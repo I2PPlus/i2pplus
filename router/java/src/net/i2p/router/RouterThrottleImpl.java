@@ -448,20 +448,50 @@ public class RouterThrottleImpl implements RouterThrottle {
         return (maxTunnels / 3) * 2;
     }
 
+    private static final String PROP_TUNNEL_GROWTH_FACTOR = "router.tunnelGrowthFactor";
+    private static final String PROP_TUNNEL_TEST_TIME_GROWTH_FACTOR = "router.tunnelTestTimeGrowthFactor";
+    private static final double DEFAULT_TUNNEL_GROWTH_FACTOR = 2.0d;
+    private static final double DEFAULT_TUNNEL_TEST_TIME_GROWTH_FACTOR = 1.5d;
+
+    private String _cachedGrowthFactorProp;
+    private double _cachedGrowthFactor = DEFAULT_TUNNEL_GROWTH_FACTOR;
+    private String _cachedTestTimeGrowthFactorProp;
+    private double _cachedTestTimeGrowthFactor = DEFAULT_TUNNEL_TEST_TIME_GROWTH_FACTOR;
+
     private double getTunnelGrowthFactor() {
+        String p = _context.getProperty(PROP_TUNNEL_GROWTH_FACTOR);
+        if (p == _cachedGrowthFactorProp) {
+            return _cachedGrowthFactor;
+        }
+        _cachedGrowthFactorProp = p;
+        if (p == null) {
+            _cachedGrowthFactor = DEFAULT_TUNNEL_GROWTH_FACTOR;
+            return _cachedGrowthFactor;
+        }
         try {
-            String p = _context.getProperty("router.tunnelGrowthFactor");
-            if (p == null) {return 2.0d;}
-            return Double.parseDouble(p);
-        } catch (NumberFormatException nfe) {return 2.0d;}
+            _cachedGrowthFactor = Double.parseDouble(p);
+        } catch (NumberFormatException nfe) {
+            _cachedGrowthFactor = DEFAULT_TUNNEL_GROWTH_FACTOR;
+        }
+        return _cachedGrowthFactor;
     }
 
     private double getTunnelTestTimeGrowthFactor() {
+        String p = _context.getProperty(PROP_TUNNEL_TEST_TIME_GROWTH_FACTOR);
+        if (p == _cachedTestTimeGrowthFactorProp) {
+            return _cachedTestTimeGrowthFactor;
+        }
+        _cachedTestTimeGrowthFactorProp = p;
+        if (p == null) {
+            _cachedTestTimeGrowthFactor = DEFAULT_TUNNEL_TEST_TIME_GROWTH_FACTOR;
+            return _cachedTestTimeGrowthFactor;
+        }
         try {
-            String p = _context.getProperty("router.tunnelTestTimeGrowthFactor");
-            if (p == null) {return 1.5d;}
-            return Double.parseDouble(p);
-        } catch (NumberFormatException nfe) {return 1.5d;}
+            _cachedTestTimeGrowthFactor = Double.parseDouble(p);
+        } catch (NumberFormatException nfe) {
+            _cachedTestTimeGrowthFactor = DEFAULT_TUNNEL_TEST_TIME_GROWTH_FACTOR;
+        }
+        return _cachedTestTimeGrowthFactor;
     }
 
     public long getMessageDelay() {

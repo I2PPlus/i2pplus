@@ -116,6 +116,10 @@ public class Router implements RouterClock.ClockShiftListener {
     private char _lastCongestionCap = 0;
     private BandwidthHistory _bandwidthHistory;
 
+    // Cache for getSharePercentage() to avoid repeated Double.parseDouble on hot paths
+    private String _cachedSharePctProp;
+    private double _cachedSharePct = DEFAULT_SHARE_PERCENTAGE / 100.0d;
+
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
     public static final String PROP_CONFIG_FILE = "router.configLocation";
 
@@ -2072,16 +2076,21 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public double getSharePercentage() {
         String pct = _context.getProperty(PROP_BANDWIDTH_SHARE_PERCENTAGE);
+        if (pct == _cachedSharePctProp) {
+            return _cachedSharePct;
+        }
+        _cachedSharePctProp = pct;
         if (pct != null) {
             try {
                 double d = Double.parseDouble(pct);
-                if (d > 1) {return d/100d;} // *cough* sometimes it's 80 instead of .8 (!stab jrandom)
-                else {return d;}
+                _cachedSharePct = (d > 1) ? d / 100d : d;
+                return _cachedSharePct;
             } catch (NumberFormatException nfe) {
                 if (_log.shouldInfo()) {_log.info("Unable to get the share percentage");}
             }
         }
-        return DEFAULT_SHARE_PERCENTAGE / 100.0d;
+        _cachedSharePct = DEFAULT_SHARE_PERCENTAGE / 100.0d;
+        return _cachedSharePct;
     }
 
     /**

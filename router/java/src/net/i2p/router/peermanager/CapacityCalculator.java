@@ -48,6 +48,41 @@ class CapacityCalculator {
     private static final String PROP_E_CAP = "router.penaltyCapE";
     private static final double PENALTY_CAP_E = 4.75;
     private static final double PENALTY_RECENT_SEND_FAIL = 4;
+
+    // Cached parsed config values
+    private static String _cachedDcapProp;
+    private static double _cachedDcap = PENALTY_CAP_D;
+    private static String _cachedEcapProp;
+    private static double _cachedEcap = PENALTY_CAP_E;
+
+    /**
+     *  Get the D-cap penalty, cached to avoid repeated Double.parseDouble.
+     */
+    private static double getCachedDcap(RouterContext ctx) {
+        String p = ctx.getProperty(PROP_D_CAP);
+        if (p == _cachedDcapProp) {return _cachedDcap;}
+        _cachedDcapProp = p;
+        if (p != null) {
+            try {_cachedDcap = Double.parseDouble(p);}
+            catch (NumberFormatException nfe) {_cachedDcap = PENALTY_CAP_D;}
+        } else {_cachedDcap = PENALTY_CAP_D;}
+        return _cachedDcap;
+    }
+
+    /**
+     *  Get the E-cap penalty, cached to avoid repeated Double.parseDouble.
+     */
+    private static double getCachedEcap(RouterContext ctx) {
+        String p = ctx.getProperty(PROP_E_CAP);
+        if (p == _cachedEcapProp) {return _cachedEcap;}
+        _cachedEcapProp = p;
+        if (p != null) {
+            try {_cachedEcap = Double.parseDouble(p);}
+            catch (NumberFormatException nfe) {_cachedEcap = PENALTY_CAP_E;}
+        } else {_cachedEcap = PENALTY_CAP_E;}
+        return _cachedEcap;
+    }
+
     private static final double BONUS_LAST_SEND_SUCCESS = 1;
     private static final double BONUS_RECENT_SEND_SUCCESS = 1;
     // we make this a bonus for non-ff, not a penalty for ff, so we
@@ -139,31 +174,14 @@ class CapacityCalculator {
                 if (caps.indexOf(Router.CAPABILITY_BW32) >= 0)
                     capacity -= PENALTY_L_CAP;
                 if (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0) {
-                    String dcapPenalty = context.getProperty(PROP_D_CAP);
-                    if (dcapPenalty != null) {
-                        try {
-                            double dcap = Double.parseDouble(dcapPenalty);
-                            capacity -= dcap;
-                        } catch (NumberFormatException nfe) {
-                            capacity -= PENALTY_CAP_D;
-                        }
-                    } else {
-                        capacity -= PENALTY_CAP_D;
-                    }
+                    double dcap = getCachedDcap(context);
+                    capacity -= dcap;
                 } else if (caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0){
                     // Use E-cap penalty for recent RouterInfos (younger than 30 min).
                     // For older RouterInfos, the congestion report may be stale,
                     // so fall back to the milder D-cap penalty per proposal 162.
                     long riAge = context.clock().now() - ri.getPublished();
-                    double sevPenalty = riAge < 30*60*1000L ? PENALTY_CAP_E : PENALTY_CAP_D;
-                    String ecapPenalty = context.getProperty(PROP_E_CAP);
-                    if (ecapPenalty != null) {
-                        try {
-                            sevPenalty = Double.parseDouble(ecapPenalty);
-                        } catch (NumberFormatException nfe) {
-                            // keep default
-                        }
-                    }
+                    double sevPenalty = riAge < 30*60*1000L ? getCachedEcap(context) : getCachedDcap(context);
                     capacity -= sevPenalty;
                 } else if (caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) {
                     capacity = 0;

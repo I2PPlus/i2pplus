@@ -68,6 +68,10 @@ class JobQueueScaler implements Runnable {
     private boolean _isInExtendedCooldown;
     private boolean _scalingUpDisabled; // Circuit breaker after repeated failures
 
+    // Cached parsed config values to avoid repeated Double.parseDouble on hot paths
+    private String _cachedScaleJobsRatioProp;
+    private double _cachedScaleJobsRatio = DEFAULT_SCALE_UP_JOBS_RATIO;
+
     // Trend tracking for predictive scaling
     private int _previousReadyJobs;
     private long _previousMessageDelay;
@@ -406,14 +410,21 @@ class JobQueueScaler implements Runnable {
      */
     private double getScaleUpJobsRatio() {
         String prop = _context.getProperty(PROP_SCALE_JOBS_RATIO);
+        if (prop == _cachedScaleJobsRatioProp && _cachedScaleJobsRatioProp != null) {
+            return _cachedScaleJobsRatio;
+        }
+        _cachedScaleJobsRatioProp = prop;
         if (prop != null) {
             try {
-                return Double.parseDouble(prop);
+                _cachedScaleJobsRatio = Double.parseDouble(prop);
+                return _cachedScaleJobsRatio;
             } catch (NumberFormatException e) {
-                // ignore, use default
+                _cachedScaleJobsRatio = DEFAULT_SCALE_UP_JOBS_RATIO;
+                return _cachedScaleJobsRatio;
             }
         }
-        return DEFAULT_SCALE_UP_JOBS_RATIO;
+        _cachedScaleJobsRatio = DEFAULT_SCALE_UP_JOBS_RATIO;
+        return _cachedScaleJobsRatio;
     }
 
     /**
