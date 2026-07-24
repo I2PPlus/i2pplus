@@ -135,7 +135,7 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
                     try { Thread.sleep(1000); } catch (InterruptedException ie) {}
                     // should hang here
                     synchronized(o2) {
-                        System.out.println("Test fail");
+                        _log.error("Test fail");
                     }
                 }
             }
@@ -146,7 +146,7 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
                 synchronized(o2) {
                     // should hang here
                     synchronized(o1) {
-                        System.out.println("Test fail");
+                        _log.error("Test fail");
                     }
                 }
             }
@@ -156,9 +156,9 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
         long start = System.currentTimeMillis();
         boolean yes = detect(I2PAppContext.getGlobalContext());
         if (!yes)
-            System.out.println("Test fail");
+            _log.error("Test fail");
         long time = System.currentTimeMillis() - start;
-        System.out.println("Test took " + time + "ms");
+        _log.debug("Test took " + time + "ms");
     }
 */
 }

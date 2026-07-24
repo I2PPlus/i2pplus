@@ -20,15 +20,12 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
-import net.i2p.util.LogFactory;
 
 /**
  * Helper for the /streams page - shows active I2P streaming connections.
  * @since 0.9.70+
  */
 public class StreamHelper extends HelperBase {
-
-    private static final Log _log = LogFactory.getLog(StreamHelper.class);
 
     private static final String ROW_OPEN = "<tr>";
     private static final String ROW_CLOSE = "</tr>\n";

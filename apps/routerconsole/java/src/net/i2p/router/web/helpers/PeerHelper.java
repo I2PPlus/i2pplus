@@ -32,14 +32,12 @@ import net.i2p.stat.RateStat;
 import net.i2p.util.AddressType;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
-import net.i2p.util.LogFactory;
 
 /**
  * Helper for peer connections page rendering and form processing.
  * @since 0.9.33
  */
 public class PeerHelper extends HelperBase {
-    private static final Log _log = LogFactory.getLog(PeerHelper.class);
     private int _sortFlags;
     private String _urlBase;
     private String _transport;

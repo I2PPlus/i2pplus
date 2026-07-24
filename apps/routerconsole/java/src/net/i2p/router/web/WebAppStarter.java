@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.I2PAppContext;
 import net.i2p.router.RouterContext;
 import net.i2p.util.FileUtil;
+import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SecureDirectory;
 import org.eclipse.jetty.server.Handler;
@@ -34,7 +35,6 @@ import org.eclipse.jetty.webapp.WebAppContext;
  *  http://servlets.com/archive/servlet/ReadMsg?msgId=511113&amp;listName=jetty-support
  *
  *  @since 0.7.12
- *  @author zzz
  */
 public class WebAppStarter {
 
@@ -59,8 +59,9 @@ public class WebAppStarter {
     private static final boolean HAS_ANNOTATION_CLASSES;
     private static final Set<String> BUILTINS = new HashSet<>(8);
 
+    private static Log _log;
     static {
-        //_log = ContextHelper.getContext(null).logManager().getLog(WebAppStarter.class);;
+        try { _log = ContextHelper.getContext(null).logManager().getLog(WebAppStarter.class); } catch (Throwable t) {}
         // see DefaultServlet javadocs
         String pfx = "org.eclipse.jetty.servlet.Default.";
         // this enables javascript to be cached as immutable
@@ -78,7 +79,7 @@ public class WebAppStarter {
         } catch (ClassNotFoundException e) {
             // Expected if annotation classes are not available
         } catch (Exception e) {
-            System.err.println("Error checking annotation classes: " + e.getMessage());
+            _log.error("Error checking annotation classes", e);
         }
         HAS_ANNOTATION_CLASSES = found;
 

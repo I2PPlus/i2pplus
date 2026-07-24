@@ -8,14 +8,12 @@ import net.i2p.data.Hash;
 import net.i2p.router.web.HelperBase;
 import net.i2p.servlet.util.WriterOutputStream;
 import net.i2p.util.Log;
-import net.i2p.util.LogFactory;
 
 /**
  * Helper for statistics page rendering and form processing.
  * @since 0.9.33
  */
 public class StatHelper extends HelperBase {
-    private static final Log _log = LogFactory.getLog(StatHelper.class);
     private String _peer;
     private boolean _full;
 

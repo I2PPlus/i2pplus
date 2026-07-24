@@ -49,7 +49,6 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
  *  Get or change settings in plugins.config
  *
  *  @since 0.7.12
- *  @author zzz
  */
 public class PluginStarter implements Runnable {
     protected RouterContext _context;
@@ -112,6 +111,7 @@ public class PluginStarter implements Runnable {
          return ctx.getBooleanPropertyDefaultTrue("router.enablePlugins");
     }
 
+    @Override
     public void run() {
         deferredDeletePlugins(_context);
         if (_context.getBooleanPropertyDefaultTrue("plugins.autoUpdate") &&
@@ -146,6 +146,7 @@ public class PluginStarter implements Runnable {
             _ctx = ctx;
         }
 
+        @Override
         public void run() {
             updateAll(_ctx, false);
         }
@@ -337,8 +338,7 @@ public class PluginStarter implements Runnable {
                     throw new Exception(foo);
                 } else {
                     pluginUpdate.delete();
-                    // Need to always log this, and  log.logAlways() did not work for me.
-                    System.err.println("INFO: Plugin updated: " + appName);
+                    log.info("Plugin updated: " + appName);
                 }
             } // silently fail to update, because we have not restarted.
         }

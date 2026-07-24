@@ -34,6 +34,7 @@ public class NavHelper implements NavService, ClientApp {
      * @param iconpath path-only URL starting with /, HTML escaped, or null
      * @since 0.9.20 added iconpath parameter
      */
+    @Override
     public void registerApp(String appName, String displayName, String path, String tooltip, String iconpath) {
         if (iconpath != null && !iconpath.startsWith("/"))
             iconpath = null;
@@ -43,6 +44,7 @@ public class NavHelper implements NavService, ClientApp {
     /**
      * @param name standard name for the app
      */
+    @Override
     public void unregisterApp(String name) {
         _apps.remove(name);
     }
@@ -162,26 +164,31 @@ public class NavHelper implements NavService, ClientApp {
     /////// ClientApp methods
 
     /** @since 0.9.56 */
+    @Override
     public void startup() {
         // TODO
     }
     /** @since 0.9.56 */
+    @Override
     public void shutdown(String[] args) {
         _apps.clear();
         _binary.clear();
     }
 
     /** @since 0.9.56 */
+    @Override
     public ClientAppState getState() {
         return ClientAppState.RUNNING;
     }
 
     /** @since 0.9.56 */
+    @Override
     public String getName() {
         return "NavHelper";
     }
 
     /** @since 0.9.56 */
+    @Override
     public String getDisplayName() {
         return "Nav Helper";
     }

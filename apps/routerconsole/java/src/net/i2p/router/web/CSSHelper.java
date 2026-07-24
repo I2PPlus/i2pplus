@@ -17,7 +17,6 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Copied and modded from I2PTunnel IndexBean (GPL)
- * @author zzz
  */
 public class CSSHelper extends HelperBase {
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(CSSHelper.class);

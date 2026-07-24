@@ -2,6 +2,7 @@ package net.i2p.router.web;
 
 import java.io.Writer;
 import net.i2p.router.RouterContext;
+import net.i2p.util.Log;
 
 /**
  *  Base helper class for JSP helper beans.
@@ -13,6 +14,7 @@ public abstract class HelperBase {
     protected RouterContext _context;
     /** the writer for output */
     protected Writer _out;
+    protected Log _log;
 
     /**
      *  Property key for advanced mode.
@@ -35,8 +37,10 @@ public abstract class HelperBase {
      *                  the first one we come across.
      */
     public void setContextId(String contextId) {
-        try {_context = ContextHelper.getContext(contextId);}
-        catch (Throwable t) {t.printStackTrace();}
+        try {
+            _context = ContextHelper.getContext(contextId);
+            _log = _context.logManager().getLog(getClass());
+        } catch (Throwable t) {_log.error("error in helper", t);}
     }
 
     /**

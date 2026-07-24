@@ -21,7 +21,6 @@ import org.eclipse.jetty.webapp.WebAppContext;
  * Also, as of 0.8.2, rewrite "/" and "/index.html" to "/index.jsp",
  * and "/foo" to "/foo.jsp".
  *
- * @author zzz
  */
 public class LocaleWebAppHandler extends HandlerWrapper
 {
@@ -47,6 +46,7 @@ public class LocaleWebAppHandler extends HandlerWrapper
      *  or as specified in the routerconsole.lang property.
      *  Unless language == "en".
      */
+    @Override
     public void handle(String pathInContext,
                        Request baseRequest,
                        HttpServletRequest httpRequest,

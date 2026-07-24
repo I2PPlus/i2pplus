@@ -77,6 +77,7 @@ public class HostCheckHandler extends GzipHandler
      *  redirect HTTP to HTTPS,
      *  pass everything else to the delegate.
      */
+    @Override
     public void handle(String pathInContext,
                        Request baseRequest,
                        HttpServletRequest httpRequest,

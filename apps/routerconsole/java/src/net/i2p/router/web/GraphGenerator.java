@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -48,7 +49,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     /** list of GraphListener instances, preserved for iteration by UI helpers */
     private final List<GraphListener> _listeners;
     /** index of listener by rate for O(1) lookup during rendering */
-    private final Map<Rate, GraphListener> _listenerByRate = new java.util.concurrent.ConcurrentHashMap<>();
+    private final Map<Rate, GraphListener> _listenerByRate = new ConcurrentHashMap<>();
     private static final int MAX_CONCURRENT_RENDER = SystemVersion.isARM() ? Math.max(2, SystemVersion.getCores() / 2) :
                                                   SystemVersion.getMaxMemory() < 256*1024*1024 ? Math.max(8, SystemVersion.getCores() / 2) :
                                                   Math.max(12, SystemVersion.getCores());
@@ -79,6 +80,7 @@ public class GraphGenerator implements Runnable, ClientApp {
         return (app != null) ? (GraphGenerator) app : null;
     }
 
+    @Override
     public void run() {
         // JRobin 1.5.9 crashes these JVMs
         if (SystemVersion.isApache() /* Harmony */ || SystemVersion.isGNU()) /* JamVM or gij */ {
@@ -203,6 +205,7 @@ public class GraphGenerator implements Runnable, ClientApp {
      * Does nothing, we aren't tracked
      * @since 0.9.38
      */
+    @Override
     public void startup() {
         // TODO
     }
@@ -210,16 +213,20 @@ public class GraphGenerator implements Runnable, ClientApp {
      * Does nothing, we aren't tracked
      * @since 0.9.38
      */
+    @Override
     public void shutdown(String[] args) {
         // TODO
     }
     /** @since 0.9.38 */
+    @Override
     public ClientAppState getState() {return ClientAppState.RUNNING;}
 
     /** @since 0.9.38 */
+    @Override
     public String getName() {return NAME;}
 
     /** @since 0.9.38 */
+    @Override
     public String getDisplayName() {return "I2P+ Graph Generator";}
 
     /////// End ClientApp methods
@@ -485,6 +492,7 @@ public class GraphGenerator implements Runnable, ClientApp {
      *  @since 0.8.7
      */
     private class Shutdown implements Runnable {
+        @Override
         public void run() {
             setDisabled();
             for (GraphListener lsnr : _listeners) {lsnr.stopListening();} // FIXME could cause exceptions if rendering?

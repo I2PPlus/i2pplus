@@ -5,7 +5,6 @@ import java.io.StringWriter;
 
 import net.i2p.router.web.HelperBase;
 import net.i2p.util.Log;
-import net.i2p.util.LogFactory;
 
 /**
  * Helper for tunnel status page rendering and form processing.
@@ -15,7 +14,6 @@ import net.i2p.util.LogFactory;
  * @since 0.9.33
  */
 public class TunnelHelper extends HelperBase {
-    private static final Log _log = LogFactory.getLog(TunnelHelper.class);
     public TunnelHelper() { /* nop */ }
 
     public String getTunnelSummary() {

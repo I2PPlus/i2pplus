@@ -10,7 +10,6 @@ import org.eclipse.jetty.server.Server;
  *  Stop all plugins that are installed and running
  *
  *  @since 0.7.13
- *  @author zzz
  */
 class PluginStopper extends PluginStarter {
 

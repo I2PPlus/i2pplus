@@ -13,6 +13,7 @@ import net.i2p.apps.systray.UrlLauncher;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.startup.ClientAppConfig;
+import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 import org.tanukisoftware.wrapper.WrapperManager;
@@ -63,6 +64,7 @@ public class ConfigServiceHandler extends FormHandler {
     private static class UpdateWrapperOrRekeyTask implements Runnable {
         private final boolean _rekey;
         private final boolean _tellWrapper;
+        private final Log _log;
         private static final int HASHCODE = -123999871;
         // RPi takes a long time to write out the peer profiles
         private static final int WAIT = SystemVersion.isARM() ? 4*60*1000 : 2*60*1000;
@@ -70,6 +72,7 @@ public class ConfigServiceHandler extends FormHandler {
         public UpdateWrapperOrRekeyTask(boolean rekey, boolean tellWrapper) {
             _rekey = rekey;
             _tellWrapper = tellWrapper;
+            _log = ContextHelper.getContext(null).logManager().getLog(UpdateWrapperOrRekeyTask.class);
         }
 
         public void run() {
@@ -93,7 +96,7 @@ public class ConfigServiceHandler extends FormHandler {
                     }
                     WrapperManager.signalStopping(wait);
                 }
-            } catch (Throwable t) {t.printStackTrace();}
+            } catch (Throwable t) {_log.error("Error updating/wrapping/rekeying", t);}
         }
 
         /**
@@ -120,13 +123,17 @@ public class ConfigServiceHandler extends FormHandler {
      */
     private static class FinalWrapperTask implements Runnable {
         private final int _exitCode;
+        private final Log _log;
         private static final int HASHCODE = 123999871;
 
-        public FinalWrapperTask(int exitCode) {_exitCode = exitCode;}
+        public FinalWrapperTask(int exitCode) {
+            _exitCode = exitCode;
+            _log = ContextHelper.getContext(null).logManager().getLog(FinalWrapperTask.class);
+        }
 
         public void run() {
             try {WrapperManager.signalStopped(_exitCode);}
-            catch (Throwable t) {t.printStackTrace();}
+            catch (Throwable t) {_log.error("error in final wrapper task", t);}
         }
 
         /**

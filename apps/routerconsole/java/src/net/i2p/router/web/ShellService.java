@@ -47,7 +47,6 @@ import net.i2p.util.SystemVersion;
  *
  * Works on Windows, OSX, and Linux.
  *
- * @author eyedeekay
  * @since 1.6.0/0.9.52, moved from net.i2p.app in 0.9.53
  */
 public class ShellService implements ClientApp {
@@ -185,6 +184,7 @@ public class ShellService implements ClientApp {
      * has been started yet. If it hasn't, attempt to start the process and
      * notify the router that it has been started.
      */
+    @Override
     public synchronized void startup() throws Throwable {
         File exe = new File(_commandPath);
         if (!exe.exists()) {
@@ -257,6 +257,7 @@ public class ShellService implements ClientApp {
      *
      * @param args generally null but could be stopArgs from clients.config
      */
+    @Override
     public synchronized void shutdown(String[] args) throws Throwable {
         if (getName().equals("unnamedClient")) {
             if (_log.shouldWarn())
@@ -280,6 +281,7 @@ public class ShellService implements ClientApp {
      *
      * @return non-null
      */
+    @Override
     public ClientAppState getState() {
         if (!isProcessRunning()) {
             if (_log.shouldDebug())
@@ -297,6 +299,7 @@ public class ShellService implements ClientApp {
      *
      * @return non-null
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -307,6 +310,7 @@ public class ShellService implements ClientApp {
      *
      * @return non-null
      */
+    @Override
     public String getDisplayName() {
         return displayName;
     }

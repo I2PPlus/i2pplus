@@ -213,7 +213,6 @@ public class GraphListener implements RateSummaryListener {
             // No backend from RrdBackendFactory
             _log.error("Error starting RRD for stat " + baseName, iae);
             _log.log(Log.CRIT, "RRD4J backend error, graphs disabled");
-            System.out.println("RRD4J backend error, graphs disabled");
             GraphGenerator.setDisabled(_context);
         } catch (NoSuchMethodError nsme) {
             // Covariant fail Java 8/9/10
@@ -223,8 +222,7 @@ public class GraphListener implements RateSummaryListener {
                        "\nCompiler JDK mismatch with JRE version " + System.getProperty("java.version") +
                        " and no bootclasspath specified when building." +
                        "\nContact packager.";
-            _log.log(Log.CRIT, s);
-            System.out.println(s);
+            _log.warn(s);
             GraphGenerator.setDisabled(_context);
         } catch (Throwable t) {
             _log.error("Error starting RRD for stat " + baseName, t);

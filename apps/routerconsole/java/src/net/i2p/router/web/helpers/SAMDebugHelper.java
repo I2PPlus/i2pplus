@@ -9,7 +9,6 @@ import net.i2p.app.ClientAppManager;
 import net.i2p.sam.SAMBridge;
 import net.i2p.router.web.HelperBase;
 import net.i2p.util.Log;
-import net.i2p.util.LogFactory;
 
 /**
  * Helper for the /samdebug page - shows SAM bridge status with rings
@@ -19,8 +18,6 @@ import net.i2p.util.LogFactory;
  * @since 0.9.70+
  */
 public class SAMDebugHelper extends HelperBase {
-
-    private static final Log _log = LogFactory.getLog(SAMDebugHelper.class);
 
     public SAMDebugHelper() {}
 

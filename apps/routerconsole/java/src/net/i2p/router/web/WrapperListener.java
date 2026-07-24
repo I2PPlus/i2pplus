@@ -57,6 +57,7 @@ class WrapperListener {
             _ctxt = ctx;
         }
 
+        @Override
         public void fired(WrapperEvent event) {
             Log log = _ctxt.logManager().getLog(ConfigServiceHandler.class);
             if (SystemVersion.isWindows() && (event instanceof WrapperServiceControlEvent)) {
@@ -98,8 +99,7 @@ class WrapperListener {
                     wce.consume();
                     if (!(_ctxt.router().gracefulShutdownInProgress() ||
                           _ctxt.router().isFinalShutdownInProgress())) {
-                        System.err.println("WARN: Graceful shutdown initiated by SIGHUP");
-                        log.logAlways(Log.WARN, "Graceful shutdown initiated by SIGHUP");
+                        log.warn("Graceful shutdown initiated by SIGHUP");
                         ConfigServiceHandler.registerWrapperNotifier(_ctxt, Router.EXIT_GRACEFUL, false);
                         _ctxt.router().shutdownGracefully();
                     }

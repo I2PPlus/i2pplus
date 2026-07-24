@@ -23,7 +23,6 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
-import net.i2p.util.LogFactory;
 import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.SystemVersion;
 
@@ -32,8 +31,6 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.33
  */
 public class JobQueueHelper extends HelperBase {
-
-    private static final Log _log = LogFactory.getLog(JobQueueHelper.class);
 
     private static int CORES = SystemVersion.getCores();
     private static boolean isSlow = SystemVersion.isSlow();

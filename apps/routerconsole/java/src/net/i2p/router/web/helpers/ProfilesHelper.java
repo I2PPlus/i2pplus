@@ -3,14 +3,12 @@ package net.i2p.router.web.helpers;
 import java.io.IOException;
 import net.i2p.router.web.HelperBase;
 import net.i2p.util.Log;
-import net.i2p.util.LogFactory;
 
 /**
  * Helper for peer profiles page rendering and form processing.
  * @since 0.9.33
  */
 public class ProfilesHelper extends HelperBase {
-    private static final Log _log = LogFactory.getLog(ProfilesHelper.class);
     private int _full;
     private boolean _graphical;
 

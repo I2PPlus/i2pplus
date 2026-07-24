@@ -36,7 +36,6 @@ import org.eclipse.jetty.webapp.WebAppContext;
  *  http://servlets.com/archive/servlet/ReadMsg?msgId=511113&amp;listName=jetty-support
  *
  *  @since 0.7.12
- *  @author zzz
  */
 public class WebAppConfiguration implements Configuration {
 
@@ -198,19 +197,23 @@ public class WebAppConfiguration implements Configuration {
     }
 
     /** @since Jetty 7 */
+    @Override
     public void cloneConfigure(WebAppContext template, WebAppContext context) {
         // no state, nothing to be done
     }
 
     /** @since Jetty 7 */
+    @Override
     public void destroy(WebAppContext context) {
         // TODO
     }
     /** @since Jetty 7 */
+    @Override
     public void preConfigure(WebAppContext context) {
         // TODO
     }
     /** @since Jetty 7 */
+    @Override
     public void postConfigure(WebAppContext context) {
         // TODO
     }}
