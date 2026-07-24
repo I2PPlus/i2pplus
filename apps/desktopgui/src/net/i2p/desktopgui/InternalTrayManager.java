@@ -67,6 +67,7 @@ class InternalTrayManager extends TrayManager {
      *
      * @return the AWT popup menu
      */
+    @Override
     public synchronized PopupMenu getMainMenu() {
         PopupMenu popup = new PopupMenu();
 

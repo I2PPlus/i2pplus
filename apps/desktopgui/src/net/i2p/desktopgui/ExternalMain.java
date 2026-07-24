@@ -61,7 +61,8 @@ public class ExternalMain implements ClientApp, NotificationService {
     public static void main(String[] args) {
         // early check so we can bail out when started via CLI
         if (!SystemTray.isSupported()) {
-            System.err.println("SystemTray not supported");
+            I2PAppContext ctx = I2PAppContext.getGlobalContext();
+            ctx.logManager().getLog(ExternalMain.class).error("SystemTray not supported");
             return;
         }
         ExternalMain main = new ExternalMain();
@@ -84,8 +85,6 @@ public class ExternalMain implements ClientApp, NotificationService {
 
     /**
      * Main method launching the application.
-     *
-     * @param args unused
      */
     private void beginStartup() {
         String headless = System.getProperty("java.awt.headless");
@@ -222,19 +221,23 @@ public class ExternalMain implements ClientApp, NotificationService {
         beginStartup();
     }
 
+    @Override
     public synchronized void shutdown(String[] args) {
         if (_trayManager != null)
             _trayManager.stopManager();
     }
 
+    @Override
     public ClientAppState getState() {
         return ClientAppState.INITIALIZED;
     }
 
+    @Override
     public String getName() {
         return "desktopgui";
     }
 
+    @Override
     public String getDisplayName() {
         return "Desktop GUI";
     }

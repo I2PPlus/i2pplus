@@ -109,9 +109,12 @@ public class Main implements RouterApp, NotificationService {
     public static void main(String[] args) {
         // early check so we can bail out when started via CLI
         if (!SystemTray.isSupported()) {
-            System.err.println("SystemTray not supported");
+            // log not available yet; create one from global context
+            I2PAppContext ctx = I2PAppContext.getGlobalContext();
+            ctx.logManager().getLog(Main.class).error("SystemTray not supported");
             return;
         }
+
         Main main = new Main();
         main.beginStartup();
     }
@@ -303,9 +306,9 @@ public class Main implements RouterApp, NotificationService {
             _mgr.notify(this, state, msg, e);
         if (_context == null) {
             if (msg != null)
-                System.out.println(state + ": " + msg);
+                log.log(Log.WARN, state + ": " + msg);
             if (e != null)
-                e.printStackTrace();
+                log.log(Log.WARN, "Error in state change", e);
         }
     }
 }

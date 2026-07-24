@@ -37,8 +37,6 @@ import net.i2p.util.SystemVersion;
  * browsers if that was not successful.</p>
  * <p>Handles Galeon, Internet Explorer, Falkon, Konqueror, Links, Lynx, Mozilla, Mozilla
  * Firefox, Netscape, Opera, and Safari.</p>
- *
- * @author hypercubus
  */
 public class UrlLauncher implements ClientApp {
 
@@ -494,6 +492,7 @@ public class UrlLauncher implements ClientApp {
      *
      *  @since 0.9.18
      */
+    @Override
     public void startup() {
         if (IS_SERVICE) {
             // not START_FAILED so manager doesn't log CRIT
@@ -511,6 +510,7 @@ public class UrlLauncher implements ClientApp {
     }
 
     private class Runner implements Runnable {
+        @Override
         public void run() {
             changeState(RUNNING);
             String url = _args[0];
@@ -523,6 +523,7 @@ public class UrlLauncher implements ClientApp {
      *  ClientApp interface
      *  @since 0.9.18
      */
+    @Override
     public ClientAppState getState() {
         return _state;
     }
@@ -531,6 +532,7 @@ public class UrlLauncher implements ClientApp {
      *  ClientApp interface
      *  @since 0.9.18
      */
+    @Override
     public String getName() {
         return REGISTERED_NAME;
     }
@@ -539,6 +541,7 @@ public class UrlLauncher implements ClientApp {
      *  ClientApp interface
      *  @since 0.9.18
      */
+    @Override
     public String getDisplayName() {
         return REGISTERED_NAME + " \"" + _args[0] + '"';
     }
@@ -563,6 +566,7 @@ public class UrlLauncher implements ClientApp {
      *  ClientApp interface
      *  @since 0.9.18
      */
+    @Override
     public void shutdown(String[] args) {
         // doesn't really do anything
         changeState(STOPPED);
@@ -570,6 +574,7 @@ public class UrlLauncher implements ClientApp {
 
     /**
      *  Obsolete, now uses ClientApp interface
+     *  @param args URL(s) to open
      */
     public static void main(String[] args) {
         UrlLauncher launcher = new UrlLauncher();

@@ -100,11 +100,11 @@ abstract class TrayManager {
             menu.setFont(new Font("Arial", Font.BOLD, 14));
         TrayIcon ti = new TrayIcon(getTrayImage(), tooltip, menu);
         ti.addMouseListener(new MouseListener() {
-            public void mouseClicked(MouseEvent m)  { /* no-op */ }
-            public void mouseEntered(MouseEvent m)  { /* no-op */ }
-            public void mouseExited(MouseEvent m)   { /* no-op */ }
-            public void mousePressed(MouseEvent m)  { updateMenu(); }
-            public void mouseReleased(MouseEvent m) { updateMenu(); }
+            @Override public void mouseClicked(MouseEvent m)  { /* no-op */ }
+            @Override public void mouseEntered(MouseEvent m)  { /* no-op */ }
+            @Override public void mouseExited(MouseEvent m)   { /* no-op */ }
+            @Override public void mousePressed(MouseEvent m)  { updateMenu(); }
+            @Override public void mouseReleased(MouseEvent m) { updateMenu(); }
         });
         return ti;
     }
@@ -133,14 +133,15 @@ abstract class TrayManager {
         ti.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e)  { /* no-op */ }
+            @Override
             public void mouseEntered(MouseEvent e)  { /* no-op */ }
+            @Override
             public void mouseExited(MouseEvent e)   { /* no-op */ }
             public void mousePressed(MouseEvent e)  { handle(e); }
             @Override
             public void mouseReleased(MouseEvent e) { handle(e); }
             private void handle(MouseEvent e) {
-                // menu visible check is never true
-                if (!frame.isVisible() /* || !menu.isVisible() */ ) {
+                if (!frame.isVisible()) {
                     frame.setLocation(e.getX(), e.getY());
                     frame.setVisible(true);
                     menu.show(frame, 0, 0);
@@ -151,20 +152,23 @@ abstract class TrayManager {
         menu.addPopupMenuListener(new PopupMenuListener() {
             @Override
             public void popupMenuCanceled(PopupMenuEvent e)            { /* no-op */ }
+            @Override
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e) { frame.setVisible(false); }
+            @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e)   { /* no-op */ }
         });
-        // this is to make it go away when we click elsewhere
-        // doesn't do anything
         menu.addFocusListener(new FocusListener() {
+            @Override
             public void focusGained(FocusEvent e) { /* no-op */ }
+            @Override
             public void focusLost(FocusEvent e)   { frame.setVisible(false); }
         });
-        // this is to make it go away when we hit escape
-        // doesn't do anything
         menu.addMenuKeyListener(new MenuKeyListener() {
+            @Override
             public void menuKeyPressed(MenuKeyEvent e)  { /* no-op */ }
+            @Override
             public void menuKeyReleased(MenuKeyEvent e) { /* no-op */ }
+            @Override
             public void menuKeyTyped(MenuKeyEvent e)    {
                 if (e.getKeyChar() == (char) 0x1b)
                     frame.setVisible(false);
@@ -192,7 +196,6 @@ abstract class TrayManager {
     public synchronized void languageChanged() {
         if (trayIcon != null && !_useSwing)
             trayIcon.setPopupMenu(getMainMenu());
-        // else TODO
     }
 
     /**

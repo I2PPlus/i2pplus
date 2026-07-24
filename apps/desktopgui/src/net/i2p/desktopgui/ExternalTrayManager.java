@@ -33,6 +33,7 @@ class ExternalTrayManager extends TrayManager {
      *
      * @return the AWT popup menu
      */
+    @Override
     public PopupMenu getMainMenu() {
         PopupMenu popup = new PopupMenu();
         MenuItem startItem = new MenuItem(_t("Start I2P"));
