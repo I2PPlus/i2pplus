@@ -572,19 +572,22 @@ public class NTCPConnection implements Closeable {
      * @return usually this, but could be a second connection with the same peer...
      *         only this or null as of 0.9.37
      */
-    private synchronized NTCPConnection locked_close(boolean allowRequeue) {
+    private NTCPConnection locked_close(boolean allowRequeue) {
+        EstablishState es;
+        NTCPConnection old;
+        synchronized (this) {
         if (_chan != null) try { _chan.close(); } catch (IOException ioe) { /* ignored */ }
         if (_conKey != null) _conKey.cancel();
         // Release any in-progress handshake buffers (SimpleByteCache / _dataReadBufs).
         // Plain close() paths (read errors etc.) would otherwise leak these, as only
         // closeOnTimeout() routed through EstablishState.close(). close()/fail() is
         // idempotent, so this is safe even if already released.
-        EstablishState es = _establishState;
-        if (es != null && es != EstablishBase.FAILED) {
-            es.close("Connection closed", null);
-        }
+        es = _establishState;
+        // close() deferred to after synchronized block to avoid AB/BA deadlock:
+        //   Thread A: lock NTCPConnection → lock OutboundNTCP2State (via es.close())
+        //   Thread B: lock OutboundNTCP2State (via receive()) → lock NTCPConnection (via finishOutboundEstablishment())
         _establishState = EstablishBase.FAILED;
-        NTCPConnection old = _transport.removeCon(this);
+        old = _transport.removeCon(this);
         _transport.getReader().connectionClosed(this);
         _transport.getWriter().connectionClosed(this);
 
@@ -630,6 +633,12 @@ public class NTCPConnection implements Closeable {
                 _curReadState.destroy();
                 _curReadState = null;
             }
+        }
+        } // synchronized(this)
+        // Close EstablishState outside the NTCPConnection lock to avoid
+        // AB/BA deadlock with OutboundNTCP2State.receive() → finishOutboundEstablishment().
+        if (es != null && es != EstablishBase.FAILED) {
+            es.close("Connection closed", null);
         }
         return old;
     }
