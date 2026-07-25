@@ -816,6 +816,21 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         } else if (fromLocalDest == null && isClientDb()) {
             if (_log.shouldWarn()) {_log.warn("Search from Client subDb using Exploratory tunnels requested -> Dropping...");}
             return null;
+        } else if (fromLocalDest != null) {
+            // Client-initiated search always starts immediately, even if a
+            // floodfill-triggered search for the same key is already in
+            // progress.  This prevents our own lookups from being deferred
+            // behind a floodfill-relayed search that may fail or time out.
+            // We skip the _activeFloodQueries dedup so our search runs
+            // independently; complete() is a safe no-op if the key is not
+            // in the map or if it removes the floodfill search's entry.
+            if (_log.shouldDebug()) {
+                _log.debug("Client IterativeSearch for key [" + key.toBase32().substring(0,8) + "] -> " + this);
+            }
+            IterativeSearchJob job = new IterativeSearchJob(_context, this, key, onFindJob, onFailedLookupJob,
+                                                            (int)timeoutMs, isLease, fromLocalDest);
+            _context.jobQueue().addJob(job);
+            return null;
         } else {
             boolean isNew = false;
             FloodSearchJob searchJob = _activeFloodQueries.get(key);
@@ -832,7 +847,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
             if (isNew) {
                 if (_log.shouldDebug()) {
-                    _log.debug("New IterativeSearch via " + ((fromLocalDest != null) ? "Client tunnels" : "Exploratory tunnels") +
+                    _log.debug("New IterativeSearch via Exploratory tunnels" +
                                " for key [" + key.toBase32().substring(0,8) + "] -> " + this);
                 }
                 _context.jobQueue().addJob(searchJob);
