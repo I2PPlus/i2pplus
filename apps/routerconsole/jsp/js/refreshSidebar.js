@@ -65,13 +65,10 @@ worker.port.start();
 worker.port.addEventListener("message", ({ data }) => {
   try {
     const { responseText } = data;
-    if (responseText) {
+    if (responseText && responseText.includes("<body id=sb>")) {
       noResponse = 0;
-      if (responseText.includes("<body id=sb>")) {
-        responseDoc = parser.parseFromString(responseText, "text/html");
-        document.body.classList.remove("isDown");
-        requestAnimationFrame(applySidebarUpdates);
-      }
+      responseDoc = parser.parseFromString(responseText, "text/html");
+      requestAnimationFrame(applySidebarUpdates);
     } else {
       noResponse = Math.min(noResponse + 1, 10);
     }
@@ -109,7 +106,8 @@ function startAutoRefresh() {
 
   autoRefreshInterval = setInterval(() => {
     if (!document.hidden && navigator.onLine && !isDown && refreshActive && !isRefreshing) {
-      refreshSidebar();
+      isRefreshing = true;
+      refreshSidebar().finally(() => { isRefreshing = false; });
     }
   }, getRefreshInterval());
 }
@@ -155,6 +153,7 @@ export async function refreshSidebar(force = false) {
 function applySidebarUpdates() {
   xhrContainer = document.getElementById("xhr");
   if (!responseDoc || !xhrContainer) return;
+  if (isDown && !recoveryPending) return;
 
   updateCachedElements();
 
@@ -223,11 +222,11 @@ function applySidebarUpdates() {
 
   isRefreshing = false;
   noResponse = 0;
+  lastRefreshTime = Date.now();
 
   if (recoveryPending) {
     recoveryPending = false;
     isDown = false;
-    lastRefreshTime = 0;
     document.body.classList.remove("isDown");
   }
 }
@@ -276,6 +275,7 @@ function syncGraphDataAttributes() {
  * @returns {void}
  */
 function refreshAll() {
+  if (isDown && !recoveryPending) return;
   if (!responseDoc) {
     noResponse = Math.min(noResponse + 1, 10);
     return;
@@ -292,13 +292,13 @@ function refreshAll() {
   newHosts();
   countNewsItems();
   isRefreshing = false;
+  lastRefreshTime = Date.now();
   // Trigger immediate minigraph re-render after full sidebar replacement
   document.dispatchEvent(new Event("sidebarRefreshed"));
 
   if (recoveryPending) {
     recoveryPending = false;
     isDown = false;
-    lastRefreshTime = 0;
     document.body.classList.remove("isDown");
   }
 }
@@ -327,7 +327,6 @@ async function updateConnectionStatus() {
     if (currentlyDown && !isDown) {
       isDown = true;
       document.body.classList.add("isDown");
-      refreshAll();
     }
     if (isDown) {
       refreshSidebar(true);
@@ -370,7 +369,10 @@ let observer;
 
 /**
  * Sets up a MutationObserver on the xhr container to detect DOM changes
- * and trigger sidebar refreshes.
+ * and trigger sidebar refreshes as a backup if the interval timer stalls.
+ * The debounce is set to 2x the refresh interval so the observer does not
+ * fire alongside the regular interval timer — it only fires when the
+ * interval has missed a cycle (e.g. tab was backgrounded).
  * @function isSidebarVisible
  * @returns {void}
  */
@@ -379,18 +381,18 @@ function isSidebarVisible() {
   if (!target) return;
 
   observer = new MutationObserver(() => {
-    if (document.hidden || isRefreshing) {
-      observer.disconnect();
-      return;
-    }
+    if (document.hidden || isRefreshing) return;
+    const timeSinceLastRefresh = Date.now() - lastRefreshTime;
+    if (timeSinceLastRefresh < getRefreshInterval() * 1.5) return;
     clearTimeout(debounceTimeoutId);
     debounceTimeoutId = setTimeout(() => {
+      if (isRefreshing) return;
       isRefreshing = true;
       refreshSidebar(true).finally(() => {
         isRefreshing = false;
         observer.observe(target, { childList: true, subtree: true });
       });
-    }, getRefreshInterval());
+    }, getRefreshInterval() * 2);
   });
 
   observer.observe(target, { childList: true, subtree: true });
