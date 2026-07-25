@@ -1307,6 +1307,17 @@ public class TunnelPool {
     private boolean _hasGoodLeaseSet;
     /** True when last built LeaseSet had fewer leases than wanted — bypass cache */
     private boolean _hasIncompleteLeaseSet;
+    /**
+     * @return true if this pool can't meet its published LeaseSet target
+     *         or has fewer active tunnels than the configured quantity.
+     *         Used by ClientPeerSelector to relax the cross-tunnel peer
+     *         diversity constraint when the pool is starved for build candidates.
+     * @since 0.9.70+
+     */
+    public boolean isStruggling() {
+        return _hasIncompleteLeaseSet || getActiveTunnelCount() < _settings.getQuantity();
+    }
+
     /** Earliest lease end time of the last published LeaseSet.
      *  Used to detect same-lease-stall: if the new LS has the same earliest end time,
      *  the oldest lease is rotated out so floodfill peers see wasNew=true. */
@@ -1381,16 +1392,20 @@ public class TunnelPool {
                 int maxUsable = Math.max(target + 2, 2);
                 if (usable >= maxUsable) {
                     // At capacity — try replacing a non-GOOD tunnel instead of
-                    // dropping a freshly-built tunnel.  UNKNOWN/TESTING/UNTESTED
-                    // tunnels block the cap but may never pass testing; replacing
-                    // one with a newly-built tunnel is always a net improvement.
-                    // For server pools, keep FAILING tunnels (published in LS).
+                    // dropping a freshly-built tunnel.  Only replace FAILED
+                    // tunnels (or FAILING for non-server pools).  UNTESTED and
+                    // TESTING tunnels must not be replaced — they need time for
+                    // TestJob to score them.  Replacing UNTESTED tunnels before
+                    // they're tested creates a build→replace→build churn cycle
+                    // where the pool can never accumulate GOOD tunnels.
                     TunnelInfo replacee = null;
                     boolean isServerPool = _settings.isInbound() && !_settings.isExploratory();
                     for (TunnelInfo t : _tunnels) {
                         TunnelTestStatus ts = t.getTestStatus();
                         if (ts == TunnelTestStatus.GOOD) {continue;}
                         if (isServerPool && ts == TunnelTestStatus.FAILING) {continue;}
+                        if (ts == TunnelTestStatus.UNTESTED) {continue;}
+                        if (ts == TunnelTestStatus.TESTING) {continue;}
                         replacee = t;
                         break;
                     }
@@ -2802,7 +2817,14 @@ public class TunnelPool {
         // to be tested.  Don't count them as deficit UNLESS the pool has
         // zero GOOD tunnels, in which case they're likely stuck failing
         // tests and blocking replacement builds.
-        if (safeActive < effectiveTarget && (nearExpiry > 0 || safeActive == 0 || _hasIncompleteLeaseSet)) {
+        // When the pool already has enough total tunnels (safe + untested >=
+        // effectiveTarget), don't build more just because the LS is incomplete.
+        // Waiting for test results is better than churning: building more UNTESTED
+        // tunnels fills the test queue, delays every tunnel's first test, and
+        // creates a build→replace→build cycle where none ever reach GOOD status.
+        boolean incompleteLSTrigger = _hasIncompleteLeaseSet &&
+            (safeActive + untestedCount >= effectiveTarget);
+        if (safeActive < effectiveTarget && (nearExpiry > 0 || safeActive == 0 || _hasIncompleteLeaseSet) && !incompleteLSTrigger) {
             int deficit;
             // Failing tunnels will likely die soon — count them as deficit
             // so replacement builds are triggered proactively before the pool

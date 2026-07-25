@@ -196,13 +196,18 @@ class ClientPeerSelector extends TunnelPeerSelector {
             }
             // Per-pool diversity: exclude peers already in an active tunnel of this pool.
             // No peer should appear in more than 1 tunnel of the same pool.
+            // Relaxed when the pool is struggling (incomplete LeaseSet or active
+            // tunnels below target) so replacement builds can reuse peers rather
+            // than starving the pool of build candidates.
             Hash dest = settings.getDestination();
             if (dest != null) {
                 TunnelManagerFacade tmf = ctx.tunnelManager();
                 TunnelPool pool = isInbound ? tmf.getInboundPool(dest)
                                             : tmf.getOutboundPool(dest);
-                Set<Hash> poolPeers = getPeersInPool(ctx, pool);
-                exclude.addAll(poolPeers);
+                if (pool != null && !pool.isStruggling()) {
+                    Set<Hash> poolPeers = getPeersInPool(ctx, pool);
+                    exclude.addAll(poolPeers);
+                }
             }
             ArraySet<Hash> matches = new ArraySet<>(length);
             if (length == 1) {
