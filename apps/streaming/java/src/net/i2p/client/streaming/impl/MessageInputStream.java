@@ -312,10 +312,23 @@ class MessageInputStream extends InputStream {
      */
     public void closeReceived() {
         synchronized (_dataLock) {
+            // Promote any contiguous blocks from _notYetReadyBlocks before marking EOF,
+            // so data received out of order (but before FIN) is not discarded.
+            long cur = _highestReadyBlockId + 1;
+            while (_notYetReadyBlocks.containsKey(cur)) {
+                ByteArray ba = _notYetReadyBlocks.remove(cur);
+                if (ba.getData() != null && ba.getValid() > 0) {
+                    _readyDataBlocks.add(ba);
+                    _readyDataSize += ba.getValid();
+                }
+                _highestReadyBlockId = cur;
+                cur++;
+            }
             if (_log.shouldDebug()) {
                 _log.debug("Close received: ready blocks=" + _readyDataBlocks.size()
                         + ", not ready blocks=" + _notYetReadyBlocks.size()
-                        + ", highest ready block=" + _highestReadyBlockId);
+                        + ", highest ready block=" + _highestReadyBlockId
+                        + ", promoted through block " + (cur - 1));
             }
             _closeReceived = true;
             _dataLock.notifyAll();
@@ -446,9 +459,11 @@ class MessageInputStream extends InputStream {
                         if (_locallyClosed.get()) {
                             throw new IOException("Input stream closed");
                         }
-                        if (_closeReceived) {
+                        if (_closeReceived && _notYetReadyBlocks.isEmpty()) {
                             if (_log.shouldInfo()) {
-                                _log.info("EOF reached after reading " + _readTotal + " bytes");
+                                _log.info("Close received, EOF at " + _readTotal + " bytes, "
+                                        + _readyDataBlocks.size() + " ready, "
+                                        + _notYetReadyBlocks.size() + " pending");
                             }
                             return -1;
                         }
