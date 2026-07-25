@@ -116,11 +116,11 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static void setRTOMultiplier(int val) { _rtoMultiplier = Math.max(100, Math.min(500, val)); }
 
     /** @since 0.9.70+ */
-    private static volatile int _minResendDelay = 100;
+    private static volatile int _minResendDelay = 1000;
     /** @since 0.9.70+ */
     public static int getMinResendDelayStatic() { return _minResendDelay; }
     /** @since 0.9.70+ */
-    public static void setMinResendDelay(int val) { _minResendDelay = Math.max(100, Math.min(2000, val)); }
+    public static void setMinResendDelay(int val) { _minResendDelay = Math.max(1000, Math.min(5000, val)); }
 
     /** @since 0.9.70+ */
     private static volatile int _maxResendDelay = 15000;
@@ -256,13 +256,13 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** @since I2P+ */
     public static int getDefaultCongestionAvoidanceGrowthRateFactorStatic() { return _defaultCongestionAvoidanceGrowthRateFactor; }
     /** @since I2P+ */
-    public static void setDefaultCongestionAvoidanceGrowthRateFactor(int val) { _defaultCongestionAvoidanceGrowthRateFactor = Math.max(1, Math.min(16, val)); }
+    public static void setDefaultCongestionAvoidanceGrowthRateFactor(int val) { _defaultCongestionAvoidanceGrowthRateFactor = Math.max(1, Math.min(4, val)); }
     /** @since I2P+ */
     private static volatile int _defaultSlowStartGrowthRateFactor = 1;
     /** @since I2P+ */
     public static int getDefaultSlowStartGrowthRateFactorStatic() { return _defaultSlowStartGrowthRateFactor; }
     /** @since I2P+ */
-    public static void setDefaultSlowStartGrowthRateFactor(int val) { _defaultSlowStartGrowthRateFactor = Math.max(1, Math.min(16, val)); }
+    public static void setDefaultSlowStartGrowthRateFactor(int val) { _defaultSlowStartGrowthRateFactor = Math.max(1, Math.min(4, val)); }
     /** @since 0.9.34 */
     private static final String DEFAULT_LIMIT_ACTION = "reset";
     /** @since 0.9.34 */
