@@ -475,8 +475,22 @@ class ConnectionPacketHandler {
                     // linear growth - increase window 1/N per RTT
                     // we can't use newWindowSize += acked/(oldWindow*N) (where N = the cong. avoid. factor), since we're
                     // integers, so lets use a random distribution instead
-                    int shouldIncrement = _context.random().nextInt(con.getOptions().getCongestionAvoidanceGrowthRateFactor()*newWindowSize);
-                    if (shouldIncrement < acked)
+                    int caFactor = con.getOptions().getCongestionAvoidanceGrowthRateFactor();
+                    int effAcked = acked;
+                    int maxWin = con.getOptions().getMaxWindowSize();
+                    if (newWindowSize < maxWin) {
+                        // Deficit-driven growth: grow faster when well below max window
+                        // so large windows recover quickly after a loss. Tapers to 1/RTT
+                        // as the window fills, preventing overshoot at the plateau.
+                        // At maxWindow: 1x (TCP Reno, 1/RTT).
+                        // At 50% maxWindow: ~5x.
+                        // At 25% maxWindow: ~7x.
+                        int deficit = maxWin - newWindowSize;
+                        int multiplier = 1 + (8 * deficit) / Math.max(1, maxWin);
+                        effAcked = Math.max(acked, acked * multiplier);
+                    }
+                    int shouldIncrement = _context.random().nextInt(Math.max(1, caFactor * newWindowSize));
+                    if (shouldIncrement < effAcked)
                         newWindowSize++;
                     if (_log.shouldDebug())
                         _log.debug("Congestion Avoidance ACKs = " + acked + " for " + con);

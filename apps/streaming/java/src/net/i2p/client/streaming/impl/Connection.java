@@ -1927,12 +1927,14 @@ class Connection {
                     if (_log.shouldDebug()) {
                         _log.debug(Connection.this + " cutting SlowStartThreshold and Window");
                     }
+                    int wsize = _options.getWindowSize();
                     _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
                     _ssthresh = Math.min(ConnectionPacketHandler.getMaxSlowStartWindow(_context), _ssthresh);
-                    // Partial window collapse (matching fast retransmit behavior):
-                    // halve the window instead of collapsing to 1, so connections
-                    // with transient loss don't stall at single-packet throughput.
-                    int wsize = _options.getWindowSize();
+                    // Ensure ssthresh is at least the halved window so the connection
+                    // can slow-start back to at least half its pre-loss capacity.
+                    // Without this floor, a low bandwidth estimate (from the current
+                    // slow window) caps ssthresh at ~4, collapsing CWND from 256 to 4.
+                    _ssthresh = Math.max(_ssthresh, Math.max(1, wsize / 2));
                     _options.setWindowSize(Math.min(_ssthresh, Math.max(1, wsize / 2)));
                     updatePacingRate();
                 } else if (_log.shouldDebug()) {
