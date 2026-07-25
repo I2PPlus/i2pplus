@@ -524,7 +524,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * Initialization
      */
     private void cinit(Properties opts) {
-        setMaxWindowSize(getInt(opts, PROP_MAX_WINDOW_SIZE, Connection.MAX_WINDOW_SIZE));
+        int maxWinConfig = getInt(opts, PROP_MAX_WINDOW_SIZE, 0);
+        if (maxWinConfig > 0) {setMaxWindowSize(maxWinConfig);}
         setConnectDelay(getInt(opts, PROP_CONNECT_DELAY, -1));
         setProfile(getInt(opts, PROP_PROFILE, PROFILE_BULK));
         setMaxMessageSize(getInt(opts, PROP_MAX_MESSAGE_SIZE, DEFAULT_MAX_MESSAGE_SIZE));
@@ -573,7 +574,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         super.setProperties(opts);
         if (opts == null) {return;}
         if (opts.getProperty(PROP_MAX_WINDOW_SIZE) != null) {
-            setMaxWindowSize(getInt(opts, PROP_MAX_WINDOW_SIZE, Connection.MAX_WINDOW_SIZE));
+            setMaxWindowSize(getInt(opts, PROP_MAX_WINDOW_SIZE, 0));
         }
         if (opts.getProperty(PROP_CONNECT_DELAY) != null) {
             setConnectDelay(getInt(opts, PROP_CONNECT_DELAY, -1));
@@ -957,18 +958,33 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public int getInactivityAction() {return _inactivityAction;}
     public void setInactivityAction(int action) {_inactivityAction = action;}
 
-    public int getMaxWindowSize() {return _maxWindowSize;}
+    /**
+     *  @return the effective max window for this connection:
+     *          per-connection cap if set explicitly, otherwise the Tuner-managed global ceiling
+     */
+    public int getMaxWindowSize() {
+        if (_maxWindowSize > 0)
+            return Math.min(_maxWindowSize, Connection.getGlobalMaxWindowSize());
+        return Connection.getGlobalMaxWindowSize();
+    }
 
     /**
      * Set the maximum window size.
+     * A value of 0 or less resets to the Tuner-managed global default.
      *
-     * @param msgs the maximum window size, clamped to [2, ABSOLUTE_MAX_WINDOW]
+     * @param msgs the maximum window size, clamped to [2, ABSOLUTE_MAX_WINDOW];
+     *             0 or less clears the per-connection override
      */
     public void setMaxWindowSize(int msgs) {
-        _maxWindowSize = 1;
-        if (msgs > Connection.ABSOLUTE_MAX_WINDOW) {_maxWindowSize = Connection.ABSOLUTE_MAX_WINDOW;}
-        else if (msgs < 2) {_maxWindowSize = 2;}
-        else {_maxWindowSize = msgs;}
+        if (msgs <= 0) {
+            _maxWindowSize = 0;
+        } else if (msgs > Connection.ABSOLUTE_MAX_WINDOW) {
+            _maxWindowSize = Connection.ABSOLUTE_MAX_WINDOW;
+        } else if (msgs < 2) {
+            _maxWindowSize = 2;
+        } else {
+            _maxWindowSize = msgs;
+        }
     }
 
     /**

@@ -133,10 +133,11 @@ class Connection {
     }
 
     /**
-     *  Legacy hard cap used as a safe floor for the BDP-based dynamic cap.
-     *  The actual per-connection in-flight limit is computed by getBDPBasedInFlightCap().
+     *  Default window size cap used when no per-connection or global override is set.
+     *  The effective ceiling is managed by getGlobalMaxWindowSize(), which the Tuner
+     *  adjusts based on observed RTT, bandwidth, and loss.
      */
-    public static final int MAX_WINDOW_SIZE = SystemVersion.isSlow() ? 192 : 256;
+    public static final int MAX_WINDOW_SIZE_DEFAULT = SystemVersion.isSlow() ? 192 : 256;
 
     /**
      *  Absolute ceiling on in-flight packets regardless of BDP estimate.
@@ -144,6 +145,15 @@ class Connection {
      *  Set to accommodate high-BDP paths (e.g. 50Mbps @ 1s RTT ~ 6250 packets @ 1KB).
      */
     public static final int ABSOLUTE_MAX_WINDOW = 4096;
+
+    /** @since I2P+ mutable for adaptive tuning via Tuner */
+    private static volatile int _maxWindowSize = MAX_WINDOW_SIZE_DEFAULT;
+    /** @since I2P+ */
+    public static int getGlobalMaxWindowSize() { return _maxWindowSize; }
+    /** @since I2P+ */
+    public static void setGlobalMaxWindowSize(int val) {
+        _maxWindowSize = Math.max(128, Math.min(ABSOLUTE_MAX_WINDOW, val));
+    }
 
     private static final int UNCHOKES_TO_SEND = 8;
 
@@ -382,15 +392,15 @@ class Connection {
     /**
      *  BDP-based upper bound on in-flight packets.
      *  Uses the Westwood+ bandwidth estimator to compute how many packets
-     *  the pipe can hold, floored at MAX_WINDOW_SIZE (256/192) to preserve
+     *  the pipe can hold, floored at the global max window size to preserve
      *  the legacy baseline on low-BDP or uncalibrated paths.
      *
-     *  @return max allowed in-flight packets, in [MAX_WINDOW_SIZE, ABSOLUTE_MAX_WINDOW]
+     *  @return max allowed in-flight packets, in [globalMax, ABSOLUTE_MAX_WINDOW]
      */
     private int getBDPBasedInFlightCap() {
         float bwe = _bwEstimator.getBandwidthEstimate(); // packets/ms
         int rtt = Math.max(_options.getRTT(), 500);       // ms
-        int bdp = Math.max(MAX_WINDOW_SIZE, (int)(bwe * rtt));
+        int bdp = Math.max(getGlobalMaxWindowSize(), (int)(bwe * rtt));
         return Math.min(ABSOLUTE_MAX_WINDOW, bdp);
     }
 
