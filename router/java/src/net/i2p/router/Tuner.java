@@ -2792,7 +2792,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("INITIAL_WINDOW_SIZE", "Initial congestion window",
                   SUB_STREAMING,
 
-                  4, 256, 4, "stream.con.initialRTT.in", _context);
+                  8, 256, 4, "stream.con.initialRTT.in", _context);
         }
 
         protected void applyValue(int value) {
@@ -2902,7 +2902,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("INITIAL_RTO", "First retransmit timeout (ms)",
                   SUB_STREAMING,
 
-                  1000, 10000, 1000, "stream.con.initialRTT.out", _context);
+                  1000, 15000, 1000, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
