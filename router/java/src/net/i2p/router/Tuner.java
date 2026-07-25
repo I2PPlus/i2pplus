@@ -1230,6 +1230,27 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
+         * Fetch an additional stat value using the 5-minute average.
+         *
+         * <p>Useful for medium-term decisions that need more signal than
+         * a 60s spike but faster reaction than a 1-hour trend. For example,
+         * retransmit ratio over 5 minutes filters out transient bursts
+         * while still catching sustained loss within a minute or two.
+         *
+         * @param ctx      the router context
+         * @param statName the stat to query
+         * @return the 5-minute rolling average, or NaN if not available
+         * @since 0.9.70+
+         */
+        protected double getAdditionalStat5Min(RouterContext ctx, String statName) {
+            RateStat rs = ctx.statManager().getRate(statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(RateConstants.FIVE_MINUTES);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        /**
          * Fetch the event count for an additional stat using the 1-hour period.
          *
          * @param ctx      the router context
@@ -5235,7 +5256,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Min delay between retransmissions.
-     * Lower = faster loss detection, higher = avoid spurious retransmits.
+     * Targets 80% of observed RTT to avoid spurious retransmits on slow paths
+     * while staying below RTT for fast loss detection. During congestion the
+     * delay is raised above the RTT target to reduce retransmit volume.
      */
     private class MinResendDelayParam extends BaseParam {
 
@@ -5243,7 +5266,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.minResendDelay", "Streaming min resend delay (ms)",
                   SUB_STREAMING,
 
-                  100, 2000, 50, "stream.con.initialRTT.out", _context);
+                  1000, 5000, 100, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
@@ -5252,7 +5275,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMinResendDelayStatic");
-            return v > 0 ? v : 100;
+            return v > 0 ? v : 1000;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -5263,28 +5286,29 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
             // Cross-refs: stream.con.sendDuplicateSize (spurious retransmit rate),
-            //             stream.sendsBeforeAck (ACK efficiency),
             //             transport.sendMessageFailureLifetime (congestion)
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
-            double sendsBeforeAck = getAdditionalStat(_context, "stream.sendsBeforeAck");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean spuriousFlood = !Double.isNaN(dupSize) && dupSize > 2000;
-            boolean highRTT = !Double.isNaN(observed) && observed > 7000;
-            boolean inefficientAck = !Double.isNaN(sendsBeforeAck) && sendsBeforeAck > 8;
 
             // Spurious flood = raise min delay (stop hammering the pipe)
             if (spuriousFlood)
                 return Math.min(_max, current + _step);
 
-            // Congestion + high RTT = raise min delay
-            if (congested && highRTT)
+            // Congestion = raise min delay above RTT target
+            if (congested)
                 return Math.min(_max, current + _step);
 
-            // Efficient ACKing + low RTT + no congestion = lower min delay
-            if (!inefficientAck && !highRTT && !congested && !spuriousFlood)
-                return Math.max(_min, current - _step);
+            // Target 80% of observed RTT to avoid spurious retransmits
+            // while keeping loss detection faster than one full RTT
+            if (!Double.isNaN(observed)) {
+                int target = (int) Math.round(observed * 0.8);
+                target = Math.max(_min, Math.min(_max, target));
+                if (Math.abs(target - current) >= _step)
+                    return clamp(current, target, _step);
+            }
 
             return current;
         }
@@ -5292,7 +5316,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Congestion avoidance growth rate factor.
-     * Higher = more aggressive window growth in steady state.
+     * Higher Tuner value = faster window growth (maps to lower code factor,
+     * i.e. fewer ACKs per window increment). Range [1,4] limits code factors
+     * 1-4 so growth is never slower than 1/4th per ACK, which avoids the
+     * pathologically slow settings the old [1,16] range allowed.
      * Primary signal: stream.con.sendDuplicateSize (retransmit pressure).
      */
     private class CongestionAvoidanceGrowthParam extends BaseParam {
@@ -5301,7 +5328,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.congestionAvoidanceGrowthRateFactor", "Streaming CA growth rate",
                   SUB_STREAMING,
 
-                  1, 16, 1, "stream.con.sendDuplicateSize", _context);
+                  1, 4, 1, "stream.con.sendDuplicateSize", _context);
         }
 
         protected void applyValue(int value) {
@@ -5337,16 +5364,26 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Retransmit ratio (per-mille) from closed streams. Prefer the
             // byte-weighted stat (stream.rtxRatioBytes) for a bandwidth-overhead
             // view; fall back to the message-count stat if no byte data yet.
+            // Use both hourly (trend) and 5-minute (recent) windows so sustained
+            // loss is caught minutes earlier than the 1-hour stat allows.
             double rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatioBytes");
             if (Double.isNaN(rtxRatio))
                 rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatio");
-            boolean retransmitting = !Double.isNaN(rtxRatio) && rtxRatio > 200;
-            boolean retransmitLow = !Double.isNaN(rtxRatio) && rtxRatio < 50;
+            double rtxRatio5 = getAdditionalStat5Min(_context, "stream.rtxRatioBytes");
+            if (Double.isNaN(rtxRatio5))
+                rtxRatio5 = getAdditionalStat5Min(_context, "stream.rtxRatio");
+
+            boolean retransmitting = (!Double.isNaN(rtxRatio) && rtxRatio > 200) ||
+                                     (!Double.isNaN(rtxRatio5) && rtxRatio5 > 160);
+            boolean retransmitLow = (!Double.isNaN(rtxRatio) && rtxRatio < 50) ||
+                                    (!Double.isNaN(rtxRatio5) && rtxRatio5 < 40);
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean dropping = observed > 500;
-            boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 5000;
+            // Lower threshold to 3000ms so connections on modest-latency paths
+            // (e.g. 3.5s RTT) are treated as slow and eligible for faster growth.
+            boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 3000;
             boolean windowsSmall = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize < 4;
             boolean choking = !Double.isNaN(chokeSize) && chokeSize > 5;
 
@@ -5387,9 +5424,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Slow start growth rate factor.
-     * Higher = more aggressive ramp-up during slow start.
-     * Dead zone: hold at default unless signal is strong. This prevents
-     * the classic ping-pong where RTT fluctuates around the threshold.
+     * Higher Tuner value = faster ramp-up (maps to lower code factor).
+     * Range [1,4] limits code factors 1-4 so initial window growth is
+     * never slower than 1/4th per ACK. Dead zone: hold at default unless
+     * signal is strong. This prevents the classic ping-pong where RTT
+     * fluctuates around the threshold.
      */
     private class SlowStartGrowthParam extends BaseParam {
 
@@ -5397,7 +5436,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.slowStartGrowthRateFactor", "Streaming SS growth rate",
                   SUB_STREAMING,
 
-                  1, 16, 1, "stream.con.initialRTT.out", _context);
+                  1, 4, 1, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
@@ -5432,10 +5471,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double congWindowSize = getAdditionalStat(_context, "stream.con.windowSizeAtCongestion");
             boolean windowsCongesting = !Double.isNaN(congWindowSize) && congWindowSize < 5;
 
+            // Retransmit ratio (per-mille) — hourly trend with 5-min recent
+            // catch-up so sustained loss is detected sooner.
+            double rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatioBytes");
+            if (Double.isNaN(rtxRatio))
+                rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatio");
+            double rtxRatio5 = getAdditionalStat5Min(_context, "stream.rtxRatioBytes");
+            if (Double.isNaN(rtxRatio5))
+                rtxRatio5 = getAdditionalStat5Min(_context, "stream.rtxRatio");
+            boolean retransmitLow = (!Double.isNaN(rtxRatio) && rtxRatio < 50) ||
+                                    (!Double.isNaN(rtxRatio5) && rtxRatio5 < 40);
+
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
-            boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 5000;
+            // Use observed (initialRTT.out) as primary RTT for "streams slow"
+            // since that's the RTT new connections see — more relevant than
+            // lifetimeRTT for page-load connections. Lower threshold to 3000ms
+            // so 3-4s paths are treated as eligible for faster growth.
+            boolean streamsSlow = !Double.isNaN(observed) && observed > 3000;
             boolean windowsSmall = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize < 4;
             boolean choking = !Double.isNaN(chokeSize) && chokeSize > 5;
 
@@ -5461,7 +5515,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return current;
 
             // Completed streams slow + windows small = increase ramp (need faster ramp)
-            if (streamsSlow && windowsSmall && !dropping && !congested && !windowsCongesting)
+            if (streamsSlow && windowsSmall && !dropping && !congested && !windowsCongesting && retransmitLow)
                 return Math.min(_max, current + _step);
 
             // Below default: increase if healthy
