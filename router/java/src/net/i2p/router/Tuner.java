@@ -419,6 +419,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new RTOMultiplierParam());
         _params.add(new MaxRttParam());
         _params.add(new MaxSlowStartWindowParam());
+        _params.add(new MaxWindowSizeParam());
         _params.add(new MinResendDelayParam());
         _params.add(new PassiveFlushDelayParam());
         _params.add(new SlowStartGrowthParam());
@@ -3181,6 +3182,76 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.max(recoveryFloor, current - _step);
 
             return current;
+        }
+    }
+
+    /**
+     * Tunes the global max window size ceiling for all streaming connections.
+     * Higher = more in-flight data, higher peak throughput, but more memory
+     * and worse loss recovery when congestion hits.  Adjusted based on RTT,
+     * bandwidth, loss rate, and memory pressure so the cap tracks the BDP
+     * without over-committing memory on constrained routers.
+     */
+    private class MaxWindowSizeParam extends BaseParam {
+
+        MaxWindowSizeParam() {
+            super("i2p.streaming.maxWindowSize", "Streaming max window size",
+                  SUB_STREAMING,
+
+                  128, 2048, 128, "stream.con.initialRTT.out", _context);
+        }
+
+        protected void applyValue(int value) {
+            StreamingConnectionReflector.invokeConnectionSet("setGlobalMaxWindowSize", value);
+        }
+
+        protected int getRuntimeValue() {
+            int v = StreamingConnectionReflector.invokeConnectionInt("getGlobalMaxWindowSize");
+            return v > 0 ? v : 256;
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            return getObservedRTT(_context, _statName);
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
+            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double bwSend = getAdditionalStat(_context, "bw.sendBps");
+            double memPct = getAdditionalStat(_context, "jobQueue.memoryUsedPercent");
+
+            boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
+            boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
+            double memPressure = !Double.isNaN(memPct) ? memPct : 0.0;
+
+            // Recovery floor: always climb back toward default unless severe drops/congestion
+            int recoveryFloor = Math.max(_min, _defaultValue / 2);
+            if (current < recoveryFloor && !congested && !dropping)
+                return Math.min(_defaultValue, current + _step);
+
+            // Severe drops, congestion, or memory > 60% — shrink ceiling
+            if (dropping || congested || memPressure > 60.0)
+                return Math.max(recoveryFloor, current - _step);
+
+            // BDP-based target: how many packets can the pipe hold
+            double rttSec = observed / 1000.0;
+            int bdpTarget = current;
+            if (!Double.isNaN(bwSend) && bwSend > 0 && observed > 100) {
+                int packetSize = 4096;
+                bdpTarget = (int)(bwSend * rttSec / packetSize);
+                bdpTarget = Math.max(_min, Math.min(_max, bdpTarget));
+            }
+
+            // Hold at current unless BDP diverges significantly
+            int bdpDiff = Math.abs(bdpTarget - current);
+            if (bdpDiff < _step * 2)
+                return current;
+
+            // Move toward BDP target
+            if (bdpTarget > current)
+                return Math.min(bdpTarget, current + _step);
+            return Math.max(recoveryFloor, current - _step);
         }
     }
 
