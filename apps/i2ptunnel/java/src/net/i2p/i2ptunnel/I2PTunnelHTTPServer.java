@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.HashSet;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Locale;
@@ -695,23 +696,24 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
 
                 boolean compress = allowGZIP && useGZIP;
-                // waiter is set to the return value when the CompressedRequestor is done
-                AtomicInteger waiter = keepalive ? new AtomicInteger() : null;
                 Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
-                                                     _log, compress, upgrade, _clientExecutor, keepalive, waiter);
-                // keepalive implies isGetOrHead (forced false above for non-GET/HEAD),
-                // so isGetOrHead alone covers every inline case.
-                if (isGetOrHead) {t.run();} // run inline
-                else {_clientExecutor.execute(t);} // run in the server pool
-
+                                                     _log, compress, upgrade, _clientExecutor, keepalive, null);
+                // Offload to executor pool to avoid blocking the handler thread on
+                // slow I2P socket writes (high-latency tunnel paths).
+                try {
+                    _clientExecutor.execute(t);
+                } catch (RejectedExecutionException ree) {
+                    try { sendError(socket, ERR_UNAVAILABLE); } catch (IOException ioe) {}
+                    try { socket.close(); } catch (IOException ioe) {}
+                    if (_log.shouldWarn())
+                        _log.warn("[HTTPServer] Executor pool saturated, rejecting request \n* Client: " + peerB32);
+                    return;
+                }
 
                 long afterHandle = getTunnel().getContext().clock().now();
                 recordInitialTiming(afterAccept, afterHeaders, afterSocket, afterHandle, requestCount, peerB32);
-                if (keepalive && !shouldKeepalive(waiter, afterAccept, requestCount))
-                    break;
-
-                // go around again
-                requestCount++;
+                // Async dispatch: can't check keepalive synchronously
+                break;
 
             } while (keepalive);
 
