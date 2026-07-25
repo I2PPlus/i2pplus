@@ -336,6 +336,11 @@ class Connection {
      * Block until there is an open outbound packet slot or the write timeout expires.
      * PacketLocal is the only caller, generally with -1.
      *
+     * A persist timer prevents deadlock when the remote chokes us (window=1) and
+     * then never sends an unchoke signal.  After RTO (min 5s), we auto-unchoke and
+     * allow the retransmission mechanism to restore the window, with exponential
+     * backoff so a persistently choked peer does not cause a tight probe loop.
+     *
      * @param timeoutMs 0 or negative means wait forever, 5 minutes max
      * @return true if the packet should be sent, false for a fatal error
      *         will return false after 5 minutes even if timeoutMs is &lt;= 0.
@@ -345,6 +350,7 @@ class Connection {
         long now = start;
         long writeExpire = start + timeoutMs;
         boolean started = false;
+        int persistBackoff = 0;
         while (true) {
             long timeLeft = writeExpire - now;
             synchronized (_outboundPackets) {
@@ -357,6 +363,20 @@ class Connection {
                 int unacked = _outboundPackets.size();
                 int wsz = _options.getWindowSize();
                 if (shouldWait(unacked, wsz)) {
+                    if (_isChoked) {
+                        long persistDelay = _options.getRTO();
+                        if (persistDelay <= 0) persistDelay = 5000L;
+                        if (persistDelay < 5000L) persistDelay = 5000L;
+                        if (persistBackoff > 0)
+                            persistDelay = Math.min(persistDelay << persistBackoff, 60000L);
+                        if (now - start >= persistDelay) {
+                            if (_log.shouldWarn())
+                                _log.warn("Persist timer expired, auto-unchoking on " + this);
+                            persistBackoff = Math.min(persistBackoff + 1, 5);
+                            setChoked(false);
+                            continue;
+                        }
+                    }
                     if (timeoutMs > 0) {
                         if (timeLeft <= 0) {
                             if (_log.shouldInfo()) {
@@ -1370,6 +1390,9 @@ class Connection {
         if (on != _isChoked) {
            _isChoked = on;
            if (_log.shouldWarn()) {_log.warn("Choked changed to " + on + " on " + this);}
+           if (!on) {
+               windowAdjusted();
+           }
         }
         if (on) {
             congestionOccurred();
