@@ -1209,6 +1209,27 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
+         * Fetch an additional stat value using the 10-minute average.
+         *
+         * <p>The 10-minute period is a medium-term signal — slower to react than
+         * the 60s period but less prone to gaps from brief idle windows. Use this
+         * as the first fallback when the 60s stat has no recent events, since most
+         * streaming stats are registered with both ONE_MINUTE and TEN_MINUTES rates.
+         *
+         * @param ctx      the router context
+         * @param statName the stat to query
+         * @return the 10-minute rolling average, or NaN if not available
+         * @since 0.9.70+
+         */
+        protected double getAdditionalStatLong(RouterContext ctx, String statName) {
+            RateStat rs = ctx.statManager().getRate(statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD_LONG);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        /**
          * Fetch the event count for an additional stat using the 60s period.
          *
          * <p>For event-count stats where {@code addRateData(name, 1)} is called,
@@ -1370,6 +1391,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          */
         protected double getObservedRTT(RouterContext ctx, String primaryStat) {
             double val = getAdditionalStat(ctx, primaryStat);
+            if (!Double.isNaN(val)) return val;
+            val = getAdditionalStatLong(ctx, primaryStat);
+            if (!Double.isNaN(val)) return val;
+            val = getAdditionalStatHourly(ctx, primaryStat);
             if (!Double.isNaN(val)) return val;
             return getAdditionalStat(ctx, "udp.sendConfirmTime");
         }
@@ -2954,15 +2979,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // Retransmit ratio (per-mille) from closed streams: a lossy-path
             // signal complementary to the absolute dup-size above.
+            // Fall back through hourly → 10-minute periods so retransmit
+            // detection is available within ~10 min of router start (instead
+            // of waiting a full hour for the hourly stat to populate).
             double rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatioBytes");
             if (Double.isNaN(rtxRatio))
                 rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatio");
+            if (Double.isNaN(rtxRatio))
+                rtxRatio = getAdditionalStatLong(_context, "stream.rtxRatioBytes");
+            if (Double.isNaN(rtxRatio))
+                rtxRatio = getAdditionalStatLong(_context, "stream.rtxRatio");
             boolean retransmitting = !Double.isNaN(rtxRatio) && rtxRatio > 200;
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean spuriousRetransmits = !Double.isNaN(dupSize) && dupSize > 1000;
-            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 7000;
+            boolean highRTT = (!Double.isNaN(observed) && observed > 7000) ||
+                              (!Double.isNaN(confirmTime) && confirmTime > 7000);
             // Connects are failing (SYN never ACKed): the initial RTO gives up before
             // the path's real RTT — raise it so the SYN retransmit waits long enough.
             boolean connectsFailing = !Double.isNaN(connectFailed) && connectFailed > 2;
@@ -5030,7 +5063,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxRTO", "Streaming max RTO (ms)",
                   SUB_STREAMING,
 
-                  1000, 20000, 1000, "udp.sendConfirmTime", _context);
+                  1000, 60000, 1000, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -5146,7 +5179,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxResendDelay", "Streaming max resend delay (ms)",
                   SUB_STREAMING,
 
-                  1000, 15000, 1000, "stream.con.initialRTT.out", _context);
+                  1000, 60000, 1000, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
@@ -5542,7 +5575,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxRtt", "Streaming RTT cap (ms)",
                   SUB_STREAMING,
 
-                  5000, 15000, 1000, "stream.con.initialRTT.out", _context);
+                  5000, 60000, 1000, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {

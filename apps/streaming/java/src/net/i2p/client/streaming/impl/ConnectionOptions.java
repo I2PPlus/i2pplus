@@ -93,19 +93,19 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static int getInitialRTO() { return _initialRTO; }
 
     /** @since 0.9.70+ */
-    static void setInitialRTO(int val) { _initialRTO = Math.max(500, Math.min(10000, val)); }
+    static void setInitialRTO(int val) { _initialRTO = Math.max(500, Math.min(15000, val)); }
 
     /**
-     * Default aligns with the RTT cap (_maxRtt, default 10000): observed I2P RTT
-     * rarely exceeds ~9s, so a 15s ceiling only wasted time per retransmit.
-     * The clamp ceiling (12000) allows the tuner limited headroom above the default.
+     * Default (15000) accommodates RTT up to ~7s with standard TCP deviation.
+     * High-latency networks may drive this higher via the Tuner, allowing the
+     * connection to survive multi-second RTT spikes without spurious retransmits.
      * @since 0.9.70+
      */
     private static volatile int _maxRTO = 15000;
     /** @since 0.9.70+ */
     public static int getMaxRTOStatic() { return _maxRTO; }
     /** @since 0.9.70+ */
-    public static void setMaxRTO(int val) { _maxRTO = Math.max(1000, Math.min(20000, val)); }
+    public static void setMaxRTO(int val) { _maxRTO = Math.max(1000, Math.min(60000, val)); }
 
     static final String PROP_RTO_MULTIPLIER = "i2p.streaming.rtoMultiplier";
     /** @since 2.12.0+ mutable for adaptive tuning */
@@ -127,7 +127,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** @since 0.9.70+ */
     public static int getMaxResendDelayStatic() { return _maxResendDelay; }
     /** @since 0.9.70+ */
-    public static void setMaxResendDelay(int val) { _maxResendDelay = Math.max(1000, Math.min(15000, val)); }
+    public static void setMaxResendDelay(int val) { _maxResendDelay = Math.max(1000, Math.min(60000, val)); }
 
     /** @since I2P+ */
     private int getMaxRTO() {

@@ -1450,7 +1450,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         break;
                     } catch (IOException ioe) {
                         connectAttempts++;
-                        if (connectAttempts >= 2) {throw ioe;}
+                        if (connectAttempts >= 6) {throw ioe;}
                         if (_log.shouldInfo()) {
                             _log.info(getPrefix(requestId) + "Connection failed (" + ioe.getClass().getSimpleName() +
                                       "), retrying: " + ioe.getMessage());
