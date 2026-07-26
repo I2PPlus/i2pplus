@@ -51,12 +51,8 @@ msgstr "Zobraziť správu ako obyčajný text"
 msgid "unknown"
 msgstr "neznámy"
 
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
-msgstr ""
-"Kvôli ochrane súkromia SusiMail blokuje Javascript a vzdialený obsah v tejto"
-" HTML správe."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
+msgstr "Kvôli ochrane súkromia SusiMail blokuje Javascript a vzdialený obsah v tejto HTML správe."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "Povoliť Javascript pre lepšie zobrazenie a ďalšie funkcie."
@@ -180,8 +176,7 @@ msgstr "Žiadne správy označené na zmazanie."
 
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"Hostiteľ nezmenený. Upravte konfiguračný súbor {0} pre zmenu hostiteľa."
+msgstr "Hostiteľ nezmenený. Upravte konfiguračný súbor {0} pre zmenu hostiteľa."
 
 msgid "Configuration saved"
 msgstr "Konfigurácia uložená"
@@ -449,14 +444,10 @@ msgid "No response from server"
 msgstr "Žiadna odpoveď zo servera"
 
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"Prihlásenie na mailový server zlyhalo, nesprávne používateľské meno alebo "
-"heslo."
+msgstr "Prihlásenie na mailový server zlyhalo, nesprávne používateľské meno alebo heslo."
 
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"Odhláste sa a potom sa znova prihláste so správnym používateľským menom a "
-"heslom."
+msgstr "Odhláste sa a potom sa znova prihláste so správnym používateľským menom a heslom."
 
 msgid "Login failed"
 msgstr "Prihlásenie zlyhalo"

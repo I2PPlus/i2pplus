@@ -141,5 +141,4 @@ msgid "Running I2P as the root user is *not* recommended."
 msgstr "Spúšťanie I2P ako root *nie je* odporúčané."
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
-msgstr ""
-"Pre spustenie ako root aj tak, upravte i2prouter a nastavte ALLOW_ROOT=true."
+msgstr "Pre spustenie ako root aj tak, upravte i2prouter a nastavte ALLOW_ROOT=true."
