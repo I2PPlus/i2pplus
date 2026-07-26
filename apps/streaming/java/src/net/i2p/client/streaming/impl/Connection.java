@@ -126,10 +126,10 @@ class Connection {
     public static int getDisconnectTimeout() {
         return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.disconnectTimeout", 2*60*1000);
     }
-    public static final int DEFAULT_CONNECT_TIMEOUT = 60*1000;
+    public static final int DEFAULT_CONNECT_TIMEOUT = 30*1000;
     /** @since 0.9.70+ */
     static long getMaxConnectTimeout() {
-        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxConnectTimeout", 2*60*1000);
+        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxConnectTimeout", 75*1000);
     }
 
     /**
@@ -254,7 +254,7 @@ class Connection {
         _ackedList = new ArrayList<>(8);
 
         // Initialize random wait for activity timer randomization and bandwidth estimator
-        _randomWait = _context.random().nextInt(10*1000); // 0-10 seconds randomization
+        _randomWait = _context.random().nextInt(3*1000); // 0-3 seconds randomization
         _bwEstimator = new SimpleBandwidthEstimator(_context, _options);
     }
 
@@ -292,28 +292,26 @@ class Connection {
 
     /**
      * Calculate delay needed for pacing based on packet size and current rate.
-     *
-     * The pacing rate is recomputed live here (rather than read from the cached
-     * {@link #_pacingRate}) because RTT is updated on every ACK, while the cache
-     * is only refreshed on window-size changes via {@link #updatePacingRate()}.
-     * Reading it live avoids stale-RTT pacing that would otherwise throttle or
-     * burst throughput on paths with a stable window but varying RTT.
+     * Pacing delay = (packetSize / rate) - timeSinceLastPacket.
+     * @return delay in ms, 0 if no pacing needed
      */
     private long calculatePacingDelay(int packetSize) {
         long rate = calculatePacingRate();
-        if (rate == Long.MAX_VALUE) {
-            return 0; // No pacing
-        }
+        if (rate == Long.MAX_VALUE)
+            return 0;
+        return calculatePacingDelay(packetSize, rate);
+    }
+
+    /**
+     * Same as above but recomputes live to avoid stale-RTT pacing.
+     */
+    private long calculatePacingDelay(int packetSize, long pacingRate) {
         synchronized (_pacingLock) {
-            _pacingRate = rate;
             long now = _context.clock().now();
             long timeSinceLastPacket = now - _lastPacketSendTime;
-            long expectedInterval = (long) packetSize * 1000 / rate;
-
-            if (timeSinceLastPacket >= expectedInterval) {
-                return 0; // Can send immediately
-            }
-
+            long expectedInterval = (long) packetSize * 1000 / pacingRate;
+            if (timeSinceLastPacket >= expectedInterval)
+                return 0;
             return expectedInterval - timeSinceLastPacket;
         }
     }
@@ -594,7 +592,7 @@ class Connection {
                 packet.setTimeout(timeout);
             }
 
-            // Apply pacing to smooth transmission
+            // Pace or send immediately
             long pacingDelay = calculatePacingDelay(packet.getPayloadSize());
             if (pacingDelay > 0) {
                 synchronized (_pacedQueue) {
@@ -605,39 +603,20 @@ class Connection {
                     }
                 }
                 packet.markEnqueued();
-                // Schedule retransmit timer even for paced packets so loss
-                // is detected even if the paced event is delayed.
-                if (_retransmitEvent.scheduleIfNotRunning(timeout)) {
-                    if (_log.shouldDebug()) {
-                        _log.debug("[" + Connection.this + "] Resend in " + timeout + "ms for paced " + packet);
-                    }
-                    _tlpEvent.scheduleProbe(getPTO());
+            } else if (_outboundQueue.enqueue(packet)) {
+                packet.markEnqueued();
+                _unackedPacketsReceived.set(0);
+                _lastSendTime = _context.clock().now();
+                synchronized (_pacingLock) {
+                    _lastPacketSendTime = _context.clock().now();
                 }
-            } else {
-                if (_outboundQueue.enqueue(packet)) {
-                    packet.markEnqueued();
-                    _unackedPacketsReceived.set(0);
-                    _lastSendTime = _context.clock().now();
-                    synchronized (_pacingLock) {
-                        _lastPacketSendTime = _context.clock().now();
-                    }
-                    resetActivityTimer();
-                }
-                // Schedule retransmit timer outside the _outboundPackets lock
-                // to prevent deadlock with RetransmitEvent.timeReached()
-                if (_retransmitEvent.scheduleIfNotRunning(timeout)) {
-                   if (_log.shouldDebug()) {
-                       _log.debug("[" + Connection.this + "] Resend in " + timeout + "ms for " + packet);
-                   }
-                   // Schedule Tail Loss Probe — fires at ~2*RTT to detect loss
-                   // before the RTO timer (5-15s). Only scheduled when the RTO
-                   // transitions from idle to running (first unacked packet).
-                   _tlpEvent.scheduleProbe(getPTO());
-                } else {
-                    if (_log.shouldDebug()) {
-                        _log.debug("[" + Connection.this + "] Timer was already running!");
-                    }
-                }
+                resetActivityTimer();
+            }
+            // Schedule retransmit timer outside _outboundPackets lock
+            // to prevent deadlock with RetransmitEvent.timeReached()
+            // TLP scheduled at ~2*RTT to detect loss before RTO.
+            if (_retransmitEvent.scheduleIfNotRunning(timeout)) {
+               _tlpEvent.scheduleProbe(getPTO());
             }
         }
     }
@@ -803,9 +782,8 @@ class Connection {
     }
 
     /**
-     *  Notify that a close was sent.
-     *  Called by CPH.
-     *  May be called multiple times... but shouldn't be.
+     *  Called by CPH when a CLOSE packet is sent.
+     *  Idempotent: only the first call sets the timestamp.
      */
     public void notifyCloseSent() {
         if (!_closeSentOn.compareAndSet(0, _context.clock().now()) && _log.shouldDebug()) {
@@ -954,10 +932,7 @@ class Connection {
         }
         synchronized (_connectLock) {_connectLock.notifyAll();}
 
-        int disconnectCount = 0;
-
         if (_closeReceivedOn.get() <= 0) {
-            // should have already been called from closeReceived() above
             _inputStream.closeReceived();
         }
 
@@ -970,19 +945,16 @@ class Connection {
         } else {
             _hardDisconnected = true;
             if (_inputStream.getHighestBlockId() >= 0 && !getResetReceived()) {
-                // only send a RESET if we ever got something (and he didn't RESET us),
-                // otherwise don't waste the crypto and tags
+                // only send a RESET if we ever got a packet (and he didn't RESET us),
+                // otherwise don't waste crypto and session tags
                 if (_log.shouldWarn()) {
-                    _log.warn("Hard disconnecting " + (disconnectCount == 1 ? "(Count: " + disconnectCount + ") " : "") +
-                              "and sending RESET to " + getRemotePeerString() + " -> " +
+                    _log.warn("Hard disconnecting and sending RESET to " + getRemotePeerString() + " -> " +
                               (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
                 }
                 sendReset();
-                disconnectCount++;
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn("Hard disconnecting " + (disconnectCount == 1 ? "(Count: " + disconnectCount + ") " : "") +
-                              "from " + getRemotePeerString() + " -> " +
+                    _log.warn("Hard disconnecting from " + getRemotePeerString() + " -> " +
                               (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
                 }
             }
@@ -1104,7 +1076,7 @@ class Connection {
         if (peer == null) {throw new NullPointerException();}
         synchronized(this) {
             if (_remotePeer != null) {
-                throw new RuntimeException("Remote peer already set [" + _remotePeer + ", " + peer + "]");
+                throw new IllegalStateException("Remote peer already set [" + _remotePeer + ", " + peer + "]");
             }
             _remotePeer = peer;
         }
@@ -1134,7 +1106,7 @@ class Connection {
     public void setRemoteTransientSPK(SigningPublicKey transientSPK) {
         synchronized(this) {
             if (_transientSPK != null) {
-                throw new RuntimeException("Remote Signing Public Key already set");
+                throw new IllegalStateException("Remote Signing Public Key already set");
             }
             _transientSPK = transientSPK;
         }
@@ -1526,125 +1498,70 @@ class Connection {
     }
 
     /**
-     * wait until a connection is made or the connection fails within the
-     * timeout period, setting the error accordingly.
+     * Wait for the connection to be established, with the option's connectTimeout.
      */
      void waitForConnect() {
-         long connectStart = _context.clock().now();
-         long now = _context.clock().now();
-         long expiration = now + _options.getConnectTimeout();
-         if (_log.shouldInfo())
-             _log.info("waitForConnect() starting for " + _remotePeer + " (timeout=" + _options.getConnectTimeout() + "ms)");
-         while (true) {
-             if (_connected.get() && (_receiveStreamId.get() > 0) && (_sendStreamId.get() > 0)) {
-                 // w00t
-                 long elapsed = _context.clock().now() - connectStart;
-                 if (_log.shouldInfo())
-                     _log.info("waitForConnect() connected in " + elapsed + "ms for " + _remotePeer);
-                 if (_log.shouldDebug()) {_log.debug("waitForConnect(): Connected and we have Stream IDs");}
-                 return;
-             }
-             if (_connectionError != null) {
-                 long elapsed = _context.clock().now() - connectStart;
-                 if (_log.shouldInfo())
-                     _log.info("waitForConnect() error after " + elapsed + "ms: " + _connectionError);
-                 if (_log.shouldDebug()) {
-                     _log.debug("waitForConnect(): connection error found: " + _connectionError);
-                 }
-                 return;
-             }
-             if (!_connected.get()) {
-                 long elapsed = _context.clock().now() - connectStart;
-                 if (_log.shouldInfo())
-                     _log.info("waitForConnect() failed after " + elapsed + "ms: not connected");
-                 _connectionError = "Connection failed";
-                 if (_log.shouldDebug()) {_log.debug("waitForConnect(): not connected");}
-                 return;
-             }
-
-             long timeLeft = expiration - now;
-             if ((timeLeft <= 0) && (_options.getConnectTimeout() > 0)) {
-                 long elapsed = _context.clock().now() - connectStart;
-                 if (_connectionError == null) {
-                     _connectionError = "Connection timed out";
-                     disconnect(false);
-                 }
-                 if (_log.shouldInfo())
-                     _log.info("waitForConnect() timed out after " + elapsed + "ms: " + _connectionError);
-                 if (_log.shouldDebug()) {
-                     _log.debug("waitForConnect(): timed out: " + _connectionError);
-                 }
-                 return;
-             }
-             if (timeLeft > getMaxConnectTimeout()) {timeLeft = getMaxConnectTimeout();}
-             else if (_options.getConnectTimeout() <= 0) {timeLeft = DEFAULT_CONNECT_TIMEOUT;}
-
-             if (_log.shouldDebug()) {_log.debug("waitForConnect(): wait " + timeLeft);}
-             try {
-                 synchronized (_connectLock) {_connectLock.wait(timeLeft);}
-             } catch (InterruptedException ie) {
-                 if (_log.shouldDebug()) _log.debug("waitForConnect(): InterruptedException");
-                 _connectionError = "InterruptedException";
-                 return;
-             }
-             now = _context.clock().now();
-         }
+         waitForConnect(0);
      }
 
-     /**
-      * Wait for the connection to be established, but no longer than timeoutMs.
-      * If the connection is not established within timeoutMs, sets
-      * _connectionError so callers detect the failure.
-      *
-      * @param timeoutMs max milliseconds to wait (<= 0 delegates to waitForConnect())
-      */
-     void waitForConnect(int timeoutMs) {
-         if (timeoutMs <= 0) {
-             waitForConnect();
-             return;
-         }
-         long connectStart = _context.clock().now();
-         long expiration = connectStart + Math.min(timeoutMs, getMaxConnectTimeout());
-         if (_log.shouldInfo())
-             _log.info("waitForConnect() bounded starting for " + _remotePeer + " (timeout=" + timeoutMs + "ms)");
-         while (true) {
-             if (_connected.get() && (_receiveStreamId.get() > 0) && (_sendStreamId.get() > 0)) {
-                 long elapsed = _context.clock().now() - connectStart;
-                 if (_log.shouldInfo())
-                     _log.info("waitForConnect() connected in " + elapsed + "ms for " + _remotePeer);
-                 return;
-             }
-             if (_connectionError != null)
-                 return;
-             if (!_connected.get()) {
-                 long elapsed = _context.clock().now() - connectStart;
-                 if (_connectionError == null) {
-                     _connectionError = "Connection failed";
-                 }
-                 if (_log.shouldInfo())
-                     _log.info("waitForConnect() bounded failed after " + elapsed + "ms: " + _remotePeer);
-                 return;
-             }
-             long timeLeft = expiration - _context.clock().now();
-             if (timeLeft <= 0) {
-                 long elapsed = _context.clock().now() - connectStart;
-                 if (_connectionError == null) {
-                     _connectionError = "Connection timed out";
-                     disconnect(false);
-                 }
-                 if (_log.shouldInfo())
-                     _log.info("waitForConnect() bounded timeout after " + elapsed + "ms for " + _remotePeer);
-                 return;
-             }
-             try {
-                 synchronized (_connectLock) { _connectLock.wait(Math.min(timeLeft, 1000)); }
-             } catch (InterruptedException ie) {
-                 if (_log.shouldDebug()) _log.debug("waitForConnect(): InterruptedException");
-                 _connectionError = "InterruptedException";
-                 return;
-             }
-         }
-     }
+    /**
+     * Wait for the connection to be established, but no longer than timeoutMs.
+     * If the connection fails or the timeout is exceeded, sets _connectionError.
+     * @param timeoutMs max wait in ms; if &lt;= 0 uses the connection option's connectTimeout
+     */
+      void waitForConnect(int timeoutMs) {
+          long totalTimeout = timeoutMs > 0 ? timeoutMs : _options.getConnectTimeout();
+          boolean hasTimeout = totalTimeout > 0;
+          long expiry = 0;
+          if (hasTimeout) {
+              long cap = getMaxConnectTimeout();
+              if (totalTimeout > cap)
+                  totalTimeout = cap;
+              expiry = _context.clock().now() + totalTimeout;
+          }
+          long start = _context.clock().now();
+          if (_log.shouldInfo())
+              _log.info("waitForConnect() starting for " + _remotePeer + " (timeout=" + (hasTimeout ? totalTimeout : 0) + "ms)");
+          while (true) {
+              if (_connected.get() && (_receiveStreamId.get() > 0) && (_sendStreamId.get() > 0)) {
+                  if (_log.shouldInfo())
+                      _log.info("waitForConnect() connected in " + (_context.clock().now() - start) + "ms for " + _remotePeer);
+                  return;
+              }
+              if (_connectionError != null)
+                  return;
+              if (!_connected.get()) {
+                  if (_connectionError == null)
+                      _connectionError = "Connection failed";
+                  return;
+              }
+              if (hasTimeout) {
+                  long timeLeft = expiry - _context.clock().now();
+                  if (timeLeft <= 0) {
+                      if (_connectionError == null) {
+                          _connectionError = "Connection timed out";
+                          disconnect(false);
+                      }
+                      if (_log.shouldInfo())
+                          _log.info("waitForConnect() timed out after " + (_context.clock().now() - start) + "ms for " + _remotePeer);
+                      return;
+                  }
+                  try {
+                      synchronized (_connectLock) { _connectLock.wait(Math.min(timeLeft, 1000)); }
+                  } catch (InterruptedException ie) {
+                      _connectionError = "InterruptedException";
+                      return;
+                  }
+              } else {
+                  try {
+                      synchronized (_connectLock) { _connectLock.wait(60000); }
+                  } catch (InterruptedException ie) {
+                      _connectionError = "InterruptedException";
+                      return;
+                  }
+              }
+          }
+      }
 
     private void resetActivityTimer() {
         long howLong = _options.getInactivityTimeout();
@@ -1777,10 +1694,7 @@ class Connection {
         else {buf.append("Unknown");}
         if (_isInbound) {buf.append(" from ");}
         else {buf.append(" to ");}
-        Destination remotePeer;
-        synchronized(this) {
-            remotePeer = _remotePeer;
-        }
+        Destination remotePeer = getRemotePeer();
         if (remotePeer != null) {buf.append("[").append(remotePeer.calculateHash().toBase32().substring(0,8)).append("]");}
         else {buf.append("Unknown");}
         long now = _context.clock().now();
@@ -1945,13 +1859,12 @@ class Connection {
 
             congestionOccurred();
 
-            // 1. RTO backoff: for established connections, double RTO per RFC 6298
-            //    sec 5.5-5.6. For SYN-phase connections (stream IDs not yet assigned),
-            //    there's no congestion to manage — keep RTO fixed so each retry gets
-            //    the same window. SYN retries are bounded by maxSynResends, whose total
-            //    budget (maxSynResends * initialRTO) fills the connect() timeout with
-            //    gentle fixed-interval retransmits instead of exponential backoff.
-            if (_receiveStreamId.get() > 0) {
+            // 1. RTO backoff: for established connections (ACK received), double RTO
+            //    per RFC 6298 sec 5.5-5.6. For SYN-phase connections, no congestion
+            //    to manage — keep RTO fixed so each retry gets the same window.
+            //    SYN retries are bounded by maxSynResends, whose total budget
+            //    (maxSynResends * initialRTO) fills the connect() timeout.
+            if (_highestAckedThrough.get() >= 0) {
                 pushBackRTO(_options.doubleRTO());
             } else {
                 pushBackRTO(_options.getRTO());

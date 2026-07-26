@@ -339,6 +339,9 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      */
     public void waitForAccept(int maxWaitMs) throws IOException, InterruptedException {
         long before = _context.clock().now();
+        // Save packet description before any state mutation (payload release, etc.)
+        // so the debug log below doesn't see torn fields.
+        String packetDesc = _log.shouldDebug() ? toString() : null;
         boolean accepted = false;
         try {
             // throws IOE or IE
@@ -359,7 +362,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                            + (isCancelled() ? " and CANCELLED" : "")
                            + ", queued behind " + queued +" with a window size of " + window
                            + "; finally accepted with " + afterQueued + " queued: "
-                           + toString());
+                           + packetDesc);
             }
         }
     }
@@ -433,9 +436,9 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             }
     }
 
-    /** @since I2P+ */
+    /** @since 0.9.70+ */
     public void markEnqueued() { _enqueued = true; }
 
-    /** @since I2P+ */
+    /** @since 0.9.70+ */
     public boolean isEnqueued() { return _enqueued; }
 }

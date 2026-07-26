@@ -101,10 +101,13 @@ class ConnectionManager {
 
     /**
      * Whether stream pooling is enabled.
-     * Tunable via i2p.streaming.streamPool.enabled (default: true).
+     * Disabled by default — pooled connections retain stale remote state
+     * that causes zero-data-flow after reuse. Enable only with proper
+     * connection state reset.
+     * Tunable via i2p.streaming.streamPool.enabled (default: false).
      */
     private boolean isPoolEnabled() {
-        return _context.getProperty("i2p.streaming.streamPool.enabled", true);
+        return _context.getProperty("i2p.streaming.streamPool.enabled", false);
     }
 
     /**
@@ -112,7 +115,7 @@ class ConnectionManager {
      * Tunable via i2p.streaming.destinationCooldownMs (default: 60000).
      */
     private long getDestCooldownMs() {
-        return _context.getProperty("i2p.streaming.destinationCooldownMs", 60*1000);
+        return _context.getProperty("i2p.streaming.destinationCooldownMs", 5*1000);
     }
 
      private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
@@ -670,8 +673,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                   if (_log.shouldDebug()) {
                       _log.debug("Reusing pooled connection to " + peer.calculateHash().toBase64().substring(0,6));
                   }
-                  // Skip to post-creation setup
-                  return finalizeConnection(con, peer, opts, connectStart);
+                  // Skip to post-creation setup (fromPool=true — skip cooldown)
+                  return finalizeConnection(con, peer, opts, connectStart, true);
               }
           }
           long expiration = _context.clock().now();
@@ -708,111 +711,41 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
               }
           }
 
-          // ok we're in...
-          // Check per-destination cooldown to avoid hammering unreachable peers
-          Hash destHash = peer.calculateHash();
-          Long lastFailure = _destFailures.get(destHash);
-          if (lastFailure != null) {
-              long elapsed = _context.clock().now() - lastFailure;
-              if (elapsed < getDestCooldownMs() && elapsed >= 0) {
-                  long delay = getDestCooldownMs() - elapsed;
-                  if (_log.shouldWarn())
-                        _log.warn("Delaying connect to [" + destHash.toBase64().substring(0,6) +
-                                  "] for " + delay + "ms (cooldown from previous failure)");
-                  synchronized (_cooldownLock) {
-                      try {
-                          _cooldownLock.wait(delay);
-                      } catch (InterruptedException ie) {
-                          Thread.currentThread().interrupt();
-                      }
-                  }
-              } else {
-                  _destFailures.remove(destHash, lastFailure);
-              }
-          }
-          con.eventOccurred();
-
-           if (_log.shouldDebug())
-               _log.debug("Connect() conDelay = " + opts.getConnectDelay());
-           if (opts.getConnectDelay() <= 0) {
-               con.waitForConnect();
-           } else {
-                 // The SYN send is delayed by connectDelay ms (SchedulerPreconnect).
-                 // Wait for the connection to establish with enough margin for the
-                 // SYN delay plus several resend cycles plus a full round trip.
-                 // With initial RTO 5s and doubling backoff, 45s allows ~4 SYN
-                 // attempts (5s + 10s + 20s + ...) — real I2P RTTs are 4-14s with
-                 // asymmetric transport, so 20s was too tight and gave up early.
-                 // Sets _connectionError on timeout.
-                int boundedTimeout = opts.getConnectDelay() + 45_000;
-               con.waitForConnect(boundedTimeout);
-           }
-           long connectElapsed = _context.clock().now() - connectStart;
-           if (_log.shouldInfo()) {
-               String err = con.getConnectionError();
-               if (err != null) {
-                   _log.info("ConnectionManager.connect() to [" + destHash.toBase64().substring(0,6) +
-                             "] failed in " + connectElapsed + "ms: " + err);
-               } else {
-                   _log.info("ConnectionManager.connect() to [" + destHash.toBase64().substring(0,6) +
-                             "] succeeded in " + connectElapsed + "ms");
-               }
-           }
-            // Record failure for cooldown, clear on success
-            if (con.getConnectionError() != null) {
-               _context.statManager().addRateData("stream.connectFailed", connectElapsed, connectElapsed);
-               _destFailures.put(destHash, _context.clock().now());
-               // Opportunistic trim: prevent unbounded growth from abandoned destinations
-               if (_destFailures.size() > 256) {
-                   long cutoff = _context.clock().now() - getDestCooldownMs();
-                   for (Map.Entry<Hash, Long> e : _destFailures.entrySet()) {
-                       if (e.getValue() < cutoff)
-                           _destFailures.remove(e.getKey(), e.getValue());
-                   }
-               }
-           } else {
-              _context.statManager().addRateData("stream.connectTime", connectElapsed, connectElapsed);
-              _destFailures.remove(destHash);
-          }
-          // safe decrement
-          for (;;) {
-              int n = _numWaiting.get();
-              if (n <= 0)
-                  break;
-              if (_numWaiting.compareAndSet(n, n - 1))
-                  break;
-          }
-
-_context.statManager().addRateData("stream.connectionCreated", 1);
-           return con;
+          // Delegate to shared finalizeConnection for cooldown, waitForConnect, and stats.
+          // fromPool=false so cooldown is applied for new connections.
+          return finalizeConnection(con, peer, opts, connectStart, false);
       }
 
       /**
        * Common post-creation setup for both pooled and new connections.
        * Handles cooldown, waitForConnect, stats recording.
+       * @param fromPool if true, skip cooldown delay (connection already established)
        */
       private Connection finalizeConnection(Connection con, Destination peer,
-                                             ConnectionOptions opts, long connectStart) {
+                                             ConnectionOptions opts, long connectStart,
+                                             boolean fromPool) {
           // ok we're in...
-          // Check per-destination cooldown to avoid hammering unreachable peers
           Hash destHash = peer.calculateHash();
-          Long lastFailure = _destFailures.get(destHash);
-          if (lastFailure != null) {
-              long elapsed = _context.clock().now() - lastFailure;
-              if (elapsed < getDestCooldownMs() && elapsed >= 0) {
-                  long delay = getDestCooldownMs() - elapsed;
-                  if (_log.shouldWarn())
-                        _log.warn("Delaying connect to [" + destHash.toBase64().substring(0,6) +
-                                  "] for " + delay + "ms (cooldown from previous failure)");
-                  synchronized (_cooldownLock) {
-                      try {
-                          _cooldownLock.wait(delay);
-                      } catch (InterruptedException ie) {
-                          Thread.currentThread().interrupt();
+          // Skip cooldown for pooled connections — the connection is already established
+          if (!fromPool) {
+              Long lastFailure = _destFailures.get(destHash);
+              if (lastFailure != null) {
+                  long elapsed = _context.clock().now() - lastFailure;
+                  if (elapsed < getDestCooldownMs() && elapsed >= 0) {
+                      long delay = getDestCooldownMs() - elapsed;
+                      if (_log.shouldWarn())
+                            _log.warn("Delaying connect to [" + destHash.toBase64().substring(0,6) +
+                                      "] for " + delay + "ms (cooldown from previous failure)");
+                      synchronized (_cooldownLock) {
+                          try {
+                              _cooldownLock.wait(delay);
+                          } catch (InterruptedException ie) {
+                              Thread.currentThread().interrupt();
+                          }
                       }
+                  } else {
+                      _destFailures.remove(destHash, lastFailure);
                   }
-              } else {
-                  _destFailures.remove(destHash, lastFailure);
               }
           }
           con.eventOccurred();
@@ -821,16 +754,15 @@ _context.statManager().addRateData("stream.connectionCreated", 1);
                _log.debug("Connect() conDelay = " + opts.getConnectDelay());
            if (opts.getConnectDelay() <= 0) {
                con.waitForConnect();
-           } else {
-               // The SYN send is delayed by connectDelay ms (SchedulerPreconnect).
-               // Wait for the connection to establish with enough margin for the
-               // SYN delay plus several resend cycles plus a full round trip.
-               // With initial RTO 5s and doubling backoff, 45s allows ~4 SYN
-               // attempts (5s + 10s + 20s + ...) — real I2P RTTs are 4-14s with
-               // asymmetric transport, so 20s was too tight and gave up early.
-               // Sets _connectionError on timeout.
-              int boundedTimeout = opts.getConnectDelay() + 45_000;
-              con.waitForConnect(boundedTimeout);
+            } else {
+                // The SYN send is delayed by connectDelay ms (SchedulerPreconnect).
+                // Wait for the connection to establish with enough margin for the
+                // SYN delay plus the configured connect timeout (which governs
+                // RTO doubling and retry budget). The connectTimeout from opts
+                // (_connectTimeout, default 30s) is the authoritative limit.
+                // Sets _connectionError on timeout.
+               int boundedTimeout = opts.getConnectDelay() + (int) opts.getConnectTimeout();
+               con.waitForConnect(boundedTimeout);
           }
           long connectElapsed = _context.clock().now() - connectStart;
           if (_log.shouldInfo()) {
@@ -1176,6 +1108,8 @@ _context.statManager().addRateData("stream.connectionCreated", 1);
      * Called from removeConnection().
      */
     private void returnToPool(Connection con) {
+        if (!isPoolEnabled())
+            return;
         if (con == null || con.getRemotePeer() == null) {
             return;
         }

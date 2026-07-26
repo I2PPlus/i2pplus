@@ -833,8 +833,9 @@ class Packet {
                 buf.append(" [").append(_sequenceNum).append("]");
             }
             toFlagString(buf);
-            if ((_payload != null) && (_payload.getValid() > 0)) {
-                buf.append("\n* Data: ").append(_payload.getValid()).append(" bytes;");
+            ByteArray payload = _payload;
+            if (payload != null && payload.getValid() > 0) {
+                buf.append("\n* Data: ").append(payload.getValid()).append(" bytes;");
             }
         }
         return buf;

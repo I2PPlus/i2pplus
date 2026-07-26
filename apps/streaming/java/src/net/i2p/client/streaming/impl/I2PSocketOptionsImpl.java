@@ -23,7 +23,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
         1024*1024;
     public static final int DEFAULT_READ_TIMEOUT = -1;
     public static final int DEFAULT_WRITE_TIMEOUT = -1;
-    public static final int DEFAULT_CONNECT_TIMEOUT = 60*1000;
+    public static final int DEFAULT_CONNECT_TIMEOUT = 30*1000;
 
     /**
      *  Sets max buffer size, connect timeout, read timeout, and write timeout
