@@ -120,7 +120,7 @@ msgid "Total number of threads in use"
 msgstr "使用中のスレッドの合計数"
 
 msgid "Time spent paused in GC (ms)"
-msgstr ""
+msgstr "GC での一時停止に費やした時間 (ミリ秒)"
 
 msgid "Peers without a published IP address"
 msgstr "IPアドレスが公開されていないピア"
@@ -702,7 +702,7 @@ msgid "If the problem persists, verify that you have cookies enabled in your bro
 msgstr "問題が続く場合、クッキーがブラウザで有効になっているか確認してください。"
 
 msgid "Bandwidth usage"
-msgstr ""
+msgstr "帯域幅の使用量"
 
 #, java-format
 msgid "events in {0}"
@@ -2001,13 +2001,13 @@ msgid "Do not show legend on graphs"
 msgstr "グラフに凡例を表示しない"
 
 msgid "Disabled while legend is hidden"
-msgstr ""
+msgstr "凡例が非表示になっている間は無効になります"
 
 msgid "Hide restarts"
-msgstr ""
+msgstr "再起動を非表示にする"
 
 msgid "Suppress restart lines on graphs"
-msgstr ""
+msgstr "グラフ上の再起動線を抑制する"
 
 msgid "Persistence"
 msgstr "持続性"
@@ -2040,10 +2040,10 @@ msgid "Graph settings unchanged"
 msgstr "グラフ設定は変更なし"
 
 msgid "improved"
-msgstr ""
+msgstr "改善された"
 
 msgid "vs baseline"
-msgstr ""
+msgstr "対ベースライン"
 
 msgid "CPU"
 msgstr "CPU"
@@ -2247,7 +2247,7 @@ msgid "Health"
 msgstr "状態"
 
 msgid "Router performance overview"
-msgstr ""
+msgstr "ルーターのパフォーマンスの概要"
 
 msgid "Help"
 msgstr "ヘルプ"
@@ -2316,7 +2316,7 @@ msgid "Router Auto-Tuning"
 msgstr "ルーター Auto-Tuning"
 
 msgid "Tuning"
-msgstr ""
+msgstr "チューニング"
 
 msgid "Manage server and client tunnels"
 msgstr "サーバーとクライアントのトンネルを管理する"
@@ -3324,58 +3324,58 @@ msgid "to your router.config file."
 msgstr "router.config ファイルに追加します。"
 
 msgid "Peers reached in the last 60s"
-msgstr ""
+msgstr "過去 60 年代に到達したピア"
 
 msgid "Fast"
 msgstr "高速"
 
 msgid "Low-latency peers for tunnel participation"
-msgstr ""
+msgstr "トンネル参加のための低遅延ピア"
 
 msgid "HighCap"
-msgstr ""
+msgstr "ハイキャップ"
 
 msgid "High-bandwidth peers for many tunnels"
-msgstr ""
+msgstr "多くのトンネルの高帯域幅ピア"
 
 msgid "Reliable"
-msgstr ""
+msgstr "信頼性のある"
 
 msgid "High-capacity peers with good acceptance"
-msgstr ""
+msgstr "良好な受け入れ能力を備えた大容量ピア"
 
 msgid "Peers that store and serve NetDb info"
-msgstr ""
+msgstr "NetDb 情報を保存および提供するピア"
 
 msgid "Known"
 msgstr "既知"
 
 msgid "Total entries in network database"
-msgstr ""
+msgstr "ネットワーク データベースのエントリの合計"
 
 msgid "Active%"
-msgstr ""
+msgstr "アクティブ％"
 
 msgid "Profiles with activity in the last 24h"
-msgstr ""
+msgstr "過去 24 時間にアクティビティがあったプロファイル"
 
 msgid "Unreachable"
 msgstr "到達不可"
 
 msgid "Peers without a reachable address"
-msgstr ""
+msgstr "到達可能なアドレスを持たないピア"
 
 msgid "Peers excluded from all interactions"
-msgstr ""
+msgstr "すべてのインタラクションから除外されたピア"
 
 msgid "/min"
-msgstr ""
+msgstr "/分"
 
 msgid "Test Fail"
-msgstr ""
+msgstr "テスト失敗"
 
 msgid "Connectivity test failures per minute"
-msgstr ""
+msgstr "1 分あたりの接続テストの失敗数"
 
 msgid "Peer Connections"
 msgstr "ピア接続"
@@ -4791,7 +4791,7 @@ msgid "Slow Start Window Cap"
 msgstr "スロースタートウィンドウ上限"
 
 msgid "Max SYN Sends"
-msgstr ""
+msgstr "最大SYN送信数"
 
 msgid "Max RTO"
 msgstr "最大 RTO"
@@ -4920,7 +4920,7 @@ msgid "Max Concurrent RI Lookups"
 msgstr "最大同時 RI 検索数"
 
 msgid "Next-Hop Lookup %"
-msgstr ""
+msgstr "ネクストホップ ルックアップ %"
 
 msgid "Max Concurrent Test Jobs"
 msgstr "最大同時テストジョブ数"
@@ -4992,7 +4992,7 @@ msgid "Slow Start Growth Rate"
 msgstr "スロースタート成長率"
 
 msgid "Min Pacing Rate"
-msgstr ""
+msgstr "最小ペーシング速度"
 
 msgid "RTT Cap"
 msgstr "RTT 上限"
@@ -5007,7 +5007,7 @@ msgid "Inactivity Timeout"
 msgstr "非アクティブタイムアウト"
 
 msgid "Max Window Size"
-msgstr ""
+msgstr "最大ウィンドウサイズ"
 
 msgid "Max Message Queue Age"
 msgstr "最大メッセージキュー寿命"
@@ -5106,10 +5106,10 @@ msgid "Socket Connect Timeout"
 msgstr "ソケット接続タイムアウト"
 
 msgid "Untested Tunnel Cap Multiplier"
-msgstr ""
+msgstr "未テストのトンネル キャップ乗数"
 
 msgid "Message Processing Throttle"
-msgstr ""
+msgstr "メッセージ処理スロットル"
 
 msgid "Data packets between each ACK."
 msgstr "各 ACK 間のデータパケット数。"
@@ -5133,7 +5133,7 @@ msgid "Bandwidth token refill interval (ms)."
 msgstr "帯域幅トークン補充間隔（ミリ秒）。"
 
 msgid "NIO selector sleep between loops (ms)."
-msgstr ""
+msgstr "ループ間の NIO セレクターのスリープ (ミリ秒)。"
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "ゲートウェイポンプあたりにバッチ処理されるアウトバウンドメッセージ数。"
@@ -5157,7 +5157,7 @@ msgid "Max congestion window during slow start."
 msgstr "スロースタート中の最大輻輳ウィンドウ。"
 
 msgid "Total SYN attempts before giving up on a handshake."
-msgstr ""
+msgstr "ハンドシェイクを諦めるまでの SYN 試行の合計数。"
 
 msgid "Max retransmission timeout (ms)."
 msgstr "最大再送信タイムアウト（ミリ秒）。"
@@ -5172,7 +5172,7 @@ msgid "Max idle time before dropping a stream (ms)."
 msgstr "ストリームを破棄するまでの最大アイドル時間（ミリ秒）。"
 
 msgid "Max unacknowledged packets per stream connection."
-msgstr ""
+msgstr "ストリーム接続ごとの未確認パケットの最大数。"
 
 msgid "I2CP write queue depth."
 msgstr "I2CP 書き込みキューの深さ。"
@@ -5292,7 +5292,7 @@ msgid "Max concurrent RI lookups during builds."
 msgstr "構築中の最大同時 RI 検索数。"
 
 msgid "Concurrent next-hop lookup limit as % of transit tunnels."
-msgstr ""
+msgstr "同時ネクストホップ ルックアップの制限 (トランジット トンネルの %)。"
 
 msgid "Max concurrent tunnel test jobs."
 msgstr "最大同時トンネルテストジョブ数。"
@@ -5307,7 +5307,7 @@ msgid "Threads decrypting inbound NTCP data."
 msgstr "インバウンド NTCP データを復号するスレッド数。"
 
 msgid "Threads that encrypt outbound NTCP messages."
-msgstr ""
+msgstr "送信 NTCP メッセージを暗号化するスレッド。"
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "スタックした NTCP ポンプのフェイルセーフスキャン間隔（ミリ秒）。"
@@ -5334,7 +5334,7 @@ msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "RTO 崩壊後のウィンドウ再開サイズ（MTU）。"
 
 msgid "Priority-aware buffer where client messages jump transit."
-msgstr ""
+msgstr "クライアントメッセージが転送される優先順位を意識したバッファー。"
 
 msgid "I2CP session buffer size."
 msgstr "I2CP セッションバッファサイズ。"
@@ -5361,7 +5361,7 @@ msgid "Window multiplier per RTT during slow start."
 msgstr "スロースタート中の RTT あたりのウィンドウ乗数。"
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
-msgstr ""
+msgstr "ペーシングが開始される前の最小送信レート (KB/秒)。"
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT 推定の上限（ミリ秒）。"
@@ -5439,13 +5439,13 @@ msgid "Consecutive failures before pool backoff."
 msgstr "プールバックオフ前の連続失敗回数。"
 
 msgid "Cooldown duration after pool failure threshold (ms)."
-msgstr ""
+msgstr "プール障害後のクールダウン期間のしきい値 (ミリ秒)。"
 
 msgid "Target spare tunnel count per pool."
 msgstr "プールあたりの目標予備トンネル数。"
 
 msgid "Widens untested tunnel cap when testing stalls."
-msgstr ""
+msgstr "ストールをテストするときに、テストされていないトンネルのキャップを広げます。"
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "確率的な中継拒否が始まる負荷しきい値（%）。"
@@ -5472,7 +5472,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "トンネルサーバーハンドラスレッド用 TCP ソケット接続タイムアウト（ミリ秒）。"
 
 msgid "Max average message delay before rejecting transit (ms)."
-msgstr ""
+msgstr "転送を拒否するまでの最大平均メッセージ遅延 (ミリ秒)。"
 
 msgid "Tunnel"
 msgstr "トンネル"
@@ -7405,13 +7405,13 @@ msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction
 msgstr "起動抑制期間（ミリ秒単位）。初期ルーター起動中は警告とトンネル削減ロジックが抑制され、早期の判断を回避します。[デフォルトは300000（5分）]"
 
 msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "LeaseSet の発行間の最小間隔 (ミリ秒単位)。トンネル チャーン中の急速なパブリッシュ ストームを防ぎます。 [デフォルトは120000(2分)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "LeaseSet オブジェクトのビルド間の最小間隔 (ミリ秒単位)。トンネルの追加/削除ごとに不必要な LeaseSet オブジェクトのチャーンを防ぎます。 [デフォルトは120000(2分)]"
 
 msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
-msgstr ""
+msgstr "公開された LeaseSet の最大リース期間 (ミリ秒単位)。今後、リース終了日はこの値に制限されるため、トンネルの有効期間よりも短く設定すると、ピアはより早く再フェッチされます。ゲートウェイは、トンネルの存続期間全体にわたってメッセージを処理し続けます。要求側でキャッシュされた LeaseSet のみがより早く期限切れになり、最新バージョンの再フェッチがトリガーされます。デフォルトは、i2p.netdb.republishInterval + 60 秒 (標準設定では 6 分) から自動計算されます。"
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "方向ごとの最大同時トンネル構築数。値が高いとプール回復が加速しますが、ネットワークに過負荷をかける可能性があります。[デフォルトは6]"
@@ -7492,10 +7492,10 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "明示的な接続タイムアウトが設定されていない場合のデフォルトの最大ストリーム遅延（ミリ秒単位）。[デフォルトは10000（10秒）]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr ""
+msgstr "受信した SYN が accept() によって取得されるまで、受け入れキュー内で待機できる最大時間 (ミリ秒単位)。 accept() が遅れた場合 (ホストサーバーがビジー状態の場合)、この時間枠の後に接続は拒否されるため、値を大きくすると短時間の停止が許容されます。 [デフォルトは30000(30秒)]"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "サーバー受け入れキュー内の保留中の接続 (SYN および部分パケット) の最大数。いっぱいになると、新しい SYN はリセットされるのではなくドロップされます (クライアントは再試行します)。そのため、値を大きくすると、メモリを犠牲にして接続バーストを吸収しやすくなります。 [デフォルトは 256 (遅いシステムでは 128)]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "自動LeaseSet再公開の間隔（ミリ秒単位）。値が高いとnetdbトラフィックが減少しますが、リース情報が古くなる可能性があります。[デフォルトは300000（5分）]"
@@ -9817,12 +9817,3 @@ msgstr "次へ"
 
 msgid "Finished"
 msgstr "完了"
-
-
-
-
-
-
-
-
-

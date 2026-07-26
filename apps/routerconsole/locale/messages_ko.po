@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\\\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "Hash"
 msgstr "해시"
@@ -40,15 +40,11 @@ msgstr "리시드 시작"
 
 #, java-format
 msgid "Acquired {0} router info from reseed hosts"
-msgid_plural "Acquired {0} router infos from reseed hosts"
-msgstr[0] "리시드 호스트에서 라우터 정보 {0}개를 가져왔습니다"
-msgstr[1] "리시드 호스트에서 라우터 정보 {0}개를 가져왔습니다"
+msgstr "리시드 호스트로부터 {0} 라우터 정보를 획득했습니다."
 
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
-msgid_plural "Acquired only {0} router infos from reseed hosts"
-msgstr[0] "리시드 호스트에서 라우터 정보 1개만 가져왔습니다"
-msgstr[1] "리시드 호스트에서 라우터 정보 1개만 가져왔습니다"
+msgstr "리시드 호스트로부터 라우터 정보를 1개만 획득했습니다."
 
 #, java-format
 msgid "{0}Reseed{1} failed:"
@@ -122,7 +118,7 @@ msgid "Total number of threads in use"
 msgstr "사용 중인 스레드의 총 수"
 
 msgid "Time spent paused in GC (ms)"
-msgstr ""
+msgstr "GC에서 일시 중지된 시간(ms)"
 
 msgid "Peers without a published IP address"
 msgstr "게시된 IP 주소가 없는 피어"
@@ -704,7 +700,7 @@ msgid "If the problem persists, verify that you have cookies enabled in your bro
 msgstr "문제가 지속되면 브라우저의 쿠키가 활성화되어 있는지 확인해주세요."
 
 msgid "Bandwidth usage"
-msgstr ""
+msgstr "대역폭 사용량"
 
 #, java-format
 msgid "events in {0}"
@@ -753,9 +749,7 @@ msgstr "플러그인 업데이트 확인 실패"
 
 #, java-format
 msgid "{0} plugin updated"
-msgid_plural "{0} plugins updated"
-msgstr[0] "플러그인 {0}개 업데이트됨"
-msgstr[1] "플러그인 {0}개 업데이트됨"
+msgstr "{0} 플러그인이 업데이트되었습니다."
 
 msgid "Plugin check complete"
 msgstr "플러그인 체크 완료"
@@ -1546,9 +1540,7 @@ msgstr "파일 재시드 실패"
 
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
-msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] "리시드 성공, 파일에서 라우터 정보 {0}개를 불러왔습니다."
-msgstr[1] "리시드 성공, 파일에서 라우터 정보 {0}개를 불러왔습니다."
+msgstr "다시 시드에 성공했습니다. 파일에서 {0} 라우터 정보를 로드했습니다."
 
 msgid "Reset URL list"
 msgstr "URL 리스트 재설정"
@@ -1591,15 +1583,11 @@ msgstr "{0} 안에 종료"
 
 #, java-format
 msgid "{0} transit tunnel still active"
-msgid_plural "{0} transit tunnels still active"
-msgstr[0] "경유 터널 {0}개가 여전히 활성 상태입니다"
-msgstr[1] "경유 터널 {0}개가 여전히 활성 상태입니다"
+msgstr "{0} 대중교통 터널이 아직 활성 상태입니다."
 
 #, java-format
 msgid "Please wait for routing commitment to expire for {0} tunnel"
-msgid_plural "Please wait for routing commitments to expire for {0} tunnels"
-msgstr[0] "{0}개 터널의 라우팅 커밋이 만료될 때까지 기다려 주세요"
-msgstr[1] "{0}개 터널의 라우팅 커밋이 만료될 때까지 기다려 주세요"
+msgstr "{0} 터널의 라우팅 약정이 만료될 때까지 기다려 주세요."
 
 #, java-format
 msgid "Restart in {0}"
@@ -1673,15 +1661,11 @@ msgstr "설정 저장 오류 (적용됬으나 저장되지 않음) - 오류 로�
 
 #, java-format
 msgid "{0} hop"
-msgid_plural "{0} hops"
-msgstr[0] "{0} 홉"
-msgstr[1] "{0} 홉"
+msgstr "{0}홉"
 
 #, java-format
 msgid "{0} tunnel"
-msgid_plural "{0} tunnels"
-msgstr[0] "{0} 터널"
-msgstr[1] "{0} 터널"
+msgstr "{0} 터널"
 
 msgid "Exploratory tunnels"
 msgstr "예비 터널"
@@ -2009,13 +1993,13 @@ msgid "Do not show legend on graphs"
 msgstr "그래프에 전설을 표시하지 마십시오"
 
 msgid "Disabled while legend is hidden"
-msgstr ""
+msgstr "범례가 숨겨진 동안에는 비활성화됩니다."
 
 msgid "Hide restarts"
-msgstr ""
+msgstr "재시작 숨기기"
 
 msgid "Suppress restart lines on graphs"
-msgstr ""
+msgstr "그래프에서 재시작 라인 억제"
 
 msgid "Persistence"
 msgstr "고집"
@@ -2048,10 +2032,10 @@ msgid "Graph settings unchanged"
 msgstr "그래프 설정 변경되지 않음"
 
 msgid "improved"
-msgstr ""
+msgstr "개선됨"
 
 msgid "vs baseline"
-msgstr ""
+msgstr "기준선 대비"
 
 msgid "CPU"
 msgstr "CPU"
@@ -2255,7 +2239,7 @@ msgid "Health"
 msgstr "상태"
 
 msgid "Router performance overview"
-msgstr ""
+msgstr "라우터 성능 개요"
 
 msgid "Help"
 msgstr "도움말"
@@ -2324,7 +2308,7 @@ msgid "Router Auto-Tuning"
 msgstr "라우터 Auto-Tuning"
 
 msgid "Tuning"
-msgstr ""
+msgstr "동조"
 
 msgid "Manage server and client tunnels"
 msgstr "서버 및 클라이언트 터널 관리"
@@ -3332,58 +3316,58 @@ msgid "to your router.config file."
 msgstr "router.config 파일에."
 
 msgid "Peers reached in the last 60s"
-msgstr ""
+msgstr "지난 60년대에 도달한 동료"
 
 msgid "Fast"
 msgstr "빠른"
 
 msgid "Low-latency peers for tunnel participation"
-msgstr ""
+msgstr "터널 참여를 위한 대기 시간이 짧은 피어"
 
 msgid "HighCap"
-msgstr ""
+msgstr "하이캡"
 
 msgid "High-bandwidth peers for many tunnels"
-msgstr ""
+msgstr "많은 터널을 위한 고대역폭 피어"
 
 msgid "Reliable"
-msgstr ""
+msgstr "믿을 수 있는"
 
 msgid "High-capacity peers with good acceptance"
-msgstr ""
+msgstr "수용성이 좋은 고용량 피어"
 
 msgid "Peers that store and serve NetDb info"
-msgstr ""
+msgstr "NetDb 정보를 저장하고 제공하는 피어"
 
 msgid "Known"
 msgstr "알려진"
 
 msgid "Total entries in network database"
-msgstr ""
+msgstr "네트워크 데이터베이스의 총 항목"
 
 msgid "Active%"
-msgstr ""
+msgstr "활동적인%"
 
 msgid "Profiles with activity in the last 24h"
-msgstr ""
+msgstr "지난 24시간 동안 활동이 있는 프로필"
 
 msgid "Unreachable"
 msgstr "접근불가능"
 
 msgid "Peers without a reachable address"
-msgstr ""
+msgstr "연결 가능한 주소가 없는 피어"
 
 msgid "Peers excluded from all interactions"
-msgstr ""
+msgstr "모든 상호작용에서 제외된 피어"
 
 msgid "/min"
-msgstr ""
+msgstr "/분"
 
 msgid "Test Fail"
-msgstr ""
+msgstr "테스트 실패"
 
 msgid "Connectivity test failures per minute"
-msgstr ""
+msgstr "분당 연결 테스트 실패"
 
 msgid "Peer Connections"
 msgstr "피어 연결"
@@ -3462,9 +3446,7 @@ msgstr "연결이 백로그링됩니다"
 
 #, java-format
 msgid "{0} peer"
-msgid_plural "{0} peers"
-msgstr[0] "{0} 피어"
-msgstr[1] "{0} 피어"
+msgstr "{0} 피어"
 
 msgid "UDP connections"
 msgstr "UDP 연결"
@@ -3555,9 +3537,7 @@ msgstr "우리를 소개하도록 제공했습니다"
 
 #, java-format
 msgid "{0} fail"
-msgid_plural "{0} fails"
-msgstr[0] "{0} 실패"
-msgstr[1] "{0} 실패"
+msgstr "{0} 실패"
 
 msgid "backlogged"
 msgstr "백로그됨"
@@ -3639,21 +3619,15 @@ msgstr "피어로부터 중복된 패킷을 수신했습니다."
 
 #, java-format
 msgid "Showing {0} recent profile."
-msgid_plural "Showing {0} recent profiles."
-msgstr[0] "최근 프로필 {0}개를 표시합니다."
-msgstr[1] "최근 프로필 {0}개를 표시합니다."
+msgstr "{0}개의 최근 프로필을 표시 중입니다."
 
 #, java-format
 msgid "Hiding {0} older profile."
-msgid_plural "Hiding {0} older profiles."
-msgstr[0] "이전 프로필 {0}개를 숨깁니다."
-msgstr[1] "이전 프로필 {0}개를 숨깁니다."
+msgstr "{0}개의 이전 프로필을 숨깁니다."
 
 #, java-format
 msgid "Hiding {0} standard profile."
-msgid_plural "Hiding {0} standard profiles."
-msgstr[0] "표준 프로필 {0}개를 숨깁니다."
-msgstr[1] "표준 프로필 {0}개를 숨깁니다."
+msgstr "{0} 표준 프로필을 숨깁니다."
 
 msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
 msgstr "프로파일러는 피어를 정확하게 프로파일링하기 위해 지속적인 클라이언트 터널 사용에 의존합니다."
@@ -3741,21 +3715,15 @@ msgstr "동료"
 
 #, java-format
 msgid "{0} fast peer"
-msgid_plural "{0} fast peers"
-msgstr[0] "빠른 피어 {0}개"
-msgstr[1] "빠른 피어 {0}개"
+msgstr "{0} 빠른 피어"
 
 #, java-format
 msgid "{0} high capacity peer"
-msgid_plural "{0} high capacity peers"
-msgstr[0] "고용량 피어 {0}개"
-msgstr[1] "고용량 피어 {0}개"
+msgstr "{0} 고용량 피어"
 
 #, java-format
 msgid "{0} integrated peer"
-msgid_plural "{0} integrated peers"
-msgstr[0] "통합된 피어 {0}개"
-msgstr[1] "통합된 피어 {0}개"
+msgstr "{0} 통합 피어"
 
 msgid "1h Fail Rate"
 msgstr "1h 실패율"
@@ -4452,9 +4420,7 @@ msgstr "전체 평균 빈도"
 
 #, java-format
 msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "이벤트 {0}개"
-msgstr[1] "이벤트 {0}개"
+msgstr "{0} 이벤트"
 
 msgid "rate"
 msgstr "비율"
@@ -4498,9 +4464,7 @@ msgstr "전기간 평균 값"
 
 #, java-format
 msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "이벤트 1개"
-msgstr[1] "이벤트 1개"
+msgstr "이벤트 1개"
 
 msgid "sent"
 msgstr "전송됨"
@@ -4809,7 +4773,7 @@ msgid "Slow Start Window Cap"
 msgstr "슬로우 스타트 창 한도"
 
 msgid "Max SYN Sends"
-msgstr ""
+msgstr "최대 SYN 전송"
 
 msgid "Max RTO"
 msgstr "최대 RTO"
@@ -4938,7 +4902,7 @@ msgid "Max Concurrent RI Lookups"
 msgstr "최대 동시 RI 조회 수"
 
 msgid "Next-Hop Lookup %"
-msgstr ""
+msgstr "다음 홉 조회 %"
 
 msgid "Max Concurrent Test Jobs"
 msgstr "최대 동시 테스트 작업 수"
@@ -5010,7 +4974,7 @@ msgid "Slow Start Growth Rate"
 msgstr "슬로우 스타트 증가율"
 
 msgid "Min Pacing Rate"
-msgstr ""
+msgstr "최소 간격 속도"
 
 msgid "RTT Cap"
 msgstr "RTT 상한"
@@ -5025,7 +4989,7 @@ msgid "Inactivity Timeout"
 msgstr "비활성 제한 시간"
 
 msgid "Max Window Size"
-msgstr ""
+msgstr "최대 창 크기"
 
 msgid "Max Message Queue Age"
 msgstr "최대 메시지 큐 보관 시간"
@@ -5124,10 +5088,10 @@ msgid "Socket Connect Timeout"
 msgstr "소켓 연결 제한 시간"
 
 msgid "Untested Tunnel Cap Multiplier"
-msgstr ""
+msgstr "테스트되지 않은 터널 캡 승수"
 
 msgid "Message Processing Throttle"
-msgstr ""
+msgstr "메시지 처리 제한"
 
 msgid "Data packets between each ACK."
 msgstr "각 ACK 사이의 데이터 패킷 수입니다."
@@ -5151,7 +5115,7 @@ msgid "Bandwidth token refill interval (ms)."
 msgstr "대역폭 토큰 재충전 간격입니다(ms)."
 
 msgid "NIO selector sleep between loops (ms)."
-msgstr ""
+msgstr "루프 간 NIO 선택기 절전 모드(ms)입니다."
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "게이트웨이 펌프마다 묶음 처리되는 아웃바운드 메시지 수입니다."
@@ -5175,7 +5139,7 @@ msgid "Max congestion window during slow start."
 msgstr "슬로우 스타트 중 최대 혼잡 창 크기입니다."
 
 msgid "Total SYN attempts before giving up on a handshake."
-msgstr ""
+msgstr "핸드셰이크를 포기하기 전까지의 총 SYN 시도 횟수입니다."
 
 msgid "Max retransmission timeout (ms)."
 msgstr "최대 재전송 제한 시간입니다(ms)."
@@ -5190,7 +5154,7 @@ msgid "Max idle time before dropping a stream (ms)."
 msgstr "스트림을 중단하기 전의 최대 유휴 시간입니다(ms)."
 
 msgid "Max unacknowledged packets per stream connection."
-msgstr ""
+msgstr "스트림 연결당 최대 확인되지 않은 패킷 수입니다."
 
 msgid "I2CP write queue depth."
 msgstr "I2CP 쓰기 큐 깊이입니다."
@@ -5310,7 +5274,7 @@ msgid "Max concurrent RI lookups during builds."
 msgstr "빌드 중 최대 동시 RI 조회 수입니다."
 
 msgid "Concurrent next-hop lookup limit as % of transit tunnels."
-msgstr ""
+msgstr "전송 터널의 %로 표시되는 동시 다음 홉 조회 제한입니다."
 
 msgid "Max concurrent tunnel test jobs."
 msgstr "최대 동시 터널 테스트 작업 수입니다."
@@ -5325,7 +5289,7 @@ msgid "Threads decrypting inbound NTCP data."
 msgstr "인바운드 NTCP 데이터를 복호화하는 스레드 수입니다."
 
 msgid "Threads that encrypt outbound NTCP messages."
-msgstr ""
+msgstr "아웃바운드 NTCP 메시지를 암호화하는 스레드입니다."
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "멈춘 NTCP 펌퍼를 위한 안전장치 검사 간격입니다(ms)."
@@ -5352,7 +5316,7 @@ msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "RTO 붕괴 후 창 재시작 크기입니다(MTU)."
 
 msgid "Priority-aware buffer where client messages jump transit."
-msgstr ""
+msgstr "클라이언트 메시지가 전송을 건너뛰는 우선순위 인식 버퍼입니다."
 
 msgid "I2CP session buffer size."
 msgstr "I2CP 세션 버퍼 크기입니다."
@@ -5379,7 +5343,7 @@ msgid "Window multiplier per RTT during slow start."
 msgstr "슬로우 스타트 중 RTT당 창 승수입니다."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
-msgstr ""
+msgstr "페이싱이 시작되기 전 최소 전송 속도(KB/s)입니다."
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT 추정값의 상한입니다(ms)."
@@ -5457,13 +5421,13 @@ msgid "Consecutive failures before pool backoff."
 msgstr "풀 백오프 전 연속 실패 횟수입니다."
 
 msgid "Cooldown duration after pool failure threshold (ms)."
-msgstr ""
+msgstr "풀 실패 임계값 이후 휴지 기간(ms)입니다."
 
 msgid "Target spare tunnel count per pool."
 msgstr "풀당 목표 예비 터널 수입니다."
 
 msgid "Widens untested tunnel cap when testing stalls."
-msgstr ""
+msgstr "스톨을 테스트할 때 테스트되지 않은 터널 캡을 넓힙니다."
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "확률적 경유 거부가 시작되는 부하 임계값입니다(%)."
@@ -5490,7 +5454,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "터널 서버 처리 스레드를 위한 TCP 소켓 연결 제한 시간입니다(ms)."
 
 msgid "Max average message delay before rejecting transit (ms)."
-msgstr ""
+msgstr "전송을 거부하기 전 최대 평균 메시지 지연 시간(밀리초)입니다."
 
 msgid "Tunnel"
 msgstr "터널"
@@ -7423,13 +7387,13 @@ msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction
 msgstr "밀리초 단위 시작 억제 기간. 초기 라우터 시작 중에는 경고 및 터널 축소 로직이 억제되어 조기 결정을 피합니다. [기본값 300000(5분)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "LeaseSet 게시 간의 최소 간격(밀리초)입니다. 터널 이탈 중 급격한 게시 폭풍을 방지합니다. [기본값은 120000(2분)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "LeaseSet 개체 빌드 간의 최소 간격(밀리초)입니다. 터널을 추가/제거할 때마다 불필요한 LeaseSet 객체 이탈을 방지합니다. [기본값은 120000(2분)]"
 
 msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
-msgstr ""
+msgstr "게시된 LeaseSets의 최대 임대 기간(밀리초)입니다. 임대 종료 날짜는 지금부터 이 값으로 제한되므로 터널 수명보다 짧게 설정하면 피어가 더 빨리 다시 가져옵니다. 게이트웨이는 전체 터널 수명 동안 메시지를 계속 처리합니다. 요청 측의 캐시된 LeaseSet만 더 일찍 만료되어 최신 버전을 다시 가져옵니다. 기본값은 i2p.netdb.republishInterval + 60초(표준 설정에서는 6분)에서 자동 계산됩니다."
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "방향당 최대 동시 터널 구축 수. 값이 높을수록 풀 복구가 가속화되지만 네트워크에 과부하가 걸릴 수 있습니다. [기본값 6]"
@@ -7510,10 +7474,10 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "명시적 연결 시간 제한이 설정되지 않은 경우 기본 최대 스트림 지연(밀리초). [기본값 10000(10초)]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr ""
+msgstr "accept()가 이를 가져오기 전에 수신된 SYN이 수락 대기열에서 대기할 수 있는 최대 시간(밀리초)입니다. accept()가 지연되면(호스트 서버 사용량이 많음) 이 창 이후 연결이 거부되므로 값이 높을수록 짧은 지연이 허용됩니다. [기본값은 30000(30초)]"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "서버 승인 대기열에서 보류 중인 연결(SYN 및 부분 패킷)의 최대 수입니다. 가득 차면 새 SYN이 재설정되지 않고 삭제(클라이언트 재시도)되므로 값이 클수록 메모리를 희생하면서 연결 버스트를 더 잘 흡수할 수 있습니다. [기본값은 256(느린 시스템에서는 128)]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "자동 LeaseSet 재게시 간격(밀리초). 값이 높을수록 netdb 트래픽이 줄어들지만 임대 정보가 오래될 수 있습니다. [기본값 300000(5분)]"
@@ -9835,12 +9799,3 @@ msgstr "다음"
 
 msgid "Finished"
 msgstr "완료됨"
-
-
-
-
-
-
-
-
-

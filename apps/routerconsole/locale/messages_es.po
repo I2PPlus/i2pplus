@@ -122,7 +122,7 @@ msgid "Total number of threads in use"
 msgstr "Número total de hilos en uso"
 
 msgid "Time spent paused in GC (ms)"
-msgstr ""
+msgstr "Tiempo de pausa en GC (ms)"
 
 msgid "Peers without a published IP address"
 msgstr "Compañeros sin una dirección IP publicada"
@@ -704,7 +704,7 @@ msgid "If the problem persists, verify that you have cookies enabled in your bro
 msgstr "Si el problema persiste, verifique que tiene habilitadas las cookies en su navegador."
 
 msgid "Bandwidth usage"
-msgstr ""
+msgstr "Uso de ancho de banda"
 
 #, java-format
 msgid "events in {0}"
@@ -2009,13 +2009,13 @@ msgid "Do not show legend on graphs"
 msgstr "No mostrar leyenda en los gráficos"
 
 msgid "Disabled while legend is hidden"
-msgstr ""
+msgstr "Deshabilitado mientras la leyenda está oculta"
 
 msgid "Hide restarts"
-msgstr ""
+msgstr "Ocultar reinicios"
 
 msgid "Suppress restart lines on graphs"
-msgstr ""
+msgstr "Suprimir líneas de reinicio en gráficos"
 
 msgid "Persistence"
 msgstr "Persistencia"
@@ -2048,10 +2048,10 @@ msgid "Graph settings unchanged"
 msgstr "Configuración del gráfico sin cambios"
 
 msgid "improved"
-msgstr ""
+msgstr "mejorado"
 
 msgid "vs baseline"
-msgstr ""
+msgstr "vs línea de base"
 
 msgid "CPU"
 msgstr "CPU"
@@ -2255,7 +2255,7 @@ msgid "Health"
 msgstr "Estado"
 
 msgid "Router performance overview"
-msgstr ""
+msgstr "Descripción general del rendimiento del enrutador"
 
 msgid "Help"
 msgstr "Ayuda"
@@ -2324,7 +2324,7 @@ msgid "Router Auto-Tuning"
 msgstr "Auto-Tuning del enrutador"
 
 msgid "Tuning"
-msgstr ""
+msgstr "Sintonización"
 
 msgid "Manage server and client tunnels"
 msgstr "Administrar túneles de servidor y cliente"
@@ -3332,58 +3332,58 @@ msgid "to your router.config file."
 msgstr "a tu archivo de configuración router.config."
 
 msgid "Peers reached in the last 60s"
-msgstr ""
+msgstr "Compañeros alcanzados en los últimos 60 años"
 
 msgid "Fast"
 msgstr "Rápidos"
 
 msgid "Low-latency peers for tunnel participation"
-msgstr ""
+msgstr "Pares de baja latencia para la participación en túneles"
 
 msgid "HighCap"
-msgstr ""
+msgstr "AltoCap"
 
 msgid "High-bandwidth peers for many tunnels"
-msgstr ""
+msgstr "Pares de alto ancho de banda para muchos túneles"
 
 msgid "Reliable"
-msgstr ""
+msgstr "Confiable"
 
 msgid "High-capacity peers with good acceptance"
-msgstr ""
+msgstr "Compañeros de alta capacidad con buena aceptación."
 
 msgid "Peers that store and serve NetDb info"
-msgstr ""
+msgstr "Pares que almacenan y sirven información de NetDb"
 
 msgid "Known"
 msgstr "Conocidos"
 
 msgid "Total entries in network database"
-msgstr ""
+msgstr "Entradas totales en la base de datos de la red"
 
 msgid "Active%"
-msgstr ""
+msgstr "Activo%"
 
 msgid "Profiles with activity in the last 24h"
-msgstr ""
+msgstr "Perfiles con actividad en las últimas 24h"
 
 msgid "Unreachable"
 msgstr "Inalcanzable"
 
 msgid "Peers without a reachable address"
-msgstr ""
+msgstr "Compañeros sin una dirección accesible"
 
 msgid "Peers excluded from all interactions"
-msgstr ""
+msgstr "Compañeros excluidos de todas las interacciones."
 
 msgid "/min"
-msgstr ""
+msgstr "/min"
 
 msgid "Test Fail"
-msgstr ""
+msgstr "Prueba fallida"
 
 msgid "Connectivity test failures per minute"
-msgstr ""
+msgstr "Fallos de pruebas de conectividad por minuto"
 
 msgid "Peer Connections"
 msgstr "Conexiones entre pares"
@@ -4809,7 +4809,7 @@ msgid "Slow Start Window Cap"
 msgstr "Tope de ventana de inicio lento"
 
 msgid "Max SYN Sends"
-msgstr ""
+msgstr "Envíos máximos de sincronización"
 
 msgid "Max RTO"
 msgstr "RTO máximo"
@@ -4938,7 +4938,7 @@ msgid "Max Concurrent RI Lookups"
 msgstr "Búsquedas de RI concurrentes máximas"
 
 msgid "Next-Hop Lookup %"
-msgstr ""
+msgstr "% de búsqueda del siguiente salto"
 
 msgid "Max Concurrent Test Jobs"
 msgstr "Trabajos de prueba concurrentes máximos"
@@ -5010,7 +5010,7 @@ msgid "Slow Start Growth Rate"
 msgstr "Tasa de crecimiento de inicio lento"
 
 msgid "Min Pacing Rate"
-msgstr ""
+msgstr "Frecuencia de estimulación mínima"
 
 msgid "RTT Cap"
 msgstr "Tope de RTT"
@@ -5025,7 +5025,7 @@ msgid "Inactivity Timeout"
 msgstr "Tiempo de espera de inactividad"
 
 msgid "Max Window Size"
-msgstr ""
+msgstr "Tamaño máximo de ventana"
 
 msgid "Max Message Queue Age"
 msgstr "Edad máxima de cola de mensajes"
@@ -5124,10 +5124,10 @@ msgid "Socket Connect Timeout"
 msgstr "Tiempo de espera de conexión de socket"
 
 msgid "Untested Tunnel Cap Multiplier"
-msgstr ""
+msgstr "Multiplicador de tapa de túnel no probado"
 
 msgid "Message Processing Throttle"
-msgstr ""
+msgstr "Acelerador de procesamiento de mensajes"
 
 msgid "Data packets between each ACK."
 msgstr "Paquetes de datos entre cada ACK."
@@ -5151,7 +5151,7 @@ msgid "Bandwidth token refill interval (ms)."
 msgstr "Intervalo de recarga de ficha de ancho de banda (ms)."
 
 msgid "NIO selector sleep between loops (ms)."
-msgstr ""
+msgstr "El selector NIO duerme entre bucles (ms)."
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "Mensajes salientes agrupados por bomba de puerta de enlace."
@@ -5175,7 +5175,7 @@ msgid "Max congestion window during slow start."
 msgstr "Ventana de congestión máxima durante el inicio lento."
 
 msgid "Total SYN attempts before giving up on a handshake."
-msgstr ""
+msgstr "Total de intentos de SYN antes de darse por vencido en un apretón de manos."
 
 msgid "Max retransmission timeout (ms)."
 msgstr "Tiempo de espera de retransmisión máximo (ms)."
@@ -5190,7 +5190,7 @@ msgid "Max idle time before dropping a stream (ms)."
 msgstr "Tiempo máximo de inactividad antes de descartar un flujo (ms)."
 
 msgid "Max unacknowledged packets per stream connection."
-msgstr ""
+msgstr "Máximo de paquetes no reconocidos por conexión de flujo."
 
 msgid "I2CP write queue depth."
 msgstr "Profundidad de cola de escritura I2CP."
@@ -5310,7 +5310,7 @@ msgid "Max concurrent RI lookups during builds."
 msgstr "Búsquedas de RI concurrentes máximas durante construcciones."
 
 msgid "Concurrent next-hop lookup limit as % of transit tunnels."
-msgstr ""
+msgstr "Límite de búsqueda simultánea del siguiente salto como porcentaje de túneles de tránsito."
 
 msgid "Max concurrent tunnel test jobs."
 msgstr "Trabajos de prueba de túnel concurrentes máximos."
@@ -5325,7 +5325,7 @@ msgid "Threads decrypting inbound NTCP data."
 msgstr "Subprocesos que descifran datos NTCP entrantes."
 
 msgid "Threads that encrypt outbound NTCP messages."
-msgstr ""
+msgstr "Hilos que cifran mensajes NTCP salientes."
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Intervalo de escaneo de protección para bombas NTCP atascadas (ms)."
@@ -5352,7 +5352,7 @@ msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "Tamaño de reinicio de ventana (MTUs) tras colapso de RTO."
 
 msgid "Priority-aware buffer where client messages jump transit."
-msgstr ""
+msgstr "Búfer con reconocimiento de prioridades donde los mensajes del cliente saltan el tránsito."
 
 msgid "I2CP session buffer size."
 msgstr "Tamaño de búfer de sesión I2CP."
@@ -5379,7 +5379,7 @@ msgid "Window multiplier per RTT during slow start."
 msgstr "Multiplicador de ventana por RTT durante el inicio lento."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
-msgstr ""
+msgstr "Velocidad de envío mínima antes de que se active el ritmo (KB/s)."
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "Límite superior de la estimación de RTT (ms)."
@@ -5457,13 +5457,13 @@ msgid "Consecutive failures before pool backoff."
 msgstr "Fallos consecutivos antes del retroceso del grupo."
 
 msgid "Cooldown duration after pool failure threshold (ms)."
-msgstr ""
+msgstr "Duración del enfriamiento después del umbral de falla del grupo (ms)."
 
 msgid "Target spare tunnel count per pool."
 msgstr "Recuento objetivo de túneles de repuesto por grupo."
 
 msgid "Widens untested tunnel cap when testing stalls."
-msgstr ""
+msgstr "Ensancha la tapa del túnel no probada al probar puestos."
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "Umbral de carga donde inicia el rechazo probabilístico de tránsito (%)."
@@ -5490,7 +5490,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Tiempo de espera de conexión de socket TCP para subprocesos manejadores de servidor de túnel (ms)."
 
 msgid "Max average message delay before rejecting transit (ms)."
-msgstr ""
+msgstr "Retraso máximo promedio de mensajes antes de rechazar el tránsito (ms)."
 
 msgid "Tunnel"
 msgstr "Túnel"
@@ -7423,13 +7423,13 @@ msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction
 msgstr "Periodo de supresion de inicio en milisegundos. Las advertencias y la logica de reduccion de túneles se suprimen durante el inicio inicial del router para evitar decisiones prematuras. [Por defecto es 300000 (5 minutos)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Intervalo mínimo en milisegundos entre publicaciones de LeaseSet. Previene tormentas de publicación rápida durante la rotación de túneles. [El valor predeterminado es 120000 (2 minutos)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Intervalo mínimo en milisegundos entre compilaciones de objetos LeaseSet. Evita la rotación innecesaria de objetos LeaseSet en cada adición o eliminación de túnel. [El valor predeterminado es 120000 (2 minutos)]"
 
 msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
-msgstr ""
+msgstr "Duración máxima del arrendamiento en milisegundos para los LeaseSets publicados. Las fechas de finalización del arrendamiento están limitadas a este valor a partir de ahora, por lo que los pares vuelven a buscar antes cuando se establecen en un período más corto que la vida útil del túnel. La puerta de enlace aún procesa mensajes durante toda la vida útil del túnel; solo el LeaseSet almacenado en caché en el lado solicitante caduca antes, lo que provoca una recuperación de la última versión. El valor predeterminado se calcula automáticamente a partir de i2p.netdb.republishInterval + 60 segundos (6 minutos con la configuración estándar)."
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "Numero maximo de construcciones de túnel concurrentes por direccion. Valores mas altos aceleran la recuperacion del grupo pero pueden sobrecargar la red. [Por defecto es 6]"
@@ -7510,10 +7510,10 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Retraso maximo de flujo predeterminado en milisegundos cuando no se establece un tiempo de espera de conexion explícito. [Por defecto es 10000 (10 segundos)]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr ""
+msgstr "Tiempo máximo en milisegundos que un SYN recibido puede esperar en la cola de aceptación antes de que Accept() lo extraiga. Si aceptar() se retrasa (servidor alojado ocupado), la conexión se rechaza después de esta ventana, por lo que un valor más alto tolera breves paradas. [El valor predeterminado es 30000 (30 segundos)]"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Número máximo de conexiones pendientes (SYN y paquetes parciales) en la cola de aceptación del servidor. Cuando están llenos, los nuevos SYN se descartan (el cliente reintenta) en lugar de restablecerse, por lo que un valor mayor absorbe mejor las ráfagas de conexión a costa de la memoria. [El valor predeterminado es 256 (128 en sistemas lentos)]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Intervalo en milisegundos entre republicaciones automatizadas de LeaseSet. Valores mas altos reducen el trafico de netdb pero pueden causar informacion de concesion obsoleta. [Por defecto es 300000 (5 minutos)]"
@@ -9835,12 +9835,3 @@ msgstr "Siguiente"
 
 msgid "Finished"
 msgstr "Terminado"
-
-
-
-
-
-
-
-
-

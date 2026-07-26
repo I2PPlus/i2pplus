@@ -126,7 +126,7 @@ msgid "Total number of threads in use"
 msgstr "Skupno število niti v uporabi"
 
 msgid "Time spent paused in GC (ms)"
-msgstr ""
+msgstr "Čas začasne zaustavitve v GC (ms)"
 
 msgid "Peers without a published IP address"
 msgstr "Parterji brez objavljenega IP naslova"
@@ -708,7 +708,7 @@ msgid "If the problem persists, verify that you have cookies enabled in your bro
 msgstr "Če težava obstaja, preverite, ali imate omogočene piškotke v brskalniku"
 
 msgid "Bandwidth usage"
-msgstr ""
+msgstr "Uporaba pasovne širine"
 
 #, java-format
 msgid "events in {0}"
@@ -2025,13 +2025,13 @@ msgid "Do not show legend on graphs"
 msgstr "Ne prikaži opisov na grafih"
 
 msgid "Disabled while legend is hidden"
-msgstr ""
+msgstr "Onemogočeno, ko je legenda skrita"
 
 msgid "Hide restarts"
-msgstr ""
+msgstr "Skrij ponovne zagone"
 
 msgid "Suppress restart lines on graphs"
-msgstr ""
+msgstr "Zavrni ponovni zagon na grafih"
 
 msgid "Persistence"
 msgstr "Trdnjava"
@@ -2064,10 +2064,10 @@ msgid "Graph settings unchanged"
 msgstr "Nastavitve grafa niso spremenjene"
 
 msgid "improved"
-msgstr ""
+msgstr "izboljšan"
 
 msgid "vs baseline"
-msgstr ""
+msgstr "v primerjavi z izhodiščem"
 
 msgid "CPU"
 msgstr "CPU"
@@ -2271,7 +2271,7 @@ msgid "Health"
 msgstr "Zdravje"
 
 msgid "Router performance overview"
-msgstr ""
+msgstr "Pregled delovanja usmerjevalnika"
 
 msgid "Help"
 msgstr "Pomoč"
@@ -2340,7 +2340,7 @@ msgid "Router Auto-Tuning"
 msgstr "Samodejno uravnavanje usmerjevalnika"
 
 msgid "Tuning"
-msgstr ""
+msgstr "Uglaševanje"
 
 msgid "Manage server and client tunnels"
 msgstr "Upravljanje strežniških in klientovih tuneljev"
@@ -3348,58 +3348,58 @@ msgid "to your router.config file."
 msgstr "v datoteko router.config."
 
 msgid "Peers reached in the last 60s"
-msgstr ""
+msgstr "Vrstniki, doseženi v zadnjih 60. letih"
 
 msgid "Fast"
 msgstr "Hitro"
 
 msgid "Low-latency peers for tunnel participation"
-msgstr ""
+msgstr "Vrstniki z nizko zakasnitvijo za sodelovanje v tunelu"
 
 msgid "HighCap"
-msgstr ""
+msgstr "HighCap"
 
 msgid "High-bandwidth peers for many tunnels"
-msgstr ""
+msgstr "Visoko pasovni vrstniki za številne tunele"
 
 msgid "Reliable"
-msgstr ""
+msgstr "Zanesljiv"
 
 msgid "High-capacity peers with good acceptance"
-msgstr ""
+msgstr "Visoko zmogljivi vrstniki z dobrim sprejemanjem"
 
 msgid "Peers that store and serve NetDb info"
-msgstr ""
+msgstr "Vrstniki, ki shranjujejo in strežejo informacije NetDb"
 
 msgid "Known"
 msgstr "Znani"
 
 msgid "Total entries in network database"
-msgstr ""
+msgstr "Skupaj vnosov v omrežno bazo podatkov"
 
 msgid "Active%"
-msgstr ""
+msgstr "aktivni %"
 
 msgid "Profiles with activity in the last 24h"
-msgstr ""
+msgstr "Profili z aktivnostjo v zadnjih 24 urah"
 
 msgid "Unreachable"
 msgstr "Ne dosegljivo"
 
 msgid "Peers without a reachable address"
-msgstr ""
+msgstr "Vrstniki brez dosegljivega naslova"
 
 msgid "Peers excluded from all interactions"
-msgstr ""
+msgstr "Vrstniki so izključeni iz vseh interakcij"
 
 msgid "/min"
-msgstr ""
+msgstr "/min"
 
 msgid "Test Fail"
-msgstr ""
+msgstr "Test Fail"
 
 msgid "Connectivity test failures per minute"
-msgstr ""
+msgstr "Napake pri preizkusu povezljivosti na minuto"
 
 msgid "Peer Connections"
 msgstr "Povezave partnerja"
@@ -4845,7 +4845,7 @@ msgid "Slow Start Window Cap"
 msgstr "Omejitev okna počasnega zagona"
 
 msgid "Max SYN Sends"
-msgstr ""
+msgstr "Največ SYN pošilja"
 
 msgid "Max RTO"
 msgstr "Največji RTO"
@@ -4974,7 +4974,7 @@ msgid "Max Concurrent RI Lookups"
 msgstr "Največje število sočasnih iskanj RI"
 
 msgid "Next-Hop Lookup %"
-msgstr ""
+msgstr "% iskanja naslednjega skoka"
 
 msgid "Max Concurrent Test Jobs"
 msgstr "Največje število sočasnih preizkusnih opravil"
@@ -5046,7 +5046,7 @@ msgid "Slow Start Growth Rate"
 msgstr "Hitrost rasti počasnega zagona"
 
 msgid "Min Pacing Rate"
-msgstr ""
+msgstr "Najmanjša stopnja tempa"
 
 msgid "RTT Cap"
 msgstr "Omejitev RTT"
@@ -5061,7 +5061,7 @@ msgid "Inactivity Timeout"
 msgstr "Časovna omejitev neaktivnosti"
 
 msgid "Max Window Size"
-msgstr ""
+msgstr "Največja velikost okna"
 
 msgid "Max Message Queue Age"
 msgstr "Največja starost vrste sporočil"
@@ -5160,10 +5160,10 @@ msgid "Socket Connect Timeout"
 msgstr "Časovna omejitev povezave vtičnice"
 
 msgid "Untested Tunnel Cap Multiplier"
-msgstr ""
+msgstr "Nepreizkušen multiplikator tunelskih pokrovov"
 
 msgid "Message Processing Throttle"
-msgstr ""
+msgstr "Plin za obdelavo sporočil"
 
 msgid "Data packets between each ACK."
 msgstr "Podatkovna paketa med vsakim ACK."
@@ -5187,7 +5187,7 @@ msgid "Bandwidth token refill interval (ms)."
 msgstr "Interval ponovnega polnjenja žetonov pasovne širine (ms)."
 
 msgid "NIO selector sleep between loops (ms)."
-msgstr ""
+msgstr "Spanje izbirnika NIO med zankami (ms)."
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "Odhodna sporočila v paketih na črpalko prehoda."
@@ -5211,7 +5211,7 @@ msgid "Max congestion window during slow start."
 msgstr "Največje okno zasedenosti med počasnim zagonom."
 
 msgid "Total SYN attempts before giving up on a handshake."
-msgstr ""
+msgstr "Skupni poskusi SYN, preden obupajo pri rokovanju."
 
 msgid "Max retransmission timeout (ms)."
 msgstr "Največja časovna omejitev ponovnega prenosa (ms)."
@@ -5226,7 +5226,7 @@ msgid "Max idle time before dropping a stream (ms)."
 msgstr "Največji čas nedejavnosti pred prekinitvijo toka (ms)."
 
 msgid "Max unacknowledged packets per stream connection."
-msgstr ""
+msgstr "Največje število nepotrjenih paketov na tokovno povezavo."
 
 msgid "I2CP write queue depth."
 msgstr "Globina vrste za pisanje I2CP."
@@ -5346,7 +5346,7 @@ msgid "Max concurrent RI lookups during builds."
 msgstr "Največje število sočasnih iskanj RI med gradnjami."
 
 msgid "Concurrent next-hop lookup limit as % of transit tunnels."
-msgstr ""
+msgstr "Omejitev sočasnega iskanja naslednjega skoka kot % tranzitnih tunelov."
 
 msgid "Max concurrent tunnel test jobs."
 msgstr "Največje število sočasnih preizkusnih opravil predorov."
@@ -5361,7 +5361,7 @@ msgid "Threads decrypting inbound NTCP data."
 msgstr "Niti, ki dešifrirajo dohodne podatke NTCP."
 
 msgid "Threads that encrypt outbound NTCP messages."
-msgstr ""
+msgstr "Niti, ki šifrirajo izhodna sporočila NTCP."
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Interval varnostnega pregleda zataknjenih črpalk NTCP (ms)."
@@ -5388,7 +5388,7 @@ msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "Velikost ponovnega zagona okna (MTU) po propadu RTO."
 
 msgid "Priority-aware buffer where client messages jump transit."
-msgstr ""
+msgstr "Priority-aware medpomnilnik, kamor preskočijo sporočila odjemalcev."
 
 msgid "I2CP session buffer size."
 msgstr "Velikost medpomnilnika seje I2CP."
@@ -5415,7 +5415,7 @@ msgid "Window multiplier per RTT during slow start."
 msgstr "Množitelj okna na RTT med počasnim zagonom."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
-msgstr ""
+msgstr "Najmanjša hitrost pošiljanja, preden se sproži pospeševanje (KB/s)."
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "Zgornja meja ocene RTT (ms)."
@@ -5493,13 +5493,13 @@ msgid "Consecutive failures before pool backoff."
 msgstr "Zaporedni neuspehi pred umikom zaloge."
 
 msgid "Cooldown duration after pool failure threshold (ms)."
-msgstr ""
+msgstr "Trajanje ohlajanja po pragu odpovedi bazena (ms)."
 
 msgid "Target spare tunnel count per pool."
 msgstr "Ciljno število varnostnih predorov na zalogo."
 
 msgid "Widens untested tunnel cap when testing stalls."
-msgstr ""
+msgstr "Razširi pokrov nepreizkušenega tunela pri testiranju stojnic."
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "Prag obremenitve, pri katerem se začne verjetnostna zavrnitev prehoda (%)."
@@ -5526,7 +5526,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Časovna omejitev povezave vtičnice TCP za niti strežniškega obdelovalca predorov (ms)."
 
 msgid "Max average message delay before rejecting transit (ms)."
-msgstr ""
+msgstr "Največja povprečna zakasnitev sporočila pred zavrnitvijo tranzita (ms)."
 
 msgid "Tunnel"
 msgstr "Tunel"
@@ -7459,13 +7459,13 @@ msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction
 msgstr "Obdobje zatiranja ob zagonu v milisekundah. Opozorila in logika zmanjševanja predorov so zatrta med začetnim zagonom usmerjevalnika, da se preprečijo prezgodnje odločitve. [Privzeto 300000 (5 minut)"
 
 msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Najmanjši interval v milisekundah med objavami LeaseSet. Preprečuje hitre objavljajoče nevihte med odmikom tunela. [Privzeto je 120000 (2 minuti)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Najmanjši interval v milisekundah med zgradbami objekta LeaseSet. Preprečuje nepotrebno opuščanje objekta LeaseSet pri vsakem dodajanju/odstranjevanju tunela. [Privzeto je 120000 (2 minuti)]"
 
 msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
-msgstr ""
+msgstr "Največje trajanje najema v milisekundah za objavljene LeaseSets. Končni datumi zakupa so od zdaj naprej omejeni na to vrednost, tako da vrstniki ponovno pridobijo prej, če so nastavljeni krajše od življenjske dobe tunela. Prehod še vedno obdeluje sporočila za celotno življenjsko dobo tunela; samo predpomnjeni LeaseSet na strani, ki je zahtevala, poteče prej, kar sproži ponovno pridobivanje najnovejše različice. Privzeto je samodejno izračunano iz i2p.netdb.republishInterval + 60 sekund (6 minut s standardnimi nastavitvami)."
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "Največje število sočasnih graditev predorov na smer. Višje vrednosti pospešijo obnovitev bazena, vendar lahko preobremenijo omrežje. [Privzeto 6"
@@ -7546,10 +7546,10 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Privzeta največja zakasnitev toka v milisekundah, ko ni nastavljena eksplicitna časovna omejitev povezave. [Privzeto 10000 (10 sekund)"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr ""
+msgstr "Največji čas v milisekundah, ko lahko prejeti SYN čaka v sprejemni čakalni vrsti, preden ga accept() potegne. Če je accept() zakasnjen (zaseden gostujoči strežnik), je povezava po tem oknu zavrnjena, tako da višja vrednost dopušča kratke zastoje. [Privzeto je 30000 (30 sekund)]"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Največje število čakajočih povezav (SYN in delni paketi) v čakalni vrsti za sprejemanje strežnika. Ko je poln, so novi SYN-ji opuščeni (odjemalec poskusi znova) in ne ponastavljeni, tako da večja vrednost bolje absorbira izbruhe povezave na račun pomnilnika. [Privzeto je 256 (128 v počasnih sistemih)]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Interval v milisekundah med samodejnimi ponovnimi objavami LeaseSet. Višje vrednosti zmanjšajo promet netdb, vendar lahko povzročijo zastarele informacije o najemu. [Privzeto 300000 (5 minut)"
@@ -9871,12 +9871,3 @@ msgstr "Naslednje"
 
 msgid "Finished"
 msgstr "Končano"
-
-
-
-
-
-
-
-
-

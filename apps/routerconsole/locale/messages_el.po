@@ -122,7 +122,7 @@ msgid "Total number of threads in use"
 msgstr "Συνολικός αριθμός νημάτων σε χρήση"
 
 msgid "Time spent paused in GC (ms)"
-msgstr ""
+msgstr "Ο χρόνος που δαπανήθηκε σε παύση σε GC (ms)"
 
 msgid "Peers without a published IP address"
 msgstr "Ομότιμοι χωρίς δημοσιευμένη διεύθυνση IP"
@@ -704,7 +704,7 @@ msgid "If the problem persists, verify that you have cookies enabled in your bro
 msgstr "Αν το πρόβλημα επιμένει, βεβαιωθείτε ότι ο περιηγητής ιστού σας αποδέχεται τα cookies."
 
 msgid "Bandwidth usage"
-msgstr ""
+msgstr "Χρήση εύρους ζώνης"
 
 #, java-format
 msgid "events in {0}"
@@ -2009,13 +2009,13 @@ msgid "Do not show legend on graphs"
 msgstr "Μην εμφανίζετε θρύλο στα γραφήματα"
 
 msgid "Disabled while legend is hidden"
-msgstr ""
+msgstr "Απενεργοποιήθηκε ενώ το υπόμνημα είναι κρυφό"
 
 msgid "Hide restarts"
-msgstr ""
+msgstr "Απόκρυψη επανεκκινήσεων"
 
 msgid "Suppress restart lines on graphs"
-msgstr ""
+msgstr "Καταργήστε τις γραμμές επανεκκίνησης στα γραφήματα"
 
 msgid "Persistence"
 msgstr "Επιμονή"
@@ -2048,10 +2048,10 @@ msgid "Graph settings unchanged"
 msgstr "Οι ρυθμίσεις γραφήματος δεν άλλαξαν"
 
 msgid "improved"
-msgstr ""
+msgstr "βελτιωμένη"
 
 msgid "vs baseline"
-msgstr ""
+msgstr "έναντι γραμμής βάσης"
 
 msgid "CPU"
 msgstr "CPU"
@@ -2255,7 +2255,7 @@ msgid "Health"
 msgstr "Κατάσταση"
 
 msgid "Router performance overview"
-msgstr ""
+msgstr "Επισκόπηση απόδοσης δρομολογητή"
 
 msgid "Help"
 msgstr "Βοήθεια"
@@ -2324,7 +2324,7 @@ msgid "Router Auto-Tuning"
 msgstr "Αυτόματη βελτιστοποίηση δρομολογητή"
 
 msgid "Tuning"
-msgstr ""
+msgstr "Κούρδισμα"
 
 msgid "Manage server and client tunnels"
 msgstr "Διαχειριστείτε τις σήραγγες διακομιστή και πελατών"
@@ -3332,58 +3332,58 @@ msgid "to your router.config file."
 msgstr "στο αρχείο router.config."
 
 msgid "Peers reached in the last 60s"
-msgstr ""
+msgstr "Οι συνομήλικοι έφτασαν τα τελευταία 60s"
 
 msgid "Fast"
 msgstr "Γρήγορα"
 
 msgid "Low-latency peers for tunnel participation"
-msgstr ""
+msgstr "Ομότιμοι χαμηλού λανθάνοντος χρόνου για συμμετοχή στο τούνελ"
 
 msgid "HighCap"
-msgstr ""
+msgstr "HighCap"
 
 msgid "High-bandwidth peers for many tunnels"
-msgstr ""
+msgstr "Ομότιμοι υψηλού εύρους ζώνης για πολλές σήραγγες"
 
 msgid "Reliable"
-msgstr ""
+msgstr "Αξιόπιστος"
 
 msgid "High-capacity peers with good acceptance"
-msgstr ""
+msgstr "Ομότιμοι υψηλής χωρητικότητας με καλή αποδοχή"
 
 msgid "Peers that store and serve NetDb info"
-msgstr ""
+msgstr "Ομότιμοι που αποθηκεύουν και προβάλλουν πληροφορίες NetDb"
 
 msgid "Known"
 msgstr "Γνωστό"
 
 msgid "Total entries in network database"
-msgstr ""
+msgstr "Συνολικές καταχωρήσεις στη βάση δεδομένων δικτύου"
 
 msgid "Active%"
-msgstr ""
+msgstr "Ενεργός%"
 
 msgid "Profiles with activity in the last 24h"
-msgstr ""
+msgstr "Προφίλ με δραστηριότητα τις τελευταίες 24 ώρες"
 
 msgid "Unreachable"
 msgstr "Απροσπέλαστος"
 
 msgid "Peers without a reachable address"
-msgstr ""
+msgstr "Ομότιμοι χωρίς προσβάσιμη διεύθυνση"
 
 msgid "Peers excluded from all interactions"
-msgstr ""
+msgstr "Συνομήλικοι που αποκλείονται από όλες τις αλληλεπιδράσεις"
 
 msgid "/min"
-msgstr ""
+msgstr "/min"
 
 msgid "Test Fail"
-msgstr ""
+msgstr "Αποτυχία δοκιμής"
 
 msgid "Connectivity test failures per minute"
-msgstr ""
+msgstr "Αποτυχίες δοκιμών συνδεσιμότητας ανά λεπτό"
 
 msgid "Peer Connections"
 msgstr "Συνδέσεις ομοτίμων"
@@ -4809,7 +4809,7 @@ msgid "Slow Start Window Cap"
 msgstr "Ανώτατο Όριο Παραθύρου Slow Start"
 
 msgid "Max SYN Sends"
-msgstr ""
+msgstr "Μέγιστη αποστολή SYN"
 
 msgid "Max RTO"
 msgstr "Μέγιστο RTO"
@@ -4938,7 +4938,7 @@ msgid "Max Concurrent RI Lookups"
 msgstr "Μέγιστες Ταυτόχρονες Αναζητήσεις RI"
 
 msgid "Next-Hop Lookup %"
-msgstr ""
+msgstr "% αναζήτησης Next-Hop"
 
 msgid "Max Concurrent Test Jobs"
 msgstr "Μέγιστες Ταυτόχρονες Εργασίες Ελέγχου"
@@ -5010,7 +5010,7 @@ msgid "Slow Start Growth Rate"
 msgstr "Ρυθμός Ανάπτυξης Slow Start"
 
 msgid "Min Pacing Rate"
-msgstr ""
+msgstr "Ελάχιστος ρυθμός βηματοδότησης"
 
 msgid "RTT Cap"
 msgstr "Ανώτατο Όριο RTT"
@@ -5025,7 +5025,7 @@ msgid "Inactivity Timeout"
 msgstr "Χρονικό Όριο Αδράνειας"
 
 msgid "Max Window Size"
-msgstr ""
+msgstr "Μέγιστο μέγεθος παραθύρου"
 
 msgid "Max Message Queue Age"
 msgstr "Μέγιστη Ηλικία Ουράς Μηνυμάτων"
@@ -5124,10 +5124,10 @@ msgid "Socket Connect Timeout"
 msgstr "Χρονικό Όριο Σύνδεσης Υποδοχής"
 
 msgid "Untested Tunnel Cap Multiplier"
-msgstr ""
+msgstr "Μη δοκιμασμένος πολλαπλασιαστής καλύμματος σήραγγας"
 
 msgid "Message Processing Throttle"
-msgstr ""
+msgstr "γκάζι επεξεργασίας μηνυμάτων"
 
 msgid "Data packets between each ACK."
 msgstr "Πακέτα δεδομένων μεταξύ κάθε ACK."
@@ -5151,7 +5151,7 @@ msgid "Bandwidth token refill interval (ms)."
 msgstr "Διάστημα αναπλήρωσης δικαιωμάτων εύρους ζώνης (ms)."
 
 msgid "NIO selector sleep between loops (ms)."
-msgstr ""
+msgstr "Αναστολή λειτουργίας επιλογέα NIO μεταξύ βρόχων (ms)."
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "Ομαδοποιημένα εξερχόμενα μηνύματα ανά άντληση πύλης."
@@ -5175,7 +5175,7 @@ msgid "Max congestion window during slow start."
 msgstr "Μέγιστο παράθυρο συμφόρησης κατά το slow start."
 
 msgid "Total SYN attempts before giving up on a handshake."
-msgstr ""
+msgstr "Συνολικές προσπάθειες SYN πριν εγκαταλείψουν μια χειραψία."
 
 msgid "Max retransmission timeout (ms)."
 msgstr "Μέγιστο χρονικό όριο επαναμετάδοσης (ms)."
@@ -5190,7 +5190,7 @@ msgid "Max idle time before dropping a stream (ms)."
 msgstr "Μέγιστος χρόνος αδράνειας πριν την απόρριψη μιας ροής (ms)."
 
 msgid "Max unacknowledged packets per stream connection."
-msgstr ""
+msgstr "Μέγιστο μη επιβεβαιωμένο πακέτα ανά σύνδεση ροής."
 
 msgid "I2CP write queue depth."
 msgstr "Βάθος ουράς εγγραφής I2CP."
@@ -5310,7 +5310,7 @@ msgid "Max concurrent RI lookups during builds."
 msgstr "Μέγιστες ταυτόχρονες αναζητήσεις RI κατά τη διάρκεια κατασκευών."
 
 msgid "Concurrent next-hop lookup limit as % of transit tunnels."
-msgstr ""
+msgstr "Όριο ταυτόχρονης αναζήτησης επόμενου άλματος ως % των σηράγγων διέλευσης."
 
 msgid "Max concurrent tunnel test jobs."
 msgstr "Μέγιστες ταυτόχρονες εργασίες ελέγχου σήραγγας."
@@ -5325,7 +5325,7 @@ msgid "Threads decrypting inbound NTCP data."
 msgstr "Νήματα που αποκρυπτογραφούν εισερχόμενα δεδομένα NTCP."
 
 msgid "Threads that encrypt outbound NTCP messages."
-msgstr ""
+msgstr "Νήματα που κρυπτογραφούν εξερχόμενα μηνύματα NTCP."
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Διάστημα σάρωσης ασφαλείας για κολλημένες αντλίες NTCP (ms)."
@@ -5352,7 +5352,7 @@ msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "Μέγεθος επανεκκίνησης παραθύρου (MTUs) μετά την κατάρρευση RTO."
 
 msgid "Priority-aware buffer where client messages jump transit."
-msgstr ""
+msgstr "Προσωρινή μνήμη με επίγνωση προτεραιότητας όπου μεταφέρονται τα μηνύματα πελάτη."
 
 msgid "I2CP session buffer size."
 msgstr "Μέγεθος buffer συνεδρίας I2CP."
@@ -5379,7 +5379,7 @@ msgid "Window multiplier per RTT during slow start."
 msgstr "Πολλαπλασιαστής παραθύρου ανά RTT κατά το slow start."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
-msgstr ""
+msgstr "Ελάχιστος ρυθμός αποστολής πριν από την έναρξη βηματοδότησης (KB/s)."
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "Ανώτατο όριο στην εκτίμηση RTT (ms)."
@@ -5457,13 +5457,13 @@ msgid "Consecutive failures before pool backoff."
 msgstr "Διαδοχικές αποτυχίες πριν την οπισθοχώρηση ομάδας."
 
 msgid "Cooldown duration after pool failure threshold (ms)."
-msgstr ""
+msgstr "Διάρκεια ψύξης μετά το όριο αστοχίας της πισίνας (ms)."
 
 msgid "Target spare tunnel count per pool."
 msgstr "Στόχος εφεδρικού αριθμού σηράγγων ανά ομάδα."
 
 msgid "Widens untested tunnel cap when testing stalls."
-msgstr ""
+msgstr "Διευρύνει το μη δοκιμασμένο καπάκι της σήραγγας όταν δοκιμάζει πάγκους."
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "Όριο φόρτου όπου ξεκινά η πιθανοτική απόρριψη διέλευσης (%)."
@@ -5490,7 +5490,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Χρονικό όριο σύνδεσης υποδοχής TCP για νήματα χειριστή διακομιστή σήραγγας (ms)."
 
 msgid "Max average message delay before rejecting transit (ms)."
-msgstr ""
+msgstr "Μέγιστη μέση καθυστέρηση μηνύματος πριν από την απόρριψη της μετάδοσης (ms)."
 
 msgid "Tunnel"
 msgstr "Τούνελ"
@@ -7423,13 +7423,13 @@ msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction
 msgstr "Περίοδος καταστολής εκκίνησης σε χιλιοστά του δευτερολέπτου. Οι προειδοποιήσεις και η λογική μείωσης σηράγγων καταστέλλονται κατά την αρχική εκκίνηση του δρομολογητή για αποφυγή πρόωρων αποφάσεων. [Προεπιλογή 300000 (5 λεπτά)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Ελάχιστο διάστημα σε χιλιοστά του δευτερολέπτου μεταξύ δημοσιεύσεων LeaseSet. Αποτρέπει τις γρήγορες καταιγίδες δημοσίευσης κατά την ανατροπή της σήραγγας. [Η προεπιλογή είναι 120000 (2 λεπτά)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Ελάχιστο διάστημα σε χιλιοστά του δευτερολέπτου μεταξύ των εκδόσεων αντικειμένων LeaseSet. Αποτρέπει την περιττή ανατροπή αντικειμένων LeaseSet σε κάθε προσθήκη/αφαίρεση σήραγγας. [Η προεπιλογή είναι 120000 (2 λεπτά)]"
 
 msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
-msgstr ""
+msgstr "Μέγιστη διάρκεια μίσθωσης σε χιλιοστά του δευτερολέπτου για δημοσιευμένα Σύνολα Μισθώσεων. Οι ημερομηνίες λήξης της μίσθωσης περιορίζονται σε αυτήν την τιμή από τώρα, επομένως οι ομότιμες ανακτούν εκ νέου νωρίτερα όταν ορίζονται μικρότερες από τη διάρκεια ζωής της σήραγγας. Η πύλη εξακολουθεί να επεξεργάζεται μηνύματα για όλη τη διάρκεια ζωής της σήραγγας. μόνο το αποθηκευμένο LeaseSet στην πλευρά του αιτήματος λήγει νωρίτερα, ενεργοποιώντας την εκ νέου ανάκτηση της πιο πρόσφατης έκδοσης. Η προεπιλογή υπολογίζεται αυτόματα από το i2p.netdb.republishInterval + 60 δευτερόλεπτα (6 λεπτά με τυπικές ρυθμίσεις)."
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "Μέγιστος αριθμός ταυτόχρονων κατασκευών σήραγγας ανά κατεύθυνση. Υψηλότερες τιμές επιταχύνουν την ανάκτηση πισίνας αλλά μπορεί να υπερφορτώσουν το δίκτυο. [Προεπιλογή 6]"
@@ -7510,10 +7510,10 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Προεπιλεγμένη μέγιστη καθυστέρηση ροής σε χιλιοστά του δευτερολέπτου όταν δεν έχει οριστεί ρητό χρονικό όριο σύνδεσης. [Προεπιλογή 10000 (10 δευτερόλεπτα)]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr ""
+msgstr "Ο μέγιστος χρόνος σε χιλιοστά του δευτερολέπτου μπορεί να περιμένει ένα λαμβανόμενο SYN στην ουρά αποδοχής πριν το τραβήξει η accept(). Εάν η Accept() καθυστερήσει (απασχολημένος φιλοξενούμενος διακομιστής), η σύνδεση απορρίπτεται μετά από αυτό το παράθυρο, επομένως μια υψηλότερη τιμή ανέχεται σύντομες καθυστερήσεις. [Η προεπιλογή είναι 30000 (30 δευτερόλεπτα)]"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Μέγιστος αριθμός συνδέσεων σε εκκρεμότητα (SYN και μερικά πακέτα) στον διακομιστή ουρά αποδοχής. Όταν είναι πλήρης, οι νέοι SYN απορρίπτονται (ο πελάτης ξαναπροσπαθεί) αντί να επαναφέρει, έτσι μια μεγαλύτερη τιμή απορροφά καλύτερα τις ριπές σύνδεσης σε βάρος της μνήμης. [Η προεπιλογή είναι 256 (128 σε αργά συστήματα)]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Διάστημα σε χιλιοστά του δευτερολέπτου μεταξύ αυτοματοποιημένων αναδημοσιεύσεων LeaseSet. Υψηλότερες τιμές μειώνουν την κίνηση netdb αλλά μπορεί να προκαλέσουν παρωχημένες πληροφορίες μίσθωσης. [Προεπιλογή 300000 (5 λεπτά)]"
@@ -9835,12 +9835,3 @@ msgstr "Επόμενο"
 
 msgid "Finished"
 msgstr "Τελειωμέν"
-
-
-
-
-
-
-
-
-

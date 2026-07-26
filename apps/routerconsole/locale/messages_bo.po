@@ -40,15 +40,11 @@ msgstr "སྐྱེད་བསྲིང་འགོ་བརྩམས་བཞ
 
 #, java-format
 msgid "Acquired {0} router info from reseed hosts"
-msgid_plural "Acquired {0} router infos from reseed hosts"
-msgstr[0] "སྐྱེད་བསྲིང་ཞབས་ཞུའི་རྒྱུད་པའི་ཆ་འཕྲིན་{0} ཐོབ་པ།"
-msgstr[1] "སྐྱེད་བསྲིང་ཞབས་ཞུའི་རྒྱུད་པའི་ཆ་འཕྲིན་{0} ཐོབ་པ།"
+msgstr "Acquired {0} router info from reseed hosts"
 
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
-msgid_plural "Acquired only {0} router infos from reseed hosts"
-msgstr[0] "རྒྱུད་པའི་ཆ་འཕྲིན་{0} ཁོ་ན་ཐོབ་པ།"
-msgstr[1] "རྒྱུད་པའི་ཆ་འཕྲིན་{0} ཁོ་ན་ཐོབ་པ།"
+msgstr "Acquired only 1 router info from reseed hosts"
 
 #, java-format
 msgid "{0}Reseed{1} failed:"
@@ -122,7 +118,7 @@ msgid "Total number of threads in use"
 msgstr "བེད་སྤྱོད་བྱེད་བཞིན་པའི་སྲོལ་ཁག་གི་བསྡོམས།"
 
 msgid "Time spent paused in GC (ms)"
-msgstr ""
+msgstr "Time spent paused in GC (ms)"
 
 msgid "Peers without a published IP address"
 msgstr "IP ཁ་བྱང་སྤེལ་མེད་པའི་མཐུད་སྣེ།"
@@ -704,7 +700,7 @@ msgid "If the problem persists, verify that you have cookies enabled in your bro
 msgstr "གནས་བབ་འདི་མི་བཞིན་པའི་རོགས་པ་ཙམ།"
 
 msgid "Bandwidth usage"
-msgstr ""
+msgstr "Bandwidth usage"
 
 #, java-format
 msgid "events in {0}"
@@ -753,9 +749,7 @@ msgstr "བརྒྱུད་བཏོན་པའི་བསྐྱར་བཏ
 
 #, java-format
 msgid "{0} plugin updated"
-msgid_plural "{0} plugins updated"
-msgstr[0] "སྒྲིག་ཆས་{0} གསར་བརྗེས་བྱས།"
-msgstr[1] "སྒྲིག་ཆས་{0} གསར་བརྗེས་བྱས།"
+msgstr "{0} plugin updated"
 
 msgid "Plugin check complete"
 msgstr "བརྒྱུད་བཏོན་པའི་བལྟ་བཞིན་མེད།"
@@ -1546,9 +1540,7 @@ msgstr "ཡིག་ཆ་ནས་རྒྱུན་དུ་བཙོན་པ
 
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
-msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] "སྐྱེད་བསྲིང་ལེགས་གྲུབ། ཡིག་ཆ་ནས་རྒྱུད་པའི་ཆ་འཕྲིན་{0} མངོན་སུམ་བྱས།"
-msgstr[1] "སྐྱེད་བསྲིང་ལེགས་གྲུབ། ཡིག་ཆ་ནས་རྒྱུད་པའི་ཆ་འཕྲིན་{0} མངོན་སུམ་བྱས།"
+msgstr "Reseed successful, loaded {0} router info from file."
 
 msgid "Reset URL list"
 msgstr "URL ཐོ་བཀོད་སླར་སྒྲིག"
@@ -1591,15 +1583,11 @@ msgstr "{0} ལ་སྒོ་བརྒྱག"
 
 #, java-format
 msgid "{0} transit tunnel still active"
-msgid_plural "{0} transit tunnels still active"
-msgstr[0] "འགྲུམ་ལམ་ཁ་བསྐྲུན་{0} ད་དུང་ཤུགས་ལྡན་ཡིན།"
-msgstr[1] "འགྲུམ་ལམ་ཁ་བསྐྲུན་{0} ད་དུང་ཤུགས་ལྡན་ཡིན།"
+msgstr "{0} transit tunnel still active"
 
 #, java-format
 msgid "Please wait for routing commitment to expire for {0} tunnel"
-msgid_plural "Please wait for routing commitments to expire for {0} tunnels"
-msgstr[0] "ཁ་བསྐྲུན་{0} གི་མཛོད་སྤྲོད་དུས་ཚད་ཟད་པའི་སྒུག་རོགས།"
-msgstr[1] "ཁ་བསྐྲུན་{0} གི་མཛོད་སྤྲོད་དུས་ཚད་ཟད་པའི་སྒུག་རོགས།"
+msgstr "Please wait for routing commitment to expire for {0} tunnel"
 
 #, java-format
 msgid "Restart in {0}"
@@ -1673,15 +1661,11 @@ msgstr "རྒྱུད་སྟེན་ཉར་ནོཙ་འཛོལ་བ
 
 #, java-format
 msgid "{0} hop"
-msgid_plural "{0} hops"
-msgstr[0] "འཕྲོད་ལམ་{0}"
-msgstr[1] "འཕྲོད་ལམ་{0}"
+msgstr "{0} hop"
 
 #, java-format
 msgid "{0} tunnel"
-msgid_plural "{0} tunnels"
-msgstr[0] "ཁ་བསྐྲུན་{0}"
-msgstr[1] "ཁ་བསྐྲུན་{0}"
+msgstr "{0} tunnel"
 
 msgid "Exploratory tunnels"
 msgstr "འཚོལ་ཞིབ་སྐུད་སྲོག་སྐར་དག།"
@@ -2009,13 +1993,13 @@ msgid "Do not show legend on graphs"
 msgstr "རི་མོའི་ཐོག་དཔེ་རིས་མི་སྟོན་པ།"
 
 msgid "Disabled while legend is hidden"
-msgstr ""
+msgstr "Disabled while legend is hidden"
 
 msgid "Hide restarts"
-msgstr ""
+msgstr "Hide restarts"
 
 msgid "Suppress restart lines on graphs"
-msgstr ""
+msgstr "Suppress restart lines on graphs"
 
 msgid "Persistence"
 msgstr "རྒྱུན་མཐུགས་རང་བཞིན།"
@@ -2048,10 +2032,10 @@ msgid "Graph settings unchanged"
 msgstr "རི་མོའི་སྒྲིག་སྟེན་བསྒྱུར་བཏོན་མེད།"
 
 msgid "improved"
-msgstr ""
+msgstr "improved"
 
 msgid "vs baseline"
-msgstr ""
+msgstr "vs baseline"
 
 msgid "CPU"
 msgstr "CPU"
@@ -2255,7 +2239,7 @@ msgid "Health"
 msgstr "གཟུགས་གཞི།"
 
 msgid "Router performance overview"
-msgstr ""
+msgstr "Router performance overview"
 
 msgid "Help"
 msgstr "རོགས་རམ།"
@@ -2324,7 +2308,7 @@ msgid "Router Auto-Tuning"
 msgstr "རྟོག་མཁན་གྱི་རང་འཕྲུལ་སྒྲིག་སྐྱོང་།"
 
 msgid "Tuning"
-msgstr ""
+msgstr "Tuning"
 
 msgid "Manage server and client tunnels"
 msgstr "སརྟོན་པ་དང་ལག་གདང་གི་གྲུང་ནེལ་དོ་དམ་བྱེད་པ།"
@@ -3332,58 +3316,58 @@ msgid "to your router.config file."
 msgstr "ཁྱེད་ཀྱི་router.configཡིག་ཆར།"
 
 msgid "Peers reached in the last 60s"
-msgstr ""
+msgstr "Peers reached in the last 60s"
 
 msgid "Fast"
 msgstr "མྱུར་བ།"
 
 msgid "Low-latency peers for tunnel participation"
-msgstr ""
+msgstr "Low-latency peers for tunnel participation"
 
 msgid "HighCap"
-msgstr ""
+msgstr "HighCap"
 
 msgid "High-bandwidth peers for many tunnels"
-msgstr ""
+msgstr "High-bandwidth peers for many tunnels"
 
 msgid "Reliable"
-msgstr ""
+msgstr "Reliable"
 
 msgid "High-capacity peers with good acceptance"
-msgstr ""
+msgstr "High-capacity peers with good acceptance"
 
 msgid "Peers that store and serve NetDb info"
-msgstr ""
+msgstr "Peers that store and serve NetDb info"
 
 msgid "Known"
 msgstr "ཤེས་པ།"
 
 msgid "Total entries in network database"
-msgstr ""
+msgstr "Total entries in network database"
 
 msgid "Active%"
-msgstr ""
+msgstr "Active%"
 
 msgid "Profiles with activity in the last 24h"
-msgstr ""
+msgstr "Profiles with activity in the last 24h"
 
 msgid "Unreachable"
 msgstr "འབྲེལ་ཐུབ་མེད་པ།"
 
 msgid "Peers without a reachable address"
-msgstr ""
+msgstr "Peers without a reachable address"
 
 msgid "Peers excluded from all interactions"
-msgstr ""
+msgstr "Peers excluded from all interactions"
 
 msgid "/min"
-msgstr ""
+msgstr "/min"
 
 msgid "Test Fail"
-msgstr ""
+msgstr "Test Fail"
 
 msgid "Connectivity test failures per minute"
-msgstr ""
+msgstr "Connectivity test failures per minute"
 
 msgid "Peer Connections"
 msgstr "ལག་གདང་འབྲེལ་བ།"
@@ -3462,9 +3446,7 @@ msgstr "མཐུད་འབྲེལ་ལ་འགྲེམ་གྲལ་འ
 
 #, java-format
 msgid "{0} peer"
-msgid_plural "{0} peers"
-msgstr[0] "ཟླ་གྲོགས་{0}"
-msgstr[1] "ཟླ་གྲོགས་{0}"
+msgstr "{0} peer"
 
 msgid "UDP connections"
 msgstr "UDP མཐུད་འབྲེལ།"
@@ -3555,9 +3537,7 @@ msgstr "ཁོང་ཚོས་ང་ཚོར་ངོ་སྤྲོད་བ
 
 #, java-format
 msgid "{0} fail"
-msgid_plural "{0} fails"
-msgstr[0] "ཕམ་འབྱུང་{0}"
-msgstr[1] "ཕམ་འབྱུང་{0}"
+msgstr "{0} fail"
 
 msgid "backlogged"
 msgstr "ལས་ཀའི་གྲལ་རིམ་ནང་།"
@@ -3639,21 +3619,15 @@ msgstr "ལྷན་ཚོགས་ནས་བདག་ལེན་བྱས་
 
 #, java-format
 msgid "Showing {0} recent profile."
-msgid_plural "Showing {0} recent profiles."
-msgstr[0] "ཉེ་ཆར་གྱི་མཚོན་གཞི་{0} སྟོན་བཞིན་པ།"
-msgstr[1] "ཉེ་ཆར་གྱི་མཚོན་གཞི་{0} སྟོན་བཞིན་པ།"
+msgstr "Showing {0} recent profile."
 
 #, java-format
 msgid "Hiding {0} older profile."
-msgid_plural "Hiding {0} older profiles."
-msgstr[0] "མཚོན་གཞི་རྙིང་པ་{0} སྦས་བཞིན་པ།"
-msgstr[1] "མཚོན་གཞི་རྙིང་པ་{0} སྦས་བཞིན་པ།"
+msgstr "Hiding {0} older profile."
 
 #, java-format
 msgid "Hiding {0} standard profile."
-msgid_plural "Hiding {0} standard profiles."
-msgstr[0] "ཚད་ལྡན་མཚོན་གཞི་{0} སྦས་བཞིན་པ།"
-msgstr[1] "ཚད་ལྡན་མཚོན་གཞི་{0} སྦས་བཞིན་པ།"
+msgstr "Hiding {0} standard profile."
 
 msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
 msgstr "དྲན་ཤེས་པར་ཞིབ་འཇུག་པ་ནི་རྒྱུན་མཐུགས་པའི་ལེན་གནད་གྲུང་ནེལ་བེད་སྤྱོད་ལ་བརྟེན་ནས་གནད་སྤུས་ལྡན་པའི་སྒོ་ནས་རྒྱུན་དུ་བཙོན་པའི་ཚོགས་པར་ཞིབ་བཤོལ་བྱེད་པར་རྒྱུག་གི་ཡོད།"
@@ -3741,21 +3715,15 @@ msgstr "ལག་གདང་རྣམས།"
 
 #, java-format
 msgid "{0} fast peer"
-msgid_plural "{0} fast peers"
-msgstr[0] "མགྱོགས་པོའི་ཟླ་གྲོགས་{0}"
-msgstr[1] "མགྱོགས་པོའི་ཟླ་གྲོགས་{0}"
+msgstr "{0} fast peer"
 
 #, java-format
 msgid "{0} high capacity peer"
-msgid_plural "{0} high capacity peers"
-msgstr[0] "ནུས་པ་མཐོ་བའི་ཟླ་གྲོགས་{0}"
-msgstr[1] "ནུས་པ་མཐོ་བའི་ཟླ་གྲོགས་{0}"
+msgstr "{0} high capacity peer"
 
 #, java-format
 msgid "{0} integrated peer"
-msgid_plural "{0} integrated peers"
-msgstr[0] "མཉམ་འདྲེས་ཟླ་གྲོགས་{0}"
-msgstr[1] "མཉམ་འདྲེས་ཟླ་གྲོགས་{0}"
+msgstr "{0} integrated peer"
 
 msgid "1h Fail Rate"
 msgstr "ཆུ་ཚོད་གཅིག་གི་ཕམ་ཚད།"
@@ -4452,9 +4420,7 @@ msgstr "ཚེ་ཚད་གྱི་ཆ་སྙོམ་ཐེགས་ཚད
 
 #, java-format
 msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "དོན་ལྟན་{0}"
-msgstr[1] "དོན་ལྟན་{0}"
+msgstr "{0} event"
 
 msgid "rate"
 msgstr "ཚད་ཚད།"
@@ -4498,9 +4464,7 @@ msgstr "ཚེ་ཚད་གྱི་ཆ་སྙོམ་གནས་ཐང་
 
 #, java-format
 msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "དོན་ལྟན་{0}"
-msgstr[1] "དོན་ལྟན་{0}"
+msgstr "1 event"
 
 msgid "sent"
 msgstr "བཏང་བ།"
@@ -4809,7 +4773,7 @@ msgid "Slow Start Window Cap"
 msgstr "འཇམ་པོའི་འགོ་བཙུགས་སྒོ་སྟེགས་ཀྱི་མཐའ་ཚད།"
 
 msgid "Max SYN Sends"
-msgstr ""
+msgstr "Max SYN Sends"
 
 msgid "Max RTO"
 msgstr "RTO མཐོ་ཤོས།"
@@ -4938,7 +4902,7 @@ msgid "Max Concurrent RI Lookups"
 msgstr "དུས་མཉམ་RI འཚོལ་བ་མཐོ་ཤོས།"
 
 msgid "Next-Hop Lookup %"
-msgstr ""
+msgstr "Next-Hop Lookup %"
 
 msgid "Max Concurrent Test Jobs"
 msgstr "དུས་མཉམ་བརྟག་ཞིབ་ལས་དོན་མཐོ་ཤོས།"
@@ -5010,7 +4974,7 @@ msgid "Slow Start Growth Rate"
 msgstr "འཇམ་པོའི་འགོ་བཙུགས་འཕེལ་རྒྱས་ཀྱི་ཚད།"
 
 msgid "Min Pacing Rate"
-msgstr ""
+msgstr "Min Pacing Rate"
 
 msgid "RTT Cap"
 msgstr "RTT མཐའ་ཚད།"
@@ -5025,7 +4989,7 @@ msgid "Inactivity Timeout"
 msgstr "བྱ་སྤེལ་མེད་པའི་དུས་ཚད།"
 
 msgid "Max Window Size"
-msgstr ""
+msgstr "Max Window Size"
 
 msgid "Max Message Queue Age"
 msgstr "འཕྲོས་པ་རིམ་པའི་དུས་ཡོལ་མཐོ་ཤོས།"
@@ -5124,10 +5088,10 @@ msgid "Socket Connect Timeout"
 msgstr "སོ་ཁེའི་(socket)་སྦྲེལ་མའི་དུས་ཚད།"
 
 msgid "Untested Tunnel Cap Multiplier"
-msgstr ""
+msgstr "Untested Tunnel Cap Multiplier"
 
 msgid "Message Processing Throttle"
-msgstr ""
+msgstr "Message Processing Throttle"
 
 msgid "Data packets between each ACK."
 msgstr "ACK སོ་སོའི་བར་གྱི་གནས་སྡུད་གྲུ་བོ།"
@@ -5151,7 +5115,7 @@ msgid "Bandwidth token refill interval (ms)."
 msgstr "རྒྱུན་ཚད་མཚོན་རྟགས་སླར་བརྡན་པའི་དབར་ཡུན།(ms)"
 
 msgid "NIO selector sleep between loops (ms)."
-msgstr ""
+msgstr "NIO selector sleep between loops (ms)."
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "ལམ་སྒོའི་མེ་སིན་རེར་ཕྲལ་བའི་ཕྱིར་གཏོང་འཕྲོས་པ།"
@@ -5175,7 +5139,7 @@ msgid "Max congestion window during slow start."
 msgstr "འཇམ་པོའི་འགོ་བཙུགས་དུས་ཀྱི་འགོག་རྐྱེན་སྒོ་སྟེགས་མཐོ་ཤོས།"
 
 msgid "Total SYN attempts before giving up on a handshake."
-msgstr ""
+msgstr "Total SYN attempts before giving up on a handshake."
 
 msgid "Max retransmission timeout (ms)."
 msgstr "སླར་གཏོང་གི་དུས་ཚད་མཐོ་ཤོས།(ms)"
@@ -5190,7 +5154,7 @@ msgid "Max idle time before dropping a stream (ms)."
 msgstr "རྒྱུན་ཁམས་བོར་སྔོན་གྱི་སྟོང་བའི་དུས་ཚོད་མཐོ་ཤོས།(ms)"
 
 msgid "Max unacknowledged packets per stream connection."
-msgstr ""
+msgstr "Max unacknowledged packets per stream connection."
 
 msgid "I2CP write queue depth."
 msgstr "I2CP བྲི་བའི་རིམ་པའི་གཏིང་ཚད།"
@@ -5310,7 +5274,7 @@ msgid "Max concurrent RI lookups during builds."
 msgstr "བཟོ་སྐྲུན་དུས་སའི་དུས་མཉམ་RI འཚོལ་བ་མཐོ་ཤོས།"
 
 msgid "Concurrent next-hop lookup limit as % of transit tunnels."
-msgstr ""
+msgstr "Concurrent next-hop lookup limit as % of transit tunnels."
 
 msgid "Max concurrent tunnel test jobs."
 msgstr "དུས་མཉམ་ཁ་བསྐྲུན་བརྟག་ཞིབ་ལས་དོན་མཐོ་ཤོས།"
@@ -5325,7 +5289,7 @@ msgid "Threads decrypting inbound NTCP data."
 msgstr "ནང་འབྱོར་NTCP གནས་སྡུད་ཉོག་འགྲོལ་བྱེད་པའི་རྒྱུན་རིམ།"
 
 msgid "Threads that encrypt outbound NTCP messages."
-msgstr ""
+msgstr "Threads that encrypt outbound NTCP messages."
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "འཐེབས་པའི་NTCP མེ་སིན་བྱེད་མཁན་གྱི་བདེ་འཇགས་འཕྲལ་སྡོམ་བརྟག་ཞིབ་དབར་ཡུན།(ms)"
@@ -5352,7 +5316,7 @@ msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "RTO ཡོངས་རྫོགས་ཆད་རྗེས་ཀྱི་སྒོ་སྟེགས་སླར་འགོ་བཙུགས་པའི་ཚད།(MTU)"
 
 msgid "Priority-aware buffer where client messages jump transit."
-msgstr ""
+msgstr "Priority-aware buffer where client messages jump transit."
 
 msgid "I2CP session buffer size."
 msgstr "I2CP ཚོགས་པའི་བར་སྣོན་གྱི་ཚད་ཀ།"
@@ -5379,7 +5343,7 @@ msgid "Window multiplier per RTT during slow start."
 msgstr "འཇམ་པོའི་འགོ་བཙུགས་དུས་ཀྱི་RTT རེར་སྒོ་སྟེགས་འགྱུར་གྲངས།"
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
-msgstr ""
+msgstr "Minimum send rate before pacing kicks in (KB/s)."
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT གདེངས་གཞིའི་མཐའ་མིག (ms)།"
@@ -5457,13 +5421,13 @@ msgid "Consecutive failures before pool backoff."
 msgstr "གཞི་ཚོགས་རྒྱུན་འཐེན་གྱི་སྔོན་གྱི་རྒྱུན་མཐུད་ཕམ་འབྱུང་།"
 
 msgid "Cooldown duration after pool failure threshold (ms)."
-msgstr ""
+msgstr "Cooldown duration after pool failure threshold (ms)."
 
 msgid "Target spare tunnel count per pool."
 msgstr "གཞི་ཚོགས་རེར་དམིགས་ཡུལ་གྱི་ཁ་བསྐྲུན་ལྷག་མའི་གྲངས་ཀ།"
 
 msgid "Widens untested tunnel cap when testing stalls."
-msgstr ""
+msgstr "Widens untested tunnel cap when testing stalls."
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "སྲིད་པ་ཅན་གྱི་འགྲུམ་ལམ་རྩིས་བཤོལ་འགོ་བརྩམས་པའི་དོག་ཤུགས་ཚད་གཞི།(%)"
@@ -5490,7 +5454,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "ཁ་བསྐྲུན་ཞབས་ཞུ་པ་ལས་སྒྲུབ་རྒྱུན་རིམ་གྱི་TCP སོ་ཁེ་སྦྲེལ་མའི་དུས་ཚད།(ms)"
 
 msgid "Max average message delay before rejecting transit (ms)."
-msgstr ""
+msgstr "Max average message delay before rejecting transit (ms)."
 
 msgid "Tunnel"
 msgstr "འགྲུལ་ལམ་"
@@ -7423,13 +7387,13 @@ msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction
 msgstr "འགོ་འཛུགས་སྐབས་ཀྱི་བཀག་སྡོམ་དུས་ཚོད། Router ཀྱི་མགོ་དང་པོའི་འགོ་འཛུགས་སྐབས་ཉེན་བརྡ་དང་འབྲེལ་ལམ་ཉུང་དུ་གཏོང་བའི་རྩིས་ལུགས་བཀག་སྡོམ་བྱེད།. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions [Default is 300000 (5 minutes)]. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions [Default is 300000 (5 minutes)]. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions [Default is 300000 (5 minutes)]. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions [Default is 300000 (5 minutes)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
 
 msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
-msgstr ""
+msgstr "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "ཕྱོགས་རེ་རེའི་ཆེ་ཤོས་མཉམ་བྱེད་འབྲེལ་ལམ་འཛུགས་སྐྲུན། གྲངས་མཐོ་ཤོས་ཀྱིས་ཆོག་མཛོད་སླར་བསྒྲུབ་མྱུར་དུ་གཏོང་ཡང་དྲ་བར་ཁུར་བརྒལ་དུ་འགྲོ་སྲིད།. Higher values accelerate pool recovery but may overload the network [Default is 6]. Higher values accelerate pool recovery but may overload the network [Default is 6]. Higher values accelerate pool recovery but may overload the network [Default is 6]. Higher values accelerate pool recovery but may overload the network [Default is 6]"
@@ -7510,10 +7474,10 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "དངོས་ཀྱི་འབྲེལ་བའི་དུས་འདས་མ་བཟོས་སྐབས་མ་འོངས་པའི་ཆེ་ཤོས་རྒྱུན་བརྒྱུད་དུས།"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr ""
+msgstr "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "རང་འགུལ་གྱི་ LeaseSet སླར་ཁྱབ་བསྒྲགས་བར་གྱི་སྐར་ཆའི་དུས་བར་ཚད། གྲངས་མཐོ་ཤོས་ཀྱིས་ netdb འགྲུལ་སྐྱོད་ཉུང་དུ་གཏོང་ཡང་གནས་ཚུལ་རྙིང་པར་འགྱུར་སྲིད།. Higher values reduce netdb traffic but may cause stale lease info [Default is 300000 (5 minutes)]. Higher values reduce netdb traffic but may cause stale lease info [Default is 300000 (5 minutes)]. Higher values reduce netdb traffic but may cause stale lease info [Default is 300000 (5 minutes)]. Higher values reduce netdb traffic but may cause stale lease info [Default is 300000 (5 minutes)]"
@@ -9835,12 +9799,3 @@ msgstr "རྗེས་མ།"
 
 msgid "Finished"
 msgstr "མཇུག་རྫོགས།"
-
-
-
-
-
-
-
-
-

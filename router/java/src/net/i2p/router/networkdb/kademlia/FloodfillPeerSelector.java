@@ -406,21 +406,21 @@ class FloodfillPeerSelector extends PeerSelector {
                 _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> OK");
             return PeerClass.OK;
         }
-        // Ban floodfills with >95% failure rate on >=15 failed queries and no recent success
+        // Ban floodfills with >95% failure rate on >=30 failed queries and no recent success
         Rate failRate = prof.getDBHistory().getFailedLookupRate().getRate(RateConstants.ONE_HOUR);
         if (failRate != null &&
-            failRate.getLifetimeEventCount() >= 15 &&
+            failRate.getLifetimeEventCount() >= 30 &&
             failRate.getAverageValue() > 0.95d &&
             now - Math.max(prof.getDBHistory().getLastLookupSuccessful(), prof.getDBHistory().getLastStoreSuccessful()) > 15*60*1000L &&
             Math.max(prof.getDBHistory().getLastLookupFailed(), prof.getDBHistory().getLastStoreFailed()) > now - 15*60*1000L) {
             if ("true".equals(_context.getProperty("router.banlist.enableUnresponsiveFloodfillBan", "true"))) {
                 String ipPort = getIPFromRouterInfo(info);
                 String verCaps = "(" + info.getVersion() + " / " + caps + ")";
-                _context.banlist().banlistRouter(entry, "Unresponsive Floodfill " + verCaps, null, null, now + 60*60*1000L);
-                _banLogger.logBan(entry, ipPort != null ? ipPort : "UNKNOWN", "Unresponsive Floodfill " + verCaps, 60*60*1000L, info);
+                _context.banlist().banlistRouter(entry, "Unresponsive Floodfill", null, null, now + 60*60*1000L);
+                _banLogger.logBan(entry, ipPort != null ? ipPort : "UNKNOWN", "Unresponsive Floodfill " + verCaps, 30*60*1000L, info);
                 _context.commSystem().forceDisconnect(entry, "Unresponsive Floodfill");
                 if (_log.shouldWarn()) {
-                    _log.warn("Banning for 1h and disconnecting from unresponsive Floodfill [" + entry.toBase64().substring(0,6) + "] -> " +
+                    _log.warn("Banning for 30m and disconnecting from unresponsive Floodfill [" + entry.toBase64().substring(0,6) + "] -> " +
                               "Fail rate: " + String.format("%.2f", failRate.getAverageValue()) +
                               ", Failures: " + failRate.getLifetimeEventCount() +
                               ", IP: " + (ipPort != null ? ipPort : "UNKNOWN") +

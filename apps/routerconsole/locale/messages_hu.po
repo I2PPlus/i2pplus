@@ -122,7 +122,7 @@ msgid "Total number of threads in use"
 msgstr "Használatban lévő szálak teljes száma"
 
 msgid "Time spent paused in GC (ms)"
-msgstr ""
+msgstr "GC-ben szüneteltetett idő (ms)"
 
 msgid "Peers without a published IP address"
 msgstr "Közzétett IP-cím nélküli társak"
@@ -704,7 +704,7 @@ msgid "If the problem persists, verify that you have cookies enabled in your bro
 msgstr "Ha a probléma fennáll, ellenőrizd, hogy a sütik engedélyezve vannak-e a böngésződben."
 
 msgid "Bandwidth usage"
-msgstr ""
+msgstr "Sávszélesség-használat"
 
 #, java-format
 msgid "events in {0}"
@@ -2009,13 +2009,13 @@ msgid "Do not show legend on graphs"
 msgstr "Ne mutasson jelmagyarázatot a grafikonokon"
 
 msgid "Disabled while legend is hidden"
-msgstr ""
+msgstr "Letiltva, amíg a jelmagyarázat el van rejtve"
 
 msgid "Hide restarts"
-msgstr ""
+msgstr "Újraindítások elrejtése"
 
 msgid "Suppress restart lines on graphs"
-msgstr ""
+msgstr "Az újraindítási vonalak letiltása a grafikonokon"
 
 msgid "Persistence"
 msgstr "Kitartás"
@@ -2048,10 +2048,10 @@ msgid "Graph settings unchanged"
 msgstr "A grafikon beállításai nem változtak"
 
 msgid "improved"
-msgstr ""
+msgstr "javított"
 
 msgid "vs baseline"
-msgstr ""
+msgstr "vs alapvonal"
 
 msgid "CPU"
 msgstr "CPU"
@@ -2255,7 +2255,7 @@ msgid "Health"
 msgstr "Állapot"
 
 msgid "Router performance overview"
-msgstr ""
+msgstr "A router teljesítményének áttekintése"
 
 msgid "Help"
 msgstr "Segítség"
@@ -2324,7 +2324,7 @@ msgid "Router Auto-Tuning"
 msgstr "Router Auto-Tuning"
 
 msgid "Tuning"
-msgstr ""
+msgstr "Hangolás"
 
 msgid "Manage server and client tunnels"
 msgstr "Szerver- és ügyfélalagutak kezelése"
@@ -3332,58 +3332,58 @@ msgid "to your router.config file."
 msgstr "a router.config fájlba."
 
 msgid "Peers reached in the last 60s"
-msgstr ""
+msgstr "A társak az elmúlt 60-as években értek el"
 
 msgid "Fast"
 msgstr "Gyors"
 
 msgid "Low-latency peers for tunnel participation"
-msgstr ""
+msgstr "Alacsony késleltetésű társak az alagútban való részvételhez"
 
 msgid "HighCap"
-msgstr ""
+msgstr "HighCap"
 
 msgid "High-bandwidth peers for many tunnels"
-msgstr ""
+msgstr "Nagy sávszélességű társak sok alagúthoz"
 
 msgid "Reliable"
-msgstr ""
+msgstr "Megbízható"
 
 msgid "High-capacity peers with good acceptance"
-msgstr ""
+msgstr "Nagy kapacitású társak, jó elfogadással"
 
 msgid "Peers that store and serve NetDb info"
-msgstr ""
+msgstr "A NetDb-információkat tároló és kiszolgáló társak"
 
 msgid "Known"
 msgstr "Ismert"
 
 msgid "Total entries in network database"
-msgstr ""
+msgstr "Összes bejegyzés a hálózati adatbázisban"
 
 msgid "Active%"
-msgstr ""
+msgstr "Aktív%"
 
 msgid "Profiles with activity in the last 24h"
-msgstr ""
+msgstr "Profilok tevékenységekkel az elmúlt 24 órában"
 
 msgid "Unreachable"
 msgstr "Nem elérhető"
 
 msgid "Peers without a reachable address"
-msgstr ""
+msgstr "Elérhető címmel nem rendelkező társak"
 
 msgid "Peers excluded from all interactions"
-msgstr ""
+msgstr "A társak minden interakcióból kizárva"
 
 msgid "/min"
-msgstr ""
+msgstr "/perc"
 
 msgid "Test Fail"
-msgstr ""
+msgstr "Sikertelen teszt"
 
 msgid "Connectivity test failures per minute"
-msgstr ""
+msgstr "Kapcsolódási teszt hibák percenként"
 
 msgid "Peer Connections"
 msgstr "Távoli csatlakozások"
@@ -4809,7 +4809,7 @@ msgid "Slow Start Window Cap"
 msgstr "Lassú indítás ablakkorlátja"
 
 msgid "Max SYN Sends"
-msgstr ""
+msgstr "Max SYN küld"
 
 msgid "Max RTO"
 msgstr "Maximális RTO"
@@ -4938,7 +4938,7 @@ msgid "Max Concurrent RI Lookups"
 msgstr "Maximális egyidejű RI keresés"
 
 msgid "Next-Hop Lookup %"
-msgstr ""
+msgstr "Next Hop keresés %"
 
 msgid "Max Concurrent Test Jobs"
 msgstr "Maximális egyidejű tesztfeladat"
@@ -5010,7 +5010,7 @@ msgid "Slow Start Growth Rate"
 msgstr "Lassú indítás növekedési üteme"
 
 msgid "Min Pacing Rate"
-msgstr ""
+msgstr "Minimális ingerlési frekvencia"
 
 msgid "RTT Cap"
 msgstr "RTT felső határ"
@@ -5025,7 +5025,7 @@ msgid "Inactivity Timeout"
 msgstr "Inaktivitási időtúllépés"
 
 msgid "Max Window Size"
-msgstr ""
+msgstr "Max ablakméret"
 
 msgid "Max Message Queue Age"
 msgstr "Maximális üzenetsor-életkor"
@@ -5124,10 +5124,10 @@ msgid "Socket Connect Timeout"
 msgstr "Socket csatlakozási időtúllépés"
 
 msgid "Untested Tunnel Cap Multiplier"
-msgstr ""
+msgstr "Nem tesztelt Tunnel Cap szorzó"
 
 msgid "Message Processing Throttle"
-msgstr ""
+msgstr "Üzenetfeldolgozási fojtószelep"
 
 msgid "Data packets between each ACK."
 msgstr "Adatcsomagok nyugták között."
@@ -5151,7 +5151,7 @@ msgid "Bandwidth token refill interval (ms)."
 msgstr "Sávszélesség-jogosultság feltöltési intervalluma (ms)."
 
 msgid "NIO selector sleep between loops (ms)."
-msgstr ""
+msgstr "NIO választó alvó ciklusok között (ms)."
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "Kimenő üzenetek kötegelése átjáró-pumpánként."
@@ -5175,7 +5175,7 @@ msgid "Max congestion window during slow start."
 msgstr "Maximális torlódási ablak a lassú indítás során."
 
 msgid "Total SYN attempts before giving up on a handshake."
-msgstr ""
+msgstr "Összes SYN-kísérlet, mielőtt feladná a kézfogást."
 
 msgid "Max retransmission timeout (ms)."
 msgstr "Maximális újraküldési időtúllépés (ms)."
@@ -5190,7 +5190,7 @@ msgid "Max idle time before dropping a stream (ms)."
 msgstr "Maximális üresjárati idő a stream eldobása előtt (ms)."
 
 msgid "Max unacknowledged packets per stream connection."
-msgstr ""
+msgstr "Max. nyugtázatlan csomagok adatfolyam-kapcsolatonként."
 
 msgid "I2CP write queue depth."
 msgstr "I2CP írási sor mélysége."
@@ -5310,7 +5310,7 @@ msgid "Max concurrent RI lookups during builds."
 msgstr "Maximális egyidejű RI keresés build közben."
 
 msgid "Concurrent next-hop lookup limit as % of transit tunnels."
-msgstr ""
+msgstr "Egyidejű következő ugrás keresési korlátja a tömegközlekedési alagutak %-ában."
 
 msgid "Max concurrent tunnel test jobs."
 msgstr "Maximális egyidejű alagút-teszt feladat."
@@ -5325,7 +5325,7 @@ msgid "Threads decrypting inbound NTCP data."
 msgstr "Bejövő NTCP adatokat visszafejtő szálak."
 
 msgid "Threads that encrypt outbound NTCP messages."
-msgstr ""
+msgstr "A kimenő NTCP-üzeneteket titkosító szálak."
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Biztonsági vizsgálati intervallum a beragadt NTCP pumpákhoz (ms)."
@@ -5352,7 +5352,7 @@ msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "Ablak újraindítási mérete (MTU) RTO összeomlás után."
 
 msgid "Priority-aware buffer where client messages jump transit."
-msgstr ""
+msgstr "Prioritástudatos puffer, ahol az ügyfélüzenetek ugrásszerűen továbbhaladnak."
 
 msgid "I2CP session buffer size."
 msgstr "I2CP munkamenet-puffer mérete."
@@ -5379,7 +5379,7 @@ msgid "Window multiplier per RTT during slow start."
 msgstr "Ablak-szorzó RTT-nként a lassú indítás során."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
-msgstr ""
+msgstr "Minimális küldési sebesség az ingerlés megkezdése előtt (KB/s)."
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "Felső határ az RTT becslésnél (ms)."
@@ -5457,13 +5457,13 @@ msgid "Consecutive failures before pool backoff."
 msgstr "Egymást követő hibák a pool visszavonása előtt."
 
 msgid "Cooldown duration after pool failure threshold (ms)."
-msgstr ""
+msgstr "Lehűlés időtartama a medence meghibásodási küszöbértéke után (ms)."
 
 msgid "Target spare tunnel count per pool."
 msgstr "Célzott tartalék alagút száma poolonként."
 
 msgid "Widens untested tunnel cap when testing stalls."
-msgstr ""
+msgstr "Kiszélesíti a nem tesztelt alagút sapkáját teszteléskor."
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "Terhelési küszöb, ahol a valószínűségi átmenő elutasítás kezdődik (%)."
@@ -5490,7 +5490,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "TCP socket csatlakozási időtúllépés az alagút-kiszolgáló kezelőszálakhoz (ms)."
 
 msgid "Max average message delay before rejecting transit (ms)."
-msgstr ""
+msgstr "Maximális átlagos üzenetkésleltetés a tömegközlekedés elutasítása előtt (ms)."
 
 msgid "Tunnel"
 msgstr "Alagút"
@@ -7423,13 +7423,13 @@ msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction
 msgstr "Indítási elnyomási idő ezredmásodpercben. [Alapértelmezés 300000 (5 perc)] [Alapértelmezés 300000 (5 perc)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Minimális intervallum ezredmásodpercben a LeaseSet közzétételei között. Megakadályozza a gyors közzétételi viharokat az alagút lemorzsolódása során. [Alapértelmezett: 120000 (2 perc)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Minimális intervallum ezredmásodpercben a LeaseSet objektum felépítései között. Megakadályozza a szükségtelen LeaseSet objektum lemorzsolódást minden alagút hozzáadásakor/eltávolításakor. [Alapértelmezett: 120000 (2 perc)]"
 
 msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
-msgstr ""
+msgstr "A közzétett LeaseSet-ek maximális bérleti időtartama ezredmásodpercben. A kölcsönzés befejezési dátumai mostantól erre az értékre korlátozódnak, így a társak hamarabb töltik le újra, ha rövidebbre állítják be az alagút élettartamánál. Az átjáró továbbra is az alagút teljes élettartama alatt dolgozza fel az üzeneteket; csak a kérő oldalon lévő gyorsítótárazott LeaseSet jár le korábban, ami elindítja a legújabb verzió újbóli lekérését. Az alapértelmezett érték automatikusan az i2p.netdb.republishInterval + 60 másodperctől számítva (6 perc normál beállításokkal) történik."
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "Maximális egyidejű alagútépítés irányonként. [Alapértelmezés 6] [Default is 6]"
@@ -7510,10 +7510,10 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Alapértelmezett maximális folyamkésleltetés ezredmásodpercben, ha nincs explicit kapcsolódási időtúllépés beállítva. [Alapértelmezés 10000 (10 mp)]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr ""
+msgstr "Maximális idő ezredmásodpercben, ameddig a fogadott SYN várhat az elfogadási sorban, mielőtt az accept() lehívná. Ha az accept() késik (foglalt szerver), akkor a kapcsolat megtagadva az ablak után, így a magasabb érték tolerálja a rövid leállást. [Alapértelmezett: 30000 (30 másodperc)]"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "A függőben lévő kapcsolatok (SYN-ek és részcsomagok) maximális száma a kiszolgáló elfogadási sorban. Amikor megtelik, az új SYN-eket a rendszer eldobja (az ügyfél újrapróbálja), nem pedig alaphelyzetbe állítja, így a nagyobb érték jobban elnyeli a memória árán keletkező kapcsolati sorozatokat. [Az alapértelmezett 256 (lassú rendszereken 128)]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Időköz ezredmásodpercben az automatikus LeaseSet újraközzétételek között. [Alapértelmezés 300000 (5 perc)] [Alapértelmezés 300000 (5 perc)]"
@@ -9835,12 +9835,3 @@ msgstr "Következő"
 
 msgid "Finished"
 msgstr "Befejeződött"
-
-
-
-
-
-
-
-
-

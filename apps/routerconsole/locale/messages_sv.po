@@ -122,7 +122,7 @@ msgid "Total number of threads in use"
 msgstr "Totalt antal trådar som används"
 
 msgid "Time spent paused in GC (ms)"
-msgstr ""
+msgstr "Pausad tid i GC (ms)"
 
 msgid "Peers without a published IP address"
 msgstr "Peers utan en publicerad IP-adress"
@@ -704,7 +704,7 @@ msgid "If the problem persists, verify that you have cookies enabled in your bro
 msgstr "Om problemet kvarstår, bekräfta att cookies är påslaget i din browser"
 
 msgid "Bandwidth usage"
-msgstr ""
+msgstr "Användning av bandbredd"
 
 #, java-format
 msgid "events in {0}"
@@ -2009,13 +2009,13 @@ msgid "Do not show legend on graphs"
 msgstr "Visa inte förklaring på grafer"
 
 msgid "Disabled while legend is hidden"
-msgstr ""
+msgstr "Inaktiverad medan förklaringen är dold"
 
 msgid "Hide restarts"
-msgstr ""
+msgstr "Dölj omstarter"
 
 msgid "Suppress restart lines on graphs"
-msgstr ""
+msgstr "Undertryck omstartslinjer på grafer"
 
 msgid "Persistence"
 msgstr "Uthållighet"
@@ -2048,10 +2048,10 @@ msgid "Graph settings unchanged"
 msgstr "Grafinställningarna oförändrade"
 
 msgid "improved"
-msgstr ""
+msgstr "förbättrats"
 
 msgid "vs baseline"
-msgstr ""
+msgstr "vs baslinje"
 
 msgid "CPU"
 msgstr "CPU"
@@ -2255,7 +2255,7 @@ msgid "Health"
 msgstr "Status"
 
 msgid "Router performance overview"
-msgstr ""
+msgstr "Översikt över routerns prestanda"
 
 msgid "Help"
 msgstr "Hjälp"
@@ -2324,7 +2324,7 @@ msgid "Router Auto-Tuning"
 msgstr "Router Auto-Tuning"
 
 msgid "Tuning"
-msgstr ""
+msgstr "Inställning"
 
 msgid "Manage server and client tunnels"
 msgstr "Hantera server- och klienttunnlar"
@@ -3332,58 +3332,58 @@ msgid "to your router.config file."
 msgstr "till din router.config-fil."
 
 msgid "Peers reached in the last 60s"
-msgstr ""
+msgstr "Kamrater nådde under de senaste 60-talet"
 
 msgid "Fast"
 msgstr "Snabba"
 
 msgid "Low-latency peers for tunnel participation"
-msgstr ""
+msgstr "Peers med låg latens för tunneldeltagande"
 
 msgid "HighCap"
-msgstr ""
+msgstr "HighCap"
 
 msgid "High-bandwidth peers for many tunnels"
-msgstr ""
+msgstr "Peers med hög bandbredd för många tunnlar"
 
 msgid "Reliable"
-msgstr ""
+msgstr "Pålitlig"
 
 msgid "High-capacity peers with good acceptance"
-msgstr ""
+msgstr "Högkapacitetskollegor med god acceptans"
 
 msgid "Peers that store and serve NetDb info"
-msgstr ""
+msgstr "Peers som lagrar och serverar NetDb-information"
 
 msgid "Known"
 msgstr "Kända"
 
 msgid "Total entries in network database"
-msgstr ""
+msgstr "Totalt antal poster i nätverksdatabasen"
 
 msgid "Active%"
-msgstr ""
+msgstr "Aktiv%"
 
 msgid "Profiles with activity in the last 24h"
-msgstr ""
+msgstr "Profiler med aktivitet under de senaste 24 timmarna"
 
 msgid "Unreachable"
 msgstr "Onåbar"
 
 msgid "Peers without a reachable address"
-msgstr ""
+msgstr "Peers utan nåbar adress"
 
 msgid "Peers excluded from all interactions"
-msgstr ""
+msgstr "Kamrater uteslutna från alla interaktioner"
 
 msgid "/min"
-msgstr ""
+msgstr "/min"
 
 msgid "Test Fail"
-msgstr ""
+msgstr "Testet misslyckades"
 
 msgid "Connectivity test failures per minute"
-msgstr ""
+msgstr "Anslutningstestfel per minut"
 
 msgid "Peer Connections"
 msgstr "Peer-anslutningar"
@@ -4809,7 +4809,7 @@ msgid "Slow Start Window Cap"
 msgstr "Övre gräns för långsam start-fönster"
 
 msgid "Max SYN Sends"
-msgstr ""
+msgstr "Max SYN skickar"
 
 msgid "Max RTO"
 msgstr "Max RTO"
@@ -4938,7 +4938,7 @@ msgid "Max Concurrent RI Lookups"
 msgstr "Max samtidiga RI-uppslagningar"
 
 msgid "Next-Hop Lookup %"
-msgstr ""
+msgstr "Next-Hop Lookup %"
 
 msgid "Max Concurrent Test Jobs"
 msgstr "Max samtidiga testjobb"
@@ -5010,7 +5010,7 @@ msgid "Slow Start Growth Rate"
 msgstr "Tillväxttakt för långsam start"
 
 msgid "Min Pacing Rate"
-msgstr ""
+msgstr "Min pacingfrekvens"
 
 msgid "RTT Cap"
 msgstr "RTT-tak"
@@ -5025,7 +5025,7 @@ msgid "Inactivity Timeout"
 msgstr "Tidsgräns för inaktivitet"
 
 msgid "Max Window Size"
-msgstr ""
+msgstr "Max fönsterstorlek"
 
 msgid "Max Message Queue Age"
 msgstr "Max ålder för meddelandekö"
@@ -5124,10 +5124,10 @@ msgid "Socket Connect Timeout"
 msgstr "Tidsgräns för socketanslutning"
 
 msgid "Untested Tunnel Cap Multiplier"
-msgstr ""
+msgstr "Otestad Tunnel Cap Multiplikator"
 
 msgid "Message Processing Throttle"
-msgstr ""
+msgstr "Meddelandebearbetning Throttle"
 
 msgid "Data packets between each ACK."
 msgstr "Datapaket mellan varje ACK."
@@ -5151,7 +5151,7 @@ msgid "Bandwidth token refill interval (ms)."
 msgstr "Påfyllningsintervall för bandbreddspoletter (ms)."
 
 msgid "NIO selector sleep between loops (ms)."
-msgstr ""
+msgstr "NIO-väljare vila mellan loopar (ms)."
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "Utgående meddelanden buntade per gateway-pump."
@@ -5175,7 +5175,7 @@ msgid "Max congestion window during slow start."
 msgstr "Max överbelastningsfönster under långsam start."
 
 msgid "Total SYN attempts before giving up on a handshake."
-msgstr ""
+msgstr "Totala SYN-försök innan du ger upp ett handslag."
 
 msgid "Max retransmission timeout (ms)."
 msgstr "Max omsändningstidsgräns (ms)."
@@ -5190,7 +5190,7 @@ msgid "Max idle time before dropping a stream (ms)."
 msgstr "Max inaktiv tid innan en ström släpps (ms)."
 
 msgid "Max unacknowledged packets per stream connection."
-msgstr ""
+msgstr "Max okvitterade paket per streamanslutning."
 
 msgid "I2CP write queue depth."
 msgstr "Djup för I2CP-skrivkö."
@@ -5310,7 +5310,7 @@ msgid "Max concurrent RI lookups during builds."
 msgstr "Max samtidiga RI-uppslagningar under byggen."
 
 msgid "Concurrent next-hop lookup limit as % of transit tunnels."
-msgstr ""
+msgstr "Samtidigt nästa hopp-sökningsgräns som % av transittunnlar."
 
 msgid "Max concurrent tunnel test jobs."
 msgstr "Max samtidiga tunneltestjobb."
@@ -5325,7 +5325,7 @@ msgid "Threads decrypting inbound NTCP data."
 msgstr "Trådar som dekrypterar inkommande NTCP-data."
 
 msgid "Threads that encrypt outbound NTCP messages."
-msgstr ""
+msgstr "Trådar som krypterar utgående NTCP-meddelanden."
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Felsäkert avsökningsintervall för fastnade NTCP-pumpar (ms)."
@@ -5352,7 +5352,7 @@ msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "Fönsteromstartsstorlek (MTU:er) efter RTO-kollaps."
 
 msgid "Priority-aware buffer where client messages jump transit."
-msgstr ""
+msgstr "Prioritetsmedveten buffert där klientmeddelanden hoppar över överföringen."
 
 msgid "I2CP session buffer size."
 msgstr "Buffertstorlek för I2CP-session."
@@ -5379,7 +5379,7 @@ msgid "Window multiplier per RTT during slow start."
 msgstr "Fönstermultiplikator per RTT under långsam start."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
-msgstr ""
+msgstr "Minsta sändningshastighet innan pacing startar (KB/s)."
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "Övre gräns för RTT-uppskattning (ms)."
@@ -5457,13 +5457,13 @@ msgid "Consecutive failures before pool backoff."
 msgstr "Antal misslyckanden i följd innan poolåterhållsamhet."
 
 msgid "Cooldown duration after pool failure threshold (ms)."
-msgstr ""
+msgstr "Nedkylningslängd efter tröskelvärde för poolfel (ms)."
 
 msgid "Target spare tunnel count per pool."
 msgstr "Målantal reservtunnlar per pool."
 
 msgid "Widens untested tunnel cap when testing stalls."
-msgstr ""
+msgstr "Bredar oprövad tunnelkåpa vid testning av stall."
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "Belastningströskel där sannolikhetsbaserad transitavvisning börjar (%)."
@@ -5490,7 +5490,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Tidsgräns för TCP-socketanslutning för tunnelserverns hanterartrådar (ms)."
 
 msgid "Max average message delay before rejecting transit (ms)."
-msgstr ""
+msgstr "Max genomsnittlig meddelandefördröjning innan transitering avvisas (ms)."
 
 msgid "Tunnel"
 msgstr "Tunnel"
@@ -7423,13 +7423,13 @@ msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction
 msgstr "Startundertryckningsperiod i millisekunder. Varningar och tunnelreduceringslogik undertrycks under initial routerstart för att undvika förhastade beslut. [Standard är 300000 (5 minuter)"
 
 msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Minsta intervall i millisekunder mellan LeaseSet-publicering. Förhindrar snabba publiceringsstormar under tunnelavstötning. [Standard är 120 000 (2 minuter)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Minsta intervall i millisekunder mellan LeaseSet-objektbyggen. Förhindrar onödig churn av LeaseSet-objekt vid varje tunnel som läggs till/ta bort. [Standard är 120 000 (2 minuter)]"
 
 msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
-msgstr ""
+msgstr "Maximal leasingtid i millisekunder för publicerade LeaseSets. Slutdatum för leasingavtal är begränsade till detta värde från och med nu, så peers återhämtas snabbare när de ställs in kortare än tunnelns livslängd. Gatewayen bearbetar fortfarande meddelanden under hela tunnelns livslängd; endast det cachade LeaseSet på den begärande sidan går ut tidigare, vilket utlöser en återhämtning av den senaste versionen. Standard är automatiskt beräknat från i2p.netdb.republishInterval + 60 sekunder (6 minuter med standardinställningar)."
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "Maximalt antal samtidiga tunnelbyggen per riktning. Högre värden accelererar poolåterhämtning men kan överbelasta nätverket. [Standard är 6"
@@ -7510,10 +7510,10 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Standard maximal strömningsfördröjning i millisekunder när ingen explicit anslutningstidsgräns är inställd. [Standard är 10000 (10 sekunder)"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr ""
+msgstr "Maximal tid i millisekunder en mottagen SYN kan vänta i acceptkön innan accept() drar den. Om accept() är fördröjd (upptagen värdserver) nekas anslutningen efter detta fönster, så ett högre värde tolererar korta stall. [Standard är 30 000 (30 sekunder)]"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Maximalt antal väntande anslutningar (SYN och partiella paket) i serverns acceptkö. När de är fulla avbryts nya SYN (klienten försöker igen) snarare än att återställas, så ett högre värde absorberar anslutningsskurar bättre till kostnaden för minnet. [Standard är 256 (128 på långsamma system)]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Intervall i millisekunder mellan automatiska LeaseSet-ompublikationer. Högre värden minskar netdb-trafik men kan orsaka inaktuell leasinfo. [Standard är 300000 (5 minuter)"
@@ -9835,12 +9835,3 @@ msgstr "Nästa"
 
 msgid "Finished"
 msgstr "Avslutad"
-
-
-
-
-
-
-
-
-

@@ -123,7 +123,7 @@ msgid "Total number of threads in use"
 msgstr "Kokkuhulk kasutatavate lõimede arv"
 
 msgid "Time spent paused in GC (ms)"
-msgstr ""
+msgstr "GC-s peatatud aeg (ms)"
 
 msgid "Peers without a published IP address"
 msgstr "Avaldatud IP-aadressita kaaslased"
@@ -705,7 +705,7 @@ msgid "If the problem persists, verify that you have cookies enabled in your bro
 msgstr "kui probleem püsib, veenduge, et teie brauseris on küpsised lubatud."
 
 msgid "Bandwidth usage"
-msgstr ""
+msgstr "Ribalaiuse kasutamine"
 
 #, java-format
 msgid "events in {0}"
@@ -2010,13 +2010,13 @@ msgid "Do not show legend on graphs"
 msgstr "Ärge kuvage graafikutel legende"
 
 msgid "Disabled while legend is hidden"
-msgstr ""
+msgstr "Keelatud, kui legend on peidetud"
 
 msgid "Hide restarts"
-msgstr ""
+msgstr "Peida taaskäivitused"
 
 msgid "Suppress restart lines on graphs"
-msgstr ""
+msgstr "Taaskäivitusliinide sulgemine graafikutel"
 
 msgid "Persistence"
 msgstr "Püsivus"
@@ -2049,10 +2049,10 @@ msgid "Graph settings unchanged"
 msgstr "graafiku sätteid ei muudeta"
 
 msgid "improved"
-msgstr ""
+msgstr "paranenud"
 
 msgid "vs baseline"
-msgstr ""
+msgstr "vs baasjoon"
 
 msgid "CPU"
 msgstr "CPU"
@@ -2256,7 +2256,7 @@ msgid "Health"
 msgstr "Tervis"
 
 msgid "Router performance overview"
-msgstr ""
+msgstr "Ruuteri jõudluse ülevaade"
 
 msgid "Help"
 msgstr "Abi"
@@ -2325,7 +2325,7 @@ msgid "Router Auto-Tuning"
 msgstr "Ruuteri automaatne häälestus"
 
 msgid "Tuning"
-msgstr ""
+msgstr "Häälestamine"
 
 msgid "Manage server and client tunnels"
 msgstr "haldage serveri- ja klienditunneleid"
@@ -3333,58 +3333,58 @@ msgid "to your router.config file."
 msgstr "faili ruuter.config."
 
 msgid "Peers reached in the last 60s"
-msgstr ""
+msgstr "Eakaaslased jõudsid viimastel 60ndatel"
 
 msgid "Fast"
 msgstr "Kiire"
 
 msgid "Low-latency peers for tunnel participation"
-msgstr ""
+msgstr "Madala latentsusega partnerid tunnelis osalemiseks"
 
 msgid "HighCap"
-msgstr ""
+msgstr "HighCap"
 
 msgid "High-bandwidth peers for many tunnels"
-msgstr ""
+msgstr "Suure ribalaiusega partnerid paljude tunnelite jaoks"
 
 msgid "Reliable"
-msgstr ""
+msgstr "Usaldusväärne"
 
 msgid "High-capacity peers with good acceptance"
-msgstr ""
+msgstr "Suure võimsusega kolleegid, kellel on hea vastuvõtt"
 
 msgid "Peers that store and serve NetDb info"
-msgstr ""
+msgstr "Sarnased partnerid, kes salvestavad ja teenindavad NetDb teavet"
 
 msgid "Known"
 msgstr "Tuntud"
 
 msgid "Total entries in network database"
-msgstr ""
+msgstr "Kirjete koguarv võrgu andmebaasis"
 
 msgid "Active%"
-msgstr ""
+msgstr "Aktiivne%"
 
 msgid "Profiles with activity in the last 24h"
-msgstr ""
+msgstr "Viimase 24 tunni tegevustega profiilid"
 
 msgid "Unreachable"
 msgstr "Kättesaadamatud"
 
 msgid "Peers without a reachable address"
-msgstr ""
+msgstr "Eakaaslased, millel puudub juurdepääsetav aadress"
 
 msgid "Peers excluded from all interactions"
-msgstr ""
+msgstr "Eakaaslased on kõigist suhtlustest välja jäetud"
 
 msgid "/min"
-msgstr ""
+msgstr "/min"
 
 msgid "Test Fail"
-msgstr ""
+msgstr "Test ebaõnnestus"
 
 msgid "Connectivity test failures per minute"
-msgstr ""
+msgstr "Ühenduvustesti tõrkeid minutis"
 
 msgid "Peer Connections"
 msgstr "Vastastikused ühendused"
@@ -4810,7 +4810,7 @@ msgid "Slow Start Window Cap"
 msgstr "Aeglase käivituse akna ülempiir"
 
 msgid "Max SYN Sends"
-msgstr ""
+msgstr "Max SYN saadab"
 
 msgid "Max RTO"
 msgstr "Maksimaalne uuesti saatmise aegumine (RTO)"
@@ -4939,7 +4939,7 @@ msgid "Max Concurrent RI Lookups"
 msgstr "Maksimaalsed samaaegsed RI otsingud"
 
 msgid "Next-Hop Lookup %"
-msgstr ""
+msgstr "Järgmise hüppe otsingu %"
 
 msgid "Max Concurrent Test Jobs"
 msgstr "Maksimaalsed samaaegsed testimistööd"
@@ -5011,7 +5011,7 @@ msgid "Slow Start Growth Rate"
 msgstr "Aeglase käivituse kasvumäär"
 
 msgid "Min Pacing Rate"
-msgstr ""
+msgstr "Minimaalne temposagedus"
 
 msgid "RTT Cap"
 msgstr "RTT ülempiir"
@@ -5026,7 +5026,7 @@ msgid "Inactivity Timeout"
 msgstr "Tegevusetuse aegumine"
 
 msgid "Max Window Size"
-msgstr ""
+msgstr "Max akna suurus"
 
 msgid "Max Message Queue Age"
 msgstr "Maksimaalne sõnumijärjekorra vanus"
@@ -5125,10 +5125,10 @@ msgid "Socket Connect Timeout"
 msgstr "Pistikühenduse aegumine"
 
 msgid "Untested Tunnel Cap Multiplier"
-msgstr ""
+msgstr "Testimata tunnelikorgi kordaja"
 
 msgid "Message Processing Throttle"
-msgstr ""
+msgstr "Sõnumi töötlemise gaasihoob"
 
 msgid "Data packets between each ACK."
 msgstr "Andmepakette iga kinnituse vahel."
@@ -5152,7 +5152,7 @@ msgid "Bandwidth token refill interval (ms)."
 msgstr "Ribalaiuse märgi täiendamise intervall (ms)."
 
 msgid "NIO selector sleep between loops (ms)."
-msgstr ""
+msgstr "NIO valija unerežiim silmuste vahel (ms)."
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "Väljuvad sõnumid partii kaupa lüüsipumpa kohta."
@@ -5176,7 +5176,7 @@ msgid "Max congestion window during slow start."
 msgstr "Maksimaalne ummikumina aken aeglase käivituse ajal."
 
 msgid "Total SYN attempts before giving up on a handshake."
-msgstr ""
+msgstr "SYN-i katsete koguarv enne käepigistusest loobumist."
 
 msgid "Max retransmission timeout (ms)."
 msgstr "Maksimaalne uuesti edastamise aegumine (ms)."
@@ -5191,7 +5191,7 @@ msgid "Max idle time before dropping a stream (ms)."
 msgstr "Maksimaalne jõudeaeg enne voo mahalangetamist (ms)."
 
 msgid "Max unacknowledged packets per stream connection."
-msgstr ""
+msgstr "Maksimaalne kinnitamata pakettide arv vooühenduse kohta."
 
 msgid "I2CP write queue depth."
 msgstr "I2CP kirjutusjärjekorra sügavus."
@@ -5311,7 +5311,7 @@ msgid "Max concurrent RI lookups during builds."
 msgstr "Maksimaalsed samaaegsed RI otsingud ehituste ajal."
 
 msgid "Concurrent next-hop lookup limit as % of transit tunnels."
-msgstr ""
+msgstr "Samaaegse järgmise hüppe otsingu limiit, % ühistransporditunnelitest."
 
 msgid "Max concurrent tunnel test jobs."
 msgstr "Maksimaalsed samaaegsed tunneli testimistööd."
@@ -5326,7 +5326,7 @@ msgid "Threads decrypting inbound NTCP data."
 msgstr "Lõimed siseneva NTCP andmete dekrüpteerimisel."
 
 msgid "Threads that encrypt outbound NTCP messages."
-msgstr ""
+msgstr "Lõimed, mis krüpteerivad väljaminevaid NTCP-sõnumeid."
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Veekindla skaneerimise intervall ummikus NTCP pumbadele (ms)."
@@ -5353,7 +5353,7 @@ msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "Akna taaskäivituse suurus (MTUd) pärast RTO kokkuvarisemist."
 
 msgid "Priority-aware buffer where client messages jump transit."
-msgstr ""
+msgstr "Prioriteediteadlik puhver, kus kliendi sõnumid hüppavad."
 
 msgid "I2CP session buffer size."
 msgstr "I2CP seansi puhvri suurus."
@@ -5380,7 +5380,7 @@ msgid "Window multiplier per RTT during slow start."
 msgstr "Akna kordaja RTT kohta aeglase käivituse ajal."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
-msgstr ""
+msgstr "Minimaalne saatmiskiirus enne stimulatsiooni sisselülitamist (KB/s)."
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "Ülempiir RTT hinnangul (ms)."
@@ -5458,13 +5458,13 @@ msgid "Consecutive failures before pool backoff."
 msgstr "Järjestikused ebaõnnestumised enne basendi taganemist."
 
 msgid "Cooldown duration after pool failure threshold (ms)."
-msgstr ""
+msgstr "Jahutamise kestus pärast basseini rikkelävi (ms)."
 
 msgid "Target spare tunnel count per pool."
 msgstr "Sihtvarutunnelite arv basendi kohta."
 
 msgid "Widens untested tunnel cap when testing stalls."
-msgstr ""
+msgstr "Laiendab kioskite testimisel testimata tunneli korki."
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "Koormuse lävi, kust tõenäosuslik transiidi tagasilükkamine algab (%)."
@@ -5491,7 +5491,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "TCP pistikühenduse aegumine tunneli serveri töötlejalõimedele (ms)."
 
 msgid "Max average message delay before rejecting transit (ms)."
-msgstr ""
+msgstr "Maksimaalne keskmine sõnumi viivitus enne ühistranspordi tagasilükkamist (ms)."
 
 msgid "Tunnel"
 msgstr "Tunnel"
@@ -7424,13 +7424,13 @@ msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction
 msgstr "Käivitusperiood millisekundites. Hoiatused ja tunnelite vähendamise loogika surutakse maha esialgsel käivitusel. [Vaikeväärtus 300000 (5 minutit)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "LeaseSeti avaldamiste vaheline minimaalne intervall millisekundites. Hoiab ära kiire avaldamise tormid tunneli pöörete ajal. [Vaikimisi on 120000 (2 minutit)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Minimaalne intervall millisekundites LeaseSeti objekti ehituste vahel. Hoiab ära tarbetu LeaseSeti objektide katkestamise igal tunneli lisamisel/eemaldamisel. [Vaikimisi on 120000 (2 minutit)]"
 
 msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
-msgstr ""
+msgstr "Avaldatud rendikomplektide maksimaalne rendi kestus millisekundites. Rendi lõppkuupäevad on nüüdsest piiratud selle väärtusega, nii et partnerid toovad varem uuesti, kui need on määratud tunneli kasutusajast lühemaks. Lüüs töötleb endiselt sõnumeid kogu tunneli eluea jooksul; ainult taotleva poole vahemällu salvestatud LeaseSet aegub varem, käivitades uusima versiooni uuesti toomise. Vaikimisi arvutatakse automaatselt alates i2p.netdb.republishInterval + 60 sekundit (tavasätetega 6 minutit)."
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "Maksimaalne samaaegsete tunneliehituste arv suuna kohta. Kõrgemad väärtused kiirendavad kogumi taastumist. [Vaikeväärtus 6]"
@@ -7511,10 +7511,10 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Vaikimisi maksimaalne voo viivitus millisekundites, kui pole seatud selgesõnalist ühenduse aegumist. [Vaikeväärtus 10000 (10 sekundit)]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr ""
+msgstr "Maksimaalne aeg millisekundites võib vastuvõetud SYN oodata vastuvõtujärjekorras, enne kui akcept() selle tõmbab. Kui aktsepteerimine() viibib (hostiserver hõivatud), keeldutakse ühenduse loomisest pärast seda akent, nii et suurem väärtus talub lühikesi seiskumisi. [Vaikimisi on 30000 (30 sekundit)]"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Maksimaalne ootel ühenduste (SYN-id ja osalised paketid) arv serveri vastuvõtujärjekorras. Kui need on täis, loobutakse uutest SYN-idest (klient proovib uuesti), mitte lähtestatakse, nii et suurem väärtus neelab paremini ühenduse katkestusi mälu arvelt. [Vaikimisi on 256 (aeglastes süsteemides 128)]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Intervall millisekundites automatiseeritud LeaseSet'i taasavaldamiste vahel. Kõrgemad väärtused vähendavad netdb liiklust. [Vaikeväärtus 300000 (5 minutit)]"
@@ -9836,12 +9836,3 @@ msgstr "Järgmine"
 
 msgid "Finished"
 msgstr "Lõppenud"
-
-
-
-
-
-
-
-
-

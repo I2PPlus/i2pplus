@@ -122,7 +122,7 @@ msgid "Total number of threads in use"
 msgstr "Käytettyjen säikeiden kokonaismäärä"
 
 msgid "Time spent paused in GC (ms)"
-msgstr ""
+msgstr "Keskeytetty aika GC:ssä (ms)"
 
 msgid "Peers without a published IP address"
 msgstr "Vertaisversiot, joilla ei ole julkaistua IP-osoitetta"
@@ -704,7 +704,7 @@ msgid "If the problem persists, verify that you have cookies enabled in your bro
 msgstr "Jos pulma jatkuu, vahvista, että evästeet ovar käytössä selaimessasi."
 
 msgid "Bandwidth usage"
-msgstr ""
+msgstr "Kaistanleveyden käyttö"
 
 #, java-format
 msgid "events in {0}"
@@ -2009,13 +2009,13 @@ msgid "Do not show legend on graphs"
 msgstr "Älä näytä selitteitä kaavioissa"
 
 msgid "Disabled while legend is hidden"
-msgstr ""
+msgstr "Pois käytöstä, kun legenda on piilotettu"
 
 msgid "Hide restarts"
-msgstr ""
+msgstr "Piilota uudelleenkäynnistykset"
 
 msgid "Suppress restart lines on graphs"
-msgstr ""
+msgstr "Tukista kaavioiden uudelleenaloitusviivat"
 
 msgid "Persistence"
 msgstr "Itsepäisyys"
@@ -2048,10 +2048,10 @@ msgid "Graph settings unchanged"
 msgstr "Kaavioasetukset ennallaan"
 
 msgid "improved"
-msgstr ""
+msgstr "parantunut"
 
 msgid "vs baseline"
-msgstr ""
+msgstr "vs perusviiva"
 
 msgid "CPU"
 msgstr "CPU"
@@ -2255,7 +2255,7 @@ msgid "Health"
 msgstr "Tila"
 
 msgid "Router performance overview"
-msgstr ""
+msgstr "Reitittimen suorituskyvyn yleiskatsaus"
 
 msgid "Help"
 msgstr "Ohje"
@@ -2324,7 +2324,7 @@ msgid "Router Auto-Tuning"
 msgstr "Reititimen Auto-Tuning"
 
 msgid "Tuning"
-msgstr ""
+msgstr "Viritys"
 
 msgid "Manage server and client tunnels"
 msgstr "Hallitse palvelin- ja asiakastunneleita"
@@ -3332,58 +3332,58 @@ msgid "to your router.config file."
 msgstr "router.config-tiedostoon."
 
 msgid "Peers reached in the last 60s"
-msgstr ""
+msgstr "Vastaajat saavuttivat viime 60-luvulla"
 
 msgid "Fast"
 msgstr "Nopea"
 
 msgid "Low-latency peers for tunnel participation"
-msgstr ""
+msgstr "Matalaviiveiset kumppanit tunneliin osallistumiselle"
 
 msgid "HighCap"
-msgstr ""
+msgstr "HighCap"
 
 msgid "High-bandwidth peers for many tunnels"
-msgstr ""
+msgstr "Suuren kaistanleveyden vertaisversiot monille tunneleille"
 
 msgid "Reliable"
-msgstr ""
+msgstr "Luotettava"
 
 msgid "High-capacity peers with good acceptance"
-msgstr ""
+msgstr "Korkean kapasiteetin vertaiset, joilla on hyvä hyväksyntä"
 
 msgid "Peers that store and serve NetDb info"
-msgstr ""
+msgstr "Vertailijat, jotka tallentavat ja palvelevat NetDb-tietoja"
 
 msgid "Known"
 msgstr "Tuttu"
 
 msgid "Total entries in network database"
-msgstr ""
+msgstr "Tietojen kokonaismäärä verkkotietokannassa"
 
 msgid "Active%"
-msgstr ""
+msgstr "aktiivinen %"
 
 msgid "Profiles with activity in the last 24h"
-msgstr ""
+msgstr "Profiilit, joissa on toimintaa viimeisen 24 tunnin aikana"
 
 msgid "Unreachable"
 msgstr "Ei saavutettavissa"
 
 msgid "Peers without a reachable address"
-msgstr ""
+msgstr "Vertaiset, joilla ei ole tavoitettavissa olevaa osoitetta"
 
 msgid "Peers excluded from all interactions"
-msgstr ""
+msgstr "Vertaishenkilöt on suljettu pois kaikista vuorovaikutuksista"
 
 msgid "/min"
-msgstr ""
+msgstr "/min"
 
 msgid "Test Fail"
-msgstr ""
+msgstr "Testi epäonnistui"
 
 msgid "Connectivity test failures per minute"
-msgstr ""
+msgstr "Yhteystestin epäonnistumiset minuutissa"
 
 msgid "Peer Connections"
 msgstr "Vertaisyhteydet"
@@ -4809,7 +4809,7 @@ msgid "Slow Start Window Cap"
 msgstr "Hitaan aloituksen ikkunan yläraja"
 
 msgid "Max SYN Sends"
-msgstr ""
+msgstr "Max SYN lähettää"
 
 msgid "Max RTO"
 msgstr "Enimmäis-RTO"
@@ -4938,7 +4938,7 @@ msgid "Max Concurrent RI Lookups"
 msgstr "Samanaikaisten RI-hakujen enimmäismäärä"
 
 msgid "Next-Hop Lookup %"
-msgstr ""
+msgstr "Next-hop-haku %"
 
 msgid "Max Concurrent Test Jobs"
 msgstr "Samanaikaisten testitehtävien enimmäismäärä"
@@ -5010,7 +5010,7 @@ msgid "Slow Start Growth Rate"
 msgstr "Hitaan aloituksen kasvunopeus"
 
 msgid "Min Pacing Rate"
-msgstr ""
+msgstr "Minimaalinen tahdistustaajuus"
 
 msgid "RTT Cap"
 msgstr "RTT-yläraja"
@@ -5025,7 +5025,7 @@ msgid "Inactivity Timeout"
 msgstr "Toimettomuuden aikakatkaisu"
 
 msgid "Max Window Size"
-msgstr ""
+msgstr "Ikkunan enimmäiskoko"
 
 msgid "Max Message Queue Age"
 msgstr "Viestijonon enimmäisikä"
@@ -5124,10 +5124,10 @@ msgid "Socket Connect Timeout"
 msgstr "Pistokkeen yhteydenmuodostuksen aikakatkaisu"
 
 msgid "Untested Tunnel Cap Multiplier"
-msgstr ""
+msgstr "Testaamaton tunnelin korkkikerroin"
 
 msgid "Message Processing Throttle"
-msgstr ""
+msgstr "Viestien käsittelyn kaasutin"
 
 msgid "Data packets between each ACK."
 msgstr "Datapaketit kunkin ACK:n välissä."
@@ -5151,7 +5151,7 @@ msgid "Bandwidth token refill interval (ms)."
 msgstr "Kaistanleveyspoletin täydennysväli (ms)."
 
 msgid "NIO selector sleep between loops (ms)."
-msgstr ""
+msgstr "NIO-valitsimen lepotila silmukoiden välillä (ms)."
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "Lähtevät viestit eräkäsiteltynä yhdyskäytäväpumppausta kohti."
@@ -5175,7 +5175,7 @@ msgid "Max congestion window during slow start."
 msgstr "Ruuhkaikkunan enimmäisarvo hitaan aloituksen aikana."
 
 msgid "Total SYN attempts before giving up on a handshake."
-msgstr ""
+msgstr "SYN-yritysten kokonaismäärä ennen kättelyn luovuttamista."
 
 msgid "Max retransmission timeout (ms)."
 msgstr "Uudelleenlähetyksen enimmäisaikakatkaisu (ms)."
@@ -5190,7 +5190,7 @@ msgid "Max idle time before dropping a stream (ms)."
 msgstr "Enimmäisjouten-aika ennen suoratoiston pudottamista (ms)."
 
 msgid "Max unacknowledged packets per stream connection."
-msgstr ""
+msgstr "Vahvistamattomien pakettien enimmäismäärä suoratoistoyhteyttä kohden."
 
 msgid "I2CP write queue depth."
 msgstr "I2CP-kirjoitusjonon syvyys."
@@ -5310,7 +5310,7 @@ msgid "Max concurrent RI lookups during builds."
 msgstr "Samanaikaisten RI-hakujen enimmäismäärä rakennusten aikana."
 
 msgid "Concurrent next-hop lookup limit as % of transit tunnels."
-msgstr ""
+msgstr "Samanaikaisen seuraavan hypyn haun raja prosentteina liikennetunneleista."
 
 msgid "Max concurrent tunnel test jobs."
 msgstr "Samanaikaisten tunnelitestitehtävien enimmäismäärä."
@@ -5325,7 +5325,7 @@ msgid "Threads decrypting inbound NTCP data."
 msgstr "Säikeet, jotka purkavat saapuvaa NTCP-dataa."
 
 msgid "Threads that encrypt outbound NTCP messages."
-msgstr ""
+msgstr "Säikeet, jotka salaavat lähtevät NTCP-viestit."
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Vikaturvaskannauksen väli jumiutuneille NTCP-pumpuille (ms)."
@@ -5352,7 +5352,7 @@ msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "Ikkunan uudelleenkäynnistyskoko (MTU:t) RTO-romahduksen jälkeen."
 
 msgid "Priority-aware buffer where client messages jump transit."
-msgstr ""
+msgstr "Priority-aware puskuri, jossa asiakasviestit siirtyvät eteenpäin."
 
 msgid "I2CP session buffer size."
 msgstr "I2CP-istunnon puskurin koko."
@@ -5379,7 +5379,7 @@ msgid "Window multiplier per RTT during slow start."
 msgstr "Ikkunan kerroin RTT:tä kohti hitaan aloituksen aikana."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
-msgstr ""
+msgstr "Vähimmäislähetysnopeus ennen tahdistuksen käynnistymistä (KB/s)."
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT-arvion yläraja (ms)."
@@ -5457,13 +5457,13 @@ msgid "Consecutive failures before pool backoff."
 msgstr "Peräkkäiset epäonnistumiset ennen varannon perääntymistä."
 
 msgid "Cooldown duration after pool failure threshold (ms)."
-msgstr ""
+msgstr "Jäähdytyskesto poolin epäonnistumisrajan jälkeen (ms)."
 
 msgid "Target spare tunnel count per pool."
 msgstr "Tavoitteena oleva varatunnelien määrä varantoa kohti."
 
 msgid "Widens untested tunnel cap when testing stalls."
-msgstr ""
+msgstr "Leventää testaamatonta tunnelin korkkia testattaessa."
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "Kuormakynnys, jossa todennäköisyyspohjainen läpikulun hylkäys alkaa (%)."
@@ -5490,7 +5490,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "TCP-pistokkeen yhteydenmuodostuksen aikakatkaisu tunnelipalvelimen käsittelijäsäikeille (ms)."
 
 msgid "Max average message delay before rejecting transit (ms)."
-msgstr ""
+msgstr "Suurin keskimääräinen viestin viive ennen kuljetuksen hylkäämistä (ms)."
 
 msgid "Tunnel"
 msgstr "Käytävä"
@@ -7423,13 +7423,13 @@ msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction
 msgstr "Käynnistyksen vaimennusaika. [Oletus 300000 (5 min)] [Default is 300000 (5 minutes)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)]. [Oletus on 300000 (5 minuuttia)"
 
 msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "LeaseSet-julkaisujen välinen vähimmäisväli millisekunteina. Estää nopeat julkaisumyrskyt tunnelin vaihtuessa. [Oletus on 120000 (2 minuuttia)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Pienin aikaväli millisekunteina LeaseSet-objektin rakennusten välillä. Estää tarpeettoman LeaseSet-objektin vaihtumisen jokaisen tunnelin lisäyksen/poiston yhteydessä. [Oletus on 120000 (2 minuuttia)]"
 
 msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
-msgstr ""
+msgstr "Julkaistujen LeaseSettien vuokrauksen enimmäiskesto millisekunteina. Vuokrasopimuksen päättymispäivät rajoitetaan tästä lähtien tähän arvoon, joten vertaiskumppanit hakevat uudelleen nopeammin, kun ne on asetettu tunnelin käyttöikää lyhyemmäksi. Yhdyskäytävä käsittelee edelleen viestejä koko tunnelin käyttöiän ajan; vain välimuistissa oleva LeaseSet pyytävällä puolella vanhenee aikaisemmin, mikä käynnistää uusimman version uudelleenhaun. Oletusarvo lasketaan automaattisesti arvosta i2p.netdb.republishInterval + 60 sekuntia (6 minuuttia vakioasetuksella)."
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "Samanaikaiset tunnelirakennukset per suunta. [Oletus 6] [Default is 6] [Oletusarvo on 6] [Oletusarvo on 6] [Oletusarvo on 6]. [Oletus on 6"
@@ -7510,10 +7510,10 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Oletus enimmäis stream-viive ilman nimenomaista yhteyden aikakatkaisua. [Oletus 10000 (10s)"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr ""
+msgstr "Maksimiaika millisekunteina vastaanotettu SYN voi odottaa hyväksymisjonossa ennen kuin accept() vetää sen. Jos accept() viivästyy (varattu isännöity palvelin), yhteys evätään tämän ikkunan jälkeen, joten suurempi arvo sietää lyhyitä pysähdyksiä. [Oletus on 30 000 (30 sekuntia)]"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Enimmäismäärä odottavia yhteyksiä (SYN:t ja osittaiset paketit) palvelimen hyväksymisjonossa. Kun SYN on täynnä, uudet SYN:t pudotetaan (asiakas yrittää uudelleen) nollauksen sijaan, joten suurempi arvo imee paremmin yhteyspurskeet muistin kustannuksella. [Oletusarvo on 256 (128 hitaissa järjestelmissä)]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Väli automaattisten LeaseSet-uudelleenjulkaisujen välillä. [Oletus 300000 (5 min)] [Default is 300000 (5 minutes)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)]. [Oletus on 300000 (5 minuuttia)"
@@ -9835,12 +9835,3 @@ msgstr "Seuraava"
 
 msgid "Finished"
 msgstr "Valmistunut"
-
-
-
-
-
-
-
-
-

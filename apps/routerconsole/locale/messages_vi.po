@@ -40,15 +40,11 @@ msgstr "Bắt đầu gieo lại"
 
 #, java-format
 msgid "Acquired {0} router info from reseed hosts"
-msgid_plural "Acquired {0} router infos from reseed hosts"
-msgstr[0] "Đã nhận {0} thông tin bộ định tuyến từ máy chủ gieo lại"
-msgstr[1] "Đã nhận {0} thông tin bộ định tuyến từ máy chủ gieo lại"
+msgstr "Đã thu được thông tin bộ định tuyến {0} từ máy chủ reseed"
 
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
-msgid_plural "Acquired only {0} router infos from reseed hosts"
-msgstr[0] "Chỉ nhận được 1 thông tin bộ định tuyến từ máy chủ gieo lại"
-msgstr[1] "Chỉ nhận được 1 thông tin bộ định tuyến từ máy chủ gieo lại"
+msgstr "Chỉ nhận được 1 thông tin bộ định tuyến từ máy chủ reseed"
 
 #, java-format
 msgid "{0}Reseed{1} failed:"
@@ -122,7 +118,7 @@ msgid "Total number of threads in use"
 msgstr "Tổng số lượng luồng đang sử dụng"
 
 msgid "Time spent paused in GC (ms)"
-msgstr ""
+msgstr "Thời gian tạm dừng trong GC (ms)"
 
 msgid "Peers without a published IP address"
 msgstr "Các máy ngang hàng không có địa chỉ IP được công bố"
@@ -704,7 +700,7 @@ msgid "If the problem persists, verify that you have cookies enabled in your bro
 msgstr "Nếu sự cố vẫn tiếp diễn, hãy xác minh rằng bạn đã bật cookie trong trình duyệt của mình."
 
 msgid "Bandwidth usage"
-msgstr ""
+msgstr "Sử dụng băng thông"
 
 #, java-format
 msgid "events in {0}"
@@ -753,9 +749,7 @@ msgstr "Kiểm tra cập nhật plugin không thành công"
 
 #, java-format
 msgid "{0} plugin updated"
-msgid_plural "{0} plugins updated"
-msgstr[0] "{0} trình cắm đã được cập nhật"
-msgstr[1] "{0} trình cắm đã được cập nhật"
+msgstr "Đã cập nhật plugin {0}"
 
 msgid "Plugin check complete"
 msgstr "Kiểm tra plugin hoàn tất"
@@ -1546,9 +1540,7 @@ msgstr "Không thể gieo hạt lại từ tệp"
 
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
-msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] "Gieo lại thành công, đã tải {0} thông tin bộ định tuyến từ tập tin."
-msgstr[1] "Gieo lại thành công, đã tải {0} thông tin bộ định tuyến từ tập tin."
+msgstr "Chèn lại thành công, tải thông tin bộ định tuyến {0} từ tệp."
 
 msgid "Reset URL list"
 msgstr "Đặt lại danh sách URL"
@@ -1591,15 +1583,11 @@ msgstr "Tắt máy sau {0}"
 
 #, java-format
 msgid "{0} transit tunnel still active"
-msgid_plural "{0} transit tunnels still active"
-msgstr[0] "{0} đường hầm trung chuyển vẫn đang hoạt động"
-msgstr[1] "{0} đường hầm trung chuyển vẫn đang hoạt động"
+msgstr "{0} đường hầm chuyển tuyến vẫn hoạt động"
 
 #, java-format
 msgid "Please wait for routing commitment to expire for {0} tunnel"
-msgid_plural "Please wait for routing commitments to expire for {0} tunnels"
-msgstr[0] "Vui lòng đợi cam kết định tuyến hết hạn cho {0} đường hầm"
-msgstr[1] "Vui lòng đợi cam kết định tuyến hết hạn cho {0} đường hầm"
+msgstr "Vui lòng đợi cam kết định tuyến hết hạn cho đường hầm {0}"
 
 #, java-format
 msgid "Restart in {0}"
@@ -1673,15 +1661,11 @@ msgstr "Lỗi khi lưu cấu hình (đã áp dụng nhưng chưa được lưu) 
 
 #, java-format
 msgid "{0} hop"
-msgid_plural "{0} hops"
-msgstr[0] "{0} bước nhảy"
-msgstr[1] "{0} bước nhảy"
+msgstr "{0} bước nhảy"
 
 #, java-format
 msgid "{0} tunnel"
-msgid_plural "{0} tunnels"
-msgstr[0] "{0} đường hầm"
-msgstr[1] "{0} đường hầm"
+msgstr "đường hầm {0}"
 
 msgid "Exploratory tunnels"
 msgstr "Đường hầm khám phá"
@@ -2009,13 +1993,13 @@ msgid "Do not show legend on graphs"
 msgstr "Không hiển thị chú thích trên đồ thị"
 
 msgid "Disabled while legend is hidden"
-msgstr ""
+msgstr "Bị vô hiệu hóa khi chú giải bị ẩn"
 
 msgid "Hide restarts"
-msgstr ""
+msgstr "Ẩn khởi động lại"
 
 msgid "Suppress restart lines on graphs"
-msgstr ""
+msgstr "Ngăn chặn các dòng khởi động lại trên biểu đồ"
 
 msgid "Persistence"
 msgstr "Độ bền"
@@ -2048,10 +2032,10 @@ msgid "Graph settings unchanged"
 msgstr "Cài đặt biểu đồ không thay đổi"
 
 msgid "improved"
-msgstr ""
+msgstr "được cải thiện"
 
 msgid "vs baseline"
-msgstr ""
+msgstr "so với đường cơ sở"
 
 msgid "CPU"
 msgstr "CPU"
@@ -2255,7 +2239,7 @@ msgid "Health"
 msgstr "Sức khỏe"
 
 msgid "Router performance overview"
-msgstr ""
+msgstr "Tổng quan về hiệu suất của bộ định tuyến"
 
 msgid "Help"
 msgstr "Giúp đỡ"
@@ -2324,7 +2308,7 @@ msgid "Router Auto-Tuning"
 msgstr "Tự động tinh chỉnh Router"
 
 msgid "Tuning"
-msgstr ""
+msgstr "Điều chỉnh"
 
 msgid "Manage server and client tunnels"
 msgstr "Quản lý đường hầm máy chủ và máy khách"
@@ -3332,58 +3316,58 @@ msgid "to your router.config file."
 msgstr "vào tệp router.config của bạn."
 
 msgid "Peers reached in the last 60s"
-msgstr ""
+msgstr "Những người ngang hàng đã đạt được trong những năm 60 vừa qua"
 
 msgid "Fast"
 msgstr "Nhanh"
 
 msgid "Low-latency peers for tunnel participation"
-msgstr ""
+msgstr "Các đồng nghiệp có độ trễ thấp để tham gia đường hầm"
 
 msgid "HighCap"
-msgstr ""
+msgstr "vốn hóa cao"
 
 msgid "High-bandwidth peers for many tunnels"
-msgstr ""
+msgstr "Các băng thông ngang hàng cao cho nhiều đường hầm"
 
 msgid "Reliable"
-msgstr ""
+msgstr "Đáng tin cậy"
 
 msgid "High-capacity peers with good acceptance"
-msgstr ""
+msgstr "Các đồng nghiệp có năng lực cao với khả năng chấp nhận tốt"
 
 msgid "Peers that store and serve NetDb info"
-msgstr ""
+msgstr "Các máy ngang hàng lưu trữ và cung cấp thông tin NetDb"
 
 msgid "Known"
 msgstr "Được biết"
 
 msgid "Total entries in network database"
-msgstr ""
+msgstr "Tổng số mục trong cơ sở dữ liệu mạng"
 
 msgid "Active%"
-msgstr ""
+msgstr "Tích cực%"
 
 msgid "Profiles with activity in the last 24h"
-msgstr ""
+msgstr "Hồ sơ có hoạt động trong 24h qua"
 
 msgid "Unreachable"
 msgstr "Không thể truy cập"
 
 msgid "Peers without a reachable address"
-msgstr ""
+msgstr "Các đồng nghiệp không có địa chỉ có thể truy cập"
 
 msgid "Peers excluded from all interactions"
-msgstr ""
+msgstr "Các đồng nghiệp bị loại trừ khỏi tất cả các tương tác"
 
 msgid "/min"
-msgstr ""
+msgstr "/ phút"
 
 msgid "Test Fail"
-msgstr ""
+msgstr "Kiểm tra thất bại"
 
 msgid "Connectivity test failures per minute"
-msgstr ""
+msgstr "Lỗi kiểm tra kết nối mỗi phút"
 
 msgid "Peer Connections"
 msgstr "Kết nối ngang hàng"
@@ -3462,9 +3446,7 @@ msgstr "Kết nối bị tồn đọng"
 
 #, java-format
 msgid "{0} peer"
-msgid_plural "{0} peers"
-msgstr[0] "{0} đồng đẳng"
-msgstr[1] "{0} đồng đẳng"
+msgstr "{0} ngang hàng"
 
 msgid "UDP connections"
 msgstr "Kết nối UDP"
@@ -3555,9 +3537,7 @@ msgstr "Họ cung cấp phần giới thiệu với chúng ta"
 
 #, java-format
 msgid "{0} fail"
-msgid_plural "{0} fails"
-msgstr[0] "{0} thất bại"
-msgstr[1] "{0} thất bại"
+msgstr "{0} thất bại"
 
 msgid "backlogged"
 msgstr "đăng nhập trở lại"
@@ -3639,21 +3619,15 @@ msgstr "Các gói trùng lặp nhận được từ ngang hàng"
 
 #, java-format
 msgid "Showing {0} recent profile."
-msgid_plural "Showing {0} recent profiles."
-msgstr[0] "Đang hiển thị {0} hồ sơ gần đây."
-msgstr[1] "Đang hiển thị {0} hồ sơ gần đây."
+msgstr "Đang hiển thị {0} hồ sơ gần đây."
 
 #, java-format
 msgid "Hiding {0} older profile."
-msgid_plural "Hiding {0} older profiles."
-msgstr[0] "Đang ẩn {0} hồ sơ cũ hơn."
-msgstr[1] "Đang ẩn {0} hồ sơ cũ hơn."
+msgstr "Đang ẩn {0} hồ sơ cũ hơn."
 
 #, java-format
 msgid "Hiding {0} standard profile."
-msgid_plural "Hiding {0} standard profiles."
-msgstr[0] "Đang ẩn {0} hồ sơ tiêu chuẩn."
-msgstr[1] "Đang ẩn {0} hồ sơ tiêu chuẩn."
+msgstr "Ẩn cấu hình tiêu chuẩn {0}."
 
 msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
 msgstr "Lưu ý rằng người lập hồ sơ dựa vào việc sử dụng đường hầm máy khách bền vững để lập hồ sơ chính xác cho các đồng nghiệp."
@@ -3741,21 +3715,15 @@ msgstr "đồng nghiệp"
 
 #, java-format
 msgid "{0} fast peer"
-msgid_plural "{0} fast peers"
-msgstr[0] "{0} đồng đẳng nhanh"
-msgstr[1] "{0} đồng đẳng nhanh"
+msgstr "{0} ngang hàng nhanh"
 
 #, java-format
 msgid "{0} high capacity peer"
-msgid_plural "{0} high capacity peers"
-msgstr[0] "{0} đồng đẳng dung lượng cao"
-msgstr[1] "{0} đồng đẳng dung lượng cao"
+msgstr "{0} ngang hàng có dung lượng cao"
 
 #, java-format
 msgid "{0} integrated peer"
-msgid_plural "{0} integrated peers"
-msgstr[0] "{0} đồng đẳng đã tích hợp"
-msgstr[1] "{0} đồng đẳng đã tích hợp"
+msgstr "{0} ngang hàng tích hợp"
 
 msgid "1h Fail Rate"
 msgstr "Tỷ lệ thất bại 1h"
@@ -4452,9 +4420,7 @@ msgstr "Tần số trung bình trọn đời"
 
 #, java-format
 msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "{0} sự kiện"
-msgstr[1] "{0} sự kiện"
+msgstr "sự kiện {0}"
 
 msgid "rate"
 msgstr "tỷ lệ"
@@ -4498,9 +4464,7 @@ msgstr "Giá trị trung bình trọn đời"
 
 #, java-format
 msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "1 sự kiện"
-msgstr[1] "1 sự kiện"
+msgstr "1 sự kiện"
 
 msgid "sent"
 msgstr "đã gửi"
@@ -4809,7 +4773,7 @@ msgid "Slow Start Window Cap"
 msgstr "Giới hạn cửa sổ khởi động chậm"
 
 msgid "Max SYN Sends"
-msgstr ""
+msgstr "Số lần gửi SYN tối đa"
 
 msgid "Max RTO"
 msgstr "RTO tối đa"
@@ -4938,7 +4902,7 @@ msgid "Max Concurrent RI Lookups"
 msgstr "Số tra cứu RI đồng thời tối đa"
 
 msgid "Next-Hop Lookup %"
-msgstr ""
+msgstr "Tra cứu bước nhảy tiếp theo %"
 
 msgid "Max Concurrent Test Jobs"
 msgstr "Số công việc kiểm tra đồng thời tối đa"
@@ -5010,7 +4974,7 @@ msgid "Slow Start Growth Rate"
 msgstr "Tỷ lệ tăng khởi động chậm"
 
 msgid "Min Pacing Rate"
-msgstr ""
+msgstr "Tốc độ nhịp độ tối thiểu"
 
 msgid "RTT Cap"
 msgstr "Giới hạn RTT"
@@ -5025,7 +4989,7 @@ msgid "Inactivity Timeout"
 msgstr "Thời gian chờ không hoạt động"
 
 msgid "Max Window Size"
-msgstr ""
+msgstr "Kích thước cửa sổ tối đa"
 
 msgid "Max Message Queue Age"
 msgstr "Tuổi hàng đợi tin nhắn tối đa"
@@ -5124,10 +5088,10 @@ msgid "Socket Connect Timeout"
 msgstr "Thời gian chờ kết nối socket"
 
 msgid "Untested Tunnel Cap Multiplier"
-msgstr ""
+msgstr "Hệ số nhân nắp đường hầm chưa được kiểm tra"
 
 msgid "Message Processing Throttle"
-msgstr ""
+msgstr "Van xử lý tin nhắn"
 
 msgid "Data packets between each ACK."
 msgstr "Các gói dữ liệu giữa mỗi ACK."
@@ -5151,7 +5115,7 @@ msgid "Bandwidth token refill interval (ms)."
 msgstr "Khoảng nạp lại token băng thông (ms)."
 
 msgid "NIO selector sleep between loops (ms)."
-msgstr ""
+msgstr "Bộ chọn NIO ngủ giữa các vòng lặp (ms)."
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "Các tin nhắn đi được gộp mỗi lần bơm cổng."
@@ -5175,7 +5139,7 @@ msgid "Max congestion window during slow start."
 msgstr "Cửa sổ tắc nghẽn tối đa trong khởi động chậm."
 
 msgid "Total SYN attempts before giving up on a handshake."
-msgstr ""
+msgstr "Tổng số lần thử SYN trước khi từ bỏ việc bắt tay."
 
 msgid "Max retransmission timeout (ms)."
 msgstr "Thời gian chờ truyền lại tối đa (ms)."
@@ -5190,7 +5154,7 @@ msgid "Max idle time before dropping a stream (ms)."
 msgstr "Thời gian rỗi tối đa trước khi hủy luồng (ms)."
 
 msgid "Max unacknowledged packets per stream connection."
-msgstr ""
+msgstr "Số gói không được thừa nhận tối đa trên mỗi kết nối luồng."
 
 msgid "I2CP write queue depth."
 msgstr "Độ sâu hàng đợi ghi I2CP."
@@ -5310,7 +5274,7 @@ msgid "Max concurrent RI lookups during builds."
 msgstr "Số tra cứu RI đồng thời tối đa trong quá trình xây dựng."
 
 msgid "Concurrent next-hop lookup limit as % of transit tunnels."
-msgstr ""
+msgstr "Giới hạn tra cứu bước nhảy tiếp theo đồng thời tính theo % đường hầm chuyển tuyến."
 
 msgid "Max concurrent tunnel test jobs."
 msgstr "Số công việc kiểm tra đường hầm đồng thời tối đa."
@@ -5325,7 +5289,7 @@ msgid "Threads decrypting inbound NTCP data."
 msgstr "Các luồng giải mã dữ liệu NTCP đến."
 
 msgid "Threads that encrypt outbound NTCP messages."
-msgstr ""
+msgstr "Các chủ đề mã hóa tin nhắn NTCP gửi đi."
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Khoảng quét an toàn cho máy bơm NTCP bị kẹt (ms)."
@@ -5352,7 +5316,7 @@ msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "Kích thước khởi động lại cửa sổ (MTU) sau sụp đổ RTO."
 
 msgid "Priority-aware buffer where client messages jump transit."
-msgstr ""
+msgstr "Bộ đệm nhận biết mức độ ưu tiên nơi các thông báo của khách hàng chuyển tiếp."
 
 msgid "I2CP session buffer size."
 msgstr "Kích thước bộ đệm phiên I2CP."
@@ -5379,7 +5343,7 @@ msgid "Window multiplier per RTT during slow start."
 msgstr "Hệ số nhân cửa sổ mỗi RTT trong khởi động chậm."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
-msgstr ""
+msgstr "Tốc độ gửi tối thiểu trước khi bắt đầu tăng tốc độ (KB/s)."
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "Giới hạn trên của ước tính RTT (ms)."
@@ -5457,13 +5421,13 @@ msgid "Consecutive failures before pool backoff."
 msgstr "Số lần thất bại liên tiếp trước khi lùi nhóm."
 
 msgid "Cooldown duration after pool failure threshold (ms)."
-msgstr ""
+msgstr "Thời gian hồi chiêu sau ngưỡng lỗi nhóm (ms)."
 
 msgid "Target spare tunnel count per pool."
 msgstr "Số đường hầm dự phòng mục tiêu mỗi nhóm."
 
 msgid "Widens untested tunnel cap when testing stalls."
-msgstr ""
+msgstr "Mở rộng nắp đường hầm chưa được kiểm tra khi kiểm tra gian hàng."
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "Ngưỡng tải nơi từ chối trung chuyển xác suất bắt đầu (%)."
@@ -5490,7 +5454,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Thời gian chờ kết nối socket TCP cho các luồng xử lý máy chủ đường hầm (ms)."
 
 msgid "Max average message delay before rejecting transit (ms)."
-msgstr ""
+msgstr "Độ trễ tin nhắn trung bình tối đa trước khi từ chối chuyển tuyến (ms)."
 
 msgid "Tunnel"
 msgstr "Đường hầm"
@@ -7423,13 +7387,13 @@ msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction
 msgstr "Thời gian ức chế khởi động tính bằng mili giây. Các cảnh báo và logic giảm đường hầm bị ức chế trong quá trình khởi động ban đầu của bộ định tuyến để tránh các quyết định sớm. [Mặc định 300000 (5 phút)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Khoảng thời gian tối thiểu tính bằng mili giây giữa các lần xuất bản LeaseSet. Ngăn chặn các cơn bão xuất bản nhanh chóng trong quá trình di chuyển đường hầm. [Mặc định là 120000 (2 phút)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Khoảng thời gian tối thiểu tính bằng mili giây giữa các bản dựng đối tượng LeaseSet. Ngăn chặn việc rời bỏ đối tượng LeaseSet không cần thiết trong mỗi lần thêm/xóa đường hầm. [Mặc định là 120000 (2 phút)]"
 
 msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
-msgstr ""
+msgstr "Thời lượng thuê tối đa tính bằng mili giây đối với các Bộ hợp đồng thuê được xuất bản. Kể từ bây giờ, ngày kết thúc hợp đồng thuê được giới hạn ở giá trị này, do đó, các đồng nghiệp sẽ tìm nạp lại sớm hơn khi được đặt ngắn hơn thời gian tồn tại của đường hầm. Cổng vẫn xử lý tin nhắn trong suốt thời gian tồn tại của đường hầm; chỉ LeaseSet được lưu trong bộ nhớ đệm ở bên yêu cầu mới hết hạn trước đó, kích hoạt việc tìm nạp lại phiên bản mới nhất. Mặc định được tính toán tự động từ i2p.netdb.republishInterval + 60 giây (6 phút với cài đặt tiêu chuẩn)."
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "Số lượng xây dựng đường hầm đồng thời tối đa mỗi hướng. Giá trị cao hơn tăng tốc phục hồi nhóm nhưng có thể quá tải mạng. [Mặc định 6]"
@@ -7510,10 +7474,10 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Độ trễ luồng tối đa mặc định tính bằng mili giây khi không có thời gian chờ kết nối rõ ràng nào được đặt. [Mặc định 10000 (10 giây)]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr ""
+msgstr "Thời gian tối đa tính bằng mili giây mà SYN nhận được có thể đợi trong hàng đợi chấp nhận trước khi Accept() kéo nó. Nếu chấp nhận() bị trì hoãn (máy chủ được lưu trữ bận) thì kết nối sẽ bị từ chối sau cửa sổ này, do đó giá trị cao hơn sẽ chấp nhận tình trạng ngừng hoạt động trong thời gian ngắn. [Mặc định là 30000 (30 giây)]"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Số lượng kết nối đang chờ xử lý tối đa (SYN và gói một phần) trong hàng đợi chấp nhận của máy chủ. Khi đầy, các SYN mới sẽ bị loại bỏ (máy khách thử lại) thay vì đặt lại, do đó giá trị lớn hơn sẽ hấp thụ tốt hơn các lần ngắt kết nối với chi phí bộ nhớ. [Mặc định là 256 (128 trên hệ thống chậm)]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Khoảng thời gian tính bằng mili giây giữa các lần xuất bản lại LeaseSet tự động. Giá trị cao hơn làm giảm lưu lượng netdb nhưng có thể gây ra thông tin cho thuê cũ. [Mặc định 300000 (5 phút)]"
@@ -9835,12 +9799,3 @@ msgstr "Kế tiếp"
 
 msgid "Finished"
 msgstr "Đã kết thúc"
-
-
-
-
-
-
-
-
-

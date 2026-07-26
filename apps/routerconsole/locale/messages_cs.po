@@ -124,7 +124,7 @@ msgid "Total number of threads in use"
 msgstr "Celkový počet používaných vláken"
 
 msgid "Time spent paused in GC (ms)"
-msgstr ""
+msgstr "Čas strávený pozastavením v GC (ms)"
 
 msgid "Peers without a published IP address"
 msgstr "Peers bez zveřejněné IP adresy"
@@ -706,7 +706,7 @@ msgid "If the problem persists, verify that you have cookies enabled in your bro
 msgstr "Pokud problém přetrvává, ověřte, zda máte ve svém prohlížeči povoleny soubory cookie."
 
 msgid "Bandwidth usage"
-msgstr ""
+msgstr "Využití šířky pásma"
 
 #, java-format
 msgid "events in {0}"
@@ -2017,13 +2017,13 @@ msgid "Do not show legend on graphs"
 msgstr "Nezobrazovat legendu na grafech"
 
 msgid "Disabled while legend is hidden"
-msgstr ""
+msgstr "Deaktivováno, když je legenda skrytá"
 
 msgid "Hide restarts"
-msgstr ""
+msgstr "Skrýt restarty"
 
 msgid "Suppress restart lines on graphs"
-msgstr ""
+msgstr "Potlačit restartování čar na grafech"
 
 msgid "Persistence"
 msgstr "Vytrvalost"
@@ -2056,10 +2056,10 @@ msgid "Graph settings unchanged"
 msgstr "Nastavení grafu nezměněno"
 
 msgid "improved"
-msgstr ""
+msgstr "zlepšila"
 
 msgid "vs baseline"
-msgstr ""
+msgstr "vs. základní linie"
 
 msgid "CPU"
 msgstr "CPU"
@@ -2263,7 +2263,7 @@ msgid "Health"
 msgstr "Stav"
 
 msgid "Router performance overview"
-msgstr ""
+msgstr "Přehled výkonu routeru"
 
 msgid "Help"
 msgstr "Nápověda"
@@ -2332,7 +2332,7 @@ msgid "Router Auto-Tuning"
 msgstr "Auto-Tuning směrovače"
 
 msgid "Tuning"
-msgstr ""
+msgstr "Ladění"
 
 msgid "Manage server and client tunnels"
 msgstr "Správa serverových a klientských tunelů"
@@ -3340,58 +3340,58 @@ msgid "to your router.config file."
 msgstr "do souboru router.config."
 
 msgid "Peers reached in the last 60s"
-msgstr ""
+msgstr "Peers dosáhli v posledních 60. letech"
 
 msgid "Fast"
 msgstr "Rychle"
 
 msgid "Low-latency peers for tunnel participation"
-msgstr ""
+msgstr "Peers s nízkou latencí pro účast v tunelu"
 
 msgid "HighCap"
-msgstr ""
+msgstr "HighCap"
 
 msgid "High-bandwidth peers for many tunnels"
-msgstr ""
+msgstr "Peers s vysokou šířkou pásma pro mnoho tunelů"
 
 msgid "Reliable"
-msgstr ""
+msgstr "Spolehlivý"
 
 msgid "High-capacity peers with good acceptance"
-msgstr ""
+msgstr "Vysokokapacitní kolegové s dobrým přijetím"
 
 msgid "Peers that store and serve NetDb info"
-msgstr ""
+msgstr "Protějšky, které ukládají a poskytují informace NetDb"
 
 msgid "Known"
 msgstr "Známý"
 
 msgid "Total entries in network database"
-msgstr ""
+msgstr "Celkový počet záznamů v síťové databázi"
 
 msgid "Active%"
-msgstr ""
+msgstr "Aktivní%"
 
 msgid "Profiles with activity in the last 24h"
-msgstr ""
+msgstr "Profily s aktivitou za posledních 24 hodin"
 
 msgid "Unreachable"
 msgstr "Nedosažitelné"
 
 msgid "Peers without a reachable address"
-msgstr ""
+msgstr "Peers bez dostupné adresy"
 
 msgid "Peers excluded from all interactions"
-msgstr ""
+msgstr "Peers vyloučeni ze všech interakcí"
 
 msgid "/min"
-msgstr ""
+msgstr "/min"
 
 msgid "Test Fail"
-msgstr ""
+msgstr "Test se nezdařil"
 
 msgid "Connectivity test failures per minute"
-msgstr ""
+msgstr "Selhání testu připojení za minutu"
 
 msgid "Peer Connections"
 msgstr "Peer připojení"
@@ -4827,7 +4827,7 @@ msgid "Slow Start Window Cap"
 msgstr "Strop okna pomalého startu"
 
 msgid "Max SYN Sends"
-msgstr ""
+msgstr "Maximální počet odesílání SYN"
 
 msgid "Max RTO"
 msgstr "Maximální RTO"
@@ -4956,7 +4956,7 @@ msgid "Max Concurrent RI Lookups"
 msgstr "Maximální souběžná vyhledání RI"
 
 msgid "Next-Hop Lookup %"
-msgstr ""
+msgstr "% vyhledávání dalšího skoku"
 
 msgid "Max Concurrent Test Jobs"
 msgstr "Maximální souběžné testovací úlohy"
@@ -5028,7 +5028,7 @@ msgid "Slow Start Growth Rate"
 msgstr "Míra růstu pomalého startu"
 
 msgid "Min Pacing Rate"
-msgstr ""
+msgstr "Minimální rychlost stimulace"
 
 msgid "RTT Cap"
 msgstr "Strop RTT"
@@ -5043,7 +5043,7 @@ msgid "Inactivity Timeout"
 msgstr "Časový limit neaktivity"
 
 msgid "Max Window Size"
-msgstr ""
+msgstr "Maximální velikost okna"
 
 msgid "Max Message Queue Age"
 msgstr "Maximální stáří fronty zpráv"
@@ -5142,10 +5142,10 @@ msgid "Socket Connect Timeout"
 msgstr "Časový limit připojení socketu"
 
 msgid "Untested Tunnel Cap Multiplier"
-msgstr ""
+msgstr "Netestovaný Tunnel Cap Multiplier"
 
 msgid "Message Processing Throttle"
-msgstr ""
+msgstr "Omezovač zpracování zpráv"
 
 msgid "Data packets between each ACK."
 msgstr "Datové pakety mezi jednotlivými ACK."
@@ -5169,7 +5169,7 @@ msgid "Bandwidth token refill interval (ms)."
 msgstr "Interval doplňování tokenů šířky pásma (ms)."
 
 msgid "NIO selector sleep between loops (ms)."
-msgstr ""
+msgstr "NIO selektor spánku mezi smyčkami (ms)."
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "Dávka odchozích zpráv na cyklus brány pumpy."
@@ -5193,7 +5193,7 @@ msgid "Max congestion window during slow start."
 msgstr "Maximální okno přetížení během pomalého startu."
 
 msgid "Total SYN attempts before giving up on a handshake."
-msgstr ""
+msgstr "Celkový počet pokusů o SYN, než se vzdá podání ruky."
 
 msgid "Max retransmission timeout (ms)."
 msgstr "Maximální časový limit opakovaného přenosu (ms)."
@@ -5208,7 +5208,7 @@ msgid "Max idle time before dropping a stream (ms)."
 msgstr "Maximální doba nečinnosti před zrušením proudu (ms)."
 
 msgid "Max unacknowledged packets per stream connection."
-msgstr ""
+msgstr "Maximální počet nepotvrzených paketů na připojení streamu."
 
 msgid "I2CP write queue depth."
 msgstr "Hloubka zapisovací fronty I2CP."
@@ -5328,7 +5328,7 @@ msgid "Max concurrent RI lookups during builds."
 msgstr "Maximální souběžná vyhledání RI během sestavování."
 
 msgid "Concurrent next-hop lookup limit as % of transit tunnels."
-msgstr ""
+msgstr "Limit souběžného vyhledávání dalšího skoku jako % tranzitních tunelů."
 
 msgid "Max concurrent tunnel test jobs."
 msgstr "Maximální souběžné testovací úlohy tunelů."
@@ -5343,7 +5343,7 @@ msgid "Threads decrypting inbound NTCP data."
 msgstr "Vlákna dešifrující příchozí data NTCP."
 
 msgid "Threads that encrypt outbound NTCP messages."
-msgstr ""
+msgstr "Vlákna, která šifrují odchozí zprávy NTCP."
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Failsafe interval skenování zaseknutých pump NTCP (ms)."
@@ -5370,7 +5370,7 @@ msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "Velikost restartu okna (MTU) po kolapsu RTO."
 
 msgid "Priority-aware buffer where client messages jump transit."
-msgstr ""
+msgstr "Vyrovnávací paměť s prioritou, kde klientské zprávy přeskakují přenos."
 
 msgid "I2CP session buffer size."
 msgstr "Velikost bufferu relace I2CP."
@@ -5397,7 +5397,7 @@ msgid "Window multiplier per RTT during slow start."
 msgstr "Násobitel okna na RTT během pomalého startu."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
-msgstr ""
+msgstr "Minimální rychlost odesílání před zahájením stimulace (kB/s)."
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "Horní mez odhadu RTT (ms)."
@@ -5475,13 +5475,13 @@ msgid "Consecutive failures before pool backoff."
 msgstr "Po sobě jdoucí selhání před ústupem poolu."
 
 msgid "Cooldown duration after pool failure threshold (ms)."
-msgstr ""
+msgstr "Doba ochlazování po prahu selhání bazénu (ms)."
 
 msgid "Target spare tunnel count per pool."
 msgstr "Cílový počet záložních tunelů na pool."
 
 msgid "Widens untested tunnel cap when testing stalls."
-msgstr ""
+msgstr "Rozšiřuje netestovanou krytku tunelu při testovacích stáních."
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "Práh zátěže, kde začíná pravděpodobné odmítání tranzitu (%)."
@@ -5508,7 +5508,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Časový limit připojení TCP socketu pro obslužná vlákna serveru tunelů (ms)."
 
 msgid "Max average message delay before rejecting transit (ms)."
-msgstr ""
+msgstr "Maximální průměrné zpoždění zprávy před odmítnutím přenosu (ms)."
 
 msgid "Tunnel"
 msgstr "Tunel"
@@ -7441,13 +7441,13 @@ msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction
 msgstr "Počáteční potlačovací období v milisekundách. Varování a logika redukce tunelů jsou potlačeny během počátečního spouštění routeru. [Výchozí je 120000]"
 
 msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Minimální interval v milisekundách mezi publikováním LeaseSet. Zabraňuje rychlému publikování bouří během tunelu. [Výchozí hodnota je 120 000 (2 minuty)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Minimální interval v milisekundách mezi sestaveními objektu LeaseSet. Zabraňuje zbytečnému vracení objektů LeaseSet při každém přidání/odebrání tunelu. [Výchozí hodnota je 120 000 (2 minuty)]"
 
 msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
-msgstr ""
+msgstr "Maximální doba zapůjčení v milisekundách pro publikované sady zapůjčení. Data ukončení pronájmu jsou od nynějška omezena na tuto hodnotu, takže partneři se znovu načítají dříve, když jsou nastaveni na kratší dobu, než je životnost tunelu. Brána stále zpracovává zprávy po celou dobu životnosti tunelu; pouze LeaseSet uložený v mezipaměti na žádající straně vyprší dříve, čímž se spustí opětovné načtení nejnovější verze. Výchozí hodnota je automaticky vypočítána z i2p.netdb.republishInterval + 60 sekund (6 minut se standardním nastavením)."
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "Maximální počet souběžných staveb tunelů na směr. Vyšší hodnoty urychlují obnovu poolu, ale mohou přetížit síť. [Výchozí je 8]"
@@ -7528,10 +7528,10 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Výchozí maximální zpoždění streamu v milisekundách, když není nastaven explicitní časový limit připojení. [Výchozí je 10000 (10 sekund)]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr ""
+msgstr "Maximální doba v milisekundách, po kterou může přijatý SYN čekat ve frontě přijetí, než jej funkce accept() stáhne. Pokud je accept() zpožděno (zaneprázdněný hostovaný server), připojení je po tomto okně odmítnuto, takže vyšší hodnota toleruje krátká zastavení. [Výchozí hodnota je 30 000 (30 sekund)]"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Maximální počet čekajících připojení (SYN a částečné pakety) ve frontě přijetí serveru. Když je plný, nové SYN jsou vynechány (klient se zopakuje) místo toho, aby se resetovaly, takže větší hodnota lépe pohltí shluky připojení na úkor paměti. [Výchozí hodnota je 256 (128 na pomalých systémech)]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Interval v milisekundách mezi automatickými republikacemi LeaseSet. Vyšší hodnoty snižují netdb provoz, ale mohou způsobit zastaralé informace. [Výchozí je 300000]"
@@ -9859,12 +9859,3 @@ msgstr "Další"
 
 msgid "Finished"
 msgstr "Hotové"
-
-
-
-
-
-
-
-
-
