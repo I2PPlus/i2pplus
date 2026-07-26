@@ -1,12 +1,13 @@
 package net.i2p.router.networkdb.kademlia;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
-
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -134,10 +135,17 @@ class RefreshRoutersJob extends JobImpl {
             Set<Hash> allRouters = new HashSet<>(_facade.getAllRouters());
             allRouters.removeAll(floodfills);
             // Sort non-floodfill peers by score so high-value peers are refreshed first
+            // Compute scores once to avoid TimSort contract violations when RouterInfo changes during sort
             List<Hash> nonFloodfills = new ArrayList<>(allRouters);
+            final Map<Hash, Integer> scores = new HashMap<>(nonFloodfills.size());
+            for (Hash h : nonFloodfills) {
+                scores.put(h, scorePeer(h));
+            }
             Collections.sort(nonFloodfills, new Comparator<Hash>() {
                 public int compare(Hash a, Hash b) {
-                    return scorePeer(b) - scorePeer(a);
+                    int sa = scores.getOrDefault(a, 0);
+                    int sb = scores.getOrDefault(b, 0);
+                    return Integer.compare(sb, sa);
                 }
             });
             _routers = new ArrayList<>(floodfills);
