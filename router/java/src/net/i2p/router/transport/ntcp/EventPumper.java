@@ -127,7 +127,8 @@ class EventPumper implements Runnable {
     private static final long MAX_FAILSAFE_FREQ = 30 * 1000L;
     private static final int FAILSAFE_LOOP_COUNT = IS_SLOW ? 512 : 2048;
     private static volatile long _selectorLoopDelay = IS_SLOW ? 100 : 5;
-    private static final long SELECTOR_MAX_DELAY = 200;  // Max delay when under load
+    /** Max delay when idle — must stay low for client responsiveness */
+    private static final long SELECTOR_MAX_DELAY = 20;
     private static long _currentDelay = _selectorLoopDelay;
     private static final long BLOCKED_IP_FREQ = 43 * 60 * 1000L;
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */

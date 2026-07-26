@@ -54,10 +54,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
@@ -87,7 +84,7 @@ public abstract class TransportImpl implements Transport {
     private TransportEventListener _listener;
     private final List<RouterAddress> _currentAddresses;
     // Only used by NTCP. SSU does not use. See send() below.
-    private volatile BlockingQueue<OutNetMessage> _sendPool;
+    private volatile PrioritySendPool _sendPool;
     protected final RouterContext _context;
     /** map from routerIdentHash to timestamp (Long) that the peer was last unreachable */
     private final Map<Hash, Long>  _unreachableEntries;
@@ -95,6 +92,10 @@ public abstract class TransportImpl implements Transport {
     // one-entry cache for reachable check
     private volatile Hash _lastReachablePeer;
     private final Set<InetAddress> _localAddresses;
+    private volatile int _sendPoolEvictedLast;
+    private volatile int _sendPoolDroppedLast;
+    private long _lastSendPoolStatTime;
+
     /** global router ident -> IP */
     private static final Map<Hash, byte[]> _IPMap;
 
@@ -138,6 +139,12 @@ public abstract class TransportImpl implements Transport {
     public static int getSendPoolCapacity() { return SEND_POOL_CAPACITY; }
 
     /**
+     * @return the send pool instance (for stat access), or null if not NTCP
+     * @since 0.9.70+
+     */
+    public PrioritySendPool getSendPool() { return _sendPool; }
+
+    /**
      * Set the NTCP send pool capacity (called by Tuner).
      * Resizes the pool on NTCP transports, draining old messages.
      * @since 0.9.70+
@@ -166,9 +173,12 @@ public abstract class TransportImpl implements Transport {
         _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", RATES);
         _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("ntcp.sendPool.utilization", "Send pool size as fraction of capacity (pct)", "Transport", RATES);
+        _context.statManager().createRequiredRateStat("transport.sendPool.full", "Send pool full events", "Transport", RATES);
+        _context.statManager().createRequiredRateStat("transport.sendPool.evicted", "Send pool priority evictions", "Transport", RATES);
+        _context.statManager().createRequiredRateStat("transport.sendPool.dropped", "Send pool drops (lower priority)", "Transport", RATES);
 
         _currentAddresses = new ArrayList<>(3);
-        if (getStyle().equals("NTCP")) {_sendPool = new ArrayBlockingQueue<>(SEND_POOL_CAPACITY);}
+        if (getStyle().equals("NTCP")) {_sendPool = new PrioritySendPool(SEND_POOL_CAPACITY);}
         else {_sendPool = null;}
         _unreachableEntries = new ConcurrentHashMap<>(32);
         _wasUnreachableEntries = new ConcurrentHashMap<>(32);
@@ -193,11 +203,18 @@ public abstract class TransportImpl implements Transport {
      */
     public void resizeSendPool() {
         if (_sendPool == null) return;
-        int current = _sendPool.size();
         int newCap = SEND_POOL_CAPACITY;
-        if (newCap <= _sendPool.remainingCapacity() + current) return;
-        BlockingQueue<OutNetMessage> newPool = new ArrayBlockingQueue<>(newCap);
-        _sendPool.drainTo(newPool);
+        if (newCap == _sendPool.getCapacity()) return;
+        if (newCap < _sendPool.getCapacity()) {
+            _sendPool.setCapacity(newCap);
+            return;
+        }
+        PrioritySendPool newPool = new PrioritySendPool(newCap);
+        ArrayList<OutNetMessage> pending = new ArrayList<>();
+        _sendPool.drainTo(pending);
+        for (OutNetMessage msg : pending) {
+            newPool.offer(msg);
+        }
         _sendPool = newPool;
     }
 
@@ -356,7 +373,7 @@ public abstract class TransportImpl implements Transport {
      *
      * Only used by NTCP. SSU does not call.
      *
-     * @return the next message or null if none are available
+     * @return the next highest-priority message or null if none available
      */
     protected OutNetMessage getNextMessage() {
         OutNetMessage msg = _sendPool.poll();
@@ -517,8 +534,8 @@ public abstract class TransportImpl implements Transport {
      *
      * Only used by NTCP. SSU overrides.
      *
-     * Note that this adds to the queue and then takes it back off in the same thread,
-     * so it actually blocks, and we don't need a big queue.
+     * Non-blocking: uses priority eviction when the pool is full.
+     * Higher-priority messages (client data) evict lower-priority (transit).
      *
      */
     public void send(OutNetMessage msg) {
@@ -529,21 +546,32 @@ public abstract class TransportImpl implements Transport {
             return;
         }
         msg.setTransportQueued(_context.clock().now());
-        try {
-            if (!_sendPool.offer(msg, 200, TimeUnit.MILLISECONDS)) {
-                _context.statManager().addRateData("transport.sendPool.full", 1);
-                afterSend(msg, false);
-                return;
-            }
-            int cap = SEND_POOL_CAPACITY;
-            if (cap > 0) {
-                int pct = (_sendPool.size() * 100) / cap;
-                _context.statManager().addRateData("ntcp.sendPool.utilization", pct, _sendPool.size());
-            }
-        } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-            if (_log.shouldError()) {_log.error("Interrupted during send " + msg);}
+        int evictedBefore = _sendPool.getEvictedCount();
+        int droppedBefore = _sendPool.getDroppedCount();
+        if (!_sendPool.offer(msg)) {
+            _context.statManager().addRateData("transport.sendPool.full", 1);
+            afterSend(msg, false);
             return;
+        }
+        // Emit priority eviction/drop deltas every 60s
+        long now = _context.clock().now();
+        if (now - _lastSendPoolStatTime >= 60_000) {
+            int evictedDelta = _sendPool.getEvictedCount() - _sendPoolEvictedLast;
+            int droppedDelta = _sendPool.getDroppedCount() - _sendPoolDroppedLast;
+            if (evictedDelta > 0) {
+                _context.statManager().addRateData("transport.sendPool.evicted", evictedDelta);
+            }
+            if (droppedDelta > 0) {
+                _context.statManager().addRateData("transport.sendPool.dropped", droppedDelta);
+            }
+            _sendPoolEvictedLast = _sendPool.getEvictedCount();
+            _sendPoolDroppedLast = _sendPool.getDroppedCount();
+            _lastSendPoolStatTime = now;
+        }
+        int cap = SEND_POOL_CAPACITY;
+        if (cap > 0) {
+            int pct = (_sendPool.size() * 100) / cap;
+            _context.statManager().addRateData("ntcp.sendPool.utilization", pct, _sendPool.size());
         }
         outboundMessageReady();
     }
