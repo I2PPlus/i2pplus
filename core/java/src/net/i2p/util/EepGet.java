@@ -1929,7 +1929,7 @@ public class EepGet {
     /**
      *  Show the Server field
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
 
     public String getServer() {
@@ -1939,7 +1939,7 @@ public class EepGet {
     /**
      *  Show the Content-Language field
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
 
     public String getContentLanguage() {
@@ -1952,7 +1952,7 @@ public class EepGet {
     /**
      *  Show the Transfer-Encoding field
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
 
     public String getTransferEncoding() {
@@ -1962,7 +1962,7 @@ public class EepGet {
     /**
      *  Show the Content-Encoding field
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
 
     public String getContentEncoding() {
@@ -1972,7 +1972,7 @@ public class EepGet {
     /**
      *  Show the Cache-Control field
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
 
     public String getCacheControl() {
@@ -1982,7 +1982,7 @@ public class EepGet {
     /**
      *  Show the Accept-Ranges field
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
 
     public String getAcceptRanges() {
@@ -1992,7 +1992,7 @@ public class EepGet {
     /**
      *  Show the Expires field
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
 
     public String getExpiryDate() {
@@ -2002,7 +2002,7 @@ public class EepGet {
     /**
      *  Show the Set-Cookie field
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
 
     public String getCookie() {
@@ -2012,7 +2012,7 @@ public class EepGet {
     /**
      *  Show the Referrer-Policy field
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
 
     public String getReferrerPolicy() {
@@ -2022,7 +2022,7 @@ public class EepGet {
     /**
      *  Show the Vary field
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
 
     public String getVary() {
@@ -2032,7 +2032,7 @@ public class EepGet {
     /**
      *  Show the X-frame-Options field
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
 
     public String getXframeOptions() {
@@ -2042,7 +2042,7 @@ public class EepGet {
     /**
      *  Show the Content-Security-Policy field
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
 
     public String getCSP() {
@@ -2052,7 +2052,7 @@ public class EepGet {
     /**
      *  Show the X-XSS-Protection field
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
 
     public String getXSSProtection() {
@@ -2062,7 +2062,7 @@ public class EepGet {
     /**
      *  Show the X-Content-Type-Options field
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
 
     public String getXContentTypeOptions() {
@@ -2072,7 +2072,7 @@ public class EepGet {
     /**
      *  Show the X-Powered-By field
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
 
     public String getXPoweredBy() {
@@ -2115,7 +2115,7 @@ public class EepGet {
     /**
      *  Show a combined server status message e.g. "200 OK"
      *
-     *  @since I2P+ 0.9.47
+     *  @since 0.9.47
      */
     public String getStatus() {
         StringBuilder buf = new StringBuilder(64);

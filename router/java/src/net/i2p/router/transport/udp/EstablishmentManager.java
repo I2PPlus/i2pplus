@@ -2335,7 +2335,6 @@ public class EstablishmentManager {
      *
      *  @param dest router hash
      *  @return true if we are currently trying to establish an outbound connection
-     *  @since I2P+
      */
     public boolean isConnecting(Hash dest) {
         return _outboundByHash.containsKey(dest);

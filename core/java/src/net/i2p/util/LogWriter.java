@@ -88,7 +88,7 @@ abstract class LogWriter implements Runnable {
     /**
      *  Wake up the writer to immediately re-read config and flush pending records.
      *
-     *  @since 2.12.0
+     *  @since 0.9.70+
      */
     public void wakeup() {
         _lastReadConfig = 0;

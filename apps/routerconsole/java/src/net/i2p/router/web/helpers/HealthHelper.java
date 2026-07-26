@@ -59,7 +59,7 @@ public class HealthHelper extends HelperBase {
         }
     }
 
-    /** @since 2.12.0 */
+    /** @since 0.9.70+ */
     public String getPerfRings() {
         try {
             StringWriter sw = new StringWriter(2048);
@@ -74,7 +74,7 @@ public class HealthHelper extends HelperBase {
         }
     }
 
-    /** @since 2.12.0 */
+    /** @since 0.9.70+ */
     public String getTransportRings() {
         try {
             StringWriter sw = new StringWriter(2048);
@@ -89,7 +89,7 @@ public class HealthHelper extends HelperBase {
         }
     }
 
-    /** @since 2.12.0 */
+    /** @since 0.9.70+ */
     public String getNetworkRings() {
         try {
             StringWriter sw = new StringWriter(2048);
@@ -104,7 +104,7 @@ public class HealthHelper extends HelperBase {
         }
     }
 
-    /** @since 2.12.0 */
+    /** @since 0.9.70+ */
     public String getFFRings() {
         try {
             StringWriter sw = new StringWriter(2048);

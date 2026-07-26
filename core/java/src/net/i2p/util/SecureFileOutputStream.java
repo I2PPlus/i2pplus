@@ -84,7 +84,7 @@ public class SecureFileOutputStream extends FileOutputStream {
      *  Tries to set the permissions to 660 (owner+group rw),
      *  ignores errors. Uses PosixFilePermission API.
      *
-     *  @since 2.12.0
+     *  @since 0.9.70+
      */
     public static void setGroupPerms(File f) {
         try {

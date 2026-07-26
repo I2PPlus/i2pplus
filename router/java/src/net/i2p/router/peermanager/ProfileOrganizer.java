@@ -1911,7 +1911,6 @@ public class ProfileOrganizer {
         return buildSuccess < ATTACK_THRESHOLD;
     }
 
-    /** @since I2P+ */
     public void writeProfile(PeerProfile profile) {
         _persistenceHelper.writeProfile(profile);
     }

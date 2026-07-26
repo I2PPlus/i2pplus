@@ -116,6 +116,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2p.streaming.minResendDelay", _x("Min Resend Delay"));
         DISPLAY_NAMES.put("i2p.streaming.congestionAvoidanceGrowthRateFactor", _x("Congestion Avoidance Growth Rate"));
         DISPLAY_NAMES.put("i2p.streaming.slowStartGrowthRateFactor", _x("Slow Start Growth Rate"));
+        DISPLAY_NAMES.put("i2p.streaming.minPacingRate", _x("Min Pacing Rate"));
         DISPLAY_NAMES.put("i2p.streaming.maxRtt", _x("RTT Cap"));
         DISPLAY_NAMES.put("i2p.streaming.initialResendDelay", _x("Initial Resend Delay"));
         DISPLAY_NAMES.put("i2p.streaming.immediateAckDelay", _x("Dup ACK Delay"));
@@ -167,7 +168,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("NTCP_ESTABLISH_TIMEOUT", _x("NTCP2 handshake timeout (ms)."));
         PARAM_DESCRIPTIONS.put("REQUEUE_TIME", _x("Pumper idle wait before re-checking work (ms)."));
         PARAM_DESCRIPTIONS.put("REPLENISH_FREQUENCY", _x("Bandwidth token refill interval (ms)."));
-        PARAM_DESCRIPTIONS.put("SELECTOR_LOOP_DELAY", _x("NTCP selector sleep between loops (ms)."));
+        PARAM_DESCRIPTIONS.put("SELECTOR_LOOP_DELAY", _x("NIO selector sleep between loops (ms)."));
         PARAM_DESCRIPTIONS.put("MAX_OB_MSGS_PER_PUMP", _x("Outbound messages batched per gateway pump."));
         PARAM_DESCRIPTIONS.put("MAX_IB_MSGS_PER_PUMP", _x("Inbound messages batched per gateway pump."));
         PARAM_DESCRIPTIONS.put("INITIAL_WINDOW_SIZE", _x("Starting congestion window (packets)."));
@@ -225,7 +226,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("tunnel.testJob.minTestDelay", _x("Min interval between tunnel tests (ms)."));
         PARAM_DESCRIPTIONS.put("tunnel.testJob.maxTestDelay", _x("Max interval between tunnel tests (ms)."));
         PARAM_DESCRIPTIONS.put("ntcp.reader.threads", _x("Threads decrypting inbound NTCP data."));
-        PARAM_DESCRIPTIONS.put("ntcp.writer.threads", _x("Threads encrypting NTCP messages."));
+        PARAM_DESCRIPTIONS.put("ntcp.writer.threads", _x("Threads that encrypt outbound NTCP messages."));
         PARAM_DESCRIPTIONS.put("ntcp.failsafe.iterationFreq", _x("Failsafe scan interval for stuck NTCP pumps (ms)."));
         PARAM_DESCRIPTIONS.put("udp.peer.concurrentMaxMessages", _x("In-flight message limit per UDP peer."));
         PARAM_DESCRIPTIONS.put("udp.peer.initConcurrentMsgs", _x("Initial concurrent messages per peer."));
@@ -235,7 +236,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("udp.peer.maxRTO", _x("Max retransmission timeout (ms)."));
         PARAM_DESCRIPTIONS.put("udp.peer.maxSendWindow", _x("Max unacknowledged messages per peer."));
         PARAM_DESCRIPTIONS.put("udp.peer.postRTOWindowMTUs", _x("Window restart size (MTUs) after RTO collapse."));
-        PARAM_DESCRIPTIONS.put("ntcp.sendPool.capacity", _x("NTCP send pool queue size."));
+        PARAM_DESCRIPTIONS.put("ntcp.sendPool.capacity", _x("Priority-aware buffer where client messages jump transit."));
         PARAM_DESCRIPTIONS.put("i2cp.internalQueueSize", _x("I2CP session buffer size."));
         PARAM_DESCRIPTIONS.put("udp.peer.sentMessagesCleanTime", _x("Interval between sweeps of ACKed sent-messages."));
         PARAM_DESCRIPTIONS.put("udp.peer.outboundMsgExpiration", _x("Max age for undelivered outbound messages."));
@@ -244,6 +245,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.streaming.minResendDelay", _x("Min time between retransmissions (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.congestionAvoidanceGrowthRateFactor", _x("Congestion avoidance growth rate."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.slowStartGrowthRateFactor", _x("Window multiplier per RTT during slow start."));
+        PARAM_DESCRIPTIONS.put("i2p.streaming.minPacingRate", _x("Minimum send rate before pacing kicks in (KB/s)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxRtt", _x("Upper bound on RTT estimate (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.initialResendDelay", _x("Delay before first retransmit (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.immediateAckDelay", _x("Delay for dup or OOO packet ACKs (ms)."));
@@ -269,7 +271,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", _x("Duration of moderate load before declining requests (ms)."));
         PARAM_DESCRIPTIONS.put("tunnel.peerSelection.activityWindowMultiplier", _x("Widens peer recency window to re-admit peers when builds fail."));
         PARAM_DESCRIPTIONS.put("tunnel.pool.failureThreshold", _x("Consecutive failures before pool backoff."));
-        PARAM_DESCRIPTIONS.put("tunnel.pool.backoffMs", _x("Cooldown duration after pool failure threshold, in ms."));
+        PARAM_DESCRIPTIONS.put("tunnel.pool.backoffMs", _x("Cooldown duration after pool failure threshold (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.targetBuffer", _x("Target spare tunnel count per pool."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.untestedMultiplier", _x("Widens untested tunnel cap when testing stalls."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.rejectThreshold", _x("Load threshold where probabilistic transit rejection starts (%)."));
