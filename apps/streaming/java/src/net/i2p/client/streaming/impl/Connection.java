@@ -114,20 +114,20 @@ class Connection {
     private final AtomicLong _lifetimeDupMessageReceived = new AtomicLong();
     private final AtomicLong _lifetimeDupBytesSent = new AtomicLong();
 
-    /** @since I2P+ */
+    /** @since 0.9.70+ */
     public static int getMaxResendDelay() {
         return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxResendDelay", 30*1000);
     }
-    /** @since I2P+ */
+    /** @since 0.9.70+ */
     public static int getMinResendDelay() {
         return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.minResendDelay", 100);
     }
-    /** @since I2P+ */
+    /** @since 0.9.70+ */
     public static int getDisconnectTimeout() {
         return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.disconnectTimeout", 2*60*1000);
     }
     public static final int DEFAULT_CONNECT_TIMEOUT = 60*1000;
-    /** @since I2P+ */
+    /** @since 0.9.70+ */
     static long getMaxConnectTimeout() {
         return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxConnectTimeout", 2*60*1000);
     }
@@ -146,11 +146,11 @@ class Connection {
      */
     public static final int ABSOLUTE_MAX_WINDOW = 4096;
 
-    /** @since I2P+ mutable for adaptive tuning via Tuner */
+    /** @since 0.9.70+ mutable for adaptive tuning via Tuner */
     private static volatile int _maxWindowSize = MAX_WINDOW_SIZE_DEFAULT;
-    /** @since I2P+ */
+    /** @since 0.9.70+ */
     public static int getGlobalMaxWindowSize() { return _maxWindowSize; }
-    /** @since I2P+ */
+    /** @since 0.9.70+ */
     public static void setGlobalMaxWindowSize(int val) {
         _maxWindowSize = Math.max(128, Math.min(ABSOLUTE_MAX_WINDOW, val));
     }
@@ -162,10 +162,11 @@ class Connection {
      *  SYN retransmission uses a fixed RTO interval (no backoff — there is no
      *  congestion to manage before the connection is established), so the total
      *  SYN budget equals maxSynResends * initialRTO and should roughly fill
-     *  the connect() timeout (~60s).
+     *  the connect() timeout (~60s).  With default initialRTO of 5s and
+     *  maxSynResends of 12, the budget is 60s — matching the connect timeout.
      *  @since 0.9.70+ mutable for adaptive tuning
      */
-    private static volatile int _maxSynResends = 8;
+    private static volatile int _maxSynResends = 12;
 
     /**
      * Maximum number of packets to retransmit when the timer hits.
@@ -253,7 +254,7 @@ class Connection {
         _ackedList = new ArrayList<>(8);
 
         // Initialize random wait for activity timer randomization and bandwidth estimator
-        _randomWait = _context.random().nextInt(3*1000); // 0-3 seconds randomization
+        _randomWait = _context.random().nextInt(10*1000); // 0-10 seconds randomization
         _bwEstimator = new SimpleBandwidthEstimator(_context, _options);
     }
 
@@ -274,7 +275,7 @@ class Connection {
         long rateBytesPerSec = (long) cwnd * mss * 1000 / rtt;
 
         // Ensure minimum rate to prevent excessive delays
-        long minRate = (long) 64 * 1024; // 64 KB/s minimum
+        long minRate = ConnectionOptions.getMinPacingRate();
         return Math.max(rateBytesPerSec, minRate);
     }
 
@@ -341,6 +342,9 @@ class Connection {
      * allow the retransmission mechanism to restore the window, with exponential
      * backoff so a persistently choked peer does not cause a tight probe loop.
      *
+     * <p>The wait loop polls every 50ms (instead of 250ms) to reduce latency
+     * when an ACK arrives to free a window slot.
+     *
      * @param timeoutMs 0 or negative means wait forever, 5 minutes max
      * @return true if the packet should be sent, false for a fatal error
      *         will return false after 5 minutes even if timeoutMs is &lt;= 0.
@@ -387,9 +391,9 @@ class Connection {
                             }
                             return false;
                         }
-                        _outboundPackets.wait(Math.min(timeLeft, 250));
+                        _outboundPackets.wait(Math.min(timeLeft, 50));
                     } else {
-                        _outboundPackets.wait(250);
+                        _outboundPackets.wait(50);
                     }
                     now = _context.clock().now();
                 } else {
@@ -441,9 +445,8 @@ class Connection {
      *  @return true if the sender should block (window full or choked)
      */
     private boolean shouldWait(int unacked, int wsz) {
-        int maxInFlight = Math.min(getBDPBasedInFlightCap(), 2 * wsz);
         return _isChoked || unacked >= wsz ||
-               _lastSendId.get() - _highestAckedThrough.get() >= maxInFlight;
+               _lastSendId.get() - _highestAckedThrough.get() >= getBDPBasedInFlightCap();
     }
 
     /**
@@ -602,6 +605,14 @@ class Connection {
                     }
                 }
                 packet.markEnqueued();
+                // Schedule retransmit timer even for paced packets so loss
+                // is detected even if the paced event is delayed.
+                if (_retransmitEvent.scheduleIfNotRunning(timeout)) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("[" + Connection.this + "] Resend in " + timeout + "ms for paced " + packet);
+                    }
+                    _tlpEvent.scheduleProbe(getPTO());
+                }
             } else {
                 if (_outboundQueue.enqueue(packet)) {
                     packet.markEnqueued();
@@ -1495,9 +1506,11 @@ class Connection {
     }
 
     private void congestionOccurred() {
-        // if we hit congestion and e.g. 5 packets are resent,
-        // Don't set the size to (winSize >> 4).  only set the
-        if (_ackSinceCongestion.compareAndSet(true,false)) {
+        // Record the highest unacked packet ID at the time of congestion.
+        // This is used by ResendPacketEvent to determine whether to shrink
+        // the window — only the first loss in a window triggers reduction
+        // to avoid multiple reductions for correlated losses.
+        if (_ackSinceCongestion.compareAndSet(true, false)) {
             _lastCongestionHighestUnacked = _lastSendId.get();
         }
     }
@@ -1956,7 +1969,10 @@ class Connection {
                 }
 
                 PacketLocal oldest = e.getValue();
-                if (oldest.getNumSends() == 1) {
+                // numSends may be 2 if a Tail Loss Probe was sent for this packet
+                // (TLP re-enqueues the same PacketLocal, incrementing numSends).
+                // Cut the window on the first real loss (numSends <= 2).
+                if (oldest.getNumSends() <= 2) {
                     if (_log.shouldDebug()) {
                         _log.debug(Connection.this + " cutting SlowStartThreshold and Window");
                     }

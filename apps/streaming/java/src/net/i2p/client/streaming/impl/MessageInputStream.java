@@ -92,6 +92,9 @@ class MessageInputStream extends InputStream {
      * instead of the actual payload to prevent memory accumulation while still allowing
      * canAccept() to return true for retransmits of already-processed messages.
      * This enables proper handling of late-arriving duplicate packets after stream closure.
+     *
+     * <p>Note: the payload size of this sentinel is 0, so it does not count toward
+     * {@link #_readyDataSize} or buffer limits.  See {@link #canAccept(long, int)}.
      */
     private static final ByteArray DUMMY_BA = new ByteArray(null);
 
@@ -430,8 +433,13 @@ class MessageInputStream extends InputStream {
     }
 
     /**
-     * Reads up to `length` bytes into the `target` array at `offset`.
+     * Reads up to {@code length} bytes into the {@code target} array at {@code offset}.
      * Blocks until data is available or timeout occurs.
+     *
+     * <p>The lock is held only during state checks, waits, and index updates.
+     * The actual {@link System#arraycopy} is performed outside the synchronized
+     * block to reduce contention with the receive thread ({@link #messageReceived}).
+     * This is safe because {@link ByteArray} payloads are immutable once stored.
      *
      * @param target byte array to read into
      * @param offset offset in array to start writing
@@ -445,85 +453,92 @@ class MessageInputStream extends InputStream {
         long expiration = readTimeout > 0 ? System.currentTimeMillis() + readTimeout : -1;
         boolean shouldDebug = _log.shouldDebug();
 
+        // Phase 1: wait for data under lock
         synchronized (_dataLock) {
             if (_locallyClosed.get()) {
                 throw new IOException("Input stream closed");
             }
             throwAnyError();
 
-            int totalRead = 0;
+            while (_readyDataBlocks.isEmpty()) {
+                if (_locallyClosed.get()) {
+                    throw new IOException("Input stream closed");
+                }
+                if (_closeReceived && _notYetReadyBlocks.isEmpty()) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Close received, EOF at " + _readTotal + " bytes, "
+                                + _readyDataBlocks.size() + " ready, "
+                                + _notYetReadyBlocks.size() + " pending");
+                    }
+                    return -1;
+                }
+                try {
+                    if (readTimeout < 0) {
+                        if (shouldDebug) {_log.debug("Waiting indefinitely for data");}
+                        _dataLock.wait();
+                        throwAnyError();
+                    } else if (readTimeout > 0) {
+                        if (shouldDebug) {_log.debug("Waiting up to " + readTimeout + "ms for data");}
+                        _dataLock.wait(readTimeout);
+                        throwAnyError();
 
-            while (totalRead < length) {
-                if (_readyDataBlocks.isEmpty() && totalRead == 0) {
-                    while (_readyDataBlocks.isEmpty()) {
-                        if (_locallyClosed.get()) {
-                            throw new IOException("Input stream closed");
-                        }
-                        if (_closeReceived && _notYetReadyBlocks.isEmpty()) {
-                            if (_log.shouldInfo()) {
-                                _log.info("Close received, EOF at " + _readTotal + " bytes, "
-                                        + _readyDataBlocks.size() + " ready, "
-                                        + _notYetReadyBlocks.size() + " pending");
-                            }
-                            return -1;
-                        }
-                        try {
-                            if (readTimeout < 0) {
-                                if (shouldDebug) _log.debug("Waiting indefinitely for data");
-                                _dataLock.wait();
-                                throwAnyError();
-                            } else if (readTimeout > 0) {
-                                if (shouldDebug) _log.debug("Waiting up to " + readTimeout + "ms for data");
-                                _dataLock.wait(readTimeout);
-                                throwAnyError();
-
-                                if (_readyDataBlocks.isEmpty()) {
-                                    long remaining = expiration - System.currentTimeMillis();
-                                    if (remaining <= 0) {
-                                        if (_log.shouldInfo()) {
-                                            _log.info("Read timed out after " + readTimeout + "ms");
-                                        }
-                                        throw new SocketTimeoutException("Read timed out");
-                                    }
-                                    readTimeout = (int) remaining;
+                        if (_readyDataBlocks.isEmpty()) {
+                            long remaining = expiration - System.currentTimeMillis();
+                            if (remaining <= 0) {
+                                if (_log.shouldInfo()) {
+                                    _log.info("Read timed out after " + readTimeout + "ms");
                                 }
-                            } else {
-                                return 0; // non-blocking
+                                throw new SocketTimeoutException("Read timed out");
                             }
-                        } catch (InterruptedException ie) {
-                            throw new InterruptedIOException("Interrupted during read");
+                            readTimeout = (int) remaining;
                         }
+                    } else {
+                        return 0; // non-blocking
                     }
-                } else if (_readyDataBlocks.isEmpty()) {
-                    return totalRead;
-                } else {
-                    ByteArray cur = _readyDataBlocks.get(0);
-                    int available = cur.getValid() - _readyDataBlockIndex;
-                    int toRead = Math.min(available, length - totalRead);
-
-                    System.arraycopy(
-                        cur.getData(), cur.getOffset() + _readyDataBlockIndex,
-                        target, offset + totalRead,
-                        toRead
-                    );
-
-                    _readyDataBlockIndex += toRead;
-                    totalRead += toRead;
-                    _readTotal += toRead;
-
-                    if (_readyDataBlockIndex >= cur.getValid()) {
-                        _readyDataSize -= cur.getValid();
-                        _readyDataBlockIndex = 0;
-                        _readyDataBlocks.remove(0);
-                    }
-
-                    if (shouldDebug) {
-                        _log.debug("Read " + toRead + " bytes; remaining in block: " + (cur.getValid() - _readyDataBlockIndex));
-                    }
+                } catch (InterruptedException ie) {
+                    throw new InterruptedIOException("Interrupted during read");
                 }
             }
-            return totalRead;
         }
+
+        // Phase 2: copy data — lock held only for index updates
+        int totalRead = 0;
+        while (totalRead < length) {
+            ByteArray cur;
+            int toRead;
+            byte[] data;
+            int srcOffset;
+            boolean blockConsumed;
+            int blockSize;
+
+            synchronized (_dataLock) {
+                if (_readyDataBlocks.isEmpty()) {
+                    return totalRead;
+                }
+                cur = _readyDataBlocks.get(0);
+                int available = cur.getValid() - _readyDataBlockIndex;
+                toRead = Math.min(available, length - totalRead);
+                data = cur.getData();
+                srcOffset = cur.getOffset() + _readyDataBlockIndex;
+                blockConsumed = (_readyDataBlockIndex + toRead >= cur.getValid());
+                blockSize = cur.getValid();
+                _readyDataBlockIndex += toRead;
+                totalRead += toRead;
+                _readTotal += toRead;
+                if (blockConsumed) {
+                    _readyDataSize -= blockSize;
+                    _readyDataBlockIndex = 0;
+                    _readyDataBlocks.remove(0);
+                }
+            }
+            // arraycopy outside the lock — ByteArray data is immutable
+            System.arraycopy(data, srcOffset, target, offset + totalRead - toRead, toRead);
+
+            if (shouldDebug) {
+                _log.debug("Read " + toRead + " bytes from block of " + blockSize);
+            }
+        }
+        return totalRead;
     }
 
     /**
