@@ -77,7 +77,6 @@ public class HostChecker {
     private final NamingService _namingService;
     private final ScheduledExecutorService _scheduler;
     private final Map<String, PingResult> _pingResults;
-    private final Map<String, Destination> _destinations;
     private Map<String, String> _hostCategories;
     private final AtomicBoolean _running;
     private final AtomicBoolean _categoriesDownloaded;
@@ -265,7 +264,6 @@ public class HostChecker {
         _log = _context.logManager().getLog(HostChecker.class);
         _namingService = namingService;
         _pingResults = new ConcurrentHashMap<>();
-        _destinations = new ConcurrentHashMap<>();
         _running = new AtomicBoolean(false);
         _categoriesDownloaded = new AtomicBoolean(false);
         _categoriesDownloadSuccessful = new AtomicBoolean(false);
@@ -798,30 +796,25 @@ public class HostChecker {
             if (reachable) {
                 PingResult result = createPingResult(true, startTime, pingTime, hostname, leaseSetTypes);
                 if (saveResult) {
-                    synchronized (_pingResults) {
-                        _pingResults.put(hostname, result);
-                    }
                     if (_log.shouldInfo()) {
                         _log.info("HostChecker ping [SUCCESS] -> Received response from " + displayHostname + " " + leaseSetTypes + " in " + pingTime + "ms");
                     }
-                    savePingResults();
-                } else {
-                    synchronized (_pingResults) {
-                        _pingResults.put(hostname, result);
-                    }
-                    savePingResults();
                 }
+                synchronized (_pingResults) {
+                    _pingResults.put(hostname, result);
+                }
+                savePingResults();
                 return result;
             } else {
                 PingResult result = createPingResult(false, startTime, -1, hostname, leaseSetTypes);
                 if (saveResult) {
+                    if (_log.shouldInfo()) {
+                        _log.info("HostChecker ping [FAILURE] -> No response from " + displayHostname + " " + leaseSetTypes + ", trying eephead...");
+                    }
                     synchronized (_pingResults) {
                         _pingResults.put(hostname, result);
                     }
                     savePingResults();
-                    if (_log.shouldInfo()) {
-                        _log.info("HostChecker ping [FAILURE] -> No response from " + displayHostname + " " + leaseSetTypes + ", trying eephead...");
-                    }
                     return fallbackToEepHead(hostname, startTime, leaseSetTypes, saveResult);
                 }
                 return result;
@@ -1175,11 +1168,7 @@ public class HostChecker {
      * Get destination for a hostname from naming service
      */
     private Destination getDestination(String hostname) {
-        Destination dest = _namingService.lookup(hostname);
-        if (dest != null) {
-            _destinations.put(hostname, dest);
-        }
-        return dest;
+        return _namingService.lookup(hostname);
     }
 
     /**
@@ -1220,7 +1209,6 @@ public class HostChecker {
             for (String cachedHostname : cachedHostnames) {
                 if (!currentHostnames.contains(cachedHostname)) {
                     _pingResults.remove(cachedHostname);
-                    _destinations.remove(cachedHostname);
                     removedCount++;
 
                     if (_log.shouldDebug()) {
@@ -1368,70 +1356,6 @@ public class HostChecker {
     }
 
     /**
-     * Add header to categories file with timestamp
-     */
-    private void addCategoriesHeader() {
-        try {
-            // Read current content
-            List<String> lines = new ArrayList<>();
-            if (_categoriesFile.exists()) {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(_categoriesFile), StandardCharsets.UTF_8))) {
-                    String line;
-                    int lineCount = 0;
-                    while ((line = reader.readLine()) != null) {
-                        lines.add(line);
-                        lineCount++;
-                    }
-                    if (_log.shouldInfo()) {
-                        _log.info("addCategoriesHeader: Read " + lineCount + " lines from categories.txt");
-                    }
-                }
-            }
-
-            // Count non-comment, non-empty lines that will be written
-            int dataLineCount = 0;
-            for (String line : lines) {
-                if (!line.startsWith("#") && !line.trim().isEmpty()) {
-                    dataLineCount++;
-                }
-            }
-            if (_log.shouldInfo()) {
-                _log.info("addCategoriesHeader: Found " + dataLineCount + " data entries to preserve");
-            }
-
-            // Write file with header
-            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_categoriesFile), StandardCharsets.UTF_8))) {
-                writer.write("# I2P+ Address Book Host Categories");
-                writer.newLine();
-                writer.write("# Format: hostname,category");
-                writer.newLine();
-                writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
-                writer.newLine();
-                writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(new Date()));
-                writer.newLine();
-                writer.newLine();
-
-                // Write original content, skipping any existing header lines and empty lines
-                int writtenCount = 0;
-                for (String line : lines) {
-                    if (!line.startsWith("#") && !line.trim().isEmpty()) {
-                        writer.write(line);
-                        writer.newLine();
-                        writtenCount++;
-                    }
-                }
-                if (_log.shouldInfo()) {
-                    _log.info("addCategoriesHeader: Wrote " + writtenCount + " data entries to categories.txt");
-                }
-            }
-        } catch (Exception e) {
-            if (_log.shouldWarn()) {
-                _log.warn("Failed to add header to categories file", e);
-            }
-        }
-    }
-
-    /**
      * Write cleaned categories.txt file with only valid entries (no empty lines)
      */
     private void writeCleanCategoriesFile(List<String> validLines) throws IOException {
@@ -1565,6 +1489,9 @@ public class HostChecker {
 
     /**
      * Helper method to create PingResult with category
+     *
+     * @param hostname used to look up the category from _hostCategories
+     * @return PingResult with category (or null if unknown) and no leaseSetTypes
      */
     private PingResult createPingResult(boolean reachable, long timestamp, long responseTime, String hostname) {
         String category = _hostCategories.get(hostname);
@@ -1578,6 +1505,10 @@ public class HostChecker {
         String category = _hostCategories.get(hostname);
 
         PingResult existing = _pingResults.get(hostname);
+        // Preserve existing leaseSetTypes when current lookup returns nothing
+        // or returns the same value — avoids replacing a known-good types string
+        // with "[]" from a transient lookup failure. Only overwrite when the new
+        // lookup returns a genuinely different non-empty set.
         if (existing != null && existing.leaseSetTypes != null && !existing.leaseSetTypes.equals("[]") &&
             (leaseSetTypes == null || leaseSetTypes.equals("[]") || existing.leaseSetTypes.equals(leaseSetTypes))) {
             leaseSetTypes = existing.leaseSetTypes;
@@ -1985,7 +1916,6 @@ public class HostChecker {
                         break;
                     }
 
-
                     // Check if router is shutting down or restarting
                     if (_context instanceof RouterContext) {
                         RouterContext routerContext = (RouterContext) _context;
@@ -2013,21 +1943,14 @@ public class HostChecker {
                             @Override
                             public Void call() throws Exception {
                                 try {
-                                    // Acquire semaphore permit to limit concurrent pings
+                                    // Limit concurrent pings
                                     _pingSemaphore.acquire();
-
-                                    // Then add random delay (up to 5s)
-                                    int randomDelay = 2000 + _context.random().nextInt(3000);
-                                    Thread.sleep(randomDelay);
-
                                     if (_log.shouldInfo()) {
                                         _log.info("Starting HostChecker for " + hostname + "...");
                                     }
-
                                     testDestination(hostname);
                                     return null;
                                 } finally {
-                                    // Always release semaphore permit
                                     _pingSemaphore.release();
                                 }
                             }
@@ -2232,7 +2155,6 @@ public class HostChecker {
         }
         return "[" + sb.toString() + "]";
     }
-
 
     /** translate */
     private static String _t(String s) {return Messages.getString(s);}
