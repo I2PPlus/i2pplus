@@ -5126,7 +5126,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Lower = gentler backoff, more retries before hitting maxRTO.
      * Higher = faster to maxRTO, fewer retries.
      *
-     * @since 2.12.0+
+     * @since 0.9.70+
      */
     private class RTOMultiplierParam extends BaseParam {
 
@@ -5313,7 +5313,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.minResendDelay", "Streaming min resend delay (ms)",
                   SUB_STREAMING,
 
-                  1000, 5000, 100, "stream.con.initialRTT.out", _context);
+                  300, 5000, 100, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
@@ -5322,7 +5322,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMinResendDelayStatic");
-            return v > 0 ? v : 1000;
+            return v > 0 ? v : 300;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -6899,7 +6899,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("tunnel.build.maxConcurrent", "Tunnel max concurrent builds",
                   SUB_TUNNEL,
 
-                   Math.max(SystemVersion.getCores() * 2, 24), 128, 4, "tunnel.buildSuccessRate", _context);
+                   Math.max(SystemVersion.getCores() * 2, 16), 32, 4, "tunnel.buildSuccessRate", _context);
         }
 
         protected void applyValue(int value) {
@@ -8749,12 +8749,20 @@ protected int computeTarget(double observed) {
             boolean handlerSlow = !Double.isNaN(blockingTime) && blockingTime > 2000;
             boolean handlerBlocking = !Double.isNaN(blockingTime) && blockingTime > 1000;
 
+            // Emergency: blocking >10s = aggressive growth (add 4 threads immediately)
+            if (!cpuPressure && !Double.isNaN(blockingTime) && blockingTime > 10000) {
+                return Math.min(_max, current + 4);
+            }
             // Queue backlog + no CPU pressure — grow pool
             if (!cpuPressure && observed > 100)
-                return Math.min(_max, current + 1);
+                return Math.min(_max, current + 2);
 
             // Handlers blocking >2s — grow pool to reduce per-handler load
             if (handlerSlow && !cpuPressure)
+                return Math.min(_max, current + 2);
+
+            // Handlers blocking >1s — grow pool
+            if (handlerBlocking && !cpuPressure)
                 return Math.min(_max, current + 1);
 
             // Idle pool with minimal queue and handlers not blocking — shrink
@@ -10269,7 +10277,7 @@ protected int computeTarget(double observed) {
     private class TunnelTargetBufferParam extends BaseParam {
         TunnelTargetBufferParam() {
             super("i2p.tunnel.targetBuffer", "Pool spare tunnel buffer",
-                  SUB_TUNNEL, 0, 8, 1, "tunnel.buildSuccessRate", _context);
+                  SUB_TUNNEL, 2, 8, 1, "tunnel.buildSuccessRate", _context);
         }
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.tunnel.targetBuffer", Integer.toString(value));
