@@ -100,15 +100,23 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
     }
 
     /**
-     * Execute a runnable task, running inline when called from an unlimited thread pool
-     * to avoid creating unnecessary threads, otherwise start a new thread.
+     * Execute a runnable task on the thread pool, freeing the accept thread
+     * to handle the next connection.
+     *
+     * <p>Both {@link I2PTunnelRunner} and {@link I2PTunnelOutproxyRunner}
+     * manage their own socket cleanup in their finally blocks, so the
+     * caller no longer needs to close sockets after this returns.
      *
      * @param task Thread task to execute
+     * @since 0.9.70+
      */
     private void executeTask(Thread task) {
-        // For now, maintain original behavior of running inline
-        // TODO: Consider using a thread pool executor for better resource management
-        task.run();
+        if (_executor != null) {
+            _executor.execute(task);
+        } else {
+            // Fallback: run inline if executor not yet initialized
+            task.run();
+        }
     }
 
     /**
@@ -367,16 +375,16 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
             _log.info(getPrefix(requestId) + "Error trying to connect", ex);
             handleClientException(ex, out, targetRequest, usingWWWProxy, currentProxy, requestId);
         } catch (I2PException ex) {
-            _log.info("getPrefix(requestId) + Error trying to connect", ex);
+            _log.info(getPrefix(requestId) + "Error trying to connect", ex);
             handleClientException(ex, out, targetRequest, usingWWWProxy, currentProxy, requestId);
         } catch (OutOfMemoryError oom) {
             IOException ex = new IOException("OOM");
-            _log.info("getPrefix(requestId) + Error trying to connect", ex);
+            _log.info(getPrefix(requestId) + "Error trying to connect", ex);
             handleClientException(ex, out, targetRequest, usingWWWProxy, currentProxy, requestId);
         } finally {
-            // only because we are running it inline
-            closeSocket(s);
-            if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) { /* ignored */ }
+            // Socket cleanup is handled by the runner's own finally block.
+            // No action needed here — the runner closes both the local socket
+            // and the I2P socket when it completes.
         }
     }
 
