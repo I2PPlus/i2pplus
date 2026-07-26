@@ -123,6 +123,9 @@ msgstr "Total de colegi din NetDb-ul nostru"
 msgid "Total number of threads in use"
 msgstr "Numărul total de fire în utilizare"
 
+msgid "Time spent paused in GC (ms)"
+msgstr ""
+
 msgid "Peers without a published IP address"
 msgstr "Peers fără o adresă IP publicată"
 
@@ -702,8 +705,8 @@ msgstr "Transmitere formular invalid, probabil pentru că ați folosit butonul \
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Dacă problema persistă, verificați dacă aveți activate cookie-urile în browser-ul dumneavoastră."
 
-msgid "Bandwidth Usage"
-msgstr "Utilizarea lățimii de bandă"
+msgid "Bandwidth usage"
+msgstr ""
 
 #, java-format
 msgid "events in {0}"
@@ -1922,6 +1925,9 @@ msgstr "{0} pentru {1}"
 msgid "Nothing to display - no stat specified!"
 msgstr "Nimic de afișat - nicio statistică specificată!"
 
+msgid "Bandwidth Usage"
+msgstr "Utilizarea lățimii de bandă"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "s-a terminat {0} în urmă"
@@ -2010,6 +2016,15 @@ msgstr "Ascundeți legenda"
 msgid "Do not show legend on graphs"
 msgstr "Nu afișați legende pe grafice"
 
+msgid "Disabled while legend is hidden"
+msgstr ""
+
+msgid "Hide restarts"
+msgstr ""
+
+msgid "Suppress restart lines on graphs"
+msgstr ""
+
 msgid "Persistence"
 msgstr "Persistență"
 
@@ -2040,6 +2055,12 @@ msgstr "Setări grafice salvate"
 msgid "Graph settings unchanged"
 msgstr "Setările graficului sunt neschimbate"
 
+msgid "improved"
+msgstr ""
+
+msgid "vs baseline"
+msgstr ""
+
 msgid "CPU"
 msgstr "CPU"
 
@@ -2057,9 +2078,6 @@ msgstr "Timpul de funcționare al routerului"
 
 msgid "Job Lag"
 msgstr "Întârzierea locului de muncă"
-
-msgid "ms"
-msgstr "ms"
 
 msgid "Job queue delay"
 msgstr "Întârzierea cozii de joburi"
@@ -2241,6 +2259,12 @@ msgstr "Performanța Routerului Grafic"
 msgid "Graphs"
 msgstr "Grafice"
 
+msgid "Health"
+msgstr "Stare"
+
+msgid "Router performance overview"
+msgstr ""
+
 msgid "Help"
 msgstr "Ajutor"
 
@@ -2303,6 +2327,12 @@ msgstr "Harta site-ului"
 
 msgid "Built-in anonymous BitTorrent Client"
 msgstr "Client BitTorrent anonim incorporat"
+
+msgid "Router Auto-Tuning"
+msgstr "Auto-Tuning router"
+
+msgid "Tuning"
+msgstr ""
 
 msgid "Manage server and client tunnels"
 msgstr "Gestionați tunelurile server și client"
@@ -3309,6 +3339,60 @@ msgstr "pe {0}pagina Configurare avansată{1}."
 msgid "to your router.config file."
 msgstr "în fișierul router.config."
 
+msgid "Peers reached in the last 60s"
+msgstr ""
+
+msgid "Fast"
+msgstr "Rapid"
+
+msgid "Low-latency peers for tunnel participation"
+msgstr ""
+
+msgid "HighCap"
+msgstr ""
+
+msgid "High-bandwidth peers for many tunnels"
+msgstr ""
+
+msgid "Reliable"
+msgstr ""
+
+msgid "High-capacity peers with good acceptance"
+msgstr ""
+
+msgid "Peers that store and serve NetDb info"
+msgstr ""
+
+msgid "Known"
+msgstr "Cunoscute"
+
+msgid "Total entries in network database"
+msgstr ""
+
+msgid "Active%"
+msgstr ""
+
+msgid "Profiles with activity in the last 24h"
+msgstr ""
+
+msgid "Unreachable"
+msgstr "Indisponibil"
+
+msgid "Peers without a reachable address"
+msgstr ""
+
+msgid "Peers excluded from all interactions"
+msgstr ""
+
+msgid "/min"
+msgstr ""
+
+msgid "Test Fail"
+msgstr ""
+
+msgid "Connectivity test failures per minute"
+msgstr ""
+
 msgid "Peer Connections"
 msgstr "Conexiuni de la egal la egal"
 
@@ -3626,9 +3710,6 @@ msgstr "OK"
 msgid "tests passed"
 msgstr "teste trecute"
 
-msgid "Unreachable"
-msgstr "Indisponibil"
-
 msgid "Test Fails"
 msgstr "Testul a eșuat"
 
@@ -3750,9 +3831,6 @@ msgstr "grupuri"
 
 msgid "Note: Peers are categorized by the profile organizer based on observable performance, not from capabilities they advertise in the NetDB."
 msgstr "Notă: colegii sunt clasificați de către organizatorul de profil pe baza performanței observabile, nu pe baza capacităților pe care le promovează în NetDB."
-
-msgid "Fast"
-msgstr "Rapid"
 
 msgid "Peers marked as high capacity that also meet or exceed speed average for all profiled peers."
 msgstr "Colegii marcați ca de mare capacitate care ating sau depășesc, de asemenea, viteza medie pentru toți colegii profilați."
@@ -4125,9 +4203,6 @@ msgstr "NetDb"
 msgid "Show all current peer connections"
 msgstr "Arată toate conexiunile partenerului actual"
 
-msgid "Health"
-msgstr "Stare"
-
 msgid "Router health overview"
 msgstr "Prezentare generală a stării routerului"
 
@@ -4261,9 +4336,6 @@ msgstr "Numărul total de utilizatori în baza noastră de date a rețelei"
 
 msgid "Total RouterInfos stored on disk"
 msgstr "RouterInfos totale stocate pe disc"
-
-msgid "Known"
-msgstr "Cunoscute"
 
 msgid "Configure router bandwidth allocation"
 msgstr "Configurează alocarea benzii router-ului"
@@ -4754,6 +4826,9 @@ msgstr "Întârzierea de golire Nagle"
 msgid "Slow Start Window Cap"
 msgstr "Plafonul ferestrei de start lent"
 
+msgid "Max SYN Sends"
+msgstr ""
+
 msgid "Max RTO"
 msgstr "RTO maxim"
 
@@ -4880,6 +4955,9 @@ msgstr "Construcții de tuneluri concurente maxime"
 msgid "Max Concurrent RI Lookups"
 msgstr "Căutări RI concurente maxime"
 
+msgid "Next-Hop Lookup %"
+msgstr ""
+
 msgid "Max Concurrent Test Jobs"
 msgstr "Joburi de testare concurente maxime"
 
@@ -4949,6 +5027,9 @@ msgstr "Rata de creștere a evitării congestiei"
 msgid "Slow Start Growth Rate"
 msgstr "Rata de creștere a startului lent"
 
+msgid "Min Pacing Rate"
+msgstr ""
+
 msgid "RTT Cap"
 msgstr "Plafonul RTT"
 
@@ -4960,6 +5041,9 @@ msgstr "Întârzierea ACK duplicat"
 
 msgid "Inactivity Timeout"
 msgstr "Timp de așteptare depășit pentru inactivitate"
+
+msgid "Max Window Size"
+msgstr ""
 
 msgid "Max Message Queue Age"
 msgstr "Vârsta maximă a cozii de mesaje"
@@ -5057,6 +5141,12 @@ msgstr "Multiplicatorul de retragere RTO"
 msgid "Socket Connect Timeout"
 msgstr "Timp de așteptare depășit pentru conexiunea socket"
 
+msgid "Untested Tunnel Cap Multiplier"
+msgstr ""
+
+msgid "Message Processing Throttle"
+msgstr ""
+
 msgid "Data packets between each ACK."
 msgstr "Pachete de date între fiecare ACK."
 
@@ -5078,8 +5168,8 @@ msgstr "Așteptarea în repaus a pompei înainte de reverificarea lucrului (ms).
 msgid "Bandwidth token refill interval (ms)."
 msgstr "Intervalul de realimentare a token-urilor de lățime de bandă (ms)."
 
-msgid "NTCP selector sleep between loops (ms)."
-msgstr "Pauza selectorului NTCP între bucle (ms)."
+msgid "NIO selector sleep between loops (ms)."
+msgstr ""
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "Mesaje de ieșire grupate per pompă gateway."
@@ -5102,6 +5192,9 @@ msgstr "Întârzierea de golire Nagle (ms)."
 msgid "Max congestion window during slow start."
 msgstr "Fereastra maximă de congestie în timpul startului lent."
 
+msgid "Total SYN attempts before giving up on a handshake."
+msgstr ""
+
 msgid "Max retransmission timeout (ms)."
 msgstr "Timpul maxim de retransmisie (ms)."
 
@@ -5113,6 +5206,9 @@ msgstr "Retransmisii înainte de abandonarea fluxului."
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "Timpul maxim de inactivitate înainte de abandonarea unui flux (ms)."
+
+msgid "Max unacknowledged packets per stream connection."
+msgstr ""
 
 msgid "I2CP write queue depth."
 msgstr "Adâncimea cozii de scriere I2CP."
@@ -5231,6 +5327,9 @@ msgstr "Construcții de tuneluri concurente maxime."
 msgid "Max concurrent RI lookups during builds."
 msgstr "Căutări RI concurente maxime în timpul construcțiilor."
 
+msgid "Concurrent next-hop lookup limit as % of transit tunnels."
+msgstr ""
+
 msgid "Max concurrent tunnel test jobs."
 msgstr "Joburi de testare a tunelurilor concurente maxime."
 
@@ -5243,8 +5342,8 @@ msgstr "Intervalul maxim între testele tunelului (ms)."
 msgid "Threads decrypting inbound NTCP data."
 msgstr "Fire care decriptează datele NTCP de intrare."
 
-msgid "Threads encrypting NTCP messages."
-msgstr "Fire care criptează mesajele NTCP."
+msgid "Threads that encrypt outbound NTCP messages."
+msgstr ""
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Intervalul de scanare failsafe pentru pompele NTCP blocate (ms)."
@@ -5270,8 +5369,8 @@ msgstr "Mesaje neconfirmate maxime per nod."
 msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "Dimensiunea de repornire a ferestrei (MTU-uri) după colapsul RTO."
 
-msgid "NTCP send pool queue size."
-msgstr "Dimensiunea cozii grupului de trimitere NTCP."
+msgid "Priority-aware buffer where client messages jump transit."
+msgstr ""
 
 msgid "I2CP session buffer size."
 msgstr "Dimensiunea bufferului de sesiune I2CP."
@@ -5296,6 +5395,9 @@ msgstr "Rata de creștere a evitării congestiei."
 
 msgid "Window multiplier per RTT during slow start."
 msgstr "Multiplicatorul ferestrei per RTT în timpul startului lent."
+
+msgid "Minimum send rate before pacing kicks in (KB/s)."
+msgstr ""
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "Limita superioară a estimării RTT (ms)."
@@ -5372,11 +5474,14 @@ msgstr "Lărgește fereastra de recență a nodurilor pentru a readmite noduri c
 msgid "Consecutive failures before pool backoff."
 msgstr "Eșecuri consecutive înainte de retragerea grupului."
 
-msgid "Cooldown duration after pool failure threshold, in ms."
-msgstr "Durata de răcire după pragul de eșec al grupului, în ms."
+msgid "Cooldown duration after pool failure threshold (ms)."
+msgstr ""
 
 msgid "Target spare tunnel count per pool."
 msgstr "Numărul țintă de tuneluri de rezervă per grup."
+
+msgid "Widens untested tunnel cap when testing stalls."
+msgstr ""
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "Pragul de încărcare de la care începe respingerea probabilistică a tranzitului (%)."
@@ -5401,6 +5506,9 @@ msgstr "Multiplicatorul de creștere RTO per timeout de retransmisie (%, 100 = p
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Timpul de așteptare al conexiunii socket TCP pentru firele de execuție ale handler-ului server de tunel (ms)."
+
+msgid "Max average message delay before rejecting transit (ms)."
+msgstr ""
 
 msgid "Tunnel"
 msgstr "Tunel"
@@ -7332,11 +7440,14 @@ msgstr "Durata de viață a tunelului în milisecunde. Tunelurile expiră după 
 msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]"
 msgstr "Perioada de suprimare la pornire în milisecunde. Avertismentele și logica de reducere a tunelurilor sunt suprimate în timpul pornirii inițiale a routerului pentru a evita deciziile premature. [Implicit este 300000 (5 minute)]"
 
-msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]"
-msgstr "Intervalul minim în milisecunde între publicările LeaseSet. Previne furtunile rapide de publicare în timpul fluctuației tunelurilor. [Implicit este 300000 (5 minute)]"
+msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
+msgstr ""
 
-msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]"
-msgstr "Intervalul minim în milisecunde între construcțiile obiectelor LeaseSet. Previne fluctuația inutilă a obiectelor LeaseSet la fiecare adăugare/eliminare de tunel. [Implicit este 300000 (5 minute)]"
+msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
+msgstr ""
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "Numărul maxim de construcții simultane de tuneluri pe direcție. Valorile mai mari accelerează recuperarea pool-ului dar pot supraîncărca rețeaua. [Implicit este 6]"
@@ -7416,11 +7527,11 @@ msgstr "Numărul de răspunsuri către o destinație limitată înainte de a eli
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr "Întârzierea maximă implicită a fluxului în milisecunde când nu este setat niciun timeout explicit de conectare. [Implicit este 10000 (10 secunde)]"
 
-msgid "Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]"
-msgstr "Timpul maxim în milisecunde între primirea unui SYN și acceptarea acestuia pe un socket de server. Controlează cât timp sunt menținute conexiunile incomplete în coada de acceptare. [Implicit este 4000 (4 secunde)]"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
+msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]"
-msgstr "Numărul maxim de conexiuni în așteptare (SYN-uri și pachete parțiale) în coada de acceptare a serverului. Valorile mai mari stochează mai multe conexiuni primite cu costul memoriei. [Implicit este 80 (48 pe sisteme lente)]"
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
+msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Intervalul în milisecunde între republicările automate LeaseSet. Valorile mai mari reduc traficul netdb dar pot cauza informații învechite de lease. [Implicit este 300000 (5 minute)]"
@@ -9576,9 +9687,6 @@ msgstr "Tuneluri de tranzit de Peer"
 msgid "tuning"
 msgstr "reglare"
 
-msgid "Router Auto-Tuning"
-msgstr "Auto-Tuning router"
-
 msgid "tunnel peer count"
 msgstr "număr peer tunnel"
 
@@ -9745,3 +9853,12 @@ msgstr "Următorul"
 
 msgid "Finished"
 msgstr "Finalizat"
+
+
+
+
+
+
+
+
+

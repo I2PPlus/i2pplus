@@ -138,27 +138,11 @@ msgstr "Nome nodo \"{0}\" non valido."
 msgid "Please enter a host name and destination"
 msgstr "Inserire un nome per il nodo ed una destinazione"
 
-msgid "Delete Entry"
-msgstr "Elimina voce"
-
-msgid "Delete Selected"
-msgstr "Elimina selezione"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "Destinazione {0} eliminata."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "1 destinazione eliminata."
-msgstr[1] "{0} destinazioni eliminate."
-
-msgid "No valid entries selected to delete."
-msgstr "Nessuna voce valida selezionata per l'eliminazione."
-
 msgid "Add Alternate"
 msgstr "Aggiungi alternativo"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "Rubrica salvata."
@@ -208,9 +192,28 @@ msgstr "Il nome del nodo {0} non è nella rubrica."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Impossibile aggiungere la destinazione per {0} al servizio di denominazione {1}Operazione di aggiunta della Destinazione per {0} al servizio di naming {1} fallita"
 
+msgid "Delete Entry"
+msgstr "Elimina voce"
+
+msgid "Delete Selected"
+msgstr "Elimina selezione"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Impossibile eliminare la destinazione per {0} dal servizio di denominazione {1}Operazione di eliminazione della Destinazione per {0} dal servizio di naming {1} fallita"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Destinazione {0} eliminata."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "1 destinazione eliminata."
+msgstr[1] "{0} destinazioni eliminate."
+
+msgid "No valid entries selected to delete."
+msgstr "Nessuna voce valida selezionata per l'eliminazione."
 
 msgid "Blacklist Selected"
 msgstr "Blacklist selezionata"

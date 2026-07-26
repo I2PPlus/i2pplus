@@ -122,6 +122,9 @@ msgstr "Totalt antall noder i vår NetDb"
 msgid "Total number of threads in use"
 msgstr "Totalt antall tråder i bruk"
 
+msgid "Time spent paused in GC (ms)"
+msgstr ""
+
 msgid "Peers without a published IP address"
 msgstr "Noder uten en publisert IP-adresse"
 
@@ -701,8 +704,8 @@ msgstr "Ugyldig skjemainnsendelse, sannsynligvis fordi du brukte 'tilbake' eller
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Hvis problemet vedvarer, må du kontrollere at du har aktivert informasjonskapsler i nettleseren din"
 
-msgid "Bandwidth Usage"
-msgstr "Båndbreddebruk"
+msgid "Bandwidth usage"
+msgstr ""
 
 #, java-format
 msgid "events in {0}"
@@ -1924,6 +1927,9 @@ msgstr "{0} for {1}"
 msgid "Nothing to display - no stat specified!"
 msgstr "Ingenting å vise - ingen statistikk angitt!"
 
+msgid "Bandwidth Usage"
+msgstr "Båndbreddebruk"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "sluttet for {0}  siden"
@@ -2012,6 +2018,15 @@ msgstr "Skjul legende"
 msgid "Do not show legend on graphs"
 msgstr "Ikke vis forklaring på grafer"
 
+msgid "Disabled while legend is hidden"
+msgstr ""
+
+msgid "Hide restarts"
+msgstr ""
+
+msgid "Suppress restart lines on graphs"
+msgstr ""
+
 msgid "Persistence"
 msgstr "Vedvarelse"
 
@@ -2046,6 +2061,12 @@ msgstr "Grafinnstillinger lagret"
 msgid "Graph settings unchanged"
 msgstr "Grafinnstillinger uendret"
 
+msgid "improved"
+msgstr ""
+
+msgid "vs baseline"
+msgstr ""
+
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:239
 msgid "CPU"
 msgstr "CPU"
@@ -2066,10 +2087,6 @@ msgstr "Ruterens oppetid"
 
 msgid "Job Lag"
 msgstr "Jobb forsinkelse"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:468
-msgid "ms"
-msgstr "ms"
 
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:246
 msgid "Job queue delay"
@@ -2298,6 +2315,13 @@ msgstr "Grafruterytelse"
 msgid "Graphs"
 msgstr "Grafer"
 
+# /java/src/net/i2p/router/web/helpers/SidebarRenderer.java:541
+msgid "Health"
+msgstr "Tilstand"
+
+msgid "Router performance overview"
+msgstr ""
+
 msgid "Help"
 msgstr "Hjelp"
 
@@ -2360,6 +2384,12 @@ msgstr "Nettstedskart"
 
 msgid "Built-in anonymous BitTorrent Client"
 msgstr "Innebygd anonym BitTorrent-klient"
+
+msgid "Router Auto-Tuning"
+msgstr "Ruter Auto-Tuning"
+
+msgid "Tuning"
+msgstr ""
 
 msgid "Manage server and client tunnels"
 msgstr "Administrer server- og klienttunneler"
@@ -3367,6 +3397,60 @@ msgstr "på siden {0}Avansert konfigurasjon{1}."
 msgid "to your router.config file."
 msgstr "til router.config-filen."
 
+msgid "Peers reached in the last 60s"
+msgstr ""
+
+msgid "Fast"
+msgstr "Rask"
+
+msgid "Low-latency peers for tunnel participation"
+msgstr ""
+
+msgid "HighCap"
+msgstr ""
+
+msgid "High-bandwidth peers for many tunnels"
+msgstr ""
+
+msgid "Reliable"
+msgstr ""
+
+msgid "High-capacity peers with good acceptance"
+msgstr ""
+
+msgid "Peers that store and serve NetDb info"
+msgstr ""
+
+msgid "Known"
+msgstr "Kjent"
+
+msgid "Total entries in network database"
+msgstr ""
+
+msgid "Active%"
+msgstr ""
+
+msgid "Profiles with activity in the last 24h"
+msgstr ""
+
+msgid "Unreachable"
+msgstr "Ikke tilgjengelige"
+
+msgid "Peers without a reachable address"
+msgstr ""
+
+msgid "Peers excluded from all interactions"
+msgstr ""
+
+msgid "/min"
+msgstr ""
+
+msgid "Test Fail"
+msgstr ""
+
+msgid "Connectivity test failures per minute"
+msgstr ""
+
 msgid "Peer Connections"
 msgstr "Personforbindelser"
 
@@ -3679,9 +3763,6 @@ msgstr "OK"
 msgid "tests passed"
 msgstr "tester bestått"
 
-msgid "Unreachable"
-msgstr "Ikke tilgjengelige"
-
 msgid "Test Fails"
 msgstr "Testen mislykkes"
 
@@ -3800,9 +3881,6 @@ msgstr "grupper"
 
 msgid "Note: Peers are categorized by the profile organizer based on observable performance, not from capabilities they advertise in the NetDB."
 msgstr "Merk: Peers er kategorisert av profilarrangøren basert på observerbar ytelse, ikke fra funksjoner de annonserer i NetDB"
-
-msgid "Fast"
-msgstr "Rask"
 
 msgid "Peers marked as high capacity that also meet or exceed speed average for all profiled peers."
 msgstr "Noder merket som høy kapasitet som også møter eller overskrider hastighetsgjennomsnittet for alle profilerte jevnaldrende"
@@ -4181,10 +4259,6 @@ msgstr "NetDb"
 msgid "Show all current peer connections"
 msgstr "Vis alle nåværende likemannstilkoblinger"
 
-# /java/src/net/i2p/router/web/helpers/SidebarRenderer.java:541
-msgid "Health"
-msgstr "Tilstand"
-
 # /java/src/net/i2p/router/web/helpers/SidebarRenderer.java:544
 msgid "Router health overview"
 msgstr "Ruterens tilstandsoversikt"
@@ -4319,9 +4393,6 @@ msgstr "Totalt antall likemenn i vår nettverksdatabse"
 
 msgid "Total RouterInfos stored on disk"
 msgstr "Samlet RouterInfos lagret på disk"
-
-msgid "Known"
-msgstr "Kjent"
 
 msgid "Configure router bandwidth allocation"
 msgstr "Sett opp ruterbåndbreddetildelig"
@@ -4813,6 +4884,9 @@ msgstr "Nagle-tømmingsforsinkelse"
 msgid "Slow Start Window Cap"
 msgstr "Tak for langsom start-vindu"
 
+msgid "Max SYN Sends"
+msgstr ""
+
 msgid "Max RTO"
 msgstr "Maks RTO"
 
@@ -4939,6 +5013,9 @@ msgstr "Maks samtidige tunnelbygginger"
 msgid "Max Concurrent RI Lookups"
 msgstr "Maks samtidige RI-oppslag"
 
+msgid "Next-Hop Lookup %"
+msgstr ""
+
 msgid "Max Concurrent Test Jobs"
 msgstr "Maks samtidige testjobber"
 
@@ -5008,6 +5085,9 @@ msgstr "Vekstrate for unngåelse av konsentrasjon"
 msgid "Slow Start Growth Rate"
 msgstr "Vekstrate for langsom start"
 
+msgid "Min Pacing Rate"
+msgstr ""
+
 msgid "RTT Cap"
 msgstr "RTT-tak"
 
@@ -5019,6 +5099,9 @@ msgstr "Forsinkelse for duplikat-ACK"
 
 msgid "Inactivity Timeout"
 msgstr "Tidsavbrudd for inaktivitet"
+
+msgid "Max Window Size"
+msgstr ""
 
 msgid "Max Message Queue Age"
 msgstr "Maks alder på meldingskø"
@@ -5116,6 +5199,12 @@ msgstr "Tilbaketrekningsmultiplikator for RTO"
 msgid "Socket Connect Timeout"
 msgstr "Tidsavbrudd for socket-tilkobling"
 
+msgid "Untested Tunnel Cap Multiplier"
+msgstr ""
+
+msgid "Message Processing Throttle"
+msgstr ""
+
 msgid "Data packets between each ACK."
 msgstr "Datapakker mellom hver ACK."
 
@@ -5137,8 +5226,8 @@ msgstr "Pumpe ventetid før arbeid sjekkes på nytt (ms)."
 msgid "Bandwidth token refill interval (ms)."
 msgstr "Intervall for påfyll av båndbredde-token (ms)."
 
-msgid "NTCP selector sleep between loops (ms)."
-msgstr "NTCP-velger hvile mellom løkker (ms)."
+msgid "NIO selector sleep between loops (ms)."
+msgstr ""
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "Utgående meldinger samlet per gateway-pumpe."
@@ -5161,6 +5250,9 @@ msgstr "Nagle-tømmingsforsinkelse (ms)."
 msgid "Max congestion window during slow start."
 msgstr "Maks konsentrasjonsvindu under langsom start."
 
+msgid "Total SYN attempts before giving up on a handshake."
+msgstr ""
+
 msgid "Max retransmission timeout (ms)."
 msgstr "Maks tidsavbrudd for omsending (ms)."
 
@@ -5172,6 +5264,9 @@ msgstr "Omsendinger før strømmen droppes."
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "Maks inaktiv tid før en strøm droppes (ms)."
+
+msgid "Max unacknowledged packets per stream connection."
+msgstr ""
 
 msgid "I2CP write queue depth."
 msgstr "Dybde på I2CP-skrivekø."
@@ -5290,6 +5385,9 @@ msgstr "Maks samtidige tunnelbygginger."
 msgid "Max concurrent RI lookups during builds."
 msgstr "Maks samtidige RI-oppslag under bygginger."
 
+msgid "Concurrent next-hop lookup limit as % of transit tunnels."
+msgstr ""
+
 msgid "Max concurrent tunnel test jobs."
 msgstr "Maks samtidige tunneltestjobber."
 
@@ -5302,8 +5400,8 @@ msgstr "Største intervall mellom tunneltester (ms)."
 msgid "Threads decrypting inbound NTCP data."
 msgstr "Tråder som dekrypterer inngående NTCP-data."
 
-msgid "Threads encrypting NTCP messages."
-msgstr "Tråder som krypterer NTCP-meldinger."
+msgid "Threads that encrypt outbound NTCP messages."
+msgstr ""
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Sikkerhetsskanneintervall for fastlåste NTCP-pumper (ms)."
@@ -5329,8 +5427,8 @@ msgstr "Maks ubekreftede meldinger per node."
 msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "Vindusrestart-størrelse (MTUer) etter RTO-sammenbrudd."
 
-msgid "NTCP send pool queue size."
-msgstr "Størrelse på NTCP-sendepoolkø."
+msgid "Priority-aware buffer where client messages jump transit."
+msgstr ""
 
 msgid "I2CP session buffer size."
 msgstr "Størrelse på I2CP-øktbuffer."
@@ -5355,6 +5453,9 @@ msgstr "Vekstrate for unngåelse av konsentrasjon."
 
 msgid "Window multiplier per RTT during slow start."
 msgstr "Vindusmultiplikator per RTT under langsom start."
+
+msgid "Minimum send rate before pacing kicks in (KB/s)."
+msgstr ""
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "Øvre grense for RTT-estimat (ms)."
@@ -5431,11 +5532,14 @@ msgstr "Utvider node-nyhetsvindu for å slippe inn noder på nytt når bygginger
 msgid "Consecutive failures before pool backoff."
 msgstr "Konssekutive feil før pool-tilbaketrekning."
 
-msgid "Cooldown duration after pool failure threshold, in ms."
-msgstr "Nedkjølingsvarighet etter pool-feilterskel, i ms."
+msgid "Cooldown duration after pool failure threshold (ms)."
+msgstr ""
 
 msgid "Target spare tunnel count per pool."
 msgstr "Mål for antall reserve-tunneler per pool."
+
+msgid "Widens untested tunnel cap when testing stalls."
+msgstr ""
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "Lastterskel der sannsynlighetsbasert transittavvisning starter (%)."
@@ -5460,6 +5564,9 @@ msgstr "RTO-vekstmultiplikator per omsendingstidsavbrudd (%, 100 = flat)."
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "TCP-socket-tilkoblingstidsavbrudd for tunneltjener-behandlingstråder (ms)."
+
+msgid "Max average message delay before rejecting transit (ms)."
+msgstr ""
 
 msgid "Tunnel"
 msgstr "Tunnel"
@@ -7407,11 +7514,14 @@ msgstr "Tunnellevetid i millisekunder. Tunneler utløper etter denne perioden og
 msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]"
 msgstr "Startoppstartsundertrykkelsesperiode i millisekunder. Advarsler og tunnelreduksjonslogikk undertrykkes under innledende ruterstart for å unngå forhastede beslutninger. [Standard 300000 (5 minutter)"
 
-msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]"
-msgstr "Minimumsintervall i millisekunder mellom LeaseSet-publiseringer. Forhindrer raske publiseringsstormer under tunnelomløp. [Standard 300000 (5 minutter)"
+msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
+msgstr ""
 
-msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]"
-msgstr "Minimumsintervall i millisekunder mellom LeaseSet-objektbygginger. Forhindrer unødvendig LeaseSet-objektomløp ved hver tunneladd/fjern. [Standard 300000 (5 minutter)"
+msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
+msgstr ""
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "Maksimalt antall samtidige tunnelbygginger per retning. Høyere verdier akselererer poolgjenoppretting, men kan overbelaste nettverket. [Standard 6"
@@ -7491,11 +7601,11 @@ msgstr "Antall ganger å svare på en strupt destinasjon før du stille dropper 
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr "Standard maksimal strømforsinkelse i millisekunder når ingen eksplisitt tilkoblingstidsavbrudd er satt. [Standard 10000 (10 sekunder)"
 
-msgid "Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]"
-msgstr "Maksimal tid i millisekunder mellom å motta en SYN og akseptere den på en server socket. Kontrollerer hvor lenge ufullstendige tilkoblinger holdes i akseptkøen. [Standard 4000 (4 sekunder)"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
+msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]"
-msgstr "Maksimalt antall ventende tilkoblinger (SYN-er og delvise pakker) i serverens akseptkø. Større verdier buffer flere innkommende tilkoblinger på bekostning av minne. [Standard 80 (48 på trege systemer)"
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
+msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Intervall i millisekunder mellom automatiske LeaseSet-utgivelser. Høyere verdier reduserer netdb-trafikk, men kan forårsake foreldet leieinfo. [Standard 300000 (5 minutter)"
@@ -9652,9 +9762,6 @@ msgstr "Transittunneler av Peer"
 msgid "tuning"
 msgstr "justering"
 
-msgid "Router Auto-Tuning"
-msgstr "Ruter Auto-Tuning"
-
 msgid "tunnel peer count"
 msgstr "telling av tunnelfeller"
 
@@ -9821,3 +9928,13 @@ msgstr "Neste"
 
 msgid "Finished"
 msgstr "Sluttført"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:468
+
+
+
+
+
+
+
+

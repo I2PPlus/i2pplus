@@ -121,6 +121,9 @@ msgstr "আমাদের নেটডিবি (নেটওয়ার্ক
 msgid "Total number of threads in use"
 msgstr "ব্যবহৃত থ্রেডের মোট সংখ্যা"
 
+msgid "Time spent paused in GC (ms)"
+msgstr ""
+
 msgid "Peers without a published IP address"
 msgstr "প্রকাশিত IP ঠিকানাবিহীন পিয়ার"
 
@@ -700,8 +703,8 @@ msgstr "অবৈধ ফর্ম জমা, সম্ভবত আপনি ''�
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "যদি সমস্যা থেকে যায়, আপনার ব্রাউজারে কুকি সক্রিয় আছে কিনা যাচাই করুন।"
 
-msgid "Bandwidth Usage"
-msgstr "ব্যান্ডউইথ ব্যবহার"
+msgid "Bandwidth usage"
+msgstr ""
 
 #, java-format
 msgid "events in {0}"
@@ -1914,6 +1917,9 @@ msgstr "{1}-এর জন্য {0}"
 msgid "Nothing to display - no stat specified!"
 msgstr "প্রদর্শনের কিছু নেই - কোনো পরিসংখ্যান নির্ধারিত নয়!"
 
+msgid "Bandwidth Usage"
+msgstr "ব্যান্ডউইথ ব্যবহার"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "{0} আগে শেষ"
@@ -2002,6 +2008,15 @@ msgstr "লিজেন্ড লুকান"
 msgid "Do not show legend on graphs"
 msgstr "গ্রাফে লিজেন্ড দেখাবেন না"
 
+msgid "Disabled while legend is hidden"
+msgstr ""
+
+msgid "Hide restarts"
+msgstr ""
+
+msgid "Suppress restart lines on graphs"
+msgstr ""
+
 msgid "Persistence"
 msgstr "স্থায়িত্ব"
 
@@ -2032,6 +2047,12 @@ msgstr "গ্রাফ সেটিংস সংরক্ষিত"
 msgid "Graph settings unchanged"
 msgstr "গ্রাফ সেটিংস অপরিবর্তিত"
 
+msgid "improved"
+msgstr ""
+
+msgid "vs baseline"
+msgstr ""
+
 msgid "CPU"
 msgstr "CPU"
 
@@ -2049,9 +2070,6 @@ msgstr "রাউটার আপটাইম"
 
 msgid "Job Lag"
 msgstr "জব ল্যাগ"
-
-msgid "ms"
-msgstr "ms"
 
 msgid "Job queue delay"
 msgstr "জব কিউ বিলম্ব"
@@ -2233,6 +2251,12 @@ msgstr "রাউটার কার্যসম্পাদন গ্রাফ"
 msgid "Graphs"
 msgstr "গ্রাফ"
 
+msgid "Health"
+msgstr "স্বাস্থ্য"
+
+msgid "Router performance overview"
+msgstr ""
+
 msgid "Help"
 msgstr "সাহায্য"
 
@@ -2295,6 +2319,12 @@ msgstr "সাইটম্যাপ"
 
 msgid "Built-in anonymous BitTorrent Client"
 msgstr "অন্তর্নির্মিত অনামা বিটটরেন্ট ক্লায়েন্ট"
+
+msgid "Router Auto-Tuning"
+msgstr "রাউটার অটো-টিউনিং"
+
+msgid "Tuning"
+msgstr ""
 
 msgid "Manage server and client tunnels"
 msgstr "সার্ভার ও ক্লায়েন্ট টানেল পরিচালনা"
@@ -3301,6 +3331,60 @@ msgstr "{0}উন্নত কনফিগারেশন{1} পাতায়�
 msgid "to your router.config file."
 msgstr "আপনার router.config ফাইলে।"
 
+msgid "Peers reached in the last 60s"
+msgstr ""
+
+msgid "Fast"
+msgstr "দ্রুত"
+
+msgid "Low-latency peers for tunnel participation"
+msgstr ""
+
+msgid "HighCap"
+msgstr ""
+
+msgid "High-bandwidth peers for many tunnels"
+msgstr ""
+
+msgid "Reliable"
+msgstr ""
+
+msgid "High-capacity peers with good acceptance"
+msgstr ""
+
+msgid "Peers that store and serve NetDb info"
+msgstr ""
+
+msgid "Known"
+msgstr "পরিচিত"
+
+msgid "Total entries in network database"
+msgstr ""
+
+msgid "Active%"
+msgstr ""
+
+msgid "Profiles with activity in the last 24h"
+msgstr ""
+
+msgid "Unreachable"
+msgstr "অপ্রাপ্য"
+
+msgid "Peers without a reachable address"
+msgstr ""
+
+msgid "Peers excluded from all interactions"
+msgstr ""
+
+msgid "/min"
+msgstr ""
+
+msgid "Test Fail"
+msgstr ""
+
+msgid "Connectivity test failures per minute"
+msgstr ""
+
 msgid "Peer Connections"
 msgstr "পিয়ার সংযোগ"
 
@@ -3613,9 +3697,6 @@ msgstr "ঠিক আছে"
 msgid "tests passed"
 msgstr "পরীক্ষা উত্তীর্ণ"
 
-msgid "Unreachable"
-msgstr "অপ্রাপ্য"
-
 msgid "Test Fails"
 msgstr "পরীক্ষা ব্যর্থ"
 
@@ -3734,9 +3815,6 @@ msgstr "গোষ্ঠী"
 
 msgid "Note: Peers are categorized by the profile organizer based on observable performance, not from capabilities they advertise in the NetDB."
 msgstr "দ্রষ্টব্য: পিয়ারদের প্রোফাইল সংগঠক পর্যবেক্ষণযোগ্য কর্মক্ষমতার ভিত্তিতে শ্রেণীবদ্ধ করে, নেটডিবিতে তারা যে সক্ষমতা বিজ্ঞাপন দেয় তা থেকে নয়।"
-
-msgid "Fast"
-msgstr "দ্রুত"
 
 msgid "Peers marked as high capacity that also meet or exceed speed average for all profiled peers."
 msgstr "উচ্চ ক্ষমতা হিসেবে চিহ্নিত পিয়ার যারা সকল প্রোফাইলকৃত পিয়ারের গড় গতি পূরণ বা অতিক্রম করে।"
@@ -4109,9 +4187,6 @@ msgstr "নেটডিবি (নেটওয়ার্ক ডাটাবে
 msgid "Show all current peer connections"
 msgstr "বর্তমান সকল পিয়ার সংযোগ দেখান"
 
-msgid "Health"
-msgstr "স্বাস্থ্য"
-
 msgid "Router health overview"
 msgstr "রাউটার স্বাস্থ্য সংক্ষিপ্ত বিবরণ"
 
@@ -4245,9 +4320,6 @@ msgstr "আমাদের নেটওয়ার্ক ডাটাবেস�
 
 msgid "Total RouterInfos stored on disk"
 msgstr "ডিস্কে সংরক্ষিত মোট রাউটারইনফো"
-
-msgid "Known"
-msgstr "পরিচিত"
 
 msgid "Configure router bandwidth allocation"
 msgstr "রাউটার ব্যান্ডউইথ বরাদ্দ কনফিগার করুন"
@@ -4736,6 +4808,9 @@ msgstr "নাগলে ফ্লাশ বিলম্ব"
 msgid "Slow Start Window Cap"
 msgstr "স্লো স্টার্ট উইন্ডো ক্যাপ"
 
+msgid "Max SYN Sends"
+msgstr ""
+
 msgid "Max RTO"
 msgstr "সর্বোচ্চ RTO"
 
@@ -4862,6 +4937,9 @@ msgstr "সর্বোচ্চ একযোগী টানেল বিল্
 msgid "Max Concurrent RI Lookups"
 msgstr "সর্বোচ্চ একযোগী RI লুকআপ"
 
+msgid "Next-Hop Lookup %"
+msgstr ""
+
 msgid "Max Concurrent Test Jobs"
 msgstr "সর্বোচ্চ একযোগী টেস্ট জব"
 
@@ -4931,6 +5009,9 @@ msgstr "কনজেশন পরিহার বৃদ্ধির হার"
 msgid "Slow Start Growth Rate"
 msgstr "স্লো স্টার্ট বৃদ্ধির হার"
 
+msgid "Min Pacing Rate"
+msgstr ""
+
 msgid "RTT Cap"
 msgstr "RTT ক্যাপ"
 
@@ -4942,6 +5023,9 @@ msgstr "ডুপ ACK বিলম্ব"
 
 msgid "Inactivity Timeout"
 msgstr "নিষ্ক্রিয়তার সময়সীমা"
+
+msgid "Max Window Size"
+msgstr ""
 
 msgid "Max Message Queue Age"
 msgstr "সর্বোচ্চ বার্তা কিউ বয়স"
@@ -5039,6 +5123,12 @@ msgstr "RTO ব্যাকঅফ গুণক"
 msgid "Socket Connect Timeout"
 msgstr "সকেট সংযোগ সময়সীমা"
 
+msgid "Untested Tunnel Cap Multiplier"
+msgstr ""
+
+msgid "Message Processing Throttle"
+msgstr ""
+
 msgid "Data packets between each ACK."
 msgstr "প্রতিটি ACK-এর মধ্যে ডেটা প্যাকেট।"
 
@@ -5060,8 +5150,8 @@ msgstr "কাজ পুনরায় পরীক্ষা করার আ�
 msgid "Bandwidth token refill interval (ms)."
 msgstr "ব্যান্ডউইথ টোকেন পুনর্পূরণ ব্যবধান (ms)।"
 
-msgid "NTCP selector sleep between loops (ms)."
-msgstr "লুপগুলির মধ্যে NTCP সিলেক্টর স্লিপ (ms)।"
+msgid "NIO selector sleep between loops (ms)."
+msgstr ""
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "প্রতি গেটওয়ে পাম্পে ব্যাচযুক্ত আউটবাউন্ড বার্তা।"
@@ -5084,6 +5174,9 @@ msgstr "নাগলে ফ্লাশ বিলম্ব (ms)।"
 msgid "Max congestion window during slow start."
 msgstr "স্লো স্টার্টের সময় সর্বোচ্চ কনজেশন উইন্ডো।"
 
+msgid "Total SYN attempts before giving up on a handshake."
+msgstr ""
+
 msgid "Max retransmission timeout (ms)."
 msgstr "সর্বোচ্চ পুনঃপ্রেরণ সময়সীমা (ms)।"
 
@@ -5095,6 +5188,9 @@ msgstr "স্ট্রিম ড্রপ করার আগের পুন�
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "একটি স্ট্রিম ড্রপ করার আগের সর্বোচ্চ আইডল সময় (ms)।"
+
+msgid "Max unacknowledged packets per stream connection."
+msgstr ""
 
 msgid "I2CP write queue depth."
 msgstr "I2CP রাইট কিউ গভীরতা।"
@@ -5213,6 +5309,9 @@ msgstr "সর্বোচ্চ একযোগী টানেল বিল্
 msgid "Max concurrent RI lookups during builds."
 msgstr "বিল্ড চলাকালীন সর্বোচ্চ একযোগী RI লুকআপ।"
 
+msgid "Concurrent next-hop lookup limit as % of transit tunnels."
+msgstr ""
+
 msgid "Max concurrent tunnel test jobs."
 msgstr "সর্বোচ্চ একযোগী টানেল টেস্ট জব।"
 
@@ -5225,8 +5324,8 @@ msgstr "টানেল টেস্টের মধ্যে সর্বোচ
 msgid "Threads decrypting inbound NTCP data."
 msgstr "ইনবাউন্ড NTCP ডেটা ডিক্রিপ্ট করা থ্রেড।"
 
-msgid "Threads encrypting NTCP messages."
-msgstr "NTCP বার্তা এনক্রিপ্ট করা থ্রেড।"
+msgid "Threads that encrypt outbound NTCP messages."
+msgstr ""
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "আটকে থাকা NTCP পাম্পের জন্য ফেইলসেফ স্ক্যান ব্যবধান (ms)।"
@@ -5252,8 +5351,8 @@ msgstr "প্রতি পিয়ারে সর্বোচ্চ অস্
 msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "RTO কলাপসের পরে উইন্ডো রি-স্টার্ট সাইজ (MTU)।"
 
-msgid "NTCP send pool queue size."
-msgstr "NTCP প্রেরণ পুল কিউ সাইজ।"
+msgid "Priority-aware buffer where client messages jump transit."
+msgstr ""
 
 msgid "I2CP session buffer size."
 msgstr "I2CP সেশন বাফার সাইজ।"
@@ -5278,6 +5377,9 @@ msgstr "কনজেশন পরিহার বৃদ্ধির হার।
 
 msgid "Window multiplier per RTT during slow start."
 msgstr "স্লো স্টার্টের সময় প্রতি RTT উইন্ডো গুণক।"
+
+msgid "Minimum send rate before pacing kicks in (KB/s)."
+msgstr ""
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT অনুমানের উপরের সীমা (ms)।"
@@ -5354,11 +5456,14 @@ msgstr "বিল্ড ব্যর্থ হলে পিয়ার পু�
 msgid "Consecutive failures before pool backoff."
 msgstr "পুল ব্যাকঅফের আগে ক্রমাগত ব্যর্থতা।"
 
-msgid "Cooldown duration after pool failure threshold, in ms."
-msgstr "পুল ব্যর্থতা থ্রেশহোল্ডের পরে কুলডাউন স্থিতিকাল, ms-এ।"
+msgid "Cooldown duration after pool failure threshold (ms)."
+msgstr ""
 
 msgid "Target spare tunnel count per pool."
 msgstr "প্রতি পুলে লক্ষ্যমাত্রা স্পেয়ার টানেল সংখ্যা।"
+
+msgid "Widens untested tunnel cap when testing stalls."
+msgstr ""
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "যে লোড থ্রেশহোল্ড থেকে সম্ভাব্যতাভিত্তিক ট্রানজিট রিজেকশন শুরু হয় (%।"
@@ -5383,6 +5488,9 @@ msgstr "প্রতি পুনঃপ্রেরণ সময়সীমা�
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "টানেল সার্ভার হ্যান্ডলার থ্রেডের জন্য TCP সকেট সংযোগ সময়সীমা (ms)।"
+
+msgid "Max average message delay before rejecting transit (ms)."
+msgstr ""
 
 msgid "Tunnel"
 msgstr "টানেল"
@@ -7314,11 +7422,14 @@ msgstr "টানেলের জীবনকাল মিলিসেকেন�
 msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]"
 msgstr "স্টার্টআপ দমন সময়কাল মিলিসেকেন্ডে। প্রাথমিক রাউটার স্টার্টআপের সময় সতর্কতা এবং টানেল হ্রাস যুক্তি দমন করা হয় অকাল সিদ্ধান্ত এড়াতে। [ডিফল্ট 300000 (5 মিনিট)]"
 
-msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]"
-msgstr "LeaseSet প্রকাশের মধ্যে ন্যূনতম ব্যবধান মিলিসেকেন্ডে। টানেল পরিবর্তনের সময় দ্রুত প্রকাশের ঝড় প্রতিরোধ করে। [ডিফল্ট 300000 (5 মিনিট)]"
+msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
+msgstr ""
 
-msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]"
-msgstr "LeaseSet অবজেক্ট বিল্ডের মধ্যে ন্যূনতম ব্যবধান মিলিসেকেন্ডে। প্রতিটি টানেল যোগ/অপসারণে অপ্রয়োজনীয় LeaseSet অবজেক্ট পরিবর্তন প্রতিরোধ করে। [ডিফল্ট 300000 (5 মিনিট)]"
+msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
+msgstr ""
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "প্রতি দিকে সমবর্তী টানেল বিল্ডের সর্বোচ্চ সংখ্যা। উচ্চ মান পুল পুনরুদ্ধার ত্বরান্বিত করে কিন্তু নেটওয়ার্ক ওভারলোড করতে পারে। [ডিফল্ট 6]"
@@ -7398,11 +7509,11 @@ msgstr "একটি থ্রটলড গন্তব্যে নীরবে
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr "যখন কোন স্পষ্ট সংযোগ টাইমআউট সেট করা না থাকে তখন ডিফল্ট সর্বোচ্চ স্ট্রিম বিলম্ব মিলিসেকেন্ডে। [ডিফল্ট 10000 (10 সেকেন্ড)]"
 
-msgid "Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]"
-msgstr "একটি SYN গ্রহণ এবং সার্ভার সকেটে এটি গ্রহণের মধ্যে সর্বোচ্চ সময় মিলিসেকেন্ডে। অসম্পূর্ণ সংযোগগুলি অ্যাকসেপ্ট কিউতে কতক্ষণ রাখা হয় তা নিয়ন্ত্রণ করে। [ডিফল্ট 4000 (4 সেকেন্ড)]"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
+msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]"
-msgstr "সার্ভার অ্যাকসেপ্ট কিউতে মুলতুবি সংযোগের (SYN এবং আংশিক প্যাকেট) সর্বোচ্চ সংখ্যা। বড় মান মেমরির বিনিময়ে আরও আগত সংযোগ বাফার করে। [ডিফল্ট 80 (ধীর সিস্টেমে 48)]"
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
+msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "স্বয়ংক্রিয় LeaseSet পুনঃপ্রকাশের মধ্যে ব্যবধান মিলিসেকেন্ডে। উচ্চ মান netdb ট্রাফিক হ্রাস করে তবে অপ্রচলিত লিজ তথ্য হতে পারে। [ডিফল্ট 300000 (5 মিনিট)]"
@@ -9558,9 +9669,6 @@ msgstr "পিয়ার অনুসারে ট্রানজিট টা
 msgid "tuning"
 msgstr "টিউনিং"
 
-msgid "Router Auto-Tuning"
-msgstr "রাউটার অটো-টিউনিং"
-
 msgid "tunnel peer count"
 msgstr "টানেল পিয়ার সংখ্যা"
 
@@ -9727,3 +9835,12 @@ msgstr "পরবর্তী"
 
 msgid "Finished"
 msgstr "সমাপ্ত"
+
+
+
+
+
+
+
+
+

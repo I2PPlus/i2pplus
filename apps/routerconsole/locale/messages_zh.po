@@ -119,6 +119,9 @@ msgstr "我方数据库中记录的对等节点总数量"
 msgid "Total number of threads in use"
 msgstr "使用的线程总数"
 
+msgid "Time spent paused in GC (ms)"
+msgstr ""
+
 msgid "Peers without a published IP address"
 msgstr "没有已发布 IP 地址的对等方"
 
@@ -698,8 +701,8 @@ msgstr "表单提交无效，可能的原因是您使用了“后退”或“刷
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "如果问题持续出现，请检查您的浏览器是否已启用 cookie。"
 
-msgid "Bandwidth Usage"
-msgstr "带宽占用"
+msgid "Bandwidth usage"
+msgstr ""
 
 #, java-format
 msgid "events in {0}"
@@ -1906,6 +1909,9 @@ msgstr "过去 {1} 统计 {0}"
 msgid "Nothing to display - no stat specified!"
 msgstr "无内容显示 - 未指定统计信息！"
 
+msgid "Bandwidth Usage"
+msgstr "带宽占用"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "{0} 前结束"
@@ -1994,6 +2000,15 @@ msgstr "隐藏长度"
 msgid "Do not show legend on graphs"
 msgstr "不在图表中显示长度"
 
+msgid "Disabled while legend is hidden"
+msgstr ""
+
+msgid "Hide restarts"
+msgstr ""
+
+msgid "Suppress restart lines on graphs"
+msgstr ""
+
 msgid "Persistence"
 msgstr "持久"
 
@@ -2024,6 +2039,12 @@ msgstr "图表设置已保存"
 msgid "Graph settings unchanged"
 msgstr "图表设置已保存"
 
+msgid "improved"
+msgstr ""
+
+msgid "vs baseline"
+msgstr ""
+
 msgid "CPU"
 msgstr "CPU"
 
@@ -2041,9 +2062,6 @@ msgstr "路由器运行时间"
 
 msgid "Job Lag"
 msgstr "作业延迟"
-
-msgid "ms"
-msgstr "毫秒"
 
 msgid "Job queue delay"
 msgstr "作业队列延迟"
@@ -2225,6 +2243,12 @@ msgstr "路由性能统计图"
 msgid "Graphs"
 msgstr "图表"
 
+msgid "Health"
+msgstr "健康状态"
+
+msgid "Router performance overview"
+msgstr ""
+
 msgid "Help"
 msgstr "帮助"
 
@@ -2287,6 +2311,12 @@ msgstr "网站地图"
 
 msgid "Built-in anonymous BitTorrent Client"
 msgstr "内置匿名 BitTorrent 客户端"
+
+msgid "Router Auto-Tuning"
+msgstr "路由器 Auto-Tuning"
+
+msgid "Tuning"
+msgstr ""
 
 msgid "Manage server and client tunnels"
 msgstr "管理服务器和客户端隧道"
@@ -3293,6 +3323,60 @@ msgstr "在{0}高级配置页{1}。"
 msgid "to your router.config file."
 msgstr "到您的路由器.config 文件。"
 
+msgid "Peers reached in the last 60s"
+msgstr ""
+
+msgid "Fast"
+msgstr "快速"
+
+msgid "Low-latency peers for tunnel participation"
+msgstr ""
+
+msgid "HighCap"
+msgstr ""
+
+msgid "High-bandwidth peers for many tunnels"
+msgstr ""
+
+msgid "Reliable"
+msgstr ""
+
+msgid "High-capacity peers with good acceptance"
+msgstr ""
+
+msgid "Peers that store and serve NetDb info"
+msgstr ""
+
+msgid "Known"
+msgstr "已知"
+
+msgid "Total entries in network database"
+msgstr ""
+
+msgid "Active%"
+msgstr ""
+
+msgid "Profiles with activity in the last 24h"
+msgstr ""
+
+msgid "Unreachable"
+msgstr "不可达"
+
+msgid "Peers without a reachable address"
+msgstr ""
+
+msgid "Peers excluded from all interactions"
+msgstr ""
+
+msgid "/min"
+msgstr ""
+
+msgid "Test Fail"
+msgstr ""
+
+msgid "Connectivity test failures per minute"
+msgstr ""
+
 msgid "Peer Connections"
 msgstr "对等节点连接"
 
@@ -3600,9 +3684,6 @@ msgstr "正常"
 msgid "tests passed"
 msgstr "测试通过"
 
-msgid "Unreachable"
-msgstr "不可达"
-
 msgid "Test Fails"
 msgstr "测试失败"
 
@@ -3718,9 +3799,6 @@ msgstr "分组"
 
 msgid "Note: Peers are categorized by the profile organizer based on observable performance, not from capabilities they advertise in the NetDB."
 msgstr "注意：对等节点由配置文件管理器根据可观察的性能进行分类，而不是根据它们在 NetDB 中通告的功能进行分类。"
-
-msgid "Fast"
-msgstr "快速"
 
 msgid "Peers marked as high capacity that also meet or exceed speed average for all profiled peers."
 msgstr "标记为高容量的对等节点，这些对等节点也达到或超过所有分析对等方的速度平均值。"
@@ -4093,9 +4171,6 @@ msgstr "节点数据库"
 msgid "Show all current peer connections"
 msgstr "显示所有当前对等节点连接"
 
-msgid "Health"
-msgstr "健康状态"
-
 msgid "Router health overview"
 msgstr "路由器健康状态概览"
 
@@ -4229,9 +4304,6 @@ msgstr "我方网络数据库中记录的对等节点总数量"
 
 msgid "Total RouterInfos stored on disk"
 msgstr "磁盘上存储的RouterInfo总数"
-
-msgid "Known"
-msgstr "已知"
 
 msgid "Configure router bandwidth allocation"
 msgstr "设置路由的带宽配额"
@@ -4718,6 +4790,9 @@ msgstr "Nagle 刷新延迟"
 msgid "Slow Start Window Cap"
 msgstr "慢启动窗口上限"
 
+msgid "Max SYN Sends"
+msgstr ""
+
 msgid "Max RTO"
 msgstr "最大重传超时 (RTO)"
 
@@ -4844,6 +4919,9 @@ msgstr "最大并发隧道构建数"
 msgid "Max Concurrent RI Lookups"
 msgstr "最大并发 RI 查找数"
 
+msgid "Next-Hop Lookup %"
+msgstr ""
+
 msgid "Max Concurrent Test Jobs"
 msgstr "最大并发测试任务数"
 
@@ -4913,6 +4991,9 @@ msgstr "拥塞避免增长率"
 msgid "Slow Start Growth Rate"
 msgstr "慢启动增长率"
 
+msgid "Min Pacing Rate"
+msgstr ""
+
 msgid "RTT Cap"
 msgstr "RTT 上限"
 
@@ -4924,6 +5005,9 @@ msgstr "重复确认延迟"
 
 msgid "Inactivity Timeout"
 msgstr "不活动超时"
+
+msgid "Max Window Size"
+msgstr ""
 
 msgid "Max Message Queue Age"
 msgstr "最大消息队列存在时间"
@@ -5021,6 +5105,12 @@ msgstr "RTO 退避乘数"
 msgid "Socket Connect Timeout"
 msgstr "套接字连接超时"
 
+msgid "Untested Tunnel Cap Multiplier"
+msgstr ""
+
+msgid "Message Processing Throttle"
+msgstr ""
+
 msgid "Data packets between each ACK."
 msgstr "每次确认之间的数据包数量。"
 
@@ -5042,8 +5132,8 @@ msgstr "泵送器空闲等待并重新检查工作的时长（毫秒）。"
 msgid "Bandwidth token refill interval (ms)."
 msgstr "带宽令牌补充间隔（毫秒）。"
 
-msgid "NTCP selector sleep between loops (ms)."
-msgstr "NTCP 选择器在循环之间的休眠时长（毫秒）。"
+msgid "NIO selector sleep between loops (ms)."
+msgstr ""
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "每个网关泵送批处理的出站消息数。"
@@ -5066,6 +5156,9 @@ msgstr "Nagle 刷新延迟（毫秒）。"
 msgid "Max congestion window during slow start."
 msgstr "慢启动期间的最大拥塞窗口。"
 
+msgid "Total SYN attempts before giving up on a handshake."
+msgstr ""
+
 msgid "Max retransmission timeout (ms)."
 msgstr "最大重传超时（毫秒）。"
 
@@ -5077,6 +5170,9 @@ msgstr "丢弃流之前的最大重传次数。"
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "丢弃流之前的最大空闲时间（毫秒）。"
+
+msgid "Max unacknowledged packets per stream connection."
+msgstr ""
 
 msgid "I2CP write queue depth."
 msgstr "I2CP 写入队列深度。"
@@ -5195,6 +5291,9 @@ msgstr "最大并发隧道构建数。"
 msgid "Max concurrent RI lookups during builds."
 msgstr "构建期间的最大并发 RI 查找数。"
 
+msgid "Concurrent next-hop lookup limit as % of transit tunnels."
+msgstr ""
+
 msgid "Max concurrent tunnel test jobs."
 msgstr "最大并发隧道测试任务数。"
 
@@ -5207,8 +5306,8 @@ msgstr "隧道测试之间的最大间隔（毫秒）。"
 msgid "Threads decrypting inbound NTCP data."
 msgstr "解密入站 NTCP 数据的线程数。"
 
-msgid "Threads encrypting NTCP messages."
-msgstr "加密 NTCP 消息的线程数。"
+msgid "Threads that encrypt outbound NTCP messages."
+msgstr ""
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "卡住 NTCP 泵送器的故障保护扫描间隔（毫秒）。"
@@ -5234,8 +5333,8 @@ msgstr "每个节点的最大未确认消息数。"
 msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "RTO 崩溃后的窗口重启大小（MTU）。"
 
-msgid "NTCP send pool queue size."
-msgstr "NTCP 发送池队列大小。"
+msgid "Priority-aware buffer where client messages jump transit."
+msgstr ""
 
 msgid "I2CP session buffer size."
 msgstr "I2CP 会话缓冲区大小。"
@@ -5260,6 +5359,9 @@ msgstr "拥塞避免增长率。"
 
 msgid "Window multiplier per RTT during slow start."
 msgstr "慢启动期间每个 RTT 的窗口乘数。"
+
+msgid "Minimum send rate before pacing kicks in (KB/s)."
+msgstr ""
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT 估计的上限（毫秒）。"
@@ -5336,11 +5438,14 @@ msgstr "在构建失败时加宽节点最近性窗口以重新接纳节点。"
 msgid "Consecutive failures before pool backoff."
 msgstr "触发池退避前的连续失败次数。"
 
-msgid "Cooldown duration after pool failure threshold, in ms."
-msgstr "达到池失败阈值后的冷却时长（毫秒）。"
+msgid "Cooldown duration after pool failure threshold (ms)."
+msgstr ""
 
 msgid "Target spare tunnel count per pool."
 msgstr "每个池的目标备用隧道数量。"
+
+msgid "Widens untested tunnel cap when testing stalls."
+msgstr ""
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "概率性中转拒绝开始的负载阈值（%）。"
@@ -5365,6 +5470,9 @@ msgstr "每次重传超时的 RTO 增长乘数（%，100 = 持平）。"
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "隧道服务器处理线程的 TCP 套接字连接超时（毫秒）。"
+
+msgid "Max average message delay before rejecting transit (ms)."
+msgstr ""
 
 msgid "Tunnel"
 msgstr "隧道"
@@ -7296,11 +7404,14 @@ msgstr "隧道生命周期（毫秒）。隧道在此时间段后过期，并由
 msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]"
 msgstr "启动抑制期（毫秒）。在路由器初始启动期间，警告和隧道缩减逻辑被抑制，以避免过早做出决定。[默认为300000（5分钟）]"
 
-msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]"
-msgstr "LeaseSet发布之间的最小间隔（毫秒）。防止隧道更换期间的快速发布风暴。[默认为300000（5分钟）]"
+msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
+msgstr ""
 
-msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]"
-msgstr "LeaseSet对象构建之间的最小间隔（毫秒）。防止每次隧道添加/删除时不必要的LeaseSet对象更换。[默认为300000（5分钟）]"
+msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
+msgstr ""
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "每个方向的最大并发隧道构建数。较高的值加速池恢复，但可能使网络过载。[默认为6]"
@@ -7380,11 +7491,11 @@ msgstr "在被节制的目的地回复的次数，之后多余的包将被静默
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr "未设置显式连接超时时的默认最大流延迟（毫秒）。[默认为10000（10秒）]"
 
-msgid "Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]"
-msgstr "在服务器套接字上接收SYN和接受它之间的最长时间（毫秒）。控制不完整连接在接受队列中保留的时间。[默认为4000（4秒）]"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
+msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]"
-msgstr "服务器接受队列中的最大挂起连接数（SYN和部分包）。较大的值以内存为代价缓冲更多传入连接。[默认为80（慢速系统上为48）]"
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
+msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "自动LeaseSet重新发布之间的间隔（毫秒）。较高的值减少netdb流量，但可能导致租赁信息过时。[默认为300000（5分钟）]"
@@ -9540,9 +9651,6 @@ msgstr "同行的过境隧道"
 msgid "tuning"
 msgstr "调优"
 
-msgid "Router Auto-Tuning"
-msgstr "路由器 Auto-Tuning"
-
 msgid "tunnel peer count"
 msgstr "计数"
 
@@ -9709,3 +9817,12 @@ msgstr "下一步"
 
 msgid "Finished"
 msgstr "完成"
+
+
+
+
+
+
+
+
+

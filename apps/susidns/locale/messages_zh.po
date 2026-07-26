@@ -134,26 +134,11 @@ msgstr "无效的主机名“{0}”。"
 msgid "Please enter a host name and destination"
 msgstr "请输入主机名称与目标"
 
-msgid "Delete Entry"
-msgstr "删除记录"
-
-msgid "Delete Selected"
-msgstr "删除选中项"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "目标 {0} 已删除"
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "{0} 个目标已删除。"
-
-msgid "No valid entries selected to delete."
-msgstr "未选择任何有效的条目进行删除。"
-
 msgid "Add Alternate"
 msgstr "添加备用"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "地址簿已保存。"
@@ -203,9 +188,27 @@ msgstr "主机名 {0} 不在地址簿中。"
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "域名服务{1}中的目标{0}添加失败。"
 
+msgid "Delete Entry"
+msgstr "删除记录"
+
+msgid "Delete Selected"
+msgstr "删除选中项"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "域名服务{1}中的目标{0}删除失败。"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "目标 {0} 已删除"
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "{0} 个目标已删除。"
+
+msgid "No valid entries selected to delete."
+msgstr "未选择任何有效的条目进行删除。"
 
 msgid "Blacklist Selected"
 msgstr "黑名单选中项"

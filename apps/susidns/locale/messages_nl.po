@@ -138,27 +138,11 @@ msgstr "Ongeldige hostnaam \"{0}\"."
 msgid "Please enter a host name and destination"
 msgstr "Voer een host naam en destination in"
 
-msgid "Delete Entry"
-msgstr "Item verwijderen"
-
-msgid "Delete Selected"
-msgstr "Verwijderen Selectie"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "Destination {0} verwijderd."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "1 bestemming verwijderd."
-msgstr[1] "{0} bestemmingen verwijderd."
-
-msgid "No valid entries selected to delete."
-msgstr "Geen geldige items geselecteerd om te verwijderen."
-
 msgid "Add Alternate"
 msgstr "Voeg alternatief toe"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "Adresboek opgeslagen."
@@ -208,9 +192,28 @@ msgstr "Host naam {0} komt niet in het adresboek voor."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Toevoegen van Bestemming voor {0} naar naamdienst {1} mislukt"
 
+msgid "Delete Entry"
+msgstr "Item verwijderen"
+
+msgid "Delete Selected"
+msgstr "Verwijderen Selectie"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Verwijderen van Bestemming voor {0} van naamdienst {1} mislukt"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Destination {0} verwijderd."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "1 bestemming verwijderd."
+msgstr[1] "{0} bestemmingen verwijderd."
+
+msgid "No valid entries selected to delete."
+msgstr "Geen geldige items geselecteerd om te verwijderen."
 
 msgid "Blacklist Selected"
 msgstr "Blacklist Geselecteerd"

@@ -138,27 +138,11 @@ msgstr "Virheellinen isäntänimi \"{0}\"."
 msgid "Please enter a host name and destination"
 msgstr "Anna isäntänimi ja kohde"
 
-msgid "Delete Entry"
-msgstr "Poista merkintä"
-
-msgid "Delete Selected"
-msgstr "Poista valitut"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "Kohde {0} poistettu."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "1 kohde poistettu."
-msgstr[1] "{0} kohdetta poistettu."
-
-msgid "No valid entries selected to delete."
-msgstr "Ei valittuja kelvollisia merkintöjä poistettavaksi."
-
 msgid "Add Alternate"
 msgstr "Lisää vaihtoehtoinen"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "Osoitekirja tallennettu."
@@ -208,9 +192,28 @@ msgstr "Isäntänimi {0} ei ole osoitekirjassa."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Kohteen {0} lisääminen nimeämispalveluun {1} epäonnistui"
 
+msgid "Delete Entry"
+msgstr "Poista merkintä"
+
+msgid "Delete Selected"
+msgstr "Poista valitut"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Kohteen {0} poistaminen nimeämispalvelusta {1} epäonnistui"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Kohde {0} poistettu."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "1 kohde poistettu."
+msgstr[1] "{0} kohdetta poistettu."
+
+msgid "No valid entries selected to delete."
+msgstr "Ei valittuja kelvollisia merkintöjä poistettavaksi."
 
 msgid "Blacklist Selected"
 msgstr "Estolista valittu"

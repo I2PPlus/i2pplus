@@ -138,27 +138,11 @@ msgstr "अमान्य होस्ट नाम \"{0}\"।"
 msgid "Please enter a host name and destination"
 msgstr "कृपया एक होस्ट नाम और गंतव्य दर्ज करें"
 
-msgid "Delete Entry"
-msgstr "प्रविष्टि हटाएं"
-
-msgid "Delete Selected"
-msgstr "चुनी गई हटाएं"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "गंतव्य {0} हटा दिया गया।"
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "{0} गंतव्य हटा दिया गया।"
-msgstr[1] "{0} गंतव्य हटे गए।"
-
-msgid "No valid entries selected to delete."
-msgstr "हटाने के लिए कोई वैध प्रविष्टियाँ चुनी नहीं गईं।"
-
 msgid "Add Alternate"
 msgstr "विकल्प जोड़ें"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "पत्रिका सहेजा गया।"
@@ -208,9 +192,28 @@ msgstr "होस्ट नाम {0} पत्रिका में नही�
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "{0} के लिए गंतव्य को नामिंग सेवा {1} में जोड़ने में विफलता"
 
+msgid "Delete Entry"
+msgstr "प्रविष्टि हटाएं"
+
+msgid "Delete Selected"
+msgstr "चुनी गई हटाएं"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "{0} के लिए गंतव्य को नामिंग सेवा {1} से हटाने में विफलता"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "गंतव्य {0} हटा दिया गया।"
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "{0} गंतव्य हटा दिया गया।"
+msgstr[1] "{0} गंतव्य हटे गए।"
+
+msgid "No valid entries selected to delete."
+msgstr "हटाने के लिए कोई वैध प्रविष्टियाँ चुनी नहीं गईं।"
 
 msgid "Blacklist Selected"
 msgstr "ब्लैकलिस्ट चयनित"

@@ -123,6 +123,9 @@ msgstr "Загальна кількість однорангових прист�
 msgid "Total number of threads in use"
 msgstr "Загальна кількість використовуваних потоків"
 
+msgid "Time spent paused in GC (ms)"
+msgstr ""
+
 msgid "Peers without a published IP address"
 msgstr "Однорангові пристрої без опублікованої IP-адреси"
 
@@ -702,8 +705,8 @@ msgstr "Неправильно передана форма, можливо ви 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Якщо проблема не усунута, переконайтеся, що cookies увімкнені у вашому браузері."
 
-msgid "Bandwidth Usage"
-msgstr "Використання мережі"
+msgid "Bandwidth usage"
+msgstr ""
 
 #, java-format
 msgid "events in {0}"
@@ -1922,6 +1925,9 @@ msgstr "{0} для {1}"
 msgid "Nothing to display - no stat specified!"
 msgstr "Нічого не відображається - статистика не вказана!"
 
+msgid "Bandwidth Usage"
+msgstr "Використання мережі"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "завершується {0} тому"
@@ -2010,6 +2016,15 @@ msgstr "Приховати легенду"
 msgid "Do not show legend on graphs"
 msgstr "Не показувати легенду на графіках"
 
+msgid "Disabled while legend is hidden"
+msgstr ""
+
+msgid "Hide restarts"
+msgstr ""
+
+msgid "Suppress restart lines on graphs"
+msgstr ""
+
 msgid "Persistence"
 msgstr "Наполегливість"
 
@@ -2040,6 +2055,12 @@ msgstr "Налагтування графікі збережено"
 msgid "Graph settings unchanged"
 msgstr "Налаштування графіка не змінено"
 
+msgid "improved"
+msgstr ""
+
+msgid "vs baseline"
+msgstr ""
+
 msgid "CPU"
 msgstr "CPU"
 
@@ -2057,9 +2078,6 @@ msgstr "Час роботи маршрутизатора"
 
 msgid "Job Lag"
 msgstr "Затримка завдань"
-
-msgid "ms"
-msgstr "мс"
 
 msgid "Job queue delay"
 msgstr "Затримка черги завдань"
@@ -2241,6 +2259,12 @@ msgstr "Продуктивність графічного маршрутизат
 msgid "Graphs"
 msgstr "Графіки"
 
+msgid "Health"
+msgstr "Стан"
+
+msgid "Router performance overview"
+msgstr ""
+
 msgid "Help"
 msgstr "Допомога"
 
@@ -2303,6 +2327,12 @@ msgstr "Карта сайту"
 
 msgid "Built-in anonymous BitTorrent Client"
 msgstr "Вбудований анонімник клієнт BitTorrent"
+
+msgid "Router Auto-Tuning"
+msgstr "Автоналаштування маршрутизатора"
+
+msgid "Tuning"
+msgstr ""
 
 msgid "Manage server and client tunnels"
 msgstr "Керуйте серверними та клієнтськими тунелями"
@@ -3309,6 +3339,60 @@ msgstr "на {0}сторінці розширеної конфігурації{1
 msgid "to your router.config file."
 msgstr "у файл router.config."
 
+msgid "Peers reached in the last 60s"
+msgstr ""
+
+msgid "Fast"
+msgstr "Швидко"
+
+msgid "Low-latency peers for tunnel participation"
+msgstr ""
+
+msgid "HighCap"
+msgstr ""
+
+msgid "High-bandwidth peers for many tunnels"
+msgstr ""
+
+msgid "Reliable"
+msgstr ""
+
+msgid "High-capacity peers with good acceptance"
+msgstr ""
+
+msgid "Peers that store and serve NetDb info"
+msgstr ""
+
+msgid "Known"
+msgstr "Відомі"
+
+msgid "Total entries in network database"
+msgstr ""
+
+msgid "Active%"
+msgstr ""
+
+msgid "Profiles with activity in the last 24h"
+msgstr ""
+
+msgid "Unreachable"
+msgstr "Недоступність"
+
+msgid "Peers without a reachable address"
+msgstr ""
+
+msgid "Peers excluded from all interactions"
+msgstr ""
+
+msgid "/min"
+msgstr ""
+
+msgid "Test Fail"
+msgstr ""
+
+msgid "Connectivity test failures per minute"
+msgstr ""
+
 msgid "Peer Connections"
 msgstr "Однорангові з''єднання"
 
@@ -3626,9 +3710,6 @@ msgstr "добре"
 msgid "tests passed"
 msgstr "тестів пройдено"
 
-msgid "Unreachable"
-msgstr "Недоступність"
-
 msgid "Test Fails"
 msgstr "Тест невдалий"
 
@@ -3750,9 +3831,6 @@ msgstr "групи"
 
 msgid "Note: Peers are categorized by the profile organizer based on observable performance, not from capabilities they advertise in the NetDB."
 msgstr "Примітка. Однорангові класифікуються організатором профілю на основі спостережуваної продуктивності, а не на основі можливостей, які вони рекламують у NetDB."
-
-msgid "Fast"
-msgstr "Швидко"
 
 msgid "Peers marked as high capacity that also meet or exceed speed average for all profiled peers."
 msgstr "Однорангові пристрої, позначені як високопродуктивні, які також відповідають або перевищують середню швидкість для всіх профільованих однорангових пристроїв."
@@ -4125,9 +4203,6 @@ msgstr "Мережа БД"
 msgid "Show all current peer connections"
 msgstr "Показати всі поточні однорангові підключення"
 
-msgid "Health"
-msgstr "Стан"
-
 msgid "Router health overview"
 msgstr "Огляд стану маршрутизатора"
 
@@ -4261,9 +4336,6 @@ msgstr "Загальна кількість пірів у нашій базі д
 
 msgid "Total RouterInfos stored on disk"
 msgstr "Загалом RouterInfos збережено на диску"
-
-msgid "Known"
-msgstr "Відомі"
 
 msgid "Configure router bandwidth allocation"
 msgstr "Налаштуйте розподіл пропускної здатності маршрутизатора"
@@ -4754,6 +4826,9 @@ msgstr "Затримка очищення Nagle"
 msgid "Slow Start Window Cap"
 msgstr "Обмеження вікна повільного старту"
 
+msgid "Max SYN Sends"
+msgstr ""
+
 msgid "Max RTO"
 msgstr "Максимальний RTO"
 
@@ -4880,6 +4955,9 @@ msgstr "Максимум одночасних побудов тунелів"
 msgid "Max Concurrent RI Lookups"
 msgstr "Максимум одночасних запитів RI"
 
+msgid "Next-Hop Lookup %"
+msgstr ""
+
 msgid "Max Concurrent Test Jobs"
 msgstr "Максимум одночасних завдань тестування"
 
@@ -4949,6 +5027,9 @@ msgstr "Швидкість зростання уникнення переван�
 msgid "Slow Start Growth Rate"
 msgstr "Швидкість зростання повільного старту"
 
+msgid "Min Pacing Rate"
+msgstr ""
+
 msgid "RTT Cap"
 msgstr "Обмеження RTT"
 
@@ -4960,6 +5041,9 @@ msgstr "Затримка дубліката ACK"
 
 msgid "Inactivity Timeout"
 msgstr "Час очікування через бездіяльність"
+
+msgid "Max Window Size"
+msgstr ""
 
 msgid "Max Message Queue Age"
 msgstr "Максимальний вік черги повідомлень"
@@ -5057,6 +5141,12 @@ msgstr "Множник відступу RTO"
 msgid "Socket Connect Timeout"
 msgstr "Час очікування з''єднання сокета"
 
+msgid "Untested Tunnel Cap Multiplier"
+msgstr ""
+
+msgid "Message Processing Throttle"
+msgstr ""
+
 msgid "Data packets between each ACK."
 msgstr "Пакети даних між кожним ACK."
 
@@ -5078,8 +5168,8 @@ msgstr "Час простою насоса перед повторною пер�
 msgid "Bandwidth token refill interval (ms)."
 msgstr "Інтервал поповнення маркерів пропускної здатності (мс)."
 
-msgid "NTCP selector sleep between loops (ms)."
-msgstr "Сон селектора NTCP між циклами (мс)."
+msgid "NIO selector sleep between loops (ms)."
+msgstr ""
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "Пакетні вихідні повідомлення на насос шлюзу."
@@ -5102,6 +5192,9 @@ msgstr "Затримка очищення Nagle (мс)."
 msgid "Max congestion window during slow start."
 msgstr "Максимальне вікно перевантаження під час повільного старту."
 
+msgid "Total SYN attempts before giving up on a handshake."
+msgstr ""
+
 msgid "Max retransmission timeout (ms)."
 msgstr "Максимальний час очікування повторної передачі (мс)."
 
@@ -5113,6 +5206,9 @@ msgstr "Повторні передачі перед скиданням пото
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "Максимальний час простою перед скиданням потоку (мс)."
+
+msgid "Max unacknowledged packets per stream connection."
+msgstr ""
 
 msgid "I2CP write queue depth."
 msgstr "Глибина черги запису I2CP."
@@ -5231,6 +5327,9 @@ msgstr "Максимум одночасних побудов тунелів."
 msgid "Max concurrent RI lookups during builds."
 msgstr "Максимум одночасних запитів RI під час побудов."
 
+msgid "Concurrent next-hop lookup limit as % of transit tunnels."
+msgstr ""
+
 msgid "Max concurrent tunnel test jobs."
 msgstr "Максимум одночасних завдань тестування тунелів."
 
@@ -5243,8 +5342,8 @@ msgstr "Максимальний інтервал між тестами туне
 msgid "Threads decrypting inbound NTCP data."
 msgstr "Потоки, що розшифровують вхідні дані NTCP."
 
-msgid "Threads encrypting NTCP messages."
-msgstr "Потоки, що шифрують повідомлення NTCP."
+msgid "Threads that encrypt outbound NTCP messages."
+msgstr ""
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Інтервал аварійного сканування застряглих насосів NTCP (мс)."
@@ -5270,8 +5369,8 @@ msgstr "Максимум непідтверджених повідомлень �
 msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "Розмір перезапуску вікна (MTU) після краху RTO."
 
-msgid "NTCP send pool queue size."
-msgstr "Розмір черги пулу надсилання NTCP."
+msgid "Priority-aware buffer where client messages jump transit."
+msgstr ""
 
 msgid "I2CP session buffer size."
 msgstr "Розмір буфера сеансу I2CP."
@@ -5296,6 +5395,9 @@ msgstr "Швидкість зростання уникнення переван�
 
 msgid "Window multiplier per RTT during slow start."
 msgstr "Множник вікна на RTT під час повільного старту."
+
+msgid "Minimum send rate before pacing kicks in (KB/s)."
+msgstr ""
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "Верхня межа оцінки RTT (мс)."
@@ -5372,11 +5474,14 @@ msgstr "Розширює вікно актуальності вузла для �
 msgid "Consecutive failures before pool backoff."
 msgstr "Послідовні невдачі перед відступом пулу."
 
-msgid "Cooldown duration after pool failure threshold, in ms."
-msgstr "Тривалість охолодження після порогу невдачі пулу, у мс."
+msgid "Cooldown duration after pool failure threshold (ms)."
+msgstr ""
 
 msgid "Target spare tunnel count per pool."
 msgstr "Цільова кількість резервних тунелів на пул."
+
+msgid "Widens untested tunnel cap when testing stalls."
+msgstr ""
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "Поріг навантаження, з якого починається імовірнісне відхилення транзиту (%)."
@@ -5401,6 +5506,9 @@ msgstr "Множник зростання RTO на кожен час очіку�
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Час очікування з''єднання TCP-сокета для потоків обробників сервера тунелів (мс)."
+
+msgid "Max average message delay before rejecting transit (ms)."
+msgstr ""
 
 msgid "Tunnel"
 msgstr "Тунель"
@@ -7332,11 +7440,14 @@ msgstr "Тривалість життя тунелю в мілісекундах
 msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]"
 msgstr "Період придушення запуску в мілісекундах. Попередження та логіка зменшення тунелів придушуються під час початкового запуску маршрутизатора, щоб уникнути передчасних рішень. [Стандартно 300000 (5 хвилин)]"
 
-msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]"
-msgstr "Мінімальний інтервал у мілісекундах між публікаціями LeaseSet. Запобігає швидким штормам публікацій під час зміни тунелів. [Стандартно 300000 (5 хвилин)]"
+msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
+msgstr ""
 
-msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]"
-msgstr "Мінімальний інтервал у мілісекундах між побудовами об''єктів LeaseSet. Запобігає непотрібній зміні об''єктів LeaseSet при кожному додаванні/видаленні тунелю. [Стандартно 300000 (5 хвилин)]"
+msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
+msgstr ""
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "Максимальна кількість одночасних побудов тунелів на напрямок. Вищі значення прискорюють відновлення пулу, але можуть перевантажити мережу. [Стандартно 6]"
@@ -7416,11 +7527,11 @@ msgstr "Кількість разів відповідати обмеженій 
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr "Стандартна максимальна затримка потоку в мілісекундах, коли не встановлено явний тайм-аут з''єднання. [Стандартно 10000 (10 секунд)]"
 
-msgid "Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]"
-msgstr "Максимальний час у мілісекундах між отриманням SYN та його прийняттям на серверному сокеті. Контролює, як довго незавершені з''єднання зберігаються в черзі прийняття. [Стандартно 4000 (4 секунди)]"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
+msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]"
-msgstr "Максимальна кількість очікуваних з''єднань (SYN та часткових пакетів) у черзі прийняття сервера. Більші значення буферизують більше вхідних з''єднань ціною пам''яті. [Стандартно 80 (48 на повільних системах)]"
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
+msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Інтервал у мілісекундах між автоматичними перепублікаціями LeaseSet. Вищі значення зменшують трафік netdb, але можуть спричинити застарілу інформацію про оренду. [Стандартно 300000 (5 хвилин)]"
@@ -9576,9 +9687,6 @@ msgstr "Транзитні тунелі за Peer"
 msgid "tuning"
 msgstr "налаштування"
 
-msgid "Router Auto-Tuning"
-msgstr "Автоналаштування маршрутизатора"
-
 msgid "tunnel peer count"
 msgstr "кількість однорангових тунелів"
 
@@ -9745,3 +9853,12 @@ msgstr "Наступна"
 
 msgid "Finished"
 msgstr "Готово"
+
+
+
+
+
+
+
+
+

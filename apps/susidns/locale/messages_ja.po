@@ -134,26 +134,11 @@ msgstr "無効なホスト名 \"{0}\" 。"
 msgid "Please enter a host name and destination"
 msgstr "ホスト名と宛先を入力してください"
 
-msgid "Delete Entry"
-msgstr "エントリを削除"
-
-msgid "Delete Selected"
-msgstr "選択したものを削除"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "宛先 {0} は削除されました。"
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "{0} 件の宛先が削除されました。"
-
-msgid "No valid entries selected to delete."
-msgstr "削除する有効なエントリが選択されていません。"
-
 msgid "Add Alternate"
 msgstr "代替の追加"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "アドレスブックは保存されました。"
@@ -203,9 +188,27 @@ msgstr "ホスト名 {0} がアドレス帳にありません。"
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "ネーミング・サービス {1} への {0} の宛先を追加するのに失敗しました"
 
+msgid "Delete Entry"
+msgstr "エントリを削除"
+
+msgid "Delete Selected"
+msgstr "選択したものを削除"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "ネーミング・サービス {1} から {0} の宛先を削除するのに失敗しました"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "宛先 {0} は削除されました。"
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "{0} 件の宛先が削除されました。"
+
+msgid "No valid entries selected to delete."
+msgstr "削除する有効なエントリが選択されていません。"
 
 msgid "Blacklist Selected"
 msgstr "ブラックリストを選択"

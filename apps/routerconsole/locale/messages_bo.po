@@ -121,6 +121,9 @@ msgstr "ང་ཚོའི་ NetDb ནང་གི་མཐུད་སྣེ�
 msgid "Total number of threads in use"
 msgstr "བེད་སྤྱོད་བྱེད་བཞིན་པའི་སྲོལ་ཁག་གི་བསྡོམས།"
 
+msgid "Time spent paused in GC (ms)"
+msgstr ""
+
 msgid "Peers without a published IP address"
 msgstr "IP ཁ་བྱང་སྤེལ་མེད་པའི་མཐུད་སྣེ།"
 
@@ -700,8 +703,8 @@ msgstr "རོགས་དྲན་བཤོལ་བ་ནོར་བ། འ�
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "གནས་བབ་འདི་མི་བཞིན་པའི་རོགས་པ་ཙམ།"
 
-msgid "Bandwidth Usage"
-msgstr "བརྒྱུད་བཏོན་པའི་ཚོད་བཤོལ་བ།"
+msgid "Bandwidth usage"
+msgstr ""
 
 #, java-format
 msgid "events in {0}"
@@ -1914,6 +1917,9 @@ msgstr "{1} ལ་{0}"
 msgid "Nothing to display - no stat specified!"
 msgstr "བཀྲལ་བར་ཅི་ཡང་མེད། - ཚད་རྩིས་གསལ་བཀོད་མེད།"
 
+msgid "Bandwidth Usage"
+msgstr "བརྒྱུད་བཏོན་པའི་ཚོད་བཤོལ་བ།"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "{0} ནས་མཇུག་པ།"
@@ -2002,6 +2008,15 @@ msgstr "དཔེ་རིས་སྦས་པ།"
 msgid "Do not show legend on graphs"
 msgstr "རི་མོའི་ཐོག་དཔེ་རིས་མི་སྟོན་པ།"
 
+msgid "Disabled while legend is hidden"
+msgstr ""
+
+msgid "Hide restarts"
+msgstr ""
+
+msgid "Suppress restart lines on graphs"
+msgstr ""
+
 msgid "Persistence"
 msgstr "རྒྱུན་མཐུགས་རང་བཞིན།"
 
@@ -2032,6 +2047,12 @@ msgstr "རི་མོའི་སྒྲིག་སྟངས་ཉར་ཚར
 msgid "Graph settings unchanged"
 msgstr "རི་མོའི་སྒྲིག་སྟེན་བསྒྱུར་བཏོན་མེད།"
 
+msgid "improved"
+msgstr ""
+
+msgid "vs baseline"
+msgstr ""
+
 msgid "CPU"
 msgstr "CPU"
 
@@ -2049,9 +2070,6 @@ msgstr "རྟོག་མཁན་གྱི་ལས་བྱེད་དུས
 
 msgid "Job Lag"
 msgstr "ལས་ཀ་དོན་དུས་རིང་ལུག"
-
-msgid "ms"
-msgstr "ms"
 
 msgid "Job queue delay"
 msgstr "ལས་ཀའི་སྒུག་ཐིག་གི་ཕྱིར་དོགས།"
@@ -2233,6 +2251,12 @@ msgstr "རོ་ཌེར་གྱི་ནུས་གནས་རི་མོ
 msgid "Graphs"
 msgstr "རི་མོ་ཚང་མ།"
 
+msgid "Health"
+msgstr "གཟུགས་གཞི།"
+
+msgid "Router performance overview"
+msgstr ""
+
 msgid "Help"
 msgstr "རོགས་རམ།"
 
@@ -2295,6 +2319,12 @@ msgstr "ས་ཁྲ་རྟགས་ཚིག"
 
 msgid "Built-in anonymous BitTorrent Client"
 msgstr "ནང་འཁོར་གྱི་མིང་མེད་BitTorrent ལག་གདང་།"
+
+msgid "Router Auto-Tuning"
+msgstr "རྟོག་མཁན་གྱི་རང་འཕྲུལ་སྒྲིག་སྐྱོང་།"
+
+msgid "Tuning"
+msgstr ""
 
 msgid "Manage server and client tunnels"
 msgstr "སརྟོན་པ་དང་ལག་གདང་གི་གྲུང་ནེལ་དོ་དམ་བྱེད་པ།"
@@ -3301,6 +3331,60 @@ msgstr "{0}མཐོ་རིམ་རྒྱུན་སྒྲིག་སྟེ
 msgid "to your router.config file."
 msgstr "ཁྱེད་ཀྱི་router.configཡིག་ཆར།"
 
+msgid "Peers reached in the last 60s"
+msgstr ""
+
+msgid "Fast"
+msgstr "མྱུར་བ།"
+
+msgid "Low-latency peers for tunnel participation"
+msgstr ""
+
+msgid "HighCap"
+msgstr ""
+
+msgid "High-bandwidth peers for many tunnels"
+msgstr ""
+
+msgid "Reliable"
+msgstr ""
+
+msgid "High-capacity peers with good acceptance"
+msgstr ""
+
+msgid "Peers that store and serve NetDb info"
+msgstr ""
+
+msgid "Known"
+msgstr "ཤེས་པ།"
+
+msgid "Total entries in network database"
+msgstr ""
+
+msgid "Active%"
+msgstr ""
+
+msgid "Profiles with activity in the last 24h"
+msgstr ""
+
+msgid "Unreachable"
+msgstr "འབྲེལ་ཐུབ་མེད་པ།"
+
+msgid "Peers without a reachable address"
+msgstr ""
+
+msgid "Peers excluded from all interactions"
+msgstr ""
+
+msgid "/min"
+msgstr ""
+
+msgid "Test Fail"
+msgstr ""
+
+msgid "Connectivity test failures per minute"
+msgstr ""
+
 msgid "Peer Connections"
 msgstr "ལག་གདང་འབྲེལ་བ།"
 
@@ -3613,9 +3697,6 @@ msgstr "འགྲིགས་ཡོད།"
 msgid "tests passed"
 msgstr "ཚོད་ལྟ་འདས་སོང་།"
 
-msgid "Unreachable"
-msgstr "འབྲེལ་ཐུབ་མེད་པ།"
-
 msgid "Test Fails"
 msgstr "ཚོད་ལྟའི་ཕམ་ཁ།"
 
@@ -3734,9 +3815,6 @@ msgstr "སྡེ་ཚོགས།"
 
 msgid "Note: Peers are categorized by the profile organizer based on observable performance, not from capabilities they advertise in the NetDB."
 msgstr "དྲན་ཐོ། ལག་གདང་རྣམས་གསལ་བཤད་རྟགས་བཟོ་བྱེད་ཀྱིས་མཐོང་ཐུབ་པའི་ནུས་པའི་གཞིར་བཞག་ནས་དབྱེ་རིམ་བྱེད་པ་ཡིན་ལ། NetDB ནང་ཁྱབ་བསྒྲགས་བྱེད་པའི་ནུས་པ་དག་ལས་མིན།"
-
-msgid "Fast"
-msgstr "མྱུར་བ།"
 
 msgid "Peers marked as high capacity that also meet or exceed speed average for all profiled peers."
 msgstr "མཐོ་ནུས་ཅན་དུ་རྟགས་བཀོད་བྱས་པའི་ལག་གདང་དེ་དག་གིས་ཞིབ་འཇུག་བྱས་པའི་ལག་གདང་ཚང་མའི་མྱུར་ཚད་ཆ་སྙོམ་ལ་སོན་པ་ཡང་ན་ལས་བརྒལ་བ།"
@@ -4109,9 +4187,6 @@ msgstr "དྲ་ལམ་གནད་དཔེར།"
 msgid "Show all current peer connections"
 msgstr "ད་ལྟའི་ལག་གདང་འབྲེལ་བ་ཆ་ཚང་སྟོན་པ།"
 
-msgid "Health"
-msgstr "གཟུགས་གཞི།"
-
 msgid "Router health overview"
 msgstr "རྟོག་མཁན་གྱི་གཟུགས་གཞིའི་སྤྱི་བསྡོམས།"
 
@@ -4245,9 +4320,6 @@ msgstr "ང་ཚོའི་དྲ་ལམ་གནད་དོན་ནང་
 
 msgid "Total RouterInfos stored on disk"
 msgstr "བརྒྱུག་གི་བརྒྱུག་གི་སྲོད་པའི་སྲོད་པའི་གི་སྲོད་པ"
-
-msgid "Known"
-msgstr "ཤེས་པ།"
 
 msgid "Configure router bandwidth allocation"
 msgstr "རོ་ཌེར་གྱི་བརྒྱུད་བཏོན་ཚད་འགན་འགྲོང་རྒྱུན་སྒྲིག་བྱེད་པ།"
@@ -4736,6 +4808,9 @@ msgstr "Nagle བཀྲུས་གཏོང་གི་དུས་འགྱང
 msgid "Slow Start Window Cap"
 msgstr "འཇམ་པོའི་འགོ་བཙུགས་སྒོ་སྟེགས་ཀྱི་མཐའ་ཚད།"
 
+msgid "Max SYN Sends"
+msgstr ""
+
 msgid "Max RTO"
 msgstr "RTO མཐོ་ཤོས།"
 
@@ -4862,6 +4937,9 @@ msgstr "དུས་མཉམ་ཁ་བསྐྲུན་བཟོ་སྐྲ
 msgid "Max Concurrent RI Lookups"
 msgstr "དུས་མཉམ་RI འཚོལ་བ་མཐོ་ཤོས།"
 
+msgid "Next-Hop Lookup %"
+msgstr ""
+
 msgid "Max Concurrent Test Jobs"
 msgstr "དུས་མཉམ་བརྟག་ཞིབ་ལས་དོན་མཐོ་ཤོས།"
 
@@ -4931,6 +5009,9 @@ msgstr "འགོག་རྐྱེན་སྤོང་བའི་འཕེལ
 msgid "Slow Start Growth Rate"
 msgstr "འཇམ་པོའི་འགོ་བཙུགས་འཕེལ་རྒྱས་ཀྱི་ཚད།"
 
+msgid "Min Pacing Rate"
+msgstr ""
+
 msgid "RTT Cap"
 msgstr "RTT མཐའ་ཚད།"
 
@@ -4942,6 +5023,9 @@ msgstr "འདྲ་པའི་ACK དུས་འགྱངས།"
 
 msgid "Inactivity Timeout"
 msgstr "བྱ་སྤེལ་མེད་པའི་དུས་ཚད།"
+
+msgid "Max Window Size"
+msgstr ""
 
 msgid "Max Message Queue Age"
 msgstr "འཕྲོས་པ་རིམ་པའི་དུས་ཡོལ་མཐོ་ཤོས།"
@@ -5039,6 +5123,12 @@ msgstr "RTO རྒྱུན་འཐེན་གྱི་འགྱུར་ག�
 msgid "Socket Connect Timeout"
 msgstr "སོ་ཁེའི་(socket)་སྦྲེལ་མའི་དུས་ཚད།"
 
+msgid "Untested Tunnel Cap Multiplier"
+msgstr ""
+
+msgid "Message Processing Throttle"
+msgstr ""
+
 msgid "Data packets between each ACK."
 msgstr "ACK སོ་སོའི་བར་གྱི་གནས་སྡུད་གྲུ་བོ།"
 
@@ -5060,8 +5150,8 @@ msgstr "ལས་དོན་སླར་བརྟག་མ་སྔོན་ག
 msgid "Bandwidth token refill interval (ms)."
 msgstr "རྒྱུན་ཚད་མཚོན་རྟགས་སླར་བརྡན་པའི་དབར་ཡུན།(ms)"
 
-msgid "NTCP selector sleep between loops (ms)."
-msgstr "NTCP འདེམས་སྡེམ་འཁོར་བ་དབར་གྱི་ངལ་གསོ།(ms)"
+msgid "NIO selector sleep between loops (ms)."
+msgstr ""
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "ལམ་སྒོའི་མེ་སིན་རེར་ཕྲལ་བའི་ཕྱིར་གཏོང་འཕྲོས་པ།"
@@ -5084,6 +5174,9 @@ msgstr "Nagle བཀྲུས་གཏོང་གི་དུས་འགྱང
 msgid "Max congestion window during slow start."
 msgstr "འཇམ་པོའི་འགོ་བཙུགས་དུས་ཀྱི་འགོག་རྐྱེན་སྒོ་སྟེགས་མཐོ་ཤོས།"
 
+msgid "Total SYN attempts before giving up on a handshake."
+msgstr ""
+
 msgid "Max retransmission timeout (ms)."
 msgstr "སླར་གཏོང་གི་དུས་ཚད་མཐོ་ཤོས།(ms)"
 
@@ -5095,6 +5188,9 @@ msgstr "རྒྱུན་ཁམས་བོར་སྔོན་གྱི་ས
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "རྒྱུན་ཁམས་བོར་སྔོན་གྱི་སྟོང་བའི་དུས་ཚོད་མཐོ་ཤོས།(ms)"
+
+msgid "Max unacknowledged packets per stream connection."
+msgstr ""
 
 msgid "I2CP write queue depth."
 msgstr "I2CP བྲི་བའི་རིམ་པའི་གཏིང་ཚད།"
@@ -5213,6 +5309,9 @@ msgstr "དུས་མཉམ་ཁ་བསྐྲུན་བཟོ་སྐྲ
 msgid "Max concurrent RI lookups during builds."
 msgstr "བཟོ་སྐྲུན་དུས་སའི་དུས་མཉམ་RI འཚོལ་བ་མཐོ་ཤོས།"
 
+msgid "Concurrent next-hop lookup limit as % of transit tunnels."
+msgstr ""
+
 msgid "Max concurrent tunnel test jobs."
 msgstr "དུས་མཉམ་ཁ་བསྐྲུན་བརྟག་ཞིབ་ལས་དོན་མཐོ་ཤོས།"
 
@@ -5225,8 +5324,8 @@ msgstr "ཁ་བསྐྲུན་བརྟག་ཞིབ་དབར་གྱ
 msgid "Threads decrypting inbound NTCP data."
 msgstr "ནང་འབྱོར་NTCP གནས་སྡུད་ཉོག་འགྲོལ་བྱེད་པའི་རྒྱུན་རིམ།"
 
-msgid "Threads encrypting NTCP messages."
-msgstr "NTCP འཕྲོས་པ་གསང་བཟུང་བྱེད་པའི་རྒྱུན་རིམ།"
+msgid "Threads that encrypt outbound NTCP messages."
+msgstr ""
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "འཐེབས་པའི་NTCP མེ་སིན་བྱེད་མཁན་གྱི་བདེ་འཇགས་འཕྲལ་སྡོམ་བརྟག་ཞིབ་དབར་ཡུན།(ms)"
@@ -5252,8 +5351,8 @@ msgstr "ཟླ་གྲོགས་རེར་ངོས་ལེན་མི་
 msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "RTO ཡོངས་རྫོགས་ཆད་རྗེས་ཀྱི་སྒོ་སྟེགས་སླར་འགོ་བཙུགས་པའི་ཚད།(MTU)"
 
-msgid "NTCP send pool queue size."
-msgstr "NTCP གཏོང་བའི་གཞི་ཚོགས་རིམ་པའི་ཚད་ཀ།"
+msgid "Priority-aware buffer where client messages jump transit."
+msgstr ""
 
 msgid "I2CP session buffer size."
 msgstr "I2CP ཚོགས་པའི་བར་སྣོན་གྱི་ཚད་ཀ།"
@@ -5278,6 +5377,9 @@ msgstr "འགོག་རྐྱེན་སྤོང་བའི་འཕེལ
 
 msgid "Window multiplier per RTT during slow start."
 msgstr "འཇམ་པོའི་འགོ་བཙུགས་དུས་ཀྱི་RTT རེར་སྒོ་སྟེགས་འགྱུར་གྲངས།"
+
+msgid "Minimum send rate before pacing kicks in (KB/s)."
+msgstr ""
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT གདེངས་གཞིའི་མཐའ་མིག (ms)།"
@@ -5354,11 +5456,14 @@ msgstr "བཟོ་སྐྲུན་ཕམ་དུས་ཟླ་གྲོག
 msgid "Consecutive failures before pool backoff."
 msgstr "གཞི་ཚོགས་རྒྱུན་འཐེན་གྱི་སྔོན་གྱི་རྒྱུན་མཐུད་ཕམ་འབྱུང་།"
 
-msgid "Cooldown duration after pool failure threshold, in ms."
-msgstr "གཞི་ཚོགས་ཕམ་འབྱུང་ཚད་གཞིའི་རྗེས་ཀྱི་སལ་བསིལ་དུས་ཡུན།(ms)"
+msgid "Cooldown duration after pool failure threshold (ms)."
+msgstr ""
 
 msgid "Target spare tunnel count per pool."
 msgstr "གཞི་ཚོགས་རེར་དམིགས་ཡུལ་གྱི་ཁ་བསྐྲུན་ལྷག་མའི་གྲངས་ཀ།"
+
+msgid "Widens untested tunnel cap when testing stalls."
+msgstr ""
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "སྲིད་པ་ཅན་གྱི་འགྲུམ་ལམ་རྩིས་བཤོལ་འགོ་བརྩམས་པའི་དོག་ཤུགས་ཚད་གཞི།(%)"
@@ -5383,6 +5488,9 @@ msgstr "སླར་གཏོང་དུས་ཚད་རེར་RTO འཕ�
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "ཁ་བསྐྲུན་ཞབས་ཞུ་པ་ལས་སྒྲུབ་རྒྱུན་རིམ་གྱི་TCP སོ་ཁེ་སྦྲེལ་མའི་དུས་ཚད།(ms)"
+
+msgid "Max average message delay before rejecting transit (ms)."
+msgstr ""
 
 msgid "Tunnel"
 msgstr "འགྲུལ་ལམ་"
@@ -7314,11 +7422,14 @@ msgstr "འབྲེལ་ལམ་གྱི་སྐར་ཆའི་ཡུན
 msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]"
 msgstr "འགོ་འཛུགས་སྐབས་ཀྱི་བཀག་སྡོམ་དུས་ཚོད། Router ཀྱི་མགོ་དང་པོའི་འགོ་འཛུགས་སྐབས་ཉེན་བརྡ་དང་འབྲེལ་ལམ་ཉུང་དུ་གཏོང་བའི་རྩིས་ལུགས་བཀག་སྡོམ་བྱེད།. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions [Default is 300000 (5 minutes)]. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions [Default is 300000 (5 minutes)]. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions [Default is 300000 (5 minutes)]. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions [Default is 300000 (5 minutes)]"
 
-msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]"
-msgstr "LeaseSet ཁྱབ་བསྒྲགས་བར་གྱི་མཐའ་མའི་སྐར་ཆའི་དུས་བར་ཚད། འབྲེལ་ལམ་འགྱུར་ལྡོག་སྐབས་མྱུར་པོའི་ཁྱབ་བསྒྲགས་འབར་བ་མི་འབྱུང་བར་སྔོག་པ།. Prevents rapid publish storms during tunnel churn [Default is 300000 (5 minutes)]. Prevents rapid publish storms during tunnel churn [Default is 300000 (5 minutes)]. Prevents rapid publish storms during tunnel churn [Default is 300000 (5 minutes)]. Prevents rapid publish storms during tunnel churn [Default is 300000 (5 minutes)]"
+msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
+msgstr ""
 
-msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]"
-msgstr "LeaseSet བྱེད་དོན་འཛུགས་སྐྲུན་བར་གྱི་མཐའ་མའི་སྐར་ཆའི་དུས་བར་ཚད། འབྲེལ་ལམ་འགྱུར་བ་རེ་རེའི་སྐབས་དགོས་མེད་ཀྱི་LeaseSet བྱེད་དོན་འགྱུར་བ་མི་འབྱུང་བར་སྔོག་པ།. Prevents unnecessary LeaseSet object churn on every tunnel add/remove [Default is 300000 (5 minutes)]. Prevents unnecessary LeaseSet object churn on every tunnel add/remove [Default is 300000 (5 minutes)]. Prevents unnecessary LeaseSet object churn on every tunnel add/remove [Default is 300000 (5 minutes)]. Prevents unnecessary LeaseSet object churn on every tunnel add/remove [Default is 300000 (5 minutes)]"
+msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
+msgstr ""
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "ཕྱོགས་རེ་རེའི་ཆེ་ཤོས་མཉམ་བྱེད་འབྲེལ་ལམ་འཛུགས་སྐྲུན། གྲངས་མཐོ་ཤོས་ཀྱིས་ཆོག་མཛོད་སླར་བསྒྲུབ་མྱུར་དུ་གཏོང་ཡང་དྲ་བར་ཁུར་བརྒལ་དུ་འགྲོ་སྲིད།. Higher values accelerate pool recovery but may overload the network [Default is 6]. Higher values accelerate pool recovery but may overload the network [Default is 6]. Higher values accelerate pool recovery but may overload the network [Default is 6]. Higher values accelerate pool recovery but may overload the network [Default is 6]"
@@ -7398,11 +7509,11 @@ msgstr "ཚད་འཛིན་བྱས་པའི་འབྲེལ་སར
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr "དངོས་ཀྱི་འབྲེལ་བའི་དུས་འདས་མ་བཟོས་སྐབས་མ་འོངས་པའི་ཆེ་ཤོས་རྒྱུན་བརྒྱུད་དུས།"
 
-msgid "Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]"
-msgstr "server སྒོ་ཁྱིམ་ཐོག་ SYN ལེན་པ་དང་དེ་ལེན་བར་གྱི་ཆེ་ཤོས་སྐར་ཆའི་དུས་ཚོད། མ་ཚང་བའི་འབྲེལ་བ་གནས་ཚད་ལ་དབང་བསྒྱུར་བྱེད།. Controls how long incomplete connections are kept in the accept queue [Default is 4000 (4 seconds)]. Controls how long incomplete connections are kept in the accept queue [Default is 4000 (4 seconds)]. Controls how long incomplete connections are kept in the accept queue [Default is 4000 (4 seconds)]. Controls how long incomplete connections are kept in the accept queue [Default is 4000 (4 seconds)]"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
+msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]"
-msgstr "server ལེན་བསྒྲིལ་བའི་ནང་དུ་སྒུག་བཞིན་པའི་ཆེ་ཤོས་འབྲེལ་བའི་གྲངས། (SYN དང་ཕྱེད་ཀྱི་དེབ་ཕྲེང) གྲངས་ཆེ་ཤོས་ཀྱིས་ནང་འཛུལ་འབྲེལ་བ་མང་བ་སྲོད་ཚང་དུ་བཞག་ཐུབ།. Larger values buffer more incoming connections at the cost of memory [Default is 80 (48 on slow systems)]. Larger values buffer more incoming connections at the cost of memory [Default is 80 (48 on slow systems)]. Larger values buffer more incoming connections at the cost of memory [Default is 80 (48 on slow systems)]. Larger values buffer more incoming connections at the cost of memory [Default is 80 (48 on slow systems)]"
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
+msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "རང་འགུལ་གྱི་ LeaseSet སླར་ཁྱབ་བསྒྲགས་བར་གྱི་སྐར་ཆའི་དུས་བར་ཚད། གྲངས་མཐོ་ཤོས་ཀྱིས་ netdb འགྲུལ་སྐྱོད་ཉུང་དུ་གཏོང་ཡང་གནས་ཚུལ་རྙིང་པར་འགྱུར་སྲིད།. Higher values reduce netdb traffic but may cause stale lease info [Default is 300000 (5 minutes)]. Higher values reduce netdb traffic but may cause stale lease info [Default is 300000 (5 minutes)]. Higher values reduce netdb traffic but may cause stale lease info [Default is 300000 (5 minutes)]. Higher values reduce netdb traffic but may cause stale lease info [Default is 300000 (5 minutes)]"
@@ -9558,9 +9669,6 @@ msgstr "Peer གིས་ Transit Tunnels"
 msgid "tuning"
 msgstr "སྒྲིག་སྐྱོང་།"
 
-msgid "Router Auto-Tuning"
-msgstr "རྟོག་མཁན་གྱི་རང་འཕྲུལ་སྒྲིག་སྐྱོང་།"
-
 msgid "tunnel peer count"
 msgstr "གྲུ་བཞི་ peer གྲངས།"
 
@@ -9727,3 +9835,12 @@ msgstr "རྗེས་མ།"
 
 msgid "Finished"
 msgstr "མཇུག་རྫོགས།"
+
+
+
+
+
+
+
+
+

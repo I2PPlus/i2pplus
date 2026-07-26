@@ -138,27 +138,11 @@ msgstr "Neplatný názov hostiteľa \"{0}\"."
 msgid "Please enter a host name and destination"
 msgstr "Prosím zadajte názov hostiteľa a cieľ"
 
-msgid "Delete Entry"
-msgstr "Zmazať záznam"
-
-msgid "Delete Selected"
-msgstr "Zmazať vybrané"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "Cieľ {0} zmazaný."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "1 cieľ zmazaný."
-msgstr[1] "{0} cieľov zmazaných."
-
-msgid "No valid entries selected to delete."
-msgstr "Nie sú vybrané žiadne platné záznamy na zmazanie."
-
 msgid "Add Alternate"
 msgstr "Pridať alternatívny"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "Adresár uložený."
@@ -208,9 +192,28 @@ msgstr "Názov hostiteľa {0} nie je v adresári."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Nepodarilo sa pridať cieľ pre {0} do pomenovacej služby {1}"
 
+msgid "Delete Entry"
+msgstr "Zmazať záznam"
+
+msgid "Delete Selected"
+msgstr "Zmazať vybrané"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Nepodarilo sa zmazať cieľ pre {0} z pomenovacej služby {1}"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Cieľ {0} zmazaný."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "1 cieľ zmazaný."
+msgstr[1] "{0} cieľov zmazaných."
+
+msgid "No valid entries selected to delete."
+msgstr "Nie sú vybrané žiadne platné záznamy na zmazanie."
 
 msgid "Blacklist Selected"
 msgstr "Čierna listina vybraných"

@@ -138,27 +138,11 @@ msgstr "Ungültiger Hostname \"{0}\""
 msgid "Please enter a host name and destination"
 msgstr "Bitte geben Sie einen Hostnamen und ein Ziel ein!"
 
-msgid "Delete Entry"
-msgstr "Eintrag löschen"
-
-msgid "Delete Selected"
-msgstr "Ausgewähltes löschen"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "Ziel {0} gelöscht"
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "Ein Ziel gelöscht"
-msgstr[1] "{0} Ziele gelöscht"
-
-msgid "No valid entries selected to delete."
-msgstr "Keine gültigen Einträge zum Löschen ausgewählt."
-
 msgid "Add Alternate"
 msgstr "Alternative hinzufügen"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "Adressbuch gespeichert"
@@ -208,9 +192,28 @@ msgstr "Hostname {0} ist nicht im Adressbuch."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Konnte das Ziel für {0} nicht dem Domainnamenservice {1} hinzufügen"
 
+msgid "Delete Entry"
+msgstr "Eintrag löschen"
+
+msgid "Delete Selected"
+msgstr "Ausgewähltes löschen"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Konnte das Ziel für {0} nicht aus dem Domainnamenservice {1} löschen"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Ziel {0} gelöscht"
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "Ein Ziel gelöscht"
+msgstr[1] "{0} Ziele gelöscht"
+
+msgid "No valid entries selected to delete."
+msgstr "Keine gültigen Einträge zum Löschen ausgewählt."
 
 msgid "Blacklist Selected"
 msgstr "Blacklist ausgewählt"

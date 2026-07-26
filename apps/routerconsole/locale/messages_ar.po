@@ -129,6 +129,9 @@ msgstr "إجمالي الأقران في NetDb الخاص بنا"
 msgid "Total number of threads in use"
 msgstr "إجمالي عدد الخيوط المستخدمة"
 
+msgid "Time spent paused in GC (ms)"
+msgstr ""
+
 msgid "Peers without a published IP address"
 msgstr "الأقران بدون عنوان IP منشور"
 
@@ -708,8 +711,8 @@ msgstr "خطأ في الارسال، ربما لاستعمالك زر 'الرج�
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "إذا استمرت المشكلة، فتأكد من تمكين ملفات تعريف الارتباط في متصفحك."
 
-msgid "Bandwidth Usage"
-msgstr "استعمال الشيكة"
+msgid "Bandwidth usage"
+msgstr ""
 
 #, java-format
 msgid "events in {0}"
@@ -1946,6 +1949,9 @@ msgstr "{0} لـ {1}"
 msgid "Nothing to display - no stat specified!"
 msgstr "لا يوجد شيء لعرضه - لم يتم تحديد إحصاء!"
 
+msgid "Bandwidth Usage"
+msgstr "استعمال الشيكة"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "تنتهي قبل {0}"
@@ -2034,6 +2040,15 @@ msgstr "إخفاء وسيلة الإيضاح"
 msgid "Do not show legend on graphs"
 msgstr "لا تظهر وسيلة الإيضاح على الرسوم البيانية"
 
+msgid "Disabled while legend is hidden"
+msgstr ""
+
+msgid "Hide restarts"
+msgstr ""
+
+msgid "Suppress restart lines on graphs"
+msgstr ""
+
 msgid "Persistence"
 msgstr "إصرار"
 
@@ -2064,6 +2079,12 @@ msgstr "حفظ اعدادات الرسم البياني"
 msgid "Graph settings unchanged"
 msgstr "إعدادات الرسم البياني دون تغيير"
 
+msgid "improved"
+msgstr ""
+
+msgid "vs baseline"
+msgstr ""
+
 msgid "CPU"
 msgstr "CPU"
 
@@ -2081,9 +2102,6 @@ msgstr "مدة تشغيل جهاز التوجيه"
 
 msgid "Job Lag"
 msgstr "فريق العمل"
-
-msgid "ms"
-msgstr "مللي ثانية"
 
 msgid "Job queue delay"
 msgstr "تأخير طابور العمل"
@@ -2265,6 +2283,12 @@ msgstr "أداء جهاز التوجيه الرسم البياني"
 msgid "Graphs"
 msgstr "رسم بياني"
 
+msgid "Health"
+msgstr "حالة"
+
+msgid "Router performance overview"
+msgstr ""
+
 msgid "Help"
 msgstr "مساعدة"
 
@@ -2327,6 +2351,12 @@ msgstr "خريطة الموقع"
 
 msgid "Built-in anonymous BitTorrent Client"
 msgstr "برنامج تورنت مجهول"
+
+msgid "Router Auto-Tuning"
+msgstr "Auto-Tuning للجهاز"
+
+msgid "Tuning"
+msgstr ""
 
 msgid "Manage server and client tunnels"
 msgstr "إدارة أنفاق الخادم والعميل"
@@ -3333,6 +3363,60 @@ msgstr "في {0}صفحة التكوين المتقدم{1}."
 msgid "to your router.config file."
 msgstr "إلى ملف router.config الخاص بك."
 
+msgid "Peers reached in the last 60s"
+msgstr ""
+
+msgid "Fast"
+msgstr "سريع"
+
+msgid "Low-latency peers for tunnel participation"
+msgstr ""
+
+msgid "HighCap"
+msgstr ""
+
+msgid "High-bandwidth peers for many tunnels"
+msgstr ""
+
+msgid "Reliable"
+msgstr ""
+
+msgid "High-capacity peers with good acceptance"
+msgstr ""
+
+msgid "Peers that store and serve NetDb info"
+msgstr ""
+
+msgid "Known"
+msgstr "معروف"
+
+msgid "Total entries in network database"
+msgstr ""
+
+msgid "Active%"
+msgstr ""
+
+msgid "Profiles with activity in the last 24h"
+msgstr ""
+
+msgid "Unreachable"
+msgstr "لا يمكن الوصول له"
+
+msgid "Peers without a reachable address"
+msgstr ""
+
+msgid "Peers excluded from all interactions"
+msgstr ""
+
+msgid "/min"
+msgstr ""
+
+msgid "Test Fail"
+msgstr ""
+
+msgid "Connectivity test failures per minute"
+msgstr ""
+
 msgid "Peer Connections"
 msgstr "اتصالات الأقران"
 
@@ -3665,9 +3749,6 @@ msgstr "موافق"
 msgid "tests passed"
 msgstr "الاختبارات ناجحة"
 
-msgid "Unreachable"
-msgstr "لا يمكن الوصول له"
-
 msgid "Test Fails"
 msgstr "فشل التجربة"
 
@@ -3798,9 +3879,6 @@ msgstr "مجموعات"
 
 msgid "Note: Peers are categorized by the profile organizer based on observable performance, not from capabilities they advertise in the NetDB."
 msgstr "ملاحظة: يتم تصنيف النظراء بواسطة منظم ملف التعريف بناءً على الأداء الملحوظ، وليس من الإمكانات التي يعلنون عنها في NetDB."
-
-msgid "Fast"
-msgstr "سريع"
 
 msgid "Peers marked as high capacity that also meet or exceed speed average for all profiled peers."
 msgstr "تم تصنيف الأقران على أنهم ذوي قدرة عالية تفي أيضًا بمتوسط ​​السرعة أو تتجاوزه لجميع الأقران المحددين."
@@ -4173,9 +4251,6 @@ msgstr "NetDb"
 msgid "Show all current peer connections"
 msgstr "أظهر اتصالات المشاركين"
 
-msgid "Health"
-msgstr "حالة"
-
 msgid "Router health overview"
 msgstr "نظرة عامة على حالة جهاز التوجيه"
 
@@ -4309,9 +4384,6 @@ msgstr "العدد الإجمالي للأقران في قاعدة بيانات 
 
 msgid "Total RouterInfos stored on disk"
 msgstr "إجمالي معلومات أجهزة التوجيه المخزنة على القرص"
-
-msgid "Known"
-msgstr "معروف"
 
 msgid "Configure router bandwidth allocation"
 msgstr "حدد سرعة الموجه"
@@ -4808,6 +4880,9 @@ msgstr "XTEST"
 msgid "Slow Start Window Cap"
 msgstr "XTEST"
 
+msgid "Max SYN Sends"
+msgstr ""
+
 msgid "Max RTO"
 msgstr "XTEST"
 
@@ -4934,6 +5009,9 @@ msgstr "XTEST"
 msgid "Max Concurrent RI Lookups"
 msgstr "XTEST"
 
+msgid "Next-Hop Lookup %"
+msgstr ""
+
 msgid "Max Concurrent Test Jobs"
 msgstr "XTEST"
 
@@ -5003,6 +5081,9 @@ msgstr "XTEST"
 msgid "Slow Start Growth Rate"
 msgstr "XTEST"
 
+msgid "Min Pacing Rate"
+msgstr ""
+
 msgid "RTT Cap"
 msgstr "XTEST"
 
@@ -5014,6 +5095,9 @@ msgstr "XTEST"
 
 msgid "Inactivity Timeout"
 msgstr "XTEST"
+
+msgid "Max Window Size"
+msgstr ""
 
 msgid "Max Message Queue Age"
 msgstr "XTEST"
@@ -5111,6 +5195,12 @@ msgstr "XTEST"
 msgid "Socket Connect Timeout"
 msgstr "XTEST"
 
+msgid "Untested Tunnel Cap Multiplier"
+msgstr ""
+
+msgid "Message Processing Throttle"
+msgstr ""
+
 msgid "Data packets between each ACK."
 msgstr "XTEST"
 
@@ -5132,8 +5222,8 @@ msgstr "XTEST"
 msgid "Bandwidth token refill interval (ms)."
 msgstr "XTEST"
 
-msgid "NTCP selector sleep between loops (ms)."
-msgstr "XTEST"
+msgid "NIO selector sleep between loops (ms)."
+msgstr ""
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "XTEST"
@@ -5156,6 +5246,9 @@ msgstr "XTEST"
 msgid "Max congestion window during slow start."
 msgstr "XTEST"
 
+msgid "Total SYN attempts before giving up on a handshake."
+msgstr ""
+
 msgid "Max retransmission timeout (ms)."
 msgstr "XTEST"
 
@@ -5167,6 +5260,9 @@ msgstr "XTEST"
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "XTEST"
+
+msgid "Max unacknowledged packets per stream connection."
+msgstr ""
 
 msgid "I2CP write queue depth."
 msgstr "XTEST"
@@ -5285,6 +5381,9 @@ msgstr "XTEST"
 msgid "Max concurrent RI lookups during builds."
 msgstr "XTEST"
 
+msgid "Concurrent next-hop lookup limit as % of transit tunnels."
+msgstr ""
+
 msgid "Max concurrent tunnel test jobs."
 msgstr "XTEST"
 
@@ -5297,8 +5396,8 @@ msgstr "XTEST"
 msgid "Threads decrypting inbound NTCP data."
 msgstr "XTEST"
 
-msgid "Threads encrypting NTCP messages."
-msgstr "XTEST"
+msgid "Threads that encrypt outbound NTCP messages."
+msgstr ""
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "XTEST"
@@ -5324,8 +5423,8 @@ msgstr "XTEST"
 msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "XTEST"
 
-msgid "NTCP send pool queue size."
-msgstr "XTEST"
+msgid "Priority-aware buffer where client messages jump transit."
+msgstr ""
 
 msgid "I2CP session buffer size."
 msgstr "XTEST"
@@ -5350,6 +5449,9 @@ msgstr "XTEST"
 
 msgid "Window multiplier per RTT during slow start."
 msgstr "XTEST"
+
+msgid "Minimum send rate before pacing kicks in (KB/s)."
+msgstr ""
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "XTEST"
@@ -5426,11 +5528,14 @@ msgstr "XTEST"
 msgid "Consecutive failures before pool backoff."
 msgstr "XTEST"
 
-msgid "Cooldown duration after pool failure threshold, in ms."
-msgstr "XTEST"
+msgid "Cooldown duration after pool failure threshold (ms)."
+msgstr ""
 
 msgid "Target spare tunnel count per pool."
 msgstr "XTEST"
+
+msgid "Widens untested tunnel cap when testing stalls."
+msgstr ""
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "XTEST"
@@ -5455,6 +5560,9 @@ msgstr "XTEST"
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "XTEST"
+
+msgid "Max average message delay before rejecting transit (ms)."
+msgstr ""
 
 msgid "Tunnel"
 msgstr "نفق"
@@ -7386,11 +7494,14 @@ msgstr "عمر النفق بالميلي ثانية. تنتهي صلاحية ا�
 msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]"
 msgstr "فترة قمع بدء التشغيل بالميلي ثانية. يتم كتم التحذيرات ومنطق تقليل الأنفاق أثناء بدء التشغيل الأولي للموجه. [الافتراضي 120000]"
 
-msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]"
-msgstr "الحد الأدنى للفاصل الزمني بالميلي ثانية بين نشر LeaseSet. يمنع عواصف النشر السريعة أثناء تغيير الأنفاق. [الافتراضي 10000]"
+msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
+msgstr ""
 
-msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]"
-msgstr "الحد الأدنى للفاصل الزمني بالميلي ثانية بين بناء كائنات LeaseSet. يمنع تغيير كائن LeaseSet غير الضروري عند كل تغيير للنفق. [الافتراضي 20000]"
+msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
+msgstr ""
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "الحد الأقصى لعدد بناءات الأنفاق المتزامنة لكل اتجاه. القيم الأعلى تسرع استرداد المجموعة ولكن قد تثقل الشبكة. [الافتراضي 8]"
@@ -7470,11 +7581,11 @@ msgstr "عدد المرات للرد على وجهة مقيدة قبل إسقا�
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr "الحد الأقصى الافتراضي لتأخير التدفق بالميلي ثانية عندما لا يتم تعيين مهلة اتصال صريحة. [الافتراضي 10000 (10 ثوانٍ)]"
 
-msgid "Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]"
-msgstr "الحد الأقصى للوقت بالميلي ثانية بين استلام SYN وقبوله على مقبس الخادم. يتحكم في مدة بقاء الاتصالات غير المكتملة. [الافتراضي 5000]"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
+msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]"
-msgstr "الحد الأقصى لعدد الاتصالات المعلقة (SYNs والحزم الجزئية) في قائمة انتظار قبول الخادم. القيم الأكبر تخزن المزيد من الاتصالات الواردة مؤقتًا. [الافتراضي 200]"
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
+msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "الفاصل الزمني بالميلي ثانية بين إعادة نشر LeaseSet الآلية. القيم الأعلى تقلل من حركة قاعدة البيانات الشبكية ولكنها قد تسبب معلومات قديمة. [الافتراضي 300000]"
@@ -9630,9 +9741,6 @@ msgstr "أنفاق العبور عن طريق الأقران"
 msgid "tuning"
 msgstr "ضبط"
 
-msgid "Router Auto-Tuning"
-msgstr "Auto-Tuning للجهاز"
-
 msgid "tunnel peer count"
 msgstr "عدد أقران النفق"
 
@@ -9799,3 +9907,12 @@ msgstr "التالي"
 
 msgid "Finished"
 msgstr "منتهي"
+
+
+
+
+
+
+
+
+

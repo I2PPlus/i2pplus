@@ -138,27 +138,11 @@ msgstr "O nome de anfitrião \"{0}\" é inválido."
 msgid "Please enter a host name and destination"
 msgstr "Por favor, insira o nome de anfitrião e o destino"
 
-msgid "Delete Entry"
-msgstr "Apagar entrada"
-
-msgid "Delete Selected"
-msgstr "Apagar Selecionados"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "Destino {0} apagado."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "1 destino apagado."
-msgstr[1] "{0} destinos apagados."
-
-msgid "No valid entries selected to delete."
-msgstr "Nenhuma entrada válida selecionada para eliminar."
-
 msgid "Add Alternate"
 msgstr "Adicionar Alternativa"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "O livro de endereços foi salvo."
@@ -208,9 +192,28 @@ msgstr "O nome do host {0} não está no catálogo de endereços."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Falha ao adicionar o Destino para {0} ao serviço de nomes {1}"
 
+msgid "Delete Entry"
+msgstr "Apagar entrada"
+
+msgid "Delete Selected"
+msgstr "Apagar Selecionados"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Falha ao remover o Destino para {0} do serviço de nomes {1}"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Destino {0} apagado."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "1 destino apagado."
+msgstr[1] "{0} destinos apagados."
+
+msgid "No valid entries selected to delete."
+msgstr "Nenhuma entrada válida selecionada para eliminar."
 
 msgid "Blacklist Selected"
 msgstr "Colocar na Lista Negra"

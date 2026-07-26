@@ -138,27 +138,11 @@ msgstr "Le nom d’hôte « {0} » est invalide."
 msgid "Please enter a host name and destination"
 msgstr "Veuillez saisir un nom et une destination d’hôte"
 
-msgid "Delete Entry"
-msgstr "Supprimer l’entrée"
-
-msgid "Delete Selected"
-msgstr "Supprimer les éléments sélectionnés"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "La destination {0} a été supprimée."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "1 destination a été supprimée."
-msgstr[1] "{0} destinations ont été supprimées."
-
-msgid "No valid entries selected to delete."
-msgstr "Aucune entrée valide n'a été sélectionnée pour suppression."
-
 msgid "Add Alternate"
 msgstr "Ajouter un substitut"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "Le carnet d’adresses a été enregistré."
@@ -208,9 +192,28 @@ msgstr "Le nom d’hôte {0} n’est pas dans le carnet d’adresses."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Échec d’ajout de destination pour {0} au système de noms {1}"
 
+msgid "Delete Entry"
+msgstr "Supprimer l’entrée"
+
+msgid "Delete Selected"
+msgstr "Supprimer les éléments sélectionnés"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Échec de suppression de destination pour {0} du service de noms {1}"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "La destination {0} a été supprimée."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "1 destination a été supprimée."
+msgstr[1] "{0} destinations ont été supprimées."
+
+msgid "No valid entries selected to delete."
+msgstr "Aucune entrée valide n'a été sélectionnée pour suppression."
 
 msgid "Blacklist Selected"
 msgstr "Liste noire sélectionnée"

@@ -121,6 +121,9 @@ msgstr ""
 msgid "Total number of threads in use"
 msgstr ""
 
+msgid "Time spent paused in GC (ms)"
+msgstr ""
+
 msgid "Peers without a published IP address"
 msgstr ""
 
@@ -700,7 +703,7 @@ msgstr ""
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr ""
 
-msgid "Bandwidth Usage"
+msgid "Bandwidth usage"
 msgstr ""
 
 #, java-format
@@ -1914,6 +1917,9 @@ msgstr ""
 msgid "Nothing to display - no stat specified!"
 msgstr ""
 
+msgid "Bandwidth Usage"
+msgstr ""
+
 #, java-format
 msgid "ending {0} ago"
 msgstr ""
@@ -2002,6 +2008,15 @@ msgstr ""
 msgid "Do not show legend on graphs"
 msgstr ""
 
+msgid "Disabled while legend is hidden"
+msgstr ""
+
+msgid "Hide restarts"
+msgstr ""
+
+msgid "Suppress restart lines on graphs"
+msgstr ""
+
 msgid "Persistence"
 msgstr ""
 
@@ -2032,6 +2047,12 @@ msgstr ""
 msgid "Graph settings unchanged"
 msgstr ""
 
+msgid "improved"
+msgstr ""
+
+msgid "vs baseline"
+msgstr ""
+
 msgid "CPU"
 msgstr ""
 
@@ -2048,9 +2069,6 @@ msgid "Router uptime"
 msgstr ""
 
 msgid "Job Lag"
-msgstr ""
-
-msgid "ms"
 msgstr ""
 
 msgid "Job queue delay"
@@ -2233,6 +2251,12 @@ msgstr ""
 msgid "Graphs"
 msgstr ""
 
+msgid "Health"
+msgstr ""
+
+msgid "Router performance overview"
+msgstr ""
+
 msgid "Help"
 msgstr ""
 
@@ -2294,6 +2318,12 @@ msgid "Sitemap"
 msgstr ""
 
 msgid "Built-in anonymous BitTorrent Client"
+msgstr ""
+
+msgid "Router Auto-Tuning"
+msgstr ""
+
+msgid "Tuning"
 msgstr ""
 
 msgid "Manage server and client tunnels"
@@ -3301,6 +3331,60 @@ msgstr ""
 msgid "to your router.config file."
 msgstr ""
 
+msgid "Peers reached in the last 60s"
+msgstr ""
+
+msgid "Fast"
+msgstr ""
+
+msgid "Low-latency peers for tunnel participation"
+msgstr ""
+
+msgid "HighCap"
+msgstr ""
+
+msgid "High-bandwidth peers for many tunnels"
+msgstr ""
+
+msgid "Reliable"
+msgstr ""
+
+msgid "High-capacity peers with good acceptance"
+msgstr ""
+
+msgid "Peers that store and serve NetDb info"
+msgstr ""
+
+msgid "Known"
+msgstr ""
+
+msgid "Total entries in network database"
+msgstr ""
+
+msgid "Active%"
+msgstr ""
+
+msgid "Profiles with activity in the last 24h"
+msgstr ""
+
+msgid "Unreachable"
+msgstr ""
+
+msgid "Peers without a reachable address"
+msgstr ""
+
+msgid "Peers excluded from all interactions"
+msgstr ""
+
+msgid "/min"
+msgstr ""
+
+msgid "Test Fail"
+msgstr ""
+
+msgid "Connectivity test failures per minute"
+msgstr ""
+
 msgid "Peer Connections"
 msgstr ""
 
@@ -3613,9 +3697,6 @@ msgstr ""
 msgid "tests passed"
 msgstr ""
 
-msgid "Unreachable"
-msgstr ""
-
 msgid "Test Fails"
 msgstr ""
 
@@ -3733,9 +3814,6 @@ msgid "groups"
 msgstr ""
 
 msgid "Note: Peers are categorized by the profile organizer based on observable performance, not from capabilities they advertise in the NetDB."
-msgstr ""
-
-msgid "Fast"
 msgstr ""
 
 msgid "Peers marked as high capacity that also meet or exceed speed average for all profiled peers."
@@ -4109,9 +4187,6 @@ msgstr ""
 msgid "Show all current peer connections"
 msgstr ""
 
-msgid "Health"
-msgstr ""
-
 msgid "Router health overview"
 msgstr ""
 
@@ -4244,9 +4319,6 @@ msgid "The total number of peers in our network database"
 msgstr ""
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
-
-msgid "Known"
 msgstr ""
 
 msgid "Configure router bandwidth allocation"
@@ -4736,6 +4808,9 @@ msgstr ""
 msgid "Slow Start Window Cap"
 msgstr ""
 
+msgid "Max SYN Sends"
+msgstr ""
+
 msgid "Max RTO"
 msgstr ""
 
@@ -4862,6 +4937,9 @@ msgstr ""
 msgid "Max Concurrent RI Lookups"
 msgstr ""
 
+msgid "Next-Hop Lookup %"
+msgstr ""
+
 msgid "Max Concurrent Test Jobs"
 msgstr ""
 
@@ -4931,6 +5009,9 @@ msgstr ""
 msgid "Slow Start Growth Rate"
 msgstr ""
 
+msgid "Min Pacing Rate"
+msgstr ""
+
 msgid "RTT Cap"
 msgstr ""
 
@@ -4941,6 +5022,9 @@ msgid "Dup ACK Delay"
 msgstr ""
 
 msgid "Inactivity Timeout"
+msgstr ""
+
+msgid "Max Window Size"
 msgstr ""
 
 msgid "Max Message Queue Age"
@@ -5039,6 +5123,9 @@ msgstr ""
 msgid "Socket Connect Timeout"
 msgstr ""
 
+msgid "Untested Tunnel Cap Multiplier"
+msgstr ""
+
 msgid "Message Processing Throttle"
 msgstr ""
 
@@ -5063,7 +5150,7 @@ msgstr ""
 msgid "Bandwidth token refill interval (ms)."
 msgstr ""
 
-msgid "NTCP selector sleep between loops (ms)."
+msgid "NIO selector sleep between loops (ms)."
 msgstr ""
 
 msgid "Outbound messages batched per gateway pump."
@@ -5087,6 +5174,9 @@ msgstr ""
 msgid "Max congestion window during slow start."
 msgstr ""
 
+msgid "Total SYN attempts before giving up on a handshake."
+msgstr ""
+
 msgid "Max retransmission timeout (ms)."
 msgstr ""
 
@@ -5097,6 +5187,9 @@ msgid "Retransmissions before dropping the stream."
 msgstr ""
 
 msgid "Max idle time before dropping a stream (ms)."
+msgstr ""
+
+msgid "Max unacknowledged packets per stream connection."
 msgstr ""
 
 msgid "I2CP write queue depth."
@@ -5216,6 +5309,9 @@ msgstr ""
 msgid "Max concurrent RI lookups during builds."
 msgstr ""
 
+msgid "Concurrent next-hop lookup limit as % of transit tunnels."
+msgstr ""
+
 msgid "Max concurrent tunnel test jobs."
 msgstr ""
 
@@ -5228,7 +5324,7 @@ msgstr ""
 msgid "Threads decrypting inbound NTCP data."
 msgstr ""
 
-msgid "Threads encrypting NTCP messages."
+msgid "Threads that encrypt outbound NTCP messages."
 msgstr ""
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
@@ -5255,7 +5351,7 @@ msgstr ""
 msgid "Window restart size (MTUs) after RTO collapse."
 msgstr ""
 
-msgid "NTCP send pool queue size."
+msgid "Priority-aware buffer where client messages jump transit."
 msgstr ""
 
 msgid "I2CP session buffer size."
@@ -5280,6 +5376,9 @@ msgid "Congestion avoidance growth rate."
 msgstr ""
 
 msgid "Window multiplier per RTT during slow start."
+msgstr ""
+
+msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr ""
 
 msgid "Upper bound on RTT estimate (ms)."
@@ -5357,10 +5456,13 @@ msgstr ""
 msgid "Consecutive failures before pool backoff."
 msgstr ""
 
-msgid "Cooldown duration after pool failure threshold, in ms."
+msgid "Cooldown duration after pool failure threshold (ms)."
 msgstr ""
 
 msgid "Target spare tunnel count per pool."
+msgstr ""
+
+msgid "Widens untested tunnel cap when testing stalls."
 msgstr ""
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
@@ -7320,10 +7422,13 @@ msgstr ""
 msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]"
 msgstr ""
 
-msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]"
+msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
 msgstr ""
 
-msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]"
+msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
 msgstr ""
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
@@ -7404,10 +7509,10 @@ msgstr ""
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr ""
 
-msgid "Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
 msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]"
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
 msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
@@ -9562,9 +9667,6 @@ msgid "Transit Tunnels by Peer"
 msgstr ""
 
 msgid "tuning"
-msgstr ""
-
-msgid "Router Auto-Tuning"
 msgstr ""
 
 msgid "tunnel peer count"

@@ -138,27 +138,11 @@ msgstr "Ogiltigt värdnamn  \"{0}\"."
 msgid "Please enter a host name and destination"
 msgstr "Ange värdnamn och mål"
 
-msgid "Delete Entry"
-msgstr "Ta bort post"
-
-msgid "Delete Selected"
-msgstr "Radera Valda"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "Mål {0} raderat."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "1 mål raderat."
-msgstr[1] "{0} mål raderade."
-
-msgid "No valid entries selected to delete."
-msgstr "Inga giltiga poster markerade för borttagning."
-
 msgid "Add Alternate"
 msgstr "Lägg till alternativ"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "Adressbok sparad."
@@ -208,9 +192,28 @@ msgstr "Värdnamnet {0} finns inte i adressboken."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Kunde inte lägga till målet för {0} till namntjänsten {1}"
 
+msgid "Delete Entry"
+msgstr "Ta bort post"
+
+msgid "Delete Selected"
+msgstr "Radera Valda"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Det gick inte att ta bort målet för {0} från namntjänsten {1}"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Mål {0} raderat."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "1 mål raderat."
+msgstr[1] "{0} mål raderade."
+
+msgid "No valid entries selected to delete."
+msgstr "Inga giltiga poster markerade för borttagning."
 
 msgid "Blacklist Selected"
 msgstr "Svartlista markerade"

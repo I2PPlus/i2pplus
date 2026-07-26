@@ -154,31 +154,11 @@ msgstr "اسم المضيف غير صالح \"{0}\"."
 msgid "Please enter a host name and destination"
 msgstr "قم بادخال اسم المضيف والوجهة"
 
-msgid "Delete Entry"
-msgstr "حذف العنصر"
-
-msgid "Delete Selected"
-msgstr "حذف"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "وجهة {0} محذوفة."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "لا توجد وجهات محذوفة."
-msgstr[1] "1 الوجهة المحذوفة."
-msgstr[2] "2 الوجهات المحذوفة."
-msgstr[3] "{0} تم حذف الوجهات."
-msgstr[4] "{0} تم حذف الوجهات."
-msgstr[5] "{0} تم حذف الوجهات."
-
-msgid "No valid entries selected to delete."
-msgstr "لم يتم تحديد إدخالات صالحة للحذف."
-
 msgid "Add Alternate"
 msgstr "إضافة بديل"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "تم حفظ دفتر العناوين"
@@ -228,9 +208,32 @@ msgstr "اسم المضيف {0} غير موجود في دفتر العناوين
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "فشل في إضافة وجهة {0} إلى خدمة التسمية {1}"
 
+msgid "Delete Entry"
+msgstr "حذف العنصر"
+
+msgid "Delete Selected"
+msgstr "حذف"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "فشل في حذف الوجهة لـ {0} من خدمة التسمية {1}"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "وجهة {0} محذوفة."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "لا توجد وجهات محذوفة."
+msgstr[1] "1 الوجهة المحذوفة."
+msgstr[2] "2 الوجهات المحذوفة."
+msgstr[3] "{0} تم حذف الوجهات."
+msgstr[4] "{0} تم حذف الوجهات."
+msgstr[5] "{0} تم حذف الوجهات."
+
+msgid "No valid entries selected to delete."
+msgstr "لم يتم تحديد إدخالات صالحة للحذف."
 
 msgid "Blacklist Selected"
 msgstr "إضافة إلى القائمة السوداء"

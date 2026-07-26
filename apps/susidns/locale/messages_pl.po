@@ -142,28 +142,11 @@ msgstr "Nieprawidłowa nazwa hosta \"{0}\"."
 msgid "Please enter a host name and destination"
 msgstr "Wpisz nazwę hosta i miejsca przeznaczenia"
 
-msgid "Delete Entry"
-msgstr "Usuń wpis"
-
-msgid "Delete Selected"
-msgstr "Usuń zaznaczone"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "Miejsce przeznaczenia {0} usunięte."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "1 miejsce przeznaczenia usunięte."
-msgstr[1] "{0} miejsca przeznaczenia usunięte."
-msgstr[2] "{0} miejsc przeznaczenia usunięte."
-
-msgid "No valid entries selected to delete."
-msgstr "Nie zaznaczono prawidłowych wpisów do usunięcia."
-
 msgid "Add Alternate"
 msgstr "Dodaj alternatywny"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "Książka adresowa zapisana."
@@ -213,9 +196,29 @@ msgstr "Brak nazwy hosta {0} w książce adresowej."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Nie udało się dodać Miejsca Przeznaczenia dla {0} do serwisu nazewnictwa {1}"
 
+msgid "Delete Entry"
+msgstr "Usuń wpis"
+
+msgid "Delete Selected"
+msgstr "Usuń zaznaczone"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Nie udało się usunąć Miejsca Przeznaczenia dla {0} z serwisu nazewnictwa {1}"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Miejsce przeznaczenia {0} usunięte."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "1 miejsce przeznaczenia usunięte."
+msgstr[1] "{0} miejsca przeznaczenia usunięte."
+msgstr[2] "{0} miejsc przeznaczenia usunięte."
+
+msgid "No valid entries selected to delete."
+msgstr "Nie zaznaczono prawidłowych wpisów do usunięcia."
 
 msgid "Blacklist Selected"
 msgstr "Zablokuj zaznaczone"

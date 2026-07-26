@@ -134,26 +134,11 @@ msgstr "잘못된 호스트 이름 \"{0}\"."
 msgid "Please enter a host name and destination"
 msgstr "호스트 이름과 목적지를 입력하세요"
 
-msgid "Delete Entry"
-msgstr "항목 삭제"
-
-msgid "Delete Selected"
-msgstr "선택된 것 삭제"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "목적지 {0}  삭제."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "{0} 목적지 삭제."
-
-msgid "No valid entries selected to delete."
-msgstr "삭제할 유효한 항목을 선택하지 않았습니다."
-
 msgid "Add Alternate"
 msgstr "대체 추가"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "주소록 저장됨."
@@ -203,9 +188,27 @@ msgstr "호스트 이름 {0}이(가) 주소록에 없습니다."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "네이밍 서비스 {1}으로 {0} 목적지 추가 실패"
 
+msgid "Delete Entry"
+msgstr "항목 삭제"
+
+msgid "Delete Selected"
+msgstr "선택된 것 삭제"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "네이밍 서비스 {1}에서 {0} 목적지 삭제 실패"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "목적지 {0}  삭제."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "{0} 목적지 삭제."
+
+msgid "No valid entries selected to delete."
+msgstr "삭제할 유효한 항목을 선택하지 않았습니다."
 
 msgid "Blacklist Selected"
 msgstr "블랙리스트 선택됨"

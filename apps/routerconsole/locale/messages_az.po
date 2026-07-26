@@ -121,6 +121,9 @@ msgstr "NetDb-də cəmi həmkarlar"
 msgid "Total number of threads in use"
 msgstr "İstifadə iplik mühərələrin ümumi sayı"
 
+msgid "Time spent paused in GC (ms)"
+msgstr ""
+
 msgid "Peers without a published IP address"
 msgstr "Dərc edilmiş IP ünvanı olmayan həmkarlar"
 
@@ -700,8 +703,8 @@ msgstr "Yanlış formanın təqdim edilməsi, ehtimal ki, brauzerinizdə 'geri' 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Problem davam edərsə, brauzerinizdə kukilərin aktiv olduğunu yoxlayın."
 
-msgid "Bandwidth Usage"
-msgstr "Bant genişliyi istifadəsi"
+msgid "Bandwidth usage"
+msgstr ""
 
 #, java-format
 msgid "events in {0}"
@@ -1914,6 +1917,9 @@ msgstr "{0} {1} üçün"
 msgid "Nothing to display - no stat specified!"
 msgstr "Göstərmək üçün heç bir statistika belirtilmedi!"
 
+msgid "Bandwidth Usage"
+msgstr "Bant genişliyi istifadəsi"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "{0} əvvəl bitir"
@@ -2002,6 +2008,15 @@ msgstr "Əfsanəni gizlət"
 msgid "Do not show legend on graphs"
 msgstr "Qrafiklərdə əfsanə göstərməyin"
 
+msgid "Disabled while legend is hidden"
+msgstr ""
+
+msgid "Hide restarts"
+msgstr ""
+
+msgid "Suppress restart lines on graphs"
+msgstr ""
+
 msgid "Persistence"
 msgstr "Davamlılıq"
 
@@ -2032,6 +2047,12 @@ msgstr "Qrafik parametrləri yadda saxlanıldı"
 msgid "Graph settings unchanged"
 msgstr "Qrafik parametrləri dəyişməyib"
 
+msgid "improved"
+msgstr ""
+
+msgid "vs baseline"
+msgstr ""
+
 msgid "CPU"
 msgstr "CPU"
 
@@ -2049,9 +2070,6 @@ msgstr "Ruterin iş vaxtı"
 
 msgid "Job Lag"
 msgstr "İş Gecikmesi"
-
-msgid "ms"
-msgstr "ms"
 
 msgid "Job queue delay"
 msgstr "İş növbəsi gecikməsi"
@@ -2233,6 +2251,12 @@ msgstr "Qrafik Router Performansı"
 msgid "Graphs"
 msgstr "Qrafiklər"
 
+msgid "Health"
+msgstr "Sağlamlıq"
+
+msgid "Router performance overview"
+msgstr ""
+
 msgid "Help"
 msgstr "Kömək"
 
@@ -2295,6 +2319,12 @@ msgstr "Sayt xəritəsi"
 
 msgid "Built-in anonymous BitTorrent Client"
 msgstr "Daxili anonim BitTorrent Müştərisi"
+
+msgid "Router Auto-Tuning"
+msgstr "Ruter Avtomatik Tənzimləmə"
+
+msgid "Tuning"
+msgstr ""
 
 msgid "Manage server and client tunnels"
 msgstr "Server və müştəri tunellərini idarə edin"
@@ -3301,6 +3331,60 @@ msgstr "{0}Qabaqcıl Konfiqurasiya səhifəsində{1}."
 msgid "to your router.config file."
 msgstr "router.config faylınıza."
 
+msgid "Peers reached in the last 60s"
+msgstr ""
+
+msgid "Fast"
+msgstr "Sürətli"
+
+msgid "Low-latency peers for tunnel participation"
+msgstr ""
+
+msgid "HighCap"
+msgstr ""
+
+msgid "High-bandwidth peers for many tunnels"
+msgstr ""
+
+msgid "Reliable"
+msgstr ""
+
+msgid "High-capacity peers with good acceptance"
+msgstr ""
+
+msgid "Peers that store and serve NetDb info"
+msgstr ""
+
+msgid "Known"
+msgstr "Məlumdur"
+
+msgid "Total entries in network database"
+msgstr ""
+
+msgid "Active%"
+msgstr ""
+
+msgid "Profiles with activity in the last 24h"
+msgstr ""
+
+msgid "Unreachable"
+msgstr "Əlçatmaz"
+
+msgid "Peers without a reachable address"
+msgstr ""
+
+msgid "Peers excluded from all interactions"
+msgstr ""
+
+msgid "/min"
+msgstr ""
+
+msgid "Test Fail"
+msgstr ""
+
+msgid "Connectivity test failures per minute"
+msgstr ""
+
 msgid "Peer Connections"
 msgstr "Peer Əlaqələri"
 
@@ -3613,9 +3697,6 @@ msgstr "OK"
 msgid "tests passed"
 msgstr "testlər keçdi"
 
-msgid "Unreachable"
-msgstr "Əlçatmaz"
-
 msgid "Test Fails"
 msgstr "Test uğursuz oldu"
 
@@ -3734,9 +3815,6 @@ msgstr "qruplar"
 
 msgid "Note: Peers are categorized by the profile organizer based on observable performance, not from capabilities they advertise in the NetDB."
 msgstr "Qeyd: Həmyaşıdlar NetDB-də reklam etdikləri imkanlara görə deyil, müşahidə edilə bilən performansa görə profil təşkilatçısı tərəfindən təsnif edilir."
-
-msgid "Fast"
-msgstr "Sürətli"
 
 msgid "Peers marked as high capacity that also meet or exceed speed average for all profiled peers."
 msgstr "Bütün profilli həmyaşıdlar üçün orta sürətə cavab verən və ya artıq olan yüksək tutumlu həmyaşıdlar."
@@ -4109,9 +4187,6 @@ msgstr "NetDb"
 msgid "Show all current peer connections"
 msgstr "Bütün cari həmyaşıd əlaqələrini göstərin"
 
-msgid "Health"
-msgstr "Sağlamlıq"
-
 msgid "Router health overview"
 msgstr "Ruter sağlamlığının icmalı"
 
@@ -4245,9 +4320,6 @@ msgstr "Şəbəkə verilənlər bazamızda olan həmyaşıdların ümumi sayı"
 
 msgid "Total RouterInfos stored on disk"
 msgstr "Diskdə saxlanmış RouterInfos ümumi sayı"
-
-msgid "Known"
-msgstr "Məlumdur"
 
 msgid "Configure router bandwidth allocation"
 msgstr "Routerin bant genişliyinin ayrılmasını konfiqurasiya edin"
@@ -4736,6 +4808,9 @@ msgstr "Nagle Flush Gecikməsi"
 msgid "Slow Start Window Cap"
 msgstr "Yavaş Başlanğıc Pəncərə Tavanı"
 
+msgid "Max SYN Sends"
+msgstr ""
+
 msgid "Max RTO"
 msgstr "Maksimum RTO"
 
@@ -4862,6 +4937,9 @@ msgstr "Maksimum Eyni Vaxtlı Tunel Qurulmaları"
 msgid "Max Concurrent RI Lookups"
 msgstr "Maksimum Eyni Vaxtlı RI Axtarışları"
 
+msgid "Next-Hop Lookup %"
+msgstr ""
+
 msgid "Max Concurrent Test Jobs"
 msgstr "Maksimum Eyni Vaxtlı Test Tapşırıqları"
 
@@ -4931,6 +5009,9 @@ msgstr "Tıxacdan Qaçınma Böyümə Sürəti"
 msgid "Slow Start Growth Rate"
 msgstr "Yavaş Başlanğıc Böyümə Sürəti"
 
+msgid "Min Pacing Rate"
+msgstr ""
+
 msgid "RTT Cap"
 msgstr "RTT Tavanı"
 
@@ -4942,6 +5023,9 @@ msgstr "Təkrar ACK Gecikməsi"
 
 msgid "Inactivity Timeout"
 msgstr "Fəaliyyətsizlik Vaxtı"
+
+msgid "Max Window Size"
+msgstr ""
 
 msgid "Max Message Queue Age"
 msgstr "Maksimum Mesaj Növbəsi Yaşı"
@@ -5039,6 +5123,12 @@ msgstr "RTO Geri Çəkilmə Çarpansı"
 msgid "Socket Connect Timeout"
 msgstr "Soket Qoşulma Vaxtı"
 
+msgid "Untested Tunnel Cap Multiplier"
+msgstr ""
+
+msgid "Message Processing Throttle"
+msgstr ""
+
 msgid "Data packets between each ACK."
 msgstr "Hər ACK arasındakı məlumat paketləri."
 
@@ -5060,8 +5150,8 @@ msgstr "İşi yenidən yoxlamadan əvvəl pompa boş gözləməsi (ms)."
 msgid "Bandwidth token refill interval (ms)."
 msgstr "Bant genişliyi tokeninin yenidən doldurulma aralığı (ms)."
 
-msgid "NTCP selector sleep between loops (ms)."
-msgstr "Döngülər arasındakı NTCP seçici yuxusu (ms)."
+msgid "NIO selector sleep between loops (ms)."
+msgstr ""
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "Qateway pompası başına partiyalı çıxış mesajları."
@@ -5084,6 +5174,9 @@ msgstr "Nagle flush gecikməsi (ms)."
 msgid "Max congestion window during slow start."
 msgstr "Yavaş başlanğıc zamanı maksimum tıxac pəncərəsi."
 
+msgid "Total SYN attempts before giving up on a handshake."
+msgstr ""
+
 msgid "Max retransmission timeout (ms)."
 msgstr "Maksimum təkrar ötürmə vaxtı (ms)."
 
@@ -5095,6 +5188,9 @@ msgstr "Axının atılmasından əvvəlki təkrar ötürmələr."
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "Axının atılmasından əvvəlki maksimum boş vaxt (ms)."
+
+msgid "Max unacknowledged packets per stream connection."
+msgstr ""
 
 msgid "I2CP write queue depth."
 msgstr "I2CP yazma növbəsinin dərinliyi."
@@ -5213,6 +5309,9 @@ msgstr "Maksimum eyni vaxtlı tunel qurulmaları."
 msgid "Max concurrent RI lookups during builds."
 msgstr "Qurulmalar zamanı maksimum eyni vaxtlı RI axtarışları."
 
+msgid "Concurrent next-hop lookup limit as % of transit tunnels."
+msgstr ""
+
 msgid "Max concurrent tunnel test jobs."
 msgstr "Maksimum eyni vaxtlı tunel test tapşırıqları."
 
@@ -5225,8 +5324,8 @@ msgstr "Tunel testləri arasındakı maksimum aralıq (ms)."
 msgid "Threads decrypting inbound NTCP data."
 msgstr "Giriş NTCP məlumatlarını deşifrələyən mövzular."
 
-msgid "Threads encrypting NTCP messages."
-msgstr "NTCP mesajlarını şifrələyən mövzular."
+msgid "Threads that encrypt outbound NTCP messages."
+msgstr ""
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Çıxılmış NTCP pompaları üçün təhlükəsizlik skan aralığı (ms)."
@@ -5252,8 +5351,8 @@ msgstr "Qovşaq başına maksimum təsdiqlənməmiş mesajlar."
 msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "RTO çökməsindən sonra pəncərənin yenidən başlama ölçüsü (MTU)."
 
-msgid "NTCP send pool queue size."
-msgstr "NTCP göndərmə hovuzu növbə ölçüsü."
+msgid "Priority-aware buffer where client messages jump transit."
+msgstr ""
 
 msgid "I2CP session buffer size."
 msgstr "I2CP sessiya bufer ölçüsü."
@@ -5278,6 +5377,9 @@ msgstr "Tıxacdan qaçınma böyümə sürəti."
 
 msgid "Window multiplier per RTT during slow start."
 msgstr "Yavaş başlanğıc zamanı RTT başına pəncərə çarpansı."
+
+msgid "Minimum send rate before pacing kicks in (KB/s)."
+msgstr ""
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT təxminindəki yuxarı hədd (ms)."
@@ -5354,11 +5456,14 @@ msgstr "Qurulmalar uğursuz olduqda qovşaqları yenidən qəbul etmək üçün 
 msgid "Consecutive failures before pool backoff."
 msgstr "Hovuz geri çəkilməsindən əvvəlki ardıcıl uğursuzluqlar."
 
-msgid "Cooldown duration after pool failure threshold, in ms."
-msgstr "Hovuz uğursuzluq həddindən sonra soyuma müddəti (ms)."
+msgid "Cooldown duration after pool failure threshold (ms)."
+msgstr ""
 
 msgid "Target spare tunnel count per pool."
 msgstr "Hovuz başına hədəf ehtiyat tunel sayı."
+
+msgid "Widens untested tunnel cap when testing stalls."
+msgstr ""
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "Ehtimali tranzit rədd etmənin başladığı yük həddi (%)."
@@ -5383,6 +5488,9 @@ msgstr "Təkrar ötürmə vaxtı başına RTO böyümə çarpansı (%, 100 = sab
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Tunel server işləyici mövzuları üçün TCP soket qoşulma vaxtı (ms)."
+
+msgid "Max average message delay before rejecting transit (ms)."
+msgstr ""
 
 msgid "Tunnel"
 msgstr "Tunel"
@@ -7314,11 +7422,14 @@ msgstr "Tunnel ömrü millisaniyələrlə. Tunellər bu müddətdən sonra bitir
 msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]"
 msgstr "Başlanğıc bastırma dövrü millisaniyələrlə. Routerin ilkin başlanğıcı zamanı xəbərdarlıqlar və tunnel azaltma məntiqi bastırılır. [Standart 120000]"
 
-msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]"
-msgstr "LeaseSet dərc edilmələri arasında minimum interval millisaniyələrlə. Tunnel dəyişməsi zamanı sürətli dərc fırtınalarının qarşısını alır. [Standart 10000]"
+msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
+msgstr ""
 
-msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]"
-msgstr "LeaseSet obyekt qurmaları arasında minimum interval millisaniyələrlə. Hər tunnel dəyişməsində lazımsız LeaseSet obyekt dəyişməsinin qarşısını alır. [Standart 20000]"
+msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
+msgstr ""
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "İstiqamət başına maksimum paralel tunnel qurma sayı. Daha yüksək dəyərlər hovuz bərpasını sürətləndirir, lakin şəbəkəni həddən artıq yükləyə bilər. [Standart 8]"
@@ -7398,11 +7509,11 @@ msgstr "Boğulmuş ünvana cavab vermə sayı, artıq paketləri səssizcə atma
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr "Açıq qoşulma vaxt aşımı təyin edilmədikdə standart maksimum axın gecikməsi millisaniyələrlə. [Standart 10000 (10 saniyə)]"
 
-msgid "Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]"
-msgstr "Server soketində SYN qəbulu ilə onu qəbul etmə arasında maksimum vaxt millisaniyələrlə. Tamamlanmamış qoşulmaların nə qədər qaldığını idarə edir. [Standart 5000]"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
+msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]"
-msgstr "Server qəbul növbəsində gözləyən maksimum qoşulma sayı (SYN-lər və qismən paketlər). Daha böyük dəyərlər daha çox daxil olan qoşulmanı buferləşdirir. [Standart 200]"
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
+msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Avtomatik LeaseSet yenidən dərc edilmələri arasında interval millisaniyələrlə. Daha yüksək dəyərlər netdb trafikini azaldır, lakin köhnəlmiş məlumatlara səbəb ola bilər. [Standart 300000]"
@@ -9558,9 +9669,6 @@ msgstr "Peer tərəfindən Tranzit Tunellər"
 msgid "tuning"
 msgstr "tənzimləmə"
 
-msgid "Router Auto-Tuning"
-msgstr "Ruter Avtomatik Tənzimləmə"
-
 msgid "tunnel peer count"
 msgstr "tunel həmyaşıdlarının sayı"
 
@@ -9727,3 +9835,12 @@ msgstr "Növbəti"
 
 msgid "Finished"
 msgstr "Bitdi"
+
+
+
+
+
+
+
+
+

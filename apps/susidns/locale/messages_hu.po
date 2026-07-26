@@ -138,27 +138,11 @@ msgstr "Érvénytelen hosztnév \"{0}\"."
 msgid "Please enter a host name and destination"
 msgstr "Kérlek, írd be a hosztnevet és célállomást"
 
-msgid "Delete Entry"
-msgstr "Bejegyzés Törlése"
-
-msgid "Delete Selected"
-msgstr "Kiválasztottak Törlése"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "Célállomás {0} törölve."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "1 célállomás törölve."
-msgstr[1] "{0} célállomás törölve."
-
-msgid "No valid entries selected to delete."
-msgstr "Nincs érvényes bejegyzés kiválasztva törlésre."
-
 msgid "Add Alternate"
 msgstr "Alternatív hozzáadása"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "Címjegyzés elmentve."
@@ -208,9 +192,28 @@ msgstr "A(z) {0} gazdagépnév nem szerepel a címjegyzékben."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "{0} Célállomás hozzáadása sikertelen a {1} névszolgáltatóhoz"
 
+msgid "Delete Entry"
+msgstr "Bejegyzés Törlése"
+
+msgid "Delete Selected"
+msgstr "Kiválasztottak Törlése"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "{0} Célállomás törlése sikertelen a {1} névszolgáltatóból"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Célállomás {0} törölve."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "1 célállomás törölve."
+msgstr[1] "{0} célállomás törölve."
+
+msgid "No valid entries selected to delete."
+msgstr "Nincs érvényes bejegyzés kiválasztva törlésre."
 
 msgid "Blacklist Selected"
 msgstr "Blacklist Kiválasztva"

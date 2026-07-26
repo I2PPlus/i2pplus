@@ -134,26 +134,11 @@ msgstr "Nama host \"{0}\" invalid."
 msgid "Please enter a host name and destination"
 msgstr "Mohon masukkan nama host dan destinasi"
 
-msgid "Delete Entry"
-msgstr "Hapus Entri"
-
-msgid "Delete Selected"
-msgstr "Hapus Yang Dipilih"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "Destinasi {0} dihapus"
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "{0} destinasi dihapus"
-
-msgid "No valid entries selected to delete."
-msgstr "Tidak ada entri valid yang dipilih untuk dihapus."
-
 msgid "Add Alternate"
 msgstr "Tambahkan Alternate"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "Address book disimpan."
@@ -203,9 +188,27 @@ msgstr "Nama host {0} tidak ada di address book."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Gagal menambahkan Destinasi untuk {0} ke naming service {1}"
 
+msgid "Delete Entry"
+msgstr "Hapus Entri"
+
+msgid "Delete Selected"
+msgstr "Hapus Yang Dipilih"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Gagal menghapus Destinasi untuk {0} ke naming service {1}"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Destinasi {0} dihapus"
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "{0} destinasi dihapus"
+
+msgid "No valid entries selected to delete."
+msgstr "Tidak ada entri valid yang dipilih untuk dihapus."
 
 msgid "Blacklist Selected"
 msgstr "Pilih Blacklist"

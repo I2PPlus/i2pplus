@@ -138,27 +138,11 @@ msgstr "Səhv mənzil adı \"{0}\"."
 msgid "Please enter a host name and destination"
 msgstr "Zəhmət olmasa mənzil adı və nöqtəni daxil edin"
 
-msgid "Delete Entry"
-msgstr "Qeydiyyatı sil"
-
-msgid "Delete Selected"
-msgstr "Seçilmişləri sil"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "Nöqtə {0} silindi."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "1 nöqtə silindi."
-msgstr[1] "{0} nöqtə silindi."
-
-msgid "No valid entries selected to delete."
-msgstr "Silmək üçün heç bir etibarlı məlumat seçilməyib."
-
 msgid "Add Alternate"
 msgstr "Alternativ əlavə et"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "Adres kitabı saxlandı."
@@ -208,9 +192,28 @@ msgstr "Mənzil adı {0} adres kitabında yoxdur."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "{0} üçün {1} adlandırma xidmətinə Nöqtə əlavə etməkdə uğursuz oldu"
 
+msgid "Delete Entry"
+msgstr "Qeydiyyatı sil"
+
+msgid "Delete Selected"
+msgstr "Seçilmişləri sil"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "{0} üçün {1} adlandırma xidmətindən Nöqtə silməkdə uğursuz oldu"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Nöqtə {0} silindi."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "1 nöqtə silindi."
+msgstr[1] "{0} nöqtə silindi."
+
+msgid "No valid entries selected to delete."
+msgstr "Silmək üçün heç bir etibarlı məlumat seçilməyib."
 
 msgid "Blacklist Selected"
 msgstr "Qara siyahı seçildi"

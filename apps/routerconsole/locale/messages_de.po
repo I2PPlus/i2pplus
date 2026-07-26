@@ -14,6 +14,9 @@ msgstr "Hash"
 msgid "Banned by Router Hash"
 msgstr "Durch Router-Hash gesperrt"
 
+msgid "Tor Exit"
+msgstr "Tor-Ausgang"
+
 msgid "Blocklist"
 msgstr "Sperrliste"
 
@@ -117,6 +120,9 @@ msgstr "Gesamtanzahl der Peers in unserer NetDb"
 
 msgid "Total number of threads in use"
 msgstr "Gesamtzahl der verwendeten Threads"
+
+msgid "Time spent paused in GC (ms)"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "Peers ohne veröffentlichte IP-Adresse"
@@ -697,8 +703,8 @@ msgstr "Ungültige Übertragung der eingegebenen Daten, möglicherweise da Sie d
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Sollte das Problem fortbestehen, stellen Sie sicher, dass in Ihrem Browser Cookies aktiviert sind."
 
-msgid "Bandwidth Usage"
-msgstr "Bandbreitennutzung"
+msgid "Bandwidth usage"
+msgstr ""
 
 #, java-format
 msgid "events in {0}"
@@ -754,11 +760,35 @@ msgstr[1] "{0} plugins aktualisiert"
 msgid "Plugin check complete"
 msgstr "Plugin-Prüfung abgeschlossen"
 
+msgid "Restore Defaults"
+msgstr "Standardwerte wiederherstellen"
+
+msgid "All parameters restored to factory defaults"
+msgstr "Alle Parameter auf Werkseinstellungen zurückgesetzt"
+
+msgid "Auto-Tuning is not available"
+msgstr "Auto-Tuning ist nicht verfügbar"
+
+msgid "Tuning ranges saved — changes take effect immediately"
+msgstr "Tuning-Bereiche gespeichert — Änderungen treten sofort in Kraft"
+
+msgid "No changes to save"
+msgstr "Keine Änderungen zum Speichern"
+
+msgid "Tuning overrides applied"
+msgstr "Tuning-Überschreibungen angewendet"
+
+msgid "Invalid value"
+msgstr "Ungültiger Wert"
+
 msgid "No bans currently active"
 msgstr "Derzeit sind keine Sperren aktiv"
 
 msgid "Country"
 msgstr "Land"
+
+msgid "Caps"
+msgstr "Kategorien"
 
 msgid "Version"
 msgstr "Version"
@@ -768,6 +798,9 @@ msgstr "IP-Adresse"
 
 msgid "Port"
 msgstr "Port"
+
+msgid "Host"
+msgstr "Gastgeber"
 
 msgid "Reason"
 msgstr "Grund"
@@ -1303,6 +1336,9 @@ msgstr "Reseeden"
 msgid "Router Family"
 msgstr "Router-Familie"
 
+msgid "Auto-Tuning"
+msgstr "Auto-Tuning"
+
 msgid "Save changes"
 msgstr "Änderungen speichern"
 
@@ -1583,6 +1619,9 @@ msgstr "Seitenleisten-Einstellungen aktualisiert"
 
 msgid "Refresh interval must be a number"
 msgstr "Die Auffrischungsverzögerung muss als Zahl angegeben werden"
+
+msgid "Graph preferences updated"
+msgstr "Diagrammeinstellungen aktualisiert"
 
 msgid "Full sidebar defaults restored."
 msgstr "Vollständige Seitenleisten-Standardwerte wiederhergestellt."
@@ -1878,6 +1917,9 @@ msgstr "{0} für {1}"
 msgid "Nothing to display - no stat specified!"
 msgstr "Keine Anzeige - keine Statusangabe!"
 
+msgid "Bandwidth Usage"
+msgstr "Bandbreitennutzung"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "endete vor {0}"
@@ -1966,11 +2008,32 @@ msgstr "Legende ausblenden"
 msgid "Do not show legend on graphs"
 msgstr "Legende nicht in Diagrammen anzeigen"
 
+msgid "Disabled while legend is hidden"
+msgstr ""
+
+msgid "Hide restarts"
+msgstr ""
+
+msgid "Suppress restart lines on graphs"
+msgstr ""
+
 msgid "Persistence"
 msgstr "Langlebigkeit"
 
 msgid "Store graph data on disk"
 msgstr "Speichere Graphen auf Festplatte"
+
+msgid "UTC time"
+msgstr "UTC-Zeit"
+
+msgid "Display time in UTC on graph axes"
+msgstr "Zeit in UTC auf Diagrammachsen anzeigen"
+
+msgid "Glow effect"
+msgstr "Leuchteffekt"
+
+msgid "Add a glow effect to graph lines"
+msgstr "Leuchteffekt zu Diagrammlinien hinzufügen"
 
 msgid "Select Stats"
 msgstr "Wähle die Statistiken"
@@ -1983,6 +2046,189 @@ msgstr "Einstellungen zu Grafiken gespeichert"
 
 msgid "Graph settings unchanged"
 msgstr "Grafikeinstellungen unverändert"
+
+msgid "improved"
+msgstr ""
+
+msgid "vs baseline"
+msgstr ""
+
+msgid "CPU"
+msgstr "CPU"
+
+msgid "CPU load average"
+msgstr "CPU-Lastdurchschnitt"
+
+msgid "Memory"
+msgstr "Speicher"
+
+msgid "Memory usage"
+msgstr "Speichernutzung"
+
+msgid "Router uptime"
+msgstr "Router-Betriebszeit"
+
+msgid "Job Lag"
+msgstr "Aufgabenverzögerung"
+
+msgid "Job queue delay"
+msgstr "Job-Warteschlangenverzögerung"
+
+msgid "Msg Lag"
+msgstr "Nachrichtenverzögerung"
+
+msgid "Message send processing time"
+msgstr "Nachrichten-Sendeverarbeitungszeit"
+
+msgid "Job Queue"
+msgstr "Auftragswarteschlange"
+
+msgid "Ready jobs waiting in queue"
+msgstr "Bereite Jobs in der Warteschlange"
+
+msgid "Threads"
+msgstr "Threads"
+
+msgid "Active JVM threads"
+msgstr "Aktive JVM-Threads"
+
+msgid "NTCP Estab"
+msgstr "NTCP-Verbindungsaufbau"
+
+msgid "NTCP outbound establish time"
+msgstr "NTCP-Ausgehende Verbindungsaufbauzeit"
+
+msgid "SSU Estab"
+msgstr "SSU-Verbindungsaufbau"
+
+msgid "SSU outbound establish time"
+msgstr "SSU-Ausgehende Verbindungsaufbauzeit"
+
+msgid "SSU RTO"
+msgstr "SSU-RTO"
+
+msgid "SSU retransmission timeout"
+msgstr "SSU-Übertragungszeitüberschreitung"
+
+msgid "Conns/s"
+msgstr "Verbindungen/s"
+
+msgid "NTCP connections established per second"
+msgstr "NTCP-Verbindungen pro Sekunde aufgebaut"
+
+msgid "Msgs/s"
+msgstr "Nachr./s"
+
+msgid "Messages delivered per second"
+msgstr "Nachrichten pro Sekunde zugestellt"
+
+msgid "RTT"
+msgstr "RTT"
+
+msgid "End-to-end message round trip time"
+msgstr "Ende-zu-Ende-Nachrichten-Rundlaufzeit"
+
+msgid "Timeout"
+msgstr "Zeitüberschreitung"
+
+msgid "Tunnel build timeout rate"
+msgstr "Tunnel-Aufbau-Zeitüberschreitungsrate"
+
+msgid "Tunnel Build"
+msgstr "Tunnel-Aufbau"
+
+msgid "Client tunnel build latency"
+msgstr "Client-Tunnel-Aufbau-Latenzzeit"
+
+msgid "Active Peers"
+msgstr "Aktive Peers"
+
+msgid "Active peers (last 60s)"
+msgstr "Aktive Peers (letzte 60s)"
+
+msgid "Known Peers"
+msgstr "Bekannte Peers"
+
+msgid "Known routers in network database"
+msgstr "Bekannte Router in der Netzwerkdatenbank"
+
+msgid "Active I2CP clients"
+msgstr "Aktive I2CP-Clients"
+
+msgid "Transit"
+msgstr "Transit"
+
+msgid "Transit tunnels hosted"
+msgstr "Gehostete Transit-Tunnel"
+
+msgid "Streams"
+msgstr "Datenströme"
+
+msgid "Build Success"
+msgstr "Erfolg aufbauen"
+
+msgid "Tunnel build success rate"
+msgstr "Tunnel-Aufbau-Erfolgsrate"
+
+msgid "NetDB"
+msgstr "NetDB"
+
+msgid "NetDB lookup time"
+msgstr "NetDB-Abfragezeit"
+
+msgid "Banned"
+msgstr "Gesperrt"
+
+msgid "Total banned peers"
+msgstr "Gesperrte Peers gesamt"
+
+msgid "LeaseSets"
+msgstr "LeaseSets"
+
+msgid "Stored LeaseSets in floodfill"
+msgstr "Gespeicherte LeaseSets im Floodfill"
+
+msgid "Cache Hit"
+msgstr "Cache-Treffer"
+
+msgid "NetDB lookup success rate"
+msgstr "NetDB-Abfrage-Erfolgsrate"
+
+msgid "Flood Verify"
+msgstr "Floodfill-Überprüfung"
+
+msgid "Floodfill verify time"
+msgstr "Floodfill-Überprüfungszeit"
+
+msgid "NetDB ACK"
+msgstr "NetDB-Bestätigung"
+
+msgid "NetDB peer acknowledge time"
+msgstr "NetDB-Peer-Bestätigungszeit"
+
+msgid "Lookups/s"
+msgstr "Abfragen/s"
+
+msgid "NetDB lookups handled per second"
+msgstr "NetDB-Abfragen pro Sekunde bearbeitet"
+
+msgid "Requests/s"
+msgstr "Anfragen/s"
+
+msgid "Combined store + lookup operations per second"
+msgstr "Kombinierte Speicher- und Abfroperationen pro Sekunde"
+
+msgid "Stores/s"
+msgstr "Speicher/s"
+
+msgid "NetDB store messages handled per second"
+msgstr "NetDB-Speichernachrichten pro Sekunde bearbeitet"
+
+msgid "LS Timeout"
+msgstr "LS-Zeitüberschreitung"
+
+msgid "LeaseSet request timeouts (last minute)"
+msgstr "LeaseSet-Anfrage-Zeitüberschreitungen (letzte Minute)"
 
 msgid "Overview"
 msgstr "Übersicht"
@@ -2004,6 +2250,12 @@ msgstr "Router-Leistung grafisch darstellen"
 
 msgid "Graphs"
 msgstr "Graphen"
+
+msgid "Health"
+msgstr "Zustand"
+
+msgid "Router performance overview"
+msgstr ""
 
 msgid "Help"
 msgstr "Hilfe"
@@ -2067,6 +2319,12 @@ msgstr "Sitemap"
 
 msgid "Built-in anonymous BitTorrent Client"
 msgstr "Integrierter anonymer BitTorrent-Client"
+
+msgid "Router Auto-Tuning"
+msgstr "Router-Auto-Tuning"
+
+msgid "Tuning"
+msgstr ""
 
 msgid "Manage server and client tunnels"
 msgstr "Server- und Client-Tunnel verwalten"
@@ -2504,6 +2762,9 @@ msgstr "Nein"
 msgid "GeoIP Db"
 msgstr "GeoIP-Datenbank"
 
+msgid "ASN Db"
+msgstr "ASN-Datenbank"
+
 msgid "Target"
 msgstr "Ziel"
 
@@ -2652,9 +2913,6 @@ msgstr "Routersuche"
 
 msgid "All Routers"
 msgstr "Alle Router"
-
-msgid "LeaseSets"
-msgstr "LeaseSets"
 
 msgid "Advanced Lookup"
 msgstr "Erweiterte Suche"
@@ -2948,9 +3206,6 @@ msgstr "Profil anzeigen"
 msgid "Configure peer"
 msgstr "Teilnehmer editieren"
 
-msgid "Memory usage"
-msgstr "Speichernutzung"
-
 msgid "Hidden"
 msgstr "Versteckt"
 
@@ -3076,6 +3331,60 @@ msgstr "auf der Seite {0}Erweiterte Konfiguration{1}."
 msgid "to your router.config file."
 msgstr "zu Ihrer router.config-Datei."
 
+msgid "Peers reached in the last 60s"
+msgstr ""
+
+msgid "Fast"
+msgstr "schnell"
+
+msgid "Low-latency peers for tunnel participation"
+msgstr ""
+
+msgid "HighCap"
+msgstr ""
+
+msgid "High-bandwidth peers for many tunnels"
+msgstr ""
+
+msgid "Reliable"
+msgstr ""
+
+msgid "High-capacity peers with good acceptance"
+msgstr ""
+
+msgid "Peers that store and serve NetDb info"
+msgstr ""
+
+msgid "Known"
+msgstr "bekannt"
+
+msgid "Total entries in network database"
+msgstr ""
+
+msgid "Active%"
+msgstr ""
+
+msgid "Profiles with activity in the last 24h"
+msgstr ""
+
+msgid "Unreachable"
+msgstr "Unerreichbar"
+
+msgid "Peers without a reachable address"
+msgstr ""
+
+msgid "Peers excluded from all interactions"
+msgstr ""
+
+msgid "/min"
+msgstr ""
+
+msgid "Test Fail"
+msgstr ""
+
+msgid "Connectivity test failures per minute"
+msgstr ""
+
 msgid "Peer Connections"
 msgstr "Peer-Verbindungen"
 
@@ -3099,9 +3408,6 @@ msgstr "NTCP-Verbindungen"
 
 msgid "Peer capabilities"
 msgstr "Peer-Fähigkeiten"
-
-msgid "Caps"
-msgstr "Kategorien"
 
 msgid "Direction/Introduction"
 msgstr "Richtung/Bekanntmachung"
@@ -3253,9 +3559,6 @@ msgid_plural "{0} fails"
 msgstr[0] "{0} Fehler"
 msgstr[1] "{0} Fehler"
 
-msgid "Banned"
-msgstr "Gesperrt"
-
 msgid "backlogged"
 msgstr "im Rückstand"
 
@@ -3358,9 +3661,6 @@ msgstr "Beachten Sie, dass der Profiler auf die kontinuierliche Nutzung des Clie
 msgid "Domain"
 msgstr "Domäne"
 
-msgid "Host"
-msgstr "Gastgeber"
-
 msgid "Groups"
 msgstr "Gruppen"
 
@@ -3396,9 +3696,6 @@ msgstr "OK"
 
 msgid "tests passed"
 msgstr "Tests bestanden"
-
-msgid "Unreachable"
-msgstr "Unerreichbar"
 
 msgid "Test Fails"
 msgstr "Test fehlgeschlagen"
@@ -3519,9 +3816,6 @@ msgstr "Gruppen"
 msgid "Note: Peers are categorized by the profile organizer based on observable performance, not from capabilities they advertise in the NetDB."
 msgstr "Hinweis: Peers werden vom Profilorganisator anhand der beobachtbaren Leistung kategorisiert, nicht anhand der von ihnen in der NetDB angekündigten Funktionen."
 
-msgid "Fast"
-msgstr "schnell"
-
 msgid "Peers marked as high capacity that also meet or exceed speed average for all profiled peers."
 msgstr "Mit hoher Kapazität gekennzeichnete Peers, die auch den Geschwindigkeitsdurchschnitt aller profilierten Peers erreichen oder übertreffen."
 
@@ -3560,6 +3854,24 @@ msgstr "Wie viele neue Kontakte hat dieser Teilnehmer uns kürzlich mitgeteilt?"
 
 msgid "All"
 msgstr "Alle"
+
+msgid "SAM bridge is not running."
+msgstr "SAM-Bridge läuft nicht."
+
+msgid "Active sessions in SessionsDB"
+msgstr "Aktive Sitzungen in SessionsDB"
+
+msgid "Active / pool worker threads"
+msgstr "Aktive / Pool-Arbeiter-Threads"
+
+msgid "Pending commands in pool"
+msgstr "Ausstehende Befehle im Pool"
+
+msgid "Connected pool handlers"
+msgstr "Verbundene Pool-Handler"
+
+msgid "Sockets stolen for data streaming"
+msgstr "Sockets für Daten-Streaming entwendet"
 
 msgid "Select search engine"
 msgstr "Wähle eine Suchmaschine aus"
@@ -3875,6 +4187,9 @@ msgstr "NetDb"
 msgid "Show all current peer connections"
 msgstr "Zeige alle bestehenden Verbindungen zu Teilnehmern"
 
+msgid "Router health overview"
+msgstr "Router-Zustandsübersicht"
+
 msgid "Profiles"
 msgstr "Profile"
 
@@ -3883,9 +4198,6 @@ msgstr "Zeige aktuelle Leistungsprofile der Teilnehmer"
 
 msgid "View existing tunnels and tunnel build status"
 msgstr "Betrachte die existierenden Tunnel und den Status des Tunnelaufbaus"
-
-msgid "Streams"
-msgstr "Datenströme"
 
 msgid "Advanced Configuration"
 msgstr "Erweiterte Einstellungen"
@@ -3935,9 +4247,6 @@ msgstr "Unterschied zwischen netzwerksynchronisierter Zeit und Ortszeit"
 
 msgid "How much RAM I2P is using / total RAM available to I2P (excludes RAM allocated to the JVM)"
 msgstr "Speichernutzung von I2P / maximaler verfügbarer Speicher für I2P (ohne den Speicher für die JVM)"
-
-msgid "Memory"
-msgstr "Speicher"
 
 msgid "Floodfill enabled"
 msgstr "Floodfill aktiviert"
@@ -4012,9 +4321,6 @@ msgstr "Gesamtanzahl an Teilnehmern in unserer Netzwerk-Datenbank"
 msgid "Total RouterInfos stored on disk"
 msgstr "Gesamte RouterInfos auf der Festplatte gespeichert"
 
-msgid "Known"
-msgstr "bekannt"
-
 msgid "Configure router bandwidth allocation"
 msgstr "Konfigurieren der Bandbreitenzuweisung des Routers"
 
@@ -4060,9 +4366,6 @@ msgstr "Tunnel an denen wir teilnehmen, die direkt Bandbreite dem Netzwerk zur V
 msgid "Current / Maximum"
 msgstr "Aktuell / Maximum"
 
-msgid "Transit"
-msgstr "Transit"
-
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr "Gleichzeitige Tunnelaufbauten (gemittelt über eine Minute) / einzelne Tunnelaufbauzeit"
 
@@ -4071,9 +4374,6 @@ msgstr "Parallelität"
 
 msgid "Combined utility and service tunnel build success (higher of 1m or 10m average)"
 msgstr "Kombinierter Nutz- und Diensttunnel-Bauerfolg (höherer Wert aus 1-Min.- oder 10-Min.-Mittelwert)"
-
-msgid "Build Success"
-msgstr "Erfolg aufbauen"
 
 msgid "The ratio of tunnel hops we provide to tunnel hops we use - a value greater than 1.00 indicates a positive contribution to the network"
 msgstr " Verhältnis der Tunnelsprünge, die wir dem Netz zur Verfügugn stellen, zu denen, die wir selbst benutzen - ein Wert größer als 1,00 bedeutet einen positiven Beitrag zum I2P-Netzwerk"
@@ -4201,6 +4501,15 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "ein Ereignis"
 msgstr[1] "{0} Ereignisse"
+
+msgid "sent"
+msgstr "gesendet"
+
+msgid "received"
+msgstr "empfangen"
+
+msgid "No active streaming connections."
+msgstr "Keine aktiven Streaming-Verbindungen."
 
 msgid "No known routers"
 msgstr "Keine bekannten Router"
@@ -4453,6 +4762,780 @@ msgstr "Entfernung zu"
 
 msgid "Distance for"
 msgstr "Entfernung für"
+
+msgid "Acknowledgement Frequency"
+msgstr "Bestätigungsfrequenz"
+
+msgid "Data Message Timeout"
+msgstr "Datenmeldungs-Timeout"
+
+msgid "Outbound Establish Timeout"
+msgstr "Outbound-Establish-Timeout"
+
+msgid "Inbound Establish Timeout"
+msgstr "Inbound-Establish-Timeout"
+
+msgid "NTCP Establish Timeout"
+msgstr "NTCP-Establish-Timeout"
+
+msgid "Tunnel Requeue Delay"
+msgstr "Tunnel-Requeue-Verzögerung"
+
+msgid "Tunnel Replenish Frequency"
+msgstr "Tunnel-Auffüllfrequenz"
+
+msgid "Tunnel Selector Loop Delay"
+msgstr "Tunnel-Selektor-Schleifenverzögerung"
+
+msgid "Outbound Messages Per Pump"
+msgstr "Outbound-Meldungen pro Pumpvorgang"
+
+msgid "Inbound Messages Per Pump"
+msgstr "Inbound-Meldungen pro Pumpvorgang"
+
+msgid "Initial Congestion Window"
+msgstr "Anfängliches Stau-Fenster"
+
+msgid "Initial RTO"
+msgstr "Anfängliches RTO"
+
+msgid "ACK Delay"
+msgstr "ACK-Verzögerung"
+
+msgid "Nagle Flush Delay"
+msgstr "Nagle-Flush-Verzögerung"
+
+msgid "Slow Start Window Cap"
+msgstr "Slow-Start-Fenster-Limit"
+
+msgid "Max SYN Sends"
+msgstr ""
+
+msgid "Max RTO"
+msgstr "Max. RTO"
+
+msgid "Max Resend Delay"
+msgstr "Max. Resend-Verzögerung"
+
+msgid "Max Retransmissions"
+msgstr "Max. Retransmissionen"
+
+msgid "Writer Queue Size"
+msgstr "Schreiber-Warteschlangengröße"
+
+msgid "CoDel Target Delay"
+msgstr "CoDel-Zielverzögerung"
+
+msgid "CoDel Interval"
+msgstr "CoDel-Intervall"
+
+msgid "Westwood Decay Factor"
+msgstr "Westwood-Abklingfaktor"
+
+msgid "RED Minimum Queue Threshold"
+msgstr "RED-Mindest-Warteschlangenschwelle"
+
+msgid "RED Maximum Queue Threshold"
+msgstr "RED-Maximal-Warteschlangenschwelle"
+
+msgid "RED Maximum Drop Probability"
+msgstr "RED-Maximale-Verwerf-Wahrscheinlichkeit"
+
+msgid "X25519 Precalculate Minimum"
+msgstr "X25519-Vorberechnung Minimum"
+
+msgid "EDH Precalculate Minimum"
+msgstr "EDH-Vorberechnung Minimum"
+
+msgid "ML-KEM Precalculate Minimum"
+msgstr "ML-KEM-Vorberechnung Minimum"
+
+msgid "NTCP Maximum Send Threads"
+msgstr "NTCP maximale Sende-Threads"
+
+msgid "NTCP Send Finisher Threads"
+msgstr "NTCP-Sende-Abschluss-Threads"
+
+msgid "NTCP Send Queue Capacity"
+msgstr "NTCP-Sende-Warteschlangenkapazität"
+
+msgid "UDP Message Receiver Threads"
+msgstr "UDP-Meldungs-Empfangs-Threads"
+
+msgid "UDP Maximum Handler Threads"
+msgstr "UDP maximale Handler-Threads"
+
+msgid "rDNS Executor Threads"
+msgstr "rDNS-Executor-Threads"
+
+msgid "Peer Outbound Queue Size"
+msgstr "Peer-Outbound-Warteschlangengröße"
+
+msgid "Transit Throttle Factor"
+msgstr "Transit-Drosselungsfaktor"
+
+msgid "Throttle Reject Exponent"
+msgstr "Drosselungs-Ablehnungs-Exponent"
+
+msgid "Maximum Participating Tunnels"
+msgstr "Maximale teilnehmende Tunnel"
+
+msgid "Build Handler Maximum Queue"
+msgstr "Build-Handler-Maximalwarteschlange"
+
+msgid "Rebuild Throttle Interval"
+msgstr "Wiederaufbau-Drosselungsintervall"
+
+msgid "Per-Tunnel Bandwidth Divisor"
+msgstr "Bandbreiten-Divisor pro Tunnel"
+
+msgid "Tunnel Growth Tolerance"
+msgstr "Tunnel-Wachstumstoleranz"
+
+msgid "Peers Per Search"
+msgstr "Peers pro Suche"
+
+msgid "Max Concurrent Searches"
+msgstr "Max. gleichzeitige Suchen"
+
+msgid "Search Timeout"
+msgstr "Such-Timeout"
+
+msgid "LeaseSet Lookup Timeout"
+msgstr "LeaseSet-Such-Timeout"
+
+msgid "RouterInfo Lookup Timeout"
+msgstr "RouterInfo-Such-Timeout"
+
+msgid "Max Concurrent Handshakes"
+msgstr "Max. gleichzeitige Handshakes"
+
+msgid "Maximum Peer Profiles"
+msgstr "Maximale Peer-Profile"
+
+msgid "Minimum Fast Peers"
+msgstr "Mindestanzahl schnelle Peers"
+
+msgid "Maximum Fast Peers"
+msgstr "Maximale schnelle Peers"
+
+msgid "Minimum High Capacity Peers"
+msgstr "Mindestanzahl Peers mit hoher Kapazität"
+
+msgid "Maximum High Capacity Peers"
+msgstr "Maximale Peers mit hoher Kapazität"
+
+msgid "Tunnel Build Request Timeout"
+msgstr "Tunnel-Build-Anfrage-Timeout"
+
+msgid "Tunnel Build First Hop Timeout"
+msgstr "Tunnel-Build-First-Hop-Timeout"
+
+msgid "Max Concurrent Tunnel Builds"
+msgstr "Max. gleichzeitige Tunnel-Builds"
+
+msgid "Max Concurrent RI Lookups"
+msgstr "Max. gleichzeitige RI-Suchen"
+
+msgid "Next-Hop Lookup %"
+msgstr ""
+
+msgid "Max Concurrent Test Jobs"
+msgstr "Max. gleichzeitige Test-Jobs"
+
+msgid "Min Delay Between Tests"
+msgstr "Min. Verzögerung zwischen Tests"
+
+msgid "Max Delay Between Tests"
+msgstr "Max. Verzögerung zwischen Tests"
+
+msgid "NTCP Reader Threads"
+msgstr "NTCP-Leser-Threads"
+
+msgid "NTCP Writer Threads"
+msgstr "NTCP-Schreiber-Threads"
+
+msgid "NTCP Pumper Failsafe Interval"
+msgstr "NTCP-Pumper-Failsafe-Intervall"
+
+msgid "Max Concurrent Peer Messages"
+msgstr "Max. gleichzeitige Peer-Meldungen"
+
+msgid "Initial UDP Concurrent Messages"
+msgstr "Anfängliche gleichzeitige UDP-Meldungen"
+
+msgid "Min UDP Concurrent Messages"
+msgstr "Min. gleichzeitige UDP-Meldungen"
+
+msgid "Initial UDP RTO"
+msgstr "Anfängliches UDP-RTO"
+
+msgid "Min UDP RTO"
+msgstr "Min. UDP-RTO"
+
+msgid "Max UDP RTO"
+msgstr "Max. UDP-RTO"
+
+msgid "Max UDP Send Window"
+msgstr "Max. UDP-Sende-Fenster"
+
+msgid "Post-RTO Window Restart"
+msgstr "Post-RTO-Fenster-Neustart"
+
+msgid "NTCP Send Pool Capacity"
+msgstr "NTCP-Sendepool-Kapazität"
+
+msgid "Internal Queue Size"
+msgstr "Interne Warteschlangengröße"
+
+msgid "Sent Messages Clean Time"
+msgstr "Aufräumzeit für gesendete Meldungen"
+
+msgid "Outbound Message Expiration"
+msgstr "Outbound-Meldungs-Ablauf"
+
+msgid "Max Pending Handshakes"
+msgstr "Max. anstehende Handshakes"
+
+msgid "NTCP Max Write Buffers Per Connection"
+msgstr "NTCP max. Schreibpuffer pro Verbindung"
+
+msgid "Min Resend Delay"
+msgstr "Min. Resend-Verzögerung"
+
+msgid "Congestion Avoidance Growth Rate"
+msgstr "Stau-Vermeidungs-Wachstumsrate"
+
+msgid "Slow Start Growth Rate"
+msgstr "Slow-Start-Wachstumsrate"
+
+msgid "Min Pacing Rate"
+msgstr ""
+
+msgid "RTT Cap"
+msgstr "RTT-Limit"
+
+msgid "Initial Resend Delay"
+msgstr "Anfängliche Resend-Verzögerung"
+
+msgid "Dup ACK Delay"
+msgstr "Dup-ACK-Verzögerung"
+
+msgid "Inactivity Timeout"
+msgstr "Inaktivitäts-Timeout"
+
+msgid "Max Window Size"
+msgstr ""
+
+msgid "Max Message Queue Age"
+msgstr "Max. Meldungs-Warteschlangenalter"
+
+msgid "I/O Thread Priority"
+msgstr "I/O-Thread-Priorität"
+
+msgid "Pumper Queue Capacity"
+msgstr "Pumper-Warteschlangenkapazität"
+
+msgid "Pumper Threads"
+msgstr "Pumper-Threads"
+
+msgid "Server Handler Threads"
+msgstr "Server-Handler-Threads"
+
+msgid "Build Handler Threads"
+msgstr "Build-Handler-Threads"
+
+msgid "Client Runner Max Threads"
+msgstr "Client-Runner-Max-Threads"
+
+msgid "Participating Throttle Min"
+msgstr "Teilnahme-Drosselung Minimum"
+
+msgid "Participating Throttle Max"
+msgstr "Teilnahme-Drosselung Maximum"
+
+msgid "Participating Throttle Percent"
+msgstr "Teilnahme-Drosselung Prozent"
+
+msgid "Request Throttle Min"
+msgstr "Anfrage-Drosselung Minimum"
+
+msgid "Request Throttle Max"
+msgstr "Anfrage-Drosselung Maximum"
+
+msgid "Request Throttle Percent"
+msgstr "Anfrage-Drosselung Prozent"
+
+msgid "Request Throttle Burst Threshold"
+msgstr "Anfrage-Drosselung-Burst-Schwelle"
+
+msgid "High-Load Lag Threshold"
+msgstr "Hochlast-Verzögerungsschwelle"
+
+msgid "High-Load CPU Threshold"
+msgstr "Hochlast-CPU-Schwelle"
+
+msgid "Moderate-Load Lag Threshold"
+msgstr "Mäßiglast-Verzögerungsschwelle"
+
+msgid "Moderate-Load CPU Threshold"
+msgstr "Mäßiglast-CPU-Schwelle"
+
+msgid "Sustained High-Load Window"
+msgstr "Anhaltendes Hochlast-Fenster"
+
+msgid "Sustained Moderate-Load Window"
+msgstr "Anhaltendes Mäßiglast-Fenster"
+
+msgid "Peer Activity Window Multiplier"
+msgstr "Peer-Aktivitäts-Fenster-Multiplikator"
+
+msgid "Pool Build Failure Threshold"
+msgstr "Pool-Build-Fehler-Schwelle"
+
+msgid "Pool Build Backoff"
+msgstr "Pool-Build-Backoff"
+
+msgid "Pool Spare Tunnel Buffer"
+msgstr "Pool-Reserve-Tunnel-Puffer"
+
+msgid "Transit Reject Threshold"
+msgstr "Transit-Ablehnungs-Schwelle"
+
+msgid "Transit Reject Steepness"
+msgstr "Transit-Ablehnungs-Steilheit"
+
+msgid "Transit Load Weight"
+msgstr "Transit-Last-Gewicht"
+
+msgid "Request Reject Threshold"
+msgstr "Anfrage-Ablehnungs-Schwelle"
+
+msgid "Request Reject Steepness"
+msgstr "Anfrage-Ablehnungs-Steilheit"
+
+msgid "Request Load Weight"
+msgstr "Anfrage-Last-Gewicht"
+
+msgid "RTO Backoff Multiplier"
+msgstr "RTO-Backoff-Multiplikator"
+
+msgid "Socket Connect Timeout"
+msgstr "Socket-Verbindungs-Timeout"
+
+msgid "Untested Tunnel Cap Multiplier"
+msgstr ""
+
+msgid "Message Processing Throttle"
+msgstr ""
+
+msgid "Data packets between each ACK."
+msgstr "Datenpakete zwischen jeder ACK."
+
+msgid "Time before a message is declared lost (ms)."
+msgstr "Zeit, bevor eine Meldung als verloren gilt (ms)."
+
+msgid "Outbound SSU handshake timeout (ms)."
+msgstr "Outbound-SSU-Handshake-Timeout (ms)."
+
+msgid "Inbound SSU handshake timeout (ms)."
+msgstr "Inbound-SSU-Handshake-Timeout (ms)."
+
+msgid "NTCP2 handshake timeout (ms)."
+msgstr "NTCP2-Handshake-Timeout (ms)."
+
+msgid "Pumper idle wait before re-checking work (ms)."
+msgstr "Pumper-Leerlaufwartezeit vor erneuter Arbeitsprüfung (ms)."
+
+msgid "Bandwidth token refill interval (ms)."
+msgstr "Bandbreiten-Token-Auffüllintervall (ms)."
+
+msgid "NIO selector sleep between loops (ms)."
+msgstr ""
+
+msgid "Outbound messages batched per gateway pump."
+msgstr "Outbound-Meldungen pro Gateway-Pumpvorgang gebündelt."
+
+msgid "Inbound messages batched per gateway pump."
+msgstr "Inbound-Meldungen pro Gateway-Pumpvorgang gebündelt."
+
+msgid "Starting congestion window (packets)."
+msgstr "Anfängliches Stau-Fenster (Pakete)."
+
+msgid "Starting retransmission timeout (ms)."
+msgstr "Anfängliches Retransmission-Timeout (ms)."
+
+msgid "ACK delay for piggybacking (ms)."
+msgstr "ACK-Verzögerung für Piggybacking (ms)."
+
+msgid "Nagle flush delay (ms)."
+msgstr "Nagle-Flush-Verzögerung (ms)."
+
+msgid "Max congestion window during slow start."
+msgstr "Max. Stau-Fenster während Slow Start."
+
+msgid "Total SYN attempts before giving up on a handshake."
+msgstr ""
+
+msgid "Max retransmission timeout (ms)."
+msgstr "Max. Retransmission-Timeout (ms)."
+
+msgid "Max time between retransmissions (ms)."
+msgstr "Max. Zeit zwischen Retransmissionen (ms)."
+
+msgid "Retransmissions before dropping the stream."
+msgstr "Retransmissionen vor Verwerfen des Streams."
+
+msgid "Max idle time before dropping a stream (ms)."
+msgstr "Max. Leerlaufzeit vor Verwerfen eines Streams (ms)."
+
+msgid "Max unacknowledged packets per stream connection."
+msgstr ""
+
+msgid "I2CP write queue depth."
+msgstr "I2CP-Schreib-Warteschlangentiefe."
+
+msgid "CoDel drop target delay (ms)."
+msgstr "CoDel-Verwerf-Zielverzögerung (ms)."
+
+msgid "CoDel measurement window (ms)."
+msgstr "CoDel-Messfenster (ms)."
+
+msgid "Westwood EWMA smoothing factor."
+msgstr "Westwood-EWMA-Glättungsfaktor."
+
+msgid "Min RED queue size before probabilistic drops (bytes)."
+msgstr "Min. RED-Warteschlangengröße vor probabilistischem Verwerfen (Bytes)."
+
+msgid "Max RED queue size for full drops (bytes)."
+msgstr "Max. RED-Warteschlangengröße für vollständiges Verwerfen (Bytes)."
+
+msgid "Max RED drop probability when queue is full (ppm)."
+msgstr "Max. RED-Verwerf-Wahrscheinlichkeit bei voller Warteschlange (ppm)."
+
+msgid "Precomputed X25519 key pool minimum."
+msgstr "Vorberechneter X25519-Schlüsselpool Mindestgröße."
+
+msgid "Precomputed EDH key pool minimum."
+msgstr "Vorberechneter EDH-Schlüsselpool Mindestgröße."
+
+msgid "Precomputed ML-KEM key pool minimum."
+msgstr "Vorberechneter ML-KEM-Schlüsselpool Mindestgröße."
+
+msgid "Thread pool cap for NTCP send completion."
+msgstr "Thread-Pool-Limit für NTCP-Sendeabschluss."
+
+msgid "Active threads completing NTCP sends."
+msgstr "Aktive Threads, die NTCP-Sendevorgänge abschließen."
+
+msgid "NTCP send finalizer queue size."
+msgstr "NTCP-Sende-Finalizer-Warteschlangengröße."
+
+msgid "Thread pool cap for UDP packet dispatch."
+msgstr "Thread-Pool-Limit für UDP-Paket-Versand."
+
+msgid "Threads reassembling UDP messages from fragments."
+msgstr "Threads, die UDP-Meldungen aus Fragmenten zusammensetzen."
+
+msgid "Threads performing reverse DNS lookups."
+msgstr "Threads, die Reverse-DNS-Abfragen ausführen."
+
+msgid "Per-peer outbound queue size."
+msgstr "Outbound-Warteschlangengröße pro Peer."
+
+msgid "Transit rejection aggressiveness (50-100%)."
+msgstr "Transit-Ablehnungs-Aggressivität (50–100 %)."
+
+msgid "Steepness of the transit rejection curve."
+msgstr "Steilheit der Transit-Ablehnungskurve."
+
+msgid "Transit tunnel capacity."
+msgstr "Transit-Tunnel-Kapazität."
+
+msgid "Max queued build requests."
+msgstr "Max. wartende Build-Anfragen."
+
+msgid "Delay between rebuild rounds when pools are healthy (ms)."
+msgstr "Verzögerung zwischen Wiederaufbau-Runden bei gesunden Pools (ms)."
+
+msgid "Divides bandwidth among transit tunnels."
+msgstr "Teilt Bandbreite unter Transit-Tunnels auf."
+
+msgid "How aggressively new tunnels are accepted before throttling."
+msgstr "Wie aggressiv neue Tunnel vor der Drosselung akzeptiert werden."
+
+msgid "Peers queried per iterative search."
+msgstr "Pro iterative Suche abgefragte Peers."
+
+msgid "Max simultaneous NetDB lookups."
+msgstr "Max. gleichzeitige NetDB-Suchen."
+
+msgid "Per-peer lookup timeout (ms)."
+msgstr "Such-Timeout pro Peer (ms)."
+
+msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
+msgstr "Adaptive Deadline-Obergrenze für LeaseSet-Suchen (ms)."
+
+msgid "Adaptive deadline cap for RouterInfo lookups (ms)."
+msgstr "Adaptive Deadline-Obergrenze für RouterInfo-Suchen (ms)."
+
+msgid "Max simultaneous SSU handshakes."
+msgstr "Max. gleichzeitige SSU-Handshakes."
+
+msgid "Memory cap for peer profiles."
+msgstr "Speicher-Limit für Peer-Profile."
+
+msgid "Min fast peers in routing table."
+msgstr "Min. schnelle Peers in Routing-Tabelle."
+
+msgid "Max fast peers in routing table."
+msgstr "Max. schnelle Peers in Routing-Tabelle."
+
+msgid "Min high-capacity peers in routing table."
+msgstr "Min. Peers mit hoher Kapazität in Routing-Tabelle."
+
+msgid "Max high-capacity peers in routing table."
+msgstr "Max. Peers mit hoher Kapazität in Routing-Tabelle."
+
+msgid "Build reply timeout (ms)."
+msgstr "Build-Antwort-Timeout (ms)."
+
+msgid "First-hop build forward timeout (ms)."
+msgstr "First-Hop-Build-Forward-Timeout (ms)."
+
+msgid "Max concurrent tunnel builds."
+msgstr "Max. gleichzeitige Tunnel-Builds."
+
+msgid "Max concurrent RI lookups during builds."
+msgstr "Max. gleichzeitige RI-Suchen während Builds."
+
+msgid "Concurrent next-hop lookup limit as % of transit tunnels."
+msgstr ""
+
+msgid "Max concurrent tunnel test jobs."
+msgstr "Max. gleichzeitige Tunnel-Test-Jobs."
+
+msgid "Min interval between tunnel tests (ms)."
+msgstr "Min. Intervall zwischen Tunnel-Tests (ms)."
+
+msgid "Max interval between tunnel tests (ms)."
+msgstr "Max. Intervall zwischen Tunnel-Tests (ms)."
+
+msgid "Threads decrypting inbound NTCP data."
+msgstr "Threads, die eingehende NTCP-Daten entschlüsseln."
+
+msgid "Threads that encrypt outbound NTCP messages."
+msgstr ""
+
+msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
+msgstr "Failsafe-Scan-Intervall für hängende NTCP-Pumps (ms)."
+
+msgid "In-flight message limit per UDP peer."
+msgstr "In-Flight-Meldungs-Limit pro UDP-Peer."
+
+msgid "Initial concurrent messages per peer."
+msgstr "Anfängliche gleichzeitige Meldungen pro Peer."
+
+msgid "Min concurrent messages per peer."
+msgstr "Min. gleichzeitige Meldungen pro Peer."
+
+msgid "Initial retransmission timeout (ms)."
+msgstr "Anfängliches Retransmission-Timeout (ms)."
+
+msgid "Min retransmission timeout (ms)."
+msgstr "Min. Retransmission-Timeout (ms)."
+
+msgid "Max unacknowledged messages per peer."
+msgstr "Max. unbestätigte Meldungen pro Peer."
+
+msgid "Window restart size (MTUs) after RTO collapse."
+msgstr "Fenster-Neustartgröße (MTUs) nach RTO-Kollaps."
+
+msgid "Priority-aware buffer where client messages jump transit."
+msgstr ""
+
+msgid "I2CP session buffer size."
+msgstr "I2CP-Sitzungspuffergröße."
+
+msgid "Interval between sweeps of ACKed sent-messages."
+msgstr "Intervall zwischen Säuberungen bestätigter gesendeter Meldungen."
+
+msgid "Max age for undelivered outbound messages."
+msgstr "Max. Alter für unzugestellte Outbound-Meldungen."
+
+msgid "Pending outbound handshake queue."
+msgstr "Warteschlange für anstehende Outbound-Handshakes."
+
+msgid "Write buffer per NTCP connection."
+msgstr "Schreibpuffer pro NTCP-Verbindung."
+
+msgid "Min time between retransmissions (ms)."
+msgstr "Min. Zeit zwischen Retransmissionen (ms)."
+
+msgid "Congestion avoidance growth rate."
+msgstr "Stau-Vermeidungs-Wachstumsrate."
+
+msgid "Window multiplier per RTT during slow start."
+msgstr "Fenster-Multiplikator pro RTT während Slow Start."
+
+msgid "Minimum send rate before pacing kicks in (KB/s)."
+msgstr ""
+
+msgid "Upper bound on RTT estimate (ms)."
+msgstr "Obergrenze für RTT-Schätzung (ms)."
+
+msgid "Delay before first retransmit (ms)."
+msgstr "Verzögerung vor erster Retransmission (ms)."
+
+msgid "Delay for dup or OOO packet ACKs (ms)."
+msgstr "Verzögerung für Dup- oder OOO-Paket-ACKs (ms)."
+
+msgid "Max message age in queue before drop (ms)."
+msgstr "Max. Meldungsalter in Warteschlange vor Verwerfen (ms)."
+
+msgid "Dynamic priority for I/O handler threads."
+msgstr "Dynamische Priorität für I/O-Handler-Threads."
+
+msgid "Gateway pumper queue size."
+msgstr "Gateway-Pumper-Warteschlangengröße."
+
+msgid "Gateway pumper thread count."
+msgstr "Gateway-Pumper-Thread-Anzahl."
+
+msgid "Handler threads for incoming I2PTunnel connections."
+msgstr "Handler-Threads für eingehende I2PTunnel-Verbindungen."
+
+msgid "Thread pool for inbound build request processing."
+msgstr "Thread-Pool für eingehende Build-Anfrage-Verarbeitung."
+
+msgid "Ceiling for client proxy thread pool."
+msgstr "Obergrenze für Client-Proxy-Thread-Pool."
+
+msgid "Min transit tunnels any peer can hold."
+msgstr "Min. Transit-Tunnels, die ein Peer halten kann."
+
+msgid "Max transit tunnels a single peer can hold."
+msgstr "Max. Transit-Tunnels, die ein einzelner Peer halten kann."
+
+msgid "Max share of transit tunnels for a single peer."
+msgstr "Max. Anteil an Transit-Tunnels für einen einzelnen Peer."
+
+msgid "Min inbound requests accepted from any peer."
+msgstr "Min. eingehende Anfragen, die von einem Peer akzeptiert werden."
+
+msgid "Max inbound requests accepted from any peer."
+msgstr "Max. eingehende Anfragen, die von einem Peer akzeptiert werden."
+
+msgid "Max share of tunnel requests from a single peer."
+msgstr "Max. Anteil an Tunnel-Anfragen von einem einzelnen Peer."
+
+msgid "Burst threshold: requests per second before a ban."
+msgstr "Burst-Schwelle: Anfragen pro Sekunde vor einem Bann."
+
+msgid "Job queue lag triggering high-load request gating (ms)."
+msgstr "Job-Warteschlangen-Verzögerung, die Hochlast-Anfrage-Gating auslöst (ms)."
+
+msgid "System load percent triggering high-load request gating."
+msgstr "Systemlast-Prozent, das Hochlast-Anfrage-Gating auslöst."
+
+msgid "Job queue lag triggering moderate-load peer disconnect (ms)."
+msgstr "Job-Warteschlangen-Verzögerung, die Mäßiglast-Peer-Trennung auslöst (ms)."
+
+msgid "System load percent triggering moderate-load disconnect."
+msgstr "Systemlast-Prozent, das Mäßiglast-Trennung auslöst."
+
+msgid "Duration of high load before gating requests (ms)."
+msgstr "Dauer der hohen Last vor dem Gating von Anfragen (ms)."
+
+msgid "Duration of moderate load before declining requests (ms)."
+msgstr "Dauer der mäßigen Last vor dem Ablehnen von Anfragen (ms)."
+
+msgid "Widens peer recency window to re-admit peers when builds fail."
+msgstr "Erweitert das Peer-Aktualitätsfenster, um Peers bei Build-Fehlern wieder zuzulassen."
+
+msgid "Consecutive failures before pool backoff."
+msgstr "Aufeinanderfolgende Fehler vor Pool-Backoff."
+
+msgid "Cooldown duration after pool failure threshold (ms)."
+msgstr ""
+
+msgid "Target spare tunnel count per pool."
+msgstr "Ziel-Reserve-Tunnelanzahl pro Pool."
+
+msgid "Widens untested tunnel cap when testing stalls."
+msgstr ""
+
+msgid "Load threshold where probabilistic transit rejection starts (%)."
+msgstr "Last-Schwelle, ab der probabilistische Transit-Ablehnung beginnt (%)."
+
+msgid "Steepness of the transit rejection probability curve."
+msgstr "Steilheit der Transit-Ablehnungs-Wahrscheinlichkeitskurve."
+
+msgid "Load score multiplier for transit rejection (% of computed load)."
+msgstr "Last-Score-Multiplikator für Transit-Ablehnung (% der berechneten Last)."
+
+msgid "Load threshold where probabilistic request throttling starts (%)."
+msgstr "Last-Schwelle, ab der probabilistische Anfrage-Drosselung beginnt (%)."
+
+msgid "Steepness of the request throttling probability curve."
+msgstr "Steilheit der Anfrage-Drosselungs-Wahrscheinlichkeitskurve."
+
+msgid "Load score multiplier for request throttling (% of computed load)."
+msgstr "Last-Score-Multiplikator für Anfrage-Drosselung (% der berechneten Last)."
+
+msgid "RTO growth multiplier per retransmission timeout (%, 100 = flat)."
+msgstr "RTO-Wachstums-Multiplikator pro Retransmission-Timeout (%, 100 = flach)."
+
+msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
+msgstr "TCP-Socket-Verbindungs-Timeout für Tunnel-Server-Handler-Threads (ms)."
+
+msgid "Max average message delay before rejecting transit (ms)."
+msgstr ""
+
+msgid "Tunnel"
+msgstr "Tunnel"
+
+msgid "Streaming"
+msgstr "Streaming"
+
+msgid "Crypto"
+msgstr "Krypto"
+
+msgid "Auto-Tuning continuously monitors router performance and adjusts parameters to optimize throughput, reduce latency, and maintain stability."
+msgstr "Auto-Tuning überwacht kontinuierlich die Router-Leistung und passt Parameter an, um Durchsatz zu optimieren, Latenz zu reduzieren und Stabilität zu erhalten."
+
+msgid "Uncheck the Auto box on any row to pin that parameter and prevent further adjustments."
+msgstr "Deaktivieren Sie das Auto-Kontrollkästchen in einer Zeile, um diesen Parameter festzulegen und weitere Anpassungen zu verhindern."
+
+msgid "Healthy"
+msgstr "Gut"
+
+msgid "Fair"
+msgstr "Befriedigend"
+
+msgid "Degraded"
+msgstr "Beeinträchtigt"
+
+msgid "Current system health:"
+msgstr "Aktueller Systemzustand:"
+
+msgid "System health assessment is not yet available."
+msgstr "Systemzustandsbewertung ist noch nicht verfügbar."
+
+msgid "Parameter"
+msgstr "Parameter"
+
+msgid "Default"
+msgstr "Standard"
+
+msgid "Step"
+msgstr "Schritt"
+
+msgid "History"
+msgstr "Verlauf"
+
+msgid "Auto"
+msgstr "Auto"
 
 msgid "Exploratory"
 msgstr "Erkundung"
@@ -4992,6 +6075,27 @@ msgstr "Zusätzliche Router-Fähigkeiten"
 
 msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG"
 msgstr "Fähigkeitsgruppen hinzufügen, durch Leerzeichen oder Kommas getrennt, z.B. LUf,PUG"
+
+msgid "Misc Reasons"
+msgstr "Sonstige Gründe"
+
+msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
+msgstr "Sperre Floodfill-Peers, die auf Abfragen nicht antworten (Fehlerrate >95%)"
+
+msgid "Ban unresponsive floodfills"
+msgstr "Nicht antwortende Floodfills sperren"
+
+msgid "Ban routers whose RouterInfo has no version field"
+msgstr "Router sperren, deren RouterInfo kein Versionsfeld hat"
+
+msgid "Ban routers with no version"
+msgstr "Router ohne Version sperren"
+
+msgid "Ban routers that send excessive tunnel participation requests"
+msgstr "Router sperren, die übermäßige Tunnel-Teilnahmeanfragen senden"
+
+msgid "Ban excessive tunnel requests"
+msgstr "Übermäßige Tunnel-Anfragen sperren"
 
 msgid "Clear all bans"
 msgstr "Alle Sperren aufheben"
@@ -5609,6 +6713,36 @@ msgstr "Feste Seitenleiste"
 msgid "Enable conditional fixed sidebar"
 msgstr "Bedingte Seitenleiste aktivieren"
 
+msgid "Graph Options"
+msgstr "Diagrammoptionen"
+
+msgid "Legacy renderer"
+msgstr "Herkömmlicher Renderer"
+
+msgid "Use RRD4J renderer"
+msgstr "RRD4J-Renderer verwenden"
+
+msgid "minutes (2–30)"
+msgstr "Minuten (2–30)"
+
+msgid "Split display"
+msgstr "Geteilte Anzeige"
+
+msgid "Separate Inbound and Outbound"
+msgstr "Eingehend und ausgehend trennen"
+
+msgid "Graph direction"
+msgstr "Diagrammrichtung"
+
+msgid "Left-to-right"
+msgstr "Links nach rechts"
+
+msgid "Refresh Interval"
+msgstr "Aktualisierungsintervall"
+
+msgid "Update graph every second"
+msgstr "Diagramm jede Sekunde aktualisieren"
+
 msgid "config stats"
 msgstr "Statistiken einrichten"
 
@@ -5835,6 +6969,24 @@ msgstr "Diagramme"
 msgid "Performance Graphs"
 msgstr "Leistungsdiagramme"
 
+msgid "health"
+msgstr "Zustand"
+
+msgid "Router Health"
+msgstr "Router-Zustand"
+
+msgid "Performance & Load"
+msgstr "Leistung & Last"
+
+msgid "Transport & Connectivity"
+msgstr "Transport & Konnektivität"
+
+msgid "Network & Participation"
+msgstr "Netzwerk & Teilnahme"
+
+msgid "Floodfill / NetDB"
+msgstr "Floodfill / NetDB"
+
 msgid "Advanced Configuration Help - I2P+"
 msgstr "Hilfe zur erweiterten Konfiguration – I2P"
 
@@ -5912,6 +7064,18 @@ msgstr "Diese Einstellung, wenn auf true gesetzt, zeigt die Standard-Seitenleist
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Wenn aktiviert, benötigt die Router-Konsole eine Anmeldung. Wenn kein Passwort gesetzt ist, werden Sie auf der Anmeldeseite aufgefordert, eines festzulegen. Wenn deaktiviert, ist die Konsole ohne Anmeldung zugänglich, wenn keine Passwörter konfiguriert sind. [Standard ist false, wird in einer zukünftigen Version aus CSRF-Schutzgründen standardmäßig aktiviert]"
+
+msgid "When set to true, the sidebar bandwidth graph uses the legacy RRD4J SVG renderer. When set to false, the new dual-baseline canvas renderer is used, with gradient fills, glow effects, and a split inbound/outbound display. [Default is false]"
+msgstr "Wenn auf true gesetzt, verwendet das Bandbreiten-Diagramm in der Seitenleiste den veralteten RRD4J-SVG-Renderer. Wenn auf false gesetzt, wird der neue Dual-Baseline-Canvas-Renderer mit Verlaufsfüllungen, Glüh-Effekten und einer geteilten Inbound/Outbound-Anzeige verwendet. [Standard ist false]"
+
+msgid "The time period, in minutes, displayed in the sidebar bandwidth graph. Values outside the valid range (2–30) are clamped. [Default is 20]"
+msgstr "Der im Bandbreiten-Diagramm der Seitenleiste angezeigte Zeitraum in Minuten. Werte außerhalb des gültigen Bereichs (2–30) werden begrenzt. [Standard ist 20]"
+
+msgid "When set to true (the default), inbound and outbound traffic are displayed in a split view with a center baseline, with outbound spikes upward and inbound spikes downward. When set to false, both lines are displayed in overlay mode from the top of the graph with a configurable composite blend. [Default is true]"
+msgstr "Wenn auf true gesetzt (der Standard), werden eingehender und ausgehender Datenverkehr in einer geteilten Ansicht mit zentraler Baseline angezeigt, mit ausgehenden Ausschlägen nach oben und eingehenden nach unten. Wenn auf false gesetzt, werden beide Linien im Überlagerungsmodus von oben im Diagramm mit konfigurierbarem Komposit-Blend angezeigt. [Standard ist true]"
+
+msgid "Sets the render direction for the sidebar bandwidth graph. When set to rtl (the default), the graph renders right-to-left with newest data on the right. When set to ltr, the graph renders left-to-right with newest data on the left. [Default is rtl]"
+msgstr "Legt die Render-Richtung für das Bandbreiten-Diagramm der Seitenleiste fest. Wenn auf rtl gesetzt (der Standard), rendert das Diagramm von rechts nach links mit den neuesten Daten rechts. Wenn auf ltr gesetzt, rendert es von links nach rechts mit den neuesten Daten links. [Standard ist rtl]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Diese Einstellung bestimmt, ob der Router die bereitgestellte Datei <i>blocklist.txt</i> und eventuelle vom Benutzer konfigurierte Blocklisten verwenden soll, um das Sperren von Routern nach Hash oder IP-Adresse zu ermöglichen. Für IPv4 werden Bereiche und Netzmasken unterstützt, nicht jedoch für IPv6. Weitere Informationen finden Sie in der Datei <i>blocklist.txt</i> im Installationsverzeichnis von I2P+. [Standardmäßig aktiviert, Neustart erforderlich]"
@@ -6258,11 +7422,14 @@ msgstr "Tunnel-Lebensdauer in Millisekunden. Tunnel laufen nach diesem Zeitraum 
 msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]"
 msgstr "Start-Unterdrückungszeit in Millisekunden. Warnungen und Tunnelreduzierungslogik werden während des anfänglichen Router-Starts unterdrückt, um voreilige Entscheidungen zu vermeiden. [Standard ist 300000 (5 Minuten)]"
 
-msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]"
-msgstr "Mindestintervall in Millisekunden zwischen LeaseSet-Veröffentlichungen. Verhindert schnelle Veröffentlichungsstürme bei Tunnelwechseln. [Standard ist 300000 (5 Minuten)]"
+msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
+msgstr ""
 
-msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]"
-msgstr "Mindestintervall in Millisekunden zwischen LeaseSet-Objekterstellungen. Verhindert unnötigen LeaseSet-Objektverschleiß bei jedem Tunnel-Hinzufügen/Entfernen. [Standard ist 300000 (5 Minuten)]"
+msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
+msgstr ""
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "Maximale Anzahl gleichzeitiger Tunnelbauten pro Richtung. Höhere Werte beschleunigen die Pool-Erholung, können aber das Netz überlasten. [Standard ist 6]"
@@ -6342,11 +7509,11 @@ msgstr "Anzahl der Antworten an ein gedrosseltes Ziel, bevor überschüssige Pak
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr "Standard maximale Streaming-Verzögerung in Millisekunden, wenn keine explizite Verbindungs-Timeout gesetzt ist. [Standard ist 10000 (10 Sekunden)]"
 
-msgid "Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]"
-msgstr "Maximale Zeit in Millisekunden zwischen dem Empfang eines SYN und der Annahme auf einem Server-Socket. Steuert, wie lange unvollständige Verbindungen in der Annahme-Warteschlange gehalten werden. [Standard ist 4000 (4 Sekunden)]"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
+msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]"
-msgstr "Maximale Anzahl ausstehender Verbindungen (SYNs und Teilpakete) in der Server-Annahmewarteschlange. Größere Werte puffern mehr eingehende Verbindungen auf Kosten des Speichers. [Standard ist 80 (48 auf langsamen Systemen)]"
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
+msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Intervall in Millisekunden zwischen automatischen LeaseSet-Neuveröffentlichungen. Höhere Werte reduzieren den NetDB-Verkehr, können aber veraltete Lease-Informationen verursachen. [Standard ist 300000 (5 Minuten)]"
@@ -7010,9 +8177,6 @@ msgstr "Eingeschränkte Länder"
 
 msgid "A list of countries derived from the <a href=https://freedomhouse.org/report/countries-world-freedom-2019 class='sitelink external' target=_blank rel=noreferrer>World Freedom Report</a> with a poor civil liberties reputation. This list is used to place routers running in the specified countries in <i>Hidden Mode</i> to provide enhanced security for users. The following countries are designated as strict: Afghanistan, Azerbaijan, Bahrain, Belarus, Brunei, Burundi, Cameroon, Central African Republic, Chad, China, Cuba, Democratic Republic of the Congo, Egypt, Equatorial Guinea, Eritrea, Ethiopia, Iran, Kazakhstan, Laos, Libya, Myanmar, North Korea, Palestinian Territories, Rwanda, Saudi Arabia, Somalia, South Sudan, Sudan, Eswatini (Swaziland), Syria, Tajikistan, Thailand, Turkey, Turkmenistan, Venezuela, United Arab Emirates, Uzbekistan, Western Sahara, Yemen."
 msgstr "Eine Liste von Ländern, die aus dem <a href=https://freedomhouse.org/report/countries-world-freedom-2019 class='sitelink external' target=_blank rel=noreferrer>World Freedom Report</a> mit einem schlechten Ruf in Bezug auf bürgerliche Freiheiten abgeleitet wurde. Diese Liste wird verwendet, um Router, die in den angegebenen Ländern ausgeführt werden, im <i>Hidden Mode</i> zu platzieren, um erweiterte Sicherheit für Benutzer zu bieten. Die folgenden Länder gelten als streng: Afghanistan, Aserbaidschan, Bahrain, Weißrussland, Brunei, Burundi, Kamerun, Zentralafrikanische Republik, Tschad, China, Kuba, Demokratische Republik Kongo, Ägypten, Äquatorialguinea, Eritrea, Äthiopien, Iran, Kasachstan, Laos, Libyen, Myanmar, Nordkorea, Palästinensische Gebiete, Ruanda, Saudi-Arabien, Somalia, Südsudan, Sudan, Eswatini (Swasiland), Syrien, Tadschikistan, Thailand, Türkei, Turkmenistan, Venezuela, Vereinigte Arabische Emirate, Usbekistan, Westsahara, Jemen."
-
-msgid "Tunnel"
-msgstr "Tunnel"
 
 msgid "A <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink external' target=_blank rel=noreferrer>unidirectional</a> encrypted communication pathway between a client or server on the I2P network. Similar to a circuit in Tor, except that Tor circuits are bidirectional."
 msgstr "Ein <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink external' target=_blank rel=noreferrer>unidirektionaler</a> verschlüsselter Kommunikationsweg zwischen einem Client oder Server im I2P-Netzwerk. Ähnlich wie ein Tor-Schaltkreis, außer dass Tor-Schaltkreise bidirektional sind."
@@ -7877,6 +9041,9 @@ msgstr "Hinweis: Viele der Beschriftungen und Optionen in der Konsole haben Tool
 msgid "Theme Overrides"
 msgstr "Themenüberschreibungen"
 
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "I2P+ unterstützt benutzerdefinierte Theme-Überschreibungen für die Konsole, den Tunnel-Manager, I2PSnark, SusiDNS und Susimail, die Änderungen an den Themes erlauben, die nach Upgrades erhalten bleiben. Um eine Überschreibung zu aktivieren, erstellen Sie eine CSS-Datei namens <code>override.css</code> mit Ihren Theme-Änderungen und legen Sie diese im entsprechenden Theme-Verzeichnis des zu ändernden Themes ab, oder benennen Sie eine der Beispieldateien um, und führen Sie dann einen harten Browser-Refresh durch. Beachten Sie, dass der Tunnel-Manager und die Konsole dieselbe override.css verwenden. Um eine Überschreibung zu deaktivieren, löschen oder benennen Sie die Datei <code>override.css</code> um und führen dann einen harten Browser-Refresh durch (meist Control + Shift + R)."
+
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
 msgstr "Das Themeverzeichnis befindet sich im I2P-Anwendungsverzeichnis unter <code>docs/themes</code>. Es gibt Beispiele für Überschreibungsdateien in den Unterverzeichnissen der Konsole und des Torrents-Themas."
 
@@ -7951,9 +9118,6 @@ msgstr "Die Anzahl der Tunnel, die Sie für andere Teilnehmer bereitstellen, get
 
 msgid "Some basic indications of router overload:"
 msgstr "Einige grundlegende Anzeichen für Router-Überlastung:"
-
-msgid "Job Lag"
-msgstr "Aufgabenverzögerung"
 
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "Wie lange Aufgaben warten, bevor sie ausgeführt werden. Die Aufgabenwarteschlange wird auf der <a href='/jobs'>Jobs</a>-Seite aufgelistet. Leider gibt es in dem Router mehrere andere Aufgabenwarteschlangen, die verstopft sein könnten, und ihr Status ist in der Router-Konsole nicht verfügbar. Die Aufgabenverzögerung sollte im Allgemeinen null sein. Wenn sie durchgehend höher als 500 ms ist, ist Ihr Computer sehr langsam, Ihr Netzwerk hat Verbindungsprobleme oder der Router hat ernsthafte Probleme. <a href='/configstats#jobQueue.jobLag'>[Grafik aktivieren]</a>."
@@ -8282,9 +9446,6 @@ msgstr "JAR-Dateien"
 msgid "job queue stats"
 msgstr "Jobwarteschlangenstatistiken"
 
-msgid "Job Queue"
-msgstr "Auftragswarteschlange"
-
 msgid "Job statistics for this session"
 msgstr "Jobstatistiken für diese Sitzung"
 
@@ -8433,6 +9594,12 @@ msgstr "Ereignisprotokoll anzeigen"
 msgid "Filter Router log output"
 msgstr "Router-Log-Ausgabe filtern"
 
+msgid "SAM Debug"
+msgstr "SAM-Debug"
+
+msgid "SAM Bridge Debug"
+msgstr "SAM-Bridge-Debug"
+
 msgid "service logs"
 msgstr "Dienstprotokolle"
 
@@ -8457,11 +9624,17 @@ msgstr "Streaming-Verbindungen"
 msgid "Streaming Connections"
 msgstr "Streaming-Verbindungen"
 
-msgid "Local Tunnels"
-msgstr "Lokale Tunnel"
+msgid "All streaming connections"
+msgstr "Alle Streaming-Verbindungen"
 
-msgid "Most Recent"
-msgstr "Neueste"
+msgid "All Streams"
+msgstr "Alle Streams"
+
+msgid "Inbound streaming connections"
+msgstr "Eingehende Streaming-Verbindungen"
+
+msgid "Outbound streaming connections"
+msgstr "Ausgehende Streaming-Verbindungen"
 
 msgid "torrents"
 msgstr "Torrents"
@@ -8474,6 +9647,9 @@ msgstr "Neueste Transittunnel"
 
 msgid "Locally hosted tunnels (exploratory and client)"
 msgstr "Lokal gehostete Tunnel (Explorations- und Client-Tunnel)"
+
+msgid "Most Recent"
+msgstr "Neueste"
 
 msgid "Fastest"
 msgstr "Am schnellsten"
@@ -8490,11 +9666,17 @@ msgstr "Schnellste Transittunnel"
 msgid "Transit Tunnels by Peer"
 msgstr "Transittunnel von Peer"
 
+msgid "tuning"
+msgstr "Abstimmung"
+
 msgid "tunnel peer count"
 msgstr "Tunnel-Peer-Anzahl"
 
 msgid "local tunnels"
 msgstr "lokale Tunnel"
+
+msgid "Local Tunnels"
+msgstr "Lokale Tunnel"
 
 msgid "Toggle Tunnel Ids"
 msgstr "Tunnel-IDs umschalten"
@@ -8654,1076 +9836,11 @@ msgstr "Weiter"
 msgid "Finished"
 msgstr "Fertiggestellt"
 
-msgid "Tor Exit"
-msgstr "Tor-Ausgang"
 
-msgid "Restore Defaults"
-msgstr "Standardwerte wiederherstellen"
 
-msgid "All parameters restored to factory defaults"
-msgstr "Alle Parameter auf Werkseinstellungen zurückgesetzt"
 
-msgid "Auto-Tuning is not available"
-msgstr "Auto-Tuning ist nicht verfügbar"
 
-msgid "Tuning ranges saved — changes take effect immediately"
-msgstr "Tuning-Bereiche gespeichert — Änderungen treten sofort in Kraft"
 
-msgid "No changes to save"
-msgstr "Keine Änderungen zum Speichern"
 
-msgid "Tuning overrides applied"
-msgstr "Tuning-Überschreibungen angewendet"
 
-msgid "Invalid value"
-msgstr "Ungültiger Wert"
 
-msgid "Auto-Tuning"
-msgstr "Auto-Tuning"
-
-msgid "Graph preferences updated"
-msgstr "Diagrammeinstellungen aktualisiert"
-
-msgid "UTC time"
-msgstr "UTC-Zeit"
-
-msgid "Display time in UTC on graph axes"
-msgstr "Zeit in UTC auf Diagrammachsen anzeigen"
-
-msgid "Glow effect"
-msgstr "Leuchteffekt"
-
-msgid "Add a glow effect to graph lines"
-msgstr "Leuchteffekt zu Diagrammlinien hinzufügen"
-
-msgid "CPU"
-msgstr "CPU"
-
-msgid "CPU load average"
-msgstr "CPU-Lastdurchschnitt"
-
-msgid "Router uptime"
-msgstr "Router-Betriebszeit"
-
-msgid "ms"
-msgstr "ms"
-
-msgid "Job queue delay"
-msgstr "Job-Warteschlangenverzögerung"
-
-msgid "Msg Lag"
-msgstr "Nachrichtenverzögerung"
-
-msgid "Message send processing time"
-msgstr "Nachrichten-Sendeverarbeitungszeit"
-
-msgid "Ready jobs waiting in queue"
-msgstr "Bereite Jobs in der Warteschlange"
-
-msgid "Threads"
-msgstr "Threads"
-
-msgid "Active JVM threads"
-msgstr "Aktive JVM-Threads"
-
-msgid "NTCP Estab"
-msgstr "NTCP-Verbindungsaufbau"
-
-msgid "NTCP outbound establish time"
-msgstr "NTCP-Ausgehende Verbindungsaufbauzeit"
-
-msgid "SSU Estab"
-msgstr "SSU-Verbindungsaufbau"
-
-msgid "SSU outbound establish time"
-msgstr "SSU-Ausgehende Verbindungsaufbauzeit"
-
-msgid "SSU RTO"
-msgstr "SSU-RTO"
-
-msgid "SSU retransmission timeout"
-msgstr "SSU-Übertragungszeitüberschreitung"
-
-msgid "Conns/s"
-msgstr "Verbindungen/s"
-
-msgid "NTCP connections established per second"
-msgstr "NTCP-Verbindungen pro Sekunde aufgebaut"
-
-msgid "Msgs/s"
-msgstr "Nachr./s"
-
-msgid "Messages delivered per second"
-msgstr "Nachrichten pro Sekunde zugestellt"
-
-msgid "RTT"
-msgstr "RTT"
-
-msgid "End-to-end message round trip time"
-msgstr "Ende-zu-Ende-Nachrichten-Rundlaufzeit"
-
-msgid "Timeout"
-msgstr "Zeitüberschreitung"
-
-msgid "Tunnel build timeout rate"
-msgstr "Tunnel-Aufbau-Zeitüberschreitungsrate"
-
-msgid "Tunnel Build"
-msgstr "Tunnel-Aufbau"
-
-msgid "Client tunnel build latency"
-msgstr "Client-Tunnel-Aufbau-Latenzzeit"
-
-msgid "Active Peers"
-msgstr "Aktive Peers"
-
-msgid "Active peers (last 60s)"
-msgstr "Aktive Peers (letzte 60s)"
-
-msgid "Known Peers"
-msgstr "Bekannte Peers"
-
-msgid "Known routers in network database"
-msgstr "Bekannte Router in der Netzwerkdatenbank"
-
-msgid "Active I2CP clients"
-msgstr "Aktive I2CP-Clients"
-
-msgid "Transit tunnels hosted"
-msgstr "Gehostete Transit-Tunnel"
-
-msgid "Tunnel build success rate"
-msgstr "Tunnel-Aufbau-Erfolgsrate"
-
-msgid "NetDB"
-msgstr "NetDB"
-
-msgid "NetDB lookup time"
-msgstr "NetDB-Abfragezeit"
-
-msgid "Total banned peers"
-msgstr "Gesperrte Peers gesamt"
-
-msgid "Stored LeaseSets in floodfill"
-msgstr "Gespeicherte LeaseSets im Floodfill"
-
-msgid "Cache Hit"
-msgstr "Cache-Treffer"
-
-msgid "NetDB lookup success rate"
-msgstr "NetDB-Abfrage-Erfolgsrate"
-
-msgid "Flood Verify"
-msgstr "Floodfill-Überprüfung"
-
-msgid "Floodfill verify time"
-msgstr "Floodfill-Überprüfungszeit"
-
-msgid "NetDB ACK"
-msgstr "NetDB-Bestätigung"
-
-msgid "NetDB peer acknowledge time"
-msgstr "NetDB-Peer-Bestätigungszeit"
-
-msgid "Lookups/s"
-msgstr "Abfragen/s"
-
-msgid "NetDB lookups handled per second"
-msgstr "NetDB-Abfragen pro Sekunde bearbeitet"
-
-msgid "Requests/s"
-msgstr "Anfragen/s"
-
-msgid "Combined store + lookup operations per second"
-msgstr "Kombinierte Speicher- und Abfroperationen pro Sekunde"
-
-msgid "Stores/s"
-msgstr "Speicher/s"
-
-msgid "NetDB store messages handled per second"
-msgstr "NetDB-Speichernachrichten pro Sekunde bearbeitet"
-
-msgid "LS Timeout"
-msgstr "LS-Zeitüberschreitung"
-
-msgid "LeaseSet request timeouts (last minute)"
-msgstr "LeaseSet-Anfrage-Zeitüberschreitungen (letzte Minute)"
-
-msgid "ASN Db"
-msgstr "ASN-Datenbank"
-
-msgid "SAM bridge is not running."
-msgstr "SAM-Bridge läuft nicht."
-
-msgid "Active sessions in SessionsDB"
-msgstr "Aktive Sitzungen in SessionsDB"
-
-msgid "Active / pool worker threads"
-msgstr "Aktive / Pool-Arbeiter-Threads"
-
-msgid "Pending commands in pool"
-msgstr "Ausstehende Befehle im Pool"
-
-msgid "Connected pool handlers"
-msgstr "Verbundene Pool-Handler"
-
-msgid "Sockets stolen for data streaming"
-msgstr "Sockets für Daten-Streaming entwendet"
-
-msgid "Health"
-msgstr "Zustand"
-
-msgid "Router health overview"
-msgstr "Router-Zustandsübersicht"
-
-msgid "sent"
-msgstr "gesendet"
-
-msgid "received"
-msgstr "empfangen"
-
-msgid "No active streaming connections."
-msgstr "Keine aktiven Streaming-Verbindungen."
-
-msgid "Healthy"
-msgstr "Gut"
-
-msgid "Fair"
-msgstr "Befriedigend"
-
-msgid "Degraded"
-msgstr "Beeinträchtigt"
-
-msgid "Current system health:"
-msgstr "Aktueller Systemzustand:"
-
-msgid "System health assessment is not yet available."
-msgstr "Systemzustandsbewertung ist noch nicht verfügbar."
-
-msgid "Parameter"
-msgstr "Parameter"
-
-msgid "Default"
-msgstr "Standard"
-
-msgid "Step"
-msgstr "Schritt"
-
-msgid "History"
-msgstr "Verlauf"
-
-msgid "Auto"
-msgstr "Auto"
-
-msgid "Misc Reasons"
-msgstr "Sonstige Gründe"
-
-msgid "Ban unresponsive floodfills"
-msgstr "Nicht antwortende Floodfills sperren"
-
-msgid "Ban routers whose RouterInfo has no version field"
-msgstr "Router sperren, deren RouterInfo kein Versionsfeld hat"
-
-msgid "Ban routers with no version"
-msgstr "Router ohne Version sperren"
-
-msgid "Ban routers that send excessive tunnel participation requests"
-msgstr "Router sperren, die übermäßige Tunnel-Teilnahmeanfragen senden"
-
-msgid "Ban excessive tunnel requests"
-msgstr "Übermäßige Tunnel-Anfragen sperren"
-
-msgid "Graph Options"
-msgstr "Diagrammoptionen"
-
-msgid "Legacy renderer"
-msgstr "Herkömmlicher Renderer"
-
-msgid "Use RRD4J renderer"
-msgstr "RRD4J-Renderer verwenden"
-
-msgid "minutes (2–30)"
-msgstr "Minuten (2–30)"
-
-msgid "Split display"
-msgstr "Geteilte Anzeige"
-
-msgid "Separate Inbound and Outbound"
-msgstr "Eingehend und ausgehend trennen"
-
-msgid "Graph direction"
-msgstr "Diagrammrichtung"
-
-msgid "Left-to-right"
-msgstr "Links nach rechts"
-
-msgid "Refresh Interval"
-msgstr "Aktualisierungsintervall"
-
-msgid "Update graph every second"
-msgstr "Diagramm jede Sekunde aktualisieren"
-
-msgid "health"
-msgstr "Zustand"
-
-msgid "Router Health"
-msgstr "Router-Zustand"
-
-msgid "Performance & Load"
-msgstr "Leistung & Last"
-
-msgid "Transport & Connectivity"
-msgstr "Transport & Konnektivität"
-
-msgid "Network & Participation"
-msgstr "Netzwerk & Teilnahme"
-
-msgid "Floodfill / NetDB"
-msgstr "Floodfill / NetDB"
-
-msgid "SAM Debug"
-msgstr "SAM-Debug"
-
-msgid "SAM Bridge Debug"
-msgstr "SAM-Bridge-Debug"
-
-msgid "All streaming connections"
-msgstr "Alle Streaming-Verbindungen"
-
-msgid "All Streams"
-msgstr "Alle Streams"
-
-msgid "Inbound streaming connections"
-msgstr "Eingehende Streaming-Verbindungen"
-
-msgid "Outbound streaming connections"
-msgstr "Ausgehende Streaming-Verbindungen"
-
-msgid "tuning"
-msgstr "Abstimmung"
-
-msgid "Router Auto-Tuning"
-msgstr "Router-Auto-Tuning"
-
-msgid "CoDel drop target delay (ms)."
-msgstr "CoDel-Verwerf-Zielverzögerung (ms)."
-
-msgid "Initial RTO"
-msgstr "Anfängliches RTO"
-
-msgid "Rebuild Throttle Interval"
-msgstr "Wiederaufbau-Drosselungsintervall"
-
-msgid "Max fast peers in routing table."
-msgstr "Max. schnelle Peers in Routing-Tabelle."
-
-msgid "Minimum Fast Peers"
-msgstr "Mindestanzahl schnelle Peers"
-
-msgid "Threads encrypting NTCP messages."
-msgstr "Threads, die NTCP-Meldungen verschlüsseln."
-
-msgid "X25519 Precalculate Minimum"
-msgstr "X25519-Vorberechnung Minimum"
-
-msgid "Starting congestion window (packets)."
-msgstr "Anfängliches Stau-Fenster (Pakete)."
-
-msgid "Steepness of the request throttling probability curve."
-msgstr "Steilheit der Anfrage-Drosselungs-Wahrscheinlichkeitskurve."
-
-msgid "NTCP selector sleep between loops (ms)."
-msgstr "NTCP-Selektor-Schlaf zwischen Schleifen (ms)."
-
-msgid "Starting retransmission timeout (ms)."
-msgstr "Anfängliches Retransmission-Timeout (ms)."
-
-msgid "I2CP write queue depth."
-msgstr "I2CP-Schreib-Warteschlangentiefe."
-
-msgid "Handler threads for incoming I2PTunnel connections."
-msgstr "Handler-Threads für eingehende I2PTunnel-Verbindungen."
-
-msgid "Write buffer per NTCP connection."
-msgstr "Schreibpuffer pro NTCP-Verbindung."
-
-msgid "Moderate-Load Lag Threshold"
-msgstr "Mäßiglast-Verzögerungsschwelle"
-
-msgid "Job queue lag triggering moderate-load peer disconnect (ms)."
-msgstr "Job-Warteschlangen-Verzögerung, die Mäßiglast-Peer-Trennung auslöst (ms)."
-
-msgid "Transit Reject Steepness"
-msgstr "Transit-Ablehnungs-Steilheit"
-
-msgid "Transit Throttle Factor"
-msgstr "Transit-Drosselungsfaktor"
-
-msgid "Maximum High Capacity Peers"
-msgstr "Maximale Peers mit hoher Kapazität"
-
-msgid "RTT Cap"
-msgstr "RTT-Limit"
-
-msgid "Request Throttle Min"
-msgstr "Anfrage-Drosselung Minimum"
-
-msgid "Max concurrent tunnel test jobs."
-msgstr "Max. gleichzeitige Tunnel-Test-Jobs."
-
-msgid "Ceiling for client proxy thread pool."
-msgstr "Obergrenze für Client-Proxy-Thread-Pool."
-
-msgid "NTCP send pool queue size."
-msgstr "NTCP-Sendepool-Warteschlangengröße."
-
-msgid "Min Delay Between Tests"
-msgstr "Min. Verzögerung zwischen Tests"
-
-msgid "Load threshold where probabilistic transit rejection starts (%)."
-msgstr "Last-Schwelle, ab der probabilistische Transit-Ablehnung beginnt (%)."
-
-msgid "Load threshold where probabilistic request throttling starts (%)."
-msgstr "Last-Schwelle, ab der probabilistische Anfrage-Drosselung beginnt (%)."
-
-msgid "Acknowledgement Frequency"
-msgstr "Bestätigungsfrequenz"
-
-msgid "Participating Throttle Max"
-msgstr "Teilnahme-Drosselung Maximum"
-
-msgid "Request Load Weight"
-msgstr "Anfrage-Last-Gewicht"
-
-msgid "Min UDP Concurrent Messages"
-msgstr "Min. gleichzeitige UDP-Meldungen"
-
-msgid "NTCP2 handshake timeout (ms)."
-msgstr "NTCP2-Handshake-Timeout (ms)."
-
-msgid "Initial UDP RTO"
-msgstr "Anfängliches UDP-RTO"
-
-msgid "Peer Activity Window Multiplier"
-msgstr "Peer-Aktivitäts-Fenster-Multiplikator"
-
-msgid "NTCP Pumper Failsafe Interval"
-msgstr "NTCP-Pumper-Failsafe-Intervall"
-
-msgid "Pool Build Backoff"
-msgstr "Pool-Build-Backoff"
-
-msgid "Transit rejection aggressiveness (50-100%)."
-msgstr "Transit-Ablehnungs-Aggressivität (50–100 %)."
-
-msgid "Request Throttle Max"
-msgstr "Anfrage-Drosselung Maximum"
-
-msgid "Max concurrent tunnel builds."
-msgstr "Max. gleichzeitige Tunnel-Builds."
-
-msgid "Initial UDP Concurrent Messages"
-msgstr "Anfängliche gleichzeitige UDP-Meldungen"
-
-msgid "Max interval between tunnel tests (ms)."
-msgstr "Max. Intervall zwischen Tunnel-Tests (ms)."
-
-msgid "Max simultaneous SSU handshakes."
-msgstr "Max. gleichzeitige SSU-Handshakes."
-
-msgid "Delay before first retransmit (ms)."
-msgstr "Verzögerung vor erster Retransmission (ms)."
-
-msgid "Inbound Establish Timeout"
-msgstr "Inbound-Establish-Timeout"
-
-msgid "rDNS Executor Threads"
-msgstr "rDNS-Executor-Threads"
-
-msgid "Max share of transit tunnels for a single peer."
-msgstr "Max. Anteil an Transit-Tunnels für einen einzelnen Peer."
-
-msgid "Client Runner Max Threads"
-msgstr "Client-Runner-Max-Threads"
-
-msgid "Socket Connect Timeout"
-msgstr "Socket-Verbindungs-Timeout"
-
-msgid "Request Reject Steepness"
-msgstr "Anfrage-Ablehnungs-Steilheit"
-
-msgid "Throttle Reject Exponent"
-msgstr "Drosselungs-Ablehnungs-Exponent"
-
-msgid "System load percent triggering moderate-load disconnect."
-msgstr "Systemlast-Prozent, das Mäßiglast-Trennung auslöst."
-
-msgid "Thread pool cap for UDP packet dispatch."
-msgstr "Thread-Pool-Limit für UDP-Paket-Versand."
-
-msgid "NTCP Writer Threads"
-msgstr "NTCP-Schreiber-Threads"
-
-msgid "Streaming"
-msgstr "Streaming"
-
-msgid "Min transit tunnels any peer can hold."
-msgstr "Min. Transit-Tunnels, die ein Peer halten kann."
-
-msgid "The time period, in minutes, displayed in the sidebar bandwidth graph. Values outside the valid range (2–30) are clamped. [Default is 20]"
-msgstr "Der im Bandbreiten-Diagramm der Seitenleiste angezeigte Zeitraum in Minuten. Werte außerhalb des gültigen Bereichs (2–30) werden begrenzt. [Standard ist 20]"
-
-msgid "Max unacknowledged messages per peer."
-msgstr "Max. unbestätigte Meldungen pro Peer."
-
-msgid "Min fast peers in routing table."
-msgstr "Min. schnelle Peers in Routing-Tabelle."
-
-msgid "Threads decrypting inbound NTCP data."
-msgstr "Threads, die eingehende NTCP-Daten entschlüsseln."
-
-msgid "Max RED queue size for full drops (bytes)."
-msgstr "Max. RED-Warteschlangengröße für vollständiges Verwerfen (Bytes)."
-
-msgid "Writer Queue Size"
-msgstr "Schreiber-Warteschlangengröße"
-
-msgid "Westwood EWMA smoothing factor."
-msgstr "Westwood-EWMA-Glättungsfaktor."
-
-msgid "Initial Resend Delay"
-msgstr "Anfängliche Resend-Verzögerung"
-
-msgid "Max idle time before dropping a stream (ms)."
-msgstr "Max. Leerlaufzeit vor Verwerfen eines Streams (ms)."
-
-msgid "Tunnel Replenish Frequency"
-msgstr "Tunnel-Auffüllfrequenz"
-
-msgid "Congestion Avoidance Growth Rate"
-msgstr "Stau-Vermeidungs-Wachstumsrate"
-
-msgid "Max simultaneous NetDB lookups."
-msgstr "Max. gleichzeitige NetDB-Suchen."
-
-msgid "NTCP Reader Threads"
-msgstr "NTCP-Leser-Threads"
-
-msgid "Peers queried per iterative search."
-msgstr "Pro iterative Suche abgefragte Peers."
-
-msgid "Min UDP RTO"
-msgstr "Min. UDP-RTO"
-
-msgid "Load score multiplier for request throttling (% of computed load)."
-msgstr "Last-Score-Multiplikator für Anfrage-Drosselung (% der berechneten Last)."
-
-msgid "Max Pending Handshakes"
-msgstr "Max. anstehende Handshakes"
-
-msgid "NTCP Send Pool Capacity"
-msgstr "NTCP-Sendepool-Kapazität"
-
-msgid "Min high-capacity peers in routing table."
-msgstr "Min. Peers mit hoher Kapazität in Routing-Tabelle."
-
-msgid "First-hop build forward timeout (ms)."
-msgstr "First-Hop-Build-Forward-Timeout (ms)."
-
-msgid "Initial retransmission timeout (ms)."
-msgstr "Anfängliches Retransmission-Timeout (ms)."
-
-msgid "Maximum Peer Profiles"
-msgstr "Maximale Peer-Profile"
-
-msgid "Tunnel Build Request Timeout"
-msgstr "Tunnel-Build-Anfrage-Timeout"
-
-msgid "Dynamic priority for I/O handler threads."
-msgstr "Dynamische Priorität für I/O-Handler-Threads."
-
-msgid "Max Concurrent Searches"
-msgstr "Max. gleichzeitige Suchen"
-
-msgid "When set to true (the default), inbound and outbound traffic are displayed in a split view with a center baseline, with outbound spikes upward and inbound spikes downward. When set to false, both lines are displayed in overlay mode from the top of the graph with a configurable composite blend. [Default is true]"
-msgstr "Wenn auf true gesetzt (der Standard), werden eingehender und ausgehender Datenverkehr in einer geteilten Ansicht mit zentraler Baseline angezeigt, mit ausgehenden Ausschlägen nach oben und eingehenden nach unten. Wenn auf false gesetzt, werden beide Linien im Überlagerungsmodus von oben im Diagramm mit konfigurierbarem Komposit-Blend angezeigt. [Standard ist true]"
-
-msgid "Max Retransmissions"
-msgstr "Max. Retransmissionen"
-
-msgid "Min interval between tunnel tests (ms)."
-msgstr "Min. Intervall zwischen Tunnel-Tests (ms)."
-
-msgid "Peers Per Search"
-msgstr "Peers pro Suche"
-
-msgid "Consecutive failures before pool backoff."
-msgstr "Aufeinanderfolgende Fehler vor Pool-Backoff."
-
-msgid "Outbound messages batched per gateway pump."
-msgstr "Outbound-Meldungen pro Gateway-Pumpvorgang gebündelt."
-
-msgid "NTCP Send Finisher Threads"
-msgstr "NTCP-Sende-Abschluss-Threads"
-
-msgid "Request Throttle Burst Threshold"
-msgstr "Anfrage-Drosselung-Burst-Schwelle"
-
-msgid "Outbound SSU handshake timeout (ms)."
-msgstr "Outbound-SSU-Handshake-Timeout (ms)."
-
-msgid "Bandwidth token refill interval (ms)."
-msgstr "Bandbreiten-Token-Auffüllintervall (ms)."
-
-msgid "Max share of tunnel requests from a single peer."
-msgstr "Max. Anteil an Tunnel-Anfragen von einem einzelnen Peer."
-
-msgid "RouterInfo Lookup Timeout"
-msgstr "RouterInfo-Such-Timeout"
-
-msgid "Max time between retransmissions (ms)."
-msgstr "Max. Zeit zwischen Retransmissionen (ms)."
-
-msgid "Min retransmission timeout (ms)."
-msgstr "Min. Retransmission-Timeout (ms)."
-
-msgid "When set to true, the sidebar bandwidth graph uses the legacy RRD4J SVG renderer. When set to false, the new dual-baseline canvas renderer is used, with gradient fills, glow effects, and a split inbound/outbound display. [Default is false]"
-msgstr "Wenn auf true gesetzt, verwendet das Bandbreiten-Diagramm in der Seitenleiste den veralteten RRD4J-SVG-Renderer. Wenn auf false gesetzt, wird der neue Dual-Baseline-Canvas-Renderer mit Verlaufsfüllungen, Glüh-Effekten und einer geteilten Inbound/Outbound-Anzeige verwendet. [Standard ist false]"
-
-msgid "Data Message Timeout"
-msgstr "Datenmeldungs-Timeout"
-
-msgid "Max Concurrent Peer Messages"
-msgstr "Max. gleichzeitige Peer-Meldungen"
-
-msgid "Request Throttle Percent"
-msgstr "Anfrage-Drosselung Prozent"
-
-msgid "Min inbound requests accepted from any peer."
-msgstr "Min. eingehende Anfragen, die von einem Peer akzeptiert werden."
-
-msgid "Max queued build requests."
-msgstr "Max. wartende Build-Anfragen."
-
-msgid "Steepness of the transit rejection curve."
-msgstr "Steilheit der Transit-Ablehnungskurve."
-
-msgid "CoDel measurement window (ms)."
-msgstr "CoDel-Messfenster (ms)."
-
-msgid "In-flight message limit per UDP peer."
-msgstr "In-Flight-Meldungs-Limit pro UDP-Peer."
-
-msgid "Transit Load Weight"
-msgstr "Transit-Last-Gewicht"
-
-msgid "Maximum Fast Peers"
-msgstr "Maximale schnelle Peers"
-
-msgid "Request Reject Threshold"
-msgstr "Anfrage-Ablehnungs-Schwelle"
-
-msgid "Transit tunnel capacity."
-msgstr "Transit-Tunnel-Kapazität."
-
-msgid "Load score multiplier for transit rejection (% of computed load)."
-msgstr "Last-Score-Multiplikator für Transit-Ablehnung (% der berechneten Last)."
-
-msgid "RED Minimum Queue Threshold"
-msgstr "RED-Mindest-Warteschlangenschwelle"
-
-msgid "Search Timeout"
-msgstr "Such-Timeout"
-
-msgid "Internal Queue Size"
-msgstr "Interne Warteschlangengröße"
-
-msgid "Divides bandwidth among transit tunnels."
-msgstr "Teilt Bandbreite unter Transit-Tunnels auf."
-
-msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
-msgstr "TCP-Socket-Verbindungs-Timeout für Tunnel-Server-Handler-Threads (ms)."
-
-msgid "Steepness of the transit rejection probability curve."
-msgstr "Steilheit der Transit-Ablehnungs-Wahrscheinlichkeitskurve."
-
-msgid "Outbound Establish Timeout"
-msgstr "Outbound-Establish-Timeout"
-
-msgid "Participating Throttle Min"
-msgstr "Teilnahme-Drosselung Minimum"
-
-msgid "Upper bound on RTT estimate (ms)."
-msgstr "Obergrenze für RTT-Schätzung (ms)."
-
-msgid "Max Concurrent Test Jobs"
-msgstr "Max. gleichzeitige Test-Jobs"
-
-msgid "Max retransmission timeout (ms)."
-msgstr "Max. Retransmission-Timeout (ms)."
-
-msgid "Precomputed X25519 key pool minimum."
-msgstr "Vorberechneter X25519-Schlüsselpool Mindestgröße."
-
-msgid "System load percent triggering high-load request gating."
-msgstr "Systemlast-Prozent, das Hochlast-Anfrage-Gating auslöst."
-
-msgid "Max inbound requests accepted from any peer."
-msgstr "Max. eingehende Anfragen, die von einem Peer akzeptiert werden."
-
-msgid "UDP Maximum Handler Threads"
-msgstr "UDP maximale Handler-Threads"
-
-msgid "Precomputed ML-KEM key pool minimum."
-msgstr "Vorberechneter ML-KEM-Schlüsselpool Mindestgröße."
-
-msgid "Pumper Threads"
-msgstr "Pumper-Threads"
-
-msgid "Outbound Messages Per Pump"
-msgstr "Outbound-Meldungen pro Pumpvorgang"
-
-msgid "Max Concurrent Tunnel Builds"
-msgstr "Max. gleichzeitige Tunnel-Builds"
-
-msgid "Pool Build Failure Threshold"
-msgstr "Pool-Build-Fehler-Schwelle"
-
-msgid "Inbound SSU handshake timeout (ms)."
-msgstr "Inbound-SSU-Handshake-Timeout (ms)."
-
-msgid "Time before a message is declared lost (ms)."
-msgstr "Zeit, bevor eine Meldung als verloren gilt (ms)."
-
-msgid "Active threads completing NTCP sends."
-msgstr "Aktive Threads, die NTCP-Sendevorgänge abschließen."
-
-msgid "Uncheck the Auto box on any row to pin that parameter and prevent further adjustments."
-msgstr "Deaktivieren Sie das Auto-Kontrollkästchen in einer Zeile, um diesen Parameter festzulegen und weitere Anpassungen zu verhindern."
-
-msgid "Outbound Message Expiration"
-msgstr "Outbound-Meldungs-Ablauf"
-
-msgid "Participating Throttle Percent"
-msgstr "Teilnahme-Drosselung Prozent"
-
-msgid "Min RED queue size before probabilistic drops (bytes)."
-msgstr "Min. RED-Warteschlangengröße vor probabilistischem Verwerfen (Bytes)."
-
-msgid "Max transit tunnels a single peer can hold."
-msgstr "Max. Transit-Tunnels, die ein einzelner Peer halten kann."
-
-msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
-msgstr "Sperre Floodfill-Peers, die auf Abfragen nicht antworten (Fehlerrate >95%)"
-
-msgid "Build reply timeout (ms)."
-msgstr "Build-Antwort-Timeout (ms)."
-
-msgid "RED Maximum Queue Threshold"
-msgstr "RED-Maximal-Warteschlangenschwelle"
-
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Erweitert das Peer-Aktualitätsfenster, um Peers bei Build-Fehlern wieder zuzulassen."
-
-msgid "Per-Tunnel Bandwidth Divisor"
-msgstr "Bandbreiten-Divisor pro Tunnel"
-
-msgid "Max UDP RTO"
-msgstr "Max. UDP-RTO"
-
-msgid "Job queue lag triggering high-load request gating (ms)."
-msgstr "Job-Warteschlangen-Verzögerung, die Hochlast-Anfrage-Gating auslöst (ms)."
-
-msgid "EDH Precalculate Minimum"
-msgstr "EDH-Vorberechnung Minimum"
-
-msgid "Pending outbound handshake queue."
-msgstr "Warteschlange für anstehende Outbound-Handshakes."
-
-msgid "Build Handler Threads"
-msgstr "Build-Handler-Threads"
-
-msgid "Max message age in queue before drop (ms)."
-msgstr "Max. Meldungsalter in Warteschlange vor Verwerfen (ms)."
-
-msgid "Gateway pumper queue size."
-msgstr "Gateway-Pumper-Warteschlangengröße."
-
-msgid "Initial Congestion Window"
-msgstr "Anfängliches Stau-Fenster"
-
-msgid "Gateway pumper thread count."
-msgstr "Gateway-Pumper-Thread-Anzahl."
-
-msgid "Nagle Flush Delay"
-msgstr "Nagle-Flush-Verzögerung"
-
-msgid "CoDel Target Delay"
-msgstr "CoDel-Zielverzögerung"
-
-msgid "Max Delay Between Tests"
-msgstr "Max. Verzögerung zwischen Tests"
-
-msgid "Nagle flush delay (ms)."
-msgstr "Nagle-Flush-Verzögerung (ms)."
-
-msgid "Moderate-Load CPU Threshold"
-msgstr "Mäßiglast-CPU-Schwelle"
-
-msgid "Server Handler Threads"
-msgstr "Server-Handler-Threads"
-
-msgid "Duration of moderate load before declining requests (ms)."
-msgstr "Dauer der mäßigen Last vor dem Ablehnen von Anfragen (ms)."
-
-msgid "Target spare tunnel count per pool."
-msgstr "Ziel-Reserve-Tunnelanzahl pro Pool."
-
-msgid "Tunnel Build First Hop Timeout"
-msgstr "Tunnel-Build-First-Hop-Timeout"
-
-msgid "ACK delay for piggybacking (ms)."
-msgstr "ACK-Verzögerung für Piggybacking (ms)."
-
-msgid "Slow Start Window Cap"
-msgstr "Slow-Start-Fenster-Limit"
-
-msgid "NTCP Maximum Send Threads"
-msgstr "NTCP maximale Sende-Threads"
-
-msgid "Threads reassembling UDP messages from fragments."
-msgstr "Threads, die UDP-Meldungen aus Fragmenten zusammensetzen."
-
-msgid "ACK Delay"
-msgstr "ACK-Verzögerung"
-
-msgid "Build Handler Maximum Queue"
-msgstr "Build-Handler-Maximalwarteschlange"
-
-msgid "Pumper Queue Capacity"
-msgstr "Pumper-Warteschlangenkapazität"
-
-msgid "Max Resend Delay"
-msgstr "Max. Resend-Verzögerung"
-
-msgid "Thread pool cap for NTCP send completion."
-msgstr "Thread-Pool-Limit für NTCP-Sendeabschluss."
-
-msgid "Slow Start Growth Rate"
-msgstr "Slow-Start-Wachstumsrate"
-
-msgid "Crypto"
-msgstr "Krypto"
-
-msgid "NTCP Establish Timeout"
-msgstr "NTCP-Establish-Timeout"
-
-msgid "Transit Reject Threshold"
-msgstr "Transit-Ablehnungs-Schwelle"
-
-msgid "Memory cap for peer profiles."
-msgstr "Speicher-Limit für Peer-Profile."
-
-msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
-msgstr "Adaptive Deadline-Obergrenze für LeaseSet-Suchen (ms)."
-
-msgid "Inbound Messages Per Pump"
-msgstr "Inbound-Meldungen pro Pumpvorgang"
-
-msgid "Data packets between each ACK."
-msgstr "Datenpakete zwischen jeder ACK."
-
-msgid "Sets the render direction for the sidebar bandwidth graph. When set to rtl (the default), the graph renders right-to-left with newest data on the right. When set to ltr, the graph renders left-to-right with newest data on the left. [Default is rtl]"
-msgstr "Legt die Render-Richtung für das Bandbreiten-Diagramm der Seitenleiste fest. Wenn auf rtl gesetzt (der Standard), rendert das Diagramm von rechts nach links mit den neuesten Daten rechts. Wenn auf ltr gesetzt, rendert es von links nach rechts mit den neuesten Daten links. [Standard ist rtl]"
-
-msgid "Tunnel Selector Loop Delay"
-msgstr "Tunnel-Selektor-Schleifenverzögerung"
-
-msgid "Max Concurrent RI Lookups"
-msgstr "Max. gleichzeitige RI-Suchen"
-
-msgid "Max UDP Send Window"
-msgstr "Max. UDP-Sende-Fenster"
-
-msgid "Sent Messages Clean Time"
-msgstr "Aufräumzeit für gesendete Meldungen"
-
-msgid "Tunnel Requeue Delay"
-msgstr "Tunnel-Requeue-Verzögerung"
-
-msgid "Tunnel Growth Tolerance"
-msgstr "Tunnel-Wachstumstoleranz"
-
-msgid "Post-RTO Window Restart"
-msgstr "Post-RTO-Fenster-Neustart"
-
-msgid "RTO Backoff Multiplier"
-msgstr "RTO-Backoff-Multiplikator"
-
-msgid "Window restart size (MTUs) after RTO collapse."
-msgstr "Fenster-Neustartgröße (MTUs) nach RTO-Kollaps."
-
-msgid "RTO growth multiplier per retransmission timeout (%, 100 = flat)."
-msgstr "RTO-Wachstums-Multiplikator pro Retransmission-Timeout (%, 100 = flach)."
-
-msgid "Max congestion window during slow start."
-msgstr "Max. Stau-Fenster während Slow Start."
-
-msgid "Adaptive deadline cap for RouterInfo lookups (ms)."
-msgstr "Adaptive Deadline-Obergrenze für RouterInfo-Suchen (ms)."
-
-msgid "Duration of high load before gating requests (ms)."
-msgstr "Dauer der hohen Last vor dem Gating von Anfragen (ms)."
-
-msgid "Window multiplier per RTT during slow start."
-msgstr "Fenster-Multiplikator pro RTT während Slow Start."
-
-msgid "Per-peer outbound queue size."
-msgstr "Outbound-Warteschlangengröße pro Peer."
-
-msgid "Min time between retransmissions (ms)."
-msgstr "Min. Zeit zwischen Retransmissionen (ms)."
-
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "I2P+ unterstützt benutzerdefinierte Theme-Überschreibungen für die Konsole, den Tunnel-Manager, I2PSnark, SusiDNS und Susimail, die Änderungen an den Themes erlauben, die nach Upgrades erhalten bleiben. Um eine Überschreibung zu aktivieren, erstellen Sie eine CSS-Datei namens <code>override.css</code> mit Ihren Theme-Änderungen und legen Sie diese im entsprechenden Theme-Verzeichnis des zu ändernden Themes ab, oder benennen Sie eine der Beispieldateien um, und führen Sie dann einen harten Browser-Refresh durch. Beachten Sie, dass der Tunnel-Manager und die Konsole dieselbe override.css verwenden. Um eine Überschreibung zu deaktivieren, löschen oder benennen Sie die Datei <code>override.css</code> um und führen dann einen harten Browser-Refresh durch (meist Control + Shift + R)."
-
-msgid "Sustained Moderate-Load Window"
-msgstr "Anhaltendes Mäßiglast-Fenster"
-
-msgid "ML-KEM Precalculate Minimum"
-msgstr "ML-KEM-Vorberechnung Minimum"
-
-msgid "RED Maximum Drop Probability"
-msgstr "RED-Maximale-Verwerf-Wahrscheinlichkeit"
-
-msgid "Max age for undelivered outbound messages."
-msgstr "Max. Alter für unzugestellte Outbound-Meldungen."
-
-msgid "High-Load CPU Threshold"
-msgstr "Hochlast-CPU-Schwelle"
-
-msgid "Per-peer lookup timeout (ms)."
-msgstr "Such-Timeout pro Peer (ms)."
-
-msgid "Inbound messages batched per gateway pump."
-msgstr "Inbound-Meldungen pro Gateway-Pumpvorgang gebündelt."
-
-msgid "NTCP Max Write Buffers Per Connection"
-msgstr "NTCP max. Schreibpuffer pro Verbindung"
-
-msgid "Max Message Queue Age"
-msgstr "Max. Meldungs-Warteschlangenalter"
-
-msgid "Min Resend Delay"
-msgstr "Min. Resend-Verzögerung"
-
-msgid "Dup ACK Delay"
-msgstr "Dup-ACK-Verzögerung"
-
-msgid "Max RED drop probability when queue is full (ppm)."
-msgstr "Max. RED-Verwerf-Wahrscheinlichkeit bei voller Warteschlange (ppm)."
-
-msgid "Initial concurrent messages per peer."
-msgstr "Anfängliche gleichzeitige Meldungen pro Peer."
-
-msgid "Max high-capacity peers in routing table."
-msgstr "Max. Peers mit hoher Kapazität in Routing-Tabelle."
-
-msgid "Max RTO"
-msgstr "Max. RTO"
-
-msgid "Threads performing reverse DNS lookups."
-msgstr "Threads, die Reverse-DNS-Abfragen ausführen."
-
-msgid "Cooldown duration after pool failure threshold, in ms."
-msgstr "Abkühlungsdauer nach Pool-Fehlerschwelle, in ms."
-
-msgid "Delay between rebuild rounds when pools are healthy (ms)."
-msgstr "Verzögerung zwischen Wiederaufbau-Runden bei gesunden Pools (ms)."
-
-msgid "Maximum Participating Tunnels"
-msgstr "Maximale teilnehmende Tunnel"
-
-msgid "UDP Message Receiver Threads"
-msgstr "UDP-Meldungs-Empfangs-Threads"
-
-msgid "Retransmissions before dropping the stream."
-msgstr "Retransmissionen vor Verwerfen des Streams."
-
-msgid "Interval between sweeps of ACKed sent-messages."
-msgstr "Intervall zwischen Säuberungen bestätigter gesendeter Meldungen."
-
-msgid "Thread pool for inbound build request processing."
-msgstr "Thread-Pool für eingehende Build-Anfrage-Verarbeitung."
-
-msgid "Burst threshold: requests per second before a ban."
-msgstr "Burst-Schwelle: Anfragen pro Sekunde vor einem Bann."
-
-msgid "Min concurrent messages per peer."
-msgstr "Min. gleichzeitige Meldungen pro Peer."
-
-msgid "How aggressively new tunnels are accepted before throttling."
-msgstr "Wie aggressiv neue Tunnel vor der Drosselung akzeptiert werden."
-
-msgid "Congestion avoidance growth rate."
-msgstr "Stau-Vermeidungs-Wachstumsrate."
-
-msgid "LeaseSet Lookup Timeout"
-msgstr "LeaseSet-Such-Timeout"
-
-msgid "Sustained High-Load Window"
-msgstr "Anhaltendes Hochlast-Fenster"
-
-msgid "Inactivity Timeout"
-msgstr "Inaktivitäts-Timeout"
-
-msgid "Pool Spare Tunnel Buffer"
-msgstr "Pool-Reserve-Tunnel-Puffer"
-
-msgid "NTCP send finalizer queue size."
-msgstr "NTCP-Sende-Finalizer-Warteschlangengröße."
-
-msgid "Auto-Tuning continuously monitors router performance and adjusts parameters to optimize throughput, reduce latency, and maintain stability."
-msgstr "Auto-Tuning überwacht kontinuierlich die Router-Leistung und passt Parameter an, um Durchsatz zu optimieren, Latenz zu reduzieren und Stabilität zu erhalten."
-
-msgid "Max Concurrent Handshakes"
-msgstr "Max. gleichzeitige Handshakes"
-
-msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
-msgstr "Failsafe-Scan-Intervall für hängende NTCP-Pumps (ms)."
-
-msgid "I2CP session buffer size."
-msgstr "I2CP-Sitzungspuffergröße."
-
-msgid "Peer Outbound Queue Size"
-msgstr "Peer-Outbound-Warteschlangengröße"
-
-msgid "Max concurrent RI lookups during builds."
-msgstr "Max. gleichzeitige RI-Suchen während Builds."
-
-msgid "High-Load Lag Threshold"
-msgstr "Hochlast-Verzögerungsschwelle"
-
-msgid "NTCP Send Queue Capacity"
-msgstr "NTCP-Sende-Warteschlangenkapazität"
-
-msgid "Pumper idle wait before re-checking work (ms)."
-msgstr "Pumper-Leerlaufwartezeit vor erneuter Arbeitsprüfung (ms)."
-
-msgid "I/O Thread Priority"
-msgstr "I/O-Thread-Priorität"
-
-msgid "Delay for dup or OOO packet ACKs (ms)."
-msgstr "Verzögerung für Dup- oder OOO-Paket-ACKs (ms)."
-
-msgid "Westwood Decay Factor"
-msgstr "Westwood-Abklingfaktor"
-
-msgid "Precomputed EDH key pool minimum."
-msgstr "Vorberechneter EDH-Schlüsselpool Mindestgröße."
-
-msgid "CoDel Interval"
-msgstr "CoDel-Intervall"
-
-msgid "Minimum High Capacity Peers"
-msgstr "Mindestanzahl Peers mit hoher Kapazität"

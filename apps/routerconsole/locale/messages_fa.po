@@ -121,6 +121,9 @@ msgstr "مجموع همتایان در NetDb ما"
 msgid "Total number of threads in use"
 msgstr "مجموع تعداد رشته های در حال استفاده"
 
+msgid "Time spent paused in GC (ms)"
+msgstr ""
+
 msgid "Peers without a published IP address"
 msgstr "همتایان بدون آدرس IP منتشر شده"
 
@@ -700,8 +703,8 @@ msgstr "فرمِ اشتباهی ارسال شده است. احتمالا شما 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "اگر همچنان مشکل پابرجاست، مطمئن شوید که در مرورگر شما Cookie ها فعال هستند."
 
-msgid "Bandwidth Usage"
-msgstr "مصرف پهنای باند"
+msgid "Bandwidth usage"
+msgstr ""
 
 #, java-format
 msgid "events in {0}"
@@ -1914,6 +1917,9 @@ msgstr "{0} برای {1}"
 msgid "Nothing to display - no stat specified!"
 msgstr "چیزی برای نمایش وجود ندارد - هیچ آمار مشخص نشده است!"
 
+msgid "Bandwidth Usage"
+msgstr "مصرف پهنای باند"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "پایان {0} پیش"
@@ -2002,6 +2008,15 @@ msgstr "افسانه را پنهان کنید"
 msgid "Do not show legend on graphs"
 msgstr "افسانه را روی نمودارها نشان ندهید"
 
+msgid "Disabled while legend is hidden"
+msgstr ""
+
+msgid "Hide restarts"
+msgstr ""
+
+msgid "Suppress restart lines on graphs"
+msgstr ""
+
 msgid "Persistence"
 msgstr "پشتکار"
 
@@ -2032,6 +2047,12 @@ msgstr "تنظیمات نمودار ذخیره شد"
 msgid "Graph settings unchanged"
 msgstr "تنظیمات نمودار بدون تغییر"
 
+msgid "improved"
+msgstr ""
+
+msgid "vs baseline"
+msgstr ""
+
 msgid "CPU"
 msgstr "پردازنده"
 
@@ -2049,9 +2070,6 @@ msgstr "زمان فعال بودن روتر"
 
 msgid "Job Lag"
 msgstr "تاخیر شغلی"
-
-msgid "ms"
-msgstr "میلی‌ثانیه"
 
 msgid "Job queue delay"
 msgstr "تأخیر صف وظایف"
@@ -2233,6 +2251,12 @@ msgstr "عملکرد روتر نمودار"
 msgid "Graphs"
 msgstr "گراف ها"
 
+msgid "Health"
+msgstr "سلامت"
+
+msgid "Router performance overview"
+msgstr ""
+
 msgid "Help"
 msgstr "راهنمایی"
 
@@ -2295,6 +2319,12 @@ msgstr "نقشه سایت"
 
 msgid "Built-in anonymous BitTorrent Client"
 msgstr "سرویس گیرنده بیت تورنت ناشناس داخلی"
+
+msgid "Router Auto-Tuning"
+msgstr "تنظیم خودکار روتر"
+
+msgid "Tuning"
+msgstr ""
 
 msgid "Manage server and client tunnels"
 msgstr "تونل های سرور و مشتری را مدیریت کنید"
@@ -3301,6 +3331,60 @@ msgstr "در صفحه {0}پیکربندی پیشرفته{1}."
 msgid "to your router.config file."
 msgstr "به فایل router.config شما."
 
+msgid "Peers reached in the last 60s"
+msgstr ""
+
+msgid "Fast"
+msgstr "سریع"
+
+msgid "Low-latency peers for tunnel participation"
+msgstr ""
+
+msgid "HighCap"
+msgstr ""
+
+msgid "High-bandwidth peers for many tunnels"
+msgstr ""
+
+msgid "Reliable"
+msgstr ""
+
+msgid "High-capacity peers with good acceptance"
+msgstr ""
+
+msgid "Peers that store and serve NetDb info"
+msgstr ""
+
+msgid "Known"
+msgstr "معروف"
+
+msgid "Total entries in network database"
+msgstr ""
+
+msgid "Active%"
+msgstr ""
+
+msgid "Profiles with activity in the last 24h"
+msgstr ""
+
+msgid "Unreachable"
+msgstr "غیر قابل دسترس"
+
+msgid "Peers without a reachable address"
+msgstr ""
+
+msgid "Peers excluded from all interactions"
+msgstr ""
+
+msgid "/min"
+msgstr ""
+
+msgid "Test Fail"
+msgstr ""
+
+msgid "Connectivity test failures per minute"
+msgstr ""
+
 msgid "Peer Connections"
 msgstr "اتصالات همتا"
 
@@ -3613,9 +3697,6 @@ msgstr "تایید"
 msgid "tests passed"
 msgstr "آزمایش‌های پاس شده"
 
-msgid "Unreachable"
-msgstr "غیر قابل دسترس"
-
 msgid "Test Fails"
 msgstr "آزمون ناموفق است"
 
@@ -3734,9 +3815,6 @@ msgstr "گروه ها"
 
 msgid "Note: Peers are categorized by the profile organizer based on observable performance, not from capabilities they advertise in the NetDB."
 msgstr "توجه: همتاها توسط سازمان‌دهنده نمایه بر اساس عملکرد قابل مشاهده طبقه‌بندی می‌شوند، نه بر اساس قابلیت‌هایی که در NetDB تبلیغ می‌کنند."
-
-msgid "Fast"
-msgstr "سریع"
 
 msgid "Peers marked as high capacity that also meet or exceed speed average for all profiled peers."
 msgstr "همتاهایی که به عنوان ظرفیت بالا مشخص شده‌اند که میانگین سرعت را برای همه همتایان نمایه‌شده نیز برآورده می‌کنند یا از آن فراتر می‌روند."
@@ -4109,9 +4187,6 @@ msgstr "پایگاه داده شبکه"
 msgid "Show all current peer connections"
 msgstr "تمام اتصالات همتای فعلی را نشان دهید"
 
-msgid "Health"
-msgstr "سلامت"
-
 msgid "Router health overview"
 msgstr "نمای کلی سلامت روتر"
 
@@ -4245,9 +4320,6 @@ msgstr "تعداد کل همتاها در پایگاه داده شبکه ما"
 
 msgid "Total RouterInfos stored on disk"
 msgstr "مجموع RouterInfos ذخیره شده روی دیسک"
-
-msgid "Known"
-msgstr "معروف"
 
 msgid "Configure router bandwidth allocation"
 msgstr "تخصیص پهنای باند روتر را پیکربندی کنید"
@@ -4736,6 +4808,9 @@ msgstr "تأخیر تخلیه نیگل"
 msgid "Slow Start Window Cap"
 msgstr "سقف پنجره شروع آهسته"
 
+msgid "Max SYN Sends"
+msgstr ""
+
 msgid "Max RTO"
 msgstr "حداکثر RTO"
 
@@ -4862,6 +4937,9 @@ msgstr "حداکثر ساخت‌های هم‌زمان تونل"
 msgid "Max Concurrent RI Lookups"
 msgstr "حداکثر جستجوهای RI هم‌زمان"
 
+msgid "Next-Hop Lookup %"
+msgstr ""
+
 msgid "Max Concurrent Test Jobs"
 msgstr "حداکثر کارهای آزمایش هم‌زمان"
 
@@ -4931,6 +5009,9 @@ msgstr "نرخ رشد اجتناب از ازدحام"
 msgid "Slow Start Growth Rate"
 msgstr "نرخ رشد شروع آهسته"
 
+msgid "Min Pacing Rate"
+msgstr ""
+
 msgid "RTT Cap"
 msgstr "سقف RTT"
 
@@ -4942,6 +5023,9 @@ msgstr "تأخیر تأیید دریافت تکراری"
 
 msgid "Inactivity Timeout"
 msgstr "زمان انقضای عدم فعالیت"
+
+msgid "Max Window Size"
+msgstr ""
 
 msgid "Max Message Queue Age"
 msgstr "حداکثر عمر صف پیام"
@@ -5039,6 +5123,12 @@ msgstr "ضریب عقب‌نشینی RTO"
 msgid "Socket Connect Timeout"
 msgstr "زمان انقضای اتصال سوکت"
 
+msgid "Untested Tunnel Cap Multiplier"
+msgstr ""
+
+msgid "Message Processing Throttle"
+msgstr ""
+
 msgid "Data packets between each ACK."
 msgstr "بسته‌های داده بین هر تأیید دریافت."
 
@@ -5060,8 +5150,8 @@ msgstr "انتظار بیکار پمپ‌کننده پیش از بررسی مج�
 msgid "Bandwidth token refill interval (ms)."
 msgstr "بازه شارژ مجدد توکن پهنای باند (میلی‌ثانیه)."
 
-msgid "NTCP selector sleep between loops (ms)."
-msgstr "خواب انتخاب‌گر NTCP بین حلقه‌ها (میلی‌ثانیه)."
+msgid "NIO selector sleep between loops (ms)."
+msgstr ""
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "پیام‌های خروجی دسته‌بندی‌شده در هر پمپ دروازه."
@@ -5084,6 +5174,9 @@ msgstr "تأخیر تخلیه نیگل (میلی‌ثانیه)."
 msgid "Max congestion window during slow start."
 msgstr "حداکثر پنجره ازدحام در طول شروع آهسته."
 
+msgid "Total SYN attempts before giving up on a handshake."
+msgstr ""
+
 msgid "Max retransmission timeout (ms)."
 msgstr "حداکثر زمان انقضای ارسال مجدد (میلی‌ثانیه)."
 
@@ -5095,6 +5188,9 @@ msgstr "ارسال‌های مجدد پیش از رها کردن جریان."
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "حداکثر زمان بیکاری پیش از رها کردن یک جریان (میلی‌ثانیه)."
+
+msgid "Max unacknowledged packets per stream connection."
+msgstr ""
 
 msgid "I2CP write queue depth."
 msgstr "عمق صف نوشتن I2CP."
@@ -5213,6 +5309,9 @@ msgstr "حداکثر ساخت‌های هم‌زمان تونل."
 msgid "Max concurrent RI lookups during builds."
 msgstr "حداکثر جستجوهای RI هم‌زمان در حین ساخت."
 
+msgid "Concurrent next-hop lookup limit as % of transit tunnels."
+msgstr ""
+
 msgid "Max concurrent tunnel test jobs."
 msgstr "حداکثر کارهای آزمایش تونل هم‌زمان."
 
@@ -5225,8 +5324,8 @@ msgstr "حداکثر بازه بین آزمایش‌های تونل (میلی‌
 msgid "Threads decrypting inbound NTCP data."
 msgstr "رشته‌های رمزگشایی داده ورودی NTCP."
 
-msgid "Threads encrypting NTCP messages."
-msgstr "رشته‌های رمزنگاری پیام‌های NTCP."
+msgid "Threads that encrypt outbound NTCP messages."
+msgstr ""
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "بازه پویش ایمنی برای پمپ‌های گیرکرده NTCP (میلی‌ثانیه)."
@@ -5252,8 +5351,8 @@ msgstr "حداکثر پیام‌های تأییدنشده به ازای همتا
 msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "اندازه راه‌اندازی مجدد پنجره (MTU) پس از فروپاشی RTO."
 
-msgid "NTCP send pool queue size."
-msgstr "اندازه صف استخر ارسال NTCP."
+msgid "Priority-aware buffer where client messages jump transit."
+msgstr ""
 
 msgid "I2CP session buffer size."
 msgstr "اندازه بافر نشست I2CP."
@@ -5278,6 +5377,9 @@ msgstr "نرخ رشد اجتناب از ازدحام."
 
 msgid "Window multiplier per RTT during slow start."
 msgstr "ضریب پنجره به ازای RTT در طول شروع آهسته."
+
+msgid "Minimum send rate before pacing kicks in (KB/s)."
+msgstr ""
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "کران بالای برآورد RTT (میلی‌ثانیه)."
@@ -5354,11 +5456,14 @@ msgstr "پنجره تازگی همتا را برای پذیرش مجدد همت�
 msgid "Consecutive failures before pool backoff."
 msgstr "شکست‌های پیاپی پیش از عقب‌نشینی استخر."
 
-msgid "Cooldown duration after pool failure threshold, in ms."
-msgstr "مدت خنک‌شدن پس از آستانه شکست استخر، به میلی‌ثانیه."
+msgid "Cooldown duration after pool failure threshold (ms)."
+msgstr ""
 
 msgid "Target spare tunnel count per pool."
 msgstr "تعداد هدف تونل اضافی به ازای استخر."
+
+msgid "Widens untested tunnel cap when testing stalls."
+msgstr ""
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "آستانه بار که رد احتمالاتی ترانزیت از آن آغاز می‌شود (٪)."
@@ -5383,6 +5488,9 @@ msgstr "ضریب رشد RTO به ازای زمان انقضای ارسال مج�
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "زمان انقضای اتصال سوکت TCP برای رشته‌های پردازشگر سرور تونل (میلی‌ثانیه)."
+
+msgid "Max average message delay before rejecting transit (ms)."
+msgstr ""
 
 msgid "Tunnel"
 msgstr "تونل"
@@ -7314,11 +7422,14 @@ msgstr "عمر تونل برحسب میلی‌ثانیه. تونل‌ها پس �
 msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]"
 msgstr "دوره سرکوب راه‌اندازی برحسب میلی‌ثانیه. هشدارها و منطق کاهش تونل در راه‌اندازی اولیه سرکوب می‌شوند. [پیش‌فرض 300000 (5 دقیقه)]"
 
-msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]"
-msgstr "حداقل فاصله برحسب میلی‌ثانیه بین انتشارهای LeaseSet. از طوفان انتشار جلوگیری می‌کند. [پیش‌فرض 300000 (5 دقیقه)]"
+msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
+msgstr ""
 
-msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]"
-msgstr "حداقل فاصله برحسب میلی‌ثانیه بین ساخت اشیاء LeaseSet. از ایجاد اشیاء غیرضروری جلوگیری می‌کند. [پیش‌فرض 300000 (5 دقیقه)]"
+msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
+msgstr ""
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "حداکثر تعداد ساخت‌های همزمان تونل به ازای جهت. مقادیر بالاتر بازیابی حوضه را تسریع می‌کنند. [پیش‌فرض 6]"
@@ -7398,11 +7509,11 @@ msgstr "تعداد دفعات پاسخ به یک مقصد محدود شده قب
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr "حداکثر تأخیر جریان پیش‌فرض برحسب میلی‌ثانیه وقتی زمان انتظار اتصال مشخصی تعیین نشده است. [پیش‌فرض 10000 (10 ثانیه)]"
 
-msgid "Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]"
-msgstr "حداکثر زمان برحسب میلی‌ثانیه بین دریافت SYN و پذیرش آن در سوکت سرور. کنترل می‌کند اتصالات ناقص چقدر در صف پذیرش نگه داشته می‌شوند. [پیش‌فرض 4000 (4 ثانیه)]"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
+msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]"
-msgstr "حداکثر تعداد اتصالات در انتظار در صف پذیرش سرور. مقادیر بزرگتر اتصالات بیشتری را بافر می‌کنند. [پیش‌فرض 80 (48 در سیستم‌های کند)]"
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
+msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "فاصله برحسب میلی‌ثانیه بین انتشارهای خودکار LeaseSet. مقادیر بالاتر ترافیک netdb را کاهش می‌دهند. [پیش‌فرض 300000 (5 دقیقه)]"
@@ -9558,9 +9669,6 @@ msgstr "تونل های ترانزیت توسط Peer"
 msgid "tuning"
 msgstr "تنظیم"
 
-msgid "Router Auto-Tuning"
-msgstr "تنظیم خودکار روتر"
-
 msgid "tunnel peer count"
 msgstr "تعداد همتایان تونل"
 
@@ -9727,3 +9835,12 @@ msgstr "بعدی"
 
 msgid "Finished"
 msgstr "به پایان رسیده"
+
+
+
+
+
+
+
+
+

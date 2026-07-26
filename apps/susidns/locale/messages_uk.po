@@ -142,28 +142,11 @@ msgstr "Неправильна назва хосту \"{0}\"."
 msgid "Please enter a host name and destination"
 msgstr "Будь ласка, введіть ім'я хоста і призначення"
 
-msgid "Delete Entry"
-msgstr "Видалити запис"
-
-msgid "Delete Selected"
-msgstr "Видалити вибрані"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "Призначення {0} видалено."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "{0} призначення видалено."
-msgstr[1] "{0}  призначення видалено."
-msgstr[2] "{0} призначень видалено."
-
-msgid "No valid entries selected to delete."
-msgstr "Не вибрано жодного дійсного запису для видалення."
-
 msgid "Add Alternate"
 msgstr "Додати альтернативу"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "Адресна книга збережена"
@@ -213,9 +196,29 @@ msgstr "Хост {0} відсутній в адресній книзі."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Не вдалося додати адресу призначення для {0} до служби імен {1}"
 
+msgid "Delete Entry"
+msgstr "Видалити запис"
+
+msgid "Delete Selected"
+msgstr "Видалити вибрані"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Не вдалося видалити адресу призначення для {0} із служби імен {1}"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Призначення {0} видалено."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "{0} призначення видалено."
+msgstr[1] "{0}  призначення видалено."
+msgstr[2] "{0} призначень видалено."
+
+msgid "No valid entries selected to delete."
+msgstr "Не вибрано жодного дійсного запису для видалення."
 
 msgid "Blacklist Selected"
 msgstr "Чорний список Вибрано"

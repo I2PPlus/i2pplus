@@ -138,27 +138,11 @@ msgstr "Nombre del host inválido \"{0}\""
 msgid "Please enter a host name and destination"
 msgstr "Por favor, ¡introduzca un nombre de host y destino!"
 
-msgid "Delete Entry"
-msgstr "Eliminar entrada"
-
-msgid "Delete Selected"
-msgstr "Eliminar seleccionados"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "Destino {0} eliminado."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "Una dirección de destino ha sido eliminada."
-msgstr[1] "{0} direcciones de destino han sido eliminadas."
-
-msgid "No valid entries selected to delete."
-msgstr "No hay entradas válidas seleccionadas para eliminar."
-
 msgid "Add Alternate"
 msgstr "Añadir alternativa"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "La libreta de direcciones ha sido guardada."
@@ -208,9 +192,28 @@ msgstr "El nombre de servidor {0} no está en la libreta de direcciones."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Error al agregar la dirección de destino {0} al servicio de nombrado {1}"
 
+msgid "Delete Entry"
+msgstr "Eliminar entrada"
+
+msgid "Delete Selected"
+msgstr "Eliminar seleccionados"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Error al borrar la dirección de destino {0} del servicio de nombrado {1}"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Destino {0} eliminado."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "Una dirección de destino ha sido eliminada."
+msgstr[1] "{0} direcciones de destino han sido eliminadas."
+
+msgid "No valid entries selected to delete."
+msgstr "No hay entradas válidas seleccionadas para eliminar."
 
 msgid "Blacklist Selected"
 msgstr "Lista negra seleccionada"

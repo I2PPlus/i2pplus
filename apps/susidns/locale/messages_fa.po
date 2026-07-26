@@ -138,27 +138,11 @@ msgstr "نام میزبان نامعتبر \"{0}\"."
 msgid "Please enter a host name and destination"
 msgstr "لطفا یک نام میزبان و مقصد وارد کنید"
 
-msgid "Delete Entry"
-msgstr "حذف ورودی"
-
-msgid "Delete Selected"
-msgstr "حذف انتخاب شده"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "مقصد {0} حذف شد."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "1 مقصد حذف شد."
-msgstr[1] "{0} مقصد حذف شده است."
-
-msgid "No valid entries selected to delete."
-msgstr "هیچ ورودی معتبری برای حذف انتخاب نشده است."
-
 msgid "Add Alternate"
 msgstr "جایگزین اضافه کنید"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "دفترچه آدرس ذخیره شد."
@@ -208,9 +192,28 @@ msgstr "نام میزبان {0} در دفترچه آدرس نیست."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "افزودن مقصد برای {0} به سرویس نامگذاری {1} انجام نشد"
 
+msgid "Delete Entry"
+msgstr "حذف ورودی"
+
+msgid "Delete Selected"
+msgstr "حذف انتخاب شده"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "حذف مقصد برای {0} از سرویس نامگذاری {1} انجام نشد"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "مقصد {0} حذف شد."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "1 مقصد حذف شد."
+msgstr[1] "{0} مقصد حذف شده است."
+
+msgid "No valid entries selected to delete."
+msgstr "هیچ ورودی معتبری برای حذف انتخاب نشده است."
 
 msgid "Blacklist Selected"
 msgstr "لیست سیاه انتخاب شده"

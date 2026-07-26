@@ -138,27 +138,11 @@ msgstr "གཟིགས་མིང་\"{0}\"བཟོ་མི་རུང་�
 msgid "Please enter a host name and destination"
 msgstr "གཟིགས་མིང་དང་འབྲས་བུ་འཇུག་རོགས།"
 
-msgid "Delete Entry"
-msgstr "ཁ་པ་སོར་ཆུབ།"
-
-msgid "Delete Selected"
-msgstr "འདེམས་པ་སོར་ཆུབ།"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "འབྲས་བུ་{0}སོར་ཆུབ་པ།"
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "འབྲས་བུ་གཅིག་སོར་ཆུབ་པ།"
-msgstr[1] "འབྲས་བུ་{0}སོར་ཆུབ་པ།"
-
-msgid "No valid entries selected to delete."
-msgstr "སོར་ཆུབ་པར་འདེམས་པའི་ཁ་པ་ཡོད་མེད།"
-
 msgid "Add Alternate"
 msgstr "གཞན་དག་སྣོན་པ།"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "ཡིག་ཆ་བང་བརྟན་པོར་བཞག"
@@ -208,9 +192,28 @@ msgstr "གཟིགས་མིང་{0}ཡིག་ཆ་བང་གི་ན
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "{0}གི་འབྲས་བུ་{1}གྱི་མིང་གི་རིགས་སུ་སྣོན་མི་ཐུབ།"
 
+msgid "Delete Entry"
+msgstr "ཁ་པ་སོར་ཆུབ།"
+
+msgid "Delete Selected"
+msgstr "འདེམས་པ་སོར་ཆུབ།"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "{0}གི་འབྲས་བུ་{1}གྱི་མིང་གི་རིགས་ནས་སོར་ཆུབ་མི་ཐུབ།"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "འབྲས་བུ་{0}སོར་ཆུབ་པ།"
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "འབྲས་བུ་གཅིག་སོར་ཆུབ་པ།"
+msgstr[1] "འབྲས་བུ་{0}སོར་ཆུབ་པ།"
+
+msgid "No valid entries selected to delete."
+msgstr "སོར་ཆུབ་པར་འདེམས་པའི་ཁ་པ་ཡོད་མེད།"
 
 msgid "Blacklist Selected"
 msgstr "འདེམས་པའི་མི་ཆོག་པའི་ཐོ་གཞུང་།"

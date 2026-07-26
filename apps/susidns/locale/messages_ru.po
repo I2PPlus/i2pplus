@@ -142,28 +142,11 @@ msgstr "Неправильное имя хоста \"{0}\"."
 msgid "Please enter a host name and destination"
 msgstr "Пожалуйста, введите имя узла и адрес назначения"
 
-msgid "Delete Entry"
-msgstr "Удалить"
-
-msgid "Delete Selected"
-msgstr "Удалить выделенное"
-
-#, java-format
-msgid "Destination {0} deleted."
-msgstr "Адрес {0} удален."
-
-#, java-format
-msgid "1 destination deleted."
-msgid_plural "{0} destinations deleted."
-msgstr[0] "{0} адрес назначения удалён."
-msgstr[1] "{0} адреса назначения удалёны."
-msgstr[2] "{0} адресов назначения удалёны."
-
-msgid "No valid entries selected to delete."
-msgstr "Не выбраны действительные записи для удаления."
-
 msgid "Add Alternate"
 msgstr "Добавить альтернативу"
+
+msgid "Unsupported"
+msgstr ""
 
 msgid "Address book saved."
 msgstr "Адресная книга сохранена."
@@ -213,9 +196,29 @@ msgstr "Имя хоста {0} не в адресной книге."
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Не удалось добавить адрес назначения для {0} в сервис именования {1}"
 
+msgid "Delete Entry"
+msgstr "Удалить"
+
+msgid "Delete Selected"
+msgstr "Удалить выделенное"
+
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Не удалось удалить адрес назначения для {0} из сервиса именования {1}"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Адрес {0} удален."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "{0} адрес назначения удалён."
+msgstr[1] "{0} адреса назначения удалёны."
+msgstr[2] "{0} адресов назначения удалёны."
+
+msgid "No valid entries selected to delete."
+msgstr "Не выбраны действительные записи для удаления."
 
 msgid "Blacklist Selected"
 msgstr "Добавить в чёрный список"
