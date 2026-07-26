@@ -100,7 +100,7 @@ public class Servlet extends HttpServlet {
                     try {
                         ClassLoader cl2 = getServletContext().getClassLoader();
                         Class<?> daemonClass = Class.forName("net.i2p.addressbook.Daemon", true, cl2);
-                        Object hostChecker = daemonClass.getDeclaredMethod("getHostCheckerInstance").invoke(null);
+                        Object hostChecker = daemonClass.getDeclaredMethod("getHostChecker").invoke(null);
 
                         if (hostChecker != null) {
                             getServletContext().setAttribute("hostChecker", hostChecker);
