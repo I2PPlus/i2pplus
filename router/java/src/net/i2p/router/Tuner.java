@@ -7876,7 +7876,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("udp.peer.minRTO", "Min UDP RTO (ms)",
                   SUB_TRANSPORT,
 
-                  250, 1000, 50, "udp.sendConfirmTime", _context);
+                  100, 500, 50, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -7906,17 +7906,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean congestionActive = !Double.isNaN(congCWIN) && congCWIN > 0;
             double congestedRTO = getAdditionalStat(_context, "udp.congestedRTO");
             boolean rtoInflated = !Double.isNaN(congestedRTO) && congestedRTO > current * 2;
+            // Emergency: rtxRatio > 1000 = stream death spiral
+            double rtxRatio = getAdditionalStat(_context, "stream.rtxRatio");
+            boolean deathSpiral = !Double.isNaN(rtxRatio) && rtxRatio > 1000;
 
-            // CWIN collapse = congestion is active, lower minRTO for faster loss detection.
-            // This breaks the death spiral: congestion → high RTO → no retransmit signal → minRTO stuck high.
+            // CWIN collapse = lower minRTO for faster loss detection (aggressive)
             if (cwinCollapsed) {
-                return Math.max(_min, current - _step * 2);
+                return Math.max(_min, current - _step * 3);
             }
-            // Active congestion + RTO already inflated = lower aggressively to break spiral
+            // Active congestion + RTO already inflated = lower aggressively
             if (congestionActive && rtoInflated) {
                 return Math.max(_min, current - _step * 2);
             }
-            // Normal retransmits without CWIN collapse = raise to avoid retransmit storms
+            // Death spiral (rtxRatio > 1000) = crush minRTO to floor
+            if (deathSpiral) {
+                return _min;
+            }
+            // Normal retransmits without CWIN collapse = raise to avoid storms
             if (hasRetransmits) { return Math.min(_max, current + _step); }
             // No retransmits + low RTT = can safely lower
             if (!Double.isNaN(observed) && observed < 300 && !hasRetransmits) {
@@ -7971,12 +7977,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean congestionActive = !Double.isNaN(congCWIN) && congCWIN > 0;
             double congestedRTO = getAdditionalStat(_context, "udp.congestedRTO");
             boolean rtoInflated = !Double.isNaN(congestedRTO) && congestedRTO > current * 1.5;
+            double rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatio");
+            boolean deathSpiral = !Double.isNaN(rtxRatio) && rtxRatio > 1000;
 
+            // Death spiral: rtxRatio > 1000 = cut maxRTO to minimum
+            if (deathSpiral) {
+                return _min;
+            }
             // CWIN collapse = congestion is active, tighten maxRTO for fast failover
-            if (cwinCollapsed) { return Math.max(_min, current - _step * 2); }
+            if (cwinCollapsed) { return Math.max(_min, current - _step * 3); }
             // Active congestion + RTO already inflated = tighten aggressively
             if (congestionActive && rtoInflated) {
-                return Math.max(_min, current - _step * 2);
+                return Math.max(_min, current - _step * 3);
             }
             // Severely inflated RTO (>3× maxRTO) = cut hard to break spiral
             if (!Double.isNaN(congestedRTO) && congestedRTO > current * 3) {
@@ -8050,6 +8062,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean congestionActive = !Double.isNaN(congCWIN) && congCWIN > 0;
             double sendWindow = getAdditionalStat(_context, "udp.avgSendWindow");
             boolean cwinCollapsed = !Double.isNaN(sendWindow) && sendWindow < 20000;
+            double rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatio");
+            boolean deathSpiral = !Double.isNaN(rtxRatio) && rtxRatio > 1000;
             double failsafeCloses = getAdditionalEventCount(_context, "ntcp.failsafeCloses");
             boolean failsafeActive = !Double.isNaN(failsafeCloses) && failsafeCloses > 0;
             double mtuDecrease = getAdditionalEventCount(_context, "udp.mtuDecrease");
@@ -8057,6 +8071,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // Memory critical: shrink fast
             if (memPressure > 0.85) { return Math.max(_min, current - _step * 4); }
+            // Death spiral: rtxRatio > 1000 = grow window to break logjam
+            if (deathSpiral && cpuFree && memOk) {
+                return Math.min(_max, current + _step * 4);
+            }
             // Failsafe closes or MTU shrinking = extreme congestion — shrink window
             if (failsafeActive || mtuShrinking) {
                 return Math.max(_min, current - _step * 2);
