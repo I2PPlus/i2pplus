@@ -696,24 +696,33 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
 
                 boolean compress = allowGZIP && useGZIP;
+                AtomicInteger waiter = keepalive ? new AtomicInteger() : null;
                 Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
-                                                     _log, compress, upgrade, _clientExecutor, keepalive, null);
-                // Offload to executor pool to avoid blocking the handler thread on
-                // slow I2P socket writes (high-latency tunnel paths).
-                try {
-                    _clientExecutor.execute(t);
-                } catch (RejectedExecutionException ree) {
-                    try { sendError(socket, ERR_UNAVAILABLE); } catch (IOException ioe) {}
-                    try { socket.close(); } catch (IOException ioe) {}
-                    if (_log.shouldWarn())
-                        _log.warn("[HTTPServer] Executor pool saturated, rejecting request \n* Client: " + peerB32);
-                    return;
+                                                     _log, compress, upgrade, _clientExecutor, keepalive, waiter);
+                // GET/HEAD requests run inline to support HTTP keepalive.
+                // Non-GET/HEAD requests offload to the executor pool to avoid
+                // blocking the handler thread on slow I2P socket writes.
+                if (isGetOrHead) {
+                    t.run();
+                } else {
+                    try {
+                        _clientExecutor.execute(t);
+                    } catch (RejectedExecutionException ree) {
+                        try { sendError(socket, ERR_UNAVAILABLE); } catch (IOException ioe) {}
+                        try { socket.close(); } catch (IOException ioe) {}
+                        if (_log.shouldWarn())
+                            _log.warn("[HTTPServer] Executor pool saturated, rejecting request \n* Client: " + peerB32);
+                        return;
+                    }
                 }
 
                 long afterHandle = getTunnel().getContext().clock().now();
                 recordInitialTiming(afterAccept, afterHeaders, afterSocket, afterHandle, requestCount, peerB32);
-                // Async dispatch: can't check keepalive synchronously
-                break;
+                if (keepalive && !shouldKeepalive(waiter, afterAccept, requestCount))
+                    break;
+
+                // go around again
+                requestCount++;
 
             } while (keepalive);
 
