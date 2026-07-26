@@ -1389,7 +1389,12 @@ public class TunnelPool {
                         usable++;
                     }
                 }
-                int maxUsable = Math.max(target + 2, 2);
+                // Capacity: target + 1 (reduced from +2) to reduce churn.
+                // The old +2 formula kept 2 extra tunnels beyond target, causing
+                // constant "Pool at capacity" warnings and replacement builds.
+                // With +1, pools hold just 1 extra tunnel as a buffer, reducing
+                // build churn while still providing resilience against expiry.
+                int maxUsable = Math.max(target + 1, 2);
                 if (usable >= maxUsable) {
                     // At capacity — try replacing a non-GOOD tunnel instead of
                     // dropping a freshly-built tunnel.  Only replace FAILED
@@ -2786,14 +2791,15 @@ public class TunnelPool {
             _consecutiveEmergencies--;
         }
 
-        // Early exit: cap in-progress at target + 2 to prevent
+        // Early exit: cap in-progress at target + 1 to prevent
         // emergency-boosted effectiveTarget from inflating the tolerance.
+        // Reduced from target + 2 to match the tighter pool capacity.
         // EMERGENCY has its own inProgress check (target-based) and is
         // reached after this early exit when safeActive == 0.
-        if (inProgress >= Math.max(target + 2, 2)) {
+        if (inProgress >= Math.max(target + 1, 2)) {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping build: inProgress(" +
-                          inProgress + ") >= cap " + Math.max(target + 2, 2) +
+                          inProgress + ") >= cap " + Math.max(target + 1, 2) +
                           " (target=" + target + ")");
             }
             return;

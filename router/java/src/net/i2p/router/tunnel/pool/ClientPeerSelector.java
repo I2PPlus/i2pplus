@@ -558,6 +558,37 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 if (matches.isEmpty()) {
                     ctx.profileOrganizer().selectAllNotFailingPeers(1, exclude, matches, false);
                 }
+                // Soft fallback: when all standard tiers fail, try peers that were
+                // excluded ONLY for "no-signal" but have proven track records
+                // (acceptance ratio > 50%, have been tested before).  These peers
+                // are capable but simply haven't been contacted recently — better
+                // than failing the build entirely.
+                boolean softInStartup = ctx.router() != null && ctx.router().getUptime() < 15*60*1000;
+                if (matches.isEmpty() && !softInStartup) {
+                    Set<Hash> softExclude = new HashSet<>(exclude);
+                    // Remove no-signal peers from the exclusion set to give them
+                    // a chance, but only if they have good historical metrics
+                    for (Hash h : new ArrayList<>(softExclude)) {
+                        String reason = excluder._reasons.get(h);
+                        if ("no-signal".equals(reason)) {
+                            PeerProfile prof = ctx.profileOrganizer().getProfile(h);
+                            if (prof != null && prof.getTunnelAcceptanceRatio() > 0.5 &&
+                                prof.getTunnelHistory().getLastTestedSuccessfully() > 0) {
+                                softExclude.remove(h);
+                            }
+                        }
+                    }
+                    if (softExclude.size() < exclude.size()) {
+                        ctx.profileOrganizer().selectNotFailingPeers(1, softExclude, matches, false, 0, null);
+                        if (matches.isEmpty()) {
+                            ctx.profileOrganizer().selectAllNotFailingPeers(1, softExclude, matches, false);
+                        }
+                        if (!matches.isEmpty() && log.shouldInfo()) {
+                            log.info("Soft fallback: found peer bypassing no-signal exclusion: " +
+                                     matches.get(0).toBase64().substring(0, 6));
+                        }
+                    }
+                }
                 // Post-selection first-hop quality check.
                 // Hard-fail gates: first-hop-failing peers, stale peers — always reject.
                 // Established preference: prefer established/connecting peers but fall

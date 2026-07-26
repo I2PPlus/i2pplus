@@ -464,8 +464,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // Peers that have never been tested, heard from, or connected to
         // will waste tunnel builds and test cycles.  This is always active
         // for client pools (skipped for exploratory and during startup).
-        // Require evidence of life within 24 hours — a peer tested once
-        // years ago should not pass indefinitely.
+        // Use a 30-minute activity window for heard-from/sent-to checks
+        // (wider than the old 10-minute window) to avoid starving peer
+        // selection when the network is sparse or under load.
         if (!isExploratory && !isInStartupGracePeriod(ctx)) {
             boolean hasSignal = false;
             long now = ctx.clock().now();
@@ -473,14 +474,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (ctx.commSystem().isEstablished(peerHash)) {
                 hasSignal = true;
             }
-            // Recently heard from or successfully sent to (10-minute window)
+            // Recently heard from or successfully sent to (30-minute window)
             if (!hasSignal && profile != null) {
+                long heardWindow = 30 * 60 * 1000L;
                 if (profile.getLastHeardFrom() > 0 &&
-                    now - profile.getLastHeardFrom() < 10 * 60 * 1000L) {
+                    now - profile.getLastHeardFrom() < heardWindow) {
                     hasSignal = true;
                 }
                 if (profile.getLastSendSuccessful() > 0 &&
-                    now - profile.getLastSendSuccessful() < 10 * 60 * 1000L) {
+                    now - profile.getLastSendSuccessful() < heardWindow) {
                     hasSignal = true;
                 }
             }
@@ -488,6 +490,17 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (!hasSignal && profile != null) {
                 long lastTested = profile.getTunnelHistory().getLastTestedSuccessfully();
                 if (lastTested > 0 && now - lastTested < getActivityWindow(ctx)) {
+                    hasSignal = true;
+                }
+            }
+            // Soft fallback: accept peers with ANY tunnel test history
+            // (even old) if they have a reasonable acceptance ratio (>50%).
+            // These peers are proven-capable but simply haven't been contacted
+            // recently — better than excluding them entirely.
+            if (!hasSignal && profile != null) {
+                double acceptanceRatio = profile.getTunnelAcceptanceRatio();
+                long lastTested = profile.getTunnelHistory().getLastTestedSuccessfully();
+                if (acceptanceRatio > 0.5 && lastTested > 0) {
                     hasSignal = true;
                 }
             }
@@ -1321,14 +1334,16 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         long window = base * _windowMultiplier;
 
         // Acute floor: when builds are degraded, never let the window fall below
-        // 4 hours regardless of active-peer count, to break the pruning loop fast
+        // 6 hours regardless of active-peer count, to break the pruning loop fast
         // (the Tuner multiplier reacts more slowly across cycles).
+        // Raised from 4h to 6h to retain more peer candidates during sustained
+        // degradation — the old 4h floor still excluded too many viable peers.
         double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
         if (buildSuccess > 0 && buildSuccess < DEGRADED_BUILD_THRESHOLD) {
-            window = Math.max(window, 4 * 60 * 60 * 1000L);
+            window = Math.max(window, 6 * 60 * 60 * 1000L);
         }
 
-        return Math.min(window, 8 * 60 * 60 * 1000L);
+        return Math.min(window, 12 * 60 * 60 * 1000L);
     }
 
     /**
