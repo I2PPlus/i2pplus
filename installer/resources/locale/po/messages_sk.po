@@ -1,0 +1,145 @@
+# I2P
+# Copyright (C) 2012 The I2P Project
+msgid ""
+msgstr ""
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Failed to load the wrapper"
+msgstr "Nepodarilo sa načítať wrapper"
+
+#, sh-format
+msgid "$APP_LONG_NAME is already running."
+msgstr "$APP_LONG_NAME už beží."
+
+#, sh-format
+msgid "Running $APP_LONG_NAME"
+msgstr "$APP_LONG_NAME beží"
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME"
+msgstr "Čaká sa na $APP_LONG_NAME"
+
+#, sh-format
+msgid "WARNING: $APP_LONG_NAME may have failed to start."
+msgstr "UPOZORNENIE: $APP_LONG_NAME sa možno nepodarilo spustiť."
+
+msgid "Must be root to perform this action."
+msgstr "Pre vykonanie tejto akcie musíte byť root."
+
+#, sh-format
+msgid "Starting $APP_LONG_NAME"
+msgstr "Spúšťa sa $APP_LONG_NAME"
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME"
+msgstr "Zastavuje sa $APP_LONG_NAME"
+
+#, sh-format
+msgid "$APP_LONG_NAME was not running."
+msgstr "$APP_LONG_NAME nebežal."
+
+#, sh-format
+msgid "Unable to stop $APP_LONG_NAME."
+msgstr "Nie je možné zastaviť $APP_LONG_NAME."
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME to exit"
+msgstr "Čaká sa na ukončenie $APP_LONG_NAME"
+
+#, sh-format
+msgid "Failed to stop $APP_LONG_NAME."
+msgstr "Nepodarilo sa zastaviť $APP_LONG_NAME."
+
+#, sh-format
+msgid "Stopped $APP_LONG_NAME."
+msgstr "$APP_LONG_NAME zastavený."
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME gracefully"
+msgstr "Riadne zastavenie $APP_LONG_NAME"
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME nebeží."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME beží: PID:$pid"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+msgstr "$APP_LONG_NAME beží: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is already installed."
+msgstr "Démon $APP_LONG_NAME je už nainštalovaný."
+
+#, sh-format
+msgid "Installing the $APP_LONG_NAME daemon"
+msgstr "Inštaluje sa démon $APP_LONG_NAME"
+
+#, sh-format
+msgid "Install not currently supported for $DIST_OS"
+msgstr "Inštalácia momentálne nie je podporovaná pre $DIST_OS"
+
+#, sh-format
+msgid "Removing $APP_LONG_NAME daemon"
+msgstr "Odstraňuje sa démon $APP_LONG_NAME"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is not currently installed."
+msgstr "Démon $APP_LONG_NAME nie je momentálne nainštalovaný."
+
+#, sh-format
+msgid "Remove not currently supported for $DIST_OS"
+msgstr "Odstránenie momentálne nie je podporované pre $DIST_OS"
+
+msgid "Commands:"
+msgstr "Príkazy:"
+
+msgid "Launch in the current console."
+msgstr "Spustiť v aktuálnej konzole."
+
+msgid "Start in the background as a daemon process."
+msgstr "Spustiť na pozadí ako démon."
+
+msgid "Stop if running as a daemon or in another console."
+msgstr "Zastaviť ak beží ako démon alebo v inej konzole."
+
+msgid "Stop gracefully, may take up to 11 minutes or more."
+msgstr "Riadne zastaviť, môže trvať až 11 minút alebo viac."
+
+msgid "Restart gracefully, may take up to 11 minutes or more."
+msgstr "Riadne reštartovať, môže trvať až 11 minút alebo viac."
+
+msgid "Stop if running and then start."
+msgstr "Zastaviť ak beží a potom spustiť."
+
+msgid "Restart only if already running."
+msgstr "Reštartovať len ak už beží."
+
+msgid "Query the current status."
+msgstr "Zistiť aktuálny stav."
+
+msgid "Install to start automatically when system boots."
+msgstr "Nainštalovať pre automatické spustenie pri štarte systému."
+
+msgid "Uninstall."
+msgstr "Odinštalovať."
+
+msgid "Request a Java thread dump if running."
+msgstr "Vyžiadať Java thread dump ak beží."
+
+msgid "Please edit i2prouter and set the variable RUN_AS_USER"
+msgstr "Prosím upravte i2prouter a nastavte premennú RUN_AS_USER"
+
+msgid "Running I2P as the root user is *not* recommended."
+msgstr "Spúšťanie I2P ako root *nie je* odporúčané."
+
+msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
+msgstr ""
+"Pre spustenie ako root aj tak, upravte i2prouter a nastavte ALLOW_ROOT=true."

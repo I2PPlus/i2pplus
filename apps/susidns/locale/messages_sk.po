@@ -1,0 +1,397 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, java-format
+msgid "Host name \"{0}\" contains illegal character {1}"
+msgstr "Názov hostiteľa \"{0}\" obsahuje nepovolený znak {1}"
+
+#, java-format
+msgid "Host name cannot start with \"{0}\""
+msgstr "Názov hostiteľa nemôže začínať na \"{0}\""
+
+#, java-format
+msgid "Host name cannot end with \"{0}\""
+msgstr "Názov hostiteľa nemôže končiť na \"{0}\""
+
+#, java-format
+msgid "Host name cannot contain \"{0}\""
+msgstr "Názov hostiteľa nemôže obsahovať \"{0}\""
+
+#, java-format
+msgid ""
+"Host name \"{0}\" requires conversion to ASCII but the conversion library is"
+" unavailable in this JVM"
+msgstr ""
+"Názov hostiteľa \"{0}\" vyžaduje konverziu na ASCII, ale konverzná knižnica "
+"nie je v tomto JVM k dispozícii"
+
+msgid "Source"
+msgstr "Zdroj"
+
+msgid "Imported from"
+msgstr "Importované z"
+
+msgid "Imported from file"
+msgstr "Importované zo súboru"
+
+msgid "Manually added via SusiDNS"
+msgstr "Ručne pridané cez SusiDNS"
+
+msgid "Manually added"
+msgstr "Ručne pridané"
+
+msgid "Added via address helper"
+msgstr "Pridané cez address helper"
+
+msgid "Via helper"
+msgstr "Cez helper"
+
+msgid "Via helper from"
+msgstr "Cez helper z"
+
+msgid "None"
+msgstr "Žiadny"
+
+msgid "Hidden"
+msgstr "Skrytý"
+
+msgid "Signed"
+msgstr "Podpísaný"
+
+msgid "Key"
+msgstr "Kľúč"
+
+#, java-format
+msgid "Type {0}"
+msgstr "Typ {0}"
+
+msgid "DSA 1024 bit"
+msgstr "DSA 1024 bit"
+
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 bit"
+
+msgid "Search for <span class=active>"
+msgid_plural "Search for <span class=active>"
+msgstr[0] "Hľadať <span class=active>"
+msgstr[1] "Hľadať <span class=active>"
+
+#, java-format
+msgid "Filtered list contains 1 entry."
+msgid_plural "Filtered list contains {0} entries."
+msgstr[0] "Filtrovaný zoznam obsahuje 1 záznam."
+msgstr[1] "Filtrovaný zoznam obsahuje {0} záznamov."
+
+#, java-format
+msgid "One result for: <span class=active>"
+msgid_plural "{0} results for: <span class=active>"
+msgstr[0] "Jeden výsledok pre: <span class=active>"
+msgstr[1] "{0} výsledkov pre: <span class=active>"
+
+#, java-format
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] "Kniha obsahuje 1 záznam"
+msgstr[1] "Kniha obsahuje {0} záznamov"
+
+msgid "Add"
+msgstr "Pridať"
+
+msgid "Replace"
+msgstr "Nahradiť"
+
+#, java-format
+msgid "Host name {0} is already in address book, unchanged."
+msgstr "Názov hostiteľa {0} je už v adresári, nezmenené."
+
+#, java-format
+msgid ""
+"Host name {0} is already in address book with a different destination. Click"
+" \"Replace\" to overwrite."
+msgstr ""
+"Názov hostiteľa {0} je už v adresári s iným cieľom. Kliknite \"Nahradiť\" "
+"pre prepísanie."
+
+msgid "Unable to resolve Base 32 address"
+msgstr "Nie je možné rozlíšiť Base 32 adresu"
+
+#, java-format
+msgid "Destination added for {0}."
+msgstr "Cieľ pridaný pre {0}."
+
+#, java-format
+msgid "Destination changed for {0}."
+msgstr "Cieľ zmenený pre {0}."
+
+msgid "Warning - host name does not end with \".i2p\""
+msgstr "Upozornenie - názov hostiteľa nekončí na \".i2p\""
+
+msgid "Invalid Base 32 host name."
+msgstr "Neplatný názov Base 32 hostiteľa."
+
+msgid "Invalid Base 64 destination."
+msgstr "Neplatný Base 64 cieľ."
+
+#, java-format
+msgid "Invalid host name \"{0}\"."
+msgstr "Neplatný názov hostiteľa \"{0}\"."
+
+msgid "Please enter a host name and destination"
+msgstr "Prosím zadajte názov hostiteľa a cieľ"
+
+msgid "Delete Entry"
+msgstr "Zmazať záznam"
+
+msgid "Delete Selected"
+msgstr "Zmazať vybrané"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Cieľ {0} zmazaný."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "1 cieľ zmazaný."
+msgstr[1] "{0} cieľov zmazaných."
+
+msgid "No valid entries selected to delete."
+msgstr "Nie sú vybrané žiadne platné záznamy na zmazanie."
+
+msgid "Add Alternate"
+msgstr "Pridať alternatívny"
+
+msgid "Address book saved."
+msgstr "Adresár uložený."
+
+msgid "ERROR: Could not write addressbook file."
+msgstr "CHYBA: Nie je možné zapísať súbor adresára."
+
+msgid ""
+"Invalid form submission, probably because you used the \"back\" or "
+"\"reload\" button on your browser. Please resubmit."
+msgstr ""
+"Neplatné odoslanie formulára, pravdepodobne ste použili tlačidlo \"späť\" "
+"alebo \"obnoviť\" v prehliadači. Prosím odošlite znova."
+
+msgid ""
+"If the problem persists, verify that you have cookies enabled in your "
+"browser."
+msgstr "Ak problém pretrváva, overte, že máte v prehliadači povolené cookies."
+
+msgid "Save"
+msgstr "Uložiť"
+
+msgid "Blacklist saved."
+msgstr "Čierna listina uložená."
+
+msgid "Reload"
+msgstr "Obnoviť"
+
+msgid "Blacklist reloaded from file."
+msgstr "Čierna listina obnovená zo súboru."
+
+msgid "Configuration saved."
+msgstr "Konfigurácia uložená."
+
+msgid "Configuration reloaded."
+msgstr "Konfigurácia obnovená."
+
+msgid "New domain"
+msgstr "Nová doména"
+
+msgid "Subscription log reloaded."
+msgstr "Záznam odberov obnovený."
+
+#, java-format
+msgid "{0} address book in {1} database"
+msgstr "{0} adresár v databáze {1}"
+
+#, java-format
+msgid "Host name {0} is not in the address book."
+msgstr "Názov hostiteľa {0} nie je v adresári."
+
+#, java-format
+msgid "Failed to add Destination for {0} to naming service {1}"
+msgstr "Nepodarilo sa pridať cieľ pre {0} do pomenovacej služby {1}"
+
+#, java-format
+msgid "Failed to delete Destination for {0} from naming service {1}"
+msgstr "Nepodarilo sa zmazať cieľ pre {0} z pomenovacej služby {1}"
+
+msgid "Blacklist Selected"
+msgstr "Čierna listina vybraných"
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] "1 cieľ na čiernej listine."
+msgstr[1] "{0} cieľov na čiernej listine."
+
+msgid "No valid entries selected to blacklist."
+msgstr "Nie sú vybrané žiadne platné záznamy na čiernu listinu."
+
+msgid "Save Notes"
+msgstr "Uložiť poznámky"
+
+msgid "You must enter a file"
+msgstr "Musíte zadať súbor"
+
+msgid "No entries found in file"
+msgstr "V súbore neboli nájdené žiadne záznamy"
+
+#, java-format
+msgid "Imported from file {0}"
+msgstr "Importované zo súboru {0}"
+
+#, java-format
+msgid "Loaded {0} entry from file"
+msgid_plural "Loaded {0} entries from file"
+msgstr[0] "Načítaný {0} záznam zo súboru"
+msgstr[1] "Načítaných {0} záznamov zo súboru"
+
+#, java-format
+msgid "Skipped {0} duplicate entry from file"
+msgid_plural "Skipped {0} duplicate entries from file"
+msgstr[0] "Preskočený {0} duplicitný záznam zo súboru"
+msgstr[1] "Preskočených {0} duplicitných záznamov zo súboru"
+
+msgid "Import from file failed"
+msgstr "Import zo súboru zlyhal"
+
+msgid "Subscriptions saved."
+msgstr "Odbery uložené."
+
+msgid "Update"
+msgstr "Aktualizovať"
+
+msgid "Attempting to update addressbook from subscription sources..."
+msgstr "Pokus o aktualizáciu adresára zo zdrojov odberov..."
+
+msgid "Cannot update subscriptions: HTTP proxy is not running!"
+msgstr "Nie je možné aktualizovať odbery: HTTP proxy nebeží!"
+
+msgid "Subscriptions reloaded."
+msgstr "Odbery obnovené."
+
+msgid ""
+"If SusiDNS is configured to publish your Router address book, the entries "
+"will appear in your Published address book and saved to a hosts.txt file for"
+" sharing."
+msgstr ""
+"Ak je SusiDNS nakonfigurovaný na publikovanie adresára smerovača, záznamy sa"
+" objavia v publikovanom adresári a uložia do hosts.txt súboru na zdieľanie."
+
+msgid "Published Addressbook"
+msgstr "Publikovaný adresár"
+
+msgid ""
+"To configure SusiDNS to push your Router address book to your Published "
+"address book, set 'should_publish=true' on the configuration page."
+msgstr ""
+"Pre konfiguráciu SusiDNS na prenos adresára smerovača do publikovaného "
+"adresára nastavte 'should_publish=true' na konfiguračnej stránke."
+
+msgid ""
+"All hosts derived from subscriptions will appear in this address book, in "
+"addition to any you manually add here or to your Master address book."
+msgstr ""
+"Všetky hostitele z odberov sa zobrazia v tomto adresári, okrem tých, ktoré "
+"sem ručne pridáte alebo do hlavného adresára."
+
+msgid "Router Addressbook"
+msgstr "Adresár smerovača"
+
+msgid ""
+"Hosts you manually add here will never be published. You can also add "
+"aliases to hosts in other address books here."
+msgstr ""
+"Hostitelia, ktorých sem ručne pridáte, nebudú nikdy publikovaní. Môžete tiež"
+" pridať aliasy hostiteľov z iných adresárov."
+
+msgid "Private Addressbook"
+msgstr "Súkromný adresár"
+
+msgid "Local Records"
+msgstr "Miestne záznamy"
+
+msgid ""
+"I2P applications (including the HTTP proxy) use the hosts in your local "
+"address books to resolve .i2p hostnames."
+msgstr ""
+"I2P aplikácie (vrátane HTTP proxy) používajú hostiteľov z miestnych "
+"adresárov na rozlíšenie .i2p názvov hostiteľov."
+
+msgid ""
+"Additional subscriptions can be found in the FAQ section of the Router help "
+"page."
+msgstr "Ďalšie odbery nájdete v sekcii FAQ na stránke pomocníka smerovača."
+
+msgid "Subscriptions"
+msgstr "Odbery"
+
+msgid ""
+"Hosts sourced from your subscriptions are added to your Router address book,"
+" and are automatically synced (by default every 12 hours)."
+msgstr ""
+"Hostitelia z vašich odberov sú pridaní do adresára smerovača a automaticky "
+"synchronizovaní (štandardne každých 12 hodín)."
+
+msgid "Configure Subscriptions"
+msgstr "Nastaviť odbery"
+
+msgid ""
+"If you manually add hosts here, they will be included your Published address"
+" book (if configured)."
+msgstr ""
+"Ak sem ručne pridáte hostiteľov, budú zahrnutí do publikovaného adresára (ak"
+" je nakonfigurovaný)."
+
+msgid "Master Addressbook"
+msgstr "Hlavný adresár"
+
+msgid "Searchable by"
+msgstr "Vyhľadávateľné pomocou"
+
+msgid "I2P applications"
+msgstr "I2P aplikácie"
+
+msgid ""
+"The Master, Router and Private address books collectively serve as the DNS "
+"authority for I2P applications."
+msgstr ""
+"Hlavný, smerovací a súkromný adresár spoločne slúžia ako DNS autorita pre "
+"I2P aplikácie."
+
+msgid "Optional,"
+msgstr "Voliteľné,"
+
+msgid "for websites"
+msgstr "pre webstránky"
+
+msgid ""
+"If you configure SusiDNS to publish your Router address book, it will export"
+" a hosts.txt file containing all the hosts (by default to the root of your "
+"eepsite)."
+msgstr ""
+"Ak nakonfigurujete SusiDNS na publikovanie adresára smerovača, exportuje "
+"hosts.txt súbor obsahujúci všetkých hostiteľov (štandardne do koreňa vašej "
+"eepstránky)."
+
+msgid ""
+"Addresses manually added to your Master address book will merge with your "
+"Router address book."
+msgstr ""
+"Adresy ručne pridané do hlavného adresára sa zlúčia s adresárom smerovača."
+
+msgid ""
+"Hosts you receive from your subscriptions will merge with your Router "
+"address book."
+msgstr "Hostitelia z vašich odberov sa zlúčia s adresárom smerovača."

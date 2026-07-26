@@ -1,0 +1,585 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "This seems to be a bad destination:"
+msgstr "Toto sa zdá byť zlý cieľ:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper vám nemôže pomôcť s takýmto cieľom!"
+
+#, java-format
+msgid ""
+"To visit the destination in your addressbook, click <a "
+"href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, "
+"click <a href=\"{1}\">here</a>."
+msgstr ""
+"Pre návštevu cieľa v adresári kliknite <a href=\"{0}\">sem</a>. Pre "
+"konfliktný cieľ addresshelper kliknite <a href=\"{1}\">sem</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Cieľ pre {0} v adresári"
+
+msgid "Conflicting address helper destination"
+msgstr "Konfliktný cieľ address helper"
+
+msgid "Corrupt Base32 address"
+msgstr "Poškodená Base32 adresa"
+
+msgid "Destination LeaseSet not found"
+msgstr "Sada prenájmov cieľa nenájdená"
+
+msgid "Host"
+msgstr "Hostiteľ"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "Cieľ"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "Pokračovať na {0} bez uloženia"
+
+msgid ""
+"You can browse to the site without saving it to the addressbook. The address"
+" will be remembered until you restart your I2P router."
+msgstr ""
+"Môžete prehliadať stránku bez uloženia do adresára. Adresa zostane "
+"zapamätaná do reštartu I2P smerovača."
+
+msgid "Continue without saving"
+msgstr "Pokračovať bez uloženia"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "Uložiť {0} do adresára smerovača a pokračovať na stránku"
+
+msgid ""
+"This address will be saved to your Router addressbook where your "
+"subscription-based addresses are stored."
+msgstr ""
+"Táto adresa bude uložená do adresára smerovača, kde sú uložené adresy z "
+"odberov."
+
+msgid ""
+"If you want to keep track of sites you have added manually, add to your "
+"Master or Private addressbook instead."
+msgstr ""
+"Ak si chcete uchovať prehľad o ručne pridaných stránkach, pridajte ich "
+"radšej do hlavného alebo súkromného adresára."
+
+msgid "Save & continue"
+msgstr "Uložiť a pokračovať"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "Uložiť {0} do hlavného adresára a pokračovať na stránku"
+
+msgid ""
+"This address will be saved to your Master addressbook. Select this option "
+"for addresses you wish to keep separate from the main router address book, "
+"but don't mind publishing."
+msgstr ""
+"Táto adresa bude uložená do hlavného adresára. Vyberte túto možnosť pre "
+"adresy, ktoré chcete oddeliť od hlavného adresára smerovača, ale nevadí vám "
+"ich zverejnenie."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "Uložiť {0} do súkromného adresára a pokračovať na stránku"
+
+msgid ""
+"This address will be saved to your Private addressbook, ensuring it is never"
+" published."
+msgstr ""
+"Táto adresa bude uložená do súkromného adresára, čím sa zabezpečí, že nikdy "
+"nebude zverejnená."
+
+msgid "Base32 address requires lookup password"
+msgstr "Base32 adresa vyžaduje vyhľadávacie heslo"
+
+msgid "Base32 address requires encryption key"
+msgstr "Base32 adresa vyžaduje šifrovací kľúč"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Base32 adresa vyžaduje šifrovací kľúč a vyhľadávacie heslo"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Zlyhanie dešifrovania Base32 adresy, skontrolujte šifrovací kľúč"
+
+msgid "Generate"
+msgstr "Generovať"
+
+msgid "Encryption key"
+msgstr "Šifrovací kľúč"
+
+msgid ""
+"You must either enter a PSK encryption key provided by the server operator, "
+"or generate a DH encryption key and send that to the server operator."
+msgstr ""
+"Musíte zadať PSK šifrovací kľúč poskytnutý prevádzkovateľom servera, alebo "
+"vygenerovať DH šifrovací kľúč a poslať ho prevádzkovateľovi."
+
+msgid "Ask the server operator for help."
+msgstr "Požiadajte prevádzkovateľa servera o pomoc."
+
+msgid "Enter PSK encryption key"
+msgstr "Zadať PSK šifrovací kľúč"
+
+msgid "Generate new DH encryption key"
+msgstr "Generovať nový DH šifrovací kľúč"
+
+msgid "Lookup password"
+msgstr "Vyhľadávacie heslo"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "Musíte zadať heslo poskytnuté prevádzkovateľom servera."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "Pridané cez address helper z {0}"
+
+msgid "Added via address helper"
+msgstr "Pridané cez address helper"
+
+msgid "Missing lookup password"
+msgstr "Chýbajúce vyhľadávacie heslo"
+
+msgid "Missing private key"
+msgstr "Chýbajúci súkromný kľúč"
+
+msgid "Invalid private key"
+msgstr "Neplatný súkromný kľúč"
+
+msgid "Your new encryption key"
+msgstr "Váš nový šifrovací kľúč"
+
+msgid "Router Console"
+msgstr "Konzola smerovača"
+
+msgid "Addressbook"
+msgstr "Adresár"
+
+msgid "Configuration"
+msgstr "Konfigurácia"
+
+msgid "Help"
+msgstr "Pomocník"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Skopírujte kľúč a pošlite ho prevádzkovateľovi servera."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "Po udelení povolenia môžete pokračovať na stránku."
+
+msgid "Go back and fix the error"
+msgstr "Vrátiť sa a opraviť chybu"
+
+msgid "router"
+msgstr "smerovač"
+
+msgid "master"
+msgstr "hlavný"
+
+msgid "private"
+msgstr "súkromný"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "Presmerovanie na {0}"
+
+msgid "Redirection in progress"
+msgstr "Presmerovanie prebieha"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "Uložené {0} do adresára {1}, presmerúvam."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "Nepodarilo sa uložiť {0} do adresára {1}, presmerúvam."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "Kliknite sem, ak nie ste presmerovaní automaticky."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "Autentifikácia pre {0} uložená, presmerúvam."
+
+msgid "Website Unknown"
+msgstr "Neznáma stránka"
+
+msgid "I2P Router Console"
+msgstr "Konzola I2P smerovača"
+
+msgid "Website Not Found in Addressbook"
+msgstr "Stránka nenájdená v adresári"
+
+msgid "The website was not found in your router's addressbook."
+msgstr "Stránka nebola nájdená v adresári smerovača."
+
+msgid "Check the link or find a Base 32 or Base 64 address."
+msgstr "Skontrolujte odkaz alebo nájdite Base 32 či Base 64 adresu."
+
+#, java-format
+msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
+msgstr "Ak máte Base 64 adresu, {0}pridajte ju do adresára{1}."
+
+msgid ""
+"Otherwise, find a Base 32 or address helper link, or use a jump service link"
+" below."
+msgstr ""
+"Inak nájdite Base 32 alebo address helper odkaz, alebo použite jump service "
+"odkaz nižšie."
+
+#, java-format
+msgid ""
+"Seeing this page often? See {0}the FAQ{1} for help in {2}adding some "
+"subscriptions{3} to your addressbook."
+msgstr ""
+"Vidíte túto stránku často? Pozrite si {0}FAQ{1} pre pomoc s {2}pridaním "
+"odberov{3} do adresára."
+
+msgid "Could not find the following destination:"
+msgstr "Nepodarilo sa nájsť nasledujúci cieľ:"
+
+msgid "Warning: Non-HTTP Protocol"
+msgstr "Upozornenie: Ne-HTTP protokol"
+
+msgid "The request uses a bad protocol."
+msgstr "Požiadavka používa zlý protokol."
+
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "I2P HTTP proxy podporuje iba HTTP a HTTPS požiadavky."
+
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Iné protokoly ako FTP nie sú povolené."
+
+msgid "Error: Request Denied"
+msgstr "Chyba: Požiadavka zamietnutá"
+
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "Chyba: K konzole smerovača nemožno pristupovať cez I2P proxy"
+
+msgid "Your browser is misconfigured."
+msgstr "Váš prehliadač je zle nakonfigurovaný."
+
+msgid ""
+"Do not use the proxy to access the router console, localhost, or local LAN "
+"destinations."
+msgstr ""
+"Nepoužívajte proxy na prístup ku konzole smerovača, localhost alebo miestnym"
+" LAN cieľom."
+
+msgid ""
+"You need to prevent 127.0.0.1 (or the address you're accessing the I2P "
+"console on) from being routed via I2P's http proxy, usually by excluding the"
+" address in your browser's proxy configuration section."
+msgstr ""
+"Musíte zabrániť smerovaniu 127.0.0.1 (alebo adresy, z ktorej pristupujete ku"
+" konzole I2P) cez I2P http proxy, zvyčajne vylúčením adresy v sekcii "
+"konfigurácie proxy vášho prehliadača."
+
+msgid "Warning: Destination Key Conflict"
+msgstr "Upozornenie: Konflikt kľúča cieľa"
+
+msgid ""
+"The address helper link you followed specifies a different destination key "
+"than the entry in your address book."
+msgstr ""
+"Odkaz address helper, ktorý ste nasledovali, určuje iný kľúč cieľa ako "
+"záznam vo vašom adresári."
+
+msgid ""
+"Someone could be trying to impersonate another website, or people have given"
+" two websites identical names."
+msgstr ""
+"Niekto sa môže pokúšať vydávať za inú stránku, alebo ľudia dali dvom "
+"stránkam rovnaké názvy."
+
+msgid ""
+"Resolve the conflict by deciding which key you trust, and then either ignore"
+" the address helper link, or delete the host entry from your address book "
+"and click the address helper link again."
+msgstr ""
+"Vyriešte konflikt rozhodnutím, ktorému kľúču dôverujete, a potom buď "
+"ignorujte odkaz address helper, alebo vymažte záznam hostiteľa z adresára a "
+"znova kliknite na odkaz address helper."
+
+msgid "Connection Reset"
+msgstr "Pripojenie bolo resetované"
+
+msgid "The connection to the website was reset while the page was loading."
+msgstr "Pripojenie k stránke bolo resetované počas načítavania stránky."
+
+msgid ""
+"The website could be temporarily unavailable, too busy, or it has blocked "
+"your access."
+msgstr ""
+"Stránka môže byť dočasne nedostupná, príliš vyťažená, alebo zablokovala váš "
+"prístup."
+
+#, java-format
+msgid "You may want to {0}retry{1}."
+msgstr "Možno budete chcieť {0}skúsiť znova{1}."
+
+#, java-format
+msgid ""
+"If you leave this page open, it will automatically retry connecting to the "
+"website every {0} seconds after a failed connection attempt."
+msgstr ""
+"Ak necháte túto stránku otvorenú, automaticky sa pokúsi znova pripojiť k "
+"stránke každých {0} sekúnd po neúspešnom pokuse."
+
+msgid "Website Unreachable"
+msgstr "Stránka nedosiahnuteľná"
+
+msgid ""
+"The website was not reachable, because it uses encryption options that are "
+"not supported by your I2P or Java version."
+msgstr ""
+"Stránka nebola dosiahnuteľná, pretože používa možnosti šifrovania, ktoré nie"
+" sú podporované vašou verziou I2P alebo Javy."
+
+msgid "Could not connect to the following destination:"
+msgstr "Nepodarilo sa pripojiť k nasledujúcemu cieľu:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr ""
+"Stránka nebola dosiahnuteľná, pretože jej sada prenájmov nebola nájdená."
+
+msgid ""
+"The website is probably down, but there could also be network congestion."
+msgstr ""
+"Stránka je pravdepodobne nefunkčná, ale môže ísť aj o zahltenie siete."
+
+msgid "The connection to the proxy was reset."
+msgstr "Pripojenie k proxy bolo resetované."
+
+msgid ""
+"The proxy could be temporarily unavailable, too busy, or it has blocked your"
+" access."
+msgstr ""
+"Proxy môže byť dočasne nedostupná, príliš vyťažená, alebo zablokovala váš "
+"prístup."
+
+#, java-format
+msgid ""
+"You may want to {0}retry{1} as this will randomly reselect an outproxy from "
+"the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr ""
+"Možno budete chcieť {0}skúsiť znova{1}, pretože to náhodne vyberie inú "
+"outproxy z poolu, ktorý ste definovali {2}tu{3} (ak máte nakonfigurovaných "
+"viac ako jednu)."
+
+#, java-format
+msgid ""
+"If you continue to have trouble you may want to edit your outproxy list "
+"{0}here{1}."
+msgstr "Ak máte naďalej problémy, môžete upraviť zoznam outproxy {0}tu{1}."
+
+msgid "Outproxy Unreachable"
+msgstr "Outproxy nedosiahnuteľná"
+
+msgid ""
+"The HTTP outproxy was not reachable, because it uses encryption options that"
+" are not supported by your I2P or Java version."
+msgstr ""
+"HTTP outproxy nebola dosiahnuteľná, pretože používa možnosti šifrovania, "
+"ktoré nie sú podporované vašou verziou I2P alebo Javy."
+
+msgid "The website was not reachable."
+msgstr "Stránka nebola dosiahnuteľná."
+
+msgid ""
+"The website is offline, there is network congestion, or your router is not "
+"yet well-integrated with peers."
+msgstr ""
+"Stránka je offline, sieť je zahltená, alebo váš smerovač ešte nie je dobre "
+"integrovaný s peer-mi."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "Upozornenie: Nie je nakonfigurovaná žiadna outproxy"
+
+msgid ""
+"Your request was for a site outside of I2P, but you have no HTTP outproxy "
+"configured."
+msgstr ""
+"Vaša požiadavka bola na stránku mimo I2P, ale nemáte nakonfigurovanú HTTP "
+"outproxy."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Prosím nakonfigurujte outproxy v I2PTunnel."
+
+msgid "Outproxy Not Found"
+msgstr "Outproxy nenájdená"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "HTTP outproxy nebola nájdená."
+
+msgid ""
+"It is offline, there is network congestion, or your router is not yet well-"
+"integrated with peers."
+msgstr ""
+"Je offline, sieť je zahltená, alebo váš smerovač ešte nie je dobre "
+"integrovaný s peer-mi."
+
+msgid "Information: New Host Name"
+msgstr "Informácia: Nový názov hostiteľa"
+
+msgid "Information: New Host Name with Address Helper"
+msgstr "Informácia: Nový názov hostiteľa s Address Helper"
+
+msgid ""
+"The address helper link you followed is for a new host name that is not in "
+"your address book."
+msgstr ""
+"Odkaz address helper, ktorý ste nasledovali, je pre nový názov hostiteľa, "
+"ktorý nie je vo vašom adresári."
+
+msgid "You may save this host name to your local address book."
+msgstr "Tento názov hostiteľa môžete uložiť do miestneho adresára."
+
+msgid ""
+"If you save it to your address book, you will not see this message again."
+msgstr "Ak ho uložíte do adresára, túto správu už neuvidíte."
+
+msgid ""
+"If you do not save it, the host name will be forgotten after the next router"
+" restart."
+msgstr ""
+"Ak ho neuložíte, názov hostiteľa bude po ďalšom reštarte smerovača "
+"zabudnutý."
+
+msgid ""
+"If you do not wish to visit this host, click the \"back\" button on your "
+"browser."
+msgstr ""
+"Ak nechcete navštíviť tohto hostiteľa, kliknite na tlačidlo \"späť\" v "
+"prehliadači."
+
+msgid "Proxy Authorization Required"
+msgstr "Vyžaduje sa autorizácia proxy"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "Vyžaduje sa autorizácia I2P HTTP proxy"
+
+msgid ""
+"This proxy is configured to require a username and password for access."
+msgstr ""
+"Táto proxy je nakonfigurovaná tak, aby vyžadovala používateľské meno a heslo"
+" pre prístup."
+
+#, java-format
+msgid ""
+"Please enter your username and password, or check your {0}router "
+"configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr ""
+"Prosím zadajte používateľské meno a heslo, alebo skontrolujte "
+"{0}konfiguráciu smerovača{1} alebo {2}konfiguráciu I2PTunnel{3}."
+
+#, java-format
+msgid ""
+"To disable authorization, remove the configuration "
+"{0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy "
+"tunnel."
+msgstr ""
+"Pre zakázanie autorizácie odstráňte konfiguráciu "
+"{0}i2ptunnel.proxy.auth=basic{1}, potom zastavte a reštartujte HTTP Proxy "
+"tunel."
+
+msgid ""
+"The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr ""
+"HTTP outproxy nebola dosiahnuteľná, pretože jej sada prenájmov nebola "
+"nájdená."
+
+msgid ""
+"The outproxy is probably down, but there could also be network congestion."
+msgstr ""
+"Outproxy je pravdepodobne nefunkčná, ale môže ísť aj o zahltenie siete."
+
+msgid "Warning: Request Denied"
+msgstr "Upozornenie: Požiadavka zamietnutá"
+
+msgid ""
+"This address appears to be malformed. Please verify you have supplied a "
+"valid address!"
+msgstr "Táto adresa sa zdá byť chybná. Overte, že ste zadali platnú adresu!"
+
+msgid "Warning: Bad Address Helper"
+msgstr "Upozornenie: Zlý Address Helper"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "Pomocný kľúč v URL ({0}i2paddresshelper={1}) nie je rozlíšiteľný."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "Zdá sa, že ide o neplatné dáta alebo preklep v Base 32 adrese."
+
+msgid ""
+"Check your URL to try and fix the helper key to be a valid Base 32 hostname "
+"or Base 64 key."
+msgstr ""
+"Skontrolujte URL a skúste opraviť pomocný kľúč na platný Base 32 názov "
+"hostiteľa alebo Base 64 kľúč."
+
+msgid "Warning: Address Blacklisted"
+msgstr "Upozornenie: Adresa na čiernej listine"
+
+msgid ""
+"The requested destination is in your blacklist and access has been blocked."
+msgstr "Požadovaný cieľ je vo vašej čiernej listine a prístup bol blokovaný."
+
+msgid ""
+"To allow access to this site, remove it from your blacklist on the SusiDNS "
+"blacklist management page."
+msgstr ""
+"Pre povolenie prístupu k tejto stránke ju odstráňte z čiernej listiny na "
+"stránke správy čiernych listín SusiDNS."
+
+msgid "Warning: Invalid Destination"
+msgstr "Upozornenie: Neplatný cieľ"
+
+msgid ""
+"The website destination specified was not valid, or was otherwise "
+"unreachable."
+msgstr "Zadaný cieľ stránky nebol platný alebo bol inak nedosiahnuteľný."
+
+msgid ""
+"Perhaps you pasted in the wrong Base 64 string or the link you are following"
+" is bad."
+msgstr ""
+"Možno ste vložili nesprávny Base 64 reťazec alebo odkaz, ktorý sledujete, je"
+" chybný."
+
+msgid "The I2P host could also be offline."
+msgstr "I2P hostiteľ môže byť tiež offline."
+
+msgid "Warning: Authorization Required"
+msgstr "Upozornenie: Vyžaduje sa autorizácia"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Upozornenie: Neplatný URI požiadavky"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "URI požiadavky je neplatný a pravdepodobne obsahuje nepovolené znaky."
+
+msgid ""
+"If you clicked a link, check the end of the URI for any characters the "
+"browser has mistakenly added on."
+msgstr ""
+"Ak ste klikli na odkaz, skontrolujte koniec URI na znaky, ktoré prehliadač "
+"omylom pridal."
+
+msgid "The Base32 address is invalid."
+msgstr "Base32 adresa je neplatná."

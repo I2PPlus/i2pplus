@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Služby súvisiace s kryptomenami"
+
+msgid "Controlled substances marketplaces"
+msgstr "Trhoviská s kontrolovanými látkami"
+
+msgid "E-book libraries and publishing"
+msgstr "Knižnice e-kníh a vydavateľstvo"
+
+msgid "File hosting and storage services"
+msgstr "Služby hostingu a ukladania súborov"
+
+msgid "Peer-to-peer file sharing"
+msgstr "Zdieľanie súborov peer-to-peer"
+
+msgid "Discussion forums and message boards"
+msgstr "Diskusné fóra a nástenky"
+
+msgid "Image galleries and photo sharing"
+msgstr "Galerie obrázkov a zdieľanie fotografií"
+
+msgid "Gaming servers and communities"
+msgstr "Herné servery a komunity"
+
+msgid "Git repositories and code hosting"
+msgstr "Git repozitáre a hosting kódu"
+
+msgid "Help and support resources"
+msgstr "Zdroj pomoci a podpory"
+
+msgid "Human rights and civil liberties"
+msgstr "Ľudské práva a občianske slobody"
+
+msgid "Official I2P infrastructure services"
+msgstr "Oficiálne infraštruktúrne služby I2P"
+
+msgid "News and media outlets"
+msgstr "Spravodajské a mediálne kanály"
+
+msgid "Text/code paste services"
+msgstr "Služby na vkladanie textu/kódu"
+
+msgid "Personal websites and blogs"
+msgstr "Osobné webstránky a blogy"
+
+msgid "Internet radio and streaming"
+msgstr "Internetové rádio a streamovanie"
+
+msgid "Search engines and directories"
+msgstr "Vyhľadávače a katalógy"
+
+msgid "Software repositories and downloads"
+msgstr "Softvérové repozitáre a sťahovanie"
+
+msgid "Statistics and analytics"
+msgstr "Štatistiky a analýzy"
+
+msgid "Utilities and web tools"
+msgstr "Nástroje a webové pomôcky"
+
+msgid "Torrent and content trackers"
+msgstr "Torrent a obsahové trackery"
+
+msgid "Conspiracy / Religious content"
+msgstr "Konšpiračný / Náboženský obsah"
+
+msgid "Unclassified or pending review"
+msgstr "Neklasifikované alebo čaká na kontrolu"
+
+msgid "Not yet categorized"
+msgstr "Zatiaľ nekategorizované"
+
+msgid "Video streaming and media"
+msgstr "Video streaming a médiá"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki a kolaboratívna dokumentácia"
+
+msgid "Work in progress / development"
+msgstr "Rozpracované / vývoj"

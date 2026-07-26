@@ -1,0 +1,63 @@
+# I2P
+# Copyright (C) 2014 The I2P Project
+msgid ""
+msgstr ""
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Message timeout"
+msgstr "Časový limit správy"
+
+msgid "Failed delivery to local destination"
+msgstr "Doručenie miestnemu cieľu zlyhalo"
+
+msgid "Local router failure"
+msgstr "Zlyhanie miestneho smerovača"
+
+msgid "Local network failure"
+msgstr "Zlyhanie miestnej siete"
+
+msgid "Session closed"
+msgstr "Relácia ukončená"
+
+msgid "Invalid message"
+msgstr "Neplatná správa"
+
+msgid "Invalid message options"
+msgstr "Neplatné voľby správy"
+
+msgid "Buffer overflow"
+msgstr "Pretečenie vyrovnávacej pamäte"
+
+msgid "Message expired"
+msgstr "Správa vypršala"
+
+msgid "Local lease set invalid"
+msgstr "Neplatná miestna sada prenájmov"
+
+msgid "No local tunnels"
+msgstr "Žiadne miestne tunely"
+
+msgid "Unsupported encryption options"
+msgstr "Nepodporované možnosti šifrovania"
+
+msgid "Invalid destination"
+msgstr "Neplatný cieľ"
+
+msgid "Destination lease set expired"
+msgstr "Sada prenájmov cieľa vypršala"
+
+msgid "Destination lease set not found"
+msgstr "Sada prenájmov cieľa nenájdená"
+
+msgid "Local destination shutdown"
+msgstr "Miestny cieľ bol vypnutý"
+
+msgid "Connection was reset"
+msgstr "Pripojenie bolo resetované"
+
+msgid "Failure code"
+msgstr "Kód chyby"

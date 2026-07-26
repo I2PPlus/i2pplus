@@ -1,0 +1,468 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, java-format
+msgid "{0} new message"
+msgid_plural "{0} new messages"
+msgstr[0] "{0} nová správa"
+msgstr[1] "{0} nové správy"
+
+msgid "Email"
+msgstr "Email"
+
+#, java-format
+msgid "No encoder found for encoding \\''{0}\\''."
+msgstr "Kodér pre kódovanie \\''{0}\\'' nebol nájdený."
+
+msgid "Re:"
+msgstr "Re:"
+
+msgid "Fwd:"
+msgstr "Fwd:"
+
+msgid "Drafts"
+msgstr "Koncepty"
+
+msgid "Sent"
+msgstr "Odoslané"
+
+msgid "Trash"
+msgstr "Kôš"
+
+msgid "Bulk Mail"
+msgstr "Hromadná pošta"
+
+msgid "Inbox"
+msgstr "Doručená pošta"
+
+msgid "View message as HTML"
+msgstr "Zobraziť správu ako HTML"
+
+msgid "View message as plain text"
+msgstr "Zobraziť správu ako obyčajný text"
+
+msgid "unknown"
+msgstr "neznámy"
+
+msgid ""
+"To protect your privacy, SusiMail is blocking Javascript and any remote "
+"content contained in this HTML message."
+msgstr ""
+"Kvôli ochrane súkromia SusiMail blokuje Javascript a vzdialený obsah v tejto"
+" HTML správe."
+
+msgid "Enable Javascript for enhanced presentation and additional features."
+msgstr "Povoliť Javascript pre lepšie zobrazenie a ďalšie funkcie."
+
+#, java-format
+msgid "Tracking images removed from message: {0}"
+msgstr "Sledovacie obrázky odstránené zo správy: {0}"
+
+#, java-format
+msgid "Blocked images not displayed: {0}"
+msgstr "Blokované obrázky nezobrazené: {0}"
+
+#, java-format
+msgid "Charset \\''{0}\\'' not supported."
+msgstr "Znaková sada \\''{0}\\'' nie je podporovaná."
+
+#, java-format
+msgid "Part ({0}) not shown, because of {1}"
+msgstr "Časť ({0}) nezobrazená kvôli {1}"
+
+msgid "Reloading the page may fix the error."
+msgstr "Obnovenie stránky môže opraviť chybu."
+
+msgid "File"
+msgstr "Súbor"
+
+#, java-format
+msgid "Download attachment {0}"
+msgstr "Stiahnuť prílohu {0}"
+
+msgid "File is packed into a zipfile for security reasons."
+msgstr "Súbor je zabalený do zip súboru z bezpečnostných dôvodov."
+
+#, java-format
+msgid "Attachment ({0})."
+msgstr "Príloha ({0})."
+
+msgid "Need username for authentication."
+msgstr "Vyžaduje sa používateľské meno pre autentifikáciu."
+
+msgid "Do not include @mail.i2p in the username"
+msgstr "Neuvádzajte @mail.i2p v používateľskom mene"
+
+msgid "Need password for authentication."
+msgstr "Vyžaduje sa heslo pre autentifikáciu."
+
+msgid "Need hostname for connect."
+msgstr "Vyžaduje sa názov hostiteľa pre pripojenie."
+
+msgid "Need port number for pop3 connect."
+msgstr "Vyžaduje sa číslo portu pre POP3 pripojenie."
+
+msgid "POP3 port number is not in range 0..65535."
+msgstr "Číslo POP3 portu nie je v rozsahu 0..65535."
+
+msgid "POP3 port number is invalid."
+msgstr "Číslo POP3 portu je neplatné."
+
+msgid "Need port number for smtp connect."
+msgstr "Vyžaduje sa číslo portu pre SMTP pripojenie."
+
+msgid "SMTP port number is not in range 0..65535."
+msgstr "Číslo SMTP portu nie je v rozsahu 0..65535."
+
+msgid "SMTP port number is invalid."
+msgstr "Číslo SMTP portu je neplatné."
+
+msgid "Cannot connect"
+msgstr "Nie je možné sa pripojiť"
+
+msgid "Error connecting to server"
+msgstr "Chyba pri pripájaní k serveru"
+
+msgid "Draft saved."
+msgstr "Koncept uložený."
+
+msgid "Unable to save mail."
+msgstr "Nie je možné uložiť poštu."
+
+#, java-format
+msgid "On {0} {1} wrote:"
+msgstr "Dňa {0} {1} napísal:"
+
+#, java-format
+msgid "Error reading uploaded file: {0}"
+msgstr "Chyba pri čítaní nahraného súboru: {0}"
+
+msgid "begin forwarded mail"
+msgstr "začiatok preposlanej pošty"
+
+msgid "end forwarded mail"
+msgstr "koniec preposlanej pošty"
+
+msgid "Could not fetch mail body."
+msgstr "Nepodarilo sa načítať telo správy."
+
+msgid "Message id not valid."
+msgstr "ID správy nie je platné."
+
+msgid "Internal error, lost connection."
+msgstr "Interná chyba, stratené pripojenie."
+
+#, java-format
+msgid "No Encoding found for {0}"
+msgstr "Kódovanie pre {0} nenájdené"
+
+msgid "Attachment not found."
+msgstr "Príloha nenájdená."
+
+msgid "Message not found."
+msgstr "Správa nenájdená."
+
+#, java-format
+msgid "1 message deleted."
+msgid_plural "{0} messages deleted."
+msgstr[0] "1 správa zmazaná."
+msgstr[1] "{0} správ zmazaných."
+
+msgid "No messages marked for deletion."
+msgstr "Žiadne správy označené na zmazanie."
+
+#, java-format
+msgid "Host unchanged. Edit configation file {0} to change host."
+msgstr ""
+"Hostiteľ nezmenený. Upravte konfiguračný súbor {0} pre zmenu hostiteľa."
+
+msgid "Configuration saved"
+msgstr "Konfigurácia uložená"
+
+msgid "Invalid pagesize number, resetting to default value."
+msgstr "Neplatné číslo veľkosti stránky, nastavuje sa na predvolenú hodnotu."
+
+msgid "Login"
+msgstr "Prihlásenie"
+
+msgid "Loading messages, please wait..."
+msgstr "Načítavanie správ, čakajte prosím..."
+
+#, java-format
+msgid "1 message"
+msgid_plural "{0} messages"
+msgstr[0] "1 správa"
+msgstr[1] "{0} správ"
+
+msgid "No messages"
+msgstr "Žiadne správy"
+
+msgid "Show Message"
+msgstr "Zobraziť správu"
+
+msgid "New Message"
+msgstr "Nová správa"
+
+msgid "Configuration"
+msgstr "Konfigurácia"
+
+msgid "I2PMail"
+msgstr "I2PMail"
+
+msgid "No new messages"
+msgstr "Žiadne nové správy"
+
+#, java-format
+msgid "{0} is an I2P-exclusive service provided by {1}."
+msgstr "{0} je I2P-exkluzívna služba poskytovaná {1}."
+
+#, java-format
+msgid "{0} webmail client &copy Susi 2004-2005."
+msgstr "{0} webmail klient &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Kontrola nových správ na serveri"
+
+msgid "Refresh the page for updates"
+msgstr "Obnovte stránku pre aktualizácie"
+
+msgid "Removed tracking image placeholder"
+msgstr "Odstránený placeholder sledovacieho obrázka"
+
+msgid "no subject"
+msgstr "bez predmetu"
+
+msgid "Found no valid sender address."
+msgstr "Nájdená žiadna platná adresa odosielateľa."
+
+#, java-format
+msgid "Found no valid address in \\''{0}\\''."
+msgstr "V \\''{0}\\'' nebola nájdená žiadna platná adresa."
+
+msgid "No recipients found."
+msgstr "Neboli nájdení žiadni príjemcovia."
+
+#, java-format
+msgid "Email is too large, max is {0}"
+msgstr "Email je príliš veľký, maximum je {0}"
+
+msgid "Sending mail."
+msgstr "Odosielanie pošty."
+
+msgid "Error sending mail"
+msgstr "Chyba pri odosielaní pošty"
+
+msgid "Mail sent."
+msgstr "Pošta odoslaná."
+
+msgid "Cancel"
+msgstr "Zrušiť"
+
+msgid "Save as Draft"
+msgstr "Uložiť ako koncept"
+
+msgid "Send"
+msgstr "Odoslať"
+
+msgid "From"
+msgstr "Od"
+
+msgid "To"
+msgstr "Komu"
+
+msgid "Cc"
+msgstr "Kópia"
+
+msgid "Bcc"
+msgstr "Skrytá kópia"
+
+msgid "Subject"
+msgstr "Predmet"
+
+msgid "Add Attachment"
+msgstr "Pridať prílohu"
+
+msgid "Add attachment"
+msgstr "Pridať prílohu"
+
+msgid "Attachments"
+msgstr "Prílohy"
+
+msgid "Delete selected attachments"
+msgstr "Zmazať vybrané prílohy"
+
+msgid "I2PMail Login"
+msgstr "Prihlásenie I2PMail"
+
+msgid "User"
+msgstr "Používateľ"
+
+msgid "Username"
+msgstr "Používateľské meno"
+
+msgid "Password"
+msgstr "Heslo"
+
+msgid "Toggle password visibility"
+msgstr "Prepnúť viditeľnosť hesla"
+
+msgid "Host"
+msgstr "Hostiteľ"
+
+msgid "POP3 Port"
+msgstr "POP3 port"
+
+msgid "SMTP Port"
+msgstr "SMTP port"
+
+msgid "Read Mail Offline"
+msgstr "Čítať poštu offline"
+
+msgid "Settings"
+msgstr "Nastavenia"
+
+msgid "Learn about I2PMail"
+msgstr "Zistiť viac o I2PMail"
+
+msgid "Create Account"
+msgstr "Vytvoriť účet"
+
+msgid "New"
+msgstr "Nový"
+
+msgid "Check Mail"
+msgstr "Skontrolovať poštu"
+
+msgid "Refresh Page"
+msgstr "Obnoviť stránku"
+
+msgid "Change to Folder"
+msgstr "Zmeniť na priečinok"
+
+#, java-format
+msgid "1 Message"
+msgid_plural "{0} Messages"
+msgstr[0] "1 správa"
+msgstr[1] "{0} správ"
+
+msgid "Logout"
+msgstr "Odhlásiť"
+
+msgid "Date"
+msgstr "Dátum"
+
+msgid "Size"
+msgstr "Veľkosť"
+
+msgid "Mark for deletion"
+msgstr "Označiť na zmazanie"
+
+msgid "Really delete the marked messages?"
+msgstr "Naozaj zmazať označené správy?"
+
+msgid "Yes, really delete them!"
+msgstr "Áno, naozaj ich zmazať!"
+
+msgid "Delete Selected"
+msgstr "Zmazať vybrané"
+
+msgid "Mark All"
+msgstr "Označiť všetky"
+
+msgid "Clear All"
+msgstr "Zrušiť všetky"
+
+msgid "Message contains HTML"
+msgstr "Správa obsahuje HTML"
+
+msgid "Message is new"
+msgstr "Správa je nová"
+
+msgid "Message is spam"
+msgstr "Správa je spam"
+
+msgid "Message body not downloaded"
+msgstr "Telo správy nebolo stiahnuté"
+
+msgid "First"
+msgstr "Prvá"
+
+msgid "Previous"
+msgstr "Predchádzajúca"
+
+msgid "Next"
+msgstr "Ďalšia"
+
+msgid "Last"
+msgstr "Posledná"
+
+msgid "Really delete this message?"
+msgstr "Naozaj zmazať túto správu?"
+
+msgid "Yes, really delete it!"
+msgstr "Áno, naozaj ju zmazať!"
+
+msgid "Reply"
+msgstr "Odpovedať"
+
+msgid "Reply All"
+msgstr "Odpovedať všetkým"
+
+msgid "Forward"
+msgstr "Preposlať"
+
+msgid "Save As"
+msgstr "Uložiť ako"
+
+msgid "Delete"
+msgstr "Zmazať"
+
+msgid "Back to Folder"
+msgstr "Späť do priečinka"
+
+msgid "Move to Folder"
+msgstr "Presunúť do priečinka"
+
+msgid "View message in new tab"
+msgstr "Zobraziť správu v novej karte"
+
+msgid "Folder Page Size"
+msgstr "Veľkosť stránky priečinka"
+
+msgid "Set"
+msgstr "Nastaviť"
+
+msgid "Advanced Configuration"
+msgstr "Rozšírená konfigurácia"
+
+msgid "Save Configuration"
+msgstr "Uložiť konfiguráciu"
+
+msgid "No response from server"
+msgstr "Žiadna odpoveď zo servera"
+
+msgid "Mail server login failed, wrong username or password."
+msgstr ""
+"Prihlásenie na mailový server zlyhalo, nesprávne používateľské meno alebo "
+"heslo."
+
+msgid "Logout and then login again with the correct username and password."
+msgstr ""
+"Odhláste sa a potom sa znova prihláste so správnym používateľským menom a "
+"heslom."
+
+msgid "Login failed"
+msgstr "Prihlásenie zlyhalo"
+
+msgid "Server refused connection"
+msgstr "Server odmietol pripojenie"
+
+msgid "Mail rejected"
+msgstr "Pošta zamietnutá"

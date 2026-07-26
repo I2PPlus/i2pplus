@@ -1,0 +1,1929 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "internal"
+msgstr "interný"
+
+#, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} prichádzajúci, {0} odchádzajúci tunel"
+msgstr[1] "{0} prichádzajúce, {0} odchádzajúce tunely"
+
+#, java-format
+msgid "{0} inbound tunnel"
+msgid_plural "{0} inbound tunnels"
+msgstr[0] "{0} prichádzajúci tunel"
+msgstr[1] "{0} prichádzajúce tunely"
+
+#, java-format
+msgid "{0} outbound tunnel"
+msgid_plural "{0} outbound tunnels"
+msgstr[0] "{0} odchádzajúci tunel"
+msgstr[1] "{0} odchádzajúce tunely"
+
+msgid "lower bandwidth and reliability"
+msgstr "nižšia šírka pásma a spoľahlivosť"
+
+msgid "standard bandwidth and reliability"
+msgstr "štandardná šírka pásma a spoľahlivosť"
+
+msgid "higher bandwidth and reliability"
+msgstr "vyššia šírka pásma a spoľahlivosť"
+
+msgid "Error - tunnels are not initialized yet"
+msgstr "Chyba - tunely ešte nie sú inicializované"
+
+msgid ""
+"Invalid form submission, probably because you used the 'back' or 'reload' "
+"button on your browser. Please resubmit."
+msgstr ""
+"Neplatné odoslanie formulára, pravdepodobne ste použili tlačidlo 'späť' "
+"alebo 'obnoviť' v prehliadači. Prosím odošlite znova."
+
+msgid ""
+"If the problem persists, verify that you have cookies enabled in your "
+"browser."
+msgstr "Ak problém pretrváva, overte, že máte v prehliadači povolené cookies."
+
+msgid "No services configured, cannot restart!"
+msgstr "Nie sú nakonfigurované žiadne služby, nie je možné reštartovať!"
+
+msgid "Stopping tunnel"
+msgstr "Zastavovanie tunela"
+
+msgid "Starting tunnel"
+msgstr "Spúšťanie tunela"
+
+msgid "Error restarting tunnel"
+msgstr "Chyba pri reštartovaní tunela"
+
+msgid "Restarted all running tunnels"
+msgstr "Všetky spustené tunely boli reštartované"
+
+msgid "No clients configured, cannot restart!"
+msgstr "Nie sú nakonfigurovaní žiadni klienti, nie je možné reštartovať!"
+
+msgid "Restarted all running client tunnels"
+msgstr "Všetky spustené klientské tunely boli reštartované"
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "Konfigurácia pre všetky tunely bola znovu načítaná"
+
+msgid "Error: Invalid tunnel"
+msgstr "Chyba: Neplatný tunel"
+
+msgid "Started tunnel"
+msgstr "Tunel spustený"
+
+msgid "Stopped tunnel"
+msgstr "Tunel zastavený"
+
+msgid "Restarting tunnel"
+msgstr "Reštartovanie tunela"
+
+msgid "Please confirm removal"
+msgstr "Prosím potvrďte odstránenie"
+
+msgid "New Tunnel"
+msgstr "Nový tunel"
+
+msgid "Port not set"
+msgstr "Port nenastavený"
+
+msgid "Invalid port"
+msgstr "Neplatný port"
+
+msgid "Warning - ports less than 1024 are not recommended"
+msgstr "Upozornenie - porty menšie ako 1024 sa neodporúčajú"
+
+msgid "Warning - duplicate port"
+msgstr "Upozornenie - duplicitný port"
+
+msgid "Standard client"
+msgstr "Štandardný klient"
+
+msgid "HTTP/HTTPS client"
+msgstr "HTTP/HTTPS klient"
+
+msgid "IRC client"
+msgstr "IRC klient"
+
+msgid "Standard server"
+msgstr "Štandardný server"
+
+msgid "HTTP server"
+msgstr "HTTP server"
+
+msgid "SOCKS 4/4a/5 proxy"
+msgstr "SOCKS 4/4a/5 proxy"
+
+msgid "SOCKS IRC proxy"
+msgstr "SOCKS IRC proxy"
+
+msgid "CONNECT/SSL/HTTPS proxy"
+msgstr "CONNECT/SSL/HTTPS proxy"
+
+msgid "IRC server"
+msgstr "IRC server"
+
+msgid "Streamr client"
+msgstr "Streamr klient"
+
+msgid "Streamr server"
+msgstr "Streamr server"
+
+msgid "HTTP bidir"
+msgstr "HTTP bidir"
+
+msgid "Host not set"
+msgstr "Hostiteľ nenastavený"
+
+msgid "Invalid address"
+msgstr "Neplatná adresa"
+
+msgid "Tunnel Manager"
+msgstr "Správca tunelov"
+
+msgid "Edit Client Tunnel"
+msgstr "Upraviť klientský tunel"
+
+msgid "Edit Server Tunnel"
+msgstr "Upraviť serverový tunel"
+
+msgid "Are you sure you want to delete?"
+msgstr "Ste si istí, že chcete odstrániť?"
+
+msgid "required"
+msgstr "povinné"
+
+msgid ""
+"Tunnel and all other shared client tunnels must be stopped to change this "
+"configuration"
+msgstr ""
+"Pre zmenu tejto konfigurácie musia byť zastavené tunel a všetky ostatné "
+"zdieľané klientské tunely"
+
+msgid "Tunnel must be stopped to change this configuration"
+msgstr "Pre zmenu tejto konfigurácie musí byť tunel zastavený"
+
+msgid "Configuration"
+msgstr "Konfigurácia"
+
+msgid "New Client Configuration"
+msgstr "Nová konfigurácia klienta"
+
+msgid "Name"
+msgstr "Názov"
+
+msgid "Auto Start Tunnel"
+msgstr "Automaticky spustiť tunel"
+
+msgid ""
+"Name of tunnel to be displayed on Tunnel Manager home page and the router "
+"console sidebar"
+msgstr ""
+"Názov tunela zobrazený na domovskej stránke Správcu tunelov a na bočnom "
+"paneli konzoly smerovača"
+
+msgid ""
+"Enable this option to ensure this service is available when the router "
+"starts"
+msgstr "Povoľte túto možnosť, aby bola služba dostupná pri štarte smerovača"
+
+msgid "Automatically start tunnel when router starts"
+msgstr "Automaticky spustiť tunel pri štarte smerovača"
+
+msgid "Description"
+msgstr "Popis"
+
+msgid "Shared Client"
+msgstr "Zdieľaný klient"
+
+msgid "Description of tunnel to be displayed on Tunnel Manager home page"
+msgstr "Popis tunela zobrazený na domovskej stránke Správcu tunelov"
+
+msgid ""
+"Traffic from all clients with this feature enabled will be routed over the "
+"same set of tunnels. This will make profiling the tunnels by an adversary "
+"more difficult, but will link the clients together."
+msgstr ""
+"Prevádzka zo všetkých klientov s povolenou touto funkciou bude smerovaná cez"
+" rovnakú sadu tunelov. To sťaží profilovanie tunelov protivníkom, ale spojí "
+"klientov dohromady."
+
+msgid "Share tunnels with other configured clients"
+msgstr "Zdieľať tunely s inými nakonfigurovanými klientmi"
+
+msgid "Target"
+msgstr "Cieľ"
+
+msgid "Access Point"
+msgstr "Prístupový bod"
+
+msgid "Use Outproxy Plugin"
+msgstr "Použiť plugin outproxy"
+
+msgid "Enable DCC"
+msgstr "Povoliť DCC"
+
+msgid "Port"
+msgstr "Port"
+
+msgid "Specify the local port this service should be accessible from"
+msgstr "Zadajte lokálny port, z ktorého má byť táto služba prístupná"
+
+msgid "Host"
+msgstr "Hostiteľ"
+
+msgid "Hostname or IP address of the target server"
+msgstr "Názov hostiteľa alebo IP adresa cieľového servera"
+
+msgid "Reachable by"
+msgstr "Dosiahnuteľný cez"
+
+msgid "Local interface (ip address) the client tunnel will be reachable from"
+msgstr ""
+"Lokálne rozhranie (IP adresa), z ktorého bude klientský tunel dosiahnuteľný"
+
+msgid ""
+"If an outproxy plugin is installed (e.g. Orchid), use this instead of any "
+"configured outproxies to access websites outside of I2P"
+msgstr ""
+"Ak je nainštalovaný plugin outproxy (napr. Orchid), použite ho namiesto "
+"nakonfigurovaných outproxy pre prístup k webstránkam mimo I2P"
+
+msgid "Use plugin instead of proxies listed below if available"
+msgstr "Použiť plugin namiesto proxy uvedených nižšie, ak je k dispozícii"
+
+msgid ""
+"Enables direct chat and file transfers, bypassing I2P. Note that this will "
+"compromise your anonymity and is not recommended."
+msgstr ""
+"Umožňuje priamy chat a prenos súborov mimo I2P. Tým sa zníži vaša anonymita "
+"a neodporúča sa to."
+
+msgid "Enable Direct Client-to-Client protocol"
+msgstr "Povoliť Direct Client-to-Client protokol"
+
+msgid "Outproxies"
+msgstr "Outproxy"
+
+msgid "SSL Outproxies"
+msgstr "SSL Outproxy"
+
+msgid ""
+"Specify the .i2p address or destination (b32 or b64) of the outproxy here."
+msgstr "Zadajte .i2p adresu alebo cieľ (b32 alebo b64) outproxy."
+
+msgid ""
+"For a random selection from a pool, separate with commas e.g. "
+"server1.i2p,server2.i2p"
+msgstr ""
+"Pre náhodný výber z poolu oddeľte čiarkami, napr. server1.i2p,server2.i2p"
+
+msgid "Outproxy Type"
+msgstr "Typ outproxy"
+
+msgid "Tunnel Destination"
+msgstr "Cieľ tunela"
+
+msgid "Use SSL"
+msgstr "Použiť SSL"
+
+msgid ""
+"Specify the .i2p address or destination (b32 or b64) of the tunnel here."
+msgstr "Zadajte .i2p adresu alebo cieľ (b32 alebo b64) tunela."
+
+msgid "name, name:port, or destination"
+msgstr "názov, názov:port, alebo cieľ"
+
+msgid ""
+"If you are accessing a service on a remote I2P router, you may wish to "
+"connect with SSL to avoid traffic interception. The client application "
+"should be also be configured to use SSL."
+msgstr ""
+"Ak pristupujete k službe na vzdialenom I2P smerovači, možno sa budete chcieť"
+" pripojiť cez SSL, aby ste predišli zachyteniu prevádzky. Klientská "
+"aplikácia by mala byť tiež nakonfigurovaná na používanie SSL."
+
+msgid "Clients use SSL to connect to tunnel"
+msgstr "Klienti používajú SSL na pripojenie k tunelu"
+
+msgid "Please specify the full b64 destination."
+msgstr "Zadajte úplný b64 cieľ."
+
+msgid "Local destination"
+msgstr "Lokálny cieľ"
+
+msgid "Local Base32"
+msgstr "Lokálna Base32"
+
+msgid "Read Only: Local Destination (if known)"
+msgstr "Len na čítanie: Lokálny cieľ (ak je známy)"
+
+msgid "Stop"
+msgstr "Zastaviť"
+
+msgid "Start this Tunnel"
+msgstr "Spustiť tento tunel"
+
+msgid "Start"
+msgstr "Spustiť"
+
+msgid "Cancel"
+msgstr "Zrušiť"
+
+msgid "Delete this tunnel (cannot be undone)"
+msgstr "Odstrániť tento tunel (nie je možné vrátiť)"
+
+msgid "Delete"
+msgstr "Odstrániť"
+
+msgid "Save"
+msgstr "Uložiť"
+
+msgid "Advanced networking options"
+msgstr "Rozšírené možnosti siete"
+
+msgid ""
+"Note: When this client is configured to share tunnels, these options apply "
+"to all clients configured to share tunnels."
+msgstr ""
+"Poznámka: Ak je tento klient nakonfigurovaný na zdieľanie tunelov, tieto "
+"možnosti sa vzťahujú na všetkých klientov nakonfigurovaných na zdieľanie "
+"tunelov."
+
+msgid "Profile"
+msgstr "Profil"
+
+msgid "Delay Connect"
+msgstr "Oneskorenie pripojenia"
+
+msgid "Connection Profile"
+msgstr "Profil pripojenia"
+
+msgid "interactive connection"
+msgstr "interaktívne pripojenie"
+
+msgid "bulk connection (downloads/websites/BT)"
+msgstr "hromadné pripojenie (sťahovanie/weby/BT)"
+
+msgid "Delay Connection"
+msgstr "Oneskoriť pripojenie"
+
+msgid "for request/response connections"
+msgstr "pre spojenia požiadavka/odpoveď"
+
+msgid "Router I2CP Address"
+msgstr "Adresa I2CP smerovača"
+
+msgid "I2CP Hostname or IP"
+msgstr "Názov hostiteľa alebo IP I2CP"
+
+msgid "I2CP Port Number"
+msgstr "Číslo portu I2CP"
+
+msgid "Delay tunnel open until required"
+msgstr "Oneskoriť otvorenie tunela kým je potrebné"
+
+msgid "Signature type"
+msgstr "Typ podpisu"
+
+msgid "Conserve resources by only creating tunnels when required"
+msgstr "Šetriť zdroje vytváraním tunelov len keď sú potrebné"
+
+msgid "Don't open tunnel until activity is detected on port"
+msgstr "Neotvárať tunel, kým nie je na porte detekovaná aktivita"
+
+msgid "This is the default, recommended option"
+msgstr "Toto je predvolená, odporúčaná možnosť"
+
+msgid "Encryption types"
+msgstr "Typy šifrovania"
+
+msgid "Legacy options"
+msgstr "Legacy možnosti"
+
+msgid "Post Quantum"
+msgstr "Post Quantum"
+
+msgid "Both encryption types"
+msgstr "Oba typy šifrovania"
+
+msgid "Tunnel Options"
+msgstr "Možnosti tunela"
+
+msgid "Length"
+msgstr "Dĺžka"
+
+msgid "Count"
+msgstr "Počet"
+
+msgid "Length of each Tunnel"
+msgstr "Dĺžka každého tunela"
+
+msgid "0 hop tunnel (no anonymity)"
+msgstr "0 hop tunel (žiadna anonymita)"
+
+msgid "1 hop tunnel (low anonymity)"
+msgstr "1 hop tunel (nízka anonymita)"
+
+msgid "2 hop tunnel (medium anonymity)"
+msgstr "2 hop tunel (stredná anonymita)"
+
+msgid "3 hop tunnel (high anonymity)"
+msgstr "3 hop tunel (vysoká anonymita)"
+
+#, java-format
+msgid "{0} hop tunnel"
+msgid_plural "{0} hop tunnel"
+msgstr[0] "{0} hop tunel"
+msgstr[1] "{0} hop tunel"
+
+msgid "Number of Tunnels in Group"
+msgstr "Počet tunelov v skupine"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr "Zakázané pre 0 hop tunely"
+
+msgid "Variance"
+msgstr "Variácia"
+
+msgid "Backup Count"
+msgstr "Počet záložných"
+
+msgid "Level of Randomization for Tunnel Length"
+msgstr "Úroveň randomizácie dĺžky tunela"
+
+msgid "0 hop variance"
+msgstr "0 hop variácia"
+
+msgid "no randomization, consistent performance"
+msgstr "žiadna randomizácia, konzistentný výkon"
+
+msgid "+ 0-1 hop variance"
+msgstr "+ 0-1 hop variácia"
+
+msgid "medium randomization, lower performance"
+msgstr "stredná randomizácia, nižší výkon"
+
+msgid "+ 0-2 hop variance"
+msgstr "+ 0-2 hop variácia"
+
+msgid "high randomization, very low performance"
+msgstr "vysoká randomizácia, veľmi nízky výkon"
+
+msgid "+/- 0-1 hop variance"
+msgstr "+/- 0-1 hop variácia"
+
+msgid "standard randomization, standard performance"
+msgstr "štandardná randomizácia, štandardný výkon"
+
+msgid "+/- 0-2 hop variance"
+msgstr "+/- 0-2 hop variácia"
+
+msgid "not recommended"
+msgstr "neodporúča sa"
+
+msgid "hop variance"
+msgstr "hop variácia"
+
+msgid "Number of Reserve Tunnels"
+msgstr "Počet rezervných tunelov"
+
+#, java-format
+msgid "{0} backup tunnel"
+msgid_plural "{0} backup tunnels"
+msgstr[0] "{0} záložný tunel"
+msgstr[1] "{0} záložné tunely"
+
+msgid "no redundancy, no added resource usage"
+msgstr "žiadna redundancia, žiadne dodatočné využitie zdrojov"
+
+msgid "low redundancy, low resource usage"
+msgstr "nízka redundancia, nízke využitie zdrojov"
+
+msgid "medium redundancy, medium resource usage"
+msgstr "stredná redundancia, stredné využitie zdrojov"
+
+msgid "high redundancy, high resource usage"
+msgstr "vysoká redundancia, vysoké využitie zdrojov"
+
+msgid "Reduce tunnel quantity"
+msgstr "Znížiť počet tunelov"
+
+msgid ""
+"Reduce tunnel count when idle to conserve resources but keep tunnel open (to"
+" ensure immediate availability)"
+msgstr ""
+"Znížiť počet tunelov pri nečinnosti pre šetrenie zdrojov, ale ponechať tunel"
+" otvorený (pre okamžitú dostupnosť)"
+
+msgid "Reduce tunnel quantity when idle"
+msgstr "Znížiť počet tunelov pri nečinnosti"
+
+msgid "Idle period"
+msgstr "Obdobie nečinnosti"
+
+msgid "Reduced Tunnel Idle Time"
+msgstr "Skrátený čas nečinnosti tunela"
+
+msgid "Reduced count"
+msgstr "Znížený počet"
+
+msgid "Reduced tunnel count"
+msgstr "Znížený počet tunelov"
+
+msgid "Close tunnels when idle"
+msgstr "Zatvoriť tunely pri nečinnosti"
+
+msgid "To conserve resources, close tunnels when not in use"
+msgstr "Pre šetrenie zdrojov zatvorte tunely, keď sa nepoužívajú"
+
+msgid "Close client tunnels after specified idle period"
+msgstr "Zatvoriť klientské tunely po zadanom období nečinnosti"
+
+msgid "Close Tunnel Idle Time"
+msgstr "Čas nečinnosti pred zatvorením tunela"
+
+msgid "New Keys on Reopen"
+msgstr "Nové kľúče pri opätovnom otvorení"
+
+msgid "Change tunnel identity (destination) when tunnels reopen"
+msgstr "Zmeniť identitu tunela (cieľ) pri opätovnom otvorení tunelov"
+
+msgid "Enable"
+msgstr "Povoliť"
+
+msgid "Retain tunnel identity (destination) when tunnels reopen"
+msgstr "Zachovať identitu tunela (cieľ) pri opätovnom otvorení tunelov"
+
+msgid "Disable"
+msgstr "Zakázať"
+
+msgid "Persistent private key"
+msgstr "Trvalý súkromný kľúč"
+
+msgid "Private key file"
+msgstr "Súbor súkromného kľúča"
+
+msgid ""
+"Enabling this feature will ensure your tunnel identity (destination) remains"
+" static, for services offering features based on destination e.g. IRC user "
+"authentication"
+msgstr ""
+"Povolenie tejto funkcie zabezpečí, že identita tunela (cieľ) zostane "
+"statická, pre služby ponúkajúce funkcie založené na cieli, napr. "
+"autentifikácia IRC používateľa"
+
+msgid "Generate key to enable persistent client tunnel identity"
+msgstr "Generovať kľúč pre povolenie trvalej identity klientskeho tunela"
+
+msgid "Path to Private Key File"
+msgstr "Cesta k súboru súkromného kľúča"
+
+msgid "HTTP Filtering"
+msgstr "HTTP filtrovanie"
+
+msgid ""
+"When enabled, the user agent of your web browser or http client will not be "
+"spoofed, potentially reducing your anonymity"
+msgstr ""
+"Ak je povolené, user agent vášho webového prehliadača alebo http klienta "
+"nebude sfalšovaný, čo môže znížiť vašu anonymitu"
+
+msgid "Do not spoof User-Agent header"
+msgstr "Nefalšovať User-Agent hlavičku"
+
+msgid ""
+"When enabled, the referer (originating page) of your web requests will not "
+"be filtered, potentially reducing your anonymity"
+msgstr ""
+"Ak je povolené, referer (zdrojová stránka) vašich webových požiadaviek "
+"nebude filtrovaný, čo môže znížiť vašu anonymitu"
+
+msgid "Do not block Referer header"
+msgstr "Neblokovať Referer hlavičku"
+
+msgid ""
+"When enabled, the accept headers (mime types support) broadcast by your web "
+"browser will not be filtered, potentially reducing your anonymity"
+msgstr ""
+"Ak je povolené, accept hlavičky (podpora mime typov) vysielané vašim "
+"prehliadačom nebudú filtrované, čo môže znížiť vašu anonymitu"
+
+msgid "Do not block Accept headers"
+msgstr "Neblokovať Accept hlavičky"
+
+msgid "Allow SSL to I2P addresses when enabled"
+msgstr "Povoliť SSL na I2P adresy ak je povolené"
+
+msgid "Allow SSL to I2P addresses"
+msgstr "Povoliť SSL na I2P adresy"
+
+msgid "Local Authorization"
+msgstr "Lokálna autorizácia"
+
+msgid "Local Credentials"
+msgstr "Lokálne prihlasovacie údaje"
+
+msgid ""
+"Enable to require a username and password to access this local service (for "
+"example if hosting on a LAN)"
+msgstr ""
+"Povoliť pre vyžadovanie používateľského mena a hesla pre prístup k tejto "
+"lokálnej službe (napríklad pri hosťovaní v LAN)"
+
+msgid "Require local authorization for this service"
+msgstr "Vyžadovať lokálnu autorizáciu pre túto službu"
+
+msgid "Set username required to access this service"
+msgstr "Nastaviť používateľské meno potrebné pre prístup k tejto službe"
+
+msgid "Username"
+msgstr "Používateľské meno"
+
+msgid "Set password required to access this service"
+msgstr "Nastaviť heslo potrebné pre prístup k tejto službe"
+
+msgid "Password"
+msgstr "Heslo"
+
+msgid "Outproxy Authorization"
+msgstr "Autorizácia outproxy"
+
+msgid "Remote Credentials"
+msgstr "Vzdialené prihlasovacie údaje"
+
+msgid "Enable if the outproxy a username and password to access"
+msgstr "Povoliť ak outproxy vyžaduje používateľské meno a heslo"
+
+msgid "Outproxy requires authorization"
+msgstr "Outproxy vyžaduje autorizáciu"
+
+msgid "Enter username required by outproxy"
+msgstr "Zadajte používateľské meno vyžadované outproxy"
+
+msgid "Enter password required by outproxy"
+msgstr "Zadajte heslo vyžadované outproxy"
+
+msgid "Jump URL List"
+msgstr "Zoznam Jump URL"
+
+msgid ""
+"List of helper URLs providing jump links when a host is not found in your "
+"addressbook"
+msgstr ""
+"Zoznam pomocných URL poskytujúcich jump odkazy, keď hostiteľ nie je nájdený "
+"v adresári"
+
+msgid "Custom options"
+msgstr "Vlastné možnosti"
+
+msgid "Advanced tunnel, streaming, and I2CP options"
+msgstr "Rozšírené možnosti tunela, streamovania a I2CP"
+
+msgid "New Server Configuration"
+msgstr "Nová konfigurácia servera"
+
+msgid "Hostname"
+msgstr "Názov hostiteľa"
+
+msgid ""
+"Random startup delay (when auto-start is enabled) to defend against "
+"correlation attacks"
+msgstr ""
+"Náhodné oneskorenie štartu (keď je povolený auto-štart) na obranu proti "
+"korelačným útokom"
+
+msgid "Startup Delay"
+msgstr "Oneskorenie štartu"
+
+msgid "Minimum"
+msgstr "Minimum"
+
+msgid "Minimum startup delay"
+msgstr "Minimálne oneskorenie štartu"
+
+msgid "seconds"
+msgstr "sekúnd"
+
+msgid "Maximum"
+msgstr "Maximum"
+
+msgid "Maximum startup delay"
+msgstr "Maximálne oneskorenie štartu"
+
+msgid ""
+"Add random delay before tunnel shutdown, then start graceful router shutdown"
+" / restart process"
+msgstr ""
+"Pridať náhodné oneskorenie pred vypnutím tunela, potom spustiť proces "
+"riadneho vypnutia / reštartu smerovača"
+
+msgid "Shutdown Delay"
+msgstr "Oneskorenie vypnutia"
+
+msgid "Minimum shutdown delay"
+msgstr "Minimálne oneskorenie vypnutia"
+
+msgid "Maximum shutdown delay"
+msgstr "Maximálne oneskorenie vypnutia"
+
+msgid "Website Hostname"
+msgstr "Názov hostiteľa webstránky"
+
+msgid "(leave blank for outproxies)"
+msgstr "(ponechajte prázdne pre outproxy)"
+
+msgid "Website Hostname e.g. mysite.i2p"
+msgstr "Názov hostiteľa webstránky napr. mojastranka.i2p"
+
+msgid "Specify the port the server is running on"
+msgstr "Zadajte port, na ktorom server beží"
+
+msgid ""
+"Listening interface (IP address) for client access (normally 127.0.0.1)"
+msgstr ""
+"Počúvacie rozhranie (IP adresa) pre prístup klienta (zvyčajne 127.0.0.1)"
+
+msgid ""
+"To avoid traffic sniffing if connecting to a remote server, you can enable "
+"an SSL connection. Note that the target server must be configured to accept "
+"SSL connections."
+msgstr ""
+"Aby ste predišli odpočúvaniu prevádzky pri pripájaní na vzdialený server, "
+"môžete povoliť SSL pripojenie. Cieľový server musí byť nakonfigurovaný na "
+"prijímanie SSL spojení."
+
+msgid "Use SSL to connect to target"
+msgstr "Použiť SSL na pripojenie k cieľu"
+
+msgid ""
+"Port required to access service (this can be a different port to the port "
+"the service is hosted on)"
+msgstr ""
+"Port potrebný na prístup k službe (môže sa líšiť od portu, na ktorom je "
+"služba hostovaná)"
+
+msgid "Generate a QR Code for this domain"
+msgstr "Generovať QR kód pre túto doménu"
+
+msgid "Generate QR Code"
+msgstr "Generovať QR kód"
+
+msgid "Add to Private addressbook"
+msgstr "Pridať do súkromného adresára"
+
+msgid "Add to local addressbook"
+msgstr "Pridať do lokálneho adresára"
+
+msgid "Register, unregister or change details for hostname"
+msgstr "Registrovať, odregistrovať alebo zmeniť podrobnosti názvu hostiteľa"
+
+msgid "Registration Authentication"
+msgstr "Autentifikácia registrácie"
+
+msgid "HTTPS configuration"
+msgstr "HTTPS konfigurácia"
+
+msgid "SSL Wizard"
+msgstr "SSL sprievodca"
+
+msgid ""
+"Note: In order to enable QR code generation or registration authentication, "
+"configure the Website Hostname field (for websites) or the Name field "
+"(everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+msgstr ""
+"Poznámka: Pre povolenie generovania QR kódu alebo autentifikácie registrácie"
+" nakonfigurujte pole Názov hostiteľa webstránky (pre weby) alebo pole Názov "
+"(všetko ostatné) vyššie s názvom hostiteľa s príponou .i2p, napr. "
+"mojnovyserver.i2p"
+
+msgid ""
+"Absolute path to Private Key File (will be created if it does not exist)"
+msgstr ""
+"Absolútna cesta k súboru súkromného kľúča (bude vytvorený ak neexistuje)"
+
+msgid "Alternate private key file"
+msgstr "Alternatívny súbor súkromného kľúča"
+
+msgid "Alternate local destination"
+msgstr "Alternatívny lokálny cieľ"
+
+msgid "Absolute path for new key (will be created)"
+msgstr "Absolútna cesta pre nový kľúč (bude vytvorený)"
+
+msgid "Read Only: Alternate Local Destination"
+msgstr "Len na čítanie: Alternatívny lokálny cieľ"
+
+msgid "Specify filename or full path for new key"
+msgstr "Zadajte názov súboru alebo úplnú cestu pre nový kľúč"
+
+msgid "Configuration cannot be changed after destination is created"
+msgstr "Konfiguráciu nie je možné zmeniť po vytvorení cieľa"
+
+msgid ""
+"Configuration of signature type is only possible when the tunnel is first "
+"created. To change, you must create a new tunnel."
+msgstr ""
+"Konfigurácia typu podpisu je možná len pri prvom vytvorení tunela. Pre zmenu"
+" musíte vytvoriť nový tunel."
+
+msgid "Legacy option, with alternate key configured"
+msgstr "Legacy možnosť, s nakonfigurovaným alternatívnym kľúčom"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "Legacy možnosť (zastarané), poskytnuté pre spätnú kompatibilitu"
+
+msgid "Recommended for blinded and encrypted destinations"
+msgstr "Odporúčané pre blinded a šifrované ciele"
+
+msgid "Inbound"
+msgstr "Prichádzajúci"
+
+msgid "Outbound"
+msgstr "Odchádzajúci"
+
+msgid "no anonymity"
+msgstr "žiadna anonymita"
+
+msgid "low anonymity"
+msgstr "nízka anonymita"
+
+msgid "medium anonymity"
+msgstr "stredná anonymita"
+
+msgid "high anonymity"
+msgstr "vysoká anonymita"
+
+msgid "Level of Randomization for Tunnel Depth"
+msgstr "Úroveň randomizácie hĺbky tunela"
+
+msgid "very high randomization, very low performance"
+msgstr "veľmi vysoká randomizácia, veľmi nízky výkon"
+
+msgid "+ 0-3 hop variance"
+msgstr "+ 0-3 hop variácia"
+
+msgid "definitely not recommended"
+msgstr "rozhodne neodporúča sa"
+
+msgid "+/- 0-3 hop variance"
+msgstr "+/- 0-3 hop variácia"
+
+msgid "backup tunnels"
+msgstr "záložné tunely"
+
+msgid "Reduce tunnels to conserve resources"
+msgstr "Znížiť počet tunelov pre šetrenie zdrojov"
+
+msgid "Period of inactivity before tunnel number is reduced"
+msgstr "Obdobie nečinnosti pred znížením počtu tunelov"
+
+msgid "minutes"
+msgstr "minút"
+
+msgid "Number of tunnels to keep open to maintain availability of service"
+msgstr "Počet tunelov ponechaných otvorených pre udržanie dostupnosti služby"
+
+msgid "Server Access Options"
+msgstr "Možnosti prístupu k serveru"
+
+msgid "Prevent clients from accessing this service via an inproxy"
+msgstr "Zabrániť klientom v prístupe k tejto službe cez inproxy"
+
+msgid "Block Access via Inproxies"
+msgstr "Blokovať prístup cez Inproxy"
+
+msgid "Block Accesses containing Referers"
+msgstr "Blokovať prístupy obsahujúce Referer"
+
+msgid ""
+"Use unique IP addresses for each connecting client (local non-SSL servers "
+"only)"
+msgstr ""
+"Použiť jedinečné IP adresy pre každého pripájajúceho sa klienta (len lokálne"
+" non-SSL servery)"
+
+msgid "Unique Local Address per Client"
+msgstr "Jedinečná lokálna adresa pre každého klienta"
+
+msgid "Only enable if you are hosting this service on multiple routers"
+msgstr "Povoliť len ak hostujete túto službu na viacerých smerovačoch"
+
+msgid "Optimize for Multihoming"
+msgstr "Optimalizovať pre Multihoming"
+
+msgid "Deny User-Agents matching these strings (probably from inproxies)"
+msgstr ""
+"Odmietnuť User-Agent zodpovedajúce týmto reťazcom (pravdepodobne z inproxy)"
+
+msgid "Block these User-Agents"
+msgstr "Blokovať tieto User-Agent"
+
+msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
+msgstr "oddelené čiarkami, napr. Mozilla,Opera (rozlišuje veľkosť písmen)"
+
+msgid "Encrypt Leaseset"
+msgstr "Šifrovať sadu prenájmov"
+
+msgid "Optional Lookup Password"
+msgstr "Voliteľné vyhľadávacie heslo"
+
+msgid "Keyring Manager"
+msgstr "Správca kľúčenky"
+
+msgid "Allow all clients to connect to this service"
+msgstr "Povoliť všetkým klientom pripojiť sa k tejto službe"
+
+msgid "Send key to all users."
+msgstr "Poslať kľúč všetkým používateľom."
+
+msgid "Encrypted"
+msgstr "Šifrované"
+
+msgid "Prevents server discovery by floodfills"
+msgstr "Zabraňuje objaveniu servera floodfillami"
+
+msgid "Blinded"
+msgstr "Blinded"
+
+msgid "Send password to all users."
+msgstr "Poslať heslo všetkým používateľom."
+
+msgid "Blinded with lookup password"
+msgstr "Blinded s vyhľadávacím heslom"
+
+msgid "Send key and password to all users."
+msgstr "Poslať kľúč a heslo všetkým používateľom."
+
+msgid "Encrypted with lookup password"
+msgstr "Šifrované s vyhľadávacím heslom"
+
+msgid "Send individual key to each user."
+msgstr "Poslať individuálny kľúč každému používateľovi."
+
+msgid "Encrypted with per-user key"
+msgstr "Šifrované s kľúčom pre každého používateľa"
+
+msgid "Encrypted with lookup password and per-user key"
+msgstr "Šifrované s vyhľadávacím heslom a kľúčom pre každého používateľa"
+
+msgid "Enter key from each user."
+msgstr "Zadať kľúč od každého používateľa."
+
+msgid "Encryption Key"
+msgstr "Šifrovací kľúč"
+
+msgid "Generate New Key"
+msgstr "Generovať nový kľúč"
+
+msgid "Encryption key required to access this service"
+msgstr "Šifrovací kľúč potrebný na prístup k tejto službe"
+
+msgid "Generate new encryption key"
+msgstr "Generovať nový šifrovací kľúč"
+
+msgid "Generate"
+msgstr "Generovať"
+
+msgid "Tunnel must be stopped first"
+msgstr "Najprv musí byť tunel zastavený"
+
+msgid "Client Manager"
+msgstr "Správca klientov"
+
+msgid "Client Name"
+msgstr "Názov klienta"
+
+msgid "Client Key"
+msgstr "Kľúč klienta"
+
+msgid "Revoke"
+msgstr "Odvolať"
+
+msgid "Client"
+msgstr "Klient"
+
+msgid "Add"
+msgstr "Pridať"
+
+msgid "Restricted Access List"
+msgstr "Zoznam obmedzeného prístupu"
+
+msgid "Activate to enable editing"
+msgstr "Aktivovať pre povolenie úprav"
+
+msgid "Tunnel Filter"
+msgstr "Filter tunela"
+
+msgid "Help with defining tunnel filters"
+msgstr "Pomoc s definovaním filtrov tunela"
+
+msgid "Prevent listed clients from connecting to this service"
+msgstr "Zabrániť uvedeným klientom pripojiť sa k tejto službe"
+
+msgid "Blacklist"
+msgstr "Čierna listina"
+
+msgid "Only allow listed clients to connect to this service"
+msgstr "Povoliť len uvedeným klientom pripojiť sa k tejto službe"
+
+msgid "Whitelist"
+msgstr "Biela listina"
+
+msgid "Absolute path to file containing filter definition"
+msgstr "Absolútna cesta k súboru obsahujúcemu definíciu filtra"
+
+msgid "Absolute path to filter definition"
+msgstr "Absolútna cesta k definícii filtra"
+
+msgid "Specify client destinations, 1 per line"
+msgstr "Zadajte ciele klientov, 1 na riadok"
+
+msgid "Server Throttling"
+msgstr "Obmedzovanie servera"
+
+msgid "Inbound connection limits"
+msgstr "Limity prichádzajúcich spojení"
+
+msgid "Per Minute"
+msgstr "Za minútu"
+
+msgid "Per Hour"
+msgstr "Za hodinu"
+
+msgid "Per Day"
+msgstr "Za deň"
+
+msgid "Concurrent"
+msgstr "Súbežné"
+
+msgid "Per Client"
+msgstr "Na klienta"
+
+msgid ""
+"Maximum number of web page requests per minute for a unique client before "
+"access to the server is blocked"
+msgstr ""
+"Maximálny počet požiadaviek webovej stránky za minútu pre jedinečného "
+"klienta pred zablokovaním prístupu k serveru"
+
+msgid "(0 = unlimited)"
+msgstr "(0 = neobmedzene)"
+
+msgid ""
+"Maximum number of web page requests per hour for a unique client before "
+"access to the server is blocked"
+msgstr ""
+"Maximálny počet požiadaviek webovej stránky za hodinu pre jedinečného "
+"klienta pred zablokovaním prístupu k serveru"
+
+msgid ""
+"Maximum number of web page requests per day for a unique client before "
+"access to the server is blocked"
+msgstr ""
+"Maximálny počet požiadaviek webovej stránky za deň pre jedinečného klienta "
+"pred zablokovaním prístupu k serveru"
+
+msgid "Total"
+msgstr "Celkom"
+
+msgid ""
+"Total number of web page requests per minute before access to the server is "
+"blocked"
+msgstr ""
+"Celkový počet požiadaviek webovej stránky za minútu pred zablokovaním "
+"prístupu k serveru"
+
+msgid ""
+"Total number of web page requests per hour before access to the server is "
+"blocked"
+msgstr ""
+"Celkový počet požiadaviek webovej stránky za hodinu pred zablokovaním "
+"prístupu k serveru"
+
+msgid ""
+"Total number of web page requests per day before access to the server is "
+"blocked"
+msgstr ""
+"Celkový počet požiadaviek webovej stránky za deň pred zablokovaním prístupu "
+"k serveru"
+
+msgid "Maximum number of simultaneous client connections"
+msgstr "Maximálny počet súbežných klientských pripojení"
+
+msgid "POST limits"
+msgstr "Limity POST"
+
+msgid "Per Period"
+msgstr "Za obdobie"
+
+msgid "Ban Duration"
+msgstr "Trvanie zákazu"
+
+msgid "POST limit period"
+msgstr "Obdobie limitu POST"
+
+msgid ""
+"Maximum number of post requests permitted for a unique client for the "
+"configured timespan"
+msgstr ""
+"Maximálny počet POST požiadaviek povolených pre jedinečného klienta za "
+"nastavený časový úsek"
+
+msgid ""
+"If a client exceeds the maximum number of post requests per allocated "
+"period, enforce a ban for this number of minutes"
+msgstr ""
+"Ak klient prekročí maximálny počet POST požiadaviek za pridelené obdobie, "
+"uplatniť zákaz na tento počet minút"
+
+msgid ""
+"Timespan for the maximum number of post requests to be reached before a ban "
+"is triggered"
+msgstr ""
+"Časový úsek pre dosiahnutie maximálneho počtu POST požiadaviek pred "
+"spustením zákazu"
+
+msgid "Total number of post requests permitted for the configured timespan"
+msgstr "Celkový počet POST požiadaviek povolených za nastavený časový úsek"
+
+msgid ""
+"If the maximum number of post requests per allocated period is exceeded, "
+"enforce a global access ban for this number of minutes"
+msgstr ""
+"Ak je prekročený maximálny počet POST požiadaviek za pridelené obdobie, "
+"uplatniť globálny zákaz prístupu na tento počet minút"
+
+msgid "Custom HTTP Headers"
+msgstr "Vlastné HTTP hlavičky"
+
+msgid ""
+"Note: These custom headers will only be enabled for served files that don't "
+"have the relevant header already set."
+msgstr ""
+"Poznámka: Tieto vlastné hlavičky budú povolené len pre obsluhované súbory, "
+"ktoré už nemajú príslušnú hlavičku nastavenú."
+
+msgid ""
+"Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
+msgstr ""
+"Nastaviť Allow hlavičku na 'GET, POST, HEAD' pre html, xml, json a textové "
+"súbory"
+
+msgid "Allow"
+msgstr "Povoliť"
+
+msgid ""
+"Enable Cache-Control headers (no-cache for html, xml, json and text, "
+"immutable for everything else)"
+msgstr ""
+"Povoliť Cache-Control hlavičky (no-cache pre html, xml, json a text, "
+"immutable pre všetko ostatné)"
+
+msgid "Cache-Control"
+msgstr "Cache-Control"
+
+msgid ""
+"Set the Referrer-Policy header to 'same-origin' for html, xml, json and text"
+" files"
+msgstr ""
+"Nastaviť Referrer-Policy hlavičku na 'same-origin' pre html, xml, json a "
+"textové súbory"
+
+msgid "Referrer-Policy"
+msgstr "Referrer-Policy"
+
+msgid "Set the X-Content-Type-Options header to 'nosniff'"
+msgstr "Nastaviť X-Content-Type-Options hlavičku na 'nosniff'"
+
+msgid "X-Content-Type-Options"
+msgstr "X-Content-Type-Options"
+
+#, java-format
+msgid "Initializing Tunnel Manager{0}"
+msgstr "Inicializácia Správcu tunelov{0}"
+
+msgid "Tunnels not initialized yet; please retry in a few moments."
+msgstr "Tunely ešte nie sú inicializované; skúste znova o niekoľko okamihov."
+
+msgid "Status Messages"
+msgstr "Stavové správy"
+
+msgid "Clear"
+msgstr "Vyčistiť"
+
+msgid "Refresh"
+msgstr "Obnoviť"
+
+msgid "Global Tunnel Control"
+msgstr "Globálne ovládanie tunelov"
+
+msgid "Tunnel Wizard"
+msgstr "Sprievodca tunelom"
+
+msgid "Stop All"
+msgstr "Zastaviť všetky"
+
+msgid "Start All"
+msgstr "Spustiť všetky"
+
+msgid "Restart all running tunnels"
+msgstr "Reštartovať všetky spustené tunely"
+
+msgid "Restart All"
+msgstr "Reštartovať všetky"
+
+msgid "Restart all running server tunnels"
+msgstr "Reštartovať všetky spustené serverové tunely"
+
+msgid "Restart All Servers"
+msgstr "Reštartovať všetky servery"
+
+msgid "Restart all running client tunnels"
+msgstr "Reštartovať všetky spustené klientské tunely"
+
+msgid "Restart All Clients"
+msgstr "Reštartovať všetkých klientov"
+
+msgid "I2P Server Tunnels"
+msgstr "I2P serverové tunely"
+
+msgid "Helper"
+msgstr "Pomocník"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Points at"
+msgstr "Smeruje na"
+
+msgid "Preview"
+msgstr "Náhľad"
+
+msgid "Status"
+msgstr "Stav"
+
+msgid "Control"
+msgstr "Ovládanie"
+
+msgid "Edit Server Tunnel Settings for"
+msgstr "Upraviť nastavenia serverového tunela pre"
+
+msgid "Test IRC server, bypassing I2P"
+msgstr "Testovať IRC server mimo I2P"
+
+msgid "Test HTTPS server, bypassing I2P"
+msgstr "Testovať HTTPS server mimo I2P"
+
+msgid "Test HTTP server, bypassing I2P"
+msgstr "Testovať HTTP server mimo I2P"
+
+msgid "Test HTTP server through I2P"
+msgstr "Testovať HTTP server cez I2P"
+
+msgid "Base32 Address"
+msgstr "Base32 adresa"
+
+msgid "Offline"
+msgstr "Offline"
+
+msgid "No Preview"
+msgstr "Žiadny náhľad"
+
+msgid "Starting..."
+msgstr "Spúšťa sa..."
+
+msgid "Starting in"
+msgstr "Spúšťa sa o"
+
+msgid "Running"
+msgstr "Beží"
+
+msgid "Hops"
+msgstr "Hopy"
+
+msgid "in"
+msgstr "prích"
+
+msgid "out"
+msgstr "odch"
+
+msgid "Stopped"
+msgstr "Zastavený"
+
+msgid "Stop this Tunnel"
+msgstr "Zastaviť tento tunel"
+
+msgid "Restart this Tunnel"
+msgstr "Reštartovať tento tunel"
+
+msgid "Restart"
+msgstr "Reštartovať"
+
+msgid "Destination"
+msgstr "Cieľ"
+
+msgid "Signature"
+msgstr "Podpis"
+
+msgid "Alternate"
+msgstr "Alternatívny"
+
+msgid "Alt Destination"
+msgstr "Alt cieľ"
+
+msgid "Encryption"
+msgstr "Šifrovanie"
+
+msgid "Supported encryption"
+msgstr "Podporované šifrovanie"
+
+msgid "New server tunnel"
+msgstr "Nový serverový tunel"
+
+msgid "Standard"
+msgstr "Štandardný"
+
+msgid "Create"
+msgstr "Vytvoriť"
+
+msgid "I2P Client Tunnels"
+msgstr "I2P klientské tunely"
+
+msgid "Interface"
+msgstr "Rozhranie"
+
+msgid "Edit Tunnel Settings for"
+msgstr "Upraviť nastavenia tunela pre"
+
+msgid "Standby"
+msgstr "Pohotovostný"
+
+msgid "Outproxy"
+msgstr "Outproxy"
+
+msgid "internal plugin"
+msgstr "interný plugin"
+
+msgid "none"
+msgstr "žiadny"
+
+msgid "New client tunnel"
+msgstr "Nový klientský tunel"
+
+msgid "Registration Helper"
+msgstr "Pomocník registrácie"
+
+msgid ""
+"This service uses encrypted leasesets. Registration is not recommended. "
+"Registration authentication is disabled."
+msgstr ""
+"Táto služba používa šifrované sady prenájmov. Registrácia sa neodporúča. "
+"Autentifikácia registrácie je zakázaná."
+
+msgid ""
+"Please be sure to select, copy, and paste the entire contents of the "
+"appropriate authentication data into the form of your favorite registration "
+"site"
+msgstr ""
+"Uistite sa, že vyberiete, skopírujete a vložíte celý obsah príslušných "
+"autentifikačných údajov do formulára vášho obľúbeného registračného webu"
+
+msgid "Tunnel name"
+msgstr "Názov tunela"
+
+msgid "Website name"
+msgstr "Názov webstránky"
+
+msgid "Local Destination"
+msgstr "Lokálny cieľ"
+
+msgid "Local destination is not available. Start the tunnel."
+msgstr "Lokálny cieľ nie je k dispozícii. Spustite tunel."
+
+msgid ""
+"To enable registration verification, edit tunnel and set name (or website "
+"name) to a valid host name ending in '.i2p'"
+msgstr ""
+"Pre povolenie overenia registrácie upravte tunel a nastavte názov (alebo "
+"názov webstránky) na platný názov hostiteľa končiaci na '.i2p'"
+
+msgid ""
+"To enable registration verification, edit tunnel and set name to a valid "
+"host name ending in '.i2p'"
+msgstr ""
+"Pre povolenie overenia registrácie upravte tunel a nastavte názov na platný "
+"názov hostiteľa končiaci na '.i2p'"
+
+msgid "Destination signing key is not available. Start the tunnel."
+msgstr "Podpisovací kľúč cieľa nie je k dispozícii. Spustite tunel."
+
+msgid ""
+"Destination signing key is offline. Use CLI tools on the offline machine."
+msgstr ""
+"Podpisovací kľúč cieľa je offline. Použite CLI nástroje na offline stroji."
+
+#, java-format
+msgid "Authentication for adding host {0}"
+msgstr "Autentifikácia pre pridanie hostiteľa {0}"
+
+msgid "Copy and paste this to the registration site"
+msgstr "Skopírujte a vložte toto do registračného webu"
+
+msgid "Advanced authentication strings"
+msgstr "Rozšírené autentifikačné reťazce"
+
+#, java-format
+msgid "Authentication for removing host {0}"
+msgstr "Autentifikácia pre odstránenie hostiteľa {0}"
+
+msgid "Authentication for changing name"
+msgstr "Autentifikácia pre zmenu názvu"
+
+#, java-format
+msgid "This will change the name from {0} to {1}, using the same destination"
+msgstr "Tým sa zmení názov z {0} na {1} s použitím rovnakého cieľa"
+
+msgid "This tunnel must be configured with the new host name."
+msgstr "Tento tunel musí byť nakonfigurovaný s novým názvom hostiteľa."
+
+msgid "Enter old hostname below."
+msgstr "Zadajte starý názov hostiteľa nižšie."
+
+msgid "Authentication for adding alias"
+msgstr "Autentifikácia pre pridanie aliasu"
+
+#, java-format
+msgid "This will add an alias {0} for {1}, using the same destination"
+msgstr "Tým sa pridá alias {0} pre {1} s použitím rovnakého cieľa"
+
+msgid "Authentication for changing destination"
+msgstr "Autentifikácia pre zmenu cieľa"
+
+#, java-format
+msgid "This will change the destination for {0}"
+msgstr "Tým sa zmení cieľ pre {0}"
+
+msgid "This tunnel must be configured with the new destination."
+msgstr "Tento tunel musí byť nakonfigurovaný s novým cieľom."
+
+msgid "Enter old destination below."
+msgstr "Zadajte starý cieľ nižšie."
+
+msgid "Authentication for adding alternate destination"
+msgstr "Autentifikácia pre pridanie alternatívneho cieľa"
+
+#, java-format
+msgid "This will add an alternate destination for {0}"
+msgstr "Tým sa pridá alternatívny cieľ pre {0}"
+
+msgid "Authentication for adding subdomain"
+msgstr "Autentifikácia pre pridanie subdomény"
+
+#, java-format
+msgid "This will add a subdomain {0} of {1}, with a different destination"
+msgstr "Tým sa pridá subdoména {0} z {1} s iným cieľom"
+
+msgid "This tunnel must be configured with the new subdomain and destination."
+msgstr "Tento tunel musí byť nakonfigurovaný s novou subdoménou a cieľom."
+
+msgid "Enter higher-level domain and destination below."
+msgstr "Zadajte doménu vyššej úrovne a cieľ nižšie."
+
+msgid "Return to Tunnel Configuration"
+msgstr "Návrat na konfiguráciu tunela"
+
+msgid "Specify old name and destination"
+msgstr "Zadajte starý názov a cieľ"
+
+msgid "This is only required for advanced authentication."
+msgstr "Toto je potrebné len pre rozšírenú autentifikáciu."
+
+msgid "See above for required items."
+msgstr "Vyššie nájdete požadované položky."
+
+msgid "Old / parent hostname "
+msgstr "Starý / nadradený názov hostiteľa "
+
+msgid "Private key file for old destination / sub-domain parent"
+msgstr "Súbor súkromného kľúča pre starý cieľ / nadradenú subdoménu"
+
+msgid "Generate Authentication"
+msgstr "Generovať autentifikáciu"
+
+msgid "SSL Helper"
+msgstr "SSL pomocník"
+
+msgid "Experts only!"
+msgstr "Len pre expertov!"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Alt Base32"
+msgstr "Alt Base32"
+
+msgid "Incoming I2P Port Routing"
+msgstr "Smerovanie prichádzajúcich I2P portov"
+
+msgid "Virtual Host"
+msgstr "Virtuálny hostiteľ"
+
+msgid "Via SSL?"
+msgstr "Cez SSL?"
+
+msgid "Test HTTPS server through I2P"
+msgstr "Testovať HTTPS server cez I2P"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "SSL Activation"
+msgstr "SSL aktivácia"
+
+msgid "I2P webserver (eepsite)"
+msgstr "I2P webový server (eepstránka)"
+
+msgid "Disable SSL"
+msgstr "Zakázať SSL"
+
+msgid "Enable SSL"
+msgstr "Povoliť SSL"
+
+msgid "New Certificate Password"
+msgstr "Heslo nového certifikátu"
+
+msgid "Password (required to encrypt the certificate)"
+msgstr "Heslo (potrebné na šifrovanie certifikátu)"
+
+msgid "Generate new SSL certificate"
+msgstr "Generovať nový SSL certifikát"
+
+msgid "Generate SSL certificate and enable"
+msgstr "Generovať SSL certifikát a povoliť"
+
+#, java-format
+msgid ""
+"Cannot configure, no Jetty server found in {0}client configurations{1} that "
+"matches this tunnel"
+msgstr ""
+"Nie je možné nakonfigurovať, v {0}klientských konfiguráciách{1} nebol "
+"nájdený Jetty server, ktorý by zodpovedal tomuto tunelu"
+
+msgid "Support for non-Jetty servers will be added in a future release"
+msgstr "Podpora pre non-Jetty servery bude pridaná v budúcom vydaní"
+
+msgid "Return to Tunnel Manager Index"
+msgstr "Návrat na index Správcu tunelov"
+
+msgid "Return to Tunnel Editor"
+msgstr "Návrat do Editora tunelov"
+
+msgid "I2P Tunnel Manager - Tunnel Creation Wizard"
+msgstr "Správca I2P tunelov - Sprievodca vytvorením tunela"
+
+msgid "Server or client tunnel?"
+msgstr "Serverový alebo klientsky tunel?"
+
+msgid "Tunnel type"
+msgstr "Typ tunela"
+
+msgid "Tunnel name and description"
+msgstr "Názov a popis tunela"
+
+msgid "Tunnel destination"
+msgstr "Cieľ tunela"
+
+msgid "Binding address and port"
+msgstr "Väzbová adresa a port"
+
+msgid "Tunnel auto-start"
+msgstr "Automatický štart tunela"
+
+msgid "Wizard completed"
+msgstr "Sprievodca dokončený"
+
+msgid ""
+"This wizard will take you through the various options available for creating"
+" tunnels in I2P."
+msgstr ""
+"Tento sprievodca vás prevedie rôznymi možnosťami vytvárania tunelov v I2P."
+
+msgid ""
+"The first thing to decide is whether you want to create a server or a client"
+" tunnel."
+msgstr ""
+"Prvá vec, ktorú musíte rozhodnúť, je či chcete vytvoriť serverový alebo "
+"klientsky tunel."
+
+msgid ""
+"If you need to connect to a remote service, such as an IRC server inside I2P"
+" or a code repository, then you will require a CLIENT tunnel."
+msgstr ""
+"Ak sa potrebujete pripojiť k vzdialenej službe, ako je IRC server v I2P "
+"alebo repozitár kódu, budete potrebovať KLIENTSKÝ tunel."
+
+msgid ""
+"On the other hand, if you wish to host a service for others to connect to "
+"you'll need to create a SERVER tunnel."
+msgstr ""
+"Na druhej strane, ak chcete hostovať službu, ku ktorej sa môžu pripájať "
+"ostatní, budete musieť vytvoriť SERVEROVÝ tunel."
+
+msgid "Server Tunnel"
+msgstr "Serverový tunel"
+
+msgid "Client Tunnel"
+msgstr "Klientsky tunel"
+
+msgid "There are several types of tunnels to choose from:"
+msgstr "K dispozícii je niekoľko typov tunelov:"
+
+msgid "Basic tunnel for connecting to a single service inside I2P."
+msgstr "Základný tunel pre pripojenie k jednej službe v rámci I2P."
+
+msgid ""
+"Try this if none of the tunnel types below fit your requirements, or you "
+"don't know what type of tunnel you need."
+msgstr ""
+"Skúste to, ak žiadny z typov tunelov nižšie nevyhovuje vašim požiadavkám, "
+"alebo neviete, aký typ tunela potrebujete."
+
+msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
+msgstr ""
+"Tunel, ktorý funguje ako HTTP proxy pre dosiahnutie eepstránok v rámci I2P."
+
+msgid ""
+"Set your browser to use this tunnel as an http proxy, or set your "
+"\"http_proxy\" environment variable for command-line applications in "
+"GNU/Linux."
+msgstr ""
+"Nastavte prehliadač na používanie tohto tunela ako http proxy, alebo "
+"nastavte premennú prostredia \"http_proxy\" pre aplikácie príkazového riadka"
+" v GNU/Linuxe."
+
+msgid ""
+"Websites outside I2P can also be reached if an HTTP proxy within I2P is "
+"known."
+msgstr ""
+"Webstránky mimo I2P sú tiež dosiahnuteľné, ak je známa HTTP proxy v rámci "
+"I2P."
+
+msgid "Customised client tunnel specific for IRC connections."
+msgstr "Prispôsobený klientsky tunel špecifický pre IRC pripojenia."
+
+msgid ""
+"With this tunnel type, your IRC client will be able to connect to an IRC "
+"network inside I2P."
+msgstr ""
+"S týmto typom tunela sa váš IRC klient bude môcť pripojiť k IRC sieti v "
+"rámci I2P."
+
+msgid ""
+"Each IRC network in I2P that you wish to connect to will require its own "
+"tunnel. (See Also, SOCKS IRC)"
+msgstr ""
+"Každá IRC sieť v I2P, ku ktorej sa chcete pripojiť, bude vyžadovať vlastný "
+"tunel. (Pozri tiež SOCKS IRC)"
+
+msgid "A tunnel that implements the SOCKS protocol."
+msgstr "Tunel, ktorý implementuje protokol SOCKS."
+
+msgid ""
+"This enables both TCP and UDP connections to be made through a SOCKS "
+"outproxy within I2P."
+msgstr "To umožňuje TCP aj UDP pripojenia cez SOCKS outproxy v rámci I2P."
+
+msgid ""
+"A client tunnel implementing the SOCKS protocol, which is customised for "
+"connecting to IRC networks."
+msgstr ""
+"Klientsky tunel implementujúci protokol SOCKS, ktorý je prispôsobený na "
+"pripojenie k IRC sieťam."
+
+msgid ""
+"With this tunnel type, IRC networks in I2P can be reached by typing the I2P "
+"address into your IRC client, and configuring the IRC client to use this "
+"SOCKS tunnel."
+msgstr ""
+"S týmto typom tunela sú IRC siete v I2P dosiahnuteľné zadaním I2P adresy do "
+"vášho IRC klienta a nakonfigurovaním IRC klienta na používanie tohto SOCKS "
+"tunela."
+
+msgid ""
+"This means that only one I2P tunnel is required rather than a separate "
+"tunnel per IRC network."
+msgstr ""
+"To znamená, že je potrebný len jeden I2P tunel namiesto samostatného tunela "
+"pre každú IRC sieť."
+
+msgid ""
+"IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P "
+"is known, though it depends on whether or not the outproxy has been blocked "
+"by the IRC network."
+msgstr ""
+"IRC siete mimo I2P sú tiež dosiahnuteľné, ak je známa SOCKS outproxy v rámci"
+" I2P, aj keď závisí od toho, či outproxy nebola zablokovaná IRC sieťou."
+
+msgid "A basic server tunnel for hosting a generic service inside I2P."
+msgstr ""
+"Základný serverový tunel pre hostovanie všeobecnej služby v rámci I2P."
+
+msgid "A server tunnel that is customised for HTTP connections."
+msgstr "Serverový tunel prispôsobený pre HTTP pripojenia."
+
+msgid "Use this tunnel type if you want to host an eepsite."
+msgstr "Použite tento typ tunela, ak chcete hostovať eepstránku."
+
+msgid "A customised server tunnel for hosting IRC networks inside I2P."
+msgstr "Prispôsobený serverový tunel pre hostovanie IRC sietí v rámci I2P."
+
+msgid ""
+"Usually, a separate tunnel needs to be created for each IRC server that is "
+"to be accessible inside I2P."
+msgstr ""
+"Zvyčajne je potrebné vytvoriť samostatný tunel pre každý IRC server, ktorý "
+"má byť prístupný v rámci I2P."
+
+msgid "Select tunnel type"
+msgstr "Vyberte typ tunela"
+
+msgid "Choose a name and description for your tunnel."
+msgstr "Vyberte názov a popis pre váš tunel."
+
+msgid ""
+"These can be anything you want - they are just for ease of identifying the "
+"tunnel in the routerconsole."
+msgstr ""
+"Môžu to byť čokoľvek - slúžia len pre ľahšiu identifikáciu tunela v konzole "
+"smerovača."
+
+msgid ""
+"If you know of any outproxies for this type of tunnel (either HTTP or "
+"SOCKS), fill them in below."
+msgstr ""
+"Ak poznáte nejaké outproxy pre tento typ tunela (HTTP alebo SOCKS), vyplňte "
+"ich nižšie."
+
+msgid "Separate multiple proxies with commas."
+msgstr "Oddeľte viacero proxy čiarkami."
+
+msgid ""
+"List of I2P outproxy destinations, separated with commas (e.g. "
+"proxy1.i2p,proxy2.i2p)"
+msgstr ""
+"Zoznam I2P outproxy cieľov, oddelených čiarkami (napr. "
+"proxy1.i2p,proxy2.i2p)"
+
+msgid ""
+"Type in the I2P destination of the service that this client tunnel should "
+"connect to."
+msgstr ""
+"Zadajte I2P cieľ služby, ku ktorej by sa mal tento klientsky tunel pripojiť."
+
+msgid ""
+"This could be the full Base64 destination key, or an I2P URL from your "
+"address book."
+msgstr "Môže to byť úplný Base64 cieľový kľúč alebo I2P URL z vášho adresára."
+
+msgid "Enter a b64 or .i2p address here"
+msgstr "Zadajte b64 alebo .i2p adresu sem"
+
+msgid ""
+"This is the IP that your service is running on, this is usually on the same "
+"machine so 127.0.0.1 is autofilled."
+msgstr ""
+"Toto je IP, na ktorej vaša služba beží, zvyčajne je to na rovnakom stroji, "
+"takže 127.0.0.1 je automaticky vyplnené."
+
+msgid "This is the port that the service is accepting connections on."
+msgstr "Toto je port, na ktorom služba prijíma spojenia."
+
+msgid "This is the port that the client tunnel will be accessed from locally."
+msgstr "Toto je port, z ktorého bude klientsky tunel lokálne prístupný."
+
+msgid ""
+"How do you want this tunnel to be accessed? By just this machine, your "
+"entire subnet, or external internet?"
+msgstr ""
+"Ako má byť tento tunel prístupný? Len z tohto stroja, z celej vašej "
+"podsiete, alebo z externého internetu?"
+
+msgid "You will most likely want to just allow 127.0.0.1"
+msgstr "S najväčšou pravdepodobnosťou budete chcieť povoliť len 127.0.0.1"
+
+msgid ""
+"The I2P router can automatically start this tunnel for you when the router "
+"is started."
+msgstr ""
+"I2P smerovač môže automaticky spustiť tento tunel pri štarte smerovača."
+
+msgid ""
+"This can be useful for frequently-used tunnels (especially server tunnels), "
+"but for tunnels that are only used occasionally it would mean that the I2P "
+"router is creating and maintaining unnecessary tunnels."
+msgstr ""
+"To môže byť užitočné pre často používané tunely (najmä serverové), ale pre "
+"tunely používané len príležitostne by to znamenalo, že I2P smerovač vytvára "
+"a udržiava zbytočné tunely."
+
+msgid "The wizard has now collected enough information to create your tunnel."
+msgstr ""
+"Sprievodca teraz zhromaždil dostatok informácií na vytvorenie vášho tunela."
+
+msgid ""
+"Upon clicking the Save button below, the wizard will set up the tunnel, and "
+"take you back to the main I2PTunnel page."
+msgstr ""
+"Po kliknutí na tlačidlo Uložiť nižšie sprievodca nastaví tunel a vráti vás "
+"na hlavnú stránku I2PTunnel."
+
+msgid ""
+"Because you chose to automatically start the tunnel when the router starts, "
+"you don't have to do anything further."
+msgstr ""
+"Pretože ste zvolili automatické spustenie tunela pri štarte smerovača, "
+"nemusíte robiť nič ďalšie."
+
+msgid "The router will start the tunnel once it has been set up."
+msgstr "Smerovač spustí tunel po jeho nastavení."
+
+msgid ""
+"Because you chose not to automatically start the tunnel, you will have to "
+"manually start it."
+msgstr ""
+"Pretože ste nezvolili automatické spustenie tunela, budete ho musieť spustiť"
+" manuálne."
+
+msgid ""
+"You can do this by clicking the Start button on the main page which "
+"corresponds to the new tunnel."
+msgstr ""
+"Môžete to urobiť kliknutím na tlačidlo Štart na hlavnej stránke, ktoré "
+"zodpovedá novému tunelu."
+
+msgid "Below is a summary of the options you chose:"
+msgstr "Nižšie je súhrn možností, ktoré ste zvolili:"
+
+msgid "Tunnel description"
+msgstr "Popis tunela"
+
+msgid "Binding address"
+msgstr "Väzbová adresa"
+
+msgid "Tunnel port"
+msgstr "Port tunela"
+
+msgid ""
+"Alongside these basic settings, there are a number of advanced options for "
+"tunnel configuration."
+msgstr ""
+"Popri týchto základných nastaveniach existuje množstvo rozšírených možností "
+"konfigurácie tunela."
+
+msgid ""
+"The wizard will set reasonably sensible default values for these, but you "
+"can view and/or edit these by clicking on the tunnel's name in the main "
+"I2PTunnel page."
+msgstr ""
+"Sprievodca nastaví primerane rozumné predvolené hodnoty, ale môžete ich "
+"zobraziť a/alebo upraviť kliknutím na názov tunela na hlavnej stránke "
+"I2PTunnel."
+
+msgid "Cancel the wizard and return to Tunnel Manager home page"
+msgstr "Zrušiť sprievodcu a vrátiť sa na domovskú stránku Správcu tunelov"
+
+msgid "Return to previous page"
+msgstr "Vrátiť sa na predchádzajúcu stránku"
+
+msgid "Previous"
+msgstr "Predchádzajúci"
+
+msgid "Save tunnel configuration"
+msgstr "Uložiť konfiguráciu tunela"
+
+msgid "Save Tunnel"
+msgstr "Uložiť tunel"
+
+msgid "Finish Wizard and review tunnel settings"
+msgstr "Dokončiť sprievodcu a skontrolovať nastavenia tunela"
+
+msgid "Finish"
+msgstr "Dokončiť"
+
+msgid "Advance to next page"
+msgstr "Prejsť na ďalšiu stránku"
+
+msgid "Next"
+msgstr "Ďalší"

@@ -1,0 +1,61 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Start I2P"
+msgstr "Spustiť I2P"
+
+msgid "I2P is starting!"
+msgstr "I2P sa spúšťa!"
+
+msgid "Starting"
+msgstr "Spúšťa sa"
+
+msgid "Launch I2P Browser"
+msgstr "Spustiť I2P prehliadač"
+
+msgid "Configure I2P System Tray"
+msgstr "Nastaviť systémovú lištu I2P"
+
+msgid "Disable system tray"
+msgstr "Zakázať systémovú lištu"
+
+msgid "Restart I2P"
+msgstr "Reštartovať I2P"
+
+msgid "Stop I2P"
+msgstr "Zastaviť I2P"
+
+msgid "Restart I2P Immediately"
+msgstr "Okamžite reštartovať I2P"
+
+msgid "Stop I2P Immediately"
+msgstr "Okamžite zastaviť I2P"
+
+msgid "Cancel I2P Shutdown"
+msgstr "Zrušiť vypnutie I2P"
+
+#, java-format
+msgid "Shutdown in {0}"
+msgstr "Vypnutie o {0}"
+
+msgid "Shutdown imminent"
+msgstr "Vypnutie čoskoro"
+
+msgid "Network"
+msgstr "Sieť"
+
+msgid "I2P: Right-click for menu"
+msgstr "I2P: Pravé kliknutie pre menu"
+
+msgid "Enable notifications"
+msgstr "Povoliť upozornenia"
+
+msgid "Disable notifications"
+msgstr "Zakázať upozornenia"
