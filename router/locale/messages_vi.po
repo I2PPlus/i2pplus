@@ -137,8 +137,17 @@ msgstr "Yêu cầu quá tải"
 msgid "Connection limit reached"
 msgstr "Đã đạt đến giới hạn kết nối"
 
+msgid "Transit throttle drop"
+msgstr "Loại bỏ điều tiết chuyển tiếp"
+
+msgid "Transit throttle reject"
+msgstr "Từ chối điều tiết chuyển tiếp"
+
 msgid "Dropping Tunnel Requests: High load"
 msgstr "Từ chối yêu cầu đường hầm: Tải quá cao"
+
+msgid "Transit request throttle"
+msgstr "Điều tiết yêu cầu chuyển tiếp"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Từ chối yêu cầu đường hầm: Thời gian hàng đợi"

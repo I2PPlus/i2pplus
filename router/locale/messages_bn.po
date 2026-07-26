@@ -137,8 +137,17 @@ msgstr "অনুরোধ ওভারলোড"
 msgid "Connection limit reached"
 msgstr "সংযোগ সীমা অতিক্রান্ত"
 
+msgid "Transit throttle drop"
+msgstr "ট্রানজিট থ্রটল বাদ"
+
+msgid "Transit throttle reject"
+msgstr "ট্রানজিট থ্রটল প্রত্যাখ্যান"
+
 msgid "Dropping Tunnel Requests: High load"
 msgstr "টানেল অনুরোধ বাদ দেওয়া হচ্ছে: উচ্চ লোড"
+
+msgid "Transit request throttle"
+msgstr "ট্রানজিট অনুরোধ থ্রটল"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "টানেল অনুরোধ বাদ দেওয়া হচ্ছে: সারির সময়"

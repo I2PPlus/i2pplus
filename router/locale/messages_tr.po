@@ -137,8 +137,17 @@ msgstr "Aşırı yükleme isteği"
 msgid "Connection limit reached"
 msgstr "Bağlantı limitine ulaşıldı"
 
+msgid "Transit throttle drop"
+msgstr "Geçiş kısma düşümü"
+
+msgid "Transit throttle reject"
+msgstr "Geçiş kısma reddi"
+
 msgid "Dropping Tunnel Requests: High load"
 msgstr "Tünel istekleri geri çevriliyor: Yüksek yüklenme"
+
+msgid "Transit request throttle"
+msgstr "Geçiş isteği kısma"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Tünel istekleri geri çevriliyor: Kuyruk süresi"

@@ -137,8 +137,17 @@ msgstr "Solicitare supraîncărcare"
 msgid "Connection limit reached"
 msgstr "Limita de conectare a fost atinsă"
 
+msgid "Transit throttle drop"
+msgstr "Renunțare throttle de tranzit"
+
+msgid "Transit throttle reject"
+msgstr "Refuz throttle de tranzit"
+
 msgid "Dropping Tunnel Requests: High load"
 msgstr "Arunc cererile de tunel: Încărcătura mare"
+
+msgid "Transit request throttle"
+msgstr "Limitarea cererilor de tranzit"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Arunc cererile de tunel: Timp așteptare"

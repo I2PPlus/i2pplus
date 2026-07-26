@@ -137,8 +137,17 @@ msgstr "Перевантаження запиту"
 msgid "Connection limit reached"
 msgstr "Досягнуто ліміту підключення"
 
+msgid "Transit throttle drop"
+msgstr "Скидання транзитного обмеження"
+
+msgid "Transit throttle reject"
+msgstr "Відхилення транзитного обмеження"
+
 msgid "Dropping Tunnel Requests: High load"
 msgstr "Відхиляю запити на тунелі: високе навантаження"
+
+msgid "Transit request throttle"
+msgstr "Обмеження транзитних запитів"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Відхиляю запити на тунелі: завеликий час у черзі"

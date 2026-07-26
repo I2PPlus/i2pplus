@@ -137,8 +137,17 @@ msgstr "Permintaan berlebihan"
 msgid "Connection limit reached"
 msgstr "Batas koneksi tercapai"
 
+msgid "Transit throttle drop"
+msgstr "Throttle transit dijatuhkan"
+
+msgid "Transit throttle reject"
+msgstr "Throttle transit ditolak"
+
 msgid "Dropping Tunnel Requests: High load"
 msgstr "Menolak permintaan tunnel: beban tinggi"
+
+msgid "Transit request throttle"
+msgstr "Throttle permintaan transit"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Menolak permintaan tunnel: waktu antrian"

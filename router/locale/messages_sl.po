@@ -137,8 +137,17 @@ msgstr "Preobremenitev zahteve"
 msgid "Connection limit reached"
 msgstr "Omejitev povezave je dosežena"
 
+msgid "Transit throttle drop"
+msgstr "Opustitev omejevanja tranzita"
+
+msgid "Transit throttle reject"
+msgstr "Zavrnitev omejevanja tranzita"
+
 msgid "Dropping Tunnel Requests: High load"
 msgstr "Spuščanje prošenj predorov: Visoko breme"
+
+msgid "Transit request throttle"
+msgstr "Omejevanje tranzitnih zahtev"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Spuščanje prošenj predorov: Čas čakalnega reda"

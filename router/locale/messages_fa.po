@@ -137,8 +137,17 @@ msgstr "درخواست اضافه بار"
 msgid "Connection limit reached"
 msgstr "محدودیت اتصال رسیده است"
 
+msgid "Transit throttle drop"
+msgstr "رها کردن محدودیت عبور"
+
+msgid "Transit throttle reject"
+msgstr "رد محدودیت عبور"
+
 msgid "Dropping Tunnel Requests: High load"
 msgstr "درخواست های تونل انداختن: بار زیاد"
+
+msgid "Transit request throttle"
+msgstr "محدودیت درخواست عبور"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "درخواست های تونل انداختن: زمان صف"

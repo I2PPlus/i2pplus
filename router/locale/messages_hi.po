@@ -137,8 +137,17 @@ msgstr "अनुरोध की अत्यधिकता"
 msgid "Connection limit reached"
 msgstr "कनेक्शन की सीमा पार हो चुकी है"
 
+msgid "Transit throttle drop"
+msgstr "ट्रांज़िट थ्रॉटल गिरावट"
+
+msgid "Transit throttle reject"
+msgstr "ट्रांज़िट थ्रॉटल अस्वीकार"
+
 msgid "Dropping Tunnel Requests: High load"
 msgstr "टंनल अनुरोधों को छोड़ रहा है: उच्च लोड"
+
+msgid "Transit request throttle"
+msgstr "ट्रांज़िट अनुरोध थ्रॉटल"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "टंनल अनुरोधों को छोड़ रहा है: क्यू समय"

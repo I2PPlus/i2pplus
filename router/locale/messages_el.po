@@ -137,8 +137,17 @@ msgstr "Αίτημα υπερφόρτωσης"
 msgid "Connection limit reached"
 msgstr "Συμπληρώθηκε το όριο σύνδεσης"
 
+msgid "Transit throttle drop"
+msgstr "Πτώση περιορισμού διαμετακόμισης"
+
+msgid "Transit throttle reject"
+msgstr "Απόρριψη περιορισμού διαμετακόμισης"
+
 msgid "Dropping Tunnel Requests: High load"
 msgstr "Απόρριψη αιτημάτων για τούνελ: Υψηλό φορτίο"
+
+msgid "Transit request throttle"
+msgstr "Περιορισμός αιτημάτων διαμετακόμισης"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Απόρριψη αιτημάτων για τούνελ: Χρόνος ουράς αναμονής"

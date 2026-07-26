@@ -137,8 +137,17 @@ msgstr "Həddindən artıq yükləmə tələbi"
 msgid "Connection limit reached"
 msgstr "Bağlantı limitinə çatdı"
 
+msgid "Transit throttle drop"
+msgstr "Tranzit boğma atılışı"
+
+msgid "Transit throttle reject"
+msgstr "Tranzit boğma rəddi"
+
 msgid "Dropping Tunnel Requests: High load"
 msgstr "Tunel tələblərini buraxma: Yüksək yük"
+
+msgid "Transit request throttle"
+msgstr "Tranzit sorğu boğması"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Tunel sorğularının atılması: Növbə vaxtı"

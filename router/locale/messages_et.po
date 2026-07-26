@@ -137,8 +137,17 @@ msgstr "Taotle ülekoormust"
 msgid "Connection limit reached"
 msgstr "Ühenduse limiit on täis"
 
+msgid "Transit throttle drop"
+msgstr "Transiidi piiramise mahavisak"
+
+msgid "Transit throttle reject"
+msgstr "Transiidi piiramisest keeldumine"
+
 msgid "Dropping Tunnel Requests: High load"
 msgstr "Eiran tunneliosaluse palveid: Kõrge koormus"
+
+msgid "Transit request throttle"
+msgstr "Transiidi päringu piiramine"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Eiran tunneliosaluse palveid: Pikk järjekord"
