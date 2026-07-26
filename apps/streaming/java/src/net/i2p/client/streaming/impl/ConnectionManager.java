@@ -6,7 +6,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PSession;
@@ -60,14 +62,50 @@ class ConnectionManager {
     private static final Object DUMMY = new Object();
 
     /**
+     * Lock for interruptible cooldown wait in connect() — notified on shutdown.
+     */
+    private final Object _cooldownLock = new Object();
+
+    /**
      * Per-destination cooldown to avoid hammering unreachable peers.
      * Key is destination Hash, value is timestamp of last failed connect.
      * @since 2.7.0
      */
     private final ConcurrentHashMap<Hash, Long> _destFailures = new ConcurrentHashMap<>(4);
 
-    /** Lock for interruptible cooldown wait in connect() — notified on shutdown. */
-    private final Object _cooldownLock = new Object();
+    /**
+     * Stream connection pool — reuses established streams to the same destination.
+     * Key: destination Hash, Value: deque of pooled connections.
+     * @since 0.9.70+
+     */
+    private final ConcurrentHashMap<Hash, ConcurrentLinkedDeque<PooledConnection>> _streamPools =
+        new ConcurrentHashMap<>(32);
+
+    /**
+     * Max idle time before a pooled stream is closed and evicted.
+     * Default 20s — balances reuse vs staleness.
+     * Tunable via i2p.streaming.poolMaxIdleMs.
+     */
+    private long getPoolMaxIdleMs() {
+        return _context.getProperty("i2p.streaming.poolMaxIdleMs", 20 * 1000);
+    }
+
+    /**
+     * Max pooled streams per destination.
+     * Default 8 — limits memory per peer.
+     * Tunable via i2p.streaming.poolMaxPerDestination.
+     */
+    private int getPoolMaxPerDestination() {
+        return _context.getProperty("i2p.streaming.poolMaxPerDestination", 8);
+    }
+
+    /**
+     * Whether stream pooling is enabled.
+     * Tunable via i2p.streaming.streamPool.enabled (default: true).
+     */
+    private boolean isPoolEnabled() {
+        return _context.getProperty("i2p.streaming.streamPool.enabled", true);
+    }
 
     /**
      * Cooldown between connection attempts to the same failed destination.
@@ -616,43 +654,59 @@ class ConnectionManager {
      * @param session generally the session from the constructor, but could be a subsession
      * @return new connection, or null if we have exceeded our limit
      */
-     public Connection connect(Destination peer, ConnectionOptions opts, I2PSession session) {
-         if (peer == null) {throw new NullPointerException();}
-         Connection con = null;
-         long connectStart = _context.clock().now();
-         long expiration = _context.clock().now();
-         long tmout = opts.getConnectTimeout();
-         int max = _defaultOptions.getMaxConns();
-         if (tmout <= 0) {expiration += getDefaultStreamDelayMax();}
-         else {expiration += tmout;}
-         _numWaiting.incrementAndGet();
-         while (true) {
-             long remaining = expiration - _context.clock().now();
-             if (remaining <= 0) {
-                 _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + max + " concurrent streams exceeded");
-                 _numWaiting.decrementAndGet();
-                 return null;
-             }
+public Connection connect(Destination peer, ConnectionOptions opts, I2PSession session) {
+          if (peer == null) {throw new NullPointerException();}
+          Connection con = null;
+          long connectStart = _context.clock().now();
 
-             if (locked_tooManyStreams()) {
-                 // allow a full buffer of pending/waiting streams
-                 if (_numWaiting.get() > max) {
-                     _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + max + " concurrent streams exceeded, with " +
-                                              _numWaiting + " queued");
-                     _numWaiting.decrementAndGet();
-                     return null;
-                 }
+          // Try to acquire a pooled connection first
+          if (isPoolEnabled()) {
+              con = acquireFromPool(peer);
+              if (con != null) {
+                  // Update connection options and session if needed
+                  con.setRemotePeer(peer);
+                  // Assign new stream IDs since this is a new logical connection
+                  assignReceiveStreamId(con);
+                  if (_log.shouldDebug()) {
+                      _log.debug("Reusing pooled connection to " + peer.calculateHash().toBase64().substring(0,6));
+                  }
+                  // Skip to post-creation setup
+                  return finalizeConnection(con, peer, opts, connectStart);
+              }
+          }
+          long expiration = _context.clock().now();
+          long tmout = opts.getConnectTimeout();
+          int max = _defaultOptions.getMaxConns();
+          if (tmout <= 0) {expiration += getDefaultStreamDelayMax();}
+          else {expiration += tmout;}
+          _numWaiting.incrementAndGet();
+          while (true) {
+              long remaining = expiration - _context.clock().now();
+              if (remaining <= 0) {
+                  _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + max + " concurrent streams exceeded");
+                  _numWaiting.decrementAndGet();
+                  return null;
+              }
 
-                  // no remaining streams, let's wait a bit
-                  try { Thread.sleep(remaining/4); } catch (InterruptedException ie) { /* ignored */ }
-             } else {
-                 con = new Connection(_context, this, session, _schedulerChooser, _timer.getSharedTimer(),
-                                       _outboundQueue, _conPacketHandler, opts, false);
-                 con.setRemotePeer(peer);
-                 assignReceiveStreamId(con);
-                 break; // stop looping as a psuedo-wait
-             }
-         }
+              if (locked_tooManyStreams()) {
+                  // allow a full buffer of pending/waiting streams
+                  if (_numWaiting.get() > max) {
+                      _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + max + " concurrent streams exceeded, with " +
+                                               _numWaiting + " queued");
+                      _numWaiting.decrementAndGet();
+                      return null;
+                  }
+
+                   // no remaining streams, let's wait a bit
+                   try { Thread.sleep(remaining/4); } catch (InterruptedException ie) { /* ignored */ }
+              } else {
+                  con = new Connection(_context, this, session, _schedulerChooser, _timer.getSharedTimer(),
+                                        _outboundQueue, _conPacketHandler, opts, false);
+                  con.setRemotePeer(peer);
+                  assignReceiveStreamId(con);
+                  break; // stop looping as a psuedo-wait
+              }
+          }
 
           // ok we're in...
           // Check per-destination cooldown to avoid hammering unreachable peers
@@ -729,9 +783,100 @@ class ConnectionManager {
                   break;
           }
 
-          _context.statManager().addRateData("stream.connectionCreated", 1);
-          return con;
-     }
+_context.statManager().addRateData("stream.connectionCreated", 1);
+           return con;
+      }
+
+      /**
+       * Common post-creation setup for both pooled and new connections.
+       * Handles cooldown, waitForConnect, stats recording.
+       */
+      private Connection finalizeConnection(Connection con, Destination peer,
+                                             ConnectionOptions opts, long connectStart) {
+          // ok we're in...
+          // Check per-destination cooldown to avoid hammering unreachable peers
+          Hash destHash = peer.calculateHash();
+          Long lastFailure = _destFailures.get(destHash);
+          if (lastFailure != null) {
+              long elapsed = _context.clock().now() - lastFailure;
+              if (elapsed < getDestCooldownMs() && elapsed >= 0) {
+                  long delay = getDestCooldownMs() - elapsed;
+                  if (_log.shouldWarn())
+                        _log.warn("Delaying connect to [" + destHash.toBase64().substring(0,6) +
+                                  "] for " + delay + "ms (cooldown from previous failure)");
+                  synchronized (_cooldownLock) {
+                      try {
+                          _cooldownLock.wait(delay);
+                      } catch (InterruptedException ie) {
+                          Thread.currentThread().interrupt();
+                      }
+                  }
+              } else {
+                  _destFailures.remove(destHash, lastFailure);
+              }
+          }
+          con.eventOccurred();
+
+           if (_log.shouldDebug())
+               _log.debug("Connect() conDelay = " + opts.getConnectDelay());
+           if (opts.getConnectDelay() <= 0) {
+               con.waitForConnect();
+           } else {
+               // The SYN send is delayed by connectDelay ms (SchedulerPreconnect).
+               // Wait for the connection to establish with enough margin for the
+               // SYN delay plus several resend cycles plus a full round trip.
+               // With initial RTO 5s and doubling backoff, 45s allows ~4 SYN
+               // attempts (5s + 10s + 20s + ...) — real I2P RTTs are 4-14s with
+               // asymmetric transport, so 20s was too tight and gave up early.
+               // Sets _connectionError on timeout.
+              int boundedTimeout = opts.getConnectDelay() + 45_000;
+              con.waitForConnect(boundedTimeout);
+          }
+          long connectElapsed = _context.clock().now() - connectStart;
+          if (_log.shouldInfo()) {
+              String err = con.getConnectionError();
+              if (err != null) {
+                  _log.info("ConnectionManager.connect() to [" + destHash.toBase64().substring(0,6) +
+                            "] failed in " + connectElapsed + "ms: " + err);
+              } else {
+                  _log.info("ConnectionManager.connect() to [" + destHash.toBase64().substring(0,6) +
+                            "] succeeded in " + connectElapsed + "ms");
+              }
+          }
+           // Record failure for cooldown, clear on success
+           if (con.getConnectionError() != null) {
+              _context.statManager().addRateData("stream.connectFailed", connectElapsed, connectElapsed);
+              _destFailures.put(destHash, _context.clock().now());
+              // Opportunistic trim: prevent unbounded growth from abandoned destinations
+              if (_destFailures.size() > 256) {
+                  long cutoff = _context.clock().now() - getDestCooldownMs();
+                  for (Map.Entry<Hash, Long> e : _destFailures.entrySet()) {
+                      if (e.getValue() < cutoff)
+                          _destFailures.remove(e.getKey(), e.getValue());
+                  }
+              }
+          } else {
+             _context.statManager().addRateData("stream.connectTime", connectElapsed, connectElapsed);
+             _destFailures.remove(destHash);
+         }
+         // safe decrement
+         for (;;) {
+             int n = _numWaiting.get();
+             if (n <= 0)
+                 break;
+             if (_numWaiting.compareAndSet(n, n - 1))
+                 break;
+         }
+
+         _context.statManager().addRateData("stream.connectionCreated", 1);
+         return con;
+    }
+
+    /**
+     * Attempt to acquire a valid pooled connection for the given destination.
+     * @param peer Destination to connect to
+     * @return Valid Connection from pool, or null if none available
+     */
 
     /**
      *  Doesn't need to be locked any more.
@@ -963,9 +1108,124 @@ class ConnectionManager {
     }
 
     /**
-     * Register a connection's outbound stream ID for O(1) lookup.
-     * Called from Connection.setSendStreamId() when the outbound ID is first assigned.
+     * Wrapper for a pooled connection with metadata.
+     * @since 0.9.70+
      */
+    private static class PooledConnection {
+        final Connection connection;
+        final long pooledAt;
+        final AtomicLong lastUsed;
+
+        PooledConnection(Connection con, long now) {
+            this.connection = con;
+            this.pooledAt = now;
+            this.lastUsed = new AtomicLong(now);
+        }
+
+        boolean isStale(long maxIdleMs, long now) {
+            return now - lastUsed.get() > maxIdleMs;
+        }
+
+        void touch(long now) {
+            lastUsed.set(now);
+        }
+    }
+
+    /**
+     * Try to acquire a pooled connection for the given destination.
+     * Returns a valid connection or null if none available.
+     */
+    private Connection acquireFromPool(Destination peer) {
+        Hash destHash = peer.calculateHash();
+        ConcurrentLinkedDeque<PooledConnection> pool = _streamPools.get(destHash);
+        if (pool == null || pool.isEmpty()) {
+            return null;
+        }
+
+        long now = _context.clock().now();
+        long maxIdle = getPoolMaxIdleMs();
+        PooledConnection pc;
+
+        while ((pc = pool.pollFirst()) != null) {
+            // Evict stale entries
+            if (pc.isStale(maxIdle, now)) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Evicting stale pooled connection to " + destHash.toBase64().substring(0, 6));
+                }
+                pc.connection.disconnect(false, false);
+                continue;
+            }
+            // Validate: connection must be established and healthy
+            if (pc.connection.getIsConnected() && pc.connection.getConnectionError() == null) {
+                pc.touch(now);
+                if (_log.shouldDebug()) {
+                    _log.debug("Reusing pooled connection to " + destHash.toBase64().substring(0, 6) +
+                               " (idle " + (now - pc.pooledAt) + "ms)");
+                }
+                return pc.connection;
+            } else {
+                // Unhealthy, discard
+                pc.connection.disconnect(false, false);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Return a connection to the pool if healthy.
+     * Called from removeConnection().
+     */
+    private void returnToPool(Connection con) {
+        if (con == null || con.getRemotePeer() == null) {
+            return;
+        }
+        // Only pool established, healthy connections
+        if (!con.getIsConnected() || con.getConnectionError() != null) {
+            return;
+        }
+        // Check if input/output streams are clean
+        if (con.getInputStream().isLocallyClosed() || con.getOutputStream().getClosed()) {
+            return;
+        }
+
+        Hash destHash = con.getRemotePeer().calculateHash();
+        ConcurrentLinkedDeque<PooledConnection> pool = _streamPools.computeIfAbsent(destHash,
+            k -> new ConcurrentLinkedDeque<>());
+
+        // Enforce per-destination limit
+        int maxPerDest = getPoolMaxPerDestination();
+        while (pool.size() >= maxPerDest) {
+            PooledConnection oldest = pool.pollFirst();
+            if (oldest != null) {
+                oldest.connection.disconnect(false, false);
+            }
+        }
+
+        PooledConnection pc = new PooledConnection(con, _context.clock().now());
+        pool.addLast(pc);
+
+        if (_log.shouldDebug()) {
+            _log.debug("Pooled connection to " + destHash.toBase64().substring(0, 6) +
+                       " (pool size: " + pool.size() + ")");
+        }
+    }
+
+    /**
+     * Periodic pool cleanup — evicts stale connections.
+     * Called from timer or on shutdown.
+     */
+    void cleanupPool() {
+        long now = _context.clock().now();
+        long maxIdle = getPoolMaxIdleMs();
+        for (Map.Entry<Hash, ConcurrentLinkedDeque<PooledConnection>> entry : _streamPools.entrySet()) {
+            ConcurrentLinkedDeque<PooledConnection> pool = entry.getValue();
+            PooledConnection pc;
+            while ((pc = pool.peekFirst()) != null && pc.isStale(maxIdle, now)) {
+                pool.pollFirst();
+                pc.connection.disconnect(false, false);
+            }
+        }
+    }
     void registerOutboundId(Connection con) {
         long sendId = con.getSendStreamId();
         if (sendId > 0)
@@ -978,6 +1238,9 @@ class ConnectionManager {
      * @param con Connection to drop.
      */
     public void removeConnection(Connection con) {
+
+        // Attempt to return to pool before removing
+        returnToPool(con);
 
         Long rcvID = Long.valueOf(con.getReceiveStreamId());
         synchronized(_recentlyClosed) {
