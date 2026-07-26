@@ -7585,9 +7585,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("udp.peer.concurrentMaxMessages", "Max UDP concurrent messages",
                   SUB_TRANSPORT,
 
-                  128, Math.max(256, Math.min(4096,
-                      (int) (SystemVersion.getMaxMemory() / (8 * 1024 * 1024)))),
-                  16, "udp.allowConcurrentActive", _context);
+                  // Scale min with cores: at least 128, more on multi-core
+                  Math.max(128, SystemVersion.getCores() * 32),
+                  // Scale max with memory: 1 concurrent msg per 4MB heap, clamped
+                  Math.max(1024, Math.min(32768,
+                      (int) (SystemVersion.getMaxMemory() / (4 * 1024 * 1024)))),
+                  32, "udp.allowConcurrentActive", _context);
         }
 
         protected void applyValue(int value) {
@@ -7904,10 +7907,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double congestedRTO = getAdditionalStat(_context, "udp.congestedRTO");
             boolean rtoInflated = !Double.isNaN(congestedRTO) && congestedRTO > current * 2;
 
-            // CWIN collapse + retransmits = lower minRTO for faster loss detection.
-            // This breaks the death spiral: congestion → retransmits → higher RTO → more delay.
-            if (hasRetransmits && cwinCollapsed) {
-                return Math.max(_min, current - _step);
+            // CWIN collapse = congestion is active, lower minRTO for faster loss detection.
+            // This breaks the death spiral: congestion → high RTO → no retransmit signal → minRTO stuck high.
+            if (cwinCollapsed) {
+                return Math.max(_min, current - _step * 2);
             }
             // Active congestion + RTO already inflated = lower aggressively to break spiral
             if (congestionActive && rtoInflated) {
@@ -7938,7 +7941,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("udp.peer.maxRTO", "Max UDP RTO (ms)",
                   SUB_TRANSPORT,
 
-                  10000, 30000, 1000, "udp.sendConfirmTime", _context);
+                  3000, 30000, 1000, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -8010,7 +8013,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("udp.peer.maxSendWindow", "Max UDP send window (bytes)",
                   SUB_TRANSPORT,
 
-                  65536, 1048576, 8192, "udp.avgSendWindow", _context);
+                  // Min 64KB, max 8MB scaled to memory (1MB per 512MB heap)
+                  65536,
+                  Math.max(1048576, Math.min(16777216,
+                      (int) (SystemVersion.getMaxMemory() / 512))),
+                  65536, "udp.avgSendWindow", _context);
         }
 
         protected void applyValue(int value) {
@@ -8041,6 +8048,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean congested = !Double.isNaN(retransmits) && retransmits > 0;
             double congCWIN = getAdditionalStat(_context, "udp.congestionOccurred");
             boolean congestionActive = !Double.isNaN(congCWIN) && congCWIN > 0;
+            double sendWindow = getAdditionalStat(_context, "udp.avgSendWindow");
+            boolean cwinCollapsed = !Double.isNaN(sendWindow) && sendWindow < 20000;
             double failsafeCloses = getAdditionalEventCount(_context, "ntcp.failsafeCloses");
             boolean failsafeActive = !Double.isNaN(failsafeCloses) && failsafeCloses > 0;
             double mtuDecrease = getAdditionalEventCount(_context, "udp.mtuDecrease");
@@ -8061,7 +8070,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (highUsage && cpuFree && memOk) { return Math.min(_max, current + _step * 2); }
             // Low usage + no congestion + healthy = shrink to reduce buffering
             boolean lowUsage = !Double.isNaN(observed) && observed < current * 0.3;
-            if (lowUsage && !congested && !congestionActive && current > _min) {
+            // Don't shrink maxSendWindow when CWIN is collapsed — that's a death spiral!
+            // CWIN collapse means the window is constrained by RTO/congestion, not by the configured max.
+            if (lowUsage && !congested && !congestionActive && !cwinCollapsed && current > _min) {
                 return Math.max(_min, current - _step);
             }
             return current;
@@ -8154,24 +8165,36 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class SendPoolCapacityParam extends BaseParam {
 
-        SendPoolCapacityParam() {
+SendPoolCapacityParam() {
             super("ntcp.sendPool.capacity", "NTCP send pool capacity",
                   SUB_TRANSPORT,
-                  64, 8192, 32, "ntcp.sendPool.utilization", _context);
+
+                  // Scale min with cores: at least 64, up to 256 on 16+ cores
+                  Math.max(64, SystemVersion.getCores() * 16),
+                  // Scale max with cores and memory: 16 slots per core, or 1 per MB heap
+                  Math.max(2048, Math.min(16384,
+                      Math.max(SystemVersion.getCores() * 512,
+                          (int) (SystemVersion.getMaxMemory() / (2 * 1024 * 1024))))),
+                  64, "ntcp.sendPool.utilization", _context);
         }
 
         @Override
         protected int getDefaultMin(RouterContext ctx) {
-            // Floor: at least 64, or 1 peer per slot up to 64
+            // Floor: at least 64, or 1 peer per slot up to 256, scaled by cores
             int active = ctx.commSystem().countActivePeers();
-            return Math.max(64, Math.min(256, active / 16));
+            int cores = SystemVersion.getCores();
+            return Math.max(64, Math.min(256 * Math.max(1, cores / 4), active / Math.max(4, cores / 2)));
         }
 
         @Override
         protected int getDefaultMax(RouterContext ctx) {
-            int def = SystemVersion.isSlow() ? 64 : 128;
+            int cores = SystemVersion.getCores();
+            long memMB = SystemVersion.getMaxMemory() / (1024 * 1024);
             // Scale max with cores: more connections = more queued sends.
-            return Math.max(def * 16, SystemVersion.getCores() * 512);
+            // Also scale with memory: 1 slot per 2MB heap
+            int byCores = Math.max(cores * 512, cores * 256 * Math.max(1, cores / 4));
+            int byMem = Math.max(2048, (int) (memMB / 2));
+            return Math.max(byCores, byMem);
         }
 
         protected void applyValue(int value) {
@@ -8192,7 +8215,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        protected int computeTarget(double observed) {
+protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int activePeers = _context.commSystem().countActivePeers();
             // observed = ntcp.sendPool.utilization (pct 0–100)
@@ -8215,13 +8238,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double queueLifetime = getAdditionalStat(_context, "transport.expiredOnQueueLifetime");
             boolean queueStalling = !Double.isNaN(queueLifetime) && queueLifetime > 10000;
             boolean queueHealthy = !Double.isNaN(queueLifetime) && queueLifetime < 1000;
+            boolean lowLatency = !Double.isNaN(sendTime) && sendTime < 50;
+            boolean lowRTT = !Double.isNaN(rtt) && rtt < 200;
 
-            // Scale target with active peers: ~1 slot per 8 peers
-            int peerTarget = Math.max(64, activePeers / 8);
+            // Scale target with active peers and cores: ~1 slot per 4 peers, more on multi-core
+            int peerTarget = Math.max(_min, activePeers / Math.max(4, SystemVersion.getCores() / 2));
 
             // Memory critical: shrink immediately
             if (memCritical && current > _min)
                 return Math.max(_min, current - _step * 2);
+
+            // Death spiral: CWIN collapsed + high latency = shrink pool to force backpressure upstream
+            // This prevents the pool from absorbing messages that will just expire
+            if (queueStalling && !cpuPressure && memOk && highUtilization) {
+                return Math.max(_min, current - _step * 2);
+            }
 
             // Extreme evictions + critical utilization = grow aggressively
             if (extremeEvictions && criticalUtilization && !cpuPressure && memOk)
@@ -8235,25 +8266,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (highEvictions && highUtilization && !cpuPressure && memOk)
                 return Math.min(_max, Math.max(peerTarget, current) + _step);
 
-            // Queue stalling + no CPU + memory OK = grow to absorb messages dying on queue
-            if (queueStalling && !cpuPressure && memOk)
-                return Math.min(_max, current + _step);
-
             // Dispatch pressure + no CPU + memory OK = grow to absorb backlog
             if (dispatchPressure && !criticalUtilization && !cpuPressure && memOk)
                 return Math.min(_max, current + _step);
 
-            // High utilization or finisher backlog + no CPU + memory OK = grow pool
-            if ((highUtilization || finisherBacklog) && !cpuPressure && memOk)
-                return Math.min(_max, current + _step);
-
-            // Moderate utilization + low latency + low RTT + memory OK = grow toward peer target
-            boolean lowLatency = !Double.isNaN(sendTime) && sendTime < 100;
-            boolean lowRTT = !Double.isNaN(rtt) && rtt < 200;
-            if (!Double.isNaN(observed) && observed > 40 && !cpuPressure && lowLatency && lowRTT && memOk) {
+            // Healthy: low utilization + low latency + no queue pressure = grow proactively to absorb bursts
+            if (!Double.isNaN(observed) && observed < 40 && !cpuPressure && lowLatency && lowRTT && memOk) {
                 if (current < peerTarget)
                     return Math.min(_max, Math.min(peerTarget, current + _step));
-                return current;
+                return Math.min(_max, current + _step);
             }
 
             // Low utilization + no backlog + no evictions + queue healthy = shrink toward peer target
@@ -8281,7 +8302,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2cp.internalQueueSize", "I2CP internal queue (messages)",
                   SUB_I2CP,
 
-                  128, 1024, 32, "udp.sendConfirmTime", _context);
+                  // Min 128, max 2048 scaled to memory (1 msg per 2MB heap)
+                  128,
+                  Math.max(512, Math.min(4096,
+                      (int) (SystemVersion.getMaxMemory() / (2 * 1024 * 1024)))),
+                  64, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
