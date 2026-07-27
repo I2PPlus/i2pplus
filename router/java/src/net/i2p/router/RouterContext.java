@@ -257,7 +257,6 @@ public class RouterContext extends I2PAppContext {
         _blocklist = new Blocklist(this);
         _messageValidator = new MessageValidator(this);
         _throttle = new RouterThrottleImpl(this);
-        //_throttle = new RouterDoSThrottle(this);
         _appManager = new RouterAppManager(this);
         _initialized = true;
     }

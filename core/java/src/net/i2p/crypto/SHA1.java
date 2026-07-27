@@ -751,7 +751,6 @@ public final class SHA1 extends MessageDigest implements Cloneable {
         hC += /* c= */ (c << 30) | (c >>> 2);
     }
 
-
     /**
      *  Test the GNU and the JVM's implementations for speed
      *
@@ -770,44 +769,5 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      *
      *  @since 0.8.7
      */
-/****
-    public static void main(String[] args) {
-        if (args.length <= 0) {
-            System.err.println("Usage: SHA1 string");
-            return;
-        }
 
-        byte[] data = args[0].getBytes();
-        SHA1 gnu = new SHA1();
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < RUNS; i++) {
-            gnu.update(data, 0, data.length);
-            byte[] sha = gnu.digest();
-            if (i == 0)
-                System.out.println("SHA1 [" + args[0] + "] = [" + Base64.encode(sha) + "]");
-            gnu.reset();
-        }
-        long time = System.currentTimeMillis() - start;
-        System.out.println("Time for " + RUNS + " SHA-256 computations:");
-        System.out.println("GNU time (ms): " + time);
-
-        start = System.currentTimeMillis();
-        MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("SHA-1");
-        } catch (NoSuchAlgorithmException e) {
-            System.err.println("Fatal: " + e);
-            return;
-        }
-        for (int i = 0; i < RUNS; i++) {
-            md.reset();
-            byte[] sha = md.digest(data);
-            if (i == 0)
-                System.out.println("SHA1 [" + args[0] + "] = [" + Base64.encode(sha) + "]");
-        }
-        time = System.currentTimeMillis() - start;
-
-        System.out.println("JVM time (ms): " + time);
-    }
-****/
 }

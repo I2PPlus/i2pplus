@@ -158,43 +158,4 @@ public class Datagram3 {
     public Properties getOptions() {
         return _options;
     }
-
-    /*
-        public static void main(String[] args) throws Exception {
-            I2PAppContext ctx = I2PAppContext.getGlobalContext();
-            I2PClient cl = I2PClientFactory.createClient();
-            ByteArrayStream bas1 = new ByteArrayStream(800);
-            ByteArrayStream bas2 = new ByteArrayStream(800);
-            // sess 1
-            cl.createDestination(bas1, SigType.EdDSA_SHA512_Ed25519);
-            // sess 2
-            cl.createDestination(bas2, SigType.EdDSA_SHA512_Ed25519);
-
-            Properties p = new Properties();
-            I2PSession s1 = cl.createSession(bas1.asInputStream(), p);
-            I2PSession s2 = cl.createSession(bas2.asInputStream(), p);
-            Destination d1 = s1.getMyDestination();
-            Destination d2 = s2.getMyDestination();
-
-            Properties opts = new Properties();
-            opts.setProperty("foooooooooooo", "bar");
-            opts.setProperty("a", "b");
-
-            byte[] data1 = new byte[1024];
-            ctx.random().nextBytes(data1);
-            byte[] dg1 = Datagram3.make(ctx, s1, data1, opts);
-            Datagram3 datag = Datagram3.load(ctx, s2, dg1);
-            byte[] data2 = datag.getPayload();
-            Hash dr = datag.getSender();
-            if (!dr.equals(d1.calculateHash())) {
-                System.out.println("FAIL sender mismatch");
-            } else if (!DataHelper.eq(data1, data2)) {
-                System.out.println("FAIL data mismatch");
-                System.out.println("Send Payload:\n" + HexDump.dump(data1));
-                System.out.println("Rcv Payload:\n" + HexDump.dump(data2));
-            } else {
-                System.out.println("PASS");
-            }
-        }
-    */
 }

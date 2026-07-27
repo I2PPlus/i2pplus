@@ -314,5 +314,4 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
         }
     }
 
-    // main() removed - dieharder test harness
 }

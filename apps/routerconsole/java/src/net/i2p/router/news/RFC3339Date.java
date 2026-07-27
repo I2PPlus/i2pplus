@@ -109,17 +109,4 @@ public abstract class RFC3339Date {
         return OUTPUT_FORMAT.format(new Date(t));
     }
 
-/****
-    public static void main(String[] args) {
-        if (args.length == 1) {
-            try {
-                System.out.println(to3339Date(Long.parseLong(args[0])));
-            } catch (NumberFormatException nfe) {
-                System.out.println(parse3339Date(args[0]));
-            }
-        } else {
-            System.out.println("Usage: RFC3339Date numericDate|stringDate");
-        }
-    }
-****/
 }

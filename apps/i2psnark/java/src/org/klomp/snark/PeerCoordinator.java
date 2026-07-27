@@ -64,10 +64,10 @@ import org.klomp.snark.dht.DHT;
 class PeerCoordinator implements PeerListener, BandwidthListener {
     private final Log _log;
 
-    /** External use by PeerMonitorTask only. Will be null when in magnet mode. */
+    /** Will be null when in magnet mode. */
     MetaInfo metainfo;
 
-    /** External use by PeerMonitorTask only. Will be null when in magnet mode. */
+    /** Will be null when in magnet mode. */
     Storage storage;
 
     private final Snark snark;
@@ -112,8 +112,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
     /**
      * synchronize on this when changing peers or downloaders. This is a Queue, not a Set, because
-     * PeerCheckerTask keeps things in order for choking/unchoking. External use by PeerMonitorTask
-     * only.
+     * PeerCheckerTask keeps things in order for choking/unchoking.
      */
     final Deque<Peer> peers;
 

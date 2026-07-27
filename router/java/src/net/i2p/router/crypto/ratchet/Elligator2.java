@@ -49,28 +49,20 @@ class Elligator2 {
     static {
         ENCODING.setField(FIELD);
 
-        // p = 2 ^ 255 - 19
         p = TWO.pow(255).subtract(new BigInteger("19"));
 
-        // divide_plus_p_3_8 = (p + 3) / 8
         divide_plus_p_3_8 = p.add(new BigInteger("3")).divide(new BigInteger("8"));
 
-        // divide_minus_p_1_2 = (p - 1) / 2
         divide_minus_p_1_2 = p.subtract(BigInteger.ONE).divide(TWO);
 
-        // divide_minus_p_1_4 = (p - 1) / 4
         divide_minus_p_1_4 = divide_minus_p_1_2.divide(TWO);
 
-        // square_root_negative_1 = 2 ^ divide_minus_p_1_4 (mod p)
         square_root_negative_1 = TWO.modPow(divide_minus_p_1_4, p);
 
-        // negative_A = -A (mod p)
         negative_A = p.subtract(A);
 
-        // u = 2
         u = TWO;
 
-        // inverted_u = 1 / u (mod p)
         inverted_u = u.modInverse(p);
     }
 

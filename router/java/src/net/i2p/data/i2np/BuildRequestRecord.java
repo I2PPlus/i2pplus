@@ -572,7 +572,6 @@ public class BuildRequestRecord {
      */
     public byte[] getChaChaReplyAD() { return _chachaReplyAD; }
 
-
     /**
      * Decrypts an encrypted build request record.
      * Decrypt the data from the specified record, writing the decrypted record into this instance's
@@ -902,44 +901,4 @@ public class BuildRequestRecord {
         return buf.toString();
     }
 
-/****
-    public static void main(String[] args) throws Exception {
-        System.out.println("OFF_OPTIONS is " + OFF_OPTIONS);
-        RouterContext ctx = new RouterContext(null);
-        TESTKF = new net.i2p.router.transport.crypto.X25519KeyFactory(ctx);
-        byte[] h = new byte[32];
-        ctx.random().nextBytes(h);
-        Hash bh = new Hash(h);
-        SessionKey k1 = ctx.keyGenerator().generateSessionKey();
-        SessionKey k2 = ctx.keyGenerator().generateSessionKey();
-        SessionKey k3 = ctx.keyGenerator().generateSessionKey();
-        byte[] iv = new byte[16];
-        ctx.random().nextBytes(iv);
-        Properties props = new Properties();
-        props.setProperty("foo", "bar");
-        BuildRequestRecord brr = new BuildRequestRecord(ctx, 1, 2, bh, 3, k1, k2, k3, iv, false, false, props);
-        System.out.println(brr.toString());
-        System.out.println("\nplaintext request:\n" + net.i2p.util.HexDump.dump(brr.getData()));
-        net.i2p.crypto.KeyPair kp = ctx.keyGenerator().generatePKIKeys(net.i2p.crypto.EncType.ECIES_X25519);
-        PublicKey bpub = kp.getPublic();
-        PrivateKey bpriv = kp.getPrivate();
-        EncryptedBuildRecord record = brr.encryptECIESRecord(ctx, bpub, bh);
-        System.out.println("\nencrypted request:\n" + net.i2p.util.HexDump.dump(record.getData()));
-        System.out.println("reply key: " + brr.getChaChaReplyKey());
-        System.out.println("reply IV: " + net.i2p.data.Base64.encode(brr.getChaChaReplyAD()));
-        BuildRequestRecord brr2 = new BuildRequestRecord(ctx, bpriv, record);
-        System.out.println(brr2.toString());
-        System.out.println("\nreply key: " + brr2.getChaChaReplyKey());
-        System.out.println("reply IV: " + net.i2p.data.Base64.encode(brr2.getChaChaReplyAD()));
-        props.setProperty("yes", "no");
-        EncryptedBuildRecord ebr = BuildResponseRecord.create(ctx, 1, brr.getChaChaReplyKey(), brr.getChaChaReplyAD(), props);
-        System.out.println("\nencrypted reply:\n" + net.i2p.util.HexDump.dump(ebr.getData()));
-        BuildResponseRecord.decrypt(ebr, brr2.getChaChaReplyKey(), brr2.getChaChaReplyAD());
-        System.out.println("\nplaintext reply:\n" + net.i2p.util.HexDump.dump(ebr.getData()));
-        Properties p2 = new net.i2p.util.OrderedProperties();
-        DataHelper.fromProperties(ebr.getData(), 0, p2);
-        System.out.println("reply props: " + p2);
-        System.out.println("reply status: " + (ebr.getData()[511] & 0xff));
-    }
-****/
 }

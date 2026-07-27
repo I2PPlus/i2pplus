@@ -627,25 +627,4 @@ public class SingleFileNamingService extends NamingService {
         _fileLock.writeLock().unlock();
     }
 
-    /****
-     * public static void main(String[] args) {
-     * NamingService ns = new SingleFileNamingService(I2PAppContext.getGlobalContext(), "hosts.txt");
-     * Destination d = new Destination();
-     * try {
-     * d.readBytes(new byte[387], 0);
-     * } catch (DataFormatException dfe) {}
-     * boolean b = ns.put("aaaaa", d);
-     * System.out.println("Test 1 pass? " + b);
-     * b = ns.put("bbbbb", d);
-     * System.out.println("Test 2 pass? " + b);
-     * b = ns.remove("aaaaa");
-     * System.out.println("Test 3 pass? " + b);
-     * b = ns.lookup("aaaaa") == null;
-     * System.out.println("Test 4 pass? " + b);
-     * b = ns.lookup("bbbbb") != null;
-     * System.out.println("Test 5 pass? " + b);
-     * b = !ns.putIfAbsent("bbbbb", d);
-     * System.out.println("Test 6 pass? " + b);
-     * }
-     ****/
 }

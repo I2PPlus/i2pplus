@@ -306,22 +306,16 @@ public class GroupElement implements Serializable {
         y = curve.getField().fromByteArray(s);
         yy = y.square();
 
-        // u = y^2-1
         u = yy.subtractOne();
 
-        // v = dy^2+1
         v = yy.multiply(curve.getD()).addOne();
 
-        // v3 = v^3
         v3 = v.square().multiply(v);
 
-        // x = (v3^2)vu, aka x = uv^7
         x = v3.square().multiply(v).multiply(u);
 
-        //  x = (uv^7)^((q-5)/8)
         x = x.pow22523();
 
-        // x = uv^3(uv^7)^((q-5)/8)
         x = v3.multiply(u).multiply(x);
 
         vxx = x.square().multiply(v);

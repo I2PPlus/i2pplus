@@ -142,12 +142,4 @@ public class HexDump {
     /**
      *  @since 0.9.21
      */
-    /****
-     * public static void main(String[] args) {
-     * byte[] b = new byte[9993];
-     * RandomSource.getInstance().nextBytes(b);
-     * System.out.println(dump(b));
-     * System.out.println(dump("test test test abcde xyz !!!".getBytes()));
-     * }
-     ****/
 }

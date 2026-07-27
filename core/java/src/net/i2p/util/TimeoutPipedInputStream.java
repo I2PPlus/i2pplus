@@ -87,29 +87,4 @@ class TimeoutPipedInputStream extends PipedInputStream {
         super.close();
     }
 
-    /****
-     * public static void main(String[] args) throws IOException {
-     * TimeoutPipedInputStream in = new TimeoutPipedInputStream(1024);
-     * TimeoutPipedOutputStream out = new TimeoutPipedOutputStream(in);
-     * out.write('a');
-     * in.setReadTimeout(5555);
-     * long start = System.currentTimeMillis();
-     * try {
-     * int a = in.read();
-     * if (a == 'a')
-     * System.out.println("got 1 (pass)");
-     * else
-     * System.out.println("Bad data (fail)");
-     * in.read();
-     * System.out.println("got 2 (fail)");
-     * } catch (IOException ioe) {
-     * ioe.printStackTrace();
-     * System.out.println("got ioe (pass)");
-     * }
-     * System.out.println("took " + (System.currentTimeMillis() - start));
-     * in.setReadTimeout(0);
-     * System.out.println("wait forever");
-     * in.read();
-     * }
-     ****/
 }

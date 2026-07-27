@@ -832,8 +832,6 @@ public class NativeBigInteger extends BigInteger {
         return _cpuModel;
     }
 
-    // main() and benchmark methods removed - CLI benchmark harness
-
     /**
      * <p>Do whatever we can to load up the native library backing this BigInteger's native methods.
      * If it can find a custom built jbigi.dll / libjbigi.so, it'll use that.  Otherwise

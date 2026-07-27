@@ -93,14 +93,4 @@ public class I2CPMessageHandler {
         }
     }
 
-    /***
-     * public static void main(String[] args) {
-     * try {
-     * I2CPMessage msg = readMessage(new FileInputStream(args[0]));
-     * System.out.println(msg);
-     * } catch (Exception e) {
-     * e.printStackTrace();
-     * }
-     * }
-     ***/
 }

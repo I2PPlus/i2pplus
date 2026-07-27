@@ -358,53 +358,5 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     /**
      *  About 3x faster than HashSet.
      */
-    /****
-    *
-     * @SuppressWarnings({ "unchecked", "rawtypes" })
-     * public static void main(String[] args) {
-     * if (args.length > 0) {
-     * System.out.println("Test with overwrite");
-     * Set s = new ArraySet(4, false);
-     * for (int i = 0; i < args.length; i++) {
-     * System.out.println("Added " + args[i] + "? " + s.add(args[i]));
-     * System.out.println("Size is now " + s.size());
-     * }
-     * // toString tests the iterator
-     * System.out.println("Set now contains" + s);
-     * for (int i = 0; i < args.length; i++) {
-     * System.out.println("Removed " + args[i] + "? " + s.remove(args[i]));
-     * System.out.println("Size is now " + s.size());
-     * }
-     * System.out.println("\nTest with throw on full");
-     * s = new ArraySet(4);
-     * for (int i = 0; i < args.length; i++) {
-     * System.out.println("Added " + args[i] + "? " + s.add(args[i]));
-     * System.out.println("Size is now " + s.size());
-     * }
-     * // toString tests the iterator
-     * System.out.println("Set now contains" + s);
-     * for (int i = 0; i < args.length; i++) {
-     * System.out.println("Removed " + args[i] + "? " + s.remove(args[i]));
-     * System.out.println("Size is now " + s.size());
-     * }
-     * }
-     *
-     * //java.util.List c = java.util.Arrays.asList(new String[] {"foo", "bar", "baz", "splat", "barf", "baz", "moose", "bear", "cat", "dog"});
-     * java.util.List c = java.util.Arrays.asList(new String[] {"foo", "bar"});
-     * long start = System.currentTimeMillis();
-     * Set s = new java.util.HashSet(c);
-     * int runs = 10000000;
-     * for (int i = 0; i < runs; i++) {
-     * s = new java.util.HashSet(s);
-     * }
-     * System.out.println("HashSet took " + (System.currentTimeMillis() - start));
-     *
-     * start = System.currentTimeMillis();
-     * s = new ArraySet(c);
-     * for (int i = 0; i < runs; i++) {
-     * s = new ArraySet(s);
-     * }
-     * System.out.println("ArraySet took " + (System.currentTimeMillis() - start));
-     * }
-     ****/
+
 }

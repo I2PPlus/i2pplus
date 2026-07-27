@@ -232,14 +232,8 @@ public class Jsoner {
                     break;
                 default: break;
             }
-            // System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            // System.out.println(currentState);
-            // System.out.println(token);
-            // System.out.println(valueStack);
-            // System.out.println(stateStack);
             /* If we're not at the END and DONE then do the above again. */
         } while (!(States.DONE.equals(currentState) && Yytoken.Types.END.equals(token.getType())));
-        // System.out.println("!!!!!!!!!!DESERIALIZED!!!!!!!!!!");
         return new JsonArray(valueStack);
     }
 

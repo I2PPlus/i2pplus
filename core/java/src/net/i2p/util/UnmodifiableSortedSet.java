@@ -192,15 +192,4 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
         return -1;
     }
 
-    /*
-        public static void main(String[] args) {
-            String[] test = new String[] {"foo", "bar", "baz", "bar", "baf", "bar", "boo", "foo", "a" };
-            java.util.List<String> list = Arrays.asList(test);
-            Set<String> set = new UnmodifiableSortedSet(list);
-            System.out.println(set.toString());
-            Set<String> set2 = new HashSet<>(list);
-            set = new UnmodifiableSortedSet(set2);
-            System.out.println(set.toString());
-        }
-    */
 }
