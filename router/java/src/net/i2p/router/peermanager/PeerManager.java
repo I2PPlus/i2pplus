@@ -54,6 +54,7 @@ class PeerManager {
     private final Map<Hash, String> _capabilitiesByPeer;
     private final AtomicBoolean _storeLock = new AtomicBoolean();
     private volatile long _lastStore;
+    private boolean _evictToggle;
 
     private static final long REORGANIZE_TIME = 30*1000L;
     private static final long REORGANIZE_TIME_MEDIUM = 90*1000L;
@@ -148,6 +149,13 @@ class PeerManager {
             boolean shouldDecay = uptime > 4*60*60*1000L;
             try {_organizer.reorganize(true, shouldDecay);}
             catch (Exception t) {_log.log(Log.CRIT, "Error evaluating profiles", t);}
+            // Evict profiles for peers no longer in netdb
+            // Run after every other reorganize when uptime > 2h
+            if (uptime > 2*60*60*1000L && _evictToggle) {
+                try {_organizer.evictProfilesNotInNetdb();}
+                catch (Exception t) {_log.log(Log.CRIT, "Error evicting stale profiles", t);}
+            }
+            _evictToggle = !_evictToggle;
             long orgtime = System.currentTimeMillis() - start;
             if (_lastStore == 0) {_lastStore = start;}
             else if (start - _lastStore > STORE_TIME) {

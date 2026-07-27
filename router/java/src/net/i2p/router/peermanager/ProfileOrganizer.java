@@ -1119,8 +1119,9 @@ public class ProfileOrganizer {
                 candidates.sort((p1, p2) -> Double.compare(p2.getSpeedValue(), p1.getSpeedValue()));
 
                 // First pass: low-latency peers (proven fast via tunnel builds or peer tests)
-                for (PeerProfile profile : candidates) {
+                for (int i = 0; i < candidates.size(); i++) {
                     if (_fastPeers.size() >= target) break;
+                    PeerProfile profile = candidates.get(i);
                     if (profile.isLowLatency() && isSelectable(profile.getPeer()) &&
                         !isLowTunnelAcceptance(profile) && !hasRecentTunnelFailures(profile)) {
                         _fastPeers.put(profile.getPeer(), profile);
@@ -1132,8 +1133,9 @@ public class ProfileOrganizer {
                 double[] thresholds = { _thresholdSpeedValue, 0.3, 0.1, Double.MIN_VALUE };
                 for (double threshold : thresholds) {
                     if (_fastPeers.size() >= target) break;
-                    for (PeerProfile profile : candidates) {
+                    for (int i = 0; i < candidates.size(); i++) {
                         if (_fastPeers.size() >= target) break;
+                        PeerProfile profile = candidates.get(i);
                         if (profile.getIsActive() && profile.getSpeedValue() >= threshold &&
                             isSelectable(profile.getPeer()) && !isLowTunnelAcceptance(profile) &&
                             !hasRecentTunnelFailures(profile)) {
@@ -1437,6 +1439,50 @@ public class ProfileOrganizer {
 
         if (_log.shouldInfo()) {
             _log.info("Evicted " + evicted + " low-priority profiles to enforce cap (" + maxProfiles + ")");
+        }
+    }
+
+    /**
+     *  Evict profiles for peers no longer in the network database.
+     *  Keeps profile files on disk — they'll be reloaded if the peer reappears.
+     *  Acquires the write lock.
+     */
+    void evictProfilesNotInNetdb() {
+        if (isLowBuildSuccess()) return;
+        if (!getWriteLock()) return;
+        try {
+            NetworkDatabaseFacade netDb = _context.netDb();
+            long now = _context.clock().now();
+            long netdbAbsentThreshold = 60 * 60 * 1000L;
+            List<Hash> toRemove = new ArrayList<>(128);
+            for (PeerProfile profile : _notFailingPeers.values()) {
+                Hash peer = profile.getPeer();
+                if (_fastPeers.containsKey(peer) || _highCapacityPeers.containsKey(peer))
+                    continue;
+                RouterInfo info = netDb.lookupRouterInfoLocally(peer);
+                if (info != null) continue;
+                long lastActivity = Math.max(profile.getLastSendSuccessful(),
+                                              Math.max(profile.getLastHeardFrom(),
+                                                       profile.getLastHeardAbout()));
+                if (now - lastActivity > netdbAbsentThreshold) {
+                    profile.shrinkProfile();
+                    if (profile.getIsExpandedDB())
+                        profile.shrinkDBProfile();
+                    toRemove.add(peer);
+                }
+            }
+            if (toRemove.isEmpty()) return;
+            for (Hash peer : toRemove) {
+                PeerProfile p = _notFailingPeers.remove(peer);
+                if (p != null) {
+                    _notFailingPeersList.remove(peer);
+                    _strictCapacityOrder.remove(p);
+                }
+            }
+            if (_log.shouldInfo())
+                _log.info("Evicted " + toRemove.size() + " stale profiles (not in netdb) from RAM");
+        } finally {
+            releaseWriteLock();
         }
     }
 
