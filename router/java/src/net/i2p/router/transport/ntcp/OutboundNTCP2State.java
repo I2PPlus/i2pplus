@@ -58,23 +58,17 @@ class OutboundNTCP2State implements EstablishState {
      * IV_SIZE.
      */
     public static final int IV_SIZE = 16;
-    /**
-     * OPTIONS1_SIZE.
-     */
+    /** Options block size in bytes. */
     public static final int OPTIONS1_SIZE = 16;
-    /** 64 */
+    /** NTCP2 message 1 size in bytes (64). */
     public static final int MSG1_SIZE = KEY_SIZE + OPTIONS1_SIZE + MAC_SIZE;
     private static final int PADDING1_MAX = 64;
     private static final int PADDING3_MAX = 64;
-    /**
-     * OPTIONS2_SIZE.
-     */
+    /** Options block size in bytes. */
     public static final int OPTIONS2_SIZE = 16;
-    /**
-     * MSG2_SIZE.
-     */
+    /** NTCP2 message 2 size in bytes. */
     public static final int MSG2_SIZE = KEY_SIZE + OPTIONS2_SIZE + MAC_SIZE;
-    /** 48 */
+    /** NTCP2 message 3 part 1 size in bytes (48). */
     public static final int MSG3P1_SIZE = KEY_SIZE + MAC_SIZE;
     private static final int OPTIONS3_SIZE = 12;
     /** in SECONDS */

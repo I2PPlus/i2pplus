@@ -68,7 +68,7 @@ import java.util.Arrays;
 public class Signature extends SimpleDataStructure {
     private static final SigType DEF_TYPE = SigType.DSA_SHA1;
 
-    /** 40 */
+    /** Default signature length in bytes. */
     public static final int SIGNATURE_BYTES = DEF_TYPE.getSigLen();
 
     private final SigType _type;

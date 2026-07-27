@@ -53,7 +53,6 @@ public class CommandLine {
         "net.i2p.util.ZipFileComment"
     }));
 
-    /** Constructor */
     protected CommandLine() {}
 
     /**

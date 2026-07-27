@@ -77,14 +77,12 @@ class PacketBuilder2 {
     /** Same for IPv4 and IPv6 */
     public static final int UDP_HEADER_SIZE = PacketBuilder.UDP_HEADER_SIZE;
 
-    /** 60 */
+    /** Minimum IPv4 data packet overhead with MAC in bytes (60). */
     public static final int MIN_DATA_PACKET_OVERHEAD = IP_HEADER_SIZE + UDP_HEADER_SIZE + DATA_HEADER_SIZE + MAC_LEN;
 
-    /**
-     * IPV6_HEADER_SIZE.
-     */
+    /** IPv6 header size in bytes. */
     public static final int IPV6_HEADER_SIZE = PacketBuilder.IPV6_HEADER_SIZE;
-    /** 80 */
+    /** Minimum IPv6 data packet overhead with MAC in bytes (80). */
     public static final int MIN_IPV6_DATA_PACKET_OVERHEAD = IPV6_HEADER_SIZE + UDP_HEADER_SIZE + DATA_HEADER_SIZE + MAC_LEN;
 
     private static final int ABSOLUTE_MAX_ACK_RANGES = 512;
@@ -148,26 +146,20 @@ class PacketBuilder2 {
         return buildPacket(frags, peer);
     }
 
-    /*
-     *  Multiple fragments
+    /**
+     *  Build a packet from multiple fragments.
      *
      *  @throws IOException if peer is dead
-     */
-    /**
-     * buildPacket.
      */
     public UDPPacket buildPacket(List<Fragment> fragments, PeerState2 peer) throws IOException {
         return buildPacket(fragments, null, peer);
     }
 
-    /*
-     *  Multiple fragments and optional other blocks.
+    /**
+     *  Build a packet from multiple fragments and optional other blocks.
      *
      *  @param otherBlocks may be null or empty
      *  @throws IOException if peer is dead
-     */
-    /**
-     * buildPacket.
      */
     public UDPPacket buildPacket(List<Fragment> fragments, List<Block> otherBlocks, SSU2Sender peer) throws IOException {
         // calculate data size

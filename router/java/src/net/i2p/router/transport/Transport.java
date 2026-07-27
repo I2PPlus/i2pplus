@@ -154,7 +154,6 @@ public interface Transport {
         SOURCE_UPNP("upnp"),
         /** S o u r c e  i n t e r f a c e */
         SOURCE_INTERFACE("local"),
-        /** unused */
         SOURCE_CONFIG("config"),
         /** S o u r c e  s s u */
         SOURCE_SSU("ssu");
@@ -310,9 +309,14 @@ public interface Transport {
      */
     public int[] getPeerCounts();
 
-    /** @return true if capacity available */
+    /**
+     * @return true if capacity available
+     */
     public boolean haveCapacity();
-    /** @param pct percent 0-100 @return true if capacity available */
+    /**
+     * @param pct percent 0-100
+     * @return true if capacity available
+     */
     public boolean haveCapacity(int pct);
 
     /**
@@ -331,10 +335,16 @@ public interface Transport {
      */
     public List<Long> getClockSkews();
 
-    /** @return recent error messages */
+    /**
+     * @return recent error messages
+     */
     public List<String> getMostRecentErrorMessages();
 
-    /** @param out writer @param urlBase base URL @param sortFlags flags */
+    /**
+     * @param out writer
+     * @param urlBase base URL
+     * @param sortFlags flags
+     */
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException;
 
     /**
@@ -358,16 +368,25 @@ public interface Transport {
     @Deprecated
     public void recheckReachability();
 
-    /** @return IPv6 config */
+    /**
+     * @return IPv6 config
+     */
     public TransportUtil.IPv6Config getIPv6Config();
 
-    /** @return true if force-firewalled for IPv4 */
+    /**
+     * @return true if force-firewalled for IPv4
+     */
     public boolean isIPv4Firewalled();
 
-    /** @return true if force-firewalled for IPv6 */
+    /**
+     * @return true if force-firewalled for IPv6
+     */
     public boolean isIPv6Firewalled();
 
-    /** @param peer peer hash @return true if backlogged */
+    /**
+     * @param peer peer hash
+     * @return true if backlogged
+     */
     public boolean isBacklogged(Hash peer);
 
     /**
@@ -390,9 +409,15 @@ public interface Transport {
      */
     public boolean wasUnreachable(Hash peer);
 
-    /** @param peer peer hash @return true if unreachable */
+    /**
+     * @param peer peer hash
+     * @return true if unreachable
+     */
     public boolean isUnreachable(Hash peer);
-    /** @param peer peer hash @return true if established */
+    /**
+     * @param peer peer hash
+     * @return true if established
+     */
     public boolean isEstablished(Hash peer);
 
     /**

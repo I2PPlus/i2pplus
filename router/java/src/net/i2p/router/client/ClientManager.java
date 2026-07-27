@@ -81,17 +81,26 @@ class ClientManager {
     protected volatile boolean _wasStarted;
     private final SimpleTimer2.TimedEvent _clientTimestamper;
 
-    /** Disable external interface, allow internal clients only @since 0.8.3 */
+    /**
+     * Disable external interface, allow internal clients only.
+     * @since 0.8.3
+     */
     private static final String PROP_DISABLE_EXTERNAL = "i2cp.disableInterface";
-    /** SSL interface (only) @since 0.8.3 */
+    /**
+     * SSL interface (only).
+     * @since 0.8.3
+     */
     private static final String PROP_ENABLE_SSL = "i2cp.SSL";
-    /** Disable local-local "loopback", force all traffic through tunnels @since 0.9.44 */
+    /**
+     * Disable local-local loopback, force all traffic through tunnels.
+     * @since 0.9.44
+     */
     private static final String PROP_DISABLE_LOOPBACK = "i2cp.disableLoopback";
     private static final long REQUEST_LEASESET_TIMEOUT = 60L*1000;
     private static final int MAX_SESSION_ID = 65534; /** 2 bytes, save 65535 for unknown */
     private static final String PROP_MAX_SESSIONS = "i2cp.maxSessions";
     private static final int DEFAULT_MAX_SESSIONS = SystemVersion.isSlow() ? 768 : 1536;
-    /** 65535 */
+    /** Sentinel session ID for unknown/unidentified sessions. */
     public static final SessionId UNKNOWN_SESSION_ID = new SessionId(MAX_SESSION_ID + 1);
 
     /**

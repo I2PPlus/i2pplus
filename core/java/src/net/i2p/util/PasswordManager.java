@@ -25,7 +25,7 @@ public class PasswordManager {
      */
     protected static final int SALT_LENGTH = 16;
 
-    /** 48 */
+    /** Stored hash length in bytes (salt + session key, 48). */
     protected static final int SHASH_LENGTH = SALT_LENGTH + SessionKey.KEYSIZE_BYTES;
 
     /** stored as plain text */

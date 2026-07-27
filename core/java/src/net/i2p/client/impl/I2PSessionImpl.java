@@ -180,11 +180,17 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  @since 0.9.8
      */
     protected enum State {
-        /** Not yet connected, @since 0.9.20 */
+        /**
+         * Not yet connected.
+         * @since 0.9.20
+         */
         INIT,
         /** Connection in progress */
         OPENING,
-        /** Date received from router, @since 0.9.11 */
+        /**
+         * Date received from router.
+         * @since 0.9.11
+         */
         GOTDATE,
         /** Session is open */
         OPEN,
@@ -986,7 +992,6 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         private final List<Integer> _pendingSizes;
         private volatile boolean _alive;
 
-        /** Constructor */
         public AvailabilityNotifier() {
             _pendingIds = new ArrayList<>(2);
             _pendingSizes = new ArrayList<>(2);

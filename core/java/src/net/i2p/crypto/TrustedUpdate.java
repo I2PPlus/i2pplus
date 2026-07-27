@@ -63,7 +63,7 @@ public class TrustedUpdate {
     private final Map<SigningPublicKey, String> _trustedKeys;
     private String _newVersion;
 
-    /** 172 */
+    /** Key size in base64 bytes (padding + key data, 172). */
     private static final int KEYSIZE_B64_BYTES = 2 + (SigningPublicKey.KEYSIZE_BYTES * 4 / 3);
 
     private static final Map<String, String> DEFAULT_KEYS = new HashMap<>(4);
@@ -322,17 +322,6 @@ public class TrustedUpdate {
 
         return isMatch;
     }
-
-    /**
-     * Fetches the trusted keys for the current instance.
-     *
-     * @return An <code>ArrayList</code> containting the trusted keys.
-     */
-    /***
-     * public ArrayList getTrustedKeys() {
-     * return _trustedKeys;
-     * }
-     ***/
 
     /**
      * Fetches the trusted keys for the current instance.

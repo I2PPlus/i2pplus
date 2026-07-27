@@ -62,7 +62,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
         // all createRateStat() moved to TunnelDispatcher
     }
 
-    /** 1003 */
+    /** Full preprocessed message size in bytes (1003). */
     private static final int FULL_SIZE = PREPROCESSED_SIZE
                                          - IV_SIZE
                                          - 1  // 0x00 ending the padding

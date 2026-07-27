@@ -42,7 +42,6 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         _listeners = new ConcurrentHashMap<>(4);
     }
 
-    /** unused */
     @Override
     public void messageAvailable(I2PSession session, int msgId, long size) {
         // TODO

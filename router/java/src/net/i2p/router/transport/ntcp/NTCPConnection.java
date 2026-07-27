@@ -847,7 +847,6 @@ public class NTCPConnection implements Closeable {
         /** Unencrypted data buffer */
         final byte[] unencrypted;
 
-        /** Constructor */
         public PrepBuffer() {
             unencrypted = new byte[BUFFER_SIZE];
         }

@@ -55,7 +55,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      */
     public final static int CHECKSUM_LENGTH = 1; //Hash.HASH_LENGTH;
 
-    /** 16 */
+    /** I2NP message header size in bytes. */
     public static final int HEADER_LENGTH = 1 // type
                         + 4 // uniqueId
                         + DataHelper.DATE_LENGTH // expiration

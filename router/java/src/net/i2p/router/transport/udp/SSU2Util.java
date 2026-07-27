@@ -86,19 +86,19 @@ final class SSU2Util {
 
     // data size minimums, not including IP/UDP headers
 
-    /** 40 */
+    /** Short message type (e.g. data) minimum length in bytes (40). */
     public static final int MIN_DATA_LEN = SHORT_HEADER_SIZE + TOTAL_PROT_SAMPLE_LEN;
-    /** 56 */
+    /** Long message type minimum length in bytes (56). */
     public static final int MIN_LONG_DATA_LEN = LONG_HEADER_SIZE + TOTAL_PROT_SAMPLE_LEN;
-    /** 88 */
+    /** Handshake message type minimum length in bytes (88). */
     public static final int MIN_HANDSHAKE_DATA_LEN = SESSION_HEADER_SIZE + TOTAL_PROT_SAMPLE_LEN;
-    /** 56 */
+    /** Token request minimum length in bytes (56). */
     public static final int MIN_TOKEN_REQUEST_LEN = MIN_LONG_DATA_LEN;
-    /** 56 */
+    /** Retry message minimum length in bytes (56). */
     public static final int MIN_RETRY_LEN = MIN_LONG_DATA_LEN;
-    /** 88 */
+    /** Session request minimum length in bytes (88). */
     public static final int MIN_SESSION_REQUEST_LEN = MIN_HANDSHAKE_DATA_LEN;
-    /** 88 */
+    /** Session created minimum length in bytes (88). */
     public static final int MIN_SESSION_CREATED_LEN = MIN_HANDSHAKE_DATA_LEN;
 
     /** 3 byte block header */

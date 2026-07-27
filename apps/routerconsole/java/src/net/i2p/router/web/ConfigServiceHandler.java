@@ -33,7 +33,6 @@ public class ConfigServiceHandler extends FormHandler {
     private static final String PROPERTIES_AVAILABLE = "3.2.0";
     private static final String LOCATION_AVAILABLE = "3.3.7";
 
-    /** Constructor */
     public ConfigServiceHandler() {}
 
     /**

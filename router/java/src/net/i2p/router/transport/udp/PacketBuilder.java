@@ -21,14 +21,12 @@ class PacketBuilder {
     /** Same for IPv4 and IPv6 */
     public static final int UDP_HEADER_SIZE = 8;
 
-    /** 74 */
+    /** Minimum IPv4 data packet overhead in bytes (74). */
     public static final int MIN_DATA_PACKET_OVERHEAD = IP_HEADER_SIZE + UDP_HEADER_SIZE + DATA_HEADER_SIZE;
 
-    /**
-     * IPV6_HEADER_SIZE.
-     */
+    /** IPv6 header size in bytes. */
     public static final int IPV6_HEADER_SIZE = 40;
-    /** 94 */
+    /** Minimum IPv6 data packet overhead in bytes (94). */
     public static final int MIN_IPV6_DATA_PACKET_OVERHEAD = IPV6_HEADER_SIZE + UDP_HEADER_SIZE + DATA_HEADER_SIZE;
 
     /** one byte field */

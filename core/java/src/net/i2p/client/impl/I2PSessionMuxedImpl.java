@@ -375,9 +375,6 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     }
 
     /**
-     * MuxedAvailabilityNotifier.
-     */
-    /**
      * MuxedAvailabilityNotifier Extends AvailabilityNotifier.
      */
     protected class MuxedAvailabilityNotifier extends AvailabilityNotifier {
@@ -386,9 +383,6 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         private static final int POISON_SIZE = -99999;
         private final AtomicBoolean stopping = new AtomicBoolean();
 
-        /**
-         * MuxedAvailabilityNotifier.
-         */
         public MuxedAvailabilityNotifier() {
             _msgs = new LinkedBlockingQueue<>();
         }
@@ -419,15 +413,11 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
             }
         }
 
-        /** unused */
         @Override
         public void available(long msgId, int size) {
             throw new IllegalArgumentException("no");
         }
 
-        /**
-         * available.
-         */
         /**
          * Notify that data is available.
          */

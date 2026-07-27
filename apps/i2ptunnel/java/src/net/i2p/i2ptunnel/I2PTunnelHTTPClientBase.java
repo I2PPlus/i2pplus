@@ -71,7 +71,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     private static final int PROXYNONCE_BYTES = 8;
     private static final int SHA256_BYTES = 32;
-    /** 40 */
+    /** Nonce size in bytes (date + SHA256). */
     private static final int NONCE_BYTES = DataHelper.DATE_LENGTH + SHA256_BYTES;
     private static final long MAX_NONCE_AGE = 60*60*1000L;
     private static final int MAX_NONCE_COUNT = 1024;

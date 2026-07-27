@@ -6,7 +6,6 @@ package net.i2p.router.crypto.ratchet;
  */
 class ContainerHelpers {
 
-    /** unused */
     private ContainerHelpers() {}
 
     /** This is Arrays.binarySearch(), but doesn't do any argument validation. */

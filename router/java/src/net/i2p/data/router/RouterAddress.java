@@ -61,8 +61,6 @@ public class RouterAddress extends DataStructureImpl {
     /** Property key for port */
     public static final String PROP_PORT = "port";
     private static final byte[] NOT_LOOKED_UP = new byte[0];
-    /** Routeraddress */
-
     public RouterAddress() {
         _options = new OrderedProperties();
     }

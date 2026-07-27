@@ -182,7 +182,7 @@ public class FIFOBandwidthRefiller implements Runnable {
         }
     }
 
-    /** comment */
+    /** Reset refill timing and reload configuration. */
     synchronized void reinitialize() {
         _lastRefillTime = _limiter.now();
         checkConfig();
@@ -355,13 +355,9 @@ public class FIFOBandwidthRefiller implements Runnable {
         }
     }
 
-    /** comment */
     int getOutboundKBytesPerSecond() { return _outboundKBytesPerSecond; }
-    /** comment */
     int getInboundKBytesPerSecond() { return _inboundKBytesPerSecond; }
-    /** comment */
     int getOutboundBurstKBytesPerSecond() { return _outboundBurstKBytesPerSecond; }
-    /** comment */
     int getInboundBurstKBytesPerSecond() { return _inboundBurstKBytesPerSecond; }
 
     /**

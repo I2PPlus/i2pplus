@@ -1572,10 +1572,10 @@ public class PeerState {
     }
 
     private static final int MTU_RCV_DISPLAY_THRESHOLD = 20;
-    /** 60 */
+    /** IPv4 packet overhead in bytes (IP + UDP + MAC + IV, 60). */
     private static final int OVERHEAD_SIZE = PacketBuilder.IP_HEADER_SIZE + PacketBuilder.UDP_HEADER_SIZE +
                                              UDPPacket.MAC_SIZE + UDPPacket.IV_SIZE;
-    /** 80 */
+    /** IPv6 packet overhead in bytes (IP + UDP + MAC + IV, 80). */
     private static final int IPV6_OVERHEAD_SIZE = PacketBuilder.IPV6_HEADER_SIZE + PacketBuilder.UDP_HEADER_SIZE +
                                                   UDPPacket.MAC_SIZE + UDPPacket.IV_SIZE;
 

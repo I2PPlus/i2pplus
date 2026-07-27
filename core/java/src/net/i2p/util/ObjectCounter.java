@@ -30,7 +30,7 @@ public class ObjectCounter<K> implements Serializable {
      */
     private static final long serialVersionUID = 3160378641721937421L;
 
-    /** Map */
+    /** Object counter storage keyed by tracked item. */
     private final ConcurrentHashMap<K, AtomicInteger> map;
 
     /**
