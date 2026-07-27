@@ -1483,8 +1483,8 @@ public class TunnelPool {
                                       "\n* Added: " + info);
                         }
                     } else {
-                        if (_log.shouldWarn()) {
-                            _log.warn(toString() + " -> Pool at capacity, all tunnels GOOD (" +
+                        if (_log.shouldInfo()) {
+                            _log.info(toString() + " -> Pool at capacity, all tunnels GOOD (" +
                                       usable + " >= max " + maxUsable + ", target=" + target +
                                       ") \n* " + info);
                         }
