@@ -72,10 +72,12 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     /**
      * Update max drop probability on all active instances.
      *
+     * @param probability new max drop probability (0.0 - 1.0)
      * @since 0.9.70+
      */
     public static void updateAllMaxDropProbability(float probability) {
         _maxDropProbability = probability;
+        expungeStaleInstances();
         for (WeakReference<SyntheticREDQueue> ref : INSTANCES) {
             SyntheticREDQueue q = ref.get();
             if (q != null) q._maxDropProbability = probability;
@@ -85,9 +87,11 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     /**
      * Update min threshold on all active instances.
      *
+     * @param threshold new minimum threshold in bytes (must be less than max)
      * @since 0.9.70+
      */
     public static void updateAllMinThresholds(int threshold) {
+        expungeStaleInstances();
         for (WeakReference<SyntheticREDQueue> ref : INSTANCES) {
             SyntheticREDQueue q = ref.get();
             if (q != null && threshold < q._maxThresholdBytes) {
@@ -99,9 +103,11 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     /**
      * Update max threshold on all active instances.
      *
+     * @param threshold new maximum threshold in bytes (must be greater than min)
      * @since 0.9.70+
      */
     public static void updateAllMaxThresholds(int threshold) {
+        expungeStaleInstances();
         for (WeakReference<SyntheticREDQueue> ref : INSTANCES) {
             SyntheticREDQueue q = ref.get();
             if (q != null && threshold > q._minThresholdBytes) {
@@ -221,8 +227,8 @@ public class SyntheticREDQueue implements BandwidthEstimator {
         _bandwidthBytesPerMs = bwBps / 1000f;
 
         _lastQueueUpdateTime = _lastAckTime;
+        expungeStaleInstances();
         INSTANCES.add(new WeakReference<>(this));
-
         if (_log.shouldDebug()) {
             _log.debug("Configured bandwidth: " + bwBps + "B/s; MinThreshold: " + minThB + "B; MaxThreshold: " + maxThB + "B");
         }
