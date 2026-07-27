@@ -4,6 +4,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.crypto.AESEngine;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
+import net.i2p.router.BanLogger;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
@@ -93,6 +94,10 @@ class HopProcessor {
                               _config.getReceiveFrom());
                 }
                 ctx.banlist().banlistRouter(prev, "Mid-tunnel injection attempt", null, null, now + 24*60*60*1000);
+                BanLogger banLog = BanLogger.getInstance();
+                if (banLog != null) {
+                    banLog.logBan(prev, ctx, "Mid-tunnel injection attempt", 24*60*60*1000L);
+                }
                 return false;
             }
         }

@@ -261,8 +261,18 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
                 if (_log.shouldWarn())
                     _log.warn("BAD " + len + " byte data packet (Type: " + header.getType() + ") from " + this);
                 // Track bad packets for repeat offender detection (skip if already blocklisted)
-                if (!_context.blocklist().isBlocklisted(_remoteHostId.toString())) {
-                    _context.banlist().badPacket(_remoteHostId.toString(), null);
+                // Prefer the peer hash for full-context BanLogger output; fall back to IP string
+                // for direct peers whose hash is unknown at this layer
+                Hash peerHash = _remoteHostId.getPeerHash();
+                if (peerHash != null) {
+                    if (!_context.blocklist().isBlocklisted(peerHash)) {
+                        _context.banlist().badPacket(peerHash, null);
+                    }
+                } else {
+                    String ipStr = _remoteHostId.toString();
+                    if (!_context.blocklist().isBlocklisted(ipStr)) {
+                        _context.banlist().badPacket(ipStr, null);
+                    }
                 }
                 return;
             }

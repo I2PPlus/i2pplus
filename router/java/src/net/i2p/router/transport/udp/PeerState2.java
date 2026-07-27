@@ -543,9 +543,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                               (shouldLogDebug ? this : ""));
                 }
                 // Track bad packets for repeat offender detection (skip if already blocklisted)
-                String ipStr = Addresses.toString(_remoteIP);
-                if (!_context.blocklist().isBlocklisted(ipStr)) {
-                    _context.banlist().badPacket(ipStr, null);
+                // Use the peer hash for full-context BanLogger output (caps, version) instead of IP-only
+                if (!_context.blocklist().isBlocklisted(_remotePeer)) {
+                    _context.banlist().badPacket(_remotePeer, null);
                 }
                 // TODO if it's early:
                 // If inbound, could be a retransmitted Session Confirmed, ack it again.
@@ -1109,10 +1109,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                             _log.warn("[SSU] Path response from unexpected address... \n* Expected: " + _pendingRemoteHostId
                                     + " -> Received from: " + from + ' ' + this);
                         }
-                        // Track port hopping attempts
-                        String ipStr = Addresses.toString(from.getIP());
-                        if (ipStr != null && !_context.blocklist().isBlocklisted(ipStr)) {
-                            _context.banlist().portHopping(ipStr);
+                        // Track port hopping attempts via the peer hash for full BanLogger context
+                        if (!_context.blocklist().isBlocklisted(_remotePeer)) {
+                            _context.banlist().portHopping(_remotePeer);
                         }
                         _migrationState = MigrationState.MIGRATION_STATE_NONE; // Reset on failure
                         messagePartiallyReceived(); // ACK-eliciting
