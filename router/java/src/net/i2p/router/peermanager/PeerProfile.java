@@ -110,7 +110,14 @@ public class PeerProfile {
     // x**4 = .5; x = 4th root of .5,  x = .5**(1/4), x ~= 0.84
     private static final float DEGRADE_FACTOR = (float) Math.pow(TOTAL_DEGRADE_PER_DAY, 1.0d / DEGRADES_PER_DAY);
     private long _lastCoalesceDate = System.currentTimeMillis();
-    private static final long[] RATES = RateConstants.STANDARD_RATES;
+    private static final long[] TUNNEL_CREATE_RESPONSE_RATES = {
+        RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR, RateConstants.ONE_DAY
+    };
+    private static final long[] DB_RESPONSE_RATES = { RateConstants.ONE_HOUR };
+    private static final long[] DB_INTRODUCTION_RATES = {
+        RateConstants.ONE_HOUR, RateConstants.ONE_DAY
+    };
+    private static final long MIN_AGE_FOR_COALESCE = 4 * RateConstants.ONE_HOUR;
 
     /**
      *  Countries with more than about a 2% share of the netdb.
@@ -130,13 +137,13 @@ public class PeerProfile {
      *  @param context the router context
      *  @param peer non-null
      */
-    public PeerProfile(RouterContext context, Hash peer) {this(context, peer, true);}
+    public PeerProfile(RouterContext context, Hash peer) {this(context, peer, false);}
 
     /**
      *  Caller should call setLastHeardAbout() and setFirstHeardAbout()
      *
      *  @param peer non-null
-     *  @param expand must be true (see below)
+     *  @param expand whether to eagerly expand (default false; auto-expanded on first use)
      */
     private PeerProfile(RouterContext context, Hash peer, boolean expand) {
         if (peer == null) {throw new NullPointerException();}
@@ -144,8 +151,6 @@ public class PeerProfile {
         _log = _context.logManager().getLog(PeerProfile.class);
         _peer = peer;
         _firstHeardAbout = _context.clock().now();
-        // this is always true, and there are several places in the router that will NPE
-        // if it is false, so all need to be fixed before we can have non-expanded profiles
         if (expand) {expandProfile();}
         Hash us = _context.routerHash();
         if (us != null) {_distance = ((_peer.getData()[0] & 0xff) ^ (us.getData()[0] & 0xff)) - 127;}
@@ -160,17 +165,15 @@ public class PeerProfile {
     public Hash getPeer() {return _peer;}
 
     /**
-     * Whether we keep an expanded profile on this peer.
-     * Currently always true — the constructor always calls expandProfile().
-     * The non-expanded code path is dead (would NPE from missing RateStat/TunnelHistory),
-     * retained only for potential future use.
+     * Whether the tunnel profile data has been allocated (RateStats, TunnelHistory).
+     * Profiles are created unexpanded and expanded lazily on first use.
      *
      * @return true if expanded
      */
     public boolean getIsExpanded() {return _expanded;}
 
     /**
-     * Whether we keep an expanded DB profile on this peer.
+     * Whether the DB profile data has been allocated.
      *
      * @return true if expanded DB
      */
@@ -362,11 +365,14 @@ public class PeerProfile {
 
     /**
      * History of tunnel activity with the peer.
-     * Warning - may return null if !getIsExpanded()
+     * Expands the profile lazily on first access.
      *
-     * @return TunnelHistory, may be null
+     * @return TunnelHistory, non-null after first access
      */
-    public synchronized TunnelHistory getTunnelHistory() {return _tunnelHistory;}
+    public synchronized TunnelHistory getTunnelHistory() {
+        if (!_expanded) {expandProfile();}
+        return _tunnelHistory;
+    }
 
     /**
      * Set the tunnel history.
@@ -399,11 +405,14 @@ public class PeerProfile {
 
     /**
      * History of DB activity with the peer.
-     * Warning - may return null if !getIsExpandedDB()
+     * Expands the DB profile lazily on first access.
      *
-     * @return DBHistory, may be null
+     * @return DBHistory, non-null after first access
      */
-    public synchronized DBHistory getDBHistory() {return _dbHistory;}
+    public synchronized DBHistory getDBHistory() {
+        if (!_expandedDB) {expandDBProfile();}
+        return _dbHistory;
+    }
 
     /**
      * Set the DB history.
@@ -413,35 +422,37 @@ public class PeerProfile {
     public synchronized void setDBHistory(DBHistory hist) {_dbHistory = hist;}
 
     /**
-     * How long it takes to get a DB response from the peer (in milliseconds), calculated over a 1 minute, 1 hour, and 1 day period.
-     * Warning - may return null if !getIsExpandedDB()
+     * How long it takes to get a DB response from the peer (in milliseconds).
+     * Expands the DB profile lazily on first access.
      *
-     * @return RateStat, may be null
+     * @return RateStat, non-null after first access
      */
-    public synchronized RateStat getDbResponseTime() {return _dbResponseTime;}
+    public synchronized RateStat getDbResponseTime() {
+        if (!_expandedDB) {expandDBProfile();}
+        return _dbResponseTime;
+    }
 
     /**
-     * How long it takes to get a tunnel create response from the peer (in milliseconds), calculated over a 1 minute, 1 hour, and 1 day period.
-     * Warning - may return null if !getIsExpanded()
+     * How long it takes to get a tunnel create response from the peer (in milliseconds).
+     * Expands the profile lazily on first access.
      *
-     * @return RateStat, may be null
+     * @return RateStat, non-null after first access
      */
-    public synchronized RateStat getTunnelCreateResponseTime() {return _tunnelCreateResponseTime;}
+    public synchronized RateStat getTunnelCreateResponseTime() {
+        if (!_expanded) {expandProfile();}
+        return _tunnelCreateResponseTime;
+    }
 
     /**
-     *  How long it takes to successfully test a tunnel this peer participates in (in milliseconds),
-     *  calculated over a 10 minute, 1 hour, and 1 day period
-     *  Warning - may return null if !getIsExpanded()
+     * How many new peers we get from dbSearchReplyMessages or dbStore messages.
+     * Expands the DB profile lazily on first access.
      *
-     *  @return latency response time in ms
+     * @return RateStat, non-null after first access
      */
-    /**
-     * How many new peers we get from dbSearchReplyMessages or dbStore messages, calculated over a 1 hour, 1 day, and 1 week period.
-     * Warning - may return null if !getIsExpandedDB()
-     *
-     * @return RateStat, may be null
-     */
-    public synchronized RateStat getDbIntroduction() {return _dbIntroduction;}
+    public synchronized RateStat getDbIntroduction() {
+        if (!_expandedDB) {expandDBProfile();}
+        return _dbIntroduction;
+    }
 
     /**
      * Obsolete — prefer {@link #isLowLatency()}. Retained for backward compatibility
@@ -805,7 +816,7 @@ public class PeerProfile {
         String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0,6));
 
         if (_tunnelCreateResponseTime == null) {
-            _tunnelCreateResponseTime = new RateStat("tunnelCreateResponseTime", "Time for tunnel create response from peer (ms)", group, RATES);
+            _tunnelCreateResponseTime = new RateStat("tunnelCreateResponseTime", "Time for tunnel create response from peer (ms)", group, TUNNEL_CREATE_RESPONSE_RATES);
         }
         if (_tunnelHistory == null) {_tunnelHistory = new TunnelHistory(_context, group);}
         _expanded = true;
@@ -817,10 +828,10 @@ public class PeerProfile {
     public synchronized void expandDBProfile() {
         String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0,6));
         if (_dbResponseTime == null) {
-            _dbResponseTime = new RateStat("dbResponseTime", "Time for NetDb response from peer (ms)", group, RATES);
+            _dbResponseTime = new RateStat("dbResponseTime", "Time for NetDb response from peer (ms)", group, DB_RESPONSE_RATES);
         }
         if (_dbIntroduction == null) {
-            _dbIntroduction = new RateStat("dbIntroduction", "Total new peers received from DbSearchReplyMsgs or DbStore messages", group, RATES);
+            _dbIntroduction = new RateStat("dbIntroduction", "Total new peers received from DbSearchReplyMsgs or DbStore messages", group, DB_INTRODUCTION_RATES);
         }
         if (_dbHistory == null) {
             _dbHistory = new DBHistory(_context, group);
@@ -834,7 +845,10 @@ public class PeerProfile {
      *  when the profile is used again.
      */
     public synchronized void shrinkProfile() {
-        _tunnelCreateResponseTime = null;
+        if (_tunnelCreateResponseTime != null) {
+            _context.statManager().removeRateStat(_tunnelCreateResponseTime.getName());
+            _tunnelCreateResponseTime = null;
+        }
         _tunnelHistory = null;
         _expanded = false;
     }
@@ -843,8 +857,14 @@ public class PeerProfile {
      *  Shrink the DB-specific part of the profile.
      */
     public synchronized void shrinkDBProfile() {
-        _dbResponseTime = null;
-        _dbIntroduction = null;
+        if (_dbResponseTime != null) {
+            _context.statManager().removeRateStat(_dbResponseTime.getName());
+            _dbResponseTime = null;
+        }
+        if (_dbIntroduction != null) {
+            _context.statManager().removeRateStat(_dbIntroduction.getName());
+            _dbIntroduction = null;
+        }
         _dbHistory = null;
         _expandedDB = false;
     }
@@ -913,22 +933,22 @@ public class PeerProfile {
      */
     synchronized void coalesceOnly(boolean shouldDecay) {
         _coalescing = true;
-        if (_tunnelCreateResponseTime != null) {_tunnelCreateResponseTime.coalesceStats();}
-
-        if (_tunnelHistory != null) {_tunnelHistory.coalesceStats();}
-
+        boolean mature = _context.clock().now() - _firstHeardAbout > MIN_AGE_FOR_COALESCE;
+        if (_expanded && mature) {
+            if (_tunnelCreateResponseTime != null) {_tunnelCreateResponseTime.coalesceStats();}
+            if (_tunnelHistory != null) {_tunnelHistory.coalesceStats();}
+        }
         if (_expandedDB) {
             if (_dbIntroduction != null) {_dbIntroduction.coalesceStats();}
             if (_dbResponseTime != null) {_dbResponseTime.coalesceStats();}
             if (_dbHistory != null) {_dbHistory.coalesceStats();}
         }
-
         coalesceThroughput(shouldDecay);
-        _speedValueNew = calculateSpeed();
-        _capacityValueNew = calculateCapacity();
-        // These two are not used by InverseCapacityComparator to sort _strictCapacityOrder in ProfileOrganizer
-        // (in fact aren't really used at all), so we can update them directly
-        _integrationValue = calculateIntegration();
+        if (_expanded && mature) {
+            _speedValueNew = calculateSpeed();
+            _capacityValueNew = calculateCapacity();
+            _integrationValue = calculateIntegration();
+        }
     }
 
     private float calculateSpeed() {return (float) SpeedCalculator.calc(this);}

@@ -46,7 +46,7 @@ public class DBHistory {
         _failedLookupRate = new RateStat("dbHistory.failedLookupRate", "How often peer responds to a lookup",
                                          statGroup, new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer sends us a bad RouterInfo?",
-                                         statGroup, new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+                                         statGroup, new long[] { RateConstants.ONE_HOUR });
     }
 
     /** how many times we have sent them a db lookup and received the value back from them */
