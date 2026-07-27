@@ -109,7 +109,7 @@ msgid "Known high capacity peers"
 msgstr "Các đồng nghiệp có năng lực cao được biết đến"
 
 msgid "Known integrated (floodfill) peers"
-msgstr "Các đồng nghiệp tích hợp (lũ lụt) đã biết"
+msgstr "Các đồng nghiệp tích hợp (nút lũ) đã biết"
 
 msgid "Total peers in our NetDb"
 msgstr "Tổng số đồng nghiệp trong NetDb của chúng tôi"
@@ -130,7 +130,7 @@ msgid "unknown"
 msgstr "không biết"
 
 msgid "Floodfill"
-msgstr "Floodfill"
+msgstr "nút lũ"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Hiển thị tất cả các bộ định tuyến với khả năng này trong NetDb"
@@ -1796,7 +1796,7 @@ msgid "Aborted startup"
 msgstr "Khởi động bị hủy bỏ"
 
 msgid "Enabled floodfill"
-msgstr "Kích hoạt tính năng lấp lũ"
+msgstr "Nút lũ đã bật"
 
 msgid "Changed IP"
 msgstr "Đã thay đổi IP"
@@ -1826,7 +1826,7 @@ msgid "New router identity"
 msgstr "Nhận dạng bộ định tuyến mới"
 
 msgid "Disabled floodfill"
-msgstr "Bãi ngập bị vô hiệu hóa"
+msgstr "Nút lũ bị vô hiệu hóa"
 
 msgid "Out of memory error"
 msgstr "Lỗi hết bộ nhớ"
@@ -2170,7 +2170,7 @@ msgid "LeaseSets"
 msgstr "Bộ hợp đồng thuê"
 
 msgid "Stored LeaseSets in floodfill"
-msgstr "LeaseSet lưu trong floodfill"
+msgstr "Bộ hợp đồng thuê được lưu trữ trong nút lũ"
 
 msgid "Cache Hit"
 msgstr "Cache trúng"
@@ -2182,7 +2182,7 @@ msgid "Flood Verify"
 msgstr "Xác minh Flood"
 
 msgid "Floodfill verify time"
-msgstr "Thời gian xác minh floodfill"
+msgstr "thời gian xác minh nút lũ"
 
 msgid "NetDB ACK"
 msgstr "NetDB ACK"
@@ -2699,7 +2699,7 @@ msgid "UDP Port"
 msgstr "Cổng UDP"
 
 msgid "Floodfill Role"
-msgstr "Vai trò lũ lụt"
+msgstr "nút lũ Vai trò"
 
 msgid "Active"
 msgstr "Hoạt động"
@@ -3043,7 +3043,7 @@ msgid "Change in"
 msgstr "Thay đổi trong"
 
 msgid "Floodfill mode enabled"
-msgstr "Chế độ floodfill được bật"
+msgstr "đã bật chế độ nút lũ"
 
 msgid "Routing Key"
 msgstr "Khóa định tuyến"
@@ -3052,7 +3052,7 @@ msgid "Median distance (bits)"
 msgstr "Khoảng cách trung bình (bit)"
 
 msgid "Estimated total floodfills"
-msgstr "Tổng lượng lũ ước tính"
+msgstr "Tổng số nút lũ ước tính"
 
 msgid "Estimated total leasesets"
 msgstr "Tổng số tiền thuê ước tính"
@@ -3791,7 +3791,7 @@ msgid "Peers that meet or exceed tunnel build rate average for all profiled peer
 msgstr "Các đồng nghiệp đáp ứng hoặc vượt quá mức trung bình của tốc độ xây dựng đường hầm cho tất cả các đồng nghiệp có hồ sơ."
 
 msgid "Floodfill peers currently available for NetDb inquiries."
-msgstr "Các đồng nghiệp của Floodfill hiện có sẵn cho các yêu cầu NetDb."
+msgstr "các nút lũ ngang hàng hiện có sẵn cho các yêu cầu về NetDb."
 
 msgid "Peers not profiled as high capacity (lower build rate than average peer)."
 msgstr "Đồng nghiệp không được định hình là công suất cao (tốc độ xây dựng thấp hơn so với đồng nghiệp trung bình)."
@@ -3861,7 +3861,7 @@ msgid "Firewalled with Inbound TCP Enabled"
 msgstr "Tường lửa với TCP trong nước được bật"
 
 msgid "Firewalled &amp; Floodfill"
-msgstr "Tường lửa và lũ lụt"
+msgstr "Đã tường lửa &amp; nút lũ"
 
 msgid "Disconnected"
 msgstr "Mất kết nối"
@@ -4217,7 +4217,7 @@ msgid "How much RAM I2P is using / total RAM available to I2P (excludes RAM allo
 msgstr "I2P đang sử dụng bao nhiêu RAM/ tổng RAM khả dụng cho I2P (không bao gồm RAM được phân bổ cho jvm)"
 
 msgid "Floodfill enabled"
-msgstr "Floodfill được kích hoạt"
+msgstr "nút lũ đã được kích hoạt"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "Tổng số LeaseSet từ xa được lưu trữ trong NetDb của chúng tôi"
@@ -4323,7 +4323,7 @@ msgid "inbound / outbound"
 msgstr "trong nước / bên ngoài"
 
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
-msgstr "Được sử dụng để xây dựng và thử nghiệm các đường hầm, và giao tiếp với các đồng nghiệp lấp đầy lũ"
+msgstr "Được sử dụng để xây dựng và thử nghiệm các đường hầm cũng như liên lạc với các nút lũ ngang hàng"
 
 msgid "Utility"
 msgstr "Tiện ích"
@@ -4494,7 +4494,7 @@ msgid "Delete Sybil Blocklist"
 msgstr "Xóa danh sách chặn Sybil"
 
 msgid "Floodfill Summary"
-msgstr "Tóm tắt lũ lụt"
+msgstr "nút lũ Tóm tắt"
 
 msgid "Same Family"
 msgstr "Cùng một gia đình"
@@ -4530,7 +4530,7 @@ msgid "Review"
 msgstr "Xem lại"
 
 msgid "Run analysis on Floodfills only"
-msgstr "Chỉ chạy phân tích trên vùng lấp lũ"
+msgstr "Chỉ chạy phân tích trên các nút lũ"
 
 msgid "Start Scan"
 msgstr "Bắt đầu quét"
@@ -4566,7 +4566,7 @@ msgid "Block all detected sybils"
 msgstr "Chặn tất cả các tín hiệu được phát hiện"
 
 msgid "Include non-floodfill routers"
-msgstr "Bao gồm các bộ định tuyến không tràn ngập"
+msgstr "Bao gồm các bộ định tuyến nút không lũ lụt"
 
 msgid "Minimum threshold for block"
 msgstr "Ngưỡng tối thiểu cho khối"
@@ -4581,10 +4581,10 @@ msgid "days"
 msgstr "ngày"
 
 msgid "Known Floodfills"
-msgstr "Lũ lụt đã biết"
+msgstr "Các nút lũ đã biết"
 
 msgid "Average closest floodfill distance"
-msgstr "Khoảng cách lấp lũ trung bình gần nhất"
+msgstr "Khoảng cách trung bình của nút lũ gần nhất"
 
 msgid "Routing Data"
 msgstr "Dữ liệu định tuyến"
@@ -4593,28 +4593,28 @@ msgid "Rotates in"
 msgstr "Xoay trong"
 
 msgid "Closest Floodfills to Our Routing Key (Where we Store our RI)"
-msgstr "Lỗi lấp đầy gần nhất với Khóa định tuyến của chúng tôi (Nơi chúng tôi lưu trữ RI)"
+msgstr "Các nút lũ gần nhất với Khóa định tuyến của chúng tôi (Nơi chúng tôi lưu trữ RI của mình)"
 
 msgid "Closest Floodfills to Tomorrow's Routing Key (Where we will Store our RI)"
-msgstr "Lũ lụt gần nhất với Khóa định tuyến của ngày mai (Nơi chúng tôi sẽ lưu trữ RI của mình)"
+msgstr "Các nút lũ gần nhất với Khóa định tuyến của ngày mai (Nơi chúng tôi sẽ lưu trữ RI của mình)"
 
 msgid "Closest Floodfills to Our Router Hash (DHT Neighbors if we are Floodfill)"
-msgstr "Lũ lụt gần nhất với Hash bộ định tuyến của chúng tôi (Hàng xóm DHT nếu chúng tôi là Floodfill)"
+msgstr "Các nút lũ gần nhất với Hash bộ định tuyến của chúng tôi (Hàng xóm DHT nếu chúng tôi là nút lũ)"
 
 msgid "Floodfills Close to Our Destinations"
-msgstr "Lũ lụt gần điểm đến của chúng ta"
+msgstr "các nút lũ Gần điểm đến của chúng tôi"
 
 msgid "None"
 msgstr "Không có"
 
 msgid "Closest floodfills to the Routing Key for"
-msgstr "Vùng ngập gần nhất với Khóa định tuyến cho"
+msgstr "Các nút lũ gần nhất với Khóa định tuyến cho"
 
 msgid "where we store our LS"
 msgstr "nơi chúng tôi lưu trữ LS của mình"
 
 msgid "Closest floodfills to Tomorrow's Routing Key for"
-msgstr "Các vùng lũ gần nhất với Chìa khóa định tuyến ngày mai cho"
+msgstr "Các nút lũ gần nhất với Khóa định tuyến của ngày mai cho"
 
 msgid "where we will store our LS"
 msgstr "nơi chúng tôi sẽ lưu trữ LS của mình"
@@ -4629,10 +4629,10 @@ msgid "Router info not available"
 msgstr "Không có thông tin về bộ định tuyến"
 
 msgid "Average Floodfill Distance is"
-msgstr "Khoảng cách lấp lũ trung bình là"
+msgstr "Khoảng cách nút lũ trung bình là"
 
 msgid "Closest Floodfill Pairs by Hash"
-msgstr "Cặp Floodfill gần nhất theo Hash"
+msgstr "Cặp nút lũ gần nhất theo Hash"
 
 msgid "Hash Distance"
 msgstr "Khoảng cách băm"
@@ -4686,7 +4686,7 @@ msgid "Totals for"
 msgstr "Tổng số cho"
 
 msgid "floodfills"
-msgstr "lũ lụt"
+msgstr "nút lũ"
 
 msgid "MIN"
 msgstr "PHÚT"
@@ -5902,16 +5902,16 @@ msgid "Key <b>{0}</b> selected for removal. To commit the change, save the confi
 msgstr "Khóa <b>{0}</b> đã được chọn để xóa. Để thực hiện thay đổi, hãy lưu cấu hình, hoặc hủy để khôi phục khóa."
 
 msgid "Floodfill Configuration"
-msgstr "Cấu hình lũ lụt"
+msgstr "Cấu hình nút lũ"
 
 msgid "Floodfill participation helps the network, but may use more of your computer's resources."
-msgstr "Sự tham gia của Floodfill giúp ích cho mạng nhưng có thể sử dụng nhiều tài nguyên máy tính của bạn hơn."
+msgstr "Việc tham gia vào nút lũ giúp ích cho mạng nhưng có thể sử dụng nhiều tài nguyên máy tính của bạn hơn."
 
 msgid "This router is currently a floodfill participant."
-msgstr "Bộ định tuyến này hiện là người tham gia lũ lụt."
+msgstr "Bộ định tuyến này hiện là người tham gia nút lũ."
 
 msgid "This router is not currently a floodfill participant."
-msgstr "Bộ định tuyến này hiện không phải là người tham gia lũ lụt."
+msgstr "Bộ định tuyến này hiện không phải là người tham gia nút lũ."
 
 msgid "Enrollment"
 msgstr "Ghi danh"
@@ -6044,10 +6044,10 @@ msgid "Misc Reasons"
 msgstr "Lý do khác"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
-msgstr "Cấm peer floodfill không phản hồi truy vấn (tỷ lệ thất bại >95%)"
+msgstr "Cấm các nút lũ ngang hàng không phản hồi các truy vấn (tỷ lệ lỗi >95%)"
 
 msgid "Ban unresponsive floodfills"
-msgstr "Cấm floodfill không phản hồi"
+msgstr "Cấm các nút lũ không phản hồi"
 
 msgid "Ban routers whose RouterInfo has no version field"
 msgstr "Cấm router có RouterInfo không có trường phiên bản"
@@ -6122,7 +6122,7 @@ msgid "Create New Router Family"
 msgstr "Tạo dòng bộ định tuyến mới"
 
 msgid "You may create a new router family here. Once you have created the family, you may export the family key file and share with other routers in your nominated family."
-msgstr "Bạn có thể tạo dòng bộ định tuyến mới tại đây."
+msgstr "Bạn có thể tạo một dòng bộ định tuyến mới tại đây. Khi bạn đã tạo dòng, bạn có thể xuất tệp khóa dòng và chia sẻ với các bộ định tuyến khác trong dòng do bạn chỉ định."
 
 msgid "Note: To avoid deanonymization, do not name your family with personally-attributable information e.g. your IRC nickname; your family name is associated with your router's IP address."
 msgstr "Lưu ý: Để tránh việc ẩn danh, không đặt tên gia đình của bạn bằng thông tin có thể xác định cá nhân, ví dụ: biệt hiệu IRC của bạn; họ của bạn được liên kết với địa chỉ IP của bộ định tuyến."
@@ -6232,7 +6232,7 @@ msgid "Enter key provided by server operator."
 msgstr "Nhập key do nhà điều hành máy chủ cung cấp."
 
 msgid "Prevents server discovery by floodfills"
-msgstr "Ngăn chặn việc phát hiện máy chủ bằng cách lấp đầy"
+msgstr "Ngăn chặn việc phát hiện máy chủ bằng các nút lũ"
 
 msgid "Enter password provided by server operator."
 msgstr "Nhập mật khẩu do nhà điều hành máy chủ cung cấp."
@@ -6949,7 +6949,7 @@ msgid "Network & Participation"
 msgstr "Mạng & Tham gia"
 
 msgid "Floodfill / NetDB"
-msgstr "Floodfill / NetDB"
+msgstr "nút lũ / NetDB"
 
 msgid "Advanced Configuration Help - I2P+"
 msgstr "Trợ giúp cấu hình nâng cao - I2P"
@@ -7120,7 +7120,7 @@ msgid "When set to false, slow peers may be selected as hops for outbound client
 msgstr "Khi được đặt thành false, các peer chậm có thể được chọn làm bước nhảy cho các đường hầm khách đầu ra. [Mặc định true]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "Cài đặt này (tính bằng giờ) xác định một bộ định tuyến trong NETDB bao nhiêu tuổi (ngày xuất bản cuối cùng của nó) trước khi nó được phân loại là cũ và bị xóa. [Mặc định là 28 giờ trừ khi bộ định tuyến là lũ lụt, trong trường hợp đó mặc định là 8 giờ]"
+msgstr "Cài đặt này (tính bằng giờ) xác định tuổi của RouterInfo trong NetDb (ngày xuất bản được biết đến gần đây nhất của nó) trước khi nó được phân loại là cũ và bị xóa. [Mặc định là 28 giờ trừ khi bộ định tuyến là nút lũ, trong trường hợp đó mặc định là 8 giờ]"
 
 msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
 msgstr "Thiết lập này xác định số lượng người cùng khám phá song song khi công việc Khám phá Đồng ngũ chạy [mặc định là 1 người một lượt khi biết hơn 3000 người]. Lưu ý là tăng giá trị này sẽ tăng yêu cầu băng thông cho quá trình khám phá, và đặt giá trị quá cao có thể gây ra độ trễ tin nhắn quá mức và can thiệp vào các dịch vụ khác, do đó hãy sử dụng cẩn thận!"
@@ -7129,19 +7129,19 @@ msgid "This setting determines the number of NetDb DHT buckets the Peer Explorat
 msgstr "Cài đặt này xác định số lượng thùng NETDB DHT Công việc khám phá ngang hàng sẽ tham chiếu khi chạy. Theo mặc định, số lượng thùng để khám phá sẽ thay đổi tùy thuộc vào việc bộ định tuyến đã chạy trong hơn một giờ, nếu bộ định tuyến bị ẩn hay trong tầng băng thông 'K' và số lượng bộ định tuyến đã biết."
 
 msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "Cài đặt này (tính bằng giây) cho phép bạn ghi đè sự chậm trễ giữa các lần chạy của công việc khám phá ngang hàng, cố gắng xác định vị trí các đồng nghiệp mới để thêm vào NETDB. Công việc sẽ chạy cứ sau 80 giây theo mặc định hoặc nếu bộ định tuyến đang trải qua độ trễ công việc hoặc tin nhắn, cứ sau 3 phút. Nếu kích thước của NETDB đạt 4000 đồng nghiệp, tạm dừng sẽ tăng lên 15 phút. Bạn có thể muốn tăng độ trễ nếu NETDB của bạn được đông dân cư (hơn 2000 đồng nghiệp) hoặc nếu bạn muốn giảm sử dụng băng thông tổng thể. Lưu ý: Đối với các bộ định tuyến lũ lụt, công việc này không chạy."
+msgstr "Cài đặt này (tính bằng giây) cho phép bạn ghi đè độ trễ giữa các lần chạy của Công việc khám phá ngang hàng nhằm cố gắng xác định vị trí các đồng nghiệp mới để thêm vào NetDb. Theo mặc định, công việc sẽ chạy 80 giây một lần hoặc nếu bộ định tuyến gặp phải tình trạng trễ công việc hoặc tin nhắn thì cứ 3 phút một lần. Nếu kích thước của NetDb đạt 4000 ngang hàng, thời gian tạm dừng sẽ tăng lên 15 phút. Bạn có thể muốn tăng độ trễ nếu NetDb của bạn đông đúc (trên 2000 ngang hàng) hoặc nếu bạn muốn giảm mức sử dụng băng thông tổng thể. Lưu ý: Đối với bộ định tuyến nút lũ, công việc này không chạy."
 
 msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
 msgstr "Cài đặt này xác định số lượng băm ngang hàng tối đa để xếp hàng để khám phá. Trong i2p tối đa là 128 và trong i2p+ giá trị mặc định là 512."
 
 msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "Cài đặt này xác định xem một bộ định tuyến hoạt động như một floodfill có khám phá NetDb để tìm hiểu về các người đồng hành mới hay không. [Mặc định là sai, yêu cầu khởi động lại]"
+msgstr "Cài đặt này xác định xem bộ định tuyến hoạt động như một nút lũ có khám phá NetDb để tìm hiểu về các thiết bị ngang hàng mới hay không. [Mặc định là sai, cần khởi động lại]"
 
 msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
 msgstr "Cài đặt này, khi được đặt thành True, ngăn một bộ định tuyến trực tiếp giao tiếp với các bộ định tuyến khác, buộc việc sử dụng các node giới thiệu. [Mặc định là sai trừ khi bộ định tuyến ở chế độ Ẩn]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
-msgstr "Khi được đặt thành True, nếu bộ định tuyến của bạn đang hoạt động như một floodfill cho mạng, sự tham gia của bạn với tư cách <a href=/configadvanced#ffconf>floodfill</a> sẽ bị ẩn đối với các bộ định tuyến khác."
+msgstr "Khi được đặt thành true, nếu bộ định tuyến của bạn đang hoạt động như một nút lũ cho mạng thì <a href=/configadvanced#ffconf>sự tham gia của nút lũ</a> của bạn sẽ bị ẩn khỏi các bộ định tuyến khác."
 
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
 msgstr "Xác định số công việc <a href=/jobs>song song</a> tối đa có thể chạy. Giá trị mặc định được quyết định bởi lượng bộ nhớ cấp cho JVM qua <code>wrapper.config</code>, và được đặt là 3 cho dưới 64MB, 4 cho dưới 256M, hoặc 5 cho trên 256MB. Lưu ý: Việc thay đổi cài đặt này yêu cầu khởi động lại bộ định tuyến."
@@ -7234,7 +7234,7 @@ msgid "Maximum number of peer profiles to retain in memory. Older, inactive prof
 msgstr "Số lượng hồ sơ peer tối đa được giữ trong bộ nhớ. Các hồ sơ cũ hơn, không hoạt động sẽ hết hạn trước khi đạt đến giới hạn này. Giá trị dưới 100 được kẹp thành 100. [Mặc định 8000, hoặc 800 trên hệ thống chậm]"
 
 msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]"
-msgstr "Tuổi tối đa của RouterInfo (tính bằng giờ) để peer được coi là có thể chọn cho việc xây dựng đường hầm. Các peer có RouterInfo cũ hơn ngưỡng này sẽ bị loại khỏi lựa chọn trừ khi chúng có kết nối đang hoạt động. Điều này đặc biệt liên quan đến các bộ định tuyến floodfill không chủ động khám phá NetDB, vì RouterInfo của chúng có thể trở nên lỗi thời mà không cần làm mới định kỳ. [Mặc định 3]"
+msgstr "Tuổi tối đa của RouterInfo (tính theo giờ) để một thiết bị ngang hàng được coi là có thể lựa chọn để xây dựng đường hầm. Các thiết bị ngang hàng có RouterInfos cũ hơn ngưỡng này sẽ bị loại khỏi lựa chọn trừ khi chúng có kết nối đang hoạt động. Điều này đặc biệt liên quan đến các bộ định tuyến nút lũ không tích cực khám phá NetDB, vì RouterInfos của chúng có thể trở nên cũ nếu không được làm mới định kỳ. [Mặc định là 3]"
 
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
 msgstr "Cài đặt này xác định xem các số liệu thống kê về bộ định tuyến của chúng tôi có được công bố lẻ tẻ lên NETDB hay không. [Mặc định là sai]"
@@ -8002,7 +8002,7 @@ msgid "A tunnel used by the router for communicating with other routers to perfo
 msgstr "Một đường hầm được bộ định tuyến sử dụng để liên lạc với các bộ định tuyến khác nhằm thực hiện các chức năng \"quản trị\" như học hỏi và xuất bản <i>leasesets</i>, thử nghiệm các đường hầm khách hàng, học hỏi và xác thực các bộ định tuyến khác trên mạng. Những đường hầm này thường có băng thông thấp."
 
 msgid "A router on the network tasked with providing and receiving information about other routers and services on the network. The current minimum share bandwidth for a router to be considered as capable of performing floodfill duties is 128 KBytes/sec, though it's possible to override this requirement and force a router to be a floodfill on the <a href=/configadvanced>Advanced Configuration page</a>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "Một bộ định tuyến trên mạng được giao nhiệm vụ cung cấp và nhận thông tin về các bộ định tuyến và dịch vụ khác trên mạng. Băng thông chia sẻ tối thiểu hiện tại cho một bộ định tuyến được coi là có khả năng thực hiện nhiệm vụ floodfill là 128 KBytes/giây, mặc dù có thể ghi đè yêu cầu này và buộc một bộ định tuyến là floodfill trên trang <a href=/configadvanced>Cấu hình nâng cao</a>. Để biết thêm thông tin, xem <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>tài liệu trực tuyến</a>."
+msgstr "Một bộ định tuyến trên mạng có nhiệm vụ cung cấp và nhận thông tin về các bộ định tuyến và dịch vụ khác trên mạng. Băng thông chia sẻ tối thiểu hiện tại để một bộ định tuyến được coi là có khả năng thực hiện nhiệm vụ của nút lũ là 128 KBytes/giây, mặc dù có thể ghi đè yêu cầu này và buộc bộ định tuyến trở thành nút lũ trên <a href=/configadvanced>trang Cấu hình nâng cao</a>. Để biết thêm thông tin, hãy xem <a href=https://geti2p.net/en/docs/how/network-database#flood node class='sitelink external' target=_blank rel=noreferrer>tài liệu trực tuyến</a>."
 
 msgid "Garlic Routing"
 msgstr "Định tuyến Hành"
@@ -8502,7 +8502,7 @@ msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
 msgstr "WARN_FIREWALLED_AND_FAST - Bị tường lửa nhưng là ngang hàng nhanh"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr "WARN_FIREWALLED_AND_FLOODFILL - Bị tường lửa nhưng là floodfill"
+msgstr "WARN_FIREWALLED_AND_FLOODFILL - Đã tường lửa nhưng nút tràn ngập"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
 msgstr "WARN_FIREWALLED_WITH_INBOUND_TCP - Bị tường lửa với TCP vào"
@@ -8781,7 +8781,7 @@ msgid "Securely send the i2preseed.zip file to your friend"
 msgstr "Gửi an toàn tệp i2preseed.zip cho bạn bè của bạn"
 
 msgid "Do not reveal this file to unknown users, as it contains sensitive data (100 RouterInfo files) from your own I2P router which potentially could be used by an adversary to decloak your identity. In order to protect your anonymity: you should wait for a few hours/days before sharing the file with your trusted friend. It is also advisable to use this procedure sparingly (no more than once a week)."
-msgstr "Không tiết lộ tệp này cho những người dùng không xác định vì nó chứa dữ liệu nhạy cảm (100 tệp RouterInfo) từ bộ định tuyến I2P của riêng bạn mà kẻ thù có thể sử dụng để tiết lộ danh tính của bạn."
+msgstr "Không tiết lộ tệp này cho những người dùng không xác định vì nó chứa dữ liệu nhạy cảm (100 tệp RouterInfo) từ bộ định tuyến I2P của riêng bạn mà kẻ thù có thể sử dụng để tiết lộ danh tính của bạn. Để bảo vệ danh tính của bạn: bạn nên đợi vài giờ/ngày trước khi chia sẻ tệp với người bạn đáng tin cậy của mình. Cũng nên sử dụng quy trình này một cách tiết kiệm (không quá một lần một tuần)."
 
 msgid "General guidelines for manual reseeding of I2P"
 msgstr "Hướng dẫn chung về việc tạo lại I2P theo cách thủ công"
@@ -8814,7 +8814,7 @@ msgid "Firewalls, Modems &amp; Routers"
 msgstr "Tường lửa, Modem và Bộ định tuyến"
 
 msgid "Where possible, please ensure I2P+/Java is allowed bi-directional port access from the internet by configuring your modem/router/pc firewall accordingly. If you're behind a prohibitive firewall but have unrestricted outbound access, I2P+ can still function; you can turn off inbound access and rely on <a href=http://i2p-projekt.i2p/udp.html target=_blank rel=noreferrer class=sitelink>SSU IP Address Detection</a> (<a href=https://wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer class='sitelink external'>firewall hole punching</a>) to connect you to the network, and your network status in the side panel will indicate \"Status: Firewalled\". For optimal performance, please ensure I2P's <a href=/confignet#udpconfig>external port</a> is visible from the internet (see below for more information)."
-msgstr "Nếu có thể, vui lòng đảm bảo I2P /Java được phép truy cập cổng hai chiều từ internet bằng cách định cấu hình tường lửa modem/bộ định tuyến/máy tính của bạn cho phù hợp."
+msgstr "Nếu có thể, vui lòng đảm bảo I2P+/Java được phép truy cập cổng hai chiều từ internet bằng cách định cấu hình tường lửa modem/bộ định tuyến/máy tính của bạn cho phù hợp. Nếu bạn bị chặn bởi tường lửa nhưng có quyền truy cập ra bên ngoài không hạn chế, I2P+ vẫn có thể hoạt động; bạn có thể tắt quyền truy cập gửi đến và dựa vào <a href=http://i2p-projekt.i2p/udp.html target=_blank rel=noreferrer class=sitelink>Phát hiện địa chỉ IP SSU</a> (<a href=https://wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer class='sitelink external'>đục lỗ tường lửa</a>) để kết nối bạn với mạng và trạng thái mạng của bạn trong bảng điều khiển bên cạnh sẽ cho biết \"Trạng thái: Đã tường lửa\". Để có hiệu suất tối ưu, vui lòng đảm bảo <a href=/confignet#udpconfig>cổng ngoài</a> của I2P hiển thị trên Internet (xem bên dưới để biết thêm thông tin)."
 
 msgid "Check Your Proxy Settings"
 msgstr "Kiểm tra cài đặt proxy của bạn"
@@ -8826,7 +8826,7 @@ msgid "Check Your Logs"
 msgstr "Kiểm tra nhật ký của bạn"
 
 msgid "<a href=/logs>Logs</a> may help resolve a problem. You may wish to paste excerpts in a <a href=http://i2pforum.i2p/ target=_blank rel=noreferrer>forum</a> for help, or perhaps <a href=http://cake.i2p/pastebin/ target=_blank rel=noreferrer class='sitelink external'>paste</a> it instead and reference the link on IRC for help."
-msgstr "<a href=/logs>Nhật ký</a> có thể giúp giải quyết vấn đề."
+msgstr "<a href=/logs>Nhật ký</a> có thể giúp giải quyết sự cố. Bạn có thể muốn dán các đoạn trích vào <a href=http://i2pforum.i2p/ target=_blank rel=noreferrer>diễn đàn</a> để được trợ giúp hoặc có thể <a href=http://cake.i2p/pastebin/ target=_blank rel=noreferrer class='sitelink external'>dán</a> đoạn trích đó và tham khảo liên kết trên IRC để được trợ giúp."
 
 msgid "Verify Java is Up to Date"
 msgstr "Xác minh Java đã được cập nhật"
@@ -8838,13 +8838,13 @@ msgid "Problems running on Legacy Hardware"
 msgstr "Sự cố khi chạy trên Phần cứng kế thừa"
 
 msgid "[Linux/Unix/Solaris] If you can't start the router with <code>i2p/i2prouter start</code> try the <code>runplain.sh</code> script in the same directory. Root privileges are never required to run I2P+. If you need to compile the <a href=http://i2p-projekt.i2p/jbigi.html target=_blank rel=noreferrer>jBigi library</a> (which is necessary in rare cases), consult the documentation, visit the forums, or visit <a href=irc://127.0.0.1:6668/saltR class=chatlink>the I2P+ channel</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>IRC developer channel</a>."
-msgstr "[Linux/Unix/Solaris] Nếu bạn không thể khởi động bộ định tuyến bằng <code>i2p/i2prouter start</code>, hãy thử tập lệnh <code>runplain.sh</code> trong cùng thư mục."
+msgstr "[Linux/Unix/Solaris] Nếu bạn không thể khởi động bộ định tuyến bằng <code>i2p/i2prouter start</code>, hãy thử tập lệnh <code>runplain.sh</code> trong cùng thư mục. Không bao giờ cần có quyền root để chạy I2P+. Nếu bạn cần biên dịch <a href=http://i2p-projekt.i2p/jbigi.html target=_blank rel=noreferrer>thư viện jBigi</a> (cần thiết trong một số ít trường hợp), hãy tham khảo tài liệu, truy cập diễn đàn hoặc truy cập <a href=irc://127.0.0.1:6668/saltR class=chatlink>kênh I2P+</a> hoặc <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>Kênh nhà phát triển IRC</a>."
 
 msgid "Enable Universal Plug and Play (UPnP)"
 msgstr "Bật tính năng Cắm và Chạy Đa năng (UPnP)"
 
 msgid "Your modem or router may support <a href=https://wikipedia.org/wiki/Universal_Plug_and_Play target=_blank rel=noreferrer>Universal Plug &amp; Play</a> (UPnP), which permits automatic port forwarding. Ensure UPnP support for I2P+ is enabled on the <a href=/confignet>config page</a>, then try to activate UPnP on your modem/router and possibly your computer also. Now try restarting the <a href=/>I2P+ router</a>. If successful, I2P+ should report \"Status: OK\" in the side panel once the I2P+ router completes initial connectivity tests."
-msgstr "Modem hoặc bộ định tuyến của bạn có thể hỗ trợ <a href=https://wikipedia.org/wiki/Universal_Plug_and_Play target=_blank rel=noreferrer>Phích cắm đa năng."
+msgstr "Modem hoặc bộ định tuyến của bạn có thể hỗ trợ <a href=https://wikipedia.org/wiki/Universal_Plug_and_Play target=_blank rel=noreferrer>Universal Plug &amp; Chơi</a> (UPnP), cho phép chuyển tiếp cổng tự động. Đảm bảo bật hỗ trợ UPnP cho I2P+ trên <a href=/confignet>trang cấu hình</a>, sau đó thử kích hoạt UPnP trên modem/bộ định tuyến và có thể cả máy tính của bạn. Bây giờ hãy thử khởi động lại <a href=/>bộ định tuyến I2P+</a>. Nếu thành công, I2P+ sẽ báo cáo \"Trạng thái: OK\" trong bảng điều khiển bên cạnh sau khi bộ định tuyến I2P+ hoàn tất các bài kiểm tra kết nối ban đầu."
 
 msgid "Port Forwarding"
 msgstr "Cổng chuyển tiếp"
@@ -8886,13 +8886,13 @@ msgid "Introduction to Tunnel Filtering"
 msgstr "Giới thiệu về lọc đường hầm"
 
 msgid "Server tunnels, configurable in the <a href=/i2ptunnelmgr>Tunnel Manager</a>, provide a number of ways to limit access to the hosted service. Destination whitelisting, blacklisting, connection throttling, and tunnel filtering are methods provisioned to mitigate denial of service attacks, grant exclusive access to known I2P destinations, and manage traffic to the server."
-msgstr "Đường hầm máy chủ, có thể định cấu hình trong <a href=/i2ptunnelmgr>Trình quản lý đường hầm</a>, cung cấp một số cách để hạn chế quyền truy cập vào dịch vụ được lưu trữ."
+msgstr "Đường hầm máy chủ, có thể định cấu hình trong <a href=/i2ptunnelmgr>Trình quản lý đường hầm</a>, cung cấp một số cách để hạn chế quyền truy cập vào dịch vụ được lưu trữ. Danh sách trắng, danh sách đen, điều chỉnh kết nối và lọc đường hầm là các phương pháp được cung cấp để giảm thiểu các cuộc tấn công từ chối dịch vụ, cấp quyền truy cập độc quyền vào các điểm đến I2P đã biết và quản lý lưu lượng truy cập đến máy chủ."
 
 msgid "A tunnel filter can provide protection against denial of service attacks, without otherwise interrupting the service for genuine users, either in conjunction with the tunnel throttler or as an alternative strategy. It can also be used to log access to a hosted service to determine if the server is under attack, or simply to log all visitors by I2P destination. Additionally, a filter can function simultaneously as a whitelist and blacklist making it more flexible than the Tunnel Manager's access list controls. Note that multiple server tunnels can share a single filter file if you wish to implement a global filter."
-msgstr "Bộ lọc đường hầm có thể cung cấp khả năng bảo vệ chống lại các cuộc tấn công từ chối dịch vụ mà không làm gián đoạn dịch vụ cho người dùng chính hãng, kết hợp với bộ điều tiết đường hầm hoặc như một chiến lược thay thế."
+msgstr "Bộ lọc đường hầm có thể cung cấp khả năng bảo vệ chống lại các cuộc tấn công từ chối dịch vụ mà không làm gián đoạn dịch vụ của người dùng chính hãng, kết hợp với bộ điều tiết đường hầm hoặc như một chiến lược thay thế. Nó cũng có thể được sử dụng để ghi nhật ký quyền truy cập vào dịch vụ được lưu trữ để xác định xem máy chủ có đang bị tấn công hay đơn giản là ghi nhật ký tất cả khách truy cập theo đích I2P. Ngoài ra, bộ lọc có thể hoạt động đồng thời dưới dạng danh sách trắng và danh sách đen, khiến nó linh hoạt hơn các điều khiển danh sách truy cập của Trình quản lý đường hầm. Lưu ý rằng nhiều đường hầm máy chủ có thể chia sẻ một tệp bộ lọc nếu bạn muốn triển khai bộ lọc chung."
 
 msgid "A filter is a text file that can contain one or more declarations. Blank lines and lines beginning with <i class=example>#</i> are ignored."
-msgstr "Bộ lọc là một tệp văn bản có thể chứa một hoặc nhiều khai báo."
+msgstr "Bộ lọc là một tệp văn bản có thể chứa một hoặc nhiều khai báo. Các dòng trống và các dòng bắt đầu bằng <i class=example>#</i> sẽ bị bỏ qua."
 
 msgid "A declaration will contain a directive (keyword) with parameters to define the scope of the declaration, and can represent one of the following:"
 msgstr "Một khai báo sẽ chứa một lệnh (từ khóa) với các tham số để xác định phạm vi của khai báo và có thể biểu thị một trong các mục sau:"
@@ -9042,7 +9042,7 @@ msgid "This is the number of peers your router has available for building your e
 msgstr "Đây là số lượng đồng nghiệp mà bộ định tuyến của bạn có sẵn để xây dựng các đường hầm thám hiểm được sử dụng để xác định hiệu suất mạng. Thông thường nằm trong khoảng 8-75. Các đồng nghiệp nhanh nằm trong hạng mục dung lượng cao. Các đồng nghiệp dung lượng cao của bạn được hiển thị trên trang <a href='/profiles'>Trang Hồ sơ</a>. <a href='/configstats#router.highCapacityPeers'>[Kích hoạt biểu đồ]</a>"
 
 msgid "This is the number of peers your router will use for network database inquiries. These are usually the <i>floodfill</i> routers which are responsible for maintaining network integrity. Your well integrated peers are shown on the bottom of the <a href='/profiles'>Profiles page</a>."
-msgstr "Đây là số lượng đồng nghiệp mà bộ định tuyến của bạn sẽ sử dụng để truy vấn cơ sở dữ liệu mạng. Thông thường đây là các bộ định tuyến <i>lũ lụt</i> chịu trách nhiệm duy trì toàn vẹn mạng. Các đồng nghiệp tốt của bạn được hiển thị ở phần cuối trang <a href='/profiles'>Trang Hồ sơ</a>."
+msgstr "Đây là số lượng thiết bị ngang hàng mà bộ định tuyến của bạn sẽ sử dụng để truy vấn cơ sở dữ liệu mạng. Đây thường là các bộ định tuyến <i>nút lũ</i> chịu trách nhiệm duy trì tính toàn vẹn của mạng. Các đồng nghiệp tích hợp tốt của bạn được hiển thị ở cuối <a href='/profiles'>trang Hồ sơ</a>."
 
 msgid "This is the total number of peers that are known by your router. They are listed on the <a href='/netdb'>Network Database page</a>. This may range from under 100 to 1000 or more. This number is not the total size of the network; it may vary widely depending on your total bandwidth, shared bandwidth, and locally-generated traffic. I2P does not require a router to know every other router in the network."
 msgstr "Đây là tổng số đồng nghiệp mà bộ định tuyến của bạn biết. Chúng được liệt kê trên trang <a href='/netdb'>Cơ sở dữ liệu Mạng</a>. Số lượng này có thể từ dưới 100 đến 1000 hoặc nhiều hơn. Số lượng này không phải là kích thước tổng thể của mạng; nó có thể thay đổi rất nhiều tùy thuộc vào băng thông tổng thể, băng thông chia sẻ và lưu lượng của bạn. I2P không yêu cầu một bộ định tuyến phải biết mọi bộ định tuyến khác trong mạng."
@@ -9063,7 +9063,7 @@ msgid "The actual tunnels are shown on the <a href='/tunnels'>Tunnels page</a>."
 msgstr "Các đường hầm thực tế được hiển thị trên trang <a href='/tunnels'>Trang Đường hầm</a>."
 
 msgid "Tunnels built by your router and used for communication with the floodfill peers, building new tunnels, and testing existing tunnels."
-msgstr "Các đường hầm được xây dựng bởi bộ định tuyến của bạn và được sử dụng để liên lạc với các đồng nghiệp lũ lụt, xây dựng các đường hầm mới và thử nghiệm các đường hầm hiện có."
+msgstr "Các đường hầm do bộ định tuyến của bạn xây dựng và được sử dụng để liên lạc với các nút lũ ngang hàng, xây dựng các đường hầm mới và kiểm tra các đường hầm hiện có."
 
 msgid "Tunnels built by your router for each client's use."
 msgstr "Các đường hầm được xây dựng bởi bộ định tuyến của bạn cho mỗi khách hàng sử dụng."
@@ -9165,13 +9165,13 @@ msgid "While I2P will work fine in this configuration, if you really have over 1
 msgstr "Mặc dù I2P sẽ hoạt động tốt trong cấu hình này, nhưng nếu bạn thực sự có băng thông trên 128KBps để chia sẻ, thì việc mở tường lửa sẽ hữu ích hơn nhiều cho mạng."
 
 msgid "WARN - Firewalled and Floodfill"
-msgstr "WARN - Tường lửa và Floodfill"
+msgstr "CẢNH BÁO - Nút tường lửa và lũ lụt"
 
 msgid "You have configured I2P to be a floodfill router, but you are firewalled."
-msgstr "Bạn đã định cấu hình I2P thành bộ định tuyến tràn, nhưng bạn đã được tường lửa."
+msgstr "Bạn đã định cấu hình I2P làm bộ định tuyến nút lũ nhưng bạn đã được tường lửa."
 
 msgid "For best participation as a floodfill router, you should open your firewall."
-msgstr "Để tham gia tốt nhất với tư cách là bộ định tuyến tràn, bạn nên mở tường lửa của mình."
+msgstr "Để tham gia tốt nhất với tư cách là bộ định tuyến nút lũ, bạn nên mở tường lửa của mình."
 
 msgid "WARN - Firewalled with Inbound TCP Enabled"
 msgstr "CẢNH BÁO - Đã bật tường lửa khi bật TCP trong nước"

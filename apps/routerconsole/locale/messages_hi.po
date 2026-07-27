@@ -113,7 +113,7 @@ msgid "Known high capacity peers"
 msgstr "ज्ञात उच्च क्षमता वाले पीयर"
 
 msgid "Known integrated (floodfill) peers"
-msgstr "ज्ञात समेत (फ्लूडफिल) पीयर"
+msgstr "ज्ञात एकीकृत (फ्लडफ़िलमार्कर) सहकर्मी"
 
 msgid "Total peers in our NetDb"
 msgstr "हमारे NetDb में कुल पीयर"
@@ -134,7 +134,7 @@ msgid "unknown"
 msgstr "अज्ञात"
 
 msgid "Floodfill"
-msgstr "फ्लूडफिल"
+msgstr "बाढ़फ़िलमार्कर"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "NetDb में इस क्षमता के साथ सभी राउटर दिखाएं"
@@ -1812,7 +1812,7 @@ msgid "Aborted startup"
 msgstr "शुरूआत रोक दी गई"
 
 msgid "Enabled floodfill"
-msgstr "फ्लूडफिल सक्षम किया"
+msgstr "सक्षम फ़्लूफ़िलमार्कर"
 
 msgid "Changed IP"
 msgstr "IP बदल दिया"
@@ -1842,7 +1842,7 @@ msgid "New router identity"
 msgstr "नई राउटर पहचान"
 
 msgid "Disabled floodfill"
-msgstr "फ्लूडफिल अक्षम किया"
+msgstr "विकलांग बाढ़फ़िलमार्कर"
 
 msgid "Out of memory error"
 msgstr "मेमोरी की कमी की त्रुटि"
@@ -2186,7 +2186,7 @@ msgid "LeaseSets"
 msgstr "लीज़ सेट"
 
 msgid "Stored LeaseSets in floodfill"
-msgstr "फ्लडफिल में संग्रहीत लीज़सेट"
+msgstr "फ़्लूफ़फ़िलमार्कर में संग्रहीत लीज़सेट"
 
 msgid "Cache Hit"
 msgstr "कैश हिट"
@@ -2198,7 +2198,7 @@ msgid "Flood Verify"
 msgstr "फ्लड सत्यापन"
 
 msgid "Floodfill verify time"
-msgstr "फ्लडफिल सत्यापन समय"
+msgstr "फ़्लूफ़िलमार्कर समय सत्यापित करता है"
 
 msgid "NetDB ACK"
 msgstr "NetDB ACK"
@@ -2715,7 +2715,7 @@ msgid "UDP Port"
 msgstr "UDP पोर्ट"
 
 msgid "Floodfill Role"
-msgstr "फ्लूडफिल भूमिका"
+msgstr "बाढ़फ़िलमार्कर भूमिका"
 
 msgid "Active"
 msgstr "सक्रिय"
@@ -3059,7 +3059,7 @@ msgid "Change in"
 msgstr "में परिवर्तन"
 
 msgid "Floodfill mode enabled"
-msgstr "फ्लडफिल मोड सक्षम"
+msgstr "फ़्लूफ़फ़िलमार्कर मोड सक्षम किया गया"
 
 msgid "Routing Key"
 msgstr "रूटिंग की"
@@ -3068,7 +3068,7 @@ msgid "Median distance (bits)"
 msgstr "मीडियन दूरी (बिट)"
 
 msgid "Estimated total floodfills"
-msgstr "अनुमानित कुल फ्लूडफिल्स"
+msgstr "अनुमानित कुल बाढ़फ़िलमार्कर"
 
 msgid "Estimated total leasesets"
 msgstr "अनुमानित कुल लीज़ सेट्स"
@@ -3823,7 +3823,7 @@ msgid "Peers that meet or exceed tunnel build rate average for all profiled peer
 msgstr "पीयर जो सभी प्रोफ़ाइल्ड पीयर के लिए टनल बनाने की औसत दर को पूरा करते हैं या उससे अधिक होते हैं।"
 
 msgid "Floodfill peers currently available for NetDb inquiries."
-msgstr "वर्तमान में नेटडीबी जांच के लिए उपलब्ध फ्लॉडफिल पीयर।"
+msgstr "फ़्लूफ़फ़िलमार्कर सहकर्मी वर्तमान में नेटडीबी पूछताछ के लिए उपलब्ध हैं।"
 
 msgid "Peers not profiled as high capacity (lower build rate than average peer)."
 msgstr "उच्च क्षमता के रूप में प्रोफ़ाइल नहीं किए गए पीयर (औसत पीयर की तुलना में कम बनाने की दर)।"
@@ -3893,7 +3893,7 @@ msgid "Firewalled with Inbound TCP Enabled"
 msgstr "इनबाउंड TCP सक्षम होने के साथ फायरवॉल के पीछे"
 
 msgid "Firewalled &amp; Floodfill"
-msgstr "फायरवॉल के पीछे &amp; फ्लॉडफिल"
+msgstr "फ़ायरवॉलयुक्त एवं amp; बाढ़फ़िलमार्कर"
 
 msgid "Disconnected"
 msgstr "असंगत"
@@ -4249,7 +4249,7 @@ msgid "How much RAM I2P is using / total RAM available to I2P (excludes RAM allo
 msgstr "I2P कितना RAM उपयोग कर रहा है / I2P के लिए उपलब्ध कुल RAM (JVM को अल्लोकेट किया गया RAM से छोड़कर)"
 
 msgid "Floodfill enabled"
-msgstr "फ्लॉडफिल सक्षम"
+msgstr "फ़्लूफ़फ़िलमार्कर सक्षम"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "हमारे NetDb में संग्रहीत दूरस्थ लीज़सेट की कुल संख्या"
@@ -4355,7 +4355,7 @@ msgid "inbound / outbound"
 msgstr "आगंतुकीय / निर्गमी"
 
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
-msgstr "टनल बनाने, परीक्षण करने और फ्लॉडफिल पीयर के साथ संवाद करने के लिए उपयोग किया जाता है"
+msgstr "सुरंगों के निर्माण और परीक्षण और फ़्लूफ़फ़िलमार्कर साथियों के साथ संचार के लिए उपयोग किया जाता है"
 
 msgid "Utility"
 msgstr "उपयोगिता"
@@ -4530,7 +4530,7 @@ msgid "Delete Sybil Blocklist"
 msgstr "साइबिल ब्लॉकलिस्ट को हटाएं"
 
 msgid "Floodfill Summary"
-msgstr "फ्लॉडफिल सारांश"
+msgstr "बाढ़फ़िलमार्कर सारांश"
 
 msgid "Same Family"
 msgstr "समान परिवार"
@@ -4602,7 +4602,7 @@ msgid "Block all detected sybils"
 msgstr "सभी पहचाने गए साइबिल्स को ब्लॉक करें"
 
 msgid "Include non-floodfill routers"
-msgstr "नॉन-फ्लॉडफिल रूटर शामिल करें"
+msgstr "गैर-फ़्लूडफ़िलमार्कर राउटर शामिल करें"
 
 msgid "Minimum threshold for block"
 msgstr "ब्लॉक के लिए न्यूनतम थ्रेशोल्ड"
@@ -4620,7 +4620,7 @@ msgid "Known Floodfills"
 msgstr "परिचित Floodfills"
 
 msgid "Average closest floodfill distance"
-msgstr "औसत सबसे निकट floodfill दूरी"
+msgstr "औसत निकटतम बाढ़ नोड दूरी"
 
 msgid "Routing Data"
 msgstr "रूटिंग डेटा"
@@ -4629,13 +4629,13 @@ msgid "Rotates in"
 msgstr "में घुमाव देता है"
 
 msgid "Closest Floodfills to Our Routing Key (Where we Store our RI)"
-msgstr "हमारे रूटिंग कुंजी के करीब सबसे (हमारे RI को कहाँ संग्रहित करते हैं)"
+msgstr "हमारी रूटिंग कुंजी के निकटतम फ्लडफ़िलमार्कर (जहां हम अपना आरआई संग्रहीत करते हैं)"
 
 msgid "Closest Floodfills to Tomorrow's Routing Key (Where we will Store our RI)"
-msgstr "कल के रूटिंग कुंजी के करीब सबसे (हमारे RI को कहाँ संग्रहित करेंगे)"
+msgstr "कल की रूटिंग कुंजी के निकटतम फ़्लूफ़फ़िलमार्कर (जहां हम अपना आरआई संग्रहीत करेंगे)"
 
 msgid "Closest Floodfills to Our Router Hash (DHT Neighbors if we are Floodfill)"
-msgstr "हमारे रूटर हैश के करीब सबसे (अगर हम Floodfill हैं, तो DHT पड़ोसी)"
+msgstr "हमारे राउटर हैश के निकटतम फ्लड नोड (यदि हम फ्लड नोड हैं तो DHT पड़ोसी)"
 
 msgid "Floodfills Close to Our Destinations"
 msgstr "हमारे गंतव्यों के करीब floodfills"
@@ -4665,10 +4665,10 @@ msgid "Router info not available"
 msgstr "रूटर जानकारी उपलब्ध नहीं"
 
 msgid "Average Floodfill Distance is"
-msgstr "औसत floodfill दूरी है"
+msgstr "औसत बाढ़ नोड दूरी है"
 
 msgid "Closest Floodfill Pairs by Hash"
-msgstr "हैश के आधार पर सबसे निकट floodfill जोड़े"
+msgstr "हैश द्वारा निकटतम बाढ़ नोड जोड़े"
 
 msgid "Hash Distance"
 msgstr "हैश दूरी"
@@ -5938,16 +5938,16 @@ msgid "Key <b>{0}</b> selected for removal. To commit the change, save the confi
 msgstr "हटाने के लिए कुंजी <b>{0}</b> चयनित। परिवर्तन को प्रतिबद्ध करने के लिए, कॉन्फ़िगरेशन सहेज करें, या कुंजी पुनर्स्थापित करने के लिए रद्द करें।"
 
 msgid "Floodfill Configuration"
-msgstr "फ्लॉडफिल सेटिंग"
+msgstr "फ़्लूफ़फ़िलमार्कर कॉन्फ़िगरेशन"
 
 msgid "Floodfill participation helps the network, but may use more of your computer's resources."
-msgstr "फ्लॉडफिल के हिस्से होने से नेटवर्क की मदद होती है, लेकिन आपके कंप्यूटर के संसाधनों का अधिक उपयोग कर सकता है।"
+msgstr "फ़्लूफ़फ़िलमार्कर की भागीदारी से नेटवर्क को मदद मिलती है, लेकिन यह आपके कंप्यूटर के संसाधनों का अधिक उपयोग कर सकता है।"
 
 msgid "This router is currently a floodfill participant."
-msgstr "यह रूटर क्रेन्टली एक floodfill सहभागी है।"
+msgstr "यह राउटर वर्तमान में एक फ्लड नोड भागीदार है।"
 
 msgid "This router is not currently a floodfill participant."
-msgstr "यह रूटर क्रेन्टली floodfill सहभागी नहीं है।"
+msgstr "यह राउटर वर्तमान में फ्लड नोड भागीदार नहीं है।"
 
 msgid "Enrollment"
 msgstr "पंजीकरण"
@@ -6080,10 +6080,10 @@ msgid "Misc Reasons"
 msgstr "विविध कारण"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
-msgstr "उन फ्लडफिल पीयर को प्रतिबंधित करें जो क्वेरी का उत्तर देने में विफल रहते हैं (विफलता दर >95%)"
+msgstr "फ़्लूफ़फ़िलमार्कर साथियों पर प्रतिबंध लगाएं जो प्रश्नों का उत्तर देने में विफल रहते हैं (विफलता दर >95%)"
 
 msgid "Ban unresponsive floodfills"
-msgstr "अप्रतिक्रियाशील फ्लडफिल प्रतिबंधित करें"
+msgstr "अनुत्तरदायी फ़्लूफ़िलमार्कर्स पर प्रतिबंध लगाएं"
 
 msgid "Ban routers whose RouterInfo has no version field"
 msgstr "उन राउटर को प्रतिबंधित करें जिनके RouterInfo में कोई संस्करण फ़ील्ड नहीं है"
@@ -6268,7 +6268,7 @@ msgid "Enter key provided by server operator."
 msgstr "सर्वर ऑपरेटर द्वारा प्रदान की गई कुंजी दर्ज करें।"
 
 msgid "Prevents server discovery by floodfills"
-msgstr "फ्लॉडफिल द्वारा सर्वर की खोज पर रोक"
+msgstr "FloodfillS द्वारा सर्वर खोज को रोकता है"
 
 msgid "Enter password provided by server operator."
 msgstr "सर्वर ऑपरेटर द्वारा प्रदान किया गया पासवर्ड दर्ज करें।"
@@ -6985,7 +6985,7 @@ msgid "Network & Participation"
 msgstr "नेटवर्क और भागीदारी"
 
 msgid "Floodfill / NetDB"
-msgstr "फ्लडफिल / NetDB"
+msgstr "फ़्लूफ़फ़िलमार्कर / नेटडीबी"
 
 msgid "Advanced Configuration Help - I2P+"
 msgstr "उन्नत सेटिंग मदद - I2P+"
@@ -7156,7 +7156,7 @@ msgid "When set to false, slow peers may be selected as hops for outbound client
 msgstr "false पर सेट होने पर, धीमे पीयर को आउटबाउंड क्लाइंट सुरंगों के हॉप के रूप में चुना जा सकता है। [डिफ़ॉल्ट true]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "यह सेटिंग (घंटों में) नेटडीबी में एक RouterInfo कितनी पुरानी होने के बाद यह अप्रयोगी और हटाया जाने के लिए वर्गीकृत की जाएगी (उसकी अंतिम जानकारी देखी गई प्रकाशित तारीख)। [मूल मान 28 घंटे है, जबकि यदि राउटर एक Floodfill है, तो मूल मान 8 घंटे होता है]"
+msgstr "यह सेटिंग (घंटों में) निर्धारित करती है कि नेटडीबी में राउटरइन्फो कितना पुराना है (इसकी अंतिम ज्ञात प्रकाशन तिथि) इसे बासी के रूप में वर्गीकृत करने और हटाए जाने से पहले। [डिफ़ॉल्ट 28 घंटे है जब तक कि राउटर एक फ्लड नोड न हो, उस स्थिति में डिफ़ॉल्ट 8 घंटे है]"
 
 msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
 msgstr "यह सेटिंग देखभाल करने वाली Peer Exploration Job के चलने के समय समान समय में अन्वेषण करने वाले पीयर की संख्या को निर्धारित करती है [मूल मान 3000 से अधिक पीयर जानने पर समय-समय पर 1 पीयर]। ध्यान दें कि इस मान को बढ़ाने से अन्वेषण के लिए बैंडविड्थ की मांग बढ़ेगी और इस मान को बहुत ऊपर सेट करने से संदेश की अतिरिक्त देरी हो सकती है और अन्य सेवाओं के साथ हस्तक्षेप कर सकती है, इसलिए सावधानीपूर्वक उपयोग करें!"
@@ -7165,19 +7165,19 @@ msgid "This setting determines the number of NetDb DHT buckets the Peer Explorat
 msgstr "यह सेटिंग देखभाल करने वाली Peer Exploration Job को चलाने के समय संदर्भित करने वाले NetDb DHT बकेट की संख्या को निर्धारित करती है। मूल मान में, अन्वेषण करने वाले बकेट की संख्या राउटर के एक घंटे से अधिक समय तक चलने के आधार पर, यदि राउटर छिपा हुआ है या ''K'' बैंडविड्थ स्तर में है, और जाने माने राउटरों की संख्या पर निर्भर करेगी।"
 
 msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "यह सेटिंग (सेकंड में) आपको Peer Exploration Job के चलने के बीच की देरी को अधिग्रहित करने की अनुमति देती है, जो नए पीयर को नेटडीबी में जोड़ने की कोशिश करता है। नौकरी मूल रूप से हर 80 सेकंड में चलेगी, या यदि राउटर को कार्य या संदेश देरी का अनुभव हो रहा हो, तो हर 3 मिनट में। यदि नेटडीबी का आकार 4000 पीयर तक पहुंच जाता है, तो रोक तक पहुंच जाएगी 15 मिनट तक। यदि आपका नेटडीबी अच्छी तरह से भरा हो (2000 से अधिक पीयर), या यदि आप कुल बैंडविड्थ का उपयोग कम करना चाहते हैं, तो आप देरी को बढ़ाना चाह सकते हैं। नोट: Floodfill राउटर के लिए, यह कार्य नहीं चलता है जॉब डिफ़ॉल्ट रूप से हर 80 सेकंड में चलेगा, या यदि राउटर जॉब या मैसेज लैग का अनुभव कर रहा है, तो हर 3 मिनट में यदि NetDb का आकार 4000 पीयर तक पहुँचता है, तो विराम बढ़कर 15 मिनट हो जाएगा यदि आपका NetDb अच्छी तरह से भरा हुआ है (2000 से अधिक पीयर), या यदि आप समग्र बैंडविड्थ उपयोग कम करना चाहते हैं, तो आप देरी बढ़ाना चाह सकते हैं नोट: फ्लडफिल राउटर के लिए, यह जॉब नहीं चलता है"
+msgstr "यह सेटिंग (सेकंड में) आपको पीयर एक्सप्लोरेशन जॉब के रन के बीच देरी को ओवरराइड करने की अनुमति देती है जो नेटडीबी में जोड़ने के लिए नए पीयर्स का पता लगाने का प्रयास करती है। कार्य डिफ़ॉल्ट रूप से हर 80 सेकंड में चलेगा, या यदि राउटर कार्य या संदेश अंतराल का अनुभव कर रहा है, तो हर 3 मिनट में चलेगा। यदि नेटडीबी का आकार 4000 साथियों तक पहुंच जाता है, तो ठहराव 15 मिनट तक बढ़ जाएगा। यदि आपका नेटडीबी अच्छी तरह से भरा हुआ है (2000 से अधिक सहकर्मी), या यदि आप समग्र बैंडविड्थ उपयोग को कम करना चाहते हैं, तो आप विलंब को बढ़ाना चाह सकते हैं। नोट: फ्लड नोड राउटर्स के लिए, यह कार्य नहीं चलता है।"
 
 msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
 msgstr "यह सेटिंग अन्वेषण के लिए पीयर हैश की अधिकतम संख्या को लाइन में रखने की निर्धारित करती है। I2P में अधिकतम सीमा 128 है, और I2P+ में मूल मान 512 है।"
 
 msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "यह सेटिंग तय करती है कि एक floodfill के रूप में कार्यरत राउटर के लिए नेटडीबी का अन्वेषण करने के लिए क्या करेंगे ताकि नए पीयर के बारे में सीख सकें। [मूल मान असत्य है, रीस्टार्ट की आवश्यकता है]"
+msgstr "यह सेटिंग निर्धारित करती है कि फ्लड नोड के रूप में कार्य करने वाला राउटर नए साथियों के बारे में जानने के लिए नेटडीबी का पता लगाएगा या नहीं। [डिफ़ॉल्ट गलत है, पुनरारंभ आवश्यक है]"
 
 msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
 msgstr "जब यह सेटिंग सत्य कर दी जाती है, तो यह राउटर को अन्य राउटरों के साथ सीधे संवाद करने से रोकता है, और परिचयकों का उपयोग करने की मजबूरी पैदा करता है। [मूल मान असत्य है, जब तक कि राउटर छिपा हुआ मोड में नहीं है]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
-msgstr "जब यह सत्य कर दिया जाता है, तो यदि आपका राउटर नेटवर्क के लिए फ्लॉडफिल के रूप में कार्यरत है, तो आपका <a href=/configadvanced#ffconf>फ्लॉडफिल भागीदारी</a> अन्य राउटरों से छिपी रहेगी।"
+msgstr "सही पर सेट होने पर, यदि आपका राउटर नेटवर्क के लिए फ्लड नोड के रूप में काम कर रहा है, तो आपकी <a href=/configadvanced#ffconf>फ्लड नोड भागीदारी</a> अन्य राउटर से छिपी रहेगी।"
 
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
 msgstr "समान्तर <a href=/jobs>jobs</a> की अधिकतम संख्या को परिभाषित करती है जो चल सकती हैं। मूल मान JVM के लिए <code>wrapper.config</code> माध्यम से आवंटित जीवनशैली के आधार पर तय किया जाता है, और 64MB से कम मेमोरी के मामले में 3, 256MB से कम मेमोरी के मामले में 4, या 256MB से अधिक मेमोरी के मामले में 5 के रूप में सेट किया गया है। नोट: इस सेटिंग में बदलाव के लिए राउटर को रीस्टार्ट करना आवश्यक होगा कॉन्फ़िग, और 64MB से कम के लिए 3, 256M से कम के लिए 4, या 256MB से अधिक के लिए 5 सेट है नोट: इस सेटिंग में बदलाव के लिए राउटर को पुनर्प्रारंभ करना आवश्यक है"
@@ -7270,7 +7270,7 @@ msgid "Maximum number of peer profiles to retain in memory. Older, inactive prof
 msgstr "मेमोरी में रखने के लिए अधिकतम पीयर प्रोफ़ाइल। इस सीमा पर पहुँचने पर पुरानी, निष्क्रिय प्रोफ़ाइल पहले समाप्त होती हैं। 100 से नीचे के मान 100 पर क्लैम्प किए जाते हैं। [डिफ़ॉल्ट 8000, या धीमी सिस्टम पर 800]"
 
 msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]"
-msgstr "सुरंग निर्माण के लिए पीयर को चयन योग्य माने जाने के लिए RouterInfo की अधिकतम आयु (घंटों में)। इस सीमा से पुराने RouterInfo वाले पीयर को चयन से बाहर रखा जाता है जब तक कि उनके पास सक्रिय कनेक्शन न हो। यह विशेष रूप से फ्लडफ़िल राउटर के लिए प्रासंगिक है जो NetDB का सक्रिय रूप से अन्वेषण नहीं करते, क्योंकि उनका RouterInfo आवधिक रिफ़्रेश के बिना पुराना हो सकता है। [डिफ़ॉल्ट 3]"
+msgstr "सुरंग निर्माण के लिए चयन योग्य माने जाने वाले एक सहकर्मी के लिए राउटरइन्फो की अधिकतम आयु (घंटे में)। इस सीमा से अधिक पुराने राउटरइन्फोस वाले साथियों को तब तक चयन से बाहर रखा जाता है जब तक कि उनके पास सक्रिय कनेक्शन न हो। यह विशेष रूप से फ्लड नोड राउटर्स के लिए प्रासंगिक है जो नेटडीबी को सक्रिय रूप से एक्सप्लोर नहीं करते हैं, क्योंकि उनके राउटरइन्फोस समय-समय पर रिफ्रेश के बिना बासी हो सकते हैं। [डिफ़ॉल्ट 3 है]"
 
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
 msgstr "यह सेटिंग तय करती है कि हमारे राउटर के बारे में स्टैट्स अनियमित रूप से नेटडीबी में प्रकाशित किए जाते हैं या नहीं। [मूल मान असत्य है]"
@@ -8038,7 +8038,7 @@ msgid "A tunnel used by the router for communicating with other routers to perfo
 msgstr "रूटर के द्वारा अन्य रूटर के साथ संवाद करने के लिए उपयोग किए जाने वाले टंनल, जो विभिन्न ''घरेलू'' कार्यों को पूरा करते हैं, जैसे <i>leasesets</i> की सीख और प्रकाशन, क्लाइंट टंनल की परीक्षा, और नेटवर्क में अन्य रूटरों के बारे में सीखना और पुष्टि करना। ये टंनल आमतौर पर कम बैंडविड्थ के होते हैं।"
 
 msgid "A router on the network tasked with providing and receiving information about other routers and services on the network. The current minimum share bandwidth for a router to be considered as capable of performing floodfill duties is 128 KBytes/sec, though it's possible to override this requirement and force a router to be a floodfill on the <a href=/configadvanced>Advanced Configuration page</a>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "नेटवर्क पर एक रूटर जिसे अन्य रूटरों और नेटवर्क पर सेवाओं के बारे में जानकारी प्रदान करने और प्राप्त करने का कार्य दिया गया है। एक रूटर को floodfill के कर्तव्यों को पूरा करने के लिए वर्तमान मिनिमम साझा बैंडविड्थ 128 KBytes/sec है, हालांकि यह मानदंड ओवरराइड करने की संभावना है और रूटर को <a href=/configadvanced>अनुकूलित सेटिंग पेज</a> पर floodfill बनाने के लिए मजबूर कर सकते हैं। अधिक जानकारी के लिए, <a href=https://geti2p.net/en/docs/how/network-database#floodfill class=''sitelink external'' target=_blank rel=noreferrer>ऑनलाइन दस्तावेज़ीकरण</a> देखें फ्लडफिल कर्तव्यों को निभाने में सक्षम माने जाने वाले राउटर के लिए वर्तमान न्यूनतम साझा बैंडविड्थ 128 KBytes/sec है, हालाँकि उन्नत कॉन्फ़िगरेशन पृष्ठ पर इस आवश्यकता को ओवरराइड करना और राउटर को फ्लडफिल बनने के लिए मजबूर करना संभव है अधिक जानकारी के लिए, ऑनलाइन दस्तावेज़ देखें"
+msgstr "नेटवर्क पर एक राउटर जिसे नेटवर्क पर अन्य राउटर्स और सेवाओं के बारे में जानकारी प्रदान करने और प्राप्त करने का काम सौंपा गया है। फ्लड नोड कर्तव्यों को निष्पादित करने में सक्षम माने जाने वाले राउटर के लिए वर्तमान न्यूनतम शेयर बैंडविड्थ 128 KBytes/sec है, हालांकि इस आवश्यकता को ओवरराइड करना और राउटर को <a href=/configadvanced>उन्नत कॉन्फ़िगरेशन पृष्ठ</a> पर फ्लड नोड बनने के लिए बाध्य करना संभव है। अधिक जानकारी के लिए, <a href=https://geti2p.net/en/docs/how/network-database#flood node class='sitelink external' target=_blank rel=noreferrer>ऑनलाइन दस्तावेज़</a> देखें।"
 
 msgid "Garlic Routing"
 msgstr "लहसुनी रूटिंग"
@@ -8538,7 +8538,7 @@ msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
 msgstr "चेतावनी_फ़ायरवॉल्ड_और_तेज़ - फ़ायरवॉल्ड लेकिन तेज़ पीयर"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr "चेतावनी_फ़ायरवॉल्ड_और_फ्लूडफिल - फ़ायरवॉल्ड लेकिन फ्लूडफिल"
+msgstr "WARN_FIREWALLED_AND_FLOODFILL - फ़ायरवॉल लेकिन बाढ़ नोड"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
 msgstr "चेतावनी_फ़ायरवॉल्ड_इनबाउंड_TCP_sath - इनबाउंड TCP के साथ फ़ायरवॉल्ड"
@@ -9078,7 +9078,7 @@ msgid "This is the number of peers your router has available for building your e
 msgstr "यह वह संख्या है जितने पीयर्स आपके रूटर के पास अन्वेषण टंनल बनाने के लिए उपलब्ध हैं, जो नेटवर्क प्रदर्शन को स्थापित करने के लिए उपयोग किए जाते हैं। यह सामान्यतया 8-75 के बीच होता है। तेजी से कार्य करने वाले पीयर्स उच्च क्षमता श्रेणी में शामिल होते हैं। आपके उच्च क्षमता वाले पीयर्स <a href=''/profiles''>Profiles पृष्ठ</a> पर दिखाए जाते हैं। <a href=''/configstats#router.highCapacityPeers''>[ग्राफ़ चालू करें]</a> यह आमतौर पर 8-75 की सीमा में है तेज़ पीयर उच्च क्षमता वाले स्तर में शामिल हैं आपके उच्च क्षमता वाले पीयर प्रोफ़ाइल पृष्ठ पर दिखाए गए हैं [ग्राफ़िंग सक्षम करें]"
 
 msgid "This is the number of peers your router will use for network database inquiries. These are usually the <i>floodfill</i> routers which are responsible for maintaining network integrity. Your well integrated peers are shown on the bottom of the <a href='/profiles'>Profiles page</a>."
-msgstr "यह वह संख्या है जितने पीयर्स आपका रूटर नेटवर्क डेटाबेस के जांच के लिए उपयोग करेगा। ये आमतौर पर नेटवर्क की संपूर्णता बनाए रखने के लिए जिम्मेदार <i>floodfill</i> रूटर होते हैं। आपके अच्छी तरह संगठित पीयर्स <a href=''/profiles''>Profiles पृष्ठ</a> के नीचे दिखाए जाते हैं ये आमतौर पर फ्लडफिल राउटर हैं जो नेटवर्क अखंडता बनाए रखने के लिए जिम्मेदार हैं आपके अच्छी तरह से एकीकृत पीयर प्रोफ़ाइल पृष्ठ के नीचे दिखाए गए हैं"
+msgstr "यह उन साथियों की संख्या है जिनका उपयोग आपका राउटर नेटवर्क डेटाबेस पूछताछ के लिए करेगा। ये आमतौर पर <i>फ्लड नोड</i> राउटर होते हैं जो नेटवर्क अखंडता बनाए रखने के लिए जिम्मेदार होते हैं। आपके अच्छी तरह से एकीकृत सहकर्मी <a href='/profiles'>प्रोफ़ाइल पृष्ठ</a> के नीचे दिखाए गए हैं।"
 
 msgid "This is the total number of peers that are known by your router. They are listed on the <a href='/netdb'>Network Database page</a>. This may range from under 100 to 1000 or more. This number is not the total size of the network; it may vary widely depending on your total bandwidth, shared bandwidth, and locally-generated traffic. I2P does not require a router to know every other router in the network."
 msgstr "यह वह कुल संख्या है जितने पीयर्स आपके रूटर को पता हैं। वे <a href=''/netdb''>Network Database पृष्ठ</a> पर सूचीबद्ध होते हैं। यह 100 से कम से कम से 1000 या अधिक तक विभिन्न हो सकता है। यह संख्या नेटवर्क के कुल आकार को नहीं दर्शाती है; यह आपकी कुल बैंडविड्थ, साझा बैंडविड्थ और स्थानीय तरंगों के आधार पर विस्तृत रूप से भिन्न हो सकती है। I2P में यह मांग नहीं होती है कि किसी रूटर को नेटवर्क में हर अन्य रूटर को पता होना चाहिए ये नेटवर्क डेटाबेस पृष्ठ पर सूचीबद्ध हैं यह 100 से कम से लेकर 1000 या अधिक तक हो सकता है यह संख्या नेटवर्क का कुल आकार नहीं है; यह आपकी कुल बैंडविड्थ, साझा बैंडविड्थ और स्थानीय रूप से उत्पन्न ट्रैफ़िक के आधार पर व्यापक रूप से भिन्न हो सकती है I2P को राउटर को नेटवर्क में हर दूसरे राउटर को जानने की आवश्यकता नहीं है"
@@ -9099,7 +9099,7 @@ msgid "The actual tunnels are shown on the <a href='/tunnels'>Tunnels page</a>."
 msgstr "वास्तविक टनल <a href=''/tunnels''>टनल पृष्ठ</a> पर दिखाए जाते हैं।"
 
 msgid "Tunnels built by your router and used for communication with the floodfill peers, building new tunnels, and testing existing tunnels."
-msgstr "आपके रूटर द्वारा बनाए गए टनल जो फ्लॉडफिल पीयर्स के साथ संचार के लिए, नए टनल बनाने और मौजूदा टनल की परीक्षा करने के लिए उपयोग किए जाते हैं।"
+msgstr "आपके राउटर द्वारा बनाई गई सुरंगें और फ़्लूफ़फ़िलमार्कर साथियों के साथ संचार, नई सुरंगों के निर्माण और मौजूदा सुरंगों के परीक्षण के लिए उपयोग की जाती हैं।"
 
 msgid "Tunnels built by your router for each client's use."
 msgstr "प्रत्येक क्लाइंट के उपयोग के लिए आपके रूटर द्वारा बनाए गए टनल।"
@@ -9201,13 +9201,13 @@ msgid "While I2P will work fine in this configuration, if you really have over 1
 msgstr "जबकि I2P इस सेटिंग में ठीक कार्य करेगा, अगर आपके पास वास्तव में 128KBps से अधिक बैंडविड्थ है जो साझा करने के लिए है, तो अगर आप अपनी फ़ायरवॉल खोलेंगे, तो यह नेटवर्क के लिए अधिक उपयोगी होगा।"
 
 msgid "WARN - Firewalled and Floodfill"
-msgstr "WARN - फ़ायरवॉल्ड और फ्लॉडफिल"
+msgstr "चेतावनी - फ़ायरवॉलयुक्त और बाढ़फ़िलमार्कर"
 
 msgid "You have configured I2P to be a floodfill router, but you are firewalled."
-msgstr "आपने I2P को एक फ्लॉडफिल रूटर के रूप में सेट किया है, लेकिन आपको फ़ायरवॉल्ड है।"
+msgstr "आपने I2P को फ़्लूफ़िलमार्कर राउटर के रूप में कॉन्फ़िगर किया है, लेकिन आप फ़ायरवॉल से जुड़े हुए हैं।"
 
 msgid "For best participation as a floodfill router, you should open your firewall."
-msgstr "एक फ्लॉडफिल रूटर के रूप में सबसे अच्छी भागीदारी के लिए, आपको अपनी फ़ायरवॉल खोलनी चाहिए।"
+msgstr "फ़्लूफ़फ़िलमार्कर राउटर के रूप में सर्वोत्तम भागीदारी के लिए, आपको अपना फ़ायरवॉल खोलना चाहिए।"
 
 msgid "WARN - Firewalled with Inbound TCP Enabled"
 msgstr "WARN - फ़ायरवॉल्ड और इनबाउंड TCP सक्षम"
@@ -9411,7 +9411,7 @@ msgid "How to Harden Your WordPress Site"
 msgstr "आपकी WordPress साइट को कैसे मजबूत करें"
 
 msgid "<b>Note:</b> On some Apache installations, the <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> and <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> modules are enabled by default. It is important to disable these, or otherwise protect access to the urls, to avoid compromising the anonymity and security of your server."
-msgstr "नोट: कुछ Apache स्थापनाओं में, mod_status और mod_info मॉड्यूल डिफ़ॉल्ट रूप से सक्रिय होते हैं। अपने सर्वर की गुप्तता और सुरक्षा को हानि पहुँचाने से बचने के लिए, ये दोनों को अक्षम करना या उनके URL की पहुँच को अन्यथा सुरक्षित करना महत्वपूर्ण है।"
+msgstr "<b>ध्यान दें:</b> कुछ अपाचे इंस्टॉलेशन पर, <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> और <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> मॉड्यूल डिफ़ॉल्ट रूप से सक्षम हैं। अपने सर्वर की गुमनामी और सुरक्षा से समझौता करने से बचने के लिए, इन्हें अक्षम करना या अन्यथा यूआरएल तक पहुंच की रक्षा करना महत्वपूर्ण है।"
 
 msgid "home"
 msgstr "घर"

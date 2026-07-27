@@ -114,7 +114,7 @@ msgid "Known high capacity peers"
 msgstr "Noti peer ad alta capacità"
 
 msgid "Known integrated (floodfill) peers"
-msgstr "Peer integrati (floodfill) noti"
+msgstr "Peer integrati noti (nodo Flood)."
 
 msgid "Total peers in our NetDb"
 msgstr "Totale peer nel nostro NetDb"
@@ -135,7 +135,7 @@ msgid "unknown"
 msgstr "sconosciuto"
 
 msgid "Floodfill"
-msgstr "Riempimento"
+msgstr "SEGNALE DI ALLAGAMENTO"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Mostra tutti i router con questa capacità nel NetDb"
@@ -1813,7 +1813,7 @@ msgid "Aborted startup"
 msgstr "Avvio interrotto"
 
 msgid "Enabled floodfill"
-msgstr "Floodfill abilitato"
+msgstr "Nodo Flood abilitato"
 
 msgid "Changed IP"
 msgstr "IP modificato"
@@ -1843,7 +1843,7 @@ msgid "New router identity"
 msgstr "Nuova identità del router"
 
 msgid "Disabled floodfill"
-msgstr "Floodfill disabilitato"
+msgstr "Nodo di inondazione disabilitato"
 
 msgid "Out of memory error"
 msgstr "Errore out of memory"
@@ -2187,7 +2187,7 @@ msgid "LeaseSets"
 msgstr "Insiemi di Lease"
 
 msgid "Stored LeaseSets in floodfill"
-msgstr "LeaseSet memorizzati nel floodfill"
+msgstr "LeaseSet archiviati nel nodo Flood"
 
 msgid "Cache Hit"
 msgstr "Colpo di cache"
@@ -2199,7 +2199,7 @@ msgid "Flood Verify"
 msgstr "Verifica flood"
 
 msgid "Floodfill verify time"
-msgstr "Tempo di verifica del floodfill"
+msgstr "ora di verifica del nodo di inondazione"
 
 msgid "NetDB ACK"
 msgstr "ACK NetDB"
@@ -2716,7 +2716,7 @@ msgid "UDP Port"
 msgstr "Porta UDP"
 
 msgid "Floodfill Role"
-msgstr "Ruolo Floodfill"
+msgstr "Ruolo del nodo di inondazione"
 
 msgid "Active"
 msgstr "Attivo"
@@ -3060,7 +3060,7 @@ msgid "Change in"
 msgstr "Modifica in"
 
 msgid "Floodfill mode enabled"
-msgstr "Modalità floodfill abilitata"
+msgstr "modalità nodo Flood abilitata"
 
 msgid "Routing Key"
 msgstr "Chiave di instradamento"
@@ -3168,7 +3168,7 @@ msgid "X Tier"
 msgstr "Livello X"
 
 msgid "Floodfills"
-msgstr "Riempimenti"
+msgstr "SEGNALI DI ALLAGAMENTO"
 
 msgid "Total"
 msgstr "Totale"
@@ -3824,7 +3824,7 @@ msgid "Peers that meet or exceed tunnel build rate average for all profiled peer
 msgstr "Peer che soddisfano o superano la media di tunnel costruiti per tutti i peer profilati."
 
 msgid "Floodfill peers currently available for NetDb inquiries."
-msgstr "Peer Floodfill attualmente disponibili per le richieste NetDb."
+msgstr "peer del nodo Flood attualmente disponibili per le richieste NetDb."
 
 msgid "Peers not profiled as high capacity (lower build rate than average peer)."
 msgstr "Peer non profilati come alta capacita (Ratio di costruzione inferiore rispetto al peer medio)"
@@ -3894,7 +3894,7 @@ msgid "Firewalled with Inbound TCP Enabled"
 msgstr "Firewall con TCP in entrata abilitato"
 
 msgid "Firewalled &amp; Floodfill"
-msgstr "Firewalled e Inondazione"
+msgstr "Firewall e protezione SEGNALE DI ALLAGAMENTO"
 
 msgid "Disconnected"
 msgstr "Disconnesso"
@@ -4250,7 +4250,7 @@ msgid "How much RAM I2P is using / total RAM available to I2P (excludes RAM allo
 msgstr "Quanta memoria I2P sta utilizzando / memoria totale disponibile a I2P (esclusa la memoria allocata alla JVM)"
 
 msgid "Floodfill enabled"
-msgstr "Floodfill abilitato"
+msgstr "nodo di inondazione abilitato"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "Numero totale di LeaseSet remoti memorizzati nella nostra NetDb"
@@ -4356,7 +4356,7 @@ msgid "inbound / outbound"
 msgstr "entrata / uscita"
 
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
-msgstr "Usato per costruire/testare i tunnel e comunicare con i peer di accumulo"
+msgstr "Utilizzato per costruire e testare tunnel e comunicare con i peer del nodo Flood"
 
 msgid "Utility"
 msgstr "Utilità"
@@ -4531,7 +4531,7 @@ msgid "Delete Sybil Blocklist"
 msgstr "Cancella lista blocco Sybil"
 
 msgid "Floodfill Summary"
-msgstr "Riepilogo Floodfill"
+msgstr "Riepilogo del nodo alluvione"
 
 msgid "Same Family"
 msgstr "Stessa famiglia"
@@ -4567,7 +4567,7 @@ msgid "Review"
 msgstr "Revisione"
 
 msgid "Run analysis on Floodfills only"
-msgstr "Esegui analisi solo sui Floofill"
+msgstr "Esegui l'analisi solo sui nodi alluvionali"
 
 msgid "Start Scan"
 msgstr "Avvia scansione"
@@ -4603,7 +4603,7 @@ msgid "Block all detected sybils"
 msgstr "Blocca tutti i sybil individuati"
 
 msgid "Include non-floodfill routers"
-msgstr "Includi router non-floodfill"
+msgstr "Includere router dei nodi non-flood"
 
 msgid "Minimum threshold for block"
 msgstr "Soglia minima per il blocco"
@@ -4621,7 +4621,7 @@ msgid "Known Floodfills"
 msgstr "Floodfills conosciuti"
 
 msgid "Average closest floodfill distance"
-msgstr "Distanza media del floodfill più vicino"
+msgstr "Distanza media del nodo alluvionale più vicino"
 
 msgid "Routing Data"
 msgstr "Instradamento dati"
@@ -4630,28 +4630,28 @@ msgid "Rotates in"
 msgstr "Ruota in"
 
 msgid "Closest Floodfills to Our Routing Key (Where we Store our RI)"
-msgstr "Floodfill più vicini alla nostra chiave di Routing (Dove memorizziamo la nostra RI)"
+msgstr "Nodi Flood più vicini alla nostra chiave di instradamento (dove conserviamo la nostra RI)"
 
 msgid "Closest Floodfills to Tomorrow's Routing Key (Where we will Store our RI)"
-msgstr "Floodfill più vicini alla nostra chiave di Routing di domani(Dove memorizzeremo la nostra RI)"
+msgstr "Nodi Flood più vicini alla chiave di routing di domani (dove memorizzeremo la nostra RI)"
 
 msgid "Closest Floodfills to Our Router Hash (DHT Neighbors if we are Floodfill)"
-msgstr "Floodfill più vicini alla nostro HASH del router(Vicini DHT se siamo Floodfill)"
+msgstr "Nodi Flood più vicini al nostro router Hash (vicini DHT se siamo nodi Flood)"
 
 msgid "Floodfills Close to Our Destinations"
-msgstr "Floodfill vicini alle nostre destinazioni"
+msgstr "nodi alluvionali vicini alle nostre destinazioni"
 
 msgid "None"
 msgstr "Nessuno"
 
 msgid "Closest floodfills to the Routing Key for"
-msgstr "Floodfill più vicini alla chiave di routing per"
+msgstr "Nodi Flood più vicini alla chiave di routing per"
 
 msgid "where we store our LS"
 msgstr "dove memorizziamo il nostro LS"
 
 msgid "Closest floodfills to Tomorrow's Routing Key for"
-msgstr "Floodfill più vicini alla chiave di routing di domani per"
+msgstr "Nodi di inondazione più vicini alla chiave di routing di domani per"
 
 msgid "where we will store our LS"
 msgstr "dove memorizzeremo il nostro LS"
@@ -4666,10 +4666,10 @@ msgid "Router info not available"
 msgstr "Informazioni sul Router non disponibili"
 
 msgid "Average Floodfill Distance is"
-msgstr "La distanza media del Floodfill è"
+msgstr "La distanza media del nodo di inondazione è"
 
 msgid "Closest Floodfill Pairs by Hash"
-msgstr "Coppie di Floodfill più vicine per Hash"
+msgstr "Nodo Flood più vicino Coppie per Hash"
 
 msgid "Hash Distance"
 msgstr "Distanza di Hash"
@@ -4723,7 +4723,7 @@ msgid "Totals for"
 msgstr "Totali per"
 
 msgid "floodfills"
-msgstr "router di riempimento alluvione"
+msgstr "SEGNALI DI ALLAGAMENTO"
 
 msgid "MIN"
 msgstr "MINIMO"
@@ -5939,16 +5939,16 @@ msgid "Key <b>{0}</b> selected for removal. To commit the change, save the confi
 msgstr "Chiave <b>{0}</b> selezionata per la rimozione. Per confermare la modifica, salva la configurazione, o annulla per ripristinare la chiave."
 
 msgid "Floodfill Configuration"
-msgstr "Configurazione Floodfill"
+msgstr "Configurazione del nodo di inondazione"
 
 msgid "Floodfill participation helps the network, but may use more of your computer's resources."
-msgstr "La partecipazione Floodfill aiuta la rete, ma potrebbe usare più risorse del tuo computer."
+msgstr "La partecipazione al nodo Flood aiuta la rete, ma potrebbe utilizzare più risorse del tuo computer."
 
 msgid "This router is currently a floodfill participant."
-msgstr "Questo router è attualmente un partecipante floodfill."
+msgstr "Questo router è attualmente un partecipante al nodo Flood."
 
 msgid "This router is not currently a floodfill participant."
-msgstr "Questo router non è attualmente un partecipante floodfill."
+msgstr "Questo router non è attualmente un partecipante al nodo Flood."
 
 msgid "Enrollment"
 msgstr "Arruolamento"
@@ -6081,10 +6081,10 @@ msgid "Misc Reasons"
 msgstr "Motivi vari"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
-msgstr "Bannire i peer floodfill che non rispondono alle richieste (tasso di fallimento >95%)"
+msgstr "Escludere i peer del nodo Flood che non riescono a rispondere alle query (tasso di fallimento> 95%)"
 
 msgid "Ban unresponsive floodfills"
-msgstr "Bannire i floodfill non rispondenti"
+msgstr "Blocca i nodi Flood che non rispondono"
 
 msgid "Ban routers whose RouterInfo has no version field"
 msgstr "Bannire i router il cui RouterInfo non ha un campo versione"
@@ -6269,7 +6269,7 @@ msgid "Enter key provided by server operator."
 msgstr "Inserisci chiave fornita dall''operatore del server."
 
 msgid "Prevents server discovery by floodfills"
-msgstr "Previene la scoperta del server dai floodfill"
+msgstr "Impedisce il rilevamento del server da parte dei nodi Flood"
 
 msgid "Enter password provided by server operator."
 msgstr "Inserisci password fornita dall''operatore del server."
@@ -6986,7 +6986,7 @@ msgid "Network & Participation"
 msgstr "Rete e partecipazione"
 
 msgid "Floodfill / NetDB"
-msgstr "Floodfill / NetDB"
+msgstr "nodo di inondazione/NetDB"
 
 msgid "Advanced Configuration Help - I2P+"
 msgstr "Guida alla configurazione avanzata - I2P"
@@ -7157,7 +7157,7 @@ msgid "When set to false, slow peers may be selected as hops for outbound client
 msgstr "Se impostato su false, i peer lenti possono essere selezionati come hop pertunnel client in uscita. [Il valore predefinito è true]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "Questa impostazione (in ore) determina da quanto tempo è vecchia una RouterInfo nel NetDb (la sua ultima data di pubblicazione nota) prima che venga definita obsoleta ed eliminata. [Il predefinito è di 28 ore a meno che il router sia un Floodfill, in tal caso il predefinito è di 8 ore]"
+msgstr "Questa impostazione (in ore) determina quanti anni ha un RouterInfo nel NetDb (la sua ultima data di pubblicazione nota) prima che venga classificato come obsoleto ed eliminato. [L'impostazione predefinita è 28 ore a meno che il router non sia un nodo Flood, nel qual caso l'impostazione predefinita è 8 ore]"
 
 msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
 msgstr "Questa impostazione determina il numero di peer da esplorare in parallelo quando viene eseguito il Jobs di esplorazione dei peer [il predefinito è 1 peer alla volta quando sono noti più di 3000 peer]. Nota che aumentare questo valore aumenterà i requisiti di larghezza di banda per l''esplorazione, e impostare questo valore troppo alto potrebbe causare ritardi eccessivi dei messaggi e interferire con altri servizi, quindi utilizzare con cautela!"
@@ -7166,19 +7166,19 @@ msgid "This setting determines the number of NetDb DHT buckets the Peer Explorat
 msgstr "Questa impostazione determina il numero di bucket di NetDb DHT che il lavoro di esplorazione peer utilizzerà quando viene eseguito. Di default, il numero di bucket da esplorare varia a seconda se il router è in esecuzione da più di un''ora, se il router è nascosto o nella categoria ''K'' di larghezza di banda e il numero di router conosciuti."
 
 msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "Questa impostazione (in secondi) ti consente di annullare il ritardo tra le esecuzioni del lavoro di esplorazione peer che tenta di individuare nuovi peer da aggiungere a NetDb. Di default, il lavoro viene eseguito ogni 80 secondi o, se il router sta riscontrando ritardi nei lavori o nei messaggi, ogni 3 minuti. Se la dimensione di NetDb raggiunge 4000 peer, la pausa aumenterà a 15 minuti. Puoi aumentare il ritardo se il tuo NetDb è ben popolato (oltre 2000 peer) o se desideri ridurre l''utilizzo complessivo della larghezza di banda. Nota: per i router Floodfill, questo lavoro non viene eseguito."
+msgstr "Questa impostazione (in secondi) consente di ignorare il ritardo tra le esecuzioni del processo di esplorazione peer che tenta di individuare nuovi peer da aggiungere al NetDb. Per impostazione predefinita, il lavoro verrà eseguito ogni 80 secondi oppure, se il router riscontra un ritardo nel lavoro o nei messaggi, ogni 3 minuti. Se la dimensione del NetDb raggiunge i 4000 peer la pausa aumenterà a 15 minuti. Potresti voler aumentare il ritardo se il tuo NetDb è ben popolato (oltre 2000 peer) o se desideri ridurre l'utilizzo complessivo della larghezza di banda. Nota: per i router del nodo Flood, questo lavoro non viene eseguito."
 
 msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
 msgstr "Questa impostazione determina il numero massimo di hash dei peer da mettere in coda per l''esplorazione. In I2P il massimo è 128 e in I2P+ il valore predefinito è 512."
 
 msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "Questa impostazione determina se un router che funge da floodfill esplorerà la NetDb per apprendere informazioni sui nuovi peer. [Il valore predefinito è false, necessita riavvio]"
+msgstr "Questa impostazione determina se un router che funge da nodo Flood esplorerà NetDb per conoscere nuovi peer. [L'impostazione predefinita è falsa, è necessario riavviare]"
 
 msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
 msgstr "Questa impostazione, quando impostata su true, impedisce a un router di comunicare direttamente con altri router, forzando l''utilizzo degli introduttori. [Il valore predefinito è false a meno che il router non sia in modalità nascosta]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
-msgstr "Quando impostato su true, se il tuo router serve come floodfill per la rete, la tua partecipazione come floodfill verrà nascosta agli altri router."
+msgstr "Se impostato su true, se il tuo router funge da nodo Flood per la rete, la tua <a href=/configadvanced#ffconf>partecipazione al nodo Flood</a> sarà nascosta agli altri router."
 
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
 msgstr "Definisce il numero massimo di <a href=/jobs>lavori</a> paralleli che possono essere eseguiti. Il valore predefinito è determinato dalla quantità di memoria allocata alla JVM tramite <code>wrapper.config</code>, ed è impostato a 3 per meno di 64 MB, 4 per meno di 256 MB o 5 per più di 256 MB. Nota: una modifica a questa impostazione richiede un riavvio del router."
@@ -7271,7 +7271,7 @@ msgid "Maximum number of peer profiles to retain in memory. Older, inactive prof
 msgstr "Numero massimo di profili peer da mantenere in memoria. I profili piùvecchi e inattivi vengono rimossi per primi quando questo limite vieneraggiunto. I valori inferiori a 100 vengono bloccati a 100. [Il valorepredefinito è 8000, o 800 su sistemi lenti]"
 
 msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]"
-msgstr "Età massima di un RouterInfo (in ore) affinché un peer sia consideratoselezionabile per la costruzione di tunnel. I peer con RouterInfo piùvecchi di questa soglia vengono esclusi dalla selezione a meno che nonabbiano una connessione attiva. Questo è particolarmente rilevante per irouter floodfill che non esplorano attivamente il NetDB, poiché i loroRouterInfo potrebbero diventare obsoleti senza aggiornamenti periodici. [Ilvalore predefinito è 3]"
+msgstr "Età massima di un RouterInfo (in ore) affinché un peer possa essere considerato selezionabile per la costruzione del tunnel. I peer con RouterInfo precedenti a questa soglia sono esclusi dalla selezione a meno che non abbiano una connessione attiva. Ciò è particolarmente rilevante per i router dei nodi Flood che non esplorano attivamente il NetDB, poiché i loro RouterInfo potrebbero diventare obsoleti senza un aggiornamento periodico. [L'impostazione predefinita è 3]"
 
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
 msgstr "Questa impostazione determina se le statistiche sul nostro router vengono pubblicate sporadicamente su NetDb. [Il valore predefinito è falso]"
@@ -8039,7 +8039,7 @@ msgid "A tunnel used by the router for communicating with other routers to perfo
 msgstr "Un tunnel utilizzato dal router per comunicare con altri router per eseguire varie funzioni di \"mantenimento\" come apprendere e pubblicare <i>leasesets</i>, testare tunnel di client e apprendere e convalidare altri router nella rete. Questi tunnel sono normalmente a bassa larghezza di banda."
 
 msgid "A router on the network tasked with providing and receiving information about other routers and services on the network. The current minimum share bandwidth for a router to be considered as capable of performing floodfill duties is 128 KBytes/sec, though it's possible to override this requirement and force a router to be a floodfill on the <a href=/configadvanced>Advanced Configuration page</a>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "Un router sulla rete incaricato di fornire e ricevere informazioni su altri router e servizi sulla rete. La larghezza di banda minima attuale per considerare un router capace di svolgere le funzioni di floodfill è di 128 KBytes/sec, anche se è possibile ignorare questo requisito e forzare un router ad essere un floodfill nella <a href=/configadvanced>pagina Configurazione Avanzata</a>. Per maggiori informazioni, consultare la <a href=https://geti2p.net/en/docs/how/network-database#floodfill class=''sitelink external'' target=_blank rel=noreferrer>documentazione online</a>."
+msgstr "Un router sulla rete incaricato di fornire e ricevere informazioni su altri router e servizi sulla rete. L'attuale larghezza di banda condivisa minima affinché un router possa essere considerato in grado di eseguire compiti di nodo Flood è 128 KByte/sec, sebbene sia possibile ignorare questo requisito e forzare un router a essere un nodo Flood nella <a href=/configadvanced>pagina Configurazione avanzata</a>. Per ulteriori informazioni, consulta la <a href=https://geti2p.net/en/docs/how/network-database#flood node class='sitelink external' target=_blank rel=noreferrer>documentazione online</a>."
 
 msgid "Garlic Routing"
 msgstr "Instradamento Garlic"
@@ -8539,7 +8539,7 @@ msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
 msgstr "WARN_FIREWALLED_AND_FAST - Con firewall ma peer veloce"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr "WARN_FIREWALLED_AND_FLOODFILL - Con firewall ma floodfill"
+msgstr "WARN_FIREWALLED_AND_FLOODFILL - Nodo con firewall ma allagato"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
 msgstr "WARN_FIREWALLED_WITH_INBOUND_TCP - Con firewall e TCP in entrata"
@@ -9079,7 +9079,7 @@ msgid "This is the number of peers your router has available for building your e
 msgstr "Questo è il numero di peer disponibili per il tuo router per la creazione dei tunnel esplorativi che vengono utilizzati per determinare le prestazioni di rete. In genere si trova nell''intervallo 8-75. I peer veloci sono inclusi nell''alto livello di capacità. I tuoi peer ad alta capacità sono mostrati nella pagina dei <a href=''/profiles''>Profili</a>. <a href=''/configstats#router.highCapacityPeers''>[Abilita la rappresentazione grafica]</a>"
 
 msgid "This is the number of peers your router will use for network database inquiries. These are usually the <i>floodfill</i> routers which are responsible for maintaining network integrity. Your well integrated peers are shown on the bottom of the <a href='/profiles'>Profiles page</a>."
-msgstr "Questo è il numero di peer che il tuo router utilizzerà per le richieste del database di rete. Di solito si tratta dei router <i>floodfill</i> responsabili del mantenimento dell''integrità di rete. I tuoi peer ben integrati sono mostrati in fondo alla <a href=''/profiles''>pagina Profili</a>."
+msgstr "Questo è il numero di peer che il router utilizzerà per le richieste del database di rete. Di solito si tratta dei router <i>nodi Flood</i> responsabili del mantenimento dell'integrità della rete. I tuoi colleghi ben integrati vengono visualizzati nella parte inferiore della <a href='/profiles'>pagina dei profili</a>."
 
 msgid "This is the total number of peers that are known by your router. They are listed on the <a href='/netdb'>Network Database page</a>. This may range from under 100 to 1000 or more. This number is not the total size of the network; it may vary widely depending on your total bandwidth, shared bandwidth, and locally-generated traffic. I2P does not require a router to know every other router in the network."
 msgstr "Questo è il numero totale di peer conosciuti dal tuo router. Sono elencati sulla <a href=''/netdb''>pagina del Database di Rete</a>. Questo numero può variare da meno di 100 a 1000 o più. Questo numero non rappresenta la dimensione totale della rete; può variare ampiamente a seconda della tua larghezza di banda totale, della larghezza di banda condivisa e del traffico generato localmente. I2P non richiede che un router conosca ogni altro router nella rete."
@@ -9100,7 +9100,7 @@ msgid "The actual tunnels are shown on the <a href='/tunnels'>Tunnels page</a>."
 msgstr "I tunnel effettivi sono mostrati sulla pagina <a href=''/tunnels''>Tunnels</a>."
 
 msgid "Tunnels built by your router and used for communication with the floodfill peers, building new tunnels, and testing existing tunnels."
-msgstr "I tunnel costruiti dal tuo router e utilizzati per la comunicazione con i peer di floodfill, per la costruzione di nuovi tunnel e per il test dei tunnel esistenti."
+msgstr "Tunnel creati dal router e utilizzati per la comunicazione con i peer del nodo Flood, per la costruzione di nuovi tunnel e per il test dei tunnel esistenti."
 
 msgid "Tunnels built by your router for each client's use."
 msgstr "I tunnel costruiti dal tuo router per l''uso di ogni client."
@@ -9202,13 +9202,13 @@ msgid "While I2P will work fine in this configuration, if you really have over 1
 msgstr "Nonostante I2P funzionerà bene con questa configurazione, se davvero hai più di 128KBps di banda da condividere, sarebbe molto più di aiuto per la rete se tu aprissi il tuo firewall."
 
 msgid "WARN - Firewalled and Floodfill"
-msgstr "AVVISO - Dietro ad un firewall e Floodfill"
+msgstr "WARN: nodo con firewall e allagamento"
 
 msgid "You have configured I2P to be a floodfill router, but you are firewalled."
-msgstr "Hai configurato I2P per essere un router Floodfill ma sei dietro ad un firewall."
+msgstr "Hai configurato I2P come router del nodo Flood, ma sei protetto da firewall."
 
 msgid "For best participation as a floodfill router, you should open your firewall."
-msgstr "Per una migliore partecipazione come router Floodfill dovresti aprire il tuo firewall."
+msgstr "Per una migliore partecipazione come router del nodo Flood, è necessario aprire il firewall."
 
 msgid "WARN - Firewalled with Inbound TCP Enabled"
 msgstr "AVVISO - Dietro ad un firewall con TCP in Ingresso Abilitato"

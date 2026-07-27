@@ -117,7 +117,7 @@ msgid "Known high capacity peers"
 msgstr "Znani parterji z visoko kapaciteto"
 
 msgid "Known integrated (floodfill) peers"
-msgstr "Znani integrirani (zalivni) parterji"
+msgstr "Znani integrirani (poplavno vozlišče) vrstniki"
 
 msgid "Total peers in our NetDb"
 msgstr "Skupaj parterjev v naši mrežni bazi"
@@ -138,7 +138,7 @@ msgid "unknown"
 msgstr "neznano"
 
 msgid "Floodfill"
-msgstr "Zalivni"
+msgstr "poplavno vozlišče"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Pokaži vse usmerjevalnike z to zmogljivostjo v mrežni bazi"
@@ -1828,7 +1828,7 @@ msgid "Aborted startup"
 msgstr "Začetek je prekinjen"
 
 msgid "Enabled floodfill"
-msgstr "Omogočen zalivni"
+msgstr "Omogočeno poplavno vozlišče"
 
 msgid "Changed IP"
 msgstr "Spremenjena IP"
@@ -1858,7 +1858,7 @@ msgid "New router identity"
 msgstr "Nova identiteta usmerjevalnika"
 
 msgid "Disabled floodfill"
-msgstr "Onemogočen zalivni"
+msgstr "Onemogočeno poplavno vozlišče"
 
 msgid "Out of memory error"
 msgstr "Napaka z manjkajočim pomnilnikom"
@@ -2202,7 +2202,7 @@ msgid "LeaseSets"
 msgstr "Nizi zakupov"
 
 msgid "Stored LeaseSets in floodfill"
-msgstr "Shranjeni LeaseSet-i v floodfill"
+msgstr "Shranjeni LeaseSets v vozlišču poplav"
 
 msgid "Cache Hit"
 msgstr "Zadetek predpomnilnika"
@@ -2214,7 +2214,7 @@ msgid "Flood Verify"
 msgstr "Preverjanje floodfill"
 
 msgid "Floodfill verify time"
-msgstr "Čas preverjanja floodfill"
+msgstr "čas preverjanja poplavnega vozlišča"
 
 msgid "NetDB ACK"
 msgstr "NetDB potrditev"
@@ -2731,7 +2731,7 @@ msgid "UDP Port"
 msgstr "UDP vrata"
 
 msgid "Floodfill Role"
-msgstr "Vloga zalivne"
+msgstr "poplavno vozlišče Vloga"
 
 msgid "Active"
 msgstr "Aktiven"
@@ -3075,7 +3075,7 @@ msgid "Change in"
 msgstr "Sprememba v"
 
 msgid "Floodfill mode enabled"
-msgstr "Način Floodfill omogočen"
+msgstr "omogočen način poplavnega vozlišča"
 
 msgid "Routing Key"
 msgstr "Ključ usmerjanja"
@@ -3084,7 +3084,7 @@ msgid "Median distance (bits)"
 msgstr "Srednja razdalja (biti)"
 
 msgid "Estimated total floodfills"
-msgstr "Ocena skupaj zalivnih"
+msgstr "Ocenjeno skupno število poplavnih vozlišč"
 
 msgid "Estimated total leasesets"
 msgstr "Ocena skupaj leaseSet"
@@ -3183,7 +3183,7 @@ msgid "X Tier"
 msgstr "X nivo"
 
 msgid "Floodfills"
-msgstr "Poplave"
+msgstr "poplavna vozlišča"
 
 msgid "Total"
 msgstr "Skupaj"
@@ -3855,7 +3855,7 @@ msgid "Peers that meet or exceed tunnel build rate average for all profiled peer
 msgstr "Parterji, ki izpolnjujejo ali presega povprečje gradnje tuneljev za vse profilirane parterje"
 
 msgid "Floodfill peers currently available for NetDb inquiries."
-msgstr "Zalivni parterji trenutno na voljo za vprašanja NetDb."
+msgstr "vrstniki vozlišč poplav, ki so trenutno na voljo za poizvedbe NetDb."
 
 msgid "Peers not profiled as high capacity (lower build rate than average peer)."
 msgstr "Parterji, ki niso profilirani kot visoka kapaciteta (manjša stopnja gradnje kot povprečni parter)"
@@ -3925,7 +3925,7 @@ msgid "Firewalled with Inbound TCP Enabled"
 msgstr "Zaščiten s firewallom z omogočenim vhodnim TCP"
 
 msgid "Firewalled &amp; Floodfill"
-msgstr "Zaščiten s firewallom &amp; Zalivni"
+msgstr "Požarni zid &amp; poplavno vozlišče"
 
 msgid "Disconnected"
 msgstr "Razklopljen"
@@ -4281,7 +4281,7 @@ msgid "How much RAM I2P is using / total RAM available to I2P (excludes RAM allo
 msgstr "Koliko RAM-a uporablja I2P / skupaj RAM, na voljo I2P (izključuje RAM, namenjen JVM"
 
 msgid "Floodfill enabled"
-msgstr "Zalivni je omogočen"
+msgstr "omogočeno poplavno vozlišče"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "Skupno število oddaljenih LeaseSetov, shranjenih v naši NetDb"
@@ -4387,7 +4387,7 @@ msgid "inbound / outbound"
 msgstr "vhodni / izhodni"
 
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
-msgstr "Uporabljen za izgradnjo in testiranje tuneljev ter za komunikacijo z zalivnimi partnerj"
+msgstr "Uporablja se za gradnjo in preizkušanje predorov ter komunikacijo s sorodniki poplavnih vozlišč"
 
 msgid "Utility"
 msgstr "Uporabnost"
@@ -4566,7 +4566,7 @@ msgid "Delete Sybil Blocklist"
 msgstr "Izbriši Sybil črno listo"
 
 msgid "Floodfill Summary"
-msgstr "Pregled zalivnega"
+msgstr "poplavno vozlišče Povzetek"
 
 msgid "Same Family"
 msgstr "Iški družina"
@@ -4602,7 +4602,7 @@ msgid "Review"
 msgstr "Pregled"
 
 msgid "Run analysis on Floodfills only"
-msgstr "Zaženi analizo le na zalivnih"
+msgstr "Izvedite analizo samo na vozliščih poplav"
 
 msgid "Start Scan"
 msgstr "Začni skeniranje"
@@ -4638,7 +4638,7 @@ msgid "Block all detected sybils"
 msgstr "Blokiraj vse zaznane Sybil"
 
 msgid "Include non-floodfill routers"
-msgstr "Vključi nezalivne usmerjevalnike"
+msgstr "Vključite usmerjevalnike vozlišč brez poplav"
 
 msgid "Minimum threshold for block"
 msgstr "Minimalni prag za blokiranje"
@@ -4653,10 +4653,10 @@ msgid "days"
 msgstr "dni"
 
 msgid "Known Floodfills"
-msgstr "Znane zalivne"
+msgstr "Znani Floodfillji"
 
 msgid "Average closest floodfill distance"
-msgstr "Povprečna najbližja razdalja do zalivnega"
+msgstr "Povprečna razdalja najbližjega poplavnega vozlišča"
 
 msgid "Routing Data"
 msgstr "Podatki o usmerjanju"
@@ -4665,28 +4665,28 @@ msgid "Rotates in"
 msgstr "Vrte se v"
 
 msgid "Closest Floodfills to Our Routing Key (Where we Store our RI)"
-msgstr "Najblizje zalivne do našega ključa za usmerjanje (kjer shranjujemo naš RI"
+msgstr "Floodfillji, ki so najbližji našemu usmerjevalnemu ključu (kjer hranimo naš RI)"
 
 msgid "Closest Floodfills to Tomorrow's Routing Key (Where we will Store our RI)"
-msgstr "Najblizje zalivne do jutrišnjega ključa za usmerjanje (kjer bomo shranili naš RI"
+msgstr "Floodfillji, ki so najbližje jutrišnjemu usmerjevalnemu ključu (kje bomo shranili naš RI)"
 
 msgid "Closest Floodfills to Our Router Hash (DHT Neighbors if we are Floodfill)"
-msgstr "Najblizje zalivne do našega dija usmerjevalnika (Sosednji DHT, če smo zalivni"
+msgstr "Najbližja poplavna vozlišča našemu zgoščevanju usmerjevalnika (DHT sosedi, če smo poplavno vozlišče)"
 
 msgid "Floodfills Close to Our Destinations"
-msgstr "Zalivne blizu naših destinacij"
+msgstr "Floodfillji blizu naših destinacij"
 
 msgid "None"
 msgstr "Nič"
 
 msgid "Closest floodfills to the Routing Key for"
-msgstr "Najblizje zalivne do ključa za usmerjanje za"
+msgstr "Floodfillji, ki so najbližji usmerjevalnemu ključu za"
 
 msgid "where we store our LS"
 msgstr "kjer shranjujemo naš LS"
 
 msgid "Closest floodfills to Tomorrow's Routing Key for"
-msgstr "Najblizje zalivne do jutrišnjega ključa za usmerjanje za"
+msgstr "Floodfillji, ki so najbližje jutrišnjemu ključu usmerjanja za"
 
 msgid "where we will store our LS"
 msgstr "kjer bomo shranili naš LS"
@@ -4701,10 +4701,10 @@ msgid "Router info not available"
 msgstr "Informacije o usmerjevalniku niso na voljo"
 
 msgid "Average Floodfill Distance is"
-msgstr "Povprečna razdalja do zalivne je"
+msgstr "Povprečna razdalja poplavnega vozlišča je"
 
 msgid "Closest Floodfill Pairs by Hash"
-msgstr "Najblizje parjal zalivnih glede na dije"
+msgstr "Najbližje poplavno vozlišče Pari po Hash"
 
 msgid "Hash Distance"
 msgstr "Razdalja dija"
@@ -4758,7 +4758,7 @@ msgid "Totals for"
 msgstr "Skupaj za"
 
 msgid "floodfills"
-msgstr "zalivne"
+msgstr "poplavna vozlišča"
 
 msgid "MIN"
 msgstr "MIN"
@@ -5974,16 +5974,16 @@ msgid "Key <b>{0}</b> selected for removal. To commit the change, save the confi
 msgstr "Ključ <b>{0}</b> je izbran za brisanje. Za potrditev spremembe, shranite konfiguracijo ali prekliči za obnovitev ključ"
 
 msgid "Floodfill Configuration"
-msgstr "Konfiguracija zalivne"
+msgstr "Konfiguracija poplavnega vozlišča"
 
 msgid "Floodfill participation helps the network, but may use more of your computer's resources."
-msgstr "Sodelovanje v zalivnem pomaga omrežju, vendar lahko uporablja več vsebine vašega računalnika"
+msgstr "udeležba vozlišča poplav pomaga omrežju, vendar lahko porabi več virov vašega računalnika."
 
 msgid "This router is currently a floodfill participant."
-msgstr "Ta usmerjevalnik je trenutno sodelujoč v zalivnem."
+msgstr "Ta usmerjevalnik je trenutno udeleženec poplavnega vozlišča."
 
 msgid "This router is not currently a floodfill participant."
-msgstr "Ta usmerjevalnik trenutno ni sodelujoč v zalivnem."
+msgstr "Ta usmerjevalnik trenutno ni udeleženec poplavnega vozlišča."
 
 msgid "Enrollment"
 msgstr "Vpis"
@@ -6116,10 +6116,10 @@ msgid "Misc Reasons"
 msgstr "Razni razlogi"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
-msgstr "Prepovej floodfill soležnike, ki se ne odzivajo na poizvedbe (stopnja neuspehov >95%)"
+msgstr "Prepoved vrstnikov poplavnih vozlišč, ki se ne odzovejo na poizvedbe (stopnja napak >95 %)"
 
 msgid "Ban unresponsive floodfills"
-msgstr "Prepovej neodzivne floodfill-e"
+msgstr "Prepoved neodzivnih poplavnih vozlišč"
 
 msgid "Ban routers whose RouterInfo has no version field"
 msgstr "Prepovej usmerjevalnike, katerih RouterInfo nima polja z različico"
@@ -6304,7 +6304,7 @@ msgid "Enter key provided by server operator."
 msgstr "Vnesite ključ, podan od operatorja strežnika."
 
 msgid "Prevents server discovery by floodfills"
-msgstr "Prepreči odkrivanje strežnika s strani zalivnih"
+msgstr "Preprečuje odkrivanje strežnika s poplavnimi vozlišči"
 
 msgid "Enter password provided by server operator."
 msgstr "Vnesite geslo, podano od operatorja strežnika."
@@ -7021,7 +7021,7 @@ msgid "Network & Participation"
 msgstr "Omrežje in sodelovanje"
 
 msgid "Floodfill / NetDB"
-msgstr "Floodfill / NetDB"
+msgstr "poplavno vozlišče / NetDB"
 
 msgid "Advanced Configuration Help - I2P+"
 msgstr "Pomoč za napredno konfiguracijo - I2P+"
@@ -7165,7 +7165,7 @@ msgid "When set to false, the router will not throttle tunnel build requests fro
 msgstr "Če je nastavljeno na false, usmerjevalnik ne bo omejil zahtev za izgradnjo tuneljev iz drugih usmerjevalnikov, in bi se moralo uporabljati z previdom. [Privzeto je true, potreben je ponovni zagon"
 
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
-msgstr "Ta nastavitev določa, katere <a href=/profiles#profile_defs>možnosti sosednjega strežnika</a> ne bodo uporabljene za izgradnjo tunelov vašega usmerjevalnika. npr. <code>router.excludePeerCaps=LMN</code"
+msgstr "Ta nastavitev določa, katere <a href=/profiles#profile_defs>možnosti sosednjega strežnika</a> ne bodo uporabljene za izgradnjo tunelov vašega usmerjevalnika. npr. <code>router.excludePeerCaps=LMN</code</code>"
 
 msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "Ko je nastavljeno na false, so nedosegljivi enakovredni lahko izbrani kot skoki za dohodne raziskovalne predore. [Privzeto true"
@@ -7192,7 +7192,7 @@ msgid "When set to false, slow peers may be selected as hops for outbound client
 msgstr "Ko je nastavljeno na false, so počasni enakovredni lahko izbrani kot skoki za odhodne odjemalske predore. [Privzeto true"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "Ta nastavitev (v urah) določa, kako star je RouterInfo v NetDb (njegova zadnja znana datum izdaje) preden je razvrščen kot zastarel in izbrisan. [Privzeto je 28 ur, razen če je usmerjevalnik Floodfill, v katerem primeru je privzeto 8 ur"
+msgstr "Ta nastavitev (v urah) določa, koliko je star RouterInfo v NetDb (njegov zadnji znani datum objave), preden je razvrščen kot zastarel in izbrisan. [Privzeto je 28 ur, razen če je usmerjevalnik poplavno vozlišče, v tem primeru je privzeto 8 ur]"
 
 msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
 msgstr "Ta nastavitev določa število sosednjih strežnikov, ki jih je treba preiskati hkrasno, ko se izvede delo Peer Exploration [privzeto je 1 sosednji strežnik začasno, ko je znanih več kot 3000 sosednjih strežnikov]. Opomba: povečanje te vrednosti poveča zahteve po širini pasma za preiskavo, in nastavljanje te vrednosti previsoko lahko povzroči prevelik zamik sporočil in vpliva na druge storitve, zato uporabljajte s skrbi"
@@ -7201,19 +7201,19 @@ msgid "This setting determines the number of NetDb DHT buckets the Peer Explorat
 msgstr "Ta nastavitev določa število vедерov DHT NetDb, ki jih bo delo Peer Exploration upoštevalo pri izvedbi. Po privzemu se število vедерov, ki jih je treba preiskati, bo razlikovalo glede na to, ali je usmerjevalnik delal več kot uro, ali je usmerjevalnik skrit ali v vrstici širine pasma 'K', in število znanih usmerjevalnikov"
 
 msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "Ta nastavitev (v sekundah) vam omogoča nadomestiti zamik med poskusami delo Peer Exploration, ki poskuša najti nove sosednje strežnike za dodajanje v NetDb. Delo se bo izvedlo vsake 80 sekund po privzemu, ali pa, če usmerjevalnik doživlja zamik nalog ali sporočil, vsake 3 minute. Če je velikost NetDb dosegle 4000 sosednjih strežnikov, počitnice se bo povečala na 15 minut. Morda bi želeli povečati zamik, če je vaš NetDb dobro naseljen (več kot 2000 sosednjih strežnikov), ali pa če želite zmanjšati skupno uporabo širine pasma. Opomba: Za usmerjevalnike Floodfill, to delo ne deluje"
+msgstr "Ta nastavitev (v sekundah) vam omogoča, da preglasite zamik med zagoni opravila Peer Exploration Job, ki poskuša poiskati nove enakovredne naprave za dodajanje v NetDb. Opravilo se bo privzeto izvajalo vsakih 80 sekund ali, če usmerjevalnik doživlja zakasnitev opravila ali sporočila, vsake 3 minute. Če velikost NetDb doseže 4000 vrstnikov, se premor poveča na 15 minut. Morda boste želeli povečati zakasnitev, če je vaša NetDb dobro poseljena (več kot 2000 vrstnikov) ali če želite zmanjšati skupno uporabo pasovne širine. Opomba: Pri usmerjevalnikih vozlišč poplav se to opravilo ne izvaja."
 
 msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
 msgstr "Ta nastavitev določa maksimalno število dijev parterjev za vrstico za raziskavo. V I2P je maksimum 128, in v I2P+ je privzeta vrednost 512"
 
 msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "Ta nastavitev določa, ali bo usmerjevalnik, ki deluje kot zalivni, raziskoval NetDb, da se nauči o novih parterjev. [Privzeto je false, potreben je ponovni zagon"
+msgstr "Ta nastavitev določa, ali bo usmerjevalnik, ki deluje kot poplavno vozlišče, raziskoval NetDb, da bi izvedel več o novih vrstnikih. [Privzeto je false, potreben je ponovni zagon]"
 
 msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
 msgstr "Ta nastavitev, ko je nastavljeno na true, prepreči usmerjevalnik, da direktno komunicira z drugimi usmerjevalniki, prisiljeva pa uporabo predstavljencev. [Privzeto je false, razen če je usmerjevalnik v skritem načinu"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
-msgstr "Ko je nastavljeno na true, če služi vaš usmerjevalnik kot floodfill za omrežje, bo vaše <a href=/configadvanced#ffconf>učestvo floodfill</a> skrito pred drugimi usmerjevalniki"
+msgstr "Če je nastavljeno na true, če vaš usmerjevalnik služi kot preplavno vozlišče za omrežje, bo vaša <a href=/configadvanced#ffconf>udeležba v preplavnem vozlišču</a> skrita pred drugimi usmerjevalniki."
 
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
 msgstr "Določi maksimalno število hkrasnega <a href=/jobs>nalog</a>, ki jih lahko izvede. Privzeta vrednost se določi glede na količino pomnilnika, dodeljene JVM preko <code>wrapper.config</code>, in je nastavljena na 3 za manj kot 64MB, 4 za manj kot 256M, ali 5 za več kot 256MB. Opomba: Sprememba te nastavitve zahteva ponovni zagon usmerjevalnika"
@@ -7306,7 +7306,7 @@ msgid "Maximum number of peer profiles to retain in memory. Older, inactive prof
 msgstr "Največje število profilov enakovrednih za ohranitev v pomnilniku. Starejši, neaktivni profili najprej potečejo, ko je ta meja dosežena. Vrednosti pod 100 so omejene na 100. [Privzeto 8000, ali 800 na počasnih sistemih"
 
 msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]"
-msgstr "Največja starost RouterInfo (v urah), da je enakovredni lahko izbran za gradnjo predorov. Enakovredni s starejšim RouterInfo od tega praga so izključeni iz izbire, razen če imajo aktivno povezavo. To je še posebej pomembno za floodfill usmerjevalnike, ki ne raziskujejo aktivno NetDB, saj lahko njihov RouterInfo zastara brez rednega osveževanja. [Privzeto 3"
+msgstr "Največja starost RouterInfo (v urah) za vrstnika, ki se šteje za izbirnega za gradnjo tunela. Vrstniki z RouterInfos, starejšimi od tega praga, so izključeni iz izbire, razen če imajo aktivno povezavo. To je še posebej pomembno za usmerjevalnike preplavnih vozlišč, ki ne raziskujejo aktivno NetDB, saj lahko njihov RouterInfos postane zastarel brez rednega osveževanja. [Privzeto je 3]"
 
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
 msgstr "Ta nastavitev določa, ali se statistike o našem usmerjevalniku nesistematično objavljajo v NetDb. [Privzeto je false"
@@ -8074,7 +8074,7 @@ msgid "A tunnel used by the router for communicating with other routers to perfo
 msgstr "Tunel, ki ga uporablja usmerjevalnik za komunikacijo z drugimi usmerjevalniki za izvedbo različnih \"čiščenjskih\" funkcij, kot so učenje in objavljivanje <i>leaseset-ov</i>, testiranje klientnih tunelov, in učenje o in preverjanje drugih usmerjevalnikov v omrežju. Ti tuneli so običajno z majhno širino pasma."
 
 msgid "A router on the network tasked with providing and receiving information about other routers and services on the network. The current minimum share bandwidth for a router to be considered as capable of performing floodfill duties is 128 KBytes/sec, though it's possible to override this requirement and force a router to be a floodfill on the <a href=/configadvanced>Advanced Configuration page</a>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "Usmerjevalnik na omrežju, ki je nalogovana z zagotavljanjem in prejemanjem informacij o drugih usmerjevalnikeh in storitvah na omrežju. Sedajnja minimalna dodeljena širina pasma za usmerjevalnik, da se obravnava kot sposoben opravljanja nalog floodfill, je 128 KBytes / sec, vendar je mogoče prenesti to zahtevo in prisiliti usmerjevalnik, da je floodfill na <a href=/configadvanced>Strani za napredno konfiguracijo</a>. Za več informacij, glejte <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>spletna dokumentacija</a>"
+msgstr "Usmerjevalnik v omrežju, katerega naloga je zagotavljanje in prejemanje informacij o drugih usmerjevalnikih in storitvah v omrežju. Trenutna minimalna skupna pasovna širina za usmerjevalnik, ki se šteje za sposobnega opravljanja nalog preplavnega vozlišča, je 128 Kbajtov/s, čeprav je mogoče preglasiti to zahtevo in prisiliti usmerjevalnik, da postane preplavno vozlišče na <a href=/configadvanced>strani z napredno konfiguracijo</a>. Za več informacij si oglejte <a href=https://geti2p.net/en/docs/how/network-database#flood node class='sitelink external' target=_blank rel=noreferrer>spletno dokumentacijo</a>."
 
 msgid "Garlic Routing"
 msgstr "Rutevanje češnjake"
@@ -8215,7 +8215,7 @@ msgid "A list of countries derived from the <a href=https://freedomhouse.org/rep
 msgstr "Seznam držav, izveden iz <a href=https://freedomhouse.org/report/countries-world-freedom-2019 class='sitelink external' target=_blank rel=noreferrer>Poročila o svetu in svobodi</a>, z slabo reputacijo v zvezi z civilnimi svoboščami. Ta seznam se uporablja za postavljanje usmerjevalnikov, ki delajo v določenih državah, v <i>Skrito stanje</i>, da uporabnikom pruži izboljšano varnost. Naslednje države so označene kot stroge: Afganistan, Azerbajdžan, Bahrajn, Berala, Brunaj, Burundi, Kamerun, Središnja Afriška republika, Čad, Kitajska, Kuba, Demokratična republika Kongo, Egipt, Ravninska Gvineja, Eritreja, Etiopija, Iran, Kazahstan, Laosi, Libija, Mjanmar, Severna Koreja, Palestinska ozemlja, Ruanda, Saoudska Arabija, Somalija, Južni Sudani, Sudani, Esvatini (Swaziland), Sirija, Tadžikistan, Tajland, Turčija, Turkmenistan, Venecuela, Združeni Arabski Emirati, Uzbekistan, Zahodna Sara, Jemen"
 
 msgid "A <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink external' target=_blank rel=noreferrer>unidirectional</a> encrypted communication pathway between a client or server on the I2P network. Similar to a circuit in Tor, except that Tor circuits are bidirectional."
-msgstr "Enosmerno šifrirano komunikacijsko pot med klientom ali strežnikom na omrežju I2P. Podobno krožnici v Tor, razen če Tor krožnice so dvosmerne"
+msgstr "<a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink external' target=_blank rel=noreferrer>enosmerna</a> šifrirana komunikacijska pot med odjemalcem ali strežnikom v omrežju I2P. Podobno vezju v Tor, le da so vezja Tor dvosmerna."
 
 msgid "Tunnel Endpoint"
 msgstr "Končna točka tunela"
@@ -8574,7 +8574,7 @@ msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
 msgstr "WARN_FIREWALLED_AND_FAST - Požarni zid, a hiter vrstnik"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr "WARN_FIREWALLED_AND_FLOODFILL - Požarni zid, a floodfill"
+msgstr "WARN_FIREWALLED_AND_FLOODFILL – Vozlišče s požarnim zidom, vendar poplavno"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
 msgstr "WARN_FIREWALLED_WITH_INBOUND_TCP - Požarni zid z dohodnim TCP"
@@ -8838,7 +8838,7 @@ msgstr "Dnevnik storitve (Omotnik)"
 
 #, java-format
 msgid "The reseed status will be indicated on the sidebar. You can also check the {0} for the following message: <code>Reseed got 100 router infos from file with 0 errors</code>"
-msgstr "Stanje ponovnega zalaganja bo prikazano na vrstnici. Tudi lahko preverite {0} za naslednje sporočilo: <code>Ponovno zalaganje je pridobilo 100 informacij o strežniku iz datoteke z 0 napakami</code"
+msgstr "Stanje ponovnega zalaganja bo prikazano na vrstnici. Tudi lahko preverite {0} za naslednje sporočilo: <code>Ponovno zalaganje je pridobilo 100 informacij o strežniku iz datoteke z 0 napakami</code</code>"
 
 msgid "Sharing a reseed file"
 msgstr "Dieljenje datoteke ponovnega zalaganja"
@@ -9114,7 +9114,7 @@ msgid "This is the number of peers your router has available for building your e
 msgstr "To je število sosednjih strežnikov, ki jih ima vaš strežnik na voljo za izgradnjo vaših raziskovalnih tunelov, ki se uporabljajo za določanje zmogljivosti omrežja. Običajno je v obsegu 8-75. Hitri sosednji strežniki so vključeni v višjo kapaciteto. Vaši sosednji strežniki z višjo kapaciteto so prikazani na <a href='/profiles'>strani za profila</a>. <a href='/configstats#router.highCapacityPeers'>[Omogoči grafe]</a"
 
 msgid "This is the number of peers your router will use for network database inquiries. These are usually the <i>floodfill</i> routers which are responsible for maintaining network integrity. Your well integrated peers are shown on the bottom of the <a href='/profiles'>Profiles page</a>."
-msgstr "To je število sosednjih strežnikov, ki jih bo vaš strežnik uporabil za vprašanja v bazo podatkov omrežja. To so običajno <i>floodfill</i> strežniki, ki so odgovorni za vzdrževanje celovitosti omrežja. Vaši dobro integrirani sosednji strežniki so prikazani na dnu <a href='/profiles'>strani za profila</a>"
+msgstr "To je število vrstnikov, ki jih bo vaš usmerjevalnik uporabil za poizvedbe po omrežni bazi podatkov. To so običajno usmerjevalniki <i>poplavnih vozlišč</i>, ki so odgovorni za vzdrževanje celovitosti omrežja. Vaši dobro integrirani kolegi so prikazani na dnu <a href='/profiles'>strani s profili</a>."
 
 msgid "This is the total number of peers that are known by your router. They are listed on the <a href='/netdb'>Network Database page</a>. This may range from under 100 to 1000 or more. This number is not the total size of the network; it may vary widely depending on your total bandwidth, shared bandwidth, and locally-generated traffic. I2P does not require a router to know every other router in the network."
 msgstr "To je skupno število sosednjih strežnikov, ki so znani vašemu strežniku. So prikazani na <a href='/netdb'>strani za bazo podatkov omrežja</a>. To lahko sega od pod 100 do 1000 ali več. Ta številka ni skupna velikost omrežja; lahko se značajno razlikuje glede na vašo skupno širino pasma, deljeno širino pasma, in lokalno ustvarjeno promet. I2P ne zahteva, da bi strežnik znal vse druge strežnike v omrežju"
@@ -9135,7 +9135,7 @@ msgid "The actual tunnels are shown on the <a href='/tunnels'>Tunnels page</a>."
 msgstr "Resnični tuneli so prikazani na <a href='/tunnels'>strani za tunele</a>"
 
 msgid "Tunnels built by your router and used for communication with the floodfill peers, building new tunnels, and testing existing tunnels."
-msgstr "Tuneli izgradnjeni od vašega strežnika in uporabljeni za komunikacijo z sosednjimi strežniki floodfill, izgradnjo novih tunelov, in testiranjem obstoječih tunelov"
+msgstr "Tuneli, ki jih je zgradil vaš usmerjevalnik in se uporabljajo za komunikacijo z enakovrednimi vozlišči poplav, gradnjo novih predorov in preizkušanje obstoječih predorov."
 
 msgid "Tunnels built by your router for each client's use."
 msgstr "Tuneli izgradnjeni od vašega strežnika za uporabo vsakega klienta."
@@ -9237,13 +9237,13 @@ msgid "While I2P will work fine in this configuration, if you really have over 1
 msgstr "Čeprav bo I2P v tej konfiguraciji deloval dobro, če res imate več kot 128KBps širine pasma za deljenje, bo omrežju bolj pomembno, če odprite svoj omejitelj"
 
 msgid "WARN - Firewalled and Floodfill"
-msgstr "OPOMBA - Omejena in Floodfill"
+msgstr "OPOZORILO - Vozlišče s požarnim zidom in poplavo"
 
 msgid "You have configured I2P to be a floodfill router, but you are firewalled."
-msgstr "Konfigurirali ste I2P za delovanje kot strežnik Floodfill, vendar ste omejeni"
+msgstr "Konfigurirali ste I2P kot usmerjevalnik vozlišča poplav, vendar imate požarni zid."
 
 msgid "For best participation as a floodfill router, you should open your firewall."
-msgstr "Za najboljšo sodelovanje kot strežnik Floodfill, bi morali odpreti svoj omejitelj"
+msgstr "Za najboljšo udeležbo kot usmerjevalnik poplavnih vozlišč odprite požarni zid."
 
 msgid "WARN - Firewalled with Inbound TCP Enabled"
 msgstr "OPOMBA - Omejena z vhodnim TCP omogočen"

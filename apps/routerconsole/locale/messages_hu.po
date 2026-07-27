@@ -113,7 +113,7 @@ msgid "Known high capacity peers"
 msgstr "Ismert nagy kapacitású társak"
 
 msgid "Known integrated (floodfill) peers"
-msgstr "Ismert integrált (floodfill) társak"
+msgstr "Ismert integrált (flod node) társak"
 
 msgid "Total peers in our NetDb"
 msgstr "Összes társ a NetDb-nkban"
@@ -134,7 +134,7 @@ msgid "unknown"
 msgstr "ismeretlen"
 
 msgid "Floodfill"
-msgstr "Floodfill"
+msgstr "árvízi csomópont"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Az összes ilyen funkcióval rendelkező útválasztó megjelenítése a NetDb-ben"
@@ -1812,7 +1812,7 @@ msgid "Aborted startup"
 msgstr "Megszakított indítás"
 
 msgid "Enabled floodfill"
-msgstr "Engedélyezett floodfill"
+msgstr "Engedélyezett elárasztási csomópont"
 
 msgid "Changed IP"
 msgstr "IP megváltozott"
@@ -1842,7 +1842,7 @@ msgid "New router identity"
 msgstr "Új útválasztó azonosító"
 
 msgid "Disabled floodfill"
-msgstr "Letiltott árvízkitöltés"
+msgstr "Letiltott árvízi csomópont"
 
 msgid "Out of memory error"
 msgstr "Memóriahiány hiba"
@@ -2186,7 +2186,7 @@ msgid "LeaseSets"
 msgstr "LeaseSet-ek"
 
 msgid "Stored LeaseSets in floodfill"
-msgstr "Tárolt LeaseSet-ok a floodfill-ben"
+msgstr "Tárolt LeaseSets az árvízi csomópontban"
 
 msgid "Cache Hit"
 msgstr "Gyorsítótár találat"
@@ -2198,7 +2198,7 @@ msgid "Flood Verify"
 msgstr "Flood ellenőrzés"
 
 msgid "Floodfill verify time"
-msgstr "Floodfill ellenőrzési idő"
+msgstr "árvíz csomópont ellenőrzési idő"
 
 msgid "NetDB ACK"
 msgstr "NetDB visszaigazolás"
@@ -2715,7 +2715,7 @@ msgid "UDP Port"
 msgstr "UDP port"
 
 msgid "Floodfill Role"
-msgstr "Floodfill Szerep"
+msgstr "árvíz csomópont Szerep"
 
 msgid "Active"
 msgstr "Aktív"
@@ -3059,7 +3059,7 @@ msgid "Change in"
 msgstr "Változás"
 
 msgid "Floodfill mode enabled"
-msgstr "Floodfill mód engedélyezve"
+msgstr "elárasztási csomópont mód engedélyezve"
 
 msgid "Routing Key"
 msgstr "Útválasztó kulcs"
@@ -3068,7 +3068,7 @@ msgid "Median distance (bits)"
 msgstr "Medián távolság (bit)"
 
 msgid "Estimated total floodfills"
-msgstr "Becsült teljes árvízkitöltés"
+msgstr "Becsült összes árvízi csomópont"
 
 msgid "Estimated total leasesets"
 msgstr "Becsült összes bérleti szerződés"
@@ -3167,7 +3167,7 @@ msgid "X Tier"
 msgstr "X szint"
 
 msgid "Floodfills"
-msgstr "Árvizek"
+msgstr "FLOODFILLJELZŐK"
 
 msgid "Total"
 msgstr "Összes"
@@ -3823,7 +3823,7 @@ msgid "Peers that meet or exceed tunnel build rate average for all profiled peer
 msgstr "Olyan társak, amelyek elérik vagy meghaladják az alagútépítési arány átlagát az összes profilozott társ esetében."
 
 msgid "Floodfill peers currently available for NetDb inquiries."
-msgstr "A NetDb lekérdezéséhez jelenleg elérhető Floodfill társak."
+msgstr "NetDb lekérdezésekhez jelenleg elérhető flood node társak."
 
 msgid "Peers not profiled as high capacity (lower build rate than average peer)."
 msgstr "A hasonlók nem nagy kapacitásúak (alacsonyabb építési arány, mint az átlagos partnereknél)."
@@ -3893,7 +3893,7 @@ msgid "Firewalled with Inbound TCP Enabled"
 msgstr "Bejövő TCP-vel tűzfalazva"
 
 msgid "Firewalled &amp; Floodfill"
-msgstr "Firewalled és Floodfill"
+msgstr "Tűzfallal védett &amp; árvízi csomópont"
 
 msgid "Disconnected"
 msgstr "Leválasztva"
@@ -4249,7 +4249,7 @@ msgid "How much RAM I2P is using / total RAM available to I2P (excludes RAM allo
 msgstr "Mennyi RAM-ot használ az I2P/az I2P számára elérhető összes RAM (kivéve a JVM-hez rendelt RAM-ot)"
 
 msgid "Floodfill enabled"
-msgstr "Floodfill engedélyezve"
+msgstr "elárasztási csomópont engedélyezve"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "A NetDb-ben tárolt távoli LeaseSetek teljes száma"
@@ -4355,7 +4355,7 @@ msgid "inbound / outbound"
 msgstr "bejövő / kimenő"
 
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
-msgstr "Alagutak építésére és tesztelésére, valamint az árvízvédelmi társakkal való kommunikációra szolgál"
+msgstr "Alagutak építésére és tesztelésére, valamint az árvízi csomópontokkal való kommunikációra használják"
 
 msgid "Utility"
 msgstr "Hasznosság"
@@ -4530,7 +4530,7 @@ msgid "Delete Sybil Blocklist"
 msgstr "Sybil blokklistájának törlése"
 
 msgid "Floodfill Summary"
-msgstr "Árvízi kitöltés összefoglalása"
+msgstr "árvíz csomópont Összefoglalás"
 
 msgid "Same Family"
 msgstr "Ugyanaz a család"
@@ -4566,7 +4566,7 @@ msgid "Review"
 msgstr "Áttekintés"
 
 msgid "Run analysis on Floodfills only"
-msgstr "Elemzés futtatása csak az árvízvédelmi tölteteken"
+msgstr "Futtasson elemzést csak árvízi csomópontokon"
 
 msgid "Start Scan"
 msgstr "Szkenelés indítása"
@@ -4602,7 +4602,7 @@ msgid "Block all detected sybils"
 msgstr "Az összes észlelt sybil blokkolása"
 
 msgid "Include non-floodfill routers"
-msgstr "Tartalmazza a nem elárasztott útválasztókat"
+msgstr "Tartalmazzon nem elárasztásos csomóponti útválasztókat"
 
 msgid "Minimum threshold for block"
 msgstr "A blokk minimális küszöbértéke"
@@ -4620,7 +4620,7 @@ msgid "Known Floodfills"
 msgstr "Ismert Floodfills"
 
 msgid "Average closest floodfill distance"
-msgstr "Átlagos legközelebbi elárasztási távolság"
+msgstr "A legközelebbi árvízi csomópont átlagos távolsága"
 
 msgid "Routing Data"
 msgstr "Útválasztási adatok"
@@ -4632,25 +4632,25 @@ msgid "Closest Floodfills to Our Routing Key (Where we Store our RI)"
 msgstr "Útválasztási kulcsunkhoz legközelebbi Floodfills (hol tároljuk az RI-t)"
 
 msgid "Closest Floodfills to Tomorrow's Routing Key (Where we will Store our RI)"
-msgstr "A holnapi útválasztási kulcshoz legközelebb eső árvízvédelmi töltetek (ahol az RI-t tároljuk)"
+msgstr "A holnapi útválasztási kulcshoz legközelebbi árvízi csomópontok (hol tároljuk az RI-t)"
 
 msgid "Closest Floodfills to Our Router Hash (DHT Neighbors if we are Floodfill)"
-msgstr "Legközelebbi árvízvédelmi töltések a router hash-hez (DHT szomszédok, ha árvízvédelmi töltés vagyunk)"
+msgstr "A Router Hash-hez (DHT szomszédok, ha árvízi csomópontok vagyunk) a legközelebbi elárasztási csomópontok"
 
 msgid "Floodfills Close to Our Destinations"
-msgstr "Árvízvédelmi töltések úti céljaink közelében"
+msgstr "árvízi csomópontok Úticélunkhoz közel"
 
 msgid "None"
 msgstr "Egyik sem"
 
 msgid "Closest floodfills to the Routing Key for"
-msgstr "Legközelebbi árvízvédelmi töltések az Útválasztási kulcshoz"
+msgstr "Az útválasztási kulcshoz legközelebbi elárasztási csomópontok"
 
 msgid "where we store our LS"
 msgstr "hol tároljuk az LS-t"
 
 msgid "Closest floodfills to Tomorrow's Routing Key for"
-msgstr "Legközelebbi árvízvédelmi töltések a holnapi útvonalválasztó kulcshoz"
+msgstr "A legközelebbi árvízi csomópontok a holnapi útválasztási kulcshoz"
 
 msgid "where we will store our LS"
 msgstr "hol tároljuk az LS-t"
@@ -4665,10 +4665,10 @@ msgid "Router info not available"
 msgstr "A router információi nem állnak rendelkezésre"
 
 msgid "Average Floodfill Distance is"
-msgstr "Az átlagos elárasztási távolság"
+msgstr "Az átlagos árvízi csomópont távolsága"
 
 msgid "Closest Floodfill Pairs by Hash"
-msgstr "Legközelebbi árvízvédelmi párok hash-sel"
+msgstr "Legközelebbi árvízi csomópont Párok Hash alapján"
 
 msgid "Hash Distance"
 msgstr "Hash távolság"
@@ -4722,7 +4722,7 @@ msgid "Totals for"
 msgstr "Összegek 10 főre:"
 
 msgid "floodfills"
-msgstr "árvízvédelmi"
+msgstr "FLOODFILLJELZŐK"
 
 msgid "MIN"
 msgstr "MIN"
@@ -5938,16 +5938,16 @@ msgid "Key <b>{0}</b> selected for removal. To commit the change, save the confi
 msgstr "A <b>{0}</b> kulcs kiválasztva törlésre. A változtatás véglegesítéséhez mentse a konfigurációt, vagy a kulcs visszaállításához törlse."
 
 msgid "Floodfill Configuration"
-msgstr "Árvízi kitöltés konfiguráció"
+msgstr "árvíz csomópont konfigurációja"
 
 msgid "Floodfill participation helps the network, but may use more of your computer's resources."
-msgstr "Az árvízvédelmi részvétel segíti a hálózatot, de többet használhat a számítógép erőforrásaiból."
+msgstr "A flood node részvétele segíti a hálózatot, de több számítógép erőforrását is igénybe veheti."
 
 msgid "This router is currently a floodfill participant."
-msgstr "Ez az útválasztó jelenleg árvízvédelmi résztvevő."
+msgstr "Ez az útválasztó jelenleg árvízi csomópont résztvevő."
 
 msgid "This router is not currently a floodfill participant."
-msgstr "Ez a router jelenleg nem árvízvédelmi résztvevő."
+msgstr "Ez az útválasztó jelenleg nem vesz részt az elárasztási csomópontban."
 
 msgid "Enrollment"
 msgstr "Beiratkozás"
@@ -6080,10 +6080,10 @@ msgid "Misc Reasons"
 msgstr "Egyéb okok"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
-msgstr "Nem válaszoló floodfill társak letiltása (hibaráta >95%)"
+msgstr "A lekérdezésekre nem válaszoló flood node társak kitiltása (hibaarány >95%)"
 
 msgid "Ban unresponsive floodfills"
-msgstr "Nem válaszoló floodfill-ek letiltása"
+msgstr "Tiltsa le a nem reagáló árvízi csomópontokat"
 
 msgid "Ban routers whose RouterInfo has no version field"
 msgstr "Verzió mező nélküli RouterInfo-val rendelkező útválasztók letiltása"
@@ -6268,7 +6268,7 @@ msgid "Enter key provided by server operator."
 msgstr "Adja meg a szerver üzemeltetője által biztosított kulcsot."
 
 msgid "Prevents server discovery by floodfills"
-msgstr "Megakadályozza a kiszolgáló felderítését az elárasztások által"
+msgstr "Megakadályozza az elárasztási csomópontok általi szerverfelderítést"
 
 msgid "Enter password provided by server operator."
 msgstr "Adja meg a szerver üzemeltetője által megadott jelszót."
@@ -6470,7 +6470,7 @@ msgid "Completely disable UDP connections"
 msgstr "Teljesen tiltsa le az UDP kapcsolatokat"
 
 msgid "The router's external port allows communication with other routers. It is recommended to configure your firewall to allow inbound and outbound traffic on this port to optimize your router's performance on the network."
-msgstr "Az útválasztó külső portja lehetővé teszi a kommunikációt más útválasztókkal."
+msgstr "Az útválasztó külső portja lehetővé teszi a kommunikációt más útválasztókkal. Javasoljuk, hogy a tűzfalat úgy konfigurálja, hogy engedélyezze a bejövő és kimenő forgalmat ezen a porton, hogy optimalizálja az útválasztó teljesítményét a hálózaton."
 
 msgid "Do not reveal your port numbers to anyone, as they can be used to discover your IP address."
 msgstr "Ne fedje fel senkinek a portszámait, mivel ezek felhasználhatók az IP-címének felderítésére."
@@ -6608,7 +6608,7 @@ msgid "The su3 format is preferred, as it will be verified as signed by a truste
 msgstr "A su3 formátumot részesítjük előnyben, mivel azt egy megbízható forrás aláírja-e."
 
 msgid "The zip format is unsigned; use a zip file only from a source that you trust."
-msgstr "A zip formátum aláírás nélküli; "
+msgstr "A zip formátum aláírás nélküli; csak megbízható forrásból származó zip fájlt használjon."
 
 msgid "Enter zip or su3 URL"
 msgstr "Írja be a zip vagy su3 URL-t"
@@ -6985,7 +6985,7 @@ msgid "Network & Participation"
 msgstr "Hálózat és részvétel"
 
 msgid "Floodfill / NetDB"
-msgstr "Floodfill / NetDB"
+msgstr "árvíz csomópont / NetDB"
 
 msgid "Advanced Configuration Help - I2P+"
 msgstr "Speciális Konfigurációs Súgó - I2P+"
@@ -7156,7 +7156,7 @@ msgid "When set to false, slow peers may be selected as hops for outbound client
 msgstr "Ha hamisra van állítva, a lassú társak kiválaszthatók ugrópontként a kimenő kliens alagutakhoz. [Alapértelmezés igaz]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "Ez a beállítás (órákat) meghatározza, hogy mennyi idős egy RouterInfo az NetDb-ban (utolsó ismert közzétételi dátuma) mielőtt elavultnak és törlendőnek minősül. [Az alapértelmezett érték 28 óra, hacsak a router nem Floodfill, ebben az esetben az alapértelmezett érték 8 óra]"
+msgstr "Ez a beállítás (órákban) határozza meg, hogy a NetDb-ben lévő RouterInfo mennyi idős (utolsó ismert közzétételi dátuma), mielőtt elavultnak minősítené és törölné. [Az alapértelmezett 28 óra, hacsak az útválasztó nem egy elárasztási csomópont, ebben az esetben az alapértelmezett 8 óra]"
 
 msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
 msgstr "Ez a beállítás meghatározza, hogy párhuzamosan hány peert vizsgáljon meg a Peer Exploration Job futásakor [az alapértelmezett érték az, hogy egyszerre 1 peer-t vizsgál, amikor több mint 3000 peer ismert]. Vegye figyelembe, hogy ez az érték növeli a sávszélességigényeket a felderítéshez, és ha túl magasra állítja ezt az értéket, ez túlzott üzenetkésleltetést okozhat és akadályozhatja más szolgáltatások működését, ezért legyen óvatos!"
@@ -7165,19 +7165,19 @@ msgid "This setting determines the number of NetDb DHT buckets the Peer Explorat
 msgstr "Ez a beállítás meghatározza, hogy hány NetDb DHT vödröt fog hivatkozni a Peer Exploration Job futásakor. Alapértelmezés szerint a vizsgálandó vödrök száma attól függ, hogy a router több mint egy órája fut-e, a router el van-e rejtve vagy az „K” sávszélességi kategóriában van-e, valamint az ismert routerek számától."
 
 msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "Ez a beállítás (másodpercekben) lehetővé teszi a Peer Exploration Job futásai közötti késleltetés felülírását, amely megpróbálja megtalálni az új megbízható partnereket a NetDbhez való hozzáadáshoz. A feladat alapértelmezés szerint 80 másodpercenként fut le, vagy ha a router munka- vagy üzenetkésleltetéssel küzd, akkor 3 percenként. Ha a NetDb mérete eléri a 4000 megbízható partnert, akkor a feladat szünetel 15 percig. Ha a NetDb jól megszállott (több mint 2000 megbízható partnerrel rendelkezik), vagy ha az összes sávszélesség használatát csökkenteni szeretné, akkor növelheti a késleltetést. Megjegyzés: A Floodfill routerekre ez a feladat nem fut."
+msgstr "Ez a beállítás (másodpercben) lehetővé teszi a Peer Exploration Job futtatásai közötti késleltetés felülírását, amely megpróbálja megtalálni a NetDb-hez hozzáadandó új partnereket. A job alapértelmezés szerint 80 másodpercenként fut le, vagy ha az útválasztó feladat- vagy üzenetkésést tapasztal, akkor 3 percenként. Ha a NetDb mérete eléri a 4000 társat, a szünet 15 percre nő. Növelheti a késleltetést, ha a NetDb jól lakott (több mint 2000 társ), vagy ha csökkenteni szeretné a teljes sávszélesség-használatot. Megjegyzés: Árvízi csomópont útválasztók esetén ez a feladat nem fut."
 
 msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
 msgstr "Ez a beállítás meghatározza a tárolóba állítandó maximális peer-hash mennyiséget a felderítéshez. Az I2P-ben a maximum 128, és az I2P+-ban az alapértéke 512."
 
 msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "Ez a beállítás meghatározza, hogy egy fluxustöltőként működő útválasztó felderíti-e a NetDb-t az új közvetítők megismeréséhez. [Az alapérték hamis, újraindítás szükséges]"
+msgstr "Ez a beállítás határozza meg, hogy az elárasztási csomópontként működő útválasztó feltérképezi-e a NetDb-t, hogy megismerje az új társakat. [Az alapértelmezett érték false, újra kell indítani]"
 
 msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
 msgstr "Ez a beállítás, ha igazra állítva, megakadályozza az útválasztó közvetlen kommunikációját más útválasztókkal, és az beajánlók használatát erőlteti. [Az alapérték hamis, kivéve, ha az útválasztó rejtett módban van]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
-msgstr "Ha igazra van állítva, és a router a hálózat központi szervereként működik, a <a href=/configadvanced#ffconf>flódfill részvétele</a> más routerek elől el lesz rejtve."
+msgstr "Igaz értékre állítva, ha az Ön útválasztója a hálózat elárasztási csomópontjaként szolgál, az <a href=/configadvanced#ffconf>elárasztási csomópont részvétele</a> el lesz rejtve a többi útválasztó elől."
 
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
 msgstr "Meghatározza a futtatható párhuzamos <a href=/jobs>munkafolyamatok</a> maximális számát. Az alapérték a JVM-nek a <code>wrapper.config</code> segítségével rendelt memóriamennyiségtől függ: 3, ha kevesebb, mint 64MB, 4, ha kevesebb, mint 256MB, vagy 5, ha 256MB-nál több. Megjegyzés: A beállítás megváltoztatása a router újraindítását igényli."
@@ -7186,7 +7186,7 @@ msgid "Defines the minimum number of parallel <a href=/jobs>job runners</a>. The
 msgstr "Meghatározza a párhuzamos <a href=/jobs>feladatfuttatók</a> minimális számát. Az útválasztó nem skálázódik e szám alá. Alapértelmezés 4, minimum 1. Ez a beállítás dinamikus és újraindítás nélkül hatályba lép."
 
 msgid "Enable dynamic scaling of job runners based on queue load. When enabled, the router automatically scales the number of job runner threads up or down based on ready job count and lag. [Default is true]"
-msgstr "Feladatfuttatók dinamikus skálázásának engedélyezése a sor terhelése alapján. [Alapértelmezés igaz] [Default is true]"
+msgstr "A feladatfutók dinamikus skálázásának engedélyezése a sorterhelés alapján. Ha engedélyezve van, az útválasztó automatikusan felfelé vagy lefelé skálázza a jobfutó szálak számát a kész feladatok száma és a késleltetés alapján. [Az alapértelmezett érték igaz]"
 
 msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 1]"
 msgstr "A feladatsor késleltetési küszöbértéke ezredmásodpercben, amely elindítja a feladatfuttatók felskálázását. [Alapértelmezés 1] [Default is 1]"
@@ -7195,7 +7195,7 @@ msgid "The job queue lag threshold in milliseconds that allows scaling down job 
 msgstr "A feladatsor késleltetési küszöbértéke ezredmásodpercben, amely lehetővé teszi a feladatfuttatók leskálázását. [Alapértelmezés 1] [Default is 1]"
 
 msgid "The ratio of ready jobs to active runners that triggers scaling up. If readyJobs > activeRunners * ratio, additional runners are started. [Default is 1.2]"
-msgstr "A kész feladatok és az aktív futtatók aránya, amely elindítja a felskálázást. [Alapértelmezés 1.2]"
+msgstr "A kész munkák és az aktív futók aránya, amely kiváltja a bővítést. Ha readyJobs > activeRunners * arány, további futók indulnak el. [Az alapértelmezett 1.2]"
 
 msgid "The interval in milliseconds between job runner scaling checks. [Default is 1000]"
 msgstr "A feladatfuttató skálázási ellenőrzések közötti időköz ezredmásodpercben. [Alapértelmezés 1000]"
@@ -7207,10 +7207,10 @@ msgid "Enable the feedback mechanism that automatically rolls back ineffective s
 msgstr "A visszacsatolási mechanizmus engedélyezése, amely automatikusan visszavonja a hatástalan felskálázásokat. [Alapértelmezés igaz] [Default is true]"
 
 msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48]"
-msgstr "A sorban várakozó feladatok maximális száma az agresszív feladateldobás előtt. [Alapértelmezés 48] [Default is 48]"
+msgstr "A várakozó jobok maximális száma a sorban, mielőtt agresszív jobledobásra kerülne sor. Ha túllépi, a nem kritikus feladatokat a rendszer eldobja, hogy csökkentse a sornyomást. [Alapértelmezett: 48]"
 
 msgid "Maximum number of pending tunnel build jobs in the BuildHandler queue. When the queue exceeds this limit, new build requests are rejected to prevent job queue overload. [Default is 256]"
-msgstr "A BuildHandler sorban függőben lévő alagútépítési feladatok maximális száma. [Alapértelmezés 256] [Default is 256]"
+msgstr "A függőben lévő alagútépítési feladatok maximális száma a BuildHandler sorban. Ha a várólista túllépi ezt a korlátot, az új összeállítási kérelmek elutasításra kerülnek a feladatsor túlterhelésének elkerülése érdekében. [Alapértelmezett: 256]"
 
 msgid "Multiplier applied to the base tunnel build concurrency. The effective concurrency is baseBuildRate * multiplier, clamped by maxConcurrentBuilds. Higher values accelerate pool recovery but increase network load. [Default is 1.0]"
 msgstr "Az alap alagútépítési egyidejűségre alkalmazott szorzó. A hatékony egyidejűség baseBuildRate * szorzó, maxConcurrentBuilds korlátozva. [Alapértelmezés 1.0]"
@@ -7258,7 +7258,7 @@ msgid "This setting determines the delay between peer test jobs, configured in m
 msgstr "Ez a beállítás határozza meg a társ-teszt feladatok közötti késleltetést ezredmásodpercben. [Alapértelmezés 30000 (30 mp), vagy 45000 (45 mp) lassú rendszereken]"
 
 msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 5000]"
-msgstr "A társ késleltetésének meghatározásához ez a beállítás allokálja a maximális időt, amit egy társ-tesztnek el kell tartania a hiba megállapítása előtt. [Alapértelmezés 5000] [Default is 5000]"
+msgstr "A peer késleltetés meghatározásához ez a beállítás ezredmásodpercben adja meg azt a maximális időt, ameddig a peer tesztnek el kell telnie, mielőtt meghibásodásnak minősülne. Abban az esetben, ha az időtúllépés az átlagos sikeres tesztnél alacsonyabbra van konfigurálva, az átlagos sikeres tesztérték kerül felhasználásra. [Az alapértelmezett 5000]"
 
 msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 400]"
 msgstr "A gyors szinten megtartandó társak minimális száma a profilátszervezés során. Ha több mint 3000 útválasztó ismert, az alapértelmezés <code>knownRouters / 15</code> lesz. [Alapértelmezés 400] [Default is 400]"
@@ -7270,7 +7270,7 @@ msgid "Maximum number of peer profiles to retain in memory. Older, inactive prof
 msgstr "A memóriában megtartandó társ profilok maximális száma. A 100 alatti értékek 100-ra vannak szorítva. [Alapértelmezés 8000, vagy 800 lassú rendszereken] [Default is 8000, or 800 on slow systems]"
 
 msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]"
-msgstr "A RouterInfo maximális kora (órákban) ahhoz, hogy egy társ kiválasztható legyen alagútépítéshez. [Alapértelmezés 3] Ez különösen fontos a floodfill routereknél, amelyek nem fedezik fel aktívan a NetDB-t, mivel a RouterInfo-ik elavulhatnak időszakos frissítés nélkül. [Alapértelmezés 3]"
+msgstr "A RouterInfo maximális életkora (órában), hogy a társ alagútépítéshez választhatónak tekinthető. Az ennél a küszöbértéknél régebbi RouterInfos szolgáltatással rendelkező társak ki vannak zárva a kiválasztásból, hacsak nincs aktív kapcsolatuk. Ez különösen fontos azokra az árvízcsomópont-útválasztókra, amelyek nem fedezik fel aktívan a NetDB-t, mivel a RouterInfojuk időnkénti frissítés nélkül elavulttá válhat. [Alapértelmezett: 3]"
 
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
 msgstr "Ez a beállítás meghatározza, hogy a mi Útválasztónk adatai közvetett módon megjelennek-e a NetDb-ben. [Az alapérték hamis]"
@@ -7309,19 +7309,19 @@ msgid "When configured, this sets a hard limit for the number of tunnels the rou
 msgstr "Ha be van állítva, ez kemény korlátot szab az útválasztó által egyidejűleg építhető alagutak számára. Dinamikus, újraindítás nélkül hatályba lép. This setting is dynamic and takes effect without restart"
 
 msgid "When set to true, the router uses the older peer selection algorithm when building tunnels (prefer fast peers directly, without the multi-tier HighCap → Fast → Active fallback chain). May be useful for troubleshooting peer selection issues. [Default is false. This setting is dynamic and takes effect immediately.]"
-msgstr "Ha igaz, az útválasztó a régebbi társ-kiválasztási algoritmust használja alagutak építésekor. [Alapértelmezés hamis, dinamikus, azonnal hatályos] [Default is false This setting is dynamic and takes effect immediately ]"
+msgstr "Ha igazra van állítva, az útválasztó a régebbi társkiválasztási algoritmust használja az alagutak építésekor (a gyors társválasztást részesíti előnyben közvetlenül, a többrétegű HighCap → Fast → Active backback lánc nélkül). Hasznos lehet a társválasztási problémák hibaelhárításához. [Az alapértelmezett érték false. Ez a beállítás dinamikus és azonnal életbe lép.]"
 
 msgid "Growth factor used by the router's transit tunnel throttle. Higher values make the router accept tunnel build requests more aggressively relative to the 10-minute average. Lower values make it probabalistically reject sooner when tunnel counts are rising rapidly. [Default is 2.0]"
-msgstr "Az útválasztó tranzitalagút fojtása által használt növekedési tényező. [Alapértelmezés 2.0] [Alapértelmezés 2.0]"
+msgstr "Az útválasztó tranzit alagút fojtószelepe által használt növekedési tényező. A magasabb értékek miatt az útválasztó a 10 perces átlaghoz képest agresszívebben fogadja el az alagútépítési kéréseket. Az alacsonyabb értékek valószínűsíthetően hamarabb utasítják el, ha az alagútszám gyorsan növekszik. [Az alapértelmezett 2.0]"
 
 msgid "Growth factor for tunnel test time acceptance rate limiting. If the 1-minute average test time exceeds the 1-hour average multiplied by this factor, the router begins probabalistically rejecting. [Default is 1.5]"
-msgstr "Növekedési tényező az alagút tesztidő elfogadási arány korlátozásához. [Alapértelmezés 1.5]"
+msgstr "Növekedési tényező az alagútvizsgálati idő elfogadási arányának korlátozásához. Ha az 1 perces átlagos tesztidő meghaladja az 1 órás átlagot ezzel a tényezővel szorozva, az útválasztó megkezdi a valószínűségi elutasítást. [Az alapértelmezett 1,5]"
 
 msgid "Controls the steepness of the rejection probability curve when bandwidth usage approaches capacity. Lower values give a smoother transition (less aggressive rejection at moderate load). [Default is 10]"
 msgstr "Az elutasítási valószínűségi görbe meredekségét szabályozza, amikor a sávszélesség-használat közelíti a kapacitást. [Alapértelmezés 10] [Default is 10]"
 
 msgid "Penalty multiplier applied to a peer's capacity value when the peer publishes a 'D' congestion cap (moderate congestion). Higher values reduce the peer's effective capacity more aggressively. [Default is 2.5]"
-msgstr "Büntető szorzó alkalmazva a társ kapacitásértékére, amikor a társ 'D' torlódási képességet tesz közzé. [Alapértelmezés 2.5]"
+msgstr "Büntetési szorzót alkalmaznak a partner kapacitásértékére, amikor a partner „D” torlódási korlátot tesz közzé (mérsékelt torlódás). A magasabb értékek agresszívebben csökkentik a társ effektív kapacitását. [Alapértelmezett: 2,5]"
 
 msgid "Penalty multiplier applied to a peer's capacity value when the peer publishes an 'E' congestion cap (severe congestion). [Default is 4.75]"
 msgstr "Büntető szorzó 'E' torlódási képességhez. [Alapértelmezés 4.75]"
@@ -7333,13 +7333,13 @@ msgid "The latency threshold in milliseconds for removing slow tunnels from <a h
 msgstr "A késleltetési küszöb ezredmásodpercben a lassú alagutak eltávolításához a <a href=/tunnels>helyi alagútmedencékből</a>. [Alapértelmezés 0] Set to 0 to use 1 second or the lowest recorded latency from all pools, whichever is higher [Default is 0]"
 
 msgid "The minimum number of tunnels to keep in each pool when removing slow tunnels (minimum 2), overriding the configured tunnel quantity. Set to 0 to use the configured quantity per pool. [Default is 0]"
-msgstr "Az egyes medencékben megtartandó alagutak minimális száma lassú alagutak eltávolításakor (minimum 2). [Alapértelmezés 0] [Default is 0]"
+msgstr "Az egyes készletekben megtartandó alagutak minimális száma lassú alagutak eltávolításakor (legalább 2), felülírva a konfigurált alagútmennyiséget. Állítsa 0-ra a készletenkénti konfigurált mennyiség használatához. [Alapértelmezett: 0]"
 
 msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 90000 (90s), or 120000 (120s) if under load]"
 msgstr "A Lassú Alagutak Eltávolítása feladat futtatásai közötti időköz ezredmásodpercben. [Alapértelmezés 90000 (90 mp)] [Default is 90000 (90s), or 120000 (120s) if under load]"
 
 msgid "The time in milliseconds before expiration to mark tunnels for early expiry when the Remove Slow Tunnels job prunes slow or excess tunnels. Higher values allow more time for new tunnels to build. [Default is 30000]"
-msgstr "Idő ezredmásodpercben a lejárat előtt az alagutak korai lejáratra jelöléséhez. [Alapértelmezés 30000] [Default is 30000]"
+msgstr "Ez az idő ezredmásodpercben a lejárat előtt az alagutak korai lejárati jelzéséhez, amikor a Lassú alagutak eltávolítása feladat levágja a lassú vagy felesleges alagutakat. A magasabb értékek több időt hagynak az új alagutak építésére. [Alapértelmezett: 30000]"
 
 msgid "Hard limit on total tunnel test jobs (queued + active). Prevents runaway test backlogs from causing job queue lag. Once reached, no new tests are scheduled until the count drops. [Default is 128 (96 on slower systems)]"
 msgstr "Kemény korlát az összes alagútteszt-feladatra (sorban + aktív). [Alapértelmezés 128 (96 lassúbb rendszereken)] Once reached, no new tests are scheduled until the count drops [Default is 128 (96 on slower systems)]"
@@ -7351,7 +7351,7 @@ msgid "Maximum number of tunnel tests that can execute simultaneously. Caps conc
 msgstr "Az egyidejűleg végrehajtható alagúttesztek maximális száma. [Alapértelmezés 64 (32 lassúbb rendszereken)] [Default is 64 (32 on slower systems)]"
 
 msgid "Maximum consecutive client tunnel build timeouts before forcing exploratory tunnels for build reply delivery. Higher values keep the router trying paired tunnels longer; lower values fall back to exploratory sooner. [Default is 3]"
-msgstr "Maximális egymást követő kliens alagútépítési időtúllépések, mielőtt a feltáró alagutak kényszerítésre kerülnének. [Alapértelmezés 3] [Default is 3]"
+msgstr "Maximális egymást követő ügyfélalagút-felépítési időtúllépések, mielőtt feltáró alagutakra kényszerítenék a build-válasz kézbesítését. A magasabb értékek miatt az útválasztó hosszabb ideig próbálkozik páros alagutakkal; az alacsonyabb értékek hamarabb esnek vissza felfedezőre. [Alapértelmezett: 3]"
 
 msgid "How long to wait for a tunnel build reply before trying a different pool or different peers. The BuildExecutor adaptively increases this when success rates are low. [Default is 5000 (5s), 10000 (10s) on slow systems]"
 msgstr "Mennyi ideig várjon alagútépítési válaszra, mielőtt másik medencét vagy társakat próbálna. [Alapértelmezés 5000 (5 mp), 10000 (10 mp) lassú rendszereken] [Default is 5000 (5s), 10000 (10s) on slow systems]"
@@ -7372,13 +7372,13 @@ msgid "Grace period in milliseconds to accept late tunnel build replies after th
 msgstr "Türelmi idő ezredmásodpercben a késői alagútépítési válaszok elfogadásához, miután az útválasztó feladta a várakozást. [Alapértelmezés 60000 (60 mp)] [Default is 60000 (60 seconds)]"
 
 msgid "Minimum target tunnels per pool before triggering urgent rebuild logic. When the number of good tunnels drops below this threshold, the pool escalates to urgent rebuild mode. [Default is 2]"
-msgstr "Minimális célszámú alagút medencénként a sürgős újraépítési logika elindítása előtt. [Alapértelmezés 2] [Default is 2]"
+msgstr "Minimális célalagutak készletenként a sürgős újraépítési logika elindítása előtt. Amikor a jó alagutak száma e küszöb alá csökken, a készlet sürgős újraépítési módba lép. [Alapértelmezett: 2]"
 
 msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build processing. Ensures a minimum level of lookup concurrency even when few tunnels are participating. [Default is 10 (4 on slow systems)]"
 msgstr "Padló az egyidejű következő-ugró RouterInfo keresésekhez alagútépítés során. [Alapértelmezés 10 (4 lassú rendszereken)] [Default is 10 (4 on slow systems)]"
 
 msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Caps lookup concurrency to prevent overwhelming the netDb. [Default is max(cores/2, 16) (10 on slow systems)]"
-msgstr "Plafon az egyidejű RouterInfo keresésekhez. [Alapértelmezés max(cores/2, 16)]"
+msgstr "A párhuzamos következő ugrású RouterInfo keresések felső határa az alagútépítési feldolgozás során. Caps keresési párhuzamosság a netDb túlterhelésének megelőzése érdekében. [Az alapértelmezés max(cores/2, 16) (lassú rendszereken 10)]"
 
 msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
 msgstr "A jelenleg résztvevő alagutak százaléka az egyidejű keresési korlát skálázásához. [Alapértelmezés 40 (15 lassú rendszereken)] [Default is 40 (15 on slow systems)]"
@@ -7408,19 +7408,19 @@ msgid "Maximum concurrent tunnel test jobs per client pool. Caps how many client
 msgstr "Maximális egyidejű alagútteszt-feladatok kliens medencénként. [Alapértelmezés 24] [Default is 24]"
 
 msgid "Ratio of tunnels tested vs total pool size that triggers pool coverage heuristics. When fewer than this fraction of tunnels have recent test results, the pool prioritises testing over building. [Default is 0.95]"
-msgstr "A tesztelt alagutak aránya a teljes medenceméretben, amely elindítja a medence lefedettségi heurisztikáit. [Alapértelmezés 0.95]"
+msgstr "A tesztelt alagutak és a teljes medenceméret aránya, amely a medence lefedettségi heurisztikáját váltja ki. Ha az alagutak ennél kevesebb része rendelkezik a közelmúltban végzett vizsgálati eredményekkel, a medence a tesztelést részesíti előnyben az építéssel szemben. [Alapértelmezett: 0,95]"
 
 msgid "Cooldown period in milliseconds for client peer selection. Peers selected for a client tunnel are excluded from selection in other client pools for this duration, ensuring peer diversity. [Default is 15000 (15 seconds)]"
-msgstr "Lehűlési idő ezredmásodpercben a kliens társ-kiválasztáshoz. [Alapértelmezés 15000 (15 mp)] [Default is 15000 (15 seconds)]"
+msgstr "Lehűlési időszak ezredmásodpercben az ügyféltárs kiválasztásához. Az ügyfélalagúthoz kiválasztott társak erre az időtartamra ki vannak zárva a többi ügyfélkészletből, így biztosítva a peer-diverzitást. [Az alapértelmezett 15000 (15 másodperc)]"
 
 msgid "Client peer selection strategy: 'default' (balanced, preferred), 'reliability' (prioritise proven peers with high tunnel acceptance ratio), or 'diversity' (lower cooldowns, explores broader peer set). Changes apply dynamically. [Default is 'default']"
-msgstr "Kliens társ-kiválasztási stratégia: default, reliability, vagy diversity. [Alapértelmezés 'default']"
+msgstr "Ügyféltárs-kiválasztási stratégia: „alapértelmezett” (kiegyensúlyozott, előnyben részesített), „megbízhatóság” (előnyben részesítjük a bizonyított partnereket magas alagút-elfogadási aránnyal) vagy „sokszínűség” (alacsonyabb lehűlés, szélesebb partnerkészlet feltárása). A változtatások dinamikusan érvényesülnek. [Az alapértelmezett az 'alapértelmezett']"
 
 msgid "Tunnel lifetime in milliseconds. Tunnels expire after this period and are replaced with fresh builds. Lower values increase churn but may improve freshness; higher values reduce build overhead but may accumulate stale tunnels. [Default is 600000 (10 minutes)]"
 msgstr "Alagút élettartama ezredmásodpercben. [Alapértelmezés 600000 (10 perc)] Az alacsonyabb értékek növelik a cserélődést, de javíthatják a frissességet; a magasabb értékek csökkentik az építési többletterhelést, de elavult alagutakat halmozhatnak fel. [Alapértelmezés 600000 (10 perc)]"
 
 msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]"
-msgstr "Indítási elnyomási idő ezredmásodpercben. [Alapértelmezés 300000 (5 perc)] [Alapértelmezés 300000 (5 perc)]"
+msgstr "Indítási elnyomási időszak ezredmásodpercben. A figyelmeztetéseket és az alagútcsökkentési logikát a rendszer elnyomja a router kezdeti indításakor az idő előtti döntések elkerülése érdekében. [Alapértelmezett: 300000 (5 perc)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
 msgstr "Minimális intervallum ezredmásodpercben a LeaseSet közzétételei között. Megakadályozza a gyors közzétételi viharokat az alagút lemorzsolódása során. [Alapértelmezett: 120000 (2 perc)]"
@@ -7432,25 +7432,25 @@ msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end
 msgstr "A közzétett LeaseSet-ek maximális bérleti időtartama ezredmásodpercben. A kölcsönzés befejezési dátumai mostantól erre az értékre korlátozódnak, így a társak hamarabb töltik le újra, ha rövidebbre állítják be az alagút élettartamánál. Az átjáró továbbra is az alagút teljes élettartama alatt dolgozza fel az üzeneteket; csak a kérő oldalon lévő gyorsítótárazott LeaseSet jár le korábban, ami elindítja a legújabb verzió újbóli lekérését. Az alapértelmezett érték automatikusan az i2p.netdb.republishInterval + 60 másodperctől számítva (6 perc normál beállításokkal) történik."
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
-msgstr "Maximális egyidejű alagútépítés irányonként. [Alapértelmezés 6] [Default is 6]"
+msgstr "Az egyidejű alagútépítések maximális száma irányonként. A magasabb értékek felgyorsítják a készlet helyreállítását, de túlterhelhetik a hálózatot. [Alapértelmezett: 6]"
 
 msgid "If exploratory tunnel build success rate falls below 1 in this many attempts, tunnel quantity is reduced. Higher values make quantity reduction less likely. [Default is 12]"
 msgstr "Ha a feltáró alagútépítés sikerességi aránya 1 alá esik ennyi próbálkozásból, az alagutak száma csökken. [Alapértelmezés 12] [Default is 12]"
 
 msgid "Extra tunnels to maintain beyond the configured pool quantity. A positive value keeps spare tunnels ready so the pool doesn't drain when tunnels expire simultaneously. [Default is 0]"
-msgstr "További alagutak fenntartása a beállított medence mennyiségen felül. [Alapértelmezés 0] [Default is 0]"
+msgstr "A konfigurált készletmennyiségen túlmenően karbantartható extra alagutak. A pozitív érték készenlétben tartja a tartalék alagutakat, így a medence nem ürül ki, amikor az alagutak egyidejűleg lejárnak. [Alapértelmezett: 0]"
 
 msgid "Minimum interval in milliseconds between GOOD-tunnel deficit rebuilds for non-critical pools. Prevents rapid build-retry loops when the pool has enough FAILING tunnels to satisfy the numerical target. [Default is 30000 (30 seconds)]"
-msgstr "Minimális időköz a JÓ-alagút hiány újraépítések között nem kritikus medencékhez. [Alapértelmezés 30000 (30 mp)] [Default is 30000 (30 seconds)]"
+msgstr "Minimális intervallum ezredmásodpercben a GOOD-alagút-hiányos újraépítések között a nem kritikus készleteknél. Megakadályozza a gyors felépítési-újrapróbálkozási hurkokat, amikor a készletnek elegendő FAILING alagútja van a számszerű cél teljesítéséhez. [Alapértelmezett: 30000 (30 másodperc)]"
 
 msgid "Minimum tunnel test period in milliseconds. Tunnel tests always wait at least this long for a reply before timing out. [Default is 45000 (45 seconds)]"
 msgstr "Minimális alagútteszt idő ezredmásodpercben. [Alapértelmezés 45000 (45 mp)] [Default is 45000 (45 seconds)]"
 
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
-msgstr "Maximális alagútteszt idő ezredmásodpercben. [Alapértelmezés 50000 (50 mp)] [Default is 50000 (50 seconds)]"
+msgstr "Az alagútteszt maximális időtartama ezredmásodpercben. Az alagúttesztek soha nem várnak ennél tovább a válaszra, még nagy késleltetésű útvonalakon sem. [Az alapértelmezett 50000 (50 másodperc)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Alagútépítési időtúllépések száma, mielőtt egy társ szellemként lenne jelölve. [Alapértelmezés 3] [Default is 3]"
+msgstr "Az alagútépítési időtúllépések száma, mielőtt egy társat szellemként jelölnek meg (feketelistán az alagútban való részvétel miatt). A magasabb értékek több átmeneti meghibásodást is elviselnek. [Alapértelmezett: 3]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
 msgstr "Lehűlési idő ezredmásodpercben, mielőtt egy szellemként jelölt társ újra figyelembe vehető. [Alapértelmezés 180000 (3 perc)] [Default is 180000 (3 minutes)]"
@@ -7468,7 +7468,7 @@ msgid "Number of tunnel build requests from a single peer in 1 second that trigg
 msgstr "Alagútépítési kérések száma egyetlen társról 1 másodperc alatt, amely azonnali tiltást vált ki. [Alapértelmezés 10] [Default is 10]"
 
 msgid "Percentage of participating tunnels used to dynamically scale the per-peer request throttle limit. The effective maxLimit is adjusted based on this percentage of current participating tunnel count. [Default is 20]"
-msgstr "A résztvevő alagutak százaléka a társankénti kérésfojtási korlát dinamikus skálázásához. [Alapértelmezés 20] [Default is 20]"
+msgstr "A résztvevő alagutak százalékos aránya a peer-kérelem fojtószelep-korlátjának dinamikus skálázásához. Az effektív maxLimit az aktuális résztvevő alagútszám ezen százaléka alapján kerül beállításra. [Alapértelmezett: 20]"
 
 msgid "Minimum number of participating tunnel build requests accepted per clean window. Ensures a baseline acceptance rate even when the router is under load. [Default is 80 (40 on slow systems)]"
 msgstr "Minimális számú résztvevő alagútépítési kérés elfogadva tisztítási ablakonként. [Alapértelmezés 80 (40 lassú rendszereken)] [Default is 80 (40 on slow systems)]"
@@ -7477,25 +7477,25 @@ msgid "Maximum number of participating tunnel build requests accepted per clean 
 msgstr "Maximális számú résztvevő alagútépítési kérés elfogadva tisztítási ablakonként. [Alapértelmezés 300 (150 lassú rendszereken)] [Default is 300 (150 on slow systems)]"
 
 msgid "Percentage of current participating tunnels used to scale the participating throttle limits. Higher values allow more build requests relative to tunnel count. [Default is 10]"
-msgstr "A jelenleg résztvevő alagutak százaléka a résztvevő fojtási korlátok skálázásához. [Alapértelmezés 10] [Default is 10]"
+msgstr "A részt vevő fojtószelep-korlátok skálázásához használt jelenlegi részt vevő alagutak százalékos aránya. A magasabb értékek több felépítési kérést tesznek lehetővé az alagútszámhoz képest. [Alapértelmezett: 10]"
 
 msgid "Minimum percentage of non-failing peer profiles required before the router broadens exploratory peer selection. When below this threshold, only the most reliable peers are used. [Default is 15]"
 msgstr "A nem hibás társ profilok minimális százaléka, mielőtt az útválasztó kiterjesztené a feltáró társ-kiválasztást. [Alapértelmezés 15] [Default is 15]"
 
 msgid "Minimum number of active (non-failing) peers required for normal exploratory peer selection. Below this threshold, selection logic becomes more permissive. [Default is 12]"
-msgstr "A normál feltáró társ-kiválasztáshoz szükséges aktív társak minimális száma. [Alapértelmezés 12] [Default is 12]"
+msgstr "A normál felfedező társkiválasztáshoz szükséges aktív (nem sikertelen) társak minimális száma. E küszöb alatt a kiválasztási logika megengedőbbé válik. [Alapértelmezett: 12]"
 
 msgid "Minimum number of active peers required during router startup before restricting exploratory peer selection. During early startup the router is more lenient about peer quality. [Default is 6]"
-msgstr "Az útválasztó indítása során szükséges minimális aktív társak száma. [Alapértelmezés 6] [Default is 6]"
+msgstr "Az útválasztó indításakor szükséges aktív társak minimális száma, mielőtt korlátozná a felfedező társválasztást. A korai indítás során az útválasztó engedékenyebb a peer-minőséggel kapcsolatban. [Alapértelmezett: 6]"
 
 msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 64]"
-msgstr "Maximális lassú indítási ablakméret streaming kapcsolatokhoz. [Alapértelmezés 64] [Default is 64]"
+msgstr "Maximális lassú indítási ablakméret a streaming kapcsolatokhoz. Lassú indításkor leállítja a torlódási ablakot, hogy megakadályozza a hálózat túlterhelését. [Alapértelmezett: 64]"
 
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 60000 (60 seconds)]"
 msgstr "Maximális oda-vissza idő ezredmásodpercben streaming kapcsolatokhoz. [Alapértelmezés 60000 (60 mp)] [Default is 60000 (60 seconds)]"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 64]"
-msgstr "Maximális csomag-újraküldések száma a kapcsolat feladása előtt. [Alapértelmezés 64] [Default is 64]"
+msgstr "A kapcsolat feladása előtt a csomagok újraküldésének maximális száma. A magasabb értékek növelik a veszteséges kapcsolatok megbízhatóságát, de késleltetik a hibaészlelést. [Alapértelmezett: 64]"
 
 msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 60000 (60 seconds)]"
 msgstr "Lehűlési idő ezredmásodpercben a kapcsolódási kísérletek között ugyanazon elérhetetlen célponthoz. [Alapértelmezés 60000 (60 mp)] [Default is 60000 (60 seconds)]"
@@ -7519,7 +7519,7 @@ msgid "Interval in milliseconds between automated LeaseSet republishes. Higher v
 msgstr "Időköz ezredmásodpercben az automatikus LeaseSet újraközzétételek között. [Alapértelmezés 300000 (5 perc)] [Alapértelmezés 300000 (5 perc)]"
 
 msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
-msgstr "Küszöbérték ezredmásodpercben a proaktív LeaseSet újraközzétételhez. [Alapértelmezés 180000 (3 perc)] [Default is 180000 (3 minutes)]"
+msgstr "A proaktív LeaseSet újraközlés küszöbértéke ezredmásodpercben. Ha a bérlet ezen az időszakon belül jár le, a LeaseSet azonnal újra közzéteszi ahelyett, hogy megvárná a következő időszakos ciklust. [Alapértelmezett: 180000 (3 perc)]"
 
 msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
 msgstr "Az időtartam ezredmásodpercben az inaktív alagutak ellenőrzéséhez. [Alapértelmezés 60000] [Default is 60000]"
@@ -7579,19 +7579,19 @@ msgid "The inactivity timeout in milliseconds for eepget transfers (max idle tim
 msgstr "Az inaktivitási időtúllépés ezredmásodpercben az eepget átvitelekhez. [Alapértelmezés 300000 (5 perc)] [Default is 300000 (5min)]"
 
 msgid "Maximum number of consecutive zero-data transfer failures before eepget gives up, even if retries remain. Increase if transfers fail without receiving any data. [Default is 20]"
-msgstr "Maximális egymást követő nulla-adat átviteli hibák száma, mielőtt az eepget feladja. [Alapértelmezés 20] [Default is 20]"
+msgstr "Az egymást követő nulla adatátviteli hibák maximális száma, mielőtt az eepget feladná, még akkor is, ha maradnak az újrapróbálkozások. Növelje, ha az átvitelek adatok fogadása nélkül meghiúsulnak. [Alapértelmezett: 20]"
 
 msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
 msgstr "Az eepget alapértelmezett újrapróbálkozási száma, ha a <code>-n</code> kapcsoló nincs megadva. [Alapértelmezés 10]"
 
 msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 300000 (5min)]"
-msgstr "A TIME-WAIT időtartam ezredmásodpercben streaming kapcsolat bontása után. [Alapértelmezés 300000 (5 perc)] [Default is 300000 (5min)]"
+msgstr "A TIME-WAIT időtartam ezredmásodpercben a streaming kapcsolat megszakadása után, amely alatt a késői csomagokat továbbra is nyugtázza. Növekedés a nagy késleltetésű útvonalakhoz, ahol a végső ACK-k késhetnek. [Alapértelmezett: 300000 (5 perc)]"
 
 msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 120000 (2min)]"
 msgstr "A streaming kapcsolódási időtúllépés felső korlátja. [Alapértelmezés 120000 (2 perc)] Növelje nagyon nagy késleltetésű távoli hozzáférés esetén. [Alapértelmezés 120000 (2 perc)]"
 
 msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 8]"
-msgstr "Kezdeti torlódási ablakméret (csomagokban) új streaming kapcsolatokhoz. [Alapértelmezés 8] [Default is 8]"
+msgstr "A kezdeti torlódási ablak mérete (csomagokban) az új streaming kapcsolatokhoz. Egy nagyobb ablak gyorsabban indítja el a kapcsolatokat, de több újraküldést okozhat a túlterhelt útvonalakon. [Alapértelmezett: 8]"
 
 msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 128]"
 msgstr "Maximális torlódási ablakméret (csomagokban) streaming kapcsolatokhoz. [Alapértelmezés 128] [Default is 128]"
@@ -7603,13 +7603,13 @@ msgid "The maximum retransmission delay in milliseconds. Retransmit interval wil
 msgstr "A maximális újraküldési késleltetés ezredmásodpercben. [Alapértelmezés 30000 (30 mp)] Increase to allow longer between retries on congested paths [Default is 30000 (30s)]"
 
 msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
-msgstr "A maximális újraküldési időtúllépés ezredmásodpercben exponenciális visszalépés után. [Alapértelmezés 30000 (30 mp)] [Default is 30000 (30s)]"
+msgstr "A maximális újraküldési időtúllépés ezredmásodpercben az exponenciális visszalépés (duplázódás) után. Meghatározza, hogy a küldő mennyi ideig várjon, mielőtt megpróbálná újraküldeni súlyos torlódások esetén. [Alapértelmezett: 30000 (30s)]"
 
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
 msgstr "Ha az érték igaz-ra van állítva, az I2P hálózati kapcsolat nélkül fut, ami hasznos lehet, ha folyamatosan újraindítja a routert a kódfrissítések teszteléséhez, mivel ez megakadályozza a hálózat megszakadását."
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
-msgstr "Ha igaz, letiltja a helyi-helyi loopback kézbesítést és minden forgalmat alagutakon keresztül irányít. [Alapértelmezés szerint letiltva] [Disabled by default]"
+msgstr "Igaz értékre állítva letiltja a helyi-helyi visszacsatolási kézbesítést, és az összes forgalmat alagutakon keresztül kényszeríti (kimenő alagút → hálózat → bejövő alagút → helyi cél). Hasznos az alagút-útválasztási viselkedés teszteléséhez, amikor a forrás és a cél ugyanazon az útválasztón található. [Alapértelmezés szerint letiltva]"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Ez a beállítás lehetővé teszi alternatív NTP szerverek beállítását, amelyek szükségesek ahhoz, hogy a router pontos időtartamot tartsa. [Az alapértelmezett érték: 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -8038,7 +8038,7 @@ msgid "A tunnel used by the router for communicating with other routers to perfo
 msgstr "Egy tunnel, amit a közvetítő használ más közvetítőkkel való kommunikációra, hogy végezzen különböző \"karbantartási\" funkciókat, mint például olyan \"leasesetek\" tanulmányozása és publikálása, kliens tunnel-ek tesztelése, és más közvetítők megtanulása és érvényesítése a hálózatban. Ezek a tunnel-ek általában alacsony sávszélességűek."
 
 msgid "A router on the network tasked with providing and receiving information about other routers and services on the network. The current minimum share bandwidth for a router to be considered as capable of performing floodfill duties is 128 KBytes/sec, though it's possible to override this requirement and force a router to be a floodfill on the <a href=/configadvanced>Advanced Configuration page</a>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "Egy közvetítő a hálózaton, amelynek feladata más közvetítőkkel és szolgáltatásokkal kapcsolatos információk megadása és fogadása a hálózaton. Az aktuális minimális osztozott sávszélesség a közvetítő számára ahhoz, hogy képesnek tekinthető legyen a tulajdonában lévő floodfill feladatok elvégzésére, 128 KByte/sec, bár lehetséges felülbírálni ezt az elvárást és kényszeríteni a közvetítőt a floodfill funkcióra a <a href=/configadvanced>Speciális Konfigurációs oldalon</a>. További információért lásd az <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>online dokumentációt</a>."
+msgstr "A hálózaton lévő útválasztó, amelynek feladata, hogy információkat biztosítson és fogadjon a hálózat egyéb útválasztóiról és szolgáltatásairól. A jelenlegi minimális megosztási sávszélesség ahhoz, hogy egy router elárasztási csomóponti feladatok ellátására képes legyen, 128 KByte/s, bár a <a href=/configadvanced>Speciális konfiguráció oldalon</a> felülírható ez a követelmény, és egy útválasztót elárasztási csomóponttá kényszeríthetjük. További információért tekintse meg az <a href=https://geti2p.net/en/docs/how/network-database#flood node class='sitelink external' target=_blank rel=noreferrer>online dokumentációt</a>."
 
 msgid "Garlic Routing"
 msgstr "Fokhagyma Routing"
@@ -8538,7 +8538,7 @@ msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
 msgstr "FIGYELMEZTETÉS_TŰZFAL ÉS_GYORS - Tűzfal mögött, de gyors társ"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr "FIGYELMEZTETÉS_TŰZFAL ÉS_FLOODFILL - Tűzfal mögött, de floodfill"
+msgstr "WARN_FIREWALLED_AND_FLOODFILL – Tűzfal, de elárasztási csomópont"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
 msgstr "FIGYELMEZTETÉS_TŰZFAL_BEJÖVŐ_TCP-VEL - Tűzfal mögött bejövő TCP-vel"
@@ -9078,7 +9078,7 @@ msgid "This is the number of peers your router has available for building your e
 msgstr "Ez a csomópontok száma, amelyek a hálózat teljesítményének meghatározásához szükséges kutató (exploratory) alagutak építéséhez állnak rendelkezésre. Általában 8 és 75 között van. A gyors csomópontok megtalálhatók a magas kapacitású válasz belsejében. A magas kapacitású csomópontok megjelennek a <a href='/profiles'>Profilok oldal</a>. <a href='/configstats#router.highCapacityPeers'>[Grafikonok engedélyezése]</a>"
 
 msgid "This is the number of peers your router will use for network database inquiries. These are usually the <i>floodfill</i> routers which are responsible for maintaining network integrity. Your well integrated peers are shown on the bottom of the <a href='/profiles'>Profiles page</a>."
-msgstr "Ez azon csomópontok száma amiket a routered használ a hálózat adatbáziskérdések lefuttatásához. Általában ezek az <i>floodfill</i> routerek, amelyek felelősek a hálózati integritás fenntartásáért. A jól integrált csomópontjaidat az <a href='/profiles'>Profilok oldalon</a> találod."
+msgstr "Ez az útválasztója a hálózati adatbázis lekérdezéséhez használt társak száma. Ezek általában a <i>flod node</i> útválasztók, amelyek a hálózat integritásának megőrzéséért felelősek. Jól integrált társai a <a href='/profiles'>Profilok oldal</a> alján láthatók."
 
 msgid "This is the total number of peers that are known by your router. They are listed on the <a href='/netdb'>Network Database page</a>. This may range from under 100 to 1000 or more. This number is not the total size of the network; it may vary widely depending on your total bandwidth, shared bandwidth, and locally-generated traffic. I2P does not require a router to know every other router in the network."
 msgstr "Ez az ismert csomópontok száma a routeredben. <a href='/netdb'>A Hálózati adatbázis oldalon</a> vannak felsorolva. Ez a szám tartományban mozoghat 100 alatt és 1000 fölött is. Ez a szám nem a hálózat teljes mérete; széles tartományban változhat, attól függően, hogy a teljes sávszélességed, a megosztott sávszélességed és a helyileg generált forgalom. Az I2P nem követeli meg, hogy a routereknek ismerniük kelljen minden más rutert a hálózaton."
@@ -9099,7 +9099,7 @@ msgid "The actual tunnels are shown on the <a href='/tunnels'>Tunnels page</a>."
 msgstr "A tényleges alagutak az <a href=/tunnels>Alagút oldalon</a> láthatók."
 
 msgid "Tunnels built by your router and used for communication with the floodfill peers, building new tunnels, and testing existing tunnels."
-msgstr "Az útválasztó által épített alagutak, amelyeket a floodfill társakkal való kommunikációra, új alagutak építésére és meglévő alagutak tesztelésére használnak."
+msgstr "Az útválasztó által épített alagutak, amelyeket a flood node társakkal való kommunikációhoz, új alagutak építéséhez és meglévő alagutak teszteléséhez használnak."
 
 msgid "Tunnels built by your router for each client's use."
 msgstr "Az útválasztó által épített alagutak minden ügyfél számára."
@@ -9201,13 +9201,13 @@ msgid "While I2P will work fine in this configuration, if you really have over 1
 msgstr "Habár az I2P rendesen működik ilyen beállítással, ha valóban több mint 128KBps sávszélességet tudsz megosztani, nagy segítség lesz a hálózat számára, ha megnyitod a tűzfalad."
 
 msgid "WARN - Firewalled and Floodfill"
-msgstr "FIGYELEM - Tűzfalazva és floodfill"
+msgstr "FIGYELMEZTETÉS – Tűzfallal védett és elárasztó csomópont"
 
 msgid "You have configured I2P to be a floodfill router, but you are firewalled."
-msgstr "Az I2P úgy lett beállítva, hogy floodfill router legyen, de tűzfalazva van. (floodfill - nem megbízott I2P router, mely routerinfót és leaseset-eket biztosít más társaknak)"
+msgstr "Az I2P-t elárasztási csomópont útválasztónak állította be, de tűzfallal rendelkezik."
 
 msgid "For best participation as a floodfill router, you should open your firewall."
-msgstr "A floodfill routerként való legoptimálisabb közreműködés érdekében ajánlatos a tűzfal megnyitása."
+msgstr "Az árvízi csomópont útválasztóként való legjobb részvételhez meg kell nyitnia a tűzfalat."
 
 msgid "WARN - Firewalled with Inbound TCP Enabled"
 msgstr "FIGYELEM - Tűzfal mögött és bejövő TCP Engedélyezve"

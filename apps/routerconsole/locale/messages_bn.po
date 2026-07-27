@@ -113,7 +113,7 @@ msgid "Known high capacity peers"
 msgstr "পরিচিত উচ্চ ক্ষমতাসম্পন্ন পিয়ার"
 
 msgid "Known integrated (floodfill) peers"
-msgstr "পরিচিত ইন্টিগ্রেটেড (ফ্লাডফিল - তথ্য বিতরণকারী নোড) পিয়ার"
+msgstr "পরিচিত সমন্বিত (বন্যা নোড) সহকর্মী"
 
 msgid "Total peers in our NetDb"
 msgstr "আমাদের নেটডিবি (নেটওয়ার্ক ডাটাবেজ)-তে মোট পিয়ার"
@@ -134,7 +134,7 @@ msgid "unknown"
 msgstr "অজানা"
 
 msgid "Floodfill"
-msgstr "ফ্লাডফিল (তথ্য বিতরণকারী নোড)"
+msgstr "ফ্লুডফিলমার্কার"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "নেটডিবিতে এই সক্ষমতাসম্পন্ন সকল রাউটার দেখান"
@@ -1812,7 +1812,7 @@ msgid "Aborted startup"
 msgstr "স্টার্টআপ বাতিল"
 
 msgid "Enabled floodfill"
-msgstr "ফ্লাডফিল সক্রিয়"
+msgstr "সক্রিয় ফ্লাড নোড"
 
 msgid "Changed IP"
 msgstr "IP পরিবর্তিত"
@@ -1842,7 +1842,7 @@ msgid "New router identity"
 msgstr "নতুন রাউটার আইডেন্টিটি"
 
 msgid "Disabled floodfill"
-msgstr "ফ্লাডফিল নিষ্ক্রিয়"
+msgstr "অক্ষম বন্যা নোড"
 
 msgid "Out of memory error"
 msgstr "মেমরি স্বল্পতা ত্রুটি"
@@ -2186,7 +2186,7 @@ msgid "LeaseSets"
 msgstr "লিজসেট (লিজ তথ্য সেট)"
 
 msgid "Stored LeaseSets in floodfill"
-msgstr "ফ্লাডফিলে সংরক্ষিত LeaseSet"
+msgstr "বন্যা নোডে সংরক্ষিত লিজসেট"
 
 msgid "Cache Hit"
 msgstr "ক্যাশে হিট"
@@ -2198,7 +2198,7 @@ msgid "Flood Verify"
 msgstr "ফ্লাড যাচাই"
 
 msgid "Floodfill verify time"
-msgstr "ফ্লাডফিল যাচাই সময়"
+msgstr "বন্যা নোড যাচাই করার সময়"
 
 msgid "NetDB ACK"
 msgstr "NetDB ACK"
@@ -2715,7 +2715,7 @@ msgid "UDP Port"
 msgstr "UDP পোর্ট"
 
 msgid "Floodfill Role"
-msgstr "ফ্লাডফিল ভূমিকা"
+msgstr "বন্যা নোড ভূমিকা"
 
 msgid "Active"
 msgstr "সক্রিয়"
@@ -3059,7 +3059,7 @@ msgid "Change in"
 msgstr "পরিবর্তন হবে"
 
 msgid "Floodfill mode enabled"
-msgstr "ফ্লাডফিল (ডেটা বিতরণ) মোড সক্রিয়"
+msgstr "ফ্লাড নোড মোড সক্রিয়"
 
 msgid "Routing Key"
 msgstr "রাউটিং কী"
@@ -3068,7 +3068,7 @@ msgid "Median distance (bits)"
 msgstr "মধ্যমা দূরত্ব (বিট)"
 
 msgid "Estimated total floodfills"
-msgstr "আনুমানিক মোট ফ্লাডফিল"
+msgstr "আনুমানিক মোট বন্যা নোড"
 
 msgid "Estimated total leasesets"
 msgstr "আনুমানিক মোট লিজসেট"
@@ -3167,7 +3167,7 @@ msgid "X Tier"
 msgstr "X স্তর"
 
 msgid "Floodfills"
-msgstr "ফ্লাডফিল (ডেটা বিতরণ নোড)"
+msgstr "ফ্লুডফিলমার্কার"
 
 msgid "Total"
 msgstr "মোট"
@@ -3823,7 +3823,7 @@ msgid "Peers that meet or exceed tunnel build rate average for all profiled peer
 msgstr "পিয়ার যারা সকল প্রোফাইলকৃত পিয়ারের টানেল নির্মাণ হারের গড় পূরণ বা অতিক্রম করে।"
 
 msgid "Floodfill peers currently available for NetDb inquiries."
-msgstr "নেটডিবি অনুসন্ধানের জন্য বর্তমানে উপলব্ধ ফ্লাডফিল পিয়ার।"
+msgstr "ফ্লাড নোড সহকর্মীরা বর্তমানে NetDb অনুসন্ধানের জন্য উপলব্ধ।"
 
 msgid "Peers not profiled as high capacity (lower build rate than average peer)."
 msgstr "উচ্চ ক্ষমতা হিসেবে প্রোফাইলকৃত নয় এমন পিয়ার (গড় পিয়ারের চেয়ে কম নির্মাণ হার)।"
@@ -3893,7 +3893,7 @@ msgid "Firewalled with Inbound TCP Enabled"
 msgstr "আগত TCP সক্রিয় সহ ফায়ারওয়ালযুক্ত"
 
 msgid "Firewalled &amp; Floodfill"
-msgstr "ফায়ারওয়ালযুক্ত এবং ফ্লাডফিল"
+msgstr "ফায়ারওয়ালযুক্ত &amp; ফ্লুডফিলমার্কার"
 
 msgid "Disconnected"
 msgstr "সংযোগ বিচ্ছিন্ন"
@@ -4249,7 +4249,7 @@ msgid "How much RAM I2P is using / total RAM available to I2P (excludes RAM allo
 msgstr "I2P কত র্যাম ব্যবহার করছে / I2P-এর জন্য মোট উপলব্ধ র্যাম (JVM-এ বরাদ্দকৃত র্যাম বাদে)"
 
 msgid "Floodfill enabled"
-msgstr "ফ্লাডফিল সক্রিয়"
+msgstr "বন্যা নোড সক্রিয়"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "আমাদের নেটডিবিতে সংরক্ষিত মোট দূরবর্তী লিজসেটের সংখ্যা"
@@ -4355,7 +4355,7 @@ msgid "inbound / outbound"
 msgstr "আগত / বহির্গামী"
 
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
-msgstr "টানেল নির্মাণ ও পরীক্ষা এবং ফ্লাডফিল পিয়ারের সাথে যোগাযোগের জন্য ব্যবহৃত"
+msgstr "টানেল তৈরি এবং পরীক্ষা করার জন্য এবং বন্যা নোড সহকর্মীদের সাথে যোগাযোগের জন্য ব্যবহৃত হয়"
 
 msgid "Utility"
 msgstr "উপযোগ"
@@ -4530,7 +4530,7 @@ msgid "Delete Sybil Blocklist"
 msgstr "সিবিল ব্লকলিস্ট মুছুন"
 
 msgid "Floodfill Summary"
-msgstr "ফ্লাডফিল সারসংক্ষেপ"
+msgstr "বন্যা নোড সারাংশ"
 
 msgid "Same Family"
 msgstr "একই পরিবার"
@@ -4566,7 +4566,7 @@ msgid "Review"
 msgstr "পর্যালোচনা"
 
 msgid "Run analysis on Floodfills only"
-msgstr "শুধুমাত্র ফ্লাডফিলের উপর বিশ্লেষণ চালান"
+msgstr "শুধুমাত্র বন্যা নোডের উপর বিশ্লেষণ চালান"
 
 msgid "Start Scan"
 msgstr "স্ক্যান শুরু করুন"
@@ -4602,7 +4602,7 @@ msgid "Block all detected sybils"
 msgstr "সকল সনাক্তকৃত সিবিল ব্লক করুন"
 
 msgid "Include non-floodfill routers"
-msgstr "অ-ফ্লাডফিল রাউটার অন্তর্ভুক্ত করুন"
+msgstr "নন-ফ্লুডফিলমার্কার রাউটার অন্তর্ভুক্ত করুন"
 
 msgid "Minimum threshold for block"
 msgstr "ব্লকের জন্য ন্যূনতম সীমা"
@@ -4617,10 +4617,10 @@ msgid "days"
 msgstr "দিন"
 
 msgid "Known Floodfills"
-msgstr "পরিচিত ফ্লাডফিল"
+msgstr "পরিচিত বন্যা নোড"
 
 msgid "Average closest floodfill distance"
-msgstr "গড় নিকটতম ফ্লাডফিল দূরত্ব"
+msgstr "গড় নিকটতম বন্যা নোড দূরত্ব"
 
 msgid "Routing Data"
 msgstr "রাউটিং তথ্য"
@@ -4629,28 +4629,28 @@ msgid "Rotates in"
 msgstr "ঘুরবে"
 
 msgid "Closest Floodfills to Our Routing Key (Where we Store our RI)"
-msgstr "আমাদের রাউটিং কী-এর নিকটতম ফ্লাডফিল (যেখানে আমরা আমাদের RI সংরক্ষণ করি)"
+msgstr "আমাদের রাউটিং কী-এর নিকটতম Floodfills (যেখানে আমরা আমাদের RI সঞ্চয় করি)"
 
 msgid "Closest Floodfills to Tomorrow's Routing Key (Where we will Store our RI)"
-msgstr "আগামীকালের রাউটিং কী-এর নিকটতম ফ্লাডফিল (যেখানে আমরা আমাদের RI সংরক্ষণ করব)"
+msgstr "আগামীকালের রাউটিং কী থেকে সবচেয়ে কাছের Floodfills (যেখানে আমরা আমাদের RI সংরক্ষণ করব)"
 
 msgid "Closest Floodfills to Our Router Hash (DHT Neighbors if we are Floodfill)"
-msgstr "আমাদের রাউটার হ্যাশের নিকটতম ফ্লাডফিল (আমরা ফ্লাডফিল হলে DHT প্রতিবেশী)"
+msgstr "আমাদের রাউটার হ্যাশের নিকটতম ফ্লাড নোড (যদি আমরা ফ্লাড নোড হই তবে DHT প্রতিবেশী)"
 
 msgid "Floodfills Close to Our Destinations"
-msgstr "আমাদের গন্তব্যের নিকটবর্তী ফ্লাডফিল"
+msgstr "Floodfills আমাদের গন্তব্যের কাছাকাছি"
 
 msgid "None"
 msgstr "কিছুই না"
 
 msgid "Closest floodfills to the Routing Key for"
-msgstr "এর জন্য রাউটিং কী-এর নিকটতম ফ্লাডফিল"
+msgstr "এর জন্য রাউটিং কী-এর নিকটতম Floodfills৷"
 
 msgid "where we store our LS"
 msgstr "যেখানে আমরা আমাদের LS সংরক্ষণ করি"
 
 msgid "Closest floodfills to Tomorrow's Routing Key for"
-msgstr "এর জন্য আগামীকালের রাউটিং কী-এর নিকটতম ফ্লাডফিল"
+msgstr "আগামীকালের রাউটিং কী থেকে সবচেয়ে কাছের Floodfills"
 
 msgid "where we will store our LS"
 msgstr "যেখানে আমরা আমাদের LS সংরক্ষণ করব"
@@ -4665,10 +4665,10 @@ msgid "Router info not available"
 msgstr "রাউটার তথ্য উপলব্ধ নয়"
 
 msgid "Average Floodfill Distance is"
-msgstr "গড় ফ্লাডফিল দূরত্ব হল"
+msgstr "গড় ফ্লুডফিলমার্কার দূরত্ব"
 
 msgid "Closest Floodfill Pairs by Hash"
-msgstr "হ্যাশ অনুযায়ী নিকটতম ফ্লাডফিল জোড়া"
+msgstr "হ্যাশ দ্বারা নিকটতম ফ্লাড নোড জোড়া"
 
 msgid "Hash Distance"
 msgstr "হ্যাশ দূরত্ব"
@@ -4722,7 +4722,7 @@ msgid "Totals for"
 msgstr "এর জন্য মোট"
 
 msgid "floodfills"
-msgstr "ফ্লাডফিল"
+msgstr "ফ্লুডফিলমার্কার"
 
 msgid "MIN"
 msgstr "সর্বনিম্ন"
@@ -5938,16 +5938,16 @@ msgid "Key <b>{0}</b> selected for removal. To commit the change, save the confi
 msgstr "মুছে ফেলার জন্য <b>{0}</b> কী নির্বাচিত হয়েছে। পরিবর্তন কার্যকর করতে কনফিগারেশন সংরক্ষণ করুন, অথবা কী পুনরুদ্ধার করতে বাতিল করুন।"
 
 msgid "Floodfill Configuration"
-msgstr "Floodfill কনফিগারেশন"
+msgstr "বন্যা নোড কনফিগারেশন"
 
 msgid "Floodfill participation helps the network, but may use more of your computer's resources."
-msgstr "Floodfill অংশগ্রহণ নেটওয়ার্ককে সহায়তা করে, কিন্তু আপনার কম্পিউটারের সম্পদ বেশি ব্যবহার করতে পারে।"
+msgstr "ফ্লাড নোডের অংশগ্রহণ নেটওয়ার্ককে সাহায্য করে, কিন্তু আপনার কম্পিউটারের আরও বেশি সম্পদ ব্যবহার করতে পারে।"
 
 msgid "This router is currently a floodfill participant."
-msgstr "এই রাউটার বর্তমানে একটি floodfill অংশগ্রহণকারী।"
+msgstr "এই রাউটারটি বর্তমানে একটি ফ্লাড নোড অংশগ্রহণকারী।"
 
 msgid "This router is not currently a floodfill participant."
-msgstr "এই রাউটার বর্তমানে একটি floodfill অংশগ্রহণকারী নয়।"
+msgstr "এই রাউটারটি বর্তমানে একটি বন্যা নোড অংশগ্রহণকারী নয়।"
 
 msgid "Enrollment"
 msgstr "নিবন্ধন"
@@ -6080,10 +6080,10 @@ msgid "Misc Reasons"
 msgstr "বিবিধ কারণ"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
-msgstr "অনুসন্ধানে সাড়া দিতে ব্যর্থ ফ্লাডফিল পিয়ার নিষিদ্ধ করুন (ব্যর্থতার হার >৯৫%)"
+msgstr "ফ্লাড নোড সহকর্মীদের নিষিদ্ধ করুন যারা প্রশ্নের উত্তর দিতে ব্যর্থ হয় (ব্যর্থতার হার >95%)"
 
 msgid "Ban unresponsive floodfills"
-msgstr "অসাড় ফ্লাডফিল নিষিদ্ধ করুন"
+msgstr "প্রতিক্রিয়াহীন Floodfills নিষিদ্ধ করুন"
 
 msgid "Ban routers whose RouterInfo has no version field"
 msgstr "যেসব রাউটারের RouterInfo-তে কোনো ভার্সন ক্ষেত্র নেই এমন রাউটার নিষিদ্ধ করুন"
@@ -6268,7 +6268,7 @@ msgid "Enter key provided by server operator."
 msgstr "সার্ভার অপারেটরের দেওয়া কী লিখুন।"
 
 msgid "Prevents server discovery by floodfills"
-msgstr "Floodfill দ্বারা সার্ভার আবিষ্কার প্রতিরোধ করে"
+msgstr "বন্যা নোড দ্বারা সার্ভার আবিষ্কার প্রতিরোধ করে"
 
 msgid "Enter password provided by server operator."
 msgstr "সার্ভার অপারেটরের দেওয়া পাসওয়ার্ড লিখুন।"
@@ -6985,7 +6985,7 @@ msgid "Network & Participation"
 msgstr "নেটওয়ার্ক ও অংশগ্রহণ"
 
 msgid "Floodfill / NetDB"
-msgstr "ফ্লাডফিল / NetDB"
+msgstr "ফ্লুডফিলমার্কার / নেটডিবি"
 
 msgid "Advanced Configuration Help - I2P+"
 msgstr "উন্নত কনফিগারেশন সহায়তা - I2P+"
@@ -7117,10 +7117,10 @@ msgid "This setting (in milliseconds) allows you to manually configure the queue
 msgstr "এই সেটিং (মিলিসেকেন্ডে) আপনাকে সেসব ক্ষেত্রে ম্যানুয়ালি কিউ বিলম্ব ব্যান্ডউইথ বিলম্ব পণ্য কনফিগার করতে দেয় যেখানে ডিফল্ট অটো-ডিটেকশন সঠিকভাবে কাজ করছে না। 0 অটো-ডিটেকশন ব্যবহার করে। [ডিফল্ট 0]"
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
-msgstr "এই সেটিং, মিলিসেকেন্ডে, ডিফল্ট বার্তা প্রক্রিয়াকরণ সময় সীমা ওভাররাইড করে। [ডিফল্ট 0, রাউটার-গণিত মান ব্যবহার করে]"
+msgstr "এই সেটিং, মিলিসেকেন্ডে, রাউটারটি কনজেস্টেড এবং ট্রানজিট টানেলের অনুরোধ প্রত্যাখ্যান করার আগে ডিফল্ট বার্তা প্রক্রিয়াকরণের সময়সীমা (কনজেশন সাইডবার বিভাগে <i>মেসেজ বিলম্ব</i> হিসাবে নির্দেশিত) ওভাররাইড করে। [রাউটার ধীর হিসাবে ফ্ল্যাগ করা হলে ডিফল্ট 750ms বা 1500ms হয়]"
 
 msgid "Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]"
-msgstr "পর্যায়ক্রমে টানেল পরীক্ষা করে গড় বিলম্ব নির্ধারণ করুন এবং ফলাফল রাউটার কনসোলে প্রদর্শন করুন। [ডিফল্টরূপে সক্রিয়]"
+msgstr "গড় ব্যবধান নির্ধারণ করতে পর্যায়ক্রমে টানেল পরীক্ষা করুন, এবং কনজেশন সাইডপ্যানেল বিভাগে ফলাফল প্রদর্শন করুন। সক্ষম করতে, এই মানটি মিথ্যাতে সেট করুন। [ডিফল্ট মিথ্যা]"
 
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
 msgstr "true-তে সেট করা হলে, রাউটার প্রতিবার বাহ্যিক IP ঠিকানা পরিবর্তন হলে তার পরিচয় এবং UDP পোর্ট পরিবর্তন করবে। [ডিফল্ট true]"
@@ -7129,7 +7129,7 @@ msgid "When set to false, the router will not throttle tunnel build requests fro
 msgstr "false-তে সেট করা হলে, রাউটার অন্যান্য রাউটার থেকে টানেল বিল্ড অনুরোধ থ্রোটল করবে না। [ডিফল্ট true]"
 
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
-msgstr "এই সেটিং নির্ধারণ করে কোন <a href=/profiles#profile_defs>পিয়ার ক্ষমতাসমূহ</a> টানেলে অংশগ্রহণে সক্ষম বলে বিবেচিত হবে।"
+msgstr "এই সেটিং আপনার রাউটারের টানেল তৈরি করতে কোন <a href=/profiles#profile_defs>পিয়ার ক্ষমতা</a> ব্যবহার করা হবে না তা নির্ধারণ করে। যেমন <code>router.excludePeerCaps=LMN</code>"
 
 msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "false-তে সেট করা হলে, অপ্রাপ্য পিয়ারগুলি ইনবাউন্ড এক্সপ্লোরেটরি টানেল বিল্ডের জন্য হপ হিসাবে নির্বাচিত হতে পারে। [ডিফল্ট true]"
@@ -7156,31 +7156,31 @@ msgid "When set to false, slow peers may be selected as hops for outbound client
 msgstr "false-তে সেট করা হলে, ধীর পিয়ারগুলি আউটবাউন্ড ক্লায়েন্ট টানেল বিল্ডের জন্য হপ হিসাবে নির্বাচিত হতে পারে। [ডিফল্ট true]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "এই সেটিং (ঘন্টায়) নির্ধারণ করে NetDb-তে একটি RouterInfo কত পুরানো (প্রোফাইলে শেষ সফল পিয়ার পরীক্ষা) তার আগে এটি নিম্ন-মানের পিয়ার হিসাবে বিবেচিত হয়। [ডিফল্ট 168 (7 দিন)]"
+msgstr "এই সেটিংটি (ঘন্টার মধ্যে) NetDb-এ রাউটারইনফো কত পুরানো তা নির্ধারণ করে (এটির সর্বশেষ জানা প্রকাশের তারিখ) এটিকে পুরানো এবং মুছে ফেলার আগে। [ডিফল্ট 28 ঘন্টা যদি না রাউটার একটি ফ্লাড নোড হয়, যে ক্ষেত্রে ডিফল্ট 8 ঘন্টা হয়]"
 
 msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr "এই সেটিং নির্ধারণ করে পিয়ার এক্সপ্লোরেশন জব চলাকালীন সমান্তরালভাবে কতগুলি পিয়ার অন্বেষণ করতে হবে। উচ্চ সংখ্যা আরও আক্রমণাত্মক এবং দ্রুত পিয়ার আবিষ্কারে আরও সফল হতে পারে, তবে নেটডিবি ট্রাফিক বাড়াতে পারে। [ডিফল্ট 3]"
+msgstr "এই সেটিংটি পিয়ার এক্সপ্লোরেশন জব চলাকালীন সমান্তরালভাবে অন্বেষণ করার জন্য সমবয়সীদের সংখ্যা নির্ধারণ করে [ডিফল্ট হল 1 পিয়ার যখন 3000 জনের বেশি পরিচিত হয়]। মনে রাখবেন যে এই মানটি বাড়ানো অন্বেষণের জন্য ব্যান্ডউইথের প্রয়োজনীয়তা বাড়িয়ে তুলবে এবং এই মানটিকে খুব বেশি সেট করার ফলে অত্যধিক বার্তা বিলম্ব হতে পারে এবং অন্যান্য পরিষেবাগুলিতে হস্তক্ষেপ হতে পারে, তাই সাবধানতার সাথে ব্যবহার করুন!"
 
 msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr "এই সেটিং নির্ধারণ করে পিয়ার এক্সপ্লোরেশন জব প্রতি রান, প্রতি বাকেটে কতগুলি NetDb DHT বাকেট অন্বেষণ করে। উচ্চ সংখ্যা আরও আক্রমণাত্মক কিন্তু নেটডিবি ট্রাফিক বাড়াতে পারে। [ডিফল্ট 2]"
+msgstr "এই সেটিংটি NetDb DHT বাকেটের সংখ্যা নির্ধারণ করে যখন পিয়ার এক্সপ্লোরেশন জব চালানো হবে। ডিফল্টরূপে, রাউটারটি এক ঘন্টার বেশি সময় ধরে চলছে কিনা, রাউটারটি লুকানো বা 'কে' ব্যান্ডউইথ স্তরে আছে কিনা এবং পরিচিত রাউটারের সংখ্যার উপর নির্ভর করে অন্বেষণ করার জন্য বালতির সংখ্যা পরিবর্তিত হবে।"
 
 msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "এই সেটিং (সেকেন্ডে) আপনাকে পিয়ার এক্সপ্লোরেশন জব-এর রানগুলির মধ্যে বিলম্ব ওভাররাইড করতে দেয়। [ডিফল্ট 120]"
+msgstr "এই সেটিং (সেকেন্ডে) আপনাকে পিয়ার এক্সপ্লোরেশন কাজের রানের মধ্যে বিলম্বকে ওভাররাইড করতে দেয় যা NetDb-এ যোগ করার জন্য নতুন সমবয়সীদের সনাক্ত করার চেষ্টা করে। কাজটি ডিফল্টরূপে প্রতি 80 সেকেন্ডে চলবে, অথবা যদি রাউটারটি কাজ বা বার্তা ল্যাগ অনুভব করে, প্রতি 3 মিনিটে। NetDb এর আকার 4000 পিয়ারে পৌঁছালে, বিরতি 15 মিনিটে বাড়বে। আপনার NetDb ভালভাবে জনবহুল হলে (2000 জনের বেশি) অথবা আপনি সামগ্রিক ব্যান্ডউইথ ব্যবহার কমাতে চাইলে আপনি বিলম্ব বাড়াতে চাইতে পারেন। দ্রষ্টব্য: ফ্লাড নোড রাউটারগুলির জন্য, এই কাজটি চালানো হয় না।"
 
 msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
 msgstr "এই সেটিং অন্বেষণের জন্য সারিবদ্ধ পিয়ার হ্যাশের সর্বোচ্চ সংখ্যা নির্ধারণ করে। উচ্চ মান আরও আক্রমণাত্মক কিন্তু নেটডিবি ট্রাফিক বাড়াতে পারে। [ডিফল্ট 10]"
 
 msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "এই সেটিং নির্ধারণ করে যে ফ্লাডফিল হিসাবে কাজ করা একটি রাউটার নতুন পিয়ারের জন্য নেটওয়ার্ক অন্বেষণ করবে কিনা। [ডিফল্ট true]"
+msgstr "এই সেটিং নির্ধারণ করে যে একটি ফ্লাড নোড হিসেবে কাজ করা রাউটারটি নতুন সহকর্মীদের সম্পর্কে জানতে NetDb অন্বেষণ করবে কিনা। [ডিফল্ট মিথ্যা, পুনরায় চালু করা প্রয়োজন]"
 
 msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
 msgstr "এই সেটিং, true-তে সেট করা হলে, রাউটারকে তার নিজস্ব ফ্লাডফিল ডাটাবেসের সাথে সরাসরি যোগাযোগ করতে বাধা দেয়। [ডিফল্ট false]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
-msgstr "true-তে সেট করা হলে, যদি আপনার রাউটার নেটওয়ার্কের জন্য ফ্লাডফিল হিসাবে কাজ করে, তাহলে আপনার রাউটার নতুন পিয়ারের জন্য DHT-ও অন্বেষণ করবে। [ডিফল্ট true]"
+msgstr "সত্য হিসাবে সেট করা হলে, আপনার রাউটার যদি নেটওয়ার্কের জন্য একটি ফ্লাড নোড হিসাবে কাজ করে, আপনার <a href=/configadvanced#ffconf>ফ্লাড নোড অংশগ্রহণ</a> অন্যান্য রাউটার থেকে লুকানো হবে৷"
 
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
-msgstr "সমান্তরালভাবে চালানো যেতে পারে এমন সর্বোচ্চ সংখ্যক <a href=/jobs>জব</a> সংজ্ঞায়িত করে। এটি কার্যকরভাবে জব রানারের জন্য থ্রেড পুলের আকার। [ডিফল্ট 2 (বা 4 বা তার বেশি প্রসেসরযুক্ত সিস্টেমে 4)]"
+msgstr "সর্বাধিক সমান্তরাল <a href=/jobs>কাজ</a> সংজ্ঞায়িত করে যা চালানো যেতে পারে। ডিফল্ট মানটি <code>wrapper.config</code> এর মাধ্যমে JVM-এ বরাদ্দ করা মেমরির পরিমাণ দ্বারা নির্ধারিত হয় এবং 64MB-এর কমের জন্য 3, 256M-এর কমের জন্য 4 বা 256MB-এর বেশির জন্য 5-এ সেট করা হয়। দ্রষ্টব্য: এই সেটিং পরিবর্তনের জন্য রাউটার পুনরায় চালু করা প্রয়োজন।"
 
 msgid "Defines the minimum number of parallel <a href=/jobs>job runners</a>. The router will not scale down below this number. Default is 4, minimum is 1. This setting is dynamic and takes effect without restart."
 msgstr "সমান্তরাল <a href=/jobs>জব রানার</a>-এর ন্যূনতম সংখ্যা সংজ্ঞায়িত করে। রাউটার সর্বদা কমপক্ষে এতগুলি রানার থ্রেড উপলব্ধ রাখবে। [ডিফল্ট 2 (বা 4 বা তার বেশি প্রসেসরযুক্ত সিস্টেমে 4)]"
@@ -7207,7 +7207,7 @@ msgid "Enable the feedback mechanism that automatically rolls back ineffective s
 msgstr "ফিডব্য্যাক মেকানিজম সক্ষম করুন যা স্বয়ংক্রিয়ভাবে অকার্যকর স্কেল-আপ অপারেশনগুলি প্রত্যাহার করে, অনিয়ন্ত্রিত থ্রেড বৃদ্ধি রোধ করে। [ডিফল্ট true]"
 
 msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48]"
-msgstr "সিস্টেম কনজেশনের সময় আক্রমণাত্মক জব ড্রপিং ট্রিগার হওয়ার আগে কিউতে অপেক্ষারত জবের সর্বোচ্চ সংখ্যা। [ডিফল্ট 4000]"
+msgstr "আক্রমনাত্মক চাকরি ড্রপিং ট্রিগার হওয়ার আগে সারিতে থাকা চাকরির সর্বোচ্চ সংখ্যা। অতিক্রম করা হলে, সারির চাপ কমাতে অ-গুরুত্বপূর্ণ কাজ বাদ দেওয়া হয়। [ডিফল্ট হল 48]"
 
 msgid "Maximum number of pending tunnel build jobs in the BuildHandler queue. When the queue exceeds this limit, new build requests are rejected to prevent job queue overload. [Default is 256]"
 msgstr "BuildHandler কিউতে মুলতুবি টানেল বিল্ড জবের সর্বোচ্চ সংখ্যা। কিউ পূর্ণ হলে, অতিরিক্ত বিল্ড অনুরোধ প্রত্যাখ্যান করা হয়। [ডিফল্ট 256]"
@@ -7222,16 +7222,16 @@ msgid "Defines the maximum percentage of active local tunnels (client and explor
 msgstr "সক্রিয় স্থানীয় টানেলের (ক্লায়েন্ট এবং এক্সপ্লোরেটরি) সর্বোচ্চ শতাংশ নির্ধারণ করে যা একসাথে পুনর্নির্মাণ করা যেতে পারে। [ডিফল্ট 50]"
 
 msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr "এই সেটিং আপনাকে 1-হপ টানেলের জন্য হোস্টেড অংশগ্রহণকারী টানেলের ন্যূনতম সংখ্যা কনফিগার করতে দেয়। [ডিফল্ট 1]"
+msgstr "রাউটার প্রত্যাশিত ব্যান্ডউইথ প্রয়োজনীয়তার উপর ভিত্তি করে টানেল অনুরোধ প্রত্যাখ্যান করতে শুরু করার আগে এই সেটিং আপনাকে হোস্ট করা অংশগ্রহণকারী টানেলের ন্যূনতম সংখ্যা কনফিগার করতে দেয়। [ডিফল্ট হল 100 যদি সিস্টেম অ্যান্ড্রয়েড চালায়, 800 যদি সিস্টেম ARM-এ চলমান থাকে এবং 4-এর কম কোর উপলব্ধ, 1200 যদি সিস্টেম ARM-এ চলমান থাকে এবং 4 বা তার বেশি কোর উপলব্ধ, অন্যথায় 2500]"
 
 msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr "এই সেটিং আপনাকে আপনার NetDb থেকে পুরানো রাউটার বাদ দিতে দেয়। এই সংস্করণের চেয়ে পুরানো রাউটারগুলি বাদ দেওয়া হবে। [ডিফল্ট 0.9.29]"
+msgstr "এই সেটিং আপনাকে আপনার NetDb থেকে পুরানো রাউটারগুলি বাদ দিতে দেয়৷ ডিফল্টের চেয়ে পুরানো রাউটার বা আপনার সেট করা মান NetDb থেকে মুছে ফেলা হবে এবং রাউটার সেশনের সময়কালের জন্য নিষিদ্ধ করা হবে। ডিফল্টরূপে, 0.9.20 এর চেয়ে পুরানো রাউটারগুলি বাদ দেওয়া হয়৷ দ্রষ্টব্য: I2P+ সংস্করণ 0.9.46+ দিয়ে শুরু করে, শুধুমাত্র অতি সাম্প্রতিক সংস্করণে চলমান রাউটারগুলি স্থানীয় টানেল নির্মাণের জন্য ব্যবহার করা হয়। [পুনরায় চালু করতে হবে]"
 
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
 msgstr "true-তে সেট করা হলে, আপনার প্রোফাইলের netDB ডিরেক্টরিতে সংরক্ষিত রাউটার তথ্য ফাইলগুলি শাটডাউনে সরানো এবং স্টার্টআপে রিফ্রেশ করা হয়। [ডিফল্ট false]"
 
 msgid "When set to true, your router will not be classified as slow, regardless of the specifications of your host system. Ordinarily, routers running on hosts with the following characteristics will be classified as slow, and various performance-related router options will be modified accordingly:"
-msgstr "true-তে সেট করা হলে, টানেল পরীক্ষার সময়ের মান নির্বিশেষে আপনার রাউটার ধীর হিসাবে শ্রেণীবদ্ধ হবে না। [ডিফল্ট false]"
+msgstr "সত্য হিসাবে সেট করা হলে, আপনার হোস্ট সিস্টেমের স্পেসিফিকেশন নির্বিশেষে আপনার রাউটারকে ধীর হিসাবে শ্রেণীবদ্ধ করা হবে না। সাধারণত, নিম্নলিখিত বৈশিষ্ট্য সহ হোস্টে চলমান রাউটারগুলি ধীর হিসাবে শ্রেণীবদ্ধ করা হবে, এবং বিভিন্ন কর্মক্ষমতা-সম্পর্কিত রাউটার বিকল্পগুলি সেই অনুযায়ী সংশোধন করা হবে:"
 
 msgid "Host OS running Android"
 msgstr "হোস্ট OS Android চালাচ্ছে"
@@ -7252,25 +7252,25 @@ msgid "Router running a non-native, software emulated version of the Java BigInt
 msgstr "রাউটার Java BigInteger লাইব্রেরির নন-নেটিভ, সফটওয়্যার এমুলেটেড সংস্করণ চালাচ্ছে"
 
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. When tunnel build success drops below 50%, concurrency is halved to avoid adding load during a failure cascade. [Default varies: 1 on slow systems, 2 on single/dual-core, 4 otherwise]"
-msgstr "এই সেটিং পিয়ার লেটেন্সি নির্ধারণ করতে একসাথে চালানো পিয়ার পরীক্ষার সংখ্যা নির্ধারণ করে"
+msgstr "এই সেটিং একযোগে চালানোর জন্য পিয়ার পরীক্ষার সংখ্যা নির্ধারণ করে, পিয়ার লেটেন্সি নির্ধারণ করতে ব্যবহৃত হয়। যখন টানেল নির্মাণের সাফল্য 50% এর নিচে নেমে যায়, তখন ব্যর্থতার ক্যাসকেডের সময় লোড যোগ করা এড়াতে কনকারেন্সি অর্ধেক হয়ে যায়। [ডিফল্ট পরিবর্তিত হয়: ধীরগতির সিস্টেমে 1টি, একক/ডুয়াল-কোরে 2টি, অন্যথায় 4টি]"
 
 msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 30000 (30s), or 45000 (45s) on slow systems]"
 msgstr "এই সেটিং পিয়ার পরীক্ষার কাজের মধ্যে বিলম্ব নির্ধারণ করে, মিলিসেকেন্ডে কনফিগার করা। [ডিফল্ট 30]"
 
 msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 5000]"
-msgstr "পিয়ার লেটেন্সি নির্ধারণ করতে, এই সেটিং একটি পিয়ার পরীক্ষার বাতিল হওয়ার আগে সর্বোচ্চ সময় বরাদ্দ করে। [ডিফল্ট 8000]"
+msgstr "পিয়ার লেটেন্সি নির্ধারণ করতে, এই সেটিংটি মিলিসেকেন্ডে কনফিগার করা ব্যর্থতা হিসেবে বিবেচিত হওয়ার আগে একটি পিয়ার টেস্টের সর্বোচ্চ সময় বরাদ্দ করে। টাইমআউট গড় সফল পরীক্ষার চেয়ে কম কনফিগার করা হলে, গড় সফল পরীক্ষার মান ব্যবহার করা হবে। [ডিফল্ট হল 5000]"
 
 msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 400]"
-msgstr "প্রোফাইল পুনর্গঠনের সময় ফাস্ট টিয়ারে রাখার জন্য ন্যূনতম পিয়ার সংখ্যা। উচ্চ মান দ্রুত পিয়ার উপলব্ধতা নিশ্চিত করে কিন্তু পছন্দ সীমিত করতে পারে। [ডিফল্ট 25]"
+msgstr "প্রোফাইল পুনর্গঠনের সময় দ্রুত স্তরে ধরে রাখার জন্য ন্যূনতম সংখ্যক সহকর্মী। একটি উচ্চ মান নিশ্চিত করে যে আরও সহকর্মীরা টানেল নির্মাণের জন্য উপলব্ধ রয়েছে, সম্ভাব্য খরচে ধীর সমবয়সীদের সহ। যদি 3000 টির বেশি রাউটার পরিচিত হয়, ডিফল্ট স্কেল <code>known Routers / 15</code> এ। [ডিফল্ট হল 400]"
 
 msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 500]"
-msgstr "উচ্চ-ক্ষমতা টিয়ারে রাখার জন্য ন্যূনতম পিয়ার সংখ্যা। এগুলি সর্বোচ্চ পরিমাপিত ব্যান্ডউইথ সহ পিয়ার। [ডিফল্ট 25]"
+msgstr "উচ্চ-ক্ষমতার স্তরে ধরে রাখার জন্য ন্যূনতম সংখ্যক সহকর্মী। এগুলি হল সর্বোচ্চ পরিমাপিত থ্রুপুট এবং ট্র্যাফিক রিলে করার সর্বাধিক ক্ষমতা সহ সহকর্মী। যদি 3000 টির বেশি রাউটার পরিচিত হয়, ডিফল্ট স্কেল <code>known Routers / 15</code> এ। [ডিফল্ট হল 500]"
 
 msgid "Maximum number of peer profiles to retain in memory. Older, inactive profiles are expired first when this limit is reached. Values below 100 are clamped to 100. [Default is 8000, or 800 on slow systems]"
-msgstr "মেমরিতে রাখার জন্য সর্বোচ্চ পিয়ার প্রোফাইল সংখ্যা। পুরানো, নিষ্ক্রিয় প্রোফাইলগুলি প্রথমে মেয়াদোত্তীর্ণ হয় যখন সীমা পৌঁছয়। [ডিফল্ট 600]"
+msgstr "মেমরিতে ধরে রাখার জন্য পিয়ার প্রোফাইলের সর্বাধিক সংখ্যা। পুরানো, নিষ্ক্রিয় প্রোফাইলগুলি এই সীমায় পৌঁছে গেলে প্রথমে মেয়াদ শেষ হয়ে যায়। 100-এর নিচের মানগুলি 100-এ আটকানো হয়। [ডিফল্ট হল 8000, বা ধীর সিস্টেমে 800]"
 
 msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]"
-msgstr "টানেল বিল্ডিংয়ের জন্য নির্বাচনযোগ্য বিবেচিত হওয়ার জন্য পিয়ারের RouterInfo-র সর্বোচ্চ বয়স (ঘন্টায়)। প্রোফাইল পুনর্গঠন পুরানো পিয়ার বাদ দেয়। [ডিফল্ট 336 (14 দিন)]"
+msgstr "একটি রাউটারইনফো-এর সর্বোচ্চ বয়স (ঘণ্টায়) একজন সহকর্মীকে টানেল নির্মাণের জন্য নির্বাচনযোগ্য বলে বিবেচনা করা হবে। এই থ্রেশহোল্ডের চেয়ে পুরানো রাউটারইনফোস সহ সহকর্মীদের নির্বাচন থেকে বাদ দেওয়া হয় যদি না তাদের সক্রিয় সংযোগ থাকে। এটি ফ্লাড নোড রাউটারগুলির জন্য বিশেষভাবে প্রাসঙ্গিক যেগুলি সক্রিয়ভাবে NetDB অন্বেষণ করে না, কারণ তাদের রাউটারইনফোগুলি পর্যায়ক্রমিক রিফ্রেশ ছাড়াই বাসি হয়ে যেতে পারে। [ডিফল্ট হল 3]"
 
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
 msgstr "এই সেটিং নির্ধারণ করে আমাদের রাউটার সম্পর্কে পরিসংখ্যান NetDb-তে বিক্ষিপ্তভাবে প্রকাশিত হয় কিনা। [ডিফল্ট true]"
@@ -7291,10 +7291,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "true-তে সেট করা হলে, রাউটার পুনরায় চালু হলে তারপর রাউটার তার পরিচয় এবং UDP পোর্ট পরিবর্তন করবে এবং রাউটার কনসোল পুনরায় লোড হবে। [ডিফল্ট false]"
 
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
-msgstr "এই সেটিং (মিলিসেকেন্ডে) আপনাকে রাউটার রিফ্রেশ আপডেট চেকের মধ্যে বিলম্ব ম্যানুয়ালি কনফিগার করতে দেয়। [ডিফল্ট 30000]"
+msgstr "এই সেটিং (মিলিসেকেন্ডে) আপনাকে রিফ্রেশ রাউটার জব দ্বারা চালিত রাউটার রিফ্রেশ আপডেটের মধ্যে বিলম্ব ম্যানুয়ালি কনফিগার করতে দেয়। ডিফল্টরূপে রিফ্রেশের মধ্যে বিরতি NetDb এর আকার দ্বারা নির্ধারিত হয়, এবং ট্র্যাফিক বিশ্লেষণ প্রশমিত করার জন্য সময়ে কিছু এলোমেলোতার পরিচয় দেয়। 2000 মিলিসেকেন্ডের কম মানগুলির জন্য, <code>router.refreshTimeout</code> এর মান বাড়ানোর সুপারিশ করা হয়। মনে রাখবেন যে এই মানটি 2000 মিলিসেকেন্ডের নিচে সেট করা আপনার নেটওয়ার্ক ট্র্যাফিককে বাড়িয়ে দেবে এবং কাজের ব্যবধান শুরু করতে পারে এবং টেকসই ব্যবহারের জন্য সুপারিশ করা হয় না।"
 
 msgid "This setting (in hours) allows you to manually configure how old a RouterInfo is in order for it to be checked by the Refresh Routers Job. By default, the age of a RouterInfo before a refresh is intitiated scales according to the size of the NetDb, increasing as the NetDb grows in size. A value of 0 will force the Router Refresh Job to check every router in the NetDb, regardless of age."
-msgstr "এই সেটিং (ঘন্টায়) আপনাকে ম্যানুয়ালি কনফিগার করতে দেয় একটি RouterInfo কত পুরানো হলে এটি NetDb থেকে সরানোর জন্য বিবেচিত হবে। [ডিফল্ট 48]"
+msgstr "এই সেটিংটি (ঘন্টায়) আপনাকে ম্যানুয়ালি কনফিগার করতে দেয় যে রাউটারইনফো কত পুরানো তা রিফ্রেশ রাউটার জব দ্বারা চেক করার জন্য। ডিফল্টরূপে, রিফ্রেশ করার আগে রাউটারইনফো-এর বয়স NetDb-এর আকার অনুসারে স্কেল শুরু করা হয়, NetDb আকারে বৃদ্ধির সাথে সাথে বাড়তে থাকে। 0 এর মান রাউটার রিফ্রেশ জবকে বয়স নির্বিশেষে NetDb-এর প্রতিটি রাউটার পরীক্ষা করতে বাধ্য করবে।"
 
 msgid "This setting (in seconds) allows you to manually configure the amount of time to wait before an attempt to refresh a router is determined to have failed. [The default is 20 seconds]"
 msgstr "এই সেটিং (সেকেন্ডে) আপনাকে একটি ব্যর্থ NetDb স্টোর প্রচেষ্টা পুনরায় চেষ্টা করার আগে অপেক্ষার সময় কনফিগার করতে দেয়। [ডিফল্ট 60]"
@@ -7303,16 +7303,16 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "এই সেটিং নির্ধারণ করে যে অরুচিকর (K বা L টিয়ার, অপ্রাপ্য বা পুরানো প্রোফাইল) হিসাবে শ্রেণীবদ্ধ রাউটারগুলি টানেল অংশগ্রহণ থেকে বাদ দেওয়া হবে কিনা। [ডিফল্ট false]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr "true-তে সেট করা হলে, এই সেটিং আপনার রাউটারের কনজেশন ক্যাপ প্রকাশের জন্য প্রয়োজনীয় শর্ত শিথিল করবে, সম্ভাব্যভাবে বেশি টানেল বিল্ড অনুরোধ আকর্ষণ করবে। [ডিফল্ট false]"
+msgstr "সত্য হিসাবে সেট করা হলে, এই সেটিংটি আপনার রাউটারের কনজেশন ক্যাপগুলি প্রকাশ করার জন্য প্রয়োজনীয় শর্তগুলি শিথিল করবে, বিশেষত যখন এটি নির্ধারিত হয় যে আপনার ব্যান্ডউইথের ব্যবহার বেশি। অন্যান্য অবস্থা, যেমন উচ্চ জব ল্যাগ বা ধীর হিসাবে শ্রেণীবদ্ধ একটি রাউটার, এখনও ক্যাপ প্রকাশের কারণ হবে। [ডিফল্ট মিথ্যা]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. This setting is dynamic and takes effect without restart."
-msgstr "কনফিগার করা হলে, এটি রাউটারের টানেল তৈরির অনুমোদিত সংখ্যার জন্য হার্ড সীমা নির্ধারণ করে, টানেল পুল পূর্বাভাস ওভাররাইড করে। [ডিফল্ট 0 (কোন সীমা নেই)]"
+msgstr "কনফিগার করা হলে, এটি রাউটারকে একযোগে নির্মাণের অনুমতি দেওয়া টানেলের সংখ্যার জন্য একটি কঠিন সীমা সেট করে। সর্বোত্তম বিল্ড রেট নির্ধারণ করতে ডিফল্টরূপে রাউটার গড় বিল্ড সময় এবং বর্তমান আউটবাউন্ড ব্যান্ডউইথ ব্যবহার করে। এই সেটিংটি গতিশীল এবং রিস্টার্ট ছাড়াই কার্যকর হয়৷"
 
 msgid "When set to true, the router uses the older peer selection algorithm when building tunnels (prefer fast peers directly, without the multi-tier HighCap → Fast → Active fallback chain). May be useful for troubleshooting peer selection issues. [Default is false. This setting is dynamic and takes effect immediately.]"
-msgstr "true-তে সেট করা হলে, রাউটার টানেল তৈরির সময় পুরানো পিয়ার নির্বাচন অ্যালগরিদম ব্যবহার করে (নতুন অ্যালগরিদমের উপর ফাস্ট/হাই-ক্যাপ টিয়ার পছন্দ করে)। [ডিফল্ট false]"
+msgstr "সত্য হিসাবে সেট করা হলে, রাউটার টানেল তৈরি করার সময় পুরানো পিয়ার সিলেকশন অ্যালগরিদম ব্যবহার করে (মাল্টি-টায়ার হাইক্যাপ → ফাস্ট → অ্যাক্টিভ ফলব্যাক চেইন ছাড়াই সরাসরি দ্রুত পিয়ারদের পছন্দ করুন)। সহকর্মী নির্বাচন সংক্রান্ত সমস্যা সমাধানের জন্য উপযোগী হতে পারে। [ডিফল্ট মিথ্যা. এই সেটিংটি গতিশীল এবং অবিলম্বে কার্যকর হয়৷]"
 
 msgid "Growth factor used by the router's transit tunnel throttle. Higher values make the router accept tunnel build requests more aggressively relative to the 10-minute average. Lower values make it probabalistically reject sooner when tunnel counts are rising rapidly. [Default is 2.0]"
-msgstr "রাউটারের ট্রানজিট টানেল থ্রোটল দ্বারা ব্যবহৃত বৃদ্ধি ফ্যাক্টর। উচ্চ মান রাউটারকে দ্রুত টানেল বিল্ড অনুরোধ গ্রহণ করতে এবং ধীরে ধীরে হ্রাস করতে বাধ্য করে। [ডিফল্ট 25]"
+msgstr "রাউটারের ট্রানজিট টানেল থ্রটল দ্বারা ব্যবহৃত গ্রোথ ফ্যাক্টর। উচ্চতর মান রাউটারকে 10-মিনিট গড়ের তুলনায় আরো আক্রমনাত্মকভাবে টানেল তৈরির অনুরোধগুলিকে গ্রহণ করে। যখন টানেলের সংখ্যা দ্রুত বাড়ছে তখন নিম্ন মানগুলি এটিকে সম্ভাব্যভাবে প্রত্যাখ্যান করে। [ডিফল্ট হল 2.0]"
 
 msgid "Growth factor for tunnel test time acceptance rate limiting. If the 1-minute average test time exceeds the 1-hour average multiplied by this factor, the router begins probabalistically rejecting. [Default is 1.5]"
 msgstr "টানেল পরীক্ষার সময় গ্রহণের হার সীমিত করার জন্য বৃদ্ধি ফ্যাক্টর। যদি 1-মিনিট গড় পরীক্ষার সময় থ্রেশহোল্ড অতিক্রম করে, গ্রহণের হার হ্রাস পায়। [ডিফল্ট 20]"
@@ -7321,28 +7321,28 @@ msgid "Controls the steepness of the rejection probability curve when bandwidth 
 msgstr "ব্যান্ডউইথ ব্যবহার ক্ষমতার কাছাকাছি হলে প্রত্যাখ্যান সম্ভাবনা বক্ররের steepness নিয়ন্ত্রণ করে। উচ্চ মান লোডের অধীনে আরও আক্রমণাত্মক ড্রপিং ঘটায়। [ডিফল্ট 2]"
 
 msgid "Penalty multiplier applied to a peer's capacity value when the peer publishes a 'D' congestion cap (moderate congestion). Higher values reduce the peer's effective capacity more aggressively. [Default is 2.5]"
-msgstr "যখন পিয়ার ''D'' কনজেশন ক্যাপ প্রকাশ করে তখন পিয়ারের ক্ষমতা মানতে প্রয়োগিত পেনাল্টি গুণক (ড্রপ/বিলম্ব বাড়ছে)। [ডিফল্ট 0.75]"
+msgstr "পেনাল্টি মাল্টিপ্লায়ার একটি পিয়ারের ক্যাপাসিটি ভ্যালুতে প্রয়োগ করা হয় যখন পিয়ার একটি 'D' কনজেশন ক্যাপ (মাঝারি কনজেশন) প্রকাশ করে। উচ্চতর মান সহকর্মীর কার্যকর ক্ষমতা আরও আক্রমনাত্মকভাবে কমিয়ে দেয়। [ডিফল্ট হল 2.5]"
 
 msgid "Penalty multiplier applied to a peer's capacity value when the peer publishes an 'E' congestion cap (severe congestion). [Default is 4.75]"
 msgstr "যখন পিয়ার ''E'' কনজেশন ক্যাপ প্রকাশ করে তখন পিয়ারের ক্ষমতা মানতে প্রয়োগিত পেনাল্টি গুণক (গুরুতর কনজেশন, গুরুতর ড্রপ)। [ডিফল্ট 0.2]"
 
 msgid "Time in milliseconds before expiration when pruned tunnels are marked for early expiry, giving replacement tunnels time to build. Higher values allow more overlap between old and new tunnels. [Default is 120000 (2 minutes)]"
-msgstr "মেয়াদ শেষ হওয়ার আগে মিলিসেকেন্ডে সময় যখন pruned টানেল প্রাথমিক মেয়াদ উত্তীর্ণের জন্য চিহ্নিত হয়, প্রতিস্থাপন টানেল তৈরির সময় দেয়। [ডিফল্ট 60000]"
+msgstr "মেয়াদ শেষ হওয়ার আগে মিলিসেকেন্ডে সময় যখন ছাঁটাই করা টানেলগুলিকে প্রথম মেয়াদ শেষ হওয়ার জন্য চিহ্নিত করা হয়, প্রতিস্থাপন টানেলগুলি নির্মাণের সময় দেয়। উচ্চতর মানগুলি পুরানো এবং নতুন টানেলের মধ্যে আরও ওভারল্যাপ করার অনুমতি দেয়। [ডিফল্ট হল 120000 (2 মিনিট)]"
 
 msgid "The latency threshold in milliseconds for removing slow tunnels from <a href=/tunnels>local tunnel pools</a>. Tunnels with latency above this threshold will be removed if the pool exceeds the minimum tunnel count. Set to 0 to use 1 second or the lowest recorded latency from all pools, whichever is higher. [Default is 0]"
-msgstr "<a href=/tunnels>স্থানীয় টানেল পুল</a> থেকে ধীর টানেল অপসারণের জন্য লেটেন্সি থ্রেশহোল্ড মিলিসেকেন্ডে। [ডিফল্ট 10000]"
+msgstr "<a href=/tunnels>স্থানীয় টানেল পুল</a> থেকে ধীরগতির টানেল সরানোর জন্য মিলিসেকেন্ডে লেটেন্সি থ্রেশহোল্ড৷ এই থ্রেশহোল্ডের উপরে লেটেন্সি সহ টানেলগুলি সরানো হবে যদি পুলটি ন্যূনতম টানেলের সংখ্যা অতিক্রম করে। 1 সেকেন্ড ব্যবহার করতে 0 তে সেট করুন বা সমস্ত পুল থেকে রেকর্ড করা সর্বনিম্ন বিলম্ব, যেটি বেশি। [ডিফল্ট হল 0]"
 
 msgid "The minimum number of tunnels to keep in each pool when removing slow tunnels (minimum 2), overriding the configured tunnel quantity. Set to 0 to use the configured quantity per pool. [Default is 0]"
-msgstr "ধীর টানেল অপসারণের সময় প্রতিটি পুলে রাখার ন্যূনতম টানেল সংখ্যা (ন্যূনতম 2), স্ট্যান্ডার্ড পুল লক্ষ্য ওভাররাইড করে। [ডিফল্ট 0]"
+msgstr "ধীরগতির টানেল (সর্বনিম্ন 2), কনফিগার করা টানেলের পরিমাণকে ওভাররাইড করার সময় প্রতিটি পুলে রাখা ন্যূনতম সংখ্যক টানেল। প্রতি পুল কনফিগার করা পরিমাণ ব্যবহার করতে 0 এ সেট করুন। [ডিফল্ট হল 0]"
 
 msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 90000 (90s), or 120000 (120s) if under load]"
 msgstr "ধীর টানেল অপসারণ কাজের রানের মধ্যে ব্যবধান মিলিসেকেন্ডে। উচ্চ মান টানেল অস্থিরতা হ্রাস করে কিন্তু পুরানো ধীর টানেল ধরে রাখতে পারে। [ডিফল্ট 120000]"
 
 msgid "The time in milliseconds before expiration to mark tunnels for early expiry when the Remove Slow Tunnels job prunes slow or excess tunnels. Higher values allow more time for new tunnels to build. [Default is 30000]"
-msgstr "ধীর টানেল অপসারণ কাজ চালানোর সময় প্রাথমিক মেয়াদ উত্তীর্ণের জন্য টানেল চিহ্নিত করার মেয়াদ শেষ হওয়ার আগে মিলিসেকেন্ডে সময়। [ডিফল্ট 0 (নিষ্ক্রিয়)]"
+msgstr "মেয়াদ শেষ হওয়ার আগে মিলিসেকেন্ডে সময় শেষ হওয়ার জন্য টানেল চিহ্নিত করার জন্য যখন ধীর টানেল সরান কাজ ধীর বা অতিরিক্ত টানেল ছাঁটাই করে। উচ্চ মান নতুন টানেল নির্মাণের জন্য আরো সময় দেয়। [ডিফল্ট হল 30000]"
 
 msgid "Hard limit on total tunnel test jobs (queued + active). Prevents runaway test backlogs from causing job queue lag. Once reached, no new tests are scheduled until the count drops. [Default is 128 (96 on slower systems)]"
-msgstr "মোট টানেল পরীক্ষার কাজের (সারিবদ্ধ + সক্রিয়) হার্ড সীমা। কাজের ব্যাকলগ থেকে CPU ব্যবহারের স্পাইক প্রতিরোধ করে। [ডিফল্ট 512]"
+msgstr "মোট টানেল পরীক্ষার কাজের উপর কঠোর সীমা (সারিবদ্ধ + সক্রিয়)। পলাতক পরীক্ষার ব্যাকলগগুলিকে কাজের সারি ল্যাগ হতে বাধা দেয়। একবার পৌঁছে গেলে, গণনা না হওয়া পর্যন্ত কোনও নতুন পরীক্ষার সময়সূচী নেই। [ডিফল্ট হল 128 (ধীরগতির সিস্টেমে 96)]"
 
 msgid "Base adaptive queue limit for tunnel test jobs. The router scales this up/down by 2-3x based on job queue lag and failure rates. [Default is 48 (32 on slower systems)]"
 msgstr "টানেল পরীক্ষার কাজের জন্য বেস অভিযোজিত কিউ সীমা। রাউটার কাজের সমাপ্তির হারের উপর ভিত্তি করে এটি 2-3x স্কেল করে। [ডিফল্ট 256]"
@@ -7351,7 +7351,7 @@ msgid "Maximum number of tunnel tests that can execute simultaneously. Caps conc
 msgstr "সর্বোচ্চ টানেল পরীক্ষার সংখ্যা যা একসাথে কার্যকর করা যেতে পারে। সিস্টেম ওভারলোড প্রতিরোধে সমবর্তী পরীক্ষার থ্রুপুট সীমিত করে। [ডিফল্ট 5]"
 
 msgid "Maximum consecutive client tunnel build timeouts before forcing exploratory tunnels for build reply delivery. Higher values keep the router trying paired tunnels longer; lower values fall back to exploratory sooner. [Default is 3]"
-msgstr "বিল্ড রিপ্লে ট্রান্সপোর্টের জন্য এক্সপ্লোরেটরি টানেল বাধ্য করার আগে সর্বোচ্চ পরপর ক্লায়েন্ট টানেল বিল্ড টাইমআউট। [ডিফল্ট 4]"
+msgstr "বিল্ড রিপ্লাই ডেলিভারির জন্য অনুসন্ধানমূলক টানেল জোরপূর্বক করার আগে সর্বাধিক পরপর ক্লায়েন্ট টানেল বিল্ড টাইমআউট। উচ্চ মান রাউটার জোড়া টানেল দীর্ঘ চেষ্টা করে; নিম্ন মানগুলি শীঘ্রই অনুসন্ধানে ফিরে আসে। [ডিফল্ট হল 3]"
 
 msgid "How long to wait for a tunnel build reply before trying a different pool or different peers. The BuildExecutor adaptively increases this when success rates are low. [Default is 5000 (5s), 10000 (10s) on slow systems]"
 msgstr "ভিন্ন পুল বা ভিন্ন পিয়ার চেষ্টা করার আগে টানেল বিল্ড রিপ্লের জন্য কতক্ষণ অপেক্ষা করতে হবে। BuildHandler বিভিন্ন পুল জুড়ে রিপ্লে সময় গণনা করে। [ডিফল্ট 9000]"
@@ -7369,7 +7369,7 @@ msgid "Backoff delay in milliseconds between client tunnel build retries. Lower 
 msgstr "ক্লায়েন্ট টানেল বিল্ড পুনঃচেষ্টার মধ্যে ব্যাকঅফ বিলম্ব মিলিসেকেন্ডে। কম মান ব্যর্থ ক্লায়েন্ট টানেল দ্রুত পুনর্নির্মাণ করে কিন্তু নেটওয়ার্ক লোড বাড়াতে পারে। [ডিফল্ট 300]"
 
 msgid "Grace period in milliseconds to accept late tunnel build replies after the router has given up waiting. Prevents wasting valid tunnel builds that arrive just after timeout. [Default is 60000 (60 seconds)]"
-msgstr "রাউটার অপেক্ষা ছেড়ে দেওয়ার পরে দেরীতে টানেল বিল্ড রিপ্লে গ্রহণের জন্য গ্রেস পিরিয়ড মিলিসেকেন্ডে। [ডিফল্ট 3000]"
+msgstr "রাউটার অপেক্ষা করা ছেড়ে দেওয়ার পরে দেরিতে টানেল তৈরির উত্তরগুলি গ্রহণ করতে মিলিসেকেন্ডে গ্রেস পিরিয়ড। বৈধ টানেল নির্মাণের অপচয় রোধ করে যা সময় শেষ হওয়ার ঠিক পরে আসে। [ডিফল্ট হল 60000 (60 সেকেন্ড)]"
 
 msgid "Minimum target tunnels per pool before triggering urgent rebuild logic. When the number of good tunnels drops below this threshold, the pool escalates to urgent rebuild mode. [Default is 2]"
 msgstr "জরুরি পুনর্নির্মাণ যুক্তি ট্রিগার করার আগে প্রতি পুলে ন্যূনতম টার্গেট টানেল। যখন ভাল টানেলের সংখ্যা পুল লক্ষ্যের নিচে নেমে যায়, জরুরি বিল্ড ট্রিগার হয়। [ডিফল্ট 2]"
@@ -7387,7 +7387,7 @@ msgid "Maximum allowable future skew for tunnel build request timestamps. Reques
 msgstr "টানেল বিল্ড অনুরোধ টাইমস্ট্যাম্পের জন্য সর্বোচ্চ অনুমোদিত ভবিষ্যত skew। এর চেয়ে বেশি দূরের টাইমস্ট্যাম্পযুক্ত অনুরোধ প্রত্যাখ্যান করা হয়। [ডিফল্ট 5000]"
 
 msgid "Maximum age in milliseconds for tunnel build requests (ElGamal). Requests older than this are rejected as potential replay attacks. Must be >1 hour due to rounding in the protocol. [Default is 3900000 (65 minutes)]"
-msgstr "টানেল বিল্ড অনুরোধের (ElGamal) জন্য সর্বোচ্চ বয়স মিলিসেকেন্ডে। এর চেয়ে পুরানো অনুরোধ ক্লক skew প্রতিরোধ করতে প্রত্যাখ্যান করা হয়। [ডিফল্ট 60000]"
+msgstr "টানেল তৈরির অনুরোধের জন্য মিলিসেকেন্ডে সর্বোচ্চ বয়স (এলগামাল)। এর চেয়ে পুরানো অনুরোধগুলি সম্ভাব্য রিপ্লে আক্রমণ হিসাবে প্রত্যাখ্যান করা হয়। প্রোটোকলের রাউন্ডিংয়ের কারণে 1 ঘন্টা হতে হবে। [ডিফল্ট হল 3900000 (65 মিনিট)]"
 
 msgid "Maximum age in milliseconds for tunnel build requests (ECIES). ECIES timestamps are rounded to minutes so the tolerance is tighter. [Default is 480000 (8 minutes)]"
 msgstr "টানেল বিল্ড অনুরোধের (ECIES) জন্য সর্বোচ্চ বয়স মিলিসেকেন্ডে। ECIES টাইমস্ট্যাম্প গোপনীয়তার জন্য মিনিটে রাউন্ড করা হয়। [ডিফল্ট 120000]"
@@ -7537,7 +7537,7 @@ msgid "This setting allows you to configure the update url for the unsigned upda
 msgstr "এই সেটিংটি আপনাকে স্বাক্ষরবিহীন আপডেট বৈশিষ্ট্যের জন্য আপডেট url কনফিগার করার অনুমতি দেয়, যদি সক্রিয় থাকে। url <code>/i2pupdate.zip</code> দিয়ে শেষ হওয়া উচিত। মনে রাখবেন: আপডেটের উৎস বিশ্বাস না করা পর্যন্ত স্বাক্ষরবিহীন আপডেট ইনস্টল করবেন না!"
 
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
-msgstr "এই সেটিং (মিনিটে) আপনাকে স্টার্টআপের পরে কতক্ষণ অপেক্ষা করতে হবে তা ম্যানুয়ালি কনফিগার করতে দেয় তার আগে NetDb-তে RouterInfos বৈধতার জন্য পরীক্ষা করা হয়, তার পরে শুধুমাত্র বৈধ রাউটার অন্তর্ভুক্তির জন্য গ্রহণ করা হবে। যখন বৈধতা ঘটে, মেয়াদোত্তীর্ণ RouterInfos এবং শুধুমাত্র SSU-এর মাধ্যমে অ্যাক্সেসযোগ্য অপ্রতিক্রিয়াশীল পিয়ারগুলি NetDb থেকে সরানো হবে। [ডিফল্ট 60 মিনিট]"
+msgstr "এই সেটিংটি (মিনিটের মধ্যে) আপনাকে ম্যানুয়ালি কনফিগার করতে দেয় যে NetDb-এ রাউটারইনফোস-এর বৈধতা পরীক্ষা করার আগে স্টার্টআপের পরে কতক্ষণ অপেক্ষা করতে হবে, এর পরে শুধুমাত্র বৈধ রাউটার অন্তর্ভুক্তির জন্য গ্রহণ করা হবে। যখন বৈধতা ঘটবে, মেয়াদোত্তীর্ণ রাউটারইনফোস এবং শুধুমাত্র SSU এর মাধ্যমে অ্যাক্সেসযোগ্য অপ্রতিক্রিয়াশীল সহকর্মীদের NetDb থেকে সরিয়ে দেওয়া হবে। [ডিফল্ট হল 60 মিনিট] দ্রষ্টব্য: এই সেটিংটি পুরানো রাউটারগুলিতে (ডিফল্টরূপে 0.9.29 এর বেশি পুরানো) কোন প্রভাব নেই যা NetDb থেকে সরানো হয় এবং NetDb স্টোরের চেষ্টা করার সাথে সাথে রাউটার সেশনের জন্য নিষিদ্ধ করা হয়।"
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false, or true if router is in hidden mode]"
 msgstr "এই সেটিং, true-তে সেট করা হলে, আপনার নিজের দেশের সমস্ত রাউটার থেকে সরাসরি যোগাযোগ ব্লক করবে এবং আপনার রাউটার পুনরায় চালু না হওয়া পর্যন্ত তাদের আপনার ব্যানলিস্টে যুক্ত করবে। [ডিফল্ট false, বা true যদি রাউটার হিডেন মোডে থাকে]"
@@ -8038,7 +8038,7 @@ msgid "A tunnel used by the router for communicating with other routers to perfo
 msgstr "রাউটার দ্বারা অন্যান্য রাউটারের সাথে যোগাযোগের জন্য ব্যবহৃত টানেল বিভিন্ন \"রক্ষণাবেক্ষণ\" ফাংশন সম্পাদন করতে যেমন <i>leaseset</i> শেখা এবং প্রকাশ করা, ক্লায়েন্ট টানেল পরীক্ষা করা এবং নেটওয়ার্কের অন্যান্য রাউটার সম্পর্কে জানা এবং বৈধতা দেওয়া। এই টানেলগুলি সাধারণত নিম্ন-ব্যান্ডউইথের হয়।"
 
 msgid "A router on the network tasked with providing and receiving information about other routers and services on the network. The current minimum share bandwidth for a router to be considered as capable of performing floodfill duties is 128 KBytes/sec, though it's possible to override this requirement and force a router to be a floodfill on the <a href=/configadvanced>Advanced Configuration page</a>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "নেটওয়ার্কের অন্যান্য রাউটার এবং পরিষেবা সম্পর্কে তথ্য প্রদান এবং গ্রহণের দায়িত্বপ্রাপ্ত রাউটার। ফ্লাডফিল দায়িত্ব পালনে সক্ষম হিসাবে বিবেচিত হওয়ার জন্য বর্তমান ন্যূনতম শেয়ার ব্যান্ডউইথ 128 KBytes/sec, যদিও <a href=/configadvanced>অ্যাডভান্সড কনফিগারেশন পৃষ্ঠায়</a> এই প্রয়োজনীয়তা ওভাররাইড করে রাউটারকে ফ্লাডফিল হতে বাধ্য করা সম্ভব। আরও তথ্যের জন্য, <a href=https://geti2p.net/en/docs/how/network-database#floodfill class=''sitelink external'' target=_blank rel=noreferrer>অনলাইন ডকুমেন্টেশন</a> দেখুন।"
+msgstr "নেটওয়ার্কের একটি রাউটার নেটওয়ার্কে অন্যান্য রাউটার এবং পরিষেবাগুলি সম্পর্কে তথ্য প্রদান এবং গ্রহণের দায়িত্বপ্রাপ্ত। একটি রাউটারের বর্তমান ন্যূনতম শেয়ার ব্যান্ডউইথ ফ্লাড নোড ডিউটি ​​সম্পাদন করতে সক্ষম হিসাবে বিবেচিত হয় 128 KBytes/sec, যদিও এই প্রয়োজনীয়তাটিকে ওভাররাইড করা সম্ভব এবং একটি রাউটারকে <a href=/configadvanced>উন্নত কনফিগারেশন পৃষ্ঠাতে</a> ফ্লাড নোড হতে বাধ্য করা সম্ভব। আরও তথ্যের জন্য, <a href=https://geti2p.net/en/docs/how/network-database#flood node class='sitelink external' target=_blank rel=noreferrer>অনলাইন ডকুমেন্টেশন</a> দেখুন।"
 
 msgid "Garlic Routing"
 msgstr "গার্লিক রাউটিং"
@@ -8538,7 +8538,7 @@ msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
 msgstr "সতর্কতা_ফায়ারওয়ালকৃত_এবং_দ্রুত - ফায়ারওয়ালকৃত কিন্তু দ্রুত পিয়ার"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr "সতর্কতা_ফায়ারওয়ালকৃত_এবং_ফ্লাডফিল - ফায়ারওয়ালকৃত কিন্তু ফ্লাডফিল"
+msgstr "WARN_FIREWALLED_AND_FLOODFILL - ফায়ারওয়ালড কিন্তু ফ্লাড নোড"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
 msgstr "সতর্কতা_ফায়ারওয়ালকৃত_আগত_TCP_সহ - আগত TCP সহ ফায়ারওয়ালকৃত"
@@ -9078,7 +9078,7 @@ msgid "This is the number of peers your router has available for building your e
 msgstr "এটি আপনার রাউটারের অনুসন্ধানমূলক টানেল তৈরির জন্য উপলব্ধ পিয়ারের সংখ্যা যা নেটওয়ার্ক পারফরম্যান্স নির্ধারণ করতে ব্যবহৃত হয়। এটি সাধারণত ৮-৭৫-এর মধ্যে থাকে। দ্রুত পিয়ারগুলি উচ্চ ক্ষমতা স্তরে অন্তর্ভুক্ত। আপনার উচ্চ ক্ষমতাসম্পন্ন পিয়ারগুলি <a href=''/profiles''>প্রোফাইল পৃষ্ঠায়</a> দেখানো হয়েছে। <a href=''/configstats#router.highCapacityPeers''>[গ্রাফিং সক্ষম করুন]</a>"
 
 msgid "This is the number of peers your router will use for network database inquiries. These are usually the <i>floodfill</i> routers which are responsible for maintaining network integrity. Your well integrated peers are shown on the bottom of the <a href='/profiles'>Profiles page</a>."
-msgstr "এটি আপনার রাউটার নেটওয়ার্ক ডাটাবেস অনুসন্ধানের জন্য ব্যবহার করবে এমন পিয়ারের সংখ্যা। এগুলি সাধারণত <i>ফ্লাডফিল</i> রাউটার যা নেটওয়ার্ক অখণ্ডতা বজায় রাখার জন্য দায়ী। আপনার ভালভাবে একীভূত পিয়ারগুলি <a href=''/profiles''>প্রোফাইল পৃষ্ঠার</a> নীচে দেখানো হয়েছে।"
+msgstr "এটি আপনার রাউটার নেটওয়ার্ক ডাটাবেস অনুসন্ধানের জন্য ব্যবহার করা সহকর্মীদের সংখ্যা। এগুলি সাধারণত <i>ফ্লাড নোড</i> রাউটার যা নেটওয়ার্ক অখণ্ডতা বজায় রাখার জন্য দায়ী। আপনার ভালভাবে সমন্বিত সহকর্মীদের <a href='/profiles'>প্রোফাইল পৃষ্ঠার</a> নীচে দেখানো হয়েছে৷"
 
 msgid "This is the total number of peers that are known by your router. They are listed on the <a href='/netdb'>Network Database page</a>. This may range from under 100 to 1000 or more. This number is not the total size of the network; it may vary widely depending on your total bandwidth, shared bandwidth, and locally-generated traffic. I2P does not require a router to know every other router in the network."
 msgstr "এটি আপনার রাউটারের জানা মোট পিয়ারের সংখ্যা। এগুলি <a href=''/netdb''>নেটওয়ার্ক ডাটাবেস পৃষ্ঠায়</a> তালিকাভুক্ত। এটি ১০০-এর কম থেকে ১০০০ বা তার বেশি হতে পারে। এই সংখ্যাটি নেটওয়ার্কের মোট আকার নয়; এটি আপনার মোট ব্যান্ডউইথ, শেয়ারকৃত ব্যান্ডউইথ এবং স্থানীয়ভাবে উৎপন্ন ট্রাফিকের উপর নির্ভর করে ব্যাপকভাবে পরিবর্তিত হতে পারে। I2P-এর জন্য একটি রাউটারকে নেটওয়ার্কের প্রতিটি অন্যান্য রাউটার জানার প্রয়োজন হয় না।"
@@ -9099,7 +9099,7 @@ msgid "The actual tunnels are shown on the <a href='/tunnels'>Tunnels page</a>."
 msgstr "প্রকৃত টানেলগুলি <a href=''/tunnels''>টানেল পৃষ্ঠায়</a> দেখানো হয়েছে।"
 
 msgid "Tunnels built by your router and used for communication with the floodfill peers, building new tunnels, and testing existing tunnels."
-msgstr "আপনার রাউটার দ্বারা নির্মিত টানেল এবং ফ্লাডফিল পিয়ারদের সাথে যোগাযোগ, নতুন টানেল নির্মাণ এবং বিদ্যমান টানেল পরীক্ষার জন্য ব্যবহৃত।"
+msgstr "আপনার রাউটার দ্বারা নির্মিত টানেল এবং ফ্লাড নোড সহকর্মীদের সাথে যোগাযোগের জন্য, নতুন টানেল তৈরি করা এবং বিদ্যমান টানেল পরীক্ষা করার জন্য ব্যবহৃত হয়।"
 
 msgid "Tunnels built by your router for each client's use."
 msgstr "প্রতিটি ক্লায়েন্টের ব্যবহারের জন্য আপনার রাউটার দ্বারা নির্মিত টানেল।"
@@ -9201,13 +9201,13 @@ msgid "While I2P will work fine in this configuration, if you really have over 1
 msgstr "যদিও এই কনফিগারেশনে I2P ভালো কাজ করবে, যদি আপনার সত্যিই শেয়ার করার জন্য ১২৮KBps-এর বেশি ব্যান্ডউইথ থাকে, তবে আপনি আপনার ফায়ারওয়াল খুললে নেটওয়ার্কের জন্য এটি অনেক বেশি সহায়ক হবে।"
 
 msgid "WARN - Firewalled and Floodfill"
-msgstr "সতর্কতা - ফায়ারওয়ালকৃত এবং ফ্লাডফিল"
+msgstr "সতর্কতা - ফায়ারওয়াল এবং ফ্লুডফিলমার্কার"
 
 msgid "You have configured I2P to be a floodfill router, but you are firewalled."
-msgstr "আপনি একটি ফ্লাডফিল রাউটার হতে I2P কনফিগার করেছেন, কিন্তু আপনি ফায়ারওয়ালকৃত।"
+msgstr "আপনি একটি ফ্লাড নোড রাউটার হিসাবে I2P কনফিগার করেছেন, কিন্তু আপনি ফায়ারওয়ালড।"
 
 msgid "For best participation as a floodfill router, you should open your firewall."
-msgstr "ফ্লাডফিল রাউটার হিসাবে সর্বোত্তম অংশগ্রহণের জন্য, আপনার ফায়ারওয়াল খোলা উচিত।"
+msgstr "একটি ফ্লাড নোড রাউটার হিসাবে সেরা অংশগ্রহণের জন্য, আপনার ফায়ারওয়াল খুলতে হবে।"
 
 msgid "WARN - Firewalled with Inbound TCP Enabled"
 msgstr "সতর্কতা - আগত TCP সক্রিয় সহ ফায়ারওয়ালকৃত"
