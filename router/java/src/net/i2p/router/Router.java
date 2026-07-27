@@ -1139,10 +1139,6 @@ public class Router implements RouterClock.ClockShiftListener {
     /** for testing */
     public static final String PROP_FORCE_UNREACHABLE = "router.forceUnreachable";
 
-    /** @deprecated unused */
-    @Deprecated
-    public static final char CAPABILITY_NEW_TUNNEL = 'T';
-
     /**
      * In binary (1024) Kbytes.
      *

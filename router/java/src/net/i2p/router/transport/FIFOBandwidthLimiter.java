@@ -120,21 +120,13 @@ public class FIFOBandwidthLimiter {
     }
 
     /**
-     * getTotalAllocatedInboundBytes.
+     * Total bytes allocated for inbound messages since start.
      */
     public long getTotalAllocatedInboundBytes() { return _totalAllocatedInboundBytes.get(); }
     /**
-     * getTotalAllocatedOutboundBytes.
+     * Total bytes allocated for outbound messages since start.
      */
     public long getTotalAllocatedOutboundBytes() { return _totalAllocatedOutboundBytes.get(); }
-    /** @deprecated unused for now, we are always limited */
-    @Deprecated
-    void setInboundUnlimited(boolean isUnlimited) { _inboundUnlimited = isUnlimited; }
-
-    /** @deprecated unused for now, we are always limited */
-    @Deprecated
-    void setOutboundUnlimited(boolean isUnlimited) { _outboundUnlimited = isUnlimited; }
-
     /** @return smoothed one second rate */
     public float getSendBps() { return _sendBps; }
 

@@ -243,24 +243,6 @@ public class ConfigNetHelper extends HelperBase {
     }
 
     /**
-     *  This isn't updated for the new statuses, but it's commented out in the jsp.
-     *  @deprecated unused, to be fixed if needed
-     */
-    @Deprecated
-    public String getRequireIntroductionsChecked() {
-        Status status = _context.commSystem().getStatus();
-        switch (status) {
-            case OK:
-            case UNKNOWN:
-                return getChecked(UDPTransport.PROP_FORCE_INTRODUCERS);
-            case DIFFERENT:
-            case REJECT_UNSOLICITED:
-            default:
-                return CHECKED;
-        }
-    }
-
-    /**
      * Combined SSU/NTCP
      * Use SSU setting, then NTCP setting, then default
      * @param mode the IPv6 configuration mode

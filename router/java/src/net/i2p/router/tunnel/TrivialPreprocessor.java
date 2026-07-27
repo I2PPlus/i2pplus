@@ -146,12 +146,6 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     /** is this the first of a fragmented message? */
     private static final byte MASK_FRAGMENTED = FragmentHandler.MASK_FRAGMENTED;
 
-    /**
-     *  are there follow up headers?
-     *  @deprecated unimplemented
-     */
-    @Deprecated
-    private static final byte MASK_EXTENDED = FragmentHandler.MASK_EXTENDED;
     private static final byte MASK_TUNNEL = (byte)(FragmentHandler.TYPE_TUNNEL << 5);
     private static final byte MASK_ROUTER = (byte)(FragmentHandler.TYPE_ROUTER << 5);
 
