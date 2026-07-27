@@ -37,6 +37,12 @@ public class DecayingHashSet extends DecayingBloomFilter {
     private ConcurrentHashSet<ArrayWrapper> _previous;
 
     /**
+     *  Maximum entries before a forced early decay prevents unbounded memory growth.
+     *  @since 0.9.70+
+     */
+    private static final int MAX_ENTRIES = 128 * 1024;
+
+    /**
      * Create a double-buffered hash set that will decay its entries over time.
      *
      * @param durationMs entries last for at least this long, but no more than twice this long
@@ -82,6 +88,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
         if (len != _entryBytes)
             throw new IllegalArgumentException("Bad entry [" + len + ", expected "
                                                + _entryBytes + "]");
+        forceDecayIfOverCap();
         ArrayWrapper w = new ArrayWrapper(entry, off, len);
         getReadLock();
         try {
@@ -111,11 +118,29 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     private boolean add(long entry, boolean addIfNew) {
+        forceDecayIfOverCap();
         ArrayWrapper w = new ArrayWrapper(entry);
         getReadLock();
         try {
             return locked_add(w, addIfNew);
         } finally { releaseReadLock(); }
+    }
+
+    /**
+     *  Force a decay cycle if the entry count exceeds the cap.
+     *  Best-effort: races are harmless (extra decay or one-entry overshoot).
+     *  @since 0.9.70+
+     */
+    private void forceDecayIfOverCap() {
+        if (getInsertedCount() >= MAX_ENTRIES && getWriteLock()) {
+            try {
+                if (getInsertedCount() >= MAX_ENTRIES) {
+                    decay();
+                }
+            } finally {
+                releaseWriteLock();
+            }
+        }
     }
 
     /**
