@@ -806,7 +806,7 @@ msgid "Total session-only bans"
 msgstr "རྒྱུན་དུ་བཙོན་པའི་ཚོད་བཤོལ་བ།"
 
 msgid "Certificates are used to authenticate encrypted services running on the network, provision optional SSL for hosted services and the router console, or provide proof of ownership of a router family."
-msgstr "རྒྱུན་དུ་བཙོན་པའི་གཞིབ་བཤོལ་བཞིན་པ།"
+msgstr "དཔང་ཡིག་དེ་དག་ནི་དྲ་རྒྱའི་སྟེང་དུ་གསང་སྦྱོར་བྱས་པའི་ཞབས་ཞུ་དག་ལ་ངོས་འཛིན་བྱེད་པ། གཞོན་ཞབས་ཞུ་དང་རྒྱུད་ཀོན་སོལ་ལ་གདམ་ངོས་ཀྱི་SSL གྲ་སྒྲིག་བྱེད་པ། ཡང་ན་རྒྱུད་པའི་ཁྱིམ་ཚང་གི་བདག་དབང་དཔང་རྟགས་སྤྲོད་པར་བེད་སྤྱོད་བྱེད།"
 
 msgid "Local SSL Certificates"
 msgstr "ནང་གི་SSL གསང་བོ།"
@@ -842,7 +842,7 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "རོ་ཌེར་རོགས་དྲན་གི་SSL རིམ་རྒྱུན་དུ་བཙོན་པའི་ཐོན་པར་མི་འཚམས།. config file located in your I2P application directory for more information You will need to edit the RouterConsoleRunner config file located in the directory:. config file located in your I2P application directory for more information You will need to edit the RouterConsoleRunner config file located in the directory:. config file located in your I2P application directory for more information You will need to edit the RouterConsoleRunner config file located in the directory:. config file located in your I2P application directory for more information You will need to edit the RouterConsoleRunner config file located in the directory:"
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr "ཐོབ་བཏང་བཞིན་མེད།"
+msgstr "གསོག་འཇོག་སྒོ་རྒྱག་ཡོད། བཅོས་བསྒྱུར་བྱེད་པར་router.config ཡིག་ཆར་རྩོམ་སྒྲིག་བྱོས།"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "རོགས་དྲན་བསྐྱར་བཏོན་པ་ནོར་བ།"
