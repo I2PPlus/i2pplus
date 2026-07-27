@@ -11,18 +11,15 @@
     This package provides:
 </p>
 <ul>
-<li>Tunnel creation and build message processing</li>
-<li>Peer selection algorithms for tunnel participants</li>
-<li>Inbound and outbound tunnel pool management</li>
-<li>Adaptive tunnel build strategies</li>
-<li>Build request throttling and acceptance policies</li>
-<li>Tunnel pool configuration and optimization</li>
+<li>TunnelPool - Inbound/outbound tunnel pool lifecycle management</li>
+<li>BuildRequestor - Build message creation and throttling</li>
+<li>BuildExecutor - Coordinate and dispatch tunnel build requests</li>
+<li>BuildMessageProcessor - Process incoming tunnel build messages</li>
+<li>TestJob - Tunnel test and validation</li>
+<li>ExpireJob - Tunnel expiration and cleanup</li>
+<li>TunnelPeerSelector - Intelligent peer selection for tunnel paths</li>
+<li>RequestThrottler - Build request rate limiting</li>
+<li>PooledTunnelCreatorConfig - Tunnel creation configuration</li>
 </ul>
-
-<p>
-    Manages the lifecycle of tunnel pools, handling build requests based on
-    local statistics and network conditions. Implements intelligent peer selection
-    to optimize tunnel performance and anonymity.
-</p>
 </body>
 </html>

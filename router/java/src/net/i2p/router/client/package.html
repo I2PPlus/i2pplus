@@ -14,14 +14,14 @@
 <p><b>Key Components:</b></p>
 <ul>
 <li>ClientManager - Manages client connections and sessions</li>
-<li>ClientConnection - Handles individual client connections</li>
-<li>ClientListener - Accepts and manages new client connections</li>
-<li>I2CPMessageHandler - Processes I2CP protocol messages</li>
-<li>I2CPMessageReader - Reads and parses I2CP messages</li>
-<li>I2CPMessageWriter - Writes and formats I2CP messages</li>
+<li>ClientConnectionRunner - Handles individual client connections</li>
+<li>ClientListenerRunner - Accepts and manages new client connections</li>
+<li>ClientWriterRunner - Writes and formats I2CP messages</li>
 <li>ClientMessageEventListener - Handles client message events</li>
-<li>LeaseRequest - Manages lease requests for clients</li>
-<li>SessionConfig - Configuration for client sessions</li>
+<li>LeaseRequestState - Manages lease requests for clients</li>
+<li>I2CPMessageQueueImpl - Message queue implementation for client protocol</li>
+<li>CreateSessionJob - Handles session creation requests</li>
+<li>RequestLeaseSetJob - Manages lease set requests</li>
 </ul>
 
 <p><b>Main Functionality:</b></p>

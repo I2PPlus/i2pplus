@@ -15,18 +15,17 @@
 <ul>
 <li>TransportManager - Coordinates all transport protocols</li>
 <li>Transport - Base interface for transport implementations</li>
-<li>CommSystemFacade - High-level communication system interface</li>
+<li>CommSystemFacadeImpl - High-level communication system implementation</li>
 <li>TransportImpl - Base implementation for transports</li>
 <li>TransportEventListener - Handles transport events</li>
-<li>TransportBidirectional - Bidirectional transport support</li>
-<li>TransportEstablishment - Connection establishment management</li>
+<li>TransportBid - Transport selection bid mechanism</li>
+<li>FIFOBandwidthLimiter - Per-connection bandwidth management</li>
 </ul>
 
 <p><b>Supported Transport Types:</b></p>
 <ul>
 <li>NTCP2 - New TCP transport with improved security and performance</li>
 <li>SSU - Secure UDP transport for firewall traversal</li>
-<li>HTTP - Optional HTTP transport for restrictive networks</li>
 <li>Custom transports - Extensible framework for new protocols</li>
 </ul>
 

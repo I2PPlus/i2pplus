@@ -1,24 +1,24 @@
 <html>
 <head>
-    <title>Servlet Filters Package</title>
+    <title>I2P Servlet Filters Package</title>
 </head>
 <body>
 <p>
-    Security filters for I2P web applications, providing XSS (Cross-Site Scripting)
-    protection and other security measures.
+    Servlet filters for the I2P router console web application, providing
+    authentication, session management, and security header enforcement.
 </p>
 
 <p>
     This package contains:
 </p>
 <ul>
-<li>XSS filter to sanitize user input and prevent cross-site scripting attacks</li>
-<li>Security-related HTTP response headers</li>
-<li>Input validation and filtering utilities</li>
+<li>AuthFilter - Request authentication and login enforcement</li>
+<li>SameSiteCookieFilter - Adds SameSite=Lax to all cookies</li>
+<li>SessionManager - In-memory session store with expiration and rate limiting</li>
 </ul>
 
 <p>
-    Since 0.9.14.
+    <em>Since 0.9.14</em>
 </p>
 </body>
 </html>
