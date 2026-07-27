@@ -167,6 +167,8 @@ public class Banlist {
     private static final long BAN_REDUCTION_MIN = 4 * 60 * 60 * 1000L;
     /** Eligible ban durations for reduction: < 1 week */
     private static final long BAN_REDUCTION_MAX = 7 * 24 * 60 * 60 * 1000L;
+    /** Above this count, ALL bans over 1h are halved regardless of existing scaling. */
+    private static final int BAN_COUNT_HIGH = 8000;
 
     /**
      *  A ban that expires after this will return true in isBanlistedForever().
@@ -450,6 +452,21 @@ public class Banlist {
         }
         if (_log.shouldDebug()) {
             _log.debug("Reduced ban durations: count=" + count + " scale=" + scale);
+        }
+        // Aggressive halving when ban count exceeds BAN_COUNT_HIGH
+        if (count > BAN_COUNT_HIGH) {
+            long cutoff = 60 * 60 * 1000L;
+            int halved = 0;
+            for (Entry e : _entries.values()) {
+                long remaining = e.expireOn - now;
+                if (remaining > cutoff) {
+                    e.expireOn = now + (remaining / 2);
+                    halved++;
+                }
+            }
+            if (halved > 0 && _log.shouldInfo()) {
+                _log.info("High ban count (" + count + "): halved " + halved + " bans over 1h");
+            }
         }
     }
 
