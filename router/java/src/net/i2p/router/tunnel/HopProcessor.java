@@ -93,11 +93,11 @@ class HopProcessor {
                               "] for 24h -> Attempted mid-tunnel injection \n* Expected: " +
                               _config.getReceiveFrom());
                 }
-                ctx.banlist().banlistRouter(prev, "Mid-tunnel injection attempt", null, null, now + 24*60*60*1000);
                 BanLogger banLog = BanLogger.getInstance();
                 if (banLog != null) {
                     banLog.logBan(prev, ctx, "Mid-tunnel injection attempt", 24*60*60*1000L);
                 }
+                ctx.banlist().banlistRouter(prev, "Mid-tunnel injection attempt", null, null, now + 24*60*60*1000);
                 return false;
             }
         }

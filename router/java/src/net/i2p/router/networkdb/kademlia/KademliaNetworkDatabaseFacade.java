@@ -904,6 +904,39 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
+     * Look up a RouterInfo by hash, performing a network search if not locally cached.
+     * Unlike lookupRouterInfo() which calls onFailedLookupJob immediately for unknown
+     * routers, this method schedules an IterativeSearchJob when the RI is absent from
+     * the local netdb. The caller should provide a timeoutMs shorter than the acceptable
+     * delay (typical: 8-15 seconds).
+     * <p>
+     * The onFindJob fires when the RI is available locally (either it was already present
+     * or the search completed). The onFailedLookupJob fires on search timeout or failure.
+     * <p>
+     * Caller must clean up via removeRouterInfo() after extracting the needed data.
+     *
+     * @param key the Router hash to look up
+     * @param onFindJob run when RI is local (may be null)
+     * @param onFailedLookupJob run on lookup failure (may be null)
+     * @param timeoutMs max wait in ms (bounded internally by the adaptive lookup cap)
+     * @since 0.9.70+
+     */
+    public void lookupRouterInfoRemote(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
+        if (!_initialized || key == null) {
+            if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
+            return;
+        }
+        RouterInfo ri = lookupRouterInfoLocally(key);
+        if (ri != null) {
+            if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}
+            return;
+        }
+        // Not local — schedule a network search. The IterativeSearchJob caps
+        // the actual deadline at its adaptive _maxRouterInfoLookupTime.
+        search(key, onFindJob, onFailedLookupJob, Math.min(timeoutMs, 15L * 1000), false);
+    }
+
+    /**
      * Should we banlist this router based on country restrictions?
      * Checks if:
      * - we are in strict country mode and router is in same country
@@ -984,6 +1017,25 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         removeFromNetDb(key);
         if (onFailedLookupJob != null) {
             _context.jobQueue().addJob(onFailedLookupJob);
+        }
+    }
+
+    /**
+     * Remove a RouterInfo from the local netdb.
+     * No-op if the key is not present or is not a RouterInfo.
+     * Safe to call on any hash — non-RouterInfo entries are left untouched.
+     *
+     * @param key the Router hash to remove
+     * @since 0.9.70+
+     */
+    public void removeRouterInfo(Hash key) {
+        if (!_initialized || key == null) return;
+        DatabaseEntry data = _ds.get(key);
+        if (data != null && data.isRouterInfo()) {
+            _ds.remove(key);
+            if (_log.shouldDebug()) {
+                _log.debug("Removed RouterInfo from NetDb: " + key.toBase32().substring(0, 8));
+            }
         }
     }
 

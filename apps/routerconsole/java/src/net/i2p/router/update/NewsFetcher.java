@@ -694,11 +694,11 @@ class NewsFetcher extends UpdateRunner {
                 }
                 Hash h = Hash.create(b);
                 if (!ban.isBanlistedForever(h)) {
-                    ban.banlistRouterForever(h, reason);
                     BanLogger banLog = BanLogger.getInstance();
                     if (banLog != null) {
                         banLog.logBanForever(h, _context, reason);
                     }
+                    ban.banlistRouterForever(h, reason);
                     _context.commSystem().forceDisconnect(h);
                 }
             } else {

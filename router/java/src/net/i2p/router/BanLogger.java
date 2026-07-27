@@ -12,22 +12,21 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 
 import java.util.Locale;
 
 import java.util.TimeZone;
-import java.util.Map;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.router.JobImpl;
+import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 
 import net.i2p.util.Log;
-import net.i2p.util.LHMCache;
 
 /**
  * Dedicated logger for all ban events.
@@ -57,9 +56,6 @@ public class BanLogger {
     private static volatile boolean _initialized = false;
     private static volatile boolean _globalArchiveDone = false;
     private static volatile boolean _headerWritten = false;
-    private static final int MAX_LOGGED_ENTRIES = 2048;
-    private static final Map<String, Long> _loggedHashes = Collections.synchronizedMap(new LHMCache<>(MAX_LOGGED_ENTRIES));
-    private static final Map<String, Long> _loggedIPs = Collections.synchronizedMap(new LHMCache<>(MAX_LOGGED_ENTRIES));
 
     /** No-arg constructor for deferred initialization. */
     public BanLogger() {
@@ -111,38 +107,6 @@ public class BanLogger {
             }
             _initialized = true;
             _self = this;
-
-            loadActiveIPs();
-        }
-    }
-
-    /**
-     * Load active IPs from existing sessionbans.txt to prevent duplicate logging.
-     * Only loads IPs that haven't expired yet.
-     */
-    private void loadActiveIPs() {
-        if (_logFile == null || !_logFile.exists()) {return;}
-        long now = System.currentTimeMillis();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(_logFile), StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.startsWith("#")) continue;
-                String[] parts = PIPE_SPLIT.split(line);
-                if (parts.length >= 5) {
-                    String hash = parts[1].trim();
-                    String ip = parts[2].trim();
-                    String durationStr = parts[4].trim();
-                    if ("UNKNOWN".equals(hash) && !ip.isEmpty()) {
-                        long expires = parseDuration(durationStr, now);
-                        if (expires > now) {
-                            _loggedIPs.put(ip, Long.valueOf(expires));
-                        }
-                    }
-                }
-            }
-        } catch (IOException e) {
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("Failed to load active IPs from ban log", e);
         }
     }
 
@@ -333,6 +297,11 @@ public class BanLogger {
         String caps = hash != null ? getCaps(hash) : "";
         String version = hash != null ? getVersion(hash) : "";
         writeLog(hashStr, ip, reason, durationStr, caps, version, getCountry(ip), getHost(ip));
+        if (hash != null && (caps.isEmpty() || version.isEmpty() || "UNKNOWN".equals(ip))) {
+            if (_context != null && !_context.banlist().isBanlisted(hash)) {
+                fetchRouterInfo(hash, reason, durationMs);
+            }
+        }
     }
 
     /**
@@ -400,6 +369,11 @@ public class BanLogger {
         String caps = hash != null ? getCaps(hash) : "";
         String version = hash != null ? getVersion(hash) : "";
         writeLog(hashStr, ip, reason, "FOREVER", caps, version, getCountry(ip), getHost(ip));
+        if (hash != null && (caps.isEmpty() || version.isEmpty() || "UNKNOWN".equals(ip))) {
+            if (_context != null && !_context.banlist().isBanlisted(hash)) {
+                fetchRouterInfo(hash, reason, 0L);
+            }
+        }
     }
 
     /**
@@ -555,7 +529,6 @@ public class BanLogger {
     private String getIPFromContext(Hash hash, RouterContext context) {
         if (hash == null) {return "UNKNOWN";}
         try {
-            // Try to look up RouterInfo from netdb
             RouterInfo ri = context.netDb().lookupRouterInfoLocally(hash);
             if (ri != null) {
                 String ipPort = getIPFromRouterInfo(ri);
@@ -567,6 +540,66 @@ public class BanLogger {
             // Ignore lookup errors
         }
         return "UNKNOWN";
+    }
+
+    /**
+     * Schedule an async network lookup for a RouterInfo that was not locally
+     * cached when the ban was logged. When the lookup completes, write a second
+     * line to sessionbans.txt with the actual IP, caps, and version, then evict
+     * the RouterInfo from the netdb (we only fetched it for logging).
+     * <p>
+     * This is a best-effort operation: silently keep the basic entry on failure.
+     *
+     * @param hash Router hash (non-null)
+     * @param reason reason from the ban
+     * @param durationMs ban duration
+     * @since 0.9.70+
+     */
+    private void fetchRouterInfo(Hash hash, String reason, long durationMs) {
+        if (_context == null || hash == null) return;
+        try {
+            final KademliaNetworkDatabaseFacade facade = (KademliaNetworkDatabaseFacade) _context.netDb();
+            facade.lookupRouterInfoRemote(hash,
+                new JobImpl(_context) {
+                    @Override
+                    public void runJob() {
+                        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(hash);
+                        if (ri == null) return;
+                        String caps = ri.getCapabilities();
+                        if (caps == null) caps = "";
+                        String ver = ri.getVersion();
+                        if (ver == null) ver = "";
+                        String ip = getIPFromRouterInfo(ri);
+                        if (ip.isEmpty()) ip = "UNKNOWN";
+                        String dur = formatDuration(durationMs);
+                        String ts = _dateFormat.format(new Date());
+                        String entry = String.format("%s | %s | %s | %s | %s | %s | %s | %s | %s",
+                            ts, hash.toBase64(), ip, reason, dur,
+                            caps, ver, getCountry(ip), getHost(ip));
+                        synchronized (_writeLock) {
+                            if (_writer != null) {
+                                _writer.println(entry);
+                                _writer.flush();
+                                _banCount.incrementAndGet();
+                            }
+                        }
+                        facade.removeRouterInfo(hash);
+                    }
+                    @Override
+                    public String getName() { return "BanLogger lookup"; }
+                },
+                new JobImpl(_context) {
+                    @Override
+                    public void runJob() { /* lookup failed */ }
+                    @Override
+                    public String getName() { return "BanLogger lookup timeout"; }
+                },
+                12L * 1000
+            );
+        } catch (ClassCastException e) {
+            if (_log.shouldLog(Log.WARN))
+                _log.warn("Cannot schedule ban log lookup: netDb is not a KademliaNetworkDatabaseFacade", e);
+        }
     }
 
     /**
@@ -622,18 +655,8 @@ public class BanLogger {
             }
         }
         // Skip if this IP already has an active ban in the file
-        if ("UNKNOWN".equals(hashStr)) {
-            if (hasActiveBan(ip)) {
-                return;
-            }
-        } else {
-            if (_loggedHashes.put(hashStr, Long.valueOf(System.currentTimeMillis())) != null) {
-                return;
-            }
-            // Also track IP to prevent duplicate logging for same IP
-            if (ip != null && !ip.isEmpty() && !"UNKNOWN".equals(ip)) {
-                _loggedIPs.put(ip, Long.valueOf(System.currentTimeMillis()));
-            }
+        if ("UNKNOWN".equals(hashStr) && hasActiveBan(ip)) {
+            return;
         }
 
         String timestamp = _dateFormat.format(new Date());
