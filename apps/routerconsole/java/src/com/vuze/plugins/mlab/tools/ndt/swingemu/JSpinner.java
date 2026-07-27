@@ -7,8 +7,6 @@
  * Licensed under the GPLv2 or later.
  */
 
-
-
 package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
 /**
@@ -21,9 +19,6 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  * <p>All operations except value retrieval are no-ops, maintaining API compatibility
  * without requiring an actual graphical display system.</p>
  *
- */
-/**
- * Default constructor.
  */
 public class
 JSpinner

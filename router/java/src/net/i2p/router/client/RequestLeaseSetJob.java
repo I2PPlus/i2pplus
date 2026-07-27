@@ -42,8 +42,6 @@ class RequestLeaseSetJob extends JobImpl {
     // Maximum future time for lease expiration (must match KademliaNetworkDatabaseFacade.MAX_LEASE_FUDGE)
     private static final long MAX_LEASE_FUTURE = 10L * 60 * 1000;
     private static final long CLOCK_FUDGE_FACTOR = 30L * 1000;
-/** Requestleasesetjob */
-
     public RequestLeaseSetJob(RouterContext ctx, ClientConnectionRunner runner, LeaseRequestState state) {
         super(ctx);
         _log = ctx.logManager().getLog(RequestLeaseSetJob.class);
@@ -51,10 +49,10 @@ class RequestLeaseSetJob extends JobImpl {
         _requestState = state;
         // all createRateStat in ClientManager
     }
-/** Return the name */
+    /** Return the name */
 
     public String getName() {return "Request LeaseSet from Client";}
-/** Execute the job */
+    /** Execute the job */
 
     public void runJob() {
         if (_runner.isDead()) {
@@ -189,14 +187,12 @@ class RequestLeaseSetJob extends JobImpl {
      */
     private class CheckLeaseRequestStatus extends JobImpl {
         private final long _start;
-/** Checkleaserequeststatus */
-
         public CheckLeaseRequestStatus() {
             super(RequestLeaseSetJob.this.getContext());
             _start = RequestLeaseSetJob.this.getContext().clock().now();
             getTiming().setStartAfter(_requestState.getExpiration());
         }
-/** Execute the job */
+        /** Execute the job */
 
         public void runJob() {
             if (_runner.isDead()) {
@@ -217,7 +213,7 @@ class RequestLeaseSetJob extends JobImpl {
                 _runner.failLeaseRequest(_requestState);
             }
         }
-/** Return the name */
+        /** Return the name */
         public String getName() { return "Check LeaseRequest Status"; }
     }
 }

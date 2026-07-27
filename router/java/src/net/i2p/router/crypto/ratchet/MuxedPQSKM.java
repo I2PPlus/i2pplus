@@ -27,16 +27,16 @@ public class MuxedPQSKM extends SessionKeyManager {
     // PQ is about this much slower than EC
     private static final int PQ_SLOW_FACTOR = 2;
     private static final int RESTART_COUNTERS = 500;
-/** Muxedpqskm */
+    /** Combines ECIES and PQ SKMs with adaptive decrypt ordering. */
 
     public MuxedPQSKM(RatchetSKM ec, RatchetSKM pq) {
         _ec = ec;
         _pq = pq;
     }
-/** Return the eCSKM */
+    /** Return the eCSKM */
 
     public RatchetSKM getECSKM() { return _ec; }
-/** Return the pQSKM */
+    /** Return the pQSKM */
 
     public RatchetSKM getPQSKM() { return _pq; }
 
@@ -151,15 +151,11 @@ public class MuxedPQSKM extends SessionKeyManager {
             return _pq.consumeNextAvailableTag(target);
     }
 
-    /**
-     * getTagsToSend.
-     */
+    /** @return 0, tag management is handled by ratchet protocol */
     @Override
     public int getTagsToSend() { return 0; }
 
-    /**
-     * getLowThreshold.
-     */
+    /** @return 0, threshold not used for ratchet sessions */
     @Override
     public int getLowThreshold() { return 0; }
 
@@ -179,9 +175,7 @@ public class MuxedPQSKM extends SessionKeyManager {
         return false;
     }
 
-    /**
-     * getAvailableTags.
-     */
+    /** Delegates to the appropriate key manager by encryption type. */
     @Override
     public int getAvailableTags(PublicKey target, SessionKey key) {
         EncType type = target.getType();
@@ -191,9 +185,7 @@ public class MuxedPQSKM extends SessionKeyManager {
             return _pq.getAvailableTags(target, key);
     }
 
-    /**
-     * getAvailableTimeLeft.
-     */
+    /** Delegates to the appropriate key manager by encryption type. */
     @Override
     public long getAvailableTimeLeft(PublicKey target, SessionKey key) {
         EncType type = target.getType();
@@ -238,9 +230,7 @@ public class MuxedPQSKM extends SessionKeyManager {
         _ec.tagsReceived(key, tag, expire);
     }
 
-    /**
-     * consumeTag.
-     */
+    /** Tries ECIES tag lookup first, falls back to PQ lookup. */
     @Override
     public SessionKey consumeTag(SessionTag tag) {
         RatchetSessionTag rstag = new RatchetSessionTag(tag.getData());
@@ -251,18 +241,14 @@ public class MuxedPQSKM extends SessionKeyManager {
         return rv;
     }
 
-    /**
-     * shutdown.
-     */
+    /** Shuts down both ECIES and PQ key managers. */
     @Override
     public void shutdown() {
         _ec.shutdown();
         _pq.shutdown();
     }
 
-    /**
-     * renderStatusHTML.
-     */
+    /** Renders debug status for both key managers. */
     @Override
     public void renderStatusHTML(Writer out) throws IOException {
         _ec.renderStatusHTML(out);

@@ -43,7 +43,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     private static final int HARD_MAX = 65536;
     private static final int HARD_MIN = 4;
     private final boolean RETURN_UNUSED_TO_XDH;
-/** Elg2keyfactory */
+    /** Creates factory and starts background key precomputation thread. */
 
     public Elg2KeyFactory(RouterContext ctx) {
         super("EDH Precalc");
@@ -152,7 +152,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         this.interrupt();
         _keys.clear();
     }
-/** Execute the task */
+    /** Execute the task */
 
     public void run() {
         try {run2();}

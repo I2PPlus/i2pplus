@@ -10,11 +10,11 @@ import net.i2p.data.DataHelper;
  *  @since 0.9.44
  */
 public class RatchetSessionTag {
-/** Length of the tag in bytes */
+    /** Length of the tag in bytes */
     public static final int LENGTH = 8;
 
     private final long _data;
-/** Ratchetsessiontag */
+    /** Constructs tag from a long value for compact 8-byte storage. */
 
     public RatchetSessionTag(long val) {
         _data = val;
@@ -45,7 +45,7 @@ public class RatchetSessionTag {
     public long getLong() {
         return _data;
     }
-/** Length */
+    /** @return the tag size in bytes (always 8) */
 
     public int length() { // NOSONAR S1845 length() is standard Java naming
         return LENGTH;
@@ -54,7 +54,6 @@ public class RatchetSessionTag {
     /** 12 chars */
     public String toBase64() {
         // for efficiency
-        //return Base64.encode(getData());
         StringBuilder buf = new StringBuilder(12);
         for (int i = 58; i > 0; i -= 6) {
             buf.append(Base64.ALPHABET_I2P.charAt(((int) (_data >> i)) & 0x3f));
@@ -72,9 +71,7 @@ public class RatchetSessionTag {
         return (int) _data;
     }
 
-    /**
-     * equals.
-     */
+    /** Compares by long value for fast identity. */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
@@ -82,9 +79,7 @@ public class RatchetSessionTag {
         return _data == ((RatchetSessionTag) obj)._data;
     }
 
-    /**
-     * toString.
-     */
+    /** @return base64-encoded tag string */
     @Override
     public String toString() {
         return "RatchetSessionTag: " + toBase64();

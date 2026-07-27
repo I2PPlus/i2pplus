@@ -78,7 +78,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     private final Map<PublicKey, OutboundSession> _outboundSessions;
     /** Map allowing us to go from a SessionTag to the containing TagSet */
     private final Map<SessionTag, TagSet> _inboundTagSets;
-/** The router context */
+    /** The router context */
     protected final I2PAppContext _context;
     private volatile boolean _alive;
     /** for debugging */
@@ -111,7 +111,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * a few MB? how about 24 MB!
      * This is the max size of _inboundTagSets.
      */
-/** Max Inbound Session Tags constant */
     public static final int MAX_INBOUND_SESSION_TAGS = 800 * 1000;
 
     /**
@@ -147,9 +146,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      *
      *  @since 0.9.2 moved from GarlicMessageBuilder to per-SKM config
      */
-/** Default tags */
     public static final int DEFAULT_TAGS = 40;
-    /** ditto */
+    /** Same as DEFAULT_RECHECK_INTERVAL. */
     public static final int LOW_THRESHOLD = 30;
     private static final boolean USE_UNACKED_TAGS = false;
 
@@ -193,9 +191,9 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     }
 
     private class CleanupEvent extends SimpleTimer2.TimedEvent {
-/** Cleanupevent */
+        /** Creates cleanup timer running recurring maintenance on sessions. */
         public CleanupEvent() { super(_context.simpleTimer2()); }
-/** Perform recurring maintenance */
+        /** Perform recurring maintenance */
         public void timeReached() {
             if (!_alive) {return;}
             long beforeExpire = _context.clock().now();
@@ -207,7 +205,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
     }
 
-    /** TagSet */
+    /** @return a snapshot of all inbound tag sets */
     private Set<TagSet> getInboundTagSets() {
         synchronized (_inboundTagSets) {
             return new HashSet<>(_inboundTagSets.values());
@@ -738,9 +736,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         return inboundSets;
     }
 
-    /**
-     * renderStatusHTML.
-     */
+    /** Renders inbound/outbound ElGamal session state as debug HTML tables. */
     @Override
     public void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
@@ -833,7 +829,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      *  Earliest first
      */
     private static class TagSetComparator implements Comparator<TagSet>, Serializable {
-/** Compare two entries for ordering */
+         /** Compare two entries for ordering */
          public int compare(TagSet l, TagSet r) {
              int rv = (int) (l.getDate() - r.getDate());
              if (rv != 0)
@@ -880,7 +876,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         private int _consecutiveFailures;
 
         private static final int MAX_FAILS = 2;
-/** Outboundsession */
+        /** Creates state for tracking outbound ElGamal session to a single target. */
 
         public OutboundSession(I2PAppContext ctx, Log log, PublicKey target, SessionKey key) {
             _context = ctx;
@@ -960,17 +956,17 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                 }
             }
         }
-/** Return the target */
+        /** Return the target */
 
         public PublicKey getTarget() {
             return _target;
         }
-/** Return the currentKey */
+        /** Return the currentKey */
 
         public SessionKey getCurrentKey() {
             return _currentKey;
         }
-/** Set the currentKey */
+        /** Set the currentKey */
 
         public void setCurrentKey(SessionKey key) {
             _lastUsed = _context.clock().now();
@@ -991,12 +987,12 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             _currentKey = key;
 
         }
-/** Return the establishedDate */
+        /** Return the establishedDate */
 
         public long getEstablishedDate() {
             return _established;
         }
-/** Return the lastUsedDate */
+        /** Return the lastUsedDate */
 
         public long getLastUsedDate() {
             return _lastUsed;
@@ -1029,7 +1025,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             }
             return removed;
         }
-/** Consume the next available tag and advance */
+        /** Consume the next available tag and advance */
 
         public SessionTag consumeNext() {
             long now = _context.clock().now();
@@ -1122,7 +1118,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         private final long _date;
         private final int _id;
         private final int _origSize;
-        //private Exception _createdBy;
         /** did we get an ack for this tagset? Only for outbound tagsets */
         private boolean _acked;
 
@@ -1137,10 +1132,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             _date = date;
             _id = id;
             _origSize = tags.size();
-            //    long now = I2PAppContext.getGlobalContext().clock().now();
-            //    _createdBy = new Exception("Created by: key=" + _key.toBase64() + " on "
-            //                               + new Date(now) + "/" + now
-            //                               + " via " + Thread.currentThread().getName());
         }
 
         /**
@@ -1155,14 +1146,11 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             return _origSize;
         }
 
-        //void setDate(long when) {
-        //    _date = when;
-
         /** tags still available */
         public Set<SessionTag> getTags() {
             return _sessionTags;
         }
-/** Return the associatedKey */
+        /** Return the associatedKey */
 
         public SessionKey getAssociatedKey() {
             return _key;
@@ -1190,8 +1178,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             return first;
         }
 
-        //public Exception getCreatedBy() { return _createdBy; }
-
         /**
          *  For outbound only.
          */
@@ -1205,9 +1191,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         /** @since 0.9 for debugging */
         public int getID() {return _id;}
 
-        /**
-         * toString.
-         */
+        /** @return debug string with ID, size, ack status, and key */
         @Override
         public String toString() {
             return "TagSet [" + _id + "]" +

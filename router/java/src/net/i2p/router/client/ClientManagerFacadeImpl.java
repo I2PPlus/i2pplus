@@ -44,14 +44,12 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     private final ConcurrentHashMap<Hash, Long> _lastExpiredLogTime = new ConcurrentHashMap<>();
     /** Note that this is different than the property the client side uses, i2cp.tcp.port */
     public static final String PROP_CLIENT_PORT = "i2cp.port";
-/** Default port */
+    /** Default port */
     public static final int DEFAULT_PORT = I2PClient.DEFAULT_LISTEN_PORT;
     /** Note that this is different than the property the client side uses, i2cp.tcp.host */
     public static final String PROP_CLIENT_HOST = "i2cp.hostname";
-/** Default host */
+    /** Default host */
     public static final String DEFAULT_HOST = "127.0.0.1";
-/** Clientmanagerfacadeimpl */
-
     public ClientManagerFacadeImpl(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(ClientManagerFacadeImpl.class);
@@ -81,7 +79,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     public synchronized void shutdown(String msg) {
         if (_manager != null) {_manager.shutdown(msg);}
     }
-/** Restart the service */
+    /** Restart the service */
 
     public synchronized void restart() {
         if (_manager != null) {_manager.restart();}
@@ -273,8 +271,6 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         if (_manager != null) {_manager.messageDeliveryStatusUpdate(fromDest, id, messageNonce, status);}
         else if (_log.shouldError()) {_log.error("Null manager on messageDeliveryStatusUpdate!");}
     }
-/** Messagereceived */
-
     public void messageReceived(ClientMessage msg) {
         if (_manager != null) {_manager.messageReceived(msg);}
         else if (_log.shouldError()) {_log.error("Null manager on messageReceived!");}

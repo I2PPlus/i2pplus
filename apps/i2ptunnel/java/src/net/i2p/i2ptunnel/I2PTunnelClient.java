@@ -3,18 +3,6 @@
  */
 package net.i2p.i2ptunnel;
 
-/**
- * Standard I2P client tunnel that forwards local TCP connections to I2P destinations.
- * <p>
- * Listens on a local port and creates I2P connections to configured
- * destinations when clients connect. Supports multiple destinations with
- * random selection, configurable read timeouts, and port mapping
- * for services like SMTP and POP.
- * <p>
- * Handles destination resolution, connection management, and data forwarding
- * between local client socket and remote I2P destination.
- */
-
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -30,7 +18,15 @@ import net.i2p.util.EventDispatcher;
 import net.i2p.util.PortMapper;
 
 /**
- * I2PTunnelClient.
+ * Standard I2P client tunnel that forwards local TCP connections to I2P destinations.
+ * <p>
+ * Listens on a local port and creates I2P connections to configured
+ * destinations when clients connect. Supports multiple destinations with
+ * random selection, configurable read timeouts, and port mapping
+ * for services like SMTP and POP.
+ * <p>
+ * Handles destination resolution, connection management, and data forwarding
+ * between local client socket and remote I2P destination.
  */
 public class I2PTunnelClient extends I2PTunnelClientBase {
 
@@ -48,7 +44,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
     // We don't know what protocol, so we assume the application has its own timeout mechanism
     private static final long DEFAULT_READ_TIMEOUT = -1;
     /**
-     * readTimeout.
+     * Idle timeout in milliseconds for I2P socket reads on new connections. &le; 0 means no timeout.
      */
     protected long readTimeout = DEFAULT_READ_TIMEOUT;
     private InternalSocketRunner _isr;
@@ -164,7 +160,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
     }
 
     /**
-     * clientConnectionRun.
+     * Handles an incoming local socket by selecting a remote destination and forwarding data.
      */
     protected void clientConnectionRun(Socket s) {
         I2PSocket i2ps = null;

@@ -12,7 +12,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.TryCache;
 
-/** CDPQEntry */
+/** UDP datagram wrapper implementing CDPQEntry for priority queue dispatch. */
 class UDPPacket implements CDPQEntry {
     private RouterContext _context;
     private final DatagramPacket _packet;
@@ -66,7 +66,7 @@ class UDPPacket implements CDPQEntry {
         }
     }
 
-    /** 1572 */
+    /** Maximum SSU packet size in bytes. */
     static final int MAX_PACKET_SIZE = 1572;
     /** Size of initialization vector in bytes. */
     public static final int IV_SIZE = 16;
@@ -74,25 +74,25 @@ class UDPPacket implements CDPQEntry {
     public static final int MAC_SIZE = 16;
 
     // Payload type constants
-    /** 0 */
+    /** Packet type: session request. */
     public static final int PAYLOAD_TYPE_SESSION_REQUEST = 0;
-    /** 1 */
+    /** Packet type: session created. */
     public static final int PAYLOAD_TYPE_SESSION_CREATED = 1;
-    /** 2 */
+    /** Packet type: session confirmed. */
     public static final int PAYLOAD_TYPE_SESSION_CONFIRMED = 2;
-    /** 3 */
+    /** Packet type: relay request. */
     public static final int PAYLOAD_TYPE_RELAY_REQUEST = 3;
-    /** 4 */
+    /** Packet type: relay response. */
     public static final int PAYLOAD_TYPE_RELAY_RESPONSE = 4;
-    /** 5 */
+    /** Packet type: relay intro. */
     public static final int PAYLOAD_TYPE_RELAY_INTRO = 5;
-    /** 6 */
+    /** Packet type: data. */
     public static final int PAYLOAD_TYPE_DATA = 6;
-    /** 7 */
+    /** Packet type: test. */
     public static final int PAYLOAD_TYPE_TEST = 7;
-    /** 8 */
+    /** Packet type: session destroy. */
     public static final int PAYLOAD_TYPE_SESSION_DESTROY = 8;
-    /** PAYLOAD_TYPE_SESSION_DESTROY */
+    /** Largest payload type value. */
     public static final int MAX_PAYLOAD_TYPE = PAYLOAD_TYPE_SESSION_DESTROY;
 
     /** Type. */
@@ -295,7 +295,7 @@ class UDPPacket implements CDPQEntry {
         return _bandwidthRequest.get();
     }
 
-    /** Release. */
+    /** Return the packet to the object pool for reuse. */
     public void release() {
         synchronized(this) {
             if (_released) return;
@@ -393,7 +393,7 @@ class UDPPacket implements CDPQEntry {
         return rv;
     }
 
-    /** Drop. */
+    /** Discard the packet and release it back to the cache. */
     public void drop() {
         release();
     }

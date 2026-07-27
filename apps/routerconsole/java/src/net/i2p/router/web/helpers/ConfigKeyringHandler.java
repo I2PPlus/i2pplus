@@ -1,6 +1,5 @@
 package net.i2p.router.web.helpers;
 
-
 import net.i2p.crypto.Blinding;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
@@ -15,13 +14,8 @@ import net.i2p.router.web.FormHandler;
 import net.i2p.util.ConvertToHash;
 
 /**
- * Support additions via B64 Destkey, B64 Desthash, blahblah.i2p, and others
- * supported by ConvertToHash
- *
- * Default constructor.
- */
-/**
- * Default constructor.
+ * Handles adding and revoking keys from the router keyring.
+ * Accepts destinations in base64, base32 .b32.i2p, or .i2p hostname form.
  */
 public class ConfigKeyringHandler extends FormHandler {
     private String _peer;

@@ -36,8 +36,6 @@ class SSLClientListenerRunner extends ClientListenerRunner {
     private static final String PROP_KEY_PASSWORD = "i2cp.keyPassword";
     private static final String KEY_ALIAS = "i2cp";
     private static final String ASCII_KEYFILE = "i2cp.local.crt";
-/** Sslclientlistenerrunner */
-
     public SSLClientListenerRunner(RouterContext context, ClientManager manager, int port) {
         super(context, manager, port);
     }

@@ -44,7 +44,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     private final HashMap<PublicKey, List<OutboundSession>> _pendingOutboundSessions;
     /** Map allowing us to go from a SessionTag to the containing RatchetTagSet */
     private final ConcurrentHashMap<RatchetSessionTag, RatchetTagSet> _inboundTagSets;
-/** The router context */
+    /** The router context */
     protected final RouterContext _context;
     private volatile boolean _alive;
     private CleanupEvent _cleanupEvent;
@@ -138,12 +138,12 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     private class CleanupEvent extends SimpleTimer2.TimedEvent {
-/** Cleanupevent */
+        /** Creates cleanup timer with initial delay for first expiration pass. */
         public CleanupEvent() {
             // wait until first expiration time to start
             super(_context.simpleTimer2(), SESSION_PENDING_DURATION_MS);
         }
-/** Perform recurring maintenance */
+        /** Perform recurring maintenance */
 
         public void timeReached() {
             if (!_alive)
@@ -173,7 +173,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         return _type;
     }
 
-    /** RatchetTagSet */
+    /** @return a snapshot of all inbound ratchet tag sets */
     private Set<RatchetTagSet> getRatchetTagSets() {
         synchronized (_inboundTagSets) {
             return new HashSet<>(_inboundTagSets.values());
@@ -969,7 +969,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      *  Earliest first
      */
     private static class RatchetTagSetComparator implements Comparator<RatchetTagSet>, Serializable {
-/** Compare two entries for ordering */
+         /** Compare two entries for ordering */
          public int compare(RatchetTagSet l, RatchetTagSet r) {
              return l.getDebugID() - r.getDebugID();
         }
@@ -1430,7 +1430,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             }
             return rv;
         }
-/** Return the target */
+        /** Return the target */
 
         public PublicKey getTarget() {
             return _target;
@@ -1442,12 +1442,12 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         public HandshakeState getHandshakeState() {
             return _state;
         }
-/** Return the currentKey */
+        /** Return the currentKey */
 
         public SessionKey getCurrentKey() {
             return _currentKey;
         }
-/** Return the establishedDate */
+        /** Return the establishedDate */
 
         public long getEstablishedDate() {
             return _established;
@@ -1489,7 +1489,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             }
             return removed;
         }
-/** Consume the next available tag and advance */
+        /** Consume the next available tag and advance */
 
         public RatchetEntry consumeNext() {
             long now = _context.clock().now();
@@ -1592,7 +1592,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             }
             return -1;
         }
-/** Return the ackReceived */
+        /** Return the ackReceived */
 
         public boolean getAckReceived() {
             return _acked;

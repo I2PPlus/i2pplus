@@ -8,7 +8,6 @@ import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.i2np.GarlicClove;
 
-
 /**
  *
  *  Ratchet payload generation and parsing
@@ -266,10 +265,6 @@ class RatchetPayload {
     }
 
     /**
-     *  Base class for blocks to be transmitted.
-     *  Not used for receive; we use callbacks instead.
-     */
-    /**
      * Base class for blocks to be transmitted.
      * Not used for receive; we use callbacks instead.
      */
@@ -317,9 +312,7 @@ class RatchetPayload {
          */
         public abstract int writeData(byte[] tgt, int off);
 
-        /**
-         * toString.
-         */
+        /** @return debug string with block type and length */
         @Override
         public String toString() {
             return "Payload block type " + type + " length " + getDataLength();
@@ -337,12 +330,12 @@ class RatchetPayload {
             super(BLOCK_GARLIC);
             c = clove;
         }
-/** Return the dataLength */
+        /** Return the dataLength */
 
         public int getDataLength() {
             return c.getSizeRatchet();
         }
-/** Write this block to the output buffer */
+        /** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             return c.writeBytesRatchet(tgt, off);
@@ -368,12 +361,12 @@ class RatchetPayload {
             sz = size;
             ctx = context;
         }
-/** Return the dataLength */
+        /** Return the dataLength */
 
         public int getDataLength() {
             return sz;
         }
-/** Write this block to the output buffer */
+        /** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             if (ctx != null)
@@ -395,12 +388,12 @@ class RatchetPayload {
             super(BLOCK_DATETIME);
             now = time;
         }
-/** Return the dataLength */
+        /** Return the dataLength */
 
         public int getDataLength() {
             return 4;
         }
-/** Write this block to the output buffer */
+        /** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong(tgt, off, 4, now / 1000);
@@ -419,12 +412,12 @@ class RatchetPayload {
             super(BLOCK_OPTIONS);
             opts = options;
         }
-/** Return the dataLength */
+        /** Return the dataLength */
 
         public int getDataLength() {
             return opts.length;
         }
-/** Write this block to the output buffer */
+        /** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(opts, 0, tgt, off, opts.length);
@@ -443,12 +436,12 @@ class RatchetPayload {
             super(BLOCK_NEXTKEY);
             next = nextKey;
         }
-/** Return the dataLength */
+        /** Return the dataLength */
 
         public int getDataLength() {
             return next.getData() != null ? 35 : 3;
         }
-/** Write this block to the output buffer */
+        /** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             if (next.getData() != null)
@@ -473,7 +466,7 @@ class RatchetPayload {
  */
     public static class AckBlock extends Block {
         private final byte[] data;
-/** Ackblock */
+        /** Builds an ACK block for a single key ID and count. */
 
         public AckBlock(int keyID, int n) {
             super(BLOCK_ACK);
@@ -494,12 +487,12 @@ class RatchetPayload {
                 i += 4;
             }
         }
-/** Return the dataLength */
+        /** Return the dataLength */
 
         public int getDataLength() {
             return data.length;
         }
-/** Write this block to the output buffer */
+        /** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(data, 0, tgt, off, data.length);
@@ -514,17 +507,17 @@ class RatchetPayload {
  */
     public static class AckRequestBlock extends Block {
 
-        /** Default constructor */
+        /** Builds an ACK request block with a zero flag byte. */
         public AckRequestBlock() {
             super(BLOCK_ACKREQ);
             // flag is zero
         }
-/** Return the dataLength */
+        /** Return the dataLength */
 
         public int getDataLength() {
             return 1;
         }
-/** Write this block to the output buffer */
+        /** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             tgt[off] = 0;
@@ -543,12 +536,12 @@ class RatchetPayload {
             super(BLOCK_TERMINATION);
             rsn = (byte) reason;
         }
-/** Return the dataLength */
+        /** Return the dataLength */
 
         public int getDataLength() {
             return 1;
         }
-/** Write this block to the output buffer */
+        /** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             tgt[off] = rsn;
@@ -563,18 +556,18 @@ class RatchetPayload {
  */
     public static class PNBlock extends Block {
         private final int pn;
-/** Pnblock */
+        /** Builds a packet number block. */
 
         public PNBlock(int pn) {
             super(BLOCK_MSGNUM);
             this.pn = pn;
         }
-/** Return the dataLength */
+        /** Return the dataLength */
 
         public int getDataLength() {
             return 2;
         }
-/** Write this block to the output buffer */
+        /** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong(tgt, off, 2, pn);

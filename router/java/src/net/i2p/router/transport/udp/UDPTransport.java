@@ -63,7 +63,7 @@ import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
-/** TransportImpl */
+/** SSU/SSU2 transport implementation with UDP endpoint management and packet dispatch. */
 public class UDPTransport extends TransportImpl {
     private final Log _log;
     private final BanLogger _banLogger;
@@ -159,9 +159,9 @@ public class UDPTransport extends TransportImpl {
     public Tuner getTuner() { return _tuner; }
 
     // SSU2
-    /** SSU2 */
+    /** SSU2 transport style identifier. */
     public static final String STYLE2 = "SSU2";
-    /** 2 */
+    /** SSU2 protocol version. */
     static final int SSU2_INT_VERSION = 2;
     /** "2" */
     static final String SSU2_VERSION = Integer.toString(SSU2_INT_VERSION);
@@ -181,15 +181,15 @@ public class UDPTransport extends TransportImpl {
     private static final long MIN_DOWNTIME_TO_REKEY_HIDDEN = 24*60*60*1000L;
 
     private static final int DROPLIST_PERIOD = 10*60*1000;
-    /** SSU */
+    /** SSU transport style identifier. */
     public static final String STYLE = "SSU";
-    /** i2np.udp.internalPort */
+    /** Config key for SSU internal port. */
     public static final String PROP_INTERNAL_PORT = "i2np.udp.internalPort";
     /** define this to explicitly set an external IP address */
     public static final String PROP_EXTERNAL_HOST = "i2np.udp.host";
     /** define this to explicitly set an external port */
     public static final String PROP_EXTERNAL_PORT = "i2np.udp.port";
-    /** i2np.udp.preferred */
+    /** Config key to prefer UDP transport. */
     public static final String PROP_PREFER_UDP = "i2np.udp.preferred";
     private static final String DEFAULT_PREFER_UDP = "false";
 
@@ -206,9 +206,9 @@ public class UDPTransport extends TransportImpl {
                                                  SOURCE_SSU.toConfigString();
     /** remember IP changes */
     public static final String PROP_IP= "i2np.lastIP";
-    /** i2np.lastIPChange */
+    /** Config key tracking last IP address change. */
     public static final String PROP_IP_CHANGE = "i2np.lastIPChange";
-    /** i2np.laptopMode */
+    /** Config key for laptop power-saving mode. */
     public static final String PROP_LAPTOP_MODE = "i2np.laptopMode";
     /**
      * Last IPv6 config.
@@ -280,17 +280,17 @@ public class UDPTransport extends TransportImpl {
         EstablishmentManager.DATA_MESSAGE_TIMEOUT.set(Math.max(15000, Math.min(120000, ms)));
     }
 
-    /** 5 */
+    /** Default cost value for SSU peer selection. */
     public static final int DEFAULT_COST = 5;
     private static final int SSU_OUTBOUND_COST = 14;
-    /** RateConstants.SHORT_TERM_RATES */
+    /** Short-term rate limits for SSU. */
     static final long[] RATES = RateConstants.SHORT_TERM_RATES;
     /** Minimum active peers to maintain IP detection, etc. */
     private static final int MIN_PEERS = 80;
     private static final int MIN_PEERS_IF_HAVE_V6 = 100;
     /** Minimum peers volunteering to be introducers if we need that */
     private static final int MIN_INTRODUCER_POOL = 30;
-    /** 20 */
+    /** Default introducer expiration in ms. */
     static final long INTRODUCER_EXPIRATION_MARGIN = 20*60*1000L;
     private static final long MIN_DOWNTIME_TO_REKEY = 7*24*60*60*1000L;
 
@@ -305,7 +305,6 @@ public class UDPTransport extends TransportImpl {
     private static final int NEAR_CAPACITY_COST_BID = 7;
     private static final int TRANSIENT_FAIL_BID = 8;
     private final TransportBid[] _cachedBid;
-
 
     /**
      *  RI sigtypes supported in 0.9.16, but due to a bug in InboundEstablishState
@@ -364,7 +363,6 @@ public class UDPTransport extends TransportImpl {
                                                                     Status.IPV4_FIREWALLED_IPV6_OK,
                                                                     Status.IPV4_DISABLED_IPV6_OK,
                                                                     Status.IPV4_SNAT_IPV6_OK);
-
 
     private static final Set<Status> STATUS_OK =         EnumSet.of(Status.OK,
                                                                     Status.IPV4_DISABLED_IPV6_OK);
@@ -549,7 +547,6 @@ public class UDPTransport extends TransportImpl {
     OutboundMessageFragments getOMF() {
         return _fragments;
     }
-
 
     /**
      *  Pick a port if not previously configured, so that TransportManager may
@@ -925,7 +922,7 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
-    /** Shutdown. */
+    /** Stop all UDP endpoints, handlers, and background threads. */
     public synchronized void shutdown() {
         if (_haveIPv6Address) {
             boolean fwOld = _context.getBooleanProperty(PROP_IPV6_FIREWALLED);
@@ -1172,7 +1169,7 @@ public class UDPTransport extends TransportImpl {
      *  unless the endpoint failed to bind.
      */
     @Override
-    /** RequestedPort */
+    /** Port configured or bound by the UDP endpoint. */
     public int getRequestedPort() {
         return getRequestedPort(false);
     }
@@ -1541,7 +1538,7 @@ public class UDPTransport extends TransportImpl {
         // this defaults to true when we are firewalled or unknown and false otherwise.
         boolean fixedPort = getIsPortFixed(isIPv6);
 
-        /** _rebuildLock */
+        /** Lock for rebuilding external address. */
         synchronized (_rebuildLock) {
             RouterAddress current = getCurrentExternalAddress(isIPv6);
             byte[] externalListenHost = current != null ? current.getIP() : null;
@@ -1840,7 +1837,7 @@ public class UDPTransport extends TransportImpl {
         return _peersByIdent.values();
     }
 
-    /** Established */
+    /** Identities of all currently established peers. */
     public List<Hash> getEstablished() {
         return new ArrayList<>(_peersByIdent.keySet());
     }
@@ -2004,7 +2001,7 @@ public class UDPTransport extends TransportImpl {
                     }
                     if (count < PUBLIC_RELAY_COUNT) {
                         long now = _context.clock().now();
-                        /** _rebuildLock */
+                        /** Lock for rebuilding external address. */
                         synchronized (_rebuildLock) {
                             long sinceSelected = now - (ipv6 ? _v6IntroducersSelectedOn : _v4IntroducersSelectedOn);
                             if (count == 0 || sinceSelected > 2*60*1000) {
@@ -2025,7 +2022,7 @@ public class UDPTransport extends TransportImpl {
      * messageReceived.
      */
     @Override
-    /** bytesReceived */
+    /** Handle incoming message from transport layer. */
     public void messageReceived(I2NPMessage inMsg, RouterIdentity remoteIdent, Hash remoteIdentHash, long msToReceive, int bytesReceived) {
         if (inMsg.getType() == DatabaseStoreMessage.MESSAGE_TYPE) {
             DatabaseStoreMessage dsm = (DatabaseStoreMessage)inMsg;
@@ -2133,7 +2130,7 @@ public class UDPTransport extends TransportImpl {
                 if (itag.equals(stag)) {
                     if (_log.shouldWarn())
                         _log.warn("Rebuilding address -> Dropped published introducer " + peer);
-                    /** rebuildExternalAddressipv6 */
+                    /** Trigger rebuild of external IPv6 address. */
                     synchronized (_rebuildLock) {rebuildExternalAddress(ipv6);}
                     break;
                 }
@@ -2313,7 +2310,7 @@ public class UDPTransport extends TransportImpl {
         }
         int howMany = _peersByIdent.size();
         // use no more than 1/4 of configured bandwidth
-        /** 8 */
+        // Maximum burst count for SSU sends.
         final int burst = 8;
         int pps = Math.max(48, (_context.bandwidthLimiter().getOutboundKBytesPerSecond() * 1000 / 4) /  48);
         int burstps = pps / burst;
@@ -2547,13 +2544,13 @@ public class UDPTransport extends TransportImpl {
                "cn".equals(_context.commSystem().getOurCountry());
     }
 
-    /** 20 */
+    /** Default introducer expiration in ms. */
     public static final int EXPIRE_TIMEOUT = 20*60*1000;
     private static final int MAX_IDLE_TIME = EXPIRE_TIMEOUT;
-    /** 3 */
+    /** Minimum introducer expiration in ms. */
     public static final int MIN_EXPIRE_TIMEOUT = 3*60*1000;
 
-    /** Style. */
+    /** Transport style string "SSU". */
     public String getStyle() {return STYLE;}
 
     /**
@@ -2561,7 +2558,7 @@ public class UDPTransport extends TransportImpl {
      * @since 0.9.54
      */
     @Override
-    /** STYLE2 */
+    /** Returns "SSU2". */
     public String getAltStyle() {return STYLE2;}
 
     /**
@@ -2570,11 +2567,7 @@ public class UDPTransport extends TransportImpl {
      */
     private String getPublishStyle() {return STYLE2;}
 
-    /**
-     * Send.
-     */
     @Override
-    /** Msg. */
     public void send(OutNetMessage msg) {
         if (msg == null) return;
         RouterInfo tori = msg.getTarget();
@@ -2705,7 +2698,9 @@ public class UDPTransport extends TransportImpl {
     /** Not used for UDP. */
     protected void outboundMessageReady() { throw new UnsupportedOperationException("Not used for UDP"); }
 
-    /** Startup. */
+    /**
+     * Start the transport listener.
+     */
     public void startListening() {startup();}
 
     /** Stop listening. */
@@ -2726,7 +2721,7 @@ public class UDPTransport extends TransportImpl {
      * @since 0.7.12
      */
     @Override
-    /** updateAddress */
+    /** Update and return the current router addresses. */
     public List<RouterAddress> updateAddress() {
         boolean ipv6 = getIPv6Config() == IPV6_ONLY;
         rebuildExternalAddress(false, ipv6);
@@ -2876,7 +2871,7 @@ public class UDPTransport extends TransportImpl {
      *  @since IPv6
      */
     private RouterAddress rebuildExternalAddress(String host, int port, boolean allowRebuildRouterInfo) {
-        /** _rebuildLock */
+        /** Lock for rebuilding external address. */
         synchronized (_rebuildLock) {
             return locked_rebuildExternalAddress(host, port, allowRebuildRouterInfo);
         }
@@ -3131,7 +3126,6 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
-
     /**
      *  Simple fetch of stored IP and port, since
      *  we don't put them in the real, published RouterAddress anymore
@@ -3143,7 +3137,7 @@ public class UDPTransport extends TransportImpl {
      */
     public RouterAddress getCurrentExternalAddress(boolean isIPv6) {
         // deadlock thru here ticket #1699
-        /** _rebuildLock */
+        /** Lock for rebuilding external address. */
         synchronized (_rebuildLock) {
             return isIPv6 ? _currentOurV6Address : _currentOurV4Address;
         }
@@ -3179,7 +3173,7 @@ public class UDPTransport extends TransportImpl {
      *  @since 0.9.20
      */
     @Override
-    /** ipv6 */
+    /** Remove address for the given IP version. */
     protected void removeAddress(boolean ipv6) {
         super.removeAddress(ipv6);
         if (ipv6)
@@ -3340,7 +3334,6 @@ public class UDPTransport extends TransportImpl {
      */
     public void failed(OutboundMessageState msg) { failed(msg, true); }
 
-    /** Failed */
     void failed(OutboundMessageState msg, boolean allowPeerFailure) {
         if (msg == null) return;
         OutNetMessage m = msg.getMessage();
@@ -3452,11 +3445,7 @@ public class UDPTransport extends TransportImpl {
         return active;
     }
 
-    /**
-     * Established.
-     */
     @Override
-    /** Dest. */
     public boolean isEstablished(Hash dest) {
         return _peersByIdent.containsKey(dest);
     }
@@ -3466,17 +3455,12 @@ public class UDPTransport extends TransportImpl {
      *  @since 0.9.3
      */
     @Override
-    /** Dest. */
     public boolean isBacklogged(Hash dest) {
         PeerState peer =  _peersByIdent.get(dest);
         return peer != null && peer.isBacklogged();
     }
 
-    /**
-     * Connecting.
-     */
     @Override
-    /** Dest. */
     public boolean isConnecting(Hash dest) {
         return _establisher != null && _establisher.isConnecting(dest);
     }
@@ -3554,7 +3538,7 @@ public class UDPTransport extends TransportImpl {
      * A positive number means our clock is ahead of theirs.
      */
     @Override
-    /** ClockSkews */
+    /** Peer clock skews in seconds. */
     public List<Long> getClockSkews() {
         List<Long> skews = new ArrayList<>(_peersByIdent.size());
 
@@ -3615,7 +3599,6 @@ public class UDPTransport extends TransportImpl {
      */
     @Override
     @Deprecated
-    /** IOException */
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
         // Deprecated - moved to routerconsole
     }
@@ -3626,11 +3609,7 @@ public class UDPTransport extends TransportImpl {
     private class SharedBid extends TransportBid {
         /** Latency ms. */
         public SharedBid(int ms) { super(); setLatencyMs(ms); }
-        /**
-         * Transport.
-         */
         @Override
-        /** Transport. */
         public Transport getTransport() { return UDPTransport.this; }
         /**
          * String representation.
@@ -3728,7 +3707,7 @@ public class UDPTransport extends TransportImpl {
                longInactivityCutoff = now - EXPIRE_TIMEOUT;
             }
 
-            /** MAY_DISCON_TIMEOUT */
+            // MAY_DISCON_TIMEOUT cutoff for stale peer cleanup
             final long mayDisconCutoff = now - MAY_DISCON_TIMEOUT;
             long pingCutoff = now - (2 * 60*60*1000L);
             long pingFirewallCutoff = now - PING_FIREWALL_CUTOFF;
@@ -3838,7 +3817,7 @@ public class UDPTransport extends TransportImpl {
      *  @param isIPv6 Is the change an IPv6 change?
      */
     void setReachabilityStatus(Status status, boolean isIPv6) {
-        /** _rebuildLock */
+        /** Lock for rebuilding external address. */
         synchronized (_rebuildLock) {
             locked_setReachabilityStatus(status, isIPv6);
         }
@@ -3995,7 +3974,7 @@ public class UDPTransport extends TransportImpl {
 
     private static final String PROP_REACHABILITY_STATUS_OVERRIDE = "i2np.udp.status";
 
-    /** ReachabilityStatus */
+    /** Current reachability status, possibly overridden by configuration. */
     public Status getReachabilityStatus() {
         String override = _context.getProperty(PROP_REACHABILITY_STATUS_OVERRIDE);
         if (override != null) {

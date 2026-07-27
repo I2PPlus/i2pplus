@@ -22,47 +22,47 @@ import net.i2p.util.SimpleTimer2;
  *
  */
 class LookupThrottler {
-/** concurrent hash map */
+    /** concurrent hash map */
     private final ConcurrentHashMap<Hash, ConcurrentHashMap<TunnelId, AtomicInteger>> counter;
     // Map to track timestamps of recent requests per (Hash, TunnelId) for burst detection.
     // Outer key is Hash (peer), inner key is TunnelId (reply tunnel).
-/** map */
+    /** Map of peer hashes to sets of reply tunnel IDs for throttling. */
     private final Map<Hash, ConcurrentHashMap<TunnelId, Deque<Long>>> burstTimestamps;
 
     /** the id of this is -1 */
     private static final TunnelId DUMMY_ID = new TunnelId();
     /** this seems like plenty */
     private static final int DEFAULT_MAX_LOOKUPS = 30;
-/** default_max_non_ff_lookups */
+    /** Max lookups per peer when not floodfill. */
     private static final int DEFAULT_MAX_NON_FF_LOOKUPS = 10;
-/** default_clean_time */
+    /** Clean interval for expired throttle entries. */
     private static final long DEFAULT_CLEAN_TIME = 3*60*1000L;
     // Max requests allowed in 1-second burst window
-/** burst_threshold */
+    /** Max requests allowed per peer per burst window. */
     private static final int BURST_THRESHOLD = 5;
-/** burst_window_ms */
+    /** Length of the burst detection window in ms. */
     private static final long BURST_WINDOW_MS = 1000L;
     /** Hard cap on unique (from, tunnel) pairs tracked to prevent memory leaks.
      *  At ~25 peak lookups/sec with a 3-min clean window, ~4,500 keys is sufficient.
      *  10,000 gives ~7 min headroom at peak — the clean runs every 3 min so this
      *  cap is only hit during sustained attack. */
-/** max_entries */
+    /** Hard cap on unique tracked (peer,tunnel) pairs. */
     private static final int MAX_ENTRIES = 10000;
 
-/** max lookups limit */
+    /** max lookups limit */
     private final int MAX_LOOKUPS;
-/** max non-FF lookups limit */
+    /** max non-FF lookups limit */
     private final int MAX_NON_FF_LOOKUPS;
-/** clean time */
+    /** clean time */
     private final long CLEAN_TIME;
-/** facade */
+    /** Floodfill network database facade for capability checks. */
     private final FloodfillNetworkDatabaseFacade _facade;
-/** max value */
+    /** max value */
     private volatile int _max;
-/** cleaner */
+    /** Periodic cleanup task for stale throttle entries. */
     private final Cleaner _cleaner;
 
-    /** Lookup throttler */
+    /** @param facade floodfill network database facade */
     LookupThrottler(FloodfillNetworkDatabaseFacade facade) {
         this(facade, DEFAULT_MAX_LOOKUPS, DEFAULT_MAX_NON_FF_LOOKUPS, DEFAULT_CLEAN_TIME);
     }
@@ -78,9 +78,9 @@ class LookupThrottler {
         CLEAN_TIME = cleanTime;
         this.counter = new ConcurrentHashMap<Hash, ConcurrentHashMap<TunnelId, AtomicInteger>>();
         this.burstTimestamps = new LinkedHashMap<Hash, ConcurrentHashMap<TunnelId, Deque<Long>>>() {
-            /** removeEldestEntry. / */
+            /** Evict eldest entry to keep map bounded. */
             @Override
-/** Remove eldest entry */
+            /** Remove eldest entry */
             protected boolean removeEldestEntry(Map.Entry<Hash, ConcurrentHashMap<TunnelId, Deque<Long>>> eldest) {
                 // Evict the eldest Hash entry to stay bounded.
                 // Cap is on unique Hash keys (not per-tunnel entries).
@@ -147,13 +147,13 @@ class LookupThrottler {
         return ai.incrementAndGet() > _max;
     }
 
-/** Cleaner. */
+    /** Periodically clears throttle counters to prevent unbounded growth. */
     private class Cleaner extends SimpleTimer2.TimedEvent {
-        /** Cleaner. / */
+        /** Schedule cleanup on the shared timer. */
         public Cleaner() { super(SimpleTimer2.getInstance()); }
-        /** timeReached. / */
+        /** Clear all counters and reschedule. */
         @Override
-/** Time reached */
+        /** Time reached */
         public void timeReached() {
             int size;
             synchronized (burstTimestamps) {
@@ -170,4 +170,3 @@ class LookupThrottler {
     }
 
 }
-

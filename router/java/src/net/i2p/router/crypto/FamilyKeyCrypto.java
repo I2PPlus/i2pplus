@@ -50,22 +50,22 @@ public class FamilyKeyCrypto {
     private final SigningPrivateKey _privkey;
     private final SigningPublicKey _pubkey;
     private final AtomicInteger _failCount = new AtomicInteger();
-/** Property key for keystore password */
+    /** Property key for keystore password */
 
     public static final String PROP_KEYSTORE_PASSWORD = "netdb.family.keystorePassword";
-/** Property key for family name */
+    /** Property key for family name */
     public static final String PROP_FAMILY_NAME = "netdb.family.name";
-/** Property key for key password */
+    /** Property key for key password */
     public static final String PROP_KEY_PASSWORD = "netdb.family.keyPassword";
-/** Certificate file suffix */
+    /** Certificate file suffix */
     public static final String CERT_SUFFIX = ".crt";
-/** CRL file suffix */
+    /** CRL file suffix */
     public static final String CRL_SUFFIX = ".crl";
-/** Keystore file prefix */
+    /** Keystore file prefix */
     public static final String KEYSTORE_PREFIX = "family-";
-/** Keystore file suffix */
+    /** Keystore file suffix */
     public static final String KEYSTORE_SUFFIX = ".ks";
-/** Common name suffix */
+    /** Common name suffix */
     public static final String CN_SUFFIX = ".family.i2p.net";
     private static final int DEFAULT_KEY_VALID_DAYS = 3652;  // 10 years
     // Note that we can't use RSA here, as the b64 sig would exceed the 255 char limit for a Mapping
@@ -75,11 +75,11 @@ public class FamilyKeyCrypto {
     private static final String KS_DIR = "keystore";
     private static final String CERT_DIR = "certificates/family";
     private static final String CRL_DIR = "crls";
-/** Option key for family name */
+    /** Option key for family name */
     public static final String OPT_NAME = "family";
-/** Option key for family signature */
+    /** Option key for family signature */
     public static final String OPT_SIG = "family.sig";
-/** Option key for family certificate */
+    /** Option key for family certificate */
     public static final String OPT_KEY = "family.key";
 
     /**
@@ -117,9 +117,7 @@ public class FamilyKeyCrypto {
         loadCerts();
         // Schedule periodic negative cache cleanup (every hour) to prevent unbounded growth
         _context.simpleTimer2().addEvent(new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
-            /**
-             * timeReached.
-             */
+            /** Cleans up negative cache and reschedules. */
             @Override
             public void timeReached() {
                 cleanup();
@@ -261,13 +259,13 @@ public class FamilyKeyCrypto {
      *  @since 0.9.54
      */
     private static class Verified {
-/** The family name */
+        /** The family name */
         public final String name;
-/** The family signature */
+        /** The family signature */
         public final String sig;
-/** The verification result */
+        /** The verification result */
         public final Result result;
-/** Verified */
+        /** @param n family name @param s signature string @param r verification result */
         public Verified(String n, String s, Result r) {
             name = n; sig = s; result = r;
         }

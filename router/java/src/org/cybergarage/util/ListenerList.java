@@ -11,9 +11,6 @@ import java.util.Vector;
  * A thread-safe list for managing event listeners. This class extends Vector to provide a
  * collection that prevents duplicate listener objects from being added.
  */
-/**
- * Default constructor.
- */
 public class ListenerList extends Vector<Object> {
     /**
      * Adds a listener object to the list if it's not already present.

@@ -12,13 +12,13 @@ import net.i2p.data.SessionKey;
 class SplitKeys {
 
     private static final byte[] ZEROLEN = new byte[0];
-/** The chain key */
+    /** The chain key */
     public final SessionKey ck;
-/** The session key for direction {A to B} */
+    /** The session key for direction {A to B} */
     public final SessionKey k_ab;
-/** The session key for direction {B to A} */
+    /** The session key for direction {B to A} */
     public final SessionKey k_ba;
-/** Splitkeys */
+    /** Derives ck, k_ab, k_ba from Noise handshake split stage. */
 
     public SplitKeys(HandshakeState state, HKDF hkdf) {
         byte[] ckd = state.getChainingKey();

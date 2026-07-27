@@ -57,50 +57,48 @@ import net.i2p.util.SimpleTimer2;
  * Public only for access to static methods by startup classes.
  */
 public class PersistentDataStore extends TransientDataStore {
-/** database directory */
+    /** database directory */
     private final File _dbDir;
-/** facade */
+    /** Reference to the Kademlia facade for netdb operations. */
     private final KademliaNetworkDatabaseFacade _facade;
-/** writer */
+    /** Background thread for persisting RouterInfo files to disk. */
     private final Writer _writer;
-/** read job */
+    /** read job */
     private final ReadJob _readJob;
-/** ban logger */
+    /** ban logger */
     private final BanLogger _banLogger;
-/** initialized flag */
+    /** initialized flag */
     private volatile boolean _initialized;
-/** flat mode flag */
+    /** flat mode flag */
     private final boolean _flat;
-/** network ID */
+    /** network ID */
     private final int _networkID;
 
-/** read_delay */
+    /** Initial delay before first netdb scan. */
     private static final int READ_DELAY = 3*1000;
-/** read_interval */
+    /** Interval between periodic netdb rescans. */
     private static final int READ_INTERVAL = 5*60*1000;
-/** prop_flat */
+    /** Config property to enable flat directory layout. */
     private static final String PROP_FLAT = "router.networkDatabase.flat";
     /** D i r  p r e f i x */
     static final String DIR_PREFIX = "r";
-/** b64 */
+    /** Base64 alphabet used for directory naming. */
     private static final String B64 = Base64.ALPHABET_I2P;
-/** max_routers_init */
+    /** Max router files to load during startup initialization. */
     private static final int MAX_ROUTERS_INIT = 6000;
-/** min_version */
+    /** Minimum router version to persist to disk. */
     private static final String MIN_VERSION = "0.9.64";
 
-/** prop_enable_reverse_lookups */
+    /** Config property to enable reverse address lookups. */
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
-    /**
-     * enableReverseLookups.
-     */
+    /** @return true if reverse DNS lookups are enabled */
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
-/** default_should_disconnect */
+    /** Default value for immediate disconnect on IP spoof. */
     private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
-/** prop_should_disconnect */
+    /** Config property to enable immediate disconnect on IP spoof. */
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
-/** rates */
+    /** Stat rate periods for NetDb write metrics. */
     private static final long[] RATES = RateConstants.BASIC_RATES;
 
     /**
@@ -130,38 +128,26 @@ public class PersistentDataStore extends TransientDataStore {
         writer.start();
     }
 
-    /**
-     * isInitialized.
-     */
     @Override
-/** @return initialized */
+    /** @return true if the data store has completed initial loading */
     public boolean isInitialized() {return _initialized || _readJob.isNetDbReady();}
 
     // this doesn't stop the read job or the writer, maybe it should?
-    /**
-     * stop.
-     */
     @Override
-/** stop. */
+    /** Stop the writer thread and perform super shutdown. */
     public void stop() {
         super.stop();
         _writer.flush();
     }
 
-    /**
-     * rescan.
-     */
     @Override
-/** rescan. */
+    /** Trigger immediate rescan if initialized. */
     public void rescan() {
         if (_initialized) {_readJob.wakeup();}
     }
 
-    /**
-     * get.
-     */
     @Override
-/** get. */
+    /** @return the entry or null */
     public DatabaseEntry get(Hash key) {return get(key, true);}
 
     /**
@@ -169,47 +155,34 @@ public class PersistentDataStore extends TransientDataStore {
      *  @param persist if false, call super only, don't access disk
      */
     @Override
-/** get. */
     public DatabaseEntry get(Hash key, boolean persist) {
         return super.get(key);
     }
 
-    /**
-     * remove.
-     */
     @Override
-/** remove. */
+    /** Remove and optionally queue disk deletion. */
     public DatabaseEntry remove(Hash key) {return remove(key, true);}
 
     /*
      *  @param persist if false, call super only, don't access disk
      */
-    /**
-     * remove.
-     */
     @Override
-/** remove. */
+    /** Remove from memory and optionally queue disk deletion. */
     public DatabaseEntry remove(Hash key, boolean persist) {
         if (persist) {_writer.remove(key);}
         return super.remove(key);
     }
 
-    /**
-     * put.
-     */
     @Override
-/** put. */
+    /** Store and optionally persist RouterInfos to disk. */
     public boolean put(Hash key, DatabaseEntry data) {return put(key, data, true);}
 
     /*
      *  @param persist if false, call super only, don't access disk
      *  @return success
      */
-    /**
-     * put.
-     */
     @Override
-/** put. */
+    /** Store and optionally persist to disk. */
     public boolean put(Hash key, DatabaseEntry data, boolean persist) {
         if ( (data == null) || (key == null) ) {return false;}
         boolean rv = super.put(key, data);
@@ -228,11 +201,8 @@ public class PersistentDataStore extends TransientDataStore {
      *  @param data non-null
      *  @since 0.9.64
      */
-    /**
-     * forcePut.
-     */
     @Override
-/** forcePut. */
+    /** Unconditionally store, bypassing new/old checks. */
     public boolean forcePut(Hash key, DatabaseEntry data) {
         boolean rv = super.forcePut(key, data);
         if (rv && data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {_writer.queue(key, data);}
@@ -243,7 +213,7 @@ public class PersistentDataStore extends TransientDataStore {
      *  they just back up in the queue hogging memory.
      */
     private static final int WRITE_LIMIT = 10000;
-/** write_delay */
+    /** Interval between batch disk write cycles. */
     private static final long WRITE_DELAY = 10*60*1000L;
 
     /*
@@ -255,27 +225,22 @@ public class PersistentDataStore extends TransientDataStore {
      * a subset of all DatabaseEntrys in memory and keeping the rest on disk.
      */
     private class Writer implements Runnable, Flushable {
-/** map */
+        /** Queue of entries pending disk write. */
         private final Map<Hash, DatabaseEntry>_keys;
-/** keys to remove set */
+        /** Keys to remove from disk on next write cycle. */
         private final Set<Hash> _keysToRemove;
-/** wait lock */
+        /** Lock object for coordinating write cycle timing. */
         private final Object _waitLock;
-/** quit flag */
+        /** Flag to signal the write loop to exit. */
         private volatile boolean _quit;
 
-        /**
-         * Writer.
-         */
         public Writer() {
             _keys = new ConcurrentHashMap<>(64);
             _keysToRemove = new ConcurrentHashSet<>();
             _waitLock = new Object();
         }
 
-        /**
-         * queue.
-         */
+        /** Add entry to the disk write queue. */
         public void queue(Hash key, DatabaseEntry data) {
             int pending = _keys.size();
             _keysToRemove.remove(key);
@@ -284,9 +249,7 @@ public class PersistentDataStore extends TransientDataStore {
             _context.statManager().addRateData("netDb.writePending", pending);
         }
 
-        /**
-         * remove.
-         */
+        /** Mark a key for removal from disk on next cycle. */
         public void remove(Hash key) {
             _keys.remove(key);
             _keysToRemove.add(key);
@@ -372,11 +335,7 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
-        /**
-         * run.
-         */
         @Override
-/** Run. */
         public void run() {
             if (isShuttingDown(_context)) return;
             _quit = false;
@@ -392,9 +351,7 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
-        /**
-         * flush.
-         */
+        /** Signal the write loop to exit and flush pending writes. */
         public void flush() {
             synchronized(_waitLock) {
                 _quit = true;
@@ -660,7 +617,7 @@ public class PersistentDataStore extends TransientDataStore {
         return count;
     }
 
-/** @return the publishDate */
+    /** @return the publish date from a DatabaseEntry */
     private static long getPublishDate(DatabaseEntry data) {return data.getDate();}
 
     /**
@@ -673,29 +630,23 @@ public class PersistentDataStore extends TransientDataStore {
      *  As of 0.9.4, also initiates an automatic reseed if necessary.
      */
     private class ReadJob extends JobImpl {
-/** last modified time */
+        /** last modified time */
         private volatile long _lastModified;
-/** last reseed time */
+        /** last reseed time */
         private volatile long _lastReseed;
-/** netdb ready flag */
+        /** netdb ready flag */
         private volatile boolean _setNetDbReady;
-/** min_routers */
+        /** Minimum routers before netdb is considered ready. */
         private static final int MIN_ROUTERS = KademliaNetworkDatabaseFacade.MIN_RESEED;
-/** min_reseed_interval */
+        /** Minimum time between automatic reseed attempts. */
         private static final long MIN_RESEED_INTERVAL = 90*60*1000L;
-/** has run */
+        /** Whether the initial scan has completed at least once. */
         private volatile boolean hasRun = false;
 
-        /**
-         * ReadJob.
-         */
         public ReadJob() {super(PersistentDataStore.this._context);}
 
-        /**
-         * getName.
-         */
         @Override
-/** @return the name */
+        /** @return the name */
         public String getName() {return "Read NetDb";}
 
         /**
@@ -754,11 +705,8 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
-        /**
-         * runJob.
-         */
         @Override
-/** Run the job */
+        /** Scan for new RouterInfo files and manage reseed. */
         public void runJob() {
             if (getContext().router().gracefulShutdownInProgress()) {
                 return;
@@ -777,14 +725,10 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
-        /**
-         * wakeup.
-         */
+        /** Trigger an immediate rescan. */
         public void wakeup() {requeue(0);}
 
-        /**
-         * isNetDbReady.
-         */
+        /** @return true once the netdb has enough routers to be usable */
         public boolean isNetDbReady() {return _setNetDbReady;}
 
         /**
@@ -876,13 +820,13 @@ public class PersistentDataStore extends TransientDataStore {
         }
     }
 
-/** ReadRouterJob. */
+    /** Reads a single RouterInfo file from disk and stores it in memory. */
     private class ReadRouterJob extends JobImpl {
-/** router file */
+        /** router file */
         private final File _routerFile;
-/** hash key */
+        /** hash key */
         private final Hash _key;
-/** known date */
+        /** known date */
         private long _knownDate;
 
         /**
@@ -896,14 +840,11 @@ public class PersistentDataStore extends TransientDataStore {
             _key = key;
         }
 
-        /**
-         * getName.
-         */
         @Override
-/** @return the name */
+        /** @return the name */
         public String getName() {return "Read RouterInfo";}
 
-/** @return true if Read */
+        /** @return true if Read */
         private boolean shouldRead() {
             // persist = false to call only super.get()
             DatabaseEntry data = get(_key, false);
@@ -920,11 +861,8 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
-        /**
-         * runJob.
-         */
         @Override
-/** Run the job */
+        /** Read a RouterInfo from disk and load into memory. */
         public void runJob() {
             read();
         }
@@ -1140,7 +1078,7 @@ public class PersistentDataStore extends TransientDataStore {
         }
     }
 
-/** @return the dbDir */
+    /** Resolve and prepare the database directory, creating subdirs if needed. */
     private File getDbDir(String dbDir) throws IOException {
         File f = new SecureDirectory(_context.getRouterDir(), dbDir);
         if (!f.exists()) {
@@ -1197,9 +1135,9 @@ public class PersistentDataStore extends TransientDataStore {
         }
     }
 
-/** routerinfo_prefix */
+    /** Prefix for RouterInfo filenames on disk. */
     private static final String ROUTERINFO_PREFIX = "routerInfo-";
-/** routerinfo_suffix */
+    /** Suffix for RouterInfo filenames on disk. */
     private static final String ROUTERINFO_SUFFIX = ".dat";
 
     /**
@@ -1239,7 +1177,7 @@ public class PersistentDataStore extends TransientDataStore {
         return getHash(filename, ROUTERINFO_PREFIX, ROUTERINFO_SUFFIX);
     }
 
-/** @return the hash */
+    /** Extract hash from a prefixed+suffixed filename. */
     private static Hash getHash(String filename, String prefix, String suffix) {
         try {
             String key = filename.substring(prefix.length());
@@ -1250,7 +1188,7 @@ public class PersistentDataStore extends TransientDataStore {
         } catch (RuntimeException e) {return null;}
     }
 
-/** Remove file */
+    /** Remove file */
     private void removeFile(Hash key, File dir) {
         String riName = getRouterInfoName(key);
         File f = new File(dir, riName);
@@ -1262,19 +1200,13 @@ public class PersistentDataStore extends TransientDataStore {
         }
     }
 
-/** Disconnector. */
+    /** Schedules a delayed force disconnect for a banned peer. */
     private class Disconnector extends SimpleTimer2.TimedEvent {
-/** h */
+        /** Router hash to disconnect. */
         private final Hash h;
-/** reason */
+        /** Reason for the disconnect. */
         private final String reason;
-        /**
-         * Disconnector.
-         */
         public Disconnector(Hash h, String reason) {super(_context.simpleTimer2()); this.h = h; this.reason = reason;}
-        /**
-         * timeReached.
-         */
         public void timeReached() {_context.commSystem().forceDisconnect(h, reason);}
     }
 
@@ -1291,4 +1223,3 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
 }
-

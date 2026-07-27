@@ -9,19 +9,19 @@ import java.util.List;
  *  @since 0.9.44
  */
 class RatchetEntry {
-/** The session tag */
+    /** The session tag */
     public final RatchetSessionTag tag;
-/** The session key */
+    /** The session key */
     public final SessionKeyAndNonce key;
-/** The key identifier */
+    /** The key identifier */
     public final int keyID;
-/** The previous chain length */
+    /** The previous chain length */
     public final int pn;
-/** The next {forward} chain key */
+    /** The next {forward} chain key */
     public final NextSessionKey nextForwardKey;
-/** The next {reverse} chain key */
+    /** The next {reverse} chain key */
     public final NextSessionKey nextReverseKey;
-/** ackstosend */
+    /** ACKs queued for delivery with this entry, or null. */
     public final List<Integer> acksToSend;
 
     /** outbound - calculated key */
@@ -29,7 +29,7 @@ class RatchetEntry {
         this(tag, key, keyID, pn, null, null, null);
     }
 
-    /** Ratchet entry */
+    /** Full constructor with optional next keys and pending ACKs. */
     public RatchetEntry(RatchetSessionTag tag, SessionKeyAndNonce key, int keyID, int pn,
                         NextSessionKey nextFwdKey, NextSessionKey nextRevKey, List<Integer> acksToSend) {
         this.tag = tag;
@@ -41,9 +41,7 @@ class RatchetEntry {
         this.acksToSend = acksToSend;
     }
 
-    /**
-     * toString.
-     */
+    /** @return debug string with tag and key */
     @Override
     public String toString() {
         return "RatchetEntry[" + tag.toBase64() + ' ' + key + ']';

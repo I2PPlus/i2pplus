@@ -16,7 +16,7 @@ import java.net.SocketException;
 import java.util.StringTokenizer;
 import org.cybergarage.util.Debug;
 
-/** comment */
+/** HTTP request message with method, URI, headers, and content body. */
 public class HTTPRequest extends HTTPPacket {
     ////////////////////////////////////////////////
     //	Constructor
@@ -26,12 +26,12 @@ public class HTTPRequest extends HTTPPacket {
         setVersion(HTTP.VERSION_10);
     }
 
-    /** method comment */
+    /** Parses an HTTP request from the given input stream. */
     public HTTPRequest(InputStream in) {
         super(in);
     }
 
-    /** method comment */
+    /** Creates an HTTP request from the given socket's input stream. */
     public HTTPRequest(HTTPSocket httpSock) {
         this(httpSock.getInputStream());
         setSocket(httpSock);

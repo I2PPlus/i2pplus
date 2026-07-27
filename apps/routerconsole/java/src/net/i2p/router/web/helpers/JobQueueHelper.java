@@ -30,9 +30,6 @@ import net.i2p.util.SystemVersion;
  * Helper for job queue page rendering and form processing.
  * @since 0.9.33
  */
-/**
- * Default constructor.
- */
 public class JobQueueHelper extends HelperBase {
 
     private static int CORES = SystemVersion.getCores();

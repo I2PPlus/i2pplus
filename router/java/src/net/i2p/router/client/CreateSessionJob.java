@@ -26,18 +26,16 @@ import net.i2p.util.Log;
 class CreateSessionJob extends JobImpl {
     private final Log _log;
     private final SessionConfig _config;
-/** Createsessionjob */
-
     public CreateSessionJob(RouterContext context, SessionConfig config) {
         super(context);
         _log = context.logManager().getLog(CreateSessionJob.class);
         _config = config;
         if (_log.shouldDebug()) {_log.debug("CreateSessionJob for config: " + config);}
     }
-/** Return the name */
+    /** Return the name */
 
     public String getName() {return "Request Tunnels for New Client";}
-/** Execute the job */
+    /** Execute the job */
 
     public void runJob() {
         Hash dest = _config.getDestination().calculateHash();

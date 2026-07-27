@@ -22,53 +22,29 @@ import net.i2p.util.SystemVersion;
  * almost everything. This does NOT extend SearchJob.
  */
 abstract class FloodSearchJob extends JobImpl {
-    /**
-     * _log.
-     */
+    /** Class logger. */
     protected final Log _log;
-    /**
-     * _facade.
-     */
+    /** Floodfill network database facade. */
     protected final FloodfillNetworkDatabaseFacade _facade;
-    /**
-     * _key.
-     */
+    /** Target database entry hash being searched. */
     protected final Hash _key;
-    /**
-     * _onFind.
-     */
+    /** Callbacks for successful search completion. */
     protected final List<Job> _onFind;
-    /**
-     * _onFailed.
-     */
+    /** Callbacks for search failure. */
     protected final List<Job> _onFailed;
-    /**
-     * _expiration.
-     */
+    /** Deadline after which the search expires. */
     protected long _expiration;
-    /**
-     * _timeoutMs.
-     */
+    /** Timeout for the search in milliseconds. */
     protected int _timeoutMs;
-    /**
-     * _isLease.
-     */
+    /** Whether the target is a LeaseSet lookup. */
     protected final boolean _isLease;
-    /**
-     * _lookupsRemaining.
-     */
+    /** Remaining flood lookups before fallback to iterative search. */
     protected final AtomicInteger _lookupsRemaining = new AtomicInteger();
-    /**
-     * _dead.
-     */
+    /** Whether this search has been marked as completed. */
     protected volatile boolean _dead;
-    /**
-     * _created.
-     */
+    /** System time when this search was created. */
     protected final long _created;
-    /**
-     * _success.
-     */
+    /** Whether the search completed successfully. */
     protected boolean _success;
 
     /**
@@ -123,9 +99,7 @@ abstract class FloodSearchJob extends JobImpl {
 
     /** using context clock */
     public long getExpiration() { return _expiration; }
-    /**
-     * CONCURRENT_SEARCHES.
-     */
+    /** Max simultaneous flood lookups before fallback. */
     protected static final int CONCURRENT_SEARCHES = SystemVersion.isSlow() ? 3 : 5;
     private static final int FLOOD_SEARCH_TIME_FACTOR = 2;
     /**
@@ -140,9 +114,7 @@ abstract class FloodSearchJob extends JobImpl {
      */
     public String getName() { return "NetDb Search (phase 1)"; }
 
-    /**
-     * getKey.
-     */
+    /** @return the database entry hash being searched */
     public Hash getKey() { return _key; }
 
     /**
@@ -159,9 +131,7 @@ abstract class FloodSearchJob extends JobImpl {
         }
     }
 
-    /**
-     * getLookupsRemaining.
-     */
+    /** @return number of flood lookups still pending */
     protected int getLookupsRemaining() { return _lookupsRemaining.get(); }
 
     /**

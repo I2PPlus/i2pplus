@@ -18,8 +18,6 @@ import net.i2p.internal.I2CPMessageQueue;
 class I2CPMessageQueueImpl extends I2CPMessageQueue {
     private final BlockingQueue<I2CPMessage> _in;
     private final BlockingQueue<I2CPMessage> _out;
-/** I2cpmessagequeueimpl */
-
     public I2CPMessageQueueImpl(BlockingQueue<I2CPMessage> in, BlockingQueue<I2CPMessage> out) {
         _in = in;
         _out = out;

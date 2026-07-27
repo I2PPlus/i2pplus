@@ -55,13 +55,13 @@ import net.i2p.util.OrderedProperties;
  * @author jrandom
  */
 public class RouterInfo extends DatabaseEntry {
-    /** Ctx */
+    /** Router context. */
     private final I2PAppContext ctx = I2PAppContext.getGlobalContext();
-    /** Log */
+    /** Class logger. */
     private final Log log = ctx.logManager().getLog(RouterInfo.class);
-    /**  identity */
+    /** This router's identity (router key + certificate). */
     private RouterIdentity _identity;
-    /**  published */
+    /** Last published time in ms since epoch. */
     private volatile long _published;
     /**
      *  Save addresses in the order received so the signature works.
@@ -69,14 +69,13 @@ public class RouterInfo extends DatabaseEntry {
     private final List<RouterAddress> _addresses;
     /** may be null to save memory, no longer final */
     private Set<Hash> _peers;
-    /**  options */
+    /** Config properties for this router info. */
     private final Properties _options;
-    /**  validated */
+    /** Whether the signature has been verified. */
     private volatile boolean _validated;
     /**  is valid */
     private volatile boolean _isValid;
-    //private volatile String _stringified;
-    /**  byteified */
+    /** Cached serialized byte form. */
     private volatile byte[] _byteified;
     /**  hash code */
     private volatile int _hashCode;
@@ -89,12 +88,12 @@ public class RouterInfo extends DatabaseEntry {
      * If we do bring this back, don't do on ARM or Android
      */
     private static final boolean CACHE_ALL = false; // SystemVersion.getMaxMemory() > 128*1024*1024L;
-/** Property key for network id */
+    /** Property key for network id */
 
     public static final String PROP_NETWORK_ID = "netId";
-/** Property key for capabilities */
+    /** Property key for capabilities */
     public static final String PROP_CAPABILITIES = "caps";
-/** Capability flag for hidden */
+    /** Capability flag for hidden */
     public static final char CAPABILITY_HIDDEN = 'H';
     private static final int MAX_ADDRESSES = 16;
     private static final int MAX_INTRODUCERS = 5;
@@ -106,13 +105,11 @@ public class RouterInfo extends DatabaseEntry {
      *
      *  @since 0.9.62
      */
-/** Max Uncompressed Size constant */
     public static final int MAX_UNCOMPRESSED_SIZE = 4*1024;
 
     /** Public string of chars which serve as bandwidth capacity markers
      * NOTE: individual chars defined in Router.java
      */
-/** Bw Capability Chars constant */
     public static final String BW_CAPABILITY_CHARS = "" +
         // reverse, so e.g. "POfR" works correctly
         Router.CAPABILITY_BW_UNLIMITED +
@@ -128,12 +125,11 @@ public class RouterInfo extends DatabaseEntry {
      *
      * @since 0.9.63+
      */
-/** Congestion Capability Chars constant */
     public static final String CONGESTION_CAPABILITY_CHARS = "" +
         Router.CAPABILITY_CONGESTION_MODERATE +
         Router.CAPABILITY_CONGESTION_SEVERE +
         Router.CAPABILITY_NO_TUNNELS;
-/** Routerinfo */
+    /** Constructor with default address list and options properties. */
 
     public RouterInfo() {
         _addresses = new ArrayList<>(2);
@@ -150,17 +146,17 @@ public class RouterInfo extends DatabaseEntry {
         setIdentity(old.getIdentity());
         setPeers(old.getPeers());
     }
-/** Return the date */
+    /** Return the date */
 
     public long getDate() {
         return _published;
     }
-/** Return the keysAndCert */
+    /** Return the keysAndCert */
 
     public KeysAndCert getKeysAndCert() {
         return _identity;
     }
-/** Return the type */
+    /** Return the type */
 
     public int getType() {
         return KEY_TYPE_ROUTERINFO;
@@ -297,7 +293,7 @@ public class RouterInfo extends DatabaseEntry {
     public Map<Object, Object> getOptionsMap() {
         return Collections.unmodifiableMap(_options);
     }
-/** Return the option */
+    /** Return the option */
 
     public String getOption(String opt) {return _options.getProperty(opt);}
 

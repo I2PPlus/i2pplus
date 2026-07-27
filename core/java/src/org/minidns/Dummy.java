@@ -4,7 +4,4 @@ package org.minidns;
  * Exists only to enable package.html to be included in javadoc.
  * http://java.sun.com/j2se/javadoc/faq/index.html#packagewithoutjavafiles
  */
-/**
- * Default constructor.
- */
 abstract class Dummy {}

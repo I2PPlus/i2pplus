@@ -77,7 +77,6 @@ import net.i2p.util.SystemVersion;
  *
  * @since 0.9.70+
  */
-/** SimpleTimer2.TimedEvent */
 public class Tuner extends SimpleTimer2.TimedEvent {
 
     private final RouterContext _context;
@@ -85,9 +84,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private final List<TunableParam> _params;
     private final AutotuneConfig _autotune;
 
-    /** RateConstants.ONE_MINUTE */
+    /** Period for short-term bandwidth stats. */
     static final long STAT_PERIOD = RateConstants.ONE_MINUTE;
-    /** RateConstants.TEN_MINUTES */
+    /** Period for long-term bandwidth stats. */
     static final long STAT_PERIOD_LONG = RateConstants.TEN_MINUTES;
     /** Max history samples for sparklines (30 samples @ 30s = 15min) */
     static final int MAX_HISTORY = 30;
@@ -138,7 +137,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *
      * @since 0.9.70+
      */
-    /** adjustHandlerPriority */
     public static void adjustHandlerPriority() {
         int target = _handlerThreadPriority;
         Thread t = Thread.currentThread();
@@ -190,50 +188,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /** Subsystem labels for grouping in the UI */
     public static final String SUB_TRANSPORT = "Transport";
-    /**
-     * SUB_TUNNEL.
-     */
-    /** Tunnel */
+    /** Tunnel subsystem identifier. */
     public static final String SUB_TUNNEL = "Tunnel";
-    /**
-     * SUB_STREAMING.
-     */
-    /** Streaming */
+    /** Streaming subsystem identifier. */
     public static final String SUB_STREAMING = "Streaming";
-    /**
-     * SUB_I2CP.
-     */
-    /** I2CP */
+    /** I2CP subsystem identifier. */
     public static final String SUB_I2CP = "I2CP";
-    /**
-     * SUB_CONGESTION.
-     */
-    /** Congestion */
+    /** Congestion subsystem identifier. */
     public static final String SUB_CONGESTION = "Congestion";
-    /**
-     * SUB_CRYPTO.
-     */
-    /** Crypto */
+    /** Crypto subsystem identifier. */
     public static final String SUB_CRYPTO = "Crypto";
-    /**
-     * SUB_ROUTER.
-     */
-    /** Router */
+    /** Router subsystem identifier. */
     public static final String SUB_ROUTER = "Router";
-    /**
-     * SUB_NETDB.
-     */
-    /** NetDB */
+    /** NetDB subsystem identifier. */
     public static final String SUB_NETDB = "NetDB";
-    /**
-     * SUB_PEER.
-     */
-    /** Peers */
+    /** Peers subsystem identifier. */
     public static final String SUB_PEER = "Peers";
-    /**
-     * SUB_TRANSIT.
-     */
-    /** Transit */
+    /** Transit subsystem identifier. */
     public static final String SUB_TRANSIT = "Transit";
 
     // System capability factors for scaling defaults
@@ -267,7 +238,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Compute a system-scaled value: base * factor, bounded by min and max.
      * Factor is max(memFactor, coreFactor), halved for slow systems.
      */
-    /** hardMax */
     static int scaleForSystem(int base, int hardMin, int hardMax) {
         int factor = Math.max(MEM_FACTOR, CORE_FACTOR);
         if (IS_SLOW) factor = Math.max(1, factor / 2);
@@ -280,7 +250,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *
      * @since 0.9.70+
      */
-    /** MemoryPressure */
     static double getMemoryPressure() {
         Runtime rt = Runtime.getRuntime();
         long max = rt.maxMemory();
@@ -298,11 +267,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *
      * <p>Writes are throttled: values are marked dirty and flushed to
      * disk at most once per 5 minutes ({@link #save()}). Use
-     * {@link #forceSave()} for unconditional writes (e.g., shutdown).
+     * {@link #forceSave()} for unconditional writes (e.g. shutdown).
      *
      * @since 0.9.70+
      */
-    /** AutotuneConfig */
     public static class AutotuneConfig {
         private static final String FILENAME = "autotune.config";
         private static final long SAVE_INTERVAL_MS = 5 * 60 * 1000L;
@@ -364,12 +332,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
 
-        /** Property value for key. */
+        /** Read a property value. */
         String getProperty(String key) {
             return _props.getProperty(key);
         }
 
-        /** Integer property value. */
+        /** Read an integer property value. */
         int getInt(String key, int defaultVal) {
             String val = _props.getProperty(key);
             if (val != null) {
@@ -389,12 +357,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             _dirty = true;
         }
 
-        /** Config file. */
+        /** Autotune config file. */
         File getFile() { return _file; }
     }
 
-    /**
-     * Tuner.
+    /** Set up the tuner with all tunable parameters.
+     *
      * @param ctx the router context
      */
     public Tuner(RouterContext ctx) {
@@ -577,10 +545,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         ctx.router().saveConfig(markerKey, "true");
     }
 
-    /**
-     * timeReached.
-     */
-    /** timeReached */
+    /** Expire entries and reschedule the next check. */
     public void timeReached() {
         schedule(30*1000L);
         // Compute system health once per cycle, shared by all params
@@ -777,30 +742,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *
      * @since 0.9.70+
      */
-    /** SubsystemScore */
     public static class SubsystemScore {
-        /**
-         * Name.
-         */
-        /** name */
+        /** Subsystem identifier. */
         public final String name;
-        /**
-         * Label.
-         */
-        /** label */
+        /** Human-readable label. */
         public final String label;
-        /**
-         * Score.
-         */
-        /** score */
+        /** Health score 0.0-1.0. */
         public double score;
-        /**
-         * Details.
-         */
-        /** details */
+        /** Detailed metric labels. */
         public final String[] details;
 
-        /** Subsystem score */
         SubsystemScore(String name, String label, double score, String[] details) {
             this.name = name;
             this.label = label;
@@ -902,9 +853,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * TunableParam.
+     * A tunable parameter with name, description, bounds, and default value.
      */
-    /** TunableParam */
     public interface TunableParam {
         /**
          * The param name.
@@ -971,74 +921,52 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * ParamSnapshot.
+     * Snapshot of a subsystem's tunable parameter values at a point in time.
      */
-    /** ParamSnapshot */
     public static class ParamSnapshot {
-        /**
-         * Name.
-         */
-        /** name */
+        /** Subsystem identifier. */
         public final String name;
-        /**
-         * Description.
-         */
-        /** description */
+        /** Human-readable description. */
         public final String description;
-        /**
-         * Subsystem.
-         */
-        /** subsystem */
+        /** Subsystem identifier. */
         public final String subsystem;
         /**
          * Current value.
          */
-        /** currentValue */
         public final int currentValue;
         /**
          * Default value.
          */
-        /** defaultValue */
         public final int defaultValue;
         /**
          * Minimum.
          */
-        /** min */
         public final int min;
         /**
          * Maximum.
          */
-        /** max */
         public final int max;
-        /**
-         * Step.
-         */
-        /** step */
+        /** Adjustment step size. */
         public final int step;
         /**
          * Auto-tuning enabled.
          */
-        /** autoTuning */
         public final boolean autoTuning;
         /**
          * Observed stat key.
          */
-        /** observedStat */
         public final String observedStat;
         /**
          * Observed stat value.
          */
-        /** observedStatValue */
         public final double observedStatValue;
         /**
          * Value history.
          */
-        /** valueHistory */
         public final int[] valueHistory;
         /**
          * Stat history.
          */
-        /** statHistory */
         public final double[] statHistory;
 
         /**
@@ -1081,7 +1009,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Property prefix for tuner ranges.
      * Format: tuner.{paramName}.min, tuner.{paramName}.max, tuner.{paramName}.step
      */
-    /** tuner. */
     static final String PROP_PREFIX = "tuner.";
 
     /**
@@ -1109,64 +1036,30 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *
      * @since 0.9.70+
      */
-    /** TunableParam */
     abstract static class BaseParam implements TunableParam {
         /** Shared instance — set once in Tuner constructor, used by all BaseParams */
         static volatile AutotuneConfig _sharedAutotune;
-        /**
-         * _name.
-         */
-        /** _name */
+        /** Internal config property key (e.g. "i2p.tunnel.socketConnectTimeout"). */
         protected final String _name;
-        /**
-         * _description.
-         */
-        /** _description */
+        /** Human-readable label for display in the Tuner UI. */
         protected final String _description;
-        /**
-         * _subsystem.
-         */
-        /** _subsystem */
+        /** Subsystem identifier this parameter belongs to. */
         protected final String _subsystem;
-        /**
-         * _propPrefix.
-         */
-        /** _propPrefix */
+        /** Config key prefix for property lookups. */
         protected final String _propPrefix;
-        /**
-         * _defaultMin.
-         */
-        /** _defaultMin */
+        /** Default minimum value from code or config. */
         protected final int _defaultMin;
-        /**
-         * _defaultMax.
-         */
-        /** _defaultMax */
+        /** Default maximum value from code or config. */
         protected final int _defaultMax;
-        /**
-         * _defaultStep.
-         */
-        /** _defaultStep */
+        /** Default step/increment size for adjustments. */
         protected final int _defaultStep;
-        /**
-         * _min.
-         */
-        /** _min */
+        /** Current minimum value (may differ from default after tuning). */
         protected int _min;
-        /**
-         * _max.
-         */
-        /** _max */
+        /** Current maximum value (may differ from default after tuning). */
         protected int _max;
-        /**
-         * _step.
-         */
-        /** _step */
+        /** Current step/increment size (may differ from default). */
         protected int _step;
-        /**
-         * _statName.
-         */
-        /** _statName */
+        /** Router stat name for observed value feedback. */
         protected final String _statName;
         /** Factory default: value before any tuning. Persisted on first run for auto-revert. */
         protected int _defaultValue;
@@ -1176,65 +1069,40 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected final int _initialValue;
         /** True until first update() call — applies persisted value from autotune.config. */
         protected boolean _firstTick = true;
-        /**
-         * _override.
-         */
-        /** _override */
+        /** User-set override value, or Integer.MIN_VALUE if unset. */
         protected volatile int _override;
-        /**
-         * _autoTuning.
-         */
-        /** _autoTuning */
+        /** Whether autotuning is active for this parameter. */
         protected volatile boolean _autoTuning;
-        /**
-         * _health.
-         */
-        /** _health */
+        /** Health score and subsystem for autotune decisions. */
         protected SystemHealth _health;
-        /**
-         * _valueHistory.
-         */
-        /** _valueHistory */
+        /** Rolling window of recent tunable values for trend analysis. */
         protected final int[] _valueHistory;
-        /**
-         * _statHistory.
-         */
-        /** _statHistory */
+        /** Rolling window of recent stat values for trend analysis. */
         protected final double[] _statHistory;
-        /**
-         * _historyCount.
-         */
-        /** _historyCount */
+        /** Number of valid entries in _valueHistory / _statHistory. */
         protected int _historyCount;
-        /**
-         * _log.
-         */
-        /** _log */
+        /** Class logger. */
         protected final Log _log;
-        /**
-         * _ctx.
-         */
-        /** _ctx */
+        /** Router context. */
         protected final RouterContext _ctx;
-        /**
-         * _autotune.
-         */
-        /** _autotune */
+        /** Autotune profile for this tunable parameter. */
         protected final AutotuneConfig _autotune;
 
         /**
          * @param name internal property key (e.g. "i2p.tunnel.socketConnectTimeout")
          * @param description human-readable label shown in Tuner UI (e.g. "Socket connect timeout (ms)")
          *                    — keep short, include unit in parens; same convention for all new params
+         * @param subsystem subsystem identifier (e.g. "i2ptunnel", "streaming")
          */
-        /** subsystem */
         protected BaseParam(String name, String description, String subsystem,
                             int defaultMin, int defaultMax,
                             int defaultStep, String statName, RouterContext ctx) {
             this(name, description, subsystem, defaultMin, defaultMax, defaultStep, statName, ctx, null);
         }
 
-        /** subsystem */
+        /**
+         * @param subsystem subsystem identifier (e.g. "i2ptunnel", "streaming")
+         */
         protected BaseParam(String name, String description, String subsystem,
                             int defaultMin, int defaultMax,
                             int defaultStep, String statName, RouterContext ctx,
@@ -1291,7 +1159,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 }
             }
             // Read persisted tuned value (clamped to current range) — catches stale
-            // autotune.config values from before code changes (e.g., max lowered 512→20)
+            // autotune.config values from before code changes (e.g. max lowered 512→20)
             int raw = _autotune.getInt(valueKey, _defaultValue);
             _initialValue = Math.max(_min, Math.min(_max, raw));
             // Persist clamped value so autotune.config reflects reality
@@ -1315,42 +1183,34 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Param name.
          */
-        /** _name */
         public String getName() { return _name; }
         /**
          * Param description.
          */
-        /** _description */
         public String getDescription() { return _description; }
         /**
          * Subsystem name.
          */
-        /** _subsystem */
         public String getSubsystem() { return _subsystem; }
         /**
          * Minimum value.
          */
-        /** _min */
         public int getMin() { return _min; }
         /**
          * Maximum value.
          */
-        /** _max */
         public int getMax() { return _max; }
         /**
          * Step size.
          */
-        /** _step */
         public int getStep() { return _step; }
         /**
          * Default value.
          */
-        /** _defaultValue */
         public int getDefaultValue() { return _defaultValue; }
         /**
          * Whether auto-tuning is enabled.
          */
-        /** _autoTuning */
         public boolean isAutoTuning() { return _autoTuning; }
 
         /**
@@ -1359,7 +1219,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *
          * @since 0.9.70+
          */
-        /** ctx */
         protected static int getShareBps(RouterContext ctx) {
             return 1000 * TunnelDispatcher.getShareBandwidth(ctx);
         }
@@ -1370,7 +1229,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *
          * @since 0.9.70+
          */
-        /** _defaultMin */
         protected int getDefaultMin(RouterContext ctx) { return _defaultMin; }
 
         /**
@@ -1379,7 +1237,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *
          * @since 0.9.70+
          */
-        /** _defaultMax */
         protected int getDefaultMax(RouterContext ctx) { return _defaultMax; }
 
         /**
@@ -1387,7 +1244,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Replaces the old hardcoded 50 KB/s which was far too low for any real router.
          * @since 0.9.70+
          */
-        /** ctx */
         protected static int getHeavyTransitThreshold(RouterContext ctx) {
             return getShareBps(ctx) * 4 / 5;
         }
@@ -1396,7 +1252,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Transit bandwidth threshold for "sustained heavy" — 50% of configured share.
          * @since 0.9.70+
          */
-        /** ctx */
         protected static int getSustainedHeavyTransitThreshold(RouterContext ctx) {
             return getShareBps(ctx) / 2;
         }
@@ -1407,7 +1262,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *
          * @since 0.9.70+
          */
-        /** _defaultStep */
         protected int getDefaultStep(RouterContext ctx) { return _defaultStep; }
 
         /**
@@ -1421,7 +1275,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *
          * @since 0.9.70+
          */
-        /** ctx */
         public void refreshRanges(RouterContext ctx) {
             String name = _name;
             int floor = getDefaultMin(ctx);
@@ -1439,7 +1292,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 _max = ceil;
             }
             // Clamp persisted value to new range — prevents stale autotune.config
-            // values from exceeding caps after code changes (e.g., max lowered)
+            // values from exceeding caps after code changes (e.g. max lowered)
             int val = _autotune.getInt(_name + ".value", _defaultValue);
             if (val < _min || val > _max) {
                 int clamped = Math.max(_min, Math.min(_max, val));
@@ -1459,7 +1312,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *
          * @since 0.9.70+
          */
-        /** ctx */
         public void refreshDefault(RouterContext ctx) {
             int newDefault = _autotune.getInt(_name + ".default", _defaultValue);
             if (newDefault != _defaultValue) {
@@ -1480,7 +1332,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @param value the new value to persist
          * @since 0.9.70+
          */
-        /** value */
         protected void persistValue(RouterContext ctx, int value) {
             _autotune.setProperty(_name + ".value", String.valueOf(value));
         }
@@ -1496,7 +1347,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @param value the override value, or &lt; 0 to re-enable auto-tuning
          * @since 0.9.70+
          */
-        /** value */
         public void setOverride(int value) {
             _override = value;
             _autoTuning = (value < 0);
@@ -1514,21 +1364,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** The current system health score for this update cycle. */
         void setHealth(SystemHealth health) { _health = health; }
 
-        /**
-         * getValueHistory.
-         */
-        /** _valueHistory */
+        /** @return rolling window of recent tunable values */
         public int[] getValueHistory() { return _valueHistory; }
-        /**
-         * getStatHistory.
-         */
-        /** _statHistory */
+        /** @return rolling window of recent stat values */
         public double[] getStatHistory() { return _statHistory; }
 
-        /**
-         * snapshot.
-         */
-        /** snapshot */
+        /** Capture snapshot of current tunable state for display. */
         public ParamSnapshot snapshot() {
             int[] vh = new int[_historyCount];
             double[] sh = new double[_historyCount];
@@ -1545,25 +1386,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                                      _statName, obsVal, vh, sh);
         }
 
-        /**
-         * value).
-         */
-        /** value */
+        /** @param value the tunable value to apply to router configuration */
         protected abstract void applyValue(int value);
-        /**
-         * getRuntimeValue().
-         */
-        /** RuntimeValue */
+        /** @return current runtime value read from router config */
         protected abstract int getRuntimeValue();
-        /**
-         * ctx).
-         */
-        /** ctx */
+        /** @param ctx router context @return observed stat value for autotuning */
         protected abstract double getObservedStat(RouterContext ctx);
-        /**
-         * observed).
-         */
-        /** observed */
+        /** @param observed current stat value @return target tunable value */
         protected abstract int computeTarget(double observed);
 
         /**
@@ -1576,11 +1405,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * increasing load when the CPU is already saturated.
          *
          * @param ctx      the router context
-         * @param statName the stat to query (e.g., "jobQueue.jobLag")
+         * @param statName the stat to query (e.g. "jobQueue.jobLag")
          * @return the 60s rolling average, or NaN if not available
          * @since 0.9.70+
          */
-        /** statName */
         protected double getAdditionalStat(RouterContext ctx, String statName) {
             RateStat rs = ctx.statManager().getRate(statName);
             if (rs == null) return Double.NaN;
@@ -1602,7 +1430,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @return the 1-hour rolling average, or NaN if not available
          * @since 0.9.70+
          */
-        /** statName */
         protected double getAdditionalStatHourly(RouterContext ctx, String statName) {
             RateStat rs = ctx.statManager().getRate(statName);
             if (rs == null) return Double.NaN;
@@ -1624,7 +1451,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @return the 10-minute rolling average, or NaN if not available
          * @since 0.9.70+
          */
-        /** statName */
         protected double getAdditionalStatLong(RouterContext ctx, String statName) {
             RateStat rs = ctx.statManager().getRate(statName);
             if (rs == null) return Double.NaN;
@@ -1646,7 +1472,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @return the event count in the last 60s, or NaN if not available
          * @since 0.9.70+
          */
-        /** statName */
         protected double getAdditionalEventCount(RouterContext ctx, String statName) {
             RateStat rs = ctx.statManager().getRate(statName);
             if (rs == null) return Double.NaN;
@@ -1668,7 +1493,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @return the 5-minute rolling average, or NaN if not available
          * @since 0.9.70+
          */
-        /** statName */
         protected double getAdditionalStat5Min(RouterContext ctx, String statName) {
             RateStat rs = ctx.statManager().getRate(statName);
             if (rs == null) return Double.NaN;
@@ -1685,7 +1509,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @return the event count in the last hour, or NaN if not available
          * @since 0.9.70+
          */
-        /** statName */
         protected double getAdditionalEventCountHourly(RouterContext ctx, String statName) {
             RateStat rs = ctx.statManager().getRate(statName);
             if (rs == null) return Double.NaN;
@@ -1711,7 +1534,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @return success rate as 0.0–1.0, or NaN if no build events
          * @since 0.9.70+
          */
-        /** ctx */
         protected double getBuildSuccessRate(RouterContext ctx) {
             // Use the hourly average, not the 60s one. A brief tunnel-build dip
             // (e.g. the 1-2 min window after a LeaseSet republish drops a dead
@@ -1744,7 +1566,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @return shrunk count, or -1 if no change
          * @since 0.9.70+
          */
-        /** idleThreshold */
         protected static int reclaimIfIdle(double utilization, int current, int min, double idleThreshold) {
             if (Double.isNaN(utilization)) return -1;
             if (utilization >= idleThreshold) return -1;
@@ -1763,14 +1584,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * This method sums the event counts across all priorities.
          *
          * @param ctx      the router context
-         * @param prefix   the stat prefix (e.g., "codel.UDP-Sender.drop")
+         * @param prefix   the stat prefix (e.g. "codel.UDP-Sender.drop")
          * @return the total drop event count, or NaN if no priorities have events
          * @since 0.9.70+
          */
-        /** prefix */
         protected double getCoDelDropEventCount(RouterContext ctx, String prefix) {
             // CoDelPriorityBlockingQueue priorities: {0, 100, 200, 300, 400, 500}
-            /** 500 */
+            /** Priority level values for CoDel queue. */
             final int[] priorities = {0, 100, 200, 300, 400, 500};
             double total = 0;
             boolean found = false;
@@ -1790,7 +1610,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * when the primary stat has no events (lightly loaded router).
          *
          * <p>The primary stat is typically a streaming-specific metric
-         * (e.g., {@code stream.lifetimeRTT}) which only fires when active
+         * (e.g. {@code stream.lifetimeRTT}) which only fires when active
          * streaming connections exist. On a lightly loaded router, this
          * may be NaN. The fallback {@code udp.sendConfirmTime} is always
          * available when any UDP traffic is present.
@@ -1800,7 +1620,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @return the observed RTT in ms, or NaN if neither stat has events
          * @since 0.9.70+
          */
-        /** primaryStat */
         protected double getObservedRTT(RouterContext ctx, String primaryStat) {
             double val = getAdditionalStat(ctx, primaryStat);
             if (!Double.isNaN(val)) return val;
@@ -1815,7 +1634,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * NTCP reader pool utilization (0.0-1.0).
          * @since 0.9.70+
          */
-        /** ctx */
         protected double getReaderUtilization(RouterContext ctx) {
             Transport t = ctx.commSystem().getTransports().get(NTCPTransport.STYLE);
             return (t instanceof NTCPTransport) ? ((NTCPTransport) t).getReaderUtilization() : Double.NaN;
@@ -1825,7 +1643,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * NTCP writer pool utilization (0.0-1.0).
          * @since 0.9.70+
          */
-        /** ctx */
         protected double getWriterUtilization(RouterContext ctx) {
             Transport t = ctx.commSystem().getTransports().get(NTCPTransport.STYLE);
             return (t instanceof NTCPTransport) ? ((NTCPTransport) t).getWriterUtilization() : Double.NaN;
@@ -1835,7 +1652,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * NTCP send finisher pool utilization (0.0-1.0).
          * @since 0.9.70+
          */
-        /** ctx */
         protected double getSendFinisherUtilization(RouterContext ctx) {
             Transport t = ctx.commSystem().getTransports().get(NTCPTransport.STYLE);
             return (t instanceof NTCPTransport) ? ((NTCPTransport) t).getSendFinisherUtilization() : Double.NaN;
@@ -1845,7 +1661,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * UDP packet handler pool utilization (0.0-1.0).
          * @since 0.9.70+
          */
-        /** ctx */
         protected double getPacketHandlerUtilization(RouterContext ctx) {
             Transport t = ctx.commSystem().getTransports().get(UDPTransport.STYLE);
             return (t instanceof UDPTransport) ? ((UDPTransport) t).getPacketHandlerUtilization() : Double.NaN;
@@ -1855,7 +1670,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * UDP message receiver pool utilization (0.0-1.0).
          * @since 0.9.70+
          */
-        /** ctx */
         protected double getMessageReceiverUtilization(RouterContext ctx) {
             Transport t = ctx.commSystem().getTransports().get(UDPTransport.STYLE);
             return (t instanceof UDPTransport) ? ((UDPTransport) t).getMessageReceiverUtilization() : Double.NaN;
@@ -1865,7 +1679,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Tunnel pumper pool utilization (0.0-1.0).
          * @since 0.9.70+
          */
-        /** ctx */
         protected double getPumperUtilization(RouterContext ctx) {
             return TunnelDispatcher.getPumperUtilization();
         }
@@ -1873,13 +1686,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Current value.
          */
-        /** RuntimeValue */
         public int getCurrentValue() { return getRuntimeValue(); }
 
         /**
          * Record history.
          */
-        /** observed */
         protected void recordHistory(double observed) {
             if (_historyCount < MAX_HISTORY) {
                 _valueHistory[_historyCount] = getRuntimeValue();
@@ -1913,8 +1724,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * </ol>
          *
          * @since 0.9.70+
-         */
-        /** update */
+        /** Re-read tuning properties from router config and apply. */
         public void update() {
             double observed = getObservedStat(null);
             recordHistory(observed);
@@ -1997,8 +1807,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @param step    the maximum change per cycle
          * @return current ± step, clamped to target
          * @since 0.9.70+
-         */
-        /** step */
+        /** Clamp and apply a step change to a tunable parameter. */
         protected static int clamp(int current, int target, int step) {
             if (target > current)
                 return Math.min(target, current + step);
@@ -2034,7 +1843,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return _cls;
         }
 
-        /** methodName */
+        /** Call a static int getter via reflection. */
         static int invokeGetInt(String methodName) {
             Class<?> c = getCLS();
             if (c == null) return -1;
@@ -2045,7 +1854,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
 
-        /** value */
+        /** Call a static int setter via reflection. */
         static void invokeSetInt(String methodName, int value) {
             Class<?> c = getCLS();
             if (c == null) return;
@@ -2085,7 +1894,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
 
-        /** methodName */
+        /** Method name for reflection-based config invocation. */
         static int invokeConnectionOptionsInt(String methodName) {
             resolve();
             if (_connectionOptionsCls == null) return -1;
@@ -2096,7 +1905,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
 
-        /** value */
+        /** Call a setter on ConnectionOptions via reflection. */
         static void invokeConnectionOptionsSet(String methodName, int value) {
             resolve();
             if (_connectionOptionsCls == null) return;
@@ -2107,7 +1916,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
 
-        /** methodName */
+        /** Call a getter on Connection via reflection. */
         static int invokeConnectionInt(String methodName) {
             resolve();
             if (_connectionCls == null) return -1;
@@ -2118,7 +1927,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
 
-        /** value */
+        /** Call a setter on Connection via reflection. */
         static void invokeConnectionSet(String methodName, int value) {
             resolve();
             if (_connectionCls == null) return;
@@ -2153,7 +1962,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return _cls;
         }
 
-        /** methodName */
+        /** Call a static int getter via reflection. */
         static int invokeGetInt(String methodName) {
             Class<?> c = getCLS();
             if (c == null) return -1;
@@ -2164,7 +1973,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
 
-        /** value */
+        /** Call a static int setter via reflection. */
         static void invokeSetInt(String methodName, int value) {
             Class<?> c = getCLS();
             if (c == null) return;
@@ -2193,26 +2002,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   SUB_TRANSPORT, 50, 300, 10, "udp.sendConfirmTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             PeerState.setAckFrequency(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return PeerState.getAckFrequency();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -2221,10 +2021,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (actual network RTT, ms)
@@ -2270,26 +2067,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   SUB_TRANSPORT, 15000, 120000, 2000, "udp.sendConfirmTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             UDPTransport.setDataMessageTimeout(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return (int) UDPTransport.getDataMessageTimeout();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -2300,10 +2088,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual SSU send+confirm RTT)
@@ -2381,26 +2166,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1500, 5000, 250, "udp.outboundEstablishTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             UDPTransport.setMaxObEstablishTime(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return (int) UDPTransport.getMaxObEstablishTime();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -2411,10 +2187,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double sendExpired = getAdditionalStat(_context, "udp.sendExpired");
@@ -2455,26 +2228,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1500, 5000, 250, "udp.inboundEstablishTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             UDPTransport.setMaxIbEstablishTime(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return (int) UDPTransport.getMaxIbEstablishTime();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -2485,10 +2249,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double sendExpired = getAdditionalStat(_context, "udp.sendExpired");
@@ -2534,26 +2295,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1500, 10000, 250, "ntcp.outboundEstablishTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             NTCPTransport.setEstablishTimeout(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return NTCPTransport.getEstablishTimeout();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -2564,10 +2316,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double ibTime = getAdditionalStat(_context, "ntcp.inboundEstablishTime");
@@ -2627,26 +2376,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   2, 8, 1, "rdns.executor.queueSize", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             CommSystemFacadeImpl.setRdnsCorePoolSize(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return CommSystemFacadeImpl.getRdnsCorePoolSize();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             if (!_context.getBooleanProperty("routerconsole.enableReverseLookups"))
                 return Double.NaN;
@@ -2659,10 +2399,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Skip tuning when rDNS is disabled
@@ -2701,35 +2438,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   2000, 30000, 1000, "transport.expiredOnQueueLifetime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _maxDispatchAgeMs = value;
             _context.router().saveConfig("i2p.router.maxDispatchAge", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return _context.getProperty("i2p.router.maxDispatchAge", 3000);
         }
 
         /**
-         * setRuntimeValue.
+         * Set the runtime value.
          */
-        /** value */
         protected void setRuntimeValue(int value) {
             _maxDispatchAgeMs = value;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _ctx.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -2738,10 +2465,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.expiredOnQueueLifetime (ms, avg lifetime of expired messages)
@@ -2825,27 +2549,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   "transport.sendProcessingTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _handlerThreadPriority = value;
             _context.router().saveConfig("i2p.router.handlerThreadPriority", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return _context.getProperty("i2p.router.handlerThreadPriority", Thread.NORM_PRIORITY);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _ctx.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -2854,10 +2569,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, dispatch latency)
@@ -2916,26 +2628,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   10, 200, 5, "tunnel.participating InBps", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             TunnelDispatcher.setRequeueTime(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return (int) TunnelDispatcher.getRequeueTime();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -2946,10 +2649,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = participating InBps (transit inbound bandwidth)
@@ -3004,35 +2704,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   256, 4096, 128, "tunnel.pumperQueueFull", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             TunnelDispatcher.setPumperQueueCapacity(value);
             TunnelDispatcher.resizePumperQueue(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return TunnelDispatcher.getPumperQueueCapacity();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.pumperQueueFull event count (drop events per period)
@@ -3088,27 +2776,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   2, 16, 1, "tunnel.pumperQueueDepth", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             TunnelDispatcher.setPumperMaxThreads(value);
             TunnelDispatcher.adjustPumperThreads(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return TunnelDispatcher.getPumperMaxThreads();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -3117,10 +2796,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.pumperQueueDepth (avg items in pumper queue)
@@ -3175,26 +2851,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   5, 200, 5, "tunnel.participating OutBps", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             FIFOBandwidthRefiller.setReplenishFrequency(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return (int) FIFOBandwidthRefiller.getReplenishFrequency();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -3205,10 +2872,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = participating OutBps (transit outbound bandwidth)
@@ -3247,26 +2911,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1, 20, 1, "ntcp.pumperLoopsPerSecond", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             NTCPTransport.setSelectorLoopDelay(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return (int) NTCPTransport.getSelectorLoopDelay();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -3277,10 +2932,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = ntcp.pumperLoopsPerSecond (NTCP event loop rate)
@@ -3347,26 +2999,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   8, 1024, 16, "tunnel.obgw.queueSize", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             TunnelDispatcher.setMaxObMsgsPerPump(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return TunnelDispatcher.getMaxObMsgsPerPump();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -3377,10 +3020,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.obgw.queueSize (queue depth, messages waiting)
@@ -3432,26 +3072,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   8, 512, 8, "tunnel.ibgw.queueSize", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             TunnelDispatcher.setMaxIbMsgsPerPump(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return TunnelDispatcher.getMaxIbMsgsPerPump();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -3462,10 +3093,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.ibgw.queueSize (queue depth, messages waiting)
@@ -3522,35 +3150,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   8, 256, 4, "stream.con.initialRTT.in", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingReflector.invokeSetInt("setInitialWindowSize", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getInitialWindowSize");
             return v >= 0 ? v : 16;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.in (inbound RTT, ms)
@@ -3648,35 +3264,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1000, 15000, 1000, "stream.con.initialRTT.out", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingReflector.invokeSetInt("setInitialRTO", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getInitialRTO");
             return v >= 0 ? v : 6000;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (outbound RTT in ms)
@@ -3766,27 +3370,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   10, 500, 5, "stream.sendsBeforeAck", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingReflector.invokeSetInt("setDefaultInitialAckDelay", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getDefaultInitialAckDelay");
             return v >= 0 ? v : 500;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -3797,10 +3392,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.sendsBeforeAck (avg sends before standalone ACK)
@@ -3850,27 +3442,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   10, 200, 10, "stream.con.sendMessageSize", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingReflector.invokeSetInt("setDefaultPassiveFlushDelay", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getDefaultPassiveFlushDelay");
             return v >= 0 ? v : 100;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -3881,10 +3464,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.sendMessageSize (avg outgoing message size)
@@ -3934,35 +3514,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   8, 2048, 8, "stream.con.initialRTT.out", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingConnectionReflector.invokeConnectionOptionsSet("setMaxSlowStartWindow", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMaxSlowStartWindowStatic");
             return v > 0 ? v : 256;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (outbound RTT, ms)
@@ -4018,35 +3586,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   128, 2048, 128, "stream.con.initialRTT.out", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingConnectionReflector.invokeConnectionSet("setGlobalMaxWindowSize", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionInt("getGlobalMaxWindowSize");
             return v > 0 ? v : 256;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
@@ -4105,26 +3661,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   32, 2048, 32, "udp.sendConfirmTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             ClientManagerFacadeImpl.setWriterQueueSize(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return ClientManagerFacadeImpl.getWriterQueueSize();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -4133,10 +3680,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -4196,10 +3740,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                    SUB_CONGESTION, 1, 10, 1, "codel.UDP-Sender.delay", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig(
                 Collections.singletonMap("router.codelTarget", String.valueOf(value)), null);
@@ -4207,18 +3748,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             CoDelPriorityBlockingQueue.updateAllTargets(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return _context.getProperty("router.codelTarget", 5);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -4229,10 +3764,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = codel.UDP-Sender.delay (avg queue sojourn time, ms)
@@ -4284,10 +3816,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                    SUB_CONGESTION, 20, 200, 10, "codel.UDP-Sender.delay", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig(
                 Collections.singletonMap("router.codelInterval", String.valueOf(value)), null);
@@ -4295,18 +3824,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             CoDelPriorityBlockingQueue.updateAllIntervals(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return _context.getProperty("router.codelInterval", 50);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -4315,10 +3838,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = codel.UDP-Sender.delay (avg queue sojourn time, ms)
@@ -4368,28 +3888,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                    SUB_CONGESTION, 2, 16, 1, "transport.sendProcessingTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             SimpleBandwidthEstimator.setDecayFactor(value);
             // Also set on streaming estimator via reflection
             StreamingReflector.invokeSetInt("setDecayFactor", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return SimpleBandwidthEstimator.getDecayFactor();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -4400,10 +3911,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, proxy for RTT variability)
@@ -4446,49 +3954,32 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Default = bwBps / 4; range = [bwBps/16 .. bwBps].
          */
         @Override
-        /** ctx */
+        /** Router context. */
         protected int getDefaultMin(RouterContext ctx) {
             return Math.max(1024, getShareBps(ctx) / 16);
         }
 
-        /**
-         * getDefaultMax.
-         */
         @Override
-        /** ctx */
         protected int getDefaultMax(RouterContext ctx) {
             return Math.min(getShareBps(ctx), 262144);
         }
 
-        /**
-         * getDefaultStep.
-         */
         @Override
-        /** ctx */
         protected int getDefaultStep(RouterContext ctx) {
             return Math.max(256, getShareBps(ctx) / 256);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             SyntheticREDQueue.updateAllMinThresholds(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return SyntheticREDQueue.getCurrentMinThreshold();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -4497,10 +3988,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = participating bandwidth queue (bytes) — growing = more transit load
@@ -4544,49 +4032,32 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Default = bwBps / 2; range = [bwBps/8 .. bwBps*2].
          */
         @Override
-        /** ctx */
+        /** Router context. */
         protected int getDefaultMin(RouterContext ctx) {
             return Math.max(2048, getShareBps(ctx) / 8);
         }
 
-        /**
-         * getDefaultMax.
-         */
         @Override
-        /** ctx */
         protected int getDefaultMax(RouterContext ctx) {
             return Math.min(getShareBps(ctx) * 2, 524288);
         }
 
-        /**
-         * getDefaultStep.
-         */
         @Override
-        /** ctx */
         protected int getDefaultStep(RouterContext ctx) {
             return Math.max(512, getShareBps(ctx) / 128);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             SyntheticREDQueue.updateAllMaxThresholds(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return SyntheticREDQueue.getCurrentMaxThreshold();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -4595,10 +4066,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int minThreshold = getRuntimeValue(); // fallback
@@ -4646,36 +4114,24 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                    "tunnel.participatingMessageDropped", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             float prob = value / 1_000_000.0f;
             SyntheticREDQueue.updateAllMaxDropProbability(prob);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             float prob = SyntheticREDQueue.getCurrentMaxDropProbability();
             return Math.round(prob * 1_000_000);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.participatingMessageDropped event count
@@ -4729,36 +4185,24 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   XDH_PRECALC_MIN, XDH_PRECALC_MAX, 8, "crypto.XDHUsed", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             X25519KeyFactory f = X25519KeyFactory.getInstance();
             if (f != null) f.setMinSize(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             X25519KeyFactory f = X25519KeyFactory.getInstance();
             return f != null ? f.getMinSize() : _min;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             // Clamp to bounds first — config may have stale value beyond current range
             int current = Math.min(Math.max(getRuntimeValue(), _min), _max);
@@ -4808,37 +4252,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   EDH_PRECALC_MIN, EDH_PRECALC_MAX, 8, "crypto.EDHUsed", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("crypto.edh.precalc.min", Integer.toString(value));
             net.i2p.router.crypto.ratchet.Elg2KeyFactory f = net.i2p.router.crypto.ratchet.Elg2KeyFactory.getInstance();
             if (f != null) f.setMinSize(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             net.i2p.router.crypto.ratchet.Elg2KeyFactory f = net.i2p.router.crypto.ratchet.Elg2KeyFactory.getInstance();
             return f != null ? f.getMinSize() : _min;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = Math.min(Math.max(getRuntimeValue(), _min), _max);
             // observed = crypto.EDHUsed event count (key consumption per period)
@@ -4882,37 +4314,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   MLKEM_PRECALC_MIN, MLKEM_PRECALC_MAX, 64, "crypto.MLKEMEmpty", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("crypto.mlkem.precalc.min", Integer.toString(value));
             net.i2p.router.crypto.pqc.MLKEMKeyFactory f = net.i2p.router.crypto.pqc.MLKEMKeyFactory.getInstance();
             if (f != null) f.setMinSize(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             net.i2p.router.crypto.pqc.MLKEMKeyFactory f = net.i2p.router.crypto.pqc.MLKEMKeyFactory.getInstance();
             return f != null ? f.getMinSize() : _min;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = Math.min(Math.max(getRuntimeValue(), _min), _max);
             // observed = crypto.MLKEMEmpty event count (queue empty events per period)
@@ -4974,26 +4394,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   256, 16384, 256, "ntcp.sendTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             NTCPTransport.setSendFinisherQueueCapacity(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return NTCPTransport.getSendFinisherQueueCapacity();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -5002,10 +4413,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = ntcp.sendTime (ms, message lifetime in finisher pipeline)
@@ -5065,28 +4473,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   2, 16, 1, "udp.pushTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             UDPTransport.setPacketHandlerMaxThreads(value);
             Transport udp = _context.commSystem().getTransports().get(UDPTransport.STYLE);
             if (udp instanceof UDPTransport) ((UDPTransport) udp).adjustPacketHandlerThreads();
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return UDPTransport.getPacketHandlerMaxThreads();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -5095,10 +4494,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.pushTime (avg time to push packet to handler, ms)
@@ -5176,28 +4572,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   2, 16, 1, "codel.UDP-Receiver.delay", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             UDPTransport.setMessageReceiverThreads(value);
             Transport udp = _context.commSystem().getTransports().get(UDPTransport.STYLE);
             if (udp instanceof UDPTransport) ((UDPTransport) udp).adjustMessageReceiverThreads();
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return UDPTransport.getMessageReceiverThreads();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -5206,10 +4593,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Reclaim parked threads when the pool is massively under-utilized
@@ -5294,26 +4678,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   2000, 300000, 5000, "udp.sentMessagesDepth", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             PeerState.setSentMessagesCleanTime(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return (int) PeerState.getSentMessagesCleanTime();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -5322,10 +4697,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sentMessagesDepth (avg pending-ACK entries across peers)
@@ -5379,26 +4751,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   5000, 300000, 5000, "udp.peerCount", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             PeerState.setOutboundMsgExpiration(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return (int) PeerState.getOutboundMsgExpiration();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -5407,10 +4770,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.peerCount (total SSU connections)
@@ -5459,27 +4819,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   50, 1000, 50, "peer.activeProfileCount", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("router.peerOutboundQueueSize", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = _context.getProperty("router.peerOutboundQueueSize", 0);
             return v > 0 ? v : _min;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -5488,10 +4839,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = peer.activeProfileCount (active profiles in RAM)
@@ -5548,27 +4896,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   50, 100, 5, "tunnel.participating InBps", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("router.transitThrottleFactor", String.valueOf(value / 100.0f));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             float f = _context.getProperty("router.transitThrottleFactor", 0.95f);
             return (int)(f * 100);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             // Primary: tunnel.participating InBps (transit bandwidth)
             // Fallback: transport.sendProcessingTime (latency proxy)
@@ -5585,10 +4924,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return Double.NaN;
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int maxBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond() * 1024;
@@ -5662,27 +4998,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   2000, 8000, 500, "transport.sendProcessingTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("router.defaultProcessingTimeThrottle", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return _context.getProperty("router.defaultProcessingTimeThrottle",
                                          SystemVersion.isSlow() ? 3000 : 2000);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             // Stable baseline: 10-minute average of sendProcessingTime. Avoids
             // ratcheting the threshold up to match a transient spike.
@@ -5693,10 +5020,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Target ~4x the stable baseline, so the throttle only fires on
@@ -5730,26 +5054,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1, 50, 1, "tunnel.buildSuccessRate", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("router.throttleRejectExponent", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return _context.getProperty("router.throttleRejectExponent", 10);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -5759,10 +5074,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue() / 100.0;
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = build success ratio (0.0-1.0)
@@ -5811,18 +5123,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   2, 40, 2, "tunnel.participating InBps", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("router.tunnel.perTunnelBweDivisor", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int configured = _context.getProperty("router.tunnel.perTunnelBweDivisor", 0);
             if (configured > 0) return configured;
@@ -5832,10 +5138,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return Math.min(maxTunnels, 100);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -5844,10 +5147,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int numTunnels = _context.tunnelManager().getParticipatingCount();
@@ -5903,18 +5203,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   10, 100, 5, "tunnel.participating InBps", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("router.tunnelGrowthFactor", String.valueOf(value / 10.0d));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             double factor = 2.0d;
             String p = _context.getProperty("router.tunnelGrowthFactor");
@@ -5924,10 +5218,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return (int)(factor * 10);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -5936,10 +5227,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int maxBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond() * 1024;
@@ -5979,27 +5267,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   500, 20000, 500, "tunnel.participating InBps", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             RouterThrottleImpl.setDefaultMaxTunnels(value);
             _context.router().saveConfig("router.maxParticipatingTunnels", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return RouterThrottleImpl.getDefaultMaxTunnels();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             // Primary: tunnel.participating InBps
             // Fallback: transport.sendProcessingTime
@@ -6016,10 +5295,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return Double.NaN;
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int maxBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond() * 1024;
@@ -6074,26 +5350,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   64, 2048, 32, "jobQueue.jobLag", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             BuildHandler.setMaxQueue(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return BuildHandler.getMaxQueue();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -6102,10 +5369,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = jobQueue.jobLag (ms)
@@ -6157,26 +5421,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1000, 60000, 5000, "tunnel.buildSuccessRate", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.tunnel.goodDeficitThrottle", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return (int) BuildExecutor.getGoodDeficitThrottle(_context);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -6186,10 +5441,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue() / 100.0;
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.buildSuccessRate (normalized 0.0-1.0)
@@ -6247,35 +5499,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1000, 60000, 1000, "udp.sendConfirmTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingConnectionReflector.invokeConnectionOptionsSet("setMaxRTO", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMaxRTOStatic");
             return v > 0 ? v : 10000;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -6319,27 +5559,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   100, 300, 5, "stream.con.sendDuplicateSize", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingReflector.invokeSetInt("setRTOMultiplier", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getRTOMultiplier");
             return v > 0 ? v : 125;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -6348,10 +5579,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.sendDuplicateSize (avg duplicate ACK size)
@@ -6395,35 +5623,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1000, 60000, 1000, "stream.con.initialRTT.out", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingConnectionReflector.invokeConnectionOptionsSet("setMaxResendDelay", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMaxResendDelayStatic");
             return v > 0 ? v : 15000;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -6468,35 +5684,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   8, 128, 8, "stream.con.initialRTT.out", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingConnectionReflector.invokeConnectionSet("setMaxRetransmissions", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionInt("getMaxRetransmissionsStatic");
             return v > 0 ? v : 32;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -6547,35 +5751,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   300, 5000, 100, "stream.con.initialRTT.out", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingConnectionReflector.invokeConnectionOptionsSet("setMinResendDelay", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMinResendDelayStatic");
             return v > 0 ? v : 300;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -6625,38 +5817,26 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1, 4, 1, "stream.con.sendDuplicateSize", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             // Invert: Tuner treats higher=more aggressive, but code treats higher=slower
             StreamingConnectionReflector.invokeConnectionOptionsSet("setDefaultCongestionAvoidanceGrowthRateFactor",
                                                                      _min + _max - value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int codeVal = StreamingConnectionReflector.invokeConnectionOptionsInt("getDefaultCongestionAvoidanceGrowthRateFactorStatic");
             if (codeVal <= 0) codeVal = 1;
             return Math.max(_min, Math.min(_max, _min + _max - codeVal));
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.sendDuplicateSize (retransmit volume)
@@ -6749,38 +5929,26 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1, 4, 1, "stream.con.initialRTT.out", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             // Invert: Tuner treats higher=more aggressive, but code treats higher=slower
             StreamingConnectionReflector.invokeConnectionOptionsSet("setDefaultSlowStartGrowthRateFactor",
                                                                      _min + _max - value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int codeVal = StreamingConnectionReflector.invokeConnectionOptionsInt("getDefaultSlowStartGrowthRateFactorStatic");
             if (codeVal <= 0) codeVal = 1;
             return Math.max(_min, Math.min(_max, _min + _max - codeVal));
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (RTT, ms)
@@ -6873,27 +6041,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1, 256, 4, "transport.sendBps", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingConnectionReflector.invokeConnectionOptionsSet("setMinPacingRateKBps", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMinPacingRateKBps");
             return v >= 0 ? v : 16;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -6905,10 +6064,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue() / 1024.0;
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendBps (average send bandwidth in KB/s)
@@ -6950,35 +6106,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   5000, 60000, 1000, "stream.con.initialRTT.out", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingConnectionReflector.invokeConnectionOptionsSet("setMaxRtt", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMaxRttStatic");
             return v > 0 ? v : 10000;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (ms), falling back to udp.sendConfirmTime
@@ -7022,35 +6166,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   100, 3000, 50, "stream.con.initialRTT.out", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingConnectionReflector.invokeConnectionOptionsSet("setDefaultResendDelay", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getDefaultResendDelayStatic");
             return v > 0 ? v : 1000;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (RTT, ms)
@@ -7092,35 +6224,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1, 1000, 10, "stream.con.initialRTT.out", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingConnectionReflector.invokeConnectionOptionsSet("setImmediateAckDelay", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getImmediateAckDelayStatic");
             return v > 0 ? v : 80;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (RTT, ms)
@@ -7169,35 +6289,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   120000, 600000, 30000, "udp.sendConfirmTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingReflector.invokeSetInt("setDefaultInactivityTimeout", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getDefaultInactivityTimeout");
             return v > 0 ? v : 300000;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -7240,35 +6348,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   2, 12, 1, "stream.connectFailed", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             StreamingConnectionReflector.invokeConnectionSet("setMaxSynResends", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionInt("getMaxSynResendsStatic");
             return v > 0 ? v : 5;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.connectFailed event count in last 60s
@@ -7317,26 +6413,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                    8, 24, 1, "transport.sendProcessingTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("netdb.searchLimit", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return _context.getProperty("netdb.searchLimit", 16);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -7345,10 +6432,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
@@ -7391,26 +6475,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   4, 64, 1, "transport.sendProcessingTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             IterativeSearchJob.setMaxConcurrentDefault(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return IterativeSearchJob.getMaxConcurrentDefault();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -7419,10 +6494,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
@@ -7470,26 +6542,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1000, 6000, 250, "transport.sendProcessingTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("netdb.singleSearchTime", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return _context.getProperty("netdb.singleSearchTime", 6000);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -7498,10 +6561,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, per-peer network latency proxy)
@@ -7580,26 +6640,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   3000, 15000, 1000, "client.leaseSetFoundRemoteTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             IterativeSearchJob.setMaxLeaseSetLookupTime(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return IterativeSearchJob.getMaxLeaseSetLookupTime();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -7608,10 +6659,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = client.leaseSetFoundRemoteTime (ms): time for successful
@@ -7689,27 +6737,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   3000, 5000, 500, "netDb.successTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             IterativeSearchJob.setMaxRouterInfoLookupTime(value);
             _context.router().saveConfig("i2p.tunnel.build.nextHopLookupTimeout", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return IterativeSearchJob.getMaxRouterInfoLookupTime();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -7721,10 +6760,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = netDb.successTime (ms): avg successful NetDb lookup (RI + LS).
@@ -7803,27 +6839,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   32, 1024, 32, "udp.outboundEstablishTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2np.udp.maxConcurrentEstablish", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return _context.getProperty("i2np.udp.maxConcurrentEstablish",
                    EstablishmentManager.getDefaultLowMaxConcurrentEstablish());
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -7832,10 +6859,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.outboundEstablishTime (avg ms per outbound handshake)
@@ -7903,26 +6927,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   200, "peer.activeProfileCount", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             ProfileOrganizer.setDefaultMaxProfiles(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return ProfileOrganizer.getDefaultMaxProfilesValue();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -7931,10 +6946,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = peer.activeProfileCount (active profiles in RAM)
@@ -7972,26 +6984,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   50, 2000, 50, "peer.fastPeerCount", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             ProfileOrganizer.setDefaultMinFastPeers(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return ProfileOrganizer.getDefaultMinFastPeers();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -8000,10 +7003,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int maxFast = ProfileOrganizer.getDefaultMaxFastPeers();
@@ -8058,26 +7058,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   200, 3000, 50, "peer.qualityPeerCount", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             ProfileOrganizer.setDefaultMaxFastPeers(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return ProfileOrganizer.getDefaultMaxFastPeers();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -8086,10 +7077,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int minFast = ProfileOrganizer.getDefaultMinFastPeers();
@@ -8132,26 +7120,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   50, 2000, 50, "peer.qualityPeerCount", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             ProfileOrganizer.setMinHighCapacityPeers(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return ProfileOrganizer.getMinHighCapacityPeers();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -8160,10 +7139,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int maxHighCap = ProfileOrganizer.getDefaultMaxHighCapPeers();
@@ -8212,26 +7188,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   200, 4000, 50, "peer.qualityPeerCount", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             ProfileOrganizer.setDefaultMaxHighCapPeers(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return ProfileOrganizer.getDefaultMaxHighCapPeers();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -8240,10 +7207,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int minHighCap = ProfileOrganizer.getMinHighCapacityPeers();
@@ -8290,34 +7254,22 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   5000, 15000, 1000, "tunnel.buildClientExpire", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.tunnel.build.requestTimeout", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return BuildRequestor.getRequestTimeout(_context);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.buildClientExpire event count (timed-out builds per period)
@@ -8385,34 +7337,22 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   5000, 10000, 1000, "tunnel.buildFailFirstHop", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.tunnel.build.firstHopTimeout", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return BuildRequestor.getFirstHopTimeout(_context);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.buildFailFirstHop event count (first-hop delivery failures per period)
@@ -8485,26 +7425,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                    Math.max(SystemVersion.getCores() * 2, 16), 32, 4, "tunnel.buildSuccessRate", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             BuildExecutor.setMaxConcurrentBuilds(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return BuildExecutor.getMaxConcurrentBuilds();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -8514,10 +7445,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue() / 100.0;
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.buildSuccessRate (normalized 0.0-1.0)
@@ -8653,26 +7581,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1, 4, 1, "tunnel.buildSuccessRate", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             TunnelPeerSelector.setWindowMultiplier(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return TunnelPeerSelector.getWindowMultiplier();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) {return Double.NaN;}
@@ -8682,10 +7601,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue() / 100.0;
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.buildSuccessRate (normalized 0.0-1.0)
@@ -8731,34 +7647,22 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   10, 64, 2, "tunnel.dropLookupThrottle", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.tunnel.build.maxLookupLimit", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return _context.getProperty("i2p.tunnel.build.maxLookupLimit", 32);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double pendingQueue = getAdditionalStat(_context, "tunnel.pendingLookupQueue");
@@ -8813,27 +7717,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   10, 80, 5, "tunnel.nextHopLookupSuccessTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.tunnel.build.percentLookupLimit", Integer.toString(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return _context.getProperty("i2p.tunnel.build.percentLookupLimit",
                                         SystemVersion.isSlow() ? 15 : 40);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             double observed = getAdditionalStat(_context, "tunnel.nextHopLookupSuccessTime");
             if (!Double.isNaN(observed))
@@ -8846,10 +7741,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return Double.NaN;
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double pendingQueue = getAdditionalStat(_context, "tunnel.pendingLookupQueue");
@@ -8898,26 +7790,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   2, 16, 1, "ntcp.readQueueSize", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             Reader.setThreadCount(value);
             Transport t = _context.commSystem().getTransports().get(NTCPTransport.STYLE);
             if (t instanceof NTCPTransport) ((NTCPTransport) t).adjustReaderThreads();
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** Reader.getThreadCount */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return Reader.getThreadCount(); }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -8926,10 +7809,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Reclaim parked threads when the pool is massively under-utilized
@@ -9013,26 +7893,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   2, 16, 1, "ntcp.sendTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             Writer.setThreadCount(value);
             Transport t = _context.commSystem().getTransports().get(NTCPTransport.STYLE);
             if (t instanceof NTCPTransport) ((NTCPTransport) t).adjustWriterThreads();
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** Writer.getThreadCount */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return Writer.getThreadCount(); }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -9041,10 +7912,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Reclaim parked threads when the pool is massively under-utilized
@@ -9129,26 +7997,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   2000, 30000, 1000, "ntcp.failsafeIterationTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             NTCPTransport.setFailsafeIterationFreq(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return (int) NTCPTransport.getFailsafeIterationFreq();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -9157,10 +8016,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = ntcp.failsafeIterationTime (ms, time to iterate all connections)
@@ -9210,10 +8066,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   2, 16, 1, "ntcp.sendPool.utilization", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             NTCPTransport.setSendFinisherMaxThreads(value);
             Transport t = _context.commSystem().getTransports().get(NTCPTransport.STYLE);
@@ -9221,18 +8074,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 ((NTCPTransport) t).adjustSendFinisherThreads(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return NTCPTransport.getSendFinisherMaxThreads();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -9241,10 +8088,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Reclaim parked threads when the pool is massively under-utilized
@@ -9304,26 +8148,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   32, "udp.allowConcurrentActive", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             PeerState.setMaxConcurrentMessages(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return PeerState.getMaxConcurrentMessages();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -9332,10 +8167,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.allowConcurrentActive (avg concurrent messages per peer)
@@ -9433,27 +8265,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   16, memoryDerivedInitMsgMax(), 4, "udp.sendConfirmTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.transport.udp.initConcurrentMsgs", Integer.toString(value));
             PeerState.setInitConcurrentMsgs(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return PeerState.getInitConcurrentMsgs();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) { return Double.NaN; }
@@ -9474,10 +8297,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return Math.max(_min, Math.min(_max, byFree));
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -9517,27 +8337,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   8, 128, 2, "udp.sendConfirmTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.transport.udp.minConcurrentMsgs", Integer.toString(value));
             PeerState.setMinConcurrentMsgs(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return PeerState.getMinConcurrentMsgs();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) { return Double.NaN; }
@@ -9546,10 +8357,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double memPressure = getMemoryPressure();
@@ -9578,27 +8386,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   500, 2000, 50, "udp.sendConfirmTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.transport.udp.initRTO", Integer.toString(value));
             PeerState.setInitRTO(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return PeerState.getInitRTO();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) { return Double.NaN; }
@@ -9607,10 +8406,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = avg RTT in ms
@@ -9654,27 +8450,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   100, 500, 50, "udp.sendConfirmTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.transport.udp.minRTO", Integer.toString(value));
             PeerState.setMinRTO(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return PeerState.getMinRTO();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) { return Double.NaN; }
@@ -9683,10 +8470,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double retransmits = getAdditionalStat(_context, "udp.retransmitEvents");
@@ -9741,27 +8525,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   3000, 30000, 1000, "udp.sendConfirmTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.transport.udp.maxRTO", Integer.toString(value));
             PeerState.setMaxRTO(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return PeerState.getMaxRTO();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) { return Double.NaN; }
@@ -9770,10 +8545,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double failures = getAdditionalStat(_context, "udp.sendExpired");
@@ -9839,27 +8611,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   65536, "udp.avgSendWindow", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.transport.udp.maxSendWindow", Integer.toString(value));
             PeerState.setMaxSendWindow(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return PeerState.getMaxSendWindow();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) { return Double.NaN; }
@@ -9868,10 +8631,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -9941,27 +8701,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1, 4, 1, "udp.avgSendWindow", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.transport.udp.postRTOWindowMTUs", Integer.toString(value));
             PeerState.setPostRTOWindowMTUs(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return PeerState.getPostRTOWindowMTUs();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) { return Double.NaN; }
@@ -9970,10 +8721,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double congCWIN = getAdditionalStat(_context, "udp.congestionOccurred");
@@ -10022,7 +8770,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class SendPoolCapacityParam extends BaseParam {
 
-/** SendPoolCapacityParam */
 SendPoolCapacityParam() {
             super("ntcp.sendPool.capacity", "NTCP send pool capacity",
                   SUB_TRANSPORT,
@@ -10036,11 +8783,7 @@ SendPoolCapacityParam() {
                   64, "ntcp.sendPool.utilization", _context);
         }
 
-        /**
-         * getDefaultMin.
-         */
         @Override
-        /** ctx */
         protected int getDefaultMin(RouterContext ctx) {
             // Floor: at least 64, or 1 peer per slot up to 256, scaled by cores
             int active = ctx.commSystem().countActivePeers();
@@ -10048,11 +8791,7 @@ SendPoolCapacityParam() {
             return Math.max(64, Math.min(256 * Math.max(1, cores / 4), active / Math.max(4, cores / 2)));
         }
 
-        /**
-         * getDefaultMax.
-         */
         @Override
-        /** ctx */
         protected int getDefaultMax(RouterContext ctx) {
             int cores = SystemVersion.getCores();
             long memMB = SystemVersion.getMaxMemory() / (1024 * 1024);
@@ -10063,28 +8802,19 @@ SendPoolCapacityParam() {
             return Math.max(byCores, byMem);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             TransportImpl.setSendPoolCapacity(value);
             Transport t = _context.commSystem().getTransports().get(NTCPTransport.STYLE);
             if (t instanceof TransportImpl) ((TransportImpl) t).resizeSendPool();
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return TransportImpl.getSendPoolCapacity();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10093,10 +8823,7 @@ SendPoolCapacityParam() {
             return rate.getAverageValue();
         }
 
-/**
- * computeTarget.
- */
-/** observed */
+/** Compute target value based on observed stat and configured limits. */
 protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int activePeers = _context.commSystem().countActivePeers();
@@ -10191,26 +8918,17 @@ protected int computeTarget(double observed) {
                   64, "udp.sendConfirmTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             Tuner.setInternalQueueSize(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return Tuner.getInternalQueueSize();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10219,10 +8937,7 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -10274,26 +8989,17 @@ protected int computeTarget(double observed) {
                   32, 512, 8, "udp.sendConfirmTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             EstablishmentManager.setMaxQueuedOutbound(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return EstablishmentManager.getMaxQueuedOutbound();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10302,10 +9008,7 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -10353,26 +9056,17 @@ protected int computeTarget(double observed) {
                   128, 2048, 16, "ntcp.writeBufs.size", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             NTCPConnection.setMaxWriteBufs(value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return NTCPConnection.getMaxWriteBufs();
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10381,10 +9075,7 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = ntcp.writeBufs.size (avg write buffer count per connection)
@@ -10466,26 +9157,17 @@ protected int computeTarget(double observed) {
                   12, 256, 4, "transport.sendProcessingTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             TestJob.maxQueuedTests = value;
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return TestJob.maxQueuedTests;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10494,10 +9176,7 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, message lifetime)
@@ -10543,26 +9222,17 @@ protected int computeTarget(double observed) {
                   10000, 120000, 5000, "transport.sendProcessingTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.tunnel.testJob.minTestDelay", String.valueOf(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return _context.getProperty("i2p.tunnel.testJob.minTestDelay", 30000);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10571,10 +9241,7 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms)
@@ -10616,26 +9283,17 @@ protected int computeTarget(double observed) {
                   60000, 600000, 10000, "transport.sendProcessingTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.tunnel.testJob.maxTestDelay", String.valueOf(value));
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return _context.getProperty("i2p.tunnel.testJob.maxTestDelay", 90000);
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10644,10 +9302,7 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms)
@@ -10682,26 +9337,17 @@ protected int computeTarget(double observed) {
                   2, 128, 1, "i2ptunnel.serverHandler.queueDepth", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             I2PTunnelReflector.invokeSetInt("setServerHandlerThreads", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return I2PTunnelReflector.invokeGetInt("getServerHandlerThreads");
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10710,10 +9356,7 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = i2ptunnel.serverHandler.queueDepth (60s rolling avg)
@@ -10762,26 +9405,17 @@ protected int computeTarget(double observed) {
                    4, 8192, 4, "i2ptunnel.clientRunner.poolSize", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             I2PTunnelReflector.invokeSetInt("setClientRunnerMax", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return I2PTunnelReflector.invokeGetInt("getClientRunnerMax");
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10790,10 +9424,7 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = i2ptunnel.clientRunner.poolSize (60s rolling avg)
@@ -10822,26 +9453,17 @@ protected int computeTarget(double observed) {
                   5000, 120000, 5000, "i2ptunnel.serverHandler.socketConnectTime", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             I2PTunnelReflector.invokeSetInt("setSocketConnectTimeout", value);
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return I2PTunnelReflector.invokeGetInt("getSocketConnectTimeout");
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10850,10 +9472,7 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = i2ptunnel.serverHandler.socketConnectTime (60s rolling avg, ms)
@@ -10897,10 +9516,7 @@ protected int computeTarget(double observed) {
                   2, 8, 1, "tunnel.buildHandler.queueSize", _context);
         }
 
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             if (_context.tunnelManager() instanceof TunnelPoolManager) {
                 ((TunnelPoolManager) _context.tunnelManager()).setBuildHandlerThreads(value);
@@ -10908,10 +9524,7 @@ protected int computeTarget(double observed) {
             }
         }
 
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int stored = TunnelPoolManager.getBuildHandlerThreads();
             if (_context.tunnelManager() instanceof TunnelPoolManager) {
@@ -10934,10 +9547,7 @@ protected int computeTarget(double observed) {
             return stored;
         }
 
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10946,10 +9556,7 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -11002,7 +9609,7 @@ protected int computeTarget(double observed) {
      */
     private static final long STARTUP_GRACE_MS = 5 * 60 * 1000L;
 
-    /** SystemHealth */
+    /** Tracks overall router health score for adaptive tuning decisions. */
     static class SystemHealth {
         private final RouterContext _ctx;
         private double _score = Double.NaN;
@@ -11631,20 +10238,11 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.participatingThrottle.minLimit", "Transit throttle min (tunnels)",
                   SUB_TRANSIT, 20, 500, 4, "tunnel.buildSuccessRate", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** ParticipatingThrottler.setParticipatingMinLimitvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { ParticipatingThrottler.setParticipatingMinLimit(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** ParticipatingThrottler.getParticipatingMinLimit */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingMinLimit(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -11652,10 +10250,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -11690,20 +10285,11 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.participatingThrottle.maxLimit", "Transit throttle max (tunnels)",
                   SUB_TRANSIT, 50, 1000, 8, "tunnel.buildSuccessRate", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** ParticipatingThrottler.setParticipatingMaxLimitvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { ParticipatingThrottler.setParticipatingMaxLimit(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** ParticipatingThrottler.getParticipatingMaxLimit */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingMaxLimit(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -11711,10 +10297,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -11746,20 +10329,11 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.participatingThrottle.percentLimit", "Transit throttle target (%)",
                   SUB_TRANSIT, 5, 100, 1, "tunnel.buildSuccessRate", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** ParticipatingThrottler.setParticipatingPctLimitvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { ParticipatingThrottler.setParticipatingPctLimit(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** ParticipatingThrottler.getParticipatingPctLimit */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingPctLimit(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -11767,10 +10341,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -11803,27 +10374,15 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.participatingThrottle.rejectThreshold", "Transit reject threshold (%)",
                   SUB_TRANSIT, 30, 100, 2, "jobQueue.loadRecoveryTime", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** ParticipatingThrottler.setRejectThresholdvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { ParticipatingThrottler.setRejectThreshold(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** ParticipatingThrottler.getRejectThreshold */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return ParticipatingThrottler.getRejectThreshold(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             if (Double.isNaN(observed)) return current;
@@ -11846,27 +10405,15 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.participatingThrottle.rejectSteepness", "Transit reject steepness",
                   SUB_TRANSIT, 100, 500, 10, "jobQueue.loadRecoveryTime", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** ParticipatingThrottler.setRejectSteepnessvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { ParticipatingThrottler.setRejectSteepness(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** ParticipatingThrottler.getRejectSteepness */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return ParticipatingThrottler.getRejectSteepness(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             if (Double.isNaN(observed)) return current;
@@ -11889,27 +10436,15 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.participatingThrottle.loadWeight", "Transit load weight (%)",
                   SUB_TRANSIT, 0, 300, 10, "jobQueue.loadRecoveryTime", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** ParticipatingThrottler.setLoadWeightvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { ParticipatingThrottler.setLoadWeight(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** ParticipatingThrottler.getLoadWeight */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return ParticipatingThrottler.getLoadWeight(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             if (Double.isNaN(observed)) return current;
@@ -11931,20 +10466,11 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.requestThrottle.minLimit", "Build request throttle min (ms)",
                   SUB_TRANSIT, 1, 100, 2, "tunnel.throttleParticipatingReject", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** RequestThrottler.setRequestMinLimitvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { RequestThrottler.setRequestMinLimit(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** RequestThrottler.getRequestMinLimit */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return RequestThrottler.getRequestMinLimit(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -11952,10 +10478,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -11980,20 +10503,11 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.requestThrottle.maxLimit", "Build request throttle max (ms)",
                   SUB_TRANSIT, 10, 1000, 8, "tunnel.throttleParticipatingReject", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** RequestThrottler.setRequestMaxLimitvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { RequestThrottler.setRequestMaxLimit(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** RequestThrottler.getRequestMaxLimit */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return RequestThrottler.getRequestMaxLimit(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12001,10 +10515,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -12032,20 +10543,11 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.requestThrottle.percentLimit", "Build request throttle target (%)",
                   SUB_TRANSIT, 1, 100, 1, "tunnel.throttleParticipatingReject", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** RequestThrottler.setRequestPctLimitvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { RequestThrottler.setRequestPctLimit(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** RequestThrottler.getRequestPctLimit */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return RequestThrottler.getRequestPctLimit(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12053,10 +10555,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -12083,20 +10582,11 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.requestThrottle.burst1sThreshold", "Build request burst threshold",
                   SUB_TRANSIT, 5, 20, 1, "tunnel.throttleParticipatingReject", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** RequestThrottler.setRequestBurst1sThresholdvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { RequestThrottler.setRequestBurst1sThreshold(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** RequestThrottler.getRequestBurst1sThreshold */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return RequestThrottler.getRequestBurst1sThreshold(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12104,10 +10594,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -12133,27 +10620,15 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.requestThrottle.rejectThreshold", "Request reject threshold (%)",
                   SUB_TRANSIT, 30, 100, 2, "jobQueue.loadRecoveryTime", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** RequestThrottler.setRequestRejectThresholdvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { RequestThrottler.setRequestRejectThreshold(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** RequestThrottler.getRequestRejectThreshold */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return RequestThrottler.getRequestRejectThreshold(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             if (Double.isNaN(observed)) return current;
@@ -12176,27 +10651,15 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.requestThrottle.rejectSteepness", "Request reject steepness",
                   SUB_TRANSIT, 100, 500, 10, "jobQueue.loadRecoveryTime", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** RequestThrottler.setRequestRejectSteepnessvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { RequestThrottler.setRequestRejectSteepness(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** RequestThrottler.getRequestRejectSteepness */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return RequestThrottler.getRequestRejectSteepness(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             if (Double.isNaN(observed)) return current;
@@ -12219,27 +10682,15 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.requestThrottle.loadWeight", "Request load weight (%)",
                   SUB_TRANSIT, 0, 300, 10, "jobQueue.loadRecoveryTime", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** RequestThrottler.setRequestLoadWeightvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { RequestThrottler.setRequestLoadWeight(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** RequestThrottler.getRequestLoadWeight */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return RequestThrottler.getRequestLoadWeight(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             if (Double.isNaN(observed)) return current;
@@ -12266,20 +10717,11 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.requestThrottle.highLoadLagMs", "High-load lag threshold (ms)",
                   SUB_TRANSIT, 200, 5000, 100, "jobQueue.jobLag", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** RequestThrottler.setHighLoadLagMsvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { RequestThrottler.setHighLoadLagMs(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** RequestThrottler.getHighLoadLagMs */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return RequestThrottler.getHighLoadLagMs(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12287,10 +10729,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = avg jobLag (ms)
@@ -12314,20 +10753,11 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.requestThrottle.highLoadCpuPct", "High-load CPU threshold (%)",
                   SUB_TRANSIT, 50, 100, 1, "jobQueue.jobLag", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** RequestThrottler.setHighLoadCpuPctvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { RequestThrottler.setHighLoadCpuPct(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** RequestThrottler.getHighLoadCpuPct */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return RequestThrottler.getHighLoadCpuPct(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12335,10 +10765,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Hold steady — CPU threshold is system-dependent, not load-reactive
@@ -12357,20 +10784,11 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.requestThrottle.moderateLoadLagMs", "Moderate-load lag threshold (ms)",
                   SUB_TRANSIT, 100, 3000, 50, "jobQueue.jobLag", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** RequestThrottler.setModerateLoadLagMsvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { RequestThrottler.setModerateLoadLagMs(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** RequestThrottler.getModerateLoadLagMs */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return RequestThrottler.getModerateLoadLagMs(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12378,10 +10796,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Keep moderate threshold roughly half of high threshold
@@ -12403,20 +10818,11 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.requestThrottle.moderateLoadCpuPct", "Moderate-load CPU threshold (%)",
                   SUB_TRANSIT, 40, 100, 1, "jobQueue.jobLag", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** RequestThrottler.setModerateLoadCpuPctvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { RequestThrottler.setModerateLoadCpuPct(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** RequestThrottler.getModerateLoadCpuPct */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return RequestThrottler.getModerateLoadCpuPct(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12424,10 +10830,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             return current;
@@ -12446,20 +10849,11 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.requestThrottle.sustainedHighLoadMs", "Sustained high-load window (ms)",
                   SUB_TRANSIT, 5000, 120_000, 5000, "jobQueue.jobLag", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** RequestThrottler.setSustainedHighLoadMsvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { RequestThrottler.setSustainedHighLoadMs(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** RequestThrottler.getSustainedHighLoadMs */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return (int) RequestThrottler.getSustainedHighLoadMs(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12467,10 +10861,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -12494,20 +10885,11 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", "Sustained moderate-load window (ms)",
                   SUB_TRANSIT, 10_000, 300_000, 5000, "jobQueue.jobLag", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** RequestThrottler.setSustainedModerateLoadMsvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { RequestThrottler.setSustainedModerateLoadMs(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** RequestThrottler.getSustainedModerateLoadMs */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return (int) RequestThrottler.getSustainedModerateLoadMs(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12515,10 +10897,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -12543,20 +10922,11 @@ protected int computeTarget(double observed) {
             super("tunnel.pool.failureThreshold", "Pool failure threshold (count)",
                   SUB_TUNNEL, 3, 20, 1, "tunnel.buildSuccessRate", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** BuildExecutor.setPoolFailureThresholdvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { BuildExecutor.setPoolFailureThreshold(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** BuildExecutor.getPoolFailureThreshold */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return BuildExecutor.getPoolFailureThreshold(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12564,10 +10934,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -12589,20 +10956,11 @@ protected int computeTarget(double observed) {
             super("tunnel.pool.backoffMs", "Pool rebuild backoff (ms)",
                   SUB_TUNNEL, 1000, 30000, 2000, "tunnel.buildSuccessRate", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** BuildExecutor.setPoolBackoffMsvalue */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) { BuildExecutor.setPoolBackoffMs(value); }
-        /**
-         * getRuntimeValue.
-         */
-        /** BuildExecutor.getPoolBackoffMs */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() { return (int) BuildExecutor.getPoolBackoffMs(); }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12610,10 +10968,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -12642,24 +10997,15 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.targetBuffer", "Pool spare tunnel buffer",
                   SUB_TUNNEL, 2, 8, 1, "tunnel.buildSuccessRate", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.tunnel.targetBuffer", Integer.toString(value));
         }
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return _context.getProperty("i2p.tunnel.targetBuffer", 0);
         }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12667,10 +11013,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -12724,24 +11067,15 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.untestedMultiplier", "Untested tunnel cap multiplier",
                   SUB_TUNNEL, 1, 8, 1, "tunnel.buildSuccessRate", _context);
         }
-        /**
-         * applyValue.
-         */
-        /** value */
+        /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.tunnel.untestedMultiplier", Integer.toString(value));
         }
-        /**
-         * getRuntimeValue.
-         */
-        /** RuntimeValue */
+        /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             return _context.getProperty("i2p.tunnel.untestedMultiplier", 2);
         }
-        /**
-         * getObservedStat.
-         */
-        /** ctx */
+        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12749,10 +11083,7 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /**
-         * computeTarget.
-         */
-        /** observed */
+        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double memPressure = getMemoryPressure();

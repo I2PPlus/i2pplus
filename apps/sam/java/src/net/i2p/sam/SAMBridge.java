@@ -37,14 +37,12 @@ import net.i2p.util.PortMapper;
 import net.i2p.util.SimpleTimer2;
 import java.io.Writer;
 
-
 /**
  * SAM bridge implementation.
  * This is the main entry point for SAM.
  *
  * @author human
  */
-/** SAMBridge */
 public class SAMBridge implements Runnable, ClientApp {
     private static final Log _logStatic = new Log(SAMBridge.class);
     private final Log _log;
@@ -86,74 +84,39 @@ public class SAMBridge implements Runnable, ClientApp {
     private final ClientAppManager _mgr;
     private volatile ClientAppState _state = UNINITIALIZED;
 
-
-    /**
-     * DEFAULT_SAM_KEYFILE.
-     */
-    /** DEFAULT_SAM_KEYFILE */
+    /** Default filename for persistent SAM private key storage. */
     public static final String DEFAULT_SAM_KEYFILE = "sam.keys";
     static final String DEFAULT_SAM_CONFIGFILE = "sam.config";
     private static final String PROP_SAM_KEYFILE = "sam.keyfile";
     private static final String PROP_SAM_SSL = "sam.useSSL";
-    /**
-     * PROP_TCP_HOST.
-     */
-    /** PROP_TCP_HOST */
+    /** Property for the SAM TCP listen address. */
     public static final String PROP_TCP_HOST = "sam.tcp.host";
-    /**
-     * PROP_TCP_PORT.
-     */
-    /** PROP_TCP_PORT */
+    /** Property for the SAM TCP listen port. */
     public static final String PROP_TCP_PORT = "sam.tcp.port";
-    /**
-     * PROP_AUTH.
-     */
-    /** PROP_AUTH */
+    /** Property to enable SAM bridge authentication. */
     public static final String PROP_AUTH = "sam.auth";
-    /**
-     * PROP_PW_PREFIX.
-     */
-    /** PROP_PW_PREFIX */
+    /** Property prefix for SAM password hash entries. */
     public static final String PROP_PW_PREFIX = "sam.auth.";
-    /**
-     * PROP_PW_SUFFIX.
-     */
-    /** PROP_PW_SUFFIX */
+    /** Property suffix for SAM password hash entries. */
     public static final String PROP_PW_SUFFIX = ".shash";
-    /**
-     * DEFAULT_TCP_HOST.
-     */
+    /** Default listen address for the SAM TCP socket. */
     /** ignored */
     protected static final String DEFAULT_TCP_HOST = "127.0.0.1";
-    /**
-     * DEFAULT_TCP_PORT.
-     */
+    /** Default port for the SAM TCP socket. */
     /** ignored */
     protected static final String DEFAULT_TCP_PORT = "7656";
 
-    /**
-     * PROP_DATAGRAM_HOST.
-     */
-    /** PROP_DATAGRAM_HOST */
+    /** Property for the SAM datagram listen address. */
     public static final String PROP_DATAGRAM_HOST = "sam.udp.host";
-    /**
-     * PROP_DATAGRAM_PORT.
-     */
-    /** PROP_DATAGRAM_PORT */
+    /** Property for the SAM datagram listen port. */
     public static final String PROP_DATAGRAM_PORT = "sam.udp.port";
-    /**
-     * DEFAULT_DATAGRAM_HOST.
-     */
+    /** Default listen address for the SAM datagram socket. */
     /** ignored */
     protected static final String DEFAULT_DATAGRAM_HOST = "127.0.0.1";
-    /**
-     * DEFAULT_DATAGRAM_PORT_INT.
-     */
+    /** Default port for the SAM datagram socket. */
     /** ignored */
     protected static final int DEFAULT_DATAGRAM_PORT_INT = 7655;
-    /**
-     * DEFAULT_DATAGRAM_PORT.
-     */
+    /** Default port string for the SAM datagram socket. */
     /** ignored */
     protected static final String DEFAULT_DATAGRAM_PORT = Integer.toString(DEFAULT_DATAGRAM_PORT_INT);
 
@@ -259,6 +222,8 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
+     * Open and bind the server socket (TCP or SSL).
+     *
      * @since 0.9.6
      */
     /** ignored */
@@ -709,6 +674,8 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
+     * Start the listener thread and schedule periodic stale-session sweeps.
+     *
      * @since 0.9.6
      */
     /** ignored */
@@ -717,7 +684,7 @@ public class SAMBridge implements Runnable, ClientApp {
         if (Boolean.parseBoolean(System.getProperty("sam.shutdownOnOOM"))) {
             t.addOOMEventThreadListener(new I2PAppThread.OOMEventListener() {
                 /**
-                 * outOfMemory.
+                 * Log the error and terminate on OutOfMemoryError.
                  */
                 /** ignored */
                 public void outOfMemory(OutOfMemoryError err) {
@@ -733,7 +700,7 @@ public class SAMBridge implements Runnable, ClientApp {
         I2PAppContext.getGlobalContext().simpleTimer2().addEvent(
             new SimpleTimer2.TimedEvent(I2PAppContext.getGlobalContext().simpleTimer2()) {
                 /**
-                 * timeReached.
+                 * Remove stale SAM sessions and reschedule the sweep.
                  */
                 @Override
                 /** ignored */
@@ -749,6 +716,8 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
+     * Parsed command-line options for the SAM bridge.
+     *
      * @since 0.9.6
      */
     /** ignored */
@@ -761,7 +730,7 @@ public class SAMBridge implements Runnable, ClientApp {
         private final File configFile;
 
         /**
-         * Options.
+         * Configure with parsed command-line values.
          */
         /** ignored */
         public Options(String host, int port, boolean isSSL, Properties opts, String keyFile, File configFile) {
@@ -955,7 +924,7 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
-     * run.
+     * Accept incoming SAM connections and dispatch to handlers.
      */
     /** ignored */
     public void run() {
@@ -988,7 +957,7 @@ public class SAMBridge implements Runnable, ClientApp {
                     }
 
                     /**
-                     * run.
+                     * Process a single SAM handshake and dispatch to the appropriate handler.
                      */
                     /** ignored */
                     public void run() {
@@ -1031,7 +1000,7 @@ public class SAMBridge implements Runnable, ClientApp {
                         }
                     }
 
-                    /** @since 0.9.20 */
+                    /** Close the handler socket. @since 0.9.20 */
                     public void stopHandling() {
                         try { s.close(); } catch (IOException ioe) { /* ignored */ }
                     }

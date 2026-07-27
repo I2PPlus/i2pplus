@@ -8,7 +8,7 @@ package org.cybergarage.http;
 import java.io.InputStream;
 import org.cybergarage.util.Debug;
 
-/** comment */
+/** HTTP response message with status code, headers, and content body. */
 public class HTTPResponse extends HTTPPacket {
     ////////////////////////////////////////////////
     //	Constructor
@@ -135,7 +135,7 @@ public class HTTPResponse extends HTTPPacket {
         return str.toString();
     }
 
-    /** method comment */
+    /** Outputs the full HTTP response to the debug log. */
     public void print() {
         Debug.message(toString());
     }

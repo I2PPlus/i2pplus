@@ -43,7 +43,7 @@ import net.i2p.util.Log;
 public class RouterKeyGenerator extends RoutingKeyGenerator {
     private final Log _log;
     private final I2PAppContext _context;
-/** Routerkeygenerator */
+    /** Constructor that initializes GMT date formatter and generates current routing key modifier data. */
 
     public RouterKeyGenerator(I2PAppContext context) {
         _log = context.logManager().getLog(RoutingKeyGenerator.class);
@@ -87,7 +87,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     }
 
     /**
-     * getLastChanged.
+     * Time the routing key modifier data was last regenerated.
      */
     @Override
     public long getLastChanged() {

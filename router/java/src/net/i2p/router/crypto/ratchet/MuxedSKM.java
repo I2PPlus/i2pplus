@@ -26,16 +26,16 @@ public class MuxedSKM extends SessionKeyManager {
     // ElG is about this much slower than EC
     private static final int ELG_SLOW_FACTOR = 5;
     private static final int RESTART_COUNTERS = 500;
-/** Muxedskm */
+    /** Combines ElGamal and ECIES SKMs with adaptive decrypt ordering. */
 
     public MuxedSKM(TransientSessionKeyManager elg, RatchetSKM ec) {
         _elg = elg;
         _ec = ec;
     }
-/** Return the elgSKM */
+    /** Return the elgSKM */
 
     public TransientSessionKeyManager getElgSKM() { return _elg; }
-/** Return the eCSKM */
+    /** Return the eCSKM */
 
     public RatchetSKM getECSKM() { return _ec; }
 
@@ -141,15 +141,11 @@ public class MuxedSKM extends SessionKeyManager {
         return null;
     }
 
-    /**
-     * getTagsToSend.
-     */
+    /** @return 0, tag management is handled by ratchet protocol */
     @Override
     public int getTagsToSend() { return 0; }
 
-    /**
-     * getLowThreshold.
-     */
+    /** @return 0, threshold not used for ratchet sessions */
     @Override
     public int getLowThreshold() { return 0; }
 
@@ -175,9 +171,7 @@ public class MuxedSKM extends SessionKeyManager {
         return false;
     }
 
-    /**
-     * getAvailableTags.
-     */
+    /** Delegates to the appropriate key manager by encryption type. */
     @Override
     public int getAvailableTags(PublicKey target, SessionKey key) {
         EncType type = target.getType();
@@ -188,9 +182,7 @@ public class MuxedSKM extends SessionKeyManager {
         return 0;
     }
 
-    /**
-     * getAvailableTimeLeft.
-     */
+    /** Delegates to the appropriate key manager by encryption type. */
     @Override
     public long getAvailableTimeLeft(PublicKey target, SessionKey key) {
         EncType type = target.getType();
@@ -239,9 +231,7 @@ public class MuxedSKM extends SessionKeyManager {
         _ec.tagsReceived(key, tag, expire);
     }
 
-    /**
-     * consumeTag.
-     */
+    /** Tries ElGamal tag lookup first, falls back to ratchet lookup. */
     @Override
     public SessionKey consumeTag(SessionTag tag) {
         SessionKey rv = _elg.consumeTag(tag);
@@ -252,18 +242,14 @@ public class MuxedSKM extends SessionKeyManager {
         return rv;
     }
 
-    /**
-     * shutdown.
-     */
+    /** Shuts down both ElGamal and ECIES key managers. */
     @Override
     public void shutdown() {
         _elg.shutdown();
         _ec.shutdown();
     }
 
-    /**
-     * renderStatusHTML.
-     */
+    /** Renders debug status for both key managers. */
     @Override
     public void renderStatusHTML(Writer out) throws IOException {
         _elg.renderStatusHTML(out);

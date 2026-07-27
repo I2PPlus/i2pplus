@@ -71,7 +71,7 @@ public class ShellService implements ClientApp {
     private Process _p;
 
     /**
-     * ShellService.
+     * Creates a ShellService from command-line args, validating the executable and setting up log files.
      */
     public ShellService(I2PAppContext context, ClientAppManager listener, String[] args) {
         _context = context;
@@ -124,14 +124,12 @@ public class ShellService implements ClientApp {
             }
         }
 
-
         _errorLog = new File(pluginDir, "error.log");
         _outputLog = new File(pluginDir, "output.log");
         _pb.redirectOutput(_outputLog);
         _pb.redirectError(_errorLog);
         if (_log.shouldDebug())
             _log.debug("ShellService: Logs: " + _errorLog.getAbsolutePath() + ", " + _outputLog.getAbsolutePath());
-
 
         _pb.directory(pluginDir);
         if (_log.shouldDebug())

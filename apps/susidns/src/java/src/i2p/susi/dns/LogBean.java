@@ -24,9 +24,6 @@ import java.nio.charset.StandardCharsets;
  *
  * @since 0.9.35
  */
-/**
- * Default constructor.
- */
 public class LogBean extends BaseBean
 {
     private String logName;

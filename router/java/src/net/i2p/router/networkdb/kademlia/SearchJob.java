@@ -42,47 +42,43 @@ import net.i2p.util.SystemVersion;
  * Does not update peer profile statistics.
  */
 class SearchJob extends JobImpl {
-    /**
-     * _log.
-     */
+    /** Class logger. */
     protected final Log _log;
-    /**
-     * _facade.
-     */
+    /** Network database facade for peer lookups and storage. */
     protected final KademliaNetworkDatabaseFacade _facade;
-/** search state */
+    /** search state */
     private final SearchState _state;
-/** success job */
+    /** success job */
     private final Job _onSuccess;
-/** failure job */
+    /** failure job */
     private final Job _onFailure;
-/** expiration time */
+    /** expiration time */
     private final long _expiration;
-/** timeout in ms */
+    /** timeout in ms */
     private final long _timeoutMs;
-/** keep stats flag */
+    /** keep stats flag */
     private final boolean _keepStats;
-/** is lease flag */
+    /** is lease flag */
     private final boolean _isLease;
-/** pending requeue job */
+    /** pending requeue job */
     private Job _pendingRequeueJob;
-/** peer selector */
+    /** peer selector */
     private final PeerSelector _peerSelector;
-/** deferred searches list */
+    /** deferred searches list */
     private final List<Search> _deferredSearches;
-/** deferred cleared flag */
+    /** deferred cleared flag */
     private boolean _deferredCleared;
-/** start time */
+    /** start time */
     private long _startedOn;
-/** FF peers exhausted flag */
+    /** FF peers exhausted flag */
     private boolean _floodfillPeersExhausted;
-/** outstanding FF searches */
+    /** outstanding FF searches */
     private int _floodfillSearchesOutstanding;
-/** message ID bloom XOR */
+    /** message ID bloom XOR */
     private final long _msgIDBloomXor;
-/** search_bredth */
+    /** Max concurrent non-lease iterative searches. */
     private static int SEARCH_BREDTH = 3;
-/** search_bredth_lease */
+    /** Max concurrent lease search queries. */
     private static int SEARCH_BREDTH_LEASE = 8;
     /** Only send the 10 closest "don't tell me about" refs */
     static final int MAX_CLOSEST = 10;
@@ -132,9 +128,7 @@ class SearchJob extends JobImpl {
         getContext().statManager().addRateData("netDb.searchCount", 1);
     }
 
-    /**
-     * runJob.
-     */
+    /** Execute the next step of the iterative search. */
     public void runJob() {
         if (_startedOn <= 0) {_startedOn = getContext().clock().now();}
         if (_log.shouldDebug()) {
@@ -143,24 +137,16 @@ class SearchJob extends JobImpl {
         searchNext();
     }
 
-    /**
-     * getState.
-     */
+    /** @return search state tracking attempted/pending/failed peers */
     protected SearchState getState() {return _state;}
-    /**
-     * getFacade.
-     */
+    /** @return the network database facade */
     protected KademliaNetworkDatabaseFacade getFacade() {return _facade;}
-    /**
-     * getExpiration.
-     */
+    /** @return absolute time when this search expires */
     public long getExpiration() {return _expiration;}
-    /**
-     * getTimeoutMs.
-     */
+    /** @return timeout duration in milliseconds */
     public long getTimeoutMs() {return _timeoutMs;}
 
-/** default_floodfill_only */
+    /** Whether to query only floodfill peers by default. */
     private static final boolean DEFAULT_FLOODFILL_ONLY = true;
 
     /** this is now misnamed, as it is only used to determine whether to return floodfill peers only */
@@ -182,9 +168,7 @@ class SearchJob extends JobImpl {
     /** minimum timeout in ms */
     static final long MIN_TIMEOUT = 2*1000L;
 
-    /**
-     * getPerPeerTimeoutMs.
-     */
+    /** Per-peer timeout adjusted for floodfill and remaining time. */
     protected int getPerPeerTimeoutMs(Hash peer) {
         int timeout = 0;
         if (_floodfillPeersExhausted && _floodfillSearchesOutstanding <= 0) {timeout = _facade.getPeerTimeout(peer);}
@@ -204,7 +188,7 @@ class SearchJob extends JobImpl {
         else {return PER_FLOODFILL_PEER_TIMEOUT;}
     }
 
-/** max_peers_queried */
+    /** Hard limit on total peers to query before giving up. */
     private static int MAX_PEERS_QUERIED = 20;
 
     /**
@@ -243,7 +227,7 @@ class SearchJob extends JobImpl {
      */
     private boolean isLocal() {return _facade.getDataStore().isKnown(_state.getTarget());}
 
-/** @return expired */
+    /** @return expired */
     private boolean isExpired() {return getContext().clock().now() >= _expiration;}
 
     /** max # of concurrent searches */
@@ -343,7 +327,7 @@ class SearchJob extends JobImpl {
         }
     }
 
-/** Requeue pending */
+    /** Requeue pending */
     private void requeuePending() {
         // timeout/2 to average things out (midway through)
         long perPeerTimeout = getPerPeerTimeoutMs()/2;
@@ -351,7 +335,7 @@ class SearchJob extends JobImpl {
         else {requeuePending(REQUEUE_DELAY);}
     }
 
-/** Requeue pending */
+    /** Requeue pending */
     private void requeuePending(long ms) {
         if (_pendingRequeueJob == null) {
             _pendingRequeueJob = new RequeuePending(getContext());
@@ -363,21 +347,15 @@ class SearchJob extends JobImpl {
         getContext().jobQueue().addJob(_pendingRequeueJob);
     }
 
-/** RequeuePending. */
+    /** Job that re-invokes searchNext after a delay. */
     private class RequeuePending extends JobImpl {
-        /**
-         * RequeuePending.
-         */
+        /** @param enclosingContext the router context */
         public RequeuePending(RouterContext enclosingContext) {
             super(enclosingContext);
         }
-        /**
-         * getName.
-         */
+        /** @return "Requeue Search with Pending" */
         public String getName() {return "Requeue Search with Pending";}
-        /**
-         * runJob.
-         */
+        /** Re-invoke searchNext to check pending replies. */
         public void runJob() {searchNext();}
     }
 
@@ -425,7 +403,6 @@ class SearchJob extends JobImpl {
             sendLeaseSearch(router);
         } else {sendRouterSearch(router);}
     }
-
 
     /**
      * we're (probably) searching for a LeaseSet, so to be (overly) cautious, we're sending
@@ -544,17 +521,15 @@ class SearchJob extends JobImpl {
      *
      */
     protected class FailedJob extends JobImpl {
-/** peer hash */
+        /** peer hash */
         private Hash _peer;
-/** floodfill flag */
+        /** floodfill flag */
         private boolean _isFloodfill;
-/** penalize peer flag */
+        /** penalize peer flag */
         private boolean _penalizePeer;
-/** sent time */
+        /** sent time */
         private long _sentOn;
-        /**
-         * FailedJob.
-         */
+        /** @param enclosingContext the router context  @param peer the peer that failed */
         public FailedJob(RouterContext enclosingContext, RouterInfo peer) {
             this(enclosingContext, peer, true);
         }
@@ -570,9 +545,7 @@ class SearchJob extends JobImpl {
             _sentOn = enclosingContext.clock().now();
             _isFloodfill = FloodfillNetworkDatabaseFacade.isFloodfill(peer);
         }
-        /**
-         * runJob.
-         */
+        /** Notify the search of a peer timeout and optionally penalize. */
         public void runJob() {
             if (_isFloodfill) {_floodfillSearchesOutstanding--;}
             if (_state.completed()) {return;}
@@ -591,9 +564,7 @@ class SearchJob extends JobImpl {
             getContext().statManager().addRateData("netDb.failedPeers", 1);
             searchNext();
         }
-        /**
-         * getName.
-         */
+        /** @return "Timeout Kademlia Search" */
         public String getName() {return "Timeout Kademlia Search";}
     }
 
@@ -733,9 +704,7 @@ class SearchJob extends JobImpl {
         handleDeferred(false);
     }
 
-    /**
-     * addDeferred.
-     */
+    /** Add a deferred search to run on completion of this search. */
     public int addDeferred(Job onFind, Job onFail, long expiration, boolean isLease) {
         Search search = new Search(onFind, onFail, expiration, isLease);
         boolean ok = true;
@@ -758,7 +727,7 @@ class SearchJob extends JobImpl {
         } else {return deferred;}
     }
 
-/** Handle deferred */
+    /** Handle deferred */
     private void handleDeferred(boolean success) {
         List<Search> deferred = null;
         synchronized (_deferredSearches) {
@@ -782,47 +751,35 @@ class SearchJob extends JobImpl {
         }
     }
 
-/** Search. */
+    /** Holds callbacks and expiration for a deferred search. */
     private static class Search {
-/** on find */
+        /** on find */
         private final Job _onFind;
-/** on fail */
+        /** on fail */
         private final Job _onFail;
-/** expiration time */
+        /** expiration time */
         private final long _expiration;
 
-        /**
-         * Search.
-         */
+        /** @param onFind success callback  @param onFail failure callback  @param expiration deadline  @param isLease whether target is a LeaseSet */
         public Search(Job onFind, Job onFail, long expiration, boolean isLease) {
             _onFind = onFind;
             _onFail = onFail;
             _expiration = expiration;
         }
-        /**
-         * getOnFind.
-         */
+        /** @return success callback */
         public Job getOnFind() {return _onFind;}
-        /**
-         * getOnFail.
-         */
+        /** @return failure callback */
         public Job getOnFail() {return _onFail;}
-        /**
-         * getExpiration.
-         */
+        /** @return search deadline */
         public long getExpiration() {return _expiration;}
     }
 
-    /**
-     * getName.
-     */
+    /** @return "Start Kademlia NetDb Search" */
     public String getName() {return "Start Kademlia NetDb Search";}
 
-    /**
-     * toString.
-     */
+    /** @return string representation including elapsed time */
     @Override
-/** @return string */
+    /** @return string */
     public String toString() {
         return super.toString() + " started "
                + DataHelper.formatDuration((getContext().clock().now() - _startedOn)) + " ago";
@@ -853,4 +810,3 @@ class SearchJob extends JobImpl {
     /** Decrement the count of outstanding floodfill searches */
     void decrementOutstandingFloodfillSearches() {_floodfillSearchesOutstanding--;}
 }
-

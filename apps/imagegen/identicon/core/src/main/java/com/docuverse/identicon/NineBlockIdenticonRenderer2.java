@@ -11,7 +11,8 @@ import java.awt.image.BufferedImage;
 import java.math.BigInteger;
 
 /**
- * NineBlockIdenticonRenderer2.
+ * Generates 3x3 geometric identicons from hash codes using
+ * symmetric and rotated patch patterns.
  */
 public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
 
@@ -55,21 +56,21 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
     private Color backgroundColor = Color.WHITE;
 
     /**
-     * NineBlockIdenticonRenderer2.
+     * Constructs a renderer with the default patch size.
      */
     public NineBlockIdenticonRenderer2() {
         setPatchSize(DEFAULT_PATCH_SIZE);
     }
 
     /**
-     * getPatchSize.
+     * Size of each patch in the identicon.
      */
     public float getPatchSize() {
         return patchSize;
     }
 
     /**
-     * setPatchSize.
+     * Set the size for each patch and rebuild the patch shapes.
      */
     public void setPatchSize(float size) {
         this.patchSize = size;
@@ -101,28 +102,28 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
     }
 
     /**
-     * getBackgroundColor.
+     * Background color of the identicon.
      */
     public Color getBackgroundColor() {
         return backgroundColor;
     }
 
     /**
-     * setBackgroundColor.
+     * Set the background color of the identicon.
      */
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 
     /**
-     * render.
+     * Render an identicon from a BigInteger hash code.
      */
     public BufferedImage render(BigInteger code, int size) {
         return renderQuilt((int)code.longValue(), size);
     }
 
     /**
-     * render.
+     * Render an identicon from an integer hash code.
      */
     public BufferedImage render(int code, int size) {
         return renderQuilt(code, size);

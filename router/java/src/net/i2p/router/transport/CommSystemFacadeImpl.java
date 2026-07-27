@@ -624,13 +624,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * @deprecated unused
-     */
-    @Override
-    @Deprecated
-    public void recheckReachability() { _manager.recheckReachability(); }
-
-    /**
      *  As of 0.9.31, only outputs UPnP status
      *
      *  Warning - blocking, very slow, queries the active UPnP router,
@@ -1467,7 +1460,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             return _geoIP.get(ipBytes); // Existing geoip lookup by raw IP bytes
         } catch (UnknownHostException e) {return null;}
     }
-
 
     private ExecutorService reverseDnsExecutor;
     private final Object reverseDnsExecutorLock = new Object();

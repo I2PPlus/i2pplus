@@ -44,7 +44,7 @@ public final class ElGamalAESEngine {
     public static final int MAX_TAGS_RECEIVED = 200;
     private static final int ELG_CLEARTEXT_LENGTH = 222;
     private static final int ELG_ENCRYPTED_LENGTH = 514;
-/** Elgamalaesengine */
+    /** Creates engine with given context and initializes crypto frequency stats. */
 
     public ElGamalAESEngine(I2PAppContext ctx) {
         _context = ctx;
@@ -156,8 +156,6 @@ public final class ElGamalAESEngine {
         } else {
             return null;
         }
-
-        //}
 
         if (!foundTags.isEmpty()) {
             if (foundKey.getData() != null) {
@@ -313,9 +311,6 @@ public final class ElGamalAESEngine {
         offset += 32;
 
         // use alternate calculateHash() method to avoid object churn and caching
-        //Hash ivHash = _context.sha().calculateHash(preIV);
-        //byte[] iv = new byte[16];
-        //System.arraycopy(ivHash.getData(), 0, iv, 0, 16);
         byte[] iv = halfHash(preIV);
         SimpleByteCache.release(preIV);
 
@@ -326,7 +321,6 @@ public final class ElGamalAESEngine {
                                          usedKey, iv, null, foundTags, foundKey);
         SimpleByteCache.release(iv);
 
-        //               new Exception("Decrypted by"));
         return aesDecr;
     }
 
@@ -358,9 +352,6 @@ public final class ElGamalAESEngine {
         byte[] preIV = SimpleByteCache.acquire(32);
         System.arraycopy(data, 0, preIV, 0, 32);
         // use alternate calculateHash() method to avoid object churn and caching
-        //Hash ivHash = _context.sha().calculateHash(preIV);
-        //byte[] iv = new byte[16];
-        //System.arraycopy(ivHash.getData(), 0, iv, 0, 16);
         byte[] iv = halfHash(preIV);
 
         byte[] decrypted = decryptAESBlock(data, 32, data.length-32, key, iv, preIV, foundTags, foundKey);
@@ -380,7 +371,6 @@ public final class ElGamalAESEngine {
             return rv;
         }
         // existing session decrypted successfully!
-        //               new Exception("Decrypted by"));
         usedKey.setData(key.getData());
         return decrypted;
     }
@@ -405,13 +395,6 @@ public final class ElGamalAESEngine {
      * @param foundKey  out parameter. Data must be unset when called; may be filled with a new sessionKey found during decryption
      * @return decrypted data or null on failure
      */
-/****
-    private byte[] decryptAESBlock(byte[] encrypted, SessionKey key, byte[] iv,
-                           byte[] sentTag, Set foundTags, SessionKey foundKey) throws DataFormatException {
-        return decryptAESBlock(encrypted, 0, encrypted.length, key, iv, sentTag, foundTags, foundKey);
-    }
-****/
-
     /*
      * Note: package private for ElGamalTest.testAES()
      */
@@ -419,7 +402,6 @@ public final class ElGamalAESEngine {
                            byte[] sentTag, Set<SessionTag> foundTags, SessionKey foundKey) {
         byte[] decrypted = new byte[encryptedLen];
         _context.aes().decrypt(encrypted, offset, decrypted, 0, key, iv, encryptedLen);
-        //Hash h = _context.sha().calculateHash(decrypted);
         try {
             SessionKey newKey = null;
             List<SessionTag> tags = null;
@@ -443,7 +425,6 @@ public final class ElGamalAESEngine {
             cur += 4;
             if ((len < 0) || (len > decrypted.length - cur - Hash.HASH_LENGTH - 1))
                 throw new IllegalArgumentException("Invalid size of payload (" + len + ", remaining " + (decrypted.length-cur) +")");
-            //byte[] hashval = new byte[Hash.HASH_LENGTH];
             //System.arraycopy(decrypted, cur, hashval, 0, Hash.HASH_LENGTH);
             //readHash.setData(hashval);
             //readHash = Hash.create(decrypted, cur);
@@ -461,7 +442,6 @@ public final class ElGamalAESEngine {
             System.arraycopy(decrypted, cur, unencrData, 0, (int)len);
             // use alternate calculateHash() method to avoid object churn and caching
             //Hash calcHash = _context.sha().calculateHash(unencrData);
-            //boolean eq = calcHash.equals(readHash);
             byte[] calcHash = SimpleByteCache.acquire(32);
             _context.sha().calculateHash(unencrData, 0, (int) len, calcHash, 0);
             boolean eq = DataHelper.eq(decrypted, hashIndex, calcHash, 0, 32);
@@ -626,9 +606,7 @@ public final class ElGamalAESEngine {
         byte[] preIV = SimpleByteCache.acquire(32);
         System.arraycopy(elgSrcData, SessionKey.KEYSIZE_BYTES, preIV, 0, 32);
 
-        //long before = _context.clock().now();
         byte[] elgEncr = _context.elGamalEngine().encrypt(elgSrcData, target);
-        //    long after = _context.clock().now();
         if (elgEncr.length < ELG_ENCRYPTED_LENGTH) {
             // ??? ElGamalEngine.encrypt() always returns 514 bytes
             byte[] elg = new byte[ELG_ENCRYPTED_LENGTH];
@@ -640,9 +618,6 @@ public final class ElGamalAESEngine {
         // should we also feed the encrypted elG block into the harvester?
 
         // use alternate calculateHash() method to avoid object churn and caching
-        //Hash ivHash = _context.sha().calculateHash(preIV);
-        //byte[] iv = new byte[16];
-        //System.arraycopy(ivHash.getData(), 0, iv, 0, 16);
         byte[] iv = halfHash(preIV);
         SimpleByteCache.release(preIV);
 
@@ -652,7 +627,6 @@ public final class ElGamalAESEngine {
         byte[] rv = new byte[elgEncr.length + aesEncr.length];
         System.arraycopy(elgEncr, 0, rv, 0, elgEncr.length);
         System.arraycopy(aesEncr, 0, rv, elgEncr.length, aesEncr.length);
-        //long finish = _context.clock().now();
         return rv;
     }
 
@@ -679,8 +653,6 @@ public final class ElGamalAESEngine {
 
         // use alternate calculateHash() method to avoid object churn and caching
         //Hash ivHash = _context.sha().calculateHash(rawTag);
-        //byte[] iv = new byte[16];
-        //System.arraycopy(ivHash.getData(), 0, iv, 0, 16);
         byte[] iv = halfHash(rawTag);
 
         byte[] aesEncr = encryptAESBlock(data, key, iv, tagsForDelivery, newKey, paddedSize, SessionTag.BYTE_LENGTH);

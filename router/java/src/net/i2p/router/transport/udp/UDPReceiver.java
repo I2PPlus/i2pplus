@@ -11,15 +11,13 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * Lowest level component to pull raw UDP datagrams off the wire as fast as possible,
- * controlled by both the bandwidth limiter and the router's throttle. If the inbound
- * queue gets too large or packets have been waiting around too long, they are dropped.
- * Packets should be pulled off from the queue ASAP by a {@link PacketHandler}
+ * Receives raw UDP datagrams off the wire as fast as possible, controlled by
+ * the bandwidth limiter and the router's throttle. Pushes received packets
+ * into the PacketHandler queue.
  *
  * There is a UDPReceiver for each UDPEndpoint. It contains a thread but no queue.
  * Received packets are queued in the common PacketHandler queue.
  */
-/** UDPReceiver */
 class UDPReceiver {
     private final RouterContext _context;
     private final Log _log;
@@ -35,7 +33,7 @@ class UDPReceiver {
     /** How long to sleep between throttle checks while inbound is throttled */
     private static final int THROTTLE_WAIT_MS = 10;
 
-    /** name */
+    /** Constructor name parameter. */
     public UDPReceiver(RouterContext ctx, UDPTransport transport, DatagramSocket socket, String name,
                        SocketListener lsnr) {
         _context = ctx;
@@ -51,10 +49,7 @@ class UDPReceiver {
         _context.statManager().createRateStat("udp.receiveFailsafe", "How often we failed to receive a UDP packet", "Transport [UDP]", UDPTransport.RATES);
     }
 
-    /**
-     *  Cannot be restarted (socket is final)
-     */
-    /** startup */
+    /** Cannot be restarted (socket is final). */
     public synchronized void startup() {
         _keepRunning = true;
         I2PThread t = new I2PThread(_runner, _name, true);
@@ -62,10 +57,7 @@ class UDPReceiver {
         t.start();
     }
 
-    /**
-     * shutdown.
-     */
-    /** shutdown */
+    /** Stop the receiver thread and cease reading from the socket. */
     public synchronized void shutdown() {
         _keepRunning = false;
     }
@@ -116,10 +108,9 @@ class UDPReceiver {
     private class Runner implements Runnable {
 
         /**
-         * run.
+         * Main receive loop: throttle-check, acquire packet, wait for datagram, push to handler.
          */
         @Override
-        /** run */
         public void run() {
             while (_keepRunning) {
                 // Wait out any inbound throttle before acquiring a pooled packet, so a

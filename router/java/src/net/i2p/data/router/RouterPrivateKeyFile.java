@@ -1,6 +1,5 @@
 package net.i2p.data.router;
 
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,7 +21,7 @@ import net.i2p.data.SigningPrivateKey;
  * @since 0.9.16
  */
 public class RouterPrivateKeyFile extends PrivateKeyFile {
-/** Routerprivatekeyfile */
+    /** Constructor with the router private key file path. */
 
     public RouterPrivateKeyFile(File file) {
         super(file);

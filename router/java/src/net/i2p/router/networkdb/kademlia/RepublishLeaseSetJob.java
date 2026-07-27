@@ -32,65 +32,59 @@ import net.i2p.util.Log;
  * Thread-safe via concurrent maps across instances.
  */
 public class RepublishLeaseSetJob extends JobImpl {
-/** log */
+    /** Class logger. */
     private final Log _log;
-/** prop_timeout */
+    /** Config property for LeaseSet publish timeout. */
     private static final String PROP_TIMEOUT = "router.leaseSetPublishTimeout";
-/** prop_retry_delay */
+    /** Config property for publish retry base delay. */
     private static final String PROP_RETRY_DELAY = "router.leaseSetPublishRetryDelay";
-/** prop_max_retry_delay */
+    /** Config property for max publish retry delay. */
     private static final String PROP_MAX_RETRY_DELAY = "router.leaseSetPublishMaxRetryDelay";
-    /**
-     * REPUBLISH_LEASESET_TIMEOUT_DEFAULT.
-     */
+    /** Default timeout for LeaseSet publication to floodfills. */
     public static final long REPUBLISH_LEASESET_TIMEOUT_DEFAULT = 60L * 1000;
-    /**
-     * RETRY_DELAY_DEFAULT.
-     */
+    /** Default base delay before retrying a failed publish. */
     public static final int RETRY_DELAY_DEFAULT = (int) (10L * 1000);
-    /**
-     * RETRY_MAX_DELAY_DEFAULT.
-     */
+    /** Maximum backoff delay for publish retries. */
     public static final int RETRY_MAX_DELAY_DEFAULT = (int) (30L * 1000);
-/** expiry_window */
+    /** Window before lease expiry to trigger early republish. */
     private static final long EXPIRY_WINDOW = 3L * 60 * 1000;
-/** cache_cleanup_threshold */
+    /** Staleness threshold for cleaning up tracking maps. */
     private static final long CACHE_CLEANUP_THRESHOLD = 15L * 60 * 1000;
     // Last time cleanupStaleEntries() ran — guards against redundant sweeps
-/** last cleanup time */
+    /** last cleanup time */
     private static volatile long _lastCleanupTime;
-/** ConcurrentHashMap<>. */
+    /** Tracks destinations currently being retried to prevent duplicate retries. */
     private static final ConcurrentHashMap<Hash, Boolean> _retryInProgress = new ConcurrentHashMap<>();
-/** ConcurrentHashMap<>. */
+    /** Last log timestamp per destination to throttle publish log messages. */
     private static final ConcurrentHashMap<Hash, Long> _lastPublishLogTime = new ConcurrentHashMap<>();
-/** ConcurrentHashMap<>. */
+    /** Last log timestamp per destination to throttle verification log messages. */
     private static final ConcurrentHashMap<Hash, Long> _lastVerifyLogTime = new ConcurrentHashMap<>();
-/** ConcurrentHashMap<>. */
+    /** Last log timestamp per destination to throttle no-requeue log messages. */
     private static final ConcurrentHashMap<Hash, Long> _lastNotRequeueLogTime = new ConcurrentHashMap<>();
     // Persistent per-destination failure count — never reset, survives job instances.
     // Used to decide when to perform expensive floodfill verification.
-/** ConcurrentHashMap<>. */
+    /** Persistent per-destination store failure count. */
     private static final ConcurrentHashMap<Hash, AtomicInteger> _globalFailCount = new ConcurrentHashMap<>();
-/** max_floodfill_verifications */
+    /** Max verifications per destination before falling back to direct retry. */
     private static final int MAX_FLOODFILL_VERIFICATIONS = 3;
     // Tracks defer start for startup-gate; cleared on success or FIRST_PUBLISH_TIMEOUT
-/** ConcurrentHashMap<>. */
+    /** Timestamp when first publish was deferred, per destination. */
     private static final ConcurrentHashMap<Hash, Long> _firstDeferredAt = new ConcurrentHashMap<>();
-/** first_publish_timeout */
+    /** Max time to defer first publish while waiting for target tunnels. */
     private static final long FIRST_PUBLISH_TIMEOUT = 60L * 1000;
-/** destination hash */
+    /** destination hash */
     private final Hash _dest;
-/** facade */
+    /** Kademlia network database facade instance. */
     private final KademliaNetworkDatabaseFacade _facade;
-/** last published time */
+    /** last published time */
     private volatile long _lastPublished;
-/** AtomicInteger. */
+    /** Per-instance retry counter for exponential backoff. */
     private final AtomicInteger failCount = new AtomicInteger(0);
-/** high priority flag */
+    /** Whether this job instance is promoted to high priority. */
     private boolean highPriority;
-/** AtomicBoolean. */
+    /** Whether a floodfill verification lookup is in progress. */
     private final AtomicBoolean _lookupInProgress = new AtomicBoolean(false);
-/** registered flag */
+    /** registered flag */
     private boolean _registered = false;
 
     /**
@@ -116,11 +110,8 @@ public class RepublishLeaseSetJob extends JobImpl {
         return _registered;
     }
 
-    /**
-     * runJob.
-     */
     @Override
-/** Run the job */
+    /** Run the job */
     public void runJob() {
         cleanupStaleEntries();
         if (!_registered) {
@@ -157,7 +148,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     // Client has indicated it should no longer publish this LeaseSet
-/** Handle should not publish */
+    /** Handle should not publish */
     private void handleShouldNotPublish() {
         LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
         if (ls != null) {
@@ -170,7 +161,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     // Handle a local LeaseSet that needs publication
-/** Handle local lease set */
+    /** Handle local lease set */
     private void handleLocalLeaseSet() {
         LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
         if (ls != null) {
@@ -190,7 +181,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     // LeaseSet has expired — request a fresh one and check back soon
-/** Handle expired lease set */
+    /** Handle expired lease set */
     private void handleExpiredLeaseSet(LeaseSet ls, String name) {
         if (_log.shouldWarn()) {
             _log.warn("LeaseSet EXPIRED - triggering immediate rebuild for " + name +
@@ -201,7 +192,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     // No LeaseSet exists locally — ask the client to create one
-/** Handle missing lease set */
+    /** Handle missing lease set */
     private void handleMissingLeaseSet() {
         if (_log.shouldWarn()) {
             _log.warn("Client [" + shortHash() +
@@ -213,7 +204,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     // Client is no longer local — clean up and stop publishing
-/** Handle not local */
+    /** Handle not local */
     private void handleNotLocal() {
         if (_log.shouldInfo()) {
             _log.info("Client [" + shortHash() +
@@ -229,7 +220,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     // Publish a valid LeaseSet.  Startup gate defers first publication until
     // target tunnel count met (or FIRST_PUBLISH_TIMEOUT elapses).  After first
     // successful publish, subsequent renewals proceed immediately.
-/** Handle valid lease set */
+    /** Handle valid lease set */
     private void handleValidLeaseSet(LeaseSet ls, String name, long now, long timeUntilExpiry) {
         Long lastPubLog = _lastPublishLogTime.get(_dest);
         if (timeUntilExpiry <= EXPIRY_WINDOW) {
@@ -277,7 +268,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     // Falls through after FIRST_PUBLISH_TIMEOUT so pools at partial
     // capacity (e.g. 70% build success) don't block indefinitely.
     // Returns true if publication was deferred
-/** @return true if deferred */
+    /** @return true if deferred */
     private boolean maybeDeferFirstPublish(int leaseCount, int targetLeases) {
         Long deferred = _firstDeferredAt.get(_dest);
         if (deferred == null && leaseCount < targetLeases) {
@@ -308,29 +299,29 @@ public class RepublishLeaseSetJob extends JobImpl {
      */
     public String getName() {return "Republish Local LeaseSet" + (highPriority ? " [High priority]" : "");}
 
-/** @return the publishTimeout */
+    /** @return the publishTimeout */
     private long getPublishTimeout() {
         return getContext().getProperty(PROP_TIMEOUT, REPUBLISH_LEASESET_TIMEOUT_DEFAULT);
     }
 
-/** @return the retryDelay */
+    /** @return the retryDelay */
     private int getRetryDelay() {
         return getContext().getProperty(PROP_RETRY_DELAY, RETRY_DELAY_DEFAULT);
     }
 
-/** @return the maxRetryDelay */
+    /** @return the maxRetryDelay */
     private int getMaxRetryDelay() {
         return getContext().getProperty(PROP_MAX_RETRY_DELAY, RETRY_MAX_DELAY_DEFAULT);
     }
 
-/** @return the republishInterval */
+    /** @return the republishInterval */
     private long getRepublishInterval() {
         return getContext().getProperty("i2p.netdb.republishInterval", 3L * 60 * 1000);
     }
 
     // Register a successor RepublishLeaseSetJob with timing set.
     // Returns the registered job, or null if registration failed
-/** @return the successor */
+    /** @return the successor */
     private RepublishLeaseSetJob registerSuccessor(long delayMs) {
         RepublishLeaseSetJob job = new RepublishLeaseSetJob(getContext(), _facade, _dest);
         if (!job.registerSelf()) {
@@ -345,7 +336,7 @@ public class RepublishLeaseSetJob extends JobImpl {
 
     // Schedule the next republish cycle.  Unregisters current job first
     // so hasActiveRepublishJob() doesn't block the successor.
-/** Schedule republish */
+    /** Schedule republish */
     private void scheduleRepublish(long delayMs) {
         _facade.removePublishingJob(_dest, this);
         if (_facade.hasActiveRepublishJob(_dest)) {
@@ -406,17 +397,17 @@ public class RepublishLeaseSetJob extends JobImpl {
         }
     }
 
-/** Clear retry in progress */
+    /** Clear retry in progress */
     private void clearRetryInProgress() {
         _retryInProgress.remove(_dest);
     }
 
-/** @return short hash */
+    /** @return short hash */
     private String shortHash() {
         return _dest.toBase32().substring(0, 8);
     }
 
-/** Cleanup stale entries */
+    /** Cleanup stale entries */
     private static void cleanupStaleEntries() {
         long now = System.currentTimeMillis();
         if (now - _lastCleanupTime <= CACHE_CLEANUP_THRESHOLD)
@@ -428,7 +419,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         cleanupGlobalFailCount(now);
     }
 
-/** Cleanup map */
+    /** Cleanup map */
     private static void cleanupMap(ConcurrentHashMap<Hash, Long> map, long now) {
         Iterator<Map.Entry<Hash, Long>> iter = map.entrySet().iterator();
         while (iter.hasNext()) {
@@ -440,7 +431,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     // Reset global fail counters idle beyond the threshold
-/** Cleanup global fail count */
+    /** Cleanup global fail count */
     private static void cleanupGlobalFailCount(long now) {
         // Global fail count has no timestamp per entry; just clear entries
         // for destinations no longer being tracked in the publish log.
@@ -470,27 +461,18 @@ public class RepublishLeaseSetJob extends JobImpl {
 
     // Handles store timeout: retries (with floodfill verification on recurring failures)
     // or cancels if a newer LeaseSet appeared locally.
-/** OnRepublishFailure. */
+    /** Handles publish timeout and schedules retries with floodfill verification. */
     private class OnRepublishFailure extends JobImpl {
-/** lease set */
+        /** LeaseSet that failed to publish. */
         private final LeaseSet _ls;
 
-        /**
-         * OnRepublishFailure.
-         */
         public OnRepublishFailure(LeaseSet ls) {
             super(RepublishLeaseSetJob.this.getContext());
             _ls = ls;
         }
 
-        /**
-         * getName.
-         */
         public String getName() {return "Timeout LeaseSet Publication";}
 
-        /**
-         * runJob.
-         */
         public void runJob() {
             LeaseSet ls = _facade.lookupLeaseSetLocally(_ls.getHash());
             String tunnelName = ls != null ? getTunnelName(_ls.getDestination()) : "";
@@ -542,19 +524,13 @@ public class RepublishLeaseSetJob extends JobImpl {
             }
         }
 
-/** Verify and retry */
+        /** Verify and retry */
         private void verifyAndRetry(final LeaseSet ls) {
             String tunnelName = getTunnelName(ls.getDestination());
             String name = !tunnelName.isEmpty() ? " for '" + tunnelName + "'" : " for key";
 
             Job onFound = new JobImpl(getContext()) {
-                /**
-                 * getName.
-                 */
                 public String getName() {return "Verify LS Published";}
-                /**
-                 * runJob.
-                 */
                 public void runJob() {
                     _lookupInProgress.set(false);
                     clearRetryInProgress();
@@ -573,13 +549,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             };
 
             Job onFailed = new JobImpl(getContext()) {
-                /**
-                 * getName.
-                 */
                 public String getName() {return "Verify LS Failed";}
-                /**
-                 * runJob.
-                 */
                 public void runJob() {
                     _lookupInProgress.set(false);
                     clearRetryInProgress();
@@ -596,23 +566,14 @@ public class RepublishLeaseSetJob extends JobImpl {
 
     // Fired on successful store — resets global fail counter and clears
     // the first-publish gate so subsequent renewals proceed immediately.
-/** OnRepublishSuccess. */
+    /** Fired on successful store to reset counters and log confirmation. */
     private class OnRepublishSuccess extends JobImpl {
-        /**
-         * OnRepublishSuccess.
-         */
         public OnRepublishSuccess() {
             super(RepublishLeaseSetJob.this.getContext());
         }
 
-        /**
-         * getName.
-         */
         public String getName() {return "LeaseSet Publish Succeeded";}
 
-        /**
-         * runJob.
-         */
         public void runJob() {
             cleanupStaleEntries();
             _firstDeferredAt.remove(_dest);
@@ -647,4 +608,3 @@ public class RepublishLeaseSetJob extends JobImpl {
         return name != null ? name : "[" + d.calculateHash().toBase32().substring(0,8) + "]";
     }
 }
-

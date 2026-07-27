@@ -13,7 +13,10 @@ import net.i2p.util.Addresses;
 import net.i2p.util.LHMCache;
 import net.i2p.util.SystemVersion;
 
-/** UDPAddress */
+/**
+ * Parses and caches the host, port, introducer list, MTU, and key data from a RouterAddress
+ * for the SSU and SSU2 transport styles.
+ */
 class UDPAddress {
     private final String _host;
     private InetAddress _hostAddress;
@@ -31,9 +34,9 @@ class UDPAddress {
     private final boolean _isIPv4;
     private final boolean _isIPv6;
 
-    /** RouterAddress.PROP_PORT */
+    /** Config key for SSU port. */
     public static final String PROP_PORT = RouterAddress.PROP_PORT;
-    /** RouterAddress.PROP_HOST */
+    /** Config key for SSU host. */
     public static final String PROP_HOST = RouterAddress.PROP_HOST;
     /** Key. */
     public static final String PROP_INTRO_KEY = "key";
@@ -60,12 +63,12 @@ class UDPAddress {
     /** Introduction hash prefix for SSU2 */
     public static final String PROP_INTRO_HASH_PREFIX = "ih";
 
-    /** 5 */
+    /** Maximum number of introducers per address. */
     static final int MAX_INTRODUCERS = 5;
     private static final String[] PROP_INTRO_HOST;
     private static final String[] PROP_INTRO_PORT;
     private static final String[] PROP_INTRO_IKEY;
-    /** PROP_INTRO_TAG */
+    /** Introducer tag property names indexed by position. */
     static final String[] PROP_INTRO_TAG;
     private static final String[] PROP_INTRO_EXP;
     private static final String[] PROP_INTRO_HASH;
@@ -421,7 +424,6 @@ class UDPAddress {
     ////////////////
     // cache copied from Addresses.java but caching InetAddress instead of byte[]
 
-
     /**
      *  Textual IP to InetAddress, because InetAddress.getByName() is slow.
      *
@@ -455,14 +457,14 @@ class UDPAddress {
         if (host == null)
             return null;
         InetAddress rv;
-        /** _inetAddressCache */
+        /** InetAddress cache synchronized block. */
         synchronized (_inetAddressCache) {
             rv = _inetAddressCache.get(host);
         }
         if (rv == null && Addresses.isIPAddress(host)) {
             try {
                 rv = InetAddress.getByName(host);
-                /** _inetAddressCache */
+                /** InetAddress cache synchronized block. */
                 synchronized (_inetAddressCache) {
                     _inetAddressCache.put(host, rv);
                 }
@@ -477,6 +479,5 @@ class UDPAddress {
             _inetAddressCache.clear();
         }
     }
-
 
 }

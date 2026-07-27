@@ -31,8 +31,6 @@ public abstract class CommSystemFacade implements Service {
 
     /** @since 0.9.45 */
     protected static final String ROUTER_BUNDLE_NAME = "net.i2p.router.util.messages";
-/** Commsystemfacade */
-
     protected CommSystemFacade() {}
 
     /**
@@ -119,36 +117,19 @@ public abstract class CommSystemFacade implements Service {
 
     /**
      * Determine under what conditions we are remotely reachable.
-     * For internal use only.
-     * Not recommended for plugins or embedded applications, as
-     * the integer codes may change. Use getStatus() instead.
-     *
-     * @deprecated use getStatus()
-     */
-    @Deprecated
-    public short getReachabilityStatus() { return (short) getStatus().getCode(); }
-
-    /**
-     * Determine under what conditions we are remotely reachable.
      *
      * @since 0.9.20
      */
     public Status getStatus() { return Status.OK; }
 
     /**
-     * getStatus().toStatusString(), translated if available.
+     *  Localized reachability status string.
      *
-     * @since 0.9.45
+     *  @since 0.9.45
      */
     public String getLocalizedStatusString() {
         return getStatus().toStatusString();
     }
-
-    /**
-     * @deprecated unused
-     */
-    @Deprecated
-    public void recheckReachability() {}
 
     /**
      *  Check whether the given peer has excessive pending outbound messages.
@@ -219,16 +200,34 @@ public abstract class CommSystemFacade implements Service {
      */
     public void forceDisconnect(Hash peer, String reason) {}
 
-    /** @since 0.8.11 */
+    /**
+     *  Our two-letter country code determined from our external IP.
+     *
+     *  @since 0.8.11
+     */
     public String getOurCountry() { return null; }
 
-    /** @since 0.8.13 */
+    /**
+     *  Whether country blocking is enabled at all.
+     *
+     *  @since 0.8.13
+     */
     public boolean isInStrictCountry() { return false; }
 
-    /** @since 0.9.16 */
+    /**
+     *  Whether the given peer's country is blocked.
+     *
+     *  @param peer peer to check
+     *  @since 0.9.16
+     */
     public boolean isInStrictCountry(Hash peer) { return false; }
 
-    /** @since 0.9.16 */
+    /**
+     *  Whether the given router's country is blocked.
+     *
+     *  @param ri router info to check
+     *  @since 0.9.16
+     */
     public boolean isInStrictCountry(RouterInfo ri) { return false; }
 
     /**
@@ -328,6 +327,8 @@ public abstract class CommSystemFacade implements Service {
     }
 
     /**
+     *  Registered transports by style name.
+     *
      *  @return SortedMap of style to Transport (a copy)
      *  @since 0.9.31
      */
@@ -345,10 +346,18 @@ public abstract class CommSystemFacade implements Service {
      */
     public abstract List<Hash> getEstablished();
 
-    /** @since 0.8.13 */
+    /**
+     *  Whether this is a dummy implementation with no real transports.
+     *
+     *  @since 0.8.13
+     */
     public boolean isDummy() { return true; }
 
-    /** @since 0.9.53 */
+    /**
+     *  Whether the comm system is fully initialized and running.
+     *
+     *  @since 0.9.53
+     */
     public boolean isRunning() { return true; }
 
     /**
@@ -371,14 +380,14 @@ public abstract class CommSystemFacade implements Service {
     public void notifyRemoveAddress(boolean ipv6) {}
 
     /**
-     *  Pluggable transport
+     *  Register a transport for use by the comm system.
      *
      *  @since 0.9.16
      */
     public void registerTransport(Transport t) {}
 
     /**
-     *  Pluggable transport
+     *  Unregister a transport from the comm system.
      *
      *  @since 0.9.16
      */
@@ -456,7 +465,6 @@ public abstract class CommSystemFacade implements Service {
      * We are able to receive unsolicited connections
      * on all enabled transports
      */
-/** Status Ok constant */
     public static final short STATUS_OK = 0;
 
     /**
@@ -466,7 +474,6 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
-/** Status Ipv4 Ok Ipv6 Unknown constant */
     public static final short STATUS_IPV4_OK_IPV6_UNKNOWN = 2;
 
     /**
@@ -476,7 +483,6 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
-/** Status Ipv4 Ok Ipv6 Firewalled constant */
     public static final short STATUS_IPV4_OK_IPV6_FIREWALLED = 1;
 
     /**
@@ -486,7 +492,6 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
-/** Status Ipv4 Unknown Ipv6 Ok constant */
     public static final short STATUS_IPV4_UNKNOWN_IPV6_OK = 4;
 
     /**
@@ -496,7 +501,6 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
-/** Status Ipv4 Firewalled Ipv6 Ok constant */
     public static final short STATUS_IPV4_FIREWALLED_IPV6_OK = 3;
 
     /**
@@ -506,7 +510,6 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
-/** Status Ipv4 Disabled Ipv6 Ok constant */
     public static final short STATUS_IPV4_DISABLED_IPV6_OK = 5;
 
     /**
@@ -516,7 +519,6 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
-/** Status Ipv4 Snat Ipv6 Ok constant */
     public static final short STATUS_IPV4_SNAT_IPV6_OK = 6;
 
     /**
@@ -524,7 +526,6 @@ public abstract class CommSystemFacade implements Service {
      * differently when we talk to multiple people
      *
      */
-/** Status Different constant */
     public static final short STATUS_DIFFERENT = 7;
 
     /**
@@ -534,7 +535,6 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
-/** Status Ipv4 Snat Ipv6 Unknown constant */
     public static final short STATUS_IPV4_SNAT_IPV6_UNKNOWN = 8;
 
     /**
@@ -544,7 +544,6 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
-/** Status Ipv4 Firewalled Ipv6 Unknown constant */
     public static final short STATUS_IPV4_FIREWALLED_IPV6_UNKNOWN = 10;
 
     /**
@@ -552,7 +551,6 @@ public abstract class CommSystemFacade implements Service {
      * cannot receive unsolicited connections, i.e. Firewalled,
      * on all enabled transports.
      */
-/** Status Reject Unsolicited constant */
     public static final short STATUS_REJECT_UNSOLICITED = 9;
 
     /**
@@ -562,7 +560,6 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
-/** Status Ipv4 Unknown Ipv6 Firewalled constant */
     public static final short STATUS_IPV4_UNKNOWN_IPV6_FIREWALLED = 11;
 
     /**
@@ -572,7 +569,6 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
-/** Status Ipv4 Disabled Ipv6 Unknown constant */
     public static final short STATUS_IPV4_DISABLED_IPV6_UNKNOWN = 13;
 
     /**
@@ -582,7 +578,6 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
-/** Status Ipv4 Disabled Ipv6 Firewalled constant */
     public static final short STATUS_IPV4_DISABLED_IPV6_FIREWALLED = 12;
 
     /**
@@ -590,27 +585,24 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.4
      */
-/** Status Disconnected constant */
     public static final short STATUS_DISCONNECTED = 14;
 
     /**
      * Our detection system is broken (SSU bind port failed)
      */
-/** Status Hosed constant */
     public static final short STATUS_HOSED = 15;
 
     /**
      * Our reachability is unknown on all
      */
-/** Status Unknown constant */
     public static final short STATUS_UNKNOWN = 16;
 
-/**
+    /**
      * Network connectivity status enumeration for IPv4 and IPv6 transport capabilities.
      * Represents firewall status, NAT configuration, and transport readiness for tunnel participation.
-     *  Since codes may change.
+     * Since codes may change.
      *
-     *  @since 0.9.20
+     * @since 0.9.20
      */
     public enum Status {
         /** IPv4 OK, IPv6 OK or disabled or no address */

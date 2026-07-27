@@ -8,33 +8,33 @@ import net.i2p.I2PAppContext;
  * @since 0.7.12
  */
 public class VariableTunnelBuildMessage extends TunnelBuildMessage {
-/** Message type ID for this I2NP message */
+    /** Message type ID for this I2NP message */
     public static final int MESSAGE_TYPE = 23;
 
     /** zero record count, will be set with readMessage() */
     public VariableTunnelBuildMessage(I2PAppContext context) {
         super(context, 0);
     }
-/** Variabletunnelbuildmessage */
+    /** Constructor with the given number of build records. */
 
     public VariableTunnelBuildMessage(I2PAppContext context, int records) {
         super(context, records);
     }
 
     /**
-     * calculateWrittenLength.
+     * Length including record count byte plus all encrypted records.
      */
     @Override
     protected int calculateWrittenLength() { return 1 + super.calculateWrittenLength(); }
 
     /**
-     * getType.
+     * I2NP message type 23 for variable-record tunnel build requests.
      */
     @Override
     public int getType() { return MESSAGE_TYPE; }
 
     /**
-     * readMessage.
+     * Parse record count from first byte, then delegate to parent for record data.
      */
     @Override
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
@@ -50,7 +50,7 @@ public class VariableTunnelBuildMessage extends TunnelBuildMessage {
     }
 
     /**
-     * writeMessageBody.
+     * Write record count byte followed by all encrypted build records.
      */
     @Override
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
@@ -69,7 +69,7 @@ public class VariableTunnelBuildMessage extends TunnelBuildMessage {
     }
 
     /**
-     * toString.
+     * Label with unique ID and record count for logging.
      */
     @Override
     public String toString() {

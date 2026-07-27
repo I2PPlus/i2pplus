@@ -74,7 +74,6 @@ public class JobQueue {
         if (RUNNERS > maxRunners) {RUNNERS = maxRunners;}
     }
 
-
     /** router.config parameter to override the max runners */
     static final String PROP_MAX_RUNNERS = "router.maxJobRunners";
     /** If a job is this lagged, spit out a warning, but keep going */
@@ -731,7 +730,6 @@ public class JobQueue {
     }
 
     private final class QueuePumper implements Runnable, Clock.ClockUpdateListener, RouterClock.ClockShiftListener {
-/** Queuepumper */
         public QueuePumper() {
             _context.clock().addUpdateListener(this);
             ((RouterClock) _context.clock()).addShiftListener(this);
@@ -815,13 +813,13 @@ public class JobQueue {
                 ((RouterClock) _context.clock()).removeShiftListener(this);
             }
         }
-/** Handle a clock offset change */
+        /** Handle a clock offset change */
 
         public void offsetChanged(long delta) {
             updateJobTimings(delta);
             synchronized (_jobLock) {_jobLock.notifyAll();}
         }
-/** Handle a clock shift event */
+        /** Handle a clock shift event */
 
         public void clockShift(long delta) {
             if (delta < 0) offsetChanged(delta);
@@ -894,37 +892,19 @@ public class JobQueue {
     private static final int POISON_ID = -99999;
 
     private static class PoisonJob implements Job {
-        /**
-         * getName.
-         */
         @Override
         public String getName() {return null;}
-        /**
-         * getJobId.
-         */
         @Override
         public long getJobId() {return POISON_ID;}
-        /**
-         * getTiming.
-         */
         @Override
         public JobTiming getTiming() {return null;}
-        /**
-         * runJob.
-         */
         @Override
         public void runJob() { /* No-op - poison sentinel, not a real job */ }
-        /**
-         * dropped.
-         */
         @Override
         public void dropped() { /* No-op - poison sentinel, not a real job */ }
     }
 
     private static class JobComparator implements Comparator<Job>, Serializable {
-          /**
-           * compare.
-           */
           @Override
           public int compare(Job l, Job r) {
               if (l.equals(r)) return 0;

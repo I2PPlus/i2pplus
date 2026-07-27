@@ -255,9 +255,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
     }
 
-    /**
-     * startup.
-     */
+    /** Start monitor jobs, throttle, and optional router refresh. */
     @Override
     public synchronized void startup() {
         boolean isFF;
@@ -283,9 +281,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
     }
 
-    /**
-     * createHandlers.
-     */
+    /** Register message handlers for DatabaseLookup and DatabaseStore. */
     @Override
     protected void createHandlers() {
         // Only initialize the handlers for the flooodfill netDb.
@@ -374,17 +370,13 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             super(SimpleTimer2.getInstance(), 2000);
         }
 
-        /**
-         * timeReached.
-         */
+        /** Process all elapsed search timeouts and reschedule. */
         public void timeReached() {
             processElapsedTimeouts();
             reschedule(2000);
         }
 
-        /**
-         * getName.
-         */
+        /** @return "BatchedSearchTimeout" */
         public String getName() { return "BatchedSearchTimeout"; }
     }
 
@@ -412,9 +404,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 flood(local);
                 // let the messages get out...
                 new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
-                    /**
-                     * timeReached.
-                     */
+                    /** Allow time for flood messages to be dispatched. */
                     @Override
                     public void timeReached() {
                         // Messages should have been sent by now
@@ -471,16 +461,12 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      */
     private class DelayedPublish extends SimpleTimer2.TimedEvent {
         private final RouterInfo localRouterInfo;
-        /**
-         * DelayedPublish.
-         */
+        /** @param local the RouterInfo to publish after delay */
         public DelayedPublish(RouterInfo local) {
             super(_context.simpleTimer2());
             localRouterInfo = local;
         }
-        /**
-         * timeReached.
-         */
+        /** Publish the RouterInfo if it hasn't changed during the delay. */
         public void timeReached() {
             RouterInfo latest = _context.router().getRouterInfo();
             boolean shouldLog = _log.shouldWarn() || _log.shouldInfo();
@@ -540,9 +526,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 final int delay = (int) Math.min(idx * 1000L, 10_000);
                 final int concurrentForLog = concurrent;
                 new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
-                    /**
-                     * timeReached.
-                     */
+                    /** Submit the store job after delay to spread flood load. */
                     @Override
                     public void timeReached() {
                         _context.jobQueue().addJob(new FloodfillStoreJob(
@@ -623,7 +607,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
         return ft != null && ft.shouldThrottle(key);
     }
-
 
     /**
      *  Check if lookup from a peer should be banned.
@@ -779,20 +762,14 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static class FloodFailedJob extends JobImpl {
         private final Hash _peer;
 
-        /**
-         * FloodFailedJob.
-         */
+        /** @param ctx router context  @param peer the peer that failed */
         public FloodFailedJob(RouterContext ctx, Hash peer) {
             super(ctx);
             _peer = peer;
         }
-        /**
-         * getName.
-         */
+        /** @return "Flood failed" */
         public String getName() {return "Flood failed";}
-        /**
-         * runJob.
-         */
+        /** Record the store failure in the peer profile. */
         public void runJob() {getContext().profileManager().dbStoreFailed(_peer);}
     }
 
@@ -803,20 +780,14 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static class FloodSuccessJob extends JobImpl {
         private final Hash _peer;
 
-        /**
-         * FloodSuccessJob.
-         */
+        /** @param ctx router context  @param peer the floodfill peer */
         public FloodSuccessJob(RouterContext ctx, Hash peer) {
             super(ctx);
             _peer = peer;
         }
-        /**
-         * getName.
-         */
+        /** @return "Flood succeeded" */
         public String getName() {return "Flood succeeded";}
-        /**
-         * runJob.
-         */
+        /** Record the store success in the peer profile. */
         public void runJob() {getContext().profileManager().dbStoreSuccessful(_peer);}
     }
 
@@ -848,9 +819,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
     }
 
-    /**
-     * floodfillEnabled.
-     */
+    /** @return whether this router participates in floodfill */
     @Override
     public boolean floodfillEnabled() {
         return _floodfillEnabled;
@@ -974,7 +943,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     /**
-     *  Notify that we heard from or about a peer (e.g., received a DatabaseStoreMessage
+     *  Notify that we heard from or about a peer (e.g. received a DatabaseStoreMessage
      *  from them).  The ContactDrivenRefreshJob will consider refreshing their RouterInfo
      *  if it is stale.
      *
@@ -1238,20 +1207,14 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private class DropLookupFailedJob extends JobImpl {
         private final Hash _peer;
 
-        /**
-         * DropLookupFailedJob.
-         */
+        /** @param ctx router context  @param peer the peer that failed lookup  @param _info unused */
         public DropLookupFailedJob(RouterContext ctx, Hash peer, RouterInfo _info) {
             super(ctx);
             _peer = peer;
         }
-        /**
-         * getName.
-         */
+        /** @return "Timeout NetDb Lookup for Failing Peer" */
         public String getName() { return "Timeout NetDb Lookup for Failing Peer"; }
-        /**
-         * runJob.
-         */
+        /** Remove the peer from the database after lookup failure. */
         public void runJob() {
             // Skip for banned peers
             if (_context.banlist().isBanlisted(_peer)) {
@@ -1268,21 +1231,15 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         private final Hash _peer;
         private final RouterInfo _info;
 
-        /**
-         * DropLookupFoundJob.
-         */
+        /** @param ctx router context  @param peer the peer being verified  @param info the stored RouterInfo for comparison */
         public DropLookupFoundJob(RouterContext ctx, Hash peer, RouterInfo info) {
             super(ctx);
             _peer = peer;
             _info = info;
         }
-        /**
-         * getName.
-         */
+        /** @return "Verify NetDb Lookup for Failing Peer" */
         public String getName() { return "Verify NetDb Lookup for Failing Peer"; }
-        /**
-         * runJob.
-         */
+        /** Compare updated RouterInfo and drop peer if unchanged. */
         public void runJob() {
             // Skip verification for banned peers
             if (_context.banlist().isBanlisted(_peer)) {
@@ -1298,9 +1255,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
     }
 
-    /**
-     * getTunnelName.
-     */
+    /** Look up the tunnel pool nickname for a destination. */
     public String getTunnelName(Destination d) {
         TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(d.calculateHash());
         String name = (in != null ? in.getDestinationNickname() : null);
