@@ -92,6 +92,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      * @since 0.9.70+
      */
     public static void updateAllTargets(long target) {
+        expungeStaleInstances();
         for (WeakReference<CoDelBlockingQueue> ref : INSTANCES) {
             CoDelBlockingQueue q = ref.get();
             if (q != null) q._target = target;
@@ -105,6 +106,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      * @since 0.9.70+
      */
     public static void updateAllIntervals(long interval) {
+        expungeStaleInstances();
         for (WeakReference<CoDelBlockingQueue> ref : INSTANCES) {
             CoDelBlockingQueue q = ref.get();
             if (q != null) q._interval = interval;
@@ -184,6 +186,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         _interval = interval;
         STAT_DELAY = ("codel." + name + ".delay").intern();
         _id = __id.incrementAndGet();
+        expungeStaleInstances();
         INSTANCES.add(new WeakReference<>(this));
     }
 

@@ -632,7 +632,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
         // Compute derived test/build tuning values from subsystem scores
         computeTuningValues();
-        // Expunge stale CoDel queue weak references (queues from cycled tunnels)
+        // Expunge stale queue weak references (queues from cycled tunnels)
+        SyntheticREDQueue.expungeStaleInstances();
         CoDelBlockingQueue.expungeStaleInstances();
         CoDelPriorityBlockingQueue.expungeStaleInstances();
         // Flush dirty state to disk (at most once per 5min, per AutotuneConfig throttle)

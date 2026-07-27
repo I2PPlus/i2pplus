@@ -31,7 +31,7 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
     private static final long serialVersionUID = 4863212596318574111L;
 
     /** Thread local */
-    private final ThreadLocal<CachedIterator<E>> iterator = ThreadLocal.withInitial(() -> new CachedIterator<>());
+    private volatile ThreadLocal<CachedIterator<E>> iterator = ThreadLocal.withInitial(() -> new CachedIterator<>());
 
     /** Creates a new empty CachedIteratorArrayList. */
     public CachedIteratorArrayList() {
@@ -67,9 +67,28 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        CachedIterator<E> it = iterator.get();
+        ThreadLocal<CachedIterator<E>> tl = this.iterator;
+        if (tl == null) {
+            tl = ThreadLocal.withInitial(() -> new CachedIterator<>());
+            this.iterator = tl;
+        }
+        CachedIterator<E> it = tl.get();
         it.reset(this);
         return it;
+    }
+
+    /**
+     * Clear the list and release the ThreadLocal so its entries can be
+     * reclaimed from all threads' ThreadLocalMaps.
+     */
+    @Override
+    public void clear() {
+        super.clear();
+        ThreadLocal<CachedIterator<E>> tl = this.iterator;
+        if (tl != null) {
+            tl.remove();
+            this.iterator = null;
+        }
     }
 
     private static class CachedIterator<E> implements Iterator<E>, Serializable {

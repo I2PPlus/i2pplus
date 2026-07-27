@@ -99,6 +99,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *  @param target the new target delay in ms
      */
     public static void updateAllTargets(long target) {
+        expungeStaleInstances();
         for (WeakReference<CoDelPriorityBlockingQueue> ref : INSTANCES) {
             CoDelPriorityBlockingQueue q = ref.get();
             if (q != null) q._target = target;
@@ -110,6 +111,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *  @param interval the new interval in ms
      */
     public static void updateAllIntervals(long interval) {
+        expungeStaleInstances();
         for (WeakReference<CoDelPriorityBlockingQueue> ref : INSTANCES) {
             CoDelPriorityBlockingQueue q = ref.get();
             if (q != null) q._interval = interval;
@@ -157,6 +159,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         }
         ctx.statManager().createRequiredRateStat(STAT_DELAY, "Average queue delay (ms)", "Router [CoDel]", CODEL_RATES);
         _id = __id.incrementAndGet();
+        expungeStaleInstances();
         INSTANCES.add(new WeakReference<>(this));
     }
 
