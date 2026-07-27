@@ -655,21 +655,13 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     private int aggressiveExpire() {
         long now = _context.clock().now();
 
-        // inbound - collect expired tagsets first, then remove all their tags
+        // inbound - single pass over entrySet, remove all entries with expired tagsets
         int removed = 0;
-        Set<RatchetTagSet> expiredTagSets = new HashSet<>();
-        for (Map.Entry<RatchetSessionTag, RatchetTagSet> entry : _inboundTagSets.entrySet()) {
+        for (Iterator<Map.Entry<RatchetSessionTag, RatchetTagSet>> iter = _inboundTagSets.entrySet().iterator(); iter.hasNext();) {
+            Map.Entry<RatchetSessionTag, RatchetTagSet> entry = iter.next();
             if (entry.getValue().getExpiration() < now) {
-                expiredTagSets.add(entry.getValue());
-            }
-        }
-        for (RatchetTagSet ts : expiredTagSets) {
-            // Remove all tags pointing to this tagset
-            for (Iterator<Map.Entry<RatchetSessionTag, RatchetTagSet>> iter = _inboundTagSets.entrySet().iterator(); iter.hasNext();) {
-                if (iter.next().getValue() == ts) {
-                    iter.remove();
-                    removed++;
-                }
+                iter.remove();
+                removed++;
             }
         }
 
