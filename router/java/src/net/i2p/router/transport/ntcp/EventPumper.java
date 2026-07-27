@@ -104,6 +104,9 @@ class EventPumper implements Runnable {
     private static final int BUF_SIZE = 8 * 1024;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
+        /**
+         * newInstance.
+         */
         @Override
         public ByteBuffer newInstance() {
             if (USE_DIRECT) {
@@ -158,6 +161,9 @@ class EventPumper implements Runnable {
     private static final Set<Status> STATUS_OK = EnumSet.of(Status.OK, Status.IPV4_OK_IPV6_UNKNOWN, Status.IPV4_OK_IPV6_FIREWALLED);
     private static final long[] RATES = { 60*1000L, 10*60*1000L };
 
+    /**
+     * EventPumper.
+     */
     public EventPumper(RouterContext ctx, NTCPTransport transport) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
@@ -177,6 +183,9 @@ class EventPumper implements Runnable {
         _context.statManager().createRequiredRateStat("ntcp.inboundEstablishFailed", "Inbound NTCP handshake failures", "Transport [NTCP]", RATES);
     }
 
+    /**
+     * startPumping.
+     */
     public synchronized void startPumping() {
         if (_log.shouldInfo())
             _log.info("Starting NTCP Pumper...");
@@ -194,6 +203,9 @@ class EventPumper implements Runnable {
         }
     }
 
+    /**
+     * stopPumping.
+     */
     public synchronized void stopPumping() {
         _alive = false;
         if (_selector != null && _selector.isOpen())
@@ -259,6 +271,9 @@ class EventPumper implements Runnable {
         _selector.wakeup();
     }
 
+    /**
+     * run.
+     */
     @Override
     public void run() {
         int loopCount = 0;
@@ -885,6 +900,9 @@ class EventPumper implements Runnable {
         processWrite(con, key);
     }
 
+    /**
+     * processWrite.
+     */
     public boolean processWrite(final NTCPConnection con, final SelectionKey key) {
         boolean rv = false;
         final SocketChannel chan = con.getChannel();
@@ -1089,6 +1107,9 @@ class EventPumper implements Runnable {
         }
     }
 
+    /**
+     * blockIP.
+     */
     public void blockIP(byte[] ip) {
         if (ip == null) return;
         String ba = Addresses.toString(ip);
@@ -1139,6 +1160,9 @@ class EventPumper implements Runnable {
         _transport.expireTimedOut();
     }
 
+    /**
+     * getIdleTimeout.
+     */
     public long getIdleTimeout() {
         return _expireIdleWriteTime;
     }
@@ -1150,6 +1174,9 @@ class EventPumper implements Runnable {
      *  Updates the base delay the pumper relaxes toward and raises the live
      *  delay immediately so Tuner-driven increases take effect without waiting
      *  for the pumper's own 60s ramp. */
+    /**
+     * setSelectorLoopDelay.
+     */
     public static void setSelectorLoopDelay(long ms) {
         long v = Math.max(1, Math.min(SELECTOR_MAX_DELAY, ms));
         _selectorLoopDelay = v;
@@ -1163,6 +1190,9 @@ class EventPumper implements Runnable {
     /** Set the failsafe iteration frequency, bounded by MIN-MAX */
     public static void setFailsafeIterationFreq(long ms) { _failsafeIterationFreq = Math.max(MIN_FAILSAFE_FREQ, Math.min(MAX_FAILSAFE_FREQ, ms)); }
 
+    /**
+     * setInterest.
+     */
     public static void setInterest(SelectionKey key, int op) throws CancelledKeyException {
         if (key == null || !key.isValid()) return;
         synchronized (key) {
@@ -1172,6 +1202,9 @@ class EventPumper implements Runnable {
         }
     }
 
+    /**
+     * clearInterest.
+     */
     public static void clearInterest(SelectionKey key, int op) throws CancelledKeyException {
         if (key == null || !key.isValid()) return;
         synchronized (key) {

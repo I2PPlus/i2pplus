@@ -88,6 +88,9 @@ class NetDbRenderer {
     private final RouterContext _context;
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
     private static String fmt(double val) { synchronized (TWO_DECIMALS) { return TWO_DECIMALS.format(val); } }
+    /**
+     * Construct a new instance.
+     */
     public NetDbRenderer (RouterContext ctx) {
         _context = ctx;
         _organizer = ctx.profileOrganizer();
@@ -95,12 +98,27 @@ class NetDbRenderer {
     }
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     private static final Pattern COMMA_SPACE_SPLIT = Pattern.compile("[, ]+");
+    /**
+     * enableReverseLookups.
+     */
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
+    /**
+     * Lookup wait.
+     */
     public static final int LOOKUP_WAIT = 3 * 1000;
+    /**
+     * Whether floodfill.
+     */
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
+    /**
+     * Local ls count.
+     */
     public int localLSCount;
     private final ProfileOrganizer _organizer;
     private final int BATCH_SIZE = SystemVersion.isSlow() ? 8 : Math.max(SystemVersion.getCores() - 2, 16);
+    /**
+     * Now.
+     */
     private long now = System.currentTimeMillis();
 
     /**
@@ -108,6 +126,9 @@ class NetDbRenderer {
      *  Prioritizes published, nicknamed, named, client, and meta leasesets.
      */
     private class LeaseSetComparator implements Comparator<LeaseSet> {
+          /**
+           * compare.
+           */
           @Override
           public int compare(LeaseSet l, LeaseSet r) {
              Hash keyL = l.getHash();
@@ -145,7 +166,13 @@ class NetDbRenderer {
      */
     private static class LeaseSetRoutingKeyComparator implements Comparator<LeaseSet>, Serializable {
           private final transient Hash _us;
+          /**
+           * LeaseSetRoutingKeyComparator.
+           */
           public LeaseSetRoutingKeyComparator(Hash us) {_us = us;}
+          /**
+           * compare.
+           */
           @Override
           public int compare(LeaseSet l, LeaseSet r) {
              return HashDistance.getDistance(_us, l.getRoutingKey()).compareTo(HashDistance.getDistance(_us, r.getRoutingKey()));
@@ -190,8 +217,14 @@ class NetDbRenderer {
             }
         }
         return true;
+    /**
+     * The value.
+     */
     }
 
+    /**
+     * render router info html.
+     */
     public void renderRouterInfoHTML(Writer out, int pageSize, int page, String routerPrefix, String version,
                                      String country, String family, String capabilities, String ipAddress, String sybil,
                                      int port, int highPort, SigType signatureType, EncType encryptionType, String mtu,
@@ -766,8 +799,17 @@ class NetDbRenderer {
      *  @since 0.9.48
      */
     private class LookupWaiter extends JobImpl {
+        /**
+         * LookupWaiter.
+         */
         public LookupWaiter() {super(_context);}
+        /**
+         * runJob.
+         */
         public void runJob() {synchronized(this) {notifyAll();}}
+        /**
+         * getName.
+         */
         public String getName() {return "Console NetDb Lookup";}
     }
 
@@ -819,6 +861,9 @@ class NetDbRenderer {
     /** Guards against multiple concurrent background workers. */
     private static final AtomicBoolean _rdnsWorkerRunning = new AtomicBoolean(false);
 
+    /**
+     * precacheReverseDNSLookups.
+     */
     public Map<String, String> precacheReverseDNSLookups(Collection<RouterInfo> routers) {
         if (_context.router().isHidden()) {
             return Collections.emptyMap();
@@ -970,10 +1015,16 @@ class NetDbRenderer {
         _context.netDb().lookupRouterInfoLocally(hash);
         if (_context.netDb().lookupRouterInfoLocally(hash) == null) {
             _context.jobQueue().addJob(new JobImpl(_context) {
+                /**
+                 * runJob.
+                 */
                 public void runJob() {
                     lookupRouterInfoWithWait(_context.netDb(), hash, LOOKUP_WAIT);
                 }
 
+                /**
+                 * getName.
+                 */
                 public String getName() {
                     return "Introducer Lookup: " + hash.toBase64().substring(0, 6);
                 }
@@ -1002,6 +1053,7 @@ class NetDbRenderer {
      *  @param debug if true, sort by distance and show debug info
      *  @param client if non-null, render only leasesets for that client
      *  @since 0.7.14
+     * @throws java.io.IOException if an I/O error occurs
      */
     public void renderLeaseSetHTML(Writer out, boolean debug, Hash client) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
@@ -1138,6 +1190,7 @@ class NetDbRenderer {
      *  @param hostname the destination b32, full hash, or hostname
      *  @param debug if true, show debug info
      *  @since 0.9.57
+     * @throws java.io.IOException if an I/O error occurs
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderLeaseSet(Writer out, String hostname, boolean debug) throws IOException {
@@ -1386,6 +1439,7 @@ class NetDbRenderer {
      *              1 = full router infos,
      *              2 = compact router infos,
      *              3 = summary charts sorted by country count
+     * @throws java.io.IOException if an I/O error occurs
      */
     public void renderStatusHTML(Writer out, int pageSize, int page, int mode) throws IOException {
         if (!_context.netDb().isInitialized()) {
@@ -1693,10 +1747,16 @@ class NetDbRenderer {
     private class CountryComparator implements Comparator<String> {
          private static final long serialVersionUID = 1L;
          private final Collator coll;
+         /**
+          * CountryComparator.
+          */
          public CountryComparator() {
              super();
              coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
          }
+          /**
+           * compare.
+           */
           @Override
           public int compare(String l, String r) {
               return coll.compare(getTranslatedCountry(l), getTranslatedCountry(r));
@@ -1709,6 +1769,9 @@ class NetDbRenderer {
      */
     static class RAComparator implements Comparator<RouterAddress>, Serializable {
          private static final long serialVersionUID = 1L;
+          /**
+           * compare.
+           */
           @Override
           public int compare(RouterAddress l, RouterAddress r) {
              int rv = l.getTransportStyle().compareTo(r.getTransportStyle());

@@ -9,16 +9,20 @@ import org.rrd4j.core.Util;
  * chronological ordering.
  */
 class Normalizer {
+    /** Array of timestamps for the data series */
     private final long[] timestamps;
+    /** Number of data points in the series */
     final int count;
+    /** Time step in seconds between data points */
     final long step;
 
+    /** @param timestamps timestamps defining the target grid */
     Normalizer(long[] timestamps) {
         this.timestamps = timestamps;
         this.step = timestamps[1] - timestamps[0];
         this.count = timestamps.length;
     }
-
+    /** Normalize timestamps and values to the target interval */
     double[] normalize(long[] rawTimestamps, double[] rawValues) {
         int rawCount = rawTimestamps.length;
         long rawStep = rawTimestamps[1] - rawTimestamps[0];
@@ -60,6 +64,7 @@ class Normalizer {
         return values;
     }
 
+    /** @return a copy of rawValues */
     private static double[] getCopyOf(double[] rawValues) {
         int n = rawValues.length;
         double[] values = new double[n];

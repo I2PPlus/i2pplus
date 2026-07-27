@@ -30,6 +30,9 @@ import java.util.Map;
 /**
  * This object renders a QR Code as a BitMatrix 2D array of greyscale values.
  *
+ * <p>Encodes text content into a QR Code barcode using the ZXing library's encoder,
+ * supporting various error correction levels and encoding hint types.</p>
+ *
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class QRCodeWriter implements Writer {

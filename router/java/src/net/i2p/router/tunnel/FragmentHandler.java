@@ -92,7 +92,9 @@ The total size, including the tunnel ID and IV, is 1028 bytes.
  *
  */
 class FragmentHandler {
+    /** the context */
     protected final RouterContext _context;
+    /** the log */
     protected final Log _log;
     private final Map<Integer, FragmentedMessage> _fragmentedMessages;
     private final DefragmentedReceiver _receiver;
@@ -118,6 +120,8 @@ class FragmentHandler {
     }
 
     /**
+     * @param context the router context
+     * @param receiver the defragmented receiver
      * @param isInbound true for IBEP, false for OBEP
      */
     public FragmentHandler(RouterContext context, DefragmentedReceiver receiver, boolean isInbound) {
@@ -136,6 +140,9 @@ class FragmentHandler {
      * sending the resulting I2NPMessages where necessary.  The received
      * fragments are all verified.
      *
+     * @param preprocessed the preprocessed data
+     * @param offset the offset
+     * @param length the length
      * @return ok (false if corrupt)
      */
     public boolean receiveTunnelMessage(byte[] preprocessed, int offset, int length) {
@@ -217,7 +224,9 @@ class FragmentHandler {
         return true;
     }
 
+    /** @return complete count */
     public int getCompleteCount() { return _completed.get(); }
+    /** @return failed count */
     public int getFailedCount() { return _failed.get(); }
 
     private static final ByteCache _validateCache = ByteCache.getInstance(512, TrivialPreprocessor.PREPROCESSED_SIZE);
@@ -290,9 +299,13 @@ class FragmentHandler {
     /** for subsequent fragments, which bits contain the fragment #? */
     private static final int MASK_FRAGMENT_NUM = (byte)((1 << 7) - 2); // 0x7E;
 
+    /** local delivery */
     static final short TYPE_LOCAL = 0;
+    /** tunnel delivery */
     static final short TYPE_TUNNEL = 1;
+    /** router delivery */
     static final short TYPE_ROUTER = 2;
+    /** undefined delivery */
     static final short TYPE_UNDEF = 3;
 
     /**

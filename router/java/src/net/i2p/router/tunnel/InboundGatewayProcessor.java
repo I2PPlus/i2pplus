@@ -7,6 +7,9 @@ import net.i2p.I2PAppContext;
  * IV.
  */
 class InboundGatewayProcessor extends HopProcessor {
+    /**
+     * InboundGatewayProcessor.
+     */
     public InboundGatewayProcessor(I2PAppContext ctx, HopConfig config) {
         super(ctx, config, DummyValidator.getInstance());
     }

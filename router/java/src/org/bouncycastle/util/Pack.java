@@ -5,6 +5,13 @@ package org.bouncycastle.util;
  */
 public abstract class Pack
 {
+    /**
+     * Convert a big-endian byte array to a short.
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @return the short value
+     */
     public static short bigEndianToShort(byte[] bs, int off)
     {
         int n = (bs[off] & 0xff) << 8;
@@ -12,6 +19,13 @@ public abstract class Pack
         return (short)n;
     }
 
+    /**
+     * Convert a big-endian byte array to an int.
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @return the int value
+     */
     public static int bigEndianToInt(byte[] bs, int off)
     {
         int n = bs[off] << 24;
@@ -21,6 +35,13 @@ public abstract class Pack
         return n;
     }
 
+    /**
+     * Convert a big-endian byte array to an array of ints.
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @param ns the output int array
+     */
     public static void bigEndianToInt(byte[] bs, int off, int[] ns)
     {
         for (int i = 0; i < ns.length; ++i)
@@ -30,6 +51,15 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Convert a big-endian byte array to a range of an int array.
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @param ns the output int array
+     * @param nsOff the offset into the output array
+     * @param nsLen the number of ints to write
+     */
     public static void bigEndianToInt(byte[] bs, int off, int[] ns, int nsOff, int nsLen)
     {
         for (int i = 0; i < nsLen; ++i)
@@ -39,6 +69,12 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Convert an int to a big-endian byte array.
+     *
+     * @param n the int value
+     * @return the byte array
+     */
     public static byte[] intToBigEndian(int n)
     {
         byte[] bs = new byte[4];
@@ -46,6 +82,13 @@ public abstract class Pack
         return bs;
     }
 
+    /**
+     * Write an int to a byte array in big-endian order.
+     *
+     * @param n the int value
+     * @param bs the target byte array
+     * @param off the offset into the array
+     */
     public static void intToBigEndian(int n, byte[] bs, int off)
     {
         bs[off] = (byte)(n >>> 24);
@@ -54,6 +97,12 @@ public abstract class Pack
         bs[++off] = (byte)(n);
     }
 
+    /**
+     * Convert an int array to a big-endian byte array.
+     *
+     * @param ns the int array
+     * @return the byte array
+     */
     public static byte[] intToBigEndian(int[] ns)
     {
         byte[] bs = new byte[4 * ns.length];
@@ -61,6 +110,13 @@ public abstract class Pack
         return bs;
     }
 
+    /**
+     * Write an int array to a byte array in big-endian order.
+     *
+     * @param ns the int array
+     * @param bs the target byte array
+     * @param off the offset into the array
+     */
     public static void intToBigEndian(int[] ns, byte[] bs, int off)
     {
         for (int i = 0; i < ns.length; ++i)
@@ -70,6 +126,15 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Write a range of an int array to a byte array in big-endian order.
+     *
+     * @param ns the int array
+     * @param nsOff the offset into the int array
+     * @param nsLen the number of ints to write
+     * @param bs the target byte array
+     * @param bsOff the offset into the byte array
+     */
     public static void intToBigEndian(int[] ns, int nsOff, int nsLen, byte[] bs, int bsOff)
     {
         for (int i = 0; i < nsLen; ++i)
@@ -79,6 +144,13 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Convert a big-endian byte array to a long.
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @return the long value
+     */
     public static long bigEndianToLong(byte[] bs, int off)
     {
         int hi = bigEndianToInt(bs, off);
@@ -86,6 +158,13 @@ public abstract class Pack
         return ((long)(hi & 0xffffffffL) << 32) | (long)(lo & 0xffffffffL);
     }
 
+    /**
+     * Convert a big-endian byte array to a long array.
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @param ns the output long array
+     */
     public static void bigEndianToLong(byte[] bs, int off, long[] ns)
     {
         for (int i = 0; i < ns.length; ++i)
@@ -95,6 +174,15 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Convert a big-endian byte array to a range of a long array.
+     *
+     * @param bs the byte array
+     * @param bsOff the offset into the byte array
+     * @param ns the output long array
+     * @param nsOff the offset into the output array
+     * @param nsLen the number of longs to write
+     */
     public static void bigEndianToLong(byte[] bs, int bsOff, long[] ns, int nsOff, int nsLen)
     {
         for (int i = 0; i < nsLen; ++i)
@@ -104,6 +192,14 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Convert a big-endian byte array of variable length to a long.
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @param len the number of bytes to read (1-8)
+     * @return the long value
+     */
     public static long bigEndianToLong(byte[] bs, int off, int len)
     {
         long x = 0;
@@ -114,6 +210,12 @@ public abstract class Pack
         return x;
     }
 
+    /**
+     * Convert a long to a big-endian byte array.
+     *
+     * @param n the long value
+     * @return the byte array
+     */
     public static byte[] longToBigEndian(long n)
     {
         byte[] bs = new byte[8];
@@ -121,12 +223,25 @@ public abstract class Pack
         return bs;
     }
 
+    /**
+     * Write a long to a byte array in big-endian order.
+     *
+     * @param n the long value
+     * @param bs the target byte array
+     * @param off the offset into the array
+     */
     public static void longToBigEndian(long n, byte[] bs, int off)
     {
         intToBigEndian((int)(n >>> 32), bs, off);
         intToBigEndian((int)(n & 0xffffffffL), bs, off + 4);
     }
 
+    /**
+     * Convert a long array to a big-endian byte array.
+     *
+     * @param ns the long array
+     * @return the byte array
+     */
     public static byte[] longToBigEndian(long[] ns)
     {
         byte[] bs = new byte[8 * ns.length];
@@ -134,6 +249,13 @@ public abstract class Pack
         return bs;
     }
 
+    /**
+     * Write a long array to a byte array in big-endian order.
+     *
+     * @param ns the long array
+     * @param bs the target byte array
+     * @param off the offset into the array
+     */
     public static void longToBigEndian(long[] ns, byte[] bs, int off)
     {
         for (int i = 0; i < ns.length; ++i)
@@ -143,6 +265,15 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Write a range of a long array to a byte array in big-endian order.
+     *
+     * @param ns the long array
+     * @param nsOff the offset into the long array
+     * @param nsLen the number of longs to write
+     * @param bs the target byte array
+     * @param bsOff the offset into the byte array
+     */
     public static void longToBigEndian(long[] ns, int nsOff, int nsLen, byte[] bs, int bsOff)
     {
         for (int i = 0; i < nsLen; ++i)
@@ -168,6 +299,13 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Convert a little-endian byte array to a short.
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @return the short value
+     */
     public static short littleEndianToShort(byte[] bs, int off)
     {
         int n = bs[off] & 0xff;
@@ -175,6 +313,13 @@ public abstract class Pack
         return (short)n;
     }
 
+    /**
+     * Convert a little-endian byte array to an int.
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @return the int value
+     */
     public static int littleEndianToInt(byte[] bs, int off)
     {
         int n = bs[off] & 0xff;
@@ -184,11 +329,27 @@ public abstract class Pack
         return n;
     }
 
+    /**
+     * Convert a little-endian byte array of variable length to the high-order bits of an int.
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @param len the number of bytes to read (1-4)
+     * @return the int value shifted into the high-order bits
+     */
     public static int littleEndianToInt_High(byte[] bs, int off, int len)
     {
         return littleEndianToInt_Low(bs, off, len) << ((4 - len) << 3);
     }
 
+    /**
+     * Convert a little-endian byte array of variable length to an int (low-order bits).
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @param len the number of bytes to read (1-4)
+     * @return the int value
+     */
     public static int littleEndianToInt_Low(byte[] bs, int off, int len)
     {
 //        assert 1 <= len && len <= 4;
@@ -203,6 +364,13 @@ public abstract class Pack
         return result;
     }
 
+    /**
+     * Convert a little-endian byte array to an int array.
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @param ns the output int array
+     */
     public static void littleEndianToInt(byte[] bs, int off, int[] ns)
     {
         for (int i = 0; i < ns.length; ++i)
@@ -212,6 +380,15 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Convert a little-endian byte array to a range of an int array.
+     *
+     * @param bs the byte array
+     * @param bOff the offset into the byte array
+     * @param ns the output int array
+     * @param nOff the offset into the output array
+     * @param count the number of ints to write
+     */
     public static void littleEndianToInt(byte[] bs, int bOff, int[] ns, int nOff, int count)
     {
         for (int i = 0; i < count; ++i)
@@ -221,6 +398,14 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Convert a little-endian byte array to a new int array of specified count.
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @param count the number of ints to read
+     * @return the int array
+     */
     public static int[] littleEndianToInt(byte[] bs, int off, int count)
     {
         int[] ns = new int[count];
@@ -232,6 +417,12 @@ public abstract class Pack
         return ns;
     }
 
+    /**
+     * Convert a short to a little-endian byte array.
+     *
+     * @param n the short value
+     * @return the byte array
+     */
     public static byte[] shortToLittleEndian(short n)
     {
         byte[] bs = new byte[2];
@@ -239,6 +430,13 @@ public abstract class Pack
         return bs;
     }
 
+    /**
+     * Write a short to a byte array in little-endian order.
+     *
+     * @param n the short value
+     * @param bs the target byte array
+     * @param off the offset into the array
+     */
     public static void shortToLittleEndian(short n, byte[] bs, int off)
     {
         bs[off] = (byte)(n);
@@ -246,6 +444,12 @@ public abstract class Pack
     }
 
 
+    /**
+     * Convert a short to a big-endian byte array.
+     *
+     * @param n the short value
+     * @return the byte array
+     */
     public static byte[] shortToBigEndian(short n)
     {
         byte[] r = new byte[2];
@@ -253,6 +457,13 @@ public abstract class Pack
         return r;
     }
 
+    /**
+     * Write a short to a byte array in big-endian order.
+     *
+     * @param n the short value
+     * @param bs the target byte array
+     * @param off the offset into the array
+     */
     public static void shortToBigEndian(short n, byte[] bs, int off)
     {
         bs[off] = (byte)(n >>> 8);
@@ -260,6 +471,12 @@ public abstract class Pack
     }
 
 
+    /**
+     * Convert an int to a little-endian byte array.
+     *
+     * @param n the int value
+     * @return the byte array
+     */
     public static byte[] intToLittleEndian(int n)
     {
         byte[] bs = new byte[4];
@@ -267,6 +484,13 @@ public abstract class Pack
         return bs;
     }
 
+    /**
+     * Write an int to a byte array in little-endian order.
+     *
+     * @param n the int value
+     * @param bs the target byte array
+     * @param off the offset into the array
+     */
     public static void intToLittleEndian(int n, byte[] bs, int off)
     {
         bs[off] = (byte)(n);
@@ -275,6 +499,12 @@ public abstract class Pack
         bs[++off] = (byte)(n >>> 24);
     }
 
+    /**
+     * Convert an int array to a little-endian byte array.
+     *
+     * @param ns the int array
+     * @return the byte array
+     */
     public static byte[] intToLittleEndian(int[] ns)
     {
         byte[] bs = new byte[4 * ns.length];
@@ -282,6 +512,13 @@ public abstract class Pack
         return bs;
     }
 
+    /**
+     * Write an int array to a byte array in little-endian order.
+     *
+     * @param ns the int array
+     * @param bs the target byte array
+     * @param off the offset into the array
+     */
     public static void intToLittleEndian(int[] ns, byte[] bs, int off)
     {
         for (int i = 0; i < ns.length; ++i)
@@ -291,6 +528,15 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Write a range of an int array to a byte array in little-endian order.
+     *
+     * @param ns the int array
+     * @param nsOff the offset into the int array
+     * @param nsLen the number of ints to write
+     * @param bs the target byte array
+     * @param bsOff the offset into the byte array
+     */
     public static void intToLittleEndian(int[] ns, int nsOff, int nsLen, byte[] bs, int bsOff)
     {
         for (int i = 0; i < nsLen; ++i)
@@ -300,6 +546,13 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Convert a little-endian byte array to a long.
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @return the long value
+     */
     public static long littleEndianToLong(byte[] bs, int off)
     {
         int lo = littleEndianToInt(bs, off);
@@ -307,6 +560,13 @@ public abstract class Pack
         return ((long)(hi & 0xffffffffL) << 32) | (long)(lo & 0xffffffffL);
     }
 
+    /**
+     * Convert a little-endian byte array to a long array.
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @param ns the output long array
+     */
     public static void littleEndianToLong(byte[] bs, int off, long[] ns)
     {
         for (int i = 0; i < ns.length; ++i)
@@ -316,6 +576,14 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Convert a little-endian byte array of variable length to a long.
+     *
+     * @param input the byte array
+     * @param off the offset into the array
+     * @param len the number of bytes to read (1-8)
+     * @return the long value
+     */
     public static long littleEndianToLong(byte[] input, int off, int len)
     {
         long result = 0;
@@ -326,6 +594,15 @@ public abstract class Pack
         return result;
     }
 
+    /**
+     * Convert a little-endian byte array to a range of a long array.
+     *
+     * @param bs the byte array
+     * @param bsOff the offset into the byte array
+     * @param ns the output long array
+     * @param nsOff the offset into the output array
+     * @param nsLen the number of longs to write
+     */
     public static void littleEndianToLong(byte[] bs, int bsOff, long[] ns, int nsOff, int nsLen)
     {
         for (int i = 0; i < nsLen; ++i)
@@ -335,6 +612,14 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Write the high-order bytes of a long to a byte array in little-endian order.
+     *
+     * @param n the long value
+     * @param bs the target byte array
+     * @param off the offset into the array
+     * @param len the number of bytes to write (1-8)
+     */
     public static void longToLittleEndian_High(long n, byte[] bs, int off, int len)
     {
         //Debug.Assert(1 <= len && len <= 8);
@@ -347,6 +632,14 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Write a long to a byte array in little-endian order with variable length.
+     *
+     * @param n the long value
+     * @param bs the target byte array
+     * @param off the offset into the array
+     * @param len the number of bytes to write (1-8)
+     */
     public static void longToLittleEndian(long n, byte[] bs, int off, int len)
     {
         for (int i = 0; i < len; ++i)
@@ -360,11 +653,27 @@ public abstract class Pack
 //        longToLittleEndian_High(n << ((8 - len) << 3), bs, off, len);
 //    }
 
+    /**
+     * Convert a little-endian byte array of variable length to the high-order bits of a long.
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @param len the number of bytes to read (1-8)
+     * @return the long value shifted into the high-order bits
+     */
     public static long littleEndianToLong_High(byte[] bs, int off, int len)
     {
         return littleEndianToLong_Low(bs, off, len) << ((8 - len) << 3);
     }
 
+    /**
+     * Convert a little-endian byte array of variable length to a long (low-order bits).
+     *
+     * @param bs the byte array
+     * @param off the offset into the array
+     * @param len the number of bytes to read (1-8)
+     * @return the long value
+     */
     public static long littleEndianToLong_Low(byte[] bs, int off, int len)
     {
         //Debug.Assert(1 <= len && len <= 8);
@@ -377,6 +686,12 @@ public abstract class Pack
         return result;
     }
 
+    /**
+     * Convert a long to a little-endian byte array.
+     *
+     * @param n the long value
+     * @return the byte array
+     */
     public static byte[] longToLittleEndian(long n)
     {
         byte[] bs = new byte[8];
@@ -384,12 +699,25 @@ public abstract class Pack
         return bs;
     }
 
+    /**
+     * Write a long to a byte array in little-endian order.
+     *
+     * @param n the long value
+     * @param bs the target byte array
+     * @param off the offset into the array
+     */
     public static void longToLittleEndian(long n, byte[] bs, int off)
     {
         intToLittleEndian((int)(n & 0xffffffffL), bs, off);
         intToLittleEndian((int)(n >>> 32), bs, off + 4);
     }
 
+    /**
+     * Convert a long array to a little-endian byte array.
+     *
+     * @param ns the long array
+     * @return the byte array
+     */
     public static byte[] longToLittleEndian(long[] ns)
     {
         byte[] bs = new byte[8 * ns.length];
@@ -397,6 +725,13 @@ public abstract class Pack
         return bs;
     }
 
+    /**
+     * Write a long array to a byte array in little-endian order.
+     *
+     * @param ns the long array
+     * @param bs the target byte array
+     * @param off the offset into the array
+     */
     public static void longToLittleEndian(long[] ns, byte[] bs, int off)
     {
         for (int i = 0; i < ns.length; ++i)
@@ -406,6 +741,15 @@ public abstract class Pack
         }
     }
 
+    /**
+     * Write a range of a long array to a byte array in little-endian order.
+     *
+     * @param ns the long array
+     * @param nsOff the offset into the long array
+     * @param nsLen the number of longs to write
+     * @param bs the target byte array
+     * @param bsOff the offset into the byte array
+     */
     public static void longToLittleEndian(long[] ns, int nsOff, int nsLen, byte[] bs, int bsOff)
     {
         for (int i = 0; i < nsLen; ++i)

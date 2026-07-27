@@ -83,6 +83,9 @@ public class RandomIterator<E> implements Iterator<E> {
         }
     }
 
+    /**
+     * RandomIterator.
+     */
     public RandomIterator(List<E> list){
         this.list = list;
         LIST_SIZE = list.size();
@@ -90,10 +93,16 @@ public class RandomIterator<E> implements Iterator<E> {
         upper = LIST_SIZE - 1;
     }
 
+    /**
+     * hasNext.
+     */
     public boolean hasNext() {
         return servedCount < LIST_SIZE;
     }
 
+    /**
+     * next.
+     */
     public E next() {
         if (!hasNext())
             throw new NoSuchElementException();
@@ -157,7 +166,7 @@ public class RandomIterator<E> implements Iterator<E> {
         throw new UnsupportedOperationException();
     }
 
-/*
+    /*
     public static void main(String[] args) {
         testAndroid();
         test(0);

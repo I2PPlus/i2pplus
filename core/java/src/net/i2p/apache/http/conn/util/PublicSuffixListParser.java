@@ -38,10 +38,16 @@ import java.util.List;
  *
  * @since 4.4
  */
+/**
+ * PublicSuffixListParser.
+ */
 public final class PublicSuffixListParser {
 
     private static final int MAX_LINE_LEN = 256;
 
+    /**
+     * PublicSuffixListParser.
+     */
     public PublicSuffixListParser() {
     }
 

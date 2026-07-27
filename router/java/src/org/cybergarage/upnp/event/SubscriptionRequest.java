@@ -37,10 +37,16 @@ public class SubscriptionRequest extends HTTPRequest {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     * SubscriptionRequest.
+     */
     public SubscriptionRequest() {
         setContentLength(0);
     }
 
+    /**
+     * SubscriptionRequest.
+     */
     public SubscriptionRequest(HTTPRequest httpReq) {
         this();
         set(httpReq);
@@ -84,6 +90,9 @@ public class SubscriptionRequest extends HTTPRequest {
         setRequestPort(reqPort);
     }
 
+    /**
+     * setSubscribeRequest.
+     */
     public void setSubscribeRequest(Service service, String callback, long timeout) {
         setMethod(Subscription.SUBSCRIBE_METHOD);
         setService(service);
@@ -92,6 +101,9 @@ public class SubscriptionRequest extends HTTPRequest {
         setTimeout(timeout);
     }
 
+    /**
+     * setRenewRequest.
+     */
     public void setRenewRequest(Service service, String uuid, long timeout) {
         setMethod(Subscription.SUBSCRIBE_METHOD);
         setService(service);
@@ -99,6 +111,9 @@ public class SubscriptionRequest extends HTTPRequest {
         setTimeout(timeout);
     }
 
+    /**
+     * setUnsubscribeRequest.
+     */
     public void setUnsubscribeRequest(Service service) {
         setMethod(Subscription.UNSUBSCRIBE_METHOD);
         setService(service);
@@ -109,14 +124,23 @@ public class SubscriptionRequest extends HTTPRequest {
     //	NT
     ////////////////////////////////////////////////
 
+    /**
+     * setNT.
+     */
     public void setNT(String value) {
         setHeader(HTTP.NT, value);
     }
 
+    /**
+     * getNT.
+     */
     public String getNT() {
         return getHeaderValue(HTTP.NT);
     }
 
+    /**
+     * hasNT.
+     */
     public boolean hasNT() {
         String nt = getNT();
         return (nt != null && 0 < nt.length()) ? true : false;
@@ -129,14 +153,23 @@ public class SubscriptionRequest extends HTTPRequest {
     private static final String CALLBACK_START_WITH = "<";
     private static final String CALLBACK_END_WITH = ">";
 
+    /**
+     * setCallback.
+     */
     public void setCallback(String value) {
         setStringHeader(HTTP.CALLBACK, value, CALLBACK_START_WITH, CALLBACK_END_WITH);
     }
 
+    /**
+     * getCallback.
+     */
     public String getCallback() {
         return getStringHeaderValue(HTTP.CALLBACK, CALLBACK_START_WITH, CALLBACK_END_WITH);
     }
 
+    /**
+     * hasCallback.
+     */
     public boolean hasCallback() {
         String callback = getCallback();
         return (callback != null && 0 < callback.length()) ? true : false;
@@ -146,10 +179,16 @@ public class SubscriptionRequest extends HTTPRequest {
     //	SID
     ////////////////////////////////////////////////
 
+    /**
+     * setSID.
+     */
     public void setSID(String id) {
         setHeader(HTTP.SID, Subscription.toSIDHeaderString(id));
     }
 
+    /**
+     * getSID.
+     */
     public String getSID() {
         // Thanks for Grzegorz Lehmann and Stefano Lenzi(12/06/04)
         String sid = Subscription.getSID(getHeaderValue(HTTP.SID));
@@ -157,6 +196,9 @@ public class SubscriptionRequest extends HTTPRequest {
         return sid;
     }
 
+    /**
+     * hasSID.
+     */
     public boolean hasSID() {
         String sid = getSID();
         return (sid != null && 0 < sid.length()) ? true : false;
@@ -166,10 +208,16 @@ public class SubscriptionRequest extends HTTPRequest {
     //	Timeout
     ////////////////////////////////////////////////
 
+    /**
+     * setTimeout.
+     */
     public final void setTimeout(long value) {
         setHeader(HTTP.TIMEOUT, Subscription.toTimeoutHeaderString(value));
     }
 
+    /**
+     * getTimeout.
+     */
     public long getTimeout() {
         return Subscription.getTimeout(getHeaderValue(HTTP.TIMEOUT));
     }
@@ -178,6 +226,9 @@ public class SubscriptionRequest extends HTTPRequest {
     //	post (Response)
     ////////////////////////////////////////////////
 
+    /**
+     * post.
+     */
     public void post(SubscriptionResponse subRes) {
         super.post(subRes);
     }
@@ -186,6 +237,9 @@ public class SubscriptionRequest extends HTTPRequest {
     //	post
     ////////////////////////////////////////////////
 
+    /**
+     * post.
+     */
     public SubscriptionResponse post() {
         HTTPResponse httpRes = post(getRequestHost(), getRequestPort());
         return new SubscriptionResponse(httpRes);

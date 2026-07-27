@@ -41,14 +41,23 @@ class ExpireLeasesJob extends JobImpl {
     private static final int LIMIT_LEASES_FF = 1250;
     private static final int LIMIT_LEASES_CLIENT = SystemVersion.isSlow() ? 300 : 750;
 
+    /**
+     * ExpireLeasesJob.
+     */
     public ExpireLeasesJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
         super(ctx);
         _log = ctx.logManager().getLog(ExpireLeasesJob.class);
         _facade = facade;
     }
 
+    /**
+     * getName.
+     */
     public String getName() { return "Expire Leases"; }
 
+    /**
+     * runJob.
+     */
     public void runJob() {
         long uptime = getContext().router().getUptime();
         List<Hash> toExpire = selectKeysToExpire();
@@ -126,6 +135,9 @@ class ExpireLeasesJob extends JobImpl {
      *  @since 0.9.65
      */
     private static class LeaseSetComparator implements Comparator<LeaseSet>, Serializable {
+         /**
+          * compare.
+          */
          @Override
          public int compare(LeaseSet l, LeaseSet r) {
              long dl = l.getLatestLeaseDate();
@@ -136,6 +148,9 @@ class ExpireLeasesJob extends JobImpl {
         }
     }
 
+    /**
+     * getTunnelName.
+     */
     public String getTunnelName(Destination d) {
         if (d != null) {
             TunnelPoolSettings in = getContext().tunnelManager().getInboundSettings(d.calculateHash());

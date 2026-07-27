@@ -15,6 +15,7 @@ import java.util.Locale;
 
 /** Extremely simple utility class used to create XML documents. */
 public class XmlWriter implements AutoCloseable {
+    /** Indentation string for XML output */
     static final String INDENT_STR = "   ";
     private static final String STYLE = "style";
     private static final DateTimeFormatter ISOLIKE =
@@ -40,11 +41,14 @@ public class XmlWriter implements AutoCloseable {
          */
         String format(double value, String nanString);
     }
+    /** Writer */
 
     private final PrintWriter writer;
     private final StringBuilder indent = new StringBuilder();
     private final Deque<String> openTags = new LinkedList<>();
+    /** Time formatter */
     private final DateTimeFormatter timeFormatter;
+    /** Double formatter */
     private final DoubleFormater doubleFormatter;
 
     private XmlWriter(
@@ -297,6 +301,9 @@ public class XmlWriter implements AutoCloseable {
     private static String escape(String s) {
         return s.replace("<", "&lt;").replace(">", "&gt;");
     }
+    /**
+     * Close
+     */
 
     @Override
     public void close() {

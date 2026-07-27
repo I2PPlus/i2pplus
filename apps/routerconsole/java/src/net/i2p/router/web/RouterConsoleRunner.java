@@ -113,18 +113,45 @@ public class RouterConsoleRunner implements RouterApp {
         authenticator.setMaxNonceAge(60*60*1000L);
     }
     private static final String NAME = "console";
+    /**
+     * JETTY_REALM.
+     */
     public static final String JETTY_REALM = "i2prouter";
     private static final String JETTY_ROLE = "routerAdmin";
+    /**
+     * PROP_CONSOLE_PW.
+     */
     public static final String PROP_CONSOLE_PW = "routerconsole.auth." + JETTY_REALM;
+    /**
+     * PROP_PW_ENABLE.
+     */
     public static final String PROP_PW_ENABLE = "routerconsole.auth.enable";
     /** from Jetty Credential.java */
     private static final String MD5_CREDENTIAL_TYPE = "MD5:";
 
+    /**
+     * ROUTERCONSOLE.
+     */
     public static final String ROUTERCONSOLE = "routerconsole";
+    /**
+     * PREFIX.
+     */
     public static final String PREFIX = "webapps.";
+    /**
+     * ENABLED.
+     */
     public static final String ENABLED = ".startOnLoad";
+    /**
+     * PROP_KEYSTORE_PASSWORD.
+     */
     public static final String PROP_KEYSTORE_PASSWORD = "routerconsole.keystorePassword";
+    /**
+     * PROP_KEY_PASSWORD.
+     */
     public static final String PROP_KEY_PASSWORD = "routerconsole.keyPassword";
+    /**
+     * DEFAULT_LISTEN_PORT.
+     */
     public static final int DEFAULT_LISTEN_PORT = PortMapper.DEFAULT_CONSOLE_PORT;
     private static final String DEFAULT_WEBAPPS_DIR = "./webapps/";
     private static final String USAGE = "Bad RouterConsoleRunner arguments, check clientApp.0.args in your clients.config file! " +
@@ -137,7 +164,11 @@ public class RouterConsoleRunner implements RouterApp {
 
     private static final int MAX_IDLE_TIME = 30*1000;
     private static final String THREAD_NAME = "Console";
+    /**
+     * PROP_DTG_ENABLED.
+     */
     public static final String PROP_DTG_ENABLED = "desktopgui.enabled";
+    /** P r o p  a l l o w e d  h o s t s */
     static final String PROP_ALLOWED_HOSTS = "routerconsole.allowedHosts";
     /** @since 0.9.34 */
     static final FileFilter WAR_FILTER = new WarFilenameFilter();
@@ -214,6 +245,9 @@ public class RouterConsoleRunner implements RouterApp {
         _state = INITIALIZED;
     }
 
+    /**
+     * main.
+     */
     public static void main(String[] args) {
         List<RouterContext> contexts = RouterContext.listContexts();
         if (contexts == null || contexts.isEmpty())
@@ -549,6 +583,9 @@ public class RouterConsoleRunner implements RouterApp {
                         // number of acceptors, (default) number of selectors
                         ServerConnector lsnr = new ServerConnector(_server, 1, 0,
                                                                    new HttpConnectionFactory(httpConfig)) {
+                            /**
+                             * toString.
+                             */
                             @Override
                             public String toString() {
                                 return ":" + getPort();
@@ -645,6 +682,9 @@ public class RouterConsoleRunner implements RouterApp {
                             ServerConnector ssll = new ServerConnector(_server, 1, 0,
                                                                        new SslConnectionFactory(sslFactory, "http/1.1"),
                                                                        new HttpConnectionFactory(httpConfig)) {
+                                /**
+                                 * toString.
+                                 */
                                 @Override
                                 public String toString() {
                                     return ":" + getPort();
@@ -1063,12 +1103,18 @@ public class RouterConsoleRunner implements RouterApp {
         private final String _webapp;
         private final Log _log;
 
+        /**
+         * CustomHashLoginService.
+         */
         public CustomHashLoginService(String realm, String webapp, Log log) {
             super(realm);
             _webapp = webapp;
             _log = log;
         }
 
+        /**
+         * login.
+         */
         @Override
         public UserIdentity login(String username, Object credentials, ServletRequest request) {
             UserIdentity rv = super.login(username, credentials, request);
@@ -1081,6 +1127,9 @@ public class RouterConsoleRunner implements RouterApp {
 
     /** @since 0.8.8 */
     private class ServerShutdown implements Runnable {
+        /**
+         * run.
+         */
         @Override
         public void run() {
             shutdown(null);
@@ -1091,11 +1140,15 @@ public class RouterConsoleRunner implements RouterApp {
         return webAppProperties(_context.getConfigDir().getAbsolutePath());
     }
 
-    /** @since 0.9.4 */
+    /** Return webapp properties
+     *  @since 0.9.4 */
     public static Properties webAppProperties(I2PAppContext ctx) {
         return webAppProperties(ctx.getConfigDir().getAbsolutePath());
     }
 
+    /**
+     * webAppProperties.
+     */
     public static Properties webAppProperties(String dir) {
         Properties rv = new OrderedProperties();
         // String webappConfigFile = _context.getProperty(PROP_WEBAPP_CONFIG_FILENAME, DEFAULT_WEBAPP_CONFIG_FILENAME);
@@ -1110,6 +1163,9 @@ public class RouterConsoleRunner implements RouterApp {
         return rv;
     }
 
+    /**
+     * storeWebAppProperties.
+     */
     public static void storeWebAppProperties(RouterContext ctx, Properties props) {
         // String webappConfigFile = _context.getProperty(PROP_WEBAPP_CONFIG_FILENAME, DEFAULT_WEBAPP_CONFIG_FILENAME);
         String webappConfigFile = DEFAULT_WEBAPP_CONFIG_FILENAME;
@@ -1158,8 +1214,14 @@ public class RouterConsoleRunner implements RouterApp {
     private static class WarFilenameFilter extends FileSuffixFilter {
         private static final String RCWAR = ROUTERCONSOLE + ".war";
 
+        /**
+         * WarFilenameFilter.
+         */
         public WarFilenameFilter() { super(".war"); }
 
+        /**
+         * accept.
+         */
         @Override
         public boolean accept(File file) {
             return super.accept(file) && !file.getName().equals(RCWAR);
@@ -1171,6 +1233,9 @@ public class RouterConsoleRunner implements RouterApp {
      * @since 0.9.24
      */
     private static class HostComparator implements Comparator<String>, Serializable {
+         /**
+          * compare.
+          */
          @Override
          public int compare(String l, String r) {
              boolean l4 = l.contains(".");

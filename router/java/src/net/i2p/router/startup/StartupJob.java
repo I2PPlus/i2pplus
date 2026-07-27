@@ -28,11 +28,20 @@ import net.i2p.util.SystemVersion;
  */
 public class StartupJob extends JobImpl {
 
+    /**
+     * StartupJob.
+     */
     public StartupJob(RouterContext context) {
         super(context);
     }
 
+    /**
+     * getName.
+     */
     public String getName() { return "Boot Router"; }
+    /**
+     * runJob.
+     */
     public void runJob() {
         if (!SystemVersion.isAndroid())
             getContext().jobQueue().addJob(new LoadClientAppsJob(getContext()));

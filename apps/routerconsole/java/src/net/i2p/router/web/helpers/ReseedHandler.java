@@ -13,9 +13,15 @@ import net.i2p.router.web.HelperBase;
 public class ReseedHandler extends HelperBase {
     private HttpSession _session;
 
+    /**
+     * ReseedHandler.
+     */
     public ReseedHandler() {
         this(ContextHelper.getContext(null));
     }
+    /**
+     * ReseedHandler.
+     */
     public ReseedHandler(RouterContext ctx) {
         _context = ctx;
     }

@@ -88,6 +88,9 @@ import org.freenetproject.ForwardPortStatus;
  *
  * Public for CommandLine main()
  */
+/**
+ * UPnP.
+ */
 public class UPnP extends ControlPoint implements DeviceChangeListener, EventListener {
 	private final Log _log;
 	private final I2PAppContext _context;
@@ -105,6 +108,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	private static final String WAN_IP_CONNECTION_2 = "urn:schemas-upnp-org:service:WANIPConnection:2";
 	private static final String WAN_IPV6_CONNECTION = "urn:schemas-upnp-org:service:WANIPv6FirewallControl:1";
 
+	/**
+	 * LEASE_TIME_SECONDS.
+	 */
 	public static final int LEASE_TIME_SECONDS = 3*60*60;
 
 	private Device _router;
@@ -131,6 +137,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	/** set to true to talk to UPnP on the same host as us, probably for testing */
 	private static final boolean ALLOW_SAME_HOST = false;
 
+	/**
+	 * UPnP.
+	 */
 	public UPnP(I2PAppContext context, int ssdpPort, int httpPort, InetAddress[] binds) {
 		super(ssdpPort, httpPort, binds);
 		_context = context;
@@ -141,6 +150,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		_eventVars = new HashMap<>(4);
 	}
 
+	/**
+	 * runPlugin.
+	 */
 	public synchronized boolean runPlugin() {
 		addDeviceChangeListener(this);
 		addEventListener(this);
@@ -539,6 +551,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		return isPortForwarded;
 	}
 
+	/**
+	 * unregisterPortMappings.
+	 */
 	public void unregisterPortMappings() {
 		Set<ForwardPort> ports;
 		synchronized(lock) {
@@ -1293,6 +1308,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	 *  @since 0.9.46
 	 */
 	private static class UDNComparator implements Comparator<Map.Entry<String, Device>>, Serializable {
+		/**
+		 * compare.
+		 */
 		public int compare(Map.Entry<String, Device> l, Map.Entry<String, Device> r) {
 			Device ld = l.getValue();
 			Device rd = r.getValue();
@@ -1878,6 +1896,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			portsToForwardNow = ports;
 		}
 
+		/**
+		 * run.
+		 */
 		public void run() {
 			// This renews the subscriptions for all services on all devices
 			renewSubscriberService(LEASE_TIME_SECONDS);
@@ -1927,10 +1948,16 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	private class UnregisterPortsThread implements Runnable {
 		private final Set<ForwardPort> portsToForwardNow;
 
+		/**
+		 * UnregisterPortsThread.
+		 */
 		public UnregisterPortsThread(Set<ForwardPort> ports) {
 			portsToForwardNow = ports;
 		}
 
+		/**
+		 * run.
+		 */
 		public void run() {
 			for(ForwardPort port : portsToForwardNow) {
 				String proto = protoToString(port.protocol);
@@ -1962,6 +1989,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			_ip = ip;
 		}
 
+		/**
+		 * getIP.
+		 */
 		public String getIP() { return _ip; }
 
 		/**
@@ -1984,6 +2014,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		 */
 		public synchronized void setExpiration(long expires) { _expires = expires; }
 
+		/**
+		 * hashCode.
+		 */
 		@Override
 		public int hashCode() {
 			return _ip.hashCode() ^ super.hashCode();
@@ -2000,6 +2033,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			return _ip.equals(f.getIP()) && super.equals(o);
 		}
 
+		/**
+		 * toString.
+		 */
 		@Override
 		public String toString() {
 			return "IPv6FP " + name + ' ' + protocol + ' ' + _ip + ' ' + portNumber + ' ' + _uid + ' ' + _expires;

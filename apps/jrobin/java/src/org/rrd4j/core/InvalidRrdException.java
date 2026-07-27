@@ -9,10 +9,16 @@ public class InvalidRrdException extends RrdException {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * InvalidRrdException.
+     */
     public InvalidRrdException(String message) {
         super(message);
     }
 
+    /**
+     * InvalidRrdException.
+     */
     public InvalidRrdException(String message, Exception cause) {
         super(message, cause);
     }

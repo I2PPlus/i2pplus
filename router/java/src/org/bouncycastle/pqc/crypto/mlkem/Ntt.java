@@ -6,7 +6,14 @@ package org.bouncycastle.pqc.crypto.mlkem;
  */
 class Ntt
 {
+    /**
+     * Default constructor.
+     */
+    public Ntt() {}
 
+    /**
+     * Ntt zetas.
+     */
     public static final short[] nttZetas = new short[]{
         2285, 2571, 2970, 1812, 1493, 1422, 287, 202, 3158, 622, 1577, 182, 962,
         2127, 1855, 1468, 573, 2004, 264, 383, 2500, 1458, 1727, 3199, 2648, 1017,
@@ -19,10 +26,19 @@ class Ntt
         1218, 1994, 2455, 220, 2142, 1670, 2144, 1799, 2051, 794, 1819, 2475, 2459,
         478, 3221, 3021, 996, 991, 958, 1869, 1522, 1628};
 
+    /**
+     * The value.
+     */
+    /**
+     * Ntt zetas inv.
+     */
     public static final short[] nttZetasInv = new short[]{
         1701, 1807, 1460, 2371, 2338, 2333, 308, 108, 2851, 870, 854, 1510, 2535,
         1278, 1530, 1185, 1659, 1187, 3109, 874, 1335, 2111, 136, 1215, 2945, 1465,
         1285, 2007, 2719, 2726, 2232, 2512, 75, 156, 3000, 2911, 2980, 872, 2685,
+        /**
+         * The value.
+         */
         1590, 2210, 602, 1846, 777, 147, 2170, 2551, 246, 1676, 1755, 460, 291, 235,
         3152, 2742, 2907, 3224, 1779, 2458, 1251, 2486, 2774, 2899, 1103, 1275, 2652,
         1065, 2881, 725, 1508, 2368, 398, 951, 247, 1421, 3222, 2499, 271, 90, 853,
@@ -31,6 +47,9 @@ class Ntt
         829, 2946, 3065, 1325, 2756, 1861, 1474, 1202, 2367, 3147, 1752, 2707, 171,
         3127, 3042, 1907, 1836, 1517, 359, 758, 1441};
 
+    /**
+     * ntt.
+     */
     public static short[] ntt(short[] inp)
     {
         short[] r = new short[MLKEMEngine.KyberN];
@@ -55,6 +74,9 @@ class Ntt
         return r;
     }
 
+    /**
+     * inv ntt.
+     */
     public static short[] invNtt(short[] inp)
     {
         short[] r = new short[MLKEMEngine.KyberN];
@@ -78,6 +100,12 @@ class Ntt
             }
         }
 
+        /**
+         * The value.
+         */
+        /**
+         * for.
+         */
         for (j = 0; j < 256; ++j)
         {
             r[j] = factorQMulMont(r[j], Ntt.nttZetasInv[127]);
@@ -85,11 +113,17 @@ class Ntt
         return r;
     }
 
+    /**
+     * factor q mul mont.
+     */
     public static short factorQMulMont(short a, short b)
     {
         return Reduce.montgomeryReduce((int)(a * b));
     }
 
+    /**
+     * base mult.
+     */
     public static void baseMult(Poly outPoly, int outIndex, short a0, short a1, short b0, short b1, short zeta)
     {
         short outVal0 = factorQMulMont(a1, b1);

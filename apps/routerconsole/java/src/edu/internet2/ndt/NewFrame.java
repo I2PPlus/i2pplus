@@ -12,5 +12,10 @@ import com.vuze.plugins.mlab.tools.ndt.swingemu.*;
  *
  */
 public class NewFrame extends JFrame {
+    /**
+     * Creates a new frame with the specified parent applet.
+     *
+     * @param parent the parent JApplet
+     */
     public NewFrame(final JApplet parent) {}
 }

@@ -27,10 +27,19 @@ import net.i2p.util.SystemVersion;
 public class InfoHelper extends HelperBase {
     private boolean _full;
 
+    /**
+     * InfoHelper.
+     */
     public InfoHelper() { /* nop */ }
 
+    /**
+     * setFull.
+     */
     public void setFull(String f) {_full = f != null && !f.isEmpty();}
 
+    /**
+     * getConsole.
+     */
     public String getConsole() {
         try {
             if (_out != null) {
@@ -48,6 +57,9 @@ public class InfoHelper extends HelperBase {
         } catch (IOException ioe) {return "<b>" + _t("Error displaying the info page.") + "</b>";}
     }
 
+    /**
+     * getStats.
+     */
     public String getStats() {
         StatsGenerator gen = new StatsGenerator(_context);
         try {
@@ -83,56 +95,104 @@ public class InfoHelper extends HelperBase {
         return _t("unknown");
     }
 
+    /**
+     * lastCountry.
+     */
     public String lastCountry() {return _context.getProperty("i2np.lastCountry");}
+    /**
+     * getUdpPort.
+     */
     public String getUdpPort() {return _context.getProperty("i2np.udp.port");}
+    /**
+     * firstInstalled.
+     */
     public String firstInstalled() {return _context.getProperty("router.firstInstalled");}
+    /**
+     * firstVersion.
+     */
     public String firstVersion() {return _context.getProperty("router.firstVersion");}
+    /**
+     * lastUpdated.
+     */
     public String lastUpdated() {return _context.getProperty("router.updateLastInstalled");}
+    /**
+     * updatePolicy.
+     */
     public String updatePolicy() {return _context.getProperty("router.updatePolicy");}
+    /**
+     * updateDevSU3.
+     */
     public String updateDevSU3() {return _context.getProperty("router.updateDevSU3");}
 
+    /**
+     * updateUnsigned.
+     */
     public String updateUnsigned() {
         if (_context.getProperty("router.updateUnsigned") != null) {
             return _context.getProperty("router.updateUnsigned");
         } else {return "true";}
     }
 
+    /**
+     * isRouterSlow.
+     */
     public boolean isRouterSlow() {
         return SystemVersion.isSlow();
     }
 
+    /**
+     * getCoreCount.
+     */
     public String getCoreCount() {return Integer.toString(SystemVersion.getCores());}
 
+    /**
+     * bwIn.
+     */
     public String bwIn() {
         String in = _context.getProperty("i2np.bandwidth.inboundKBytesPerSecond");
         if (in != null) {return in;}
         else {return "1024";}
     }
 
+    /**
+     * bwOut.
+     */
     public String bwOut() {
         String out = _context.getProperty("i2np.bandwidth.outboundKBytesPerSecond");
         if (out != null) {return out;}
         else {return "512";}
     }
 
+    /**
+     * bwShare.
+     */
     public String bwShare() {
         String share = _context.getProperty("router.sharePercentage");
         if (share != null) {return share;}
         else {return "80";}
     }
 
+    /**
+     * codelInterval.
+     */
     public String codelInterval() {
         String interval = _context.getProperty("router.codelInterval");
         if (interval != null) {return interval;}
         else {return Integer.toString(UDPSender.CODEL_INTERVAL);}
     }
 
+    /**
+     * codelTarget.
+     */
     public String codelTarget() {
         String target = _context.getProperty("router.codelTarget");
         if (target != null) {return target;}
         else {return Integer.toString(UDPSender.CODEL_TARGET);}
     }
 
+    /**
+     * getFamily.
+     */
     public String getFamily() {
         RouterInfo ri = _context.router().getRouterInfo();
         String family = ri.getOption("family");
@@ -140,11 +200,17 @@ public class InfoHelper extends HelperBase {
         else {return null;}
     }
 
+    /**
+     * getGeoIPBuildInfo.
+     */
     public String getGeoIPBuildInfo() {
       GeoIP db = new GeoIP(_context);
       return db.getGeoIPBuildInfo();
     }
 
+    /**
+     * getASNBuildInfo.
+     */
     public String getASNBuildInfo() {
       GeoIP db = new GeoIP(_context);
       return db.getASNBuildInfo();

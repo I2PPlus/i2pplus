@@ -19,6 +19,7 @@ package org.minidns.dnslabel;
  */
 public final class FakeALabel extends XnLabel {
 
+    /** Create fake A-label */
     FakeALabel(String label) {
         super(label);
     }

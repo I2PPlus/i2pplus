@@ -19,7 +19,7 @@ class ConnThrottler {
     private final AtomicInteger _currentTotal;
     private final Cleaner _cleaner;
 
-    /*
+    /**
      * @param max per-peer, 0 for unlimited
      * @param totalMax for all peers, 0 for unlimited
      * @param period ms
@@ -38,7 +38,7 @@ class ConnThrottler {
         }
     }
 
-    /*
+    /**
      * @param max per-peer, 0 for unlimited
      * @param totalMax for all peers, 0 for unlimited
      * @since 0.9.3
@@ -78,6 +78,9 @@ class ConnThrottler {
             _period = period;
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             if (_totalMax > 0)
                 _currentTotal.set(0);

@@ -7,6 +7,9 @@ package org.bouncycastle.pqc.crypto.mlkem;
 class Reduce
 {
 
+    /**
+     * montgomeryReduce.
+     */
     public static short montgomeryReduce(int a)
     {
         int t;
@@ -19,6 +22,9 @@ class Reduce
         return (short)t;
     }
 
+    /**
+     * barretReduce.
+     */
     public static short barretReduce(short a)
     {
         short t;
@@ -29,6 +35,9 @@ class Reduce
         return (short)(a - t);
     }
 
+    /**
+     * conditionalSubQ.
+     */
     public static short conditionalSubQ(short a)
     {
         a -= MLKEMEngine.KyberQ;

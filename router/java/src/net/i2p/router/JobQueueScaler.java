@@ -20,7 +20,7 @@ import net.i2p.util.SystemVersion;
  * <strong>Scaling Algorithm:</strong>
  * <ul>
  *   <li>Scale UP when: readyJobs > activeRunners * scaleUpJobsRatio OR maxLag > scaleUpLagThreshold</li>
- *   <li>Scale DOWN when: readyJobs < activeRunners AND avgLag < scaleDownLagThreshold (sustained)</li>
+ *   <li>Scale DOWN when: readyJobs &lt; activeRunners AND avgLag &lt; scaleDownLagThreshold (sustained)</li>
  *   <li>Bounds: min runners = max(4, cores), max runners = min(2 * router.maxJobRunners, RAM-based limit)</li>
  * </ul>
  *
@@ -31,7 +31,7 @@ import net.i2p.util.SystemVersion;
  * <ul>
  *   <li>CPU saturation: router.cpuLoad > 85%</li>
  *   <li>GC storm: router.gcPauseTime > 50 ms/min</li>
- *   <li>Network congestion: tunnel.buildSuccessRate < 50%</li>
+ *   <li>Network congestion: tunnel.buildSuccessRate &lt; 50%</li>
  *   <li>Bandwidth saturation: bwLimiter.outboundDelayedTime > 500ms</li>
  * </ul>
  *

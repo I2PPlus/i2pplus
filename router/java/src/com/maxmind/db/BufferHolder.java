@@ -18,6 +18,13 @@ final class BufferHolder {
     // DO NOT PASS OUTSIDE THIS CLASS. Doing so will remove thread safety.
     private final ByteBuffer buffer;
 
+    /**
+     * Create a BufferHolder from a database file.
+     *
+     * @param database the database file
+     * @param mode the file mode
+     * @throws IOException if the file cannot be read
+     */
     BufferHolder(File database, FileMode mode) throws IOException {
         final RandomAccessFile file = new RandomAccessFile(database, "r");
         boolean threw = true;
@@ -69,14 +76,21 @@ final class BufferHolder {
         this.buffer = ByteBuffer.wrap(baos.toByteArray());
     }
 
-    // This is just to ease unit testing
+    /**
+     * Create a BufferHolder from a ByteBuffer.
+     * This is just to ease unit testing.
+     *
+     * @param buffer the byte buffer
+     */
     BufferHolder(ByteBuffer buffer) {
         this.buffer = buffer;
     }
 
-    /*
+    /**
      * Returns a duplicate of the underlying ByteBuffer. The returned ByteBuffer
      * should not be shared between threads.
+     *
+     * @return a duplicate of the underlying ByteBuffer
      */
     synchronized ByteBuffer get() {
         return this.buffer.duplicate();

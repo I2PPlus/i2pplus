@@ -26,6 +26,9 @@ public final class SHA256Generator {
         _digests = new LinkedBlockingQueue<>(32);
     }
 
+    /**
+     * getInstance.
+     */
     public static final SHA256Generator getInstance() {
         return I2PAppContext.getGlobalContext().sha();
     }
@@ -122,6 +125,9 @@ public final class SHA256Generator {
         }
     }
 
+    /**
+     * main.
+     */
     public static void main(String[] args) {
         if (args.length != 1) {
             System.err.println("Usage: SHA256Generator 'text to hash'");

@@ -51,11 +51,12 @@ public class Util {
     /** Constant <code>MIN_DOUBLE=-Double.MAX_VALUE</code> */
     public static final double MIN_DOUBLE = -Double.MAX_VALUE;
 
-    // pattern RRDTool uses to format doubles in XML files
+    /** ignored */
     static final String PATTERN = "0.0000000000E00";
-    // directory under $USER_HOME used for demo graphs storing
+    /** ignored */
     static final String RRD4J_DIR = "rrd4j-demo";
 
+    /** ignored */
     static final ThreadLocal<NumberFormat> df =
             ThreadLocal.withInitial(
                     () -> {
@@ -69,6 +70,7 @@ public class Util {
     private static final Pattern SPRINTF_PATTERN =
             Pattern.compile("([^%]|^)%([^a-zA-Z%]*)l(f|g|e)");
 
+    /** ignored */
     private Util() {}
 
     /**
@@ -454,7 +456,7 @@ public class Util {
             return null;
         }
     }
-
+    /** Same file path */
     static boolean sameFilePath(String pathname1, String pathname2) throws IOException {
         Path path1 = Paths.get(pathname1);
         Path path2 = Paths.get(pathname2);
@@ -469,6 +471,7 @@ public class Util {
         }
     }
 
+    /** ignored */
     static int getMatchingDatasourceIndex(RrdDb rrd1, int dsIndex, RrdDb rrd2) throws IOException {
         String dsName = rrd1.getDatasource(dsIndex).getName();
         try {
@@ -478,6 +481,7 @@ public class Util {
         }
     }
 
+    /** ignored */
     static int getMatchingArchiveIndex(RrdDb rrd1, int arcIndex, RrdDb rrd2) throws IOException {
         Archive archive = rrd1.getArchive(arcIndex);
         ConsolFun consolFun = archive.getConsolFun();
@@ -489,10 +493,12 @@ public class Util {
         }
     }
 
+    /** ignored */
     static String getTmpFilename() throws IOException {
         return File.createTempFile("rrd4j_", ".tmp").getCanonicalPath();
     }
 
+    /** ignored */
     static final String ISO_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"; // ISO
 
     /**
@@ -523,6 +529,9 @@ public class Util {
 
     /** Various DOM utility functions. */
     public static class Xml {
+        /**
+         * SingletonHelper class.
+         */
 
         private static class SingletonHelper {
             private static final DocumentBuilderFactory factory;
@@ -550,25 +559,35 @@ public class Util {
 
         private static final ErrorHandler eh =
                 new ErrorHandler() {
+                    /**
+                     * Error
+                     */
                     public void error(SAXParseException exception) throws SAXException {
                         throw exception;
                     }
-
+                    /** Fatal error */
                     public void fatalError(SAXParseException exception) throws SAXException {
                         throw exception;
                     }
-
+                    /** Warning */
                     public void warning(SAXParseException exception) throws SAXException {
                         throw exception;
                     }
                 };
 
+        /** ignored */
         private Xml() {}
 
+        /**
+         * getChildNodes.
+         */
         public static Node[] getChildNodes(Node parentNode) {
             return getChildNodes(parentNode, null);
         }
 
+        /**
+         * getChildNodes.
+         */
         public static Node[] getChildNodes(Node parentNode, String childName) {
             ArrayList<Node> nodes = new ArrayList<>();
             NodeList nodeList = parentNode.getChildNodes();
@@ -582,6 +601,9 @@ public class Util {
             return nodes.toArray(new Node[0]);
         }
 
+        /**
+         * getFirstChildNode.
+         */
         public static Node getFirstChildNode(Node parentNode, String childName) {
             Node[] childs = getChildNodes(parentNode, childName);
             if (childs.length > 0) {
@@ -589,17 +611,23 @@ public class Util {
             }
             throw new IllegalArgumentException("XML Error, no such child: " + childName);
         }
-
+        /** Has child node */
         public static boolean hasChildNode(Node parentNode, String childName) {
             Node[] childs = getChildNodes(parentNode, childName);
             return childs.length > 0;
         }
 
         // -- Wrapper around getChildValue with trim
+        /**
+         * getChildValue.
+         */
         public static String getChildValue(Node parentNode, String childName) {
             return getChildValue(parentNode, childName, true);
         }
 
+        /**
+         * getChildValue.
+         */
         public static String getChildValue(Node parentNode, String childName, boolean trim) {
             NodeList children = parentNode.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
@@ -612,10 +640,16 @@ public class Util {
         }
 
         // -- Wrapper around getValue with trim
+        /**
+         * getValue.
+         */
         public static String getValue(Node node) {
             return getValue(node, true);
         }
 
+        /**
+         * getValue.
+         */
         public static String getValue(Node node, boolean trimValue) {
             String value = null;
             Node child = node.getFirstChild();
@@ -628,46 +662,73 @@ public class Util {
             return value;
         }
 
+        /**
+         * getChildValueAsInt.
+         */
         public static int getChildValueAsInt(Node parentNode, String childName) {
             String valueStr = getChildValue(parentNode, childName);
             return Integer.parseInt(valueStr);
         }
 
+        /**
+         * getValueAsInt.
+         */
         public static int getValueAsInt(Node node) {
             String valueStr = getValue(node);
             return Integer.parseInt(valueStr);
         }
 
+        /**
+         * getChildValueAsLong.
+         */
         public static long getChildValueAsLong(Node parentNode, String childName) {
             String valueStr = getChildValue(parentNode, childName);
             return Long.parseLong(valueStr);
         }
 
+        /**
+         * getValueAsLong.
+         */
         public static long getValueAsLong(Node node) {
             String valueStr = getValue(node);
             return Long.parseLong(valueStr);
         }
 
+        /**
+         * getChildValueAsDouble.
+         */
         public static double getChildValueAsDouble(Node parentNode, String childName) {
             String valueStr = getChildValue(parentNode, childName);
             return Util.parseDouble(valueStr);
         }
 
+        /**
+         * getValueAsDouble.
+         */
         public static double getValueAsDouble(Node node) {
             String valueStr = getValue(node);
             return Util.parseDouble(valueStr);
         }
 
+        /**
+         * getChildValueAsBoolean.
+         */
         public static boolean getChildValueAsBoolean(Node parentNode, String childName) {
             String valueStr = getChildValue(parentNode, childName);
             return Util.parseBoolean(valueStr);
         }
 
+        /**
+         * getValueAsBoolean.
+         */
         public static boolean getValueAsBoolean(Node node) {
             String valueStr = getValue(node);
             return Util.parseBoolean(valueStr);
         }
 
+        /**
+         * getRootElement.
+         */
         public static Element getRootElement(InputSource inputSource) throws IOException {
             try {
                 DocumentBuilder builder = SingletonHelper.factory.newDocumentBuilder();
@@ -679,10 +740,16 @@ public class Util {
             }
         }
 
+        /**
+         * getRootElement.
+         */
         public static Element getRootElement(String xmlString) throws IOException {
             return getRootElement(new InputSource(new StringReader(xmlString)));
         }
 
+        /**
+         * getRootElement.
+         */
         public static Element getRootElement(File xmlFile) throws IOException {
             try (Reader reader =
                     new InputStreamReader(new FileInputStream(xmlFile), StandardCharsets.UTF_8)) {
@@ -691,6 +758,7 @@ public class Util {
         }
     }
 
+    /** ignored */
     private static long lastLap = System.currentTimeMillis();
 
     /**

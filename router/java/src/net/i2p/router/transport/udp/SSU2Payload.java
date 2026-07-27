@@ -45,7 +45,13 @@ class SSU2Payload {
     private static final int BLOCK_RELAYTAG = 16;
     private static final int BLOCK_RELAYTAGREQ = 15;
     private static final int BLOCK_ROUTERINFO = 2;
+    /**
+     * BLOCK_HEADER_SIZE.
+     */
     public static final int BLOCK_HEADER_SIZE = 3;
+    /**
+     * BLOCK_TERMINATION.
+     */
     public static final int BLOCK_TERMINATION = 6;
 
     /**
@@ -54,87 +60,138 @@ class SSU2Payload {
      *  processing of succeeding blocks.
      */
     public interface PayloadCallback {
+        /**
+         * Receive a date/time synchronization block.
+         * @param time time in milliseconds since epoch
+         */
         public void gotDateTime(long time) throws DataFormatException;
 
+        /**
+         * Receive an I2NP message block.
+         * @param msg the parsed I2NP message
+         */
         public void gotI2NP(I2NPMessage msg) throws I2NPMessageException;
 
         /**
-         *  Data must be copied out in this method.
-         *  Data starts at the 9 byte header for fragment 0.
+         * Receive a fragment of a fragmented message.
+         * Data must be copied out in this method.
+         * Data starts at the 9 byte header for fragment 0.
          *
-         *  @param off offset in data
-         *  @param len length of data to copy
+         * @param data buffer containing fragment data
+         * @param off offset in data
+         * @param len length of data to copy
+         * @param messageID unique message identifier
+         * @param frag fragment number (0-based)
+         * @param isLast whether this is the last fragment
          */
         public void gotFragment(byte[] data, int off, int len, long messageID, int frag, boolean isLast) throws DataFormatException;
 
         /**
-         *  @param ranges null if none
+         * Receive an acknowledgment block.
+         * @param ackThru highest contiguous sequence number acknowledged
+         * @param acks number of additional acknowledgments beyond ackThru
+         * @param ranges null if none
          */
         public void gotACK(long ackThru, int acks, byte[] ranges);
 
         /**
-         *  @param isHandshake true only for message 3 part 2
+         * Receive a session options block.
+         * @param options the option data
+         * @param isHandshake true only for message 3 part 2
          */
         public void gotOptions(byte[] options, boolean isHandshake) throws DataFormatException;
 
         /**
-         *  @param ri will already be validated
-         *  @param isHandshake true only for message 3 part 2
+         * Receive a complete RouterInfo block.
+         * @param ri will already be validated
+         * @param isHandshake true only for message 3 part 2
+         * @param flood true if this is a floodfill router
          */
         public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException;
 
         /**
-         *  @param data is first gzipped and then fragmented
-         *  @param isHandshake true only for message 3 part 2
+         * Receive a fragment of a RouterInfo block.
+         * @param data is first gzipped and then fragmented
+         * @param isHandshake true only for message 3 part 2
+         * @param flood true if this is a floodfill router
+         * @param isGzipped true if the data is gzipped
+         * @param frag fragment number (0-based)
+         * @param totalFrags total number of fragments
          */
         public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags);
 
+        /**
+         * Receive an address block.
+         * @param ip IP address bytes
+         * @param port port number
+         */
         public void gotAddress(byte[] ip, int port);
 
+        /**
+         * Receive a relay tag request.
+         */
         public void gotRelayTagRequest();
 
+        /**
+         * Receive a relay tag.
+         * @param tag the relay tag
+         */
         public void gotRelayTag(long tag);
 
         /**
-         *  @param data excludes flag, includes signature
+         * Receive a relay request.
+         * @param data excludes flag, includes signature
          */
         public void gotRelayRequest(byte[] data);
 
         /**
-         *  @param status 0 = accept, 1-255 = reject
-         *  @param data excludes flag, includes signature
+         * Receive a relay response.
+         * @param status 0 = accept, 1-255 = reject
+         * @param data excludes flag, includes signature
          */
         public void gotRelayResponse(int status, byte[] data);
 
         /**
-         *  @param data excludes flag, includes signature
+         * Receive a relay introduction.
+         * @param aliceHash hash of the introducer
+         * @param data excludes flag, includes signature
          */
         public void gotRelayIntro(Hash aliceHash, byte[] data);
 
         /**
-         *  @param msg 1-7
-         *  @param status 0 = accept, 1-255 = reject
-         *  @param h Alice or Charlie hash for msg 2 and 4, null for msg 1, 3, 5-7
-         *  @param data excludes flag, includes signature
+         * Receive a peer test block.
+         * @param msg 1-7
+         * @param status 0 = accept, 1-255 = reject
+         * @param h Alice or Charlie hash for msg 2 and 4, null for msg 1, 3, 5-7
+         * @param data excludes flag, includes signature
          */
         public void gotPeerTest(int msg, int status, Hash h, byte[] data);
 
+        /**
+         * Receive a new session token.
+         * @param token the token value
+         * @param expires token expiration time in milliseconds
+         */
         public void gotToken(long token, long expires);
 
         /**
-         *  @param lastReceived in theory could wrap around to negative, but very unlikely
+         * Receive a session termination block.
+         * @param reason termination reason code
+         * @param lastReceived in theory could wrap around to negative, but very unlikely
          */
         public void gotTermination(int reason, long lastReceived);
 
         /**
-         *  @param from null if unknown
-         *  @since 0.9.55
+         * Receive a path challenge block.
+         * @param from null if unknown
+         * @since 0.9.55
          */
         public void gotPathChallenge(RemoteHostId from, byte[] data);
 
         /**
-         *  @param from null if unknown
-         *  @since 0.9.55
+         * Receive a path response block.
+         * @param from null if unknown
+         * @since 0.9.55
          */
         public void gotPathResponse(RemoteHostId from, byte[] data);
     }
@@ -449,6 +506,10 @@ class SSU2Payload {
     public abstract static class Block {
         private final int type;
 
+        /**
+         * Create a new block of the given type.
+         * @param ttype the block type identifier
+         */
         public Block(int ttype) {
             type = ttype;
         }
@@ -460,7 +521,12 @@ class SSU2Payload {
          */
         public int getType() { return type; }
 
-        /** Write the block to the target array, returning the new offset */
+        /**
+         * Write the block to the target array, returning the new offset.
+         * @param tgt target array to write to
+         * @param off offset in the target array
+         * @return the new offset after writing
+         */
         public int write(byte[] tgt, int off) {
             tgt[off++] = (byte) type;
             // we do it this way so we don't call getDataLength(),
@@ -478,20 +544,30 @@ class SSU2Payload {
         }
 
         /**
-         *  @return the size of the block, including the 3 byte header (type and size)
+         * Return the total size of the block, including the 3 byte header.
+         * @return the size of the block, including the 3 byte header (type and size)
          */
         public int getTotalLength() {
             return BLOCK_HEADER_SIZE + getDataLength();
         }
 
         /**
-         *  @return the size of the block, NOT including the 3 byte header (type and size)
+         * Return the size of the block data, excluding the 3 byte header.
+         * @return the size of the block, NOT including the 3 byte header (type and size)
          */
         public abstract int getDataLength();
 
-        /** Write the block data to the target array, returning the new offset */
+        /**
+         * Write the block data to the target array, returning the new offset.
+         * @param tgt target array to write to
+         * @param off offset in the target array
+         * @return the new offset after writing
+         */
         public abstract int writeData(byte[] tgt, int off);
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "Payload block type " + type + " length " + getDataLength();
@@ -512,14 +588,24 @@ class SSU2Payload {
         private final int frt;
 
         /**
-         *  Whole thing
+         * Create a complete (non-fragmented) RouterInfo block.
+         * @param ridata the raw RouterInfo data
+         * @param flood true if this is a floodfill router
+         * @param gzipped true if data is gzipped
          */
         public RIBlock(byte[] ridata, boolean flood, boolean gzipped) {
             this(ridata, 0, ridata.length, flood, gzipped, 0, 1);
         }
 
         /**
-         *  Fragment
+         * Create a fragment of a RouterInfo block.
+         * @param ridata the raw RouterInfo data
+         * @param off offset in the data
+         * @param len length of the fragment
+         * @param flood true if this is a floodfill router
+         * @param gzipped true if data is gzipped
+         * @param frag fragment number (0-based)
+         * @param total total number of fragments
          */
         public RIBlock(byte[] ridata, int off, int len, boolean flood, boolean gzipped, int frag, int total) {
             super(BLOCK_ROUTERINFO);
@@ -532,10 +618,20 @@ class SSU2Payload {
             frt = total;
         }
 
+        /**
+         * Return the data length including the 2 byte header.
+         * @return the data length
+         */
         public int getDataLength() {
             return 2 + data.length;
         }
 
+        /**
+         * Write the RouterInfo block data to the target array.
+         * @param tgt target array to write to
+         * @param off offset in the target array
+         * @return the new offset after writing
+         */
         public int writeData(byte[] tgt, int off) {
             byte b = (byte) (f ? 1 : 0);
             if (gz)
@@ -555,16 +651,30 @@ class SSU2Payload {
     public static class I2NPBlock extends Block {
         private final OutboundMessageState m;
 
+        /**
+         * Create an I2NP message block.
+         * @param msg the outbound message state containing the I2NP message
+         */
         public I2NPBlock(OutboundMessageState msg) {
             super(BLOCK_I2NP);
             m = msg;
         }
 
+        /**
+         * Return the full I2NP message size (9 byte header vs. 16).
+         * @return the message size
+         */
         public int getDataLength() {
             // 9 byte header vs. 16
             return m.getMessageSize();
         }
 
+        /**
+         * Write the I2NP block data to the target array.
+         * @param tgt target array to write to
+         * @param off offset in the target array
+         * @return the new offset after writing
+         */
         public int writeData(byte[] tgt, int off) {
             return off + m.writeFragment(tgt, off, 0);
         }
@@ -576,16 +686,30 @@ class SSU2Payload {
     public static class FirstFragBlock extends Block {
         private final OutboundMessageState m;
 
+        /**
+         * Create a first fragment block.
+         * @param msg the outbound message state
+         */
         public FirstFragBlock(OutboundMessageState msg) {
             super(BLOCK_FIRSTFRAG);
             m = msg;
         }
 
+        /**
+         * Return the fragment size including the 9 byte header.
+         * @return the fragment data length
+         */
         public int getDataLength() {
             // 9 byte header vs. 5
             return m.fragmentSize(0); // + 4;
         }
 
+        /**
+         * Write the first fragment block data to the target array.
+         * @param tgt target array to write to
+         * @param off offset in the target array
+         * @return the new offset after writing
+         */
         public int writeData(byte[] tgt, int off) {
             return off + m.writeFragment(tgt, off, 0);
         }
@@ -598,6 +722,11 @@ class SSU2Payload {
         private final OutboundMessageState m;
         private final int f;
 
+        /**
+         * Create a follow-on fragment block.
+         * @param msg the outbound message state
+         * @param frag the fragment number (must be &gt; 0)
+         */
         public FollowFragBlock(OutboundMessageState msg, int frag) {
             super(BLOCK_FOLLOWONFRAG);
             if (frag <= 0)
@@ -606,10 +735,20 @@ class SSU2Payload {
             f = frag;
         }
 
+        /**
+         * Return the fragment data length including the 5 byte header.
+         * @return the fragment data length
+         */
         public int getDataLength() {
             return m.fragmentSize(f) + 5;
         }
 
+        /**
+         * Write the follow-on fragment block data to the target array.
+         * @param tgt target array to write to
+         * @param off offset in the target array
+         * @return the new offset after writing
+         */
         public int writeData(byte[] tgt, int off) {
             byte b = (byte) (f << 1);
             if (f == m.getFragmentCount() - 1)
@@ -629,22 +768,39 @@ class SSU2Payload {
         private final int sz;
         private final I2PAppContext ctx;
 
-        /** with zero-filled data */
+        /**
+         * Create a padding block with zero-filled data.
+         * @param size the padding size
+         */
         public PaddingBlock(int size) {
             this(null, size);
         }
 
-        /** with random data */
+        /**
+         * Create a padding block with random data.
+         * @param context the I2P context for random data generation
+         * @param size the padding size
+         */
         public PaddingBlock(I2PAppContext context, int size) {
             super(BLOCK_PADDING);
             sz = size;
             ctx = context;
         }
 
+        /**
+         * Return the padding size.
+         * @return the padding size
+         */
         public int getDataLength() {
             return sz;
         }
 
+        /**
+         * Write the padding block data to the target array.
+         * @param tgt target array to write to
+         * @param off offset in the target array
+         * @return the new offset after writing
+         */
         public int writeData(byte[] tgt, int off) {
             if (ctx != null)
                 ctx.random().nextBytes(tgt, off, sz);
@@ -661,15 +817,29 @@ class SSU2Payload {
     public static class DateTimeBlock extends Block {
         private final long now;
 
+        /**
+         * Create a date/time block with the current clock time.
+         * @param ctx the I2P context for reading the clock
+         */
         public DateTimeBlock(I2PAppContext ctx) {
             super(BLOCK_DATETIME);
             now = ctx.clock().now();
         }
 
+        /**
+         * Return the 4 byte date/time data length.
+         * @return the data length
+         */
         public int getDataLength() {
             return 4;
         }
 
+        /**
+         * Write the date/time block data to the target array.
+         * @param tgt target array to write to
+         * @param off offset in the target array
+         * @return the new offset after writing
+         */
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong(tgt, off, 4, (now + 500) / 1000);
             return off + 4;
@@ -683,15 +853,29 @@ class SSU2Payload {
     public static class OptionsBlock extends Block {
         private final byte[] opts;
 
+        /**
+         * Create an options block.
+         * @param options the option data
+         */
         public OptionsBlock(byte[] options) {
             super(BLOCK_OPTIONS);
             opts = options;
         }
 
+        /**
+         * Return the options data length.
+         * @return the options data length
+         */
         public int getDataLength() {
             return opts.length;
         }
 
+        /**
+         * Write the options block data to the target array.
+         * @param tgt target array to write to
+         * @param off offset in the target array
+         * @return the new offset after writing
+         */
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(opts, 0, tgt, off, opts.length);
             return off + opts.length;
@@ -706,16 +890,31 @@ class SSU2Payload {
         private final byte rsn;
         private final long rcvd;
 
+        /**
+         * Create a session termination block.
+         * @param reason termination reason code (0-255)
+         * @param lastReceived highest sequence number received
+         */
         public TerminationBlock(int reason, long lastReceived) {
             super(BLOCK_TERMINATION);
             rsn = (byte) reason;
             rcvd = lastReceived;
         }
 
+        /**
+         * Return the 9 byte termination data length.
+         * @return the data length
+         */
         public int getDataLength() {
             return 9;
         }
 
+        /**
+         * Write the termination block data to the target array.
+         * @param tgt target array to write to
+         * @param off offset in the target array
+         * @return the new offset after writing
+         */
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong8(tgt, off, rcvd);
             tgt[off + 8] = rsn;
@@ -733,10 +932,12 @@ class SSU2Payload {
         private final byte[] r;
         private final int rc;
 
-        /*
-         * @param acnt 255 max
-         * @param ranges nack/ack/nack/ack
-         * @param rangeCount ranges length / 2
+        /**
+         * Create an acknowledgment block.
+         * @param thru highest contiguous sequence number
+         * @param acnt number of additional acks (max 255)
+         * @param ranges nack/ack/nack/ack ranges
+         * @param rangeCount number of range pairs (ranges length / 2)
          */
         public AckBlock(long thru, int acnt, byte[] ranges, int rangeCount) {
             super(BLOCK_ACK);
@@ -748,10 +949,20 @@ class SSU2Payload {
             rc = rangeCount;
         }
 
+        /**
+         * Return the ACK data length (5 byte header + 2 bytes per range).
+         * @return the data length
+         */
         public int getDataLength() {
             return 5 + (rc * 2);
         }
 
+        /**
+         * Write the ACK block data to the target array.
+         * @param tgt target array to write to
+         * @param off offset in the target array
+         * @return the new offset after writing
+         */
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong(tgt, off, 4, t);
             off += 4;
@@ -760,6 +971,9 @@ class SSU2Payload {
             return off + (rc * 2);
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return SSU2Bitfield.toString(t, a, r, rc);
@@ -774,16 +988,31 @@ class SSU2Payload {
         private final byte[] i;
         private final int p;
 
+        /**
+         * Create an address block.
+         * @param ip the IP address bytes (IPv4 = 4 bytes, IPv6 = 16 bytes)
+         * @param port the port number
+         */
         public AddressBlock(byte[] ip, int port) {
             super(BLOCK_ADDRESS);
             i = ip;
             p = port;
         }
 
+        /**
+         * Return the address data length (2 byte port + IP bytes).
+         * @return the data length
+         */
         public int getDataLength() {
             return 2 + i.length;
         }
 
+        /**
+         * Write the address block data to the target array.
+         * @param tgt target array to write to
+         * @param off offset in the target array
+         * @return the new offset after writing
+         */
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong(tgt, off, 2, p);
             off += 2;
@@ -798,14 +1027,27 @@ class SSU2Payload {
      */
     public static class RelayTagRequestBlock extends Block {
 
+        /**
+         * Create a relay tag request block (no data payload).
+         */
         public RelayTagRequestBlock() {
             super(BLOCK_RELAYTAGREQ);
         }
 
+        /**
+         * Return zero (no data payload).
+         * @return the data length
+         */
         public int getDataLength() {
             return 0;
         }
 
+        /**
+         * Write the relay tag request block data to the target array.
+         * @param tgt target array to write to
+         * @param off offset in the target array
+         * @return the new offset after writing
+         */
         public int writeData(byte[] tgt, int off) {
             return off;
         }
@@ -818,15 +1060,29 @@ class SSU2Payload {
     public static class RelayTagBlock extends Block {
         private final long t;
 
+        /**
+         * Create a relay tag block.
+         * @param tag the relay tag value
+         */
         public RelayTagBlock(long tag) {
             super(BLOCK_RELAYTAG);
             t = tag;
         }
 
+        /**
+         * Return the 4 byte relay tag data length.
+         * @return the data length
+         */
         public int getDataLength() {
             return 4;
         }
 
+        /**
+         * Write the relay tag block data to the target array.
+         * @param tgt target array to write to
+         * @param off offset in the target array
+         * @return the new offset after writing
+         */
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong(tgt, off, 4, t);
             return off + 4;
@@ -840,15 +1096,29 @@ class SSU2Payload {
     public static class RelayRequestBlock extends Block {
         private final byte[] d;
 
+        /**
+         * Create a relay request block.
+         * @param data the relay request data (excludes flag, includes signature)
+         */
         public RelayRequestBlock(byte[] data) {
             super(BLOCK_RELAYREQ);
             d = data;
         }
 
+        /**
+         * Return the relay request data length.
+         * @return the data length
+         */
         public int getDataLength() {
             return d.length;
         }
 
+        /**
+         * Write the relay request block data to the target array.
+         * @param tgt target array to write to
+         * @param off offset in the target array
+         * @return the new offset after writing
+         */
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(d, 0, tgt, off, d.length);
             return off + d.length;
@@ -862,15 +1132,24 @@ class SSU2Payload {
     public static class RelayResponseBlock extends Block {
         private final byte[] d;
 
+        /**
+         * RelayResponseBlock.
+         */
         public RelayResponseBlock(byte[] data) {
             super(BLOCK_RELAYRESP);
             d = data;
         }
 
+        /**
+         * getDataLength.
+         */
         public int getDataLength() {
             return d.length;
         }
 
+        /**
+         * writeData.
+         */
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(d, 0, tgt, off, d.length);
             return off + d.length;
@@ -884,15 +1163,24 @@ class SSU2Payload {
     public static class RelayIntroBlock extends Block {
         private final byte[] d;
 
+        /**
+         * RelayIntroBlock.
+         */
         public RelayIntroBlock(byte[] data) {
             super(BLOCK_RELAYINTRO);
             d = data;
         }
 
+        /**
+         * getDataLength.
+         */
         public int getDataLength() {
             return d.length;
         }
 
+        /**
+         * writeData.
+         */
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(d, 0, tgt, off, d.length);
             return off + d.length;
@@ -920,6 +1208,9 @@ class SSU2Payload {
             d = data;
         }
 
+        /**
+         * getDataLength.
+         */
         public int getDataLength() {
             int rv = 3 + d.length;
             if (h != null)
@@ -927,6 +1218,9 @@ class SSU2Payload {
             return rv;
         }
 
+        /**
+         * writeData.
+         */
         public int writeData(byte[] tgt, int off) {
             tgt[off++] = (byte) n;
             tgt[off++] = (byte) c;
@@ -947,15 +1241,24 @@ class SSU2Payload {
     public static class NewTokenBlock extends Block {
         private final EstablishmentManager.Token tok;
 
+        /**
+         * NewTokenBlock.
+         */
         public NewTokenBlock(EstablishmentManager.Token token) {
             super(BLOCK_NEWTOKEN);
             tok = token;
         }
 
+        /**
+         * getDataLength.
+         */
         public int getDataLength() {
             return 12;
         }
 
+        /**
+         * writeData.
+         */
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong(tgt, off, 4, tok.getExpiration() / 1000);
             off += 4;
@@ -971,15 +1274,24 @@ class SSU2Payload {
     public static class PathChallengeBlock extends Block {
         private final byte[] d;
 
+        /**
+         * PathChallengeBlock.
+         */
         public PathChallengeBlock(byte[] data) {
             super(BLOCK_PATHCHALLENGE);
             d = data;
         }
 
+        /**
+         * getDataLength.
+         */
         public int getDataLength() {
             return d.length;
         }
 
+        /**
+         * writeData.
+         */
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(d, 0, tgt, off, d.length);
             return off + d.length;
@@ -993,15 +1305,24 @@ class SSU2Payload {
     public static class PathResponseBlock extends Block {
         private final byte[] d;
 
+        /**
+         * PathResponseBlock.
+         */
         public PathResponseBlock(byte[] data) {
             super(BLOCK_PATHRESP);
             d = data;
         }
 
+        /**
+         * getDataLength.
+         */
         public int getDataLength() {
             return d.length;
         }
 
+        /**
+         * writeData.
+         */
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(d, 0, tgt, off, d.length);
             return off + d.length;

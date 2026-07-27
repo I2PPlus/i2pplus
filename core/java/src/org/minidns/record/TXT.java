@@ -31,22 +31,32 @@ public class TXT extends Data {
 
     private final byte[] blob;
 
+    /**
+     * parse.
+     */
     public static TXT parse(DataInputStream dis, int length) throws IOException {
         byte[] blob = new byte[length];
         dis.readFully(blob);
         return new TXT(blob);
     }
 
+    /**
+     * @param blob the raw TXT record data
+     */
     public TXT(byte[] blob) {
         this.blob = blob;
     }
 
+    /** @return copy of the raw blob data */
     public byte[] getBlob() {
         return blob.clone();
     }
 
     private transient String textCache;
 
+    /**
+     * getText.
+     */
     public String getText() {
         if (textCache == null) {
             StringBuilder sb = new StringBuilder();
@@ -64,6 +74,7 @@ public class TXT extends Data {
 
     private transient List<String> characterStringsCache;
 
+    /** @return individual character strings as UTF-8 strings */
     public List<String> getCharacterStrings() {
         if (characterStringsCache == null) {
             List<byte[]> extents = getExtents();
@@ -77,6 +88,7 @@ public class TXT extends Data {
         return characterStringsCache;
     }
 
+    /** @return individual character strings as raw byte arrays */
     public List<byte[]> getExtents() {
         ArrayList<byte[]> extents = new ArrayList<>();
         int segLength = 0;
@@ -89,16 +101,25 @@ public class TXT extends Data {
         return extents;
     }
 
+    /**
+     * serialize.
+     */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
         dos.write(blob);
     }
 
+    /**
+     * getType.
+     */
     @Override
     public TYPE getType() {
         return TYPE.TXT;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return "\"" + getText() + "\"";

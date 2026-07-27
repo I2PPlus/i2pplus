@@ -46,6 +46,12 @@ public class MLabRunner {
     private final AtomicBoolean _running = new AtomicBoolean();
     private static MLabRunner _instance;
 
+    /**
+     * The singleton instance.
+     *
+     * @param ctx the application context
+     * @return the singleton instance
+     */
     public static MLabRunner getInstance(I2PAppContext ctx) {
         synchronized(MLabRunner.class) {
             if (_instance == null)
@@ -54,11 +60,21 @@ public class MLabRunner {
         }
     }
 
+    /**
+     * Creates a new MLabRunner instance.
+     *
+     * @param ctx the application context
+     */
     private MLabRunner(I2PAppContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(MLabRunner.class);
     }
 
+    /**
+     * Check if a test is currently running.
+     *
+     * @return true if a test is in progress
+     */
     public boolean isRunning() {
        return _running.get();
     }
@@ -311,8 +327,11 @@ public class MLabRunner {
      * Returned from runNDT
      */
     public interface ToolRun {
+        /** Cancel the test */
         public void cancel();
-        public void addListener(ToolRunListener    l);
+        /** Add a listener for test events */
+        public void addListener(ToolRunListener l);
+        /** The current status */
         public String getStatus();
     }
 
@@ -362,18 +381,23 @@ public class MLabRunner {
 
     /** The listener for ToolRun */
     public interface ToolRunListener {
+        /** Called when the test is cancelled */
         public void cancelled();
+        /** The current status */
         public String getStatus();
     }
 
     /** The parameter for runNDT() */
     public interface ToolListener {
+        /** Report a summary message */
         public void reportSummary(String str);
+        /** Report a detail message */
         public void reportDetail(String str);
+        /** Called when the test completes */
         public void complete(Map<String,Object> results);
     }
 
-    /** standalone test */
+    /** Standalone test */
     private static class TestListener implements ToolListener {
         private final AtomicBoolean _complete = new AtomicBoolean();
 
@@ -395,7 +419,11 @@ public class MLabRunner {
         }
     }
 
-    /** standalone test */
+    /**
+     * Standalone test
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         boolean useSSL = args.length > 0 && args[0].equals("-s");
         String host;

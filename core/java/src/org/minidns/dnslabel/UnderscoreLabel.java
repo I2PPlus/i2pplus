@@ -16,10 +16,12 @@ package org.minidns.dnslabel;
  */
 public final class UnderscoreLabel extends NonLdhLabel {
 
+    /** Create label */
     UnderscoreLabel(String label) {
         super(label);
     }
 
+    /** @return true if label starts with underscore */
     static boolean isUnderscoreLabelInternal(String label) {
         return label.charAt(0) == '_';
     }

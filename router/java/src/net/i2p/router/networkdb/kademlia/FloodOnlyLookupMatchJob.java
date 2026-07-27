@@ -21,10 +21,17 @@ import net.i2p.util.Log;
  * search strategies where responses are processed asynchronously.
  */
 class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
+    /** the log */
     protected final Log _log;
+    /** the parent search job */
     protected final FloodSearchJob _search;
+    /** whether the match was successful */
     protected volatile boolean _success;
 
+    /**
+     * @param ctx the router context
+     * @param job the parent flood search job
+     */
     public FloodOnlyLookupMatchJob(RouterContext ctx, FloodSearchJob job) {
         super(ctx);
         _log = ctx.logManager().getLog(getClass());

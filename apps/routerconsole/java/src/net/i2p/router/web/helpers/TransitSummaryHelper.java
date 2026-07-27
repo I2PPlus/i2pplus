@@ -11,8 +11,14 @@ import net.i2p.util.Log;
  * @since 0.9.33
  */
 public class TransitSummaryHelper extends HelperBase {
+    /**
+     * TransitSummaryHelper.
+     */
     public TransitSummaryHelper() { /* nop */ }
 
+    /**
+     * getTransitSummary.
+     */
     public String getTransitSummary() {
         TunnelRenderer renderer = new TunnelRenderer(_context);
         try {

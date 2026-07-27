@@ -49,9 +49,6 @@ import org.minidns.util.SafeCharSequence;
  */
 public final class DnsName extends SafeCharSequence implements Serializable, Comparable<DnsName> {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     /**
@@ -64,12 +61,24 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
      */
     static final int MAX_DNSNAME_LENGTH_IN_OCTETS = 255;
 
+    /**
+     * MAX_LABELS.
+     */
     public static final int MAX_LABELS = 128;
 
+    /**
+     * ROOT.
+     */
     public static final DnsName ROOT = new DnsName(".");
 
+    /**
+     * IN_ADDR_ARPA.
+     */
     public static final DnsName IN_ADDR_ARPA = new DnsName("in-addr.arpa");
 
+    /**
+     * IP6_ARPA.
+     */
     public static final DnsName IP6_ARPA = new DnsName("ip6.arpa");
 
     /**
@@ -107,6 +116,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     private transient int hashCode;
 
+    /** Size */
     private int size = -1;
 
     private DnsName(String name) {
@@ -183,6 +193,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         }
     }
 
+    /**
+     * writeToStream.
+     */
     public void writeToStream(OutputStream os) throws IOException {
         setBytesIfRequired();
         os.write(bytes);
@@ -198,6 +211,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return bytes.clone();
     }
 
+    /**
+     * getRawBytes.
+     */
     public byte[] getRawBytes() {
         if (rawBytes == null) {
             setLabelsIfRequired();
@@ -286,6 +302,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return rawAce;
     }
 
+    /**
+     * asIdn.
+     */
     public String asIdn() {
         if (idn != null) return idn;
 
@@ -313,6 +332,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return hostpart;
     }
 
+    /**
+     * getHostpartLabel.
+     */
     public DnsLabel getHostpartLabel() {
         setLabelsIfRequired();
         return labels[labels.length - 1];
@@ -330,6 +352,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         }
     }
 
+    /**
+     * size.
+     */
     public int size() {
         if (size < 0) {
             if (isRootLabel()) {
@@ -343,6 +368,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     private transient String safeToStringRepresentation;
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         if (safeToStringRepresentation == null) {
@@ -368,10 +396,16 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return safeToStringRepresentation;
     }
 
+    /**
+     * from.
+     */
     public static DnsName from(CharSequence name) {
         return from(name.toString());
     }
 
+    /**
+     * from.
+     */
     public static DnsName from(String name) {
         return new DnsName(name, false);
     }
@@ -398,11 +432,17 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return new DnsName(rawLabels, true);
     }
 
+    /**
+     * from.
+     */
     public static DnsName from(CharSequence child, DnsName parent) {
         DnsLabel childLabel = DnsLabel.from(child.toString());
         return DnsName.from(childLabel, parent);
     }
 
+    /**
+     * from.
+     */
     public static DnsName from(DnsLabel child, DnsName parent) {
         parent.setLabelsIfRequired();
 
@@ -412,6 +452,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return new DnsName(rawLabels, true);
     }
 
+    /**
+     * from.
+     */
     public static DnsName from(DnsLabel grandchild, DnsLabel child, DnsName parent) {
         parent.setBytesIfRequired();
 
@@ -422,6 +465,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return new DnsName(rawLabels, true);
     }
 
+    /**
+     * from.
+     */
     public static DnsName from(DnsName... nameComponents) {
         int labelCount = 0;
         for (DnsName component : nameComponents) {
@@ -440,6 +486,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return new DnsName(rawLabels, true);
     }
 
+    /**
+     * from.
+     */
     public static DnsName from(String[] parts) {
         DnsLabel[] rawLabels = DnsLabel.from(parts);
 
@@ -507,11 +556,17 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return DnsName.from(child, parent);
     }
 
+    /**
+     * compareTo.
+     */
     @Override
     public int compareTo(DnsName other) {
         return ace.compareTo(other.ace);
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object other) {
         if (other == null) return false;
@@ -526,6 +581,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return false;
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         if (hashCode == 0 && !isRootLabel()) {
@@ -535,6 +593,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return hashCode;
     }
 
+    /**
+     * isDirectChildOf.
+     */
     public boolean isDirectChildOf(DnsName parent) {
         setLabelsIfRequired();
         parent.setLabelsIfRequired();
@@ -549,6 +610,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return true;
     }
 
+    /**
+     * isChildOf.
+     */
     public boolean isChildOf(DnsName parent) {
         setLabelsIfRequired();
         parent.setLabelsIfRequired();
@@ -562,6 +626,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return true;
     }
 
+    /**
+     * getLabelCount.
+     */
     public int getLabelCount() {
         setLabelsIfRequired();
         return labels.length;
@@ -578,6 +645,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return labels.clone();
     }
 
+    /**
+     * getLabel.
+     */
     public DnsLabel getLabel(int labelNum) {
         setLabelsIfRequired();
         return labels[labelNum];
@@ -594,6 +664,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return rawLabels.clone();
     }
 
+    /**
+     * stripToLabels.
+     */
     public DnsName stripToLabels(int labelCount) {
         setLabelsIfRequired();
 
@@ -630,6 +703,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return stripToLabels(getLabelCount() - 1);
     }
 
+    /**
+     * isRootLabel.
+     */
     public boolean isRootLabel() {
         return ace.isEmpty() || ace.equals(".");
     }

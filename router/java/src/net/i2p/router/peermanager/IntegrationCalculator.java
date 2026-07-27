@@ -11,6 +11,9 @@ class IntegrationCalculator {
 
     private IntegrationCalculator() {}
 
+    /**
+     * calc.
+     */
     public static double calc(PeerProfile profile) {
         long val = 0;
         if (profile.getIsExpandedDB()) {

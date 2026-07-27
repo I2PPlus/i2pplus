@@ -76,7 +76,6 @@ import net.i2p.util.Log;
  *   <li>Implements connection filtering via StatefulConnectionFilter</li>
  *   <li>Uses thread pool for concurrent connection handling</li>
  * </ul>
- * </p>
  * <p>
  * <b>Connection Flow:</b>
  * <ol>
@@ -85,7 +84,6 @@ import net.i2p.util.Log;
  *   <li>Local TCP socket is created via getSocket()</li>
  *   <li>I2PTunnelRunner handles bidirectional data streaming</li>
  * </ol>
- * </p>
  * <p>
  * <b>Subclasses:</b> I2PTunnelHTTPServer, I2PTunnelIRCServer, and others
  * extend this class to provide protocol-specific handling while reusing
@@ -98,34 +96,79 @@ import net.i2p.util.Log;
  */
 public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
+    /**
+     * _log.
+     */
     protected final Log _log;
+    /**
+     * sockMgr.
+     */
     protected final I2PSocketManager sockMgr;
+    /**
+     * i2pss.
+     */
     protected volatile I2PServerSocket i2pss;
 
     private final Object lock = new Object();
+    /**
+     * slock.
+     */
     protected final Object slock = new Object();
+    /**
+     * sslLock.
+     */
     protected final Object sslLock = new Object();
 
+    /**
+     * remoteHost.
+     */
     protected volatile InetAddress remoteHost;
+    /**
+     * remotePort.
+     */
     protected volatile int remotePort;
+    /**
+     * l.
+     */
     protected final Logging l;
     private I2PSSLSocketFactory _sslFactory;
     private static final long DEFAULT_READ_TIMEOUT = -1;
     /** default timeout - override if desired */
     protected volatile long readTimeout = DEFAULT_READ_TIMEOUT;
+    /**
+     * PROP_USE_SSL.
+     */
     public static final String PROP_USE_SSL = "useSSL";
+    /**
+     * PROP_UNIQUE_LOCAL.
+     */
     public static final String PROP_UNIQUE_LOCAL = "enableUniqueLocal";
     /** @since 0.9.30 */
     public static final String PROP_ALT_PKF = "altPrivKeyFile";
+    /**
+     * _clientExecutor.
+     */
     protected volatile ThreadPoolExecutor _clientExecutor;
     private final Map<Integer, InetSocketAddress> _socketMap = new ConcurrentHashMap<>(4);
     private volatile StatefulConnectionFilter _filter;
 
     /* the following are required for http bidir server */
+    /**
+     * task.
+     */
     protected I2PTunnelTask task;
+    /**
+     * bidir.
+     */
     protected boolean bidir;
+    /**
+     * __serverId.
+     */
     protected static volatile long __serverId = 0;
     private int DEFAULT_LOCALPORT = 4488;
+    /**
+     * localPort.
+     */
     protected int localPort = DEFAULT_LOCALPORT;
 
     /**
@@ -715,8 +758,14 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     private class Handler implements Runnable {
         private final I2PSocket _i2ps;
 
+        /**
+         * Handler.
+         */
         public Handler(I2PSocket socket) {_i2ps = socket;}
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             long start = getTunnel().getContext().clock().now();
@@ -742,13 +791,12 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * <p>
      * <b>Implementation Notes:</b>
      * <ul>
-     *   <li>Subclasses that override this must call super.blockingHandle() or implement</li>
+     *   <li>Subclasses that override this must call super.blockingHandle() or implement
      *       full connection handling themselves</li>
      *   <li>For protocol-specific handling (HTTP, IRC), spawn a handler thread and return</li>
      *   <li>For simple forwarding, this base implementation handles all cases</li>
      *   <li>Performance: local connections are fast enough to handle synchronously</li>
      * </ul>
-     * </p>
      * <p>
      * <b>Error Handling:</b> SocketException and IOException are caught and logged,
      * with the socket being reset to notify the peer of the failure.
@@ -812,10 +860,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * <pre>
      * targetForPort.80=localhost:8080
      * targetForPort.443=localhost:8443
-     * </pre>
-     * </p>
-     * <p>
-     * <b>Special Ports:</b> Ports 443 and 22 are automatically flagged for non-SSL
+ * </pre>
+ * <p>
+ * <b>Special Ports:</b> Ports 443 and 22 are automatically flagged for non-SSL
      * handling to prevent SSL-over-SSL issues.
      * </p>
      *

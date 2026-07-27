@@ -40,6 +40,7 @@ public abstract class DnsLabel extends SafeCharSequence implements Comparable<Dn
      */
     public static final int MAX_LABEL_LENGTH_IN_OCTETS = 63;
 
+    /** The wildcard label. */
     public static final DnsLabel WILDCARD_LABEL = DnsLabel.from("*");
 
     /**
@@ -47,8 +48,12 @@ public abstract class DnsLabel extends SafeCharSequence implements Comparable<Dn
      */
 private static final boolean VALIDATE = true;
 
+    /** The label string. */
     public final String label;
 
+    /**
+     * DnsLabel.
+     */
     protected DnsLabel(String label) {
         this.label = label;
 
@@ -64,6 +69,10 @@ private static final boolean VALIDATE = true;
 
     private transient String internationalizedRepresentation;
 
+    /**
+     * Get the internationalized representation of this label.
+     * @return the internationalized label
+     */
     public final String getInternationalizedRepresentation() {
         if (internationalizedRepresentation == null) {
             internationalizedRepresentation = getInternationalizedRepresentationInternal();
@@ -79,12 +88,19 @@ private static final boolean VALIDATE = true;
         return label;
     }
 
+    /**
+     * Get the type of this label.
+     * @return the simple class name
+     */
     public final String getLabelType() {
         return getClass().getSimpleName();
     }
 
     private transient String safeToStringRepresentation;
 
+    /**
+     * toString.
+     */
     @Override
     public final String toString() {
         if (safeToStringRepresentation == null) {
@@ -107,6 +123,9 @@ private static final boolean VALIDATE = true;
         return label;
     }
 
+    /**
+     * equals.
+     */
     @Override
     public final boolean equals(Object other) {
         if (!(other instanceof DnsLabel)) {
@@ -116,6 +135,9 @@ private static final boolean VALIDATE = true;
         return label.equals(otherDnsLabel.label);
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public final int hashCode() {
         return label.hashCode();
@@ -123,6 +145,10 @@ private static final boolean VALIDATE = true;
 
     private transient DnsLabel lowercasedVariant;
 
+    /**
+     * Get the lowercase variant of this label.
+     * @return the lowercase label
+     */
     public final DnsLabel asLowercaseVariant() {
         if (lowercasedVariant == null) {
             String lowercaseLabel = label.toLowerCase(Locale.US);
@@ -139,6 +165,10 @@ private static final boolean VALIDATE = true;
         }
     }
 
+    /**
+     * Write this label to a ByteArrayOutputStream prefixed by its length.
+     * @param byteArrayOutputStream the output stream to write to
+     */
     public final void writeToBoas(ByteArrayOutputStream byteArrayOutputStream) {
         setBytesIfRequired();
 
@@ -146,6 +176,9 @@ private static final boolean VALIDATE = true;
         byteArrayOutputStream.write(byteCache, 0, byteCache.length);
     }
 
+    /**
+     * compareTo.
+     */
     @Override
     public final int compareTo(DnsLabel other) {
         String myCanonical = asLowercaseVariant().label;
@@ -154,6 +187,11 @@ private static final boolean VALIDATE = true;
         return myCanonical.compareTo(otherCanonical);
     }
 
+    /**
+     * Create a DnsLabel from a string.
+     * @param label the label string
+     * @return the DnsLabel
+     */
     public static DnsLabel from(String label) {
         if (label == null || label.isEmpty()) {
             throw new IllegalArgumentException("Label is null or empty");
@@ -166,6 +204,11 @@ private static final boolean VALIDATE = true;
         return NonLdhLabel.fromInternal(label);
     }
 
+    /**
+     * Create DnsLabel array from string array.
+     * @param labels the label strings
+     * @return the DnsLabel array
+     */
     public static DnsLabel[] from(String[] labels) {
         DnsLabel[] res = new DnsLabel[labels.length];
 
@@ -176,10 +219,20 @@ private static final boolean VALIDATE = true;
         return res;
     }
 
+    /**
+     * Check if a string has the IDN ACE prefix.
+     * @param string the string to check
+     * @return true if the string starts with "xn--"
+     */
     public static boolean isIdnAcePrefixed(String string) {
         return string.toLowerCase(Locale.US).startsWith("xn--");
     }
 
+    /**
+     * Convert a DNS label string to a safe representation.
+     * @param dnsLabel the label to convert
+     * @return safe string representation
+     */
     public static String toSafeRepesentation(String dnsLabel) {
         if (consistsOnlyOfLettersDigitsHypenAndUnderscore(dnsLabel)) {
             // This label is safe, nothing to do.
@@ -260,14 +313,27 @@ private static final boolean VALIDATE = true;
         return true;
     }
 
+    /**
+     * Check if a string consists of only letters, digits, and hyphens.
+     * @param string the string to check
+     * @return true if it matches LDH rules
+     */
     public static boolean consistsOnlyOfLettersDigitsAndHypen(String string) {
         return consistsOnlyOfLdhAndMaybeUnderscore(string, false);
     }
 
+    /**
+     * Check if a string consists of only letters, digits, hyphens, and underscores.
+     * @param string the string to check
+     * @return true if it matches LDH or underscore rules
+     */
     public static boolean consistsOnlyOfLettersDigitsHypenAndUnderscore(String string) {
         return consistsOnlyOfLdhAndMaybeUnderscore(string, true);
     }
 
+    /**
+     * Thrown when a DNS label exceeds the maximum length.
+     */
     public static class LabelToLongException extends IllegalArgumentException {
 
         /**

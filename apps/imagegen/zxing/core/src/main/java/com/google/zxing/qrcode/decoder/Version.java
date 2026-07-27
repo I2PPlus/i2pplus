@@ -47,6 +47,11 @@ public final class Version {
   private final ECBlocks[] ecBlocks;
   private final int totalCodewords;
 
+  /**
+   * @param versionNumber version number
+   * @param alignmentPatternCenters alignment pattern coordinates
+   * @param ecBlocks error correction blocks
+   */
   private Version(int versionNumber,
                   int[] alignmentPatternCenters,
                   ECBlocks... ecBlocks) {
@@ -62,22 +67,37 @@ public final class Version {
     this.totalCodewords = total;
   }
 
+  /**
+   * getVersionNumber.
+   */
   public int getVersionNumber() {
     return versionNumber;
   }
 
+  /**
+   * getAlignmentPatternCenters.
+   */
   public int[] getAlignmentPatternCenters() {
     return alignmentPatternCenters;
   }
 
+  /**
+   * getTotalCodewords.
+   */
   public int getTotalCodewords() {
     return totalCodewords;
   }
 
+  /**
+   * getDimensionForVersion.
+   */
   public int getDimensionForVersion() {
     return 17 + 4 * versionNumber;
   }
 
+  /**
+   * getECBlocksForLevel.
+   */
   public ECBlocks getECBlocksForLevel(ErrorCorrectionLevel ecLevel) {
     return ecBlocks[ecLevel.ordinal()];
   }
@@ -100,6 +120,9 @@ public final class Version {
     }
   }
 
+  /**
+   * getVersionForNumber.
+   */
   public static Version getVersionForNumber(int versionNumber) {
     if (versionNumber < 1 || versionNumber > 40) {
       throw new IllegalArgumentException();
@@ -107,6 +130,7 @@ public final class Version {
     return VERSIONS[versionNumber - 1];
   }
 
+  /** @param versionBits raw version bits */
   static Version decodeVersionInformation(int versionBits) {
     int bestDifference = Integer.MAX_VALUE;
     int bestVersion = 0;
@@ -184,15 +208,22 @@ public final class Version {
     private final int ecCodewordsPerBlock;
     private final ECB[] ecBlocks;
 
+    /** @param ecCodewordsPerBlock EC codewords per block */
     ECBlocks(int ecCodewordsPerBlock, ECB... ecBlocks) {
       this.ecCodewordsPerBlock = ecCodewordsPerBlock;
       this.ecBlocks = ecBlocks;
     }
 
+    /**
+     * getECCodewordsPerBlock.
+     */
     public int getECCodewordsPerBlock() {
       return ecCodewordsPerBlock;
     }
 
+    /**
+     * getNumBlocks.
+     */
     public int getNumBlocks() {
       int total = 0;
       for (ECB ecBlock : ecBlocks) {
@@ -201,10 +232,16 @@ public final class Version {
       return total;
     }
 
+    /**
+     * getTotalECCodewords.
+     */
     public int getTotalECCodewords() {
       return ecCodewordsPerBlock * getNumBlocks();
     }
 
+    /**
+     * getECBlocks.
+     */
     public ECB[] getECBlocks() {
       return ecBlocks;
     }
@@ -219,20 +256,30 @@ public final class Version {
     private final int count;
     private final int dataCodewords;
 
+    /** @param count block count */
     ECB(int count, int dataCodewords) {
       this.count = count;
       this.dataCodewords = dataCodewords;
     }
 
+    /**
+     * getCount.
+     */
     public int getCount() {
       return count;
     }
 
+    /**
+     * getDataCodewords.
+     */
     public int getDataCodewords() {
       return dataCodewords;
     }
   }
 
+  /**
+   * toString.
+   */
   @Override
   public String toString() {
     return String.valueOf(versionNumber);

@@ -59,27 +59,45 @@ public class OutNetMessage implements CDPQEntry {
      *
      *  @since 0.9.3
      */
+    /** Lowest priority */
     public static final int PRIORITY_LOWEST = 100;
+    /** Medium priority */
     public static final int PRIORITY_MEDIUM = 400;
+    /** Highest priority */
     public static final int PRIORITY_HIGHEST = 1000;
+    /** Build reply priority */
     public static final int PRIORITY_BUILD_REPLY = 300;
+    /** Exploratory priority */
     public static final int PRIORITY_EXPLORATORY = 455;
+    /** Participating priority */
     public static final int PRIORITY_PARTICIPATING = 200;
+    /** My build request priority */
     public static final int PRIORITY_MY_BUILD_REQUEST = 500;
-    public static final int PRIORITY_MY_DATA = PRIORITY_HIGHEST; // may be adjusted +/- 25 for outbound traffic
+    /** My data priority */
+    public static final int PRIORITY_MY_DATA = PRIORITY_HIGHEST;
+    /** My netdb lookup priority */
     public static final int PRIORITY_MY_NETDB_LOOKUP = PRIORITY_HIGHEST;
+    /** My netdb store low priority */
     public static final int PRIORITY_MY_NETDB_STORE_LOW = 250;
+    /** My netdb store priority */
     public static final int PRIORITY_MY_NETDB_STORE = PRIORITY_HIGHEST;
+    /** Netdb explore priority */
     public static final int PRIORITY_NETDB_EXPLORE = PRIORITY_LOWEST;
+    /** Netdb flood priority */
     public static final int PRIORITY_NETDB_FLOOD = PRIORITY_HIGHEST;
+    /** Netdb harvest priority */
     public static final int PRIORITY_NETDB_HARVEST = PRIORITY_LOWEST;
+    /** Netdb reply priority */
     public static final int PRIORITY_NETDB_REPLY = 300;
+    /** His build request priority */
     public static final int PRIORITY_HIS_BUILD_REQUEST = 300;
+    /** His netdb store priority */
     public static final int PRIORITY_HIS_NETDB_STORE = 200;
 
     /**
      *  Null msg and target, zero expiration (used in OutboundMessageRegistry only)
      *
+     *  @param context the router context
      *  @since 0.9.9
      */
     public OutNetMessage(RouterContext context) {this(context, null, 0, -1, null);}
@@ -87,7 +105,10 @@ public class OutNetMessage implements CDPQEntry {
     /**
      *  Standard constructor
      *
+     *  @param context the router context
      *  @param msg generally non-null
+     *  @param expiration the expiration time
+     *  @param priority the priority
      *  @param target generally non-null
      *  @since 0.9.9
      */
@@ -173,12 +194,16 @@ public class OutNetMessage implements CDPQEntry {
     /**
      * Specifies the router to which the message should be delivered.
      * Generally non-null but may be null in special cases.
+     *
+     * @return the target router
      */
     public RouterInfo getTarget() {return _target;}
 
     /**
      * Specifies the message to be sent.
      * Generally non-null but may be null in special cases.
+     *
+     * @return the message
      */
     public I2NPMessage getMessage() {return _message;}
 
@@ -191,12 +216,16 @@ public class OutNetMessage implements CDPQEntry {
         return _message != null ? _message.getClass().getSimpleName() : "null";
     }
 
+    /** @return the message type ID */
     public int getMessageTypeId() {return _messageTypeId;}
+    /** @return the message ID */
     public long getMessageId() {return _messageId;}
 
     /**
      * How large the message is, including the full 16 byte header.
      * Transports with different header sizes should adjust.
+     *
+     * @return the message size
      */
     public int getMessageSize() {
         return _messageSize;
@@ -206,6 +235,7 @@ public class OutNetMessage implements CDPQEntry {
      *  Copies the message data to outbuffer.
      *  Used only by VM Comm System.
      *
+     *  @param outBuffer the buffer to copy to
      *  @return the length, or -1 if message is null
      */
     public int getMessageData(byte[] outBuffer) {
@@ -221,6 +251,7 @@ public class OutNetMessage implements CDPQEntry {
      * priority.  Higher priority messages should be delivered before lower
      * priority ones, though some algorithm may be used to avoid starvation.
      *
+     * @return the priority
      */
     public int getPriority() {return _priority;}
 
@@ -230,6 +261,7 @@ public class OutNetMessage implements CDPQEntry {
      * removed from the pool.  If the message has already been sent, this
      * expiration is ignored and the expiration from the ReplySelector is used.
      *
+     * @return the expiration time
      */
     public long getExpiration() {return _expiration;}
 
@@ -237,41 +269,65 @@ public class OutNetMessage implements CDPQEntry {
      * After the message is successfully passed to the router specified, the
      * given job is enqueued.
      *
+     * @return the onSend job
      */
     public Job getOnSendJob() {return _onSend;}
+    /**
+     * setOnSendJob.
+     */
     public void setOnSendJob(Job job) {_onSend = job;}
 
     /**
      * If the router could not be reached or the expiration passed, this job
      * is enqueued.
      *
+     * @return the onFailedSend job
      */
     public Job getOnFailedSendJob() {return _onFailedSend;}
+    /**
+     * setOnFailedSendJob.
+     */
     public void setOnFailedSendJob(Job job) {_onFailedSend = job;}
 
     /**
      * If the MessageSelector detects a reply, this job is enqueued
      *
+     * @return the onReply job
      */
     public ReplyJob getOnReplyJob() {return _onReply;}
+    /**
+     * setOnReplyJob.
+     */
     public void setOnReplyJob(ReplyJob job) {_onReply = job;}
 
     /**
      * If the Message selector is specified but it doesn't find a reply before
      * its expiration passes, this job is enqueued.
+     *
+     * @return the onFailedReply job
      */
     public Job getOnFailedReplyJob() {return _onFailedReply;}
+    /**
+     * setOnFailedReplyJob.
+     */
     public void setOnFailedReplyJob(Job job) {_onFailedReply = job;}
 
     /**
      * Defines a MessageSelector to find a reply to this message.
      *
+     * @return the reply selector
      */
     public MessageSelector getReplySelector() {return _replySelector;}
+    /**
+     * setReplySelector.
+     */
     public void setReplySelector(MessageSelector selector) {_replySelector = selector;}
 
     /**
      * As of 0.9.55, returns the previous number of failed transports.
+     *
+     * @param transportStyle the transport that failed
+     * @return the number of previously failed transports
      */
     public synchronized int transportFailed(String transportStyle) {
         int rv;
@@ -284,6 +340,7 @@ public class OutNetMessage implements CDPQEntry {
     }
 
     /**
+     * @return the number of failed transports
      * @since 0.9.55
      */
     public synchronized int getFailedTransportCount() {
@@ -292,25 +349,29 @@ public class OutNetMessage implements CDPQEntry {
 
     /**
      * As of 0.9.55, changed from a Set to a List
+     *
+     * @return the list of failed transports
      */
     public synchronized List<String> getFailedTransports() {
         return (_failedTransports == null ? Collections.<String>emptyList() : _failedTransports);
     }
 
-    /** when did the sending process begin */
+    /** @return when the sending process began */
     public long getSendBegin() {return _sendBegin;}
 
+    /** begin the send */
     public void beginSend() {_sendBegin = _context.clock().now();}
 
+    /** @return the creation time */
     public long getCreated() {return _created;}
 
     /** Reset creation time for dispatch age tracking on requeue */
     public void resetCreatedTime() {_created = _context.clock().now();}
 
-    /** time since the message was created */
+    /** @return the remaining lifetime */
     public long getLifetime() {return _context.clock().now() - _created;}
 
-    /** time the transport tries to send the message (including any queueing) */
+    /** @return the send time */
     public long getSendTime() {return _context.clock().now() - _sendBegin;}
 
     /**
@@ -329,9 +390,11 @@ public class OutNetMessage implements CDPQEntry {
 
     /**
      *  When the message entered the transport queue (set by transport send()).
+     *  @param now the queue time
      */
     public void setTransportQueued(long now) {_transportQueued = now;}
 
+    /** @return when the message was queued */
     public long getTransportQueued() {return _transportQueued;}
 
     /**
@@ -371,6 +434,9 @@ public class OutNetMessage implements CDPQEntry {
      */
     public void discardData() { /* No-op - data is not held separately in this implementation */ }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);

@@ -24,12 +24,17 @@ import org.rrd4j.core.RrdException;
  */
 public class RRDatabase implements Closeable {
 
+    /** The RRD file */
     final RRDFile rrdFile;
 
     // RRD file name
+    /** ignored */
     private final String name;
+    /** The header */
     final Header header;
+    /** ignored */
     private final ArrayList<DataSource> dataSources;
+    /** ignored */
     private final ArrayList<Archive> archives;
 
     /** Timestamp of last data modification */
@@ -208,6 +213,7 @@ public class RRDatabase implements Closeable {
         return getArchiveList(type).iterator();
     }
 
+    /** ignored */
     ArrayList<Archive> getArchiveList(ConsolidationFunctionType type) {
 
         ArrayList<Archive> subset = new ArrayList<>();
@@ -349,6 +355,7 @@ public class RRDatabase implements Closeable {
      * This is almost a verbatim copy of the original C code by Tobias Oetiker.
      * I need to put more of a Java style on it - CT
      */
+    /** ignored */
     private Archive findBestArchive(long start, long end, long step, ArrayList<Archive> archives) {
 
         Archive archive = null;

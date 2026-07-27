@@ -235,7 +235,6 @@ public class NtpClient {
      * This program queries the specified NTP servers and prints the current time along with stratum and offset information.
      *
      * @param args command-line arguments; optionally "-6" followed by list of NTP servers
-     * @throws IOException if a network error occurs
      */
     public static void main(String[] args) {
         boolean ipv6 = false;

@@ -21,6 +21,9 @@ class UpdateHandler implements Updater {
     private final UpdateManager _umgr;
     private final SnarkManager _smgr;
 
+    /**
+     * UpdateHandler.
+     */
     public UpdateHandler(I2PAppContext ctx, UpdateManager umgr, SnarkManager smgr) {
         _context = ctx;
         _umgr = umgr;

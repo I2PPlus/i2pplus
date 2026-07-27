@@ -22,15 +22,33 @@ import java.io.IOException;
  */
 public class CNAME extends RRWithTarget {
 
+    /**
+     * Parse a CNAME record from a data stream.
+     *
+     * @param dis the data input stream
+     * @param data the raw record data
+     * @return the parsed CNAME record
+     * @throws IOException if parsing fails
+     */
     public static CNAME parse(DataInputStream dis, byte[] data) throws IOException {
         DnsName target = DnsName.parse(dis, data);
         return new CNAME(target);
     }
 
+    /**
+     * Create a CNAME record from a string target.
+     *
+     * @param target the target domain name
+     */
     public CNAME(String target) {
         this(DnsName.from(target));
     }
 
+    /**
+     * Create a CNAME record from a DnsName target.
+     *
+     * @param target the target domain name
+     */
     public CNAME(DnsName target) {
         super(target);
     }

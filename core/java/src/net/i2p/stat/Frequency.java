@@ -19,20 +19,28 @@ public class Frequency {
     private final long _start = now();
     private long _count;
 
-    /** @param period ms */
+    /**
+     * Creates a new Frequency with the specified period
+     *
+     * @param period ms
+     */
     public Frequency(long period) {
         _period = period;
         _avgInterval = (long) period + 1;
         _minAverageInterval = _avgInterval;
     }
 
-    /** how long is this frequency averaged over? (ms) */
+    /**
+     * How long is this frequency averaged over? (ms)
+     *
+     * @return the period in ms
+     */
     public long getPeriod() {
         return _period;
     }
 
     /**
-     * on average over the last $period, after how many milliseconds are events coming in,
+     * On average over the last $period, after how many milliseconds are events coming in,
      * as calculated during the last event occurrence?
      *
      * @return milliseconds; returns period + 1 if no events in previous period
@@ -42,7 +50,7 @@ public class Frequency {
     }
 
     /**
-     * what is the lowest average interval (aka most frequent) we have seen? (ms)
+     * What is the lowest average interval (aka most frequent) we have seen? (ms)
      *
      * @return milliseconds; returns period + 1 if no events in previous period
      */
@@ -81,14 +89,22 @@ public class Frequency {
         return duration / (double) _count;
     }
 
-    /** using the strict average interval, how many events occur within an average period? */
+    /**
+     * Using the strict average interval, how many events occur within an average period?
+     *
+     * @return events per period
+     */
     public synchronized double getStrictAverageEventsPerPeriod() {
         double avgInterval = getStrictAverageInterval();
         if (avgInterval > 0) return _period / avgInterval;
         return 0;
     }
 
-    /** how many events have occurred within the lifetime of this stat? */
+    /**
+     * How many events have occurred within the lifetime of this stat?
+     *
+     * @return event count
+     */
     public synchronized long getEventCount() {
         return _count;
     }

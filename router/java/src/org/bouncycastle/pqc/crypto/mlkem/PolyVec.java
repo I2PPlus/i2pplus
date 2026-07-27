@@ -8,11 +8,18 @@ import java.util.Arrays;
  */
 class PolyVec
 {
+    /** ignored */
     Poly[] vec;
+    /** ignored */
     private MLKEMEngine engine;
+    /** ignored */
     private int kyberK;
+    /** ignored */
     private int polyVecBytes;
 
+    /**
+     * PolyVec.
+     */
     public PolyVec(MLKEMEngine engine)
     {
         this.engine = engine;
@@ -26,17 +33,26 @@ class PolyVec
         }
     }
 
+    /**
+     * PolyVec.
+     */
     public PolyVec()
         throws Exception
     {
         throw new Exception("Requires Parameter");
     }
 
+    /**
+     * getVectorIndex.
+     */
     public Poly getVectorIndex(int i)
     {
         return vec[i];
     }
 
+    /**
+     * polyVecNtt.
+     */
     public void polyVecNtt()
     {
         int i;
@@ -46,6 +62,9 @@ class PolyVec
         }
     }
 
+    /**
+     * polyVecInverseNttToMont.
+     */
     public void polyVecInverseNttToMont()
     {
         for (int i = 0; i < kyberK; i++)
@@ -54,6 +73,9 @@ class PolyVec
         }
     }
 
+    /**
+     * compressPolyVec.
+     */
     public byte[] compressPolyVec()
     {
         int i, j, k;
@@ -145,6 +167,9 @@ class PolyVec
         return r;
     }
 
+    /**
+     * decompressPolyVec.
+     */
     public void decompressPolyVec(byte[] compressedPolyVecCipherText)
     {
         int i, j, k, count = 0;
@@ -199,6 +224,9 @@ class PolyVec
         }
     }
 
+    /**
+     * pointwiseAccountMontgomery.
+     */
     public static void pointwiseAccountMontgomery(Poly out, PolyVec inp1, PolyVec inp2, MLKEMEngine engine)
     {
         int i;
@@ -213,6 +241,9 @@ class PolyVec
         out.reduce();
     }
 
+    /**
+     * reducePoly.
+     */
     public void reducePoly()
     {
         int i;
@@ -222,6 +253,9 @@ class PolyVec
         }
     }
 
+    /**
+     * addPoly.
+     */
     public void addPoly(PolyVec b)
     {
         int i;
@@ -231,6 +265,9 @@ class PolyVec
         }
     }
 
+    /**
+     * toBytes.
+     */
     public byte[] toBytes()
     {
         byte[] r = new byte[polyVecBytes];
@@ -242,6 +279,9 @@ class PolyVec
         return r;
     }
 
+    /**
+     * fromBytes.
+     */
     public void fromBytes(byte[] inputBytes)
     {
         for (int i = 0; i < kyberK; i++)
@@ -250,6 +290,9 @@ class PolyVec
         }
     }
 
+    /**
+     * conditionalSubQ.
+     */
     public void conditionalSubQ()
     {
         for (int i = 0; i < kyberK; i++)
@@ -258,6 +301,9 @@ class PolyVec
         }
     }
 
+    /**
+     * toString.
+     */
     public String toString()
     {
         StringBuffer out = new StringBuffer();

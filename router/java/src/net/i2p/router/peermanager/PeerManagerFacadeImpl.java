@@ -30,6 +30,9 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
 
     private static final boolean ENABLE_PEER_TEST = true;
 
+    /**
+     * PeerManagerFacadeImpl.
+     */
     public PeerManagerFacadeImpl(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(PeerManagerFacadeImpl.class);
@@ -37,6 +40,9 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
         _testJob = ENABLE_PEER_TEST ? new PeerTestJob(_context) : null;
     }
 
+    /**
+     * startup.
+     */
     public synchronized void startup() {
         _log.info("Starting Peer Manager...");
         _manager = new PeerManager(_context);
@@ -44,6 +50,9 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
         if (_testJob != null) {_testJob.startTesting(_manager);}
     }
 
+    /**
+     * shutdown.
+     */
     public synchronized void shutdown() {
         _log.info("Shutting down Peer Manager...");
         if (_testJob != null) {_testJob.stopTesting();}
@@ -53,6 +62,9 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
         }
     }
 
+    /**
+     * restart.
+     */
     public synchronized void restart() {
         _manager.storeProfiles();
         _persistenceHelper.setUs(_context.routerHash());
@@ -67,6 +79,9 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
         _manager.setCapabilities(peer, caps);
     }
 
+    /**
+     * removeCapabilities.
+     */
     public void removeCapabilities(Hash peer) {
         if (_manager == null) return;
         _manager.removeCapabilities(peer);

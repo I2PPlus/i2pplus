@@ -45,6 +45,8 @@ public final class ByteMatrix {
   }
 
   /**
+   * Returns the height of the matrix.
+   *
    * @return the height of the matrix
    */
   public int getHeight() {
@@ -52,6 +54,8 @@ public final class ByteMatrix {
   }
 
   /**
+   * Returns the width of the matrix.
+   *
    * @return the width of the matrix
    */
   public int getWidth() {
@@ -69,6 +73,8 @@ public final class ByteMatrix {
   }
 
   /**
+   * Returns the internal representation as bytes, in row-major order.
+   *
    * @return an internal representation as bytes, in row-major order. array[y][x] represents point (x,y)
    */
   public byte[][] getArray() {

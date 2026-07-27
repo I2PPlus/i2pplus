@@ -110,8 +110,33 @@ public interface CipherState extends Destroyable, Cloneable {
 	int encryptWithAd(byte[] ad, byte[] plaintext, int plaintextOffset, byte[] ciphertext, int ciphertextOffset, int length) throws ShortBufferException;
 
 	/**
-	 *  I2P
-	 *  @since 0.9.54
+	 * Encrypts a plaintext buffer with a block of associated data, with separate offset/length for the AD.
+	 *
+	 * @param ad The associated data, or null if there is none.
+	 * @param adOffset The offset within the ad buffer of the first byte of associated data.
+	 * @param adLength The length of the associated data within the ad buffer.
+	 * @param plaintext The buffer containing the plaintext to encrypt.
+	 * @param plaintextOffset The offset within the plaintext buffer of the first byte to encrypt.
+	 * @param ciphertext The buffer to place the ciphertext in.  This can be
+	 * the same as the plaintext buffer.
+	 * @param ciphertextOffset The first offset within the ciphertext buffer
+	 * to place the ciphertext.
+	 * @param length The length of the plaintext.
+	 * @return The length of the ciphertext with the MAC tag appended.
+	 *
+	 * @throws ShortBufferException The ciphertext buffer does not have
+	 * enough space to store the encrypted data.
+	 *
+	 * @throws IllegalStateException The nonce has wrapped around.
+	 *
+	 * @since 0.9.54
+	 *
+	 * The plaintext and ciphertext buffers can be the same for in-place
+	 * encryption.  In that case, plaintextOffset must be identical to
+	 * ciphertextOffset.
+	 *
+	 * There must be enough space in the ciphertext buffer to accomodate
+	 * length + getMACLength() bytes of data starting at ciphertextOffset.
 	 */
 	public int encryptWithAd(byte[] ad, int adOffset, int adLength, byte[] plaintext, int plaintextOffset,
 	                         byte[] ciphertext, int ciphertextOffset, int length) throws ShortBufferException;
@@ -144,8 +169,34 @@ public interface CipherState extends Destroyable, Cloneable {
 	int decryptWithAd(byte[] ad, byte[] ciphertext, int ciphertextOffset, byte[] plaintext, int plaintextOffset, int length) throws ShortBufferException, BadPaddingException;
 
 	/**
-	 *  I2P
-	 *  @since 0.9.54
+	 * Decrypts a ciphertext buffer using the cipher and a block of associated data,
+	 * with separate offset/length for the AD.
+	 *
+	 * @param ad The associated data, or null if there is none.
+	 * @param adOffset The offset within the ad buffer of the first byte of associated data.
+	 * @param adLength The length of the associated data within the ad buffer.
+	 * @param ciphertext The buffer containing the ciphertext to decrypt.
+	 * @param ciphertextOffset The offset within the ciphertext buffer of
+	 * the first byte of ciphertext data.
+	 * @param plaintext The buffer to place the plaintext in.  This can be
+	 * the same as the ciphertext buffer.
+	 * @param plaintextOffset The first offset within the plaintext buffer
+	 * to place the plaintext.
+	 * @param length The length of the incoming ciphertext plus the MAC tag.
+	 * @return The length of the plaintext with the MAC tag stripped off.
+	 *
+	 * @throws ShortBufferException The plaintext buffer does not have
+	 * enough space to store the decrypted data.
+	 *
+	 * @throws BadPaddingException The MAC value failed to verify.
+	 *
+	 * @throws IllegalStateException The nonce has wrapped around.
+	 *
+	 * @since 0.9.54
+	 *
+	 * The plaintext and ciphertext buffers can be the same for in-place
+	 * decryption.  In that case, ciphertextOffset must be identical to
+	 * plaintextOffset.
 	 */
 	public int decryptWithAd(byte[] ad, int adOffset, int adLength, byte[] ciphertext,
 	                         int ciphertextOffset, byte[] plaintext, int plaintextOffset,
@@ -172,8 +223,13 @@ public interface CipherState extends Destroyable, Cloneable {
 	void setNonce(long nonce);
 
 	/**
-	 *  I2P
-	 *  @since 0.9.44
+	 * Creates a clone of this cipher state.
+	 *
+	 * @return A clone of this CipherState.
+	 *
+	 * @throws CloneNotSupportedException If cloning is not supported.
+	 *
+	 * @since 0.9.44
 	 */
 	public CipherState clone() throws CloneNotSupportedException;
 }

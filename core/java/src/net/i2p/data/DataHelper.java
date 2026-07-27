@@ -132,6 +132,9 @@ import java.nio.charset.StandardCharsets;
 @SuppressWarnings("PMD.CloseResource")
 public class DataHelper {
 
+    /** utility class */
+    private DataHelper() {}
+
     /** See storeProps(). 600-750 ms on RPi. */
     private static final boolean SHOULD_SYNC = !(SystemVersion.isAndroid() || SystemVersion.isARM());
 
@@ -373,8 +376,11 @@ public class DataHelper {
      * Use utf8 = false for RouterAddress (fast, non UTF-8)
      * Use utf8 = true for SessionConfig (slow, UTF-8)
      *
+     * @param rawStream stream to write to
      * @param props source may be null
+     * @param utf8 if true, encode strings as UTF-8
      * @throws DataFormatException if a length limit is exceeded
+     * @throws IOException if there is an IO error
      */
     public static void writeProperties(OutputStream rawStream, Properties props, boolean utf8) throws DataFormatException, IOException {
         writeProperties(rawStream, props, utf8, props != null && props.size() > 1 && !(props instanceof OrderedProperties));
@@ -397,10 +403,13 @@ public class DataHelper {
      * Use utf8 = false for RouterAddress (fast, non UTF-8)
      * Use utf8 = true for SessionConfig (slow, UTF-8)
      *
+     * @param rawStream stream to write to
      * @param props source may be null
+     * @param utf8 if true, encode strings as UTF-8
      * @param sort should we sort the properties? (set to false if already sorted, e.g. OrderedProperties)
      * @throws DataFormatException if any string is over 255 bytes long, or if the total length
      *                             (not including the two length bytes) is greater than 65535 bytes.
+     * @throws IOException if there is an IO error
      *
      * @since 0.8.7
      */
@@ -440,7 +449,7 @@ public class DataHelper {
         }
     }
 
-    /*
+    /**
      * Writes the props to the byte array, sorted
      * See readProperties() for the format.
      * Property keys and values must not contain '=' or ';', this is not checked and they are not escaped
@@ -452,6 +461,7 @@ public class DataHelper {
      * Properties from the defaults table of props (if any) are not written out by this method.
      *
      * @param target returned array as specified in data structure spec
+     * @param offset starting offset in target
      * @param props source may be null
      * @return new offset
      * @throws DataFormatException if any string is over 255 bytes long, or if the total length
@@ -499,6 +509,7 @@ public class DataHelper {
      *  As of 0.9.18, throws DataFormatException on duplicate key
      *
      * @param source source
+     * @param offset starting offset in source
      * @param target returned Properties
      * @return new offset
      * @throws DataFormatException if the data is malformed
@@ -552,6 +563,8 @@ public class DataHelper {
      *
      * Properties from the defaults table of props (if any) are not written out by this method.
      *
+     * @param opts properties to serialize
+     * @return byte array containing the serialized properties
      * @throws DataFormatException if key, value, or total is too long
      */
     public static byte[] toProperties(Properties opts) throws DataFormatException {
@@ -567,6 +580,9 @@ public class DataHelper {
     /**
      * Pretty print the mapping, unsorted
      * (unless the options param is an OrderedProperties)
+     *
+     * @param options properties to print, may be null
+     * @return string representation
      */
     public static String toString(Properties options) {
         return toString((Map<?, ?>) options);
@@ -576,6 +592,8 @@ public class DataHelper {
      * Pretty print the mapping, unsorted
      * (unless the options param is an OrderedProperties)
      *
+     * @param options map to print, may be null
+     * @return string representation
      * @since 0.9.4, as of 0.9.38 supports non-String values
      */
     public static String toString(Map<?, ?> options) {
@@ -606,13 +624,21 @@ public class DataHelper {
      *
      * As in Java Properties, duplicate keys are allowed, last one wins.
      *
+     * @param props the properties object to load into
+     * @param file the file to read from
+     * @throws IOException if there is an error reading
      */
     public static void loadProps(Properties props, File file) throws IOException {
         loadProps(props, file, false);
     }
 
     /**
-     *  @param forceLowerCase if true forces the keys to lower case (not the values)
+     * Load properties from a file, optionally forcing keys to lower case.
+     *
+     * @param props the properties object to load into
+     * @param file the file to read from
+     * @param forceLowerCase if true forces the keys to lower case (not the values)
+     * @throws IOException if there is an error reading
      */
     public static void loadProps(Properties props, File file, boolean forceLowerCase) throws IOException {
         loadProps(props, new FileInputStream(file), forceLowerCase);
@@ -630,7 +656,12 @@ public class DataHelper {
     }
 
     /**
-     *  @param forceLowerCase if true forces the keys to lower case (not the values)
+     * Load properties from a stream, optionally forcing keys to lower case.
+     *
+     * @param props the properties object to load into
+     * @param inStr the input stream to read from
+     * @param forceLowerCase if true forces the keys to lower case (not the values)
+     * @throws IOException if there is an error reading
      */
     public static void loadProps(Properties props, InputStream inStr, boolean forceLowerCase) throws IOException {
         BufferedReader in = null;
@@ -684,8 +715,11 @@ public class DataHelper {
      * Leading or trailing whitespace in values is not checked but
      * will be trimmed by loadProps()
      *
+     * @param props properties to store
+     * @param file the file to write to
      * @throws IllegalArgumentException if a key contains any of "#=\n" or starts with ';',
      *                                  or a value contains '#' or '\n'
+     * @throws IOException if there is an IO error
      */
     public static void storeProps(Properties props, File file) throws IOException {
         FileOutputStream fos = null;
@@ -747,6 +781,8 @@ public class DataHelper {
     /**
      * Pretty print the collection
      *
+     * @param col the collection to print, may be null
+     * @return string representation
      */
     public static String toString(Collection<?> col) {
         StringBuilder buf = new StringBuilder();
@@ -812,6 +848,7 @@ public class DataHelper {
      *  Use toString(byte[]) to get leading zeros
      *
      *  @param data may be null (returns "00")
+     *  @return hex string representation
      */
     public static final String toHexString(byte[] data) {
         if ((data == null) || (data.length <= 0)) {
@@ -917,6 +954,8 @@ public class DataHelper {
     /**
      * Big endian.
      *
+     * @param target the target byte array
+     * @param offset starting offset in target
      * @param numBytes 1-8
      * @param value non-negative
      * @throws IllegalArgumentException if numBytes is out of range or value is negative
@@ -934,6 +973,8 @@ public class DataHelper {
     /**
      * Little endian, i.e. backwards. Not for use in I2P protocols.
      *
+     * @param target the target byte array
+     * @param offset starting offset in target
      * @param numBytes 1-8
      * @param value non-negative
      * @since 0.8.12
@@ -955,10 +996,11 @@ public class DataHelper {
     /**
      * Big endian.
      *
-     * @param src if null returns 0
+     * @param src source byte array, may be null (returns 0)
+     * @param offset starting offset in src
      * @param numBytes 1-8
      * @return non-negative
-     * @throws ArrayIndexOutOfBoundsException
+     * @throws ArrayIndexOutOfBoundsException if the source array is too short
      * @throws IllegalArgumentException if negative (only possible if numBytes = 8)
      */
     public static long fromLong(byte[] src, int offset, int numBytes) {
@@ -982,9 +1024,11 @@ public class DataHelper {
     /**
      * Little endian, i.e. backwards. Not for use in I2P protocols.
      *
+     * @param src source byte array, may be null (returns 0)
+     * @param offset starting offset in src
      * @param numBytes 1-8
      * @return non-negative
-     * @throws ArrayIndexOutOfBoundsException
+     * @throws ArrayIndexOutOfBoundsException if the source array is too short
      * @throws IllegalArgumentException if negative (only possible if numBytes = 8)
      * @since 0.8.12
      */
@@ -1007,7 +1051,10 @@ public class DataHelper {
      * Big endian.
      * Same as fromLong(src, offset, 8) but allows negative result
      *
-     * @throws ArrayIndexOutOfBoundsException
+     * @param src source byte array
+     * @param offset starting offset in src
+     * @return the long value, possibly negative
+     * @throws ArrayIndexOutOfBoundsException if the source array is too short
      * @since 0.9.47 moved from NTCP2Payload
      */
     public static long fromLong8(byte[] src, int offset) {
@@ -1024,7 +1071,10 @@ public class DataHelper {
      * Big endian.
      * Same as toLong(target, offset, 8, value) but allows negative value
      *
-     * @throws ArrayIndexOutOfBoundsException
+     * @param target the target byte array
+     * @param offset starting offset in target
+     * @param value the value to write, may be negative
+     * @throws ArrayIndexOutOfBoundsException if the target array is too short
      * @since 0.9.47 moved from NTCP2Payload
      */
     public static void toLong8(byte[] target, int offset, long value) {
@@ -1083,6 +1133,8 @@ public class DataHelper {
     }
 
     /**
+     * Write a date (8-byte timestamp) to a byte array.
+     *
      * @param target the target byte array
      * @param offset the starting offset
      * @param when the time in milliseconds since epoch
@@ -1093,6 +1145,8 @@ public class DataHelper {
     }
 
     /**
+     * Read a date (8-byte timestamp) from a byte array.
+     *
      * @param src the source byte array
      * @param offset the starting offset
      * @return the date, or null if the time is zero or negative
@@ -1114,6 +1168,7 @@ public class DataHelper {
         }
     }
 
+    /** Number of bytes in a date field (8). */
     public static final int DATE_LENGTH = 8;
 
     /** Read in a string from the stream as specified by the I2P data structure spec.
@@ -1121,7 +1176,6 @@ public class DataHelper {
      *  in the string and the remaining 0-255 bytes are the non-null terminated UTF-8 encoded character array.
      *
      *  @param in stream to read from
-     *  @throws DataFormatException if the stream doesn't contain a validly formatted string
      *  @throws EOFException since 0.8.2, if there aren't enough bytes to read the string
      *  @throws IOException if there is an IO error reading the string
      *  @return UTF-8 string
@@ -1209,6 +1263,10 @@ public class DataHelper {
      * <p>
      *
      * This treats (null == null) as true, and (null == (!null)) as false.
+     *
+     * @param lhs first object, may be null
+     * @param rhs second object, may be null
+     * @return true if equal
      */
     public static final boolean eq(Object lhs, Object rhs) {
         try {
@@ -1230,6 +1288,9 @@ public class DataHelper {
      * The collection order should be consistent, as this simply iterates across both and compares
      * based on the value of each at each step along the way.
      *
+     * @param lhs first collection, may be null
+     * @param rhs second collection, may be null
+     * @return true if equal
      */
     public static final boolean eq(Collection<?> lhs, Collection<?> rhs) {
         if ((lhs == null) && (rhs == null)) return true;
@@ -1253,6 +1314,8 @@ public class DataHelper {
      *
      * Variable time.
      *
+     * @param lhs first byte array, may be null
+     * @param rhs second byte array, may be null
      * @return Arrays.equals(lhs, rhs)
      */
     public static final boolean eq(byte[] lhs, byte[] rhs) {
@@ -1263,6 +1326,12 @@ public class DataHelper {
      *  Unlike eq(byte[], byte[]), this returns false if either lhs or rhs is null.
      *  Variable time.
      *
+     *  @param lhs first byte array
+     *  @param offsetLeft starting offset in lhs
+     *  @param rhs second byte array
+     *  @param offsetRight starting offset in rhs
+     *  @param length number of bytes to compare
+     *  @return true if equal
      *  @throws ArrayIndexOutOfBoundsException if either array isn't long enough
      */
     public static final boolean eq(byte[] lhs, int offsetLeft, byte[] rhs, int offsetRight, int length) {
@@ -1281,6 +1350,12 @@ public class DataHelper {
      *  Unlike eq(), this throws NPE if either lhs or rhs is null.
      *  Constant time.
      *
+     *  @param lhs first byte array
+     *  @param offsetLeft starting offset in lhs
+     *  @param rhs second byte array
+     *  @param offsetRight starting offset in rhs
+     *  @param length number of bytes to compare
+     *  @return true if equal
      *  @throws NullPointerException if lhs or rhs is null
      *  @throws ArrayIndexOutOfBoundsException if either array isn't long enough
      *  @since 0.9.13
@@ -1297,6 +1372,9 @@ public class DataHelper {
      *  Constant time string comparison.
      *  Null-safe. Different lengths handled in constant time.
      *
+     *  @param lhs first string, may be null
+     *  @param rhs second string, may be null
+     *  @return true if equal
      *  @since 0.9.70+
      */
     public static final boolean eqCT(String lhs, String rhs) {
@@ -1320,6 +1398,10 @@ public class DataHelper {
      *  Shorter arg is lesser.
      *  Args may be null, null is less than non-null.
      *  Variable time.
+     *
+     *  @param lhs first byte array, may be null
+     *  @param rhs second byte array, may be null
+     *  @return negative, zero, or positive
      */
     public static final int compareTo(byte[] lhs, byte[] rhs) {
         if ((rhs == null) && (lhs == null)) return 0;
@@ -1338,7 +1420,11 @@ public class DataHelper {
     }
 
     /**
-     *  @return null if either arg is null or the args are not equal length
+     * XOR two byte arrays.
+     *
+     * @param lhs first byte array, may be null
+     * @param rhs second byte array, may be null
+     * @return null if either arg is null or the args are not equal length
      */
     public static final byte[] xor(byte[] lhs, byte[] rhs) {
         if ((lhs == null) || (rhs == null) || (lhs.length != rhs.length)) return new byte[0];
@@ -1385,6 +1471,8 @@ public class DataHelper {
     /**
      * Calculate the hashcode of the object, using 0 for null
      *
+     * @param obj the object, may be null
+     * @return hash code
      */
     public static int hashCode(Object obj) {
         if (obj == null) {
@@ -1396,6 +1484,8 @@ public class DataHelper {
     /**
      * Calculate the hashcode of the date, using 0 for null
      *
+     * @param obj the date, may be null
+     * @return hash code
      */
     public static int hashCode(Date obj) {
         if (obj == null) {
@@ -1407,6 +1497,8 @@ public class DataHelper {
     /**
      * Calculate the hashcode of the byte array, using 0 for null
      *
+     * @param b byte array, may be null
+     * @return hash code
      */
     public static int hashCode(byte[] b) {
         // Java 5 now has its own method, and the old way
@@ -1428,6 +1520,8 @@ public class DataHelper {
     /**
      * Calculate the hashcode of the collection, using 0 for null
      *
+     * @param col the collection, may be null
+     * @return hash code
      */
     public static int hashCode(Collection<?> col) {
         if (col == null) {
@@ -1495,8 +1589,11 @@ public class DataHelper {
      *
      *  As of 0.9.27, throws EOFException if the full length is not read.
      *
+     *  @param in the input stream
+     *  @param target the target byte array
      *  @return target.length
      *  @throws EOFException if the full length is not read (since 0.9.27)
+     *  @throws IOException if an I/O error occurs
      */
     public static int read(InputStream in, byte[] target) throws IOException {
         return read(in, target, 0, target.length);
@@ -1511,8 +1608,13 @@ public class DataHelper {
      *  WARNING - Broken for nonzero offset before 0.9.27.
      *  As of 0.9.27, throws EOFException if the full length is not read.
      *
+     *  @param in the input stream
+     *  @param target the target byte array
+     *  @param offset starting offset in target
+     *  @param length number of bytes to read
      *  @return the new offset (== old offset + length)
      *  @throws EOFException if the full length is not read (since 0.9.27)
+     *  @throws IOException if an I/O error occurs
      */
     public static int read(InputStream in, byte[] target, int offset, int length) throws IOException {
         int cur = 0;
@@ -1533,7 +1635,9 @@ public class DataHelper {
      * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
      * Warning - not UTF-8
      *
+     * @param in the input stream
      * @return null on EOF
+     * @throws IOException if there is an IO error
      */
     public static String readLine(InputStream in) throws IOException {
         return readLine(in, (MessageDigest) null);
@@ -1545,8 +1649,10 @@ public class DataHelper {
      * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
      * Warning - not UTF-8
      *
+     * @param in the input stream
      * @param hash null OK
      * @return null on EOF
+     * @throws IOException if there is an IO error
      * @since 0.8.8
      */
     public static String readLine(InputStream in, MessageDigest hash) throws IOException {
@@ -1568,8 +1674,11 @@ public class DataHelper {
      * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
      * Warning - not UTF-8
      *
+     * @param in the input stream
+     * @param buf the buffer to append to
      * @return true if the line was read, false if eof was reached on an empty line
      *              (returns true for non-empty last line without a newline)
+     * @throws IOException if there is an IO error
      */
     public static boolean readLine(InputStream in, StringBuilder buf) throws IOException {
         return readLine(in, buf, (MessageDigest) null);
@@ -1581,10 +1690,12 @@ public class DataHelper {
      * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
      * Warning - not UTF-8
      *
+     * @param in the input stream
+     * @param buf the buffer to append to
      * @param hash null OK
      * @return true if the line was read, false if eof was reached on an empty line
      *              (returns true for non-empty last line without a newline)
-     *
+     * @throws IOException if there is an IO error
      * @since 0.8.8
      */
     public static boolean readLine(InputStream in, StringBuilder buf, MessageDigest hash) throws IOException {
@@ -1604,8 +1715,12 @@ public class DataHelper {
     }
 
     /**
-     *  update the hash along the way
+     *  Write data to the output stream while updating the MessageDigest along the way.
      *
+     *  @param out the output stream to write to
+     *  @param data the byte array to write
+     *  @param hash the MessageDigest to update (non-null)
+     *  @throws IOException if an I/O error occurs
      *  @since 0.8.8
      */
     public static void write(OutputStream out, byte[] data, MessageDigest hash) throws IOException {
@@ -1614,7 +1729,11 @@ public class DataHelper {
     }
 
     /**
+     *  Format a duration in milliseconds to a human-readable string.
      *  NOTE: formatDuration2() recommended in most cases for readability
+     *
+     *  @param ms the duration in milliseconds
+     *  @return a compact string like "5s", "30m", "2h", "3d"
      */
     public static String formatDuration(long ms) {
         if (ms < 5 * 1000) {
@@ -1644,6 +1763,8 @@ public class DataHelper {
      *
      * Negative numbers handled correctly.
      *
+     * @param ms the duration in milliseconds
+     * @return a translated string like "5&nbsp;sec", "30&nbsp;min", "2&nbsp;hours"
      * @since 0.8.2
      */
     public static String formatDuration2(long ms) {
@@ -1702,6 +1823,8 @@ public class DataHelper {
     /**
      * Like formatDuration2(long) but with microsec and nanosec also.
      *
+     * @param ms the duration in milliseconds (fractional values supported)
+     * @return a translated string with appropriate units (ns, &mu;s, ms, sec, min, etc.)
      * @since 0.9.19
      */
     public static String formatDuration2(double ms) {
@@ -1760,6 +1883,7 @@ public class DataHelper {
      * No space between the number and the letter.
      * NOTE: formatSize2() recommended in most cases for readability
      *
+     * @param bytes the number of bytes
      * @return e.g. "123.05Ki"
      */
     public static String formatSize(long bytes) {
@@ -1803,6 +1927,7 @@ public class DataHelper {
      * Use only in HTML, and not inside form values (use
      * formatSize2(bytes, false) there instead).
      *
+     * @param bytes the number of bytes
      * @return e.g. "123.05&amp;#8239;Ki"
      * @since 0.7.14, uses thin non-breaking space since 0.9.31
      */
@@ -1818,6 +1943,7 @@ public class DataHelper {
      * Like formatSize but with a space after the number
      * This seems consistent with most style guides out there.
      *
+     * @param bytes the number of bytes
      * @param nonBreaking use an HTML thin non-breaking space (&amp;#8239;)
      * @return e.g. "123.05&amp;#8239;Ki" or "123.05 Ki"
      * @since 0.9.31
@@ -1868,6 +1994,7 @@ public class DataHelper {
      * Like formatSize but with a space after the number
      * This seems consistent with most style guides out there.
      *
+     * @param bytes the number of bytes
      * @return e.g. "123.05&amp;#8239;K"
      * @since 0.9.34
      */
@@ -1883,6 +2010,7 @@ public class DataHelper {
      * Like formatSize but with a space after the number
      * This seems consistent with most style guides out there.
      *
+     * @param bytes the number of bytes
      * @param nonBreaking use an HTML thin non-breaking space (&amp;#8239;)
      * @return e.g. "123.05&amp;#8239;K" or "123.05 K"
      * @since 0.9.34
@@ -1925,6 +2053,8 @@ public class DataHelper {
      *  en: Aug 30, 2019
      *  de: 30.08.2019
      *
+     *  @param now the timestamp in milliseconds since epoch
+     *  @return the formatted date string
      *  @since 0.9.43
      */
     public static String formatDate(long now) {
@@ -1946,6 +2076,8 @@ public class DataHelper {
      *  en: Aug 30, 2019 12:38 PM
      *  de: 30.08.2019 12:38
      *
+     *  @param now the timestamp in milliseconds since epoch
+     *  @return the formatted date/time string
      *  @since 0.9.43
      */
     public static String formatTime(long now) {
@@ -1964,6 +2096,7 @@ public class DataHelper {
      * Strip out any HTML (simply removing any less than / greater than symbols)
      *
      * @param orig may be null, returns empty string if null
+     * @return the stripped string, or "" if null
      */
     public static String stripHTML(String orig) {
         if (orig == null) {
@@ -2018,6 +2151,7 @@ public class DataHelper {
      */
     public static final int MEDIUM_COMPRESSION = 5;
 
+    /** No compression (level 0). */
     public static final int NO_COMPRESSION = Deflater.NO_COMPRESSION;
 
     /**

@@ -19,10 +19,19 @@ import java.util.Locale;
  */
 public abstract class XnLabel extends ReservedLdhLabel {
 
+    /**
+     * XnLabel.
+     */
     protected XnLabel(String label) {
         super(label);
     }
 
+    /**
+     * Create an LdhLabel from an internal (ACE) representation.
+     *
+     * @param label the ACE label
+     * @return the LdhLabel
+     */
     protected static LdhLabel fromInternal(String label) {
         assert isIdnAcePrefixed(label);
 
@@ -35,6 +44,11 @@ public abstract class XnLabel extends ReservedLdhLabel {
         }
     }
 
+    /**
+     * Check if a label is an XN label.
+     * @param label the label to check
+     * @return true if the label is an XN label
+     */
     public static boolean isXnLabel(String label) {
         if (!isReservedLdhLabel(label)) {
             return false;
@@ -42,6 +56,11 @@ public abstract class XnLabel extends ReservedLdhLabel {
         return isXnLabelInternal(label);
     }
 
+    /**
+     * Check if a label is an XN label internally.
+     * @param label the label to check
+     * @return true if the label is an XN label
+     */
     static boolean isXnLabelInternal(String label) {
         // Note that we already ensure the minimum label length here, since reserved LDH
         // labels must start with "xn--".

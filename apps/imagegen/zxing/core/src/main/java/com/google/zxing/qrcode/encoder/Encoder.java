@@ -37,7 +37,7 @@ import java.util.Map;
  */
 public final class Encoder {
 
-  // The original table is defined in the table 5 of JISX0510:2004 (p.19).
+  /** Alphanumeric code table from JISX0510:2004 */
   private static final int[] ALPHANUMERIC_TABLE = {
       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  // 0x00-0x0f
       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  // 0x10-0x1f
@@ -47,8 +47,10 @@ public final class Encoder {
       25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1,  // 0x50-0x5f
   };
 
+  /** Default byte mode encoding */
   static final String DEFAULT_BYTE_MODE_ENCODING = "ISO-8859-1";
 
+  /** Private constructor for utility class */
   private Encoder() {
   }
 
@@ -62,6 +64,8 @@ public final class Encoder {
   }
 
   /**
+   * Encode the given content into a QR Code.
+   *
    * @param content text to encode
    * @param ecLevel error correction level to use
    * @return {@link QRCode} representing the encoded QR code
@@ -72,6 +76,15 @@ public final class Encoder {
     return encode(content, ecLevel, null);
   }
 
+  /**
+   * Encode content into a QR Code with hints for encoding options.
+   *
+   * @param content text to encode
+   * @param ecLevel error correction level
+   * @param hints optional hints (character set, version, mask pattern, GS1 format)
+   * @return QRCode representing the encoded QR code
+   * @throws WriterException if encoding fails
+   */
   public static QRCode encode(String content,
                               ErrorCorrectionLevel ecLevel,
                               Map<EncodeHintType,?> hints) throws WriterException {
@@ -213,6 +226,9 @@ public final class Encoder {
     return -1;
   }
 
+  /**
+   * chooseMode.
+   */
   public static Mode chooseMode(String content) {
     return chooseMode(content, null);
   }
@@ -472,6 +488,7 @@ public final class Encoder {
     return result;
   }
 
+  /** @param dataBytes data to encode */
   static byte[] generateECBytes(byte[] dataBytes, int numEcBytesInBlock) {
     int numDataBytes = dataBytes.length;
     int[] toEncode = new int[numDataBytes + numEcBytesInBlock];
@@ -531,6 +548,7 @@ public final class Encoder {
     }
   }
 
+  /** Append numeric mode bytes */
   static void appendNumericBytes(CharSequence content, BitArray bits) {
     int length = content.length();
     int i = 0;
@@ -555,6 +573,7 @@ public final class Encoder {
     }
   }
 
+  /** Append alphanumeric mode bytes */
   static void appendAlphanumericBytes(CharSequence content, BitArray bits) throws WriterException {
     int length = content.length();
     int i = 0;
@@ -579,6 +598,7 @@ public final class Encoder {
     }
   }
 
+  /** Append 8-bit byte mode bytes */
   static void append8BitBytes(String content, BitArray bits, String encoding)
       throws WriterException {
     byte[] bytes;
@@ -592,6 +612,7 @@ public final class Encoder {
     }
   }
 
+  /** Append Kanji mode bytes */
   static void appendKanjiBytes(String content, BitArray bits) throws WriterException {
     byte[] bytes;
     try {

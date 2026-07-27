@@ -26,21 +26,45 @@ import net.i2p.util.Log;
  */
 abstract class SAMHandler implements Runnable, Handler {
 
+    /**
+     * _log.
+     */
     protected final Log _log;
 
+    /**
+     * thread.
+     */
     protected I2PAppThread thread;
+    /**
+     * bridge.
+     */
     protected final SAMBridge bridge;
 
     private final Object socketWLock = new Object(); // Guards writings on socket
+    /**
+     * socket.
+     */
     protected final SocketChannel socket;
 
+    /**
+     * verMajor.
+     */
     public final int verMajor;
+    /**
+     * verMinor.
+     */
     public final int verMinor;
 
     /** I2CP options configuring the I2CP connection (port, host, numHops, etc) */
     protected final Properties i2cpProps;
 
+    /**
+     * stopLock.
+     */
     protected final Object stopLock = new Object();
+    /**
+     * stopHandler.
+     */
     protected boolean stopHandler;
 
     /**
@@ -50,7 +74,6 @@ abstract class SAMHandler implements Runnable, Handler {
      * @param verMajor SAM major version to manage
      * @param verMinor SAM minor version to manage
      * @param i2cpProps properties to configure the I2CP connection (host, port, etc)
-     * @throws IOException
      */
     protected SAMHandler(SocketChannel s, int verMajor, int verMinor,
                          Properties i2cpProps, SAMBridge parent) {

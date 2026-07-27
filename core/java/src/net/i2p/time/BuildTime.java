@@ -155,6 +155,10 @@ public class BuildTime {
         }
     }
 
+    /**
+     *  Run the BuildTime command-line utility.
+     *  @param args command-line arguments
+     */
     public static void main(String[] args) {
         System.out.println("Hard earliest: " + Instant.ofEpochMilli(EARLIEST_LONG));
         long date = getEarliestTime();

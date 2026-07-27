@@ -90,11 +90,17 @@ public class FIFOBandwidthLimiter {
     private volatile float _sendBps15s;
     private volatile float _recvBps15s;
 
+    /**
+     * now.
+     */
     public /* static */ long now() {
         // Don't use the clock().now(), since that may jump
         return System.currentTimeMillis();
     }
 
+    /**
+     * FIFOBandwidthLimiter.
+     */
     public FIFOBandwidthLimiter(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(FIFOBandwidthLimiter.class);
@@ -113,7 +119,13 @@ public class FIFOBandwidthLimiter {
         _refillerThread.start();
     }
 
+    /**
+     * getTotalAllocatedInboundBytes.
+     */
     public long getTotalAllocatedInboundBytes() { return _totalAllocatedInboundBytes.get(); }
+    /**
+     * getTotalAllocatedOutboundBytes.
+     */
     public long getTotalAllocatedOutboundBytes() { return _totalAllocatedOutboundBytes.get(); }
     /** @deprecated unused for now, we are always limited */
     @Deprecated
@@ -159,6 +171,9 @@ public class FIFOBandwidthLimiter {
      */
     public int getInboundBurstKBytesPerSecond() { return _refiller.getInboundBurstKBytesPerSecond(); }
 
+    /**
+     * reinitialize.
+     */
     public synchronized void reinitialize() {
         clear();
         _refiller.reinitialize();
@@ -292,17 +307,31 @@ public class FIFOBandwidthLimiter {
             _context.statManager().addRateData("bwLimiter.pendingOutboundRequests", pending);
     }
 
+    /** Set inbound burst KBps */
     void setInboundBurstKBps(int kbytesPerSecond) {
         _maxInbound = kbytesPerSecond * 1024;
     }
+    /** Set outbound burst KBps */
     void setOutboundBurstKBps(int kbytesPerSecond) {
         _maxOutbound = kbytesPerSecond * 1024;
     }
+    /**
+     * getInboundBurstBytes.
+     */
+    /**
+     * getInboundBurstBytes.
+     */
     public int getInboundBurstBytes() { return _maxInboundBurst; }
+    /**
+     * getOutboundBurstBytes.
+     */
     public int getOutboundBurstBytes() { return _maxOutboundBurst; }
+    /** Set inbound burst bytes */
     void setInboundBurstBytes(int bytes) { _maxInboundBurst = bytes; }
+    /** Set outbound burst bytes */
     void setOutboundBurstBytes(int bytes) { _maxOutboundBurst = bytes; }
 
+    /** Get status string */
     StringBuilder getStatus() {
         StringBuilder rv = new StringBuilder(128);
         rv.append("Available: ").append(_availableInbound).append('/').append(_availableOutbound).append("; ");
@@ -775,15 +804,30 @@ public class FIFOBandwidthLimiter {
 
         /** uses System clock, not context clock */
         public long getRequestTime() { return _requestTime; }
+        /**
+         * getTotalRequested.
+         */
         public int getTotalRequested() { return _total; }
+        /**
+         * getPendingRequested.
+         */
         public synchronized int getPendingRequested() { return _total - _allocated; }
+        /**
+         * getAborted.
+         */
         public boolean getAborted() { return _aborted; }
+        /**
+         * abort.
+         */
         public synchronized void abort() {
             _aborted = true;
             // so isComplete() will return true
             _allocated = _total;
             notifyAllocation();
         }
+        /**
+         * getCompleteListener.
+         */
         public synchronized CompleteListener getCompleteListener() { return _lsnr; }
 
         /**
@@ -857,15 +901,30 @@ public class FIFOBandwidthLimiter {
             }
         }
 
+        /**
+         * attach.
+         */
         public void attach(Object obj) { _attachment = obj; }
+        /**
+         * attachment.
+         */
         public Object attachment() { return _attachment; }
 
         // PQEntry methods
+        /**
+         * getPriority.
+         */
         public int getPriority() { return _priority; }
         // uncomment for switch to PBQ
+        /**
+         * setSeqNum.
+         */
         public void setSeqNum(long num) { /** _requestId = num; */ }
         public long getSeqNum() { return _requestId; }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "Req: " + _requestId + " priority: " + _priority +
@@ -893,10 +952,19 @@ public class FIFOBandwidthLimiter {
         public void abort();
         /** was this request aborted?  */
         public boolean getAborted();
+        /**
+         * lsnr).
+         */
         public void setCompleteListener(CompleteListener lsnr);
         /** Only supported if the request is not satisfied */
         public void attach(Object obj);
+        /**
+         * attachment().
+         */
         public Object attachment();
+        /**
+         * getCompleteListener().
+         */
         public CompleteListener getCompleteListener();
     }
 
@@ -904,37 +972,82 @@ public class FIFOBandwidthLimiter {
      * Listener for bandwidth request completion events.
      */
     public interface CompleteListener {
+        /**
+         * req).
+         */
         public void complete(Request req);
     }
 
     private static final NoopRequest _noop = new NoopRequest();
 
     private static class NoopRequest implements Request {
+        /**
+         * abort.
+         */
         public void abort() {
             // No-op - intentionally empty
         }
+        /**
+         * getAborted.
+         */
         public boolean getAborted() { return false; }
+        /**
+         * getPendingRequested.
+         */
         public int getPendingRequested() { return 0; }
+        /**
+         * toString.
+         */
         @Override
         public String toString() { return "noop"; }
+        /**
+         * getRequestTime.
+         */
         public long getRequestTime() { return 0; }
+        /**
+         * getTotalRequested.
+         */
         public int getTotalRequested() { return 0; }
+        /**
+         * waitForNextAllocation.
+         */
         public void waitForNextAllocation() {
             // No-op - intentionally empty
         }
+        /**
+         * getCompleteListener.
+         */
         public CompleteListener getCompleteListener() { return null; }
+        /**
+         * setCompleteListener.
+         */
         public void setCompleteListener(CompleteListener lsnr) {
             lsnr.complete(NoopRequest.this);
         }
+        /**
+         * attach.
+         */
         public void attach(Object obj) {
             throw new UnsupportedOperationException("Don't attach to a satisfied request");
         }
+        /**
+         * attachment.
+         */
         public Object attachment() { return null; }
         // PQEntry methods
+        /**
+         * getPriority.
+         */
         public int getPriority() { return 0; }
+        /**
+         * setSeqNum.
+         */
         public void setSeqNum(long num) {
             // No-op - intentionally empty
         }
+        /**
+         * getSeqNum.
+         */
         public long getSeqNum() { return 0; }
     }
 }

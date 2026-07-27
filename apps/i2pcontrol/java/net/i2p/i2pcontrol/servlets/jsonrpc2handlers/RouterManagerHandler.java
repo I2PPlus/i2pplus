@@ -46,6 +46,9 @@ public class RouterManagerHandler implements RequestHandler {
     private final static int SHUTDOWN_WAIT = 1500;
 
 
+    /**
+     * RouterManagerHandler.
+     */
     public RouterManagerHandler(RouterContext ctx, JSONRPC2Helper helper) {
         _helper = helper;
         _context = ctx;
@@ -86,6 +89,9 @@ public class RouterManagerHandler implements RequestHandler {
         if (inParams.containsKey("Shutdown")) {
             outParams.put("Shutdown", null);
             (new Thread() {
+                /**
+                 * run.
+                 */
                 @Override
                 public void run() {
                     try {
@@ -101,6 +107,9 @@ public class RouterManagerHandler implements RequestHandler {
         if (inParams.containsKey("Restart")) {
             outParams.put("Restart", null);
             (new Thread() {
+                /**
+                 * run.
+                 */
                 @Override
                 public void run() {
                     try {
@@ -116,6 +125,9 @@ public class RouterManagerHandler implements RequestHandler {
         if (inParams.containsKey("ShutdownGraceful")) {
             outParams.put("ShutdownGraceful", null);
             (new Thread() {
+                /**
+                 * run.
+                 */
                 @Override
                 public void run() {
                     try {
@@ -131,6 +143,9 @@ public class RouterManagerHandler implements RequestHandler {
         if (inParams.containsKey("RestartGraceful")) {
             outParams.put("RestartGraceful", null);
             (new Thread() {
+                /**
+                 * run.
+                 */
                 @Override
                 public void run() {
                     try {
@@ -146,6 +161,9 @@ public class RouterManagerHandler implements RequestHandler {
         if (inParams.containsKey("Reseed")) {
             outParams.put("Reseed", null);
             (new Thread() {
+                /**
+                 * run.
+                 */
                 @Override
                 public void run() {
                     ReseedChecker reseeder = new ReseedChecker(_context);
@@ -157,6 +175,9 @@ public class RouterManagerHandler implements RequestHandler {
 
         if (inParams.containsKey("FindUpdates")) {
             Thread t = new Thread() {
+                /**
+                 * run.
+                 */
                 @Override
                 public void run() {
                     ClientAppManager clmgr = I2PAppContext.getCurrentContext().clientAppManager();
@@ -182,6 +203,9 @@ public class RouterManagerHandler implements RequestHandler {
 
         if (inParams.containsKey("Update")) {
             Thread t = new Thread() {
+                /**
+                 * run.
+                 */
                 @Override
                 public void run() {
                     ClientAppManager clmgr = I2PAppContext.getCurrentContext().clientAppManager();
@@ -225,9 +249,15 @@ public class RouterManagerHandler implements RequestHandler {
     /** Task to update the wrapper manager with a specific exit code */
     public static class UpdateWrapperManagerTask implements Runnable {
         private int _exitCode;
+        /**
+         * UpdateWrapperManagerTask.
+         */
         public UpdateWrapperManagerTask(int exitCode) {
             _exitCode = exitCode;
         }
+        /**
+         * run.
+         */
         public void run() {
             try {
                 WrapperManager.signalStopped(_exitCode);

@@ -82,6 +82,11 @@ class ClientPeerSelector extends TunnelPeerSelector {
     private static final String STRATEGY_RELIABILITY = "reliability";
     private static final String STRATEGY_DIVERSITY = "diversity";
 
+    /**
+     *  Constructor.
+     *
+     *  @param context the router context
+     */
     public ClientPeerSelector(RouterContext context) {
         super(context);
     }

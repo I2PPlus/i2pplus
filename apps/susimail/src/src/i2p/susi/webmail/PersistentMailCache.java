@@ -65,7 +65,13 @@ class PersistentMailCache {
     private static final String DIR_SUSI = "susimail";
     private static final String DIR_CACHE = "cache";
     private static final String CACHE_PREFIX = "cache-";
+    /**
+     * DIR_IMPORT.
+     */
     public static final String DIR_IMPORT = "import"; // Flat with .eml files, debug only for now
+    /**
+     * DIR_ATTACHMENTS.
+     */
     public static final String DIR_ATTACHMENTS = "attachments"; // Flat with draft attachment files
     private static final String DIR_PREFIX = "s";
     private static final String FILE_PREFIX = "mail-";
@@ -104,6 +110,9 @@ class PersistentMailCache {
      * Fetch all mails from disk.
      *
      * @return a new collection
+     */
+    /**
+     * Return the mail list.
      */
     public Collection<Mail> getMails() {
         synchronized(_lock) {
@@ -166,7 +175,13 @@ class PersistentMailCache {
             _isD = isDrafts;
         }
 
+        /**
+         * run.
+         */
         @Override
+        /**
+         * Execute the task.
+         */
         public void run() {
             File f;
             while ((f = _in.poll()) != null) {
@@ -180,6 +195,9 @@ class PersistentMailCache {
      * Fetch any needed data from disk.
      *
      * @return success
+     */
+    /**
+     * Return a mail by UIDL.
      */
     public boolean getMail(Mail mail, boolean headerOnly) {
         synchronized(_lock) {return locked_getMail(mail);}
@@ -297,11 +315,17 @@ class PersistentMailCache {
      *
      * @since 0.9.35
      */
+    /**
+     * Return the full mail buffer.
+     */
     public GzipFileBuffer getFullBuffer(String uidl) {return new GzipFileBuffer(getFile(uidl, FULL_SUFFIX));}
 
     /**
      * @return non-null only for Drafts
      * @since 0.9.35
+     */
+    /**
+     * Return the attachment directory.
      */
     public File getAttachmentDir() {return _attachmentDir;}
 

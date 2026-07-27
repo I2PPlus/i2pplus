@@ -9,6 +9,12 @@ import net.i2p.router.web.FormHandler;
  * Handler for peer configuration.
  */
 public class ConfigPeerHandler extends FormHandler {
+
+    /**
+     * Constructs the handler.
+     */
+    public ConfigPeerHandler() {}
+
     private String _peer;
     private String _speed;
     private String _capacity;
@@ -73,7 +79,19 @@ public class ConfigPeerHandler extends FormHandler {
         return null;
     }
 
+    /**
+     * Set the peer hash.
+     * @param peer the peer hash string
+     */
     public void setPeer(String peer) { _peer = peer; }
+    /**
+     * Set the speed bonus.
+     * @param bonus the speed bonus value
+     */
     public void setSpeed(String bonus) { _speed = bonus; }
+    /**
+     * Set the capacity bonus.
+     * @param bonus the capacity bonus value
+     */
     public void setCapacity(String bonus) { _capacity = bonus; }
 }

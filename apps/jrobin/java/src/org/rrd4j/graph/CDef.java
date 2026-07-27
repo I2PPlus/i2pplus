@@ -10,6 +10,12 @@ import org.rrd4j.data.DataProcessor;
 class CDef extends Source {
     private final String rpnExpression;
 
+    /**
+     *  Create a new CDef.
+     *
+     *  @param name the source name
+     *  @param rpnExpression the RPN expression
+     */
     CDef(String name, String rpnExpression) {
         super(name);
         this.rpnExpression = rpnExpression;

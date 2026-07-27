@@ -26,7 +26,9 @@ import net.i2p.data.DataHelper;
  */
 public class Folder<O extends Object> {
 
+	/** Property key for page size configuration */
 	public static final String PAGESIZE = "pager.pagesize";
+	/** Default page size for folder display */
 	public static final int DEFAULT_PAGESIZE = 30;
 
 	/**

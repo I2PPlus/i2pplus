@@ -22,17 +22,53 @@ import net.i2p.util.SystemVersion;
  * almost everything. This does NOT extend SearchJob.
  */
 abstract class FloodSearchJob extends JobImpl {
+    /**
+     * _log.
+     */
     protected final Log _log;
+    /**
+     * _facade.
+     */
     protected final FloodfillNetworkDatabaseFacade _facade;
+    /**
+     * _key.
+     */
     protected final Hash _key;
+    /**
+     * _onFind.
+     */
     protected final List<Job> _onFind;
+    /**
+     * _onFailed.
+     */
     protected final List<Job> _onFailed;
+    /**
+     * _expiration.
+     */
     protected long _expiration;
+    /**
+     * _timeoutMs.
+     */
     protected int _timeoutMs;
+    /**
+     * _isLease.
+     */
     protected final boolean _isLease;
+    /**
+     * _lookupsRemaining.
+     */
     protected final AtomicInteger _lookupsRemaining = new AtomicInteger();
+    /**
+     * _dead.
+     */
     protected volatile boolean _dead;
+    /**
+     * _created.
+     */
     protected final long _created;
+    /**
+     * _success.
+     */
     protected boolean _success;
 
     /**
@@ -87,6 +123,9 @@ abstract class FloodSearchJob extends JobImpl {
 
     /** using context clock */
     public long getExpiration() { return _expiration; }
+    /**
+     * CONCURRENT_SEARCHES.
+     */
     protected static final int CONCURRENT_SEARCHES = SystemVersion.isSlow() ? 3 : 5;
     private static final int FLOOD_SEARCH_TIME_FACTOR = 2;
     /**
@@ -101,6 +140,9 @@ abstract class FloodSearchJob extends JobImpl {
      */
     public String getName() { return "NetDb Search (phase 1)"; }
 
+    /**
+     * getKey.
+     */
     public Hash getKey() { return _key; }
 
     /**
@@ -117,6 +159,9 @@ abstract class FloodSearchJob extends JobImpl {
         }
     }
 
+    /**
+     * getLookupsRemaining.
+     */
     protected int getLookupsRemaining() { return _lookupsRemaining.get(); }
 
     /**

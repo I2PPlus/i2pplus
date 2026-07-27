@@ -29,10 +29,16 @@ class LocalHash extends Hash {
 
     private static final int MAX_CACHED_XOR = 1024;
 
+    /**
+     * LocalHash.
+     */
     public LocalHash(Hash h) {
         super(h.getData());
     }
 
+    /**
+     * LocalHash.
+     */
     public LocalHash(byte[] b) {
         super(b);
     }
@@ -84,6 +90,9 @@ class LocalHash extends Hash {
         return distance;
     }
 
+    /**
+     * clearXorCache.
+     */
     public void clearXorCache() {
         synchronized (_xorCache) {
             _xorCache.clear();

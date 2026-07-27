@@ -50,8 +50,6 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
  *
  * This makes installation of a new eepsite a turnkey operation.
  *
- * Usage: I2PControlController -d $PLUGIN [start|stop]
- *
  * This class is NOT used for the webapp or the bare ServerSocket implementation.
  */
 public class I2PControlController implements RouterApp {
@@ -67,9 +65,7 @@ public class I2PControlController implements RouterApp {
     private final SecurityManager _secMan;
     private final Server _server;
     private ClientAppState _state = UNINITIALIZED;
-    // only for main()
-    private static final Log _staticLog = new Log(I2PControlController.class);
-    private static I2PControlController _instance;
+    /** Allowed hosts config property */
     static final String PROP_ALLOWED_HOSTS = "i2pcontrol.allowedhosts";
     private static final String SVC_HTTPS_I2PCONTROL = "https_i2pcontrol";
     private static final int DEFAULT_PORT = 7650;
@@ -82,25 +78,6 @@ public class I2PControlController implements RouterApp {
         _mgr = mgr;
         _log = _appContext.logManager().getLog(I2PControlController.class);
         File pluginDir = new File(_context.getAppDir(), "plugins/I2PControl");
-        _pluginDir = pluginDir.getAbsolutePath();
-        _conf = new ConfigurationManager(_appContext, pluginDir, true);
-        _ksp = new KeyStoreProvider(_pluginDir);
-        _secMan = new SecurityManager(_appContext, _ksp, _conf);
-        _server = buildServer();
-        _state = INITIALIZED;
-    }
-
-    /**
-     *  From main() (old way)
-     */
-    public I2PControlController(File pluginDir) {
-        _appContext = I2PAppContext.getGlobalContext();
-        if (_appContext instanceof RouterContext)
-            _context = (RouterContext) _appContext;
-        else
-            _context = null;
-        _mgr = null;
-        _log = _appContext.logManager().getLog(I2PControlController.class);
         _pluginDir = pluginDir.getAbsolutePath();
         _conf = new ConfigurationManager(_appContext, pluginDir, true);
         _ksp = new KeyStoreProvider(_pluginDir);
@@ -168,41 +145,6 @@ public class I2PControlController implements RouterApp {
                 _log.log(Log.WARN, state + ": " + msg);
             if (e != null)
                 _log.log(Log.WARN, "Error in state change", e);
-        }
-    }
-
-
-    /**
-     *  Deprecated, use constructor
-     */
-    public static void main(String[] args) {
-        if (args.length != 3 || (!"-d".equals(args[0])))
-            throw new IllegalArgumentException("Usage: PluginController -d $PLUGINDIR [start|stop]");
-
-        if ("start".equals(args[2])) {
-            File pluginDir = new File(args[1]);
-            if (!pluginDir.exists())
-                throw new IllegalArgumentException("Plugin directory " + pluginDir.getAbsolutePath() + " does not exist");
-            synchronized(I2PControlController.class) {
-                if (_instance != null)
-                    throw new IllegalStateException();
-                I2PControlController i2pcc = new I2PControlController(pluginDir);
-                try {
-                    i2pcc.startup();
-                    _instance = i2pcc;
-                } catch (Exception e) {
-                    _staticLog.log(Log.WARN, "Startup failed", e);
-                }
-            }
-        } else if ("stop".equals(args[2])) {
-            synchronized(I2PControlController.class) {
-                if (_instance != null) {
-                    _instance.shutdown(null);
-                    _instance = null;
-                }
-            }
-        } else {
-            throw new IllegalArgumentException("Usage: PluginController -d $PLUGINDIR [start|stop]");
         }
     }
 

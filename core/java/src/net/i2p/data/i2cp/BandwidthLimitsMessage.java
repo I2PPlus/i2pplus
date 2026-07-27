@@ -18,10 +18,12 @@ import java.io.InputStream;
  * @author zzz
  */
 public class BandwidthLimitsMessage extends I2CPMessageImpl {
+    /** Message type identifier for bandwidth limit messages */
     public static final int MESSAGE_TYPE = 23;
     private static final int LIMITS = 16;
     private int[] data;
 
+    /** Creates a new BandwidthLimitsMessage with default values. */
     public BandwidthLimitsMessage() {
         super();
         data = new int[LIMITS];
@@ -40,6 +42,12 @@ public class BandwidthLimitsMessage extends I2CPMessageImpl {
      * 6) Router burst time (seconds)
      * 7-15) undefined
      */
+    /**
+     * Construct with client bandwidth limits.
+     *
+     * @param in Client inbound limit (KBps)
+     * @param out Client outbound limit (KBps)
+     */
     public BandwidthLimitsMessage(int in, int out) {
         this();
         data[0] = in;
@@ -47,6 +55,8 @@ public class BandwidthLimitsMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Construct with all bandwidth limits.
+     *
      * @param in Client inbound limit (KBps)
      * @param out Client outbound limit (KBps)
      * @param rin Router inbound limit (KBps)
@@ -68,6 +78,11 @@ public class BandwidthLimitsMessage extends I2CPMessageImpl {
         data[6] = sec;
     }
 
+    /**
+     * Get the current bandwidth limits.
+     *
+     * @return the current bandwidth limits array
+     */
     public int[] getLimits() {
         return data;
     }

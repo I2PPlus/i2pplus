@@ -19,6 +19,7 @@ import net.i2p.util.SystemVersion;
  * There is a UDPReceiver for each UDPEndpoint. It contains a thread but no queue.
  * Received packets are queued in the common PacketHandler queue.
  */
+/** UDPReceiver */
 class UDPReceiver {
     private final RouterContext _context;
     private final Log _log;
@@ -34,6 +35,7 @@ class UDPReceiver {
     /** How long to sleep between throttle checks while inbound is throttled */
     private static final int THROTTLE_WAIT_MS = 10;
 
+    /** name */
     public UDPReceiver(RouterContext ctx, UDPTransport transport, DatagramSocket socket, String name,
                        SocketListener lsnr) {
         _context = ctx;
@@ -52,6 +54,7 @@ class UDPReceiver {
     /**
      *  Cannot be restarted (socket is final)
      */
+    /** startup */
     public synchronized void startup() {
         _keepRunning = true;
         I2PThread t = new I2PThread(_runner, _name, true);
@@ -59,6 +62,10 @@ class UDPReceiver {
         t.start();
     }
 
+    /**
+     * shutdown.
+     */
+    /** shutdown */
     public synchronized void shutdown() {
         _keepRunning = false;
     }
@@ -108,7 +115,11 @@ class UDPReceiver {
 
     private class Runner implements Runnable {
 
+        /**
+         * run.
+         */
         @Override
+        /** run */
         public void run() {
             while (_keepRunning) {
                 // Wait out any inbound throttle before acquiring a pooled packet, so a

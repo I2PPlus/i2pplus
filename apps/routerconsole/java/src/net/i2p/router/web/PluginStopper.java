@@ -15,11 +15,17 @@ class PluginStopper extends PluginStarter {
 
     private final Server _server;
 
+    /**
+     * PluginStopper.
+     */
     public PluginStopper(RouterContext ctx, Server server) {
         super(ctx);
         _server = server;
     }
 
+    /**
+     * run.
+     */
     @Override
     public void run() {
         stopPlugins();

@@ -24,14 +24,23 @@ package com.google.zxing.qrcode.decoder;
  */
 public enum Mode {
 
+  /** T e r m i n a t o r */
   TERMINATOR(new int[]{0, 0, 0}, 0x00), // Not really a mode...
+  /** N u m e r i c */
   NUMERIC(new int[]{10, 12, 14}, 0x01),
+  /** A l p h a n u m e r i c */
   ALPHANUMERIC(new int[]{9, 11, 13}, 0x02),
+  /** S t r u c t u r e d  a p p e n d */
   STRUCTURED_APPEND(new int[]{0, 0, 0}, 0x03), // Not supported
+  /** B y t e */
   BYTE(new int[]{8, 16, 16}, 0x04),
+  /** E c i */
   ECI(new int[]{0, 0, 0}, 0x07), // character counts don't apply
+  /** K a n j i */
   KANJI(new int[]{8, 10, 12}, 0x08),
+  /** F n c1  f i r s t  p o s i t i o n */
   FNC1_FIRST_POSITION(new int[]{0, 0, 0}, 0x05),
+  /** F n c1  s e c o n d  p o s i t i o n */
   FNC1_SECOND_POSITION(new int[]{0, 0, 0}, 0x09),
   /** See GBT 18284-2000; "Hanzi" is a transliteration of this mode name. */
   HANZI(new int[]{8, 10, 12}, 0x0D);
@@ -39,6 +48,7 @@ public enum Mode {
   private final int[] characterCountBitsForVersions;
   private final int bits;
 
+  /** @param characterCountBitsForVersions per-version bit counts */
   Mode(int[] characterCountBitsForVersions, int bits) {
     this.characterCountBitsForVersions = characterCountBitsForVersions;
     this.bits = bits;
@@ -95,6 +105,9 @@ public enum Mode {
     return characterCountBitsForVersions[offset];
   }
 
+  /**
+   * getBits.
+   */
   public int getBits() {
     return bits;
   }

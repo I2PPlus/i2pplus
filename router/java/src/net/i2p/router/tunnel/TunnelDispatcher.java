@@ -140,8 +140,18 @@ public class TunnelDispatcher implements Service {
     /** Configs currently being removed - prevents duplicate removal calls */
     private final Set<HopConfig> _configsBeingRemoved = ConcurrentHashMap.newKeySet();
 
-    /** Location in the tunnel for RED logic */
-    public enum Location { OBEP, PARTICIPANT, IBGW }
+    /**
+     * Location in the tunnel for RED (Random Early Discard) logic.
+     * Determines which throttle factor and bandwidth estimator to apply.
+     */
+    public enum Location {
+        /** Outbound endpoint */
+        OBEP,
+        /** Transit (middle) hop */
+        PARTICIPANT,
+        /** Inbound gateway */
+        IBGW
+    }
 
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
@@ -156,6 +166,8 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Creates a new instance of TunnelDispatcher
+     *
+     * @param ctx the router context
      */
     public TunnelDispatcher(RouterContext ctx) {
         _context = ctx;
@@ -176,6 +188,8 @@ public class TunnelDispatcher implements Service {
     /**
      * Get the cleanup interval based on tunnel count.
      * More tunnels = more frequent cleanup.
+     *
+     * @return cleanup interval in milliseconds
      */
     private long getCleanupInterval() {
         int count = getParticipatingCount();
@@ -189,7 +203,9 @@ public class TunnelDispatcher implements Service {
      * This is a safety net in case LeaveTunnel job fails to remove them.
      */
     private class PeriodicCleanup extends SimpleTimer2.TimedEvent {
+        /** Schedule the first cleanup pass */
         public PeriodicCleanup() { super(_context.simpleTimer2()); }
+        /** Run cleanup and reschedule */
         public void timeReached() {
             updateThrottleFactors();
             cleanupExpiredTunnels();
@@ -377,6 +393,8 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Create a preprocessor for an inbound tunnel gateway
+     *
+     * @param cfg the hop configuration for the inbound gateway
      */
     private TunnelGateway.QueuePreprocessor createPreprocessor(HopConfig cfg) {
         return new BatchedRouterPreprocessor(_context, cfg);
@@ -384,6 +402,8 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Create a preprocessor for an outbound tunnel gateway
+     *
+     * @param cfg the tunnel creator configuration for the outbound gateway
      */
     private TunnelGateway.QueuePreprocessor createPreprocessor(TunnelCreatorConfig cfg) {
         return new BatchedRouterPreprocessor(_context, cfg);
@@ -391,6 +411,8 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Returns the timestamp of the last participating tunnel expiration.
+     *
+     * @return last expiration in milliseconds since epoch, or -1 if none
      */
     public long getLastParticipatingExpiration() {
         return _lastParticipatingExpiration;
@@ -414,6 +436,7 @@ public class TunnelDispatcher implements Service {
     /**
      * We are the outbound gateway - we created this tunnel
      *
+     * @param cfg config for the outbound tunnel we created
      * @return true if successful, false if tunnel ID is a duplicate
      */
     public boolean joinOutbound(PooledTunnelCreatorConfig cfg) {
@@ -448,6 +471,7 @@ public class TunnelDispatcher implements Service {
     /**
      * We are the inbound endpoint - we created this tunnel
      *
+     * @param cfg config for the inbound tunnel we created
      * @return true if successful, false if tunnel ID is a duplicate
      */
     public synchronized boolean joinInbound(TunnelCreatorConfig cfg) {
@@ -475,6 +499,7 @@ public class TunnelDispatcher implements Service {
     /**
      * We are a participant in this tunnel, but not as the endpoint or gateway
      *
+     * @param cfg config for the tunnel we're joining as participant
      * @return true if successful, false if tunnel ID is a duplicate
      */
     public boolean joinParticipant(HopConfig cfg) {
@@ -509,6 +534,7 @@ public class TunnelDispatcher implements Service {
     /**
      * We are the outbound endpoint in this tunnel, and did not create it
      *
+     * @param cfg config for the tunnel we're joining as outbound endpoint
      * @return true if successful, false if tunnel ID is a duplicate
      */
     public boolean joinOutboundEndpoint(HopConfig cfg) {

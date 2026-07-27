@@ -33,12 +33,19 @@ import java.nio.charset.StandardCharsets;
  */
 public class I2PDefaultServlet extends DefaultServlet {
     // shadows of private fields in super
+    /** The context handler */
     private ContextHandler _contextHandler;
+    /** Whether directory listing is allowed */
     private boolean _dirAllowed = true;
+    /** Whether ETags are enabled */
     private boolean _etags = true;
+    /** The resource base */
     private Resource _resourceBase;
+    /** The stylesheet resource */
     private Resource _stylesheet;
+    /** Date format for directory listing */
     private static final String FORMAT = "dd MMM yyyy HH:mm";
+    /** Date format for Last-Modified header */
     private static final String LAST_MODIFIED_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
     /**
@@ -87,6 +94,7 @@ public class I2PDefaultServlet extends DefaultServlet {
     }
 
     /* copied from DefaultServlet unchanged */
+    /** ignored */
     private boolean getInitBoolean(String name, boolean dft) {
         String value = getInitParameter(name);
         if (value == null || value.isEmpty()) {return dft;}
@@ -245,14 +253,22 @@ public class I2PDefaultServlet extends DefaultServlet {
      *  @since 0.9.51
      */
     private static class FileComparator implements Comparator<String> {
+        /** ignored */
         private final Comparator<Object> _coll;
+        /** ignored */
         private final Resource _base;
 
+        /**
+         * FileComparator.
+         */
         public FileComparator(Resource base) {
             _base = base;
             _coll = Collator.getInstance(Locale.US);
         }
 
+        /**
+         * compare.
+         */
         public int compare(String a, String b) {
             try {
                 Resource ra = _base.addPath(a);
@@ -324,6 +340,9 @@ public class I2PDefaultServlet extends DefaultServlet {
      */
     private static String deTag(String raw) {return StringUtil.sanitizeXmlString(raw);}
 
+    /**
+     * doGet.
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String resourcePath = request.getRequestURI().substring(request.getContextPath().length()); // Get the resource path from the request URI
@@ -343,6 +362,9 @@ public class I2PDefaultServlet extends DefaultServlet {
         super.doGet(request, response); // Let the super implementation handle the response
     }
 
+    /**
+     * getResource.
+     */
     @Override
     public Resource getResource(String path) {
         Resource resource = super.getResource(path); // First, try to get the resource with the requested path

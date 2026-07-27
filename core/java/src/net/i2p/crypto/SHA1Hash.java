@@ -36,18 +36,32 @@ import net.i2p.data.SimpleDataStructure;
 public class SHA1Hash extends SimpleDataStructure {
     private int _cachedHashCode;
 
+    /**
+     * HASH_LENGTH.
+     */
     public static final int HASH_LENGTH = SHA1.HASH_LENGTH;
 
-    /** @since 0.9.9 */
+    /**
+     * Create an empty SHA-1 hash (data is null).
+     * @since 0.9.9
+     */
     public SHA1Hash() {
         super();
     }
 
-    /** @throws IllegalArgumentException if data is not 20 bytes (null is ok) */
+    /**
+     * Create a SHA-1 hash from the given data.
+     *
+     * @param data the 20-byte SHA-1 hash data
+     * @throws IllegalArgumentException if data is not 20 bytes (null is ok)
+     */
     public SHA1Hash(byte[] data) {
         super(data);
     }
 
+    /**
+     * length.
+     */
     @Override
     public int length() {
         return HASH_LENGTH;
@@ -60,6 +74,9 @@ public class SHA1Hash extends SimpleDataStructure {
         _cachedHashCode = super.hashCode();
     }
 
+    /**
+     * readBytes.
+     */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         super.readBytes(in);

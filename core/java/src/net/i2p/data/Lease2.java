@@ -42,8 +42,14 @@ import java.io.OutputStream;
  *
  * @since 0.9.38
  */
+/**
+ * Creates a new Lease2 instance.
+ */
 public class Lease2 extends Lease {
 
+    /**
+     * Length of Lease2 in bytes.
+     */
     public static final int LENGTH = 40;
 
     @Override

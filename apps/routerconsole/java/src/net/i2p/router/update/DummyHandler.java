@@ -15,6 +15,9 @@ class DummyHandler implements Checker, Updater {
     private final RouterContext _context;
     private final ConsoleUpdateManager _mgr;
 
+    /**
+     * DummyHandler.
+     */
     public DummyHandler(RouterContext ctx, ConsoleUpdateManager mgr) {
         _context = ctx;
         _mgr = mgr;
@@ -47,14 +50,23 @@ class DummyHandler implements Checker, Updater {
     private static class DummyRunner extends UpdateRunner {
         private final long _delay;
 
+        /**
+         * DummyRunner.
+         */
         public DummyRunner(RouterContext ctx, ConsoleUpdateManager mgr, long maxTime) {
             super(ctx, mgr, UpdateType.TYPE_DUMMY, Collections.<URI> emptyList());
             _delay = maxTime;
         }
 
+        /**
+         * getMethod.
+         */
         @Override
         public UpdateMethod getMethod() { return UpdateMethod.METHOD_DUMMY; }
 
+        /**
+         * update.
+         */
         @Override
         protected void update() {
             try {

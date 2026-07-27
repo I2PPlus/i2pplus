@@ -8,6 +8,10 @@ package org.cybergarage.upnp;
 import org.cybergarage.upnp.xml.ArgumentData;
 import org.cybergarage.xml.Node;
 
+/**
+ * Represents a UPnP argument for an action.
+ * An argument has a name, direction (in/out), and an optional related state variable.
+ */
 public class Argument {
     ////////////////////////////////////////////////
     //	Constants

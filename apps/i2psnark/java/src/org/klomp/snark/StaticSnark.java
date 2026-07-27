@@ -12,6 +12,9 @@ package org.klomp.snark;
  */
 public class StaticSnark {
 
+    /**
+     * main.
+     */
     public static void main(String[] args) {
         System.err.println("unsupported");
     }

@@ -25,6 +25,9 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     /** decay the recently completed every 10 seconds */
     private static final int DECAY_PERIOD = 10*1000;
 
+    /**
+     * InboundMessageFragments.
+     */
     public InboundMessageFragments(RouterContext ctx, OutboundMessageFragments outbound, UDPTransport transport) {
         _context = ctx;
         _transport = transport;
@@ -34,6 +37,9 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
         _context.statManager().createRateStat("udp.receivedCompleteTime", "Time to receive a full message (ms)", "Transport [UDP]", UDPTransport.RATES);
     }
 
+    /**
+     * startup.
+     */
     public synchronized void startup() {
         _alive = true;
         // may want to extend the DecayingBloomFilter so we can use a smaller array size
@@ -42,6 +48,9 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
         _messageReceiver.startup();
     }
 
+    /**
+     * shutdown.
+     */
     public synchronized void shutdown() {
         _alive = false;
         if (_recentlyCompletedMessages != null) {_recentlyCompletedMessages.stopDecaying();}
@@ -49,6 +58,9 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
         _messageReceiver.shutdown();
     }
 
+    /**
+     * isAlive.
+     */
     public boolean isAlive() {return _alive;}
 
     /**
@@ -110,7 +122,13 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
      * @since 0.9.49
      */
     public static class ModifiableLong {
+        /**
+         * value.
+         */
         public long value;
+        /**
+         * ModifiableLong.
+         */
         public ModifiableLong(long val) { value = val; }
     }
 }

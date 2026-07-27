@@ -23,24 +23,42 @@ import java.io.InputStream;
  * @author jrandom
  */
 public class DisconnectMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 30;
     private String _reason;
 
+    /**
+     * DisconnectMessage.
+     */
     public DisconnectMessage() { /* required for I2CP deserialization */ }
 
+    /**
+     * getReason.
+     */
     public String getReason() {
         return _reason;
     }
 
+    /**
+     * setReason.
+     */
     public void setReason(String reason) {
         _reason = reason;
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         _reason = DataHelper.readString(in);
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         int len = 1;
@@ -54,11 +72,17 @@ public class DisconnectMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

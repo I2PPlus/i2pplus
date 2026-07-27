@@ -36,8 +36,14 @@ public class IrcOutboundFilter implements Runnable {
     }
 
     /**
-     *  @param helper may be null
-     *  @since 0.8.9
+     * Create an outbound filter with optional DCC support.
+     *
+     * @param lcl the local socket
+     * @param rem the remote I2P socket
+     * @param pong buffer for expected PONG responses
+     * @param log the logger
+     * @param helper may be null
+     * @since 0.8.9
      */
     public IrcOutboundFilter(Socket lcl, I2PSocket rem, StringBuffer pong, Log log, DCCHelper helper) {
         local = lcl;

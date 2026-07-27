@@ -44,6 +44,9 @@ class MessageReceiver {
     private static final int MAX_THREADS = 16;
     private static final AtomicInteger _threadNum = new AtomicInteger();
 
+    /**
+     * MessageReceiver.
+     */
     public MessageReceiver(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
         _log = ctx.logManager().getLog(MessageReceiver.class);
@@ -103,6 +106,9 @@ class MessageReceiver {
         _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, count));
     }
 
+    /**
+     * startup.
+     */
     public synchronized void startup() {
         _alive = true;
         int count = _threadCount;
@@ -122,10 +128,16 @@ class MessageReceiver {
     private class Runner implements Runnable {
         private final I2NPMessageHandler _handler;
         Runner() { _handler = new I2NPMessageHandler(_context); }
+        /**
+         * run.
+         */
         @Override
         public void run() { loop(_handler); }
     }
 
+    /**
+     * shutdown.
+     */
     public synchronized void shutdown() {
         _alive = false;
         _completeMessages.clear();
@@ -193,6 +205,10 @@ class MessageReceiver {
         }
     }
 
+    /**
+     *  Main processing loop. Pulls completed messages from the queue, parses them
+     *  into I2NPMessages, and delivers them to the transport.
+     */
     void loop(I2NPMessageHandler handler) {
         InboundMessageState message = null;
         ByteArray buf = new ByteArray(new byte[I2NPMessage.MAX_SIZE]);

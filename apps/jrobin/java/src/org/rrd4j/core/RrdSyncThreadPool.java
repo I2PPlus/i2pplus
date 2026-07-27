@@ -22,13 +22,10 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class RrdSyncThreadPool {
     /** The reference to the shutdown hook, or null. */
+    /** ignored */
     private final AtomicReference<Thread> shutdownHook = new AtomicReference<>();
 
-    /**
-     * The {@link java.util.concurrent.ScheduledExecutorService} used to periodically sync the
-     * mapped file to disk with. Defaults to {@value
-     * org.rrd4j.core.RrdNioBackendFactory#DEFAULT_SYNC_CORE_POOL_SIZE} threads.
-     */
+    /** ignored */
     private final ScheduledExecutorService syncExecutor;
 
     /**
@@ -120,6 +117,7 @@ public class RrdSyncThreadPool {
         syncExecutor.shutdown();
     }
 
+    /** Schedule sync task */
     ScheduledFuture<?> scheduleWithFixedDelay(
             Runnable command, long initialDelay, long delay, TimeUnit unit) {
         return syncExecutor.scheduleWithFixedDelay(command, initialDelay, delay, unit);
@@ -136,16 +134,23 @@ public class RrdSyncThreadPool {
      * this factory.
      */
     static class DaemonThreadFactory implements ThreadFactory {
+        /** Thread group */
         final ThreadGroup group;
+        /** Thread number */
         final AtomicInteger threadNumber = new AtomicInteger(1);
+        /** Pool name */
         final String poolName;
 
+        /** Constructor */
         DaemonThreadFactory(String poolName) {
             SecurityManager s = System.getSecurityManager();
             group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
             this.poolName = poolName;
         }
 
+        /**
+         * newThread.
+         */
         public Thread newThread(Runnable r) {
             Thread t =
                     new Thread(
@@ -159,12 +164,19 @@ public class RrdSyncThreadPool {
         }
     }
 
+    /** Shutdown hook thread */
     private class ShutdownThread extends Thread {
+        /**
+         * ShutdownThread.
+         */
         public ShutdownThread() {
             // include the RrdSyncThreadPool's toString in the thread name
             super("RRD4J Sync-ThreadPool-Shutdown for " + RrdSyncThreadPool.this);
         }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             // Progress and failure logging arising from the following code cannot be logged, since

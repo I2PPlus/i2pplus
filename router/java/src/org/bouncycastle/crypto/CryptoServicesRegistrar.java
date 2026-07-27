@@ -8,6 +8,10 @@ import java.security.SecureRandom;
  */
 public class CryptoServicesRegistrar {
 
+    /** default constructor */
+    public CryptoServicesRegistrar() {}
+
+    /** @param csp the service properties */
     public static void checkConstraints(CryptoServiceProperties csp) {}
 
     private static final SecureRandom sr = new SecureRandom();
@@ -15,6 +19,7 @@ public class CryptoServicesRegistrar {
     /**
      * Return the default source of randomness.
      *
+     * @param secureRandom the secure random to check
      * @return the default SecureRandom
      */
     public static SecureRandom getSecureRandom(SecureRandom secureRandom)

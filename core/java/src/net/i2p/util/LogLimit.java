@@ -17,23 +17,38 @@ class LogLimit {
     private final String _rootName;
     private int _limit;
 
+    /**
+     * LogLimit.
+     */
     public LogLimit(String name, int limit) {
         _rootName = name;
         _limit = limit;
     }
 
+    /**
+     * getRootName.
+     */
     public String getRootName() {
         return _rootName;
     }
 
+    /**
+     * getLimit.
+     */
     public int getLimit() {
         return _limit;
     }
 
+    /**
+     * setLimit.
+     */
     public void setLimit(int limit) {
         _limit = limit;
     }
 
+    /**
+     * matches.
+     */
     public boolean matches(Log log) {
         String name = log.getName();
         if (name == null) return false;
@@ -42,11 +57,17 @@ class LogLimit {
         return name.startsWith(_rootName) && (name.length() == _rootName.length() || name.charAt(_rootName.length()) == '.');
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return _rootName.hashCode();
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object o) {
         if (o == null || !(o instanceof LogLimit)) return false;

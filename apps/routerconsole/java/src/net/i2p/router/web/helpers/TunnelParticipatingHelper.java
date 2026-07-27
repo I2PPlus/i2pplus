@@ -11,8 +11,14 @@ import net.i2p.util.Log;
  * @since 0.9.33
  */
 public class TunnelParticipatingHelper extends HelperBase {
+    /**
+     * TunnelParticipatingHelper.
+     */
     public TunnelParticipatingHelper() { /* nop */ }
 
+    /**
+     * getTunnelsParticipating.
+     */
     public String getTunnelsParticipating() {
         TunnelRenderer renderer = new TunnelRenderer(_context);
         try {

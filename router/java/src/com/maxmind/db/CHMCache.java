@@ -16,10 +16,17 @@ public class CHMCache implements NodeCache {
     private final ConcurrentHashMap<Integer, Object> cache;
     private boolean cacheFull = false;
 
+    /**
+     * Create a cache with default capacity.
+     */
     public CHMCache() {
         this(DEFAULT_CAPACITY);
     }
 
+    /**
+     * Create a cache with the given capacity.
+     * @param capacity the maximum number of entries
+     */
     public CHMCache(int capacity) {
         this.capacity = capacity;
         this.cache = new ConcurrentHashMap<>(capacity);

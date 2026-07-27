@@ -47,7 +47,11 @@ public class PersistSybil {
     private static final String SFX = ".txt.gz";
     private static final String BLOCKLIST_SYBIL_FILE = "blocklist-sybil.txt";
 
-    /** access via Analysis.getPersister() */
+    /**
+     * Create a new PersistSybil instance.
+     *
+     * @param ctx the router context
+     */
     public PersistSybil(I2PAppContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(PersistSybil.class);
@@ -56,7 +60,9 @@ public class PersistSybil {
     /**
      *  Store each entry.
      *
+     *  @param date the timestamp for the file
      *  @param entries each one should be "entry" at the root
+     *  @throws IOException if an I/O error occurs
      */
     public synchronized void store(long date, Map<Hash, Points> entries) throws IOException {
         File dir = new SecureDirectory(_context.getConfigDir(), DIR);
@@ -104,7 +110,9 @@ public class PersistSybil {
     /**
      *  Load the analysis for a certain date.
      *
+     *  @param date the timestamp for the file
      *  @return non-null, unsorted
+     *  @throws IOException if an I/O error occurs
      */
     public synchronized Map<Hash, Points> load(long date) throws IOException {
         File dir = new File(_context.getConfigDir(), DIR);
@@ -138,7 +146,9 @@ public class PersistSybil {
     /**
      *  Load all the analysis for a certain hash.
      *
+     *  @param h the hash to load
      *  @return non-null, unsorted
+     *  @throws IOException if an I/O error occurs
      */
     public synchronized Map<Long, Points> load(Hash h) throws IOException {
         String bh = h.toBase64() + ':';
@@ -214,6 +224,7 @@ public class PersistSybil {
     /**
      *  Delete the file for a particular date
      *
+     *  @param date the timestamp for the file
      *  @return success
      */
     public synchronized boolean delete(long date) {
@@ -225,6 +236,7 @@ public class PersistSybil {
     /**
      *  Get the blocklist path
      *
+     *  @return the blocklist file
      *  @since 0.9.57
      */
     public File getBlocklistFile() {
@@ -308,6 +320,7 @@ public class PersistSybil {
      *  Format: One per line: ip or hash,expiration time (ms)
      *
      *  @param blocks non-empty, will be merged with existing entries
+     *  @param blockUntil the expiration time in ms
      *  @since 0.9.50
      */
     synchronized void storeBlocklist(Set<String> blocks, long blockUntil) {

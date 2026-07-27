@@ -45,6 +45,11 @@ class ProbeStalePeerJob extends JobImpl {
     private static final long STARTUP_BURST_PERIOD = 5L * 60 * 1000;
     private static final int STARTUP_BURST_CYCLES = 3;
 
+    /**
+     * Constructor.
+     * @param ctx the router context
+     * @param facade the floodfill network database facade
+     */
     public ProbeStalePeerJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade) {
         super(ctx);
         _log = ctx.logManager().getLog(ProbeStalePeerJob.class);

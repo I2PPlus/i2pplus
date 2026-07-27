@@ -30,13 +30,22 @@ class ExploreKeySelectorJob extends JobImpl {
     private static final long RERUN_DELAY_MS = 60*1000L;
     private static final long OLD_BUCKET_TIME = 15*60*1000L;
 
+    /**
+     * ExploreKeySelectorJob.
+     */
     public ExploreKeySelectorJob(RouterContext context, KademliaNetworkDatabaseFacade facade) {
         super(context);
         _log = context.logManager().getLog(ExploreKeySelectorJob.class);
         _facade = facade;
     }
 
+    /**
+     * getName.
+     */
     public String getName() { return "Explore Key Selector"; }
+    /**
+     * runJob.
+     */
     public void runJob() {
         if (_facade.floodfillEnabled()) {
             requeue(30*RERUN_DELAY_MS);

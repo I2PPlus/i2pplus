@@ -14,8 +14,10 @@ import org.rrd4j.core.Util;
  * computation.
  */
 class RpnCalculator {
+    /** Token_Symbol class. */
     private enum Token_Symbol {
         TKN_VAR("") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(s.token.values[s.slot]);
@@ -23,6 +25,7 @@ class RpnCalculator {
             }
         },
         TKN_NUM("") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(s.token.number);
@@ -31,12 +34,14 @@ class RpnCalculator {
 
         // Arithmetics
         TKN_PLUS("+") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(c.pop() + c.pop());
             }
         },
         TKN_ADDNAN("ADDNAN") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x1 = c.pop();
@@ -45,6 +50,7 @@ class RpnCalculator {
             }
         },
         TKN_MINUS("-") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x2 = c.pop();
@@ -53,12 +59,14 @@ class RpnCalculator {
             }
         },
         TKN_MULT("*") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(c.pop() * c.pop());
             }
         },
         TKN_DIV("/") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x2 = c.pop();
@@ -67,6 +75,7 @@ class RpnCalculator {
             }
         },
         TKN_MOD("%") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x2 = c.pop();
@@ -76,42 +85,49 @@ class RpnCalculator {
         },
 
         TKN_SIN("SIN") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.sin(c.pop()));
             }
         },
         TKN_COS("COS") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.cos(c.pop()));
             }
         },
         TKN_LOG("LOG") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.log(c.pop()));
             }
         },
         TKN_EXP("EXP") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.exp(c.pop()));
             }
         },
         TKN_SQRT("SQRT") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.sqrt(c.pop()));
             }
         },
         TKN_ATAN("ATAN") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.atan(c.pop()));
             }
         },
         TKN_ATAN2("ATAN2") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x2 = c.pop();
@@ -121,12 +137,14 @@ class RpnCalculator {
         },
 
         TKN_FLOOR("FLOOR") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.floor(c.pop()));
             }
         },
         TKN_CEIL("CEIL") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.ceil(c.pop()));
@@ -134,24 +152,28 @@ class RpnCalculator {
         },
 
         TKN_DEG2RAD("DEG2RAD") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.toRadians(c.pop()));
             }
         },
         TKN_RAD2DEG("RAD2DEG") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.toDegrees(c.pop()));
             }
         },
         TKN_ROUND("ROUND") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.round(c.pop()));
             }
         },
         TKN_POW("POW") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x2 = c.pop();
@@ -160,18 +182,21 @@ class RpnCalculator {
             }
         },
         TKN_ABS("ABS") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.abs(c.pop()));
             }
         },
         TKN_RANDOM("RANDOM") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.random());
             }
         },
         TKN_RND("RND") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.floor(c.pop() * Math.random()));
@@ -180,18 +205,21 @@ class RpnCalculator {
 
         // Boolean operators
         TKN_UN("UN") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Double.isNaN(c.pop()) ? 1 : 0);
             }
         },
         TKN_ISINF("ISINF") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Double.isInfinite(c.pop()) ? 1 : 0);
             }
         },
         TKN_LT("LT") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x2 = c.pop();
@@ -200,6 +228,7 @@ class RpnCalculator {
             }
         },
         TKN_LE("LE") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x2 = c.pop();
@@ -208,6 +237,7 @@ class RpnCalculator {
             }
         },
         TKN_GT("GT") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x2 = c.pop();
@@ -216,6 +246,7 @@ class RpnCalculator {
             }
         },
         TKN_GE("GE") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x2 = c.pop();
@@ -224,6 +255,7 @@ class RpnCalculator {
             }
         },
         TKN_EQ("EQ") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x2 = c.pop();
@@ -232,6 +264,7 @@ class RpnCalculator {
             }
         },
         TKN_NE("NE") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x2 = c.pop();
@@ -240,6 +273,7 @@ class RpnCalculator {
             }
         },
         TKN_IF("IF") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x3 = c.pop();
@@ -251,18 +285,21 @@ class RpnCalculator {
 
         // Comparing values
         TKN_MIN("MIN") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.min(c.pop(), c.pop()));
             }
         },
         TKN_MAX("MAX") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.max(c.pop(), c.pop()));
             }
         },
         TKN_MINNAN("MINNAN") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x1 = c.pop();
@@ -271,6 +308,7 @@ class RpnCalculator {
             }
         },
         TKN_MAXNAN("MAXNAN") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x1 = c.pop();
@@ -279,6 +317,7 @@ class RpnCalculator {
             }
         },
         TKN_LIMIT("LIMIT") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x3 = c.pop();
@@ -290,12 +329,14 @@ class RpnCalculator {
 
         // Processing the stack directly
         TKN_DUP("DUP") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(c.peek());
             }
         },
         TKN_EXC("EXC") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x2 = c.pop();
@@ -305,6 +346,7 @@ class RpnCalculator {
             }
         },
         TKN_POP("POP") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.pop();
@@ -313,30 +355,35 @@ class RpnCalculator {
 
         // Special values
         TKN_UNKN("UNKN") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Double.NaN);
             }
         },
         TKN_PI("PI") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.PI);
             }
         },
         TKN_E("E") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Math.E);
             }
         },
         TKN_INF("INF") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Double.POSITIVE_INFINITY);
             }
         },
         TKN_NEGINF("NEGINF") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Double.NEGATIVE_INFINITY);
@@ -345,6 +392,7 @@ class RpnCalculator {
 
         // Logical operator
         TKN_AND("AND") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x2 = c.pop();
@@ -353,6 +401,7 @@ class RpnCalculator {
             }
         },
         TKN_OR("OR") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x2 = c.pop();
@@ -361,6 +410,7 @@ class RpnCalculator {
             }
         },
         TKN_XOR("XOR") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x2 = c.pop();
@@ -370,6 +420,7 @@ class RpnCalculator {
         },
 
         TKN_PREV("PREV") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push((s.slot == 0) ? Double.NaN : s.token.values[s.slot - 1]);
@@ -378,24 +429,28 @@ class RpnCalculator {
 
         // Time and date operator
         TKN_STEP("STEP") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(c.timeStep);
             }
         },
         TKN_NOW("NOW") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(Util.getTime());
             }
         },
         TKN_TIME("TIME") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(c.timestamps[s.slot]);
             }
         },
         TKN_LTIME("LTIME") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 TimeZone tz = s.getTimeZone();
@@ -403,48 +458,56 @@ class RpnCalculator {
             }
         },
         TKN_YEAR("YEAR") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(c.getCalendarField(c.pop(), Calendar.YEAR));
             }
         },
         TKN_MONTH("MONTH") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(c.getCalendarField(c.pop(), Calendar.MONTH) + 1);
             }
         },
         TKN_DATE("DATE") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(c.getCalendarField(c.pop(), Calendar.DAY_OF_MONTH));
             }
         },
         TKN_HOUR("HOUR") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(c.getCalendarField(c.pop(), Calendar.HOUR_OF_DAY));
             }
         },
         TKN_MINUTE("MINUTE") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(c.getCalendarField(c.pop(), Calendar.MINUTE));
             }
         },
         TKN_SECOND("SECOND") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(c.getCalendarField(c.pop(), Calendar.SECOND));
             }
         },
         TKN_WEEK("WEEK") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(c.getCalendarField(c.pop(), Calendar.WEEK_OF_YEAR));
             }
         },
         TKN_SIGN("SIGN") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 double x1 = c.pop();
@@ -452,6 +515,7 @@ class RpnCalculator {
             }
         },
         TKN_SORT("SORT") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 int n = (int) c.pop();
@@ -466,6 +530,7 @@ class RpnCalculator {
             }
         },
         TKN_REV("REV") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 int n = (int) c.pop();
@@ -479,6 +544,7 @@ class RpnCalculator {
             }
         },
         TKN_AVG("AVG") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 int count = 0;
@@ -502,12 +568,14 @@ class RpnCalculator {
             }
         },
         TKN_COUNT("COUNT") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.push(s.slot + 1.0);
             }
         },
         TKN_TREND("TREND") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 int dur = (int) c.pop();
@@ -544,12 +612,14 @@ class RpnCalculator {
             }
         },
         TKN_TRENDNAN("TRENDNAN") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 TKN_TREND.do_method(c, s);
             }
         },
         TKN_PREDICT("PREDICT") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 c.pop(); // Clear the value of our variable
@@ -636,22 +706,25 @@ class RpnCalculator {
             }
         },
         TKN_PREDICTSIGMA("PREDICTSIGMA") {
+            /** Do method */
             @Override
             void do_method(RpnCalculator c, State s) {
                 TKN_PREDICT.do_method(c, s);
             }
         };
 
+        /** token_string. */
         public final String token_string;
 
         Token_Symbol(String token_string) {
             this.token_string = token_string;
         }
-
+        /** Do method */
         abstract void do_method(RpnCalculator c, State s);
     }
-
+    /** Symbols */
     private static final Token_Symbol[] symbols;
+    /** Perfect */
     private static final PerfectStringHash perfect;
 
     static {
@@ -672,18 +745,25 @@ class RpnCalculator {
             }
         }
     }
-
+    /** Rpn expression */
     private final String rpnExpression;
+    /** Source name */
     private final String sourceName;
+    /** Data processor */
     private final DataProcessor dataProcessor;
-
+    /** Tokens */
     private final Token[] tokens;
     private final RpnStack stack = new RpnStack();
+    /** Calculated values */
     private final double[] calculatedValues;
+    /** Array of timestamps for the data series */
     private final long[] timestamps;
+    /** Time step */
     private final double timeStep;
+    /** Sources names */
     private final List<String> sourcesNames;
 
+    /** Rpn calculator */
     RpnCalculator(String rpnExpression, String sourceName, DataProcessor dataProcessor) {
         this.rpnExpression = rpnExpression;
         this.sourceName = sourceName;
@@ -698,7 +778,7 @@ class RpnCalculator {
             tokens[i] = createToken(tokensString[i].trim());
         }
     }
-
+    /** Create token */
     private Token createToken(String parsedText) {
         Token token;
         int hash = perfect.hashAsInt(parsedText);
@@ -720,7 +800,7 @@ class RpnCalculator {
         }
         return token;
     }
-
+    /** Calculate values */
     double[] calculateValues() {
         State s = new State();
         for (int slot = 0; slot < timestamps.length; slot++) {
@@ -746,36 +826,46 @@ class RpnCalculator {
         return calculatedValues;
     }
 
+    /** @return calendar field value from timestamp */
     private double getCalendarField(double timestamp, int field) {
         Calendar calendar = Util.getCalendar((long) (timestamp));
         return calendar.get(field);
     }
+    /** Push a value onto the RPN stack */
 
     private void push(final double x) {
         stack.push(x);
     }
+    /** Pop a value from the RPN stack */
 
     private double pop() {
         return stack.pop();
     }
+    /** Examine the top value on the stack without removing it */
 
     private double peek() {
         return stack.peek();
     }
+    /** Clear all values from the RPN calculation stack */
 
     private void resetStack() {
         stack.reset();
     }
 
+    /** @return true if stack is empty */
     private boolean isStackEmpty() {
         return stack.isEmpty();
     }
+    /** RpnStack class. */
 
     private static final class RpnStack {
+        /** Maximum RPN stack depth */
         private static final int MAX_STACK_SIZE = 1000;
+        /** RPN stack storage */
         private final double[] stack = new double[MAX_STACK_SIZE];
+        /** Current stack position */
         private int pos = 0;
-
+        /** Push a value onto the RPN stack */
         void push(double x) {
             if (pos >= MAX_STACK_SIZE) {
                 throw new IllegalArgumentException(
@@ -783,29 +873,31 @@ class RpnCalculator {
             }
             stack[pos++] = x;
         }
-
+        /** Pop a value from the RPN stack */
         double pop() {
             if (pos <= 0) {
                 throw new IllegalArgumentException("POP failed, RPN stack is empty");
             }
             return stack[--pos];
         }
-
+        /** Examine the top value on the stack without removing it */
         double peek() {
             if (pos <= 0) {
                 throw new IllegalArgumentException("PEEK failed, RPN stack is empty");
             }
             return stack[pos - 1];
         }
-
+        /** Reset the allocator state */
         void reset() {
             pos = 0;
         }
 
+        /** @return true if stack is empty */
         boolean isEmpty() {
             return pos <= 0;
         }
     }
+    /** State class. */
 
     private final class State {
         private int token_rpi;
@@ -817,6 +909,7 @@ class RpnCalculator {
             return RpnCalculator.this.dataProcessor.getTimeZone();
         }
     }
+    /** Token class. */
 
     private static final class Token {
         final Token_Symbol id;

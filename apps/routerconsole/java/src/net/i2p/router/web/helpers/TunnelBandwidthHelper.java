@@ -13,6 +13,9 @@ import net.i2p.util.Log;
  * @since 0.9.33
  */
 public class TunnelBandwidthHelper extends HelperBase {
+    /**
+     * getTunnelBandwidth.
+     */
     public String getTunnelBandwidth() {
         TunnelRenderer renderer = new TunnelRenderer(_context);
         try {

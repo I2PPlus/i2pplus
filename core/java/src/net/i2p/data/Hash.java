@@ -85,7 +85,13 @@ public class Hash extends SimpleDataStructure {
     private volatile String _base64ed;
     private volatile int _cachedHashCode;
 
+    /**
+     * HASH_LENGTH.
+     */
     public static final int HASH_LENGTH = 32;
+    /**
+     * FAKE_HASH.
+     */
     public static final Hash FAKE_HASH = new Hash(new byte[HASH_LENGTH]);
     private static final int CACHE_SIZE = 2048;
 
@@ -127,6 +133,7 @@ public class Hash extends SimpleDataStructure {
         return _cache.get(in);
     }
 
+    /** Create an empty hash (data is null) */
     public Hash() {
         super();
     }
@@ -137,6 +144,9 @@ public class Hash extends SimpleDataStructure {
         setData(data);
     }
 
+    /**
+     * length.
+     */
     @Override
     public int length() {
         return HASH_LENGTH;
@@ -150,6 +160,9 @@ public class Hash extends SimpleDataStructure {
         _cachedHashCode = super.hashCode();
     }
 
+    /**
+     * readBytes.
+     */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         super.readBytes(in);
@@ -163,6 +176,9 @@ public class Hash extends SimpleDataStructure {
         return _cachedHashCode;
     }
 
+    /**
+     * toBase64.
+     */
     @Override
     public String toBase64() {
         if (_base64ed == null) {

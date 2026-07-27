@@ -55,6 +55,9 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     /** Each keypair is ~64 bytes; this is the memory budget per key in bytes */
     private static final int KEY_SIZE_BYTES = 64;
 
+    /**
+     * X25519KeyFactory.
+     */
     public X25519KeyFactory(I2PAppContext ctx) {
         super("XDHPrecalc");
         _context = ctx;
@@ -251,6 +254,9 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         _keys.clear();
     }
 
+    /**
+     * run.
+     */
     public void run() {
         try {run2();}
         catch (IllegalStateException ise) {

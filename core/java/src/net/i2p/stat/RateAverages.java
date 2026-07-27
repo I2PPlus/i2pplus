@@ -8,8 +8,14 @@ package net.i2p.stat;
  */
 public class RateAverages {
 
+    /** Create a new RateAverages */
+    public RateAverages() {}
+
     /** thread-local temp instance */
     private static final ThreadLocal<RateAverages> TEMP = new ThreadLocal<RateAverages>() {
+        /**
+         * Per-thread initial value.
+         */
         @Override
         public RateAverages initialValue() {
             return new RateAverages();
@@ -27,16 +33,25 @@ public class RateAverages {
         return TEMP.get();
     }
 
+    /**
+     * Remove the thread-local temp instance.
+     */
     public static void release() {
         TEMP.remove();
     }
 
+    /** ignored */
     private double average;
+    /** ignored */
     private double current;
+    /** ignored */
     private double last;
+    /** ignored */
     private double totalValues;
+    /** ignored */
     private long totalEventCount;
 
+    /** ignored */
     void reset() {
         average = 0;
         current = 0;
@@ -60,6 +75,7 @@ public class RateAverages {
         return average;
     }
 
+    /** ignored */
     void setAverage(double average) {
         this.average = average;
     }
@@ -75,6 +91,7 @@ public class RateAverages {
         return current;
     }
 
+    /** ignored */
     void setCurrent(double current) {
         this.current = current;
     }
@@ -90,6 +107,7 @@ public class RateAverages {
         return last;
     }
 
+    /** ignored */
     void setLast(double last) {
         this.last = last;
     }
@@ -105,6 +123,7 @@ public class RateAverages {
         return totalEventCount;
     }
 
+    /** ignored */
     void setTotalEventCount(long totalEventCount) {
         this.totalEventCount = totalEventCount;
     }
@@ -120,6 +139,7 @@ public class RateAverages {
         return totalValues;
     }
 
+    /** ignored */
     void setTotalValues(double totalValues) {
         this.totalValues = totalValues;
     }

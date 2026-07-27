@@ -28,7 +28,9 @@ import net.i2p.util.Log;
  *
  */
 public abstract class FormHandler {
+    /** Router context */
     protected RouterContext _context;
+    /** Logger */
     protected Log _log;
     /** Not for multipart/form-data, will be null */
     @SuppressWarnings("rawtypes")
@@ -36,13 +38,17 @@ public abstract class FormHandler {
     /** Only for multipart/form-data. Warning, parameters are NOT XSS filtered */
     protected RequestWrapper _requestWrapper;
     private String _nonce;
+    /** Form action */
     protected String _action;
+    /** Request method */
     protected String _method;
     private final List<Message> _errors;
     private final List<Message> _notices;
     private boolean _processed;
     private boolean _valid;
+    /** Output writer */
     protected Writer _out;
+    /** HTTP session for nonce validation */
     protected HttpSession _session;
 
     /** Rate limiter for form submissions - prevents brute-force attacks */
@@ -102,6 +108,9 @@ public abstract class FormHandler {
         }
     }
 
+    /**
+     * FormHandler.
+     */
     public FormHandler() {
         _errors = new ArrayList<>();
         _notices = new ArrayList<>();
@@ -110,6 +119,7 @@ public abstract class FormHandler {
 
     /**
      *  For nonce validation
+     *  @param session the HTTP session
      *  @since 0.9.69
      */
     public void storeSession(HttpSession session) { _session = session; }
@@ -127,12 +137,15 @@ public abstract class FormHandler {
         } catch (Throwable t) {_log.error("Error processing form", t);}
     }
 
+    /** @param val the nonce value */
     public void setNonce(String val) {_nonce = val == null ? null : DataHelper.stripHTML(val);}
+    /** @param val the action value */
     public void setAction(String val) {_action = val == null ? null : DataHelper.stripHTML(val);}
 
     /**
      * For many forms, it's easiest just to put all the parameters here.
      *
+     * @param settings the form parameters
      * @since 0.9.4 consolidated from numerous FormHandlers
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -141,12 +154,14 @@ public abstract class FormHandler {
     /**
      *  Only set by formhandler.jsi for multipart/form-data
      *
+     *  @param rw the request wrapper
      *  @since 0.9.19
      */
     public void setRequestWrapper(RequestWrapper rw) {_requestWrapper = rw;}
 
     /**
      *  Same as HelperBase
+     *  @return true if advanced mode
      *  @since 0.9.14.1
      */
     public boolean isAdvanced() {return _context.getBooleanProperty(HelperBase.PROP_ADVANCED);}
@@ -156,6 +171,7 @@ public abstract class FormHandler {
      * Curses Jetty for returning arrays.
      * For nofilter_ prefixed params, validates for XSS patterns.
      *
+     * @param key the setting key
      * @since 0.9.4 consolidated from numerous FormHandlers
      * @return trimmed string or null
      */
@@ -191,6 +207,9 @@ public abstract class FormHandler {
     public void storeMethod(String val) {_method = val;}
 
     /**
+     * Store the output writer for inline form processing.
+     *
+     * @param out the writer
      * @since 0.9.38
      */
     public void storeWriter(Writer out) {_out = out;}
@@ -207,6 +226,8 @@ public abstract class FormHandler {
      * Add an error message to display
      * Use if it does not include a link.
      * Escapes '&lt;' and '&gt;' before queueing
+     *
+     * @param errorMsg the error message
      */
     protected void addFormError(String errorMsg) {
         addFormError(errorMsg, false);
@@ -216,6 +237,8 @@ public abstract class FormHandler {
      * Add an error message to display
      * Use if it does not include a link.
      * Escapes '&lt;' and '&gt;' before queueing
+     *
+     * @param errorMsg the error message
      * @param canClose If true, the message can be closed by the user.
      */
     protected void addFormError(String errorMsg, boolean canClose) {
@@ -227,6 +250,8 @@ public abstract class FormHandler {
      * Add a non-error message to display
      * Use if it does not include a link.
      * Escapes '&lt;' and '&gt;' before queueing
+     *
+     * @param msg the notice message
      */
     protected void addFormNotice(String msg) {
         addFormNotice(msg, false);
@@ -236,6 +261,8 @@ public abstract class FormHandler {
      * Add a non-error message to display
      * Use if it does not include a link.
      * Escapes '&lt;' and '&gt;' before queueing
+     *
+     * @param msg the notice message
      * @param canClose If true, the message can be closed by the user.
      */
     protected void addFormNotice(String msg, boolean canClose) {
@@ -247,6 +274,8 @@ public abstract class FormHandler {
      * Add a non-error message to display
      * Use if it includes a link or other formatting.
      * Does not escape '&lt;' and '&gt;' before queueing
+     *
+     * @param msg the notice message
      * @since 0.9.14.1
      */
     protected void addFormNoticeNoEscape(String msg) {
@@ -257,6 +286,8 @@ public abstract class FormHandler {
      * Add a non-error message to display
      * Use if it includes a link or other formatting.
      * Does not escape '&lt;' and '&gt;' before queueing
+     *
+     * @param msg the notice message
      * @param canClose If true, the message can be closed by the user.
      * @since 0.9.14.1
      */
@@ -269,6 +300,8 @@ public abstract class FormHandler {
      * Add an error message to display
      * Use if it includes a link or other formatting.
      * Does not escape '&lt;' and '&gt;' before queueing
+     *
+     * @param msg the error message
      * @since 0.9.19
      */
     protected void addFormErrorNoEscape(String msg) {
@@ -279,6 +312,8 @@ public abstract class FormHandler {
      * Add an error message to display
      * Use if it includes a link or other formatting.
      * Does not escape '&lt;' and '&gt;' before queueing
+     *
+     * @param msg the error message
      * @param canClose If true, the message can be closed by the user.
      * @since 0.9.19
      */
@@ -290,6 +325,7 @@ public abstract class FormHandler {
     /**
      * Display everything, wrap it in a div for consistent presentation
      *
+     * @return the HTML
      */
     public String getAllMessages() {
         validate();
@@ -315,6 +351,7 @@ public abstract class FormHandler {
      * Display any error messages (processing the form if it hasn't
      * been yet)
      *
+     * @return the HTML
      */
     public String getErrors() {
         validate();
@@ -326,6 +363,7 @@ public abstract class FormHandler {
      * Display any non-error messages (processing the form if it hasn't
      * been yet)
      *
+     * @return the HTML
      */
     public String getNotices() {
         validate();
@@ -419,7 +457,12 @@ public abstract class FormHandler {
         }
     }
 
-    /** translate a string */
+    /**
+     * Translate a string.
+     *
+     * @param s the string to translate
+     * @return the translated string
+     */
     public String _t(String s) {return Messages.getString(s, _context);}
 
     /**
@@ -433,16 +476,26 @@ public abstract class FormHandler {
      *    To translate parameter also, use _t("foo {0} bar", _t("baz"))
      *    Do not double the single quotes in the parameter.
      *    Use autoboxing to call with ints, longs, floats, etc.
+     *  @return the translated string
      */
     public String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
-    /** two params @since 0.8.2 */
+    /**
+     * Translate a string with two parameters.
+     *
+     * @param s the string to translate containing {0} and {1}
+     * @param o the first parameter
+     * @param o2 the second parameter
+     * @return the translated string
+     * @since 0.8.2
+     */
     public String _t(String s, Object o, Object o2) {return Messages.getString(s, o, o2, _context);}
 
     /**
      *  Mark a string for extraction by xgettext and translation.
      *  Use this only in static initializers.
      *  It does not translate!
+     *  @param s the string to mark
      *  @return s
      */
     public static String _x(String s) {return s;}
@@ -454,15 +507,24 @@ public abstract class FormHandler {
         private String text;
         private boolean canClose;
 
+        /**
+         * Message.
+         */
         public Message(String text, boolean canClose) {
             this.text = text;
             this.canClose = canClose;
         }
 
+        /**
+         * getText.
+         */
         public String getText() {
             return text;
         }
 
+        /**
+         * isCanClose.
+         */
         public boolean isCanClose() {
             return canClose;
         }

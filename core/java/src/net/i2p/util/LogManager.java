@@ -41,27 +41,75 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  */
 public class LogManager implements Flushable {
+    /**
+     * Property name for the logger config file location
+     */
     public static final String CONFIG_LOCATION_PROP = "loggerConfigLocation";
+    /**
+     * Property name to override the log filename
+     */
     public static final String FILENAME_OVERRIDE_PROP = "loggerFilenameOverride";
+    /**
+     * Default logger config file name
+     */
     public static final String CONFIG_LOCATION_DEFAULT = "logger.config";
 
     /**
      * These define the characters in the format line of the config file
      */
     public static final char DATE = 'd';
+    /**
+     * CLASS.
+     */
     public static final char CLASS = 'c';
+    /**
+     * THREAD.
+     */
     public static final char THREAD = 't';
+    /**
+     * PRIORITY.
+     */
     public static final char PRIORITY = 'p';
+    /**
+     * MESSAGE.
+     */
     public static final char MESSAGE = 'm';
 
+    /**
+     * Property name for the log record format string
+     */
     public static final String PROP_FORMAT = "logger.format";
+    /**
+     * Property name for the date format pattern
+     */
     public static final String PROP_DATEFORMAT = "logger.dateFormat";
+    /**
+     * Property name for the log file name pattern
+     */
     public static final String PROP_FILENAME = "logger.logFileName";
+    /**
+     * Property name for the log file size limit
+     */
     public static final String PROP_FILESIZE = "logger.logFileSize";
+    /**
+     * Property name for the log rotation limit
+     */
     public static final String PROP_ROTATIONLIMIT = "logger.logRotationLimit";
+    /**
+     * Property name to enable or disable on-screen display
+     */
     public static final String PROP_DISPLAYONSCREEN = "logger.displayOnScreen";
+    /**
+     * Property name for the console buffer size
+     */
     public static final String PROP_CONSOLEBUFFERSIZE = "logger.consoleBufferSize";
+    /**
+     * Property name for the minimum log level displayed on screen
+     */
     public static final String PROP_DISPLAYONSCREENLEVEL = "logger.minimumOnScreenLevel";
+    /**
+     * Property name for the default log level
+     */
     public static final String PROP_DEFAULTLEVEL = "logger.defaultLevel";
 
     /** @since 0.9.2 */
@@ -82,21 +130,52 @@ public class LogManager implements Flushable {
     /** @since 0.9.56 */
     private static final String PROP_MIN_GZIP_SIZE = "logger.minGzipSize";
 
+    /**
+     * Prefix for per-logger level override properties
+     */
     public static final String PROP_RECORD_PREFIX = "logger.record.";
 
+    /**
+     * Default log record format string
+     */
     public static final String DEFAULT_FORMAT = DATE + " " + PRIORITY + "[" + THREAD + "] " + CLASS + ": " + MESSAGE;
 
-    /** blank means default short date and medium time for the locale - see DateFormat */
+    /**
+     * Default date format pattern; blank means default short date and medium time for the locale
+     */
     // TODO: Sync time format for router and wrapper logs and dates in router log messages (currently 3 different formats)
+    /**
+     * DEFAULT_DATEFORMAT.
+     */
     public static final String DEFAULT_DATEFORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
 
+    /**
+     * Default log file name pattern
+     */
     public static final String DEFAULT_FILENAME = "logs/log-@.txt";
+    /**
+     * Default log file size limit as a string
+     */
     public static final String DEFAULT_FILESIZE = "5m";
+    /**
+     * Default setting for on-screen log display
+     */
     public static final boolean DEFAULT_DISPLAYONSCREEN = true;
-    // number of entries to display for router logs?? doesn't appear to work or is being overriden elsewhere
+    /**
+     * Default number of entries in the console buffer
+     */
     public static final int DEFAULT_CONSOLEBUFFERSIZE = 25;
+    /**
+     * Default log rotation limit
+     */
     public static final String DEFAULT_ROTATIONLIMIT = "3";
+    /**
+     * Default log level string
+     */
     public static final String DEFAULT_DEFAULTLEVEL = Log.STR_ERROR;
+    /**
+     * Default on-screen log level string
+     */
     public static final String DEFAULT_ONSCREENLEVEL = Log.STR_ERROR;
     private static final int MIN_FILESIZE_LIMIT = 16 * 1024;
     private static final boolean DEFAULT_GZIP = false;
@@ -282,7 +361,12 @@ public class LogManager implements Flushable {
         return rv;
     }
 
-    /** now used by ConfigLogingHelper */
+    /**
+     * Return all currently cached Log instances.
+     * Now used by ConfigLogingHelper.
+     *
+     * @return list of all Log objects tracked by this manager
+     */
     public List<Log> getLogs() {
         return new ArrayList<>(_logs.values());
     }
@@ -290,6 +374,8 @@ public class LogManager implements Flushable {
     /**
      *  If the log already exists, its priority is set here but cannot
      *  be changed later, as it becomes an "orphan" not tracked by the manager.
+     *
+     *  @param log the Log to add and track
      */
     void addLog(Log log) {
         Log old = _logs.putIfAbsent(log.getScope(), log);
@@ -302,6 +388,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Return the circular buffer holding recent log records for console display.
+     *
      * @return the console buffer
      */
     public LogConsoleBuffer getBuffer() {
@@ -309,6 +397,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Whether log messages should be printed to stdout.
+     *
      * @return whether to display log on screen
      */
     public boolean displayOnScreen() {
@@ -316,6 +406,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Minimum log level for messages printed to stdout.
+     *
      * @return the minimum level for on-screen display
      */
     public int getDisplayOnScreenLevel() {
@@ -323,6 +415,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Maximum number of entries held in the console buffer.
+     *
      * @return the console buffer size
      */
     public int getConsoleBufferSize() {
@@ -330,6 +424,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Set the logger config file path and reload configuration.
+     *
      * @param filename the config file path
      */
     public final void setConfig(String filename) {
@@ -352,6 +448,8 @@ public class LogManager implements Flushable {
      * Used by Log to add records to the queue.
      * This is generally nonblocking and unsyncrhonized but may block when under
      * massive logging load as a way of throttling logging threads.
+     *
+     * @param record the log record to enqueue
      */
     void addRecord(LogRecord record) {
         if (_shutdown && !SystemVersion.isAndroid()) {
@@ -393,21 +491,25 @@ public class LogManager implements Flushable {
     }
 
     /**
-     * Called periodically by the log writer's thread
-     * Do not log here, deadlock of LogWriter
+     * Called periodically by the LogWriter thread to reload the config file.
+     * Do not log here, deadlock of LogWriter.
      */
     void rereadConfig() {
         loadConfig();
     }
 
     /**
-     *  @since 0.9.3
+     * Whether duplicate log records should be dropped.
+     *
+     * @return true if duplicate records are dropped
+     * @since 0.9.3
      */
     boolean shouldDropDuplicates() {
         return _dropDuplicates;
     }
 
     /**
+     * Load and parse the logger configuration file if it has changed.
      * Do not log here, deadlock of LogWriter via rereadConfig().
      */
     private synchronized void loadConfig() {
@@ -438,7 +540,10 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Parse all configuration properties and set internal state accordingly.
      * Do not log here, deadlock of LogWriter via rereadConfig().
+     *
+     * @param config the configuration properties to parse
      */
     private void parseConfig(Properties config) {
         String fmt = config.getProperty(PROP_FORMAT, DEFAULT_FORMAT);
@@ -913,6 +1018,9 @@ public class LogManager implements Flushable {
     }
 
     private class ShutdownHook extends I2PAppThread {
+        /**
+         * run.
+         */
         @Override
         public void run() {
             setName("LogShutdown");

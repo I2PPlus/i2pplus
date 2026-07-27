@@ -80,6 +80,9 @@ public class TrackerClient implements Runnable {
     /** No guidance in BEP 5; standard practice is K (=8) */
     private static final int DHT_ANNOUNCE_PEERS = 8;
 
+    /**
+     * PORT.
+     */
     public static final int PORT = 6881;
     private static final int DEFAULT_UDP_TRACKER_PORT = 6969;
     private static final int MAX_TRACKERS = 12;
@@ -232,10 +235,16 @@ public class TrackerClient implements Runnable {
     }
 
     private class Runner extends SimpleTimer2.TimedEvent {
+        /**
+         * Runner.
+         */
         public Runner(long delay) {
             super(_util.getContext().simpleTimer2(), delay);
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             _event = null;
             _thread =
@@ -257,6 +266,9 @@ public class TrackerClient implements Runnable {
         return !stop && _util.connected();
     }
 
+    /**
+     * run.
+     */
     @Override
     public void run() {
         long begin = _util.getContext().clock().now();
@@ -965,10 +977,16 @@ public class TrackerClient implements Runnable {
     private class Unannouncer implements Runnable {
         private final TCTracker tr;
 
+        /**
+         * Unannouncer.
+         */
         public Unannouncer(TCTracker tr) {
             this.tr = tr;
         }
 
+        /**
+         * run.
+         */
         public void run() {
             if (_log.shouldDebug()) {
                 _log.debug("Running unannounce " + _threadName + " to " + tr.announce);
@@ -1276,6 +1294,9 @@ public class TrackerClient implements Runnable {
      * @since 0.9.67
      */
     private static class URLComparator implements Comparator<String> {
+        /**
+         * compare.
+         */
         public int compare(String l, String r) {
             boolean ul = l.startsWith("udp://");
             boolean ur = r.startsWith("udp://");

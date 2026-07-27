@@ -19,6 +19,10 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
 
     /**
      * Create a new runner with the given queues
+     *
+     * @param context the router context
+     * @param manager the client manager
+     * @param queue the I2CP message queue
      */
     public QueuedClientConnectionRunner(RouterContext context, ClientManager manager, I2CPMessageQueue queue) {
         super(context, manager, null);

@@ -12,8 +12,10 @@ import java.io.IOException;
  * @param <U> The type of RrdUpdater this primitive belongs to
  */
 class RrdDoubleArray<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
+    /** ignored */
     private final int length;
 
+    /** Create array */
     RrdDoubleArray(RrdUpdater<U> updater, int length) {
         super(updater, RrdPrimitive.RRD_DOUBLE, length, false);
         this.length = length;
@@ -30,6 +32,7 @@ class RrdDoubleArray<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
         set(index, value, 1);
     }
 
+    /** Set values in bulk */
     void set(int index, double value, int count) throws IOException {
         // rollovers not allowed!
         assert index + count <= length
@@ -54,6 +57,7 @@ class RrdDoubleArray<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
         return readDouble(index);
     }
 
+    /** @return the values */
     double[] get(int index, int count) throws IOException {
         assert index + count <= length
                 : "Invalid index/count supplied: "

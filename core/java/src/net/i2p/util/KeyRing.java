@@ -18,6 +18,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * and moved to the router console since version 0.9.33.</p>
  */
 public class KeyRing extends ConcurrentHashMap<Hash, SessionKey> {
+    /**
+     * KeyRing.
+     */
     public KeyRing() {
         super(0);
     }

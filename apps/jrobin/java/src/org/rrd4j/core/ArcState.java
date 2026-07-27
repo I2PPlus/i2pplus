@@ -14,6 +14,13 @@ public class ArcState implements RrdUpdater<ArcState> {
     private final RrdDouble<ArcState> accumValue;
     private final RrdLong<ArcState> nanSteps;
 
+    /**
+     * Constructor.
+     *
+     * @param parentArc the parent archive
+     * @param shouldInitialize whether to initialize state
+     * @throws IOException if an I/O error occurs
+     */
     ArcState(Archive parentArc, boolean shouldInitialize) throws IOException {
         this.parentArc = parentArc;
         accumValue = new RrdDouble<>(this);
@@ -31,10 +38,22 @@ public class ArcState implements RrdUpdater<ArcState> {
         }
     }
 
+    /**
+     * Dump state as a string.
+     *
+     * @return dump string
+     * @throws IOException if an I/O error occurs
+     */
     String dump() throws IOException {
         return "accumValue:" + accumValue.get() + " nanSteps:" + nanSteps.get() + "\n";
     }
 
+    /**
+     * Set the NaN steps count.
+     *
+     * @param value the value to set
+     * @throws IOException if an I/O error occurs
+     */
     void setNanSteps(long value) throws IOException {
         nanSteps.set(value);
     }
@@ -49,6 +68,12 @@ public class ArcState implements RrdUpdater<ArcState> {
         return nanSteps.get();
     }
 
+    /**
+     * Set the accumulated value.
+     *
+     * @param value the value to set
+     * @throws IOException if an I/O error occurs
+     */
     void setAccumValue(double value) throws IOException {
         accumValue.set(value);
     }
@@ -72,6 +97,12 @@ public class ArcState implements RrdUpdater<ArcState> {
         return parentArc;
     }
 
+    /**
+     * Append XML representation.
+     *
+     * @param writer the XML writer
+     * @throws IOException if an I/O error occurs
+     */
     void appendXml(XmlWriter writer) throws IOException {
         writer.startTag("ds");
         writer.writeTag("value", accumValue.get());

@@ -32,6 +32,9 @@ import org.cybergarage.xml.Node;
 import org.cybergarage.xml.Parser;
 import org.cybergarage.xml.ParserException;
 
+/**
+ * Service.
+ */
 public class Service {
     ////////////////////////////////////////////////
     //	Constants
@@ -615,6 +618,9 @@ public class Service {
     //	serviceStateTable
     ////////////////////////////////////////////////
 
+    /**
+     * getServiceStateTable.
+     */
     public ServiceStateTable getServiceStateTable() {
         ServiceStateTable stateTable = new ServiceStateTable();
         Node stateTableNode = getSCPDNode().getNode(ServiceStateTable.ELEM_NAME);
@@ -630,6 +636,9 @@ public class Service {
         return stateTable;
     }
 
+    /**
+     * getStateVariable.
+     */
     public StateVariable getStateVariable(String name) {
         ServiceStateTable stateTable = getServiceStateTable();
         int tableSize = stateTable.size();
@@ -642,6 +651,9 @@ public class Service {
         return null;
     }
 
+    /**
+     * hasStateVariable.
+     */
     public boolean hasStateVariable(String name) {
         return (getStateVariable(name) != null) ? true : false;
     }
@@ -650,6 +662,9 @@ public class Service {
     //	UserData
     ////////////////////////////////////////////////
 
+    /**
+     * isService.
+     */
     public boolean isService(String name) {
         if (name == null) return false;
         if (name.endsWith(getServiceType()) == true) return true;
@@ -720,6 +735,9 @@ public class Service {
         }
     }
 
+    /**
+     * byebye.
+     */
     public void byebye(String bindAddr) {
         // uuid:device-UUID::urn:schemas-upnp-org:service:serviceType:v
 
@@ -741,6 +759,9 @@ public class Service {
         }
     }
 
+    /**
+     * serviceSearchResponse.
+     */
     public boolean serviceSearchResponse(SSDPPacket ssdpPacket) {
         String ssdpST = ssdpPacket.getST();
 
@@ -766,6 +787,9 @@ public class Service {
     // QueryListener
     ////////////////////////////////////////////////
 
+    /**
+     * setQueryListener.
+     */
     public void setQueryListener(QueryListener queryListener) {
         ServiceStateTable stateTable = getServiceStateTable();
         int tableSize = stateTable.size();
@@ -779,18 +803,30 @@ public class Service {
     //	Subscription
     ////////////////////////////////////////////////
 
+    /**
+     * getSubscriberList.
+     */
     public SubscriberList getSubscriberList() {
         return getServiceData().getSubscriberList();
     }
 
+    /**
+     * addSubscriber.
+     */
     public void addSubscriber(Subscriber sub) {
         getSubscriberList().add(sub);
     }
 
+    /**
+     * removeSubscriber.
+     */
     public void removeSubscriber(Subscriber sub) {
         getSubscriberList().remove(sub);
     }
 
+    /**
+     * getSubscriber.
+     */
     public Subscriber getSubscriber(String name) {
         SubscriberList subList = getSubscriberList();
         int subListCnt = subList.size();
@@ -822,6 +858,9 @@ public class Service {
         return true;
     }
 
+    /**
+     * notify.
+     */
     public void notify(StateVariable stateVar) {
         SubscriberList subList = getSubscriberList();
         int subListCnt;
@@ -852,6 +891,9 @@ public class Service {
         }
     }
 
+    /**
+     * notifyAllStateVariables.
+     */
     public void notifyAllStateVariables() {
         ServiceStateTable stateTable = getServiceStateTable();
         int tableSize = stateTable.size();
@@ -865,23 +907,38 @@ public class Service {
     // SID
     ////////////////////////////////////////////////
 
+    /**
+     * getSID.
+     */
     public String getSID() {
         return getServiceData().getSID();
     }
 
+    /**
+     * setSID.
+     */
     public void setSID(String id) {
         getServiceData().setSID(id);
     }
 
+    /**
+     * clearSID.
+     */
     public void clearSID() {
         setSID("");
         setTimeout(0);
     }
 
+    /**
+     * hasSID.
+     */
     public boolean hasSID() {
         return StringUtil.hasData(getSID());
     }
 
+    /**
+     * isSubscribed.
+     */
     public boolean isSubscribed() {
         return hasSID();
     }
@@ -890,10 +947,16 @@ public class Service {
     // Timeout
     ////////////////////////////////////////////////
 
+    /**
+     * getTimeout.
+     */
     public long getTimeout() {
         return getServiceData().getTimeout();
     }
 
+    /**
+     * setTimeout.
+     */
     public void setTimeout(long value) {
         getServiceData().setTimeout(value);
     }
@@ -902,6 +965,9 @@ public class Service {
     // AcionListener
     ////////////////////////////////////////////////
 
+    /**
+     * setActionListener.
+     */
     public void setActionListener(ActionListener listener) {
         ActionList actionList = getActionList();
         int nActions = actionList.size();
@@ -942,10 +1008,16 @@ public class Service {
 
     private Object userData = null;
 
+    /**
+     * setUserData.
+     */
     public void setUserData(Object data) {
         userData = data;
     }
 
+    /**
+     * getUserData.
+     */
     public Object getUserData() {
         return userData;
     }

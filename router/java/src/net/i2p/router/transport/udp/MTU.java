@@ -185,6 +185,10 @@ public class MTU {
     }
 
     /**
+     * Rectify the MTU value to valid range and alignment.
+     *
+     * @param isIPv6 true if IPv6
+     * @param mtu the MTU value to rectify
      * @return min of PeerState.MIN_MTU, max of PeerState.LARGE_MTU,
      *         rectified so rv % 16 == 12 (IPv4)
      *         or rv % 16 == 0 (IPv6)
@@ -203,6 +207,7 @@ public class MTU {
         return Math.max(PeerState.MIN_MTU, Math.min(PeerState.LARGE_MTU, rv));
     }
 
+    /** CLI test */
     public static void main(String[] args) {
         if (args.length > 0) {
             System.out.println("Cmd line interfaces:"); // NOSONAR S106 CLI output

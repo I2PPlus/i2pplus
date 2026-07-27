@@ -31,6 +31,9 @@ import org.cybergarage.upnp.control.*;
  * @since 1.0
  */
 public class StateVariableData extends NodeData {
+    /**
+     * StateVariableData.
+     */
     public StateVariableData() {}
 
     ////////////////////////////////////////////////
@@ -39,10 +42,16 @@ public class StateVariableData extends NodeData {
 
     private String value = "";
 
+    /**
+     * getValue.
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * setValue.
+     */
     public void setValue(String value) {
         this.value = value;
     }
@@ -53,10 +62,16 @@ public class StateVariableData extends NodeData {
 
     private QueryListener queryListener = null;
 
+    /**
+     * getQueryListener.
+     */
     public QueryListener getQueryListener() {
         return queryListener;
     }
 
+    /**
+     * setQueryListener.
+     */
     public void setQueryListener(QueryListener queryListener) {
         this.queryListener = queryListener;
     }
@@ -67,10 +82,16 @@ public class StateVariableData extends NodeData {
 
     private QueryResponse queryRes = null;
 
+    /**
+     * getQueryResponse.
+     */
     public QueryResponse getQueryResponse() {
         return queryRes;
     }
 
+    /**
+     * setQueryResponse.
+     */
     public void setQueryResponse(QueryResponse res) {
         queryRes = res;
     }

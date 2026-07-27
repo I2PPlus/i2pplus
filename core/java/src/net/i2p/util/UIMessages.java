@@ -99,14 +99,20 @@ public class UIMessages {
         return rv;
     }
 
-    /** clear all */
+    /**
+     * Remove all messages from the queue.
+     */
     public synchronized void clear() {
         _messages.clear();
         _cachedStrings = null;
         _cachedCount = -1;
     }
 
-    /** clear all up to and including this id */
+    /**
+     * Remove all messages up to and including the given id.
+     *
+     * @param id message id to clear through
+     */
     public synchronized void clearThrough(int id) {
         Message m = _messages.peekLast();
         if (m == null) {
@@ -148,7 +154,9 @@ public class UIMessages {
      * selectively clear messages from the queue.</p>
      */
     public static class Message {
+        /** sequential identifier */
         public final int id;
+        /** the message text */
         public final String message;
 
         private Message(int i, String msg) {
@@ -156,6 +164,9 @@ public class UIMessages {
             message = msg;
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return message;

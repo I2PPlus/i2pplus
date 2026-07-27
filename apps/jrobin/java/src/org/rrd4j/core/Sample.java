@@ -246,6 +246,7 @@ public class Sample {
         return buffer.toString();
     }
 
+    /** @return the rrdtool command */
     String getRrdToolCommand() {
         return dump();
     }

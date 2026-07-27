@@ -29,6 +29,9 @@ public class RouterInfoHandler implements RequestHandler {
     private final JSONRPC2Helper _helper;
     private final RouterContext _context;
 
+    /**
+     * RouterInfoHandler.
+     */
     public RouterInfoHandler(RouterContext ctx, JSONRPC2Helper helper) {
         _helper = helper;
         _context = ctx;

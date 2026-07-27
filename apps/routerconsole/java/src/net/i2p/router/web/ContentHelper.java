@@ -9,6 +9,9 @@ import net.i2p.util.FileUtil;
  * @since 0.9.35
  */
 public class ContentHelper extends HelperBase {
+    /**
+     * _page.
+     */
     protected String _page;
     private int _maxLines;
     private boolean _startAtBeginning;
@@ -18,9 +21,15 @@ public class ContentHelper extends HelperBase {
      * Caution, use absolute paths only, do not assume files are in CWD
      */
     public void setPage(String page) { _page = page; }
+    /**
+     * setStartAtBeginning.
+     */
     public void setStartAtBeginning(String moo) {
         _startAtBeginning = Boolean.parseBoolean(moo);
     }
+    /**
+     * setLang.
+     */
     public void setLang(String l) {
 /*****
         if((_lang == null || !_lang.equals(l)) && (l != null)) {
@@ -43,6 +52,9 @@ public class ContentHelper extends HelperBase {
 *****/
     }
 
+    /**
+     * setMaxLines.
+     */
     public void setMaxLines(String lines) {
         if (lines != null) {
             try {
@@ -54,6 +66,9 @@ public class ContentHelper extends HelperBase {
             _maxLines = -1;
         }
     }
+    /**
+     * getContent.
+     */
     public String getContent() {
         String str = FileUtil.readTextFile(filename(), _maxLines, _startAtBeginning);
         if (str == null)
@@ -61,6 +76,9 @@ public class ContentHelper extends HelperBase {
         else
             return str;
     }
+    /**
+     * getTextContent.
+     */
     public String getTextContent() {
         String str = FileUtil.readTextFile(filename(), _maxLines, _startAtBeginning);
         if (str == null)

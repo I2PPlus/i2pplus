@@ -19,6 +19,9 @@ class MLKEMIndCpa
 
     private Symmetric symmetric;
 
+    /**
+     * MLKEMIndCpa.
+     */
     public MLKEMIndCpa(MLKEMEngine engine)
     {
         this.engine = engine;
@@ -139,6 +142,9 @@ class MLKEMIndCpa
         return new byte[][]{packPublicKey(publicKey, publicSeed), packSecretKey(secretKey)};
     }
 
+    /**
+     * encrypt.
+     */
     public byte[] encrypt(byte[] publicKeyInput, byte[] msg, byte[] coins)
     {
         int i;
@@ -165,7 +171,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(publicKeyPolyVec.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]"); 
+        // System.out.println("]");
 
         // System.out.print("seed = ");
         // Helper.printByteArray(seed);
@@ -215,7 +221,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(sp.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]"); 
+        // System.out.println("]");
 
 
         // System.out.print("sp = [");
@@ -223,7 +229,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(sp.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]"); 
+        // System.out.println("]");
 
         for (i = 0; i < kyberK; i++)
         {
@@ -235,7 +241,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(bp.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]");     
+        // System.out.println("]");
 
         PolyVec.pointwiseAccountMontgomery(v, publicKeyPolyVec, sp, engine);
 
@@ -257,7 +263,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(bp.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]"); 
+        // System.out.println("]");
 
 
         // System.out.print("v = ");
@@ -276,7 +282,7 @@ class MLKEMIndCpa
         System.arraycopy(b.compressPolyVec(), 0, outBuf, 0, polyVecCompressedBytes);
         System.arraycopy(v.compressPoly(), 0, outBuf, polyVecCompressedBytes, polyCompressedBytes);
         // System.out.print("outBuf = [");
-        // Helper.printByteArray(outBuf);        
+        // Helper.printByteArray(outBuf);
         return outBuf;
     }
 
@@ -289,6 +295,9 @@ class MLKEMIndCpa
         v.decompressPoly(compressedPolyCipherText);
     }
 
+    /**
+     * packPublicKey.
+     */
     public byte[] packPublicKey(PolyVec publicKeyPolyVec, byte[] seed)
     {
         byte[] buf = new byte[indCpaPublicKeyBytes];
@@ -297,6 +306,9 @@ class MLKEMIndCpa
         return buf;
     }
 
+    /**
+     * unpackPublicKey.
+     */
     public byte[] unpackPublicKey(PolyVec publicKeyPolyVec, byte[] publicKey)
     {
         byte[] outputSeed = new byte[MLKEMEngine.KyberSymBytes];
@@ -305,18 +317,30 @@ class MLKEMIndCpa
         return outputSeed;
     }
 
+    /**
+     * packSecretKey.
+     */
     public byte[] packSecretKey(PolyVec secretKeyPolyVec)
     {
         return secretKeyPolyVec.toBytes();
     }
 
+    /**
+     * unpackSecretKey.
+     */
     public void unpackSecretKey(PolyVec secretKeyPolyVec, byte[] secretKey)
     {
         secretKeyPolyVec.fromBytes(secretKey);
     }
 
+    /**
+     * KyberGenerateMatrixNBlocks.
+     */
     public final int KyberGenerateMatrixNBlocks;
 
+    /**
+     * generateMatrix.
+     */
     public void generateMatrix(PolyVec[] aMatrix, byte[] seed, boolean transposed)
     {
         int i, j, k, ctr, off;
@@ -380,6 +404,9 @@ class MLKEMIndCpa
 
     }
 
+    /**
+     * decrypt.
+     */
     public byte[] decrypt(byte[] secretKey, byte[] cipherText)
     {
         byte[] outputMessage = new byte[MLKEMEngine.getKyberIndCpaMsgBytes()];
@@ -394,7 +421,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(bp.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]"); 
+        // System.out.println("]");
 
 
         // System.out.print("v = ");
@@ -421,7 +448,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(bp.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]"); 
+        // System.out.println("]");
 
         bp.polyVecNtt();
 
@@ -430,7 +457,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(bp.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]"); 
+        // System.out.println("]");
 
         PolyVec.pointwiseAccountMontgomery(mp, secretKeyPolyVec, bp, engine);
 

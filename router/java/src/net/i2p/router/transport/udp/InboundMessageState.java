@@ -27,12 +27,22 @@ class InboundMessageState implements CDQEntry {
     private final Object lock = new Object();
 
     private static final long MAX_RECEIVE_TIME = 10*1000L;
+    /**
+     * Description.
+     */
+    /**
+     * Description.
+     */
+    /**
+     * Description.
+     */
     public static final int MAX_FRAGMENTS = 32;
     private static final int MAX_FRAGMENT_SIZE = UDPPacket.MAX_PACKET_SIZE;
     private static final ByteCache _fragmentCache = ByteCache.getInstance(64, MAX_FRAGMENT_SIZE);
 
     /**
      * Constructs a new InboundMessageState with no fragments.
+      * @param ctx the ctx
      */
     public InboundMessageState(RouterContext ctx, long messageId, Hash from) {
         _context = ctx;
@@ -49,6 +59,7 @@ class InboundMessageState implements CDQEntry {
     /**
      * Constructs and initializes by receiving one fragment.
      * @throws DataFormatException if fragment is invalid
+      * @param ctx the ctx
      */
     public InboundMessageState(RouterContext ctx, long messageId, Hash from,
                                byte[] data, int off, int len, int fragmentNum, boolean isLast)
@@ -76,6 +87,7 @@ class InboundMessageState implements CDQEntry {
     /**
      * Receives and stores a fragment.
      * @return true if successful, false if corrupt or invalid
+      * @param data the data
      */
     public boolean receiveFragment(byte[] data, int off, int len, int fragmentNum, boolean isLast) {
         synchronized(lock) {
@@ -124,6 +136,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Returns whether the specified fragment has been received.
+      * @param fragmentNum the fragmentNum
      */
     public boolean hasFragment(int fragmentNum) {
         synchronized(lock) {
@@ -135,6 +148,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Returns true if all fragments up to last have been received.
+      * @return the value
      */
     public boolean isComplete() {
         synchronized(lock) {
@@ -146,6 +160,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Returns true if message has expired (received more than 10s ago).
+      * @return the value
      */
     public boolean isExpired() {
         return _context.clock().now() > _receiveBegin + MAX_RECEIVE_TIME;
@@ -153,6 +168,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Returns the message lifetime in milliseconds.
+      * @return the value
      */
     public long getLifetime() {
         return _context.clock().now() - _receiveBegin;
@@ -185,17 +201,21 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Returns the Hash of the sender.
+      * @return the value
+      * @return the value
      */
     public Hash getFrom() { return _from; }
 
     /**
      * Returns the message ID.
+      * @return the value
      */
     public long getMessageId() { return _messageId; }
 
     /**
      * Returns the total size of the complete message in bytes.
      * @throws IllegalStateException if message incomplete or released
+      * @return the value
      */
     public int getCompleteSize() {
         synchronized(lock) {
@@ -219,6 +239,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Creates a bitfield representing received fragments.
+      * @return the value
      */
     public ACKBitfield createACKBitfield() {
         synchronized(lock) {
@@ -305,6 +326,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Returns the array of fragments, throws if already released.
+      * @return the value
      */
     public ByteArray[] getFragments() {
         synchronized(lock) {
@@ -319,6 +341,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Returns number of fragments received or expected.
+      * @return the value
      */
     public int getFragmentCount() {
         synchronized(lock) {

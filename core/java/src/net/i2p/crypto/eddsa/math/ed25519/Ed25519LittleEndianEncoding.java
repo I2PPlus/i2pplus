@@ -6,7 +6,7 @@
  * to EdDSA-Java.
  *
  * You should have received a copy of the CC0 legalcode along with this
- * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>lt;https://creativecommons.org/publicdomain/zero/1.0/<https://creativecommons.org/publicdomain/zero/1.0/>gt;.
+ * work. If not, see &lt;https://creativecommons.org/publicdomain/zero/1.0/&gt;.
  *
  */
 package net.i2p.crypto.eddsa.math.ed25519;
@@ -185,6 +185,7 @@ public class Ed25519LittleEndianEncoding extends Encoding {
         return s;
     }
 
+    /** Load 3 bytes from input */
     static int load_3(byte[] in, int offset) {
         int result = in[offset++] & 0xff;
         result |= (in[offset++] & 0xff) << 8;
@@ -192,6 +193,7 @@ public class Ed25519LittleEndianEncoding extends Encoding {
         return result;
     }
 
+    /** Load 4 bytes from input */
     static long load_4(byte[] in, int offset) {
         int result = in[offset++] & 0xff;
         result |= (in[offset++] & 0xff) << 8;

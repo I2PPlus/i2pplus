@@ -95,19 +95,43 @@ import java.util.Set;
  * @author jrandom
  */
 public class LeaseSet extends DatabaseEntry {
+    /**
+     * _destination.
+     */
     protected Destination _destination;
+    /**
+     * _encryptionKey.
+     */
     protected PublicKey _encryptionKey;
     // The revocation key for LS1, null for LS2 except blinded key for encrypted LS2
+    /**
+     * _signingKey.
+     */
     protected SigningPublicKey _signingKey;
     // Keep leases in the order received, or else signature verification will fail!
+    /**
+     * _leases.
+     */
     protected final List<Lease> _leases;
     // Store these since isCurrent() and getEarliestLeaseDate() are called frequently
+    /** ignored */
     private long _firstExpiration;
+    /**
+     * _lastExpiration.
+     */
     protected long _lastExpiration;
+    /** ignored */
     private List<Lease> _decryptedLeases;
+    /** ignored */
     private boolean _decrypted;
+    /**
+     * _checked.
+     */
     protected boolean _checked;
     // cached byte version
+    /**
+     * _byteified.
+     */
     protected volatile byte[] _byteified;
 
     /**
@@ -127,7 +151,7 @@ public class LeaseSet extends DatabaseEntry {
      */
     public static final int MAX_LEASES = 16;
 
-    /** */
+    /** Creates a new leaseset with default values. */
     public LeaseSet() {
         _leases = new ArrayList<>(2);
         _firstExpiration = Long.MAX_VALUE;
@@ -141,11 +165,17 @@ public class LeaseSet extends DatabaseEntry {
         return getEarliestLeaseDate();
     }
 
+    /**
+     * getKeysAndCert.
+     */
     @Override
     public KeysAndCert getKeysAndCert() {
         return _destination;
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return KEY_TYPE_LEASESET;
@@ -505,7 +535,9 @@ public class LeaseSet extends DatabaseEntry {
         return buf.toString();
     }
 
+    /** ignored */
     private static final int DATA_LEN = Hash.HASH_LENGTH + 4;
+    /** ignored */
     private static final int IV_LEN = 16;
 
     /**
@@ -535,6 +567,7 @@ public class LeaseSet extends DatabaseEntry {
      *  - Add an extra lease
      *  - Replace the Hash and TunnelID in each Lease
      */
+    /** ignored */
     private void encryp(SessionKey key) throws DataFormatException, IOException {
         int size = _leases.size();
         if (size < 1 || size > MAX_LEASES - 1) {
@@ -618,6 +651,7 @@ public class LeaseSet extends DatabaseEntry {
      * @return true if it was encrypted, and we decrypted it successfully.
      * Decrypts on first call.
      */
+    /** ignored */
     private synchronized boolean isEncrypted() {
         if (_decrypted) {
             return true;

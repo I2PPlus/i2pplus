@@ -38,17 +38,29 @@ import org.xlattice.crypto.filters.BloomSHA1;
  * @since 0.8.8
  */
 public class DecayingBloomFilter {
+    /** The I2P app context */
     protected final I2PAppContext _context;
+    /** The logger */
     protected final Log _log;
+    /** Current bloom filter */
     private BloomSHA1 _current;
+    /** Previous bloom filter */
     private BloomSHA1 _previous;
+    /** Duration of each filter in ms */
     protected final int _durationMs;
+    /** Size of entries in bytes */
     protected final int _entryBytes;
+    /** Extender arrays for small entries */
     private final byte[][] _extenders;
+    /** Mask for converting longs to entries */
     private final long _longToEntryMask;
+    /** Thread-local buffer for extended entries */
     private final ThreadLocal<byte[]> _extendedBuf;
+    /** Counter for current duplicates */
     protected final AtomicLong _currentDuplicates = new AtomicLong();
+    /** Whether decay is still running */
     protected volatile boolean _keepDecaying;
+    /** The decay timer event */
     protected final SimpleTimer2.TimedEvent _decayEvent;
     /** just for logging */
     protected final String _name;
@@ -60,7 +72,14 @@ public class DecayingBloomFilter {
     /** true for debugging */
     private static final boolean ALWAYS_MISS = false;
 
-    /** only for extension by DHS */
+    /**
+     * Only for extension by DecayingHashSet
+     *
+     * @param durationMs entries last for at least this long
+     * @param entryBytes how large are the entries
+     * @param name filter name for logging
+     * @param context the I2P app context
+     */
     protected DecayingBloomFilter(int durationMs, int entryBytes, String name, I2PAppContext context) {
         _context = context;
         _log = context.logManager().getLog(getClass());
@@ -86,6 +105,7 @@ public class DecayingBloomFilter {
      * Create a bloom filter that will decay its entries over time.
      * Uses default m of 23, memory usage is 2 MB.
      *
+     * @param context the I2P app context
      * @param durationMs entries last for at least this long, but no more than twice this long
      * @param entryBytes how large are the entries to be added?  if this is less than 32 bytes,
      *                   the entries added will be expanded by concatenating their XORing
@@ -98,6 +118,9 @@ public class DecayingBloomFilter {
     /**
      * Uses default m of 23, memory usage is 2 MB.
      *
+     * @param context the I2P app context
+     * @param durationMs entries last for at least this long
+     * @param entryBytes how large are the entries
      * @param name just for logging / debugging / stats
      */
     public DecayingBloomFilter(I2PAppContext context, int durationMs, int entryBytes, String name) {
@@ -110,6 +133,10 @@ public class DecayingBloomFilter {
     /**
      * Memory usage is 2 * (2**m) bits or 2**(m-2) bytes.
      *
+     * @param context the I2P app context
+     * @param durationMs entries last for at least this long
+     * @param entryBytes how large are the entries
+     * @param name filter name for logging
      * @param m filter size exponent, max is 29
      */
     public DecayingBloomFilter(I2PAppContext context, int durationMs, int entryBytes, String name, int m) {
@@ -164,12 +191,16 @@ public class DecayingBloomFilter {
      * @since 0.8.8
      */
     private class Shutdown implements Runnable {
+        /**
+         * run.
+         */
         @Override
         public void run() {
            clear();
         }
     }
 
+    /** @return the current duplicate count */
     public long getCurrentDuplicateCount() { return _currentDuplicates.get(); }
 
     /** unsynchronized but only used for logging elsewhere */
@@ -177,12 +208,19 @@ public class DecayingBloomFilter {
             return _current.size() + _previous.size();
     }
 
-    /** unsynchronized, only used for logging elsewhere */
+    /**
+     * Get the false positive rate
+     *
+     * @return the false positive rate
+     */
     public double getFalsePositiveRate() {
             return _current.falsePositives();
     }
 
     /**
+     * Add a byte array entry to the filter
+     *
+     * @param entry the entry to add
      * @return true if the entry added is a duplicate
      */
     public boolean add(byte[] entry) {
@@ -190,6 +228,11 @@ public class DecayingBloomFilter {
     }
 
     /**
+     * Add a byte array entry at the specified offset and length
+     *
+     * @param entry the entry data
+     * @param off the offset
+     * @param len the length
      * @return true if the entry added is a duplicate
      */
     public boolean add(byte[] entry, int off, int len) {
@@ -206,10 +249,12 @@ public class DecayingBloomFilter {
     }
 
     /**
-     * @return true if the entry added is a duplicate.  the number of low order
+     * Add a long entry to the filter. The number of low order
      * bits used is determined by the entryBytes parameter used on creation of the
      * filter.
      *
+     * @param entry the long value to add
+     * @return true if the entry added is a duplicate
      */
     public boolean add(long entry) {
         if (ALWAYS_MISS) return false;
@@ -230,9 +275,11 @@ public class DecayingBloomFilter {
     }
 
     /**
+     * Check if an entry is already known without adding it
+     *
+     * @param entry the long value to check
      * @return true if the entry is already known.  this does NOT add the
      * entry however.
-     *
      */
     public boolean isKnown(long entry) {
         if (ALWAYS_MISS) return false;
@@ -293,6 +340,7 @@ public class DecayingBloomFilter {
         }
     }
 
+    /** Clear all filters and reset counts */
     public void clear() {
         if (!getWriteLock())
             return;
@@ -303,11 +351,15 @@ public class DecayingBloomFilter {
         } finally { releaseWriteLock(); }
     }
 
+    /** Stop the decay process */
     public void stopDecaying() {
         _keepDecaying = false;
         _decayEvent.cancel();
     }
 
+    /**
+     * decay.
+     */
     protected void decay() {
         int currentCount = 0;
         long dups = 0;
@@ -337,6 +389,9 @@ public class DecayingBloomFilter {
             super(_context.simpleTimer2());
         }
 
+        /**
+         * timeReached.
+         */
         @Override
         public void timeReached() {
             if (_keepDecaying) {
@@ -365,6 +420,9 @@ public class DecayingBloomFilter {
             schedule(getTimeTillNextHour());
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             if (_keepDecaying) {
                 long now = _context.clock().now();
@@ -389,17 +447,25 @@ public class DecayingBloomFilter {
         }
     }
 
-    /** @since 0.8.11 moved from DecayingHashSet */
+    /**
+     * Acquire the read lock
+     * @since 0.8.11 moved from DecayingHashSet
+     */
     protected void getReadLock() {
         _reorganizeLock.readLock().lock();
     }
 
-    /** @since 0.8.11 moved from DecayingHashSet */
+    /**
+     * Release the read lock
+     * @since 0.8.11 moved from DecayingHashSet
+     */
     protected void releaseReadLock() {
         _reorganizeLock.readLock().unlock();
     }
 
     /**
+     * Acquire the write lock
+     *
      *  @return true if the lock was acquired
      *  @since 0.8.11 moved from DecayingHashSet
      */
@@ -415,7 +481,10 @@ public class DecayingBloomFilter {
         return false;
     }
 
-    /** @since 0.8.11 moved from DecayingHashSet */
+    /**
+     * Release the write lock
+     * @since 0.8.11 moved from DecayingHashSet
+     */
     protected void releaseWriteLock() {
         _reorganizeLock.writeLock().unlock();
     }

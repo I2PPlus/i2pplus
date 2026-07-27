@@ -12,6 +12,9 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 
+/**
+ * HTTP socket wrapper providing input/output stream management
+ */
 public class HTTPSocket {
     ////////////////////////////////////////////////
     //	Constructor
@@ -48,6 +51,9 @@ public class HTTPSocket {
         this.socket = socket;
     }
 
+    /**
+     * getSocket.
+     */
     public Socket getSocket() {
         return socket;
     }
@@ -85,6 +91,11 @@ public class HTTPSocket {
         sockIn = in;
     }
 
+    /**
+     * Get the input stream
+     *
+     * @return the input stream
+     */
     public InputStream getInputStream() {
         return sockIn;
     }

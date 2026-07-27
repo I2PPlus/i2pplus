@@ -15,6 +15,9 @@ import org.cybergarage.util.Debug;
 import org.cybergarage.util.Mutex;
 import org.cybergarage.xml.Node;
 
+/**
+ * Represents a UPnP action with its associated service, arguments, and control functionality.
+ */
 public class Action {
     ////////////////////////////////////////////////
     //	Constants

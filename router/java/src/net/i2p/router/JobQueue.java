@@ -267,7 +267,7 @@ public class JobQueue {
     }
 
     /**
-     * Get the number of jobs ready to be executed.
+     * Number of jobs ready to be executed.
      *
      * @return count of ready jobs in normal, high priority, and timed-ready queues
      */
@@ -276,7 +276,7 @@ public class JobQueue {
     }
 
     /**
-     * Get and reset the dropped jobs count.
+     * Dropped jobs count (resets on read).
      *
      * @return number of jobs dropped since last call
      */
@@ -285,7 +285,7 @@ public class JobQueue {
     }
 
     /**
-     * Get the maximum lag time for jobs waiting in the queue.
+     * Maximum lag time for jobs waiting in the queue.
      * This is the delay between when the earliest job was supposed to start
      * and the current time.
      *
@@ -328,7 +328,7 @@ public class JobQueue {
     }
 
     /**
-     * Get the maximum duration of currently running jobs.
+     * Maximum duration of currently running jobs.
      * This measures how long active jobs have been executing,
      * which is important when all runners are busy but queue is empty.
      *
@@ -355,7 +355,7 @@ public class JobQueue {
     }
 
     /**
-     * Get the average lag time for jobs waiting in the queue.
+     * Average lag time for jobs waiting in the queue.
      * This is the average delay between when jobs were supposed to start
      * and the current time across all ready jobs.
      *
@@ -494,7 +494,7 @@ public class JobQueue {
     boolean isAlive() {return _alive;}
 
     /**
-     * Get the timestamp of when the last job began execution.
+     * Timestamp of when the last job began execution.
      *
      * @return timestamp in milliseconds when the last job started, or -1 if no jobs have run
      */
@@ -508,7 +508,7 @@ public class JobQueue {
     }
 
     /**
-     * Get the timestamp of when the last job finished execution.
+     * Timestamp of when the last job finished execution.
      *
      * @return timestamp in milliseconds when the last job ended, or -1 if no jobs have run
      */
@@ -522,7 +522,7 @@ public class JobQueue {
     }
 
     /**
-     * Get the last job that was executed.
+     * Last job that was executed.
      *
      * @return the last Job that was executed, or null if no jobs have run
      */
@@ -538,6 +538,7 @@ public class JobQueue {
         return j;
     }
 
+    /** Next. */
     Job getNext() {
         while (_alive) {
             try {
@@ -607,7 +608,7 @@ public class JobQueue {
     void removeRunner(int id) {_queueRunners.remove(Integer.valueOf(id));}
 
     /**
-     * Get the current number of active job runners.
+     * Current number of active job runners.
      * Package-private for use by JobQueueScaler.
      *
      * @return the number of active runners
@@ -618,7 +619,7 @@ public class JobQueue {
     }
 
     /**
-     * Get the current maximum number of job runners allowed.
+     * Current maximum number of job runners allowed.
      * Returns the RAM-adjusted limit if scaler is active and RAM is constrained,
      * otherwise returns the hard limit (2× configured).
      *
@@ -716,25 +717,29 @@ public class JobQueue {
         while (iter.hasNext() && removed < maxToRemove) {
             Map.Entry<Integer, JobQueueRunner> entry = iter.next();
             JobQueueRunner runner = entry.getValue();
-             // Only remove if runner is idle (not processing a job)
+            // Only remove if runner is idle (not processing a job)
             if (runner.getCurrentJob() == null) {
                 runner.stopRunning();
                 iter.remove();
                 removed++;
             }
         }
-         if (removed > 0 && _log.shouldInfo()) {
+        if (removed > 0 && _log.shouldInfo()) {
             _log.info("Removed " + removed + " idle runners. Total: " + _queueRunners.size());
         }
-         return removed;
+        return removed;
     }
 
     private final class QueuePumper implements Runnable, Clock.ClockUpdateListener, RouterClock.ClockShiftListener {
+/** Queuepumper */
         public QueuePumper() {
             _context.clock().addUpdateListener(this);
             ((RouterClock) _context.clock()).addShiftListener(this);
         }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             try {
@@ -810,11 +815,13 @@ public class JobQueue {
                 ((RouterClock) _context.clock()).removeShiftListener(this);
             }
         }
+/** Handle a clock offset change */
 
         public void offsetChanged(long delta) {
             updateJobTimings(delta);
             synchronized (_jobLock) {_jobLock.notifyAll();}
         }
+/** Handle a clock shift event */
 
         public void clockShift(long delta) {
             if (delta < 0) offsetChanged(delta);
@@ -838,6 +845,7 @@ public class JobQueue {
         }
     }
 
+    /** Update stats */
     void updateStats(Job job, long doStart, long _origStartAfter, long duration) {
         // Remove from in-flight tracking when job completes
         _jobsInFlight.remove(job);
@@ -886,19 +894,37 @@ public class JobQueue {
     private static final int POISON_ID = -99999;
 
     private static class PoisonJob implements Job {
+        /**
+         * getName.
+         */
         @Override
         public String getName() {return null;}
+        /**
+         * getJobId.
+         */
         @Override
         public long getJobId() {return POISON_ID;}
+        /**
+         * getTiming.
+         */
         @Override
         public JobTiming getTiming() {return null;}
+        /**
+         * runJob.
+         */
         @Override
         public void runJob() { /* No-op - poison sentinel, not a real job */ }
+        /**
+         * dropped.
+         */
         @Override
         public void dropped() { /* No-op - poison sentinel, not a real job */ }
     }
 
     private static class JobComparator implements Comparator<Job>, Serializable {
+          /**
+           * compare.
+           */
           @Override
           public int compare(Job l, Job r) {
               if (l.equals(r)) return 0;
@@ -941,7 +967,7 @@ public class JobQueue {
     }
 
     /**
-     * Get all job statistics collected by the queue.
+     * All job statistics collected by the queue.
      *
      * @return unmodifiable collection of JobStats for all job types
      */

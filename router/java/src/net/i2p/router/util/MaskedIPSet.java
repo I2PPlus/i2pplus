@@ -29,10 +29,12 @@ import net.i2p.router.RouterContext;
  */
 public class MaskedIPSet extends HashSet<String> {
 
+    /** Default constructor */
     public MaskedIPSet() {
         super();
     }
 
+    /** @param initialCapacity the initial capacity */
     public MaskedIPSet(int initialCapacity) {
         super(initialCapacity);
     }
@@ -143,7 +145,12 @@ public class MaskedIPSet extends HashSet<String> {
         return buf.toString();
     }
 
-    /** does this contain any of the elements in b? */
+    /**
+     * Does this contain any of the elements in b?
+     *
+     * @param b the set of elements to check
+     * @return true if any element is contained
+     */
     public boolean containsAny(Set<String> b) {
         if (isEmpty() || b.isEmpty())
             return false;

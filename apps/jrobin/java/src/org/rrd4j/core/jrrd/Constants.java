@@ -1,5 +1,8 @@
 package org.rrd4j.core.jrrd;
 
+/**
+ * Constants for RRD file format definitions.
+ */
 interface Constants {
     /** Constant <code>DS_NAM_SIZE=20</code> */
     int DS_NAM_SIZE = 20;

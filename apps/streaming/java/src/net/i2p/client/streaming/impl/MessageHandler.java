@@ -24,6 +24,12 @@ class MessageHandler implements I2PSessionMuxedListener {
     private final Set<I2PSocketManager.DisconnectListener> _listeners;
     private final AtomicBoolean _restartPending = new AtomicBoolean();
 
+    /**
+     * Creates a new MessageHandler
+     *
+     * @param ctx the I2P app context
+     * @param mgr the connection manager
+     */
     public MessageHandler(I2PAppContext ctx, ConnectionManager mgr) {
         _manager = mgr;
         _context = ctx;
@@ -145,6 +151,8 @@ class MessageHandler implements I2PSessionMuxedListener {
     }
 
     /**
+     * Add a disconnect listener
+     *
      * @param lsnr the listener to add
      */
     public void addDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {
@@ -152,6 +160,8 @@ class MessageHandler implements I2PSessionMuxedListener {
     }
 
     /**
+     * Remove a disconnect listener
+     *
      * @param lsnr the listener to remove
      */
     public void removeDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {

@@ -24,10 +24,22 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
 
     /** this is a marker to register with the MessageRegistry, it is never sent */
     private OutNetMessage _out;
+    /** reply message selector */
     protected final MessageSelector _replySelector;
+    /** job to run on reply */
     protected final ReplyJob _onReply;
+    /** job to run on timeout */
     protected final Job _onTimeout;
 
+    /**
+     * @param ctx the router context
+     * @param facade the floodfill network database facade
+     * @param key the hash key to search for
+     * @param onFind job to run on successful find
+     * @param onFailed job to run on failure
+     * @param timeoutMs the timeout in milliseconds
+     * @param isLease true if searching for a lease set
+     */
     public FloodOnlySearchJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash key, Job onFind, Job onFailed, int timeoutMs, boolean isLease) {
         super(ctx, facade, key, onFind, onFailed, timeoutMs, isLease);
         // these override the settings in super
@@ -42,6 +54,12 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
     /**
      * For DirectLookupJob extension, RI only, different match job
      *
+     * @param ctx the router context
+     * @param facade the floodfill network database facade
+     * @param key the hash key to search for
+     * @param onFind job to run on successful find
+     * @param onFailed job to run on failure
+     * @param timeoutMs the timeout in milliseconds
      * @since 0.9.56
      */
     protected FloodOnlySearchJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash key, Job onFind, Job onFailed, int timeoutMs) {
@@ -54,6 +72,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
         _onTimeout = new FloodOnlyLookupTimeoutJob(ctx, this);
     }
 
+    /** @return true if DSRM should be processed */
     public boolean shouldProcessDSRM() { return _shouldProcessDSRM; }
 
     @Override
@@ -67,6 +86,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
     /**
      *  Note that we heard from the peer
      *
+     *  @param peer the peer hash
      *  @return number remaining after decrementing
      */
     int decrementRemaining(Hash peer) {

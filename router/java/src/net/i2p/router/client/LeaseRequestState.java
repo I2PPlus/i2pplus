@@ -25,6 +25,10 @@ class LeaseRequestState {
     private volatile boolean _successful;
 
     /**
+     * Create a new LeaseRequestState.
+     *
+     *  @param onGranted job to run on success
+     *  @param onFailed job to run on failure
      *  @param currentEarliestLeastDate absolute time, the earliest expiration in
      *         the current LS (NOT the requested one), or 0 if none
      *
@@ -42,28 +46,49 @@ class LeaseRequestState {
         _requestedLeaseSet = requested;
     }
 
-    /** lease set that is being requested */
+    /**
+     * Get the requested lease set.
+     * @return the lease set that is being requested
+     */
     public LeaseSet getRequested() {return _requestedLeaseSet;}
 
-    /** what to do once the lease set is created */
+    /**
+     * Get the on-granted job.
+     * @return what to do once the lease set is created
+     */
     public Job getOnGranted() { return _onGranted; }
 
-    /** what to do if the lease set create fails / times out */
+    /**
+     * Get the on-failed job.
+     * @return what to do if the lease set create fails / times out
+     */
     public Job getOnFailed() { return _onFailed; }
 
-    /** when the request for the lease set expires */
+    /**
+     * Get the expiration time.
+     * @return when the request for the lease set expires
+     */
     public long getExpiration() { return _expiration; }
 
     /**
      * The earliest lease expiration time in the current LS (NOT the requested one),
      * or 0 if none.
      *
+     * @return the earliest lease date
      * @since 0.9.39
      */
     public long getCurrentEarliestLeaseDate() {return _currentEarliestLeastDate;}
 
-    /** whether the request was successful in the time allotted */
+    /**
+     * Whether the request was successful in the time allotted.
+     * @return true if successful
+     */
     public boolean getIsSuccessful() {return _successful;}
+
+    /**
+     * Set whether the request was successful.
+     * @param is true if successful
+     */
     public void setIsSuccessful(boolean is) {_successful = is;}
 
     @Override

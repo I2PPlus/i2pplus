@@ -56,8 +56,16 @@ public class HTTPMUSocket {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /** Default constructor. */
     public HTTPMUSocket() {}
 
+    /**
+     * Create a new HTTPMU socket and open it.
+     *
+     * @param addr the multicast address
+     * @param port the multicast port
+     * @param bindAddr the bind address
+     */
     public HTTPMUSocket(String addr, int port, String bindAddr) {
         open(addr, port, bindAddr);
     }
@@ -70,6 +78,11 @@ public class HTTPMUSocket {
     //	bindAddr
     ////////////////////////////////////////////////
 
+    /**
+     * Get the local address.
+     *
+     * @return the local address string
+     */
     public String getLocalAddress() {
         /**** I2P fix
          * if (ssdpMultiGroup == null || ssdpMultiIf == null)
@@ -90,7 +103,9 @@ public class HTTPMUSocket {
     }
 
     /**
-     * @return the destination port for multicast packet
+     * Get the destination port for multicast packet.
+     *
+     * @return the multicast port
      * @since 1.8
      */
     public int getMulticastPort() {
@@ -98,7 +113,9 @@ public class HTTPMUSocket {
     }
 
     /**
-     * @return the source port for multicast packet
+     * Get the source port for multicast packet.
+     *
+     * @return the local port
      * @since 1.8
      */
     public int getLocalPort() {
@@ -106,7 +123,9 @@ public class HTTPMUSocket {
     }
 
     /**
-     * @return the opened {@link MulticastSocket}
+     * Get the opened multicast socket.
+     *
+     * @return the {@link MulticastSocket}
      * @since 1.8
      */
     public MulticastSocket getSocket() {
@@ -117,19 +136,32 @@ public class HTTPMUSocket {
     //	MulticastAddr
     ////////////////////////////////////////////////
 
+    /**
+     * Get the multicast inet address.
+     *
+     * @return the multicast address
+     */
     public InetAddress getMulticastInetAddress() {
         return ssdpMultiGroup.getAddress();
     }
 
+    /**
+     * Get the multicast address string.
+     *
+     * @return the multicast address
+     */
     public String getMulticastAddress() {
         return getMulticastInetAddress().getHostAddress();
     }
 
     /**
+     * Open a multicast socket and join the given group.
+     *
      * @param addr {@link String} rappresenting the multicast hostname to join into.
      * @param port int rappresenting the port to be use poth as source and destination
      * @param bindAddr {@link InetAddress} which identify the hostname of the interface to use for
      *     sending and recieving multicast packet
+     * @return true if successful
      */
     public boolean open(String addr, int port, InetAddress bindAddr) {
         try {
@@ -150,6 +182,14 @@ public class HTTPMUSocket {
         return true;
     }
 
+    /**
+     * Open a multicast socket with the given string address.
+     *
+     * @param addr the multicast address
+     * @param port the port
+     * @param bindAddr the bind address string
+     * @return true if successful
+     */
     public boolean open(String addr, int port, String bindAddr) {
         try {
             return open(addr, port, InetAddress.getByName(bindAddr));
@@ -159,6 +199,11 @@ public class HTTPMUSocket {
         }
     }
 
+    /**
+     * Close the multicast socket and leave the group.
+     *
+     * @return true if successful
+     */
     public boolean close() {
         if (ssdpMultiSock == null) return true;
 
@@ -182,6 +227,14 @@ public class HTTPMUSocket {
     //	send
     ////////////////////////////////////////////////
 
+    /**
+     * Send a multicast message.
+     *
+     * @param msg the message to send
+     * @param bindAddr the bind address
+     * @param bindPort the bind port
+     * @return true if successful
+     */
     public boolean send(String msg, String bindAddr, int bindPort) {
         MulticastSocket msock = null;
         try {
@@ -206,6 +259,12 @@ public class HTTPMUSocket {
         return true;
     }
 
+    /**
+     * Send a multicast message using default bind settings.
+     *
+     * @param msg the message to send
+     * @return true if successful
+     */
     public boolean send(String msg) {
         return send(msg, null, -1);
     }
@@ -214,10 +273,24 @@ public class HTTPMUSocket {
     //	post (HTTPRequest)
     ////////////////////////////////////////////////
 
+    /**
+     * Post an HTTP request as a multicast message.
+     *
+     * @param req the HTTP request
+     * @param bindAddr the bind address
+     * @param bindPort the bind port
+     * @return true if successful
+     */
     public boolean post(HTTPRequest req, String bindAddr, int bindPort) {
         return send(req.toString(), bindAddr, bindPort);
     }
 
+    /**
+     * Post an HTTP request using default bind settings.
+     *
+     * @param req the HTTP request
+     * @return true if successful
+     */
     public boolean post(HTTPRequest req) {
         return send(req.toString(), null, -1);
     }
@@ -226,6 +299,12 @@ public class HTTPMUSocket {
     //	reveive
     ////////////////////////////////////////////////
 
+    /**
+     * Receive a multicast packet.
+     *
+     * @return the received packet
+     * @throws IOException if an I/O error occurs
+     */
     public SSDPPacket receive() throws IOException {
         byte[] ssdvRecvBuf = new byte[SSDP.RECV_MESSAGE_BUFSIZE];
         SSDPPacket recvPacket = new SSDPPacket(ssdvRecvBuf, ssdvRecvBuf.length);

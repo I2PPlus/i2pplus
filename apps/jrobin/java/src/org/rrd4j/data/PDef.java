@@ -7,6 +7,12 @@ package org.rrd4j.data;
 class PDef extends Source implements NonRrdSource {
     private final IPlottable plottable;
 
+    /**
+     * Creates a new PDef instance.
+     *
+     * @param name the name of the data source
+     * @param plottable2 the plottable object to provide values
+     */
     PDef(String name, IPlottable plottable2) {
         super(name);
         this.plottable = plottable2;

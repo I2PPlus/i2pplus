@@ -29,16 +29,28 @@ import java.util.List;
  */
 public class OPT extends Data {
 
+    /**
+     * variablePart.
+     */
     public final List<EdnsOption> variablePart;
 
+    /**
+     * OPT.
+     */
     public OPT() {
         this(Collections.<EdnsOption>emptyList());
     }
 
+    /**
+     * OPT.
+     */
     public OPT(List<EdnsOption> variablePart) {
         this.variablePart = Collections.unmodifiableList(variablePart);
     }
 
+    /**
+     * parse.
+     */
     public static OPT parse(DataInputStream dis, int payloadLength) throws IOException {
         List<EdnsOption> variablePart;
         if (payloadLength == 0) {
@@ -62,11 +74,17 @@ public class OPT extends Data {
         return new OPT(variablePart);
     }
 
+    /**
+     * getType.
+     */
     @Override
     public TYPE getType() {
         return TYPE.OPT;
     }
 
+    /**
+     * serialize.
+     */
     @Override
     protected void serialize(DataOutputStream dos) throws IOException {
         for (EdnsOption endsOption : variablePart) {

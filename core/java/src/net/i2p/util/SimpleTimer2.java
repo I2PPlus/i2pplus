@@ -210,6 +210,7 @@ public class SimpleTimer2 {
         private Log _log;
         private SimpleTimer2 _pool;
         private int _fuzz;
+        /** default fuzz threshold in milliseconds */
         protected static final int DEFAULT_FUZZ = 100;
         private ScheduledFuture<?> _future;
 
@@ -267,6 +268,8 @@ public class SimpleTimer2 {
          * Set reschedule threshold in ms. Rescheduling is skipped if the
          * existing and new timeouts differ by less than this value.
          * Default 100ms.
+         *
+         * @param fuzz the fuzz threshold in ms
          */
         public synchronized void setFuzz(int fuzz) {
             _fuzz = fuzz;

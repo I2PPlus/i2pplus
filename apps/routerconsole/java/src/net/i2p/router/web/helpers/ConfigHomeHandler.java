@@ -14,6 +14,13 @@ import net.i2p.router.web.FormHandler;
  */
 public class ConfigHomeHandler extends FormHandler {
 
+    /**
+     * Creates a new instance of the home page configuration handler.
+     */
+    public ConfigHomeHandler() {
+        super();
+    }
+
     @Override
     protected void processForm() {
         String group = getJettyString("group");

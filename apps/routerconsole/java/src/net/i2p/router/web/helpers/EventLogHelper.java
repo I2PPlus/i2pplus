@@ -61,11 +61,17 @@ public class EventLogHelper extends FormHandler {
     private static final long DAY = 24*60*60L;
     private static final long[] _times = { 0, DAY, 7*DAY, 30*DAY, 90*DAY, 365*DAY };
 
+    /**
+     * EventLogHelper.
+     */
     public EventLogHelper() {
         super();
         _xevents = new HashMap<>(1 + (_events.length / 2));
     }
 
+    /**
+     * processForm.
+     */
     @Override
     protected void processForm() {
         // TODO
@@ -79,8 +85,14 @@ public class EventLogHelper extends FormHandler {
         }
     }
 
+    /**
+     * Set the from.
+     */
     public void setFrom(String s) {
         try {
+            /**
+             * parse long.
+             */
             _age = Long.parseLong(s) * 1000;
             if (_age > 0)
                 _from = _context.clock().now() - _age;
@@ -92,10 +104,16 @@ public class EventLogHelper extends FormHandler {
         }
     }
 
+    /**
+     * Set the type.
+     */
     public void setType(String s) {
         _event = s;
     }
 
+    /**
+     * Get the form.
+     */
     public String getForm() {
         // too hard to use the standard formhandler.jsi / FormHandler.java session nonces
         // since graphs.jsp needs the refresh value in its <head>.
@@ -149,6 +167,9 @@ public class EventLogHelper extends FormHandler {
          _out.write(Long.toString(age));
          _out.write("\"");
          if (age == _age / 1000)
+             /**
+              * write.
+              */
              _out.write(HelperBase.SELECTED);
          _out.write(">");
          if (age == 0)
@@ -158,6 +179,9 @@ public class EventLogHelper extends FormHandler {
          _out.write("</option>\n");
     }
 
+    /**
+     * Get the events.
+     */
     public String getEvents() {
         EventLog ev = _context.router().eventLog();
         // oldest first

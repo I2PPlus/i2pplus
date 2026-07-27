@@ -24,13 +24,19 @@ class FloodThrottler {
     private static final int MAX_FLOODS = 3;
     private static final long CLEAN_TIME = 45*1000L;
 
+    /** Creates a new FloodThrottler */
     FloodThrottler() {
         this.counter = new ObjectCounter<>();
         _cleaner = new Cleaner();
         _cleaner.schedule(CLEAN_TIME);
     }
 
-    /** increments before checking */
+    /**
+     * Increments the counter and checks if the hash should be throttled
+     *
+     * @param h the hash to check
+     * @return true if the hash should be throttled
+     */
     boolean shouldThrottle(Hash h) {
         return this.counter.increment(h) > MAX_FLOODS;
     }

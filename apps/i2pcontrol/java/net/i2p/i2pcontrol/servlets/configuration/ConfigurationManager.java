@@ -30,6 +30,9 @@ public class ConfigurationManager {
     private final Map<String, Integer> integerConfigurations = new HashMap<>();
 
 
+    /**
+     * ConfigurationManager.
+     */
     public ConfigurationManager(I2PAppContext ctx, File dir, boolean isPlugin) {
         _log = ctx.logManager().getLog(ConfigurationManager.class);
         if (isPlugin) {
@@ -40,7 +43,10 @@ public class ConfigurationManager {
         readConfFile();
     }
 
-    /** @since 0.12 */
+    /**
+     * Description.
+     * @since 0.12
+     */
     public File getConfFile() {
         return configLocation;
     }
@@ -168,8 +174,8 @@ public class ConfigurationManager {
 
     /**
      * Set a specific int setting
-     * @param settingName
-     * @param nbr
+     * @param settingName the setting name
+     * @param nbr the nbr
      */
     public synchronized void setConf(String settingName, int nbr) {
         integerConfigurations.put(settingName, nbr);
@@ -178,8 +184,8 @@ public class ConfigurationManager {
 
     /**
      * Set a specific string setting
-     * @param settingName
-     * @param str
+     * @param settingName the setting name
+     * @param str the str
      */
     public synchronized void setConf(String settingName, String str) {
         stringConfigurations.put(settingName, str);
@@ -188,8 +194,8 @@ public class ConfigurationManager {
 
     /**
      * Set a specific boolean setting
-     * @param settingName
-     * @param bool
+     * @param settingName the setting name
+     * @param bool the bool
      */
     public synchronized void setConf(String settingName, boolean bool) {
         booleanConfigurations.put(settingName, bool);

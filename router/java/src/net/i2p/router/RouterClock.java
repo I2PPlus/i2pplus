@@ -31,6 +31,9 @@ public class RouterClock extends Clock {
      *  All of this is @since 0.7.12
      */
     private static final long MAX_SLEW = 25;
+    /**
+     * DEFAULT_STRATUM.
+     */
     public static final int DEFAULT_STRATUM = 8;
     private static final int WORST_STRATUM = 16;
 
@@ -370,6 +373,9 @@ public class RouterClock extends Clock {
      *
      *  @since 0.7.12
      *  @deprecated for debugging only
+     */
+    /**
+     * getDeltaOffset.
      */
     @Deprecated
     public long getDeltaOffset() {

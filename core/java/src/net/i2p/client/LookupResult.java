@@ -49,11 +49,13 @@ public interface LookupResult {
     public static final int RESULT_DEFERRED = -1;
 
     /**
+     * Description.
      * @return zero for success, nonzero for failure
      */
     public int getResultCode();
 
     /**
+     * Description.
      * @return Destination on success, null on failure
      */
     public Destination getDestination();

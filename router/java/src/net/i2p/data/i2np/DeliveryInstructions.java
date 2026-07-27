@@ -27,23 +27,47 @@ import net.i2p.data.TunnelId;
  * @author jrandom
  */
 public class DeliveryInstructions extends DataStructureImpl {
+    /** ignored */
     private int _deliveryMode;
+    /**
+     * DELIVERY_MODE_LOCAL.
+     */
     public final static int DELIVERY_MODE_LOCAL = 0;
+    /**
+     * DELIVERY_MODE_DESTINATION.
+     */
     public final static int DELIVERY_MODE_DESTINATION = 1;
+    /**
+     * DELIVERY_MODE_ROUTER.
+     */
     public final static int DELIVERY_MODE_ROUTER = 2;
+    /**
+     * DELIVERY_MODE_TUNNEL.
+     */
     public final static int DELIVERY_MODE_TUNNEL = 3;
+    /** ignored */
     private Hash _destinationHash;
+    /** ignored */
     private Hash _routerHash;
+    /** ignored */
     private TunnelId _tunnelId;
+    /** ignored */
     private boolean _delayRequested;
+    /** ignored */
     private long _delaySeconds;
 
+    /** ignored */
     private final static int FLAG_MODE_LOCAL = 0;
+    /** ignored */
     private final static int FLAG_MODE_DESTINATION = 1;
+    /** ignored */
     private final static int FLAG_MODE_ROUTER = 2;
+    /** ignored */
     private final static int FLAG_MODE_TUNNEL = 3;
 
+    /** ignored */
     private final static int FLAG_MODE = 96;
+    /** ignored */
     private final static int FLAG_DELAY = 16;
 
     /**
@@ -66,6 +90,9 @@ public class DeliveryInstructions extends DataStructureImpl {
         return rv;
     }
 
+    /**
+     * DeliveryInstructions.
+     */
     public DeliveryInstructions() {
         _deliveryMode = -1;
     }
@@ -132,6 +159,9 @@ public class DeliveryInstructions extends DataStructureImpl {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * readBytes.
+     */
     public int readBytes(byte[] data, int offset) {
         int cur = offset;
         int flags = data[cur] & 0xff;
@@ -184,11 +214,12 @@ public class DeliveryInstructions extends DataStructureImpl {
         return v;
     }
 
-    /**  unused */
+    /** unused */
     private static boolean flagDelay(int flags) {
         return (0 != (flags & FLAG_DELAY));
     }
 
+    /** ignored */
     private int getFlags() {
         int val = 0;
 
@@ -210,6 +241,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         return val;
     }
 
+    /** ignored */
     private int getAdditionalInfoSize() {
         int additionalSize = 0;
 
@@ -237,6 +269,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         return additionalSize;
     }
 
+    /** ignored */
     private int getAdditionalInfo(byte[] rv, int offset) {
         int origOffset = offset;
 
@@ -288,10 +321,16 @@ public class DeliveryInstructions extends DataStructureImpl {
         return offset - origOffset;
     }
 
+    /**
+     * getSize.
+     */
     public int getSize() {
         return 1 + getAdditionalInfoSize(); // flags +
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object obj) {
         if ((obj == null) || !(obj instanceof DeliveryInstructions)) {return false;}
@@ -306,6 +345,9 @@ public class DeliveryInstructions extends DataStructureImpl {
                DataHelper.eq(getTunnelId(), instr.getTunnelId());
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return (int)getDelaySeconds() +
@@ -316,6 +358,9 @@ public class DeliveryInstructions extends DataStructureImpl {
                     DataHelper.hashCode(getTunnelId());
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
@@ -349,55 +394,88 @@ public class DeliveryInstructions extends DataStructureImpl {
     private static final class LocalInstructions extends DeliveryInstructions {
         //private static final byte flag = DELIVERY_MODE_LOCAL << 5;  // 0
 
+        /**
+         * getDeliveryMode.
+         */
         @Override
         public int getDeliveryMode() { return DELIVERY_MODE_LOCAL; }
 
+        /**
+         * setDeliveryMode.
+         */
         @Override
         public void setDeliveryMode(int mode) {
             throw new RuntimeException("immutable");
         }
 
+        /**
+         * setDestination.
+         */
         @Override
         public void setDestination(Hash dest) {
             throw new RuntimeException("immutable");
         }
 
+        /**
+         * setRouter.
+         */
         @Override
         public void setRouter(Hash router) {
             throw new RuntimeException("immutable");
         }
 
+        /**
+         * setTunnelId.
+         */
         @Override
         public void setTunnelId(TunnelId id) {
             throw new RuntimeException("immutable");
         }
 
+        /**
+         * setDelayRequested.
+         */
         @Override
         public void setDelayRequested(boolean req) {
             throw new RuntimeException("immutable");
         }
 
+        /**
+         * setDelaySeconds.
+         */
         @Override
         public void setDelaySeconds(long seconds) {
             throw new RuntimeException("immutable");
         }
 
+        /**
+         * readBytes.
+         */
         @Override
         public int readBytes(byte[] data, int offset) {
             throw new RuntimeException("immutable");
         }
 
+        /**
+         * writeBytes.
+         */
         @Override
         public int writeBytes(byte[] target, int offset) {
             target[offset] = 0;
             return 1;
         }
 
+        /**
+         * getSize.
+         */
         @Override
         public int getSize() {
             return 1;
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "\n\tDelivery Instructions:" +

@@ -12,12 +12,20 @@ package org.minidns.dnsname;
 
 import org.minidns.dnslabel.DnsLabel;
 
+/**
+ * Exception for invalid DNS names.
+ */
 public abstract class InvalidDnsNameException extends IllegalStateException {
 
+    /** ignored */
     private static final long serialVersionUID = 1L;
 
+    /** the ACE-encoded domain name */
     protected final String ace;
 
+    /**
+     * @param ace the ASCII-encoded domain name
+     */
     protected InvalidDnsNameException(String ace) {
         this.ace = ace;
     }
@@ -27,10 +35,10 @@ public abstract class InvalidDnsNameException extends IllegalStateException {
      * DNS labels are limited to 63 characters according to DNS specifications.
      */
     public static class LabelTooLongException extends InvalidDnsNameException {
-        /** Serial version UID for serialization */
+        /** ignored */
         private static final long serialVersionUID = 1L;
 
-        /** The DNS label that exceeds the maximum length */
+        /** ignored */
         private final String label;
 
         /**
@@ -44,6 +52,9 @@ public abstract class InvalidDnsNameException extends IllegalStateException {
             this.label = label;
         }
 
+        /**
+         * getMessage.
+         */
         @Override
         public String getMessage() {
             return "The DNS name '" + ace + "' contains the label '" + label + "' which exceeds the maximum label length of " + DnsLabel.MAX_LABEL_LENGTH_IN_OCTETS + " octets by " + (label.length() - DnsLabel.MAX_LABEL_LENGTH_IN_OCTETS) + " octets.";
@@ -72,6 +83,9 @@ public abstract class InvalidDnsNameException extends IllegalStateException {
             this.bytes = bytes;
         }
 
+        /**
+         * getMessage.
+         */
         @Override
         public String getMessage() {
             return "The DNS name '" + ace + "' exceeds the maximum name length of " + DnsName.MAX_DNSNAME_LENGTH_IN_OCTETS + " octets by " + (bytes.length - DnsName.MAX_DNSNAME_LENGTH_IN_OCTETS) + " octets.";

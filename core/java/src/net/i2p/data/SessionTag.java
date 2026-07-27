@@ -23,6 +23,9 @@ import java.util.Arrays;
  *  As of 0.9.44, does NOT extend SimpleDataStructure, to save space
  */
 public class SessionTag {
+    /**
+     * BYTE_LENGTH.
+     */
     public static final int BYTE_LENGTH = 32;
     private final int _cachedHashCode;
     private final byte[] _data;
@@ -56,10 +59,16 @@ public class SessionTag {
         _cachedHashCode = SipHash.hashCode(val);
     }
 
+    /**
+     * getData.
+     */
     public byte[] getData() {
         return _data;
     }
 
+    /**
+     * length.
+     */
     public int length() {
         return BYTE_LENGTH;
     }
@@ -74,6 +83,9 @@ public class SessionTag {
         return _cachedHashCode;
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -85,6 +97,9 @@ public class SessionTag {
         return Arrays.equals(_data, ((SessionTag) obj)._data);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);

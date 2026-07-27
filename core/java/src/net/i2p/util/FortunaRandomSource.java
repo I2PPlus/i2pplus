@@ -26,12 +26,16 @@ import java.util.Properties;
  *
  */
 public class FortunaRandomSource extends RandomSource implements EntropyHarvester {
+    /**  fortuna */
     private final AsyncFortunaStandalone _fortuna;
+    /**  next gaussian */
     private double _nextGaussian;
+    /**  have next gaussian */
     private boolean _haveNextGaussian;
 
     /**
      *  May block up to 10 seconds or forever
+     * @param context the context
      */
     public FortunaRandomSource(I2PAppContext context) {
         super(context);
@@ -76,6 +80,9 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
         }
     }
 
+    /**
+     * Seed the Fortuna PRNG.
+     */
     @Override
     public void setSeed(byte[] buf) {
         synchronized (_fortuna) {
@@ -104,6 +111,9 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
         return rv;
     }
 
+    /**
+     * Non-negative random int.
+     */
     @Override
     public int nextInt() {
         return signedNextInt() & 0x7fffffff;
@@ -161,7 +171,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     }
 
     /**
-     *  @return all possible long values, positive and negative
+     * All possible long values, positive and negative.
      */
     @Override
     public long nextLong() {
@@ -170,6 +180,9 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
         return DataHelper.fromLong8(b, 0);
     }
 
+    /**
+     * Random boolean.
+     */
     @Override
     public boolean nextBoolean() {
         byte val;
@@ -179,6 +192,9 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
         return ((val & 0x01) != 0);
     }
 
+    /**
+     * Fill buffer with random bytes.
+     */
     @Override
     public void nextBytes(byte[] buf) {
         synchronized (_fortuna) {
@@ -202,6 +218,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      * Not part of java.util.SecureRandom, but added for efficiency, since Fortuna supports it.
      *
      * @since 0.9.24
+     * @return the result
      */
     public byte nextByte() {
         synchronized (_fortuna) {
@@ -297,25 +314,5 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
         }
     }
 
-    /**
-     *  Outputs to stdout for dieharder:
-     *  <code>
-     *  java -cp build/i2p.jar net.i2p.util.FortunaRandomSource | dieharder -a -g 200
-     *  </code>
-     */
-    public static void main(String[] args) {
-        try {
-            Properties props = new Properties();
-            props.setProperty("prng.buffers", "12");
-            I2PAppContext ctx = new I2PAppContext(props);
-            RandomSource rand = ctx.random();
-            byte[] buf = new byte[65536];
-            while (true) {
-                rand.nextBytes(buf);
-                System.out.write(buf);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    // main() removed - dieharder test harness
 }

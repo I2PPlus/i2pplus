@@ -14,8 +14,14 @@ import org.minidns.dnsname.DnsName;
 
 import java.net.IDN;
 
+/**
+ * DefaultIdnaTransformator.
+ */
 public class DefaultIdnaTransformator implements IdnaTransformator {
 
+    /**
+     * toASCII.
+     */
     @Override
     public String toASCII(String input) {
         // Special case if input is ".", i.e. a string containing only a single dot character. This is a workaround for
@@ -28,6 +34,9 @@ public class DefaultIdnaTransformator implements IdnaTransformator {
         return IDN.toASCII(input);
     }
 
+    /**
+     * toUnicode.
+     */
     @Override
     public String toUnicode(String input) {
         return IDN.toUnicode(input);

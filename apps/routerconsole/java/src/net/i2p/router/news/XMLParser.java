@@ -43,8 +43,14 @@ public class XMLParser extends JaxpParser {
     private static final Pattern WHITESPACE = Pattern.compile("[ \t\r\n]");
     private final Log _log;
 
+    /**
+     * TEXT_NAME.
+     */
     public static final String TEXT_NAME = "#text";
 
+    /**
+     * XMLParser.
+     */
     public XMLParser(I2PAppContext ctx) {
         super();
         _log = ctx.logManager().getLog(XMLParser.class);

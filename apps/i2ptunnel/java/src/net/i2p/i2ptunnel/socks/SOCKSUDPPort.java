@@ -28,6 +28,9 @@ public class SOCKSUDPPort implements Source, Sink {
     private final SOCKSUDPWrapper wrapper;
     private final SOCKSUDPUnwrapper unwrapper;
 
+    /**
+     * SOCKSUDPPort.
+     */
     public SOCKSUDPPort(InetAddress host, int port, Map<Integer, SOCKSUDPPort> replyMap) {
 
         // this passes the host and port from UDPUnwrapper to UDPWrapper

@@ -40,17 +40,41 @@ import net.i2p.data.Destination;
  */
 class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramReceiver, SAMStreamReceiver {
 
+    /**
+     * rawSession.
+     */
     protected SAMMessageSess rawSession;
+    /**
+     * datagramSession.
+     */
     protected SAMMessageSess datagramSession;
+    /**
+     * streamSession.
+     */
     protected SAMStreamSession streamSession;
 
+    /**
+     * getRawSession.
+     */
     protected final SAMMessageSess getRawSession() { return rawSession; }
+    /**
+     * getDatagramSession.
+     */
     protected final SAMMessageSess getDatagramSession() { return datagramSession; }
+    /**
+     * getStreamSession.
+     */
     protected final SAMStreamSession getStreamSession() { return streamSession; }
 
+    /**
+     * _id.
+     */
     protected final long _id;
     private static final AtomicLong __id = new AtomicLong();
     private static final int FIRST_READ_TIMEOUT = 60*1000;
+    /**
+     * SESSION_ERROR.
+     */
     protected static final String SESSION_ERROR = "SESSION STATUS RESULT=I2P_ERROR";
 
     /**

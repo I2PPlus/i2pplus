@@ -22,6 +22,9 @@ import java.util.Properties;
  * @since 0.9.11
  */
 public class HostReplyMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 39;
 
     private Destination _dest;
@@ -30,6 +33,9 @@ public class HostReplyMessage extends I2CPMessageImpl {
     private SessionId _sessionId;
     private Properties _options;
 
+    /**
+     * RESULT_SUCCESS.
+     */
     public static final int RESULT_SUCCESS = 0;
 
     /** generic fail, other codes TBD */
@@ -69,6 +75,9 @@ public class HostReplyMessage extends I2CPMessageImpl {
 
     private static final long MAX_INT = (1L << 32) - 1;
 
+    /**
+     * HostReplyMessage.
+     */
     public HostReplyMessage() {}
 
     /**
@@ -113,6 +122,9 @@ public class HostReplyMessage extends I2CPMessageImpl {
         _reqID = reqID;
     }
 
+    /**
+     * getSessionId.
+     */
     public SessionId getSessionId() {
         return _sessionId;
     }
@@ -162,6 +174,9 @@ public class HostReplyMessage extends I2CPMessageImpl {
         return _options;
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
@@ -186,6 +201,9 @@ public class HostReplyMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         int len = 7;
@@ -211,11 +229,17 @@ public class HostReplyMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();

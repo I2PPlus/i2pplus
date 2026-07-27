@@ -32,8 +32,14 @@ import net.i2p.util.Log;
  */
 abstract class SAMMessageSession implements SAMMessageSess {
 
+    /**
+     * _log.
+     */
     protected final Log _log;
     private final I2PSession session;
+    /**
+     * _isOwnSession.
+     */
     protected final boolean _isOwnSession;
     private final SAMMessageSessionHandler handler;
     private final int listenProtocol;
@@ -45,9 +51,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
      * @param dest Base64-encoded destination and private keys,
      *             and optional offline signature section (same format as PrivateKeyFile)
      * @param props Properties to setup the I2P session
-     * @throws IOException
-     * @throws DataFormatException
-     * @throws I2PSessionException
+     * @throws I2PSessionException if the session cannot be created
      */
     protected SAMMessageSession(String dest, Properties props) throws I2PSessionException {
         this(new ByteArrayInputStream(Base64.decode(dest)), props);
@@ -59,9 +63,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
      * @param destStream Input stream containing the binary destination and private keys,
      *                   and optional offline signature section (same format as PrivateKeyFile)
      * @param props Properties to setup the I2P session
-     * @throws IOException
-     * @throws DataFormatException
-     * @throws I2PSessionException
+     * @throws I2PSessionException if the session cannot be created
      */
     protected SAMMessageSession(InputStream destStream, Properties props) throws I2PSessionException {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
@@ -77,9 +79,6 @@ abstract class SAMMessageSession implements SAMMessageSess {
     /**
      * Initialize a new SAM message-based session using an existing I2PSession.
      *
-     * @throws IOException
-     * @throws DataFormatException
-     * @throws I2PSessionException
      * @since 0.9.25
      */
     protected SAMMessageSession(I2PSession sess, int listenProtocol, int listenPort)
@@ -335,6 +334,9 @@ abstract class SAMMessageSession implements SAMMessageSess {
             }
         }
 
+        /**
+         * run.
+         */
         public void run() {
 
             if (_log.shouldDebug())
@@ -369,6 +371,9 @@ abstract class SAMMessageSession implements SAMMessageSess {
             }
         }
 
+        /**
+         * disconnected.
+         */
         public void disconnected(I2PSession session) {
             if (_log.shouldDebug())
                 _log.debug("I2P session disconnected");
@@ -382,6 +387,9 @@ abstract class SAMMessageSession implements SAMMessageSess {
             stopRunning();
         }
 
+        /**
+         * messageAvailable.
+         */
         public void messageAvailable(I2PSession session, int msgId, long size) {
             messageAvailable(session, msgId, size, I2PSession.PROTO_UNSPECIFIED,
                              I2PSession.PORT_UNSPECIFIED, I2PSession.PORT_UNSPECIFIED);
@@ -406,6 +414,9 @@ abstract class SAMMessageSession implements SAMMessageSess {
             }
         }
 
+        /**
+         * reportAbuse.
+         */
         public void reportAbuse(I2PSession session, int severity) {
             _log.warn("Abuse reported (severity: " + severity + ")");
             stopRunning();

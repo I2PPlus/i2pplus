@@ -20,11 +20,17 @@ class FloodOnlyLookupTimeoutJob extends JobImpl {
 
     private final FloodSearchJob _search;
 
+    /**
+     * FloodOnlyLookupTimeoutJob.
+     */
     public FloodOnlyLookupTimeoutJob(RouterContext ctx, FloodSearchJob job) {
         super(ctx);
         _search = job;
     }
 
+    /**
+     * runJob.
+     */
     public void runJob() {
         Log log = getContext().logManager().getLog(getClass());
         if (log.shouldDebug())
@@ -32,5 +38,8 @@ class FloodOnlyLookupTimeoutJob extends JobImpl {
         _search.failed();
     }
 
+    /**
+     * getName.
+     */
     public String getName() { return "Timeout NetDb FloodSearch"; }
 }

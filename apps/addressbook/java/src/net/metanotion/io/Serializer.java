@@ -35,6 +35,12 @@ package net.metanotion.io;
  * @param <T> type of objects to serialize/deserialize
  */
 public interface Serializer<T> {
+	/**
+	 * o).
+	 */
 	public byte[] getBytes(T o);
+	/**
+	 * b).
+	 */
 	public T construct(byte[] b);
 }

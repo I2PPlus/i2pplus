@@ -30,6 +30,9 @@ import net.i2p.I2PAppContext;
  */
 class SchedulerClosing extends SchedulerImpl {
 
+    /**
+     * SchedulerClosing.
+     */
     public SchedulerClosing(I2PAppContext ctx) {
         super(ctx);
     }

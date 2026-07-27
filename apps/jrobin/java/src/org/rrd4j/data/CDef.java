@@ -8,11 +8,22 @@ package org.rrd4j.data;
 class CDef extends Source implements NonRrdSource {
     private final String rpnExpression;
 
+    /**
+     * Create a CDef.
+     *
+     * @param name the source name
+     * @param rpnExpression the RPN expression
+     */
     CDef(String name, String rpnExpression) {
         super(name);
         this.rpnExpression = rpnExpression;
     }
 
+    /**
+     * Return the RPN expression for this CDef.
+     *
+     * @return the RPN expression
+     */
     String getRpnExpression() {
         return rpnExpression;
     }

@@ -30,18 +30,54 @@ public class Log {
     private final LogScope _scope;
     private final LogManager _manager;
 
+    /**
+     * DEBUG.
+     */
     public static final int DEBUG = 10;
+    /**
+     * INFO.
+     */
     public static final int INFO = 20;
+    /**
+     * WARN.
+     */
     public static final int WARN = 30;
+    /**
+     * ERROR.
+     */
     public static final int ERROR = 40;
+    /**
+     * CRIT.
+     */
     public static final int CRIT = 50;
 
+    /**
+     * STR_DEBUG.
+     */
     public static final String STR_DEBUG = "DEBUG";
+    /**
+     * STR_INFO.
+     */
     public static final String STR_INFO = "INFO";
+    /**
+     * STR_WARN.
+     */
     public static final String STR_WARN = "WARN";
+    /**
+     * STR_ERROR.
+     */
     public static final String STR_ERROR = "ERROR";
+    /**
+     * STR_CRIT.
+     */
     public static final String STR_CRIT = "CRIT";
 
+    /**
+     * Get the log level integer for a string level name.
+     *
+     * @param level the level name
+     * @return the integer level
+     */
     public static int getLevel(String level) {
         if (level == null) return ERROR;
         level = level.toUpperCase(Locale.US);
@@ -53,6 +89,12 @@ public class Log {
         return ERROR;
     }
 
+    /**
+     * Convert a log level integer to its string representation.
+     *
+     * @param level the integer level
+     * @return the level string
+     */
     public static String toLevelString(int level) {
         switch (level) {
             case DEBUG: return STR_DEBUG;
@@ -82,14 +124,17 @@ public class Log {
         _manager.addLog(this);
     }
 
+    /** Log */
     Log(LogManager manager, Class<?> cls) {
         this(manager, cls, null);
     }
 
+    /** Log */
     Log(LogManager manager, String name) {
         this(manager, null, name);
     }
 
+    /** Log */
     Log(LogManager manager, Class<?> cls, String name) {
         _manager = manager;
         _class = cls;
@@ -99,12 +144,25 @@ public class Log {
         _scope = new LogScope(name, cls);
     }
 
+    /**
+     * Log a message at the given priority.
+     *
+     * @param priority the priority level
+     * @param msg the message
+     */
     public void log(int priority, String msg) {
         if (priority >= _minPriority) {
             _manager.addRecord(new LogRecord(_class, _name, Thread.currentThread().getName(), priority, msg, null));
         }
     }
 
+    /**
+     * Log a message with a throwable at the given priority.
+     *
+     * @param priority the priority level
+     * @param msg the message
+     * @param t the throwable
+     */
     public void log(int priority, String msg, Throwable t) {
         if (priority >= _minPriority) {
             _manager.addRecord(new LogRecord(_class, _name, Thread.currentThread().getName(), priority, msg, t));
@@ -121,46 +179,106 @@ public class Log {
         _manager.addRecord(new LogRecord(_class, _name, Thread.currentThread().getName(), priority, msg, null));
     }
 
+    /**
+     * Log a debug message.
+     *
+     * @param msg the message
+     */
     public void debug(String msg) {
         log(DEBUG, msg);
     }
 
+    /**
+     * Log a debug message with a throwable.
+     *
+     * @param msg the message
+     * @param t the throwable
+     */
     public void debug(String msg, Throwable t) {
         log(DEBUG, msg, t);
     }
 
+    /**
+     * Log an info message.
+     *
+     * @param msg the message
+     */
     public void info(String msg) {
         log(INFO, msg);
     }
 
+    /**
+     * Log an info message with a throwable.
+     *
+     * @param msg the message
+     * @param t the throwable
+     */
     public void info(String msg, Throwable t) {
         log(INFO, msg, t);
     }
 
+    /**
+     * Log a warning message.
+     *
+     * @param msg the message
+     */
     public void warn(String msg) {
         log(WARN, msg);
     }
 
+    /**
+     * Log a warning message with a throwable.
+     *
+     * @param msg the message
+     * @param t the throwable
+     */
     public void warn(String msg, Throwable t) {
         log(WARN, msg, t);
     }
 
+    /**
+     * Log an error message.
+     *
+     * @param msg the message
+     */
     public void error(String msg) {
         log(ERROR, msg);
     }
 
+    /**
+     * Log an error message with a throwable.
+     *
+     * @param msg the message
+     * @param t the throwable
+     */
     public void error(String msg, Throwable t) {
         log(ERROR, msg, t);
     }
 
+    /**
+     * Get the minimum priority for logging.
+     *
+     * @return the minimum priority
+     */
     public int getMinimumPriority() {
         return _minPriority;
     }
 
+    /**
+     * Set the minimum priority for logging.
+     *
+     * @param priority the minimum priority
+     */
     public void setMinimumPriority(int priority) {
         _minPriority = priority;
     }
 
+    /**
+     * Check if messages at the given priority should be logged.
+     *
+     * @param priority the priority level
+     * @return true if messages at this priority will be logged
+     */
     public boolean shouldLog(int priority) {
         return priority >= _minPriority;
     }
@@ -236,6 +354,9 @@ public class Log {
             builder.append(String.valueOf(o));
         }
         Exception e = new Exception("check stack trace") {
+            /**
+             * fillInStackTrace.
+             */
             @Override
             public Throwable fillInStackTrace() {
                 return this;
@@ -244,6 +365,11 @@ public class Log {
         log(level, builder.toString(), e);
     }
 
+    /**
+     * Get the logger name.
+     *
+     * @return the name
+     */
     public String getName() {
         if (_className != null) {
             return _className;
@@ -260,6 +386,13 @@ public class Log {
         return _scope;
     }
 
+    /**
+     * Get the scope string for a name and class.
+     *
+     * @param name the logger name
+     * @param cls the class
+     * @return the scope string
+     */
     static String getScope(String name, Class<?> cls) {
         if ((name == null) && (cls == null)) {
             return "f00";
@@ -276,15 +409,25 @@ public class Log {
     private static final class LogScope {
         private final String _scopeCache;
 
+        /**
+         * @param name the logger name
+         * @param cls the class
+         */
         public LogScope(String name, Class<?> cls) {
             _scopeCache = getScope(name, cls);
         }
 
+        /**
+         * Based on the scope cache string.
+         */
         @Override
         public int hashCode() {
             return _scopeCache.hashCode();
         }
 
+        /**
+         * Compare scope cache strings.
+         */
         @Override
         public boolean equals(Object obj) {
             if (this == obj) {

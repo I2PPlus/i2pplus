@@ -73,11 +73,21 @@ import java.util.Arrays;
  * @author zzz
  */
 public class KeysAndCert extends DataStructureImpl {
+    /**
+     * _publicKey.
+     */
     protected PublicKey _publicKey;
+    /**
+     * _signingKey.
+     */
     protected SigningPublicKey _signingKey;
+    /**
+     * _certificate.
+     */
     protected Certificate _certificate;
+    /** ignored */
     private Hash __calculatedHash;
-    // if compressed, 32 bytes only
+    /** if compressed, 32 bytes only */
     private byte[] _padding;
 
     /**
@@ -87,9 +97,14 @@ public class KeysAndCert extends DataStructureImpl {
      */
     protected int _paddingBlocks;
 
+    /** ignored */
     private static final int PAD_COMP_LEN = 32;
+    /** ignored */
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(KeysAndCert.class);
 
+    /**
+     * getCertificate.
+     */
     public Certificate getCertificate() {
         return _certificate;
     }
@@ -161,6 +176,9 @@ public class KeysAndCert extends DataStructureImpl {
         _publicKey = key;
     }
 
+    /**
+     * getSigningPublicKey.
+     */
     public SigningPublicKey getSigningPublicKey() {
         return _signingKey;
     }
@@ -261,6 +279,7 @@ public class KeysAndCert extends DataStructureImpl {
      *
      * @since 0.9.62
      */
+    /** ignored */
     private void compressPadding() {
         _paddingBlocks = 0;
         // > 32 and a mult. of 32
@@ -299,6 +318,9 @@ public class KeysAndCert extends DataStructureImpl {
         return off;
     }
 
+    /**
+     * writeBytes.
+     */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if ((_certificate == null) || (_publicKey == null) || (_signingKey == null)) throw new DataFormatException("Not enough data to format the router identity");
@@ -318,6 +340,9 @@ public class KeysAndCert extends DataStructureImpl {
         _certificate.writeBytes(out);
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -340,6 +365,9 @@ public class KeysAndCert extends DataStructureImpl {
         return _signingKey.hashCode();
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);

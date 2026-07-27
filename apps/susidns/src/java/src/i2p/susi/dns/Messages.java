@@ -9,6 +9,7 @@ import net.i2p.util.Translate;
  * @since 0.7.9
  */
 public class Messages {
+    /** The bundle name */
     static final String BUNDLE_NAME = "i2p.susi.dns.messages";
     private final I2PAppContext _context;
 

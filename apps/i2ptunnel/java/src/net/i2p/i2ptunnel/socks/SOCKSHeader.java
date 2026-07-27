@@ -122,6 +122,9 @@ public class SOCKSHeader {
         return I2PAppContext.getGlobalContext().namingService().lookup(name);
     }
 
+    /**
+     * getBytes.
+     */
     public byte[] getBytes() {
         return header;
     }

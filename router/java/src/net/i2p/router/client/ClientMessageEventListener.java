@@ -65,7 +65,9 @@ import net.i2p.util.PasswordManager;
  */
 class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventListener {
     private final Log _log;
+    /** the router context */
     protected final RouterContext _context;
+    /** the client connection runner */
     protected final ClientConnectionRunner _runner;
     private final boolean  _enforceAuth;
     private volatile boolean _authorized;
@@ -75,6 +77,10 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     private static final String PROP_AUTH_STRICT = "i2cp.strictAuth";
 
     /**
+     *  Create a new event listener for the given client connection.
+     *
+     *  @param context the router context
+     *  @param runner the client connection runner
      *  @param enforceAuth set false for in-JVM, true for socket access
      */
     public ClientMessageEventListener(RouterContext context, ClientConnectionRunner runner, boolean enforceAuth) {
@@ -402,8 +408,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     /**
      *  Override for testing
      *
+     *  @param config the session config
      *  @since 0.9.8
-     *
      */
     protected void startCreateSessionJob(SessionConfig config) {
         _context.jobQueue().addJob(new CreateSessionJob(_context, config));
@@ -521,7 +527,11 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         else if (_log.shouldInfo()) {_log.info("Still " + left + " sessions left");}
     }
 
-    /** override for testing */
+    /**
+     *  Handle a CreateLeaseSet message. Override for testing.
+     *
+     *  @param message the message to handle
+     */
     protected void handleCreateLeaseSet(CreateLeaseSetMessage message) {
         LeaseSet ls = message.getLeaseSet();
         if (ls == null) {
@@ -691,7 +701,11 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         _runner.leaseSetCreated(ls);
     }
 
-    /** override for testing */
+    /**
+     *  Handle a DestLookup message. Override for testing.
+     *
+     *  @param message the message to handle
+     */
     protected void handleDestLookup(DestLookupMessage message) {
         // no session id in DLM
         _context.jobQueue().addJob(new LookupDestJob(_context, _runner, message.getHash(),
@@ -699,8 +713,9 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     }
 
     /**
- * override for testing
+ * Handle a HostLookup message. Override for testing.
  *
+ * @param message the message to handle
  * @since 0.9.11
  */
     protected void handleHostLookup(HostLookupMessage message) {
@@ -775,6 +790,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * But it's not enforced anywhere.
      *
      * protected for unit test override
+     *
+     * @param message the message to handle
      */
     protected void handleGetBWLimits(GetBandwidthLimitsMessage message) {
         if (_log.shouldInfo()) {_log.info("Received Bandwidth Limits request");}

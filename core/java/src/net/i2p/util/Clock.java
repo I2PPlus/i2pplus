@@ -23,11 +23,17 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  */
 public class Clock implements Timestamper.UpdateListener {
+    /** the I2P application context */
     protected final I2PAppContext _context;
+    /** whether the system clock was determined to be invalid at startup */
     protected final boolean _isSystemClockBad;
+    /** the time when this clock was started */
     protected long _startedOn;
+    /** whether the clock skew stat has been created */
     protected boolean _statCreated;
+    /** the current offset from system time */
     protected volatile long _offset;
+    /** whether the offset has ever been changed */
     protected boolean _alreadyChanged;
     private final Set<ClockUpdateListener> _listeners;
 
@@ -36,6 +42,8 @@ public class Clock implements Timestamper.UpdateListener {
     private AtomicLong _savedTime = new AtomicLong(0);
 
     /**
+     * Create a new Clock with the given context, detecting system clock validity.
+     *
      * @param context the I2P app context
      */
     public Clock(I2PAppContext context) {
@@ -66,6 +74,8 @@ public class Clock implements Timestamper.UpdateListener {
     }
 
     /**
+     * Get the global clock instance.
+     *
      * @return the global clock instance
      */
     public static Clock getInstance() {
@@ -74,12 +84,18 @@ public class Clock implements Timestamper.UpdateListener {
 
     /**
      *  This is a dummy, see RouterClock and RouterTimestamper for the real thing
+     *
+     *  @return the timestamper
      */
     public Timestamper getTimestamper() {
         return new Timestamper();
     }
 
-    /** we fetch it on demand to avoid circular dependencies (logging uses the clock) */
+    /**
+     * Fetch the log on demand to avoid circular dependencies (logging uses the clock).
+     *
+     * @return the log
+     */
     protected Log getLog() {
         return _context.logManager().getLog(Clock.class);
     }
@@ -110,6 +126,7 @@ public class Clock implements Timestamper.UpdateListener {
      * Warning - overridden in RouterClock
      *
      * @param offsetMs the delta from System.currentTimeMillis() (NOT the delta from now())
+     * @param force if true, bypass all sanity checks
      */
     public synchronized void setOffset(long offsetMs, boolean force) {
         long delta = offsetMs - _offset;
@@ -155,6 +172,8 @@ public class Clock implements Timestamper.UpdateListener {
     }
 
     /**
+     * Get the current offset from system time.
+     *
      * @return the current delta from System.currentTimeMillis() in milliseconds
      */
     public synchronized long getOffset() {
@@ -162,6 +181,8 @@ public class Clock implements Timestamper.UpdateListener {
     }
 
     /**
+     * Check whether the offset has been updated at least once.
+     *
      * @return whether the offset has been updated at least once
      */
     public boolean getUpdatedSuccessfully() {
@@ -200,6 +221,7 @@ public class Clock implements Timestamper.UpdateListener {
      * Retrieve the current time synchronized with whatever reference clock is in
      * use.
      *
+     * @return the current synchronized time in milliseconds
      */
     public long now() {
         // aims to check currentTimeMillis twice per ms under constant load
@@ -216,6 +238,8 @@ public class Clock implements Timestamper.UpdateListener {
     }
 
     /**
+     * Register a listener for clock offset changes.
+     *
      * @param lsnr the listener to add
      */
     public void addUpdateListener(ClockUpdateListener lsnr) {
@@ -223,6 +247,8 @@ public class Clock implements Timestamper.UpdateListener {
     }
 
     /**
+     * Unregister a listener for clock offset changes.
+     *
      * @param lsnr the listener to remove
      */
     public void removeUpdateListener(ClockUpdateListener lsnr) {
@@ -230,6 +256,8 @@ public class Clock implements Timestamper.UpdateListener {
     }
 
     /**
+     * Notify registered listeners of a clock offset change.
+     *
      * @param delta the offset change in milliseconds
      */
     protected void fireOffsetChanged(long delta) {

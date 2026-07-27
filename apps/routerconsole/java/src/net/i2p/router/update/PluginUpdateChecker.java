@@ -27,6 +27,13 @@ class PluginUpdateChecker extends UpdateRunner {
     private final String _appName;
     private final String _oldVersion;
 
+    /**
+     * @param ctx the router context
+     * @param mgr the update manager
+     * @param uris update source URIs
+     * @param appName the plugin name
+     * @param oldVersion current installed version
+     */
     public PluginUpdateChecker(RouterContext ctx, ConsoleUpdateManager mgr,
                                List<URI> uris, String appName, String oldVersion ) {
         super(ctx, mgr, UpdateType.PLUGIN, uris, oldVersion);
@@ -36,9 +43,15 @@ class PluginUpdateChecker extends UpdateRunner {
         _oldVersion = oldVersion;
     }
 
+    /**
+     * getID.
+     */
     @Override
     public String getID() { return _appName; }
 
+        /**
+         * update.
+         */
         @Override
         protected void update() {
             // must be set for super
@@ -68,6 +81,9 @@ class PluginUpdateChecker extends UpdateRunner {
             }
         }
 
+        /**
+         * bytesTransferred.
+         */
         @Override
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {
         }
@@ -86,6 +102,9 @@ class PluginUpdateChecker extends UpdateRunner {
             _mgr.notifyCheckComplete(this, newer, true);
         }
 
+        /**
+         * transferFailed.
+         */
         @Override
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
             File f = new File(_updateFile);
@@ -93,4 +112,3 @@ class PluginUpdateChecker extends UpdateRunner {
             _mgr.notifyCheckComplete(this, false, false);
         }
 }
-

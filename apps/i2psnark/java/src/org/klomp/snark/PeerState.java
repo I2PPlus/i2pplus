@@ -40,21 +40,22 @@ class PeerState implements DataLoader {
     /** Null unless needed. Contains -1 for all. locking: this */
     private List<Integer> havesBeforeMetaInfo;
 
-    // Interesting and choking describes whether we are interested in or
-    // are choking the other side.
+    /** Whether we are interested in the peer */
     volatile boolean interesting;
+    /** Whether we are choking the peer */
     volatile boolean choking = true;
 
-    // Interested and choked describes whether the other side is
-    // interested in us or choked us.
+    /** Whether the peer is interested in us */
     volatile boolean interested;
+    /** Whether the peer has choked us */
     volatile boolean choked = true;
 
     /** the pieces the peer has. locking: this */
     BitField bitfield;
 
-    // Package local for use by Peer.
+    /** Inbound connection */
     final PeerConnectionIn in;
+    /** Outbound connection */
     final PeerConnectionOut out;
 
     // Outstanding request
@@ -67,14 +68,21 @@ class PeerState implements DataLoader {
 
     // FIXME if piece size < PARTSIZE, pipeline could be bigger
     /**
+     * Minimum request pipeline depth for outbound requests.
+     *
      * @since 0.9.47
      */
     public static final int MIN_PIPELINE = 5; // this is for outbound requests
 
     /**
+     * Maximum request pipeline depth for outbound requests.
+     *
      * @since public since 0.9.47
      */
     public static final int MAX_PIPELINE = 16; // this is for outbound requests
+    /**
+     * Chunk size for outbound piece requests.
+     */
     public static final int PARTSIZE = 16 * 1024; // outbound request
     private static final int MAX_PIPELINE_BYTES = (MAX_PIPELINE + 2) * PARTSIZE; // this is for inbound requests
     private static final int MAX_PARTSIZE = 128 * 1024; // Don't let anybody request more than this
@@ -111,10 +119,12 @@ class PeerState implements DataLoader {
 
     // NOTE Methods that inspect or change the state synchronize (on this).
 
+    /** Handle a keepalive message from the peer */
     void keepAliveMessage() {
         if (_log.shouldDebug()) _log.debug("Received keepalive request from [" + peer + "]");
     }
 
+    /** Handle a choke or unchoke message from the peer */
     void chokeMessage(boolean choke) {
         if (_log.shouldDebug()) {
             _log.debug("Received " + (choke ? "" : "un") + "choked status message from [" + peer + "]");
@@ -147,6 +157,7 @@ class PeerState implements DataLoader {
         }
     }
 
+    /** Handle an interested or uninterested message from the peer */
     void interestedMessage(boolean interest) {
         if (_log.shouldDebug())
             _log.debug("[" + peer + "] rcv " + (interest ? "" : "un") + "interested");
@@ -154,6 +165,7 @@ class PeerState implements DataLoader {
         listener.gotInterest(peer, interest);
     }
 
+    /** Handle a have message from the peer */
     void haveMessage(int piece) {
         if (_log.shouldDebug()) _log.debug("[" + peer + "] rcv have(" + piece + ")");
         // Sanity check
@@ -201,6 +213,7 @@ class PeerState implements DataLoader {
         if (listener.gotHave(peer, piece)) setInteresting(true);
     }
 
+    /** Handle a bitfield message from the peer */
     void bitfieldMessage(byte[] bitmap) {
         bitfieldMessage(bitmap, false);
     }
@@ -294,6 +307,7 @@ class PeerState implements DataLoader {
         }
     }
 
+    /** Handle a request message from the peer */
     void requestMessage(int piece, int begin, int length) {
         if (_log.shouldDebug())
             _log.debug(
@@ -431,8 +445,7 @@ class PeerState implements DataLoader {
         peer.uploaded(size);
     }
 
-    // This is used to flag that we have to back up from the firstOutstandingRequest
-    // when calculating how far we've gotten
+    /** Flag to back up from firstOutstandingRequest when calculating progress */
     private Request pendingRequest;
 
     /**
@@ -665,6 +678,7 @@ class PeerState implements DataLoader {
         return rv;
     }
 
+    /** Handle a cancel message from the peer */
     void cancelMessage(int piece, int begin, int length) {
         if (_log.shouldDebug())
             _log.debug("Received cancel message (" + piece + ", " + begin + ", " + length + ")");
@@ -1119,6 +1133,7 @@ class PeerState implements DataLoader {
         }
     }
 
+    /** Last time a choke message was sent */
     private long lastChokeSendTime = 0;
 
     /**

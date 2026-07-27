@@ -127,6 +127,7 @@ public class PeerProfile {
     /**
      *  Caller should call setLastHeardAbout() and setFirstHeardAbout()
      *
+     *  @param context the router context
      *  @param peer non-null
      */
     public PeerProfile(RouterContext context, Hash peer) {this(context, peer, true);}
@@ -151,7 +152,11 @@ public class PeerProfile {
         else {_distance = 0;}
     }
 
-    /** what peer is being profiled, non-null */
+    /**
+     *  what peer is being profiled
+     *
+     *  @return the peer, non-null
+     */
     public Hash getPeer() {return _peer;}
 
     /**
@@ -159,21 +164,39 @@ public class PeerProfile {
      * Currently always true — the constructor always calls expandProfile().
      * The non-expanded code path is dead (would NPE from missing RateStat/TunnelHistory),
      * retained only for potential future use.
+     *
+     * @return true if expanded
      */
     public boolean getIsExpanded() {return _expanded;}
+
+    /**
+     * Whether we keep an expanded DB profile on this peer.
+     *
+     * @return true if expanded DB
+     */
     public boolean getIsExpandedDB() {return _expandedDB;}
 
     /**
      * Low latency flag, set when this peer has been observed to respond quickly
      * to tunnel build requests. Persisted in profiles and used to seed fast/high-cap
      * tiers at startup from prior session data.
+     *
+     * @return true if low latency
      */
     public boolean isLowLatency() {return _lowLatency;}
+
+    /**
+     * Set the low latency flag.
+     *
+     * @param low true for low latency
+     */
     public void setLowLatency(boolean low) {_lowLatency = low;}
 
     /**
      * Is this peer active at the moment (sending/receiving messages within the last
      * 10 minutes)
+     *
+     * @return true if active
      */
     public boolean getIsActive() {
         return getIsActive(10*60*1000L, _context.clock().now());
@@ -182,13 +205,20 @@ public class PeerProfile {
     /**
      * Is this peer active at the moment (sending/receiving messages within the last 10 minutes)
      *
+     * @param now current time
+     * @return true if active
      * @since 0.9.58
      */
     public boolean getIsActive(long now) {
         return getIsActive(10*60*1000L, now);
     }
 
-    /** @since 0.8.11 */
+    /**
+     * Is this peer established?
+     *
+     * @return true if established
+     * @since 0.8.11
+     */
     boolean isEstablished() {
         // null for tests
         CommSystemFacade cs = _context.commSystem();
@@ -196,7 +226,12 @@ public class PeerProfile {
         return cs.isEstablished(_peer);
     }
 
-    /** @since 0.8.11 */
+    /**
+     * Was the peer previously unreachable?
+     *
+     * @return true if unreachable
+     * @since 0.8.11
+     */
     public boolean wasUnreachable() {
         // null for tests
         CommSystemFacade cs = _context.commSystem();
@@ -204,7 +239,12 @@ public class PeerProfile {
         return cs.wasUnreachable(_peer);
     }
 
-    /** @since 0.8.11 */
+    /**
+     * Is the peer in the same country as us?
+     *
+     * @return true if same country
+     * @since 0.8.11
+     */
     boolean isSameCountry() {
         // null for tests
         CommSystemFacade cs = _context.commSystem();
@@ -231,7 +271,8 @@ public class PeerProfile {
      *
      * @param period must be one of the periods in the RateStat constructors below
      *        (5*60*1000 or 60*60*1000)
-     *
+     * @param now current time
+     * @return true if active
      * @since 0.9.58
      */
     public boolean getIsActive(long period, long now) {
@@ -250,6 +291,9 @@ public class PeerProfile {
      *  Set when did we first heard about this peer, only if older.
      *  Package private, only set by profile management subsystem.
      */
+    /**
+     * @param when the time to set
+     */
     synchronized void setFirstHeardAbout(long when) {
         if (when < _firstHeardAbout) {_firstHeardAbout = when;}
     }
@@ -265,27 +309,70 @@ public class PeerProfile {
      *  Set when did we last hear about this peer, only if unset or newer
      *  Also sets FirstHeardAbout if earlier
      */
+    /**
+     * @param when the time to set
+     */
     public synchronized void setLastHeardAbout(long when) {
         if (when > _lastHeardAbout) {_lastHeardAbout = when;}
         // this is called by netdb PersistentDataStore, so fixup first heard
         if (when < _firstHeardAbout) {_firstHeardAbout = when;}
     }
 
-    /** when did we last send to this peer successfully? */
+    /**
+     * When did we last send to this peer successfully?
+     *
+     * @return the timestamp
+     */
     public long getLastSendSuccessful() {return _lastSentToSuccessfully;}
+
+    /**
+     * Set when we last sent to this peer successfully.
+     *
+     * @param when the timestamp
+     */
     public void setLastSendSuccessful(long when) {_lastSentToSuccessfully = when;}
 
-    /** when did we last have a problem sending to this peer? */
+    /**
+     * When did we last have a problem sending to this peer?
+     *
+     * @return the timestamp
+     */
     public long getLastSendFailed() {return _lastFailedSend;}
+
+    /**
+     * Set when we last had a problem sending to this peer.
+     *
+     * @param when the timestamp
+     */
     public void setLastSendFailed(long when) {_lastFailedSend = when;}
 
-    /** when did we last hear from the peer? */
+    /**
+     * When did we last hear from the peer?
+     *
+     * @return the timestamp
+     */
     public long getLastHeardFrom() {return _lastHeardFrom;}
+
+    /**
+     * Set when we last heard from the peer.
+     *
+     * @param when the timestamp
+     */
     public void setLastHeardFrom(long when) {_lastHeardFrom = when;}
 
-    /** history of tunnel activity with the peer
-        Warning - may return null if !getIsExpanded() */
+    /**
+     * History of tunnel activity with the peer.
+     * Warning - may return null if !getIsExpanded()
+     *
+     * @return TunnelHistory, may be null
+     */
     public synchronized TunnelHistory getTunnelHistory() {return _tunnelHistory;}
+
+    /**
+     * Set the tunnel history.
+     *
+     * @param history the TunnelHistory
+     */
     public synchronized void setTunnelHistory(TunnelHistory history) {_tunnelHistory = history;}
 
     /**
@@ -310,17 +397,35 @@ public class PeerProfile {
         return th.getLastTestedSuccessfully();
     }
 
-    /** history of db activity with the peer
-        Warning - may return null if !getIsExpandedDB() */
+    /**
+     * History of DB activity with the peer.
+     * Warning - may return null if !getIsExpandedDB()
+     *
+     * @return DBHistory, may be null
+     */
     public synchronized DBHistory getDBHistory() {return _dbHistory;}
+
+    /**
+     * Set the DB history.
+     *
+     * @param hist the DBHistory
+     */
     public synchronized void setDBHistory(DBHistory hist) {_dbHistory = hist;}
 
-    /** how long it takes to get a db response from the peer (in milliseconds), calculated over a 1 minute, 1 hour, and 1 day period
-        Warning - may return null if !getIsExpandedDB() */
+    /**
+     * How long it takes to get a DB response from the peer (in milliseconds), calculated over a 1 minute, 1 hour, and 1 day period.
+     * Warning - may return null if !getIsExpandedDB()
+     *
+     * @return RateStat, may be null
+     */
     public synchronized RateStat getDbResponseTime() {return _dbResponseTime;}
 
-    /** how long it takes to get a tunnel create response from the peer (in milliseconds), calculated over a 1 minute, 1 hour, and 1 day period
-        Warning - may return null if !getIsExpanded() */
+    /**
+     * How long it takes to get a tunnel create response from the peer (in milliseconds), calculated over a 1 minute, 1 hour, and 1 day period.
+     * Warning - may return null if !getIsExpanded()
+     *
+     * @return RateStat, may be null
+     */
     public synchronized RateStat getTunnelCreateResponseTime() {return _tunnelCreateResponseTime;}
 
     /**
@@ -330,14 +435,21 @@ public class PeerProfile {
      *
      *  @return latency response time in ms
      */
-    /** how many new peers we get from dbSearchReplyMessages or dbStore messages, calculated over a 1 hour, 1 day, and 1 week period
-        Warning - may return null if !getIsExpandedDB() */
+    /**
+     * How many new peers we get from dbSearchReplyMessages or dbStore messages, calculated over a 1 hour, 1 day, and 1 week period.
+     * Warning - may return null if !getIsExpandedDB()
+     *
+     * @return RateStat, may be null
+     */
     public synchronized RateStat getDbIntroduction() {return _dbIntroduction;}
 
     /**
      * Obsolete — prefer {@link #isLowLatency()}. Retained for backward compatibility
      * with stored profile data. Returns 0 unconditionally if not set, or the stored
      * value with a 4-hour expiry for existing profiles that still carry it.
+     */
+    /**
+     * @return the speed bonus
      */
     public int getSpeedBonus() {
         if (_speedBonus == 0) return _speedBonus;
@@ -348,6 +460,9 @@ public class PeerProfile {
     /**
      * Obsolete — prefer {@link #setLowLatency(boolean)}. Retained for
      * backward compatibility with stored profile data.
+     */
+    /**
+     * @param bonus the speed bonus
      */
     public void setSpeedBonus(int bonus) {_speedBonus = bonus; _speedBonusLastUpdate = _context.clock().now();}
     /**
@@ -366,15 +481,33 @@ public class PeerProfile {
      * written to disk to affect how the algorithm ranks capacity.  Negative values are
      * penalties. Expires after 4 hours if not refreshed.
      */
+    /**
+     * @return the capacity bonus
+     */
     public int getCapacityBonus() {
         if (_capacityBonus == 0) return _capacityBonus;
         if (_capacityBonusLastUpdate <= 0) return _capacityBonus; // backward compat: no timestamp = valid
         long hoursSinceUpdate = (_context.clock().now() - _capacityBonusLastUpdate) / (60 * 60 * 1000L);
         return hoursSinceUpdate >= 4 ? 0 : _capacityBonus;
     }
+    /**
+     * @param bonus the capacity bonus
+     */
     public void setCapacityBonus(int bonus) {_capacityBonus = bonus; _capacityBonusLastUpdate = _context.clock().now();}
+
+    /**
+     * @return the timestamp of the last capacity bonus update
+     */
     long getCapacityBonusLastUpdate() {return _capacityBonusLastUpdate;}
+
+    /**
+     * @param ts the timestamp
+     */
     void setCapacityBonusLastUpdate(long ts) {_capacityBonusLastUpdate = ts;}
+
+    /**
+     * @return the raw capacity bonus value
+     */
     int getCapacityBonusRaw() {return _capacityBonus;}
 
     /**
@@ -382,7 +515,14 @@ public class PeerProfile {
      * written to disk to affect how the algorithm ranks integration.  Negative values are
      * penalties
      */
+    /**
+     * @return the integration bonus
+     */
     public int getIntegrationBonus() {return _integrationBonus;}
+
+    /**
+     * @param bonus the integration bonus
+     */
     public void setIntegrationBonus(int bonus) {_integrationBonus = bonus;}
 
     /**
@@ -391,16 +531,25 @@ public class PeerProfile {
      * (or measured) max rates, allowing this speed to reflect the speed /available/.
      *
      */
+    /**
+     * @return the speed value
+     */
     public float getSpeedValue() {return _speedValue;}
     /**
      * How many tunnels do we think this peer can handle over the next hour?
      *
+     */
+    /**
+     * @return the capacity value
      */
     public float getCapacityValue() {return _capacityValue;}
     /**
      * How well integrated into the network is this peer (as measured by how much they've
      * told us that we didn't already know).  Higher numbers means better integrated
      *
+     */
+    /**
+     * @return the integration value
      */
     public float getIntegrationValue() {return _integrationValue;}
     /**
@@ -416,17 +565,29 @@ public class PeerProfile {
     }
 
     /**
-     *  @return timestamp when the EWMA was last updated
+     * @return timestamp when the EWMA was last updated
      */
     long getTunnelTestTimeAvgLastUpdate() {return _tunnelTestTimeAvgLastUpdate;}
 
-    
+    /**
+     * Set the tunnel test time average.
+     *
+     * @param avg the average in ms
+     */
     void setTunnelTestTimeAverage(float avg) {_tunnelTestResponseTimeAvg = avg;}
 
-    
+    /**
+     * Set the timestamp of the last tunnel test time average update.
+     *
+     * @param ts the timestamp
+     */
     void setTunnelTestTimeAvgLastUpdate(long ts) {_tunnelTestTimeAvgLastUpdate = ts;}
 
-    
+    /**
+     * Update the tunnel test time average with a new measurement.
+     *
+     * @param ms the new measurement in ms
+     */
     void updateTunnelTestTimeAverage(float ms) {
 
         if (_tunnelTestResponseTimeAvg <= 0) {_tunnelTestResponseTimeAvg = ms;} // should we instead start at $ms?
@@ -443,9 +604,21 @@ public class PeerProfile {
         }
     }
 
+    /**
+     * @return the peer test time average
+     */
     public float getPeerTestTimeAverage() {return _peerTestResponseTimeAvg;}
+
+    /**
+     * @param testAvg the peer test time average
+     */
     void setPeerTestTimeAverage(float testAvg) {_peerTestResponseTimeAvg = testAvg;}
 
+    /**
+     * Update peer test time average.
+     *
+     * @param ms the new measurement in ms
+     */
     void updatePeerTestTimeAverage(float ms) {
         if (_peerTestResponseTimeAvg <= 0) {_peerTestResponseTimeAvg = ms;}
         else {_peerTestResponseTimeAvg = 0.75f * _peerTestResponseTimeAvg + .25f * ms;}
@@ -470,6 +643,9 @@ public class PeerProfile {
         _lowLatency = _peerTestResponseTimeAvg < 3 * peerTimeout;
     }
 
+    /**
+     * @return the peak throughput in KBps
+     */
     public float getPeakThroughputKBps() {
         float rv = 0;
         for (int i = 0; i < THROUGHPUT_COUNT; i++) {rv += _peakThroughput[i];}
@@ -480,15 +656,27 @@ public class PeerProfile {
     /**
      *  Only for restoration from persisted profile.
      */
+    /**
+     * @param kBps the peak throughput in KBps
+     */
     void setPeakThroughputKBps(float kBps) {
         // Set all so the average remains the same
         float speed = kBps * (60 * 1024);
         for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakThroughput[i] = speed;}
     }
 
+    /**
+     * Record data pushed through this peer.
+     *
+     * @param size the number of bytes pushed
+     */
     void dataPushed(int size) {_peakThroughputCurrentTotal.addAndGet(size);}
 
-    /** the tunnel pushed that much data in its lifetime */
+    /**
+     * The tunnel pushed that much data in its lifetime.
+     *
+     * @param tunnelByteLifetime total bytes transferred
+     */
     void tunnelDataTransferred(long tunnelByteLifetime) {
         float lowPeak = _peakTunnelThroughput[THROUGHPUT_COUNT-1];
         if (tunnelByteLifetime > lowPeak) {
@@ -505,6 +693,9 @@ public class PeerProfile {
         }
     }
 
+    /**
+     * @return the peak tunnel throughput in KBps
+     */
     public float getPeakTunnelThroughputKBps() {
         float rv = 0;
         for (int i = 0; i < THROUGHPUT_COUNT; i++) {rv += _peakTunnelThroughput[i];}
@@ -515,13 +706,20 @@ public class PeerProfile {
     /**
      *  Only for restoration from persisted profile.
      */
+    /**
+     * @param kBps the peak tunnel throughput in KBps
+     */
     void setPeakTunnelThroughputKBps(float kBps) {
         // Set all so the average remains the same
         float speed = kBps * (60 * 10 * 1024);
         for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakTunnelThroughput[i] = speed;}
     }
 
-    /** the tunnel pushed that much data in a 1 minute period */
+    /**
+     * The tunnel pushed that much data in a 1 minute period.
+     *
+     * @param size the number of bytes in that minute
+     */
     void dataPushed1m(int size) {
         _lastThroughputUpdate = _context.clock().now();
         float lowPeak = _peakTunnel1mThroughput[THROUGHPUT_COUNT-1];
@@ -567,16 +765,33 @@ public class PeerProfile {
     /**
      *  Only for restoration from persisted profile.
      */
+    /**
+     * @param kBps the peak 1-minute throughput in KBps
+     */
     void setPeakTunnel1mThroughputKBps(float kBps) {
         // Set all so the average remains the same
         float speed = kBps * (60 * 1024);
         for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakTunnel1mThroughput[i] = speed;}
     }
 
+    /**
+     * @return the timestamp of the last throughput update
+     */
     long getLastThroughputUpdate() {return _lastThroughputUpdate;}
+
+    /**
+     * @param ts the timestamp
+     */
     void setLastThroughputUpdate(long ts) {_lastThroughputUpdate = ts;}
 
+    /**
+     * @return the timestamp of the last test start
+     */
     public long getLastTestStarted() {return _lastTestStarted;}
+
+    /**
+     * @param ts the timestamp
+     */
     void setLastTestStarted(long ts) {_lastTestStarted = ts;}
 
     /**
@@ -669,6 +884,8 @@ public class PeerProfile {
     }
 
     /**
+     * Update the speed, capacity, and integration values from the new values.
+     *
      * @since 0.9.4
      */
     public synchronized void updateValues() {
@@ -691,6 +908,9 @@ public class PeerProfile {
  *
  * @since 0.9.4
  */
+    /**
+     * @param shouldDecay whether to decay peak throughput values
+     */
     synchronized void coalesceOnly(boolean shouldDecay) {
         _coalescing = true;
         if (_tunnelCreateResponseTime != null) {_tunnelCreateResponseTime.coalesceStats();}
@@ -720,6 +940,9 @@ public class PeerProfile {
  *
  * @since 0.9.2
  */
+    /**
+     * @return the router context
+     */
     RouterContext getContext() {return _context;}
 
     @Override

@@ -24,6 +24,9 @@ import net.i2p.util.SystemVersion;
  *
  *  @since 0.9.68 adapted from X25519KeyFactory
  */
+/**
+ * Key factory for MLKEM.
+ */
 public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
 
     private static volatile MLKEMKeyFactory _lastInstance;

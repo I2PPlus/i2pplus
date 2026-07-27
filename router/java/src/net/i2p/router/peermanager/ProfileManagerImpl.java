@@ -21,6 +21,9 @@ public class ProfileManagerImpl implements ProfileManager {
     private final Log _log;
     private final RouterContext _context;
 
+    /**
+     * ProfileManagerImpl.
+     */
     public ProfileManagerImpl(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(ProfileManagerImpl.class);

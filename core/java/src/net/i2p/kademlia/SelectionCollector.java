@@ -10,5 +10,8 @@ import net.i2p.data.SimpleDataStructure;
  * @param <T> type of SimpleDataStructure objects being collected
  */
 public interface SelectionCollector<T extends SimpleDataStructure> {
+    /**
+     * entry).
+     */
     public void add(T entry);
 }

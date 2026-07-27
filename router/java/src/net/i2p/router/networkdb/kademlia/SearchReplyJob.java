@@ -41,6 +41,9 @@ class SearchReplyJob extends JobImpl {
     private final long _duration;
     private final SearchJob _searchJob;
 
+    /**
+     * SearchReplyJob.
+     */
     public SearchReplyJob(RouterContext enclosingContext, SearchJob job, DatabaseSearchReplyMessage message, Hash peer, long duration) {
         super(enclosingContext);
         _log = enclosingContext.logManager().getLog(getClass());
@@ -51,8 +54,14 @@ class SearchReplyJob extends JobImpl {
         else {_duration = 0;}
     }
 
+    /**
+     * getName.
+     */
     public String getName() { return "Process Kademlia Search Reply"; }
 
+    /**
+     * runJob.
+     */
     public void runJob() {
         int count = Math.min(_msg.getNumReplies(), 2 * SingleLookupJob.MAX_TO_FOLLOW);
         for (int i = 0; i < count; i++) {processPeer(i);}

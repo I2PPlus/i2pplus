@@ -26,9 +26,15 @@ import net.i2p.data.Destination;
  */
 class SAMDatagramSession extends SAMMessageSession {
 
+    /**
+     * DGRAM_SIZE_MAX.
+     */
     public static final int DGRAM_SIZE_MAX = 31*1024;
 
     // FIXME make final after fixing SAMv3DatagramSession override
+    /**
+     * recv.
+     */
     protected SAMDatagramReceiver recv;
     private final I2PDatagramMaker dgramMaker;
     private final I2PDatagramDissector dgramDissector = new I2PDatagramDissector();
@@ -59,8 +65,6 @@ class SAMDatagramSession extends SAMMessageSession {
      * @param destStream Input stream containing the destination keys
      * @param props Properties to setup the I2P session
      * @param recv Object that will receive incoming data
-     * @throws IOException
-     * @throws DataFormatException
      * @throws I2PSessionException
      */
     public SAMDatagramSession(InputStream destStream, Properties props,

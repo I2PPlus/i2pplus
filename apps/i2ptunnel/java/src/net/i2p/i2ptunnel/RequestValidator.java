@@ -52,7 +52,6 @@ public class RequestValidator {
      *   <li>DNS blocking (0.0.0.0 or :: responses)</li>
      *   <li>Non-I2P/non-onion hostnames that resolve to private addresses</li>
      * </ul>
-     * </p>
      * <p>
      * Valid hostnames ending in .i2p or .onion are passed through without
      * validation, as these are expected I2P/eepSite or Tor addresses.

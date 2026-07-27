@@ -29,7 +29,6 @@ public class HttpHeaderFormatter {
      * ...
      *
      * </pre>
-     * </p>
      *
      * @param headers the HTTP headers map (header name to list of values)
      * @param command the request/response command line (e.g., "GET / HTTP/1.1")
@@ -66,7 +65,6 @@ public class HttpHeaderFormatter {
      *   <li>User-Agent containing "MYOB"</li>
      *   <li>HEAD requests (headers only)</li>
      * </ul>
-     * </p>
      * <p>
      * Long request URLs containing "peer_id" are truncated.
      * </p>

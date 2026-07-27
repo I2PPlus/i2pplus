@@ -17,6 +17,9 @@ import net.i2p.util.PortMapper;
  */
 public class ConfigUpdateHelper extends HelperBase {
     private boolean _dontInstall;
+    /**
+     * _session.
+     */
     protected HttpSession _session;
 
     /**
@@ -25,6 +28,9 @@ public class ConfigUpdateHelper extends HelperBase {
      */
     public void storeSession(HttpSession session) { _session = session; }
 
+    /**
+     * ConfigUpdateHelper.
+     */
     public ConfigUpdateHelper() {
         // TODO
     }
@@ -35,28 +41,49 @@ public class ConfigUpdateHelper extends HelperBase {
         _dontInstall = NewsHelper.dontInstall(_context);
     }
 
+    /**
+     * canInstall.
+     */
     public boolean canInstall() {return !_dontInstall;}
 
+    /**
+     * updateAvailable.
+     */
     public boolean updateAvailable() {return true;}
 
+    /**
+     * getNewsURL.
+     */
     public String getNewsURL() {return getNewsURL(_context);}
 
+    /**
+     * getNewsURL.
+     */
     public static String getNewsURL(I2PAppContext ctx) {
         String url = ctx.getProperty(ConfigUpdateHandler.PROP_NEWS_URL);
         return ConfigUpdateHandler.DEFAULT_NEWS_URL_SU3;
     }
 
+    /**
+     * getUpdateURL.
+     */
     public String getUpdateURL() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_URL);
         if (url != null) {return url.replace(",", "\n");}
         else {return ConfigUpdateHandler.DEFAULT_UPDATE_URL;}
     }
 
+    /**
+     * getProxyHost.
+     */
     public String getProxyHost() {
         if (isInternal()) {return _t("internal") + "\" readonly";}
         return _context.getProperty(ConfigUpdateHandler.PROP_PROXY_HOST, ConfigUpdateHandler.DEFAULT_PROXY_HOST);
     }
 
+    /**
+     * getProxyPort.
+     */
     public String getProxyPort() {
         if (isInternal()) {return _t("internal") + "\" readonly";}
         return Integer.toString(ConfigUpdateHandler.proxyPort(_context));
@@ -75,6 +102,9 @@ public class ConfigUpdateHelper extends HelperBase {
                _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY) == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT;
     }
 
+    /**
+     * getUpdateThroughProxy.
+     */
     public String getUpdateThroughProxy() {
         if (_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY)) {
             return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateThroughProxy\" id=updateThroughProxy checked>";
@@ -92,6 +122,9 @@ public class ConfigUpdateHelper extends HelperBase {
         }
     }
 
+    /**
+     * getUpdateUnsigned.
+     */
     public String getUpdateUnsigned() {
         return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateUnsigned\" id=updateUnsigned " +
                getChecked(ConfigUpdateHandler.PROP_UPDATE_UNSIGNED) + '>';
@@ -107,6 +140,9 @@ public class ConfigUpdateHelper extends HelperBase {
                                                        24*60*60*1000L, 36*60*60*1000L, 48*60*60*1000L,
                                                        3*24*60*60*1000L, 7*24*60*60*1000L, -1L };
 
+    /**
+     * getRefreshFrequencySelectBox.
+     */
     public String getRefreshFrequencySelectBox() {
         String freq = _context.getProperty(ConfigUpdateHandler.PROP_REFRESH_FREQUENCY,
                                            ConfigUpdateHandler.DEFAULT_REFRESH_FREQUENCY);
@@ -160,8 +196,14 @@ public class ConfigUpdateHelper extends HelperBase {
         return buf.toString();
     }
 
+    /**
+     * getTrustedKeys.
+     */
     public String getTrustedKeys() {return new TrustedUpdate(_context).getTrustedKeysString();}
 
+    /**
+     * getZipURL.
+     */
     public String getZipURL() {
         return _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL, "http://skank.i2p/i2pupdate.zip");
     }
@@ -171,6 +213,9 @@ public class ConfigUpdateHelper extends HelperBase {
         return _context.getProperty(ConfigUpdateHandler.PROP_DEV_SU3_URL, "");
     }
 
+    /**
+     * getNewsStatus.
+     */
     public String getNewsStatus() {return NewsHelper.status(_context, _session);}
 
 }

@@ -29,9 +29,13 @@ import java.security.spec.AlgorithmParameterSpec;
  */
 public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable {
     private static final long serialVersionUID = 8274987108472012L;
+    /** Curve */
     private final Curve curve;
+    /** Hash algo */
     private final String hashAlgo;
+    /** Sc */
     private final ScalarOps sc;
+    /** B */
     private final GroupElement B;
 
     /**

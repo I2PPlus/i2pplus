@@ -43,8 +43,16 @@ public class MessageHistory {
     public static final String PROP_KEEP_MESSAGE_HISTORY = "router.keepHistory";
     /** config property determining where we want to log the message history, if we're keeping one */
     public static final String PROP_MESSAGE_HISTORY_FILENAME = "router.historyFilename";
+    /**
+     * DEFAULT_MESSAGE_HISTORY_FILENAME.
+     */
     public static final String DEFAULT_MESSAGE_HISTORY_FILENAME = "messageHistory.txt";
 
+    /**
+     * MessageHistory.
+     *
+     * @param context the router context
+     */
     public MessageHistory(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(getClass());
@@ -56,7 +64,11 @@ public class MessageHistory {
         initialize(true);
     }
 
-    /** @since 0.8.12 */
+    /**
+     * Shutdown the message history.
+     *
+     * @since 0.8.12
+     */
     public synchronized void shutdown() {
         if (_doLog)
             addEntry(getPrefix() + "** Router shutdown");
@@ -65,11 +77,17 @@ public class MessageHistory {
         _doLog = false;
     }
 
+    /**
+     * @return whether logging is enabled
+     */
     public boolean getDoLog() { return _doLog; }
 
-    /** @deprecated unused */
+    /**
+     *  @deprecated unused
+     */
     @Deprecated
     void setPauseFlushes(boolean doPause) { _doPause = doPause; }
+    /** Filename. */
     String getFilename() { return _historyFile; }
 
     private void updateSettings() {
@@ -81,6 +99,7 @@ public class MessageHistory {
      * Initialize the message history according to the router's configuration.
      * Call this whenever the router identity changes.
      *
+     * @param forceReinitialize whether to force reinit
      */
     public synchronized void initialize(boolean forceReinitialize) {
         if (SystemVersion.isAndroid())
@@ -121,26 +140,17 @@ public class MessageHistory {
         private ReinitializeJob() {
             super(MessageHistory.this._context);
         }
+        /**
+         * runJob.
+         */
         public void runJob() {
             initialize(true);
         }
+        /**
+         * getName.
+         */
         public String getName() { return "Reinitialize Message History"; }
     }
-
-    /**
-     * We are requesting that the peerRequested create the tunnel specified with the
-     * given nextPeer, and we are sending that request to them through outTunnel with
-     * a request that the reply is sent back to us through replyTunnel on the given
-     * replyThrough router.
-     *
-     * @param createTunnel tunnel being created
-     * @param outTunnel tunnel we are sending this request out
-     * @param peerRequested peer asked to participate in the tunnel
-     * @param nextPeer who peerRequested should forward messages to (or null if it is the endpoint)
-     * @param replyTunnel the tunnel sourceRoutePeer should forward the source routed message to
-     * @param replyThrough the gateway of the tunnel that the sourceRoutePeer will be sending to
-     */
-
 
     /**
      * The local router has joined the given tunnel operating in the given state.
@@ -166,17 +176,32 @@ public class MessageHistory {
         addEntry(getPrefix() + "joining as [" + state + "] to tunnel: " + tunnel.toString());
     }
 
+    /**
+     * @param info the info
+     */
     public void tunnelDispatched(String info) {
         if (!_doLog) return;
         if (info == null) return;
         addEntry(getPrefix() + "tunnel dispatched: " + info);
     }
 
+    /**
+     * @param messageId the message ID
+     * @param tunnelId the tunnel ID
+     * @param type the type
+     */
     public void tunnelDispatched(long messageId, long tunnelId, String type) {
         if (!_doLog) return;
         addEntry(getPrefix() + "message " + messageId + " on tunnel " + tunnelId + " as " + type);
     }
 
+    /**
+     * @param messageId the message ID
+     * @param tunnelId the tunnel ID
+     * @param toTunnel the tunnel
+     * @param toPeer the peer
+     * @param type the type
+     */
     public void tunnelDispatched(long messageId, long tunnelId, long toTunnel, Hash toPeer, String type) {
         if (!_doLog) return;
         if (toPeer != null)
@@ -185,6 +210,12 @@ public class MessageHistory {
             addEntry(getPrefix() + "message " + messageId + " on tunnel " + tunnelId + " / " + toTunnel + " as " + type);
     }
 
+    /**
+     * @param messageId the message ID
+     * @param innerMessageId the inner message ID
+     * @param tunnelId the tunnel ID
+     * @param type the type
+     */
     public void tunnelDispatched(long messageId, long innerMessageId, long tunnelId, String type) {
         if (!_doLog) return;
         addEntry(getPrefix() + "message " + messageId + "/" + innerMessageId + " on " + tunnelId + " as " + type);
@@ -217,6 +248,10 @@ public class MessageHistory {
     /**
      * The peer did not accept the tunnel join for the given reason
      *
+     * @param peer the peer
+     * @param tunnel the tunnel
+     * @param replyThrough the reply-through router
+     * @param reason the reason
      */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void tunnelRejected(Hash peer, TunnelId tunnel, Hash replyThrough, String reason) {
@@ -231,6 +266,10 @@ public class MessageHistory {
         addEntry(buf.toString());
     }
 
+    /**
+     * @param peer the peer
+     * @param msg the message
+     */
     public void tunnelParticipantRejected(Hash peer, String msg) {
         if (!_doLog) return;
         if (peer == null) return;
@@ -279,6 +318,9 @@ public class MessageHistory {
         addEntry(buf.toString());
     }
 
+    /**
+     * droppedInboundMessage.
+     */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void droppedInboundMessage(long messageId, Hash from, String info) {
         if (!_doLog) return;
@@ -386,6 +428,9 @@ public class MessageHistory {
         buf.append("expiring on [").append(getTime(expiration)).append("] valid? ").append(isValid);
         addEntry(buf.toString());
     }
+    /**
+     * receiveMessage.
+     */
     public void receiveMessage(String messageType, long messageId, long expiration, boolean isValid) {
         receiveMessage(messageType, messageId, expiration, null, isValid);
     }
@@ -424,21 +469,33 @@ public class MessageHistory {
         addEntry(getPrefix() + "Sent payload message in [" + messageId + "] in [" + timeToSend + "] successfully? " + successfullySent);
     }
 
+    /**
+     * receiveTunnelFragment.
+     */
     public void receiveTunnelFragment(long messageId, int fragmentId, Object status) {
         if (!_doLog) return;
         if (messageId == -1) throw new IllegalArgumentException("why are you -1?");
         addEntry(getPrefix() + "Received fragment " + fragmentId + " in " + messageId + " Status: " + status.toString());
     }
+    /**
+     * receiveTunnelFragmentComplete.
+     */
     public void receiveTunnelFragmentComplete(long messageId) {
         if (!_doLog) return;
         if (messageId == -1) throw new IllegalArgumentException("why are you -1?");
         addEntry(getPrefix() + "Received fragmented message completely: " + messageId);
     }
+    /**
+     * droppedFragmentedMessage.
+     */
     public void droppedFragmentedMessage(long messageId, String status) {
         if (!_doLog) return;
         if (messageId == -1) throw new IllegalArgumentException("why are you -1?");
         addEntry(getPrefix() + "Fragmented message dropped: " + messageId + " " + status);
     }
+    /**
+     * fragmentMessage.
+     */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void fragmentMessage(long messageId, int numFragments, int totalLength, List<Long> messageIds, String msg) {
         if (!_doLog) return;
@@ -451,6 +508,9 @@ public class MessageHistory {
             buf.append(": ").append(msg);
         addEntry(buf.toString());
     }
+    /**
+     * fragmentMessage.
+     */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void fragmentMessage(long messageId, int numFragments, int totalLength, List<Long> messageIds, Object tunnel, String msg) {
         if (!_doLog) return;
@@ -465,11 +525,17 @@ public class MessageHistory {
             buf.append(": ").append(msg);
         addEntry(buf.toString());
     }
+    /**
+     * droppedTunnelDataMessageUnknown.
+     */
     public void droppedTunnelDataMessageUnknown(long msgId, long tunnelId) {
         if (!_doLog) return;
         if (msgId == -1) throw new IllegalArgumentException("why are you -1?");
         addEntry(getPrefix() + "Dropping data message " + msgId + " for UNKNOWN tunnel " + tunnelId);
     }
+    /**
+     * droppedTunnelGatewayMessageUnknown.
+     */
     public void droppedTunnelGatewayMessageUnknown(long msgId, long tunnelId) {
         if (!_doLog) return;
         if (msgId == -1) throw new IllegalArgumentException("why are you -1?");
@@ -540,10 +606,19 @@ public class MessageHistory {
     /** write out the message history once per minute, if not sooner */
     private static final long WRITE_DELAY = 60*1000L;
     private class WriteJob extends JobImpl {
+        /**
+         * WriteJob.
+         */
         public WriteJob() {
             super(MessageHistory.this._context);
         }
+        /**
+         * getName.
+         */
         public String getName() { return _doLog ? "Message Debug Log" : "Message Debug Log (disabled)"; }
+        /**
+         * runJob.
+         */
         public void runJob() {
             flushEntries();
             updateSettings();
@@ -551,18 +626,4 @@ public class MessageHistory {
         }
     }
 
-/****
-    public static void main(String[] args) {
-        RouterContext ctx = new RouterContext(null);
-        MessageHistory hist = new MessageHistory(ctx);
-        //, new Hash(new byte[32]), "messageHistory.txt");
-        hist.setDoLog(false);
-        hist.addEntry("you smell before");
-        hist.setDoLog(true);
-        hist.addEntry("you smell after");
-        hist.setDoLog(false);
-        hist.addEntry("you smell finished");
-        hist.flushEntries();
-    }
-****/
 }

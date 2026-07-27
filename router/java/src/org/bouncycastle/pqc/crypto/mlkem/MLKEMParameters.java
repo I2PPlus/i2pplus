@@ -9,8 +9,17 @@ import org.bouncycastle.pqc.crypto.KEMParameters;
 public class MLKEMParameters
     implements KEMParameters
 {
+    /**
+     * ml_kem_512.
+     */
     public static final MLKEMParameters ml_kem_512 = new MLKEMParameters("ML-KEM-512", 2, 256);
+    /**
+     * ml_kem_768.
+     */
     public static final MLKEMParameters ml_kem_768 = new MLKEMParameters("ML-KEM-768", 3, 256);
+    /**
+     * ml_kem_1024.
+     */
     public static final MLKEMParameters ml_kem_1024 = new MLKEMParameters("ML-KEM-1024", 4, 256);
 
     private final String name;
@@ -24,16 +33,25 @@ public class MLKEMParameters
         this.sessionKeySize = sessionKeySize;
     }
 
+    /**
+     * getName.
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * getEngine.
+     */
     public MLKEMEngine getEngine()
     {
         return new MLKEMEngine(k);
     }
 
+    /**
+     * getSessionKeySize.
+     */
     public int getSessionKeySize()
     {
         return sessionKeySize;

@@ -12,16 +12,28 @@ import java.io.File;
  */
 public class SecureDirectory extends File {
 
+    /**
+     * isNotWindows.
+     */
     protected static final boolean isNotWindows = !SystemVersion.isWindows();
 
+    /**
+     * SecureDirectory.
+     */
     public SecureDirectory(String pathname) {
         super(pathname);
     }
 
+    /**
+     * SecureDirectory.
+     */
     public SecureDirectory(String parent, String child) {
         super(parent, child);
     }
 
+    /**
+     * SecureDirectory.
+     */
     public SecureDirectory(File parent, String child) {
         super(parent, child);
     }

@@ -12,6 +12,9 @@ import net.i2p.data.Hash;
  *  @since 0.9.64 moved from BanlistRenderer
  */
 class HashComparator implements Comparator<Hash>, Serializable {
+    /**
+     * _instance.
+     */
     public static final HashComparator _instance = new HashComparator();
 
     /**
@@ -19,11 +22,17 @@ class HashComparator implements Comparator<Hash>, Serializable {
      */
     public static HashComparator getInstance() { return _instance; }
 
+    /**
+     * compare.
+     */
     @Override
     public int compare(Hash l, Hash r) {
         return DataHelper.compareTo(l.getData(), r.getData());
     }
 
+    /**
+     * comp.
+     */
     public static int comp(Hash l, Hash r) {
         return DataHelper.compareTo(l.getData(), r.getData());
     }

@@ -48,22 +48,22 @@ public class FrequencyStat {
         for (int i = 0; i < _frequencies.length; i++) _frequencies[i].recalculate();
     }
 
-    /** Return the unique name of this statistic. @return the unique name of this statistic */
+    /** @return the unique name of this statistic */
     public String getName() {
         return _statName;
     }
 
-    /** Return the grouping name under which this statistic is kept. @return the grouping name under which this statistic is kept */
+    /** @return the grouping name under which this statistic is kept */
     public String getGroupName() {
         return _groupName;
     }
 
-    /** Return a simple description of this statistic. @return a simple description of this statistic */
+    /** @return a simple description of this statistic */
     public String getDescription() {
         return _description;
     }
 
-    /** Return the periods this frequency is tracked over, in milliseconds. @return the periods this frequency is tracked over, in milliseconds */
+    /** @return the periods this frequency is tracked over, in milliseconds */
     public long[] getPeriods() {
         long[] rv = new long[_frequencies.length];
         for (int i = 0; i < _frequencies.length; i++) rv[i] = _frequencies[i].getPeriod();

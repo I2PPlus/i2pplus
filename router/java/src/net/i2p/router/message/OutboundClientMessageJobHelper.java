@@ -105,6 +105,12 @@ class OutboundClientMessageJobHelper {
      * @param bundledReplyLeaseSet may be null; if non-null, put it in a clove
      * @param callback only for ECIES, may be null
      * @return garlic, or null if no tunnels were found (or other errors)
+     * @param ctx the router context
+     * @param replyToken the reply token
+     * @param expiration the message expiration
+     * @param recipientPK the recipient public key
+     * @param from the sender hash
+     * @param dest the destination
      */
     static GarlicMessage createGarlicMessage(RouterContext ctx, long replyToken, long expiration, PublicKey recipientPK,
                                              PayloadGarlicConfig dataClove, Hash from, Destination dest, TunnelInfo replyTunnel,

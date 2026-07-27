@@ -11,6 +11,7 @@ public class MLKEMKeyParameters
 {
     private MLKEMParameters params;
 
+    /** MLKEMKeyParameters. */
     public MLKEMKeyParameters(
         boolean isPrivate,
         MLKEMParameters params)
@@ -19,6 +20,9 @@ public class MLKEMKeyParameters
         this.params = params;
     }
 
+    /**
+     * getParameters.
+     */
     public MLKEMParameters getParameters()
     {
         return params;

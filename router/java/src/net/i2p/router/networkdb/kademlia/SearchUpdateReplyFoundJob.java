@@ -31,12 +31,18 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
     private final boolean _isFloodfillPeer;
     private final long _sentOn;
 
+    /**
+     * Create job with no tunnel info
+     */
     public SearchUpdateReplyFoundJob(RouterContext context, RouterInfo peer,
                                      SearchState state, KademliaNetworkDatabaseFacade facade,
                                      SearchJob job) {
         this(context, peer, state, facade, job, null, null);
     }
 
+    /**
+     * Create job with tunnel info for reply routing
+     */
     public SearchUpdateReplyFoundJob(RouterContext context, RouterInfo peer,
                                      SearchState state, KademliaNetworkDatabaseFacade facade,
                                      SearchJob job, TunnelInfo outTunnel, TunnelInfo replyTunnel) {
@@ -52,9 +58,15 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
         _sentOn = System.currentTimeMillis();
     }
 
+    /**
+     * getName.
+     */
     @Override
     public String getName() { return "Update Kademlia Search Reply Found "; }
 
+    /**
+     * runJob.
+     */
     public void runJob() {
         if (_isFloodfillPeer)
             _job.decrementOutstandingFloodfillSearches();
@@ -133,6 +145,9 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
         _job.searchNext();
     }
 
+    /**
+     * setMessage.
+     */
     @Override
     public void setMessage(I2NPMessage message) { _message = message; }
 }

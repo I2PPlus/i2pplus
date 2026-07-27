@@ -84,12 +84,20 @@ public class ControlPoint implements HTTPRequestListener {
     private SSDPNotifySocketList ssdpNotifySocketList;
     private SSDPSearchResponseSocketList ssdpSearchResponseSocketList;
 
-    /** I2P was private */
+    /**
+     *  Get the SSDP notify socket list.
+     *
+     *  @return the SSDP notify socket list
+     */
     protected SSDPNotifySocketList getSSDPNotifySocketList() {
         return ssdpNotifySocketList;
     }
 
-    /** I2P was private */
+    /**
+     *  Get the SSDP search response socket list.
+     *
+     *  @return the SSDP search response socket list
+     */
     protected SSDPSearchResponseSocketList getSSDPSearchResponseSocketList() {
         return ssdpSearchResponseSocketList;
     }
@@ -106,6 +114,13 @@ public class ControlPoint implements HTTPRequestListener {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     *  Create a control point with specified ports and network bindings.
+     *
+     *  @param ssdpPort the SSDP port
+     *  @param httpPort the HTTP port
+     *  @param binds the network interfaces to bind to, or null for all
+     */
     public ControlPoint(int ssdpPort, int httpPort, InetAddress[] binds) {
         ssdpNotifySocketList = new SSDPNotifySocketList(binds);
         ssdpSearchResponseSocketList = new SSDPSearchResponseSocketList(binds);
@@ -122,10 +137,17 @@ public class ControlPoint implements HTTPRequestListener {
         setRenewSubscriber(null);
     }
 
+    /**
+     *  Create a control point with specified SSDP and HTTP ports.
+     *
+     *  @param ssdpPort the SSDP port
+     *  @param httpPort the HTTP port
+     */
     public ControlPoint(int ssdpPort, int httpPort) {
         this(ssdpPort, httpPort, null);
     }
 
+    /** Default constructor using default ports */
     public ControlPoint() {
         this(DEFAULT_SSDP_PORT, DEFAULT_EVENTSUB_PORT);
     }
@@ -140,10 +162,12 @@ public class ControlPoint implements HTTPRequestListener {
 
     private Mutex mutex = new Mutex();
 
+    /** Lock the mutex */
     public void lock() {
         mutex.lock();
     }
 
+    /** Unlock the mutex */
     public void unlock() {
         mutex.unlock();
     }
@@ -154,10 +178,12 @@ public class ControlPoint implements HTTPRequestListener {
 
     private int ssdpPort = 0;
 
+    /** Get the SSDP port. @return the SSDP port */
     public int getSSDPPort() {
         return ssdpPort;
     }
 
+    /** Set the SSDP port. @param port the SSDP port */
     public void setSSDPPort(int port) {
         ssdpPort = port;
     }
@@ -168,10 +194,12 @@ public class ControlPoint implements HTTPRequestListener {
 
     private int httpPort = 0;
 
+    /** Get the HTTP port. @return the HTTP port */
     public int getHTTPPort() {
         return httpPort;
     }
 
+    /** Set the HTTP port. @param port the HTTP port */
     public void setHTTPPort(int port) {
         httpPort = port;
     }
@@ -182,10 +210,12 @@ public class ControlPoint implements HTTPRequestListener {
 
     private boolean nmprMode;
 
+    /** Set the NMPR mode flag. @param flag the NMPR mode flag */
     public void setNMPRMode(boolean flag) {
         nmprMode = flag;
     }
 
+    /** Check if NMPR mode is enabled. @return true if NMPR mode is enabled */
     public boolean isNMPRMode() {
         return nmprMode;
     }
@@ -298,6 +328,7 @@ public class ControlPoint implements HTTPRequestListener {
         return new Device(rootNode, devNode);
     }
 
+    /** Get the list of discovered devices. @return the list of discovered devices */
     public DeviceList getDeviceList() {
         DeviceList devList = new DeviceList();
         int nRoots = devNodeList.size();
@@ -317,6 +348,12 @@ public class ControlPoint implements HTTPRequestListener {
         return devList;
     }
 
+    /**
+     *  Get a device by its name or UDN.
+     *
+     *  @param name the device name or UDN
+     *  @return the device, or null
+     */
     public Device getDevice(String name) {
         int nRoots = devNodeList.size();
         for (int n = 0; n < nRoots; n++) {
@@ -337,6 +374,12 @@ public class ControlPoint implements HTTPRequestListener {
         return null;
     }
 
+    /**
+     *  Check if a device with the given name or UDN exists.
+     *
+     *  @param name the device name or UDN
+     *  @return true if a device with that name exists
+     */
     public boolean hasDevice(String name) {
         return (getDevice(name) != null) ? true : false;
     }
@@ -352,11 +395,13 @@ public class ControlPoint implements HTTPRequestListener {
         devNodeList.remove(rootNode);
     }
 
+    /** Remove a device from the device list. @param dev the device to remove */
     protected void removeDevice(Device dev) {
         if (dev == null) return;
         removeDevice(dev.getRootNode());
     }
 
+    /** Remove a device by its name or UDN. @param name the device name to remove */
     protected void removeDevice(String name) {
         Device dev = getDevice(name);
         removeDevice(dev);
@@ -376,6 +421,7 @@ public class ControlPoint implements HTTPRequestListener {
     private Disposer deviceDisposer;
     private long expiredDeviceMonitoringInterval;
 
+    /** Remove all expired devices */
     public void removeExpiredDevices() {
         DeviceList devList = getDeviceList();
         int devCnt = devList.size();
@@ -389,18 +435,22 @@ public class ControlPoint implements HTTPRequestListener {
         }
     }
 
+    /** Set the expired device monitoring interval. @param interval the monitoring interval */
     public void setExpiredDeviceMonitoringInterval(long interval) {
         expiredDeviceMonitoringInterval = interval;
     }
 
+    /** Get the expired device monitoring interval. @return the expired device monitoring interval */
     public long getExpiredDeviceMonitoringInterval() {
         return expiredDeviceMonitoringInterval;
     }
 
+    /** Set the device disposer. @param disposer the device disposer */
     public void setDeviceDisposer(Disposer disposer) {
         deviceDisposer = disposer;
     }
 
+    /** Get the device disposer. @return the device disposer */
     public Disposer getDeviceDisposer() {
         return deviceDisposer;
     }
@@ -411,14 +461,17 @@ public class ControlPoint implements HTTPRequestListener {
 
     private ListenerList deviceNotifyListenerList = new ListenerList();
 
+    /** Add a notify listener. @param listener the notify listener to add */
     public void addNotifyListener(NotifyListener listener) {
         deviceNotifyListenerList.add(listener);
     }
 
+    /** Remove a notify listener. @param listener the notify listener to remove */
     public void removeNotifyListener(NotifyListener listener) {
         deviceNotifyListenerList.remove(listener);
     }
 
+    /** Notify all registered notify listeners of a received SSDP packet. @param ssdpPacket the received SSDP packet */
     public void performNotifyListener(SSDPPacket ssdpPacket) {
         int listenerSize = deviceNotifyListenerList.size();
         for (int n = 0; n < listenerSize; n++) {
@@ -437,14 +490,17 @@ public class ControlPoint implements HTTPRequestListener {
 
     private ListenerList deviceSearchResponseListenerList = new ListenerList();
 
+    /** @param listener the search response listener to add */
     public void addSearchResponseListener(SearchResponseListener listener) {
         deviceSearchResponseListenerList.add(listener);
     }
 
+    /** @param listener the search response listener to remove */
     public void removeSearchResponseListener(SearchResponseListener listener) {
         deviceSearchResponseListenerList.remove(listener);
     }
 
+    /** @param ssdpPacket the received SSDP packet */
     public void performSearchResponseListener(SSDPPacket ssdpPacket) {
         int listenerSize = deviceSearchResponseListenerList.size();
         for (int n = 0; n < listenerSize; n++) {
@@ -467,14 +523,17 @@ public class ControlPoint implements HTTPRequestListener {
 
     ListenerList deviceChangeListenerList = new ListenerList();
 
+    /** @param listener the device change listener to add */
     public void addDeviceChangeListener(DeviceChangeListener listener) {
         deviceChangeListenerList.add(listener);
     }
 
+    /** @param listener the device change listener to remove */
     public void removeDeviceChangeListener(DeviceChangeListener listener) {
         deviceChangeListenerList.remove(listener);
     }
 
+    /** @param dev the device that was added */
     public void performAddDeviceListener(Device dev) {
         int listenerSize = deviceChangeListenerList.size();
         for (int n = 0; n < listenerSize; n++) {
@@ -483,6 +542,7 @@ public class ControlPoint implements HTTPRequestListener {
         }
     }
 
+    /** @param dev the device that was removed */
     public void performRemoveDeviceListener(Device dev) {
         int listenerSize = deviceChangeListenerList.size();
         for (int n = 0; n < listenerSize; n++) {
@@ -495,6 +555,9 @@ public class ControlPoint implements HTTPRequestListener {
     //	SSDPPacket
     ////////////////////////////////////////////////
 
+    /**
+     *  @param packet the received SSDP packet
+     */
     public void notifyReceived(SSDPPacket packet) {
         if (packet.isRootDevice() == true) {
             if (packet.isAlive() == true) {
@@ -506,6 +569,7 @@ public class ControlPoint implements HTTPRequestListener {
         performNotifyListener(packet);
     }
 
+    /** @param packet the search response packet */
     public void searchResponseReceived(SSDPPacket packet) {
         if (packet.isRootDevice() == true) addDevice(packet);
         performSearchResponseListener(packet);
@@ -517,14 +581,20 @@ public class ControlPoint implements HTTPRequestListener {
 
     private int searchMx = SSDP.DEFAULT_MSEARCH_MX;
 
+    /** @return the search MX value */
     public int getSearchMx() {
         return searchMx;
     }
 
+    /** @param mx the search MX value */
     public void setSearchMx(int mx) {
         searchMx = mx;
     }
 
+    /**
+     *  @param target the search target
+     *  @param mx the maximum wait time
+     */
     public void search(String target, int mx) {
         SSDPSearchRequest msReq = new SSDPSearchRequest(target, mx);
         SSDPSearchResponseSocketList ssdpSearchResponseSocketList =
@@ -532,10 +602,12 @@ public class ControlPoint implements HTTPRequestListener {
         ssdpSearchResponseSocketList.post(msReq);
     }
 
+    /** @param target the search target */
     public void search(String target) {
         search(target, SSDP.DEFAULT_MSEARCH_MX);
     }
 
+    /** Search for all root devices */
     public void search() {
         search(ST.ROOT_DEVICE, SSDP.DEFAULT_MSEARCH_MX);
     }
@@ -546,7 +618,11 @@ public class ControlPoint implements HTTPRequestListener {
 
     private HTTPServerList httpServerList = new HTTPServerList();
 
-    /** I2P was private */
+    /**
+     *  I2P was private
+     *
+     *  @return the HTTP server list
+     */
     protected HTTPServerList getHTTPServerList() {
         return httpServerList;
     }
@@ -580,14 +656,22 @@ public class ControlPoint implements HTTPRequestListener {
 
     private ListenerList eventListenerList = new ListenerList();
 
+    /** @param listener the event listener to add */
     public void addEventListener(EventListener listener) {
         eventListenerList.add(listener);
     }
 
+    /** @param listener the event listener to remove */
     public void removeEventListener(EventListener listener) {
         eventListenerList.remove(listener);
     }
 
+    /**
+     *  @param uuid the subscription ID
+     *  @param seq the sequence number
+     *  @param name the property name
+     *  @param value the property value
+     */
     public void performEventListener(String uuid, long seq, String name, String value) {
         int listenerSize = eventListenerList.size();
         for (int n = 0; n < listenerSize; n++) {
@@ -602,10 +686,12 @@ public class ControlPoint implements HTTPRequestListener {
 
     private String eventSubURI = DEFAULT_EVENTSUB_URI;
 
+    /** @return the event subscription URI */
     public String getEventSubURI() {
         return eventSubURI;
     }
 
+    /** @param url the event subscription URI */
     public void setEventSubURI(String url) {
         eventSubURI = url;
     }
@@ -614,6 +700,11 @@ public class ControlPoint implements HTTPRequestListener {
         return HostInterface.getHostURL(host, getHTTPPort(), getEventSubURI());
     }
 
+    /**
+     *  @param service the service to subscribe to
+     *  @param timeout the subscription timeout
+     *  @return true if successful
+     */
     public boolean subscribe(Service service, long timeout) {
         if (service.isSubscribed() == true) {
             String sid = service.getSID();
@@ -635,10 +726,17 @@ public class ControlPoint implements HTTPRequestListener {
         return false;
     }
 
+    /** @param service the service to subscribe to */
     public boolean subscribe(Service service) {
         return subscribe(service, Subscription.INFINITE_VALUE);
     }
 
+    /**
+     *  @param service the service
+     *  @param uuid the subscription ID
+     *  @param timeout the timeout
+     *  @return true if successful
+     */
     public boolean subscribe(Service service, String uuid, long timeout) {
         SubscriptionRequest subReq = new SubscriptionRequest();
         subReq.setRenewRequest(service, uuid, timeout);
@@ -654,15 +752,28 @@ public class ControlPoint implements HTTPRequestListener {
         return false;
     }
 
+    /**
+     *  @param service the service
+     *  @param uuid the subscription ID
+     *  @return true if successful
+     */
     public boolean subscribe(Service service, String uuid) {
         return subscribe(service, uuid, Subscription.INFINITE_VALUE);
     }
 
+    /**
+     *  @param service the service
+     *  @return true if subscribed
+     */
     public boolean isSubscribed(Service service) {
         if (service == null) return false;
         return service.isSubscribed();
     }
 
+    /**
+     *  @param service the service
+     *  @return true if successful
+     */
     public boolean unsubscribe(Service service) {
         SubscriptionRequest subReq = new SubscriptionRequest();
         subReq.setUnsubscribeRequest(service);
@@ -674,6 +785,7 @@ public class ControlPoint implements HTTPRequestListener {
         return false;
     }
 
+    /** @param device the device to unsubscribe */
     public void unsubscribe(Device device) {
         ServiceList serviceList = device.getServiceList();
         int serviceCnt = serviceList.size();
@@ -690,6 +802,7 @@ public class ControlPoint implements HTTPRequestListener {
         }
     }
 
+    /** Unsubscribe from all services */
     public void unsubscribe() {
         DeviceList devList = getDeviceList();
         int devCnt = devList.size();
@@ -703,6 +816,10 @@ public class ControlPoint implements HTTPRequestListener {
     //	getSubscriberService
     ////////////////////////////////////////////////
 
+    /**
+     *  @param uuid the subscription ID
+     *  @return the service with that subscription, or null
+     */
     public Service getSubscriberService(String uuid) {
         DeviceList devList = getDeviceList();
         int devCnt = devList.size();
@@ -718,6 +835,10 @@ public class ControlPoint implements HTTPRequestListener {
     //	getSubscriberService
     ////////////////////////////////////////////////
 
+    /**
+     *  @param dev the device whose subscriptions to renew
+     *  @param timeout the subscription timeout
+     */
     public void renewSubscriberService(Device dev, long timeout) {
         ServiceList serviceList = dev.getServiceList();
         int serviceCnt = serviceList.size();
@@ -737,6 +858,7 @@ public class ControlPoint implements HTTPRequestListener {
         }
     }
 
+    /** @param timeout the subscription timeout */
     public void renewSubscriberService(long timeout) {
         DeviceList devList = getDeviceList();
         int devCnt = devList.size();
@@ -746,6 +868,7 @@ public class ControlPoint implements HTTPRequestListener {
         }
     }
 
+    /** Renew all subscriber services with infinite timeout */
     public void renewSubscriberService() {
         renewSubscriberService(Subscription.INFINITE_VALUE);
     }
@@ -756,10 +879,12 @@ public class ControlPoint implements HTTPRequestListener {
 
     private RenewSubscriber renewSubscriber;
 
+    /** @param sub the renew subscriber */
     public void setRenewSubscriber(RenewSubscriber sub) {
         renewSubscriber = sub;
     }
 
+    /** @return the renew subscriber */
     public RenewSubscriber getRenewSubscriber() {
         return renewSubscriber;
     }
@@ -768,6 +893,11 @@ public class ControlPoint implements HTTPRequestListener {
     //	run
     ////////////////////////////////////////////////
 
+    /**
+     *  @param target the search target
+     *  @param mx the maximum wait time for responses
+     *  @return true if started successfully
+     */
     public boolean start(String target, int mx) {
         stop();
 
@@ -852,14 +982,17 @@ public class ControlPoint implements HTTPRequestListener {
         return true;
     }
 
+    /** @param target the search target */
     public boolean start(String target) {
         return start(target, SSDP.DEFAULT_MSEARCH_MX);
     }
 
+    /** Start with default search target */
     public boolean start() {
         return start(ST.ROOT_DEVICE, SSDP.DEFAULT_MSEARCH_MX);
     }
 
+    /** @return true if stopped successfully */
     public boolean stop() {
         unsubscribe();
 
@@ -914,10 +1047,12 @@ public class ControlPoint implements HTTPRequestListener {
 
     private Object userData = null;
 
+    /** @param data user-defined data */
     public void setUserData(Object data) {
         userData = data;
     }
 
+    /** @return user-defined data */
     public Object getUserData() {
         return userData;
     }

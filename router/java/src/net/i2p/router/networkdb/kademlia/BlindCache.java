@@ -53,6 +53,8 @@ class BlindCache {
 
     /**
      *  Caller MUST call startup() to load persistent cache from disk
+     *
+     *  @param ctx the router context
      */
     public BlindCache(RouterContext ctx) {
         _context = ctx;
@@ -88,6 +90,7 @@ class BlindCache {
         }
     }
 
+    /** Load persistent cache from disk. */
     public synchronized void startup() {
         load();
     }
@@ -194,6 +197,8 @@ class BlindCache {
 
     /**
      *  Persists immediately if secret or privkey is non-null
+     *
+     *  @param bd the blind data to add
      */
     public void addToCache(BlindData bd) {
         storeInCache(bd);
@@ -218,6 +223,9 @@ class BlindCache {
 
     /**
      *  The cached data or null
+     *
+     *  @param dest the destination to look up
+     *  @return the cached BlindData or null
      */
     public BlindData getData(Destination dest) {
         BlindData rv = getData(dest.getSigningPublicKey());
@@ -235,6 +243,7 @@ class BlindCache {
      *  The cached data or null
      *
      *  @param spk the unblinded public key
+     *  @return the cached BlindData or null
      */
     public BlindData getData(SigningPublicKey spk) {
         SigType type = spk.getType();
@@ -248,6 +257,7 @@ class BlindCache {
      *  The cached data or null
      *
      *  @param spk the blinded public key
+     *  @return the cached BlindData or null
      */
     public BlindData getReverseData(SigningPublicKey spk) {
         SigType type = spk.getType();

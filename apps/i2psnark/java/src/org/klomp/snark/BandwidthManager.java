@@ -48,6 +48,11 @@ public class BandwidthManager implements BandwidthListener {
     private SyntheticREDQueue _down;
     private SyntheticREDQueue _req;
 
+    /**
+     * @param ctx the app context
+     * @param upLimit the upload limit in Bps
+     * @param downLimit the download limit in Bps
+     */
     BandwidthManager(I2PAppContext ctx, int upLimit, int downLimit) {
         _context = ctx;
         _log = ctx.logManager().getLog(BandwidthManager.class);

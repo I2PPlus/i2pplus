@@ -18,8 +18,11 @@ import net.i2p.data.DataHelper;
  * @since 0.9.26
  */
 public class CRLEntry {
+    /** The data payload */
     public String data;
+    /** The identifier */
     public String id;
+    /** The last updated timestamp */
     public long updated;
 
     @Override

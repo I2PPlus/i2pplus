@@ -26,6 +26,9 @@ import net.i2p.util.Translate;
  */
 public class ConfigUIHelper {
 
+    /** Utility class, not intended for instantiation */
+    private ConfigUIHelper() {}
+
     private static final String CHECKED = " selected ";
 
     /**

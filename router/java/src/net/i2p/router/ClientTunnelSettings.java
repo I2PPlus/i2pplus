@@ -20,14 +20,30 @@ public class ClientTunnelSettings {
     private final TunnelPoolSettings _inboundSettings;
     private final TunnelPoolSettings _outboundSettings;
 
+    /**
+     * Create tunnel settings for the given destination.
+     *
+     * @param dest the destination hash
+     */
     public ClientTunnelSettings(Hash dest) {
         _inboundSettings = new TunnelPoolSettings(dest, true);
         _outboundSettings = new TunnelPoolSettings(dest, false);
     }
 
+    /**
+     * @return inbound tunnel pool settings
+     */
     public TunnelPoolSettings getInboundSettings() { return _inboundSettings; }
+    /**
+     * @return outbound tunnel pool settings
+     */
     public TunnelPoolSettings getOutboundSettings() { return _outboundSettings; }
 
+    /**
+     * Load settings from the given properties.
+     *
+     * @param props the properties to load from
+     */
     public void readFromProperties(Properties props) {
         _inboundSettings.readFromProperties("inbound.", props);
         _outboundSettings.readFromProperties("outbound.", props);

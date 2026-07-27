@@ -70,6 +70,12 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     /**
      *  All entries in this bucket will have at least one bit different
      *  from us in the range [begin, end] inclusive.
+     *
+     * @param context the router context
+     * @param begin the range begin
+     * @param end the range end
+     * @param max the maximum entries per bucket
+     * @param trimmer the trim strategy
      */
     public KBucketImpl(I2PAppContext context, int begin, int end, int max, KBucketTrimmer<T> trimmer) {
         if (begin > end) throw new IllegalArgumentException(begin + " > " + end);

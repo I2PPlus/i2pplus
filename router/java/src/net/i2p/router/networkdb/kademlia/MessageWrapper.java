@@ -29,13 +29,15 @@ import net.i2p.router.util.RemovableSingletonSet;
  *  and sending keys and tags for others to encrypt inbound netdb traffic,
  *  including management of the ElGamal/AES tags.
  *
- *  @since 0.7.10
  */
 public class MessageWrapper {
 
+    /** MessageWrapper. */
     private MessageWrapper() {}
 
+    /** netdb_tags_to_deliver */
     private static final int NETDB_TAGS_TO_DELIVER = 6;
+    /** netdb_low_threshold */
     private static final int NETDB_LOW_THRESHOLD = 3;
 
     /**
@@ -81,17 +83,20 @@ public class MessageWrapper {
         return new WrappedMessage(msg, skm, sentTo, sentKey, tsh);
     }
 
-    /**
-     *  Wrapper so that we can keep track of the key and tags
-     *  for later notification to the SKM
-     */
+    /** Wrapper so that we can keep track of the key and tags  for later notification to the SKM  */
     static class WrappedMessage {
+        /** msg */
         private GarlicMessage msg;
+        /** skm */
         private SessionKeyManager skm;
+        /** sent to */
         private PublicKey sentTo;
+        /** session key */
         private SessionKey sessionKey;
+        /** tsh */
         private TagSetHandle tsh;
 
+        /** Wrapped message */
         WrappedMessage(GarlicMessage msg, SessionKeyManager skm, PublicKey sentTo, SessionKey sentKey, TagSetHandle tsh) {
             this.msg = msg;
             this.skm = skm;
@@ -100,6 +105,7 @@ public class MessageWrapper {
             this.tsh = tsh;
         }
 
+        /** Message. */
         GarlicMessage getMessage() {
             return this.msg;
         }
@@ -124,9 +130,10 @@ public class MessageWrapper {
      *  to hide the contents from the OBEP.
      *  Forces full asymmetric encryption.
      *
+     *  @param ctx the router context
+     *  @param m the message to wrap
      *  @param to must be ELGAMAL_2048 or ECIES_X25519 EncType
      *  @return null on encrypt failure
-     *  @since 0.9.5, public since 0.9.50 for BuildRequestor
      */
     public static GarlicMessage wrap(RouterContext ctx, I2NPMessage m, RouterInfo to) {
 
@@ -152,22 +159,21 @@ public class MessageWrapper {
         return msg;
     }
 
-    /**
-     *  A single key and tag, for receiving a single message.
-     *
-     *  @since 0.9.7
-     */
+    /** A single key and tag, for receiving a single message.  */
     public static class OneTimeSession {
         /** ElG or ratchet */
         public final SessionKey key;
         /** non-null for ElG */
         public final SessionTag tag;
-        /**
-         * non-null for ratchet
-         * @since 0.9.46
-         */
+        /** non-null for ratchet  */
         public final RatchetSessionTag rtag;
 
+        /**
+         * OneTimeSession.
+         *
+         * @param key the session key
+         * @param tag the session tag for ElGamal
+         */
         public OneTimeSession(SessionKey key, SessionTag tag) {
             this.key = key; this.tag = tag;
             rtag = null;
@@ -176,7 +182,8 @@ public class MessageWrapper {
         /**
          * Creates a new one-time session with a ratchet tag.
          *
-         * @since 0.9.46
+         * @param key the session key
+         * @param tag the ratchet session tag
          */
         public OneTimeSession(SessionKey key, RatchetSessionTag tag) {
             this.key = key; rtag = tag;
@@ -190,8 +197,9 @@ public class MessageWrapper {
      *  The recipient can then send us an AES- or ChaCha- encrypted message,
      *  avoiding full ElGamal or ECIES.
      *
+     *  @param ctx the router context
      *  @param expiration time from now
-     *  @since 0.9.7
+     *  @return non-null
      */
     public static OneTimeSession generateSession(RouterContext ctx, long expiration) {
         return generateSession(ctx, ctx.sessionKeyManager(), expiration, false);
@@ -203,9 +211,11 @@ public class MessageWrapper {
      *  The recipient can then send us an AES- or ChaCha- encrypted message,
      *  avoiding full ElGamal or ECIES.
      *
+     *  @param ctx the router context
+     *  @param localDest the local client destination
      *  @param expiration time from now
+     *  @param forceElG if true, force ElGamal even if ratchet is available
      *  @return null if we can't find the SKM for the localDest
-     *  @since 0.9.9
      */
     public static OneTimeSession generateSession(RouterContext ctx, Hash localDest,
                                                  long expiration, boolean forceElG) {
@@ -221,9 +231,11 @@ public class MessageWrapper {
      *  The recipient can then send us an AES- or ChaCha- encrypted message,
      *  avoiding full ElGamal or ECIES.
      *
+     *  @param ctx the router context
+     *  @param skm the session key manager
      *  @param expiration time from now
+     *  @param forceElG if true, force ElGamal even if ratchet is available
      *  @return non-null
-     *  @since 0.9.9
      */
     public static OneTimeSession generateSession(RouterContext ctx, SessionKeyManager skm,
                                                  long expiration, boolean forceElG) {
@@ -258,9 +270,10 @@ public class MessageWrapper {
      *
      *  Used by OCMJH for DSM.
      *
+     *  @param ctx the router context
+     *  @param m the message to wrap
      *  @param session non-null
      *  @return null on encrypt failure
-     *  @since 0.9.12
      */
     public static GarlicMessage wrap(RouterContext ctx, I2NPMessage m, OneTimeSession session) {
         if (session.tag != null)
@@ -276,10 +289,11 @@ public class MessageWrapper {
      *
      *  Used by above and for DLM replies in HDLMJ.
      *
+     *  @param ctx the router context
+     *  @param m the message to wrap
      *  @param encryptKey non-null
      *  @param encryptTag non-null
      *  @return null on encrypt failure
-     *  @since 0.9.7
      */
     public static GarlicMessage wrap(RouterContext ctx, I2NPMessage m, SessionKey encryptKey, SessionTag encryptTag) {
         PayloadGarlicConfig payload = new PayloadGarlicConfig(Certificate.NULL_CERT,
@@ -298,10 +312,11 @@ public class MessageWrapper {
      *
      *  Used by above and for DLM replies in HDLMJ.
      *
+     *  @param ctx the router context
+     *  @param m the message to wrap
      *  @param encryptKey non-null
      *  @param encryptTag non-null
      *  @return null on encrypt failure
-     *  @since 0.9.46
      */
     public static GarlicMessage wrap(RouterContext ctx, I2NPMessage m, SessionKey encryptKey, RatchetSessionTag encryptTag) {
         PayloadGarlicConfig payload = new PayloadGarlicConfig(Certificate.NULL_CERT,
@@ -311,3 +326,4 @@ public class MessageWrapper {
         return GarlicMessageBuilder.buildMessage(ctx, payload, encryptKey, encryptTag);
     }
 }
+

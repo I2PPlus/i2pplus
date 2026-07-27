@@ -17,7 +17,10 @@ public interface IVValidator {
      * dvorak for pointing out that tagging!
      *
      * @param iv data will not be modified
+     * @param ivOffset offset of the IV in the iv array
      * @param payload will not be modified
+     * @param payloadOffset offset of the payload in the payload array
+     * @return true if valid, false if already used or otherwise invalid
      */
     public boolean receiveIV(byte[] iv, int ivOffset, byte[] payload, int payloadOffset);
 }

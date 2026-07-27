@@ -210,10 +210,32 @@ public class SessionKeyManager {
     public void shutdown() { // nop
     }
 
+    /**
+     * Render status HTML.
+     *
+     * @param out the writer to render to
+     * @throws IOException if an I/O error occurs
+     */
     public void renderStatusHTML(Writer out) throws IOException { // nop
     }
+
+    /**
+     * Fail tags for the given target, key, and tag set handle.
+     *
+     * @param target the target public key
+     * @param key the session key
+     * @param ts the tag set handle
+     */
     public void failTags(PublicKey target, SessionKey key, TagSetHandle ts) { // nop
     }
+
+    /**
+     * Acknowledge tags for the given target, key, and tag set handle.
+     *
+     * @param target the target public key
+     * @param key the session key
+     * @param ts the tag set handle
+     */
     public void tagsAcked(PublicKey target, SessionKey key, TagSetHandle ts) { // nop
     }
 }

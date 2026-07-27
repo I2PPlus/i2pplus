@@ -8,23 +8,34 @@ import net.i2p.I2PAppContext;
  * @since 0.7.12
  */
 public class VariableTunnelBuildMessage extends TunnelBuildMessage {
+/** Message type ID for this I2NP message */
     public static final int MESSAGE_TYPE = 23;
 
     /** zero record count, will be set with readMessage() */
     public VariableTunnelBuildMessage(I2PAppContext context) {
         super(context, 0);
     }
+/** Variabletunnelbuildmessage */
 
     public VariableTunnelBuildMessage(I2PAppContext context, int records) {
         super(context, records);
     }
 
+    /**
+     * calculateWrittenLength.
+     */
     @Override
     protected int calculateWrittenLength() { return 1 + super.calculateWrittenLength(); }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() { return MESSAGE_TYPE; }
 
+    /**
+     * readMessage.
+     */
     @Override
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         // message type will be checked in super()
@@ -38,6 +49,9 @@ public class VariableTunnelBuildMessage extends TunnelBuildMessage {
         super.readMessage(data, offset + 1, dataSize, type);
     }
 
+    /**
+     * writeMessageBody.
+     */
     @Override
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         int remaining = out.length - (curIndex + calculateWrittenLength());
@@ -54,6 +68,9 @@ public class VariableTunnelBuildMessage extends TunnelBuildMessage {
         return curIndex;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return "VariableTunnelBuildMessage [ID: " + getUniqueId() + "] -> " + getRecordCount() + " records";

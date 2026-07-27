@@ -50,6 +50,12 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     /** Minimum delay even under full pressure (ms) — avoids busy-wait retry storms */
     private static final long MIN_FLUSH_DELAY = 5L;
 
+    /**
+     * Create a new preprocessor for batched tunnel messages.
+     *
+     * @param ctx the router context
+     * @param name the preprocessor name
+     */
     public BatchedPreprocessor(RouterContext ctx, String name) {
         super(ctx);
         _name = name;
@@ -64,11 +70,13 @@ class BatchedPreprocessor extends TrivialPreprocessor {
 
     //private static final boolean DISABLE_BATCHING = false;
 
-    /* not final or private so the test code can adjust */
+    /** not final or private so the test code can adjust */
     static long DEFAULT_DELAY = SystemVersion.isSlow() ? 100 : 50;
     /**
      *  Wait up to this long before sending (flushing) a small tunnel message
      *  Warning - overridden in BatchedRouterPreprocessor
+     *
+     *  @return the send delay in ms
      */
     protected long getSendDelay() { return DEFAULT_DELAY; }
 
@@ -402,6 +410,9 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      *
      * @param startAt first index in pending to send (inclusive)
      * @param sendThrough last index in pending to send (inclusive)
+     * @param pending the list of pending messages
+     * @param sender the sender to deliver messages
+     * @param rec the receiver for preprocessed data
      */
     protected void send(List<PendingGatewayMessage> pending, int startAt, int sendThrough, TunnelGateway.Sender sender, TunnelGateway.Receiver rec) {
         if (_log.shouldDebug())

@@ -23,27 +23,42 @@ import java.util.NoSuchElementException;
 public class RemovableSingletonSet<E> extends AbstractSet<E> {
     private volatile E _elem;
 
+    /**
+     * RemovableSingletonSet.
+     */
     public RemovableSingletonSet(E element) {
         if (element == null)
             throw new NullPointerException();
         _elem = element;
     }
 
+    /**
+     * clear.
+     */
     @Override
     public void clear() {
         _elem = null;
     }
 
+    /**
+     * contains.
+     */
     @Override
     public boolean contains(Object o) {
         return o != null && o.equals(_elem);
     }
 
+    /**
+     * isEmpty.
+     */
     @Override
     public boolean isEmpty() {
         return _elem == null;
     }
 
+    /**
+     * remove.
+     */
     @Override
     public boolean remove(Object o) {
         boolean rv = o.equals(_elem);
@@ -52,11 +67,17 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
         return rv;
     }
 
+    /**
+     * size.
+     */
     @Override
     public int size() {
         return _elem != null ? 1 : 0;
     }
 
+    /**
+     * iterator.
+     */
     public Iterator<E> iterator() {
         return new RSSIterator();
     }
@@ -64,11 +85,17 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
     private class RSSIterator implements Iterator<E> {
         boolean done;
 
+        /**
+         * hasNext.
+         */
         @Override
         public boolean hasNext() {
             return _elem != null && !done;
         }
 
+        /**
+         * next.
+         */
         public E next() {
             if (!hasNext())
                 throw new NoSuchElementException();
@@ -76,6 +103,9 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
             return _elem;
         }
 
+        /**
+         * remove.
+         */
         public void remove() {
             if (_elem == null || !done)
                 throw new IllegalStateException();
@@ -83,4 +113,3 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
         }
     }
 }
-

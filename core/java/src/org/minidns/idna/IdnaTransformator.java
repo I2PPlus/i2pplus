@@ -10,9 +10,24 @@
  */
 package org.minidns.idna;
 
+/**
+ * IdnaTransformator.
+ */
 public interface IdnaTransformator {
 
+    /**
+     * Convert a Unicode domain name to ASCII Compatible Encoding.
+     *
+     * @param input the Unicode domain name
+     * @return the ACE-encoded domain name
+     */
     String toASCII(String input);
 
+    /**
+     * Convert an ASCII Compatible Encoding to Unicode.
+     *
+     * @param input the ACE-encoded domain name
+     * @return the Unicode domain name
+     */
     String toUnicode(String input);
 }

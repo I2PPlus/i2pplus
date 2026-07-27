@@ -41,26 +41,30 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /** ignored */
     private InetAddress[] binds = null;
+    /** ignored */
     private String multicastIPv4 = SSDP.ADDRESS;
+    /** ignored */
     private String multicastIPv6 = SSDP.getIPv6Address();
+    /** ignored */
     private int port = SSDP.PORT;
 
+    /** Default constructor. */
     public SSDPSearchSocketList() {}
 
-    /**
-     * @param binds The IP address that we will used for bindind the service
-     */
+    /** Constructor with bind addresses. */
     public SSDPSearchSocketList(InetAddress[] binds) {
         this.binds = binds;
     }
 
     /**
-     * @param binds The IP address that we will used for bindind the service
-     * @param port The port that we will used for bindind the service
-     * @param multicastIPv4 The IPv4 address that we will used for multicast comunication
-     * @param multicastIPv6 The IPv6 address that we will used for multicast comunication
-     * @since 1.8
+     * Create SSDP search socket list.
+     *
+     * @param binds Bind addresses
+     * @param port Port number
+     * @param multicastIPv4 IPv4 multicast address
+     * @param multicastIPv6 IPv6 multicast address
      */
     public SSDPSearchSocketList(
             InetAddress[] binds, int port, String multicastIPv4, String multicastIPv6) {
@@ -74,10 +78,12 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
     //	Methods
     ////////////////////////////////////////////////
 
+    /** Returns the socket at the given index. */
     public SSDPSearchSocket getSSDPSearchSocket(int n) {
         return get(n);
     }
 
+    /** Adds a search listener to all sockets. */
     public void addSearchListener(SearchListener listener) {
         int nServers = size();
         for (int n = 0; n < nServers; n++) {
@@ -90,6 +96,7 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
     //	Methods
     ////////////////////////////////////////////////
 
+    /** Opens all search sockets. */
     public boolean open() {
         InetAddress[] binds = this.binds;
         String[] bindAddresses;
@@ -125,6 +132,7 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
         return true;
     }
 
+    /** Closes all search sockets. */
     public void close() {
         int nSockets = size();
         for (int n = 0; n < nSockets; n++) {
@@ -138,6 +146,7 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
     //	Methods
     ////////////////////////////////////////////////
 
+    /** Starts all search sockets. */
     public void start() {
         int nSockets = size();
         for (int n = 0; n < nSockets; n++) {
@@ -146,6 +155,7 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
         }
     }
 
+    /** Stops all search sockets. */
     public void stop() {
         int nSockets = size();
         for (int n = 0; n < nSockets; n++) {

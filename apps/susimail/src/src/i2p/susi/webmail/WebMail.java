@@ -76,6 +76,7 @@ import java.nio.charset.StandardCharsets;
  * Main webmail application class providing email functionality for I2P.
  */
 public class WebMail extends HttpServlet {
+    /**  log */
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(WebMail.class);
     private static final long serialVersionUID = 1L;
     private static final String DEFAULT_HOST = "127.0.0.1";
@@ -171,17 +172,25 @@ public class WebMail extends HttpServlet {
     private static final String PREV = "prev";
     private static final String NEXT = "next";
     private static final String SORT = "sort"; // SORT is a GET or POST param, SORT_XX are the values, possibly prefixed by '-'
+    /** S o r t  i d */
     static final String SORT_ID = "id";
+    /** S o r t  s e n d e r */
     static final String SORT_SENDER = "sender";
+    /** S o r t  s u b j e c t */
     static final String SORT_SUBJECT = "subject";
+    /** S o r t  d a t e */
     static final String SORT_DATE = "date";
+    /** S o r t  s i z e */
     static final String SORT_SIZE = "size";
+    /** S o r t  d e f a u l t */
     static final String SORT_DEFAULT = SORT_DATE;
+    /** S o r t  o r d e r  d e f a u l t */
     static final SortOrder SORT_ORDER_DEFAULT = SortOrder.UP;
     private static final List<String> VALID_SORTS = Arrays.asList(new String[] {// for XSS
                                       SORT_ID, SORT_SENDER, SORT_SUBJECT, SORT_DATE, SORT_SIZE,
                                       '-' + SORT_ID, '-' + SORT_SENDER, '-' + SORT_SUBJECT, '-' +
                                       SORT_DATE, '-' + SORT_SIZE});
+    /** D i r  f o l d e r */
     static final String DIR_FOLDER = "cur"; // MailDir-like
     /** Translated "Drafts" folder name */
     public static final String DIR_DRAFTS = _x("Drafts"); // MailDir-like
@@ -214,9 +223,19 @@ public class WebMail extends HttpServlet {
     private static final String CONFIG_HTML_SHOW_BLOCKED_IMAGES = "view.html.blockedImages";
     private static final String CONFIG_ENABLE_MAIL_PREVIEWS = "view.enableMailPreviews";
     private static final String CONFIG_COPY_TO_SENT = "composer.copy.to.sent";
+    /** C o n f i g  l e a v e  o n  s e r v e r */
     static final String CONFIG_LEAVE_ON_SERVER = "pop3.leave.on.server";
+    /**
+     * CONFIG_BACKGROUND_CHECK.
+     */
     public static final String CONFIG_BACKGROUND_CHECK = "pop3.check.enable";
+    /**
+     * CONFIG_CHECK_MINUTES.
+     */
     public static final String CONFIG_CHECK_MINUTES = "pop3.check.interval.minutes";
+    /**
+     * CONFIG_IDLE_SECONDS.
+     */
     public static final String CONFIG_IDLE_SECONDS = "pop3.idle.timeout.seconds";
     private static final String CONFIG_DEBUG = "debug";
     private static final String RC_PROP_THEME = "routerconsole.theme";
@@ -248,16 +267,34 @@ public class WebMail extends HttpServlet {
         private String _sessionSalt;
         /** @since 0.9.70+ */
         private String _sessionKey;
+        /**
+         * List.
+         */
         public ArrayList<Attachment> attachments; // TODO Map of UIDL to List
+        /**
+         * P-R-G.
+         */
         public boolean reallyDelete; // This is only for multi-delete. Single-message delete is handled with P-R-G
         String themePath;
         String imgPath;
         boolean isMobile;
         private final List<String> nonces;
         private static final int MAX_NONCES = 15;
+        /**
+         * log.
+         */
         public final Log log;
+        /**
+         * lastError.
+         */
         public String lastError = "";
+        /**
+         * lastInfo.
+         */
         public String lastInfo = "";
+        /**
+         * lastNotice.
+         */
         public String lastNotice = "";
 
         SessionObject(Log log) {
@@ -272,8 +309,8 @@ public class WebMail extends HttpServlet {
         }
 
         /**
-         *  Set local password for session protection
-         *  @since 0.9.70+
+         * Hash and store a local password.
+         * @since 0.9.70+
          */
         public void setLocalPassword(String password) {
             if (password == null || password.isEmpty()) return;
@@ -282,9 +319,9 @@ public class WebMail extends HttpServlet {
         }
 
         /**
-         *  Verify password against stored session key
-         *  @return true if password matches
-         *  @since 0.9.70+
+         * Verify a password against the stored hash.
+         * @return true if password matches
+         * @since 0.9.70+
          */
         public boolean verifyLocalPassword(String password) {
             if (_sessionSalt == null || _sessionKey == null || password == null) {
@@ -318,7 +355,7 @@ public class WebMail extends HttpServlet {
         public void valueBound(HttpSessionBindingEvent event) { /* no-op */ }
 
         /**
-         * Close the POP3 socket if still open
+         * Called when the session attribute is removed.
          * @since 0.9.13
          */
         public void valueUnbound(HttpSessionBindingEvent event) {
@@ -331,11 +368,9 @@ public class WebMail extends HttpServlet {
         }
 
         /**
-         *  Relay from the checker to the webmail session object,
-         *  which relays to MailCache, which will fetch the mail from us
-         *  in a big circle
+         * Handle new mail notification.
          *
-         *  @since 0.9.13
+         * @since 0.9.13
          */
         @Override
         public void foundNewMail(boolean yes) {
@@ -361,7 +396,7 @@ public class WebMail extends HttpServlet {
         }
 
         /**
-         * Remove references but does not delete files
+         * Clear the attachment list.
          * @since 0.9.33
          */
         public void clearAttachments() {
@@ -369,7 +404,7 @@ public class WebMail extends HttpServlet {
         }
 
         /**
-         * Remove references AND delete files
+         * Delete attachment files.
          * @since 0.9.35
          */
         public void deleteAttachments() {
@@ -380,6 +415,9 @@ public class WebMail extends HttpServlet {
         }
     }
 
+    /**
+     * safeEquals.
+     */
     public static boolean safeEquals(String a, String b) {
         return a == null ? b == null : a.equals(b);
     }
@@ -897,7 +935,13 @@ public class WebMail extends HttpServlet {
          */
         public LoadWaiter(SessionObject so, MailCache mc) {_so = so; _mc = mc;}
 
+        /**
+         * foundNewMail.
+         */
         @Override
+        /**
+         * Handle new mail notification.
+         */
         public void foundNewMail(boolean yes) {
             synchronized(_so) {
                 // Get through cache so we have the disk-only ones too
@@ -2522,6 +2566,9 @@ public class WebMail extends HttpServlet {
      * Determine if a user-provided override.css file is active
      * @since 0.9.65+
      */
+    /**
+     * Return whether override CSS is active.
+     */
     public boolean isOverrideCssActive() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         String theme = ctx.getProperty(RC_PROP_THEME, DEFAULT_THEME);
@@ -2978,7 +3025,13 @@ public class WebMail extends HttpServlet {
             recipients = recip; body = bod; attachments = att;
         }
 
+        /**
+         * run.
+         */
         @Override
+        /**
+         * Execute the task.
+         */
         public void run() {
             Log log = sessionObject.log;
             if (log.shouldDebug()) log.debug("Attempting to send email...");

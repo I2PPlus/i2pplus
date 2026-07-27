@@ -14,6 +14,7 @@ import java.util.Locale;
  * </ul>
  */
 public class SimpleTimeLabelFormat implements TimeLabelFormat {
+    /** Format */
 
     private final String format;
 
@@ -27,6 +28,9 @@ public class SimpleTimeLabelFormat implements TimeLabelFormat {
         // escape strftime like format string
         this.format = format.replaceAll("%([^%])", "%1\\$t$1");
     }
+    /**
+     * Format
+     */
 
     @Override
     public String format(Calendar calendar, Locale locale) {

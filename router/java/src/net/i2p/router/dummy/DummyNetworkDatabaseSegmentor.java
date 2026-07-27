@@ -12,6 +12,9 @@ import net.i2p.router.networkdb.kademlia.SegmentedNetworkDatabaseFacade;
 public class DummyNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseFacade {
     private final NetworkDatabaseFacade _fndb;
 
+    /**
+     * @param ctx the context
+     */
     public DummyNetworkDatabaseSegmentor(RouterContext ctx) {
         _fndb = new DummyNetworkDatabaseFacade(ctx);
     }

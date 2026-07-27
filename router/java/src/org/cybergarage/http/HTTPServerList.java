@@ -20,7 +20,9 @@ public class HTTPServerList extends Vector<HTTPServer> {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /** ignored */
     private InetAddress[] binds = null;
+    /** ignored */
     private int port = Device.HTTP_DEFAULT_PORT;
 
     /** Creates a new empty HTTPServerList. */

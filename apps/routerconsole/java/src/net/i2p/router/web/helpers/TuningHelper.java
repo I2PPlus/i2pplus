@@ -29,6 +29,9 @@ public class TuningHelper extends HelperBase {
     private static final Pattern UNDERSCORE_SPLIT = Pattern.compile("_");
     private String _nonce;
 
+    /**
+     * setNonce.
+     */
     public void setNonce(String nonce) { _nonce = nonce; }
 
     // human-readable labels for raw param names
@@ -346,6 +349,9 @@ public class TuningHelper extends HelperBase {
         // Sort each group by display name
         for (List<ParamSnapshot> list : groups.values()) {
             Collections.sort(list, new Comparator<ParamSnapshot>() {
+                /**
+                 * compare.
+                 */
                 @Override
                 public int compare(ParamSnapshot a, ParamSnapshot b) {
                     return dn.get(a.name).compareToIgnoreCase(dn.get(b.name));

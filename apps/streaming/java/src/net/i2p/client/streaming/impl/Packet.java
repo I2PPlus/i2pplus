@@ -70,24 +70,45 @@ import net.i2p.util.SystemVersion;
  *
  */
 class Packet {
+    /**
+     * _session.
+     */
     protected final I2PSession _session;
     private long _sendStreamId;
     private long _receiveStreamId;
     private long _sequenceNum;
     private long _ackThrough;
+    /**
+     * _nacks.
+     */
     protected long[] _nacks;
     private int _resendDelay;
     private int _flags;
     private ByteArray _payload;
     private boolean _sigVerified;
     // the next four are set only if the flags say so
+    /**
+     * _optionSignature.
+     */
     protected Signature _optionSignature;
+    /**
+     * _optionFrom.
+     */
     protected Destination _optionFrom;
     private int _optionDelay;
     private int _optionMaxSize;
     // following 3 for ofline sigs
+    /**
+     * _transientExpires.
+     */
     protected long _transientExpires;
+    /**
+     * _offlineSignature.
+     */
     protected Signature _offlineSignature;
+    /**
+     * _transientSigningPublicKey.
+     */
     protected SigningPublicKey _transientSigningPublicKey;
     // ports
     private int _localPort;
@@ -101,6 +122,9 @@ class Packet {
      */
     public static final long STREAM_ID_UNKNOWN = 0L;
 
+    /**
+     * MAX_STREAM_ID.
+     */
     public static final long MAX_STREAM_ID = 0xFFFFFFFFL;
 
     /**
@@ -176,9 +200,21 @@ class Packet {
      */
     public static final int FLAG_SIGNATURE_OFFLINE = (1 << 11);
 
+    /**
+     * DEFAULT_MAX_SIZE.
+     */
     public static final int DEFAULT_MAX_SIZE = SystemVersion.isSlow() ? 32*1024 : 128*1024;
+    /**
+     * MAX_DELAY_REQUEST.
+     */
     protected static final int MAX_DELAY_REQUEST = 65535;
+    /**
+     * MIN_DELAY_CHOKE.
+     */
     public static final int MIN_DELAY_CHOKE = 60001;
+    /**
+     * SEND_DELAY_CHOKE.
+     */
     public static final int SEND_DELAY_CHOKE = 61000;
 
     /**
@@ -297,6 +333,9 @@ class Packet {
      */
     public void setResendDelay(int numSeconds) {_resendDelay = numSeconds;}
 
+    /**
+     * MAX_PAYLOAD_SIZE.
+     */
     public static final int MAX_PAYLOAD_SIZE = 32*1024;
 
     /** get the actual payload of the message.  may be null
@@ -817,12 +856,18 @@ class Packet {
         return ok;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder str = formatAsString();
         return str.toString();
     }
 
+    /**
+     * formatAsString.
+     */
     protected StringBuilder formatAsString() {
         Log l = I2PAppContext.getCurrentContext().logManager().getLog(Packet.class);
         StringBuilder buf = new StringBuilder(64);

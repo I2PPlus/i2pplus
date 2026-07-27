@@ -55,21 +55,33 @@ class TunnelRenderer {
     private static class BoundedCache<K, V> extends LinkedHashMap<K, V> {
         private final int _maxSize;
 
+        /**
+         * BoundedCache.
+         */
         public BoundedCache(int maxSize) {
             super(maxSize, 0.75f, true);
             _maxSize = maxSize;
         }
 
+        /**
+         * removeEldestEntry.
+         */
         @Override
         protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
             return size() > _maxSize;
         }
 
+        /**
+         * clone.
+         */
         @Override
         public Object clone() {
             return super.clone();
         }
 
+        /**
+         * computeIfAbsent.
+         */
         public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
             V value = get(key);
             if (value == null) {
@@ -88,10 +100,16 @@ class TunnelRenderer {
     private static String fmt(double val) { synchronized (TWO_DECIMALS) { return TWO_DECIMALS.format(val); } }
 
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    /**
+     * enableReverseLookups.
+     */
     public boolean enableReverseLookups() {
         return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
     }
 
+    /**
+     * TunnelRenderer.
+     */
     public TunnelRenderer(RouterContext ctx) {
         _context = ctx;
         _log = _context.logManager().getLog(TunnelRenderer.class);
@@ -101,6 +119,9 @@ class TunnelRenderer {
     private final BoundedCache<Hash, ReverseLookupResult> reverseLookupResults = new BoundedCache<>(5000);
     private final BoundedCache<Hash, String> peerToIP = new BoundedCache<>(5000);
 
+    /**
+     * renderStatusHTML.
+     */
     public void renderStatusHTML(Writer out) throws IOException {
         boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
         TunnelManagerFacade tm = _context.tunnelManager();
@@ -201,6 +222,9 @@ class TunnelRenderer {
         }
     }
 
+    /**
+     * renderParticipating.
+     */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderParticipating(Writer out, boolean bySpeed) throws IOException {
         boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
@@ -352,6 +376,9 @@ class TunnelRenderer {
         sb.setLength(0);
     }
 
+    /**
+     * renderTransitSummary.
+     */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderTransitSummary(Writer out) throws IOException {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
@@ -521,6 +548,9 @@ class TunnelRenderer {
         }
     }
 
+    /**
+     * renderPeers.
+     */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderPeers(Writer out) throws IOException {
         long uptime = _context.router().getUptime();
@@ -810,6 +840,9 @@ class TunnelRenderer {
     }
 
     private static class TunnelComparator implements Comparator<HopConfig>, Serializable {
+          /**
+           * compare.
+           */
           @Override
           public int compare(HopConfig l, HopConfig r) {
              long le = l.getExpiration();
@@ -824,6 +857,9 @@ class TunnelRenderer {
 
     /** @since 0.9.35 */
     private static class TunnelComparatorBySpeed implements Comparator<HopConfig>, Serializable {
+          /**
+           * compare.
+           */
           @Override
           public int compare(HopConfig l, HopConfig r) {
              long now = System.currentTimeMillis();
@@ -840,6 +876,9 @@ class TunnelRenderer {
     }
 
     private static class TunnelInfoComparator implements Comparator<TunnelInfo>, Serializable {
+          /**
+           * compare.
+           */
           @Override
           public int compare(TunnelInfo l, TunnelInfo r) {
              long le = l.getExpiration();
@@ -856,6 +895,9 @@ class TunnelRenderer {
      */
     private class TPComparator implements Comparator<TunnelPool> {
           private final Collator _comp = Collator.getInstance();
+          /**
+           * compare.
+           */
           @Override
           public int compare(TunnelPool l, TunnelPool r) {
              int rv = _comp.compare(getTunnelName(l), getTunnelName(r));
@@ -1079,6 +1121,9 @@ class TunnelRenderer {
         buf.setLength(0);
     }
 
+    /**
+     * renderLifetimeBandwidth.
+     */
     public void renderLifetimeBandwidth(Writer out, TunnelPool in, TunnelPool outPool) throws IOException {
         Comparator<TunnelInfo> comp = new TunnelInfoComparator();
         List<TunnelInfo> tunnels;
@@ -1158,7 +1203,13 @@ class TunnelRenderer {
     }
 
     private static class CountryComparator implements Comparator<Hash> {
+        /**
+         * CountryComparator.
+         */
         public CountryComparator(CommSystemFacade comm) {this.comm = comm;}
+        /**
+         * compare.
+         */
         @Override
         public int compare(Hash l, Hash r) {
             // get both countries

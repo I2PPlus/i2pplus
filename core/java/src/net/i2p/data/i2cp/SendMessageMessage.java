@@ -25,10 +25,25 @@ import java.io.OutputStream;
  * @author jrandom
  */
 public class SendMessageMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 5;
+    /**
+     * _sessionId.
+     */
     protected SessionId _sessionId;
+    /**
+     * _destination.
+     */
     protected Destination _destination;
+    /**
+     * _payload.
+     */
     protected Payload _payload;
+    /**
+     * _nonce.
+     */
     protected long _nonce;
 
     /**

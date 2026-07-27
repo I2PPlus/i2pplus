@@ -32,9 +32,15 @@ public abstract class SystemVersion {
     /*
      *  @since 0.9.28
      */
+    /**
+     * DAEMON_USER.
+     */
     public static final String DAEMON_USER = "i2psvc";
     /*
      *  @since 0.9.29
+     */
+    /**
+     * GENTOO_USER.
      */
     public static final String GENTOO_USER = "i2p";
 
@@ -83,6 +89,9 @@ public abstract class SystemVersion {
     /** @since 0.9.55+ */
     public static final String PROP_OVERRIDE_IS_SLOW = "router.overrideIsSlow";
 
+    /**
+     * DEFAULT_OVERRIDE_IS_SLOW.
+     */
     public static final boolean DEFAULT_OVERRIDE_IS_SLOW = false;
     private static final Pattern COMMA_SPLIT = Pattern.compile(",");
     private static final I2PAppContext _ctx = I2PAppContext.getGlobalContext();
@@ -230,14 +239,23 @@ public abstract class SystemVersion {
         return "unknown";
     }
 
+    /**
+     * isWindows.
+     */
     public static boolean isWindows() {
         return _isWin;
     }
 
+    /**
+     * isMac.
+     */
     public static boolean isMac() {
         return _isMac;
     }
 
+    /**
+     * isAndroid.
+     */
     public static boolean isAndroid() {
         return _isAndroid;
     }
@@ -532,6 +550,9 @@ public abstract class SystemVersion {
     /*
      *  @since 0.9.28
      */
+    /**
+     * isLinuxService.
+     */
     public static boolean isLinuxService() {
         return _isLinuxService;
     }
@@ -539,12 +560,18 @@ public abstract class SystemVersion {
     /*
      *  @since 0.9.46
      */
+    /**
+     * isWindowsService.
+     */
     public static boolean isWindowsService() {
         return _isWindowsService;
     }
 
     /*
      *  @since 0.9.46
+     */
+    /**
+     * isService.
      */
     public static boolean isService() {
         return _isService;

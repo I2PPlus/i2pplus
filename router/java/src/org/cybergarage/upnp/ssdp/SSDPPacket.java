@@ -39,6 +39,9 @@ public class SSDPPacket {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     * SSDPPacket.
+     */
     public SSDPPacket(byte[] buf, int length) {
         dgmPacket = new DatagramPacket(buf, length);
     }
@@ -49,6 +52,9 @@ public class SSDPPacket {
 
     private DatagramPacket dgmPacket = null;
 
+    /**
+     * getDatagramPacket.
+     */
     public DatagramPacket getDatagramPacket() {
         return dgmPacket;
     }
@@ -59,10 +65,16 @@ public class SSDPPacket {
 
     private String localAddr = "";
 
+    /**
+     * setLocalAddress.
+     */
     public void setLocalAddress(String addr) {
         localAddr = addr;
     }
 
+    /**
+     * getLocalAddress.
+     */
     public String getLocalAddress() {
         return localAddr;
     }
@@ -73,10 +85,16 @@ public class SSDPPacket {
 
     private long timeStamp;
 
+    /**
+     * setTimeStamp.
+     */
     public void setTimeStamp(long value) {
         timeStamp = value;
     }
 
+    /**
+     * getTimeStamp.
+     */
     public long getTimeStamp() {
         return timeStamp;
     }
@@ -85,15 +103,24 @@ public class SSDPPacket {
     //	Remote host
     ////////////////////////////////////////////////
 
+    /**
+     * getRemoteInetAddress.
+     */
     public InetAddress getRemoteInetAddress() {
         return getDatagramPacket().getAddress();
     }
 
+    /**
+     * getRemoteAddress.
+     */
     public String getRemoteAddress() {
         // Thanks for Theo Beisch (11/09/04)
         return getDatagramPacket().getAddress().getHostAddress();
     }
 
+    /**
+     * getRemotePort.
+     */
     public int getRemotePort() {
         return getDatagramPacket().getPort();
     }
@@ -102,8 +129,14 @@ public class SSDPPacket {
     //	Access Methods
     ////////////////////////////////////////////////
 
+    /**
+     * packetBytes.
+     */
     public byte[] packetBytes = null;
 
+    /**
+     * getData.
+     */
     public byte[] getData() {
         if (packetBytes != null) return packetBytes;
 
@@ -119,42 +152,72 @@ public class SSDPPacket {
     //	Access Methods
     ////////////////////////////////////////////////
 
+    /**
+     * getHost.
+     */
     public String getHost() {
         return HTTPHeader.getValue(getData(), HTTP.HOST);
     }
 
+    /**
+     * getCacheControl.
+     */
     public String getCacheControl() {
         return HTTPHeader.getValue(getData(), HTTP.CACHE_CONTROL);
     }
 
+    /**
+     * getLocation.
+     */
     public String getLocation() {
         return HTTPHeader.getValue(getData(), HTTP.LOCATION);
     }
 
+    /**
+     * getMAN.
+     */
     public String getMAN() {
         return HTTPHeader.getValue(getData(), HTTP.MAN);
     }
 
+    /**
+     * getST.
+     */
     public String getST() {
         return HTTPHeader.getValue(getData(), HTTP.ST);
     }
 
+    /**
+     * getNT.
+     */
     public String getNT() {
         return HTTPHeader.getValue(getData(), HTTP.NT);
     }
 
+    /**
+     * getNTS.
+     */
     public String getNTS() {
         return HTTPHeader.getValue(getData(), HTTP.NTS);
     }
 
+    /**
+     * getServer.
+     */
     public String getServer() {
         return HTTPHeader.getValue(getData(), HTTP.SERVER);
     }
 
+    /**
+     * getUSN.
+     */
     public String getUSN() {
         return HTTPHeader.getValue(getData(), HTTP.USN);
     }
 
+    /**
+     * getMX.
+     */
     public int getMX() {
         return HTTPHeader.getIntegerValue(getData(), HTTP.MX);
     }
@@ -163,6 +226,9 @@ public class SSDPPacket {
     //	Access Methods
     ////////////////////////////////////////////////
 
+    /**
+     * getHostInetAddress.
+     */
     public InetAddress getHostInetAddress() {
         String addrStr = "127.0.0.1";
         String host = getHost();
@@ -181,6 +247,9 @@ public class SSDPPacket {
     //	Access Methods (Extension)
     ////////////////////////////////////////////////
 
+    /**
+     * isRootDevice.
+     */
     public boolean isRootDevice() {
         if (NT.isRootDevice(getNT()) == true) return true;
         // Thanks for Theo Beisch (11/01/04)
@@ -188,18 +257,30 @@ public class SSDPPacket {
         return USN.isRootDevice(getUSN());
     }
 
+    /**
+     * isDiscover.
+     */
     public boolean isDiscover() {
         return MAN.isDiscover(getMAN());
     }
 
+    /**
+     * isAlive.
+     */
     public boolean isAlive() {
         return NTS.isAlive(getNTS());
     }
 
+    /**
+     * isByeBye.
+     */
     public boolean isByeBye() {
         return NTS.isByeBye(getNTS());
     }
 
+    /**
+     * getLeaseTime.
+     */
     public int getLeaseTime() {
         return SSDP.getLeaseTime(getCacheControl());
     }
@@ -208,6 +289,9 @@ public class SSDPPacket {
     //	toString
     ////////////////////////////////////////////////
 
+    /**
+     * toString.
+     */
     public String toString() {
         return new String(getData(), StandardCharsets.UTF_8);
     }

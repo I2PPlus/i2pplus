@@ -33,6 +33,9 @@ import java.nio.charset.StandardCharsets;
  * Includes base64 size calculations and 8BITMIME support for efficient I2P mail delivery.
  *
  */
+/**
+ * SMTPClient.
+ */
 public class SMTPClient {
     /**
      *  10.00 MB
@@ -50,6 +53,9 @@ public class SMTPClient {
 
     private final Log _log;
     private Socket socket;
+    /**
+     * error.
+     */
     public String error;
     private String lastResponse;
     private boolean supportsPipelining;
@@ -363,9 +369,18 @@ public class SMTPClient {
      *  @since 0.9.13
      */
     private static class SendExpect {
+        /**
+         * send.
+         */
         public final String send;
+        /**
+         * expect.
+         */
         public final int expect;
 
+        /**
+         * SendExpect.
+         */
         public SendExpect(String s, int e) {
             send = s;
             expect = e;
@@ -377,7 +392,13 @@ public class SMTPClient {
      *  @since 0.9.13
      */
     private static class Result {
+        /**
+         * result.
+         */
         public final int result;
+        /**
+         * recv.
+         */
         public final String recv;
 
         /** @param t non-null */

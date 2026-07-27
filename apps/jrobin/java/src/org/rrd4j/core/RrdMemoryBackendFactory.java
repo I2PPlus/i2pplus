@@ -20,6 +20,9 @@ import java.util.concurrent.atomic.AtomicReference;
 @RrdBackendAnnotation(name = "MEMORY", shouldValidateHeader = false)
 public class RrdMemoryBackendFactory extends RrdBackendFactory {
 
+    /**
+     * backends.
+     */
     protected final Map<String, AtomicReference<ByteBuffer>> backends = new ConcurrentHashMap<>();
 
     /**
@@ -33,6 +36,9 @@ public class RrdMemoryBackendFactory extends RrdBackendFactory {
         return new RrdMemoryBackend(id, refbb);
     }
 
+    /**
+     * canStore.
+     */
     @Override
     public boolean canStore(URI uri) {
         return uri.getScheme().equals(getScheme());

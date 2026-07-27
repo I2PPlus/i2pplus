@@ -48,6 +48,9 @@ import java.nio.charset.StandardCharsets;
  */
 public class BEncoder {
 
+    /** Utility class with static methods only */
+    private BEncoder() {}
+
     /**
      * Bencode an object to the given OutputStream.
      *

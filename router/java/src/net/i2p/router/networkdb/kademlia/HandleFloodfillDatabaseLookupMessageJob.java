@@ -32,6 +32,15 @@ import net.i2p.router.networkdb.HandleDatabaseLookupMessageJob;
  * reduce misdirected queries.
  */
 public class HandleFloodfillDatabaseLookupMessageJob extends HandleDatabaseLookupMessageJob {
+    /**
+     * Creates a new job to handle a floodfill database lookup message
+     *
+     * @param ctx the router context
+     * @param receivedMessage the lookup message received
+     * @param from the router identity of the sender
+     * @param fromHash the hash of the sender
+     * @param msgIDBloomXor the message ID bloom XOR
+     */
     public HandleFloodfillDatabaseLookupMessageJob(RouterContext ctx, DatabaseLookupMessage receivedMessage, RouterIdentity from, Hash fromHash, long msgIDBloomXor) {
         super(ctx, receivedMessage, from, fromHash, msgIDBloomXor);
     }

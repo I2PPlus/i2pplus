@@ -61,12 +61,18 @@ public class BanLogger {
     private static final Map<String, Long> _loggedHashes = Collections.synchronizedMap(new LHMCache<>(MAX_LOGGED_ENTRIES));
     private static final Map<String, Long> _loggedIPs = Collections.synchronizedMap(new LHMCache<>(MAX_LOGGED_ENTRIES));
 
+    /** No-arg constructor for deferred initialization. */
     public BanLogger() {
         _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
         _dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         _banCount = new AtomicInteger();
     }
 
+    /**
+     * Constructor with context for immediate initialization.
+     *
+     * @param context the router context
+     */
     public BanLogger(RouterContext context) {
         _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
         _dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -75,6 +81,8 @@ public class BanLogger {
 
     /**
      * Initialize the logger. Safe to call multiple times.
+     *
+     * @param context the router context
      */
     public void initialize(RouterContext context) {
         if (context == null) {return;}
@@ -172,6 +180,8 @@ public class BanLogger {
 
     /**
      * Check if the logger is initialized.
+     *
+     * @return true if initialized
      */
     public static boolean isInitialized() {
         return _initialized;
@@ -180,6 +190,8 @@ public class BanLogger {
     /**
      * Get the singleton instance of BanLogger.
      * May return null if not initialized yet.
+     *
+     * @return the singleton instance, or null if not initialized
      */
     public static BanLogger getInstance() {
         return _initialized ? _self : null;
@@ -417,6 +429,9 @@ public class BanLogger {
 
     /**
      * Log a permanent ban by IP only.
+     *
+     * @param ip IP address with port (format: "1.2.3.4:5678" or "ipv6:port")
+     * @param reason Reason for the ban
      */
     public void logBanForever(String ip, String reason) {
         logBanForever(null, ip, reason);
@@ -693,6 +708,8 @@ public class BanLogger {
 
     /**
      * Get the log file path.
+     *
+     * @return the log file
      */
     public File getLogFile() {
         return _logFile;

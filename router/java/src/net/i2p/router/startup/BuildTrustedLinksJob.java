@@ -18,6 +18,12 @@ import net.i2p.router.RouterContext;
 class BuildTrustedLinksJob extends JobImpl {
     private final Job _next;
 
+    /**
+     * Create a new trusted links job.
+     *
+     * @param context the router context
+     * @param next the next job to run after this one
+     */
     public BuildTrustedLinksJob(RouterContext context, Job next) {
         super(context);
         _next = next;

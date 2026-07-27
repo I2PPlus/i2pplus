@@ -27,8 +27,11 @@ public class LocaleWebAppHandler extends HandlerWrapper
     private final I2PAppContext _context;
     private final WebAppContext _wac;
 
+    /**
+     *  Create handler for localized JSP resolution and Jetty integration.
+     */
     public LocaleWebAppHandler(I2PAppContext ctx, String path, String warPath,
-                               File tmpdir, ServletHandler servletHandler) {
+                                File tmpdir, ServletHandler servletHandler) {
         super();
         _context = ctx;
         _wac = new WebAppContext(warPath, path);
@@ -110,33 +113,6 @@ public class LocaleWebAppHandler extends HandlerWrapper
     }
 
     /**
-     *  Overrides method in ServletHandler
-     *  @since 0.8
-     */
-/****  not in Jetty 6
-    @Override
-    public void handleTrace(HttpServletRequest request,
-                            HttpServletResponse response)
-        throws IOException
-    {
-        response.sendError(405);
-    }
-****/
-
-    /**
-     *  Not an override
-     *  @since 0.8
-     */
-/****  not in Jetty 7
-    public void handleOptions(HttpServletRequest request,
-                              HttpServletResponse response)
-        throws IOException
-    {
-        response.sendError(405);
-    }
-****/
-
-    /**
      *  Mysteriously removed from Jetty 7
      */
     private void setInitParams(Map<?,?> params) {
@@ -144,6 +120,7 @@ public class LocaleWebAppHandler extends HandlerWrapper
     }
 
     /**
+     *  Copy init params from map to WebAppContext.
      *  @since Jetty 7
      */
     public static void setInitParams(WebAppContext context, Map<?,?> params) {

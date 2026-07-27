@@ -14,18 +14,28 @@ import java.util.Map;
  */
 @SuppressWarnings("java:S2975")
 public class LHMCache<K, V> extends LinkedHashMap<K, V> {
+    /**  max */
     private final int _max;
 
+    /**
+     * @param max maximum entries before oldest are evicted
+     */
     public LHMCache(int max) {
         super(max, 0.75f, true);
         _max = max;
     }
 
+    /**
+     * Shallow clone.
+     */
     @Override
     public Object clone() {
         return super.clone();
     }
 
+    /**
+     * Evict eldest when over capacity.
+     */
     @Override
     protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
         return size() > _max;

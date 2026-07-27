@@ -22,24 +22,35 @@ import net.i2p.util.SystemVersion;
  */
 @SuppressWarnings("java:S2975")
 public class AsyncFortunaStandalone extends FortunaStandalone implements Runnable {
-    /**
-     * This is set to 2 to minimize memory usage for standalone apps.
-     * The router must override this via the prng.buffers property in the router context.
-     */
+    /** ignored */
     private static final int DEFAULT_BUFFERS = 2;
+    /** ignored */
     private static final int DEFAULT_BUFSIZE = SystemVersion.isAndroid() ? 64*1024 : 256*1024;
+    /** ignored */
     private final int _bufferCount;
+    /** ignored */
     private final int _bufferSize;
     /** the lock */
     private final Object asyncBuffers = new Object();
+    /** ignored */
     private final I2PAppContext _context;
+    /** ignored */
     private final Log _log;
+    /** ignored */
     private volatile boolean _isRunning;
+    /** ignored */
     private Thread _refillThread;
+    /** ignored */
     private final LinkedBlockingQueue<AsyncBuffer> _fullBuffers;
+    /** ignored */
     private final LinkedBlockingQueue<AsyncBuffer> _emptyBuffers;
+    /** ignored */
     private AsyncBuffer _currentBuffer;
 
+    /**
+     * Create a new AsyncFortunaStandalone.
+     * @param context the I2P app context
+     */
     public AsyncFortunaStandalone(I2PAppContext context) {
         super(context.getBooleanPropertyDefaultTrue("prng.useDevRandom") && !SystemVersion.isWindows() && !SystemVersion.isSlow());
         _bufferCount = Math.max(context.getProperty("prng.buffers", DEFAULT_BUFFERS), 2);
@@ -51,10 +62,12 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
     }
 
     @Override
+    /** Return a copy of this object */
     public Object clone() {
         return super.clone();
     }
 
+    /** Start the PRNG */
     public void startup() {
         for (int i = 0; i < _bufferCount; i++) {_emptyBuffers.offer(new AsyncBuffer(_bufferSize));}
         _isRunning = true;
@@ -64,10 +77,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         _refillThread.start();
     }
 
-    /**
-     *  Note - methods may hang or NPE or throw IllegalStateExceptions after this
-     *  @since 0.8.8
-     */
+    /** Stop the PRNG */
     public void shutdown() {
         _isRunning = false;
         _emptyBuffers.clear();
@@ -86,8 +96,14 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
     }
 
     private static class AsyncBuffer {
+        /**
+         * buffer.
+         */
         public final byte[] buffer;
 
+        /**
+         * AsyncBuffer.
+         */
         public AsyncBuffer(int size) {
             buffer = new byte[size];
         }
@@ -117,6 +133,9 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
      *  The refiller thread
      */
     @Override
+    /**
+     * Execute the task.
+     */
     public void run() {
         while (_isRunning) {
             AsyncBuffer aBuff = null;
@@ -140,7 +159,13 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         }
     }
 
+    /**
+     * fillBlock.
+     */
     @Override
+    /**
+     * Fill the PRNG output block.
+     */
     public void fillBlock() {rotateBuffer();}
 
     private void doFill(byte[] buf) {

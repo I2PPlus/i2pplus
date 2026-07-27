@@ -85,17 +85,23 @@ import javax.security.auth.Destroyable;
  */
 public class PrivateKey extends SimpleDataStructure implements Destroyable {
     private static final EncType DEF_TYPE = EncType.ELGAMAL_2048;
+    /**
+     * KEYSIZE_BYTES.
+     */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPrivkeyLen();
 
     private final EncType _type;
     // cache
     private PublicKey _pubKey;
 
+    /** no-arg constructor, uses default type */
     public PrivateKey() {
         this(DEF_TYPE);
     }
 
     /**
+     * Constructor with type.
+     *
      *  @param type non-null
      *  @since 0.9.38
      */
@@ -104,11 +110,14 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
         _type = type;
     }
 
+    /** @param data key data */
     public PrivateKey(byte[] data) {
         this(DEF_TYPE, data);
     }
 
     /**
+     * Constructor with type and data.
+     *
      *  @param type non-null
      *  @param data must be non-null
      *  @since 0.9.38
@@ -120,6 +129,8 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
+     * Constructor with type, data, and cached public key.
+     *
      *  @param type non-null
      *  @param data must be non-null
      *  @param pubKey corresponding pubKey to be cached
@@ -131,16 +142,21 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
         _pubKey = pubKey;
     }
 
-    /** constructs from base64
-    *
+    /**
+     * Constructs from base64.
+     *
      * @param base64Data a string of base64 data (the output of .toBase64() called
      * on a prior instance of PrivateKey
+     * @throws DataFormatException if the data is not valid
      */
     public PrivateKey(String base64Data) throws DataFormatException {
         this(DEF_TYPE);
         fromBase64(base64Data);
     }
 
+    /**
+     * length.
+     */
     @Override
     public int length() {
         return _type.getPrivkeyLen();
@@ -226,6 +242,9 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
         return rv;
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;

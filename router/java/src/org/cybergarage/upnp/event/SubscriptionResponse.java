@@ -36,10 +36,16 @@ public class SubscriptionResponse extends HTTPResponse {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     * SubscriptionResponse.
+     */
     public SubscriptionResponse() {
         setServer(UPnP.getServerName());
     }
 
+    /**
+     * SubscriptionResponse.
+     */
     public SubscriptionResponse(HTTPResponse httpRes) {
         super(httpRes);
     }
@@ -48,6 +54,9 @@ public class SubscriptionResponse extends HTTPResponse {
     //	Error
     ////////////////////////////////////////////////
 
+    /**
+     * setResponse.
+     */
     public void setResponse(int code) {
         setStatusCode(code);
         setContentLength(0);
@@ -57,6 +66,9 @@ public class SubscriptionResponse extends HTTPResponse {
     //	Error
     ////////////////////////////////////////////////
 
+    /**
+     * setErrorResponse.
+     */
     public void setErrorResponse(int code) {
         setStatusCode(code);
         setContentLength(0);
@@ -66,10 +78,16 @@ public class SubscriptionResponse extends HTTPResponse {
     //	SID
     ////////////////////////////////////////////////
 
+    /**
+     * setSID.
+     */
     public void setSID(String id) {
         setHeader(HTTP.SID, Subscription.toSIDHeaderString(id));
     }
 
+    /**
+     * getSID.
+     */
     public String getSID() {
         return Subscription.getSID(getHeaderValue(HTTP.SID));
     }
@@ -78,10 +96,16 @@ public class SubscriptionResponse extends HTTPResponse {
     //	Timeout
     ////////////////////////////////////////////////
 
+    /**
+     * setTimeout.
+     */
     public void setTimeout(long value) {
         setHeader(HTTP.TIMEOUT, Subscription.toTimeoutHeaderString(value));
     }
 
+    /**
+     * getTimeout.
+     */
     public long getTimeout() {
         return Subscription.getTimeout(getHeaderValue(HTTP.TIMEOUT));
     }

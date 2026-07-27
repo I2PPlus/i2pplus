@@ -33,17 +33,29 @@ import net.i2p.util.SimpleTimer2;
  * Unused directly - see PumpedTunnelGateway, ThrottledPumpedTunnelGateway, and TunnelGatewayZeroHop overrides.
  */
 abstract class TunnelGateway {
+    /** router context */
     protected final RouterContext _context;
+    /** log instance */
     protected final Log _log;
+    /** message queue */
     protected final List<PendingGatewayMessage> _queue;
+    /** queue preprocessor */
     protected final QueuePreprocessor _preprocessor;
+    /** sender */
     protected final Sender _sender;
+    /** receiver */
     protected final Receiver _receiver;
+    /** last flush time */
     protected long _lastFlush;
+    /** delayed flush timer */
     protected final DelayedFlush _delayedFlush;
+    /** messages sent count */
     protected int _messagesSent;
 
     /**
+     * Creates a new TunnelGateway.
+     *
+     * @param context the router context
      * @param preprocessor this pulls Pending messages off a list, builds some
      *                     full preprocessed messages, and pumps those into the sender
      * @param sender this takes a preprocessed message, encrypts it, and sends it to
@@ -140,9 +152,14 @@ abstract class TunnelGateway {
                        + " expire: " + (afterExpire-afterPreprocess)
                        + " queue flush: " + (complete-afterExpire));
         }
-****/
+*/
     }
 
+    /**
+     * Get the number of messages sent.
+     *
+     * @return the number of messages sent
+     */
     public int getMessagesSent() { return _messagesSent; }
 
     /**
@@ -151,10 +168,10 @@ abstract class TunnelGateway {
      */
     public interface Sender {
         /**
-         * Take the preprocessed data containing zero or more fragments, encrypt
-         * it, and pass it on to the receiver
+         * Encrypt and forward preprocessed data to the receiver.
          *
-         * @param preprocessed IV + (rand padding) + 0x0 + Hash[0:3] + {instruction+fragment}*
+         * @param preprocessed the preprocessed data
+         * @param receiver the receiver
          * @return message ID it was sent in, or -1 if it was deferred
          */
         public long sendPreprocessed(byte[] preprocessed, Receiver receiver);
@@ -174,12 +191,17 @@ abstract class TunnelGateway {
          *                Messages are not removed from the list until actually sent.
          *                The status of unsent and partially-sent messages is stored in
          *                the Pending structure.
-         *
+         * @param sender the sender to forward preprocessed data
+         * @param receiver the receiver to accept encrypted data
          * @return true if we should delay before preprocessing again
          */
         public boolean preprocessQueue(List<PendingGatewayMessage> pending, Sender sender, Receiver receiver);
 
-        /** how long do we want to wait before flushing */
+        /**
+         * How long do we want to wait before flushing.
+         *
+         * @return delay in milliseconds
+         */
         public long getDelayAmount();
     }
 
@@ -189,24 +211,29 @@ abstract class TunnelGateway {
      */
     public interface Receiver {
         /**
-         * Take the encrypted data and send it off to the next hop
+         * Forward encrypted data to the next hop.
+         *
+         * @param encrypted the encrypted data
          * @return message ID it was sent in, or -1 if it had to be deferred
          */
         public long receiveEncrypted(byte[] encrypted);
 
-        /**
-         * The next hop
-         * @return non-null
-         * @since 0.9.3
-         */
+        /** @return non-null */
         public Hash getSendTo();
     }
 
+    /**
+     * DelayedFlush.
+     */
     protected class DelayedFlush extends SimpleTimer2.TimedEvent {
+        /** Schedule with the context timer. */
         DelayedFlush() {
             super(_context.simpleTimer2());
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             boolean wantRequeue = false;
             //int remaining = 0;

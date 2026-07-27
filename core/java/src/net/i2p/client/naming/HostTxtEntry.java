@@ -33,35 +33,62 @@ public class HostTxtEntry {
     private boolean isValidated;
     private boolean isValid;
 
+    /** Separator between name and destination in the hosts.txt line */
     public static final char KV_SEPARATOR = '=';
+    /** Separator between the destination part and the properties part */
     public static final String PROPS_SEPARATOR = "#!";
+    /** Separator between individual properties */
     public static final char PROP_SEPARATOR = '#';
+    /** Property key for the action type (e.g. adddest, remove) */
     public static final String PROP_ACTION = "action";
+    /** Property key for the date timestamp (seconds since epoch) */
     public static final String PROP_DATE = "date";
+    /** Property key for the destination Base64 string */
     public static final String PROP_DEST = "dest";
+    /** Property key for the expiry time */
     public static final String PROP_EXPIRES = "expires";
+    /** Property key for the hostname */
     public static final String PROP_NAME = "name";
+    /** Property key for the old destination (used in change operations) */
     public static final String PROP_OLDDEST = "olddest";
+    /** Property key for the old hostname (used in rename operations) */
     public static final String PROP_OLDNAME = "oldname";
+    /** Property key for the old signature for inner verification */
     public static final String PROP_OLDSIG = "oldsig";
+    /** Property key for the signature */
     public static final String PROP_SIG = "sig";
+    /** Action value: add a new destination */
     public static final String ACTION_ADDDEST = "adddest";
+    /** Action value: add a new hostname */
     public static final String ACTION_ADDNAME = "addname";
+    /** Action value: add a subdomain entry */
     public static final String ACTION_ADDSUBDOMAIN = "addsubdomain";
+    /** Action value: change an existing destination */
     public static final String ACTION_CHANGEDEST = "changedest";
+    /** Action value: change an existing hostname */
     public static final String ACTION_CHANGENAME = "changename";
+    /** Action value: remove an entry */
     public static final String ACTION_REMOVE = "remove";
+    /** Action value: remove all entries */
     public static final String ACTION_REMOVEALL = "removeall";
+    /** Action value: update an existing entry */
     public static final String ACTION_UPDATE = "update";
 
     /**
-     * Properties will be null
+     * Create a new host text entry with name and destination, no properties.
+     *
+     * @param name the hostname
+     * @param dest the Base64 destination
      */
     public HostTxtEntry(String name, String dest) {
         this(name, dest, (OrderedProperties) null);
     }
 
     /**
+     * Create a new host text entry with name, destination, and serialized properties.
+     *
+     * @param name the hostname
+     * @param dest the Base64 destination
      * @param sprops line part after the #!, non-null
      * @throws IllegalArgumentException on dup key in sprops and other errors
      */
@@ -82,6 +109,8 @@ public class HostTxtEntry {
     /**
      * Create a new host text entry with optional properties.
      *
+     * @param name the hostname
+     * @param dest the Base64 destination
      * @param props may be null
      */
     public HostTxtEntry(String name, String dest, OrderedProperties props) {
@@ -140,6 +169,9 @@ public class HostTxtEntry {
     /**
      * Write as a standard line name=dest[#!k1=v1#k2=v2...]
      * Includes newline.
+     *
+     * @param out the writer to write to
+     * @throws IOException if writing fails
      */
     public void write(BufferedWriter out) throws IOException {
         write((Writer) out);
@@ -149,6 +181,9 @@ public class HostTxtEntry {
     /**
      * Write as a standard line name=dest[#!k1=v1#k2=v2...]
      * Does not include newline.
+     *
+     * @param out the writer to write to
+     * @throws IOException if writing fails
      */
     public void write(Writer out) throws IOException {
         if (name != null && dest != null) {
@@ -164,6 +199,9 @@ public class HostTxtEntry {
      * This works whether constructed with name and dest, or just properties.
      * Includes newline.
      * Must have been constructed with non-null properties.
+     *
+     * @param out the writer to write to
+     * @throws IOException if writing fails
      */
     public void writeRemoveLine(BufferedWriter out) throws IOException {
         writeRemove(out);
@@ -175,6 +213,9 @@ public class HostTxtEntry {
      * This works whether constructed with name and dest, or just properties.
      * Does not include newline.
      * Must have been constructed with non-null properties.
+     *
+     * @param out the writer to write to
+     * @throws IOException if writing fails
      */
     public void writeRemove(Writer out) throws IOException {
         if (props == null) throw new IllegalStateException();
@@ -190,7 +231,10 @@ public class HostTxtEntry {
     }
 
     /**
-     * Write the props part (if any) only, without newline
+     * Write the props part (if any) only, without newline.
+     *
+     * @param out the writer to write to
+     * @throws IOException if writing fails
      */
     public void writeProps(Writer out) throws IOException {
         writeProps(out, false, false);

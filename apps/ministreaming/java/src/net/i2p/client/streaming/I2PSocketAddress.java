@@ -13,10 +13,13 @@ import net.i2p.data.Destination;
  *  @since 0.9.1
  */
 public class I2PSocketAddress extends SocketAddress {
-
+    /** Serial version unique identifier */
     private static final long serialVersionUID = 1L;
+    /** ignored */
     private final int _port;
+    /** ignored */
     private transient Destination _dest;
+    /** ignored */
     private final String _host;
 
     /**
@@ -82,7 +85,7 @@ public class I2PSocketAddress extends SocketAddress {
         return new I2PSocketAddress(port, host);
     }
 
-    /** unresolved */
+    /** ignored */
     private I2PSocketAddress(int port, String host) {
         if (port < 0 || port > 65535)
             throw new IllegalArgumentException("Bad port " + port);
@@ -123,6 +126,9 @@ public class I2PSocketAddress extends SocketAddress {
         return _dest == null;
     }
 
+    /**
+     * toString.
+     */
     @Override
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public String toString() {
@@ -136,6 +142,9 @@ public class I2PSocketAddress extends SocketAddress {
         return buf.toString();
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof I2PSocketAddress))
@@ -152,6 +161,9 @@ public class I2PSocketAddress extends SocketAddress {
         return o._host == null;
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return DataHelper.hashCode(_dest) ^ DataHelper.hashCode(_host) ^ _port;

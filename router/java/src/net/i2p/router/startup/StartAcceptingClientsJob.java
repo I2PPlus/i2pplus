@@ -14,12 +14,21 @@ import net.i2p.router.RouterContext;
 /** start I2CP interface */
 class StartAcceptingClientsJob extends JobImpl {
 
+    /**
+     * StartAcceptingClientsJob.
+     */
     public StartAcceptingClientsJob(RouterContext context) {
         super(context);
     }
 
+    /**
+     * getName.
+     */
     public String getName() { return "Start Accepting Clients"; }
 
+    /**
+     * runJob.
+     */
     public void runJob() {
 
         getContext().clientManager().startup();

@@ -17,7 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
  * expansion functionality essential for I2P's cryptographic operations including
  * session key generation and key derivation.
  *
- * <p>Features and capabilities:</p>
+ * <p>Features and capabilities:
  * <ul>
  *   <li>HMAC-SHA256 based derivation for cryptographic security</li>
  *   <li>Support for one or two output keys with optional info parameter</li>

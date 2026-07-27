@@ -13,11 +13,19 @@ public class Elg2KeyPair extends KeyPair {
 
     private final byte[] encoded;
 
+    /**
+     * @param publicKey the public key
+     * @param privateKey the private key
+     * @param enc the encoded Elligator2 public key
+     */
     public Elg2KeyPair(PublicKey publicKey, PrivateKey privateKey, byte[] enc) {
         super(publicKey, privateKey);
         encoded = enc;
     }
 
+    /**
+     * @return the encoded Elligator2 public key
+     */
     public byte[] getEncoded() {
         return encoded;
     }

@@ -47,6 +47,9 @@ public abstract class EdnsOption {
         this.optionData = optionData;
     }
 
+    /**
+     * EdnsOption.
+     */
     @SuppressWarnings("this-escape")
     protected EdnsOption(byte[] optionData) {
         this.optionCode = getOptionCode().asInt;
@@ -75,6 +78,9 @@ public abstract class EdnsOption {
 
     private volatile String toStringCache;
 
+    /**
+     * toString.
+     */
     @Override
     public final String toString() {
         if (toStringCache == null) {

@@ -71,9 +71,12 @@ import java.util.Arrays;
  */
 @SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
 public class Certificate extends DataStructureImpl {
+    /** Null certificate singleton */
     public static final Certificate NULL_CERT = new NullCert();
 
+    /** Certificate type identifier */
     protected int _type;
+    /** Certificate payload data */
     protected byte[] _payload;
 
     /** Specifies a null certificate type with no payload */
@@ -85,6 +88,7 @@ public class Certificate extends DataStructureImpl {
     /** Signed with 40-byte Signature and (optional) 32-byte hash */
     public static final int CERTIFICATE_TYPE_SIGNED = 3;
 
+    /** Length of signed certificate with hash (signature + hash) */
     public static final int CERTIFICATE_LENGTH_SIGNED_WITH_HASH = Signature.SIGNATURE_BYTES + Hash.HASH_LENGTH;
 
     /** Contains multiple certs */
@@ -99,6 +103,9 @@ public class Certificate extends DataStructureImpl {
     /**
      * If null, P256 key, or Ed25519 key cert, return immutable static instance, else create new
      *
+     * @param data the source data
+     * @param off the offset into data
+     * @return the Certificate instance
      * @throws DataFormatException if not enough bytes
      * @since 0.8.3
      */
@@ -131,6 +138,10 @@ public class Certificate extends DataStructureImpl {
     /**
      * If null, P256 key, or Ed25519 key cert, return immutable static instance, else create new
      *
+     * @param in the input stream
+     * @return the Certificate instance
+     * @throws DataFormatException if the data is malformed
+     * @throws IOException if there is an I/O error
      * @since 0.8.3
      */
     public static Certificate create(InputStream in) throws DataFormatException, IOException {
@@ -157,10 +168,15 @@ public class Certificate extends DataStructureImpl {
         return new Certificate(type, payload);
     }
 
+    /** Creates a new Certificate with default values. */
     public Certificate() {}
 
     /**
-     *  @throws IllegalArgumentException if type &lt; 0
+     * Construct a certificate with the given type and payload.
+     *
+     * @param type the certificate type
+     * @param payload the certificate payload (may be null)
+     * @throws IllegalArgumentException if type &lt; 0
      */
     public Certificate(int type, byte[] payload) {
         if (type < 0) throw new IllegalArgumentException();
@@ -169,6 +185,8 @@ public class Certificate extends DataStructureImpl {
     }
 
     /** Gets the certificate type.
+     *
+     * @return the certificate type
      */
     public int getCertificateType() {
         return _type;
@@ -177,6 +195,7 @@ public class Certificate extends DataStructureImpl {
     /**
      *  Sets the certificate type.
      *
+     *  @param type the certificate type to set
      *  @throws IllegalArgumentException if type &lt; 0
      *  @throws IllegalStateException if already set
      */
@@ -186,6 +205,11 @@ public class Certificate extends DataStructureImpl {
         _type = type;
     }
 
+    /**
+     * Get the certificate payload.
+     *
+     * @return the certificate payload, or null
+     */
     public byte[] getPayload() {
         return _payload;
     }
@@ -193,6 +217,7 @@ public class Certificate extends DataStructureImpl {
     /**
      *  Sets the certificate payload.
      *
+     *  @param payload the payload to set
      *  @throws IllegalStateException if already set
      */
     public void setPayload(byte[] payload) {
@@ -234,6 +259,8 @@ public class Certificate extends DataStructureImpl {
     /**
      *  Writes the certificate to the target array.
      *
+     *  @param target the output array
+     *  @param offset the starting offset in the target
      *  @return the written length (NOT the new offset)
      */
     public int writeBytes(byte[] target, int offset) {
@@ -255,7 +282,11 @@ public class Certificate extends DataStructureImpl {
     /**
      *  Reads the certificate from the source array.
      *
+     *  @param source the source array
+     *  @param offset the starting offset in the source
+     *  @return the bytes consumed
      *  @throws IllegalStateException if already set
+     *  @throws DataFormatException if the data is malformed
      */
     public int readBytes(byte[] source, int offset) throws DataFormatException {
         if (_type != 0 || _payload != null) throw new IllegalStateException("already set");
@@ -279,6 +310,11 @@ public class Certificate extends DataStructureImpl {
         return cur - offset;
     }
 
+    /**
+     * Get the serialized size.
+     *
+     * @return the serialized size in bytes
+     */
     public int size() {
         return 1 + 2 + (_payload != null ? _payload.length : 0);
     }
@@ -286,6 +322,7 @@ public class Certificate extends DataStructureImpl {
     /**
      *  Up-convert this to a KeyCertificate
      *
+     *  @return the KeyCertificate
      *  @throws DataFormatException if cert type != CERTIFICATE_TYPE_KEY
      *  @since 0.9.12
      */

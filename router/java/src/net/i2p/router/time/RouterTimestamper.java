@@ -47,10 +47,25 @@ public class RouterTimestamper extends Timestamper {
     private static final int SHORT_TIMEOUT = 5*1000;
     private static final long MAX_WAIT_INITIALIZATION = 45*1000L;
 
+    /**
+     * PROP_QUERY_FREQUENCY.
+     */
     public static final String PROP_QUERY_FREQUENCY = "time.queryFrequencyMs";
+    /**
+     * PROP_SERVER_LIST.
+     */
     public static final String PROP_SERVER_LIST = "time.sntpServerList";
+    /**
+     * PROP_DISABLED.
+     */
     public static final String PROP_DISABLED = "time.disabled";
+    /**
+     * PROP_CONCURRING_SERVERS.
+     */
     public static final String PROP_CONCURRING_SERVERS = "time.concurringServers";
+    /**
+     * PROP_IP_COUNTRY.
+     */
     public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
 
     /** if different SNTP servers differ by more than 10s, someone is b0rked */
@@ -100,34 +115,61 @@ public class RouterTimestamper extends Timestamper {
         updateConfig();
     }
 
+    /**
+     * getServerCount.
+     */
     public int getServerCount() {
         synchronized (_servers) {
             return _servers.size();
         }
     }
+    /**
+     * getServer.
+     */
     public String getServer(int index) {
         synchronized (_servers) {
             return _servers.get(index);
         }
     }
 
+    /**
+     * getQueryFrequencyMs.
+     */
     public int getQueryFrequencyMs() { return _queryFrequency; }
 
+    /**
+     * getIsDisabled.
+     */
     public boolean getIsDisabled() { return _disabled; }
 
+    /**
+     * addListener.
+     */
     public void addListener(UpdateListener lsnr) {
             _listeners.add(lsnr);
     }
+    /**
+     * removeListener.
+     */
     public void removeListener(UpdateListener lsnr) {
             _listeners.remove(lsnr);
     }
+    /**
+     * getListenerCount.
+     */
     public int getListenerCount() {
             return _listeners.size();
     }
+    /**
+     * getListener.
+     */
     public UpdateListener getListener(int index) {
             return _listeners.get(index);
     }
 
+    /**
+     * startTimestamper.
+     */
     public void startTimestamper() {
         if (_disabled || _initialized)
             return;
@@ -138,6 +180,9 @@ public class RouterTimestamper extends Timestamper {
         _context.addShutdownTask(new Shutdown());
     }
 
+    /**
+     * waitForInitialization.
+     */
     @Override
     public void waitForInitialization() {
         try {
@@ -162,6 +207,9 @@ public class RouterTimestamper extends Timestamper {
 
     /** @since 0.8.8 */
     private class Shutdown implements Runnable {
+        /**
+         * run.
+         */
         public void run() {
              _isRunning = false;
              if (_timestamperThread != null)
@@ -169,6 +217,9 @@ public class RouterTimestamper extends Timestamper {
         }
     }
 
+    /**
+     * run.
+     */
     @Override
     public void run() {
         boolean lastFailed = false;

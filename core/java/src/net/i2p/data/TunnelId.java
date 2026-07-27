@@ -75,9 +75,11 @@ import java.io.OutputStream;
 public class TunnelId {
     private long _tunnelId;
 
+    /**
+     * MAX_ID_VALUE.
+     */
     public static final long MAX_ID_VALUE = 0xffffffffL;
 
-    /** */
     public TunnelId() {
         _tunnelId = -1;
     }

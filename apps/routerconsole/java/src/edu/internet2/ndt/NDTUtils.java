@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
  * Class that defines utility methods used by the NDT code
  */
 public class NDTUtils {
+    /** default constructor */
 
     /**
      * Utility method to print double value up to the hundredth place.
@@ -32,6 +33,7 @@ public class NDTUtils {
      * Utility method to print Text values for data speed related keys.
      *
      * @param paramIntVal integer parameter for which we find text value
+     * @param paramResBundObj resource bundle for localization
      * @return String Textual name for input parameter
      */
     public static String prttxt(int paramIntVal, ResourceBundle paramResBundObj) {

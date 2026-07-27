@@ -17,6 +17,8 @@ import net.i2p.util.OrderedProperties;
  *
  */
 public class Config {
+    /** Default constructor */
+    public Config() {}
 
 	private static Properties properties;
 	private static Properties config;
@@ -58,6 +60,8 @@ public class Config {
 
 	/**
 	 *  Don't bother showing a reload config button if this returns false.
+	 *
+	 *  @return true if the config file exists
 	 *  @since 0.9.13
 	 */
 	public synchronized static boolean hasConfigFile() {
@@ -98,6 +102,7 @@ public class Config {
 	/**
 	 * Returns the properties, sorted, WITHOUT the prefix
 	 *
+	 * @return the properties
 	 * @since 0.9.13
 	 */
 	public synchronized static Properties getProperties() {
@@ -132,6 +137,7 @@ public class Config {
 	 * will not override the default in the resource.
 	 *
 	 * @param newProps non-null WITHOUT the prefix
+	 * @throws IOException if the save fails
 	 * @since 0.9.13
 	 */
 	public synchronized static void saveConfiguration(Properties newProps) throws IOException {

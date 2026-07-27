@@ -31,9 +31,13 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public abstract class NamingService {
 
+    /** logger */
     protected final Log _log;
+    /** context */
     protected final I2PAppContext _context;
+    /** listeners */
     protected final Set<NamingServiceListener> _listeners;
+    /** updaters */
     protected final Set<NamingServiceUpdater> _updaters;
 
     /** what classname should be used as the naming service impl? */

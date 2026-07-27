@@ -20,6 +20,8 @@ public interface ReplyJob extends Job {
      *  Called by InNetMessagePool when an I2NPMessage
      *  matching a MessageSelector registered with the OutboundMessageRegistry
      *  is received
+     *
+     *  @param message the received I2NP message
      */
     public void setMessage(I2NPMessage message);
 }

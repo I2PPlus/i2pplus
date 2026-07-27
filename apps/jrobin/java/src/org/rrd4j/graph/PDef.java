@@ -8,12 +8,17 @@ import org.rrd4j.data.IPlottable;
  * plottable object that can generate values programmatically.
  */
 class PDef extends Source {
+    /** Plottable */
     private final IPlottable plottable;
 
+    /** Create a PDef */
     PDef(String name, IPlottable plottable) {
         super(name);
         this.plottable = plottable;
     }
+    /**
+     * @param dproc data processor to register the datasource with
+     */
 
     void requestData(DataProcessor dproc) {
         dproc.datasource(name, plottable);

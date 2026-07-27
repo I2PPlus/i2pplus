@@ -9,6 +9,8 @@ package com.maxmind.geoip;
 public final class InvalidDatabaseException extends RuntimeException {
 
     /**
+     * Create an exception with the given message.
+     *
      * @param message A message describing the reason why the exception was thrown.
      */
     public InvalidDatabaseException(String message) {
@@ -16,6 +18,8 @@ public final class InvalidDatabaseException extends RuntimeException {
     }
 
     /**
+     * Create an exception with the given message and cause.
+     *
      * @param message A message describing the reason why the exception was thrown.
      * @param cause   The cause of the exception.
      */

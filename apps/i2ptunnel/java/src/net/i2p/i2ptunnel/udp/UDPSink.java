@@ -11,8 +11,17 @@ import net.i2p.data.Destination;
  */
 public class UDPSink implements Sink {
 
+    /**
+     * sock.
+     */
     protected final DatagramSocket sock;
+    /**
+     * remoteHost.
+     */
     protected final InetAddress remoteHost;
+    /**
+     * remotePort.
+     */
     protected final int remotePort;
 
     /**

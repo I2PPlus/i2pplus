@@ -22,7 +22,13 @@ import net.i2p.util.Log;
  * <p>This is like a FormHandler but we don't extend it, as we don't have the message area, etc.</p>
  */
 public class UpdateHandler {
+    /**
+     * _context.
+     */
     protected RouterContext _context;
+    /**
+     * _log.
+     */
     protected Log _log;
     private String _action;
     private String _nonce;
@@ -34,8 +40,14 @@ public class UpdateHandler {
      */
     public void storeSession(HttpSession session) { _session = session; }
 
+    /**
+     * UpdateHandler.
+     */
     public UpdateHandler() {this(ContextHelper.getContext(null));}
 
+    /**
+     * UpdateHandler.
+     */
     public UpdateHandler(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(UpdateHandler.class);
@@ -70,6 +82,9 @@ public class UpdateHandler {
         checkUpdateAction();
     }
 
+    /**
+     * setUpdateNonce.
+     */
     public void setUpdateNonce(String nonce) {
         _nonce = nonce;
         checkUpdateAction();

@@ -19,6 +19,9 @@ import net.i2p.util.PortMapper;
  */
 class DevSU3UpdateRunner extends UpdateRunner {
 
+    /**
+     * DevSU3UpdateRunner.
+     */
     public DevSU3UpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris) {
         super(ctx, mgr, ROUTER_DEV_SU3, uris);
         if (!uris.isEmpty())

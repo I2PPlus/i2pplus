@@ -44,11 +44,17 @@ final class YKGenerator {
     private final I2PAppContext ctx;
     private volatile boolean _isRunning;
 
+    /** Property: minimum pool threshold */
     public static final String PROP_YK_PRECALC_MIN = "crypto.yk.precalc.min";
+    /** Property: maximum pool size */
     public static final String PROP_YK_PRECALC_MAX = "crypto.yk.precalc.max";
+    /** Property: delay between precalc operations (ms) */
     public static final String PROP_YK_PRECALC_DELAY = "crypto.yk.precalc.delay";
+    /** Default minimum pool threshold */
     public static final int DEFAULT_YK_PRECALC_MIN = SystemVersion.isSlow() ? 30 : 50;
+    /** Default maximum pool size */
     public static final int DEFAULT_YK_PRECALC_MAX = SystemVersion.isSlow() ? 100 : 200;
+    /** Default delay between precalc operations (ms) */
     public static final int DEFAULT_YK_PRECALC_DELAY = SystemVersion.isSlow() ? 200 : 150;
 
     /**
@@ -167,6 +173,9 @@ final class YKGenerator {
             _maxSize = maxSize;
         }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             while (_isRunning) {

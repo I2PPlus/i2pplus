@@ -15,6 +15,9 @@ public class SOCKS4Constants {
 
     private SOCKS4Constants() {}
 
+    /**
+     * SOCKS_VERSION_4.
+     */
     public static final int SOCKS_VERSION_4 = 0x04;
 
     /*
@@ -26,7 +29,13 @@ public class SOCKS4Constants {
      * @since 0.9.33
      */
     public static class Command {
+        /**
+         * CONNECT.
+         */
         public static final int CONNECT = 0x01;
+        /**
+         * BIND.
+         */
         public static final int BIND = 0x02;
     }
 
@@ -36,7 +45,13 @@ public class SOCKS4Constants {
      * @since 0.9.33
      */
     public static class Reply {
+        /**
+         * SUCCEEDED.
+         */
         public static final int SUCCEEDED = 0x5a;
+        /**
+         * CONNECTION_REFUSED.
+         */
         public static final int CONNECTION_REFUSED = 0x5b;
     }
 }

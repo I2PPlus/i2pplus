@@ -13,8 +13,17 @@ import net.i2p.data.DataHelper;
  */
 public class ReadBuffer implements Buffer {
 
+	/**
+	 * content.
+	 */
 	public final byte[] content;
+	/**
+	 * length.
+	 */
 	public final int length;
+	/**
+	 * offset.
+	 */
 	public final int offset;
 
 	/**
@@ -75,6 +84,9 @@ public class ReadBuffer implements Buffer {
 		return offset;
 	}
 
+	/**
+	 * toString.
+	 */
 	@Override
 	public String toString()
 	{

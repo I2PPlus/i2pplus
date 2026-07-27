@@ -4,21 +4,10 @@ package net.i2p.client.streaming;
  * Usage: StreamSinkTest [(old|new) [#hops [#kb]]]
  */
 public class StreamSinkTestStandalone {
-/*    private static String HOST1 = "dev.i2p.net";
-    private static String HOST2 = "dev.i2p.net";
-    private static String PORT1 = "4101";
-    private static String PORT2 = "4501";
- /*
-    private static String HOST1 = "localhost";
-    private static String HOST2 = "localhost";
-    private static String PORT1 = "7654";
-    private static String PORT2 = "7654";
-   */
     private static String HOST1 = "localhost";
     private static String HOST2 = "localhost";
     private static String PORT1 = "10001";
     private static String PORT2 = "11001";
-  /* */
 
     public static void main(String[] args) {
         int hops = 0;
@@ -48,14 +37,6 @@ public class StreamSinkTestStandalone {
         }, "server").start();
 
         try { Thread.sleep(60*1000); } catch (Exception e) {}
-
-        //run(256, 1);
-        //run(256, 1000);
-        //run(4*1024, 10);
-        run(kb, 1);
-        //run(1*1024, 1);
-        //run("/home/jrandom/streamSinkTestDir/clientSink36766.dat", 1);
-        //run(512*1024, 1);
         try { Thread.sleep(10*1000); } catch (InterruptedException e) {}
         System.out.println("Shutting down");
         System.exit(0);

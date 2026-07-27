@@ -12,10 +12,16 @@ import net.i2p.router.RouterContext;
  */
 class DirectLookupMatchJob extends FloodOnlyLookupMatchJob {
 
+    /**
+     * DirectLookupMatchJob.
+     */
     public DirectLookupMatchJob(RouterContext ctx, FloodSearchJob job) {
         super(ctx, job);
     }
 
+    /**
+     * getName.
+     */
     @Override
     public String getName() { return "Direct Lookup Match"; }
 

@@ -80,6 +80,9 @@ public class RRSIG extends Data {
      */
     private final byte[] signature;
 
+    /**
+     * parse.
+     */
     @SuppressWarnings("JavaUtilDate")
     public static RRSIG parse(DataInputStream dis, byte[] data, int length) throws IOException {
         TYPE typeCovered = TYPE.getType(dis.readUnsignedShort());
@@ -115,36 +118,60 @@ public class RRSIG extends Data {
         this.signature = signature;
     }
 
+    /**
+     * RRSIG.
+     */
     public RRSIG(TYPE typeCovered, int algorithm, byte labels, long originalTtl, Date signatureExpiration, Date signatureInception, int keyTag, DnsName signerName, byte[] signature) {
         this(typeCovered, null, (byte) algorithm, labels, originalTtl, signatureExpiration, signatureInception, keyTag, signerName, signature);
     }
 
+    /**
+     * RRSIG.
+     */
     public RRSIG(TYPE typeCovered, int algorithm, byte labels, long originalTtl, Date signatureExpiration, Date signatureInception, int keyTag, String signerName, byte[] signature) {
         this(typeCovered, null, (byte) algorithm, labels, originalTtl, signatureExpiration, signatureInception, keyTag, DnsName.from(signerName), signature);
     }
 
+    /**
+     * RRSIG.
+     */
     public RRSIG(TYPE typeCovered, SignatureAlgorithm algorithm, byte labels, long originalTtl, Date signatureExpiration, Date signatureInception, int keyTag, DnsName signerName, byte[] signature) {
         this(typeCovered, algorithm.number, labels, originalTtl, signatureExpiration, signatureInception, keyTag, signerName, signature);
     }
 
+    /**
+     * RRSIG.
+     */
     public RRSIG(TYPE typeCovered, SignatureAlgorithm algorithm, byte labels, long originalTtl, Date signatureExpiration, Date signatureInception, int keyTag, String signerName, byte[] signature) {
         this(typeCovered, algorithm.number, labels, originalTtl, signatureExpiration, signatureInception, keyTag, DnsName.from(signerName), signature);
     }
 
+    /**
+     * getSignature.
+     */
     public byte[] getSignature() {
         return signature.clone();
     }
 
+    /**
+     * getSignatureAsDataInputStream.
+     */
     public DataInputStream getSignatureAsDataInputStream() {
         return new DataInputStream(new ByteArrayInputStream(signature));
     }
 
+    /**
+     * getSignatureLength.
+     */
     public int getSignatureLength() {
         return signature.length;
     }
 
     private transient String base64SignatureCache;
 
+    /**
+     * getSignatureBase64.
+     */
     public String getSignatureBase64() {
         if (base64SignatureCache == null) {
             base64SignatureCache = Base64.encodeToString(signature);
@@ -152,17 +179,26 @@ public class RRSIG extends Data {
         return base64SignatureCache;
     }
 
+    /**
+     * getType.
+     */
     @Override
     public TYPE getType() {
         return TYPE.RRSIG;
     }
 
+    /**
+     * serialize.
+     */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
         writePartialSignature(dos);
         dos.write(signature);
     }
 
+    /**
+     * writePartialSignature.
+     */
     @SuppressWarnings("JavaUtilDate")
     public void writePartialSignature(DataOutputStream dos) throws IOException {
         dos.writeShort(typeCovered.getValue());
@@ -175,6 +211,9 @@ public class RRSIG extends Data {
         signerName.writeToStream(dos);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");

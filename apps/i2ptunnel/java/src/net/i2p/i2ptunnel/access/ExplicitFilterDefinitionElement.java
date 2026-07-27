@@ -6,6 +6,9 @@ import net.i2p.data.Hash;
 /**
  * Filter definition element for a single explicitly defined remote destination.
  *
+ * <p>Defines access control for a specific remote destination using a .b32 address,
+ * applying the given threshold to limit connection behavior from that destination.</p>
+ *
  * @since 0.9.40
  */
 class ExplicitFilterDefinitionElement extends FilterDefinitionElement {

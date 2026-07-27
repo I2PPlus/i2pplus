@@ -20,6 +20,12 @@ public class I2PTunnelHTTPBidirProxy extends I2PTunnelHTTPClient implements Runn
      *  As of 0.9.20 this is fast, and does NOT connect the manager to the router,
      *  or open the local socket. You MUST call startRunning() for that.
      *
+     * @param localPort the local port to bind to
+     * @param l logging instance
+     * @param sockMgr the I2P socket manager
+     * @param tunnel the I2P tunnel
+     * @param notifyThis the event dispatcher for notifications
+     * @param clientId the client ID
      * @throws IllegalArgumentException if the I2PTunnel does not contain
      *                                  valid config to contact the router
      */

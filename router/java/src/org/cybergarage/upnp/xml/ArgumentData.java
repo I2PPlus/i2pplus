@@ -29,6 +29,7 @@ package org.cybergarage.upnp.xml;
  * @since 1.0
  */
 public class ArgumentData extends NodeData {
+    /** ArgumentData default constructor */
     public ArgumentData() {}
 
     ////////////////////////////////////////////////
@@ -37,10 +38,20 @@ public class ArgumentData extends NodeData {
 
     private String value = "";
 
+    /**
+     * Get the argument value.
+     *
+     * @return the value
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Set the argument value.
+     *
+     * @param value the value to set
+     */
     public void setValue(String value) {
         this.value = value;
     }

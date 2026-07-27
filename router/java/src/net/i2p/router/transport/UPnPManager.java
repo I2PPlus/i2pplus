@@ -104,6 +104,9 @@ class UPnPManager {
     private static final String TCP_PORT_NAME = "TCP";
     private static final String UDP_PORT_NAME = "UDP";
 
+    /**
+     * UPnPManager.
+     */
     public UPnPManager(RouterContext context, TransportManager manager) {
         _context = context;
         _manager = manager;
@@ -252,6 +255,9 @@ class UPnPManager {
             super(_context.simpleTimer2());
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             if (_shouldBeRunning) {
                 rescan();
@@ -272,6 +278,9 @@ class UPnPManager {
             super(_context.simpleTimer2());
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
              _scannerCallback.afterScan();
         }

@@ -27,6 +27,11 @@ import java.math.BigInteger;
  */
 public interface Hash<T> {
 
+    /**
+     * Returns the hash range for this hash function.
+     *
+     * @return the hash range
+     */
     HashRange getRange();
 
     /**

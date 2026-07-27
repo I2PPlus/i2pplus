@@ -49,14 +49,23 @@ public class JSONRPC2Servlet extends HttpServlet {
     private static final int BUFFER_LENGTH = 2048;
     private static final String SVC_HTTP_I2PCONTROL = "http_i2pcontrol";
     private static final String SVC_HTTPS_I2PCONTROL = "https_i2pcontrol";
+    /** JSON-RPC 2.0 request dispatcher. */
     private Dispatcher disp;
+    /** Logger. */
     private Log _log;
+    /** Security manager. */
     private final SecurityManager _secMan;
+    /** Configuration manager. */
     private final ConfigurationManager _conf;
+    /** JSON-RPC 2.0 helper. */
     private final JSONRPC2Helper _helper;
+    /** Router context. */
     private final RouterContext _context;
+    /** Whether running as a webapp. */
     private final boolean _isWebapp;
+    /** Whether HTTP is available. */
     private boolean _isHTTP;
+    /** Whether HTTPS is available. */
     private boolean _isHTTPS;
 
     /**
@@ -91,6 +100,7 @@ public class JSONRPC2Servlet extends HttpServlet {
         _isWebapp = false;
     }
 
+    /** Register JSON-RPC 2.0 request handlers. */
     @Override
     public void init() throws ServletException {
         super.init();
@@ -120,6 +130,7 @@ public class JSONRPC2Servlet extends HttpServlet {
         }
     }
 
+    /** Clean up port mappings and stop timed events. */
     @Override
     public void destroy() {
         if (_isWebapp) {
@@ -134,6 +145,7 @@ public class JSONRPC2Servlet extends HttpServlet {
         super.destroy();
     }
 
+    /** Serve the I2PControl status page. */
     @Override
     protected void doGet(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         setHeaders(httpServletResponse);
@@ -169,9 +181,7 @@ public class JSONRPC2Servlet extends HttpServlet {
     }
 
 
-    /**
-     *  @since 0.9.48
-     */
+    /** HTTP security headers. */
     private static void setHeaders(HttpServletResponse resp) {
         resp.setContentType("text/html");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
@@ -181,7 +191,7 @@ public class JSONRPC2Servlet extends HttpServlet {
         resp.setHeader("Cache-Control","private, no-cache, max-age=14400");
     }
 
-    /** @since 0.12 */
+    /** Handle API password change form submission. */
     private void doPasswordChange(HttpServletRequest req, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         setHeaders(httpServletResponse);
         PrintWriter out = httpServletResponse.getWriter();
@@ -221,6 +231,7 @@ public class JSONRPC2Servlet extends HttpServlet {
         out.println("</body>\n</html>");
     }
 
+    /** Handle JSON-RPC 2.0 requests and password changes. */
     @Override
     protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
    if ("/password".equals(httpServletRequest.getServletPath())) {

@@ -22,15 +22,22 @@ import net.i2p.data.DataHelper;
  * @author jrandom
  */
 public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public final static int MESSAGE_TYPE = 6;
+    /** the session ID */
     private int _sessionId;
+    /** the message ID */
     private long _messageId;
 
+    /** Default constructor */
     public ReceiveMessageBeginMessage() {
         _sessionId = -1;
         _messageId = -1;
     }
 
+    /** @return the session ID */
     public long getSessionId() {
         return _sessionId;
     }
@@ -54,14 +61,19 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
         _sessionId = (int) id;
     }
 
+    /** @return the message ID */
     public long getMessageId() {
         return _messageId;
     }
 
+    /** @param id the message ID */
     public void setMessageId(long id) {
         _messageId = id;
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
@@ -72,6 +84,9 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         throw new UnsupportedOperationException("This shouldn't be called... use writeMessage(out)");
@@ -81,7 +96,7 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
     /**
      * Override to reduce mem churn
      *
-     * @throws IOException
+     * @throws IOException on write error
      */
     @Override
     public void writeMessage(OutputStream out) throws I2CPMessageException, IOException {
@@ -98,11 +113,17 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

@@ -14,6 +14,9 @@ public class VersionBean {
     private static String version = "0.7";
     private static String url = "http://susi.i2p/";
 
+    /**
+     * VersionBean.
+     */
     public VersionBean() {
         super();
     }

@@ -11,6 +11,7 @@ import java.io.InputStream;
  */
 public class CountingInputStream extends FilterInputStream implements ReadCounter {
 
+        /** total bytes read or skipped */
     protected long count;
 
     /**

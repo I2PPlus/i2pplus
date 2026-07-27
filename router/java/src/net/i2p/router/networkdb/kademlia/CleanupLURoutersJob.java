@@ -4,6 +4,9 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
+/**
+ * Periodically cleans up least-used router entries from the network database.
+ */
 class CleanupLURoutersJob extends JobImpl {
     private final Log _log;
     private final KademliaNetworkDatabaseFacade _facade;
@@ -12,6 +15,11 @@ class CleanupLURoutersJob extends JobImpl {
     private static final long INITIAL_DELAY_MS = 60*1000L;
     private static final long RERUN_DELAY_MS = 10*60*1000L;
 
+    /**
+     * Creates a new cleanup job for least-used routers.
+     * @param ctx the router context
+     * @param facade the network database facade
+     */
     public CleanupLURoutersJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
         super(ctx);
         _ctx = ctx;

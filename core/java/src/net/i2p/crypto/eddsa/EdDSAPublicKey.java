@@ -6,7 +6,7 @@
  * to EdDSA-Java.
  *
  * You should have received a copy of the CC0 legalcode along with this
- * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>lt;https://creativecommons.org/publicdomain/zero/1.0/<https://creativecommons.org/publicdomain/zero/1.0/>gt;.
+ * work. If not, see &lt;https://creativecommons.org/publicdomain/zero/1.0/&gt;.
  *
  */
 package net.i2p.crypto.eddsa;
@@ -37,9 +37,13 @@ import java.util.Arrays;
  */
 public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     private static final long serialVersionUID = 9837459837498475L;
+    /** A */
     private final GroupElement A;
+    /** Aneg */
     private GroupElement Aneg = null;
+    /** Abyte */
     private final byte[] Abyte;
+    /** Ed dsa spec */
     private final EdDSAParameterSpec edDsaSpec;
 
     // OID 1.3.101.xxx
@@ -48,6 +52,11 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     private static final int OID_BYTE = 8;
     private static final int IDLEN_BYTE = 3;
 
+    /**
+     * EdDSAPublicKey.
+     *
+     * @param spec the public key specification
+     */
     public EdDSAPublicKey(EdDSAPublicKeySpec spec) {
         this.A = spec.getA();
         this.Abyte = this.A.toByteArray();
@@ -55,17 +64,26 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     }
 
     /**
-     *  @since 0.9.25
+     * Create from X.509.
+     *
+     * @param spec the X.509 key specification
+     * @throws InvalidKeySpecException if the spec is invalid
      */
     public EdDSAPublicKey(X509EncodedKeySpec spec) throws InvalidKeySpecException {
         this(new EdDSAPublicKeySpec(decode(spec.getEncoded()), EdDSANamedCurveTable.ED_25519_CURVE_SPEC));
     }
 
+    /**
+     * getAlgorithm.
+     */
     @Override
     public String getAlgorithm() {
         return KEY_ALGORITHM;
     }
 
+    /**
+     * getFormat.
+     */
     @Override
     public String getFormat() {
         return "X.509";
@@ -216,15 +234,28 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
         }
     }
 
+    /**
+     * getParams.
+     */
     @Override
     public EdDSAParameterSpec getParams() {
         return edDsaSpec;
     }
 
+    /**
+     * getA.
+     *
+     * @return the public key point A
+     */
     public GroupElement getA() {
         return A;
     }
 
+    /**
+     * getNegativeA.
+     *
+     * @return the negated public key point
+     */
     public GroupElement getNegativeA() {
         // Only read Aneg once, otherwise read re-ordering might occur between
         // here and return. Requires all GroupElement's fields to be final.
@@ -236,6 +267,11 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
         return ourAneg;
     }
 
+    /**
+     * getAbyte.
+     *
+     * @return the public key bytes
+     */
     public byte[] getAbyte() {
         return Abyte;
     }

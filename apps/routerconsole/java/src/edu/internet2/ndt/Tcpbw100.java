@@ -107,36 +107,66 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      */
     private static final long serialVersionUID = -2030725073538492542L;
 
+    /**  txt diagnosis */
     JTextArea _txtDiagnosis, _txtStatistics;
+    /**  results txt pane */
     ResultsTextPane _resultsTxtPane;
+    /**  s err msg */
     String _sErrMsg;
+    /**  button start test */
     JButton _buttonStartTest;
+    /**  button details */
     JButton _buttonDetails;
+    /**  button statistics */
     JButton _buttonStatistics;
+    /**  chkbox default test */
     JCheckBox _chkboxDefaultTest, _chkboxPreferIPv6;
+    /**  spinner test count */
     JSpinner _spinnerTestCount = new JSpinner();
+    /**  sa delays */
     String[] _saDelays = { "immediate", "1min", "5mins", "10mins", "30mins", "2hours", "12hours", "1day" };
 
+    /**  b failed */
     boolean _bFailed;
+    /**  frame web100 vars */
     NewFrame _frameWeb100Vars, _frameDetailedStats;
+    /**  d time */
     double _dTime;
+    /**  s2cspd update time */
     int _s2cspdUpdateTime = 500, _c2sspdUpdateTime = 500; // ms
+    /**  i e c n enabled */
     int _iECNEnabled, _iNagleEnabled, MSSSent, MSSRcvd;
+    /**  i s a c k enabled */
     int _iSACKEnabled, _iTimestampsEnabled, _iWinScaleRcvd, _iWinScaleSent;
+    /**  i fast retran */
     int _iFastRetran, _iAckPktsOut, _iSmoothedRTT, _iCurrentCwnd, _iMaxCwnd;
+    /**  i snd lim time rwin */
     int _iSndLimTimeRwin, _iSndLimTimeCwnd, _iSndLimTimeSender;
+    /**  i snd lim trans rwin */
     int _iSndLimTransRwin, _iSndLimTransCwnd, _iSndLimTransSender, _iMaxSsthresh;
+    /**  i sum r t t */
     int _iSumRTT, _iCountRTT, _iCurrentMSS, _iTimeouts, _iPktsRetrans;
+    /**  i s a c ks rcvd */
     int _iSACKsRcvd, _iDupAcksIn, _iMaxRwinRcvd, _iMaxRwinSent;
+    /**  i data pkts out */
     int _iDataPktsOut, _iRcvbuf, _iSndbuf, _iAckPktsIn;
+    /**  i data bytes out */
     long _iDataBytesOut;
+    /**  i pkts out */
     int _iPktsOut, _iCongestionSignals, _iRcvWinScale;
+    /**  i pkts */
     int _iPkts, _iLength = NDTConstants.PREDEFINED_BUFFER_SIZE, _iCurrentRTO;
+    /**  i c2s data */
     int _iC2sData, _iC2sAck, _iS2cData, _iS2cAck;
+    /**  s server type */
     String _sServerType = "web100"; // Lowercase string either web100 or web10g used to select Message based upon server type
+    /**  d s2cspd */
     double _dS2cspd, _dC2sspd, _dSc2sspd, _dSs2cspd;
+    /**  i ssndqueue */
     int _iSsndqueue;
+    /**  d sbytes */
     double _dSbytes;
+    /**  yabuff2 write */
     byte[] _yabuff2Write;
 
     /*
@@ -149,20 +179,32 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     private String _sClient = "applet";
 
     // These variables are self-explanatory. Do not follow naming convention, but left that way
+    /** Half duplex */
     int half_duplex, congestion, bad_cable, mismatch;
+    /** Mylink */
     double mylink;
+    /** Loss */
     double loss, estimate, avgrtt, spd, waitsec, timesec, rttsec;
+    /** Order */
     double order, rwintime, sendtime, cwndtime, rwin, swin, cwin;
+    /** Aspd */
     double aspd;
     // end naming convention-not-followed variables
 
+    /**  b is application */
     boolean _bIsApplication = false;
     private final AtomicBoolean _bTestInProgress = new AtomicBoolean();
+    /** S host name */
     String sHostName = null;
+    /** Host address */
     InetAddress hostAddress = null;
+    /**  s test results */
     String _sTestResults = "";
+    /**  y tests */
     byte _yTests = NDTConstants.TEST_C2S | NDTConstants.TEST_S2C | NDTConstants.TEST_STATUS | NDTConstants.TEST_META;
+    /**  i c2s s f w result */
     int _iC2sSFWResult = NDTConstants.SFW_NOTTESTED;
+    /**  i s2c s f w result */
     int _iS2cSFWResult = NDTConstants.SFW_NOTTESTED;
 
     /*
@@ -226,6 +268,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     private final I2PSSLSocketFactory _sslFactory;
     private StatusPanel _sPanel;
 
+    /**
+     * Tcpbw100.
+     */
     public Tcpbw100(boolean useSSL) {
         super();
         I2PSSLSocketFactory sslFactory = null;
@@ -275,22 +320,70 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     // Accessor methods for public variables
     //
 
+    /**
+     * get_c2sspd.
+     */
     public String get_c2sspd() {return Double.toString((pub_c2sspd));} // Expressed as MiB using base 10
+    /**
+     * get_s2cspd.
+     */
     public String get_s2cspd() {return Double.toString(pub_s2cspd);} // Expressed as MiB using base 10
+    /**
+     * get_CurRwinRcvd.
+     */
     public String get_CurRwinRcvd() {return Integer.toString(pub_CurRwinRcvd);}
+    /**
+     * get_MaxRwinRcvd.
+     */
     public String get_MaxRwinRcvd() {return Integer.toString(pub_MaxRwinRcvd);}
+    /**
+     * get_Ping.
+     */
     public String get_Ping() {return Integer.toString(pub_MinRTT);}
+    /**
+     * get_MaxRTT.
+     */
     public String get_MaxRTT() {return Integer.toString(pub_MaxRTT);}
+    /**
+     * get_loss.
+     */
     public String get_loss() {return Double.toString(pub_loss);}
+    /**
+     * get_avgrtt.
+     */
     public String get_avgrtt() {return Double.toString(pub_avgrtt);}
+    /**
+     * get_CurRTO.
+     */
     public String get_CurRTO() {return Integer.toString(pub_CurRTO);}
+    /**
+     * get_SACKsRcvd.
+     */
     public String get_SACKsRcvd() {return Integer.toString(pub_SACKsRcvd);}
+    /**
+     * get_osVer.
+     */
     public String get_osVer() {return pub_osVer;}
+    /**
+     * get_pluginVer.
+     */
     public String get_pluginVer() {return pub_pluginVer;}
+    /**
+     * get_host.
+     */
     public String get_host() {return pub_host;}
+    /**
+     * get_osName.
+     */
     public String get_osName() {return pub_osName;}
+    /**
+     * get_osArch.
+     */
     public String get_osArch() {return pub_osArch;}
 
+    /**
+     * get_mismatch.
+     */
     public String get_mismatch() {
         String result;
         if (pub_mismatch == 0) {result = "no";}
@@ -298,6 +391,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         return result;
     }
 
+    /**
+     * get_Bad_cable.
+     */
     public String get_Bad_cable() {
         String result;
         if (pub_Bad_cable == 1) {result = "yes";}
@@ -305,6 +401,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         return result;
     }
 
+    /**
+     * get_congestion.
+     */
     public String get_congestion() {
         String result;
         if (pub_congestion == 1) {result = "yes";}
@@ -312,19 +411,46 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         return result;
     }
 
+    /**
+     * get_cwndtime.
+     */
     public String get_cwndtime() {return Double.toString(pub_cwndtime);}
+    /**
+     * get_AccessTech.
+     */
     public String get_AccessTech() {return pub_AccessTech;}
+    /**
+     * get_rcvrLimiting.
+     */
     public String get_rcvrLimiting() {return Double.toString(pub_pctRcvrLimited);}
 
+    /**
+     * get_optimalRcvrBuffer.
+     */
     public String get_optimalRcvrBuffer() {
         return Integer.toString(pub_MaxRwinRcvd * NDTConstants.KILO_BITS); //buffer size in bits
     }
 
+    /**
+     * get_clientIP.
+     */
     public String get_clientIP() {return pub_clientIP;}
+    /**
+     * get_natStatus.
+     */
     public String get_natStatus() {return pub_natBox;}
+    /**
+     * get_DupAcksOut.
+     */
     public String get_DupAcksOut() {return Integer.toString(pub_DupAcksOut);}
+    /**
+     * get_DupAcksIn.
+     */
     public String get_DupAcksIn() {return Integer.toString(pub_DupAcksIn);}
 
+    /**
+     * get_TimeStamp.
+     */
     public String get_TimeStamp() {
         String result = "unknown";
         if (pub_TimeStamp != null) {result = pub_TimeStamp.toString();}
@@ -332,14 +458,38 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     // get PC buffer imposed throughput limit
+    /**
+     * get_PcBuffSpdLimit.
+     */
     public String get_PcBuffSpdLimit() {return Double.toString(rwin / rttsec);}
+    /**
+     * get_jitter.
+     */
     public String get_jitter() {return Integer.toString((pub_MaxRTT - pub_MinRTT));}
+    /**
+     * get_WaitSec.
+     */
     public String get_WaitSec() {return Integer.toString((pub_CurRTO * pub_Timeouts) / 1000);}
+    /**
+     * get_errmsg.
+     */
     public String get_errmsg() {return pub_errmsg;}
+    /**
+     * get_diagnosis.
+     */
     public String get_diagnosis() {return pub_diagnosis;}
+    /**
+     * get_statistics.
+     */
     public String get_statistics() {return pub_statistics;}
+    /**
+     * get_status.
+     */
     public String get_status() {return pub_status;}
 
+    /**
+     * get_instSpeed.
+     */
     public String get_instSpeed() {
         //Get speed in bits, hence multiply by 8 for byte->bit conversion
         return Double.toString((NDTConstants.EIGHT * pub_bytes) / (System.currentTimeMillis() - pub_time));
@@ -396,6 +546,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
     /* I2P */
 
+    /**
+     * isTestInProgress.
+     */
     public boolean isTestInProgress() {return _bTestInProgress.get();}
 
     /**
@@ -406,6 +559,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      */
     class TestWorker implements Runnable {
         // I2P
+        /**
+         * run.
+         */
         public void run() {
             if (_bTestInProgress.compareAndSet(false, true)) {
                 try {run2();}
@@ -700,7 +856,13 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      */
     public synchronized String getStatus() {return _displayStatus;}
 
+    /**
+     * test_mid.
+     */
     public boolean test_mid(Protocol paramProtoObj) throws IOException {return false;}
+    /**
+     * test_sfw.
+     */
     public boolean test_sfw(Protocol protocolObj) throws IOException {return false;}
 
     /**
@@ -788,6 +950,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
             new I2PAppThread("NDTSleeper") {
 
+                /**
+                 * run.
+                 */
                 public void run() {
                     try {Thread.sleep(10000);} // sleep for 10s
                     catch (InterruptedException e) {
@@ -806,6 +971,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             }.start();
 
             PeriodicTimer c2sspdUpdateTimer = new PeriodicTimer() {
+                /**
+                 * timeReached.
+                 */
                 @Override
                 public void timeReached() {
                     pub_c2sspd = ((NDTConstants.EIGHT * _iPkts * _yabuff2Write.length) / NDTConstants.KILO) / (System.currentTimeMillis() - _dTime);
@@ -970,6 +1138,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             pub_time = _dTime;
 
             PeriodicTimer s2cspdUpdateTimer = new PeriodicTimer() {
+                /**
+                 * timeReached.
+                 */
                 @Override
                 public void timeReached() {
                     pub_s2cspd = ((NDTConstants.EIGHT * pub_bytes) / NDTConstants.KILO) / (System.currentTimeMillis() - _dTime);
@@ -2370,6 +2541,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
         _thread_group.setDaemon(true);
         Thread t = new I2PAppThread(_thread_group, new Runnable() {
+            /**
+             * run.
+             */
             @Override
             public void run() {
                 try {new TestWorker().run();}
@@ -2386,6 +2560,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      *  @since 0.9.46 to replace Java Timer and TimerTask
      */
     private abstract class PeriodicTimer extends SimpleTimer2.TimedEvent {
+        /**
+         * PeriodicTimer.
+         */
         public PeriodicTimer() {super(_context.simpleTimer2(), 100);}
     }
 

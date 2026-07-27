@@ -5,7 +5,17 @@ package com.maxmind.geoip;
  */
 
 public class Region {
+	/**
+	 * countryCode.
+	 */
 	public String countryCode;
+	/**
+	 * countryName.
+	 */
 	public String countryName;
-	public String region;
+	/**
+	 * region.
+	 */
+    /** Region or state code. */
+    public String region;
 }

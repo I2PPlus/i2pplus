@@ -86,19 +86,37 @@ public class MultiSource implements Source, Sink {
      *  @since 0.9.53
      */
     static class MSink {
+        /**
+         * dest.
+         */
         public final Destination dest;
+        /**
+         * fromPort.
+         */
         public final int fromPort;
+        /**
+         * toPort.
+         */
         public final int toPort;
 
+        /**
+         * MSink.
+         */
         public MSink(Destination dest, int fromPort, int toPort) {
             this.dest = dest; this.fromPort = fromPort; this.toPort = toPort;
         }
 
+        /**
+         * hashCode.
+         */
         @Override
         public int hashCode() {
             return dest.hashCode() | fromPort | (toPort << 16);
         }
 
+        /**
+         * equals.
+         */
         @Override
         public boolean equals(Object o) {
             if (!(o instanceof MSink))
@@ -107,6 +125,9 @@ public class MultiSource implements Source, Sink {
             return dest.equals(s.dest) && fromPort == s.fromPort && toPort == s.toPort;
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "from port " + fromPort + " to " + dest.toBase32() + ':' + toPort;

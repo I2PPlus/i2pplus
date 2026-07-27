@@ -48,10 +48,13 @@ public class RateStat {
         }
     }
 
-    /**
-     * update all of the rates for the various periods with the given value.
-     */
-    public void addData(long value, long eventDuration) {
+/**
+ * Update all of the rates for the various periods with the given value.
+ *
+ * @param value the value to add
+ * @param eventDuration the event duration
+ */
+public void addData(long value, long eventDuration) {
         for (Rate r : _rates) r.addData(value, eventDuration);
     }
 
@@ -59,9 +62,10 @@ public class RateStat {
      * Update all of the rates for the various periods with the given value.
      * Zero duration.
      *
-     * @since 0.8.10
-     */
-    public void addData(long value) {
+ * @param value the value to add
+ * @since 0.8.10
+ */
+public void addData(long value) {
         for (Rate r : _rates) r.addData(value);
     }
 
@@ -70,34 +74,34 @@ public class RateStat {
         for (Rate r : _rates) r.coalesce();
     }
 
-    /** Return the unique name of this statistic. @return the unique name of this statistic */
+    /** @return the unique name of this statistic */
     public String getName() {
         return _statName;
     }
 
-    /** Return the grouping name under which this statistic is kept. @return the grouping name under which this statistic is kept */
+    /** @return the grouping name under which this statistic is kept */
     public String getGroupName() {
         return _groupName;
     }
 
-    /** Return a simple description of this statistic. @return a simple description of this statistic */
+    /** @return a simple description of this statistic */
     public String getDescription() {
         return _description;
     }
 
-    /** Return the periods this rate is tracked over, in milliseconds. @return the periods this rate is tracked over, in milliseconds */
+    /** @return the periods this rate is tracked over, in milliseconds */
     public long[] getPeriods() {
         long[] rv = new long[_rates.length];
         for (int i = 0; i < _rates.length; i++) rv[i] = _rates[i].getPeriod();
         return rv;
     }
 
-    /** Return the lifetime average value from the shortest period's rate. @return the lifetime average value from the shortest period's rate */
+    /** @return the lifetime average value from the shortest period's rate */
     public double getLifetimeAverageValue() {
         return _rates[0].getLifetimeAverageValue();
     }
 
-    /** Return the lifetime event count from the shortest period's rate. @return the lifetime event count from the shortest period's rate */
+    /** @return the lifetime event count from the shortest period's rate */
     public long getLifetimeEventCount() {
         return _rates[0].getLifetimeEventCount();
     }
@@ -165,12 +169,17 @@ public class RateStat {
         return false;
     }
 
+    /** @param rs the other RateStat */
     boolean nameGroupDescEquals(RateStat rs) {
         return DataHelper.eq(getGroupName(), rs.getGroupName()) && DataHelper.eq(getDescription(), rs.getDescription()) && DataHelper.eq(getName(), rs.getName());
     }
 
     /**
      * Includes comment lines
+     *
+     * @param out the output stream
+     * @param prefix the property prefix
+     * @throws IOException if an I/O error occurs
      */
     public void store(OutputStream out, String prefix) throws IOException {
         store(out, prefix, true);
@@ -179,7 +188,10 @@ public class RateStat {
     /**
      *  Stores the rate statistics to an output stream.
      *
+     * @param out the output stream
+     * @param prefix the property prefix
      * @param addComments add comment lines to the output
+     * @throws IOException if an I/O error occurs
      * @since 0.9.41
      */
     public void store(OutputStream out, String prefix, boolean addComments) throws IOException {
@@ -213,6 +225,7 @@ public class RateStat {
      * This RateStat must already be created, with the specified rate entries constructued - this
      * merely loads them with data.
      *
+     * @param props the properties
      * @param prefix prefix to the property entries (should NOT end with a period)
      * @param treatAsCurrent if true, we'll treat the loaded data as if no time has
      *                       elapsed since it was written out, but if it is false, we'll

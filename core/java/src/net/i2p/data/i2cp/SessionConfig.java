@@ -39,9 +39,13 @@ import java.util.Properties;
  * @author jrandom
  */
 public class SessionConfig extends DataStructureImpl {
+    /** ignored */
     private Destination _destination;
+    /** ignored */
     private Signature _signature;
+    /** ignored */
     private Date _creationDate;
+    /** ignored */
     private Properties _options;
 
     /**
@@ -72,12 +76,19 @@ public class SessionConfig extends DataStructureImpl {
      * Really? See also ClientManager.REQUEST_LEASESET_TIMEOUT.
      * If I2CP replay attacks are a thing, there's a lot more to do.
      */
+    /** ignored */
     private static final long OFFSET_VALIDITY = 3 * (long) 60 * 1000;
 
+    /**
+     * SessionConfig.
+     */
     public SessionConfig() {
         this(null);
     }
 
+    /**
+     * SessionConfig.
+     */
     public SessionConfig(Destination dest) {
         _destination = dest;
         _creationDate = Date.from(Instant.ofEpochMilli(Clock.getInstance().now()));
@@ -102,6 +113,9 @@ public class SessionConfig extends DataStructureImpl {
         return _creationDate;
     }
 
+    /**
+     * setCreationDate.
+     */
     public void setCreationDate(Date date) {
         _creationDate = date;
     }
@@ -131,10 +145,16 @@ public class SessionConfig extends DataStructureImpl {
         _options = options;
     }
 
+    /**
+     * getSignature.
+     */
     public Signature getSignature() {
         return _signature;
     }
 
+    /**
+     * setSignature.
+     */
     public void setSignature(Signature sig) {
         _signature = sig;
     }
@@ -324,6 +344,7 @@ public class SessionConfig extends DataStructureImpl {
         return false;
     }
 
+    /** ignored */
     private byte[] getBytes() {
         if (_destination == null || _options == null || _creationDate == null) {
             return new byte[0];
@@ -346,6 +367,9 @@ public class SessionConfig extends DataStructureImpl {
         return out.toByteArray();
     }
 
+    /**
+     * readBytes.
+     */
     @Override
     public void readBytes(InputStream rawConfig) throws DataFormatException, IOException {
         _destination = Destination.create(rawConfig);
@@ -359,6 +383,9 @@ public class SessionConfig extends DataStructureImpl {
         _signature.readBytes(rawConfig);
     }
 
+    /**
+     * writeBytes.
+     */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if ((_destination == null) || (_options == null) || (_signature == null) || (_creationDate == null)) {
@@ -370,6 +397,9 @@ public class SessionConfig extends DataStructureImpl {
         _signature.writeBytes(out);
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if ((object != null) && (object instanceof SessionConfig)) {
@@ -379,11 +409,17 @@ public class SessionConfig extends DataStructureImpl {
         return false;
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return _signature != null ? _signature.hashCode() : 0;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder("SessionConfig: ");

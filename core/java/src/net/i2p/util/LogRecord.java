@@ -22,6 +22,9 @@ class LogRecord {
     private final String _message;
     private final Throwable _throwable;
 
+    /**
+     * LogRecord.
+     */
     public LogRecord(Class<?> src, String name, String threadName, int priority, String msg, Throwable t) {
         _date = Clock.getInstance().now();
         _source = src;
@@ -32,30 +35,51 @@ class LogRecord {
         _throwable = t;
     }
 
+    /**
+     * getDate.
+     */
     public long getDate() {
         return _date;
     }
 
+    /**
+     * getSource.
+     */
     public Class<?> getSource() {
         return _source;
     }
 
+    /**
+     * getSourceName.
+     */
     public String getSourceName() {
         return _name;
     }
 
+    /**
+     * getThreadName.
+     */
     public String getThreadName() {
         return _threadName;
     }
 
+    /**
+     * getPriority.
+     */
     public int getPriority() {
         return _priority;
     }
 
+    /**
+     * getMessage.
+     */
     public String getMessage() {
         return _message;
     }
 
+    /**
+     * getThrowable.
+     */
     public Throwable getThrowable() {
         return _throwable;
     }
@@ -75,6 +99,9 @@ class LogRecord {
         return _source == r._source && ((_message == null && r._message == null) || (_message != null && r._message != null && ((_message.length() <= MATCH_LEN) ? _message.equals(r._message) : _message.regionMatches(0, r._message, 0, MATCH_LEN)))) && ((_throwable == null && r._throwable == null) || (_throwable != null && r._throwable != null && _throwable.getClass() == r._throwable.getClass()));
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return _message != null ? _message.hashCode() : 0;

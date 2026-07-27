@@ -88,16 +88,40 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // Constants
     // //////////////////////////////////////////////
 
+    /**
+     * ELEM_NAME.
+     */
     public static final String ELEM_NAME = "device";
+    /**
+     * UPNP_ROOTDEVICE.
+     */
     public static final String UPNP_ROOTDEVICE = "upnp:rootdevice";
 
+    /**
+     * DEFAULT_STARTUP_WAIT_TIME.
+     */
     public static final int DEFAULT_STARTUP_WAIT_TIME = 1000;
+    /**
+     * DEFAULT_DISCOVERY_WAIT_TIME.
+     */
     public static final int DEFAULT_DISCOVERY_WAIT_TIME = 300;
+    /**
+     * DEFAULT_LEASE_TIME.
+     */
     public static final int DEFAULT_LEASE_TIME = 30 * 60;
 
+    /**
+     * HTTP_DEFAULT_PORT.
+     */
     public static final int HTTP_DEFAULT_PORT = 4004;
 
+    /**
+     * DEFAULT_DESCRIPTION_URI.
+     */
     public static final String DEFAULT_DESCRIPTION_URI = "/description.xml";
+    /**
+     * DEFAULT_PRESENTATION_URI.
+     */
     public static final String DEFAULT_PRESENTATION_URI = "/presentation";
 
     // //////////////////////////////////////////////
@@ -107,20 +131,32 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     private Node rootNode;
     private Node deviceNode;
 
+    /**
+     * getRootNode.
+     */
     public Node getRootNode() {
         if (rootNode != null) return rootNode;
         if (deviceNode == null) return null;
         return deviceNode.getRootNode();
     }
 
+    /**
+     * getDeviceNode.
+     */
     public Node getDeviceNode() {
         return deviceNode;
     }
 
+    /**
+     * setRootNode.
+     */
     public void setRootNode(Node node) {
         rootNode = node;
     }
 
+    /**
+     * setDeviceNode.
+     */
     public void setDeviceNode(Node node) {
         deviceNode = node;
     }
@@ -137,6 +173,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // Constructor
     // //////////////////////////////////////////////
 
+    /**
+     * Device.
+     */
     public Device(Node root, Node device) {
         rootNode = root;
         deviceNode = device;
@@ -144,14 +183,23 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         setWirelessMode(false);
     }
 
+    /**
+     * Device.
+     */
     public Device() {
         this(null, null);
     }
 
+    /**
+     * Device.
+     */
     public Device(Node device) {
         this(null, device);
     }
 
+    /**
+     * Device.
+     */
     public Device(File descriptionFile) throws InvalidDescriptionException {
         this(null, null);
         loadDescription(descriptionFile);
@@ -165,6 +213,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         loadDescription(input);
     }
 
+    /**
+     * Device.
+     */
     public Device(String descriptionFileName) throws InvalidDescriptionException {
         this(new File(descriptionFileName));
     }
@@ -175,10 +226,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private Mutex mutex = new Mutex();
 
+    /**
+     * lock.
+     */
     public void lock() {
         mutex.lock();
     }
 
+    /**
+     * unlock.
+     */
     public void unlock() {
         mutex.unlock();
     }
@@ -187,6 +244,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // getAbsoluteURL
     // //////////////////////////////////////////////
 
+    /**
+     * getAbsoluteURL.
+     */
     public String getAbsoluteURL(String urlString, String baseURLStr, String locationURLStr) {
         // Debug.warning("GAURL \"" + urlString + "\" \"" + baseURLStr + "\" \"" + locationURLStr +
         // '"');
@@ -263,6 +323,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return urlString;
     }
 
+    /**
+     * getAbsoluteURL.
+     */
     public String getAbsoluteURL(String urlString) {
         String baseURLStr = null;
         String locationURLStr = null;
@@ -280,6 +343,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // NMPR
     // //////////////////////////////////////////////
 
+    /**
+     * setNMPRMode.
+     */
     public void setNMPRMode(boolean flag) {
         Node devNode = getDeviceNode();
         if (devNode == null) return;
@@ -291,6 +357,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         }
     }
 
+    /**
+     * isNMPRMode.
+     */
     public boolean isNMPRMode() {
         Node devNode = getDeviceNode();
         if (devNode == null) return false;
@@ -303,14 +372,23 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private boolean wirelessMode;
 
+    /**
+     * setWirelessMode.
+     */
     public void setWirelessMode(boolean flag) {
         wirelessMode = flag;
     }
 
+    /**
+     * isWirelessMode.
+     */
     public boolean isWirelessMode() {
         return wirelessMode;
     }
 
+    /**
+     * getSSDPAnnounceCount.
+     */
     public int getSSDPAnnounceCount() {
         if (isNMPRMode() == true && isWirelessMode() == true)
             return UPnP.INMPR03_DISCOVERY_OVER_WIRELESS_COUNT;
@@ -327,6 +405,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         this.devUUID = uuid;
     }
 
+    /**
+     * getUUID.
+     */
     public String getUUID() {
         return this.devUUID;
     }
@@ -345,6 +426,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         this.bootId = UPnP.createBootId();
     }
 
+    /**
+     * getBootId.
+     */
     public int getBootId() {
         return this.bootId;
     }
@@ -385,10 +469,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         devNode.setAttribute(CONFIG_ID, configId);
     }
 
+    /**
+     * updateConfigId.
+     */
     public void updateConfigId() {
         updateConfigId(this);
     }
 
+    /**
+     * getConfigId.
+     */
     public int getConfigId() {
         Node devNode = getDeviceNode();
         if (devNode == null) return 0;
@@ -399,6 +489,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // Root Device
     // //////////////////////////////////////////////
 
+    /**
+     * getRootDevice.
+     */
     public Device getRootDevice() {
         Node rootNode = getRootNode();
         if (rootNode == null) return null;
@@ -497,6 +590,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         getDeviceData().setDescriptionFile(file);
     }
 
+    /**
+     * getDescriptionFile.
+     */
     public File getDescriptionFile() {
         return getDeviceData().getDescriptionFile();
     }
@@ -515,6 +611,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return descriptionURI.equals(uri);
     }
 
+    /**
+     * getDescriptionFilePath.
+     */
     public String getDescriptionFilePath() {
         File descriptionFile = getDescriptionFile();
         if (descriptionFile == null) return "";
@@ -544,6 +643,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return true;
     }
 
+    /**
+     * loadDescription.
+     */
     public boolean loadDescription(String descString) throws InvalidDescriptionException {
         try {
             Parser parser = UPnP.getXMLParser();
@@ -564,6 +666,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return true;
     }
 
+    /**
+     * loadDescription.
+     */
     public boolean loadDescription(File file) throws InvalidDescriptionException {
         try {
             Parser parser = UPnP.getXMLParser();
@@ -599,6 +704,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // isDeviceNode
     // //////////////////////////////////////////////
 
+    /**
+     * isDeviceNode.
+     */
     public static boolean isDeviceNode(Node node) {
         return Device.ELEM_NAME.equals(node.getName());
     }
@@ -607,6 +715,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // Root Device
     // //////////////////////////////////////////////
 
+    /**
+     * isRootDevice.
+     */
     public boolean isRootDevice() {
         return getRootNode().getNode("device").getNodeValue(UDN).equals(getUDN());
     }
@@ -615,10 +726,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // Root Device
     // //////////////////////////////////////////////
 
+    /**
+     * setSSDPPacket.
+     */
     public void setSSDPPacket(SSDPPacket packet) {
         getDeviceData().setSSDPPacket(packet);
     }
 
+    /**
+     * getSSDPPacket.
+     */
     public SSDPPacket getSSDPPacket() {
         return getSSDPPacket(false);
     }
@@ -637,10 +754,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // Location
     // //////////////////////////////////////////////
 
+    /**
+     * setLocation.
+     */
     public void setLocation(String value) {
         getDeviceData().setLocation(value);
     }
 
+    /**
+     * getLocation.
+     */
     public String getLocation() {
         return getLocation(false);
     }
@@ -660,6 +783,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // LeaseTime
     // //////////////////////////////////////////////
 
+    /**
+     * setLeaseTime.
+     */
     public void setLeaseTime(int value) {
         getDeviceData().setLeaseTime(value);
         Advertiser adv = getAdvertiser();
@@ -669,6 +795,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         }
     }
 
+    /**
+     * getLeaseTime.
+     */
     public int getLeaseTime() {
         SSDPPacket packet = getSSDPPacket();
         if (packet != null) return packet.getLeaseTime();
@@ -679,16 +808,25 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // TimeStamp
     // //////////////////////////////////////////////
 
+    /**
+     * getTimeStamp.
+     */
     public long getTimeStamp() {
         SSDPPacket packet = getSSDPPacket();
         if (packet != null) return packet.getTimeStamp();
         return 0;
     }
 
+    /**
+     * getElapsedTime.
+     */
     public long getElapsedTime() {
         return (System.currentTimeMillis() - getTimeStamp()) / 1000;
     }
 
+    /**
+     * isExpired.
+     */
     public boolean isExpired() {
         long elipsedTime = getElapsedTime();
         long leaseTime = getLeaseTime() + UPnP.DEFAULT_EXPIRED_DEVICE_EXTRA_TIME;
@@ -722,6 +860,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         setURLBase(urlBase);
     }
 
+    /**
+     * getURLBase.
+     */
     public String getURLBase() {
         if (isRootDevice() == true) return getRootNode().getNodeValue(URLBASE_NAME);
         return "";
@@ -733,14 +874,23 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private static final String DEVICE_TYPE = "deviceType";
 
+    /**
+     * setDeviceType.
+     */
     public void setDeviceType(String value) {
         getDeviceNode().setNode(DEVICE_TYPE, value);
     }
 
+    /**
+     * getDeviceType.
+     */
     public String getDeviceType() {
         return getDeviceNode().getNodeValue(DEVICE_TYPE);
     }
 
+    /**
+     * isDeviceType.
+     */
     public boolean isDeviceType(String value) {
         if (value == null) return false;
         return value.equals(getDeviceType());
@@ -752,10 +902,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private static final String FRIENDLY_NAME = "friendlyName";
 
+    /**
+     * setFriendlyName.
+     */
     public void setFriendlyName(String value) {
         getDeviceNode().setNode(FRIENDLY_NAME, value);
     }
 
+    /**
+     * getFriendlyName.
+     */
     public String getFriendlyName() {
         return getDeviceNode().getNodeValue(FRIENDLY_NAME);
     }
@@ -766,10 +922,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private static final String MANUFACTURE = "manufacturer";
 
+    /**
+     * setManufacture.
+     */
     public void setManufacture(String value) {
         getDeviceNode().setNode(MANUFACTURE, value);
     }
 
+    /**
+     * getManufacture.
+     */
     public String getManufacture() {
         return getDeviceNode().getNodeValue(MANUFACTURE);
     }
@@ -780,10 +942,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private static final String MANUFACTURE_URL = "manufacturerURL";
 
+    /**
+     * setManufactureURL.
+     */
     public void setManufactureURL(String value) {
         getDeviceNode().setNode(MANUFACTURE_URL, value);
     }
 
+    /**
+     * getManufactureURL.
+     */
     public String getManufactureURL() {
         return getDeviceNode().getNodeValue(MANUFACTURE_URL);
     }
@@ -794,10 +962,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private static final String MODEL_DESCRIPTION = "modelDescription";
 
+    /**
+     * setModelDescription.
+     */
     public void setModelDescription(String value) {
         getDeviceNode().setNode(MODEL_DESCRIPTION, value);
     }
 
+    /**
+     * getModelDescription.
+     */
     public String getModelDescription() {
         return getDeviceNode().getNodeValue(MODEL_DESCRIPTION);
     }
@@ -808,10 +982,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private static final String MODEL_NAME = "modelName";
 
+    /**
+     * setModelName.
+     */
     public void setModelName(String value) {
         getDeviceNode().setNode(MODEL_NAME, value);
     }
 
+    /**
+     * getModelName.
+     */
     public String getModelName() {
         return getDeviceNode().getNodeValue(MODEL_NAME);
     }
@@ -822,10 +1002,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private static final String MODEL_NUMBER = "modelNumber";
 
+    /**
+     * setModelNumber.
+     */
     public void setModelNumber(String value) {
         getDeviceNode().setNode(MODEL_NUMBER, value);
     }
 
+    /**
+     * getModelNumber.
+     */
     public String getModelNumber() {
         return getDeviceNode().getNodeValue(MODEL_NUMBER);
     }
@@ -836,10 +1022,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private static final String MODEL_URL = "modelURL";
 
+    /**
+     * setModelURL.
+     */
     public void setModelURL(String value) {
         getDeviceNode().setNode(MODEL_URL, value);
     }
 
+    /**
+     * getModelURL.
+     */
     public String getModelURL() {
         return getDeviceNode().getNodeValue(MODEL_URL);
     }
@@ -850,10 +1042,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private static final String SERIAL_NUMBER = "serialNumber";
 
+    /**
+     * setSerialNumber.
+     */
     public void setSerialNumber(String value) {
         getDeviceNode().setNode(SERIAL_NUMBER, value);
     }
 
+    /**
+     * getSerialNumber.
+     */
     public String getSerialNumber() {
         return getDeviceNode().getNodeValue(SERIAL_NUMBER);
     }
@@ -864,14 +1062,23 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private static final String UDN = "UDN";
 
+    /**
+     * setUDN.
+     */
     public void setUDN(String value) {
         getDeviceNode().setNode(UDN, value);
     }
 
+    /**
+     * getUDN.
+     */
     public String getUDN() {
         return getDeviceNode().getNodeValue(UDN);
     }
 
+    /**
+     * hasUDN.
+     */
     public boolean hasUDN() {
         String udn = getUDN();
         if (udn == null || udn.length() <= 0) return false;
@@ -884,10 +1091,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private static final String UPC = "UPC";
 
+    /**
+     * setUPC.
+     */
     public void setUPC(String value) {
         getDeviceNode().setNode(UPC, value);
     }
 
+    /**
+     * getUPC.
+     */
     public String getUPC() {
         return getDeviceNode().getNodeValue(UPC);
     }
@@ -899,14 +1112,23 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     private static final String presentationURL = "presentationURL";
     private PresentationListener presentationListener;
 
+    /**
+     * setPresentationURL.
+     */
     public void setPresentationURL(String value) {
         getDeviceNode().setNode(presentationURL, value);
     }
 
+    /**
+     * getPresentationURL.
+     */
     public String getPresentationURL() {
         return getDeviceNode().getNodeValue(presentationURL);
     }
 
+    /**
+     * removePresentationURL.
+     */
     public boolean removePresentationURL() {
         return getDeviceNode().removeNode(presentationURL);
     }
@@ -920,6 +1142,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return urlPath.startsWith(presentationURL);
     }
 
+    /**
+     * setPresentationListener.
+     */
     public void setPresentationListener(PresentationListener listener) {
         this.presentationListener = listener;
 
@@ -930,10 +1155,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         }
     }
 
+    /**
+     * hasPresentationListener.
+     */
     public boolean hasPresentationListener() {
         return (this.presentationListener != null) ? true : false;
     }
 
+    /**
+     * getPresentationListener.
+     */
     public PresentationListener getPresentationListener() {
         return this.presentationListener;
     }
@@ -942,6 +1173,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // deviceList
     // //////////////////////////////////////////////
 
+    /**
+     * getDeviceList.
+     */
     public DeviceList getDeviceList() {
         DeviceList devList = new DeviceList();
         Node devListNode = getDeviceNode().getNode(DeviceList.ELEM_NAME);
@@ -956,6 +1190,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return devList;
     }
 
+    /**
+     * isDevice.
+     */
     public boolean isDevice(String name) {
         if (name == null) return false;
         if (name.endsWith(getUDN()) == true) return true;
@@ -964,6 +1201,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return false;
     }
 
+    /**
+     * getDevice.
+     */
     public Device getDevice(String name) {
         DeviceList devList = getDeviceList();
         int devCnt = devList.size();
@@ -976,6 +1216,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return null;
     }
 
+    /**
+     * getDeviceByDescriptionURI.
+     */
     public Device getDeviceByDescriptionURI(String uri) {
         DeviceList devList = getDeviceList();
         int devCnt = devList.size();
@@ -992,6 +1235,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // serviceList
     // //////////////////////////////////////////////
 
+    /**
+     * getServiceList.
+     */
     public ServiceList getServiceList() {
         ServiceList serviceList = new ServiceList();
         Node serviceListNode = getDeviceNode().getNode(ServiceList.ELEM_NAME);
@@ -1006,6 +1252,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return serviceList;
     }
 
+    /**
+     * getService.
+     */
     public Service getService(String name) {
         ServiceList serviceList = getServiceList();
         int serviceCnt = serviceList.size();
@@ -1025,6 +1274,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return null;
     }
 
+    /**
+     * getServiceBySCPDURL.
+     */
     public Service getServiceBySCPDURL(String searchUrl) {
         ServiceList serviceList = getServiceList();
         int serviceCnt = serviceList.size();
@@ -1044,6 +1296,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return null;
     }
 
+    /**
+     * getServiceByControlURL.
+     */
     public Service getServiceByControlURL(String searchUrl) {
         ServiceList serviceList = getServiceList();
         int serviceCnt = serviceList.size();
@@ -1063,6 +1318,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return null;
     }
 
+    /**
+     * getServiceByEventSubURL.
+     */
     public Service getServiceByEventSubURL(String searchUrl) {
         ServiceList serviceList = getServiceList();
         int serviceCnt = serviceList.size();
@@ -1082,6 +1340,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return null;
     }
 
+    /**
+     * getSubscriberService.
+     */
     public Service getSubscriberService(String uuid) {
         ServiceList serviceList = getServiceList();
         int serviceCnt = serviceList.size();
@@ -1106,6 +1367,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // StateVariable
     // //////////////////////////////////////////////
 
+    /**
+     * getStateVariable.
+     */
     public StateVariable getStateVariable(String serviceType, String name) {
         if (serviceType == null && name == null) return null;
 
@@ -1132,6 +1396,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return null;
     }
 
+    /**
+     * getStateVariable.
+     */
     public StateVariable getStateVariable(String name) {
         return getStateVariable(null, name);
     }
@@ -1140,6 +1407,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // Action
     // //////////////////////////////////////////////
 
+    /**
+     * getAction.
+     */
     public Action getAction(String name) {
         ServiceList serviceList = getServiceList();
         int serviceCnt = serviceList.size();
@@ -1172,12 +1442,18 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private HashMap<String, byte[]> iconBytesMap = new HashMap<>();
 
+    /**
+     * isIconBytesURI.
+     */
     public boolean isIconBytesURI(String uri) {
         byte[] iconBytes = iconBytesMap.get(uri);
         if (iconBytes == null) return false;
         return true;
     }
 
+    /**
+     * getIconByURI.
+     */
     public Icon getIconByURI(String uri) {
         IconList iconList = getIconList();
         if (iconList.size() <= 0) return null;
@@ -1191,6 +1467,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return null;
     }
 
+    /**
+     * addIcon.
+     */
     public boolean addIcon(Icon icon) {
         Node deviceNode = getDeviceNode();
         if (deviceNode == null) return false;
@@ -1214,6 +1493,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return true;
     }
 
+    /**
+     * getIconList.
+     */
     public IconList getIconList() {
         IconList iconList = new IconList();
         Node iconListNode = getDeviceNode().getNode(IconList.ELEM_NAME);
@@ -1235,12 +1517,18 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return iconList;
     }
 
+    /**
+     * getIcon.
+     */
     public Icon getIcon(int n) {
         IconList iconList = getIconList();
         if (n < 0 && (iconList.size() - 1) < n) return null;
         return iconList.getIcon(n);
     }
 
+    /**
+     * getSmallestIcon.
+     */
     public Icon getSmallestIcon() {
         Icon smallestIcon = null;
         IconList iconList = getIconList();
@@ -1261,6 +1549,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // Notify
     // //////////////////////////////////////////////
 
+    /**
+     * getLocationURL.
+     */
     public String getLocationURL(String host) {
         return HostInterface.getHostURL(host, getHTTPPort(), getDescriptionURI());
     }
@@ -1283,10 +1574,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return getUDN() + "::" + getDeviceType();
     }
 
+    /**
+     * notifyWait.
+     */
     public static final void notifyWait() {
         TimerUtil.waitRandom(DEFAULT_DISCOVERY_WAIT_TIME);
     }
 
+    /**
+     * announce.
+     */
     public void announce(String bindAddr) {
         String devLocation = getLocationURL(bindAddr);
 
@@ -1345,6 +1642,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         }
     }
 
+    /**
+     * announce.
+     */
     public void announce() {
         notifyWait();
         InetAddress[] binds = getDeviceData().getHTTPBindAddress();
@@ -1368,6 +1668,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         }
     }
 
+    /**
+     * byebye.
+     */
     public void byebye(String bindAddr) {
         SSDPNotifySocket ssdpSock;
         // I2P
@@ -1415,6 +1718,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         }
     }
 
+    /**
+     * byebye.
+     */
     public void byebye() {
 
         InetAddress[] binds = getDeviceData().getHTTPBindAddress();
@@ -1445,6 +1751,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private static Calendar cal = Calendar.getInstance();
 
+    /**
+     * postSearchResponse.
+     */
     public boolean postSearchResponse(SSDPPacket ssdpPacket, String st, String usn) {
         String localAddr = ssdpPacket.getLocalAddress();
         Device rootDev = getRootDevice();
@@ -1473,6 +1782,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return true;
     }
 
+    /**
+     * deviceSearchResponse.
+     */
     public void deviceSearchResponse(SSDPPacket ssdpPacket) {
         String ssdpST = ssdpPacket.getST();
 
@@ -1516,6 +1828,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         }
     }
 
+    /**
+     * deviceSearchReceived.
+     */
     public void deviceSearchReceived(SSDPPacket ssdpPacket) {
         deviceSearchResponse(ssdpPacket);
     }
@@ -1524,18 +1839,30 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // HTTP Server
     // //////////////////////////////////////////////
 
+    /**
+     * setHTTPPort.
+     */
     public void setHTTPPort(int port) {
         getDeviceData().setHTTPPort(port);
     }
 
+    /**
+     * getHTTPPort.
+     */
     public int getHTTPPort() {
         return getDeviceData().getHTTPPort();
     }
 
+    /**
+     * setHTTPBindAddress.
+     */
     public void setHTTPBindAddress(InetAddress[] inets) {
         this.getDeviceData().setHTTPBindAddress(inets);
     }
 
+    /**
+     * getHTTPBindAddress.
+     */
     public InetAddress[] getHTTPBindAddress() {
         return this.getDeviceData().getHTTPBindAddress();
     }
@@ -1572,6 +1899,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         this.getDeviceData().setMulticastIPv6Address(ip);
     }
 
+    /**
+     * httpRequestRecieved.
+     */
     public void httpRequestRecieved(HTTPRequest httpReq) {
         if (Debug.isOn() == true) httpReq.print();
 
@@ -1942,6 +2272,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return getDeviceData().getAdvertiser();
     }
 
+    /**
+     * start.
+     */
     public boolean start() {
         stop(true);
 
@@ -2016,10 +2349,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         return true;
     }
 
+    /**
+     * stop.
+     */
     public boolean stop() {
         return stop(true);
     }
 
+    /**
+     * isRunning.
+     */
     public boolean isRunning() {
         return (getAdvertiser() != null) ? true : false;
     }
@@ -2028,6 +2367,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // Interface Address
     // //////////////////////////////////////////////
 
+    /**
+     * getInterfaceAddress.
+     */
     public String getInterfaceAddress() {
         SSDPPacket ssdpPacket = getSSDPPacket();
         if (ssdpPacket == null) return "";
@@ -2038,6 +2380,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // Acion/QueryListener
     // //////////////////////////////////////////////
 
+    /**
+     * setActionListener.
+     */
     public void setActionListener(ActionListener listener) {
         ServiceList serviceList = getServiceList();
         int nServices = serviceList.size();
@@ -2047,6 +2392,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         }
     }
 
+    /**
+     * setQueryListener.
+     */
     public void setQueryListener(QueryListener listener) {
         ServiceList serviceList = getServiceList();
         int nServices = serviceList.size();
@@ -2061,6 +2409,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // //////////////////////////////////////////////
 
     // Thanks for Mikael Hakman (04/25/05)
+    /**
+     * setActionListener.
+     */
     public void setActionListener(ActionListener listener, boolean includeSubDevices) {
         setActionListener(listener);
         if (includeSubDevices == true) {
@@ -2074,6 +2425,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     }
 
     // Thanks for Mikael Hakman (04/25/05)
+    /**
+     * setQueryListener.
+     */
     public void setQueryListener(QueryListener listener, boolean includeSubDevices) {
         setQueryListener(listener);
         if (includeSubDevices == true) {
@@ -2092,10 +2446,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     private Object userData = null;
 
+    /**
+     * setUserData.
+     */
     public void setUserData(Object data) {
         userData = data;
     }
 
+    /**
+     * getUserData.
+     */
     public Object getUserData() {
         return userData;
     }

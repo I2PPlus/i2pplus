@@ -52,9 +52,14 @@ import java.io.OutputStream;
  */
 public class MetaLease extends Lease {
 
+    /**
+     * LENGTH.
+     */
     public static final int LENGTH = 40;
 
+    /** ignored */
     private int _cost;
+    /** ignored */
     private int _type;
 
     /**

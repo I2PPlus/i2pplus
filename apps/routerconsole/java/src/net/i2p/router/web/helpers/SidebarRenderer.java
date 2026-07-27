@@ -39,11 +39,13 @@ import net.i2p.util.SystemVersion;
  */
 class SidebarRenderer {
 
+    /** All section identifiers */
     static final String[] ALL_SECTIONS =
         {"Advanced", "AdvancedRouterInfo", "Bandwidth", "BandwidthGraph", "Clock", "Congestion", "CPUBar",
          "Destinations", "FirewallAndReseedStatus", "HelpAndFAQ", "I2PInternals", "I2PServices", "MemoryBar",
          "NetworkReachability", "NewsHeadings", "Peers", "RestartStatus", "RouterInfo", "ShortRouterInfo",
          "Tunnels", "TunnelStatus", "UpdateStatus"};
+    /** Section name map */
     static final Map<String, String> SECTION_NAMES;
 
     static {
@@ -73,20 +75,38 @@ class SidebarRenderer {
         SECTION_NAMES = Collections.unmodifiableMap(aMap);
     }
 
+    /** ignored */
     private final RouterContext _context;
+    /** ignored */
     private final SidebarHelper _helper;
+    /** ignored */
     private static final String PROP_ADVANCED = "routerconsole.advanced";
+    /** ignored */
     private static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
+    /** ignored */
     private String toggleId = "";
+    /** ignored */
     private String getToggle() {return "<input type=checkbox id=" + toggleId + " class=\"toggleSection script\" checked hidden>";}
 
+    /**
+     * SidebarRenderer.
+     */
     public SidebarRenderer(RouterContext context, SidebarHelper helper) {
         _context = context;
         _helper = helper;
     }
 
+    /**
+     * isAdvanced.
+     */
     public boolean isAdvanced() {return _context.getBooleanProperty(PROP_ADVANCED);}
+    /**
+     * unifiedSidebar.
+     */
     public boolean unifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
+    /**
+     * floodfillEnabled.
+     */
     public boolean floodfillEnabled() {return _context.netDb().floodfillEnabled();}
 
     /**
@@ -162,6 +182,9 @@ class SidebarRenderer {
         }
     }
 
+    /**
+     * renderHelpAndFAQHTML.
+     */
     public String renderHelpAndFAQHTML() {
         StringBuilder buf = new StringBuilder(512);
         toggleId = "toggle_sb_help";
@@ -262,6 +285,9 @@ class SidebarRenderer {
         return buf.toString();
     }
 
+    /**
+     * renderI2PServicesHTML.
+     */
     public String renderI2PServicesHTML() {
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
 
@@ -412,6 +438,9 @@ class SidebarRenderer {
         return buf.toString();
     }
 
+    /**
+     * renderClockHTML.
+     */
     public String renderClockHTML() {
         String FORMAT = "HH:mm:ss";
         DateFormat dfmt = new SimpleDateFormat(FORMAT, Locale.UK);
@@ -420,6 +449,9 @@ class SidebarRenderer {
         return "<div id=clock class=volatile>" + dfmt.format(new Date()) + "</div>";
     }
 
+    /**
+     * renderI2PInternalsHTML.
+     */
     public String renderI2PInternalsHTML() {
         StringBuilder buf = new StringBuilder(512);
         toggleId = "toggle_sb_internals";
@@ -589,6 +621,9 @@ class SidebarRenderer {
         return buf.toString();
     }
 
+    /**
+     * renderAdvancedHTML.
+     */
     public String renderAdvancedHTML() {
         StringBuilder buf = new StringBuilder(512);
         toggleId = "toggle_sb_advanced";
@@ -678,6 +713,9 @@ class SidebarRenderer {
         return buf.toString();
     }
 
+    /**
+     * renderRouterInfoHTML.
+     */
     public String renderRouterInfoHTML() {
         if (_helper == null) {return "";}
         toggleId = "toggle_sb_general";
@@ -710,6 +748,9 @@ class SidebarRenderer {
             + "</span></td></tr>\n</table>\n";
     }
 
+    /**
+     * renderShortRouterInfoHTML.
+     */
     public String renderShortRouterInfoHTML() {
         if (_helper == null) {return "";}
         return "<table id=sb_shortgeneral>\n<tr title=\""
@@ -808,6 +849,9 @@ class SidebarRenderer {
         return _helper.getCPUBar();
     }
 
+    /**
+     * renderNetworkReachabilityHTML.
+     */
     public String renderNetworkReachabilityHTML() {
         if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
@@ -922,6 +966,9 @@ class SidebarRenderer {
         return buf.toString();
     }
 
+    /**
+     * renderUpdateStatusHTML.
+     */
     public String renderUpdateStatusHTML() {
         String updateStatus = _helper.getUpdateStatus();
         StringBuilder buf = new StringBuilder(512);
@@ -941,11 +988,17 @@ class SidebarRenderer {
         return buf.toString();
     }
 
+    /**
+     * renderRestartStatusHTML.
+     */
     public String renderRestartStatusHTML() {
         if (_helper == null) {return "";}
         return _helper.getRestartStatus();
     }
 
+    /**
+     * renderPeersHTML.
+     */
     public String renderPeersHTML() {
         if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
@@ -1047,11 +1100,17 @@ class SidebarRenderer {
         return buf.toString();
     }
 
+    /**
+     * renderFirewallAndReseedStatusHTML.
+     */
     public String renderFirewallAndReseedStatusHTML() {
         if (_helper == null) {return "";}
         return _helper.getFirewallAndReseedStatus();
     }
 
+    /**
+     * renderBandwidthHTML.
+     */
     public String renderBandwidthHTML() {
         if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
@@ -1207,6 +1266,7 @@ class SidebarRenderer {
         }
     }
 
+    /** ignored */
     private static void appendValues(StringBuilder sb, double[] values) {
         for (int i = 0; i < values.length; i++) {
             if (i > 0) {sb.append(',');}
@@ -1215,6 +1275,9 @@ class SidebarRenderer {
         }
     }
 
+    /**
+     * renderTunnelsHTML.
+     */
     public String renderTunnelsHTML() {
         if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
@@ -1346,6 +1409,9 @@ class SidebarRenderer {
         return buf.toString();
     }
 
+    /**
+     * renderCongestionHTML.
+     */
     public String renderCongestionHTML() {
         if (_helper == null) {return "";}
         long maxLag = _context.jobQueue().getMaxLag();
@@ -1443,6 +1509,9 @@ class SidebarRenderer {
         return buf.toString();
     }
 
+    /**
+     * renderTunnelStatusHTML.
+     */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public String renderTunnelStatusHTML() {
         if (_helper == null) {return "";}
@@ -1478,6 +1547,9 @@ class SidebarRenderer {
         return buf.toString();
     }
 
+    /**
+     * renderDestinationsHTML.
+     */
     public String renderDestinationsHTML() {
         if (_helper == null) {return "";}
         return _helper.getDestinations();

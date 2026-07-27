@@ -23,10 +23,16 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
     private final Object _streamStatusLock = new Object();
     private final Map<String,String> _namingReplies = new HashMap<>();
 
+    /**
+     * SAMEventHandler.
+     */
     public SAMEventHandler(I2PAppContext ctx) {
         _log = ctx.logManager().getLog(getClass());
     }
 
+    /**
+     * helloReplyReceived.
+     */
     @Override
     public void helloReplyReceived(boolean ok, String version) {
         synchronized (_helloLock) {
@@ -56,6 +62,9 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
         }
     }
 
+    /**
+     * namingReplyReceived.
+     */
     @Override
     public void namingReplyReceived(String name, String result, String value, String msg) {
         synchronized (_namingReplyLock) {
@@ -67,6 +76,9 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
         }
     }
 
+    /**
+     * streamStatusReceived.
+     */
     @Override
     public void streamStatusReceived(String result, String id, String message) {
         synchronized (_streamStatusLock) {
@@ -78,6 +90,9 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
         }
     }
 
+    /**
+     * unknownMessageReceived.
+     */
     @Override
     public void unknownMessageReceived(String major, String minor, Properties params) {
         _log.error("Unhandled message: [" + major + "] [" + minor + "] [" + params + "]");

@@ -74,10 +74,18 @@ public final class KeyGenerator {
         I2PProvider.addProvider();
     }
 
+    /**
+     * Create a new KeyGenerator.
+     * @param context the I2P app context
+     */
     public KeyGenerator(I2PAppContext context) {
         _context = context;
     }
 
+    /**
+     * Get the global KeyGenerator instance.
+     * @return the global instance
+     */
     public static KeyGenerator getInstance() {
         return I2PAppContext.getGlobalContext().keyGenerator();
     }
@@ -164,16 +172,18 @@ public final class KeyGenerator {
     private static final String PROP_LONG_EXPONENT = "crypto.elGamal.useLongKey";
 
     /** Whether to use a long (2048-bit) ElGamal exponent.
-    *
-     *  @since 0.9.8
+     *
+     * @return true if using long exponent
+     * @since 0.9.8
      */
     public boolean useLongElGamalExponent() {
         return _context.getProperty(PROP_LONG_EXPONENT, DEFAULT_USE_LONG_EXPONENT);
     }
 
     /** Get the size of the ElGamal exponent in bits.
-    *
-     *  @since 0.9.8
+     *
+     * @return the size in bits
+     * @since 0.9.8
      */
     public int getElGamalExponentSize() {
         return useLongElGamalExponent() ? PUBKEY_EXPONENT_SIZE_FULL : PUBKEY_EXPONENT_SIZE_SHORT;
@@ -194,6 +204,7 @@ public final class KeyGenerator {
      *  ElGamal only.
      *  Same as generatePKIKeypair() but different return type.
      *
+     *  @return pair of keys
      *  @since 0.8.7
      */
     public SimpleDataStructure[] generatePKIKeys() {
@@ -219,6 +230,8 @@ public final class KeyGenerator {
     /**
      *  Supports EncTypes
      *
+     *  @param type the encryption type
+     *  @return the key pair
      *  @since 0.9.38
      */
     public KeyPair generatePKIKeys(EncType type) {
@@ -305,6 +318,7 @@ public final class KeyGenerator {
      *
      *  Same as above but different return type
      *
+     *  @return pair of keys
      *  @since 0.8.7
      */
     public SimpleDataStructure[] generateSigningKeys() {
@@ -331,6 +345,9 @@ public final class KeyGenerator {
     /**
      *  Generic signature type, supports DSA, RSA, ECDSA, EdDSA
      *
+     *  @param type the signature type
+     *  @return the key pair
+     *  @throws GeneralSecurityException if key generation fails
      *  @since 0.9.9
      */
     public SimpleDataStructure[] generateSigningKeys(SigType type) throws GeneralSecurityException {
@@ -440,6 +457,7 @@ public final class KeyGenerator {
 
     /**
      *  Usage: KeyGenerator [sigtype...]
+     *  @param args command line arguments
      */
     public static void main(String[] args) {
         try {

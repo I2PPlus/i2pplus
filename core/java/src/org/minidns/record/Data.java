@@ -55,11 +55,18 @@ public abstract class Data {
         bytes = baos.toByteArray();
     }
 
+    /** @return the length of the binary representation */
     public final int length() {
         setBytes();
         return bytes.length;
     }
 
+    /**
+     * Write the binary representation to the given OutputStream.
+     *
+     * @param outputStream the OutputStream to write to.
+     * @throws IOException if an I/O error occurs.
+     */
     public final void toOutputStream(OutputStream outputStream) throws IOException {
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         toOutputStream(dataOutputStream);
@@ -76,6 +83,7 @@ public abstract class Data {
         dos.write(bytes);
     }
 
+    /** @return the binary representation as a byte array */
     public final byte[] toByteArray() {
         setBytes();
         return bytes.clone();

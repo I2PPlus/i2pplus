@@ -79,6 +79,9 @@ public class SAMStreamSink {
     private static final int V3FORWARDPORT=9998;
     private static final int V3DGPORT=9999;
 
+    /**
+     * main.
+     */
     public static void main(String[] args) {
         Getopt g = new Getopt("SAM", args, "sxhb:m:p:u:v:w:");
         boolean isSSL = false;
@@ -171,6 +174,9 @@ public class SAMStreamSink {
         sink.startup(version, isSSL, mode, user, password, optsBuf.toString());
     }
 
+    /**
+     * SAMStreamSink.
+     */
     public SAMStreamSink(I2PAppContext ctx, String samHost, String samPort, String destFile, String sinkDir) {
         _context = ctx;
         _log = ctx.logManager().getLog(SAMStreamSink.class);
@@ -182,6 +188,9 @@ public class SAMStreamSink {
         _remotePeers = new HashMap<>();
     }
 
+    /**
+     * startup.
+     */
     public void startup(String version, boolean isSSL, int mode, String user, String password, String sessionOpts) {
         if (_log.shouldDebug())
             _log.debug("Starting up");
@@ -252,11 +261,17 @@ public class SAMStreamSink {
     private class DGRcvr extends I2PAppThread {
         private final int _mode;
 
+        /**
+         * DGRcvr.
+         */
         public DGRcvr(int mode) {
             super("SAM-DGRX");
             _mode = mode;
         }
 
+        /**
+         * run.
+         */
         public void run() {
             DatagramSocket dg = null;
             byte[] buf = new byte[32768];
@@ -310,12 +325,18 @@ public class SAMStreamSink {
         // for SSL only
         private final Properties _opts;
 
+        /**
+         * FwdRcvr.
+         */
         public FwdRcvr(boolean isSSL, Properties opts) {
             super("SAM-FwdRX");
             _isSSL = isSSL;
             _opts = opts;
         }
 
+        /**
+         * run.
+         */
         public void run() {
             try {
                 ServerSocket ss;
@@ -379,12 +400,18 @@ public class SAMStreamSink {
     private static class Pinger extends I2PAppThread {
         private final OutputStream _out;
 
+        /**
+         * Pinger.
+         */
         public Pinger(OutputStream out) {
             super("SAM-SinkPing");
             setDaemon(true);
             _out = out;
         }
 
+        /**
+         * run.
+         */
         public void run() {
             while (true) {
                 try {
@@ -405,13 +432,22 @@ public class SAMStreamSink {
 
     private class SinkEventHandler extends SAMEventHandler {
 
+        /**
+         * _out.
+         */
         protected final OutputStream _out;
 
+        /**
+         * SinkEventHandler.
+         */
         public SinkEventHandler(I2PAppContext ctx, OutputStream out) {
             super(ctx);
             _out = out;
         }
 
+        /**
+         * streamClosedReceived.
+         */
         @Override
         public void streamClosedReceived(String result, String id, String message) {
             Sink sink;
@@ -427,6 +463,9 @@ public class SAMStreamSink {
             }
         }
 
+        /**
+         * streamDataReceived.
+         */
         @Override
         public void streamDataReceived(String id, byte[] data, int offset, int length) {
             Sink sink;
@@ -440,6 +479,9 @@ public class SAMStreamSink {
             }
         }
 
+        /**
+         * streamConnectedReceived.
+         */
         @Override
         public void streamConnectedReceived(String dest, String id) {
             if (_log.shouldDebug())
@@ -455,6 +497,9 @@ public class SAMStreamSink {
             }
         }
 
+        /**
+         * pingReceived.
+         */
         @Override
         public void pingReceived(String data) {
             if (_log.shouldInfo())
@@ -469,6 +514,9 @@ public class SAMStreamSink {
             }
         }
 
+        /**
+         * datagramReceived.
+         */
         @Override
         public void datagramReceived(String dest, byte[] data, int offset, int length, int fromPort, int toPort) {
             // just get the first
@@ -483,6 +531,9 @@ public class SAMStreamSink {
             sink.received(data, offset, length);
         }
 
+        /**
+         * rawReceived.
+         */
         @Override
         public void rawReceived(byte[] data, int offset, int length, int fromPort, int toPort, int protocol) {
             // just get the first
@@ -502,11 +553,17 @@ public class SAMStreamSink {
 
         private final InputStream _in;
 
+        /**
+         * SinkEventHandler2.
+         */
         public SinkEventHandler2(I2PAppContext ctx, InputStream in, OutputStream out) {
             super(ctx, out);
             _in = in;
         }
 
+        /**
+         * streamStatusReceived.
+         */
         @Override
         public void streamStatusReceived(String result, String id, String message) {
             if (_log.shouldDebug())
@@ -807,6 +864,9 @@ public class SAMStreamSink {
         private long _lastReceivedOn;
         private final OutputStream _out;
 
+        /**
+         * Sink.
+         */
         public Sink(String conId, String remDest) throws IOException {
             _connectionId = conId;
             _remoteDestination = remDest;
@@ -827,9 +887,18 @@ public class SAMStreamSink {
             _started = _context.clock().now();
         }
 
+        /**
+         * getConnectionId.
+         */
         public String getConnectionId() { return _connectionId; }
+        /**
+         * getDestination.
+         */
         public String getDestination() { return _remoteDestination; }
 
+        /**
+         * closed.
+         */
         public void closed() {
             if (_closed) return;
             _closed = true;
@@ -841,6 +910,9 @@ public class SAMStreamSink {
                 _log.info("Error closing", ioe);
             }
         }
+        /**
+         * received.
+         */
         public void received(byte[] data, int offset, int len) {
             if (_closed) return;
             try {

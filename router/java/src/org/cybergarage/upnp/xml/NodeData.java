@@ -32,6 +32,9 @@ import org.cybergarage.xml.*;
  * @since 1.0
  */
 public class NodeData {
+    /**
+     * NodeData.
+     */
     public NodeData() {
         setNode(null);
     }
@@ -42,10 +45,20 @@ public class NodeData {
 
     private Node node;
 
+    /**
+     * Set the XML node.
+     *
+     * @param node the XML node to set
+     */
     public void setNode(Node node) {
         this.node = node;
     }
 
+    /**
+     * Get the XML node.
+     *
+     * @return the XML node
+     */
     public Node getNode() {
         return node;
     }

@@ -15,12 +15,16 @@ import net.i2p.data.Destination;
  */
 public interface I2PSocket extends Closeable {
     /**
-     * @return the Destination of this side of the socket.
+     * Returns the Destination of this side of the socket.
+     *
+     * @return the Destination of this side of the socket
      */
     public Destination getThisDestination();
 
     /**
-     * @return the destination of the peer.
+     * Returns the destination of the peer.
+     *
+     * @return the destination of the peer
      */
     public Destination getPeerDestination();
 
@@ -65,6 +69,8 @@ public interface I2PSocket extends Closeable {
     public SelectableChannel getChannel() throws IOException;
 
     /**
+     * Returns the socket's configuration.
+     *
      * @return socket's configuration
      */
     public I2PSocketOptions getOptions();
@@ -92,6 +98,8 @@ public interface I2PSocket extends Closeable {
     public void setReadTimeout(long ms);
 
     /**
+     * Returns whether this socket has been closed.
+     *
      * @return true if this socket has been closed
      */
     public boolean isClosed();
@@ -142,6 +150,12 @@ public interface I2PSocket extends Closeable {
      *  Resetting this socket will also close the socket's InputStream and OutputStream.
      *
      *  @since 0.9.30
+     */
+    /**
+     * Resets and closes this socket. Sends a RESET indication to the far-end.
+     *
+     * @throws IOException on reset failure
+     * @since 0.9.30
      */
     public void reset() throws IOException;
 

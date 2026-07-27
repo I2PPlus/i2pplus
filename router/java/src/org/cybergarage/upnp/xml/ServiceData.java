@@ -33,6 +33,9 @@ import org.cybergarage.xml.*;
  * @since 1.0
  */
 public class ServiceData extends NodeData {
+    /**
+     * ServiceData.
+     */
     public ServiceData() {}
 
     ////////////////////////////////////////////////
@@ -41,6 +44,9 @@ public class ServiceData extends NodeData {
 
     private ListenerList controlActionListenerList = new ListenerList();
 
+    /**
+     * getControlActionListenerList.
+     */
     public ListenerList getControlActionListenerList() {
         return controlActionListenerList;
     }
@@ -51,10 +57,16 @@ public class ServiceData extends NodeData {
 
     private Node scpdNode = null;
 
+    /**
+     * getSCPDNode.
+     */
     public Node getSCPDNode() {
         return scpdNode;
     }
 
+    /**
+     * setSCPDNode.
+     */
     public void setSCPDNode(Node node) {
         scpdNode = node;
     }
@@ -65,6 +77,9 @@ public class ServiceData extends NodeData {
 
     private SubscriberList subscriberList = new SubscriberList();
 
+    /**
+     * getSubscriberList.
+     */
     public SubscriberList getSubscriberList() {
         return subscriberList;
     }
@@ -75,10 +90,16 @@ public class ServiceData extends NodeData {
 
     private String descriptionURL = "";
 
+    /**
+     * getDescriptionURL.
+     */
     public String getDescriptionURL() {
         return descriptionURL;
     }
 
+    /**
+     * setDescriptionURL.
+     */
     public void setDescriptionURL(String descriptionURL) {
         this.descriptionURL = descriptionURL;
     }
@@ -89,10 +110,16 @@ public class ServiceData extends NodeData {
 
     private String sid = "";
 
+    /**
+     * getSID.
+     */
     public String getSID() {
         return sid;
     }
 
+    /**
+     * setSID.
+     */
     public void setSID(String id) {
         sid = id;
     }
@@ -103,10 +130,16 @@ public class ServiceData extends NodeData {
 
     private long timeout = 0;
 
+    /**
+     * getTimeout.
+     */
     public long getTimeout() {
         return timeout;
     }
 
+    /**
+     * setTimeout.
+     */
     public void setTimeout(long value) {
         timeout = value;
     }

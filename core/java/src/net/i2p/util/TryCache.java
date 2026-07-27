@@ -20,6 +20,7 @@ public class TryCache<T> {
      * @since 0.9.35
      */
     public interface ObjectFactory<T> {
+        /** Create instance */
         T newInstance();
     }
 
@@ -32,6 +33,9 @@ public class TryCache<T> {
     private volatile long _releaseCount;
     private volatile long _discardCount;
 
+    /**
+     * TryCache.
+     */
     public TryCache(ObjectFactory<T> factory, int capacity) {
         this.factory = factory;
         this.capacity = Math.max(0, capacity);
@@ -39,6 +43,8 @@ public class TryCache<T> {
 
     /**
      * Acquire an object from the cache or create a new one.
+     *
+     * @return a cached or newly created object
      */
     public T acquire() {
         T item = items.pollLast();
@@ -54,6 +60,8 @@ public class TryCache<T> {
     /**
      * Try to return the item to the cache.
      * If the cache is full, the item is discarded.
+     *
+     * @param item the item to return
      */
     public void release(T item) {
         if (DEBUG_DUP) {
@@ -75,22 +83,35 @@ public class TryCache<T> {
         _releaseCount++;
     }
 
-    /**
-     * Clear all cached items.
-     * This is best-effort; some may still be in flight.
-     */
+    /** Clear all cached items. */
     public void clear() {
         items.clear();
     }
 
+    /**
+     * Get the current number of cached items.
+     *
+     * @return the current number of cached items
+     */
     public int size() {
         return items.size();
     }
 
+    /**
+     * Check if the cache has been underfilled longer than the threshold.
+     *
+     * @param thresholdMillis the threshold in milliseconds
+     * @return true if the cache has been underfilled longer than the threshold
+     */
     public boolean wasUnderfilled(long thresholdMillis) {
         return (System.currentTimeMillis() - _lastUnderflow) > thresholdMillis;
     }
 
+    /**
+     * Shrink the cache to the target size, evicting excess items.
+     *
+     * @param targetSize the desired maximum number of items
+     */
     public void shrink(int targetSize) {
         while (items.size() > targetSize) {
             items.pollLast();
@@ -115,6 +136,11 @@ public class TryCache<T> {
         }
     }
 
+    /**
+     * Get the timestamp of the last underflow.
+     *
+     * @return the timestamp of the last underflow
+     */
     public long getLastUnderflowTime() {
         return _lastUnderflow;
     }
@@ -122,6 +148,7 @@ public class TryCache<T> {
     /**
      * Return the current cache capacity.
      *
+     * @return the maximum number of cached items
      * @since 0.9.70+
      */
     public int getCapacity() {
@@ -132,6 +159,7 @@ public class TryCache<T> {
      * Return the number of acquire() calls that found an empty cache
      * (misses required allocating a new object).
      *
+     * @return the miss count
      * @since 0.9.70+
      */
     public long getMissCount() {
@@ -142,6 +170,7 @@ public class TryCache<T> {
      * Return the number of release() calls that were discarded because
      * the cache was full.
      *
+     * @return the discard count
      * @since 0.9.70+
      */
     public long getDiscardCount() {
@@ -151,6 +180,7 @@ public class TryCache<T> {
     /**
      * Return total acquire() count (hits + misses).
      *
+     * @return the acquire count
      * @since 0.9.70+
      */
     public long getAcquireCount() {
@@ -160,6 +190,7 @@ public class TryCache<T> {
     /**
      * Return total release() count (returned to cache).
      *
+     * @return the release count
      * @since 0.9.70+
      */
     public long getReleaseCount() {

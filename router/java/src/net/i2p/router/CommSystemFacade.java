@@ -31,10 +31,32 @@ public abstract class CommSystemFacade implements Service {
 
     /** @since 0.9.45 */
     protected static final String ROUTER_BUNDLE_NAME = "net.i2p.router.util.messages";
+/** Commsystemfacade */
 
+    protected CommSystemFacade() {}
+
+    /**
+     *  Queue an outbound message for delivery through the appropriate transport.
+     *
+     *  @param msg the message to send
+     */
     public abstract void processMessage(OutNetMessage msg);
 
+    /**
+     *  Render the transport status section of the router console page.
+     *
+     *  @param out destination writer
+     *  @param urlBase base URL for links, may be null
+     *  @param sortFlags flags controlling sort order
+     *  @throws IOException on write error
+     */
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException { }
+    /**
+     *  Render the transport status section of the router console page with default flags.
+     *
+     *  @param out destination writer
+     *  @throws IOException on write error
+     */
     public void renderStatusHTML(Writer out) throws IOException { renderStatusHTML(out, null, 0); }
 
     /** Create the list of RouterAddress structures based on the router's config */
@@ -53,9 +75,31 @@ public abstract class CommSystemFacade implements Service {
      */
     public abstract int countActiveSendPeers();
 
+    /**
+     *  Report whether inbound bandwidth has capacity for the given percentage load.
+     *
+     *  @param pct percentage of bandwidth currently in use
+     *  @return true if capacity is available
+     */
     public boolean haveInboundCapacity(int pct) { return true; }
+    /**
+     *  Report whether outbound bandwidth has capacity for the given percentage load.
+     *
+     *  @param pct percentage of bandwidth currently in use
+     *  @return true if capacity is available
+     */
     public boolean haveOutboundCapacity(int pct) { return true; }
+    /**
+     *  Report whether outbound bandwidth is operating well below its limit.
+     *
+     *  @return true if high outbound capacity is available
+     */
     public boolean haveHighOutboundCapacity() { return true; }
+    /**
+     *  Retrieve recent transport-related error messages for display in the console.
+     *
+     *  @return list of error message strings, non-null
+     */
     public List<String> getMostRecentErrorMessages() { return Collections.emptyList(); }
 
     /**
@@ -67,6 +111,9 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Return framed average clock skew of connected peers in seconds, or null if we cannot answer.
      * CommSystemFacadeImpl overrides this.
+     *
+     * @param percentToInclude percentage of peers to include in the frame
+     * @return average skew in seconds
      */
     public long getFramedAveragePeerClockSkew(int percentToInclude) { return 0; }
 
@@ -103,8 +150,26 @@ public abstract class CommSystemFacade implements Service {
     @Deprecated
     public void recheckReachability() {}
 
+    /**
+     *  Check whether the given peer has excessive pending outbound messages.
+     *
+     *  @param peer the peer to check
+     *  @return true if the peer is backlogged
+     */
     public boolean isBacklogged(Hash peer) { return false; }
+    /**
+     *  Check whether the given peer was recently unreachable.
+     *
+     *  @param peer the peer to check
+     *  @return true if the peer was unreachable
+     */
     public boolean wasUnreachable(Hash peer) { return false; }
+    /**
+     *  Check whether a transport connection exists with the given peer.
+     *
+     *  @param peer the peer to check
+     *  @return true if a connection is established
+     */
     public abstract boolean isEstablished(Hash peer);
 
     /**
@@ -116,7 +181,18 @@ public abstract class CommSystemFacade implements Service {
      * @since 0.9.62
      */
     public boolean isConnecting(Hash peer) { return false; }
+    /**
+     *  Get the IP address associated with the given destination.
+     *
+     *  @param dest destination hash
+     *  @return IP address bytes or null if unknown
+     */
     public byte[] getIP(Hash dest) { return null; }
+    /**
+     *  Queue a reverse-DNS lookup for the given IP address.
+     *
+     *  @param ip IP address bytes to look up
+     */
     public void queueLookup(byte[] ip) {}
 
     /**
@@ -155,8 +231,26 @@ public abstract class CommSystemFacade implements Service {
     /** @since 0.9.16 */
     public boolean isInStrictCountry(RouterInfo ri) { return false; }
 
+    /**
+     *  Get the two-letter country code for the given peer's IP address.
+     *
+     *  @param peer the peer to look up
+     *  @return two-letter country code or null if unknown
+     */
     public String getCountry(Hash peer) { return null; }
+    /**
+     *  Get the two-letter country code for the given IP address.
+     *
+     *  @param ip the IP address to look up
+     *  @return two-letter country code or null if unknown
+     */
     public String getCountry(String ip) { return null; }
+    /**
+     *  Resolve a two-letter country code to its full country name.
+     *
+     *  @param code two-letter country code
+     *  @return country name, or the code itself if unknown
+     */
     public String getCountryName(String code) { return code; }
 
     /**
@@ -169,22 +263,54 @@ public abstract class CommSystemFacade implements Service {
         return Collections.emptyMap();
     }
 
+    /**
+     *  Render an HTML snippet identifying the given peer, optionally with extended details.
+     *
+     *  @param peer the peer to render
+     *  @param extended if true include extended information
+     *  @return HTML string
+     */
     public String renderPeerHTML(Hash peer, boolean extended) {
         return peer.toBase64().substring(0, 4);
     }
 
+    /**
+     *  Render the country flag for the given peer as HTML.
+     *
+     *  @param peer the peer to render
+     *  @return HTML string for the flag
+     */
     public String renderPeerFlag(Hash peer) {
         return peer.toBase64().substring(0, 4);
     }
 
+    /**
+     *  Render the peer's capabilities as HTML, optionally inline.
+     *
+     *  @param peer the peer to render
+     *  @param inline if true render inline
+     *  @return HTML string
+     */
     public String renderPeerCaps(Hash peer, boolean inline) {
         return peer.toBase64().substring(0, 4);
     }
 
+    /**
+     *  Look up the canonical hostname for the given IP, blocking on DNS if necessary.
+     *
+     *  @param ipAddress the IP address to look up
+     *  @return hostname, or the IP itself if not resolvable
+     */
     public synchronized String getCanonicalHostName(String ipAddress) {
         return ipAddress;
     }
 
+    /**
+     *  Synchronous canonical hostname lookup for the given IP.
+     *
+     *  @param ipAddress the IP address to look up
+     *  @return hostname, or the IP itself if not resolvable
+     */
     public String getCanonicalHostNameSync(String ipAddress) {
         return ipAddress;
     }
@@ -330,6 +456,7 @@ public abstract class CommSystemFacade implements Service {
      * We are able to receive unsolicited connections
      * on all enabled transports
      */
+/** Status Ok constant */
     public static final short STATUS_OK = 0;
 
     /**
@@ -339,6 +466,7 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
+/** Status Ipv4 Ok Ipv6 Unknown constant */
     public static final short STATUS_IPV4_OK_IPV6_UNKNOWN = 2;
 
     /**
@@ -348,6 +476,7 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
+/** Status Ipv4 Ok Ipv6 Firewalled constant */
     public static final short STATUS_IPV4_OK_IPV6_FIREWALLED = 1;
 
     /**
@@ -357,6 +486,7 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
+/** Status Ipv4 Unknown Ipv6 Ok constant */
     public static final short STATUS_IPV4_UNKNOWN_IPV6_OK = 4;
 
     /**
@@ -366,6 +496,7 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
+/** Status Ipv4 Firewalled Ipv6 Ok constant */
     public static final short STATUS_IPV4_FIREWALLED_IPV6_OK = 3;
 
     /**
@@ -375,6 +506,7 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
+/** Status Ipv4 Disabled Ipv6 Ok constant */
     public static final short STATUS_IPV4_DISABLED_IPV6_OK = 5;
 
     /**
@@ -384,6 +516,7 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
+/** Status Ipv4 Snat Ipv6 Ok constant */
     public static final short STATUS_IPV4_SNAT_IPV6_OK = 6;
 
     /**
@@ -391,6 +524,7 @@ public abstract class CommSystemFacade implements Service {
      * differently when we talk to multiple people
      *
      */
+/** Status Different constant */
     public static final short STATUS_DIFFERENT = 7;
 
     /**
@@ -400,6 +534,7 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
+/** Status Ipv4 Snat Ipv6 Unknown constant */
     public static final short STATUS_IPV4_SNAT_IPV6_UNKNOWN = 8;
 
     /**
@@ -409,6 +544,7 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
+/** Status Ipv4 Firewalled Ipv6 Unknown constant */
     public static final short STATUS_IPV4_FIREWALLED_IPV6_UNKNOWN = 10;
 
     /**
@@ -416,6 +552,7 @@ public abstract class CommSystemFacade implements Service {
      * cannot receive unsolicited connections, i.e. Firewalled,
      * on all enabled transports.
      */
+/** Status Reject Unsolicited constant */
     public static final short STATUS_REJECT_UNSOLICITED = 9;
 
     /**
@@ -425,6 +562,7 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
+/** Status Ipv4 Unknown Ipv6 Firewalled constant */
     public static final short STATUS_IPV4_UNKNOWN_IPV6_FIREWALLED = 11;
 
     /**
@@ -434,6 +572,7 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
+/** Status Ipv4 Disabled Ipv6 Unknown constant */
     public static final short STATUS_IPV4_DISABLED_IPV6_UNKNOWN = 13;
 
     /**
@@ -443,6 +582,7 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.20
      */
+/** Status Ipv4 Disabled Ipv6 Firewalled constant */
     public static final short STATUS_IPV4_DISABLED_IPV6_FIREWALLED = 12;
 
     /**
@@ -450,16 +590,19 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @since 0.9.4
      */
+/** Status Disconnected constant */
     public static final short STATUS_DISCONNECTED = 14;
 
     /**
      * Our detection system is broken (SSU bind port failed)
      */
+/** Status Hosed constant */
     public static final short STATUS_HOSED = 15;
 
     /**
      * Our reachability is unknown on all
      */
+/** Status Unknown constant */
     public static final short STATUS_UNKNOWN = 16;
 
 /**
@@ -472,10 +615,15 @@ public abstract class CommSystemFacade implements Service {
     public enum Status {
         /** IPv4 OK, IPv6 OK or disabled or no address */
         OK(STATUS_OK, _x("OK")),
+        /** IPv4 OK, IPv6 connectivity testing */
         IPV4_OK_IPV6_UNKNOWN(STATUS_IPV4_OK_IPV6_UNKNOWN, _x("IPv4: OK; IPv6: Testing")),
+        /** IPv4 OK, IPv6 firewalled */
         IPV4_OK_IPV6_FIREWALLED(STATUS_IPV4_OK_IPV6_FIREWALLED, _x("IPv4: OK; IPv6: Firewalled")),
+        /** IPv4 connectivity testing, IPv6 OK */
         IPV4_UNKNOWN_IPV6_OK(STATUS_IPV4_UNKNOWN_IPV6_OK, _x("IPv4: Testing; IPv6: OK")),
+        /** IPv4 firewalled, IPv6 OK */
         IPV4_FIREWALLED_IPV6_OK(STATUS_IPV4_FIREWALLED_IPV6_OK, _x("IPv4: Firewalled; IPv6: OK")),
+        /** IPv4 disabled, IPv6 OK */
         IPV4_DISABLED_IPV6_OK(STATUS_IPV4_DISABLED_IPV6_OK, _x("IPv4: Disabled; IPv6: OK")),
         /** IPv4 symmetric NAT (not source NAT) */
         IPV4_SNAT_IPV6_OK(STATUS_IPV4_SNAT_IPV6_OK, _x("IPv4: Symmetric NAT; IPv6: OK")),
@@ -483,30 +631,50 @@ public abstract class CommSystemFacade implements Service {
         DIFFERENT(STATUS_DIFFERENT, _x("Symmetric NAT")),
         /** IPv4 symmetric NAT (not source NAT) */
         IPV4_SNAT_IPV6_UNKNOWN(STATUS_IPV4_SNAT_IPV6_UNKNOWN, _x("IPv4: Symmetric NAT; IPv6: Testing")),
+        /** IPv4 firewalled, IPv6 connectivity testing */
         IPV4_FIREWALLED_IPV6_UNKNOWN(STATUS_IPV4_FIREWALLED_IPV6_UNKNOWN, _x("IPv4: Firewalled; IPv6: Testing")),
         /** IPv4 firewalled, IPv6 firewalled or disabled or no address */
         REJECT_UNSOLICITED(STATUS_REJECT_UNSOLICITED, _x("Firewalled")),
+        /** IPv4 connectivity testing, IPv6 firewalled */
         IPV4_UNKNOWN_IPV6_FIREWALLED(STATUS_IPV4_UNKNOWN_IPV6_FIREWALLED, _x("IPv4: Testing; IPv6: Firewalled")),
+        /** IPv4 disabled, IPv6 connectivity testing */
         IPV4_DISABLED_IPV6_UNKNOWN(STATUS_IPV4_DISABLED_IPV6_UNKNOWN, _x("IPv4: Disabled; IPv6: Testing")),
+        /** IPv4 disabled, IPv6 firewalled */
         IPV4_DISABLED_IPV6_FIREWALLED(STATUS_IPV4_DISABLED_IPV6_FIREWALLED, _x("IPv4: Disabled; IPv6: Firewalled")),
+        /** No network interface available on any transport */
         DISCONNECTED(STATUS_DISCONNECTED, _x("Disconnected")),
+        /** Transport detection failure, SSU bind port conflict */
         HOSED(STATUS_HOSED, _x("Port Conflict")),
+        /** Reachability has not been determined on any transport */
         UNKNOWN(STATUS_UNKNOWN, _x("Testing"));
 
         private final int code;
         private final String status;
 
+        /**
+         *  @param code the integer status code
+         *  @param status the human-readable status string
+         */
         Status(int code, String status) {
             this.code = code;
             this.status = status;
         }
 
+        /**
+         *  Get the integer code for this reachability status.
+         *
+         *  @return the integer status code
+         */
         public int getCode() {
             return code;
         }
 
         /**
-         *  merge the new Status with the old Status
+         *  Merge the new status with the old status, producing the best combined estimate.
+         *
+         *  @param oldStatus the previous status
+         *  @param newStatus the newly observed status
+         *  @return the merged status reflecting both observations
          */
         public static Status merge(Status oldStatus, Status newStatus) {
             // shortcut newStatus
@@ -763,12 +931,17 @@ public abstract class CommSystemFacade implements Service {
         /**
          * toStatusString(), translated if available.
          *
+         * @param ctx the context for translation lookup
+         * @return translated status string
          * @since 0.9.45
          */
         public String toLocalizedStatusString(I2PAppContext ctx) {
             return Translate.getString(status, ctx, ROUTER_BUNDLE_NAME);
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return super.toString() + " (" + code + "; " + status + ')';

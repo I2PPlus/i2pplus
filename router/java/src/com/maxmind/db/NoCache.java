@@ -17,6 +17,10 @@ public class NoCache implements NodeCache {
         return loader.load(key);
     }
 
+    /**
+     * Get the singleton instance.
+     * @return the NoCache singleton
+     */
     public static NoCache getInstance() {
         return INSTANCE;
     }

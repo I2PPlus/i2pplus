@@ -11,8 +11,14 @@ import net.i2p.util.Log;
  * @since 0.9.33
  */
 public class TunnelPeerCountHelper extends HelperBase {
+    /**
+     * TunnelPeerCountHelper.
+     */
     public TunnelPeerCountHelper() { /* nop */ }
 
+    /**
+     * getTunnelPeerCount.
+     */
     public String getTunnelPeerCount() {
         TunnelRenderer renderer = new TunnelRenderer(_context);
         try {

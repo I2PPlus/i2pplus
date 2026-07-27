@@ -47,6 +47,12 @@ class ContactDrivenRefreshJob extends JobImpl {
     /** Max pending queue size — reject offers past this to prevent OOM under heavy store load */
     private static final int MAX_PENDING = 8192;
 
+    /**
+     * Creates a new ContactDrivenRefreshJob
+     *
+     * @param ctx the router context
+     * @param facade the floodfill network database facade
+     */
     ContactDrivenRefreshJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade) {
         super(ctx);
         _log = ctx.logManager().getLog(ContactDrivenRefreshJob.class);
@@ -64,6 +70,8 @@ class ContactDrivenRefreshJob extends JobImpl {
      *  Called when we hear from or about a peer.
      *  Safe to call from any thread (e.g., message handler).
      *  Drops the entry if the pending queue is full to prevent unbounded memory growth.
+     *
+     *  @param peer the peer hash
      */
     void heardFrom(Hash peer) {
         if (peer == null || peer.equals(getContext().routerHash()))

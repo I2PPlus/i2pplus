@@ -15,6 +15,10 @@ import net.i2p.data.i2cp.I2CPMessage;
  * Handle I2CP dest replies from the router
  */
 class DestReplyMessageHandler extends HandlerImpl {
+    /**
+     * Create a new DestReplyMessageHandler.
+     * @param ctx the I2P app context
+     */
     public DestReplyMessageHandler(I2PAppContext ctx) {
         super(ctx, DestReplyMessage.MESSAGE_TYPE);
     }

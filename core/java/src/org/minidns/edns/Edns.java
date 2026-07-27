@@ -42,10 +42,13 @@ public class Edns {
      * @see <a href="http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-11">IANA - DNS EDNS0 Option Codes (OPT)</a>
      */
     public enum OptionCode {
+        /** Unknown option code */
         UNKNOWN(-1, UnknownEdnsOption.class),
+        /** NSID option */
         NSID(3, Nsid.class),
        ;
 
+        /** ignored */
         private static Map<Integer, OptionCode> INVERSE_LUT = new HashMap<>(OptionCode.values().length);
 
         static {
@@ -54,7 +57,13 @@ public class Edns {
             }
         }
 
+        /**
+         * asInt.
+         */
         public final int asInt;
+        /**
+         * clazz.
+         */
         public final Class<? extends EdnsOption> clazz;
 
         OptionCode(int optionCode, Class<? extends EdnsOption> clazz) {
@@ -62,6 +71,9 @@ public class Edns {
             this.clazz = clazz;
         }
 
+        /**
+         * from.
+         */
         public static OptionCode from(int optionCode) {
             OptionCode res = INVERSE_LUT.get(optionCode);
             if (res == null) res = OptionCode.UNKNOWN;
@@ -105,6 +117,7 @@ public class Edns {
      */
     public final boolean dnssecOk;
 
+    /** ignored */
     private Record<OPT> optRecord;
 
     /**
@@ -148,6 +161,9 @@ public class Edns {
         }
     }
 
+    /**
+     * getEdnsOption.
+     */
     @SuppressWarnings({"unchecked", "TypeParameterUnusedInFormals"})
     public <O extends EdnsOption> O getEdnsOption(OptionCode optionCode) {
         for (EdnsOption o : variablePart) {
@@ -173,6 +189,7 @@ public class Edns {
         return optRecord;
     }
 
+    /** ignored */
     private String terminalOutputCache;
 
     /**
@@ -203,6 +220,9 @@ public class Edns {
         return terminalOutputCache;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return asTerminalOutput();

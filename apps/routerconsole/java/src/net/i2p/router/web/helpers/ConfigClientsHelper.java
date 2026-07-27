@@ -36,10 +36,13 @@ public class ConfigClientsHelper extends HelperBase {
     public static final String BIND_ALL_INTERFACES = "i2cp.tcp.bindAllInterfaces";
     /** from ClientManager */
     public static final String PROP_DISABLE_EXTERNAL = "i2cp.disableInterface";
+    /** from ClientManager */
     public static final String PROP_ENABLE_SSL = "i2cp.SSL";
     /** from ClientMessageEventListener */
     public static final String PROP_AUTH = "i2cp.auth";
+    /** Enable/disable client configuration changes in the web UI */
     public static final String PROP_ENABLE_CLIENT_CHANGE = "routerconsole.enableClientChange";
+    /** Enable/disable plugin installation in the web UI */
     public static final String PROP_ENABLE_PLUGIN_INSTALL = "routerconsole.enablePluginInstall";
 
     /**
@@ -51,11 +54,13 @@ public class ConfigClientsHelper extends HelperBase {
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
         Pattern.compile("[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z2]{2,6}", Pattern.CASE_INSENSITIVE);
 
+    /** Constructor */
     public ConfigClientsHelper() {
         // TODO
     }
     /**
      *  Whether client configuration changes are allowed.
+     *  @return true if enabled, false otherwise
      *  @since 0.9.14.1
      */
     public boolean isClientChangeEnabled() {
@@ -64,6 +69,7 @@ public class ConfigClientsHelper extends HelperBase {
 
     /**
      *  Whether plugin installation is enabled.
+     *  @return true if enabled, false otherwise
      *  @since 0.9.14.1
      */
     public boolean isPluginInstallEnabled() {
@@ -73,6 +79,7 @@ public class ConfigClientsHelper extends HelperBase {
 
     /**
      *  Whether any plugins have updates available.
+     *  @return true if updates available, false otherwise
      *  @since 0.9.15
      */
     public boolean isPluginUpdateEnabled() {
@@ -81,6 +88,7 @@ public class ConfigClientsHelper extends HelperBase {
 
     /**
      *  Get the configured I2CP port.
+     *  @return the port number string
      *  @since 0.8.3
      */
     public String getPort() {
@@ -90,6 +98,8 @@ public class ConfigClientsHelper extends HelperBase {
 
     /**
      *  Get checked attribute for I2CP mode radio buttons.
+     *  @param mode the mode number (0=disabled, 1=clear, 2=SSL)
+     *  @return CHECKED if this mode is selected, otherwise ""
      *  @since 0.8.3
      */
     public String i2cpModeChecked(int mode) {
@@ -104,6 +114,7 @@ public class ConfigClientsHelper extends HelperBase {
 
     /**
      *  Whether I2CP authentication is enabled.
+     *  @return CHECKED if enabled, otherwise ""
      *  @since 0.8.3
      */
     public String getAuth() {
@@ -115,6 +126,7 @@ public class ConfigClientsHelper extends HelperBase {
 
     /**
      *  Get available network interface addresses.
+     *  @return array of address strings
      *  @since 0.8.3
      */
     public String[] intfcAddresses() {
@@ -125,6 +137,8 @@ public class ConfigClientsHelper extends HelperBase {
 
     /**
      *  Whether the given address is the selected I2CP interface.
+     *  @param addr the address to check
+     *  @return true if selected, false otherwise
      *  @since 0.8.3
      */
     public boolean isIFSelected(String addr) {
@@ -136,6 +150,11 @@ public class ConfigClientsHelper extends HelperBase {
         return (host.equals(addr));
     }
 
+    /**
+     *  Set the edit mode for a specific client or for adding a new client.
+     *
+     *  @param edit the edit command string
+     */
     public void setEdit(String edit) {
         if (edit == null)
             return;
@@ -146,7 +165,10 @@ public class ConfigClientsHelper extends HelperBase {
         }
     }
 
-    /** clients */
+    /**
+     *  Generate the clients configuration table HTML.
+     *  @return the HTML string
+     */
     public String getForm1() {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<table id=clientconfig>\n" +
@@ -248,7 +270,10 @@ public class ConfigClientsHelper extends HelperBase {
         }
     }
 
-    /** webapps */
+    /**
+     *  Generate the webapps configuration table HTML.
+     *  @return the HTML string
+     */
     public String getForm2() {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<table id=webappconfig>\n" +
@@ -291,11 +316,18 @@ public class ConfigClientsHelper extends HelperBase {
         return buf.toString();
     }
 
+    /**
+     *  Whether plugins are enabled.
+     *  @return true if plugins are enabled for this router
+     */
     public boolean showPlugins() {
         return PluginStarter.pluginsEnabled(_context);
     }
 
-    /** plugins */
+    /**
+     *  Generate the plugins configuration table HTML.
+     *  @return the HTML string
+     */
     public String getForm3() {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<table id=pluginconfig>\n").append("<tr>")
@@ -453,6 +485,10 @@ public class ConfigClientsHelper extends HelperBase {
     /**
      *  Like in DataHelper but doesn't convert null to ""
      *  There's a lot worse things a plugin could do but...
+     *
+     *  @param props the properties to retrieve from
+     *  @param key the property key
+     *  @return the stripped value, or null
      */
     public static String stripHTML(Properties props, String key) {
         return PluginStarter.stripHTML(props, key);

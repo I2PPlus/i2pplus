@@ -27,13 +27,16 @@ public class MuxedPQSKM extends SessionKeyManager {
     // PQ is about this much slower than EC
     private static final int PQ_SLOW_FACTOR = 2;
     private static final int RESTART_COUNTERS = 500;
+/** Muxedpqskm */
 
     public MuxedPQSKM(RatchetSKM ec, RatchetSKM pq) {
         _ec = ec;
         _pq = pq;
     }
+/** Return the eCSKM */
 
     public RatchetSKM getECSKM() { return _ec; }
+/** Return the pQSKM */
 
     public RatchetSKM getPQSKM() { return _pq; }
 
@@ -148,9 +151,15 @@ public class MuxedPQSKM extends SessionKeyManager {
             return _pq.consumeNextAvailableTag(target);
     }
 
+    /**
+     * getTagsToSend.
+     */
     @Override
     public int getTagsToSend() { return 0; }
 
+    /**
+     * getLowThreshold.
+     */
     @Override
     public int getLowThreshold() { return 0; }
 
@@ -170,6 +179,9 @@ public class MuxedPQSKM extends SessionKeyManager {
         return false;
     }
 
+    /**
+     * getAvailableTags.
+     */
     @Override
     public int getAvailableTags(PublicKey target, SessionKey key) {
         EncType type = target.getType();
@@ -179,6 +191,9 @@ public class MuxedPQSKM extends SessionKeyManager {
             return _pq.getAvailableTags(target, key);
     }
 
+    /**
+     * getAvailableTimeLeft.
+     */
     @Override
     public long getAvailableTimeLeft(PublicKey target, SessionKey key) {
         EncType type = target.getType();
@@ -223,6 +238,9 @@ public class MuxedPQSKM extends SessionKeyManager {
         _ec.tagsReceived(key, tag, expire);
     }
 
+    /**
+     * consumeTag.
+     */
     @Override
     public SessionKey consumeTag(SessionTag tag) {
         RatchetSessionTag rstag = new RatchetSessionTag(tag.getData());
@@ -233,12 +251,18 @@ public class MuxedPQSKM extends SessionKeyManager {
         return rv;
     }
 
+    /**
+     * shutdown.
+     */
     @Override
     public void shutdown() {
         _ec.shutdown();
         _pq.shutdown();
     }
 
+    /**
+     * renderStatusHTML.
+     */
     @Override
     public void renderStatusHTML(Writer out) throws IOException {
         _ec.renderStatusHTML(out);

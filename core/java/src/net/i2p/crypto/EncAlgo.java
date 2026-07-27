@@ -6,7 +6,9 @@ package net.i2p.crypto;
  * @since 0.9.18
  */
 public enum EncAlgo {
+    /** ElGamal encryption. */
     ELGAMAL("ElGamal"),
+    /** EC encryption. */
     EC("EC"),
 
     /** ECIES encryption.
@@ -35,6 +37,9 @@ public enum EncAlgo {
         this.name = name;
     }
 
+    /**
+     * getName.
+     */
     public String getName() {
         return name;
     }

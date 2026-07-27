@@ -126,7 +126,7 @@ public class JobStats {
             }
         }
     }
-
+/** Return the lastRunTime */
     public long getLastRunTime() {return _lastRunTime;}
 
     /**
@@ -225,7 +225,7 @@ public class JobStats {
         if (numRuns > 0) {return _totalPendingTime.get() / (double) numRuns;}
         else {return 0;}
     }
-
+/** Return the recentStats */
     public RecentStats getRecentStats() {
         long now = System.currentTimeMillis();
         long cutoff = now - RECENT_WINDOW_MS;
@@ -262,15 +262,26 @@ public class JobStats {
                               recentTotalPending, recentMaxPending, recentMinPending);
     }
 
+    /**
+     * RecentStats.
+     */
     public static class RecentStats {
+/** Number of runs */
         public final long runs;
+/** Total time across all runs */
         public final long totalTime;
+/** Maximum time of all runs */
         public final long maxTime;
+/** Minimum time of all runs */
         public final long minTime;
+/** Total pending time across all runs */
         public final long totalPendingTime;
+/** Maximum pending time */
         public final long maxPendingTime;
+/** Minimum pending time */
         public final long minPendingTime;
 
+        /** Recent stats */
         RecentStats(long runs, long totalTime, long maxTime, long minTime,
                    long totalPendingTime, long maxPendingTime, long minPendingTime) {
             this.runs = runs;
@@ -281,11 +292,11 @@ public class JobStats {
             this.maxPendingTime = maxPendingTime;
             this.minPendingTime = minPendingTime;
         }
-
+/** Return the avgTime */
         public double getAvgTime() {
             return runs > 0 ? totalTime / (double) runs : 0;
         }
-
+/** Return the avgPendingTime */
         public double getAvgPendingTime() {
             return runs > 0 ? totalPendingTime / (double) runs : 0;
         }

@@ -62,6 +62,7 @@ public class BlocklistEntries {
     /**  Maximum number of entries allowed in a blocklist. */
     public static final int MAX_ENTRIES = 2000;
     private static final String CONTENT_ROUTER = "router";
+    /** Maximum future timestamp allowed for blocklist validation (2 days). */
     public static final long MAX_FUTURE = 2*24*60*60*1000L;
 
     /**
@@ -185,6 +186,8 @@ public class BlocklistEntries {
      *  File format: One entry per line, # starts a comment, ! starts an unblock entry.
      *  Single IPv4 or IPv6 address only (no mask allowed), or 44-char base 64 router hash.
      *  See MAX_ENTRIES above.
+     *
+     *  @param args command line arguments
      */
     public static void main(String[] args) {
         if (args.length < 3) {

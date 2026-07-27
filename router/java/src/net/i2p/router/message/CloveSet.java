@@ -33,6 +33,8 @@ public class CloveSet {
      *
      *  @param cloves non-null, all entries non-null
      *  @param cert non-null
+     *  @param msgId the message ID
+     *  @param expiration the expiration time
      */
     public CloveSet(GarlicClove[] cloves, Certificate cert, long msgId, long expiration) {
    _cloves = cloves;
@@ -41,16 +43,37 @@ public class CloveSet {
    _expiration = expiration;
     }
 
+    /**
+     *  Get the number of cloves.
+     *  @return the clove count
+     */
     public int getCloveCount() { return _cloves.length; }
 
-    /** Get the clove at the specified index.
-     *  @throws ArrayIndexOutOfBoundsException */
+    /**
+     *  Get the clove at the specified index.
+     *
+     *  @param index the index
+     *  @return the clove at the given index
+     *  @throws ArrayIndexOutOfBoundsException if the index is out of range
+     */
     public GarlicClove getClove(int index) { return _cloves[index]; }
 
+    /**
+     *  Get the certificate.
+     *  @return the certificate
+     */
     public Certificate getCertificate() { return _cert; }
 
+    /**
+     *  Get the message ID.
+     *  @return the message ID
+     */
     public long getMessageId() { return _msgId; }
 
+    /**
+     *  Get the expiration.
+     *  @return the expiration time
+     */
     public long getExpiration() { return _expiration; }
 
     @Override

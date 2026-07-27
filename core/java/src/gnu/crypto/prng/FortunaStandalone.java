@@ -97,21 +97,29 @@ import net.i2p.crypto.SHA256Generator;
 public class FortunaStandalone extends BasePRNGStandalone implements Serializable {
     private static final long serialVersionUID = 0xFACADE;
     private static final int SEED_FILE_SIZE = 64;
+    /** number of entropy pools */
     static final int NUM_POOLS = 32;
+    /** minimum bytes in pool 0 before reseed */
     static final int MIN_POOL_SIZE = 64;
+    /** the underlying PRNG generator */
     protected final IRandomStandalone generator;
     /** null if using DevRandom */
     protected final MessageDigest[] pools;
+    /** timestamp of last reseed */
     protected long lastReseed;
+    /** current pool index for entropy distribution */
     private int pool;
+    /** bytes added to pool 0 */
     protected int pool0Count;
+    /** number of reseeds performed */
     protected int reseedCount;
+    /** property name for the seed attribute */
     public static final String SEED = "gnu.crypto.prng.fortuna.seed";
+
+    /** With DevRandom disabled. */
     public FortunaStandalone() {this(false);}
 
-    /**
-     *  @since 0.9.58
-     */
+    /** @param useDevRandom if true, use DevRandom instead of the Fortuna Generator */
     public FortunaStandalone(boolean useDevRandom) {
         super("Fortuna i2p");
         generator = useDevRandom ? new DevRandom() : new Generator();
@@ -124,11 +132,12 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
         }
     }
 
-  /** Unused, see AsyncFortunaStandalone */
+  /** Unused, see AsyncFortunaStandalone. @param val the seed data (unused) */
     public void seed(byte[] val) {
         throw new UnsupportedOperationException("use override");
     }
 
+    /** Set up the PRNG instance. */
     public void setup(Map<String, byte[]> attributes) {
         lastReseed = 0;
         reseedCount = 0;
@@ -142,6 +151,9 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
         throw new UnsupportedOperationException("use override");
     }
 
+    /**
+     * Return a copy of this object.
+     */
     @Override
     public Object clone() {
         try {
@@ -151,6 +163,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
         }
     }
 
+    /** addRandomByte. */
     @Override
     public void addRandomByte(byte b) {
         if (pools == null) {return;}
@@ -159,6 +172,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
         pool = (pool + 1) % NUM_POOLS;
     }
 
+    /** addRandomBytes. */
     @Override
     public void addRandomBytes(byte[] buf, int offset, int length) {
         if (pools == null) {return;}
@@ -168,12 +182,14 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
     }
 
     // Reading and writing this object is equivalent to storing and retrieving the seed.
+    /** Write object */
     private void writeObject(ObjectOutputStream out) throws IOException {
         byte[] seed = new byte[SEED_FILE_SIZE];
         generator.nextBytes(seed);
         out.write(seed);
     }
 
+    /** Read object */
     private void readObject(ObjectInputStream in) throws IOException {
         byte[] seed = new byte[SEED_FILE_SIZE];
         in.readFully(seed);
@@ -196,6 +212,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
         private CryptixAESKeyCache.KeyCacheEntry cryptixKeyBuf;
         private boolean seeded;
 
+        /** Generator. */
         public Generator () {
             super("Fortuna.generator.i2p");
             this.hash = SHA256Generator.getDigestInstance();
@@ -206,6 +223,9 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
             cryptixKeyBuf = CryptixAESKeyCache.createNew();
         }
 
+        /**
+         * Return a copy of this object.
+         */
         @Override
         public Object clone() {
             try {
@@ -215,6 +235,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
             }
         }
 
+        /** nextByte. */
         @Override
         public final byte nextByte() {
             byte[] b = new byte[1];
@@ -222,6 +243,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
             return b[0];
         }
 
+        /** nextBytes. */
         @Override
         public final void nextBytes(byte[] out, int offset, int length) {
             if (!seeded) {
@@ -250,11 +272,13 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
             ndx = 0;
         }
 
+        /** addRandomByte. */
         @Override
         public final void addRandomByte(byte b) {
             addRandomBytes(new byte[] { b });
         }
 
+        /** addRandomBytes. */
         @Override
         public final void addRandomBytes(byte[] seed, int offset, int length) {
             hash.update(key, 0, key.length);
@@ -267,11 +291,13 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
             seeded = true;
         }
 
+        /** Fill the PRNG output block. */
         public final void fillBlock() {
             CryptixRijndael_Algorithm.blockEncrypt(counter, buffer, 0, 0, cryptixKey);
             incrementCounter();
         }
 
+        /** Set up the PRNG instance. */
         public void setup(Map<String, byte[]> attributes) {
             seeded = false;
             Arrays.fill(key, (byte) 0);

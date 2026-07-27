@@ -21,11 +21,17 @@ import net.i2p.router.RouterContext;
 class IterativeFollowupJob extends SingleSearchJob {
     private final IterativeSearchJob _search;
 
+    /**
+     * IterativeFollowupJob.
+     */
     public IterativeFollowupJob(RouterContext ctx, Hash key, Hash to, IterativeSearchJob search) {
         super(ctx, key, to);
         _search = search;
     }
 
+    /**
+     * getName.
+     */
     @Override
     public String getName() { return "Start DbStoreReplyMsg Iterative Search"; }
 

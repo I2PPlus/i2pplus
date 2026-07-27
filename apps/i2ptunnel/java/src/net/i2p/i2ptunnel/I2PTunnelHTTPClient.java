@@ -78,6 +78,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      */
     private final String _proxyNonce;
 
+    /**
+     * AUTH_REALM.
+     */
     public static final String AUTH_REALM = "I2P HTTP Proxy";
     private static final String UA_I2P = "User-Agent: " + "MYOB/6.66 (AN/ON)" + "\r\n";
     // ESR version of Firefox, same as Tor Browser
@@ -85,11 +88,16 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     // overrides
     private static final String PROP_UA_I2P = "httpclient.userAgent.i2p";
     private static final String PROP_UA_CLEARNET = "httpclient.userAgent.outproxy";
+    /**
+     * OPT_KEEPALIVE_BROWSER.
+     */
     public static final String OPT_KEEPALIVE_BROWSER = "keepalive.browser";
+    /**
+     * OPT_KEEPALIVE_I2P.
+     */
     public static final String OPT_KEEPALIVE_I2P = "keepalive.i2p";
 
-    // how long to wait for another request on the same socket
-    // Firefox timeout appears to be about 114 seconds, so it will close before we do.
+    /** how long to wait for another request on the same socket */
     static final int BROWSER_KEEPALIVE_TIMEOUT = 2*60*1000;
     private static final boolean DEFAULT_KEEPALIVE_BROWSER = true;
     private static final boolean DEFAULT_KEEPALIVE_I2P = true;
@@ -348,13 +356,28 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     private static final String HELPER_PARAM = "i2paddresshelper";
+    /**
+     * LOCAL_SERVER.
+     */
     public static final String LOCAL_SERVER = "proxy.i2p";
     private static final boolean DEFAULT_GZIP = true;
     /** all default to false */
     public static final String PROP_REFERER = "i2ptunnel.httpclient.sendReferer";
+    /**
+     * PROP_USER_AGENT.
+     */
     public static final String PROP_USER_AGENT = "i2ptunnel.httpclient.sendUserAgent";
+    /**
+     * PROP_VIA.
+     */
     public static final String PROP_VIA = "i2ptunnel.httpclient.sendVia";
+    /**
+     * PROP_JUMP_SERVERS.
+     */
     public static final String PROP_JUMP_SERVERS = "i2ptunnel.httpclient.jumpServers";
+    /**
+     * PROP_DISABLE_HELPER.
+     */
     public static final String PROP_DISABLE_HELPER = "i2ptunnel.httpclient.disableAddressHelper";
     /** @since 0.9.14 */
     public static final String PROP_ACCEPT = "i2ptunnel.httpclient.sendAccept";
@@ -1673,6 +1696,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     private static class InputReader {
         InputStream _s;
 
+        /**
+         * InputReader.
+         */
         public InputReader(InputStream s) {
             _s = s;
         }
@@ -1710,6 +1736,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         return dest.toBase32();
     }
 
+    /**
+     * DEFAULT_JUMP_SERVERS.
+     */
     public static final String DEFAULT_JUMP_SERVERS =
             "http://notbob.i2p/cgi-bin/jump.cgi?q=," +
             "http://reg.i2p/jump/," +
@@ -1721,7 +1750,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             return false;
         }
 
-        /****
+        /*
          *  Let's not look up the name _again_
          *  and now that host is a b32, this was failing
          *
@@ -1741,7 +1770,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         } catch (DataFormatException dfe) {
         }
         }
-         ****/
+*/
         String lc = protocol.toLowerCase(Locale.US);
         return lc.equals("http") || lc.equals("https");
     }
@@ -1848,37 +1877,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         return null;
     }
 
-/****
-    private static String[] tests = {
-        "", "foo", "foo=bar", "&", "&=&", "===", "&&",
-        "i2paddresshelper=foo",
-        "i2paddresshelpe=foo",
-        "2paddresshelper=foo",
-        "i2paddresshelper=%66oo",
-        "%692paddresshelper=foo",
-        "i2paddresshelper=foo&a=b",
-        "a=b&i2paddresshelper=foo",
-        "a=b&i2paddresshelper&c=d",
-        "a=b&i2paddresshelper=foo&c=d",
-        "a=b;i2paddresshelper=foo;c=d",
-        "a=b&i2paddresshelper=foo&c",
-        "a=b&i2paddresshelper=foo==&c",
-        "a=b&i2paddresshelper=foo%3d%3d&c",
-        "a=b&i2paddresshelper=f%6f%6F==&c",
-        "a=b&i2paddresshelper=foo&i2paddresshelper=bar&c",
-        "a=b&i2paddresshelper=foo&c%3F%3f%26%3b%3B%3d%3Dc=x%3F%3f%26%3b%3B%3d%3Dx"
-    };
-
-    public static void main(String[] args) {
-        for (int i = 0; i < tests.length; i++) {
-            String[] s = removeHelper(tests[i]);
-            if (s != null)
-                System.out.println("Test \"" + tests[i] + "\" q=\"" + s[0] + "\" h=\"" + s[1] + "\"");
-            else
-                System.out.println("Test \"" + tests[i] + "\" no match");
-        }
-    }
-****/
 
     /**
      *  Look up a hostname with a timeout to prevent blocking the request handler.
@@ -1894,6 +1892,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         final Destination[] result = new Destination[1];
         final boolean[] done = new boolean[1];
         I2PThread lookupThread = new I2PThread("Naming lookup for " + hostname) {
+            /**
+             * run.
+             */
             @Override
             public void run() {
                 try {

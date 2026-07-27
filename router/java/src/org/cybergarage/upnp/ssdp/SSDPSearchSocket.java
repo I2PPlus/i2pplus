@@ -71,16 +71,25 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     ////////////////////////////////////////////////
     //	Constructor
     ////////////////////////////////////////////////
+    /**
+     * open.
+     */
     public boolean open(Inet4Address bindAddr) {
         useIPv6Address = false;
         return open(SSDP.ADDRESS, SSDP.PORT, bindAddr);
     }
 
+    /**
+     * open.
+     */
     public boolean open(Inet6Address bindAddr) {
         useIPv6Address = true;
         return open(SSDP.getIPv6Address(), SSDP.PORT, bindAddr);
     }
 
+    /**
+     * open.
+     */
     public boolean open(String bind, String multicast) {
         if ((HostInterface.isIPv6Address(bind)) && (HostInterface.isIPv6Address(multicast))) {
             useIPv6Address = true;
@@ -114,14 +123,23 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
 
     private ListenerList deviceSearchListenerList = new ListenerList();
 
+    /**
+     * addSearchListener.
+     */
     public void addSearchListener(SearchListener listener) {
         deviceSearchListenerList.add(listener);
     }
 
+    /**
+     * removeSearchListener.
+     */
     public void removeSearchListener(SearchListener listener) {
         deviceSearchListenerList.remove(listener);
     }
 
+    /**
+     * performSearchListener.
+     */
     public void performSearchListener(SSDPPacket ssdpPacket) {
         int listenerSize = deviceSearchListenerList.size();
         for (int n = 0; n < listenerSize; n++) {
@@ -136,6 +154,9 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
 
     private Thread deviceSearchThread = null;
 
+    /**
+     * run.
+     */
     public void run() {
         Thread thisThread = Thread.currentThread();
 
@@ -158,6 +179,9 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
         }
     }
 
+    /**
+     * start.
+     */
     public void start() {
         StringBuffer name = new StringBuffer("Cyber.SSDPSearchSocket/");
         String localAddr = this.getLocalAddress();
@@ -174,6 +198,9 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
         deviceSearchThread.start();
     }
 
+    /**
+     * stop.
+     */
     public void stop() {
         // Thanks for Mikael Hakman (04/20/05)
         close();

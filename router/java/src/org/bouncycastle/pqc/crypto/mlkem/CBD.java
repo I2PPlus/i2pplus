@@ -6,7 +6,16 @@ package org.bouncycastle.pqc.crypto.mlkem;
  */
 final class CBD
 {
+    /** unused */
+    private CBD() {}
 
+    /**
+     * Perform ML-KEM CBD sampling.
+     *
+     * @param r the output polynomial
+     * @param bytes the input byte array
+     * @param eta the CBD parameter (2 or 3)
+     */
     public static void mlkemCBD(Poly r, byte[] bytes, int eta)
     {
         long t, d;
@@ -56,7 +65,7 @@ final class CBD
      */
     private static long convertByteTo32BitUnsignedInt(byte[] x, int offset)
     {
-        // Convert first byte to an unsigned integer 
+        // Convert first byte to an unsigned integer
         // byte x & 0xFF allows us to grab the last 8 bits
         long r = (long)(x[offset] & 0xFF);
 

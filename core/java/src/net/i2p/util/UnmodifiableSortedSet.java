@@ -26,10 +26,17 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     private final Comparator<? super E> comp;
     private final boolean initialized;
 
+    /**
+     * @param c sorted set to copy, must already be sorted
+     */
     public UnmodifiableSortedSet(SortedSet<? extends E> c) {
         this(c, null);
     }
 
+    /**
+     * @param c sorted set to copy, must already be sorted
+     * @param comparator comparator for ordering
+     */
     public UnmodifiableSortedSet(SortedSet<? extends E> c, Comparator<? super E> comparator) {
         super(c, c.size());
         comp = comparator;
@@ -37,10 +44,17 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
         initialized = true;
     }
 
+    /**
+     * @param c set to copy and sort
+     */
     public UnmodifiableSortedSet(Set<? extends E> c) {
         this(c, null);
     }
 
+    /**
+     * @param c set to copy and sort
+     * @param comparator comparator for ordering
+     */
     @SuppressWarnings("unchecked")
     public UnmodifiableSortedSet(Set<? extends E> c, Comparator<? super E> comparator) {
         super(c, c.size());
@@ -52,6 +66,8 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
 
     /**
      *  Warning: O(n**2)
+     *
+     *  @param c collection to copy and sort
      */
     public UnmodifiableSortedSet(Collection<? extends E> c) {
         this(c, null);
@@ -59,6 +75,9 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
 
     /**
      *  Warning: O(n**2)
+     *
+     *  @param c collection to copy and sort
+     *  @param comparator comparator for ordering
      */
     @SuppressWarnings("unchecked")
     public UnmodifiableSortedSet(Collection<? extends E> c, Comparator<? super E> comparator) {
@@ -69,11 +88,17 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
         initialized = true;
     }
 
+    /**
+     * comparator.
+     */
     @Override
     public Comparator<? super E> comparator() {
         return comp;
     }
 
+    /**
+     * first.
+     */
     @Override
     @SuppressWarnings("unchecked")
     public E first() {
@@ -81,6 +106,9 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
         return (E) _entries[0];
     }
 
+    /**
+     * last.
+     */
     @Override
     @SuppressWarnings("unchecked")
     public E last() {

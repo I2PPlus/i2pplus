@@ -126,13 +126,17 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      *  Caller must then check getState() and build a
      *  Token Request or Session Request to send to the peer.
      *
+     *  @param ctx the router context
+     *  @param transport the UDP transport
      *  @param claimedAddress an IP/port based RemoteHostId, or null if unknown
      *  @param remoteHostId non-null, == claimedAddress if direct, or a hash-based one if indirect
      *  @param remotePeer must have supported sig type
      *  @param needIntroduction should we ask Bob to be an introducer for us?
-               ignored unless allowExtendedOptions is true
+     *                ignored unless allowExtendedOptions is true
      *  @param introKey Bob's introduction key, as published in the netdb
+     *  @param ra the router address
      *  @param addr non-null
+     *  @param version the SSU2 version
      */
     public OutboundEstablishState2(RouterContext ctx, UDPTransport transport, RemoteHostId claimedAddress,
                                    RemoteHostId remoteHostId, RouterIdentity remotePeer,
@@ -234,6 +238,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     /**
      *  After introduction
      *
+     *  @param ip the IP address bytes
+     *  @param port the port number
+     *  @param token the token received
      *  @since 0.9.55
      */
     public synchronized void introduced(byte[] ip, int port, long token) {
@@ -498,10 +505,15 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     @Override
     public int getVersion() { return _version; }
+    /** @return the send connection ID */
     public long getSendConnID() { return _sendConnID; }
+    /** @return the receive connection ID */
     public long getRcvConnID() { return _rcvConnID; }
+    /** @return the current token */
     public long getToken() { return _token; }
     /**
+     *  Get the next token for this connection
+     *
      *  @return may be null
      */
     public EstablishmentManager.Token getNextToken() {
@@ -509,21 +521,29 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             return null;
         return _transport.getEstablisher().getInboundToken(_remoteHostId);
     }
+    /** @return the handshake state */
     public HandshakeState getHandshakeState() { return _handshakeState; }
+    /** @return the send header encrypt key 1 */
     public byte[] getSendHeaderEncryptKey1() { return _headerEncryptKey1; }
+    /** @return the receive header encrypt key 1 */
     public byte[] getRcvHeaderEncryptKey1() { return _headerEncryptKey1; }
+    /** @return the send header encrypt key 2 */
     public byte[] getSendHeaderEncryptKey2() { return _sendHeaderEncryptKey2; }
     /**
      *  @return null before Session Request is sent (i.e. we sent a Token Request first)
      */
     public byte[] getRcvHeaderEncryptKey2() { return _rcvHeaderEncryptKey2; }
+    /** @return the retry header encrypt key 2 */
     public byte[] getRcvRetryHeaderEncryptKey2() { return _rcvRetryHeaderEncryptKey2; }
+    /** @return the Bob socket address */
     public InetSocketAddress getSentAddress() { return _bobSocketAddress; }
 
     /**
      *  What is the largest packet we can send to the peer?
      *  Only used for Session Confirmed packets.
      *  Session Request is very small.
+     *
+     *  @return the MTU in bytes
      */
     public int getMTU() {
         // To avoid PMTU problems on brokered IPv6 tunnels, make it the minimum.
@@ -533,6 +553,11 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         return _mtu;
     }
 
+    /**
+     * Receive a retry packet
+     *
+     * @param packet the UDP packet received
+     */
     public synchronized void receiveRetry(UDPPacket packet) throws GeneralSecurityException {
         try {
             locked_receiveRetry(packet);
@@ -616,6 +641,11 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         _currentState = OutboundState.OB_STATE_RETRY_RECEIVED;
     }
 
+    /**
+     * Receive a SessionCreated packet
+     *
+     * @param packet the UDP packet received
+     */
     public synchronized void receiveSessionCreated(UDPPacket packet) throws GeneralSecurityException {
         try {
             locked_receiveSessionCreated(packet);
@@ -715,8 +745,10 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     * Note that we just sent a token request packet.
-     * and save them for retransmission
+     * Note that we just sent a token request packet
+     * and save it for retransmission
+     *
+     * @param packet the datagram packet sent
      */
     public synchronized void tokenRequestSent(DatagramPacket packet) {
         OutboundState old = _currentState;
@@ -727,8 +759,10 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     * note that we just sent the SessionRequest packet
+     * Note that we just sent the SessionRequest packet
      * and save it for retransmission
+     *
+     * @param pkt the datagram packet sent
      */
     public synchronized void requestSent(DatagramPacket pkt) {
         OutboundState old = _currentState;
@@ -754,9 +788,10 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     * note that we just sent the SessionConfirmed packets
+     * Note that we just sent the SessionConfirmed packets
      * and save them for retransmission
      *
+     * @param packets the UDP packets sent
      * @return the new PeerState2, may also be retrieved from getPeerState()
      */
     public synchronized PeerState2 confirmedPacketsSent(UDPPacket[] packets) {
@@ -834,6 +869,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
+     * Get a packet to retransmit the SessionRequest
+     *
      * @return null if not sent or already got the session created
      */
     public synchronized UDPPacket getRetransmitSessionRequestPacket() {
@@ -852,6 +889,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
+     * Get the peer state for this connection
+     *
      * @return null if we have not sent the session confirmed
      */
     public synchronized PeerState2 getPeerState() {
@@ -860,6 +899,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
+     * Get the current state for the SSU2 introducer specified
+     *
+     * @param h the introducer hash
      * @return non-null current state for the SSU2 introducer specified,
      *         or INTRO_STATE_INVALID if peer is not an SSU2 introducer
      * @since 0.9.55
@@ -876,6 +918,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     /**
      * Set the current state for the SSU2 introducer specified
+     *
+     * @param h the introducer hash
+     * @param state the new state
      * @since 0.9.55
      */
     public void setIntroState(Hash h, IntroState state) {
@@ -889,6 +934,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     /**
      * A relay request was sent to the SSU2 introducer specified
+     *
+     * @param h the introducer hash
      * @since 0.9.55
      */
     public void introSent(Hash h) {
@@ -907,6 +954,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                 count > 0 ? " (Introducers: " + count + ")" : "");
     }
 
+    /** @return the number of introducers */
     public int countIntroducers() {
         return _introducers != null ? _introducers.size() : 0;
     }

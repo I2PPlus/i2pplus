@@ -41,6 +41,9 @@ public class AuthenticateHandler implements RequestHandler {
     private final JSONRPC2Helper _helper;
     private final SecurityManager _secMan;
 
+    /**
+     * AuthenticateHandler.
+     */
     public AuthenticateHandler(JSONRPC2Helper helper, SecurityManager secMan) {
         _helper = helper;
         _secMan = secMan;

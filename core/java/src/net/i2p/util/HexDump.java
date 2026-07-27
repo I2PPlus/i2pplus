@@ -24,6 +24,8 @@ import java.io.OutputStream;
  * @author human
  */
 public class HexDump {
+    /** utility class */
+    private HexDump() {}
 
     private static final int FORMAT_OFFSET_PADDING = 8;
     private static final int FORMAT_BYTES_PER_ROW = 16;
@@ -34,6 +36,7 @@ public class HexDump {
      * Dump a byte array in a String.
      *
      * @param data Data to be dumped
+     * @return the hexdump as a String
      */
     public static String dump(byte[] data) {
         return dump(data, 0, data.length);
@@ -45,6 +48,7 @@ public class HexDump {
      * @param data Data to be dumped
      * @param off  Offset from the beginning of <code>data</code>
      * @param len  Number of bytes of <code>data</code> to be dumped
+     * @return the hexdump as a String
      */
     public static String dump(byte[] data, int off, int len) {
         int outlen = OUTPUT_BYTES_PER_ROW * (len + FORMAT_BYTES_PER_ROW - 1) / FORMAT_BYTES_PER_ROW;
@@ -63,6 +67,7 @@ public class HexDump {
      *
      * @param data Data to be dumped
      * @param out  Output stream
+     * @throws java.io.IOException if the write fails
      */
     public static void dump(byte[] data, OutputStream out) throws IOException {
         dump(data, 0, data.length, out);

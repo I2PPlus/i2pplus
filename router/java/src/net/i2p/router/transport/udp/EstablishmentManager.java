@@ -198,12 +198,18 @@ public class EstablishmentManager {
     // SSU 2
     private static final int MIN_TOKENS = SystemVersion.isSlow() ? 64 : 128;
     private static final int MAX_TOKENS = SystemVersion.isSlow() ? 1024 : 2048;
+    /**
+     * IB_TOKEN_EXPIRATION.
+     */
     public static final long IB_TOKEN_EXPIRATION = 60*60L*1000L;
     private static final long MAX_SKEW = 2*60L*1000L;
     private static final String TOKEN_FILE = "ssu2tokens.txt";
     /** Max immediate terminations to send to a peer every FAILSAFE_INTERVAL */
     private static final int MAX_TERMINATIONS = 2;
 
+    /**
+     * EstablishmentManager.
+     */
     public EstablishmentManager(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
         _log = ctx.logManager().getLog(EstablishmentManager.class);
@@ -251,6 +257,9 @@ public class EstablishmentManager {
         _context.statManager().createRequiredRateStat("udp.inboundConn", "Inbound UDP Connection", "Transport [UDP]", UDPTransport.RATES);
     }
 
+    /**
+     * startup.
+     */
     public synchronized void startup() {
         loadTokens();
         _alive = true;
@@ -258,6 +267,9 @@ public class EstablishmentManager {
         t.start();
     }
 
+    /**
+     * shutdown.
+     */
     public synchronized void shutdown() {
         _alive = false;
         saveTokens();
@@ -2619,6 +2631,9 @@ public class EstablishmentManager {
      * @since 0.9.57
      */
     private static class TokenComparator implements Comparator<Map.Entry<RemoteHostId, Token>>, Serializable {
+        /**
+         * compare.
+         */
         @Override
         public int compare(Map.Entry<RemoteHostId, Token> l, Map.Entry<RemoteHostId, Token> r) {
              long le = l.getValue().expires;
@@ -2637,8 +2652,14 @@ public class EstablishmentManager {
      */
     private class InboundTokens extends LHMCache<RemoteHostId, Token> {
 
+        /**
+         * InboundTokens.
+         */
         public InboundTokens(int max) {super(max);}
 
+        /**
+         * removeEldestEntry.
+         */
         @Override
         protected boolean removeEldestEntry(Map.Entry<RemoteHostId, Token> eldest) {
             boolean rv = super.removeEldestEntry(eldest);
@@ -2661,50 +2682,95 @@ public class EstablishmentManager {
         private final RemoteHostId _from;
         private final Log _log;
 
+        /**
+         * _timeReceived.
+         */
         public long _timeReceived;
+        /**
+         * _aliceIP.
+         */
         public byte[] _aliceIP;
+        /**
+         * _alicePort.
+         */
         public int _alicePort;
+        /**
+         * _respCode.
+         */
         public int _respCode = 999;
+        /**
+         * _respData.
+         */
         public byte[] _respData;
 
+        /**
+         * HPCallback.
+         */
         public HPCallback(RemoteHostId from, Log log) {
             _from = from;
             _log = log;
         }
 
+        /**
+         * gotDateTime.
+         */
         public void gotDateTime(long time) {
             _timeReceived = time;
         }
 
+        /**
+         * gotOptions.
+         */
         public void gotOptions(byte[] options, boolean isHandshake) {
             // Options are allowed in HolePunch (but ignored)
         }
 
+        /**
+         * gotRI.
+         */
         public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) {
             warn("Unexpected RI block in HolePunch");
         }
 
+        /**
+         * gotRIFragment.
+         */
         public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
             warn("Unexpected RI fragment block in HolePunch");
         }
 
+        /**
+         * gotAddress.
+         */
         public void gotAddress(byte[] ip, int port) {
             _aliceIP = ip;
             _alicePort = port;
         }
 
+        /**
+         * gotRelayTagRequest.
+         */
         public void gotRelayTagRequest() {
             warn("Unexpected RelayTagRequest block in HolePunch");
         }
 
+        /**
+         * gotRelayTag.
+         */
         public void gotRelayTag(long tag) {
             warn("Unexpected RelayTag block in HolePunch");
         }
 
+        /**
+         * gotRelayRequest.
+         */
         public void gotRelayRequest(byte[] data) {
             warn("Unexpected RelayRequest block in HolePunch");
         }
 
+        /**
+         * gotRelayResponse.
+         */
         public void gotRelayResponse(int status, byte[] data) {
             if (data == null || data.length < 12) {
                 warn("Invalid RelayResponse data in HolePunch");
@@ -2714,38 +2780,65 @@ public class EstablishmentManager {
             _respData = data;
         }
 
+        /**
+         * gotRelayIntro.
+         */
         public void gotRelayIntro(Hash aliceHash, byte[] data) {
             warn("Unexpected RelayIntro block in HolePunch");
         }
 
+        /**
+         * gotPeerTest.
+         */
         public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
             warn("Unexpected PeerTest block in HolePunch");
         }
 
+        /**
+         * gotToken.
+         */
         public void gotToken(long token, long expires) {
             warn("Unexpected Token block in HolePunch");
         }
 
+        /**
+         * gotI2NP.
+         */
         public void gotI2NP(I2NPMessage msg) {
             warn("Unexpected I2NP block in HolePunch");
         }
 
+        /**
+         * gotFragment.
+         */
         public void gotFragment(byte[] data, int off, int len, long messageId, int frag, boolean isLast) {
             warn("Unexpected Fragment block in HolePunch");
         }
 
+        /**
+         * gotACK.
+         */
         public void gotACK(long ackThru, int acks, byte[] ranges) {
             warn("Unexpected ACK block in HolePunch");
         }
 
+        /**
+         * gotTermination.
+         */
         public void gotTermination(int reason, long count) {
             warn("Unexpected Termination block in HolePunch");
         }
 
+        /**
+         * gotPathChallenge.
+         */
         public void gotPathChallenge(RemoteHostId from, byte[] data) {
             warn("Unexpected PathChallenge block in HolePunch");
         }
 
+        /**
+         * gotPathResponse.
+         */
         public void gotPathResponse(RemoteHostId from, byte[] data) {
             warn("Unexpected PathResponse block in HolePunch");
         }
@@ -2767,6 +2860,9 @@ public class EstablishmentManager {
      *
      */
     private class Establisher implements Runnable {
+        /**
+         * run.
+         */
         @Override
         public void run() {
             while (_alive) {
@@ -2912,6 +3008,9 @@ public class EstablishmentManager {
         return false;
     }
 
+    /**
+     * parseReason.
+     */
     public static String parseReason(int reasonCode) {
         switch (reasonCode) {
             case 0: return "Unspecified";

@@ -37,6 +37,7 @@ public class NSEC3 extends Data {
      */
     public static final byte FLAG_OPT_OUT = 0x1;
 
+    /** ignored */
     private static final Map<Byte, HashAlgorithm> HASH_ALGORITHM_LUT = new HashMap<>();
 
     /**
@@ -47,10 +48,13 @@ public class NSEC3 extends Data {
      *      IANA DNSSEC NSEC3 Hash Algorithms</a>
      */
     public enum HashAlgorithm {
+        /** Reserved */
         RESERVED(0, "Reserved"),
+        /** SHA-1 */
         SHA1(1, "SHA-1"),
        ;
 
+        /** ignored */
         HashAlgorithm(int value, String description) {
             if (value < 0 || value > 255) {
                 throw new IllegalArgumentException();
@@ -60,9 +64,18 @@ public class NSEC3 extends Data {
             HASH_ALGORITHM_LUT.put(this.value, this);
         }
 
+        /**
+         * value.
+         */
         public final byte value;
+        /**
+         * description.
+         */
         public final String description;
 
+        /**
+         * forByte.
+         */
         public static HashAlgorithm forByte(byte b) {
             return HASH_ALGORITHM_LUT.get(b);
         }
@@ -95,13 +108,16 @@ public class NSEC3 extends Data {
     /**
      * The salt appended to the next owner name before hashing.
      */
+    /** the salt */
     private final byte[] salt;
 
     /**
      * The next hashed owner name in hash order.
      */
+    /** the next hashed name */
     private final byte[] nextHashed;
 
+    /** the type bitmap */
     private final byte[] typeBitmap;
 
     /**
@@ -109,6 +125,9 @@ public class NSEC3 extends Data {
      */
     public final List<TYPE> types;
 
+    /**
+     * parse.
+     */
     public static NSEC3 parse(DataInputStream dis, int length) throws IOException {
         byte hashAlgorithm = dis.readByte();
         byte flags = dis.readByte();
@@ -129,6 +148,7 @@ public class NSEC3 extends Data {
         return new NSEC3(hashAlgorithm, flags, iterations, salt, nextHashed, types);
     }
 
+    /** ignored */
     private NSEC3(HashAlgorithm hashAlgorithm, byte hashAlgorithmByte, byte flags, int iterations, byte[] salt, byte[] nextHashed, List<TYPE> types) {
         assert hashAlgorithmByte == (hashAlgorithm != null ? hashAlgorithm.value : hashAlgorithmByte);
         this.hashAlgorithmByte = hashAlgorithmByte;
@@ -142,19 +162,31 @@ public class NSEC3 extends Data {
         this.typeBitmap = NSEC.createTypeBitMap(types);
     }
 
+    /**
+     * NSEC3.
+     */
     public NSEC3(byte hashAlgorithm, byte flags, int iterations, byte[] salt, byte[] nextHashed, List<TYPE> types) {
         this(null, hashAlgorithm, flags, iterations, salt, nextHashed, types);
     }
 
+    /**
+     * NSEC3.
+     */
     public NSEC3(byte hashAlgorithm, byte flags, int iterations, byte[] salt, byte[] nextHashed, TYPE... types) {
         this(null, hashAlgorithm, flags, iterations, salt, nextHashed, Arrays.asList(types));
     }
 
+    /**
+     * getType.
+     */
     @Override
     public TYPE getType() {
         return TYPE.NSEC3;
     }
 
+    /**
+     * serialize.
+     */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
         dos.writeByte(hashAlgorithmByte);
@@ -167,6 +199,9 @@ public class NSEC3 extends Data {
         dos.write(typeBitmap);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder()
@@ -181,20 +216,33 @@ public class NSEC3 extends Data {
         return sb.toString();
     }
 
+    /**
+     * getSalt.
+     */
     public byte[] getSalt() {
         return salt.clone();
     }
 
+    /**
+     * getSaltLength.
+     */
     public int getSaltLength() {
         return salt.length;
     }
 
+    /**
+     * getNextHashed.
+     */
     public byte[] getNextHashed() {
         return nextHashed.clone();
     }
 
+    /** ignored */
     private String nextHashedBase32Cache;
 
+    /**
+     * getNextHashedBase32.
+     */
     public String getNextHashedBase32() {
         if (nextHashedBase32Cache == null) {
             nextHashedBase32Cache = Base32.encodeToString(nextHashed);
@@ -202,8 +250,12 @@ public class NSEC3 extends Data {
         return nextHashedBase32Cache;
     }
 
+    /** ignored */
     private DnsLabel nextHashedDnsLabelCache;
 
+    /**
+     * getNextHashedDnsLabel.
+     */
     public DnsLabel getNextHashedDnsLabel() {
         if (nextHashedDnsLabelCache == null) {
             String nextHashedBase32 = getNextHashedBase32();
@@ -212,6 +264,9 @@ public class NSEC3 extends Data {
         return nextHashedDnsLabelCache;
     }
 
+    /**
+     * copySaltInto.
+     */
     public void copySaltInto(byte[] dest, int destPos) {
         System.arraycopy(salt, 0, dest, destPos, salt.length);
     }

@@ -14,7 +14,12 @@ class NextSessionKey extends PublicKey {
     private final boolean _isRequest;
 
     /**
-     *  @param data non-null
+     * Create a NextSessionKey from raw key data.
+     *
+     * @param data non-null
+     * @param id the session identifier
+     * @param isReverse whether this is a reverse session
+     * @param isRequest whether this is a request
      */
     public NextSessionKey(byte[] data, int id, boolean isReverse, boolean isRequest) {
         super(EncType.ECIES_X25519, data);
@@ -24,11 +29,14 @@ class NextSessionKey extends PublicKey {
     }
 
     /**
-     *  Null data, for acks/requests only.
-     *  Type will be ElG but doesn't matter.
-     *  Don't call setData().
+     * Create a NextSessionKey with null data, for acks/requests only.
+     * Type will be ElG but doesn't matter.
+     * Don't call setData().
      *
-     *  @since 0.9.46
+     * @param id the session identifier
+     * @param isReverse whether this is a reverse session
+     * @param isRequest whether this is a request
+     * @since 0.9.46
      */
     public NextSessionKey(int id, boolean isReverse, boolean isRequest) {
         super();
@@ -37,16 +45,25 @@ class NextSessionKey extends PublicKey {
         _isRequest = isRequest;
     }
 
+    /**
+     * @return the session identifier
+     */
     public int getID() {
         return _id;
     }
 
-    /** @since 0.9.46 */
+    /**
+     * @return true if this is a reverse session
+     * @since 0.9.46
+     */
     public boolean isReverse() {
         return _isReverse;
     }
 
-    /** @since 0.9.46 */
+    /**
+     * @return true if this is a request
+     * @since 0.9.46
+     */
     public boolean isRequest() {
         return _isRequest;
     }

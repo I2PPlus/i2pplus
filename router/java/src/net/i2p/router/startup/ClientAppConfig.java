@@ -78,25 +78,63 @@ public class ClientAppConfig {
 
     // let's keep this really simple
     // Following 4 may be edited in router console
+    /** The main class name. */
     public String className;
+    /** The display name. */
     public String clientName;
+    /** The arguments. */
     public String args;
+    /** Whether disabled. */
     public boolean disabled;
+    /** The startup delay. */
     public final long delay;
-    /** @since 0.7.12 */
+    /**
+     * The classpath.
+     * @since 0.7.12
+     */
     public final String classpath;
-    /** @since 0.7.12 */
+    /**
+     * The stop arguments.
+     * @since 0.7.12
+     */
     public final String stopargs;
-    /** @since 0.7.12 */
+    /**
+     * The uninstall arguments.
+     * @since 0.7.12
+     */
     public final String uninstallargs;
-    /** @since 0.9.42 */
+    /**
+     * The config file.
+     * @since 0.9.42
+     */
     File configFile;
 
+    /**
+     * Create a new ClientAppConfig.
+     *
+     * @param cl the class name
+     * @param client the display name
+     * @param a the arguments
+     * @param d the startup delay in ms
+     * @param dis whether disabled
+     */
     public ClientAppConfig(String cl, String client, String a, long d, boolean dis) {
         this(cl, client, a, d, dis, null, null, null);
     }
 
-    /** @since 0.7.12 */
+    /**
+     * Create a new ClientAppConfig with all fields.
+     *
+     * @param cl the class name
+     * @param client the display name
+     * @param a the arguments
+     * @param d the startup delay in ms
+     * @param dis whether disabled
+     * @param cp the classpath
+     * @param sa the stop arguments
+     * @param ua the uninstall arguments
+     * @since 0.7.12
+     */
     public ClientAppConfig(String cl, String client, String a, long d, boolean dis, String cp, String sa, String ua) {
         className = cl;
         clientName = client;
@@ -108,10 +146,12 @@ public class ClientAppConfig {
         uninstallargs = ua;
     }
 
-    /*
+    /**
      * Only valid for the router's clients (not plugins).
      * Only valid after getClientApps(ctx) has been called.
- *
+     *
+     * @param ctx the I2P app context
+     * @return true if split config
      * @since 0.9.42
      */
     public static synchronized boolean isSplitConfig(I2PAppContext ctx) {
@@ -119,8 +159,11 @@ public class ClientAppConfig {
         return dir.exists() && !configFile(ctx).exists();
     }
 
-    /*
+    /**
      * This is the old config file. Only valid if not a split config.
+     *
+     * @param ctx the I2P app context
+     * @return the config file
      */
     public static File configFile(I2PAppContext ctx) {
         String clientConfigFile = ctx.getProperty(PROP_CLIENT_CONFIG_FILENAME, DEFAULT_CLIENT_CONFIG_FILENAME);
@@ -130,17 +173,23 @@ public class ClientAppConfig {
         return cfgFile;
     }
 
-    /*
+    /**
      * This is the config dir. Only valid if a split config.
+     *
+     * @param ctx the I2P app context
+     * @return the config directory
      * @since 0.9.48
      */
     public static File configDir(I2PAppContext ctx) {
         return new File(ctx.getConfigDir(), CLIENT_CONFIG_DIR);
     }
 
-    /*
+    /**
      * Go through the files, and return a List of ClientAppConfig structures
      * This is for the router.
+     *
+     * @param ctx the router context
+     * @return the list of client app configs
      */
     public static synchronized List<ClientAppConfig> getClientApps(RouterContext ctx) {
         File dir = new SecureDirectory(ctx.getConfigDir(), CLIENT_CONFIG_DIR);
@@ -195,9 +244,12 @@ public class ClientAppConfig {
         return rv;
     }
 
-    /*
+    /**
      * Go through the file, and return a List of ClientAppConfig structures
      *
+     * @param cfgFile the config file to read
+     * @return the list of client app configs
+     * @throws IOException if the file cannot be read
      * @since 0.7.12
      */
     public static synchronized List<ClientAppConfig> getClientApps(File cfgFile) throws IOException {
@@ -314,6 +366,9 @@ public class ClientAppConfig {
      * Do not use if multiple apps in a single file - use writeClientAppConfig(ctx, apps).
      * If app.configFile is null, a new file will be created and assigned.
      *
+     * @param ctx the I2P app context
+     * @param app the client app config to write
+     * @throws IOException if the file cannot be written
      * @since 0.9.42
      */
     public static synchronized void writeClientAppConfig(I2PAppContext ctx, ClientAppConfig app) throws IOException {
@@ -346,6 +401,9 @@ public class ClientAppConfig {
      * Do not add apps with this method - use writeClientAppConfig(ctx, app).
      * Do not delete apps with this method - use deleteClientAppConfig().
      *
+     * @param ctx the I2P app context
+     * @param apps the list of client app configs to write
+     * @throws IOException if the file cannot be written
      * @since 0.9.42 split out from above
      */
     public static synchronized void writeClientAppConfig(I2PAppContext ctx, List<ClientAppConfig> apps) throws IOException {
@@ -407,8 +465,10 @@ public class ClientAppConfig {
      * If this is the only config in the file, the file will be deleted;
      * otherwise the file will be saved with the remaining configs.
      *
+     * @param cac the client app config to delete
      * @return success
      * @throws IllegalArgumentException if cac has a null configfile
+     * @throws IOException if the file cannot be read or written
      * @since 0.9.42
      */
     public static synchronized boolean deleteClientAppConfig(ClientAppConfig cac) throws IOException {

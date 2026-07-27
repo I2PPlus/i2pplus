@@ -46,6 +46,10 @@ public class AllowedValueRange {
     /** The underlying XML node containing the allowed value range data. */
     private Node allowedValueRangeNode;
 
+    /**
+     *  Get the underlying XML node.
+     *  @return the underlying XML node
+     */
     public Node getAllowedValueRangeNode() {
         return allowedValueRangeNode;
     }

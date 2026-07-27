@@ -22,15 +22,18 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     private TunnelId _tunnelId;
     private I2NPMessage _msg;
     private byte[] _msgData;
+/** Message type ID for this I2NP message */
 
     public final static int MESSAGE_TYPE = 19;
     /** if we can't deliver a tunnel message in 10s, forget it */
     private static final int EXPIRATION_PERIOD = 10*1000;
+/** Tunnelgatewaymessage */
 
     public TunnelGatewayMessage(I2PAppContext context) {
         super(context);
         setMessageExpiration(context.clock().now() + EXPIRATION_PERIOD);
     }
+/** Return the tunnelId */
 
     public TunnelId getTunnelId() {return _tunnelId;}
 
@@ -62,6 +65,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
         if (msg == null) {throw new IllegalArgumentException("Don't set me to null!");}
         _msg = msg;
     }
+/** Calculate the serialized length of this message */
 
     protected int calculateWrittenLength() {
         int rv = 4 + 2;
@@ -100,6 +104,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
         curIndex += _msgData.length;
         return curIndex;
     }
+/** Read and parse the message from raw data into fields */
 
 
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
@@ -151,15 +156,22 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
         umsg.readBytes(data, utype, curIndex);
         _msg = umsg;
     }
+/** Return the type */
 
     public int getType() {return MESSAGE_TYPE;}
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return DataHelper.hashCode(getTunnelId()) +
                DataHelper.hashCode(_msg);
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if ((object != null) && (object instanceof TunnelGatewayMessage)) {
@@ -170,6 +182,9 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
         } else {return false;}
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return "\n* TunnelGatewayMessage: MessageID: " + getUniqueId() + "; TunnelID: " + getTunnelId() + "\n* Message: " + _msg;

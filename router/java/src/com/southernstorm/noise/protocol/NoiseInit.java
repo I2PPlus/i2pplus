@@ -12,7 +12,7 @@ import net.i2p.data.DataHelper;
  * @since 0.9.70
  */
 public class NoiseInit {
-        
+
         private NoiseInit() {}
 
         /** NTCP2 */
@@ -24,24 +24,26 @@ public class NoiseInit {
         /** SSU2 */
         private static final String protocolName4 = "Noise_XKchaobfse+hs1+hs2+hs3_25519_ChaChaPoly_SHA256";
         /**
-         * Hybrid Ratchet
-         * @since 0.9.67
+         * Hybrid Ratchet MLKEM512
          */
         private static final String protocolName5 = "Noise_IKhfselg2_25519+MLKEM512_ChaChaPoly_SHA256";
+        /** Hybrid Ratchet MLKEM768 */
         private static final String protocolName6 = "Noise_IKhfselg2_25519+MLKEM768_ChaChaPoly_SHA256";
+        /** Hybrid Ratchet MLKEM1024 */
         private static final String protocolName7 = "Noise_IKhfselg2_25519+MLKEM1024_ChaChaPoly_SHA256";
         /**
-         * Hybrid NTCP2
-         * @since 0.9.69
+         * Hybrid NTCP2 MLKEM512
          */
         private static final String protocolName8 = "Noise_XKhfsaesobfse+hs2+hs3_25519+MLKEM512_ChaChaPoly_SHA256";
+        /** Hybrid NTCP2 MLKEM768 */
         private static final String protocolName9 = "Noise_XKhfsaesobfse+hs2+hs3_25519+MLKEM768_ChaChaPoly_SHA256";
+        /** Hybrid NTCP2 MLKEM1024 */
         private static final String protocolName10 = "Noise_XKhfsaesobfse+hs2+hs3_25519+MLKEM1024_ChaChaPoly_SHA256";
         /**
-         * Hybrid SSU2
-         * @since 0.9.69
+         * Hybrid SSU2 MLKEM512
          */
         private static final String protocolName11 = "Noise_XKhfschaobfse+hs1+hs2+hs3_25519+MLKEM512_ChaChaPoly_SHA256";
+        /** Hybrid SSU2 MLKEM768 */
         private static final String protocolName12 = "Noise_XKhfschaobfse+hs1+hs2+hs3_25519+MLKEM768_ChaChaPoly_SHA256";
 
         /** NTCP2 */
@@ -56,6 +58,7 @@ public class NoiseInit {
         private static final String PATTERN_ID_XK_SSU2 = "XK-SSU2";
         /** Hybrid Base */
         private static final String PATTERN_ID_IKHFS = "IKhfs";
+        /** Hybrid Base */
         private static final String PATTERN_ID_XKHFS = "XKhfs";
         /**
          * Hybrid Ratchet
@@ -80,21 +83,34 @@ public class NoiseInit {
         // no 1024, too big
 
         /**
-         *
+         * Pattern identifiers for Noise protocol handshake patterns.
          */
         public enum PatternID {
+            /** NTCP2 */
             XK(PATTERN_ID_XK, protocolName),
+            /** Ratchet */
             IK(PATTERN_ID_XK, protocolName2),
+            /** Tunnels */
             N(PATTERN_ID_XK, protocolName3),
+            /** Tunnels, no response expected */
             N_NO_RESPONSE(PATTERN_ID_XK, protocolName3),
+            /** SSU2 */
             XK_SSU2(PATTERN_ID_XK, protocolName4),
+            /** Hybrid Ratchet MLKEM512 */
             IKHFS_512(PATTERN_ID_XK, protocolName5),
+            /** Hybrid Ratchet MLKEM768 */
             IKHFS_768(PATTERN_ID_XK, protocolName6),
+            /** Hybrid Ratchet MLKEM1024 */
             IKHFS_1024(PATTERN_ID_XK, protocolName7),
+            /** Hybrid NTCP2 MLKEM512 */
             XKHFS_512(PATTERN_ID_XK, protocolName8),
+            /** Hybrid NTCP2 MLKEM768 */
             XKHFS_768(PATTERN_ID_XK, protocolName9),
+            /** Hybrid NTCP2 MLKEM1024 */
             XKHFS_1024(PATTERN_ID_XK, protocolName10),
+            /** Hybrid SSU2 MLKEM512 */
             XKHFS_512_SSU2(PATTERN_ID_XK, protocolName11),
+            /** Hybrid SSU2 MLKEM768 */
             XKHFS_768_SSU2(PATTERN_ID_XK, protocolName12);
 
             private final String prefix;
@@ -149,12 +165,33 @@ public class NoiseInit {
                 }
             }
 
+            /**
+             * getPrefix.
+             */
             public String getPrefix() { return prefix; }
+            /**
+             * getPatternID.
+             */
             public String getPatternID() { return patternId; }
+            /**
+             * getProtocolName.
+             */
             public String getProtocolName() { return protoName; }
+            /**
+             * getDH.
+             */
             public String getDH() { return dh; }
+            /**
+             * getCipher.
+             */
             public String getCipher() { return scipher; }
+            /**
+             * getHash.
+             */
             public String getHash() { return shash; }
+            /**
+             * getPattern.
+             */
             public short[] getPattern() { return pattern; }
 
             /**

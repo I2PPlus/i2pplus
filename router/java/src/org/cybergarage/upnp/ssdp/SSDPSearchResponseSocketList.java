@@ -26,6 +26,9 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
 
     private InetAddress[] binds = null;
 
+    /**
+     * SSDPSearchResponseSocketList.
+     */
     public SSDPSearchResponseSocketList() {}
 
     /**
@@ -42,6 +45,9 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
     //	ControlPoint
     ////////////////////////////////////////////////
 
+    /**
+     * setControlPoint.
+     */
     public void setControlPoint(ControlPoint ctrlPoint) {
         int nSockets = size();
         for (int n = 0; n < nSockets; n++) {
@@ -54,6 +60,9 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
     //	get
     ////////////////////////////////////////////////
 
+    /**
+     * getSSDPSearchResponseSocket.
+     */
     public SSDPSearchResponseSocket getSSDPSearchResponseSocket(int n) {
         return get(n);
     }
@@ -62,6 +71,9 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
     //	Methods
     ////////////////////////////////////////////////
 
+    /**
+     * open.
+     */
     public boolean open(int port) {
         InetAddress[] binds = this.binds;
         String[] bindAddresses;
@@ -92,10 +104,16 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
         return true;
     }
 
+    /**
+     * open.
+     */
     public boolean open() {
         return open(SSDP.PORT);
     }
 
+    /**
+     * close.
+     */
     public void close() {
         int nSockets = size();
         for (int n = 0; n < nSockets; n++) {
@@ -109,6 +127,9 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
     //	Methods
     ////////////////////////////////////////////////
 
+    /**
+     * start.
+     */
     public void start() {
         int nSockets = size();
         for (int n = 0; n < nSockets; n++) {
@@ -117,6 +138,9 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
         }
     }
 
+    /**
+     * stop.
+     */
     public void stop() {
         int nSockets = size();
         for (int n = 0; n < nSockets; n++) {
@@ -129,6 +153,12 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
     //	Methods
     ////////////////////////////////////////////////
 
+    /**
+     * Sends an M-SEARCH request from all sockets in the list.
+     *
+     * @param req the search request to broadcast
+     * @return true if all sends succeeded
+     */
     public boolean post(SSDPSearchRequest req) {
         boolean ret = true;
         int nSockets = size();

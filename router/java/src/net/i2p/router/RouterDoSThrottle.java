@@ -12,6 +12,9 @@ import net.i2p.util.Log;
  */
 @Deprecated
 class RouterDoSThrottle extends RouterThrottleImpl {
+    /**
+     * RouterDoSThrottle.
+     */
     public RouterDoSThrottle(RouterContext context) {
         super(context);
         _log = context.logManager().getLog(RouterDoSThrottle.class);
@@ -24,6 +27,9 @@ class RouterDoSThrottle extends RouterThrottleImpl {
     private static final long LOOKUP_THROTTLE_MAX = 50;
     private final Log _log;
 
+    /**
+     * acceptNetDbLookupRequest.
+     */
     @Override
     public boolean acceptNetDbLookupRequest(Hash key) {
         // if we were going to refuse it anyway, drop it

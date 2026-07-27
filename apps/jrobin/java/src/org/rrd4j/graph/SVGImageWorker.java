@@ -13,20 +13,33 @@ import org.jfree.svg.SVGGraphics2D;
  * @author zzz
  */
 public class SVGImageWorker extends ImageWorker {
+    /** G2d */
     private SVGGraphics2D g2d;
+    /** Img width */
     private int imgWidth;
+    /** Img height */
     private int imgHeight;
+    /** Glow */
     private boolean glow;
 
+    /**
+     * SVGImageWorker.
+     */
     public SVGImageWorker(int width, int height) {
         this.glow = false;
         initGraphics(width, height);
     }
 
+    /**
+     * SVGImageWorker.
+     */
     public SVGImageWorker(int width, int height, boolean glow) {
         this.glow = glow;
         initGraphics(width, height);
     }
+    /**
+     * Init graphics
+     */
 
     private void initGraphics(int width, int height) {
         imgWidth = width;
@@ -35,21 +48,33 @@ public class SVGImageWorker extends ImageWorker {
         g2d.setGlowEnabled(glow);
         setG2d(g2d);
     }
+    /**
+     * Resize
+     */
 
     void resize(int width, int height) {
         if (width != imgWidth || height != imgHeight) {
             initGraphics(width, height);
         }
     }
+    /**
+     * Reset the allocator state
+     */
 
     protected void reset(Graphics2D g2d) {
         g2d.setClip(0, 0, imgWidth, imgHeight);
     }
+    /**
+     * Make image
+     */
 
     void makeImage(OutputStream os) throws IOException {
         byte[] svgBytes = g2d.getSVGElement().getBytes(java.nio.charset.StandardCharsets.UTF_8);
         os.write(svgBytes);
     }
+    /**
+     * Draw string
+     */
 
     @Override
     void drawString(String text, int x, int y, Font font, Paint paint) {

@@ -36,14 +36,23 @@ import java.util.Map;
  *
  * @since 0.9.38
  */
+/**
+ * Meta lease set wrapper.
+ */
 public class MetaLeaseSet extends LeaseSet2 {
 
+    /**
+     * MetaLeaseSet.
+     */
     public MetaLeaseSet() {
         super();
     }
 
     ///// overrides below here
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return KEY_TYPE_META_LS2;
@@ -150,6 +159,9 @@ public class MetaLeaseSet extends LeaseSet2 {
         _expires = _lastExpiration;
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -165,6 +177,9 @@ public class MetaLeaseSet extends LeaseSet2 {
         return super.hashCode();
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);

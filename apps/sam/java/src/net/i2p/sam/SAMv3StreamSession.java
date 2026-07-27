@@ -59,6 +59,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
 
     private final String nick;
 
+    /**
+     * getNick.
+     */
     public String getNick() {
         return nick;
     }
@@ -88,8 +91,6 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * Caller MUST call start().
      *
      * @param login nickname of the session
-     * @throws IOException
-     * @throws DataFormatException
      * @since 0.9.25
      */
     public SAMv3StreamSession(
@@ -131,6 +132,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         }
     }
 
+    /**
+     * getDB.
+     */
     public static SessionsDB getDB() {
         return SAMv3Handler.sSessionsHash;
     }
@@ -205,6 +209,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
             this.nick = nick;
         }
 
+        /**
+         * run.
+         */
         public void run() {
             SAMBridge bridge = handler.getBridge();
             String hashPrefix = dest.calculateHash().toBase64().substring(0,6);
@@ -317,6 +324,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         final SAMv3Handler fHandler = handler;
         final boolean fVerbose = verbose;
         new I2PAppThread(rec.getThreadGroup(), new Runnable() {
+            /**
+             * run.
+             */
             @Override
             public void run() {
                 try {
@@ -442,6 +452,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
             this.isSSL = isSSL;
         }
 
+        /**
+         * run.
+         */
         public void run() {
             while (getSocketServer() != null) {
 
@@ -565,6 +578,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
             this.lastTouch = System.currentTimeMillis();
         }
 
+        /**
+         * run.
+         */
         public void run() {
             if (bridge != null) bridge.register(this);
             try {
@@ -610,6 +626,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         }
     }
 
+    /**
+     * getSocketServer.
+     */
     protected I2PServerSocket getSocketServer() {
         synchronized (this.socketServerLock) {
             return this.socketServer;

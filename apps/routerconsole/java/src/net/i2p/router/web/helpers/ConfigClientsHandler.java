@@ -44,6 +44,10 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
  * installation, updates, and startup configuration.
  */
 public class ConfigClientsHandler extends FormHandler {
+    /**
+     * Construct a new ConfigClientsHandler.
+     */
+    public ConfigClientsHandler() {}
 
     @Override
     protected void processForm() {

@@ -18,6 +18,9 @@ import net.i2p.data.DataHelper;
  * @author jrandom
  */
 public class DeliveryStatusMessage extends FastI2NPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public final static int MESSAGE_TYPE = 10;
     private long _id;
     private long _arrival;
@@ -25,18 +28,26 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     /** 4 bytes unsigned */
     private static final long MAX_MSG_ID = (1L << 32) - 1;
 
+    /**
+     * Create a delivery status message
+     */
     public DeliveryStatusMessage(I2PAppContext context) {
         super(context);
         _id = -1;
         _arrival = -1;
     }
 
+    /**
+     * getMessageId.
+     */
     public long getMessageId() { return _id; }
 
     /**
-     *  @param id 0 to (2**32) - 1
-     *  @throws IllegalStateException if id previously set, to protect saved checksum
-     *  @throws IllegalArgumentException
+     * Set the message ID for this delivery status.
+     *
+     * @param id 0 to (2**32) - 1
+     * @throws IllegalStateException if id previously set, to protect saved checksum
+     * @throws IllegalArgumentException if id is out of range
      */
     public void setMessageId(long id) {
         if (_id >= 0)
@@ -49,12 +60,16 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     /**
      *  Misnamed, as it is generally (always?) set by the creator to the current time,
      *  in some future usage it could be set on arrival
+     *
+     *  @return the arrival time
      */
     public long getArrival() { return _arrival; }
 
     /**
      *  Misnamed, as it is generally (always?) set by the creator to the current time,
      *  in some future usage it could be set on arrival
+     *
+     *  @param arrival the arrival time
      */
     public void setArrival(long arrival) {
         // To accomodate setting on arrival,
@@ -64,12 +79,15 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
         _arrival = arrival;
     }
 
+    /**
+     * readMessage.
+     */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         if (dataSize != 12)
             throw new I2NPMessageException("bad len " + dataSize);
         int curIndex = offset;
-        
+
         _id = DataHelper.fromLong(data, curIndex, 4);
         curIndex += 4;
         _arrival = DataHelper.fromLong(data, curIndex, DataHelper.DATE_LENGTH);
@@ -91,13 +109,22 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
         return curIndex;
     }
 
+    /**
+     * getType.
+     */
     public int getType() { return MESSAGE_TYPE; }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return (int)getMessageId() ^ (int)getArrival();
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if ( (object != null) && (object instanceof DeliveryStatusMessage) ) {
@@ -109,6 +136,9 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
         }
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return " [MsgID " + getMessageId() + "] -> Received " + (_context.clock().now() - _arrival) + "ms ago";

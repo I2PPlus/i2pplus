@@ -30,12 +30,18 @@ import java.util.List;
  * @since 0.9.7
  */
 public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 37;
     private SessionId _sessionId;
     private final List<Lease> _endpoints;
 
     private static final String MIN_VERSION = "0.9.7";
 
+    /**
+     * RequestVariableLeaseSetMessage.
+     */
     public RequestVariableLeaseSetMessage() {
         _endpoints = new ArrayList<>(6);
     }
@@ -50,6 +56,9 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
         return clientVersion != null && VersionComparator.comp(clientVersion, MIN_VERSION) >= 0;
     }
 
+    /**
+     * getSessionId.
+     */
     public SessionId getSessionId() {
         return _sessionId;
     }
@@ -64,14 +73,23 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
         return _sessionId;
     }
 
+    /**
+     * setSessionId.
+     */
     public void setSessionId(SessionId id) {
         _sessionId = id;
     }
 
+    /**
+     * getEndpoints.
+     */
     public int getEndpoints() {
         return _endpoints.size();
     }
 
+    /**
+     * getEndpoint.
+     */
     public Lease getEndpoint(int endpoint) {
         if ((endpoint < 0) || (_endpoints.size() <= endpoint)) {
             return null;
@@ -79,6 +97,9 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
         return _endpoints.get(endpoint);
     }
 
+    /**
+     * addEndpoint.
+     */
     public void addEndpoint(Lease lease) {
         if (lease == null) {
             throw new IllegalArgumentException();
@@ -86,6 +107,9 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
         _endpoints.add(lease);
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
@@ -108,6 +132,9 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if (_sessionId == null) {
@@ -127,11 +154,17 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();

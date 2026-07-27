@@ -15,6 +15,9 @@ import net.i2p.router.web.FormHandler;
  */
 public class ConfigTunnelsHandler extends FormHandler {
 
+    /** Constructor */
+    public ConfigTunnelsHandler() {}
+
     private boolean _shouldSave;
 
     @Override
@@ -26,6 +29,11 @@ public class ConfigTunnelsHandler extends FormHandler {
         }
     }
 
+    /**
+     * Set whether the form should trigger a save
+     *
+     * @param moo the form value to check for save trigger
+     */
     public void setShouldsave(String moo) {
         if ( (moo != null) && (moo.equals(_t("Save changes"))) )
             _shouldSave = true;

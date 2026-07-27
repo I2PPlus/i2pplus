@@ -7,8 +7,14 @@ import net.i2p.I2PAppContext;
  */
 public class TunnelBuildMessage extends TunnelBuildMessageBase {
 
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 21;
 
+    /**
+     * TunnelBuildMessage.
+     */
     public TunnelBuildMessage(I2PAppContext context) {
         super(context, MAX_RECORD_COUNT);
     }
@@ -18,8 +24,14 @@ public class TunnelBuildMessage extends TunnelBuildMessageBase {
         super(context, records);
     }
 
+    /**
+     * getType.
+     */
     public int getType() {return MESSAGE_TYPE;}
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {return "[TunnelBuildMessage]";}
 }

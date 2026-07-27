@@ -55,9 +55,13 @@ import net.i2p.util.OrderedProperties;
  * @author jrandom
  */
 public class RouterInfo extends DatabaseEntry {
+    /** Ctx */
     private final I2PAppContext ctx = I2PAppContext.getGlobalContext();
+    /** Log */
     private final Log log = ctx.logManager().getLog(RouterInfo.class);
+    /**  identity */
     private RouterIdentity _identity;
+    /**  published */
     private volatile long _published;
     /**
      *  Save addresses in the order received so the signature works.
@@ -65,12 +69,18 @@ public class RouterInfo extends DatabaseEntry {
     private final List<RouterAddress> _addresses;
     /** may be null to save memory, no longer final */
     private Set<Hash> _peers;
+    /**  options */
     private final Properties _options;
+    /**  validated */
     private volatile boolean _validated;
+    /**  is valid */
     private volatile boolean _isValid;
     //private volatile String _stringified;
+    /**  byteified */
     private volatile byte[] _byteified;
+    /**  hash code */
     private volatile int _hashCode;
+    /**  hash code initialized */
     private volatile boolean _hashCodeInitialized;
     /** should we cache the byte and string versions _byteified ? **/
     private volatile boolean _shouldCache;
@@ -79,9 +89,12 @@ public class RouterInfo extends DatabaseEntry {
      * If we do bring this back, don't do on ARM or Android
      */
     private static final boolean CACHE_ALL = false; // SystemVersion.getMaxMemory() > 128*1024*1024L;
+/** Property key for network id */
 
     public static final String PROP_NETWORK_ID = "netId";
+/** Property key for capabilities */
     public static final String PROP_CAPABILITIES = "caps";
+/** Capability flag for hidden */
     public static final char CAPABILITY_HIDDEN = 'H';
     private static final int MAX_ADDRESSES = 16;
     private static final int MAX_INTRODUCERS = 5;
@@ -93,11 +106,13 @@ public class RouterInfo extends DatabaseEntry {
      *
      *  @since 0.9.62
      */
+/** Max Uncompressed Size constant */
     public static final int MAX_UNCOMPRESSED_SIZE = 4*1024;
 
     /** Public string of chars which serve as bandwidth capacity markers
      * NOTE: individual chars defined in Router.java
      */
+/** Bw Capability Chars constant */
     public static final String BW_CAPABILITY_CHARS = "" +
         // reverse, so e.g. "POfR" works correctly
         Router.CAPABILITY_BW_UNLIMITED +
@@ -113,10 +128,12 @@ public class RouterInfo extends DatabaseEntry {
      *
      * @since 0.9.63+
      */
+/** Congestion Capability Chars constant */
     public static final String CONGESTION_CAPABILITY_CHARS = "" +
         Router.CAPABILITY_CONGESTION_MODERATE +
         Router.CAPABILITY_CONGESTION_SEVERE +
         Router.CAPABILITY_NO_TUNNELS;
+/** Routerinfo */
 
     public RouterInfo() {
         _addresses = new ArrayList<>(2);
@@ -133,14 +150,17 @@ public class RouterInfo extends DatabaseEntry {
         setIdentity(old.getIdentity());
         setPeers(old.getPeers());
     }
+/** Return the date */
 
     public long getDate() {
         return _published;
     }
+/** Return the keysAndCert */
 
     public KeysAndCert getKeysAndCert() {
         return _identity;
     }
+/** Return the type */
 
     public int getType() {
         return KEY_TYPE_ROUTERINFO;
@@ -277,6 +297,7 @@ public class RouterInfo extends DatabaseEntry {
     public Map<Object, Object> getOptionsMap() {
         return Collections.unmodifiableMap(_options);
     }
+/** Return the option */
 
     public String getOption(String opt) {return _options.getProperty(opt);}
 
@@ -633,6 +654,9 @@ public class RouterInfo extends DatabaseEntry {
         _signature.writeBytes(out);
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -648,6 +672,9 @@ public class RouterInfo extends DatabaseEntry {
                && DataHelper.eq(getPeers(), info.getPeers());
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         if (!_hashCodeInitialized) {
@@ -657,6 +684,9 @@ public class RouterInfo extends DatabaseEntry {
         return _hashCode;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(1024);
@@ -686,42 +716,4 @@ public class RouterInfo extends DatabaseEntry {
         return rv;
     }
 
-    /**
-     *  Print out routerinfos from files specified on the command line.
-     *  Exits 1 if any RI is invalid, fails signature, etc.
-     *  @since 0.8
-     */
-    public static void main(String[] args) {
-        if (args.length <= 0) {
-            System.err.println("Usage: RouterInfo file ...");
-            System.exit(1);
-        }
-        boolean fail = false;
-        for (int i = 0; i < args.length; i++) {
-             RouterInfo ri = new RouterInfo();
-             InputStream is = null;
-             try {
-                 is = new FileInputStream(args[i]);
-                 ri.readBytes(is);
-                 if (ri.isValid()) {
-                     System.out.println(ri.toString());
-                  } else {
-                     System.err.println("RouterInfo " + args[i] + " is invalid");
-                     fail = true;
-                  }
-             } catch (IOException e) {
-                 System.err.println("Error reading " + args[i] + ": " + e);
-                 fail = true;
-             } catch (DataFormatException e) {
-                 System.err.println("Error reading " + args[i] + ": " + e);
-                 fail = true;
-             } finally {
-                 if (is != null) {
-                     try { is.close(); } catch (IOException ioe) { /* ignored */ }
-                 }
-             }
-        }
-        if (fail)
-            System.exit(1);
-    }
 }

@@ -5,5 +5,8 @@ package net.i2p.router.transport.udp;
  *  @since 0.9.16
  */
 interface SocketListener {
+    /**
+     * fail().
+     */
     public void fail();
 }

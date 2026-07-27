@@ -43,6 +43,9 @@ class FloodfillPeerSelector extends PeerSelector {
 
     private BanLogger _banLogger;
 
+    /**
+     * FloodfillPeerSelector.
+     */
     public FloodfillPeerSelector(RouterContext ctx) {
         super(ctx);
         _banLogger = new BanLogger();
@@ -484,6 +487,9 @@ class FloodfillPeerSelector extends PeerSelector {
             _wanted = wanted;
         }
         private static final int EXTRA_MATCHES = 200;
+        /**
+         * add.
+         */
         public void add(Hash entry) {
             if ((_toIgnore != null) && (_toIgnore.contains(entry))) {return;}
             if (_context.banlist().isBanlisted(entry)) {return;}
@@ -569,6 +575,9 @@ class FloodfillPeerSelector extends PeerSelector {
             }
             return rv;
         }
+        /**
+         * size.
+         */
         public int size() { return _matches; }
     }
 

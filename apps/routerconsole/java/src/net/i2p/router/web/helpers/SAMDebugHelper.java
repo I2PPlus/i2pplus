@@ -19,6 +19,9 @@ import net.i2p.util.Log;
  */
 public class SAMDebugHelper extends HelperBase {
 
+    /**
+     * SAMDebugHelper.
+     */
     public SAMDebugHelper() {}
 
     /**

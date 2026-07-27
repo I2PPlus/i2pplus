@@ -14,8 +14,10 @@ import java.util.concurrent.atomic.AtomicLong;
  * class).
  */
 public class RrdSafeFileBackend extends RrdRandomAccessFileBackend {
+    /** ignored */
     private static final Counters counters = new Counters();
 
+    /** ignored */
     private FileLock lock;
 
     /**
@@ -102,10 +104,15 @@ public class RrdSafeFileBackend extends RrdRandomAccessFileBackend {
      * and debugging the file locking behavior.
      */
     static class Counters {
+        /** Lock count */
         final AtomicLong locks = new AtomicLong(0);
+        /** Quick lock count */
         final AtomicLong quickLocks = new AtomicLong(0);
+        /** Unlock count */
         final AtomicLong unlocks = new AtomicLong(0);
+        /** Locked count */
         final AtomicLong locked = new AtomicLong(0);
+        /** Error count */
         final AtomicLong errors = new AtomicLong(0);
 
         /** Registers a quick lock operation. */

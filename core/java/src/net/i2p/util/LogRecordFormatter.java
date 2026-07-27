@@ -21,12 +21,16 @@ import java.util.Date;
  *
  */
 class LogRecordFormatter {
+    /** N l */
     static final String NL = System.getProperty("line.separator");
     // arbitrary max length for the classname property (this makes sure it lines up nicely)
     private static final int MAX_WHERE_LENGTH = 16;
     private static final int MAX_THREAD_LENGTH = 11;
     private static final int MAX_PRIORITY_LENGTH = 5;
 
+    /**
+     * Format a log record per manager settings.
+     */
     public static String formatRecord(LogManager manager, LogRecord rec) {
         return formatRecord(manager, rec, true);
     }
@@ -73,6 +77,9 @@ class LogRecordFormatter {
         return toString(logRecord.getThreadName(), MAX_THREAD_LENGTH);
     }
 
+    /**
+     * Format the record timestamp.
+     */
     public static String getWhen(LogManager manager, LogRecord logRecord) {
         SimpleDateFormat fmt = manager.getDateFormat();
         Date d = new Date(logRecord.getDate());
@@ -81,14 +88,8 @@ class LogRecordFormatter {
         }
     }
 
-    /** don't translate */
-    /****
-     * private static String getPriority(LogRecord rec) {
-     * return toString(Log.toLevelString(rec.getPriority()), MAX_PRIORITY_LENGTH);
-     * }
-     ****/
+    /* don't translate */
 
-    /** */
     private static final String BUNDLE_NAME = "net.i2p.util.messages";
 
     static {

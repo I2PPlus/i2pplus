@@ -91,19 +91,30 @@ import java.util.Arrays;
  * @author zzz
  */
 public abstract class SimpleDataStructure implements DataStructure {
+    /**
+     * _data.
+     */
     protected byte[] _data;
 
-    /** A new instance with the data set to null. Call readBytes(), setData(), or fromByteArray() after this to set the data */
+    /**
+     * A new instance with the data set to null. Call readBytes(), setData(), or fromByteArray() after this to set the data.
+     */
     public SimpleDataStructure() {}
 
-    /** @throws IllegalArgumentException if data is not the legal number of bytes (but null is ok) */
+    /**
+     * Creates a SimpleDataStructure with the given data.
+     *
+     * @param data the byte array, or null
+     * @throws IllegalArgumentException if data is not the legal number of bytes (but null is ok)
+     */
     public SimpleDataStructure(byte[] data) {
         setData(data);
     }
 
     /**
-     * The legal length of the byte array in this data structure
+     * The legal length of the byte array in this data structure.
      *
+     * @return the legal length of the byte array
      * @since 0.8.2
      */
     public abstract int length();
@@ -146,21 +157,30 @@ public abstract class SimpleDataStructure implements DataStructure {
     }
 
     /**
-     * Repeated reads until the buffer is full or IOException is thrown
+     * Repeated reads until the buffer is full or IOException is thrown.
      *
+     * @param in the stream to read from
+     * @param target the buffer to fill
      * @return number of bytes read (should always equal target.length)
-     * @since 0.9.48, copied from former superclass DataStructureImpl
+     * @throws IOException on IO error
+     * @since 0.9.48
      */
     protected int read(InputStream in, byte[] target) throws IOException {
         return DataHelper.read(in, target);
     }
 
+    /**
+     * writeBytes.
+     */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_data == null) throw new DataFormatException("No data to write out");
         out.write(_data);
     }
 
+    /**
+     * toBase64.
+     */
     @Override
     public String toBase64() {
         if (_data == null) return null;
@@ -201,9 +221,9 @@ public abstract class SimpleDataStructure implements DataStructure {
     /**
      * Does the same thing as setData() but null not allowed.
      *
-     * @param data non-null
+     * @param data non-null byte array
      * @throws DataFormatException if null or wrong length
-     * @throws RuntimeException if data already set.
+     * @throws RuntimeException if data already set
      */
     @Override
     public void fromByteArray(byte[] data) throws DataFormatException {
@@ -213,6 +233,9 @@ public abstract class SimpleDataStructure implements DataStructure {
         setData(data);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
@@ -230,6 +253,8 @@ public abstract class SimpleDataStructure implements DataStructure {
     /**
      * We assume the data has enough randomness in it, so use the first 4 bytes for speed.
      * If this is not the case, override in the extending class.
+     *
+     * @return the hash code
      */
     @Override
     public int hashCode() {
@@ -243,6 +268,9 @@ public abstract class SimpleDataStructure implements DataStructure {
      * Warning - this returns true for two different classes with the same size
      * and same data, e.g. SessionKey and SessionTag, but you wouldn't
      * put them in the same Set, would you?
+     *
+     * @param obj the object to compare
+     * @return true if equal
      */
     @Override
     public boolean equals(Object obj) {

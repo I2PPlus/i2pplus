@@ -21,6 +21,7 @@ import java.io.IOException;
  */
 public abstract class RRWithTarget extends Data {
 
+    /** The target domain name */
     public final DnsName target;
 
     /**
@@ -34,16 +35,23 @@ public abstract class RRWithTarget extends Data {
         target.writeToStream(dos);
     }
 
+    /**
+     * RRWithTarget.
+     */
     protected RRWithTarget(DnsName target) {
         this.target = target;
         this.name = target;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return target + ".";
     }
 
+    /** @return the target domain name */
     public final DnsName getTarget() {
         return target;
     }

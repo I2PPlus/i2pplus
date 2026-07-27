@@ -101,6 +101,13 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
         }
     }
 
+    /**
+     * Verify the hostname against the certificate.
+     *
+     * @param host the hostname
+     * @param cert the certificate
+     * @throws SSLException if verification fails
+     */
     public final void verify(
             final String host, final X509Certificate cert) throws SSLException {
         final boolean ipv4 = InetAddressUtils.isIPv4Address(host);
@@ -128,6 +135,10 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
         }
     }
 
+    /** @param host the IP address */
+    /**
+     * Match the IP address against subject alternative names.
+     */
     static void matchIPAddress(final String host, final List<String> subjectAlts) throws SSLException {
         for (int i = 0; i < subjectAlts.size(); i++) {
             final String subjectAlt = subjectAlts.get(i);
@@ -139,6 +150,9 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
                 "of the subject alternative names: " + subjectAlts);
     }
 
+    /**
+     * Match the IPv6 address against subject alternative names.
+     */
     static void matchIPv6Address(final String host, final List<String> subjectAlts) throws SSLException {
         final String normalisedHost = normaliseAddress(host);
         for (int i = 0; i < subjectAlts.size(); i++) {
@@ -152,6 +166,9 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
                 "of the subject alternative names: " + subjectAlts);
     }
 
+    /**
+     * Match the DNS name against subject alternative names.
+     */
     static void matchDNSName(final String host, final List<String> subjectAlts,
                              final PublicSuffixMatcher publicSuffixMatcher) throws SSLException {
         final String normalizedHost = host.toLowerCase(Locale.ROOT);
@@ -166,6 +183,9 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
                 "of the subject alternative names: " + subjectAlts);
     }
 
+    /**
+     * Match the common name against the hostname.
+     */
     static void matchCN(final String host, final String cn,
                  final PublicSuffixMatcher publicSuffixMatcher) throws SSLException {
         if (!matchIdentityStrict(host, cn, publicSuffixMatcher)) {
@@ -174,6 +194,9 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
         }
     }
 
+    /**
+     * Match the host against a domain root.
+     */
     static boolean matchDomainRoot(final String host, final String domainRoot) {
         if (domainRoot == null) {
             return false;
@@ -219,24 +242,43 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
         return host.equalsIgnoreCase(identity);
     }
 
+    /**
+     * Match the host against the identity with public suffix matching.
+     */
     static boolean matchIdentity(final String host, final String identity,
                                  final PublicSuffixMatcher publicSuffixMatcher) {
         return matchIdentity(host, identity, publicSuffixMatcher, false);
     }
 
+    /**
+     * Match the host against the identity.
+     */
     static boolean matchIdentity(final String host, final String identity) {
         return matchIdentity(host, identity, null, false);
     }
 
+    /**
+     * Strictly match the host against the identity with public suffix matching.
+     */
     static boolean matchIdentityStrict(final String host, final String identity,
                                        final PublicSuffixMatcher publicSuffixMatcher) {
         return matchIdentity(host, identity, publicSuffixMatcher, true);
     }
 
+    /**
+     * Strictly match the host against the identity.
+     */
     static boolean matchIdentityStrict(final String host, final String identity) {
         return matchIdentity(host, identity, null, true);
     }
 
+    /**
+     * Extract the Common Name from the subject principal.
+     *
+     * @param subjectPrincipal the X500 principal name
+     * @return the CN, or null if not found
+     * @throws SSLException if the name is invalid
+     */
     static String extractCN(final String subjectPrincipal) throws SSLException {
         if (subjectPrincipal == null) {
             return null;
@@ -267,6 +309,13 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
         }
     }
 
+    /**
+     * Extract subject alternative names from the certificate.
+     *
+     * @param cert the certificate
+     * @param subjectType the subject type (DNS or IP)
+     * @return the list of subject alternative names, or null
+     */
     static List<String> extractSubjectAlts(final X509Certificate cert, final int subjectType) {
         Collection<List<?>> c = null;
         try {
@@ -293,6 +342,12 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
 
     /*
      * Normalize IPv6 or DNS name.
+     */
+    /**
+     * Normalize an IPv6 or DNS name.
+     *
+     * @param hostname the hostname to normalize
+     * @return the normalized address
      */
     static String normaliseAddress(final String hostname) {
         if (hostname == null) {

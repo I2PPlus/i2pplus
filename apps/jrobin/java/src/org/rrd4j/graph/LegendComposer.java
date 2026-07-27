@@ -8,7 +8,9 @@ import java.util.List;
  * spacing within the legend area.
  */
 class LegendComposer implements RrdGraphConstants {
+    /** Gdef */
     private final RrdGraphDef gdef;
+    /** Worker */
     private final ImageWorker worker;
 
     /** X-coordinate for legend placement */
@@ -51,6 +53,9 @@ class LegendComposer implements RrdGraphConstants {
         smallLeading = generator.getSmallLeading();
         boxSpace = generator.getBoxSpace();
     }
+    /**
+     * Place comments
+     */
 
     int placeComments() {
         Line line = new Line();
@@ -66,6 +71,9 @@ class LegendComposer implements RrdGraphConstants {
         line.layoutAndAdvance(true);
         return legY;
     }
+    /**
+     * Line-style graph element with configurable width and color.
+     */
 
     class Line {
         private Markers lastMarker;
@@ -74,9 +82,13 @@ class LegendComposer implements RrdGraphConstants {
         private boolean noJustification;
         private final List<CommentText> comments = new ArrayList<>();
 
+        /** Create a line */
         Line() {
             clear();
         }
+        /**
+         * Clear
+         */
 
         void clear() {
             lastMarker = null;
@@ -85,6 +97,9 @@ class LegendComposer implements RrdGraphConstants {
             noJustification = false;
             comments.clear();
         }
+        /**
+         * Can accommodate
+         */
 
         boolean canAccommodate(CommentText comment) {
             // always accommodate if empty
@@ -107,6 +122,9 @@ class LegendComposer implements RrdGraphConstants {
             }
             return width + commentWidth <= legWidth;
         }
+        /**
+         * Add
+         */
 
         void add(CommentText comment) {
             double commentWidth = getCommentWidth(comment);
@@ -119,6 +137,9 @@ class LegendComposer implements RrdGraphConstants {
             noJustification |= lastMarker == Markers.NO_JUSTIFICATION_MARKER || lastMarker == null;
             comments.add(comment);
         }
+        /**
+         * Layout and advance
+         */
 
         void layoutAndAdvance(boolean isLastLine) {
             if (comments.size() > 0) {
@@ -168,6 +189,9 @@ class LegendComposer implements RrdGraphConstants {
             }
             return commentWidth;
         }
+        /**
+         * Place comments
+         */
 
         private void placeComments(double xStart, double space) {
             double x = xStart;

@@ -159,6 +159,7 @@ public final class Reader implements Closeable {
      *  @param country two-letter uppper-case
      *  @param out caller must close
      *  @since 0.9.48
+     *  @throws IOException on error
      */
     public void countryToIP(String country, Writer out) throws IOException {
         Walker walker = new Walker(country, out);
@@ -404,6 +405,8 @@ public final class Reader implements Closeable {
     }
 
     /**
+     * Returns the metadata for the MaxMind DB file.
+     *
      * @return the metadata for the MaxMind DB file.
      */
     public Metadata getMetadata() {
@@ -411,7 +414,6 @@ public final class Reader implements Closeable {
     }
 
     /**
-     /**
      * <p>
      * Closes the database.
      * </p>

@@ -17,6 +17,10 @@ import net.i2p.data.i2np.GarlicClove;
  */
 class RatchetPayload {
 
+    /** utility class */
+    private RatchetPayload() {}
+
+    /** Block header size in bytes */
     public static final int BLOCK_HEADER_SIZE = 3;
 
     private static final int BLOCK_DATETIME = 0;
@@ -36,37 +40,62 @@ class RatchetPayload {
      *  processing of succeeding blocks.
      */
     public interface PayloadCallback {
+        /**
+         * Receive a datetime block.
+         * @param time the timestamp
+         * @throws DataFormatException on bad data
+         */
         public void gotDateTime(long time) throws DataFormatException;
 
+        /**
+         * Receive a garlic clove block.
+         * @param clove the garlic clove
+         */
         public void gotGarlic(GarlicClove clove);
 
         /**
-         *  @param isHandshake true only for message 3 part 2
+         * Receive an options block.
+         *
+         * @param options the option bytes
+         * @param isHandshake true only for message 3 part 2
+         * @throws DataFormatException on bad data
          */
         public void gotOptions(byte[] options, boolean isHandshake) throws DataFormatException;
 
         /**
-         *  @param reason 0-255
+         * Receive a termination block.
+         *
+         * @param reason 0-255
          */
         public void gotTermination(int reason);
 
         /**
-         *  @param pn 0-65535
+         * Receive a packet number block.
+         *
+         * @param pn 0-65535
          */
         public void gotPN(int pn);
 
         /**
-         *  @param nextKey the next one
+         * Receive a next key block.
+         *
+         * @param nextKey the next one
          */
         public void gotNextKey(NextSessionKey nextKey);
 
         /**
-         *  @since 0.9.46
+         * Receive an ACK block.
+         *
+         * @param id the key ID
+         * @param n the count
+         * @since 0.9.46
          */
         public void gotAck(int id, int n);
 
         /**
-         *  @since 0.9.46
+         * Receive an ACK request block.
+         *
+         * @since 0.9.46
          */
         public void gotAckRequest();
 
@@ -78,13 +107,28 @@ class RatchetPayload {
          */
         public void gotPadding(int paddingLength, int frameLength);
 
+        /**
+         * Receive an unknown block.
+         *
+         * @param type the block type
+         * @param len the block length
+         */
         public void gotUnknown(int type, int len);
     }
 
 /**
- * Ratchet payload generation and parsing utilities supporting datetime, options, garlic, next key, acknowledgment, and padding blocks for ECIES+AEAD messages
+ * Process a ratchet payload, calling the callback for each block found.
  *
- *  @since 0.9.44 adapted from NTCP2Payload
+ * @param ctx the I2P app context
+ * @param cb the payload callback
+ * @param payload the payload data
+ * @param off the offset into the payload
+ * @param length the length of the payload
+ * @param isHandshake true for handshake messages
+ * @return the number of blocks processed
+ * @throws IOException on I/O error
+ * @throws DataFormatException on data format error
+ * @since 0.9.44 adapted from NTCP2Payload
  */
     public static int processPayload(I2PAppContext ctx, PayloadCallback cb,
                                      byte[] payload, int off, int length, boolean isHandshake)
@@ -207,7 +251,11 @@ class RatchetPayload {
     }
 
     /**
+     * Write blocks to a payload buffer.
+     *
      *  @param payload writes to it starting at off
+     *  @param off the starting offset
+     *  @param blocks the blocks to write
      *  @return the new offset
      */
     public static int writePayload(byte[] payload, int off, List<Block> blocks) {
@@ -221,9 +269,14 @@ class RatchetPayload {
      *  Base class for blocks to be transmitted.
      *  Not used for receive; we use callbacks instead.
      */
+    /**
+     * Base class for blocks to be transmitted.
+     * Not used for receive; we use callbacks instead.
+     */
     public abstract static class Block {
         private final int type;
 
+        /** @param ttype the block type */
         public Block(int ttype) {
             type = ttype;
         }
@@ -240,6 +293,8 @@ class RatchetPayload {
         }
 
         /**
+         *  Get the total size of the block.
+         *
          *  @return the size of the block, including the 3 byte header (type and size)
          */
         public int getTotalLength() {
@@ -247,43 +302,61 @@ class RatchetPayload {
         }
 
         /**
+         *  Get the data size of the block.
+         *
          *  @return the size of the block, NOT including the 3 byte header (type and size)
          */
         public abstract int getDataLength();
 
-        /** @return new offset */
+        /**
+         *  Write the block data.
+         *
+         *  @param tgt the target buffer
+         *  @param off the offset
+         *  @return new offset
+         */
         public abstract int writeData(byte[] tgt, int off);
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "Payload block type " + type + " length " + getDataLength();
         }
     }
 
-    /** Garlic clove block for embedding I2NP messages in ratchet payload */
+    /**
+     * Garlic clove block for embedding I2NP messages in ratchet payload.
+     */
     public static class GarlicBlock extends Block {
         private final GarlicClove c;
 
+        /** @param clove the garlic clove */
         public GarlicBlock(GarlicClove clove) {
             super(BLOCK_GARLIC);
             c = clove;
         }
+/** Return the dataLength */
 
         public int getDataLength() {
             return c.getSizeRatchet();
         }
+/** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             return c.writeBytesRatchet(tgt, off);
         }
     }
 
-    /** Padding block for ratchet payload size alignment and obfuscation */
+    /**
+     * Padding block for ratchet payload size alignment and obfuscation.
+     */
     public static class PaddingBlock extends Block {
         private final int sz;
         private final I2PAppContext ctx;
 
-        /** with zero-filled data */
+        /** @param size padding size, with zero-filled data */
         public PaddingBlock(int size) {
             this(null, size);
         }
@@ -295,10 +368,12 @@ class RatchetPayload {
             sz = size;
             ctx = context;
         }
+/** Return the dataLength */
 
         public int getDataLength() {
             return sz;
         }
+/** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             if (ctx != null)
@@ -309,18 +384,23 @@ class RatchetPayload {
         }
     }
 
-    /** Timestamp block for ratchet payload synchronization and timing */
+    /**
+     * Timestamp block for ratchet payload synchronization and timing.
+     */
     public static class DateTimeBlock extends Block {
         private final long now;
 
+        /** @param time the timestamp */
         public DateTimeBlock(long time) {
             super(BLOCK_DATETIME);
             now = time;
         }
+/** Return the dataLength */
 
         public int getDataLength() {
             return 4;
         }
+/** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong(tgt, off, 4, now / 1000);
@@ -328,18 +408,23 @@ class RatchetPayload {
         }
     }
 
-    /** Options block for ratchet protocol configuration and negotiation */
+    /**
+     * Options block for ratchet protocol configuration and negotiation.
+     */
     public static class OptionsBlock extends Block {
         private final byte[] opts;
 
+        /** @param options the options */
         public OptionsBlock(byte[] options) {
             super(BLOCK_OPTIONS);
             opts = options;
         }
+/** Return the dataLength */
 
         public int getDataLength() {
             return opts.length;
         }
+/** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(opts, 0, tgt, off, opts.length);
@@ -347,18 +432,23 @@ class RatchetPayload {
         }
     }
 
-    /** Next session key block for ratchet key exchange operations */
+    /**
+     * Next session key block for ratchet key exchange operations.
+     */
     public static class NextKeyBlock extends Block {
         private final NextSessionKey next;
 
+        /** @param nextKey the next session key */
         public NextKeyBlock(NextSessionKey nextKey) {
             super(BLOCK_NEXTKEY);
             next = nextKey;
         }
+/** Return the dataLength */
 
         public int getDataLength() {
             return next.getData() != null ? 35 : 3;
         }
+/** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             if (next.getData() != null)
@@ -383,6 +473,7 @@ class RatchetPayload {
  */
     public static class AckBlock extends Block {
         private final byte[] data;
+/** Ackblock */
 
         public AckBlock(int keyID, int n) {
             super(BLOCK_ACK);
@@ -403,10 +494,12 @@ class RatchetPayload {
                 i += 4;
             }
         }
+/** Return the dataLength */
 
         public int getDataLength() {
             return data.length;
         }
+/** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(data, 0, tgt, off, data.length);
@@ -421,14 +514,17 @@ class RatchetPayload {
  */
     public static class AckRequestBlock extends Block {
 
+        /** Default constructor */
         public AckRequestBlock() {
             super(BLOCK_ACKREQ);
             // flag is zero
         }
+/** Return the dataLength */
 
         public int getDataLength() {
             return 1;
         }
+/** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             tgt[off] = 0;
@@ -436,18 +532,23 @@ class RatchetPayload {
         }
     }
 
-    /** Termination block for ratchet session closure with reason codes */
+    /**
+     * Termination block for ratchet session closure with reason codes.
+     */
     public static class TerminationBlock extends Block {
         private final byte rsn;
 
+        /** @param reason the termination reason */
         public TerminationBlock(int reason) {
             super(BLOCK_TERMINATION);
             rsn = (byte) reason;
         }
+/** Return the dataLength */
 
         public int getDataLength() {
             return 1;
         }
+/** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             tgt[off] = rsn;
@@ -462,15 +563,18 @@ class RatchetPayload {
  */
     public static class PNBlock extends Block {
         private final int pn;
+/** Pnblock */
 
         public PNBlock(int pn) {
             super(BLOCK_MSGNUM);
             this.pn = pn;
         }
+/** Return the dataLength */
 
         public int getDataLength() {
             return 2;
         }
+/** Write this block to the output buffer */
 
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong(tgt, off, 2, pn);
@@ -482,6 +586,9 @@ class RatchetPayload {
      * Big endian.
      * Same as DataHelper.toLong(target, offset, 4, value) but allows negative value
      *
+     * @param target the target array
+     * @param offset the offset
+     * @param value the value to write
      * @throws ArrayIndexOutOfBoundsException
      * @since 0.9.46
      */

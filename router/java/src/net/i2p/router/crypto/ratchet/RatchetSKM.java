@@ -44,6 +44,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     private final HashMap<PublicKey, List<OutboundSession>> _pendingOutboundSessions;
     /** Map allowing us to go from a SessionTag to the containing RatchetTagSet */
     private final ConcurrentHashMap<RatchetSessionTag, RatchetTagSet> _inboundTagSets;
+/** The router context */
     protected final RouterContext _context;
     private volatile boolean _alive;
     private CleanupEvent _cleanupEvent;
@@ -67,6 +68,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      */
     static final long SESSION_LIFETIME_MAX_MS = SESSION_TAG_DURATION_MS + 2 * 60 * 1000L;
 
+    /** S e s s i o n  p e n d i n g  d u r a t i o n  m s */
     static final long SESSION_PENDING_DURATION_MS = 3 * 60 * 1000L;
     // replace an old session created before this if we get a new NS
     private static final long SESSION_REPLACE_AGE = 2*60*1000L;
@@ -76,6 +78,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * For the router SKM only.
      *
+     * @param context the router context
      * @since 0.9.48
      */
     public RatchetSKM(RouterContext context) {
@@ -85,6 +88,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * ECIES only.
      *
+     * @param context the router context
      * @param dest null for router's SKM only
      * @since 0.9.48
      */
@@ -96,6 +100,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * The session key manager is constructed and accessed through the
      * client manager.
      *
+     * @param context the router context
      * @param dest null for router's SKM only
      * @param type the encryption type
      * @since 0.9.67
@@ -133,10 +138,12 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     private class CleanupEvent extends SimpleTimer2.TimedEvent {
+/** Cleanupevent */
         public CleanupEvent() {
             // wait until first expiration time to start
             super(_context.simpleTimer2(), SESSION_PENDING_DURATION_MS);
         }
+/** Perform recurring maintenance */
 
         public void timeReached() {
             if (!_alive)
@@ -156,12 +163,12 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         return _destination;
     }
 
-/**
- * Session key manager for ratchet encryption that handles outbound sessions, inbound tag sets,
- * next key exchanges, and acknowledgment processing for ECIES+AEAD communications
- *
- *  @since 0.9.44
- */
+    /**
+     * Get the encryption type for this session key manager
+     *
+     *  @return the encryption type
+     *  @since 0.9.44
+     */
     public EncType getType() {
         return _type;
     }
@@ -203,6 +210,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
+     * Check if a public key is a duplicate
+     *
+     *  @param pk the public key to check
      *  @return true if a dup
      *  @since 0.9.46
      */
@@ -216,7 +226,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * For inbound (NS rcvd), if no other pending outbound sessions, creates one
      * and returns true, or false if one already exists.
      *
+     * @param target the target public key
      * @param d null if unknown
+     * @param state the handshake state
      * @param callback null for inbound, may be null for outbound
      */
     boolean createSession(PublicKey target, Destination d, HandshakeState state, ReplyCallback callback) {
@@ -261,7 +273,11 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * For outbound (NSR rcvd by Alice), sets session to transition to ES mode outbound.
      * For inbound (NSR sent by Bob), sets up inbound ES tagset.
      *
+     * @param target the target public key
      * @param oldState null for inbound, pre-clone for outbound
+     * @param state the handshake state
+     * @param callback the reply callback
+     * @param split the split keys
      * @return true if this was the first NSR received
      */
     boolean updateSession(PublicKey target, HandshakeState oldState, HandshakeState state,
@@ -346,6 +362,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
+     * Process a received next key
+     *
+     * @param target the target public key
+     * @param key the next session key
      * @since 0.9.46
      */
     void nextKeyReceived(PublicKey target, NextSessionKey key) {
@@ -361,7 +381,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * Side effect - binds this session to the supplied destination.
      *
+     * @param target the target public key
      * @param d the far-end Destination for this PublicKey if known, or null
+     * @param timer the timer event
      * @return true if registered
      * @since 0.9.47
      */
@@ -376,6 +398,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
+     * Get the far-end destination for a public key
+     *
+     * @param target the target public key
      * @return the far-end Destination for this PublicKey, or null
      * @since 0.9.47
      */
@@ -408,6 +433,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * and a New Session Reply message should be sent.
      * Otherwise, an Existing Session message should be sent.
      *
+     * @param target the target public key
+     * @return the next available tag, or null
      */
     public RatchetEntry consumeNextAvailableTag(PublicKey target) {
         OutboundSession sess = getSession(target);
@@ -538,6 +565,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * One time session
      *
+     * @param key the session key
+     * @param tag the ratchet session tag
      * @param expire time from now
      */
     public void tagsReceived(SessionKey key, RatchetSessionTag tag, long expire) {
@@ -562,6 +591,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      *
      * If the return value has null data, it will have a non-null HandshakeState.
      *
+     * @param tag the ratchet session tag to consume
      * @return a SessionKeyAndNonce or null
      */
     public SessionKeyAndNonce consumeTag(RatchetSessionTag tag) {
@@ -729,7 +759,13 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /// ACKS ///
 
     /**
-     *  @since 0.9.46
+     * Register a callback for an ACK
+     *
+     * @param target the target public key
+     * @param id the callback ID
+     * @param n the callback count
+     * @param callback the reply callback
+     * @since 0.9.46
      */
     void registerCallback(PublicKey target, int id, int n, ReplyCallback callback) {
         if (_log.shouldInfo())
@@ -742,7 +778,12 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     *  @since 0.9.46
+     * Process a received ACK
+     *
+     * @param target the target public key
+     * @param id the ACK ID
+     * @param n the ACK count
+     * @since 0.9.46
      */
     void receivedACK(PublicKey target, int id, int n) {
         OutboundSession sess = getSession(target);
@@ -753,7 +794,12 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     *  @since 0.9.46
+     * Process an ACK request
+     *
+     * @param target the target public key
+     * @param id the ACK ID
+     * @param n the ACK count
+     * @since 0.9.46
      */
     void ackRequested(PublicKey target, int id, int n) {
         if (_log.shouldInfo())
@@ -793,6 +839,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         return inboundSets;
     }
 
+    /**
+     * renderStatusHTML.
+     */
     @Override
     public void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
@@ -920,6 +969,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      *  Earliest first
      */
     private static class RatchetTagSetComparator implements Comparator<RatchetTagSet>, Serializable {
+/** Compare two entries for ordering */
          public int compare(RatchetTagSet l, RatchetTagSet r) {
              return l.getDebugID() - r.getDebugID();
         }
@@ -1380,6 +1430,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             }
             return rv;
         }
+/** Return the target */
 
         public PublicKey getTarget() {
             return _target;
@@ -1391,10 +1442,12 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         public HandshakeState getHandshakeState() {
             return _state;
         }
+/** Return the currentKey */
 
         public SessionKey getCurrentKey() {
             return _currentKey;
         }
+/** Return the establishedDate */
 
         public long getEstablishedDate() {
             return _established;
@@ -1436,6 +1489,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             }
             return removed;
         }
+/** Consume the next available tag and advance */
 
         public RatchetEntry consumeNext() {
             long now = _context.clock().now();
@@ -1538,6 +1592,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             }
             return -1;
         }
+/** Return the ackReceived */
 
         public boolean getAckReceived() {
             return _acked;

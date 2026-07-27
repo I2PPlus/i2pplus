@@ -84,6 +84,7 @@ public class NewsXMLParser {
         ALLOW_ALL
     }
 
+    /** Creates a new NewsXMLParser with the given context */
     public NewsXMLParser(I2PAppContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(NewsXMLParser.class);
@@ -95,6 +96,8 @@ public class NewsXMLParser {
      *  XHTML element in the feed content.
      *  Must be set before parse().
      *  Default REMOVE_ELEMENT.
+     *
+     *  @param mode the XHTML mode to set
      */
     public void setXHTMLMode(XHTMLMode mode) {
         _mode = mode;
@@ -499,6 +502,8 @@ public class NewsXMLParser {
     /**
      *  Helper to get all Nodes matching the name
      *
+     *  @param node the parent node to search
+     *  @param name the name to match
      *  @return non-null
      */
     public static List<Node> getNodes(Node node, String name) {
@@ -584,6 +589,7 @@ public class NewsXMLParser {
         }
     }
 
+    /** Command-line entry point for testing */
     public static void main(String[] args) {
         if (args.length <= 0 || args.length > 2) {
             System.err.println("Usage: NewsXMLParser file.xml [parserMode]");

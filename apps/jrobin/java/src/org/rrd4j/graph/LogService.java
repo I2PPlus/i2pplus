@@ -7,6 +7,9 @@ import java.util.function.DoubleUnaryOperator;
  * logarithmic functions based on data ranges and characteristics.
  */
 class LogService {
+    /**
+     * Resolve the appropriate logarithmic function for the data range
+     */
 
     static DoubleUnaryOperator resolve(ImageParameters im) {
         boolean sameSign = Math.signum(im.minval) == Math.signum(im.maxval);
@@ -43,6 +46,9 @@ class LogService {
             }
         }
     }
+    /**
+     * Compute base-10 logarithm with zero-crossing protection
+     */
 
     private static double log10(double v) {
         double lv = Math.log10(Math.abs(v));

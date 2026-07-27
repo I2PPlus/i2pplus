@@ -21,11 +21,17 @@ import net.i2p.util.OrderedProperties;
  * @since 0.9.1
  */
 public class BaseBean {
+    /** The I2P application context */
     protected final I2PAppContext _context;
+    /** The configuration properties */
     protected final Properties properties;
+    /** The current action */
     protected String action;
+    /** The last serial number for CSRF */
     protected String lastSerial;
+    /** The serial number */
     protected String serial;
+    /** The HTTP method */
     protected String method;
     private long configLastLoaded;
     private static final String PRIVATE_BOOK = "private_addressbook";
@@ -34,6 +40,7 @@ public class BaseBean {
     private static final String PROP_THEME_NAME = "theme";
     private static final String DEFAULT_THEME = "dark";
     private static final String BASE_THEME_PATH = "/themes/susidns/";
+    /** Property for password enable */
     public static final String PROP_PW_ENABLE = "routerconsole.auth.enable";
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     private static final String ADDRESSBOOK_DIR = "addressbook";
@@ -182,6 +189,7 @@ public class BaseBean {
     }
 
     /**
+     * Get the action.
      * @return the action
      * @since 0.9.13 moved from subclasses
      */
@@ -213,6 +221,7 @@ public class BaseBean {
     public void setSerial(String serial) {this.serial = DataHelper.stripHTML(serial);}
 
     /**
+     * Store the HTTP method.
      * @param method the HTTP method
      * @since 0.9.65
      */

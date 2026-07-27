@@ -22,6 +22,9 @@ import net.i2p.data.DataHelper;
  */
 public class Mp3Tags {
 
+    /** Utility class, not instantiable */
+    private Mp3Tags() {}
+
     /**
      * Extracts artist and title metadata from an MP3 file's ID3 tags.
      *

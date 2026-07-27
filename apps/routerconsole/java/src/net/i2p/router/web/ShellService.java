@@ -70,6 +70,9 @@ public class ShellService implements ClientApp {
 
     private Process _p;
 
+    /**
+     * ShellService.
+     */
     public ShellService(I2PAppContext context, ClientAppManager listener, String[] args) {
         _context = context;
         _cmgr = listener;
@@ -136,7 +139,11 @@ public class ShellService implements ClientApp {
         changeState(ClientAppState.INITIALIZED, "ShellService: " + getName() + " setup and initialized");
     }
 
-    // private String[] trimArgs(String[] args) {
+    /**
+     * Extract the app process arguments, filtering out -shellservice options.
+     * @param args raw command-line arguments
+     * @return filtered argument list
+     */
     private ArrayList<String> trimArgs(String[] args) {
         ArrayList<String> newargs = new ArrayList<>();
         for (int i = 0; i < args.length; i++) {

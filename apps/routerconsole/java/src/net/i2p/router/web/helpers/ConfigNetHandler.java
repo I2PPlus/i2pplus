@@ -24,6 +24,12 @@ import net.i2p.util.Addresses;
  * Used for both /config and /confignet
  */
 public class ConfigNetHandler extends FormHandler {
+
+    /**
+     * Create a new handler.
+     */
+    public ConfigNetHandler() {}
+
     private String _hostname;
     private boolean _saveRequested;
     private boolean _recheckReachabilityRequested;
@@ -56,6 +62,9 @@ public class ConfigNetHandler extends FormHandler {
     private final Map<String, String> changes = new HashMap<>();
     private static final String PROP_HIDDEN = Router.PROP_HIDDEN_HIDDEN; // see Router for other choice
 
+    /**
+     * processForm.
+     */
     @Override
     protected void processForm() {
         if (_saveRequested || ((_action != null) && (_t("Save changes").equals(_action)))) {
@@ -67,87 +76,147 @@ public class ConfigNetHandler extends FormHandler {
         }
     }
 
+    /**
+     * Set that the user wants to save.
+     * @param moo ignored
+     */
     public void setSave(String moo) { _saveRequested = true; }
+    /**
+     * Set that the user wants to recheck reachability.
+     * @param moo ignored
+     */
     public void setRecheckReachability(String moo) { _recheckReachabilityRequested = true; }
+    /**
+     * Set that the user wants to require introducers.
+     * @param moo ignored
+     */
     public void setRequireIntroductions(String moo) { _requireIntroductions = true; }
+    /**
+     * Set that the user wants dynamic keys.
+     * @param moo ignored
+     */
     public void setDynamicKeys(String moo) { _dynamicKeys = true; }
+    /**
+     * Enable load testing.
+     * @param moo ignored
+     */
     public void setEnableloadtesting(String moo) { }
+    /**
+     * setUdpAutoIP.
+     */
     public void setUdpAutoIP(String mode) {
         _udpAutoIP = mode;
         _hiddenMode = "hidden".equals(mode);
     }
+    /**
+     * Set the NTCP auto IP mode.
+     * @param mode the auto IP mode
+     */
     public void setNtcpAutoIP(String mode) {
         _ntcpAutoIP = mode;
     }
+    /**
+     * Set the NTCP auto port mode.
+     * @param mode the auto port mode
+     */
     public void setNtcpAutoPort(String mode) {
         _ntcpAutoPort = mode.equals("2");
     }
 
+    /**
+     * Set that the user wants UPnP enabled.
+     * @param moo ignored
+     */
     public void setUpnp(String moo) { _upnp = true; }
+    /**
+     * Set that the user wants laptop mode enabled.
+     * @param moo ignored
+     */
     public void setLaptop(String moo) { _laptop = true; }
 
     /**
      *  Set whether IPv4 is firewalled.
+     *  @param moo ignored
      *  @since 0.9.20
      */
     public void setIPv4Firewalled(String moo) { _ipv4Firewalled = true; }
 
     /**
      *  Set whether IPv6 is firewalled.
+     *  @param moo ignored
      *  @since 0.9.28
      */
     public void setIPv6Firewalled(String moo) { _ipv6Firewalled = true; }
 
+    /**
+     * Set the hostname.
+     * @param hostname the hostname
+     */
     public void setHostname(String hostname) {
         _hostname = (hostname != null ? hostname.trim() : null);
     }
+    /**
+     * Set the TCP port.
+     * @param port the port
+     */
     public void setTcpPort(String port) {
         _tcpPort = (port != null ? port.trim() : null);
     }
+    /**
+     * Set the NTCP hostname.
+     * @param host the hostname
+     */
     public void setNtcphost(String host) {
         _ntcpHostname = (host != null ? host.trim() : null);
     }
+    /**
+     * Set the NTCP port.
+     * @param port the port
+     */
     public void setNtcpport(String port) {
         _ntcpPort = (port != null ? port.trim() : null);
     }
+    /**
+     * Set the first UDP host.
+     * @param host the host
+     */
     public void setUdpHost1(String host) {
         _udpHost1 = (host != null ? host.trim() : null);
     }
+    /**
+     * Set the UDP port.
+     * @param port the port
+     */
     public void setUdpPort(String port) {
         _udpPort = (port != null ? port.trim() : null);
     }
+    /**
+     * Set the inbound rate.
+     * @param rate the inbound rate
+     */
     public void setInboundrate(String rate) {
         _inboundRate = (rate != null ? rate.trim() : null);
     }
 
-/*
-    public void setInboundburstrate(String rate) {
-        _inboundBurstRate = (rate != null ? rate.trim() : null);
-    }
-    public void setInboundburstfactor(String factor) {
-        _inboundBurst = (factor != null ? factor.trim() : null);
-    }
-****/
-
+    /**
+     * Set the outbound rate.
+     * @param rate the outbound rate
+     */
     public void setOutboundrate(String rate) {
         _outboundRate = (rate != null ? rate.trim() : null);
     }
 
-/*
-    public void setOutboundburstrate(String rate) {
-        _outboundBurstRate = (rate != null ? rate.trim() : null);
-    }
-    public void setOutboundburstfactor(String factor) {
-        _outboundBurst = (factor != null ? factor.trim() : null);
-    }
-****/
-
+    /**
+     * Set the share percentage.
+     * @param pct the percentage
+     */
     public void setSharePercentage(String pct) {
         _sharePct = (pct != null ? pct.trim() : null);
     }
 
     /**
      *  Set rates-only mode (skip IP/transport changes).
+     *  @param foo ignored
      *  @since 0.8.12
      */
     public void setRatesOnly(String foo) {
@@ -156,6 +225,7 @@ public class ConfigNetHandler extends FormHandler {
 
     /**
      *  Set whether UDP transport is disabled.
+     *  @param foo the disable UDP mode
      *  @since 0.8.13
      */
     public void setDisableUDP(String foo) {
@@ -164,6 +234,7 @@ public class ConfigNetHandler extends FormHandler {
 
     /**
      *  Set the IPv6 mode configuration.
+     *  @param mode the IPv6 mode
      *  @since IPv6
      */
     public void setIpv6(String mode) {
@@ -489,7 +560,9 @@ public class ConfigNetHandler extends FormHandler {
         _context.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
     }
 
+    /** default burst percentage */
     static final int DEF_BURST_PCT = 10;
+    /** default burst time */
     static final int DEF_BURST_TIME = 20;
 
     /**

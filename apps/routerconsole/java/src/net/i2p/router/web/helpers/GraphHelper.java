@@ -103,6 +103,9 @@ public class GraphHelper extends FormHandler {
         return _refreshDelaySeconds;
     }
 
+    /**
+     * setPeriodCount.
+     */
     public void setPeriodCount(String str) {
         setC(str);
     }
@@ -119,10 +122,16 @@ public class GraphHelper extends FormHandler {
         catch (NumberFormatException nfe) { /* ignored */ }
     }
 
+    /**
+     * setShowEvents.
+     */
     public void setShowEvents(String b) {
         _showEvents = !"false".equals(b);
     }
 
+    /**
+     * setHeight.
+     */
     public void setHeight(String str) {
         setH(str);
     }
@@ -133,6 +142,9 @@ public class GraphHelper extends FormHandler {
         catch (NumberFormatException nfe) { /* ignored */ }
     }
 
+    /**
+     * setWidth.
+     */
     public void setWidth(String str) {
         setW(str);
     }
@@ -143,6 +155,9 @@ public class GraphHelper extends FormHandler {
         catch (NumberFormatException nfe) { /* ignored */ }
     }
 
+    /**
+     * setRefreshDelay.
+     */
     public void setRefreshDelay(String str) {
         try {
             int rds = Integer.parseInt(str);
@@ -186,6 +201,9 @@ public class GraphHelper extends FormHandler {
      */
     public void setStat(String stat) {_stat = stat;}
 
+    /**
+     * getImages.
+     */
     public String getImages() {
         GraphGenerator ss = GraphGenerator.instance(_context);
         if (ss == null) {return "";}
@@ -420,6 +438,9 @@ public class GraphHelper extends FormHandler {
 
     private static final int[] times = { 5, 10, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
 
+    /**
+     * getForm.
+     */
     public String getForm() {
         GraphGenerator ss = GraphGenerator.instance(_context);
         if (ss == null) return "";
@@ -603,6 +624,9 @@ public class GraphHelper extends FormHandler {
      *  alphabetically, then by stat name and period.
      */
     private static class AlphaComparator implements Comparator<GraphListener>, Serializable {
+        /**
+         * compare.
+         */
         @Override
         public int compare(GraphListener l, GraphListener r) {
             // sort by group name

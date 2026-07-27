@@ -12,5 +12,10 @@ package net.i2p.i2ptunnel;
  */
 
 public interface Logging {
+    /**
+     * Log a message.
+     *
+     * @param s the message to log
+     */
     public void log(String s);
 }

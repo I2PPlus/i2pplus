@@ -26,7 +26,6 @@ import net.i2p.util.SystemVersion;
  * with enhanced statistics tracking for priority-based operations.
  *
  * @param <E>  type of elements in this queue, extending {@link CDPQEntry}
- * @since 0.9.3
  */
 public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlockingQueue<E> {
 
@@ -43,10 +42,12 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     /** following is a per-request global for ease of use, locked by this */
     private volatile long _now;
 
+    /**  last dropped priority */
     private int _lastDroppedPriority;
 
     /** debugging */
     static final AtomicLong __id = new AtomicLong();
+    /**  id */
     private final long _id;
 
     private static final long[] CODEL_RATES = RateConstants.SHORT_TERM_RATES;
@@ -60,7 +61,9 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *
      */
     private static final int DEFAULT_CODEL_TARGET = 5;
+    /** Property key for CoDel target delay */
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
+    /**  target */
     private volatile long _target;
 
     /**
@@ -71,32 +74,30 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *
      */
     private static final int DEFAULT_CODEL_INTERVAL = 50;
+    /** Property key for CoDel interval */
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
+    /**  interval */
     private volatile long _interval;
+    /** S t a t  d r o p */
     private final String STAT_DROP;
 
     /** Active instances for dynamic tuning — weak refs prevent leak when tunnels expire */
     private static final CopyOnWriteArrayList<WeakReference<CoDelPriorityBlockingQueue>> INSTANCES = new CopyOnWriteArrayList<>();
 
-    /**
-     * Remove this instance from the tuning list.
-     * Called when the owning tunnel/queue is no longer active.
-     *
-     * @since 0.9.70+
-     */
+    /** Remove this instance from the tuning list. */
     public void dispose() {
         INSTANCES.removeIf(ref -> ref.get() == this || ref.get() == null);
     }
 
-    /**
-     * Remove cleared (GC'd) weak references from the list.
-     *
-     * @since 0.9.70+
-     */
+    /** Remove cleared (GC'd) weak references from the list. */
     public static void expungeStaleInstances() {
         INSTANCES.removeIf(ref -> ref.get() == null);
     }
 
+    /**
+     *  Update the target delay for all active instances.
+     *  @param target the new target delay in ms
+     */
     public static void updateAllTargets(long target) {
         for (WeakReference<CoDelPriorityBlockingQueue> ref : INSTANCES) {
             CoDelPriorityBlockingQueue q = ref.get();
@@ -104,26 +105,45 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         }
     }
 
+    /**
+     *  Update the interval for all active instances.
+     *  @param interval the new interval in ms
+     */
     public static void updateAllIntervals(long interval) {
         for (WeakReference<CoDelPriorityBlockingQueue> ref : INSTANCES) {
             CoDelPriorityBlockingQueue q = ref.get();
             if (q != null) q._interval = interval;
         }
     }
+    /** Stat name for delay tracking */
     private final String STAT_DELAY;
+    /** min priority */
     public static final int MIN_PRIORITY = 100;
     private static final int[] PRIORITIES = {0, MIN_PRIORITY, 200, 300, 400, 500};
     /** if priority is &gt;= this, never drop */
     public static final int DONT_DROP_PRIORITY = 1000;
     private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 1000 : 500;
 
+    /**
+     *  Constructs a new CoDel priority blocking queue with default target and interval.
+     *
+     *  @param ctx the I2P application context
+     *  @param name a name for this queue instance
+     *  @param initialCapacity the initial capacity for the priority queue
+     */
     public CoDelPriorityBlockingQueue(I2PAppContext ctx, String name, int initialCapacity) {
         this(ctx, name, initialCapacity, ctx.getProperty(PROP_CODEL_TARGET, DEFAULT_CODEL_TARGET),
                                          ctx.getProperty(PROP_CODEL_INTERVAL, DEFAULT_CODEL_INTERVAL));
     }
 
     /**
+     *  Constructs a new CoDel priority blocking queue with explicit target and interval.
+     *
+     *  @param ctx the I2P application context
      *  @param name for stats
+     *  @param initialCapacity the initial capacity for the priority queue
+     *  @param target the CoDel target delay in ms
+     *  @param interval the CoDel interval in ms
      */
     public CoDelPriorityBlockingQueue(I2PAppContext ctx, String name, int initialCapacity, int target, int interval) {
         super(ctx, name, initialCapacity);
@@ -143,31 +163,34 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     /**
      * Returns the current CoDel target delay in ms.
      *
-     * @since 0.9.70+
+     * @return the target delay in ms
      */
     public long getTarget() { return _target; }
 
     /**
      * Sets the current CoDel target delay in ms.
      *
-     * @since 0.9.70+
+     * @param target the new target delay in ms
      */
     public void setTarget(long target) { _target = target; }
 
     /**
      * Returns the current CoDel interval in ms.
      *
-     * @since 0.9.70+
+     * @return the interval in ms
      */
     public long getInterval() { return _interval; }
 
     /**
      * Sets the current CoDel interval in ms.
      *
-     * @since 0.9.70+
+     * @param interval the new interval in ms
      */
     public void setInterval(long interval) { _interval = interval; }
 
+    /**
+     * clear.
+     */
     @Override
     public void clear() {
         super.clear();
@@ -179,6 +202,9 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         }
     }
 
+    /**
+     * take.
+     */
     @Override
     public E take() throws InterruptedException {
         E rv;
@@ -187,6 +213,9 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         return rv;
     }
 
+    /**
+     * poll.
+     */
     @Override
     public E poll() {
         E rv = super.poll();
@@ -220,6 +249,9 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
 
     /**
      *  Drains all, without updating stats or dropping.
+     *
+     *  @param c the collection to drain into
+     *  @return the number of elements drained
      */
     public int drainAllTo(Collection<? super E> c) {
         return super.drainTo(c);
@@ -239,6 +271,9 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
 
     /////// private below here
 
+    /**
+     * timestamp.
+     */
     @Override
     protected void timestamp(E o) {
         super.timestamp(o);
@@ -254,7 +289,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *  @param entry may be null
      */
     private boolean updateVars(E entry) {
-        /**
+        /*
          * This is a helper routine that tracks whether the sojourn time is above or below target and,
          * if above, it has remained above continuously for at least interval.
          * Returns boolean indicating if OK to drop (sojourn time above target for at least interval)
@@ -278,7 +313,6 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         return ok_to_drop;
     }
 
-    /* @since 0.9.65+ */
     private void getCurrentTime() {_now = _context.clock().now();}
 
     /**

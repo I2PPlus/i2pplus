@@ -20,11 +20,20 @@ import net.i2p.util.Clock;
  * @author jrandom
  */
 class SetDateMessageHandler extends HandlerImpl {
+    /**
+     * SetDateMessageHandler.
+     */
     public SetDateMessageHandler(I2PAppContext ctx) {
         super(ctx, SetDateMessage.MESSAGE_TYPE);
     }
 
+    /**
+     * handleMessage.
+     */
     @Override
+    /**
+     * Handle an incoming I2CP message.
+     */
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
         if (_log.shouldDebug()) {
             _log.debug("Handling " + message);

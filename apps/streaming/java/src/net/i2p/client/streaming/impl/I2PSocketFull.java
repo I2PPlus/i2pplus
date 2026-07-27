@@ -96,6 +96,7 @@ class I2PSocketFull implements I2PSocket {
         destroy();
     }
 
+    /** @return the connection */
     Connection getConnection() { return _connection; }
 
     /**
@@ -214,6 +215,7 @@ class I2PSocketFull implements I2PSocket {
                 (c.getResetSent()));
     }
 
+    /** Destroy */
     void destroy() {
         _connection = null;
     }
@@ -264,6 +266,9 @@ class I2PSocketFull implements I2PSocket {
         return c != null ? c.getLifetimeBytesReceived() : 0;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         Connection c = _connection;

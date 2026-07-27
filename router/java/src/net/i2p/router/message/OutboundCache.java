@@ -95,11 +95,15 @@ public class OutboundCache {
         private final Hash sh;
         private final Hash dh;
 
+        /** Hash pair */
         HashPair(final Hash s, final Hash d) {
             sh = s;
             dh = d;
         }
 
+        /**
+         * hashCode.
+         */
         @Override
         public int hashCode() {
             int result = sh.hashCode();
@@ -107,6 +111,9 @@ public class OutboundCache {
             return result;
         }
 
+        /**
+         * equals.
+         */
         @Override
         public boolean equals(final Object o) {
             if (!(o instanceof HashPair)) return false;
@@ -237,7 +244,13 @@ public class OutboundCache {
      * Internal timer event that periodically cleans all caches.
      */
     private class OCMOSJCacheCleaner extends SimpleTimer2.TimedEvent {
+        /**
+         * OCMOSJCacheCleaner.
+         */
         public OCMOSJCacheCleaner() { super(_context.simpleTimer2()); }
+        /**
+         * timeReached.
+         */
         @Override
         public void timeReached() {
             cleanLeaseSetCache(_context, leaseSetCache);

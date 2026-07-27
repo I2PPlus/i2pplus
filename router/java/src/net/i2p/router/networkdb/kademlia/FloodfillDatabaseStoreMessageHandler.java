@@ -35,6 +35,12 @@ public class FloodfillDatabaseStoreMessageHandler implements HandlerJobBuilder {
     private FloodfillNetworkDatabaseFacade _facade;
     private final long _msgIDBloomXor = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
 
+    /**
+     * Create a handler for floodfill database store messages.
+     *
+     * @param context the router context
+     * @param facade the floodfill network database facade
+     */
     public FloodfillDatabaseStoreMessageHandler(RouterContext context, FloodfillNetworkDatabaseFacade facade) {
         _context = context;
         _facade = facade;

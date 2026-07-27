@@ -27,12 +27,19 @@ public class MetaNamingService extends DummyNamingService {
     private static final String PROP_NAME_SERVICES = "i2p.nameservicelist";
     private static final String DEFAULT_NAME_SERVICES = "net.i2p.client.naming.HostsTxtNamingService";
 
+    /**
+     * The value.
+     */
+    /**
+     * _services.
+     */
     protected final List<NamingService> _services;
 
     /**
      *  Adds the services from the i2p.nameservicelist property, in order, as chained services.
      */
     /**
+     * Construct a new meta naming service.
      * @param context context
      */
     public MetaNamingService(I2PAppContext context) {

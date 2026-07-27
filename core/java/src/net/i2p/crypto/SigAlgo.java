@@ -6,8 +6,11 @@ package net.i2p.crypto;
  * @since 0.9.9
  */
 public enum SigAlgo {
+    /** DSA signature. */
     DSA("DSA"),
+    /** EC signature. */
     EC("EC"),
+    /** EdDSA signature. */
     EdDSA("EdDSA"),
     /**
      *  For local use only, not for use in the network.
@@ -26,6 +29,9 @@ public enum SigAlgo {
         this.name = name;
     }
 
+    /**
+     * getName.
+     */
     public String getName() {
         return name;
     }

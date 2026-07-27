@@ -33,6 +33,9 @@ import net.i2p.I2PAppContext;
  */
 class SchedulerConnectedBulk extends SchedulerImpl {
 
+    /**
+     * SchedulerConnectedBulk.
+     */
     public SchedulerConnectedBulk(I2PAppContext ctx) {
         super(ctx);
     }

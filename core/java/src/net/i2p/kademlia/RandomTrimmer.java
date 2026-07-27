@@ -14,9 +14,15 @@ import java.util.List;
  *  @param <T> type of SimpleDataStructure objects in the bucket
  */
 public class RandomTrimmer<T extends SimpleDataStructure> implements KBucketTrimmer<T> {
+    /** context */
     protected final I2PAppContext _ctx;
     private final int _max;
 
+    /**
+     * Constructor
+     * @param ctx the context
+     * @param max the max entries
+     */
     public RandomTrimmer(I2PAppContext ctx, int max) {
         _ctx = ctx;
         _max = max;

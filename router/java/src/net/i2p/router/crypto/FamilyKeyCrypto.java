@@ -50,14 +50,22 @@ public class FamilyKeyCrypto {
     private final SigningPrivateKey _privkey;
     private final SigningPublicKey _pubkey;
     private final AtomicInteger _failCount = new AtomicInteger();
+/** Property key for keystore password */
 
     public static final String PROP_KEYSTORE_PASSWORD = "netdb.family.keystorePassword";
+/** Property key for family name */
     public static final String PROP_FAMILY_NAME = "netdb.family.name";
+/** Property key for key password */
     public static final String PROP_KEY_PASSWORD = "netdb.family.keyPassword";
+/** Certificate file suffix */
     public static final String CERT_SUFFIX = ".crt";
+/** CRL file suffix */
     public static final String CRL_SUFFIX = ".crl";
+/** Keystore file prefix */
     public static final String KEYSTORE_PREFIX = "family-";
+/** Keystore file suffix */
     public static final String KEYSTORE_SUFFIX = ".ks";
+/** Common name suffix */
     public static final String CN_SUFFIX = ".family.i2p.net";
     private static final int DEFAULT_KEY_VALID_DAYS = 3652;  // 10 years
     // Note that we can't use RSA here, as the b64 sig would exceed the 255 char limit for a Mapping
@@ -67,8 +75,11 @@ public class FamilyKeyCrypto {
     private static final String KS_DIR = "keystore";
     private static final String CERT_DIR = "certificates/family";
     private static final String CRL_DIR = "crls";
+/** Option key for family name */
     public static final String OPT_NAME = "family";
+/** Option key for family signature */
     public static final String OPT_SIG = "family.sig";
+/** Option key for family certificate */
     public static final String OPT_KEY = "family.key";
 
     /**
@@ -106,6 +117,9 @@ public class FamilyKeyCrypto {
         loadCerts();
         // Schedule periodic negative cache cleanup (every hour) to prevent unbounded growth
         _context.simpleTimer2().addEvent(new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
+            /**
+             * timeReached.
+             */
             @Override
             public void timeReached() {
                 cleanup();
@@ -216,8 +230,30 @@ public class FamilyKeyCrypto {
      *
      *  @since 0.9.54
      */
-    public enum Result { NO_FAMILY, NO_KEY, NO_SIG, NAME_CHANGED, SIG_CHANGED, INVALID_SIG,
-                         UNSUPPORTED_SIG, BAD_KEY, BAD_SIG, RI_KEY, STORED_KEY }
+    public enum Result {
+        /** Router has no family option */
+        NO_FAMILY,
+        /** Router has a family name but no key and no stored certificate */
+        NO_KEY,
+        /** Router has a family name but no signature */
+        NO_SIG,
+        /** Family name changed since last verification */
+        NAME_CHANGED,
+        /** Signature changed since last verification, will re-verify */
+        SIG_CHANGED,
+        /** Signature could not be decoded */
+        INVALID_SIG,
+        /** Signature type is not available on this router */
+        UNSUPPORTED_SIG,
+        /** Key in the router info could not be decoded */
+        BAD_KEY,
+        /** Signature verification failed */
+        BAD_SIG,
+        /** Verified with a key in the router info */
+        RI_KEY,
+        /** Verified with a stored certificate */
+        STORED_KEY,
+    }
 
     /**
      *  Cached name/sig/result.
@@ -225,9 +261,13 @@ public class FamilyKeyCrypto {
      *  @since 0.9.54
      */
     private static class Verified {
+/** The family name */
         public final String name;
+/** The family signature */
         public final String sig;
+/** The verification result */
         public final Result result;
+/** Verified */
         public Verified(String n, String s, Result r) {
             name = n; sig = s; result = r;
         }

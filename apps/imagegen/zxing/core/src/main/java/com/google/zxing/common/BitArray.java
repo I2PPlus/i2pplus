@@ -41,25 +41,23 @@ public final class BitArray implements Cloneable {
    *
    * @param size the number of bits in the array
    */
-  /**
-   * Creates a new BitArray with the specified size.
-   * @param size the number of bits in the array
-   */
   public BitArray(int size) {
     this.size = size;
     this.bits = makeArray(size);
   }
 
-  // For testing only
+  /**
+   * For testing only.
+   * @param bits the bit array data
+   * @param size the number of bits
+   */
   BitArray(int[] bits, int size) {
     this.bits = bits;
     this.size = size;
   }
 
   /**
-   * @return the number of bits in the array
-   */
-  /**
+   * Get the number of bits in the array.
    * @return the number of bits in the array
    */
   public int getSize() {
@@ -67,9 +65,7 @@ public final class BitArray implements Cloneable {
   }
 
   /**
-   * @return the size of the array in bytes (rounded up)
-   */
-  /**
+   * Get the size of the array in bytes.
    * @return the size of the array in bytes (rounded up)
    */
   public int getSizeInBytes() {
@@ -85,6 +81,8 @@ public final class BitArray implements Cloneable {
   }
 
   /**
+   * Gets the bit at the specified index.
+   *
    * @param i bit to get
    * @return true iff bit i is set
    */
@@ -111,6 +109,8 @@ public final class BitArray implements Cloneable {
   }
 
   /**
+   * Gets the index of the next set bit.
+   *
    * @param from first bit to check
    * @return index of first bit that is set, starting from the given index, or size if none are set
    *  at or beyond this given index
@@ -135,6 +135,8 @@ public final class BitArray implements Cloneable {
   }
 
   /**
+   * Gets the index of the next unset bit.
+   *
    * @param from index to start looking for unset bit
    * @return index of next unset bit, or {@code size} if none are unset until the end
    * @see #getNextSet(int)
@@ -312,6 +314,7 @@ public final class BitArray implements Cloneable {
   }
 
   /**
+   * Writes the bits to an array of bytes.
    *
    * @param bitOffset first bit to start writing
    * @param array array to write into. Bytes are written most-significant byte first. This is the opposite
@@ -333,6 +336,8 @@ public final class BitArray implements Cloneable {
   }
 
   /**
+   * Returns the underlying array of ints.
+   *
    * @return underlying array of ints. The first element holds the first 32 bits, and the least
    *         significant bit is bit 0.
    */

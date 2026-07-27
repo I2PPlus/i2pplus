@@ -60,9 +60,10 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
 
     // Set to true in clear() to signal all iterator instances the collection is gone.
     // ThreadLocalMap entries for other threads will be cleaned lazily via WeakRef key.
+    /** True after clear() to signal iterator instances the collection is gone */
     volatile boolean _cleared;
 
-    // Size of the AbstractCollectionTest object
+    /** Size of the collection */
     int size;
 
     /**
@@ -83,10 +84,10 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         }
     }
 
-    // First Node in the AbstractCollectionTest object
+    /** First node in the linked list */
     Node<E> first;
 
-    // Last Node in the AbstractCollectionTest object
+    /** Last node in the linked list */
     Node<E> last;
 
     /**
@@ -214,6 +215,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
      *  collection, which would prevent GC of the collection (and its owning PeerState)
      *  when held in another thread's ThreadLocal after {@link CachedIteratorCollection#clear()} is called.
      *
+     *  @param <E> the type of elements in this iterator
      */
     @SuppressWarnings("ReferenceEquality")
     public static class CachedIterator<E> implements Iterator<E> {
@@ -224,6 +226,11 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         // Iteration Index
         private Node<E> itrIndexNode;
 
+        /**
+         * Create a new CachedIterator.
+         *
+         * @param coll the owning collection
+         */
         CachedIterator(CachedIteratorCollection<E> coll) {
             this.collRef = new WeakReference<>(coll);
         }

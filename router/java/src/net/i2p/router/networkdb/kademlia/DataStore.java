@@ -75,6 +75,9 @@ public interface DataStore {
      *  @param data non-null
      *  @since 0.9.64
      */
+    /**
+     * data).
+     */
     public boolean forcePut(Hash key, DatabaseEntry data);
 
     /**

@@ -60,24 +60,43 @@ public class DnsMessage {
      * @see <a href="http://tools.ietf.org/html/rfc6895#section-2.3">RFC 6895 § 2.3</a>
      */
     public enum RESPONSE_CODE {
+        /** No error */
         NO_ERROR(0),
+        /** Format error */
         FORMAT_ERR(1),
+        /** Server failure */
         SERVER_FAIL(2),
+        /** Non-existent domain */
         NX_DOMAIN(3),
+        /** Not implemented */
         NO_IMP(4),
+        /** Query refused */
         REFUSED(5),
+        /** Name exists when it should not */
         YXDOMAIN(6),
+        /** RR set exists when it should not */
         YXRRSET(7),
+        /** RR set does not exist */
         NXRRSET(8),
+        /** Server not authoritative */
         NOT_AUTH(9),
+        /** Name not in zone */
         NOT_ZONE(10),
+        /** Bad version or bad signature */
         BADVERS_BADSIG(16),
+        /** Bad key */
         BADKEY(17),
+        /** Bad timestamp */
         BADTIME(18),
+        /** Bad mode */
         BADMODE(19),
+        /** Bad name */
         BADNAME(20),
+        /** Bad algorithm */
         BADALG(21),
+        /** Bad truncation */
         BADTRUNC(22),
+        /** Bad cookie */
         BADCOOKIE(23),
        ;
 
@@ -138,11 +157,17 @@ public class DnsMessage {
      *      IANA Domain Name System (DNS) Paramters - DNS OpCodes</a>
      */
     public enum OPCODE {
+        /** Standard query */
         QUERY,
+        /** Inverse query */
         INVERSE_QUERY,
+        /** Server status request */
         STATUS,
+        /** Unassigned opcode 3 */
         UNASSIGNED3,
+        /** Notify */
         NOTIFY,
+        /** Dynamic update */
         UPDATE,
        ;
 
@@ -292,6 +317,9 @@ public class DnsMessage {
      */
     public final List<Record<? extends Data>> additionalSection;
 
+    /**
+     * The position of the OPT pseudo-record in the additional section, or -1 if none.
+     */
     public final int optRrPosition;
 
     /**
@@ -306,6 +334,9 @@ public class DnsMessage {
      */
     public final long receiveTimestamp;
 
+    /**
+     * DnsMessage.
+     */
     protected DnsMessage(Builder builder) {
         this.id = builder.id;
         this.opcode = builder.opcode;
@@ -470,15 +501,24 @@ public class DnsMessage {
         return serialize().clone();
     }
 
+    /**
+     * asDatagram.
+     */
     public DatagramPacket asDatagram(InetAddress address, int port) {
         byte[] bytes = serialize();
         return new DatagramPacket(bytes, bytes.length, address, port);
     }
 
+    /**
+     * writeTo.
+     */
     public void writeTo(OutputStream outputStream) throws IOException {
         writeTo(outputStream, true);
     }
 
+    /**
+     * writeTo.
+     */
     public void writeTo(OutputStream outputStream, boolean writeLength) throws IOException {
         byte[] bytes = serialize();
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
@@ -488,11 +528,17 @@ public class DnsMessage {
         dataOutputStream.write(bytes);
     }
 
+    /**
+     * getInByteBuffer.
+     */
     public ByteBuffer getInByteBuffer() {
         byte[] bytes = serialize().clone();
         return ByteBuffer.wrap(bytes);
     }
 
+    /**
+     * Cached serialized byte array, used to avoid re-serializing on repeated calls.
+     */
     private byte[] byteCache;
 
     private byte[] serialize() {
@@ -555,6 +601,7 @@ public class DnsMessage {
         return byteCache;
     }
 
+    /** Compute the DNS header bitmap */
     int calculateHeaderBitmap() {
         int header = 0;
         if (qr) {
@@ -587,6 +634,9 @@ public class DnsMessage {
         return header;
     }
 
+    /**
+     * getQuestion.
+     */
     public Question getQuestion() {
         return questions.get(0);
     }
@@ -627,6 +677,9 @@ public class DnsMessage {
         return res;
     }
 
+    /**
+     * getEdns.
+     */
     public Edns getEdns() {
         if (edns != null) return edns;
 
@@ -636,6 +689,9 @@ public class DnsMessage {
         return edns;
     }
 
+    /**
+     * getOptPseudoRecord.
+     */
     @SuppressWarnings("unchecked")
     public Record<OPT> getOptPseudoRecord() {
         if (optRrPosition == -1) return null;
@@ -654,8 +710,14 @@ public class DnsMessage {
         return edns.dnssecOk;
     }
 
+    /**
+     * Cached string representation of this message, built on first call to {@link #toString()}.
+     */
     private String toStringCache;
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         if (toStringCache != null) return toStringCache;
@@ -667,6 +729,9 @@ public class DnsMessage {
         return toStringCache;
     }
 
+    /**
+     * Cached terminal-formatted output string, built on first call to {@link #asTerminalOutput()}.
+     */
     private String terminalOutputCache;
 
     /**
@@ -732,6 +797,9 @@ public class DnsMessage {
         return terminalOutputCache;
     }
 
+    /**
+     * getAnswersFor.
+     */
     public <D extends Data> Set<D> getAnswersFor(Question q) {
         if (responseCode != RESPONSE_CODE.NO_ERROR) return null;
 
@@ -753,6 +821,9 @@ public class DnsMessage {
         return res;
     }
 
+    /**
+     * Cached minimum TTL value across all answer records, or -1 if not yet computed.
+     */
     private long answersMinTtlCache = -1;
 
     /**
@@ -772,12 +843,21 @@ public class DnsMessage {
         return answersMinTtlCache;
     }
 
+    /**
+     * asBuilder.
+     */
     public Builder asBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Cached normalized version of this message (id set to 0), built on first call to {@link #asNormalizedVersion()}.
+     */
     private DnsMessage normalizedVersionCache;
 
+    /**
+     * asNormalizedVersion.
+     */
     public DnsMessage asNormalizedVersion() {
         if (normalizedVersionCache == null) {
             normalizedVersionCache = new DnsMessage(this);
@@ -785,6 +865,9 @@ public class DnsMessage {
         return normalizedVersionCache;
     }
 
+    /**
+     * getResponseBuilder.
+     */
     public Builder getResponseBuilder(RESPONSE_CODE responseCode) {
         if (qr) {
             throw new IllegalStateException();
@@ -794,8 +877,14 @@ public class DnsMessage {
         return responseBuilder;
     }
 
+    /**
+     * Cached hash code, computed from the serialized byte representation on first call to {@link #hashCode()}.
+     */
     private transient Integer hashCodeCache;
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         if (hashCodeCache == null) {
@@ -851,30 +940,51 @@ public class DnsMessage {
         return result.get(0);
     }
 
+    /**
+     * filterAnswerSectionBy.
+     */
     public <D extends Data> List<Record<D>> filterAnswerSectionBy(Class<D> type) {
         return filterSectionByType(SectionName.answer, type);
     }
 
+    /**
+     * filterAuthoritySectionBy.
+     */
     public <D extends Data> List<Record<D>> filterAuthoritySectionBy(Class<D> type) {
         return filterSectionByType(SectionName.authority, type);
     }
 
+    /**
+     * filterAdditionalSectionBy.
+     */
     public <D extends Data> List<Record<D>> filterAdditionalSectionBy(Class<D> type) {
         return filterSectionByType(SectionName.additional, type);
     }
 
+    /**
+     * getFirstOfTypeFromAnswerSection.
+     */
     public <D extends Data> Record<D> getFirstOfTypeFromAnswerSection(Class<D> type) {
         return getFirstOfType(SectionName.answer, type);
     }
 
+    /**
+     * getFirstOfTypeFromAuthoritySection.
+     */
     public <D extends Data> Record<D> getFirstOfTypeFromAuthoritySection(Class<D> type) {
         return getFirstOfType(SectionName.authority, type);
     }
 
+    /**
+     * getFirstOfTypeFromAdditionalSection.
+     */
     public <D extends Data> Record<D> getFirstOfTypeFromAdditionalSection(Class<D> type) {
         return getFirstOfType(SectionName.additional, type);
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof DnsMessage)) {
@@ -889,6 +999,9 @@ public class DnsMessage {
         return Arrays.equals(myBytes, otherBytes);
     }
 
+    /**
+     * builder.
+     */
     public static Builder builder() {
         return new DnsMessage.Builder();
     }
@@ -936,23 +1049,39 @@ public class DnsMessage {
             additionalSection.addAll(message.additionalSection);
         }
 
+        /** The DNS message ID. */
         private int id;
+        /** The DNS message opcode. */
         private OPCODE opcode = OPCODE.QUERY;
+        /** The DNS response code. */
         private RESPONSE_CODE responseCode = RESPONSE_CODE.NO_ERROR;
+        /** True if this is a response (QR flag), false if it is a query. */
         private boolean query;
+        /** True if the response is authoritative. */
         private boolean authoritativeAnswer;
+        /** True if the message was truncated. */
         private boolean truncated;
+        /** True if recursion was requested. */
         private boolean recursionDesired;
+        /** True if the server supports recursion. */
         private boolean recursionAvailable;
+        /** True if the server considers the data authentic (DNSSEC). */
         private boolean authenticData;
+        /** True if DNSSEC validation should be skipped. */
         private boolean checkingDisabled;
 
+        /** The timestamp when the message was received, or -1 if not set. */
         private long receiveTimestamp = -1;
 
+        /** The question section records. */
         private List<Question> questions;
+        /** The answer section records. */
         private List<Record<? extends Data>> answerSection;
+        /** The authority section records. */
         private List<Record<? extends Data>> authoritySection;
+        /** The additional section records. */
         private List<Record<? extends Data>> additionalSection;
+        /** Builder for the EDNS OPT pseudo-record, or null if not used. */
         private Edns.Builder ednsBuilder;
 
         /**
@@ -966,11 +1095,17 @@ public class DnsMessage {
             return this;
         }
 
+        /**
+         * setOpcode.
+         */
         public Builder setOpcode(OPCODE opcode) {
             this.opcode = opcode;
             return this;
         }
 
+        /**
+         * setResponseCode.
+         */
         public Builder setResponseCode(RESPONSE_CODE responseCode) {
             this.responseCode = responseCode;
             return this;
@@ -1066,6 +1201,9 @@ public class DnsMessage {
             return this;
         }
 
+        /**
+         * copyFlagsFrom.
+         */
         public void copyFlagsFrom(DnsMessage dnsMessage) {
             this.query = dnsMessage.qr;
             this.authoritativeAnswer = dnsMessage.authenticData;
@@ -1076,11 +1214,17 @@ public class DnsMessage {
             this.checkingDisabled = dnsMessage.checkingDisabled;
         }
 
+        /**
+         * setReceiveTimestamp.
+         */
         public Builder setReceiveTimestamp(long receiveTimestamp) {
             this.receiveTimestamp = receiveTimestamp;
             return this;
         }
 
+        /**
+         * addQuestion.
+         */
         public Builder addQuestion(Question question) {
             if (questions == null) {
                 questions = new ArrayList<>(1);
@@ -1112,6 +1256,9 @@ public class DnsMessage {
             return this;
         }
 
+        /**
+         * addAnswer.
+         */
         public Builder addAnswer(Record<? extends Data> answer) {
             if (answerSection == null) {
                 answerSection = new ArrayList<>(1);
@@ -1120,6 +1267,9 @@ public class DnsMessage {
             return this;
         }
 
+        /**
+         * addAnswers.
+         */
         public Builder addAnswers(Collection<Record<? extends Data>> records) {
             if (answerSection == null) {
                 answerSection = new ArrayList<>(records.size());
@@ -1128,12 +1278,18 @@ public class DnsMessage {
             return this;
         }
 
+        /**
+         * setAnswers.
+         */
         public Builder setAnswers(Collection<Record<? extends Data>> records) {
             answerSection = new ArrayList<>(records.size());
             answerSection.addAll(records);
             return this;
         }
 
+        /**
+         * getAnswers.
+         */
         public List<Record<? extends Data>> getAnswers() {
             if (answerSection == null) {
                 return Collections.emptyList();
@@ -1141,6 +1297,9 @@ public class DnsMessage {
             return answerSection;
         }
 
+        /**
+         * addNameserverRecords.
+         */
         public Builder addNameserverRecords(Record<? extends Data> record) {
             if (authoritySection == null) {
                 authoritySection = new ArrayList<>(8);
@@ -1149,18 +1308,27 @@ public class DnsMessage {
             return this;
         }
 
+        /**
+         * setNameserverRecords.
+         */
         public Builder setNameserverRecords(Collection<Record<? extends Data>> records) {
             authoritySection = new ArrayList<>(records.size());
             authoritySection.addAll(records);
             return this;
         }
 
+        /**
+         * setAdditionalResourceRecords.
+         */
         public Builder setAdditionalResourceRecords(Collection<Record<? extends Data>> records) {
             additionalSection = new ArrayList<>(records.size());
             additionalSection.addAll(records);
             return this;
         }
 
+        /**
+         * addAdditionalResourceRecord.
+         */
         public Builder addAdditionalResourceRecord(Record<? extends Data> record) {
             if (additionalSection == null) {
                 additionalSection = new ArrayList<>();
@@ -1169,6 +1337,9 @@ public class DnsMessage {
             return this;
         }
 
+        /**
+         * addAdditionalResourceRecords.
+         */
         public Builder addAdditionalResourceRecords(List<Record<? extends Data>> records) {
             if (additionalSection == null) {
                 additionalSection = new ArrayList<>(records.size());
@@ -1177,6 +1348,9 @@ public class DnsMessage {
             return this;
         }
 
+        /**
+         * getAdditionalResourceRecords.
+         */
         public List<Record<? extends Data>> getAdditionalResourceRecords() {
             if (additionalSection == null) {
                 return Collections.emptyList();
@@ -1203,6 +1377,9 @@ public class DnsMessage {
             return ednsBuilder;
         }
 
+        /**
+         * build.
+         */
         public DnsMessage build() {
             return new DnsMessage(this);
         }
@@ -1255,6 +1432,9 @@ public class DnsMessage {
             }
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             StringBuilder sb = new StringBuilder("Builder of DnsMessage");

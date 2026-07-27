@@ -28,27 +28,66 @@ import net.i2p.util.Log;
 public class GarlicClove extends DataStructureImpl {
 
     private static final long serialVersionUID = 1L;
+    /** ignored */
     private transient final I2PAppContext _context;
+    /** ignored */
     private DeliveryInstructions _instructions;
+    /** ignored */
     private I2NPMessage _msg;
+    /** ignored */
     private long _cloveId;
+    /** ignored */
     private long _expiration;
+    /** ignored */
     private Certificate _certificate;
 
+    /**
+     * GarlicClove.
+     */
     public GarlicClove(I2PAppContext context) {
         _context = context;
         _cloveId = -1;
     }
 
+    /**
+     * getInstructions.
+     */
     public DeliveryInstructions getInstructions() { return _instructions; }
+    /**
+     * setInstructions.
+     */
     public void setInstructions(DeliveryInstructions instr) { _instructions = instr; }
+    /**
+     * getData.
+     */
     public I2NPMessage getData() { return _msg; }
+    /**
+     * setData.
+     */
     public void setData(I2NPMessage msg) { _msg = msg; }
+    /**
+     * getCloveId.
+     */
     public long getCloveId() { return _cloveId; }
+    /**
+     * setCloveId.
+     */
     public void setCloveId(long id) { _cloveId = id; }
+    /**
+     * getExpiration.
+     */
     public long getExpiration() { return _expiration; }
+    /**
+     * setExpiration.
+     */
     public void setExpiration(long exp) { _expiration = exp; }
+    /**
+     * getCertificate.
+     */
     public Certificate getCertificate() { return _certificate; }
+    /**
+     * setCertificate.
+     */
     public void setCertificate(Certificate cert) { _certificate = cert; }
 
     /**
@@ -61,6 +100,7 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
+     * Description.
      *  @return length read
      */
     public int readBytes(byte[] source, int offset) throws DataFormatException {
@@ -112,9 +152,7 @@ public class GarlicClove extends DataStructureImpl {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     *
-     */
+    /** @return serialized clove */
     @Override
     public byte[] toByteArray() {
         byte[] rv = new byte[estimateSize()];
@@ -148,12 +186,16 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
+     * Description.
      *  @since 0.9.44
      */
     public int getSizeRatchet() {
         return _instructions.getSize() + _msg.getMessageSize() - 7;
     }
 
+    /**
+     * estimateSize.
+     */
     public int estimateSize() {
         return _instructions.getSize()
                + _msg.getMessageSize()
@@ -162,6 +204,9 @@ public class GarlicClove extends DataStructureImpl {
                + _certificate.size(); // certificate
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object obj) {
         if ( (obj == null) || !(obj instanceof GarlicClove))
@@ -174,6 +219,9 @@ public class GarlicClove extends DataStructureImpl {
                DataHelper.eq(_instructions,  clove._instructions);
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return DataHelper.hashCode(_certificate) ^
@@ -183,6 +231,9 @@ public class GarlicClove extends DataStructureImpl {
                DataHelper.hashCode(_instructions);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return _instructions + "\n* Expires: " + DataHelper.formatTime(_expiration) +

@@ -18,4 +18,10 @@ public class
 BadLocationException
 	extends Exception
 {
+	/**
+	 * Constructs a BadLocationException with no detail message.
+	 */
+	public BadLocationException() {
+		super();
+	}
 }

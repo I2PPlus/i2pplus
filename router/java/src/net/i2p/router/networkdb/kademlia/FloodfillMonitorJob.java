@@ -42,6 +42,12 @@ class FloodfillMonitorJob extends JobImpl {
     private static final int MAX_FF = 999999;
     private boolean autoff = true;
 
+    /**
+     * Creates a new FloodfillMonitorJob.
+     *
+     * @param context the router context
+     * @param facade  the floodfill network database facade
+     */
     public FloodfillMonitorJob(RouterContext context, FloodfillNetworkDatabaseFacade facade) {
         super(context);
         _facade = facade;

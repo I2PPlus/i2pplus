@@ -20,18 +20,28 @@ import net.i2p.data.DataHelper;
  * @author jrandom
  */
 public class DataMessage extends FastI2NPMessageImpl {
+    /** The message type identifier. */
     public final static int MESSAGE_TYPE = 20;
     private byte[] _data;
 
+    /**
+     * Create a new DataMessage.
+     *
+     * @param context the router context
+     */
     public DataMessage(I2PAppContext context) {
         super(context);
     }
 
+    /** @return the data */
     public byte[] getData() {
         return _data;
     }
 
     /**
+     * Set the data payload.
+     *
+     *  @param data the data
      *  @throws IllegalStateException if data previously set, to protect saved checksum
      */
     public void setData(byte[] data) {
@@ -40,6 +50,7 @@ public class DataMessage extends FastI2NPMessageImpl {
         _data = data;
     }
 
+    /** @return the data size */
     public int getSize() {
         return _data.length;
     }

@@ -14,8 +14,14 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
      *  Impossible value, more than 1 byte
      */
     public static final int MESSAGE_TYPE = 999;
+    /**
+     * SHORT_RECORD_SIZE.
+     */
     public static final int SHORT_RECORD_SIZE = ShortTunnelBuildMessage.SHORT_RECORD_SIZE;
 
+    /**
+     * ShortTunnelBuildReplyMessage.
+     */
     public ShortTunnelBuildReplyMessage(I2PAppContext context, int records) {
         super(context, records);
     }
@@ -30,9 +36,15 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
         super.setRecord(index, record);
     }
 
+    /**
+     * calculateWrittenLength.
+     */
     @Override
     protected int calculateWrittenLength() { return 0; }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() { return MESSAGE_TYPE; }
 
@@ -52,6 +64,9 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return "[ShortTunnelBuildReplyMessage: " +

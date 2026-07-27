@@ -14,8 +14,14 @@ import net.i2p.util.Log;
  * @since 0.9.33
  */
 public class TunnelHelper extends HelperBase {
+    /**
+     * TunnelHelper.
+     */
     public TunnelHelper() { /* nop */ }
 
+    /**
+     * getTunnelSummary.
+     */
     public String getTunnelSummary() {
         TunnelRenderer renderer = new TunnelRenderer(_context);
         try {
@@ -35,6 +41,9 @@ public class TunnelHelper extends HelperBase {
         }
     }
 
+    /**
+     * isAdvanced.
+     */
     @Override
     public boolean isAdvanced() {
         return _context.getBooleanProperty(HelperBase.PROP_ADVANCED);

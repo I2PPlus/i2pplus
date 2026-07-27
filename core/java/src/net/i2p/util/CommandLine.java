@@ -17,6 +17,7 @@ import net.i2p.CoreVersion;
  */
 public class CommandLine {
 
+    /** List of available command classes. */
     protected static final List<String> CLASSES = Collections.unmodifiableList(Arrays.asList(new String[] {
         "help",
         "freenet.support.CPUInformation.CPUID",
@@ -52,8 +53,14 @@ public class CommandLine {
         "net.i2p.util.ZipFileComment"
     }));
 
+    /** Constructor */
     protected CommandLine() {}
 
+    /**
+     * Entry point for command line utilities.
+     *
+     * @param args command arguments
+     */
     public static void main(String[] args) {
         if (args.length > 0) {
             exec(args, CLASSES);
@@ -63,7 +70,7 @@ public class CommandLine {
     }
 
     /**
-     * Will only return if command not found
+     * Will only return if command not found.
      *
      * @param args command arguments
      * @param classes list of classes to search
@@ -111,6 +118,11 @@ public class CommandLine {
         printCommands(CLASSES);
     }
 
+    /**
+     * Print the list of available commands.
+     *
+     * @param classes list of classes to display
+     */
     protected static void printCommands(List<String> classes) {
         System.err.println("Available commands:");
         List<String> cmds = new ArrayList<>(classes.size());

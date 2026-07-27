@@ -51,31 +51,52 @@ import net.i2p.util.Log;
  */
 public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runnable {
 
+    /** The logger */
     protected final Log _log;
+    /** The application context */
     protected final I2PAppContext _context;
+    /** The logging instance */
     protected final Logging l;
+    /** Default connect timeout */
     static final long DEFAULT_CONNECT_TIMEOUT = (long) 30*1000;
+    /** Client ID counter */
     private static final AtomicLong __clientId = new AtomicLong();
+    /** This client's ID */
     protected long _clientId;
-    protected final Object sockLock = new Object(); // Guards sockMgr and mySockets
+    /** Guards sockMgr and mySockets */
+    protected final Object sockLock = new Object();
+    /** The socket manager */
     protected I2PSocketManager sockMgr; // should be final and use a factory. LINT
+    /** List of active sockets */
     protected final List<I2PSocket> mySockets = new ArrayList<>();
+    /** Whether we own our destination */
     protected boolean _ownDest;
+    /** The destination */
     protected Destination dest;
+    /** Local port */
     private volatile int localPort;
+    /** Handler name */
     private final String _handlerName;
 
     /**
      *  Protected for I2Ping since 0.9.11. Not for use outside package.
      */
     protected boolean listenerReady;
+    /** Server socket */
     protected ServerSocket ss;
+    /** Start lock */
     private final Object startLock = new Object();
+    /** Whether start is running */
     private boolean startRunning;
+    /** Whether we are building tunnels */
     private volatile boolean _buildingTunnels;
+    /** Tunnel builder thread */
     private volatile Thread _tunnelBuilder;
+    /** Private key file path */
     private String privKeyFile;
-    private boolean chained; // true if we are chained from a server.
+    /** true if we are chained from a server. */
+    private boolean chained;
+    /** Thread pool executor */
     protected volatile ThreadPoolExecutor _executor;
     /** true if we created _executor ourselves (TCG was null) and must shut it down on close */
     private volatile boolean _ownExecutor;
@@ -87,7 +108,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *  @since 0.9.20
      */
     private enum SocketManagerState { INIT, CONNECTED }
+    /** Socket manager state */
     private static SocketManagerState _socketManagerState = SocketManagerState.INIT;
+    /** Property for SSL enable */
     public static final String PROP_USE_SSL = I2PTunnelServer.PROP_USE_SSL;
 
     /**
@@ -98,7 +121,11 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * immediately (ignoring the <code>i2cp.delayOpen</code> option).
      *
      *  @param localPort if 0, use any port, get actual port selected with getLocalPort()
+     *  @param l the logging instance
      *  @param sktMgr the existing socket manager
+     *  @param tunnel the I2PTunnel instance
+     *  @param notifyThis the event dispatcher for notifications
+     *  @param clientId the client identifier
      */
     public I2PTunnelClientBase(int localPort, Logging l, I2PSocketManager sktMgr,
             I2PTunnel tunnel, EventDispatcher notifyThis, long clientId )
@@ -126,6 +153,11 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * necessary to call startRunning() for that.)
      *
      * @param localPort if 0, use any port, get actual port selected with getLocalPort()
+     * @param ownDest whether to use an owned destination
+     * @param l the logging instance
+     * @param notifyThis the event dispatcher for notifications
+     * @param handlerName the handler name
+     * @param tunnel the I2PTunnel instance
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
      *                                  badly that we can't create a socketManager
      */
@@ -146,8 +178,12 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * necessary to call startRunning() for that.)
      *
      * @param localPort if 0, use any port, get actual port selected with getLocalPort()
+     * @param ownDest whether to use an owned destination
+     * @param l the logging instance
+     * @param notifyThis the event dispatcher for notifications
+     * @param handlerName the handler name
+     * @param tunnel the I2PTunnel instance
      * @param pkf Path to the private key file, or null to generate a transient key
-     *
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
      *                                  badly that we can't create a socketManager
      */
@@ -256,6 +292,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
      * Call verifySocketManager() for that.
      *
+     * @param tunnel the I2PTunnel instance
      * @return non-null
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
      *                                  badly that we cant create a socketManager
@@ -269,6 +306,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
      * Call verifySocketManager() for that.
      *
+     * @param tunnel the I2PTunnel instance
+     * @param pkf the private key file path, or null
      * @return non-null
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
      *                                  badly that we cant create a socketManager
@@ -334,6 +373,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
      * Call verifySocketManager() for that.
      *
+     * @param tunnel the I2PTunnel instance
      * @return non-null
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
      *                                  badly that we cant create a socketManager
@@ -349,6 +389,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
      * Call verifySocketManager() for that.
      *
+     * @param tunnel the I2PTunnel instance
      * @param pkf absolute path or null
      * @return non-null
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
@@ -362,7 +403,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
      * Call verifySocketManager() for that.
      *
+     * @param tunnel the I2PTunnel instance
      * @param pkf absolute path or null
+     * @param log the logging instance
      * @return non-null
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
      *                                  badly that we cant create a socketManager
@@ -481,8 +524,17 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         }
     }
 
+    /**
+     * Get the local port.
+     * @return the local port number
+     */
     public final int getLocalPort() {return localPort;}
 
+    /**
+     * Get the listen host address.
+     * @param l the logging instance
+     * @return the InetAddress for the listen host, or null on error
+     */
     protected final InetAddress getListenHost(Logging l) {
         I2PTunnel t = getTunnel();
         if (t == null) {
@@ -588,6 +640,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * Create the default options (using the default timeout, etc).
      * Warning, this does not make a copy of I2PTunnel's client options,
      * it modifies them directly.
+     *
+     * @return the default socket options
      */
     protected I2PSocketOptions getDefaultOptions() {
         if (sockMgr == null) {
@@ -606,6 +660,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * Warning, this does not make a copy of I2PTunnel's client options,
      * it modifies them directly.
      * Do not use overrides for per-socket options.
+     *
+     * @param overrides the properties to override
+     * @return the default socket options with overrides
      */
     protected I2PSocketOptions getDefaultOptions(Properties overrides) {
         if (sockMgr == null) {
@@ -641,6 +698,10 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *
      * @param dest The destination to connect to, non-null
      * @return a new I2PSocket
+     * @throws I2PException if there is an I2P-related problem
+     * @throws ConnectException if the peer refuses the connection
+     * @throws NoRouteToHostException if the peer is not found or not reachable
+     * @throws InterruptedIOException if the connection times out
      */
     public I2PSocket createI2PSocket(Destination dest) throws I2PException, ConnectException, NoRouteToHostException, InterruptedIOException {
         return createI2PSocket(dest, 0);
@@ -654,6 +715,10 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param dest The destination to connect to, non-null
      * @param port The destination port to connect to 0 - 65535
      * @return a new I2PSocket
+     * @throws I2PException if there is an I2P-related problem
+     * @throws ConnectException if the peer refuses the connection
+     * @throws NoRouteToHostException if the peer is not found or not reachable
+     * @throws InterruptedIOException if the connection times out
      * @since 0.9.9
      */
     public I2PSocket createI2PSocket(Destination dest, int port) throws I2PException, ConnectException, NoRouteToHostException, InterruptedIOException {
@@ -926,6 +991,10 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         return true;
     }
 
+    /**
+     * Close a socket silently.
+     * @param s the socket to close
+     */
     public static void closeSocket(Socket s) {
         try {s.close();}
         catch (IOException ex) { /* ignored */ }
@@ -937,6 +1006,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *
      * This is run in a thread from an unlimited-size thread pool,
      * so it may block or run indefinitely.
+     *
+     * @param s the socket to manage
      */
     protected abstract void clientConnectionRun(Socket s);
 

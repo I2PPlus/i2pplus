@@ -13,6 +13,11 @@ import net.i2p.data.i2cp.I2CPMessage;
  * Handle I2CP BW replies from the router
  */
 class BWLimitsMessageHandler extends HandlerImpl {
+    /**
+     * Create a handler for I2CP bandwidth limit messages.
+     *
+     * @param ctx the I2P application context
+     */
     public BWLimitsMessageHandler(I2PAppContext ctx) {
         super(ctx, BandwidthLimitsMessage.MESSAGE_TYPE);
     }

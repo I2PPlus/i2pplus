@@ -24,12 +24,18 @@ public class SAMReader {
     private Thread _thread;
     private static final AtomicInteger _count = new AtomicInteger();
 
+    /**
+     * SAMReader.
+     */
     public SAMReader(I2PAppContext context, InputStream samIn, SAMClientEventListener listener) {
         _log = context.logManager().getLog(SAMReader.class);
         _inRaw = samIn;
         _listener = listener;
     }
 
+    /**
+     * startReading.
+     */
     public synchronized void startReading() {
         if (_live)
             throw new IllegalStateException();
@@ -39,6 +45,9 @@ public class SAMReader {
         _thread = t;
     }
 
+    /**
+     * stopReading.
+     */
     public synchronized void stopReading() {
         _live = false;
         if (_thread != null) {
@@ -53,44 +62,137 @@ public class SAMReader {
      *
      */
     public interface SAMClientEventListener {
+        /**
+         * SESSION_STATUS_OK.
+         */
         public static final String SESSION_STATUS_OK = "OK";
+        /**
+         * SESSION_STATUS_DUPLICATE_DEST.
+         */
         public static final String SESSION_STATUS_DUPLICATE_DEST = "DUPLICATE_DEST";
+        /**
+         * SESSION_STATUS_I2P_ERROR.
+         */
         public static final String SESSION_STATUS_I2P_ERROR = "I2P_ERROR";
+        /**
+         * SESSION_STATUS_INVALID_KEY.
+         */
         public static final String SESSION_STATUS_INVALID_KEY = "INVALID_KEY";
 
+        /**
+         * STREAM_STATUS_OK.
+         */
         public static final String STREAM_STATUS_OK = "OK";
+        /**
+         * STREAM_STATUS_CANT_REACH_PEER.
+         */
         public static final String STREAM_STATUS_CANT_REACH_PEER = "CANT_REACH_PEER";
+        /**
+         * STREAM_STATUS_I2P_ERROR.
+         */
         public static final String STREAM_STATUS_I2P_ERROR = "I2P_ERROR";
+        /**
+         * STREAM_STATUS_INVALID_KEY.
+         */
         public static final String STREAM_STATUS_INVALID_KEY = "INVALID_KEY";
+        /**
+         * STREAM_STATUS_TIMEOUT.
+         */
         public static final String STREAM_STATUS_TIMEOUT = "TIMEOUT";
 
+        /**
+         * STREAM_CLOSED_OK.
+         */
         public static final String STREAM_CLOSED_OK = "OK";
+        /**
+         * STREAM_CLOSED_CANT_REACH_PEER.
+         */
         public static final String STREAM_CLOSED_CANT_REACH_PEER = "CANT_REACH_PEER";
+        /**
+         * STREAM_CLOSED_I2P_ERROR.
+         */
         public static final String STREAM_CLOSED_I2P_ERROR = "I2P_ERROR";
+        /**
+         * STREAM_CLOSED_PEER_NOT_FOUND.
+         */
         public static final String STREAM_CLOSED_PEER_NOT_FOUND = "PEER_NOT_FOUND";
+        /**
+         * STREAM_CLOSED_TIMEOUT.
+         */
         public static final String STREAM_CLOSED_TIMEOUT = "CLOSED";
 
+        /**
+         * NAMING_REPLY_OK.
+         */
         public static final String NAMING_REPLY_OK = "OK";
+        /**
+         * NAMING_REPLY_INVALID_KEY.
+         */
         public static final String NAMING_REPLY_INVALID_KEY = "INVALID_KEY";
+        /**
+         * NAMING_REPLY_KEY_NOT_FOUND.
+         */
         public static final String NAMING_REPLY_KEY_NOT_FOUND = "KEY_NOT_FOUND";
 
+        /**
+         * version).
+         */
         public void helloReplyReceived(boolean ok, String version);
+        /**
+         * message).
+         */
         public void sessionStatusReceived(String result, String destination, String message);
+        /**
+         * message).
+         */
         public void streamStatusReceived(String result, String id, String message);
+        /**
+         * id).
+         */
         public void streamConnectedReceived(String remoteDestination, String id);
+        /**
+         * message).
+         */
         public void streamClosedReceived(String result, String id, String message);
+        /**
+         * length).
+         */
         public void streamDataReceived(String id, byte[] data, int offset, int length);
+        /**
+         * message).
+         */
         public void namingReplyReceived(String name, String result, String value, String message);
+        /**
+         * privateKey).
+         */
         public void destReplyReceived(String publicKey, String privateKey);
+        /**
+         * toPort).
+         */
         public void datagramReceived(String dest, byte[] data, int offset, int length, int fromPort, int toPort);
+        /**
+         * protocol).
+         */
         public void rawReceived(byte[] data, int offset, int length, int fromPort, int toPort, int protocol);
+        /**
+         * data).
+         */
         public void pingReceived(String data);
+        /**
+         * data).
+         */
         public void pongReceived(String data);
 
+        /**
+         * params).
+         */
         public void unknownMessageReceived(String major, String minor, Properties params);
     }
 
     private class Runner implements Runnable {
+        /**
+         * run.
+         */
         public void run() {
             Properties params = new Properties();
             ByteArrayOutputStream baos = new ByteArrayOutputStream(80);

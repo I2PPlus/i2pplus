@@ -47,10 +47,19 @@ public class Disposer extends ThreadCore {
 
     private ControlPoint ctrlPoint;
 
+    /**
+     * The value.
+     */
+    /**
+     * Set the control point.
+     */
     public void setControlPoint(ControlPoint ctrlp) {
         ctrlPoint = ctrlp;
     }
 
+    /**
+     * Get the control point.
+     */
     public ControlPoint getControlPoint() {
         return ctrlPoint;
     }

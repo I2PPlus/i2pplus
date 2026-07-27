@@ -62,13 +62,15 @@ import net.i2p.util.TempDirScanner;
  *
  */
 public class I2PAppContext {
-    /** the context that components without explicit root are bound */
+    /** The context that components without explicit root are bound */
     protected static volatile I2PAppContext _globalAppContext;
 
+    /** Override properties for this context */
     protected final I2PProperties _overrideProps;
     private volatile Properties _mergedProps;
 
     private StatManager _statManager;
+    /** The session key manager */
     protected SessionKeyManager _sessionKeyManager;
     private NamingService _namingService;
     private ElGamalEngine _elGamalEngine;
@@ -76,14 +78,19 @@ public class I2PAppContext {
     private LogManager _logManager;
     private HMAC256Generator _hmac256;
     private SHA256Generator _sha;
-    protected Clock _clock; // overridden in RouterContext
+    /** The context clock, overridden in RouterContext */
+    protected Clock _clock;
     private DSAEngine _dsa;
     private RandomSource _random;
     private KeyGenerator _keyGenerator;
-    protected KeyRing _keyRing; // overridden in RouterContext
+    /** The key ring, overridden in RouterContext */
+    protected KeyRing _keyRing;
     private SimpleTimer2 _simpleTimer2;
     private final PortMapper _portMapper;
     private volatile boolean _statManagerInitialized;
+    /**
+     * Whether the session key manager has been initialized.
+     */
     protected volatile boolean _sessionKeyManagerInitialized;
     private volatile boolean _namingServiceInitialized;
     private volatile boolean _elGamalEngineInitialized;
@@ -91,12 +98,15 @@ public class I2PAppContext {
     private volatile boolean _logManagerInitialized;
     private volatile boolean _hmac256Initialized;
     private volatile boolean _shaInitialized;
-    protected volatile boolean _clockInitialized; // used in RouterContext
+    /** Whether the clock is initialized, used in RouterContext */
+    protected volatile boolean _clockInitialized;
     private volatile boolean _dsaInitialized;
     private volatile boolean _randomInitialized;
     private volatile boolean _keyGeneratorInitialized;
-    protected volatile boolean _keyRingInitialized; // used in RouterContext
+    /** Whether the key ring is initialized, used in RouterContext */
+    protected volatile boolean _keyRingInitialized;
     private volatile boolean _simpleTimer2Initialized;
+    /** Shutdown tasks to run on context shutdown */
     protected final Set<Runnable> _shutdownTasks;
     private final File _baseDir;
     private final File _configDir;
@@ -123,6 +133,8 @@ public class I2PAppContext {
      * in a static field, or you will get the old context if a new router is
      * started in the same JVM after the first is shut down,
      * e.g. on Android.
+     *
+     * @return the global context for this JVM
      */
     public static I2PAppContext getGlobalContext() {
         // skip the global lock - _gAC must be volatile
@@ -140,7 +152,7 @@ public class I2PAppContext {
     }
 
     /**
-     * Sets the default context, unless there is one already.
+     * Default context, unless there is one already.
      * NOT a public API, for use by RouterContext only, NOT for external use.
      *
      * @param ctx context constructed with doInit = false
@@ -188,6 +200,8 @@ public class I2PAppContext {
      * to avoid creating additional contexts, which may spawn numerous
      * additional resources and threads, and may be the cause of logging
      * problems or hard-to-isolate bugs.
+     *
+     * @param envProps environment properties, may be null
      */
     public I2PAppContext(Properties envProps) {
         this(true, envProps);
@@ -205,6 +219,7 @@ public class I2PAppContext {
      * @param doInit should this context be used as the global one (if necessary)?
      *               Will only apply if there is no global context now.
      *
+     * @param envProps environment properties, may be null
      * @since protected since 0.9.33, NOT for external use
      */
     protected I2PAppContext(boolean doInit, Properties envProps) {
@@ -471,7 +486,7 @@ public class I2PAppContext {
      */
     public File getLibDir() { return _libDir; }
 
-    /** don't rely on deleteOnExit() */
+    /** Don't rely on deleteOnExit() */
     public void deleteTempDir() {
         synchronized (_lock1) {
             if (_tmpDir != null) {
@@ -515,6 +530,8 @@ public class I2PAppContext {
      * System.getProperty if no properties were provided during construction
      * (or the specified prop wasn't included).
      *
+     * @param propName the property name
+     * @return the property value, or null
      */
     public String getProperty(String propName) {
         if (_overrideProps != null) {
@@ -531,6 +548,9 @@ public class I2PAppContext {
      * System.getProperty if no properties were provided during construction
      * (or the specified prop wasn't included).
      *
+     * @param propName the property name
+     * @param defaultValue the default value
+     * @return the property value, or the default
      */
     public String getProperty(String propName, String defaultValue) {
         if (_overrideProps != null) {
@@ -542,6 +562,10 @@ public class I2PAppContext {
 
     /**
      * Return an int with an int default
+     *
+     * @param propName the property name
+     * @param defaultVal the default value
+     * @return the property value, or the default
      */
     public int getProperty(String propName, int defaultVal) {
         String val = null;
@@ -564,6 +588,9 @@ public class I2PAppContext {
     /**
      * Return a long with a long default
      *
+     * @param propName the property name
+     * @param defaultVal the default value
+     * @return the property value, or the default
      * @since 0.9.4
      */
     public long getProperty(String propName, long defaultVal) {
@@ -587,6 +614,9 @@ public class I2PAppContext {
     /**
      * Return a float with a float default
      *
+     * @param propName the property name
+     * @param defaultVal the default value
+     * @return the property value, or the default
      * @since 0.9.58+
      */
     public final float getProperty(String propName, float defaultVal) {
@@ -610,6 +640,9 @@ public class I2PAppContext {
     /**
      * Return a boolean with a boolean default
      *
+     * @param propName the property name
+     * @param defaultVal the default value
+     * @return the property value, or the default
      * @since 0.7.12
      */
     public final boolean getProperty(String propName, boolean defaultVal) {
@@ -622,6 +655,8 @@ public class I2PAppContext {
     /**
      * Default false
      *
+     * @param propName the property name
+     * @return the boolean value, or false if not set
      * @since 0.7.12
      */
     public boolean getBooleanProperty(String propName) {
@@ -629,7 +664,7 @@ public class I2PAppContext {
     }
 
     /**
-     * Get a boolean property, defaulting to true if not set.
+     * Boolean property, defaulting to true if not set.
      *
      * @param propName the property name
      * @return the boolean value, or true if the property is not set
@@ -688,6 +723,8 @@ public class I2PAppContext {
     /**
      * The statistics component with which we can track various events
      * over time.
+     *
+     * @return the stat manager
      */
     public StatManager statManager() {
         if (!_statManagerInitialized)
@@ -718,6 +755,8 @@ public class I2PAppContext {
      * As of 0.9.15, this returns a dummy SessionKeyManager in I2PAppContext.
      * The dummy SKM does NOT handle session tags.
      * Overridden in RouterContext to return the full TransientSessionKeyManager.
+     *
+     * @return the session key manager
      */
     public SessionKeyManager sessionKeyManager() {
         if (!_sessionKeyManagerInitialized)
@@ -725,6 +764,9 @@ public class I2PAppContext {
         return _sessionKeyManager;
     }
 
+    /**
+     * Initialize the session key manager.
+     */
     protected void initializeSessionKeyManager() {
         synchronized (_lock3) {
             if (_sessionKeyManager == null)
@@ -738,6 +780,8 @@ public class I2PAppContext {
      * Pull up the naming service used in this context.  The naming service itself
      * works by querying the context's properties, so those props should be
      * specified to customize the naming service exposed.
+     *
+     * @return the naming service
      */
     public NamingService namingService() {
         if (!_namingServiceInitialized)
@@ -761,6 +805,8 @@ public class I2PAppContext {
      * its performance and activity.  In addition, the engine can be swapped with
      * the context's properties (though only someone really crazy should mess with
      * it ;)
+     *
+     * @return the ElGamal engine
      */
     public ElGamalEngine elGamalEngine() {
         if (!_elGamalEngineInitialized)
@@ -780,6 +826,8 @@ public class I2PAppContext {
      * Ok, I'll admit it, there is no good reason for having a context specific AES engine.
      * We don't really keep stats on it, since its just too fast to matter.
      * Though for the crazy people out there, we do expose a way to disable it.
+     *
+     * @return the AES engine
      */
     public AESEngine aes() {
         if (!_AESEngineInitialized) {initializeAESEngine();}
@@ -798,6 +846,8 @@ public class I2PAppContext {
      * set of configuration settings (loaded from the context's properties).
      * Each context's logManager keeps its own isolated set of Log instances with
      * their own log levels, output locations, and rotation configuration.
+     *
+     * @return the log manager
      */
     public LogManager logManager() {
         if (!_logManagerInitialized)
@@ -819,6 +869,7 @@ public class I2PAppContext {
      * before it is started.  Calling this at any other time can have
      * unpredictable side effects.
      *
+     * @param logManager the LogManager instance to use
      * @since 0.9.41
      */
     public void setLogManager(LogManager logManager) {
@@ -830,6 +881,8 @@ public class I2PAppContext {
 
     /**
      * Un-deprecated in 0.9.38
+     *
+     * @return the HMAC256 generator
      */
     public HMAC256Generator hmac256() {
         if (!_hmac256Initialized)
@@ -851,6 +904,7 @@ public class I2PAppContext {
     /**
      * Our SHA256 instance (see the hmac discussion for why its context specific)
      *
+     * @return the SHA256 generator
      */
     public SHA256Generator sha() {
         if (!_shaInitialized)
@@ -869,6 +923,7 @@ public class I2PAppContext {
     /**
      * Our DSA engine (see HMAC and SHA above)
      *
+     * @return the DSA engine
      */
     public DSAEngine dsa() {
         if (!_dsaInitialized)
@@ -887,6 +942,8 @@ public class I2PAppContext {
     /**
      * Component to generate ElGamal, DSA, and Session keys.  For why it is in
      * the appContext, see the DSA, HMAC, and SHA comments above.
+     *
+     * @return the key generator
      */
     public KeyGenerator keyGenerator() {
         if (!_keyGeneratorInitialized)
@@ -906,6 +963,7 @@ public class I2PAppContext {
      * The context's synchronized clock, which is kept context specific only to
      * enable simulators to play with clock skew among different instances.
      *
+     * @return the clock
      */
     public Clock clock() {
         if (!_clockInitialized)
@@ -913,6 +971,9 @@ public class I2PAppContext {
         return _clock;
     }
 
+    /**
+     * Initialize the clock.
+     */
     protected void initializeClock() { // overridden in RouterContext
         synchronized (_lock14) {
             if (_clock == null)
@@ -938,6 +999,8 @@ public class I2PAppContext {
 
     /**
      * Basic hash map
+     *
+     * @return the key ring
      */
     public KeyRing keyRing() {
         if (!_keyRingInitialized)
@@ -945,6 +1008,9 @@ public class I2PAppContext {
         return _keyRing;
     }
 
+    /**
+     * Initialize the key ring.
+     */
     protected void initializeKeyRing() {
         synchronized (_lock16) {
             if (_keyRing == null)
@@ -956,6 +1022,7 @@ public class I2PAppContext {
     /**
      * [insert snarky comment here]
      *
+     * @return the random source
      */
     public RandomSource random() {
         if (!_randomInitialized)
@@ -978,6 +1045,7 @@ public class I2PAppContext {
      *  This method moved from Router in 0.7.1 so that clients
      *  may use it without depending on router.jar.
      *
+     *  @param task the task to add
      *  @since 0.7.1
      */
     public void addShutdownTask(Runnable task) {
@@ -995,7 +1063,7 @@ public class I2PAppContext {
     }
 
     /**
-     * Get the list of shutdown tasks.
+     * List of shutdown tasks.
      *
      * @return an unmodifiable Set of shutdown tasks
      * @since 0.7.1
@@ -1007,6 +1075,7 @@ public class I2PAppContext {
     /**
      *  Use this instead of context instanceof RouterContext
      *
+     *  @return false always in I2PAppContext
      *  @since 0.7.9
      */
     public boolean isRouterContext() {
@@ -1026,6 +1095,7 @@ public class I2PAppContext {
     /**
      *  Is the wrapper present?
      *
+     *  @return true if the wrapper is present
      *  @since 0.8.8
      */
     public boolean hasWrapper() {
@@ -1035,6 +1105,7 @@ public class I2PAppContext {
     /**
      *  Basic mapping from service names to ports
      *
+     *  @return the port mapper
      *  @since 0.8.12
      */
     public PortMapper portMapper() {
@@ -1044,6 +1115,7 @@ public class I2PAppContext {
     /**
      * Use instead of SimpleTimer2.getInstance()
      *
+     * @return the SimpleTimer2 instance
      * @since 0.9 to replace static instance in the class
      */
     public SimpleTimer2 simpleTimer2() {

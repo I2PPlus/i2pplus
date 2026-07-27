@@ -22,6 +22,7 @@ import net.i2p.router.RouterVersion;
  */
 public class NewsCommandLine extends RouterCommandLine {
 
+    /** Additional command classes for news and blocklist management */
     protected static final List<String> NCLASSES = Arrays.asList(new String[] {
         "com.vuze.plugins.mlab.MLabRunner",
         "net.i2p.router.news.BlocklistEntries",
@@ -29,8 +30,14 @@ public class NewsCommandLine extends RouterCommandLine {
         "net.i2p.router.update.NewsHandler"
     });
 
+    /** Protected constructor to prevent instantiation */
     protected NewsCommandLine() {}
 
+    /**
+     * Main entry point.
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         List<String> classes = new ArrayList<>(NCLASSES.size() + RouterCommandLine.RCLASSES.size() + RouterCommandLine.CLASSES.size());
         classes.addAll(NCLASSES);
@@ -43,6 +50,11 @@ public class NewsCommandLine extends RouterCommandLine {
         System.exit(1);
     }
 
+    /**
+     * Print usage information.
+     *
+     * @param classes the list of available command classes
+     */
     public static void usage(List<String> classes) {
         System.err.println("I2P Router Console version " + RouterVersion.FULL_VERSION + '\n' +
                            "USAGE: java -jar /path/to/routerconsole.jar command [args]");

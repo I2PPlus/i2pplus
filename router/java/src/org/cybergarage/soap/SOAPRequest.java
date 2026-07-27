@@ -44,11 +44,17 @@ public class SOAPRequest extends HTTPRequest {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     * SOAPRequest.
+     */
     public SOAPRequest() {
         setContentType(SOAP.CONTENT_TYPE);
         setMethod(HTTP.POST);
     }
 
+    /**
+     * SOAPRequest.
+     */
     public SOAPRequest(HTTPRequest httpReq) {
         set(httpReq);
     }
@@ -57,14 +63,30 @@ public class SOAPRequest extends HTTPRequest {
     // SOAPACTION
     ////////////////////////////////////////////////
 
+    /**
+     *  Set the SOAP action header.
+     *
+     * @param action the SOAP action to set
+     */
     public void setSOAPAction(String action) {
         setStringHeader(SOAPACTION, action);
     }
 
+    /**
+     *  Return the SOAP action header value.
+     *
+     * @return the SOAP action header value
+     */
     public String getSOAPAction() {
         return getStringHeaderValue(SOAPACTION);
     }
 
+    /**
+     *  Check if the SOAP action matches the given value.
+     *
+     * @param value value to compare
+     * @return true if the SOAP action matches the given value
+     */
     public boolean isSOAPAction(String value) {
         String headerValue = getHeaderValue(SOAPACTION);
         if (headerValue == null) return false;
@@ -78,6 +100,13 @@ public class SOAPRequest extends HTTPRequest {
     //	post
     ////////////////////////////////////////////////
 
+    /**
+     *  Post a SOAP message to the target host and port.
+     *
+     * @param host the target host
+     * @param port the target port
+     * @return the SOAP response
+     */
     public SOAPResponse postMessage(String host, int port) {
         HTTPResponse httpRes = post(host, port);
 
@@ -127,14 +156,29 @@ public class SOAPRequest extends HTTPRequest {
     //	XML
     ////////////////////////////////////////////////
 
+    /**
+     *  Set the SOAP envelope node.
+     *
+     * @param node the envelope node to set
+     */
     public void setEnvelopeNode(Node node) {
         setRootNode(node);
     }
 
+    /**
+     *  Return the SOAP envelope node.
+     *
+     * @return the envelope node
+     */
     public Node getEnvelopeNode() {
         return getRootNode();
     }
 
+    /**
+     *  Return the SOAP body node.
+     *
+     * @return the body node, or null if not available
+     */
     public Node getBodyNode() {
         Node envNode = getEnvelopeNode();
         if (envNode == null) return null;
@@ -146,6 +190,11 @@ public class SOAPRequest extends HTTPRequest {
     //	XML Contents
     ////////////////////////////////////////////////
 
+    /**
+     *  Set the XML content from a node.
+     *
+     * @param node the node to set as content
+     */
     public void setContent(Node node) {
         // Thanks for Ralf G. R. Bergs <Ralf@Ber.gs>, Inma Marin Lopez <inma@dif.um.es>.
         String conStr = "";
@@ -159,6 +208,9 @@ public class SOAPRequest extends HTTPRequest {
     //	print
     ////////////////////////////////////////////////
 
+    /**
+     * print.
+     */
     public void print() {
         Debug.message(toString());
         if (hasContent() == true) return;

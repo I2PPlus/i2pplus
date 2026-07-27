@@ -79,6 +79,9 @@ public final class ByteCache extends TryCache<ByteArray> {
      * Global cleanup task that iterates over all caches.
      */
     private static class GlobalCleanup extends SimpleTimer2.TimedEvent {
+        /**
+         * timeReached.
+         */
         @Override
         public void timeReached() {
             synchronized (_allCaches) {
@@ -89,6 +92,9 @@ public final class ByteCache extends TryCache<ByteArray> {
             schedule(CLEANUP_FREQUENCY);
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "Global ByteCache Cleanup";
@@ -106,6 +112,9 @@ public final class ByteCache extends TryCache<ByteArray> {
         }
     }
 
+    /**
+     * getInstance.
+     */
     @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
     public static ByteCache getInstance(int cacheSize, int size) {
         size = Math.max(1, size);
@@ -158,6 +167,9 @@ public final class ByteCache extends TryCache<ByteArray> {
             sz = entrySize;
         }
 
+        /**
+         * newInstance.
+         */
         @Override
         public ByteArray newInstance() {
             byte[] data = new byte[sz];
@@ -194,6 +206,9 @@ public final class ByteCache extends TryCache<ByteArray> {
         release(entry, true);
     }
 
+    /**
+     * release.
+     */
     public final void release(ByteArray entry, boolean shouldZero) {
         if (entry == null || entry.getData() == null) {
             return;

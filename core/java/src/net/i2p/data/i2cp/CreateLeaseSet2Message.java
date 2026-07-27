@@ -42,6 +42,9 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
      */
     public final static int MESSAGE_TYPE = 41;
     private List<PrivateKey> _privateKeys; // only used if more than one key, otherwise null
+    /**
+     * CreateLeaseSet2Message.
+     */
     public CreateLeaseSet2Message() {super();}
 
     /**
@@ -71,6 +74,9 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
         }
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
@@ -129,6 +135,9 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
         }
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if (_leaseSet == null) {
@@ -165,9 +174,15 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
         return os.toByteArray();
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {return MESSAGE_TYPE;}
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();

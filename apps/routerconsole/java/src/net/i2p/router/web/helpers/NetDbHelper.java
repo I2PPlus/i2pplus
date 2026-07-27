@@ -29,7 +29,14 @@ import net.i2p.util.SystemVersion;
  *
  * @since 0.9.33
  */
+/**
+ * Helper for network database page rendering and form processing.
+ */
 public class NetDbHelper extends FormHandler {
+
+    /** Default constructor */
+    public NetDbHelper() {}
+
     private String _routerPrefix;
     private String _version;
     private String _country;
@@ -61,6 +68,10 @@ public class NetDbHelper extends FormHandler {
     private boolean _postOK;
     private static final int DEFAULT_LIMIT = SystemVersion.isSlow() ? 100 : 200;
     private static final int DEFAULT_PAGE = 0;
+    /**
+     * Whether the router is a floodfill router.
+     * @since 0.9.33
+     */
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
 
     private static final String[] titles =
@@ -96,48 +107,82 @@ public class NetDbHelper extends FormHandler {
                                           };
 
 
+    /**
+     * Set the router hash prefix for lookup.
+     * @param r the router hash prefix
+     */
     public void setRouter(String r) {
         if (r != null && !r.isEmpty()) {_routerPrefix = DataHelper.stripHTML(r.trim());} // XSS
     }
 
-    /** @since 0.9.21 */
+    /**
+     * Set the router version filter.
+     * @param v the version string
+     * @since 0.9.21
+     */
     public void setVersion(String v) {
         if (v != null && !v.isEmpty()) {_version = DataHelper.stripHTML(v.trim());} // XSS
     }
 
-    /** @since 0.9.21 */
+    /**
+     * Set the country filter.
+     * @param c the country code
+     * @since 0.9.21
+     */
     public void setCountry(String c) {
         if (c != null && !c.isEmpty()) {_country = DataHelper.stripHTML(c.trim());} // XSS
     }
 
-    /** @since 0.9.28 */
+    /**
+     * Set the family filter.
+     * @param c the family string
+     * @since 0.9.28
+     */
     public void setFamily(String c) {
         if (c != null && !c.isEmpty()) {_family = DataHelper.stripHTML(c.trim());} // XSS
     }
 
-    /** @since 0.9.28 */
+    /**
+     * Set the capabilities filter.
+     * @param c the capabilities string
+     * @since 0.9.28
+     */
     public void setCaps(String c) {
         if (c != null && !c.isEmpty()) {_caps = DataHelper.stripHTML(c.trim());} // XSS
     }
 
-    /** @since 0.9.28 */
+    /**
+     * Set the IP address filter.
+     * @param c the IP address
+     * @since 0.9.28
+     */
     public void setIp(String c) {
         if (c != null && !c.isEmpty()) {_ip = DataHelper.stripHTML(c.trim());} // XSS
     }
 
-    /** @since 0.9.28 */
+    /**
+     * Set the Sybil analysis filter.
+     * @param c the Sybil analysis target
+     * @since 0.9.28
+     */
     public void setSybil(String c) {
         if (c != null) {_sybil = DataHelper.stripHTML(c.trim());} // XSS
     }
 
-    /** For form, same as above but with a length check
-     *  @since 0.9.28
+    /**
+     * For form, same as above but with a length check.
+     * @param c the Sybil analysis target
+     * @since 0.9.28
      */
     public void setSybil2(String c) {
         if (c != null && !c.isEmpty()) {_sybil = DataHelper.stripHTML(c.trim());} // XSS
     }
 
-    /** @since 0.9.28 */
+    /**
+     * Set the port filter (single port or range).
+     * @param f the port string
+     * @since 0.9.28
+     */
     public void setPort(String f) {
         if (f == null) {return;}
         try {
@@ -149,22 +194,38 @@ public class NetDbHelper extends FormHandler {
         } catch (NumberFormatException nfe) { /* ignored */ }
     }
 
-    /** @since 0.9.28 */
+    /**
+     * Set the signature type filter.
+     * @param f the signature type string
+     * @since 0.9.28
+     */
     public void setType(String f) {
         if (f != null && !f.isEmpty()) {_type = SigType.parseSigType(f);}
     }
 
-    /** @since 0.9.49 */
+    /**
+     * Set the encryption type filter.
+     * @param f the encryption type string
+     * @since 0.9.49
+     */
     public void setEtype(String f) {
         if (f != null && !f.isEmpty()) {_etype = EncType.parseEncType(f);}
     }
 
-    /** @since 0.9.28 */
+    /**
+     * Set the MTU filter.
+     * @param f the MTU string
+     * @since 0.9.28
+     */
     public void setMtu(String f) {
         if (f != null && !f.isEmpty()) {_mtu = DataHelper.stripHTML(f.trim());} // XSS
     }
 
-    /** @since 0.9.28 */
+    /**
+     * Set the IPv6 prefix filter.
+     * @param f the IPv6 prefix
+     * @since 0.9.28
+     */
     public void setIpv6(String f) {
         if (f != null && !f.isEmpty()) {
             _ipv6 = DataHelper.stripHTML(f.trim()); // XSS
@@ -172,51 +233,87 @@ public class NetDbHelper extends FormHandler {
         }
     }
 
-    /** @since 0.9.28 */
+    /**
+     * Set the SSU capabilities filter.
+     * @param f the SSU capabilities string
+     * @since 0.9.28
+     */
     public void setSsucaps(String f) {
         if (f != null && !f.isEmpty()) {_ssucaps = DataHelper.stripHTML(f.trim());} // XSS
     }
 
-    /** @since 0.9.36 */
+    /**
+     * Set the transport filter.
+     * @param f the transport string
+     * @since 0.9.36
+     */
     public void setTransport(String f) {
         if (f != null && !f.isEmpty()) {_transport = DataHelper.stripHTML(f).toUpperCase(Locale.US);}
     }
 
-    /** @since 0.9.28 */
+    /**
+     * Set the cost filter.
+     * @param f the cost string
+     * @since 0.9.28
+     */
     public void setCost(String f) {
         try {_cost = Integer.parseInt(f);}
         catch (NumberFormatException nfe) { /* ignored */ }
     }
 
-    /** @since 0.9.38 */
+    /**
+     * Set the mode filter.
+     * @param f the mode string
+     * @since 0.9.38
+     */
     public void setMode(String f) {
         try {_mode = Integer.parseInt(f);}
         catch (NumberFormatException nfe) { /* ignored */ }
     }
 
-    /** @since 0.9.38 */
+    /**
+     * Set the date filter.
+     * @param f the date string
+     * @since 0.9.38
+     */
     public void setDate(String f) {
         try {_date = Long.parseLong(f);}
         catch (NumberFormatException nfe) { /* ignored */ }
     }
 
+    /**
+     * Set the full display mode.
+     * @param f the mode value
+     */
     public void setFull(String f) {
         try {_full = Integer.parseInt(f);}
         catch (NumberFormatException nfe) { /* ignored */ }
     }
 
+    /**
+     * Set the lease display mode.
+     * @param l the lease mode value
+     */
     public void setLease(String l) {
         _clientOnly = "3".equals(l);
         _debug = "2".equals(l);
         _lease = _debug || "1".equals(l);
     }
 
-    /** @since 0.9.57 */
+    /**
+     * Set the leaseset hostname for lookup.
+     * @param f the hostname or b32
+     * @since 0.9.57
+     */
     public void setLeaseset(String f) {
         if (f != null && !f.isEmpty()) {_hostname = DataHelper.stripHTML(f);}
     }
 
-    /** @since 0.9.36 */
+    /**
+     * Set the result limit.
+     * @param f the limit as a string
+     * @since 0.9.36
+     */
     public void setLimit(String f) {
         try {
             _limit = Integer.parseInt(f);
@@ -225,7 +322,11 @@ public class NetDbHelper extends FormHandler {
         } catch (NumberFormatException nfe) { /* ignored */ }
     }
 
-    /** @since 0.9.36 */
+    /**
+     * Set the page number.
+     * @param f the page as a string
+     * @since 0.9.36
+     */
     public void setPage(String f) {
         try {
             _page = Integer.parseInt(f) - 1;
@@ -233,15 +334,27 @@ public class NetDbHelper extends FormHandler {
         } catch (NumberFormatException nfe) { /* ignored */ }
     }
 
-    /** @since 0.9.57 */
+    /**
+     * Set the sort field.
+     * @param f the sort field
+     * @since 0.9.57
+     */
     public void setSort(String f) {_sort = f;}
 
-    /** @since 0.9.58 */
+    /**
+     * Set the intro count filter.
+     * @param f the intro count string
+     * @since 0.9.58
+     */
     public void setIntros(String f) {
         try {_icount = Integer.parseInt(f);}
         catch (NumberFormatException nfe) { /* ignored */ }
     }
 
+    /**
+     * Set the client page.
+     * @param f the page value
+     */
     public void setClientPage(String f) {
         try { /* ignored */ }
         catch(Exception e) { /* ignored */ }
@@ -306,9 +419,14 @@ public class NetDbHelper extends FormHandler {
 
     /**
      *   storeWriter() must be called previously
+     *
+     *   @return the netdb summary HTML
      */
     public String getFloodfillNetDbSummary() {return getNetDbSummary();}
 
+    /**
+     * getNetDbSummary.
+     */
     public String getNetDbSummary() {
         NetDbRenderer renderer = new NetDbRenderer(_context);
         boolean isSearchResult = _routerPrefix != null || _version != null || _country != null ||
@@ -406,7 +524,12 @@ public class NetDbHelper extends FormHandler {
         return buf.toString();
     }
 
-     /** @since 0.9.68+ */
+    /**
+     * Get the navigation bar HTML.
+     *
+     * @return the nav bar HTML
+     * @since 0.9.68+
+     */
     public String getNavBarHtml() {
         return renderNavBar();
     }

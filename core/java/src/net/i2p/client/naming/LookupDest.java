@@ -43,14 +43,28 @@ public class LookupDest {
      */
     protected LookupDest(I2PAppContext context) {}
 
-    /** Look up a destination by Base32 hash. @param key 52 chars (do not include the .b32.i2p suffix) */
+    /**
+     * Look up a destination by Base32 hash.
+     *
+     * @param ctx the application context
+     * @param key 52 chars (do not include the .b32.i2p suffix)
+     * @return the destination, or null if not found
+     * @throws I2PSessionException if there is an I2CP error
+     */
     static Destination lookupBase32Hash(I2PAppContext ctx, String key) throws I2PSessionException {
         byte[] h = Base32.decode(key);
         if (h == null) return null;
         return lookupHash(ctx, h);
     }
 
-    /** Look up a destination by hash. @param h 32 byte hash */
+    /**
+     * Look up a destination by hash.
+     *
+     * @param ctx the application context
+     * @param h 32 byte hash
+     * @return the destination, or null if not found
+     * @throws I2PSessionException if there is an I2CP error
+     */
     private static Destination lookupHash(I2PAppContext ctx, byte[] h) throws I2PSessionException {
         Hash key = Hash.create(h);
         Destination rv = null;
@@ -113,6 +127,8 @@ public class LookupDest {
     /**
      *  Supports hostnames and extended b32.
      *  TODO: does not support I2CP options.
+     *
+     * @param args command line arguments
      */
     public static void main(String[] args) {
         if (args.length != 1) {

@@ -13,6 +13,8 @@ import net.i2p.util.LogManager;
  *
  */
 public class ConfigLoggingHandler extends FormHandler {
+    /** Handler for logging configuration form submissions. */
+    public ConfigLoggingHandler() {}
     private boolean _shouldSave;
     private String _levels;
     private String _defaultLevel;
@@ -33,29 +35,37 @@ public class ConfigLoggingHandler extends FormHandler {
         }
     }
 
+    /** Whether to save the configuration. */
     public void setShouldsave(String moo) { _shouldSave = true; }
 
+    /** The log levels configuration string. */
     public void setLevels(String levels) {
         _levels = (levels != null ? levels.trim() : null);
     }
+    /** The default log level. */
     public void setDefaultloglevel(String level) {
         _defaultLevel = (level != null ? level.trim() : null);
     }
+    /** The log file name. */
     public void setLogfilename(String filename) {
         _filename = (filename != null ? filename.trim() : null);
     }
+    /** The log record format. */
     public void setLogformat(String format) {
         _recordFormat = (format != null ? format.trim() : null);
     }
+    /** The log date format pattern. */
     public void setLogdateformat(String format) {
         _dateFormat = (format != null ? format.trim() : null);
     }
+    /** The log file size limit. */
     public void setLogfilesize(String size) {
         _fileSize = (size != null ? size.trim() : null);
     }
 
     /**
      *  Set whether to compress log files.
+     *  @param foo ignored
      *  @since 0.9.57
      */
     public void setLogcompress(String foo) {
@@ -64,6 +74,7 @@ public class ConfigLoggingHandler extends FormHandler {
 
     /**
      *  Set a new class name for log level override.
+     *  @param s the class name
      *  @since 0.8.1
      */
     public void setNewlogclass(String s) {
@@ -73,6 +84,7 @@ public class ConfigLoggingHandler extends FormHandler {
 
     /**
      *  Set the log level for a new class override.
+     *  @param s the log level
      *  @since 0.8.1
      */
     public void setNewloglevel(String s) {

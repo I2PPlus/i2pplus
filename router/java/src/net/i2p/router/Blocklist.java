@@ -203,6 +203,7 @@ public class Blocklist {
     /**
      *  Check if blocklist is enabled.
      *
+     *  @return true if blocklist is enabled
      *  @since 0.9.70
      */
     public boolean isBlocklistEnabled() { return _blocklistEnabled; }
@@ -210,6 +211,7 @@ public class Blocklist {
     /**
      *  Check if Tor blocklist is enabled.
      *
+     *  @return true if Tor blocklist is enabled
      *  @since 0.9.70
      */
     public boolean isTorBlocklistEnabled() { return _blocklistTorEnabled; }
@@ -217,6 +219,7 @@ public class Blocklist {
     /**
      *  Check if country blocklist is enabled.
      *
+     *  @return true if country blocklist is enabled
      *  @since 0.9.70
      */
     public boolean isCountryBlocklistEnabled() { return _blocklistCountryEnabled; }

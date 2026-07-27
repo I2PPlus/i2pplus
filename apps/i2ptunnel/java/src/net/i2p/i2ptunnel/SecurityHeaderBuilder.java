@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  * Builds and manages HTTP security headers for server responses.
- * <p>
+ *
  * This class provides static methods for adding security-related HTTP headers
  * to server responses. It handles:
  * <ul>
@@ -16,13 +16,11 @@ import java.util.Map;
  *   <li>X-XSS-Protection header</li>
  *   <li>X-Content-Type-Options header</li>
  * </ul>
- * </p>
- * <p>
+ *
  * Some headers are only added based on the MIME type of the response content.
  * For example, Referrer-Policy and Allow headers are only added for HTML content.
  * Cache-Control policies vary based on whether the content is static (immutable)
  * or dynamic.
- * </p>
  *
  * @since 0.10.0
  */
@@ -33,11 +31,10 @@ public class SecurityHeaderBuilder {
 
     /**
      * Adds all appropriate security headers to a response.
-     * <p>
+     *
      * This method adds security headers based on the MIME type of the response.
      * Headers are only added if they are not already present in the response.
-     * </p>
-     * <p>
+     *
      * The following headers may be added:
      * <ul>
      *   <li>Referrer-Policy: same-origin (for HTML/XML/JSON content)</li>
@@ -46,7 +43,6 @@ public class SecurityHeaderBuilder {
      *   <li>X-XSS-Protection: 1; mode=block</li>
      *   <li>X-Content-Type-Options: nosniff</li>
      * </ul>
-     * </p>
      *
      * @param headers the HTTP response headers map to modify
      * @param mimeType the MIME type of the response content; may be null

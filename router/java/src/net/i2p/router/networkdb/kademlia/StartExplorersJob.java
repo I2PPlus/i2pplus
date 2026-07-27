@@ -37,6 +37,7 @@ class StartExplorersJob extends JobImpl {
     private static final int LOW_ROUTERS = 3000;
     private static final int MAX_ROUTERS = 5000;
     private static final int MIN_FFS = 400;
+    /** Low floodfills threshold */
     static final int LOW_FFS = 2 * MIN_FFS;
     private static final long MAX_LAG = 1000;
     private static final long MAX_MSG_DELAY = 650;
@@ -44,8 +45,11 @@ class StartExplorersJob extends JobImpl {
     private static final long DELAY_SPREAD_VARIANCE = 500;
     private static final long LAGGED_DELAY_MS = 3 * 60 * 1000L; // 3 minutes
 
+    /** Property to configure exploration delay */
     static final String PROP_EXPLORE_DELAY = "router.explorePeersDelay";
+    /** Property to configure number of buckets to explore */
     static final String PROP_EXPLORE_BUCKETS = "router.exploreBuckets";
+    /** Property to force exploration even when floodfill */
     static final String PROP_FORCE_EXPLORE = "router.exploreWhenFloodfill";
 
     private final Log _log;
@@ -64,6 +68,9 @@ class StartExplorersJob extends JobImpl {
         _facade = facade;
     }
 
+    /**
+     * getName.
+     */
     @Override
     public String getName() {
         return "Start NetDb Explorers";

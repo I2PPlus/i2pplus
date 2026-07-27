@@ -6,7 +6,7 @@
  * to EdDSA-Java.
  *
  * You should have received a copy of the CC0 legalcode along with this
- * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>lt;https://creativecommons.org/publicdomain/zero/1.0/<https://creativecommons.org/publicdomain/zero/1.0/>gt;.
+ * work. If not, see &lt;https://creativecommons.org/publicdomain/zero/1.0/&gt;.
  *
  */
 package net.i2p.crypto.eddsa;
@@ -37,11 +37,17 @@ import java.util.Arrays;
  */
 public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     private static final long serialVersionUID = 23495873459878957L;
+    /** Seed */
     private final byte[] seed;
+    /** H */
     private final byte[] h;
+    /** A */
     private final byte[] a;
+    /** A */
     private final GroupElement A;
+    /** Abyte */
     private final byte[] Abyte;
+    /** Ed dsa spec */
     private final EdDSAParameterSpec edDsaSpec;
 
     // OID 1.3.101.xxx
@@ -50,6 +56,11 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     private static final int OID_BYTE = 11;
     private static final int IDLEN_BYTE = 6;
 
+    /**
+     * EdDSAPrivateKey.
+     *
+     * @param spec the private key specification
+     */
     public EdDSAPrivateKey(EdDSAPrivateKeySpec spec) {
         this.seed = spec.getSeed();
         this.h = spec.getH();
@@ -60,17 +71,26 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     }
 
     /**
-     *  @since 0.9.25
+     * Create from PKCS#8.
+     *
+     * @param spec the PKCS#8 key specification
+     * @throws InvalidKeySpecException if the spec is invalid
      */
     public EdDSAPrivateKey(PKCS8EncodedKeySpec spec) throws InvalidKeySpecException {
         this(new EdDSAPrivateKeySpec(decode(spec.getEncoded()), EdDSANamedCurveTable.ED_25519_CURVE_SPEC));
     }
 
+    /**
+     * getAlgorithm.
+     */
     @Override
     public String getAlgorithm() {
         return KEY_ALGORITHM;
     }
 
+    /**
+     * getFormat.
+     */
     @Override
     public String getFormat() {
         return "PKCS#8";
@@ -253,6 +273,9 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
         }
     }
 
+    /**
+     * getParams.
+     */
     @Override
     public EdDSAParameterSpec getParams() {
         return edDsaSpec;

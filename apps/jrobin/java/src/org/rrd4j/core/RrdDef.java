@@ -52,12 +52,18 @@ public class RrdDef {
     /** Default RRD file format version. */
     public static final int DEFAULTVERSION = 2;
 
+    /** ignored */
     private URI uri;
+    /** ignored */
     private long startTime = Util.getTime() + DEFAULT_INITIAL_SHIFT;
+    /** ignored */
     private long step = DEFAULT_STEP;
+    /** ignored */
     private int version = DEFAULTVERSION;
 
+    /** ignored */
     private final List<DsDef> dsDefs = new ArrayList<>();
+    /** ignored */
     private final List<ArcDef> arcDefs = new ArrayList<>();
 
     /**
@@ -575,10 +581,12 @@ public class RrdDef {
         return sb.toString().trim();
     }
 
+    /** @return the rrdtool command */
     String getRrdToolCommand() {
         return dump();
     }
 
+    /** Remove datasource */
     void removeDatasource(String dsName) {
         for (int i = 0; i < dsDefs.size(); i++) {
             DsDef dsDef = dsDefs.get(i);
@@ -590,10 +598,12 @@ public class RrdDef {
         throw new IllegalArgumentException("Could not find datasource named '" + dsName + "'");
     }
 
+    /** Save single datasource */
     void saveSingleDatasource(String dsName) {
         dsDefs.removeIf(dsDef -> !dsDef.getDsName().equals(dsName));
     }
 
+    /** Remove archive */
     void removeArchive(ConsolFun consolFun, int steps) {
         ArcDef arcDef = findArchive(consolFun, steps);
         if (!arcDefs.remove(arcDef)) {
@@ -602,6 +612,7 @@ public class RrdDef {
         }
     }
 
+    /** @return the archive */
     ArcDef findArchive(ConsolFun consolFun, int steps) {
         for (ArcDef arcDef : arcDefs) {
             if (arcDef.getConsolFun() == consolFun && arcDef.getSteps() == steps) {
@@ -763,6 +774,7 @@ public class RrdDef {
         return calculateSize(dsCount, arcCount, rowsCount, dsNames);
     }
 
+    /** Calculate estimated storage size */
     static long calculateSize(int dsCount, int arcCount, int rowsCount, String[] dsNames) {
         int postStorePayload = 0;
         for (String n : dsNames) {
@@ -841,6 +853,9 @@ public class RrdDef {
         return true;
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         final int prime = 31;

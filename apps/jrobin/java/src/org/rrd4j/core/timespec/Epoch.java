@@ -33,6 +33,7 @@ import org.rrd4j.core.Util;
  * The current timestamp is displayed in the title bar :)
  */
 public class Epoch extends JFrame {
+    /** Supported formats */
     private final String[] supportedFormats = {
         "MM/dd/yy HH:mm:ss",
         "dd.MM.yy HH:mm:ss",
@@ -51,14 +52,21 @@ public class Epoch extends JFrame {
         "HH:mm:ss yy-MM-dd"
     };
 
+    /** Parsers */
     private final SimpleDateFormat[] parsers = new SimpleDateFormat[supportedFormats.length];
+    /** Help text */
     private final String helpText;
 
+    /** Top label */
     private final JLabel topLabel = new JLabel("Enter timestamp or readable date:");
+    /** Input field */
     private final JTextField inputField = new JTextField(25);
+    /** Convert button */
     private final JButton convertButton = new JButton("Convert");
+    /** Help button */
     private final JButton helpButton = new JButton("Help");
 
+    /** O u t p u t  d a t e  f o r m a t */
     private final SimpleDateFormat OUTPUT_DATE_FORMAT =
             new SimpleDateFormat("MM/dd/yy HH:mm:ss EEE");
 

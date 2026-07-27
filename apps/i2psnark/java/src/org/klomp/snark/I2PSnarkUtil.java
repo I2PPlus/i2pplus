@@ -118,17 +118,53 @@ public class I2PSnarkUtil implements DisconnectListener {
     private String _apiKey;
     private static final int EEPGET_CONNECT_TIMEOUT = 60 * 1000;
     private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 15 * 1000;
+    /**
+     * DEFAULT_STARTUP_DELAY.
+     */
     public static final int DEFAULT_STARTUP_DELAY = 3;
+    /**
+     * DEFAULT_COLLAPSE_PANELS.
+     */
     public static final boolean DEFAULT_COLLAPSE_PANELS = true;
+    /**
+     * DEFAULT_SHOW_STATUSFILTER.
+     */
     public static final boolean DEFAULT_SHOW_STATUSFILTER = false;
+    /**
+     * DEFAULT_ENABLE_LIGHTBOX.
+     */
     public static final boolean DEFAULT_ENABLE_LIGHTBOX = true;
+    /**
+     * DEFAULT_ENABLE_ADDCREATE.
+     */
     public static final boolean DEFAULT_ENABLE_ADDCREATE = false;
+    /**
+     * DEFAULT_USE_OPENTRACKERS.
+     */
     public static final boolean DEFAULT_USE_OPENTRACKERS = true;
+    /**
+     * DEFAULT_VARY_INBOUND_HOPS.
+     */
     public static final boolean DEFAULT_VARY_INBOUND_HOPS = false;
+    /**
+     * DEFAULT_VARY_OUTBOUND_HOPS.
+     */
     public static final boolean DEFAULT_VARY_OUTBOUND_HOPS = false;
+    /**
+     * MAX_CONNECTIONS.
+     */
     public static final int MAX_CONNECTIONS = 300; // per torrent
+    /**
+     * PROP_MAX_BW.
+     */
     public static final String PROP_MAX_BW = "i2cp.outboundBytesPerSecond";
+    /**
+     * DEFAULT_USE_DHT.
+     */
     public static final boolean DEFAULT_USE_DHT = true;
+    /**
+     * EEPGET_USER_AGENT.
+     */
     public static final String EEPGET_USER_AGENT = "I2PSnark";
     private static final boolean ENABLE_UDP_TRACKER = true;
     private static final List<String> HIDDEN_I2CP_OPTS =
@@ -141,6 +177,9 @@ public class I2PSnarkUtil implements DisconnectListener {
                         "outbound.quantity"
                     });
 
+    /**
+     * I2PSnarkUtil.
+     */
     public I2PSnarkUtil(I2PAppContext ctx) {
         this(ctx, "i2psnark", null);
     }
@@ -166,6 +205,15 @@ public class I2PSnarkUtil implements DisconnectListener {
         _shouldUseDHT = DEFAULT_USE_DHT;
         _collapsePanels = DEFAULT_COLLAPSE_PANELS;
         _showStatusFilter = DEFAULT_SHOW_STATUSFILTER;
+        /**
+         * The value.
+         */
+        /**
+         * The value.
+         */
+        /**
+         * The value.
+         */
         _enableLightbox = DEFAULT_ENABLE_LIGHTBOX;
         _enableAddCreate = DEFAULT_ENABLE_ADDCREATE;
         _enableRatings = _enableComments = true;
@@ -225,6 +273,9 @@ public class I2PSnarkUtil implements DisconnectListener {
         setMaxUpBW(_maxUpBW); // This updates the session options and tells the router
     }
 
+    /**
+     * setMaxUploaders.
+     */
     public void setMaxUploaders(int limit) {
         _maxUploaders = limit;
     }
@@ -251,18 +302,33 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
     }
 
+    /**
+     * setMaxConnections.
+     */
     public void setMaxConnections(int limit) {
         _maxConnections = limit;
     }
 
+    /**
+     * setStartupDelay.
+     */
     public void setStartupDelay(int minutes) {
         _startupDelay = minutes;
+    /**
+     * The value.
+     */
     }
 
+    /**
+     * getI2CPHost.
+     */
     public String getI2CPHost() {
         return _i2cpHost;
     }
 
+    /**
+     * getI2CPPort.
+     */
     public int getI2CPPort() {
         return _i2cpPort;
     }
@@ -276,18 +342,30 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
     }
 
+    /**
+     * getEepProxyHost.
+     */
     public String getEepProxyHost() {
         return _proxyHost;
     }
 
+    /**
+     * getEepProxyPort.
+     */
     public int getEepProxyPort() {
         return _proxyPort;
     }
 
+    /**
+     * getEepProxySet.
+     */
     public boolean getEepProxySet() {
         return _shouldProxy;
     }
 
+    /**
+     * getMaxUploaders.
+     */
     public int getMaxUploaders() {
         return _maxUploaders;
     }
@@ -299,14 +377,23 @@ public class I2PSnarkUtil implements DisconnectListener {
         return _maxUpBW;
     }
 
+    /**
+     * getMaxConnections.
+     */
     public int getMaxConnections() {
         return _maxConnections;
     }
 
+    /**
+     * getStartupDelay.
+     */
     public int getStartupDelay() {
         return _startupDelay;
     }
 
+    /**
+     * The value.
+     */
     /**
      * @since 0.8.9
      */
@@ -321,6 +408,9 @@ public class I2PSnarkUtil implements DisconnectListener {
         _areFilesPublic = yes;
     }
 
+    /**
+     * The value.
+     */
     /**
      * @since 0.9.66+
      */
@@ -364,6 +454,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     };
 
     /**
+     * Get the api key.
      * @since 0.9.67
      */
     public String getAPIKey() {
@@ -371,6 +462,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     };
 
     /**
+     * Set the api.
      * @since 0.9.67
      */
     public void setAPI(String target, String key) {
@@ -389,6 +481,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Get the vary inbound hops.
      * @since 0.9.64+
      */
     public boolean getVaryInboundHops() {
@@ -396,6 +489,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Get the vary outbound hops.
      * @since 0.9.64+
      */
     public boolean getVaryOutboundHops() {
@@ -544,6 +638,9 @@ public class I2PSnarkUtil implements DisconnectListener {
         return (_manager != null);
     }
 
+    /**
+     * sessionDisconnected.
+     */
     @Override
     public void sessionDisconnected() {
         synchronized (this) {
@@ -575,6 +672,9 @@ public class I2PSnarkUtil implements DisconnectListener {
         return _udpTracker;
     }
 
+    /**
+     * connected.
+     */
     public boolean connected() {
         return _manager != null;
     }
@@ -673,10 +773,16 @@ public class I2PSnarkUtil implements DisconnectListener {
     private class Unbanlist extends SimpleTimer2.TimedEvent {
         private Hash _dest;
 
+        /**
+         * Unbanlist.
+         */
         public Unbanlist(Hash dest) {
             _dest = dest;
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             _banlist.remove(_dest);
         }
@@ -702,6 +808,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * get.
      * @param retries if &gt; 0, set timeout to a few seconds
      */
     public File get(String url, boolean rewrite, int retries) {
@@ -869,6 +976,9 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
     }
 
+    /**
+     * getServerSocket.
+     */
     public I2PServerSocket getServerSocket() {
         I2PSocketManager mgr = _manager;
         if (mgr != null) {
@@ -878,6 +988,9 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
     }
 
+    /**
+     * The value.
+     */
     /** Full Base64 of Destination */
     public String getOurIPString() {
         Destination dest = getMyDestination();
@@ -902,7 +1015,12 @@ public class I2PSnarkUtil implements DisconnectListener {
         return null;
     }
 
-    /** Base64 only - static (no naming service) */
+    /**
+     * Resolves a base64-encoded destination string. Does not use naming service.
+     *
+     * @param ip destination string, with or without .i2p suffix
+     * @return the Destination, or null if parsing fails
+     */
     static Destination getDestinationFromBase64(String ip) {
         if (ip == null) {
             return null;
@@ -975,6 +1093,12 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
     }
 
+    /**
+     * Look up a destination by name. Uses naming service for .i2p names, raw base64 otherwise.
+     *
+     * @param name hostname or base64 destination
+     * @return the base64-encoded destination, or null if not found
+     */
     public String lookup(String name) {
         Destination dest = getDestination(name);
         if (dest == null) {
@@ -1045,14 +1169,23 @@ public class I2PSnarkUtil implements DisconnectListener {
         return _openTrackers;
     }
 
+    /**
+     * setUseOpenTrackers.
+     */
     public void setUseOpenTrackers(boolean yes) {
         _shouldUseOT = yes;
     }
 
+    /**
+     * shouldUseOpenTrackers.
+     */
     public boolean shouldUseOpenTrackers() {
         return _shouldUseOT;
     }
 
+    /**
+     * The value.
+     */
     /**
      * @since DHT
      */

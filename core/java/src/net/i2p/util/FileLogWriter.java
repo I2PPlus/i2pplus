@@ -40,6 +40,9 @@ class FileLogWriter extends LogWriter {
     private static final int MAX_DISKFULL_MESSAGES = 8;
     private int _diskFullMessageCount;
 
+    /**
+     * FileLogWriter.
+     */
     public FileLogWriter(LogManager manager) {
         super(manager);
     }
@@ -58,11 +61,17 @@ class FileLogWriter extends LogWriter {
         return rv;
     }
 
+    /**
+     * writeRecord.
+     */
     @Override
     protected synchronized void writeRecord(LogRecord rec, String formatted) {
         writeRecord(rec.getPriority(), formatted);
     }
 
+    /**
+     * writeRecord.
+     */
     @Override
     protected synchronized void writeRecord(int priority, String val) {
         if (val == null) return;
@@ -253,16 +262,25 @@ class FileLogWriter extends LogWriter {
     private static class Gzipper extends I2PAppThread {
         private final File _f;
 
+        /**
+         * Gzipper.
+         */
         public Gzipper(File f) {
             super("Log file compressor");
             _f = f;
         }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             compress();
         }
 
+        /**
+         * compress.
+         */
         public void compress() {
             File to = new File(_f.getPath() + ".gz");
             InputStream in = null;

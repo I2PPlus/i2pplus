@@ -61,6 +61,9 @@ public class SOA extends Data {
      */
     public final long /* unsigned int */ minimum;
 
+    /**
+     * parse.
+     */
     public static SOA parse(DataInputStream dis, byte[] data) throws IOException {
         DnsName mname = DnsName.parse(dis, data);
         DnsName rname = DnsName.parse(dis, data);
@@ -72,10 +75,16 @@ public class SOA extends Data {
         return new SOA(mname, rname, serial, refresh, retry, expire, minimum);
     }
 
+    /**
+     * SOA.
+     */
     public SOA(String mname, String rname, long serial, int refresh, int retry, int expire, long minimum) {
         this(DnsName.from(mname), DnsName.from(rname), serial, refresh, retry, expire, minimum);
     }
 
+    /**
+     * SOA.
+     */
     public SOA(DnsName mname, DnsName rname, long serial, int refresh, int retry, int expire, long minimum) {
         this.mname = mname;
         this.rname = rname;
@@ -86,11 +95,17 @@ public class SOA extends Data {
         this.minimum = minimum;
     }
 
+    /**
+     * getType.
+     */
     @Override
     public TYPE getType() {
         return TYPE.SOA;
     }
 
+    /**
+     * serialize.
+     */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
         mname.writeToStream(dos);
@@ -102,6 +117,9 @@ public class SOA extends Data {
         dos.writeInt((int) minimum);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder().append(mname).append(". ").append(rname).append(". ").append(serial).append(' ').append(refresh).append(' ').append(retry).append(' ').append(expire).append(' ').append(minimum);

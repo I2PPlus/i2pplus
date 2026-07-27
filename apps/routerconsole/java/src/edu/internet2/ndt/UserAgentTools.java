@@ -16,6 +16,9 @@ package edu.internet2.ndt;
  */
 public class UserAgentTools {
 
+    /**
+     * getArray.
+     */
     public static String[] getArray(String a, String b, String c) {
         String[] res = new String[3];
         res[0] = a;
@@ -24,5 +27,8 @@ public class UserAgentTools {
         return res;
     }
 
+    /**
+     * getBrowser.
+     */
     public static String[] getBrowser(String userAgent) {return getArray("?", "?", "?");}
 }

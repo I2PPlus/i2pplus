@@ -35,6 +35,9 @@ class FragmentedMessage {
     private static final int MAX_FRAGMENTS = 64;
     private static final int MAX_FRAGMENT_SIZE = 996;
 
+    /**
+     * FragmentedMessage.
+     */
     public FragmentedMessage(I2PAppContext ctx, long messageId) {
         _context = ctx;
         _log = ctx.logManager().getLog(FragmentedMessage.class);
@@ -124,10 +127,22 @@ class FragmentedMessage {
         return true;
     }
 
+    /**
+     * getMessageId.
+     */
     public long getMessageId() { return _messageId; }
+    /**
+     * getTargetRouter.
+     */
     public Hash getTargetRouter() { return _toRouter; }
+    /**
+     * getTargetTunnel.
+     */
     public TunnelId getTargetTunnel() { return _toTunnel; }
 
+    /**
+     * getFragmentCount.
+     */
     public int getFragmentCount() {
         int found = 0;
         for (int i = 0; i < _fragments.length; i++)
@@ -139,6 +154,9 @@ class FragmentedMessage {
     /** used in the fragment handler so we can cancel the expire event on success */
     public SimpleTimer2.TimedEvent getExpireEvent() { return _expireEvent; }
 
+    /**
+     * setExpireEvent.
+     */
     public void setExpireEvent(SimpleTimer2.TimedEvent evt) { _expireEvent = evt; }
 
     /** have we received all of the fragments? */
@@ -150,6 +168,9 @@ class FragmentedMessage {
                 return false;
         return true;
     }
+    /**
+     * getCompleteSize.
+     */
     public int getCompleteSize() {
         if (!_lastReceived)
             throw new IllegalStateException("don't get the completed size when we're not complete!");
@@ -171,6 +192,9 @@ class FragmentedMessage {
 
     /** how long has this fragmented message been alive?  */
     public long getLifetime() { return _context.clock().now() - _createdOn; }
+    /**
+     * getReleased.
+     */
     public boolean getReleased() { return _completed; }
 
     private void writeComplete(byte[] target, int offset) {
@@ -187,6 +211,9 @@ class FragmentedMessage {
         _completed = true;
     }
 
+    /**
+     * toByteArray.
+     */
     public byte[] toByteArray() {
         synchronized (this) {
             if (_releasedAfter > 0) return null;
@@ -197,7 +224,13 @@ class FragmentedMessage {
         }
     }
 
+    /**
+     * getReleasedAfter.
+     */
     public synchronized long getReleasedAfter() { return _releasedAfter; }
+    /**
+     * failed.
+     */
     public void failed() {
         synchronized (this) {
             releaseFragments();

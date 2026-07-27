@@ -28,6 +28,7 @@ import net.i2p.util.TranslateReader;
 public class TranslateSVGServlet extends HttpServlet {
 
     private static final long serialVersionUID = 18638760L;
+    /**  context */
     private final I2PAppContext _context;
     private static final String DIR = "/svg";
 

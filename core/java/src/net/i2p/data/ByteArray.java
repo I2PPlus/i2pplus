@@ -17,8 +17,11 @@ import java.io.Serializable;
  *
  */
 public class ByteArray implements Serializable, Comparable<ByteArray> {
+    /**  data */
     private byte[] _data;
+    /**  valid */
     private int _valid;
+    /**  offset */
     private int _offset;
 
     /**
@@ -108,6 +111,9 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
         _offset = offset;
     }
 
+    /**
+     * equals.
+     */
     @Override
     public final boolean equals(Object o) {
         if (o == this) return true;
@@ -127,16 +133,25 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
         return (llen == rlen) && DataHelper.eq(lhs, loff, rhs, roff, llen);
     }
 
+    /**
+     * compareTo.
+     */
     @Override
     public final int compareTo(ByteArray ba) {
         return DataHelper.compareTo(_data, ba.getData());
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public final int hashCode() {
         return DataHelper.hashCode(getData());
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return super.toString() + "/" + DataHelper.toString(getData(), 32) + "." + _valid;

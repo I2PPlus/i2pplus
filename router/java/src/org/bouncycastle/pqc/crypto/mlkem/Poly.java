@@ -14,6 +14,9 @@ class Poly
 
     private Symmetric symmetric;
 
+    /**
+     * Poly.
+     */
     public Poly(MLKEMEngine engine)
     {
         this.coeffs = new short[MLKEMEngine.KyberN];
@@ -24,37 +27,58 @@ class Poly
         this.symmetric = engine.getSymmetric();
     }
 
+    /**
+     * getCoeffIndex.
+     */
     public short getCoeffIndex(int i)
     {
         return this.coeffs[i];
     }
 
+    /**
+     * getCoeffs.
+     */
     public short[] getCoeffs()
     {
         return this.coeffs;
     }
 
+    /**
+     * setCoeffIndex.
+     */
     public void setCoeffIndex(int i, short val)
     {
         this.coeffs[i] = val;
     }
 
+    /**
+     * setCoeffs.
+     */
     public void setCoeffs(short[] coeffs)
     {
         this.coeffs = coeffs;
     }
 
+    /**
+     * polyNtt.
+     */
     public void polyNtt()
     {
         this.setCoeffs(Ntt.ntt(this.getCoeffs()));
         this.reduce();
     }
 
+    /**
+     * polyInverseNttToMont.
+     */
     public void polyInverseNttToMont()
     {
         this.setCoeffs(Ntt.invNtt(this.getCoeffs()));
     }
 
+    /**
+     * reduce.
+     */
     public void reduce()
     {
         int i;
@@ -64,6 +88,9 @@ class Poly
         }
     }
 
+    /**
+     * baseMultMontgomery.
+     */
     public static void baseMultMontgomery(Poly r, Poly a, Poly b)
     {
         int i;
@@ -80,6 +107,9 @@ class Poly
         }
     }
 
+    /**
+     * addCoeffs.
+     */
     public void addCoeffs(Poly b)
     {
         int i;
@@ -89,6 +119,9 @@ class Poly
         }
     }
 
+    /**
+     * convertToMont.
+     */
     public void convertToMont()
     {
         int i;
@@ -99,6 +132,9 @@ class Poly
         }
     }
 
+    /**
+     * compressPoly.
+     */
     public byte[] compressPoly()
     {
         int i, j;
@@ -184,6 +220,9 @@ class Poly
         return r;
     }
 
+    /**
+     * decompressPoly.
+     */
     public void decompressPoly(byte[] compressedPolyCipherText)
     {
         int i, count = 0;
@@ -225,6 +264,9 @@ class Poly
 
     }
 
+    /**
+     * toBytes.
+     */
     public byte[] toBytes()
     {
         byte[] r = new byte[MLKEMEngine.KyberPolyBytes];
@@ -243,6 +285,9 @@ class Poly
 
     }
 
+    /**
+     * fromBytes.
+     */
     public void fromBytes(byte[] inpBytes)
     {
         int i;
@@ -263,6 +308,9 @@ class Poly
         }
     }
 
+    /**
+     * toMsg.
+     */
     public byte[] toMsg()
     {
         int LOWER = MLKEMEngine.KyberQ >>> 2;
@@ -289,6 +337,9 @@ class Poly
         return outMsg;
     }
 
+    /**
+     * fromMsg.
+     */
     public void fromMsg(byte[] msg)
     {
         int i, j;
@@ -307,6 +358,9 @@ class Poly
         }
     }
 
+    /**
+     * conditionalSubQ.
+     */
     public void conditionalSubQ()
     {
         int i;
@@ -316,6 +370,9 @@ class Poly
         }
     }
 
+    /**
+     * getEta1Noise.
+     */
     public void getEta1Noise(byte[] seed, byte nonce)
     {
         byte[] buf = new byte[MLKEMEngine.KyberN * eta1 / 4];
@@ -323,6 +380,9 @@ class Poly
         CBD.mlkemCBD(this, buf, eta1);
     }
 
+    /**
+     * getEta2Noise.
+     */
     public void getEta2Noise(byte[] seed, byte nonce)
     {
         byte[] buf = new byte[MLKEMEngine.KyberN * eta2 / 4];
@@ -330,6 +390,9 @@ class Poly
         CBD.mlkemCBD(this, buf, eta2);
     }
 
+    /**
+     * polySubtract.
+     */
     public void polySubtract(Poly b)
     {
         int i;
@@ -339,6 +402,9 @@ class Poly
         }
     }
 
+    /**
+     * toString.
+     */
     public String toString()
     {
         StringBuffer out = new StringBuffer();
@@ -355,4 +421,3 @@ class Poly
         return out.toString();
     }
 }
-

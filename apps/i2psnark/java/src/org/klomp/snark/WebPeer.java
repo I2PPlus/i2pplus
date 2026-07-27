@@ -37,6 +37,9 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     private int maxRequests;
 
     // to be recognized by the UI
+    /**
+     * IDBytes.
+     */
     public static final byte[] IDBytes = DataHelper.getASCII("WebSeedBEP19");
     private static final long HEADER_TIMEOUT = (long) 60 * 1000;
     private static final long TOTAL_TIMEOUT = 10 * (long) 60 * 1000;
@@ -74,6 +77,9 @@ class WebPeer extends Peer implements EepGet.StatusListener {
         _uri = uri;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return "WebSeed " + _uri;
@@ -441,11 +447,17 @@ class WebPeer extends Peer implements EepGet.StatusListener {
         }
     }
 
+    /**
+     * getMaxPipeline.
+     */
     @Override
     public int getMaxPipeline() {
         return maxRequests;
     }
 
+    /**
+     * isConnected.
+     */
     @Override
     public boolean isConnected() {
         synchronized (this) {
@@ -458,6 +470,9 @@ class WebPeer extends Peer implements EepGet.StatusListener {
         if (thread != null) thread.interrupt();
     }
 
+    /**
+     * have.
+     */
     @Override
     public void have(int piece) { /* no-op */ }
 
@@ -469,33 +484,54 @@ class WebPeer extends Peer implements EepGet.StatusListener {
         addRequest();
     }
 
+    /**
+     * isInterested.
+     */
     @Override
     public boolean isInterested() {
         return false;
     }
 
+    /**
+     * setInteresting.
+     */
     @Deprecated
     @Override
     public void setInteresting(boolean interest) { /* no-op */ }
 
+    /**
+     * isInteresting.
+     */
     @Override
     public boolean isInteresting() {
         return true;
     }
 
+    /**
+     * setChoking.
+     */
     @Override
     public void setChoking(boolean choke) { /* no-op */ }
 
+    /**
+     * isChoking.
+     */
     @Override
     public boolean isChoking() {
         return false;
     }
 
+    /**
+     * isChoked.
+     */
     @Override
     public boolean isChoked() {
         return false;
     }
 
+    /**
+     * getInactiveTime.
+     */
     @Override
     public long getInactiveTime() {
         if (lastRcvd <= 0) return -1;
@@ -503,22 +539,37 @@ class WebPeer extends Peer implements EepGet.StatusListener {
         return now - lastRcvd;
     }
 
+    /**
+     * getMaxInactiveTime.
+     */
     @Override
     public long getMaxInactiveTime() {
         return PeerCoordinator.MAX_INACTIVE;
     }
 
+    /**
+     * keepAlive.
+     */
     @Override
     public void keepAlive() { /* no-op */ }
 
+    /**
+     * retransmitRequests.
+     */
     @Override
     public void retransmitRequests() { /* no-op */ }
 
+    /**
+     * completed.
+     */
     @Override
     public int completed() {
         return metainfo.getPieces();
     }
 
+    /**
+     * isCompleted.
+     */
     @Override
     public boolean isCompleted() {
         return true;

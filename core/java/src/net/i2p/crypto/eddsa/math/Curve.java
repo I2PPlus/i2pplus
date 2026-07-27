@@ -6,7 +6,7 @@
  * to EdDSA-Java.
  *
  * You should have received a copy of the CC0 legalcode along with this
- * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>lt;https://creativecommons.org/publicdomain/zero/1.0/<https://creativecommons.org/publicdomain/zero/1.0/>gt;.
+ * work. If not, see &lt;https://creativecommons.org/publicdomain/zero/1.0/&gt;.
  *
  */
 package net.i2p.crypto.eddsa.math;
@@ -17,24 +17,30 @@ import java.io.Serializable;
  * A twisted Edwards curve.
  * Points on the curve satisfy $-x^2 + y^2 = 1 + d x^2y^2$
  *
- * @since 0.9.15
  * @author str4d
- *
  */
 public class Curve implements Serializable {
     private static final long serialVersionUID = 4578920872509827L;
+    /** F */
     private final Field f;
+    /** D */
     private final FieldElement d;
+    /** D2 */
     private final FieldElement d2;
+    /** I */
     private final FieldElement I;
 
+    /** Zero p2 */
     private final GroupElement zeroP2;
+    /** Zero p3 */
     private final GroupElement zeroP3;
+    /** Zero p3 precomputed double */
     private final GroupElement zeroP3PrecomputedDouble;
+    /** Zero precomp */
     private final GroupElement zeroPrecomp;
 
     /**
-     * Creates a new twisted Edwards curve.
+     * Create a twisted Edwards curve.
      *
      * @param f the finite field
      * @param d the curve parameter d
@@ -55,7 +61,7 @@ public class Curve implements Serializable {
     }
 
     /**
-     * Returns the finite field of this curve.
+     * Return the field.
      *
      * @return the field
      */
@@ -64,16 +70,16 @@ public class Curve implements Serializable {
     }
 
     /**
-     * Returns the curve parameter d.
+     * Return the curve parameter d.
      *
-     * @return the parameter d
+     * @return the curve parameter d
      */
     public FieldElement getD() {
         return d;
     }
 
     /**
-     * Returns 2 * d.
+     * Return twice the curve parameter d.
      *
      * @return 2 * d
      */
@@ -82,7 +88,7 @@ public class Curve implements Serializable {
     }
 
     /**
-     * Returns the square root of -1 in this field.
+     * Return the square root of -1.
      *
      * @return the square root of -1
      */
@@ -91,10 +97,10 @@ public class Curve implements Serializable {
     }
 
     /**
-     * Returns the neutral (zero) element in the given representation.
+     * Return the zero element for the given representation.
      *
      * @param repr the representation type
-     * @return the zero element, or null if the representation is unsupported
+     * @return the zero element, or null if unsupported
      */
     public GroupElement getZero(GroupElement.Representation repr) {
         switch (repr) {
@@ -107,32 +113,24 @@ public class Curve implements Serializable {
     }
 
     /**
-     * Creates a point on this curve from an encoded byte array.
+     * Create a point from an encoded representation.
      *
      * @param P the encoded point
-     * @param precompute whether to precompute lookup tables
-     * @return the group element representing the point
+     * @param precompute whether to precompute
+     * @return the group element
      */
     public GroupElement createPoint(byte[] P, boolean precompute) {
         GroupElement ge = new GroupElement(this, P, precompute);
         return ge;
     }
 
-    /**
-     * Returns a hash code for this curve.
-     *
-     *  @since 0.9.25
-     */
+    /** @return hash code */
     @Override
     public int hashCode() {
         return f.hashCode() ^ d.hashCode() ^ I.hashCode();
     }
 
-    /**
-     * Compares this curve to another object for equality.
-     *
-     *  @since 0.9.25
-     */
+    /** @param o the object @return true if equal */
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;

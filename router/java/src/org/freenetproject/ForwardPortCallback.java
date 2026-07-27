@@ -8,7 +8,11 @@ import java.util.Map;
  */
 public interface ForwardPortCallback {
 
-	/** Called to indicate status on one or more forwarded ports. */
+	/**
+	 * Called to indicate status on one or more forwarded ports.
+	 *
+	 * @param statuses the port status map
+	 */
 	public void portForwardStatus(Map<ForwardPort,ForwardPortStatus> statuses);
 
 }

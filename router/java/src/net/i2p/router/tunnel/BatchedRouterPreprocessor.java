@@ -12,6 +12,7 @@ import net.i2p.util.SystemVersion;
  */
 class BatchedRouterPreprocessor extends BatchedPreprocessor {
     private final TunnelCreatorConfig _config;
+    /** the hop config for inbound gateways */
     protected final HopConfig _hopConfig;
     private final long _sendDelay;
 
@@ -30,7 +31,12 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
     /** for IBGWs for efficiency (not our data) */
     public static final int DEFAULT_BATCH_FREQUENCY = SystemVersion.isSlow() ? 75 : 50;
 
-    /** for OBGWs */
+    /**
+     * Create a preprocessor for outbound gateway tunnels.
+     *
+     * @param ctx the router context
+     * @param cfg the tunnel creator config
+     */
     public BatchedRouterPreprocessor(RouterContext ctx, TunnelCreatorConfig cfg) {
         super(ctx, getName(cfg));
         _config = cfg;
@@ -38,7 +44,12 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
         _sendDelay = initialSendDelay();
     }
 
-    /** for IBGWs */
+    /**
+     * Create a preprocessor for inbound gateway tunnels.
+     *
+     * @param ctx the router context
+     * @param cfg the hop config
+     */
     public BatchedRouterPreprocessor(RouterContext ctx, HopConfig cfg) {
         super(ctx, getName(cfg));
         _config = null;

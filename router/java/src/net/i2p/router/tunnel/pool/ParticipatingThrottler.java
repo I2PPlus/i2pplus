@@ -45,42 +45,96 @@ public class ParticipatingThrottler {
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
 
-    /** @since 0.9.70+ */
+    /**
+     * Min tunnels per peer before throttling.
+     * @since 0.9.70+
+     */
     public static volatile int _minLimit = SystemVersion.isSlow() ? 40 : 80;
-    /** @since 0.9.70+ */
+    /**
+     * Max tunnels per peer before throttling.
+     * @since 0.9.70+
+     */
     public static volatile int _maxLimit = SystemVersion.isSlow() ? 150 : 300;
-    /** @since 0.9.70+ */
+    /**
+     * Max pct of participating tunnels per peer.
+     * @since 0.9.70+
+     */
     public static volatile int _percentLimit = 10;
-    /** Rejection threshold: start rejecting at count/limit ratio this high (30-100, default 70%). @since 0.9.70+ */
+    /**
+     * Rejection threshold: start rejecting at count/limit ratio this high (30-100, default 70%).
+     * @since 0.9.70+
+     */
     public static volatile int _rejectThreshold = 70;
-    /** Rejection steepness: 100=linear ramp, 200=quadratic, higher=faster escalation. @since 0.9.70+ */
+    /**
+     * Rejection steepness: 100=linear ramp, 200=quadratic, higher=faster escalation.
+     * @since 0.9.70+
+     */
     public static volatile int _rejectSteepness = 200;
-    /** Load weight: how much load inflates effective ratio (0-300%, default 100%). @since 0.9.70+ */
+    /**
+     * Load weight: how much load inflates effective ratio (0-300%, default 100%).
+     * @since 0.9.70+
+     */
     public static volatile int _loadWeight = 100;
 
-    /** @since 0.9.70+ */
+    /**
+     * The participating minimum limit.
+     * @return min limit
+     */
     public static int getParticipatingMinLimit() { return _minLimit; }
-    /** @since 0.9.70+ */
+    /**
+     * The participating minimum limit.
+     * @param val min limit
+     */
     public static void setParticipatingMinLimit(int val) { _minLimit = Math.max(20, Math.min(500, val)); }
-    /** @since 0.9.70+ */
+    /**
+     * The participating maximum limit.
+     * @return max limit
+     */
     public static int getParticipatingMaxLimit() { return _maxLimit; }
-    /** @since 0.9.70+ */
+    /**
+     * The participating maximum limit.
+     * @param val max limit
+     */
     public static void setParticipatingMaxLimit(int val) { _maxLimit = Math.max(50, Math.min(1000, val)); }
-    /** @since 0.9.70+ */
+    /**
+     * The participating percent limit.
+     * @return pct limit
+     */
     public static int getParticipatingPctLimit() { return _percentLimit; }
-    /** @since 0.9.70+ */
+    /**
+     * The participating percent limit.
+     * @param val pct limit
+     */
     public static void setParticipatingPctLimit(int val) { _percentLimit = Math.max(5, Math.min(100, val)); }
-    /** @since 0.9.70+ */
+    /**
+     * The rejection threshold.
+     * @return reject threshold
+     */
     public static int getRejectThreshold() { return _rejectThreshold; }
-    /** @since 0.9.70+ */
+    /**
+     * The rejection threshold.
+     * @param val reject threshold
+     */
     public static void setRejectThreshold(int val) { _rejectThreshold = Math.max(30, Math.min(100, val)); }
-    /** @since 0.9.70+ */
+    /**
+     * The rejection steepness.
+     * @return reject steepness
+     */
     public static int getRejectSteepness() { return _rejectSteepness; }
-    /** @since 0.9.70+ */
+    /**
+     * The rejection steepness.
+     * @param val reject steepness
+     */
     public static void setRejectSteepness(int val) { _rejectSteepness = Math.max(100, Math.min(500, val)); }
-    /** @since 0.9.70+ */
+    /**
+     * The load weight.
+     * @return load weight
+     */
     public static int getLoadWeight() { return _loadWeight; }
-    /** @since 0.9.70+ */
+    /**
+     * The load weight.
+     * @param val load weight
+     */
     public static void setLoadWeight(int val) { _loadWeight = Math.max(0, Math.min(300, val)); }
     // Cleanup interval in ms - 90 seconds
     private static final long CLEAN_TIME = 90 * 1000L;
@@ -91,7 +145,15 @@ public class ParticipatingThrottler {
      * Result of throttling decision for tunnel participation requests.
      * Determines whether to accept, reject, or drop a tunnel request.
      */
-    public enum Result { ACCEPT, REJECT, DROP }
+    /** The result of throttling a peer request. */
+    public enum Result {
+    /** Request accepted. */
+    ACCEPT,
+    /** Request rejected (retry later). */
+    REJECT,
+    /** Request dropped (too many requests). */
+    DROP
+}
 
     /**
      * Extract IP address and port from RouterInfo for logging to sessionbans.txt.
@@ -157,6 +219,7 @@ public class ParticipatingThrottler {
         return "";
     }
 
+    /** Participating throttler */
     ParticipatingThrottler(RouterContext ctx) {
         this.context = ctx;
         this.counter = new ObjectCounter<>();
@@ -555,7 +618,13 @@ public class ParticipatingThrottler {
      * memory and eventually banning peers on stale accumulated counts.
      */
     private class Cleaner extends SimpleTimer2.TimedEvent {
+        /**
+         * Cleaner.
+         */
         public Cleaner() { super(context.simpleTimer2()); }
+        /**
+         * timeReached.
+         */
         @Override
         public void timeReached() {
             counter.clear();
@@ -569,7 +638,13 @@ public class ParticipatingThrottler {
     private class Disconnector extends SimpleTimer2.TimedEvent {
         private final Hash h;
         private final String version;
+        /**
+         * Disconnector.
+         */
         public Disconnector(Hash h, String version) { super(context.simpleTimer2()); this.h = h; this.version = version; }
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             String reason = (version == null || version.isEmpty()) ? "Old version" : "Old version (" + version + ")";
             context.commSystem().forceDisconnect(h, reason);

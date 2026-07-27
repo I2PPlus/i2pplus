@@ -110,12 +110,18 @@ class GraphRenderer {
     private static final GraphicsEnvironment GE = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private static final List<String> FONTLIST = Arrays.asList(GE.getAvailableFontFamilyNames());
 
+    /**
+     * GraphRenderer.
+     */
     public GraphRenderer(I2PAppContext ctx, GraphListener lsnr) {
         _log = ctx.logManager().getLog(GraphRenderer.class);
         _listener = lsnr;
         _context = ctx;
     }
 
+    /**
+     * render.
+     */
     public void render(OutputStream out) throws IOException {
         render(out, DEFAULT_X, DEFAULT_Y, false, false, false, false, -1, 0, false);
     }

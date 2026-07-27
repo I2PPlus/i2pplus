@@ -182,6 +182,9 @@ class PeerTestManager {
      *  Have seen peer tests (as Alice) get stuck (_currentTest != null)
      *  so I've thrown some synchronizization on the methods;
      *  don't know the root cause or whether this fixes it
+     *
+     *  @param context the router context
+     *  @param transport the UDP transport
      */
     public PeerTestManager(RouterContext context, UDPTransport transport) {
         _context = context;
@@ -1688,6 +1691,8 @@ class PeerTestManager {
     /**
      *  Get an address out of a list of addresses. SSU2 only.
      *
+     *  @param addrs the list of addresses
+     *  @param isIPv6 whether to look for IPv6 addresses
      *  @return address or null
      *  @since 0.9.55
      */
@@ -1723,6 +1728,8 @@ class PeerTestManager {
     /**
      *  Get an intro key out of an address. SSU2 only.
      *
+     *  @param ra the router address
+     *  @return the intro key or null
      *  @since 0.9.54, pkg private since 0.9.55 for IntroManager
      */
     static SessionKey getIntroKey(RouterAddress ra) {

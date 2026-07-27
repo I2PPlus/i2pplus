@@ -23,7 +23,15 @@ public class SnarkShutdown extends I2PAppThread {
 
     private final ShutdownListener listener;
 
-    /* FIXME Exporting non-public type through public API FIXME */
+    /**
+     * SnarkShutdown.
+     *
+     * @param storage the storage
+     * @param coordinator the coordinator
+     * @param acceptor the acceptor
+     * @param trackerclient the tracker client
+     * @param listener the shutdown listener
+     */
     public SnarkShutdown(
             Storage storage,
             PeerCoordinator coordinator,
@@ -37,6 +45,9 @@ public class SnarkShutdown extends I2PAppThread {
         this.listener = listener;
     }
 
+    /**
+     * Shutdown all components.
+     */
     @Override
     public void run() {
         if (acceptor != null) acceptor.halt();

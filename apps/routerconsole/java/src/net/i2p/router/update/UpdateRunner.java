@@ -29,15 +29,25 @@ import net.i2p.util.VersionComparator;
  *
  */
 class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusListener {
+    /** router context */
     protected final RouterContext _context;
+    /** logger */
     protected final Log _log;
+    /** update manager */
     protected final ConsoleUpdateManager _mgr;
+    /** update type */
     protected final UpdateType _type;
+    /** update method */
     protected final UpdateMethod _method;
+    /** list of update URIs */
     protected final List<URI> _urls;
+    /** temporary file for the update download */
     protected final String _updateFile;
+    /** whether the runner is currently running */
     protected volatile boolean _isRunning;
+    /** whether the update completed */
     protected boolean done;
+    /** the current EepGet instance */
     protected EepGet _get;
     /** tells the listeners what mode we are in - set to true in extending classes for checks */
     protected boolean _isPartial;
@@ -45,15 +55,25 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     protected String _newVersion;
     /** 56 byte header, only used for suds */
     protected final ByteArrayOutputStream _baos;
+    /** current URI being fetched */
     protected URI _currentURI;
+    /** current router version for comparison */
     private final String _currentVersion;
 
+    /** connect timeout in ms */
     protected static final long CONNECT_TIMEOUT = (long) 55*1000;
+    /** inactivity timeout with proxy in ms */
     protected static final long INACTIVITY_TIMEOUT = 5 * (long) 60 * 1000;
+    /** inactivity timeout without proxy in ms */
     protected static final long NOPROXY_INACTIVITY_TIMEOUT = (long) 60*1000;
 
     /**
      *  Uses router version for partial checks
+     *
+     *  @param ctx router context
+     *  @param mgr update manager
+     *  @param type update type
+     *  @param uris list of update URIs
      */
     public UpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, UpdateType type, List<URI> uris) {
         this(ctx, mgr, type, uris, RouterVersion.VERSION);
@@ -61,6 +81,12 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
 
     /**
      *  Uses router version for partial checks
+     *
+     *  @param ctx router context
+     *  @param mgr update manager
+     *  @param type update type
+     *  @param method update method
+     *  @param uris list of update URIs
      *  @since 0.9.9
      */
     public UpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, UpdateType type,
@@ -69,6 +95,12 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     }
 
     /**
+     *  Constructor with explicit current version.
+     *
+     *  @param ctx router context
+     *  @param mgr update manager
+     *  @param type update type
+     *  @param uris list of update URIs
      *  @param currentVersion used for partial checks
      *  @since 0.9.7
      */
@@ -78,7 +110,13 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     }
 
     /**
+     *  Full constructor.
+     *
+     *  @param ctx router context
+     *  @param mgr update manager
+     *  @param type update type
      *  @param method HTTP, HTTP_CLEARNET, or HTTPS_CLEARNET
+     *  @param uris list of update URIs
      *  @param currentVersion used for partial checks
      *  @since 0.9.9
      */
@@ -99,23 +137,44 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
 
     //////// begin UpdateTask methods
 
+    /**
+     * isRunning.
+     */
     public boolean isRunning() { return _isRunning; }
 
+    /**
+     * shutdown.
+     */
     public void shutdown() {
         _isRunning = false;
         interrupt();
     }
 
+    /**
+     * getType.
+     */
     public UpdateType getType() { return _type; }
 
+    /**
+     * getMethod.
+     */
     public UpdateMethod getMethod() { return _method; }
 
+    /**
+     * getURI.
+     */
     public URI getURI() { return _currentURI; }
 
+    /**
+     * getID.
+     */
     public String getID() { return ""; }
 
     //////// end UpdateTask methods
 
+    /**
+     * run.
+     */
     @Override
     public void run() {
         _isRunning = true;
@@ -236,6 +295,9 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     // We use the same for both the partial and the full EepGet,
     // with a couple of adjustments depending on which mode.
 
+    /**
+     * attemptFailed.
+     */
     public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {
         if (_log.shouldDebug()) {_log.debug("Attempt failed on " + url, cause);}
         _mgr.notifyAttemptFailed(this, url, null); // ignored
@@ -286,12 +348,24 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
         // update() will call notifyTaskFailed() after last URL
     }
 
+    /**
+     * headerReceived.
+     */
     public void headerReceived(String url, int attemptNum, String key, String val) { /* nop */ }
 
+    /**
+     * attempting.
+     */
     public void attempting(String url) { /* nop */ }
 
+    /**
+     * updateStatus.
+     */
     protected void updateStatus(String s) {_mgr.notifyProgress(this, s);}
 
+    /**
+     * linkify.
+     */
     protected static String linkify(String url) {return ConsoleUpdateManager.linkify(url);}
 
     /** translate a string */
@@ -302,6 +376,9 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
      */
     protected String _t(String s, Object o) {return _mgr._t(s, o);}
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {return getClass().getName() + ' ' + getType() + ' ' + getID() + ' ' + getMethod() + ' ' + getURI();}
 

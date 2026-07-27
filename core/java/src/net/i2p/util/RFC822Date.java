@@ -65,6 +65,9 @@ public abstract class RFC822Date {
         return OUTPUT_FORMAT.get().format(Date.from(Instant.ofEpochMilli(t)));
     }
 
+    /**
+     * main.
+     */
     public static void main(String[] args) {
         if (args.length == 1) {
             try {

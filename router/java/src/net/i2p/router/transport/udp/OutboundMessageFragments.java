@@ -41,11 +41,17 @@ class OutboundMessageFragments {
     private final Object _waitLock = new Object();
     private volatile boolean _alive;
     private final PacketBuilder2 _builder2;
-    static final int MAX_VOLLEYS = 10; // don't send a packet more than 10 times
+    /**
+     *  Maximum number of times to send a packet before failing it.
+     */
+    static final int MAX_VOLLEYS = 10;
     private static final int MAX_WAIT = SystemVersion.isSlow() ? 1000 : 500;
     /** Counter for periodic aggregate stat emission */
     private int _statEmitCounter;
 
+    /**
+     * OutboundMessageFragments.
+     */
     public OutboundMessageFragments(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
         _log = ctx.logManager().getLog(OutboundMessageFragments.class);
@@ -68,14 +74,23 @@ class OutboundMessageFragments {
         _context.statManager().createRateStat("udp.sendVolleyTime", "Time (ms) to send a full volley", "Transport [UDP]", UDPTransport.RATES);
     }
 
+    /**
+     * startup.
+     */
     public synchronized void startup() { _alive = true; }
 
+    /**
+     * shutdown.
+     */
     public synchronized void shutdown() {
         _alive = false;
         _activePeers.clear();
         nudge();
     }
 
+    /**
+     *  Remove a peer from the active outbound list and drop its pending messages.
+     */
     void dropPeer(PeerState peer) {
         if (_log.shouldDebug()) {_log.debug("Dropping peer " + peer.getRemotePeer());}
         peer.dropOutbound();

@@ -14,11 +14,17 @@ import org.cybergarage.upnp.xml.StateVariableData;
 import org.cybergarage.util.Debug;
 import org.cybergarage.xml.Node;
 
+/**
+ * StateVariable.
+ */
 public class StateVariable extends NodeData {
     ////////////////////////////////////////////////
     //	Constants
     ////////////////////////////////////////////////
 
+    /**
+     * ELEM_NAME.
+     */
     public static final String ELEM_NAME = "stateVariable";
 
     ////////////////////////////////////////////////
@@ -46,6 +52,9 @@ public class StateVariable extends NodeData {
         serviceNode = n;
     }
 
+    /**
+     * getService.
+     */
     public Service getService() {
         Node serviceNode = getServiceNode();
         if (serviceNode == null) return null;
@@ -86,6 +95,9 @@ public class StateVariable extends NodeData {
     //	isStateVariableNode
     ////////////////////////////////////////////////
 
+    /**
+     * isStateVariableNode.
+     */
     public static boolean isStateVariableNode(Node node) {
         return StateVariable.ELEM_NAME.equals(node.getName());
     }
@@ -120,10 +132,16 @@ public class StateVariable extends NodeData {
 
     private static final String DATATYPE = "dataType";
 
+    /**
+     * setDataType.
+     */
     public void setDataType(String value) {
         getStateVariableNode().setNode(DATATYPE, value);
     }
 
+    /**
+     * getDataType.
+     */
     public String getDataType() {
         return getStateVariableNode().getNodeValue(DATATYPE);
     }
@@ -136,11 +154,17 @@ public class StateVariable extends NodeData {
     private static final String SENDEVENTS_YES = "yes";
     private static final String SENDEVENTS_NO = "no";
 
+    /**
+     * setSendEvents.
+     */
     public void setSendEvents(boolean state) {
         getStateVariableNode()
                 .setAttribute(SENDEVENTS, (state == true) ? SENDEVENTS_YES : SENDEVENTS_NO);
     }
 
+    /**
+     * isSendEvents.
+     */
     public boolean isSendEvents() {
         String state = getStateVariableNode().getAttributeValue(SENDEVENTS);
         if (state == null) return false;
@@ -152,6 +176,9 @@ public class StateVariable extends NodeData {
     // set
     ////////////////////////////////////////////////
 
+    /**
+     * set.
+     */
     public void set(StateVariable stateVar) {
         setName(stateVar.getName());
         setValue(stateVar.getValue());
@@ -163,6 +190,9 @@ public class StateVariable extends NodeData {
     //	UserData
     ////////////////////////////////////////////////
 
+    /**
+     * getStateVariableData.
+     */
     public StateVariableData getStateVariableData() {
         Node node = getStateVariableNode();
         StateVariableData userData = (StateVariableData) node.getUserData();
@@ -178,6 +208,9 @@ public class StateVariable extends NodeData {
     //	Value
     ////////////////////////////////////////////////
 
+    /**
+     * setValue.
+     */
     public void setValue(String value) {
         // Thnaks for Tho Beisch (11/09/04)
         String currValue = getStateVariableData().getValue();
@@ -193,14 +226,23 @@ public class StateVariable extends NodeData {
         service.notify(this);
     }
 
+    /**
+     * setValue.
+     */
     public void setValue(int value) {
         setValue(Integer.toString(value));
     }
 
+    /**
+     * setValue.
+     */
     public void setValue(long value) {
         setValue(Long.toString(value));
     }
 
+    /**
+     * getValue.
+     */
     public String getValue() {
         return getStateVariableData().getValue();
     }
@@ -209,6 +251,9 @@ public class StateVariable extends NodeData {
     //	AllowedValueList
     ////////////////////////////////////////////////
 
+    /**
+     * getAllowedValueList.
+     */
     public AllowedValueList getAllowedValueList() {
         AllowedValueList valueList = new AllowedValueList();
         Node valueListNode = getStateVariableNode().getNode(AllowedValueList.ELEM_NAME);
@@ -250,6 +295,9 @@ public class StateVariable extends NodeData {
         getStateVariableNode().addNode(n);
     }
 
+    /**
+     * hasAllowedValueList.
+     */
     public boolean hasAllowedValueList() {
         AllowedValueList valueList = getAllowedValueList();
         return (valueList != null) ? true : false;
@@ -259,6 +307,9 @@ public class StateVariable extends NodeData {
     //	AllowedValueRange
     ////////////////////////////////////////////////
 
+    /**
+     * getAllowedValueRange.
+     */
     public AllowedValueRange getAllowedValueRange() {
         Node valueRangeNode = getStateVariableNode().getNode(AllowedValueRange.ELEM_NAME);
         if (valueRangeNode == null) return null;
@@ -285,6 +336,9 @@ public class StateVariable extends NodeData {
         getStateVariableNode().addNode(avr.getAllowedValueRangeNode());
     }
 
+    /**
+     * hasAllowedValueRange.
+     */
     public boolean hasAllowedValueRange() {
         return (getAllowedValueRange() != null) ? true : false;
     }
@@ -293,14 +347,23 @@ public class StateVariable extends NodeData {
     //	queryAction
     ////////////////////////////////////////////////
 
+    /**
+     * getQueryListener.
+     */
     public QueryListener getQueryListener() {
         return getStateVariableData().getQueryListener();
     }
 
+    /**
+     * setQueryListener.
+     */
     public void setQueryListener(QueryListener listener) {
         getStateVariableData().setQueryListener(listener);
     }
 
+    /**
+     * performQueryListener.
+     */
     public boolean performQueryListener(QueryRequest queryReq) {
         QueryListener listener = getQueryListener();
         if (listener == null) return false;
@@ -323,6 +386,9 @@ public class StateVariable extends NodeData {
     //	ActionControl
     ////////////////////////////////////////////////
 
+    /**
+     * getQueryResponse.
+     */
     public QueryResponse getQueryResponse() {
         return getStateVariableData().getQueryResponse();
     }
@@ -331,6 +397,9 @@ public class StateVariable extends NodeData {
         getStateVariableData().setQueryResponse(res);
     }
 
+    /**
+     * getQueryStatus.
+     */
     public UPnPStatus getQueryStatus() {
         return getQueryResponse().getUPnPError();
     }
@@ -339,6 +408,9 @@ public class StateVariable extends NodeData {
     //	ActionControl
     ////////////////////////////////////////////////
 
+    /**
+     * postQuerylAction.
+     */
     public boolean postQuerylAction() {
         QueryRequest queryReq = new QueryRequest();
         queryReq.setRequest(this);
@@ -362,15 +434,24 @@ public class StateVariable extends NodeData {
 
     private UPnPStatus upnpStatus = new UPnPStatus();
 
+    /**
+     * setStatus.
+     */
     public void setStatus(int code, String descr) {
         upnpStatus.setCode(code);
         upnpStatus.setDescription(descr);
     }
 
+    /**
+     * setStatus.
+     */
     public void setStatus(int code) {
         setStatus(code, UPnPStatus.code2String(code));
     }
 
+    /**
+     * getStatus.
+     */
     public UPnPStatus getStatus() {
         return upnpStatus;
     }
@@ -402,10 +483,16 @@ public class StateVariable extends NodeData {
 
     private Object userData = null;
 
+    /**
+     * setUserData.
+     */
     public void setUserData(Object data) {
         userData = data;
     }
 
+    /**
+     * getUserData.
+     */
     public Object getUserData() {
         return userData;
     }

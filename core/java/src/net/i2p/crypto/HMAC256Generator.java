@@ -42,6 +42,8 @@ public final class HMAC256Generator extends HMACGenerator {
     private static final SecretKey ZERO_KEY = new HMACKey(new byte[32]);
 
     /**
+     * Create a new HMAC256Generator.
+     *
      *  @param context unused
      */
     public HMAC256Generator(I2PAppContext context) {
@@ -67,6 +69,11 @@ public final class HMAC256Generator extends HMACGenerator {
      *  Outputs 32 bytes to target starting at targetOffset.
      *
      *  @param key first 32 bytes used as the key
+     *  @param data the data to calculate the HMAC over
+     *  @param offset offset into data
+     *  @param length number of bytes to include
+     *  @param target output buffer
+     *  @param targetOffset offset into target
      *  @throws UnsupportedOperationException if the JVM does not support it
      *  @throws IllegalArgumentException for bad key or target too small
      *  @since 0.9.38
@@ -124,9 +131,11 @@ public final class HMAC256Generator extends HMACGenerator {
     }
 
     /**
+     *  Release a Mac back to the pool.
      *  Mac will be reset and initialized with a zero key.
      *  Package private for HKDF.
      *
+     *  @param mac the Mac to release
      *  @since 0.9.48
      */
     void release(Mac mac) {
@@ -157,6 +166,9 @@ public final class HMAC256Generator extends HMACGenerator {
     static final class HMACKey implements SecretKey {
         private final byte[] _data;
 
+        /** Constructor.
+         * @param data the key data
+         */
         public HMACKey(byte[] data) {
             _data = data;
         }

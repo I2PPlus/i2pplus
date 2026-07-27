@@ -18,8 +18,11 @@ import java.io.IOException;
  */
 class Request {
     private final PartialPiece piece;
+    /** Off */
     final int off;
+    /** Len */
     final int len;
+    /** Send time */
     long sendTime;
 
     /**
@@ -56,9 +59,7 @@ class Request {
             throw new IndexOutOfBoundsException("Illegal Request " + toString());
     }
 
-    /**
-     * @since 0.9.1
-     */
+    /** Read from stream */
     public void read(DataInputStream din, BandwidthListener bwl) throws IOException {
         piece.read(din, off, len, bwl);
     }
@@ -81,11 +82,13 @@ class Request {
         return piece;
     }
 
+    /** Hash based on piece number, offset, and length */
     @Override
     public int hashCode() {
         return piece.getPiece() ^ off ^ len;
     }
 
+    /** Two requests are equal if they share the same piece, offset, and length */
     @Override
     public boolean equals(Object o) {
         if (o instanceof Request) {
@@ -96,6 +99,7 @@ class Request {
         return false;
     }
 
+    /** @return "(piece,off,len)" */
     @Override
     public String toString() {
         return "(" + piece.getPiece() + "," + off + "," + len + ")";

@@ -80,11 +80,15 @@ class NewsFetcher extends UpdateRunner {
     private boolean _gotNewEntry;
 
     private static final String TEMP_NEWS_FILE = "news.xml.temp";
+    /** P r o p  b l o c k l i s t  t i m e */
     static final String PROP_BLOCKLIST_TIME = "router.blocklistVersion";
     private static final String BLOCKLIST_DIR = "docs/feed/blocklist";
     private static final String BLOCKLIST_FILE = "blocklist.txt";
     private static final long DEFAULT_TIMEOUT = (long) 60*1000;
 
+    /**
+     * NewsFetcher.
+     */
     public NewsFetcher(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris) {
         this(ctx, mgr, uris, DEFAULT_TIMEOUT);
     }
@@ -106,6 +110,9 @@ class NewsFetcher extends UpdateRunner {
         }
     }
 
+    /**
+     * run.
+     */
     @Override
     public void run() {
         _isRunning = true;
@@ -117,6 +124,9 @@ class NewsFetcher extends UpdateRunner {
         }
     }
 
+    /**
+     * fetchNews.
+     */
     public void fetchNews() {
         boolean shouldProxy = _context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY_NEWS, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY_NEWS);
         String proxyHost = _context.getProperty(ConfigUpdateHandler.PROP_PROXY_HOST, ConfigUpdateHandler.DEFAULT_PROXY_HOST);

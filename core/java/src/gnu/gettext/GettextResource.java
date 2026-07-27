@@ -59,8 +59,14 @@ import java.util.*;
  *
  * @author Bruno Haible
  */
+/**
+ * GettextResource Extends ResourceBundle.
+ */
 public abstract class GettextResource extends ResourceBundle {
 
+    /**
+     * verbose.
+     */
     public static boolean verbose = false;
 
   /**
@@ -82,6 +88,9 @@ public abstract class GettextResource extends ResourceBundle {
    * @return the translation of <VAR>msgid</VAR>, or <VAR>msgid</VAR> if
    *         none is found
    */
+    /**
+     * Look up a translated string.
+     */
     public static String gettext (ResourceBundle catalog, String msgid) {
         String result = gettextnull(catalog,msgid);
         if (result != null)

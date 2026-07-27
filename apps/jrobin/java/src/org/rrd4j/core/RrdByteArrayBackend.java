@@ -17,11 +17,17 @@ public abstract class RrdByteArrayBackend extends ByteBufferBackend {
         super(path);
     }
 
+    /**
+     * setBuffer.
+     */
     protected void setBuffer(byte[] buffer) {
         this.buffer = buffer;
         setByteBuffer(ByteBuffer.wrap(buffer));
     }
 
+    /**
+     * getBuffer.
+     */
     protected byte[] getBuffer() {
         return buffer;
     }

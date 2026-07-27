@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 import org.rrd4j.ConsolFun;
 
 /**
@@ -53,16 +52,26 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      * @since 3.5
      */
     public static class Builder {
+        /** ignored */
         private String path = null;
+        /** ignored */
         private URI uri = null;
+        /** ignored */
         private RrdBackendFactory factory = RrdBackendFactory.getDefaultFactory();
+        /** ignored */
         private boolean readOnly = false;
+        /** ignored */
         private String externalPath = null;
+        /** ignored */
         private DataImporter importer = null;
+        /** ignored */
         private RrdDef rrdDef = null;
+        /** ignored */
         private boolean usePool = false;
+        /** ignored */
         private RrdDbPool pool;
 
+        /** ignored */
         private Builder() {}
 
         /**
@@ -139,6 +148,12 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             }
         }
 
+        /**
+         * Set the path to an existing RRD.
+         *
+         * @param path a {@link java.lang.String} object.
+         * @return the same builder.
+         */
         public Builder setPath(String path) {
             this.rrdDef = null;
             this.path = path;
@@ -146,6 +161,12 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             return this;
         }
 
+        /**
+         * Set the URI to an existing RRD.
+         *
+         * @param uri a {@link java.net.URI} object.
+         * @return the same builder.
+         */
         public Builder setPath(URI uri) {
             this.rrdDef = null;
             this.uri = uri;
@@ -154,6 +175,8 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         }
 
         /**
+         * Set the backend factory for this RRD.
+         *
          * @param factory The backend factory to use for that rrd.
          * @return the same builder.
          */
@@ -163,6 +186,8 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         }
 
         /**
+         * Set whether the RRD is read-only.
+         *
          * @param readOnly true if the rrd is to be read only
          * @return the same builder.
          */
@@ -181,6 +206,12 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             return this;
         }
 
+        /**
+         * Set whether to use the pool.
+         *
+         * @param usePool true if the pool should be used
+         * @return the same builder.
+         */
         public Builder setUsePool(boolean usePool) {
             this.usePool = usePool;
             return this;
@@ -266,6 +297,8 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         }
 
         /**
+         * Set the RRD definition for creating a new RRD.
+         *
          * @param rrdDef a {@link RrdDef} to a new rrd file.
          * @return the same builder.
          */
@@ -279,6 +312,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             return this;
         }
 
+        /** ignored */
         private static RrdBackendFactory checkFactory(URI uri, RrdBackendFactory factory) {
             if (factory == null) {
                 return RrdBackendFactory.findFactory(uri);
@@ -287,6 +321,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             }
         }
 
+        /** ignored */
         private static URI buildUri(String rrdPath, URI rrdUri, RrdBackendFactory factory) {
             if (rrdUri != null) {
                 return rrdUri;
@@ -297,6 +332,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             }
         }
 
+        /** ignored */
         private static DataImporter resoleImporter(String externalPath, DataImporter importer)
                 throws IOException {
             if (importer != null) {
@@ -314,11 +350,17 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             }
         }
 
+        /** ignored */
         private static RrdDbPool resolvePool(RrdDbPool pool) {
             return pool != null ? pool : RrdDbPool.getInstance();
         }
     }
 
+    /**
+     * Create a new builder for constructing RrdDb instances.
+     *
+     * @return a Builder
+     */
     public static Builder getBuilder() {
         return new Builder();
     }
@@ -329,16 +371,24 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
     /** Prefix to identify external RRDTool file source used in various RrdDb constructors. */
     public static final String PREFIX_RRDTool = "rrdtool:/";
 
+    /** XML buffer capacity in bytes */
     static final int XML_BUFFER_CAPACITY = 100000; // bytes
 
+    /** ignored */
     private final RrdBackend backend;
+    /** ignored */
     private final RrdAllocator allocator = new RrdAllocator();
 
+    /** ignored */
     private final Header header;
+    /** ignored */
     private final Datasource[] datasources;
+    /** ignored */
     private final Archive[] archives;
+    /** ignored */
     private final RrdDbPool pool;
 
+    /** ignored */
     private boolean closed = false;
 
     /**
@@ -462,6 +512,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         this(rrdDef, factory, null);
     }
 
+    /** ignored */
     private RrdDb(RrdDef rrdDef, RrdBackendFactory factory, RrdDbPool pool) throws IOException {
         this.pool = pool;
         factory = Builder.checkFactory(rrdDef.getUri(), factory);
@@ -630,6 +681,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         this(path, null, false, factory, null);
     }
 
+    /** ignored */
     private RrdDb(
             String rrdPath, URI rrdUri, boolean readOnly, RrdBackendFactory factory, RrdDbPool pool)
             throws IOException {
@@ -852,6 +904,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         this(rrdPath, null, externalPath, null, factory, null);
     }
 
+    /** ignored */
     private RrdDb(
             String rrdPath,
             URI rrdUri,
@@ -900,6 +953,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         }
     }
 
+    /** Internal close */
     void internalClose() throws IOException {
         if (!closed) {
             closed = true;
@@ -1027,6 +1081,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         return createFetchRequest(consolFun, fetchStart, fetchEnd, 1);
     }
 
+    /** Store sample */
     final synchronized void store(Sample sample) throws IOException {
         if (closed) {
             throw new IllegalStateException("RRD already closed, cannot store this sample");
@@ -1049,6 +1104,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         header.setLastUpdateTime(newTime);
     }
 
+    /** Fetch data */
     synchronized FetchData fetchData(FetchRequest request) throws IOException {
         if (closed) {
             throw new IllegalStateException("RRD already closed, cannot fetch data");
@@ -1171,6 +1227,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         return buffer.toString();
     }
 
+    /** Archive value */
     final void archive(Datasource datasource, double value, double lastValue, long numUpdates)
             throws IOException {
         int dsIndex = getDsIndex(datasource.getName());
@@ -1215,10 +1272,12 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         return false;
     }
 
+    /** @return the datasources */
     Datasource[] getDatasources() {
         return datasources;
     }
 
+    /** @return the archives */
     Archive[] getArchives() {
         return archives;
     }
@@ -1389,9 +1448,10 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
     }
 
     /**
-     * {@inheritDoc}
+     * Copies object's internal state to another RrdDb object.
      *
-     * <p>Copies object's internal state to another RrdDb object.
+     * @param otherRrd the target RrdDb
+     * @throws IOException if an I/O error occurs
      */
     public synchronized void copyStateTo(RrdDb otherRrd) throws IOException {
         header.copyStateTo(otherRrd.header);
@@ -1493,6 +1553,11 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         return backend.getUri();
     }
 
+    /**
+     * Returns the canonical URI for this RRD.
+     *
+     * @return the canonical URI
+     */
     public URI getCanonicalUri() {
         return backend.getFactory().getCanonicalUri(getUri());
     }
@@ -1622,25 +1687,4 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         header.setInfo(info);
     }
 
-    /**
-     * main.
-     *
-     * @param args an array of {@link java.lang.String} objects.
-     */
-    public static void main(String[] args) {
-        System.out.println("RRD4J :: RRDTool choice for the Java world");
-        System.out.println(
-                "===============================================================================");
-        System.out.println("RRD4J base directory: " + Util.getRrd4jHomeDirectory());
-        long time = Util.getTime();
-        System.out.println("Current time: " + time + ": " + new Date(time * 1000L));
-        System.out.println(
-                "-------------------------------------------------------------------------------");
-        System.out.println(
-                "See https://github.com/rrd4j/rrd4j for more information and the latest version.");
-        System.out.println(
-                "Copyright 2017 The RRD4J Authors. Copyright (c) 2001-2005 Sasa Markovic and Ciaran"
-                        + " Treanor. Copyright (c) 2013 The OpenNMS Group, Inc.. Licensed under the"
-                        + " Apache License, Version 2.0.");
-    }
 }

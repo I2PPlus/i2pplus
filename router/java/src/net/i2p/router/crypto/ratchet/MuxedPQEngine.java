@@ -17,6 +17,9 @@ final class MuxedPQEngine {
     private final RouterContext _context;
     private final Log _log;
 
+    /**
+     * Construct a new instance.
+     */
     public MuxedPQEngine(RouterContext ctx) {
         _context = ctx;
         _log = _context.logManager().getLog(MuxedPQEngine.class);
@@ -58,7 +61,10 @@ final class MuxedPQEngine {
      *
      * @param ecKey must be EC, non-null
      * @param pqKey must be PQ, non-null
+     * @param data the data to decrypt
+     * @param keyManager the key manager
      * @return decrypted data or null on failure
+     * @throws net.i2p.data.DataFormatException if the data is malformed
      */
     public CloveSet decrypt(byte[] data, PrivateKey ecKey, PrivateKey pqKey, MuxedPQSKM keyManager) throws DataFormatException {
         if (ecKey.getType() != EncType.ECIES_X25519 ||

@@ -13,7 +13,13 @@ public class ForwardPort {
 	public final boolean isIP6;
 	/** Protocol number. See constants. */
 	public final int protocol;
+	/**
+	 * PROTOCOL_UDP_IPV4.
+	 */
 	public static final int PROTOCOL_UDP_IPV4 = 17;
+	/**
+	 * PROTOCOL_TCP_IPV4.
+	 */
 	public static final int PROTOCOL_TCP_IPV4 = 6;
 	/** Port number to forward */
 	public final int portNumber;
@@ -22,6 +28,9 @@ public class ForwardPort {
 	// and an IGD is normally on only one LAN.
 	private final int hashCode;
 
+	/**
+	 * ForwardPort.
+	 */
 	public ForwardPort(String name, boolean isIP6, int protocol, int portNumber) {
 		this.name = name;
 		this.isIP6 = isIP6;
@@ -30,11 +39,17 @@ public class ForwardPort {
 		hashCode = name.hashCode() | (isIP6 ? 1 : 0) | protocol | portNumber;
 	}
 
+	/**
+	 * hashCode.
+	 */
 	@Override
 	public int hashCode() {
 		return hashCode;
 	}
 
+	/**
+	 * equals.
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if(o == this) return true;

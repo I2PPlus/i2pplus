@@ -76,6 +76,9 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
         def.setLevel(Deflater.BEST_COMPRESSION);
     }
 
+    /**
+     * setLevel.
+     */
     public void setLevel(int level) {
         def.setLevel(level);
     }

@@ -38,6 +38,9 @@ public class NSEC3PARAM extends Data {
      */
     public final byte hashAlgorithmByte;
 
+    /**
+     * flags.
+     */
     public final byte flags;
 
     /**
@@ -50,6 +53,9 @@ public class NSEC3PARAM extends Data {
      */
     private final byte[] salt;
 
+    /**
+     * parse.
+     */
     public static NSEC3PARAM parse(DataInputStream dis) throws IOException {
         byte hashAlgorithm = dis.readByte();
         byte flags = dis.readByte();
@@ -60,6 +66,7 @@ public class NSEC3PARAM extends Data {
         return new NSEC3PARAM(hashAlgorithm, flags, iterations, salt);
     }
 
+    /** ignored */
     private NSEC3PARAM(HashAlgorithm hashAlgorithm, byte hashAlgorithmByte, byte flags, int iterations, byte[] salt) {
         assert hashAlgorithmByte == (hashAlgorithm != null ? hashAlgorithm.value : hashAlgorithmByte);
         this.hashAlgorithmByte = hashAlgorithmByte;
@@ -70,15 +77,22 @@ public class NSEC3PARAM extends Data {
         this.salt = salt;
     }
 
+    /** Create NSEC3PARAM */
     NSEC3PARAM(byte hashAlgorithm, byte flags, int iterations, byte[] salt) {
         this(null, hashAlgorithm, flags, iterations, salt);
     }
 
+    /**
+     * getType.
+     */
     @Override
     public TYPE getType() {
         return TYPE.NSEC3PARAM;
     }
 
+    /**
+     * serialize.
+     */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
         dos.writeByte(hashAlgorithmByte);
@@ -88,6 +102,9 @@ public class NSEC3PARAM extends Data {
         dos.write(salt);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder()
@@ -98,6 +115,9 @@ public class NSEC3PARAM extends Data {
         return sb.toString();
     }
 
+    /**
+     * getSaltLength.
+     */
     public int getSaltLength() {
         return salt.length;
     }

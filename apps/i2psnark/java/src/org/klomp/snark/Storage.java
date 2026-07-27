@@ -343,6 +343,9 @@ public class Storage implements Closeable {
     }
 
     /* @since 0.9.62+ */
+    /**
+     * getExcludedFiles.
+     */
     public List<String> getExcludedFiles(File base) {
         List<String> excludedNames = new ArrayList<>();
         for (String filePath : _filesExcluded) {
@@ -745,6 +748,9 @@ public class Storage implements Closeable {
 
         private final Collator c = Collator.getInstance();
 
+        /**
+         * compare.
+         */
         public int compare(TorrentFile l, TorrentFile r) {
             return c.compare(l.toString(), r.toString());
         }
@@ -1769,8 +1775,17 @@ public class Storage implements Closeable {
      * @since 0.9.9
      */
     private class TorrentFile implements Comparable<TorrentFile> {
+        /**
+         * length.
+         */
         public final long length;
+        /**
+         * name.
+         */
         public final String name;
+        /**
+         * RAFfile.
+         */
         public final File RAFfile;
 
         /** when was RAF last accessed, or 0 if closed locking: this */
@@ -1923,15 +1938,24 @@ public class Storage implements Closeable {
             isSparse = false;
         }
 
+        /**
+         * compareTo.
+         */
         public int compareTo(TorrentFile tf) {
             return name.compareTo(tf.name);
         }
 
+        /**
+         * hashCode.
+         */
         @Override
         public int hashCode() {
             return RAFfile.getAbsolutePath().hashCode();
         }
 
+        /**
+         * equals.
+         */
         @Override
         public boolean equals(Object o) {
             return (o instanceof TorrentFile)
@@ -1939,6 +1963,9 @@ public class Storage implements Closeable {
                             .equals(((TorrentFile) o).RAFfile.getAbsolutePath());
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return name;

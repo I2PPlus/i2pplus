@@ -112,13 +112,37 @@ public class LookupService {
     private static final int STATE_BEGIN_REV1 = 16000000;
     private static final int STRUCTURE_INFO_MAX_SIZE = 20;
     private static final int DATABASE_INFO_MAX_SIZE = 100;
+    /**
+     * GEOIP_STANDARD.
+     */
     public static final int GEOIP_STANDARD = 0;
+    /**
+     * GEOIP_MEMORY_CACHE.
+     */
     public static final int GEOIP_MEMORY_CACHE = 1;
+    /**
+     * GEOIP_CHECK_CACHE.
+     */
     public static final int GEOIP_CHECK_CACHE = 2;
+    /**
+     * GEOIP_INDEX_CACHE.
+     */
     public static final int GEOIP_INDEX_CACHE = 4;
+    /**
+     * GEOIP_UNKNOWN_SPEED.
+     */
     public static final int GEOIP_UNKNOWN_SPEED = 0;
+    /**
+     * GEOIP_DIALUP_SPEED.
+     */
     public static final int GEOIP_DIALUP_SPEED = 1;
+    /**
+     * GEOIP_CABLEDSL_SPEED.
+     */
     public static final int GEOIP_CABLEDSL_SPEED = 2;
+    /**
+     * GEOIP_CORPORATE_SPEED.
+     */
     public static final int GEOIP_CORPORATE_SPEED = 3;
 
     private static final int SEGMENT_RECORD_LENGTH = 3;
@@ -587,6 +611,11 @@ public class LookupService {
         }
     }
 
+    /**
+     * getID.
+     *
+     * @return the database ID for the given IP
+     */
     public int getID(String ipAddress) {
         InetAddress addr;
         try {
@@ -597,10 +626,20 @@ public class LookupService {
         return getID(bytesToLong(addr.getAddress()));
     }
 
+    /**
+     * getID.
+     *
+     * @return the database ID for the given IP
+     */
     public int getID(InetAddress ipAddress) {
         return getID(bytesToLong(ipAddress.getAddress()));
     }
 
+    /**
+     * getID.
+     *
+     * @return the database ID for the given IP
+     */
     public synchronized int getID(long ipAddress) {
         if (file == null && (dboptions & GEOIP_MEMORY_CACHE) == 0) {
             throw new IllegalStateException("Database has been closed.");
@@ -608,10 +647,18 @@ public class LookupService {
         return seekCountry(ipAddress) - databaseSegments[0];
     }
 
+    /**
+     * last_netmask.
+     *
+     * @return the netmask from the last lookup
+     */
     public int last_netmask() {
         return last_netmask;
     }
 
+    /**
+     * netmask.
+     */
     public void netmask(int nm) {
         last_netmask = nm;
     }
@@ -666,6 +713,7 @@ public class LookupService {
         return new DatabaseInfo("");
     }
 
+    /** Void */
     synchronized void _check_mtime() {
         try {
             if ((dboptions & GEOIP_CHECK_CACHE) != 0) {
@@ -685,6 +733,9 @@ public class LookupService {
     }
 
     // for GeoIP City only
+    /**
+     * getLocationV6.
+     */
     public Location getLocationV6(String str) {
         InetAddress addr;
         try {
@@ -697,11 +748,17 @@ public class LookupService {
     }
 
     // for GeoIP City only
+    /**
+     * getLocation.
+     */
     public Location getLocation(InetAddress addr) {
         return getLocation(bytesToLong(addr.getAddress()));
     }
 
     // for GeoIP City only
+    /**
+     * getLocation.
+     */
     public Location getLocation(String str) {
         InetAddress addr;
         try {
@@ -713,6 +770,9 @@ public class LookupService {
         return getLocation(addr);
     }
 
+    /**
+     * getRegion.
+     */
     public synchronized Region getRegion(String str) {
         InetAddress addr;
         try {
@@ -724,10 +784,16 @@ public class LookupService {
         return getRegion(bytesToLong(addr.getAddress()));
     }
 
+    /**
+     * getRegion.
+     */
     public synchronized Region getRegion(InetAddress addr) {
         return getRegion(bytesToLong(addr.getAddress()));
     }
 
+    /**
+     * getRegion.
+     */
     public synchronized Region getRegion(long ipnum) {
         Region record = new Region();
         int seek_region;
@@ -775,6 +841,9 @@ public class LookupService {
         return record;
     }
 
+    /**
+     * getLocationV6.
+     */
     public synchronized Location getLocationV6(InetAddress addr) {
         int seek_country;
 
@@ -786,6 +855,9 @@ public class LookupService {
         }
     }
 
+    /**
+     * getLocation.
+     */
     public synchronized Location getLocation(long ipnum) {
         int seek_country;
 
@@ -887,10 +959,16 @@ public class LookupService {
         return metroareaCombo;
     }
 
+    /**
+     * getOrg.
+     */
     public String getOrg(InetAddress addr) {
         return getOrg(bytesToLong(addr.getAddress()));
     }
 
+    /**
+     * getOrg.
+     */
     public String getOrg(String str) {
         InetAddress addr;
         try {
@@ -902,6 +980,9 @@ public class LookupService {
     }
 
     // GeoIP Organization and ISP Edition methods
+    /**
+     * getOrg.
+     */
     public synchronized String getOrg(long ipnum) {
         try {
             int seekOrg = seekCountry(ipnum);
@@ -912,6 +993,9 @@ public class LookupService {
         }
     }
 
+    /**
+     * getOrgV6.
+     */
     public String getOrgV6(String str) {
         InetAddress addr;
         try {
@@ -923,6 +1007,9 @@ public class LookupService {
     }
 
     // GeoIP Organization and ISP Edition methods
+    /**
+     * getOrgV6.
+     */
     public synchronized String getOrgV6(InetAddress addr) {
           try {
             int seekOrg = seekCountryV6(addr);

@@ -22,6 +22,7 @@ import net.i2p.data.SigningPrivateKey;
  * @since 0.9.16
  */
 public class RouterPrivateKeyFile extends PrivateKeyFile {
+/** Routerprivatekeyfile */
 
     public RouterPrivateKeyFile(File file) {
         super(file);

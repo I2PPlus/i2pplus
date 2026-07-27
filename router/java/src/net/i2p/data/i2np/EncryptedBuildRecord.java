@@ -19,9 +19,13 @@ import net.i2p.data.SimpleDataStructure;
  */
 public class EncryptedBuildRecord extends SimpleDataStructure {
 
+    /** 528-byte encrypted build record */
     public final static int LENGTH = TunnelBuildMessageBase.RECORD_SIZE;
 
-    /** @throws IllegalArgumentException if data is not correct length (null is ok) */
+    /**
+     * @param data the encrypted record data
+     * @throws IllegalArgumentException if data is not correct length (null is ok)
+     */
     public EncryptedBuildRecord(byte[] data) {
         super(data);
     }

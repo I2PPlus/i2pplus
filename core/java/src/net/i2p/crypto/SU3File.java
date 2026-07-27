@@ -61,6 +61,9 @@ public class SU3File {
     private boolean _verifySignature = true;
     private File _certFile;
 
+    /**
+     * MAGIC.
+     */
     public static final String MAGIC = "I2Psu3";
     private static final byte[] MAGIC_BYTES = DataHelper.getASCII(MAGIC);
     private static final int FILE_VERSION = 0;
@@ -91,9 +94,21 @@ public class SU3File {
     /** @since 0.9.51 */
     public static final int TYPE_EXE = 6;
 
+    /**
+     * CONTENT_UNKNOWN.
+     */
     public static final int CONTENT_UNKNOWN = 0;
+    /**
+     * CONTENT_ROUTER.
+     */
     public static final int CONTENT_ROUTER = 1;
+    /**
+     * CONTENT_PLUGIN.
+     */
     public static final int CONTENT_PLUGIN = 2;
+    /**
+     * CONTENT_RESEED.
+     */
     public static final int CONTENT_RESEED = 3;
 
     /** @since 0.9.15 */
@@ -123,10 +138,16 @@ public class SU3File {
             this.name = name;
         }
 
+        /**
+         * getCode.
+         */
         public int getCode() {
             return code;
         }
 
+        /**
+         * getName.
+         */
         public String getName() {
             return name;
         }

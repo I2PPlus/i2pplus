@@ -39,20 +39,38 @@ import net.i2p.apache.http.util.Args;
  *
  * @since 4.4
  */
+/**
+ * PublicSuffixList.
+ */
 public final class PublicSuffixList {
 
     private final List<String> rules;
     private final List<String> exceptions;
 
+    /**
+     * PublicSuffixList.
+     */
     public PublicSuffixList(final List<String> rules, final List<String> exceptions) {
         this.rules = Collections.unmodifiableList(Args.notNull(rules, "Domain suffix rules"));
         this.exceptions = Collections.unmodifiableList(Args.notNull(exceptions, "Domain suffix exceptions"));
     }
 
+    /**
+     * getRules.
+     */
+    /**
+     * Return the suffix rules.
+     */
     public List<String> getRules() {
         return rules;
     }
 
+    /**
+     * getExceptions.
+     */
+    /**
+     * Return the exception rules.
+     */
     public List<String> getExceptions() {
         return exceptions;
     }

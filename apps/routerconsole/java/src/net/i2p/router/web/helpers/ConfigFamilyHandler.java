@@ -23,6 +23,11 @@ import net.i2p.util.SecureDirectory;
  */
 public class ConfigFamilyHandler extends FormHandler {
 
+    /**
+     * Constructs the handler.
+     */
+    public ConfigFamilyHandler() {}
+
     @Override
     protected void processForm() {
 

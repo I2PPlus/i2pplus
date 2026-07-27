@@ -27,31 +27,51 @@ package com.southernstorm.noise.protocol;
  */
 class Pattern {
 
+	/** Private constructor prevents instantiation */
 	private Pattern() {}
 
-	// Token codes.
+	/** Token code: S */
 	public static final short S = 1;
+	/** Token code: E */
 	public static final short E = 2;
+	/** Token code: EE */
 	public static final short EE = 3;
+	/** Token code: ES */
 	public static final short ES = 4;
+	/** Token code: SE */
 	public static final short SE = 5;
+	/** Token code: SS */
 	public static final short SS = 6;
+	/** Token code: F */
 	public static final short F = 7;
+	/** Token code: FF */
 	public static final short FF = 8;
+	/** Token code: FLIP_DIR */
 	public static final short FLIP_DIR = 255;
 
-	// Pattern flag bits.
+	/** Flag bit: local static */
 	public static final short FLAG_LOCAL_STATIC = 0x0001;
+	/** Flag bit: local ephemeral */
 	public static final short FLAG_LOCAL_EPHEMERAL = 0x0002;
+	/** Flag bit: local required */
 	public static final short FLAG_LOCAL_REQUIRED = 0x0004;
+	/** Flag bit: local ephemeral required */
 	public static final short FLAG_LOCAL_EPHEM_REQ = 0x0008;
+	/** Flag bit: local hybrid */
 	public static final short FLAG_LOCAL_HYBRID = 0x0010;
+	/** Flag bit: local hybrid required */
 	public static final short FLAG_LOCAL_HYBRID_REQ = 0x0020;
+	/** Flag bit: remote static */
 	public static final short FLAG_REMOTE_STATIC = 0x0100;
+	/** Flag bit: remote ephemeral */
 	public static final short FLAG_REMOTE_EPHEMERAL = 0x0200;
+	/** Flag bit: remote required */
 	public static final short FLAG_REMOTE_REQUIRED = 0x0400;
+	/** Flag bit: remote ephemeral required */
 	public static final short FLAG_REMOTE_EPHEM_REQ = 0x0800;
+	/** Flag bit: remote hybrid */
 	public static final short FLAG_REMOTE_HYBRID = 0x1000;
+	/** Flag bit: remote hybrid required */
 	public static final short FLAG_REMOTE_HYBRID_REQ = 0x2000;
 
 	private static final short[] noise_pattern_N = {

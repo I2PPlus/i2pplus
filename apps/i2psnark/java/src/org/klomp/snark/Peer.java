@@ -44,6 +44,9 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  * @since 0.1.0
  */
 public class Peer implements Comparable<Peer>, BandwidthListener {
+    /**
+     * Logger for this peer instance.
+     */
     protected final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
     // Identifying property, the peer id of the other side.
     private final PeerID peerID;
@@ -83,7 +86,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     private final long _id;
     private final AtomicBoolean _disconnected = new AtomicBoolean();
 
+    /** C h e c k  p e r i o d */
     static final long CHECK_PERIOD = PeerCoordinator.CHECK_PERIOD; // 40 seconds
+    /** R a t e  d e p t h */
     static final int RATE_DEPTH =
             PeerCoordinator.RATE_DEPTH; // make following arrays RATE_DEPTH long
     private final long[] uploaded_old = {-1, -1, -1};
@@ -148,9 +153,10 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Is this an incoming connection? For RPC
+     *  Returns whether this is an incoming connection (initiated by the remote peer).
      *
-     * @since 0.9.30
+     *  @return true if incoming, false if outgoing
+     *  @since 0.9.30
      */
     public boolean isIncoming() {
         return _isIncoming;
@@ -204,8 +210,10 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Compares the PeerIDs.
+     * Compares this peer to another by PeerID, then by internal ID.
      *
+     * @param p the peer to compare to
+     * @return a negative, zero, or positive integer
      * @deprecated unused?
      */
     @Deprecated
@@ -394,6 +402,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
+     * Returns whether the peer supports the FAST protocol extension (BEP 6).
+     *
+     * @return true if FAST extension is supported
      * @since 0.9.21
      */
     public boolean supportsFast() {
@@ -401,6 +412,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
+     * Returns the I2P destination of the connected peer.
+     *
+     * @return the peer's Destination, or null if not connected
      * @since 0.8.4
      */
     public Destination getDestination() {
@@ -411,9 +425,10 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Shared state across all peers, callers must sync on returned object
+     * Returns the shared magnet state across all peers on this torrent.
+     * Callers must synchronize on the returned object.
      *
-     * @return non-null
+     * @return the magnet state (non-null)
      * @since 0.8.4
      */
     public MagnetState getMagnetState() {
@@ -421,14 +436,19 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * @return could be null @since 0.8.4
+     * Returns the extension handshake data from the peer.
+     *
+     * @return the handshake map, or null if not yet received
+     * @since 0.8.4
      */
     public Map<String, BEValue> getHandshakeMap() {
         return handshakeMap;
     }
 
     /**
-     * @param map non-null
+     * Sets the extension handshake data and updates the request pipeline limit.
+     *
+     * @param map the handshake map (non-null)
      * @since 0.8.4
      */
     public void setHandshakeMap(Map<String, BEValue> map) {
@@ -447,7 +467,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * @return min of PeerState.MIN_PIPELINE, max of PeerState.MAX_PIPELINE
+     * Returns the maximum request pipeline depth negotiated with the peer.
+     *
+     * @return the max pipeline depth, bounded by MIN_PIPELINE and MAX_PIPELINE
      * @since 0.9.47
      */
     public int getMaxPipeline() {
@@ -455,6 +477,10 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
+     * Sends a protocol extension message to the peer.
+     *
+     * @param type the extension message type
+     * @param payload the extension message payload
      * @since 0.8.4
      */
     public void sendExtension(int type, byte[] payload) {
@@ -465,8 +491,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Switch from magnet mode to normal mode
+     * Switches from magnet mode to normal mode with metainfo.
      *
+     * @param meta the metainfo to set
      * @since 0.8.4
      */
     public void setMetaInfo(MetaInfo meta) {
@@ -477,6 +504,11 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         }
     }
 
+    /**
+     * Returns whether the peer is in active communication.
+     *
+     * @return true if the peer has an active PeerState
+     */
     public boolean isConnected() {
         return state != null;
     }
@@ -485,6 +517,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      * Disconnects this peer if it was connected. PeerListener.disconnected() will be called when
      * the connection is completely terminated. If deregister is true, partial pieces will be
      * returned.
+     *
+     * @param deregister true if partial pieces should be returned
      */
     public void disconnect(boolean deregister) {
         // Both in and out connection will call this.
@@ -492,6 +526,10 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         disconnect();
     }
 
+    /**
+     * Disconnects this peer, closing the socket and cleaning up state.
+     * Partial pieces are returned if deregister is true.
+     */
     void disconnect() {
         if (!_disconnected.compareAndSet(false, true)) {
             return;
@@ -539,7 +577,11 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         }
     }
 
-    /** Tell the peer we have another piece. */
+    /**
+     * Notifies the peer that we have a new piece.
+     *
+     * @param piece the piece index
+     */
     public void have(int piece) {
         PeerState s = state;
         if (s != null) {
@@ -551,6 +593,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      * Tell the other side that we are no longer interested in any of the outstanding requests (if
      * any) for this piece.
      *
+     * @param piece the piece index
      * @since 0.8.1
      */
     void cancel(int piece) {
@@ -563,6 +606,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /**
      * Are we currently requesting the piece?
      *
+     * @param p the piece index
+     * @return true if requesting the piece
      * @deprecated deadlocks
      * @since 0.8.1
      */
@@ -599,6 +644,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      * interest is true and this peer unchokes us then we start downloading from it. Has no effect
      * when not connected.
      *
+     * @param interest true if interested, false otherwise
      * @deprecated unused
      */
     @Deprecated
@@ -622,6 +668,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /**
      * Sets whether or not we are choking the peer. Defaults to true. When choke is false and the
      * peer requests some pieces we upload them, otherwise requests of this peer are ignored.
+     *
+     * @param choke true to choke (stop uploading), false to unchoke (allow uploads)
      */
     public void setChoking(boolean choke) {
         PeerState s = state;
@@ -653,8 +701,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /////// begin BandwidthListener interface ///////
 
     /**
-     * Increment the counter.
+     * Increments the download counter for this peer.
      *
+     * @param size the number of bytes downloaded
      * @since 0.8.4
      */
     public void downloaded(int size) {
@@ -664,8 +713,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Increment the counter.
+     * Increments the upload counter for this peer.
      *
+     * @param size the number of bytes uploaded
      * @since 0.8.4
      */
     public void uploaded(int size) {
@@ -843,9 +893,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         } // "no state";
     }
 
-    /**
-     * @since 0.9.36
-     */
+    /** @return max inactive time */
     public long getMaxInactiveTime() {
         return isCompleted() && !isInteresting()
                 ? PeerCoordinator.MAX_SEED_INACTIVE
@@ -895,6 +943,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
+     * Returns the total number of UT comments sent to this peer.
+     *
+     * @return the comment count
      * @since 0.9.31
      */
     int getTotalCommentsSent() {
@@ -902,6 +953,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
+     * Sets the total number of UT comments sent to this peer.
+     *
+     * @param count the count to set
      * @since 0.9.31
      */
     void setTotalCommentsSent(int count) {
@@ -909,7 +963,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * @return false
+     * Returns whether this is a web peer.
+     *
+     * @return false (base Peer is never a web peer)
      * @since 0.9.49
      */
     public boolean isWebPeer() {
@@ -917,8 +973,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * when did handshake complete?
+     * Returns the timestamp when the handshake completed.
      *
+     * @return the connection timestamp in milliseconds
      * @since 0.9.63
      */
     public long getWhenConnected() {
@@ -926,8 +983,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * when did we last send pex peers?
+     * Returns the timestamp when PEX peers were last sent to this peer.
      *
+     * @return the last PEX timestamp in milliseconds
      * @since 0.9.63
      */
     public long getPexLastSent() {
@@ -935,8 +993,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * when did we last send pex peers?
+     * Sets the timestamp when PEX peers were last sent to this peer.
      *
+     * @param now the current timestamp in milliseconds
      * @since 0.9.63
      */
     public void setPexLastSent(long now) {

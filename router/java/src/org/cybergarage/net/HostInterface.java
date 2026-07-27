@@ -43,8 +43,17 @@ public class HostInterface {
     //	Constants
     ////////////////////////////////////////////////
 
+    /**
+     * USE_LOOPBACK_ADDR.
+     */
     public static boolean USE_LOOPBACK_ADDR = false;
+    /**
+     * USE_ONLY_IPV4_ADDR.
+     */
     public static boolean USE_ONLY_IPV4_ADDR = false;
+    /**
+     * USE_ONLY_IPV6_ADDR.
+     */
     public static boolean USE_ONLY_IPV6_ADDR = false;
 
     ////////////////////////////////////////////////
@@ -52,14 +61,29 @@ public class HostInterface {
     ////////////////////////////////////////////////
 
     private static String ifAddress = "";
+    /**
+     * IPV4_BITMASK.
+     */
     public static final int IPV4_BITMASK = 0x0001;
+    /**
+     * IPV6_BITMASK.
+     */
     public static final int IPV6_BITMASK = 0x0010;
+    /**
+     * LOCAL_BITMASK.
+     */
     public static final int LOCAL_BITMASK = 0x0100;
 
+    /**
+     * setInterface.
+     */
     public static final void setInterface(String ifaddr) {
         ifAddress = ifaddr;
     }
 
+    /**
+     * getInterface.
+     */
     public static final String getInterface() {
         return ifAddress;
     }
@@ -87,6 +111,9 @@ public class HostInterface {
         return true;
     }
 
+    /**
+     * getNHostAddresses.
+     */
     public static final int getNHostAddresses() {
         if (hasAssignedInterface() == true) return 1;
 
@@ -154,6 +181,9 @@ public class HostInterface {
         return addresses.toArray(new InetAddress[] {});
     }
 
+    /**
+     * getHostAddress.
+     */
     public static final String getHostAddress(int n) {
         if (hasAssignedInterface() == true) return getInterface();
 
@@ -185,6 +215,9 @@ public class HostInterface {
     //	isIPv?Address
     ////////////////////////////////////////////////
 
+    /**
+     * isIPv6Address.
+     */
     public static final boolean isIPv6Address(String host) {
         try {
             InetAddress addr = InetAddress.getByName(host);
@@ -194,6 +227,9 @@ public class HostInterface {
         return false;
     }
 
+    /**
+     * isIPv4Address.
+     */
     public static final boolean isIPv4Address(String host) {
         try {
             InetAddress addr = InetAddress.getByName(host);
@@ -207,6 +243,9 @@ public class HostInterface {
     //	hasIPv?Interfaces
     ////////////////////////////////////////////////
 
+    /**
+     * hasIPv4Addresses.
+     */
     public static final boolean hasIPv4Addresses() {
         int addrCnt = getNHostAddresses();
         for (int n = 0; n < addrCnt; n++) {
@@ -216,6 +255,9 @@ public class HostInterface {
         return false;
     }
 
+    /**
+     * hasIPv6Addresses.
+     */
     public static final boolean hasIPv6Addresses() {
         int addrCnt = getNHostAddresses();
         for (int n = 0; n < addrCnt; n++) {
@@ -229,6 +271,9 @@ public class HostInterface {
     //	hasIPv?Interfaces
     ////////////////////////////////////////////////
 
+    /**
+     * getIPv4Address.
+     */
     public static final String getIPv4Address() {
         int addrCnt = getNHostAddresses();
         for (int n = 0; n < addrCnt; n++) {
@@ -238,6 +283,9 @@ public class HostInterface {
         return "";
     }
 
+    /**
+     * getIPv6Address.
+     */
     public static final String getIPv6Address() {
         int addrCnt = getNHostAddresses();
         for (int n = 0; n < addrCnt; n++) {
@@ -251,6 +299,9 @@ public class HostInterface {
     //	getHostURL
     ////////////////////////////////////////////////
 
+    /**
+     * getHostURL.
+     */
     public static final String getHostURL(String host, int port, String uri) {
         String hostAddr = host;
         if (isIPv6Address(host) == true) hostAddr = "[" + host + "]";

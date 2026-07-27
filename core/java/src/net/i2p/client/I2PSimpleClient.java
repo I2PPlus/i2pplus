@@ -22,6 +22,7 @@ import java.util.Properties;
  * just used to talk to the router.
  */
 public class I2PSimpleClient implements I2PClient {
+    /** default constructor */
 
     /**
      * This method is not supported.
@@ -78,6 +79,7 @@ public class I2PSimpleClient implements I2PClient {
      * @param context the application context
      * @param options set of options to configure the router with
      * @return the new session
+     * @throws I2PSessionException on error
      */
     public I2PSession createSession(I2PAppContext context, Properties options) throws I2PSessionException {
         return new I2PSimpleSession(context, options);

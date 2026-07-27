@@ -36,6 +36,7 @@ class StandardSocket extends Socket {
     private volatile boolean _outputShutdown;
     private volatile boolean _closed;
 
+    /** StandardSocket */
     StandardSocket(I2PSocket socket) {
         _socket = socket;
     }
@@ -48,6 +49,9 @@ class StandardSocket extends Socket {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * close.
+     */
     @Override
     public void close() throws IOException {
         _closed = true;
@@ -251,21 +255,33 @@ class StandardSocket extends Socket {
         return true;
     }
 
+    /**
+     * isClosed.
+     */
     @Override
     public boolean isClosed() {
         return _closed;
     }
 
+    /**
+     * isConnected.
+     */
     @Override
     public boolean isConnected() {
         return _connected;
     }
 
+    /**
+     * isInputShutdown.
+     */
     @Override
     public boolean isInputShutdown() {
         return _inputShutdown;
     }
 
+    /**
+     * isOutputShutdown.
+     */
     @Override
     public boolean isOutputShutdown() {
         return _outputShutdown;
@@ -360,18 +376,27 @@ class StandardSocket extends Socket {
     @Override
     public void setTrafficClass(int tc) { /* no-op */ }
 
+    /**
+     * shutdownInput.
+     */
     @Override
     public void shutdownInput() throws IOException {
         _inputShutdown = true;
         _socket.close();
     }
 
+    /**
+     * shutdownOutput.
+     */
     @Override
     public void shutdownOutput() throws IOException {
         _outputShutdown = true;
         _socket.close();
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return _socket.toString();

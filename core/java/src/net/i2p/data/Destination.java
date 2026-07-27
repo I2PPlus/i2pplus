@@ -94,6 +94,7 @@ import java.util.Map;
  */
 public class Destination extends KeysAndCert {
 
+    /**  cached b64 */
     private String _cachedB64;
 
     private static final int CACHE_SIZE;
@@ -110,6 +111,10 @@ public class Destination extends KeysAndCert {
     /**
      * Pull from cache or return new
      *
+     * @param in the input stream
+     * @return the destination
+     * @throws DataFormatException if data is invalid
+     * @throws IOException if an I/O error occurs
      * @since 0.9.9
      */
     public static Destination create(InputStream in) throws DataFormatException, IOException {
@@ -142,12 +147,14 @@ public class Destination extends KeysAndCert {
         return rv;
     }
 
+    /** default constructor */
     public Destination() {}
 
     /**
      * alternative constructor which takes a base64 string representation
      *
      * @param s a Base64 representation of the destination, as (eg) is used in hosts.txt
+     * @throws DataFormatException if the string is invalid
      */
     public Destination(String s) throws DataFormatException {
         fromBase64(s);
@@ -171,6 +178,8 @@ public class Destination extends KeysAndCert {
      *  Deprecated, used only by Packet.java in streaming.
      *  Broken for sig types P521 and RSA before 0.9.15
      *
+     *  @param target the target buffer
+     *  @param offset the offset to start writing
      *  @return the written length (NOT the new offset)
      */
     public int writeBytes(byte[] target, int offset) {
@@ -185,6 +194,7 @@ public class Destination extends KeysAndCert {
         return cur - offset;
     }
 
+    /** @return the size in bytes */
     public int size() {
         int rv = PublicKey.KEYSIZE_BYTES + _signingKey.length();
         if (_certificate.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {
@@ -239,11 +249,17 @@ public class Destination extends KeysAndCert {
         }
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object o) {
         return super.equals(o) && (o instanceof Destination);
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         // findbugs

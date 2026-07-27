@@ -51,66 +51,135 @@ import net.i2p.util.SystemVersion;
  * take care to maintain the public methods as a stable API.
  */
 public class TunnelController implements Logging {
+    /** ignored */
     private final Log _log;
+    /** ignored */
     private Properties _config;
+    /** ignored */
     private File _configFile;
+    /** ignored */
     private final I2PTunnel _tunnel;
+    /** ignored */
     private final List<String> _messages;
+    /** ignored */
     private List<I2PSession> _sessions;
+    /** ignored */
     private volatile TunnelState _state;
+    /** ignored */
     private volatile SimpleTimer2.TimedEvent _pkfc;
+    /** ignored */
     private volatile Thread _pendingStartupThread;
+    /** ignored */
     private volatile long _startupDelayEndTime;
-    /** Suppress log messages during tunnel restart @since 0.9.69+ */
+    /** Suppress log messages during tunnel restart */
     private boolean _suppressLog;
 
-    /** @since 0.9.19 */
+    /**
+     * The tunnel state.
+     *
+     */
     public enum TunnelState {
+        /** S t a r t  o n  l o a d */
         START_ON_LOAD,
+        /** S t a r t i n g */
         STARTING,
+        /** R u n n i n g */
         RUNNING,
+        /** S t o p p i n g */
         STOPPING,
+        /** S t o p p e d */
         STOPPED,
+        /** D e s t r o y i n g */
         DESTROYING,
+        /** D e s t r o y e d */
         DESTROYED,
+        /** D e l a y e d  s t a r t  p e n d i n g */
         DELAYED_START_PENDING,
     }
 
+    /**
+     * KEY_BACKUP_DIR.
+     */
     public static final String KEY_BACKUP_DIR = "i2ptunnel-keyBackup";
 
-    /** all of these @since 0.9.14 */
+    /** all of these  */
     public static final String PROP_DESCR = "description";
+    /**
+     * PROP_DEST.
+     */
     public static final String PROP_DEST = "targetDestination";
+    /**
+     * PROP_I2CP_HOST.
+     */
     public static final String PROP_I2CP_HOST = "i2cpHost";
+    /**
+     * PROP_I2CP_PORT.
+     */
     public static final String PROP_I2CP_PORT = "i2cpPort";
+    /**
+     * PROP_INTFC.
+     */
     public static final String PROP_INTFC = "interface";
+    /**
+     * PROP_FILE.
+     */
     public static final String PROP_FILE = "privKeyFile";
+    /**
+     * PROP_LISTEN_PORT.
+     */
     public static final String PROP_LISTEN_PORT = "listenPort";
+    /**
+     * PROP_NAME.
+     */
     public static final String PROP_NAME = "name";
+    /**
+     * PROP_PROXIES.
+     */
     public static final String PROP_PROXIES = "proxyList";
+    /**
+     * PROP_SHARED.
+     */
     public static final String PROP_SHARED = "sharedClient";
+    /**
+     * PROP_SPOOFED_HOST.
+     */
     public static final String PROP_SPOOFED_HOST = "spoofedHost";
+    /**
+     * PROP_START.
+     */
     public static final String PROP_START = "startOnLoad";
+    /**
+     * PROP_TARGET_HOST.
+     */
     public static final String PROP_TARGET_HOST = "targetHost";
+    /**
+     * PROP_TARGET_PORT.
+     */
     public static final String PROP_TARGET_PORT = "targetPort";
+    /**
+     * PROP_TYPE.
+     */
     public static final String PROP_TYPE = "type";
+    /**
+     * PROP_FILTER.
+     */
     public static final String PROP_FILTER = "filterDefinition";
-    /** @since 0.9.42 */
-    public static final String PROP_CONFIG_FILE = "configFile";
-    /** @since 0.9.46 */
-    public static final String PROP_TUN_GZIP = "i2ptunnel.gzip";
+        /** P r o p  c o n f i g  f i l e */
+        public static final String PROP_CONFIG_FILE = "configFile";
+        /** P r o p  t u n  g z i p */
+        public static final String PROP_TUN_GZIP = "i2ptunnel.gzip";
 
     /**
      *  Configuration property for the minimum startup delay in seconds.
      *  Only applies to server tunnels.
-     *  @since 0.9.68+
+     *
      */
     public static final String PROP_STARTUP_DELAY_MIN = "startupDelayMin";
 
     /**
      *  Configuration property for the maximum startup delay in seconds.
      *  Only applies to server tunnels.
-     *  @since 0.9.68+
+     *
      */
     public static final String PROP_STARTUP_DELAY_MAX = "startupDelayMax";
 
@@ -123,14 +192,14 @@ public class TunnelController implements Logging {
     /**
      *  Configuration property for the minimum shutdown delay in seconds.
      *  Only applies to server tunnels.
-     *  @since 0.9.68+
+     *
      */
     public static final String PROP_SHUTDOWN_DELAY_MIN = "shutdownDelayMin";
 
     /**
      *  Configuration property for the maximum shutdown delay in seconds.
      *  Only applies to server tunnels.
-     *  @since 0.9.68+
+     *
      */
     public static final String PROP_SHUTDOWN_DELAY_MAX = "shutdownDelayMax";
 
@@ -141,40 +210,84 @@ public class TunnelController implements Logging {
     public static final int DEFAULT_SHUTDOWN_DELAY_MAX = 0;
 
     /**
-     * all of these are @since 0.9.33 (moved from TunnelConfig)
+     * all of these are  (moved from TunnelConfig)
      */
     public static final String PROP_MAX_CONNS_MIN = "i2p.streaming.maxConnsPerMinute";
+    /**
+     * PROP_MAX_CONNS_HOUR.
+     */
     public static final String PROP_MAX_CONNS_HOUR = "i2p.streaming.maxConnsPerHour";
+    /**
+     * PROP_MAX_CONNS_DAY.
+     */
     public static final String PROP_MAX_CONNS_DAY = "i2p.streaming.maxConnsPerDay";
+    /**
+     * PROP_MAX_TOTAL_CONNS_MIN.
+     */
     public static final String PROP_MAX_TOTAL_CONNS_MIN = "i2p.streaming.maxTotalConnsPerMinute";
+    /**
+     * PROP_MAX_TOTAL_CONNS_HOUR.
+     */
     public static final String PROP_MAX_TOTAL_CONNS_HOUR = "i2p.streaming.maxTotalConnsPerHour";
+    /**
+     * PROP_MAX_TOTAL_CONNS_DAY.
+     */
     public static final String PROP_MAX_TOTAL_CONNS_DAY = "i2p.streaming.maxTotalConnsPerDay";
+    /**
+     * PROP_MAX_STREAMS.
+     */
     public static final String PROP_MAX_STREAMS = "i2p.streaming.maxConcurrentStreams";
+    /**
+     * PROP_LIMITS_SET.
+     */
     public static final String PROP_LIMITS_SET = "i2p.streaming.limitsManuallySet";
+    /**
+     * DEFAULT_MAX_CONNS_MIN.
+     */
     public static final int DEFAULT_MAX_CONNS_MIN = 200;
+    /**
+     * DEFAULT_MAX_CONNS_HOUR.
+     */
     public static final int DEFAULT_MAX_CONNS_HOUR = 1200;
+    /**
+     * DEFAULT_MAX_CONNS_DAY.
+     */
     public static final int DEFAULT_MAX_CONNS_DAY = 4000;
+    /**
+     * DEFAULT_MAX_TOTAL_CONNS_MIN.
+     */
     public static final int DEFAULT_MAX_TOTAL_CONNS_MIN = 800;
+    /**
+     * DEFAULT_MAX_TOTAL_CONNS_HOUR.
+     */
     public static final int DEFAULT_MAX_TOTAL_CONNS_HOUR = 4800;
+    /**
+     * DEFAULT_MAX_TOTAL_CONNS_DAY.
+     */
     public static final int DEFAULT_MAX_TOTAL_CONNS_DAY = 19200;
+    /**
+     * DEFAULT_MAX_STREAMS.
+     */
     public static final int DEFAULT_MAX_STREAMS = 400;
 
-    /** @since 0.9.34 */
-    public static final String PROP_LIMIT_ACTION = "i2p.streaming.limitAction";
+        /** P r o p  l i m i t  a c t i o n */
+        public static final String PROP_LIMIT_ACTION = "i2p.streaming.limitAction";
 
-    /** @since 0.9.14 */
-    public static final String PFX_OPTION = "option.";
+        /** P f x  o p t i o n */
+        public static final String PFX_OPTION = "option.";
 
     private static final String OPT_PERSISTENT = PFX_OPTION + "persistentClientKey";
+    /**
+     * OPT_BUNDLE_REPLY.
+     */
     public static final String OPT_BUNDLE_REPLY = PFX_OPTION + "shouldBundleReplyInfo";
     private static final String OPT_TAGS_SEND = PFX_OPTION + "crypto.tagsToSend";
     private static final String OPT_LOW_TAGS = PFX_OPTION + "crypto.lowTagThreshold";
     private static final String OPT_SIG_TYPE = PFX_OPTION + I2PClient.PROP_SIGTYPE;
-    /** @since 0.9.30 */
-    private static final String OPT_ALT_PKF = PFX_OPTION + I2PTunnelServer.PROP_ALT_PKF;
+        private static final String OPT_ALT_PKF = PFX_OPTION + I2PTunnelServer.PROP_ALT_PKF;
 
     /**
-     * all of these are @since 0.9.33
+     * all of these are
      */
     private static final String OPT_MAX_CONNS_MIN = PFX_OPTION + PROP_MAX_CONNS_MIN;
     private static final String OPT_MAX_CONNS_HOUR = PFX_OPTION + PROP_MAX_CONNS_HOUR;
@@ -184,28 +297,59 @@ public class TunnelController implements Logging {
     private static final String OPT_MAX_TOTAL_CONNS_DAY = PFX_OPTION + PROP_MAX_TOTAL_CONNS_DAY;
     private static final String OPT_MAX_STREAMS = PFX_OPTION + PROP_MAX_STREAMS;
     private static final String OPT_LIMITS_SET = PFX_OPTION + PROP_LIMITS_SET;
+    /**
+     * OPT_POST_MAX.
+     */
     public static final String OPT_POST_MAX = PFX_OPTION + I2PTunnelHTTPServer.OPT_POST_MAX;
+    /**
+     * OPT_POST_TOTAL_MAX.
+     */
     public static final String OPT_POST_TOTAL_MAX = PFX_OPTION + I2PTunnelHTTPServer.OPT_POST_TOTAL_MAX;
 
-    /** @since 0.9.34 */
-    private static final String OPT_LIMIT_ACTION = PFX_OPTION + PROP_LIMIT_ACTION;
+        private static final String OPT_LIMIT_ACTION = PFX_OPTION + PROP_LIMIT_ACTION;
     private static final String OPT_I2CP_GZIP = PFX_OPTION + I2PClient.PROP_GZIP;
 
     private static final String OPT_ENCTYPE = PFX_OPTION + "i2cp.leaseSetEncType";
 
-    /** @since 0.9.53 */
-    private static final String OPT_PRIORITY = PFX_OPTION + "outbound.priority";
+        private static final String OPT_PRIORITY = PFX_OPTION + "outbound.priority";
 
-    /** all of these @since 0.9.14 */
+    /** all of these  */
     public static final String TYPE_CONNECT = "connectclient";
+    /**
+     * TYPE_HTTP_BIDIR_SERVER.
+     */
     public static final String TYPE_HTTP_BIDIR_SERVER = "httpbidirserver";
+    /**
+     * TYPE_HTTP_CLIENT.
+     */
     public static final String TYPE_HTTP_CLIENT = "httpclient";
+    /**
+     * TYPE_HTTP_SERVER.
+     */
     public static final String TYPE_HTTP_SERVER = "httpserver";
+    /**
+     * TYPE_IRC_CLIENT.
+     */
     public static final String TYPE_IRC_CLIENT = "ircclient";
+    /**
+     * TYPE_IRC_SERVER.
+     */
     public static final String TYPE_IRC_SERVER = "ircserver";
+    /**
+     * TYPE_SOCKS.
+     */
     public static final String TYPE_SOCKS = "sockstunnel";
+    /**
+     * TYPE_SOCKS_IRC.
+     */
     public static final String TYPE_SOCKS_IRC = "socksirctunnel";
+    /**
+     * TYPE_STD_CLIENT.
+     */
     public static final String TYPE_STD_CLIENT = "client";
+    /**
+     * TYPE_STD_SERVER.
+     */
     public static final String TYPE_STD_SERVER = "server";
     /** Client in the UI and I2P side but a server on the localhost side */
     public static final String TYPE_STREAMR_CLIENT = "streamrclient";
@@ -214,7 +358,7 @@ public class TunnelController implements Logging {
 
     /**
      *  This is guaranteed to be available.
-     *  @since 0.9.17
+     *
      */
     public static final SigType PREFERRED_SIGTYPE;
     static {
@@ -282,7 +426,7 @@ public class TunnelController implements Logging {
     /**
      *  The I2PTunnel
      *
-     *  @since 0.9.53 for advanced plugin usage
+     *   for advanced plugin usage
      */
     public I2PTunnel getTunnel() {
         return _tunnel;
@@ -359,7 +503,7 @@ public class TunnelController implements Logging {
      * Does nothing if the file already exists.
      *
      * @return success
-     * @since 0.9.30
+     *
      */
     private boolean createAltPrivateKey() {
         if (PREFERRED_SIGTYPE == SigType.DSA_SHA1)
@@ -611,8 +755,7 @@ public class TunnelController implements Logging {
         }
     }
 
-    /** @since 0.7.12 */
-    private void startSocksIRCClient() {
+        private void startSocksIRCClient() {
         setListenOn();
         String listenPort = getListenPort();
         String sharedClient = getSharedClient();
@@ -703,7 +846,7 @@ public class TunnelController implements Logging {
      *  Get all the sessions we may be using.
      *
      *  @return a copy, non-null
-     *  @since 0.9.15
+     *
      */
     private Collection<I2PSession> getAllSessions() {
         // We use _sessions AND the tunnel sessions as
@@ -769,7 +912,7 @@ public class TunnelController implements Logging {
      *  Defaults in config properties are not honored.
      *
      *  @return keys with the "option." prefix stripped, non-null
-     *  @since 0.9.1 Much better than getClientOptions()
+     *   Much better than getClientOptions()
      */
     public Properties getClientOptionProps() {
         Properties opts = new Properties();
@@ -863,7 +1006,7 @@ public class TunnelController implements Logging {
      *  When combined with a greater startupDelayMax, the tunnel will start
      *  with a random delay between min and max seconds.
      *  @return the minimum startup delay in seconds for server tunnels.
-     *  @since 0.9.68+
+     *
      */
     public int getStartupDelayMin() {
         String val = _config.getProperty(PROP_STARTUP_DELAY_MIN);
@@ -880,7 +1023,7 @@ public class TunnelController implements Logging {
      *  When combined with a positive startupDelayMin less than this value,
      *  the tunnel will start with a random delay between min and max seconds.
      *  @return the maximum startup delay in seconds for server tunnels.
-     *  @since 0.9.68+
+     *
      */
     public int getStartupDelayMax() {
         String val = _config.getProperty(PROP_STARTUP_DELAY_MAX);
@@ -897,7 +1040,7 @@ public class TunnelController implements Logging {
      *  When combined with a greater shutdownDelayMax, the tunnel will stop
      *  with a random delay between min and max seconds during router shutdown.
      *  @return the minimum shutdown delay in seconds for server tunnels.
-     *  @since 0.9.68+
+     *
      */
     public int getShutdownDelayMin() {
         String val = _config.getProperty(PROP_SHUTDOWN_DELAY_MIN);
@@ -914,7 +1057,7 @@ public class TunnelController implements Logging {
       *  When combined with a positive shutdownDelayMin less than this value,
       *  the tunnel will stop with a random delay between min and max seconds during router shutdown.
       *  @return the maximum shutdown delay in seconds for server tunnels.
-      *  @since 0.9.68+
+      *
       */
      public int getShutdownDelayMax() {
          String val = _config.getProperty(PROP_SHUTDOWN_DELAY_MAX);
@@ -930,7 +1073,7 @@ public class TunnelController implements Logging {
      /**
       *  Get the remaining startup delay time for tunnels with delayed startup.
       *  @return remaining delay in seconds, or 0 if not in delayed startup state or delay has passed
-      *  @since 0.9.68+
+      *
       */
      public int getRemainingStartupDelay() {
          if (_state != TunnelState.DELAYED_START_PENDING) {
@@ -943,7 +1086,7 @@ public class TunnelController implements Logging {
      /**
       *  Set the startup delay end time. Called by TunnelControllerGroup when setting up delayed startup.
       *  @param delayMs the delay in milliseconds
-      *  @since 0.9.68+
+      *
       */
      void setStartupDelayEndTime(long delayMs) {
          _startupDelayEndTime = System.currentTimeMillis() + delayMs;
@@ -953,7 +1096,7 @@ public class TunnelController implements Logging {
       *  May NOT be restarted with restartTunnel() or startTunnel() later.
       *  This should release all resources.
       *
-      *  @since 0.9.17
+      *
       */
      public void destroyTunnel() {
         synchronized (this) {
@@ -1164,7 +1307,7 @@ public class TunnelController implements Logging {
 
     /**
      *  Is property p different in p1 and p2?
-     *  @since 0.9.30
+     *
      */
     private static boolean configChanged(Properties p1, Properties p2, String p) {
         String s1 = p1.getProperty(p);
@@ -1193,25 +1336,30 @@ public class TunnelController implements Logging {
     /**
      *  @return the config file as passed into constructor via "configFile" property,
      *          or as set later, or null
-     *  @since 0.9.42
+     *
      */
     public File getConfigFile() { return _configFile; }
 
     /**
      *  Set the config file. Only do this if previously null.
-     *  @since 0.9.42
+     *
      */
     public void setConfigFile(File file) { _configFile = file; }
 
+    /** @return the tunnel type */
     public String getType() { return _config.getProperty(PROP_TYPE); }
+    /** @return the tunnel name */
     public String getName() { return _config.getProperty(PROP_NAME); }
+    /** @return the tunnel description */
     public String getDescription() { return _config.getProperty(PROP_DESCR); }
+    /** @return the I2CP host */
     public String getI2CPHost() { return _config.getProperty(PROP_I2CP_HOST); }
+    /** @return the I2CP port */
     public String getI2CPPort() { return _config.getProperty(PROP_I2CP_PORT); }
 
     /**
      *  Absolute path to filter definition file
-     *  @since 0.9.40
+     *
      */
     public String getFilter() { return _config.getProperty(PROP_FILTER); }
 
@@ -1220,7 +1368,7 @@ public class TunnelController implements Logging {
      *  Note that a streamr client is a UI and I2P client but a server on the localhost side.
      *  Note that a streamr server is a UI and I2P server but a client on the localhost side.
      *
-     *  @since 0.9.17
+     *
      */
     public boolean isClient() {
         return isClient(getType());
@@ -1231,8 +1379,7 @@ public class TunnelController implements Logging {
      *  Note that a streamr client is a UI and I2P client but a server on the localhost side.
      *  Note that a streamr server is a UI and I2P server but a client on the localhost side.
      *
-     *  @since 0.9.17 moved from IndexBean
-     *  @return false if type == null
+     *  *  @return false if type == null
      */
     public static boolean isClient(String type) {
         return TYPE_STD_CLIENT.equals(type) ||
@@ -1265,9 +1412,13 @@ public class TunnelController implements Logging {
         return opts.toString();
     }
 
+    /** @return the listen interface */
     public String getListenOnInterface() { return _config.getProperty(PROP_INTFC); }
+    /** @return the target host */
     public String getTargetHost() { return _config.getProperty(PROP_TARGET_HOST); }
+    /** @return the target port */
     public String getTargetPort() { return _config.getProperty(PROP_TARGET_PORT); }
+    /** @return the spoofed host */
     public String getSpoofedHost() { return _config.getProperty(PROP_SPOOFED_HOST); }
 
     /**
@@ -1275,8 +1426,11 @@ public class TunnelController implements Logging {
      */
     public String getPrivKeyFile() { return _config.getProperty(PROP_FILE); }
 
+    /** @return the listen port */
     public String getListenPort() { return _config.getProperty(PROP_LISTEN_PORT); }
+    /** @return the target destination */
     public String getTargetDestination() { return _config.getProperty(PROP_DEST); }
+    /** @return the proxy list */
     public String getProxyList() { return _config.getProperty(PROP_PROXIES); }
 
     /** default true for clients, always false for servers */
@@ -1292,12 +1446,13 @@ public class TunnelController implements Logging {
      */
     public boolean getStartOnLoad() { return Boolean.parseBoolean(_config.getProperty(PROP_START, "true")); }
 
+    /** @return true if persistent client key is enabled */
     public boolean getPersistentClientKey() { return Boolean.parseBoolean(_config.getProperty(OPT_PERSISTENT)); }
 
     /**
      *  Does not necessarily exist.
      *  @return absolute path or null if unset
-     *  @since 0.9.17
+     *
      */
     public File getPrivateKeyFile() {
         return filenameToFile(getPrivKeyFile());
@@ -1306,7 +1461,7 @@ public class TunnelController implements Logging {
     /**
      *  Does not necessarily exist.
      *  @return absolute path or null if unset
-     *  @since 0.9.30
+     *
      */
     public File getAlternatePrivateKeyFile() {
         return filenameToFile(_config.getProperty(OPT_ALT_PKF));
@@ -1316,7 +1471,7 @@ public class TunnelController implements Logging {
      *  Does not necessarily exist.
      *  @param f relative or absolute path, may be null
      *  @return absolute path or null
-     *  @since 0.9.30
+     *
      */
     static File filenameToFile(String f) {
         if (f == null)
@@ -1355,7 +1510,7 @@ public class TunnelController implements Logging {
     /**
      *  Returns null if not running.
      *  @return Destination or null
-     *  @since 0.9.17
+     *
      */
     public Destination getDestination() {
         List<I2PSession> sessions = _tunnel.getSessions();
@@ -1371,7 +1526,7 @@ public class TunnelController implements Logging {
     /**
      *  Returns false if not running.
      *  @return true if the primary session has offline keys
-     *  @since 0.9.40
+     *
      */
     public boolean getIsOfflineKeys() {
         List<I2PSession> sessions = _tunnel.getSessions();
@@ -1383,7 +1538,7 @@ public class TunnelController implements Logging {
     /**
      *  Returns false if not running.
      *  @return true if ANY session or subsession has offline keys
-     *  @since 0.9.48
+     *
      */
     private boolean getIsOfflineKeysAnySession() {
         List<I2PSession> sessions = _tunnel.getSessions();
@@ -1417,7 +1572,7 @@ public class TunnelController implements Logging {
      *  Gets the current tunnel state.
      *
      * @return the current TunnelState
-     * @since 0.9.68+
+     *
      */
     public TunnelState getState() { return _state; }
 
@@ -1442,8 +1597,8 @@ public class TunnelController implements Logging {
         return true;
     }
 
-    /** @since 0.9.19 */
-    public synchronized void changeState(TunnelState state) {
+        /** Void */
+        public synchronized void changeState(TunnelState state) {
         _state = state;
     }
 
@@ -1462,10 +1617,10 @@ public class TunnelController implements Logging {
             _log.info(s);
     }
 
-    /** Suppress log messages during restart @since 0.9.69+ */
+    /** Suppress log messages during restart  */
     public void suppressLog() { _suppressLog = true; }
 
-    /** Restore log messages after restart @since 0.9.69+ */
+    /** Restore log messages after restart  */
     public void restoreLog() { _suppressLog = false; }
 
     /**
@@ -1483,7 +1638,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     * @since 0.9.15
+     *
      */
     @Override
     public String toString() {
@@ -1494,17 +1649,14 @@ public class TunnelController implements Logging {
      * Periodically check for an updated offline-signed private key file.
      * Log if about to expire.
      *
-     * @since 0.9.48
+     *
      */
     private class PKFChecker extends SimpleTimer2.TimedEvent {
         private final List<File> files;
         private final List<Long> stamps;
         private boolean wasRun;
 
-        /**
-         *  caller must schedule
-         *  @param f2 may be null
-         */
+        /** @param f the primary key file, @param f2 may be null */
         public PKFChecker(File f, File f2) {
             super(SimpleTimer2.getInstance());
             files = new ArrayList<>(2);
@@ -1517,9 +1669,7 @@ public class TunnelController implements Logging {
             }
         }
 
-        /**
-         *  Checks for offline key expiration and stops tunnel if expired.
-         */
+        /** Check for offline key expiration and stop tunnel if expired */
         public void timeReached() {
             if (!getIsRunning() && !getIsStarting())
                 return;

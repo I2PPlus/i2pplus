@@ -31,6 +31,8 @@ import net.i2p.data.Destination;
 public interface I2PSocketManager {
 
     /**
+     * Get the I2P session.
+     *
      *  @return the session, non-null
      */
     public I2PSession getSession();
@@ -49,11 +51,16 @@ public interface I2PSocketManager {
     public I2PSession addSubsession(InputStream privateKeyStream, Properties opts) throws I2PSessionException;
 
     /**
+     * Remove a subsession.
+     *
+     *  @param session the subsession to remove
      *  @since 0.9.21
      */
     public void removeSubsession(I2PSession session);
 
     /**
+     * Get all subsessions.
+     *
      *  @return a list of subsessions, non-null, does not include the primary session
      *  @since 0.9.21
      */
@@ -66,6 +73,9 @@ public interface I2PSocketManager {
      * @param ms milliseconds to wait, maximum
      */
     public void setAcceptTimeout(long ms);
+    /**
+     * getAcceptTimeout().
+     */
     public long getAcceptTimeout();
 
     /**
@@ -79,6 +89,8 @@ public interface I2PSocketManager {
 
     /**
      *  Current options, not a copy, setters may be used to make changes.
+     *
+     *  @return the default options
      */
     public I2PSocketOptions getDefaultOptions();
 
@@ -93,6 +105,8 @@ public interface I2PSocketManager {
 
     /**
      *  Create a copy of the current options, to be used in a setDefaultOptions() call.
+     *
+     *  @return a copy of the current options
      */
     public I2PSocketOptions buildOptions();
 
@@ -102,6 +116,7 @@ public interface I2PSocketManager {
      *  As of 0.9.19, defaults in opts are honored.
      *
      *  @param opts The new options, may be null
+     *  @return a modified copy of the current options
      */
     public I2PSocketOptions buildOptions(Properties opts);
 
@@ -146,6 +161,7 @@ public interface I2PSocketManager {
     /**
      * Has the socket manager been destroyed?
      *
+     * @return true if destroyed
      * @since 0.9.9
      */
     public boolean isDestroyed();
@@ -165,7 +181,7 @@ public interface I2PSocketManager {
      *
      * @param peer Destination to ping
      * @param timeoutMs timeout in ms, greater than zero
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException on bad args
      * @return success or failure
      */
     public boolean ping(Destination peer, long timeoutMs);
@@ -180,8 +196,8 @@ public interface I2PSocketManager {
      * @param localPort 0 - 65535
      * @param remotePort 0 - 65535
      * @param timeoutMs timeout in ms, greater than zero
+     * @throws IllegalArgumentException on bad args
      * @return success or failure
-     * @throws IllegalArgumentException
      * @since 0.9.12
      */
     public boolean ping(Destination peer, int localPort, int remotePort, long timeoutMs);
@@ -197,38 +213,59 @@ public interface I2PSocketManager {
      * @param remotePort 0 - 65535
      * @param timeoutMs timeout in ms, greater than zero
      * @param payload to include in the ping
+     * @throws IllegalArgumentException on bad args
      * @return the payload received in the pong, zero-length if none, null on failure or timeout
-     * @throws IllegalArgumentException
      * @since 0.9.18
      */
     public byte[] ping(Destination peer, int localPort, int remotePort, long timeoutMs, byte[] payload);
 
     /**
      *  For logging / diagnostics only
+     *
+     *  @return the name
      */
     public String getName();
 
     /**
      *  For logging / diagnostics only
+     *
+     *  @param name the name
      */
     public void setName(String name);
 
     /**
      * Deprecated - Factory will initialize.
+     *
+     * @param context the I2P app context
+     * @param session the session
+     * @param opts the options
+     * @param name the name
      * @throws UnsupportedOperationException always
      */
     public void init(I2PAppContext context, I2PSession session, Properties opts, String name);
 
+    /**
+     * lsnr).
+     */
     public void addDisconnectListener(DisconnectListener lsnr);
+    /**
+     * lsnr).
+     */
     public void removeDisconnectListener(DisconnectListener lsnr);
 
     /** Listener for notification when an I2P session is disconnected */
     public static interface DisconnectListener {
+        /**
+         * sessionDisconnected().
+         */
         public void sessionDisconnected();
     }
 
     /**
      *  Like getServerSocket but returns a real ServerSocket for easier porting of apps.
+     *
+     *  @return a standard ServerSocket
+     *  @throws IOException on I/O error
      *  @since 0.8.4
      */
     public ServerSocket getStandardServerSocket() throws IOException;
@@ -236,6 +273,10 @@ public interface I2PSocketManager {
     /**
      *  Like connect() but returns a real Socket, and throws only IOE,
      *  for easier porting of apps.
+     *
+     *  @param peer the destination
+     *  @return a connected Socket
+     *  @throws IOException on I/O error
      *  @since 0.8.4
      */
     public Socket connectToSocket(Destination peer) throws IOException;
@@ -243,7 +284,11 @@ public interface I2PSocketManager {
     /**
      *  Like connect() but returns a real Socket, and throws only IOE,
      *  for easier porting of apps.
+     *
+     *  @param peer the destination
      *  @param timeout ms if &gt; 0, forces blocking (disables connectDelay)
+     *  @return a connected Socket
+     *  @throws IOException on I/O error
      *  @since 0.8.4
      */
     public Socket connectToSocket(Destination peer, int timeout) throws IOException;

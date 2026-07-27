@@ -13,9 +13,13 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ClientAppManagerImpl implements ClientAppManager {
 
-    // registered name to client
+    /** registered name to client */
     protected final ConcurrentHashMap<String, ClientApp> _registered;
 
+    /**
+     *  Creates a new ClientAppManagerImpl.
+     *  @param ctx the I2P app context
+     */
     public ClientAppManagerImpl(I2PAppContext ctx) {
         _registered = new ConcurrentHashMap<>(8);
     }

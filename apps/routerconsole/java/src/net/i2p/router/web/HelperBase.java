@@ -9,11 +9,15 @@ import net.i2p.util.Log;
  *  Provides common functionality for router context access,
  *  translation services, and UI helper methods.
  */
+/**
+ * Creates a new HelperBase instance.
+ */
 public abstract class HelperBase {
     /** the router context */
     protected RouterContext _context;
     /** the writer for output */
     protected Writer _out;
+    /** the log instance */
     protected Log _log;
 
     /**

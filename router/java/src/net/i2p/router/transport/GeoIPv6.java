@@ -44,6 +44,9 @@ import net.i2p.util.Log;
  */
 public class GeoIPv6 {
 
+    /** utility class */
+    private GeoIPv6() {}
+
     private static final String GEOIP_DIR_DEFAULT = "geoip";
     private static final String GEOIP_FILE_DEFAULT = "geoipv6.dat.gz";
     private static final String MAGIC = "I2PGeoIPv6\0\001\0\0\0\0";
@@ -55,7 +58,9 @@ public class GeoIPv6 {
      * Lookup search items in the geoip file.
      * See below for format.
      *
+     * @param context the I2P app context
      * @param search a sorted array of IPs to search
+     * @param codeCache the country code cache
      * @return an array of country codes, same order as the search param,
      *         or a zero-length array on total failure.
      *         Individual array elements will be null for lookup failure of that item.
@@ -338,6 +343,7 @@ public class GeoIPv6 {
      *  GeoIPv6 infile1.csv[.gz] [infile2.csv[.gz]...] outfile.dat.gz
      *
      *  Used to create the file for distribution, do not comment out
+     *  @param args command line arguments
      */
     public static void main(String[] args) {
         if (args.length < 2) {

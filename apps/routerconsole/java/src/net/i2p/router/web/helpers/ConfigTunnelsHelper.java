@@ -19,12 +19,21 @@ import net.i2p.router.web.HelperBase;
  * @since 0.9.33
  */
 public class ConfigTunnelsHelper extends HelperBase {
+    /**
+     *  Default constructor.
+     */
+    public ConfigTunnelsHelper() { super(); }
     private static final String HOP = "hop";
     private static final String TUNNEL = "tunnel";
     /** dummies for translation */
     private static final String HOPS = ngettext("{0} hop", "{0} hops");
     private static final String TUNNELS = ngettext("{0} tunnel", "{0} tunnels");
 
+    /**
+     *  Render the tunnel configuration form.
+     *
+     *  @return the HTML form
+     */
     public String getForm() {
         StringBuilder buf = new StringBuilder(1024);
         // HTML: <input> cannot be inside a <table>

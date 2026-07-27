@@ -14,21 +14,36 @@ import java.io.InputStream;
  * Request the router look up the dest for a hash
  */
 public class DestLookupMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 34;
     private Hash _hash;
 
+    /**
+     * DestLookupMessage.
+     */
     public DestLookupMessage() {
         super();
     }
 
+    /**
+     * DestLookupMessage.
+     */
     public DestLookupMessage(Hash h) {
         _hash = h;
     }
 
+    /**
+     * getHash.
+     */
     public Hash getHash() {
         return _hash;
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
@@ -38,17 +53,26 @@ public class DestLookupMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if (_hash == null) throw new I2CPMessageException("Unable to write out the message as there is not enough data");
         return _hash.getData();
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

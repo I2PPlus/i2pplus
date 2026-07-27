@@ -42,6 +42,9 @@ class NodeInfo extends SimpleDataStructure {
     private Destination dest;
     private final int port;
 
+    /**
+     * LENGTH.
+     */
     public static final int LENGTH = NID.HASH_LENGTH + Hash.HASH_LENGTH + 2;
 
     /** With a fake NID used for pings */
@@ -185,10 +188,16 @@ class NodeInfo extends SimpleDataStructure {
             throw new IllegalArgumentException("NID/Hash mismatch");
     }
 
+    /**
+     * length.
+     */
     public int length() {
         return LENGTH;
     }
 
+    /**
+     * getNID.
+     */
     public NID getNID() {
         return this.nID;
     }
@@ -200,10 +209,16 @@ class NodeInfo extends SimpleDataStructure {
         return this.dest;
     }
 
+    /**
+     * getHash.
+     */
     public Hash getHash() {
         return this.hash;
     }
 
+    /**
+     * calculateHash.
+     */
     @Override
     public Hash calculateHash() {
         return this.hash;
@@ -222,19 +237,31 @@ class NodeInfo extends SimpleDataStructure {
         this.dest = dest;
     }
 
+    /**
+     * getPort.
+     */
     public int getPort() {
         return this.port;
     }
 
+    /**
+     * lastSeen.
+     */
     public long lastSeen() {
         return nID.lastSeen();
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return super.hashCode() ^ nID.hashCode() ^ port;
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object o) {
         try {
@@ -246,6 +273,9 @@ class NodeInfo extends SimpleDataStructure {
         }
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return "["

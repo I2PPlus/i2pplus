@@ -18,10 +18,16 @@ import net.i2p.I2PException;
  */
 public class I2CPMessageException extends I2PException {
 
+    /**
+     * I2CPMessageException.
+     */
     public I2CPMessageException(String message, Throwable parent) {
         super(message, parent);
     }
 
+    /**
+     * I2CPMessageException.
+     */
     public I2CPMessageException(String message) {
         super(message);
     }

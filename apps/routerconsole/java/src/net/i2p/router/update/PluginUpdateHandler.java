@@ -30,6 +30,12 @@ class PluginUpdateHandler implements Checker, Updater {
     private final ConsoleUpdateManager _mgr;
     private final Log _log;
 
+    /**
+     * Create a plugin update handler
+     *
+     * @param ctx the router context
+     * @param mgr the console update manager
+     */
     public PluginUpdateHandler(RouterContext ctx, ConsoleUpdateManager mgr) {
         _context = ctx;
         _log = _context.logManager().getLog(PluginUpdateHandler.class);

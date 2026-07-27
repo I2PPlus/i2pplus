@@ -27,7 +27,13 @@ import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
  * @author jrandom
  */
 public abstract class ClientManagerFacade implements Service {
+/** Property key for client only */
     public static final String PROP_CLIENT_ONLY = "i2cp.dontPublishLeaseSet";
+
+    /**
+     * Package-private constructor for abstract class.
+     */
+    protected ClientManagerFacade() {}
 
     /**
      * Request that a particular client authorize the Leases contained in the
@@ -45,6 +51,13 @@ public abstract class ClientManagerFacade implements Service {
      */
     public abstract void requestLeaseSet(Destination dest, LeaseSet set, long timeout, Job onCreateJob, Job onFailedJob);
 
+    /**
+     * Request that the client authorize the Leases contained in the
+     * LeaseSet, identified by destination hash.
+     *
+     * @param dest Hash of the destination
+     * @param set LeaseSet with requested leases
+     */
     public abstract void requestLeaseSet(Hash dest, LeaseSet set);
 
     /**
@@ -61,6 +74,7 @@ public abstract class ClientManagerFacade implements Service {
      * DOES block.
      *
      * @param dest Destination to be checked
+     * @return true if the destination is local
      */
     public abstract boolean isLocal(Destination dest);
     /**
@@ -68,10 +82,14 @@ public abstract class ClientManagerFacade implements Service {
      * DOES block.
      *
      * @param destHash Hash of Destination to be checked
+     * @return true if the destination hash is local
      */
     public abstract boolean isLocal(Hash destHash);
 
     /**
+     *  Update the delivery status of a message.
+     *
+     *  @param fromDest the source destination of the message
      *  @param id the router's ID for this message
      *  @param messageNonce the client's ID for this message
      *  @param status see I2CP MessageStatusMessage for success/failure codes
@@ -79,12 +97,30 @@ public abstract class ClientManagerFacade implements Service {
     public abstract void messageDeliveryStatusUpdate(Destination fromDest, MessageId id,
                                                      long messageNonce, int status);
 
+    /**
+     * Receive a message from the network for a local client.
+     *
+     * @param msg the received client message
+     */
     public abstract void messageReceived(ClientMessage msg);
 
+    /**
+     * Verify that the client manager is still alive and responding.
+     *
+     * @return true if the client manager is alive
+     */
     public boolean verifyClientLiveliness() { return true; }
+    /**
+     * Check whether this service is alive.
+     *
+     * @return true if alive
+     */
     public boolean isAlive() { return true; }
     /**
      * Does the client specified want their leaseSet published?
+     *
+     * @param destinationHash the destination hash to check
+     * @return true if the leaseSet should be published
      */
     public boolean shouldPublishLeaseSet(Hash destinationHash) { return true; }
 
@@ -97,20 +133,37 @@ public abstract class ClientManagerFacade implements Service {
     public Set<Destination> listClients() { return Collections.emptySet(); }
 
     /**
-     * Return the client's current config, or null if not connected
+     * Return the client's current config, or null if not connected.
      *
+     * @param dest the client destination
+     * @return the client session config, or null
      */
     public abstract SessionConfig getClientSessionConfig(Destination dest);
+    /**
+     * Get the session key manager for a given client.
+     *
+     * @param dest the destination hash
+     * @return the session key manager
+     */
     public abstract SessionKeyManager getClientSessionKeyManager(Hash dest);
+    /**
+     * renderStatusHTML.
+     */
     public void renderStatusHTML(Writer out) throws IOException { }
 
-    /** @since 0.8.8 */
+    /**
+     * Shut down the client manager with a reason message.
+     *
+     * @param msg the shutdown reason
+     * @since 0.8.8
+     */
     public abstract void shutdown(String msg);
 
     /**
      *  Declare that we're going to publish a meta LS for this destination.
      *  Must be called before publishing the leaseset.
      *
+     *  @param dest the destination to register
      *  @throws I2PSessionException on duplicate dest
      *  @since 0.9.41
      */
@@ -119,6 +172,7 @@ public abstract class ClientManagerFacade implements Service {
     /**
      *  Declare that we're no longer going to publish a meta LS for this destination.
      *
+     *  @param dest the destination to unregister
      *  @since 0.9.41
      */
     public void unregisterMetaDest(Destination dest) {}

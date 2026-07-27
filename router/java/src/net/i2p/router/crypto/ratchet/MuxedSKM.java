@@ -26,13 +26,16 @@ public class MuxedSKM extends SessionKeyManager {
     // ElG is about this much slower than EC
     private static final int ELG_SLOW_FACTOR = 5;
     private static final int RESTART_COUNTERS = 500;
+/** Muxedskm */
 
     public MuxedSKM(TransientSessionKeyManager elg, RatchetSKM ec) {
         _elg = elg;
         _ec = ec;
     }
+/** Return the elgSKM */
 
     public TransientSessionKeyManager getElgSKM() { return _elg; }
+/** Return the eCSKM */
 
     public RatchetSKM getECSKM() { return _ec; }
 
@@ -138,9 +141,15 @@ public class MuxedSKM extends SessionKeyManager {
         return null;
     }
 
+    /**
+     * getTagsToSend.
+     */
     @Override
     public int getTagsToSend() { return 0; }
 
+    /**
+     * getLowThreshold.
+     */
     @Override
     public int getLowThreshold() { return 0; }
 
@@ -166,6 +175,9 @@ public class MuxedSKM extends SessionKeyManager {
         return false;
     }
 
+    /**
+     * getAvailableTags.
+     */
     @Override
     public int getAvailableTags(PublicKey target, SessionKey key) {
         EncType type = target.getType();
@@ -176,6 +188,9 @@ public class MuxedSKM extends SessionKeyManager {
         return 0;
     }
 
+    /**
+     * getAvailableTimeLeft.
+     */
     @Override
     public long getAvailableTimeLeft(PublicKey target, SessionKey key) {
         EncType type = target.getType();
@@ -224,6 +239,9 @@ public class MuxedSKM extends SessionKeyManager {
         _ec.tagsReceived(key, tag, expire);
     }
 
+    /**
+     * consumeTag.
+     */
     @Override
     public SessionKey consumeTag(SessionTag tag) {
         SessionKey rv = _elg.consumeTag(tag);
@@ -234,12 +252,18 @@ public class MuxedSKM extends SessionKeyManager {
         return rv;
     }
 
+    /**
+     * shutdown.
+     */
     @Override
     public void shutdown() {
         _elg.shutdown();
         _ec.shutdown();
     }
 
+    /**
+     * renderStatusHTML.
+     */
     @Override
     public void renderStatusHTML(Writer out) throws IOException {
         _elg.renderStatusHTML(out);

@@ -14,6 +14,11 @@ import net.i2p.router.RouterContext;
 /** start up the network database */
 class BootNetworkDbJob extends JobImpl {
 
+    /**
+     * Create a new BootNetworkDbJob.
+     *
+     * @param ctx the router context
+     */
     public BootNetworkDbJob(RouterContext ctx) {
         super(ctx);
     }

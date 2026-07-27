@@ -51,12 +51,27 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
  *  @since 0.7.12
  */
 public class PluginStarter implements Runnable {
+    /**
+     * _context.
+     */
     protected RouterContext _context;
     private static final String CONFIG_FILE = "plugins.config";
+    /**
+     * PREFIX.
+     */
     public static final String PREFIX = "plugin.";
     // false, true, or deleted
+    /**
+     * ENABLED.
+     */
     public static final String ENABLED = ".startOnLoad";
+    /**
+     * DELETED.
+     */
     public static final String DELETED = "deleted";
+    /**
+     * PLUGIN_DIR.
+     */
     public static final String PLUGIN_DIR = "plugins";
     private static final String[] STANDARD_WEBAPPS = { "i2psnark", "i2ptunnel", "imagegen", "susidns",
                                                        "susimail", "addressbook", "routerconsole" };
@@ -100,6 +115,9 @@ public class PluginStarter implements Runnable {
         java9Blacklist = Collections.unmodifiableMap(map);
     }
 
+    /**
+     * PluginStarter.
+     */
     public PluginStarter(RouterContext ctx) {
         _context = ctx;
     }
@@ -111,6 +129,9 @@ public class PluginStarter implements Runnable {
          return ctx.getBooleanPropertyDefaultTrue("router.enablePlugins");
     }
 
+    /**
+     * run.
+     */
     @Override
     public void run() {
         deferredDeletePlugins(_context);
@@ -142,10 +163,16 @@ public class PluginStarter implements Runnable {
     private static class PluginUpdater implements Runnable {
         private final RouterContext _ctx;
 
+        /**
+         * PluginUpdater.
+         */
         public PluginUpdater(RouterContext ctx) {
             _ctx = ctx;
         }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             updateAll(_ctx, false);
@@ -1004,6 +1031,9 @@ public class PluginStarter implements Runnable {
             _pendingPluginClients.get(pluginName).add(this);
         }
 
+        /**
+         * cancel.
+         */
         @Override
         public boolean cancel() {
             boolean rv = super.cancel();
@@ -1011,6 +1041,9 @@ public class PluginStarter implements Runnable {
             return rv;
         }
 
+        /**
+         * timeReached.
+         */
         @Override
         public void timeReached() {
             super.timeReached();
@@ -1018,6 +1051,9 @@ public class PluginStarter implements Runnable {
         }
     }
 
+    /**
+     * isPluginRunning.
+     */
     public static boolean isPluginRunning(String pluginName, RouterContext ctx) {
         Server s = RouterConsoleRunner.getConsoleServer(ctx);
         return isPluginRunning(pluginName, ctx, s);

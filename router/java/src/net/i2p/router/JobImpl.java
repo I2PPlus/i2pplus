@@ -20,9 +20,11 @@ public abstract class JobImpl implements Job {
     private final JobTiming _timing;
     private static final AtomicLong _idSrc = new AtomicLong();
     // make this public so we can reference the job number for tunnel builds on /jobs
+    /** Unique job identifier */
     public final long _id;
     private volatile long _madeReadyOn;
 
+    /** Create a new JobImpl. */
     public JobImpl(RouterContext context) {
         _context = context;
         _timing = new JobTiming(context);

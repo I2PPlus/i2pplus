@@ -10,18 +10,30 @@ import org.bouncycastle.util.Util;
 public class MLKEMPrivateKeyParameters
     extends MLKEMKeyParameters
 {
+    /** Secret vector s. */
     final byte[] s;
+    /** Hash of public key. */
     final byte[] hpk;
+    /** Nonce value. */
     final byte[] nonce;
+    /** Public key t component. */
     final byte[] t;
+    /** Public key rho component. */
     final byte[] rho;
+    /** Optional seed for deterministic key gen. */
     final byte[] seed;
 
+    /**
+     * MLKEMPrivateKeyParameters.
+     */
     public MLKEMPrivateKeyParameters(MLKEMParameters params, byte[] s, byte[] hpk, byte[] nonce, byte[] t, byte[] rho)
     {
         this(params, s, hpk, nonce, t, rho, null);
     }
 
+    /**
+     * MLKEMPrivateKeyParameters.
+     */
     public MLKEMPrivateKeyParameters(MLKEMParameters params, byte[] s, byte[] hpk, byte[] nonce, byte[] t, byte[] rho, byte[] seed)
     {
         super(true, params);
@@ -34,6 +46,9 @@ public class MLKEMPrivateKeyParameters
         this.seed = seed != null ? Util.clone(seed) : null;
     }
 
+    /**
+     * MLKEMPrivateKeyParameters.
+     */
     public MLKEMPrivateKeyParameters(MLKEMParameters params, byte[] encoding)
     {
         super(true, params);
@@ -67,46 +82,73 @@ public class MLKEMPrivateKeyParameters
         }
     }
 
+    /**
+     * Encoded.
+     */
     public byte[] getEncoded()
     {
         return Util.concatenate(new byte[][]{ s, t, rho, hpk, nonce });
     }
 
+    /**
+     * HPK.
+     */
     public byte[] getHPK()
     {
         return Util.clone(hpk);
     }
 
+    /**
+     * Nonce.
+     */
     public byte[] getNonce()
     {
         return Util.clone(nonce);
     }
 
+    /**
+     * Public key.
+     */
     public byte[] getPublicKey()
     {
         return MLKEMPublicKeyParameters.getEncoded(t, rho);
     }
 
+    /**
+     * Public key parameters.
+     */
     public MLKEMPublicKeyParameters getPublicKeyParameters()
     {
         return new MLKEMPublicKeyParameters(getParameters(), t, rho);
     }
 
+    /**
+     * Rho.
+     */
     public byte[] getRho()
     {
         return Util.clone(rho);
     }
 
+    /**
+     * S.
+     */
     public byte[] getS()
     {
         return Util.clone(s);
     }
 
+    /**
+     * T.
+     */
     public byte[] getT()
     {
         return Util.clone(t);
     }
 
+    /**
+     * Seed.
+     */
     public byte[] getSeed()
     {
         return Util.clone(seed);

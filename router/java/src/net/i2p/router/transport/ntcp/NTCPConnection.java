@@ -77,13 +77,17 @@ public class NTCPConnection implements Closeable {
     private static volatile int MAX_WRITE_BUFS = 512;
 
     /**
-     * @return the current max write buffers per NTCP connection
+     * Get the current max write buffers per NTCP connection.
+     *
+     * @return the current max write buffers
      * @since 0.9.70+
      */
     public static int getMaxWriteBufs() { return MAX_WRITE_BUFS; }
 
     /**
      * Set the max write buffers per NTCP connection (called by Tuner).
+     *
+     * @param max the maximum write buffers
      * @since 0.9.70+
      */
     public static void setMaxWriteBufs(int max) {
@@ -189,28 +193,49 @@ public class NTCPConnection implements Closeable {
     // don't make combined messages too big, to minimize latency
     // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
     private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 5 * 1040;
+    /** Unspecified reason */
     static final int REASON_UNSPEC = 0;
+    /** Termination reason */
     static final int REASON_TERMINATION = 1;
+    /** Timeout reason */
     static final int REASON_TIMEOUT = 2;
+    /** AEAD failure reason */
     static final int REASON_AEAD = 4;
+    /** Options mismatch reason */
     static final int REASON_OPTIONS = 5;
+    /** Signature type mismatch reason */
     static final int REASON_SIGTYPE = 6;
+    /** Clock skew reason */
     static final int REASON_SKEW = 7;
+    /** Padding violation reason */
     static final int REASON_PADDING = 8;
+    /** Framing error reason */
     static final int REASON_FRAMING = 9;
+    /** Payload error reason */
     static final int REASON_PAYLOAD = 10;
+    /** Message 1 error reason */
     static final int REASON_MSG1 = 11;
+    /** Message 2 error reason */
     static final int REASON_MSG2 = 12;
+    /** Message 3 error reason */
     static final int REASON_MSG3 = 13;
+    /** Frame timeout reason */
     static final int REASON_FRAME_TIMEOUT = 14;
+    /** Signature failure reason */
     static final int REASON_SIGFAIL = 15;
+    /** S mismatch reason */
     static final int REASON_S_MISMATCH = 16;
+    /** Banned reason */
     static final int REASON_BANNED = 17;
+    /** Default minimum padding integer */
     static final int PADDING_MIN_DEFAULT_INT = 0;
+    /** Default maximum padding integer */
     static final int PADDING_MAX_DEFAULT_INT = 1;
     private static final float PADDING_MIN_DEFAULT = PADDING_MIN_DEFAULT_INT / 16.0f;
     private static final float PADDING_MAX_DEFAULT = PADDING_MAX_DEFAULT_INT / 16.0f;
+    /** Default dummy value */
     static final int DUMMY_DEFAULT = 0;
+    /** Default delay value */
     static final int DELAY_DEFAULT = 0;
     private static final NTCP2Options OUR_PADDING = new NTCP2Options(PADDING_MIN_DEFAULT, PADDING_MAX_DEFAULT,
                                                                      PADDING_MIN_DEFAULT, PADDING_MAX_DEFAULT,
@@ -229,6 +254,10 @@ public class NTCPConnection implements Closeable {
      * Create an inbound connected (though not established) NTCP connection.
      * Caller MUST call transport.establishing(this) after construction.
      * Caller MUST key.attach(this) after construction.
+         * @param ctx the router context
+     * @param transport the NTCP transport
+     * @param chan the socket channel
+     * @param key the selection key
      */
     public NTCPConnection(RouterContext ctx, NTCPTransport transport, SocketChannel chan, SelectionKey key) {
         this(ctx, transport, null, true);
@@ -242,6 +271,10 @@ public class NTCPConnection implements Closeable {
      * Create an outbound unconnected NTCP connection.
      * Caller MUST call transport.establishing(this) after construction.
      *
+     * @param ctx the router context
+     * @param transport the NTCP transport
+     * @param remotePeer the remote peer identity
+     * @param remAddr the remote router address
      * @param version must be 2-5
      * @throws DataFormatException if there's a problem with the address
      */
@@ -262,7 +295,12 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     * Base constructor in/out
+     * Base constructor in/out.
+     *
+     * @param ctx the router context
+     * @param transport the NTCP transport
+     * @param remAddr the remote router address, may be null for inbound
+     * @param isIn true for inbound, false for outbound
      * @since 0.9.36
      */
     private NTCPConnection(RouterContext ctx, NTCPTransport transport, RouterAddress remAddr, boolean isIn) {
@@ -291,20 +329,42 @@ public class NTCPConnection implements Closeable {
 
     /**
      *  Valid for inbound; valid for outbound shortly after creation
+     *
+     *  @return the socket channel
      */
     public SocketChannel getChannel() { return _chan; }
 
     /**
      *  Valid for inbound; valid for outbound shortly after creation
+     *
+     *  @return the selection key
      */
     public SelectionKey getKey() { return _conKey; }
+
+    /**
+     *  Set the socket channel.
+     *  @param chan the channel
+     */
     public void setChannel(SocketChannel chan) { _chan = chan; }
+
+    /**
+     *  Set the selection key.
+     *  @param key the key
+     */
     public void setKey(SelectionKey key) { _conKey = key; }
 
+    /**
+     *  @return true if inbound
+     */
     public boolean isInbound() { return _isInbound; }
+
+    /**
+     *  @return true if established
+     */
     public boolean isEstablished() { return _establishState.isComplete(); }
 
     /**
+     *  @return true if IPv6
      *  @since IPv6
      */
     public boolean isIPv6() {
@@ -312,6 +372,8 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
+     *  Get the remote IP address.
+     *
      *  @return null if unknown
      *  @since 0.9.53
      */
@@ -325,6 +387,8 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
+     *  Get the remote port.
+     *
      *  @return 0 if unknown
      *  @since 2.11.0
      */
@@ -337,21 +401,29 @@ public class NTCPConnection implements Closeable {
     /**
      *  Only valid during establishment;
      *  replaced with EstablishState.VERIFIED or FAILED afterwards
+     *
+     *  @return the establish state
      */
     EstablishState getEstablishState() { return _establishState; }
 
     /**
      *  Only valid for outbound; null for inbound
+     *
+     *  @return the remote address
      */
     public RouterAddress getRemoteAddress() { return _remAddr; }
 
     /**
      *  Valid for outbound; valid for inbound after handshake
+     *
+     *  @return the remote peer identity
      */
     public RouterIdentity getRemotePeer() { return _remotePeer; }
 
     /**
      *  Valid for outbound; valid for inbound after handshake
+     *
+     *  @param ident the remote peer identity
      */
     public void setRemotePeer(RouterIdentity ident) { _remotePeer = ident; }
 
@@ -361,7 +433,11 @@ public class NTCPConnection implements Closeable {
      */
     public long getClockSkew() { return _clockSkew; }
 
-    /** Get the connection uptime in milliseconds */
+    /**
+     *  Get the connection uptime in milliseconds.
+     *
+     *  @return the uptime in ms
+     */
     public long getUptime() {
         long establishedOn;
         synchronized(_statLock) {
@@ -385,10 +461,13 @@ public class NTCPConnection implements Closeable {
         }
     }
 
+    /** @return messages sent */
     public int getMessagesSent() { return _messagesWritten.get(); }
 
+    /** @return messages received */
     public int getMessagesReceived() { return _messagesRead.get(); }
 
+    /** @return outbound queue size */
     public int getOutboundQueueSize() {
             int queued = _outbound.size();
             synchronized(_writeLock) {
@@ -422,7 +501,11 @@ public class NTCPConnection implements Closeable {
         return rv;
     }
 
-    /** Get time since last send in milliseconds */
+    /**
+     *  Get time since last send in milliseconds.
+     *
+     *  @return time since last send in ms
+     */
     public long getTimeSinceSend() { return _context.clock().now()-_lastSendTime; }
 
     /**
@@ -433,7 +516,11 @@ public class NTCPConnection implements Closeable {
      */
     public long getTimeSinceSend(long now) { return now - _lastSendTime; }
 
-    /** Get time since last receive in milliseconds */
+    /**
+     *  Get time since last receive in milliseconds.
+     *
+     *  @return time since last receive in ms
+     */
     public long getTimeSinceReceive() { return _context.clock().now()-_lastReceiveTime; }
 
     /**
@@ -444,7 +531,11 @@ public class NTCPConnection implements Closeable {
      */
     public long getTimeSinceReceive(long now) { return now - _lastReceiveTime; }
 
-    /** Get time since connection creation in milliseconds */
+    /**
+     *  Get time since connection creation in milliseconds.
+     *
+     *  @return time since creation in ms
+     */
     public long getTimeSinceCreated() { return _context.clock().now()-_created; }
 
     /**
@@ -456,7 +547,9 @@ public class NTCPConnection implements Closeable {
     public long getTimeSinceCreated(long now) { return now -_created; }
 
     /**
-     *  @return when this connection was created (not established)
+     *  When this connection was created (not established).
+     *
+     *  @return the creation timestamp
      *  @since 0.9.20
      */
     public long getCreated() { return _created; }
@@ -475,6 +568,7 @@ public class NTCPConnection implements Closeable {
      *  Set version 2 from InboundEstablishState.
      *  Just for logging, so we know before finishInboundEstablish() is called.
      *
+     *  @param ver the version to set
      *  @since 0.9.36
      */
     public void setVersion(int ver) { _version = ver; }
@@ -486,7 +580,8 @@ public class NTCPConnection implements Closeable {
     public void setMayDisconnect() { _mayDisconnect = true; }
 
     /**
-     * @since 0.9.24
+     *  @return true if may disconnect
+     *  @since 0.9.24
      */
     public boolean getMayDisconnect() { return _mayDisconnect; }
 
@@ -513,15 +608,21 @@ public class NTCPConnection implements Closeable {
         return count;
     }
 
+    /** @return last zero read time */
     public long getLastZeroReadTime() {
         return _lastZeroReadTime;
     }
 
+    /** @return true if closed */
     public boolean isClosed() { return _closed.get(); }
 
     @Override
     public void close() { close(false); }
 
+    /**
+     *  Close the connection.
+     *  @param allowRequeue if true, requeue pending messages
+     */
     public void close(boolean allowRequeue) {
         if (!_closed.compareAndSet(false,true)) {
             _log.logCloseLoop("NTCPConnection", this);
@@ -551,6 +652,7 @@ public class NTCPConnection implements Closeable {
 
     /**
      *  Close and release EstablishState resources.
+     *  @param cause the cause of the timeout
      *  @param e may be null
      *  @since 0.9.16
      */
@@ -645,6 +747,8 @@ public class NTCPConnection implements Closeable {
 
     /**
      * toss the message onto the connection's send queue
+     *
+     * @param msg the message to send
      */
     public void send(OutNetMessage msg) {
         if (!_outbound.offer(msg)) {
@@ -659,11 +763,14 @@ public class NTCPConnection implements Closeable {
             _transport.getWriter().wantsWrite(this, "enqueued");
     }
 
+    /** @return true if outbound queue is backlogged */
     public boolean isBacklogged() { return _outbound.isBacklogged(); }
 
     /**
      * Returns true if the outbound connection is currently too backlogged to accept new messages,
      * allowing a short grace period after connection establishment and optionally logging details.
+     *
+     * @return true if too backlogged
      */
     public boolean tooBacklogged() {
         // Allow some slack just after connection establishment
@@ -743,14 +850,15 @@ public class NTCPConnection implements Closeable {
      * Contains unencrypted data that will be encrypted before transmission.
      */
     static class PrepBuffer {
+        /** Unencrypted data buffer */
         final byte[] unencrypted;
-        //int unencryptedLength;
-        //byte[] encrypted;
 
+        /** Constructor */
         public PrepBuffer() {
             unencrypted = new byte[BUFFER_SIZE];
         }
 
+        /** Initialize (no-op) */
         public void init() {
         }
     }
@@ -906,6 +1014,7 @@ public class NTCPConnection implements Closeable {
     /**
      *  NTCP2 only
      *
+     *  @param shouldFlood whether to flood the router info
      *  @since 0.9.36, pkg private since 0.9.55 for EventPumper
      */
     void sendOurRouterInfo(boolean shouldFlood) {
@@ -1136,6 +1245,7 @@ public class NTCPConnection implements Closeable {
      *  If we have bandwidth, calls write() which calls EventPumnper.wantsWrite(con).
      *  If no bandwidth, calls queuedWrite().
      *
+     *  @param data the data to write
      *  @since moved from EventPumper in 0.9.52
      */
     void wantsWrite(byte[] data) {
@@ -1147,6 +1257,9 @@ public class NTCPConnection implements Closeable {
      *  If we have bandwidth, calls write() which calls EventPumnper.wantsWrite(con).
      *  If no bandwidth, calls queuedWrite().
      *
+     *  @param data the data to write
+     *  @param off the offset in the data
+     *  @param len the length of the data
      *  @since 0.9.35 off/len version, moved from EventPumper in 0.9.52
      */
     void wantsWrite(byte[] data, int off, int len) {
@@ -1167,6 +1280,9 @@ public class NTCPConnection implements Closeable {
      * because we're choked by the bandwidth limiter.  Cache the contents of
      * the buffer (not copy) and register ourselves to be notified when the
      * contents have been fully allocated
+     *
+     * @param buf the buffer to queue
+     * @param req the bandwidth request
      */
     void queuedRecv(ByteBuffer buf, FIFOBandwidthLimiter.Request req) {
         req.attach(buf);
@@ -1186,6 +1302,8 @@ public class NTCPConnection implements Closeable {
      * This should not block, and the NTCP connection now owns the buffer
      * to do with as it pleases BUT it should eventually copy out the data
      * and call EventPumper.releaseBuf().
+     *
+     * @param buf the buffer received
      */
     void recv(ByteBuffer buf) {
         if (isClosed()) {
@@ -1206,6 +1324,7 @@ public class NTCPConnection implements Closeable {
     /**
      *  Write lock for pumper delayed writes
      *
+     *  @return the write lock object
      *  @since 0.9.53
      */
     Object getWriteLock() {
@@ -1241,7 +1360,11 @@ public class NTCPConnection implements Closeable {
         }
     }
 
-    /** Get the next read buffer, or null if none available */
+    /**
+     * Get the next read buffer, or null if none available.
+     *
+     * @return the next read buffer, or null
+     */
     ByteBuffer getNextReadBuf() {
         return _readBufs.poll();
     }
@@ -1250,6 +1373,7 @@ public class NTCPConnection implements Closeable {
      * Replaces getWriteBufCount().
      * Caller should sync on getWriteLock()
      *
+     * @return true if write buffer is empty
      * @since 0.8.12
      */
     boolean isWriteBufEmpty() {
@@ -1270,6 +1394,8 @@ public class NTCPConnection implements Closeable {
     /**
      *  Remove the buffer, which _should_ be the one at the head of _writeBufs.
      *  Caller must sync on _writeLock
+     *
+     *  @param buf the buffer to remove
      */
     void removeWriteBuf(ByteBuffer buf) {
         // never clear OutNetMessages during establish phase
@@ -1328,7 +1454,9 @@ public class NTCPConnection implements Closeable {
     private float _sendBps;
     private float _recvBps;
 
+    /** @return current send rate in Bps */
     public float getSendRate() { synchronized(_statLock) { return _sendBps; } }
+    /** @return current receive rate in Bps */
     public float getRecvRate() { synchronized(_statLock) { return _recvBps; } }
 
     /**
@@ -1357,19 +1485,21 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     * Connection must be established!
+     *  Connection must be established!
      *
-     * The contents of the buffer include some fraction of one or more
-     * encrypted and encoded I2NP messages.  individual i2np messages are
-     * encoded as "sizeof(data)+data+pad+crc", and those are encrypted
-     * with the session key and the last 16 bytes of the previous encrypted
-     * i2np message.
+     *  The contents of the buffer include some fraction of one or more
+     *  encrypted and encoded I2NP messages.  individual i2np messages are
+     *  encoded as "sizeof(data)+data+pad+crc", and those are encrypted
+     *  with the session key and the last 16 bytes of the previous encrypted
+     *  i2np message.
      *
-     * The NTCP connection now owns the buffer
-     * BUT it must copy out the data
-     * as reader will call EventPumper.releaseBuf().
+     *  The NTCP connection now owns the buffer
+     *  BUT it must copy out the data
+     *  as reader will call EventPumper.releaseBuf().
      *
-     * This is the entry point as called from Reader.processRead()
+     *  This is the entry point as called from Reader.processRead()
+     *
+     *  @param buf the buffer containing encrypted data
      */
     void recvEncryptedI2NP(ByteBuffer buf) {
         if (isBanned()) {return;}
@@ -1525,6 +1655,7 @@ public class NTCPConnection implements Closeable {
      *
      * @param sender use to send to Alice
      * @param sip_ba 24 bytes to init SipHash to Alice
+     * @param reason the reason code
      * @since 0.9.36
      */
     synchronized void failInboundEstablishment(CipherState sender, byte[] sip_ba, int reason) {
@@ -2012,18 +2143,26 @@ public class NTCPConnection implements Closeable {
         }
     }
 
+    /** @return true if write interest is pending */
     public boolean hasWriteInterestPending() {
         return _writeInterestPending.get();
     }
 
+    /**
+     *  @param expected expected value
+     *  @param update new value
+     *  @return true if CAS succeeded
+     */
     public boolean compareAndSetWriteInterestPending(boolean expected, boolean update) {
         return _writeInterestPending.compareAndSet(expected, update);
     }
 
+    /** Update last active time to now */
     public void updateLastActiveTime() {
         _lastActiveTime = System.currentTimeMillis();
     }
 
+    /** @return last active time */
     public long getLastActiveTime() {
         return _lastActiveTime;
     }
@@ -2032,6 +2171,9 @@ public class NTCPConnection implements Closeable {
 
     /**
      * Check if the given interest op is not already set
+     *
+     * @param ops the interest ops to check
+     * @return true if the op is not already set
      */
     public boolean shouldSetInterest(int ops) {
         return (_currentInterestOps & ops) != ops;
@@ -2039,6 +2181,8 @@ public class NTCPConnection implements Closeable {
 
     /**
      * Update the cached interest ops
+     *
+     * @param ops the new interest ops
      */
     public void updateInterestOps(int ops) {
         _currentInterestOps = ops;

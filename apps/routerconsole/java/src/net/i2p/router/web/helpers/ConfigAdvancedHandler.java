@@ -12,11 +12,13 @@ import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.web.FormHandler;
 
 /**
- * Handles form submissions from the advanced configuration page.
- * Processes and saves changes to router configuration including floodfill settings
- * and advanced router properties. Validates permissions and applies configuration changes.
- */
+  * Handles form submissions from the advanced configuration page.
+  * Processes and saves changes to router configuration including floodfill settings
+  * and advanced router properties. Validates permissions and applies configuration changes.
+  */
 public class ConfigAdvancedHandler extends FormHandler {
+    /** Default constructor */
+    public ConfigAdvancedHandler() {}
     private boolean _shouldSave;
     private String _oldConfig;
     private String _config;
@@ -31,18 +33,30 @@ public class ConfigAdvancedHandler extends FormHandler {
         }
     }
 
+    /**
+     * Set whether to save configuration.
+     * @param moo ignored
+     */
     public void setShouldsave(String moo) { _shouldSave = true; }
 
     /**
      *  Set the floodfill status from form submission.
+     *
+     *  @param ff the floodfill status
      *  @since 0.9.20
      */
     public void setFf(String ff) {_ff = ff;}
 
+    /**
+     * Set the config text.
+     * @param val the config text
+     */
     public void setNofilter_config(String val) {_config = val;}
 
     /**
      *  Set the previous config text for diff comparison.
+     *
+     *  @param val the previous config text
      *  @since 0.9.33
      */
     public void setNofilter_oldConfig(String val) {_oldConfig = val;}

@@ -63,42 +63,7 @@ import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
-/**
- * Secure Semi-reliable UDP (SSU) transport implementation for I2P.
- *
- * <p>This class provides the primary UDP-based transport for I2P
- * communication, implementing both SSU1 (legacy) and SSU2
- * (modern) protocols. It handles peer connections, packet
- * processing, session management, and reachability testing.</p>
- *
- * <p><strong>Protocol Features:</strong></p>
- * <ul>
- *   <li>Session establishment and maintenance</li>
- *   <li>Inbound and outbound message handling</li>
- *   <li>Peer introduction and testing systems</li>
- *   <li>Reachability detection and reporting</li>
- *   <li>IPv4 and IPv6 addressing support</li>
- *   <li>Packet fragmentation and reassembly</li>
- *   <li>Acknowledgment and reliability mechanisms</li>
- * </ul>
- *
- * <p><strong>Internal Architecture:</strong></p>
- * <ul>
- *   <li>{@link EstablishmentManager} for session establishment</li>
- *   <li>{@link PacketHandler} for processing incoming packets</li>
- *   <li>{@link IntroductionManager} for managing introductions</li>
- *   <li>{@link PeerTestManager} for reachability testing</li>
- *   <li>Various state managers for connection tracking</li>
- * </ul>
- *
- * <p><strong>SSU Protocol Support:</strong></p>
- * <ul>
- *   <li>SSU1: Legacy protocol for older peers</li>
- *   <li>SSU2: Modern protocol with improved efficiency</li>
- *   <li>Automatic protocol negotiation and fallback</li>
- *   <li>Backward compatibility with existing peers</li>
- *  </ul>
- */
+/** TransportImpl */
 public class UDPTransport extends TransportImpl {
     private final Log _log;
     private final BanLogger _banLogger;
@@ -187,13 +152,16 @@ public class UDPTransport extends TransportImpl {
     private final Tuner _tuner;
 
     /**
-     * @return the transport tuner
+     * The transport tuner.
+     * @return the tuner
      * @since 0.9.70+
      */
     public Tuner getTuner() { return _tuner; }
 
     // SSU2
+    /** SSU2 */
     public static final String STYLE2 = "SSU2";
+    /** 2 */
     static final int SSU2_INT_VERSION = 2;
     /** "2" */
     static final String SSU2_VERSION = Integer.toString(SSU2_INT_VERSION);
@@ -213,20 +181,15 @@ public class UDPTransport extends TransportImpl {
     private static final long MIN_DOWNTIME_TO_REKEY_HIDDEN = 24*60*60*1000L;
 
     private static final int DROPLIST_PERIOD = 10*60*1000;
+    /** SSU */
     public static final String STYLE = "SSU";
+    /** i2np.udp.internalPort */
     public static final String PROP_INTERNAL_PORT = "i2np.udp.internalPort";
     /** define this to explicitly set an external IP address */
     public static final String PROP_EXTERNAL_HOST = "i2np.udp.host";
     /** define this to explicitly set an external port */
     public static final String PROP_EXTERNAL_PORT = "i2np.udp.port";
-    /**
-     * If i2np.udp.preferred is set to "always", UDP bids will always be under the bid from
-     * the TCP transport - even if a TCP connection already exists.
-     * If set to "true", UDP is preferred unless no UDP session exists and a TCP connection
-     * already exists.
-     * If it is set to "false" (the default), it will prefer TCP unless no TCP session exists
-     * and a UDP connection already exists.
-     */
+    /** i2np.udp.preferred */
     public static final String PROP_PREFER_UDP = "i2np.udp.preferred";
     private static final String DEFAULT_PREFER_UDP = "false";
 
@@ -237,14 +200,20 @@ public class UDPTransport extends TransportImpl {
 
     /** allowed sources of address updates */
     public static final String PROP_SOURCES = "i2np.udp.addressSources";
+    /** + */
     public static final String DEFAULT_SOURCES = SOURCE_INTERFACE.toConfigString() + ',' +
                                                  SOURCE_UPNP.toConfigString() + ',' +
                                                  SOURCE_SSU.toConfigString();
     /** remember IP changes */
     public static final String PROP_IP= "i2np.lastIP";
+    /** i2np.lastIPChange */
     public static final String PROP_IP_CHANGE = "i2np.lastIPChange";
+    /** i2np.laptopMode */
     public static final String PROP_LAPTOP_MODE = "i2np.laptopMode";
-    /** @since 0.9.43 */
+    /**
+     * Last IPv6 config.
+     * @since 0.9.43
+     */
     public static final String PROP_IPV6 = "i2np.lastIPv6";
 
     /** Do we require introducers, regardless of our status? */
@@ -255,7 +224,10 @@ public class UDPTransport extends TransportImpl {
     public static final String PROP_BIND_INTERFACE = "i2np.udp.bindInterface";
     /** Override the "large" (max) MTU, default is PeerState.LARGE_MTU */
     private static final String PROP_DEFAULT_MTU = "i2np.udp.mtu";
-    /** @since 0.9.48 */
+    /**
+     * Introducer key property.
+     * @since 0.9.48
+     */
     public static final String PROP_INTRO_KEY = "i2np.udp.introKey";
 
     private static final String CAP_TESTING = Character.toString(UDPAddress.CAPACITY_TESTING);
@@ -269,35 +241,56 @@ public class UDPTransport extends TransportImpl {
     /** Consecutive send failures before considering a peer for drop (requires inactivity too) */
     private static final int MAX_CONSECUTIVE_FAILED = 3;
 
-    /** Get the outbound establish timeout in ms */
+    /**
+     * The outbound establish timeout in ms.
+     * @return the outbound establish timeout in ms
+     */
     public static long getMaxObEstablishTime() { return EstablishmentManager.MAX_OB_ESTABLISH_TIME.get(); }
-    /** Set the outbound establish timeout, bounded 1500-5000ms */
+    /**
+     * Outbound establish timeout.
+     * @param ms the outbound establish timeout, bounded 1500-5000ms
+     */
     public static void setMaxObEstablishTime(long ms) {
         EstablishmentManager.MAX_OB_ESTABLISH_TIME.set(Math.max(1500, Math.min(5000, ms)));
     }
 
-    /** Get the inbound establish timeout in ms */
+    /**
+     * The inbound establish timeout in ms.
+     * @return the inbound establish timeout in ms
+     */
     public static long getMaxIbEstablishTime() { return EstablishmentManager.MAX_IB_ESTABLISH_TIME.get(); }
-    /** Set the inbound establish timeout, bounded 1500-5000ms */
+    /**
+     * Inbound establish timeout.
+     * @param ms the inbound establish timeout, bounded 1500-5000ms
+     */
     public static void setMaxIbEstablishTime(long ms) {
         EstablishmentManager.MAX_IB_ESTABLISH_TIME.set(Math.max(1500, Math.min(5000, ms)));
     }
 
-    /** Get the data message timeout in ms */
+    /**
+     * The data message timeout in ms.
+     * @return the data message timeout in ms
+     */
     public static long getDataMessageTimeout() { return EstablishmentManager.DATA_MESSAGE_TIMEOUT.get(); }
-    /** Set the data message timeout, bounded 15000-120000ms */
+    /**
+     * Data message timeout.
+     * @param ms the data message timeout, bounded 15000-120000ms
+     */
     public static void setDataMessageTimeout(long ms) {
         EstablishmentManager.DATA_MESSAGE_TIMEOUT.set(Math.max(15000, Math.min(120000, ms)));
     }
 
+    /** 5 */
     public static final int DEFAULT_COST = 5;
     private static final int SSU_OUTBOUND_COST = 14;
+    /** RateConstants.SHORT_TERM_RATES */
     static final long[] RATES = RateConstants.SHORT_TERM_RATES;
     /** Minimum active peers to maintain IP detection, etc. */
     private static final int MIN_PEERS = 80;
     private static final int MIN_PEERS_IF_HAVE_V6 = 100;
     /** Minimum peers volunteering to be introducers if we need that */
     private static final int MIN_INTRODUCER_POOL = 30;
+    /** 20 */
     static final long INTRODUCER_EXPIRATION_MARGIN = 20*60*1000L;
     private static final long MIN_DOWNTIME_TO_REKEY = 7*24*60*60*1000L;
 
@@ -404,6 +397,7 @@ public class UDPTransport extends TransportImpl {
                                                                       Status.IPV4_SNAT_IPV6_UNKNOWN);
 
     /**
+     *  @param ctx the router context
      *  @param xdh non-null
      */
     public UDPTransport(RouterContext ctx, X25519KeyFactory xdh) {
@@ -931,6 +925,7 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
+    /** Shutdown. */
     public synchronized void shutdown() {
         if (_haveIPv6Address) {
             boolean fwOld = _context.getBooleanProperty(PROP_IPV6_FIREWALLED);
@@ -978,6 +973,7 @@ public class UDPTransport extends TransportImpl {
     /**
      *  The endpoint has failed. Remove it.
      *
+     *  @param endpoint the endpoint to fail
      *  @since 0.9.16
      */
     public void fail(UDPEndpoint endpoint) {
@@ -1034,7 +1030,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Get the valid SSU version of Bob's SSU address
+     * valid SSU version of Bob's SSU address
      * for our outbound connections as Alice.
      *
      * @return the valid version 1 or 2, or 0 if unusable
@@ -1176,6 +1172,7 @@ public class UDPTransport extends TransportImpl {
      *  unless the endpoint failed to bind.
      */
     @Override
+    /** RequestedPort */
     public int getRequestedPort() {
         return getRequestedPort(false);
     }
@@ -1198,7 +1195,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Set the MTU for the socket interface at addr.
+     *  MTU for the socket interface at addr.
      *  @param addr null ok
      *  @return the mtu
      *  @since 0.9.2
@@ -1241,6 +1238,7 @@ public class UDPTransport extends TransportImpl {
      * The MTU for the socket interface.
      * To be used as the "large" MTU.
      * @return limited to range PeerState.MIN_MTU to PeerState.LARGE_MTU.
+     * @param ipv6 true for IPv6, false for IPv4
      * @since 0.9.2, public since 0.9.31
      */
     public int getMTU(boolean ipv6) {
@@ -1253,6 +1251,7 @@ public class UDPTransport extends TransportImpl {
      * To be used as the "large" MTU.
      *
      * @return limited to range PeerState2.MIN_MTU to PeerState2.LARGE_MTU, or 0 if unavailable
+     * @param ipv6 true for IPv6, false for IPv4
      * @since 0.9.55
      */
     public int getSSU2MTU(boolean ipv6) {
@@ -1265,6 +1264,7 @@ public class UDPTransport extends TransportImpl {
      */
     private static final int ALLOW_IP_CHANGE_INTERVAL = 2*60*1000;
 
+    /** Inbound connection received */
     void inboundConnectionReceived(boolean isIPv6) {
         if (isIPv6) {
             _lastInboundIPv6 = _context.clock().now();
@@ -1292,6 +1292,7 @@ public class UDPTransport extends TransportImpl {
      * @param port 0 if unknown
      */
     @Override
+    /** Port. */
     public void externalAddressReceived(Transport.AddressSource source, byte[] ip, int port) {
         if (_log.shouldWarn())
             _log.warn("Received address: " + Addresses.toString(ip, port) + " from: " + source);
@@ -1381,6 +1382,7 @@ public class UDPTransport extends TransportImpl {
      *  Don't do anything if UPnP claims failure.
      */
     @Override
+    /** Reason. */
     public void forwardPortStatus(byte[] ip, int port, int externalPort, boolean success, String reason) {
         if (success)
             _haveUPnP = true;
@@ -1539,6 +1541,7 @@ public class UDPTransport extends TransportImpl {
         // this defaults to true when we are firewalled or unknown and false otherwise.
         boolean fixedPort = getIsPortFixed(isIPv6);
 
+        /** _rebuildLock */
         synchronized (_rebuildLock) {
             RouterAddress current = getCurrentExternalAddress(isIPv6);
             byte[] externalListenHost = current != null ? current.getIP() : null;
@@ -1709,6 +1712,7 @@ public class UDPTransport extends TransportImpl {
      * AND we have a public IPv6 address.
      *
      * @param addr may be null, returns false
+     * @return true if valid
      */
     public final boolean isValid(byte[] addr) {
         if (addr == null) return false;
@@ -1754,7 +1758,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Get the states for all peers at the given remote host, ignoring port.
+     *  states for all peers at the given remote host, ignoring port.
      *  Used for a last-chance search for a peer that changed port, by PacketHandler.
      *  Always returns empty list for IPv6 hostInfo.
      *  @since 0.9.3
@@ -1780,7 +1784,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Get the state by SSU2 connection ID
+     * state by SSU2 connection ID
      * @since 0.9.55
      */
     PeerState2 getPeerState(long rcvConnID) {
@@ -1829,18 +1833,14 @@ public class UDPTransport extends TransportImpl {
      * For /peers UI only. Not a public API, not for external use.
      *
      * @return not a copy, do not modify
+     * @return not a copy, do not modify
      * @since 0.9.31
      */
     public Collection<PeerState> getPeers() {
         return _peersByIdent.values();
     }
 
-    /**
-     * Connected peers.
-     *
-     * @return a copy, modifiable
-     * @since 0.9.34
-     */
+    /** Established */
     public List<Hash> getEstablished() {
         return new ArrayList<>(_peersByIdent.keySet());
     }
@@ -1852,6 +1852,7 @@ public class UDPTransport extends TransportImpl {
     void changePeerPort(PeerState peer, int newPort) {
         // this happens a lot
         int oldPort;
+        /** Add/drop lock. */
         synchronized (_addDropLock) {
             oldPort = peer.getRemotePort();
             if (oldPort != newPort) {
@@ -1870,6 +1871,7 @@ public class UDPTransport extends TransportImpl {
      */
     void changePeerAddress(PeerState2 peer, RemoteHostId newAddress) {
         RemoteHostId oldAddress;
+        /** Add/drop lock. */
         synchronized (_addDropLock) {
             oldAddress = peer.getRemoteHostId();
             if (!oldAddress.equals(newAddress)) {
@@ -2002,6 +2004,7 @@ public class UDPTransport extends TransportImpl {
                     }
                     if (count < PUBLIC_RELAY_COUNT) {
                         long now = _context.clock().now();
+                        /** _rebuildLock */
                         synchronized (_rebuildLock) {
                             long sinceSelected = now - (ipv6 ? _v6IntroducersSelectedOn : _v4IntroducersSelectedOn);
                             if (count == 0 || sinceSelected > 2*60*1000) {
@@ -2018,7 +2021,11 @@ public class UDPTransport extends TransportImpl {
         return true;
     }
 
+    /**
+     * messageReceived.
+     */
     @Override
+    /** bytesReceived */
     public void messageReceived(I2NPMessage inMsg, RouterIdentity remoteIdent, Hash remoteIdentHash, long msToReceive, int bytesReceived) {
         if (inMsg.getType() == DatabaseStoreMessage.MESSAGE_TYPE) {
             DatabaseStoreMessage dsm = (DatabaseStoreMessage)inMsg;
@@ -2063,12 +2070,15 @@ public class UDPTransport extends TransportImpl {
 
     private class RemoveDropList extends SimpleTimer2.TimedEvent {
         private final RemoteHostId _peer;
+        /** Peer. */
         public RemoveDropList(RemoteHostId peer) { super(_context.simpleTimer2()); _peer = peer; }
+        /** Time reached. */
         public void timeReached() {
             _dropList.remove(_peer);
         }
     }
 
+    /** Is in drop list */
     boolean isInDropList(RemoteHostId peer) { return _dropList.contains(peer); }
 
     /**
@@ -2123,6 +2133,7 @@ public class UDPTransport extends TransportImpl {
                 if (itag.equals(stag)) {
                     if (_log.shouldWarn())
                         _log.warn("Rebuilding address -> Dropped published introducer " + peer);
+                    /** rebuildExternalAddressipv6 */
                     synchronized (_rebuildLock) {rebuildExternalAddress(ipv6);}
                     break;
                 }
@@ -2302,6 +2313,7 @@ public class UDPTransport extends TransportImpl {
         }
         int howMany = _peersByIdent.size();
         // use no more than 1/4 of configured bandwidth
+        /** 8 */
         final int burst = 8;
         int pps = Math.max(48, (_context.bandwidthLimiter().getOutboundKBytesPerSecond() * 1000 / 4) /  48);
         int burstps = pps / burst;
@@ -2331,6 +2343,7 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
+    /** Data size. */
     public TransportBid bid(RouterInfo toAddress, int dataSize) {
         if (dataSize > OutboundMessageState.MAX_MSG_SIZE) {
             // NTCP max is lower, so msg will get dropped
@@ -2493,7 +2506,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Get first available address we can use.
+     *  first available address we can use.
      *  @return address or null
      *  @since 0.9.6
      */
@@ -2534,16 +2547,13 @@ public class UDPTransport extends TransportImpl {
                "cn".equals(_context.commSystem().getOurCountry());
     }
 
-    /**
-     * We used to have MAX_IDLE_TIME = 5m, but this causes us to drop peers
-     * and lose the old introducer tags, causing introduction fails,
-     * so we keep the max time long to give the introducer keepalive code
-     * in the IntroductionManager a chance to work.
-     */
+    /** 20 */
     public static final int EXPIRE_TIMEOUT = 20*60*1000;
     private static final int MAX_IDLE_TIME = EXPIRE_TIMEOUT;
+    /** 3 */
     public static final int MIN_EXPIRE_TIMEOUT = 3*60*1000;
 
+    /** Style. */
     public String getStyle() {return STYLE;}
 
     /**
@@ -2551,6 +2561,7 @@ public class UDPTransport extends TransportImpl {
      * @since 0.9.54
      */
     @Override
+    /** STYLE2 */
     public String getAltStyle() {return STYLE2;}
 
     /**
@@ -2559,7 +2570,11 @@ public class UDPTransport extends TransportImpl {
      */
     private String getPublishStyle() {return STYLE2;}
 
+    /**
+     * Send.
+     */
     @Override
+    /** Msg. */
     public void send(OutNetMessage msg) {
         if (msg == null) return;
         RouterInfo tori = msg.getTarget();
@@ -2687,10 +2702,13 @@ public class UDPTransport extends TransportImpl {
     }
 
     // we don't need the following, since we have our own queueing
+    /** Not used for UDP. */
     protected void outboundMessageReady() { throw new UnsupportedOperationException("Not used for UDP"); }
 
+    /** Startup. */
     public void startListening() {startup();}
 
+    /** Stop listening. */
     public void stopListening() {
         shutdown();
         replaceAddress(null);
@@ -2708,6 +2726,7 @@ public class UDPTransport extends TransportImpl {
      * @since 0.7.12
      */
     @Override
+    /** updateAddress */
     public List<RouterAddress> updateAddress() {
         boolean ipv6 = getIPv6Config() == IPV6_ONLY;
         rebuildExternalAddress(false, ipv6);
@@ -2857,6 +2876,7 @@ public class UDPTransport extends TransportImpl {
      *  @since IPv6
      */
     private RouterAddress rebuildExternalAddress(String host, int port, boolean allowRebuildRouterInfo) {
+        /** _rebuildLock */
         synchronized (_rebuildLock) {
             return locked_rebuildExternalAddress(host, port, allowRebuildRouterInfo);
         }
@@ -3101,12 +3121,11 @@ public class UDPTransport extends TransportImpl {
      *  @since 0.9.49
      */
     private class RebuildEvent extends SimpleTimer2.TimedEvent {
-        /**
-         *  Caller must schedule
-         */
+        /** Rebuild event. */
         public RebuildEvent() {
             super(_context.simpleTimer2());
         }
+        /** Time reached. */
         public void timeReached() {
             _context.router().rebuildRouterInfo(true);
         }
@@ -3118,10 +3137,13 @@ public class UDPTransport extends TransportImpl {
      *  we don't put them in the real, published RouterAddress anymore
      *  if we are firewalled.
      *
+     *  @param isIPv6 true for IPv6, false for IPv4
+     *  @return the external address or null
      *  @since 0.9.18, public for PacketBuilder and TransportManager since 0.9.50
      */
     public RouterAddress getCurrentExternalAddress(boolean isIPv6) {
         // deadlock thru here ticket #1699
+        /** _rebuildLock */
         synchronized (_rebuildLock) {
             return isIPv6 ? _currentOurV6Address : _currentOurV4Address;
         }
@@ -3133,6 +3155,7 @@ public class UDPTransport extends TransportImpl {
      *  @param address the new address or null to remove all
      */
     @Override
+    /** Address. */
     protected void replaceAddress(RouterAddress address) {
         super.replaceAddress(address);
         _context.commSystem().notifyReplaceAddress(address);
@@ -3144,6 +3167,7 @@ public class UDPTransport extends TransportImpl {
      *  @since 0.9.20
      */
     @Override
+    /** Address. */
     protected void removeAddress(RouterAddress address) {
         super.removeAddress(address);
         _context.commSystem().notifyRemoveAddress(address);
@@ -3155,6 +3179,7 @@ public class UDPTransport extends TransportImpl {
      *  @since 0.9.20
      */
     @Override
+    /** ipv6 */
     protected void removeAddress(boolean ipv6) {
         super.removeAddress(ipv6);
         if (ipv6)
@@ -3295,6 +3320,7 @@ public class UDPTransport extends TransportImpl {
         return _context.getBooleanPropertyDefaultTrue(PROP_ALLOW_DIRECT);
     }
 
+    /** Packet handler status */
     String getPacketHandlerStatus() {
         PacketHandler handler = _handler;
         if (handler != null)
@@ -3303,13 +3329,18 @@ public class UDPTransport extends TransportImpl {
             return "";
     }
 
-    /** Get the packet handler */
+    /** The packet handler */
     PacketHandler getPacketHandler() {
         return _handler;
     }
 
+    /**
+     * Handle a failed outbound message.
+     * @param msg the outbound message
+     */
     public void failed(OutboundMessageState msg) { failed(msg, true); }
 
+    /** Failed */
     void failed(OutboundMessageState msg, boolean allowPeerFailure) {
         if (msg == null) return;
         OutNetMessage m = msg.getMessage();
@@ -3342,6 +3373,11 @@ public class UDPTransport extends TransportImpl {
             super.afterSend(m, false);
     }
 
+    /**
+     * Handle a failed outbound network message.
+     * @param msg the outbound network message
+     * @param reason the failure reason
+     */
     public void failed(OutNetMessage msg, String reason) {
         if (msg == null) return;
         if (_log.shouldInfo())
@@ -3353,6 +3389,10 @@ public class UDPTransport extends TransportImpl {
         super.afterSend(msg, false);
     }
 
+    /**
+     * Handle a successful outbound message.
+     * @param msg the outbound message
+     */
     public void succeeded(OutboundMessageState msg) {
         if (msg == null) return;
         if (_log.shouldDebug())
@@ -3362,21 +3402,12 @@ public class UDPTransport extends TransportImpl {
             super.afterSend(m, true);
     }
 
+    /** Count peers. */
     public int countPeers() {
             return _peersByIdent.size();
     }
 
-    /**
-     * Returns statistics on the number of connected peers, broken down by:
-     * &lt;ul&gt;
-     *     &lt;li&gt;Protocol version (SSU1 or SSU2)&lt;/li&gt;
-     *     &lt;li&gt;Address family (IPv4 or IPv6)&lt;/li&gt;
-     *     &lt;li&gt;Connection direction (inbound or outbound)&lt;/li&gt;
-     * &lt;/ul&gt;
-     *
-     * @return an array of 8 integers representing peer counts for each category
-     * @since 0.9.57
-     */
+    /** Peer counts. */
     public int[] getPeerCounts() {
         int[] rv = new int[8];
         long old = _context.clock().now() - 60*1000L;
@@ -3396,6 +3427,7 @@ public class UDPTransport extends TransportImpl {
         return rv;
     }
 
+    /** Active peers. */
     public int countActivePeers() {
         long old = _context.clock().now() - 60*1000L;
         int active = 0;
@@ -3409,6 +3441,7 @@ public class UDPTransport extends TransportImpl {
         return active;
     }
 
+    /** Active send peers. */
     public int countActiveSendPeers() {
         long old = _context.clock().now() - 60*1000L;
         int active = 0;
@@ -3419,21 +3452,31 @@ public class UDPTransport extends TransportImpl {
         return active;
     }
 
+    /**
+     * Established.
+     */
     @Override
+    /** Dest. */
     public boolean isEstablished(Hash dest) {
         return _peersByIdent.containsKey(dest);
     }
 
     /**
+     * Backlogged.
      *  @since 0.9.3
      */
     @Override
+    /** Dest. */
     public boolean isBacklogged(Hash dest) {
         PeerState peer =  _peersByIdent.get(dest);
         return peer != null && peer.isBacklogged();
     }
 
+    /**
+     * Connecting.
+     */
     @Override
+    /** Dest. */
     public boolean isConnecting(Hash dest) {
         return _establisher != null && _establisher.isConnecting(dest);
     }
@@ -3445,7 +3488,9 @@ public class UDPTransport extends TransportImpl {
      * @since 0.9.24
      */
     @Override
+    /** Peer. */
     public void mayDisconnect(final Hash peer) {
+        /** Peer state. */
         final PeerState ps =  _peersByIdent.get(peer);
         if (ps != null &&
             ps.getWeRelayToThemAs() <= 0 &&
@@ -3455,22 +3500,12 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
-    /**
-     * Tell the transport to disconnect from this peer.
-     *
-     * @since 0.9.38
-     */
+    /** Peer. */
     public void forceDisconnect(Hash peer) {
         forceDisconnect(peer, null);
     }
 
-    /**
-     * Tell the transport to disconnect from this peer with a reason for logging.
-     *
-     * @param peer the peer hash
-     * @param reason reason for disconnection (for logging), may be null
-     * @since 0.9.38
-     */
+    /** Reason. */
     public void forceDisconnect(Hash peer, String reason) {
         PeerState ps =  _peersByIdent.get(peer);
         boolean isBanned = _context.banlist().isBanlisted(peer);
@@ -3497,6 +3532,10 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
+    /**
+     * Whether a new connection is allowed.
+     * @return true if connection is allowed
+     */
     public boolean allowConnection() {
         int maxConn = getMaxConnections();
         boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
@@ -3515,6 +3554,7 @@ public class UDPTransport extends TransportImpl {
      * A positive number means our clock is ahead of theirs.
      */
     @Override
+    /** ClockSkews */
     public List<Long> getClockSkews() {
         List<Long> skews = new ArrayList<>(_peersByIdent.size());
 
@@ -3575,6 +3615,7 @@ public class UDPTransport extends TransportImpl {
      */
     @Override
     @Deprecated
+    /** IOException */
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
         // Deprecated - moved to routerconsole
     }
@@ -3583,10 +3624,19 @@ public class UDPTransport extends TransportImpl {
      * Cache the bid to reduce object churn
      */
     private class SharedBid extends TransportBid {
+        /** Latency ms. */
         public SharedBid(int ms) { super(); setLatencyMs(ms); }
+        /**
+         * Transport.
+         */
         @Override
+        /** Transport. */
         public Transport getTransport() { return UDPTransport.this; }
+        /**
+         * String representation.
+         */
         @Override
+        /** Latency ms. */
         public String toString() { return "UDP bid @ " + getLatencyMs(); }
     }
 
@@ -3607,11 +3657,13 @@ public class UDPTransport extends TransportImpl {
         private static final long MAY_DISCON_TIMEOUT = 15*1000L;
         private static final long RI_STORE_INTERVAL = 29*60*1000L;
 
+        /** Expire peer event. */
         public ExpirePeerEvent() {
             super(_context.simpleTimer2());
             _expireBuffer = new ArrayList<>();
         }
 
+        /** Time reached. */
         public void timeReached() {
             int totalPeers = _peersByIdent.size();
             int maxConn = getMaxConnections();
@@ -3676,6 +3728,7 @@ public class UDPTransport extends TransportImpl {
                longInactivityCutoff = now - EXPIRE_TIMEOUT;
             }
 
+            /** MAY_DISCON_TIMEOUT */
             final long mayDisconCutoff = now - MAY_DISCON_TIMEOUT;
             long pingCutoff = now - (2 * 60*60*1000L);
             long pingFirewallCutoff = now - PING_FIREWALL_CUTOFF;
@@ -3762,6 +3815,7 @@ public class UDPTransport extends TransportImpl {
                 schedule(loopTime);
         }
 
+        /** Alive flag. */
         public void setIsAlive(boolean isAlive) {
             _alive = isAlive;
             if (isAlive) {
@@ -3784,6 +3838,7 @@ public class UDPTransport extends TransportImpl {
      *  @param isIPv6 Is the change an IPv6 change?
      */
     void setReachabilityStatus(Status status, boolean isIPv6) {
+        /** _rebuildLock */
         synchronized (_rebuildLock) {
             locked_setReachabilityStatus(status, isIPv6);
         }
@@ -3940,12 +3995,7 @@ public class UDPTransport extends TransportImpl {
 
     private static final String PROP_REACHABILITY_STATUS_OVERRIDE = "i2np.udp.status";
 
-    /**
-     * Returns the current reachability status of the transport.
-     * This includes both IPv4 and IPv6 reachability states.
-     *
-     * @return the current status, never null
-     */
+    /** ReachabilityStatus */
     public Status getReachabilityStatus() {
         String override = _context.getProperty(PROP_REACHABILITY_STATUS_OVERRIDE);
         if (override != null) {
@@ -4087,7 +4137,9 @@ public class UDPTransport extends TransportImpl {
      *  @since 0.8.11
      */
     private class PingIntroducers extends SimpleTimer2.TimedEvent {
+        /** Ping introducers. */
         public PingIntroducers() { super(_context.simpleTimer2()); }
+        /** Time reached. */
         public void timeReached() {
             if (introducersRequired(false) || introducersRequired(true))
                 _introManager.pingIntroducers();
@@ -4100,11 +4152,16 @@ public class UDPTransport extends TransportImpl {
      */
     private static class DestroyedCache extends LHMCache<Long, PeerStateDestroyed> {
 
+        /** Max. */
         public DestroyedCache(int max) {
             super(max);
         }
 
+        /**
+         * Remove eldest entry.
+         */
         @Override
+        /** Eldest. */
         protected boolean removeEldestEntry(Map.Entry<Long, PeerStateDestroyed> eldest) {
             boolean rv = super.removeEldestEntry(eldest);
             if (rv) {
@@ -4114,10 +4171,16 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
-    /** Get the max packet handler threads */
+    /**
+     * The max packet handler threads.
+     * @return max packet handler threads
+     */
     public static int getPacketHandlerMaxThreads() { return PacketHandler.getMaxHandlers(); }
 
-    /** Set the max packet handler threads */
+    /**
+     * Max packet handler threads.
+     * @param handlers max packet handler threads
+     */
     public static void setPacketHandlerMaxThreads(int handlers) { PacketHandler.setMaxHandlers(handlers); }
 
     /**
@@ -4129,13 +4192,15 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Returns the current target MessageReceiver thread count.
+     * The current target MessageReceiver thread count.
+     * @return message receiver thread count
      * @since 0.9.70+
      */
     public static int getMessageReceiverThreads() { return MessageReceiver.getThreadCount(); }
 
     /**
-     * Sets the target MessageReceiver thread count.
+     * Target MessageReceiver thread count.
+     * @param threads message receiver thread count
      * @since 0.9.70+
      */
     public static void setMessageReceiverThreads(int threads) { MessageReceiver.setThreadCount(threads); }
@@ -4149,7 +4214,8 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Returns the current queue depth of the MessageReceiver.
+     * The current queue depth of the MessageReceiver.
+     * @return receiver queue size
      * @since 0.9.70+
      */
     public int getReceiverQueueSize() {
@@ -4158,6 +4224,7 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * Returns the maximum capacity of the MessageReceiver queue.
+     * @return receiver queue capacity
      * @since 0.9.70+
      */
     public int getReceiverQueueCapacity() {
@@ -4165,10 +4232,11 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Returns total outbound messages queued across all UDP peers.
+     * Total outbound messages queued across all UDP peers.
      * Unsynchronized — uses ConcurrentHashMap.values() which is weakly consistent.
      * For Tuner cross-references on outbound pressure.
      *
+     * @return total outbound queue depth
      * @since 0.9.70+
      */
     public int getTotalOutboundQueueDepth() {
@@ -4180,9 +4248,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Get packet handler pool utilization as a ratio (0.0-1.0).
+     * Packet handler pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
      *
+     * @return packet handler utilization
      * @since 0.9.70+
      */
     public double getPacketHandlerUtilization() {
@@ -4190,9 +4259,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Get message receiver pool utilization as a ratio (0.0-1.0).
+     * Message receiver pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
      *
+     * @return message receiver utilization
      * @since 0.9.70+
      */
     public double getMessageReceiverUtilization() {

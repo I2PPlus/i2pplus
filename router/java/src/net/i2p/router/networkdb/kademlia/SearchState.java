@@ -49,6 +49,9 @@ class SearchState {
     private static final long INITIAL_RESPONSE_TIMEOUT = 3 * 1000L;
     private volatile long _storedLeaseDate;
 
+    /**
+     * SearchState.
+     */
     public SearchState(RouterContext context, Hash key) {
         _log = context.logManager().getLog(SearchState.class);
         _context = context;
@@ -65,27 +68,45 @@ class SearchState {
         _started = _context.clock().now();
     }
 
+    /**
+     * getTarget.
+     */
     public Hash getTarget() {return _searchKey;}
+    /**
+     * getPendingSize.
+     */
     public int getPendingSize() {
         synchronized (_pendingPeers) {
             return _pendingPeers.size();
         }
     }
+    /**
+     * getPending.
+     */
     public Set<Hash> getPending() {
         synchronized (_pendingPeers) {
             return new HashSet<>(_pendingPeers);
         }
     }
+    /**
+     * getAttempted.
+     */
     public Set<Hash> getAttempted() {
         synchronized (_attemptedPeers) {
             return new HashSet<>(_attemptedPeers);
         }
     }
+    /**
+     * getAttemptedSize.
+     */
     public int getAttemptedSize() {
         synchronized (_attemptedPeers) {
             return _attemptedPeers.size();
         }
     }
+    /**
+     * getClosestAttempted.
+     */
     public Set<Hash> getClosestAttempted(int max) {
         synchronized (_attemptedPeers) {
             return locked_getClosest(_attemptedPeers, max, _searchKey);
@@ -104,34 +125,55 @@ class SearchState {
         return rv;
     }
 
+    /**
+     * wasAttempted.
+     */
     public boolean wasAttempted(Hash peer) {
         synchronized (_attemptedPeers) {
             return _attemptedPeers.contains(peer);
         }
     }
+    /**
+     * getSuccessful.
+     */
     public Set<Hash> getSuccessful() {
         synchronized (_successfulPeers) {
             return new HashSet<>(_successfulPeers);
         }
     }
+    /**
+     * getFailed.
+     */
     public Set<Hash> getFailed() {
         synchronized (_failedPeers) {
             return new HashSet<>(_failedPeers);
         }
     }
+    /**
+     * getFailedSize.
+     */
     public int getFailedSize() {
         synchronized (_failedPeers) {
             return _failedPeers.size();
         }
     }
+    /**
+     * getSuccessfulSize.
+     */
     public int getSuccessfulSize() {
         synchronized (_successfulPeers) {
             return _successfulPeers.size();
         }
     }
 
+    /**
+     * completed.
+     */
     public boolean completed() {return _completed != -1;}
 
+    /**
+     * complete.
+     */
     public void complete() {
         _completed = _context.clock().now();
         synchronized (_leaseSetResponses) {
@@ -154,9 +196,18 @@ class SearchState {
      */
     public void abort() {_aborted = true;}
 
+    /**
+     * getWhenStarted.
+     */
     public long getWhenStarted() {return _started;}
+    /**
+     * getWhenCompleted.
+     */
     public long getWhenCompleted() {return _completed;}
 
+    /**
+     * addPending.
+     */
     public void addPending(Collection<Hash> pending) {
         synchronized (_pendingPeers) {
             _pendingPeers.addAll(pending);
@@ -166,6 +217,9 @@ class SearchState {
         }
         synchronized (_attemptedPeers) {_attemptedPeers.addAll(pending);}
     }
+    /**
+     * addPending.
+     */
     public void addPending(Hash peer) {
         synchronized (_pendingPeers) {
             _pendingPeers.add(peer);
@@ -205,10 +259,16 @@ class SearchState {
         }
     }
 
+    /**
+     * getRepliedPeers.
+     */
     public Set<Hash> getRepliedPeers() {
         synchronized (_repliedPeers) {return new HashSet<>(_repliedPeers);}
     }
 
+    /**
+     * replyTimeout.
+     */
     public void replyTimeout(Hash peer) {
         synchronized (_pendingPeers) {
             _pendingPeers.remove(peer);
@@ -217,6 +277,9 @@ class SearchState {
         synchronized (_failedPeers) {_failedPeers.add(peer);}
     }
 
+    /**
+     * addLeaseSetResponse.
+     */
     public void addLeaseSetResponse(Hash peer, LeaseSet ls) {
         long leaseDate = ls.getLatestLeaseDate();
         synchronized (_leaseSetResponses) {
@@ -231,6 +294,9 @@ class SearchState {
         }
     }
 
+    /**
+     * getNewestLeaseSet.
+     */
     public LeaseSet getNewestLeaseSet() {
         synchronized (_leaseSetResponses) {
             if (_leaseSetResponses.isEmpty()) {
@@ -253,6 +319,9 @@ class SearchState {
         }
     }
 
+    /**
+     * addInitialLeaseSetResponse.
+     */
     public void addInitialLeaseSetResponse(Hash peer, LeaseSet ls) {
         long now = _context.clock().now();
         synchronized (_leaseSetResponses) {
@@ -269,6 +338,9 @@ class SearchState {
         }
     }
 
+    /**
+     * shouldStoreInitial.
+     */
     public boolean shouldStoreInitial() {
         if (_initialResponseStart <= 0) {
             return false;
@@ -278,6 +350,9 @@ class SearchState {
                || (now - _initialResponseStart) >= INITIAL_RESPONSE_TIMEOUT;
     }
 
+    /**
+     * getBestInitialLeaseSet.
+     */
     public LeaseSet getBestInitialLeaseSet() {
         synchronized (_leaseSetResponses) {
             if (_leaseSetResponses.isEmpty()) {
@@ -300,6 +375,9 @@ class SearchState {
         }
     }
 
+    /**
+     * clearInitialTracking.
+     */
     public void clearInitialTracking() {
         synchronized (_leaseSetResponses) {
             _initialResponseStart = -1;
@@ -307,18 +385,30 @@ class SearchState {
         }
     }
 
+    /**
+     * getStoredLeaseDate.
+     */
     public long getStoredLeaseDate() {
         return _storedLeaseDate;
     }
 
+    /**
+     * setStoredLeaseDate.
+     */
     public void setStoredLeaseDate(long date) {
         _storedLeaseDate = date;
     }
 
+    /**
+     * shouldUpdateStored.
+     */
     public boolean shouldUpdateStored(LeaseSet ls) {
         return ls.getLatestLeaseDate() > _storedLeaseDate;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         boolean debug = _log.shouldDebug();

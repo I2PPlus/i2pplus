@@ -24,13 +24,40 @@ class PeerSelectionCriteria {
     private int _maxReq;
     private int _purpose;
 
-    /** Minimum number of peers required */
+    /**
+     * Minimum number of peers required
+     *
+     * @return the minimum number of peers
+     */
     public int getMinimumRequired() { return _minReq; }
+    /**
+     * Set the minimum number of peers required
+     *
+     * @param min the minimum number of peers
+     */
     public void setMinimumRequired(int min) { _minReq = min; }
-    /** Maximum number of peers required */
+    /**
+     * Maximum number of peers required
+     *
+     * @return the maximum number of peers
+     */
     public int getMaximumRequired() { return _maxReq; }
+    /**
+     * Set the maximum number of peers required
+     *
+     * @param max the maximum number of peers
+     */
     public void setMaximumRequired(int max) { _maxReq = max; }
-    /** Purpose for which the peers will be used */
+    /**
+     * Purpose for which the peers will be used
+     *
+     * @return the purpose
+     */
     public int getPurpose() { return _purpose; }
+    /**
+     * Set the purpose for which the peers will be used
+     *
+     * @param purpose the purpose
+     */
     public void setPurpose(int purpose) { _purpose = purpose; }
 }

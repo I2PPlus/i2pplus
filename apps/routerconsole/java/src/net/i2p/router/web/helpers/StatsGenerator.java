@@ -24,8 +24,14 @@ import net.i2p.stat.RateStat;
 public class StatsGenerator {
     private final RouterContext _context;
 
+    /**
+     * StatsGenerator.
+     */
     public StatsGenerator(RouterContext context) {_context = context;}
 
+    /**
+     * generateStatsPage.
+     */
     public void generateStatsPage(Writer out, boolean showAll) throws IOException {
         StringBuilder buf = new StringBuilder(16*1024);
 
@@ -216,6 +222,9 @@ public class StatsGenerator {
      *  @since 0.9.3
      */
     private class AlphaComparator implements Comparator<String> {
+        /**
+         * compare.
+         */
         @Override
         public int compare(String lhs, String rhs) {
             // put the Router sections at the top of the page (compare raw keys, not translated)

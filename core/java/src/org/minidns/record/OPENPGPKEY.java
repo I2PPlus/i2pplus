@@ -25,12 +25,25 @@ public class OPENPGPKEY extends Data {
 
     private final byte[] publicKeyPacket;
 
+    /**
+     * Parse an OPENPGPKEY record from a data input stream.
+     *
+     * @param dis the data input stream
+     * @param length the record length
+     * @return the parsed OPENPGPKEY record
+     * @throws IOException if reading fails
+     */
     public static OPENPGPKEY parse(DataInputStream dis, int length) throws IOException {
         byte[] publicKeyPacket = new byte[length];
         dis.readFully(publicKeyPacket);
         return new OPENPGPKEY(publicKeyPacket);
     }
 
+    /**
+     * Create an OPENPGPKEY record
+     *
+     * @param publicKeyPacket the public key packet data
+     */
     OPENPGPKEY(byte[] publicKeyPacket) {
         this.publicKeyPacket = publicKeyPacket;
     }
@@ -52,6 +65,11 @@ public class OPENPGPKEY extends Data {
 
     private transient String publicKeyPacketBase64Cache;
 
+    /**
+     * Get the public key packet as a Base64-encoded string
+     *
+     * @return the Base64-encoded public key packet
+     */
     public String getPublicKeyPacketBase64() {
         if (publicKeyPacketBase64Cache == null) {
             publicKeyPacketBase64Cache = Base64.encodeToString(publicKeyPacket);
@@ -59,6 +77,11 @@ public class OPENPGPKEY extends Data {
         return publicKeyPacketBase64Cache;
     }
 
+    /**
+     * Get the public key packet data
+     *
+     * @return a copy of the public key packet
+     */
     public byte[] getPublicKeyPacket() {
         return publicKeyPacket.clone();
     }

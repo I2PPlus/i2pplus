@@ -137,6 +137,9 @@ public interface TunnelManagerFacade extends Service {
     public int getOutboundClientTunnelCount(Hash destination);
     /** how many inbound client tunnels in this pool? */
     public int getInboundClientTunnelCount(Hash destination);
+    /**
+     * getShareRatio().
+     */
     public double getShareRatio();
 
     /** When does the last tunnel we are participating in expire? */
@@ -179,13 +182,37 @@ public interface TunnelManagerFacade extends Service {
      */
     public void removeAlias(Destination dest);
 
+    /**
+     * getInboundSettings().
+     */
     public TunnelPoolSettings getInboundSettings();
+    /**
+     * getOutboundSettings().
+     */
     public TunnelPoolSettings getOutboundSettings();
+    /**
+     * client).
+     */
     public TunnelPoolSettings getInboundSettings(Hash client);
+    /**
+     * client).
+     */
     public TunnelPoolSettings getOutboundSettings(Hash client);
+    /**
+     * settings).
+     */
     public void setInboundSettings(TunnelPoolSettings settings);
+    /**
+     * settings).
+     */
     public void setOutboundSettings(TunnelPoolSettings settings);
+    /**
+     * settings).
+     */
     public void setInboundSettings(Hash client, TunnelPoolSettings settings);
+    /**
+     * settings).
+     */
     public void setOutboundSettings(Hash client, TunnelPoolSettings settings);
     /** for TunnelRenderer in router console */
     public void listPools(List<TunnelPool> out);

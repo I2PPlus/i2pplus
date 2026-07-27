@@ -36,6 +36,9 @@ import net.i2p.util.VersionComparator;
  */
 public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     private final static Log _log = new Log(DatabaseLookupMessage.class);
+    /**
+     * MESSAGE_TYPE.
+     */
     public final static int MESSAGE_TYPE = 2;
     private Hash _key;
     private Hash _fromHash;
@@ -48,6 +51,9 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     private PublicKey _ratchetPubKey;
     private Type _type;
 
+    /**
+     * USE_ECIES_FF.
+     */
     public static final boolean USE_ECIES_FF = true;
 
     /** Insanely big. Not much more than 1500 will fit in a message.
@@ -86,6 +92,9 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     private static final String MIN_ENCRYPTION_VERSION = "0.9.7";
     private static final String MIN_RATCHET_VERSION = "0.9.46";
 
+    /**
+     * DatabaseLookupMessage.
+     */
     public DatabaseLookupMessage(I2PAppContext context) {
         this(context, false);
     }
@@ -340,6 +349,9 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         }
     }
 
+    /**
+     * readMessage.
+     */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
@@ -446,6 +458,9 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
             throw new I2NPMessageException("buffer overrun");
     }
 
+    /**
+     * calculateWrittenLength.
+     */
     protected int calculateWrittenLength() {
         int totalLength = 0;
         totalLength += Hash.HASH_LENGTH*2; // key+fromHash
@@ -469,6 +484,9 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         return totalLength;
     }
 
+    /**
+     * writeMessageBody.
+     */
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         if (_key == null) throw new I2NPMessageException("Key being searched for not specified");
         if (_fromHash == null) throw new I2NPMessageException("From address not specified");
@@ -544,8 +562,14 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         return curIndex;
     }
 
+    /**
+     * getType.
+     */
     public int getType() { return MESSAGE_TYPE; }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return DataHelper.hashCode(_key) +
@@ -554,6 +578,9 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
                DataHelper.hashCode(_dontIncludePeers);
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if ( (object != null) && (object instanceof DatabaseLookupMessage) ) {
@@ -567,6 +594,9 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         }
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);

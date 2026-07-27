@@ -14,14 +14,17 @@ public interface I2PSocketOptions {
     /** How long to block on write/flush */
     public static final String PROP_WRITE_TIMEOUT = "i2p.streaming.writeTimeout";
     /**
+     * Description.
      *  @since 0.9.66 promoted from ConnectionOptions
      */
     public static final String PROP_PROFILE = "i2p.streaming.profile";
     /**
+     * Description.
      *  @since 0.9.66 promoted from ConnectionOptions
      */
     public static final int PROFILE_BULK = 1;
     /**
+     * Description.
      *  @since 0.9.66 promoted from ConnectionOptions
      */
     public static final int PROFILE_INTERACTIVE = 2;

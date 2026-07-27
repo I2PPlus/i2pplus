@@ -9,10 +9,16 @@ import net.i2p.I2PAppContext;
 class InboundSender implements TunnelGateway.Sender {
     private final InboundGatewayProcessor _processor;
 
+    /**
+     * InboundSender.
+     */
     public InboundSender(I2PAppContext ctx, HopConfig config) {
         _processor = new InboundGatewayProcessor(ctx, config);
     }
 
+    /**
+     * sendPreprocessed.
+     */
     public long sendPreprocessed(byte[] preprocessed, TunnelGateway.Receiver receiver) {
         _processor.process(preprocessed, 0, preprocessed.length);
         return receiver.receiveEncrypted(preprocessed);

@@ -22,6 +22,9 @@ class TimeoutPipedInputStream extends PipedInputStream {
     // local version of pkg private in super
     private volatile boolean _closedByReader;
 
+    /**
+     * TimeoutPipedInputStream.
+     */
     public TimeoutPipedInputStream(int pipeSize) {
         super(pipeSize);
     }

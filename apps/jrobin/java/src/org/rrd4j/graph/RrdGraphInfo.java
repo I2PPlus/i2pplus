@@ -9,16 +9,25 @@ import java.util.function.Supplier;
  * {@link org.rrd4j.graph.RrdGraph#getRrdGraphInfo()}.
  */
 public class RrdGraphInfo {
+    /** Filename */
     String filename;
+    /** Height */
     int width, height;
+    /** Bytes source */
     Supplier<byte[]> bytesSource;
+    /** Bytes count */
     Supplier<Integer> bytesCount;
+    /** Img info */
     String imgInfo;
     private final List<String> printLines = new ArrayList<>();
 
+    /** Prevent instantiation */
     RrdGraphInfo() {
         // cannot instantiate this class
     }
+    /**
+     * Add print line
+     */
 
     void addPrintLine(String printLine) {
         printLines.add(printLine);

@@ -13,14 +13,18 @@ class MLKEMEngine
     private SecureRandom random;
     private MLKEMIndCpa indCpa;
 
-    // constant parameters
+    /** Kyber N parameter */
     public final static int KyberN = 256;
+    /** Kyber Q parameter */
     public final static int KyberQ = 3329;
+    /** Kyber Q inverse parameter */
     public final static int KyberQinv = 62209;
 
-    public final static int KyberSymBytes = 32; // Number of bytes for Hashes and Seeds
+    /** Number of bytes for Hashes and Seeds */
+    public final static int KyberSymBytes = 32;
     private final static int KyberSharedSecretBytes = 32; // Number of Bytes for Shared Secret
 
+    /** Kyber polynomial bytes */
     public final static int KyberPolyBytes = 384;
 
     private final static int KyberEta2 = 2;
@@ -50,96 +54,116 @@ class MLKEMEngine
     private final int sessionKeyLength;
     private final Symmetric symmetric;
 
+    /** @return the symmetric */
     public Symmetric getSymmetric()
     {
         return symmetric;
     }
+    /** @return KyberEta2 */
     public static int getKyberEta2()
     {
         return KyberEta2;
     }
 
+    /** @return KyberIndCpaMsgBytes */
     public static int getKyberIndCpaMsgBytes()
     {
         return KyberIndCpaMsgBytes;
     }
 
+    /** @return CryptoCipherTextBytes */
     public int getCryptoCipherTextBytes()
     {
         return CryptoCipherTextBytes;
     }
 
+    /** @return CryptoPublicKeyBytes */
     public int getCryptoPublicKeyBytes()
     {
         return CryptoPublicKeyBytes;
     }
 
+    /** @return CryptoSecretKeyBytes */
     public int getCryptoSecretKeyBytes()
     {
         return CryptoSecretKeyBytes;
     }
 
+    /** @return CryptoBytes */
     public int getCryptoBytes()
     {
         return CryptoBytes;
     }
 
+    /** @return KyberCipherTextBytes */
     public int getKyberCipherTextBytes()
     {
         return KyberCipherTextBytes;
     }
 
+    /** @return KyberSecretKeyBytes */
     public int getKyberSecretKeyBytes()
     {
         return KyberSecretKeyBytes;
     }
 
+    /** @return KyberIndCpaPublicKeyBytes */
     public int getKyberIndCpaPublicKeyBytes()
     {
         return KyberIndCpaPublicKeyBytes;
     }
 
-
+    /** @return KyberIndCpaSecretKeyBytes */
     public int getKyberIndCpaSecretKeyBytes()
     {
         return KyberIndCpaSecretKeyBytes;
     }
 
+    /** @return KyberIndCpaBytes */
     public int getKyberIndCpaBytes()
     {
         return KyberIndCpaBytes;
     }
 
+    /** @return KyberPublicKeyBytes */
     public int getKyberPublicKeyBytes()
     {
         return KyberPublicKeyBytes;
     }
 
+    /** @return KyberPolyCompressedBytes */
     public int getKyberPolyCompressedBytes()
     {
         return KyberPolyCompressedBytes;
     }
 
+    /** @return KyberK */
     public int getKyberK()
     {
         return KyberK;
     }
 
+    /** @return KyberPolyVecBytes */
     public int getKyberPolyVecBytes()
     {
         return KyberPolyVecBytes;
     }
 
+    /** @return KyberPolyVecCompressedBytes */
     public int getKyberPolyVecCompressedBytes()
     {
         return KyberPolyVecCompressedBytes;
     }
 
+    /** @return KyberEta1 */
     public int getKyberEta1()
     {
         return KyberEta1;
     }
 
+    /**
+     * @param k the security parameter (2, 3, or 4)
+     */
     public MLKEMEngine(int k)
     {
         this.KyberK = k;
@@ -186,11 +210,13 @@ class MLKEMEngine
         this.indCpa = new MLKEMIndCpa(this);
     }
 
+    /** @param random the secure random */
     public void init(SecureRandom random)
     {
         this.random = random;
     }
 
+    /** @return key pair as byte array */
     public byte[][] generateKemKeyPair()
     {
         byte[] d = new byte[KyberSymBytes];
@@ -201,7 +227,9 @@ class MLKEMEngine
         return generateKemKeyPairInternal(d, z);
     }
 
-    //Internal functions are deterministic. No randomness is sampled inside them
+    /** @param d seed
+     *  @param z seed
+     *  @return key pair as byte array */
     public byte[][] generateKemKeyPairInternal(byte[] d, byte[] z)
     {
         byte[][] indCpaKeyPair = indCpa.generateKeyPair(d);
@@ -227,6 +255,9 @@ class MLKEMEngine
         };
     }
 
+    /** @param publicKeyInput the public key
+     *  @param randBytes random bytes
+     *  @return ciphertext and shared secret */
     public byte[][] kemEncryptInternal(byte[] publicKeyInput, byte[] randBytes)
     {
         byte[] outputCipherText;
@@ -255,6 +286,9 @@ class MLKEMEngine
         return outBuf;
     }
 
+    /** @param secretKey the secret key
+     *  @param cipherText the ciphertext
+     *  @return shared secret */
     public byte[] kemDecryptInternal(byte[] secretKey, byte[] cipherText)
     {
         byte[] buf = new byte[2 * KyberSymBytes],
@@ -285,6 +319,9 @@ class MLKEMEngine
         return Arrays.copyOfRange(kr, 0, sessionKeyLength);
     }
 
+    /** @param publicKeyInput the public key
+     *  @param randBytes random bytes
+     *  @return ciphertext and shared secret */
     public byte[][] kemEncrypt(byte[] publicKeyInput, byte[] randBytes)
     {
         //TODO: do input validation elsewhere?
@@ -305,6 +342,9 @@ class MLKEMEngine
 
         return kemEncryptInternal(publicKeyInput, randBytes);
     }
+    /** @param secretKey the secret key
+     *  @param cipherText the ciphertext
+     *  @return shared secret */
     public byte[] kemDecrypt(byte[] secretKey, byte[] cipherText)
     {
         //TODO: do input validation
@@ -323,6 +363,7 @@ class MLKEMEngine
         }
     }
 
+    /** @param buf the buffer to fill */
     public void getRandomBytes(byte[] buf)
     {
         this.random.nextBytes(buf);

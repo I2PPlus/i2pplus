@@ -37,20 +37,34 @@ public final class DnssecConstants {
      *      IANA DNSSEC Algorithm Numbers</a>
      */
     public enum SignatureAlgorithm {
+        /** RSA/MD5 (deprecated) */
         @Deprecated
         RSAMD5(1, "RSA/MD5"),
+        /** Diffie-Hellman */
         DH(2, "Diffie-Hellman"),
+        /** DSA/SHA1 */
         DSA(3, "DSA/SHA1"),
+        /** RSA/SHA-1 */
         RSASHA1(5, "RSA/SHA-1"),
+        /** DSA NSEC3 SHA1 */
         DSA_NSEC3_SHA1(6, "DSA_NSEC3-SHA1"),
+        /** RSASHA1 NSEC3 SHA1 */
         RSASHA1_NSEC3_SHA1(7, "RSASHA1-NSEC3-SHA1"),
+        /** RSA/SHA-256 */
         RSASHA256(8, "RSA/SHA-256"),
+        /** RSA/SHA-512 */
         RSASHA512(10, "RSA/SHA-512"),
+        /** GOST R 34.10-2001 */
         ECC_GOST(12, "GOST R 34.10-2001"),
+        /** ECDSA Curve P-256 with SHA-256 */
         ECDSAP256SHA256(13, "ECDSA Curve P-256 with SHA-256"),
+        /** ECDSA Curve P-384 with SHA-384 */
         ECDSAP384SHA384(14, "ECDSA Curve P-384 with SHA-384"),
+        /** Reserved for Indirect Keys */
         INDIRECT(252, "Reserved for Indirect Keys"),
+        /** private algorithm */
         PRIVATEDNS(253, "private algorithm"),
+        /** private algorithm oid */
         PRIVATEOID(254, "private algorithm oid"),
        ;
 
@@ -63,9 +77,16 @@ public final class DnssecConstants {
             SIGNATURE_ALGORITHM_LUT.put(this.number, this);
         }
 
+        /** the algorithm number */
         public final byte number;
+        /** the algorithm description */
         public final String description;
 
+        /**
+         * Look up a SignatureAlgorithm by its byte value.
+         * @param b the algorithm number
+         * @return the matching SignatureAlgorithm, or null if not found
+         */
         public static SignatureAlgorithm forByte(byte b) {
             return SIGNATURE_ALGORITHM_LUT.get(b);
         }
@@ -81,9 +102,13 @@ public final class DnssecConstants {
      *      IANA Delegation Signer (DS) Resource Record (RR)</a>
      */
     public enum DigestAlgorithm {
+        /** SHA-1 */
         SHA1(1, "SHA-1"),
+        /** SHA-256 */
         SHA256(2, "SHA-256"),
+        /** GOST R 34.11-94 */
         GOST(3, "GOST R 34.11-94"),
+        /** SHA-384 */
         SHA384(4, "SHA-384"),
        ;
 
@@ -96,9 +121,16 @@ public final class DnssecConstants {
             DELEGATION_DIGEST_LUT.put(this.value, this);
         }
 
+        /** the digest algorithm value */
         public final byte value;
+        /** the digest algorithm description */
         public final String description;
 
+        /**
+         * Look up a DigestAlgorithm by its byte value.
+         * @param b the digest algorithm value
+         * @return the matching DigestAlgorithm, or null if not found
+         */
         public static DigestAlgorithm forByte(byte b) {
             return DELEGATION_DIGEST_LUT.get(b);
         }

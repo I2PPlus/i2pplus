@@ -46,6 +46,9 @@ class LoadRouterInfoJob extends JobImpl {
     // 1 chance in this many to rekey if the defaults changed
     private static final int REKEY_PROBABILITY = 1;
 
+    /**
+     * LoadRouterInfoJob.
+     */
     public LoadRouterInfoJob(RouterContext ctx) {
         super(ctx);
         _log = ctx.logManager().getLog(LoadRouterInfoJob.class);
@@ -53,9 +56,15 @@ class LoadRouterInfoJob extends JobImpl {
         _banLogger.initialize(ctx);
     }
 
+    /**
+     * getName.
+     */
     @Override
     public String getName() { return "Load Local RouterInfo"; }
 
+    /**
+     * runJob.
+     */
     @Override
     public void runJob() {
         synchronized (getContext().router().routerInfoFileLock) {
@@ -261,10 +270,22 @@ class LoadRouterInfoJob extends JobImpl {
 
     /** Key data container for router information. @since 0.9.16 */
     public static class KeyData {
+        /**
+         * routerIdentity.
+         */
         public final RouterIdentity routerIdentity;
+        /**
+         * privateKey.
+         */
         public final PrivateKey privateKey;
+        /**
+         * signingPrivateKey.
+         */
         public final SigningPrivateKey signingPrivateKey;
 
+        /**
+         * KeyData.
+         */
         public KeyData(RouterIdentity ri, PrivateKey pk, SigningPrivateKey spk) {
             routerIdentity = ri;
             privateKey = pk;

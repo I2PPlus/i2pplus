@@ -38,6 +38,9 @@ class SpeedCalculator {
     private static final double CONGESTION_D = 0.75;
     private static final double CONGESTION_E = 0.50;
 
+    /**
+     * calc.
+     */
     public static double calc(PeerProfile profile) {
         RouterContext context = profile.getContext();
         double baseScore = getBaseScore(context, profile);

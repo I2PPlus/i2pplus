@@ -220,6 +220,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_log.shouldDebug()) {_log.debug("[SSU] New request type " + type + " len " + len + " on " + this);}
     }
 
+    /**
+     * getVersion.
+     */
     @Override
     public int getVersion() {return _version;}
 
@@ -261,11 +264,17 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     // begin payload callbacks
     /////////////////////////////////////////////////////////
 
+    /**
+     * gotDateTime.
+     */
     @Override
     public void gotDateTime(long time) {
         _timeReceived = time;
     }
 
+    /**
+     * gotOptions.
+     */
     public void gotOptions(byte[] options, boolean isHandshake) {
         if (_log.shouldDebug()) {_log.debug("[SSU] Received OPTIONS block");}
     }
@@ -505,6 +514,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
     }
 
+    /**
+     * gotRIFragment.
+     */
     @Override
     public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
         if (_log.shouldDebug()) {
@@ -514,6 +526,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         throw new IllegalStateException("Fragmented RouterInfo");
     }
 
+    /**
+     * gotAddress.
+     */
     @Override
     public void gotAddress(byte[] ip, int port) {
         if (_log.shouldDebug()) {_log.debug("[SSU] Received IP address: " + Addresses.toString(ip, port));}
@@ -521,23 +536,35 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         // final, see super
     }
 
+    /**
+     * gotRelayTagRequest.
+     */
     @Override
     public void gotRelayTagRequest() {
         if (_log.shouldDebug()) {_log.debug("[SSU] Received RelayTagRequest on " + this);}
         _introductionRequested = true;
     }
 
+    /**
+     * gotRelayTag.
+     */
     @Override
     public void gotRelayTag(long tag) {
         // intentionally empty - relay tags are not applicable to inbound connections
     }
 
+    /**
+     * gotRelayRequest.
+     */
     public void gotRelayRequest(byte[] data) {
         if (_receivedConfirmedIdentity == null) {
             throw new IllegalStateException("RouterInfo must be sent first");
         }
     }
 
+    /**
+     * gotRelayResponse.
+     */
     @Override
     public void gotRelayResponse(int status, byte[] data) {
         if (_receivedConfirmedIdentity == null) {
@@ -545,6 +572,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
     }
 
+    /**
+     * gotRelayIntro.
+     */
     @Override
     public void gotRelayIntro(Hash aliceHash, byte[] data) {
         if (_receivedConfirmedIdentity == null) {
@@ -552,6 +582,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
     }
 
+    /**
+     * gotPeerTest.
+     */
     public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
         if (_receivedConfirmedIdentity == null) {
             throw new IllegalStateException("RouterInfo must be sent first");
@@ -559,6 +592,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         _transport.getPeerTestManager().receiveTest(_remoteHostId, _pstate, msg, status, h, data);
     }
 
+    /**
+     * gotToken.
+     */
     @Override
     public void gotToken(long token, long expires) {
         if (_log.shouldDebug()) {
@@ -570,6 +606,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         _transport.getEstablisher().addOutboundToken(_remoteHostId, token, expires);
     }
 
+    /**
+     * gotI2NP.
+     */
     @Override
     public void gotI2NP(I2NPMessage msg) {
         if (_log.shouldDebug()) {_log.debug("[SSU] Received I2NP block: " + msg);}
@@ -583,6 +622,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         _pstate.gotI2NP(msg);
     }
 
+    /**
+     * gotFragment.
+     */
     @Override
     public void gotFragment(byte[] data, int off, int len, long messageID, int frag, boolean isLast) throws DataFormatException {
         if (_log.shouldDebug()) {_log.debug("[SSU] Received FRAGMENT block: " + messageID);}
@@ -596,10 +638,16 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         _pstate.gotFragment(data, off, len, messageID, frag, isLast);
     }
 
+    /**
+     * gotACK.
+     */
     public void gotACK(long ackThru, int acks, byte[] ranges) {
         throw new IllegalStateException("ACK in Handshake");
     }
 
+    /**
+     * gotTermination.
+     */
     public void gotTermination(int reason, long count) {
         if (_log.shouldInfo()) {
             _log.info("[SSU] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) + "; Count: " + count + "\n* " + this);
@@ -609,10 +657,16 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         _transport.getEstablisher().receiveSessionDestroy(_remoteHostId);
     }
 
+    /**
+     * gotPathChallenge.
+     */
     public void gotPathChallenge(RemoteHostId from, byte[] data) {
         throw new IllegalStateException("BAD block in handshake");
     }
 
+    /**
+     * gotPathResponse.
+     */
     public void gotPathResponse(RemoteHostId from, byte[] data) {
         throw new IllegalStateException("BAD block in handshake");
     }
@@ -644,8 +698,17 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     // SSU 2 things
 
+    /**
+     * getSendConnID.
+     */
     public long getSendConnID() {return _sendConnID;}
+    /**
+     * getRcvConnID.
+     */
     public long getRcvConnID() {return _rcvConnID;}
+    /**
+     * getToken.
+     */
     public long getToken() {return _token;}
     /**
      *  @return may be null
@@ -654,13 +717,34 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_aliceIP.length == 4 && _transport.isSymNatted()) {return null;}
         return _transport.getEstablisher().getInboundToken(_remoteHostId);
     }
+    /**
+     * getHandshakeState.
+     */
     public HandshakeState getHandshakeState() {return _handshakeState;}
+    /**
+     * getSendHeaderEncryptKey1.
+     */
     public byte[] getSendHeaderEncryptKey1() {return _sendHeaderEncryptKey1;}
+    /**
+     * getRcvHeaderEncryptKey1.
+     */
     public byte[] getRcvHeaderEncryptKey1() {return _transport.getSSU2StaticIntroKey();}
+    /**
+     * getSendHeaderEncryptKey2.
+     */
     public byte[] getSendHeaderEncryptKey2() {return _sendHeaderEncryptKey2;}
+    /**
+     * getRcvHeaderEncryptKey2.
+     */
     public synchronized byte[] getRcvHeaderEncryptKey2() {return _rcvHeaderEncryptKey2;}
+    /**
+     * getSentAddress.
+     */
     public InetSocketAddress getSentAddress() {return _aliceSocketAddress;}
 
+    /**
+     * createdPacketSent.
+     */
     @Override
     public synchronized void createdPacketSent() {
         /// todo state check
@@ -1180,6 +1264,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         return false;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
@@ -1203,22 +1290,40 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      */
     private static class RIException extends DataFormatException {
         private final int rsn;
+        /**
+         * RIException.
+         */
         public RIException(String msg, int reason) {
             super(msg);
             rsn = reason;
         }
+        /**
+         * RIException.
+         */
         public RIException(String msg, int reason, Throwable t) {
             super(msg, t);
             rsn = reason;
         }
+        /**
+         * getReason.
+         */
         public int getReason() {return rsn;}
+        /**
+         * getMessage.
+         */
         @Override
         public String getMessage() {return "Code " + rsn + ": " + super.getMessage();}
     }
 
     private class Disconnector extends SimpleTimer2.TimedEvent {
         private final Hash h;
+        /**
+         * Disconnector.
+         */
         public Disconnector(Hash h) {super(_context.simpleTimer2()); this.h = h;}
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             _context.commSystem().forceDisconnect(h, "Invalid SSU address");
         }

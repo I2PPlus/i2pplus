@@ -31,32 +31,50 @@ public class I2PThread extends Thread {
 
     private static final Set<OOMEventListener> _listeners = new CopyOnWriteArraySet<>();
 
+    /**
+     * I2PThread.
+     */
     public I2PThread() {
         super();
         setPriority(NORM_PRIORITY);
     }
 
+    /**
+     * I2PThread.
+     */
     public I2PThread(String name) {
         super(name);
         setPriority(NORM_PRIORITY);
     }
 
+    /**
+     * I2PThread.
+     */
     public I2PThread(Runnable r) {
         super(r);
         setPriority(NORM_PRIORITY);
     }
 
+    /**
+     * I2PThread.
+     */
     public I2PThread(Runnable r, String name) {
         super(r, name);
         setPriority(NORM_PRIORITY);
     }
 
+    /**
+     * I2PThread.
+     */
     public I2PThread(Runnable r, String name, boolean isDaemon) {
         super(r, name);
         setDaemon(isDaemon);
         setPriority(NORM_PRIORITY);
     }
 
+    /**
+     * I2PThread.
+     */
     public I2PThread(ThreadGroup g, Runnable r) {
         super(g, r);
         setPriority(NORM_PRIORITY);
@@ -94,6 +112,9 @@ public class I2PThread extends Thread {
         }
     }
 
+    /**
+     * run.
+     */
     @Override
     public void run() {
         try {
@@ -106,6 +127,9 @@ public class I2PThread extends Thread {
         }
     }
 
+    /**
+     * fireOOM.
+     */
     protected void fireOOM(OutOfMemoryError oom) {
         for (OOMEventListener listener : _listeners) listener.outOfMemory(oom);
     }
@@ -126,6 +150,9 @@ public class I2PThread extends Thread {
      * @since 0.9.35
      */
     public interface OOMEventListener {
+        /**
+         * err).
+         */
         public void outOfMemory(OutOfMemoryError err);
     }
 }

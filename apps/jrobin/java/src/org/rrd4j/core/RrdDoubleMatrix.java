@@ -12,10 +12,14 @@ import java.io.IOException;
  * @param <U> The type of RrdUpdater this primitive belongs to
  */
 class RrdDoubleMatrix<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
+    /** ignored */
     private static final String LENGTH = ", length=";
+    /** ignored */
     private final int rows;
+    /** ignored */
     private final int columns;
 
+    /** Create matrix */
     RrdDoubleMatrix(RrdUpdater<U> updater, int row, int column, boolean shouldInitialize)
             throws IOException {
         super(updater, RrdPrimitive.RRD_DOUBLE, row * column, false);
@@ -24,10 +28,12 @@ class RrdDoubleMatrix<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
         if (shouldInitialize) writeDouble(0, Double.NaN, rows * columns);
     }
 
+    /** Set a value */
     void set(int column, int index, double value) throws IOException {
         writeDouble(columns * index + column, value);
     }
 
+    /** Set values in bulk */
     void set(int column, int index, double value, int count) throws IOException {
         // rollovers not allowed!
         assert index + count <= rows
@@ -63,11 +69,13 @@ class RrdDoubleMatrix<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
             writeDouble(i, newValues[c]);
     }
 
+    /** @return the value */
     double get(int column, int index) throws IOException {
         assert index < rows : "Invalid index supplied: " + index + LENGTH + rows;
         return readDouble(columns * index + column);
     }
 
+    /** @return the values */
     double[] get(int column, int index, int count) throws IOException {
         assert index + count <= rows
                 : "Invalid index/count supplied: " + index + "/" + count + " (length=" + rows + ")";

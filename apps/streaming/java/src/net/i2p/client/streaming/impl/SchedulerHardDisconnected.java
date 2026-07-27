@@ -28,6 +28,9 @@ import net.i2p.I2PAppContext;
  */
 class SchedulerHardDisconnected extends SchedulerImpl {
 
+    /**
+     * SchedulerHardDisconnected.
+     */
     public SchedulerHardDisconnected(I2PAppContext ctx) {
         super(ctx);
     }

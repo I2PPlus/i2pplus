@@ -39,6 +39,7 @@ import net.i2p.util.SystemVersion;
 class PumpedTunnelGateway extends TunnelGateway {
     private final BlockingQueue<PendingGatewayMessage> _prequeue;
     private final TunnelGatewayPumper _pumper;
+    /** Whether this gateway is inbound (vs outbound) */
     public final boolean _isInbound;
     private final Hash _nextHop;
 
@@ -48,9 +49,13 @@ class PumpedTunnelGateway extends TunnelGateway {
     private static final int MAX_IB_QUEUE;
     private static volatile boolean _statsCreated;
 
+    /** Property key for max outbound messages per pump */
     public static final String PROP_MAX_OB_MSGS_PER_PUMP = "router.pumpMaxOutboundMsgs";
+    /** Property key for max inbound messages per pump */
     public static final String PROP_MAX_IB_MSGS_PER_PUMP = "router.pumpMaxInboundMsgs";
+    /** Property key for initial outbound queue size */
     public static final String PROP_INITIAL_OB_QUEUE = "router.pumpInitialOutboundQueue";
+    /** Property key for max inbound queue size */
     public static final String PROP_MAX_IB_QUEUE = "router.pumpMaxInboundQueue";
 
     static {
@@ -78,12 +83,23 @@ class PumpedTunnelGateway extends TunnelGateway {
     public static int getMaxObMsgsPerPump() { return _maxObMsgsPerPump; }
 
     /** @since 0.9.70+ */
+
+    /**
+     * Set the max outbound messages per pump
+     * @since 0.9.70+
+     */
     public static void setMaxObMsgsPerPump(int val) { _maxObMsgsPerPump = Math.max(8, Math.min(1024, val)); }
 
-    /** @since 0.9.70+ */
+    /**
+     * Get the max inbound messages per pump
+     * @since 0.9.70+
+     */
     public static int getMaxIbMsgsPerPump() { return _maxIbMsgsPerPump; }
 
-    /** @since 0.9.70+ */
+    /**
+     * Set the max inbound messages per pump
+     * @since 0.9.70+
+     */
     public static void setMaxIbMsgsPerPump(int val) { _maxIbMsgsPerPump = Math.max(8, Math.min(512, val)); }
 
     /**

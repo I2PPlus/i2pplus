@@ -58,6 +58,7 @@ public class SocketController implements RouterApp {
     private ServerSocket _server;
     private final List<Socket> _listeners;
     private ClientAppState _state = UNINITIALIZED;
+    /** Allowed hosts config property */
     static final String PROP_ALLOWED_HOSTS = "i2pcontrol.allowedhosts";
     private static final String SVC_SKT_I2PCONTROL = "skt_i2pcontrol";
     private static final int DEFAULT_PORT = 7640;
@@ -166,8 +167,14 @@ public class SocketController implements RouterApp {
     private class Handler implements Runnable {
         private final Socket s;
 
+        /**
+         * Handler.
+         */
         public Handler(Socket skt) { s = skt; }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             try {

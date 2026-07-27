@@ -16,10 +16,16 @@ package org.minidns.dnslabel;
  */
 public abstract class NonLdhLabel extends DnsLabel {
 
+    /**
+     * NonLdhLabel.
+     */
     protected NonLdhLabel(String label) {
         super(label);
     }
 
+    /**
+     * fromInternal.
+     */
     protected static DnsLabel fromInternal(String label) {
         if (UnderscoreLabel.isUnderscoreLabelInternal(label)) {
             return new UnderscoreLabel(label);

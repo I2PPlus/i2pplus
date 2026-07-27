@@ -40,45 +40,72 @@ import net.i2p.util.ByteCache;
  * @since 0.1.0
  */
 class Message {
+    /** K e e p  a l i v e */
     static final byte KEEP_ALIVE = -1;
+    /** C h o k e */
     static final byte CHOKE = 0;
+    /** U n c h o k e */
     static final byte UNCHOKE = 1;
+    /** I n t e r e s t e d */
     static final byte INTERESTED = 2;
+    /** U n i n t e r e s t e d */
     static final byte UNINTERESTED = 3;
+    /** H a v e */
     static final byte HAVE = 4;
+    /** B i t f i e l d */
     static final byte BITFIELD = 5;
+    /** R e q u e s t */
     static final byte REQUEST = 6;
+    /** P i e c e */
     static final byte PIECE = 7;
+    /** C a n c e l */
     static final byte CANCEL = 8;
+    /** P o r t */
     static final byte PORT = 9; // DHT  (BEP 5)
+    /** S u g g e s t */
     static final byte SUGGEST = 13; // Fast (BEP 6)
+    /** H a v e  a l l */
     static final byte HAVE_ALL = 14; // Fast (BEP 6)
+    /** H a v e  n o n e */
     static final byte HAVE_NONE = 15; // Fast (BEP 6)
+    /** R e j e c t */
     static final byte REJECT = 16; // Fast (BEP 6)
+    /** A l l o w e d  f a s t */
     static final byte ALLOWED_FAST = 17; // Fast (BEP 6)
+    /** E x t e n s i o n */
     static final byte EXTENSION = 20; // BEP 10
+    /** H a s h  r e q u e s t */
     static final byte HASH_REQUEST = 21; // BEP 52
+    /** H a s h e s */
     static final byte HASHES = 22; // BEP 52
+    /** H a s h  r e j e c t */
     static final byte HASH_REJECT = 23; // BEP 52
 
+    /** The message type */
     // Not all fields are used for every message.
     // KEEP_ALIVE doesn't have a real wire representation
     final byte type;
 
+    /** The piece index */
     // Used for HAVE, REQUEST, PIECE and CANCEL messages.
     // Also SUGGEST, REJECT, ALLOWED_FAST
     // low byte used for EXTENSION message
     // low two bytes used for PORT message
     final int piece;
 
+    /** The offset within the piece */
     // Used for REQUEST, PIECE and CANCEL messages.
     // Also REJECT
     final int begin;
+    /** The data length */
     final int length;
 
+    /** The data payload */
     // Used for PIECE and BITFIELD and EXTENSION messages
     byte[] data;
+    /** The data offset */
     final int off;
+    /** The payload length */
     final int len;
 
     // Used to do deferred fetch of data
@@ -242,6 +269,7 @@ class Message {
         if (ba != null && ba.getData().length == BUFSIZE) _cache.release(ba, false);
     }
 
+    /** @return a string representation of the message */
     @Override
     public String toString() {
         switch (type) {

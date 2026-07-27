@@ -125,6 +125,10 @@ public class Base32 {
     private Base32() { // nop
     }
 
+    /**
+     *  Run the Base32 command-line utility.
+     *  @param args command-line arguments
+     */
     public static void main(String[] args) {
         if (args.length == 0) {
             help();
@@ -203,6 +207,7 @@ public class Base32 {
      *  Does not add trailing '='.
      *
      *  @param source if null will return ""
+     *  @return the Base32-encoded string, or &quot;&quot; if source is null
      */
     public static String encode(String source) {
         return (source != null ? encode(DataHelper.getUTF8(source)) : "");
@@ -213,6 +218,7 @@ public class Base32 {
      * Does not add trailing '='.
      *
      * @param source The data to convert non-null
+     * @return the Base32-encoded string
      */
     public static String encode(byte[] source) {
         StringBuilder buf = new StringBuilder((source.length + 7) * 8 / 5);

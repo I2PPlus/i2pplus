@@ -43,6 +43,7 @@ import net.i2p.util.Log;
 public class RouterKeyGenerator extends RoutingKeyGenerator {
     private final Log _log;
     private final I2PAppContext _context;
+/** Routerkeygenerator */
 
     public RouterKeyGenerator(I2PAppContext context) {
         _log = context.logManager().getLog(RoutingKeyGenerator.class);
@@ -85,6 +86,9 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
         return _nextModData;
     }
 
+    /**
+     * getLastChanged.
+     */
     @Override
     public long getLastChanged() {
         return _lastChanged;

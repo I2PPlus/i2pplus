@@ -122,14 +122,17 @@ public class Reseeder {
         "https://reseed.sahil.world/"               + ',' +   // sahil_at_mail.i2p.crt             CA
         "https://www2.mk16.de/";                              // i2p-reseed_at_mk16.de.crt         CA
 
-        //"https://cubicchaos.net:8443/"              + ',' +   // unixeno_at_cubicchaos.net.crt     cubicchaos.net.crt
-        //"https://i2p.ghativega.in/"                 + ',' +   // arnavbhatt288_at_mail.i2p.crt     CA
-        //"https://banana.incognet.io/"               + ',' +   // rambler_at_mail.i2p.crt           CA
-        //"https://reseed.memcpy.io/"                 + ',' +   // hottuna_at_mail.i2p.crt           CA                                SNI required
+
 
     private static final String SU3_FILENAME = "i2pseeds.su3";
 
+    /**
+     * PROP_PROXY_HOST.
+     */
     public static final String PROP_PROXY_HOST = "router.reseedProxyHost";
+    /**
+     * PROP_PROXY_PORT.
+     */
     public static final String PROP_PROXY_PORT = "router.reseedProxyPort";
     /** @since 0.8.2 */
     public static final String PROP_PROXY_ENABLE = "router.reseedProxyEnable";
@@ -141,13 +144,37 @@ public class Reseeder {
     public static final String PROP_RESEED_URL = "i2p.reseedURL";
     /** all these @since 0.8.9 */
     public static final String PROP_PROXY_USERNAME = "router.reseedProxy.username";
+    /**
+     * PROP_PROXY_PASSWORD.
+     */
     public static final String PROP_PROXY_PASSWORD = "router.reseedProxy.password";
+    /**
+     * PROP_PROXY_AUTH_ENABLE.
+     */
     public static final String PROP_PROXY_AUTH_ENABLE = "router.reseedProxy.authEnable";
+    /**
+     * PROP_SPROXY_HOST.
+     */
     public static final String PROP_SPROXY_HOST = "router.reseedSSLProxyHost";
+    /**
+     * PROP_SPROXY_PORT.
+     */
     public static final String PROP_SPROXY_PORT = "router.reseedSSLProxyPort";
+    /**
+     * PROP_SPROXY_ENABLE.
+     */
     public static final String PROP_SPROXY_ENABLE = "router.reseedSSLProxyEnable";
+    /**
+     * PROP_SPROXY_USERNAME.
+     */
     public static final String PROP_SPROXY_USERNAME = "router.reseedSSLProxy.username";
+    /**
+     * PROP_SPROXY_PASSWORD.
+     */
     public static final String PROP_SPROXY_PASSWORD = "router.reseedSSLProxy.password";
+    /**
+     * PROP_SPROXY_AUTH_ENABLE.
+     */
     public static final String PROP_SPROXY_AUTH_ENABLE = "router.reseedSSLProxy.authEnable";
     /** @since 0.9.33 */
     public static final String PROP_SPROXY_TYPE = "router.reseedSSLProxyType";
@@ -161,6 +188,7 @@ public class Reseeder {
     private static final Pattern VERIFY_FAIL_PATTERN = Pattern.compile("verification failed for .*");
     private static final Pattern URL_SPLIT_PATTERN = Pattern.compile("[ ,]+");
 
+    /** Create a new Reseeder */
     Reseeder(RouterContext ctx, ReseedChecker rc) {
         _context = ctx;
         _log = ctx.logManager().getLog(Reseeder.class);
@@ -323,9 +351,7 @@ public class Reseeder {
             return host != null && !host.isEmpty() && port > 0;
         }
 
-        /*
-         * Do it.
-         */
+        /** Run the reseed sequence */
         public void run() {
             try {run2();}
             finally {
@@ -410,6 +436,7 @@ public class Reseeder {
         }
 
         // EepGet status listeners
+        /** Log and report a failed reseed attempt */
         public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {
             /*
              * Since readURL() runs an EepGet with 0 retries, we can report errors with
@@ -429,10 +456,13 @@ public class Reseeder {
             }
         }
 
+        /** No-op - progress not tracked */
         @Override
-        public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) { /* No-op - progress not tracked */ }
-        public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) { /* No-op - completion handled elsewhere */ }
-        public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) { /* No-op - failure handled in error callback */ }
+        public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {}
+        /** No-op - completion handled elsewhere */
+        public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {}
+        /** No-op - failure handled in error callback */
+        public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {}
 
         /**
          *  Use the Date header as a backup time source
@@ -780,7 +810,7 @@ public class Reseeder {
          *  @param echoStatus apparently always false
          *  @return count of routerinfos successfully fetched
          *  @since 0.9.14
-         **/
+         */
         public int reseedSU3(URI seedURL, boolean echoStatus) {
             return reseedSU3OrZip(seedURL, true, echoStatus);
         }
@@ -794,7 +824,7 @@ public class Reseeder {
          *  @param echoStatus apparently always false
          *  @return count of routerinfos successfully fetched
          *  @since 0.9.19
-         **/
+         */
         public int reseedZip(URI seedURL, boolean echoStatus) {
             return reseedSU3OrZip(seedURL, false, echoStatus);
         }
@@ -808,7 +838,7 @@ public class Reseeder {
          *  @param echoStatus apparently always false
          *  @return count of routerinfos successfully fetched
          *  @since 0.9.19
-         **/
+         */
         private int reseedSU3OrZip(URI seedURL, boolean isSU3, boolean echoStatus) {
             int fetched = 0;
             int errors = 0;
@@ -1218,133 +1248,6 @@ public class Reseeder {
         return Translate.getString(n, s, p, _context, BUNDLE_NAME);
     }
 
-    /**
-     *  @since 0.9.58
-     */
-    public static void main(String[] args) throws Exception {
-        if (args.length == 1 && args[0].equals("help")) {
-            System.out.println("Usage: reseeder [-6] [https://hostname/ ...]"); // NOSONAR S106 CLI output
-            System.exit(0);
-        }
-        boolean ipV6 = false;
-        if (args.length > 0 && args[0].equals("-6")) {
-            ipV6 = true;
-            args = Arrays.copyOfRange(args, 1, args.length);
-        }
-        File f = new File("certificates");
-        if (!f.exists()) {
-            System.out.println("Must be run from $I2P or have symlink to $I2P/certificates in this directory"); // NOSONAR S106 CLI output
-            System.exit(0);
-        }
-        String[] urls = (args.length > 0) ? args : DataHelper.split(DEFAULT_SSL_SEED_URL, ",");
-        if (args.length == 0) {Arrays.sort(urls);}
-        int pass = 0;
-        int warn = 0;
-        int fail = 0;
-        SSLEepGet.SSLState sslState = null;
-        I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        System.out.println("Initiating reseed hosts test...\n"); // NOSONAR S106 CLI output
-        StringBuilder sb = new StringBuilder();
-        for (String url : urls) {
-            url = sb.append(url).append(SU3_FILENAME).append(NETID_PARAM).append('2').toString();
-            sb.setLength(0);
-            URI uri = new URI(url);
-            String host = uri.getHost();
-            System.out.println(sb.append("Host:     ").append(host).toString()); sb.setLength(0); // NOSONAR S106 CLI output
-            File su3 = new File(sb.append(host).append(".su3").toString()); sb.setLength(0);
-            if (!su3.delete())
-                System.err.println(sb.append("Failed to delete ").append(su3.getName()).toString()); sb.setLength(0); // NOSONAR S106 CLI output
-            try {
-                SSLEepGet get;
-                if (sslState == null) {
-                    get = new SSLEepGet(ctx, su3.getPath(), url);
-                    sslState = get.getSSLState();
-                } else {get = new SSLEepGet(ctx, su3.getPath(), url, sslState);}
 
-                if (ipV6) {get.forceDNSOverHTTPS(true);}
-                long start = System.currentTimeMillis();
-                if (get.fetch()) {
-                    int rc = get.getStatusCode();
-                    if (rc == 200) {
-                        SU3File su3f = new SU3File(su3);
-                        File zip = new File(sb.append(host).append(".zip").toString()); sb.setLength(0);
-                        if (!zip.delete())
-                            System.err.println(sb.append("Failed to delete ").append(zip.getName()).toString()); sb.setLength(0); // NOSONAR S106 CLI output
-                        su3f.verifyAndMigrate(zip);
-                        SU3File.main(new String[] {"showversion", su3.getPath()});
-                        String version = su3f.getVersionString();
-                        long ver = Long.parseLong(version.trim()) * 1000;
-                        long cutoff = System.currentTimeMillis() - MAX_FILE_AGE / 4;
-                        if (ver < cutoff) {throw new IOException("su3 file is too old");}
-                        ZipFile zipf = new ZipFile(zip);
-                        int ri = 0;
-                        int old = 0;
-                        int bad = 0;
-                        int oldver = 0;
-                        int unreach = 0;
-                        try {
-                        Enumeration<? extends ZipEntry> entries = zipf.entries();
-                        while (entries.hasMoreElements()) {
-                            ZipEntry entry = entries.nextElement();
-                            net.i2p.data.router.RouterInfo r = new net.i2p.data.router.RouterInfo();
-                            InputStream in = zipf.getInputStream(entry);
-                            try {r.readBytes(in);}
-                            catch (DataFormatException dfe) {
-                                System.out.println(sb.append("Bad entry ").append(entry.getName()).append(": ").append(dfe).toString()); sb.setLength(0); // NOSONAR S106 CLI output
-                                bad++;
-                                continue;
-                            } finally {in.close();}
-                            if (r.getPublished() > cutoff) {ri++;}
-                            else {old++;}
-                            if (VersionComparator.comp(r.getVersion(), MIN_VERSION) < 0) {oldver++;}
-                            if (r.getCapabilities().indexOf('U') >= 0) {unreach++;}
-                        }
-                        } finally {zipf.close();}
-                        if (bad > 0) {System.out.println(sb.append(bad).append(" bad entries").toString()); sb.setLength(0);} // NOSONAR S106 CLI output
-                        if (old > 0) {
-                            System.out.println(sb.append("Failure:  ").append(old).append(" old RouterInfos returned").toString()); sb.setLength(0); // NOSONAR S106 CLI output
-                            fail++;
-                        } else if (ri >= 50) {
-                            System.out.println(sb.append("Success:  ").append(ri).append(" RouterInfos returned").toString()); sb.setLength(0); // NOSONAR S106 CLI output
-                            pass++;
-                            long time = System.currentTimeMillis() - start;
-                            if (time > 30*1000L) {
-                                System.out.println(sb.append("Test very slow for ").append(host).append(", took ").append(DataHelper.formatDuration(time)).toString()); sb.setLength(0); // NOSONAR S106 CLI output
-                                warn++;
-                            }
-                        } else {
-                            System.out.println(sb.append("Failure:  Only ").append(ri).append(" RouterInfos returned (less than 50)").toString()); sb.setLength(0); // NOSONAR S106 CLI output
-                            fail++;
-                        }
-                        System.out.println(sb.append("Router infos included ").append(oldver).append(" with versions older than ").append(MIN_VERSION).append(" and ").append(unreach).append(" unreachable").toString()); sb.setLength(0); // NOSONAR S106 CLI output
-                    } else {
-                        System.out.println(sb.append("Failure:  Status code ").append(rc).toString()); sb.setLength(0); // NOSONAR S106 CLI output
-                        if (!su3.delete()) {
-                            System.err.println(sb.append("Failed to delete ").append(su3.getName()).toString()); sb.setLength(0); // NOSONAR S106 CLI output
-                        }
-                        fail++;
-                    }
-                } else {
-                    int rc = get.getStatusCode();
-                    System.out.println(sb.append("Failure:  Status code ").append(rc).toString()); sb.setLength(0); // NOSONAR S106 CLI output
-                    if (!su3.delete())
-                        System.err.println(sb.append("Failed to delete ").append(su3.getName()).toString()); sb.setLength(0); // NOSONAR S106 CLI output
-                    fail++;
-                }
-            } catch (Exception ioe) {
-                System.out.println(sb.append("Failure:  ").append(ioe.getMessage()).append("\n").toString()); sb.setLength(0); // NOSONAR S106 CLI output
-                if (su3.exists()) {
-                    try {SU3File.main(new String[] {"showversion", su3.getPath()});}
-                    catch (Exception e) { /* ignored */ }
-                    if (!su3.delete())
-                        System.err.println(sb.append("Failed to delete ").append(su3.getName()).toString()); sb.setLength(0); // NOSONAR S106 CLI output
-                }
-                fail++;
-            }
-            System.out.println(); // NOSONAR S106 CLI output
-        }
-        System.out.println("Test complete: " + (pass + fail) + " reseed hosts tested - " + pass + " passed, " + warn + " slow, " + fail + " failed"); // NOSONAR S106 CLI output
-        if (fail > 0) {System.exit(0);}
-    }
 
 }

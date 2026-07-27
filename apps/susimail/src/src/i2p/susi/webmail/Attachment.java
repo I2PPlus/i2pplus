@@ -44,27 +44,37 @@ public class Attachment {
     }
 
     /**
+     * Returns the file name.
+     *
      * @return the file name
      */
     public String getFileName() {return fileName;}
 
     /**
+     * Returns the transfer encoding.
+     *
      * @return the transfer encoding, non-null
      */
     public String getTransferEncoding() {return transferEncoding;}
 
     /**
+     * Returns the content type.
+     *
      * @return the content type
      */
     public String getContentType() {return contentType;}
 
     /**
+     * Returns an input stream for reading the attachment data.
+     *
      * @return an input stream for reading the attachment data
      * @throws IOException if the file cannot be opened for reading
      */
     public InputStream getData() throws IOException {return new FileInputStream(data);}
 
     /**
+     * Returns the absolute path to the data file.
+     *
      * @return absolute path to the data file
      * @since 0.9.35
      */
@@ -72,6 +82,8 @@ public class Attachment {
 
     /**
      * The unencoded size
+     *
+     * @return the unencoded size
      * @since 0.9.33
      */
     public long getSize() {return data.length();}

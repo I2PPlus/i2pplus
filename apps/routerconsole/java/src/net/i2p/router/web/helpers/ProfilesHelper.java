@@ -26,6 +26,9 @@ public class ProfilesHelper extends HelperBase {
                                             "?f=3"                 // 3 (Session Bans)
                                            };
 
+    /**
+     * setFull.
+     */
     public void setFull(String f) {
         if (f != null) {
             try {

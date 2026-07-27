@@ -27,6 +27,9 @@ import net.i2p.I2PAppContext;
  *
  */
 class SchedulerClosed extends SchedulerImpl {
+    /**
+     * SchedulerClosed.
+     */
     public SchedulerClosed(I2PAppContext ctx) {
         super(ctx);
     }
@@ -52,6 +55,9 @@ class SchedulerClosed extends SchedulerImpl {
         return (ok || conTimeout);
     }
 
+    /**
+     * eventOccurred.
+     */
     @Override
     public void eventOccurred(Connection con) {
         // noop - timeout handled by the simpleTimer

@@ -32,16 +32,28 @@ public final class UNKNOWN extends Data {
         dis.readFully(data);
     }
 
+    /**
+     * getType.
+     */
     @Override
     public TYPE getType() {
         return type;
     }
 
+    /**
+     * serialize.
+     */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
         dos.write(data);
     }
 
+    /**
+     * parse.
+     */
+    /**
+     * Parse an unknown record from a stream.
+     */
     public static UNKNOWN parse(DataInputStream dis, int payloadLength, TYPE type) throws IOException {
         return new UNKNOWN(dis, payloadLength, type);
     }

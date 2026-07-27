@@ -43,6 +43,9 @@ public class NetworkSettingHandler implements RequestHandler {
     private final JSONRPC2Helper _helper;
     private final RouterContext _context;
 
+    /**
+     * NetworkSettingHandler.
+     */
     public NetworkSettingHandler(RouterContext ctx, JSONRPC2Helper helper) {
         _helper = helper;
         _context = ctx;

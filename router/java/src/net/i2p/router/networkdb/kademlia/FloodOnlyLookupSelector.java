@@ -26,18 +26,30 @@ class FloodOnlyLookupSelector implements MessageSelector {
     private boolean _matchFound;
     private final Log _log;
 
+    /**
+     * FloodOnlyLookupSelector.
+     */
     public FloodOnlyLookupSelector(RouterContext ctx, FloodOnlySearchJob search) {
         _context = ctx;
         _search = search;
         _log = ctx.logManager().getLog(getClass());
     }
 
+    /**
+     * continueMatching.
+     */
     public boolean continueMatching() {
         return _search.getLookupsRemaining() > 0 && !_matchFound && _context.clock().now() < getExpiration();
     }
 
+    /**
+     * getExpiration.
+     */
     public long getExpiration() { return (_matchFound ? -1 : _search.getExpiration()); }
 
+    /**
+     * isMatch.
+     */
     public boolean isMatch(I2NPMessage message) {
         if (message == null) return false;
         int type = message.getType();

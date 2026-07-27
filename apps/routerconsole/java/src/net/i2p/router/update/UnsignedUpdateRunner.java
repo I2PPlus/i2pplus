@@ -19,6 +19,9 @@ import net.i2p.util.RFC822Date;
  */
 class UnsignedUpdateRunner extends UpdateRunner {
 
+    /**
+     * UnsignedUpdateRunner.
+     */
     public UnsignedUpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris) {
         super(ctx, mgr, ROUTER_UNSIGNED, uris);
         if (!uris.isEmpty()) {_currentURI = uris.get(0);}

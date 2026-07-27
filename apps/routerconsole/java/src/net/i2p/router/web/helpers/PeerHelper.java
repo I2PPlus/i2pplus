@@ -60,9 +60,15 @@ public class PeerHelper extends HelperBase {
     // Opera doesn't have the char, TODO check UA
     private static final String THINSP = " / ";
 
+    /**
+     * PeerHelper.
+     */
     public PeerHelper() {
         // TODO
     }
+    /**
+     * setSort.
+     */
     public void setSort(String flags) {
         if (flags != null) {
             try {_sortFlags = Integer.parseInt(flags);}
@@ -70,6 +76,9 @@ public class PeerHelper extends HelperBase {
         } else {_sortFlags = 0;}
     }
 
+    /**
+     * setUrlBase.
+     */
     public void setUrlBase(String base) {_urlBase = base;}
 
     /** @since 0.9.38 */
@@ -81,6 +90,9 @@ public class PeerHelper extends HelperBase {
      */
     public void allowGraphical() {_graphical = true;}
 
+    /**
+     * getPeerSummary.
+     */
     public String getPeerSummary() {
         try {renderStatusHTML(_out, _urlBase, _sortFlags);}
         catch (IOException ioe) {_log.error("Error rendering peer summary", ioe);}
@@ -707,10 +719,16 @@ public class PeerHelper extends HelperBase {
 
     private static class AlphaComparator extends PeerComparator {
         private static final AlphaComparator _instance = new AlphaComparator();
+        /**
+         * instance.
+         */
         public static final AlphaComparator instance() {return _instance;}
     }
 
     private static class PeerComparator implements Comparator<NTCPConnection>, Serializable {
+        /**
+         * compare.
+         */
         @Override
         public int compare(NTCPConnection l, NTCPConnection r) {
             if (l == null || r == null) {throw new IllegalArgumentException();}

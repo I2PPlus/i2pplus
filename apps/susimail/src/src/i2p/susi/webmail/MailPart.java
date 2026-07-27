@@ -31,16 +31,43 @@ import net.i2p.util.Log;
 class MailPart {
 
     private static final OutputStream DUMMY_OUTPUT = new DummyOutputStream();
+    /**
+     * headerLines.
+     */
     public final String[] headerLines;
     /** encoding non-null */
     public final String type;
+    /**
+     * encoding.
+     */
     public final String encoding;
+    /**
+     * name.
+     */
     public final String name;
+    /**
+     * description.
+     */
     public final String description;
+    /**
+     * disposition.
+     */
     public final String disposition;
+    /**
+     * charset.
+     */
     public final String charset;
+    /**
+     * version.
+     */
     public final String version;
+    /**
+     * multipart_type.
+     */
     public final String multipart_type;
+    /**
+     * cid.
+     */
     public final String cid;
     /** begin, end, and beginBody are relative to readBuffer.getOffset().
      *  begin is before the headers
@@ -52,9 +79,21 @@ class MailPart {
     private final int end;
     /** Always null, reserved for future use */
     public final String filename = null;
+    /**
+     * parts.
+     */
     public final List<MailPart> parts;
+    /**
+     * multipart.
+     */
     public final boolean multipart;
+    /**
+     * message.
+     */
     public final boolean message;
+    /**
+     * buffer.
+     */
     public final Buffer buffer;
     private final Log _log;
 
@@ -239,6 +278,9 @@ class MailPart {
      *
      *  @since 0.9.34
      */
+    /**
+     * Return the part ID.
+     */
     public int getID() {return intID;}
 
 
@@ -414,7 +456,13 @@ class MailPart {
     /** translate */
     private static String _t(String s, Object o) {return Messages.getString(s, o);}
 
+    /**
+     * toString.
+     */
     @Override
+    /**
+     * Return a string representation.
+     */
     public String toString() {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("MailPart:")

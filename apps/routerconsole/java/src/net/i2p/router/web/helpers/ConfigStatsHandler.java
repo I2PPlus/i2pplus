@@ -14,6 +14,7 @@ public class ConfigStatsHandler extends FormHandler {
     private String _graphs;
     private boolean _isFull;
 
+    /** ConfigStatsHandler default constructor */
     public ConfigStatsHandler() {
         super();
         _graphs = "";
@@ -27,6 +28,7 @@ public class ConfigStatsHandler extends FormHandler {
         }
     }
 
+    /** @param stats the stat names to graph */
     public void setGraphList(String[] stats) {
         if (stats != null) {
             StringBuilder s = new StringBuilder(128);
@@ -44,6 +46,7 @@ public class ConfigStatsHandler extends FormHandler {
         }
     }
 
+    /** @param foo ignored */
     public void setIsFull(String foo) { _isFull = true; }
 
     /**

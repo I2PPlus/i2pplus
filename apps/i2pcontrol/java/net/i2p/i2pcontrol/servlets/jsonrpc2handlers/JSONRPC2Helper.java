@@ -20,11 +20,20 @@ import net.i2p.i2pcontrol.security.SecurityManager;
  * Provides common functionality for parameter validation and authentication token verification.
  */
 public class JSONRPC2Helper {
+    /**
+     * USE_NO_AUTH.
+     */
     public final static Boolean USE_NO_AUTH = false;
+    /**
+     * USE_AUTH.
+     */
     public final static Boolean USE_AUTH = true;
 
     private final SecurityManager _secMan;
 
+    /**
+     * JSONRPC2Helper.
+     */
     public JSONRPC2Helper(SecurityManager secMan) {
         _secMan = secMan;
     }

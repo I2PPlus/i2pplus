@@ -6,7 +6,7 @@
  * to EdDSA-Java.
  *
  * You should have received a copy of the CC0 legalcode along with this
- * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>lt;https://creativecommons.org/publicdomain/zero/1.0/<https://creativecommons.org/publicdomain/zero/1.0/>gt;.
+ * work. If not, see &lt;https://creativecommons.org/publicdomain/zero/1.0/&gt;.
  *
  */
 package net.i2p.crypto.eddsa.spec;
@@ -42,6 +42,9 @@ public class EdDSANamedCurveTable {
             Utils.hexToBytes("a3785913ca4deb75abd841414d0a700098e879777940c78c73fe6f2bee6c0352"), // d
             ed25519field.fromByteArray(Utils.hexToBytes("b0a00e4a271beec478e42fad0618432fa7d7fb3d99004d2b0bdfc14f8024832b"))); // I
 
+    /**
+     * ED_25519_CURVE_SPEC.
+     */
     public static final EdDSANamedCurveSpec ED_25519_CURVE_SPEC = new EdDSANamedCurveSpec(
             ED_25519,
             ed25519curve,
@@ -68,6 +71,7 @@ public class EdDSANamedCurveTable {
         putCurve(curve.getName().toLowerCase(Locale.ENGLISH), curve);
     }
 
+    /** Define an alias for a curve */
     static void defineCurveAlias(String name, String alias) {
         EdDSANamedCurveSpec curve = curves.get(name.toLowerCase(Locale.ENGLISH));
         if (curve == null) {
@@ -92,4 +96,5 @@ public class EdDSANamedCurveTable {
     public static EdDSANamedCurveSpec getByName(String name) {
         return curves.get(name.toLowerCase(Locale.ENGLISH));
     }
+
 }

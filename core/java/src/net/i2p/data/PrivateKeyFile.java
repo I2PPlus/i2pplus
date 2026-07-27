@@ -74,10 +74,14 @@ import net.i2p.util.SecureFileOutputStream;
 @SuppressWarnings("PMD.CloseResource")
 public class PrivateKeyFile {
 
+    /** the key file */
     protected final File file;
     private final I2PClient client;
+    /** the destination */
     protected Destination dest;
+    /** the private key */
     protected PrivateKey privKey;
+    /** the signing private key */
     protected SigningPrivateKey signingPrivKey;
     private long _offlineExpiration;
     private Signature _offlineSignature;
@@ -96,6 +100,8 @@ public class PrivateKeyFile {
      *  a Destination you've already registered in a hosts.txt key add form.
      *
      *  Copied and expanded from that in Destination.java
+     *
+     *  @param args command line arguments
      */
     public static void main(String[] args) {
         String stype = null;
@@ -442,6 +448,8 @@ public class PrivateKeyFile {
     }
 
     /**
+     *  Create a new PrivateKeyFile from a file name.
+     *
      *  @param file the key file name
      */
     public PrivateKeyFile(String file) {
@@ -449,6 +457,8 @@ public class PrivateKeyFile {
     }
 
     /**
+     *  Create a new PrivateKeyFile from a File.
+     *
      *  @param file the key file
      */
     public PrivateKeyFile(File file) {
@@ -456,6 +466,8 @@ public class PrivateKeyFile {
     }
 
     /**
+     *  Create a new PrivateKeyFile with a client.
+     *
      *  @param file the key file
      *  @param client the I2P client
      */
@@ -464,12 +476,24 @@ public class PrivateKeyFile {
         this.client = client;
     }
 
-    /** @since 0.8.9 */
+    /**
+     *  Create a new PrivateKeyFile from an I2P session.
+     *
+     *  @param file the key file
+     *  @param session the I2P session
+     *  @since 0.8.9
+     */
     public PrivateKeyFile(File file, I2PSession session) {
         this(file, session.getMyDestination(), session.getDecryptionKey(), session.getPrivateKey());
     }
 
     /**
+     *  Create a new PrivateKeyFile with a destination and keys.
+     *
+     *  @param file the key file
+     *  @param dest the destination
+     *  @param pk the private key
+     *  @param spk the signing private key
      *  @throws IllegalArgumentException on mismatch of spubkey and spk types
      *  @since 0.8.9
      */
@@ -484,6 +508,14 @@ public class PrivateKeyFile {
     }
 
     /**
+     *  Create a new PrivateKeyFile from individual key components.
+     *
+     *  @param file the key file
+     *  @param pubkey the public key
+     *  @param spubkey the signing public key
+     *  @param cert the certificate
+     *  @param pk the private key
+     *  @param spk the signing private key
      *  @throws IllegalArgumentException on mismatch of spubkey and spk types
      *  @since 0.8.9
      */
@@ -498,6 +530,14 @@ public class PrivateKeyFile {
     }
 
     /**
+     *  Create a new PrivateKeyFile from individual key components with padding.
+     *
+     *  @param file the key file
+     *  @param pubkey the public key
+     *  @param spubkey the signing public key
+     *  @param cert the certificate
+     *  @param pk the private key
+     *  @param spk the signing private key
      *  @param padding null OK, must be non-null if spubkey length &lt; 128
      *  @throws IllegalArgumentException on mismatch of spubkey and spk types
      *  @since 0.9.16
@@ -523,8 +563,11 @@ public class PrivateKeyFile {
     }
 
     /**
+     *  Read a PrivateKeyFile from an input stream.
      *  Can't be used for writing
      *
+     *  @param in the input stream
+     *  @throws I2PSessionException if session creation fails
      *  @since 0.9.26
      */
     public PrivateKeyFile(InputStream in) throws I2PSessionException {
@@ -540,6 +583,10 @@ public class PrivateKeyFile {
      *
      *  Also reads in the file to get the privKey and signingPrivKey,
      *  which aren't available from I2PClient.
+     *
+     *  @return the destination
+     *  @throws I2PException if creation fails
+     *  @throws IOException if file operations fail
      */
     public Destination createIfAbsent() throws I2PException, IOException {
         return createIfAbsent(I2PClient.DEFAULT_SIGTYPE);
@@ -551,6 +598,10 @@ public class PrivateKeyFile {
      *  Also reads in the file to get the privKey and signingPrivKey,
      *  which aren't available from I2PClient.
      *
+     *  @param type the signature type to use
+     *  @return the destination
+     *  @throws I2PException if creation fails
+     *  @throws IOException if file operations fail
      *  @since 0.9.26
      */
     public Destination createIfAbsent(SigType type) throws I2PException, IOException {
@@ -659,6 +710,11 @@ public class PrivateKeyFile {
     /**
      *  If the destination is not set, read it in from the file.
      *  Also sets the local privKey and signingPrivKey.
+     *
+     *  @return the destination
+     *  @throws I2PSessionException if reading fails
+     *  @throws IOException if file operations fail
+     *  @throws DataFormatException if data is malformed
      */
     public Destination getDestination() throws I2PSessionException, IOException, DataFormatException {
         if (dest == null) {
@@ -694,6 +750,9 @@ public class PrivateKeyFile {
     /**
      * Change cert type - caller must also call write().
      * Side effect - creates new Destination object.
+     *
+     * @param t the certificate type
+     * @return the certificate
      */
     public Certificate setCertType(int t) {
         if (this.dest == null) throw new IllegalArgumentException("Dest is null");
@@ -712,6 +771,8 @@ public class PrivateKeyFile {
      * Change cert type - caller must also call write().
      * Side effect - creates new Destination object.
      *
+     * @param type the signature type
+     * @return the certificate
      * @since 0.9.12
      */
     public Certificate setKeyCert(SigType type) {
@@ -744,7 +805,12 @@ public class PrivateKeyFile {
         return c;
     }
 
-    /** sign this dest by dest found in pkf2 - caller must also call write() */
+    /**
+     * Sign this dest by dest found in pkf2 - caller must also call write().
+     *
+     * @param pkf2 the signing key file
+     * @return the certificate
+     */
     public Certificate setSignedCert(PrivateKeyFile pkf2) {
         Certificate c = setCertType(Certificate.CERTIFICATE_TYPE_SIGNED);
         Destination d2;
@@ -798,6 +864,8 @@ public class PrivateKeyFile {
     }
 
     /**
+     *  Get the signing private key.
+     *
      *  @return null on error or if not initialized
      */
     public SigningPrivateKey getSigningPrivKey() {
@@ -815,6 +883,7 @@ public class PrivateKeyFile {
     /**
      *  Does this session have offline and transient keys?
      *
+     *  @return true if offline keys are configured
      *  @since 0.9.38
      */
     public boolean isOffline() {
@@ -830,6 +899,10 @@ public class PrivateKeyFile {
     /**
      *  Side effect - zeroes out the current signing private key
      *
+     *  @param expires expiration time in Java ms
+     *  @param transientPub the transient signing public key
+     *  @param sig the offline signature
+     *  @param transientPriv the transient signing private key
      *  @since 0.9.38
      */
     public void setOfflineData(
@@ -846,6 +919,8 @@ public class PrivateKeyFile {
     }
 
     /**
+     *  Get the offline key expiration time.
+     *
      *  @return Java time (ms) or 0 if not initialized or does not have offline keys
      *  @since 0.9.38
      */
@@ -854,6 +929,9 @@ public class PrivateKeyFile {
     }
 
     /**
+     *  Get the offline signature.
+     *
+     *  @return the signature, or null if not initialized or does not have offline keys
      *  @since 0.9.38
      */
     public Signature getOfflineSignature() {
@@ -861,6 +939,8 @@ public class PrivateKeyFile {
     }
 
     /**
+     *  Get the transient signing public key.
+     *
      *  @return null on error or if not initialized or does not have offline keys
      *  @since 0.9.38
      */
@@ -875,6 +955,8 @@ public class PrivateKeyFile {
     }
 
     /**
+     *  Get the transient signing private key.
+     *
      *  @return null on error or if not initialized or does not have offline keys
      *  @since 0.9.38
      */
@@ -925,7 +1007,11 @@ public class PrivateKeyFile {
     }
 
     /**
+     *  Write the keys to the file.
      *  Copied from I2PClientImpl.createDestination()
+     *
+     *  @throws IOException if file operations fail
+     *  @throws DataFormatException if data encoding fails
      */
     public void write() throws IOException, DataFormatException {
         OutputStream out = null;
@@ -1022,6 +1108,12 @@ public class PrivateKeyFile {
      *  do a naming lookup to get their Destinations, and try those only.
      *  Or do a netDb lookup of the Hash in the Certificate, do a reverse
      *  naming lookup to see if it is allowed, then verify the Signature.
+     */
+    /**
+     *  Verify the signature on a destination.
+     *
+     *  @param d the destination to verify
+     *  @return true if the signature is valid
      */
     public static boolean verifySignature(Destination d) {
         if (d.getCertificate().getCertificateType() != Certificate.CERTIFICATE_TYPE_SIGNED) return false;

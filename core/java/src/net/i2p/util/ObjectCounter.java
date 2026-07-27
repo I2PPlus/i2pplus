@@ -30,8 +30,12 @@ public class ObjectCounter<K> implements Serializable {
      */
     private static final long serialVersionUID = 3160378641721937421L;
 
+    /** Map */
     private final ConcurrentHashMap<K, AtomicInteger> map;
 
+    /**
+     * ObjectCounter.
+     */
     public ObjectCounter() {
         this.map = new ConcurrentHashMap<>();
     }

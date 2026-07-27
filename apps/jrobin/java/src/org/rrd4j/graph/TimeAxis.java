@@ -11,6 +11,7 @@ import java.util.Date;
  * graph time range and pixel density.
  */
 class TimeAxis extends Axis {
+    /** ignored */
     private static final TimeAxisSetting[] tickSettings = {
         new TimeAxisSetting(0, TimeUnit.SECOND, 30, TimeUnit.MINUTE, 5, TimeUnit.MINUTE, 5, 0),
         new TimeAxisSetting(2, TimeUnit.MINUTE, 1, TimeUnit.MINUTE, 5, TimeUnit.MINUTE, 5, 0),
@@ -46,14 +47,21 @@ class TimeAxis extends Axis {
                 1,
                 365 * 24 * 3600),
     };
+    /** Im */
 
     private final ImageParameters im;
+    /** Worker */
     private final ImageWorker worker;
+    /** Gdef */
     private final RrdGraphDef gdef;
+    /** Mapper */
     private final Mapper mapper;
+    /** Tick setting */
     private TimeAxisSetting tickSetting;
+    /** Sec per pix */
 
     private final double secPerPix;
+    /** Calendar */
     private final Calendar calendar;
 
     /**
@@ -72,6 +80,7 @@ class TimeAxis extends Axis {
         this.calendar.setFirstDayOfWeek(gdef.firstDayOfWeek);
     }
 
+    /** Create TimeAxis */
     TimeAxis(RrdGraphGenerator generator) {
         this.im = generator.im;
         this.worker = generator.worker;
@@ -81,6 +90,9 @@ class TimeAxis extends Axis {
         this.calendar = Calendar.getInstance(gdef.tz, gdef.locale);
         this.calendar.setFirstDayOfWeek(gdef.firstDayOfWeek);
     }
+    /**
+     * Draw
+     */
 
     boolean draw() {
         chooseTickSettings();
@@ -97,6 +109,9 @@ class TimeAxis extends Axis {
 
         return true;
     }
+    /**
+     * Draw minor ticks
+     */
 
     private void drawMinorTicks() {
         if (!gdef.noMinorGrid && gdef.drawTicks()) {
@@ -113,6 +128,9 @@ class TimeAxis extends Axis {
             }
         }
     }
+    /**
+     * Draw major ticks
+     */
 
     private void drawMajorTicks() {
         if (gdef.drawTicks()) {
@@ -129,6 +147,9 @@ class TimeAxis extends Axis {
             }
         }
     }
+    /**
+     * Draw minor grids
+     */
 
     private void drawMinorGrids() {
         if (!gdef.noMinorGrid) {
@@ -145,6 +166,9 @@ class TimeAxis extends Axis {
             }
         }
     }
+    /**
+     * Draw major grids
+     */
 
     private void drawMajorGrids() {
         adjustStartingTime(tickSetting.majorUnit, tickSetting.majorUnitCount);
@@ -159,6 +183,9 @@ class TimeAxis extends Axis {
             findNextTime(tickSetting.majorUnit, tickSetting.majorUnitCount);
         }
     }
+    /**
+     * Draw labels
+     */
 
     private void drawLabels() {
         Font font = gdef.getFont(FONTTAG_AXIS);
@@ -178,6 +205,9 @@ class TimeAxis extends Axis {
             findNextTime(tickSetting.labelUnit, tickSetting.labelUnitCount);
         }
     }
+    /**
+     * Find next time
+     */
 
     private void findNextTime(TimeUnit timeUnit, int timeUnitCount) {
         switch (timeUnit) {
@@ -209,6 +239,9 @@ class TimeAxis extends Axis {
         long time = calendar.getTime().getTime() / 1000L;
         return (time < im.start) ? -1 : (time > im.end) ? +1 : 0;
     }
+    /**
+     * Adjust starting time
+     */
 
     private void adjustStartingTime(TimeUnit timeUnit, int timeUnitCount) {
         calendar.setTime(new Date(im.start * 1000L));
@@ -259,6 +292,9 @@ class TimeAxis extends Axis {
                 break;
         }
     }
+    /**
+     * Choose tick settings
+     */
 
     private void chooseTickSettings() {
         if (gdef.timeAxisSetting != null) {

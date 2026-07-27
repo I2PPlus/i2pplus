@@ -21,6 +21,11 @@ public class JobTiming implements Clock.ClockUpdateListener {
     private volatile long _actualEnd;
     private final RouterContext _context;
 
+    /**
+     * Create a JobTiming for the given context.
+     *
+     * @param context the router context
+     */
     public JobTiming(RouterContext context) {
         _context = context;
         _start = context.clock().now();
@@ -28,12 +33,16 @@ public class JobTiming implements Clock.ClockUpdateListener {
 
     /**
      * # of milliseconds after the epoch to start the job
+     *
+     * @return the scheduled start time
      */
     public long getStartAfter() { return _start; }
 
     /**
      * WARNING - this does not force a resort of the job queue any more...
      * ALWAYS call JobImpl.requeue() instead if job is already queued.
+     *
+     * @param startTime the new start time
      */
     public void setStartAfter(long startTime) {
         _start = startTime;
@@ -41,24 +50,36 @@ public class JobTiming implements Clock.ClockUpdateListener {
 
     /**
      * Get the actual start time when the job began execution.
+     *
+     * @return the actual start time
      */
     public long getActualStart() { return _actualStart; }
 
     /**
      * Set the actual start time when the job began execution.
+     *
+     * @param actualStartTime the actual start time
      */
     public void setActualStart(long actualStartTime) { _actualStart = actualStartTime; }
+
+    /** Record the current time as the actual start. */
     public void start() { _actualStart = _context.clock().now(); }
 
     /**
      * Get the actual end time when the job finished execution.
+     *
+     * @return the actual end time
      */
     public long getActualEnd() { return _actualEnd; }
 
     /**
      * Set the actual end time when the job finished execution.
+     *
+     * @param actualEndTime the actual end time
      */
     public void setActualEnd(long actualEndTime) { _actualEnd = actualEndTime; }
+
+    /** Record the current time as the actual end. */
     public void end() { _actualEnd = _context.clock().now(); }
 
     /**

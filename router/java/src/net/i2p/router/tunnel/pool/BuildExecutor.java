@@ -145,13 +145,29 @@ public class BuildExecutor implements Runnable {
     private static volatile int CONSECUTIVE_FAILURE_THRESHOLD = 5;
     private static volatile long POOL_BACKOFF_MS = 12 * 1000L;
 
-    /** @since 0.9.70+ */
+    /**
+     * Get the pool failure threshold.
+     * @return the threshold
+     * @since 0.9.70+
+     */
     public static int getPoolFailureThreshold() { return CONSECUTIVE_FAILURE_THRESHOLD; }
-    /** @since 0.9.70+ */
+    /**
+     * Set the pool failure threshold.
+     * @param val the threshold value (1-20)
+     * @since 0.9.70+
+     */
     public static void setPoolFailureThreshold(int val) { CONSECUTIVE_FAILURE_THRESHOLD = Math.max(1, Math.min(20, val)); }
-    /** @since 0.9.70+ */
+    /**
+     * Get the pool backoff time in milliseconds.
+     * @return the backoff in ms
+     * @since 0.9.70+
+     */
     public static long getPoolBackoffMs() { return POOL_BACKOFF_MS; }
-    /** @since 0.9.70+ */
+    /**
+     * Set the pool backoff time in milliseconds.
+     * @param val the backoff in ms (1000-60000)
+     * @since 0.9.70+
+     */
     public static void setPoolBackoffMs(long val) { POOL_BACKOFF_MS = Math.max(1000, Math.min(60000, val)); }
     private final ConcurrentHashMap<TunnelPool, long[]> _poolFailureState = new ConcurrentHashMap<>(64);
     private int _keepAliveCounter;
@@ -160,6 +176,9 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Get the tunnel lifetime from config. Delegates to TunnelPool.
+     *
+     * @param ctx the router context
+     * @return the tunnel lifetime in milliseconds
      */
     static int getTunnelLifetime(RouterContext ctx) {
         return TunnelPool.getTunnelLifetime(ctx);
@@ -169,6 +188,9 @@ public class BuildExecutor implements Runnable {
      * Get the target build buffer from config or default (0).
      * Extra tunnels to maintain beyond the configured quantity.
      * Tunable via i2p.tunnel.targetBuffer (default: 0).
+     *
+     * @param ctx the router context
+     * @return the target buffer count
      */
     static int getTunnelTargetBuffer(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.targetBuffer", 0);
@@ -178,6 +200,9 @@ public class BuildExecutor implements Runnable {
      * Get the GOOD deficit throttle interval from config or default (30s).
      * Minimum time between GOOD-tunnel deficit rebuilds for non-critical pools.
      * Tunable via i2p.tunnel.goodDeficitThrottle (default: 30000).
+     *
+     * @param ctx the router context
+     * @return the throttle interval in milliseconds
      */
     public static long getGoodDeficitThrottle(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.goodDeficitThrottle", 30000);
@@ -191,10 +216,18 @@ public class BuildExecutor implements Runnable {
      */
     private static volatile int _maxConcurrentBuilds = Math.max(SystemVersion.getCores() * 4, 32);
 
-    /** @since 0.9.70+ */
+    /**
+     * Get the maximum number of concurrent builds allowed.
+     * @return maximum concurrent builds
+     * @since 0.9.70+
+     */
     public static int getMaxConcurrentBuilds() { return _maxConcurrentBuilds; }
 
-    /** @since 0.9.70+ */
+    /**
+     * Set the maximum number of concurrent builds allowed.
+     * @param val the maximum concurrent builds
+     * @since 0.9.70+
+     */
     public static void setMaxConcurrentBuilds(int val) { _maxConcurrentBuilds = Math.max(Math.max(SystemVersion.getCores() * 2, 24), Math.min(256, val)); }
 
     private static final int LOOP_TIME = 60000; // tunnel builds take 10-40s, no point polling faster
@@ -203,11 +236,27 @@ public class BuildExecutor implements Runnable {
         return ctx.getProperty("i2p.tunnel.build.gracePeriod", 60*1000);
     }
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
-    /** @return true if full statistics are enabled */
+    /**
+     * Check if full statistics are enabled.
+     * @return true if full statistics are enabled
+     */
     public boolean fullStats() {return _context.getBooleanProperty("stat.full");}
 
     /** Build result enumeration. @since 0.9.53 */
-    enum Result { SUCCESS, REJECT, TIMEOUT, BAD_RESPONSE, DUP_ID, OTHER_FAILURE }
+    enum Result {
+        /** Build succeeded */
+        SUCCESS,
+        /** Build was rejected */
+        REJECT,
+        /** Build timed out */
+        TIMEOUT,
+        /** Bad response received */
+        BAD_RESPONSE,
+        /** Duplicate build ID */
+        DUP_ID,
+        /** Other failure */
+        OTHER_FAILURE
+    }
 
     /**
      * Create a new BuildExecutor.
@@ -251,6 +300,7 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
+     *  Restart the build executor, clearing recent build state.
      *  @since 0.9
      */
     public synchronized void restart() {
@@ -274,6 +324,7 @@ public class BuildExecutor implements Runnable {
      *  Remove failure state for a pool that is being removed.
      *  Prevents unbounded growth of _poolFailureState and _lastRebuildTime
      *  across pool lifecycles.
+     *  @param pool the pool to remove state for
      *  @since 0.9.70
      */
     void removePoolState(TunnelPool pool) {
@@ -900,6 +951,9 @@ public class BuildExecutor implements Runnable {
      *  fresh window of attempts.
      *  During collapse (0 usable tunnels), backoff is shortened to 4s
      *  to allow faster recovery while still preventing build storms.
+     *
+     *  @param pool the tunnel pool to check
+     *  @return true if the pool is in backoff
      */
     boolean isPoolInBackoff(TunnelPool pool) {
         long[] state = _poolFailureState.get(pool);
@@ -981,6 +1035,14 @@ public class BuildExecutor implements Runnable {
         buildComplete(cfg, result, null);
     }
 
+    /**
+     *  Handle a completed tunnel build with additional detail.
+     *
+     *  @param cfg the tunnel configuration that completed
+     *  @param result the build result (success, failure, etc.)
+     *  @param detail additional detail on the result
+     *  @since 0.9.53
+     */
     public void buildComplete(PooledTunnelCreatorConfig cfg, Result result, String detail) {
         if (_log.shouldInfo()) {
             if (result == Result.OTHER_FAILURE && detail != null) {
@@ -1153,6 +1215,7 @@ public class BuildExecutor implements Runnable {
      *  which will affect the stats and profiles.
      *  But that's ok. A peer that rejects slowly gets penalized twice, for example.
      *
+     *  @param id the build message ID
      *  @return ptcc or null
      *  @since 0.7.12
      */

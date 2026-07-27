@@ -20,6 +20,9 @@ import net.i2p.data.i2cp.I2CPMessage;
  * @author jrandom
  */
 class DisconnectMessageHandler extends HandlerImpl {
+    /**
+     * @param context the I2P app context
+     */
     public DisconnectMessageHandler(I2PAppContext context) {
         super(context, DisconnectMessage.MESSAGE_TYPE);
     }

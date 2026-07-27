@@ -22,6 +22,9 @@ import java.nio.charset.StandardCharsets;
  */
 public class BlacklistBean {
 
+    /** Default constructor */
+    public BlacklistBean() {}
+
     private static final Log _log = new Log(BlacklistBean.class);
     private String content;
     private static final Pattern I2P_ADDRESS_PATTERN = Pattern.compile(

@@ -28,6 +28,9 @@ import java.util.Date;
  * @author zzz
  */
 public class SendMessageExpiresMessage extends SendMessageMessage {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 36;
     private final DateAndFlags _daf;
 
@@ -89,6 +92,9 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
         return _daf.getTime();
     }
 
+    /**
+     * setExpiration.
+     */
     public void setExpiration(Date d) {
         _daf.setDate(d);
     }
@@ -163,11 +169,17 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
         }
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

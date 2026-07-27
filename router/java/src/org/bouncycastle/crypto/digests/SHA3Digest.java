@@ -25,45 +25,69 @@ public class SHA3Digest
         }
     }
 
+    /**
+     * SHA3Digest.
+     */
     public SHA3Digest()
     {
         this(256, CryptoServicePurpose.ANY);
     }
 
+    /**
+     * SHA3Digest.
+     */
     public SHA3Digest(CryptoServicePurpose purpose)
     {
         this(256, purpose);
     }
 
+    /**
+     * SHA3Digest.
+     */
     public SHA3Digest(int bitLength)
     {
         super(checkBitLength(bitLength), CryptoServicePurpose.ANY);
     }
 
+    /**
+     * SHA3Digest.
+     */
     public SHA3Digest(int bitLength, CryptoServicePurpose purpose)
     {
         super(checkBitLength(bitLength), purpose);
     }
 
+    /**
+     * SHA3Digest.
+     */
     public SHA3Digest(SHA3Digest source)
     {
         super(source);
     }
 
+    /**
+     * getAlgorithmName.
+     */
     public String getAlgorithmName()
     {
         return "SHA3-" + fixedOutputLength;
     }
 
+    /**
+     * doFinal.
+     */
     public int doFinal(byte[] out, int outOff)
     {
         absorbBits(0x02, 2);
-        
+
         return super.doFinal(out,  outOff);
     }
 
     /*
      * TODO Possible API change to support partial-byte suffixes.
+     */
+    /**
+     * doFinal.
      */
     protected int doFinal(byte[] out, int outOff, byte partialByte, int partialBits)
     {

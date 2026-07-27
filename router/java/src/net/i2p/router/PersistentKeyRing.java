@@ -17,12 +17,18 @@ public class PersistentKeyRing extends KeyRing {
     private final transient RouterContext _ctx;
     private static final String PROP_PFX = "router.keyring.key.";
 
+    /**
+     * PersistentKeyRing.
+     */
     public PersistentKeyRing(RouterContext ctx) {
         super();
         _ctx = ctx;
         addFromProperties();
     }
 
+    /**
+     * put.
+     */
     @Override
     public SessionKey put(Hash h, SessionKey sk) {
         SessionKey old = super.put(h, sk);
@@ -33,6 +39,9 @@ public class PersistentKeyRing extends KeyRing {
         return old;
     }
 
+    /**
+     * remove.
+     */
     @Override
     public SessionKey remove(Object o) {
         SessionKey rv = super.remove(o);

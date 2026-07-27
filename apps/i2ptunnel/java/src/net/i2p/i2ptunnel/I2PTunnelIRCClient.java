@@ -32,6 +32,9 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     private final List<I2PSocketAddress> _addrs;
     // application should ping timeout before this
     private static final long DEFAULT_READ_TIMEOUT = 10 * (long) 60 * 1000;
+    /**
+     * readTimeout.
+     */
     protected long readTimeout = DEFAULT_READ_TIMEOUT;
     private final boolean _dccEnabled;
     private I2PTunnelDCCServer _DCCServer;
@@ -122,6 +125,9 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         }
     }
 
+    /**
+     * clientConnectionRun.
+     */
     @Override
     protected void clientConnectionRun(Socket s) {
         if (_log.shouldInfo())
@@ -210,6 +216,9 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         super.optionsUpdated(tunnel);
     }
 
+    /**
+     * startRunning.
+     */
     @Override
     public void startRunning() {
         super.startRunning();
@@ -217,6 +226,9 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             _context.portMapper().register(PortMapper.SVC_IRC, getTunnel().listenHost, getLocalPort());
     }
 
+    /**
+     * close.
+     */
     @Override
     public boolean close(boolean forced) {
         int reg = _context.portMapper().getPort(PortMapper.SVC_IRC);
@@ -253,19 +265,31 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             _localAddr = new byte[] {127, 0, 0, 1};
     }
 
+    /**
+     * isEnabled.
+     */
     @Override
     public boolean isEnabled() {
         return _dccEnabled;
     }
 
+    /**
+     * getB32Hostname.
+     */
     public String getB32Hostname() {
         return sockMgr.getSession().getMyDestination().toBase32();
     }
 
+    /**
+     * getLocalAddress.
+     */
     public byte[] getLocalAddress() {
         return _localAddr;
     }
 
+    /**
+     * newOutgoing.
+     */
     @Override
     public int newOutgoing(byte[] ip, int port, String type) {
         I2PTunnelDCCServer server;
@@ -285,6 +309,9 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         return rv;
     }
 
+    /**
+     * newIncoming.
+     */
     @Override
     public int newIncoming(String b32, int port, String type) {
         DCCClientManager tracker;
@@ -303,6 +330,9 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         return rv;
     }
 
+    /**
+     * resumeOutgoing.
+     */
     @Override
     public int resumeOutgoing(int port) {
         DCCClientManager tracker = _DCCClientManager;
@@ -311,6 +341,9 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         return -1;
     }
 
+    /**
+     * resumeIncoming.
+     */
     public int resumeIncoming(int port) {
         I2PTunnelDCCServer server = _DCCServer;
         if (server != null)
@@ -318,6 +351,9 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         return -1;
     }
 
+    /**
+     * acceptOutgoing.
+     */
     public int acceptOutgoing(int port) {
         I2PTunnelDCCServer server = _DCCServer;
         if (server != null)
@@ -325,6 +361,9 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         return -1;
     }
 
+    /**
+     * acceptIncoming.
+     */
     public int acceptIncoming(int port) {
         DCCClientManager tracker = _DCCClientManager;
         if (tracker != null)

@@ -154,8 +154,14 @@ final class SSU2Header {
      * with methods to access the fields.
      */
     public static class Header {
+        /**
+         * data.
+         */
         public final byte[] data;
 
+        /**
+         * Header.
+         */
         public Header(int len) { data = new byte[len]; }
 
         /** all headers */
@@ -186,6 +192,9 @@ final class SSU2Header {
             return rv;
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             if (data.length >= SESSION_HEADER_SIZE) {

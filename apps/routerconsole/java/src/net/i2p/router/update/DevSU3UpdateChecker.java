@@ -26,6 +26,12 @@ import net.i2p.util.VersionComparator;
  */
 class DevSU3UpdateChecker extends UpdateRunner {
 
+    /**
+     * Constructor.
+     * @param ctx the router context
+     * @param mgr the update manager
+     * @param uris list of update URIs
+     */
     public DevSU3UpdateChecker(RouterContext ctx, ConsoleUpdateManager mgr,
                                List<URI> uris) {
         super(ctx, mgr, UpdateType.ROUTER_DEV_SU3, uris, RouterVersion.FULL_VERSION);

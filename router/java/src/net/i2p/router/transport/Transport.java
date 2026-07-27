@@ -86,7 +86,9 @@ public interface Transport {
      * @param msg the message to send, containing destination, payload, and callbacks
      */
     public void send(OutNetMessage msg);
+    /** Start accepting connections. */
     public void startListening();
+    /** Stop accepting connections. */
     public void stopListening();
 
     /**
@@ -148,10 +150,13 @@ public interface Transport {
      *  @since IPv6
      */
     public enum AddressSource {
+        /** S o u r c e  u p n p */
         SOURCE_UPNP("upnp"),
+        /** S o u r c e  i n t e r f a c e */
         SOURCE_INTERFACE("local"),
         /** unused */
         SOURCE_CONFIG("config"),
+        /** S o u r c e  s s u */
         SOURCE_SSU("ssu");
 
         private final String cfgstr;
@@ -160,7 +165,8 @@ public interface Transport {
             this.cfgstr = cfgstr;
         }
 
-        public String toConfigString() {
+    /** @return config string */
+    public String toConfigString() {
             return cfgstr;
         }
     }
@@ -276,8 +282,11 @@ public interface Transport {
      */
     public List<Hash> getEstablished();
 
+    /** @return peer count */
     public int countPeers();
+    /** @return active peer count */
     public int countActivePeers();
+    /** @return active send peer count */
     public int countActiveSendPeers();
 
     /**
@@ -301,7 +310,9 @@ public interface Transport {
      */
     public int[] getPeerCounts();
 
+    /** @return true if capacity available */
     public boolean haveCapacity();
+    /** @param pct percent 0-100 @return true if capacity available */
     public boolean haveCapacity(int pct);
 
     /**
@@ -320,8 +331,10 @@ public interface Transport {
      */
     public List<Long> getClockSkews();
 
+    /** @return recent error messages */
     public List<String> getMostRecentErrorMessages();
 
+    /** @param out writer @param urlBase base URL @param sortFlags flags */
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException;
 
     /**
@@ -345,25 +358,16 @@ public interface Transport {
     @Deprecated
     public void recheckReachability();
 
-    /**
-     * @since 0.9.50 added to interface
-     */
+    /** @return IPv6 config */
     public TransportUtil.IPv6Config getIPv6Config();
 
-    /**
-     *  This returns true if the force-firewalled setting is configured, false otherwise.
-     *
-     *  @since 0.9.50 added to interface
-     */
+    /** @return true if force-firewalled for IPv4 */
     public boolean isIPv4Firewalled();
 
-    /**
-     *  This returns true if the force-firewalled setting is configured, false otherwise.
-     *
-     *  @since 0.9.50 added to interface
-     */
+    /** @return true if force-firewalled for IPv6 */
     public boolean isIPv6Firewalled();
 
+    /** @param peer peer hash @return true if backlogged */
     public boolean isBacklogged(Hash peer);
 
     /**
@@ -386,7 +390,9 @@ public interface Transport {
      */
     public boolean wasUnreachable(Hash peer);
 
+    /** @param peer peer hash @return true if unreachable */
     public boolean isUnreachable(Hash peer);
+    /** @param peer peer hash @return true if established */
     public boolean isEstablished(Hash peer);
 
     /**

@@ -16,11 +16,15 @@ package org.minidns.dnslabel;
  */
 public final class NonReservedLdhLabel extends LdhLabel {
 
+    /** Create label */
     NonReservedLdhLabel(String label) {
         super(label);
         assert isNonReservedLdhLabelInternal(label);
     }
 
+    /**
+     * isNonReservedLdhLabel.
+     */
     public static boolean isNonReservedLdhLabel(String label) {
         if (!isLdhLabel(label)) {
             return false;
@@ -28,6 +32,7 @@ public final class NonReservedLdhLabel extends LdhLabel {
         return isNonReservedLdhLabelInternal(label);
     }
 
+    /** @return true if label is non-reserved */
     static boolean isNonReservedLdhLabelInternal(String label) {
         return !ReservedLdhLabel.isReservedLdhLabelInternal(label);
     }

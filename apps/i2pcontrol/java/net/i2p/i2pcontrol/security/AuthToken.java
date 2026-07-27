@@ -11,12 +11,16 @@ import java.util.Locale;
  * Provides time-limited authentication tokens for secure API access.
  */
 public class AuthToken {
+    /** The VALIDITY_TIME. */
     static final int VALIDITY_TIME = 1; // Measured in days
     private static final SimpleDateFormat EXPIRY_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
     private final SecurityManager _secMan;
     private final String id;
     private final Date expiry;
 
+    /**
+     * AuthToken.
+     */
     public AuthToken(SecurityManager secMan, String password) {
         _secMan = secMan;
         String hash = _secMan.getPasswdHash(password);
@@ -24,6 +28,9 @@ public class AuthToken {
         this.expiry = Date.from(Instant.now().plus(VALIDITY_TIME, ChronoUnit.DAYS));
     }
 
+    /**
+     * @return the token ID
+     */
     public String getId() {
         return id;
     }
@@ -36,21 +43,33 @@ public class AuthToken {
         return new Date().before(expiry);
     }
 
+    /**
+     * @return the expiry time string
+     */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized String getExpiryTime() {
         return EXPIRY_FORMAT.format(expiry);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return id;
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return id.hashCode();
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -11,12 +11,15 @@ import java.io.IOException;
  * @param <U> The type of RrdUpdater this primitive belongs to
  */
 class RrdString<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
+    /** ignored */
     private String cache;
 
+    /** Constructor */
     RrdString(RrdUpdater<U> updater, boolean isConstant) {
         super(updater, RrdPrimitive.RRD_STRING, isConstant);
     }
 
+    /** Constructor */
     RrdString(RrdUpdater<U> updater) {
         this(updater, false);
     }

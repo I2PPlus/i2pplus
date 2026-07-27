@@ -41,12 +41,18 @@ class RefreshRoutersJob extends JobImpl {
     // Shared Random instance for efficient random number generation
     private static final Random _random = new Random();
 
+    /**
+     * RefreshRoutersJob.
+     */
     public RefreshRoutersJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade) {
         super(ctx);
         _log = ctx.logManager().getLog(RefreshRoutersJob.class);
         _facade = facade;
     }
 
+    /**
+     * getName.
+     */
     @Override
     public String getName() {
         return "Refresh NetDb Routers";
@@ -142,6 +148,9 @@ class RefreshRoutersJob extends JobImpl {
                 scores.put(h, scorePeer(h));
             }
             Collections.sort(nonFloodfills, new Comparator<Hash>() {
+                /**
+                 * compare.
+                 */
                 public int compare(Hash a, Hash b) {
                     int sa = scores.getOrDefault(a, 0);
                     int sb = scores.getOrDefault(b, 0);
@@ -374,7 +383,13 @@ class RefreshRoutersJob extends JobImpl {
 
     private class Disconnector extends SimpleTimer2.TimedEvent {
         private final Hash h;
+        /**
+         * Disconnector.
+         */
         public Disconnector(Hash h) {super(getContext().simpleTimer2()); this.h = h;}
+        /**
+         * timeReached.
+         */
         public void timeReached() {getContext().commSystem().forceDisconnect(h, "Routers refresh timeout");}
     }
 

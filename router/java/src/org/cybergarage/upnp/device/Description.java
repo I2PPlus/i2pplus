@@ -29,7 +29,11 @@ package org.cybergarage.upnp.device;
  * @since 1.0
  */
 public class Description {
+
+    /** Error message when description file cannot be loaded */
     public static final String LOADING_EXCEPTION = "Couldn't load a specified description file ";
+    /** Error message when root node is not found */
     public static final String NOROOT_EXCEPTION = "Couldn't find a root node";
+    /** Error message when root device node is not found */
     public static final String NOROOTDEVICE_EXCEPTION = "Couldn't find a root device node";
 }

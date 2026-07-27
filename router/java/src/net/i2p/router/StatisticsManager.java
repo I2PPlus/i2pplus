@@ -33,6 +33,9 @@ public class StatisticsManager {
     private final RouterContext _context;
     private final String _networkID;
 
+    /**
+     * PROP_PUBLISH_RANKINGS.
+     */
     public static final String PROP_PUBLISH_RANKINGS = "router.publishPeerRankings";
     /** enhance anonymity by only including build stats one out of this many times */
     private static final int RANDOM_INCLUDE_STATS = 1024;
@@ -41,6 +44,9 @@ public class StatisticsManager {
     private final DecimalFormat _fmt;
     private final DecimalFormat _pct;
 
+    /**
+     * StatisticsManager.
+     */
     public StatisticsManager(RouterContext context) {
         _context = context;
         _fmt = SIMPLE_STATS ? new DecimalFormat("0.00") :
@@ -281,5 +287,8 @@ public class StatisticsManager {
         synchronized (_pct) { return _pct.format(num); }
     }
 
+    /**
+     * renderStatusHTML.
+     */
     public void renderStatusHTML(Writer out) { /* No-op - intentionally empty */ }
 }

@@ -34,11 +34,13 @@ public class I2PLogger implements Logger
     private final StringBuilder _buffer = new StringBuilder();
 
 
+    /** no-arg constructor, uses global context */
     public I2PLogger()
     {
         this(I2PAppContext.getGlobalContext());
     }
 
+    /** @param ctx the I2P application context */
     public I2PLogger(I2PAppContext ctx)
     {
         _log = ctx.logManager().getLog(Server.class);
@@ -60,6 +62,7 @@ public class I2PLogger implements Logger
             _log.setMinimumPriority(Log.ERROR);
     }
 
+    /** @param msg the message @param arg0 first arg @param arg1 second arg */
     public void info(String msg,Object arg0, Object arg1)
     {
         if (arg0 == null && arg1 == null) {
@@ -77,11 +80,13 @@ public class I2PLogger implements Logger
         }
     }
 
+    /** @param msg the message @param th the throwable */
     public void debug(String msg,Throwable th)
     {
         _log.debug(msg,th);
     }
 
+    /** @param msg the message @param arg0 first arg @param arg1 second arg */
     public void debug(String msg,Object arg0, Object arg1)
     {
         if (arg0 == null && arg1 == null) {
@@ -99,6 +104,7 @@ public class I2PLogger implements Logger
         }
     }
 
+    /** @param msg the message @param arg0 first arg @param arg1 second arg */
     public void warn(String msg,Object arg0, Object arg1)
     {
         if (arg0 == null && arg1 == null) {

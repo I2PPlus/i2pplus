@@ -42,34 +42,44 @@ import java.util.Set;
  */
 public interface I2PSession {
 
-    /** Send a new message to the given destination, containing the specified
-     * payload, returning true if the router feels confident that the message
-     * was delivered.
-     *
-     * WARNING: It is recommended that you use a method that specifies the protocol and ports.
-     *
-     * @param dest location to send the message
-     * @param payload body of the message to be sent (unencrypted)
-     * @return whether it was accepted by the router for delivery or not
-     */
-    public boolean sendMessage(Destination dest, byte[] payload) throws I2PSessionException;
+     /** Send a new message to the given destination, containing the specified
+      * payload, returning true if the router feels confident that the message
+      * was delivered.
+      *
+      * WARNING: It is recommended that you use a method that specifies the protocol and ports.
+      *
+      * @param dest location to send the message
+      * @param payload body of the message to be sent (unencrypted)
+      * @return whether it was accepted by the router for delivery or not
+      * @throws I2PSessionException on error
+      */
+     public boolean sendMessage(Destination dest, byte[] payload) throws I2PSessionException;
 
-    /** Send a new message to the given destination, containing the specified
-     * payload, returning true if the router feels confident that the message
-     * was delivered.
-     *
-     * WARNING: It is recommended that you use a method that specifies the protocol and ports.
-     *
-     * @param dest location to send the message
-     * @param payload body of the message to be sent (unencrypted)
-     * @return success
-     */
-    public boolean sendMessage(Destination dest, byte[] payload, int offset, int size) throws I2PSessionException;
+     /** Send a new message to the given destination, containing the specified
+      * payload, returning true if the router feels confident that the message
+      * was delivered.
+      *
+      * WARNING: It is recommended that you use a method that specifies the protocol and ports.
+      *
+      * @param dest location to send the message
+      * @param payload body of the message to be sent (unencrypted)
+      * @param offset offset into the payload
+      * @param size number of bytes to send
+      * @return success
+      * @throws I2PSessionException on error
+      */
+     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size) throws I2PSessionException;
 
     /**
      * See I2PSessionMuxedImpl for proto/port details.
      *
+     * @param dest location to send the message
+     * @param payload body of the message to be sent (unencrypted)
+     * @param proto protocol number
+     * @param fromport source port
+     * @param toport destination port
      * @return success
+     * @throws I2PSessionException on error
      * @since 0.7.1
      */
     public boolean sendMessage(Destination dest, byte[] payload, int proto, int fromport, int toport) throws I2PSessionException;
@@ -105,25 +115,36 @@ public interface I2PSession {
      *                 objects that were sent along side the given keyUsed.
      *
      * @return success
+     * @throws I2PSessionException on error
      */
-    public boolean sendMessage(Destination dest, byte[] payload, SessionKey keyUsed, Set<SessionTag> tagsSent) throws I2PSessionException;
+     public boolean sendMessage(Destination dest, byte[] payload, SessionKey keyUsed, Set<SessionTag> tagsSent) throws I2PSessionException;
 
     /**
      * End-to-End Crypto is disabled, tags and keys are ignored.
      *
+     * @param dest location to send the message
+     * @param payload body of the message to be sent (unencrypted)
+     * @param offset offset into the payload
+     * @param size number of bytes to send
      * @param keyUsed UNUSED, IGNORED.
      * @param tagsSent UNUSED, IGNORED.
      * @return success
+     * @throws I2PSessionException on error
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent) throws I2PSessionException;
 
     /**
      * End-to-End Crypto is disabled, tags and keys are ignored.
      *
+     * @param dest location to send the message
+     * @param payload body of the message to be sent (unencrypted)
+     * @param offset offset into the payload
+     * @param size number of bytes to send
      * @param keyUsed UNUSED, IGNORED.
      * @param tagsSent UNUSED, IGNORED.
      * @param expire absolute expiration timestamp, NOT interval from now
      * @return success
+     * @throws I2PSessionException on error
      * @since 0.7.1
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire) throws I2PSessionException;
@@ -132,6 +153,10 @@ public interface I2PSession {
      * See I2PSessionMuxedImpl for proto/port details.
      * End-to-End Crypto is disabled, tags and keys are ignored.
      *
+     * @param dest location to send the message
+     * @param payload body of the message to be sent (unencrypted)
+     * @param offset offset into the payload
+     * @param size number of bytes to send
      * @param keyUsed UNUSED, IGNORED.
      * @param tagsSent UNUSED, IGNORED.
      * @param proto 1-254 or 0 for unset; recommended:
@@ -143,6 +168,7 @@ public interface I2PSession {
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
      * @return success
+     * @throws I2PSessionException on error
      * @since 0.7.1
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, int proto, int fromPort, int toPort) throws I2PSessionException;
@@ -151,6 +177,10 @@ public interface I2PSession {
      * See I2PSessionMuxedImpl for proto/port details.
      * End-to-End Crypto is disabled, tags and keys are ignored.
      *
+     * @param dest location to send the message
+     * @param payload body of the message to be sent (unencrypted)
+     * @param offset offset into the payload
+     * @param size number of bytes to send
      * @param keyUsed UNUSED, IGNORED.
      * @param tagsSent UNUSED, IGNORED.
      * @param expire absolute expiration timestamp, NOT interval from now
@@ -163,7 +193,8 @@ public interface I2PSession {
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
      * @return success
-     * @since 0.7.1
+     * @throws I2PSessionException on error
+     * @since 0.8.4
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire, int proto, int fromPort, int toPort) throws I2PSessionException;
 
@@ -171,6 +202,10 @@ public interface I2PSession {
      * See I2PSessionMuxedImpl for proto/port details.
      * End-to-End Crypto is disabled, tags and keys are ignored.
      *
+     * @param dest location to send the message
+     * @param payload body of the message to be sent (unencrypted)
+     * @param offset offset into the payload
+     * @param size number of bytes to send
      * @param keyUsed UNUSED, IGNORED.
      * @param tagsSent UNUSED, IGNORED.
      * @param expire absolute expiration timestamp, NOT interval from now
@@ -182,7 +217,9 @@ public interface I2PSession {
      *
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
+     * @param flags message flags
      * @return success
+     * @throws I2PSessionException on error
      * @since 0.8.4
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire, int proto, int fromPort, int toPort, int flags) throws I2PSessionException;
@@ -191,6 +228,10 @@ public interface I2PSession {
      * See I2PSessionMuxedImpl for proto/port details.
      * See SendMessageOptions for option details.
      *
+     * @param dest location to send the message
+     * @param payload body of the message to be sent (unencrypted)
+     * @param offset offset into the payload
+     * @param size number of bytes to send
      * @param proto 1-254 or 0 for unset; recommended:
      *         I2PSession.PROTO_UNSPECIFIED
      *         I2PSession.PROTO_STREAMING
@@ -201,6 +242,7 @@ public interface I2PSession {
      * @param toPort 1-65535 or 0 for unset
      * @param options to be passed to the router
      * @return success
+     * @throws I2PSessionException on error
      * @since 0.9.2
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, int proto, int fromPort, int toPort, SendMessageOptions options) throws I2PSessionException;
@@ -213,6 +255,10 @@ public interface I2PSession {
      * See I2PSessionMuxedImpl for proto/port details.
      * See SendMessageOptions for option details.
      *
+     * @param dest location to send the message
+     * @param payload body of the message to be sent (unencrypted)
+     * @param offset offset into the payload
+     * @param size number of bytes to send
      * @param proto 1-254 or 0 for unset; recommended:
      *         I2PSession.PROTO_UNSPECIFIED
      *         I2PSession.PROTO_STREAMING
@@ -222,6 +268,7 @@ public interface I2PSession {
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
      * @param options to be passed to the router
+     * @param listener for delivery status notification
      * @return the message ID to be used for later notification to the listener
      * @throws I2PSessionException on all errors
      * @since 0.9.14
@@ -229,24 +276,26 @@ public interface I2PSession {
     public long sendMessage(Destination dest, byte[] payload, int offset, int size, int proto, int fromPort, int toPort, SendMessageOptions options, SendMessageStatusListener listener) throws I2PSessionException;
 
     /** Receive a message that the router has notified the client about, returning
-     * the payload.
-     * This may only be called once for a given msgId (until the counter wraps)
-     *
-     * @param msgId message to fetch
-     * @return unencrypted body of the message, or null if not found
-     */
-    public byte[] receiveMessage(int msgId) throws I2PSessionException;
+      * the payload.
+      * This may only be called once for a given msgId (until the counter wraps)
+      *
+      * @param msgId message to fetch
+      * @return unencrypted body of the message, or null if not found
+      * @throws I2PSessionException on error
+      */
+     public byte[] receiveMessage(int msgId) throws I2PSessionException;
 
     /** Instruct the router that the message received was abusive (including how
-     * abusive on a 1-100 scale) in the hopes the router can do something to
-     * minimize receiving abusive messages like that in the future.
-     *
-     * Unused. Not fully implemented.
-     *
-     * @param msgId message that was abusive (or -1 for not message related)
-     * @param severity how abusive
-     */
-    public void reportAbuse(int msgId, int severity) throws I2PSessionException;
+      * abusive on a 1-100 scale) in the hopes the router can do something to
+      * minimize receiving abusive messages like that in the future.
+      *
+      * Unused. Not fully implemented.
+      *
+      * @param msgId message that was abusive (or -1 for not message related)
+      * @param severity how abusive
+      * @throws I2PSessionException on error
+      */
+     public void reportAbuse(int msgId, int severity) throws I2PSessionException;
 
     /** Instruct the I2PSession where it should send event notifications
      *
@@ -257,72 +306,89 @@ public interface I2PSession {
     public void setSessionListener(I2PSessionListener lsnr);
 
     /**
-     * Tear down the session and release any resources.
-     *
-     */
-    public void destroySession() throws I2PSessionException;
+      * Tear down the session and release any resources.
+      *
+      * @throws I2PSessionException on error
+      */
+     public void destroySession() throws I2PSessionException;
 
     /**
+     *  Add a subsession.
+     *
      *  @return a new subsession, non-null
      *  @param privateKeyStream null for transient, if non-null must have same encryption keys as primary session
      *                          and different signing keys
      *
      *  @param opts subsession options if any, may be null
+     *  @throws I2PSessionException on error
      *  @since 0.9.21
      */
     public I2PSession addSubsession(InputStream privateKeyStream, Properties opts) throws I2PSessionException;
 
     /**
+     *  Remove a subsession.
+     *
+     *  @param session the subsession to remove
      *  @since 0.9.21
      */
     public void removeSubsession(I2PSession session);
 
     /**
+     *  Get the list of subsessions.
+     *
      *  @return a list of subsessions, non-null, does not include the primary session
      *  @since 0.9.21
      */
     public List<I2PSession> getSubsessions();
 
     /**
-     * Actually connect the session and start receiving/sending messages.
-     * Connecting a primary session will not automatically connect subsessions.
-     * Connecting a subsession will automatically connect the primary session
-     * if not previously connected.
-     */
-    public void connect() throws I2PSessionException;
+      * Actually connect the session and start receiving/sending messages.
+      * Connecting a primary session will not automatically connect subsessions.
+      * Connecting a subsession will automatically connect the primary session
+      * if not previously connected.
+      *
+      * @throws I2PSessionException on error
+      */
+     public void connect() throws I2PSessionException;
 
-    /**
-     * Have we closed the session?
-     *
-     * @return true if the session is closed, OR connect() has not been called yet
-     */
-    public boolean isClosed();
+     /**
+      * Have we closed the session?
+      *
+      * @return true if the session is closed, OR connect() has not been called yet
+      */
+     public boolean isClosed();
 
-    /**
-     * Retrieve the Destination this session serves as the endpoint for.
-     * Returns null if no destination is available.
-     *
-     */
-    public Destination getMyDestination();
+     /**
+      * Retrieve the Destination this session serves as the endpoint for.
+      * Returns null if no destination is available.
+      *
+      * @return the Destination, or null
+      */
+     public Destination getMyDestination();
 
-    /**
-     * Retrieve the decryption PrivateKey associated with the Destination.
-     * Obsolete — retained for PrivateKeyFile compatibility.
-     */
-    public PrivateKey getDecryptionKey();
+     /**
+      * Retrieve the decryption PrivateKey associated with the Destination.
+      * Obsolete — retained for PrivateKeyFile compatibility.
+      *
+      * @return the decryption key
+      */
+     public PrivateKey getDecryptionKey();
 
-    /**
-     * Retrieve the signing SigningPrivateKey associated with the Destination.
-     * As of 0.9.38, this will be the transient key if offline signed.
-     */
-    public SigningPrivateKey getPrivateKey();
+     /**
+      * Retrieve the signing SigningPrivateKey associated with the Destination.
+      * As of 0.9.38, this will be the transient key if offline signed.
+      *
+      * @return the signing key
+      */
+     public SigningPrivateKey getPrivateKey();
 
-    /**
-     *  Does this session have offline and transient keys?
-     *
-     *  @since 0.9.38
-     */
-    public boolean isOffline();
+     /**
+      *  Does this session have offline and transient keys?
+      *
+      *  @return true if offline
+      *  @since 0.9.38
+      */
+     public boolean isOffline();
 
     /**
      *  Get the offline expiration
@@ -333,132 +399,153 @@ public interface I2PSession {
     public long getOfflineExpiration();
 
     /**
-     *  @return null on error or if not initialized or does not have offline keys
-     *  @since 0.9.38
-     */
-    public Signature getOfflineSignature();
+      *  Get the offline signature.
+      *
+      *  @return null on error or if not initialized or does not have offline keys
+      *  @since 0.9.38
+      */
+     public Signature getOfflineSignature();
+
+     /**
+      *  Get the transient signing public key.
+      *
+      *  @return null on error or if not initialized or does not have offline keys
+      *  @since 0.9.38
+      */
+     public SigningPublicKey getTransientSigningPublicKey();
 
     /**
-     *  @return null on error or if not initialized or does not have offline keys
-     *  @since 0.9.38
-     */
-    public SigningPublicKey getTransientSigningPublicKey();
+      * Lookup a Destination by Hash.
+      * Blocking. Waits a max of 10 seconds by default.
+      *
+      * @param h the hash to look up
+      * @return the Destination, or null on failure
+      * @throws I2PSessionException on error
+      */
+     public Destination lookupDest(Hash h) throws I2PSessionException;
+
+     /**
+      *  Lookup a Destination by Hash.
+      *  Blocking.
+      *
+      *  @param h the hash to look up
+      *  @param maxWait ms
+      *  @since 0.8.3
+      *  @return null on failure
+      *  @throws I2PSessionException on error
+      */
+     public Destination lookupDest(Hash h, long maxWait) throws I2PSessionException;
+
+     /**
+      *  Ask the router to lookup a Destination by host name.
+      *  Blocking. Waits a max of 10 seconds by default.
+      *
+      *  This only makes sense for a b32 hostname, OR outside router context.
+      *  Inside router context, just query the naming service.
+      *  Outside router context, this does NOT query the context naming service.
+      *  Do that first if you expect a local addressbook.
+      *
+      *  This will log a warning for non-b32 in router context.
+      *
+      *  Suggested implementation:
+      *
+      *<pre>
+      *  if (name.length() == 60 &amp;&amp; name.toLowerCase(Locale.US).endsWith(".b32.i2p")) {
+      *      if (session != null)
+      *          return session.lookup(Hash.create(Base32.decode(name.toLowerCase(Locale.US).substring(0, 52))));
+      *      else
+      *          return ctx.namingService().lookup(name); // simple session for xxx.b32.i2p handled by naming service (optional if you need lookup w/o an existing session)
+      *  } else if (ctx.isRouterContext()) {
+      *      return ctx.namingService().lookup(name); // hostname from router's naming service
+      *  } else {
+      *      Destination d = ctx.namingService().lookup(name); // local naming svc, optional
+      *      if (d != null)
+      *          return d;
+      *      if (session != null)
+      *          return session.lookup(name);
+      *      // simple session (optional if you need lookup w/o an existing session)
+      *      Destination rv = null;
+      *      I2PClient client = new I2PSimpleClient();
+      *      Properties opts = new Properties();
+      *      opts.put(I2PClient.PROP_TCP_HOST, host);
+      *      opts.put(I2PClient.PROP_TCP_PORT, port);
+      *      I2PSession session = null;
+      *      try {
+      *          session = client.createSession(null, opts);
+      *          session.connect();
+      *          rv = session.lookupDest(name);
+      *      } finally {
+      *          if (session != null)
+      *              session.destroySession();
+      *      }
+      *      return rv;
+      *  }
+      *</pre>
+      *
+      *  Requires router side to be 0.9.11 or higher. If the router is older,
+      *  this will return null immediately.
+      *
+      *  @param name the hostname to look up
+      *  @return the Destination, or null on failure
+      *  @throws I2PSessionException on error
+      *  @since 0.9.11
+      */
+     public Destination lookupDest(String name) throws I2PSessionException;
+
+     /**
+      *  Ask the router to lookup a Destination by host name.
+      *  Blocking. See above for details.
+      *
+      *  @param name the hostname to look up
+      *  @param maxWait ms
+      *  @since 0.9.11
+      *  @return null on failure
+      *  @throws I2PSessionException on error
+      */
+     public Destination lookupDest(String name, long maxWait) throws I2PSessionException;
 
     /**
-     * Lookup a Destination by Hash.
-     * Blocking. Waits a max of 10 seconds by default.
-     */
-    public Destination lookupDest(Hash h) throws I2PSessionException;
+      *  Ask the router to lookup a Destination by host name.
+      *  Blocking. See above for details.
+      *  Same as lookupDest() but with a failure code in the return value
+      *
+      *  @param name the hostname to look up
+      *  @param maxWait ms
+      *  @since 0.9.43
+      *  @return non-null
+      *  @throws I2PSessionException on error
+      */
+     public LookupResult lookupDest2(String name, long maxWait) throws I2PSessionException;
 
     /**
-     *  Lookup a Destination by Hash.
-     *  Blocking.
-     *
-     *  @param maxWait ms
-     *  @since 0.8.3
-     *  @return null on failure
-     */
-    public Destination lookupDest(Hash h, long maxWait) throws I2PSessionException;
+      *  Lookup a Destination by hash.
+      *  Non-blocking.
+      *  If the result is cached or there is an immediate failure,
+      *  the result code will be something other than RESULT_DEFERRED, and the callback will NOT be called.
+      *
+      *  @param h the hash to look up
+      *  @param maxWait ms
+      *  @param callback to return the result, non-null
+      *  @return non-null. If result code is RESULT_DEFERRED, callback will be called later
+      *  @throws I2PSessionException on error
+      *  @since 0.9.67
+      */
+     public LookupResult lookupDest(Hash h, long maxWait, LookupCallback callback) throws I2PSessionException;
 
-    /**
-     *  Ask the router to lookup a Destination by host name.
-     *  Blocking. Waits a max of 10 seconds by default.
-     *
-     *  This only makes sense for a b32 hostname, OR outside router context.
-     *  Inside router context, just query the naming service.
-     *  Outside router context, this does NOT query the context naming service.
-     *  Do that first if you expect a local addressbook.
-     *
-     *  This will log a warning for non-b32 in router context.
-     *
-     *  Suggested implementation:
-     *
-     *<pre>
-     *  if (name.length() == 60 &amp;&amp; name.toLowerCase(Locale.US).endsWith(".b32.i2p")) {
-     *      if (session != null)
-     *          return session.lookup(Hash.create(Base32.decode(name.toLowerCase(Locale.US).substring(0, 52))));
-     *      else
-     *          return ctx.namingService().lookup(name); // simple session for xxx.b32.i2p handled by naming service (optional if you need lookup w/o an existing session)
-     *  } else if (ctx.isRouterContext()) {
-     *      return ctx.namingService().lookup(name); // hostname from router's naming service
-     *  } else {
-     *      Destination d = ctx.namingService().lookup(name); // local naming svc, optional
-     *      if (d != null)
-     *          return d;
-     *      if (session != null)
-     *          return session.lookup(name);
-     *      // simple session (optional if you need lookup w/o an existing session)
-     *      Destination rv = null;
-     *      I2PClient client = new I2PSimpleClient();
-     *      Properties opts = new Properties();
-     *      opts.put(I2PClient.PROP_TCP_HOST, host);
-     *      opts.put(I2PClient.PROP_TCP_PORT, port);
-     *      I2PSession session = null;
-     *      try {
-     *          session = client.createSession(null, opts);
-     *          session.connect();
-     *          rv = session.lookupDest(name);
-     *      } finally {
-     *          if (session != null)
-     *              session.destroySession();
-     *      }
-     *      return rv;
-     *  }
-     *</pre>
-     *
-     *  Requires router side to be 0.9.11 or higher. If the router is older,
-     *  this will return null immediately.
-     *
-     *  @since 0.9.11
-     */
-    public Destination lookupDest(String name) throws I2PSessionException;
-
-    /**
-     *  Ask the router to lookup a Destination by host name.
-     *  Blocking. See above for details.
-     *
-     *  @param maxWait ms
-     *  @since 0.9.11
-     *  @return null on failure
-     */
-    public Destination lookupDest(String name, long maxWait) throws I2PSessionException;
-
-    /**
-     *  Ask the router to lookup a Destination by host name.
-     *  Blocking. See above for details.
-     *  Same as lookupDest() but with a failure code in the return value
-     *
-     *  @param maxWait ms
-     *  @since 0.9.43
-     *  @return non-null
-     */
-    public LookupResult lookupDest2(String name, long maxWait) throws I2PSessionException;
-
-    /**
-     *  Lookup a Destination by hostname.
-     *  Non-blocking.
-     *  If the result is cached or there is an immediate failure,
-     *  the result code will be something other than RESULT_DEFERRED, and the callback will NOT be called.
-     *
-     *  @param maxWait ms
-     *  @param callback to return the result, non-null
-     *  @return non-null. If result code is RESULT_DEFERRED, callback will be called later
-     *  @since 0.9.67
-     */
-    public LookupResult lookupDest(Hash h, long maxWait, LookupCallback callback) throws I2PSessionException;
-
-    /**
-     *  Lookup a Destination by hash.
-     *  Non-blocking.
-     *  If the result is cached or there is an immediate failure,
-     *  the result code will be something other than RESULT_DEFERRED, and the callback will NOT be called.
-     *
-     *  @param maxWait ms
-     *  @param callback to return the result, non-null
-     *  @return non-null. If result code is RESULT_DEFERRED, callback will be called later
-     *  @since 0.9.67
-     */
-    public LookupResult lookupDest(String name, long maxWait, LookupCallback callback) throws I2PSessionException;
+     /**
+      *  Lookup a Destination by hostname.
+      *  Non-blocking.
+      *  If the result is cached or there is an immediate failure,
+      *  the result code will be something other than RESULT_DEFERRED, and the callback will NOT be called.
+      *
+      *  @param name the hostname to look up
+      *  @param maxWait ms
+      *  @param callback to return the result, non-null
+      *  @return non-null. If result code is RESULT_DEFERRED, callback will be called later
+      *  @throws I2PSessionException on error
+      *  @since 0.9.67
+      */
+     public LookupResult lookupDest(String name, long maxWait, LookupCallback callback) throws I2PSessionException;
 
     /**
      *  Pass updated options to the router.
@@ -471,17 +558,22 @@ public interface I2PSession {
     public void updateOptions(Properties options);
 
     /**
-     * Get the current bandwidth limits. Blocking.
-     *
-     * @since 0.8.3
-     */
-    public int[] bandwidthLimits() throws I2PSessionException;
+      * Get the current bandwidth limits. Blocking.
+      *
+      * @return int array of [inbound, outbound] Bps, or null on error
+      * @throws I2PSessionException on error
+      * @since 0.8.3
+      */
+     public int[] bandwidthLimits() throws I2PSessionException;
 
     /**
-     *
-     *  @since 0.9.43
-     */
-    public void sendBlindingInfo(BlindData bd) throws I2PSessionException;
+      *  Send blinding info to the router.
+      *
+      *  @param bd the blind data
+      *  @throws I2PSessionException on error
+      *  @since 0.9.43
+      */
+     public void sendBlindingInfo(BlindData bd) throws I2PSessionException;
 
     /**
      *  Always valid in RouterContext. Returns null if not yet connected in I2PAppContext.
@@ -492,37 +584,41 @@ public interface I2PSession {
     public String getRouterVersion();
 
     /**
-     *  Listen on specified protocol and port.
-     *
-     *  An existing listener with the same proto and port is replaced.
-     *  Only the listener with the best match is called back for each message.
-     *
-     *  @param proto 1-254 or PROTO_ANY (0) for all; recommended:
-     *         I2PSession.PROTO_STREAMING
-     *         I2PSession.PROTO_DATAGRAM
-     *         255 disallowed
-     *
-     *  @param port 1-65535 or PORT_ANY (0) for all
-     *  @since 0.7.1
-     */
-    public void addSessionListener(I2PSessionListener lsnr, int proto, int port);
+      *  Listen on specified protocol and port.
+      *
+      *  An existing listener with the same proto and port is replaced.
+      *  Only the listener with the best match is called back for each message.
+      *
+      *  @param lsnr the listener to add
+      *  @param proto 1-254 or PROTO_ANY (0) for all; recommended:
+      *         I2PSession.PROTO_STREAMING
+      *         I2PSession.PROTO_DATAGRAM
+      *         255 disallowed
+      *
+      *  @param port 1-65535 or PORT_ANY (0) for all
+      *  @since 0.7.1
+      */
+     public void addSessionListener(I2PSessionListener lsnr, int proto, int port);
 
-    /**
-     *  Listen on specified protocol and port, and receive notification
-     *  of proto, fromPort, and toPort for every message.
-     *
-     *  @param proto 1-254 or PROTO_ANY (0) for all; 255 disallowed
-     *  @param port 1-65535 or PORT_ANY (0) for all
-     *  @since 0.7.1
-     */
-    public void addMuxedSessionListener(I2PSessionMuxedListener l, int proto, int port);
+     /**
+      *  Listen on specified protocol and port, and receive notification
+      *  of proto, fromPort, and toPort for every message.
+      *
+      *  @param l the listener to add
+      *  @param proto 1-254 or PROTO_ANY (0) for all; 255 disallowed
+      *  @param port 1-65535 or PORT_ANY (0) for all
+      *  @since 0.7.1
+      */
+     public void addMuxedSessionListener(I2PSessionMuxedListener l, int proto, int port);
 
-    /**
-     *  removes the specified listener (only)
-     *
-     *  @since 0.7.1
-     */
-    public void removeListener(int proto, int port);
+     /**
+      *  removes the specified listener (only)
+      *
+      *  @param proto protocol number
+      *  @param port port number
+      *  @since 0.7.1
+      */
+     public void removeListener(int proto, int port);
 
     /**
      *  Add a listener for tunnel status changes.
@@ -579,13 +675,20 @@ public interface I2PSession {
         private final TunnelId _inboundTunnelId;
         private final TunnelId _outboundTunnelId;
 
+        /** Constructor.
+         * @param inbound inbound tunnel ID
+         * @param outbound outbound tunnel ID
+         */
         public TunnelPair(TunnelId inbound, TunnelId outbound) {
             _inboundTunnelId = inbound;
             _outboundTunnelId = outbound;
         }
 
+        /** @return the inbound tunnel ID */
         public TunnelId getInboundTunnelId() { return _inboundTunnelId; }
+        /** @return the outbound tunnel ID */
         public TunnelId getOutboundTunnelId() { return _outboundTunnelId; }
+        /** @return true if both tunnel IDs are null */
         public boolean isEmpty() { return _inboundTunnelId == null && _outboundTunnelId == null; }
     }
 
@@ -598,10 +701,15 @@ public interface I2PSession {
      */
     public void setCurrentTunnelPair(TunnelPair pair);
 
+    /** Any port */
     public static final int PORT_ANY = 0;
+    /** Unspecified port */
     public static final int PORT_UNSPECIFIED = 0;
+    /** Any protocol */
     public static final int PROTO_ANY = 0;
+    /** Unspecified protocol */
     public static final int PROTO_UNSPECIFIED = 0;
+    /** Streaming protocol */
     public static final int PROTO_STREAMING = 6;
 
     /** A repliable and signed datagram */

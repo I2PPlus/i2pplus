@@ -218,10 +218,21 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     // From RouterClock
     private static final int DEFAULT_STRATUM = 8;
 
+    /**
+     * Create a DNSOverHTTPS instance.
+     *
+     * @param context the I2P app context
+     */
     public DNSOverHTTPS(I2PAppContext context) {
         this(context, null);
     }
 
+    /**
+     * Create a DNSOverHTTPS instance.
+     *
+     * @param context the I2P app context
+     * @param sslState the SSL state, or null
+     */
     public DNSOverHTTPS(I2PAppContext context, SSLEepGet.SSLState sslState) {
         ctx = context;
         _log = ctx.logManager().getLog(DNSOverHTTPS.class);
@@ -234,10 +245,15 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
      *
      * @since 0.9.35
      */
+    /** DNS query type for IPv4/IPv6 preference. */
     public enum Type {
+        /** IPv4 only */
         V4_ONLY,
+        /** IPv6 only */
         V6_ONLY,
+        /** IPv4 preferred */
         V4_PREFERRED,
+        /** IPv6 preferred */
         V6_PREFERRED
     }
 
@@ -254,6 +270,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     /**
      *  V4_ONLY unless we have only IPv6 address, then V6_ONLY
      *
+     *  @param host the hostname to resolve
      *  @return null if not found
      */
     public String lookup(String host) {
@@ -266,6 +283,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     /**
      *  Lookup in cache, then query servers
      *
+     *  @param host the hostname to resolve
+     *  @param type the query type
      *  @return null if not found
      */
     public String lookup(String host, Type type) {
@@ -310,6 +329,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         return query(host, type, url);
     }
 
+    /** Clear DNS caches and fail counts. */
     public static void clearCaches() {
         synchronized (v4Cache) {
             v4Cache.clear();
@@ -620,6 +640,11 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         }
     }
 
+    /**
+     * Main entry point for command line usage.
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         Type type = Type.V4_ONLY;
         boolean error = false;

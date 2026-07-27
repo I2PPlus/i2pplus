@@ -27,6 +27,9 @@ class InboundEndpointProcessor {
         this(ctx, cfg, DummyValidator.getInstance());
     }
 
+    /**
+     * InboundEndpointProcessor.
+     */
     public InboundEndpointProcessor(RouterContext ctx, TunnelCreatorConfig cfg, IVValidator validator) {
         _context = ctx;
         _log = ctx.logManager().getLog(InboundEndpointProcessor.class);
@@ -34,7 +37,13 @@ class InboundEndpointProcessor {
         _validator = validator;
     }
 
+    /**
+     * getDestination.
+     */
     public Hash getDestination() { return _config.getDestination(); }
+    /**
+     * getConfig.
+     */
     public TunnelCreatorConfig getConfig() { return _config; }
 
     /**

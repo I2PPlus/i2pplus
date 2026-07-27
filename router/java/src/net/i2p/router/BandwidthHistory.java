@@ -55,6 +55,7 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     private long _nextFlush;
 
     /**
+     *  Create a bandwidth history.
      *  @param ctx may be null in unit tests
      */
     public BandwidthHistory(RouterContext ctx) {
@@ -73,12 +74,18 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
         _instance = this;
     }
 
-    /** @return the singleton, or null if not yet created */
+    /**
+     *  The singleton instance.
+     *  @return the singleton, or null if not yet created
+     */
     public static BandwidthHistory getInstance() {
         return _instance;
     }
 
-    /** @return the ring buffer capacity */
+    /**
+     *  The ring buffer capacity.
+     *  @return the ring buffer capacity
+     */
     public int getCapacity() {
         return _capacity;
     }
@@ -105,6 +112,9 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
 
     /**
      *  Add a sample to the ring buffer.
+     *
+     *  @param rx the receive bandwidth in Bps
+     *  @param tx the transmit bandwidth in Bps
      */
     public synchronized void record(long rx, long tx) {
         long now = System.currentTimeMillis();
@@ -121,7 +131,10 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
         }
     }
 
-    /** @return number of stored samples */
+    /**
+     *  The number of stored samples.
+     *  @return number of stored samples
+     */
     public synchronized int getCount() {
         return _count;
     }
@@ -129,6 +142,9 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     /**
      *  Return the last {@code n} receive values as a comma-separated string.
      *  Oldest value first, most recent last.  Empty string if no data.
+     *
+     *  @param n the number of values to return
+     *  @return comma-separated string of the last n values
      */
     public synchronized String getLastRx(int n) {
         return formatLast(n, _rx);
@@ -137,6 +153,9 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     /**
      *  Return the last {@code n} send values as a comma-separated string.
      *  Oldest value first, most recent last.  Empty string if no data.
+     *
+     *  @param n the number of values to return
+     *  @return comma-separated string of the last n values
      */
     public synchronized String getLastTx(int n) {
         return formatLast(n, _tx);

@@ -13,6 +13,10 @@ public class ParametersWithContext
     private CipherParameters  parameters;
     private byte[] context;
 
+    /**
+     * @param parameters the cipher parameters
+     * @param context the context data
+     */
     public ParametersWithContext(
         CipherParameters parameters,
         byte[] context)
@@ -26,6 +30,7 @@ public class ParametersWithContext
         this.context = Util.clone(context);
     }
 
+    /** @param buf destination buffer */
     public void copyContextTo(byte[] buf, int off, int len)
     {
         if (context.length != len)
@@ -36,16 +41,19 @@ public class ParametersWithContext
         System.arraycopy(context, 0, buf, off, len);
     }
 
+    /** @return the context data */
     public byte[] getContext()
     {
         return Util.clone(context);
     }
 
+    /** @return the context length */
     public int getContextLength()
     {
         return context.length;
     }
 
+    /** @return the cipher parameters */
     public CipherParameters getParameters()
     {
         return parameters;

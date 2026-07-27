@@ -31,6 +31,7 @@ public class TunnelHistory {
     private long _lastCoalesce = System.currentTimeMillis();
     private final RateStat _rejectRate;
     private final RateStat _failRate;
+    /** Rate periods for history tracking */
     static final long[] RATES = new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
     /** probabalistic tunnel rejection due to a flood of requests - infrequent */
@@ -44,6 +45,9 @@ public class TunnelHistory {
     /** Streaming NACK - peer accepted tunnel but can't deliver data */
     public static final int TUNNEL_REJECT_STREAMING_NACK = 100;
 
+    /**
+     * TunnelHistory.
+     */
     public TunnelHistory(RouterContext context, String statGroup) {
         _context = context;
         _log = context.logManager().getLog(TunnelHistory.class);
@@ -96,10 +100,16 @@ public class TunnelHistory {
         return (double) agreed / total;
     }
 
+    /**
+     * incrementProcessed.
+     */
     public void incrementProcessed(int processedSuccessfully, int failedProcessing) {
         // intentionally empty - legacy method from strict speed calculator, no longer tracked
     }
 
+    /**
+     * incrementAgreedTo.
+     */
     public void incrementAgreedTo() {
         _lifetimeAgreedTo.incrementAndGet();
         _lastAgreedTo = _context.clock().now();
@@ -132,13 +142,22 @@ public class TunnelHistory {
         _lastFailed = _context.clock().now();
     }
 
+    /**
+     * getRejectionRate.
+     */
     public RateStat getRejectionRate() {return _rejectRate;}
+    /**
+     * getFailedRate.
+     */
     public RateStat getFailedRate() {return _failRate;}
 
     private static final long DECAY_INTERVAL_MS = 15 * 60 * 1000L;
     private static final long DECAY_NUMERATOR = 3;
     private static final long DECAY_DENOMINATOR = 4;
 
+    /**
+     * coalesceStats.
+     */
     public void coalesceStats() {
         if (_log.shouldDebug()) {_log.debug("Coalescing Profile Manager stats...");}
         _rejectRate.coalesceStats();
@@ -172,6 +191,9 @@ public class TunnelHistory {
     private static final String NL = System.getProperty("line.separator");
     private static final String HR = "# ----------------------------------------------------------------------------------------";
 
+    /**
+     * store.
+     */
     public void store(OutputStream out) throws IOException {
         store(out, true);
     }
@@ -216,6 +238,9 @@ public class TunnelHistory {
         else {buf.append("tunnels.").append(name).append('=').append(val).append(NL);}
     }
 
+    /**
+     * load.
+     */
     public void load(Properties props) {
         _lastAgreedTo = getLong(props, "tunnels.lastAgreedTo");
         _lastFailed = getLong(props, "tunnels.lastFailed");

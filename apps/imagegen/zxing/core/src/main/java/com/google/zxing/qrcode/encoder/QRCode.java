@@ -27,6 +27,9 @@ import com.google.zxing.qrcode.decoder.Version;
  */
 public final class QRCode {
 
+  /**
+   * NUM_MASK_PATTERNS.
+   */
   public static final int NUM_MASK_PATTERNS = 8;
 
   private Mode mode;
@@ -35,30 +38,51 @@ public final class QRCode {
   private int maskPattern;
   private ByteMatrix matrix;
 
+  /**
+   * QRCode.
+   */
   public QRCode() {
     maskPattern = -1;
   }
 
+  /**
+   * getMode.
+   */
   public Mode getMode() {
     return mode;
   }
 
+  /**
+   * getECLevel.
+   */
   public ErrorCorrectionLevel getECLevel() {
     return ecLevel;
   }
 
+  /**
+   * getVersion.
+   */
   public Version getVersion() {
     return version;
   }
 
+  /**
+   * getMaskPattern.
+   */
   public int getMaskPattern() {
     return maskPattern;
   }
 
+  /**
+   * getMatrix.
+   */
   public ByteMatrix getMatrix() {
     return matrix;
   }
 
+  /**
+   * toString.
+   */
   @Override
   public String toString() {
     StringBuilder result = new StringBuilder(200);
@@ -81,27 +105,45 @@ public final class QRCode {
     return result.toString();
   }
 
+  /**
+   * setMode.
+   */
   public void setMode(Mode value) {
     mode = value;
   }
 
+  /**
+   * setECLevel.
+   */
   public void setECLevel(ErrorCorrectionLevel value) {
     ecLevel = value;
   }
 
+  /**
+   * setVersion.
+   */
   public void setVersion(Version version) {
     this.version = version;
   }
 
+  /**
+   * setMaskPattern.
+   */
   public void setMaskPattern(int value) {
     maskPattern = value;
   }
 
+  /**
+   * setMatrix.
+   */
   public void setMatrix(ByteMatrix value) {
     matrix = value;
   }
 
   // Check if "mask_pattern" is valid.
+  /**
+   * isValidMaskPattern.
+   */
   public static boolean isValidMaskPattern(int maskPattern) {
     return maskPattern >= 0 && maskPattern < NUM_MASK_PATTERNS;
   }

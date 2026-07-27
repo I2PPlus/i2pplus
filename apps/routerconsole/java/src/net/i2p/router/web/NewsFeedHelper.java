@@ -18,6 +18,8 @@ import net.i2p.util.SystemVersion;
  *  @since 0.9.23
  */
 public class NewsFeedHelper extends HelperBase {
+    /** Default constructor */
+    public NewsFeedHelper() {super();}
 
     private int _start;
     private int _limit = 2;
@@ -26,10 +28,19 @@ public class NewsFeedHelper extends HelperBase {
      *  @param limit less than or equal to zero means all
      */
     public void setLimit(int limit) {_limit = limit;}
+    /** @param start the starting index */
     public void setStart(int start) {_start = start;}
+    /**
+     *  Get the formatted HTML entries.
+     *  @return non-null, "" if none
+     */
     public String getEntries() {return getEntries(_context, _start, _limit, 0);}
 
     /**
+     *  Get the formatted HTML entries.
+     *
+     *  @param ctx the router context
+     *  @param start the starting index
      *  @param max less than or equal to zero means all
      *  @param ageLimit time before now, less than or equal to zero means all (after the first)
      *  @return non-null, "" if none

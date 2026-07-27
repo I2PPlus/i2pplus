@@ -8,8 +8,14 @@ import java.net.Socket;
  *
  *  @since 0.9.11
  */
+/**
+ * Outproxy.
+ */
 public interface Outproxy {
 
+    /**
+     * NAME.
+     */
     public static final String NAME = "outproxy";
 
     /**
@@ -19,6 +25,9 @@ public interface Outproxy {
      * @param port the port to connect to
      * @return a connected socket
      * @throws IOException if the connection fails
+     */
+    /**
+     * Connect to the server.
      */
     public Socket connect(String host, int port) throws IOException;
 }

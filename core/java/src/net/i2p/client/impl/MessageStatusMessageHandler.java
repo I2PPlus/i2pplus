@@ -22,11 +22,20 @@ import net.i2p.data.i2cp.ReceiveMessageBeginMessage;
  *
  */
 class MessageStatusMessageHandler extends HandlerImpl {
+    /**
+     * MessageStatusMessageHandler.
+     */
     public MessageStatusMessageHandler(I2PAppContext context) {
         super(context, MessageStatusMessage.MESSAGE_TYPE);
     }
 
+    /**
+     * handleMessage.
+     */
     @Override
+    /**
+     * Handle an incoming I2CP message.
+     */
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
         if (_log.shouldDebug()) {
             _log.debug("Handling " + message);

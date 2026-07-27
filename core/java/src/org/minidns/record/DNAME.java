@@ -25,19 +25,31 @@ import java.io.IOException;
  */
 public class DNAME extends RRWithTarget {
 
+    /**
+     * parse.
+     */
     public static DNAME parse(DataInputStream dis, byte[] data) throws IOException {
         DnsName target = DnsName.parse(dis, data);
         return new DNAME(target);
     }
 
+    /**
+     * DNAME.
+     */
     public DNAME(String target) {
         this(DnsName.from(target));
     }
 
+    /**
+     * DNAME.
+     */
     public DNAME(DnsName target) {
         super(target);
     }
 
+    /**
+     * getType.
+     */
     @Override
     public TYPE getType() {
         return TYPE.DNAME;

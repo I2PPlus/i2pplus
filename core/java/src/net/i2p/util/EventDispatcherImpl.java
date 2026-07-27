@@ -34,6 +34,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class EventDispatcherImpl implements EventDispatcher {
 
+    /**
+     * Create a new EventDispatcherImpl.
+     */
+    public EventDispatcherImpl() {}
+
     private boolean _ignore = false;
     private final Map<String, Object> _events = new ConcurrentHashMap<>(4);
     private final List<EventDispatcher> _attached = new CopyOnWriteArrayList<>();

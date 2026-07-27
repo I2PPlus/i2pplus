@@ -37,10 +37,10 @@ import net.metanotion.util.skiplist.*;
 
 /**
  * On-disk SkipList implementation for persistent key-value storage.
- * 
+ *
  * <p>Provides efficient indexed storage with logarithmic search performance.
  * Supports multiple spans and levels for scalable data organization.</p>
- * 
+ *
  * <p>On-disk format:</p>
  * <pre>
  *    Magic number (long)
@@ -69,7 +69,9 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 	/** Whether this skiplist is closed */
 	private boolean isClosed;
 
+	/** Span cache */
 	final HashMap<Integer, BSkipSpan<K, V>> spanHash = new HashMap<>();
+	/** Level cache */
 	final HashMap<Integer, SkipLevels<K, V>> levelHash = new HashMap<>();
 
 	private final boolean fileOnly;
@@ -115,7 +117,6 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		int spans = bf.file.readInt();
 		int levelCount = bf.file.readInt();
                 // two byte spansize as of version 1.2, ignore for now
-                // int ss = bf.file.readUnsignedShort(); if (ss > 0) ...
 
 		this.fileOnly = fileOnly;
 		if (fileOnly)
@@ -170,7 +171,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 			bf.file.writeInt(Math.max(0, size));
 			bf.file.writeInt(spanHash.size());
 			bf.file.writeInt(levelHash.size());
-			
+
 		} catch (IOException ioe) { throw new RuntimeException("Error writing to database", ioe); }
 	}
 
@@ -259,20 +260,6 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		return new IBSkipIterator<>(first, 0);
 	}
 
-/****
-	//@Override
-	public SkipIterator<K, V> min() {
-		return iterator();
-	}
-
-	//@Override
-	public SkipIterator<K, V> max() {
-		if (!this.fileOnly)
-			return super.max();
-		SkipSpan<K, V> ss = stack.getEnd();
-		return new IBSkipIterator<>(ss, ss.nKeys - 1);
-	}
-****/
 
 	/**
 	 *  Find the entry with the given key.
@@ -305,9 +292,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		bf.log.info("    firstSpanPage " + this.firstSpanPage);
 		bf.log.info("    firstLevelPage " + this.firstLevelPage);
 		bf.log.info("    maxLevels " + this.maxLevels());
-		//printSL();
-		//print();
-		//bf.log.info("*** Lvlck() ***");
+
 		boolean rv = stack.blvlck(fix);
 		return rv;
 	}

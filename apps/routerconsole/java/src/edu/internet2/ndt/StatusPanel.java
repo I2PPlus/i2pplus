@@ -8,6 +8,9 @@ import com.vuze.plugins.mlab.tools.ndt.swingemu.*;
  * of whether the test is to be stopped.
  * */
 
+/**
+ * StatusPanel.
+ */
 public class StatusPanel extends JPanel {
     /**
      * Compiler generated constant that is not related to current classes'
@@ -26,6 +29,9 @@ public class StatusPanel extends JPanel {
      *
      * @param sParamaEnableMultiple String indicating whether multiple tests
      * have been scheduled
+     */
+    /**
+     * StatusPanel.
      */
     public StatusPanel(int iParamTestsNum, String sParamEnableMultiple) {}
 

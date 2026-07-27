@@ -55,21 +55,36 @@ import net.i2p.util.Log;
  * @author don
  * @since 0.9.25
  */
-public class IdenticonServlet extends HttpServlet {
+	public class IdenticonServlet extends HttpServlet {
 
+	/** ignored */
 	private static final long serialVersionUID = -3507466186902317988L;
+	/** ignored */
 	private static final String INIT_PARAM_VERSION = "version";
+	/** ignored */
 	private static final String INIT_PARAM_CACHE_PROVIDER = "cacheProvider";
+	/** ignored */
 	private static final String PARAM_IDENTICON_SIZE_SHORT = "s";
+	/** ignored */
 	private static final String PARAM_IDENTICON_CODE_SHORT = "c";
+	/** ignored */
 	private static final String IDENTICON_IMAGE_FORMAT = "PNG";
+	/** ignored */
 	private static final String IDENTICON_IMAGE_MIMETYPE = "image/png";
+	/** ignored */
 	private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * (long) 60 * 1000;
+	/** ignored */
 	private int version = 1;
+	/** ignored */
 	private final IdenticonRenderer renderer = new NineBlockIdenticonRenderer2();
+	/** ignored */
 	private IdenticonCache cache;
+	/** ignored */
 	private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
 
+	/**
+	 * init.
+	 */
 	@Override
 	public void init(ServletConfig cfg) throws ServletException {
 		super.init(cfg);
@@ -93,6 +108,9 @@ public class IdenticonServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Handle GET request: generate identicon image.
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {

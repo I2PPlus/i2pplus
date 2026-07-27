@@ -22,11 +22,17 @@ import net.i2p.data.Hash;
  * @author jrandom
  */
 public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public final static int MESSAGE_TYPE = 3;
     private Hash _key;
     private final List<Hash> _peerHashes;
     private Hash _from;
 
+    /**
+     * DatabaseSearchReplyMessage.
+     */
     public DatabaseSearchReplyMessage(I2PAppContext context) {
         super(context);
         // do this in netdb if we need it
@@ -47,14 +53,32 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
         _key = key;
     }
 
+    /**
+     * getNumReplies.
+     */
     public int getNumReplies() { return _peerHashes.size(); }
+    /**
+     * getReply.
+     */
     public Hash getReply(int index) { return _peerHashes.get(index); }
+    /**
+     * addReply.
+     */
     public void addReply(Hash peer) { _peerHashes.add(peer); }
     //public void addReplies(Collection replies) { _peerHashes.addAll(replies); }
 
+    /**
+     * getFromHash.
+     */
     public Hash getFromHash() { return _from; }
+    /**
+     * setFromHash.
+     */
     public void setFromHash(Hash from) { _from = from; }
 
+    /**
+     * readMessage.
+     */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
@@ -109,8 +133,14 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
         return curIndex;
     }
 
+    /**
+     * getType.
+     */
     public int getType() { return MESSAGE_TYPE; }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if ( (object != null) && (object instanceof DatabaseSearchReplyMessage) ) {
@@ -123,6 +153,9 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
         }
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return DataHelper.hashCode(_key) +
@@ -130,6 +163,9 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
         DataHelper.hashCode(_peerHashes);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();

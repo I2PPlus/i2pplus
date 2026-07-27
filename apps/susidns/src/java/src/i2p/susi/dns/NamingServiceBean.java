@@ -44,6 +44,7 @@ import net.i2p.util.Log;
  * @since 0.8.7
  */
 public class NamingServiceBean extends AddressbookBean {
+    /** default constructor */
     private static final Log _log = new Log(NamingServiceBean.class);
     private static final String DEFAULT_NS = "BlockfileNamingService";
     private String detail;

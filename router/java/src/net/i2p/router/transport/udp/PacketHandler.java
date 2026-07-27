@@ -44,6 +44,16 @@ class PacketHandler {
     private static final int MIN_VERSION = 2;
     private static final int MAX_VERSION = 4;
 
+    /**
+     * Create a new packet handler.
+     *
+     * @param ctx the router context
+     * @param transport the UDP transport
+     * @param establisher the establishment manager
+     * @param inbound the inbound message fragments
+     * @param testManager the peer test manager
+     * @param introManager the introduction manager
+     */
     PacketHandler(RouterContext ctx, UDPTransport transport, EstablishmentManager establisher,
                   InboundMessageFragments inbound, PeerTestManager testManager, IntroductionManager introManager) {
         _context = ctx;
@@ -64,6 +74,8 @@ class PacketHandler {
 
     /**
      * Returns the current max packet handler threads.
+     *
+     * @return the max handlers
      * @since 0.9.70+
      */
     public static int getMaxHandlers() { return _maxHandlers; }
@@ -71,6 +83,8 @@ class PacketHandler {
     /**
      * Sets the target max packet handler threads.
      * Takes effect immediately via {@link #adjustThreads()}.
+     *
+     * @param handlers the new max handlers
      * @since 0.9.70+
      */
     public static void setMaxHandlers(int handlers) {
@@ -79,12 +93,16 @@ class PacketHandler {
 
     /**
      * Returns the current number of active handler threads.
+     *
+     * @return the active handler count
      * @since 0.9.70+
      */
     public int getActiveHandlers() { return _activeHandlers.get(); }
 
     /**
      * Returns the number of handlers actively processing packets (not parked on take()).
+     *
+     * @return the processing count
      * @since 0.9.70+
      */
     public int getProcessingCount() { return _processingCount.get(); }
@@ -93,6 +111,7 @@ class PacketHandler {
      * Get packet handler pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
      *
+     * @return the utilization ratio
      * @since 0.9.70+
      */
     public double getUtilization() {
@@ -100,11 +119,13 @@ class PacketHandler {
         return max > 0 ? (double) _processingCount.get() / max : Double.NaN;
     }
 
+    /** Start the packet handler. */
     public synchronized void startup() {
         _keepReading = true;
         adjustThreads();
     }
 
+    /** Shut down the packet handler. */
     public synchronized void shutdown() {
         _keepReading = false;
         stopQueue();
@@ -145,6 +166,11 @@ class PacketHandler {
         }
     }
 
+    /**
+     * Get the handler status string.
+     *
+     * @return the status
+     */
     String getHandlerStatus() {
         StringBuilder rv = new StringBuilder();
         rv.append("Handlers: ").append(_activeHandlers.get());
@@ -155,9 +181,10 @@ class PacketHandler {
     }
 
     /**
-     * Blocking call to retrieve the next inbound packet, or null if we have
-     * shut down.
+     * Queue a received packet for processing.
      *
+     * @param packet the packet to queue
+     * @throws InterruptedException if interrupted while waiting
      * @since IPv6 moved from UDPReceiver
      */
     public void queueReceived(UDPPacket packet) throws InterruptedException {
@@ -192,6 +219,7 @@ class PacketHandler {
      * Blocking call to retrieve the next inbound packet, or null if we have
      * shut down.
      *
+     * @return the next packet, or null if shut down
      * @since IPv6 moved from UDPReceiver
      */
     public UDPPacket receiveNext() {

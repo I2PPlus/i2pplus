@@ -12,16 +12,23 @@ import org.rrd4j.core.RrdDb;
  * backend configuration.
  */
 class Def extends Source {
+    /** Rrd uri */
     private final URI rrdUri;
+    /** Ds name */
     private final String dsName;
+    /** Backend */
     private final RrdBackendFactory backend;
+    /** Consol fun */
     private final ConsolFun consolFun;
+    /** Fetch data */
     private FetchData fetchData;
 
+    /** Def */
     Def(String name, FetchData fetchData) {
         this(name, name, fetchData);
     }
 
+    /** Def */
     Def(String name, String dsName, FetchData fetchData) {
         this(
                 name,
@@ -32,6 +39,7 @@ class Def extends Source {
         this.fetchData = fetchData;
     }
 
+    /** Def */
     Def(String name, URI rrdUri, String dsName, ConsolFun consolFunc, RrdBackendFactory backend) {
         super(name);
         this.rrdUri = backend.getCanonicalUri(rrdUri);
@@ -40,22 +48,27 @@ class Def extends Source {
         this.backend = backend;
     }
 
+    /** Canonical uri. */
     URI getCanonicalUri() {
         return rrdUri;
     }
 
+    /** Ds name. */
     String getDsName() {
         return dsName;
     }
 
+    /** Consol fun. */
     ConsolFun getConsolFun() {
         return consolFun;
     }
 
+    /** Backend. */
     RrdBackendFactory getBackend() {
         return backend;
     }
 
+    /** Is compatible with */
     boolean isCompatibleWith(Def def) {
         return getCanonicalUri().equals(def.getCanonicalUri())
                 && getConsolFun() == def.consolFun
@@ -63,33 +76,36 @@ class Def extends Source {
                         || (backend != null && def.backend != null && backend.equals(def.backend)));
     }
 
+    /** Rrd db. */
     RrdDb getRrdDb() {
         return fetchData.getRequest().getParentDb();
     }
 
+    /** Fetch data. */
     void setFetchData(FetchData fetchData) {
         this.fetchData = fetchData;
     }
 
+    /** Rrd timestamps. */
     long[] getRrdTimestamps() {
         return fetchData.getTimestamps();
     }
 
+    /** Rrd values. */
     double[] getRrdValues() {
         return fetchData.getValues(dsName);
     }
 
+    /** Archive end time. */
     long getArchiveEndTime() {
         return fetchData.getArcEndTime();
     }
 
+    /** Fetch step. */
     long getFetchStep() {
         return fetchData.getStep();
     }
 
-    /* (non-Javadoc)
-     * @see org.rrd4j.data.Source#getAggregates(long, long)
-     */
     @Override
     @Deprecated
     Aggregates getAggregates(long tStart, long tEnd) {
@@ -98,9 +114,6 @@ class Def extends Source {
         return new Aggregator(t, v).getAggregates(tStart, tEnd);
     }
 
-    /* (non-Javadoc)
-     * @see org.rrd4j.data.Source#getPercentile(long, long, double)
-     */
     @Override
     @Deprecated
     double getPercentile(long tStart, long tEnd, double percentile) {
@@ -109,6 +122,7 @@ class Def extends Source {
         return new Aggregator(t, v).getPercentile(tStart, tEnd, percentile);
     }
 
+    /** Is loaded */
     boolean isLoaded() {
         return fetchData != null;
     }

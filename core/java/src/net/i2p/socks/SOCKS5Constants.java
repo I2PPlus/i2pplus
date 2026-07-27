@@ -15,6 +15,9 @@ public class SOCKS5Constants {
 
     private SOCKS5Constants() {}
 
+    /**
+     * SOCKS_VERSION_5.
+     */
     public static final int SOCKS_VERSION_5 = 0x05;
 
     /*
@@ -26,8 +29,17 @@ public class SOCKS5Constants {
      * @since 0.9.33
      */
     public static class Method {
+        /**
+         * NO_AUTH_REQUIRED.
+         */
         public static final int NO_AUTH_REQUIRED = 0x00;
+        /**
+         * USERNAME_PASSWORD.
+         */
         public static final int USERNAME_PASSWORD = 0x02;
+        /**
+         * NO_ACCEPTABLE_METHODS.
+         */
         public static final int NO_ACCEPTABLE_METHODS = 0xff;
     }
 
@@ -37,8 +49,17 @@ public class SOCKS5Constants {
      * @since 0.9.33
      */
     public static class AddressType {
+        /**
+         * IPV4.
+         */
         public static final int IPV4 = 0x01;
+        /**
+         * DOMAINNAME.
+         */
         public static final int DOMAINNAME = 0x03;
+        /**
+         * IPV6.
+         */
         public static final int IPV6 = 0x04;
     }
 
@@ -48,8 +69,17 @@ public class SOCKS5Constants {
      * @since 0.9.33
      */
     public static class Command {
+        /**
+         * CONNECT.
+         */
         public static final int CONNECT = 0x01;
+        /**
+         * BIND.
+         */
         public static final int BIND = 0x02;
+        /**
+         * UDP_ASSOCIATE.
+         */
         public static final int UDP_ASSOCIATE = 0x03;
 
         // https://github.com/torproject/torspec/blob/main/socks-extensions.txt
@@ -69,18 +99,54 @@ public class SOCKS5Constants {
      * @since 0.9.33
      */
     public static class Reply {
+        /**
+         * SUCCEEDED.
+         */
         public static final int SUCCEEDED = 0x00;
+        /**
+         * GENERAL_SOCKS_SERVER_FAILURE.
+         */
         public static final int GENERAL_SOCKS_SERVER_FAILURE = 0x01;
+        /**
+         * CONNECTION_NOT_ALLOWED_BY_RULESET.
+         */
         public static final int CONNECTION_NOT_ALLOWED_BY_RULESET = 0x02;
+        /**
+         * NETWORK_UNREACHABLE.
+         */
         public static final int NETWORK_UNREACHABLE = 0x03;
+        /**
+         * HOST_UNREACHABLE.
+         */
         public static final int HOST_UNREACHABLE = 0x04;
+        /**
+         * CONNECTION_REFUSED.
+         */
         public static final int CONNECTION_REFUSED = 0x05;
+        /**
+         * TTL_EXPIRED.
+         */
         public static final int TTL_EXPIRED = 0x06;
+        /**
+         * COMMAND_NOT_SUPPORTED.
+         */
         public static final int COMMAND_NOT_SUPPORTED = 0x07;
+        /**
+         * ADDRESS_TYPE_NOT_SUPPORTED.
+         */
         public static final int ADDRESS_TYPE_NOT_SUPPORTED = 0x08;
     }
 
+    /**
+     * AUTH_VERSION.
+     */
     public static final int AUTH_VERSION = 1;
+    /**
+     * AUTH_SUCCESS.
+     */
     public static final int AUTH_SUCCESS = 0;
+    /**
+     * AUTH_FAILURE.
+     */
     public static final int AUTH_FAILURE = 1;
 }

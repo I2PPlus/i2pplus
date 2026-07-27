@@ -33,7 +33,16 @@ public class I2PSOCKSIRCTunnel extends I2PSOCKSTunnel {
 
     private static final AtomicInteger __clientId = new AtomicInteger();
 
-    /** @param pkf private key file name or null for transient key */
+    /**
+     *  Construct a SOCKS IRC tunnel.
+     *
+     *  @param localPort the local port to listen on
+     *  @param l the logging instance
+     *  @param ownDest true if the tunnel has its own destination
+     *  @param notifyThis the event dispatcher for notifications
+     *  @param tunnel the I2P tunnel
+     *  @param pkf private key file name or null for transient key
+     */
     public I2PSOCKSIRCTunnel(int localPort, Logging l, boolean ownDest, EventDispatcher notifyThis, I2PTunnel tunnel, String pkf) {
         super(localPort, l, ownDest, notifyThis, tunnel, pkf);
         setName("SOCKS IRC Proxy on " + tunnel.listenHost + ':' + localPort);

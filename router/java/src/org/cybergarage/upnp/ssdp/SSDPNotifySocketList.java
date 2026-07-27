@@ -28,6 +28,9 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
 
     private InetAddress[] binds = null;
 
+    /**
+     * SSDPNotifySocketList.
+     */
     public SSDPNotifySocketList() {}
 
     /**
@@ -42,6 +45,9 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
     //	Methods
     ////////////////////////////////////////////////
 
+    /**
+     * getSSDPNotifySocket.
+     */
     public SSDPNotifySocket getSSDPNotifySocket(int n) {
         return get(n);
     }
@@ -50,6 +56,9 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
     //	ControlPoint
     ////////////////////////////////////////////////
 
+    /**
+     * setControlPoint.
+     */
     public void setControlPoint(ControlPoint ctrlPoint) {
         int nSockets = size();
         for (int n = 0; n < nSockets; n++) {
@@ -62,6 +71,9 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
     //	Methods
     ////////////////////////////////////////////////
 
+    /**
+     * open.
+     */
     public boolean open() {
         InetAddress[] binds = this.binds;
         String[] bindAddresses;
@@ -91,6 +103,9 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
         return true;
     }
 
+    /**
+     * close.
+     */
     public void close() {
         int nSockets = size();
         for (int n = 0; n < nSockets; n++) {
@@ -104,6 +119,9 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
     //	Methods
     ////////////////////////////////////////////////
 
+    /**
+     * start.
+     */
     public void start() {
         int nSockets = size();
         for (int n = 0; n < nSockets; n++) {
@@ -112,6 +130,9 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
         }
     }
 
+    /**
+     * stop.
+     */
     public void stop() {
         int nSockets = size();
         for (int n = 0; n < nSockets; n++) {

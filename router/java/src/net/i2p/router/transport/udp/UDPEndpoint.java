@@ -69,6 +69,9 @@ class UDPEndpoint implements SocketListener {
         }
     }
 
+    /**
+     * shutdown.
+     */
     public synchronized void shutdown() {
         if (_sender != null) {
             _sender.shutdown();
@@ -79,6 +82,9 @@ class UDPEndpoint implements SocketListener {
         }
     }
 
+    /**
+     * setListenPort.
+     */
     public void setListenPort(int newPort) { _listenPort = newPort; }
     private static final int MAX_PORT_RETRIES = 20;
 
@@ -136,6 +142,9 @@ class UDPEndpoint implements SocketListener {
 
     /** call after startup() to get actual port or -1 on startup failure */
     public int getListenPort() { return _listenPort; }
+    /**
+     * getSender.
+     */
     public UDPSender getSender() { return _sender; }
 
     /**

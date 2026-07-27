@@ -17,6 +17,11 @@ import net.i2p.util.Translate;
 public class ConfigLoggingHelper extends HelperBase {
     private LogManager _mgr;
 
+    /**
+     * Create a new helper for logging configuration.
+     */
+    public ConfigLoggingHelper() {}
+
     /** @since 0.9.57 */
     @Override
     public void setContextId(String contextId) {
@@ -24,18 +29,38 @@ public class ConfigLoggingHelper extends HelperBase {
         _mgr = _context.logManager();
     }
 
+    /**
+     * Retrieve the current log file pattern.
+     *
+     * @return the base log filename pattern
+     */
     public String getLogFilePattern() {
         return _mgr.getBaseLogfilename();
     }
 
+    /**
+     * Retrieve the current log record format pattern.
+     *
+     * @return the format pattern string
+     */
     public String getRecordPattern() {
         return new String(_mgr.getFormat());
     }
 
+    /**
+     * Retrieve the current log date format pattern.
+     *
+     * @return the date format pattern
+     */
     public String getDatePattern() {
         return _mgr.getDateFormatPattern();
     }
 
+    /**
+     * Retrieve the maximum log file size.
+     *
+     * @return the max file size as a formatted string (e.g. "1.00 MiB")
+     */
     public String getMaxFileSize() {
         int bytes = _mgr.getFileSize();
         if (bytes <= 0) return "1.00 MiB";
@@ -44,12 +69,19 @@ public class ConfigLoggingHelper extends HelperBase {
 
     /**
      *  Whether log compression is enabled.
+     *
+     *  @return the CHECKED constant if compression is enabled, empty string otherwise
      *  @since 0.9.57
      */
     public String getLogCompress() {
         return _mgr.shouldGzip() ? CHECKED : "";
     }
 
+    /**
+     * Generate the HTML table for configuring log levels by class/package.
+     *
+     * @return the HTML string for the log level table
+     */
     public String getLogLevelTable() {
         StringBuilder buf = new StringBuilder(32*1024);
         Properties limits = _mgr.getLimits();
@@ -88,6 +120,11 @@ public class ConfigLoggingHelper extends HelperBase {
     /** these are translated in the core bundle */
     private static final String[] levels = { "CRIT", "ERROR", "WARN", "INFO", "DEBUG" };
 
+    /**
+     * Generate the HTML select box for the default log level.
+     *
+     * @return the HTML string for the select box
+     */
     public String getDefaultLogLevelBox() {
         StringBuilder buf = new StringBuilder(128);
         String cur = _mgr.getDefaultLimit();
@@ -112,7 +149,9 @@ public class ConfigLoggingHelper extends HelperBase {
 
     /**
      *  All the classes the log manager knows about, except ones that
-     *  already have overrides
+     *  already have overrides.
+     *
+     *  @return the HTML string for the new class selection box
      *  @since 0.8.1
      */
     public String getNewClassBox() {

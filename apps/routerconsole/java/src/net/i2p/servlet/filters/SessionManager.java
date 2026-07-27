@@ -26,7 +26,13 @@ public class SessionManager {
     private final ScheduledExecutorService _cleanup;
     private static final int MAX_FAILED_ATTEMPTS = 5;
     private static final long FAILURE_WINDOW_MS = 5 * (long) 60 * 1000; // 5 minutes
+    /**
+     * SESSION_COOKIE_NAME.
+     */
     public static final String SESSION_COOKIE_NAME = "I2P+AUTH";
+    /**
+     * SESSION_ATTR_USER.
+     */
     public static final String SESSION_ATTR_USER = "user";
 
     private SessionManager() {
@@ -45,6 +51,9 @@ public class SessionManager {
                                      TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * getInstance.
+     */
     public static SessionManager getInstance() {
         return INSTANCE;
     }
@@ -133,6 +142,9 @@ public class SessionManager {
         }
     }
 
+    /**
+     * shutdown.
+     */
     public void shutdown() {
         _cleanup.shutdownNow();
     }

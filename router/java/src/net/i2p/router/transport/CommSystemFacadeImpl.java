@@ -129,7 +129,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since IPv6 support was added
      */
     private static final String PROP_DISABLED = "i2np.disable";
+    /**
+     * PROP_BLOCK_MY_COUNTRY.
+     */
     public static final String PROP_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
+    /**
+     * PROP_IP_COUNTRY.
+     */
     public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
 
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
@@ -142,6 +148,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static volatile int _rdnsCorePoolSize = 2;
     private static volatile int _rdnsMaxPoolSize = 8;
 
+    /**
+     * CommSystemFacadeImpl.
+     */
     public CommSystemFacadeImpl(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(CommSystemFacadeImpl.class);
@@ -428,10 +437,19 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public int countActiveSendPeers() { return _manager.countActiveSendPeers(); }
 
+    /**
+     * haveInboundCapacity.
+     */
     @Override
     public boolean haveInboundCapacity(int pct) { return _manager.haveInboundCapacity(pct); }
+    /**
+     * haveOutboundCapacity.
+     */
     @Override
     public boolean haveOutboundCapacity(int pct) { return _manager.haveOutboundCapacity(pct); }
+    /**
+     * haveHighOutboundCapacity.
+     */
     @Override
     public boolean haveHighOutboundCapacity() { return _manager.haveHighOutboundCapacity(); }
 
@@ -498,11 +516,17 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         GetBidsJob.getBids(_context, _manager, msg);
     }
 
+    /**
+     * isBacklogged.
+     */
     @Override
     public boolean isBacklogged(Hash peer) {
         return _manager.isBacklogged(peer);
     }
 
+    /**
+     * isEstablished.
+     */
     @Override
     public boolean isEstablished(Hash peer) {
         return _manager.isEstablished(peer);
@@ -516,16 +540,25 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return _manager.getEstablished();
     }
 
+    /**
+     * wasUnreachable.
+     */
     @Override
     public boolean wasUnreachable(Hash peer) {
         return _manager.wasUnreachable(peer);
     }
 
+    /**
+     * isConnecting.
+     */
     @Override
     public boolean isConnecting(Hash peer) {
         return _manager.isConnecting(peer);
     }
 
+    /**
+     * getIP.
+     */
     @Override
     public byte[] getIP(Hash peer) {
         return _manager.getIP(peer);
@@ -552,11 +585,17 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         _manager.forceDisconnect(peer);
     }
 
+    /**
+     * forceDisconnect.
+     */
     @Override
     public void forceDisconnect(Hash peer, String reason) {
         _manager.forceDisconnect(peer, reason);
     }
 
+    /**
+     * getMostRecentErrorMessages.
+     */
     @Override
     public List<String> getMostRecentErrorMessages() {
         return _manager.getMostRecentErrorMessages();
@@ -643,6 +682,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @since 0.9.50
      */
     private static class AddrComparator implements Comparator<RouterAddress>, Serializable {
+        /**
+         * compare.
+         */
         @Override
         public int compare(RouterAddress l, RouterAddress r) {
             int rv = l.getCost() - r.getCost();
@@ -817,6 +859,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     // after startup are resolved even if their page is never explicitly viewed.
     private static final int QUEUE_TIME = 10*60*1000;
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    /**
+     * enableReverseLookups.
+     */
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     private static final Charset ENCODING = StandardCharsets.UTF_8;
 
@@ -833,7 +878,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     private class QueueAll extends SimpleTimer2.TimedEvent {
         private boolean _firstRun = true;
+        /**
+         * QueueAll.
+         */
         public QueueAll() { super(_context.simpleTimer2()); }
+        /**
+         * timeReached.
+         */
         @Override
         public void timeReached() {
             for (Hash h : _context.netDb().getAllRouters()) {
@@ -857,7 +908,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     private class Lookup extends SimpleTimer2.TimedEvent {
+        /**
+         * Lookup.
+         */
         public Lookup() { super(_context.simpleTimer2()); }
+        /**
+         * timeReached.
+         */
         @Override
         public void timeReached() {
             (new LookupThread()).start();
@@ -871,11 +928,17 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     private class LookupThread extends I2PThread {
 
+        /**
+         * LookupThread.
+         */
         public LookupThread() {
             super("GeoIP Lookup");
             setDaemon(true);
         }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             long start = System.currentTimeMillis();
@@ -941,28 +1004,46 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         private final String hostname;
         private final long timestamp; // epoch millis when entry was cached
 
+        /**
+         * CacheEntry.
+         */
         public CacheEntry(String ipAddress, String hostname) {
             this(ipAddress, hostname, System.currentTimeMillis());
         }
 
+        /**
+         * CacheEntry.
+         */
         public CacheEntry(String ipAddress, String hostname, long timestamp) {
             this.ipAddress = ipAddress;
             this.hostname = (hostname != null) ? hostname : "unknown";
             this.timestamp = timestamp;
         }
 
+        /**
+         * getIpAddress.
+         */
         public String getIpAddress() {
             return ipAddress;
         }
 
+        /**
+         * getHostname.
+         */
         public String getHostname() {
             return hostname;
         }
 
+        /**
+         * getTimestamp.
+         */
         public long getTimestamp() {
             return timestamp;
         }
 
+        /**
+         * getRdnsEntry.
+         */
         public String getRdnsEntry() {
             return rdnsEntryToString(this);
         }
@@ -981,6 +1062,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /** Set after the first normalize sweep to avoid re-processing every 15 min */
     private static volatile boolean _normalizeSweepDone;
 
+    /**
+     * rdnsCacheSize.
+     */
     public static String rdnsCacheSize() {
         File cache = new File(RDNS_CACHE_FILE);
         return String.valueOf(cache.length() / 1024) + "KB";
@@ -1059,10 +1143,16 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     private static class RDNSCacheFileWriter extends TimerTask {
+        /**
+         * RDNSCacheFileWriter.
+         */
         public RDNSCacheFileWriter() {
             // Intentionally empty - default constructor
         }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             cleanupRDNSCache();
@@ -1168,6 +1258,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         rdnsCache.put(ipAddress, entry);
     }
 
+    /**
+     * countRdnsCacheEntries.
+     */
     public static int countRdnsCacheEntries() {
         return rdnsCache.size();
     }
@@ -1288,6 +1381,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
     }
 
+    /**
+     * getCanonicalHostNameSync.
+     */
     @Override
     public String getCanonicalHostNameSync(String ipAddress) {
         if (ipAddress == null || ipAddress.equals("null")) {
@@ -1833,6 +1929,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return buf.toString();
     }
 
+    /**
+     * renderPeerFlag.
+     */
     public String renderPeerFlag(Hash peer) {
         StringBuilder buf = new StringBuilder(128);
         RouterInfo ri = getRouterInfoCached(peer);
@@ -2008,7 +2107,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since 0.7.12
      */
     private class Timestamper extends SimpleTimer2.TimedEvent {
+        /**
+         * Timestamper.
+         */
         public Timestamper() { super(_context.simpleTimer2()); }
+        /**
+         * timeReached.
+         */
         @Override
         public void timeReached() {
              // use the same % as in RouterClock so that check will never fail
@@ -2034,8 +2139,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         private static final long SHORT_DELAY = 15*1000L;
         private static final long LONG_DELAY = 90*1000L;
 
+        /**
+         * NetMonitor.
+         */
         public NetMonitor() {super(_context.simpleTimer2(), 0);}
 
+        /**
+         * timeReached.
+         */
         @Override
         public void timeReached() {
             Set<AddressType> addrs = Addresses.getConnectedAddressTypes();

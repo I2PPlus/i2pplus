@@ -55,10 +55,31 @@ public class I2PSocketEepGet extends EepGet {
     private static final String PROP_CONNECT_DELAY = "i2p.streaming.connectDelay";
     private static final String CONNECT_DELAY = "500";
 
+    /**
+     * Creates an I2PSocketEepGet with default size limits.
+     *
+     * @param ctx the I2P app context
+     * @param mgr the socket manager
+     * @param numRetries number of retries on failure
+     * @param outputFile file to write output to
+     * @param url the URL to fetch
+     */
     public I2PSocketEepGet(I2PAppContext ctx, I2PSocketManager mgr, int numRetries, String outputFile, String url) {
         this(ctx, mgr, numRetries, -1, -1, outputFile, null, url);
     }
 
+    /**
+     * Creates an I2PSocketEepGet with full configuration.
+     *
+     * @param ctx the I2P app context
+     * @param mgr the socket manager
+     * @param numRetries number of retries on failure
+     * @param minSize minimum acceptable size
+     * @param maxSize maximum acceptable size
+     * @param outputFile file to write output to
+     * @param outputStream stream to write output to
+     * @param url the URL to fetch
+     */
     public I2PSocketEepGet(I2PAppContext ctx, I2PSocketManager mgr, int numRetries, long minSize, long maxSize,
                            String outputFile, OutputStream outputStream, String url) {
         super(ctx, false, null, -1, numRetries, minSize, maxSize, outputFile, outputStream, url, true, null, null);

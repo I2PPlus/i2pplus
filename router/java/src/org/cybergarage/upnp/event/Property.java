@@ -32,6 +32,9 @@ public class Property {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     * Property.
+     */
     public Property() {}
 
     ////////////////////////////////////////////////
@@ -40,10 +43,16 @@ public class Property {
 
     private String name = "";
 
+    /**
+     * getName.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * setName.
+     */
     public void setName(String val) {
         if (val == null) val = "";
         name = val;
@@ -55,10 +64,16 @@ public class Property {
 
     private String value = "";
 
+    /**
+     * getValue.
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * setValue.
+     */
     public void setValue(String val) {
         if (val == null) val = "";
         value = val;

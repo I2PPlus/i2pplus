@@ -38,7 +38,13 @@ class ProfilePersistenceHelper {
     private final Log _log;
     private final RouterContext _context;
 
+    /**
+     * PROP_PEER_PROFILE_DIR.
+     */
     public static final String PROP_PEER_PROFILE_DIR = "router.profileDir";
+    /**
+     * DEFAULT_PEER_PROFILE_DIR.
+     */
     public static final String DEFAULT_PEER_PROFILE_DIR = "peerProfiles";
     private static final String NL = System.getProperty("line.separator");
     private static final String HR = "# ----------------------------------------------------------------------------------------";
@@ -55,6 +61,9 @@ class ProfilePersistenceHelper {
     private final File _profileDir;
     private Hash _us;
 
+    /**
+     * ProfilePersistenceHelper.
+     */
     public ProfilePersistenceHelper(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(ProfilePersistenceHelper.class);
@@ -67,6 +76,9 @@ class ProfilePersistenceHelper {
         }
     }
 
+    /**
+     * setUs.
+     */
     public void setUs(Hash routerIdentHash) {_us = routerIdentHash;}
 
     /**
@@ -196,6 +208,9 @@ class ProfilePersistenceHelper {
         else {buf.append(name).append('=').append(val).append(NL);}
     }
 
+    /**
+     * readProfiles.
+     */
     public List<PeerProfile> readProfiles() {
         long start = System.currentTimeMillis();
         long down = _context.router().getEstimatedDowntime();
@@ -253,6 +268,9 @@ class ProfilePersistenceHelper {
     }
 
     private static class ProfileFilter implements FilenameFilter {
+        /**
+         * accept.
+         */
         @Override
         public boolean accept(File dir, String filename) {
             return (filename.startsWith(PREFIX) &&
@@ -455,6 +473,9 @@ class ProfilePersistenceHelper {
         }
     }
 
+    /**
+     * @return the long value or 0
+     */
     static long getLong(Properties props, String key) {
         String val = props.getProperty(key);
         if (val != null) {

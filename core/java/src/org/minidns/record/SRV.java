@@ -40,6 +40,9 @@ public class SRV extends RRWithTarget implements Comparable<SRV> {
      */
     public final int port;
 
+    /**
+     * parse.
+     */
     public static SRV parse(DataInputStream dis, byte[] data)
         throws IOException {
         int priority = dis.readUnsignedShort();
@@ -49,10 +52,16 @@ public class SRV extends RRWithTarget implements Comparable<SRV> {
         return new SRV(priority, weight, port, target);
     }
 
+    /**
+     * SRV.
+     */
     public SRV(int priority, int weight, int port, String target) {
         this(priority, weight, port, DnsName.from(target));
     }
 
+    /**
+     * SRV.
+     */
     public SRV(int priority, int weight, int port, DnsName target) {
         super(target);
         this.priority = priority;
@@ -73,6 +82,9 @@ public class SRV extends RRWithTarget implements Comparable<SRV> {
         return !target.isRootLabel();
     }
 
+    /**
+     * serialize.
+     */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
         dos.writeShort(priority);
@@ -81,16 +93,25 @@ public class SRV extends RRWithTarget implements Comparable<SRV> {
         super.serialize(dos);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return priority + " " + weight + " " + port + " " + target + ".";
     }
 
+    /**
+     * getType.
+     */
     @Override
     public TYPE getType() {
         return TYPE.SRV;
     }
 
+    /**
+     * compareTo.
+     */
     @Override
     public int compareTo(SRV other) {
         int res = other.priority - this.priority;

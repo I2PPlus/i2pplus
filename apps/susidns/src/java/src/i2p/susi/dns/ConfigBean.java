@@ -14,8 +14,12 @@ import java.nio.charset.StandardCharsets;
  * Bean for managing SusDNS configuration properties and file operations.
  */
 public class ConfigBean extends BaseBean implements Serializable {
+    /** Default constructor */
+    public ConfigBean() {}
 
+    /** Config */
     private String config;
+    /** Saved */
     private boolean saved;
     /**
      * Get the config file path.

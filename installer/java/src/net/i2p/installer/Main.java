@@ -11,10 +11,17 @@ package net.i2p.installer;
  *
  * @since 0.9.6
  */
+/**
+ * Main installer class.
+ */
 public class Main {
 
     private static final String USAGE = "Usage: {copy|delete|exec|fixwinpaths} [args...]";
 
+    /**
+     * main.
+     */
+    /** @param args command and its arguments */
     public static void main(String[] args) {
         if (args.length == 0) {throw new IllegalArgumentException(USAGE);}
         String cmd = args[0];

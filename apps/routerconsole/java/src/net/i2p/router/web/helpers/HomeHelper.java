@@ -29,15 +29,23 @@ import net.i2p.I2PAppContext;
  */
 public class HomeHelper extends HelperBase {
 
+    /** default constructor */
+    public HomeHelper() {}
+
     private static final char S = ',';
     private static final String I = "/themes/console/images/";
+    /** service list property */
     static final String PROP_SERVICES = "routerconsole.services";
+    /** favorites list property */
     static final String PROP_FAVORITES = "routerconsole.favorites";
+    /** config opts property */
     static final String PROP_CONFIG = "routerconsole.configopts";
+    /** monitoring property */
     static final String PROP_MONITORING = "routerconsole.monitoring";
+    /** search property */
     static final String PROP_SEARCH = "routerconsole.showSearch";
 
-    // No commas allowed in text strings!
+    /** Default services list, comma-separated */
     static final String DEFAULT_SERVICES =
         _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns?book=router&filter=latest" + S + I + "addressbook.svg" + S +
         _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "graphs.svg" + S +
@@ -59,6 +67,7 @@ public class HomeHelper extends HelperBase {
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "webserver.svg" + S +
         "";
 
+    /** Default services list for new installs */
     static final String NEWINSTALL_SERVICES =
         _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns?book=router&filter=latest" + S + I + "addressbook.svg" + S +
         _x("Configure Bandwidth") + S + _x("I2P Bandwidth Configuration") + S + "/config" + S + I + "speedometer.svg" + S +
@@ -83,6 +92,7 @@ public class HomeHelper extends HelperBase {
         _x("Wizard") + S + _x("Configuration and bandwidth tester") + S + "/wizard" + S + I + "wizard.svg" + S +
         "";
 
+    /** advanced services list */
     static final String ADVANCED_SERVICES =
         _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns?book=router&filter=latest" + S + I + "addressbook.svg" + S +
         _x("Advanced Config") + S + _x("Advanced router configuration") + S + "/configadvanced" + S + I + "configure.svg" + S +
@@ -106,7 +116,7 @@ public class HomeHelper extends HelperBase {
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "webserver.svg" + S +
         "";
 
-    // No commas allowed in text strings!
+    /** default favorites list */
     static final String DEFAULT_FAVORITES =
 
 // I2P specific
@@ -237,16 +247,22 @@ public class HomeHelper extends HelperBase {
         //_x("UpstreamJournal") + S + _x("A magazine about human rights and social justice") + S + "http://upstreamjournal.i2p/" + S + I + "news.svg" + S +
         "";
 
+    /** @return true if no language has been configured */
     public boolean shouldShowWelcome() {return _context.getProperty(Messages.PROP_LANG) == null;}
 
-    /* @since 0.9.52+ */
+    /** @return true if bandwidth is not yet configured */
     public boolean shouldShowBandwidthConfig() {return _context.getProperty("i2np.bandwidth.outboundKBytesPerSecond") == null;}
 
+    /** @return true if search should be shown */
     public boolean shouldShowSearch() {return _context.getBooleanProperty(PROP_SEARCH);}
 
+    /**
+     * isAdvanced.
+     */
     @Override
     public boolean isAdvanced() {return _context.getBooleanProperty(PROP_ADVANCED);}
 
+    /** @return the services HTML */
     public String getServices() {
         List<App> plugins = NavHelper.getInstance(_context).getClientApps(_context);
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -257,14 +273,19 @@ public class HomeHelper extends HelperBase {
         else {return homeTable(PROP_SERVICES, ADVANCED_SERVICES, plugins);}
     }
 
+    /** @return the favorites HTML */
     public String getFavorites() {return homeTable(PROP_FAVORITES, DEFAULT_FAVORITES, null);}
 
+    /** @return the config services HTML */
     public String getConfigServices() {return configTable(PROP_SERVICES, DEFAULT_SERVICES);}
 
+    /** @return the config favorites HTML */
     public String getConfigFavorites() {return configTable(PROP_FAVORITES, DEFAULT_FAVORITES);}
 
+    /** @return the config search HTML */
     public String getConfigSearch() {return configTable(SearchHelper.PROP_ENGINES, SearchHelper.ENGINES_DEFAULT);}
 
+    /** @return the proxy status HTML */
     public String getProxyStatus() {
         int port = _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY);
         if (port <= 0) {return _t("The HTTP proxy is not up");}
@@ -274,6 +295,7 @@ public class HomeHelper extends HelperBase {
                 "\">";
     }
 
+    /** ignored */
     private String homeTable(String prop, String dflt, Collection<App> toAdd) {
         String config = _context.getProperty(prop, dflt);
         Collection<App> apps = buildApps(_context, config);
@@ -281,6 +303,7 @@ public class HomeHelper extends HelperBase {
         return renderApps(apps);
     }
 
+    /** ignored */
     private String configTable(String prop, String dflt) {
         String config = _context.getProperty(prop, dflt);
         Collection<App> apps;
@@ -289,8 +312,12 @@ public class HomeHelper extends HelperBase {
         return renderConfig(apps);
     }
 
+    /** ignored */
     private static final String SS = Character.toString(S);
 
+    /** @param ctx context
+     *  @param config the config string
+     *  @return collection of apps */
     static Collection<App> buildApps(RouterContext ctx, String config) {
         String[] args = DataHelper.split(config, SS);
         Set<App> apps = new TreeSet<>(new AppComparator());
@@ -304,6 +331,8 @@ public class HomeHelper extends HelperBase {
         return apps;
     }
 
+    /** @param config the config string
+     *  @return collection of search apps */
     static Collection<App> buildSearchApps(String config) {
         String[] args = DataHelper.split(config, SS);
         Set<App> apps = new TreeSet<>(new AppComparator());
@@ -315,6 +344,10 @@ public class HomeHelper extends HelperBase {
         return apps;
     }
 
+    /** @param ctx context
+     *  @param prop the property name
+     *  @param apps the apps to save
+     *  @param full whether to save full data */
     static void saveApps(RouterContext ctx, String prop, Collection<App> apps, boolean full) {
         StringBuilder buf = new StringBuilder(1024);
         for (App app : apps) {
@@ -326,6 +359,7 @@ public class HomeHelper extends HelperBase {
         ctx.router().saveConfig(prop, buf.toString());
     }
 
+    /** ignored */
     private String renderApps(Collection<App> apps) {
         String website = _t("Web Server");
         StringBuilder buf = new StringBuilder(6*1024);
@@ -390,6 +424,7 @@ public class HomeHelper extends HelperBase {
             return buf.toString();
         }
 
+    /** ignored */
     private String renderConfig(Collection<App> apps) {
         StringBuilder buf = new StringBuilder(64*1024);
         buf.append("<table class=homelinkedit><tr><th class=center title=\"")
@@ -433,6 +468,9 @@ public class HomeHelper extends HelperBase {
 
     /** ignore case, current locale */
     private static class AppComparator implements Comparator<App>, Serializable {
+        /**
+         * compare.
+         */
         @Override
         public int compare(App l, App r) {return l.name.toLowerCase().compareTo(r.name.toLowerCase());}
     }

@@ -8,29 +8,61 @@ package org.rrd4j.data;
 abstract class Source {
     private final String name;
 
+    /** data values */
     protected double[] values;
+    /** timestamps corresponding to data values */
     protected long[] timestamps;
 
+    /**
+     * Creates a new Source with the given name.
+     *
+     * @param name the source name
+     */
     Source(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the source name.
+     *
+     * @return the name
+     */
     String getName() {
         return name;
     }
 
+    /**
+     * Sets the data values.
+     *
+     * @param values the data values array
+     */
     void setValues(double[] values) {
         this.values = values;
     }
 
+    /**
+     * Sets the timestamps.
+     *
+     * @param timestamps the timestamps array
+     */
     void setTimestamps(long[] timestamps) {
         this.timestamps = timestamps;
     }
 
+    /**
+     * Returns the data values.
+     *
+     * @return the values array
+     */
     double[] getValues() {
         return values;
     }
 
+    /**
+     * Returns the timestamps.
+     *
+     * @return the timestamps array
+     */
     long[] getTimestamps() {
         return timestamps;
     }

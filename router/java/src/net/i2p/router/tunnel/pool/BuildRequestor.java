@@ -95,6 +95,9 @@ public abstract class BuildRequestor {
      * Adaptive mechanism in BuildExecutor adjusts this upward when
      * success rates are low or timeout rates are high.
      * Default: 13s (normal), 18s (slow systems).
+     *
+     * @param ctx the router context
+     * @return request timeout in ms
      */
     public static int getRequestTimeout(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.requestTimeout", 15*1000);
@@ -104,6 +107,9 @@ public abstract class BuildRequestor {
      * How long the OutNetMessage for the first hop gets before
      * TunnelBuildFirstHopFailJob fires. Shorter than request timeout
      * so first-hop failure is detected before the full build timeout.
+     *
+     * @param ctx the router context
+     * @return first hop timeout in ms
      */
     public static int getFirstHopTimeout(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.firstHopTimeout", 10*1000);
@@ -121,6 +127,9 @@ public abstract class BuildRequestor {
     /**
      *  Maximum consecutive client build timeouts before forcing exploratory tunnel for replies.
      *  Tunable via i2p.tunnel.buildRequest.maxConsecutiveFails (default: 3)
+     *
+     *  @param ctx the router context
+     *  @return max consecutive failures
      */
     static int getMaxConsecutiveClientBuildFails(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.buildRequest.maxConsecutiveFails", 3);
@@ -129,10 +138,13 @@ public abstract class BuildRequestor {
         return ctx.getProperty("i2p.tunnel.build.clientBackoff", 50);
     }
 
-    // Proposal 168 bandwidth property keys
+    /** Proposal 168 minimum bandwidth property key */
     static final String PROP_MIN_BW = "m";
+    /** Proposal 168 required bandwidth property key */
     static final String PROP_REQ_BW = "r";
+    /** Proposal 168 maximum bandwidth property key */
     static final String PROP_MAX_BW = "l";
+    /** Proposal 168 available bandwidth property key */
     static final String PROP_AVAIL_BW = "b";
 
     /**

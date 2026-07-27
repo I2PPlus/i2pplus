@@ -67,6 +67,9 @@ public abstract class DelegatingDnssecRR extends Data {
      */
     protected final byte[] digest;
 
+    /**
+     * parseSharedData.
+     */
     protected static SharedData parseSharedData(DataInputStream dis, int length) throws IOException {
         int keyTag = dis.readUnsignedShort();
         byte algorithm = dis.readByte();
@@ -76,12 +79,20 @@ public abstract class DelegatingDnssecRR extends Data {
         return new SharedData(keyTag, algorithm, digestType, digest);
     }
 
+    /**
+     * SharedData.
+     */
     protected static final class SharedData {
+        /** the key tag */
         final int keyTag;
+        /** the algorithm */
         final byte algorithm;
+        /** the digest type */
         final byte digestType;
+        /** the digest */
         final byte[] digest;
 
+        /** ignored */
         private SharedData(int keyTag, byte algorithm, byte digestType, byte[] digest) {
             this.keyTag = keyTag;
             this.algorithm = algorithm;
@@ -90,6 +101,9 @@ public abstract class DelegatingDnssecRR extends Data {
         }
     }
 
+    /**
+     * DelegatingDnssecRR.
+     */
     protected DelegatingDnssecRR(int keyTag, SignatureAlgorithm algorithm, byte algorithmByte, DigestAlgorithm digestType, byte digestTypeByte, byte[] digest) {
         this.keyTag = keyTag;
 
@@ -105,18 +119,30 @@ public abstract class DelegatingDnssecRR extends Data {
         this.digest = digest;
     }
 
+    /**
+     * DelegatingDnssecRR.
+     */
     protected DelegatingDnssecRR(int keyTag, byte algorithm, byte digestType, byte[] digest) {
         this(keyTag, null, algorithm, null, digestType, digest);
     }
 
+    /**
+     * DelegatingDnssecRR.
+     */
     protected DelegatingDnssecRR(int keyTag, SignatureAlgorithm algorithm, DigestAlgorithm digestType, byte[] digest) {
         this(keyTag, algorithm, algorithm.number, digestType, digestType.value, digest);
     }
 
+    /**
+     * DelegatingDnssecRR.
+     */
     protected DelegatingDnssecRR(int keyTag, SignatureAlgorithm algorithm, byte digestType, byte[] digest) {
         this(keyTag, algorithm, algorithm.number, null, digestType, digest);
     }
 
+    /**
+     * serialize.
+     */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
         dos.writeShort(keyTag);
@@ -125,6 +151,9 @@ public abstract class DelegatingDnssecRR extends Data {
         dos.write(digest);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder()
@@ -135,8 +164,12 @@ public abstract class DelegatingDnssecRR extends Data {
         return sb.toString();
     }
 
+    /** ignored */
     private transient BigInteger digestBigIntCache;
 
+    /**
+     * getDigestBigInteger.
+     */
     public BigInteger getDigestBigInteger() {
         if (digestBigIntCache == null) {
             digestBigIntCache = new BigInteger(1, digest);
@@ -144,8 +177,12 @@ public abstract class DelegatingDnssecRR extends Data {
         return digestBigIntCache;
     }
 
+    /** ignored */
     private transient String digestHexCache;
 
+    /**
+     * getDigestHex.
+     */
     public String getDigestHex() {
         if (digestHexCache == null) {
             digestHexCache = getDigestBigInteger().toString(16).toUpperCase(Locale.ROOT);
@@ -153,6 +190,9 @@ public abstract class DelegatingDnssecRR extends Data {
         return digestHexCache;
     }
 
+    /**
+     * digestEquals.
+     */
     public boolean digestEquals(byte[] otherDigest) {
         return Arrays.equals(digest, otherDigest);
     }

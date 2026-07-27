@@ -52,6 +52,11 @@ class BanlistRenderer {
     private static final Pattern VERSION_PREFIX = Pattern.compile("\\s*/\\s*0\\.9\\.\\d+(?:\\.\\d+)?(?:-\\d+)?\\s*$");
     private static final Pattern VERSION_EXTRACT = Pattern.compile("(?:^|\\()(\\d+\\.\\d+(?:\\.\\d+)?(?:-\\d+)?)");
 
+    /**
+     *  Constructor.
+     *
+     *  @param context the router context
+     */
     public BanlistRenderer(RouterContext context) {
         _context = context;
     }
@@ -260,6 +265,9 @@ class BanlistRenderer {
 
     /**
      *  Render the compact banlist HTML table.
+     *
+     *  @param out the writer to render to
+     *  @throws IOException if writing fails
      *  @since 0.9.59+
      */
     public void renderBanlistCompact(Writer out) throws IOException {

@@ -9,9 +9,13 @@ package net.i2p.i2ptunnel.access;
  */
 class FilterDefinition {
 
+    /** ignored */
     private final Threshold defaultThreshold;
+    /** ignored */
     private final FilterDefinitionElement[] elements;
+    /** ignored */
     private final Recorder[] recorders;
+    /** ignored */
     private final int purgeSeconds;
 
     /**
@@ -35,18 +39,22 @@ class FilterDefinition {
         this.purgeSeconds = maxSeconds;
     }
 
+    /** @return the default threshold */
     Threshold getDefaultThreshold() {
         return defaultThreshold;
     }
 
+    /** @return the elements */
     FilterDefinitionElement[] getElements() {
         return elements;
     }
 
+    /** @return the recorders */
     Recorder[] getRecorders() {
         return recorders;
     }
 
+    /** @return the purge seconds */
     int getPurgeSeconds() {
         return purgeSeconds;
     }

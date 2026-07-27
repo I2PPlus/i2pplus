@@ -62,6 +62,7 @@ public class PortableWorkingDir {
      * Caller should store the return value for future reference.
      *
      * @param envProps environment properties
+     * @return the working directory path
      */
     public static String getWorkingDir(Properties envProps) {
         String dir = null;

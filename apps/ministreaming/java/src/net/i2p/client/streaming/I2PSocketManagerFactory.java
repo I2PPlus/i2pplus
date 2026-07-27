@@ -30,6 +30,11 @@ import net.i2p.util.Log;
  * You cannot connect out from a router JVM to another router.
  *
  */
+/**
+ * Factory for creating I2PSocketManager instances.
+ *
+ * @since 0.9.8
+ */
 public class I2PSocketManagerFactory {
 
     /**
@@ -312,8 +317,22 @@ public class I2PSocketManagerFactory {
      * @return the newly created socket manager, non-null (throws on error)
      * @since 0.9.8
      */
+    /**
+     * Create a disconnected socket manager using the destination loaded from the given private key
+     * stream, or null for a transient destination.
+     *
+     * Non-blocking. Does not connect to the router or build tunnels.
+     *
+     * @param myPrivateKeyStream private key stream or null for transient destination
+     * @param i2cpHost I2CP host null to use default
+     * @param i2cpPort I2CP port &lt;= 0 to use default
+     * @param opts Streaming and I2CP options, may be null
+     * @return the newly created socket manager
+     * @throws I2PSessionException on session creation error
+     * @since 0.9.8
+     */
     public static I2PSocketManager createDisconnectedManager(InputStream myPrivateKeyStream, String i2cpHost,
-                                                             int i2cpPort, Properties opts) throws I2PSessionException {
+                                                              int i2cpPort, Properties opts) throws I2PSessionException {
         return createDisconnectedManager(myPrivateKeyStream,
                                          i2cpHost,
                                          i2cpPort,
@@ -340,12 +359,27 @@ public class I2PSocketManagerFactory {
      * @return the newly created socket manager, non-null (throws on error)
      * @since 0.9.40
      */
+    /**
+     * Create a disconnected socket manager using the destination loaded from the given private key
+     * stream, or null for a transient destination.
+     *
+     * Non-blocking. Does not connect to the router or build tunnels.
+     *
+     * @param myPrivateKeyStream private key stream or null for transient destination
+     * @param i2cpHost I2CP host null to use default
+     * @param i2cpPort I2CP port &lt;= 0 to use default
+     * @param opts Streaming and I2CP options, may be null
+     * @param filter the incoming connection filter
+     * @return the newly created socket manager
+     * @throws I2PSessionException on session creation error
+     * @since 0.9.40
+     */
     public static I2PSocketManager createDisconnectedManager(InputStream myPrivateKeyStream,
-                                                             String i2cpHost,
-                                                             int i2cpPort,
-                                                             Properties opts,
-                                                             IncomingConnectionFilter filter)
-                                    throws I2PSessionException {
+                                                              String i2cpHost,
+                                                              int i2cpPort,
+                                                              Properties opts,
+                                                              IncomingConnectionFilter filter)
+                                     throws I2PSessionException {
         if (myPrivateKeyStream == null) {
             I2PClient client = I2PClientFactory.createClient();
             ByteArrayStream keyStream = new ByteArrayStream(1024);

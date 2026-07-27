@@ -21,10 +21,13 @@ import net.i2p.util.VersionComparator;
  * @since 0.9.17
  */
 public class NewsMetadata {
-    // Standard Atom feed metadata
+    /** Standard Atom feed metadata */
     public String feedTitle;
+    /** Standard Atom feed metadata */
     public String feedSubtitle;
+    /** Standard Atom feed metadata */
     public String feedID;
+    /** Standard Atom feed metadata */
     public long feedUpdated;
 
     /** I2P metadata */
@@ -44,10 +47,15 @@ public class NewsMetadata {
      * @since 0.9.17
      */
     public static class Release implements Comparable<Release> {
+        /** The release date */
         public long date;
+        /** The minimum I2P version required */
         public String minVersion;
+        /** The minimum Java version required */
         public String minJavaVersion;
+        /** The I2P version of this release */
         public String i2pVersion;
+        /** The list of available updates */
         public List<Update> updates;
 
         @Override
@@ -95,7 +103,9 @@ public class NewsMetadata {
      * @since 0.9.52
      */
     public static class Update implements Comparable<Update> {
+        /** The update type (su3, su2, etc.) */
         public String type;
+        /** The torrent source URL */
         public String torrent;
         /**
          *  Stored as of 0.9.52, but there is no registered handler
@@ -116,7 +126,12 @@ public class NewsMetadata {
             return getTypeOrder() - other.getTypeOrder();
         }
 
-        /** lower is preferred */
+        /**
+         * Get the numeric order for this update type.
+         * Lower is preferred.
+         *
+         * @return the type order
+         */
         protected int getTypeOrder() {
             if ("su3".equalsIgnoreCase(type))
                 return 1;

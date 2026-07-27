@@ -800,7 +800,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     private static final Object _pcapInitLock = new Object();
     private static boolean _pcapInitialized;
+    /** The PCAP writer */
     static PcapWriter pcapWriter;
+    /** The PCAP property */
     static final String PROP_PCAP = "i2p.streaming.pcap";
     private static final String PCAP_FILE = "streaming.pcap";
 

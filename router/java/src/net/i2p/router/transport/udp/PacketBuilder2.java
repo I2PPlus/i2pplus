@@ -52,19 +52,33 @@ class PacketBuilder2 {
      *  These are chosen to be higher than the highest I2NP message type,
      *  as a data packet is set to the underlying I2NP message type.
      */
+    /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_FIRST = 62;
+    /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_ACK = TYPE_FIRST;
+    /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_PUNCH = 63;
+    /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_RESP = 64;
+    /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_INTRO = 65;
+    /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_RREQ = 66;
+    /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_TCB = 67;
+    /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_TBC = 68;
+    /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_TTA = 69;
+    /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_TFA = 70;
+    /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_CONF = 71;
+    /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_SREQ = 72;
+    /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_CREAT = 73;
+    /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_DESTROY = 74;
 
     /** IPv4 only */
@@ -75,13 +89,17 @@ class PacketBuilder2 {
     /** 60 */
     public static final int MIN_DATA_PACKET_OVERHEAD = IP_HEADER_SIZE + UDP_HEADER_SIZE + DATA_HEADER_SIZE + MAC_LEN;
 
+    /**
+     * IPV6_HEADER_SIZE.
+     */
     public static final int IPV6_HEADER_SIZE = PacketBuilder.IPV6_HEADER_SIZE;
     /** 80 */
     public static final int MIN_IPV6_DATA_PACKET_OVERHEAD = IPV6_HEADER_SIZE + UDP_HEADER_SIZE + DATA_HEADER_SIZE + MAC_LEN;
 
     private static final int ABSOLUTE_MAX_ACK_RANGES = 512;
 
-    /* Higher than all other OutNetMessage priorities, but still droppable,
+    /**
+     * Higher than all other OutNetMessage priorities, but still droppable,
      * and will be shown in the codel.UDP-Sender.drop.500 stat.
      */
     static final int PRIORITY_HIGH = 550;
@@ -144,6 +162,9 @@ class PacketBuilder2 {
      *
      *  @throws IOException if peer is dead
      */
+    /**
+     * buildPacket.
+     */
     public UDPPacket buildPacket(List<Fragment> fragments, PeerState2 peer) throws IOException {
         return buildPacket(fragments, null, peer);
     }
@@ -153,6 +174,9 @@ class PacketBuilder2 {
      *
      *  @param otherBlocks may be null or empty
      *  @throws IOException if peer is dead
+     */
+    /**
+     * buildPacket.
      */
     public UDPPacket buildPacket(List<Fragment> fragments, List<Block> otherBlocks, SSU2Sender peer) throws IOException {
         // calculate data size

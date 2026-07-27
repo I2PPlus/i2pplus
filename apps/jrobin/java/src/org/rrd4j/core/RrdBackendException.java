@@ -8,10 +8,16 @@ package org.rrd4j.core;
  */
 public class RrdBackendException extends RrdException {
 
+    /**
+     * RrdBackendException.
+     */
     public RrdBackendException(String message) {
         super(message);
     }
 
+    /**
+     * RrdBackendException.
+     */
     public RrdBackendException(String message, Throwable cause) {
         super(message, cause);
     }

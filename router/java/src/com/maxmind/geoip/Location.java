@@ -24,22 +24,53 @@ package com.maxmind.geoip;
  * Represents geographical location data including coordinates and address information.
  */
 public class Location {
+	/**
+	 * countryCode.
+	 */
 	public String countryCode;
+	/**
+	 * countryName.
+	 */
 	public String countryName;
+	/**
+	 * region.
+	 */
 	public String region;
+	/**
+	 * city.
+	 */
 	public String city;
+	/**
+	 * postalCode.
+	 */
 	public String postalCode;
+	/**
+	 * latitude.
+	 */
 	public float latitude;
+	/**
+	 * longitude.
+	 */
 	public float longitude;
+	/**
+	 * dma_code.
+	 */
 	public int dma_code;
+	/**
+	 * area_code.
+	 */
 	public int area_code;
+	/**
+	 * metro_code.
+	 */
 	public int metro_code;
 
 	private final static double EARTH_DIAMETER = 2 * 6378.2;
 	private final static double PI = 3.14159265;
 	private final static double RAD_CONVERT = PI / 180;
 
-	public double distance(Location loc) {
+    /** @return approximate great-circle distance in km */
+    public double distance(Location loc) {
 		double delta_lat, delta_lon;
 		double temp;
 

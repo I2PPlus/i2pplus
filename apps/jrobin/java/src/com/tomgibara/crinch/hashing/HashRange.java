@@ -32,9 +32,13 @@ public class HashRange {
     private static final BigInteger LONG_MINIMUM = BigInteger.valueOf(Long.MIN_VALUE);
     private static final BigInteger LONG_MAXIMUM = BigInteger.valueOf(Long.MAX_VALUE);
 
+    /** Full int range from Integer.MIN_VALUE to Integer.MAX_VALUE */
     public static final HashRange FULL_INT_RANGE = new HashRange(INT_MINIMUM, INT_MAXIMUM);
+    /** Positive int range from 1 to Integer.MAX_VALUE */
     public static final HashRange POSITIVE_INT_RANGE = new HashRange(BigInteger.ONE, INT_MAXIMUM);
+    /** Full long range from Long.MIN_VALUE to Long.MAX_VALUE */
     public static final HashRange FULL_LONG_RANGE = new HashRange(LONG_MINIMUM, LONG_MAXIMUM);
+    /** Positive long range from 1 to Long.MAX_VALUE */
     public static final HashRange POSITIVE_LONG_RANGE = new HashRange(BigInteger.ONE, LONG_MAXIMUM);
 
     // fields
@@ -49,6 +53,12 @@ public class HashRange {
 
     // constructors
 
+    /**
+     * Construct a HashRange with BigInteger bounds.
+     *
+     * @param minimum the minimum value (inclusive)
+     * @param maximum the maximum value (inclusive)
+     */
     public HashRange(BigInteger minimum, BigInteger maximum) {
         if (minimum == null) throw new IllegalArgumentException();
         if (maximum == null) throw new IllegalArgumentException();
@@ -60,45 +70,65 @@ public class HashRange {
         // defer size related work - don't want to mem alloc in constructor
     }
 
+    /**
+     * Construct a HashRange with int bounds.
+     *
+     * @param minimum the minimum value (inclusive)
+     * @param maximum the maximum value (inclusive)
+     */
     public HashRange(int minimum, int maximum) {
         this(BigInteger.valueOf(minimum), BigInteger.valueOf(maximum));
     }
 
+    /**
+     * Construct a HashRange with long bounds.
+     *
+     * @param minimum the minimum value (inclusive)
+     * @param maximum the maximum value (inclusive)
+     */
     public HashRange(long minimum, long maximum) {
         this(BigInteger.valueOf(minimum), BigInteger.valueOf(maximum));
     }
 
     // accessors
 
+    /** @return true if the minimum value is zero */
     public boolean isZeroBased() {
         return minimum.signum() == 0;
     }
 
+    /** @return true if the range fits within int bounds */
     public boolean isIntBounded() {
         return intBounded;
     }
 
+    /** @return true if the range fits within long bounds */
     public boolean isLongBounded() {
         return longBounded;
     }
 
+    /** @return the minimum value */
     public BigInteger getMinimum() {
         return minimum;
     }
 
+    /** @return the maximum value */
     public BigInteger getMaximum() {
         return maximum;
     }
 
+    /** @return the size of the range */
     public BigInteger getSize() {
         return size == null ? size = maximum.subtract(minimum).add(BigInteger.ONE) : size;
     }
 
+    /** @return true if the size fits within int range */
     public boolean isIntSized() {
         if (intSized == null) intSized = getSize().compareTo(INT_MAXIMUM) <= 0;
         return intSized;
     }
 
+    /** @return true if the size fits within long range */
     public boolean isLongSized() {
         if (longSized == null) longSized = getSize().compareTo(LONG_MAXIMUM) <= 0;
         return longSized;
@@ -106,6 +136,7 @@ public class HashRange {
 
     // methods
 
+    /** @return a zero-based version of this range */
     public HashRange zeroBased() {
         return isZeroBased() ? this : new HashRange(BigInteger.ZERO, maximum.subtract(minimum));
     }

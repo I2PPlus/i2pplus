@@ -11,6 +11,12 @@ import net.i2p.router.web.FormHandler;
  * @since 0.9.70
  */
 public class ConfigBanHandler extends FormHandler {
+
+    /**
+     * Constructs the handler.
+     */
+    public ConfigBanHandler() {}
+
     private String _maxOffenses;
     private String _offenseWindow;
     private String _startupGrace;
@@ -94,23 +100,95 @@ public class ConfigBanHandler extends FormHandler {
         addFormNotice(_t("Ban settings reset to defaults"), true);
     }
 
+    /**
+     * Set the maximum offenses.
+     * @param val the maximum number of offenses
+     */
     public void setMaxOffenses(String val) { _maxOffenses = val; }
+    /**
+     * Set the offense window.
+     * @param val the offense window in minutes
+     */
     public void setOffenseWindow(String val) { _offenseWindow = val; }
+    /**
+     * Set the startup grace period.
+     * @param val the grace period in minutes
+     */
     public void setStartupGrace(String val) { _startupGrace = val; }
+    /**
+     * Set the bad packet ban duration.
+     * @param val the duration in minutes
+     */
     public void setBadPacketDuration(String val) { _badPacketDuration = val; }
+    /**
+     * Enable or disable bad packet banning.
+     * @param val the value
+     */
     public void setEnableBadPacketBan(String val) { _enableBadPacketBan = true; }
+    /**
+     * Enable or disable corrupt connection banning.
+     * @param val the value
+     */
     public void setEnableCorruptConnectionBan(String val) { _enableCorruptConnectionBan = true; }
+    /**
+     * Enable or disable port hopping banning.
+     * @param val the value
+     */
     public void setEnablePortHoppingBan(String val) { _enablePortHoppingBan = true; }
+    /**
+     * Enable or disable the blocklist.
+     * @param val the value
+     */
     public void setEnableBlocklist(String val) { _enableBlocklist = true; }
+    /**
+     * Enable or disable the Tor blocklist.
+     * @param val the value
+     */
     public void setEnableTorBlocklist(String val) { _enableTorBlocklist = true; }
+    /**
+     * Enable or disable country banning.
+     * @param val the value
+     */
     public void setEnableCountryBan(String val) { _enableCountryBan = true; }
+    /**
+     * Enable or disable XG banning.
+     * @param val the value
+     */
     public void setEnableXgBan(String val) { _enableXgBan = true; }
+    /**
+     * Enable or disable LU banning.
+     * @param val the value
+     */
     public void setEnableLuBan(String val) { _enableLuBan = true; }
+    /**
+     * Enable or disable blocking of the router's own country.
+     * @param val the value
+     */
     public void setEnableBlockMyCountry(String val) { _enableBlockMyCountry = true; }
+    /**
+     * Enable or disable unresponsive floodfill banning.
+     * @param val the value
+     */
     public void setEnableUnresponsiveFloodfillBan(String val) { _enableUnresponsiveFloodfillBan = true; }
+    /**
+     * Enable or disable no-version banning.
+     * @param val the value
+     */
     public void setEnableNoVersionBan(String val) { _enableNoVersionBan = true; }
+    /**
+     * Enable or disable excessive tunnel requests banning.
+     * @param val the value
+     */
     public void setEnableExcessiveTunnelRequestsBan(String val) { _enableExcessiveTunnelRequestsBan = true; }
+    /**
+     * Set custom capability bans.
+     * @param val the capability patterns
+     */
     public void setCustomCapabilityBans(String val) { _customCapabilityBans = val != null ? val.trim() : ""; }
+    /**
+     * Set custom country codes.
+     * @param val the country codes
+     */
     public void setCustomCountryCodes(String val) { _customCountryCodes = val != null ? val.trim().toLowerCase() : ""; }
 
     /**

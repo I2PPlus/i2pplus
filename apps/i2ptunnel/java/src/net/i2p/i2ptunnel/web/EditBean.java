@@ -209,22 +209,50 @@ public class EditBean extends IndexBean {
         return _helper.getTunnelVariance(tunnel, defaultVariance);
     }
 
-    /** @since 0.9.33 */
+    /**
+     *  Returns the outbound tunnel depth.
+     *
+     *  @param tunnel the tunnel index
+     *  @param defaultLength the default depth if not configured
+     *  @return the outbound tunnel depth, or -1 for default
+     *  @since 0.9.33
+     */
     public int getTunnelDepthOut(int tunnel, int defaultLength) {
         return _helper.getTunnelDepthOut(tunnel, defaultLength);
     }
 
-    /** @since 0.9.33 */
+    /**
+     *  Returns the outbound tunnel quantity.
+     *
+     *  @param tunnel the tunnel index
+     *  @param defaultQuantity the default quantity if not configured
+     *  @return the outbound tunnel quantity
+     *  @since 0.9.33
+     */
     public int getTunnelQuantityOut(int tunnel, int defaultQuantity) {
         return _helper.getTunnelQuantityOut(tunnel, defaultQuantity);
     }
 
-    /** @since 0.9.33 */
+    /**
+     *  Returns the outbound backup tunnel quantity.
+     *
+     *  @param tunnel the tunnel index
+     *  @param defaultBackupQuantity the default backup quantity if not configured
+     *  @return the outbound backup tunnel quantity
+     *  @since 0.9.33
+     */
     public int getTunnelBackupQuantityOut(int tunnel, int defaultBackupQuantity) {
         return _helper.getTunnelBackupQuantityOut(tunnel, defaultBackupQuantity);
     }
 
-    /** @since 0.9.33 */
+    /**
+     *  Returns the outbound tunnel variance.
+     *
+     *  @param tunnel the tunnel index
+     *  @param defaultVariance the default variance if not configured
+     *  @return the outbound tunnel variance
+     *  @since 0.9.33
+     */
     public int getTunnelVarianceOut(int tunnel, int defaultVariance) {
         return _helper.getTunnelVarianceOut(tunnel, defaultVariance);
     }
@@ -265,6 +293,10 @@ public class EditBean extends IndexBean {
     }
 
     /**
+     *  Returns the encryption mode for the tunnel.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the encryption mode as a string
      *  @since 0.9.40
      */
     public String getEncryptMode(int tunnel) {
@@ -272,6 +304,10 @@ public class EditBean extends IndexBean {
     }
 
     /**
+     *  Returns the blinded password for the tunnel.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the blinded password, or empty string if none
      *  @since 0.9.40
      */
     public String getBlindedPassword(int tunnel) {
@@ -290,39 +326,72 @@ public class EditBean extends IndexBean {
     }
 
     /**
+     *  Returns the signature type for the tunnel.
+     *
+     *  @param tunnel the tunnel index
      *  @param newTunnelType used if tunnel &lt; 0
+     *  @return the signature type code
      *  @since 0.9.12
      */
     public int getSigType(int tunnel, String newTunnelType) {
         return _helper.getSigType(tunnel, newTunnelType);
     }
 
-    /** @since 0.9.12 */
+    /**
+     *  Returns whether the given signature type is available.
+     *
+     *  @param code the signature type code
+     *  @return true if available
+     *  @since 0.9.12
+     */
     public boolean isSigTypeAvailable(int code) {
         return SigType.isAvailable(code);
     }
 
-    /** @since 0.9.33 */
+    /**
+     *  Returns whether the tunnel signature type can be changed.
+     *  The type is fixed if the tunnel has an existing destination.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if the signature type can be changed
+     *  @since 0.9.33
+     */
     public boolean canChangeSigType(int tunnel) {
         if (tunnel < 0) {return true;}
         if (getDestination(tunnel) != null) {return false;}
         return getTunnelStatus(tunnel) == GeneralHelper.NOT_RUNNING;
     }
 
-    /** @since 0.9.46 */
+    /**
+     *  Returns whether the tunnel encryption type can be changed.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if the encryption type can be changed
+     *  @since 0.9.46
+     */
     public boolean canChangeEncType(int tunnel) {
         if (tunnel < 0) {return true;}
         return getTunnelStatus(tunnel) == GeneralHelper.NOT_RUNNING;
     }
 
-    /** @since 0.9.46 */
+    /**
+     *  Returns whether the tunnel port setting can be changed.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if the port can be changed
+     *  @since 0.9.46
+     */
     public boolean canChangePort(int tunnel) {
         if (tunnel < 0) {return true;}
         return getTunnelStatus(tunnel) == GeneralHelper.NOT_RUNNING;
     }
 
     /**
-     *  @param encType code
+     *  Returns whether the tunnel supports the specified encryption type.
+     *
+     *  @param tunnel the tunnel index
+     *  @param encType the encryption type code
+     *  @return true if the tunnel has the encryption type
      *  @since 0.9.44
      */
     public boolean hasEncType(int tunnel, int encType) {
@@ -330,7 +399,10 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  Random keys, hidden in forms
+     *  Returns the encrypted inbound random key, hidden in forms.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the encrypted inbound random key
      *  @since 0.9.18
      */
     public String getKey1(int tunnel) {
@@ -377,6 +449,10 @@ public class EditBean extends IndexBean {
     }
 
     /**
+     *  Returns the filter definition for the tunnel.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the filter definition, or empty string if none
      *  @since 0.9.40
      */
     public String getFilterDefinition(int tunnel) {
@@ -413,22 +489,46 @@ public class EditBean extends IndexBean {
         return _helper.getDelayOpen(tunnel);
     }
 
-    /** @since 0.9.14 */
+    /**
+     *  Returns whether User-Agent header passthrough is allowed.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if User-Agent passthrough is allowed
+     *  @since 0.9.14
+     */
     public boolean getAllowUserAgent(int tunnel) {
         return _helper.getAllowUserAgent(tunnel);
     }
 
-    /** @since 0.9.14 */
+    /**
+     *  Returns whether Referer header passthrough is allowed.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if Referer passthrough is allowed
+     *  @since 0.9.14
+     */
     public boolean getAllowReferer(int tunnel) {
         return _helper.getAllowReferer(tunnel);
     }
 
-    /** @since 0.9.14 */
+    /**
+     *  Returns whether Accept header passthrough is allowed.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if Accept passthrough is allowed
+     *  @since 0.9.14
+     */
     public boolean getAllowAccept(int tunnel) {
         return _helper.getAllowAccept(tunnel);
     }
 
-    /** @since 0.9.14 */
+    /**
+     *  Returns whether internal SSL connections are allowed.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if internal SSL is allowed
+     *  @since 0.9.14
+     */
     public boolean getAllowInternalSSL(int tunnel) {
         return _helper.getAllowInternalSSL(tunnel);
     }

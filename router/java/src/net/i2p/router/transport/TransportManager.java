@@ -118,7 +118,9 @@ public class TransportManager implements TransportEventListener {
     public static final String PROP_ENABLE_NTCP = "i2np.ntcp.enable";
     /** default true */
     public static final String PROP_ENABLE_UPNP = "i2np.upnp.enable";
+    /** Enable UPnP for IPv6 */
     public static final String PROP_ENABLE_UPNP_IPV6 = "i2np.upnp.ipv6.enable";
+    /** Default UPnP IPv6 enable */
     public static final boolean DEFAULT_ENABLE_UPNP_IPV6 = true;
     private static final String PROP_JAVA_PROXY1 = "socksProxyHost";
     private static final String PROP_JAVA_PROXY2 = "java.net.useSystemProxies";
@@ -144,6 +146,7 @@ public class TransportManager implements TransportEventListener {
 
     private OutboundMaintainerEvent _outboundMaintainer;
 
+    /** @param context router context */
     public TransportManager(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(TransportManager.class);
@@ -353,6 +356,7 @@ public class TransportManager implements TransportEventListener {
             _log.log(Log.CRIT, "No transports are enabled - router cannot function!");
     }
 
+    /** @param ctx context @return true if NTCP enabled */
     public static boolean isNTCPEnabled(RouterContext ctx) {
         return ctx.getBooleanPropertyDefaultTrue(PROP_ENABLE_NTCP);
     }
@@ -504,6 +508,7 @@ public class TransportManager implements TransportEventListener {
             t.forwardPortStatus(ip, port, externalPort, success, reason);
     }
 
+    /** Void */
     synchronized void startListening() {
         if (_xdhThread != null && _xdhThread.getState() == Thread.State.NEW)
             _xdhThread.start();
@@ -545,6 +550,7 @@ public class TransportManager implements TransportEventListener {
         _context.router().rebuildRouterInfo();
     }
 
+    /** Restart all transports (stop, wait, start). */
     synchronized void restart() {
         stopListening();
         try { Thread.sleep(5*1000L); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
@@ -577,10 +583,12 @@ public class TransportManager implements TransportEventListener {
         TransportImpl.clearCaches();
     }
 
+    /** @param style transport style @return the transport for the given style or null */
     Transport getTransport(String style) {
         return _transports.get(style);
     }
 
+    /** @return number of registered transports */
     int getTransportCount() { return _transports.size(); }
 
     /**
@@ -714,6 +722,9 @@ public class TransportManager implements TransportEventListener {
             t.recheckReachability();
     }
 
+    /**
+     * @param peer peer hash @return true if any transport is backlogged to peer
+     */
     boolean isBacklogged(Hash peer) {
         for (Transport t : _transports.values()) {
             if (t.isBacklogged(peer))
@@ -722,6 +733,9 @@ public class TransportManager implements TransportEventListener {
         return false;
     }
 
+    /**
+     * @param peer peer hash @return true if any transport has an established connection
+     */
     boolean isEstablished(Hash peer) {
         for (Transport t : _transports.values()) {
             if (t.isEstablished(peer))
@@ -746,18 +760,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  @return a new list, may be modified
-     *  @since 0.9.34
-     */
-    /**
-     * Get list of peers with established connections across all transports.
-     *
-     * This method aggregates established peers from all active
-     * transports (NTCP, UDP, SSU, etc.) to provide a
-     * unified view of the router's current peer connections.
-     *
-     * @return list of peer hashes with established connections,
-     *         may be empty if no connections exist
+     * @return list of peer hashes with established connections, may be empty
      */
     public List<Hash> getEstablished() {
         // for efficiency
@@ -861,9 +864,13 @@ public class TransportManager implements TransportEventListener {
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingTypeName")
     static class Port {
+        /** Transport style */
         public final String style;
+        /** Port number */
         public final int port;
+        /** True if IPv6 */
         public final boolean isIPv6;
+        /** IP address string */
         public final String ip;
 
         /**
@@ -887,11 +894,13 @@ public class TransportManager implements TransportEventListener {
             ip = host;
         }
 
+        /** @return hash code */
         @Override
         public int hashCode() {
             return style.hashCode() ^ port ^ DataHelper.hashCode(ip);
         }
 
+        /** @param o object @return true if equal */
         @Override
         public boolean equals(Object o) {
             if (o == this)
@@ -947,6 +956,11 @@ public class TransportManager implements TransportEventListener {
         return rv;
     }
 
+    /**
+     * Get the best bid for a message across all transports.
+     * @param msg the message to bid on
+     * @return the winning bid or null
+     */
     TransportBid getBid(OutNetMessage msg) {
         List<TransportBid> bids = getBids(msg);
         if ( (bids == null) || (bids.isEmpty()) )
@@ -955,6 +969,10 @@ public class TransportManager implements TransportEventListener {
             return bids.get(0);
     }
 
+    /**
+     * Get all bids for a message across all transports.
+     * @param msg the message to bid on @return list of bids, never null
+     */
     List<TransportBid> getBids(OutNetMessage msg) {
         if (msg == null)
             throw new IllegalArgumentException("Null message? No bidding on a null outNetMessage!");
@@ -985,6 +1003,10 @@ public class TransportManager implements TransportEventListener {
         return rv;
     }
 
+    /**
+     * Get the best bid, skipping failed transports and unreachable peers.
+     * @param msg the message to bid on @return the winning bid or null
+     */
     TransportBid getNextBid(OutNetMessage msg) {
         int unreachableTransports = 0;
         RouterInfo targetRI = msg.getTarget();
@@ -1149,7 +1171,13 @@ public class TransportManager implements TransportEventListener {
      * @since 0.9.39
      */
     private class UpdatePorts extends SimpleTimer2.TimedEvent {
+        /**
+         * UpdatePorts.
+         */
         public UpdatePorts() { super(_context.simpleTimer2()); }
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             Set<Port> ports = getPorts();
             synchronized (_upnpManager) {
@@ -1168,14 +1196,21 @@ public class TransportManager implements TransportEventListener {
      * @since 0.9.50
      */
     private class UPnPRefresher extends SimpleTimer2.TimedEvent {
+        /**
+         * UPnPRefresher.
+         */
         public UPnPRefresher() { super(_context.simpleTimer2()); }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             transportAddressChanged();
             reschedule(UPNP_REFRESH_TIME);
         }
     }
 
+    /** @return aggregated recent error messages from all transports */
     List<String> getMostRecentErrorMessages() {
         List<String> rv = new ArrayList<>(16);
         for (Transport t : _transports.values()) {
@@ -1247,10 +1282,16 @@ public class TransportManager implements TransportEventListener {
      *  is below the threshold.
      */
     private class OutboundMaintainerEvent extends SimpleTimer2.TimedEvent {
+        /**
+         * OutboundMaintainerEvent.
+         */
         public OutboundMaintainerEvent() {
             super(_context.simpleTimer2());
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             try {
                 maintainOutboundConnections();

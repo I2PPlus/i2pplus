@@ -14,6 +14,9 @@ import java.util.List;
  */
 public class RouterCommandLine extends net.i2p.util.CommandLine {
 
+    /**
+     * RCLASSES.
+     */
     protected static final List<String> RCLASSES = Collections.unmodifiableList(Arrays.asList(new String[] { // NOSONAR S3878
         "com.maxmind.geoip2.DatabaseReader",
         "net.i2p.data.router.RouterInfo",
@@ -34,8 +37,14 @@ public class RouterCommandLine extends net.i2p.util.CommandLine {
         "net.i2p.router.transport.UPnP"
     }));
 
+    /**
+     * RouterCommandLine.
+     */
     protected RouterCommandLine() {}
 
+    /**
+     * main.
+     */
     public static void main(String[] args) {
         List<String> classes = new ArrayList<>(RCLASSES.size() + CLASSES.size());
         classes.addAll(RCLASSES);
@@ -47,6 +56,9 @@ public class RouterCommandLine extends net.i2p.util.CommandLine {
         System.exit(1);
     }
 
+    /**
+     * usage.
+     */
     public static void usage(List<String> classes) {
         System.err.println("I2P Router version " + RouterVersion.FULL_VERSION + '\n' +
                            "USAGE: java -jar /path/to/router.jar command [args]"); // NOSONAR CLI tool

@@ -23,12 +23,18 @@ import net.i2p.util.Log;
  *
  */
 class ReportAbuseJob extends JobImpl {
+    /** ignored */
     private final Log _log;
+    /** ignored */
     private final ClientConnectionRunner _runner;
+    /** ignored */
     private final Destination _dest;
+    /** ignored */
     private final String _reason;
+    /** ignored */
     private final int _severity;
 
+    /** Create abuse report */
     public ReportAbuseJob(RouterContext context, ClientConnectionRunner runner,
                           Destination dest, String reason, int severity) {
         super(context);
@@ -38,8 +44,10 @@ class ReportAbuseJob extends JobImpl {
         _reason = reason;
         _severity = severity;
     }
+/** Return the name */
 
     public String getName() { return "Report Abuse to Client"; }
+/** Execute the job */
 
     public void runJob() {
         if (_runner.isDead()) return;

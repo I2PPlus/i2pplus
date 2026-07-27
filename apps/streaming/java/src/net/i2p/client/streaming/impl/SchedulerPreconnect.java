@@ -25,6 +25,9 @@ import net.i2p.I2PAppContext;
  */
 class SchedulerPreconnect extends SchedulerImpl {
 
+    /**
+     * SchedulerPreconnect.
+     */
     public SchedulerPreconnect(I2PAppContext ctx) {
         super(ctx);
     }

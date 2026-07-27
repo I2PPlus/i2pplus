@@ -40,6 +40,7 @@ import org.cybergarage.util.*;
  * @since 1.0
  */
 public class DeviceData extends NodeData {
+    /** Default constructor */
     public DeviceData() {}
 
     ////////////////////////////////////////////////
@@ -49,18 +50,30 @@ public class DeviceData extends NodeData {
     private String descriptionURI = null;
     private File descriptionFile = null;
 
+    /**
+     * getDescriptionFile.
+     */
     public File getDescriptionFile() {
         return descriptionFile;
     }
 
+    /**
+     * getDescriptionURI.
+     */
     public String getDescriptionURI() {
         return descriptionURI;
     }
 
+    /**
+     * setDescriptionFile.
+     */
     public void setDescriptionFile(File descriptionFile) {
         this.descriptionFile = descriptionFile;
     }
 
+    /**
+     * setDescriptionURI.
+     */
     public void setDescriptionURI(String descriptionURI) {
         this.descriptionURI = descriptionURI;
     }
@@ -72,13 +85,18 @@ public class DeviceData extends NodeData {
     private String location = "";
     private String location_ipv6 = "";
 
+    /**
+     * getLocation.
+     */
     public String getLocation() {
         return getLocation(false);
     }
 
     /**
-     * I2P for multiple location support
+     * I2P for multiple location support.
      *
+     * @param preferIPv6 whether to prefer IPv6 address
+     * @return the location string
      * @since 0.9.50
      */
     public String getLocation(boolean preferIPv6) {
@@ -91,6 +109,9 @@ public class DeviceData extends NodeData {
         }
     }
 
+    /**
+     * setLocation.
+     */
     public void setLocation(String location) {
         if (location != null) {
             try {
@@ -114,10 +135,16 @@ public class DeviceData extends NodeData {
 
     private int leaseTime = Device.DEFAULT_LEASE_TIME;
 
+    /**
+     * getLeaseTime.
+     */
     public int getLeaseTime() {
         return leaseTime;
     }
 
+    /**
+     * setLeaseTime.
+     */
     public void setLeaseTime(int val) {
         leaseTime = val;
     }
@@ -128,6 +155,9 @@ public class DeviceData extends NodeData {
 
     private HTTPServerList httpServerList = null;
 
+    /**
+     * getHTTPServerList.
+     */
     public HTTPServerList getHTTPServerList() {
         if (this.httpServerList == null) {
             this.httpServerList = new HTTPServerList(this.httpBinds, this.httpPort);
@@ -137,10 +167,16 @@ public class DeviceData extends NodeData {
 
     private InetAddress[] httpBinds = null;
 
+    /**
+     * setHTTPBindAddress.
+     */
     public void setHTTPBindAddress(InetAddress[] inets) {
         this.httpBinds = inets;
     }
 
+    /**
+     * getHTTPBindAddress.
+     */
     public InetAddress[] getHTTPBindAddress() {
         return this.httpBinds;
     }
@@ -151,10 +187,16 @@ public class DeviceData extends NodeData {
 
     private int httpPort = Device.HTTP_DEFAULT_PORT;
 
+    /**
+     * getHTTPPort.
+     */
     public int getHTTPPort() {
         return httpPort;
     }
 
+    /**
+     * setHTTPPort.
+     */
     public void setHTTPPort(int port) {
         httpPort = port;
     }
@@ -165,6 +207,9 @@ public class DeviceData extends NodeData {
 
     private ListenerList controlActionListenerList = new ListenerList();
 
+    /**
+     * getControlActionListenerList.
+     */
     public ListenerList getControlActionListenerList() {
         return controlActionListenerList;
     }
@@ -185,6 +230,9 @@ public class DeviceData extends NodeData {
     private int ssdpPort = SSDP.PORT;
     private InetAddress[] ssdpBinds = null;
 
+    /**
+     * getSSDPSearchSocketList.
+     */
     public SSDPSearchSocketList getSSDPSearchSocketList() {
         if (this.ssdpSearchSocketList == null) {
             this.ssdpSearchSocketList =
@@ -195,6 +243,8 @@ public class DeviceData extends NodeData {
     }
 
     /**
+     * Sets the SSDP port for binding.
+     *
      * @param port The port to use for binding the SSDP service. The port will be used as source
      *     port for all SSDP messages
      * @since 1.8
@@ -204,6 +254,8 @@ public class DeviceData extends NodeData {
     }
 
     /**
+     * Returns the SSDP port used for binding.
+     *
      * @return The port used for binding the SSDP service. The port will be used as source port for
      *     all SSDP messages
      */
@@ -212,6 +264,8 @@ public class DeviceData extends NodeData {
     }
 
     /**
+     * Sets the SSDP bind addresses.
+     *
      * @param inets The <code>InetAddress</code> that will be binded for listing this service. Use
      *     <code>null</code> for the default behaviur.
      * @see org.cybergarage.upnp.ssdp
@@ -224,7 +278,9 @@ public class DeviceData extends NodeData {
     }
 
     /**
-     * @return inets The <code>InetAddress</code> that will be binded for this service <code>null
+     * Returns the SSDP bind addresses.
+     *
+     * @return The <code>InetAddress</code> that will be binded for this service <code>null
      *     </code> means that defulat behaviur will be used
      * @since 1.8
      */
@@ -233,6 +289,8 @@ public class DeviceData extends NodeData {
     }
 
     /**
+     * Sets the IPv4 multicast address.
+     *
      * @param ip The IPv4 address used as destination address for Multicast comunication
      * @since 1.8
      */
@@ -241,6 +299,8 @@ public class DeviceData extends NodeData {
     }
 
     /**
+     * Returns the IPv4 multicast address.
+     *
      * @return The IPv4 address used for Multicast comunication
      */
     public String getMulticastIPv4Address() {
@@ -248,6 +308,8 @@ public class DeviceData extends NodeData {
     }
 
     /**
+     * Sets the IPv6 multicast address.
+     *
      * @param ip The IPv6 address used as destination address for Multicast comunication
      * @since 1.8
      */
@@ -256,6 +318,8 @@ public class DeviceData extends NodeData {
     }
 
     /**
+     * Returns the IPv6 multicast address.
+     *
      * @return The IPv6 address used as destination address for Multicast comunication
      * @since 1.8
      */
@@ -270,13 +334,18 @@ public class DeviceData extends NodeData {
     private SSDPPacket ssdpPacket = null;
     private SSDPPacket ssdpPacket_ipv6 = null;
 
+    /**
+     * getSSDPPacket.
+     */
     public SSDPPacket getSSDPPacket() {
         return getSSDPPacket(false);
     }
 
     /**
-     * I2P for multiple location support
+     * I2P for multiple location support.
      *
+     * @param preferIPv6 whether to prefer IPv6 address
+     * @return the SSDP packet
      * @since 0.9.50
      */
     public SSDPPacket getSSDPPacket(boolean preferIPv6) {
@@ -289,6 +358,9 @@ public class DeviceData extends NodeData {
         }
     }
 
+    /**
+     * setSSDPPacket.
+     */
     public void setSSDPPacket(SSDPPacket packet) {
         String location = packet.getLocation();
         if (location != null) {
@@ -313,10 +385,16 @@ public class DeviceData extends NodeData {
 
     private Advertiser advertiser = null;
 
+    /**
+     * setAdvertiser.
+     */
     public void setAdvertiser(Advertiser adv) {
         advertiser = adv;
     }
 
+    /**
+     * getAdvertiser.
+     */
     public Advertiser getAdvertiser() {
         return advertiser;
     }

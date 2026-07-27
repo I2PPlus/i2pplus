@@ -21,6 +21,9 @@ import java.io.InputStream;
  * @since 0.9.11; do not send to routers older than 0.9.11.
  */
 public class HostLookupMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 38;
 
     private long _reqID;
@@ -30,11 +33,20 @@ public class HostLookupMessage extends I2CPMessageImpl {
     private String _host;
     private SessionId _sessionId;
 
+    /**
+     * LOOKUP_HASH.
+     */
     public static final int LOOKUP_HASH = 0;
+    /**
+     * LOOKUP_HOST.
+     */
     public static final int LOOKUP_HOST = 1;
 
     private static final long MAX_INT = (1L << 32) - 1;
 
+    /**
+     * HostLookupMessage.
+     */
     public HostLookupMessage() {}
 
     /**
@@ -67,6 +79,9 @@ public class HostLookupMessage extends I2CPMessageImpl {
         _lookupType = LOOKUP_HOST;
     }
 
+    /**
+     * getSessionId.
+     */
     public SessionId getSessionId() {
         return _sessionId;
     }
@@ -126,6 +141,9 @@ public class HostLookupMessage extends I2CPMessageImpl {
         return _host;
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
@@ -148,6 +166,9 @@ public class HostLookupMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         int len;
@@ -177,11 +198,17 @@ public class HostLookupMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

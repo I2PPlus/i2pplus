@@ -15,7 +15,9 @@ import java.net.InetAddress;
  */
 public class DetectedIP {
 
+	/** The detected public IP address */
 	public final InetAddress publicAddress;
+	/** The NAT type */
 	public final short natType;
 	/** The MTU as advertized by the JVM */
 	public int mtu;
@@ -41,6 +43,12 @@ public class DetectedIP {
 	/** No UDP connectivity at all */
 	public static final short NO_UDP = 8;
 
+	/**
+	 * Creates a new DetectedIP instance.
+	 *
+	 * @param addr the detected public IP address
+	 * @param type the NAT type
+	 */
 	public DetectedIP(InetAddress addr, short type) {
 		this.publicAddress = addr;
 		this.natType = type;

@@ -18,6 +18,9 @@ import net.i2p.util.Translate;
  *
  */
 public class RouterThrottleImpl implements RouterThrottle {
+    /**
+     * _context.
+     */
     protected final RouterContext _context;
     private final Log _log;
     private volatile String _tunnelStatus;
@@ -27,7 +30,13 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final long JOB_LAG_LIMIT_NETWORK = 3*1000L;
     private static final long JOB_LAG_LIMIT_NETDB = 3*1000L;
 
+    /**
+     * PROP_MAX_TUNNELS.
+     */
     public static final String PROP_MAX_TUNNELS = "router.maxParticipatingTunnels";
+    /**
+     * _defaultMaxTunnels.
+     */
     public static volatile int _defaultMaxTunnels = SystemVersion.isSlow() ? 3*1000 :
                                                   SystemVersion.getMaxMemory() < 512*1024*1024L ? 5*1000 :
                                                   SystemVersion.getCores() >= 8 ? 12*1000 : 8*1000;
@@ -67,6 +76,9 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
+    /**
+     * RouterThrottleImpl.
+     */
     public RouterThrottleImpl(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(RouterThrottleImpl.class);
@@ -83,6 +95,9 @@ public class RouterThrottleImpl implements RouterThrottle {
      *  @since 0.8.12
      */
     private class ResetStatus extends SimpleTimer2.TimedEvent {
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             if (_tunnelStatus.contains(_x("Starting up"))) {cancelShutdownStatus();}
         }
@@ -546,6 +561,9 @@ public class RouterThrottleImpl implements RouterThrottle {
         return _cachedTestTimeGrowthFactor;
     }
 
+    /**
+     * getMessageDelay.
+     */
     public long getMessageDelay() {
         RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
         if (rs == null) {return 0;}
@@ -553,11 +571,17 @@ public class RouterThrottleImpl implements RouterThrottle {
         return (long)delayRate.getAverageValue();
     }
 
+    /**
+     * getTunnelLag.
+     */
     public long getTunnelLag() {
         Rate lagRate = _context.statManager().getRate("tunnel.testSuccessTime").getRate(RateConstants.ONE_HOUR);
         return (long)lagRate.getAverageValue();
     }
 
+    /**
+     * getTunnelStatus.
+     */
     public String getTunnelStatus() {return _tunnelStatus;}
 
     /**
@@ -573,6 +597,9 @@ public class RouterThrottleImpl implements RouterThrottle {
         setTunnelStatus("[starting]" + _x("Starting up") + "&hellip;");
     }
 
+    /**
+     * isShuttingDown.
+     */
     public static boolean isShuttingDown(RouterContext _context) {
         int code = _context.router().scheduledGracefulExitCode();
         return Router.EXIT_GRACEFUL == code || Router.EXIT_HARD == code;
@@ -597,6 +624,9 @@ public class RouterThrottleImpl implements RouterThrottle {
         } else {setTunnelStatus("[rejecting/disabled]" + _x("Declining Tunnel Requests"));}
     }
 
+    /**
+     * setTunnelStatus.
+     */
     public void setTunnelStatus(String msg) {_tunnelStatus = msg;}
 
     /**

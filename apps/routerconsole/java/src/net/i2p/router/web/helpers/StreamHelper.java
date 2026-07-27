@@ -34,9 +34,18 @@ public class StreamHelper extends HelperBase {
 
     private String _direction;
 
+    /**
+     * StreamHelper.
+     */
     public StreamHelper() { /* nop */ }
 
+    /**
+     * getDirection.
+     */
     public String getDirection() { return _direction != null ? _direction : ""; }
+    /**
+     * setDirection.
+     */
     public void setDirection(String d) { _direction = d; }
 
     /**

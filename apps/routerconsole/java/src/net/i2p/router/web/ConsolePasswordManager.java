@@ -32,6 +32,15 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     private static final int PBKDF2_ITERATIONS = 1000000;
     private static final Pattern COLON_SPLIT = Pattern.compile(":");
 
+    /**
+     * Description.
+     */
+    /**
+     * Description.
+     */
+    /**
+     * Description.
+     */
     public ConsolePasswordManager(RouterContext ctx) {
         super(ctx);
         migrateConsole();
@@ -64,6 +73,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      *  @param user null or "" for no user, already trimmed
      *  @param pw plain text, already trimmed
      *  @return if pw verified
+      * @param subrealm the subrealm
      */
  public boolean checkMD5(String realm, String subrealm, String user, String pw) {
      // Check PBKDF2 first (new format)

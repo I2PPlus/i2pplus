@@ -40,6 +40,9 @@ class StoreState {
     private volatile long _completed;
     private volatile long _started;
 
+    /**
+     * StoreState.
+     */
     public StoreState(RouterContext ctx, Hash key, DatabaseEntry data) {
         this(ctx, key, data, null);
     }
@@ -67,9 +70,18 @@ class StoreState {
         _started = _context.clock().now();
     }
 
+    /**
+     * getTarget.
+     */
     public Hash getTarget() { return _key; }
+    /**
+     * getData.
+     */
     public DatabaseEntry getData() { return _data; }
 
+    /**
+     * getPendingCount.
+     */
     public int getPendingCount() {
         synchronized (_pendingPeers) {
             return _pendingPeers.size();
@@ -118,14 +130,29 @@ class StoreState {
         }
     }
 
+    /**
+     * completed.
+     */
     public boolean completed() { return _completed != -1; }
+    /**
+     * complete.
+     */
     public void complete(boolean completed) {
         if (completed && _completed <= 0)
             _completed = _context.clock().now();
     }
+    /**
+     * getCompleteCount.
+     */
     public int getCompleteCount() { return _completeCount; }
 
+    /**
+     * getWhenStarted.
+     */
     public long getWhenStarted() { return _started; }
+    /**
+     * getWhenCompleted.
+     */
     public long getWhenCompleted() { return _completed; }
 
     /**
@@ -171,6 +198,9 @@ class StoreState {
         }
     }
 
+    /**
+     * confirmed.
+     */
     public long confirmed(Hash peer) {
         long rv = -1;
         synchronized (_pendingPeers) {
@@ -188,12 +218,18 @@ class StoreState {
         return rv;
     }
 
+    /**
+     * replyTimeout.
+     */
     public void replyTimeout(Hash peer) {
         synchronized (_pendingPeers) {
             _pendingPeers.remove(peer);
         }
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);

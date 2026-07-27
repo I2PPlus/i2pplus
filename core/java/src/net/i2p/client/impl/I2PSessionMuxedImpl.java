@@ -135,6 +135,9 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *  @param port 1-65535 or PORT_ANY (0) for all
      */
     @Override
+    /**
+     * Register a session listener.
+     */
     public void addSessionListener(I2PSessionListener lsnr, int proto, int port) {
         _demultiplexer.addListener(lsnr, proto, port);
     }
@@ -147,6 +150,9 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *  @param port 1-65535 or PORT_ANY (0) for all
      */
     @Override
+    /**
+     * Register a muxed session listener.
+     */
     public void addMuxedSessionListener(I2PSessionMuxedListener l, int proto, int port) {
         _demultiplexer.addMuxedListener(l, proto, port);
     }
@@ -157,12 +163,24 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         _demultiplexer.removeListener(proto, port);
     }
 
+    /**
+     * sendMessage.
+     */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload) throws I2PSessionException {
         return sendMessage(dest, payload, 0, payload.length, null, null, 0, PROTO_UNSPECIFIED, PORT_UNSPECIFIED, PORT_UNSPECIFIED);
     }
 
+    /**
+     * sendMessage.
+     */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload, int proto, int fromport, int toport) throws I2PSessionException {
         return sendMessage(dest, payload, 0, payload.length, null, null, 0, proto, fromport, toport);
     }
@@ -174,6 +192,9 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      * @param tagsSent unused - no end-to-end crypto
      */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires) throws I2PSessionException {
         return sendMessage(dest, payload, offset, size, keyUsed, tagsSent, 0, PROTO_UNSPECIFIED, PORT_UNSPECIFIED, PORT_UNSPECIFIED);
     }
@@ -185,6 +206,9 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      * @param tagsSent unused - no end-to-end crypto
      */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, int proto, int fromport, int toport) throws I2PSessionException {
         return sendMessage(dest, payload, offset, size, keyUsed, tagsSent, 0, proto, fromport, toport);
     }
@@ -205,6 +229,9 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *  @since 0.7.1
      */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires, int proto, int fromPort, int toPort) throws I2PSessionException {
         return sendMessage(dest, payload, offset, size, keyUsed, tagsSent, 0, proto, fromPort, toPort, 0);
     }
@@ -226,6 +253,9 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *  @since 0.8.4
      */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires, int proto, int fromPort, int toPort, int flags) throws I2PSessionException {
         payload = prepPayload(payload, offset, size, proto, fromPort, toPort, SendMessageOptions.GzipOption.DEFAULT);
         if (_noEffort) return sendNoEffort(dest, payload, expires, flags);
@@ -249,6 +279,9 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *  @since 0.9.2
      */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, int proto, int fromPort, int toPort, SendMessageOptions options) throws I2PSessionException {
         payload = prepPayload(payload, offset, size, proto, fromPort, toPort, options.getGzip());
         sendNoEffort(dest, payload, options);
@@ -268,6 +301,9 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      * @since 0.9.14
      */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public long sendMessage(Destination dest, byte[] payload, int offset, int size, int proto, int fromPort, int toPort, SendMessageOptions options, SendMessageStatusListener listener) throws I2PSessionException {
         payload = prepPayload(payload, offset, size, proto, fromPort, toPort, options.getGzip());
         long nonce = _sendMessageNonce.incrementAndGet();
@@ -318,6 +354,9 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      * Receive a payload message and let the app know its available
      */
     @Override
+    /**
+     * Store a received message.
+     */
     public void addNewMessage(MessagePayloadMessage msg) {
         Long mid = Long.valueOf(msg.getMessageId());
         _availableMessages.put(mid, msg);
@@ -335,17 +374,32 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         ((MuxedAvailabilityNotifier) _availabilityNotifier).available(id, size, getProto(msg), getFromPort(msg), getToPort(msg));
     }
 
+    /**
+     * MuxedAvailabilityNotifier.
+     */
+    /**
+     * MuxedAvailabilityNotifier Extends AvailabilityNotifier.
+     */
     protected class MuxedAvailabilityNotifier extends AvailabilityNotifier {
         private final LinkedBlockingQueue<MsgData> _msgs;
         private volatile boolean _alive;
         private static final int POISON_SIZE = -99999;
         private final AtomicBoolean stopping = new AtomicBoolean();
 
+        /**
+         * MuxedAvailabilityNotifier.
+         */
         public MuxedAvailabilityNotifier() {
             _msgs = new LinkedBlockingQueue<>();
         }
 
+        /**
+         * stopNotifying.
+         */
         @Override
+        /**
+         * Stop availability notifications.
+         */
         public void stopNotifying() {
             if (!stopping.getAndSet(true)) {
                 _msgs.clear();
@@ -371,6 +425,12 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
             throw new IllegalArgumentException("no");
         }
 
+        /**
+         * available.
+         */
+        /**
+         * Notify that data is available.
+         */
         public void available(long msgId, int size, int proto, int fromPort, int toPort) {
             try {
                 _msgs.put(new MsgData((int) (msgId & 0xffffffff), size, proto, fromPort, toPort));
@@ -378,7 +438,13 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
             if (!_alive && _log.shouldWarn()) _log.warn(getPrefix() + "Message available but notifier not running");
         }
 
+        /**
+         * run.
+         */
         @Override
+        /**
+         * Execute the task.
+         */
         public void run() {
             if (_log.shouldDebug()) _log.debug(getPrefix() + "Starting muxed availability notifier");
             _msgs.clear();
@@ -405,12 +471,30 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
 
     /** let's keep this simple */
     private static class MsgData {
+        /**
+         * id.
+         */
         public final int id;
+        /**
+         * size.
+         */
         public final int size;
+        /**
+         * proto.
+         */
         public final int proto;
+        /**
+         * fromPort.
+         */
         public final int fromPort;
+        /**
+         * toPort.
+         */
         public final int toPort;
 
+        /**
+         * MsgData.
+         */
         public MsgData(int i, int s, int p, int f, int t) {
             id = i;
             size = s;

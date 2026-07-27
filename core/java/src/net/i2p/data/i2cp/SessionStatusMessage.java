@@ -23,13 +23,28 @@ import java.io.InputStream;
  * @author jrandom
  */
 public class SessionStatusMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 20;
     private SessionId _sessionId;
     private int _status;
 
+    /**
+     * STATUS_DESTROYED.
+     */
     public static final int STATUS_DESTROYED = 0;
+    /**
+     * STATUS_CREATED.
+     */
     public static final int STATUS_CREATED = 1;
+    /**
+     * STATUS_UPDATED.
+     */
     public static final int STATUS_UPDATED = 2;
+    /**
+     * STATUS_INVALID.
+     */
     public static final int STATUS_INVALID = 3;
 
     /** Session refused status.
@@ -45,10 +60,16 @@ public class SessionStatusMessage extends I2CPMessageImpl {
      */
     public static final int STATUS_DUP_DEST = 5;
 
+    /**
+     * SessionStatusMessage.
+     */
     public SessionStatusMessage() {
         setStatus(STATUS_INVALID);
     }
 
+    /**
+     * getSessionId.
+     */
     public SessionId getSessionId() {
         return _sessionId;
     }
@@ -63,18 +84,30 @@ public class SessionStatusMessage extends I2CPMessageImpl {
         return _sessionId;
     }
 
+    /**
+     * setSessionId.
+     */
     public void setSessionId(SessionId id) {
         _sessionId = id;
     }
 
+    /**
+     * getStatus.
+     */
     public int getStatus() {
         return _status;
     }
 
+    /**
+     * setStatus.
+     */
     public final void setStatus(int status) {
         _status = status;
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
@@ -89,6 +122,9 @@ public class SessionStatusMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if (_sessionId == null) {
@@ -104,11 +140,17 @@ public class SessionStatusMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

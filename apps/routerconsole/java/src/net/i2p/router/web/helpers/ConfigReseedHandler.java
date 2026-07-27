@@ -18,6 +18,10 @@ import net.i2p.router.web.Messages;
  *  @since 0.8.3
  */
 public class ConfigReseedHandler extends FormHandler {
+    /**
+     * Construct a new ConfigReseedHandler.
+     */
+    public ConfigReseedHandler() {}
     private final Map<String, String> changes = new HashMap<>();
     private final List<String> removes = new ArrayList<>();
 
@@ -188,7 +192,15 @@ public class ConfigReseedHandler extends FormHandler {
             addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
     }
 
-    /** translate (ngettext) @since 0.9.19 */
+    /**
+     * Translate a message with plural forms.
+     *
+     * @param s the singular form
+     * @param p the plural form
+     * @param n the count for plural selection
+     * @return the translated string
+     * @since 0.9.19
+     */
     public String ngettext(String s, String p, int n) {
         return Messages.getString(n, s, p, _context);
     }

@@ -32,6 +32,13 @@ class CommentText implements RrdGraphConstants {
         this.text = text;
     }
 
+    /**
+     *  Resolves the text with variable substitution and marker processing.
+     *
+     *  @param l the locale for formatting
+     *  @param dproc the data processor for resolving data references
+     *  @param valueScaler the value scaler for number formatting
+     */
     void resolveText(Locale l, DataProcessor dproc, ValueScaler valueScaler) {
         resolvedText = text;
         marker = null;
@@ -50,16 +57,27 @@ class CommentText implements RrdGraphConstants {
         enabled = resolvedText != null;
     }
 
+    /**
+     *  Trims trailing whitespace if the marker is GLUE_MARKER.
+     */
     void trimIfGlue() {
         if (Markers.GLUE_MARKER == marker) {
             resolvedText = resolvedText.replaceFirst("\\s+$", "");
         }
     }
 
+    /**
+     *  Returns whether this comment is a print item.
+     *  @return true if this is a print comment
+     */
     boolean isPrint() {
         return false;
     }
 
+    /**
+     *  Returns whether this comment is a valid graph element.
+     *  @return true if enabled and not a print item
+     */
     boolean isValidGraphElement() {
         return !isPrint() && enabled;
     }

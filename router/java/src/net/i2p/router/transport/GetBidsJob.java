@@ -31,12 +31,15 @@ import net.i2p.util.Log;
  *
  */
 class GetBidsJob extends JobImpl {
+    /** Ignored. */
     private final TransportManager _tmgr;
+    /** Ignored. */
     private final OutNetMessage _msg;
+    /** Ignored. */
     private static volatile BanLogger _banLogger;
 
     /**
-     *  @deprecated unused, see static getBids()
+     * @deprecated unused, see static getBids()
      */
     @Deprecated
     public GetBidsJob(RouterContext ctx, TransportManager tmgr, OutNetMessage msg) {
@@ -45,11 +48,18 @@ class GetBidsJob extends JobImpl {
         _msg = msg;
     }
 
+    /**
+     * Name.
+     */
     public String getName() { return "Fetch bids for a message to be delivered"; }
+    /**
+     * Run the job.
+     */
     public void runJob() {
         getBids(getContext(), _tmgr, _msg);
     }
 
+    /** Transport bids for a message and send it if a suitable bid is found */
     static void getBids(RouterContext context, TransportManager tmgr, OutNetMessage msg) {
         // Ensure BanLogger is initialized
         BanLogger bl = _banLogger;
@@ -126,6 +136,7 @@ class GetBidsJob extends JobImpl {
     }
 
 
+    /** Fail a message and trigger failure callbacks */
     static void fail(RouterContext context, OutNetMessage msg) {
         if (msg.getOnFailedSendJob() != null) {
             context.jobQueue().addJob(msg.getOnFailedSendJob());

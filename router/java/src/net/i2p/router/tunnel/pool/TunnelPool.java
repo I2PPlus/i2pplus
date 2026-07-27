@@ -56,7 +56,9 @@ public class TunnelPool {
                 return Integer.compare(la, lb);
             };
     private final List<PooledTunnelCreatorConfig> _inProgress = new ArrayList<>();
+    /** The router context */
     protected final RouterContext _context;
+    /** The log */
     protected final Log _log;
     private TunnelPoolSettings _settings;
     private final List<TunnelInfo> _tunnels;
@@ -64,6 +66,7 @@ public class TunnelPool {
     private final TunnelPeerSelector _peerSelector;
     private final TunnelPoolManager _manager;
     private TunnelPool _pairedPool;  // Inbound or outbound pool for same destination
+    /** Whether this pool is running */
     protected volatile boolean _alive;
     private long _lifetimeProcessed;
     private final int _expireSkew;
@@ -121,14 +124,14 @@ public class TunnelPool {
     /** Default early expiration time for pruned tunnels (30 seconds) */
     static final long DEFAULT_PRUNE_EARLY_EXPIRY = 120L * 1000;
     private static final String PROP_PRUNE_EARLY_EXPIRY = "router.pruneEarlyExpiryDelay";
-    /** if less than one success in this many, reduce length (exploratory only) */
+    /** If less than one success in this many, reduce length (exploratory only) */
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_1 = 10;
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 12;
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_CLIENT_1 = 4;
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_CLIENT_2 = 5;
 
     /**
-     * Get the early expiry time for pruned tunnels.
+     * Early expiry time for pruned tunnels.
      * Reads from property router.tunnel.pruneEarlyExpiry, or uses default (30s).
      * @return early expiry time in milliseconds
      */
@@ -137,62 +140,80 @@ public class TunnelPool {
     }
 
     /**
-     * Get the tunnel lifetime from config or default (10 minutes).
+     * Tunnel lifetime from config or default (10 minutes).
      * Tunable via i2p.tunnel.lifetime (default: 600000).
+     *
+     * @param ctx the router context
+     * @return the tunnel lifetime in milliseconds
      */
     static int getTunnelLifetime(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.lifetime", 10 * 60 * 1000);
     }
 
     /**
-     * Get max concurrent builds per direction from config or default (6).
+     * Max concurrent builds per direction from config or default (6).
      * Tunable via i2p.tunnel.maxConcurrentBuildsPerDirection (default: 6).
+     *
+     * @param ctx the router context
+     * @return the max concurrent builds per direction
      */
     static int getMaxConcurrentBuildsPerDirection(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.maxConcurrentBuildsPerDirection", 6);
     }
 
     /**
-     * Get the startup suppression period from config or default (5 minutes).
+     * Startup suppression period from config or default (5 minutes).
      * Tunable via i2p.tunnel.startupTime (default: 300000).
+     *
+     * @param ctx the router context
+     * @return the startup time in milliseconds
      */
     static long getStartupTime(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.startupTime", 5L * 60 * 1000);
     }
 
     /**
-     * Get the quantity override threshold from config or default (12).
+     * Quantity override threshold from config or default (12).
      * If less than one success in this many, reduce quantity.
      * Tunable via i2p.tunnel.buildTriesQuantityOverride (default: 12).
+     *
+     * @param ctx the router context
+     * @return the quantity override threshold
      */
     static int getBuildTriesQuantityOverride(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.buildTriesQuantityOverride", 12);
     }
 
     /**
-     * Get the refresh throttle interval from config or default (2 minutes).
+     * Refresh throttle interval from config or default (2 minutes).
      * Minimum interval between LeaseSet publishes, so a failed inbound
      * tunnel is dropped from the published LeaseSet promptly while staying
      * under the floodfill republish budget (~6 per destination per 10 min).
      * Tunable via i2p.tunnel.refreshThrottle (default: 120000).
+     *
+     * @param ctx the router context
+     * @return the refresh throttle interval in milliseconds
      */
     static long getRefreshThrottle(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.refreshThrottle", 2L * 60 * 1000);
     }
 
     /**
-     * Get the LeaseSet build minimum interval from config or default (2 minutes).
+     * LeaseSet build minimum interval from config or default (2 minutes).
      * Minimum interval between LeaseSet object rebuilds, kept at or below the
      * refresh throttle so a republish always reflects the current tunnel set
      * (including newly built tunnels and excluding failed ones).
      * Tunable via i2p.tunnel.leasesetBuildMinInterval (default: 120000).
+     *
+     * @param ctx the router context
+     * @return the LeaseSet build minimum interval in milliseconds
      */
     static long getLeaseSetBuildMinInterval(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.leasesetBuildMinInterval", 2L * 60 * 1000);
     }
 
     /**
-     * Get the maximum lease set lease duration from config or auto-computed default.
+     * Maximum lease set lease duration from config or auto-computed default.
      * Lease end dates in published LeaseSets are capped to this value from now,
      * so peers re-fetch our LeaseSet sooner when this is set shorter than the
      * tunnel lifetime. The tunnel itself continues to process messages; only the
@@ -203,12 +224,16 @@ public class TunnelPool {
      * where peers have no valid LS.  With the default republish interval of 5 min
      * this gives a 6-minute lease &#x2014; plenty of margin over the pool&#x2019;s 2-minute
      * refresh cycle.  Set &quot;i2p.tunnel.leaseMaxDuration&quot; explicitly to override.
+     *
+     * @param ctx the router context
+     * @return the maximum lease duration in milliseconds
      */
     static long getLeaseMaxDuration(RouterContext ctx) {
         long autoDefault = ctx.getProperty("i2p.netdb.republishInterval", 5L * 60 * 1000) + 60L * 1000;
         return ctx.getProperty("i2p.tunnel.leaseMaxDuration", autoDefault);
     }
 
+    /** Tunnel pool */
     TunnelPool(RouterContext ctx, TunnelPoolManager mgr, TunnelPoolSettings settings, TunnelPeerSelector sel) {
         _context = ctx;
         _log = ctx.logManager().getLog(TunnelPool.class);
@@ -328,14 +353,14 @@ public class TunnelPool {
     public String getRateName() {return _rateName;}
 
     /**
-     *  Get the TunnelPoolManager that owns this pool.
+     *  TunnelPoolManager that owns this pool.
      *  @return non-null
      *  @since 0.9.69+
      */
     public TunnelPoolManager getTunnelPoolManager() {return _manager;}
 
     /**
-     *  Get the average bandwidth per tunnel in the pool.
+     *  Average bandwidth per tunnel in the pool.
      *  @return average bandwidth per configured tunnel in Bps
      *  @since 0.9.66
      */
@@ -588,7 +613,7 @@ public class TunnelPool {
     }
 
     /**
-     *  Get a tunnel by its gateway tunnel ID.
+     *  tunnel by its gateway tunnel ID.
      *  @param gatewayId for inbound, the GW rcv tunnel ID; for outbound, the GW send tunnel ID.
      *  @return the tunnel with the matching gateway ID, or null if not found
      */
@@ -837,6 +862,8 @@ public class TunnelPool {
      *  Count tunnels that are usable for routing — not failed, not expired,
      *  not expiring within 5 minutes.  Used by the EMERGENCY balance check
      *  so zombie tunnels don't skew the comparison.
+     *
+     *  @return the number of usable tunnels
      *  @since 0.9.69+
      */
     int getUsableTunnelCount() {
@@ -854,8 +881,15 @@ public class TunnelPool {
         return count;
     }
 
+    /**
+     * Pool settings.
+     * @return the settings for this pool
+     */
     public TunnelPoolSettings getSettings() {return _settings;}
 
+    /** Update the settings for this pool
+     *  @param settings the new settings, may be null
+     */
     void setSettings(TunnelPoolSettings settings) {
         if (settings != null && _settings != null) {
             if (!(settings.isExploratory() || _settings.isExploratory())) {
@@ -872,12 +906,16 @@ public class TunnelPool {
         }
     }
 
-    /** Set the paired pool (inbound <-> outbound for same destination) */
+    /** Paired pool (inbound &lt;-&gt; outbound for same destination).
+     *  @param pool the paired pool
+     */
     void setPairedPool(TunnelPool pool) {
         _pairedPool = pool;
     }
 
-    /** Get the paired pool (inbound <-> outbound for same destination) */
+    /** Paired pool (inbound &lt;-&gt; outbound for same destination).
+     *  @return the paired pool, or null
+     */
     TunnelPool getPairedPool() {
         return _pairedPool;
     }
@@ -901,9 +939,11 @@ public class TunnelPool {
     }
 
     /**
-     *  @return the number of valid (non-failed, not expired) tunnels in the pool
+     *  Count valid (non-failed, not expired) tunnels in the pool.
      *  Includes untested and testing tunnels — suitable for exploratory pools
      *  and build management.
+     *
+     *  @return the number of valid tunnels
      *  @since 0.9.68+
      */
     public int getValidTunnelCount() {
@@ -928,12 +968,13 @@ public class TunnelPool {
     }
 
     /**
-     *  @return the number of GOOD and TESTING (non-failed, not expired)
-     *          tunnels in the pool.  Excludes untested, failing, and
-     *          failed tunnels.  Includes TESTING tunnels so the pool
-     *          doesn't build unnecessarily while tunnels await test
-     *          results.  Suitable for LeaseSet publication and UI
-     *          "ready" indicators.
+     *  Count GOOD and TESTING (non-failed, not expired) tunnels in the pool.
+     *  Excludes untested, failing, and failed tunnels.  Includes TESTING
+     *  tunnels so the pool doesn't build unnecessarily while tunnels await
+     *  test results.  Suitable for LeaseSet publication and UI
+     *  &quot;ready&quot; indicators.
+     *
+     *  @return the number of active tunnels
      *  @since 0.9.69+
      */
     public int getActiveTunnelCount() {
@@ -964,10 +1005,12 @@ public class TunnelPool {
     }
 
     /**
-     *  @return the number of tunnels that have been built but not yet passed
-     *          their first test.  Excludes previously-GOOD (FAILING), FAILED,
-     *          and definitely-failed tunnels.  These are treated as "in progress"
-     *          for replacement accounting and UI display.
+     *  Count tunnels that have been built but not yet passed their first test.
+     *  Excludes previously-GOOD (FAILING), FAILED, and definitely-failed
+     *  tunnels.  These are treated as &quot;in progress&quot; for replacement accounting
+     *  and UI display.
+     *
+     *  @return the number of testing tunnels
      *  @since 0.9.69+
      */
     public int getTestingTunnelCount() {
@@ -998,7 +1041,9 @@ public class TunnelPool {
     }
 
     /**
-     *  @return the number of tunnels currently being built
+     *  Count tunnels currently being built.
+     *
+     *  @return the number of in-progress builds
      *  @since 0.9.67
      */
     public int getInProgressCount() {
@@ -1122,6 +1167,9 @@ public class TunnelPool {
                 int goodTarget = _settings.getQuantity(); // how many GOOD we want to keep
                 List<TunnelInfo> sortedTunnels = new ArrayList<>(_tunnels);
                 sortedTunnels.sort(new Comparator<TunnelInfo>() {
+                    /**
+                     * compare.
+                     */
                     public int compare(TunnelInfo a, TunnelInfo b) {
                         int pa = pruneRank(a.getTestStatus());
                         int pb = pruneRank(b.getTestStatus());
@@ -1248,7 +1296,7 @@ public class TunnelPool {
     }
 
     /**
-     *  Get the global tunnel build success rate as a fraction (0.0-1.0).
+     *  global tunnel build success rate as a fraction (0.0-1.0).
      *  Reads the same StatManager rate the Tuner uses.
      *  Returns NaN if no data yet (early startup).
      */
@@ -1266,7 +1314,7 @@ public class TunnelPool {
     }
 
     /**
-     *  Get an effective latency value for prune sorting.
+     *  effective latency value for prune sorting.
      *  Higher = slower = more likely to be pruned.
      *  Uses average latency (3+ samples), then last latency,
      *  then MAX_VALUE (no data = prune first).
@@ -1290,9 +1338,11 @@ public class TunnelPool {
      *  Window set to 10 minutes to handle slow tunnel builds.
      */
     private static final long RECENTLY_ADDED_WINDOW = 60L * 1000;
-    /** Throttle refresh — publish at most once per throttle window.
-     *  5 min minimum prevents storms; with occasional emergency publishes
-     *  the actual interval averages ~10 min. */
+    /**
+     * Throttle refresh — publish at most once per throttle window.
+     * 5 min minimum prevents storms; with occasional emergency publishes
+     * the actual interval averages ~10 min.
+     */
     /** Initialize to allow first request immediately */
     private long _lastRefreshTime;
     /** Track last proactive LeaseSet publish time for rate limiting */
@@ -1308,19 +1358,24 @@ public class TunnelPool {
     /** True when last built LeaseSet had fewer leases than wanted — bypass cache */
     private boolean _hasIncompleteLeaseSet;
     /**
-     * @return true if this pool can't meet its published LeaseSet target
-     *         or has fewer active tunnels than the configured quantity.
-     *         Used by ClientPeerSelector to relax the cross-tunnel peer
-     *         diversity constraint when the pool is starved for build candidates.
-     * @since 0.9.70+
+     *  Whether this pool is struggling to meet its tunnel targets.
+     *  Returns true if this pool can't meet its published LeaseSet target
+     *  or has fewer active tunnels than the configured quantity.
+     *  Used by ClientPeerSelector to relax the cross-tunnel peer
+     *  diversity constraint when the pool is starved for build candidates.
+     *
+     *  @return true if the pool is struggling
+     *  @since 0.9.70+
      */
     public boolean isStruggling() {
         return _hasIncompleteLeaseSet || getActiveTunnelCount() < _settings.getQuantity();
     }
 
-    /** Earliest lease end time of the last published LeaseSet.
-     *  Used to detect same-lease-stall: if the new LS has the same earliest end time,
-     *  the oldest lease is rotated out so floodfill peers see wasNew=true. */
+    /**
+     * Earliest lease end time of the last published LeaseSet.
+     * Used to detect same-lease-stall: if the new LS has the same earliest end time,
+     * the oldest lease is rotated out so floodfill peers see wasNew=true.
+     */
     private long _lastPublishedEarliestLeaseEnd;
     /** Track if a deferred refresh is already scheduled */
     private final AtomicBoolean _pendingRefreshScheduled = new AtomicBoolean();
@@ -1692,10 +1747,6 @@ public class TunnelPool {
     }
 
     /**
-     *  Remove the tunnel from the pool.
-     *  @param cfg the tunnel to remove
-     */
-    /**
      *  Does this pool publish a LeaseSet to the network?
      *  Structural: inbound + non-exploratory. Additionally, for
      *  I2CP pools, the session's i2cp.dontPublishLeaseSet option
@@ -1753,6 +1804,9 @@ public class TunnelPool {
     }
 
     private class LeaseSetRepublishEvent extends SimpleTimer2.TimedEvent {
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             _leaseSetRepublishPending = false;
             refreshLeaseSet(true);
@@ -1970,6 +2024,9 @@ public class TunnelPool {
      * Event to perform deferred LeaseSet refresh after throttle window expires.
      */
     private class DeferredRefreshEvent extends SimpleTimer2.TimedEvent {
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             _pendingRefreshScheduled.set(false);
             refreshLeaseSet(false);
@@ -2083,6 +2140,9 @@ public class TunnelPool {
      *
      */
     private static class LeaseComparator implements Comparator<Lease>, Serializable {
+         /**
+          * compare.
+          */
          public int compare(Lease l, Lease r) {
              long lt = l.getEndTime();
              long rt = r.getEndTime();
@@ -2109,6 +2169,9 @@ public class TunnelPool {
             _avoidZero = avoidZeroHop;
         }
 
+        /**
+         * compare.
+         */
         public int compare(TunnelInfo lhs, TunnelInfo rhs) {
             if (_avoidZero) {
                 // put the zero-hops last
@@ -2342,6 +2405,9 @@ public class TunnelPool {
     }
 
     /**
+     *  Average test latency for a tunnel.
+     *
+     *  @param t the tunnel to query
      *  @return average test latency in ms for the tunnel, or -1 if unknown
      */
     static int getTunnelAvgLatency(TunnelInfo t) {
@@ -2709,7 +2775,6 @@ public class TunnelPool {
      *  proactively when the count drops below target. This prevents the pool
      *  from silently draining to zero, avoiding tunnel collapse cascades.
      */
-    /** called from RemoveSlowTunnelsJob in TunnelPoolManager */
     void ensureSufficientTunnels() {
         if (!_alive || !_ensuringTunnels.compareAndSet(false, true)) {return;}
         try {
@@ -3180,7 +3245,7 @@ public class TunnelPool {
     }
 
     /**
-     *  Get the count of consecutive tunnel build timeouts.
+     *  Count of consecutive tunnel build timeouts.
      *  @return the number of consecutive build timeouts
      *  @since 0.9.53
      */
@@ -3494,6 +3559,9 @@ public class TunnelPool {
         }
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         if (_settings.isExploratory()) {

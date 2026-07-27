@@ -37,10 +37,13 @@ import net.i2p.util.SimpleByteCache;
  *  @since 0.8.12
  */
 public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
+    /** comment */
     protected byte _checksum;
     // We skip the fiction that CHECKSUM_LENGTH will ever be anything but 1
+    /** comment */
     protected boolean _hasChecksum;
 
+    /** method comment */
     public FastI2NPMessageImpl(I2PAppContext context) {
         super(context);
     }

@@ -14,6 +14,9 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
     private long _seqNum;
     private final int _priority;
 
+    /**
+     * OutboundGatewayMessage.
+     */
     public OutboundGatewayMessage(I2NPMessage message, Hash toRouter, TunnelId toTunnel) {
         super(message, toRouter, toTunnel);
         _priority = getPriority(message);
@@ -91,4 +94,3 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
         }
     }
 }
-

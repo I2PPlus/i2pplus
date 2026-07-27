@@ -17,10 +17,21 @@ import net.i2p.I2PException;
  */
 public class I2NPMessageException extends I2PException {
 
+    /**
+     * Create an exception with a message and cause
+     *
+     * @param message the detail message
+     * @param parent the cause
+     */
     public I2NPMessageException(String message, Throwable parent) {
         super(message, parent);
     }
 
+    /**
+     * Create an exception with a message
+     *
+     * @param message the detail message
+     */
     public I2NPMessageException(String message) {
         super(message);
     }

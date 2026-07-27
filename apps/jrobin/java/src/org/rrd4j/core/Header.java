@@ -12,7 +12,7 @@ import java.io.IOException;
  *
  * <p>This header contains metadata about the RRD file.
  *
- * @author Sasa Markovic*
+ * @author Sasa Markovic
  */
 public class Header implements RrdUpdater<Header> {
     /** Length of the RRD signature string. */
@@ -41,6 +41,7 @@ public class Header implements RrdUpdater<Header> {
     private final RrdInt<Header> arcCount;
     private final RrdLong<Header> lastUpdateTime;
 
+    /** Create header from definition */
     Header(RrdDb parentDb, RrdDef rrdDef) throws IOException {
         this.parentDb = parentDb;
 
@@ -67,6 +68,7 @@ public class Header implements RrdUpdater<Header> {
         }
     }
 
+    /** Create header from importer */
     Header(RrdDb parentDb, DataImporter reader) throws IOException {
         this(parentDb, (RrdDef) null);
         String importVersion = reader.getVersion();
@@ -244,6 +246,7 @@ public class Header implements RrdUpdater<Header> {
         return version;
     }
 
+    /** Check if header is RRD4J format */
     boolean isRrd4jHeader() {
         try {
             return signature.get().startsWith(SIGNATURE)
@@ -253,6 +256,7 @@ public class Header implements RrdUpdater<Header> {
         }
     }
 
+    /** Validate header signature */
     void validateHeader() throws IOException {
         if (!isRrd4jHeader()) {
             throw new InvalidRrdException(

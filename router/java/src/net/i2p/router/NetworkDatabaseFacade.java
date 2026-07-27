@@ -27,6 +27,7 @@ import net.i2p.router.networkdb.reseed.ReseedChecker;
  *
  */
 public abstract class NetworkDatabaseFacade implements Service {
+
     /**
      * Return the RouterInfo structures for the routers closest to the given key.
      * At most maxNumRouters will be returned
@@ -34,10 +35,14 @@ public abstract class NetworkDatabaseFacade implements Service {
      * @param key The key
      * @param maxNumRouters The maximum number of routers to return
      * @param peersToIgnore Hash of routers not to include
+     * @return set of router hashes closest to the key
      */
     public abstract Set<Hash> findNearestRouters(Hash key, int maxNumRouters, Set<Hash> peersToIgnore);
 
     /**
+     *  Lookup a database entry locally.
+     *
+     *  @param key the key to look up
      *  @return RouterInfo, LeaseSet, or null
      *  @since 0.8.3
      */
@@ -46,11 +51,20 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      *  Not for use without validation
      *
+     *  @param key the key to look up
      *  @return RouterInfo, LeaseSet, or null, NOT validated
      *  @since 0.9.38
      */
     public abstract DatabaseEntry lookupLocallyWithoutValidation(Hash key);
 
+    /**
+     *  Lookup a LeaseSet in the network database.
+     *
+     *  @param key the key to look up
+     *  @param onFindJob job to run on success
+     *  @param onFailedLookupJob job to run on failure
+     *  @param timeoutMs timeout in milliseconds
+     */
     public abstract void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs);
 
     /**
@@ -61,8 +75,17 @@ public abstract class NetworkDatabaseFacade implements Service {
      */
     public abstract void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, Hash fromLocalDest);
 
+    /**
+     * key).
+     */
     public abstract LeaseSet lookupLeaseSetLocally(Hash key);
+    /**
+     * timeoutMs).
+     */
     public abstract void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs);
+    /**
+     * key).
+     */
     public abstract RouterInfo lookupRouterInfoLocally(Hash key);
 
     /**
@@ -134,6 +157,10 @@ public abstract class NetworkDatabaseFacade implements Service {
     public abstract RouterInfo store(Hash key, RouterInfo routerInfo) throws IllegalArgumentException;
 
     /**
+     *  Store a DatabaseEntry in the network database.
+     *
+     *  @param key the key to store under
+     *  @param entry the entry to store
      *  @return the old entry if it already existed at that key
      *  @throws IllegalArgumentException if the data is not valid
      *  @since 0.9.16
@@ -147,43 +174,108 @@ public abstract class NetworkDatabaseFacade implements Service {
     }
 
     /**
-     * @throws IllegalArgumentException if the local router is not valid
+     *  Publish a RouterInfo to the network database.
+     *
+     *  @param localRouterInfo the RouterInfo to publish
+     *  @throws IllegalArgumentException if the local router is not valid
      */
     public abstract void publish(RouterInfo localRouterInfo) throws IllegalArgumentException;
+
+    /**
+     *  Publish a LeaseSet to the network database.
+     *
+     *  @param localLeaseSet the LeaseSet to publish
+     */
     public abstract void publish(LeaseSet localLeaseSet);
+
+    /**
+     *  Unpublish a LeaseSet from the network database.
+     *
+     *  @param localLeaseSet the LeaseSet to unpublish
+     */
     public abstract void unpublish(LeaseSet localLeaseSet);
+
+    /**
+     *  Mark a database entry as failed.
+     *
+     *  @param dbEntry the key of the entry to fail
+     */
     public abstract void fail(Hash dbEntry);
 
     /**
      *  The last time we successfully published our RI.
      *
+     *  @return the timestamp, or 0
      *  @since 0.9.9
      */
     public long getLastRouterInfoPublishTime() {return 0;}
 
+    /**
+     *  Get all known router hashes.
+     *
+     *  @return set of router hashes
+     */
     public abstract Set<Hash> getAllRouters();
+
+    /**
+     *  Get the number of known routers.
+     *
+     *  @return the count
+     */
     public int getKnownRouters() {return 0;}
+
+    /**
+     *  Get the number of known LeaseSets.
+     *
+     *  @return the count
+     */
     public int getKnownLeaseSets() {return 0;}
+
+    /**
+     *  Is the network database initialized?
+     *
+     *  @return true if initialized
+     */
     public boolean isInitialized() {return true;}
+
+    /**
+     *  Rescan the network database.
+     */
     public void rescan() {}
 
     /** Debug only - all user info moved to NetDbRenderer in router console */
     public void renderStatusHTML(Writer out) throws IOException {}
-    /** public for NetDbRenderer in routerconsole */
+    /**
+     *  Get all known LeaseSets for display.
+     *
+     *  @return set of LeaseSets, or empty
+     */
     public Set<LeaseSet> getLeases() {return Collections.emptySet();}
     /** public for NetDbRenderer in routerconsole */
     public Set<RouterInfo> getRouters() {return Collections.emptySet();}
     /** public for NetDbRenderer in routerconsole */
     /* @since 0.9.64+ */
+    /**
+     * getClientLeases.
+     */
     public Set<LeaseSet> getClientLeases() {return Collections.emptySet();}
     /** public for NetDbRenderer in routerconsole */
     /* @since 0.9.64+ */
+    /**
+     * getPublishedLeases.
+     */
     public Set<LeaseSet> getPublishedLeases() {return Collections.emptySet();}
     /** public for NetDbRenderer in routerconsole */
     /* @since 0.9.64+ */
+    /**
+     * getUnpublishedLeases.
+     */
     public Set<LeaseSet> getUnpublishedLeases() {return Collections.emptySet();}
     /** public for NetDbRenderer in routerconsole */
     /* @since 0.9.64+ */
+    /**
+     * getFloodfillLeases.
+     */
     public Set<LeaseSet> getFloodfillLeases() {return Collections.emptySet();}
     /** @since 0.9 */
     public ReseedChecker reseedChecker() {return null;}

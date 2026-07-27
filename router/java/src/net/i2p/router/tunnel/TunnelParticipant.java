@@ -25,6 +25,7 @@ class TunnelParticipant {
     private final HopConfig _config;
     private final HopProcessor _processor;
 
+    /** Format a bandwidth value in B/s to a human-readable string. */
     private static String formatBandwidth(int bps) {
         if (bps >= 1000000000) {
             return String.format("%.2fGB/s", bps / 1000000000.0);
@@ -47,6 +48,7 @@ class TunnelParticipant {
     private static final long LONG_MAX_LOOKUP_TIME = 25 * 1000L;
     private static final int PRIORITY = OutNetMessage.PRIORITY_PARTICIPATING;
     // 200 messages * 2KB in 10 minutes = 340 Bps - optimized for high bandwidth contexts
+    /** D e f a u l t  b w  p e r  t u n n e l  e s t i m a t e */
     static final int DEFAULT_BW_PER_TUNNEL_ESTIMATE = RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE * 2048 / (10 * 60);
 
     /**
@@ -121,14 +123,23 @@ class TunnelParticipant {
      * Handle router info lookup completion.
      */
     private class Found extends JobImpl {
+        /**
+         * Found.
+         */
         public Found(RouterContext ctx) {
             super(ctx);
         }
 
+        /**
+         * getName.
+         */
         public String getName() {
             return "Verify Next Hop Info Found";
         }
 
+        /**
+         * runJob.
+         */
         public void runJob() {
             if (_nextHopCache == null) {
                 _nextHopCache = _context.netDb().lookupRouterInfoLocally(_config.getSendTo());
@@ -193,6 +204,7 @@ class TunnelParticipant {
         }
     }
 
+    /** Log a failure to dispatch a tunnel data message. */
     private void logDispatchFailure(TunnelDataMessage msg) {
         if (_log.shouldInfo()) {
             _log.warn("Failed to dispatch " + msg +
@@ -204,6 +216,7 @@ class TunnelParticipant {
         }
     }
 
+    /** Distribute blame among tunnel peers when message processing fails. */
     private void blameTunnelPeers(TunnelCreatorConfig cfg) {
         int lenm1 = cfg.getLength() - 1;
         if (lenm1 > 0) {
@@ -219,10 +232,16 @@ class TunnelParticipant {
         }
     }
 
+    /**
+     * getCompleteCount.
+     */
     public int getCompleteCount() {
         return _handler != null ? _handler.getCompleteCount() : 0;
     }
 
+    /**
+     * getFailedCount.
+     */
     public int getFailedCount() {
         return _handler != null ? _handler.getFailedCount() : 0;
     }
@@ -244,6 +263,9 @@ class TunnelParticipant {
      * Callback for defragmented tunnel messages.
      */
     private class DefragmentedHandler implements FragmentHandler.DefragmentedReceiver {
+        /**
+         * receiveComplete.
+         */
         public void receiveComplete(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
             if (_log.shouldDebug()) {
                 _log.debug("Successful receipt on Inbound Endpoint of" + msg);
@@ -307,15 +329,24 @@ class TunnelParticipant {
     private class SendJob extends JobImpl {
         private final TunnelDataMessage _msg;
 
+        /**
+         * SendJob.
+         */
         public SendJob(RouterContext ctx, TunnelDataMessage msg) {
             super(ctx);
             _msg = msg;
         }
 
+        /**
+         * getName.
+         */
         public String getName() {
             return "Participant send after lookup";
         }
 
+        /**
+         * runJob.
+         */
         public void runJob() {
             if (_nextHopCache != null) {
                 send(_config, _msg, _nextHopCache);
@@ -344,15 +375,24 @@ class TunnelParticipant {
     private class TimeoutJob extends JobImpl {
         private final TunnelDataMessage _msg;
 
+        /**
+         * TimeoutJob.
+         */
         public TimeoutJob(RouterContext ctx, TunnelDataMessage msg) {
             super(ctx);
             _msg = msg;
         }
 
+        /**
+         * getName.
+         */
         public String getName() {
             return "Participant Next Hop Lookup Timeout";
         }
 
+        /**
+         * runJob.
+         */
         public void runJob() {
             if (_nextHopCache != null) return;
 
@@ -373,6 +413,9 @@ class TunnelParticipant {
         }
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return _config != null ? "participant at " + _config : "Inbound Endpoint";

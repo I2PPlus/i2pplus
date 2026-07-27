@@ -30,6 +30,9 @@ public class EepPost extends EepGet {
     private static final byte[] CRLFB = DataHelper.getASCII(CRLF);
     private static final int PROP_MAX_POST_PAYLOAD_RAM = 32 * 1024;
 
+    /**
+     * EepPost.
+     */
     public EepPost(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String outputFile, String url) {
         /*
          * We're using this constructor:

@@ -75,6 +75,9 @@ public interface IRandomStandalone extends Cloneable {
     byte nextByte() throws IllegalStateException;
 
    /**
+    *  Fill the output byte array with random bytes.
+    *
+    *  @param out the output array to fill
     *  @since 0.9.58 added to interface
     */
     public void nextBytes(byte[] out) throws IllegalStateException;
@@ -136,10 +139,11 @@ public interface IRandomStandalone extends Cloneable {
     */
     void addRandomBytes(byte[] in, int offset, int length);
 
-   /**
-    * <p>Returns a clone copy of this instance.</p>
-    *
-    * @return a clone copy of this instance.
-    */
+    /**
+     * <p>Returns a clone copy of this instance.</p>
+     *
+     * @return a clone copy of this instance.
+     * @throws CloneNotSupportedException if cloning is not supported
+     */
     Object clone() throws CloneNotSupportedException;
 }

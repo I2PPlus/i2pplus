@@ -14,12 +14,14 @@ package org.klomp.snark;
  */
 @Deprecated
 class PeerMonitorTask {
-    static final long MONITOR_PERIOD = (long) 10 * 1000; // Ten seconds.
+    /** Monitor period in ms */
+    static final long MONITOR_PERIOD = (long) 10 * 1000;
 
-
+    /** @param coordinator unused */
     PeerMonitorTask(PeerCoordinator coordinator) {
     }
 
+    /** No-op */
     public void run() {
     }
 }

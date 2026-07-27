@@ -26,6 +26,13 @@ import net.i2p.data.i2np.I2NPMessage;
 public class PayloadGarlicConfig extends GarlicConfig {
     private final I2NPMessage _payload;
 
+    /**
+     * @param cert the certificate
+     * @param id the message ID
+     * @param expiration the expiration time
+     * @param di the delivery instructions
+     * @param message the I2NP message payload
+     */
     public PayloadGarlicConfig(Certificate cert, long id, long expiration,
                                DeliveryInstructions di, I2NPMessage message) {
 	super(null, cert, id, expiration, di);
@@ -35,6 +42,8 @@ public class PayloadGarlicConfig extends GarlicConfig {
     /**
      * Specify the I2NP message to be sent - if this is set, no other cloves can be included
      * in this block
+     *
+     * @return the I2NP message payload
      */
     public I2NPMessage getPayload() { return _payload; }
 

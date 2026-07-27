@@ -53,6 +53,15 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
 
     private volatile boolean _isShutdown = false;
 
+    /**
+     * Description.
+     */
+    /**
+     * Description.
+     */
+    /**
+     * Description.
+     */
     IdleTunnelMonitor(RouterContext ctx) {
         super(ctx.simpleTimer2());
         this._context = ctx;

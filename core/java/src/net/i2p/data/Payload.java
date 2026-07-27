@@ -76,12 +76,15 @@ import java.util.Arrays;
  * @author jrandom
  */
 public class Payload extends DataStructureImpl {
+    /** ignored */
     private byte[] _encryptedData;
+    /** ignored */
     private byte[] _unencryptedData;
 
     /** So we don't OOM on I2CP protocol errors. Actual max is smaller. */
     private static final int MAX_LENGTH = 64 * 1024;
 
+    /** method comment */
     public Payload() { /* required for deserialization */ }
 
     /**
@@ -105,6 +108,7 @@ public class Payload extends DataStructureImpl {
      * Unless you are doing encryption, use setEncryptedData() instead.
      *
      * @throws IllegalArgumentException if bigger than 64KB
+     * @param data the data
      */
     public void setUnencryptedData(byte[] data) {
         if (data.length > MAX_LENGTH) throw new IllegalArgumentException();
@@ -116,22 +120,27 @@ public class Payload extends DataStructureImpl {
         return _encryptedData;
     }
 
-    /**
-     * the real data
-     *
-     * @throws IllegalArgumentException if bigger than 64KB
+     /**
+      * the real data
+      *
+      * @throws IllegalArgumentException if bigger than 64KB
+     * @param data the data
      */
     public void setEncryptedData(byte[] data) {
         if (data.length > MAX_LENGTH) throw new IllegalArgumentException();
         _encryptedData = data;
     }
 
+    /** method comment */
     public int getSize() {
         if (_unencryptedData != null) return _unencryptedData.length;
         else if (_encryptedData != null) return _encryptedData.length;
         else return 0;
     }
 
+    /**
+     * readBytes.
+     */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         int size = (int) DataHelper.readLong(in, 4);
@@ -141,6 +150,9 @@ public class Payload extends DataStructureImpl {
         if (read != size) throw new DataFormatException("Incorrect number of bytes read in the payload structure");
     }
 
+    /**
+     * writeBytes.
+     */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_encryptedData == null) throw new DataFormatException("Not yet encrypted.  Please set the encrypted data");
@@ -152,6 +164,8 @@ public class Payload extends DataStructureImpl {
      *  Writes the encrypted payload to the target array.
      *
      *  @return the written length (NOT the new offset)
+     * @param target the target
+     * @param offset the offset
      */
     public int writeBytes(byte[] target, int offset) {
         if (_encryptedData == null) throw new IllegalStateException("Not yet encrypted.  Please set the encrypted data");
@@ -161,6 +175,9 @@ public class Payload extends DataStructureImpl {
         return 4 + _encryptedData.length;
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -169,11 +186,17 @@ public class Payload extends DataStructureImpl {
         return Arrays.equals(_unencryptedData, p.getUnencryptedData()) && Arrays.equals(_encryptedData, p.getEncryptedData());
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return DataHelper.hashCode(_encryptedData != null ? _encryptedData : _unencryptedData);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(32); // NOPMD - AvoidUnnecessaryStringBuilderCreation

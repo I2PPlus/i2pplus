@@ -27,6 +27,7 @@ class PeerAcceptor {
     private final Log _log =
             I2PAppContext.getGlobalContext().logManager().getLog(PeerAcceptor.class);
     private final PeerCoordinator coordinator;
+    /** Coordinators */
     final PeerCoordinatorSet coordinators;
 
     /** shorten timeout while reading handshake */
@@ -195,6 +196,7 @@ class PeerAcceptor {
      * @since 0.9.1
      */
     public static class ProtocolException extends IOException {
+        /** @param s the detail message */
         public ProtocolException(String s) {
             super(s);
         }

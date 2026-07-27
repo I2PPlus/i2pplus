@@ -37,10 +37,21 @@ public final class ChecksumException extends ReaderException {
     super(cause);
   }
 
+  /**
+   * Returns a ChecksumException instance.
+   *
+   * @return a ChecksumException instance
+   */
   public static ChecksumException getChecksumInstance() {
     return isStackTrace ? new ChecksumException() : INSTANCE;
   }
 
+  /**
+   * Returns a ChecksumException instance with the specified cause.
+   *
+   * @param cause the cause
+   * @return a ChecksumException instance
+   */
   public static ChecksumException getChecksumInstance(Throwable cause) {
     return isStackTrace ? new ChecksumException(cause) : INSTANCE;
   }

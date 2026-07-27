@@ -33,6 +33,9 @@ public class ConfigServiceHandler extends FormHandler {
     private static final String PROPERTIES_AVAILABLE = "3.2.0";
     private static final String LOCATION_AVAILABLE = "3.3.7";
 
+    /** Constructor */
+    public ConfigServiceHandler() {}
+
     /**
      *  Register two shutdown hooks, one to rekey and/or tell the wrapper we are stopping,
      *  and a final one to tell the wrapper we are stopped.
@@ -47,6 +50,9 @@ public class ConfigServiceHandler extends FormHandler {
      *  Register two shutdown hooks, one to rekey and/or tell the wrapper we are stopping,
      *  and a final one to tell the wrapper we are stopped.
      *
+     *  @param ctx the router context
+     *  @param code the exit code
+     *  @param rekey whether to rekey
      *  @since 0.8.8
      */
     public static void registerWrapperNotifier(RouterContext ctx, int code, boolean rekey) {
@@ -155,6 +161,7 @@ public class ConfigServiceHandler extends FormHandler {
      *  Register a handler for signals,
      *  so we can handle HUP from the wrapper (wrapper 3.2.0 or higher)
      *
+     *  @param ctx the router context
      *  @since 0.8.13
      */
     synchronized static void registerSignalHandler(RouterContext ctx) {
@@ -182,6 +189,7 @@ public class ConfigServiceHandler extends FormHandler {
     /**
      *  Should we show the cancel button?
      *
+     *  @return true if graceful shutdown is in progress
      *  @since 0.9.19
      */
     public boolean shouldShowCancelGraceful() {return _context.router().gracefulShutdownInProgress();}
@@ -189,6 +197,7 @@ public class ConfigServiceHandler extends FormHandler {
     /**
      *  Should we show the systray controls?
      *
+     *  @return true if the systray should be shown
      *  @since 0.9.26
      */
     public boolean shouldShowSystray() {
@@ -205,11 +214,15 @@ public class ConfigServiceHandler extends FormHandler {
     /**
      *  Is the systray enabled?
      *
+     *  @return true if the systray is enabled
      *  @since 0.9.26
      */
     public boolean isSystrayEnabled() {return RouterConsoleRunner.isSystrayEnabled(_context);}
 
     /**
+     *  Get the console URL.
+     *
+     *  @return the console URL
      *  @since 0.9.33
      */
     public String getConsoleURL() {return _context.portMapper().getConsoleURL();}
@@ -290,6 +303,7 @@ public class ConfigServiceHandler extends FormHandler {
     /**
      *  Does not necessarily exist.
      *
+     *  @param ctx the I2P app context
      *  @return non-null, doesn't necessarily exist
      *  @since 0.9.1, public since 0.9.27, moved from LogsHelper in 0.9.33
      */

@@ -49,6 +49,7 @@ public class VMCommSystem extends CommSystemFacade {
      * Mapping from Hash to VMCommSystem for all routers hooked together
      */
     private static Map<Hash, VMCommSystem> _commSystemFacades = Collections.synchronizedMap(new HashMap<>(16));
+/** Vmcommsystem */
 
     public VMCommSystem(RouterContext context) {
         _context = context;
@@ -67,9 +68,13 @@ public class VMCommSystem extends CommSystemFacade {
      */
     @Override
     public X25519KeyFactory getXDHFactory() { return _xdhThread; }
+/** Return the count of active peers */
     public int countActivePeers() { return Math.max(_commSystemFacades.size() - 1, 0); }
+/** Return the count of active send peers */
     public int countActiveSendPeers()  { return Math.max(_commSystemFacades.size() - 1, 0); }
+/** Return whether established */
     public boolean isEstablished(Hash peer) { return _commSystemFacades.containsKey(peer); }
+/** Return the established */
 
     public List<Hash> getEstablished() {
         List<Hash> rv;
@@ -126,6 +131,7 @@ public class VMCommSystem extends CommSystemFacade {
         private Hash _from;
         private byte[] _msg;
         private RouterContext _ctx;
+/** Receivejob */
         public ReceiveJob(Hash from, byte[] msg, RouterContext us) {
             super(us);
             _ctx = us;
@@ -134,6 +140,7 @@ public class VMCommSystem extends CommSystemFacade {
             // bah, ueberspeed!
             getTiming().setStartAfter(us.clock().now());
         }
+/** Execute the job */
         public void runJob() {
             I2NPMessageHandler handler = new I2NPMessageHandler(_ctx);
             try {
@@ -147,6 +154,7 @@ public class VMCommSystem extends CommSystemFacade {
                 _log.error("Error reading/formatting a VM message? Something is not right...", e);
             }
         }
+/** Return the name */
         public String getName() { return "Receive Message"; }
     }
 
@@ -159,20 +167,26 @@ public class VMCommSystem extends CommSystemFacade {
     public void receive(byte[] message, Hash fromPeer) {
         _context.jobQueue().addJob(new ReceiveJob(fromPeer, message, _context));
     }
+/** Shut down and release resources */
 
     public void shutdown() {
         _commSystemFacades.remove(_context.routerHash());
     }
+/** Start up and initialize */
 
     public void startup() {
         _commSystemFacades.put(_context.routerHash(), this);
     }
+/** Restart the service */
 
     public void restart() {
         _commSystemFacades.remove(_context.routerHash());
         _commSystemFacades.put(_context.routerHash(), this);
     }
 
+    /**
+     * renderStatusHTML.
+     */
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
         out.write("<p class=\"infohelp vmcomm\">Router is running without transports: <i>i2p.vmCommSystem=true</i></p>");
     }

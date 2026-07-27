@@ -29,12 +29,21 @@ public class CDPStatusBlock {
     /** Size of block in bytes */
     final long size;
 
+    /** Number of unknown datapoints */
     final int unknownDatapoints;
+    /** Value of this consolidated data point */
     final double value;
 
+    /** Secondary value */
     final double secondary_value;
+    /** Primary value */
     final double primary_value;
 
+    /**
+     *  Constructs a CDP status block by reading from an RRD file.
+     *
+     *  @param file the RRD file to read from
+     */
     CDPStatusBlock(RRDFile file) {
         // Should read MAX_CDP_PAR_EN = 10
         // Size should be 0x50
@@ -66,6 +75,11 @@ public class CDPStatusBlock {
         return value;
     }
 
+    /**
+     *  Writes the CDP status block as XML to the given print stream.
+     *
+     *  @param s the print stream to write to
+     */
     void toXml(PrintStream s) {
         s.print("\t\t\t<ds><value> ");
         s.print(value);

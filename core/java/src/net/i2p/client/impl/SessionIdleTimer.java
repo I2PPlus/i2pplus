@@ -19,6 +19,9 @@ import java.util.Properties;
  * @author zzz
  */
 class SessionIdleTimer extends SimpleTimer2.TimedEvent {
+    /**
+     * MINIMUM_TIME.
+     */
     public static final long MINIMUM_TIME = (long) 60 * 1000; // allow close time of 60 seconds
     private static final long DEFAULT_REDUCE_TIME = 20 * (long) 60 * 1000;
     private static final long DEFAULT_CLOSE_TIME = 30 * (long) 60 * 1000;
@@ -88,6 +91,9 @@ class SessionIdleTimer extends SimpleTimer2.TimedEvent {
         _minimumTime = minimumTime;
     }
 
+    /**
+     * timeReached.
+     */
     @Override
     public void timeReached() {
         if (_session.isClosed()) {

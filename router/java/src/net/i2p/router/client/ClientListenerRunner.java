@@ -31,17 +31,33 @@ import net.i2p.util.PortMapper;
  * @author jrandom
  */
 class ClientListenerRunner implements Runnable {
+    /** Logger for this class */
     protected final Log _log;
+    /** Router context */
     protected final RouterContext _context;
+    /** Client manager */
     protected final ClientManager _manager;
+    /** Server socket for accepting connections */
     protected ServerSocket _socket;
+    /** Port to listen on */
     protected final int _port;
+    /** Whether to bind on all interfaces */
     protected final boolean _bindAllInterfaces;
+    /** Whether the runner is running */
     protected volatile boolean _running;
+    /** Whether the socket is currently listening */
     protected volatile boolean _listening;
 
+    /** Property to control binding to all interfaces */
     public static final String BIND_ALL_INTERFACES = "i2cp.tcp.bindAllInterfaces";
 
+    /**
+     * Construct a new client listener runner.
+     *
+     * @param context the router context
+     * @param manager the client manager
+     * @param port the port to listen on
+     */
     public ClientListenerRunner(RouterContext context, ClientManager manager, int port) {
         _context = context;
         _log = _context.logManager().getLog(getClass());
@@ -50,12 +66,19 @@ class ClientListenerRunner implements Runnable {
         _bindAllInterfaces = context.getBooleanProperty(BIND_ALL_INTERFACES);
     }
 
+    /**
+     * Check if the listener is currently running and listening.
+     *
+     * @return true if the listener is currently running and listening
+     */
     public boolean isListening() { return _running && _listening; }
 
     /**
      * Get a ServerSocket.
      * Split out so it can be overridden for SSL.
      *
+     * @return the ServerSocket
+     * @throws IOException if the socket cannot be created
      * @since 0.8.3
      */
     protected ServerSocket getServerSocket() throws IOException {
@@ -169,6 +192,9 @@ class ClientListenerRunner implements Runnable {
 
     /**
      *  Verify the first byte.
+     *
+     *  @param socket the socket to validate
+     *  @return true if the first byte is the I2CP protocol byte
      */
     protected boolean validate(Socket socket) {
         try {
@@ -186,12 +212,14 @@ class ClientListenerRunner implements Runnable {
     /**
      * Handle the connection by passing it off to a {@link ClientConnectionRunner ClientConnectionRunner}
      *
+     * @param socket the accepted socket connection
      */
     protected void runConnection(Socket socket) {
         ClientConnectionRunner runner = new ClientConnectionRunner(_context, _manager, socket);
         _manager.registerConnection(runner);
     }
 
+    /** Stop listening for connections. */
     public void stopListening() {
         _running = false;
         if (_socket != null) try {

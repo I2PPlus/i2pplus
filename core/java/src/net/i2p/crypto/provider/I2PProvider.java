@@ -8,6 +8,9 @@ import java.security.Security;
  *  @since 0.9.15
  */
 public final class I2PProvider extends Provider {
+    /**
+     * PROVIDER_NAME.
+     */
     public static final String PROVIDER_NAME = "I2P";
     private static final String INFO = "I2P Security Provider v0.1, implementing" + "several algorithms used by I2P.";
     private static boolean _installed;
@@ -16,6 +19,9 @@ public final class I2PProvider extends Provider {
      * Construct a new provider.  This should only be required when
      * using runtime registration of the provider using the
      * <code>Security.addProvider()</code> mechanism.
+     */
+    /**
+     * Construct a new I2P provider.
      */
     public I2PProvider() {
         // following constructor deprecated in Java 9,

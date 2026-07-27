@@ -20,10 +20,16 @@ import java.security.cert.X509Certificate;
  *
  *  @since 0.9.9, public since 0.9.28
  */
+/**
+ * DirKeyRing Implements KeyRing.
+ */
 public class DirKeyRing implements KeyRing {
 
     private final File _base;
 
+    /**
+     * DirKeyRing.
+     */
     public DirKeyRing(File baseDir) {
         _base = baseDir;
     }
@@ -39,6 +45,9 @@ public class DirKeyRing implements KeyRing {
      *  @return null if file doesn't exist, throws on all other errors
      */
     @Override
+    /**
+     * Look up a public key.
+     */
     public PublicKey getKey(String keyName, String scope, SigType type) throws GeneralSecurityException, IOException {
         String fileName = keyName.replace("@", "_at_").replace("<", "_").replace(">", "_");
         File test = new File(fileName);
@@ -61,5 +70,8 @@ public class DirKeyRing implements KeyRing {
      *  Unimplemented, unused.
      */
     @Override
+    /**
+     * Store a public key.
+     */
     public void setKey(String keyName, String scope, PublicKey key) { /* nop */ }
 }

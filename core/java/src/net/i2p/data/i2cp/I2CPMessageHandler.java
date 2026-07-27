@@ -21,6 +21,7 @@ import java.io.InputStream;
  *
  */
 public class I2CPMessageHandler {
+    /** default constructor */
 
     /**
      *  This is huge. Mainly to catch a completly bogus response, possibly not an I2CP socket.

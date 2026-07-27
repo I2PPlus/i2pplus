@@ -36,15 +36,15 @@ class ConnThrottler {
     private final SimpleTimer2.TimedEvent _cleaner;
     private boolean _isRunning;
 
-    /*
-     * Caller MUST call start()
-     *
-     * @param max per-peer, 0 for unlimited
+    /**
+     * Constructor.
+     * @param max per-peer max, 0 for unlimited
      * @param totalMax for all peers, 0 for unlimited
      * @param period check window (ms)
      * @param throttlePeriod how long to ban a peer (ms)
      * @param totalThrottlePeriod how long to ban all peers (ms)
-     * @param action just a name to note in the log
+     * @param action name to note in log
+     * @param log the logger
      */
     public ConnThrottler(int max, int totalMax, long period,
                          long throttlePeriod, long totalThrottlePeriod, String action, Log log) {
@@ -125,10 +125,9 @@ class ConnThrottler {
      * <ul>
      *   <li>Individual: If max connections exceeded in checkPeriod, throttle for throttlePeriod</li>
      *   <li>Total: If total connections exceeded, throttle all for totalThrottlePeriod</li>
-     * </ul>
-     * </p>
-     *
-     * @param h the peer's destination hash to check
+ * </ul>
+ *
+ * @param h the peer's destination hash to check
      * @return true if the peer should be throttled (request denied), false otherwise
      */
     public synchronized boolean shouldThrottle(Hash h) {

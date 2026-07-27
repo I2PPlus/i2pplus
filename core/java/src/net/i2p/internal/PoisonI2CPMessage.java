@@ -13,8 +13,14 @@ import java.io.InputStream;
  * @since 0.8.3
  */
 public class PoisonI2CPMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 999999;
 
+    /**
+     * PoisonI2CPMessage.
+     */
     public PoisonI2CPMessage() {
         super();
     }
@@ -39,16 +45,25 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
         throw new I2CPMessageException("Don't do this");
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if ((object != null) && (object instanceof PoisonI2CPMessage)) {
@@ -58,6 +73,9 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
         return false;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return "[PoisonMessage]";

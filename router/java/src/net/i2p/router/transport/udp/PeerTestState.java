@@ -50,10 +50,23 @@ class PeerTestState {
      * Roles for peer testing scenarios.
      * Defines the participant's role in connectivity testing.
      */
-    public enum Role {ALICE, BOB, CHARLIE}
+    public enum Role {
+        /** Initiator. */
+        ALICE,
+        /** Relay. */
+        BOB,
+        /** Helper. */
+        CHARLIE
+    }
 
     /**
-     * @param bob null if role is BOB
+     * Create a new peer test state for the given role.
+     *
+     * @param role our role in the peer test
+     * @param bob Bob's PeerState, or null if we are Bob
+     * @param isIPv6 whether this is an IPv6 test
+     * @param nonce the test nonce identifier
+     * @param now the time when the test begins
      */
     public PeerTestState(Role role, PeerState bob, boolean isIPv6, long nonce, long now) {
         _ourRole = role;
@@ -64,63 +77,89 @@ class PeerTestState {
         _previousCharlies = role == Role.BOB ? new ArrayList<>(8) : null;
     }
 
+    /**
+     *  Return the test nonce identifier.
+     *  @return the nonce
+     */
     public long getNonce() { return _testNonce; }
 
-    /** Are we Alice, bob, or Charlie. */
+    /**
+     *  Return our role in the peer test.
+     *  @return Alice, Bob, or Charlie
+     */
     public Role getOurRole() { return _ourRole; }
 
     /**
-     * @return null if we are bob
-     * @since 0.9.54
+     *  Return Bob's PeerState.
+     *  @return Bob's PeerState, or null if we are Bob
+     *  @since 0.9.54
      */
     public PeerState getBob() { return _bob; }
 
     /**
-     * Is this an IPv6 test?
-     * @since 0.9.27
+     *  Whether this is an IPv6 test.
+     *  @return true for IPv6, false for IPv4
+     *  @since 0.9.27
      */
     public boolean isIPv6() { return _isIPv6; }
 
     /**
-     * If we are Alice, this will contain the IP that Bob says we
-     * can be reached at - the IP Charlie says we can be reached
-     * at is _aliceIPFromCharlie
-     *
+     *  If we are Alice, return the IP that Bob says we can be reached at.
+     *  The IP that Charlie reports is available via getAliceIPFromCharlie().
+     *  @return Alice's IP as reported by Bob
      */
     public InetAddress getAliceIP() { return _aliceIP; }
     /**
-     * SSU2 only
-     * @since 0.9.54
+     *  Return Alice's PeerState2 (SSU2 only).
+     *  @return Alice's SSU2 state, or null for SSU1
+     *  @since 0.9.54
      */
     public PeerState2 getAlice() { return _alice; }
     /**
-     * SSU2 only
-     * @since 0.9.54
+     *  Set Alice's PeerState2 (SSU2 only).
+     *  @param alice Alice's SSU2 state
+     *  @since 0.9.54
      */
     public void setAlice(PeerState2 alice) {
         _alice = alice;
     }
     /**
-     * @param hash SSU2 only, null for SSU1
-     * @since 0.9.54
+     *  Set Alice's IP, port, and hash.
+     *  @param ip Alice's IP address
+     *  @param port Alice's port
+     *  @param hash Alice's Hash (SSU2 only), null for SSU1
+     *  @since 0.9.54
      */
     public void setAlice(InetAddress ip, int port, Hash hash) {
         _aliceIP = ip;
         _alicePort = port;
         _aliceHash = hash;
     }
+    /**
+     *  Return Bob's IP address.
+     *  @return Bob's remote IP
+     */
     public InetAddress getBobIP() { return _bob.getRemoteIPAddress(); }
+    /**
+     *  Return Charlie's IP address.
+     *  @return Charlie's IP, or null if not set
+     */
     public InetAddress getCharlieIP() { return _charlieIP; }
 
     /**
-     * SSU2 only, null for SSU1.
-     * @since 0.9.57
+     *  Return Charlie's Hash (SSU2 only).
+     *  @return Charlie's Hash, or null for SSU1
+     *  @since 0.9.57
      */
     public Hash getCharlieHash() { return _charlieHash; }
 
     /**
-     * @param hash SSU2 only, null for SSU1
-     * @since 0.9.54
+     *  Set Charlie's IP, port, and hash.
+     *  Saves the previous Charlie hash for tracking rotations.
+     *  @param ip Charlie's IP address
+     *  @param port Charlie's port
+     *  @param hash Charlie's Hash (SSU2 only), null for SSU1
+     *  @since 0.9.54
      */
     public void setCharlie(InetAddress ip, int port, Hash hash) {
         _charlieIP = ip;
@@ -131,42 +170,83 @@ class PeerTestState {
     }
 
     /**
-     * SSU2 only, BOB only, else returns null.
-     * Does not include current charlie.
-     * @since 0.9.57
+     *  Return previous Charlie hashes (SSU2 only, Bob only).
+     *  Does not include the current Charlie.
+     *  @return list of previous Charlie hashes, or null if not Bob
+     *  @since 0.9.57
      */
     public List<Hash> getPreviousCharlies() { return _previousCharlies; }
 
+    /**
+     *  Return Alice's IP as reported by Charlie.
+     *  @return Alice's IP from Charlie's perspective
+     */
     public InetAddress getAliceIPFromCharlie() { return _aliceIPFromCharlie; }
+    /**
+     *  Set Alice's IP as reported by Charlie.
+     *  @param ip Alice's IP from Charlie's perspective
+     */
     public void setAliceIPFromCharlie(InetAddress ip) { _aliceIPFromCharlie = ip; }
     /**
-     * If we are Alice, this will contain the port that Bob says we
-     * can be reached at - the port Charlie says we can be reached
-     * at is _alicePortFromCharlie
-     *
+     *  If we are Alice, return the port that Bob says we can be reached at.
+     *  The port Charlie reports is available via getAlicePortFromCharlie().
+     *  @return Alice's port as reported by Bob
      */
     public int getAlicePort() { return _alicePort; }
+    /**
+     *  Return Bob's port.
+     *  @return Bob's remote port
+     */
     public int getBobPort() { return _bob.getRemotePort(); }
+    /**
+     *  Return Charlie's port.
+     *  @return Charlie's port, or 0 if not set
+     */
     public int getCharliePort() { return _charliePort; }
+    /**
+     *  Set Charlie's port.
+     *  @param charliePort Charlie's port number
+     */
     public void setCharliePort(int charliePort) { _charliePort = charliePort; }
 
+    /**
+     *  Return Alice's port as reported by Charlie.
+     *  @return Alice's port from Charlie's perspective
+     */
     public int getAlicePortFromCharlie() { return _alicePortFromCharlie; }
+    /**
+     *  Set Alice's port as reported by Charlie.
+     *  @param alicePortFromCharlie Alice's port from Charlie's perspective
+     */
     public void setAlicePortFromCharlie(int alicePortFromCharlie) { _alicePortFromCharlie = alicePortFromCharlie; }
 
+    /**
+     *  Return Alice's intro key.
+     *  @return Alice's intro key, or null if not set
+     */
     public SessionKey getAliceIntroKey() { return _aliceIntroKey; }
+    /**
+     *  Set Alice's intro key.
+     *  @param key Alice's intro key
+     */
     public void setAliceIntroKey(SessionKey key) { _aliceIntroKey = key; }
 
     /**
+     *  Return Alice's cipher key.
+     *  @return the cipher key, or null if not set
      *  @since 0.9.52
      */
     public SessionKey getAliceCipherKey() { return _aliceCipherKey; }
 
     /**
+     *  Return Alice's MAC key.
+     *  @return the MAC key, or null if not set
      *  @since 0.9.52
      */
     public SessionKey getAliceMACKey() { return _aliceMACKey; }
 
     /**
+     *  Set Alice's cipher and MAC keys.
      *  @param ck cipher key
      *  @param mk MAC key
      *  @since 0.9.52
@@ -176,83 +256,134 @@ class PeerTestState {
         _aliceMACKey = mk;
     }
 
+    /**
+     *  Return Charlie's intro key.
+     *  @return Charlie's intro key, or null if not set
+     */
     public SessionKey getCharlieIntroKey() { return _charlieIntroKey; }
+    /**
+     *  Set Charlie's intro key.
+     *  @param key Charlie's intro key
+     */
     public void setCharlieIntroKey(SessionKey key) { _charlieIntroKey = key; }
 
-    /** when did this test begin? */
+    /**
+     *  Return the time when this test began.
+     *  @return the begin timestamp
+     */
     public long getBeginTime() { return _beginTime; }
 
-    /** when did we last send out a packet? */
+    /**
+     *  Return the time we last sent a packet.
+     *  @return the last send timestamp
+     */
     public long getLastSendTime() { return _lastSendTime; }
+    /**
+     *  Set the time we last sent a packet.
+     *  @param when the last send timestamp
+     */
     public void setLastSendTime(long when) { _lastSendTime = when; }
 
     /**
-     * when did we last hear from alice?
+     *  Return the time we last received from Alice.
+     *  @return the receive timestamp
      */
     public long getReceiveAliceTime() { return _receiveAliceTime; }
+    /**
+     *  Set the time we last received from Alice.
+     *  @param when the receive timestamp
+     */
     public void setReceiveAliceTime(long when) { _receiveAliceTime = when; }
 
-    /** when did we last hear from bob? */
+    /**
+     *  Return the time we last received from Bob.
+     *  @return the receive timestamp
+     */
     public long getReceiveBobTime() { return _receiveBobTime; }
+    /**
+     *  Set the time we last received from Bob.
+     *  @param when the receive timestamp
+     */
     public void setReceiveBobTime(long when) { _receiveBobTime = when; }
 
-    /** when did we last hear from charlie? */
+    /**
+     *  Return the time we last received from Charlie.
+     *  @return the receive timestamp
+     */
     public long getReceiveCharlieTime() { return _receiveCharlieTime; }
+    /**
+     *  Set the time we last received from Charlie.
+     *  @param when the receive timestamp
+     */
     public void setReceiveCharlieTime(long when) { _receiveCharlieTime = when; }
 
     /**
-     * when did we send to alice, SSU2 Bob only
-     * @since 0.9.57
+     *  Return when we last sent to Alice (SSU2 Bob only).
+     *  @return the send timestamp
+     *  @since 0.9.57
      */
     public long getSendAliceTime() { return _sendAliceTime; }
 
     /**
-     * when did we send to alice, SSU2 Bob only
-     * @since 0.9.57
+     *  Set when we last sent to Alice (SSU2 Bob only).
+     *  @param when the send timestamp
+     *  @since 0.9.57
      */
     public void setSendAliceTime(long when) { _sendAliceTime = when; }
 
     /**
-     * when did we send to Charlie, SSU2 Alice only
-     * @since 0.9.57
+     *  Return when we last sent to Charlie (SSU2 Alice only).
+     *  @return the send timestamp
+     *  @since 0.9.57
      */
     public long getSendCharlieTime() { return _sendCharlieTime; }
 
     /**
-     * when did we send to Charlie, SSU2 Alice only
-     * @since 0.9.57
+     *  Set when we last sent to Charlie (SSU2 Alice only).
+     *  @param when the send timestamp
+     *  @since 0.9.57
      */
     public void setSendCharlieTime(long when) { _sendCharlieTime = when; }
 
     /**
-     * what code did we send to alice, SSU2 Bob only
-     * @since 0.9.57
+     *  Return the status code sent to Alice (SSU2 Bob only).
+     *  @return the status code
+     *  @since 0.9.57
      */
     public int getStatus() { return _status; }
 
     /**
-     * what code did we send to alice, SSU2 Bob only
-     * @since 0.9.57
+     *  Set the status code sent to Alice (SSU2 Bob only).
+     *  @param status the status code
+     *  @since 0.9.57
      */
     public void setStatus(int status) { _status = status; }
 
     /**
-     *  Get for retransmission.
-     *  SSU2 only, we are Alice, Bob or Charlie
+     *  Get the test data for retransmission.
+     *  SSU2 only, used when we are Alice, Bob, or Charlie.
+     *  @return the test data, or null if not set
      *  @since 0.9.57
      */
     public byte[] getTestData() { return _testData; }
 
     /**
-     *  Save for retransmission.
-     *  SSU2 only, we are Alice, Bob or Charlie
+     *  Save the test data for retransmission.
+     *  SSU2 only, used when we are Alice, Bob, or Charlie.
+     *  @param data the test data
      *  @since 0.9.57
      */
     public void setTestData(byte[] data) { _testData = data; }
 
-    /** Increment and return the packets relayed count */
+    /**
+     *  Increment and return the packets relayed count.
+     *  @return the incremented count
+     */
     public int incrementPacketsRelayed() { return _packetsRelayed.incrementAndGet(); }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);

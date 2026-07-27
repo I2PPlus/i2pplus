@@ -169,6 +169,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private static final int REPLY_NODES = 3;
     private static final int REPLY_NETWORK_FAIL = 4;
 
+    /**
+     * SECURE_NID.
+     */
     public static final boolean SECURE_NID = true;
 
     /** how long since generated do we delete - BEP 5 says 10 minutes */
@@ -192,6 +195,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private static final int BLACKLIST_MAX_PEERS = 500;
     private static final long NODES_SAVE_TIME =
             30 * (long) 60 * 1000; // frequency of save of local dht node list
+    /**
+     * DHT_FILE_SUFFIX.
+     */
     public static final String DHT_FILE_SUFFIX = ".dht.dat";
 
     private static final int SEND_CRYPTO_TAGS = 8;
@@ -1680,6 +1686,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             this.onTimeout = onTimeout;
         }
 
+        /**
+         * getSentTo.
+         */
         public NodeInfo getSentTo() {
             return sentTo;
         }
@@ -1825,9 +1834,15 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     @Override
     public void messageAvailable(I2PSession session, int msgId, long size) { /* no-op */ }
 
+    /**
+     * reportAbuse.
+     */
     @Override
     public void reportAbuse(I2PSession session, int severity) { /* no-op */ }
 
+    /**
+     * disconnected.
+     */
     @Override
     public void disconnected(I2PSession session) {
         if (_log.shouldWarn()) {
@@ -1836,6 +1851,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         stop();
     }
 
+    /**
+     * errorOccurred.
+     */
     @Override
     public void errorOccurred(I2PSession session, String message, Throwable error) {
         if (_log.shouldWarn()) {
@@ -1846,10 +1864,16 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** Cleaner-upper */
     private class Cleaner extends SimpleTimer2.TimedEvent {
 
+        /**
+         * Cleaner.
+         */
         public Cleaner() {
             super(SimpleTimer2.getInstance(), 7 * CLEAN_TIME);
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             if (!_isRunning) {
                 return;
@@ -1925,10 +1949,16 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** Fire off explorer thread */
     private class Explorer extends SimpleTimer2.TimedEvent {
 
+        /**
+         * Explorer.
+         */
         public Explorer(long delay) {
             super(SimpleTimer2.getInstance(), delay);
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             if (!_isRunning) {
                 return;
@@ -1944,6 +1974,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** explorer thread */
     private class ExplorerThread implements Runnable {
 
+        /**
+         * run.
+         */
         public void run() {
             if (!_isRunning) {
                 return;

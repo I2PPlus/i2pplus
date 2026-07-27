@@ -24,6 +24,11 @@ import java.io.Writer;
  */
 public class Base64 extends Encoding {
 
+	/**
+	 * Create a new Base64 encoder.
+	 */
+	public Base64() {}
+
 	@Override
 	public String getName() {
 		return "base64";
@@ -31,7 +36,7 @@ public class Base64 extends Encoding {
 
 	/**
 	 * @return Base64-encoded String.
-	 * @throws EncodingException
+	 * @throws EncodingException if encoding fails
 	 */
 	public String encode( byte[] in ) throws EncodingException
 	{
@@ -46,7 +51,7 @@ public class Base64 extends Encoding {
 	/**
 	 * More efficient than super
 	 *
-	 * @param in
+	 * @param in the input stream to encode
 	 * @see Base64#encode(String)
 	 * @since public since 0.9.33 with new params
 	 */

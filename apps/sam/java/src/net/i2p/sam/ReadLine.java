@@ -14,6 +14,9 @@ import java.net.SocketTimeoutException;
  */
 class ReadLine {
 
+    /** Creates a new ReadLine instance (utility class) */
+    private ReadLine() {}
+
     private static final int MAX_LINE_LENGTH = 8*1024;
 
     /**
@@ -22,6 +25,7 @@ class ReadLine {
      *  Warning - strips \n but not \r
      *  Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
      *
+     *  @param socket the socket to read from
      *  @param buf output
      *  @param timeout forever if if zero or negative
      *  @throws SocketTimeoutException if timeout is reached before newline

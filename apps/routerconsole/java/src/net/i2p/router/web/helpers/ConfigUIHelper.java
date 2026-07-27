@@ -38,6 +38,11 @@ import net.i2p.router.web.RouterConsoleRunner;
 public class ConfigUIHelper extends HelperBase {
 
     /**
+     * Create a new helper for UI configuration.
+     */
+    public ConfigUIHelper() {}
+
+    /**
      * Generates HTML for theme selection and display options configuration.
      *
      * <p>Renders a section containing:
@@ -289,6 +294,8 @@ public class ConfigUIHelper extends HelperBase {
 
     /**
      * Returns true if any console users are configured.
+     *
+     * @return true if at least one user exists, false otherwise
      */
     public boolean hasUsers() {
         ConsolePasswordManager mgr = new ConsolePasswordManager(_context);

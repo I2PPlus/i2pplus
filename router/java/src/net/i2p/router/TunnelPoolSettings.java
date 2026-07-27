@@ -42,21 +42,57 @@ public class TunnelPoolSettings {
     public static final String      PREFIX_INBOUND_EXPLORATORY = "router.inboundPool.";
     /** prefix used to configure the outbound exploratory pool */
     public static final String      PREFIX_OUTBOUND_EXPLORATORY = "router.outboundPool.";
+    /**
+     * PROP_NICKNAME.
+     */
     public static final String      PROP_NICKNAME = "nickname";
+    /**
+     * PROP_QUANTITY.
+     */
     public static final String      PROP_QUANTITY = "quantity";
+    /**
+     * PROP_BACKUP_QUANTITY.
+     */
     public static final String      PROP_BACKUP_QUANTITY = "backupQuantity";
+    /**
+     * PROP_DURATION.
+     */
     public static final String      PROP_DURATION = "duration";
+    /**
+     * PROP_LENGTH.
+     */
     public static final String      PROP_LENGTH = "length";
+    /**
+     * PROP_LENGTH_VARIANCE.
+     */
     public static final String      PROP_LENGTH_VARIANCE = "lengthVariance";
     /** don't trust this, always true */
     public static final String      PROP_ALLOW_ZERO_HOP = "allowZeroHop";
+    /**
+     * PROP_SHOULD_TEST.
+     */
     public static final String      PROP_SHOULD_TEST = "shouldTest";
+    /**
+     * PROP_IP_RESTRICTION.
+     */
     public static final String      PROP_IP_RESTRICTION = "IPRestriction";
+    /**
+     * PROP_PRIORITY.
+     */
     public static final String      PROP_PRIORITY = "priority";
     /** @since 0.9.17 */
     public static final String      PROP_RANDOM_KEY = "randomKey";
+    /**
+     * DEFAULT_QUANTITY.
+     */
     public static final int         DEFAULT_QUANTITY = 2;
+    /**
+     * DEFAULT_BACKUP_QUANTITY.
+     */
     public static final int         DEFAULT_BACKUP_QUANTITY = 0;
+    /**
+     * DEFAULT_DURATION.
+     */
     public static final int         DEFAULT_DURATION = 10*60*1000;
     private static final boolean    IS_SLOW = SystemVersion.isSlow();
     /** client only */
@@ -68,7 +104,13 @@ public class TunnelPoolSettings {
     private static final int        DEFAULT_OB_EXPL_LENGTH = IS_SLOW ? 2 : 3;
     private static final int        DEFAULT_IB_EXPL_LENGTH_VARIANCE = IS_SLOW ? 0 : 1;
     private static final int        DEFAULT_OB_EXPL_LENGTH_VARIANCE = IS_SLOW ? 0 : 1;
+    /**
+     * DEFAULT_ALLOW_ZERO_HOP.
+     */
     public static final boolean     DEFAULT_ALLOW_ZERO_HOP = false;
+    /**
+     * B.
+     */
     public static final int         DEFAULT_IP_RESTRICTION = 2;    // class B (/16)
     private static final int        MIN_PRIORITY = -25;
     private static final int        MAX_PRIORITY = 25;
@@ -118,10 +160,16 @@ public class TunnelPoolSettings {
 
     /** how many tunnels should be available at all times */
     public int getQuantity() { return _quantity; }
+    /**
+     * setQuantity.
+     */
     public void setQuantity(int quantity) { _quantity = quantity; }
 
     /** how many backup tunnels should be kept waiting in the wings */
     public int getBackupQuantity() { return _backupQuantity; }
+    /**
+     * setBackupQuantity.
+     */
     public void setBackupQuantity(int quantity) { _backupQuantity = quantity; }
 
     /**
@@ -198,6 +246,9 @@ public class TunnelPoolSettings {
      *
      */
     public int getLengthVariance() { return _lengthVariance; }
+    /**
+     * setLengthVariance.
+     */
     public void setLengthVariance(int variance) { _lengthVariance = variance; }
 
     /**
@@ -305,6 +356,9 @@ public class TunnelPoolSettings {
 
     /** what user supplied name was given to the client connected (can be null) */
     public String getDestinationNickname() { return _destinationNickname; }
+    /**
+     * setDestinationNickname.
+     */
     public void setDestinationNickname(String name) { _destinationNickname = name; }
 
     /**
@@ -332,6 +386,9 @@ public class TunnelPoolSettings {
      */
     public Properties getUnknownOptions() { return _unknownOptions; }
 
+    /**
+     * getMsgIdBloomXor.
+     */
     public long getMsgIdBloomXor() { return _msgIDBloomXor; }
 
     /**
@@ -409,6 +466,9 @@ public class TunnelPoolSettings {
         }
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();

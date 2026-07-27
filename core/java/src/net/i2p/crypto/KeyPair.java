@@ -31,10 +31,14 @@ public class KeyPair {
         if (pub.getType() != priv.getType()) throw new IllegalArgumentException();
     }
 
+
+    /** @return the public key */
     public PublicKey getPublic() {
         return pub;
     }
 
+
+    /** @return the private key */
     public PrivateKey getPrivate() {
         return priv;
     }

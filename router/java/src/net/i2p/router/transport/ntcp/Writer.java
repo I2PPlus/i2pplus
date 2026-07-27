@@ -33,6 +33,9 @@ public class Writer {
     /** Tracks how many runner threads are actively processing (not parked). */
     private final AtomicInteger _activeCount = new AtomicInteger();
 
+    /**
+     * Writer.
+     */
     public Writer(RouterContext ctx) {
         _log = ctx.logManager().getLog(getClass());
         _pendingConnections = new LinkedHashSet<>(128);
@@ -59,6 +62,9 @@ public class Writer {
     /** Set the writer thread count, bounded by MIN_THREADS-MAX_THREADS */
     public static void setThreadCount(int count) { _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, count)); }
 
+    /**
+     * startWriting.
+     */
     public synchronized void startWriting(int numWriters) {
         for (int i = 1; i <= numWriters; i++) {
             startRunner();
@@ -95,6 +101,9 @@ public class Writer {
         }
     }
 
+    /**
+     * stopWriting.
+     */
     public synchronized void stopWriting() {
         while (!_runners.isEmpty()) {
             Runner r = _runners.remove(0);
@@ -106,6 +115,9 @@ public class Writer {
         }
     }
 
+    /**
+     * wantsWrite.
+     */
     public void wantsWrite(NTCPConnection con, String source) {
         boolean already = false;
         boolean pending = false;
@@ -122,6 +134,9 @@ public class Writer {
             _log.debug("wantsWrite: " + con + " already live? " + already + " added to pending? " + pending + ": " + source);
     }
 
+    /**
+     * connectionClosed.
+     */
     public void connectionClosed(NTCPConnection con) {
         synchronized (_pendingConnections) {
             _writeAfterLive.remove(con);
@@ -138,12 +153,21 @@ public class Writer {
 
         private volatile boolean _stop;
 
+        /**
+         * Runner.
+         */
         public Runner() {
             _prepBuffer = new NTCPConnection.PrepBuffer();
         }
 
+        /**
+         * stop.
+         */
         public void stop() { _stop = true; }
 
+        /**
+         * run.
+         */
         public void run() {
             if (_log.shouldInfo()) _log.info("Starting writer");
             NTCPConnection con = null;

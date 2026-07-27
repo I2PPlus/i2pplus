@@ -20,19 +20,27 @@ import net.i2p.util.Log;
  * It stores no state. It sends everything to the Connection unless
  * the Connection is closed,
  */
+/** ignored */
 class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
+    /** ignored */
     private final I2PAppContext _context;
+    /** ignored */
     private final Log _log;
+    /** ignored */
     private final Connection _connection;
+    /** ignored */
     private static final MessageOutputStream.WriteStatus _dummyStatus = new DummyStatus();
+    /** ignored */
     private static final ByteCache _payloadCache = ByteCache.getInstance(128, Packet.MAX_PAYLOAD_SIZE);
     /** Reusable empty payload — avoids per-packet ByteArray allocation for ACK-only packets.
      *  Serialized per-connection by _dataLock in MessageOutputStream. */
+    /** ignored */
     private final ByteArray _emptyPayload;
 
     /**
      *  @param con non-null
      */
+    /** ignored */
     public ConnectionDataReceiver(I2PAppContext ctx, Connection con) {
         _context = ctx;
         _log = ctx.logManager().getLog(ConnectionDataReceiver.class);
@@ -56,6 +64,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      *
      * @return !flush
      */
+    /** ignored */
     public boolean writeInProcess() {
         return _connection.getUnackedPacketsSent() >= _connection.getOptions().getWindowSize();
     }
@@ -122,22 +131,44 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         }
     }
 
+    /** ignored */
     private static class FailedWriteStatus implements MessageOutputStream.WriteStatus {
+        /** ignored */
         private final IOException _error;
 
+        /**
+         * FailedWriteStatus.
+         */
+        /** ignored */
         public FailedWriteStatus(IOException error) {
             _error = error;
         }
 
+        /**
+         * waitForCompletion.
+         */
+        /** ignored */
         public void waitForCompletion(int maxWaitMs) throws IOException {
             throw _error;
         }
 
+        /**
+         * waitForAccept.
+         */
+        /** ignored */
         public void waitForAccept(int maxWaitMs) throws IOException {
             throw _error;
         }
 
+        /**
+         * writeAccepted.
+         */
+        /** ignored */
         public boolean writeAccepted() { return false; }
+        /**
+         * writeFailed.
+         */
+        /** ignored */
         public boolean writeFailed() { return true; }
     }
 
@@ -152,6 +183,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      * @param size how many bytes of the buffer to write (may be 0)
      * @return the packet sent
      */
+    /** ignored */
     public PacketLocal send(byte[] buf, int off, int size) {
         return send(buf, off, size, false);
     }
@@ -166,12 +198,14 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      *                       so we get an ACK back
      * @return the packet sent
      */
+    /** ignored */
     public PacketLocal send(byte[] buf, int off, int size, boolean forceIncrement) {
         PacketLocal packet = buildPacket(buf, off, size, forceIncrement);
         _connection.sendPacket(packet);
         return packet;
     }
 
+    /** ignored */
     private boolean isAckOnly(int size) {
         boolean ackOnly = size <= 0 && // no data
                           _connection.getLastSendId() >= 0 && // not a SYN
@@ -193,6 +227,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      *                       so we get an ACK back
      * @return the packet to be sent
      */
+    /** ignored */
     private PacketLocal buildPacket(byte[] buf, int off, int size, boolean forceIncrement) {
         if (size > Packet.MAX_PAYLOAD_SIZE) throw new IllegalArgumentException("size is too large (" + size + ")");
         boolean ackOnly = isAckOnly(size);
@@ -253,12 +288,30 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
     /**
      * Used if no new packet was sent.
      */
+    /** ignored */
     private static final class DummyStatus implements MessageOutputStream.WriteStatus {
+        /**
+         * waitForAccept.
+         */
+        /** ignored */
         public final void waitForAccept(int maxWaitMs) { /* no-op */ }
+        /**
+         * waitForCompletion.
+         */
+        /** ignored */
         public final void waitForCompletion(int maxWaitMs) { /* no-op */ }
+        /**
+         * writeAccepted.
+         */
+        /** ignored */
         public final boolean writeAccepted() { return true; }
+        /**
+         * writeFailed.
+         */
+        /** ignored */
         public final boolean writeFailed() { return false; }
     }
 
+    /** ignored */
     void destroy() { /* no-op */ }
 }

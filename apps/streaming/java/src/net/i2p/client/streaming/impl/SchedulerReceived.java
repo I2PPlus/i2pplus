@@ -8,6 +8,9 @@ import net.i2p.I2PAppContext;
  */
 class SchedulerReceived extends SchedulerImpl {
 
+    /**
+     * SchedulerReceived.
+     */
     public SchedulerReceived(I2PAppContext ctx) {
         super(ctx);
     }

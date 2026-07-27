@@ -22,10 +22,14 @@ import net.i2p.util.SimpleByteCache;
  *
  */
 class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
+    /** The router context */
     protected final RouterContext _context;
+    /** The logger */
     protected final Log _log;
 
+    /** Size of preprocessed data blocks */
     public static final int PREPROCESSED_SIZE = 1024;
+    /** Length of the IV */
     protected static final int IV_SIZE = HopProcessor.IV_LENGTH;
 
     /**
@@ -36,6 +40,7 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
      */
     protected static final ByteCache _dataCache = ByteCache.getInstance(512, PREPROCESSED_SIZE);
 
+    /** @param ctx the router context */
     public TrivialPreprocessor(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
@@ -54,6 +59,10 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
         throw new UnsupportedOperationException("unused, right?");
     }
 
+    /**
+     * Note preprocessing statistics.
+     * No-op - intentionally empty.
+     */
     protected void notePreprocessing(long messageId, int numFragments, int totalLength, List<Long> messageIds, String msg) {
         // No-op - intentionally empty
     }
@@ -62,6 +71,7 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
      * Wrap the preprocessed fragments with the necessary padding / checksums
      * to act as a tunnel message.
      *
+     * @param fragments the fragment data
      * @param fragmentLength fragments[0:fragmentLength] is used
      */
     protected void preprocess(byte[] fragments, int fragmentLength) {
@@ -145,6 +155,14 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     private static final byte MASK_TUNNEL = (byte)(FragmentHandler.TYPE_TUNNEL << 5);
     private static final byte MASK_ROUTER = (byte)(FragmentHandler.TYPE_ROUTER << 5);
 
+    /**
+     * Write the first fragment of a tunnel message.
+     *
+     * @param msg the pending gateway message
+     * @param target the target byte array
+     * @param offset the starting offset
+     * @return the new offset after writing
+     */
     protected int writeFirstFragment(PendingGatewayMessage msg, byte[] target, int offset) {
         boolean fragmented = false;
         int instructionsLength = getInstructionsSize(msg);
@@ -209,6 +227,14 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
         return offset;
     }
 
+    /**
+     * Write a subsequent fragment of a tunnel message.
+     *
+     * @param msg the pending gateway message
+     * @param target the target byte array
+     * @param offset the starting offset
+     * @return the new offset after writing
+     */
     protected int writeSubsequentFragment(PendingGatewayMessage msg, byte[] target, int offset) {
         boolean isLast = true;
 
@@ -252,10 +278,13 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     }
 
     /**
+     *  Calculate the size of the instructions for a pending message.
+     *
      *  @return generally 3 or 35 or 39 for first fragment, 7 for subsequent fragments.
      *
      *  Does NOT include 4 for the message ID if the message will be fragmented;
      *  call getInstructionAugmentationSize() for that.
+     *  @param msg the pending gateway message
      */
     protected static int getInstructionsSize(PendingGatewayMessage msg) {
         if (msg.getFragmentNumber() > 0)
@@ -274,7 +303,14 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
         return header;
     }
 
-    /** @return 0 or 4 */
+    /**
+     *  Get the augmentation size for instructions if fragmentation is needed.
+     *
+     *  @param msg the pending gateway message
+     *  @param offset the current offset
+     *  @param instructionsSize the current instructions size
+     *  @return 0 or 4
+     */
     protected static int getInstructionAugmentationSize(PendingGatewayMessage msg, int offset, int instructionsSize) {
         int payloadLength = msg.getData().length - msg.getOffset();
         if (offset + payloadLength + instructionsSize + IV_SIZE + 1 + 4 > PREPROCESSED_SIZE) {

@@ -31,6 +31,9 @@ import java.nio.charset.StandardCharsets;
  */
 public class I2Ping extends I2PTunnelClientBase {
 
+    /**
+     * PROP_COMMAND.
+     */
     public static final String PROP_COMMAND = "command";
     private static final int PING_COUNT = 10;
     private static final int CPING_COUNT = 5;
@@ -93,6 +96,9 @@ public class I2Ping extends I2PTunnelClientBase {
         close(false);
     }
 
+    /**
+     * runCommand.
+     */
     public void runCommand(String cmd) throws InterruptedException, IOException {
         long timeout = PING_TIMEOUT;
         int count = PING_COUNT;
@@ -198,6 +204,9 @@ public class I2Ping extends I2PTunnelClientBase {
         t.join();
     }
 
+    /**
+     * usage.
+     */
     public static String usage() {
         return
             "Usage:\n" +
@@ -213,6 +222,9 @@ public class I2Ping extends I2PTunnelClientBase {
             "  -p <value>   to (destination) port";
     }
 
+    /**
+     * close.
+     */
     @Override
     public boolean close(boolean forced) {
         if (!open) return true;
@@ -241,6 +253,9 @@ public class I2Ping extends I2PTunnelClientBase {
         }
     }
 
+    /**
+     * clientConnectionRun.
+     */
     @Override
     protected void clientConnectionRun(Socket s) { /* no-op */ }
 
@@ -265,6 +280,9 @@ public class I2Ping extends I2PTunnelClientBase {
             setName("PingHandler for " + dest);
         }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             l.log(" • PingHandler starting for destination: " + destination);

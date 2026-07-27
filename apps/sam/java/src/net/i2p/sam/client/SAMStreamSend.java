@@ -69,6 +69,9 @@ public class SAMStreamSend {
                                         "       -x: use master session (forces -v 3.3)\n" +
                                         "       multiple -o session options are allowed";
 
+    /**
+     * main.
+     */
     public static void main(String[] args) {
         Getopt g = new Getopt("SAM", args, "sxhb:m:o:p:u:v:w:");
         boolean isSSL = false;
@@ -161,6 +164,9 @@ public class SAMStreamSend {
         sender.startup(version, isSSL, mode, user, password, optsBuf.toString());
     }
 
+    /**
+     * SAMStreamSend.
+     */
     public SAMStreamSend(I2PAppContext ctx, String samHost, String samPort, String destFile, String dataFile) {
         _context = ctx;
         _log = ctx.logManager().getLog(SAMStreamSend.class);
@@ -173,6 +179,9 @@ public class SAMStreamSend {
         _remotePeers = new HashMap<>();
     }
 
+    /**
+     * startup.
+     */
     public void startup(String version, boolean isSSL, int mode, String user, String password, String sessionOpts) {
         if (_log.shouldDebug())
             _log.debug("Starting up");
@@ -220,8 +229,14 @@ public class SAMStreamSend {
     }
 
     private class SendEventHandler extends SAMEventHandler {
+        /**
+         * SendEventHandler.
+         */
         public SendEventHandler(I2PAppContext ctx) { super(ctx); }
 
+        /**
+         * streamClosedReceived.
+         */
         @Override
         public void streamClosedReceived(String result, String id, String message) {
             Sender sender = null;
@@ -402,6 +417,9 @@ public class SAMStreamSend {
         private final DatagramSocket _dgSock;
         private final InetSocketAddress _dgSAM;
 
+        /**
+         * Sender.
+         */
         public Sender(OutputStream samOut, SAMEventHandler eventHandler, int mode) throws IOException {
             _samOut = samOut;
             _eventHandler = eventHandler;
@@ -423,6 +441,9 @@ public class SAMStreamSend {
             }
         }
 
+        /**
+         * openConnection.
+         */
         public boolean openConnection() {
             FileInputStream fin = null;
             try {
@@ -468,9 +489,18 @@ public class SAMStreamSend {
             }
         }
 
+        /**
+         * getConnectionId.
+         */
         public String getConnectionId() { return _connectionId; }
+        /**
+         * getDestination.
+         */
         public String getDestination() { return _remoteDestination; }
 
+        /**
+         * closed.
+         */
         public void closed() {
             if (_closed) return;
             _closed = true;
@@ -479,6 +509,9 @@ public class SAMStreamSend {
             try { _in.close(); } catch (IOException ioe) { /* ignored */ }
         }
 
+        /**
+         * run.
+         */
         public void run() {
             _started = _context.clock().now();
             _context.statManager().addRateData("send." + _connectionId + ".started", 1, 0);

@@ -30,6 +30,9 @@ import net.i2p.util.SystemVersion;
  * Helper for job queue page rendering and form processing.
  * @since 0.9.33
  */
+/**
+ * Default constructor.
+ */
 public class JobQueueHelper extends HelperBase {
 
     private static int CORES = SystemVersion.getCores();
@@ -40,6 +43,11 @@ public class JobQueueHelper extends HelperBase {
 
     private String _requestURI;
 
+    /**
+     * Set the request URI.
+     *
+     * @param uri the request URI
+     */
     public void setRequestURI(String uri) {
         _requestURI = uri;
     }
@@ -49,6 +57,11 @@ public class JobQueueHelper extends HelperBase {
         return !_requestURI.contains("period=all");
     }
 
+    /**
+     * Get the job queue summary HTML.
+     *
+     * @return the HTML summary
+     */
     public String getJobQueueSummary() {
         try {
             if (_out != null) {
@@ -65,6 +78,11 @@ public class JobQueueHelper extends HelperBase {
         }
     }
 
+    /**
+     * Get the job queue stats HTML.
+     *
+     * @return the HTML stats
+     */
     public String getJobQueueStats() {
         try {
             if (_out != null) {

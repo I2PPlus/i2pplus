@@ -40,6 +40,7 @@ class LookupDestJob extends JobImpl {
     private final BlindData _blindData;
 
     private static final long DEFAULT_TIMEOUT = 15*1000L;
+/** Lookupdestjob */
 
     public LookupDestJob(RouterContext context, ClientConnectionRunner runner, Hash h, Hash fromLocalDest) {
         this(context, runner, -1, DEFAULT_TIMEOUT, null, h, null, fromLocalDest);
@@ -127,11 +128,13 @@ class LookupDestJob extends JobImpl {
         _name = name;
         _blindData = bd;
     }
+/** Return the name */
 
     public String getName() { return _name != null ?
                                      "Lookup Hostname for Client" :
                                      "Lookup LeaseSet for Client";
     }
+/** Execute the job */
 
     public void runJob() {
         if (_blindData != null) {
@@ -187,9 +190,12 @@ class LookupDestJob extends JobImpl {
     }
 
     private class DoneJob extends JobImpl {
+/** Donejob */
         public DoneJob(RouterContext enclosingContext) {super(enclosingContext);}
+/** Return the name */
 
         public String getName() {return "Lookup LeaseSet &amp; Reply to Client";}
+/** Execute the job */
 
         public void runJob() {
             NetworkDatabaseFacade db = _runner.getFloodfillNetworkDatabaseFacade();

@@ -43,6 +43,9 @@ import net.i2p.apache.http.util.Args;
  *
  * @since 4.4
  */
+/**
+ * PublicSuffixMatcher.
+ */
 public final class PublicSuffixMatcher {
 
     /** Domain suffix rules */
@@ -78,6 +81,9 @@ public final class PublicSuffixMatcher {
      *
      * @param domain the domain name to check
      * @return domain root
+     */
+    /**
+     * Find the registered domain root.
      */
     public String getDomainRoot(final String domain) {
         if (domain == null) {
@@ -115,6 +121,9 @@ public final class PublicSuffixMatcher {
         return domainName;
     }
 
+    /**
+     * matches.
+     */
     public boolean matches(final String domain) {
         if (domain == null) {
             return false;

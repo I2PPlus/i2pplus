@@ -43,8 +43,14 @@ public class NotifyRequest extends SOAPRequest {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     * NotifyRequest.
+     */
     public NotifyRequest() {}
 
+    /**
+     * NotifyRequest.
+     */
     public NotifyRequest(HTTPRequest httpReq) {
         set(httpReq);
     }
@@ -53,6 +59,9 @@ public class NotifyRequest extends SOAPRequest {
     //	NT
     ////////////////////////////////////////////////
 
+    /**
+     * setNT.
+     */
     public void setNT(String value) {
         setHeader(HTTP.NT, value);
     }
@@ -61,6 +70,9 @@ public class NotifyRequest extends SOAPRequest {
     //	NTS
     ////////////////////////////////////////////////
 
+    /**
+     * setNTS.
+     */
     public void setNTS(String value) {
         setHeader(HTTP.NTS, value);
     }
@@ -69,10 +81,16 @@ public class NotifyRequest extends SOAPRequest {
     //	SID
     ////////////////////////////////////////////////
 
+    /**
+     * setSID.
+     */
     public void setSID(String id) {
         setHeader(HTTP.SID, Subscription.toSIDHeaderString(id));
     }
 
+    /**
+     * getSID.
+     */
     public String getSID() {
         return Subscription.getSID(getHeaderValue(HTTP.SID));
     }
@@ -81,10 +99,16 @@ public class NotifyRequest extends SOAPRequest {
     //	SEQ
     ////////////////////////////////////////////////
 
+    /**
+     * setSEQ.
+     */
     public void setSEQ(long value) {
         setHeader(HTTP.SEQ, Long.toString(value));
     }
 
+    /**
+     * getSEQ.
+     */
     public long getSEQ() {
         return getLongHeaderValue(HTTP.SEQ);
     }
@@ -93,6 +117,9 @@ public class NotifyRequest extends SOAPRequest {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     * setRequest.
+     */
     public boolean setRequest(Subscriber sub, String varName, String value) {
         String callback = sub.getDeliveryURL();
         String sid = sub.getSID();
@@ -156,6 +183,9 @@ public class NotifyRequest extends SOAPRequest {
     }
 
     // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (09/08/03)
+    /**
+     * getPropertyList.
+     */
     public PropertyList getPropertyList() {
         PropertyList properties = new PropertyList();
         Node varSetNode = getEnvelopeNode();

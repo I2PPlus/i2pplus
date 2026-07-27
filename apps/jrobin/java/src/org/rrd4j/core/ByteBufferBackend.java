@@ -18,10 +18,20 @@ public abstract class ByteBufferBackend extends RrdBackend {
 
     private ByteBuffer byteBuffer;
 
+    /**
+     * Constructs a ByteBufferBackend with the given file path.
+     *
+     * @param path the file path
+     */
     protected ByteBufferBackend(String path) {
         super(path);
     }
 
+    /**
+     * Set the byte buffer to use for backing storage.
+     *
+     * @param byteBuffer the byte buffer to set
+     */
     protected void setByteBuffer(ByteBuffer byteBuffer) {
         this.byteBuffer = byteBuffer;
         byteBuffer.order(BYTEORDER);
@@ -180,6 +190,11 @@ public abstract class ByteBufferBackend extends RrdBackend {
         }
     }
 
+    /**
+     * Check whether the buffer has been modified since the last sync.
+     *
+     * @return true if the buffer has been modified since last sync
+     */
     protected boolean isDirty() {
         return dirty;
     }

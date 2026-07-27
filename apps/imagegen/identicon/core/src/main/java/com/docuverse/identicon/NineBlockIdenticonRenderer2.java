@@ -10,6 +10,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.math.BigInteger;
 
+/**
+ * NineBlockIdenticonRenderer2.
+ */
 public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
 
     private static final int PATCH_GRIDS = 5;
@@ -51,14 +54,23 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
     private float patchOffset;
     private Color backgroundColor = Color.WHITE;
 
+    /**
+     * NineBlockIdenticonRenderer2.
+     */
     public NineBlockIdenticonRenderer2() {
         setPatchSize(DEFAULT_PATCH_SIZE);
     }
 
+    /**
+     * getPatchSize.
+     */
     public float getPatchSize() {
         return patchSize;
     }
 
+    /**
+     * setPatchSize.
+     */
     public void setPatchSize(float size) {
         this.patchSize = size;
         this.patchOffset = patchSize / 2.0f;
@@ -88,18 +100,30 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
         }
     }
 
+    /**
+     * getBackgroundColor.
+     */
     public Color getBackgroundColor() {
         return backgroundColor;
     }
 
+    /**
+     * setBackgroundColor.
+     */
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 
+    /**
+     * render.
+     */
     public BufferedImage render(BigInteger code, int size) {
         return renderQuilt((int)code.longValue(), size);
     }
 
+    /**
+     * render.
+     */
     public BufferedImage render(int code, int size) {
         return renderQuilt(code, size);
     }

@@ -25,20 +25,31 @@ abstract class LogWriter implements Runnable {
     /** every 10 seconds? why? Just have the gui force a reread after a change?? */
     private static final long CONFIG_READ_INTERVAL = (long) 50 * 1000;
 
-    static final long FLUSH_INTERVAL = (long) 15 * 1000; // ajax refresh interval
+    /** ajax refresh interval */
+    static final long FLUSH_INTERVAL = (long) 15 * 1000;
     private static final long MIN_FLUSH_INTERVAL = (long) 2 * 1000;
     private static final long MAX_FLUSH_INTERVAL = 5 * (long) 60 * 1000;
     // true for newest first on /logs page; false for oldest first
     private static final boolean BUFFER_DISPLAYED_REVERSE = true;
+    /** Timestamp of last config reread */
     private long _lastReadConfig;
+    /**
+     * _manager.
+     */
     protected final LogManager _manager;
 
+    /** Whether the writer should continue writing */
     protected volatile boolean _write;
     private LogRecord _last;
     private long _firstTimestamp;
     // ms
     private volatile long _flushInterval = FLUSH_INTERVAL;
 
+    /**
+     * Creates a new LogWriter
+     *
+     * @param manager the log manager
+     */
     public LogWriter(LogManager manager) {
         _manager = manager;
         _lastReadConfig = Clock.getInstance().now();
@@ -67,10 +78,13 @@ abstract class LogWriter implements Runnable {
      */
     protected abstract void writeRecord(int priority, String line);
 
+    /** Flush the writer output */
     protected abstract void flushWriter();
 
+    /** Close the writer */
     protected abstract void closeWriter();
 
+    /** Stop the log writer thread */
     public void stopWriting() {
         _write = false;
     }
@@ -97,6 +111,9 @@ abstract class LogWriter implements Runnable {
         }
     }
 
+    /**
+     * run.
+     */
     @Override
     public void run() {
         _write = true;
@@ -114,10 +131,18 @@ abstract class LogWriter implements Runnable {
         closeWriter();
     }
 
+    /**
+     * Flush pending log records
+     */
     public void flushRecords() {
         flushRecords(true);
     }
 
+    /**
+     * Flush pending log records, optionally waiting for new ones
+     *
+     * @param shouldWait whether to wait for new records
+     */
     public void flushRecords(boolean shouldWait) {
         try {
             // zero copy, drain the manager queue directly

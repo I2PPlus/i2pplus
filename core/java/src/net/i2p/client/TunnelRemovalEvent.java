@@ -8,6 +8,9 @@ import net.i2p.data.TunnelId;
  *
  * @since 0.9.69
  */
+/**
+ * TunnelRemovalEvent.
+ */
 public class TunnelRemovalEvent {
     private final String _poolName;
     private final TunnelId _tunnelId;
@@ -15,6 +18,12 @@ public class TunnelRemovalEvent {
     private final RemovalReason _reason;
     private final long _timestamp;
 
+    /**
+     * RemovalReason.
+     */
+    /**
+     * RemovalReason.
+     */
     public enum RemovalReason {
         /** Tunnel was explicitly removed or failed */
         EXPLICIT_REMOVAL,
@@ -49,6 +58,9 @@ public class TunnelRemovalEvent {
      *
      * @return the tunnel pool name
      */
+    /**
+     * Return the tunnel pool name.
+     */
     public String getPoolName() {
         return _poolName;
     }
@@ -57,6 +69,9 @@ public class TunnelRemovalEvent {
      * Return the tunnel ID.
      *
      * @return the tunnel ID
+     */
+    /**
+     * Return the tunnel ID.
      */
     public TunnelId getTunnelId() {
         return _tunnelId;
@@ -67,6 +82,9 @@ public class TunnelRemovalEvent {
      *
      * @return true if inbound
      */
+    /**
+     * Return whether this is an inbound tunnel.
+     */
     public boolean isInbound() {
         return _isInbound;
     }
@@ -75,6 +93,9 @@ public class TunnelRemovalEvent {
      * Return the removal reason.
      *
      * @return the removal reason
+     */
+    /**
+     * Return the removal reason.
      */
     public RemovalReason getReason() {
         return _reason;
@@ -85,11 +106,20 @@ public class TunnelRemovalEvent {
      *
      * @return the timestamp
      */
+    /**
+     * Return the event time.
+     */
     public long getTimestamp() {
         return _timestamp;
     }
 
+    /**
+     * toString.
+     */
     @Override
+    /**
+     * Return a string representation.
+     */
     public String toString() {
         return "TunnelRemovalEvent [" + _poolName + " id=" + _tunnelId +
                " direction=" + (_isInbound ? "inbound" : "outbound") +

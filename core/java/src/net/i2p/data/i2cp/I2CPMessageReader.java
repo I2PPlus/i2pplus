@@ -29,12 +29,27 @@ import java.util.concurrent.atomic.AtomicLong;
 @SuppressWarnings("PMD.CloseResource")
 public class I2CPMessageReader {
     private InputStream _stream;
+    /**
+     * _listener.
+     */
     protected I2CPMessageEventListener _listener;
+    /**
+     * _reader.
+     */
     protected I2CPMessageReaderRunner _reader;
+    /**
+     * _readerThread.
+     */
     protected Thread _readerThread;
 
+    /**
+     * __readerId.
+     */
     protected static final AtomicLong __readerId = new AtomicLong();
 
+    /**
+     * I2CPMessageReader.
+     */
     public I2CPMessageReader(InputStream stream, I2CPMessageEventListener lsnr) {
         _stream = stream;
         setListener(lsnr);
@@ -48,15 +63,22 @@ public class I2CPMessageReader {
      * For internal extension only. No stream.
      *
      * @since 0.8.3
+      * @param lsnr the lsnr
      */
     protected I2CPMessageReader(I2CPMessageEventListener lsnr) {
         setListener(lsnr);
     }
 
+    /**
+     * setListener.
+     */
     public final void setListener(I2CPMessageEventListener lsnr) {
         _listener = lsnr;
     }
 
+    /**
+     * getListener.
+     */
     public I2CPMessageEventListener getListener() {
         return _listener;
     }
@@ -129,11 +151,23 @@ public class I2CPMessageReader {
         public void disconnected(I2CPMessageReader reader);
     }
 
+    /**
+     * I2CPMessageReaderRunner.
+     */
     protected class I2CPMessageReaderRunner implements Runnable {
+        /**
+         * _doRun.
+         */
         protected volatile boolean _doRun;
+        /**
+         * _stayAlive.
+         */
         protected volatile boolean _stayAlive;
         private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(I2CPMessageReader.class);
 
+        /**
+         * I2CPMessageReaderRunner.
+         */
         public I2CPMessageReaderRunner() {
             _doRun = true;
             _stayAlive = true;
@@ -149,6 +183,9 @@ public class I2CPMessageReader {
             _doRun = true;
         }
 
+        /**
+         * cancelRunner.
+         */
         public void cancelRunner() {
             _doRun = false;
             _stayAlive = false;
@@ -163,6 +200,9 @@ public class I2CPMessageReader {
             }
         }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             try {

@@ -16,6 +16,11 @@ package org.minidns.dnslabel;
  */
 public final class OtherNonLdhLabel extends NonLdhLabel {
 
+    /**
+     * Constructs a new OtherNonLdhLabel.
+     *
+     * @param label the label string
+     */
     OtherNonLdhLabel(String label) {
         super(label);
     }

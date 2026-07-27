@@ -21,6 +21,9 @@ package net.i2p.data;
  */
 public class VerifiedDestination extends Destination {
 
+    /**
+     * VerifiedDestination.
+     */
     public VerifiedDestination() {
         super();
     }
@@ -65,6 +68,9 @@ public class VerifiedDestination extends Destination {
     /** Defaults for Signed Certs */
     public static final int CERTIFICATE_LENGTH_SIGNED = Signature.SIGNATURE_BYTES;
 
+    /**
+     * CERTIFICATE_LENGTH_SIGNED_WITH_HASH.
+     */
     public static final int CERTIFICATE_LENGTH_SIGNED_WITH_HASH = Signature.SIGNATURE_BYTES + Hash.HASH_LENGTH;
 
     /**
@@ -103,6 +109,9 @@ public class VerifiedDestination extends Destination {
         return false;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation

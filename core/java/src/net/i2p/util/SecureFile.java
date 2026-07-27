@@ -13,14 +13,23 @@ import java.io.IOException;
  */
 public class SecureFile extends SecureDirectory {
 
+    /**
+     * SecureFile.
+     */
     public SecureFile(String pathname) {
         super(pathname);
     }
 
+    /**
+     * SecureFile.
+     */
     public SecureFile(String parent, String child) {
         super(parent, child);
     }
 
+    /**
+     * SecureFile.
+     */
     public SecureFile(File parent, String child) {
         super(parent, child);
     }

@@ -35,6 +35,9 @@ public class I2PControlHandler implements RequestHandler {
     private final SecurityManager _secMan;
     private final JSONRPC2Helper _helper;
 
+    /**
+     * I2PControlHandler.
+     */
     public I2PControlHandler(JSONRPC2Helper helper, SecurityManager secMan) {
         _helper = helper;
         _secMan = secMan;

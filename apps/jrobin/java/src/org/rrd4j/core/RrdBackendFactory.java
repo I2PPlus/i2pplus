@@ -318,6 +318,9 @@ public abstract class RrdBackendFactory implements Closeable {
             this.backend = backend;
         }
 
+        /**
+         * clear.
+         */
         @Override
         public void clear() {
             try {
@@ -330,11 +333,26 @@ public abstract class RrdBackendFactory implements Closeable {
 
     private final ReferenceQueue<RrdDb> refQueue = new ReferenceQueue<>();
 
+    /**
+     * name.
+     */
     protected final String name;
+    /**
+     * cachingAllowed.
+     */
     protected final boolean cachingAllowed;
+    /**
+     * scheme.
+     */
     protected final String scheme;
+    /**
+     * validateHeader.
+     */
     protected final boolean validateHeader;
 
+    /**
+     * RrdBackendFactory.
+     */
     protected RrdBackendFactory() {
         RrdBackendAnnotation annotation = getClass().getAnnotation(RrdBackendAnnotation.class);
         if (annotation != null) {
@@ -375,6 +393,9 @@ public abstract class RrdBackendFactory implements Closeable {
         return scheme;
     }
 
+    /**
+     * getRootUri.
+     */
     protected URI getRootUri() {
         try {
             return new URI(getScheme(), null, "/", null, null);
@@ -383,6 +404,9 @@ public abstract class RrdBackendFactory implements Closeable {
         }
     }
 
+    /**
+     * canStore.
+     */
     public boolean canStore(URI uri) {
         return false;
     }
@@ -496,6 +520,9 @@ public abstract class RrdBackendFactory implements Closeable {
         return "/" + uri.getPath();
     }
 
+    /**
+     * open.
+     */
     protected abstract RrdBackend open(String path, boolean readOnly) throws IOException;
 
     /**

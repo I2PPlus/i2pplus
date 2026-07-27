@@ -61,9 +61,21 @@ import net.i2p.util.UIMessages;
  * Usage by classes outside of i2ptunnel.war is deprecated.</p>
  */
 public class IndexBean {
+    /**
+     * _context.
+     */
     protected final I2PAppContext _context;
+    /**
+     * _log.
+     */
     protected final Log _log;
+    /**
+     * _group.
+     */
     protected final TunnelControllerGroup _group;
+    /**
+     * _helper.
+     */
     protected final GeneralHelper _helper;
     private final String _fatalError;
     private String _action;
@@ -76,9 +88,21 @@ public class IndexBean {
     private int _certType;
     private String _certSigner;
 
+    /**
+     * RUNNING.
+     */
     public static final int RUNNING = GeneralHelper.RUNNING;
+    /**
+     * STARTING.
+     */
     public static final int STARTING = GeneralHelper.STARTING;
+    /**
+     * NOT_RUNNING.
+     */
     public static final int NOT_RUNNING = GeneralHelper.NOT_RUNNING;
+    /**
+     * STANDBY.
+     */
     public static final int STANDBY = GeneralHelper.STANDBY;
     /** 3 wasn't enough for some browsers. They are reloading the page for some reason - maybe HEAD? @since 0.8.1 */
     private static final int MAX_NONCES = 8;
@@ -99,6 +123,10 @@ public class IndexBean {
     private static final String DEFAULT_THEME = "dark";
     private static final String PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
 
+    /**
+     *  Create the IndexBean, initializing the tunnel controller group and helper.
+     *  Nonces are initialized for CSRF protection.
+     */
     public IndexBean() {
         _context = I2PAppContext.getGlobalContext();
         _log = _context.logManager().getLog(IndexBean.class);
@@ -121,33 +149,54 @@ public class IndexBean {
         _config = new TunnelConfig();
     }
 
-    /** Session for nonce storage @since 0.9.69 */
+    /**
+     * Session for nonce storage
+     * @since 0.9.69
+     */
     private HttpSession _session;
 
-    /** Request method for P-R-G @since 0.9.69 */
+    /**
+     * Request method for P-R-G
+     * @since 0.9.69
+     */
     private String _method;
 
     /**
      *  For session-bound nonce generation and validation
+     *  @param session the HTTP session
      *  @since 0.9.69
      */
     public void setSession(HttpSession session) { _session = session; }
 
     /**
      *  Store request method for P-R-G pattern
+     *  @param method the request method
      *  @since 0.9.69
      */
     public void storeMethod(String method) { _method = method; }
 
     /**
+     *  Check if the tunnel group is initialized.
+     *
+     *  @return true if initialized
      *  @since 0.9.4
      */
     public boolean isInitialized() {return _group != null;}
 
+    /**
+     * Get the next nonce from the queue.
+     *
+     * @return the next nonce
+     */
     public static String getNextNonce() {
         synchronized (_nonces) {return _nonces.get(0);}
     }
 
+    /**
+     * Set the current nonce.
+     *
+     * @param nonce the nonce value
+     */
     public void setNonce(String nonce) {
         if ((nonce == null) || (nonce.trim().length() <= 0)) return;
         _curNonce = nonce;
@@ -165,6 +214,8 @@ public class IndexBean {
 
     /**
       * do we know this nonce?
+      * @param nonce the nonce to check
+      * @return true if the nonce is known
       * @since 0.8.1 public since 0.9.35
       */
     public static boolean haveNonce(String nonce) {
@@ -173,6 +224,7 @@ public class IndexBean {
 
     /**
      *  Session-bound nonce generation - replaces static nonce when session available
+     *
      *  @param session returns static nonce if null
      *  @return a new nonce for each call
      *  @since 0.9.69
@@ -226,6 +278,7 @@ public class IndexBean {
 
     /**
      *  Validate the current nonce from the session-bound queue
+     *
      *  @return true if valid and removed from queue
      *  @since 0.9.69
      */
@@ -233,18 +286,33 @@ public class IndexBean {
         return haveNonce(_curNonce, _session);
     }
 
+    /**
+     * Set the action to process.
+     *
+     * @param action the action string
+     */
     public void setAction(String action) {
         if ((action == null) || (action.trim().length() <= 0)) return;
         _action = action;
     }
 
+    /**
+     * Set the tunnel number.
+     *
+     * @param tunnel the tunnel number as a string
+     */
     public void setTunnel(String tunnel) {
         if ((tunnel == null) || (tunnel.trim().length() <= 0)) return;
         try {_tunnel = Integer.parseInt(tunnel);}
         catch (NumberFormatException nfe) {_tunnel = -1;}
     }
 
-    /** @since 0.9.33 */
+    /**
+     * Set the message ID for clearing messages.
+     *
+     * @param id the message ID
+     * @since 0.9.33
+     */
     public void setMsgid(String id) {
         if (id == null) return;
         try {_msgID = Integer.parseInt(id);}
@@ -291,11 +359,21 @@ public class IndexBean {
         return "";
     }
 
+    /**
+     *  Stop all tunnel controllers.
+     *
+     *  @return formatted messages from the stop operation
+     */
     private String stopAll() {
         List<String> msgs = _group.stopAllControllers();
         return getMessages(msgs);
     }
 
+    /**
+     *  Start all tunnel controllers.
+     *
+     *  @return formatted messages from the start operation
+     */
     private String startAll() {
         List<String> msgs = _group.startAllControllers();
         return getMessages(msgs);
@@ -427,11 +505,21 @@ public class IndexBean {
         return "";
     }
 
+    /**
+     *  Reload the controller configuration from disk for all tunnels.
+     *
+     *  @return success message
+     */
     private String reloadConfig() {
         _group.reloadControllers();
         return "✔ " + _t("Configuration reloaded for all tunnels");
     }
 
+    /**
+     *  Start the selected tunnel.
+     *
+     *  @return empty string on success, error message on failure
+     */
     private String start() {
         if (_tunnel < 0) {return "✖ " + _t("Error: Invalid tunnel");}
         List<TunnelController> controllers = _group.getControllers();
@@ -444,6 +532,11 @@ public class IndexBean {
         return "";
     }
 
+    /**
+     *  Stop the selected tunnel.
+     *
+     *  @return empty string on success, error message on failure
+     */
     private String stop() {
         if (_tunnel < 0) {return "✖ " + _t("Error: Invalid tunnel");}
         List<TunnelController> controllers = _group.getControllers();
@@ -456,6 +549,11 @@ public class IndexBean {
         return "";
     }
 
+    /**
+     *  Restart the selected tunnel (stop then start).
+     *
+     *  @return empty string on success, error message on failure
+     */
     private String restart() {
         if (_tunnel < 0) {return "✖ " + _t("Error: Invalid tunnel");}
         List<TunnelController> controllers = _group.getControllers();
@@ -482,22 +580,38 @@ public class IndexBean {
 
     /**
      *  Stop the tunnel, delete from config,
-     *  rename the private key file if in the default directory
+     *  rename the private key file if in the default directory.
+     *
+     *  @return result messages from the delete operation
      */
     private String deleteTunnel() {
         if (!_removeConfirmed) {return _t("Please confirm removal");}
         return getMessages(_helper.deleteTunnel(_tunnel, _config.getPrivKeyFile()));
     }
 
+    /**
+     *  A message with an associated timestamp for display in the web UI.
+     *  Used to show ordered status updates with time information.
+     */
     private static class TimestampedMessage {
         final long timestamp;
         final String message;
 
+        /**
+         *  Create a timestamped message with the current time.
+         *
+         *  @param message the message text
+         */
         public TimestampedMessage(String message) {
             this.message = message;
             this.timestamp = I2PAppContext.getGlobalContext().clock().now();
         }
 
+        /**
+         *  Format the timestamp as "dd/MM HH:mm:ss".
+         *
+         *  @return the formatted timestamp string
+         */
         public String getFormattedTimestamp() {
             return new SimpleDateFormat("dd/MM HH:mm:ss", Locale.US).format(new Date(timestamp));
         }
@@ -567,7 +681,13 @@ public class IndexBean {
         return buf.toString();
     }
 
-    /* @since 0.9.67+ */
+    /**
+     *  Add a message to the timestamped message list if it has not been seen before.
+     *  Maintains a bounded set of seen messages and removes oldest entries when full.
+     *
+     *  @param message the message text to add
+     *  @since 0.9.67+
+     */
     private void addUniqueMessage(String message) {
         synchronized (_seenMessages) {
             // Clean up old messages if we're approaching the limit
@@ -590,6 +710,7 @@ public class IndexBean {
     /**
      * The last stored message ID
      *
+     * @return the last message ID
      * @since 0.9.33
      */
     public int getLastMessageID() {return _messages.getLastMessageID();}
@@ -598,22 +719,42 @@ public class IndexBean {
     // The remaining methods are simple bean props for the jsp to query
     ////
 
+    /**
+     * Get the theme path.
+     *
+     * @return the theme path
+     */
     public String getTheme() {
         String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
         return "/themes/console/" + theme + "/";
     }
 
-    /* @since 0.9.67+ */
+    /**
+     * Get the theme name.
+     *
+     * @return the theme name
+     * @since 0.9.67+
+     */
     public String getThemeName() {
         String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
         return theme;
     }
 
-    /** @since 0.9.59+ */
+    /**
+     * Check if the Sora font is enabled.
+     *
+     * @return true if Sora font is enabled
+     * @since 0.9.59+
+     */
     public boolean useSoraFont() {
         return _context.getBooleanProperty(PROP_ENABLE_SORA_FONT);
     }
 
+    /**
+     * Get the number of tunnels.
+     *
+     * @return the tunnel count
+     */
     public int getTunnelCount() {
         if (_group == null) return 0;
         return _group.getControllers().size();
@@ -643,6 +784,9 @@ public class IndexBean {
      */
     private class TCComparator implements Comparator<Integer> {
          private final Collator _comp = Collator.getInstance();
+         /**
+          * compare.
+          */
          @Override
          public int compare(Integer l, Integer r) {
              int rv = _comp.compare(getTunnelName(l), getTunnelName(r));
@@ -655,6 +799,9 @@ public class IndexBean {
      *  Is it a client or server in the UI and I2P side?
      *  Note that a streamr client is a UI and I2P client but a server on the localhost side.
      *  Note that a streamr server is a UI and I2P server but a client on the localhost side.
+     *
+     *  @param tunnelNum the tunnel number
+     *  @return true if it is a client
      */
     public boolean isClient(int tunnelNum) {
         TunnelController cur = getController(tunnelNum);
@@ -666,18 +813,31 @@ public class IndexBean {
      *  Is it a client or server in the UI and I2P side?
      *  Note that a streamr client is a UI and I2P client but a server on the localhost side.
      *  Note that a streamr server is a UI and I2P server but a client on the localhost side.
+     *
+     *  @param type the tunnel type
+     *  @return true if it is a client
      */
     public static boolean isClient(String type) {
         return TunnelController.isClient(type);
     }
 
     /**
-     *  @since 0.9.46 moved from subclass
+     * Check if the tunnel is a shared client.
+     *
+     * @param tunnel the tunnel number
+     * @return true if shared client
+     * @since 0.9.46 moved from subclass
      */
     public boolean isSharedClient(int tunnel) {
         return _helper.isSharedClient(tunnel);
     }
 
+    /**
+     * Get the tunnel name.
+     *
+     * @param tunnel the tunnel number
+     * @return the tunnel name
+     */
     public String getTunnelName(int tunnel) {
         String name = _helper.getTunnelName(tunnel);
         if (name != null && !name.isEmpty()) {return DataHelper.escapeHTML(name);}
@@ -686,6 +846,9 @@ public class IndexBean {
 
     /**
      *  No validation
+     *
+     *  @param tunnel the tunnel number
+     *  @return the client port
      */
     public String getClientPort(int tunnel) {
         int port = _helper.getClientPort(tunnel);
@@ -694,6 +857,9 @@ public class IndexBean {
 
     /**
      *  Returns error message if blank or invalid
+     *
+     *  @param tunnel the tunnel number
+     *  @return the client port or error message
      *  @since 0.9.3
      */
     public String getClientPort2(int tunnel) {
@@ -729,12 +895,24 @@ public class IndexBean {
         return "<span class=ink_warn>" + _t("Port not set") + "</span>";
     }
 
+    /**
+     * Get the tunnel type.
+     *
+     * @param tunnel the tunnel number
+     * @return the tunnel type
+     */
     public String getTunnelType(int tunnel) {
         TunnelController tun = getController(tunnel);
         if (tun != null) {return getTypeName(tun.getType());}
         else {return "";}
     }
 
+    /**
+     * Get the display name for an internal type.
+     *
+     * @param internalType the internal type
+     * @return the display name
+     */
     public String getTypeName(String internalType) {
         if (TunnelController.TYPE_STD_CLIENT.equals(internalType)) {return _t("Standard client").replace(" client", "");}
         else if (TunnelController.TYPE_HTTP_CLIENT.equals(internalType)) {return _t("HTTP/HTTPS client").replace(" client", "");}
@@ -751,22 +929,67 @@ public class IndexBean {
         else {return internalType;}
     }
 
+    /**
+     *  The internal type string for the specified tunnel.
+     *
+     *  @param tunnel the tunnel number
+     *  @return the internal type
+     */
     public String getInternalType(int tunnel) {return _helper.getTunnelType(tunnel);}
+    /**
+     *  The interface the specified client tunnel is configured to listen on.
+     *
+     *  @param tunnel the tunnel number
+     *  @return the client interface
+     */
     public String getClientInterface(int tunnel) {return _helper.getClientInterface(tunnel);}
+    /**
+     *  The current status of the specified tunnel.
+     *
+     *  @param tunnel the tunnel number
+     *  @return the tunnel status
+     */
     public int getTunnelStatus(int tunnel) {return _helper.getTunnelStatus(tunnel);}
+    /**
+     *  The remaining startup delay for the specified tunnel.
+     *
+     *  @param tunnel the tunnel number
+     *  @return the remaining startup delay
+     */
     public int getRemainingStartupDelay(int tunnel) {return _helper.getRemainingStartupDelay(tunnel);}
+    /**
+     *  The description for the specified tunnel, HTML-escaped.
+     *
+     *  @param tunnel the tunnel number
+     *  @return the tunnel description
+     */
     public String getTunnelDescription(int tunnel) {return DataHelper.escapeHTML(_helper.getTunnelDescription(tunnel));}
 
+    /**
+     * Get the shared client for a tunnel.
+     *
+     * @param tunnel the tunnel number
+     * @return the shared client
+     */
     public String getSharedClient(int tunnel) {
         TunnelController tun = getController(tunnel);
         if (tun != null) {return tun.getSharedClient();}
         else {return "";}
     }
 
+    /**
+     *  The destination Base64 for the specified client tunnel.
+     *
+     *  @param tunnel the tunnel number
+     *  @return the client destination
+     */
     public String getClientDestination(int tunnel) {return _helper.getClientDestination(tunnel);}
 
     /**
      * Call this to see if it is ok to linkify getServerTarget()
+     *
+     * @param tunnel the tunnel number
+     * @return true if the server target link is valid
      * @since 0.8.3
      */
     public boolean isServerTargetLinkValid(int tunnel) {
@@ -780,6 +1003,9 @@ public class IndexBean {
     /**
      * Is this an IRC server? Call to establish if we should provide irc://
      * link on index page
+     *
+     * @param tunnel the tunnel number
+     * @return true if it is a valid IRC server
      * @since 0.9.67+
      */
     public boolean isValidIRCServer(int tunnel) {
@@ -790,6 +1016,9 @@ public class IndexBean {
 
     /**
      * Is this a server tunnel?
+     *
+     * @param tunnel the tunnel number
+     * @return true if it is a server
      * @since 0.9.67+
      */
     public boolean isServer(int tunnel) {
@@ -803,6 +1032,9 @@ public class IndexBean {
     }
 
     /**
+     * Get the server target.
+     *
+     * @param tunnel the tunnel number
      * @return valid host:port only if isServerTargetLinkValid() is true
      */
     public String getServerTarget(int tunnel) {
@@ -823,6 +1055,8 @@ public class IndexBean {
 
     /**
      *  Works even if tunnel is not running.
+     *
+     *  @param tunnel the tunnel number
      *  @return Destination or null
      *  @since 0.9.17
      */
@@ -830,6 +1064,8 @@ public class IndexBean {
 
     /**
      *  Works even if tunnel is not running.
+     *
+     *  @param tunnel the tunnel number
      *  @return Base64 or ""
      */
     public String getDestinationBase64(int tunnel) {
@@ -840,6 +1076,8 @@ public class IndexBean {
 
     /**
      *  Works even if tunnel is not running.
+     *
+     *  @param tunnel the tunnel number
      *  @return "{52 chars}.b32.i2p" or ""
      */
     public String getDestHashBase32(int tunnel) {
@@ -850,6 +1088,8 @@ public class IndexBean {
 
     /**
      *  Works even if tunnel is not running.
+     *
+     *  @param tunnel the tunnel number
      *  @return "{56 chars}.b32.i2p" or "" if not blinded
      *  @since 0.9.40
      */
@@ -872,6 +1112,8 @@ public class IndexBean {
 
     /**
      *  Works even if tunnel is not running.
+     *
+     *  @param tunnel the tunnel number
      *  @return Destination or null
      *  @since 0.9.30
      */
@@ -879,6 +1121,8 @@ public class IndexBean {
 
     /**
      *  Works even if tunnel is not running.
+     *
+     *  @param tunnel the tunnel number
      *  @return Base64 or ""
      *  @since 0.9.30
      */
@@ -890,6 +1134,8 @@ public class IndexBean {
 
     /**
      *  Works even if tunnel is not running.
+     *
+     *  @param tunnel the tunnel number
      *  @return "{52 chars}.b32.i2p" or ""
      *  @since 0.9.30
      */
@@ -901,6 +1147,8 @@ public class IndexBean {
 
     /**
      *  Works even if tunnel is not running.
+     *
+     *  @param tunnel the tunnel number
      *  @return true if offline keys
      *  @since 0.9.40
      */
@@ -908,6 +1156,8 @@ public class IndexBean {
 
     /**
      *  For index.jsp
+     *
+     *  @param tunnel the tunnel number
      *  @return true if the plugin is enabled, installed, and running
      *  @since 0.9.11
      */
@@ -924,6 +1174,10 @@ public class IndexBean {
     }
 
     /**
+     * Get the spoofed host for a tunnel.
+     *
+     * @param tunnel the tunnel number
+     * @return the spoofed host
      * @since 0.9.32 moved from EditBean
      */
     public String getSpoofedHost(int tunnel) {return DataHelper.escapeHTML(_helper.getSpoofedHost(tunnel));}
@@ -935,26 +1189,43 @@ public class IndexBean {
     /**
      * What type of tunnel (httpclient, ircclient, client, or server).
      * This is required when adding a new tunnel.
+     *
+     * @param type the tunnel type
      */
     public void setType(String type) {_config.setType(type);}
 
+    /** @return the tunnel type */
     String getType() { return _config.getType(); }
 
-    /** Short name of the tunnel */
+    /**
+     * Short name of the tunnel
+     * @param name the tunnel name
+     */
     public void setNofilter_name(String name) {_config.setName(name);}
 
-    /** One line host description */
+    /**
+     * One line host description
+     * @param description the tunnel description
+     */
     public void setNofilter_description(String description) {_config.setDescription(description);}
 
-    /** I2CP host the router is on, ignored when in router context */
+    /**
+     * I2CP host the router is on, ignored when in router context
+     * @param host the client host
+     */
     public void setClientHost(String host) {_config.setClientHost(host);}
 
-    /** I2CP port the router is on, ignored when in router context */
+    /**
+     * I2CP port the router is on, ignored when in router context
+     * @param port the client port
+     */
     public void setClientport(String port) {_config.setClientPort(port);}
 
     /**
      *  How many hops to use for inbound tunnels
      *  In or both in/out
+     *
+     *  @param tunnelDepth the tunnel depth
      */
     public void setTunnelDepth(String tunnelDepth) {
         if (tunnelDepth != null) {
@@ -966,6 +1237,8 @@ public class IndexBean {
     /**
      *  How many parallel inbound tunnels to use
      *  In or both in/out
+     *
+     *  @param tunnelQuantity the tunnel quantity
      */
     public void setTunnelQuantity(String tunnelQuantity) {
         if (tunnelQuantity != null) {
@@ -976,6 +1249,7 @@ public class IndexBean {
 
     /** How much randomisation to apply to the depth of tunnels
      *  In or both in/out
+     *  @param tunnelVariance the tunnel variance
      */
     public void setTunnelVariance(String tunnelVariance) {
         if (tunnelVariance != null) {
@@ -986,6 +1260,7 @@ public class IndexBean {
 
     /** How many tunnels to hold in reserve to guard against failures
      *  In or both in/out
+     *  @param tunnelBackupQuantity the backup quantity
      */
     public void setTunnelBackupQuantity(String tunnelBackupQuantity) {
         if (tunnelBackupQuantity != null) {
@@ -995,6 +1270,7 @@ public class IndexBean {
     }
 
     /** How many hops to use for outbound tunnels
+     *  @param tunnelDepth the outbound tunnel depth
      *  @since 0.9.33
      */
     public void setTunnelDepthOut(String tunnelDepth) {
@@ -1005,6 +1281,7 @@ public class IndexBean {
     }
 
     /** How many parallel outbound tunnels to use
+     *  @param tunnelQuantity the outbound tunnel quantity
      *  @since 0.9.33
      */
     public void setTunnelQuantityOut(String tunnelQuantity) {
@@ -1015,6 +1292,7 @@ public class IndexBean {
     }
 
     /** How much randomisation to apply to the depth of outbound tunnels
+     *  @param tunnelVariance the outbound tunnel variance
      *  @since 0.9.33
      */
     public void setTunnelVarianceOut(String tunnelVariance) {
@@ -1025,6 +1303,7 @@ public class IndexBean {
     }
 
     /** How many outbound tunnels to hold in reserve to guard against failures
+     *  @param tunnelBackupQuantity the outbound backup quantity
      *  @since 0.9.33
      */
     public void setTunnelBackupQuantityOut(String tunnelBackupQuantity) {
@@ -1034,15 +1313,24 @@ public class IndexBean {
         }
     }
 
-    /** what I2P session overrides should be used */
+    /**
+     * what I2P session overrides should be used
+     * @param customOptions the custom options
+     */
     public void setNofilter_customOptions(String customOptions) {
         _config.setCustomOptions(customOptions);
     }
-    /** what HTTP outproxies should be used (httpclient specific) */
+    /**
+     * what HTTP outproxies should be used (httpclient specific)
+     * @param proxyList the proxy list
+     */
     public void setProxyList(String proxyList) {
         _config.setProxyList(proxyList);
     }
-    /** what port should this client/httpclient/ircclient listen on */
+    /**
+     * what port should this client/httpclient/ircclient listen on
+     * @param port the port number
+     */
     public void setPort(String port) {
         if (port != null) {
             try {_config.setPort(Integer.parseInt(port.trim()));
@@ -1051,26 +1339,40 @@ public class IndexBean {
     }
     /**
      * what interface should this client/httpclient/ircclient listen on
+     *
+     * @param reachableBy the reachable interface
      */
     public void setReachableBy(String reachableBy) {
         _config.setReachableBy(reachableBy);
     }
-    /** What peer does this client tunnel point at */
+    /**
+     * What peer does this client tunnel point at
+     * @param dest the target destination
+     */
     public void setTargetDestination(String dest) {
         _config.setTargetDestination(dest);
     }
-    /** What host does this server tunnel point at */
+    /**
+     * What host does this server tunnel point at
+     * @param host the target host
+     */
     public void setTargetHost(String host) {
         _config.setTargetHost(host);
     }
-    /** What port does this server tunnel point at */
+    /**
+     * What port does this server tunnel point at
+     * @param port the target port
+     */
     public void setTargetPort(String port) {
         if (port != null) {
             try {_config.setTargetPort(Integer.parseInt(port.trim()));
             } catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
-    /** What host does this http server tunnel spoof */
+    /**
+     * What host does this http server tunnel spoof
+     * @param host the spoofed host
+     */
     public void setSpoofedHost(String host) {
         _config.setSpoofedHost(host);
     }
@@ -1166,27 +1468,47 @@ public class IndexBean {
         }
     }
 
+    /**
+     * setConnectDelay.
+     */
     public void setConnectDelay(String moo) {
         _config.setConnectDelay(true);
     }
 
+    /**
+     * setProfile.
+     */
     public void setProfile(String profile) {
         _config.setProfile(profile);
     }
 
+    /**
+     * setReduce.
+     */
     public void setReduce(String moo) {
         _config.setReduce(true);
     }
 
+    /**
+     * setClose.
+     */
     public void setClose(String moo) {
         _config.setClose(true);
     }
 
+    /**
+     * setEncrypt.
+     */
     public void setEncrypt(String moo) {
         _config.setEncrypt(true);
     }
 
-    /** @since 0.9.40 */
+    /**
+     *  Set the LeaseSet encryption mode.
+     *
+     *  @param val the encryption mode value
+     *  @since 0.9.40
+     */
     public void setEncryptMode(String val) {
         if (val != null) {
             try {_config.setEncryptMode(Integer.parseInt(val.trim()));
@@ -1194,31 +1516,41 @@ public class IndexBean {
         }
     }
 
-    /** @since 0.9.40 */
+    /**
+     *  Set the blinded password for hidden encrypted LeaseSets.
+     *
+     *  @param s the blinded password
+     *  @since 0.9.40
+     */
     public void setNofilter_blindedPassword(String s) {
         _config.setBlindedPassword(s);
     }
 
     /**
-     * Multiple entries in form
-     * @since 0.9.41
+     *  Set client names for access control (multiple entries in form).
+     *
+     *  @param s the client names
+     *  @since 0.9.41
      */
     public void setNofilter_clientName(String[] s) {
         if (s != null) {_config.addClientNames(s);}
     }
 
     /**
-     * Multiple entries in form
-     * @since 0.9.41
+     *  Set client keys for access control (multiple entries in form).
+     *
+     *  @param s the client keys
+     *  @since 0.9.41
      */
     public void setclientKey(String[] s) {
         if (s != null) {_config.addClientKeys(s);}
     }
 
     /**
-     * Multiple entries in form
-     * Values are integers
-     * @since 0.9.41
+     *  Revoke access for specified clients (multiple entries in form, values are integers).
+     *
+     *  @param s the client indices to revoke
+     *  @since 0.9.41
      */
     public void setRevokeClient(String[] s) {
         if (s != null) {_config.revokeClients(s);}
@@ -1298,6 +1630,9 @@ public class IndexBean {
     /** @since 0.9.13 */
     public void setUniqueLocal(String moo) {_config.setUniqueLocal(true);}
 
+    /**
+     * setAccessMode.
+     */
     public void setAccessMode(String val) {
         if (val != null) {
             try {_config.setAccessMode(Integer.parseInt(val.trim()));}
@@ -1312,8 +1647,14 @@ public class IndexBean {
         if (val != null) {_config.setFilterDefinition(val);}
     }
 
+    /**
+     * setDelayOpen.
+     */
     public void setDelayOpen(String moo) {_config.setDelayOpen(true);}
 
+    /**
+     * setNewDest.
+     */
     public void setNewDest(String val) {
         if (val != null) {
             try {_config.setNewDest(Integer.parseInt(val.trim()));}
@@ -1321,30 +1662,48 @@ public class IndexBean {
         }
     }
 
+    /**
+     * setReduceTime.
+     */
     public void setReduceTime(String val) {
         if (val != null) {
             try {_config.setReduceTime(Integer.parseInt(val.trim()));}
             catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
+    /**
+     * setReduceCount.
+     */
     public void setReduceCount(String val) {
         if (val != null) {
             try {_config.setReduceCount(Integer.parseInt(val.trim()));}
             catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
+    /**
+     * setEncryptKey.
+     */
     public void setEncryptKey(String val) {
         _config.setEncryptKey(val);
     }
 
+    /**
+     * setAccessList.
+     */
     public void setAccessList(String val) {
         _config.setAccessList(val);
     }
 
+    /**
+     * setJumpList.
+     */
     public void setJumpList(String val) {
         _config.setJumpList(val);
     }
 
+    /**
+     * setCloseTime.
+     */
     public void setCloseTime(String val) {
         if (val != null) {
             try {_config.setCloseTime(Integer.parseInt(val.trim()));
@@ -1385,22 +1744,37 @@ public class IndexBean {
         _config.setProxyAuth(isSOCKS ? "true" : I2PTunnelHTTPClientBase.DIGEST_AUTH);
     }
 
+    /**
+     * setProxyUsername.
+     */
     public void setProxyUsername(String s) {
         _config.setProxyUsername(s);
     }
 
+    /**
+     * setNofilter_proxyPassword.
+     */
     public void setNofilter_proxyPassword(String s) {
         _config.setProxyPassword(s);
     }
 
+    /**
+     * setOutproxyAuth.
+     */
     public void setOutproxyAuth(String s) {
         _config.setOutproxyAuth(true);
     }
 
+    /**
+     * setOutproxyUsername.
+     */
     public void setOutproxyUsername(String s) {
         _config.setOutproxyUsername(s);
     }
 
+    /**
+     * setNofilter_outproxyPassword.
+     */
     public void setNofilter_outproxyPassword(String s) {
         _config.setOutproxyPassword(s);
     }
@@ -1423,6 +1797,9 @@ public class IndexBean {
         _config.setOutproxyType(s);
     }
 
+    /**
+     * setLimitMinute.
+     */
     public void setLimitMinute(String s) {
         if (s != null) {
             try {_config.setLimitMinute(Integer.parseInt(s.trim()));}
@@ -1430,6 +1807,9 @@ public class IndexBean {
         }
     }
 
+    /**
+     * setLimitHour.
+     */
     public void setLimitHour(String s) {
         if (s != null) {
             try {_config.setLimitHour(Integer.parseInt(s.trim()));}
@@ -1437,6 +1817,9 @@ public class IndexBean {
         }
     }
 
+    /**
+     * setLimitDay.
+     */
     public void setLimitDay(String s) {
         if (s != null) {
             try {_config.setLimitDay(Integer.parseInt(s.trim()));}
@@ -1444,6 +1827,9 @@ public class IndexBean {
         }
     }
 
+    /**
+     * setTotalMinute.
+     */
     public void setTotalMinute(String s) {
         if (s != null) {
             try {_config.setTotalMinute(Integer.parseInt(s.trim()));}
@@ -1451,6 +1837,9 @@ public class IndexBean {
         }
     }
 
+    /**
+     * setTotalHour.
+     */
     public void setTotalHour(String s) {
         if (s != null) {
             try {_config.setTotalHour(Integer.parseInt(s.trim()));}
@@ -1458,6 +1847,9 @@ public class IndexBean {
         }
     }
 
+    /**
+     * setTotalDay.
+     */
     public void setTotalDay(String s) {
         if (s != null) {
             try {_config.setTotalDay(Integer.parseInt(s.trim()));}
@@ -1465,6 +1857,9 @@ public class IndexBean {
         }
     }
 
+    /**
+     * setMaxStreams.
+     */
     public void setMaxStreams(String s) {
         if (s != null) {
             try {_config.setMaxStreams(Integer.parseInt(s.trim()));}
@@ -1483,6 +1878,9 @@ public class IndexBean {
         }
     }
 
+    /**
+     * setPostTotalMax.
+     */
     public void setPostTotalMax(String s) {
         if (s != null) {
             try {_config.setPostTotalMax(Integer.parseInt(s.trim()));}
@@ -1490,6 +1888,9 @@ public class IndexBean {
         }
     }
 
+    /**
+     * setPostCheckTime.
+     */
     public void setPostCheckTime(String s) {
         if (s != null) {
             try {_config.setPostCheckTime(Integer.parseInt(s.trim()));}
@@ -1497,6 +1898,9 @@ public class IndexBean {
         }
     }
 
+    /**
+     * setPostBanTime.
+     */
     public void setPostBanTime(String s) {
         if (s != null) {
             try {_config.setPostBanTime(Integer.parseInt(s.trim()));}
@@ -1504,6 +1908,9 @@ public class IndexBean {
         }
     }
 
+    /**
+     * setPostTotalBanTime.
+     */
     public void setPostTotalBanTime(String s) {
         if (s != null) {
             try {_config.setPostTotalBanTime(Integer.parseInt(s.trim()));}
@@ -1512,6 +1919,9 @@ public class IndexBean {
     }
 
 
+    /**
+     * setCert.
+     */
     public void setCert(String val) {
         if (val != null) {
             try {_certType = Integer.parseInt(val.trim());}
@@ -1519,6 +1929,9 @@ public class IndexBean {
         }
     }
 
+    /**
+     * setSigner.
+     */
     public void setSigner(String val) {_certSigner = val;}
 
     /** @since 0.9.12 */
@@ -1547,16 +1960,25 @@ public class IndexBean {
         _config.setInboundRandomKey(s);
     }
 
+    /**
+     * setKey2.
+     */
     public void setKey2(String s) {
         s = decrypt("outbound.randomKey", s);
         _config.setOutboundRandomKey(s);
     }
 
+    /**
+     * setKey3.
+     */
     public void setKey3(String s) {
         s = decrypt("i2cp.leaseSetSigningPrivateKey", s);
         _config.setLeaseSetSigningPrivateKey(s);
     }
 
+    /**
+     * setKey4.
+     */
     public void setKey4(String s) {
         s = decrypt("i2cp.leaseSetPrivateKey", s);
         _config.setLeaseSetPrivateKey(s);
@@ -1726,6 +2148,9 @@ public class IndexBean {
         return _config.getConfig();
     }
 
+    /**
+     * getController.
+     */
     protected TunnelController getController(int tunnel) {
         return _helper.getController(tunnel);
     }
@@ -1745,6 +2170,9 @@ public class IndexBean {
         }
     }
 
+    /**
+     * _t.
+     */
     protected String _t(String key) {
         return Messages._t(key, _context);
     }

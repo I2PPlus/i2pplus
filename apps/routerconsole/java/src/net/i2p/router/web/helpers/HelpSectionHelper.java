@@ -14,9 +14,12 @@ import net.i2p.router.web.PluginStarter;
 /**
  * Render the configuration menu at the top of all the config pages.
  * refactored from confignav.jsp to reduce size and make translation easier
- 
+
  */
 public class HelpSectionHelper extends HelperBase {
+
+    /** Default constructor */
+    public HelpSectionHelper() { super(); }
 
     /** help-X.jsp */
     private static final String[] pages =
@@ -57,7 +60,11 @@ public class HelpSectionHelper extends HelperBase {
     }
 
     /**
-     *  @param graphical false for text-mode browsers
+     * Render the help navigation bar
+     *
+     * @param requestURI the current request URI
+     * @param graphical false for text-mode browsers
+     * @throws IOException if rendering fails
      */
     public void renderNavBar(String requestURI, boolean graphical) throws IOException {
         if (_context == null) { return; }

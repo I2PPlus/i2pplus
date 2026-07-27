@@ -110,6 +110,9 @@ public class Router implements RouterClock.ClockShiftListener {
     private State _state = State.UNINITIALIZED;
     private FamilyKeyCrypto _familyKeyCrypto;
     private boolean _familyKeyCryptoFail;
+    /**
+     * _familyKeyLock.
+     */
     public final Object _familyKeyLock = new Object();
     private UPnPScannerCallback _upnpScannerCallback;
     private long _downtime = -1;
@@ -121,6 +124,9 @@ public class Router implements RouterClock.ClockShiftListener {
     private double _cachedSharePct = DEFAULT_SHARE_PERCENTAGE / 100.0d;
 
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
+    /**
+     * PROP_CONFIG_FILE.
+     */
     public static final String PROP_CONFIG_FILE = "router.configLocation";
 
     /** let clocks be off by 30 seconds (reduced from 60s to improve lease renewal timing) */
@@ -148,16 +154,28 @@ public class Router implements RouterClock.ClockShiftListener {
     public static final String PROP_REBUILD_KEYS = "router.rebuildKeys";
     /** deprecated, use gracefulShutdownInProgress() */
     private static final String PROP_SHUTDOWN_IN_PROGRESS = "__shutdownInProgress";
+    /**
+     * PROP_IB_RANDOM_KEY.
+     */
     public static final String PROP_IB_RANDOM_KEY = TunnelPoolSettings.PREFIX_INBOUND_EXPLORATORY + TunnelPoolSettings.PROP_RANDOM_KEY;
+    /**
+     * PROP_OB_RANDOM_KEY.
+     */
     public static final String PROP_OB_RANDOM_KEY = TunnelPoolSettings.PREFIX_OUTBOUND_EXPLORATORY + TunnelPoolSettings.PROP_RANDOM_KEY;
     private static final String EVENTLOG = "eventlog.txt";
     private static final String PROP_JBIGI = "jbigi.loadedResource";
     private static final String PROP_JBIGI_PROCESSOR = "jbigi.lastProcessor";
+    /**
+     * UPDATE_FILE.
+     */
     public static final String UPDATE_FILE = "i2pupdate.zip";
     private static final boolean CONGESTION_CAPS = true;
     private static final int SHUTDOWN_WAIT_SECS = 60;
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String PROP_RELAX_CONGESTION_CAP = "router.relaxCongestionCap";
+    /**
+     * isAdvanced.
+     */
     public boolean isAdvanced() {return getContext().getBooleanProperty(PROP_ADVANCED);}
     private static final String ORIGINAL_TIMEZONE_ID;
     static {
@@ -652,7 +670,13 @@ public class Router implements RouterClock.ClockShiftListener {
     public RouterContext getContext() {return _context;}
 
     private class LoggerCallback implements UPnPScannerCallback {
+        /**
+         * beforeScan.
+         */
         public void beforeScan() {_log.info("SSDP beforeScan()");}
+        /**
+         * afterScan.
+         */
         public void afterScan() {_log.info("SSDP afterScan()");}
     }
 
@@ -1069,10 +1093,25 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     // publicize our ballpark capacity
+    /**
+     * CAPABILITY_BW12.
+     */
     public static final char CAPABILITY_BW12 = 'K';
+    /**
+     * CAPABILITY_BW32.
+     */
     public static final char CAPABILITY_BW32 = 'L';
+    /**
+     * CAPABILITY_BW64.
+     */
     public static final char CAPABILITY_BW64 = 'M';
+    /**
+     * CAPABILITY_BW128.
+     */
     public static final char CAPABILITY_BW128 = 'N';
+    /**
+     * CAPABILITY_BW256.
+     */
     public static final char CAPABILITY_BW256 = 'O';
     /** @since 0.9.18 */
     public static final char CAPABILITY_BW512 = 'P';
@@ -1081,7 +1120,13 @@ public class Router implements RouterClock.ClockShiftListener {
     /** for testing */
     public static final String PROP_FORCE_BWCLASS = "router.forceBandwidthClass";
 
+    /**
+     * CAPABILITY_REACHABLE.
+     */
     public static final char CAPABILITY_REACHABLE = 'R';
+    /**
+     * CAPABILITY_UNREACHABLE.
+     */
     public static final char CAPABILITY_UNREACHABLE = 'U';
 
     /** @since 0.9.58, proposal 162 */
@@ -1294,6 +1339,9 @@ public class Router implements RouterClock.ClockShiftListener {
      *  This checks the config only. We don't check the current RI
      *  due to deadlocks.
      *
+     */
+    /**
+     * isHidden.
      */
     public boolean isHidden() {
         if (_context.getBooleanProperty(PROP_HIDDEN)) {return true;}
@@ -2062,7 +2110,13 @@ public class Router implements RouterClock.ClockShiftListener {
         synchronized(_configFileLock) {_downtime = downtime;}
     }
 
+    /**
+     * PROP_BANDWIDTH_SHARE_PERCENTAGE.
+     */
     public static final String PROP_BANDWIDTH_SHARE_PERCENTAGE = "router.sharePercentage";
+    /**
+     * DEFAULT_SHARE_PERCENTAGE.
+     */
     public static final int DEFAULT_SHARE_PERCENTAGE = 90;
 
     /**

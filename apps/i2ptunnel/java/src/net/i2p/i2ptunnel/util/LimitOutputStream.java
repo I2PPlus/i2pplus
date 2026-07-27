@@ -20,12 +20,22 @@ import java.io.OutputStream;
  */
 public abstract class LimitOutputStream extends FilterOutputStream {
 
+    /** ignored */
     private final byte[] _buf1;
+    /**
+     * _callback.
+     */
     protected final DoneCallback _callback;
+    /**
+     * _isDone.
+     */
     protected boolean _isDone;
 
     /** Callback interface for notification when a limited output stream completes */
-    public interface DoneCallback { public void streamDone(); }
+    public interface DoneCallback {
+        /** Called when the stream operation completes */
+        public void streamDone();
+    }
 
     /**
      *  @param done non-null
@@ -36,6 +46,9 @@ public abstract class LimitOutputStream extends FilterOutputStream {
         _buf1 = new byte[1];
     }
 
+    /**
+     * write.
+     */
     @Override
     public void write(int c) throws IOException {
         _buf1[0] = (byte)c;
@@ -52,7 +65,9 @@ public abstract class LimitOutputStream extends FilterOutputStream {
         out.write(buf, off, len);
     }
 
-
+    /**
+     * isDone.
+     */
     protected boolean isDone() { return _isDone; }
 
     /**

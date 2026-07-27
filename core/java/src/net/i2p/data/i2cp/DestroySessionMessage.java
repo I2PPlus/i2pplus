@@ -22,11 +22,20 @@ import java.io.InputStream;
  * @author jrandom
  */
 public class DestroySessionMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 3;
     private SessionId _sessionId;
 
+    /**
+     * DestroySessionMessage.
+     */
     public DestroySessionMessage() { /* required for I2CP deserialization */ }
 
+    /**
+     * getSessionId.
+     */
     public SessionId getSessionId() {
         return _sessionId;
     }
@@ -41,10 +50,16 @@ public class DestroySessionMessage extends I2CPMessageImpl {
         return _sessionId;
     }
 
+    /**
+     * setSessionId.
+     */
     public void setSessionId(SessionId id) {
         _sessionId = id;
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         SessionId id = new SessionId();
@@ -56,6 +71,9 @@ public class DestroySessionMessage extends I2CPMessageImpl {
         setSessionId(id);
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if (_sessionId == null) throw new I2CPMessageException("Unable to write out the message as there is not enough data");
@@ -68,11 +86,17 @@ public class DestroySessionMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

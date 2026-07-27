@@ -48,13 +48,37 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
     private final String webircPassword;
     private final String webircSpoofIP;
 
+    /**
+     * PROP_METHOD.
+     */
     public static final String PROP_METHOD="ircserver.method";
+    /**
+     * PROP_METHOD_DEFAULT.
+     */
     public static final String PROP_METHOD_DEFAULT="user";
+    /**
+     * PROP_CLOAK.
+     */
     public static final String PROP_CLOAK="ircserver.cloakKey";
+    /**
+     * PROP_WEBIRC_PASSWORD.
+     */
     public static final String PROP_WEBIRC_PASSWORD="ircserver.webircPassword";
+    /**
+     * PROP_WEBIRC_SPOOF_IP.
+     */
     public static final String PROP_WEBIRC_SPOOF_IP="ircserver.webircSpoofIP";
+    /**
+     * PROP_WEBIRC_SPOOF_IP_DEFAULT.
+     */
     public static final String PROP_WEBIRC_SPOOF_IP_DEFAULT="127.0.0.1";
+    /**
+     * PROP_HOSTNAME.
+     */
     public static final String PROP_HOSTNAME="ircserver.fakeHostname";
+    /**
+     * PROP_HOSTNAME_DEFAULT.
+     */
     public static final String PROP_HOSTNAME_DEFAULT="%f.b32.i2p";
     private static final long HEADER_TIMEOUT = (long) 15*1000;
     private static final long TOTAL_HEADER_TIMEOUT = 2 * HEADER_TIMEOUT;
@@ -125,6 +149,9 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
         readTimeout = DEFAULT_IRC_READ_TIMEOUT;
     }
 
+    /**
+     * blockingHandle.
+     */
     @Override
     protected void blockingHandle(I2PSocket socket) {
         if (_log.shouldInfo())
@@ -342,6 +369,9 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
      *  @since 0.9.19
      */
     private static class RegistrationException extends IOException {
+        /**
+         * RegistrationException.
+         */
         public RegistrationException(String s) {
             super(s);
         }

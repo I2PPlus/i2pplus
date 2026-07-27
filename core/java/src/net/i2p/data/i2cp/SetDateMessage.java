@@ -26,10 +26,16 @@ import java.util.Date;
  * Since 0.8.7, optionally include a version string.
  */
 public class SetDateMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 33;
     private Date _date;
     private String _version;
 
+    /**
+     * SetDateMessage.
+     */
     public SetDateMessage() {
         super();
         _date = Date.from(Instant.ofEpochMilli(Clock.getInstance().now()));
@@ -44,10 +50,16 @@ public class SetDateMessage extends I2CPMessageImpl {
         _version = version;
     }
 
+    /**
+     * getDate.
+     */
     public Date getDate() {
         return _date;
     }
 
+    /**
+     * setDate.
+     */
     public void setDate(Date date) {
         _date = date;
     }
@@ -62,6 +74,9 @@ public class SetDateMessage extends I2CPMessageImpl {
         return _version;
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
@@ -74,6 +89,9 @@ public class SetDateMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if (_date == null) {
@@ -91,11 +109,17 @@ public class SetDateMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

@@ -13,17 +13,26 @@ import org.bouncycastle.util.Util;
 public class SecretWithEncapsulationImpl
     implements SecretWithEncapsulation
 {
+    /** ignored */
     private final AtomicBoolean hasBeenDestroyed = new AtomicBoolean(false);
 
+    /** ignored */
     private final byte[] sessionKey;
+    /** ignored */
     private final byte[] cipher_text;
 
+    /**
+     * SecretWithEncapsulationImpl.
+     */
     public SecretWithEncapsulationImpl(byte[] sessionKey, byte[] cipher_text)
     {
         this.sessionKey = sessionKey;
         this.cipher_text = cipher_text;
     }
 
+    /**
+     * getSecret.
+     */
     public byte[] getSecret()
     {
         byte[] clone = Util.clone(sessionKey);
@@ -33,6 +42,9 @@ public class SecretWithEncapsulationImpl
         return clone;
     }
 
+    /**
+     * getEncapsulation.
+     */
     public byte[] getEncapsulation()
     {
         byte[] clone = Util.clone(cipher_text);
@@ -42,6 +54,9 @@ public class SecretWithEncapsulationImpl
         return clone;
     }
 
+    /**
+     * destroy.
+     */
     public void destroy()
         throws DestroyFailedException
     {
@@ -52,11 +67,15 @@ public class SecretWithEncapsulationImpl
         }
     }
 
+    /**
+     * isDestroyed.
+     */
     public boolean isDestroyed()
     {
         return hasBeenDestroyed.get();
     }
 
+    /** ignored */
     void checkDestroyed()
     {
         if (isDestroyed())

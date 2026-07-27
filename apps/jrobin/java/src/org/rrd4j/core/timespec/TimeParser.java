@@ -38,11 +38,15 @@ import java.time.Instant;
 public class TimeParser {
     private static final int PREVIOUS_OP = -1;
 
+    /** Current token */
     TimeToken token;
+    /** Input scanner */
     final TimeScanner scanner;
+    /** Parsed time spec */
     final TimeSpec spec;
-
+    /** Current operation (PLUS/MINUS) */
     int op = TimeToken.PLUS;
+    /** Previous multiplier for months-minutes disambiguation */
     int prev_multiplier = -1;
 
     /**

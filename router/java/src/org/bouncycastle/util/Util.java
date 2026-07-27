@@ -9,11 +9,17 @@ import net.i2p.data.DataHelper;
  */
 public class Util
 {
+    /**
+     * clone.
+     */
     public static byte[] clone(byte[] a)
     {
         return Arrays.copyOf(a, a.length);
     }
 
+    /**
+     * concatenate.
+     */
     public static byte[] concatenate(byte[][] arrays)
     {
         int size = 0;
@@ -34,6 +40,9 @@ public class Util
         return rv;
     }
 
+    /**
+     * concatenate.
+     */
     public static byte[] concatenate(byte[] a, byte[] b)
     {
         byte[] rv = Arrays.copyOf(a, a.length + b.length);
@@ -41,6 +50,9 @@ public class Util
         return rv;
     }
 
+    /**
+     * append.
+     */
     public static byte[] append(byte[] a, byte b)
     {
         byte[] rv = Arrays.copyOf(a, a.length + 1);
@@ -48,6 +60,9 @@ public class Util
         return rv;
     }
 
+    /**
+     * constantTimeAreEqual.
+     */
     public static boolean constantTimeAreEqual(byte[] a, byte[] b)
     {
         return a.length == b.length && DataHelper.eqCT(a, 0, b, 0, a.length);

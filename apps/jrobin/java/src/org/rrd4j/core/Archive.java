@@ -19,14 +19,23 @@ public class Archive implements RrdUpdater<Archive> {
 
     // definition
     private final RrdEnum<Archive, ConsolFun> consolFun;
+    /** X-files factor */
     protected final RrdDouble<Archive> xff;
+    /** Number of archive steps */
     protected final RrdInt<Archive> steps;
+    /** Number of archive rows */
     protected final RrdInt<Archive> rows;
 
     // state
     private final Robin[] robins;
     private final ArcState[] states;
 
+    /**
+     * Create an archive with the given definition.
+     * @param parentDb the parent RRD database
+     * @param arcDef archive definition, or null for uninitialized
+     * @throws java.io.IOException if an I/O error occurs
+     */
     Archive(RrdDb parentDb, ArcDef arcDef) throws IOException {
         this.parentDb = parentDb;
         consolFun =
@@ -75,6 +84,13 @@ public class Archive implements RrdUpdater<Archive> {
     }
 
     // read from XML
+    /**
+     * Create an archive by importing from XML data.
+     * @param parentDb the parent RRD database
+     * @param reader data importer for XML restore
+     * @param arcIndex archive index
+     * @throws java.io.IOException if an I/O error occurs
+     */
     Archive(RrdDb parentDb, DataImporter reader, int arcIndex) throws IOException {
         this(
                 parentDb,
@@ -309,6 +325,12 @@ public class Archive implements RrdUpdater<Archive> {
         return robins[dsIndex];
     }
 
+    /**
+     * Fetch data from the archive.
+     * @param request the fetch request
+     * @return fetch data result
+     * @throws java.io.IOException if an I/O error occurs
+     */
     FetchData fetchData(FetchRequest request) throws IOException {
         long arcStep = getArcStep();
         long fetchStart = Util.normalize(request.getFetchStart(), arcStep);
@@ -359,6 +381,11 @@ public class Archive implements RrdUpdater<Archive> {
         return fetchData;
     }
 
+    /**
+     * Append the archive data as XML.
+     * @param writer the XML writer
+     * @throws java.io.IOException if an I/O error occurs
+     */
     void appendXml(XmlWriter writer) throws IOException {
         writer.startTag("rra");
         writer.writeTag("cf", consolFun.name());

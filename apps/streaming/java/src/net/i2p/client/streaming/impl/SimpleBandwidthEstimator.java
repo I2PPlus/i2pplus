@@ -66,6 +66,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             _decayFactor = factor;
     }
 
+    /** SimpleBandwidthEstimator */
     SimpleBandwidthEstimator(I2PAppContext ctx, ConnectionOptions opts) {
         _log = ctx.logManager().getLog(SimpleBandwidthEstimator.class);
         _context = ctx;
@@ -179,6 +180,9 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
         return (((_localDecayFactor - 1) * a) + b) / _localDecayFactor;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public synchronized String toString() {
         return "\n* SimpleBandwidthEstimator: " +

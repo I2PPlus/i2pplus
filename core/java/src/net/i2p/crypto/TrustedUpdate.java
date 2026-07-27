@@ -51,6 +51,9 @@ public class TrustedUpdate {
     */
 
     private static final int VERSION_BYTES = 16;
+    /**
+     * HEADER_BYTES.
+     */
     public static final int HEADER_BYTES = Signature.SIGNATURE_BYTES + VERSION_BYTES;
     private static final String PROP_TRUSTED_KEYS = "router.trustedUpdateKeys";
 

@@ -28,7 +28,7 @@ import net.i2p.util.SystemVersion;
  * It loads a platform-specific native library ({@code libjcpuid.so} / {@code jcpuid.dll})
  * that executes the CPUID assembly instruction and returns register values.</p>
  *
- * <h3>CPUID Register Layout (Leaf 1, EAX)</h3>
+ * <h2>CPUID Register Layout (Leaf 1, EAX)</h2>
  * <pre>
  * Bits 31:28  Reserved
  * Bits 27:20  Extended Family ID
@@ -39,7 +39,7 @@ import net.i2p.util.SystemVersion;
  * Bits 3:0    Stepping ID
  * </pre>
  *
- * <h3>Family/Model Computation</h3>
+ * <h2>Family/Model Computation</h2>
  * <p>The actual (displayed) family and model are computed as follows:</p>
  * <ul>
  *   <li><b>Actual Family</b> = Base Family + Extended Family
@@ -48,8 +48,9 @@ import net.i2p.util.SystemVersion;
  *       (only when Base Family == 0x6 or 0xF for Intel; always for AMD)</li>
  * </ul>
  *
- * <h3>AMD Family/Microarchitecture Mapping</h3>
- * <table border="1" cellpadding="4">
+ * <h2>AMD Family/Microarchitecture Mapping</h2>
+ * <table border="1">
+ *   <caption>AMD Family/Microarchitecture Mapping</caption>
  *   <tr><th>Family (hex)</th><th>Microarchitecture</th><th>Products</th></tr>
  *   <tr><td>15 (0xF)</td><td>K8 / Hammer</td><td>Athlon 64, Opteron</td></tr>
  *   <tr><td>16 (0x10)</td><td>K10</td><td>Phenom, Athlon II</td></tr>
@@ -61,7 +62,7 @@ import net.i2p.util.SystemVersion;
  *   <tr><td>26 (0x1A)</td><td>Zen 5</td><td>Ryzen 9000, EPYC 9005, Ryzen AI 300</td></tr>
  * </table>
  *
- * <h3>AMD Family 19h (Zen 3/4) Model Ranges</h3>
+ * <h2>AMD Family 19h (Zen 3/4) Model Ranges</h2>
  * <pre>
  * 0x00-0x0F  Milan/Chagall      (Zen 3)   - EPYC 7003, Threadripper 5000
  * 0x10-0x1F  Stones/Storm Peak  (Zen 4)   - EPYC 9004, Threadripper 7000
@@ -75,7 +76,7 @@ import net.i2p.util.SystemVersion;
  * 0xA0-0xAF  Stones-Dense       (Zen 4)   - EPYC 4004/Siena
  * </pre>
  *
- * <h3>AMD Family 1Ah (Zen 5) Model Ranges</h3>
+ * <h2>AMD Family 1Ah (Zen 5) Model Ranges</h2>
  * <p>Sources: LLVM Host.cpp, Linux kernel amd.c, InstLatx64 CPUID dumps.</p>
  * <pre>
  * 0x00-0x0F  Breithorn/Turin        (Zen 5)   - EPYC 9005 server
@@ -90,7 +91,7 @@ import net.i2p.util.SystemVersion;
  * 0xD0-0xD7  Annapurna              (Zen 5)   - Future EPYC
  * </pre>
  *
- * <h3>CPUID Brand String (Most Reliable Identification)</h3>
+ * <h2>CPUID Brand String (Most Reliable Identification)</h2>
  * <p>CPUID leaves 0x80000002-0x80000004 return a 48-byte ASCII brand string
  * programmed by AMD/Intel into the CPU. This is the most reliable way to
  * identify a specific CPU model, as model number ranges can overlap across
@@ -100,7 +101,6 @@ import net.i2p.util.SystemVersion;
  * @see <a href="https://www.amd.com/en/search/documentation/hub.html">AMD PPR / CPUID references</a>
  * @author Iakin
  */
-
 public class CPUID {
 
     /** did we load the native lib correctly? */
@@ -169,10 +169,18 @@ public class CPUID {
      * </ul>
      */
     protected static class CPUIDResult {
+        /** EAX register value */
         final int EAX;
+        /** EBX register value */
         final int EBX;
+        /** ECX register value */
         final int ECX;
+        /** EDX register value */
         final int EDX;
+        /** @param EAX EAX register value
+         *  @param EBX EBX register value
+         *  @param ECX ECX register value
+         *  @param EDX EDX register value */
         CPUIDResult(int EAX,int EBX,int ECX, int EDX) {
             this.EAX = EAX;
             this.EBX = EBX;
@@ -221,9 +229,8 @@ public class CPUID {
     }
 
     /**
-     *  Return the jcpuid version
-     *  @return 0 if no jcpuid available, 2 if version not supported
-     *  @since 0.9.26
+     * Return the jcpuid version
+     * @return 0 if no jcpuid available, 2 if version not supported
      */
     public static int getJcpuidVersion() {return _jcpuidVersion;}
 
@@ -349,14 +356,17 @@ public class CPUID {
         return getLeaf1().EAX & 0xf;
     }
 
+    /** Return the EDX feature flags */
     static int getEDXCPUFlags() {
         return getLeaf1().EDX;
     }
 
+    /** Return the ECX feature flags */
     static int getECXCPUFlags() {
         return getLeaf1().ECX;
     }
 
+    /** Return the extended ECX feature flags */
     static int getExtendedECXCPUFlags() {
         CPUIDResult c = doCPUID(0x80000001);
         return c.ECX;
@@ -457,6 +467,9 @@ public class CPUID {
      * @return CPUInfo for the detected CPU type
      * @throws UnknownCPUException if native library not loaded, not x86, or unknown vendor
      */
+    /**
+     * Return information.
+     */
     public static CPUInfo getInfo() throws UnknownCPUException {
         if (!_nativeOk) {
             throw new UnknownCPUException("Failed to read CPU information from the system. Please verify the existence of the " +
@@ -473,6 +486,9 @@ public class CPUID {
         throw new UnknownCPUException("Unknown CPU type: '" + id + '\'');
     }
 
+    /**
+     * main.
+     */
     public static void main(String[] args) {
         _doLog = true; // this is too late to log anything from above
         String path = System.getProperty("java.library.path");

@@ -25,111 +25,130 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
 public class
 Component
 {
+	/** No-op stub. */
 	public void
 	setTitle(
 		String	s )
 	{
 	}
 
+	/** No-op stub. */
 	public void
 	add(
 		Component c )
 	{
 	}
 
+	/** No-op stub. */
 	public void
 	add( String str, Component c )
 	{
 	}
 
+	/** No-op stub. */
 	public void
 	add( int i, Component c )
 	{
 	}
 
+	/** No-op stub. */
 	public void
 	setEnabled(
 		boolean	b )
 	{
 	}
 
+	/** No-op stub. */
 	public void
 	setVisible(
 		boolean b )
 	{
 	}
 
+	/** No-op stub. */
 	public void
 	setEditable(
 		boolean	b )
 	{
 	}
 
+	/** No-op stub. */
 	public void
 	setResizable(
 		boolean	b )
 	{
 	}
 
+	/** No-op stub. */
 	public void
 	setSize(
 		int	i, int j )
 	{
 	}
 
+	/** No-op stub. */
 	public void
 	setPreferredSize(
 		Dimension d )
 	{
 	}
 
+	/** No-op stub. */
 	public void
 	setBorder(
 		Component	c )
 	{
 	}
 
+	/** No-op stub. */
 	public void
 	setLayout(
 		BorderLayout l )
 	{
 	}
 
+	/** No-op stub. */
 	public void
 	setLayout(
 		BoxLayout l )
 	{
 	}
 
+	/** No-op stub. */
 	public void
 	setCursor(
 		Cursor c )
 	{
 	}
 
+	/** No-op stub. */
 	public void
 	setForeground(
 		Color	c )
 	{
 	}
 
+	/** No-op stub. */
 	public void
 	pack()
 	{
 
 	}
+	/** No-op stub. */
 	public void
 	repaint()
 	{
 
 	}
 
+	/** @return new Toolkit stub */
 	public Toolkit
 	getToolkit()
 	{
 		return( new Toolkit());
 	}
 
+	/** No-op stub. */
 	public void
 	addMouseListener(
 		MouseAdapter	l )
@@ -137,6 +156,7 @@ Component
 
 	}
 
+	/** No-op stub. */
 	public void
 	addWindowListener(
 		WindowAdapter l )

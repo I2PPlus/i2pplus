@@ -43,22 +43,35 @@ import net.i2p.util.SystemVersion;
  * Entry point from clients.config.
  */
 public class TunnelControllerGroup implements ClientApp {
+    /** ignored */
     private final Log _log;
+    /** ignored */
     private volatile ClientAppState _state;
+    /** ignored */
     private final I2PAppContext _context;
+    /** ignored */
     private final ClientAppManager _mgr;
+    /** ignored */
     private static volatile TunnelControllerGroup _instance;
+    /** Default config file name */
     static final String DEFAULT_CONFIG_FILE = "i2ptunnel.config";
+    /** Config directory for split config files */
     private static final String CONFIG_DIR = "i2ptunnel.config.d";
+    /** Config key prefix */
     private static final String PREFIX = "tunnel.";
 
+    /** ignored */
     private final List<TunnelController> _controllers;
+    /** ignored */
     private final ReadWriteLock _controllersLock;
-    // locking: this
+    /** ignored */
     private boolean _controllersLoaded;
+    /** ignored */
     private final String _configFile;
+    /** ignored */
     private final String _configDirectory;
 
+    /** Service name for ClientApp registration */
     private static final String REGISTERED_NAME = "i2ptunnel";
 
     /**
@@ -87,56 +100,68 @@ public class TunnelControllerGroup implements ClientApp {
      */
     private ExecutorService _delayedShutdownExecutor;
 
-    /**
-     * Map of I2PSession to a Set of TunnelController objects
-     * using the session (to prevent closing the session until
-     * no more tunnels are using it)
-     *
-     */
+    /** Session ownership map for preventing premature session close */
     private final Map<I2PSession, Set<TunnelController>> _sessions;
 
-    /**
-     *  We keep a pool of socket handlers for all clients,
-     *  as there is no need for isolation on the client side.
-     *  Extending classes may use it for other purposes.
-     */
+    /** Pool of socket handlers for all clients */
     private ThreadPoolExecutor _executor;
+    /** ignored */
     private static final AtomicLong _executorThreadCount = new AtomicLong();
+    /** ignored */
     private final Object _executorLock = new Object();
     /** how long to wait before dropping an idle thread */
     private static final long HANDLER_KEEPALIVE_MS = (long) 30*1000;
 
-    /**
-     *  Shared bounded executor for all server tunnel connection handlers.
-     *  Handler tasks are short-lived (µs-scale), so a modest pool suffices.
-     *  CallerRunsPolicy applies backpressure when saturated rather than silently dropping.
-     */
+    /** Shared bounded executor for server tunnel connection handlers */
     private ThreadPoolExecutor _serverExecutor;
+    /** ignored */
     private static final AtomicLong _serverExecutorThreadCount = new AtomicLong();
+    /** ignored */
     private final Object _serverExecutorLock = new Object();
+    /** Server handler idle keepalive */
     private static final long SERVER_KEEPALIVE_MS = (long) 30*1000;
 
-    /** Tuned by Tuner — min 2, max 128 */
+    /** Tuned by Tuner */
     private static volatile int _serverHandlerThreads = Math.max(SystemVersion.getCores(), 4);
+    /** Tuned by Tuner */
     private static volatile int _clientRunnerMax = 8192;
 
+    /**
+     * getServerHandlerThreads.
+     */
     public static int getServerHandlerThreads() { return _serverHandlerThreads; }
+    /**
+     * setServerHandlerThreads.
+     */
     public static void setServerHandlerThreads(int val) {
         _serverHandlerThreads = Math.max(2, Math.min(128, val));
     }
+    /**
+     * getClientRunnerMax.
+     */
     public static int getClientRunnerMax() { return _clientRunnerMax; }
+    /**
+     * setClientRunnerMax.
+     */
     public static void setClientRunnerMax(int val) {
         _clientRunnerMax = Math.max(4, Math.min(8192, val));
     }
 
-    /** Tuned by Tuner — milliseconds, min 5000 */
+    /** Socket connect timeout in ms, tuned by Tuner */
     private static volatile int _socketConnectTimeout = 10000;
 
+    /**
+     * getSocketConnectTimeout.
+     */
     public static int getSocketConnectTimeout() { return _socketConnectTimeout; }
+    /**
+     * setSocketConnectTimeout.
+     */
     public static void setSocketConnectTimeout(int val) {
         _socketConnectTimeout = Math.max(5000, Math.min(120000, val));
     }
 
+    /** Rate stat intervals */
     static final long[] RATES = {60*1000L, 10*60*1000L, 60*60*1000L};
 
 
@@ -343,31 +368,22 @@ public class TunnelControllerGroup implements ClientApp {
         return REGISTERED_NAME;
     }
 
-    /**
-     *  @since 0.9.4
-     */
+    /** @param state the new state */
     private void changeState(ClientAppState state) {
         changeState(state, null);
     }
 
-    /**
-     *  @since 0.9.4
-     */
+    /** @param state the new state, @param e optional cause */
     private synchronized void changeState(ClientAppState state, Exception e) {
         _state = state;
         if (_mgr != null)
             _mgr.notify(this, state, null, e);
     }
 
-    /**
-     *  Warning - destroys the singleton!
-     *  @since 0.8.8
-     */
+    /** Warning - destroys the singleton */
     private class Shutdown implements Runnable {
         @Override
-        public void run() {
-            shutdown();
-        }
+        public void run() {shutdown();}
     }
 
     /**
@@ -771,6 +787,7 @@ public class TunnelControllerGroup implements ClientApp {
         changeState(RUNNING);
     }
 
+    /** Start all configured tunnels */
     private class StartControllers implements Runnable {
         @Override
         public void run() {
@@ -1484,21 +1501,16 @@ public class TunnelControllerGroup implements ClientApp {
         }
     }
 
-    /**
-     * Thread pool executor for I2P tunnel client handlers with custom configuration
-     * @since 0.9.18 Moved from I2PTunnelClientBase
-     */
+    /** Thread pool executor for I2P tunnel client handlers */
     static class CustomThreadPoolExecutor extends ThreadPoolExecutor {
+        /** Create with default configuration */
         public CustomThreadPoolExecutor() {
              super(0, _clientRunnerMax, HANDLER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
                    new SynchronousQueue<>(), new CustomThreadFactory());
         }
     }
 
-    /**
-     *  Just to set the name and set Daemon
-     *  @since 0.9.18 Moved from I2PTunnelClientBase
-     */
+    /** Thread factory that sets daemon flag and names threads */
     private static class CustomThreadFactory implements ThreadFactory {
         @Override
         public Thread newThread(Runnable r) {

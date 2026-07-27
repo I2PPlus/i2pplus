@@ -40,19 +40,26 @@ import java.util.GregorianCalendar;
  * @author Sasa Markovic
  */
 public class TimeSpec {
+    /** ignored */
     static final int TYPE_ABSOLUTE = 0;
+    /** ignored */
     static final int TYPE_START = 1;
+    /** ignored */
     static final int TYPE_END = 2;
-
+    /** Type */
     int type = TYPE_ABSOLUTE;
+    /** Sec */
     int year, month, day, hour, min, sec;
+    /** Wday */
     int wday;
+    /** Dsec */
     int dyear, dmonth, dday, dhour, dmin, dsec;
-
+    /** Date string */
     final String dateString;
-
+    /** Context */
     TimeSpec context;
 
+    /** Create TimeSpec */
     TimeSpec(String dateString) {
         this.dateString = dateString;
     }
@@ -78,6 +85,7 @@ public class TimeSpec {
         wday = date.get(Calendar.DAY_OF_WEEK) - Calendar.SUNDAY;
     }
 
+    /** Resolve time, applying relative offsets to the context */
     GregorianCalendar getTime() {
         GregorianCalendar gc;
         // absolute time, this is easy

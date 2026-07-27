@@ -78,6 +78,7 @@ public final class ECIESAEADEngine {
     private static final int MIN_ENCRYPTED_SIZE = MIN_ES_SIZE;
     private static final byte[] NULLPK = new byte[KEYLEN];
     private static final int MAXPAD = 16;
+    /** M a x  n s  a g e */
     static final long MAX_NS_AGE = 5*60*1000L;
     private static final long MAX_NS_FUTURE = 2*60*1000L;
     // debug, send ACKREQ in every ES
@@ -1447,6 +1448,7 @@ public final class ECIESAEADEngine {
         return enc;
     }
 
+    /** Do d h */
     static final PrivateKey doDH(PrivateKey privkey, PublicKey pubkey) {
         byte[] dh = new byte[KEYLEN];
         Curve25519.eval(dh, 0, privkey.getData(), pubkey.getData());
@@ -1462,9 +1464,11 @@ public final class ECIESAEADEngine {
         public final List<GarlicClove> cloveSet = new ArrayList<>(3);
         private final RatchetSKM skm;
         private final PublicKey remote;
+/** The datetime value */
         public long datetime;
         /** null or non-empty */
         public List<NextSessionKey> nextKeys;
+/** Whether an ack was requested */
         public boolean ackRequested;
 
         /**
@@ -1485,6 +1489,7 @@ public final class ECIESAEADEngine {
             skm = keyManager;
             remote = remoteKey;
         }
+/** Process a datetime field from the payload */
 
         public void gotDateTime(long time) throws DataFormatException {
             if (_log.shouldDebug())
@@ -1498,18 +1503,21 @@ public final class ECIESAEADEngine {
                 throw new DataFormatException("Excess clock skew in Inbound NewSession: " + DataHelper.formatTime(time));
             }
         }
+/** Process an options field from the payload */
 
         public void gotOptions(byte[] options, boolean isHandshake) {
             if (_log.shouldDebug())
                 _log.debug("Received OPTIONS block (" + options.length + " bytes)");
             // TODO
         }
+/** Process a garlic clove field from the payload */
 
         public void gotGarlic(GarlicClove clove) {
             if (_log.shouldDebug())
                 _log.debug("Received GARLIC block: " + clove);
             cloveSet.add(clove);
         }
+/** Process a next key field from the payload */
 
         public void gotNextKey(NextSessionKey next) {
             if (_log.shouldDebug())
@@ -1520,6 +1528,7 @@ public final class ECIESAEADEngine {
                 nextKeys = new ArrayList<>(2);
             nextKeys.add(next);
         }
+/** Process an ack field from the payload */
 
         public void gotAck(int id, int n) {
             if (_log.shouldDebug())
@@ -1529,29 +1538,34 @@ public final class ECIESAEADEngine {
             else if (_log.shouldWarn())
                 _log.warn("ACK in NS/NSR?");
         }
+/** Process an ack request field from the payload */
 
         public void gotAckRequest() {
             if (_log.shouldDebug())
                 _log.debug("Received ACK REQUEST block");
             ackRequested = true;
         }
+/** Process a termination field from the payload */
 
         public void gotTermination(int reason) {
             if (_log.shouldDebug())
                 _log.debug("Received TERMINATION block, reason: " + reason);
             // TODO
         }
+/** Process a PN field from the payload */
 
         public void gotPN(int pn) {
             if (_log.shouldDebug())
                 _log.debug("Received PN block, pn: " + pn);
             // TODO
         }
+/** Process an unknown field from the payload */
 
         public void gotUnknown(int type, int len) {
             if (_log.shouldDebug())
                 _log.debug("Received UNKNOWN block, type: " + type + " len: " + len);
         }
+/** Process a padding field from the payload */
 
         public void gotPadding(int paddingLength, int frameLength) {
             if (_log.shouldDebug())

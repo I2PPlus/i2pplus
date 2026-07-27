@@ -16,6 +16,11 @@ import net.i2p.util.PortMapper;
  * Handler for router update configuration.
  */
 public class ConfigUpdateHandler extends FormHandler {
+    /** ConfigUpdateHandler default constructor */
+    public ConfigUpdateHandler() {
+        super();
+    }
+
     private String _newsURL;
     private long _refreshFrequency;
     private String _updateURL;
@@ -30,6 +35,7 @@ public class ConfigUpdateHandler extends FormHandler {
     private boolean _updateDevSU3;
     private String _devSU3URL;
 
+    /** Property for news URL */
     public static final String PROP_NEWS_URL = "router.newsURL";
     /**
      *  current default, i2pnews.i2p, run by echelon
@@ -38,30 +44,50 @@ public class ConfigUpdateHandler extends FormHandler {
      *  app/src/main/java/net/i2p/android/apps/NewsFetcher.java
      */
     public static final String DEFAULT_NEWS_URL_SU3 = "http://tc73n4kivdroccekirco7rhgxdg5f3cjvbaapabupeyzrqwv5guq.b32.i2p/news.su3";
+    /** Property for news refresh frequency */
     public static final String PROP_REFRESH_FREQUENCY = "router.newsRefreshFrequency";
+    /** Default refresh frequency (36 hours) */
     public static final long DEFAULT_REFRESH_FREQ = 36*60*60*1000L;
+    /** Default refresh frequency as String */
     public static final String DEFAULT_REFRESH_FREQUENCY = Long.toString(DEFAULT_REFRESH_FREQ);
+    /** Property for update policy */
     public static final String PROP_UPDATE_POLICY = "router.updatePolicy";
+    /** Default update policy */
     public static final String DEFAULT_UPDATE_POLICY = "notify";
+    /** Property for update through proxy */
     public static final String PROP_SHOULD_PROXY = "router.updateThroughProxy";
+    /** Default for update through proxy */
     public static final boolean DEFAULT_SHOULD_PROXY = true;
-    /** @since 0.9.9 */
+    /**
+     *  Property for fetching news through proxy.
+     *  @since 0.9.9
+     */
     public static final String PROP_SHOULD_PROXY_NEWS = "router.fetchNewsThroughProxy";
-    /** @since 0.9.9 */
+    /**
+     *  Default for fetching news through proxy.
+     *  @since 0.9.9
+     */
     public static final boolean DEFAULT_SHOULD_PROXY_NEWS = true;
+    /** Property for update proxy host */
     public static final String PROP_PROXY_HOST = "router.updateProxyHost";
+    /** Default proxy host */
     public static final String DEFAULT_PROXY_HOST = "127.0.0.1";
+    /** Property for update proxy port */
     public static final String PROP_PROXY_PORT = "router.updateProxyPort";
+    /** Default proxy port as int */
     public static final int DEFAULT_PROXY_PORT_INT = 4444;
+    /** Default proxy port as String */
     public static final String DEFAULT_PROXY_PORT = Integer.toString(DEFAULT_PROXY_PORT_INT);
     /** default false */
     public static final boolean DEFAULT_UPDATE_UNSIGNED = true;
+    /** Property for unsigned update flag */
     public static final String PROP_UPDATE_UNSIGNED = "router.updateUnsigned";
     /** default false - use for distros */
     public static final String PROP_UPDATE_DISABLED = "router.updateDisabled";
     /** no default */
     public static final String PROP_ZIP_URL = "router.updateUnsignedURL";
 
+    /** Property for update URL */
     public static final String PROP_UPDATE_URL = "router.updateURL";
 
     /**
@@ -103,10 +129,12 @@ public class ConfigUpdateHandler extends FormHandler {
         USE_SU3_UPDATE = files != null && files.length > 0;
     }
 
+    /** Property for trusted update keys */
     public static final String PROP_TRUSTED_KEYS = "router.trustedUpdateKeys";
 
     /**
      *  Convenience method for updaters
+     *  @param ctx the context for retrieving configuration
      *  @return the configured value, else the registered HTTP proxy, else the default
      *  @since 0.8.13
      */
@@ -259,24 +287,46 @@ public class ConfigUpdateHandler extends FormHandler {
         _context.router().saveConfig(changes, null);
     }
 
+    /** @param url the news URL */
     public void setNewsURL(String url) {_newsURL = url;}
+    /** @param freq the refresh frequency in milliseconds */
     public void setRefreshFrequency(String freq) {
         try {_refreshFrequency = Long.parseLong(freq);}
         catch (NumberFormatException nfe) { /* ignored */ }
     }
+    /** @param url the update URL */
     public void setUpdateURL(String url) {_updateURL = url;}
+    /** @param policy the update policy */
     public void setUpdatePolicy(String policy) {_updatePolicy = policy;}
+    /** @param keys the trusted keys */
     public void setTrustedKeys(String keys) {_trustedKeys = keys;}
+    /** @param foo ignored */
     public void setUpdateThroughProxy(String foo) {_updateThroughProxy = true;}
+    /** @param host the proxy host */
     public void setProxyHost(String host) {_proxyHost = host;}
+    /** @param port the proxy port */
     public void setProxyPort(String port) {_proxyPort = port;}
+    /** @param foo ignored */
     public void setUpdateUnsigned(String foo) {_updateUnsigned = true;}
+    /** @param url the unsigned zip URL */
     public void setZipURL(String url) {_zipURL = url;}
-     /** @since 0.9.9 */
+    /**
+     *  Set whether to fetch news through proxy.
+     *  @param foo ignored
+     *  @since 0.9.9
+     */
     public void setNewsThroughProxy(String foo) {_newsThroughProxy = true;}
-    /** @since 0.9.20 */
+    /**
+     *  Set whether to update development SU3 builds.
+     *  @param foo ignored
+     *  @since 0.9.20
+     */
     public void setUpdateDevSU3(String foo) {_updateDevSU3  = true;}
-    /** @since 0.9.20 */
+    /**
+     *  Set the development SU3 URL.
+     *  @param url the URL
+     *  @since 0.9.20
+     */
     public void setDevSU3URL(String url) {_devSU3URL = url;}
 
 }

@@ -56,6 +56,15 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
      */
     public static final long EXPIRE_DELAY = 60*60*1000L;
 
+    /**
+     * Creates a new HandleDatabaseLookupMessageJob.
+     *
+     * @param ctx the router context
+     * @param receivedMessage the received message
+     * @param _from the router identity of the sender
+     * @param _fromHash the hash of the sender
+     * @param msgIDBloomXor the message ID bloom XOR value
+     */
     public HandleDatabaseLookupMessageJob(RouterContext ctx, DatabaseLookupMessage receivedMessage, RouterIdentity _from, Hash _fromHash, long msgIDBloomXor) {
         super(ctx);
         _log = ctx.logManager().getLog(HandleDatabaseLookupMessageJob.class);
@@ -236,6 +245,14 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         sendMessage(msg, toPeer, replyTunnel);
     }
 
+    /**
+     * Send the closest routers to the requesting peer.
+     *
+     * @param key the search key
+     * @param routerHashes the set of router hashes to send
+     * @param toPeer the destination peer
+     * @param replyTunnel the reply tunnel
+     */
     protected void sendClosest(Hash key, Set<Hash> routerHashes, Hash toPeer, TunnelId replyTunnel) {
         if (_log.shouldDebug()) {
             _log.debug("Sending " + routerHashes.size() + " of our closest routers to [" +
@@ -253,6 +270,13 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         sendMessage(msg, toPeer, replyTunnel); // should this go via garlic messages instead?
     }
 
+    /**
+     * Send an I2NP message to the specified peer.
+     *
+     * @param message the message to send
+     * @param toPeer the destination peer
+     * @param replyTunnel the reply tunnel, or null for direct delivery
+     */
     protected void sendMessage(I2NPMessage message, Hash toPeer, TunnelId replyTunnel) {
         if (replyTunnel != null) {
             sendThroughTunnel(message, toPeer, replyTunnel);

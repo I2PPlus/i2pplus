@@ -6,7 +6,7 @@
  * to EdDSA-Java.
  *
  * You should have received a copy of the CC0 legalcode along with this
- * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>lt;https://creativecommons.org/publicdomain/zero/1.0/<https://creativecommons.org/publicdomain/zero/1.0/>gt;.
+ * work. If not, see &lt;https://creativecommons.org/publicdomain/zero/1.0/&gt;.
  *
  */
 package net.i2p.crypto.eddsa.math;
@@ -16,21 +16,39 @@ import java.io.Serializable;
 /**
  * An EdDSA finite field. Includes several pre-computed values.
  *
- * @since 0.9.15
  * @author str4d
- *
  */
 public class Field implements Serializable {
     private static final long serialVersionUID = 8746587465875676L;
 
+    /**
+     * ZERO.
+     */
     public final FieldElement ZERO;
+    /**
+     * ONE.
+     */
     public final FieldElement ONE;
+    /**
+     * TWO.
+     */
     public final FieldElement TWO;
+    /**
+     * FOUR.
+     */
     public final FieldElement FOUR;
+    /**
+     * FIVE.
+     */
     public final FieldElement FIVE;
+    /**
+     * EIGHT.
+     */
     public final FieldElement EIGHT;
 
+    /** B */
     private final int b;
+    /** Q */
     private final FieldElement q;
 
     /**
@@ -43,14 +61,15 @@ public class Field implements Serializable {
      */
     private final FieldElement qm5d8;
 
+    /** Enc */
     private final Encoding enc;
 
     /**
-     * Creates a new finite field with the given parameters.
+     * Create a finite field.
      *
-     * @param b the bit length of the field
-     * @param q the field prime as a byte array
-     * @param enc the encoding to use for field elements
+     * @param b the bit length
+     * @param q the field prime
+     * @param enc the encoding
      */
     public Field(int b, byte[] q, Encoding enc) {
         this.b = b;
@@ -73,9 +92,9 @@ public class Field implements Serializable {
     }
 
     /**
-     * Creates a field element from a byte array.
+     * Create a field element from a byte array.
      *
-     * @param x the byte array encoding of the field element
+     * @param x the byte array
      * @return the field element
      */
     public final FieldElement fromByteArray(byte[] x) {
@@ -83,7 +102,7 @@ public class Field implements Serializable {
     }
 
     /**
-     * Returns the bit length of the field.
+     * Return the bit length.
      *
      * @return the bit length
      */
@@ -92,7 +111,7 @@ public class Field implements Serializable {
     }
 
     /**
-     * Returns the field prime q.
+     * Return the field prime.
      *
      * @return the field prime
      */
@@ -101,7 +120,7 @@ public class Field implements Serializable {
     }
 
     /**
-     * Returns q - 2.
+     * Return q - 2.
      *
      * @return q - 2
      */
@@ -110,7 +129,7 @@ public class Field implements Serializable {
     }
 
     /**
-     * Returns (q - 5) / 8.
+     * Return (q - 5) / 8.
      *
      * @return (q - 5) / 8
      */
@@ -119,7 +138,7 @@ public class Field implements Serializable {
     }
 
     /**
-     * Returns the encoding used for this field.
+     * Return the encoding.
      *
      * @return the encoding
      */
@@ -127,11 +146,22 @@ public class Field implements Serializable {
         return enc;
     }
 
+    /**
+     * Return the hash code.
+     *
+     * @return the hash code
+     */
     @Override
     public int hashCode() {
         return q.hashCode();
     }
 
+    /**
+     * Compare for equality.
+     *
+     * @param obj the object
+     * @return true if equal
+     */
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Field)) return false;

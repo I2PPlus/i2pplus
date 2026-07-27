@@ -20,14 +20,23 @@ package net.i2p;
  */
 public class I2PException extends Exception {
 
+    /**
+     * I2PException.
+     */
     public I2PException() {
         super();
     }
 
+    /**
+     * I2PException.
+     */
     public I2PException(String msg) {
         super(msg);
     }
 
+    /**
+     * I2PException.
+     */
     public I2PException(String msg, Throwable cause) {
         super(msg, cause);
     }

@@ -21,27 +21,45 @@ public class I2PProperties extends Properties {
      */
     private final List<I2PPropertyCallback> _callbacks = new CopyOnWriteArrayList<>();
 
+    /**
+     * clone.
+     */
     @Override
     public Object clone() {
         return super.clone();
     }
 
+    /**
+     * I2PProperties.
+     */
     public I2PProperties() {
         super();
     }
 
+    /**
+     * I2PProperties.
+     */
     public I2PProperties(Properties defaults) {
         super(defaults);
     }
 
+    /**
+     * addCallBack.
+     */
     public void addCallBack(I2PPropertyCallback callback) {
         _callbacks.add(callback);
     }
 
+    /**
+     * removeCallBack.
+     */
     public void removeCallBack(I2PPropertyCallback callback) {
         _callbacks.remove(callback);
     }
 
+    /**
+     * setProperty.
+     */
     @Override
     public Object setProperty(String key, String value) {
         Object returnValue = super.setProperty(key, value);
@@ -58,6 +76,9 @@ public class I2PProperties extends Properties {
      */
     public interface I2PPropertyCallback {
 
+        /**
+         * value).
+         */
         public void propertyChanged(String key, String value);
     }
 }

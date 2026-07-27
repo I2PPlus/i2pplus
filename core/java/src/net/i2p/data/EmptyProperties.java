@@ -18,6 +18,7 @@ import java.util.Map;
  */
 public class EmptyProperties extends OrderedProperties {
 
+/** method comment */
     public static final EmptyProperties INSTANCE = new EmptyProperties();
 
     private EmptyProperties() {

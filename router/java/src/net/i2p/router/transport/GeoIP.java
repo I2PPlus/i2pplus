@@ -85,12 +85,6 @@ public class GeoIP {
     /** Cap for _IPToCountry to prevent unbounded growth */
     private static final int MAX_IP_CACHE_SIZE = 32768;
 
-/**
-    private final Set<Long> _pendingSearch;
-    private final Set<Long> _pendingIPv6Search;
-    private final Set<Long> _notFound;
-**/
-
     private final Set<Long> _pendingSearch;
     private final Set<Long> _pendingIPv6Search;
     private final Set<Long> _notFound;
@@ -102,22 +96,49 @@ public class GeoIP {
     // ASN database for IP → org name lookups
     private volatile com.maxmind.db.Reader _asnReader;
 
+    /** P r o p  g e o i p  e n a b l e d */
     static final String PROP_GEOIP_ENABLED = "routerconsole.geoip.enable";
     /** Normalize ISP/org names from ASN database (strip suffixes, abbreviate, title-case) */
     static final String PROP_NORMALIZE_ISP = "routerconsole.enableISPNameNormalization";
+    /**
+     * PROP_GEOIP_DIR.
+     */
     public static final String PROP_GEOIP_DIR = "geoip.dir";
+    /**
+     * GEOIP_DIR_DEFAULT.
+     */
     public static final String GEOIP_DIR_DEFAULT = "geoip";
+    /** Default geoip file name */
     static final String GEOIP_FILE_DEFAULT = "geoip.txt";
+    /**
+     * GEOIP2_FILE_DEFAULT.
+     */
     public static final String GEOIP2_FILE_DEFAULT = "GeoLite2-Country.mmdb";
+    /**
+     * ASN_FILE_DEFAULT.
+     */
     public static final String ASN_FILE_DEFAULT = "db-ip-asn.mmdb";
+    /** Default country names file name */
     static final String COUNTRY_FILE_DEFAULT = "countries.txt";
+    /**
+     * PROP_IP_COUNTRY.
+     */
     public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
+    /**
+     * PROP_DEBIAN_GEOIP.
+     */
     public static final String PROP_DEBIAN_GEOIP = "geoip.dat";
+    /**
+     * PROP_DEBIAN_GEOIPV6.
+     */
     public static final String PROP_DEBIAN_GEOIPV6 = "geoip.v6.dat";
     private static final String DEBIAN_GEOIP_FILE = "/usr/share/GeoIP/GeoIP.dat";
     private static final String DEBIAN_GEOIPV6_FILE = "/usr/share/GeoIP/GeoIPv6.dat";
     private static final boolean DISABLE_DEBIAN = false;
     private static final boolean ENABLE_DEBIAN = !DISABLE_DEBIAN && !(SystemVersion.isWindows() || SystemVersion.isAndroid());
+    /**
+     * PROP_BLOCK_MY_COUNTRY.
+     */
     public static final String PROP_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
     /** maxmind API */
     private static final String UNKNOWN_COUNTRY_CODE = "--";
@@ -146,12 +167,6 @@ public class GeoIP {
         _codeToName = new ConcurrentHashMap<>(512);
         _codeCache = new ConcurrentHashMap<>(512);
         _IPToCountry = new ConcurrentHashMap<>(32768);
-/**
-        _pendingSearch = new ConcurrentHashSet<>();
-        _pendingIPv6Search = new ConcurrentHashSet<>();
-        _notFound = new ConcurrentHashSet<>();
-**/
-
         _pendingSearch = ConcurrentHashMap.newKeySet();
         _pendingIPv6Search = ConcurrentHashMap.newKeySet();
         _notFound = ConcurrentHashMap.newKeySet();
@@ -160,9 +175,7 @@ public class GeoIP {
         readCountryFile();
     }
 
-    /**
-     *  @since 0.9.3
-     */
+    /** Shutdown and release resources. */
     public void shutdown() {
         _codeToName.clear();
         _codeCache.clear();
@@ -202,6 +215,9 @@ public class GeoIP {
     private class LookupJob implements Runnable {
         private static final int CLEAR = 8;
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             runit();
@@ -1126,10 +1142,10 @@ public class GeoIP {
         return result.toString();
     }
 
-    /**
-    * Open a GeoIP2 database
-    * @since 0.9.38
-    */
+     /**
+     * Open a GeoIP2 database
+     * @since 0.9.38
+     */
     private DatabaseReader openGeoIP2(File geoFile) throws IOException {
         DatabaseReader.Builder b = new DatabaseReader.Builder(geoFile);
         b.withCache(new CHMCache(256));
@@ -1590,24 +1606,5 @@ public class GeoIP {
         return Collections.unmodifiableMap(_codeToName);
     }
 
-    public static void main(String[] args) {
-        if (args.length <= 0) {
-            System.out.print("Usage: GeoIP {IP ADDRESS}...\n" +
-                              "      GeoIP -c {2 letter country code} Dump all subnets for a country to " +
-                              Blocklist.BLOCKLIST_COUNTRY_FILE); // NOSONAR S106 CLI output
-            System.exit(1);
-        }
-        GeoIP g = new GeoIP(I2PAppContext.getGlobalContext());
-        if (args[0].equals("-c") && args.length == 2) {
-            g.countryToIP(args[1]);
-            System.out.println("Subnets for country " + args[1] + " dumped to " +
-                               Blocklist.BLOCKLIST_COUNTRY_FILE); // NOSONAR S106 CLI output
-            return;
-        }
-        for (int i = 0; i < args.length; i++) {g.add(args[i]);}
-        long start = System.currentTimeMillis();
-        g.blockingLookup();
-        System.out.println("Lookup took " + (System.currentTimeMillis() - start) + "ms"); // NOSONAR S106 CLI output
-        for (int i = 0; i < args.length; i++) {System.out.println(args[i] + " : " + g.get(args[i]));} // NOSONAR S106 CLI output
-    }
+
 }

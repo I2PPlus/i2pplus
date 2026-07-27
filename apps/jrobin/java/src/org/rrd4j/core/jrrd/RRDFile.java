@@ -42,9 +42,13 @@ class RRDFile implements Constants {
     };
 
     // Reflective unmap support (mirrors RrdNioBackend pattern)
+    /** ignored */
     private static final Method CLEANER_METHOD;
+    /** ignored */
     private static final Method CLEAN_METHOD;
+    /** ignored */
     private static final Method INVOKE_CLEANER;
+    /** ignored */
     private static final Object UNSAFE;
 
     static {
@@ -81,18 +85,25 @@ class RRDFile implements Constants {
         UNSAFE = us;
     }
 
+    /** ignored */
     private int alignment;
+    /** ignored */
     private int longSize = 4;
 
+    /** ignored */
     private final FileInputStream underlying;
+    /** ignored */
     private final MappedByteBuffer mappedByteBuffer;
 
+    /** ignored */
     private ByteOrder order;
 
+    /** Open RRD file */
     RRDFile(String name) throws IOException {
         this(new File(name));
     }
 
+    /** Open RRD file */
     RRDFile(File file) throws IOException {
         long len = file.length();
         if (len > Integer.MAX_VALUE) {
@@ -117,6 +128,7 @@ class RRDFile implements Constants {
         }
     }
 
+    /** ignored */
     private void initDataLayout(File file) throws IOException {
 
         if (file.exists()) { // Load the data formats from the file
@@ -162,27 +174,33 @@ class RRDFile implements Constants {
         mappedByteBuffer.rewind();
     }
 
+    /** ignored */
     private int indexOf(byte[] pattern, byte[] array) {
         return (new String(array, StandardCharsets.UTF_8))
                 .indexOf(new String(pattern, StandardCharsets.UTF_8));
     }
 
+    /** @return true if big endian */
     boolean isBigEndian() {
         return order == ByteOrder.BIG_ENDIAN;
     }
 
+    /** @return the alignment */
     int getAlignment() {
         return alignment;
     }
 
+    /** @return the double */
     double readDouble() {
         return mappedByteBuffer.getDouble();
     }
 
+    /** @return the int */
     int readInt() {
         return mappedByteBuffer.getInt();
     }
 
+    /** @return the long */
     int readLong() {
         if (longSize == 4) {
             return mappedByteBuffer.getInt();
@@ -191,6 +209,7 @@ class RRDFile implements Constants {
         }
     }
 
+    /** @return the string */
     String readString(int maxLength) {
         byte[] array = new byte[maxLength];
         mappedByteBuffer.get(array);
@@ -198,10 +217,12 @@ class RRDFile implements Constants {
         return new String(array, 0, maxLength, StandardCharsets.UTF_8).trim();
     }
 
+    /** Skip bytes */
     void skipBytes(int n) {
         mappedByteBuffer.position(mappedByteBuffer.position() + n);
     }
 
+    /** @return the skip count */
     int align(int boundary) {
 
         int skip = (boundary - (mappedByteBuffer.position() % boundary)) % boundary;
@@ -213,18 +234,22 @@ class RRDFile implements Constants {
         return skip;
     }
 
+    /** @return the skip count */
     int align() {
         return align(alignment);
     }
 
+    /** @return the position */
     long info() {
         return mappedByteBuffer.position();
     }
 
+    /** @return the file pointer */
     long getFilePointer() {
         return mappedByteBuffer.position();
     }
 
+    /** ignored */
     private void unmapFile() {
         if (mappedByteBuffer != null && mappedByteBuffer.isDirect()) {
             try {
@@ -248,6 +273,7 @@ class RRDFile implements Constants {
         }
     }
 
+    /** Close the file */
     void close() throws IOException {
         unmapFile();
         if (underlying != null) {
@@ -255,6 +281,7 @@ class RRDFile implements Constants {
         }
     }
 
+    /** Read bytes */
     void read(ByteBuffer bb) {
         int count = bb.remaining();
         bb.put(
@@ -263,6 +290,7 @@ class RRDFile implements Constants {
         mappedByteBuffer.position(mappedByteBuffer.position() + count);
     }
 
+    /** @return the unival array */
     UnivalArray getUnivalArray(int size) {
         return new UnivalArray(this, size);
     }
@@ -274,10 +302,16 @@ class RRDFile implements Constants {
         return longSize * 8;
     }
 
+    /**
+     * seek.
+     */
     public void seek(long position) {
         mappedByteBuffer.position((int) position);
     }
 
+    /**
+     * seekToEndOfFile.
+     */
     public void seekToEndOfFile() {
         mappedByteBuffer.position(mappedByteBuffer.limit());
     }

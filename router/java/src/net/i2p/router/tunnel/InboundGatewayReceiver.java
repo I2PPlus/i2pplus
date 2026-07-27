@@ -19,16 +19,27 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
     private static final long MAX_LOOKUP_TIME = 15*1000L;
     private static final int PRIORITY = OutNetMessage.PRIORITY_PARTICIPATING;
 
+    /**
+     * @param ctx the router context
+     * @param cfg the hop configuration
+     */
     public InboundGatewayReceiver(RouterContext ctx, HopConfig cfg) {
         _context = ctx;
         _config = cfg;
         // all createRateStat() in TunnelDispatcher
     }
 
+    /**
+     * @param encrypted the encrypted data
+     * @return the message unique ID
+     */
     public long receiveEncrypted(byte[] encrypted) {
         return receiveEncrypted(encrypted, false);
     }
 
+    /**
+     * receiveEncrypted.
+     */
     public long receiveEncrypted(byte[] encrypted, boolean alreadySearched) {
         if (!alreadySearched)
             _config.incrementProcessedMessages();
@@ -71,13 +82,22 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
     private class ReceiveJob extends JobImpl {
         private final byte[] _encrypted;
 
+        /**
+         * ReceiveJob.
+         */
         public ReceiveJob(RouterContext ctx, byte[] data) {
             super(ctx);
             _encrypted = data;
         }
 
+        /**
+         * getName.
+         */
         public String getName() { return "Lookup IBGW First Hop"; }
 
+        /**
+         * runJob.
+         */
         public void runJob() {
             receiveEncrypted(_encrypted, true);
         }

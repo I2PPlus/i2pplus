@@ -28,6 +28,9 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
     private static final long DEFAULT_INTERVAL = 1;
     private static final AtomicBoolean _isDeadlocked = new AtomicBoolean();
 
+    /**
+     * DeadlockDetector.
+     */
     public DeadlockDetector(RouterContext ctx) {
         super(ctx.simpleTimer2());
         _context = ctx;
@@ -42,6 +45,9 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
         return rv * 60*60*1000L;
     }
 
+    /**
+     * timeReached.
+     */
     public void timeReached() {
         long start = System.currentTimeMillis();
         boolean detected = detect();
@@ -60,6 +66,9 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
         return detect(_context);
     }
 
+    /**
+     * detect.
+     */
     public static boolean detect(RouterContext ctx) {
         if (_isDeadlocked.get())
             return true;
@@ -125,41 +134,4 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
         return _isDeadlocked.get();
     }
 
-/*
-    public static void main(String[] args) {
-        final Object o1 = new Object();
-        final Object o2 = new Object();
-        Thread t1 = new Thread(new Runnable() {
-            public void run() {
-                synchronized(o1) {
-                    try { Thread.sleep(1000); } catch (InterruptedException ie) {}
-                    // should hang here
-                    synchronized(o2) {
-                        _log.error("Test fail");
-                    }
-                }
-            }
-        });
-        t1.start();
-        Thread t2 = new Thread(new Runnable() {
-            public void run() {
-                synchronized(o2) {
-                    // should hang here
-                    synchronized(o1) {
-                        _log.error("Test fail");
-                    }
-                }
-            }
-        });
-        t2.start();
-        try { Thread.sleep(1000); } catch (InterruptedException ie) {}
-        long start = System.currentTimeMillis();
-        boolean yes = detect(I2PAppContext.getGlobalContext());
-        if (!yes)
-            _log.error("Test fail");
-        long time = System.currentTimeMillis() - start;
-        _log.debug("Test took " + time + "ms");
-    }
-*/
 }
-

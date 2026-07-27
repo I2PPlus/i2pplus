@@ -78,7 +78,10 @@ public class Datagram2 {
     /**
      * Make a repliable I2P datagram2 containing the specified payload.
      *
+     * @param ctx the I2P app context
+     * @param session the I2P session
      * @param payload non-null Bytes to be contained in the I2P datagram.
+     * @param tohash the destination hash
      * @return non-null, throws on all errors
      * @throws DataFormatException if payload is too big
      */
@@ -89,7 +92,10 @@ public class Datagram2 {
     /**
      * Make a repliable I2P datagram2 containing the specified payload.
      *
+     * @param ctx the I2P app context
+     * @param session the I2P session
      * @param payload non-null Bytes to be contained in the I2P datagram.
+     * @param tohash the destination hash
      * @param options may be null
      * @return non-null, throws on all errors
      * @throws DataFormatException if payload is too big
@@ -136,6 +142,8 @@ public class Datagram2 {
     /**
      * Load an I2P repliable datagram and verify the signature.
      *
+     * @param ctx the I2P app context
+     * @param session the I2P session
      * @param dgram non-null I2P repliable datagram to be loaded
      * @return non-null, throws on all errors
      * @throws DataFormatException If there is an error in the datagram format

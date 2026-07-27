@@ -26,6 +26,7 @@ public class Comment implements Comparable<Comment> {
     private static final AtomicInteger _id = new AtomicInteger();
     private final int id = _id.incrementAndGet();
 
+    /** Maximum length of a commenter name */
     public static final int MAX_NAME_LEN = 32;
     // same as IRC, more or less
     private static final int MAX_TEXT_LEN = 512;
@@ -47,10 +48,13 @@ public class Comment implements Comparable<Comment> {
     }
 
     /**
+     * Create a comment with the specified text, name, rating, time, and ownership.
+     *
      * @param text may be null, will be truncated to max length, newlines replaced with spaces
      * @param name may be null, will be truncated to max length, newlines and commas removed
      * @param time java time (ms)
      * @param rating 0-5
+     * @param isMine whether this comment is from the local user
      */
     public Comment(String text, String name, int rating, long time, boolean isMine) {
         if (text != null) {
@@ -135,6 +139,7 @@ public class Comment implements Comparable<Comment> {
         return hidden;
     }
 
+    /** Mark this comment as hidden. */
     void setHidden() {
         hidden = true;
     }

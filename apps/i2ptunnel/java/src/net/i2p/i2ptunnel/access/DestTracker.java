@@ -9,8 +9,11 @@ import net.i2p.data.Hash;
  */
 class DestTracker {
 
+    /** ignored */
     private final Hash hash;
+    /** ignored */
     private final Threshold threshold;
+    /** ignored */
     private final AccessCounter counter;
 
     /**
@@ -23,6 +26,7 @@ class DestTracker {
         this.counter = new AccessCounter();
     }
 
+    /** @return the destination hash */
     Hash getHash() {
         return hash;
     }
@@ -43,6 +47,9 @@ class DestTracker {
         return counter.isBreached(threshold,now);
     }
 
+    /**
+     * @param olderThan purge entries older than this timestamp
+     */
     synchronized boolean purge(long olderThan) {
         return counter.purge(olderThan);
     }

@@ -55,6 +55,11 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
      *  As of 0.9.20 this is fast, and does NOT connect the manager to the router,
      *  or open the local socket. You MUST call startRunning() for that.
      *
+     *  @param localPort the local port to listen on
+     *  @param l the logging instance
+     *  @param ownDest whether to use own destination
+     *  @param notifyThis the event dispatcher for notifications
+     *  @param tunnel the I2P tunnel
      *  @param pkf private key file name or null for transient key
      */
     public I2PSOCKSTunnel(int localPort, Logging l, boolean ownDest, EventDispatcher notifyThis, I2PTunnel tunnel, String pkf) {
@@ -69,6 +74,9 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         notifyEvent("openSOCKSTunnelResult", "ok");
     }
 
+    /**
+     * clientConnectionRun.
+     */
     protected void clientConnectionRun(Socket s) {
         I2PSocket destSock = null;
         try {
@@ -97,7 +105,13 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
 
     /** add "default" or port number */
     public static final String PROP_PROXY_PREFIX = "i2ptunnel.socks.proxy.";
+    /**
+     * DEFAULT.
+     */
     public static final String DEFAULT = "default";
+    /**
+     * PROP_PROXY_DEFAULT.
+     */
     public static final String PROP_PROXY_DEFAULT = PROP_PROXY_PREFIX + DEFAULT;
 
     /**
@@ -152,6 +166,13 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
     public HashMap<String, List<String>> getProxyMap() {return proxies;}
 
     /**
+     * Get the default proxy list
+     *
+     * @return the default proxy list
+     */
+    public List<String> getDefaultProxies() {return proxies.get(DEFAULT);}
+
+    /**
      *  Gets the proxy list for a specific port.
      * <p>
      * If no proxies are configured for the port, returns the default proxies.
@@ -166,10 +187,11 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         return rv;
     }
 
-    public List<String> getDefaultProxies() {return proxies.get(DEFAULT);}
-
     /**
-     * Because getDefaultOptions() in super() is protected
+     * Build socket options from the tunnel config merged with overrides.
+     *
+     * @param overrides properties to override the default options
+     * @return the built socket options
      * @since 0.8.2
      */
     public I2PSocketOptions buildOptions(Properties overrides) {

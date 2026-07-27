@@ -24,9 +24,13 @@ import java.util.Properties;
  */
 public class DummyNamingService extends NamingService {
 
+    /** Length of a base32 hash string */
     protected static final int BASE32_HASH_LENGTH = 52; // 1 + Hash.HASH_LENGTH * 8 / 5
+    /** Property to enable b32 lookup */
     public static final String PROP_B32 = "i2p.naming.hostsTxt.useB32";
+    /** Maximum cache size */
     protected static final int CACHE_MAX_SIZE = SystemVersion.isAndroid() ? 32 : 128;
+    /** Standard base64 destination length (no certificate) */
     public static final int DEST_SIZE = 516; // Std. Base64 length (no certificate)
 
     /**
@@ -41,6 +45,7 @@ public class DummyNamingService extends NamingService {
      * application context.  This constructor should only be used by the
      * appropriate application context itself.
      *
+     * @param context the application context
      */
     protected DummyNamingService(I2PAppContext context) {
         super(context);
@@ -96,6 +101,7 @@ public class DummyNamingService extends NamingService {
      *  Provide basic static caching for all services
      *
      *  @param s case-sensitive, could be a hostname or a full b64 string
+     *  @param d the destination to cache
      */
     protected static void putCache(String s, Destination d) {
         if (d == null) return;
@@ -105,6 +111,8 @@ public class DummyNamingService extends NamingService {
     }
 
     /**
+     *  Look up a cached destination.
+     *
      *  @param s case-sensitive, could be a hostname or a full b64 string
      *  @return cached dest or null
      */
@@ -115,6 +123,8 @@ public class DummyNamingService extends NamingService {
     }
 
     /**
+     *  Remove a cached destination.
+     *
      *  @param s case-sensitive, could be a hostname or a full b64 string
      *  @since 0.8.7
      */
@@ -124,7 +134,7 @@ public class DummyNamingService extends NamingService {
         }
     }
 
-    /** @since 0.8.1 */
+    /** Clear all cached destinations. @since 0.8.1 */
     protected static void clearCache() {
         synchronized (_cache) {
             _cache.clear();

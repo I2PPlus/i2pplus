@@ -37,6 +37,12 @@ class ExpireRoutersJob extends JobImpl {
     private static final long RERUN_DELAY_MS = 15*60*1000L;
     private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 4000 : 8000;
 
+    /**
+     * Constructs a job to expire outdated routers from the network database.
+     *
+     * @param ctx the router context
+     * @param facade the Kademlia network database facade
+     */
     public ExpireRoutersJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
         super(ctx);
         _log = ctx.logManager().getLog(ExpireRoutersJob.class);

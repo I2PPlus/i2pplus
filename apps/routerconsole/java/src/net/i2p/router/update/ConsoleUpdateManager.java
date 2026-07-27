@@ -678,6 +678,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
     }
 
+    /**
+     * unregister.
+     */
     @Override
     public void unregister(Updater updater, UpdateType type, UpdateMethod method) {
         RegisteredUpdater ru = new RegisteredUpdater(updater, type, method, 0);
@@ -685,6 +688,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         _registeredUpdaters.remove(ru);
     }
 
+    /**
+     * register.
+     */
     @Override
     public void register(Checker updater, UpdateType type, UpdateMethod method, int priority) {
         RegisteredChecker rc = new RegisteredChecker(updater, type, method, priority);
@@ -694,6 +700,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
     }
 
+    /**
+     * unregister.
+     */
     @Override
     public void unregister(Checker updater, UpdateType type, UpdateMethod method) {
         RegisteredChecker rc = new RegisteredChecker(updater, type, method, 0);
@@ -960,6 +969,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         synchronized(task) {task.notifyAll();}
     }
 
+    /**
+     * notifyProgress.
+     */
     @Override
     public void notifyProgress(UpdateTask task, String status, long downloaded, long totalSize) {
         StringBuilder buf = new StringBuilder(64);
@@ -1391,6 +1403,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         _context.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
     }
 
+    /** Linkify */
     static String linkify(String url) {
         String durl = url;
         if (durl.startsWith("http://")) {durl = durl.substring(7);}
@@ -1422,7 +1435,13 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     private class StatusCleaner extends SimpleTimer2.TimedEvent {
         private final String _msg;
+        /**
+         * StatusCleaner.
+         */
         public StatusCleaner(String msg) {_msg = msg;}
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             if (_msg.equals(getStatus())) {updateStatus("");}
         }
@@ -1432,6 +1451,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Failsafe
      */
     private class TaskCleaner extends SimpleTimer2.TimedEvent {
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             schedule(TASK_CLEANER_TIME);
             if (!_activeCheckers.isEmpty()) {
@@ -1461,11 +1483,26 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Equals on updater, type and method only
      */
     private static class RegisteredUpdater implements Comparable<RegisteredUpdater> {
+        /**
+         * updater.
+         */
         public final Updater updater;
+        /**
+         * type.
+         */
         public final UpdateType type;
+        /**
+         * method.
+         */
         public final UpdateMethod method;
+        /**
+         * priority.
+         */
         public final int priority;
 
+        /**
+         * RegisteredUpdater.
+         */
         public RegisteredUpdater(Updater u, UpdateType t, UpdateMethod m, int priority) {
             updater = u; type = t; method = m; this.priority = priority;
         }
@@ -1477,9 +1514,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             return hashCode() - r.hashCode();
         }
 
+        /**
+         * hashCode.
+         */
         @Override
         public int hashCode() {return updater.hashCode() ^ type.hashCode() ^ method.hashCode();}
 
+        /**
+         * equals.
+         */
         @Override
         public boolean equals(Object o) {
             if (!(o instanceof RegisteredUpdater)) {return false;}
@@ -1487,6 +1530,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             return type == r.type && method == r.method && updater.equals(r.updater);
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "RegisteredUpdater " + updater.getClass().getName() + " for " + type + " (" + method + ") @ priority " + priority;
@@ -1497,11 +1543,26 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Equals on checker, type and method only
      */
     private static class RegisteredChecker implements Comparable<RegisteredChecker> {
+        /**
+         * checker.
+         */
         public final Checker checker;
+        /**
+         * type.
+         */
         public final UpdateType type;
+        /**
+         * method.
+         */
         public final UpdateMethod method;
+        /**
+         * priority.
+         */
         public final int priority;
 
+        /**
+         * RegisteredChecker.
+         */
         public RegisteredChecker(Checker u, UpdateType t, UpdateMethod m, int priority) {
             checker = u; type = t; method = m; this.priority = priority;
         }
@@ -1513,9 +1574,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             return hashCode() - r.hashCode();
         }
 
+        /**
+         * hashCode.
+         */
         @Override
         public int hashCode() {return checker.hashCode() ^ type.hashCode() ^ method.hashCode();}
 
+        /**
+         * equals.
+         */
         @Override
         public boolean equals(Object o) {
             if (!(o instanceof RegisteredChecker)) {return false;}
@@ -1523,6 +1590,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             return type == r.type && method == r.method && checker.equals(r.checker);
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "RegisteredChecker " + checker.getClass().getName() + " for " + type + " (" + method + ") @ priority " + priority;
@@ -1533,17 +1603,32 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Equals on type and ID only
      */
     private static class UpdateItem {
+        /**
+         * type.
+         */
         public final UpdateType type;
+        /**
+         * id.
+         */
         public final String id;
 
+        /**
+         * UpdateItem.
+         */
         public UpdateItem(UpdateType t, String id) {
             type = t;
             this.id = id;
         }
 
+        /**
+         * hashCode.
+         */
         @Override
         public int hashCode() {return type.hashCode() ^ id.hashCode();}
 
+        /**
+         * equals.
+         */
         @Override
         public boolean equals(Object o) {
             if (!(o instanceof UpdateItem)) {return false;}
@@ -1551,6 +1636,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             return type == r.type && id.equals(r.id);
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             if (id.isEmpty()) {return type.toString();}
@@ -1559,18 +1647,36 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     private static class Version implements Comparable<Version> {
+        /**
+         * versionStr.
+         */
         public final String versionStr;
 
+        /**
+         * Version.
+         */
         public Version(String version) {this.versionStr = version;}
 
+        /**
+         * compareTo.
+         */
         public int compareTo(Version r) {return VersionComparator.comp(versionStr, r.versionStr);}
 
+        /**
+         * hashCode.
+         */
         @Override
         public int hashCode() {return versionStr.hashCode();}
 
+        /**
+         * equals.
+         */
         @Override
         public boolean equals(Object o) {return (o instanceof Version) && versionStr.equals(((Version)o).versionStr);}
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             if (versionStr.length() == 13) {
@@ -1582,8 +1688,17 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     private static class VersionAvailable extends Version {
+        /**
+         * minVersion.
+         */
         public final String minVersion;
+        /**
+         * sourceMap.
+         */
         public final ConcurrentHashMap<UpdateMethod, List<URI>> sourceMap;
+        /**
+         * constraint.
+         */
         public volatile String constraint;
 
         /**
@@ -1607,12 +1722,21 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             this.constraint = constraint;
         }
 
+        /**
+         * equals.
+         */
         @Override
         public boolean equals(Object o) {return super.equals(o) && (o instanceof VersionAvailable);}
 
+        /**
+         * hashCode.
+         */
         @Override
         public int hashCode() {return super.hashCode();} // findbugs
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             StringBuilder buf = new StringBuilder(128);

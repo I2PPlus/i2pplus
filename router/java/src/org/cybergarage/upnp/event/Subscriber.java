@@ -36,6 +36,9 @@ public class Subscriber {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     * Subscriber.
+     */
     public Subscriber() {
         renew();
     }
@@ -46,10 +49,16 @@ public class Subscriber {
 
     private String SID = null;
 
+    /**
+     * getSID.
+     */
     public String getSID() {
         return SID;
     }
 
+    /**
+     * setSID.
+     */
     public void setSID(String sid) {
         SID = sid;
     }
@@ -60,10 +69,16 @@ public class Subscriber {
 
     private String ifAddr = "";
 
+    /**
+     * setInterfaceAddress.
+     */
     public void setInterfaceAddress(String addr) {
         ifAddr = addr;
     }
 
+    /**
+     * getInterfaceAddress.
+     */
     public String getInterfaceAddress() {
         return ifAddr;
     }
@@ -74,10 +89,16 @@ public class Subscriber {
 
     private String deliveryURL = "";
 
+    /**
+     * getDeliveryURL.
+     */
     public String getDeliveryURL() {
         return deliveryURL;
     }
 
+    /**
+     * setDeliveryURL.
+     */
     public void setDeliveryURL(String deliveryURL) {
         this.deliveryURL = deliveryURL;
         try {
@@ -94,14 +115,23 @@ public class Subscriber {
     private String deliveryPath = "";
     private int deliveryPort = 0;
 
+    /**
+     * getDeliveryHost.
+     */
     public String getDeliveryHost() {
         return deliveryHost;
     }
 
+    /**
+     * getDeliveryPath.
+     */
     public String getDeliveryPath() {
         return deliveryPath;
     }
 
+    /**
+     * getDeliveryPort.
+     */
     public int getDeliveryPort() {
         return deliveryPort;
     }
@@ -112,14 +142,23 @@ public class Subscriber {
 
     private long timeOut = 0;
 
+    /**
+     * getTimeOut.
+     */
     public long getTimeOut() {
         return timeOut;
     }
 
+    /**
+     * setTimeOut.
+     */
     public void setTimeOut(long value) {
         timeOut = value;
     }
 
+    /**
+     * isExpired.
+     */
     public boolean isExpired() {
         long currTime = System.currentTimeMillis();
 
@@ -139,10 +178,16 @@ public class Subscriber {
 
     private long subscriptionTime = 0;
 
+    /**
+     * getSubscriptionTime.
+     */
     public long getSubscriptionTime() {
         return subscriptionTime;
     }
 
+    /**
+     * setSubscriptionTime.
+     */
     public void setSubscriptionTime(long time) {
         subscriptionTime = time;
     }
@@ -153,14 +198,23 @@ public class Subscriber {
 
     private long notifyCount = 0;
 
+    /**
+     * getNotifyCount.
+     */
     public long getNotifyCount() {
         return notifyCount;
     }
 
+    /**
+     * setNotifyCount.
+     */
     public void setNotifyCount(int cnt) {
         notifyCount = cnt;
     }
 
+    /**
+     * incrementNotifyCount.
+     */
     public void incrementNotifyCount() {
         if (notifyCount == Long.MAX_VALUE) {
             notifyCount = 1;
@@ -173,6 +227,9 @@ public class Subscriber {
     //	renew
     ////////////////////////////////////////////////
 
+    /**
+     * renew.
+     */
     public void renew() {
         setSubscriptionTime(System.currentTimeMillis());
         setNotifyCount(0);

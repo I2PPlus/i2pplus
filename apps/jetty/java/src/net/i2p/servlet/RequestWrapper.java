@@ -66,6 +66,9 @@ public class RequestWrapper {
      */
     public String getParameter(String name) {return getParameter(name, null);}
 
+    /**
+     * getSession.
+     */
     public HttpSession getSession() {return httpRequest.getSession();}
 
     /**
@@ -113,6 +116,9 @@ public class RequestWrapper {
         return result;
     }
 
+    /**
+     * getAttribute.
+     */
     public Object getAttribute(String string) {return httpRequest.getAttribute(string);}
 
     /**

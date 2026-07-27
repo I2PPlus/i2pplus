@@ -8,10 +8,16 @@ package net.i2p.router.networkdb.kademlia;
  */
 public class UnsupportedCryptoException extends IllegalArgumentException {
 
+    /**
+     * UnsupportedCryptoException.
+     */
     public UnsupportedCryptoException(String msg) {
         super(msg);
     }
 
+    /**
+     * UnsupportedCryptoException.
+     */
     public UnsupportedCryptoException(String msg, Throwable t) {
         super(msg, t);
     }

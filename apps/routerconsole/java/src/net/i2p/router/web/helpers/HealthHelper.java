@@ -28,9 +28,15 @@ import net.i2p.util.Log;
  *
  * @since 0.9.70+
  */
+/**
+ * Helper for health checks.
+ */
 public class HealthHelper extends HelperBase {
     private Log _log;
 
+    /**
+     * HealthHelper.
+     */
     public HealthHelper() {}
 
     /** @since 0.9.70+ */
@@ -40,6 +46,9 @@ public class HealthHelper extends HelperBase {
         return ff != null && ff.floodfillEnabled();
     }
 
+    /**
+     * getHealthContent.
+     */
     public String getHealthContent() {
         try {
             if (_out != null) {

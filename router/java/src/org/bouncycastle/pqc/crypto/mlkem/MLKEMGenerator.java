@@ -14,11 +14,17 @@ public class MLKEMGenerator
     // the source of randomness
     private final SecureRandom sr;
 
+    /**
+     * MLKEMGenerator.
+     */
     public MLKEMGenerator(SecureRandom random)
     {
         this.sr = random;
     }
 
+    /**
+     * generateEncapsulated.
+     */
     public SecretWithEncapsulation generateEncapsulated(AsymmetricKeyParameter recipientKey)
     {
         MLKEMPublicKeyParameters key = (MLKEMPublicKeyParameters)recipientKey;
@@ -31,6 +37,9 @@ public class MLKEMGenerator
         byte[][] kemEncrypt = engine.kemEncrypt(key.getEncoded(), randBytes);
         return new SecretWithEncapsulationImpl(kemEncrypt[0], kemEncrypt[1]);
     }
+    /**
+     * internalGenerateEncapsulated.
+     */
     public SecretWithEncapsulation internalGenerateEncapsulated(AsymmetricKeyParameter recipientKey, byte[] randBytes)
     {
         MLKEMPublicKeyParameters key = (MLKEMPublicKeyParameters)recipientKey;

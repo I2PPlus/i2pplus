@@ -44,13 +44,20 @@ public class KeyManager {
     private SigningPrivateKey _signingPrivateKey;
     private SigningPublicKey _signingPublicKey;
     private final Map<Hash, LeaseSetKeys> _leaseSetKeys; // Destination --> LeaseSetKeys
+/** Property key for keydir */
 
     public static final String PROP_KEYDIR = "router.keyBackupDir";
+/** Default keydir */
     public static final String DEFAULT_KEYDIR = "keyBackup";
+/** Path to the private enc key file */
     public static final String KEYFILE_PRIVATE_ENC = "privateEncryption.key";
+/** Path to the public enc key file */
     public static final String KEYFILE_PUBLIC_ENC = "publicEncryption.key";
+/** Path to the private signing key file */
     public static final String KEYFILE_PRIVATE_SIGNING = "privateSigning.key";
+/** Path to the public signing key file */
     public static final String KEYFILE_PUBLIC_SIGNING = "publicSigning.key";
+/** Keymanager */
 
     public KeyManager(RouterContext context) {
         _context = context;
@@ -182,9 +189,11 @@ public class KeyManager {
      *  there's no real reason to try so hard to recover our old keys.
      */
     private class SynchronizeKeysJob extends JobImpl {
+/** Synchronizekeysjob */
         public SynchronizeKeysJob() {
             super(KeyManager.this._context);
         }
+/** Execute the job */
 
         public void runJob() {
             String keyDir = getContext().getProperty(PROP_KEYDIR, DEFAULT_KEYDIR);
@@ -300,6 +309,7 @@ public class KeyManager {
             else
                 return null;
         }
+/** Return the name */
 
         public String getName() { return "Synchronize Keys to Disk"; }
     }

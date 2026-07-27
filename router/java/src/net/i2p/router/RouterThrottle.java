@@ -37,6 +37,9 @@ public interface RouterThrottle {
      * Message on the state of participating tunnel acceptance
      */
     public String getTunnelStatus();
+    /**
+     * msg).
+     */
     public void setTunnelStatus(String msg);
 
     /**

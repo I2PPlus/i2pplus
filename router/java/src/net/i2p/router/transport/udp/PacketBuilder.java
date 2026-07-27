@@ -24,6 +24,9 @@ class PacketBuilder {
     /** 74 */
     public static final int MIN_DATA_PACKET_OVERHEAD = IP_HEADER_SIZE + UDP_HEADER_SIZE + DATA_HEADER_SIZE;
 
+    /**
+     * IPV6_HEADER_SIZE.
+     */
     public static final int IPV6_HEADER_SIZE = 40;
     /** 94 */
     public static final int MIN_IPV6_DATA_PACKET_OVERHEAD = IPV6_HEADER_SIZE + UDP_HEADER_SIZE + DATA_HEADER_SIZE;
@@ -31,7 +34,8 @@ class PacketBuilder {
     /** one byte field */
     public static final int ABSOLUTE_MAX_ACKS = 255;
 
-    /* Higher than all other OutNetMessage priorities, but still droppable,
+    /**
+     * Higher than all other OutNetMessage priorities, but still droppable,
      * and will be shown in the codel.UDP-Sender.drop.500 stat.
      */
     static final int PRIORITY_HIGH = 550;
@@ -42,14 +46,26 @@ class PacketBuilder {
      *  @since 0.9.16
      */
     public static class Fragment {
+        /**
+         * state.
+         */
         public final OutboundMessageState state;
+        /**
+         * num.
+         */
         public final int num;
 
+        /**
+         * Fragment.
+         */
         public Fragment(OutboundMessageState state, int num) {
             this.state = state;
             this.num = num;
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "Fragment " + num + " (" + state.fragmentSize(num) + " bytes)" + state;

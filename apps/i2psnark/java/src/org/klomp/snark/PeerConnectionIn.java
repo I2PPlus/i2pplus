@@ -33,14 +33,19 @@ class PeerConnectionIn implements Runnable {
     private volatile boolean quit;
     private final boolean isStandalone = !I2PAppContext.getGlobalContext().isRouterContext();
 
+    /** Last rcvd */
     long lastRcvd;
 
+    /**
+     * Create a handler for incoming messages from a peer.
+     */
     public PeerConnectionIn(Peer peer, DataInputStream din) {
         this.peer = peer;
         this.din = din;
         lastRcvd = System.currentTimeMillis();
     }
 
+    /** Disconnect from the peer and release resources. */
     void disconnect() {
         if (quit) {
             return;
@@ -57,6 +62,9 @@ class PeerConnectionIn implements Runnable {
         }
     }
 
+    /**
+     * Read and dispatch incoming BitTorrent messages until disconnect.
+     */
     @Override
     public void run() {
         thread = Thread.currentThread();

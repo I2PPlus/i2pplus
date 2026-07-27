@@ -17,10 +17,16 @@ public class SAMException extends Exception {
 
     private static final long serialVersionUID = 1;
 
+    /**
+     * SAMException.
+     */
     public SAMException() {
         super();
     }
 
+    /**
+     * SAMException.
+     */
     public SAMException(String s) {
         super(s);
     }

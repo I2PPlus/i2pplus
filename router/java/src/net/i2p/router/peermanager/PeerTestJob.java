@@ -55,13 +55,26 @@ import net.i2p.util.VersionComparator;
 public class PeerTestJob extends JobImpl {
     private final Log _log;
     private PeerManager _manager;
+    /** whether to continue testing */
     private boolean _keepTesting;
     private final List<Hash> _priorityPeers = new ArrayList<>();
+    /** default delay between peer tests */
     private static final long DEFAULT_PEER_TEST_DELAY = 5*60*1000L;
+    /**
+     * PROP_PEER_TEST_DELAY.
+     */
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
+    /** default number of peers to test concurrently */
     private static final int DEFAULT_PEER_TEST_CONCURRENCY = 1;
+    /**
+     * PROP_PEER_TEST_CONCURRENCY.
+     */
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
+    /** default timeout in milliseconds */
     private static final int DEFAULT_PEER_TEST_TIMEOUT = 10000;
+    /**
+     * PROP_PEER_TEST_TIMEOUT.
+     */
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
 
     /**
@@ -110,13 +123,12 @@ public class PeerTestJob extends JobImpl {
     /**
      * Calculates the delay before starting the next round of peer tests.
      *
-     * <p>Delay adapts based on router uptime and system load:
+     * Delay adapts based on router uptime and system load:
      * <ul>
-     *   <li>+1000ms if uptime > 3 hours or CPU load > 80%</li>
-     *   <li>Base delay if uptime >= 3 minutes</li>
+     *   <li>+1000ms if uptime &gt; 3 hours or CPU load &gt; 80%</li>
+     *   <li>Base delay if uptime &gt;= 3 minutes</li>
      *   <li>Inverse ramp-up based on remaining time to 3 minutes</li>
      * </ul>
-     * </p>
      *
      * @return delay in milliseconds before next test round
      */
@@ -171,12 +183,11 @@ public class PeerTestJob extends JobImpl {
     /**
      * Starts the peer testing process with adaptive initial delay.
      *
-     * <p>Schedules the first test run based on router uptime:
+     * <p>Schedules the first test run based on router uptime:</p>
      * <ul>
      *   <li>If uptime < 3 minutes: wait 3 minutes before starting</li>
      *   <li>Otherwise: start immediately with configured delay</li>
      * </ul>
-     * </p>
      *
      * @param manager the peer manager to use for peer selection
      */
@@ -225,19 +236,21 @@ public class PeerTestJob extends JobImpl {
         }
     }
 
+    /**
+     * getName.
+     */
     public String getName() { return "Test Peers"; }
 
     /**
      * Main job execution loop that performs peer testing with adaptive scheduling.
      *
-     * <p>Process flow:
+     * Process flow:
      * <ol>
      *   <li>Check if testing should continue</li>
      *   <li>Select peers for testing based on criteria</li>
      *   <li>Test each selected peer</li>
      *   <li>Adapt next run delay based on system conditions</li>
      * </ol>
-     * </p>
      *
      * <p><b>Adaptive Behavior:</b></p>
      * <ul>
@@ -527,6 +540,9 @@ public class PeerTestJob extends JobImpl {
         private final String _shortHash;
         private boolean _matchFound;
 
+        /**
+         * ReplySelector.
+         */
         public ReplySelector(Hash peer, long nonce, long expiration) {
             _nonce = nonce;
             _expiration = expiration;
@@ -534,8 +550,17 @@ public class PeerTestJob extends JobImpl {
             _shortHash = peer.toBase64().substring(0, 6);
             _matchFound = false;
         }
+        /**
+         * continueMatching.
+         */
         public boolean continueMatching() { return false; }
+        /**
+         * getExpiration.
+         */
         public long getExpiration() { return _expiration; }
+        /**
+         * isMatch.
+         */
         public boolean isMatch(I2NPMessage message) {
             if (message.getType() != DeliveryStatusMessage.MESSAGE_TYPE) {
                 return false;
@@ -648,7 +673,13 @@ public class PeerTestJob extends JobImpl {
             return data.bandwidthTier.equals("O") || data.bandwidthTier.equals("P") ||
                    data.bandwidthTier.equals("X") || data.bandwidthTier.equals("N");
         }
+        /**
+         * matchFound.
+         */
         public boolean matchFound() { return _matchFound; }
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "Test peer [" + _shortHash + "] with nonce: " + _nonce;
@@ -664,6 +695,9 @@ public class PeerTestJob extends JobImpl {
         private final TunnelInfo _replyTunnel;
         private final TunnelInfo _sendTunnel;
 
+        /**
+         * PeerReplyFoundJob.
+         */
         public PeerReplyFoundJob(RouterContext context, RouterInfo peer, TunnelInfo replyTunnel, TunnelInfo sendTunnel) {
             super(context);
             _peer = peer;
@@ -671,7 +705,13 @@ public class PeerTestJob extends JobImpl {
             _sendTunnel = sendTunnel;
             _testBegin = context.clock().now();
         }
+        /**
+         * getName.
+         */
         public String getName() { return "Verify Peer Test"; }
+        /**
+         * runJob.
+         */
         public void runJob() {
             long responseTime = getContext().clock().now() - _testBegin;
             String shortHash = _peer.getIdentity().getHash().toBase64().substring(0, 6);
@@ -740,6 +780,9 @@ public class PeerTestJob extends JobImpl {
             }
         }
 
+        /**
+         * setMessage.
+         */
         public void setMessage(I2NPMessage message) {
             // noop
         }
@@ -754,6 +797,9 @@ public class PeerTestJob extends JobImpl {
         private final TunnelInfo _sendTunnel;
         private final ReplySelector _selector;
 
+        /**
+         * PeerReplyTimeoutJob.
+         */
         public PeerReplyTimeoutJob(RouterContext context, RouterInfo peer, TunnelInfo replyTunnel, TunnelInfo sendTunnel, ReplySelector sel) {
             super(context);
             _peer = peer;
@@ -761,8 +807,14 @@ public class PeerTestJob extends JobImpl {
             _sendTunnel = sendTunnel;
             _selector = sel;
         }
+        /**
+         * getName.
+         */
         public String getName() { return "Timeout Peer Test"; }
         private boolean getShouldFailPeer() { return true; }
+        /**
+         * runJob.
+         */
         public void runJob() {
             if (_selector.matchFound())
                 return;

@@ -51,26 +51,89 @@ public class EventLog {
 
     /** for convenience, not required */
     public static final String ABORTED = "aborted";
+    /**
+     * BECAME_FLOODFILL.
+     */
     public static final String BECAME_FLOODFILL = "becameFloodfill";
+    /**
+     * CHANGE_IP.
+     */
     public static final String CHANGE_IP = "changeIP";
+    /**
+     * CHANGE_PORT.
+     */
     public static final String CHANGE_PORT = "changePort";
+    /**
+     * CLOCK_SHIFT.
+     */
     public static final String CLOCK_SHIFT = "clockShift";
+    /**
+     * CRASHED.
+     */
     public static final String CRASHED = "crashed";
+    /**
+     * CRITICAL.
+     */
     public static final String CRITICAL = "critical";
+    /**
+     * DEADLOCK.
+     */
     public static final String DEADLOCK = "deadlock";
+    /**
+     * INSTALLED.
+     */
     public static final String INSTALLED = "installed";
+    /**
+     * INSTALL_FAILED.
+     */
     public static final String INSTALL_FAILED = "installFailed";
+    /**
+     * NETWORK.
+     */
     public static final String NETWORK = "network";
+    /**
+     * NEW_IDENT.
+     */
     public static final String NEW_IDENT = "newIdent";
+    /**
+     * NOT_FLOODFILL.
+     */
     public static final String NOT_FLOODFILL = "disabledFloodfill";
+    /**
+     * OOM.
+     */
     public static final String OOM = "oom";
+    /**
+     * REACHABILITY.
+     */
     public static final String REACHABILITY = "reachability";
+    /**
+     * REKEYED.
+     */
     public static final String REKEYED = "rekeyed";
+    /**
+     * RESEED.
+     */
     public static final String RESEED = "reseed";
+    /**
+     * SOFT_RESTART.
+     */
     public static final String SOFT_RESTART = "softRestart";
+    /**
+     * STARTED.
+     */
     public static final String STARTED = "started";
+    /**
+     * STOPPED.
+     */
     public static final String STOPPED = "stopped";
+    /**
+     * UPDATED.
+     */
     public static final String UPDATED = "updated";
+    /**
+     * WATCHDOG.
+     */
     public static final String WATCHDOG = "watchdog";
 
     /**

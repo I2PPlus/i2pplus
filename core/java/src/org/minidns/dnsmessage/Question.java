@@ -61,6 +61,12 @@ public class Question {
         this(DnsName.from(name), type, clazz, unicastQuery);
     }
 
+    /**
+     * @param name the DNS name
+     * @param type the record type
+     * @param clazz the class
+     * @param unicastQuery true for unicast query
+     */
     public Question(DnsName name, TYPE type, CLASS clazz, boolean unicastQuery) {
         if (name == null || type == null || clazz == null) {
             throw new IllegalArgumentException("Name, type, and class must not be null");
@@ -168,12 +174,18 @@ public class Question {
         return name.getRawAce() + ".\t" + clazz + '\t' + type;
     }
 
+    /**
+     * @return a new DnsMessage builder with this question set
+     */
     public DnsMessage.Builder asMessageBuilder() {
         DnsMessage.Builder builder = DnsMessage.builder();
         builder.setQuestion(this);
         return builder;
     }
 
+    /**
+     * @return a new DnsMessage with this question set
+     */
     public DnsMessage asQueryMessage() {
         return asMessageBuilder().build();
     }

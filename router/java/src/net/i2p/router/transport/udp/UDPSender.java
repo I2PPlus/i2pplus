@@ -49,9 +49,18 @@ public class UDPSender {
 
     /** CoDel algorithm target delay in milliseconds and interval to control pacing. */
     public static final int CODEL_TARGET = 20;
+    /**
+     * CODEL_INTERVAL.
+     */
     public static final int CODEL_INTERVAL = 100;
 
+    /**
+     * PROP_CODEL_TARGET.
+     */
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
+    /**
+     * PROP_CODEL_INTERVAL.
+     */
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
 
     /** Time rate intervals for statistics collection. */
@@ -223,6 +232,9 @@ public class UDPSender {
      */
     private class Runner implements Runnable {
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             if (_log.shouldDebug()) {

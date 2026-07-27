@@ -18,10 +18,17 @@ public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E> {
     private static final Object DUMMY = new Object();
     private final Map<E, Object> _map;
 
+    /**
+     * Create a new ConcurrentHashSet.
+     */
     public ConcurrentHashSet() {
         _map = new ConcurrentHashMap<>();
     }
 
+    /**
+     * Create a new ConcurrentHashSet with the given capacity.
+     * @param capacity the initial capacity
+     */
     public ConcurrentHashSet(int capacity) {
         _map = new ConcurrentHashMap<>(capacity);
     }

@@ -44,6 +44,9 @@ public class HTTPUSocket {
 
     // private MulticastSocket ssdpUniSock = null;
 
+    /**
+     * getDatagramSocket.
+     */
     public DatagramSocket getDatagramSocket() {
         return ssdpUniSock;
     }
@@ -52,18 +55,30 @@ public class HTTPUSocket {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     * HTTPUSocket.
+     */
     public HTTPUSocket() {
         open();
     }
 
+    /**
+     * HTTPUSocket.
+     */
     public HTTPUSocket(String bindAddr, int bindPort) {
         open(bindAddr, bindPort);
     }
 
+    /**
+     * HTTPUSocket.
+     */
     public HTTPUSocket(int bindPort) {
         open(bindPort);
     }
 
+    /**
+     * finalize.
+     */
     protected void finalize() {
         close();
     }
@@ -74,6 +89,9 @@ public class HTTPUSocket {
 
     private String localAddr = "";
 
+    /**
+     * setLocalAddress.
+     */
     public void setLocalAddress(String addr) {
         localAddr = addr;
     }
@@ -86,6 +104,9 @@ public class HTTPUSocket {
         return ssdpUniSock;
     }
 
+    /**
+     * getLocalAddress.
+     */
     public String getLocalAddress() {
         if (0 < localAddr.length()) return localAddr;
         // I2P prevent NPE #1681
@@ -97,6 +118,9 @@ public class HTTPUSocket {
     //	open
     ////////////////////////////////////////////////
 
+    /**
+     * open.
+     */
     public boolean open() {
         close();
 
@@ -110,6 +134,9 @@ public class HTTPUSocket {
         return true;
     }
 
+    /**
+     * open.
+     */
     public boolean open(String bindAddr, int bindPort) {
         close();
 
@@ -143,6 +170,9 @@ public class HTTPUSocket {
         return true;
     }
 
+    /**
+     * open.
+     */
     public boolean open(int bindPort) {
         close();
 
@@ -163,6 +193,9 @@ public class HTTPUSocket {
     //	close
     ////////////////////////////////////////////////
 
+    /**
+     * close.
+     */
     public boolean close() {
         if (ssdpUniSock == null) return true;
 
@@ -181,6 +214,9 @@ public class HTTPUSocket {
     //	send
     ////////////////////////////////////////////////
 
+    /**
+     * post.
+     */
     public boolean post(String addr, int port, String msg) {
         try {
             InetAddress inetAddr = InetAddress.getByName(addr);
@@ -205,6 +241,9 @@ public class HTTPUSocket {
     //	reveive
     ////////////////////////////////////////////////
 
+    /**
+     * receive.
+     */
     public SSDPPacket receive() {
         byte[] ssdvRecvBuf = new byte[SSDP.RECV_MESSAGE_BUFSIZE];
         SSDPPacket recvPacket = new SSDPPacket(ssdvRecvBuf, ssdvRecvBuf.length);

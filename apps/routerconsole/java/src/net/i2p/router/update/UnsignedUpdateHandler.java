@@ -26,6 +26,9 @@ class UnsignedUpdateHandler implements Checker, Updater {
     private final RouterContext _context;
     private final ConsoleUpdateManager _mgr;
 
+    /**
+     * UnsignedUpdateHandler.
+     */
     public UnsignedUpdateHandler(RouterContext ctx, ConsoleUpdateManager mgr) {
         _context = ctx;
         _mgr = mgr;

@@ -90,6 +90,9 @@ import java.util.Arrays;
  */
 public class PublicKey extends SimpleDataStructure {
     private static final EncType DEF_TYPE = EncType.ELGAMAL_2048;
+    /**
+     * Keysize bytes.
+     */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPubkeyLen();
     private static final int CACHE_SIZE = 1024;
     private static final SDSCache<PublicKey> _cache = new SDSCache<>(PublicKey.class, KEYSIZE_BYTES, CACHE_SIZE);
@@ -101,7 +104,9 @@ public class PublicKey extends SimpleDataStructure {
      * ELGAMAL_2048 only!
      * Deprecated - used only by deprecated Destination.readBytes(data, off)
      *
-     * @throws DataFormatException if not enough bytes
+     * @param data the data to decrypt
+     * @param off the offset into the data
+     * @return the result
      * @since 0.8.3
      */
     public static PublicKey create(byte[] data, int off) {
@@ -112,17 +117,24 @@ public class PublicKey extends SimpleDataStructure {
      * Pull from cache or return new.
      * ELGAMAL_2048 only!
      *
+     * @param in the input stream
+     * @return the result
      * @since 0.8.3
+     * @throws java.io.IOException if an I/O error occurs
      */
     public static PublicKey create(InputStream in) throws IOException {
         return _cache.get(in);
     }
 
+    /**
+     * PublicKey.
+     */
     public PublicKey() {
         this(DEF_TYPE);
     }
 
     /**
+     * Construct a new public key.
      *  @param type if null, type is unknown
      *  @since 0.9.38
      */
@@ -138,6 +150,7 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
+     * Construct a new public key.
      *  @param type if null, type is unknown
      *  @param data must be non-null
      *  @since 0.9.38
@@ -174,12 +187,16 @@ public class PublicKey extends SimpleDataStructure {
      *
      * @param base64Data a string of base64 data (the output of .toBase64() called
      * on a prior instance of PublicKey
+     * @throws net.i2p.data.DataFormatException if the data is malformed
      */
     public PublicKey(String base64Data) throws DataFormatException {
         this(DEF_TYPE);
         fromBase64(base64Data);
     }
 
+    /**
+     * length.
+     */
     @Override
     public int length() {
         if (_type != null) {
@@ -207,6 +224,7 @@ public class PublicKey extends SimpleDataStructure {
      *  Only valid if getType() returns null
      *
      *  @since 0.9.38
+     * @return the unknown type code
      */
     public int getUnknownTypeCode() {
         return _unknownTypeCode;
@@ -218,6 +236,7 @@ public class PublicKey extends SimpleDataStructure {
      *
      *  @throws IllegalArgumentException if this is already typed to a different type
      *  @since 0.9.42
+     * @param kcert the key certificate
      */
     PublicKey toTypedKey(KeyCertificate kcert) {
         if (_data == null) {
@@ -254,6 +273,7 @@ public class PublicKey extends SimpleDataStructure {
      *  @return trailing padding length &gt; 0 or null if no padding or type is unknown
      *  @throws IllegalArgumentException if this is already typed to a different type
      *  @since 0.9.42
+     * @param kcert the key certificate
      */
     public byte[] getPadding(KeyCertificate kcert) {
         if (_data == null) {

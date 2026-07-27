@@ -10,8 +10,11 @@ public class PDPStatusBlock {
 
     private final long offset;
     private final long size;
+    /** the last reading from the data source */
     final String lastReading;
+    /** number of seconds of unknown data */
     final int unknownSeconds;
+    /** the current value of the primary data point */
     final double value;
 
     private enum pdp_par_en {
@@ -19,6 +22,9 @@ public class PDPStatusBlock {
         PDP_val
     }
 
+    /**
+     *  @param file the RRD file to read from
+     */
     PDPStatusBlock(RRDFile file) {
 
         offset = file.getFilePointer();

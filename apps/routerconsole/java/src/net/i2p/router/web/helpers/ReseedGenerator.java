@@ -11,6 +11,9 @@ import net.i2p.router.web.HelperBase;
  */
 public class ReseedGenerator extends HelperBase {
 
+    /**
+     * createZip.
+     */
     public File createZip() throws IOException {
         ReseedBundler rb = new ReseedBundler(_context);
         return rb.createZip(200);

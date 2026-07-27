@@ -35,10 +35,10 @@ import net.metanotion.io.RandomAccessInterface;
 
 /**
  * Manages free pages in a block file.
- * 
+ *
  * <p>Tracks available pages for allocation using a linked list of blocks.
  * Each block contains multiple free page references and fits on a single disk page.</p>
- * 
+ *
  * <p>On-disk format:</p>
  * <pre>
  *    Magic number (long)
@@ -46,7 +46,7 @@ import net.metanotion.io.RandomAccessInterface;
  *    size (unsigned int)
  *    that many free pages (unsigned ints)
  * </pre>
- * 
+ *
  * <p>Free page format:</p>
  * <pre>
  *    Magic number (long)
@@ -58,12 +58,18 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 	private static final int HEADER_LEN = 16;
 	private static final int MAX_SIZE = (BlockFile.PAGESIZE - HEADER_LEN) / 4;
 
+	/**
+	 * page.
+	 */
 	public final int page;
 	private int nextPage;
 	private int len;
 	private final int[] branches;
 	private final RandomAccessInterface file;
 
+	/**
+	 * FreeListBlock.
+	 */
 	public FreeListBlock(RandomAccessInterface file, int startPage) throws IOException {
 		this.file = file;
 		this.page = startPage;
@@ -92,6 +98,9 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 		}
 	}
 
+	/**
+	 * writeBlock.
+	 */
 	public void writeBlock() throws IOException {
 		BlockFile.pageSeek(file, page);
 		file.writeLong(MAGIC);
@@ -109,6 +118,9 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 		file.writeInt(len);
 	}
 
+	/**
+	 * getNextPage.
+	 */
 	public int getNextPage() {
 		return nextPage;
 	}
@@ -135,10 +147,16 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 		file.writeInt(branches[len - 1]);
 	}
 
+	/**
+	 * isEmpty.
+	 */
 	public boolean isEmpty() {
 		return len <= 0;
 	}
 
+	/**
+	 * isFull.
+	 */
 	public boolean isFull() {
 		return len >= MAX_SIZE;
 	}
@@ -191,6 +209,9 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 		return magic;
 	}
 
+	/**
+	 * initPage.
+	 */
 	public static void initPage(RandomAccessInterface file, int page) throws IOException {
 		BlockFile.pageSeek(file, page);
 		file.writeLong(MAGIC);
@@ -210,6 +231,9 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 		return true;
 	}
 
+	/**
+	 * toString.
+	 */
 	@Override
 	public String toString() {
 		return "FLB with " + len + " / " + MAX_SIZE + " page " + page + " next page " + nextPage;

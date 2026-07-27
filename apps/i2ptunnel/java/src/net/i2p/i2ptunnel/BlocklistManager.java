@@ -27,7 +27,6 @@ import net.i2p.util.Log;
  *   <li><b>Client Blocklist</b> (http_blocklist_clients.txt) - Tracks destinations
  *       that have been blocked, to prevent repeated abuse.</li>
  * </ul>
- * </p>
  * <p>
  * The blocklist files are located in the I2P config directory and are monitored
  * for changes. The URL blocklist is compiled into a regex pattern for efficient

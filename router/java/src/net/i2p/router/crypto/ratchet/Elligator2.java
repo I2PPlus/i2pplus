@@ -74,6 +74,11 @@ class Elligator2 {
         inverted_u = u.modInverse(p);
     }
 
+    /**
+     * Create an Elligator2 instance.
+     *
+     * @param ctx the I2P app context
+     */
     public Elligator2(I2PAppContext ctx) {
         _context = ctx;
     }
@@ -84,6 +89,7 @@ class Elligator2 {
      * There are eight possible encodings for any point.
      * Output will look like 256 random bits.
      *
+     * @param point the public key to encode
      * @return "representative", little endian or null on failure
      */
     public byte[] encode(PublicKey point) {

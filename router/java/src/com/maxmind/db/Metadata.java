@@ -31,6 +31,7 @@ public final class Metadata {
 
     private final int searchTreeSize;
 
+    /** Create Metadata from decoded map */
     @SuppressWarnings("unchecked")
     Metadata(Map metadata) {
         this.binaryFormatMajorVersion = getInt(metadata,
@@ -154,6 +155,9 @@ public final class Metadata {
      * (non-Javadoc)
      *
      * @see java.lang.Object#toString()
+     */
+    /**
+     * toString.
      */
     @Override
     public String toString() {

@@ -16,6 +16,7 @@ import java.net.SocketException;
 import java.util.StringTokenizer;
 import org.cybergarage.util.Debug;
 
+/** comment */
 public class HTTPRequest extends HTTPPacket {
     ////////////////////////////////////////////////
     //	Constructor
@@ -25,10 +26,12 @@ public class HTTPRequest extends HTTPPacket {
         setVersion(HTTP.VERSION_10);
     }
 
+    /** method comment */
     public HTTPRequest(InputStream in) {
         super(in);
     }
 
+    /** method comment */
     public HTTPRequest(HTTPSocket httpSock) {
         this(httpSock.getInputStream());
         setSocket(httpSock);
@@ -40,41 +43,87 @@ public class HTTPRequest extends HTTPPacket {
 
     private String method = null;
 
+    /**
+     * Sets the HTTP method (e.g., GET, POST).
+     *
+     * @param value the HTTP method string
+     */
     public void setMethod(String value) {
         method = value;
     }
 
+    /**
+     * Returns the HTTP method.
+     *
+     * @return the HTTP method string, or null if not set
+     */
     public String getMethod() {
         if (method != null) return method;
         return getFirstLineToken(0);
     }
 
+    /**
+     * Checks if the HTTP method matches the given string.
+     *
+     * @param method the method string to compare
+     * @return true if the methods match (case-insensitive), false otherwise
+     */
     public boolean isMethod(String method) {
         String headerMethod = getMethod();
         if (headerMethod == null) return false;
         return headerMethod.equalsIgnoreCase(method);
     }
 
+    /**
+     * Determines if this is a GET request.
+     *
+     * @return true if the method is GET, false otherwise
+     */
     public boolean isGetRequest() {
         return isMethod(HTTP.GET);
     }
 
+    /**
+     * Determines if this is a POST request.
+     *
+     * @return true if the method is POST, false otherwise
+     */
     public boolean isPostRequest() {
         return isMethod(HTTP.POST);
     }
 
+    /**
+     * Determines if this is a HEAD request.
+     *
+     * @return true if the method is HEAD, false otherwise
+     */
     public boolean isHeadRequest() {
         return isMethod(HTTP.HEAD);
     }
 
+    /**
+     * Determines if this is a SUBSCRIBE request.
+     *
+     * @return true if the method is SUBSCRIBE, false otherwise
+     */
     public boolean isSubscribeRequest() {
         return isMethod(HTTP.SUBSCRIBE);
     }
 
+    /**
+     * Determines if this is an UNSUBSCRIBE request.
+     *
+     * @return true if the method is UNSUBSCRIBE, false otherwise
+     */
     public boolean isUnsubscribeRequest() {
         return isMethod(HTTP.UNSUBSCRIBE);
     }
 
+    /**
+     * Determines if this is a NOTIFY request.
+     *
+     * @return true if the method is NOTIFY, false otherwise
+     */
     public boolean isNotifyRequest() {
         return isMethod(HTTP.NOTIFY);
     }
@@ -114,6 +163,11 @@ public class HTTPRequest extends HTTPPacket {
         setURI(value, false);
     }
 
+    /**
+     * Returns the request URI.
+     *
+     * @return the URI string, or null if not set
+     */
     public String getURI() {
         if (uri != null) return uri;
         return getFirstLineToken(1);
@@ -123,6 +177,11 @@ public class HTTPRequest extends HTTPPacket {
     //	URI Parameter
     ////////////////////////////////////////////////
 
+    /**
+     * Parses the URI query string and returns the parameters as a ParameterList.
+     *
+     * @return the ParameterList containing all query parameters, or an empty list if none exist
+     */
     public ParameterList getParameterList() {
         ParameterList paramList = new ParameterList();
         String uri = getURI();
@@ -142,6 +201,12 @@ public class HTTPRequest extends HTTPPacket {
         return paramList;
     }
 
+    /**
+     * Returns the value of the specified URI query parameter.
+     *
+     * @param name the parameter name
+     * @return the parameter value, or null if not found
+     */
     public String getParameterValue(String name) {
         ParameterList paramList = getParameterList();
         return paramList.getValue(name);
@@ -151,6 +216,11 @@ public class HTTPRequest extends HTTPPacket {
     //	SOAPAction
     ////////////////////////////////////////////////
 
+    /**
+     * Checks if this request has a SOAPAction header.
+     *
+     * @return true if the SOAPAction header is present, false otherwise
+     */
     public boolean isSOAPAction() {
         return hasHeader(HTTP.SOAP_ACTION);
     }
@@ -161,20 +231,40 @@ public class HTTPRequest extends HTTPPacket {
 
     private String requestHost = "";
 
+    /**
+     * Sets the host for this request.
+     *
+     * @param host the host string
+     */
     public void setRequestHost(String host) {
         requestHost = host;
     }
 
+    /**
+     * Returns the request host.
+     *
+     * @return the host string
+     */
     public String getRequestHost() {
         return requestHost;
     }
 
     private int requestPort = -1;
 
+    /**
+     * Sets the port for this request.
+     *
+     * @param host the port number
+     */
     public void setRequestPort(int host) {
         requestPort = host;
     }
 
+    /**
+     * Returns the request port.
+     *
+     * @return the port number
+     */
     public int getRequestPort() {
         return requestPort;
     }
@@ -185,10 +275,20 @@ public class HTTPRequest extends HTTPPacket {
 
     private HTTPSocket httpSocket = null;
 
+    /**
+     * Sets the HTTPSocket for this request.
+     *
+     * @param value the HTTPSocket to set
+     */
     public void setSocket(HTTPSocket value) {
         httpSocket = value;
     }
 
+    /**
+     * Returns the HTTPSocket for this request.
+     *
+     * @return the HTTPSocket, or null if not set
+     */
     public HTTPSocket getSocket() {
         return httpSocket;
     }
@@ -197,10 +297,20 @@ public class HTTPRequest extends HTTPPacket {
     //	local address/port
     ////////////////////////////////////////////////
 
+    /**
+     * Returns the local address of the underlying socket.
+     *
+     * @return the local address string
+     */
     public String getLocalAddress() {
         return getSocket().getLocalAddress();
     }
 
+    /**
+     * Returns the local port of the underlying socket.
+     *
+     * @return the local port number
+     */
     public int getLocalPort() {
         return getSocket().getLocalPort();
     }
@@ -233,11 +343,21 @@ public class HTTPRequest extends HTTPPacket {
     //	First Line
     ////////////////////////////////////////////////
 
+    /**
+     * Returns the HTTP version string for this request.
+     *
+     * @return the HTTP version (e.g., "HTTP/1.1")
+     */
     public String getHTTPVersion() {
         if (hasFirstLine() == true) return getFirstLineToken(2);
         return "HTTP/" + super.getVersion();
     }
 
+    /**
+     * Returns the first line of the HTTP request (method, URI, and version).
+     *
+     * @return the request line string
+     */
     public String getFirstLineString() {
         return getMethod() + " " + getURI() + " " + getHTTPVersion() + HTTP.CRLF;
     }
@@ -246,6 +366,11 @@ public class HTTPRequest extends HTTPPacket {
     //	getHeader
     ////////////////////////////////////////////////
 
+    /**
+     * Returns the complete HTTP header as a string.
+     *
+     * @return the header string including the request line and headers
+     */
     public String getHeader() {
         StringBuffer str = new StringBuffer();
 
@@ -261,6 +386,11 @@ public class HTTPRequest extends HTTPPacket {
     //	isKeepAlive
     ////////////////////////////////////////////////
 
+    /**
+     * Determines if this connection should be kept alive.
+     *
+     * @return true if keep-alive is enabled, false otherwise
+     */
     public boolean isKeepAlive() {
         if (isCloseConnection() == true) return false;
         if (isKeepAliveConnection() == true) return true;
@@ -274,6 +404,11 @@ public class HTTPRequest extends HTTPPacket {
     //	read
     ////////////////////////////////////////////////
 
+    /**
+     * Reads the HTTP request from the underlying socket.
+     *
+     * @return true if the request was read successfully, false otherwise
+     */
     public boolean read() {
         return super.read(getSocket());
     }
@@ -282,6 +417,12 @@ public class HTTPRequest extends HTTPPacket {
     //	POST (Response)
     ////////////////////////////////////////////////
 
+    /**
+     * Posts an HTTP response back to the client.
+     *
+     * @param httpRes the HTTP response to send
+     * @return true if the response was sent successfully, false otherwise
+     */
     public boolean post(HTTPResponse httpRes) {
         HTTPSocket httpSock = getSocket();
         long offset = 0;
@@ -322,6 +463,14 @@ public class HTTPRequest extends HTTPPacket {
         bindTo = host;
     }
 
+    /**
+     * Posts this HTTP request to the specified host and port.
+     *
+     * @param host the target host
+     * @param port the target port
+     * @param isKeepAlive whether to keep the connection alive
+     * @return the HTTP response
+     */
     public HTTPResponse post(String host, int port, boolean isKeepAlive) {
         HTTPResponse httpRes = new HTTPResponse();
 
@@ -427,6 +576,13 @@ public class HTTPRequest extends HTTPPacket {
         return httpRes;
     }
 
+    /**
+     * Posts this HTTP request to the specified host and port with no keep-alive.
+     *
+     * @param host the target host
+     * @param port the target port
+     * @return the HTTP response
+     */
     public HTTPResponse post(String host, int port) {
         return post(host, port, false);
     }
@@ -435,6 +591,11 @@ public class HTTPRequest extends HTTPPacket {
     //	set
     ////////////////////////////////////////////////
 
+    /**
+     * Copies the contents of the given HTTP request into this request.
+     *
+     * @param httpReq the HTTP request to copy from
+     */
     public void set(HTTPRequest httpReq) {
         set((HTTPPacket) httpReq);
         setSocket(httpReq.getSocket());

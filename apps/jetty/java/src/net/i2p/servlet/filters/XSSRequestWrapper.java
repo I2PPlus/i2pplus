@@ -26,6 +26,9 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
     private static final Pattern headerValuePattern = Pattern.compile("^[a-zA-Z0-9()\\-=\\*\\.\\?;,+\\/:&_ \"]*$");
     private static final String NOFILTER = "nofilter_";
 
+    /**
+     * XSSRequestWrapper.
+     */
     public XSSRequestWrapper(HttpServletRequest servletRequest) {
         super(servletRequest);
     }
@@ -104,6 +107,9 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
         return Collections.unmodifiableMap(rv);
     }
 
+    /**
+     * getHeader.
+     */
     @Override
     public String getHeader(String name) {
         String value = super.getHeader(name);

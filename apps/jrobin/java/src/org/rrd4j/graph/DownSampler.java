@@ -14,9 +14,17 @@ public interface DownSampler {
      * downsampled data for graph rendering.
      */
     class DataSet {
+        /** Timestamps for each data point. */
         public final long[] timestamps;
+        /** Values corresponding to each timestamp. */
         public final double[] values;
 
+        /**
+         * Create a new DataSet.
+         *
+         * @param timestamps the timestamps
+         * @param values the values
+         */
         public DataSet(long[] timestamps, double[] values) {
             this.timestamps = timestamps;
             this.values = values;
@@ -32,5 +40,12 @@ public interface DownSampler {
         }
     }
 
+    /**
+     * Downsample the given data.
+     *
+     * @param timestamps the timestamps
+     * @param values the values
+     * @return the downsampled data set
+     */
     DataSet downsize(long[] timestamps, double[] values);
 }

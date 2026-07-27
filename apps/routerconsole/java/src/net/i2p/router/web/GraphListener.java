@@ -35,24 +35,37 @@ public class GraphListener implements RateSummaryListener {
     public static final String PROP_PERSISTENT = "routerconsole.graphPersistent";
     /** note that .jrb files are NOT compatible with .rrd files */
     static final String RRD_DIR = "rrd";
+    /** R r d  p r e f i x */
     static final String RRD_PREFIX = "rrd-";
+    /** R r d  s u f f i x */
     static final String RRD_SUFFIX = ".jrb";
+    /** Consolidation function used for RRD archives. */
     static final ConsolFun CF = ConsolFun.AVERAGE;
+    /** Data source type used for RRD datasources. */
     static final DsType DS = DsType.GAUGE;
+    /** X-factor (allowed fraction of unknown data) for RRD consolidation. */
     private static final double XFF = 0.9d;
+    /** Number of primary steps per consolidation. */
     private static final int STEPS = 1;
 
     private final I2PAppContext _context;
     private final Log _log;
     private final Rate _rate;
     private final boolean _isPersistent;
+    /** RRD datasource name for the primary stat value. */
     private String _name;
+    /** RRD datasource name for the event count. */
     private String _eventName;
+    /** The RRD database instance. */
     private RrdDb _db;
+    /** Current sample being populated. */
     private Sample _sample;
+    /** Renderer for generating graph images. */
     private GraphRenderer _renderer;
+    /** Number of rows in the RRD archive. */
     private int _rows;
 
+    /** Number of periods in one day (1440 = 60 minutes * 24 hours at 1-minute resolution). */
     static final int PERIODS = 60 * 24;  // 1440
     /**
      *  Offset (seconds) subtracted from "now" when computing the fetch window end,
@@ -62,11 +75,18 @@ public class GraphListener implements RateSummaryListener {
      *  @since 0.9.70+
      */
     static final int GRAPH_END_OFFSET_SECONDS = 75;
+    /** Minimum number of rows to keep in the archive. */
     private static final int MIN_ROWS = PERIODS;
     /** @since public since 0.9.33, was package private */
     public static final int MAX_ROWS = 91 * MIN_ROWS;
+    /** Three months in milliseconds (used to compute max rows for persistent RRDs). */
     private static final long THREE_MONTHS = 91L * 24 * 60 * 60 * 1000;
 
+    /**
+     * Create a listener for the given rate stat.
+     *
+     * @param r the rate to track
+     */
     public GraphListener(Rate r) {
         _context = I2PAppContext.getGlobalContext();
         _rate = r;
@@ -74,6 +94,14 @@ public class GraphListener implements RateSummaryListener {
         _isPersistent = _context.getBooleanPropertyDefaultTrue(PROP_PERSISTENT);
     }
 
+    /**
+     * Add a new data point to the RRD database.
+     *
+     * @param totalValue the total value for the period
+     * @param eventCount the number of events in the period
+     * @param totalEventTime the total event time for the period
+     * @param period the period duration in milliseconds
+     */
     public void add(double totalValue, long eventCount, double totalEventTime, long period) {
         long now = now();
         long when = now / 1000;
@@ -135,6 +163,11 @@ public class GraphListener implements RateSummaryListener {
         return ctx.sha().calculateHash(DataHelper.getUTF8(wanted)).toBase64().substring(0,20);
     }
 
+    /**
+     * Retrieve the tracked rate.
+     *
+     * @return the rate instance
+     */
     public Rate getRate() { return _rate; }
 
     /**
@@ -230,6 +263,9 @@ public class GraphListener implements RateSummaryListener {
         return false;
     }
 
+    /**
+     * Stop listening and close the RRD database.
+     */
     public void stopListening() {
         if (_db == null) {
             return;
@@ -278,6 +314,12 @@ public class GraphListener implements RateSummaryListener {
                          end, showCredit, lsnr2, titleOverride, showRestarts);
     }
 
+    /**
+     * Render a graph of the stat data using default settings.
+     *
+     * @param out the output stream to write the graph to
+     * @throws IOException if rendering fails
+     */
     public void renderGraph(OutputStream out) throws IOException {
         if (_renderer == null || _db == null) {
             throw new IOException("No RRD, check logs for previous errors");
@@ -285,9 +327,29 @@ public class GraphListener implements RateSummaryListener {
         _renderer.render(out);
     }
 
+    /**
+     * Get the RRD datasource name for the primary stat.
+     *
+     * @return the datasource name
+     */
     String getName() {return _name;}
+    /**
+     * Get the RRD datasource name for the event count.
+     *
+     * @return the event datasource name
+     */
     String getEventName() { return _eventName; }
+    /**
+     * Get the RRD database instance.
+     *
+     * @return the RRD database
+     */
     RrdDb getData() {return _db;}
+    /**
+     * Get the current time from the router clock.
+     *
+     * @return the current time in milliseconds
+     */
     long now() {return _context.clock().now();}
 
     /** @since 0.9.46 */
@@ -301,7 +363,12 @@ public class GraphListener implements RateSummaryListener {
                             : RrdBackendFactory.getFactory("MEMORY");
     }
 
-    /** @since 0.8.7 */
+    /**
+     * Get the number of rows in the RRD archive.
+     *
+     * @return the row count
+     * @since 0.8.7
+     */
     int getRows() {return _rows;}
 
     /**
@@ -341,11 +408,22 @@ public class GraphListener implements RateSummaryListener {
         return result;
     }
 
+    /**
+     * Compare with another listener by the underlying rate.
+     *
+     * @param obj the object to compare with
+     * @return true if the listeners track the same rate
+     */
     @Override
     public boolean equals(Object obj) {
         return ((obj instanceof GraphListener) && ((GraphListener)obj)._rate.equals(_rate));
     }
 
+    /**
+     * Hash code based on the underlying rate.
+     *
+     * @return the hash code
+     */
     @Override
     public int hashCode() {return _rate.hashCode();}
 }

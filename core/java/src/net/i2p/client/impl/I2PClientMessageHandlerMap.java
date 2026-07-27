@@ -35,6 +35,9 @@ class I2PClientMessageHandlerMap {
         _handlers = new I2CPMessageHandler[highest + 1];
     }
 
+    /**
+     * I2PClientMessageHandlerMap.
+     */
     public I2PClientMessageHandlerMap(I2PAppContext context) {
         // 39 = highest type expected from router
         // http://i2p-projekt.i2p/spec/i2cp#message-types
@@ -52,6 +55,12 @@ class I2PClientMessageHandlerMap {
         _handlers[HostReplyMessage.MESSAGE_TYPE] = new HostReplyMessageHandler(context);
     }
 
+    /**
+     * getHandler.
+     */
+    /**
+     * Return the handler for the given type.
+     */
     public I2CPMessageHandler getHandler(int messageTypeId) {
         if ((messageTypeId < 0) || (messageTypeId >= _handlers.length)) return null;
         return _handlers[messageTypeId];

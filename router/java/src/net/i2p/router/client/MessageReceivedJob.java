@@ -32,8 +32,12 @@ class MessageReceivedJob extends JobImpl {
     private final boolean _sendDirect;
 
     /**
+     *  @param ctx the router context
+     *  @param runner the client connection runner
      *  @param toDest non-null, required to pick session
      *  @param fromDest ignored, generally null
+     *  @param payload the message payload
+     *  @param sendDirect if true send directly
      */
     public MessageReceivedJob(RouterContext ctx, ClientConnectionRunner runner, Destination toDest,
                               Destination fromDest, Payload payload, boolean sendDirect) {

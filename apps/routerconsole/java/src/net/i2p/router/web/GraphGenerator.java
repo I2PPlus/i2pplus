@@ -58,6 +58,9 @@ public class GraphGenerator implements Runnable, ClientApp {
     private ScheduledExecutorService _scheduler;
     private static final String NAME = "GraphGenerator";
 
+    /**
+     * GraphGenerator.
+     */
     public GraphGenerator(RouterContext ctx) {
         _context = ctx;
         _log = _context.logManager().getLog(getClass());
@@ -80,6 +83,9 @@ public class GraphGenerator implements Runnable, ClientApp {
         return (app != null) ? (GraphGenerator) app : null;
     }
 
+    /**
+     * run.
+     */
     @Override
     public void run() {
         // JRobin 1.5.9 crashes these JVMs
@@ -156,6 +162,9 @@ public class GraphGenerator implements Runnable, ClientApp {
         }
     }
 
+    /**
+     * stop.
+     */
     public synchronized void stop() {
         _isRunning = false;
         _context.clientAppManager().unregister(this);
@@ -276,6 +285,11 @@ public class GraphGenerator implements Runnable, ClientApp {
         return buf.toString();
     }
 
+    /**
+     *  Remove a rate from tracking and stop its listener.
+     *
+     *  @param r the rate to remove
+     */
     private void removeDb(Rate r) {
         GraphListener lsnr = _listenerByRate.remove(r);
         if (lsnr != null) {
@@ -284,6 +298,11 @@ public class GraphGenerator implements Runnable, ClientApp {
         }
     }
 
+    /**
+     *  Start tracking a rate by creating a new GraphListener for it.
+     *
+     *  @param r the rate to track
+     */
     private void addDb(Rate r) {
         GraphListener lsnr = new GraphListener(r);
         boolean success = lsnr.startListening();
@@ -293,32 +312,66 @@ public class GraphGenerator implements Runnable, ClientApp {
         } else {_log.error("Failed to add RRD for rate " + r.getRateStat().getName() + '.' + r.getPeriod());}
     }
 
+    /**
+     *  Render a single-data graph with default dimensions and options.
+     *
+     *  @param rate the rate to graph
+     *  @param out the output stream to write the graph image to
+     *  @return true if the graph was rendered successfully
+     *  @throws IOException if rendering fails
+     */
     public boolean renderGraph(Rate rate, OutputStream out) throws IOException {
         return renderGraph(rate, out, DEFAULT_X, DEFAULT_Y, false, false, false, false, -1, 0, true, true);
     }
 
     /**
-     *  This does the single data graphs.
+     *  Render a single-data graph with the specified options.
      *  For the two-data bandwidth graph see renderCombinedGraph().
      *  Synchronized to conserve memory.
      *
-     *  @param end number of periods before now
+     *  @param rate the rate to graph
+     *  @param out the output stream to write the graph image to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, draw event markers
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now to end at
+     *  @param showCredit if true, show the I2P+ credit line
      *  @return success
+     *  @throws IOException if rendering fails
      */
     public boolean renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
-                                         boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
-                                         int end, boolean showCredit) throws IOException {
+                                          boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
+                                          int end, boolean showCredit) throws IOException {
         return renderGraph(rate, out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
                            periodCount, end, showCredit, true);
     }
 
     /**
-     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
+     *  Render a single-data graph with the specified options.
+     *
+     *  @param rate the rate to graph
+     *  @param out the output stream to write the graph image to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, draw event markers
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now to end at
+     *  @param showCredit if true, show the I2P+ credit line
+     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     *  @return success
+     *  @throws IOException if rendering fails
      *  @since 0.9.70+
      */
     public boolean renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
-                                         boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
-                                         int end, boolean showCredit, boolean showRestarts) throws IOException {
+                                          boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
+                                          int end, boolean showCredit, boolean showRestarts) throws IOException {
         try {
             try {_sem.acquire();}
             catch (InterruptedException ie) { /* ignored */ }
@@ -337,11 +390,26 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  @param end number of periods before now
+     *  Render a single-data graph under the semaphore lock.
+     *
+     *  @param rate the rate to graph
+     *  @param out the output stream to write to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, draw event markers
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now to end at
+     *  @param showCredit if true, show the I2P+ credit line
+     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     *  @return success
+     *  @throws IOException if rendering fails
      */
     private boolean locked_renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
-                                       boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
-                                       int end, boolean showCredit, boolean showRestarts) throws IOException {
+                                        boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
+                                        int end, boolean showCredit, boolean showRestarts) throws IOException {
         if (width > MAX_X) {width = MAX_X;}
         else if (width <= 0) {width = DEFAULT_X;}
         if (height > MAX_Y) {height = MAX_Y;}
@@ -356,6 +424,14 @@ public class GraphGenerator implements Runnable, ClientApp {
         return false;
     }
 
+    /**
+     *  Export rate data as XML.
+     *
+     *  @param rate the rate to export
+     *  @param out the output stream to write the XML to
+     *  @return true if the data was exported successfully
+     *  @throws IOException if export fails
+     */
     public boolean getXML(Rate rate, OutputStream out) throws IOException {
         try {
             try {_sem.acquire();}
@@ -364,6 +440,14 @@ public class GraphGenerator implements Runnable, ClientApp {
         } finally {_sem.release();}
     }
 
+    /**
+     *  Export rate data as XML under the semaphore lock.
+     *
+     *  @param rate the rate to export
+     *  @param out the output stream to write to
+     *  @return true if the data was exported successfully
+     *  @throws IOException if export fails
+     */
     private boolean locked_getXML(Rate rate, OutputStream out) throws IOException {
         GraphListener lsnr = _listenerByRate.get(rate);
         if (lsnr != null) {
@@ -376,27 +460,51 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  This does the two-data bandwidth graph only.
+     *  Render the two-data bandwidth graph with the specified options.
      *  For all other graphs see renderGraph() above.
      *  Synchronized to conserve memory.
      *
-     *  @param end number of periods before now
+     *  @param out the output stream to write the graph image to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, draw event markers
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now to end at
+     *  @param showCredit if true, show the I2P+ credit line
      *  @return success
+     *  @throws IOException if rendering fails
      */
     public boolean renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
-                                  boolean hideGrid, boolean hideTitle, boolean showEvents,
-                                  int periodCount, int end, boolean showCredit) throws IOException {
+                                   boolean hideGrid, boolean hideTitle, boolean showEvents,
+                                   int periodCount, int end, boolean showCredit) throws IOException {
         return renderCombinedGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
                                    periodCount, end, showCredit, true);
     }
 
     /**
-     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
+     *  Render the two-data bandwidth graph with the specified options.
+     *
+     *  @param out the output stream to write to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, draw event markers
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now to end at
+     *  @param showCredit if true, show the I2P+ credit line
+     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     *  @return success
+     *  @throws IOException if rendering fails
      *  @since 0.9.70+
      */
     public boolean renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
-                                  boolean hideGrid, boolean hideTitle, boolean showEvents,
-                                  int periodCount, int end, boolean showCredit, boolean showRestarts) throws IOException {
+                                   boolean hideGrid, boolean hideTitle, boolean showEvents,
+                                   int periodCount, int end, boolean showCredit, boolean showRestarts) throws IOException {
         try {
             try {_sem.acquire();}
             catch (InterruptedException ie) { /* ignored */ }
@@ -412,9 +520,26 @@ public class GraphGenerator implements Runnable, ClientApp {
         } finally {_sem.release();}
     }
 
+    /**
+     *  Render the two-data bandwidth graph under the semaphore lock.
+     *
+     *  @param out the output stream to write to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, draw event markers
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now to end at
+     *  @param showCredit if true, show the I2P+ credit line
+     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     *  @return success
+     *  @throws IOException if rendering fails
+     */
     private boolean locked_renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
-                                          boolean hideGrid, boolean hideTitle, boolean showEvents,
-                                          int periodCount, int end, boolean showCredit, boolean showRestarts) throws IOException {
+                                           boolean hideGrid, boolean hideTitle, boolean showEvents,
+                                           int periodCount, int end, boolean showCredit, boolean showRestarts) throws IOException {
 
         // go to some trouble to see if we have the data for the combined bw graph
         GraphListener txLsnr = null;
@@ -479,7 +604,13 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     private static final boolean IS_WIN = SystemVersion.isWindows();
 
-    /** translate a string */
+    /**
+     *  Translate a string for display on graphs.
+     *  Falls back to the original string for CJK on Windows where fonts may lack glyphs.
+     *
+     *  @param s the string to translate
+     *  @return the translated string, or the original if translation is unavailable
+     */
     private String _t(String s) {
         // The RRD font doesn't have zh chars, at least on my system
         // Works on 1.5.9 except on windows
@@ -492,6 +623,9 @@ public class GraphGenerator implements Runnable, ClientApp {
      *  @since 0.8.7
      */
     private class Shutdown implements Runnable {
+        /**
+         *  Close all persistent RRDs and clean up.
+         */
         @Override
         public void run() {
             setDisabled();

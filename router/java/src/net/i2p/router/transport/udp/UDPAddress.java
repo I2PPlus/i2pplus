@@ -13,38 +13,7 @@ import net.i2p.util.Addresses;
 import net.i2p.util.LHMCache;
 import net.i2p.util.SystemVersion;
 
-/**
- * UDP address parser and validator for I2P peer information.
- *
- * This class parses and validates UDP address strings containing
- * peer introduction information. It extracts hostnames,
- * ports, introduction keys, and other metadata needed for
- * establishing SSU connections.
- *
- * <strong>Parsing Features:</strong>
- * <ul>
- *   <li>Hostname and IP address extraction</li>
- *   <li>Port number parsing and validation</li>
- *   <li>Introduction key and tag parsing</li>
- *   <li>Multiple introduction point support</li>
- *   <li>Expiration time and bandwidth information</li>
- * </ul>
- *
- * <strong>Validation:</strong>
- * <ul>
- *   <li>Address format validation</li>
- *   <li>Port range checking</li>
- *   <li>Introduction key format validation</li>
- *   <li>Hostname resolution and verification</li>
- * </ul>
- *
- * <strong>Output Format:</strong>
- * <ul>
- *   <li>Structured peer information objects</li>
- *   <li>Validated address components</li>
- *   <li>Parsed introduction metadata</li>
- * </ul>
- */
+/** UDPAddress */
 class UDPAddress {
     private final String _host;
     private InetAddress _hostAddress;
@@ -62,31 +31,45 @@ class UDPAddress {
     private final boolean _isIPv4;
     private final boolean _isIPv6;
 
+    /** RouterAddress.PROP_PORT */
     public static final String PROP_PORT = RouterAddress.PROP_PORT;
+    /** RouterAddress.PROP_HOST */
     public static final String PROP_HOST = RouterAddress.PROP_HOST;
+    /** Key. */
     public static final String PROP_INTRO_KEY = "key";
+    /** Mtu. */
     public static final String PROP_MTU = "mtu";
 
+    /** Caps. */
     public static final String PROP_CAPACITY = "caps";
+    /** 'B' */
     public static final char CAPACITY_TESTING = 'B';
+    /** 'C' */
     public static final char CAPACITY_INTRODUCER = 'C';
 
+    /** Ihost. */
     public static final String PROP_INTRO_HOST_PREFIX = "ihost";
+    /** Iport. */
     public static final String PROP_INTRO_PORT_PREFIX = "iport";
+    /** Ikey. */
     public static final String PROP_INTRO_KEY_PREFIX = "ikey";
+    /** Itag. */
     public static final String PROP_INTRO_TAG_PREFIX = "itag";
     /** Introduction expiration prefix */
     public static final String PROP_INTRO_EXP_PREFIX = "iexp";
     /** Introduction hash prefix for SSU2 */
     public static final String PROP_INTRO_HASH_PREFIX = "ih";
 
+    /** 5 */
     static final int MAX_INTRODUCERS = 5;
     private static final String[] PROP_INTRO_HOST;
     private static final String[] PROP_INTRO_PORT;
     private static final String[] PROP_INTRO_IKEY;
+    /** PROP_INTRO_TAG */
     static final String[] PROP_INTRO_TAG;
     private static final String[] PROP_INTRO_EXP;
     private static final String[] PROP_INTRO_HASH;
+    /** Static initializer. */
     static {
         // object churn
         PROP_INTRO_HOST = new String[MAX_INTRODUCERS];
@@ -105,6 +88,7 @@ class UDPAddress {
         }
     }
 
+    /** Addr. */
     public UDPAddress(RouterAddress addr) {
         if (addr == null) {
             _host = null;
@@ -128,6 +112,7 @@ class UDPAddress {
         _isIPv4 = (_host != null && _host.contains(".")) || (caps != null && caps.contains("4"));
         _isIPv6 = (_host != null && _host.contains(":")) || (caps != null && caps.contains("6"));
 
+        /** addr.getTransportStyle.equals"SSU2" */
         final boolean ssu2only = addr.getTransportStyle().equals("SSU2");
         int cmtu = 0;
         try {
@@ -176,6 +161,7 @@ class UDPAddress {
         InetAddress[] cintroAddresses = null;
         long[] cintroExps = null;
         Hash[] cintroHashes = null;
+        /** SSU2 check. */
         final boolean ssu2enable = ssu2only || "2".equals(addr.getOption("v"));
         for (int i = MAX_INTRODUCERS - 1; i >= 0; i--) {
             // This is the only one required for SSU 1 and 2
@@ -316,6 +302,7 @@ class UDPAddress {
         _introHashes = cintroHashes;
     }
 
+    /** Host. */
     public String getHost() { return _host; }
 
     /**
@@ -329,9 +316,7 @@ class UDPAddress {
         return _hostAddress;
     }
 
-    /**
-     *  @return 0 if unset or invalid
-     */
+    /** Port. */
     public int getPort() { return _port; }
 
     /**
@@ -339,6 +324,7 @@ class UDPAddress {
      */
     byte[] getIntroKey() { return _introKey; }
 
+    /** Introducer count */
     int getIntroducerCount() { return (_introTags == null ? 0 : _introTags.length); }
 
     /**
@@ -407,7 +393,11 @@ class UDPAddress {
         return _mtu;
     }
 
+    /**
+     * String representation.
+     */
     @Override
+    /** String representation. */
     public String toString() {
         StringBuilder rv = new StringBuilder(64);
         if (_introHosts != null) {
@@ -439,6 +429,7 @@ class UDPAddress {
      */
     private static final Map<String, InetAddress> _inetAddressCache;
 
+    /** Static initializer. */
     static {
         long maxMemory = SystemVersion.getMaxMemory();
         long min = 128;
@@ -464,12 +455,14 @@ class UDPAddress {
         if (host == null)
             return null;
         InetAddress rv;
+        /** _inetAddressCache */
         synchronized (_inetAddressCache) {
             rv = _inetAddressCache.get(host);
         }
         if (rv == null && Addresses.isIPAddress(host)) {
             try {
                 rv = InetAddress.getByName(host);
+                /** _inetAddressCache */
                 synchronized (_inetAddressCache) {
                     _inetAddressCache.put(host, rv);
                 }
@@ -478,39 +471,12 @@ class UDPAddress {
         return rv;
     }
 
-    /**
-     *  @since IPv6
-     */
+    /** Clear cache. */
     static void clearCache() {
         synchronized(_inetAddressCache) {
             _inetAddressCache.clear();
         }
     }
 
-/*
-    public static void main(String[] args) {
-        net.i2p.util.OrderedProperties opts = new net.i2p.util.OrderedProperties();
-        opts.setProperty("caps", "B6");
-        opts.setProperty("i", "lkjlierjsdkljglksdjlkgj~jifxg-fFhdp-~HDLJo4=");
-        opts.setProperty("iexp0", "1");
-        opts.setProperty("iexp1", "6");
-        opts.setProperty("iexp2", "5");
-        opts.setProperty("ih2", "kjshfkjshfkjshfkjsdhfkjsdfs6XYi9HbyYO4OllX0=");
-        opts.setProperty("ihost0", "9999:8888:1:6:0:0:0:0");
-        opts.setProperty("ihost1", "1.2.3.4");
-        opts.setProperty("ikey0", "3lksjdflksjflksdjfzLrlABjJf5RcKyG2zSm-qUNqQ=");
-        opts.setProperty("ikey1", "lskjflksjflksdjfQobejJ~Y2QgPNliBhWfDZ3f0icA=");
-        opts.setProperty("iport0", "11114");
-        opts.setProperty("iport1", "11118");
-        opts.setProperty("itag0", "3");
-        opts.setProperty("itag1", "5");
-        opts.setProperty("itag2", "1");
-        opts.setProperty("key", "ioerutoieutoieruotiuertoi8fABtTLXZaSVyE1STk=");
-        opts.setProperty("s", "iouwtoiuwoiutkkjsdlkjfiuwer2Zou3ad60Kgx1cD4=");
-        opts.setProperty("v", "2");
-        RouterAddress ra = new RouterAddress("SSU", opts, 5);
-        UDPAddress ua = new UDPAddress(ra);
-        System.out.println("Introducer count is " + ua.getIntroducerCount());
-    }
-*/
+
 }

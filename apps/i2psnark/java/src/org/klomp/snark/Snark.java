@@ -45,6 +45,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private final byte[] id;
     private final byte[] infoHash;
     private String additionalTrackerURL;
+    /** The util */
     protected final I2PSnarkUtil _util;
     private final Log _log;
     private final PeerCoordinatorSet _peerCoordinatorSet;
@@ -64,6 +65,16 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      *
      * <p>Will not start itself. Caller must call startTorrent() if desired.
      *
+     * @param util the I2PSnarkUtil
+     * @param torrent the torrent file name
+     * @param ip the IP address
+     * @param user_port the user port
+     * @param slistener the storage listener
+     * @param clistener the coordinator listener
+     * @param complistener the complete listener
+     * @param peerCoordinatorSet the peer coordinator set
+     * @param connectionAcceptor the connection acceptor
+     * @param rootDir the root data directory
      * @throws RuntimeException via fatal()
      * @throws RouterException via fatalRouter()
      */
@@ -97,6 +108,16 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      *
      * <p>Will not start itself. Caller must call startTorrent() if desired.
      *
+     * @param util the I2PSnarkUtil
+     * @param torrent the torrent file name
+     * @param ip the IP address
+     * @param user_port the user port
+     * @param slistener the storage listener
+     * @param clistener the coordinator listener
+     * @param complistener the complete listener
+     * @param peerCoordinatorSet the peer coordinator set
+     * @param connectionAcceptor the connection acceptor
+     * @param rootDir the root data directory
      * @param baseFile if null, use rootDir/torrentName; if non-null, use it instead
      * @throws RuntimeException via fatal()
      * @throws RouterException via fatalRouter()
@@ -227,7 +248,15 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      *
      * <p>Will not start itself. Caller must call startTorrent() if desired.
      *
+     * @param util the I2PSnarkUtil
+     * @param torrent the torrent file name
+     * @param ih the info hash
+     * @param trackerURL the tracker URL
+     * @param complistener the complete listener
+     * @param peerCoordinatorSet the peer coordinator set
+     * @param connectionAcceptor the connection acceptor
      * @param ignored used to be autostart
+     * @param rootDir the root data directory
      * @throws RuntimeException via fatal()
      * @throws RouterException via fatalRouter()
      * @since 0.8.4, removed in 0.9.36, restored in 0.9.45 with boolean param now ignored
@@ -258,9 +287,14 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      *
      * <p>Will not start itself. Caller must call startTorrent() if desired.
      *
+     * @param util the I2PSnarkUtil
      * @param torrent a fake name for now (not a file name)
      * @param ih 20-byte info hash
      * @param trackerURL may be null
+     * @param complistener the complete listener
+     * @param peerCoordinatorSet the peer coordinator set
+     * @param connectionAcceptor the connection acceptor
+     * @param rootDir the root data directory
      * @throws RuntimeException via fatal()
      * @throws RouterException via fatalRouter()
      * @since 0.8.4
@@ -482,6 +516,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     // Accessors
 
     /**
+     * Get the file name of the .torrent file.
+     *
      * @return file name of .torrent file (should be full absolute path), or a fake name if in
      *     magnet mode.
      * @since 0.8.4
@@ -491,6 +527,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the base name of the torrent.
+     *
      * @return base name of torrent [filtered version of getMetaInfo.getName()], or a fake name if
      *     in magnet mode
      * @since 0.8.4
@@ -518,6 +556,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the peer ID.
+     *
      * @return always will be valid even in magnet mode
      * @since 0.8.4
      */
@@ -526,6 +566,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the info hash.
+     *
      * @return always will be valid even in magnet mode
      * @since 0.8.4
      */
@@ -538,6 +580,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the metainfo.
+     *
      * @return may be null if in magnet mode
      * @since 0.8.4
      */
@@ -546,6 +590,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the storage.
+     *
      * @return may be null if in magnet mode
      * @since 0.8.4
      */
@@ -554,6 +600,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Check if the torrent is stopped.
+     *
+     * @return true if stopped
      * @since 0.8.4
      */
     public boolean isStopped() {
@@ -561,8 +610,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Startup in progress.
+     * Check if startup is in progress.
      *
+     * @return true if starting
      * @since 0.9.1
      */
     public boolean isStarting() {
@@ -669,7 +719,11 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         return savedUploaded;
     }
 
-    /** @return peer count */
+    /**
+     * Get the peer count.
+     *
+     * @return peer count
+     */
     public int getPeerCount() {
         PeerCoordinator coord = coordinator;
         if (coord != null) {
@@ -678,7 +732,11 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         return 0;
     }
 
-    /** @return peer list */
+    /**
+     * Get the peer list.
+     *
+     * @return peer list
+     */
     public List<Peer> getPeerList() {
         PeerCoordinator coord = coordinator;
         if (coord != null) {
@@ -698,6 +756,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Set the tracker problems string.
+     *
      * @param p tracker error string or null
      * @since 0.8.4
      */
@@ -706,6 +766,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the tracker seen peers count.
+     *
      * @return count returned from tracker
      * @since 0.8.4
      */
@@ -713,7 +775,11 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         return trackerSeenPeers;
     }
 
-    /** @param p peer count from tracker */
+    /**
+     * Set the tracker seen peers count.
+     *
+     * @param p peer count from tracker
+     */
     public void setTrackerSeenPeers(int p) {
         trackerSeenPeers = p;
     }
@@ -727,6 +793,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the total length of all torrent files.
+     *
      * @return total of all torrent files, or total of metainfo file if fetching magnet, or -1
      * @since 0.8.4
      */
@@ -814,6 +882,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the piece length.
+     *
      * @param p the piece number
      * @return metainfo piece length or 16K if fetching magnet
      * @since 0.8.4
@@ -826,6 +896,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the number of pieces.
+     *
      * @return number of pieces
      * @since 0.8.4
      */
@@ -837,6 +909,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Restart the connection acceptor.
+     *
      * @return true if restarted
      * @since 0.8.4
      */
@@ -849,6 +923,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the tracker URL.
+     *
      * @return trackerURL string from magnet-mode constructor, may be null
      * @since 0.8.4
      */
@@ -857,6 +933,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Check if the torrent is auto-stoppable.
+     *
+     * @return true if auto-stoppable
      * @since 0.9.9
      */
     public boolean isAutoStoppable() {
@@ -864,6 +943,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Set whether the torrent is auto-stoppable.
+     *
+     * @param yes true if auto-stoppable
      * @since 0.9.9
      */
     public void setAutoStoppable(boolean yes) {
@@ -920,16 +1002,18 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.9.46
      */
     static class RouterException extends RuntimeException {
+        /** @param s error message */
         public RouterException(String s) {
             super(s);
         }
 
+        /** @param s error message @param t cause */
         public RouterException(String s, Throwable t) {
             super(s, t);
         }
     }
 
-    /** CoordinatorListener - this does nothing */
+    /** CoordinatorListener no-op */
     @Override
     public void peerChange(PeerCoordinator coordinator, Peer peer) { /* no-op */ }
 
@@ -999,7 +1083,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
 
     ///////////// Begin StorageListener methods
 
-    /** does nothing */
+    /** StorageListener no-op */
     @Override
     public void storageCreateFile(Storage storage, String name, long length) { /* no-op */ }
 
@@ -1113,6 +1197,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /** Maintain a configurable total uploader cap CoordinatorListener */
     static final int MIN_TOTAL_UPLOADERS = 10;
 
+    /** M a x  t o t a l  u p l o a d e r s */
     static final int MAX_TOTAL_UPLOADERS = 50;
 
     /**

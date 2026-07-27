@@ -14,6 +14,9 @@ import net.i2p.util.CommandLine;
  */
 public class SnarkCommandLine extends CommandLine {
 
+    /**
+     * SCLASSES.
+     */
     protected static final List<String> SCLASSES =
             Arrays.asList(
                     new String[] {
@@ -22,8 +25,14 @@ public class SnarkCommandLine extends CommandLine {
                         "org.klomp.snark.bencode.BDecoder",
                     });
 
+    /**
+     * SnarkCommandLine.
+     */
     protected SnarkCommandLine() {}
 
+    /**
+     * main.
+     */
     public static void main(String[] args) {
         List<String> classes = new ArrayList<>(SCLASSES.size() + CLASSES.size());
         classes.addAll(SCLASSES);

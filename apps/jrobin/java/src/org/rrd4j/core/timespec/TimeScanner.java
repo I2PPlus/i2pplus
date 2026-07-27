@@ -5,11 +5,14 @@ package org.rrd4j.core.timespec;
  */
 
 class TimeScanner {
+    /** Date string */
     private final String dateString;
-
+    /** Position in string */
     private int pos, pos_save;
+    /** Token save */
     private TimeToken token, token_save;
 
+    /** Keyword tokens for time specification parsing */
     static final TimeToken[] WORDS = {
         new TimeToken("midnight", TimeToken.MIDNIGHT), /* 00:00:00 of today or tomorrow */
         new TimeToken("noon", TimeToken.NOON), /* 12:00:00 of today or tomorrow */
@@ -63,9 +66,10 @@ class TimeScanner {
         new TimeToken("fri", TimeToken.FRI),
         new TimeToken("saturday", TimeToken.SAT),
         new TimeToken("sat", TimeToken.SAT),
-        new TimeToken(null, 0) /*** SENTINEL ***/
+        new TimeToken(null, 0) /* SENTINEL */
     };
 
+    /** Multiplier tokens for relative time offsets */
     static final TimeToken[] MULTIPLIERS = {
         new TimeToken("second", TimeToken.SECONDS), /* seconds multiplier */
         new TimeToken("seconds", TimeToken.SECONDS), /* (pluralized) */
@@ -93,9 +97,9 @@ class TimeScanner {
         new TimeToken("years", TimeToken.YEARS), /* (pluralized) */
         new TimeToken("yr", TimeToken.YEARS), /* (generic) */
         new TimeToken("y", TimeToken.YEARS), /* (short generic) */
-        new TimeToken(null, 0) /*** SENTINEL ***/
+        new TimeToken(null, 0) /* SENTINEL */
     };
-
+    /** Specials */
     TimeToken[] specials = WORDS;
 
     /**
@@ -107,10 +111,11 @@ class TimeScanner {
         this.dateString = dateString;
     }
 
+    /** Switch token context between words and multipliers */
     void setContext(boolean parsingWords) {
         specials = parsingWords ? WORDS : MULTIPLIERS;
     }
-
+    /** Next token */
     TimeToken nextToken() {
         StringBuilder buffer = new StringBuilder();
         while (pos < dateString.length()) {
@@ -165,23 +170,23 @@ class TimeScanner {
         }
         return token = new TimeToken(null, TimeToken.EOF);
     }
-
+    /** Resolve months minutes */
     TimeToken resolveMonthsMinutes(int newId) {
         assert token.token_id == TimeToken.MONTHS_MINUTES;
         assert newId == TimeToken.MONTHS || newId == TimeToken.MINUTES;
         return token = new TimeToken(token.value, newId);
     }
-
+    /** Save state */
     void saveState() {
         token_save = token;
         pos_save = pos;
     }
-
+    /** Restore state */
     TimeToken restoreState() {
         pos = pos_save;
         return token = token_save;
     }
-
+    /** Parse token */
     private int parseToken(String arg) {
         for (int i = 0; specials[i].value != null; i++) {
             if (specials[i].value.equalsIgnoreCase(arg)) {

@@ -42,34 +42,54 @@ import net.i2p.util.SecureFile;
  * @since 0.9.19
  */
 public class GeneralHelper {
+    /** Tunnel is fully operational */
     public static final int RUNNING = 1;
+    /** Tunnel is in the process of starting up */
     public static final int STARTING = 2;
+    /** Tunnel is not running */
     public static final int NOT_RUNNING = 3;
+    /** Tunnel is alive but idle, ready for activity */
     public static final int STANDBY = 4;
 
+    /** Property key for enabling access list filtering */
     protected static final String PROP_ENABLE_ACCESS_LIST = "i2cp.enableAccessList";
+    /** Property key for enabling blacklist filtering */
     protected static final String PROP_ENABLE_BLACKLIST = "i2cp.enableBlackList";
 
     private static final String OPT = TunnelController.PFX_OPTION;
 
     private final I2PAppContext _context;
+    /**
+     * _group.
+     */
     protected final TunnelControllerGroup _group;
 
     /**
-     *  @param tcg may be null ???
+     *  Construct a new helper with the global context.
+     *
+     *  @param tcg the group of tunnel controllers, may be null
      */
     public GeneralHelper(TunnelControllerGroup tcg) {
         this(I2PAppContext.getGlobalContext(), tcg);
     }
 
     /**
-     *  @param tcg may be null ???
+     *  Construct a new helper with a specific context.
+     *
+     *  @param context the I2P app context to use
+     *  @param tcg the group of tunnel controllers, may be null
      */
     public GeneralHelper(I2PAppContext context, TunnelControllerGroup tcg) {
         _context = context;
         _group = tcg;
     }
 
+    /**
+     *  Retrieve a tunnel controller by index.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the controller, or null if not found
+     */
     public TunnelController getController(int tunnel) {
         return getController(_group, tunnel);
     }
@@ -89,6 +109,10 @@ public class GeneralHelper {
     /**
      *  Save the configuration for a new or existing tunnel to disk.
      *  For new tunnels, adds to controller and (if configured) starts it.
+     *
+     *  @param tunnel the tunnel index
+     *  @param config the configuration to apply
+     *  @return list of status messages
      */
     public List<String> saveTunnel(int tunnel, TunnelConfig config) {
         return saveTunnel(_context, _group, tunnel, config);
@@ -275,6 +299,14 @@ public class GeneralHelper {
         return rv;
     }
 
+    /**
+     *  Stop and delete the tunnel, remove its configuration, and rename
+     *  the private key file if it uses a default name in the default directory.
+     *
+     *  @param tunnel the tunnel index
+     *  @param privKeyFile the private key file name from the edit form, may be null
+     *  @return list of status messages
+     */
     public List<String> deleteTunnel(int tunnel, String privKeyFile) {
         return deleteTunnel(_context, _group, tunnel, privKeyFile);
     }
@@ -335,12 +367,21 @@ public class GeneralHelper {
     // Accessors
     //
 
+    /**
+     *  Return the tunnel type string (e.g. &quot;httpclient&quot;, &quot;httpserver&quot;).
+     *
+     *  @param tunnel the tunnel index
+     *  @return the type string, or empty string if tunnel not found
+     */
     public String getTunnelType(int tunnel) {
         TunnelController tun = getController(tunnel);
         return (tun != null && tun.getType() != null) ? tun.getType() : "";
     }
 
     /**
+     *  Return the tunnel name.
+     *
+     *  @param tunnel the tunnel index
      *  @return null if unset
      */
     public String getTunnelName(int tunnel) {
@@ -348,6 +389,10 @@ public class GeneralHelper {
     }
 
     /**
+     *  Return the tunnel name from a specific group.
+     *
+     *  @param tcg the controller group, may be null
+     *  @param tunnel the tunnel index
      *  @return null if unset
      */
     public static String getTunnelName(TunnelControllerGroup tcg, int tunnel) {
@@ -355,19 +400,33 @@ public class GeneralHelper {
         return tun != null ? tun.getName() : null;
     }
 
+    /**
+     *  Return the tunnel description.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the description, or empty string if not found
+     */
     public String getTunnelDescription(int tunnel) {
         TunnelController tun = getController(tunnel);
         return (tun != null && tun.getDescription() != null) ? tun.getDescription() : "";
     }
 
+    /**
+     *  Return the target host for the tunnel.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the target host, defaults to &quot;127.0.0.1&quot;
+     */
     public String getTargetHost(int tunnel) {
         TunnelController tun = getController(tunnel);
         return (tun != null && tun.getTargetHost() != null) ? tun.getTargetHost() : "127.0.0.1";
     }
 
     /**
-     * @param tunnel
-     * @return -1 if unset or invalid
+     *  Return the target port for the tunnel.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the port number, or -1 if unset or invalid
      */
     public int getTargetPort(int tunnel) {
         TunnelController tun = getController(tunnel);
@@ -377,12 +436,21 @@ public class GeneralHelper {
         } else {return -1;}
     }
 
+    /**
+     *  Return the spoofed HTTP host header.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the spoofed host, or empty string if not set
+     */
     public String getSpoofedHost(int tunnel) {
         TunnelController tun = getController(tunnel);
         return (tun != null && tun.getSpoofedHost() != null) ? tun.getSpoofedHost() : "";
     }
 
     /**
+     *  Return the private key file path for the tunnel.
+     *
+     *  @param tunnel the tunnel index
      *  @return path, non-null, non-empty
      */
     public String getPrivateKeyFile(int tunnel) {
@@ -390,6 +458,10 @@ public class GeneralHelper {
     }
 
     /**
+     *  Return the private key file path, computing a default if none is configured.
+     *
+     *  @param tcg the controller group, may be null
+     *  @param tunnel the tunnel index
      *  @return path, non-null, non-empty
      */
     public String getPrivateKeyFile(TunnelControllerGroup tcg, int tunnel) {
@@ -412,7 +484,10 @@ public class GeneralHelper {
     }
 
     /**
-     *  @return path or ""
+     *  Return the alternate private key file path.
+     *
+     *  @param tunnel the tunnel index
+     *  @return path or &quot;&quot;
      *  @since 0.9.30
      */
     public String getAltPrivateKeyFile(int tunnel) {
@@ -420,7 +495,11 @@ public class GeneralHelper {
     }
 
     /**
-     *  @return path or ""
+     *  Return the alternate private key file path from a specific group.
+     *
+     *  @param tcg the controller group, may be null
+     *  @param tunnel the tunnel index
+     *  @return path or &quot;&quot;
      *  @since 0.9.30
      */
     public String getAltPrivateKeyFile(TunnelControllerGroup tcg, int tunnel) {
@@ -432,6 +511,12 @@ public class GeneralHelper {
         return "";
     }
 
+    /**
+     *  Return the interface address the client tunnel listens on.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the interface address, defaults to &quot;127.0.0.1&quot;
+     */
     public String getClientInterface(int tunnel) {
         TunnelController tun = getController(tunnel);
         if (tun != null) {
@@ -440,6 +525,12 @@ public class GeneralHelper {
         } else {return "127.0.0.1";}
     }
 
+    /**
+     *  Return the port the client tunnel listens on.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the port number, or -1 if unset or invalid
+     */
     public int getClientPort(int tunnel) {
         TunnelController tun = getController(tunnel);
         if (tun != null && tun.getListenPort() != null) {
@@ -448,6 +539,12 @@ public class GeneralHelper {
         } else {return -1;}
     }
 
+    /**
+     *  Return the operational status of the tunnel.
+     *
+     *  @param tunnel the tunnel index
+     *  @return RUNNING, STARTING, NOT_RUNNING, or STANDBY
+     */
     public int getTunnelStatus(int tunnel) {
         TunnelController tun = getController(tunnel);
         if (tun == null) return NOT_RUNNING;
@@ -470,6 +567,12 @@ public class GeneralHelper {
         return tun.getRemainingStartupDelay();
     }
 
+    /**
+     *  Return the client destination (base64) or proxy list for the tunnel.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the destination string or proxy list, never null
+     */
     public String getClientDestination(int tunnel) {
         TunnelController tun = getController(tunnel);
         if (tun == null) return "";
@@ -483,7 +586,9 @@ public class GeneralHelper {
     }
 
     /**
-     *  Works even if tunnel is not running.
+     *  Retrieve the tunnel Destination, reading from the key file if the tunnel is not running.
+     *
+     *  @param tunnel the tunnel index
      *  @return Destination or null
      */
     public Destination getDestination(int tunnel) {
@@ -507,7 +612,9 @@ public class GeneralHelper {
     }
 
     /**
-     *  Works even if tunnel is not running.
+     *  Retrieve the alternate tunnel Destination from the key file.
+     *
+     *  @param tunnel the tunnel index
      *  @return Destination or null
      *  @since 0.9.30
      */
@@ -530,7 +637,9 @@ public class GeneralHelper {
     }
 
     /**
-     *  Works even if tunnel is not running.
+     *  Check whether the tunnel uses offline keys.
+     *
+     *  @param tunnel the tunnel index
      *  @return true if offline keys
      *  @since 0.9.40
      */
@@ -548,87 +657,207 @@ public class GeneralHelper {
         return false;
     }
 
+    /**
+     *  Check whether the tunnel is configured to start automatically.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if auto-start is enabled
+     */
     public boolean shouldStartAutomatically(int tunnel) {
         TunnelController tun = getController(tunnel);
         return tun != null ? tun.getStartOnLoad() : false;
     }
 
+    /**
+     *  Check whether this tunnel shares its I2CP session with other clients.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if it is a shared client
+     */
     public boolean isSharedClient(int tunnel) {
         TunnelController tun = getController(tunnel);
         return tun != null ? Boolean.parseBoolean(tun.getSharedClient()) : false;
     }
 
+    /**
+     *  Check whether the tunnel has a streaming connect delay configured.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if connect delay is positive
+     */
     public boolean shouldDelayConnect(int tunnel) {
         return getProperty(tunnel, "i2p.streaming.connectDelay", 0) > 0;
     }
 
+    /**
+     *  Check whether the tunnel is configured for interactive streaming (small window).
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if max window size is 16
+     */
     public boolean isInteractive(int tunnel) {
         return getProperty(tunnel, "i2p.streaming.maxWindowSize", 128) == 16;
     }
 
-    /** Inbound or both in/out */
+    /**
+     *  Return the inbound tunnel depth (applies to both in/out if not split).
+     *
+     *  @param tunnel the tunnel index
+     *  @param defaultLength default value if not configured
+     *  @return tunnel depth in hops
+     */
     public int getTunnelDepth(int tunnel, int defaultLength) {
         return getProperty(tunnel, "inbound.length", defaultLength);
     }
 
-    /** Inbound or both in/out */
+    /**
+     *  Return the inbound tunnel quantity (applies to both in/out if not split).
+     *
+     *  @param tunnel the tunnel index
+     *  @param defaultQuantity default value if not configured
+     *  @return number of tunnels
+     */
     public int getTunnelQuantity(int tunnel, int defaultQuantity) {
         return getProperty(tunnel, "inbound.quantity", defaultQuantity);
     }
 
-    /** Inbound or both in/out */
+    /**
+     *  Return the inbound backup tunnel quantity (applies to both in/out if not split).
+     *
+     *  @param tunnel the tunnel index
+     *  @param defaultBackupQuantity default value if not configured
+     *  @return number of backup tunnels
+     */
     public int getTunnelBackupQuantity(int tunnel, int defaultBackupQuantity) {
         return getProperty(tunnel, "inbound.backupQuantity", defaultBackupQuantity);
     }
 
-    /** Inbound or both in/out */
+    /**
+     *  Return the inbound tunnel length variance (applies to both in/out if not split).
+     *
+     *  @param tunnel the tunnel index
+     *  @param defaultVariance default value if not configured
+     *  @return length variance in hops
+     */
     public int getTunnelVariance(int tunnel, int defaultVariance) {
         return getProperty(tunnel, "inbound.lengthVariance", defaultVariance);
     }
 
-    /** @since 0.9.33 */
+    /**
+     *  Return the outbound tunnel depth.
+     *
+     *  @param tunnel the tunnel index
+     *  @param defaultLength default value if not configured
+     *  @return tunnel depth in hops
+     *  @since 0.9.33
+     */
     public int getTunnelDepthOut(int tunnel, int defaultLength) {
         return getProperty(tunnel, "outbound.length", defaultLength);
     }
 
-    /** @since 0.9.33 */
+    /**
+     *  Return the outbound tunnel quantity.
+     *
+     *  @param tunnel the tunnel index
+     *  @param defaultQuantity default value if not configured
+     *  @return number of tunnels
+     *  @since 0.9.33
+     */
     public int getTunnelQuantityOut(int tunnel, int defaultQuantity) {
         return getProperty(tunnel, "outbound.quantity", defaultQuantity);
     }
 
-    /** @since 0.9.33 */
+    /**
+     *  Return the outbound backup tunnel quantity.
+     *
+     *  @param tunnel the tunnel index
+     *  @param defaultBackupQuantity default value if not configured
+     *  @return number of backup tunnels
+     *  @since 0.9.33
+     */
     public int getTunnelBackupQuantityOut(int tunnel, int defaultBackupQuantity) {
         return getProperty(tunnel, "outbound.backupQuantity", defaultBackupQuantity);
     }
 
-    /** @since 0.9.33 */
+    /**
+     *  Return the outbound tunnel length variance.
+     *
+     *  @param tunnel the tunnel index
+     *  @param defaultVariance default value if not configured
+     *  @return length variance in hops
+     *  @since 0.9.33
+     */
     public int getTunnelVarianceOut(int tunnel, int defaultVariance) {
         return getProperty(tunnel, "outbound.lengthVariance", defaultVariance);
     }
 
+    /**
+     *  Check whether I2CP session reduction on idle is enabled.
+     *
+     *  @param tunnel the tunnel index
+     *  @param def default value if not configured
+     *  @return true if reduction on idle is enabled
+     */
     public boolean getReduceOnIdle(int tunnel, boolean def) {
         return getBooleanProperty(tunnel, "i2cp.reduceOnIdle", def);
     }
 
+    /**
+     *  Return the I2CP reduce quantity (target number of tunnels when idle).
+     *
+     *  @param tunnel the tunnel index
+     *  @param def default value if not configured
+     *  @return reduce quantity
+     */
     public int getReduceCount(int tunnel, int def) {
         return getProperty(tunnel, "i2cp.reduceQuantity", def);
     }
 
     /**
-     * @param tunnel
-     * @param def in minutes
-     * @return time in minutes
+     *  Return the I2CP idle reduction time threshold.
+     *
+     *  @param tunnel the tunnel index
+     *  @param def default idle time in minutes
+     *  @return idle time in minutes
      */
     public int getReduceTime(int tunnel, int def) {
         return getProperty(tunnel, "i2cp.reduceIdleTime", def*60*1000) / (60*1000);
     }
 
+    /**
+     *  Return the certificate type for the tunnel (currently unused, always 0).
+     *
+     *  @param tunnel the tunnel index
+     *  @return always 0
+     */
     public int getCert(int tunnel) {return 0;}
+    /**
+     *  Return the proof-of-work effort for blinded leases (currently unused, always 23).
+     *
+     *  @param tunnel the tunnel index
+     *  @return always 23
+     */
     public int getEffort(int tunnel) {return 23;}
+    /**
+     *  Return the signer for blinded leases (currently unused, always empty).
+     *
+     *  @param tunnel the tunnel index
+     *  @return always &quot;&quot;
+     */
     public String getSigner(int tunnel) {return "";}
+    /**
+     *  Check whether the lease set should be encrypted.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if encryption is enabled
+     */
     public boolean getEncrypt(int tunnel) {return getBooleanProperty(tunnel, "i2cp.encryptLeaseSet");}
 
     /**
+     *  Determine the encryption mode for the tunnel's lease set.
+     *
+     *  @param tunnel the tunnel index
+     *  @return encryption mode code (0=none, 1=full, 2=blinded, etc.)
      *  @since 0.9.40
      */
     public int getEncryptMode(int tunnel) {
@@ -651,6 +880,10 @@ public class GeneralHelper {
     }
 
     /**
+     *  Return the blinded password for the tunnel's lease set.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the decoded blinded password, or empty string
      *  @since 0.9.40
      */
     public String getBlindedPassword(int tunnel) {
@@ -661,10 +894,12 @@ public class GeneralHelper {
     }
 
     /**
-     *  List of b64 name : b64key
-     *  Pubkeys for DH, privkeys for PSK
-     *  @param isDH true for DH, false for PSK
-     *  @return non-null
+     *  Return the list of authorized client authentications for the lease set.
+     *  Each entry is a base64-encoded name:key pair.
+     *
+     *  @param tunnel the tunnel index
+     *  @param isDH true for DH public keys, false for PSK private keys
+     *  @return non-null list of auth entries
      *  @since 0.9.41
      */
     public List<String> getClientAuths(int tunnel, boolean isDH) {
@@ -680,9 +915,11 @@ public class GeneralHelper {
     }
 
     /**
-     *  @param newTunnelType used if tunnel &lt; 0
-     *  @return the current type if we have a destination already,
-     *          else the default for that type of tunnel
+     *  Return the signature type code for the tunnel.
+     *
+     *  @param tunnel the tunnel index
+     *  @param newTunnelType used if tunnel &lt; 0 to determine default
+     *  @return the current type if a destination exists, else the default for that tunnel type
      */
     public int getSigType(int tunnel, String newTunnelType) {
         SigType type;
@@ -720,7 +957,11 @@ public class GeneralHelper {
     }
 
     /**
-     *  @param encType code
+     *  Check whether the tunnel supports a given encryption type.
+     *
+     *  @param tunnel the tunnel index
+     *  @param encType encryption type code
+     *  @return true if the encryption type is in the configured list
      *  @since 0.9.44
      */
     public boolean hasEncType(int tunnel, int encType) {
@@ -737,47 +978,102 @@ public class GeneralHelper {
     }
 
     /**
-     *  Random keys
+     *  Return the inbound random key (used for testing LS encryption).
+     *
+     *  @param tunnel the tunnel index
+     *  @return the key, or empty string if not set
      */
     public String getInboundRandomKey(int tunnel) {
         return getProperty(tunnel, "inbound.randomKey", "");
     }
 
+    /**
+     *  Return the outbound random key (used for testing LS encryption).
+     *
+     *  @param tunnel the tunnel index
+     *  @return the key, or empty string if not set
+     */
     public String getOutboundRandomKey(int tunnel) {
         return getProperty(tunnel, "outbound.randomKey", "");
     }
 
+    /**
+     *  Return the lease set signing private key.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the key, or empty string if not set
+     */
     public String getLeaseSetSigningPrivateKey(int tunnel) {
         return getProperty(tunnel, "i2cp.leaseSetSigningPrivateKey", "");
     }
 
+    /**
+     *  Return the lease set private key (for encrypted LS).
+     *
+     *  @param tunnel the tunnel index
+     *  @return the key, or empty string if not set
+     */
     public String getLeaseSetPrivateKey(int tunnel) {
         return getProperty(tunnel, "i2cp.leaseSetPrivateKey", "");
     }
 
+    /**
+     *  Check whether DCC (direct client-to-client) is enabled for IRC tunnels.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if DCC is enabled
+     */
     public boolean getDCC(int tunnel) {
         return getBooleanProperty(tunnel, I2PTunnelIRCClient.PROP_DCC);
     }
 
+    /**
+     *  Check whether SSL is enabled for the server tunnel.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if SSL is enabled
+     */
     public boolean isSSLEnabled(int tunnel) {
         return getBooleanProperty(tunnel, I2PTunnelServer.PROP_USE_SSL);
     }
 
+    /**
+     *  Return the lease set encryption key.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the key, or empty string if not set
+     */
     public String getEncryptKey(int tunnel) {
         return getProperty(tunnel, "i2cp.leaseSetKey", "");
     }
 
+    /**
+     *  Return the access control mode for the tunnel.
+     *
+     *  @param tunnel the tunnel index
+     *  @return 0=none, 1=whitelist, 2=blacklist
+     */
     public int getAccessMode(int tunnel) {
         if (getBooleanProperty(tunnel, PROP_ENABLE_ACCESS_LIST)) {return 1;}
         if (getBooleanProperty(tunnel, PROP_ENABLE_BLACKLIST)) {return 2;}
         return 0;
     }
 
+    /**
+     *  Return the access control list (comma-separated destinations), newline-delimited.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the access list entries, one per line
+     */
     public String getAccessList(int tunnel) {
         return getProperty(tunnel, "i2cp.accessList", "").replace(",", "\n");
     }
 
     /**
+     *  Return the connect filter definition for the tunnel.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the filter definition, or empty string if not set
      *  @since 0.9.40
      */
     public String getFilterDefinition(int tunnel) {
@@ -790,89 +1086,196 @@ public class GeneralHelper {
         return "";
     }
 
+    /**
+     *  Return the list of jump servers (one per line).
+     *
+     *  @param tunnel the tunnel index
+     *  @return the jump server list, newline-delimited
+     */
+    /**
+     *  Return the jump server list for HTTP clients (one per line).
+     *
+     *  @param tunnel the tunnel index
+     *  @return the jump server list, newline-delimited
+     */
     public String getJumpList(int tunnel) {
         return getProperty(tunnel, I2PTunnelHTTPClient.PROP_JUMP_SERVERS,
                            I2PTunnelHTTPClient.DEFAULT_JUMP_SERVERS).replace(",", "\n");
     }
 
+    /**
+     *  Check whether I2CP close-on-idle is enabled.
+     *
+     *  @param tunnel the tunnel index
+     *  @param def default value if not configured
+     *  @return true if close-on-idle is enabled
+     */
     public boolean getCloseOnIdle(int tunnel, boolean def) {
         return getBooleanProperty(tunnel, "i2cp.closeOnIdle", def);
     }
 
+    /**
+     *  Return the I2CP close-on-idle timeout in minutes.
+     *
+     *  @param tunnel the tunnel index
+     *  @param def default value in minutes
+     *  @return idle timeout in minutes
+     */
     public int getCloseTime(int tunnel, int def) {
         return getProperty(tunnel, "i2cp.closeIdleTime", def*60*1000) / (60*1000);
     }
 
+    /**
+     *  Check whether the tunnel should get a new destination on resume.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if a new destination will be created on resume
+     */
     public boolean getNewDest(int tunnel) {
         return getBooleanProperty(tunnel, "i2cp.newDestOnResume", true) &&
                getBooleanProperty(tunnel, "i2cp.closeOnIdle") &&
                !getBooleanProperty(tunnel, "persistentClientKey");
     }
 
+    /**
+     *  Check whether the tunnel uses a persistent client key file.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if the key is persistent
+     */
     public boolean getPersistentClientKey(int tunnel) {
         return getBooleanProperty(tunnel, "persistentClientKey");
     }
 
+    /**
+     *  Check whether I2CP delay-open is enabled.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if delay-open is enabled
+     */
     public boolean getDelayOpen(int tunnel) {
         return getBooleanProperty(tunnel, "i2cp.delayOpen");
     }
 
+    /**
+     *  Check whether the HTTP client allows custom User-Agent headers.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if custom User-Agent is allowed
+     */
     public boolean getAllowUserAgent(int tunnel) {
         return getBooleanProperty(tunnel, I2PTunnelHTTPClient.PROP_USER_AGENT);
     }
 
+    /**
+     *  Check whether the HTTP client allows custom Referer headers.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if custom Referer is allowed
+     */
     public boolean getAllowReferer(int tunnel) {
         return getBooleanProperty(tunnel, I2PTunnelHTTPClient.PROP_REFERER);
     }
 
+    /**
+     *  Check whether the HTTP client allows custom Accept headers.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if custom Accept is allowed
+     */
     public boolean getAllowAccept(int tunnel) {
         return getBooleanProperty(tunnel, I2PTunnelHTTPClient.PROP_ACCEPT);
     }
 
     /**
-     *  As of 0.9.35, default true, and overridden to true unless
-     *  PROP_SSL_SET is set
+     *  Check whether internal SSL connections are allowed through the HTTP client.
+     *  As of 0.9.35, defaults to true unless explicitly disabled.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if internal SSL is allowed
      */
     public boolean getAllowInternalSSL(int tunnel) {
         return getBooleanProperty(tunnel, I2PTunnelHTTPClient.PROP_INTERNAL_SSL, true) ||
                !getBooleanProperty(tunnel, I2PTunnelHTTPClient.PROP_SSL_SET, true);
     }
 
+    /**
+     *  Check whether the tunnel should bundle reply information (multihome mode).
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if bundling is enabled
+     */
     public boolean getMultihome(int tunnel) {
         return getBooleanProperty(tunnel, "shouldBundleReplyInfo");
     }
 
+    /**
+     *  Return the proxy authentication mode.
+     *
+     *  @param tunnel the tunnel index
+     *  @return &quot;false&quot;, &quot;true&quot;, or &quot;basic&quot;
+     */
     public String getProxyAuth(int tunnel) {
         return getProperty(tunnel, I2PTunnelHTTPClientBase.PROP_AUTH, "false");
     }
 
+    /**
+     *  Check whether outproxy authentication is required.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if outproxy auth is enabled
+     */
     public boolean getOutproxyAuth(int tunnel) {
         return getBooleanProperty(tunnel, I2PTunnelHTTPClientBase.PROP_OUTPROXY_AUTH);
     }
 
+    /**
+     *  Return the outproxy username.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the username, or empty string
+     */
     public String getOutproxyUsername(int tunnel) {
         return getProperty(tunnel, I2PTunnelHTTPClientBase.PROP_OUTPROXY_USER, "");
     }
 
+    /**
+     *  Return the outproxy password (only if a username is set).
+     *
+     *  @param tunnel the tunnel index
+     *  @return the password, or empty string
+     */
     public String getOutproxyPassword(int tunnel) {
         if (getOutproxyUsername(tunnel).length() <= 0)
             return "";
         return getProperty(tunnel, I2PTunnelHTTPClientBase.PROP_OUTPROXY_PW, "");
     }
 
+    /**
+     *  Return the list of SSL outproxies.
+     *
+     *  @param tunnel the tunnel index
+     *  @return comma-separated SSL outproxy list
+     */
     public String getSslProxies(int tunnel) {
         return getProperty(tunnel, I2PTunnelHTTPClient.PROP_SSL_OUTPROXIES, "");
     }
 
     /**
-     *  Default true
+     *  Check whether the outproxy plugin is enabled.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if the outproxy plugin is used, defaults to true
      */
     public boolean getUseOutproxyPlugin(int tunnel) {
         return getBooleanProperty(tunnel, I2PTunnelHTTPClientBase.PROP_USE_OUTPROXY_PLUGIN, true);
     }
 
     /**
-     *  @return "connect" or "socks", default depends on tunnel type
+     *  Return the outproxy connection type.
+     *
+     *  @param tunnel the tunnel index
+     *  @return &quot;connect&quot; or &quot;socks&quot;, default depends on tunnel type
      *  @since 0.9.57
      */
     public String getOutproxyType(int tunnel) {
@@ -881,82 +1284,199 @@ public class GeneralHelper {
         return getProperty(tunnel, I2PSOCKSTunnel.PROP_OUTPROXY_TYPE, "socks");
     }
 
-    /** all of these are @since 0.8.3 */
+    /**
+     *  Return the per-minute connection limit.
+     *
+     *  @param tunnel the tunnel index
+     *  @return max connections per minute
+     *  @since 0.8.3
+     */
     public int getLimitMinute(int tunnel) {
         return getProperty(tunnel, TunnelController.PROP_MAX_CONNS_MIN, TunnelController.DEFAULT_MAX_CONNS_MIN);
     }
 
+    /**
+     *  Return the per-hour connection limit.
+     *
+     *  @param tunnel the tunnel index
+     *  @return max connections per hour
+     *  @since 0.8.3
+     */
     public int getLimitHour(int tunnel) {
         return getProperty(tunnel, TunnelController.PROP_MAX_CONNS_HOUR, TunnelController.DEFAULT_MAX_CONNS_HOUR);
     }
 
+    /**
+     *  Return the per-day connection limit.
+     *
+     *  @param tunnel the tunnel index
+     *  @return max connections per day
+     *  @since 0.8.3
+     */
     public int getLimitDay(int tunnel) {
         return getProperty(tunnel, TunnelController.PROP_MAX_CONNS_DAY, TunnelController.DEFAULT_MAX_CONNS_DAY);
     }
 
+    /**
+     *  Return the per-minute total connection limit across all sources.
+     *
+     *  @param tunnel the tunnel index
+     *  @return max total connections per minute
+     *  @since 0.8.3
+     */
     public int getTotalMinute(int tunnel) {
         return getProperty(tunnel, TunnelController.PROP_MAX_TOTAL_CONNS_MIN, TunnelController.DEFAULT_MAX_TOTAL_CONNS_MIN);
     }
 
+    /**
+     *  Return the per-hour total connection limit across all sources.
+     *
+     *  @param tunnel the tunnel index
+     *  @return max total connections per hour
+     *  @since 0.8.3
+     */
     public int getTotalHour(int tunnel) {
         return getProperty(tunnel, TunnelController.PROP_MAX_TOTAL_CONNS_HOUR, 0);
     }
 
+    /**
+     *  Return the per-day total connection limit across all sources.
+     *
+     *  @param tunnel the tunnel index
+     *  @return max total connections per day
+     *  @since 0.8.3
+     */
     public int getTotalDay(int tunnel) {
         return getProperty(tunnel, TunnelController.PROP_MAX_TOTAL_CONNS_DAY, 0);
     }
 
+    /**
+     *  Return the maximum concurrent streams for the tunnel.
+     *
+     *  @param tunnel the tunnel index
+     *  @return max streams
+     *  @since 0.8.3
+     */
     public int getMaxStreams(int tunnel) {
         return getProperty(tunnel, TunnelController.PROP_MAX_STREAMS, TunnelController.DEFAULT_MAX_STREAMS);
     }
 
     /**
-     * POST limits
-     * @since 0.9.9
+     *  Return the maximum POST request size in bytes.
+     *
+     *  @param tunnel the tunnel index
+     *  @return max POST size in bytes
+     *  @since 0.9.9
      */
     public int getPostMax(int tunnel) {
         return getProperty(tunnel, I2PTunnelHTTPServer.OPT_POST_MAX, I2PTunnelHTTPServer.DEFAULT_POST_MAX);
     }
 
+    /**
+     *  Return the maximum total POST request size for the window.
+     *
+     *  @param tunnel the tunnel index
+     *  @return max total POST size in bytes
+     *  @since 0.9.9
+     */
     public int getPostTotalMax(int tunnel) {
         return getProperty(tunnel, I2PTunnelHTTPServer.OPT_POST_TOTAL_MAX, I2PTunnelHTTPServer.DEFAULT_POST_TOTAL_MAX);
     }
 
+    /**
+     *  Return the POST check window size in minutes.
+     *
+     *  @param tunnel the tunnel index
+     *  @return check window in minutes
+     *  @since 0.9.9
+     */
     public int getPostCheckTime(int tunnel) {
         return getProperty(tunnel, I2PTunnelHTTPServer.OPT_POST_WINDOW, I2PTunnelHTTPServer.DEFAULT_POST_WINDOW) / 60;
     }
 
+    /**
+     *  Return the POST ban duration in minutes.
+     *
+     *  @param tunnel the tunnel index
+     *  @return ban time in minutes
+     *  @since 0.9.9
+     */
     public int getPostBanTime(int tunnel) {
         return getProperty(tunnel, I2PTunnelHTTPServer.OPT_POST_BAN_TIME, I2PTunnelHTTPServer.DEFAULT_POST_BAN_TIME) / 60;
     }
 
+    /**
+     *  Return the total POST ban duration in minutes.
+     *
+     *  @param tunnel the tunnel index
+     *  @return total ban time in minutes
+     *  @since 0.9.9
+     */
     public int getPostTotalBanTime(int tunnel) {
         return getProperty(tunnel, I2PTunnelHTTPServer.OPT_POST_TOTAL_BAN_TIME, I2PTunnelHTTPServer.DEFAULT_POST_TOTAL_BAN_TIME) / 60;
     }
 
+    /**
+     *  Check whether inproxy connections are rejected.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if inproxy connections are rejected
+     *  @since 0.9.9
+     */
     public boolean getRejectInproxy(int tunnel) {
         return getBooleanProperty(tunnel, I2PTunnelHTTPServer.OPT_REJECT_INPROXY);
     }
 
-    /** @since 0.9.25 */
+    /**
+     *  Check whether connections with a Referer header are rejected.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if Referer connections are rejected
+     *  @since 0.9.25
+     */
     public boolean getRejectReferer(int tunnel) {
         return getBooleanProperty(tunnel, I2PTunnelHTTPServer.OPT_REJECT_REFERER);
     }
 
-    /** @since 0.9.25 */
+    /**
+     *  Check whether connections with known bad User-Agents are rejected.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if User-Agent rejection is enabled
+     *  @since 0.9.25
+     */
     public boolean getRejectUserAgents(int tunnel) {
         return getBooleanProperty(tunnel, I2PTunnelHTTPServer.OPT_REJECT_USER_AGENTS);
     }
 
-    /** @since 0.9.25 */
+    /**
+     *  Return the blocked User-Agent list.
+     *
+     *  @param tunnel the tunnel index
+     *  @return comma-separated user agents to block
+     *  @since 0.9.25
+     */
     public String getUserAgents(int tunnel) {
         return getProperty(tunnel, I2PTunnelHTTPServer.OPT_USER_AGENTS, "");
     }
 
+    /**
+     *  Check whether the server tunnel uses unique local addresses for each client.
+     *
+     *  @param tunnel the tunnel index
+     *  @return true if unique local addressing is enabled
+     *  @since 0.9.9
+     */
     public boolean getUniqueLocal(int tunnel) {
         return getBooleanProperty(tunnel, I2PTunnelServer.PROP_UNIQUE_LOCAL);
     }
 
+    /**
+     *  Return the custom client options as a single URL-parameter-style string.
+     *
+     *  @param tunnel the tunnel index
+     *  @return the options string, HTML-escaped, or empty string
+     */
     public String getCustomOptionsString(int tunnel) {
         TunnelController tun = getController(tunnel);
         if (tun != null) {
@@ -1036,6 +1556,13 @@ public class GeneralHelper {
         return def;
     }
 
+    /**
+     *  Translate a string using the given context.
+     *
+     *  @param key the untranslated string
+     *  @param context the app context for translation
+     *  @return the translated string
+     */
     protected static String _t(String key, I2PAppContext context) {
         return Messages._t(key, context);
     }

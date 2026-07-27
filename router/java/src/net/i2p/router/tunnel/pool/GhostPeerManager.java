@@ -39,6 +39,9 @@ public class GhostPeerManager {
 
     private static final int MAX_TRACKED_PEERS = 1024;
 
+    /**
+     * GhostPeerManager.
+     */
     public GhostPeerManager(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(GhostPeerManager.class);

@@ -22,6 +22,7 @@ import net.i2p.util.EventDispatcher;
  * @since 0.8.9
  */
 public abstract class EventReceiver implements EventDispatcher {
+    /** default constructor */
 
     @Override
     public EventDispatcher getEventDispatcher() {

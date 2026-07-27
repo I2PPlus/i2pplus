@@ -32,6 +32,7 @@ class IterativeLookupJob extends JobImpl {
     private final DatabaseSearchReplyMessage _dsrm;
     private final IterativeSearchJob _search;
 
+    /** method comment */
     public IterativeLookupJob(RouterContext ctx, DatabaseSearchReplyMessage dsrm, IterativeSearchJob search) {
         super(ctx);
         _log = ctx.logManager().getLog(IterativeLookupJob.class);

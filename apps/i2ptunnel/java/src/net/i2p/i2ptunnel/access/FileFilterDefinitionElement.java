@@ -24,6 +24,8 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
     private volatile long lastLoading;
 
     /**
+     * Create a filter definition element that reads destinations from a file.
+     *
      * @param file file to read the remote destinations from
      * @param threshold threshold to apply to all those destinations
      */

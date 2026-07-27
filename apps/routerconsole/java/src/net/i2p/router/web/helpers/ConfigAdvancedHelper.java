@@ -19,6 +19,15 @@ import net.i2p.router.web.RouterConsoleRunner;
  * @since 0.9.33
  */
 public class ConfigAdvancedHelper extends HelperBase {
+
+    /**
+     * Constructs the helper.
+     */
+    public ConfigAdvancedHelper() {}
+
+    /**
+     * The floodfill configuration property.
+     */
     static final String PROP_FLOODFILL_PARTICIPANT = "router.floodfillParticipant";
     private static final String PROP_AUTH_PFX = RouterConsoleRunner.PROP_CONSOLE_PW + '.';
 
@@ -52,6 +61,10 @@ public class ConfigAdvancedHelper extends HelperBase {
         _headers.put("time", "Time");
     }
 
+    /**
+     *  Get the formatted settings HTML.
+     *  @return the settings as HTML
+     */
     public String getSettings() {
         StringBuilder buf = new StringBuilder(4*1024);
         TreeMap<String, String> sorted = new TreeMap<>();
@@ -94,6 +107,7 @@ public class ConfigAdvancedHelper extends HelperBase {
 
     /**
      *  Get the path to the router config file.
+     *  @return the config file path
      *  @since 0.9.14.1
      */
     public String getConfigFileName() {return _context.router().getConfigFilename();}
@@ -101,6 +115,7 @@ public class ConfigAdvancedHelper extends HelperBase {
     /**
      *  Get the checked attribute for floodfill radio buttons.
      *  @param mode 0=disabled, 1=enabled, 2=auto
+     *  @return CHECKED if the mode matches the current setting
      *  @since 0.9.20
      */
     public String getFFChecked(int mode) {
@@ -114,6 +129,7 @@ public class ConfigAdvancedHelper extends HelperBase {
 
     /**
      *  Whether the router is currently acting as a floodfill.
+     *  @return true if floodfill is enabled
      *  @since 0.9.21
      */
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}

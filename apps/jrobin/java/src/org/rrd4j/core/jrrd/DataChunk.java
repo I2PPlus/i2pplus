@@ -29,12 +29,14 @@ public class DataChunk {
     /** Number of datasources must be equal to number of datasources in file */
     final int dsCount;
 
+    /** The data values */
     final double[][] data;
     private final int rows;
 
     /** Map datasource name to datasource index */
     private final Map<String, Integer> nameindex;
 
+    /** Create a data chunk */
     DataChunk(
             Map<String, Integer> nameindex,
             long startTime,
@@ -79,18 +81,30 @@ public class DataChunk {
         return sb.toString();
     }
 
+    /**
+     * getStart.
+     */
     public int getStart() {
         return startOffset;
     }
 
+    /**
+     * getEnd.
+     */
     public int getEnd() {
         return endOffset;
     }
 
+    /**
+     * getStep.
+     */
     public long getStep() {
         return step;
     }
 
+    /**
+     * getDsCount.
+     */
     public int getDsCount() {
         return dsCount;
     }

@@ -16,12 +16,33 @@ import net.i2p.crypto.KeyStoreUtil;
  * Handles loading and accessing SSL certificates for secure connections.
  */
 public class KeyStoreProvider {
+    /**
+     * DEFAULT_CERTIFICATE_ALGORITHM_STRING.
+     */
     public static final String DEFAULT_CERTIFICATE_ALGORITHM_STRING = "RSA";
+    /**
+     * DEFAULT_CERTIFICATE_KEY_LENGTH.
+     */
     public static final int DEFAULT_CERTIFICATE_KEY_LENGTH = 4096;
+    /**
+     * DEFAULT_CERTIFICATE_VALIDITY.
+     */
     public static final int DEFAULT_CERTIFICATE_VALIDITY = 365 * 10;
+    /**
+     * DEFAULT_CERTIFICATE_DOMAIN.
+     */
     public final static String DEFAULT_CERTIFICATE_DOMAIN = "localhost";
+    /**
+     * DEFAULT_CERTIFICATE_ALIAS.
+     */
     public final static String DEFAULT_CERTIFICATE_ALIAS = "I2PControl CA";
+    /**
+     * DEFAULT_KEYSTORE_NAME.
+     */
     public static final String DEFAULT_KEYSTORE_NAME = "i2pcontrol.ks";
+    /**
+     * DEFAULT_KEYSTORE_PASSWORD.
+     */
     public static final String DEFAULT_KEYSTORE_PASSWORD = KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD;
     private static final Log _log = new Log(KeyStoreProvider.class);
     private static String DEFAULT_CERTIFICATE_PASSWORD;

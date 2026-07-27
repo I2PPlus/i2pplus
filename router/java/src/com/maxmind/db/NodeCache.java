@@ -12,6 +12,10 @@ public interface NodeCache {
      * Interface for loading nodes on cache miss.
      */
     public interface Loader {
+        /**
+         * Load a node by key on cache miss.
+         * @return the loaded value
+         */
         Object load(int key) throws IOException;
     }
 

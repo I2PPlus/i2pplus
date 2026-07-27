@@ -33,6 +33,7 @@ import net.i2p.util.Log;
 class RatchetTagSet implements TagSetHandle {
     private final SessionTagListener _lsnr;
     private final PublicKey _remoteKey;
+/** The session key */
     protected final SessionKey _key;
     // debug only, to be removed
     private final SessionKey _tagsetKey;
@@ -77,8 +78,11 @@ class RatchetTagSet implements TagSetHandle {
     private static final boolean TEST_RATCHET = false;
     // 4 * max streaming window
     private static final int LOW = TEST_RATCHET ? (MAX - 512) : (MAX - 4096);
+    /** D e b u g  o b  n s r */
     static final int DEBUG_OB_NSR = 0x10001;
+    /** D e b u g  i b  n s r */
     static final int DEBUG_IB_NSR = 0x10002;
+    /** D e b u g  s i n g l e  e s */
     static final int DEBUG_SINGLE_ES = 0x10003;
     // Start empty (no allocations), we only use storage for gaps
     private static final int INITIAL_KEY_CAPACITY = 0;
@@ -95,6 +99,10 @@ class RatchetTagSet implements TagSetHandle {
     /**
      *  Outbound NSR Tagset
      *
+     *  @param hkdf the HKDF instance
+     *  @param state the handshake state
+     *  @param rootKey the root key
+     *  @param data the data key
      *  @param date For outbound: creation time
      */
     public RatchetTagSet(HKDF hkdf, HandshakeState state, SessionKey rootKey, SessionKey data,
@@ -105,7 +113,12 @@ class RatchetTagSet implements TagSetHandle {
     /**
      *  Outbound ES Tagset
      *
+     *  @param hkdf the HKDF instance
+     *  @param rootKey the root key
+     *  @param data the data key
      *  @param date For outbound: creation time
+     *  @param tagsetid the tagset ID
+     *  @param keyid the key ID
      */
     public RatchetTagSet(HKDF hkdf, SessionKey rootKey, SessionKey data,
                          long date, int tagsetid, int keyid) {
@@ -115,7 +128,14 @@ class RatchetTagSet implements TagSetHandle {
     /**
      *  Inbound NSR Tagset
      *
+     *  @param hkdf the HKDF instance
+     *  @param lsnr the session tag listener
+     *  @param state the handshake state
+     *  @param rootKey the root key
+     *  @param data the data key
      *  @param date For inbound: creation time
+     *  @param minSize the minimum tag set size
+     *  @param maxSize the maximum tag set size
      */
     public RatchetTagSet(HKDF hkdf, SessionTagListener lsnr, HandshakeState state, SessionKey rootKey, SessionKey data,
                          long date, int minSize, int maxSize) {
@@ -125,7 +145,16 @@ class RatchetTagSet implements TagSetHandle {
     /**
      *  Inbound ES Tagset
      *
+     *  @param hkdf the HKDF instance
+     *  @param lsnr the session tag listener
+     *  @param remoteKey the remote public key
+     *  @param rootKey the root key
+     *  @param data the data key
      *  @param date For inbound: creation time
+     *  @param tagsetid the tagset ID
+     *  @param keyid the key ID
+     *  @param minSize the minimum tag set size
+     *  @param maxSize the maximum tag set size
      */
     public RatchetTagSet(HKDF hkdf, SessionTagListener lsnr,
                          PublicKey remoteKey, SessionKey rootKey, SessionKey data,
@@ -134,7 +163,19 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
+     *  @param hkdf the HKDF instance
+     *  @param lsnr the session tag listener
+     *  @param state the handshake state
+     *  @param remoteKey the remote public key
+     *  @param rootKey the root key
+     *  @param data the data key
      *  @param date For inbound and outbound: creation time
+     *  @param timeout the timeout duration
+     *  @param tagsetid the tagset ID
+     *  @param keyid the key ID
+     *  @param isInbound whether this is an inbound tagset
+     *  @param minSize the minimum tag set size
+     *  @param maxSize the maximum tag set size
      */
     private RatchetTagSet(HKDF hkdf, SessionTagListener lsnr, HandshakeState state,
                           PublicKey remoteKey, SessionKey rootKey, SessionKey data,
@@ -180,10 +221,14 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
- * For SingleTagSet
- *
- * @since 0.9.46
- */
+     * For SingleTagSet
+     *
+     * @param lsnr the session tag listener
+     * @param rootKey the root key
+     * @param date the creation time
+     * @param timeout the timeout duration
+     * @since 0.9.46
+     */
     protected RatchetTagSet(SessionTagListener lsnr, SessionKey rootKey, long date, long timeout) {
         _lsnr = lsnr;
         _state = null;
@@ -209,6 +254,7 @@ class RatchetTagSet implements TagSetHandle {
         _acked = true;
     }
 
+    /** Clear all tags and keys. */
     public void clear() {
         if (_sessionTags != null)
             _sessionTags.clear();
@@ -219,7 +265,8 @@ class RatchetTagSet implements TagSetHandle {
     /**
      *  The far-end's public key.
      *  Valid for NSR and inbound ES tagsets.
-     *  Returns null for outbound ES tagsets.
+     *
+     *  @return the remote key, or null for outbound ES tagsets
      */
     public PublicKey getRemoteKey() {
         if (_state != null) {
@@ -238,6 +285,8 @@ class RatchetTagSet implements TagSetHandle {
      *  Used to match the OB and IB ES tagset 0, where both
      *  will have the same root key.
      *  Not used for cryptographic operations after setup.
+     *
+     *  @return the associated key
      */
     public SessionKey getAssociatedKey() {
         return _key;
@@ -246,6 +295,8 @@ class RatchetTagSet implements TagSetHandle {
     /**
      *  For inbound/outbound NSR only, else null.
      *  MUST be cloned before processing NSR.
+     *
+     *  @return the handshake state, or null
      */
     public HandshakeState getHandshakeState() {
         return _state;
@@ -254,13 +305,17 @@ class RatchetTagSet implements TagSetHandle {
     /**
      *  For inbound and outbound: last used time
      *  Expiration is getDate() + getTimeout().
+     *
+     *  @return the last used time
      */
     public long getDate() {
         return _date;
     }
 
     /**
-     *  For inbound and outbound: last used time
+     *  For inbound and outbound: set last used time
+     *
+     *  @param when the last used time
      */
     public void setDate(long when) {
         _date = when;
@@ -268,6 +323,8 @@ class RatchetTagSet implements TagSetHandle {
 
     /**
      *  For inbound and outbound: creation time, for debugging only
+     *
+     *  @return the creation time
      */
     public long getCreated() {
         return _created;
@@ -277,6 +334,7 @@ class RatchetTagSet implements TagSetHandle {
      *  For inbound and outbound: Idle timeout interval.
      *  Expiration is getDate() + getTimeout().
      *
+     *  @return the timeout duration
      *  @since 0.9.46
      */
     public long getTimeout() {
@@ -297,6 +355,7 @@ class RatchetTagSet implements TagSetHandle {
      *  NSR tagsets are unaffected — they have _timeout = SESSION_PENDING_DURATION_MS
      *  (3 min), so the min() was a no-op for them.
      *
+     *  @return the expiration time
      *  @since 0.9.46
      */
     public synchronized long getExpiration() {
@@ -543,12 +602,16 @@ class RatchetTagSet implements TagSetHandle {
     /**
      *  For inbound, returns true after first consume() call.
      *  For outbound, returns true after first consumeNextKey() call.
+     *
+     *  @return true if acked
      */
     public boolean getAcked() { return _acked; }
 
     /**
      * The TagSet ID, starting at 0.
      * After that = 1 + my key id + his key id
+     *
+     * @return the tagset ID
      */
     public int getID() {
         return _id;
@@ -556,11 +619,16 @@ class RatchetTagSet implements TagSetHandle {
 
     /**
      * A unique ID for debugging only
+     *
+     * @return the debug ID
      */
     public int getDebugID() {
         return _tagSetID;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public synchronized String toString() {
         StringBuilder buf = new StringBuilder(256);
@@ -635,81 +703,4 @@ class RatchetTagSet implements TagSetHandle {
      *  inbound only
      *  testing only
      */
-/****
-    private List<RatchetSessionTag> getTags() {
-        if (_sessionTags == null)
-            return Collections.emptyList();
-        int sz = _sessionTags.size();
-        List<RatchetSessionTag> rv = new ArrayList<>(sz);
-        for (int i = 0; i < sz; i++) {
-            rv.add(_sessionTags.valueAt(i));
-        }
-        return rv;
-    }
-
-    public static void main(String[] args) {
-        SessionKey k1 = new SessionKey(new byte[32]);
-        SessionKey k2 = new SessionKey(new byte[32]);
-        System.out.println("Send test");
-        HKDF hkdf = new HKDF(I2PAppContext.getGlobalContext());
-        RatchetTagSet rts = new RatchetTagSet(hkdf, k1, k2, 0, 0, 0);
-        System.out.println("TAGNUM\tTAG\t\tKEY");
-        for (int i = 0; i < 20; i++) {
-            RatchetSessionTag tag = rts.consumeNext();
-            SessionKey key = rts.consumeNextKey();
-            System.out.println(i + "\t" + tag.toBase64() + '\t' + key.toBase64());
-        }
-        System.out.println("Size now: " + rts.size());
-        System.out.println("");
-        System.out.println("Receive test in-order");
-        rts = new RatchetTagSet(hkdf, null, (PublicKey) null, k1, k2, 0, 0, 0, 10, 50);
-        System.out.println("Size now: " + rts.size());
-        List<RatchetSessionTag> tags = rts.getTags();
-        int j = 0;
-        System.out.println("TAGNUM\tTAG\t\tKEY");
-        for (RatchetSessionTag tag : tags) {
-            SessionKey key = rts.consume(tag);
-            if (key != null)
-                System.out.println(j++ + "\t" + tag.toBase64() + '\t' + key.toBase64());
-            else
-                System.out.println(j++ + "\t" + tag.toBase64() + "\t NOT FOUND");
-        }
-        for (int i = 11; i <= 20; i++) {
-            RatchetSessionTag tag = rts.getFirstTag();
-            SessionKey key = rts.consume(tag);
-            if (key != null)
-                System.out.println(i + "\t" + tag.toBase64() + '\t' + key.toBase64());
-            else
-                System.out.println(i + "\t" + tag.toBase64() + "\t NOT FOUND");
-        }
-        System.out.println("Size now: " + rts.size());
-        System.out.println("");
-        System.out.println("Receive test out of order");
-        rts = new RatchetTagSet(hkdf, null, (PublicKey) null, k1, k2, 0, 0, 0, 10, 50);
-        System.out.println("Size now: " + rts.size());
-        tags = rts.getTags();
-        List<RatchetSessionTag> origtags = new ArrayList<>(tags);
-        Collections.shuffle(tags);
-        System.out.println("TAGNUM\tTAG\t\tKEY");
-        for (RatchetSessionTag tag : tags) {
-            int idx = origtags.indexOf(tag);
-            SessionKey key = rts.consume(tag);
-            if (key != null) {
-                System.out.println(idx + "\t" + Base64.encode(tag.getData()) + '\t' + Base64.encode(key.getData()));
-            } else {
-                System.out.println(idx + "\t" + Base64.encode(tag.getData()) + "\t NOT FOUND");
-            }
-        }
-        for (int i = 11; i <= 20; i++) {
-            RatchetSessionTag tag = rts.getFirstTag();
-            SessionKey key = rts.consume(tag);
-            if (key != null)
-                System.out.println(i + "\t" + Base64.encode(tag.getData()) + '\t' + Base64.encode(key.getData()));
-            else
-                System.out.println(i + "\t" + Base64.encode(tag.getData()) + "\t NOT FOUND");
-        }
-        System.out.println("Size now: " + rts.size());
-        System.out.println(rts.toString());
-    }
-****/
 }

@@ -25,28 +25,57 @@ public class I2PAppThread extends I2PThread {
 
     private final Set<OOMEventListener> _threadListeners = new CopyOnWriteArraySet<>();
 
+    /** Creates a new I2PAppThread with no target or name. */
     public I2PAppThread() {
         super();
     }
 
+    /**
+     * Creates a new I2PAppThread with the given name.
+     *
+     * @param name the thread name
+     */
     public I2PAppThread(String name) {
         super(name);
     }
 
+    /**
+     * Creates a new I2PAppThread with the given target runnable.
+     *
+     * @param r the target runnable
+     */
     public I2PAppThread(Runnable r) {
         super(r);
     }
 
+    /**
+     * Creates a new I2PAppThread with the given target and name.
+     *
+     * @param r the target runnable
+     * @param name the thread name
+     */
     public I2PAppThread(Runnable r, String name) {
         super(r, name);
     }
 
+    /**
+     * Creates a new I2PAppThread with the given target, name, and daemon status.
+     *
+     * @param r the target runnable
+     * @param name the thread name
+     * @param isDaemon whether the thread is a daemon
+     */
     public I2PAppThread(Runnable r, String name, boolean isDaemon) {
         super(r, name, isDaemon);
     }
 
     /**
-     *  @since 0.9.23
+     * Creates a new I2PAppThread in the given thread group.
+     *
+     * @param group the thread group
+     * @param r the target runnable
+     * @param name the thread name
+     * @since 0.9.23
      */
     public I2PAppThread(ThreadGroup group, Runnable r, String name) {
         super(group, r, name);
@@ -57,12 +86,20 @@ public class I2PAppThread extends I2PThread {
         for (OOMEventListener listener : _threadListeners) listener.outOfMemory(oom);
     }
 
-    /** register a new component that wants notification of OOM events */
+    /**
+     * Register a new component that wants notification of OOM events.
+     *
+     * @param lsnr the listener to register
+     */
     public void addOOMEventThreadListener(OOMEventListener lsnr) {
         _threadListeners.add(lsnr);
     }
 
-    /** unregister a component that wants notification of OOM events */
+    /**
+     * Unregister a component that wants notification of OOM events.
+     *
+     * @param lsnr the listener to unregister
+     */
     public void removeOOMEventThreadListener(OOMEventListener lsnr) {
         _threadListeners.remove(lsnr);
     }

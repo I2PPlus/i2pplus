@@ -20,6 +20,7 @@ import org.xml.sax.InputSource;
 public abstract class XmlTemplate {
     private static final String PATTERN_STRING = "\\$\\{(\\w+)\\}";
     private static final Pattern PATTERN = Pattern.compile(PATTERN_STRING);
+    /** Root */
 
     protected Element root;
     private final HashMap<String, Object> valueMap = new HashMap<>();
@@ -123,6 +124,9 @@ public abstract class XmlTemplate {
         String a = byteToHex(value.getAlpha());
         valueMap.put(name, "#" + r + g + b + a);
     }
+    /**
+     * Byte to hex
+     */
 
     private String byteToHex(int i) {
         StringBuilder s = new StringBuilder(Integer.toHexString(i));
@@ -260,6 +264,9 @@ public abstract class XmlTemplate {
      */
     protected String getChildValue(Node parentNode, String childName, boolean trim) {
         String value = Util.Xml.getChildValue(parentNode, childName, trim);
+        /**
+         * Resolve mappings
+         */
         return resolveMappings(value);
     }
 
@@ -282,8 +289,14 @@ public abstract class XmlTemplate {
      */
     protected String getValue(Node parentNode, boolean trim) {
         String value = Util.Xml.getValue(parentNode, trim);
+        /**
+         * Resolve mappings
+         */
         return resolveMappings(value);
     }
+    /**
+     * Resolve mappings
+     */
 
     private String resolveMappings(String templateValue) {
         if (templateValue == null) {

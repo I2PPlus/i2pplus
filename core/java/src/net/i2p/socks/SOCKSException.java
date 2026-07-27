@@ -16,10 +16,16 @@ import java.io.IOException;
  */
 public class SOCKSException extends IOException {
 
+    /**
+     * SOCKSException.
+     */
     public SOCKSException() {
         super();
     }
 
+    /**
+     * SOCKSException.
+     */
     public SOCKSException(String s) {
         super(s);
     }

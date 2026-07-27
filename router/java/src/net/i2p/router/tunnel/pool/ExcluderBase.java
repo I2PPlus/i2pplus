@@ -15,6 +15,9 @@ import net.i2p.data.Hash;
  *  @since 0.9.58
  */
 abstract class ExcluderBase implements Set<Hash> {
+    /**
+     * s.
+     */
     protected final Set<Hash> s;
 
     /**
@@ -34,21 +37,66 @@ abstract class ExcluderBase implements Set<Hash> {
      */
     @Override
     public abstract boolean contains(Object o);
+    /**
+     * add.
+     */
     public boolean add(Hash h) {return s.add(h);}
+    /**
+     * addAll.
+     */
     public boolean addAll(Collection<? extends Hash> c) {return s.addAll(c);}
+    /**
+     * clear.
+     */
     public void clear() {s.clear();}
+    /**
+     * containsAll.
+     */
     public boolean containsAll(Collection<?> c) {return s.containsAll(c);}
+    /**
+     * equals.
+     */
     public boolean equals(Object o) {return s.equals(o);}
+    /**
+     * hashCode.
+     */
     public int hashCode() {return s.hashCode();}
+    /**
+     * isEmpty.
+     */
     public boolean isEmpty() {return s.isEmpty();}
+    /**
+     * iterator.
+     */
     public Iterator<Hash> iterator() {return s.iterator();}
+    /**
+     * remove.
+     */
     public boolean remove(Object o) {return s.remove(o);}
+    /**
+     * removeAll.
+     */
     public boolean removeAll(Collection<?> c) {return s.removeAll(c);}
+    /**
+     * retainAll.
+     */
     public boolean retainAll(Collection<?> c) {return s.retainAll(c);}
+    /**
+     * size.
+     */
     public int size() {return s.size();}
+    /**
+     * toArray.
+     */
     public Object[] toArray() {return s.toArray();}
+    /**
+     * toArray.
+     */
     public <Hash> Hash[] toArray(Hash[] a) {return s.toArray(a);}
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
          return getClass().getSimpleName() + " (" + s.size() + ") " + (s.size() <= 10 ? s.toString() : "");

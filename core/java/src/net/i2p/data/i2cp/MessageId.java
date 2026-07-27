@@ -27,7 +27,6 @@ import java.io.OutputStream;
 public class MessageId {
     private long _messageId;
 
-    /** */
     public MessageId() {
         _messageId = -1;
     }

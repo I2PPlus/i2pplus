@@ -14,6 +14,11 @@ import net.i2p.util.Log;
  * Logout servlet to invalidate session.
  */
 public class LogoutServlet extends HttpServlet {
+/**
+ * Constructor.
+ */
+public LogoutServlet() {
+}
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(LogoutServlet.class);
 
     @Override

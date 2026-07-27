@@ -16,6 +16,14 @@ public class ConfigPeerHelper extends HelperBase {
 
     private static final int MAX_DISPLAY = 1000;
 
+    /** Constructs a new ConfigPeerHelper. */
+    public ConfigPeerHelper() {}
+
+
+    /**
+     *  Get the blocklist summary HTML.
+     *  @return the blocklist summary HTML
+     */
     public String getBlocklistSummary() {
         StringBuilder buf = new StringBuilder(128*1024);
         Blocklist bl = _context.blocklist();
@@ -108,6 +116,8 @@ public class ConfigPeerHelper extends HelperBase {
     /**
      *  Determine whether the given peer hash is banned.
      *
+     *  @param h the peer hash to check
+     *  @return true if banned, false otherwise
      *  @since 0.9.50
      */
     public boolean isBanned(Hash h) {return _context.banlist().isBanlisted(h);}

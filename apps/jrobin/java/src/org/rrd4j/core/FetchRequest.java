@@ -23,6 +23,13 @@ public class FetchRequest {
     private final long resolution;
     private String[] filter;
 
+    /**
+     * @param parentDb the parent RrdDb
+     * @param consolFun the consolidation function
+     * @param fetchStart the start timestamp
+     * @param fetchEnd the end timestamp
+     * @param resolution the resolution
+     */
     FetchRequest(
             RrdDb parentDb, ConsolFun consolFun, long fetchStart, long fetchEnd, long resolution) {
         if (consolFun == null) {
@@ -150,6 +157,7 @@ public class FetchRequest {
                 + (resolution > 1 ? " --resolution " + resolution : "");
     }
 
+    /** @return the rrdtool command string */
     String getRrdToolCommand() {
         return dump();
     }

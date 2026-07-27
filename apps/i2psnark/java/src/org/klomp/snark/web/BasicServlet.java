@@ -71,8 +71,17 @@ import org.klomp.snark.URIUtil;
  */
 class BasicServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    /**
+     * _context.
+     */
     protected final transient I2PAppContext _context;
+    /**
+     * _log.
+     */
     protected final transient Log _log;
+    /**
+     * _resourceBase.
+     */
     protected File _resourceBase;
     private String _warBase;
 
@@ -86,6 +95,9 @@ class BasicServlet extends HttpServlet {
     private static final int WAR_CACHE_CONTROL_SECS = 7 * 24 * 60 * 60;
     private static final int FILE_CACHE_CONTROL_SECS = 30 * 24 * 60 * 60;
 
+    /**
+     * BasicServlet.
+     */
     public BasicServlet() {
         super();
         _context = I2PAppContext.getGlobalContext();
@@ -196,6 +208,9 @@ class BasicServlet extends HttpServlet {
         return r;
     }
 
+    /**
+     * doGet.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // always starts with a '/'
@@ -459,41 +474,63 @@ class BasicServlet extends HttpServlet {
 
     /** from Jetty HttpContent.java */
     public interface HttpContent {
+        /** Get content type */
         String getContentType();
 
+        /** Get last modified */
         long getLastModified();
 
         /** in seconds */
         int getCacheTime();
 
+        /** Get content length */
         long getContentLength();
 
+        /** Get input stream */
         InputStream getInputStream() throws IOException;
     }
 
     private class FileContent implements HttpContent {
         private final File _file;
 
+        /**
+         * FileContent.
+         */
         public FileContent(File file) {
             _file = file;
         }
 
+        /**
+         * getContentType.
+         */
         public String getContentType() {
             return getMimeType(_file.toString());
         }
 
+        /**
+         * getLastModified.
+         */
         public long getLastModified() {
             return _file.lastModified();
         }
 
+        /**
+         * getCacheTime.
+         */
         public int getCacheTime() {
             return FILE_CACHE_CONTROL_SECS;
         }
 
+        /**
+         * getContentLength.
+         */
         public long getContentLength() {
             return _file.length();
         }
 
+        /**
+         * getInputStream.
+         */
         public InputStream getInputStream() throws IOException {
             if (getContentLength() > 4 * 1024 * 1024) {
                 return new BufferedInputStream(new FileInputStream(_file), 64 * 1024);
@@ -501,26 +538,28 @@ class BasicServlet extends HttpServlet {
             return new BufferedInputStream(new FileInputStream(_file));
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "File \"" + _file + '"';
         }
     }
 
-    /**
-     * @since 0.9.45
-     */
+    /** File content with byte limit */
     private class LimitFileContent extends FileContent {
         private final long _limit;
 
-        /**
-         * @param limit must be less than file length
-         */
+        /** @param file the file @param limit max bytes to serve */
         public LimitFileContent(File file, long limit) {
             super(file);
             _limit = Math.min(limit, file.length());
         }
 
+        /**
+         * getContentLength.
+         */
         @Override
         public long getContentLength() {
             return _limit;
@@ -530,14 +569,23 @@ class BasicServlet extends HttpServlet {
     private class JarContent implements HttpContent {
         private final String _path;
 
+        /**
+         * JarContent.
+         */
         public JarContent(String path) {
             _path = path;
         }
 
+        /**
+         * getContentType.
+         */
         public String getContentType() {
             return getMimeType(_path);
         }
 
+        /**
+         * getLastModified.
+         */
         public long getLastModified() {
             String cpath = getServletContext().getContextPath();
             String cname =
@@ -548,14 +596,23 @@ class BasicServlet extends HttpServlet {
             return (new File(_context.getBaseDir(), "webapps/" + cname + ".war")).lastModified();
         }
 
+        /**
+         * getCacheTime.
+         */
         public int getCacheTime() {
             return WAR_CACHE_CONTROL_SECS;
         }
 
+        /**
+         * getContentLength.
+         */
         public long getContentLength() {
             return -1;
         }
 
+        /**
+         * getInputStream.
+         */
         public InputStream getInputStream() throws IOException {
             InputStream rv = getServletContext().getResourceAsStream(_path);
             if (rv == null) {
@@ -564,6 +621,9 @@ class BasicServlet extends HttpServlet {
             return rv;
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "Jar resource: " + _path;

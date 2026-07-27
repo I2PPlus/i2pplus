@@ -10,14 +10,24 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class RingRenderer {
 
+    /** ignored */
     private static final int RING_SIZE = 90;
+    /** ignored */
     private static final int RING_STROKE = 8;
+    /** ignored */
     private static final int RING_RADIUS = (RING_SIZE - RING_STROKE) / 2;
+    /** ignored */
     private static final double RING_CIRCUM = 2 * Math.PI * RING_RADIUS;
 
     /** Mode: health (green/yellow/red), activity (blue/cyan) */
     public static final String MODE_HEALTH = "health";
+    /**
+     * MODE_ACTIVITY.
+     */
     public static final String MODE_ACTIVITY = "activity";
+    /**
+     * MODE_LATENCY.
+     */
     public static final String MODE_LATENCY = "latency";
     /** Mode: dual-arc ratio (green + red arcs showing a proportion) */
     public static final String MODE_RATIO = "ratio";
@@ -27,7 +37,9 @@ public class RingRenderer {
     public static final String MODE_ANOMALY = "anomaly";
 
     /** Deviation bands for MODE_ANOMALY, as a fraction of baseline (|current - baseline| / baseline) */
+    /** Green anomaly band threshold */
     static final double ANOMALY_GREEN_BAND = 0.25;
+    /** Yellow anomaly band threshold */
     static final double ANOMALY_YELLOW_BAND = 0.75;
 
     /** Plot type: mini bars at the bottom of the ring */
@@ -35,6 +47,7 @@ public class RingRenderer {
     /** Plot type: line chart clipped to the inner circle area */
     public static final String PLOT_LINE = "line";
 
+    /** ignored */
     private static final AtomicInteger _clipId = new AtomicInteger();
 
     /**
@@ -154,7 +167,7 @@ public class RingRenderer {
         return buf.toString();
     }
 
-    /** Add clip path def for the line plot (inner circle) */
+    /** ignored */
     private static void appendLinePlotDefs(StringBuilder buf) {
         int id = _clipId.incrementAndGet();
         int cr = RING_RADIUS - 6;
@@ -164,7 +177,7 @@ public class RingRenderer {
            .append("</clipPath></defs>");
     }
 
-    /** Append line plot (polyline + area fill) clipped to the inner circle */
+    /** ignored */
     private static void appendLinePlot(StringBuilder buf, double[] history, String cls) {
         int count = 0;
         double min = Double.MAX_VALUE, max = -Double.MAX_VALUE;
@@ -340,6 +353,9 @@ public class RingRenderer {
         /** CSS color class: &quot;green&quot;, &quot;red&quot;, &quot;yellow&quot;, &quot;blue&quot;, &quot;cyan&quot;, &quot;gray&quot; */
         public final String cssClass;
 
+        /**
+         * RingSection.
+         */
         public RingSection(double value, String cssClass) {
             this.value = value;
             this.cssClass = cssClass;

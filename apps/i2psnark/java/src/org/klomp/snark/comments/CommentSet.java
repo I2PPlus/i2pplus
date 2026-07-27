@@ -48,6 +48,7 @@ public class CommentSet extends AbstractSet<Comment> {
     private long latestCommentTime;
     private boolean modified;
 
+    /** Maximum number of comments allowed */
     public static final int MAX_SIZE = 256;
 
     // Comment.java enforces max text length of 512, but

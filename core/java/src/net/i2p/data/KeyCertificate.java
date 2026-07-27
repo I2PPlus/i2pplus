@@ -67,6 +67,9 @@ import java.io.OutputStream;
 @SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
 public class KeyCertificate extends Certificate {
 
+    /**
+     * HEADER_LENGTH.
+     */
     public static final int HEADER_LENGTH = 4;
 
     /**
@@ -314,11 +317,17 @@ public class KeyCertificate extends Certificate {
     // getCryptoType()
     // getCryptoDataOffset()
 
+    /**
+     * toKeyCertificate.
+     */
     @Override
     public KeyCertificate toKeyCertificate() {
         return this;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
@@ -341,6 +350,9 @@ public class KeyCertificate extends Certificate {
         private static final int ECDSA256_LENGTH = ECDSA256_DATA.length;
         private final int _hashcode;
 
+        /**
+         * ECDSA256Cert.
+         */
         public ECDSA256Cert() throws DataFormatException {
             super(ECDSA256_PAYLOAD);
             _hashcode = super.hashCode();
@@ -407,6 +419,9 @@ public class KeyCertificate extends Certificate {
         private static final int ED_LENGTH = ED_DATA.length;
         private final int _hashcode;
 
+        /**
+         * Ed25519Cert.
+         */
         public Ed25519Cert() throws DataFormatException {
             super(Ed25519_PAYLOAD);
             _hashcode = super.hashCode();
@@ -473,6 +488,9 @@ public class KeyCertificate extends Certificate {
         private static final int ED_LENGTH = ED_DATA.length;
         private final int _hashcode;
 
+        /**
+         * X25519_Ed25519Cert.
+         */
         public X25519_Ed25519Cert() throws DataFormatException {
             super(X25519_Ed25519_PAYLOAD);
             _hashcode = super.hashCode();

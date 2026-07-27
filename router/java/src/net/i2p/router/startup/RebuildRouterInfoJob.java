@@ -41,19 +41,31 @@ class RebuildRouterInfoJob extends JobImpl {
 
     private static final long REBUILD_DELAY = 45*1000L; // every 45 seconds
 
+    /**
+     * RebuildRouterInfoJob.
+     */
     public RebuildRouterInfoJob(RouterContext context) {
         super(context);
         _log = context.logManager().getLog(RebuildRouterInfoJob.class);
     }
 
+    /**
+     * getName.
+     */
     @Override
     public String getName() { return "Rebuild RouterInfo"; }
 
+    /**
+     * runJob.
+     */
     @Override
     public void runJob() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Rebuild with default settings
+     */
     void rebuildRouterInfo() {
         rebuildRouterInfo(true);
     }

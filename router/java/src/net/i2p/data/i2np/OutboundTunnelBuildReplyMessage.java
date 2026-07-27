@@ -13,7 +13,13 @@ import net.i2p.I2PAppContext;
  * @since 0.9.50
  */
 public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 26;
+    /**
+     * SHORT_RECORD_SIZE.
+     */
     public static final int SHORT_RECORD_SIZE = ShortTunnelBuildMessage.SHORT_RECORD_SIZE;
 
     /** zero record count, will be set with readMessage() */
@@ -21,6 +27,9 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
         super(context, 0);
     }
 
+    /**
+     * OutboundTunnelBuildReplyMessage.
+     */
     public OutboundTunnelBuildReplyMessage(I2PAppContext context, int records) {
         super(context, records);
     }
@@ -36,14 +45,23 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
         super.setRecord(index, record);
     }
 
+    /**
+     * calculateWrittenLength.
+     */
     @Override
     protected int calculateWrittenLength() {
         return 1 + (RECORD_COUNT * SHORT_RECORD_SIZE);
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() { return MESSAGE_TYPE; }
 
+    /**
+     * readMessage.
+     */
     @Override
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE)
@@ -63,6 +81,9 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
         }
     }
 
+    /**
+     * writeMessageBody.
+     */
     @Override
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         int remaining = out.length - (curIndex + calculateWrittenLength());
@@ -78,6 +99,9 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
         return curIndex;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return "[OutboundTunnelBuildReplyMessage: " +

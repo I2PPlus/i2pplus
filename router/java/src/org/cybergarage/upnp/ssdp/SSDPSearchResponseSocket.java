@@ -37,10 +37,16 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     * SSDPSearchResponseSocket.
+     */
     public SSDPSearchResponseSocket() {
         setControlPoint(null);
     }
 
+    /**
+     * SSDPSearchResponseSocket.
+     */
     public SSDPSearchResponseSocket(String bindAddr, int port) {
         super(bindAddr, port);
         setControlPoint(null);
@@ -52,10 +58,16 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
 
     private ControlPoint controlPoint = null;
 
+    /**
+     * setControlPoint.
+     */
     public void setControlPoint(ControlPoint ctrlp) {
         this.controlPoint = ctrlp;
     }
 
+    /**
+     * getControlPoint.
+     */
     public ControlPoint getControlPoint() {
         return controlPoint;
     }
@@ -66,6 +78,9 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
 
     private Thread deviceSearchResponseThread = null;
 
+    /**
+     * run.
+     */
     public void run() {
         Thread thisThread = Thread.currentThread();
 
@@ -79,6 +94,9 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
         }
     }
 
+    /**
+     * start.
+     */
     public void start() {
 
         StringBuffer name = new StringBuffer("Cyber.SSDPSearchResponseSocket/");
@@ -95,6 +113,9 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
         deviceSearchResponseThread.start();
     }
 
+    /**
+     * stop.
+     */
     public void stop() {
         deviceSearchResponseThread = null;
     }
@@ -103,6 +124,9 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
     //	post
     ////////////////////////////////////////////////
 
+    /**
+     * post.
+     */
     public boolean post(String addr, int port, SSDPSearchResponse res) {
         return post(addr, port, res.getHeader());
     }
@@ -111,6 +135,9 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
     //	post
     ////////////////////////////////////////////////
 
+    /**
+     * post.
+     */
     public boolean post(String addr, int port, SSDPSearchRequest req) {
         return post(addr, port, req.toString());
     }

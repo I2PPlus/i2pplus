@@ -45,96 +45,175 @@ import net.i2p.data.DataHelper;
  */
 @SuppressWarnings("PMD.CloseResource")
 public class EepGet {
+    /** I2P application context for configuration, logging, and random number generation */
     protected final I2PAppContext _context;
+    /** Logger for this instance */
     protected final Log _log;
+    /** Whether to route requests through an HTTP proxy */
     protected final boolean _shouldProxy;
+    /** Proxy hostname or IP address */
     protected final String _proxyHost;
+    /** Proxy port number */
     protected final int _proxyPort;
+    /** Maximum number of retry attempts per fetch */
     protected final int _numRetries;
-    private final long _minSize; // minimum and maximum acceptable response size, -1 signifies unlimited,
-    private final long _maxSize; // applied both against whole responses and chunks
+    /**
+     * Minimum acceptable response size in bytes, -1 signifies unlimited,
+     * applied both against whole responses and chunks
+     */
+    private final long _minSize;
+    /**
+     * Maximum acceptable response size in bytes, -1 signifies unlimited,
+     * applied both against whole responses and chunks
+     */
+    private final long _maxSize;
+    /** Path to the output file for saving the fetched content */
     protected final String _outputFile;
+    /** Output stream destination, overrides outputFile when non-null */
     protected final OutputStream _outputStream;
-    /** url we were asked to fetch */
+    /** The URL we were asked to fetch */
     protected final String _url;
-    /** the URL we actually fetch from (may differ from the _url in case of redirect) */
+    /** The URL we actually fetch from (may differ from _url in case of redirect) */
     protected String _actualURL;
+    /** POST data as a string body (for application/x-www-form-urlencoded) */
     private String _postData;
+    /** POST data as raw binary bytes */
     private byte[] _postBinaryData;
+    /** POST data read from a file */
     private File _postDataFile;
+    /** Whether to allow caching of the fetched response */
     private boolean _allowCaching;
+    /** Registered status listeners for progress callbacks */
     protected final List<StatusListener> _listeners;
+    /** Additional HTTP headers to include in the request */
     protected List<String> _extraHeaders;
 
+    /** Whether to continue fetching; set false to abort */
     protected volatile boolean _keepFetching;
-    // The proxy or the actual site if not proxied. Warning - null when extended by I2PSocketEepGet
+    /**
+     * The socket connection to the proxy or the target server (if not proxied).
+     * Warning - null when extended by I2PSocketEepGet
+     */
     protected Socket _proxy;
+    /** Output stream to the proxy/server socket */
     protected OutputStream _proxyOut;
+    /** Input stream from the proxy/server socket */
     protected InputStream _proxyIn;
+    /** Output stream for writing fetched data (file or pipe) */
     protected OutputStream _out;
+    /** Total bytes transferred across all attempts, including resumed content */
     protected long _alreadyTransferred;
+    /** Total bytes transferred including headers, retries, redirects, and discarded partial downloads */
     protected long _bytesTransferred;
+    /** Remaining bytes on the current attempt, -1 if unknown (chunked or no Content-Length) */
     protected long _bytesRemaining;
+    /** Zero-based attempt counter for the current fetch */
     protected int _currentAttempt;
+    /** HTTP response status code, -1 if no response received */
     protected volatile int _responseCode = -1;
+    /** HTTP response status text (e.g. "OK", "Not Found") */
     protected String _responseText;
+    /** Whether to write error response bodies to the output */
     protected volatile boolean _shouldWriteErrorToOutput;
+    /** ETag received from the server (for conditional requests) */
     protected String _etag;
+    /** Last-Modified header received from the server */
     protected String _lastModified;
+    /** Original ETag passed in constructor, preserved across redirects */
     protected final String _etagOrig;
+    /** Original Last-Modified passed in constructor, preserved across redirects */
     protected final String _lastModifiedOrig;
+    /** Whether the response is using chunked transfer encoding */
     protected volatile boolean _encodingChunked;
+    /** Whether the server returned 304 Not Modified */
     protected volatile boolean _notModified;
+    /** Content-Type header value from the response */
     protected String _contentType;
+    /** Server header value from the response */
     protected String _server;
+    /** Status header value from the response */
     protected String _status;
+    /** Transfer-Encoding header value from the response */
     protected String _transferEncoding;
+    /** Content-Encoding header value from the response */
     protected String _contentEncoding;
+    /** Content-Language header value from the response */
     protected String _contentLanguage;
+    /** Cache-Control header value from the response */
     protected String _cacheControl;
+    /** Accept-Ranges header value from the response */
     protected String _acceptRanges;
+    /** Vary header value from the response */
     protected String _vary;
+    /** Expires header value from the response */
     protected String _expiryDate;
+    /** Set-Cookie header value from the response */
     protected String _cookie;
+    /** Referrer-Policy header value from the response */
     protected String _referrerPolicy;
+    /** X-Frame-Options header value from the response */
     protected String _xframeOptions;
+    /** Content-Security-Policy header value from the response */
     protected String _csp;
+    /** X-XSS-Protection header value from the response */
     protected String _xssProtection;
+    /** X-Content-Type-Options header value from the response */
     protected String _xContentTypeOptions;
+    /** X-Powered-By header value from the response */
     protected String _xPoweredBy;
+    /** Whether the current transfer attempt failed (non-2xx response code) */
     protected volatile boolean _transferFailed;
+    /** Whether the fetch was aborted due to timeout or user request */
     protected volatile boolean _aborted;
+    /** Timeout in ms for receiving the HTTP response headers */
     protected volatile int _fetchHeaderTimeout;
+    /** Total timeout in ms for the entire fetch operation */
     protected volatile int _fetchTotalTimeout;
+    /** Inactivity timeout in ms between data packets */
     protected volatile int _fetchInactivityTimeout;
+    /** Maximum number of complete (zero-byte) failures before giving up */
     protected volatile int _maxCompleteFails;
+    /** Counter tracking the number of HTTP redirects followed */
     protected AtomicInteger _redirects;
+    /** Location header value from redirect or 407 proxy auth response */
     protected String _redirectLocation;
+    /** Whether the response body is gzip-compressed */
     protected boolean _isGzippedResponse;
+    /** IOException from the background decompressor thread, if any */
     protected IOException _decompressException;
 
-    // following for proxy digest auth
-    // only created via addAuthorization()
+    /** Authentication state for proxy digest/basic auth; created via addAuthorization() */
     protected AuthState _authState;
 
-    /** this will be replaced by the HTTP Proxy if we are using it */
+    /**
+     * Default User-Agent header value.
+     * This will be replaced by the HTTP Proxy if we are using it
+     */
     protected static final String USER_AGENT = "Wget/1.11.4";
+    /** Property name for connect timeout configuration */
     static final String PROP_CONNECT_TIMEOUT = "eepget.connectTimeout";
+    /** Property name for inactivity timeout configuration */
     static final String PROP_INACTIVITY_TIMEOUT = "eepget.inactivityTimeout";
+    /** Property name for max complete fails configuration */
     static final String PROP_MAX_COMPLETE_FAILS = "eepget.maxCompleteFails";
+    /** Property name for default retries configuration */
     static final String PROP_DEFAULT_RETRIES = "eepget.defaultRetries";
+    /** Default connect timeout in milliseconds (90 seconds) */
     protected static final int DEFAULT_CONNECT_TIMEOUT = 90*1000;
+    /** Default inactivity timeout in milliseconds (5 minutes) */
     protected static final int DEFAULT_INACTIVITY_TIMEOUT = 5*60*1000;
-    /** maximum times to try without getting any data at all, even if numRetries is higher @since 0.7.14 */
+    /** Maximum times to try without getting any data at all, even if numRetries is higher @since 0.7.14 */
     protected static final int DEFAULT_MAX_COMPLETE_FAILS = 20;
+    /** Default number of retry attempts */
     protected static final int DEFAULT_NUM_RETRIES = 10;
-    /** backward compatibility aliases */
     /** @deprecated use DEFAULT_CONNECT_TIMEOUT */
     protected static final int CONNECT_TIMEOUT = DEFAULT_CONNECT_TIMEOUT;
     /** @deprecated use DEFAULT_INACTIVITY_TIMEOUT */
     protected static final int INACTIVITY_TIMEOUT = DEFAULT_INACTIVITY_TIMEOUT;
 
     /**
+     * Creates a new EepGet instance with proxy support, defaulting to allow caching.
+     *
      * @param ctx I2P app context
      * @param proxyHost proxy hostname
      * @param proxyPort proxy port
@@ -147,6 +226,8 @@ public class EepGet {
     }
 
     /**
+     * Creates a new EepGet instance with proxy support and configurable caching.
+     *
      * @param ctx I2P app context
      * @param proxyHost proxy hostname
      * @param proxyPort proxy port
@@ -160,6 +241,8 @@ public class EepGet {
     }
 
     /**
+     * Creates a new EepGet instance without a proxy, defaulting to allow caching.
+     *
      * @param ctx I2P app context
      * @param numRetries number of retries
      * @param outputFile output file path
@@ -170,6 +253,8 @@ public class EepGet {
     }
 
     /**
+     * Creates a new EepGet instance without a proxy, with configurable caching.
+     *
      * @param ctx I2P app context
      * @param numRetries number of retries
      * @param outputFile output file path
@@ -181,6 +266,8 @@ public class EepGet {
     }
 
     /**
+     * Creates a new EepGet instance with explicit proxy control, defaulting to allow caching.
+     *
      * @param ctx I2P app context
      * @param shouldProxy whether to use a proxy
      * @param proxyHost proxy hostname
@@ -195,6 +282,8 @@ public class EepGet {
     }
 
     /**
+     * Creates a new EepGet instance with POST data support.
+     *
      * @param ctx I2P app context
      * @param shouldProxy whether to use a proxy
      * @param proxyHost proxy hostname
@@ -210,6 +299,8 @@ public class EepGet {
     }
 
     /**
+     * Creates a new EepGet instance with conditional fetch via ETag.
+     *
      * @param ctx I2P app context
      * @param shouldProxy whether to use a proxy
      * @param proxyHost proxy hostname
@@ -226,6 +317,8 @@ public class EepGet {
     }
 
     /**
+     * Creates a new EepGet instance with conditional fetch via ETag and Last-Modified.
+     *
      * @param ctx I2P app context
      * @param shouldProxy whether to use a proxy
      * @param proxyHost proxy hostname
@@ -243,8 +336,21 @@ public class EepGet {
     }
 
     /**
-     *  @param outputFile ignored if outputStream is non-null
-     *  @param outputStream takes precedence over outputFile
+     * Creates a new EepGet instance with size limits, output stream, and POST data.
+     *
+     * @param ctx I2P app context
+     * @param shouldProxy whether to use a proxy
+     * @param proxyHost proxy hostname
+     * @param proxyPort proxy port
+     * @param numRetries number of retries
+     * @param minSize minimum acceptable response size, -1 for unlimited
+     * @param maxSize maximum acceptable response size, -1 for unlimited
+     * @param outputFile ignored if outputStream is non-null
+     * @param outputStream takes precedence over outputFile
+     * @param url URL to fetch
+     * @param allowCaching whether to allow caching
+     * @param etag ETag for conditional fetch
+     * @param postData POST data string
      */
     public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort,
                   int numRetries, long minSize, long maxSize, String outputFile, OutputStream outputStream,
@@ -253,8 +359,22 @@ public class EepGet {
     }
 
     /**
-     *  @param outputFile ignored if outputStream is non-null
-     *  @param outputStream takes precedence over outputFile
+     * Full constructor for EepGet with all parameters.
+     *
+     * @param ctx I2P app context
+     * @param shouldProxy whether to use a proxy
+     * @param proxyHost proxy hostname
+     * @param proxyPort proxy port
+     * @param numRetries number of retries
+     * @param minSize minimum acceptable response size, -1 for unlimited
+     * @param maxSize maximum acceptable response size, -1 for unlimited
+     * @param outputFile ignored if outputStream is non-null
+     * @param outputStream takes precedence over outputFile
+     * @param url URL to fetch
+     * @param allowCaching whether to allow caching
+     * @param etag ETag for conditional fetch
+     * @param lastModified last-modified for conditional fetch
+     * @param postData POST data string
      */
     public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort,
                   int numRetries, long minSize, long maxSize,
@@ -285,9 +405,13 @@ public class EepGet {
     }
 
     /**
-     * EepGet [-p 127.0.0.1:4444] [-n #retries] [-e etag] [-o outputFile] [-m markSize lineLen] url
+     * Command-line entry point for EepGet.
+     *
+     * Usage: eepget [-p 127.0.0.1:4444] [-n #retries] [-e etag] [-o outputFile] [-m markSize lineLen] url
      *
      * As of 0.9.45, supports https and redirect to https
+     *
+     * @param args command-line arguments
      */
     public static void main(String[] args) {
         String proxyHost = "127.0.0.1";
@@ -493,20 +617,22 @@ public class EepGet {
         return name;
     }
 
-/* Blacklist borrowed from snark */
-
+    /** Pattern matching paths consisting only of slashes */
     private static final Pattern MULTI_SLASHES = Pattern.compile("/+");
+    /** Characters forbidden in filenames, including control characters (borrowed from snark) */
     private static final char[] ILLEGAL = new char[] {
         '<', '>', ':', '"', '/', '\\', '|', '?', '*',
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
         16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
         0x7f };
 
-  /**
-   * Removes 'suspicious' characters from the given file name.
-   * http://msdn.microsoft.com/en-us/library/aa365247%28VS.85%29.aspx
-   */
-
+    /**
+     * Removes characters unsafe for filenames, replacing them with underscores.
+     * References: http://msdn.microsoft.com/en-us/library/aa365247%28VS.85%29.aspx
+     *
+     * @param name the raw name to sanitize
+     * @return a sanitized name safe for use as a filename
+     */
     private static String sanitize(String name) {
         if (name.equals(".") || name.equals(" "))
             return "_";
@@ -522,6 +648,11 @@ public class EepGet {
         return rv;
     }
 
+    /**
+     * Returns a usage string describing command-line options.
+     *
+     * @return the usage help text
+     */
     private static String usage() {
         return
             "Usage:\n" +
@@ -537,11 +668,11 @@ public class EepGet {
     }
 
     /**
-     *  Callback interface
+     *  Callback interface for monitoring EepGet transfer progress.
      */
     public static interface StatusListener {
         /**
-         *  Total length should be == alreadyTransferred + currentWrite + bytesRemaining for all calls
+         *  Total length should be == alreadyTransferred + currentWrite + bytesRemaining for all calls.
          *
          *  @param alreadyTransferred total of all attempts, not including currentWrite
          *                       If nonzero on the first call, a partial file of that length was found,
@@ -558,20 +689,42 @@ public class EepGet {
          *  @param bytesTransferred includes headers, retries, redirects, discarded partial downloads, ...
          *  @param bytesRemaining on this attempt only, currentWrite already subtracted -
          *                   or -1 if chunked encoding or server does not return a length
+         *  @param url the URL being fetched
          *
          */
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url);
         /**
+         *  Transfer complete notification.
+         *
          *  @see #bytesTransferred
+         *  @param alreadyTransferred total bytes transferred
+         *  @param bytesTransferred total incl headers
+         *  @param bytesRemaining remaining bytes
+         *  @param url the URL
          *  @param outputFile null if unknown (output stream constructor)
+         *  @param notModified whether 304
          */
         public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified);
         /**
+         *  Attempt failed notification.
+         *
          *  @see #bytesTransferred
+         *  @param url the URL
+         *  @param bytesTransferred total transferred
+         *  @param bytesRemaining remaining
+         *  @param currentAttempt attempt index
+         *  @param numRetries retry limit
+         *  @param cause failure cause
          */
         public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause);
         /**
+         *  Transfer failed notification.
+         *
          *  @see #bytesTransferred
+         *  @param url the URL
+         *  @param bytesTransferred total transferred
+         *  @param bytesRemaining remaining
+         *  @param currentAttempt attempt index
          */
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt);
 
@@ -579,12 +732,24 @@ public class EepGet {
          *  Note: Headers are not processed, and this is not called, for most error response codes,
          *  unless setWriteErrorToOutput() is called before fetch().
          *  To be changed?
+         *
+         *  @param url the URL
+         *  @param currentAttempt attempt index
+         *  @param key header key
+         *  @param val header value
          */
         public void headerReceived(String url, int currentAttempt, String key, String val);
 
+        /**
+         *  Called when a new attempt to fetch the URL is starting.
+         *  @param url the URL being attempted
+         */
         public void attempting(String url);
     }
 
+    /**
+     * CLIStatusListener.
+     */
     protected class CLIStatusListener implements StatusListener {
         private final int _markSize;
         private final int _lineSize;
@@ -595,10 +760,18 @@ public class EepGet {
         private long _lastComplete;
         private boolean _firstTime;
         private final DecimalFormat _pct = new DecimalFormat("00.0%");
+        /**
+         * Default constructor, 1024-byte marks and 40 marks per line.
+         */
         public CLIStatusListener() {this(1024, 40);}
         private double _smoothedRate = 0.0;
         private static final double SMOOTHING_FACTOR = 0.1; // Tune between 0.1 and 0.5
 
+        /**
+         * Constructor with custom mark and line size.
+         * @param markSize bytes between progress marks
+         * @param lineSize marks per summary line
+         */
         public CLIStatusListener(int markSize, int lineSize) {
             _markSize = markSize;
             _lineSize = lineSize;
@@ -607,6 +780,9 @@ public class EepGet {
             _firstTime = true;
         }
 
+        /**
+         * Called on each chunk of received data.
+         */
         @Override
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {
             if (_firstTime) {
@@ -694,6 +870,9 @@ public class EepGet {
             }
         }
 
+        /**
+         * Called when the transfer finishes successfully.
+         */
         @Override
         public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {
             long transferred;
@@ -747,6 +926,9 @@ public class EepGet {
                 System.out.println(" • ETag: " + _etag);
         }
 
+        /**
+         * Called when a single attempt fails.
+         */
         @Override
         public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {
             System.out.println(" ✖ Attempt " + (currentAttempt + 1) + " to retrieve " + url + " failed");
@@ -757,6 +939,9 @@ public class EepGet {
             _written = 0;
         }
 
+        /**
+         * Called when all attempts have been exhausted.
+         */
         @Override
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
             System.out.println(" ✖ Transfer of " + url + " failed after " + (currentAttempt + 1) + " retries");
@@ -774,15 +959,22 @@ public class EepGet {
             System.out.println(buf.toString());
         }
 
+        /**
+         * Called when a new attempt begins.
+         */
         @Override
         public void attempting(String url) {
             // TODO
-        }        @Override
+        }        /**
+         * Called when a response header has been parsed.
+         */
+        @Override
         public void headerReceived(String url, int currentAttempt, String key, String val) {
             // TODO
         }    }
 
     /**
+     * Add a status listener.
      * @param lsnr the listener to add
      */
     public void addStatusListener(StatusListener lsnr) {
@@ -810,6 +1002,7 @@ public class EepGet {
      *
      * Total timeout default none, inactivity timeout default 60 sec.
      *
+     * @param fetchHeaderTimeout timeout in ms
      * @return success
      */
     public boolean fetch(long fetchHeaderTimeout) {
@@ -845,6 +1038,9 @@ public class EepGet {
                 final SocketTimeout stimeout = timeout;
                 final Thread thread = Thread.currentThread();
                 timeout.setTimeoutCommand(new Runnable() {
+                    /**
+                     * run.
+                     */
                     @Override
                     public void run() {
                         if (_log.shouldDebug())
@@ -924,10 +1120,10 @@ public class EepGet {
     }
 
     /**
-     *  This reads the response to a single fetch.
-     *  Call after sendRequest()
+     *  Read response body for a single fetch. Call after sendRequest().
      *
      *  @param timeout may be null
+     *  @throws IOException on IO error
      */
     protected void doFetch(SocketTimeout timeout) throws IOException {
         _aborted = false;
@@ -1255,7 +1451,9 @@ public class EepGet {
     }
 
     /**
-     * Read and parse the HTTP response headers.
+     * Read and parse HTTP response headers.
+     *
+     * @throws IOException on IO error
      */
     protected void readHeaders() throws IOException {
         String key = null;
@@ -1482,7 +1680,7 @@ public class EepGet {
     }
 
     /**
-     *  Should we read the body of the response?
+     *  Whether to read the response body.
      *
      *  @return true always, overridden in EepHead
      *  @since 0.9.50
@@ -1490,7 +1688,11 @@ public class EepGet {
     protected boolean shouldReadBody() { return true; }
 
     /**
-     *  TODO this does not skip over chunk extensions (RFC 2616 sec. 3.6.1)
+     *  Parse a chunk length from the HTTP response stream.
+     *  TODO does not skip chunk extensions (RFC 2616 sec. 3.6.1)
+     *
+     *  @return the chunk length
+     *  @throws IOException on IO error
      */
     protected long readChunkLength() throws IOException {
         StringBuilder buf = new StringBuilder(8);
@@ -1523,11 +1725,8 @@ public class EepGet {
     }
 
     /**
-     * parse the first status line and grab the response code.
-     * e.g. "HTTP/1.1 206 OK" vs "HTTP/1.1 200 OK" vs
-     * "HTTP/1.1 404 NOT FOUND", etc.
-     *
-     * Side effect - stores status text in _responseText
+     * Parse the first status line and extract the response code.
+     * Side effect: stores status text in _responseText.
      *
      * @return HTTP response code (200, 206, other)
      */
@@ -1637,7 +1836,10 @@ public class EepGet {
     private static final byte NL = '\n';
 
     /**
+     *  Open connection and send HTTP request.
+     *
      *  @param timeout may be null
+     *  @throws IOException on IO error
      */
     protected void sendRequest(SocketTimeout timeout) throws IOException {
         if (_outputStream != null) {
@@ -1728,7 +1930,10 @@ public class EepGet {
     }
 
     /**
+     * Build the HTTP request string for the current URL and state.
+     *
      * @return the HTTP request string
+     * @throws IOException on bad URL
      */
     protected String getRequest() throws IOException {
         StringBuilder buf = new StringBuilder(2048);
@@ -1899,6 +2104,8 @@ public class EepGet {
     /**
      *  After fetch, the received value from the server, or null if none.
      *  Before fetch, and after some errors, may be the value passed in the constructor.
+     *
+     *  @return the etag
      */
     public String getEtag() {
         return _etag;
@@ -1907,12 +2114,15 @@ public class EepGet {
     /**
      *  After fetch, the received value from the server, or null if none.
      *  Before fetch, and after some errors, may be the value passed in the constructor.
+     *
+     *  @return the last modified date
      */
     public String getLastModified() {
         return _lastModified;
     }
 
     /**
+     *  Whether the server returned 304.
      *  @return true if the server returned 304
      */
     public boolean getNotModified() {
@@ -1921,6 +2131,8 @@ public class EepGet {
 
     /**
      *  After fetch, the received value from the server, or null if none.
+     *
+     *  @return the content type
      */
     public String getContentType() {
         return _contentType;
@@ -1929,6 +2141,7 @@ public class EepGet {
     /**
      *  Show the Server field
      *
+     *  @return the server
      *  @since 0.9.47
      */
 
@@ -1939,6 +2152,7 @@ public class EepGet {
     /**
      *  Show the Content-Language field
      *
+     *  @return the content language
      *  @since 0.9.47
      */
 
@@ -1952,6 +2166,7 @@ public class EepGet {
     /**
      *  Show the Transfer-Encoding field
      *
+     *  @return the transfer encoding
      *  @since 0.9.47
      */
 
@@ -1962,6 +2177,7 @@ public class EepGet {
     /**
      *  Show the Content-Encoding field
      *
+     *  @return the content encoding
      *  @since 0.9.47
      */
 
@@ -1972,6 +2188,7 @@ public class EepGet {
     /**
      *  Show the Cache-Control field
      *
+     *  @return the cache control
      *  @since 0.9.47
      */
 
@@ -1982,6 +2199,7 @@ public class EepGet {
     /**
      *  Show the Accept-Ranges field
      *
+     *  @return the accept ranges
      *  @since 0.9.47
      */
 
@@ -1992,6 +2210,7 @@ public class EepGet {
     /**
      *  Show the Expires field
      *
+     *  @return the expiry date
      *  @since 0.9.47
      */
 
@@ -2002,6 +2221,7 @@ public class EepGet {
     /**
      *  Show the Set-Cookie field
      *
+     *  @return the cookie
      *  @since 0.9.47
      */
 
@@ -2010,9 +2230,8 @@ public class EepGet {
     }
 
     /**
-     *  Show the Referrer-Policy field
-     *
-     *  @since 0.9.47
+     *  Referrer-Policy header.
+     *  @return the referrer policy, or null
      */
 
     public String getReferrerPolicy() {
@@ -2020,9 +2239,8 @@ public class EepGet {
     }
 
     /**
-     *  Show the Vary field
-     *
-     *  @since 0.9.47
+     *  Vary header.
+     *  @return the vary value, or null
      */
 
     public String getVary() {
@@ -2030,9 +2248,8 @@ public class EepGet {
     }
 
     /**
-     *  Show the X-frame-Options field
-     *
-     *  @since 0.9.47
+     *  X-Frame-Options header.
+     *  @return the frame options, or null
      */
 
     public String getXframeOptions() {
@@ -2040,9 +2257,8 @@ public class EepGet {
     }
 
     /**
-     *  Show the Content-Security-Policy field
-     *
-     *  @since 0.9.47
+     *  Content-Security-Policy header.
+     *  @return the CSP value, or null
      */
 
     public String getCSP() {
@@ -2050,9 +2266,8 @@ public class EepGet {
     }
 
     /**
-     *  Show the X-XSS-Protection field
-     *
-     *  @since 0.9.47
+     *  X-XSS-Protection header.
+     *  @return the XSS protection value, or null
      */
 
     public String getXSSProtection() {
@@ -2060,9 +2275,8 @@ public class EepGet {
     }
 
     /**
-     *  Show the X-Content-Type-Options field
-     *
-     *  @since 0.9.47
+     *  X-Content-Type-Options header.
+     *  @return the content type options, or null
      */
 
     public String getXContentTypeOptions() {
@@ -2070,9 +2284,8 @@ public class EepGet {
     }
 
     /**
-     *  Show the X-Powered-By field
-     *
-     *  @since 0.9.47
+     *  X-Powered-By header.
+     *  @return the powered-by value, or null
      */
 
     public String getXPoweredBy() {
@@ -2113,9 +2326,8 @@ public class EepGet {
     }
 
     /**
-     *  Show a combined server status message e.g. "200 OK"
-     *
-     *  @since 0.9.47
+     *  Combined server status message e.g. "200 OK".
+     *  @return the status string
      */
     public String getStatus() {
         StringBuilder buf = new StringBuilder(64);
@@ -2153,7 +2365,8 @@ public class EepGet {
      *
      *  In proxied SSLEepGet, these headers are sent to the remote server, NOT the proxy.
      *
-     *  @since 0.8.8
+     *  @param name header name
+     *  @param value header value
      */
     public void addHeader(String name, String value) {
         if (_extraHeaders == null)
@@ -2166,7 +2379,8 @@ public class EepGet {
      *  Only added if the request is going through a proxy.
      *  Must be called before fetch().
      *
-     *  @since 0.8.9
+     *  @param userName proxy username
+     *  @param password proxy password
      */
     public void addAuthorization(String userName, String password) {
         if (_shouldProxy) {
@@ -2181,11 +2395,12 @@ public class EepGet {
     }
 
     /**
-     *  Set post data.
+     *  Set post data (string body).
      *  Must be called before fetch().
      *
+     *  @param contentType Content-Type header value
+     *  @param data POST body
      *  @throws IllegalStateException if already set
-     *  @since 0.9.67
      */
     protected void setPostData(String contentType, String data) {
         if (_postData != null || _postBinaryData != null || _postDataFile != null)
@@ -2195,11 +2410,12 @@ public class EepGet {
     }
 
     /**
-     *  Set post data.
+     *  Set post data (file body).
      *  Must be called before fetch().
      *
+     *  @param contentType Content-Type header value
+     *  @param data file containing POST body
      *  @throws IllegalStateException if already set
-     *  @since 0.9.67
      */
     protected void setPostData(String contentType, File data) {
         if (_postData != null || _postBinaryData != null || _postDataFile != null)
@@ -2209,11 +2425,12 @@ public class EepGet {
     }
 
     /**
-     *  Set post data.
+     *  Set post data (binary body).
      *  Must be called before fetch().
      *
+     *  @param contentType Content-Type header value
+     *  @param data POST body bytes
      *  @throws IllegalStateException if already set
-     *  @since 0.9.67
      */
     protected void setPostData(String contentType, byte[] data) {
         if (_postData != null || _postBinaryData != null || _postDataFile != null)
@@ -2233,7 +2450,7 @@ public class EepGet {
      *  Public for I2PTunnelHTTPClientBase; use outside of tree at own risk, subject to change or removal
      *
      *  @param args non-null, starting after "Digest " or "Basic "
-     *  @since 0.9.4, moved from I2PTunnelHTTPClientBase in 0.9.12
+     *  @return parsed key-value pairs
      */
     public static Map<String, String> parseAuthArgs(String args) {
         Map<String, String> rv = new HashMap<>(8);
@@ -2294,10 +2511,17 @@ public class EepGet {
 
     /**
      *  Authentication mode enumeration.
-     *
-     *  @since 0.9.12
      */
-    protected enum AUTH_MODE {NONE, BASIC, DIGEST, UNKNOWN}
+    protected enum AUTH_MODE {
+        /** No authentication */
+        NONE,
+        /** Basic authentication */
+        BASIC,
+        /** Digest authentication */
+        DIGEST,
+        /** Unknown authentication scheme */
+        UNKNOWN
+    }
 
     /**
      *  Manage the authentication parameters
@@ -2311,22 +2535,33 @@ public class EepGet {
         private final String username;
         private final String password;
         // as recvd in 407
+        /**
+         * authMode.
+         */
         public AUTH_MODE authMode = AUTH_MODE.NONE;
         // as recvd in 407, after the mode string
         private String authChallenge;
+        /**
+         * authSent.
+         */
         public boolean authSent;
         private int nonceCount;
         private String cnonce;
         // as parsed from authChallenge
         private Map<String, String> args;
 
+        /**
+         * @param user username
+         * @param pw password
+         */
         public AuthState(String user, String pw) {
             username = user;
             password = pw;
         }
 
         /**
-         *  May be called multiple times, save the best one
+         *  May be called multiple times, save the best one.
+         *  @param auth challenge string from 407 response
          */
         public void setAuthChallenge(String auth) {
             String authLC = auth.toLowerCase(Locale.US);
@@ -2370,6 +2605,9 @@ public class EepGet {
             nonceCount = 0;
         }
 
+        /**
+         * getAuthHeader.
+         */
         public String getAuthHeader(String method, String uri) throws IOException {
             switch (authMode) {
                 case BASIC:
@@ -2490,11 +2728,18 @@ public class EepGet {
         private final InputStream _inRaw;
         private final OutputStream _out;
 
+        /**
+         * @param in raw (compressed) input
+         * @param out decompressed output
+         */
         public Gunzipper(InputStream in, OutputStream out) {
             _inRaw = in;
             _out = out;
         }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             ReusableGZIPInputStream in = ReusableGZIPInputStream.acquire();

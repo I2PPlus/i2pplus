@@ -24,8 +24,10 @@ import java.awt.GraphicsDevice;
 /** A graphics device for JFreeSVG. */
 public class SVGGraphicsDevice extends GraphicsDevice {
 
+    /** The device id */
     private final String id;
 
+    /** The default configuration */
     GraphicsConfiguration defaultConfig;
 
     /**

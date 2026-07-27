@@ -43,19 +43,34 @@ import java.util.NoSuchElementException;
  * @param <V> type of values returned by this iterator
  */
 public class SkipIterator<K extends Comparable<? super K>, V> implements ListIterator<V> {
+	/**
+	 * ss.
+	 */
 	protected SkipSpan<K, V> ss;
+	/**
+	 * index.
+	 */
 	protected int index;
 
+	/**
+	 * SkipIterator.
+	 */
 	protected SkipIterator() {
         // Protected constructor for subclasses
     }
 
+	/**
+	 * SkipIterator.
+	 */
 	public SkipIterator(SkipSpan<K, V> ss, int index) {
 		if(ss==null) { throw new NullPointerException(); }
 		this.ss = ss;
 		this.index = index;
 	}
 
+/**
+ * hasNext.
+ */
 public boolean hasNext() {
 		return index < ss.nKeys;
 	}
@@ -93,6 +108,9 @@ public boolean hasNext() {
 		throw new NoSuchElementException();
 	}
 
+/**
+ * hasPrevious.
+ */
 public boolean hasPrevious() {
 		return index > 0 || ((ss.prev != null) && (ss.prev.nKeys > 0));
 	}
@@ -114,10 +132,25 @@ public boolean hasPrevious() {
 
 
 	// Optional methods
+	/**
+	 * add.
+	 */
 	public void add(V o)	{ throw new UnsupportedOperationException(); }
+	/**
+	 * remove.
+	 */
 	public void remove()		{ throw new UnsupportedOperationException(); }
+	/**
+	 * set.
+	 */
 	public void set(V o)	{ throw new UnsupportedOperationException(); }
+	/**
+	 * nextIndex.
+	 */
 	public int nextIndex()		{ throw new UnsupportedOperationException(); }
+	/**
+	 * previousIndex.
+	 */
 	public int previousIndex()	{ throw new UnsupportedOperationException(); }
 
 }

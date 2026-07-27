@@ -18,6 +18,9 @@ public class MessageValidator {
     private DecayingBloomFilter _filter;
 
 
+    /**
+     * MessageValidator.
+     */
     public MessageValidator(RouterContext context) {
         _log = context.logManager().getLog(MessageValidator.class);
         _context = context;

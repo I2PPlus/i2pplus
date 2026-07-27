@@ -11,6 +11,16 @@ import java.io.IOException;
  * @since 0.4.1.4, moved to {@link net.i2p.installer} in 0.9.5
  */
 public class Exec {
+    /**
+     * Default constructor.
+     */
+    public Exec() {}
+
+    /**
+     * Execute a shell command in the specified directory.
+     *
+     * @param args command line arguments (dir command [args...])
+     */
     public static void main(String[] args) {
         try {
             String[] cmd = new String[args.length - 1];

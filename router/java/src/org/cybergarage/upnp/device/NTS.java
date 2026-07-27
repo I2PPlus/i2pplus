@@ -28,15 +28,23 @@ package org.cybergarage.upnp.device;
  * @since 1.0
  */
 public class NTS {
+    /** default constructor */
+    public NTS() {}
+
+    /** Alive notification */
     public static final String ALIVE = "ssdp:alive";
+    /** Bye-bye notification */
     public static final String BYEBYE = "ssdp:byebye";
+    /** Property change notification */
     public static final String PROPCHANGE = "upnp:propchange";
 
+    /** @param ntsValue the NTS value to check */
     public static final boolean isAlive(String ntsValue) {
         if (ntsValue == null) return false;
         return ntsValue.startsWith(NTS.ALIVE);
     }
 
+    /** @param ntsValue the NTS value to check */
     public static final boolean isByeBye(String ntsValue) {
         if (ntsValue == null) return false;
         return ntsValue.startsWith(NTS.BYEBYE);

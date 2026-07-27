@@ -21,25 +21,50 @@ import net.i2p.util.Addresses;
  */
 public class ConfigNetHelper extends HelperBase {
 
+    /**
+     * Creates a new instance of the network configuration helper.
+     */
+    public ConfigNetHelper() {
+        super();
+    }
+
     /** copied from various private components */
     final static String PROP_I2NP_NTCP_HOSTNAME = "i2np.ntcp.hostname";
+    /** NTCP port property */
     final static String PROP_I2NP_NTCP_PORT = "i2np.ntcp.port";
+    /** NTCP auto port property */
     final static String PROP_I2NP_NTCP_AUTO_PORT = "i2np.ntcp.autoport";
+    /** NTCP auto IP property */
     final static String PROP_I2NP_NTCP_AUTO_IP = "i2np.ntcp.autoip";
 
+    /**
+     * Get the external UDP hostname.
+     * @return the hostname
+     */
     public String getUdphostname() {
         return _context.getProperty(UDPTransport.PROP_EXTERNAL_HOST, "");
     }
 
+    /**
+     * Get the NTCP hostname.
+     * @return the hostname
+     */
     public String getNtcphostname() {
         return _context.getProperty(PROP_I2NP_NTCP_HOSTNAME, "");
     }
 
+    /**
+     * Get the NTCP port.
+     * @return the port
+     */
     public String getNtcpport() {
         return _context.getProperty(PROP_I2NP_NTCP_PORT, "");
     }
 
-    /** @return host or "unknown" */
+    /**
+     * Get the UDP IP address.
+     * @return host or "unknown"
+     */
     public String getUdpIP() {
         String s = _context.getProperty(TransportUtil.SSU_IPV6_CONFIG);
         String rv;
@@ -71,6 +96,7 @@ public class ConfigNetHelper extends HelperBase {
     /**
      *  To reduce confusion caused by NATs, this is the current internal SSU port,
      *  not the external port.
+     * @return the internal SSU port
      */
     public String getUdpPort() {
       /****
@@ -91,21 +117,31 @@ public class ConfigNetHelper extends HelperBase {
     /**
      *  This should always be the actual internal SSU port, as UDPTransport udpates
      *  the config when it changes.
+     * @return the configured SSU port
      */
     public String getConfiguredUdpPort() {
         return _context.getProperty(UDPTransport.PROP_INTERNAL_PORT, "unset");
     }
 
+    /**
+     * Get checked attribute for dynamic keys.
+     * @return the checked attribute
+     */
     public String getDynamicKeysChecked() {
         return getChecked(Router.PROP_DYNAMIC_KEYS);
     }
 
+    /**
+     * Get checked attribute for laptop mode.
+     * @return the checked attribute
+     */
     public String getLaptopChecked() {
         return getChecked(UDPTransport.PROP_LAPTOP_MODE);
     }
 
     /**
      *  Get checked attribute for IPv4 firewalled setting.
+     *  @return the checked attribute
      *  @since 0.9.20
      */
     public String getIPv4FirewalledChecked() {
@@ -114,12 +150,18 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      *  Get checked attribute for IPv6 firewalled setting.
+     *  @return the checked attribute
      *  @since 0.9.28
      */
     public String getIPv6FirewalledChecked() {
         return getChecked(TransportUtil.PROP_IPV6_FIREWALLED);
     }
 
+    /**
+     * Get checked attribute for TCP auto port.
+     * @param mode the mode to check
+     * @return the checked attribute
+     */
     public String getTcpAutoPortChecked(int mode) {
         String port = _context.getProperty(PROP_I2NP_NTCP_PORT);
         boolean specified = port != null && !port.isEmpty();
@@ -129,6 +171,11 @@ public class ConfigNetHelper extends HelperBase {
         return "";
     }
 
+    /**
+     * Get checked attribute for TCP auto IP.
+     * @param mode the mode to check
+     * @return the checked attribute
+     */
     public String getTcpAutoIPChecked(int mode) {
         boolean enabled = TransportManager.isNTCPEnabled(_context);
         String hostname = _context.getProperty(PROP_I2NP_NTCP_HOSTNAME);
@@ -143,6 +190,11 @@ public class ConfigNetHelper extends HelperBase {
         return "";
     }
 
+    /**
+     * Get checked attribute for UDP auto IP.
+     * @param mode the mode to check
+     * @return the checked attribute
+     */
     public String getUdpAutoIPChecked(int mode) {
         String hostname = _context.getProperty(UDPTransport.PROP_EXTERNAL_HOST);
         boolean specified = hostname != null && !hostname.isEmpty();
@@ -158,7 +210,10 @@ public class ConfigNetHelper extends HelperBase {
         return "";
     }
 
-    /** default true */
+    /**
+     * Whether UPnP is enabled.
+     * @return the checked attribute if UPnP is enabled
+     */
     public String getUpnpChecked() {
         if (_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UPNP))
             return CHECKED;
@@ -167,6 +222,7 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * default false, inverse of default true property
+     * @return the checked attribute if UDP is disabled
      * @since 0.8.13
      */
     public String getUdpDisabledChecked() {
@@ -177,6 +233,7 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * default true
+     * @return the checked attribute if UDP is enabled
      * @since 0.9.35
      */
     public String getUdpEnabledChecked() {
@@ -206,6 +263,8 @@ public class ConfigNetHelper extends HelperBase {
     /**
      * Combined SSU/NTCP
      * Use SSU setting, then NTCP setting, then default
+     * @param mode the IPv6 configuration mode
+     * @return the checked attribute for the matching mode
      * @since IPv6
      */
     public String getIPv6Checked(String mode) {
@@ -220,12 +279,20 @@ public class ConfigNetHelper extends HelperBase {
         return "";
     }
 
+    /**
+     * Get the set of addresses.
+     * @return the addresses
+     */
     public Set<String> getAddresses() {
         // exclude local, include IPv6, exclude IPv6 temporary
         return Addresses.getAddresses(false, false, true, false);
     }
 
-    /** @since IPv6 */
+    /**
+     * Get the HTML for an address selector input.
+     * @return the HTML for the address selector
+     * @since IPv6
+     */
     public String getAddressSelector() {
         Set<String> addrs = getAddresses();
         // isPubliclyRoutable() rejects some IPv6 addresses that getAddresses() allows
@@ -261,32 +328,50 @@ public class ConfigNetHelper extends HelperBase {
         return buf.toString();
     }
 
-    /** @return decimal */
+    /**
+     * Get the inbound rate as a decimal.
+     * @return decimal
+     */
     public String getInboundRate() {
         return Integer.toString(Math.round(_context.bandwidthLimiter().getInboundKBytesPerSecond() * 1.024f));
     }
 
-    /** @return decimal */
+    /**
+     * Get the outbound rate as a decimal.
+     * @return decimal
+     */
     public String getOutboundRate() {
         return Integer.toString(Math.round(_context.bandwidthLimiter().getOutboundKBytesPerSecond() * 1.024f));
     }
 
-    /** @return decimal */
+    /**
+     * Get the inbound burst rate in bits as a decimal.
+     * @return decimal
+     */
     public String getInboundBurstRateBits() {
         return kbytesToBits(_context.bandwidthLimiter().getInboundBurstKBytesPerSecond());
     }
 
-    /** @return decimal */
+    /**
+     * Get the outbound burst rate in bits as a decimal.
+     * @return decimal
+     */
     public String getOutboundBurstRateBits() {
         return kbytesToBits(_context.bandwidthLimiter().getOutboundBurstKBytesPerSecond());
     }
 
-    /** @return decimal */
+    /**
+     * Get the share rate in bits as a decimal.
+     * @return decimal
+     */
     public String getShareRateBits() {
         return kbytesToBits(getShareBandwidth());
     }
 
-    /** @return decimal */
+    /**
+     * Get the share rate in megabits as a decimal.
+     * @return decimal
+     */
     public String getShareRateMegabits() {
         float megabits = getShareBandwidth() / 1024f * 8;
         String rounded = String.format("%.02f", megabits).replace(".00", "");
@@ -302,12 +387,18 @@ public class ConfigNetHelper extends HelperBase {
                  + "</span>");
     }
 
-    /** @return decimal */
+    /**
+     * Get the inbound burst rate as a decimal.
+     * @return decimal
+     */
     public String getInboundBurstRate() {
         return Integer.toString(Math.round(_context.bandwidthLimiter().getInboundBurstKBytesPerSecond() * 1.024f));
     }
 
-    /** @return decimal */
+    /**
+     * Get the outbound burst rate as a decimal.
+     * @return decimal
+     */
     public String getOutboundBurstRate() {
         return Integer.toString(Math.round(_context.bandwidthLimiter().getOutboundBurstKBytesPerSecond() * 1.024f));
     }
@@ -360,6 +451,10 @@ public class ConfigNetHelper extends HelperBase {
     }
 ****/
 
+    /**
+     * Get the share percentage selection box HTML.
+     * @return the HTML
+     */
     public String getSharePercentageBox() {
         int pct = (int) (100 * _context.router().getSharePercentage());
         StringBuilder buf = new StringBuilder(256);
@@ -383,10 +478,12 @@ public class ConfigNetHelper extends HelperBase {
         buf.append("</select>\n");
         return buf.toString();
     }
+    /** Default share bandwidth in KBps */
     public static final int DEFAULT_SHARE_KBPS = 48;
 
     /**
-     *  @return in binary KBytes per second
+     * Get the share bandwidth.
+     * @return in binary KBytes per second
      */
     public int getShareBandwidth() {
         int irateKBps = _context.bandwidthLimiter().getInboundKBytesPerSecond();

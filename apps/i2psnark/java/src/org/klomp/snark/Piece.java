@@ -102,6 +102,13 @@ class Piece implements Comparable<Piece> {
      *
      * @return true if removed
      */
+    /**
+     * Removes a peer from those that have this piece.
+     * Caller must synchronize.
+     *
+     * @param peer the peer to remove
+     * @return true if removed
+     */
     public boolean removePeer(Peer peer) {
         return this.peers.remove(peer.getPeerID());
     }
@@ -109,6 +116,12 @@ class Piece implements Comparable<Piece> {
     /**
      * How many peers have this piece? Caller must synchronize
      *
+     * @since 0.9.1
+     */
+    /**
+     * How many peers have this piece? Caller must synchronize.
+     *
+     * @return number of peers that have this piece
      * @since 0.9.1
      */
     public int getPeerCount() {
@@ -159,6 +172,12 @@ class Piece implements Comparable<Piece> {
      *
      * @since 0.8.3
      */
+    /**
+     * How many peers are requesting this piece? Caller must synchronize.
+     *
+     * @return number of peers requesting this piece
+     * @since 0.8.3
+     */
     public int getRequestCount() {
         return this.requests == null ? 0 : this.requests.size();
     }
@@ -196,7 +215,7 @@ class Piece implements Comparable<Piece> {
     /**
      * Checks if this piece is disabled (should not be downloaded).
      *
-     * @return true if disabled (priority < 0), false otherwise
+     * @return true if disabled (priority &lt; 0), false otherwise
      * @since 0.8.1
      */
     public boolean isDisabled() {

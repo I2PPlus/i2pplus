@@ -25,14 +25,23 @@ import java.io.InputStream;
  * @author jrandom
  */
 public class CreateLeaseSetMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 4;
+    /** the session ID */
     protected SessionId _sessionId;
+    /** the lease set */
     protected LeaseSet _leaseSet;
+    /** the signing private key */
     private SigningPrivateKey _signingPrivateKey;
+    /** the private key */
     protected PrivateKey _privateKey;
 
+    /** @since 0.9.38 */
     public CreateLeaseSetMessage() { /* required for I2CP deserialization */ }
 
+    /** @return the session ID */
     public SessionId getSessionId() {
         return _sessionId;
     }
@@ -47,34 +56,44 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
         return _sessionId;
     }
 
+    /** @param id the session ID */
     public void setSessionId(SessionId id) {
         _sessionId = id;
     }
 
+    /** @return the signing private key */
     public SigningPrivateKey getSigningPrivateKey() {
         return _signingPrivateKey;
     }
 
+    /** @param key the signing private key */
     public void setSigningPrivateKey(SigningPrivateKey key) {
         _signingPrivateKey = key;
     }
 
+    /** @return the private key */
     public PrivateKey getPrivateKey() {
         return _privateKey;
     }
 
+    /** @param privateKey the private key */
     public void setPrivateKey(PrivateKey privateKey) {
         _privateKey = privateKey;
     }
 
+    /** @return the lease set */
     public LeaseSet getLeaseSet() {
         return _leaseSet;
     }
 
+    /** @param leaseSet the lease set */
     public void setLeaseSet(LeaseSet leaseSet) {
         _leaseSet = leaseSet;
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
@@ -96,6 +115,9 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if ((_sessionId == null) || (_signingPrivateKey == null) || (_privateKey == null) || (_leaseSet == null)) throw new I2CPMessageException("Unable to write out the message as there is not enough data");
@@ -115,11 +137,17 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

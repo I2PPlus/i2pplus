@@ -22,6 +22,9 @@ import net.i2p.util.Log;
  * See PooledTunnelCreatorConfig for the non-abstract class
  */
 public abstract class TunnelCreatorConfig implements TunnelInfo {
+    /**
+     * _context.
+     */
     protected final RouterContext _context;
     /** only necessary for client tunnels */
     private final Hash _destination;
@@ -59,6 +62,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public static final int REPLY_IV_LENGTH = 16;
 
     // Make configurable? - but can't easily get to pool options from here
+    /**
+     * MAX_CONSECUTIVE_TEST_FAILURES.
+     */
     public static final int MAX_CONSECUTIVE_TEST_FAILURES = 3;
     private static final int LATENCY_SAMPLE_SIZE = 3;
     private volatile int _lastLatency = -1;
@@ -121,6 +127,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      */
     public int getLength() {return _config.length;}
 
+    /**
+     * getOptions.
+     */
     public Properties getOptions() {return null;}
 
     /**
@@ -145,6 +154,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /** retrieve the peer at the given hop.  the gateway is hop 0 */
     public Hash getPeer(int hop) {return _peers[hop];}
+    /**
+     * setPeer.
+     */
     public void setPeer(int hop, Hash peer) {_peers[hop] = peer;}
 
     /**
@@ -177,19 +189,34 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      */
     public Hash getDestination() {return _destination;}
 
+    /**
+     * getExpiration.
+     */
     public long getExpiration() {return _expiration;}
+    /**
+     * setExpiration.
+     */
     public void setExpiration(long when) {_expiration = when;}
 
     /** component ordering in the new style request */
     public List<Integer> getReplyOrder() {return _order;}
+    /**
+     * setReplyOrder.
+     */
     public void setReplyOrder(List<Integer> order) {_order = order;}
 
     /** new style reply message id */
     public long getReplyMessageId() {return _replyMessageId;}
+    /**
+     * setReplyMessageId.
+     */
     public void setReplyMessageId(long id) {_replyMessageId = id;}
 
     /** take note of a message being pumped through this tunnel */
     public void incrementProcessedMessages() {_messagesProcessed.incrementAndGet();}
+    /**
+     * getProcessedMessagesCount.
+     */
     public int getProcessedMessagesCount() {return _messagesProcessed.get();}
 
     /**
@@ -212,12 +239,18 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
                 int end = _isInbound ? _peers.length - 1 : _peers.length;
                 Hash[] peersCopy = Arrays.copyOfRange(_peers, start, end);
                 _context.jobQueue().addJob(new JobImpl(_context) {
+                    /**
+                     * runJob.
+                     */
                     @Override
                     public void runJob() {
                         for (Hash peer : peersCopy) {
                             _context.profileManager().tunnelDataPushed1m(peer, normalized);
                         }
                     }
+                    /**
+                     * getName.
+                     */
                     @Override
                     public String getName() { return "TunnelCreatorConfig profile update"; }
                 });
@@ -225,6 +258,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         }
     }
 
+    /**
+     * getVerifiedBytesTransferred.
+     */
     public synchronized long getVerifiedBytesTransferred() {return _verifiedBytesTransferred;}
 
     /**
@@ -271,6 +307,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      */
     public boolean getTunnelFailed() {return _failures.get() > MAX_CONSECUTIVE_TEST_FAILURES;}
 
+    /**
+     * getTunnelFailures.
+     */
     public int getTunnelFailures() {return _failures.get();}
 
     /**
@@ -296,6 +335,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      */
     public void incrementRecentTestExemptions() {_recentTestExemptions++;}
 
+    /**
+     * testSuccessful.
+     */
     public void testSuccessful(int ms) {
         _failures.set(0);
         _recentTestExemptions = 0;
@@ -554,6 +596,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      */
     public OneTimeSession getGarlicReplyKeys() {return _garlicReplyKeys;}
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         // H0:1235 -> H1:2345 -> H2:2345

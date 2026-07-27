@@ -13,12 +13,13 @@ import net.i2p.data.i2np.I2NPMessageImpl;
 import net.i2p.data.router.RouterInfo;
 
 /**
- * NTCP 2 payload generation and parsing utilities.
+ *  NTCP 2 payload generation and parsing utilities.
  *
  *  @since 0.9.35
  */
 class NTCP2Payload {
 
+    /** Block header size in bytes */
     public static final int BLOCK_HEADER_SIZE = 3;
 
     private static final int BLOCK_DATETIME = 0;
@@ -34,8 +35,14 @@ class NTCP2Payload {
      *  processing of succeeding blocks.
      */
     public interface PayloadCallback {
+        /**
+         * gotDateTime.
+         */
         public void gotDateTime(long time) throws DataFormatException;
 
+        /**
+         * gotI2NP.
+         */
         public void gotI2NP(I2NPMessage msg) throws I2NPMessageException;
 
         /**
@@ -61,6 +68,9 @@ class NTCP2Payload {
          */
         public void gotPadding(int paddingLength, int frameLength);
 
+        /**
+         * len).
+         */
         public void gotUnknown(int type, int len);
     }
 
@@ -181,6 +191,9 @@ class NTCP2Payload {
     public abstract static class Block {
         private final int type;
 
+        /**
+         * Block.
+         */
         public Block(int ttype) {
             type = ttype;
         }
@@ -211,6 +224,9 @@ class NTCP2Payload {
         /** Write the block data to the target array, returning the new offset */
         public abstract int writeData(byte[] tgt, int off);
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "Payload block type " + type + " length " + getDataLength();
@@ -224,16 +240,25 @@ class NTCP2Payload {
         private final byte[] data;
         private final boolean f;
 
+        /**
+         * RIBlock.
+         */
         public RIBlock(RouterInfo ri, boolean flood) {
             super(BLOCK_ROUTERINFO);
             data = ri.toByteArray();
             f = flood;
         }
 
+        /**
+         * getDataLength.
+         */
         public int getDataLength() {
             return 1 + data.length;
         }
 
+        /**
+         * writeData.
+         */
         public int writeData(byte[] tgt, int off) {
             tgt[off++] = (byte) (f ? 1 : 0);    // flag
             System.arraycopy(data, 0, tgt, off, data.length);
@@ -247,15 +272,24 @@ class NTCP2Payload {
     public static class I2NPBlock extends Block {
         private final I2NPMessage m;
 
+        /**
+         * I2NPBlock.
+         */
         public I2NPBlock(I2NPMessage msg) {
             super(BLOCK_I2NP);
             m = msg;
         }
 
+        /**
+         * getDataLength.
+         */
         public int getDataLength() {
             return m.getMessageSize() - 7;
         }
 
+        /**
+         * writeData.
+         */
         public int writeData(byte[] tgt, int off) {
             return m.toRawByteArrayNTCP2(tgt, off);
         }
@@ -280,10 +314,16 @@ class NTCP2Payload {
             ctx = context;
         }
 
+        /**
+         * getDataLength.
+         */
         public int getDataLength() {
             return sz;
         }
 
+        /**
+         * writeData.
+         */
         public int writeData(byte[] tgt, int off) {
             if (ctx != null)
                 ctx.random().nextBytes(tgt, off, sz);
@@ -300,15 +340,24 @@ class NTCP2Payload {
     public static class DateTimeBlock extends Block {
         private final long now;
 
+        /**
+         * DateTimeBlock.
+         */
         public DateTimeBlock(I2PAppContext ctx) {
             super(BLOCK_DATETIME);
             now = ctx.clock().now();
         }
 
+        /**
+         * getDataLength.
+         */
         public int getDataLength() {
             return 4;
         }
 
+        /**
+         * writeData.
+         */
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong(tgt, off, 4, (now + 500) / 1000);
             return off + 4;
@@ -321,15 +370,24 @@ class NTCP2Payload {
     public static class OptionsBlock extends Block {
         private final byte[] opts;
 
+        /**
+         * OptionsBlock.
+         */
         public OptionsBlock(byte[] options) {
             super(BLOCK_OPTIONS);
             opts = options;
         }
 
+        /**
+         * getDataLength.
+         */
         public int getDataLength() {
             return opts.length;
         }
 
+        /**
+         * writeData.
+         */
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(opts, 0, tgt, off, opts.length);
             return off + opts.length;
@@ -343,16 +401,25 @@ class NTCP2Payload {
         private final byte rsn;
         private final long rcvd;
 
+        /**
+         * TerminationBlock.
+         */
         public TerminationBlock(int reason, long lastReceived) {
             super(BLOCK_TERMINATION);
             rsn = (byte) reason;
             rcvd = lastReceived;
         }
 
+        /**
+         * getDataLength.
+         */
         public int getDataLength() {
             return 9;
         }
 
+        /**
+         * writeData.
+         */
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong8(tgt, off, rcvd);
             tgt[off + 8] = rsn;

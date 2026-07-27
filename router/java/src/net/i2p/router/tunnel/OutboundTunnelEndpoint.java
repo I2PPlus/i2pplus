@@ -30,6 +30,9 @@ class OutboundTunnelEndpoint {
     private int _i2npmsg;
     private int _totalmsg;
 
+    /**
+     * OutboundTunnelEndpoint.
+     */
     public OutboundTunnelEndpoint(RouterContext ctx, HopConfig config, HopProcessor processor) {
         _context = ctx;
         _log = ctx.logManager().getLog(OutboundTunnelEndpoint.class);
@@ -54,6 +57,9 @@ class OutboundTunnelEndpoint {
         _totalmsg = _lsdsm = _ridsm = _i2npmsg = 0;
     }
 
+    /**
+     * dispatch.
+     */
     public void dispatch(TunnelDataMessage msg, Hash recvFrom) {
         _config.incrementProcessedMessages();
         byte[] data = msg.getData();

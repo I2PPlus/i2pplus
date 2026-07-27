@@ -9,13 +9,16 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.transport.TransportManager;
 import net.i2p.util.Log;
 
-/**
- * Tools to check transport compatibility.
- *
- * @since 0.9.34
- */
-public class ConnectChecker {
+    /**
+     * Tools to check transport compatibility.
+     *
+     * @since 0.9.34
+     */
+    public class ConnectChecker {
+
+    /** the router context */
     protected final RouterContext ctx;
+    /** the logger */
     protected final Log log;
 
     private static final int NTCP_V4 = 0x01;
@@ -24,8 +27,13 @@ public class ConnectChecker {
     private static final int SSU_V6 = 0x08;
     private static final int SSU2_V4 = 0x10;
     private static final int SSU2_V6 = 0x20;
+    /** any IPv4 transport */
     public static final int ANY_V4 = NTCP_V4 | SSU_V4 | SSU2_V4;
 
+    /**
+     * Create a new ConnectChecker.
+     * @param context the router context
+     */
     public ConnectChecker(RouterContext context) {
         ctx = context;
         log = ctx.logManager().getLog(getClass());
@@ -33,12 +41,16 @@ public class ConnectChecker {
 
     /**
      *  Is NTCP disabled?
+     *
+     *  @return true if NTCP is disabled
      *  @since 0.9.34
      */
     protected boolean isNTCPDisabled() {return !TransportManager.isNTCPEnabled(ctx);}
 
     /**
      *  Is SSU disabled?
+     *
+     *  @return true if SSU is disabled
      *  @since 0.9.34
      */
     protected boolean isSSUDisabled() {return !ctx.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP);}
@@ -61,6 +73,8 @@ public class ConnectChecker {
      *  Even if a can't connect to b, they may already be connected
      *  as b connected to a.
      *
+     *  @param from the source router hash
+     *  @param to the destination router hash
      *  @return true if we don't have either RI
      *  @since 0.9.34
      */
@@ -148,6 +162,9 @@ public class ConnectChecker {
      *  This is best effort, as we can't know for sure.
      *  Does not check isEstablished(); do that first.
      *
+     *  @param ourMask our connection mask
+     *  @param to the destination router info
+     *  @return true if we can connect
      *  @since 0.9.34
      */
     public boolean canConnect(int ourMask, RouterInfo to) {
@@ -167,6 +184,9 @@ public class ConnectChecker {
      *  This is best effort, as we can't know for sure.
      *  Does not check isEstablished(); do that first.
      *
+     *  @param from the source router info
+     *  @param ourMask our connection mask
+     *  @return true if from can connect to us
      *  @since 0.9.34
      */
     public boolean canConnect(RouterInfo from, int ourMask) {
@@ -182,6 +202,7 @@ public class ConnectChecker {
      *  Our inbound mask.
      *  For most cases, we use what we published, i.e. getConnectMask()
      *
+     *  @param us our router info
      *  @return bitmask for accepting connections
      *  @since 0.9.34
      */
@@ -236,6 +257,7 @@ public class ConnectChecker {
      *  Our outbound mask.
      *  For most cases, we use our comm system status.
      *
+     *  @param us our router info
      *  @return bitmask for initiating connections
      *  @since 0.9.34
      */

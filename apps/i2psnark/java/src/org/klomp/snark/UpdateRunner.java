@@ -35,6 +35,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     private static final long COMPLETE_TIMEOUT = 12 * 60 * (long) 60 * 1000;
     private static final long CHECK_INTERVAL = 3 * (long) 60 * 1000;
 
+    /** Update runner */
     public UpdateRunner(
             I2PAppContext ctx,
             UpdateManager umgr,
@@ -53,32 +54,50 @@ class UpdateRunner implements UpdateTask, CompleteListener {
 
     //////// begin UpdateTask methods
 
+    /**
+     * isRunning.
+     */
     @Override
     public boolean isRunning() {
         return _isRunning;
     }
 
+    /**
+     * shutdown.
+     */
     @Override
     public void shutdown() {
         _isRunning = false;
         if (_snark != null) { /* ignored */ }
     }
 
+    /**
+     * getType.
+     */
     @Override
     public UpdateType getType() {
         return _type;
     }
 
+    /**
+     * getMethod.
+     */
     @Override
     public UpdateMethod getMethod() {
         return UpdateMethod.TORRENT;
     }
 
+    /**
+     * getURI.
+     */
     @Override
     public URI getURI() {
         return _currentURI;
     }
 
+    /**
+     * getID.
+     */
     @Override
     public String getID() {
         return "";
@@ -86,6 +105,9 @@ class UpdateRunner implements UpdateTask, CompleteListener {
 
     //////// end UpdateTask methods
 
+    /**
+     * start.
+     */
     @Override
     public void start() {
         _isRunning = true;
@@ -145,14 +167,23 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         if (_snark == null) fatal("No valid URLs");
     }
 
-    /** This will run twice, once at the metainfo timeout and once at the complete timeout. */
+    /**
+     * Timeout timer for metainfo and complete deadlines.
+     * Runs twice, once at the metainfo timeout and once at the complete timeout.
+     */
     private class Timeout extends SimpleTimer2.TimedEvent {
         private final long _start = _context.clock().now();
 
+        /**
+         * Timeout.
+         */
         public Timeout() {
             super(_context.simpleTimer2(), METAINFO_TIMEOUT);
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             if (_isComplete || !_isRunning) return;
             if (!_hasMetaInfo) {
@@ -168,16 +199,22 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * Rarely used - only if the user added the torrent, so we aren't a complete listener. This will
-     * periodically until the complete timeout.
+     * Periodic watcher for torrent completion.
+     * Rarely used - only if the user added the torrent, so we aren't a complete listener.
      */
     private class Watcher extends SimpleTimer2.TimedEvent {
         private final long _start = _context.clock().now();
 
+        /**
+         * Watcher.
+         */
         public Watcher() {
             super(_context.simpleTimer2(), CHECK_INTERVAL);
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             if (_hasMetaInfo && _snark.getRemainingLength() == 0 && !_isComplete)
                 processComplete(_snark);
@@ -246,6 +283,9 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     //////// begin CompleteListener methods
     //////// all pass through to SnarkManager
 
+    /**
+     * torrentComplete.
+     */
     @Override
     public void torrentComplete(Snark snark) {
         processComplete(snark);
@@ -259,6 +299,9 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         _smgr.updateStatus(snark);
     }
 
+    /**
+     * gotMetaInfo.
+     */
     @Override
     public String gotMetaInfo(Snark snark) {
         MetaInfo info = snark.getMetaInfo();
@@ -280,70 +323,83 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         return _smgr.gotMetaInfo(snark);
     }
 
+    /**
+     * fatal.
+     */
     @Override
     public void fatal(Snark snark, String error) {
         fatal(error);
         _smgr.fatal(snark, error);
     }
 
+    /**
+     * addMessage.
+     */
     @Override
     public void addMessage(Snark snark, String message) {
         _smgr.addMessage(snark, message);
     }
 
+    /**
+     * gotPiece.
+     */
     @Override
     public void gotPiece(Snark snark) {
         notifyProgress();
         _smgr.gotPiece(snark);
     }
 
+    /**
+     * getSavedTorrentTime.
+     */
     @Override
     public long getSavedTorrentTime(Snark snark) {
         return _smgr.getSavedTorrentTime(snark);
     }
 
+    /**
+     * getSavedTorrentBitField.
+     */
     @Override
     public BitField getSavedTorrentBitField(Snark snark) {
         return _smgr.getSavedTorrentBitField(snark);
     }
 
+    /**
+     * getSavedPreserveNamesSetting.
+     */
     @Override
     public boolean getSavedPreserveNamesSetting(Snark snark) {
         return _smgr.getSavedPreserveNamesSetting(snark);
     }
 
+    /**
+     * getSavedUploaded.
+     */
     @Override
     public long getSavedUploaded(Snark snark) {
         return _smgr.getSavedUploaded(snark);
     }
 
-    /**
-     * @since 0.9.31
-     */
+    /** @param snark the torrent */
     @Override
     public CommentSet getSavedComments(Snark snark) {
         return _smgr.getSavedComments(snark);
     }
 
-    /**
-     * @since 0.9.31
-     */
+    /** @param snark the torrent @param comments to save */
     @Override
     public void locked_saveComments(Snark snark, CommentSet comments) {
         _smgr.locked_saveComments(snark, comments);
     }
 
-    /**
-     * @since 0.9.42
-     */
+    /** Whether to auto-start */
     @Override
     public boolean shouldAutoStart() {
         return _smgr.shouldAutoStart();
     }
 
-    /**
-     * @since 0.9.62
-     */
+    /** The bandwidth listener */
     @Override
     public BandwidthListener getBandwidthListener() {
         return _smgr.getBandwidthListener();
@@ -351,6 +407,12 @@ class UpdateRunner implements UpdateTask, CompleteListener {
 
     //////// end CompleteListener methods
 
+    /**
+     * Convert a URL to an HTML link.
+     *
+     * @param url the URL
+     * @return the HTML link
+     */
     private static String linkify(String url) {
         String durl =
                 url.length() <= 28
@@ -364,6 +426,9 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         _umgr.notifyProgress(this, s);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return getClass().getName()

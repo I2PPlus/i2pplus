@@ -14,7 +14,9 @@ public class Header implements Constants {
     private static final double FLOAT_COOKIE = 8.642135E130;
     private static final long offset = 0;
     private final long size;
+    /** the database version string */
     final String version;
+    /** the database version as integer */
     private final int iVersion;
 
     /** Number of data sources */
@@ -23,8 +25,14 @@ public class Header implements Constants {
     /** Number of archives within file */
     final int rraCount;
 
+    /** Primary data point step */
     final int pdpStep;
 
+    /**
+     * Constructs a Header from the RRD file.
+     *
+     * @param file the RRD file to read from
+     */
     Header(RRDFile file) throws IOException {
 
         if (!file.readString(4).equals(COOKIE)) {

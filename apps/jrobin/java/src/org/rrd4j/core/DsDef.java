@@ -20,11 +20,16 @@ import org.rrd4j.DsType;
  * @author Sasa Markovic
  */
 public class DsDef {
+    /** Force zeros for NaNs suffix */
     static final String FORCE_ZEROS_FOR_NANS_SUFFIX = "!";
 
+    /** ignored */
     private final String dsName;
+    /** ignored */
     private final DsType dsType;
+    /** ignored */
     private final long heartbeat;
+    /** ignored */
     private final double minValue, maxValue;
 
     /**
@@ -150,11 +155,21 @@ public class DsDef {
         return false;
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return dsName.hashCode();
     }
 
+    /**
+     * Checks if this DsDef is exactly equal to another, including all fields.
+     *
+     * @param def the other DsDef to compare
+     * @return true if all fields match
+     */
+    /** ignored */
     boolean exactlyEqual(DsDef def) {
         return dsName.equals(def.dsName)
                 && dsType == def.dsType

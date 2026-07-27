@@ -10,8 +10,12 @@ import java.security.InvalidKeyException;
  * Rijndael AES algorithm implementation.
  * Supports 128, 192, and 256-bit keys with 128-bit block size.
  */
-public final class CryptixRijndael_Algorithm // implicit no-argument constructor
-{
+public final class CryptixRijndael_Algorithm {
+
+    /**
+     * Utility class of static methods; not instantiable.
+     */
+    private CryptixRijndael_Algorithm() {}
 
     // Constants and variables
     //...........................................................................
@@ -218,6 +222,7 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
      * @param  in         The plaintext.
      * @param  result     The resulting ciphertext.
      * @param  inOffset   Index of in from which to start considering data.
+     * @param  outOffset  Index in result at which to start writing data.
      * @param  sessionKey The session key to use for encryption. This is a CryptixAESKeyCache.KeyCacheEntry.
      *                    We use the Ke field for encryption.
      *                    The actual parameter type is opaque, changed in 0.9.31, and is subject to change again.
@@ -282,8 +287,9 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
      * Rijndael's default block size (128-bit).
      *
      * @param  in         The ciphertext.
-     * @param  result     The resulting ciphertext
+     * @param  result     The resulting ciphertext.
      * @param  inOffset   Index of in from which to start considering data.
+     * @param  outOffset  Index in result at which to start writing data.
      * @param  sessionKey The session key to use for decryption. This is a CryptixAESKeyCache.KeyCacheEntry.
      *                    We use the Kd field, for decryption.
      *                    The actual parameter type is opaque, changed in 0.9.31, and is subject to change again.
@@ -456,6 +462,7 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
      * @param  in         The plaintext.
      * @param  result     The resulting ciphertext.
      * @param  inOffset   Index of in from which to start considering data.
+     * @param  outOffset  Index in result at which to start writing data.
      * @param  sessionKey The session key to use for encryption. This is a CryptixAESKeyCache.KeyCacheEntry.
      *                    We use the Ke field for encryption.
      *                    The actual parameter type is opaque, changed in 0.9.31, and is subject to change again.
@@ -509,6 +516,7 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
      * @param  in         The ciphertext.
      * @param  result     The resulting ciphertext.
      * @param  inOffset   Index of in from which to start considering data.
+     * @param  outOffset  Index in result at which to start writing data.
      * @param  sessionKey The session key to use for decryption. This is a CryptixAESKeyCache.KeyCacheEntry.
      *                    We use the Kd field, for decryption.
      *                    The actual parameter type is opaque, changed in 0.9.31, and is subject to change again.

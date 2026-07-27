@@ -48,10 +48,21 @@ package org.minidns.dnslabel;
  */
 public abstract class LdhLabel extends DnsLabel {
 
+    /**
+     * Creates a new LdhLabel
+     *
+     * @param label the label string
+     */
     protected LdhLabel(String label) {
         super(label);
     }
 
+    /**
+     * Determine if the given label is an LDH (letters, digits, hyphen) label.
+     *
+     * @param label the label to check
+     * @return true if the label is an LDH label
+     */
     public static boolean isLdhLabel(String label) {
         if (label.isEmpty()) {
             return false;
@@ -64,6 +75,12 @@ public abstract class LdhLabel extends DnsLabel {
         return consistsOnlyOfLettersDigitsAndHypen(label);
     }
 
+    /**
+     * Creates an LdhLabel from internal representation
+     *
+     * @param label the internal label string
+     * @return the LdhLabel instance
+     */
     protected static LdhLabel fromInternal(String label) {
         assert isLdhLabel(label);
 

@@ -59,6 +59,9 @@ class SAMHandlerPool {
      */
     private static class NamedThreadFactory implements java.util.concurrent.ThreadFactory {
         private final AtomicInteger _count = new AtomicInteger();
+        /**
+         * newThread.
+         */
         public Thread newThread(Runnable r) {
             Thread t = new Thread(r, "SAM-PoolWkr." + _count.incrementAndGet());
             t.setDaemon(true);
@@ -90,6 +93,7 @@ class SAMHandlerPool {
     /** @since 0.9.63 */
     private static final String CRLF = "\n";
 
+    /** Create the pool */
     SAMHandlerPool() {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(SAMHandlerPool.class);
         try {
@@ -109,6 +113,9 @@ class SAMHandlerPool {
             new LinkedBlockingQueue<Runnable>(),
             new java.util.concurrent.ThreadFactory() {
                 private final AtomicInteger _count = new AtomicInteger();
+                /**
+                 * newThread.
+                 */
                 public Thread newThread(Runnable r) {
                     Thread t = new Thread(r, "SAM-Conn." + _count.incrementAndGet());
                     t.setDaemon(true);
@@ -198,7 +205,7 @@ class SAMHandlerPool {
     }
 
     /**
-     * Number of handlers currently registered (connected).
+     * Number of handlers currently registered (connected)
      * @since 0.9.70+
      */
     int getRegisteredCount() {
@@ -239,6 +246,9 @@ class SAMHandlerPool {
      * and handles idle timeouts and PING/PONG.
      */
     private class SelectorRunnable implements Runnable {
+        /**
+         * run.
+         */
         public void run() {
             while (_running) {
                 try {
@@ -348,6 +358,9 @@ class SAMHandlerPool {
             }
             try {
                 _workers.execute(new Runnable() {
+                    /**
+                     * run.
+                     */
                     @Override
                     public void run() {
                         synchronized (ctx.handler) {

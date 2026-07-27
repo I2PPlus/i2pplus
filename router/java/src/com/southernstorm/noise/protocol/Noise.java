@@ -31,6 +31,9 @@ import net.i2p.crypto.SHA256Generator;
 
 /**
  * Utility functions for the Noise protocol library.
+ *
+ * <p>Provides factory methods for creating Noise protocol cipher and hash instances,
+ * along with internal utility functions for byte array management.</p>
  */
 public final class Noise {
 
@@ -83,6 +86,7 @@ public final class Noise {
 	/**
 	 * I2P Release a hash object back to the pool.
 	 *
+	 * @param hash the hash object to release
 	 * @since 0.9.66
 	 */
 	static void releaseHash(MessageDigest hash)

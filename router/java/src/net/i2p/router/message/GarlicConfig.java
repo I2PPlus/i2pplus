@@ -35,10 +35,27 @@ class GarlicConfig {
     private final List<GarlicConfig> _cloveConfigs;
     private final DeliveryInstructions _instructions;
 
+    /**
+     * Creates a new GarlicConfig
+     *
+     * @param cert the certificate
+     * @param id the unique ID
+     * @param expiration the expiration time
+     * @param di the delivery instructions
+     */
     public GarlicConfig(Certificate cert, long id, long expiration, DeliveryInstructions di) {
-	this(new ArrayList<>(4), cert, id, expiration, di);
+        this(new ArrayList<>(4), cert, id, expiration, di);
     }
 
+    /**
+     * Creates a new GarlicConfig with existing clove configs
+     *
+     * @param cloveConfigs the list of clove configs
+     * @param cert the certificate
+     * @param id the unique ID
+     * @param expiration the expiration time
+     * @param di the delivery instructions
+     */
     protected GarlicConfig(List<GarlicConfig> cloveConfigs, Certificate cert, long id,
                            long expiration, DeliveryInstructions di) {
         _cert = cert;
@@ -56,8 +73,14 @@ class GarlicConfig {
      *
      * Used only if recipient public key is not set.
      *
+     * @param info the recipient router info
      */
     public void setRecipient(RouterInfo info) { _recipient = info; }
+    /**
+     * Returns the recipient router
+     *
+     * @return the recipient or null
+     */
     public RouterInfo getRecipient() { return _recipient; }
 
     /**
@@ -66,31 +89,41 @@ class GarlicConfig {
      * as their RouterIdentity is not known, but a PublicKey they handle is exposed
      * via the LeaseSet
      *
+     * @param recipientPublicKey the recipient's public key
      */
     public void setRecipientPublicKey(PublicKey recipientPublicKey) { _recipientPublicKey = recipientPublicKey; }
+    /**
+     * Returns the recipient's public key
+     *
+     * @return the public key or null
+     */
     public PublicKey getRecipientPublicKey() { return _recipientPublicKey; }
 
     /**
      * Certificate for the getRecipient() to pay for their processing
      *
+     * @return the certificate
      */
     public Certificate getCertificate() { return _cert; }
 
     /**
      * Unique ID of the clove
      *
+     * @return the unique ID
      */
     public long getId() { return _id; }
 
     /**
      * Expiration of the clove, after which it should be dropped
      *
+     * @return the expiration time
      */
     public long getExpiration() { return _expiration; }
 
     /**
      * Specify how the I2NPMessage in the clove should be handled.
      *
+     * @return the delivery instructions
      */
     public DeliveryInstructions getDeliveryInstructions() { return _instructions; }
 
@@ -99,6 +132,7 @@ class GarlicConfig {
      * cannot be specified via setPayload.  This means that the resulting GarlicClove
      * represented by this GarlicConfig must be a GarlicMessage itself
      *
+     * @param config the clove config to add
      */
     public void addClove(GarlicConfig config) {
 	if (config != null) {
@@ -106,12 +140,31 @@ class GarlicConfig {
 	}
     }
 
+    /**
+     * Returns the number of clove configs
+     *
+     * @return the clove count
+     */
     public int getCloveCount() { return _cloveConfigs.size(); }
 
+    /**
+     * Returns the clove at the specified index
+     *
+     * @param index the index
+     * @return the clove config
+     */
     public GarlicConfig getClove(int index) { return _cloveConfigs.get(index); }
 
+    /**
+     * Clears all clove configs
+     */
     public void clearCloves() { _cloveConfigs.clear(); }
 
+    /**
+     * Returns sub-data for toString
+     *
+     * @return sub-data string
+     */
     protected String getSubData() { return ""; }
 
     private static final String NL = System.getProperty("line.separator");

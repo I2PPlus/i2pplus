@@ -51,6 +51,9 @@ public class OutboundMessageRegistry {
     private final CleanupTask _cleanupTask;
     private final RouterContext _context;
 
+    /**
+     * OutboundMessageRegistry.
+     */
     public OutboundMessageRegistry(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(OutboundMessageRegistry.class);
@@ -256,11 +259,17 @@ public class OutboundMessageRegistry {
         /** LOCKING: _selectors */
         private long _nextExpire;
 
+        /**
+         * CleanupTask.
+         */
         public CleanupTask() {
             super(_context.simpleTimer2());
             _nextExpire = -1;
         }
 
+        /**
+         * timeReached.
+         */
         @SuppressWarnings("unchecked")
         public void timeReached() {
             long now = _context.clock().now();
@@ -332,6 +341,9 @@ public class OutboundMessageRegistry {
             }
         }
 
+        /**
+         * scheduleExpiration.
+         */
         public void scheduleExpiration(MessageSelector sel) {
             long now = _context.clock().now();
             synchronized(_selectors) {

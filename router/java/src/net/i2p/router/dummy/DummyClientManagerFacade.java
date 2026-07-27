@@ -29,6 +29,9 @@ import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
  */
 public class DummyClientManagerFacade extends ClientManagerFacade {
     private RouterContext _context;
+    /**
+     *  @param ctx the router context
+     */
     public DummyClientManagerFacade(RouterContext ctx) {
         _context = ctx;
     }
@@ -44,6 +47,7 @@ public class DummyClientManagerFacade extends ClientManagerFacade {
     }
     @Override
     public void startup() { /* Intentionally empty - dummy implementation */ }
+    /** empty dummy implementation */
     public void stopAcceptingClients() { /* Intentionally empty - dummy implementation */ }
     public void shutdown() { /* Intentionally empty - dummy implementation */ }
     @Override

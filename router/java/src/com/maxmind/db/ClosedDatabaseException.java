@@ -9,6 +9,9 @@ public class ClosedDatabaseException extends IOException {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Create a new ClosedDatabaseException.
+     */
     ClosedDatabaseException() {
         super("The MaxMind DB has been closed.");
     }

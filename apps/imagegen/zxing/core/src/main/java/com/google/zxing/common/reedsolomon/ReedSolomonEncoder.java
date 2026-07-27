@@ -30,6 +30,9 @@ public final class ReedSolomonEncoder {
   private final GenericGF field;
   private final List<GenericGFPoly> cachedGenerators;
 
+  /**
+   * ReedSolomonEncoder.
+   */
   public ReedSolomonEncoder(GenericGF field) {
     this.field = field;
     this.cachedGenerators = new ArrayList<>();
@@ -49,6 +52,9 @@ public final class ReedSolomonEncoder {
     return cachedGenerators.get(degree);
   }
 
+  /**
+   * encode.
+   */
   public void encode(int[] toEncode, int ecBytes) {
     if (ecBytes == 0) {
       throw new IllegalArgumentException("No error correction bytes");

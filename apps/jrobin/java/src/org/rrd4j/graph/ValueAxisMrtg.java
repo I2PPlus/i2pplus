@@ -8,9 +8,11 @@ import org.rrd4j.core.Util;
  * with quadrant-based scaling.
  */
 class ValueAxisMrtg extends Axis {
-
+    /** Im */
     private final ImageParameters im;
+    /** Worker */
     private final ImageWorker worker;
+    /** Gdef */
     private final RrdGraphDef gdef;
 
     /**
@@ -25,12 +27,13 @@ class ValueAxisMrtg extends Axis {
         this.worker = worker;
     }
 
+    /** Constructor */
     ValueAxisMrtg(RrdGraphGenerator generator) {
         this.im = generator.im;
         this.gdef = generator.gdef;
         this.worker = generator.worker;
     }
-
+    /** Draw */
     boolean draw() {
         Font font = gdef.getFont(FONTTAG_AXIS);
         Paint mGridColor = gdef.getColor(ElementsNames.mgrid);

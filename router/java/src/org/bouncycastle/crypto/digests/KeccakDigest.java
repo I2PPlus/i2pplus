@@ -21,30 +21,63 @@ public class KeccakDigest
         0x000000008000808bL, 0x800000000000008bL, 0x8000000000008089L, 0x8000000000008003L, 0x8000000000008002L,
         0x8000000000000080L, 0x000000000000800aL, 0x800000008000000aL, 0x8000000080008081L, 0x8000000000008080L,
         0x0000000080000001L, 0x8000000080008008L };
+    /**
+     * purpose.
+     */
     protected final CryptoServicePurpose purpose;
 
+    /**
+     * state.
+     */
     protected long[] state = new long[25];
+    /**
+     * dataQueue.
+     */
     protected byte[] dataQueue = new byte[192];
+    /**
+     * rate.
+     */
     protected int rate;
+    /**
+     * bitsInQueue.
+     */
     protected int bitsInQueue;
+    /**
+     * fixedOutputLength.
+     */
     protected int fixedOutputLength;
+    /**
+     * squeezing.
+     */
     protected boolean squeezing;
 
+    /**
+     * KeccakDigest.
+     */
     public KeccakDigest()
     {
         this(288, CryptoServicePurpose.ANY);
     }
 
+    /**
+     * KeccakDigest.
+     */
     public KeccakDigest(CryptoServicePurpose purpose)
     {
         this(288, purpose);
     }
 
+    /**
+     * KeccakDigest.
+     */
     public KeccakDigest(int bitLength)
     {
         this(bitLength, CryptoServicePurpose.ANY);
     }
 
+    /**
+     * KeccakDigest.
+     */
     public KeccakDigest(int bitLength, CryptoServicePurpose purpose)
     {
         this.purpose = purpose;
@@ -53,6 +86,9 @@ public class KeccakDigest
         CryptoServicesRegistrar.checkConstraints(cryptoServiceProperties());
     }
 
+    /**
+     * KeccakDigest.
+     */
     public KeccakDigest(KeccakDigest source)
     {
         this.purpose = source.purpose;
@@ -66,26 +102,41 @@ public class KeccakDigest
         CryptoServicesRegistrar.checkConstraints(cryptoServiceProperties());
     }
 
+    /**
+     * getAlgorithmName.
+     */
     public String getAlgorithmName()
     {
         return "Keccak-" + fixedOutputLength;
     }
 
+    /**
+     * getDigestSize.
+     */
     public int getDigestSize()
     {
         return fixedOutputLength / 8;
     }
 
+    /**
+     * update.
+     */
     public void update(byte in)
     {
         absorb(in);
     }
 
+    /**
+     * update.
+     */
     public void update(byte[] in, int inOff, int len)
     {
         absorb(in, inOff, len);
     }
 
+    /**
+     * doFinal.
+     */
     public int doFinal(byte[] out, int outOff)
     {
         squeeze(out, outOff, fixedOutputLength);
@@ -97,6 +148,9 @@ public class KeccakDigest
 
     /*
      * TODO Possible API change to support partial-byte suffixes.
+     */
+    /**
+     * doFinal.
      */
     protected int doFinal(byte[] out, int outOff, byte partialByte, int partialBits)
     {
@@ -112,6 +166,9 @@ public class KeccakDigest
         return getDigestSize();
     }
 
+    /**
+     * reset.
+     */
     public void reset()
     {
         init(fixedOutputLength);
@@ -162,6 +219,9 @@ public class KeccakDigest
         this.fixedOutputLength = (1600 - rate) / 2;
     }
 
+    /**
+     * absorb.
+     */
     protected void absorb(byte data)
     {
         if ((bitsInQueue % 8) != 0)
@@ -181,6 +241,9 @@ public class KeccakDigest
         }
     }
 
+    /**
+     * absorb.
+     */
     protected void absorb(byte[] data, int off, int len)
     {
         if ((bitsInQueue % 8) != 0)
@@ -222,6 +285,9 @@ public class KeccakDigest
         this.bitsInQueue = remaining << 3;
     }
 
+    /**
+     * absorbBits.
+     */
     protected void absorbBits(int data, int bits)
     {
         if (bits < 1 || bits > 7)
@@ -275,6 +341,9 @@ public class KeccakDigest
         squeezing = true;
     }
 
+    /**
+     * squeeze.
+     */
     protected void squeeze(byte[] output, int offset, long outputLength)
     {
         if (!squeezing)
@@ -436,6 +505,9 @@ public class KeccakDigest
         A[20] = a20; A[21] = a21; A[22] = a22; A[23] = a23; A[24] = a24;
     }
 
+    /**
+     * cryptoServiceProperties.
+     */
     protected CryptoServiceProperties cryptoServiceProperties()
     {
         return null;

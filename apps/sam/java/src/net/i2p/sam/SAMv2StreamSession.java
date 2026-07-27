@@ -137,6 +137,9 @@ class SAMv2StreamSession extends SAMStreamSession {
             this.dest = dest;
         }
 
+        /**
+         * run.
+         */
         public void run() {
             if (_log.shouldDebug()) _log.debug("run() called for socket connector " + id);
 
@@ -185,6 +188,9 @@ class SAMv2StreamSession extends SAMStreamSession {
         return new V2StreamSender(s, id);
     }
 
+    /**
+     * newSAMStreamSessionSocketReader.
+     */
     @Override
     protected SAMStreamSessionSocketReader newSAMStreamSessionSocketReader(I2PSocket s, int id) throws IOException {
         return new SAMv2StreamSessionSocketReader(s, id);
@@ -199,6 +205,9 @@ class SAMv2StreamSession extends SAMStreamSession {
         private volatile boolean _shuttingDownGracefully;
         private final Object runningLock = new Object();
 
+        /**
+         * V2StreamSender.
+         */
         public V2StreamSender(I2PSocket s, int id) throws IOException {
             super(s, id);
             _data = new ArrayList<>(1);
@@ -281,6 +290,9 @@ class SAMv2StreamSession extends SAMStreamSession {
             _shuttingDownGracefully = true;
         }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             if (_log.shouldDebug()) _log.debug("run() called for socket sender " + _id);
@@ -371,8 +383,17 @@ class SAMv2StreamSession extends SAMStreamSession {
      * @author human
      */
     public class SAMv2StreamSessionSocketReader extends SAMv1StreamSessionSocketReader {
+        /**
+         * nolimit.
+         */
         protected boolean nolimit;
+        /**
+         * limit.
+         */
         protected long limit;
+        /**
+         * totalReceived.
+         */
         protected long totalReceived;
 
         /**
@@ -385,6 +406,9 @@ class SAMv2StreamSession extends SAMStreamSession {
             super(s, id);
         }
 
+        /**
+         * setLimit.
+         */
         public void setLimit(long limit, boolean nolimit) {
             synchronized (runningLock) {
                 this.limit = limit;
@@ -395,6 +419,9 @@ class SAMv2StreamSession extends SAMStreamSession {
                 _log.debug("new limit set for socket reader " + id + " : " + (nolimit ? "NOLIMIT" : limit + " bytes"));
         }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             if (_log.shouldDebug()) _log.debug("run() called for socket reader " + id);

@@ -17,12 +17,18 @@ import net.i2p.router.transport.udp.SSU2Payload.AckBlock;
  */
 class SSU2Bitfield {
 
+    /** Bit storage. */
     private final long[] bitfield;
+    /** Bitfield size. */
     private final int size;
+    /** Maximum shift. */
     private final int max_shift;
+    /** Minimum shift. */
     private final int min_shift;
+    /** Current offset. */
     private long offset;
-    private int highestSet = -1; // before offset
+    /** Highest set bit before offset, -1 if none. */
+    private int highestSet = -1;
 
     /**
      * Creates a new SSU2Bitfield that represents <code>size</code> unset bits.
@@ -37,8 +43,14 @@ class SSU2Bitfield {
         bitfield = new long[size / 64];
     }
 
+    /**
+     * size.
+     */
     public int size() {return size;}
 
+    /**
+     * getOffset.
+     */
     public long getOffset() {return offset;}
 
     /**
@@ -184,7 +196,10 @@ class SSU2Bitfield {
      * Callback interface for bitfield operations.
      * Called when a bit is set in the bitfield.
      */
-    public interface Callback {public void bitSet(long bit);}
+    public interface Callback {
+        /** Called when a bit is set */
+        public void bitSet(long bit);
+    }
 
     /**
      *  Callback for all bits set in this bitfield but not set in bf2.
@@ -255,6 +270,9 @@ class SSU2Bitfield {
         return sb.toString();
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("SSU2Bitfield(");

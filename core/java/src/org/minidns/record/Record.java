@@ -40,88 +40,171 @@ public final class Record<D extends Data> {
      *      IANA DNS Parameters - Resource Record (RR) TYPEs</a>
      */
     public enum TYPE {
+        /** Unknown type. */
         UNKNOWN(-1),
+        /** A (1) - IPv4 address record. */
         A(1, A.class),
+        /** NS (2) - Nameserver record. */
         NS(2, NS.class),
+        /** MD (3) - Mail destination. */
         MD(3),
+        /** MF (4) - Mail forwarder. */
         MF(4),
+        /** CNAME (5) - Canonical name record. */
         CNAME(5, CNAME.class),
+        /** SOA (6) - Start of authority record. */
         SOA(6, SOA.class),
+        /** MB (7) - Mailbox record. */
         MB(7),
+        /** MG (8) - Mail group member record. */
         MG(8),
+        /** MR (9) - Mail rename record. */
         MR(9),
+        /** NULL (10) - Null record. */
         NULL(10),
+        /** WKS (11) - Well-known service record. */
         WKS(11),
+        /** PTR (12) - Pointer record. */
         PTR(12, PTR.class),
+        /** HINFO (13) - Host information record. */
         HINFO(13),
+        /** MINFO (14) - Mail information record. */
         MINFO(14),
+        /** MX (15) - Mail exchange record. */
         MX(15, MX.class),
+        /** TXT (16) - Text record. */
         TXT(16, TXT.class),
+        /** RP (17) - Responsible person record. */
         RP(17),
+        /** AFSDB (18) - AFS database record. */
         AFSDB(18),
+        /** X25 (19) - X.25 address record. */
         X25(19),
+        /** ISDN (20) - ISDN address record. */
         ISDN(20),
+        /** RT (21) - Route through record. */
         RT(21),
+        /** NSAP (22) - NSAP address record. */
         NSAP(22),
+        /** NSAP_PTR (23) - NSAP pointer record. */
         NSAP_PTR(23),
+        /** SIG (24) - Security signature record. */
         SIG(24),
+        /** KEY (25) - Security key record. */
         KEY(25),
+        /** PX (26) - X.400 pointer record. */
         PX(26),
+        /** GPOS (27) - Geographic position record. */
         GPOS(27),
+        /** AAAA (28) - IPv6 address record. */
         AAAA(28, AAAA.class),
+        /** LOC (29) - Location record. */
         LOC(29),
+        /** NXT (30) - Next record. */
         NXT(30),
+        /** EID (31) - Endpoint identifier record. */
         EID(31),
+        /** NIMLOC (32) - Nimrod locator record. */
         NIMLOC(32),
+        /** SRV (33) - Service locator record. */
         SRV(33, SRV.class),
+        /** ATMA (34) - ATM address record. */
         ATMA(34),
+        /** NAPTR (35) - Naming authority pointer record. */
         NAPTR(35),
+        /** KX (36) - Key exchange record. */
         KX(36),
+        /** CERT (37) - Certificate record. */
         CERT(37),
+        /** A6 (38) - A6 address record. */
         A6(38),
+        /** DNAME (39) - Delegation name record. */
         DNAME(39, DNAME.class),
+        /** SINK (40) - Sink record. */
         SINK(40),
+        /** OPT (41) - Options record (EDNS). */
         OPT(41, OPT.class),
+        /** APL (42) - Address prefix list record. */
         APL(42),
+        /** DS (43) - Delegation signer record. */
         DS(43, DS.class),
+        /** SSHFP (44) - SSH key fingerprint record. */
         SSHFP(44),
+        /** IPSECKEY (45) - IPsec key record. */
         IPSECKEY(45),
+        /** RRSIG (46) - Resource record signature. */
         RRSIG(46, RRSIG.class),
+        /** NSEC (47) - Next secure record. */
         NSEC(47, NSEC.class),
+        /** DNSKEY (48) - DNS key record. */
         DNSKEY(48, DNSKEY.class),
+        /** DHCID (49) - DHCP identifier record. */
         DHCID(49),
+        /** NSEC3 (50) - NSEC3 record. */
         NSEC3(50, NSEC3.class),
+        /** NSEC3PARAM (51) - NSEC3 parameters record. */
         NSEC3PARAM(51, NSEC3PARAM.class),
+        /** TLSA (52) - TLS certificate association record. */
         TLSA(52, TLSA.class),
+        /** HIP (55) - Host identity protocol record. */
         HIP(55),
+        /** NINFO (56) - NINFO record. */
         NINFO(56),
+        /** RKEY (57) - RKEY record. */
         RKEY(57),
+        /** TALINK (58) - Trust anchor link record. */
         TALINK(58),
+        /** CDS (59) - Child DS record. */
         CDS(59),
+        /** CDNSKEY (60) - Child DNSKEY record. */
         CDNSKEY(60),
+        /** OPENPGPKEY (61) - OpenPGP key record. */
         OPENPGPKEY(61, OPENPGPKEY.class),
+        /** CSYNC (62) - Child-to-parent sync record. */
         CSYNC(62),
+        /** SPF (99) - Sender policy framework record. */
         SPF(99),
+        /** UINFO (100) - User information record. */
         UINFO(100),
+        /** UID (101) - User identifier record. */
         UID(101),
+        /** GID (102) - Group identifier record. */
         GID(102),
+        /** UNSPEC (103) - Unspecified record. */
         UNSPEC(103),
+        /** NID (104) - Node identifier record. */
         NID(104),
+        /** L32 (105) - 32-bit locator record. */
         L32(105),
+        /** L64 (106) - 64-bit locator record. */
         L64(106),
+        /** LP (107) - Locator pointer record. */
         LP(107),
+        /** EUI48 (108) - EUI-48 address record. */
         EUI48(108),
+        /** EUI64 (109) - EUI-64 address record. */
         EUI64(109),
+        /** TKEY (249) - Transaction key record. */
         TKEY(249),
+        /** TSIG (250) - Transaction signature record. */
         TSIG(250),
+        /** IXFR (251) - Incremental zone transfer record. */
         IXFR(251),
+        /** AXFR (252) - Full zone transfer record. */
         AXFR(252),
+        /** MAILB (253) - Mailbox related record. */
         MAILB(253),
+        /** MAILA (254) - Mail agent related record. */
         MAILA(254),
+        /** ANY (255) - Any type (wildcard). */
         ANY(255),
+        /** URI (256) - URI record. */
         URI(256),
+        /** CAA (257) - Certification authority authorization record. */
         CAA(257),
+        /** TA (32768) - Trust authority record. */
         TA(32768),
+        /** DLV (32769) - DNSSEC lookaside validation record. */
         DLV(32769, DLV.class),
        ;
 
@@ -130,6 +213,7 @@ public final class Record<D extends Data> {
          */
         private final int value;
 
+        /** The Data subclass associated with this type, or null. */
         private final Class<?> dataClass;
 
         /**
@@ -233,7 +317,9 @@ public final class Record<D extends Data> {
          * The Hesiod class.
          */
         HS(4),
+        /** None class. */
         NONE(254),
+        /** Any class (wildcard). */
         ANY(255);
 
         /**
@@ -389,18 +475,56 @@ public final class Record<D extends Data> {
         return new Record<>(name, type, clazz, clazzValue, ttl, payloadData, unicastQuery);
     }
 
+    /**
+     * Create a new record.
+     *
+     * @param name the record name
+     * @param type the record type
+     * @param clazz the record class
+     * @param ttl the time to live
+     * @param payloadData the record payload data
+     * @param unicastQuery whether the unicast query bit is set
+     */
     public Record(DnsName name, TYPE type, CLASS clazz, long ttl, D payloadData, boolean unicastQuery) {
         this(name, type, clazz, clazz.getValue() + (unicastQuery ? 0x8000 : 0), ttl, payloadData, unicastQuery);
     }
 
+    /**
+     * Create a new record.
+     *
+     * @param name the record name
+     * @param type the record type
+     * @param clazz the record class
+     * @param ttl the time to live
+     * @param payloadData the record payload data
+     * @param unicastQuery whether the unicast query bit is set
+     */
     public Record(String name, TYPE type, CLASS clazz, long ttl, D payloadData, boolean unicastQuery) {
         this(DnsName.from(name), type, clazz, ttl, payloadData, unicastQuery);
     }
 
+    /**
+     * Create a new record with a raw class value.
+     *
+     * @param name the record name
+     * @param type the record type
+     * @param clazzValue the raw class value
+     * @param ttl the time to live
+     * @param payloadData the record payload data
+     */
     public Record(String name, TYPE type, int clazzValue, long ttl, D payloadData) {
         this(DnsName.from(name), type, CLASS.NONE, clazzValue, ttl, payloadData, false);
     }
 
+    /**
+     * Create a new record with a raw class value.
+     *
+     * @param name the record name
+     * @param type the record type
+     * @param clazzValue the raw class value
+     * @param ttl the time to live
+     * @param payloadData the record payload data
+     */
     public Record(DnsName name, TYPE type, int clazzValue, long ttl, D payloadData) {
         this(name, type, CLASS.NONE, clazzValue, ttl, payloadData, false);
     }
@@ -415,6 +539,12 @@ public final class Record<D extends Data> {
         this.unicastQuery = unicastQuery;
     }
 
+    /**
+     * Write this record to the given output stream.
+     *
+     * @param outputStream the output stream to write to
+     * @throws IOException if an I/O error occurs
+     */
     public void toOutputStream(OutputStream outputStream) throws IOException {
         if (payloadData == null) {
             throw new IllegalStateException("Empty Record has no byte representation");
@@ -431,8 +561,14 @@ public final class Record<D extends Data> {
         payloadData.toOutputStream(dos);
     }
 
+    /** Cached serialized bytes. */
     private transient byte[] bytes;
 
+    /**
+     * Serialize this record to a byte array.
+     *
+     * @return the serialized record bytes
+     */
     public byte[] toByteArray() {
         if (bytes == null) {
             int totalSize = name.size() + 10 // 2 byte short type + 2 byte short classValue + 4 byte int ttl + 2 byte short payload length.
@@ -511,6 +647,11 @@ public final class Record<D extends Data> {
         }
     }
 
+    /**
+     * Get a message builder for the question that this record answers.
+     *
+     * @return the message builder, or null if the record type is not retrievable
+     */
     public DnsMessage.Builder getQuestionMessage() {
         Question question = getQuestion();
         if (question == null) {
@@ -519,6 +660,7 @@ public final class Record<D extends Data> {
         return question.asMessageBuilder();
     }
 
+    /** Cached hash code. */
     private transient Integer hashCodeCache;
 
     @Override
@@ -587,6 +729,14 @@ public final class Record<D extends Data> {
         return eRecord;
     }
 
+    /**
+     * Filter a collection of records by data class, adding matching records to the result.
+     *
+     * @param <E> the target data type
+     * @param result the collection to add filtered records to
+     * @param dataClass the class to filter by
+     * @param input the input collection of records
+     */
     public static <E extends Data> void filter(Collection<Record<E>> result, Class<E> dataClass, Collection<Record<? extends Data>> input) {
         for (Record<? extends Data> record : input) {
             Record<E> filteredRecord = record.ifPossibleAs(dataClass);
@@ -596,6 +746,14 @@ public final class Record<D extends Data> {
         }
     }
 
+    /**
+     * Filter a collection of records by data class, returning a new list.
+     *
+     * @param <E> the target data type
+     * @param dataClass the class to filter by
+     * @param input the input collection of records
+     * @return a list of records matching the data class
+     */
     public static <E extends Data> List<Record<E>> filter(Class<E> dataClass, Collection<Record<? extends Data>> input) {
         List<Record<E>> result = new ArrayList<>(input.size());
         filter(result, dataClass, input);

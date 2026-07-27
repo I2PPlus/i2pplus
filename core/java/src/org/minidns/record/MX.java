@@ -40,33 +40,56 @@ public class MX extends Data {
      */
     @Deprecated public final DnsName name;
 
+    /**
+     * Parse an MX record from a stream.
+     *
+     * @param dis the input stream
+     * @param data the raw DNS message data
+     * @return the parsed MX record
+     * @throws IOException on parse error
+     */
     public static MX parse(DataInputStream dis, byte[] data) throws IOException {
         int priority = dis.readUnsignedShort();
         DnsName name = DnsName.parse(dis, data);
         return new MX(priority, name);
     }
 
+    /**
+     * MX.
+     */
     public MX(int priority, String name) {
         this(priority, DnsName.from(name));
     }
 
+    /**
+     * MX.
+     */
     public MX(int priority, DnsName name) {
         this.priority = priority;
         this.target = name;
         this.name = target;
     }
 
+    /**
+     * serialize.
+     */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
         dos.writeShort(priority);
         target.writeToStream(dos);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return priority + " " + target + '.';
     }
 
+    /**
+     * getType.
+     */
     @Override
     public TYPE getType() {
         return TYPE.MX;

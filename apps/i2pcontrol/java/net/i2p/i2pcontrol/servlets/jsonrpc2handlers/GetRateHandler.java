@@ -37,6 +37,9 @@ public class GetRateHandler implements RequestHandler {
     private static final String[] requiredArgs = {"Stat", "Period"};
     private final JSONRPC2Helper _helper;
 
+    /**
+     * GetRateHandler.
+     */
     public GetRateHandler(JSONRPC2Helper helper) {
         _helper = helper;
     }

@@ -13,15 +13,21 @@ import java.util.Comparator;
  * @param <T> type of SimpleDataStructure objects being compared
  */
 public class XORComparator<T extends SimpleDataStructure> implements Comparator<T>, Serializable {
+    /** Key to compare distances with */
     private final byte[] _base;
 
     /**
+     * Create a comparator with the given target key.
+     *
      * @param target key to compare distances with
      */
     public XORComparator(T target) {
         _base = target.getData();
     }
 
+    /**
+     * compare.
+     */
     @Override
     public int compare(T lhs, T rhs) {
         // same as the following but byte-by-byte for efficiency

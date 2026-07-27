@@ -12,8 +12,12 @@ import net.i2p.data.Hash;
  */
 abstract class FilterDefinitionElement {
 
+    /**
+     * threshold.
+     */
     protected final Threshold threshold;
 
+    /** @param threshold the threshold */
     FilterDefinitionElement(Threshold threshold) {
         this.threshold = threshold;
     }
@@ -24,6 +28,7 @@ abstract class FilterDefinitionElement {
      */
     abstract void update(Map<Hash, DestTracker> map) throws IOException;
 
+    /** @return the threshold */
     Threshold getThreshold() {
         return threshold;
     }

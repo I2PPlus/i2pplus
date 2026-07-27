@@ -58,6 +58,12 @@ public final class ChaCha20 {
      *
      * @param key first 32 bytes used as the key
      * @param iv first 12 bytes starting at ivOffset used as the iv
+     * @param ivOffset offset into iv array
+     * @param plaintext the plaintext input buffer
+     * @param plaintextOffset offset into plaintext buffer
+     * @param ciphertext the ciphertext output buffer
+     * @param ciphertextOffset offset into ciphertext buffer
+     * @param length the number of bytes to encrypt
      * @since 0.9.54
      */
     public static void encrypt(byte[] key, byte[] iv, int ivOffset, byte[] plaintext, int plaintextOffset, byte[] ciphertext, int ciphertextOffset, int length) {
@@ -106,6 +112,7 @@ public final class ChaCha20 {
      *
      *  @param key first 32 bytes used as the key
      *  @param iv first 12 bytes starting at ivOffset used as the iv
+     *  @param ivOffset offset into iv array
      *  @param ciphertext the ciphertext to decrypt
      *  @param ciphertextOffset offset in ciphertext
      *  @param plaintext the plaintext output buffer

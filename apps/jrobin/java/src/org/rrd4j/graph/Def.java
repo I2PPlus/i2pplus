@@ -11,13 +11,18 @@ import org.rrd4j.data.DataProcessor;
  * from RRD files into graphs.
  */
 class Def extends Source {
+    /** Rrd uri */
 
     private final URI rrdUri;
+    /** Ds name */
     private final String dsName;
+    /** Backend */
     private final RrdBackendFactory backend;
+    /** Consol fun */
 
     private final ConsolFun consolFun;
 
+    /** Create Def */
     Def(String name, URI rrdUri, String dsName, ConsolFun consolFun, RrdBackendFactory backend) {
         super(name);
         this.rrdUri = rrdUri;
@@ -25,6 +30,9 @@ class Def extends Source {
         this.consolFun = consolFun;
         this.backend = backend;
     }
+    /**
+     * Request data
+     */
 
     void requestData(DataProcessor dproc) {
         dproc.datasource(name, rrdUri, dsName, consolFun, backend);

@@ -17,6 +17,11 @@ package net.i2p;
  */
 public class CoreVersion {
 
+    /**
+     * Private constructor to prevent instantiation
+     */
+    private CoreVersion() {}
+
     /** deprecated */
     public static final String ID = "Git";
 
@@ -56,6 +61,10 @@ public class CoreVersion {
         return VERSION;
     }
 
+    /**
+     *  Entry point for CLI version display.
+     *  @param args ignored
+     */
     public static void main(String[] args) {
         System.out.println("I2P+ Core version: " + VERSION);
         System.out.println("I2P+ API version: " + PUBLISHED_VERSION);

@@ -29,40 +29,76 @@ import javax.crypto.spec.DHPrivateKeySpec;
 public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     private static final long serialVersionUID = 4819350091141529678L;
 
+    /** X */
     private BigInteger x;
+    /** El spec */
     private ElGamalParameterSpec elSpec;
 
+    /** no-arg constructor */
     protected ElGamalPrivateKeyImpl() {}
 
+    /**
+     * Create a copy of the given ElGamal private key.
+     *
+     * @param key the key to copy
+     */
     public ElGamalPrivateKeyImpl(ElGamalPrivateKey key) {
         this.x = key.getX();
         this.elSpec = key.getParameters();
     }
 
+    /**
+     * Create from a DH private key.
+     *
+     * @param key the DH private key
+     */
     public ElGamalPrivateKeyImpl(DHPrivateKey key) {
         this.x = key.getX();
         this.elSpec = new ElGamalParameterSpec(key.getParams().getP(), key.getParams().getG());
     }
 
+    /**
+     * Create from an ElGamal private key spec.
+     *
+     * @param spec the ElGamal private key spec
+     */
     public ElGamalPrivateKeyImpl(ElGamalPrivateKeySpec spec) {
         this.x = spec.getX();
         this.elSpec = new ElGamalParameterSpec(spec.getParams().getP(), spec.getParams().getG());
     }
 
+    /**
+     * Create from a DH private key spec.
+     *
+     * @param spec the DH private key spec
+     */
     public ElGamalPrivateKeyImpl(DHPrivateKeySpec spec) {
         this.x = spec.getX();
         this.elSpec = new ElGamalParameterSpec(spec.getP(), spec.getG());
     }
 
+    /**
+     * Constructor.
+     * @param x the private exponent
+     * @param elSpec the ElGamal parameters
+     */
     public ElGamalPrivateKeyImpl(BigInteger x, ElGamalParameterSpec elSpec) {
         this.x = x;
         this.elSpec = elSpec;
     }
 
+    /**
+     * Constructor from PKCS8 key spec.
+     * @param spec the PKCS8 key spec
+     * @throws InvalidKeySpecException always, not yet implemented
+     */
     public ElGamalPrivateKeyImpl(PKCS8EncodedKeySpec spec) throws InvalidKeySpecException {
         throw new InvalidKeySpecException("todo");
     }
 
+    /**
+     * getAlgorithm.
+     */
     @Override
     public String getAlgorithm() {
         return "ElGamal";
@@ -144,27 +180,38 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
         return rv;
     }
 
+    /**
+     * getParameters.
+     */
     @Override
     public ElGamalParameterSpec getParameters() {
         return elSpec;
     }
 
+    /**
+     * getParams.
+     */
     @Override
     public DHParameterSpec getParams() {
         return new DHParameterSpec(elSpec.getP(), elSpec.getG());
     }
 
+    /**
+     * getX.
+     */
     @Override
     public BigInteger getX() {
         return x;
     }
 
+    /** Read object */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         x = (BigInteger) in.readObject();
 
         this.elSpec = new ElGamalParameterSpec((BigInteger) in.readObject(), (BigInteger) in.readObject());
     }
 
+    /** Write object */
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeObject(this.getX());
         out.writeObject(elSpec.getP());

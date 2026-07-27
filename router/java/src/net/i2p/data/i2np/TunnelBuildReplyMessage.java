@@ -8,20 +8,36 @@ import net.i2p.I2PAppContext;
  * reply tunnel
  */
 public class TunnelBuildReplyMessage extends TunnelBuildMessageBase {
+    /** default constructor */
 
     public static final int MESSAGE_TYPE = 22;
 
+    /**
+     * TunnelBuildReplyMessage.
+     */
     public TunnelBuildReplyMessage(I2PAppContext context) {
         super(context, MAX_RECORD_COUNT);
     }
 
-    /** @since 0.7.12 */
+    /**
+     * Create a tunnel build reply message with a custom record count.
+     *
+     * @param context the I2P app context
+     * @param records the number of records
+     * @since 0.7.12
+     */
     protected TunnelBuildReplyMessage(I2PAppContext context, int records) {
         super(context, records);
     }
 
+    /**
+     * getType.
+     */
     public int getType() { return MESSAGE_TYPE; }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return "[TunnelBuildReplyMessage]";

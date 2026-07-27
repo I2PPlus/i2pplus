@@ -48,9 +48,21 @@ import java.util.Map;
  * @see <a href="https://tools.ietf.org/html/rfc8032">RFC 8032 - EdDSA</a>
  */
 public class KeyPairGenerator extends KeyPairGeneratorSpi {
+    /**
+     * DEFAULT_KEYSIZE.
+     */
     protected static final int DEFAULT_KEYSIZE = 256;
+    /**
+     * edParams.
+     */
     protected EdDSAParameterSpec edParams;
+    /**
+     * random.
+     */
     protected SecureRandom random;
+    /**
+     * initialized.
+     */
     protected boolean initialized;
 
     private static final Map<Integer, AlgorithmParameterSpec> edParameters;
@@ -61,6 +73,9 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
         edParameters.put(Integer.valueOf(256), new EdDSAGenParameterSpec(EdDSANamedCurveTable.ED_25519));
     }
 
+    /**
+     * initialize.
+     */
     @Override
     public void initialize(int keysize, SecureRandom random) {
         AlgorithmParameterSpec edParams = edParameters.get(Integer.valueOf(keysize));
@@ -72,6 +87,9 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
         }
     }
 
+    /**
+     * initialize.
+     */
     @Override
     public void initialize(AlgorithmParameterSpec params, SecureRandom random) throws InvalidAlgorithmParameterException {
         if (params instanceof EdDSAParameterSpec) {
@@ -84,6 +102,9 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
         initialized = true;
     }
 
+    /**
+     * generateKeyPair.
+     */
     @Override
     public KeyPair generateKeyPair() {
         if (!initialized) initialize(DEFAULT_KEYSIZE, RandomSource.getInstance());

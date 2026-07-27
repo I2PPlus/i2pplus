@@ -86,10 +86,22 @@ import java.util.Date;
  * @author jrandom
  */
 public class Lease extends DataStructureImpl {
+    /**
+     * _gateway.
+     */
     protected Hash _gateway;
+    /**
+     * _tunnelId.
+     */
     protected TunnelId _tunnelId;
+    /**
+     * _end.
+     */
     protected long _end;
 
+    /**
+     * Lease.
+     */
     public Lease() { /* required for deserialization */ }
 
     /** Retrieve the router at which the destination can be contacted
@@ -170,6 +182,9 @@ public class Lease extends DataStructureImpl {
         return _end < Clock.getInstance().now() - fudgeFactor;
     }
 
+    /**
+     * readBytes.
+     */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _gateway = Hash.create(in);
@@ -178,6 +193,9 @@ public class Lease extends DataStructureImpl {
         _end = DataHelper.readLong(in, 8);
     }
 
+    /**
+     * writeBytes.
+     */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if ((_gateway == null) || (_tunnelId == null)) {
@@ -188,6 +206,9 @@ public class Lease extends DataStructureImpl {
         DataHelper.writeLong(out, 8, _end);
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if (object == this) {
@@ -200,11 +221,17 @@ public class Lease extends DataStructureImpl {
         return _end == lse.getEndTime() && DataHelper.eq(_tunnelId, lse.getTunnelId()) && DataHelper.eq(_gateway, lse.getGateway());
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return (int) _end ^ DataHelper.hashCode(_gateway) ^ DataHelper.hashCode(_tunnelId);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation

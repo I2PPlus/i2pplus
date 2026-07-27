@@ -24,6 +24,7 @@ import java.io.OutputStream;
  * @author jrandom
  */
 public class AbuseReason extends DataStructureImpl {
+    /** ignored */
     private String _reason;
 
     /**
@@ -49,28 +50,43 @@ public class AbuseReason extends DataStructureImpl {
         _reason = reason;
     }
 
+    /**
+     * readBytes.
+     */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _reason = DataHelper.readString(in);
     }
 
+    /**
+     * writeBytes.
+     */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_reason == null) throw new DataFormatException("Invalid abuse reason");
         DataHelper.writeString(out, _reason);
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if ((object == null) || !(object instanceof AbuseReason)) return false;
         return DataHelper.eq(_reason, ((AbuseReason) object).getReason());
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return DataHelper.hashCode(_reason);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return "[AbuseReason: " + _reason + "]";

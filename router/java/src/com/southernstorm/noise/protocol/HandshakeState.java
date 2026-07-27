@@ -145,20 +145,35 @@ public class HandshakeState implements Destroyable, Cloneable {
      * @since 0.9.67
      */
     public static final String protocolName5 = "Noise_IKhfselg2_25519+MLKEM512_ChaChaPoly_SHA256";
+    /**
+     * protocolName6.
+     */
     public static final String protocolName6 = "Noise_IKhfselg2_25519+MLKEM768_ChaChaPoly_SHA256";
+    /**
+     * protocolName7.
+     */
     public static final String protocolName7 = "Noise_IKhfselg2_25519+MLKEM1024_ChaChaPoly_SHA256";
 	/**
 	 * Hybrid NTCP2
 	 * @since 0.9.69
 	 */
 	public static final String protocolName8 = "Noise_XKhfsaesobfse+hs2+hs3_25519+MLKEM512_ChaChaPoly_SHA256";
+	/**
+	 * protocolName9.
+	 */
 	public static final String protocolName9 = "Noise_XKhfsaesobfse+hs2+hs3_25519+MLKEM768_ChaChaPoly_SHA256";
+	/**
+	 * protocolName10.
+	 */
 	public static final String protocolName10 = "Noise_XKhfsaesobfse+hs2+hs3_25519+MLKEM1024_ChaChaPoly_SHA256";
 	/**
 	 * Hybrid SSU2
 	 * @since 0.9.69
 	 */
 	public static final String protocolName11 = "Noise_XKhfschaobfse+hs1+hs2+hs3_25519+MLKEM512_ChaChaPoly_SHA256";
+	/**
+	 * protocolName12.
+	 */
 	public static final String protocolName12 = "Noise_XKhfschaobfse+hs1+hs2+hs3_25519+MLKEM768_ChaChaPoly_SHA256";
     private final NoiseInit.PatternID patternId;
     /** NTCP2 */
@@ -179,20 +194,35 @@ public class HandshakeState implements Destroyable, Cloneable {
      * @since 0.9.67
      */
     public static final String PATTERN_ID_IKHFS_512 = "IKhfs512";
+    /**
+     * PATTERN_ID_IKHFS_768.
+     */
     public static final String PATTERN_ID_IKHFS_768 = "IKhfs768";
+    /**
+     * PATTERN_ID_IKHFS_1024.
+     */
     public static final String PATTERN_ID_IKHFS_1024 = "IKhfs1024";
 	/**
 	 * Hybrid NTCP2
 	 * @since 0.9.69
 	 */
 	public static final String PATTERN_ID_XKHFS_512 = "XKhfs512";
+	/**
+	 * PATTERN_ID_XKHFS_768.
+	 */
 	public static final String PATTERN_ID_XKHFS_768 = "XKhfs768";
+	/**
+	 * PATTERN_ID_XKHFS_1024.
+	 */
 	public static final String PATTERN_ID_XKHFS_1024 = "XKhfs1024";
 	/**
 	 * Hybrid SSU2
 	 * @since 0.9.69
 	 */
 public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
+	/**
+	 * PATTERN_ID_XKHFS_768_SSU2.
+	 */
 	public static final String PATTERN_ID_XKHFS_768_SSU2 = "XKhfs768-SSU2";
 	// no 1024, too big
 
@@ -1077,6 +1107,9 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
         return symmetric.getHandshakeHash();
     }
 
+    /**
+     * destroy.
+     */
     @Override
     public synchronized void destroy() {
         isDestroyed = true;

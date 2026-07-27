@@ -57,13 +57,22 @@ public class PublishLocalRouterInfoJob extends JobImpl {
      */
     private final AtomicInteger _runCount = new AtomicInteger();
 
+    /**
+     * PublishLocalRouterInfoJob.
+     */
     public PublishLocalRouterInfoJob(RouterContext ctx) {
         super(ctx);
         _log = ctx.logManager().getLog(PublishLocalRouterInfoJob.class);
     }
 
+    /**
+     * getName.
+     */
     public String getName() { return "Publish Local RouterInfo"; }
 
+    /**
+     * runJob.
+     */
     public void runJob() {
         if (!getContext().commSystem().isRunning()) {
             // Avoid deadlock in the transports through here via FNDF.publish() at startup
@@ -165,6 +174,9 @@ public class PublishLocalRouterInfoJob extends JobImpl {
      *  @since 0.9.18
      */
     private static class AddrComparator implements Comparator<RouterAddress>, Serializable {
+        /**
+         * compare.
+         */
         public int compare(RouterAddress l, RouterAddress r) {
             int c = l.getTransportStyle().compareTo(r.getTransportStyle());
             if (c != 0)

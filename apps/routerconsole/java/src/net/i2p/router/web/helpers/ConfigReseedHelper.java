@@ -13,44 +13,95 @@ import net.i2p.router.web.HelperBase;
  */
 public class ConfigReseedHelper extends HelperBase {
 
+    /**
+     * Create a new helper for reseed configuration.
+     */
+    public ConfigReseedHelper() {}
+
+    /**
+     * Retrieve the configured proxy port for reseeding.
+     *
+     * @return the proxy port, or empty string if not set
+     */
     public String getPort() {
         return _context.getProperty(Reseeder.PROP_PROXY_PORT, "");
     }
 
+    /**
+     * Retrieve the configured proxy host for reseeding.
+     *
+     * @return the proxy host, or empty string if not set
+     */
     public String getHost() {
         return _context.getProperty(Reseeder.PROP_PROXY_HOST, "");
     }
 
-    /** @since 0.8.9 */
+    /**
+     * Retrieve the configured proxy username for reseeding.
+     *
+     * @return the proxy username
+     * @since 0.8.9
+     */
     public String getUsername() {
         return _context.getProperty(Reseeder.PROP_PROXY_USERNAME, "");
     }
 
-    /** @since 0.8.9 */
+    /**
+     * Retrieve the configured proxy password for reseeding.
+     *
+     * @return the proxy password
+     * @since 0.8.9
+     */
     public String getNofilter_password() {
         return _context.getProperty(Reseeder.PROP_PROXY_PASSWORD, "");
     }
 
-    /** @since 0.8.9 */
+    /**
+     * Retrieve the configured SSL proxy port for reseeding.
+     *
+     * @return the SSL proxy port
+     * @since 0.8.9
+     */
     public String getSport() {
         return _context.getProperty(Reseeder.PROP_SPROXY_PORT, "");
     }
 
-    /** @since 0.8.9 */
+    /**
+     * Retrieve the configured SSL proxy host for reseeding.
+     *
+     * @return the SSL proxy host
+     * @since 0.8.9
+     */
     public String getShost() {
         return _context.getProperty(Reseeder.PROP_SPROXY_HOST, "");
     }
 
-    /** @since 0.8.9 */
+    /**
+     * Retrieve the configured SSL proxy username for reseeding.
+     *
+     * @return the SSL proxy username
+     * @since 0.8.9
+     */
     public String getSusername() {
         return _context.getProperty(Reseeder.PROP_SPROXY_USERNAME, "");
     }
 
-    /** @since 0.8.9 */
+    /**
+     * Retrieve the configured SSL proxy password for reseeding.
+     *
+     * @return the SSL proxy password
+     * @since 0.8.9
+     */
     public String getNofilter_spassword() {
         return _context.getProperty(Reseeder.PROP_SPROXY_PASSWORD, "");
     }
 
+    /**
+     * Check whether the given SSL mode matches the current configuration.
+     *
+     * @param mode the mode to check (0=optional, 1=required, 2=disabled)
+     * @return the CHECKED constant if mode matches, empty string otherwise
+     */
     public String modeChecked(int mode) {
         boolean required =  _context.getBooleanPropertyDefaultTrue(Reseeder.PROP_SSL_REQUIRED);
         boolean disabled =  _context.getBooleanProperty(Reseeder.PROP_SSL_DISABLE);
@@ -61,7 +112,13 @@ public class ConfigReseedHelper extends HelperBase {
         return "";
     }
 
-    /** @since 0.9.33 */
+    /**
+     * Check whether the given proxy mode matches the current proxy configuration.
+     *
+     * @param mode the proxy mode to check (0=disabled, 1=HTTP, 2=SOCKS4, 3=SOCKS5, 4=INTERNAL)
+     * @return the CHECKED constant if mode matches, empty string otherwise
+     * @since 0.9.33
+     */
     public String pmodeChecked(int mode) {
         String c =  _context.getProperty(Reseeder.PROP_SPROXY_TYPE, "HTTP");
         boolean disabled =  !_context.getBooleanProperty(Reseeder.PROP_SPROXY_ENABLE);
@@ -74,11 +131,21 @@ public class ConfigReseedHelper extends HelperBase {
         return "";
     }
 
+    /**
+     * Retrieve whether proxy reseeding is enabled.
+     *
+     * @return the CHECKED constant if enabled, empty string otherwise
+     */
     public String getEnable() {
         return getChecked(Reseeder.PROP_PROXY_ENABLE);
     }
 
-    /** @since 0.8.9 */
+    /**
+     * Retrieve whether proxy authentication is enabled.
+     *
+     * @return the CHECKED constant if auth enabled, empty string otherwise
+     * @since 0.8.9
+     */
     public String getAuth() {
         return getChecked(Reseeder.PROP_PROXY_AUTH_ENABLE);
     }
@@ -89,7 +156,12 @@ public class ConfigReseedHelper extends HelperBase {
     }
 ****/
 
-    /** @since 0.8.9 */
+    /**
+     * Retrieve whether SSL proxy authentication is enabled.
+     *
+     * @return the CHECKED constant if auth enabled, empty string otherwise
+     * @since 0.8.9
+     */
     public String getSauth() {
         return getChecked(Reseeder.PROP_SPROXY_AUTH_ENABLE);
     }
@@ -106,6 +178,11 @@ public class ConfigReseedHelper extends HelperBase {
         return URLList;
     }
 
+    /**
+     * Retrieve the configured reseed URLs as a newline-separated string.
+     *
+     * @return the reseed URLs, one per line
+     */
     public String getReseedURL() {
         List<String> URLList = reseedList();
         Collections.sort(URLList);

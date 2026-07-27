@@ -24,6 +24,11 @@ import net.i2p.router.web.RouterConsoleRunner;
  * for the router console interface.
  */
 public class ConfigUIHandler extends FormHandler {
+    /** ConfigUIHandler default constructor */
+    public ConfigUIHandler() {
+        super();
+    }
+
     private static final Pattern CONFIG_PATTERN = Pattern.compile("[a-zA-Z0-9_-]");
     private boolean _shouldSave;
     private boolean _universalTheming;
@@ -39,11 +44,41 @@ public class ConfigUIHandler extends FormHandler {
         else if (_action.equals(_t("Add user"))) {addUser();}
     }
 
+    /**
+     * Sets the save flag for configuration changes.
+     *
+     * @param moo ignored
+     */
     public void setShouldsave(String moo) {_shouldSave = true;}
+    /**
+     * Enables universal theming support.
+     *
+     * @param baa ignored
+     */
     public void setUniversalTheming(String baa) {_universalTheming = true;}
+    /**
+     * Forces the mobile console interface.
+     *
+     * @param baa ignored
+     */
     public void setForceMobileConsole(String baa) {_forceMobileConsole = true;}
+    /**
+     * Enables embedded application display.
+     *
+     * @param baa ignored
+     */
     public void setEmbedApps(String baa) {_embedApps = true;}
+    /**
+     * Enables Sora font usage.
+     *
+     * @param baa ignored
+     */
     public void setUseSoraFont(String baa) {_useSoraFont = true;}
+    /**
+     * Sets the theme name for configuration.
+     *
+     * @param val the theme name
+     */
     public void setTheme(String val) {_config = val;}
 
     /** Note - lang change is handled in CSSHelper but we still need to save it here */

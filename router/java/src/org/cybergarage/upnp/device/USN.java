@@ -31,13 +31,22 @@ import java.nio.charset.StandardCharsets;
  * @since 1.0
  */
 public class USN {
+    /**
+     * ROOTDEVICE.
+     */
     public static final String ROOTDEVICE = "upnp:rootdevice";
 
+    /**
+     * isRootDevice.
+     */
     public static final boolean isRootDevice(String usnValue) {
         if (usnValue == null) return false;
         return usnValue.endsWith(ROOTDEVICE);
     }
 
+    /**
+     * getUDN.
+     */
     public static final String getUDN(String usnValue) {
         if (usnValue == null) return "";
         int idx = usnValue.indexOf("::");

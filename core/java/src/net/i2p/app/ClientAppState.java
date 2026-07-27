@@ -12,9 +12,13 @@ public enum ClientAppState {
     UNINITIALIZED,
     /** after constructor is complete */
     INITIALIZED,
+    /** starting up */
     STARTING,
+    /** startup failed */
     START_FAILED,
+    /** running */
     RUNNING,
+    /** stopping */
     STOPPING,
     /** stopped normally */
     STOPPED,

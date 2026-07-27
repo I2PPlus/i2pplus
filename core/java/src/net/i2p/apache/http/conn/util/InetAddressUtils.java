@@ -78,6 +78,12 @@ public class InetAddressUtils {
         return IPV4_PATTERN.matcher(input).matches();
     }
 
+    /**
+     * Checks whether the parameter is a valid IPv4-mapped IPv6 address.
+     *
+     * @param input the address string to check for validity
+     * @return true if the input parameter is a valid IPv4-mapped IPv6 address
+     */
     public static boolean isIPv4MappedIPv64Address(final String input) {
         return IPV4_MAPPED_IPV6_PATTERN.matcher(input).matches();
     }

@@ -93,32 +93,65 @@ public class ProfileOrganizer {
     private double _thresholdIntegrationValue;
     private final InverseCapacityComparator _comp;
 
+    /**
+     * PROP_MINIMUM_FAST_PEERS.
+     */
     public static final String PROP_MINIMUM_FAST_PEERS = "profileOrganizer.minFastPeers";
+    /**
+     * _defaultMinFastPeers.
+     */
     public static volatile int _defaultMinFastPeers = 400;
     /** @since 0.9.70+ */
     public static int getDefaultMinFastPeers() { return _defaultMinFastPeers; }
     /** @since 0.9.70+ */
     public static void setDefaultMinFastPeers(int val) { _defaultMinFastPeers = Math.max(50, Math.min(2000, val)); }
 
+    /**
+     * PROP_MAX_ROUTERINFO_AGE_HOURS.
+     */
     public static final String PROP_MAX_ROUTERINFO_AGE_HOURS = "profileOrganizer.maxRouterInfoAgeHours";
+    /**
+     * DEFAULT_MAX_ROUTERINFO_AGE_HOURS.
+     */
     public static final int DEFAULT_MAX_ROUTERINFO_AGE_HOURS = 2;
     private static final long STARTUP_GRACE_PERIOD_MS = 10 * 60 * 1000L;
     private static final long PROOF_OF_LIFE_WINDOW_MS = 60 * 60 * 1000L;
+    /**
+     * PROP_MAXIMUM_FAST_PEERS.
+     */
     public static final String PROP_MAXIMUM_FAST_PEERS = "profileOrganizer.maxFastPeers";
+    /**
+     * _defaultMaxFastPeers.
+     */
     public static volatile int _defaultMaxFastPeers = 600;
     /** @since 0.9.70+ */
     public static int getDefaultMaxFastPeers() { return _defaultMaxFastPeers; }
     /** @since 0.9.70+ */
     public static void setDefaultMaxFastPeers(int val) { _defaultMaxFastPeers = Math.max(200, Math.min(3000, val)); }
 
+    /**
+     * PROP_MINIMUM_HIGH_CAPACITY_PEERS.
+     */
     public static final String PROP_MINIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.minHighCapacityPeers";
+    /**
+     * DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS.
+     */
     public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 500;
+    /**
+     * _defaultMinHighCapPeers.
+     */
     public static volatile int _defaultMinHighCapPeers = DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS;
     /** @since 0.9.70+ */
     public static int getMinHighCapacityPeers() { return _defaultMinHighCapPeers; }
     /** @since 0.9.70+ */
     public static void setMinHighCapacityPeers(int val) { _defaultMinHighCapPeers = Math.max(50, Math.min(2000, val)); }
+    /**
+     * PROP_MAXIMUM_HIGH_CAPACITY_PEERS.
+     */
     public static final String PROP_MAXIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.maxHighCapacityPeers";
+    /**
+     * _defaultMaxHighCapPeers.
+     */
     public static volatile int _defaultMaxHighCapPeers = 800;
     /** @since 0.9.70+ */
     public static int getDefaultMaxHighCapPeers() { return _defaultMaxHighCapPeers; }
@@ -146,13 +179,25 @@ public class ProfileOrganizer {
      *  @since 0.9.70+ */
     private static final int MIN_FAST_TIGHT_COUNT = 200;
 
+    /**
+     * PROP_MAX_PROFILES.
+     */
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
+    /**
+     * _defaultMaxProfiles.
+     */
     public static volatile int _defaultMaxProfiles = getDefaultMaxProfiles();
     /** @since 0.9.70+ */
     public static int getDefaultMaxProfilesValue() { return _defaultMaxProfiles; }
     /** @since 0.9.70+ */
     public static void setDefaultMaxProfiles(int val) { _defaultMaxProfiles = Math.max(MIN_MAX_PROFILES, Math.min(ABSOLUTE_MAX_PROFILES, val)); }
+    /**
+     * ABSOLUTE_MAX_PROFILES.
+     */
     public static final int ABSOLUTE_MAX_PROFILES = 8000;
+    /**
+     * MIN_MAX_PROFILES.
+     */
     public static final int MIN_MAX_PROFILES = 800;
 
     private static int getDefaultMaxProfiles() {
@@ -169,6 +214,12 @@ public class ProfileOrganizer {
 
     private final ReentrantReadWriteLock _reorganizeLock = new ReentrantReadWriteLock(false);
 
+    /**
+     * Creates a profile organizer with empty tier maps and registers
+     * performance tracking statistics for peer classification.
+     *
+     * @param context the router context providing config, stats, and log access
+     */
     public ProfileOrganizer(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(ProfileOrganizer.class);
@@ -220,13 +271,46 @@ public class ProfileOrganizer {
     }
     private void releaseWriteLock() {_reorganizeLock.writeLock().unlock();}
 
+    /**
+     * Set the local router hash for self-exclusion from peer selection.
+     */
     public void setUs(Hash us) {_us = us;}
+
+    /**
+     * Self-exclusion hash for this router instance.
+     *
+     * @return the local router hash, or null if not set
+     */
     public Hash getUs() {return _us;}
 
+    /**
+     * Current minimum speed value for the fast peer tier.
+     *
+     * @return the speed threshold computed during the last reorganize
+     */
     public double getSpeedThreshold() {return _thresholdSpeedValue;}
+
+    /**
+     * Current minimum capacity value for the high-capacity peer tier.
+     *
+     * @return the capacity threshold computed during the last reorganize
+     */
     public double getCapacityThreshold() {return _thresholdCapacityValue;}
+
+    /**
+     * Current minimum integration value for the well-integrated peer tier.
+     *
+     * @return the integration threshold computed during the last reorganize
+     */
     public double getIntegrationThreshold() {return _thresholdIntegrationValue;}
 
+    /**
+     * Retrieve the profile for a peer, or null if unknown.
+     * Blocks on the reorganize read lock.
+     *
+     * @param peer the router hash to look up
+     * @return the existing profile, or null if none exists
+     */
     public PeerProfile getProfile(Hash peer) {
         if (peer != null && peer.equals(_us)) return null;
         getReadLock();
@@ -234,6 +318,13 @@ public class ProfileOrganizer {
         finally {releaseReadLock();}
     }
 
+    /**
+     * Retrieve the profile for a peer without blocking.
+     * Returns null immediately if the lock is contended.
+     *
+     * @param peer the router hash to look up
+     * @return the existing profile, or null if none exists or lock unavailable
+     */
     public PeerProfile getProfileNonblocking(Hash peer) {
         if (peer != null && peer.equals(_us)) return null;
         if (tryReadLock()) {
@@ -243,6 +334,13 @@ public class ProfileOrganizer {
         return null;
     }
 
+    /**
+     * Retrieve an existing profile or create a new one, without blocking on contention.
+     * Uses try-lock escalation to avoid blocking the caller.
+     *
+     * @param peer the router hash to look up or create a profile for
+     * @return the existing or new profile, or null if the peer is excluded or lock contention
+     */
     PeerProfile getOrCreateProfileNonblocking(Hash peer) {
         if (peer == null || peer.equals(_us) || !tryReadLock()) return null;
 
@@ -272,6 +370,14 @@ public class ProfileOrganizer {
         return rv;
     }
 
+    /**
+     * Insert a fully-constructed profile into the organizer.
+     * The profile is added to the not-failing set and high-capacity
+     * tier if it meets the current capacity threshold.
+     *
+     * @param profile the profile to add
+     * @return the previous profile for the same peer, or null if none existed
+     */
     public PeerProfile addProfile(PeerProfile profile) {
         if (profile == null) return null;
         Hash peer = profile.getPeer();
@@ -305,10 +411,32 @@ public class ProfileOrganizer {
         finally {releaseReadLock();}
     }
 
+    /**
+     * Number of peers classified as fast tier.
+     *
+     * @return fast peer count (read-lock protected)
+     */
     public int countFastPeers() {return count(_fastPeers);}
+
+    /**
+     * Number of peers classified as high-capacity tier.
+     *
+     * @return high-capacity peer count (read-lock protected)
+     */
     public int countHighCapacityPeers() {return count(_highCapacityPeers);}
+
+    /**
+     * Total number of peer profiles in memory (all tiers).
+     *
+     * @return profile count (read-lock protected)
+     */
     public int countNotFailingPeers() {return count(_notFailingPeers);}
 
+    /**
+     * Count peers with any send or hear activity in the last 4 hours.
+     *
+     * @return active peer count (read-lock protected)
+     */
     public int countActivePeers() {
         int activePeers = 0;
         long hideBefore = _context.clock().now() - 4*60*60*1000L;
@@ -324,6 +452,11 @@ public class ProfileOrganizer {
         return activePeers;
     }
 
+    /**
+     * Count peers with activity (send, receive, or failure) within the last hour.
+     *
+     * @return recently active peer count (read-lock protected)
+     */
     public int countActivePeersInLastHour() {
         int activePeers = 0;
         long hideBefore = _context.clock().now() - 60*60*1000L;
@@ -348,10 +481,34 @@ public class ProfileOrganizer {
         finally {releaseReadLock();}
     }
 
+    /**
+     * Check whether a peer is classified in the fast tier.
+     *
+     * @param peer the router hash to check
+     * @return true if the peer is in the fast tier set
+     */
     public boolean isFast(Hash peer) {return isX(_fastPeers, peer);}
+
+    /**
+     * Check whether a peer is classified in the high-capacity tier.
+     *
+     * @param peer the router hash to check
+     * @return true if the peer is in the high-capacity tier set
+     */
     public boolean isHighCapacity(Hash peer) {return isX(_highCapacityPeers, peer);}
+
+    /**
+     * Check whether a peer is classified in the well-integrated tier.
+     *
+     * @param peer the router hash to check
+     * @return true if the peer is in the well-integrated tier set
+     */
     public boolean isWellIntegrated(Hash peer) {return isX(_wellIntegratedPeers, peer);}
 
+    /**
+     * Remove all profiles and clear all tier maps.
+     * Package-private: only called from tests and router shutdown paths.
+     */
     void clearProfiles() {
         if (!getWriteLock()) return;
         try {
@@ -366,6 +523,13 @@ public class ProfileOrganizer {
 
     private static final int MAX_BAD_REPLIES_PER_HOUR = 40;
 
+    /**
+     * Check whether a peer sends an excessive rate of invalid or failed
+     * netDb lookup replies (potential misbehavior indicator).
+     *
+     * @param peer the router hash to check
+     * @return true if the peer exceeds the bad-reply threshold in the last hour
+     */
     public boolean peerSendsBadReplies(Hash peer) {
         PeerProfile profile = getProfile(peer);
         if (profile != null && profile.getIsExpandedDB()) {
@@ -381,6 +545,14 @@ public class ProfileOrganizer {
         return false;
     }
 
+    /**
+     * Write a peer profile to the given output stream for persistence.
+     *
+     * @param profile the router hash identifying the profile to export
+     * @param out the destination stream for the serialized profile
+     * @return true if the profile was found and written, false if no profile exists
+     * @throws IOException on write errors
+     */
     public boolean exportProfile(Hash profile, OutputStream out) throws IOException {
         PeerProfile prof = getProfile(profile);
         boolean rv = prof != null;
@@ -388,10 +560,27 @@ public class ProfileOrganizer {
         return rv;
     }
 
+    /**
+     * Select up to howMany fast-tier peers, filling shortfalls from high-capacity.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     */
     public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
         selectFastPeers(howMany, exclude, matches, 0, null);
     }
 
+    /**
+     * Select fast-tier peers with IP-subnet diversity constraints.
+     * Falls through to high-capacity tier on shortfall.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     * @param mask bitmask length for /n diversity restriction (0 to disable)
+     * @param ipSet mutable set tracking already-selected subnets
+     */
     public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         getReadLock();
         try {locked_selectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet);}
@@ -405,6 +594,18 @@ public class ProfileOrganizer {
         }
     }
 
+    /**
+     * Select fast-tier peers deterministically sliced by a random key.
+     * This enables different peers per tunnel to improve path diversity.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     * @param randomKey key for deterministic sub-tier assignment
+     * @param subTierMode slicing mode (SLICE_ALL to skip slicing)
+     * @param mask bitmask length for /n diversity restriction (0 to disable)
+     * @param ipSet mutable set tracking already-selected subnets
+     */
     public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, SessionKey randomKey,
                                 Slice subTierMode, int mask, MaskedIPSet ipSet) {
         getReadLock();
@@ -443,25 +644,51 @@ public class ProfileOrganizer {
      * @since 0.9.17
      */
     public enum Slice {
+        /** All peers */
         SLICE_ALL(0x00, 0),
+        /** Peers in sub-tier 0 or 1 */
         SLICE_0_1(0x02, 0),
+        /** Peers in sub-tier 2 or 3 */
         SLICE_2_3(0x02, 2),
+        /** Peers in sub-tier 0 */
         SLICE_0(0x03, 0),
+        /** Peers in sub-tier 1 */
         SLICE_1(0x03, 1),
+        /** Peers in sub-tier 2 */
         SLICE_2(0x03, 2),
+        /** Peers in sub-tier 3 */
         SLICE_3(0x03, 3);
+        /** Selection mask */
         final int mask;
+        /** Selection value */
         final int val;
+        /** Create slice */
         Slice(int mask, int val) {
             this.mask = mask;
             this.val = val;
         }
     }
 
+    /**
+     * Select high-capacity peers, filling shortfalls from not-failing peers.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     */
     public void selectHighCapacityPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
         selectHighCapacityPeers(howMany, exclude, matches, 0, null);
     }
 
+    /**
+     * Select high-capacity peers with IP-subnet diversity.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     * @param mask bitmask length for /n diversity restriction (0 to disable)
+     * @param ipSet mutable set tracking already-selected subnets
+     */
     public void selectHighCapacityPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         getReadLock();
         try {
@@ -476,18 +703,52 @@ public class ProfileOrganizer {
         }
     }
 
+    /**
+     * Select from not-failing peers, excluding high-capacity tier if requested.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     */
     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
         selectNotFailingPeers(howMany, exclude, matches, false, 0, null);
     }
 
+    /**
+     * Select from not-failing peers with IP-subnet diversity.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     * @param mask bitmask length for /n diversity restriction (0 to disable)
+     * @param ipSet mutable set tracking already-selected subnets
+     */
     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         selectNotFailingPeers(howMany, exclude, matches, false, mask, ipSet);
     }
 
+    /**
+     * Select from not-failing peers, optionally excluding the high-capacity tier.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     * @param onlyNotFailing if true, exclude peers already in high-capacity tier
+     */
     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing) {
         selectNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0, null);
     }
 
+    /**
+     * Full-parameter select from not-failing peers.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     * @param onlyNotFailing if true, exclude peers already in high-capacity tier
+     * @param mask bitmask length for /n diversity restriction (0 to disable)
+     * @param ipSet mutable set tracking already-selected subnets
+     */
     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
                                      int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany) {
@@ -495,10 +756,26 @@ public class ProfileOrganizer {
         }
     }
 
+    /**
+     * Select from currently connected (established) not-failing peers.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     */
     public void selectActiveNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
         selectActiveNotFailingPeers(howMany, exclude, matches, 0, null);
     }
 
+    /**
+     * Select from currently connected peers with IP-subnet diversity.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     * @param mask bitmask length for /n diversity restriction (0 to disable)
+     * @param ipSet mutable set tracking already-selected subnets
+     */
     public void selectActiveNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany) {
             List<Hash> connected = _context.commSystem().getEstablished();
@@ -513,11 +790,25 @@ public class ProfileOrganizer {
     /**
      *  Select up to howMany peers from O/P/X bandwidth tiers (high shared bandwidth)
      *  that are not failing.  Falls through to selectAllNotFailingPeers on shortfall.
+     *
+     *  @param howMany target number of peers
+     *  @param exclude peers to exclude (may be null)
+     *  @param matches output set populated with selected peer hashes
      */
     public void selectHighBandwidthPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
         selectHighBandwidthPeers(howMany, exclude, matches, false, 0, null);
     }
 
+    /**
+     * Select high-bandwidth peers with tier-exclusion and IP-subnet diversity.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     * @param onlyNotFailing if true, exclude peers already in high-capacity tier
+     * @param mask bitmask length for /n diversity restriction (0 to disable)
+     * @param ipSet mutable set tracking already-selected subnets
+     */
     public void selectHighBandwidthPeers(int howMany, Set<Hash> exclude, Set<Hash> matches,
                                          boolean onlyNotFailing, int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany) {
@@ -525,6 +816,15 @@ public class ProfileOrganizer {
         }
     }
 
+    /**
+     * Iterates not-failing peers randomly, filtering for O/P/X bandwidth tiers
+     * with reliability checks (acceptance ratio, recent activity, peer tests).
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     * @param onlyNotFailing if true, exclude peers already in high-capacity tier
+     */
     private void selectHighBandwidthPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing) {
         if (matches.size() < howMany) {
             int needed = howMany - matches.size();
@@ -568,10 +868,29 @@ public class ProfileOrganizer {
         }
     }
 
+    /**
+     * Select from all not-failing peers randomly, falling through to general
+     * peers if the not-failing set is insufficient.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     * @param onlyNotFailing if true, exclude peers already in high-capacity tier
+     */
     public void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing) {
         selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0);
     }
 
+    /**
+     * Random iterator over not-failing list with optional tier exclusion.
+     * Falls through to selectAllPeers() if shortfall remains.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     * @param onlyNotFailing if true, exclude peers already in high-capacity tier
+     * @param mask bitmask length for /n diversity restriction (0 to disable, unused here)
+     */
     private void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing, int mask) {
         if (matches.size() < howMany) {
             int needed = howMany - matches.size();
@@ -605,6 +924,11 @@ public class ProfileOrganizer {
         }
     }
 
+    /**
+     * Gather the union of all peers from fast, high-capacity, and not-failing tiers.
+     *
+     * @return a new set containing every tracked peer hash
+     */
     public Set<Hash> selectAllPeers() {
         getReadLock();
         try {
@@ -627,6 +951,10 @@ public class ProfileOrganizer {
         return 2000;
     }
 
+    /**
+     * Run a standard reorganize round without coalescing or decay.
+     * Equivalent to reorganize(false, false).
+     */
     void reorganize() {
         reorganize(false, false);
     }
@@ -979,6 +1307,9 @@ public class ProfileOrganizer {
         }
     }
 
+    /**
+     * purgeStaleProfileFiles.
+     */
     public void purgeStaleProfileFiles() {
         int maxProfiles = ABSOLUTE_MAX_PROFILES;
 
@@ -1280,6 +1611,9 @@ public class ProfileOrganizer {
         return ((int) SipHashInline.hash24(k0, k1, peer.getData())) & 0x03;
     }
 
+    /**
+     * isSelectable.
+     */
     public boolean isSelectable(Hash peer) {
         NetworkDatabaseFacade netDb = _context.netDb();
         if (netDb == null) return true;
@@ -1778,12 +2112,18 @@ public class ProfileOrganizer {
         return failed.getCurrentEventCount() > 0;
     }
 
+    /**
+     * getMinimumFastPeers.
+     */
     protected int getMinimumFastPeers() {
         if (_context.router() == null) return _defaultMinFastPeers;
         int known = _context.netDb().getKnownRouters();
         return _context.getProperty(PROP_MINIMUM_FAST_PEERS, known > 3000 ? Math.max(known / 15, _defaultMinFastPeers) : _defaultMinFastPeers);
     }
 
+    /**
+     * getMaximumFastPeers.
+     */
     protected int getMaximumFastPeers() {
         if (_context.router() == null) return _defaultMaxFastPeers;
         int known = _context.netDb().getKnownRouters();
@@ -1799,6 +2139,9 @@ public class ProfileOrganizer {
         return maxFromKnown;
     }
 
+    /**
+     * getMaximumHighCapPeers.
+     */
     protected int getMaximumHighCapPeers() {
         if (_context.router() == null) return _defaultMaxHighCapPeers;
         int known = _context.netDb().getKnownRouters();
@@ -1813,6 +2156,9 @@ public class ProfileOrganizer {
         return maxFromKnown;
     }
 
+    /**
+     * getMinimumHighCapacityPeers.
+     */
     protected int getMinimumHighCapacityPeers() {
         if (_context.router() == null) return _defaultMinHighCapPeers;
         int known = _context.netDb().getKnownRouters();
@@ -1822,6 +2168,9 @@ public class ProfileOrganizer {
     private static final DecimalFormat _fmt = new DecimalFormat("###,##0.00", new DecimalFormatSymbols(Locale.UK));
     private static final String num(double num) {synchronized (_fmt) {return _fmt.format(num);} }
 
+    /**
+     * main.
+     */
     public static void main(String[] args) {
         if (args.length <= 0) {
             System.err.println("Usage: profileorganizer file.txt.gz [file2.txt.gz] ..."); // NOSONAR CLI tool
@@ -1874,6 +2223,9 @@ public class ProfileOrganizer {
         System.out.println("Capacity:    " + num(organizer.getCapacityThreshold()) + " (" + organizer.countHighCapacityPeers() + " reliable peers)");
     }
 
+    /**
+     * getTunnelBuildSuccess.
+     */
     public double getTunnelBuildSuccess() {
         try {
             RateStat eExpl = _context.statManager().getRate("tunnel.buildExploratoryExpire");
@@ -1906,11 +2258,17 @@ public class ProfileOrganizer {
         return 0;
     }
 
+    /**
+     * isLowBuildSuccess.
+     */
     public boolean isLowBuildSuccess() {
         double buildSuccess = getTunnelBuildSuccess();
         return buildSuccess < ATTACK_THRESHOLD;
     }
 
+    /**
+     * writeProfile.
+     */
     public void writeProfile(PeerProfile profile) {
         _persistenceHelper.writeProfile(profile);
     }

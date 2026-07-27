@@ -14,6 +14,7 @@ public abstract class LongDigest
 {
     private static final int BYTE_LENGTH = 128;
 
+    /** Crypto operation purpose. */
     protected final CryptoServicePurpose purpose;
 
     private byte[] xBuf = new byte[8];
@@ -22,6 +23,7 @@ public abstract class LongDigest
     private long    byteCount1;
     private long    byteCount2;
 
+    /** Hash working variables H1-H8. */
     protected long    H1, H2, H3, H4, H5, H6, H7, H8;
 
     private long[]  W = new long[80];
@@ -37,6 +39,8 @@ public abstract class LongDigest
 
     /**
      * Constructor for variable length word
+     *
+     * @param purpose the crypto service purpose
      */
     protected LongDigest(CryptoServicePurpose purpose)
     {
@@ -51,6 +55,8 @@ public abstract class LongDigest
      * Copy constructor.  We are using copy constructors in place
      * of the Object.clone() interface as this interface is not
      * supported by J2ME.
+     *
+     * @param t the digest to copy
      */
     protected LongDigest(LongDigest t)
     {
@@ -59,6 +65,11 @@ public abstract class LongDigest
         copyIn(t);
     }
 
+    /**
+     * copyIn.
+     *
+     * @param t the digest to copy state from
+     */
     protected void copyIn(LongDigest t)
     {
         System.arraycopy(t.xBuf, 0, xBuf, 0, t.xBuf.length);
@@ -80,6 +91,11 @@ public abstract class LongDigest
         wOff = t.wOff;
     }
 
+    /**
+     * populateState.
+     *
+     * @param state the encoded state to populate from
+     */
     protected void populateState(byte[] state)
     {
         System.arraycopy(xBuf, 0, state, 0, xBufOff);
@@ -102,6 +118,11 @@ public abstract class LongDigest
         }
     }
 
+    /**
+     * restoreState.
+     *
+     * @param encodedState the encoded state to restore from
+     */
     protected void restoreState(byte[] encodedState)
     {
         xBufOff = Pack.bigEndianToInt(encodedState, 8);
@@ -125,11 +146,17 @@ public abstract class LongDigest
         }
     }
 
+    /**
+     * Returns the size of the encoded state.
+     *
+     * @return the encoded state size in bytes
+     */
     protected int getEncodedStateSize()
     {
         return 96 + (wOff * 8);
     }
 
+    /** @param in the input byte */
     public void update(
         byte in)
     {
@@ -144,6 +171,7 @@ public abstract class LongDigest
         byteCount1++;
     }
 
+    /** @param in the input bytes */
     public void update(
         byte[]  in,
         int     inOff,
@@ -184,6 +212,9 @@ public abstract class LongDigest
         }
     }
 
+    /**
+     * finish.
+     */
     public void finish()
     {
         adjustByteCounts();
@@ -206,6 +237,9 @@ public abstract class LongDigest
         processBlock();
     }
 
+    /**
+     * reset.
+     */
     public void reset()
     {
         byteCount1 = 0;
@@ -224,11 +258,20 @@ public abstract class LongDigest
         }
     }
 
+    /**
+     * getByteLength.
+     */
     public int getByteLength()
     {
         return BYTE_LENGTH;
     }
 
+    /**
+     * Process a word of input data.
+     *
+     * @param in the input bytes
+     * @param inOff the offset into the input array
+     */
     protected void processWord(
         byte[]  in,
         int     inOff)
@@ -254,6 +297,12 @@ public abstract class LongDigest
         }
     }
 
+    /**
+     * Process the bit length data.
+     *
+     * @param lowW low word of the bit length
+     * @param hiW high word of the bit length
+     */
     protected void processLength(
         long    lowW,
         long    hiW)
@@ -267,6 +316,9 @@ public abstract class LongDigest
         W[15] = lowW;
     }
 
+    /**
+     * processBlock.
+     */
     protected void processBlock()
     {
         adjustByteCounts();
@@ -395,10 +447,7 @@ public abstract class LongDigest
         return ((x << 45)|(x >>> 19)) ^ ((x << 3)|(x >>> 61)) ^ (x >>> 6);
     }
 
-    /* SHA-384 and SHA-512 Constants
-     * (represent the first 64 bits of the fractional parts of the
-     * cube roots of the first sixty-four prime numbers)
-     */
+    /** SHA-384 and SHA-512 constants (first 64 bits of fractional parts of cube roots of first 64 primes) */
     static final long[] K = {
 0x428a2f98d728ae22L, 0x7137449123ef65cdL, 0xb5c0fbcfec4d3b2fL, 0xe9b5dba58189dbbcL,
 0x3956c25bf348b538L, 0x59f111f1b605d019L, 0x923f82a4af194f9bL, 0xab1c5ed5da6d8118L,
@@ -422,5 +471,10 @@ public abstract class LongDigest
 0x4cc5d4becb3e42b6L, 0x597f299cfc657e2aL, 0x5fcb6fab3ad6faecL, 0x6c44198c4a475817L
     };
 
+    /**
+     * Returns the properties for the crypto service.
+     *
+     * @return the crypto service properties
+     */
     protected abstract CryptoServiceProperties cryptoServiceProperties();
 }

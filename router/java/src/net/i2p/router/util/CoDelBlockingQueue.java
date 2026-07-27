@@ -38,7 +38,9 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private static final long serialVersionUID = 1L;
     private final transient I2PAppContext _context;
     private final transient Log _log;
+    /**  name */
     private final String _name;
+    /**  capacity */
     private final int _capacity;
 
     // following 4 are state variables defined by sample code, locked by this
@@ -56,6 +58,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
 
     /** debugging */
     private static final AtomicLong __id = new AtomicLong();
+    /**  id */
     private final long _id;
 
     private static final long[] CODEL_RATES = RateConstants.SHORT_TERM_RATES;
@@ -85,6 +88,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     /**
      * Update target on all active CoDelBlockingQueue instances.
      *
+     * @param target the new target delay in ms
      * @since 0.9.70+
      */
     public static void updateAllTargets(long target) {
@@ -97,6 +101,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     /**
      * Update interval on all active CoDelBlockingQueue instances.
      *
+     * @param interval the new interval in ms
      * @since 0.9.70+
      */
     public static void updateAllIntervals(long interval) {
@@ -106,7 +111,13 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         }
     }
 
+    /**
+     * PROP_CODEL_TARGET.
+     */
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
+    /**
+     * PROP_CODEL_INTERVAL.
+     */
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
 
     /**
@@ -118,6 +129,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *
      */
     private static final int DEFAULT_CODEL_TARGET = 5;
+    /**  target */
     private volatile long _target;
 
     /**
@@ -128,7 +140,9 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *
      */
     private static final int DEFAULT_CODEL_INTERVAL = 50;
+    /**  interval */
     private volatile long _interval;
+    /** S t a t  d e l a y */
     private final String STAT_DELAY;
     private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 1000 : 500;
 
@@ -138,15 +152,26 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *  @param name for stats
      */
 //        this(ctx, name, capacity, TARGET, INTERVAL);
+    /**
+     * Constructs a queue with default CoDel target and interval from properties.
+     *
+     * @param ctx the I2P application context
+     * @param name name for this queue instance
+     * @param capacity the maximum capacity of the queue
+     */
     public CoDelBlockingQueue(I2PAppContext ctx, String name, int capacity) {
         this(ctx, name, capacity, ctx.getProperty(PROP_CODEL_TARGET, DEFAULT_CODEL_TARGET),
                                   ctx.getProperty(PROP_CODEL_INTERVAL, DEFAULT_CODEL_INTERVAL));
     }
 
     /**
+     *  Constructs a queue with explicit CoDel target and interval.
+     *
+     *  @param ctx the I2P application context
+     *  @param name for stats
+     *  @param capacity the maximum capacity of the queue
      *  @param target the target max latency (ms)
      *  @param interval how long above target to start dropping (ms)
-     *  @param name for stats
      *  @since 0.9.50
      */
     public CoDelBlockingQueue(I2PAppContext ctx, String name, int capacity, int target, int interval) {
@@ -165,6 +190,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     /**
      * Returns the current CoDel target delay in ms.
      *
+     * @return the target delay in ms
      * @since 0.9.70+
      */
     public long getTarget() { return _target; }
@@ -172,6 +198,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     /**
      * Sets the current CoDel target delay in ms.
      *
+     * @param target the new target delay in ms
      * @since 0.9.70+
      */
     public void setTarget(long target) { _target = target; }
@@ -179,6 +206,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     /**
      * Returns the current CoDel interval in ms.
      *
+     * @return the interval in ms
      * @since 0.9.70+
      */
     public long getInterval() { return _interval; }
@@ -186,34 +214,50 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     /**
      * Sets the current CoDel interval in ms.
      *
+     * @param interval the new interval in ms
      * @since 0.9.70+
      */
     public void setInterval(long interval) { _interval = interval; }
 
+    /**
+     * add.
+     */
     @Override
     public boolean add(E o) {
         o.setEnqueueTime(_context.clock().now());
         return super.add(o);
     }
 
+    /**
+     * offer.
+     */
     @Override
     public boolean offer(E o) {
         o.setEnqueueTime(_context.clock().now());
         return super.offer(o);
     }
 
+    /**
+     * offer.
+     */
     @Override
     public boolean offer(E o, long timeout, TimeUnit unit) throws InterruptedException {
         o.setEnqueueTime(_context.clock().now());
         return super.offer(o, timeout, unit);
     }
 
+    /**
+     * put.
+     */
     @Override
     public void put(E o) throws InterruptedException {
         o.setEnqueueTime(_context.clock().now());
         super.put(o);
     }
 
+    /**
+     * clear.
+     */
     @Override
     public void clear() {
         synchronized(this) {
@@ -225,6 +269,9 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         }
     }
 
+    /**
+     * take.
+     */
     @Override
     public E take() throws InterruptedException {
         E rv;
@@ -234,6 +281,9 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         return rv;
     }
 
+    /**
+     * poll.
+     */
     @Override
     public E poll() {
         E rv = super.poll();
@@ -272,6 +322,9 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
 
     /**
      *  Drains all, without updating stats or dropping.
+     *
+     *  @param c the collection to drain into
+     *  @return the number of elements drained
      */
     public int drainAllTo(Collection<? super E> c) {
         return super.drainTo(c);
@@ -280,6 +333,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     /**
      *  Has the head of the queue been waiting too long,
      *  or is the queue almost full?
+     *
+     *  @return true if the queue is backlogged
      */
     public synchronized boolean isBacklogged() {
         E e = peek();

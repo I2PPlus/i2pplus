@@ -35,6 +35,11 @@ public interface DataHolder {
      */
     void setPoolUsed(boolean poolUsed);
 
+    /**
+     * Returns the current pool.
+     *
+     * @return the current pool, or null
+     */
     RrdDbPool getPool();
 
     /**
@@ -52,6 +57,11 @@ public interface DataHolder {
      */
     void setTimeZone(TimeZone tz);
 
+    /**
+     * Returns the time zone.
+     *
+     * @return the time zone
+     */
     TimeZone getTimeZone();
 
     /**

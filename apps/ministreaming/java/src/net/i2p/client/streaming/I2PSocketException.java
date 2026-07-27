@@ -14,8 +14,11 @@ import net.i2p.util.Translate;
  */
 public class I2PSocketException extends SocketException {
 
+    /** ignored */
     private final int _status;
+    /** ignored */
     private static final int CUSTOM = -1;
+    /** ignored */
     private static final String BUNDLE_NAME = "net.i2p.client.streaming.messages";
 
     /**
@@ -40,6 +43,8 @@ public class I2PSocketException extends SocketException {
 
     /**
      *  Use message provided
+     *
+     *  @param message the detail message
      */
     public I2PSocketException(String message) {
         super(message);

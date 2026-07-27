@@ -24,6 +24,9 @@ import net.i2p.crypto.eddsa.math.ScalarOps;
  * <p>
  * Reviewed/commented by Bloody Rookie (nemproject@gmx.de)
  */
+/**
+ * Implementation of ScalarOps for Ed25519.
+ */
 public class Ed25519ScalarOps implements ScalarOps {
 
     /**

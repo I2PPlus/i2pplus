@@ -123,6 +123,13 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     private BanLogger _banLogger;
 
+    /**
+     * Creates a new InboundEstablishState for the given context, transport, and connection
+     *
+     * @param ctx the router context
+     * @param transport the NTCP transport
+     * @param con the NTCP connection
+     */
     public InboundEstablishState(RouterContext ctx, NTCPTransport transport, NTCPConnection con) {
         super(ctx, transport, con);
         _state = State.IB_INIT;

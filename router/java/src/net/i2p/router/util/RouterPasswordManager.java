@@ -30,6 +30,7 @@ import net.i2p.util.PasswordManager;
  * @since 0.9.4
  */
 public class RouterPasswordManager extends PasswordManager {
+    /** the context */
     protected final RouterContext _context;
 
     private static final String PROP_MIGRATED = "router.passwordManager.migrated";
@@ -59,6 +60,9 @@ public class RouterPasswordManager extends PasswordManager {
     };
 ****/
 
+    /**
+     * @param ctx the router context
+     */
     public RouterPasswordManager(RouterContext ctx) {
         super(ctx);
         _context = ctx;

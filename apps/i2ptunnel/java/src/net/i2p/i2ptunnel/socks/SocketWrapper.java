@@ -43,6 +43,9 @@ class SocketWrapper implements I2PSocket {
         }
     }
 
+    /**
+     * SocketWrapper.
+     */
     public SocketWrapper(Socket sock) {
         socket = sock;
     }
@@ -108,13 +111,22 @@ class SocketWrapper implements I2PSocket {
     @Override
     public void setOptions(I2PSocketOptions options) { /* no-op */ }
 
+    /**
+     * getReadTimeout.
+     */
     public long getReadTimeout() {
         return -1;
     }
 
+    /**
+     * setReadTimeout.
+     */
     @Override
     public void setReadTimeout(long ms) { /* no-op */ }
 
+    /**
+     * close.
+     */
     public void close() throws IOException {
         socket.close();
     }
@@ -128,6 +140,9 @@ class SocketWrapper implements I2PSocket {
         close();
     }
 
+    /**
+     * isClosed.
+     */
     public boolean isClosed() {
         return socket.isClosed();
     }

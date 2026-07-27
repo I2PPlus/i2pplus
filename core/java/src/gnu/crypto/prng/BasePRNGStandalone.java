@@ -118,6 +118,11 @@ public abstract class BasePRNGStandalone implements IRandomStandalone, Serializa
    // Instance methods
    // -------------------------------------------------------------------------
 
+    /**
+     * Check whether this instance has been initialised.
+     *
+     * @return true if this instance has been initialised
+     */
     public boolean isInitialised() {
         return initialised;
     }
@@ -141,7 +146,13 @@ public abstract class BasePRNGStandalone implements IRandomStandalone, Serializa
         return super.clone();
     }
 
+    /**
+     * Set up this PRNG instance with the given attributes.
+     *
+     * @param attributes the attributes for setup
+     */
     public abstract void setup(Map<String, byte[]> attributes);
 
+    /** Fill the internal buffer with random bytes */
     public abstract void fillBlock(); //throws LimitReachedException;
 }

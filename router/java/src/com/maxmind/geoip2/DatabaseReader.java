@@ -86,11 +86,16 @@ public class DatabaseReader implements Closeable {
      * </p>
      */
     public static final class Builder {
+        /** Database */
         final File database;
+        /** Stream */
         final InputStream stream;
 
+        /** Locales */
         List<String> locales = Collections.singletonList("en");
+        /** Mode */
         FileMode mode = FileMode.MEMORY_MAPPED;
+        /** Cache */
         NodeCache cache = NoCache.getInstance();
 
         /**
@@ -212,6 +217,11 @@ public class DatabaseReader implements Closeable {
         this.reader.close();
     }
 
+    /**
+     * country.
+     *
+     * @param ipAddress IPv4 or IPv6 address
+     */
     public String country(String ipAddress) throws IOException {
         InetAddress ia = InetAddress.getByName(ipAddress);
         Object o = get(ia, "Country");
@@ -248,17 +258,4 @@ public class DatabaseReader implements Closeable {
         return this.reader.getMetadata();
     }
 
-    public static void main(String[] args) throws Exception {
-        if (args.length != 2) {
-            System.err.println("Usage: DatabaseReader geoip2-file.mmdb ip");
-            System.exit(1);
-        }
-        File f = new File(args[0]);
-        Builder b = new Builder(f);
-        b.withCache(new CHMCache(256));
-        DatabaseReader r = b.build();
-        System.out.println("Database Metadata: " + r.getMetadata());
-        String c = r.country(args[1]);
-        System.out.println("IP: " + args[1] + " country: " + c);
-    }
 }

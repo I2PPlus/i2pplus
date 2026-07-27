@@ -33,6 +33,9 @@ class SearchMessageSelector implements MessageSelector {
     private final long _exp;
     private final SearchState _state;
 
+    /**
+     * SearchMessageSelector.
+     */
     public SearchMessageSelector(RouterContext context, RouterInfo peer, long expiration, SearchState state) {
         _context = context;
         _log = context.logManager().getLog(SearchMessageSelector.class);
@@ -44,12 +47,18 @@ class SearchMessageSelector implements MessageSelector {
             _log.debug("[ID " + _id + "] Created: " + toString());
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return "Search selector \n* Looking for reply from [" + _peer.toBase64().substring(0,6) +
                  "] for key [" + _state.getTarget().toBase32().substring(0,8) + "]";
     }
 
+    /**
+     * continueMatching.
+     */
     public boolean continueMatching() {
         boolean expired = _context.clock().now() > _exp;
         if (expired) return false;
@@ -69,9 +78,15 @@ class SearchMessageSelector implements MessageSelector {
         }
     }
 
+    /**
+     * getExpiration.
+     */
     @Override
     public long getExpiration() { return _exp; }
 
+    /**
+     * isMatch.
+     */
     public boolean isMatch(I2NPMessage message) {
         int type = message.getType();
         if (type == DatabaseStoreMessage.MESSAGE_TYPE) {

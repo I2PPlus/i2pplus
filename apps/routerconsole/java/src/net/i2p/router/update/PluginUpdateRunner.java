@@ -56,9 +56,19 @@ class PluginUpdateRunner extends UpdateRunner {
 
     private static final String XPI2P = "app.xpi2p";
     private static final String ZIP = XPI2P + ".zip";
+    /**
+     * PLUGIN_DIR.
+     */
     public static final String PLUGIN_DIR = PluginStarter.PLUGIN_DIR;
     private static final String PROP_ALLOW_NEW_KEYS = "routerconsole.allowUntrustedPlugins";
 
+    /**
+     * @param ctx the router context
+     * @param mgr the update manager
+     * @param uris update source URIs
+     * @param appName the plugin name
+     * @param oldVersion current installed version
+     */
     public PluginUpdateRunner(
             RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris, String appName, String oldVersion) {
         super(ctx, mgr, UpdateType.PLUGIN, uris);
@@ -85,16 +95,25 @@ class PluginUpdateRunner extends UpdateRunner {
         _appDisplayName = appDisplayName;
     }
 
+    /**
+     * getURI.
+     */
     @Override
     public URI getURI() {
         return _uri;
     }
 
+    /**
+     * getID.
+     */
     @Override
     public String getID() {
         return _appName;
     }
 
+    /**
+     * update.
+     */
     @Override
     protected void update() {
 
@@ -166,6 +185,9 @@ class PluginUpdateRunner extends UpdateRunner {
         _mgr.notifyProgress(this, status, d, d + bytesRemaining);
     }
 
+    /**
+     * Handle completion of plugin download.
+     */
     @Override
     public void transferComplete(
             long alreadyTransferred,
@@ -629,6 +651,9 @@ class PluginUpdateRunner extends UpdateRunner {
         }
     }
 
+    /**
+     * transferFailed.
+     */
     @Override
     public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
         File f = new File(_updateFile);

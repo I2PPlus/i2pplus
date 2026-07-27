@@ -29,6 +29,9 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
     private static final long NEW_INSTALL_DELAY = 25 * (long) 60 * 1000;
     private static final long RUN_DELAY = 10 * (long) 60 * 1000;
 
+    /**
+     * NewsTimerTask.
+     */
     public NewsTimerTask(RouterContext ctx, ConsoleUpdateManager mgr) {
         super(ctx.simpleTimer2());
         _context = ctx;
@@ -44,6 +47,9 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
         // UpdateManager calls NewsFetcher to check the existing news at startup
     }
 
+    /**
+     * timeReached.
+     */
     public void timeReached() {
         schedule(RUN_DELAY);
         if (shouldFetchNews()) {
@@ -113,11 +119,17 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
      * @since 0.9.9
      */
     private class Fetcher extends I2PAppThread {
+        /**
+         * Fetcher.
+         */
         public Fetcher() {
             super("News Fetcher");
             setDaemon(true);
         }
 
+        /**
+         * run.
+         */
         public void run() {
             // blocking
             fetchNews();

@@ -15,13 +15,19 @@ import net.i2p.util.Log;
  */
 public class RegexOutputStream extends FilterOutputStream {
 
+    /** ignored */
     private final String match;
+    /** ignored */
     private final String repl;
     /** parse in progress */
     private final StringBuilder buf;
+    /** ignored */
     private final String noMatch;
+    /** ignored */
     private final Log _log;
+    /** ignored */
     private boolean found;
+    /** index */
     int idx;
 
     /**
@@ -44,6 +50,9 @@ public class RegexOutputStream extends FilterOutputStream {
             _log.debug("New regex replace '" + match + "' with '" + repl + "'");
     }
 
+    /**
+     * write.
+     */
     @Override
     public void write(int val) throws IOException {
         char c = (char) val;
@@ -117,6 +126,9 @@ public class RegexOutputStream extends FilterOutputStream {
         idx = 0;
     }
 
+    /**
+     * close.
+     */
     @Override
     public void close() throws IOException {
         flushit();
@@ -128,9 +140,4 @@ public class RegexOutputStream extends FilterOutputStream {
         super.close();
     }
 
-    public static void main(String[] args) throws Exception {
-        OutputStream out = new RegexOutputStream(System.out, args[0], args[1], null);
-        net.i2p.data.DataHelper.copy(System.in, out);
-        out.flush();
-    }
 }

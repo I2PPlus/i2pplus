@@ -49,20 +49,30 @@ public class LinearInterpolator extends Plottable {
      * @author Fabrice Bacchella
      */
     public enum Method {
+        /** Use the previous value for interpolation */
         LEFT,
+        /** Use the next value for interpolation */
         RIGHT,
+        /** Standard linear interpolation between adjacent points */
         LINEAR,
+        /** Linear regression over all data points */
         REGRESSION
     }
+    /** Last index used */
 
     private int lastIndexUsed = 0;
+    /** Interpolation method */
     private Method interpolationMethod = Method.LINEAR;
+    /** Array of timestamps for the data series */
 
     private final long[] timestamps;
+    /** Values */
     private final double[] values;
 
     // used only if INTERPOLATE_BESTFIT is specified
+    /** B0 */
     double b0 = Double.NaN;
+    /** B1 */
     double b1 = Double.NaN;
 
     /**
@@ -112,6 +122,9 @@ public class LinearInterpolator extends Plottable {
         }
         validate();
     }
+    /**
+     * Validate the current processing state
+     */
 
     private void validate() {
         boolean ok = true;
@@ -197,6 +210,9 @@ public class LinearInterpolator extends Plottable {
         }
         this.interpolationMethod = interpolationMethod;
     }
+    /**
+     * Calculate best fit line
+     */
 
     private void calculateBestFitLine() {
         int count = timestamps.length;

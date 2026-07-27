@@ -25,11 +25,17 @@ public class LoadClientAppsJob extends JobImpl {
     private final Log _log;
     private static boolean _loaded = false;
 
+    /**
+     * LoadClientAppsJob.
+     */
     public LoadClientAppsJob(RouterContext ctx) {
         super(ctx);
         _log = ctx.logManager().getLog(LoadClientAppsJob.class);
     }
 
+    /**
+     * runJob.
+     */
     public void runJob() {
         synchronized (LoadClientAppsJob.class) {
             if (_loaded) return;
@@ -74,6 +80,9 @@ public class LoadClientAppsJob extends JobImpl {
      *  Public for router console only, not for use by others, subject to change
      */
     public static class DelayedRunClient extends SimpleTimer2.TimedEvent {
+        /**
+         * _ctx.
+         */
         protected final RouterContext _ctx;
         private final String _className;
         private final String _clientName;
@@ -101,6 +110,9 @@ public class LoadClientAppsJob extends JobImpl {
             _cl = cl;
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             runClient(_className, _clientName, _args, _ctx, _log, _threadGroup, _cl);
         }
@@ -112,6 +124,9 @@ public class LoadClientAppsJob extends JobImpl {
             super(pool, enclosingContext, className, clientName, args, null, null);
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             if (!_ctx.router().isRunning()) {
                  reschedule(1000);
@@ -273,6 +288,9 @@ public class LoadClientAppsJob extends JobImpl {
         private final Log _log;
         private final ClassLoader _cl;
 
+        /**
+         * RunApp.
+         */
         public RunApp(String className, String appName, String[] args, RouterContext ctx, Log log, ClassLoader cl) {
             _className = className;
             _appName = appName;
@@ -288,6 +306,9 @@ public class LoadClientAppsJob extends JobImpl {
                 _cl = cl;
         }
 
+        /**
+         * run.
+         */
         public void run() {
             boolean ok = false;
             try {
@@ -340,6 +361,9 @@ public class LoadClientAppsJob extends JobImpl {
         }
     }
 
+    /**
+     * getName.
+     */
     public String getName() { return "Load Client Applications"; }
 
 }

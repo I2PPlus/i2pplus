@@ -28,9 +28,11 @@ public final class MLKEM {
 
     private MLKEM() {}
 
-    /** all non-threaded for now */
+    /** MLKEM-512 key factory */
     public static final KeyFactory MLKEM512KeyFactory = new MLKEMFactory(EncType.MLKEM512_X25519_INT);
+    /** MLKEM-768 key factory */
     public static final KeyFactory MLKEM768KeyFactory = new MLKEMFactory(EncType.MLKEM768_X25519_INT);
+    /** MLKEM-1024 key factory */
     public static final KeyFactory MLKEM1024KeyFactory = new MLKEMFactory(EncType.MLKEM1024_X25519_INT);
 
     private static class MLKEMFactory implements KeyFactory {
@@ -50,6 +52,7 @@ public final class MLKEM {
      *
      *  @param type must be one of the internal types MLKEM*_INT
      *  @return encapkey decapkey
+     *  @throws GeneralSecurityException on failure
      */
     public static KeyPair getKeys(EncType type) throws GeneralSecurityException {
         byte[][] keys = generateKeys(type);
@@ -63,6 +66,7 @@ public final class MLKEM {
      *
      *  @param type must be one of the internal types MLKEM*_INT
      *  @return encapkey decapkey
+     *  @throws GeneralSecurityException on failure
      */
     public static byte[][] generateKeys(EncType type) throws GeneralSecurityException {
         MLKEMParameters param = getParam(type);
@@ -80,7 +84,10 @@ public final class MLKEM {
     /**
      *  Bob side
      *
+     *  @param type the encryption type
+     *  @param pub the public key
      *  @return ciphertext sharedkey, non-null
+     *  @throws GeneralSecurityException on failure
      */
     public static byte[][] encaps(EncType type, byte[] pub)
                         throws GeneralSecurityException {
@@ -103,7 +110,11 @@ public final class MLKEM {
      *  Alice side
      *  Note that this will not fail???
      *
+     *  @param type the encryption type
+     *  @param ciphertext the ciphertext to decrypt
+     *  @param decapkey the decapsulation key
      *  @return sharedkey, 32 bytes, non-null
+     *  @throws GeneralSecurityException on failure
      */
     public static byte[] decaps(EncType type, byte[] ciphertext, byte[] decapkey)
                         throws GeneralSecurityException {

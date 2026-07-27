@@ -17,13 +17,22 @@ import net.i2p.data.DataHelper;
  * @author jrandom
  */
 public class GarlicMessage extends FastI2NPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public final static int MESSAGE_TYPE = 11;
     private byte[] _data;
 
+    /**
+     * GarlicMessage.
+     */
     public GarlicMessage(I2PAppContext context) {
         super(context);
     }
 
+    /**
+     * getData.
+     */
     public byte[] getData() {
         return _data;
     }
@@ -37,10 +46,13 @@ public class GarlicMessage extends FastI2NPMessageImpl {
         _data = data;
     }
 
+    /**
+     * readMessage.
+     */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
-        
+
         int len = (int) DataHelper.fromLong(data, curIndex, 4);
         curIndex += 4;
         if (len <= 0 || len > MAX_SIZE || len + 4 != dataSize) throw new I2NPMessageException("size="+len);
@@ -61,13 +73,22 @@ public class GarlicMessage extends FastI2NPMessageImpl {
         return curIndex;
     }
 
+    /**
+     * getType.
+     */
     public int getType() { return MESSAGE_TYPE; }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return DataHelper.hashCode(getData());
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if ( (object != null) && (object instanceof GarlicMessage) ) {
@@ -78,6 +99,9 @@ public class GarlicMessage extends FastI2NPMessageImpl {
         }
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return "GarlicMessage ID: " + getUniqueId() + " (" + getData().length + " bytes)";

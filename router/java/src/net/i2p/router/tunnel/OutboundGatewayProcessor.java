@@ -16,6 +16,7 @@ class OutboundGatewayProcessor {
     private final I2PAppContext _context;
     private final TunnelCreatorConfig _config;
 
+    /** method comment */
     public OutboundGatewayProcessor(I2PAppContext ctx, TunnelCreatorConfig cfg) {
         _context = ctx;
         _config = cfg;
@@ -58,6 +59,8 @@ class OutboundGatewayProcessor {
      * @param orig original data with an extra 16 byte IV prepended.
      * @param offset index into the array where the extra 16 bytes (IV) begins
      * @param length how much of orig can we write to (must be a multiple of 16).
+4 * @param config the config
+4 * @param ctx the ctx
      *               Should always be 1024 bytes.
      */
     static void decrypt(I2PAppContext ctx, byte[] orig, int offset, int length, HopConfig config) {

@@ -134,6 +134,9 @@ public class IdenticonUtil {
 		return code;
 	}
 
+	/**
+	 * getIdenticonSize.
+	 */
 	public static int getIdenticonSize(String param) {
 		int size = DEFAULT_IDENTICON_SIZE;
 		try {
@@ -151,6 +154,9 @@ public class IdenticonUtil {
 		return size;
 	}
 
+	/**
+	 * getIdenticonETag.
+	 */
 	public static String getIdenticonETag(int code, int size, int version) {
 		StringBuilder s = new StringBuilder("W/\"");
 		s.append(Integer.toHexString(code));

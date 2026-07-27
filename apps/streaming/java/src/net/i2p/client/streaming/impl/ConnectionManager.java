@@ -30,6 +30,7 @@ import net.i2p.util.SimpleTimer2;
  *
  *
  */
+/** ignored */
 class ConnectionManager {
     private final I2PAppContext _context;
     private final Log _log;
@@ -86,6 +87,7 @@ class ConnectionManager {
      * Default 20s — balances reuse vs staleness.
      * Tunable via i2p.streaming.poolMaxIdleMs.
      */
+    /** ignored */
     private long getPoolMaxIdleMs() {
         return _context.getProperty("i2p.streaming.poolMaxIdleMs", 20 * 1000);
     }
@@ -95,6 +97,7 @@ class ConnectionManager {
      * Default 8 — limits memory per peer.
      * Tunable via i2p.streaming.poolMaxPerDestination.
      */
+    /** ignored */
     private int getPoolMaxPerDestination() {
         return _context.getProperty("i2p.streaming.poolMaxPerDestination", 8);
     }
@@ -106,6 +109,7 @@ class ConnectionManager {
      * connection state reset.
      * Tunable via i2p.streaming.streamPool.enabled (default: false).
      */
+    /** ignored */
     private boolean isPoolEnabled() {
         return _context.getProperty("i2p.streaming.streamPool.enabled", false);
     }
@@ -114,6 +118,7 @@ class ConnectionManager {
      * Cooldown between connection attempts to the same failed destination.
      * Tunable via i2p.streaming.destinationCooldownMs (default: 60000).
      */
+    /** ignored */
     private long getDestCooldownMs() {
         return _context.getProperty("i2p.streaming.destinationCooldownMs", 5*1000);
     }
@@ -124,12 +129,16 @@ class ConnectionManager {
     private static volatile String _currentBlacklist = "";
     private static final Set<Hash> _globalBlacklist = new ConcurrentHashSet<>();
 
-    /** @since 0.9.3 */
+    /**
+     *  Blacklist property for streaming.
+     *  @since 0.9.3
+     */
     public static final String PROP_BLACKLIST = "i2p.streaming.blacklist";
 
     /**
      * Maximum ping timeout. Tunable via i2p.streaming.maxPingTimeout (default: 300000).
      */
+    /** ignored */
     private long getMaxPingTimeout() {
         return _context.getProperty("i2p.streaming.maxPingTimeout", 5*60*1000);
     }
@@ -140,14 +149,16 @@ class ConnectionManager {
      * Once over throttle limits, respond this many times before just dropping.
      * Tunable via i2p.streaming.dropOverLimit (default: 3).
      */
+    /** ignored */
     private int getDropOverLimit() {
         return _context.getProperty("i2p.streaming.dropOverLimit", 3);
     }
 
-    /* @since 0.9.54+ */
+    /** @since 0.9.54+ */
     private static final String PROP_ENABLE_PONG_DELAY = "i2p.streaming.enablePongDelay";
     private static final boolean DEFAULT_ENABLE_PONG_DELAY = false;
     private static final int MAX_PONG_DELAY = 50;
+    /** P r o p  m a x  p o n g  d e l a y */
     static final String PROP_MAX_PONG_DELAY = "i2p.streaming.maxPongDelay";
 
     // https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
@@ -170,7 +181,10 @@ class ConnectionManager {
     /**
      *  Manage all conns for this session
      *
+     *  @param context the I2P app context
      *  @param session the primary session, packets may come in on subsessions also
+     *  @param defaultOptions the default connection options
+     *  @param connectionFilter the incoming connection filter
      */
     public ConnectionManager(I2PAppContext context,
                              I2PSession session,
@@ -235,6 +249,7 @@ class ConnectionManager {
      * @param id the inbound stream ID
      * @return the connection, or null if not found
      */
+    /** ignored */
     Connection getConnectionByInboundId(long id) {
         return _connectionByInboundId.get(Long.valueOf(id));
     }
@@ -247,6 +262,7 @@ class ConnectionManager {
      * @param id the outbound stream ID
      * @return the connection, or null if not found
      */
+    /** ignored */
     Connection getConnectionByOutboundId(long id) {
         return _connectionByOutboundId.get(id);
     }
@@ -255,6 +271,7 @@ class ConnectionManager {
      *  Was this conn recently closed?
      *  @since 0.9.12
      */
+    /** ignored */
     public boolean wasRecentlyClosed(long inboundID) {
         synchronized(_recentlyClosed) {
             // use get() instead of containsKey() to update LRU access order,
@@ -267,6 +284,7 @@ class ConnectionManager {
      * Set the socket accept() timeout.
      * @param x
      */
+    /** ignored */
     public void setSoTimeout(long x) {
         _soTimeout = x;
     }
@@ -275,6 +293,7 @@ class ConnectionManager {
      * Get the socket accept() timeout.
      * @return accept timeout in ms.
      */
+    /** ignored */
     public long getSoTimeout() {
         return _soTimeout;
     }
@@ -285,6 +304,7 @@ class ConnectionManager {
      *
      * @param allow true to accept incoming connections
      */
+    /** ignored */
     public void setAllowIncomingConnections(boolean allow) {
         _connectionHandler.setActive(allow);
         if (allow) {
@@ -297,10 +317,12 @@ class ConnectionManager {
         }
     }
 
-    /*
+    /**
      * Update the throttler options
+     *
      * @since 0.9.3
      */
+    /** ignored */
     public synchronized void updateOptions() {
             if ((_defaultOptions.getMaxConnsPerMinute() > 0 || _defaultOptions.getMaxTotalConnsPerMinute() > 0) &&
                 _minuteThrottler == null) {
@@ -328,7 +350,10 @@ class ConnectionManager {
             }
     }
 
-    /** @return if we should accept connections */
+    /**
+     *  @return if we should accept connections
+     */
+    /** ignored */
     public boolean getAllowIncomingConnections() {
         return _connectionHandler.getActive();
     }
@@ -341,6 +366,7 @@ class ConnectionManager {
      *         or null if the syn's streamId was already taken,
      *         or if the connection was rejected
      */
+    /** ignored */
     public Connection receiveConnection(Packet synPacket) {
         Destination from = synPacket.getOptionalFrom();
         if (from == null) {
@@ -514,6 +540,7 @@ class ConnectionManager {
         try {
             // This validates the packet, and sets the con's SendStreamID and RemotePeer
             con.getPacketHandler().receivePacket(synPacket, con);
+        /** ignored */
         } catch (I2PException ie) {
             _connectionByInboundId.remove(Long.valueOf(con.getReceiveStreamId()));
             return null;
@@ -532,6 +559,7 @@ class ConnectionManager {
      *  @return true if we sent a pong
      *  @since 0.9.12 from PacketHandler.receivePing()
      */
+    /** ignored */
     public boolean receivePing(Connection con, Packet ping) {
         Destination dest = ping.getOptionalFrom();
         if (dest == null)
@@ -586,6 +614,7 @@ class ConnectionManager {
      *
      *  @since 0.9.12 consolidated from receiveConnection() and connect()
      */
+    /** ignored */
     private void assignReceiveStreamId(Connection con) {
         long receiveId;
         synchronized(_recentlyClosed) {
@@ -606,6 +635,7 @@ class ConnectionManager {
      *
      *  @since 0.9.12
      */
+    /** ignored */
     private long assignPingId(PingRequest req) {
         long receiveId;
         synchronized(_recentlyClosed) {
@@ -626,6 +656,7 @@ class ConnectionManager {
      *
      *  @since 0.9.34
      */
+    /** ignored */
     private long assignRejectId() {
         long receiveId;
         synchronized(_recentlyClosed) {
@@ -644,6 +675,7 @@ class ConnectionManager {
      * Default stream delay maximum when no connect timeout is set.
      * Tunable via i2p.streaming.defaultStreamDelayMax (default: 10000).
      */
+    /** ignored */
     private long getDefaultStreamDelayMax() {
         return _context.getProperty("i2p.streaming.defaultStreamDelayMax", 10*1000);
     }
@@ -657,6 +689,7 @@ class ConnectionManager {
      * @param session generally the session from the constructor, but could be a subsession
      * @return new connection, or null if we have exceeded our limit
      */
+/** ignored */
 public Connection connect(Destination peer, ConnectionOptions opts, I2PSession session) {
           if (peer == null) {throw new NullPointerException();}
           Connection con = null;
@@ -721,6 +754,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
        * Handles cooldown, waitForConnect, stats recording.
        * @param fromPool if true, skip cooldown delay (connection already established)
        */
+      /** ignored */
       private Connection finalizeConnection(Connection con, Destination peer,
                                              ConnectionOptions opts, long connectStart,
                                              boolean fromPool) {
@@ -739,6 +773,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                       synchronized (_cooldownLock) {
                           try {
                               _cooldownLock.wait(delay);
+                          /** ignored */
                           } catch (InterruptedException ie) {
                               Thread.currentThread().interrupt();
                           }
@@ -805,12 +840,6 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
-     * Attempt to acquire a valid pooled connection for the given destination.
-     * @param peer Destination to connect to
-     * @return Valid Connection from pool, or null if none available
-     */
-
-    /**
      *  Doesn't need to be locked any more.
      *  Cached for 1s to avoid O(n) scan on every SYN burst.
      *  @return too many
@@ -818,6 +847,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     private volatile long _lastTooManyCheck;
     private volatile boolean _lastTooManyResult;
 
+    /** ignored */
     private boolean locked_tooManyStreams() {
         long now = _context.clock().now();
         if (now - _lastTooManyCheck < 1000)
@@ -858,17 +888,30 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      *
      * @since 0.9.49
      */
+    /** ignored */
     private static class Reason {
         private final String txt;
         private final int seconds;
 
+        /**
+         * Reason.
+         */
+        /** ignored */
         public Reason(String text, int secs) {
             txt = text; seconds = secs;
         }
 
+        /**
+         * toString.
+         */
         @Override
+        /** ignored */
         public String toString() { return txt; }
 
+        /**
+         * getSeconds.
+         */
+        /** ignored */
         public int getSeconds() { return seconds; }
     }
 
@@ -883,6 +926,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * @return a Reason with seconds for Retry-After header; MAX_TIME for
      *         drop, 0 if unknown; or null if not rejected
      */
+    /** ignored */
     private Reason shouldRejectConnection(Packet syn) {
         // unfortunately we don't have access to the router client manager here,
         // so we can't whitelist local access
@@ -978,21 +1022,47 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
 
+    /**
+     * getMessageHandler.
+     */
+    /** ignored */
     public MessageHandler getMessageHandler() { return _messageHandler; }
+    /**
+     * getPacketHandler.
+     */
+    /** ignored */
     public PacketHandler getPacketHandler() { return _packetHandler; }
 
     /**
      * This is the primary session only
+     *
+     * @return the session
      */
+    /** ignored */
     public I2PSession getSession() { return _session; }
 
+    /** @param con the connection */
+    /** ignored */
     public void updateOptsFromShare(Connection con) { _tcbShare.updateOptsFromShare(con); }
+    /** @param con the connection */
+    /** ignored */
     public void updateShareOpts(Connection con) { _tcbShare.updateShareOpts(con); }
-    // Both of these methods are
-    // exporting non-public type through public API, this is a potential bug.
+    /**
+     * @return the connection handler
+     */
+    /** ignored */
     public ConnectionHandler getConnectionHandler() { return _connectionHandler; }
+    /**
+     * @return the outbound packet queue
+     */
+    /** ignored */
     public PacketQueue getPacketQueue() { return _outboundQueue; }
-    /** do we respond to pings that aren't on an existing connection? */
+    /**
+     * Do we respond to pings that aren't on an existing connection?
+     *
+     * @return true if we answer pings
+     */
+    /** ignored */
     public boolean answerPings() { return _defaultOptions.getAnswerPings(); }
 
     /**
@@ -1003,6 +1073,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      *
      * CAN continue to use the manager.
      */
+    /** ignored */
     public void disconnectAllHard() {
         for (Iterator<Connection> iter = _connectionByInboundId.values().iterator(); iter.hasNext(); ) {
             Connection con = iter.next();
@@ -1028,6 +1099,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      *
      * @since 0.9.7
      */
+    /** ignored */
     public void shutdown() {
         disconnectAllHard();
         _destFailures.clear();
@@ -1043,6 +1115,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * Wrapper for a pooled connection with metadata.
      * @since 0.9.70+
      */
+    /** ignored */
     private static class PooledConnection {
         final Connection connection;
         final long pooledAt;
@@ -1054,10 +1127,12 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
             this.lastUsed = new AtomicLong(now);
         }
 
+        /** ignored */
         boolean isStale(long maxIdleMs, long now) {
             return now - lastUsed.get() > maxIdleMs;
         }
 
+        /** ignored */
         void touch(long now) {
             lastUsed.set(now);
         }
@@ -1067,6 +1142,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * Try to acquire a pooled connection for the given destination.
      * Returns a valid connection or null if none available.
      */
+    /** ignored */
     private Connection acquireFromPool(Destination peer) {
         Hash destHash = peer.calculateHash();
         ConcurrentLinkedDeque<PooledConnection> pool = _streamPools.get(destHash);
@@ -1107,6 +1183,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * Return a connection to the pool if healthy.
      * Called from removeConnection().
      */
+    /** ignored */
     private void returnToPool(Connection con) {
         if (!isPoolEnabled())
             return;
@@ -1148,6 +1225,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * Periodic pool cleanup — evicts stale connections.
      * Called from timer or on shutdown.
      */
+    /** ignored */
     void cleanupPool() {
         long now = _context.clock().now();
         long maxIdle = getPoolMaxIdleMs();
@@ -1160,6 +1238,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
             }
         }
     }
+    /** ignored */
     void registerOutboundId(Connection con) {
         long sendId = con.getSendStreamId();
         if (sendId > 0)
@@ -1171,6 +1250,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      *
      * @param con Connection to drop.
      */
+    /** ignored */
     public void removeConnection(Connection con) {
 
         // Attempt to return to pool before removing
@@ -1228,6 +1308,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     /** return a set of Connection objects
      * @return set of Connection objects
      */
+    /** ignored */
     public Set<Connection> listConnections() {
             return new HashSet<>(_connectionByInboundId.values());
     }
@@ -1235,9 +1316,11 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     /**
      *  blocking
      *
+     *  @param peer the destination
      *  @param timeoutMs greater than zero
      *  @return true if pong received
      */
+    /** ignored */
     public boolean ping(Destination peer, long timeoutMs) {
         return ping(peer, 0, 0, timeoutMs, true, null);
     }
@@ -1245,29 +1328,47 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     /**
      *  blocking
      *
+     *  @param peer the destination
+     *  @param fromPort the source port
+     *  @param toPort the destination port
      *  @param timeoutMs greater than zero
      *  @return true if pong received
      *  @since 0.9.12 added port args
      */
+    /** ignored */
     public boolean ping(Destination peer, int fromPort, int toPort, long timeoutMs) {
         return ping(peer, fromPort, toPort, timeoutMs, true, null);
     }
 
     /**
+     *  blocking
+     *
+     *  @param peer the destination
+     *  @param fromPort the source port
+     *  @param toPort the destination port
      *  @param timeoutMs greater than zero
+     *  @param blocking true to block until pong
      *  @return true if blocking and pong received
      *  @since 0.9.12 added port args
      */
+    /** ignored */
     public boolean ping(Destination peer, int fromPort, int toPort, long timeoutMs, boolean blocking) {
         return ping(peer, fromPort, toPort, timeoutMs, blocking, null);
     }
 
     /**
+     *  blocking
+     *
+     *  @param peer the destination
+     *  @param fromPort the source port
+     *  @param toPort the destination port
      *  @param timeoutMs greater than zero
+     *  @param blocking true to block until pong
      *  @param notifier may be null
      *  @return true if blocking and pong received
      *  @since 0.9.12 added port args
      */
+    /** ignored */
     public boolean ping(Destination peer, int fromPort, int toPort, long timeoutMs,
                         boolean blocking, PingNotifier notifier) {
         PingRequest req = new PingRequest(notifier);
@@ -1308,12 +1409,16 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     /**
      *  blocking
      *
+     *  @param peer the destination
+     *  @param fromPort the source port
+     *  @param toPort the destination port
      *  @param timeoutMs greater than zero
      *  @param payload non-null, include in packet, up to 32 bytes may be returned in pong
      *                 not copied, do not modify
      *  @return the payload received in the pong, zero-length if none, null on failure or timeout
      *  @since 0.9.18
      */
+    /** ignored */
     public byte[] ping(Destination peer, int fromPort, int toPort, long timeoutMs,
                         byte[] payload) {
         PingRequest req = new PingRequest(null);
@@ -1326,6 +1431,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         packet.setOptionalFrom();
         packet.setLocalPort(fromPort);
         packet.setRemotePort(toPort);
+        /** ignored */
         packet.setPayload(new ByteArray(payload));
         if (timeoutMs > getMaxPingTimeout())
             timeoutMs = getMaxPingTimeout();
@@ -1358,10 +1464,12 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      *  The callback interface for a pong.
      *  Unused? Not part of the public streaming API.
      */
+    /** PingNotifier */
     public interface PingNotifier {
         /**
          *  @param ok true if pong received; false if timed out
          */
+        /** ignored */
         public void pingComplete(boolean ok);
     }
 
@@ -1369,16 +1477,25 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * Timer event that removes a pending ping from the map
      * and notifies the caller on timeout.
      */
+    /** ignored */
     private class PingFailed extends SimpleTimer2.TimedEvent {
         private final Long _id;
         private final PingNotifier _notifier;
 
+        /**
+         * PingFailed.
+         */
+        /** ignored */
         public PingFailed(Long id, PingNotifier notifier) {
             super(_timer.getSharedTimer());
             _id = id;
             _notifier = notifier;
         }
 
+        /**
+         * timeReached.
+         */
+        /** ignored */
         public void timeReached() {
             PingRequest pr = _pendingPings.remove(_id);
             if (pr != null) {
@@ -1394,12 +1511,14 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * Holds the state for a pending ping request, including
      * optional payload and notification callback.
      */
+    /** ignored */
     private static class PingRequest {
         private boolean _ponged;
         private ByteArray _payload;
         private final PingNotifier _notifier;
 
         /** @param notifier may be null */
+        /** ignored */
         public PingRequest(PingNotifier notifier) {
             _notifier = notifier;
         }
@@ -1407,6 +1526,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         /**
          *  @param payload may be null
          */
+        /** ignored */
         public void pong(ByteArray payload) {
             // static, no log
             synchronized (this) {
@@ -1418,24 +1538,27 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                 _notifier.pingComplete(true);
         }
 
+        /**
+         * pongReceived.
+         */
+        /** ignored */
         public synchronized boolean pongReceived() { return _ponged; }
 
         /**
          *  @return null if no payload or no pong received
          *  @since 0.9.18
          */
+        /** ignored */
         public synchronized ByteArray getPayload() { return _payload; }
     }
 
-    /**
-     *  @param payload may be null
-     */
     /**
      * Process a received pong response.
      *
      * @param pingId the ping stream ID to match
      * @param payload the pong payload, may be null
      */
+    /** ignored */
     void receivePong(long pingId, ByteArray payload) {
         PingRequest req = _pendingPings.remove(Long.valueOf(pingId));
         if (req != null)
@@ -1446,6 +1569,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      *  @since 0.9.21
      */
     @Override
+    /** ignored */
     public String toString() {
         return "ConnectionManager for " + _session;
     }

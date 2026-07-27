@@ -17,15 +17,15 @@ import net.i2p.util.Log;
 
 /**
  * Emulation of javax.swing.JTextArea for the NDT (Network Diagnostic Tool) plugin.
- * 
+ *
  * <p>This class provides a functional text area component that captures text output
  * from the NDT tool and logs it to the I2P logging system. Unlike other components
  * in this package, JTextArea provides actual functionality by storing text content
  * and forwarding it to the I2P logger.</p>
- * 
+ *
  * <p>This allows NDT test results and status messages to be captured and logged
  * even in headless environments without requiring an actual graphical display.</p>
- * 
+ *
  */
 public class
 JTextArea
@@ -34,6 +34,11 @@ JTextArea
 	private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(Tcpbw100.class);
 	private final StringBuilder text = new StringBuilder();
 
+	/**
+	 * @param str the initial text
+	 * @param a ignored
+	 * @param b ignored
+	 */
 	public
 	JTextArea(
 		String		str,
@@ -43,6 +48,7 @@ JTextArea
 		text.append(str);
 	}
 
+	/** @param str the text to append */
 	public void
 	append(
 		String		str )
@@ -52,12 +58,14 @@ JTextArea
 		text.append(str);
 	}
 
+	/** @return the text */
 	public String
 	getText()
 	{
 		return text.toString();
 	}
 
+	/** no-op */
 	public void
 	selectAll()
 	{

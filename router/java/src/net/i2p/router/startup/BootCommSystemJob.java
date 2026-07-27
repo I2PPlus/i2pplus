@@ -20,8 +20,13 @@ import net.i2p.util.SystemVersion;
 class BootCommSystemJob extends JobImpl {
     private final Log _log;
 
+    /** Property to enable trusted links */
     public static final String PROP_USE_TRUSTED_LINKS = "router.trustedLinks";
 
+    /**
+     * Create a new BootCommSystemJob.
+     * @param context the router context
+     */
     public BootCommSystemJob(RouterContext context) {
         super(context);
         _log = context.logManager().getLog(BootCommSystemJob.class);

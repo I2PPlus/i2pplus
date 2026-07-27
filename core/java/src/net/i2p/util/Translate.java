@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 0.7.9
  */
 public abstract class Translate {
+    /** prop lang */
     public static final String PROP_LANG = "routerconsole.lang";
 
     /** @since 0.9.10 */
@@ -78,6 +79,9 @@ public abstract class Translate {
      *    To translate parameter also, use _t("foo {0} bar", _t("baz"))
      *    Do not double the single quotes in the parameter.
      *    Use autoboxing to call with ints, longs, floats, etc.
+4 * @param ctx the ctx
+4 * @param bun the bun
+4 * @return the result
      */
     public static String getString(String s, Object o, I2PAppContext ctx, String bun) {
         return getString(s, ctx, bun, o);
@@ -93,6 +97,10 @@ public abstract class Translate {
      *
      *  @param oArray parameters
      *  @since 0.9.8
+4 * @param s the s
+4 * @param ctx the ctx
+4 * @param bun the bun
+4 * @return the result
      */
     public static String getString(String s, I2PAppContext ctx, String bun, Object... oArray) {
         String lang = getLanguage(ctx);
@@ -115,6 +123,9 @@ public abstract class Translate {
      *  @param s singluar string, optionally with {0} e.g. "one tunnel"
      *  @param p plural string optionally with {0} e.g. "{0} tunnels"
      *  @since 0.7.14
+4 * @param ctx the ctx
+4 * @param bun the bun
+4 * @return the result
      */
     public static String getString(int n, String s, String p, I2PAppContext ctx, String bun) {
         String lang = getLanguage(ctx);
@@ -139,6 +150,7 @@ public abstract class Translate {
      *  Two- or three-letter lower case
      *
      *  @return lang in routerconsole.lang property, else current locale
+4 * @param ctx the ctx
      */
     public static String getLanguage(I2PAppContext ctx) {
         String lang = ctx.getProperty(PROP_LANG);
@@ -146,7 +158,8 @@ public abstract class Translate {
         return lang;
     }
 
-    /*  Are we configured for a right-to-left language?
+    /**
+     *  Are we configured for a right-to-left language?
      *  @return true for supported RTL languages
      *  @since 0.9.46
      */

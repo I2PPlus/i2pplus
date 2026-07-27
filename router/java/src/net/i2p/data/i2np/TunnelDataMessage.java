@@ -28,8 +28,10 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     private TunnelId _tunnelIdObj;
     private byte[] _data;
     private ByteArray _dataBuf;
+/** Message type ID for this I2NP message */
 
     public final static int MESSAGE_TYPE = 18;
+/** Size of the data payload in bytes */
     public static final int DATA_SIZE = 1024;
     /** if we can't deliver a tunnel message in 10s, forget it */
     private static final int EXPIRATION_PERIOD = 10*1000;
@@ -54,11 +56,13 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
 
     /** For use-after-free checks. Always false if PIPELINED_CACHE is false. */
     private boolean _hadCache;
+/** Tunneldatamessage */
 
     public TunnelDataMessage(I2PAppContext context) {
         super(context);
         setMessageExpiration(context.clock().now() + EXPIRATION_PERIOD);
     }
+/** Return the tunnelId */
 
     public long getTunnelId() {return _tunnelId;}
 
@@ -69,6 +73,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         _hasChecksum = false;
         _tunnelId = id;
     }
+/** Return the tunnelIdObj */
 
     public TunnelId getTunnelIdObj() {
         if (_tunnelIdObj == null) {_tunnelIdObj = new TunnelId(_tunnelId);} // not thread safe, but immutable, so who cares
@@ -83,6 +88,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         _tunnelIdObj = id;
         _tunnelId = id.getTunnelId();
     }
+/** Return the data */
 
     public byte[] getData() {
         if (_hadCache && _dataBuf == null) {
@@ -101,6 +107,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         if ((data == null) || (data.length <= 0)) {throw new IllegalArgumentException("Empty tunnel payload?");}
         _data = data;
     }
+/** Read and parse the message from raw data into fields */
 
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
@@ -150,12 +157,19 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         // dataBufs released - but received TDMs do (via FragmentHandler)
         return curIndex;
     }
+/** Return the type */
 
     public int getType() {return MESSAGE_TYPE;}
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {return (int)_tunnelId +DataHelper.hashCode(_data);}
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if ((object != null) && (object instanceof TunnelDataMessage)) {
@@ -164,6 +178,9 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         } else {return false;}
     }
 
+    /**
+     * toByteArray.
+     */
     @Override
     public byte[] toByteArray() {
         byte[] rv = super.toByteArray();
@@ -171,6 +188,9 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         return rv;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         long uid = getUniqueId();

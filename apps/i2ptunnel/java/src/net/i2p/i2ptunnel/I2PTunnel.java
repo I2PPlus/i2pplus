@@ -95,8 +95,12 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     private final Properties _clientOptions;
     private final Set<I2PSession> _sessions;
     private final TunnelController _controller;
+    /**
+     * PACKET_DELAY.
+     */
     public static final int PACKET_DELAY = 80;
 
+    /** Whether to use own destination */
     public volatile boolean ownDest = false;
 
     /** the I2CP port, non-null */
@@ -106,6 +110,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /** the listen-on host. Sadly the listen-on port does not have a field. */
     public String listenHost = host;
 
+    /** Default read timeout for tunnel connections (-1 = no timeout) */
     public long readTimeout = -1;
 
     /**
@@ -135,6 +140,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /** @since 0.9.17 */
     private enum CloseMode { NORMAL, FORCED, DESTROY }
 
+    /** Command-line entry point */
     public static void main(String[] args) {
         try {
             new I2PTunnel(args);
@@ -154,8 +160,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      *  New standard constructor in router, with back ref to tc
+     *
      *  @param tc may be null
-     *  @throws IllegalArgumentException
+     *  @throws IllegalArgumentException on error
      *  @since 0.9.48
      */
     public I2PTunnel(TunnelController tc) {
@@ -164,7 +171,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      *  See usage() for options
-     *  @throws IllegalArgumentException
+     *
+     *  @param args command-line arguments
+     *  @throws IllegalArgumentException on error
      */
     public I2PTunnel(String[] args) {
         this(args, null);
@@ -172,8 +181,10 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      *  See usage() for options
+     *
+     *  @param args command-line arguments
      *  @param lsnr may be null
-     *  @throws IllegalArgumentException
+     *  @throws IllegalArgumentException on error
      */
     public I2PTunnel(String[] args, ConnectionEventListener lsnr) {
         this(args, lsnr, null);
@@ -344,6 +355,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
+     * Returns a copy of the task list
+     *
      *  @return A copy, unmodifiable, non-null
      *  @since public since 0.9.53 for advanced plugin usage, was package private
      */
@@ -352,6 +365,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
+     * Returns a copy of the session list
+     *
      *  @return A copy, unmodifiable, non-null
      *  @since public since 0.9.53 for advanced plugin usage, was package private
      */
@@ -361,6 +376,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
+     * Add a session to the tunnel
+     *
      *  @param session null ok
      */
     void addSession(I2PSession session) {
@@ -370,6 +387,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
+     * Remove a session from the tunnel
+     *
      *  @param session null ok
      */
     void removeSession(I2PSession session) {
@@ -430,7 +449,6 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      *   <li>config - Configure I2CP connection</li>
      *   <li>genkeys - Generate destination keys</li>
      * </ul>
-     * </p>
      *
      * @param cmd the command string to execute, format: "commandName arg1 arg2 ..."
      * @param l the Logging instance for command output
@@ -646,6 +664,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Same args as runServer
      * (we should stop duplicating all this code...)
+     *
+     * @param args command arguments
+     * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      */
     public void runIrcServer(String[] args, Logging l) {
@@ -1197,7 +1218,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      * Run an SOCKS IRC tunnel on the given port number
+     *
      * @param args {portNumber [, sharedClient]} or (portNumber, ignored (false), privKeyFile)
+     * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      * @since 0.7.12
      */
@@ -2077,6 +2100,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Callback routine to find out
      */
     public interface ConnectionEventListener {
+        /**
+         * routerDisconnected().
+         */
         public void routerDisconnected();
     }
 }

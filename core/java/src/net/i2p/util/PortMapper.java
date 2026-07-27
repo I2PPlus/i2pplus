@@ -23,12 +23,18 @@ public class PortMapper {
     private final ConcurrentHashMap<String, InetSocketAddress> _dir;
     private final Set<String> _eepsites;
 
+    /** Property to prefer HTTPS */
     public static final String PROP_PREFER_HTTPS = "routerconsole.preferHTTPS";
 
+    /** Console service */
     public static final String SVC_CONSOLE = "console";
+    /** HTTPS console service */
     public static final String SVC_HTTPS_CONSOLE = "https_console";
+    /** HTTP proxy service */
     public static final String SVC_HTTP_PROXY = "HTTP";
+    /** HTTPS proxy service */
     public static final String SVC_HTTPS_PROXY = "HTTPS";
+    /** Eepsite service */
     public static final String SVC_EEPSITE = "eepsite";
 
     /** HTTPS eepsite service name.
@@ -37,11 +43,17 @@ public class PortMapper {
      */
     public static final String SVC_HTTPS_EEPSITE = "https_eepsite";
 
+    /** IRC service */
     public static final String SVC_IRC = "irc";
+    /** SOCKS service */
     public static final String SVC_SOCKS = "socks";
+    /** Tahoe-LAFS service */
     public static final String SVC_TAHOE = "tahoe-lafs";
+    /** SMTP service */
     public static final String SVC_SMTP = "SMTP";
+    /** POP3 service */
     public static final String SVC_POP = "POP3";
+    /** SAM service */
     public static final String SVC_SAM = "SAM";
 
     /** SAM-UDP service name.
@@ -56,6 +68,7 @@ public class PortMapper {
      */
     public static final String SVC_SAM_SSL = "SAM-SSL";
 
+    /** BOB service */
     public static final String SVC_BOB = "BOB";
 
     /** not necessary, already in config? */
@@ -149,6 +162,8 @@ public class PortMapper {
     public static final String DEFAULT_HOST = "127.0.0.1";
 
     /**
+     * Create a port mapper
+     *
      *  @param context unused for now
      */
     public PortMapper(I2PAppContext context) {
@@ -159,6 +174,7 @@ public class PortMapper {
     /**
      *  Add the service
      *
+     *  @param service the service name
      *  @param port &gt; 0
      *  @return success, false if already registered
      */
@@ -171,6 +187,8 @@ public class PortMapper {
      *  If service is SVC_EEPSITE or SVC_HTTPS_EEPSITE,
      *  the URL will be included in getEepsites()
      *
+     *  @param service the service name
+     *  @param host the host address
      *  @param port &gt; 0
      *  @return success, false if already registered
      *  @since 0.9.21
@@ -185,6 +203,8 @@ public class PortMapper {
     /**
      *  Is the service registered?
      *
+     *  @param service the service name
+     *  @return true if registered
      *  @since 0.9.34
      */
     public boolean isRegistered(String service) {
@@ -193,6 +213,8 @@ public class PortMapper {
 
     /**
      *  Remove the service
+     *
+     *  @param service the service name
      */
     public void unregister(String service) {
         _dir.remove(service);
@@ -204,6 +226,8 @@ public class PortMapper {
      *  If service is SVC_EEPSITE or SVC_HTTPS_EEPSITE,
      *  the URL will be removed from getEepsites()
      *
+     *  @param service the service name
+     *  @param port the port
      *  @since 0.9.34
      */
     public void unregister(String service, int port) {
@@ -220,6 +244,7 @@ public class PortMapper {
     /**
      *  Get the registered port for a service
      *
+     *  @param service the service name
      *  @return -1 if not registered
      */
     public int getPort(String service) {
@@ -230,6 +255,7 @@ public class PortMapper {
     /**
      *  Get the registered port for a service
      *
+     *  @param service the service name
      *  @param def default
      *  @return def if not registered
      */

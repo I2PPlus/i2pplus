@@ -10,6 +10,9 @@ import org.rrd4j.data.Variable;
 public enum ConsolFun {
     /** The average of the data points is stored. */
     AVERAGE {
+        /**
+         * getVariable.
+         */
         @Override
         public Variable getVariable() {
             return new Variable.AVERAGE();
@@ -18,6 +21,9 @@ public enum ConsolFun {
 
     /** The smallest of the data points is stored. */
     MIN {
+        /**
+         * getVariable.
+         */
         @Override
         public Variable getVariable() {
             return new Variable.MIN();
@@ -26,6 +32,9 @@ public enum ConsolFun {
 
     /** The largest of the data points is stored. */
     MAX {
+        /**
+         * getVariable.
+         */
         @Override
         public Variable getVariable() {
             return new Variable.MAX();
@@ -34,6 +43,9 @@ public enum ConsolFun {
 
     /** The last data point is used. */
     LAST {
+        /**
+         * getVariable.
+         */
         @Override
         public Variable getVariable() {
             return new Variable.LAST();
@@ -42,6 +54,9 @@ public enum ConsolFun {
 
     /** The fist data point is used. */
     FIRST {
+        /**
+         * getVariable.
+         */
         @Override
         public Variable getVariable() {
             return new Variable.FIRST();
@@ -50,11 +65,17 @@ public enum ConsolFun {
 
     /** The total of the data points is stored. */
     TOTAL {
+        /**
+         * getVariable.
+         */
         @Override
         public Variable getVariable() {
             return new Variable.TOTAL();
         }
     };
 
+    /**
+     * getVariable().
+     */
     public abstract Variable getVariable();
 }

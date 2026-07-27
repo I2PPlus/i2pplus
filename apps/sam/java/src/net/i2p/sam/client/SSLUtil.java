@@ -22,6 +22,9 @@ import net.i2p.util.SecureDirectory;
  */
 class SSLUtil {
 
+    /**
+     * DEFAULT_SAMCLIENT_CONFIGFILE.
+     */
     public static final String DEFAULT_SAMCLIENT_CONFIGFILE = "samclient.config";
     private static final String PROP_KEYSTORE_PASSWORD = "samclient.keystorePassword";
     private static final String PROP_KEY_PASSWORD = "samclient.keyPassword";

@@ -13,24 +13,42 @@ import net.i2p.router.transport.udp.PeerState;
  */
 class UDPSorters {
 
+    /** Sort by peer hash */
     static final int FLAG_ALPHA = 0;
+    /** Sort by inbound idle time */
     static final int FLAG_IDLE_IN = 1;
+    /** Sort by outbound idle time */
     static final int FLAG_IDLE_OUT = 2;
+    /** Sort by inbound rate */
     static final int FLAG_RATE_IN = 3;
+    /** Sort by outbound rate */
     static final int FLAG_RATE_OUT = 4;
+    /** Sort by clock skew */
     static final int FLAG_SKEW = 5;
+    /** Sort by congestion window */
     static final int FLAG_CWND= 6;
+    /** Sort by slow start threshold */
     static final int FLAG_SSTHRESH = 7;
+    /** Sort by RTT */
     static final int FLAG_RTT = 8;
+    /** Sort by RTO */
     static final int FLAG_RTO = 10;
+    /** Sort by MTU */
     static final int FLAG_MTU = 11;
+    /** Sort by sent message count */
     static final int FLAG_SEND = 12;
+    /** Sort by received message count */
     static final int FLAG_RECV = 13;
+    /** Sort by retransmitted packets */
     static final int FLAG_RESEND = 14;
+    /** Sort by duplicate packets */
     static final int FLAG_DUP = 15;
+    /** Sort by uptime */
     static final int FLAG_UPTIME = 16;
+    /** Debug sort flag */
     static final int FLAG_DEBUG = 99;
 
+    /** @return a comparator for the given sort flag */
     static Comparator<PeerState> getComparator(int sortFlags) {
         Comparator<PeerState> rv;
         switch (Math.abs(sortFlags)) {
@@ -101,6 +119,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class IdleInComparator extends PeerComparator {
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = r.getLastReceiveTime() - l.getLastReceiveTime();
@@ -114,6 +135,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class IdleOutComparator extends PeerComparator {
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = r.getLastSendTime() - l.getLastSendTime();
@@ -129,6 +153,9 @@ class UDPSorters {
     static class RateInComparator extends PeerComparator {
         private final long now = I2PAppContext.getGlobalContext().clock().now();
 
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             int rv = l.getReceiveBps(now) - r.getReceiveBps(now);
@@ -144,6 +171,9 @@ class UDPSorters {
     static class RateOutComparator extends PeerComparator {
         private final long now = I2PAppContext.getGlobalContext().clock().now();
 
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             int rv = l.getSendBps(now) - r.getSendBps(now);
@@ -157,6 +187,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class UptimeComparator extends PeerComparator {
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = r.getKeyEstablishedTime() - l.getKeyEstablishedTime();
@@ -170,6 +203,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class SkewComparator extends PeerComparator {
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = l.getClockSkew() - r.getClockSkew();
@@ -183,6 +219,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class CwndComparator extends PeerComparator {
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             int rv = l.getSendWindowBytes() - r.getSendWindowBytes();
@@ -196,6 +235,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class SsthreshComparator extends PeerComparator {
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             int rv = l.getSlowStartThreshold() - r.getSlowStartThreshold();
@@ -209,6 +251,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class RTTComparator extends PeerComparator {
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             int rv = l.getRTT() - r.getRTT();
@@ -222,6 +267,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class RTOComparator extends PeerComparator {
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             int rv = l.getRTO() - r.getRTO();
@@ -235,6 +283,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class MTUComparator extends PeerComparator {
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             int rv = l.getMTU() - r.getMTU();
@@ -251,6 +302,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class SendCountComparator extends PeerComparator {
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = l.getMessagesSent() - r.getMessagesSent();
@@ -264,6 +318,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class RecvCountComparator extends PeerComparator {
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = l.getMessagesReceived() - r.getMessagesReceived();
@@ -277,6 +334,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class ResendComparator extends PeerComparator {
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = l.getPacketsRetransmitted() - r.getPacketsRetransmitted();
@@ -290,6 +350,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class DupComparator extends PeerComparator {
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             long rv = l.getPacketsReceivedDuplicate() - r.getPacketsReceivedDuplicate();
@@ -303,12 +366,16 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class PeerComparator implements Comparator<PeerState>, Serializable {
+        /**
+         * compare.
+         */
         @Override
         public int compare(PeerState l, PeerState r) {
             return HashComparator.comp(l.getRemotePeer(), r.getRemotePeer());
         }
     }
 
+    /** Append sort toggle links to a buffer */
     static void appendSortLinks(StringBuilder buf, String urlBase, int sortFlags, String descr, int ascending) {
         if (ascending == FLAG_ALPHA) { // 0
             buf.append("<span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=0\" title=\"")

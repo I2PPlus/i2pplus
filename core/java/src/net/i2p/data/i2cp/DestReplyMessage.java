@@ -21,14 +21,23 @@ import java.io.InputStream;
  * Payload may be empty (failure), a Hash (failure), or a Destination.
  */
 public class DestReplyMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 35;
     private Destination _dest;
     private Hash _hash;
 
+    /**
+     * DestReplyMessage.
+     */
     public DestReplyMessage() {
         super();
     }
 
+    /**
+     * DestReplyMessage.
+     */
     public DestReplyMessage(Destination d) {
         _dest = d;
     }
@@ -41,6 +50,9 @@ public class DestReplyMessage extends I2CPMessageImpl {
         _hash = h;
     }
 
+    /**
+     * getDestination.
+     */
     public Destination getDestination() {
         return _dest;
     }
@@ -54,6 +66,9 @@ public class DestReplyMessage extends I2CPMessageImpl {
         return _hash;
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         if (size == 0) {
@@ -73,6 +88,9 @@ public class DestReplyMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if (_dest == null) {
@@ -88,11 +106,17 @@ public class DestReplyMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

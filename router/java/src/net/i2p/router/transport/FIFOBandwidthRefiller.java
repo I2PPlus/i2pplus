@@ -74,13 +74,20 @@ public class FIFOBandwidthRefiller implements Runnable {
     private volatile long _configCheckPeriodMs = 60*1000L;
     private volatile boolean _isRunning;
 
+    /** prop inbound bandwidth */
     public static final String PROP_INBOUND_BANDWIDTH = "i2np.bandwidth.inboundKBytesPerSecond";
+    /** prop outbound bandwidth */
     public static final String PROP_OUTBOUND_BANDWIDTH = "i2np.bandwidth.outboundKBytesPerSecond";
+    /** prop inbound burst bandwidth */
     public static final String PROP_INBOUND_BURST_BANDWIDTH = "i2np.bandwidth.inboundBurstKBytesPerSecond";
+    /** prop outbound burst bandwidth */
     public static final String PROP_OUTBOUND_BURST_BANDWIDTH = "i2np.bandwidth.outboundBurstKBytesPerSecond";
+    /** prop inbound bandwidth peak */
     public static final String PROP_INBOUND_BANDWIDTH_PEAK = "i2np.bandwidth.inboundBurstKBytes";
+    /** prop outbound bandwidth peak */
     public static final String PROP_OUTBOUND_BANDWIDTH_PEAK = "i2np.bandwidth.outboundBurstKBytes";
     // no longer allow unlimited bandwidth - the user must specify a value, else use defaults below (KBps)
+    /** default inbound bandwidth */
     public static final int DEFAULT_INBOUND_BANDWIDTH = 1024;
     /**
      *  Caution, do not make DEFAULT_OUTBOUND_BANDWIDTH * DEFAULT_SHARE_PCT &gt; 32
@@ -89,9 +96,12 @@ public class FIFOBandwidthRefiller implements Runnable {
      *  adjusting bandwidth class boundaries.
      */
     public static final int DEFAULT_OUTBOUND_BANDWIDTH = 128;
+    /** default inbound burst bandwidth */
     public static final int DEFAULT_INBOUND_BURST_BANDWIDTH = 1024;
+    /** default outbound burst bandwidth */
     public static final int DEFAULT_OUTBOUND_BURST_BANDWIDTH = 128;
 
+    /** default burst seconds */
     public static final int DEFAULT_BURST_SECONDS = 60;
 
     /** For now, until there is some tuning and safe throttling, we set the floor at this inbound (KBps) */
@@ -106,6 +116,8 @@ public class FIFOBandwidthRefiller implements Runnable {
      *  Max for reasonable Bloom filter false positive rate.
      *  Do not increase without adding a new Bloom filter size!
      *  See util/DecayingBloomFilter and tunnel/BloomFilterIVValidator.
+4 * @param ms the ms
+4 * @return the result
      */
     public static final int MAX_OUTBOUND_BANDWIDTH = SystemVersion.isSlow() || SystemVersion.getCores() == 1 ? 16384 :
                                                      SystemVersion.getCores() < 3 || SystemVersion.getMaxMemory() < 1024*1024*1024L ? 32768 :
@@ -128,6 +140,7 @@ public class FIFOBandwidthRefiller implements Runnable {
     /** Set the replenish frequency, bounded 5-200ms */
     public static void setReplenishFrequency(long ms) { _replenishFrequency = Math.max(5, Math.min(200, ms)); }
 
+    /** comment */
     FIFOBandwidthRefiller(RouterContext context, FIFOBandwidthLimiter limiter) {
         _limiter = limiter;
         _context = context;
@@ -169,6 +182,7 @@ public class FIFOBandwidthRefiller implements Runnable {
         }
     }
 
+    /** comment */
     synchronized void reinitialize() {
         _lastRefillTime = _limiter.now();
         checkConfig();
@@ -341,9 +355,13 @@ public class FIFOBandwidthRefiller implements Runnable {
         }
     }
 
+    /** comment */
     int getOutboundKBytesPerSecond() { return _outboundKBytesPerSecond; }
+    /** comment */
     int getInboundKBytesPerSecond() { return _inboundKBytesPerSecond; }
+    /** comment */
     int getOutboundBurstKBytesPerSecond() { return _outboundBurstKBytesPerSecond; }
+    /** comment */
     int getInboundBurstKBytesPerSecond() { return _inboundBurstKBytesPerSecond; }
 
     /**
@@ -370,6 +388,7 @@ public class FIFOBandwidthRefiller implements Runnable {
      *  @param size bytes
      *  @param factor multiplier of size for the drop calculation, 1 for no adjustment
      *  @return true for accepted, false for drop
+4 * @return the result
      */
     boolean incrementParticipatingMessageBytesIn(int size, float factor) {
         return _partBWEIn == null || _partBWEIn.offer(size, factor);

@@ -14,15 +14,30 @@ public class Messages {
     private static final String BUNDLE_NAME = "net.i2p.i2ptunnel.web.messages";
     private final I2PAppContext _context;
 
+    /**
+     * Create a messages instance using the global context
+     */
     public Messages() {
         _context = I2PAppContext.getGlobalContext();
     }
 
-    /** lang in routerconsole.lang property, else current locale */
+    /**
+     * lang in routerconsole.lang property, else current locale
+     *
+     * @param key the translation key
+     * @return the translated string
+     */
     public String _t(String key) {
         return Translate.getString(key, _context, BUNDLE_NAME);
     }
 
+    /**
+     * Static translation method
+     *
+     * @param key the translation key
+     * @param ctx the I2P app context
+     * @return the translated string
+     */
     public static String _t(String key, I2PAppContext ctx) {
         return Translate.getString(key, ctx, BUNDLE_NAME);
     }
@@ -38,25 +53,47 @@ public class Messages {
      *    To translate parameter also, use _t("foo {0} bar", _t("baz"))
      *    Do not double the single quotes in the parameter.
      *    Use autoboxing to call with ints, longs, floats, etc.
+     *  @return the translated string
      */
     public String _t(String s, Object o) {
         return Translate.getString(s, o, _context, BUNDLE_NAME);
     }
 
-    /** @since 0.9.26 */
+    /**
+     * translate a string with two parameters
+     *
+     * @param s string to be translated containing {0} and {1}
+     * @param o1 first parameter
+     * @param o2 second parameter
+     * @return the translated string
+     * @since 0.9.26
+     */
     public String _t(String s, Object o1, Object o2) {
         return Translate.getString(s, o1, o2, _context, BUNDLE_NAME);
     }
 
-    /** translate (ngettext)
-     *  @since 0.9.7
+    /**
+     * translate (ngettext)
+     *
+     * @param s the singular form
+     * @param p the plural form
+     * @param n the count for pluralization
+     * @param ctx the I2P app context
+     * @return the translated string
+     * @since 0.9.7
      */
     public static String ngettext(String s, String p, int n, I2PAppContext ctx) {
         return Translate.getString(n, s, p, ctx, BUNDLE_NAME);
     }
 
-    /** translate (ngettext)
-     *  @since 0.9.47
+    /**
+     * translate (ngettext)
+     *
+     * @param s the singular form
+     * @param p the plural form
+     * @param n the count for pluralization
+     * @return the translated string
+     * @since 0.9.47
      */
     public String ngettext(String s, String p, int n) {
         return Translate.getString(n, s, p, _context, BUNDLE_NAME);

@@ -57,34 +57,59 @@ import net.i2p.util.SimpleTimer2;
  * Public only for access to static methods by startup classes.
  */
 public class PersistentDataStore extends TransientDataStore {
+/** database directory */
     private final File _dbDir;
+/** facade */
     private final KademliaNetworkDatabaseFacade _facade;
+/** writer */
     private final Writer _writer;
+/** read job */
     private final ReadJob _readJob;
+/** ban logger */
     private final BanLogger _banLogger;
+/** initialized flag */
     private volatile boolean _initialized;
+/** flat mode flag */
     private final boolean _flat;
+/** network ID */
     private final int _networkID;
 
+/** read_delay */
     private static final int READ_DELAY = 3*1000;
+/** read_interval */
     private static final int READ_INTERVAL = 5*60*1000;
+/** prop_flat */
     private static final String PROP_FLAT = "router.networkDatabase.flat";
+    /** D i r  p r e f i x */
     static final String DIR_PREFIX = "r";
+/** b64 */
     private static final String B64 = Base64.ALPHABET_I2P;
+/** max_routers_init */
     private static final int MAX_ROUTERS_INIT = 6000;
+/** min_version */
     private static final String MIN_VERSION = "0.9.64";
 
+/** prop_enable_reverse_lookups */
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    /**
+     * enableReverseLookups.
+     */
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
+/** default_should_disconnect */
     private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
+/** prop_should_disconnect */
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
+/** rates */
     private static final long[] RATES = RateConstants.BASIC_RATES;
 
     /**
      * Creates a new persistent data store.
      *
+     * @param ctx the router context
      * @param dbDir relative path
+     * @param facade the network database facade
+     * @throws IOException if the database directory cannot be created or accessed
      */
     public PersistentDataStore(RouterContext ctx, String dbDir, KademliaNetworkDatabaseFacade facade) throws IOException {
         super(ctx);
@@ -105,22 +130,38 @@ public class PersistentDataStore extends TransientDataStore {
         writer.start();
     }
 
+    /**
+     * isInitialized.
+     */
     @Override
+/** @return initialized */
     public boolean isInitialized() {return _initialized || _readJob.isNetDbReady();}
 
     // this doesn't stop the read job or the writer, maybe it should?
+    /**
+     * stop.
+     */
     @Override
+/** stop. */
     public void stop() {
         super.stop();
         _writer.flush();
     }
 
+    /**
+     * rescan.
+     */
     @Override
+/** rescan. */
     public void rescan() {
         if (_initialized) {_readJob.wakeup();}
     }
 
+    /**
+     * get.
+     */
     @Override
+/** get. */
     public DatabaseEntry get(Hash key) {return get(key, true);}
 
     /**
@@ -128,30 +169,47 @@ public class PersistentDataStore extends TransientDataStore {
      *  @param persist if false, call super only, don't access disk
      */
     @Override
+/** get. */
     public DatabaseEntry get(Hash key, boolean persist) {
         return super.get(key);
     }
 
+    /**
+     * remove.
+     */
     @Override
+/** remove. */
     public DatabaseEntry remove(Hash key) {return remove(key, true);}
 
     /*
      *  @param persist if false, call super only, don't access disk
      */
+    /**
+     * remove.
+     */
     @Override
+/** remove. */
     public DatabaseEntry remove(Hash key, boolean persist) {
         if (persist) {_writer.remove(key);}
         return super.remove(key);
     }
 
+    /**
+     * put.
+     */
     @Override
+/** put. */
     public boolean put(Hash key, DatabaseEntry data) {return put(key, data, true);}
 
     /*
      *  @param persist if false, call super only, don't access disk
      *  @return success
      */
+    /**
+     * put.
+     */
     @Override
+/** put. */
     public boolean put(Hash key, DatabaseEntry data, boolean persist) {
         if ( (data == null) || (key == null) ) {return false;}
         boolean rv = super.put(key, data);
@@ -170,7 +228,11 @@ public class PersistentDataStore extends TransientDataStore {
      *  @param data non-null
      *  @since 0.9.64
      */
+    /**
+     * forcePut.
+     */
     @Override
+/** forcePut. */
     public boolean forcePut(Hash key, DatabaseEntry data) {
         boolean rv = super.forcePut(key, data);
         if (rv && data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {_writer.queue(key, data);}
@@ -181,6 +243,7 @@ public class PersistentDataStore extends TransientDataStore {
      *  they just back up in the queue hogging memory.
      */
     private static final int WRITE_LIMIT = 10000;
+/** write_delay */
     private static final long WRITE_DELAY = 10*60*1000L;
 
     /*
@@ -192,17 +255,27 @@ public class PersistentDataStore extends TransientDataStore {
      * a subset of all DatabaseEntrys in memory and keeping the rest on disk.
      */
     private class Writer implements Runnable, Flushable {
+/** map */
         private final Map<Hash, DatabaseEntry>_keys;
+/** keys to remove set */
         private final Set<Hash> _keysToRemove;
+/** wait lock */
         private final Object _waitLock;
+/** quit flag */
         private volatile boolean _quit;
 
+        /**
+         * Writer.
+         */
         public Writer() {
             _keys = new ConcurrentHashMap<>(64);
             _keysToRemove = new ConcurrentHashSet<>();
             _waitLock = new Object();
         }
 
+        /**
+         * queue.
+         */
         public void queue(Hash key, DatabaseEntry data) {
             int pending = _keys.size();
             _keysToRemove.remove(key);
@@ -211,6 +284,9 @@ public class PersistentDataStore extends TransientDataStore {
             _context.statManager().addRateData("netDb.writePending", pending);
         }
 
+        /**
+         * remove.
+         */
         public void remove(Hash key) {
             _keys.remove(key);
             _keysToRemove.add(key);
@@ -296,7 +372,11 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
+        /**
+         * run.
+         */
         @Override
+/** Run. */
         public void run() {
             if (isShuttingDown(_context)) return;
             _quit = false;
@@ -312,6 +392,9 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
+        /**
+         * flush.
+         */
         public void flush() {
             synchronized(_waitLock) {
                 _quit = true;
@@ -577,6 +660,7 @@ public class PersistentDataStore extends TransientDataStore {
         return count;
     }
 
+/** @return the publishDate */
     private static long getPublishDate(DatabaseEntry data) {return data.getDate();}
 
     /**
@@ -589,16 +673,29 @@ public class PersistentDataStore extends TransientDataStore {
      *  As of 0.9.4, also initiates an automatic reseed if necessary.
      */
     private class ReadJob extends JobImpl {
+/** last modified time */
         private volatile long _lastModified;
+/** last reseed time */
         private volatile long _lastReseed;
+/** netdb ready flag */
         private volatile boolean _setNetDbReady;
+/** min_routers */
         private static final int MIN_ROUTERS = KademliaNetworkDatabaseFacade.MIN_RESEED;
+/** min_reseed_interval */
         private static final long MIN_RESEED_INTERVAL = 90*60*1000L;
+/** has run */
         private volatile boolean hasRun = false;
 
+        /**
+         * ReadJob.
+         */
         public ReadJob() {super(PersistentDataStore.this._context);}
 
+        /**
+         * getName.
+         */
         @Override
+/** @return the name */
         public String getName() {return "Read NetDb";}
 
         /**
@@ -657,7 +754,11 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
+        /**
+         * runJob.
+         */
         @Override
+/** Run the job */
         public void runJob() {
             if (getContext().router().gracefulShutdownInProgress()) {
                 return;
@@ -676,8 +777,14 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
+        /**
+         * wakeup.
+         */
         public void wakeup() {requeue(0);}
 
+        /**
+         * isNetDbReady.
+         */
         public boolean isNetDbReady() {return _setNetDbReady;}
 
         /**
@@ -769,9 +876,13 @@ public class PersistentDataStore extends TransientDataStore {
         }
     }
 
+/** ReadRouterJob. */
     private class ReadRouterJob extends JobImpl {
+/** router file */
         private final File _routerFile;
+/** hash key */
         private final Hash _key;
+/** known date */
         private long _knownDate;
 
         /**
@@ -785,9 +896,14 @@ public class PersistentDataStore extends TransientDataStore {
             _key = key;
         }
 
+        /**
+         * getName.
+         */
         @Override
+/** @return the name */
         public String getName() {return "Read RouterInfo";}
 
+/** @return true if Read */
         private boolean shouldRead() {
             // persist = false to call only super.get()
             DatabaseEntry data = get(_key, false);
@@ -804,7 +920,11 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
+        /**
+         * runJob.
+         */
         @Override
+/** Run the job */
         public void runJob() {
             read();
         }
@@ -1020,6 +1140,7 @@ public class PersistentDataStore extends TransientDataStore {
         }
     }
 
+/** @return the dbDir */
     private File getDbDir(String dbDir) throws IOException {
         File f = new SecureDirectory(_context.getRouterDir(), dbDir);
         if (!f.exists()) {
@@ -1076,10 +1197,15 @@ public class PersistentDataStore extends TransientDataStore {
         }
     }
 
+/** routerinfo_prefix */
     private static final String ROUTERINFO_PREFIX = "routerInfo-";
+/** routerinfo_suffix */
     private static final String ROUTERINFO_SUFFIX = ".dat";
 
-    /** @since 0.9.34 */
+    /**
+     * File filter for RouterInfo files.
+     * @since 0.9.34
+     */
     public static final FileFilter RI_FILTER = new FileSuffixFilter(ROUTERINFO_PREFIX, ROUTERINFO_SUFFIX);
 
     private String getRouterInfoName(Hash hash) {
@@ -1093,6 +1219,8 @@ public class PersistentDataStore extends TransientDataStore {
      *  The persistent RI file for a hash.
      *  This is available before the netdb subsystem is running, so we can delete our old RI.
      *
+     *  @param ctx the router context
+     *  @param hash the router hash
      *  @return non-null, should be absolute, does not necessarily exist
      *  @since 0.9.23
      */
@@ -1111,6 +1239,7 @@ public class PersistentDataStore extends TransientDataStore {
         return getHash(filename, ROUTERINFO_PREFIX, ROUTERINFO_SUFFIX);
     }
 
+/** @return the hash */
     private static Hash getHash(String filename, String prefix, String suffix) {
         try {
             String key = filename.substring(prefix.length());
@@ -1121,6 +1250,7 @@ public class PersistentDataStore extends TransientDataStore {
         } catch (RuntimeException e) {return null;}
     }
 
+/** Remove file */
     private void removeFile(Hash key, File dir) {
         String riName = getRouterInfoName(key);
         File f = new File(dir, riName);
@@ -1132,13 +1262,28 @@ public class PersistentDataStore extends TransientDataStore {
         }
     }
 
+/** Disconnector. */
     private class Disconnector extends SimpleTimer2.TimedEvent {
+/** h */
         private final Hash h;
+/** reason */
         private final String reason;
+        /**
+         * Disconnector.
+         */
         public Disconnector(Hash h, String reason) {super(_context.simpleTimer2()); this.h = h; this.reason = reason;}
+        /**
+         * timeReached.
+         */
         public void timeReached() {_context.commSystem().forceDisconnect(h, reason);}
     }
 
+    /**
+     * Check if the router is in a graceful or hard shutdown state.
+     *
+     * @param ctx the router context
+     * @return true if shutdown is in progress
+     */
     public static boolean isShuttingDown(RouterContext ctx) {
         int code = ctx.router().scheduledGracefulExitCode();
         return Router.EXIT_GRACEFUL == code || Router.EXIT_HARD == code ||
@@ -1146,3 +1291,4 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
 }
+

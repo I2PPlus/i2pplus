@@ -246,6 +246,9 @@ public class RandomArt {
         return String.format("%06x", base);
         }
 
+        /**
+         * main.
+         */
         public static void main(String[] args) {
             try {
                 boolean uni = true;

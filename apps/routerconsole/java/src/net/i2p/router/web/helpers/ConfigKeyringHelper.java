@@ -20,8 +20,14 @@ import net.i2p.router.web.HelperBase;
  * @since 0.9.33
  */
 public class ConfigKeyringHelper extends HelperBase {
+    /** Default constructor */
     public ConfigKeyringHelper() { /* nop */ }
 
+    /**
+     * Get the summary HTML.
+     *
+     * @return summary HTML string
+     */
     public String getSummary() {
         StringWriter sw = new StringWriter(4*1024);
         renderStatusHTML(sw);

@@ -16,13 +16,25 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     private int _localPort;
     private int _remotePort;
 
+    /**
+     * DEFAULT_BUFFER_SIZE.
+     */
     public static final int DEFAULT_BUFFER_SIZE = SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512*1024*1024 ?
         // Slow systems: 1730 * (1.5*192 + 2) = 500KB, rounded to 512KB for safety margin
         512*1024 :
         // Normal systems: 1730 * (1.5*384 + 2) = 998KB, rounded to 1MB for safety margin
         1024*1024;
+    /**
+     * DEFAULT_READ_TIMEOUT.
+     */
     public static final int DEFAULT_READ_TIMEOUT = -1;
+    /**
+     * DEFAULT_WRITE_TIMEOUT.
+     */
     public static final int DEFAULT_WRITE_TIMEOUT = -1;
+    /**
+     * DEFAULT_CONNECT_TIMEOUT.
+     */
     public static final int DEFAULT_CONNECT_TIMEOUT = 30*1000;
 
     /**
@@ -92,6 +104,9 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
         _writeTimeout = getInt(opts, PROP_WRITE_TIMEOUT, DEFAULT_WRITE_TIMEOUT);
     }
 
+    /**
+     * getInt.
+     */
     protected static int getInt(Properties opts, String name, int defaultVal) {
         if (opts == null) return defaultVal;
         String val = opts.getProperty(name);

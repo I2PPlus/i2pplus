@@ -16,26 +16,47 @@ import net.i2p.util.SystemVersion;
  * the connection with us.  In other words, they are Alice and we are Bob.
  */
 class InboundEstablishState {  // TODO do all these methods need to be synchronized?
+    /** Router context */
     protected final RouterContext _context;
+    /** Logger */
     protected final Log _log;
-    private byte[] _receivedX; // SessionRequest message
+    /** SessionRequest message data from Alice */
+    private byte[] _receivedX;
+    /** Our IP address as seen by Alice */
     protected byte[] _bobIP;
+    /** Our port number as seen by Alice */
     protected final int _bobPort;
-    protected final byte[] _aliceIP; // SessionCreated message
+    /** Alice's IP address from the SessionCreated message */
+    protected final byte[] _aliceIP;
+    /** Alice's port number */
     protected final int _alicePort;
+    /** Relay tag we sent to Alice */
     protected long _sentRelayTag;
+    /** Signed-on time we sent to Alice */
     private long _sentSignedOnTime;
-    private byte[][] _receivedIdentity; // SessionConfirmed messages - fragmented in theory but not in practice - see below
-    protected RouterIdentity _receivedUnconfirmedIdentity; // sig not verified
-    protected RouterIdentity _receivedConfirmedIdentity; // identical to uncomfirmed, but sig now verified
-    protected final long _establishBegin; // general status
+    /** SessionConfirmed message fragments from Alice (fragmentation theoretical only) */
+    private byte[][] _receivedIdentity;
+    /** Identity before signature verification */
+    protected RouterIdentity _receivedUnconfirmedIdentity;
+    /** Identity after successful signature verification */
+    protected RouterIdentity _receivedConfirmedIdentity;
+    /** Timestamp when establishment began */
+    protected final long _establishBegin;
+    /** Last packet send time */
     protected long _lastSend;
+    /** Next scheduled send time */
     protected long _nextSend;
+    /** Remote host identifier for uniqueness */
     protected final RemoteHostId _remoteHostId;
+    /** Current state in the inbound establishment protocol */
     protected InboundState _currentState;
+    /** Messages queued while session was being established */
     private final Queue<OutNetMessage> _queuedMessages;
-    protected int _createdSentCount; // count for backoff
-    protected boolean _introductionRequested; // default true for SSU 1, false for SSU 2
+    /** Count of SessionCreated packets sent (for exponential backoff) */
+    protected int _createdSentCount;
+    /** Whether Alice requested introduction (default true for SSU 1, false for SSU 2) */
+    protected boolean _introductionRequested;
+    /** Estimated round-trip time */
     protected int _rtt;
 
     /**
@@ -43,13 +64,20 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
      * Tracks the progression of incoming connection setup.
      */
     public enum InboundState {
-        IB_STATE_UNKNOWN, /** nothin' known yet */
-        IB_STATE_REQUEST_RECEIVED, /** we have received an initial request */
-        IB_STATE_CREATED_SENT, /** we have sent a signed creation packet */
-        IB_STATE_CONFIRMED_PARTIALLY, /** we have received one but not all the confirmation packets - never happens in practice - see below. */
-        IB_STATE_CONFIRMED_COMPLETELY, /** we have all the confirmation packets */
-        IB_STATE_FAILED, /** we are explicitly failing it */
-        IB_STATE_COMPLETE, /** Successful completion, PeerState created and added to transport */
+        /** nothin' known yet */
+        IB_STATE_UNKNOWN,
+        /** we have received an initial request */
+        IB_STATE_REQUEST_RECEIVED,
+        /** we have sent a signed creation packet */
+        IB_STATE_CREATED_SENT,
+        /** we have received one but not all the confirmation packets - never happens in practice - see below. */
+        IB_STATE_CONFIRMED_PARTIALLY,
+        /** we have all the confirmation packets */
+        IB_STATE_CONFIRMED_COMPLETELY,
+        /** we are explicitly failing it */
+        IB_STATE_FAILED,
+        /** Successful completion, PeerState created and added to transport */
+        IB_STATE_COMPLETE,
 
         /**
          * SSU2: We have received a token request
@@ -98,19 +126,33 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
    }
 
     /**
-     * @since 0.9.54
+     *  Return the SSU protocol version for this state (always 1 for SSU1).
+     *
+     *  @return the protocol version
+     *  @since 0.9.54
      */
     public int getVersion() {return 1;}
 
+    /**
+     *  Current state of the inbound session establishment.
+     *
+     *  @return the current InboundState
+     */
     public synchronized InboundState getState() {return _currentState;}
 
-    /** Check if the inbound establish state is complete */
+    /**
+     *  Check if the inbound establish state is complete.
+     *
+     *  @return true if complete or failed
+     */
     public synchronized boolean isComplete() {
         return _currentState == InboundState.IB_STATE_COMPLETE ||
                _currentState == InboundState.IB_STATE_FAILED;
    }
 
-    /** Notify successful completion */
+    /**
+     *  Notify successful completion of the inbound session establishment.
+     */
     public synchronized void complete() {_currentState = InboundState.IB_STATE_COMPLETE;}
 
     /**
@@ -131,30 +173,80 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
      */
     public OutNetMessage getNextQueuedMessage() {return _queuedMessages.poll();}
 
+    /**
+     *  Whether the SessionRequest message has been received from Alice.
+     *
+     *  @return true if the initial request has arrived
+     */
     public synchronized boolean sessionRequestReceived() {return _receivedX != null;}
+
+    /**
+     *  The received X value from Alice's SessionRequest message.
+     *
+     *  @return session request data or null
+     */
     public synchronized byte[] getReceivedX() {return _receivedX;}
+
+    /**
+     *  Our IP address as reported by Alice in the SessionRequest.
+     *
+     *  @return our IP bytes or null
+     */
     public synchronized byte[] getReceivedOurIP() {return _bobIP;}
 
     /**
-     *  True (default) if no extended options in session request,
-     *  or value of flag bit in the extended options.
+     *  Whether Alice requested an introduction.
+     *  True by default if no extended options in session request,
+     *  or the value of the introduction flag bit in the extended options.
+     *
+     *  @return true if introduction was requested
      *  @since 0.9.24
      */
     public synchronized boolean isIntroductionRequested() {return _introductionRequested;}
 
-    /** What IP do they appear to be on? */
+    /**
+     *  Alice's apparent IP address.
+     *
+     *  @return the IP address Alice appears to be connecting from
+     */
     public byte[] getSentIP() {return _aliceIP;}
 
-    /** What port number do they appear to be coming from? */
+    /**
+     *  Alice's apparent port number.
+     *
+     *  @return the port Alice appears to be connecting from
+     */
     public int getSentPort() {return _alicePort;}
 
+    /**
+     *  Mark this establishment attempt as failed.
+     */
     public synchronized void fail() {_currentState = InboundState.IB_STATE_FAILED;}
 
+    /**
+     *  The relay tag we sent to Alice in the SessionCreated message.
+     *
+     *  @return the relay tag, or 0 if not yet sent
+     */
     public synchronized long getSentRelayTag() {return _sentRelayTag;}
+
+    /**
+     *  Set the relay tag to include in the SessionCreated message.
+     *
+     *  @param tag the relay tag
+     */
     public synchronized void setSentRelayTag(long tag) {_sentRelayTag = tag;}
+
+    /**
+     *  The signed-on time we sent to Alice.
+     *
+     *  @return the signed-on timestamp
+     */
     public synchronized long getSentSignedOnTime() {return _sentSignedOnTime;}
 
-    /** Note that we just sent a SessionCreated packet */
+    /**
+     *  Record that a SessionCreated packet was just sent, update backoff state.
+     */
     public synchronized void createdPacketSent() {
         _lastSend = _context.clock().now();
         long delay;
@@ -169,32 +261,56 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
    }
 
     /**
-     * How long have we been trying to establish this session?
+     *  How long have we been trying to establish this session?
+     *
+     *  @return the elapsed time in milliseconds
      */
     public long getLifetime() {return getLifetime(_context.clock().now());}
 
     /**
-     * How long have we been trying to establish this session?
-     * @since 0.9.57
+     *  How long have we been trying to establish this session, using the given time.
+     *
+     *  @param now the reference time
+     *  @return the elapsed time in milliseconds
+     *  @since 0.9.57
      */
     public long getLifetime(long now) {return now - _establishBegin;}
 
+    /**
+     *  The wall clock time when this establishment attempt began.
+     *
+     *  @return the start timestamp
+     */
     public long getEstablishBeginTime() {return _establishBegin;}
 
     /**
-     *  @return rcv time after receiving a packet (including after constructor),
-     *          send time + delay after sending a packet
+     *  The next time at which we should send a packet for this establishment.
+     *  Returns the receive time after receiving a packet (including after constructor),
+     *  or the send time plus backoff delay after sending a packet.
+     *
+     *  @return the next scheduled send time
      */
     public synchronized long getNextSendTime() {return _nextSend;}
 
+    /**
+     *  The estimated round-trip time for this establishment.
+     *
+     *  @return the RTT in milliseconds
+     */
     synchronized int getRTT() {return _rtt;}
 
-    /** RemoteHostId, uniquely identifies an attempt */
+    /**
+     *  The RemoteHostId that uniquely identifies this establishment attempt.
+     *
+     *  @return the remote host identifier
+     */
     RemoteHostId getRemoteHostId() {return _remoteHostId;}
 
     /**
      *  Have we fully received the SessionConfirmed messages from Alice?
-     *  Caller must synch on this.
+     *  Caller must synchronize on this.
+     *
+     *  @return true if all fragments have been received
      */
     protected boolean confirmedFullyReceived() {
         if (_receivedIdentity != null) {
@@ -202,23 +318,30 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
                 if (_receivedIdentity[i] == null) {return false;}
             }
             return true;
-       } else {return false;}
-   }
+        } else {return false;}
+    }
 
     /**
-     * Who is Alice (null if forged/unknown)
+     *  The confirmed identity of Alice (null if forged/unknown).
+     *  Note that this isn't really confirmed - see below.
      *
-     * Note that this isn't really confirmed - see below.
+     *  @return Alice's RouterIdentity, or null
      */
     public synchronized RouterIdentity getConfirmedIdentity() {
         return _receivedConfirmedIdentity;
-   }
+    }
 
     /**
-     *  Call from synchronized method only
+     *  Update the next send time to now, as we just received a packet.
+     *  Must call from synchronized method only.
      */
     protected void packetReceived() {_nextSend = _context.clock().now();}
 
+    /**
+     *  Return a human-readable description of this establish state.
+     *
+     *  @return debug string with peer address, lifetime, relay tag, and state
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);

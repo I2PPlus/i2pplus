@@ -38,18 +38,22 @@ class ProfileOrganizerRenderer {
     private final RouterContext _context;
     private final ProfileOrganizer _organizer;
 
+    /** Creates a new ProfileOrganizerRenderer */
     public ProfileOrganizerRenderer(ProfileOrganizer organizer, RouterContext context) {
         _context = context;
         _organizer = organizer;
     }
 
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    /** @since 0.9.70+ */
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
 
     /**
      *  Render the peer profile status table.
      *
+     *  @param out the writer to render to
      *  @param mode 0 = high cap; 1 = all; 2 = floodfill; 3 = banned; 4 = ban summary by hash
+     *  @throws IOException if an I/O error occurs
      */
     public void renderStatusHTML(Writer out, int mode) throws IOException {
         boolean full = mode == 0;
@@ -618,7 +622,15 @@ class ProfileOrganizerRenderer {
 
     private String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
-    /** translate (ngettext) @since 0.8.5 */
+    /**
+     * Translate with plural support
+     *
+     * @param s singular form
+     * @param p plural form
+     * @param n the count
+     * @return translated string
+     * @since 0.8.5
+     */
     public String ngettext(String s, String p, int n) {
         return Messages.getString(n, s, p, _context);
     }

@@ -23,14 +23,23 @@ class FloodfillRouterInfoFloodJob extends JobImpl {
 
     private static final int FLOOD_PEERS = 2 * FloodfillNetworkDatabaseFacade.MAX_TO_FLOOD;
 
+    /**
+     * FloodfillRouterInfoFloodJob.
+     */
     public FloodfillRouterInfoFloodJob(RouterContext context, FloodfillNetworkDatabaseFacade facade) {
         super(context);
         _facade = facade;
         _log = context.logManager().getLog(FloodfillRouterInfoFloodJob.class);
     }
 
+    /**
+     * getName.
+     */
     public String getName() { return "Distribute Local RouterInfo to Floodfills"; }
 
+    /**
+     * runJob.
+     */
     public void runJob() {
         FloodfillPeerSelector sel = (FloodfillPeerSelector)_facade.getPeerSelector();
         DatabaseStoreMessage dsm;

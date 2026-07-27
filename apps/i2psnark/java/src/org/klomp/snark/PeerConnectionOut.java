@@ -37,6 +37,7 @@ class PeerConnectionOut implements Runnable {
     private final BlockingQueue<Message> sendQueue = new LinkedBlockingQueue<>(MAX_QUEUE_SIZE);
     private static final AtomicLong __id = new AtomicLong();
     private final long _id;
+    /** last send time */
     long lastSent;
 
     /**
@@ -60,6 +61,9 @@ class PeerConnectionOut implements Runnable {
         thread.start();
     }
 
+    /**
+     * Pull messages from the send queue and deliver to the peer.
+     */
     @Override
     public void run() {
         try {
@@ -242,7 +246,7 @@ class PeerConnectionOut implements Runnable {
      * Removes a particular message type from the queue.
      *
      * @param type the Message type to remove.
-     * @returns true when a message of the given type was removed, false otherwise.
+     * @return true when a message of the given type was removed, false otherwise.
      */
     private boolean removeMessage(int type) {
         boolean removed = false;
@@ -352,7 +356,7 @@ class PeerConnectionOut implements Runnable {
         }
     }
 
-    /** reransmit requests not received in 7m */
+    /** retransmit requests not received in 7m */
     private static final int REQ_TIMEOUT = (2 * SEND_TIMEOUT) + (60 * 1000);
 
     /**
@@ -510,41 +514,31 @@ class PeerConnectionOut implements Runnable {
         }
     }
 
-    /**
-     * @since 0.8.2
-     */
+    /** Queue an extension message. */
     void sendExtension(int id, byte[] bytes) {
         Message m = new Message(id, bytes);
         addMessage(m);
     }
 
-    /**
-     * @since 0.8.4
-     */
+    /** Queue a port message. */
     void sendPort(int port) {
         Message m = new Message(Message.PORT, port);
         addMessage(m);
     }
 
-    /**
-     * @since 0.9.21
-     */
+    /** Queue a have-all message. */
     private void sendHaveAll() {
         Message m = new Message(Message.HAVE_ALL);
         addMessage(m);
     }
 
-    /**
-     * @since 0.9.21
-     */
+    /** Queue a have-none message. */
     private void sendHaveNone() {
         Message m = new Message(Message.HAVE_NONE);
         addMessage(m);
     }
 
-    /**
-     * @since 0.9.21
-     */
+    /** Queue a reject message. */
     void sendReject(int piece, int begin, int length) {
         Message m = new Message(Message.REJECT, piece, begin, length);
         addMessage(m);

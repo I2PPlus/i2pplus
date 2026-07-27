@@ -53,26 +53,83 @@ import java.nio.charset.StandardCharsets;
 public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /* all of these in SECONDS */
+    /**
+     * DEFAULT_POST_BAN_TIME.
+     */
     public static final int DEFAULT_POST_BAN_TIME = 15*60;
+    /**
+     * DEFAULT_POST_MAX.
+     */
     public static final int DEFAULT_POST_MAX = 16;
+    /**
+     * DEFAULT_POST_TOTAL_BAN_TIME.
+     */
     public static final int DEFAULT_POST_TOTAL_BAN_TIME = 10*60;
+    /**
+     * DEFAULT_POST_TOTAL_MAX.
+     */
     public static final int DEFAULT_POST_TOTAL_MAX = 30;
+    /**
+     * DEFAULT_POST_WINDOW.
+     */
     public static final int DEFAULT_POST_WINDOW = 3*60;
     private static final boolean DEFAULT_KEEPALIVE = true;
+    /**
+     * OPT_POST_BAN_TIME.
+     */
     public static final String OPT_POST_BAN_TIME = "postBanTime";
+    /**
+     * OPT_POST_MAX.
+     */
     public static final String OPT_POST_MAX = "maxPosts";
+    /**
+     * OPT_POST_TOTAL_BAN_TIME.
+     */
     public static final String OPT_POST_TOTAL_BAN_TIME = "postTotalBanTime";
+    /**
+     * OPT_POST_TOTAL_MAX.
+     */
     public static final String OPT_POST_TOTAL_MAX = "maxTotalPosts";
+    /**
+     * OPT_POST_WINDOW.
+     */
     public static final String OPT_POST_WINDOW = "postCheckTime";
 
+    /**
+     * OPT_REJECT_INPROXY.
+     */
     public static final String OPT_REJECT_INPROXY = "rejectInproxy";
+    /**
+     * OPT_REJECT_REFERER.
+     */
     public static final String OPT_REJECT_REFERER = "rejectReferer";
+    /**
+     * OPT_REJECT_USER_AGENTS.
+     */
     public static final String OPT_REJECT_USER_AGENTS = "rejectUserAgents";
+    /**
+     * OPT_USER_AGENTS.
+     */
     public static final String OPT_USER_AGENTS = "userAgentRejectList";
+    /**
+     * OPT_KEEPALIVE.
+     */
     public static final String OPT_KEEPALIVE = "keepalive.i2p";
+    /**
+     * OPT_ADD_RESPONSE_HEADER_ALLOW.
+     */
     public static final String OPT_ADD_RESPONSE_HEADER_ALLOW = "addResponseHeaderAllow";
+    /**
+     * OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL.
+     */
     public static final String OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL = "addResponseHeaderCacheControl";
+    /**
+     * OPT_ADD_RESPONSE_HEADER_NOSNIFF.
+     */
     public static final String OPT_ADD_RESPONSE_HEADER_NOSNIFF = "addResponseHeaderNoSniff";
+    /**
+     * OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY.
+     */
     public static final String OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY = "addResponseHeaderReferrerPolicy";
 
     /** what Host: should we seem to be to the webserver? */
@@ -158,10 +215,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         SERVER_SKIPHEADERS.add(X_STYX_REQ_ID_HEADER);
     }
 
-    /* timeout for first request line */
+    /** timeout for first request line */
     private static final long HEADER_TIMEOUT = (long) 45*1000;
-    /* timeout for the rest of the request headers */
+    /** timeout for the rest of the request headers */
     private static final long HEADER_FINISH_TIMEOUT = HEADER_TIMEOUT;
+    /** min time before socket error is escalated to ERROR level */
     private static final long START_INTERVAL = (60 * 1000) * 3;
     private static final int MAX_LINE_LENGTH = 8*1024;
     /** ridiculously long, just to prevent OOM DOS
@@ -183,12 +241,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final int SERVER_READ_TIMEOUT_MEDIUM = 5*60*1000;
     private static final int SERVER_READ_TIMEOUT_POST = 4*60*60*1000;
 
+    /** ignored */
     private long _startedOn = 0L;
+    /** POST/PUT throttler for rate limiting */
     private ConnThrottler _postThrottler;
     /** @since 0.9.62+ */
     private static final int HTTP_BLOCKLIST_CLIENT_LIMIT = 512;
+    /** HTTP blocklist manager */
     private BlocklistManager _blocklistManager;
 
+    /** 404 Not Found error response */
     final static String ERR_NOT_FOUND =
          "HTTP/1.1 404 Not Found\r\n" +
          "Content-Type: text/html; charset=utf-8\r\n" +
@@ -204,6 +266,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</body>\n" +
          "</html>";
 
+    /** 503 Service Unavailable error response */
     private final static String ERR_UNAVAILABLE =
          "HTTP/1.1 503 Service Unavailable\r\n" +
          "Content-Type: text/html; charset=utf-8\r\n" +
@@ -219,6 +282,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</body>\n" +
          "</html>";
 
+    /** 429 Too Many Requests error response */
     private final static String ERR_DENIED =
          "HTTP/1.1 429 Too Many Requests\r\n" +
          "Content-Type: text/html; charset=utf-8\r\n" +
@@ -236,6 +300,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</html>";
 
     // TODO https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
+    /** 403 Forbidden error response */
     final static String ERR_FORBIDDEN =
 
          "HTTP/1.1 403 Denied\r\n" +
@@ -252,6 +317,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</body>\n" +
          "</html>";
 
+    /** 414 Request URI too long error response */
     private final static String ERR_REQUEST_URI_TOO_LONG =
          "HTTP/1.1 414 Request URI too long\r\n" +
          "Content-Type: text/html; charset=utf-8\r\n" +
@@ -265,6 +331,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</body>" +
          "\n</html>";
 
+    /** 431 Request header fields too large error response */
     private final static String ERR_HEADERS_TOO_LARGE =
          "HTTP/1.1 431 Request header fields too large\r\n" +
          "Content-Type: text/html; charset=utf-8\r\n" +
@@ -295,6 +362,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "<head><meta http-equiv=\"refresh\" content=\"5\"></head>\n" +
          "</html>";
 
+    /** 400 Bad Request error response */
     private final static String ERR_BAD_REQUEST =
          "HTTP/1.1 400 Bad Request\r\n" +
          "Content-Type: text/html; charset=utf-8\r\n" +
@@ -373,6 +441,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         _blocklistManager = new BlocklistManager(_log, HTTP_BLOCKLIST_CLIENT_LIMIT);
     }
 
+    /**
+     * startRunning.
+     */
     @Override
     public void startRunning() {
         super.startRunning();
@@ -1408,8 +1479,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /**
      *  Minimum response size in bytes before gzip compression is applied.
-     *  This plus a typical HTTP response header will fit into a 1730-byte
-     *  streaming message.
      */
     private static final int MIN_TO_COMPRESS = 1024;
 
@@ -1518,13 +1587,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /* just a wrapper to provide stats for debugging */
+    /** wrapper providing deflater stats */
     private static class InternalGZIPOutputStream extends GZIPOutputStream {
+        /** @param target the underlying output stream */
         public InternalGZIPOutputStream(OutputStream target) throws IOException {super(target);}
+        /** @return total bytes read before compression */
         public long getTotalRead() {
             try {return def.getTotalIn();}
-            // j2se 1.4.2_08 on linux is sometimes throwing an NPE in the getTotalIn() implementation
             catch (RuntimeException e) {return 0;}
         }
+        /** @return total bytes written after compression */
         public long getTotalCompressed() {
             try {return def.getTotalOut();}
             // j2se 1.4.2_08 on linux is sometimes throwing an NPE in the getTotalOut() implementation
@@ -1779,25 +1851,21 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *
      *  @since 0.9.19
      */
+    /** Thrown when a header line or total size exceeds limits */
     private static class LineTooLongException extends IOException {
+        /** @param s detail message */
         public LineTooLongException(String s) {super(s);}
     }
 
-    /**
-     *  Thrown when the request line exceeds MAX_LINE_LENGTH.
-     *
-     *  @since 0.9.20
-     */
+    /** Thrown when the request line exceeds MAX_LINE_LENGTH */
     private static class RequestTooLongException extends IOException {
+        /** @param s detail message */
         public RequestTooLongException(String s) {super(s);}
     }
 
-    /**
-     *  Thrown when HTTP headers are malformed (missing colon, invalid encoding, etc.).
-     *
-     *  @since 0.9.20
-     */
+    /** Thrown when HTTP headers are malformed */
     private static class BadRequestException extends IOException {
+        /** @param s detail message */
         public BadRequestException(String s) {super(s);}
     }
 }

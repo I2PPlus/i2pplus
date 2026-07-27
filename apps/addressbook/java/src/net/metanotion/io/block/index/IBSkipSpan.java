@@ -36,22 +36,22 @@ import net.metanotion.util.skiplist.SkipSpan;
 
 /**
  * Memory-efficient SkipList span implementation (I2P version).
- * 
+ *
  * <p>Stores only first key in memory to reduce memory usage.
  * Loads keys and values from disk on-demand during operations.</p>
- * 
+ *
  * <p>Comparison with BSkipSpan:</p>
  * <ul>
  * <li>BSkipSpan stores all keys and values in-memory, backed by file</li>
  * <li>IBSkipSpan stores only first key, and no values, in-memory</li>
  * </ul>
- * 
+ *
  * <p>For get(): performs linear search through span in file and loads only found value
  * (super() does binary search in-memory).</p>
- * 
+ *
  * <p>For put() or remove(): loads all keys and values for span from file,
  * makes modification, flushes out keys and values, and nulls out keys and values in-memory.</p>
- * 
+ *
  * <p>Recommended span size is 16.</p>
  *
  * @author zzz
@@ -62,6 +62,9 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 
 	private K firstKey;
 
+	/**
+	 * newInstance.
+	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public SkipSpan<K, V> newInstance(SkipList<K, V> sl) {
@@ -246,6 +249,9 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 		super(bf, bsl);
 	}
 
+	/**
+	 * IBSkipSpan.
+	 */
 	public IBSkipSpan(BlockFile bf, BSkipList<K, V> bsl, int spanPage, Serializer<K> key, Serializer<V> val) throws IOException {
 		super(bf, bsl);
 		if (bf.log.shouldDebug())

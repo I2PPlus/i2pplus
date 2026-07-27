@@ -44,6 +44,9 @@ class BloomFilterIVValidator implements IVValidator {
     private static final String PROP_DISABLE = "router.disableDecayingBloomFilter";
 
     /**
+     *  Construct the validator, selecting filter size based on bandwidth and memory.
+     *
+     *  @param ctx the router context
      *  @param KBps share bandwidth
      */
     public BloomFilterIVValidator(RouterContext ctx, int KBps) {
@@ -98,6 +101,7 @@ class BloomFilterIVValidator implements IVValidator {
         return !dup; // return true if it is OK, false if it isn't
     }
 
+    /** Stop the decaying filter. */
     public void destroy() {
         if (_filter != null)
             _filter.stopDecaying();

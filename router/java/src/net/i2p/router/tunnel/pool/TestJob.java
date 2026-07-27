@@ -516,6 +516,9 @@ public class TestJob extends JobImpl {
         }
     }
 
+    /**
+     * TestJob.
+     */
     public TestJob(RouterContext ctx, PooledTunnelCreatorConfig cfg, TunnelPool pool) {
         super(ctx);
         _log = ctx.logManager().getLog(TestJob.class);
@@ -603,11 +606,17 @@ public class TestJob extends JobImpl {
         getTiming().setStartAfter(startTime);
     }
 
+    /**
+     * getName.
+     */
     @Override
     public String getName() {
         return "Test Local Tunnel";
     }
 
+    /**
+     * runJob.
+     */
     @Override
     public void runJob() {
         final RouterContext ctx = getContext();
@@ -1377,6 +1386,9 @@ public class TestJob extends JobImpl {
         private final long _id;
         private final long _expiration;
 
+        /**
+         * ReplySelector.
+         */
         public ReplySelector(long id, long expiration) {
             _id = id;
             _expiration = expiration;
@@ -1398,11 +1410,20 @@ public class TestJob extends JobImpl {
         private long _successTime;
         private OutNetMessage _sentMessage;
 
+        /**
+         * OnTestReply.
+         */
         public OnTestReply() { super(TestJob.this.getContext()); }
 
+        /**
+         * setSentMessage.
+         */
         @Override public String getName() { return "Verify Tunnel Test"; }
         public void setSentMessage(OutNetMessage m) { _sentMessage = m; }
 
+        /**
+         * runJob.
+         */
         @Override
         public void runJob() {
             if (_sentMessage != null)
@@ -1416,6 +1437,9 @@ public class TestJob extends JobImpl {
             }
         }
 
+        /**
+         * setMessage.
+         */
         @Override
         public void setMessage(I2NPMessage message) {
             _successTime = getContext().clock().now() - ((DeliveryStatusMessage) message).getArrival();
@@ -1425,11 +1449,17 @@ public class TestJob extends JobImpl {
     private class OnTestTimeout extends JobImpl {
         private final long _started;
 
+        /**
+         * OnTestTimeout.
+         */
         public OnTestTimeout(long now) {
             super(TestJob.this.getContext());
             _started = now;
         }
 
+        /**
+         * runJob.
+         */
         @Override public String getName() { return "Timeout Tunnel Test"; }
 
         @Override

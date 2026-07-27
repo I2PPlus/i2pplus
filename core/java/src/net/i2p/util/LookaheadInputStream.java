@@ -35,6 +35,7 @@ public class LookaheadInputStream extends FilterInputStream {
         size = lookaheadSize;
     }
 
+    /** @return whether EOF has been reached */
     public boolean getEOFReached() {
         return _eofReached;
     }
@@ -44,6 +45,7 @@ public class LookaheadInputStream extends FilterInputStream {
      *  Resets everything if the LookaheadInputStream was previously used.
      *  WARNING - blocking until lookaheadSize bytes are read!
      *
+     *  @param src the input stream
      *  @throws IOException if less than lookaheadSize bytes could be read.
      */
     public void initialize(InputStream src) throws IOException {
@@ -87,6 +89,8 @@ public class LookaheadInputStream extends FilterInputStream {
      * Grab the lookahead footer.
      * This will be of size lookaheadsize given in constructor.
      * The last byte received will be in the last byte of the array.
+     *
+     * @return the lookahead footer bytes
      */
     public byte[] getFooter() {
         if (index == 0) return _footerLookahead;

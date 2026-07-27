@@ -77,6 +77,13 @@ abstract class StoreJob extends JobImpl {
     /**
      * Send a data structure to the floodfills
      *
+     * @param context the router context
+     * @param facade the network database facade
+     * @param key the key to store
+     * @param data the data to store
+     * @param onSuccess job to run on success
+     * @param onFailure job to run on failure
+     * @param timeoutMs timeout in milliseconds
      */
     public StoreJob(RouterContext context, KademliaNetworkDatabaseFacade facade, Hash key,
                     DatabaseEntry data, Job onSuccess, Job onFailure, long timeoutMs) {
@@ -84,6 +91,15 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
+     * Send a data structure to the floodfills, skipping certain peers
+     *
+     * @param context the router context
+     * @param facade the network database facade
+     * @param key the key to store
+     * @param data the data to store
+     * @param onSuccess job to run on success
+     * @param onFailure job to run on failure
+     * @param timeoutMs timeout in milliseconds
      * @param toSkip set of peer hashes of people we don't want to send the data to (e.g. we
      *               already know they have it).  This can be null.
      */
@@ -712,6 +728,9 @@ abstract class StoreJob extends JobImpl {
 
     /**
      * Is it new enough?
+     *
+     * @param ri the router info to check
+     * @return true if the router is new enough
      * @since 0.9.33
      */
     static boolean shouldStoreTo(RouterInfo ri) {
@@ -724,11 +743,17 @@ abstract class StoreJob extends JobImpl {
         return type == EncType.ELGAMAL_2048;
     }
 
-    /** @since 0.9.38 */
+    /**
+     * Minimum version for LS2 stores
+     * @since 0.9.38
+     */
     public static final String MIN_STORE_LS2_VERSION = "0.9.62";
 
     /**
      * Is it new enough?
+     *
+     * @param ri the router info to check
+     * @return true if the router supports LS2
      * @since 0.9.38
      */
     static boolean shouldStoreLS2To(RouterInfo ri) {
@@ -744,6 +769,9 @@ abstract class StoreJob extends JobImpl {
 
     /**
      * Is it new enough?
+     *
+     * @param ri the router info to check
+     * @return true if the router supports encrypted LS2
      * @since 0.9.39
      */
     static boolean shouldStoreEncLS2To(RouterInfo ri) {

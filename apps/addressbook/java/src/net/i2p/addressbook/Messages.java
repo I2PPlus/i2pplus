@@ -7,6 +7,7 @@ import net.i2p.util.Translate;
  * Provides translatable strings for the addressbook application.
  */
 public class Messages {
+    /** The bundle name */
     static final String BUNDLE_NAME = "net.i2p.addressbook.messages";
     private final I2PAppContext _context;
 

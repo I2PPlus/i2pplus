@@ -30,6 +30,9 @@ public final class PrioritySendPool {
     private volatile int _evictedCount;
     private volatile int _droppedCount;
 
+    /**
+     * PrioritySendPool.
+     */
     public PrioritySendPool(int capacity) {
         _capacity = Math.max(1, capacity);
         _messages = new ArrayList<>(_capacity);
@@ -93,18 +96,27 @@ public final class PrioritySendPool {
         }
     }
 
+    /**
+     * size.
+     */
     public int size() {
         synchronized (_messages) {
             return _messages.size();
         }
     }
 
+    /**
+     * remainingCapacity.
+     */
     public int remainingCapacity() {
         synchronized (_messages) {
             return _capacity - _messages.size();
         }
     }
 
+    /**
+     * getCapacity.
+     */
     public int getCapacity() {
         return _capacity;
     }
@@ -123,7 +135,13 @@ public final class PrioritySendPool {
      * Callers compute deltas over a time window.
      */
     public int getAddedCount() { return _addedCount; }
+    /**
+     * getEvictedCount.
+     */
     public int getEvictedCount() { return _evictedCount; }
+    /**
+     * getDroppedCount.
+     */
     public int getDroppedCount() { return _droppedCount; }
 
     /**

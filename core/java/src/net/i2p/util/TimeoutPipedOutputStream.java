@@ -17,6 +17,9 @@ class TimeoutPipedOutputStream extends PipedOutputStream {
 
     private final TimeoutPipedInputStream sink;
 
+    /**
+     * TimeoutPipedOutputStream.
+     */
     public TimeoutPipedOutputStream(TimeoutPipedInputStream snk) throws IOException {
         super(snk);
         sink = snk;

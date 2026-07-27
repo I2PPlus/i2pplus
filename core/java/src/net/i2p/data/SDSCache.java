@@ -89,6 +89,9 @@ public class SDSCache<V extends SimpleDataStructure> {
     private static class Shutdown implements Runnable {
         private final SDSCache _cache;
         Shutdown(SDSCache cache) { _cache = cache; }
+        /**
+         * run.
+         */
         @Override
         public void run() {
             _cache.clear();
@@ -151,6 +154,9 @@ public class SDSCache<V extends SimpleDataStructure> {
      *  @throws ArrayIndexOutOfBoundsException if not enough bytes
      *  @throws NullPointerException
      */
+    /**
+     * get.
+     */
     public V get(byte[] b, int off) {
         byte[] data = SimpleByteCache.acquire(_datalen);
         System.arraycopy(b, off, data, 0, _datalen);
@@ -162,6 +168,9 @@ public class SDSCache<V extends SimpleDataStructure> {
      *  @return the cached value if available, otherwise
      *          makes a new object and returns it
      *  @throws IOException if not enough bytes
+     */
+    /**
+     * get.
      */
     public V get(InputStream in) throws IOException {
         byte[] data = SimpleByteCache.acquire(_datalen);

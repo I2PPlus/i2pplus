@@ -47,8 +47,12 @@ import net.i2p.util.SystemVersion;
 @SuppressWarnings("PMD.CloseResource")
 public final class KeyStoreUtil {
 
+    /** whether blacklist warning has been logged */
     private static boolean _blacklistLogged;
 
+    /**
+     * DEFAULT_KEYSTORE_PASSWORD.
+     */
     public static final String DEFAULT_KEYSTORE_PASSWORD = "changeit";
     private static final String DEFAULT_KEY_ALGORITHM = "RSA";
     private static final int DEFAULT_KEY_SIZE = 2048;
@@ -151,6 +155,8 @@ public final class KeyStoreUtil {
      *  @param ksFile may be null
      *  @param password may be null
      *  @return success
+     *  @throws GeneralSecurityException if keystore operations fail
+     *  @throws IOException if file operations fail
      */
     public static KeyStore createKeyStore(File ksFile, String password) throws GeneralSecurityException, IOException {
         boolean exists = ksFile != null && ksFile.exists();
@@ -272,6 +278,7 @@ public final class KeyStoreUtil {
     /**
      *  Count all X509 Certs in a key store
      *
+     *  @param ks the key store
      *  @return number successfully added
      *  @since 0.8.2, moved from SSLEepGet in 0.9.9
      */
@@ -473,6 +480,8 @@ public final class KeyStoreUtil {
      *
      *  This DOES check for revocation.
      *
+     *  @param dir the directory containing certificate files
+     *  @param ks the key store to add certificates to
      *  @return number successfully added
      *  @since 0.8.2, moved from SSLEepGet in 0.9.9
      */

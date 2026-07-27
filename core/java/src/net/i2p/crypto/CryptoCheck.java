@@ -11,6 +11,12 @@ import javax.crypto.spec.SecretKeySpec;
  *
  * @since 0.9.23
  */
+/**
+ * Crypto check utilities.
+ */
+/**
+ * CryptoCheck.
+ */
 public class CryptoCheck {
 
     private static final boolean _isUnlimited;
@@ -65,10 +71,16 @@ public class CryptoCheck {
     /**
      *  Do we have unlimited crypto?
      */
+    /**
+     * Return whether unlimited strength is available.
+     */
     public static boolean isUnlimited() {
         return _isUnlimited;
     }
 
+    /**
+     * main.
+     */
     public static void main(String[] args) {
         System.out.println("Unlimited? " + isUnlimited());
     }

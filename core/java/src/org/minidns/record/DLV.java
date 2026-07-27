@@ -25,15 +25,39 @@ import java.io.IOException;
  */
 public class DLV extends DelegatingDnssecRR {
 
+    /**
+     * Parse a DLV record from a data stream.
+     *
+     * @param dis the data input stream
+     * @param length the record length
+     * @return the parsed DLV record
+     * @throws IOException if parsing fails
+     */
     public static DLV parse(DataInputStream dis, int length) throws IOException {
         SharedData parsedData = DelegatingDnssecRR.parseSharedData(dis, length);
         return new DLV(parsedData.keyTag, parsedData.algorithm, parsedData.digestType, parsedData.digest);
     }
 
+    /**
+     * Create a DLV record.
+     *
+     * @param keyTag the key tag
+     * @param algorithm the signature algorithm
+     * @param digestType the digest algorithm
+     * @param digest the digest data
+     */
     public DLV(int keyTag, byte algorithm, byte digestType, byte[] digest) {
         super(keyTag, algorithm, digestType, digest);
     }
 
+    /**
+     * Create a DLV record with typed algorithms.
+     *
+     * @param keyTag the key tag
+     * @param algorithm the signature algorithm
+     * @param digestType the digest algorithm
+     * @param digest the digest data
+     */
     public DLV(int keyTag, SignatureAlgorithm algorithm, DigestAlgorithm digestType, byte[] digest) {
         super(keyTag, algorithm, digestType, digest);
     }

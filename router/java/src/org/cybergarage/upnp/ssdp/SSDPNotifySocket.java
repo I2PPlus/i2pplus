@@ -26,6 +26,9 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
     //  Constructor
     ////////////////////////////////////////////////
 
+    /**
+     * SSDPNotifySocket.
+     */
     public SSDPNotifySocket(String bindAddr) throws IOException {
         String addr = SSDP.ADDRESS;
         useIPv6Address = false;
@@ -47,10 +50,16 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
 
     private ControlPoint controlPoint = null;
 
+    /**
+     * setControlPoint.
+     */
     public void setControlPoint(ControlPoint ctrlp) {
         this.controlPoint = ctrlp;
     }
 
+    /**
+     * getControlPoint.
+     */
     public ControlPoint getControlPoint() {
         return controlPoint;
     }
@@ -77,6 +86,9 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
 
     private Thread deviceNotifyThread = null;
 
+    /**
+     * run.
+     */
     public void run() {
         Thread thisThread = Thread.currentThread();
         ControlPoint ctrlPoint = getControlPoint();
@@ -103,6 +115,9 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
         }
     }
 
+    /**
+     * start.
+     */
     public void start() {
         StringBuffer name = new StringBuffer("Cyber.SSDPNotifySocket/");
         String localAddr = this.getLocalAddress();
@@ -117,6 +132,9 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
         deviceNotifyThread.start();
     }
 
+    /**
+     * stop.
+     */
     public void stop() {
         close();
         deviceNotifyThread = null;

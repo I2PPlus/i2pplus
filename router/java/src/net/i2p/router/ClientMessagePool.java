@@ -24,6 +24,10 @@ public class ClientMessagePool {
     private final RouterContext _context;
     private final OutboundCache _cache;
 
+    /**
+     * Create a new ClientMessagePool.
+     * @param context the router context
+     */
     public ClientMessagePool(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(ClientMessagePool.class);

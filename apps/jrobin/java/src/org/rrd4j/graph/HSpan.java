@@ -7,20 +7,26 @@ import java.awt.Paint;
  * of values on the y-axis.
  */
 class HSpan extends Span {
+    /** Start */
     final double start;
+    /** End */
     final double end;
 
+    /** Create a horizontal span */
     HSpan(double start, double end, Paint color, LegendText legend) {
         super(color, legend);
         this.start = start;
         this.end = end;
         assert (start < end);
     }
-
+    /**
+     * Check range
+     */
     private boolean checkRange(double v, double min, double max) {
         return v >= min && v <= max;
     }
 
+    /** Legend visibility */
     void setLegendVisibility(double min, double max, boolean forceLegend) {
         legend.enabled =
                 legend.enabled

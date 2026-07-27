@@ -70,10 +70,13 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
          * @param w the width of the requested image
          * @param h the high of the requested image
          * @return an image to draw.
-         * @throws IOException
+         * @throws IOException if an error occurs during image reading or generation
          */
         BufferedImage apply(int w, int h) throws IOException;
     }
+    /**
+     * FileImageSource class.
+     */
 
     private static class FileImageSource implements ImageSource {
         private final File imagesource;
@@ -81,11 +84,17 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
         FileImageSource(String imagesource) {
             this.imagesource = new File(imagesource);
         }
+        /**
+         * Apply
+         */
 
         public BufferedImage apply(int w, int h) throws IOException {
             return ImageIO.read(imagesource);
         }
     }
+    /**
+     * UrlImageSource class.
+     */
 
     private static class UrlImageSource implements ImageSource {
         private final URL imagesource;
@@ -93,49 +102,86 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
         private UrlImageSource(URL imagesource) {
             this.imagesource = imagesource;
         }
+        /**
+         * Apply
+         */
 
         public BufferedImage apply(int w, int h) throws IOException {
             return ImageIO.read(imagesource);
         }
     }
 
+    /** Whether to use RrdDbPool for accessing RRD files. */
     boolean poolUsed = DEFAULT_POOL_USAGE_POLICY;
+    /** Optional RrdDbPool instance to use. */
     private RrdDbPool pool = null;
-    boolean antiAliasing = false; // ok
-    boolean textAntiAliasing = false; // ok
-    String filename = RrdGraphConstants.IN_MEMORY_IMAGE; // ok
-    long startTime, endTime; // ok
-    TimeAxisSetting timeAxisSetting = null; // ok
+    /** Whether to enable anti-aliasing for the chart area. */
+    boolean antiAliasing = false;
+    /** Whether to enable text anti-aliasing. */
+    boolean textAntiAliasing = false;
+    /** Path to the output image file, or '-' for in-memory only. */
+    String filename = RrdGraphConstants.IN_MEMORY_IMAGE;
+    /** Start and end timestamps for the graph (seconds since epoch). */
+    long startTime, endTime;
+    /** Configuration for the time axis grid and labels. */
+    TimeAxisSetting timeAxisSetting = null;
+    /** Custom time label format for the x-axis. */
     TimeLabelFormat timeLabelFormat = null;
+    /** Provider that returns a TimeLabelFormat based on the TimeUnit. */
     Function<TimeUnit, Optional<TimeLabelFormat>> formatProvider = s -> Optional.empty();
-    ValueAxisSetting valueAxisSetting = null; // ok
-    boolean altYGrid = false; // ok
-    boolean noMinorGrid = false; // ok
-    boolean altYMrtg = false; // ok
-    boolean altAutoscale = false; // ok
-    boolean altAutoscaleMin = false; // ok
-    boolean altAutoscaleMax = false; // ok
-    int unitsExponent = Integer.MAX_VALUE; // ok
-    int unitsLength = DEFAULT_UNITS_LENGTH; // ok
-    String verticalLabel = null; // ok
-    int width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT; // ok
-    boolean interlaced = false; // ok
-    String imageInfo = null; // ok
-    String imageFormat = DEFAULT_IMAGE_FORMAT; // ok
-    float imageQuality = DEFAULT_IMAGE_QUALITY; // ok
-    ImageSource backgroundImage = null; // ok
-    ImageSource canvasImage = null; // ok
-    ImageSource overlayImage = null; // ok
-    String unit = null; // ok
-    boolean lazy = false; // ok
-    double minValue = Double.NaN; // ok
-    double maxValue = Double.NaN; // ok
-    boolean rigid = false; // ok
-    double base = DEFAULT_BASE; // ok
-    boolean logarithmic = false; // ok
+    /** Configuration for the value (y) axis grid and labels. */
+    ValueAxisSetting valueAxisSetting = null;
+    /** Whether to place Y grid dynamically based on graph Y range. */
+    boolean altYGrid = false;
+    /** Whether to turn off minor grid lines. */
+    boolean noMinorGrid = false;
+    /** Whether to create MRTG-like graph. */
+    boolean altYMrtg = false;
+    /** Whether to use alternative autoscaling based on actual min/max values. */
+    boolean altAutoscale = false;
+    /** Whether alternative autoscaling affects only the minimum value. */
+    boolean altAutoscaleMin = false;
+    /** Whether alternative autoscaling affects only the maximum value. */
+    boolean altAutoscaleMax = false;
+    /** The 10**unitsExponent scaling for y-axis values. */
+    int unitsExponent = Integer.MAX_VALUE;
+    /** Character width reserved for y-axis labels on the left side. */
+    int unitsLength = DEFAULT_UNITS_LENGTH;
+    /** Vertical label displayed on the left side of the graph. */
+    String verticalLabel = null;
+    /** Width and height of the drawing area within the graph. */
+    int width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT;
+    /** Whether to create interlaced or progressive mode image. */
+    boolean interlaced = false;
+    /** Additional image info format string (printf-like). */
+    String imageInfo = null;
+    /** Image format for the output (e.g., PNG, GIF, JPEG). */
+    String imageFormat = DEFAULT_IMAGE_FORMAT;
+    /** Image quality for JPEG images (0F=worst, 1F=best). */
+    float imageQuality = DEFAULT_IMAGE_QUALITY;
+    /** Background image to render behind the graph. */
+    ImageSource backgroundImage = null;
+    /** Canvas background image rendered under the plot. */
+    ImageSource canvasImage = null;
+    /** Overlay image rendered on top of the completed graph. */
+    ImageSource overlayImage = null;
+    /** Unit string displayed on the y-axis. */
+    String unit = null;
+    /** Whether to create the graph only if out of date or not existent. */
+    boolean lazy = false;
+    /** Lower limit for the graph's y-axis. */
+    double minValue = Double.NaN;
+    /** Upper limit for the graph's y-axis. */
+    double maxValue = Double.NaN;
+    /** Whether to prevent automatic expansion of axis limits. */
+    boolean rigid = false;
+    /** Base value for magnitude scaling (1000 for network, 1024 for memory). */
+    double base = DEFAULT_BASE;
+    /** Whether to use logarithmic y-axis scaling. */
+    boolean logarithmic = false;
+    /** Array of Paint colors for standard graph elements indexed by ElementsNames. */
     private final Paint[] colors =
             new Paint[] {
-                // ok
                 DEFAULT_CANVAS_COLOR,
                 DEFAULT_BACK_COLOR,
                 DEFAULT_SHADEA_COLOR,
@@ -148,11 +194,17 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
                 DEFAULT_XAXIS_COLOR,
                 DEFAULT_YAXIS_COLOR
             };
-    boolean noLegend = false; // ok
-    boolean onlyGraph = false; // ok
-    boolean forceRulesLegend = false; // ok
-    String title = null; // ok
-    long step = 0; // ok
+    /** Whether to suppress the legend. */
+    boolean noLegend = false;
+    /** Whether to render only the graph (height < 64). */
+    boolean onlyGraph = false;
+    /** Whether to always render rule legends even if rules are out of bounds. */
+    boolean forceRulesLegend = false;
+    /** Title text to display on the graph. */
+    String title = null;
+    /** Suggested time step for processing RRD data. */
+    long step = 0;
+    /** Array of Font instances for each font tag (default, title, axis, unit, legend, watermark). */
     Font[] fonts =
             new Font[] {
                 DEFAULT_SMALL_FONT, // FONTTAG_DEFAULT
@@ -162,20 +214,32 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
                 DEFAULT_SMALL_FONT, // FONTTAG_LEGEND
                 GATOR_FONT // FONTTAG_WATERMARK
             };
-    boolean drawXGrid = true; // ok
-    boolean drawYGrid = true; // ok
-    int firstDayOfWeek = FIRST_DAY_OF_WEEK; // ok
+    /** Whether to draw the x-axis grid. */
+    boolean drawXGrid = true;
+    /** Whether to draw the y-axis grid. */
+    boolean drawYGrid = true;
+    /** First day of the week for time axis labels. */
+    int firstDayOfWeek = FIRST_DAY_OF_WEEK;
+    /** Locale used for legend formatting. */
     Locale locale = Locale.getDefault();
+    /** Time zone used for time axis labels. */
     TimeZone tz = TimeZone.getDefault();
+    /** Signature string displayed on the graph. */
     String signature = "Generated by RRD4J";
+    /** Whether to show the signature on the graph. */
     boolean showSignature = true;
+    /** Stroke used to draw grid lines. */
     Stroke gridStroke = GRID_STROKE;
+    /** Stroke used to draw tick marks. */
     Stroke tickStroke = TICK_STROKE;
-    // DownSampler downsampler = new LargestTriangleThreeBucketsTime(500);
+    /** Optional downsampler for improved visual representation. */
     DownSampler downsampler = null;
 
+    /** List of data source definitions for the graph. */
     final List<Source> sources = new ArrayList<>();
+    /** List of comment and print text elements for the graph. */
     final List<CommentText> comments = new ArrayList<>();
+    /** List of plot elements (lines, areas, rules, spans) to render. */
     final List<PlotElement> plotElements = new ArrayList<>();
 
     /**
@@ -192,6 +256,8 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     /**
      * Creates RrdGraphDef object.
      *
+     * @param t1 the start timestamp
+     * @param t2 the end timestamp
      * @since 3.7
      */
     public RrdGraphDef(long t1, long t2) {
@@ -385,14 +451,14 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * int, int, int, String)}, but it allows to use a {@link org.rrd4j.graph.TimeLabelFormat} to
      * format the date label.
      *
-     * @param minorUnit
-     * @param minorUnitCount
-     * @param majorUnit
-     * @param majorUnitCount
-     * @param labelUnit
-     * @param labelUnitCount
-     * @param labelSpan
-     * @param format
+     * @param minorUnit the minor unit
+     * @param minorUnitCount the minor unit count
+     * @param majorUnit the major unit
+     * @param majorUnitCount the major unit count
+     * @param labelUnit the label unit
+     * @param labelUnitCount the label unit count
+     * @param labelSpan the label span
+     * @param format the time label format
      */
     public void setTimeAxis(
             int minorUnit,
@@ -1076,6 +1142,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
         this.setFont(FontTag.valueOf(fontTag), font, setAll, keepSizes);
     }
 
+    /**
+     * getFont.
+     */
     public Font getFont(final FontTag tag) {
         return this.fonts[tag.ordinal()] == null
                 ? this.fonts[FONTTAG_DEFAULT.ordinal()]
@@ -1788,6 +1857,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
         }
         plotElements.add(new Stack(parent, srcName, color));
     }
+    /**
+     * Find parent
+     */
 
     private SourcedPlotElement findParent() {
         // find parent AREA or LINE
@@ -1917,6 +1989,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     }
 
     /**
+     * Returns the time zone used for the graph.
+     *
+     * @return the time zone
      * @since 3.7
      */
     @Override
@@ -1954,6 +2029,11 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
         this.downsampler = downsampler;
     }
 
+    /**
+     * Returns the number of print statements defined.
+     *
+     * @return the count of PrintText comments with print flag set
+     */
     int printStatementCount() {
         int count = 0;
         for (CommentText comment : comments) {
@@ -1966,6 +2046,11 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
         return count;
     }
 
+    /**
+     * Returns whether there are any plot elements or valid graph comments to render.
+     *
+     * @return true if the graph has content to plot, false otherwise
+     */
     boolean shouldPlot() {
         if (plotElements.size() > 0) {
             return true;
@@ -1978,11 +2063,20 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
         return false;
     }
 
+    /**
+     * Returns the Paint color for the given graph element type.
+     *
+     * @param element the graph element type
+     * @return the Paint color assigned to that element
+     */
     Paint getColor(ElementsNames element) {
         return colors[element.ordinal()];
     }
 
     /**
+     * Returns the end timestamp for the graph.
+     *
+     * @return end time in seconds since epoch
      * @since 3.7
      */
     @Override
@@ -1991,6 +2085,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     }
 
     /**
+     * Returns the start timestamp for the graph.
+     *
+     * @return start time in seconds since epoch
      * @since 3.7
      */
     @Override
@@ -1999,6 +2096,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     }
 
     /**
+     * Returns the suggested time step for processing RRD data.
+     *
+     * @return the time step in seconds
      * @since 3.7
      */
     @Override
@@ -2007,6 +2107,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     }
 
     /**
+     * Returns whether ticks should be drawn.
+     *
+     * @return true if ticks should be drawn, false otherwise
      * @since 3.10
      */
     boolean drawTicks() {

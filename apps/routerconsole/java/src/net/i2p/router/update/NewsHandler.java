@@ -37,6 +37,9 @@ public class NewsHandler extends UpdateHandler implements Checker {
     private static final String DEFAULT_BACKUP_NEWS_URL_SU3 = "http://dn3tvalnjz432qkqsvpfdqrwpqkw3ye4n4i2uyfr4jexvo3sp5ka.b32.i2p/news/news.su3";
     private static final String PROP_BACKUP_NEWS_URL_SU3 = "router.backupNewsURL";
 
+    /**
+     * NewsHandler.
+     */
     public NewsHandler(RouterContext ctx, ConsoleUpdateManager mgr) {
         super(ctx, mgr);
     }

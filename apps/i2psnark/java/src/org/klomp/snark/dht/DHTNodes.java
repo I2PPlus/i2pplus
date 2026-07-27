@@ -60,11 +60,13 @@ class DHTNodes {
         _kad = new KBucketSet<>(ctx, me, KAD_K, KAD_B, new KBTrimmer(ctx, KAD_K));
     }
 
+    /** Start the DHT node manager. */
     public void start() {
         _isRunning = true;
         new Cleaner();
     }
 
+    /** Stop the DHT node manager. */
     public void stop() {
         clear();
         _isRunning = false;
@@ -73,7 +75,9 @@ class DHTNodes {
     // begin ConcurrentHashMap methods
 
     /**
-     * @return known nodes, not total net size
+     * Number of known nodes, not total net size.
+     *
+     * @return known nodes
      */
     public int size() {
         return _nodeMap.size();
@@ -98,6 +102,9 @@ class DHTNodes {
     }
 
     /**
+     * Insert a node if absent.
+     *
+     * @param nInfo the node info to insert
      * @return the old value if present, else null
      */
     public NodeInfo putIfAbsent(NodeInfo nInfo) {
@@ -168,7 +175,6 @@ class DHTNodes {
         buf.append(_kad.toString().replace("\n", "<br>\n"));
     }
 
-    /** */
     private class Cleaner extends SimpleTimer2.TimedEvent {
 
         public Cleaner() {

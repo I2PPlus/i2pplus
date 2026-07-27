@@ -12,6 +12,7 @@ public class MLKEMKeyGenerationParameters
 {
     private final MLKEMParameters params;
 
+    /** Create ML-KEM key generation parameters. */
     public MLKEMKeyGenerationParameters(
         SecureRandom random,
         MLKEMParameters mlkemParameters)
@@ -20,6 +21,9 @@ public class MLKEMKeyGenerationParameters
         this.params = mlkemParameters;
     }
 
+    /**
+     * getParameters.
+     */
     public MLKEMParameters getParameters()
     {
         return params;

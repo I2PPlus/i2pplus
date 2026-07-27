@@ -15,8 +15,11 @@ import net.i2p.util.SecureFileOutputStream;
  */
 public class FileBuffer implements Buffer {
 
+	/** the file */
 	protected final File _file;
+	/** the offset */
 	protected final int _offset;
+	/** the sub-length */
 	protected final int _sublen;
 	private InputStream _is;
 	private OutputStream _os;

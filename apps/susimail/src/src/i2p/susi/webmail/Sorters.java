@@ -18,6 +18,7 @@ class Sorters {
      * @since 0.9.13
      */
     private abstract static class SorterBase implements Comparator<String>, Serializable {
+        /** ignored */
         private final MailCache mailCache;
 
         /**
@@ -27,7 +28,7 @@ class Sorters {
         protected SorterBase(MailCache mailCache) {this.mailCache = mailCache;}
 
         /**
-         *  Gets mail from the cache, checks for null, then compares
+         * Compare two objects.
          */
         public int compare(String arg0, String arg1) {
             Mail a = mailCache.getMail(arg0, MailCache.FetchMode.HEADER_CACHE_ONLY);
@@ -39,16 +40,10 @@ class Sorters {
             return fallbackCompare(a, b);
         }
 
-        /**
-         * @param a non-null
-         * @param b non-null
-         */
+        /** Compare two mail objects */
         protected abstract int compare(Mail a, Mail b);
 
-        /**
-         * @param a non-null
-         * @param b non-null
-         */
+        /** ignored */
         private int fallbackCompare(Mail a, Mail b) {return DateSorter.scompare(a, b);}
     }
 
@@ -57,11 +52,15 @@ class Sorters {
      */
     public static class SenderSorter extends SorterBase {
 
+        /** ignored */
         private final Comparator<Object> collator = Collator.getInstance();
 
         /** @param mailCache the mail cache */
         public SenderSorter(MailCache mailCache) {super(mailCache);}
 
+        /**
+         * Compare two objects.
+         */
         protected int compare(Mail a, Mail b) {
             String as = a.sender.replace("\"", "").replace("<", "").replace(">", "");
             String bs = b.sender.replace("\"", "").replace("<", "").replace(">", "");
@@ -76,11 +75,15 @@ class Sorters {
      */
     public static class ToSorter extends SorterBase {
 
+        /** ignored */
         private final Comparator<Object> collator = Collator.getInstance();
 
         /** @param mailCache the mail cache */
         public ToSorter(MailCache mailCache) {super(mailCache);}
 
+        /**
+         * Compare two objects.
+         */
         protected int compare(Mail a, Mail b) {
             if (a.to == null) {return b.to == null ? 0 : -1;}
             if (b.to == null) {return 1;}
@@ -101,14 +104,19 @@ class Sorters {
      * Sorts Mail objects by subject field.
      */
     public static class SubjectSorter extends SorterBase {
-        // tagged in WebMail
+        /** ignored */
         private static final String xre = Messages.getString("Re:").toLowerCase(Locale.US);
+        /** ignored */
         private static final String xfwd = Messages.getString("Fwd:").toLowerCase(Locale.US);
+        /** ignored */
         private final Comparator<Object> collator = Collator.getInstance();
 
         /** @param mailCache the mail cache */
         public SubjectSorter(MailCache mailCache) {super(mailCache);}
 
+        /**
+         * Compare two objects.
+         */
         protected int compare(Mail a, Mail b) {
             String as = a.subject;
             String bs = b.subject;
@@ -142,6 +150,9 @@ class Sorters {
         /** @param mailCache the mail cache */
         public DateSorter(MailCache mailCache) {super(mailCache);}
 
+        /**
+         * Compare two objects.
+         */
         protected int compare(Mail a, Mail b) {return scompare(a, b);}
 
         /**
@@ -162,6 +173,9 @@ class Sorters {
         /** @param mailCache the mail cache */
         public SizeSorter(MailCache mailCache) {super(mailCache);}
 
+        /**
+         * Compare two objects.
+         */
         protected int compare(Mail a, Mail b) {
             long as = a.getSize();
             long bs = b.getSize();

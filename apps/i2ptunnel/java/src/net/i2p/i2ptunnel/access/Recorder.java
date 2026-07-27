@@ -11,7 +11,9 @@ import java.io.File;
  */
 class Recorder {
 
+    /** ignored */
     private final File file;
+    /** ignored */
     private final Threshold threshold;
 
     /**
@@ -23,10 +25,12 @@ class Recorder {
         this.threshold = threshold;
     }
 
+    /** @return the file */
     File getFile() {
         return file;
     }
 
+    /** @return the threshold */
     Threshold getThreshold() {
         return threshold;
     }

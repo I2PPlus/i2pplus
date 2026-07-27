@@ -12,8 +12,14 @@ import net.i2p.util.Log;
  * @since 0.9.33
  */
 public class TunnelParticipatingFastestHelper extends HelperBase {
+    /**
+     * TunnelParticipatingFastestHelper.
+     */
     public TunnelParticipatingFastestHelper() { /* nop */ }
 
+    /**
+     * getTunnelParticipatingFastest.
+     */
     public String getTunnelParticipatingFastest() {
         TunnelRenderer renderer = new TunnelRenderer(_context);
         try {

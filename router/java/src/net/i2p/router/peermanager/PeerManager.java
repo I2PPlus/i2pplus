@@ -71,6 +71,9 @@ class PeerManager {
     // for profiles stored to disk
     private static final long EXPIRE_AGE = 7*24*60*60*1000L;
 
+    /**
+     * TRACKED_CAPS.
+     */
     public static final String TRACKED_CAPS = "" +
         FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL +
         RouterInfo.CAPABILITY_HIDDEN +
@@ -106,7 +109,13 @@ class PeerManager {
     }
 
     private class Reorg extends SimpleTimer2.TimedEvent {
+        /**
+         * Reorg.
+         */
         public Reorg() {super(_context.simpleTimer2(), REORGANIZE_TIME);}
+        /**
+         * timeReached.
+         */
         public void timeReached() {(new ReorgThread(this)).start();}
     }
 
@@ -121,12 +130,18 @@ class PeerManager {
     private class ReorgThread extends I2PThread {
         private final SimpleTimer2.TimedEvent _event;
 
+        /**
+         * ReorgThread.
+         */
         public ReorgThread(SimpleTimer2.TimedEvent event) {
             super("PeerManager Reorg");
             setDaemon(true);
             _event = event;
         }
 
+        /**
+         * run.
+         */
         public void run() {
             long start = System.currentTimeMillis();
             long uptime = _context.router().getUptime();
@@ -158,6 +173,9 @@ class PeerManager {
         }
     }
 
+    /**
+     * Write active profiles to disk
+     */
     void storeProfiles() {
         // Don't overwrite disk profiles when testing
         if (_context.commSystem().isDummy()) {return;}
@@ -187,6 +205,9 @@ class PeerManager {
         for (Set<Hash> p : _peersByCapability.values()) {p.clear();}
     }
 
+    /**
+     * @return all tracked peers from the organizer
+     */
     Set<Hash> selectPeers() {return _organizer.selectAllPeers();}
 
     /**
@@ -228,6 +249,9 @@ class PeerManager {
         Router r = _context.router();
         long uptime = (r != null) ? r.getUptime() : 0L;
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             if (uptime < 60 * 1000L) {
@@ -324,6 +348,9 @@ class PeerManager {
         return _peersByCapability.get(Character.valueOf(c));
     }
 
+    /**
+     * removeCapabilities.
+     */
     public void removeCapabilities(Hash peer) {
         if (_log.shouldDebug()) {_log.debug("Removing capabilities from [" + peer.toBase64().substring(0,6) + "]");}
         String oldCaps = _capabilitiesByPeer.remove(peer);

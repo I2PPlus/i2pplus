@@ -24,6 +24,9 @@ import java.io.OutputStream;
  * @author jrandom
  */
 public class MessageStatusMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 22;
     private int _sessionId;
     private long _messageId;
@@ -36,6 +39,9 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      */
     public static final int STATUS_AVAILABLE = 0;
 
+    /**
+     * STATUS_SEND_ACCEPTED.
+     */
     public static final int STATUS_SEND_ACCEPTED = 1;
 
     /** unused */
@@ -232,6 +238,9 @@ public class MessageStatusMessage extends I2CPMessageImpl {
         _nonce = -1;
     }
 
+    /**
+     * getSessionId.
+     */
     public long getSessionId() {
         return _sessionId;
     }
@@ -255,6 +264,9 @@ public class MessageStatusMessage extends I2CPMessageImpl {
         _sessionId = (int) id;
     }
 
+    /**
+     * getStatus.
+     */
     public int getStatus() {
         return _status;
     }
@@ -300,10 +312,16 @@ public class MessageStatusMessage extends I2CPMessageImpl {
         _messageId = id;
     }
 
+    /**
+     * getSize.
+     */
     public long getSize() {
         return _size;
     }
 
+    /**
+     * setSize.
+     */
     public void setSize(long size) {
         _size = size;
     }
@@ -322,6 +340,9 @@ public class MessageStatusMessage extends I2CPMessageImpl {
         _nonce = nonce;
     }
 
+    /**
+     * getStatusString.
+     */
     public static final String getStatusString(int status) {
         switch (status) {
             case STATUS_AVAILABLE: return "AVAILABLE";
@@ -336,6 +357,9 @@ public class MessageStatusMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
@@ -376,16 +400,25 @@ public class MessageStatusMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         throw new UnsupportedOperationException("This shouldn't be called... use writeMessage(out)");
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();

@@ -16,24 +16,35 @@ import org.rrd4j.data.DataProcessor;
  */
 class RrdGraphGenerator {
 
+    /** ignored */
     private static final double[] SENSIBLE_VALUES = {
         1000.0, 900.0, 800.0, 750.0, 700.0, 600.0, 500.0, 400.0, 300.0, 250.0, 200.0, 125.0, 100.0,
         90.0, 80.0, 75.0, 70.0, 60.0, 50.0, 40.0, 30.0, 25.0, 20.0, 10.0, 9.0, 8.0, 7.0, 6.0, 5.0,
         4.0, 3.5, 3.0, 2.5, 2.0, 1.8, 1.5, 1.2, 1.0, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.0, -1
     };
+    /** ignored */
     private static final int SYMBOLS_CENTER = 8;
+    /** ignored */
     private static final char[] SYMBOLS = {
         'y', 'z', 'a', 'f', 'p', 'n', 'µ', 'm', ' ', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'
     };
+    /** Gdef */
 
     final RrdGraphDef gdef;
+    /** Worker */
     final ImageWorker worker;
+    /** Dproc */
     private final DataProcessor dproc;
+    /** Mapper */
     Mapper mapper;
+    /** Graph info */
     final RrdGraphInfo info = new RrdGraphInfo();
+    /** Signature */
     private final String signature;
+    /** Im */
     final ImageParameters im;
 
+    /** Create a graph generator */
     RrdGraphGenerator(RrdGraphDef gdef, ImageWorker worker, DataProcessor dproc) {
         this.gdef = gdef;
         this.worker = worker;
@@ -41,6 +52,9 @@ class RrdGraphGenerator {
         signature = gdef.getSignature();
         im = new ImageParameters();
     }
+    /**
+     * Create graph
+     */
 
     void createGraph() throws IOException {
         boolean lazy = lazyCheck();
@@ -72,6 +86,9 @@ class RrdGraphGenerator {
         }
         collectInfo();
     }
+    /**
+     * Collect info
+     */
 
     private void collectInfo() {
         info.filename = gdef.filename;
@@ -90,6 +107,9 @@ class RrdGraphGenerator {
                     Util.sprintf(gdef.locale, gdef.imageInfo, gdef.filename, im.xgif, im.ygif);
         }
     }
+    /**
+     * Save image
+     */
 
     private void saveImage() throws IOException {
         if (!RrdGraphConstants.IN_MEMORY_IMAGE.equals(gdef.filename)) {
@@ -117,12 +137,18 @@ class RrdGraphGenerator {
             info.bytesCount = () -> content.length;
         }
     }
+    /**
+     * Draw overlay
+     */
 
     private void drawOverlay() throws IOException {
         if (gdef.overlayImage != null) {
             worker.loadImage(gdef.overlayImage, 0, 0, im.xgif, im.ygif);
         }
     }
+    /**
+     * Gator
+     */
 
     private void gator() {
         if (!gdef.onlyGraph && gdef.showSignature) {
@@ -136,6 +162,9 @@ class RrdGraphGenerator {
             worker.setTextAntiAliasing(false);
         }
     }
+    /**
+     * Draw rules and spans
+     */
 
     private void drawRulesAndSpans() {
         boolean found = false;
@@ -199,14 +228,15 @@ class RrdGraphGenerator {
         }
         if (found) worker.reset();
     }
+    /**
+     * Draw text
+     */
 
     private void drawText() {
         if (!gdef.onlyGraph) {
             worker.setTextAntiAliasing(gdef.textAntiAliasing);
             if (gdef.title != null) {
                 // I2P truncate on the right only
-                // int x = im.xgif / 2 - (int) (worker.getStringWidth(gdef.title,
-                // gdef.getFont(RrdGraphConstants.FONTTAG_TITLE)) / 2);
                 int x =
                         Math.max(
                                 2,
@@ -219,7 +249,6 @@ class RrdGraphGenerator {
                                                                                 .FONTTAG_TITLE))
                                                         / 2));
                 // I2P a little less padding on top and more on the bottom
-                // int y = PADDING_TOP + (int) worker.getFontAscent(gdef.getFont(FONTTAG_TITLE));
                 int y =
                         RrdGraphConstants.PADDING_TOP * 2 / 3
                                 + (int)
@@ -256,6 +285,9 @@ class RrdGraphGenerator {
             worker.setTextAntiAliasing(false);
         }
     }
+    /**
+     * Draw grid
+     */
 
     private void drawGrid() {
         if (!gdef.onlyGraph) {
@@ -303,6 +335,9 @@ class RrdGraphGenerator {
             worker.setTextAntiAliasing(false);
         }
     }
+    /**
+     * Draw data
+     */
 
     private void drawData() {
         worker.setAntiAliasing(gdef.antiAliasing);
@@ -356,6 +391,9 @@ class RrdGraphGenerator {
         worker.reset();
         worker.setAntiAliasing(false);
     }
+    /**
+     * Draw axis
+     */
 
     private void drawAxis() {
         if (!gdef.onlyGraph) {
@@ -415,6 +453,9 @@ class RrdGraphGenerator {
             worker.fillPolygon(yArrowX, im.yorigin - im.ysize - 4.0, yArrowY, arrowColor);
         }
     }
+    /**
+     * Draw background
+     */
 
     private void drawBackground() throws IOException {
         worker.fillRect(0, 0, im.xgif, im.ygif, gdef.getColor(ElementsNames.back));
@@ -432,10 +473,16 @@ class RrdGraphGenerator {
                 im.ysize,
                 gdef.getColor(ElementsNames.canvas));
     }
+    /**
+     * Create image worker
+     */
 
     private void createImageWorker() {
         worker.resize(im.xgif, im.ygif);
     }
+    /**
+     * Place legends
+     */
 
     private void placeLegends() {
         if (!gdef.noLegend && !gdef.onlyGraph) {
@@ -447,6 +494,9 @@ class RrdGraphGenerator {
             im.ygif = lc.placeComments() + RrdGraphConstants.PADDING_BOTTOM;
         }
     }
+    /**
+     * Initialize limits
+     */
 
     private void initializeLimits() {
         im.xsize = gdef.width;
@@ -492,6 +542,9 @@ class RrdGraphGenerator {
                                             * getFontHeight(RrdGraphConstants.FONTTAG_AXIS));
         }
     }
+    /**
+     * Remove out of range rules
+     */
 
     private void removeOutOfRangeRules() {
         for (PlotElement plotElement : gdef.plotElements) {
@@ -503,6 +556,9 @@ class RrdGraphGenerator {
             }
         }
     }
+    /**
+     * Remove out of range spans
+     */
 
     private void removeOutOfRangeSpans() {
         for (PlotElement plotElement : gdef.plotElements) {
@@ -514,6 +570,9 @@ class RrdGraphGenerator {
             }
         }
     }
+    /**
+     * Expand value range
+     */
 
     private void expandValueRange() {
         im.ygridstep =
@@ -639,6 +698,9 @@ class RrdGraphGenerator {
             }
         }
     }
+    /**
+     * Identify si unit
+     */
 
     private void identifySiUnit() {
         im.unitsexponent = gdef.unitsExponent;
@@ -661,6 +723,9 @@ class RrdGraphGenerator {
             }
         }
     }
+    /**
+     * Find min max values
+     */
 
     private void findMinMaxValues() {
         double minval = Double.NaN;
@@ -709,6 +774,9 @@ class RrdGraphGenerator {
             im.log = LogService.resolve(im);
         }
     }
+    /**
+     * Calculate plot values
+     */
 
     private void calculatePlotValues() {
         for (PlotElement pe : gdef.plotElements) {
@@ -717,6 +785,9 @@ class RrdGraphGenerator {
             }
         }
     }
+    /**
+     * Resolve text elements
+     */
 
     private void resolveTextElements() {
         ValueScaler valueScaler = new ValueScaler(gdef.base);
@@ -724,6 +795,9 @@ class RrdGraphGenerator {
             comment.resolveText(gdef.locale, dproc, valueScaler);
         }
     }
+    /**
+     * Fetch data
+     */
 
     private void fetchData() throws IOException {
         dproc.setPixelCount(gdef.width);
@@ -743,6 +817,9 @@ class RrdGraphGenerator {
         im.start = gdef.startTime;
         im.end = gdef.endTime;
     }
+    /**
+     * Lazy check
+     */
 
     private boolean lazyCheck() throws IOException {
         // redraw if lazy option is not set or file does not exist
@@ -754,6 +831,9 @@ class RrdGraphGenerator {
         long elapsed = Util.getTimestamp() - Util.getLastModifiedTime(gdef.filename);
         return elapsed <= secPerPixel;
     }
+    /**
+     * Draw legend
+     */
 
     private void drawLegend() {
         if (!gdef.onlyGraph && !gdef.noLegend) {
@@ -805,37 +885,47 @@ class RrdGraphGenerator {
 
     // helper methods
 
+    /** Return the font height */
     double getFontHeight(RrdGraphConstants.FontTag fonttag) {
         return worker.getFontHeight(gdef.getFont(fonttag));
     }
 
+    /** Return the font char width */
     double getFontCharWidth(RrdGraphConstants.FontTag fonttag) {
         return worker.getStringWidth("a", gdef.getFont(fonttag));
     }
 
+    /** Return the inter-legend space */
     double getInterlegendSpace() {
         return getFontCharWidth(RrdGraphConstants.FONTTAG_LEGEND)
                 * RrdGraphConstants.LEGEND_INTERSPACING;
     }
 
+    /** Return the leading */
     double getLeading() {
         return getFontHeight(RrdGraphConstants.FONTTAG_LEGEND) * RrdGraphConstants.LEGEND_LEADING;
     }
 
+    /** @return the small leading */
     double getSmallLeading() {
         return getFontHeight(RrdGraphConstants.FONTTAG_LEGEND)
                 * RrdGraphConstants.LEGEND_LEADING_SMALL;
     }
 
+    /** @return the box space */
     double getBoxSpace() {
         return Math.ceil(
                 getFontHeight(RrdGraphConstants.FONTTAG_LEGEND)
                         * RrdGraphConstants.LEGEND_BOX_SPACE);
     }
 
+    /** ignored */
     private double getBox() {
         return getFontHeight(RrdGraphConstants.FONTTAG_LEGEND) * RrdGraphConstants.LEGEND_BOX;
     }
+    /**
+     * Xtr
+     */
 
     private double[] xtr(long[] timestamps) {
         double[] timestampsDev = new double[2 * timestamps.length - 1];
@@ -847,6 +937,9 @@ class RrdGraphGenerator {
         }
         return timestampsDev;
     }
+    /**
+     * Ytr
+     */
 
     private double[] ytr(double[] values) {
         double[] valuesDev = new double[2 * values.length - 1];

@@ -22,15 +22,27 @@ import java.io.InputStream;
  * @author jrandom
  */
 public class ReceiveMessageEndMessage extends I2CPMessageImpl {
+    /**
+     * Message type.
+     */
     public static final int MESSAGE_TYPE = 7;
     private int _sessionId;
+    /**
+     * _message id.
+     */
     private long _messageId;
 
+    /**
+     * Construct a new instance.
+     */
     public ReceiveMessageEndMessage() {
         _sessionId = -1;
         _messageId = -1;
     }
 
+    /**
+     * Get the session id.
+     */
     public long getSessionId() {
         return _sessionId;
     }
@@ -46,6 +58,9 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
     }
 
     /**
+     * The value.
+     */
+    /**
      *  Sets the session ID for this message.
      *
      * @param id 0-65535
@@ -54,10 +69,16 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
         _sessionId = (int) id;
     }
 
+    /**
+     * Get the message id.
+     */
     public long getMessageId() {
         return _messageId;
     }
 
+    /**
+     * Set the message id.
+     */
     public void setMessageId(long id) {
         _messageId = id;
     }

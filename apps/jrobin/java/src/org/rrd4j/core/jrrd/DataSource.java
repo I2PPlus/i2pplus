@@ -28,6 +28,7 @@ public class DataSource {
     // initialized during RRDatabase construction
     private PDPStatusBlock pdpStatusBlock;
 
+    /** Create data source from file */
     DataSource(RRDFile file) {
 
         offset = file.getFilePointer();
@@ -41,6 +42,7 @@ public class DataSource {
         size = file.getFilePointer() - offset;
     }
 
+    /** Load PDP status block */
     void loadPDPStatusBlock(RRDFile file) {
         pdpStatusBlock = new PDPStatusBlock(file);
     }
@@ -100,6 +102,7 @@ public class DataSource {
         return name;
     }
 
+    /** Print info */
     void printInfo(PrintStream s, NumberFormat numberFormat) {
 
         StringBuilder sb = new StringBuilder("ds[");
@@ -132,6 +135,7 @@ public class DataSource {
         s.println(pdpStatusBlock.unknownSeconds);
     }
 
+    /** Output XML */
     void toXml(PrintStream s) {
 
         s.println("\t<ds>");

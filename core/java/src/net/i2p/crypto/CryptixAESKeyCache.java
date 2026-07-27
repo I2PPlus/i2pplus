@@ -13,12 +13,18 @@ import java.io.Serializable;
  * Unused as a class, as the keys are cached in the SessionKey objects,
  * but the static methods are used in FortunaStandalone.
  */
+/**
+ * CryptixAESKeyCache.
+ */
 public final class CryptixAESKeyCache {
     private static final int KEYSIZE = 32; // 256bit AES
     private static final int BLOCKSIZE = 16;
     private static final int ROUNDS = CryptixRijndael_Algorithm.getRounds(KEYSIZE, BLOCKSIZE);
     private static final int BC = BLOCKSIZE / 4;
 
+    /**
+     * createNew.
+     */
     public static final KeyCacheEntry createNew() {
         KeyCacheEntry e = new KeyCacheEntry();
         return e;
@@ -60,6 +66,9 @@ public final class CryptixAESKeyCache {
         /** decryption round keys */
         final int[][] Kd;
 
+        /**
+         * KeyCacheEntry.
+         */
         public KeyCacheEntry() {
             Ke = new int[ROUNDS + 1][BC];
             Kd = new int[ROUNDS + 1][BC];

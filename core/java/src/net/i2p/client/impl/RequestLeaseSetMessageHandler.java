@@ -58,6 +58,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 class RequestLeaseSetMessageHandler extends HandlerImpl {
     private final Map<Destination, LeaseInfo> _existingLeaseSets;
+    /**
+     * _ls2Type.
+     */
     protected volatile int _ls2Type = DatabaseEntry.KEY_TYPE_LS2;
 
     // LS 1
@@ -66,6 +69,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     private static final String PROP_LS_PK = "i2cp.leaseSetPrivateKey";
     private static final String PROP_LS_SPK = "i2cp.leaseSetSigningPrivateKey";
     // LS 2
+    /**
+     * PROP_LS_TYPE.
+     */
     public static final String PROP_LS_TYPE = "i2cp.leaseSetType";
     private static final String PROP_LS_ENCTYPE = "i2cp.leaseSetEncType";
     private static final String PROP_SECRET = "i2cp.leaseSetSecret";
@@ -76,6 +82,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
 
     private static final boolean PREFER_NEW_ENC = true;
 
+    /**
+     * RequestLeaseSetMessageHandler.
+     */
     public RequestLeaseSetMessageHandler(I2PAppContext context) {
         this(context, RequestLeaseSetMessage.MESSAGE_TYPE);
     }
@@ -121,7 +130,13 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         return true;
     }
 
+    /**
+     * handleMessage.
+     */
     @Override
+    /**
+     * Handle an incoming I2CP message.
+     */
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
         if (_log.shouldDebug()) {
             _log.debug("Handling " + message);
@@ -702,7 +717,13 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         private static class PrivKeyComparator implements Comparator<PrivateKey>, Serializable {
             private static final long serialVersionUID = 1L;
 
+            /**
+             * compare.
+             */
             @Override
+            /**
+             * Compare two objects.
+             */
             public int compare(PrivateKey l, PrivateKey r) {
                 return r.getType().compareTo(l.getType());
             }

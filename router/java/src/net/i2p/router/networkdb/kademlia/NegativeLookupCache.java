@@ -31,10 +31,16 @@ class NegativeLookupCache {
     private final SimpleTimer2.TimedEvent cleaner;
     private final long cleanTime;
 
+    /** maximum number of failures before caching */
     static final int MAX_FAILS = 6;
     private static final int MAX_BAD_DESTS = 128;
     private static final long CLEAN_TIME = 2*60*1000L;
 
+    /**
+     * Creates a new NegativeLookupCache.
+     *
+     * @param context the router context
+     */
     public NegativeLookupCache(RouterContext context) {
         this.counter = new ObjectCounter<>();
         this.badDests = new LHMCache<>(MAX_BAD_DESTS);
@@ -43,6 +49,11 @@ class NegativeLookupCache {
         cleaner = new Cleaner(context.simpleTimer2());
     }
 
+    /**
+     * Record a failed lookup for the given hash.
+     *
+     * @param h the hash that failed lookup
+     */
     public void lookupFailed(Hash h) {
         this.counter.increment(h);
     }
@@ -52,10 +63,21 @@ class NegativeLookupCache {
      *
      *  @since 0.9.56
      */
+    /**
+     * Negative cache the hash until the next clean time.
+     *
+     * @param h the hash to cache
+     */
     public void cache(Hash h) {
         this.counter.max(h);
     }
 
+    /**
+     * Check if the hash is in the negative cache.
+     *
+     * @param h the hash to check
+     * @return true if the hash is cached
+     */
     public boolean isCached(Hash h) {
         if (counter.count(h) >= _maxFails)
             return true;
@@ -70,6 +92,11 @@ class NegativeLookupCache {
      *
      *  @since 0.9.16
      */
+    /**
+     * Negative cache the hash permanently.
+     *
+     * @param dest the destination to permanently fail
+     */
     public void failPermanently(Destination dest) {
         Hash h = dest.calculateHash();
         synchronized(badDests) {
@@ -82,6 +109,12 @@ class NegativeLookupCache {
      *
      *  @return dest or null if not cached
      *  @since 0.9.16
+     */
+    /**
+     * Get a cached bad destination.
+     *
+     * @param h the hash to look up
+     * @return the destination or null if not cached
      */
     public Destination getBadDest(Hash h) {
         synchronized(badDests) {

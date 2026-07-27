@@ -61,6 +61,10 @@ public class Archive {
     /** Cached content */
     private double[][] values;
 
+    /**
+     *  Create an Archive from an RRD file.
+     *  @param db the RRD database
+     */
     Archive(RRDatabase db) {
 
         this.db = db;

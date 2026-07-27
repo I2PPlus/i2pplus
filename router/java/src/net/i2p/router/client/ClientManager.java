@@ -56,6 +56,7 @@ import net.i2p.util.SystemVersion;
  */
 class ClientManager {
     private final Log _log;
+    /** registered client listener runners */
     protected final List<ClientListenerRunner> _listeners;
     // Destination --> ClientConnectionRunner
     // Locked for adds/removes but not lookups
@@ -70,9 +71,13 @@ class ClientManager {
     private final Set<SessionId> _runnerSessionIds;
     private final Set<Destination> _metaDests;
     private final Set<Hash> _metaHashes;
+    /** router context */
     protected final RouterContext _ctx;
+    /** I2CP listen port */
     protected final int _port;
+    /** true after start() completes */
     protected volatile boolean _isStarted;
+    /** true if start() was ever called */
     protected volatile boolean _wasStarted;
     private final SimpleTimer2.TimedEvent _clientTimestamper;
 
@@ -86,11 +91,15 @@ class ClientManager {
     private static final int MAX_SESSION_ID = 65534; /** 2 bytes, save 65535 for unknown */
     private static final String PROP_MAX_SESSIONS = "i2cp.maxSessions";
     private static final int DEFAULT_MAX_SESSIONS = SystemVersion.isSlow() ? 768 : 1536;
-    public static final SessionId UNKNOWN_SESSION_ID = new SessionId(MAX_SESSION_ID + 1); /** 65535 */
+    /** 65535 */
+    public static final SessionId UNKNOWN_SESSION_ID = new SessionId(MAX_SESSION_ID + 1);
 
     /**
      *  Does not start the listeners.
      *  Caller must call start()
+     *
+     *  @param context the router context
+     *  @param port the I2CP port
      */
     public ClientManager(RouterContext context, int port) {
         _ctx = context;
@@ -111,7 +120,10 @@ class ClientManager {
         _ctx.statManager().createRequiredRateStat("i2cp.internalQueueSize", "I2CP internal queue capacity", "ClientMessages", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
     }
 
-    /** @since 0.9.8 */
+    /**
+     *  Start the listeners.
+     *  @since 0.9.8
+     */
     public synchronized void start() {startListeners();}
 
     /**
@@ -161,6 +173,7 @@ class ClientManager {
         if (_log.shouldInfo()) {_log.info("Started the ClientManager");}
     }
 
+    /** Restart the client manager, disconnecting and reconnecting all clients. */
     public synchronized void restart() {
         shutdown("Router restart");
 
@@ -171,6 +184,8 @@ class ClientManager {
     }
 
     /**
+     *  Shutdown the client manager, disconnecting all clients.
+     *
      *  @param msg message to send to the clients
      */
     public synchronized void shutdown(String msg) {
@@ -192,6 +207,7 @@ class ClientManager {
      *  The InternalClientManager interface.
      *  Connects to the router, receiving a message queue to talk to the router with.
      *
+     *  @return the message queue for communicating with the router
      *  @throws I2PSessionException if the router isn't ready
      *  @since 0.8.3
      */
@@ -229,9 +245,16 @@ class ClientManager {
      *  that were registered to be running.
      *  Since most of our connections are in-JVM, we now return true even
      *  if we have I2CP port conflicts.
+     *
+     *  @return true if the ClientManager is running
      */
     public synchronized boolean isAlive() {return _isStarted;}
 
+    /**
+     *  Register a new client connection.
+     *
+     *  @param runner the runner to register
+     */
     public void registerConnection(ClientConnectionRunner runner) {
         try {
             runner.startRunning();
@@ -244,6 +267,8 @@ class ClientManager {
 
     /**
      *  Remove all sessions for this runner.
+     *
+     *  @param runner the runner to unregister
      */
     public void unregisterConnection(ClientConnectionRunner runner) {
         synchronized (_pendingRunners) {_pendingRunners.remove(runner);}
@@ -267,6 +292,8 @@ class ClientManager {
     /**
      *  Remove only the following session. Does not remove the runner if it has more.
      *
+     *  @param id the session ID
+     *  @param dest the destination
      *  @since 0.9.21
      */
     public void unregisterSession(SessionId id, Destination dest) {
@@ -282,6 +309,8 @@ class ClientManager {
      *  Remove the hash for the encrypted LS.
      *  Call before unregisterConnection, or when the hash changes.
      *
+     *  @param runner the runner
+     *  @param hash the hash to remove
      *  @since 0.9.39
      */
     public void unregisterEncryptedDestination(ClientConnectionRunner runner, Hash hash) {
@@ -294,6 +323,8 @@ class ClientManager {
      *  Side effect: Sets the session ID of the runner.
      *  Caller must call runner.disconnectClient() on failure.
      *
+     *  @param runner the runner
+     *  @param dest the destination
      *  @return SessionStatusMessage return code, 1 for success, != 1 for failure
      */
     public int destinationEstablished(ClientConnectionRunner runner, Destination dest) {
@@ -331,6 +362,7 @@ class ClientManager {
      *
      *  @param hash the location of the encrypted LS, will change every day
      *  @return success, false on dup
+     *  @param runner the runner
      *  @since 0.9.39
      */
     public boolean registerEncryptedDestination(ClientConnectionRunner runner, Hash hash) {
@@ -352,6 +384,7 @@ class ClientManager {
      *  Declare that we're going to publish a meta LS for this destination.
      *  Must be called before publishing the leaseset.
      *
+     *  @param dest the destination
      *  @throws I2PSessionException on duplicate dest
      *  @since 0.9.41
      */
@@ -370,6 +403,7 @@ class ClientManager {
     /**
      *  Declare that we're no longer going to publish a meta LS for this destination.
      *
+     *  @param dest the destination
      *  @since 0.9.41
      */
     public void unregisterMetaDest(Destination dest) {
@@ -406,6 +440,10 @@ class ClientManager {
      * @param sender non-null
      * @param msgId the router's ID for this message
      * @param messageNonce the client's ID for this message
+     * @param fromDest source destination
+     * @param toDest target destination
+     * @param payload the message payload
+     * @param expiration message expiration
      * @param flags ignored for local
      */
     void distributeMessage(ClientConnectionRunner sender, Destination fromDest, Destination toDest, Payload payload,
@@ -532,6 +570,9 @@ class ClientManager {
     /**
      *  Unsynchronized.
      *  DOES contain meta destinations.
+     *
+     *  @param dest the destination to check
+     *  @return true if local
      */
     public boolean isLocal(Destination dest) {
         return _runners.containsKey(dest) || _metaDests.contains(dest);
@@ -540,6 +581,9 @@ class ClientManager {
     /**
      *  Unsynchronized.
      *  DOES contain meta destinations.
+     *
+     *  @param destHash the destination hash to check
+     *  @return true if local
      */
     public boolean isLocal(Hash destHash) {
         if (destHash == null) {return false;}
@@ -547,6 +591,9 @@ class ClientManager {
     }
 
     /**
+     *  Determine if we should publish a leaseSet for this hash.
+     *
+     *  @param destHash the destination hash
      *  @return true if we don't know about this destination at all
      */
     public boolean shouldPublishLeaseSet(Hash destHash) {
@@ -561,6 +608,8 @@ class ClientManager {
     /**
      *  Unsynchronized.
      *  Does NOT contain meta destinations.
+     *
+     *  @return non-null set of local destinations
      */
     public Set<Destination> listClients() {
         Set<Destination> rv = new HashSet<>();
@@ -570,12 +619,17 @@ class ClientManager {
 
     /**
      *  Unsynchronized
+     *
+     *  @param dest the destination
+     *  @return the runner, or null
      */
     ClientConnectionRunner getRunner(Destination dest) {return _runners.get(dest);}
 
     /**
      * Return the client's current config, or null if not connected
      *
+     * @param dest the destination
+     * @return the SessionConfig, or null
      */
     public SessionConfig getClientSessionConfig(Destination dest) {
         ClientConnectionRunner runner = getRunner(dest);
@@ -587,6 +641,9 @@ class ClientManager {
      * Return the client's SessionKeyManager
      * Use this instead of the RouterContext.sessionKeyManager()
      * to prevent correlation attacks across destinations
+     *
+     * @param dest the destination hash
+     * @return the SessionKeyManager, or null
      */
     public SessionKeyManager getClientSessionKeyManager(Hash dest) {
         ClientConnectionRunner runner = getRunner(dest);
@@ -603,6 +660,9 @@ class ClientManager {
     }
 
     /**
+     *  Update the message delivery status for a client.
+     *
+     *  @param fromDest the source destination
      *  @param id the router's ID for this message
      *  @param messageNonce the client's ID for this message, greater than zero
      *  @param status see I2CP MessageStatusMessage for success/failure codes
@@ -624,6 +684,8 @@ class ClientManager {
     }
 
     /**
+     *  Get the set of all runner destinations.
+     *
      *  @return unmodifiable, not a copy
      */
     Set<Destination> getRunnerDestinations() {return Collections.unmodifiableSet(_runners.keySet());}
@@ -632,6 +694,8 @@ class ClientManager {
      *  Unused
      *
      *  @param dest null for all local destinations
+     *  @param reason the abuse reason
+     *  @param severity the abuse severity
      */
     public void reportAbuse(Destination dest, String reason, int severity) {
         if (dest != null) {
@@ -648,6 +712,11 @@ class ClientManager {
         // intentionally empty - deprecated, rendering moved to router console
     }
 
+    /**
+     *  Receive and process an incoming client message inline.
+     *
+     *  @param msg the message to process
+     */
     public void messageReceived(ClientMessage msg) {
         (new HandleJob(msg)).runJob(); // This is fast and non-blocking, run in-line
     }

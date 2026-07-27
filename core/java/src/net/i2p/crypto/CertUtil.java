@@ -56,6 +56,9 @@ import java.nio.charset.StandardCharsets;
  */
 public final class CertUtil {
 
+    /** utility class */
+    private CertUtil() {}
+
     private static final String CERT_DIR = "certificates";
     private static final String REVOCATION_DIR = "revocations";
     private static final int LINE_LENGTH = 64;
@@ -97,8 +100,11 @@ public final class CertUtil {
      *
      *  @param pk non-null
      *  @param certs certificate chain, null or empty to export pk only
+     *  @param out the output stream to write to
      *  @throws InvalidKeyException if the key does not support encoding
      *  @throws CertificateEncodingException if a cert does not support encoding
+     *  @throws IOException if the write fails
+     *  @throws GeneralSecurityException on any other security error
      *  @since 0.9.24
      */
     public static void exportPrivateKey(PrivateKey pk, Certificate[] certs, OutputStream out) throws IOException, GeneralSecurityException {
@@ -118,6 +124,10 @@ public final class CertUtil {
      *  Writes a certificate in base64 format.
      *  Does NOT close the stream. Throws on all errors.
      *
+     *  @param cert the certificate to export
+     *  @param out the output stream to write to
+     *  @throws IOException if the write fails
+     *  @throws CertificateEncodingException if the certificate cannot be encoded
      *  @since 0.9.24, pulled out of saveCert(), public since 0.9.25
      */
     public static void exportCert(Certificate cert, OutputStream out) throws IOException, CertificateEncodingException {
@@ -174,6 +184,7 @@ public final class CertUtil {
      *
      *  see X509Certificate.getSubjectAlternativeNames()
      *
+     *  @param cert the certificate to extract names from
      *  @return non-null, empty on error or none found
      *  @since 0.9.34
      */
@@ -197,6 +208,7 @@ public final class CertUtil {
      *
      *  Warning - unsupported in Android (no javax.naming), returns null.
      *
+     *  @param cert the certificate
      *  @param type e.g. "CN"
      *  @return value or null if not found
      */
@@ -210,6 +222,7 @@ public final class CertUtil {
      *
      *  Warning - unsupported in Android (no javax.naming), returns null.
      *
+     *  @param cert the certificate
      *  @param type e.g. "CN"
      *  @return value or null if not found
      *  @since 0.9.24
@@ -271,7 +284,10 @@ public final class CertUtil {
      *
      *  This DOES check for revocation.
      *
+     *  @param kd the certificate file
      *  @return non-null, throws on all errors including certificate invalid
+     *  @throws IOException if the file cannot be read
+     *  @throws GeneralSecurityException if the certificate is invalid
      *  @since 0.9.24 moved from SU3File private method
      */
     public static PublicKey loadKey(File kd) throws IOException, GeneralSecurityException {
@@ -292,7 +308,10 @@ public final class CertUtil {
      *  will log a warning only, as of 0.9.54.
      *  We do NOT fetch additional certs or attempt to validate a cert up the chain.
      *
+     *  @param kd the certificate file
      *  @return non-null, throws on all errors including certificate invalid
+     *  @throws IOException if the file cannot be read
+     *  @throws GeneralSecurityException if the certificate is invalid
      *  @since 0.9.24 adapted from SU3File private method
      */
     public static X509Certificate loadCert(File kd) throws IOException, GeneralSecurityException {
@@ -324,7 +343,10 @@ public final class CertUtil {
      *  Get a single Private Key from an input stream.
      *  Does NOT close the stream.
      *
+     *  @param in the input stream to read from
      *  @return non-null, non-empty, throws on all errors including certificate invalid
+     *  @throws IOException if the read fails
+     *  @throws GeneralSecurityException if the key is invalid
      *  @since 0.9.25
      */
     public static PrivateKey loadPrivateKey(InputStream in) throws IOException, GeneralSecurityException {
@@ -383,7 +405,10 @@ public final class CertUtil {
      *
      *  This does NOT check for revocation.
      *
+     *  @param in the input stream to read from
      *  @return non-null, non-empty, throws on all errors including certificate invalid
+     *  @throws IOException if the read fails
+     *  @throws GeneralSecurityException if any certificate is invalid
      *  @since 0.9.25
      */
     public static List<X509Certificate> loadCerts(InputStream in) throws IOException, GeneralSecurityException {
@@ -418,6 +443,8 @@ public final class CertUtil {
     /**
      *  Write a CRL to a file in base64 format.
      *
+     *  @param crl the CRL to save
+     *  @param file the file to write to
      *  @return success
      *  @since 0.9.25
      */
@@ -444,6 +471,9 @@ public final class CertUtil {
      *  Writes a CRL in base64 format.
      *  Does NOT close the stream. Throws on all errors.
      *
+     *  @param crl the CRL to export
+     *  @param out the output stream to write to
+     *  @throws IOException if the write fails
      *  @throws CRLException if the crl does not support encoding
      *  @since 0.9.25
      */
@@ -512,6 +542,7 @@ public final class CertUtil {
     /**
      *  Load CRLs from standard locations.
      *
+     *  @param ctx the application context
      *  @return non-null, possibly empty
      *  @since 0.9.25
      */
@@ -588,7 +619,9 @@ public final class CertUtil {
     /**
      *  Load a CRL. Does NOT Close the stream.
      *
+     *  @param in the input stream to read from
      *  @return non-null
+     *  @throws GeneralSecurityException if the CRL cannot be loaded
      *  @since 0.9.25 public since 0.9.26
      */
     public static X509CRL loadCRL(InputStream in) throws GeneralSecurityException {
@@ -596,6 +629,10 @@ public final class CertUtil {
         return (X509CRL) cf.generateCRL(in);
     }
 
+    /**
+     *  For testing purposes.
+     *  @param args command-line arguments
+     */
     public static final void main(String[] args) {
         if (args.length < 2) {
             System.out.println("Usage: [loadcert | loadcrl | loadcrldir | loadcrldirs | isrevoked | loadprivatekey | checkall] file");

@@ -40,6 +40,8 @@ public interface Writer {
       throws WriterException;
 
   /**
+   * Encode a barcode using the specified settings and optional hints.
+   *
    * @param contents The contents to encode in the barcode
    * @param format The barcode format to generate
    * @param width The preferred width in pixels

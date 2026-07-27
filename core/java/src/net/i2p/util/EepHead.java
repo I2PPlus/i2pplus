@@ -38,6 +38,9 @@ public class EepHead extends EepGet {
     /** EepGet needs either a non-null file or a stream... shouldn't actually be written to... */
     private static final OutputStream _dummyStream = new ByteArrayOutputStream(64);
 
+    /**
+     * EepHead.
+     */
     public EepHead(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String url) {
         // we're using this constructor:
         // public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort, int numRetries, long
@@ -324,6 +327,9 @@ public class EepHead extends EepGet {
         return false;
     }
 
+    /**
+     * getRequest.
+     */
     @Override
     protected String getRequest() throws IOException {
         StringBuilder buf = new StringBuilder(512);

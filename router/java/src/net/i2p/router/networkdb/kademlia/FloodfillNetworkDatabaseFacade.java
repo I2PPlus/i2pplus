@@ -41,28 +41,51 @@ import net.i2p.util.VersionComparator;
  *  The network database
  */
 public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacade {
+    /** Floodfill capability flag. */
     public static final char CAPABILITY_FLOODFILL = 'f';
+    /** Unreachable capability flag. */
     public static final char CAPABILITY_UNREACHABLE = 'U';
+    /** Bandwidth 12 Kbps capability flag. */
     public static final char CAPABILITY_BW12 = 'K';
+    /** Bandwidth 32 Kbps capability flag. */
     public static final char CAPABILITY_BW32 = 'L';
+    /** Bandwidth 64 Kbps capability flag. */
     public static final char CAPABILITY_BW64 = 'M';
+    /** Bandwidth 128 Kbps capability flag. */
     public static final char CAPABILITY_BW128 = 'N';
+    /** Bandwidth 256 Kbps capability flag. */
     public static final char CAPABILITY_BW256 = 'O';
+    /** Bandwidth 512 Kbps capability flag. */
     public static final char CAPABILITY_BW512 = 'P';
+    /** Unlimited bandwidth capability flag. */
     public static final char CAPABILITY_BW_UNLIMITED = 'X';
+    /** Moderate congestion capability flag. */
     public static final char CAPABILITY_CONGESTION_MODERATE = 'D';
+    /** Severe congestion capability flag. */
     public static final char CAPABILITY_CONGESTION_SEVERE = 'E';
+    /** No tunnels capability flag. */
     public static final char CAPABILITY_NO_TUNNELS = 'G';
+    /** Active flood queries keyed by search hash. */
     private final ConcurrentHashMap<Hash, FloodSearchJob> _activeFloodQueries;
+    /** Whether this router is currently floodfill-enabled. */
     private volatile boolean _floodfillEnabled;
+    /** Set of hashes whose verification is in progress. */
     private final Set<Hash> _verifiesInProgress;
+    /** Throttles excessive flood operations. */
     private FloodThrottler _floodThrottler;
+    /** Throttles excessive lookup operations. */
     private LookupThrottler _lookupThrottler;
+    /** Ban hammer for abusive lookup peers. */
     private LookupBanHammer _lookupBanner;
+    /** Floodfill monitor job for capability management. */
     private final Job _ffMonitor;
+    /** Job to probe stale floodfill peers. */
     private final ProbeStalePeerJob _probeStalePeerJob;
+    /** Job to refresh RouterInfo on contact. */
     private final ContactDrivenRefreshJob _contactRefreshJob;
+    /** Batched search timeout entries keyed by bucket. */
     private final ConcurrentHashMap<Long, List<TimeoutEntry>> _searchTimeouts;
+    /** Periodic processor for elapsed search timeouts. */
     private final BatchedSearchTimeoutProcessor _timeoutProcessor;
 
     /**
@@ -80,8 +103,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  Was 7 through release 0.9; 5 for 0.9.1.
      *  4 as of 0.9.2; 3 as of 0.9.9
      */
-
     public static final int MAX_TO_FLOOD = 3;
+    /** Priority for flood outbound messages. */
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
 
     /**
@@ -90,6 +113,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  @since 0.9.70+
      */
     static final ConcurrentHashMap<Hash, Long> _recentlyQueriedFloodfills = new ConcurrentHashMap<>(1024);
+    /** R e c e n t l y  q u e r i e d  c o o l d o w n */
     static final long RECENTLY_QUERIED_COOLDOWN = 60*1000L;
 
     /**
@@ -164,11 +188,17 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  refreshing it.  RIs published within this window are treated as fresh.
      */
     static final long MAX_RI_AGE_BEFORE_REFRESH_MS = 60L * 60 * 1000;
+    /** Timeout for individual flood messages. */
     private static final int FLOOD_TIMEOUT = 10*1000;
+    /** Advance time before midnight to flood to next routing key for RouterInfo. */
     static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000L;
+    /** Advance time before midnight to flood to next routing key for LeaseSet. */
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000L;
+    /** Number of additional peers to flood near routing key rollover. */
     private static final int NEXT_FLOOD_QTY = 2;
+    /** Max job queue lag before skipping exploratory searches. */
     private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 1000 : 500;
+    /** Delay before publishing RouterInfo at startup. */
     private static final int PUBLISH_JOB_DELAY = 15*1000;
     /** @since 0.9.66 moved from FloodfillMonitorJob */
     public static final String PROP_FLOODFILL_PARTICIPANT = "router.floodfillParticipant";
@@ -225,6 +255,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
     }
 
+    /**
+     * startup.
+     */
     @Override
     public synchronized void startup() {
         boolean isFF;
@@ -250,6 +283,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
     }
 
+    /**
+     * createHandlers.
+     */
     @Override
     protected void createHandlers() {
         // Only initialize the handlers for the flooodfill netDb.
@@ -314,6 +350,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         final Hash peer;
         final IterativeSearchJob search;
 
+        /**
+         * @param peer the peer that didn't respond
+         * @param search the search job to notify on timeout
+         */
         TimeoutEntry(Hash peer, IterativeSearchJob search) {
             this.peer = peer;
             this.search = search;
@@ -327,15 +367,24 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * Runs via SimpleTimer2 instead of JobQueue to avoid duplicate execution issues.
      */
     private class BatchedSearchTimeoutProcessor extends SimpleTimer2.TimedEvent {
+        /**
+         * Schedule the processor with a 2-second initial delay.
+         */
         public BatchedSearchTimeoutProcessor() {
             super(SimpleTimer2.getInstance(), 2000);
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             processElapsedTimeouts();
             reschedule(2000);
         }
 
+        /**
+         * getName.
+         */
         public String getName() { return "BatchedSearchTimeout"; }
     }
 
@@ -363,6 +412,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 flood(local);
                 // let the messages get out...
                 new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
+                    /**
+                     * timeReached.
+                     */
                     @Override
                     public void timeReached() {
                         // Messages should have been sent by now
@@ -419,10 +471,16 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      */
     private class DelayedPublish extends SimpleTimer2.TimedEvent {
         private final RouterInfo localRouterInfo;
+        /**
+         * DelayedPublish.
+         */
         public DelayedPublish(RouterInfo local) {
             super(_context.simpleTimer2());
             localRouterInfo = local;
         }
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             RouterInfo latest = _context.router().getRouterInfo();
             boolean shouldLog = _log.shouldWarn() || _log.shouldInfo();
@@ -441,6 +499,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
     }
 
+    /** Initial number of concurrent floodfill peers for store operations. */
+    private static final int INITIAL_CONCURRENT = 2;
+
     /**
      * Send out a store.
      *
@@ -451,9 +512,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * @param toIgnore may be null, if non-null, all attempted and skipped targets will be added as of 0.9.53,
      *        unused if we are ff and ds is an RI
      */
-
-    private static final int INITIAL_CONCURRENT = 2;
-
     @Override
     void sendStore(Hash key, DatabaseEntry ds, Job onSuccess, Job onFailure, long sendTimeout, Set<Hash> toIgnore) {
         int concurrent = INITIAL_CONCURRENT;
@@ -482,6 +540,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 final int delay = (int) Math.min(idx * 1000L, 10_000);
                 final int concurrentForLog = concurrent;
                 new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
+                    /**
+                     * timeReached.
+                     */
                     @Override
                     public void timeReached() {
                         _context.jobQueue().addJob(new FloodfillStoreJob(
@@ -551,6 +612,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     /**
      *  Increments and tests.
+     *
+     *  @return true if the flood should be throttled for this key
      *  @since 0.7.11
      */
     boolean shouldThrottleFlood(Hash key) {
@@ -562,7 +625,14 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
 
-    /* @since 0.9.59 */
+    /**
+     *  Check if lookup from a peer should be banned.
+     *
+     *  @param from the peer hash
+     *  @param id the tunnel ID
+     *  @return true if the lookup should be banned
+     *  @since 0.9.59
+     */
     boolean shouldBanLookup(Hash from, TunnelId id) {
         // null before startup
         return _lookupBanner == null || _lookupBanner.shouldBan(from, id);
@@ -570,6 +640,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     /**
      *  Increments and tests.
+     *
+     *  @return true if the lookup should be throttled for this peer/tunnel
      *  @since 0.7.11
      */
     boolean shouldThrottleLookup(Hash from, TunnelId id) {
@@ -681,8 +753,12 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /**
      * Determines if we should flood the database store to a peer.
      *
+     * @param key the database entry hash
      * @param type database store type
      * @param lsSigType may be null
+     * @param peer the target peer hash
+     * @param target the peer's RouterInfo, may be null
+     * @return true if the store should be flooded to this peer
      * @since 0.9.39
      */
     private boolean shouldFloodTo(Hash key, int type, SigType lsSigType, Hash peer, RouterInfo target) {
@@ -703,11 +779,20 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static class FloodFailedJob extends JobImpl {
         private final Hash _peer;
 
+        /**
+         * FloodFailedJob.
+         */
         public FloodFailedJob(RouterContext ctx, Hash peer) {
             super(ctx);
             _peer = peer;
         }
+        /**
+         * getName.
+         */
         public String getName() {return "Flood failed";}
+        /**
+         * runJob.
+         */
         public void runJob() {getContext().profileManager().dbStoreFailed(_peer);}
     }
 
@@ -718,11 +803,20 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static class FloodSuccessJob extends JobImpl {
         private final Hash _peer;
 
+        /**
+         * FloodSuccessJob.
+         */
         public FloodSuccessJob(RouterContext ctx, Hash peer) {
             super(ctx);
             _peer = peer;
         }
+        /**
+         * getName.
+         */
         public String getName() {return "Flood succeeded";}
+        /**
+         * runJob.
+         */
         public void runJob() {getContext().profileManager().dbStoreSuccessful(_peer);}
     }
 
@@ -754,6 +848,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
     }
 
+    /**
+     * floodfillEnabled.
+     */
     @Override
     public boolean floodfillEnabled() {
         return _floodfillEnabled;
@@ -770,6 +867,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         return caps.indexOf(CAPABILITY_FLOODFILL) >= 0;
     }
 
+    /**
+     *  Return all RouterInfo entries from the local data store.
+     *
+     *  @return list of known RouterInfo objects, never null
+     */
     public List<RouterInfo> getKnownRouterData() {
         List<RouterInfo> rv = new ArrayList<>();
         DataStore ds = getDataStore();
@@ -904,10 +1006,12 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
     }
 
-    /** list of the Hashes of currently known floodfill peers;
-      * Returned list will not include our own hash.
-      *  List is not sorted and not shuffled.
-      */
+    /**
+     *  List of the hashes of currently known floodfill peers.
+     *
+     *  @return list of floodfill peer hashes, not including our own hash;
+     *          not sorted and not shuffled
+     */
     public List<Hash> getFloodfillPeers() {
         FloodfillPeerSelector sel = (FloodfillPeerSelector)getPeerSelector();
         return sel.selectFloodfillParticipants(getKBuckets());
@@ -934,11 +1038,17 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      */
     void verifyFinished(Hash h) {_verifiesInProgress.remove(h);}
 
-    /** NTCP cons drop quickly but SSU takes a while, so it's prudent to keep this
-     *  a little higher than 1 or 2. */
+    /**
+     *  Minimum number of active peers before dropping router info lookups.
+     *  NTCP connections drop quickly but SSU takes a while, so this is
+     *  kept a little higher than 1 or 2.
+     */
     protected static final int MIN_ACTIVE_PEERS = SystemVersion.isSlow() ? 16 : 32;
 
-    /** @since 0.8.7 */
+    /**
+     *  Maximum database size before skipping exploratory searches.
+     *  @since 0.8.7
+     */
     private static final int MAX_DB_BEFORE_SKIPPING_SEARCH;
         static {
             MAX_DB_BEFORE_SKIPPING_SEARCH = SystemVersion.isSlow() ? 3000 : 5000;
@@ -1041,13 +1151,13 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 } else if (_context.jobQueue().getMaxLag() > MAX_LAG_BEFORE_SKIP_SEARCH) {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> High Job Lag");
                 }
-/**
+/*
                 } else if (isBadFF) {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
                     new DropLookupFailedJob(_context, peer, info);
                 } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
                     _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> KBucket is full");
-**/
+*/
                 super.lookupBeforeDropping(peer, info);
                 return;
             }
@@ -1128,11 +1238,20 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private class DropLookupFailedJob extends JobImpl {
         private final Hash _peer;
 
+        /**
+         * DropLookupFailedJob.
+         */
         public DropLookupFailedJob(RouterContext ctx, Hash peer, RouterInfo _info) {
             super(ctx);
             _peer = peer;
         }
+        /**
+         * getName.
+         */
         public String getName() { return "Timeout NetDb Lookup for Failing Peer"; }
+        /**
+         * runJob.
+         */
         public void runJob() {
             // Skip for banned peers
             if (_context.banlist().isBanlisted(_peer)) {
@@ -1149,12 +1268,21 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         private final Hash _peer;
         private final RouterInfo _info;
 
+        /**
+         * DropLookupFoundJob.
+         */
         public DropLookupFoundJob(RouterContext ctx, Hash peer, RouterInfo info) {
             super(ctx);
             _peer = peer;
             _info = info;
         }
+        /**
+         * getName.
+         */
         public String getName() { return "Verify NetDb Lookup for Failing Peer"; }
+        /**
+         * runJob.
+         */
         public void runJob() {
             // Skip verification for banned peers
             if (_context.banlist().isBanlisted(_peer)) {
@@ -1170,6 +1298,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
     }
 
+    /**
+     * getTunnelName.
+     */
     public String getTunnelName(Destination d) {
         TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(d.calculateHash());
         String name = (in != null ? in.getDestinationNickname() : null);

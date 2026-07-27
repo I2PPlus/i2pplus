@@ -15,5 +15,15 @@ import java.net.URL;
  * Minimal implementation of applet context for swing emulation.
  */
 public class AppletContext {
+    /**
+     * Construct the AppletContext.
+     */
+    public AppletContext() {}
+
+    /**
+     * Request that the browser show the document at the given URL.
+     *
+     * @param url the URL to show
+     */
     public void showDocument(URL url) {}
 }

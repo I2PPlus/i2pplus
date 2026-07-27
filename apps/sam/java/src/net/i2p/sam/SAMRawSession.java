@@ -22,9 +22,15 @@ import net.i2p.data.DataFormatException;
  */
 class SAMRawSession extends SAMMessageSession {
 
+    /**
+     * RAW_SIZE_MAX.
+     */
     public static final int RAW_SIZE_MAX = 32*1024;
 
     // FIXME make final after fixing SAMv3RawSession override
+    /**
+     * recv.
+     */
     protected SAMRawReceiver recv;
 
     /**
@@ -51,8 +57,6 @@ class SAMRawSession extends SAMMessageSession {
      * @param destStream Input stream containing the destination and private keys (same format as PrivateKeyFile)
      * @param props Properties to setup the I2P session
      * @param recv Object that will receive incoming data
-     * @throws IOException
-     * @throws DataFormatException
      * @throws I2PSessionException
      */
     public SAMRawSession(InputStream destStream, Properties props,

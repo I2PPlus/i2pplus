@@ -43,28 +43,59 @@ import net.i2p.util.OrderedProperties;
  * @since 0.9.38
  */
 public class LeaseSet2 extends LeaseSet {
+    /**
+     * _flags.
+     */
     protected int _flags;
+    /**
+     * ms.
+     */
     protected long _published; // stored as absolute ms
+    /**
+     * ms.
+     */
     protected long _expires; // stored as absolute ms
+    /**
+     * ms.
+     */
     protected long _transientExpires; // stored as absolute ms
+    /**
+     * super.
+     */
     protected SigningPublicKey _transientSigningPublicKey; // if non-null, type of this is type of _signature in super
+    /**
+     * dest.
+     */
     protected Signature _offlineSignature; // if non-null, type of this is type of SPK in the dest
+    /**
+     * null.
+     */
     protected Properties _options; // may be null
-    private List<PublicKey> _encryptionKeys; // only used if more than one key, otherwise null
-    private Hash _blindedHash; // If this leaseset was formerly blinded, the blinded hash, so we can find it again
+    /** only used if more than one key, otherwise null */
+    private List<PublicKey> _encryptionKeys;
+    /** If this leaseset was formerly blinded, the blinded hash, so we can find it again */
+    private Hash _blindedHash;
+    /** ignored */
     private static final boolean IGNORE_SERVER_KEY_PREFERENCE = false; // true for testing
+    /** ignored */
     private static final int FLAG_OFFLINE_KEYS = 0x01;
+    /** ignored */
     private static final int FLAG_UNPUBLISHED = 0x02;
     /**
      *  Set if the unencrypted LS, when published, will be blinded/encrypted
      *
      *  @since 0.9.42
      */
+    /** ignored */
     private static final int FLAG_BLINDED = 0x04;
+    /** ignored */
     private static final int MAX_KEYS = 8;
+    /** ignored */
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(LeaseSet2.class);
 
-    /** */
+    /**
+     * LeaseSet2.
+     */
     public LeaseSet2() {
         super();
         _checked = true; // prevents decryption in super
@@ -333,7 +364,6 @@ public class LeaseSet2 extends LeaseSet {
      *
      *  @param spk the key to verify against
      *  @return true if valid
-     *  @throws GeneralSecurityException if verification fails
      */
     protected boolean verifyOfflineSignature(SigningPublicKey spk) {
         if (!isOffline()) {return false;}

@@ -46,25 +46,45 @@ import java.util.Date;
  */
 public class DatabaseInfo {
 
+    /** Country edition */
     public static final int COUNTRY_EDITION = 1;
+    /** Region edition revision 0 */
     public static final int REGION_EDITION_REV0 = 7;
+    /** Region edition revision 1 */
     public static final int REGION_EDITION_REV1 = 3;
+    /** City edition revision 0 */
     public static final int CITY_EDITION_REV0 = 6;
+    /** City edition revision 1 */
     public static final int CITY_EDITION_REV1 = 2;
+    /** Organization edition */
     public static final int ORG_EDITION = 5;
+    /** ISP edition */
     public static final int ISP_EDITION = 4;
+    /** Proxy edition */
     public static final int PROXY_EDITION = 8;
+    /** AS number edition */
     public static final int ASNUM_EDITION = 9;
+    /** Net speed edition */
     public static final int NETSPEED_EDITION = 10;
+    /** Domain edition */
     public static final int DOMAIN_EDITION = 11;
+    /** Country edition IPv6 */
     public static final int COUNTRY_EDITION_V6 = 12;
+    /** AS number edition IPv6 */
     public static final int ASNUM_EDITION_V6 = 21;
+    /** ISP edition IPv6 */
     public static final int ISP_EDITION_V6 = 22;
+    /** Organization edition IPv6 */
     public static final int ORG_EDITION_V6 = 23;
+    /** Domain edition IPv6 */
     public static final int DOMAIN_EDITION_V6 = 24;
+    /** City edition revision 1 IPv6 */
     public static final int CITY_EDITION_REV1_V6 = 30;
+    /** City edition revision 0 IPv6 */
     public static final int CITY_EDITION_REV0_V6 = 31;
+    /** Net speed edition revision 1 */
     public static final int NETSPEED_EDITION_REV1 = 32;
+    /** Net speed edition revision 1 IPv6 */
     public static final int NETSPEED_EDITION_REV1_V6 = 33;
 
     private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
@@ -80,6 +100,7 @@ public class DatabaseInfo {
         this.info = info;
     }
 
+    /** @return the database type code */
     public int getType() {
         if (info == null || info.length() == 0) {
             return COUNTRY_EDITION;

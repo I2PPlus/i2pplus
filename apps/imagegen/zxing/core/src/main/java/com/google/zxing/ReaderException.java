@@ -25,20 +25,25 @@ package com.google.zxing;
  */
 public abstract class ReaderException extends Exception {
 
-  // disable stack traces when not running inside test units
+  /** disable stack traces when not running inside test units */
   protected static final boolean isStackTrace =
       System.getProperty("surefire.test.class.path") != null;
+  /** empty stack trace array for disabled stack traces */
   protected static final StackTraceElement[] NO_TRACE = new StackTraceElement[0];
 
+  /** Default constructor */
   ReaderException() {
     // do nothing
   }
 
+  /** @param cause root cause */
   ReaderException(Throwable cause) {
     super(cause);
   }
 
-  // Prevent stack traces from being taken
+  /**
+   * Disable stack trace capture for performance.
+   */
   @Override
   public final synchronized Throwable fillInStackTrace() {
     return null;

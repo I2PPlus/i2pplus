@@ -55,8 +55,17 @@ import net.i2p.util.Log;
  */
 public abstract class TransportUtil {
 
+    /**
+     * NTCP_IPV6_CONFIG.
+     */
     public static final String NTCP_IPV6_CONFIG = "i2np.ntcp.ipv6";
+    /**
+     * SSU_IPV6_CONFIG.
+     */
     public static final String SSU_IPV6_CONFIG = "i2np.udp.ipv6";
+    /**
+     * PROP_IPV4_FIREWALLED.
+     */
     public static final String PROP_IPV4_FIREWALLED = "i2np.ipv4.firewalled";
     /** @since 0.9.28 */
     public static final String PROP_IPV6_FIREWALLED = "i2np.ipv6.firewalled";
@@ -97,12 +106,18 @@ public abstract class TransportUtil {
             this.cfgstr = cfgstr;
         }
 
+        /**
+         * toConfigString.
+         */
         public String toConfigString() {
             return cfgstr;
         }
     }
 
     private static final Map<String, IPv6Config> BY_NAME = new HashMap<>();
+    /**
+     * DEFAULT_IPV6_CONFIG.
+     */
     public static final IPv6Config DEFAULT_IPV6_CONFIG = IPv6Config.IPV6_PREFERRED;
 
     static {
@@ -114,6 +129,9 @@ public abstract class TransportUtil {
         BY_NAME.put("disable", IPv6Config.IPV6_DISABLED);
     }
 
+    /**
+     * getIPv6Config.
+     */
     public static IPv6Config getIPv6Config(RouterContext ctx, String transportStyle) {
         String cfg;
         if (transportStyle.equals("NTCP"))
@@ -125,6 +143,9 @@ public abstract class TransportUtil {
         return getIPv6Config(cfg);
     }
 
+    /**
+     * getIPv6Config.
+     */
     public static IPv6Config getIPv6Config(String cfg) {
         if (cfg == null)
             return DEFAULT_IPV6_CONFIG;

@@ -30,6 +30,9 @@ final class ECUtil {
     private static final BigInteger TWO = new BigInteger("2");
     private static final BigInteger THREE = new BigInteger("3");
 
+    /**
+     * scalarMult.
+     */
     public static ECPoint scalarMult(ECPoint p, BigInteger kin, EllipticCurve curve) {
         ECPoint r = ECPoint.POINT_INFINITY;
         BigInteger prime = ((ECFieldFp) curve.getField()).getP();

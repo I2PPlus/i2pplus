@@ -19,14 +19,15 @@ import net.i2p.data.DataFormatException;
  * @author mkvore
  */
 
+/** SAM version 2 handler. */
 class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramReceiver, SAMStreamReceiver
 {
 
 
 		/**
-		 * Create a new SAM version 2 handler.  This constructor expects
-		 * that the SAM HELLO message has been still answered (and
-		 * stripped) from the socket input stream.
+		 * Create a new SAM version 2 handler with default I2CP properties.
+		 * This constructor expects that the SAM HELLO message has been still
+		 * answered (and stripped) from the socket input stream.
 		 *
 		 * @param s Socket attached to a SAM client
 		 * @param verMajor SAM major version to manage (should be 2)
@@ -52,7 +53,6 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		 * @throws SAMException if the version is not supported
 		 * @throws IOException if an I/O error occurs
 		 */
-
 		public SAMv2Handler(SocketChannel s, int verMajor, int verMinor,
 		                    Properties i2cpProps, SAMBridge parent) throws SAMException, IOException
 		{
@@ -65,11 +65,13 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		 * @return true if the major version matches this handler's version
 		 */
 		@Override
+		/** Verify SAM protocol version. */
 		public boolean verifVersion()
 		{
 			return (verMajor == 2);
 		}
 
+		/** New SAMv2 stream session. */
 		SAMStreamSession newSAMv2StreamSession(String destKeystream, String direction, Properties props )
 				throws IOException, DataFormatException, SAMException
 		{
@@ -85,6 +87,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		 * @return true if the handler should continue processing commands
 		 */
 		@Override
+		/** Execute STREAM message. */
 		protected boolean execStreamMessage ( String opcode, Properties props )
 		{
 			if ( getStreamSession() == null )
@@ -119,6 +122,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		}
 
 
+		/** Execute STREAM RECEIVE message. */
 		private boolean execStreamReceive ( Properties props )
 		{
 			if (props.isEmpty())

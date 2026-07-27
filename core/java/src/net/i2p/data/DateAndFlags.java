@@ -31,10 +31,13 @@ import java.util.Date;
  * @since 0.8.4
  */
 public class DateAndFlags extends DataStructureImpl {
+    /**
+     * _flags.
+     */
     protected int _flags;
+    /**  date */
     private long _date;
 
-    /** */
     public DateAndFlags() {}
 
     /**

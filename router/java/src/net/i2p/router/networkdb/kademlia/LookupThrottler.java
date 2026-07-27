@@ -20,36 +20,49 @@ import net.i2p.util.SimpleTimer2;
  * Note this is basic DOS protection and does not prevent spoofed
  * reply identifiers or multiple reply tunnels from malicious requestors.
  *
- * @since 0.7.11
  */
 class LookupThrottler {
+/** concurrent hash map */
     private final ConcurrentHashMap<Hash, ConcurrentHashMap<TunnelId, AtomicInteger>> counter;
     // Map to track timestamps of recent requests per (Hash, TunnelId) for burst detection.
     // Outer key is Hash (peer), inner key is TunnelId (reply tunnel).
+/** map */
     private final Map<Hash, ConcurrentHashMap<TunnelId, Deque<Long>>> burstTimestamps;
 
     /** the id of this is -1 */
     private static final TunnelId DUMMY_ID = new TunnelId();
     /** this seems like plenty */
     private static final int DEFAULT_MAX_LOOKUPS = 30;
+/** default_max_non_ff_lookups */
     private static final int DEFAULT_MAX_NON_FF_LOOKUPS = 10;
+/** default_clean_time */
     private static final long DEFAULT_CLEAN_TIME = 3*60*1000L;
     // Max requests allowed in 1-second burst window
+/** burst_threshold */
     private static final int BURST_THRESHOLD = 5;
+/** burst_window_ms */
     private static final long BURST_WINDOW_MS = 1000L;
     /** Hard cap on unique (from, tunnel) pairs tracked to prevent memory leaks.
      *  At ~25 peak lookups/sec with a 3-min clean window, ~4,500 keys is sufficient.
      *  10,000 gives ~7 min headroom at peak — the clean runs every 3 min so this
      *  cap is only hit during sustained attack. */
+/** max_entries */
     private static final int MAX_ENTRIES = 10000;
 
+/** max lookups limit */
     private final int MAX_LOOKUPS;
+/** max non-FF lookups limit */
     private final int MAX_NON_FF_LOOKUPS;
+/** clean time */
     private final long CLEAN_TIME;
+/** facade */
     private final FloodfillNetworkDatabaseFacade _facade;
+/** max value */
     private volatile int _max;
+/** cleaner */
     private final Cleaner _cleaner;
 
+    /** Lookup throttler */
     LookupThrottler(FloodfillNetworkDatabaseFacade facade) {
         this(facade, DEFAULT_MAX_LOOKUPS, DEFAULT_MAX_NON_FF_LOOKUPS, DEFAULT_CLEAN_TIME);
     }
@@ -57,7 +70,6 @@ class LookupThrottler {
     /**
      * @param maxlookups when floodfill
      * @param maxnonfflookups when not floodfill
-     * @since 0.9.61
      */
     LookupThrottler(FloodfillNetworkDatabaseFacade facade, int maxlookups, int maxnonfflookups, long cleanTime) {
         _facade = facade;
@@ -66,7 +78,9 @@ class LookupThrottler {
         CLEAN_TIME = cleanTime;
         this.counter = new ConcurrentHashMap<Hash, ConcurrentHashMap<TunnelId, AtomicInteger>>();
         this.burstTimestamps = new LinkedHashMap<Hash, ConcurrentHashMap<TunnelId, Deque<Long>>>() {
+            /** removeEldestEntry. / */
             @Override
+/** Remove eldest entry */
             protected boolean removeEldestEntry(Map.Entry<Hash, ConcurrentHashMap<TunnelId, Deque<Long>>> eldest) {
                 // Evict the eldest Hash entry to stay bounded.
                 // Cap is on unique Hash keys (not per-tunnel entries).
@@ -81,17 +95,12 @@ class LookupThrottler {
         _max = _facade.floodfillEnabled() ? MAX_LOOKUPS : MAX_NON_FF_LOOKUPS;
     }
 
-    /** Stop the periodic cleaner. Call on facade shutdown. @since 0.9.70+ */
+    /** Stop the periodic cleaner. Call on facade shutdown. */
     void cancel() {
         _cleaner.cancel();
     }
 
-    /**
-     * increments and checks throttling
-     * @param key non-null
-     * @param id null if for direct lookups
-     * @return true if throttled
-     */
+    /** increments and checks throttling @param key non-null @param id null if for direct lookups @return true if throttled / */
     boolean shouldThrottle(Hash key, TunnelId id) {
         TunnelId lookupId = (id != null) ? id : DUMMY_ID;
         long now = System.currentTimeMillis();
@@ -138,9 +147,13 @@ class LookupThrottler {
         return ai.incrementAndGet() > _max;
     }
 
+/** Cleaner. */
     private class Cleaner extends SimpleTimer2.TimedEvent {
+        /** Cleaner. / */
         public Cleaner() { super(SimpleTimer2.getInstance()); }
+        /** timeReached. / */
         @Override
+/** Time reached */
         public void timeReached() {
             int size;
             synchronized (burstTimestamps) {
@@ -157,3 +170,4 @@ class LookupThrottler {
     }
 
 }
+

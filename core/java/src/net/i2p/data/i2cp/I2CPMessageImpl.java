@@ -26,10 +26,13 @@ import java.io.OutputStream;
  */
 public abstract class I2CPMessageImpl implements I2CPMessage {
 
+    /**
+     * I2CPMessageImpl.
+     */
     public I2CPMessageImpl() {} // nop
 
     /**
-     * Validate the type and size of the message, and then read the message into the data structures.  <p>
+     * Validate the type and size of the message, and then read the message into the data structures.
      *
      * @throws IOException if there's an error reading from the stream
      */
@@ -109,6 +112,13 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
         out.write(data);
     }
 
+    /**
+     * Read the message from the stream, wrapping I2CPMessageException in DataFormatException.
+     *
+     * @param in the input stream to read from
+     * @throws DataFormatException if the message format is invalid
+     * @throws IOException if there's an error reading from the stream
+     */
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         try {
             readMessage(in);
@@ -117,6 +127,13 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
         }
     }
 
+    /**
+     * Write the message to the stream, wrapping I2CPMessageException in DataFormatException.
+     *
+     * @param out the output stream to write to
+     * @throws DataFormatException if the message cannot be written
+     * @throws IOException if there's an error writing to the stream
+     */
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         try {
             writeMessage(out);

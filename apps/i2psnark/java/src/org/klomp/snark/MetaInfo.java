@@ -65,20 +65,27 @@ public class MetaInfo {
     private final String created_by;
     private final long creation_date;
     private final List<String> url_list;
+    /** Original bencoded info dictionary, preserved to keep infohash consistent on re-encode. */
     private Map<String, BEValue> infoMap;
+    /** Length of the serialized info dictionary in bytes, cached after first computation. */
     private int infoBytesLength;
 
     /**
-     * Called by Storage when creating a new torrent from local data
+     * Called by Storage when creating a new torrent from local data.
      *
-     * @param name_utf8 ignored
-     * @param announce may be null
-     * @param files null for single-file torrent
-     * @param lengths null for single-file torrent
-     * @param announce_list may be null
-     * @param created_by may be null and will be ignored
-     * @param url_list may be null
-     * @param comment may be null
+     * @param announce the tracker announce URL, may be null
+     * @param name the file or top-level directory name
+     * @param name_utf8 unused, retained for API compatibility
+     * @param files list of file path components per file, null for single-file torrent
+     * @param lengths list of file sizes in bytes, null for single-file torrent
+     * @param piece_length the length of each data piece in bytes
+     * @param piece_hashes concatenated 20-byte SHA1 hashes of all pieces
+     * @param length total torrent size in bytes
+     * @param privateTorrent whether the tracker restricts peer sharing to the swarm
+     * @param announce_list tiered list of alternate announce URLs, may be null
+     * @param created_by application name that created the torrent, may be null
+     * @param url_list web seed URLs for BEP 19 HTTP seeding, may be null
+     * @param comment free-form user comment, may be null
      */
     public MetaInfo(
             String announce,
@@ -113,9 +120,21 @@ public class MetaInfo {
     }
 
     /**
-     * Preserves privateTorrent int value, for main()
+     * Preserves privateTorrent int value, for use by main().
      *
-     * @param name_utf8 ignored
+     * @param announce the tracker announce URL, may be null
+     * @param name the file or top-level directory name
+     * @param name_utf8 unused, retained for API compatibility
+     * @param files list of file path components per file, null for single-file torrent
+     * @param lengths list of file sizes in bytes, null for single-file torrent
+     * @param piece_length the length of each data piece in bytes
+     * @param piece_hashes concatenated 20-byte SHA1 hashes of all pieces
+     * @param length total torrent size in bytes
+     * @param privateTorrent 0 = not present, 1 = private, -1 = explicitly not private
+     * @param announce_list tiered list of alternate announce URLs, may be null
+     * @param created_by application name that created the torrent, may be null
+     * @param url_list web seed URLs for BEP 19 HTTP seeding, may be null
+     * @param comment free-form user comment, may be null
      * @since 0.9.62
      */
     public MetaInfo(
@@ -152,11 +171,12 @@ public class MetaInfo {
     /**
      * Will not change infohash. Retains creation date of old MetaInfo if nonzero.
      *
-     * @param new_announce may be null
-     * @param new_announce_list may be null
-     * @param new_comment may be null
-     * @param new_created_by may be null
-     * @param new_url_list may be null
+     * @param old the source MetaInfo whose infohash, name, files, and hashes are reused
+     * @param new_announce the replacement announce URL, may be null
+     * @param new_announce_list tiered list of replacement announce URLs, may be null
+     * @param new_comment replacement comment string, may be null
+     * @param new_created_by replacement created-by string, may be null
+     * @param new_url_list replacement web seed URLs, may be null
      * @since 0.9.64
      */
     public MetaInfo(
@@ -191,6 +211,9 @@ public class MetaInfo {
     /**
      * Creates a new MetaInfo from the given InputStream. The InputStream must start with a
      * correctly bencoded dictionary describing the torrent. Caller must close the stream.
+     *
+     * @param in the stream containing the bencoded torrent data
+     * @throws IOException if the stream cannot be read or the bencoded data is malformed
      */
     public MetaInfo(InputStream in) throws IOException {
         this(new BDecoder(in));
@@ -216,6 +239,9 @@ public class MetaInfo {
      * hash). Will NOT throw a InvalidBEncodingException if the given map does not contain a valid
      * announce string. WILL throw a InvalidBEncodingException if the given map does not contain a
      * valid info dictionary.
+     *
+     * @param m the parsed bencoded dictionary as a map of keys to BEValues
+     * @throws InvalidBEncodingException if the info dictionary is missing or malformed
      */
     public MetaInfo(Map<String, BEValue> m) throws InvalidBEncodingException {
         if (_log.shouldDebug()) {
@@ -448,9 +474,12 @@ public class MetaInfo {
 
     /**
      * Efficiently returns the name and the 20 byte SHA1 hash of the info dictionary in a torrent
-     * file Caller must close stream.
+     * file. Caller must close the stream.
      *
-     * @param infoHashOut 20-byte out parameter
+     * @param in the stream containing the bencoded torrent data
+     * @param infoHashOut 20-byte array that receives the info hash
+     * @return the name field from the info dictionary
+     * @throws IOException if the stream cannot be read or the data is malformed
      * @since 0.8.5
      */
     public static String getNameAndInfoHash(InputStream in, byte[] infoHashOut) throws IOException {
@@ -482,6 +511,7 @@ public class MetaInfo {
     /**
      * Returns a list of lists of urls.
      *
+     * @return tiered announce URLs per BEP 12, or null if none were specified
      * @since 0.9.5
      */
     public List<List<String>> getAnnounceList() {
@@ -489,8 +519,9 @@ public class MetaInfo {
     }
 
     /**
-     * Returns a list of urls or null.
+     * Returns the web seed URLs for BEP 19 HTTP seeding.
      *
+     * @return list of web seed URLs, or null if none were specified
      * @since 0.9.48
      */
     public List<String> getWebSeedURLs() {
@@ -548,6 +579,8 @@ public class MetaInfo {
     /**
      * Is this file a padding file?
      *
+     * @param filenum the index of the file in the files list
+     * @return true if the file has the padding attribute set
      * @since 0.9.48
      */
     public boolean isPaddingFile(int filenum) {
@@ -592,7 +625,11 @@ public class MetaInfo {
         return this.creation_date;
     }
 
-    /** Returns the number of pieces. */
+    /**
+     * Returns the number of pieces in the torrent.
+     *
+     * @return the piece count computed from the hash array length divided by 20
+     */
     public int getPieces() {
         return piece_hashes.length / 20;
     }
@@ -618,11 +655,28 @@ public class MetaInfo {
     /**
      * Checks that the given piece has the same SHA1 hash as the given byte array. Returns random
      * results or IndexOutOfBoundsExceptions when the piece number is unknown.
+     *
+     * @param piece the piece index to verify
+     * @param bs the byte array containing the piece data
+     * @param off the offset within the byte array where the piece data starts
+     * @param length the number of bytes in the piece
+     * @return true if the computed SHA1 hash matches the stored hash for that piece
+     * @throws IndexOutOfBoundsException if the piece index is out of range
      */
     public boolean checkPiece(int piece, byte[] bs, int off, int length) {
         return fast_checkPiece(piece, bs, off, length);
     }
 
+    /**
+     * Fast path for piece hash verification. Computes SHA1 of the given data
+     * and compares it against the stored piece hash.
+     *
+     * @param piece the piece index to verify
+     * @param bs the byte array containing the piece data
+     * @param off the offset within the byte array where the piece data starts
+     * @param length the number of bytes in the piece
+     * @return true if the computed hash matches the stored hash
+     */
     private boolean fast_checkPiece(int piece, byte[] bs, int off, int length) {
         MessageDigest sha1 = SHA1.getInstance();
 
@@ -637,7 +691,10 @@ public class MetaInfo {
     }
 
     /**
-     * @return good
+     * Checks a piece against the stored hashes using a PartialPiece.
+     *
+     * @param pp the PartialPiece containing the piece data and hash
+     * @return true if the hash embedded in the PartialPiece matches the stored hash for that piece
      * @since 0.9.1
      */
     boolean checkPiece(PartialPiece pp) {
@@ -667,6 +724,11 @@ public class MetaInfo {
         return length;
     }
 
+    /**
+     * Returns a human-readable summary of this torrent's metadata.
+     *
+     * @return string containing name, infohash, announce URL, size, file count, and piece count
+     */
     @Override
     public String toString() {
         return "MetaInfo for: "
@@ -705,7 +767,12 @@ public class MetaInfo {
         return new MetaInfo(m);
     }
 
-    /** Called by servlet to save a new torrent file generated from local data */
+    /**
+     * Returns the bencoded torrent file data. Used by the servlet when saving
+     * a torrent generated from local data.
+     *
+     * @return the bencoded byte array representing the complete torrent file
+     */
     public synchronized byte[] getTorrentData() {
         Map<String, Object> m = new HashMap<>();
         if (announce != null) {
@@ -813,6 +880,12 @@ public class MetaInfo {
         return Collections.unmodifiableMap(infoMap);
     }
 
+    /**
+     * Computes the 20-byte SHA1 hash over the bencoded info dictionary.
+     * Creates the info map if it has not been built yet.
+     *
+     * @return the 20-byte info hash used as the torrent identifier
+     */
     private byte[] calculateInfoHash() {
         Map<String, BEValue> info = createInfoMap();
         if (_log.shouldDebug()) {
@@ -836,6 +909,10 @@ public class MetaInfo {
     }
 
     /**
+     * Command-line utility to inspect and optionally modify torrent file metadata.
+     * Usage: MetaInfo [-a announceURL] [-c created-by] [-m comment] [-w webseed-url]* file.torrent [file2.torrent...]
+     *
+     * @param args command-line arguments
      * @since 0.8.5
      */
     public static void main(String[] args) {

@@ -93,6 +93,9 @@ import java.util.Arrays;
  */
 public class SigningPublicKey extends SimpleDataStructure {
     private static final SigType DEF_TYPE = SigType.DSA_SHA1;
+    /**
+     * KEYSIZE_BYTES.
+     */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPubkeyLen();
     private static final int CACHE_SIZE = 1024;
 
@@ -104,7 +107,6 @@ public class SigningPublicKey extends SimpleDataStructure {
      * Pull from cache or return new.
      * Deprecated - used only by deprecated Destination.readBytes(data, off)
      *
-     * @throws DataFormatException if not enough bytes
      * @since 0.8.3
      */
     public static SigningPublicKey create(byte[] data, int off) {
@@ -120,6 +122,9 @@ public class SigningPublicKey extends SimpleDataStructure {
         return _cache.get(in);
     }
 
+    /**
+     * SigningPublicKey.
+     */
     public SigningPublicKey() {
         this(DEF_TYPE);
     }
@@ -133,6 +138,9 @@ public class SigningPublicKey extends SimpleDataStructure {
         _type = type;
     }
 
+    /**
+     * SigningPublicKey.
+     */
     public SigningPublicKey(byte[] data) {
         this(DEF_TYPE, data);
     }

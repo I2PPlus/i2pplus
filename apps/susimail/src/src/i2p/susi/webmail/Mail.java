@@ -34,43 +34,105 @@ import net.i2p.util.SystemVersion;
  */
 class Mail {
 
+    /** ignored */
     private static final String unknown = "unknown";
+    /** ignored */
     private static final String P1 = "^[^@< \t]+@[A-Za-z0-9-]+\\.[A-Za-z0-9\\.-]+$";
+    /** ignored */
     private static final String P2 = "^<[^@< \t]+@[A-Za-z0-9-]+\\.[A-Za-z0-9\\.-]+>$";
+    /** ignored */
     private static final Pattern PATTERN1 = Pattern.compile(P1);
+    /** ignored */
     private static final Pattern PATTERN2 = Pattern.compile(P2);
     /**
-    *  Also used by MailPart
-    *  See MailPart for why we don't do \r\n\r\n
-    */
+     *  Also used by MailPart
+     *  See MailPart for why we don't do \r\n\r\n
+     */
     static final byte[] HEADER_MATCH = DataHelper.getASCII("\r\n\r");
 
+    /** ignored */
     private long size;
+    /**
+     * escaped.
+     */
     public String sender;       // as received, trimmed only, not HTML escaped
+    /**
+     * <>.
+     */
     public String reply;        // address only, enclosed by <>
+    /**
+     * "".
+     */
     public String subject;      // as received, trimmed only, not HTML escaped, non-null, default ""
+    /**
+     * dateString.
+     */
     public String dateString;
+    /**
+     * UTC.
+     */
     public String formattedDate;       // US Locale, UTC
+    /**
+     * zone.
+     */
     public String localFormattedDate;  // Current Locale, local time zone
+    /**
+     * hellip.
+     */
     public String shortSender;         // Either name or address but not both, HTML escaped, double-quotes removed, truncated with hellip
+    /**
+     * "".
+     */
     public String shortSubject;        // HTML escaped, truncated with hellip, non-null, default ""
+    /**
+     * format.
+     */
     public String quotedDate;          // Current Locale, local time zone, longer format
+    /**
+     * 1999.
+     */
     public String dateOnly;            // Long date only format for mail list date tooltips e.g. Tuesday 30th December, 1999
+    /**
+     * uidl.
+     */
     public final String uidl;
+    /**
+     * date.
+     */
     public Date date;
+    /** ignored */
     private Buffer header;
+    /** ignored */
     private Buffer body;
+    /** ignored */
     private MailPart part;
     /** May be null. Non-empty if non-null. Not HTML escaped. */
     String[] to; // addresses only, enclosed by <>
-    String[] cc; // addresses only, enclosed by <>
+    /** addresses only, enclosed by <> */
+    String[] cc;
+    /** ignored */
     private boolean isNew;
+    /** ignored */
     private boolean isSpam;
+    /** ignored */
     private boolean headersParsed;
+    /**
+     * contentType.
+     */
     public String contentType;
+    /**
+     * escaped.
+     */
     public String messageID; // as received, trimmed only, probably enclosed with <>, not HTML escaped
+    /**
+     * error.
+     */
     public String error;
+    /**
+     * markForDeletion.
+     */
     public boolean markForDeletion;
+    /** ignored */
     private final Log _log;
 
     /**
@@ -201,7 +263,11 @@ class Mail {
             !contentType.contains("multipart/signed");
     }
 
-    /** @since 0.9.62+ */
+    /**
+     *  Get the attachment type.
+     *  @return the attachment type string
+     *  @since 0.9.62+
+     */
     public synchronized String getAttachmentType() {
         if (contentType == null) {return "none";}
         else if (contentType.contains("text/html") || contentType.contains("multipart/alternative")) {return "html";}
@@ -228,7 +294,8 @@ class Mail {
 
     /**
     * Returns the first email address portion, enclosed by &lt;&gt;
-    * @param address
+    * @param address the address to parse
+    * @return the address enclosed in angle brackets, or null
     */
     public static String getAddress(String address) {
         String[] tokens = DataHelper.split(address, "[ \t]+");
@@ -262,6 +329,7 @@ class Mail {
     * in text to the recipients list.
     *
     * @param recipients out param
+    * @param ccs the Cc addresses
     * @param ok will be returned
     * @return true if ALL e-mail addresses are valid AND the in parameter was true
     * @since 0.9.35
@@ -321,9 +389,13 @@ class Mail {
         if (buf.length() > 0) {out.println(buf);}
     }
 
+    /** ignored */
     private static final DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
+    /** ignored */
     private static final DateFormat dateOnlyFormatter = new SimpleDateFormat("EEEE dd MMMM, yyyy", Locale.US);
+    /** ignored */
     private static final DateFormat localDateFormatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+    /** ignored */
     private static final DateFormat longLocalDateFormatter = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
     static {
         // the router sets the JVM time zone to UTC but saves the original here so we can get it

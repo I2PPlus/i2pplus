@@ -66,11 +66,15 @@ final class GenericGFPoly {
     }
   }
 
+  /**
+   * Get the coefficients.
+   */
   int[] getCoefficients() {
     return coefficients;
   }
 
   /**
+   * Get the degree.
    * @return degree of this polynomial
    */
   int getDegree() {
@@ -78,6 +82,7 @@ final class GenericGFPoly {
   }
 
   /**
+   * Whether zero.
    * @return true iff this polynomial is the monomial "0"
    */
   boolean isZero() {
@@ -85,6 +90,7 @@ final class GenericGFPoly {
   }
 
   /**
+   * Get the coefficient.
    * @return coefficient of x^degree term in this polynomial
    */
   int getCoefficient(int degree) {
@@ -92,6 +98,7 @@ final class GenericGFPoly {
   }
 
   /**
+   * evaluate at.
    * @return evaluation of this polynomial at a given point
    */
   int evaluateAt(int a) {
@@ -115,6 +122,9 @@ final class GenericGFPoly {
     return result;
   }
 
+  /**
+   * add or subtract.
+   */
   GenericGFPoly addOrSubtract(GenericGFPoly other) {
     if (!field.equals(other.field)) {
       throw new IllegalArgumentException("GenericGFPolys do not have same GenericGF field");
@@ -140,11 +150,17 @@ final class GenericGFPoly {
 
     for (int i = lengthDiff; i < largerCoefficients.length; i++) {
       sumDiff[i] = GenericGF.addOrSubtract(smallerCoefficients[i - lengthDiff], largerCoefficients[i]);
+    /**
+     * The value.
+     */
     }
 
     return new GenericGFPoly(field, sumDiff);
   }
 
+  /**
+   * multiply.
+   */
   GenericGFPoly multiply(GenericGFPoly other) {
     if (!field.equals(other.field)) {
       throw new IllegalArgumentException("GenericGFPolys do not have same GenericGF field");
@@ -154,6 +170,9 @@ final class GenericGFPoly {
     }
     int[] aCoefficients = this.coefficients;
     int aLength = aCoefficients.length;
+    /**
+     * B coefficients.
+     */
     int[] bCoefficients = other.coefficients;
     int bLength = bCoefficients.length;
     int[] product = new int[aLength + bLength - 1];
@@ -167,6 +186,9 @@ final class GenericGFPoly {
     return new GenericGFPoly(field, product);
   }
 
+  /**
+   * multiply.
+   */
   GenericGFPoly multiply(int scalar) {
     if (scalar == 0) {
       return field.getZero();
@@ -182,6 +204,9 @@ final class GenericGFPoly {
     return new GenericGFPoly(field, product);
   }
 
+  /**
+   * multiply by monomial.
+   */
   GenericGFPoly multiplyByMonomial(int degree, int coefficient) {
     if (degree < 0) {
       throw new IllegalArgumentException();
@@ -197,6 +222,9 @@ final class GenericGFPoly {
     return new GenericGFPoly(field, product);
   }
 
+  /**
+   * divide.
+   */
   GenericGFPoly[] divide(GenericGFPoly other) {
     if (!field.equals(other.field)) {
       throw new IllegalArgumentException("GenericGFPolys do not have same GenericGF field");

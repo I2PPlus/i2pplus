@@ -11,6 +11,9 @@ import org.rrd4j.ConsolFun;
 public enum ConsolidationFunctionType {
     /** Average consolidation function. */
     AVERAGE {
+        /**
+         * getConsolFun.
+         */
         @Override
         public ConsolFun getConsolFun() {
             return ConsolFun.AVERAGE;
@@ -19,6 +22,9 @@ public enum ConsolidationFunctionType {
 
     /** Minimum consolidation function. */
     MIN {
+        /**
+         * getConsolFun.
+         */
         @Override
         public ConsolFun getConsolFun() {
             return ConsolFun.MIN;
@@ -27,6 +33,9 @@ public enum ConsolidationFunctionType {
 
     /** Maximum consolidation function. */
     MAX {
+        /**
+         * getConsolFun.
+         */
         @Override
         public ConsolFun getConsolFun() {
             return ConsolFun.MAX;
@@ -35,6 +44,9 @@ public enum ConsolidationFunctionType {
 
     /** Last value consolidation function. */
     LAST {
+        /**
+         * getConsolFun.
+         */
         @Override
         public ConsolFun getConsolFun() {
             return ConsolFun.LAST;
@@ -43,6 +55,9 @@ public enum ConsolidationFunctionType {
 
     /** Holt-Winters prediction consolidation function. */
     HWPREDICT {
+        /**
+         * getConsolFun.
+         */
         @Override
         public ConsolFun getConsolFun() {
             throw new UnsupportedOperationException("HWPREDICT not supported");
@@ -51,6 +66,9 @@ public enum ConsolidationFunctionType {
 
     /** Seasonal consolidation function. */
     SEASONAL {
+        /**
+         * getConsolFun.
+         */
         @Override
         public ConsolFun getConsolFun() {
             throw new UnsupportedOperationException("SEASONAL not supported");
@@ -59,6 +77,9 @@ public enum ConsolidationFunctionType {
 
     /** Deviation prediction consolidation function. */
     DEVPREDICT {
+        /**
+         * getConsolFun.
+         */
         @Override
         public ConsolFun getConsolFun() {
             throw new UnsupportedOperationException("DEVPREDICT not supported");
@@ -67,6 +88,9 @@ public enum ConsolidationFunctionType {
 
     /** Deviation seasonal consolidation function. */
     DEVSEASONAL {
+        /**
+         * getConsolFun.
+         */
         @Override
         public ConsolFun getConsolFun() {
             throw new UnsupportedOperationException("DEVSEASONAL not supported");
@@ -75,6 +99,9 @@ public enum ConsolidationFunctionType {
 
     /** Failures consolidation function. */
     FAILURES {
+        /**
+         * getConsolFun.
+         */
         @Override
         public ConsolFun getConsolFun() {
             throw new UnsupportedOperationException("FAILURES not supported");
@@ -83,11 +110,17 @@ public enum ConsolidationFunctionType {
 
     /** Multiply Holt-Winters prediction consolidation function. */
     MHWPREDICT {
+        /**
+         * getConsolFun.
+         */
         @Override
         public ConsolFun getConsolFun() {
             throw new UnsupportedOperationException("MHWPREDICT not supported");
         }
     };
 
+    /**
+     * getConsolFun().
+     */
     public abstract ConsolFun getConsolFun();
 }

@@ -79,6 +79,9 @@ class SAMv3DatagramServer implements Handler {
 			_parent.unregister(this);
 	}
 
+	/**
+	 * send.
+	 */
 	public void send(SocketAddress addr, ByteBuffer msg) throws IOException {
 		_server.send(msg, addr);
 	}
@@ -93,11 +96,17 @@ class SAMv3DatagramServer implements Handler {
 
 		private final DatagramChannel server;
 
+		/**
+		 * Listener.
+		 */
 		public Listener(DatagramChannel server)
 		{
 			this.server = server;
 		}
 
+		/**
+		 * run.
+		 */
 		public void run() {
 			I2PAppContext.getGlobalContext().portMapper().register(PortMapper.SVC_SAM_UDP, _host, _port);
 			try {
@@ -136,10 +145,16 @@ class SAMv3DatagramServer implements Handler {
 		private final ByteArrayInputStream is;
 		private static final int MAX_LINE_LENGTH = 2*1024;
 
+		/**
+		 * MessageDispatcher.
+		 */
 		public MessageDispatcher(byte[] buf) {
 			this.is = new ByteArrayInputStream(buf);
 		}
 
+		/**
+		 * run.
+		 */
 		public void run() {
 			try {
 				// we cannot use SAMUtils.parseParams() here

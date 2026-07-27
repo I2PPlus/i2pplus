@@ -13,17 +13,30 @@ import net.i2p.router.util.CDQEntry;
  *  @since 0.9.3 refactored from TunnelGateway.Pending
  */
 class PendingGatewayMessage implements CDQEntry {
+    /** the destination router */
     protected final Hash _toRouter;
+    /** the destination tunnel */
     protected final TunnelId _toTunnel;
+    /** the message ID */
     protected final long _messageId;
+    /** the message expiration */
     protected final long _expiration;
+    /** raw unfragmented message data */
     protected final byte[] _remaining;
+    /** index into the data to be sent */
     protected volatile int _offset;
+    /** which fragment are we working on */
     protected int _fragmentNumber;
+    /** when this message was created */
     protected final long _created;
+    /** IDs of TunnelDataMessages this message was fragmented into */
     private List<Long> _messageIds;
+    /** time enqueued in CDQ */
     private long _enqueueTime;
 
+    /**
+     * PendingGatewayMessage.
+     */
     public PendingGatewayMessage(I2NPMessage message, Hash toRouter, TunnelId toTunnel) {
         _toRouter = toRouter;
         _toTunnel = toTunnel;
@@ -33,28 +46,49 @@ class PendingGatewayMessage implements CDQEntry {
         _created = System.currentTimeMillis();
     }
 
-    /** may be null */
+    /**
+     *  The destination router.
+     *  @return may be null
+     */
     public Hash getToRouter() { return _toRouter; }
 
-    /** may be null */
+    /**
+     *  The destination tunnel.
+     *  @return may be null
+     */
     public TunnelId getToTunnel() { return _toTunnel; }
 
+    /** @return the message ID */
     public long getMessageId() { return _messageId; }
 
+    /** @return the message expiration */
     public long getExpiration() { return _expiration; }
 
-    /** raw unfragmented message to send */
+    /**
+     *  The raw unfragmented message to send.
+     *  @return the message data
+     */
     public byte[] getData() { return _remaining; }
 
-    /** index into the data to be sent */
+    /**
+     *  The index into the data to be sent.
+     *  @return the offset
+     */
     public int getOffset() { return _offset; }
 
-    /** move the offset */
+    /**
+     *  Move the offset.
+     *  @param offset the new offset value
+     */
     public void setOffset(int offset) { _offset = offset; }
 
+    /** @return the lifetime in milliseconds */
     public long getLifetime() { return System.currentTimeMillis()-_created; }
 
-    /** which fragment are we working on (0 for the first fragment) */
+    /**
+     *  Which fragment are we working on (0 for the first fragment).
+     *  @return the fragment number
+     */
     public int getFragmentNumber() { return _fragmentNumber; }
 
     /** ok, fragment sent, increment what the next will be */
@@ -63,6 +97,7 @@ class PendingGatewayMessage implements CDQEntry {
     /**
      *  Add an ID to the list of the TunnelDataMssages this message was fragmented into.
      *  Unused except in notePreprocessing() calls for debugging
+     *  @param id the message ID to add
      */
     public void addMessageId(long id) {
         synchronized (this) {
@@ -75,6 +110,7 @@ class PendingGatewayMessage implements CDQEntry {
     /**
      *  The IDs of the TunnelDataMssages this message was fragmented into.
      *  Unused except in notePreprocessing() calls for debugging
+     *  @return non-null list of message IDs
      */
     public List<Long> getMessageIds() {
         synchronized (this) {
@@ -109,6 +145,9 @@ class PendingGatewayMessage implements CDQEntry {
         // No-op - intentionally empty
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
@@ -132,4 +171,3 @@ class PendingGatewayMessage implements CDQEntry {
         return buf.toString();
     }
 }
-

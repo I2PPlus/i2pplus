@@ -8,7 +8,13 @@ import net.i2p.util.Log;
  * for rescheduling events and logging.
  */
 abstract class SchedulerImpl implements TaskScheduler {
+    /**
+     * _context.
+     */
     protected final I2PAppContext _context;
+    /**
+     * _log.
+     */
     protected final Log _log;
 
     /**
@@ -31,6 +37,9 @@ abstract class SchedulerImpl implements TaskScheduler {
         con.scheduleConnectionEvent(msToWait);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return getClass().getSimpleName();

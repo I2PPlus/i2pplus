@@ -41,28 +41,46 @@ import org.eclipse.jetty.server.Server;
  */
 public class ErrorServlet extends HttpServlet {
 
+    /** ignored */
     private static final long serialVersionUID = 99356750L;
+    /** The context */
     private final I2PAppContext _context;
+    /** Console bundle name */
     private static final String CONSOLE_BUNDLE_NAME = "net.i2p.router.web.messages";
+    /** Theme property name */
     private static final String PROP_THEME_NAME = "routerconsole.theme";
+    /** Default theme */
     private static final String DEFAULT_THEME = "dark";
+    /** Base theme path */
     private static final String BASE_THEME_PATH = "/themes/console/";
+    /** Default icon */
     private static final String DEFAULT_ICO = "images/favicon.svg";
+    /** Default CSS */
     private static final String DEFAULT_CSS = "console.css";
+    /** Proxy CSS */
     private static final String PROXY_CSS = "proxy.css";
     /** to be added to head */
     private final String _icoPath = BASE_THEME_PATH + DEFAULT_ICO;
+    /** The CSS path */
     private String _cssPath;
     /** for webapp translation */
     private String _webappName;
+    /** The bundle name */
     private String _bundleName;
+    /** The default bundle */
     private String _defaultBundle;
 
+    /**
+     * ErrorServlet.
+     */
     public ErrorServlet() {
         super();
         _context = I2PAppContext.getGlobalContext();
     }
 
+    /**
+     * init.
+     */
     @Override
     public void init() throws ServletException {
         super.init();
@@ -77,6 +95,9 @@ public class ErrorServlet extends HttpServlet {
         _defaultBundle = _bundleName != null ? _bundleName : CONSOLE_BUNDLE_NAME;
     }
 
+    /**
+     * doGet.
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setCharacterEncoding("UTF-8");

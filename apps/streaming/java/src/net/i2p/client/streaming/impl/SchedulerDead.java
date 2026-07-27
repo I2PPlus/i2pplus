@@ -27,6 +27,9 @@ import net.i2p.I2PAppContext;
  */
 class SchedulerDead extends SchedulerImpl {
 
+    /**
+     * SchedulerDead.
+     */
     public SchedulerDead(I2PAppContext ctx) {
         super(ctx);
     }

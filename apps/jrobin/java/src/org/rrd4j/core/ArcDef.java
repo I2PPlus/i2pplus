@@ -126,10 +126,19 @@ public class ArcDef {
         return consolFun.hashCode() + steps * 19;
     }
 
+    /**
+     * Set the number of rows.
+     * @param rows the number of rows
+     */
     void setRows(int rows) {
         this.rows = rows;
     }
 
+    /**
+     * Check if two archive definitions are exactly equal.
+     * @param def the definition to compare
+     * @return true if equal
+     */
     boolean exactlyEqual(ArcDef def) {
         return consolFun == def.consolFun
                 && xff == def.xff

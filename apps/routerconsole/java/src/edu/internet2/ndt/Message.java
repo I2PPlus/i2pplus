@@ -12,7 +12,13 @@ package edu.internet2.ndt;
  * @see MessageType for more Message Types.
  */
 public class Message {
+
+    /** Creates a new Message */
+    public Message() {}
+
+    /**  y type */
     byte _yType;
+    /**  ya body */
     byte[] _yaBody;
 
     /**

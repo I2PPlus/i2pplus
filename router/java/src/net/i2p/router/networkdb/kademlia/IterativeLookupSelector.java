@@ -20,18 +20,27 @@ class IterativeLookupSelector implements MessageSelector {
     private boolean _matchFound;
     private final Log _log;
 
+    /**
+     * IterativeLookupSelector.
+     */
     public IterativeLookupSelector(RouterContext ctx, IterativeSearchJob search) {
         _context = ctx;
         _search = search;
         _log = ctx.logManager().getLog(getClass());
     }
 
+    /**
+     * continueMatching.
+     */
     @Override
     public boolean continueMatching() {
         // don't use remaining searches count
         return (!_matchFound) && _context.clock().now() < getExpiration();
     }
 
+    /**
+     * getExpiration.
+     */
     public long getExpiration() { return (_matchFound ? -1 : _search.getExpiration()); }
 
     /**

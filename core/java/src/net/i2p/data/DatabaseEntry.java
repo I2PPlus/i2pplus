@@ -85,9 +85,14 @@ import net.i2p.crypto.SigType;
  * @since 0.8.2
  */
 public abstract class DatabaseEntry extends DataStructureImpl {
-    /** these are the same as in i2np's DatabaseStoreMessage */
+    /**
+     * Router info type. These are the same as in i2np's DatabaseStoreMessage.
+     */
     public static final int KEY_TYPE_ROUTERINFO = 0;
 
+    /**
+     * KEY_TYPE_LEASESET.
+     */
     public static final int KEY_TYPE_LEASESET = 1;
 
     /** LeaseSet 2 type.
@@ -124,11 +129,16 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      */
     public static final int KEY_TYPE_SERVICE_LIST = 11;
 
+    /** cryptographic signature */
     protected volatile Signature _signature;
     // synch: this
+    /**  current routing key */
     private Hash _currentRoutingKey;
+    /**  routing key gen mod */
     private long _routingKeyGenMod;
+    /**  received as published */
     private volatile boolean _receivedAsPublished;
+    /**  received as reply */
     private volatile boolean _receivedAsReply;
 
     /**
@@ -140,6 +150,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      * The Hash of the local client that received this LS,
      * null if the router or unknown.
      *
+     * @return the hash of the receiving client, or null
      * @since 0.9.61
      */
     public Hash getReceivedBy() {
@@ -149,6 +160,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     /**
      *  Sets the local client that received this entry.
      *
+     * @param receivedBy the hash of the receiving client
      * @since 0.9.61
      */
     public void setReceivedBy(Hash receivedBy) {
@@ -163,6 +175,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      * and for a RouterInfo it will be in the past.
      * Either way, it's a timestamp.
      *
+     * @return the timestamp
      * @since 0.8.2
      */
     public abstract long getDate();
@@ -213,6 +226,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     /**
      * Convenience method, is the type any variant of leaseset?
      *
+     * @param type the type to check
      * @return true for any type of LeaseSet, false for RouterInfo, false for others
      * @since 0.9.38
      */
@@ -237,6 +251,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      *
      * @return the raw payload data, or null on error (for example, if this is a RouterInfo,
      *         a DataFormatException is thrown instead)
+     * @throws DataFormatException if the data cannot be serialized
      */
     protected abstract byte[] getBytes() throws DataFormatException;
 
@@ -244,6 +259,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      * Get the routing key for the structure using the current modifier in the RoutingKeyGenerator.
      * This only calculates a new one when necessary though (if the generator's key modifier changes)
      *
+     * @return the routing key
      * @throws IllegalStateException if not in RouterContext
      */
     public Hash getRoutingKey() {
@@ -263,6 +279,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     /**
      *  Validates the routing key for this entry.
      *
+     * @return true if the routing key is valid
      * @throws IllegalStateException if not in RouterContext
      */
     public boolean validateRoutingKey() {
@@ -277,6 +294,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     /**
      * Retrieve the proof that the identity stands behind the info here
      *
+     * @return the signature, or null if not signed
      */
     public Signature getSignature() {
         return _signature;
@@ -285,6 +303,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     /**
      * Configure the proof that the entity stands behind the info here
      *
+     * @param signature the signature to set
      * @throws IllegalStateException if already signed
      */
     public void setSignature(Signature signature) {
@@ -295,7 +314,9 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     /**
      * Sign the structure using the supplied signing key
      *
+     * @param key the signing private key
      * @throws IllegalStateException if already signed
+     * @throws DataFormatException if signing fails
      */
     public void sign(SigningPrivateKey key) throws DataFormatException {
         if (_signature != null) throw new IllegalStateException();
@@ -350,6 +371,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      * us, rather than by searching for it ourselves or locally creating it.
      * Default false.
      *
+     * @return true if received as published
      * @since 0.9.58 moved up from LeaseSet
      */
     public boolean getReceivedAsPublished() {
@@ -373,6 +395,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      * If true, we received this LeaseSet by searching for it
      * Default false.
      *
+     * @return true if received as reply
      * @since 0.7.14, moved up from LeaseSet in 0.9.58
      */
     public boolean getReceivedAsReply() {

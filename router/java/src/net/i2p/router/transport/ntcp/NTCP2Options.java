@@ -20,6 +20,7 @@ class NTCP2Options {
     private final int _sendDelay;
     private final int _recvDelay;
 
+    /** All params are as named. */
     public NTCP2Options(float sendMin, float sendMax, float recvMin, float recvMax,
                         int sendDummy, int recvDummy, int sendDelay, int recvDelay) {
         _sendMin = sendMin;
@@ -32,13 +33,37 @@ class NTCP2Options {
         _recvDelay = recvDelay;
     }
 
+    /**
+     * getSendMin.
+     */
     public float getSendMin() { return _sendMin; }
+    /**
+     * getSendMax.
+     */
     public float getSendMax() { return _sendMax; }
+    /**
+     * getRecvMin.
+     */
     public float getRecvMin() { return _recvMin; }
+    /**
+     * getRecvMax.
+     */
     public float getRecvMax() { return _recvMax; }
+    /**
+     * getSendDummy.
+     */
     public int getSendDummy() { return _sendDummy; }
+    /**
+     * getRecvDummy.
+     */
     public int getRecvDummy() { return _recvDummy; }
+    /**
+     * getSendDelay.
+     */
     public int getSendDelay() { return _sendDelay; }
+    /**
+     * getRecvDelay.
+     */
     public int getRecvDelay() { return _recvDelay; }
 
     /**
@@ -84,6 +109,9 @@ class NTCP2Options {
                                 tdummy, rdummy, tdelay, rdelay);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return "Padding options: send min/max %: (" + (_sendMin * 100) + ", " + (_sendMax * 100) +

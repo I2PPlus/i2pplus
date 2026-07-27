@@ -21,9 +21,12 @@ final class RSAConstants {
 
     private static final BigInteger F4 = new NativeBigInteger(RSAKeyGenParameterSpec.F4);
 
-    // standard specs
+    /** RSA 1024-bit with F4 exponent */
     public static final RSAKeyGenParameterSpec F4_1024_SPEC = genSpec(1024, F4);
+    /** RSA 2048-bit with F4 exponent */
     public static final RSAKeyGenParameterSpec F4_2048_SPEC = genSpec(2048, F4);
+    /** RSA 3072-bit with F4 exponent */
     public static final RSAKeyGenParameterSpec F4_3072_SPEC = genSpec(3072, F4);
+    /** RSA 4096-bit with F4 exponent */
     public static final RSAKeyGenParameterSpec F4_4096_SPEC = genSpec(4096, F4);
 }

@@ -25,8 +25,17 @@ package org.cybergarage.xml;
  * @since 1.0
  */
 public class XML {
+    /**
+     * DEFAULT_CONTENT_TYPE.
+     */
     public static final String DEFAULT_CONTENT_TYPE = "text/xml; charset=\"utf-8\"";
+    /**
+     * DEFAULT_CONTENT_LANGUAGE.
+     */
     public static final String DEFAULT_CONTENT_LANGUAGE = "en";
+    /**
+     * CHARSET_UTF8.
+     */
     public static final String CHARSET_UTF8 = "utf-8";
 
     ////////////////////////////////////////////////

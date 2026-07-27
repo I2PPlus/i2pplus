@@ -18,15 +18,21 @@ public class HTTPStatus {
     //	Code
     ////////////////////////////////////////////////
 
+    /** HTTP 100 Continue */
     public static final int CONTINUE = 100;
+    /** HTTP 200 OK */
     public static final int OK = 200;
-    //	Thanks for Brent Hills (10/20/04)
+    /** HTTP 206 Partial Content */
     public static final int PARTIAL_CONTENT = 206;
+    /** HTTP 400 Bad Request */
     public static final int BAD_REQUEST = 400;
+    /** HTTP 404 Not Found */
     public static final int NOT_FOUND = 404;
+    /** HTTP 412 Precondition Failed */
     public static final int PRECONDITION_FAILED = 412;
-    //	Thanks for Brent Hills (10/20/04)
+    /** HTTP 416 Invalid Range */
     public static final int INVALID_RANGE = 416;
+    /** HTTP 500 Internal Server Error */
     public static final int INTERNAL_SERVER_ERROR = 500;
 
     /**

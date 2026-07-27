@@ -65,35 +65,58 @@ import java.util.Set;
  */
 public class EncryptedLeaseSet extends LeaseSet2 {
 
-    // includes salt
+    /** includes salt */
     private byte[] _encryptedData;
+    /** ignored */
     private LeaseSet2 _decryptedLS2;
+    /** ignored */
     private Hash __calculatedHash;
+    /** ignored */
     private SigningPrivateKey _alpha;
-    // to decrypt with if we don't have full dest
+    /** to decrypt with if we don't have full dest */
     private SigningPublicKey _unblindedSPK;
+    /** ignored */
     private String _secret;
+    /** ignored */
     private PrivateKey _clientPrivateKey;
+    /** ignored */
     private final Log _log;
-    // debug
+    /** debug */
     private int _authType;
+    /** ignored */
     private int _numKeys;
 
+    /** ignored */
     private static final int MIN_ENCRYPTED_SIZE = 8 + 16;
+    /** ignored */
     private static final int MAX_ENCRYPTED_SIZE = 4096;
 
+    /** ignored */
     private static final int SALT_LEN = 32;
+    /** ignored */
     private static final byte[] CREDENTIAL = DataHelper.getASCII("credential");
+    /** ignored */
     private static final byte[] SUBCREDENTIAL = DataHelper.getASCII("subcredential");
+    /** ignored */
     private static final String ELS2L1K = "ELS2_L1K";
+    /** ignored */
     private static final String ELS2L2K = "ELS2_L2K";
+    /** ignored */
     private static final String ELS2_DH = "ELS2_XCA";
+    /** ignored */
     private static final String ELS2_PSK = "ELS2PSKA";
+    /** ignored */
     private static final int IV_LEN = 12;
+    /** ignored */
     private static final int ID_LEN = 8;
+    /** ignored */
     private static final int COOKIE_LEN = 32;
+    /** ignored */
     private static final int CLIENT_LEN = ID_LEN + COOKIE_LEN;
 
+    /**
+     * EncryptedLeaseSet.
+     */
     public EncryptedLeaseSet() {
         super();
         _log = I2PAppContext.getGlobalContext().logManager().getLog(EncryptedLeaseSet.class);
@@ -133,6 +156,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
 
     ///// overrides below here
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return (_signature != null) ? KEY_TYPE_ENCRYPTED_LS2 : KEY_TYPE_LS2;
@@ -886,6 +912,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         return rv;
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -903,6 +932,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         return _encryptionKey.hashCode();
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);

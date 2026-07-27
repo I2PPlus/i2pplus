@@ -73,6 +73,9 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     private transient ArrayList<Utf8StringBuilder> _buffers;
     private transient char[] _copy;
 
+    /**
+     * I2PRequestLog.
+     */
     public I2PRequestLog() {
         _extended = true;
         _append = true;
@@ -100,8 +103,14 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
         _filename = filename;
     }
 
+    /**
+     * getFilename.
+     */
     public String getFilename() {return _filename;}
 
+    /**
+     * getDatedFilename.
+     */
     public String getDatedFilename() {
         if (_fileOut instanceof RolloverFileOutputStream) {
             return ((RolloverFileOutputStream)_fileOut).getDatedFilename();
@@ -114,25 +123,85 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
      * If not set, the pre-formated request timestamp is used.
      */
     public void setLogDateFormat(String format) {_logDateFormat = format;}
+    /**
+     * getLogDateFormat.
+     */
     public String getLogDateFormat() {return _logDateFormat;}
+    /**
+     * setLogLocale.
+     */
     public void setLogLocale(Locale logLocale) {_logLocale = logLocale;}
+    /**
+     * getLogLocale.
+     */
     public Locale getLogLocale() {return _logLocale;}
+    /**
+     * setLogTimeZone.
+     */
     public void setLogTimeZone(String tz) {_logTimeZone = tz;}
+    /**
+     * getLogTimeZone.
+     */
     public String getLogTimeZone() {return _logTimeZone;}
+    /**
+     * setRetainDays.
+     */
     public void setRetainDays(int retainDays) {_retainDays = retainDays;}
+    /**
+     * getRetainDays.
+     */
     public int getRetainDays() {return _retainDays;}
+    /**
+     * setExtended.
+     */
     public void setExtended(boolean extended) {_extended = extended;}
+    /**
+     * isExtended.
+     */
     public boolean isExtended() {return _extended;}
+    /**
+     * setAppend.
+     */
     public void setAppend(boolean append) {_append = append;}
+    /**
+     * isAppend.
+     */
     public boolean isAppend() {return _append;}
+    /**
+     * setIgnorePaths.
+     */
     public void setIgnorePaths(String[] ignorePaths) {_ignorePaths = ignorePaths;}
+    /**
+     * getIgnorePaths.
+     */
     public String[] getIgnorePaths() {return _ignorePaths;}
+    /**
+     * setLogCookies.
+     */
     public void setLogCookies(boolean logCookies) {_logCookies = logCookies;}
+    /**
+     * getLogCookies.
+     */
     public boolean getLogCookies() {return _logCookies;}
+    /**
+     * getLogServer.
+     */
     public boolean getLogServer() {return _logServer;}
+    /**
+     * setLogServer.
+     */
     public void setLogServer(boolean logServer) {_logServer=logServer;}
+    /**
+     * setLogLatency.
+     */
     public void setLogLatency(boolean logLatency) {_logLatency = logLatency;}
+    /**
+     * getLogLatency.
+     */
     public boolean getLogLatency() {return _logLatency;}
+    /**
+     * setPreferProxiedForAddress.
+     */
     public void setPreferProxiedForAddress(boolean preferProxiedForAddress) {_preferProxiedForAddress = preferProxiedForAddress;}
 
     /**
@@ -141,6 +210,9 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
      */
     public void setB64(boolean b64) {_b64 = b64;}
 
+    /**
+     * log.
+     */
     public void log(Request request, Response response) {
         if (!isStarted()) {return;}
 
@@ -282,6 +354,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
 
     }
 
+    /** Log extended (referrer and user-agent) */
     protected void logExtended(Request request,
                                Writer writer) throws IOException {
         String referer = request.getHeader("Referer");
@@ -301,6 +374,9 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
         }
     }
 
+    /**
+     * doStart.
+     */
     protected void doStart() throws Exception {
         if (_logDateFormat!=null) {
             _logDateCache = new DateCache(_logDateFormat, _logLocale, _logTimeZone);
@@ -327,6 +403,9 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
         super.doStart();
     }
 
+    /**
+     * doStop.
+     */
     protected void doStop() throws Exception {
         super.doStop();
         try {

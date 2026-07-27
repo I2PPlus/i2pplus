@@ -652,6 +652,7 @@ public class Node {
     }
 
     /**
+     * Get the indent level string.
      * @param nIndentLevel the level of indentation to produce
      * @param space the String to use for the intendation
      * @since 1.8.0

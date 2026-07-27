@@ -73,11 +73,19 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     private final Snark snark;
 
     // package local for access by CheckDownLoadersTask
+    /** C h e c k  p e r i o d */
     static final long CHECK_PERIOD =
             (long) 5 * 1000; // update download speed in UI and choke/unchoke tests
+    /** M a x  u p l o a d e r s */
     static final int MAX_UPLOADERS = 16;
+    /**
+     * MAX_INACTIVE.
+     */
     public static final long MAX_INACTIVE =
             5 * (long) 60 * 1000; // how long before we disconnect from an inactive peer
+    /**
+     * MAX_SEED_INACTIVE.
+     */
     public static final long MAX_SEED_INACTIVE = 3 * (long) 60 * 1000;
 
     /**
@@ -97,6 +105,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
     private final AtomicLong uploaded = new AtomicLong();
     private final AtomicLong downloaded = new AtomicLong();
+    /** R a t e  d e p t h */
     static final int RATE_DEPTH = 3; // make following arrays RATE_DEPTH long
     private final long[] uploaded_old = {-1, -1, -1};
     private final long[] downloaded_old = {-1, -1, -1};
@@ -217,11 +226,17 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     private static class CheckEvent extends SimpleTimer2.TimedEvent {
         private final PeerCheckerTask _task;
 
+        /**
+         * Wrapper to reschedule the checker task on each fire.
+         */
         public CheckEvent(I2PAppContext ctx, PeerCheckerTask task) {
             super(ctx.simpleTimer2());
             _task = task;
         }
 
+        /**
+         * Fire the checker task and reschedule for the next period.
+         */
         public void timeReached() {
             _task.run();
             schedule(CHECK_PERIOD);
@@ -234,11 +249,16 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @since 0.9.62
      */
     private class RerequestEvent extends SimpleTimer2.TimedEvent {
-        /** caller must schedule */
+        /**
+         * Create rerequest event; caller must schedule.
+         */
         public RerequestEvent() {
             super(_util.getContext().simpleTimer2());
         }
 
+        /**
+         * Check if unthrottled, poke peers if so, or reschedule.
+         */
         public void timeReached() {
             if (bwListener.shouldRequest(null, 0)) {
                 if (_log.shouldWarn()) {
@@ -565,6 +585,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         return (r * 1000) / CHECK_PERIOD;
     }
 
+    /** Get rate */
     static long getRate(long[] array) {
         long rate = 0;
         int i = 0;
@@ -645,9 +666,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         return metainfo;
     }
 
-    /**
-     * @since 0.8.4
-     */
+    /** @return info hash */
     public byte[] getInfoHash() {
         return infohash;
     }
@@ -746,9 +765,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         }
     }
 
-    /**
-     * @since 0.9.1
-     */
+    /** Restart after halt. */
     public void restart() {
         halted = false;
         synchronized (uploaded_old) {
@@ -923,6 +940,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     wantedBytes == 0 && bitfield != null && !bitfield.complete();
             Runnable r =
                     new Runnable() {
+                        /**
+                         * Run the peer connection lifecycle.
+                         */
                         public void run() {
                             peer.runConnection(
                                     _util,

@@ -45,6 +45,9 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
 	private final boolean r;
 	private final boolean w;
 
+	/**
+	 * RAIFile.
+	 */
 	public RAIFile(RandomAccessFile file) throws FileNotFoundException {
 		this.f = null;
 		this.delegate = file;
@@ -83,31 +86,94 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
 		return this.delegate.toString();
 	}
 
+	/**
+	 * getFilePointer.
+	 */
 	public long getFilePointer()		throws IOException { return delegate.getFilePointer(); }
+	/**
+	 * length.
+	 */
 	public long length()				throws IOException { return delegate.length(); }
+	/**
+	 * read.
+	 */
 	public int read()					throws IOException { return delegate.read(); }
+	/**
+	 * read.
+	 */
 	public int read(byte[] b)			throws IOException { return delegate.read(b); }
+	/**
+	 * read.
+	 */
 	public int read(byte[] b, int off, int len) throws IOException { return delegate.read(b,off,len); }
+	/**
+	 * seek.
+	 */
 	public void seek(long pos)			throws IOException { delegate.seek(pos); }
+	/**
+	 * setLength.
+	 */
 	public void setLength(long newLength) throws IOException { delegate.setLength(newLength); }
 
 	// Closeable Methods
 	// TODO May need to change.
+	/**
+	 * close.
+	 */
 	public void close()					throws IOException { delegate.close(); }
 
 	// DataInput Methods
+	/**
+	 * readBoolean.
+	 */
 	public boolean readBoolean()		throws IOException { return delegate.readBoolean(); }
+	/**
+	 * readByte.
+	 */
 	public byte readByte()				throws IOException { return delegate.readByte(); }
+	/**
+	 * readChar.
+	 */
 	public char readChar()				throws IOException { return delegate.readChar(); }
+	/**
+	 * readDouble.
+	 */
 	public double readDouble()			throws IOException { return delegate.readDouble(); }
+	/**
+	 * readFloat.
+	 */
 	public float readFloat()			throws IOException { return delegate.readFloat(); }
+	/**
+	 * readFully.
+	 */
 	public void readFully(byte[] b)		throws IOException { delegate.readFully(b); }
+	/**
+	 * readFully.
+	 */
 	public void readFully(byte[] b, int off, int len) throws IOException { delegate.readFully(b,off,len); }
+	/**
+	 * readInt.
+	 */
 	public int readInt()				throws IOException { return delegate.readInt(); }
+	/**
+	 * readLine.
+	 */
 	public String readLine()			throws IOException { return delegate.readLine(); }
+	/**
+	 * readLong.
+	 */
 	public long readLong()				throws IOException { return delegate.readLong(); }
+	/**
+	 * readShort.
+	 */
 	public short readShort()			throws IOException { return delegate.readShort(); }
+	/**
+	 * readUnsignedByte.
+	 */
 	public int readUnsignedByte()		throws IOException { return delegate.readUnsignedByte(); }
+	/**
+	 * readUnsignedShort.
+	 */
 	public int readUnsignedShort()		throws IOException { return delegate.readUnsignedShort(); }
 
 /**
@@ -123,11 +189,11 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
 
 /**
 	 * Read a UTF encoded string with 4-byte length prefix. (I2P)
-	 * 
+	 *
 	 * <p>This method uses a 4-byte length prefix instead of Java's standard
 	 * 2-byte prefix, allowing for strings up to 16MB in length. The upper byte
 	 * must be zero for compatibility.</p>
-	 * 
+	 *
 	 * @return the UTF-8 decoded string
 	 * @throws IOException if the length encoding is invalid or EOF is reached
 	 */
@@ -141,29 +207,71 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
 		return s;
 	}
 
+	/**
+	 * skipBytes.
+	 */
 	public int skipBytes(int n)			throws IOException { return delegate.skipBytes(n); }
 
 	// DataOutput Methods
+	/**
+	 * write.
+	 */
 	public void write(int b)			throws IOException { delegate.write(b); }
+	/**
+	 * write.
+	 */
 	public void write(byte[] b)			throws IOException { delegate.write(b); }
+	/**
+	 * write.
+	 */
 	public void write(byte[] b, int off, int len) throws IOException { delegate.write(b,off,len); }
+	/**
+	 * writeBoolean.
+	 */
 	public void writeBoolean(boolean v)	throws IOException { delegate.writeBoolean(v); }
+	/**
+	 * writeByte.
+	 */
 	public void writeByte(int v)		throws IOException { delegate.writeByte(v); }
+	/**
+	 * writeShort.
+	 */
 	public void writeShort(int v)		throws IOException { delegate.writeShort(v); }
+	/**
+	 * writeChar.
+	 */
 	public void writeChar(int v)		throws IOException { delegate.writeChar(v); }
+	/**
+	 * writeInt.
+	 */
 	public void writeInt(int v)			throws IOException {  delegate.writeInt(v); }
+	/**
+	 * writeLong.
+	 */
 	public void writeLong(long v)		throws IOException {  delegate.writeLong(v); }
+	/**
+	 * writeFloat.
+	 */
 	public void writeFloat(float v)		throws IOException { delegate.writeFloat(v); }
+	/**
+	 * writeDouble.
+	 */
 	public void writeDouble(double v)	throws IOException { delegate.writeDouble(v); }
+	/**
+	 * writeBytes.
+	 */
 	public void writeBytes(String s)	throws IOException { delegate.writeBytes(s); }
+	/**
+	 * writeChars.
+	 */
 	public void writeChars(String s)	throws IOException { delegate.writeChars(s); }
 
 /**
 	 * Write a UTF encoded string with 4-byte length prefix. (I2P)
-	 * 
+	 *
 	 * <p>This method uses a 4-byte length prefix instead of Java's standard
 	 * 2-byte prefix, allowing for strings up to 16MB in length.</p>
-	 * 
+	 *
 	 * @param str the string to write
 	 * @throws IOException if the string is too long for encoding
 	 */

@@ -36,6 +36,16 @@ public class PartialEepGet extends EepGet {
      * @param proxyPort use 0 for no proxy
      * @param size fetch exactly this many bytes
      */
+    /**
+     * Instantiate an EepGet that will fetch exactly size bytes when fetch() is called.
+     *
+     * @param ctx the I2P app context
+     * @param proxyHost use null or &quot;&quot; for no proxy
+     * @param proxyPort use 0 for no proxy
+     * @param outputStream the stream to write output to
+     * @param url the URL to fetch
+     * @param size fetch exactly this many bytes
+     */
     public PartialEepGet(
             I2PAppContext ctx, String proxyHost, int proxyPort, OutputStream outputStream, String url, long size) {
         // we're using this constructor:
@@ -62,6 +72,11 @@ public class PartialEepGet extends EepGet {
     /**
      * PartialEepGet [-p 127.0.0.1:4444] [-l #bytes] url
      *
+     */
+    /**
+     * Entry point for command-line usage.
+     *
+     * @param args command line arguments
      */
     public static void main(String[] args) {
         String proxyHost = "127.0.0.1";

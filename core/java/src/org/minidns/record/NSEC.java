@@ -31,6 +31,7 @@ import java.util.logging.Logger;
  */
 public class NSEC extends Data {
 
+    /** ignored */
     private static final Logger LOGGER = Logger.getLogger(NSEC.class.getName());
 
     /**
@@ -38,6 +39,7 @@ public class NSEC extends Data {
      */
     public final DnsName next;
 
+    /** the type bitmap */
     private final byte[] typeBitmap;
 
     /**
@@ -45,6 +47,9 @@ public class NSEC extends Data {
      */
     public final List<TYPE> types;
 
+    /**
+     * parse.
+     */
     public static NSEC parse(DataInputStream dis, byte[] data, int length) throws IOException {
         DnsName next = DnsName.parse(dis, data);
         int bitmapLength = length - next.size();
@@ -57,31 +62,49 @@ public class NSEC extends Data {
         return new NSEC(next, types);
     }
 
+    /**
+     * NSEC.
+     */
     public NSEC(String next, List<TYPE> types) {
         this(DnsName.from(next), types);
     }
 
+    /**
+     * NSEC.
+     */
     public NSEC(String next, TYPE... types) {
         this(DnsName.from(next), Arrays.asList(types));
     }
 
+    /**
+     * NSEC.
+     */
     public NSEC(DnsName next, List<TYPE> types) {
         this.next = next;
         this.types = Collections.unmodifiableList(types);
         this.typeBitmap = createTypeBitMap(types);
     }
 
+    /**
+     * getType.
+     */
     @Override
     public TYPE getType() {
         return TYPE.NSEC;
     }
 
+    /**
+     * serialize.
+     */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
         next.writeToStream(dos);
         dos.write(typeBitmap);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder().append(next).append('.');
@@ -91,6 +114,7 @@ public class NSEC extends Data {
         return sb.toString();
     }
 
+    /** Create type bitmap */
     @SuppressWarnings("NarrowingCompoundAssignment")
     static byte[] createTypeBitMap(List<TYPE> types) {
         List<Integer> typeList = new ArrayList<>(types.size());
@@ -125,6 +149,7 @@ public class NSEC extends Data {
         return baos.toByteArray();
     }
 
+    /** ignored */
     private static void writeOutBlock(byte[] values, DataOutputStream dos) throws IOException {
         int n = 0;
         for (int i = 0; i < values.length; i++) {
@@ -137,6 +162,7 @@ public class NSEC extends Data {
     }
 
     // TODO: This method should probably just return List<Integer> so that unknown types can be act on later.
+    /** Read type bitmap */
     static List<TYPE> readTypeBitMap(byte[] typeBitmap) throws IOException {
         DataInputStream dis = new DataInputStream(new ByteArrayInputStream(typeBitmap));
         int read = 0;

@@ -25,8 +25,17 @@ import net.i2p.util.SimpleByteCache;
  * @author jrandom
  */
 public abstract class I2NPMessageImpl implements I2NPMessage {
+    /**
+     * _log.
+     */
     protected final Log _log;
+    /**
+     * _context.
+     */
     protected final I2PAppContext _context;
+    /**
+     * _expiration.
+     */
     protected long _expiration;
 
     /**
@@ -37,7 +46,13 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      */
     private long _uniqueId = -1;
 
+    /**
+     * DEFAULT_EXPIRATION_MS.
+     */
     public final static long DEFAULT_EXPIRATION_MS = (long) 60*1000; // 1 minute by default
+    /**
+     * CHECKSUM_LENGTH.
+     */
     public final static int CHECKSUM_LENGTH = 1; //Hash.HASH_LENGTH;
 
     /** 16 */
@@ -60,6 +75,9 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         public I2NPMessage build(I2PAppContext ctx);
     }
 
+    /**
+     * I2NPMessageImpl.
+     */
     public I2NPMessageImpl(I2PAppContext context) {
         _context = context;
         _log = context.logManager().getLog(I2NPMessageImpl.class);
@@ -164,6 +182,9 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         return getUniqueId() ^ msgIDBloomXor;
     }
 
+    /**
+     * getUniqueId.
+     */
     public synchronized long getUniqueId() {
         // Lazy initialization of value
         if (_uniqueId < 0) {
@@ -188,6 +209,9 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      */
     public void setMessageExpiration(long exp) { _expiration = exp; }
 
+    /**
+     * getMessageSize.
+     */
     public synchronized int getMessageSize() {
         return calculateWrittenLength() + (15 + CHECKSUM_LENGTH); // 16 bytes in the header
     }
@@ -200,6 +224,9 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
             return calculateWrittenLength()+5;
     }
 
+    /**
+     * toByteArray.
+     */
     public byte[] toByteArray() {
         byte[] data = new byte[getMessageSize()];
         int written = toByteArray(data);
@@ -316,6 +343,9 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         }
     }
 
+    /**
+     * readMessage.
+     */
     public void readMessage(byte[] data, int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException {
         // ignore the handler (overridden in subclasses if necessary
         try {
@@ -327,11 +357,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         }
     }
 
-/*****
-    public static I2NPMessage fromRawByteArray(I2PAppContext ctx, byte[] buffer, int offset, int len) throws I2NPMessageException {
-        return fromRawByteArray(ctx, buffer, offset, len, new I2NPMessageHandler(ctx));
-    }
-*****/
+
 
     /**
      *  Read the message with a short 5-byte header.

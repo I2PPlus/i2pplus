@@ -38,7 +38,13 @@ public class HTTPServer implements Runnable {
     /** Constants */
     public static final String NAME = "CyberHTTP";
 
+    /**
+     * VERSION.
+     */
     public static final String VERSION = "1.0";
+    /**
+     * DEFAULT_PORT.
+     */
     public static final int DEFAULT_PORT = 80;
 
     /**
@@ -48,6 +54,9 @@ public class HTTPServer implements Runnable {
      */
     public static final int DEFAULT_TIMEOUT = 10 * 1000; // I2P fix
 
+    /**
+     * getName.
+     */
     public static String getName() {
         String osName = System.getProperty("os.name");
         String osVer = System.getProperty("os.version");
@@ -252,6 +261,9 @@ public class HTTPServer implements Runnable {
     /** run */
     private Thread httpServerThread = null;
 
+    /**
+     * run.
+     */
     public void run() {
         if (isOpened() == false) {
             return;

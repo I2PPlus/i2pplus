@@ -9,18 +9,36 @@ import net.i2p.data.router.RouterInfo;
  *  @since 0.9.38 moved from SybilRenderer
  */
 public class Pair implements Comparable<Pair> {
+    /**
+     * r1.
+     */
     public final RouterInfo r1;
+    /**
+     * r2.
+     */
     public final RouterInfo r2;
+    /**
+     * dist.
+     */
     public final BigInteger dist;
 
+    /**
+     * Pair.
+     */
     public Pair(RouterInfo ri1, RouterInfo ri2, BigInteger distance) {
         r1 = ri1; r2 = ri2; dist = distance;
     }
 
+    /**
+     * compareTo.
+     */
     public int compareTo(Pair p) {
         return this.dist.compareTo(p.dist);
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -29,6 +47,9 @@ public class Pair implements Comparable<Pair> {
         return r1.equals(p.r1) && r2.equals(p.r2) && dist.equals(p.dist);
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         int result = r1.hashCode();
@@ -37,4 +58,3 @@ public class Pair implements Comparable<Pair> {
         return result;
     }
 }
-

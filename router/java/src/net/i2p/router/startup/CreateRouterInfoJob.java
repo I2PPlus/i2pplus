@@ -49,16 +49,27 @@ public class CreateRouterInfoJob extends JobImpl {
     private final Log _log;
     private final Job _next;
 
+    /** Router info filename */
     public static final String INFO_FILENAME = "router.info";
+    /** Old router keys filename */
     public static final String KEYS_FILENAME = "router.keys";
+    /** Router keys filename */
     public static final String KEYS2_FILENAME = "router.keys.dat";
+    /** Property for router signature type */
     static final String PROP_ROUTER_SIGTYPE = "router.sigType";
-    /** @since 0.9.48 */
+    /** Property for router encryption type
+     *  @since 0.9.48 */
     static final String PROP_ROUTER_ENCTYPE = "router.encType";
     private static final SigType DEFAULT_SIGTYPE = SigType.EdDSA_SHA512_Ed25519;
     private static final EncType DEFAULT_ENCTYPE = EncType.ECIES_X25519;
     private static final int PADDING_ENTROPY = 32;
 
+    /**
+     * Creates a new CreateRouterInfoJob.
+     *
+     * @param ctx the router context
+     * @param next the job to run after creation
+     */
     CreateRouterInfoJob(RouterContext ctx, Job next) {
         super(ctx);
         _next = next;
@@ -97,6 +108,8 @@ public class CreateRouterInfoJob extends JobImpl {
      *</pre>
      *
      *  Caller must hold Router.routerInfoFileLock.
+     *
+     *  @return the created RouterInfo, or null on failure
      */
     RouterInfo createRouterInfo() {
         RouterContext ctx = getContext();
@@ -188,7 +201,10 @@ public class CreateRouterInfoJob extends JobImpl {
     }
 
     /**
-     *  The configured SigType to expect on read-in
+     *  The configured SigType to expect on read-in.
+     *
+     *  @param ctx the router context
+     *  @return the configured signature type
      *  @since 0.9.16
      */
     public static SigType getSigTypeConfig(RouterContext ctx) {
@@ -206,7 +222,10 @@ public class CreateRouterInfoJob extends JobImpl {
     }
 
     /**
-     *  The configured EncType to expect on read-in
+     *  The configured EncType to expect on read-in.
+     *
+     *  @param ctx the router context
+     *  @return the configured encryption type
      *  @since 0.9.48
      */
     public static EncType getEncTypeConfig(RouterContext ctx) {
@@ -227,6 +246,8 @@ public class CreateRouterInfoJob extends JobImpl {
      * We probably don't want to expose the exact time at which a router published its info.
      * perhaps round down to the nearest minute?  10 minutes?  30 minutes?  day?
      *
+     * @param context the router context
+     * @return the current time as publish date
      */
     static long getCurrentPublishDate(RouterContext context) {
         return context.clock().now();

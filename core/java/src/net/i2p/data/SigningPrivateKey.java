@@ -93,10 +93,16 @@ import javax.security.auth.Destroyable;
  */
 public class SigningPrivateKey extends SimpleDataStructure implements Destroyable {
     private static final SigType DEF_TYPE = SigType.DSA_SHA1;
+    /**
+     * KEYSIZE_BYTES.
+     */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPrivkeyLen();
 
     private final SigType _type;
 
+    /**
+     * SigningPrivateKey.
+     */
     public SigningPrivateKey() {
         this(DEF_TYPE);
     }
@@ -109,6 +115,9 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
         _type = type;
     }
 
+    /**
+     * SigningPrivateKey.
+     */
     public SigningPrivateKey(byte[] data) {
         this(DEF_TYPE, data);
     }
@@ -132,6 +141,9 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
         fromBase64(base64Data);
     }
 
+    /**
+     * length.
+     */
     @Override
     public int length() {
         return _type.getPrivkeyLen();

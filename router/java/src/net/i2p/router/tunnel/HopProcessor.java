@@ -17,8 +17,17 @@ import net.i2p.util.Log;
  *
  */
 class HopProcessor {
+    /**
+     * The value.
+     */
+    /**
+     * _context.
+     */
     protected final I2PAppContext _context;
     private final Log _log;
+    /**
+     * _config.
+     */
     protected final HopConfig _config;
     private final IVValidator _validator;
 
@@ -39,6 +48,9 @@ class HopProcessor {
         this(ctx, config, createValidator());
     }
 
+    /**
+     * Construct a new instance.
+     */
     public HopProcessor(I2PAppContext ctx, HopConfig config, IVValidator validator) {
         _context = ctx;
         _log = ctx.logManager().getLog(HopProcessor.class);

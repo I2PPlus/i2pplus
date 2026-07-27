@@ -27,6 +27,9 @@ class PacketHandler {
     private static final ThreadLocal<SimpleDateFormat> DATE_FORMAT = ThreadLocal.withInitial(
         () -> new SimpleDateFormat("HH:mm:ss.SSS", Locale.US));
 
+    /**
+     * PacketHandler.
+     */
     public PacketHandler(I2PAppContext ctx, ConnectionManager mgr) {
         this.manager = mgr;
         this.context = ctx;

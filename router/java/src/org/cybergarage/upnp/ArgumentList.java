@@ -47,10 +47,22 @@ public class ArgumentList extends Vector<Argument> {
     //	Methods
     ////////////////////////////////////////////////
 
+    /**
+     *  Get an argument by index.
+     *
+     *  @param n the index
+     *  @return the argument at that index
+     */
     public Argument getArgument(int n) {
         return get(n);
     }
 
+    /**
+     *  Get an argument by name.
+     *
+     *  @param name the argument name
+     *  @return the argument with that name, or null if not found
+     */
     public Argument getArgument(String name) {
         int nArgs = size();
         for (int n = 0; n < nArgs; n++) {
@@ -83,7 +95,7 @@ public class ArgumentList extends Vector<Argument> {
     /**
      * Set all the Argument which are Input Argoument to the given value in the argument list
      *
-     * @param inArgList
+     * @param inArgList the argument list containing input values
      */
     public void setReqArgs(ArgumentList inArgList) {
         int nArgs = size();
@@ -102,7 +114,7 @@ public class ArgumentList extends Vector<Argument> {
     /**
      * Set all the Argument which are Output Argoument to the given value in the argument list
      *
-     * @param outArgList
+     * @param outArgList the argument list containing output values
      */
     public void setResArgs(ArgumentList outArgList) {
         int nArgs = size();

@@ -76,6 +76,9 @@ public interface I2NPMessage {
      *          that this class can read.
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException;
+    /**
+     * readMessage.
+     */
     public void readMessage(byte[] data, int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException;
 
     /**
@@ -92,7 +95,13 @@ public interface I2NPMessage {
      * passing 0 use the no-arg version.
      */
     public long getUniqueId(long msgIDBloomXor);
+    /**
+     * getUniqueId().
+     */
     public long getUniqueId();
+    /**
+     * id).
+     */
     public void setUniqueId(long id);
 
     /**
@@ -100,6 +109,9 @@ public interface I2NPMessage {
      *
      */
     public long getMessageExpiration();
+    /**
+     * exp).
+     */
     public void setMessageExpiration(long exp);
 
 

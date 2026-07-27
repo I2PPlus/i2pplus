@@ -18,6 +18,9 @@ import net.i2p.router.update.ConsoleUpdateManager;
  */
 public class NewsHelper extends ContentHelper {
 
+    /**
+     * PROP_LAST_UPDATE_TIME.
+     */
     public static final String PROP_LAST_UPDATE_TIME = "router.updateLastDownloaded";
     /** @since 0.8.12 */
     private static final String PROP_LAST_HIDDEN = "routerconsole.newsLastHidden";
@@ -34,6 +37,9 @@ public class NewsHelper extends ContentHelper {
      * @since 0.9.21
      */
     public static final String PROP_TRANSLATE = "routerconsole.newsTranslate";
+    /**
+     * NEWS_FILE.
+     */
     public static final String NEWS_FILE = "docs/news.xml";
 
     /**

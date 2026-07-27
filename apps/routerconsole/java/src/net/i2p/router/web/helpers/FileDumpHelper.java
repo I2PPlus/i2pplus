@@ -35,6 +35,15 @@ public class FileDumpHelper extends HelperBase {
     private static final String LINK = "http://git.skank.i2p/i2pplus/I2P.Plus/src/commit/";
     private static final String UPSTREAMLINK = "https://github.com/i2p/i2p.i2p/tree/";
 
+    /**
+     * Description.
+     */
+    /**
+     * Description.
+     */
+    /**
+     * Description.
+     */
     public String getFileSummary() {
         StringBuilder buf = new StringBuilder(16*1024);
         buf.append("<table id=jarfiles>\n<thead>\n<tr><th>File</th><th>Size</th><th>Date</th><th>SHA 256</th><th>Revision</th>")
@@ -213,6 +222,7 @@ public class FileDumpHelper extends HelperBase {
      *  Get a manifest attribute value with HTML stripped.
      *
      * @param atts non-null
+     * @param s the attribute name
      * @return HTML stripped, or null if not found
      * @since pkg private since 0.9.35 for LogsHelper
      */

@@ -204,10 +204,16 @@ class TrackerInfo {
         return peers;
     }
 
+    /**
+     * getPeers.
+     */
     public Set<Peer> getPeers() {
         return peers;
     }
 
+    /**
+     * getPeerCount.
+     */
     public int getPeerCount() {
         int pc = peers == null ? 0 : peers.size();
         return Math.max(pc, complete + incomplete - 1);
@@ -230,6 +236,9 @@ class TrackerInfo {
         return interval;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         if (failure_reason != null) {

@@ -7,6 +7,11 @@ package org.rrd4j.graph;
 public abstract class Axis implements RrdGraphConstants {
 
     /**
+     * Constructs an Axis.
+     */
+    protected Axis() {}
+
+    /**
      * Draws the axis on the graph.
      *
      * @return true if the axis was successfully drawn, false otherwise

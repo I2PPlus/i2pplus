@@ -63,9 +63,21 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
 
     private static final long INIT_CONN_ID = 0x41727101980L;
 
+    /**
+     * EVENT_NONE.
+     */
     public static final int EVENT_NONE = 0;
+    /**
+     * EVENT_COMPLETED.
+     */
     public static final int EVENT_COMPLETED = 1;
+    /**
+     * EVENT_STARTED.
+     */
     public static final int EVENT_STARTED = 2;
+    /**
+     * EVENT_STOPPED.
+     */
     public static final int EVENT_STOPPED = 3;
 
     private static final int ACTION_CONNECT = 0;
@@ -82,6 +94,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     private static final int MIN_INTERVAL = 15 * 60;
     private static final int MAX_INTERVAL = 8 * 60 * 60;
 
+    /**
+     * UDPTrackerClient.
+     */
     public UDPTrackerClient(I2PAppContext ctx, I2PSession session, I2PSnarkUtil util) {
         _context = ctx;
         _session = session;
@@ -685,14 +700,23 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     @Override
     public void messageAvailable(I2PSession session, int msgId, long size) { /* no-op */ }
 
+    /**
+     * reportAbuse.
+     */
     @Override
     public void reportAbuse(I2PSession session, int severity) { /* no-op */ }
 
+    /**
+     * disconnected.
+     */
     @Override
     public void disconnected(I2PSession session) {
         if (_log.shouldWarn()) _log.warn("UDPTC disconnected");
     }
 
+    /**
+     * errorOccurred.
+     */
     @Override
     public void errorOccurred(I2PSession session, String message, Throwable error) {
         if (_log.shouldWarn()) _log.warn("UDPTC got error msg: ", error);
@@ -730,23 +754,38 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             error = errorMsg;
         }
 
+        /**
+         * getPeers.
+         */
         public Set<Hash> getPeers() {
             return peers;
         }
 
+        /**
+         * getPeerCount.
+         */
         public int getPeerCount() {
             int pc = peers == null ? 0 : peers.size();
             return Math.max(pc, complete + incomplete - 1);
         }
 
+        /**
+         * getSeedCount.
+         */
         public int getSeedCount() {
             return complete;
         }
 
+        /**
+         * getLeechCount.
+         */
         public int getLeechCount() {
             return incomplete;
         }
 
+        /**
+         * getFailureReason.
+         */
         public String getFailureReason() {
             return error;
         }
@@ -759,7 +798,13 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
 
     private static class HostPort {
 
+        /**
+         * host.
+         */
         protected final String host;
+        /**
+         * port.
+         */
         protected final int port;
 
         /**
@@ -777,11 +822,17 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             return port;
         }
 
+        /**
+         * hashCode.
+         */
         @Override
         public int hashCode() {
             return host.hashCode() ^ port;
         }
 
+        /**
+         * equals.
+         */
         @Override
         public boolean equals(Object o) {
             if (o == null || !(o instanceof HostPort)) {
@@ -791,6 +842,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             return port == dp.port && host.equals(dp.host);
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "UDP Tracker " + host + ':' + port;
@@ -818,6 +872,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         private ConnState state = ConnState.INVALID;
 
 
+        /**
+         * Tracker.
+         */
         public Tracker(String host, int port) {
             super(host, port);
             responsePort = port;
@@ -836,6 +893,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             }
         }
 
+        /**
+         * setConnInProgress.
+         */
         public synchronized void setConnInProgress(boolean yes) {
             if (yes) {
                 state = ConnState.IN_PROGRESS;
@@ -844,14 +904,23 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             }
         }
 
+        /**
+         * isConnInProgress.
+         */
         public synchronized boolean isConnInProgress() {
             return state == ConnState.IN_PROGRESS;
         }
 
+        /**
+         * isConnValid.
+         */
         public synchronized boolean isConnValid() {
             return state == ConnState.VALID && expires > _context.clock().now();
         }
 
+        /**
+         * connFailed.
+         */
         public synchronized void connFailed() {
             replyTimeout();
             expires = 0;
@@ -889,6 +958,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             return null;
         }
 
+        /**
+         * getInterval.
+         */
         public synchronized int getInterval() {
             return interval;
         }
@@ -917,6 +989,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             return DEFAULT_TIMEOUT << Math.min(consecFails, 3);
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "UDP Tracker\n* Host: "
@@ -962,18 +1037,30 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             data = payload;
         }
 
+        /**
+         * getID.
+         */
         public int getID() {
             return tid;
         }
 
+        /**
+         * getSentTo.
+         */
         public Tracker getSentTo() {
             return sentTo;
         }
 
+        /**
+         * getExpectedAction.
+         */
         public int getExpectedAction() {
             return action;
         }
 
+        /**
+         * getPayload.
+         */
         public byte[] getPayload() {
             return data;
         }
@@ -1041,6 +1128,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             }
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {
             return "Message type: "

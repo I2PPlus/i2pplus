@@ -21,12 +21,25 @@ class ClientWriterRunner implements Runnable {
     /** @since 0.9.70+ mutable for adaptive tuning */
     private static volatile int _queueSize = 256;
 
-    /** @since 0.9.70+ */
+    /**
+     * Get the queue size.
+     * @return the queue size
+     * @since 0.9.70+
+     */
     public static int getQueueSize() { return _queueSize; }
 
-    /** @since 0.9.70+ */
+    /**
+     * Set the queue size.
+     * @param val the new queue size
+     * @since 0.9.70+
+     */
     public static void setQueueSize(int val) { _queueSize = Math.max(32, Math.min(2048, val)); }
 
+    /**
+     * Creates a new client writer runner.
+     * @param ctx the router context
+     * @param runner the client connection runner
+     */
     public ClientWriterRunner(RouterContext ctx, ClientConnectionRunner runner) {
         _context = ctx;
         _messagesToWrite = new LinkedBlockingQueue<>(_queueSize);
@@ -40,6 +53,8 @@ class ClientWriterRunner implements Runnable {
      * Add this message to the writer's queue
      *
      * Nonblocking, throws exception if queue is full
+     * @param msg the message to add
+     * @throws I2CPMessageException if the queue is full
      */
     public void addMessage(I2CPMessage msg) throws I2CPMessageException {
         boolean success = _messagesToWrite.offer(msg);

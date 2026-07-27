@@ -16,11 +16,16 @@ import java.util.Arrays;
  * @author Sasa Markovic
  */
 class RobinArray implements Robin {
+    /** ignored */
     private final Archive parentArc;
+    /** ignored */
     private final RrdInt<Robin> pointer;
+    /** ignored */
     private final RrdDoubleArray<Robin> values;
+    /** ignored */
     private final int rows;
 
+    /** Create robin array */
     RobinArray(Archive parentArc, int rows, boolean shouldInitialize) throws IOException {
         this.parentArc = parentArc;
         this.pointer = new RrdInt<>(this);
@@ -32,9 +37,6 @@ class RobinArray implements Robin {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.rrd4j.core.Robin#getValues()
-     */
     /**
      * Getter for the field <code>values</code>.
      *
@@ -91,9 +93,6 @@ class RobinArray implements Robin {
         values.writeDouble(0, newValues);
     }
 
-    /* (non-Javadoc)
-     * @see org.rrd4j.core.Robin#setValues(double)
-     */
     /** {@inheritDoc} */
     public void setValues(double... newValues) throws IOException {
         if (rows != newValues.length) {
@@ -107,9 +106,6 @@ class RobinArray implements Robin {
         update(newValues);
     }
 
-    /* (non-Javadoc)
-     * @see org.rrd4j.core.Robin#setValues(double)
-     */
     /** {@inheritDoc} */
     public void setValues(double newValue) throws IOException {
         double[] values = new double[rows];
@@ -133,18 +129,12 @@ class RobinArray implements Robin {
         return buffer.toString();
     }
 
-    /* (non-Javadoc)
-     * @see org.rrd4j.core.Robin#getValue(int)
-     */
     /** {@inheritDoc} */
     public double getValue(int index) throws IOException {
         int arrayIndex = (pointer.get() + index) % rows;
         return values.get(arrayIndex);
     }
 
-    /* (non-Javadoc)
-     * @see org.rrd4j.core.Robin#setValue(int, double)
-     */
     /** {@inheritDoc} */
     public void setValue(int index, double value) throws IOException {
         int arrayIndex = (pointer.get() + index) % rows;
@@ -175,9 +165,6 @@ class RobinArray implements Robin {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.rrd4j.core.Robin#getParent()
-     */
     /**
      * getParent.
      *
@@ -187,9 +174,6 @@ class RobinArray implements Robin {
         return parentArc;
     }
 
-    /* (non-Javadoc)
-     * @see org.rrd4j.core.Robin#getSize()
-     */
     /**
      * getSize.
      *
@@ -199,9 +183,6 @@ class RobinArray implements Robin {
         return rows;
     }
 
-    /* (non-Javadoc)
-     * @see org.rrd4j.core.Robin#copyStateTo(org.rrd4j.core.RrdUpdater)
-     */
     /** {@inheritDoc} */
     public void copyStateTo(Robin robin) throws IOException {
         int rowsDiff = rows - robin.getSize();
@@ -211,9 +192,6 @@ class RobinArray implements Robin {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.rrd4j.core.Robin#filterValues(double, double)
-     */
     /** {@inheritDoc} */
     public void filterValues(double minValue, double maxValue) throws IOException {
         for (int i = 0; i < rows; i++) {
@@ -227,9 +205,6 @@ class RobinArray implements Robin {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.rrd4j.core.Robin#getRrdBackend()
-     */
     /**
      * getRrdBackend.
      *
@@ -239,9 +214,6 @@ class RobinArray implements Robin {
         return parentArc.getRrdBackend();
     }
 
-    /* (non-Javadoc)
-     * @see org.rrd4j.core.Robin#getRrdAllocator()
-     */
     /**
      * getRrdAllocator.
      *

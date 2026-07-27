@@ -27,6 +27,9 @@ import java.security.SecureRandom;
 public class RandomSource extends SecureRandom implements EntropyHarvester {
 
     private static final long serialVersionUID = 1L;
+    /**
+     * _context.
+     */
     protected final transient I2PAppContext _context;
 
     /**
@@ -111,15 +114,24 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
         }
     }
 
+    /**
+     * harvester.
+     */
     public EntropyHarvester harvester() {
         return this;
     }
 
+    /**
+     * feedEntropy.
+     */
     @Override
     public void feedEntropy(String source, long data, int bitoffset, int bits) {
         if (bitoffset == 0) setSeed(data);
     }
 
+    /**
+     * feedEntropy.
+     */
     @Override
     public void feedEntropy(String source, byte[] data, int offset, int len) {
         if ((offset == 0) && (len == data.length)) {
@@ -137,6 +149,9 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
         if (initSeed(buf)) setSeed(buf);
     }
 
+    /**
+     * saveSeed.
+     */
     public void saveSeed() {
         byte[] buf = new byte[1024];
         nextBytes(buf);
@@ -145,6 +160,9 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
 
     private static final String SEEDFILE = "prngseed.rnd";
 
+    /**
+     * writeSeed.
+     */
     public static final void writeSeed(byte[] buf) {
         File f = new File(I2PAppContext.getGlobalContext().getConfigDir(), SEEDFILE);
         FileOutputStream fos = null;
@@ -203,10 +221,16 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
         private final byte[] buf;
         private static final int SZ = 64;
 
+        /**
+         * SecureRandomInit.
+         */
         public SecureRandomInit(byte[] buf) {
             this.buf = buf;
         }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             byte[] buf2 = new byte[SZ];

@@ -30,16 +30,25 @@ import java.util.Date;
 public class RequestLeaseSetMessage extends I2CPMessageImpl {
 
     private static final long serialVersionUID = 1L;
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 21;
     private SessionId _sessionId;
     // ArrayList is Serializable, List is not
     private final ArrayList<TunnelEndpoint> _endpoints;
     private Date _end;
 
+    /**
+     * RequestLeaseSetMessage.
+     */
     public RequestLeaseSetMessage() {
         _endpoints = new ArrayList<>(6);
     }
 
+    /**
+     * getSessionId.
+     */
     public SessionId getSessionId() {
         return _sessionId;
     }
@@ -54,14 +63,23 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
         return _sessionId;
     }
 
+    /**
+     * setSessionId.
+     */
     public void setSessionId(SessionId id) {
         _sessionId = id;
     }
 
+    /**
+     * getEndpoints.
+     */
     public int getEndpoints() {
         return _endpoints.size();
     }
 
+    /**
+     * getRouter.
+     */
     public Hash getRouter(int endpoint) {
         if ((endpoint < 0) || (_endpoints.size() <= endpoint)) {
             return null;
@@ -69,6 +87,9 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
         return _endpoints.get(endpoint).getRouter();
     }
 
+    /**
+     * getTunnelId.
+     */
     public TunnelId getTunnelId(int endpoint) {
         if ((endpoint < 0) || (_endpoints.size() <= endpoint)) {
             return null;
@@ -76,6 +97,9 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
         return _endpoints.get(endpoint).getTunnelId();
     }
 
+    /**
+     * addEndpoint.
+     */
     public void addEndpoint(Hash router, TunnelId tunnel) {
         if (router == null) {
             throw new IllegalArgumentException("Null Router -> [TunnelId " + tunnel + "]");
@@ -86,14 +110,23 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
         _endpoints.add(new TunnelEndpoint(router, tunnel));
     }
 
+    /**
+     * getEndDate.
+     */
     public Date getEndDate() {
         return _end;
     }
 
+    /**
+     * setEndDate.
+     */
     public void setEndDate(Date end) {
         _end = end;
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
@@ -114,6 +147,9 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if (_sessionId == null) {
@@ -137,11 +173,17 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
@@ -158,15 +200,24 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
         private final transient Hash _router;
         private final transient TunnelId _tunnelId;
 
+        /**
+         * TunnelEndpoint.
+         */
         public TunnelEndpoint(Hash router, TunnelId id) {
             _router = router;
             _tunnelId = id;
         }
 
+        /**
+         * getRouter.
+         */
         public Hash getRouter() {
             return _router;
         }
 
+        /**
+         * getTunnelId.
+         */
         public TunnelId getTunnelId() {
             return _tunnelId;
         }

@@ -8,6 +8,12 @@ import java.awt.*;
  * to highlight regions below data lines.
  */
 class Area extends SourcedPlotElement {
+    /**
+     * Create a new Area plot element.
+     * @param srcName the source name
+     * @param color the fill color
+     * @param parent the parent plot element
+     */
     Area(String srcName, Paint color, SourcedPlotElement parent) {
         super(srcName, color, parent);
     }

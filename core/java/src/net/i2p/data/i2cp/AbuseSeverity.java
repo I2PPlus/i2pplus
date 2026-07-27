@@ -25,6 +25,7 @@ import java.io.OutputStream;
  * @author jrandom
  */
 public class AbuseSeverity extends DataStructureImpl {
+    /** ignored */
     private int _severityId;
 
     /**
@@ -52,29 +53,44 @@ public class AbuseSeverity extends DataStructureImpl {
         _severityId = id;
     }
 
+    /**
+     * readBytes.
+     */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _severityId = in.read();
         if (_severityId < 0) throw new EOFException();
     }
 
+    /**
+     * writeBytes.
+     */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_severityId < 0) throw new DataFormatException("Invalid abuse severity: " + _severityId);
         out.write((byte) _severityId);
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if ((object == null) || !(object instanceof AbuseSeverity)) return false;
         return _severityId == ((AbuseSeverity) object).getSeverity();
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return _severityId;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         return "[AbuseSeverity: " + _severityId + "]";

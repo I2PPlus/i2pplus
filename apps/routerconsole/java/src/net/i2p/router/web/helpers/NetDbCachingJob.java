@@ -38,6 +38,9 @@ public class NetDbCachingJob extends JobImpl {
 
     private long _lastRunTime;
 
+    /**
+     * NetDbCachingJob.
+     */
     public NetDbCachingJob(RouterContext ctx, boolean reverseDnsEnabled, boolean introducerEnabled) {
         super(ctx);
         _log = ctx.logManager().getLog(getClass());
@@ -47,11 +50,17 @@ public class NetDbCachingJob extends JobImpl {
         _lastRunTime = ctx.clock().now();
     }
 
+    /**
+     * getName.
+     */
     @Override
     public String getName() {
         return "NetDb RouterInfo PreCacher";
     }
 
+    /**
+     * runJob.
+     */
     @Override
     public void runJob() {
         RouterContext ctx = getContext();
@@ -136,6 +145,9 @@ public class NetDbCachingJob extends JobImpl {
                 _ctx = ctx;
             }
 
+            /**
+             * timeReached.
+             */
             @Override
             public void timeReached() {
                 boolean reverseDnsEnabled = _ctx.getBooleanProperty("routerconsole.enableReverseLookups");

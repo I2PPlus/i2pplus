@@ -31,23 +31,50 @@ import org.cybergarage.upnp.*;
  * @since 1.0
  */
 public class Subscription {
+    /**
+     * XMLNS.
+     */
     public static final String XMLNS = "urn:schemas-upnp-org:event-1-0";
+    /**
+     * TIMEOUT_HEADER.
+     */
     public static final String TIMEOUT_HEADER = "Second-";
+    /**
+     * INFINITE_STRING.
+     */
     public static final String INFINITE_STRING = "infinite";
+    /**
+     * INFINITE_VALUE.
+     */
     public static final int INFINITE_VALUE = -1;
+    /**
+     * UUID.
+     */
     public static final String UUID = "uuid:";
+    /**
+     * SUBSCRIBE_METHOD.
+     */
     public static final String SUBSCRIBE_METHOD = "SUBSCRIBE";
+    /**
+     * UNSUBSCRIBE_METHOD.
+     */
     public static final String UNSUBSCRIBE_METHOD = "UNSUBSCRIBE";
 
     ////////////////////////////////////////////////
     //	Timeout
     ////////////////////////////////////////////////
 
+    /**
+     * toTimeoutHeaderString.
+     */
     public static final String toTimeoutHeaderString(long time) {
         if (time == Subscription.INFINITE_VALUE) return Subscription.INFINITE_STRING;
         return Subscription.TIMEOUT_HEADER + Long.toString(time);
     }
 
+    /**
+     * getTimeout.
+     */
     public static final long getTimeout(String headerValue) {
         int minusIdx = headerValue.indexOf('-');
         long timeout = Subscription.INFINITE_VALUE;
@@ -64,14 +91,23 @@ public class Subscription {
     //	SID
     ////////////////////////////////////////////////
 
+    /**
+     * createSID.
+     */
     public static final String createSID() {
         return UPnP.createUUID();
     }
 
+    /**
+     * toSIDHeaderString.
+     */
     public static final String toSIDHeaderString(String id) {
         return Subscription.UUID + id;
     }
 
+    /**
+     * getSID.
+     */
     public static final String getSID(String headerValue) {
         if (headerValue == null) return "";
         if (headerValue.startsWith(Subscription.UUID) == false) return headerValue;

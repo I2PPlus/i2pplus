@@ -319,8 +319,6 @@ public class UrlLauncher implements ClientApp {
      * @param  url The URL to open.
      * @return     <code>true</code> if the operation was successful, otherwise
      *             <code>false</code>.
-     *
-     * @throws IOException
      */
     public boolean openUrl(String url) {
         if (IS_SERVICE)
@@ -387,8 +385,6 @@ public class UrlLauncher implements ClientApp {
      * @param  browser The browser to use. See above for quoting rules.
      * @return         <code>true</code> if the operation was successful,
      *                 otherwise <code>false</code>.
-     *
-     * @throws IOException
      */
     public boolean openUrl(String url, String browser) {
         if (IS_SERVICE)

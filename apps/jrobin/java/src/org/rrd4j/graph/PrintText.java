@@ -15,7 +15,9 @@ import org.rrd4j.data.Variable.Value;
  * output with variable substitution and unit scaling.
  */
 class PrintText extends CommentText {
+    /** Unit marker regex pattern. */
     static final String UNIT_MARKER = "([^%]?)%(s|S)";
+    /** Compiled unit pattern. */
     static final Pattern UNIT_PATTERN = Pattern.compile(UNIT_MARKER);
 
     /** Name of the data source for variable substitution */

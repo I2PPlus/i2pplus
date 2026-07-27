@@ -20,7 +20,7 @@ public class InternalSocket extends Socket {
     private OutputStream _os;
     private final int _port;
 
-    /** server side */
+    /** Server side */
     InternalSocket(InputStream is, OutputStream os) {
         _is = is;
         _os = os;
@@ -28,7 +28,7 @@ public class InternalSocket extends Socket {
     }
 
     /**
-     *  client side
+     *  Client side
      *
      *  @param port &gt; 0
      */
@@ -53,24 +53,35 @@ public class InternalSocket extends Socket {
         return new Socket(host, port);
     }
 
+    /**
+     * Input stream connected to the internal server.
+     */
     @Override
     public synchronized InputStream getInputStream() {
         return _is;
     }
 
+    /**
+     * Output stream connected to the internal server.
+     */
     @Override
     public synchronized OutputStream getOutputStream() {
         return _os;
     }
 
+    /** Input stream */
     void setInputStream(InputStream is) {
         _is = is;
     }
 
+    /** Output stream */
     void setOutputStream(OutputStream os) {
         _os = os;
     }
 
+    /**
+     * Close both streams.
+     */
     @Override
     public synchronized void close() {
         try {
@@ -87,11 +98,17 @@ public class InternalSocket extends Socket {
         } catch (IOException ie) { /* ignored */ }
     }
 
+    /**
+     * True if either stream is null.
+     */
     @Override
     public synchronized boolean isClosed() {
         return _is == null || _os == null;
     }
 
+    /**
+     * Descriptive label.
+     */
     @Override
     public String toString() {
         return ("Internal socket");

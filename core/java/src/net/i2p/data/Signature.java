@@ -73,6 +73,9 @@ public class Signature extends SimpleDataStructure {
 
     private final SigType _type;
 
+    /**
+     * Signature.
+     */
     public Signature() {
         this(DEF_TYPE);
     }
@@ -91,6 +94,9 @@ public class Signature extends SimpleDataStructure {
         _type = type;
     }
 
+    /**
+     * Signature.
+     */
     public Signature(byte[] data) {
         this(DEF_TYPE, data);
     }
@@ -110,6 +116,9 @@ public class Signature extends SimpleDataStructure {
         setData(data);
     }
 
+    /**
+     * length.
+     */
     @Override
     public int length() {
         return _type.getSigLen();

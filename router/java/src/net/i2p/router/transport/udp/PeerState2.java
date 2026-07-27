@@ -89,17 +89,50 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private static final long PATH_CHALLENGE_DELAY = 5*1000L;
 
     // As SSU
+    /**
+     * MIN_SSU_IPV4_MTU.
+     */
     public static final int MIN_SSU_IPV4_MTU = 1292;
+    /**
+     * MAX_SSU_IPV4_MTU.
+     */
     public static final int MAX_SSU_IPV4_MTU = 1484;
+    /**
+     * DEFAULT_SSU_IPV4_MTU.
+     */
     public static final int DEFAULT_SSU_IPV4_MTU = MAX_SSU_IPV4_MTU;
+    /**
+     * MIN_SSU_IPV6_MTU.
+     */
     public static final int MIN_SSU_IPV6_MTU = 1280;
+    /**
+     * MAX_SSU_IPV6_MTU.
+     */
     public static final int MAX_SSU_IPV6_MTU = 1488;
+    /**
+     * DEFAULT_SSU_IPV6_MTU.
+     */
     public static final int DEFAULT_SSU_IPV6_MTU = MIN_SSU_IPV6_MTU; // should always be published
     // As SSU2
+    /**
+     * MIN_MTU.
+     */
     public static final int MIN_MTU = 1280;
+    /**
+     * MAX_MTU.
+     */
     public static final int MAX_MTU = 1500;
+    /**
+     * DEFAULT_MTU.
+     */
     public static final int DEFAULT_MTU = MAX_MTU;
+    /**
+     * MIN_MLKEM768_IPV4_MTU.
+     */
     public static final int MIN_MLKEM768_IPV4_MTU = 1318;
+    /**
+     * MIN_MLKEM768_IPV6_MTU.
+     */
     public static final int MIN_MLKEM768_IPV6_MTU = 1338;
 
     private static final int BITFIELD_SIZE = 512;
@@ -177,6 +210,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     // SSU 1 overrides
 
+    /**
+     * getVersion.
+     */
     @Override
     public int getVersion() {return 2;}
 
@@ -391,8 +427,20 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     /// end SSU2Sender interface ///
 
+    /**
+     *  The connection ID we expect to receive packets with.
+     *  @return the receive connection ID
+     */
     long getRcvConnID() {return _rcvConnID;}
+    /**
+     *  The first header encryption key for received packets.
+     *  @return the receive header key 1
+     */
     byte[] getRcvHeaderEncryptKey1() {return _rcvHeaderEncryptKey1;}
+    /**
+     *  The second header encryption key for received packets.
+     *  @return the receive header key 2
+     */
     byte[] getRcvHeaderEncryptKey2() {return _rcvHeaderEncryptKey2;}
 
     /**
@@ -646,15 +694,24 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     // begin payload callbacks
     /////////////////////////////////////////////////////////
 
+    /**
+     * gotDateTime.
+     */
     public void gotDateTime(long time) {
         // super adds CLOCK_SKEW_FUDGE that doesn't apply here
         adjustClockSkew((_context.clock().now() - time) - getClockSkewFudge());
     }
 
+    /**
+     * gotOptions.
+     */
     public void gotOptions(byte[] options, boolean isHandshake) {
         // No-op - intentionally empty
     }
 
+    /**
+     * gotRI.
+     */
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
         if (shouldLogDebug) {
             _log.debug("Received RouterInfo in data phase " + ri + this);
@@ -689,12 +746,21 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
     }
 
+    /**
+     * gotRIFragment.
+     */
     public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
         throw new IllegalStateException("RouterInfo fragment in Data phase");
     }
 
+    /**
+     * gotAddress.
+     */
     public void gotAddress(byte[] ip, int port) {_ourIP = ip; _ourPort = port;} // TODO validate
 
+    /**
+     * gotRelayTagRequest.
+     */
     public void gotRelayTagRequest() {
         if (shouldLogDebug) {_log.debug("[SSU] Received RELAY TAG REQUEST " + this);}
         long tag = getWeRelayToThemAs();
@@ -717,6 +783,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
     }
 
+    /**
+     * gotRelayTag.
+     */
     public void gotRelayTag(long tag) {
         long old = getTheyRelayToUsAs();
         if (old != 0) {
@@ -729,30 +798,45 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         _transport.getIntroManager().add(this);
     }
 
+    /**
+     * gotRelayRequest.
+     */
     public void gotRelayRequest(byte[] data) {
         _transport.getIntroManager().receiveRelayRequest(this, data);
         // Relay blocks are ACK-eliciting
         messagePartiallyReceived();
     }
 
+    /**
+     * gotRelayResponse.
+     */
     public void gotRelayResponse(int status, byte[] data) {
         _transport.getIntroManager().receiveRelayResponse(this, status, data);
         // Relay blocks are ACK-eliciting
         messagePartiallyReceived();
     }
 
+    /**
+     * gotRelayIntro.
+     */
     public void gotRelayIntro(Hash aliceHash, byte[] data) {
         _transport.getIntroManager().receiveRelayIntro(this, aliceHash, data);
         // Relay blocks are ACK-eliciting
         messagePartiallyReceived();
     }
 
+    /**
+     * gotPeerTest.
+     */
     public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
         _transport.getPeerTestManager().receiveTest(_remoteHostId, this, msg, status, h, data);
         // Peer Test block is ACK-eliciting
         messagePartiallyReceived();
     }
 
+    /**
+     * gotToken.
+     */
     public void gotToken(long token, long expires) {
         if (shouldLogDebug) {
             _log.debug("[SSU] Received TOKEN block: " + token + " expires " + DataHelper.formatTime(expires) + this);
@@ -760,6 +844,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         _transport.getEstablisher().addOutboundToken(_remoteHostId, token, expires);
     }
 
+    /**
+     * gotI2NP.
+     */
     public void gotI2NP(I2NPMessage msg) {
         if (shouldLogDebug) {_log.debug("[SSU] Received I2NP block: " + msg);}
         // 9 byte header
@@ -777,6 +864,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         _transport.messageReceived(msg, null, _remotePeer, 0, size);
     }
 
+    /**
+     * gotFragment.
+     */
     public void gotFragment(byte[] data, int off, int len, long messageId, int frag, boolean isLast) throws DataFormatException {
         if (shouldLogDebug) {
             _log.debug("[SSU] Received FRAGMENT block: " + messageId + " fragment " + frag + " (" + len + " bytes)" +
@@ -862,6 +952,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
     }
 
+    /**
+     * gotACK.
+     */
     public void gotACK(long ackThru, int acks, byte[] ranges) {
         int hc = (((int) ackThru) << 8) ^ (acks << 24) ^ DataHelper.hashCode(ranges);
         if (_lastAckHashCode.getAndSet(hc) == hc) {
@@ -886,6 +979,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
 
+    /**
+     * gotTermination.
+     */
     public void gotTermination(int reason, long count) {
         if (shouldLogDebug) {
             _log.debug("[SSU] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) + "; Count: " + count + " " + this);
@@ -907,6 +1003,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
     }
 
+    /**
+     * gotPathChallenge.
+     */
     public void gotPathChallenge(RemoteHostId from, byte[] data) {
         if (shouldLogDebug) {_log.debug("Received PATH CHALLENGE block, length: " + data.length + " " + this);}
         SSU2Payload.Block block = new SSU2Payload.PathResponseBlock(data);
@@ -925,6 +1024,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
     }
 
+    /**
+     * gotPathResponse.
+     */
     public void gotPathResponse(RemoteHostId from, byte[] data) {
         if (shouldLogDebug) {
             _log.debug("Received PATH RESPONSE block, length: " + data.length + " from " + from + ' ' + this);

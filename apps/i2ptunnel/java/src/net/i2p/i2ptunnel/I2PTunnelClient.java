@@ -29,6 +29,9 @@ import net.i2p.data.Destination;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.PortMapper;
 
+/**
+ * I2PTunnelClient.
+ */
 public class I2PTunnelClient extends I2PTunnelClientBase {
 
     /**
@@ -44,6 +47,9 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
     private final List<I2PSocketAddress> _addrs;
     // We don't know what protocol, so we assume the application has its own timeout mechanism
     private static final long DEFAULT_READ_TIMEOUT = -1;
+    /**
+     * readTimeout.
+     */
     protected long readTimeout = DEFAULT_READ_TIMEOUT;
     private InternalSocketRunner _isr;
 
@@ -157,6 +163,9 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
         task.run();
     }
 
+    /**
+     * clientConnectionRun.
+     */
     protected void clientConnectionRun(Socket s) {
         I2PSocket i2ps = null;
         try {

@@ -26,15 +26,22 @@ final class BlockPair {
   private final byte[] dataBytes;
   private final byte[] errorCorrectionBytes;
 
+  /** @param data data bytes */
   BlockPair(byte[] data, byte[] errorCorrection) {
     dataBytes = data;
     errorCorrectionBytes = errorCorrection;
   }
 
+  /**
+   * getDataBytes.
+   */
   public byte[] getDataBytes() {
     return dataBytes;
   }
 
+  /**
+   * getErrorCorrectionBytes.
+   */
   public byte[] getErrorCorrectionBytes() {
     return errorCorrectionBytes;
   }

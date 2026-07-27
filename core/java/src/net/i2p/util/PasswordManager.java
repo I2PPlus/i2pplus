@@ -20,6 +20,9 @@ import java.security.NoSuchAlgorithmException;
 public class PasswordManager {
     private final I2PAppContext _context;
 
+    /**
+     * SALT_LENGTH.
+     */
     protected static final int SALT_LENGTH = 16;
 
     /** 48 */
@@ -39,6 +42,9 @@ public class PasswordManager {
      */
     protected static final String PROP_SHASH = ".shash";
 
+    /**
+     * PasswordManager.
+     */
     public PasswordManager(I2PAppContext ctx) {
         _context = ctx;
     }

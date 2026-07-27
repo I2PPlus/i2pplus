@@ -20,6 +20,9 @@ import org.klomp.snark.bencode.BEValue;
  * @since 0.8.4 author zzz
  */
 class MagnetState {
+    /**
+     * CHUNK_SIZE.
+     */
     public static final int CHUNK_SIZE = 16 * 1024;
 
     private final byte[] infohash;

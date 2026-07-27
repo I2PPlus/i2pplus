@@ -25,11 +25,17 @@ public class SHAKEDigest
         }
     }
 
+    /**
+     * SHAKEDigest.
+     */
     public SHAKEDigest()
     {
         this(128);
     }
 
+    /**
+     * SHAKEDigest.
+     */
     public SHAKEDigest(CryptoServicePurpose purpose)
     {
         this(128, purpose);
@@ -66,21 +72,33 @@ public class SHAKEDigest
         super(source);
     }
 
+    /**
+     * getAlgorithmName.
+     */
     public String getAlgorithmName()
     {
         return "SHAKE" + fixedOutputLength;
     }
 
+    /**
+     * getDigestSize.
+     */
     public int getDigestSize()
     {
         return fixedOutputLength / 4;
     }
 
+    /**
+     * doFinal.
+     */
     public int doFinal(byte[] out, int outOff)
     {
         return doFinal(out, outOff, getDigestSize());
     }
 
+    /**
+     * doFinal.
+     */
     public int doFinal(byte[] out, int outOff, int outLen)
     {
         int length = doOutput(out, outOff, outLen);
@@ -90,6 +108,9 @@ public class SHAKEDigest
         return length;
     }
 
+    /**
+     * doOutput.
+     */
     public int doOutput(byte[] out, int outOff, int outLen)
     {
         if (!squeezing)
@@ -105,6 +126,9 @@ public class SHAKEDigest
     /*
      * TODO Possible API change to support partial-byte suffixes.
      */
+    /**
+     * doFinal.
+     */
     protected int doFinal(byte[] out, int outOff, byte partialByte, int partialBits)
     {
         return doFinal(out, outOff, getDigestSize(), partialByte, partialBits);
@@ -112,6 +136,9 @@ public class SHAKEDigest
 
     /*
      * TODO Possible API change to support partial-byte suffixes.
+     */
+    /**
+     * doFinal.
      */
     protected int doFinal(byte[] out, int outOff, int outLen, byte partialByte, int partialBits)
     {
@@ -142,6 +169,9 @@ public class SHAKEDigest
         return outLen;
     }
 
+    /**
+     * cryptoServiceProperties.
+     */
     protected CryptoServiceProperties cryptoServiceProperties()
     {
         return null;

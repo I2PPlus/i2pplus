@@ -37,7 +37,14 @@ class MailCache {
 	 * Enumeration of email fetching strategies.
 	 */
 	public enum FetchMode {
-		HEADER, ALL, CACHE_ONLY, HEADER_CACHE_ONLY
+		/** Header only */
+		HEADER,
+		/** All messages */
+		ALL,
+		/** Cache only */
+		CACHE_ONLY,
+		/** Header and cache only */
+		HEADER_CACHE_ONLY
 	}
 
 	private final POP3MailBox mailbox;
@@ -247,6 +254,9 @@ class MailCache {
 			_nml = nml;
 		}
 
+		/**
+		 * run.
+		 */
 		@Override
 		public void run() {
 			boolean result = false;
@@ -582,9 +592,15 @@ class MailCache {
 	 *  Outgoing to POP3
 	 */
 	private static class POP3Request implements FetchRequest {
+		/**
+		 * mail.
+		 */
 		public final Mail mail;
 		private boolean headerOnly;
 		private boolean success;
+		/**
+		 * buf.
+		 */
 		public final Buffer buf;
 
 		/**

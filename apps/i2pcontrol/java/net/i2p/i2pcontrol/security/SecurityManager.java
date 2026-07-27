@@ -33,6 +33,9 @@ import org.mindrot.jbcrypt.BCrypt;
  * Manage the password storing for I2PControl.
  */
 public class SecurityManager {
+    /**
+     * DEFAULT_AUTH_PASSWORD.
+     */
     public final static String DEFAULT_AUTH_PASSWORD = "itoopie";
     private final HashMap<String, AuthToken> authTokens;
     private final SimpleTimer2.TimedEvent timer;
@@ -190,10 +193,16 @@ public class SecurityManager {
      */
     private class Sweeper extends SimpleTimer2.TimedEvent {
         // Start running periodic task after 1 day, run periodically every 30 minutes.
+        /**
+         * Sweeper.
+         */
         public Sweeper() {
             super(_context.simpleTimer2(), AuthToken.VALIDITY_TIME * 24*60*60*1000L);
         }
 
+        /**
+         * timeReached.
+         */
         public void timeReached() {
             _log.debug("Starting cleanup job..");
             synchronized (authTokens) {

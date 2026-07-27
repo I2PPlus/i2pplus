@@ -31,18 +31,30 @@ import java.io.*;
  * @since 1.0
  */
 public class InvalidDescriptionException extends Exception {
+    /**
+     * InvalidDescriptionException.
+     */
     public InvalidDescriptionException() {
         super();
     }
 
+    /**
+     * InvalidDescriptionException.
+     */
     public InvalidDescriptionException(String s) {
         super(s);
     }
 
+    /**
+     * InvalidDescriptionException.
+     */
     public InvalidDescriptionException(String s, File file) {
         super(s + " (" + file.toString() + ")");
     }
 
+    /**
+     * InvalidDescriptionException.
+     */
     public InvalidDescriptionException(Exception e) {
         super(e.getMessage());
     }

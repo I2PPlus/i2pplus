@@ -9,32 +9,46 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
-/**
- *  Initiate a test (we are Alice)
- *
- *  @since 0.9.30 moved out of UDPTransport
- */
-class PeerTestEvent extends SimpleTimer2.TimedEvent {
+    /**
+     *  Initiate a test (we are Alice)
+     *
+     *  @since 0.9.30 moved out of UDPTransport
+     */
+    class PeerTestEvent extends SimpleTimer2.TimedEvent {
+    /** Router context. */
     private final RouterContext _context;
+    /** Logger. */
     private final Log _log;
+    /** UDP transport. */
     private final UDPTransport _transport;
+    /** Peer test manager. */
     private final PeerTestManager _testManager;
 
+    /** Whether this event is active. */
     private boolean _alive;
     /** when did we last test our reachability */
     private final AtomicLong _lastTested = new AtomicLong();
+    /** when did we last test our IPv6 reachability */
     private final AtomicLong _lastTestedV6 = new AtomicLong();
+    /** no force run */
     private static final int NO_FORCE = 0;
+    /** force IPv4 test */
     private static final int FORCE_IPV4 = 1;
+    /** force IPv6 test */
     private static final int FORCE_IPV6 = 2;
+    /** force run flags */
     private int _forceRun;
+    /** whether last test was IPv6 */
     private boolean _lastTestIPv6 = true;
+    /** test frequency in ms */
     private static final int TEST_FREQUENCY = 5*60*1000;
-    // must be greater than PeerTestManager.MAX_TEST_TIME
+    /** must be greater than PeerTestManager.MAX_TEST_TIME */
     private static final int MIN_TEST_FREQUENCY = 45*1000;
 
+    /** property to disable peer test */
     private static final String PROP_DISABLE_PEER_TEST = "i2np.udp.disablePeerTest";
 
+    /** Constructor. */
     PeerTestEvent(RouterContext ctx, UDPTransport udp, PeerTestManager ptmgr) {
         super(ctx.simpleTimer2());
         _context = ctx;
@@ -43,6 +57,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
         _testManager = ptmgr;
     }
 
+    /** timeReached. */
     @Override
     public synchronized void timeReached() {
         if (shouldTest()) {
@@ -97,6 +112,10 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
         super.reschedule(delay);
     }
 
+    /**
+     *  Run a test with Bob.
+     *  @param isIPv6 true for IPv6
+     */
     private void locked_runTest(boolean isIPv6) {
         _lastTestIPv6 = isIPv6;
         PeerState bob = _transport.pickTestPeer(BOB, 0, isIPv6, null);
@@ -137,7 +156,6 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *
      *  Run within the next 5 seconds at the latest
      *  @since 0.9.13
      */
@@ -168,6 +186,10 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
             _lastTested.set(now);
     }
 
+    /**
+     *  Whether we should run a test now.
+     *  @return true if we should test
+     */
     private boolean shouldTest() {
         String override = _context.getProperty(PROP_DISABLE_PEER_TEST);
         if ("true".equalsIgnoreCase(override))

@@ -32,6 +32,17 @@ package net.i2p.apache.http.util;
  */
 public class Args {
 
+    /** Utility class, no instances. */
+    private Args() {}
+
+    /**
+     * Check that an argument is not null.
+     *
+     * @param argument the argument to check
+     * @param name the argument name
+     * @return the argument if not null
+     * @param <T> the argument type
+     */
     public static <T> T notNull(final T argument, final String name) {
         if (argument == null) {
             throw new IllegalArgumentException(name + " may not be null");

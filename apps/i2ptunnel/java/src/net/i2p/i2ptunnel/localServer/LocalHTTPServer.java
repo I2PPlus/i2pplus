@@ -46,6 +46,8 @@ import java.nio.charset.StandardCharsets;
  *  @since 0.7.6, moved from I2PTunnelHTTPClient in 0.9
  */
 public abstract class LocalHTTPServer {
+    /** default constructor */
+    public LocalHTTPServer() {}
 
     private static final Log _log = new Log(LocalHTTPServer.class);
     private final static String ERR_404 =
@@ -110,9 +112,15 @@ public abstract class LocalHTTPServer {
      *  uncaught vulnerabilities.
      *  Restrict to the /themes/ directory for now.
      *
+     *  @param context the I2P app context
      *  @param sockMgr only for /b32, otherwise ignored
+     *  @param out the output stream
+     *  @param method the HTTP method
      *  @param targetRequest decoded path only, non-null
      *  @param query raw (encoded), may be null
+     *  @param proxyNonce the proxy nonce
+     *  @param allowGzip whether gzip is allowed
+     *  @throws IOException if an I/O error occurs
      */
     public static void serveLocalFile(I2PAppContext context, I2PSocketManager sockMgr,
                                       OutputStream out, String method, String targetRequest,

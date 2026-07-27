@@ -17,6 +17,10 @@ import net.i2p.I2PAppContext;
  * @since 0.9.1
  */
 public class ConfigSidebarHandler extends FormHandler {
+    /** ConfigSidebarHandler default constructor */
+    public ConfigSidebarHandler() {
+        super();
+    }
 
     private static final String ORDER_PREFIX = "order_";
     private static final String DELETE_PREFIX = "delete_";

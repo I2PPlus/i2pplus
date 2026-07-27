@@ -17,10 +17,22 @@ import net.i2p.I2PAppContext;
  *  @since 0.8.8
  */
 public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
+    /**
+     * Description.
+     */
     protected EncryptedBuildRecord[] _records;
+    /**
+     * RECORD_COUNT.
+     */
     protected int RECORD_COUNT;
+    /**
+     * MAX_RECORD_COUNT.
+     */
     public static final int MAX_RECORD_COUNT = 8;
 
+    /**
+     * TunnelBuildMessageBase.
+     */
     public TunnelBuildMessageBase(I2PAppContext context) {this(context, MAX_RECORD_COUNT);}
 
     /** @since 0.7.12 */
@@ -30,26 +42,40 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
             RECORD_COUNT = records;
             _records = new EncryptedBuildRecord[records];
         }
+        /**
+         * Description.
+         */
         // else will be initialized by readMessage()
     }
 
     /**
      *  @param record may be null
+      * @param index the index
      */
     public void setRecord(int index, EncryptedBuildRecord record) {_records[index] = record;}
 
     /**
      *  @return may be null
+      * @param index the index
      */
     public EncryptedBuildRecord getRecord(int index) {return _records[index];}
 
     /** @since 0.7.12 */
     public int getRecordCount() {return RECORD_COUNT;}
 
+    /**
+     * Description.
+     */
     public static final int RECORD_SIZE = 512+16;
 
+    /**
+     * calculateWrittenLength.
+     */
     protected int calculateWrittenLength() {return RECORD_SIZE * RECORD_COUNT;}
 
+    /**
+     * readMessage.
+     */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != getType()) {throw new I2NPMessageException("Message type is incorrect for this message");}
         if (dataSize != calculateWrittenLength()) {
@@ -64,6 +90,9 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
         }
     }
 
+    /**
+     * writeMessageBody.
+     */
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         int remaining = out.length - (curIndex + calculateWrittenLength());
         if (remaining < 0) {

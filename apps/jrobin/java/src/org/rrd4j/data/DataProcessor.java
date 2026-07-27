@@ -54,25 +54,35 @@ public class DataProcessor implements DataHolder {
 
     /** Constant <code>DEFAULT_PERCENTILE=95.0</code> */
     public static final double DEFAULT_PERCENTILE = 95.0; // %
+    /** Pixel count */
 
     private int pixelCount = 0;
+    /** Pool used */
 
     private boolean poolUsed = DEFAULT_POOL_USAGE_POLICY;
+    /** Pool */
     private RrdDbPool pool = null;
+    /** T start */
 
     private long tStart;
+    /** T end */
     private long tEnd;
+    /** Array of timestamps for the data series */
     private long[] timestamps;
+    /** Last rrd archive update time */
     private long lastRrdArchiveUpdateTime = 0;
     // this will be adjusted later
+    /** Time step in seconds between data points */
     private long step = 0;
     // resolution to be used for RRD fetch operation
+    /** Fetch request resolution */
     private long fetchRequestResolution = 1;
     // The timezone to use
     private TimeZone tz = TimeZone.getDefault();
 
     // the order is important, ordinary HashMap is unordered
     private final Map<String, Source> sources = new LinkedHashMap<>();
+    /** Def sources */
 
     private Def[] defSources;
 
@@ -154,6 +164,9 @@ public class DataProcessor implements DataHolder {
         this.poolUsed = poolUsed;
     }
 
+    /**
+     * getPool.
+     */
     @Override
     public RrdDbPool getPool() {
         return pool;
@@ -244,11 +257,17 @@ public class DataProcessor implements DataHolder {
         this.fetchRequestResolution = fetchRequestResolution;
     }
 
+    /**
+     * getTimeZone.
+     */
     @Override
     public TimeZone getTimeZone() {
         return tz;
     }
 
+    /**
+     * setTimeZone.
+     */
     @Override
     public void setTimeZone(TimeZone tz) {
         this.tz = tz;
@@ -464,6 +483,7 @@ public class DataProcessor implements DataHolder {
         return values;
     }
 
+    /** @param sourceName datasource name @return the matching Source */
     Source getSource(String sourceName) {
         Source source = sources.get(sourceName);
         if (source != null) {
@@ -992,10 +1012,16 @@ public class DataProcessor implements DataHolder {
     }
 
     // PRIVATE METHODS
+    /**
+     * Extract defs
+     */
 
     private void extractDefs() {
         defSources = sources.values().stream().filter(Def.class::isInstance).toArray(Def[]::new);
     }
+    /**
+     * Fetch rrd data
+     */
 
     private void fetchRrdData() throws IOException {
         long tEndFixed = (tEnd == 0) ? Util.getTime() : tEnd;
@@ -1082,6 +1108,9 @@ public class DataProcessor implements DataHolder {
                     });
         }
     }
+    /**
+     * Fix zero ending timestamp
+     */
 
     private void fixZeroEndingTimestamp() {
         if (tEnd == 0) {
@@ -1100,6 +1129,9 @@ public class DataProcessor implements DataHolder {
     }
 
     // Tricky and ugly. Should be redesigned some time in the future
+    /**
+     * Choose optimal step
+     */
     private void chooseOptimalStep() {
         long newStep = Long.MAX_VALUE;
         for (Def defSource : defSources) {
@@ -1122,6 +1154,9 @@ public class DataProcessor implements DataHolder {
             step = 1;
         }
     }
+    /**
+     * Create timestamps
+     */
 
     private void createTimestamps() {
         long t1 = Util.normalize(tStart, step);
@@ -1136,12 +1171,18 @@ public class DataProcessor implements DataHolder {
             t1 += step;
         }
     }
+    /**
+     * Assign timestamps to sources
+     */
 
     private void assignTimestampsToSources() {
         for (Source src : sources.values()) {
             src.setTimestamps(timestamps);
         }
     }
+    /**
+     * Normalize rrd values
+     */
 
     private void normalizeRrdValues() {
         Normalizer normalizer = new Normalizer(timestamps);
@@ -1151,6 +1192,9 @@ public class DataProcessor implements DataHolder {
             def.setValues(normalizer.normalize(rrdTimestamps, rrdValues));
         }
     }
+    /**
+     * Calculate non rrd sources
+     */
 
     private void calculateNonRrdSources() {
         for (Source source : sources.values()) {
@@ -1159,6 +1203,9 @@ public class DataProcessor implements DataHolder {
             }
         }
     }
+    /**
+     * Format
+     */
 
     private static String format(String s, int length) {
         StringBuilder b = new StringBuilder(s);
@@ -1168,22 +1215,19 @@ public class DataProcessor implements DataHolder {
         return b.toString();
     }
 
-    /**
-     * @since 3.7
-     */
+    /** @param time ending timestamp */
     @Override
     public void setEndTime(long time) {
         this.tEnd = time;
     }
 
-    /**
-     * @since 3.7
-     */
+    /** @return ending timestamp */
     @Override
     public long getEndTime() {
         return tEnd;
     }
 
+    /** @param time starting timestamp */
     @Override
     public void setStartTime(long time) {
         this.tStart = time;

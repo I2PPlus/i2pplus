@@ -78,7 +78,10 @@ public abstract class RrdBackend {
     }
 
     /**
+     * Set the factory and reference for this backend.
+     *
      * @param factory the factory to set
+     * @param ref the phantom reference
      */
     void done(RrdBackendFactory factory, PhantomReference<RrdDb> ref) {
         this.factory = factory;
@@ -86,6 +89,8 @@ public abstract class RrdBackend {
     }
 
     /**
+     * Get the factory for this backend.
+     *
      * @return the factory
      */
     public RrdBackendFactory getFactory() {

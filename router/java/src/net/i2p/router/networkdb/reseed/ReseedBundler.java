@@ -47,6 +47,9 @@ public class ReseedBundler {
     private static final int MINIMUM = 200;
     private static final String MIN_VERSION = "0.9.64";
 
+    /**
+     * ReseedBundler.
+     */
     public ReseedBundler(RouterContext ctx) {
         _context = ctx;
     }

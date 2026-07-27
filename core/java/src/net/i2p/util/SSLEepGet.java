@@ -111,12 +111,19 @@ public class SSLEepGet extends EepGet {
      *  @since 0.9.33
      */
     public enum ProxyType {
+        /** No proxy. */
         NONE,
+        /** HTTP CONNECT proxy. */
         HTTP,
+        /** HTTPS proxy. */
         HTTPS,
+        /** Internal I2P HTTP proxy. */
         INTERNAL,
+        /** SOCKS4 proxy. */
         SOCKS4,
+        /** SOCKS5 proxy. */
         SOCKS5,
+        /** Transparent proxy. */
         TRANSPARENT
     }
 
@@ -295,119 +302,6 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     * SSLEepGet https://foo/bar
-     *   or to save cert chain:
-     * SSLEepGet -s https://foo/bar
-     */
-    public static void main(String[] args) {
-        int saveCerts = 0;
-        boolean noVerify = false;
-        String proxyHost = "127.0.0.1";
-        int proxyPort = 0;
-        ProxyType ptype = ProxyType.NONE;
-        boolean doh = false;
-        boolean error = false;
-        Getopt g = new Getopt("ssleepget", args, "dp:y:sz");
-        try {
-            int c;
-            while ((c = g.getopt()) != -1) {
-                switch (c) {
-                    case 'p':
-                        String s = g.getOptarg();
-                        int colon = s.indexOf(':');
-                        if (colon >= 0) {
-                            // Todo IPv6 [a:b:c]:4444
-                            proxyHost = s.substring(0, colon);
-                            String port = s.substring(colon + 1);
-                            proxyPort = Integer.parseInt(port);
-                        } else {
-                            proxyHost = s;
-                            // proxyPort remains default
-                        }
-                        break;
-
-                    case 'y':
-                        String y = g.getOptarg().toUpperCase(Locale.US);
-                        if (y.equals("HTTP") || y.equals("HTTPS")) {
-                            ptype = ProxyType.HTTP;
-                        } else if (y.equals("SOCKS4")) {
-                            ptype = ProxyType.SOCKS4;
-                        } else if (y.equals("SOCKS5")) {
-                            ptype = ProxyType.SOCKS5;
-                        } else if (y.equals("I2P")) {
-                            ptype = ProxyType.INTERNAL;
-                            proxyHost = "localhost";
-                            proxyPort = 4444;
-                        } else {
-                            error = true;
-                        }
-                        break;
-
-                    case 's':
-                        saveCerts++;
-                        break;
-
-                    case 'z':
-                        noVerify = true;
-                        break;
-
-                    case 'd':
-                        doh = true;
-                        break;
-
-                    case '?':
-                    case ':':
-                    default:
-                        error = true;
-                        break;
-                } // switch
-            } // while
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            error = true;
-        }
-
-        if (error || args.length - g.getOptind() != 1) {
-            usage();
-            System.exit(1);
-        }
-        String url = args[g.getOptind()];
-
-        String saveAs = suggestName(url);
-
-        SSLEepGet get;
-        if (proxyHost != null) {
-            if (proxyPort == 0) {
-                if (ptype == ProxyType.HTTP) proxyPort = 8080;
-                else proxyPort = 1080;
-            } else if (proxyPort == 4444 && ptype != ProxyType.INTERNAL) {
-                if (proxyHost.equals("localhost") || proxyHost.equals("127.0.0.1") || proxyHost.equals("::1"))
-                    ptype = ProxyType.INTERNAL;
-            }
-            get = new SSLEepGet(I2PAppContext.getGlobalContext(), ptype, proxyHost, proxyPort, saveAs, url);
-        } else {
-            get = new SSLEepGet(I2PAppContext.getGlobalContext(), saveAs, url);
-        }
-        if (saveCerts > 0) get._saveCerts = saveCerts;
-        if (noVerify) get._bypassVerification = true;
-        if (doh) get.forceDNSOverHTTPS(true);
-        get._commandLine = true;
-        get.addStatusListener(get.new CLIStatusListener(1024, 40));
-        if (!get.fetch((long) 45 * 1000, -1, (long) 60 * 1000)) System.exit(1);
-    }
-
-    private static void usage() {
-        System.err.println("Usage: SSLEepGet [-dpsyz] https://url\n"
-            + "  -d use DNSOverHTTPS\n"
-            + "  -p proxyHost[:proxyPort]    // default port 8080 for HTTPS and 1080 for SOCKS; default localhost:4444"
-            + " for I2P\n"
-            + "  -y HTTPS|SOCKS4|SOCKS5|I2P  // proxy type, default HTTPS if proxyHost is set\n"
-            + "  -s save unknown certs\n"
-            + "  -s -s save all certs\n"
-            + "  -z bypass hostname verification");
-    }
-
-    /**
      *  Loads certs from location of javax.net.ssl.keyStore property,
      *  else from $JAVA_HOME/lib/security/jssacacerts,
      *  else from $JAVA_HOME/lib/security/cacerts.
@@ -460,52 +354,7 @@ public class SSLEepGet extends EepGet {
             X509TrustManager defaultTrustManager = (X509TrustManager) tmf.getTrustManagers()[0];
             _stm = new SavingTrustManager(defaultTrustManager);
             sslc.init(null, new TrustManager[] {_stm}, null);
-            /****
-             * if (_log.shouldDebug()) {
-             * SSLEngine eng = sslc.createSSLEngine();
-             * SSLParameters params = sslc.getDefaultSSLParameters();
-             * String[] s = eng.getSupportedProtocols();
-             * Arrays.sort(s);
-             * _log.debug("Supported protocols: " + s.length);
-             * for (int i = 0; i < s.length; i++) {
-             * _log.debug(s[i]);
-             * }
-             * s = eng.getEnabledProtocols();
-             * Arrays.sort(s);
-             * _log.debug("Enabled protocols: " + s.length);
-             * for (int i = 0; i < s.length; i++) {
-             * _log.debug(s[i]);
-             * }
-             * s = params.getProtocols();
-             * if (s == null)
-             * s = new String[0];
-             * _log.debug("Default protocols: " + s.length);
-             * Arrays.sort(s);
-             * for (int i = 0; i < s.length; i++) {
-             * _log.debug(s[i]);
-             * }
-             * s = eng.getSupportedCipherSuites();
-             * Arrays.sort(s);
-             * _log.debug("Supported ciphers: " + s.length);
-             * for (int i = 0; i < s.length; i++) {
-             * _log.debug(s[i]);
-             * }
-             * s = eng.getEnabledCipherSuites();
-             * Arrays.sort(s);
-             * _log.debug("Enabled ciphers: " + s.length);
-             * for (int i = 0; i < s.length; i++) {
-             * _log.debug(s[i]);
-             * }
-             * s = params.getCipherSuites();
-             * if (s == null)
-             * s = new String[0];
-             * _log.debug("Default ciphers: " + s.length);
-             * Arrays.sort(s);
-             * for (int i = 0; i < s.length; i++) {
-             * _log.debug(s[i]);
-             * }
-             * }
-             ****/
+
             return sslc;
         } catch (GeneralSecurityException gse) {
             _log.error("Key Store update error", gse);
@@ -531,16 +380,25 @@ public class SSLEepGet extends EepGet {
             this.tm = tm;
         }
 
+        /**
+         * getAcceptedIssuers.
+         */
         @Override
         public X509Certificate[] getAcceptedIssuers() {
             return new X509Certificate[0];
         }
 
+        /**
+         * checkClientTrusted.
+         */
         @Override
         public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
             throw new CertificateException();
         }
 
+        /**
+         * checkServerTrusted.
+         */
         @Override
         public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
             this.chain = chain;
@@ -627,6 +485,9 @@ public class SSLEepGet extends EepGet {
     ///// end of all the SSL stuff
     ///// start of overrides
 
+    /**
+     * doFetch.
+     */
     @Override
     protected void doFetch(SocketTimeout timeout) throws IOException {
         _aborted = false;
@@ -792,6 +653,9 @@ public class SSLEepGet extends EepGet {
         }
     }
 
+    /**
+     * sendRequest.
+     */
     @Override
     protected void sendRequest(SocketTimeout timeout) throws IOException {
         if (_outputStream != null) {

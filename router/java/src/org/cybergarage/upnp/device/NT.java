@@ -28,9 +28,12 @@ package org.cybergarage.upnp.device;
  * @since 1.0
  */
 public class NT {
+    /** rootdevice */
     public static final String ROOTDEVICE = "upnp:rootdevice";
+    /** event */
     public static final String EVENT = "upnp:event";
 
+    /** method comment */
     public static final boolean isRootDevice(String ntValue) {
         if (ntValue == null) return false;
         return ntValue.startsWith(ROOTDEVICE);

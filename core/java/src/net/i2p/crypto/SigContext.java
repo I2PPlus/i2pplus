@@ -10,14 +10,23 @@ import net.i2p.data.DataHelper;
  * @since 0.9.40
  */
 public enum SigContext {
+    /** No context personalization */
     SC_NONE(null),
+    /** Context for datagram protocol signatures (proposal 148) */
     SC_DATAGRAM("sign_datagramI2P"),
+    /** Context for I2CP session configuration */
     SC_I2CP("I2CP_SessionConf"),
+    /** Context for network database entries */
     SC_NETDB("network_database"),
+    /** Context for NTCP handshake signatures */
     SC_NTCP("NTCP_1_handshake"),
+    /** Context for SSU handshake signatures */
     SC_SSU("SSUHandshakeSign"),
+    /** Context for streaming protocol signatures */
     SC_STREAMING("streaming_i2psig"),
+    /** Context for SU3 file format signatures */
     SC_SU3("i2pSU3FileFormat"),
+    /** Test context for development */
     SC_TEST("test1234test5678");
 
     private final SigContextSpec spec;

@@ -52,6 +52,9 @@ public class NewsManager implements ClientApp {
      */
      //private NewsMetadata _currentMetadata;
 
+    /**
+     * APP_NAME.
+     */
     public static final String APP_NAME = "news";
     private static final String BUNDLE_NAME = "net.i2p.router.news.messages";
 
@@ -139,10 +142,19 @@ public class NewsManager implements ClientApp {
      */
     @Override
     public synchronized void shutdown(String[] args) {changeState(STOPPED);}
+    /**
+     * getState.
+     */
     @Override
     public ClientAppState getState() {return _state;}
+    /**
+     * getName.
+     */
     @Override
     public String getName() {return APP_NAME;}
+    /**
+     * getDisplayName.
+     */
     @Override
     public String getDisplayName() {return "News Manager";}
 

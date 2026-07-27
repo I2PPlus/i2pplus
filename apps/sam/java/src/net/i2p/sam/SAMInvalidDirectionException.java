@@ -17,10 +17,16 @@ package net.i2p.sam;
 class SAMInvalidDirectionException extends Exception {
     private static final long serialVersionUID = 1;
 
+    /**
+     * SAMInvalidDirectionException.
+     */
     public SAMInvalidDirectionException() {
 	super();
     }
 
+    /**
+     * SAMInvalidDirectionException.
+     */
     public SAMInvalidDirectionException(String s) {
 	super(s);
     }

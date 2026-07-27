@@ -29,6 +29,9 @@ class DevSU3UpdateHandler implements Checker, Updater {
     private final RouterContext _context;
     private final ConsoleUpdateManager _mgr;
 
+    /**
+     * DevSU3UpdateHandler.
+     */
     public DevSU3UpdateHandler(RouterContext ctx, ConsoleUpdateManager mgr) {
         _context = ctx;
         _mgr = mgr;

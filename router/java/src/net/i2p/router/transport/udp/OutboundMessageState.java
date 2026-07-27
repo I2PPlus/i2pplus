@@ -43,6 +43,9 @@ class OutboundMessageState implements CDPQEntry {
     /** how many bytes push() is allowed to send */
     private int _allowedSendBytes;
     private final AtomicInteger _nacks = new AtomicInteger();
+    /**
+     * MAX_MSG_SIZE.
+     */
     public static final int MAX_MSG_SIZE = 32 * 1024;
     /** Configurable message expiration. Default 60s, adjusted by Tuner under load. */
     private static volatile long _messageExpiration = 60*1000L;
@@ -135,8 +138,14 @@ class OutboundMessageState implements CDPQEntry {
         return 1L << fragment;
     }
 
+    /**
+     * getMessage.
+     */
     public OutNetMessage getMessage() { return _message; }
 
+    /**
+     * getMessageId.
+     */
     public long getMessageId() { return _i2npMessage.getUniqueId(); }
 
     /**
@@ -155,8 +164,14 @@ class OutboundMessageState implements CDPQEntry {
      */
     public void clearNACKs() { _nacks.set(0); }
 
+    /**
+     * getPeer.
+     */
     public PeerState getPeer() { return _peer; }
 
+    /**
+     * isExpired.
+     */
     public boolean isExpired() {
         return _expiration < _context.clock().now();
     }
@@ -168,6 +183,9 @@ class OutboundMessageState implements CDPQEntry {
         return _expiration < now;
     }
 
+    /**
+     * isComplete.
+     */
     public synchronized boolean isComplete() {
         return _fragmentAcks == 0;
     }
@@ -325,6 +343,9 @@ class OutboundMessageState implements CDPQEntry {
         return (_fragmentAcks & mask(fragment)) != 0;
     }
 
+    /**
+     * getLifetime.
+     */
     public long getLifetime() { return _context.clock().now() - _startedOn; }
 
     /**
@@ -574,6 +595,9 @@ class OutboundMessageState implements CDPQEntry {
         return _message != null ? _message.getPriority() : PacketBuilder.PRIORITY_HIGH;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);

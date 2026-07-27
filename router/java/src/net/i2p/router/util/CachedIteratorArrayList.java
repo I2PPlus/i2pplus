@@ -30,25 +30,41 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
 
     private static final long serialVersionUID = 4863212596318574111L;
 
+    /** Thread local */
     private final ThreadLocal<CachedIterator<E>> iterator = ThreadLocal.withInitial(() -> new CachedIterator<>());
 
+    /** Creates a new empty CachedIteratorArrayList. */
     public CachedIteratorArrayList() {
         super();
     }
 
+    /**
+     * Creates a CachedIteratorArrayList containing the elements of the given collection.
+     * @param c the collection whose elements are to be placed into this list
+     */
     public CachedIteratorArrayList(Collection<? extends E> c) {
         super(c);
     }
 
+    /**
+     * clone.
+     */
     @Override
     public Object clone() {
         return super.clone();
     }
 
+    /**
+     * Creates a CachedIteratorArrayList with the specified initial capacity.
+     * @param initialCapacity the initial capacity of the list
+     */
     public CachedIteratorArrayList(int initialCapacity) {
         super(initialCapacity);
     }
 
+    /**
+     * iterator.
+     */
     @Override
     public Iterator<E> iterator() {
         CachedIterator<E> it = iterator.get();
@@ -79,6 +95,7 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
         /** Reference to the owning list, set on each call to iterator() */
         private transient WeakReference<CachedIteratorArrayList<E>> listRef;
 
+        /** Reset iterator state for the given list. */
         void reset(CachedIteratorArrayList<E> list) {
             this.listRef = new WeakReference<CachedIteratorArrayList<E>>(list);
             cursor = 0;
@@ -93,11 +110,17 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
             return l;
         }
 
+        /**
+         * hasNext.
+         */
         public boolean hasNext() {
             CachedIteratorArrayList<E> l = listRef != null ? listRef.get() : null;
             return l != null && cursor != l.size();
         }
 
+        /**
+         * next.
+         */
         public E next() {
             CachedIteratorArrayList<E> l = list();
             checkForComodification(l);
@@ -110,6 +133,9 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
             return next;
         }
 
+        /**
+         * remove.
+         */
         public void remove() {
             if (lastRet < 0)
                 throw new IllegalStateException();

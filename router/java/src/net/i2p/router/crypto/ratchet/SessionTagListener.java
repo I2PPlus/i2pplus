@@ -10,12 +10,17 @@ interface SessionTagListener {
     /**
      *  Map the tag to this tagset.
      *
+     *  @param tag the session tag
+     *  @param ts the tag set
      *  @return true if added, false if dup
      */
     public boolean addTag(RatchetSessionTag tag, RatchetTagSet ts);
 
     /**
      *  Remove the tag associated with this tagset.
+     *
+     *  @param tag the session tag
+     *  @param ts the tag set
      */
     public void expireTag(RatchetSessionTag tag, RatchetTagSet ts);
 }

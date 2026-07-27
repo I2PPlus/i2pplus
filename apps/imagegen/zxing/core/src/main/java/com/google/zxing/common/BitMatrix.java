@@ -93,6 +93,14 @@ public final class BitMatrix implements Cloneable {
     return bits;
   }
 
+  /**
+   * <p>Parses a string representation of a bit matrix.</p>
+   *
+   * @param stringRepresentation the full string representation
+   * @param setString the string for a set bit
+   * @param unsetString the string for an unset bit
+   * @return the parsed bit matrix
+   */
   public static BitMatrix parse(String stringRepresentation, String setString, String unsetString) {
     if (stringRepresentation == null) {
       throw new IllegalArgumentException();
@@ -173,6 +181,12 @@ public final class BitMatrix implements Cloneable {
     bits[offset] |= 1 << (x & 0x1f);
   }
 
+  /**
+   * <p>Sets the given bit to false.</p>
+   *
+   * @param x The horizontal component (i.e. which column)
+   * @param y The vertical component (i.e. which row)
+   */
   public void unset(int x, int y) {
     int offset = y * rowSize + (x / 32);
     bits[offset] &= ~(1 << (x & 0x1f));
@@ -269,6 +283,8 @@ public final class BitMatrix implements Cloneable {
   }
 
   /**
+   * <p>Sets a row of the matrix from a BitArray.</p>
+   *
    * @param y row to set
    * @param row {@link BitArray} to copy from
    */
@@ -369,6 +385,11 @@ public final class BitMatrix implements Cloneable {
     return new int[] {x, y};
   }
 
+  /**
+   * <p>This is useful in detecting a corner of a 'pure' barcode.</p>
+   *
+   * @return {@code x,y} coordinate of bottom-right-most 1 bit, or null if it is all white
+   */
   public int[] getBottomRightOnBit() {
     int bitsOffset = bits.length - 1;
     while (bitsOffset >= 0 && bits[bitsOffset] == 0) {
@@ -392,6 +413,8 @@ public final class BitMatrix implements Cloneable {
   }
 
   /**
+   * <p>Gets the width of the matrix.</p>
+   *
    * @return The width of the matrix
    */
   public int getWidth() {
@@ -399,6 +422,8 @@ public final class BitMatrix implements Cloneable {
   }
 
   /**
+   * <p>Gets the height of the matrix.</p>
+   *
    * @return The height of the matrix
    */
   public int getHeight() {
@@ -406,6 +431,8 @@ public final class BitMatrix implements Cloneable {
   }
 
   /**
+   * <p>Gets the row size of the matrix.</p>
+   *
    * @return The row size of the matrix
    */
   public int getRowSize() {
@@ -433,6 +460,8 @@ public final class BitMatrix implements Cloneable {
   }
 
   /**
+   * <p>Gets a string representation using "X" for set and " " for unset bits.</p>
+   *
    * @return string representation using "X" for set and " " for unset bits
    */
   @Override
@@ -441,6 +470,8 @@ public final class BitMatrix implements Cloneable {
   }
 
   /**
+   * <p>Returns string representation of entire matrix utilizing given strings.</p>
+   *
    * @param setString representation of a set bit
    * @param unsetString representation of an unset bit
    * @return string representation of entire matrix utilizing given strings

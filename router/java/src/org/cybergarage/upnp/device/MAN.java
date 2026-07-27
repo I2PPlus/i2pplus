@@ -28,8 +28,14 @@ package org.cybergarage.upnp.device;
  * @since 1.0
  */
 public class MAN {
+    /**
+     * DISCOVER.
+     */
     public static final String DISCOVER = "ssdp:discover";
 
+    /**
+     * isDiscover.
+     */
     public static final boolean isDiscover(String value) {
         if (value == null) return false;
         if (value.equals(MAN.DISCOVER) == true) return true;

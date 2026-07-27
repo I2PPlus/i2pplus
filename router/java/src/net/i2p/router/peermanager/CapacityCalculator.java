@@ -23,6 +23,7 @@ class CapacityCalculator {
 
     private CapacityCalculator() {}
 
+    /** Property for bonus applied to peers in the same country */
     public static final String PROP_COUNTRY_BONUS = "profileOrganizer.sameCountryBonus";
 
     /** used to adjust each period so that we keep trying to expand the peer's capacity */
@@ -89,6 +90,12 @@ class CapacityCalculator {
     // don't drive the ffs below the default
     private static final double BONUS_NON_FLOODFILL = 1.0;
 
+    /**
+     * Calculate the capacity for the given peer profile.
+     *
+     * @param profile the peer profile
+     * @return the calculated capacity
+     */
     public static double calc(PeerProfile profile) {
         double capacity;
         RouterContext context = profile.getContext();

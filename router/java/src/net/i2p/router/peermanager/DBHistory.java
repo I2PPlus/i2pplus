@@ -37,6 +37,9 @@ public class DBHistory {
     private final AtomicLong _unpromptedDbStoreOld = new AtomicLong();
     private volatile long _lastCoalesce = System.currentTimeMillis();
 
+    /**
+     * DBHistory.
+     */
     public DBHistory(RouterContext context, String statGroup) {
         _context = context;
         _log = context.logManager().getLog(DBHistory.class);
@@ -151,15 +154,30 @@ public class DBHistory {
         else {_unpromptedDbStoreOld.incrementAndGet();}
     }
 
+    /**
+     * setSuccessfulLookups.
+     */
     public void setSuccessfulLookups(long num) {_successfulLookups.set(num);}
+    /**
+     * setFailedLookups.
+     */
     public void setFailedLookups(long num) {_failedLookups.set(num);}
+    /**
+     * setUnpromptedDbStoreNew.
+     */
     public void setUnpromptedDbStoreNew(long num) {_unpromptedDbStoreNew.set(num);}
+    /**
+     * setUnpromptedDbStoreOld.
+     */
     public void setUnpromptedDbStoreOld(long num) {_unpromptedDbStoreOld.set(num);}
 
     private static final long DECAY_INTERVAL_MS = 15 * 60 * 1000L;
     private static final long DECAY_NUMERATOR = 3;
     private static final long DECAY_DENOMINATOR = 4;
 
+    /**
+     * coalesceStats.
+     */
     public void coalesceStats() {
         if (_log.shouldDebug()) {_log.debug("Coalescing Profile Manager stats");}
         _failedLookupRate.coalesceStats();
@@ -228,6 +246,9 @@ public class DBHistory {
         if (addComments) {buf.append("# ").append(description).append(": ").append(val).append(NL);}
     }
 
+    /**
+     * load.
+     */
     public void load(Properties props) {
         _failedLookups.set(getLong(props, "dbHistory.failedLookups"));
         _unpromptedDbStoreNew.set(getLong(props, "dbHistory.unpromptedDbStoreNew"));

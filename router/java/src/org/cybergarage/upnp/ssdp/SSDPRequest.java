@@ -36,10 +36,16 @@ public class SSDPRequest extends HTTPRequest {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     * SSDPRequest.
+     */
     public SSDPRequest() {
         setVersion(HTTP.VERSION_11);
     }
 
+    /**
+     * SSDPRequest.
+     */
     public SSDPRequest(InputStream in) {
         super(in);
     }
@@ -48,10 +54,16 @@ public class SSDPRequest extends HTTPRequest {
     //	NT
     ////////////////////////////////////////////////
 
+    /**
+     * setNT.
+     */
     public void setNT(String value) {
         setHeader(HTTP.NT, value);
     }
 
+    /**
+     * getNT.
+     */
     public String getNT() {
         return getHeaderValue(HTTP.NT);
     }
@@ -60,10 +72,16 @@ public class SSDPRequest extends HTTPRequest {
     //	NTS
     ////////////////////////////////////////////////
 
+    /**
+     * setNTS.
+     */
     public void setNTS(String value) {
         setHeader(HTTP.NTS, value);
     }
 
+    /**
+     * getNTS.
+     */
     public String getNTS() {
         return getHeaderValue(HTTP.NTS);
     }
@@ -72,10 +90,16 @@ public class SSDPRequest extends HTTPRequest {
     //	Location
     ////////////////////////////////////////////////
 
+    /**
+     * setLocation.
+     */
     public void setLocation(String value) {
         setHeader(HTTP.LOCATION, value);
     }
 
+    /**
+     * getLocation.
+     */
     public String getLocation() {
         return getHeaderValue(HTTP.LOCATION);
     }
@@ -84,10 +108,16 @@ public class SSDPRequest extends HTTPRequest {
     //	USN
     ////////////////////////////////////////////////
 
+    /**
+     * setUSN.
+     */
     public void setUSN(String value) {
         setHeader(HTTP.USN, value);
     }
 
+    /**
+     * getUSN.
+     */
     public String getUSN() {
         return getHeaderValue(HTTP.USN);
     }
@@ -96,10 +126,16 @@ public class SSDPRequest extends HTTPRequest {
     //	CacheControl
     ////////////////////////////////////////////////
 
+    /**
+     * setLeaseTime.
+     */
     public void setLeaseTime(int len) {
         setHeader(HTTP.CACHE_CONTROL, "max-age=" + Integer.toString(len));
     }
 
+    /**
+     * getLeaseTime.
+     */
     public int getLeaseTime() {
         String cacheCtrl = getHeaderValue(HTTP.CACHE_CONTROL);
         return SSDP.getLeaseTime(cacheCtrl);
@@ -109,10 +145,16 @@ public class SSDPRequest extends HTTPRequest {
     //	BootId
     ////////////////////////////////////////////////
 
+    /**
+     * setBootId.
+     */
     public void setBootId(int bootId) {
         setHeader(HTTP.BOOTID_UPNP_ORG, bootId);
     }
 
+    /**
+     * getBootId.
+     */
     public int getBootId() {
         return getIntegerHeaderValue(HTTP.BOOTID_UPNP_ORG);
     }

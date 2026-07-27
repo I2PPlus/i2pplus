@@ -22,9 +22,21 @@ package org.klomp.snark;
  */
 public class Tracker {
 
+    /**
+     * name.
+     */
     public final String name;
+    /**
+     * announceURL.
+     */
     public final String announceURL;
+    /**
+     * baseURL.
+     */
     public final String baseURL;
+    /**
+     * supportsDetails.
+     */
     public final boolean supportsDetails;
 
     /**

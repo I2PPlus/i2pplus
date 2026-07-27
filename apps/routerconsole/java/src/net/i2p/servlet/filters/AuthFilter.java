@@ -23,10 +23,12 @@ import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.util.Log;
 
 /**
- * Filter to check for valid session on all console requests.
- * Redirects to login page if not authenticated.
+ *  Filter to check for valid session on all console requests.
+ *  Redirects to login page if not authenticated.
  */
 public class AuthFilter implements Filter {
+    /** Default constructor */
+    public AuthFilter() {}
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(AuthFilter.class);
     private static final String PROP_AUTH_TYPE = "routerconsole.auth.type";
     private static final String AUTH_TYPE_CUSTOM = "custom";

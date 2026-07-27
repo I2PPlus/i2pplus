@@ -49,5 +49,11 @@ public enum DataSourceType {
         }
     };
 
+    /**
+     * The value.
+     */
+    /**
+     * Get the ds type.
+     */
     public abstract DsType getDsType();
 }

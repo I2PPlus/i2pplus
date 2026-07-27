@@ -28,48 +28,91 @@ import javax.crypto.spec.DHPublicKeySpec;
 public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     private static final long serialVersionUID = 8712728417091216948L;
 
+    /** Y */
     private BigInteger y;
+    /** El spec */
     private ElGamalParameterSpec elSpec;
 
+    /**
+     * ElGamalPublicKeyImpl.
+     *
+     * @param spec the ElGamal public key spec
+     */
     public ElGamalPublicKeyImpl(ElGamalPublicKeySpec spec) {
         this.y = spec.getY();
         this.elSpec = new ElGamalParameterSpec(spec.getParams().getP(), spec.getParams().getG());
     }
 
+    /**
+     * ElGamalPublicKeyImpl.
+     *
+     * @param spec the DH public key spec
+     */
     public ElGamalPublicKeyImpl(DHPublicKeySpec spec) {
         this.y = spec.getY();
         this.elSpec = new ElGamalParameterSpec(spec.getP(), spec.getG());
     }
 
+    /**
+     * ElGamalPublicKeyImpl.
+     *
+     * @param key the ElGamal public key to copy
+     */
     public ElGamalPublicKeyImpl(ElGamalPublicKey key) {
         this.y = key.getY();
         this.elSpec = key.getParameters();
     }
 
+    /**
+     * ElGamalPublicKeyImpl.
+     *
+     * @param key the DH public key to copy
+     */
     public ElGamalPublicKeyImpl(DHPublicKey key) {
         this.y = key.getY();
         this.elSpec = new ElGamalParameterSpec(key.getParams().getP(), key.getParams().getG());
     }
 
+    /**
+     * ElGamalPublicKeyImpl.
+     *
+     * @param y the public value y = g^x mod p
+     * @param elSpec the ElGamal parameters
+     */
     public ElGamalPublicKeyImpl(BigInteger y, ElGamalParameterSpec elSpec) {
         this.y = y;
         this.elSpec = elSpec;
     }
 
+    /**
+     * ElGamalPublicKeyImpl.
+     *
+     * @param spec the X.509 key spec
+     * @throws InvalidKeySpecException always, not yet implemented
+     */
     public ElGamalPublicKeyImpl(X509EncodedKeySpec spec) throws InvalidKeySpecException {
         throw new InvalidKeySpecException("todo");
     }
 
+    /**
+     * getAlgorithm.
+     */
     @Override
     public String getAlgorithm() {
         return "ElGamal";
     }
 
+    /**
+     * getFormat.
+     */
     @Override
     public String getFormat() {
         return "X.509";
     }
 
+    /**
+     * getEncoded.
+     */
     @Override
     public byte[] getEncoded() {
         byte[] pb = elSpec.getP().toByteArray();
@@ -140,21 +183,33 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
         return 1 + rv + val;
     }
 
+    /**
+     * getParameters.
+     */
     @Override
     public ElGamalParameterSpec getParameters() {
         return elSpec;
     }
 
+    /**
+     * getParams.
+     */
     @Override
     public DHParameterSpec getParams() {
         return new DHParameterSpec(elSpec.getP(), elSpec.getG());
     }
 
+    /**
+     * getY.
+     */
     @Override
     public BigInteger getY() {
         return y;
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -163,16 +218,21 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
         return y.equals(other.y) && elSpec.getP().equals(other.elSpec.getP()) && elSpec.getG().equals(other.elSpec.getG());
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return y.hashCode() ^ elSpec.getP().hashCode() ^ elSpec.getG().hashCode();
     }
 
+    /** Read object */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         this.y = (BigInteger) in.readObject();
         this.elSpec = new ElGamalParameterSpec((BigInteger) in.readObject(), (BigInteger) in.readObject());
     }
 
+    /** Write object */
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeObject(this.getY());
         out.writeObject(elSpec.getP());

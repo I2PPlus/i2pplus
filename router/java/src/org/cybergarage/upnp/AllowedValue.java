@@ -45,6 +45,11 @@ public class AllowedValue {
     /** The underlying XML node containing the allowed value data. */
     private Node allowedValueNode;
 
+    /**
+     * Get the underlying XML node.
+     *
+     * @return the underlying XML node
+     */
     public Node getAllowedValueNode() {
         return allowedValueNode;
     }
@@ -53,6 +58,11 @@ public class AllowedValue {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     *  Create an AllowedValue wrapping the given XML node.
+     *
+     *  @param node the XML node containing the allowed value
+     */
     public AllowedValue(Node node) {
         allowedValueNode = node;
     }
@@ -96,6 +106,11 @@ public class AllowedValue {
         getAllowedValueNode().setValue(value);
     }
 
+    /**
+     * Get the value string.
+     *
+     * @return the value string
+     */
     public String getValue() {
         return getAllowedValueNode().getValue();
     }

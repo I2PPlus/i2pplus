@@ -16,43 +16,72 @@ import net.i2p.data.SigningPublicKey;
  *  @since 0.9.54
  */
 final class SSU2Util {
+    /**
+     *  SSU2 protocol version number
+     */
     public static final int PROTOCOL_VERSION = 2;
 
     // lengths
-    /** 32 */
+    /** 32 bytes, X25519 public key length */
     public static final int KEY_LEN = EncType.ECIES_X25519.getPubkeyLen();
+    /** 16 bytes, MAC tag length */
     public static final int MAC_LEN = 16;
+    /** 12 bytes, ChaCha20 nonce length */
     public static final int CHACHA_IV_LEN = 12;
+    /** 32 bytes, introductory key length */
     public static final int INTRO_KEY_LEN = 32;
+    /** 16 bytes, short (data) header size */
     public static final int SHORT_HEADER_SIZE = 16;
+    /** 32 bytes, long (handshake) header size */
     public static final int LONG_HEADER_SIZE = 32;
-    /** 64 */
+    /** 64 bytes, combined long header and key */
     public static final int SESSION_HEADER_SIZE = LONG_HEADER_SIZE + KEY_LEN;
 
     // header fields
+    /** Offset of destination connection ID in header */
     public static final int DEST_CONN_ID_OFFSET = 0;
+    /** Offset of packet number in header */
     public static final int PKT_NUM_OFFSET = 8;
+    /** Length of packet number field in bytes */
     public static final int PKT_NUM_LEN = 4;
+    /** Offset of message type in header */
     public static final int TYPE_OFFSET = 12;
+    /** Offset of protocol version in header */
     public static final int VERSION_OFFSET = 13;
+    /** Offset of short header flags */
     public static final int SHORT_HEADER_FLAGS_OFFSET = 13;
+    /** Length of short header flags in bytes */
     public static final int SHORT_HEADER_FLAGS_LEN = 3;
+    /** Offset of network ID in header */
     public static final int NETID_OFFSET = 14;
+    /** Offset of long header flags */
     public static final int LONG_HEADER_FLAGS_OFFSET = 15;
+    /** Offset of source connection ID in long header */
     public static final int SRC_CONN_ID_OFFSET = 16;
+    /** Offset of token in long header */
     public static final int TOKEN_OFFSET = 24;
 
     // header protection
+    /** Length of header protection sample in bytes */
     public static final int HEADER_PROT_SAMPLE_LEN = 12;
+    /** Total header protection sample length for both samples */
     public static final int TOTAL_PROT_SAMPLE_LEN = 2 * HEADER_PROT_SAMPLE_LEN;
+    /** Offset of first header protection sample */
     public static final int HEADER_PROT_SAMPLE_1_OFFSET = 2 * HEADER_PROT_SAMPLE_LEN;
+    /** Offset of second header protection sample */
     public static final int HEADER_PROT_SAMPLE_2_OFFSET = HEADER_PROT_SAMPLE_LEN;
+    /** Length of header protection data in bytes */
     public static final int HEADER_PROT_DATA_LEN = 8;
+    /** Offset of first header protection region (dest conn ID) */
     public static final int HEADER_PROT_1_OFFSET = DEST_CONN_ID_OFFSET;
+    /** Offset of second header protection region (packet number) */
     public static final int HEADER_PROT_2_OFFSET = PKT_NUM_OFFSET;
 
+    /** Maximum padding for data packets */
     public static final int PADDING_MAX = 32;
+    /** Maximum padding for session request */
     public static final int PADDING_MAX_SESSION_REQUEST = 32;
+    /** Maximum padding for session created */
     public static final int PADDING_MAX_SESSION_CREATED = 64;
 
     // data size minimums, not including IP/UDP headers
@@ -89,85 +118,157 @@ final class SSU2Util {
     /**
      *  The message types, 0-11, as bytes
      */
+    /** Message type flag for session request */
     public static final byte SESSION_REQUEST_FLAG_BYTE = UDPPacket.PAYLOAD_TYPE_SESSION_REQUEST;
+    /** Message type flag for session created */
     public static final byte SESSION_CREATED_FLAG_BYTE = UDPPacket.PAYLOAD_TYPE_SESSION_CREATED;
+    /** Message type flag for session confirmed */
     public static final byte SESSION_CONFIRMED_FLAG_BYTE = UDPPacket.PAYLOAD_TYPE_SESSION_CONFIRMED;
+    /** Message type flag for data */
     public static final byte DATA_FLAG_BYTE = UDPPacket.PAYLOAD_TYPE_DATA;
+    /** Message type flag for peer test */
     public static final byte PEER_TEST_FLAG_BYTE = UDPPacket.PAYLOAD_TYPE_TEST;
+    /** Message type flag for retry */
     public static final byte RETRY_FLAG_BYTE = 9;
+    /** Message type flag for token request */
     public static final byte TOKEN_REQUEST_FLAG_BYTE = 10;
+    /** Message type flag for hole punch */
     public static final byte HOLE_PUNCH_FLAG_BYTE = 11;
 
     // HKDF infos
+    /** HKDF info string for session created header key derivation */
     public static final String INFO_CREATED =   "SessCreateHeader";
+    /** HKDF info string for session confirmed key derivation */
     public static final String INFO_CONFIRMED = "SessionConfirmed";
+    /** HKDF info string for data packet key derivation */
     public static final String INFO_DATA =      "HKDFSSU2DataKeys";
 
+    /** Empty byte array, used as HKDF salt */
     public static final byte[] ZEROLEN = new byte[0];
+    /** All-zero key of KEY_LEN bytes */
     public static final byte[] ZEROKEY = new byte[KEY_LEN];
 
     // relay and peer test
     // Signature prologues
+    /** Prologue for relay request signatures */
     public static final byte[] RELAY_REQUEST_PROLOGUE = DataHelper.getASCII("RelayRequestData");
+    /** Prologue for relay response signatures */
     public static final byte[] RELAY_RESPONSE_PROLOGUE = DataHelper.getASCII("RelayAgreementOK");
+    /** Prologue for peer test signatures */
     public static final byte[] PEER_TEST_PROLOGUE = DataHelper.getASCII("PeerTestValidate");
 
     // test status codes
+    /** Peer test accepted */
     public static final int TEST_ACCEPT = 0;
+    /** Rejected by Bob: unspecified reason */
     public static final int TEST_REJECT_BOB_UNSPEC = 1;
+    /** Rejected by Bob: no Charlie */
     public static final int TEST_REJECT_BOB_NO_CHARLIE = 2;
+    /** Rejected by Bob: limit reached */
     public static final int TEST_REJECT_BOB_LIMIT = 3;
+    /** Rejected by Bob: signature failure */
     public static final int TEST_REJECT_BOB_SIGFAIL = 4;
+    /** Rejected by Bob: address mismatch */
     public static final int TEST_REJECT_BOB_ADDRESS = 5;
+    /** Rejected by Charlie: unspecified reason */
     public static final int TEST_REJECT_CHARLIE_UNSPEC = 64;
+    /** Rejected by Charlie: address mismatch */
     public static final int TEST_REJECT_CHARLIE_ADDRESS = 65;
+    /** Rejected by Charlie: limit reached */
     public static final int TEST_REJECT_CHARLIE_LIMIT = 66;
+    /** Rejected by Charlie: signature failure */
     public static final int TEST_REJECT_CHARLIE_SIGFAIL = 67;
+    /** Rejected by Charlie: already connected */
     public static final int TEST_REJECT_CHARLIE_CONNECTED = 68;
+    /** Rejected by Charlie: banned */
     public static final int TEST_REJECT_CHARLIE_BANNED = 69;
+    /** Rejected by Charlie: unknown Alice */
     public static final int TEST_REJECT_CHARLIE_UNKNOWN_ALICE = 70;
 
     // relay status codes
+    /** Relay accepted */
     public static final int RELAY_ACCEPT = 0;
+    /** Rejected by Bob: unspecified reason */
     public static final int RELAY_REJECT_BOB_UNSPEC = 1;
+    /** Rejected by Bob: Charlie is banned */
     public static final int RELAY_REJECT_BOB_BANNED_CHARLIE = 2;
+    /** Rejected by Bob: limit reached */
     public static final int RELAY_REJECT_BOB_LIMIT = 3;
+    /** Rejected by Bob: signature failure */
     public static final int RELAY_REJECT_BOB_SIGFAIL = 4;
+    /** Rejected by Bob: no tag found */
     public static final int RELAY_REJECT_BOB_NO_TAG = 5;
+    /** Rejected by Bob: unknown Alice */
     public static final int RELAY_REJECT_BOB_UNKNOWN_ALICE = 6;
+    /** Rejected by Charlie: unspecified reason */
     public static final int RELAY_REJECT_CHARLIE_UNSPEC = 64;
+    /** Rejected by Charlie: address mismatch */
     public static final int RELAY_REJECT_CHARLIE_ADDRESS = 65;
+    /** Rejected by Charlie: limit reached */
     public static final int RELAY_REJECT_CHARLIE_LIMIT = 66;
+    /** Rejected by Charlie: signature failure */
     public static final int RELAY_REJECT_CHARLIE_SIGFAIL = 67;
+    /** Rejected by Charlie: already connected */
     public static final int RELAY_REJECT_CHARLIE_CONNECTED = 68;
+    /** Rejected by Charlie: banned */
     public static final int RELAY_REJECT_CHARLIE_BANNED = 69;
+    /** Rejected by Charlie: unknown Alice */
     public static final int RELAY_REJECT_CHARLIE_UNKNOWN_ALICE = 70;
 
     // termination reason codes
+    /** Unspecified reason */
     public static final int REASON_UNSPEC = 0;
+    /** Termination requested by remote */
     public static final int REASON_TERMINATION = 1;
+    /** Connection timeout */
     public static final int REASON_TIMEOUT = 2;
+    /** Router shutting down */
     public static final int REASON_SHUTDOWN = 3;
+    /** AEAD verification failure */
     public static final int REASON_AEAD = 4;
+    /** Options parameter mismatch */
     public static final int REASON_OPTIONS = 5;
+    /** Signature type error or mismatch */
     public static final int REASON_SIGTYPE = 6;
+    /** Clock skew exceeds tolerance */
     public static final int REASON_SKEW = 7;
+    /** Invalid padding */
     public static final int REASON_PADDING = 8;
+    /** Framing protocol error */
     public static final int REASON_FRAMING = 9;
+    /** Payload data error */
     public static final int REASON_PAYLOAD = 10;
+    /** Error in session request message */
     public static final int REASON_MSG1 = 11;
+    /** Error in session created message */
     public static final int REASON_MSG2 = 12;
+    /** Error in session confirmed message */
     public static final int REASON_MSG3 = 13;
+    /** Frame acknowledgment timeout */
     public static final int REASON_FRAME_TIMEOUT = 14;
+    /** Signature verification failed */
     public static final int REASON_SIGFAIL = 15;
+    /** Session key mismatch */
     public static final int REASON_S_MISMATCH = 16;
+    /** Peer is banned */
     public static final int REASON_BANNED = 17;
+    /** Token validation error */
     public static final int REASON_TOKEN = 18;
+    /** Resource limits exceeded */
     public static final int REASON_LIMITS = 19;
+    /** Protocol version mismatch */
     public static final int REASON_VERSION = 20;
+    /** Network ID mismatch */
     public static final int REASON_NETID = 21;
+    /** Session was replaced by a new connection */
     public static final int REASON_REPLACED = 22;
 
+    /**
+     *  Convert a termination reason code to a human-readable string
+     *
+     *  @param code one of the REASON_* constants
+     *  @return human-readable description
+     */
     public static String terminationCodeToString(int code) {
         switch (code) {
             case REASON_UNSPEC:          return "Unspecified reason";

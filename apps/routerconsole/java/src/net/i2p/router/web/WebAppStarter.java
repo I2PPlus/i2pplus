@@ -39,7 +39,9 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class WebAppStarter {
 
     private static final Map<String, Long> warModTimes = new ConcurrentHashMap<>();
+    /** Init parameters for webapps */
     static final Map<String, String> INIT_PARAMS = new HashMap<>(4);
+    /** Plugin name parameter */
     static final String PARAM_PLUGIN_NAME = "net.i2p.router.web.WebAppStarter.PLUGIN_NAME";
 
     // There are 4 additional jars that are required to do the Servlet 3.0 annotation scanning.
@@ -293,6 +295,7 @@ public class WebAppStarter {
     }
 
     /**
+     *  Determine if a webapp is running
      *  @since 0.9.41
      */
     static boolean isWebAppRunning(Server s, String appName) {
@@ -316,6 +319,7 @@ public class WebAppStarter {
     }
 
     /**
+     *  Find a webapp by name
      *  @since 0.9.41
      */
     static ContextHandler getWebApp(Server s, String appName) {

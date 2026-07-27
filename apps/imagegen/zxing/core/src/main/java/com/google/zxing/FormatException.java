@@ -37,10 +37,16 @@ public final class FormatException extends ReaderException {
     super(cause);
   }
 
+  /**
+   * getFormatInstance.
+   */
   public static FormatException getFormatInstance() {
     return isStackTrace ? new FormatException() : INSTANCE;
   }
 
+  /**
+   * getFormatInstance.
+   */
   public static FormatException getFormatInstance(Throwable cause) {
     return isStackTrace ? new FormatException(cause) : INSTANCE;
   }

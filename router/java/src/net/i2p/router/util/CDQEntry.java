@@ -17,9 +17,16 @@ public interface CDQEntry {
 
     /**
      *  To be set by the queue
+     *
+     *  @param time the enqueue timestamp
      */
     public void setEnqueueTime(long time);
 
+    /**
+     * Get the enqueue timestamp.
+     *
+     * @return the enqueue timestamp
+     */
     public long getEnqueueTime();
 
     /**

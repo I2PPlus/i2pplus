@@ -24,23 +24,53 @@ public class CSSHelper extends HelperBase {
     private static final Pattern SPACE_SPLIT = Pattern.compile("\\s+");
 
     private static final Map<String, Boolean> _UACache = new ConcurrentHashMap<>();
+    /**
+     * PROP_UNIVERSAL_THEMING.
+     */
     public static final String PROP_UNIVERSAL_THEMING = "routerconsole.universal.theme";
+    /**
+     * PROP_THEME_NAME.
+     */
     public static final String PROP_THEME_NAME = "routerconsole.theme";
     /**  @since 0.9.33 moved from ConfigUIHelper */
     public static final String PROP_THEME_PFX = PROP_THEME_NAME + '.';
+    /**
+     * DEFAULT_THEME.
+     */
     public static final String DEFAULT_THEME = "dark";
+    /**
+     * BASE_THEME_PATH.
+     */
     public static final String BASE_THEME_PATH = "/themes/console/";
     private static final String FORCE = "classic";
+    /**
+     * PROP_REFRESH.
+     */
     public static final String PROP_REFRESH = "routerconsole.summaryRefresh";
+    /**
+     * DEFAULT_REFRESH.
+     */
     public static final String DEFAULT_REFRESH = "3";
+    /**
+     * MIN_REFRESH.
+     */
     public static final int MIN_REFRESH = 0;
+    /**
+     * PROP_DISABLE_REFRESH.
+     */
     public static final String PROP_DISABLE_REFRESH = "routerconsole.summaryDisableRefresh";
     private static final String PROP_XFRAME = "routerconsole.disableXFrame";
+    /**
+     * PROP_FORCE_MOBILE_CONSOLE.
+     */
     public static final String PROP_FORCE_MOBILE_CONSOLE = "routerconsole.forceMobileConsole";
     /** @since 0.9.32 */
     public static final String PROP_EMBED_APPS = "routerconsole.embedApps";
     /** @since 0.9.59+ */
     public static final String PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
+    /**
+     * DEFAULT_ENABLE_SORA_FONT.
+     */
     public static final boolean DEFAULT_ENABLE_SORA_FONT = false;
     /** Rotating nonce for CSRF protection, rotates every 5 minutes */
     private static String _currentNonce;
@@ -49,9 +79,15 @@ public class CSSHelper extends HelperBase {
     private static final long NONCE_ROTATION_MS = 5 * (long) 60 * 1000; // 5 minutes
     /** @since 0.9.67+ */
     public static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
+    /**
+     * DEFAULT_UNIFIED_SIDEBAR.
+     */
     public static final boolean DEFAULT_UNIFIED_SIDEBAR = false;
     /** @since 0.9.68+ */
     public static final String PROP_STICKY_SIDEBAR = "routerconsole.stickySidebar";
+    /**
+     * DEFAULT_STICKY_SIDEBAR.
+     */
     public static final boolean DEFAULT_STICKY_SIDEBAR = true;
     /** @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_LEGACY = "routerconsole.sidebarGraphLegacy";
@@ -192,6 +228,9 @@ public class CSSHelper extends HelperBase {
         return null;
     }
 
+    /**
+     * getTheme.
+     */
     public String getTheme(String userAgent) {
         String url = BASE_THEME_PATH;
         if (userAgent != null && userAgent.contains("MSIE") && !userAgent.contains("Trident/6")) {
@@ -411,6 +450,9 @@ public class CSSHelper extends HelperBase {
         return !ServletUtil.isSmallBrowser(ua);
     }
 
+    /**
+     * isAdvancedMode.
+     */
     public boolean isAdvancedMode() {
         return _context.getBooleanProperty("routerconsole.advanced");
     }
@@ -419,6 +461,9 @@ public class CSSHelper extends HelperBase {
      * https://www.javatpoint.com/java-program-to-capitalize-each-word-in-string
      */
     public static class StringFormatter {
+        /**
+         * capitalizeWord.
+         */
         public static String capitalizeWord(String str) {
             if (str == null || str.isEmpty()) return str;
             String trimmed = str.trim();

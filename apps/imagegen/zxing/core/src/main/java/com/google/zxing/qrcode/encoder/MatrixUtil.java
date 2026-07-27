@@ -120,16 +120,12 @@ final class MatrixUtil {
     // do nothing
   }
 
-  // Set all cells to -1.  -1 means that the cell is empty (not set yet).
-  //
-  // JAVAPORT: We shouldn't need to do this at all. The code should be rewritten to begin encoding
-  // with the ByteMatrix initialized all to zero.
+  /** Set all cells to empty (-1) */
   static void clearMatrix(ByteMatrix matrix) {
     matrix.clear((byte) -1);
   }
 
-  // Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On
-  // success, store the result in "matrix" and return true.
+  /** Build the QR code matrix */
   static void buildMatrix(BitArray dataBits,
                           ErrorCorrectionLevel ecLevel,
                           Version version,
@@ -145,12 +141,7 @@ final class MatrixUtil {
     embedDataBits(dataBits, maskPattern, matrix);
   }
 
-  // Embed basic patterns. On success, modify the matrix and return true.
-  // The basic patterns are:
-  // - Position detection patterns
-  // - Timing patterns
-  // - Dark dot at the left bottom corner
-  // - Position adjustment patterns, if need be
+  /** Embed position detection, timing, and adjustment patterns */
   static void embedBasicPatterns(Version version, ByteMatrix matrix) throws WriterException {
     // Let's get started with embedding big squares at corners.
     embedPositionDetectionPatternsAndSeparators(matrix);
@@ -163,7 +154,7 @@ final class MatrixUtil {
     embedTimingPatterns(matrix);
   }
 
-  // Embed type information. On success, modify the matrix.
+  /** Embed type information */
   static void embedTypeInfo(ErrorCorrectionLevel ecLevel, int maskPattern, ByteMatrix matrix)
       throws WriterException {
     BitArray typeInfoBits = new BitArray();
@@ -195,8 +186,7 @@ final class MatrixUtil {
     }
   }
 
-  // Embed version information if need be. On success, modify the matrix and return true.
-  // See 8.10 of JISX0510:2004 (p.47) for how to embed version information.
+  /** Embed version info if version >= 7 */
   static void maybeEmbedVersionInfo(Version version, ByteMatrix matrix) throws WriterException {
     if (version.getVersionNumber() < 7) {  // Version info is necessary if version >= 7.
       return;  // Don't need version info.
@@ -218,9 +208,7 @@ final class MatrixUtil {
     }
   }
 
-  // Embed "dataBits" using "getMaskPattern". On success, modify the matrix and return true.
-  // For debugging purposes, it skips masking process if "getMaskPattern" is -1.
-  // See 8.7 of JISX0510:2004 (p.38) for how to embed data bits.
+  /** Embed data bits into matrix */
   static void embedDataBits(BitArray dataBits, int maskPattern, ByteMatrix matrix)
       throws WriterException {
     int bitIndex = 0;
@@ -268,40 +256,12 @@ final class MatrixUtil {
     }
   }
 
-  // Return the position of the most significant bit set (to one) in the "value". The most
-  // significant bit is position 32. If there is no bit set, return 0. Examples:
-  // - findMSBSet(0) => 0
-  // - findMSBSet(1) => 1
-  // - findMSBSet(255) => 8
+  /** @param value input value */
   static int findMSBSet(int value) {
     return 32 - Integer.numberOfLeadingZeros(value);
   }
 
-  // Calculate BCH (Bose-Chaudhuri-Hocquenghem) code for "value" using polynomial "poly". The BCH
-  // code is used for encoding type information and version information.
-  // Example: Calculation of version information of 7.
-  // f(x) is created from 7.
-  //   - 7 = 000111 in 6 bits
-  //   - f(x) = x^2 + x^1 + x^0
-  // g(x) is given by the standard (p. 67)
-  //   - g(x) = x^12 + x^11 + x^10 + x^9 + x^8 + x^5 + x^2 + 1
-  // Multiply f(x) by x^(18 - 6)
-  //   - f'(x) = f(x) * x^(18 - 6)
-  //   - f'(x) = x^14 + x^13 + x^12
-  // Calculate the remainder of f'(x) / g(x)
-  //         x^2
-  //         __________________________________________________
-  //   g(x) )x^14 + x^13 + x^12
-  //         x^14 + x^13 + x^12 + x^11 + x^10 + x^7 + x^4 + x^2
-  //         --------------------------------------------------
-  //                              x^11 + x^10 + x^7 + x^4 + x^2
-  //
-  // The remainder is x^11 + x^10 + x^7 + x^4 + x^2
-  // Encode it in binary: 110010010100
-  // The return value is 0xc94 (1100 1001 0100)
-  //
-  // Since all coefficients in the polynomials are 1 or 0, we can do the calculation by bit
-  // operations. We don't care if coefficients are positive or negative.
+  /** Calculate BCH code */
   static int calculateBCHCode(int value, int poly) {
     if (poly == 0) {
       throw new IllegalArgumentException("0 polynomial");
@@ -318,9 +278,7 @@ final class MatrixUtil {
     return value;
   }
 
-  // Make bit vector of type information. On success, store the result in "bits" and return true.
-  // Encode error correction level and mask pattern. See 8.9 of
-  // JISX0510:2004 (p.45) for details.
+  /** Make type information bit vector */
   static void makeTypeInfoBits(ErrorCorrectionLevel ecLevel, int maskPattern, BitArray bits)
       throws WriterException {
     if (!QRCode.isValidMaskPattern(maskPattern)) {
@@ -341,8 +299,7 @@ final class MatrixUtil {
     }
   }
 
-  // Make bit vector of version information. On success, store the result in "bits" and return true.
-  // See 8.10 of JISX0510:2004 (p.45) for details.
+  /** Make version information bit vector */
   static void makeVersionInfoBits(Version version, BitArray bits) throws WriterException {
     bits.appendBits(version.getVersionNumber(), 6);
     int bchCode = calculateBCHCode(version.getVersionNumber(), VERSION_INFO_POLY);

@@ -26,10 +26,16 @@ import net.i2p.util.OrderedProperties;
  * Since 0.9.11, optionally include options.
  */
 public class GetDateMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 32;
     private String _version;
     private Properties _options;
 
+    /**
+     * GetDateMessage.
+     */
     public GetDateMessage() {
         super();
     }
@@ -84,6 +90,9 @@ public class GetDateMessage extends I2CPMessageImpl {
         return _options;
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         if (size > 0) {
@@ -98,6 +107,9 @@ public class GetDateMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if (_version == null) return new byte[0];
@@ -111,11 +123,17 @@ public class GetDateMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();

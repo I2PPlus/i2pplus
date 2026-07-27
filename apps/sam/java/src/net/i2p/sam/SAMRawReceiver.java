@@ -23,7 +23,7 @@ interface SAMRawReceiver {
      * @param proto I2CP protocol
      * @param fromPort I2CP from port
      * @param toPort I2CP to port
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     public void receiveRawBytes(byte[] data, int proto, int fromPort, int toPort) throws IOException;
 

@@ -22,29 +22,49 @@ package org.klomp.snark;
  * @since 0.1.0
  */
 interface StorageListener {
-    /** Called when the storage creates a new file of a given length. */
+    /**
+     * Called when the storage creates a new file of a given length.
+     *
+     * @param storage the storage instance
+     * @param name the file name
+     * @param length the file length
+     */
     void storageCreateFile(Storage storage, String name, long length);
 
-    /** Called to indicate that length bytes have been allocated. */
+    /**
+     * Called to indicate that length bytes have been allocated.
+     *
+     * @param storage the storage instance
+     * @param length the number of bytes allocated
+     */
     void storageAllocated(Storage storage, long length);
 
     /**
      * Called when storage is being checked and the num piece of that total pieces has been checked.
      * When the piece hash matches the expected piece hash checked will be true, otherwise it will
      * be false.
+     *
+     * @param storage the storage instance
+     * @param num the piece number
+     * @param checked whether the piece hash matches
      */
     void storageChecked(Storage storage, int num, boolean checked);
 
     /**
      * Called when all pieces in the storage have been checked. Does not mean that the storage is
      * complete, just that the state of the storage is known.
+     *
+     * @param storage the storage instance
      */
     void storageAllChecked(Storage storage);
 
-    /** Called the one time when the data is completely received and checked. */
+    /**
+     * Called the one time when the data is completely received and checked.
+     *
+     * @param storage the storage instance
+     */
     void storageCompleted(Storage storage);
 
-    /** Reset the peer's wanted pieces table Call after the storage double-check fails */
     /**
      * Resets the peer's wanted pieces table. Call after the storage double-check fails.
      *

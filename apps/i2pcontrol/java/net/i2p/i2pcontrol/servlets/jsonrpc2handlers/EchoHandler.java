@@ -17,6 +17,9 @@ public class EchoHandler implements RequestHandler {
     private static final String[] requiredArgs = {"Echo"};
     private final JSONRPC2Helper _helper;
 
+    /**
+     * EchoHandler.
+     */
     public EchoHandler(JSONRPC2Helper helper) {
         _helper = helper;
     }

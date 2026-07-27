@@ -12,18 +12,31 @@ import net.i2p.util.Log;
  */
 public class I2PSource implements Source {
 
+    /** The I2P session */
     protected final I2PSession sess;
+    /** The sink to receive datagrams */
     protected Sink sink;
+    /** ignored */
     private final Protocol protocol;
+    /** ignored */
     private final int port;
+    /** ignored */
     private final I2PDatagramDissector diss;
+    /** ignored */
     private final Log log;
 
     /**
      *  Protocol enum for I2P source handling.
      *  @since 0.9.53
      */
-    public enum Protocol { REPLIABLE, RAW, BOTH }
+    public enum Protocol {
+        /** Repliable datagrams */
+        REPLIABLE,
+        /** Raw datagrams */
+        RAW,
+        /** Both repliable and raw datagrams */
+        BOTH
+    }
 
     /**
      * Creates a source handling both repliable and raw datagrams on all ports.
@@ -92,13 +105,12 @@ public class I2PSource implements Source {
      */
     protected class Listener implements I2PSessionMuxedListener {
 
+        /** @throws IllegalStateException always */
         public void messageAvailable(I2PSession sess, int id, long size) {
             throw new IllegalStateException("muxed");
         }
 
-        /**
-         *  @since 0.9.53
-         */
+        /** @since 0.9.53 */
         public void messageAvailable(I2PSession session, int id, long size, int proto, int fromPort, int toPort) {
             if (log.shouldDebug())
                 log.debug("Got " + size + " bytes, proto: " + proto + " from port: " + fromPort + " to port: " + toPort);
@@ -122,13 +134,14 @@ public class I2PSource implements Source {
             }
         }
 
+        /** ignored */
         @Override
-        public void reportAbuse(I2PSession arg0, int arg1) {
-            // ignore
-        }
+        public void reportAbuse(I2PSession arg0, int arg1) {}
 
-        public void disconnected(I2PSession arg0) { /* no-op */ }
+        /** ignored */
+        public void disconnected(I2PSession arg0) {}
 
+        /** ignored */
         public void errorOccurred(I2PSession arg0, String arg1, Throwable arg2) {
             log.error(arg1, arg2);
         }

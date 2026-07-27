@@ -36,12 +36,33 @@ import java.io.IOException;
  * Provides methods for reading, writing, and seeking within files.
  */
 public interface RandomAccessInterface extends Closeable {
+	/**
+	 * getFilePointer.
+	 */
 	public long getFilePointer() throws IOException;
+	/**
+	 * length.
+	 */
 	public long length() throws IOException;
+	/**
+	 * read.
+	 */
 	public int read() throws IOException;
+	/**
+	 * read.
+	 */
 	public int read(byte[] b) throws IOException;
+	/**
+	 * read.
+	 */
 	public int read(byte[] b, int off, int len) throws IOException;
+	/**
+	 * seek.
+	 */
 	public void seek(long pos) throws IOException;
+	/**
+	 * setLength.
+	 */
 	public void setLength(long newLength) throws IOException;
 
 /**
@@ -52,40 +73,133 @@ public interface RandomAccessInterface extends Closeable {
 	public boolean canWrite();
 
 	// Closeable Methods
+	/**
+	 * close.
+	 */
 	public void close() throws IOException;
 
 	// DataInput Methods
+	/**
+	 * readBoolean.
+	 */
 	public boolean readBoolean() throws IOException;
+	/**
+	 * readByte.
+	 */
 	public byte readByte() throws IOException;
+	/**
+	 * readChar.
+	 */
 	public char readChar() throws IOException;
+	/**
+	 * readDouble.
+	 */
 	public double readDouble() throws IOException;
+	/**
+	 * readFloat.
+	 */
 	public float readFloat() throws IOException;
+	/**
+	 * readFully.
+	 */
 	public void readFully(byte[] b) throws IOException;
+	/**
+	 * readFully.
+	 */
 	public void readFully(byte[] b, int off, int len) throws IOException;
+	/**
+	 * readInt.
+	 */
 	public int readInt() throws IOException;
+	/**
+	 * readLine.
+	 */
 	public String readLine() throws IOException;
+	/**
+	 * readLong.
+	 */
 	public long readLong() throws IOException;
+	/**
+	 * readShort.
+	 */
 	public short readShort() throws IOException;
+	/**
+	 * readUnsignedByte.
+	 */
 	public int readUnsignedByte() throws IOException;
+	/**
+	 * readUnsignedShort.
+	 */
 	public int readUnsignedShort() throws IOException;
 	// I2P
+	/**
+	 * readUnsignedInt.
+	 */
 	public int readUnsignedInt() throws IOException;
+	/**
+	 * readUTF.
+	 */
 	public String readUTF() throws IOException;
+	/**
+	 * skipBytes.
+	 */
 	public int skipBytes(int n) throws IOException;
 
 	// DataOutput Methods
+	/**
+	 * write.
+	 */
 	public void write(int b) throws IOException;
+	/**
+	 * write.
+	 */
 	public void write(byte[] b) throws IOException;
+	/**
+	 * write.
+	 */
 	public void write(byte[] b, int off, int len) throws IOException;
+	/**
+	 * writeBoolean.
+	 */
 	public void writeBoolean(boolean v) throws IOException;
+	/**
+	 * writeByte.
+	 */
 	public void writeByte(int v) throws IOException;
+	/**
+	 * writeShort.
+	 */
 	public void writeShort(int v) throws IOException;
+	/**
+	 * writeChar.
+	 */
 	public void writeChar(int v) throws IOException;
+	/**
+	 * writeInt.
+	 */
 	public void writeInt(int v) throws IOException;
+	/**
+	 * writeLong.
+	 */
 	public void writeLong(long v) throws IOException;
+	/**
+	 * writeFloat.
+	 */
 	public void writeFloat(float v) throws IOException;
+	/**
+	 * writeDouble.
+	 */
 	public void writeDouble(double v) throws IOException;
+	/**
+	 * writeBytes.
+	 */
 	public void writeBytes(String s) throws IOException;
+	/**
+	 * writeChars.
+	 */
 	public void writeChars(String s) throws IOException;
+	/**
+	 * writeUTF.
+	 */
 	public void writeUTF(String str) throws IOException;
 }

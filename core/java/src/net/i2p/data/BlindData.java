@@ -132,6 +132,11 @@ public class BlindData {
     }
 
     /**
+     *  Creates a new BlindData instance for the given signing public key.
+     *
+     *  @param ctx the application context
+     *  @param spk the signing public key
+     *  @param blindType the type of blinded signature
      *  @param secret may be null or zero-length
      *  @throws IllegalArgumentException on various errors
      */

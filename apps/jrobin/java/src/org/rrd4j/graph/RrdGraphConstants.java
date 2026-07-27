@@ -423,25 +423,37 @@ public interface RrdGraphConstants {
          * java.awt.Font)}
          */
         WATERMARK;
+        /**
+         * Set
+         */
 
         public void set(Font f, Font[] fonts) {
             fonts[this.ordinal()] = f;
         }
+        /**
+         * Get
+         */
 
         public Font get(Font f, Font[] fonts) {
             return fonts[this.ordinal()];
         }
     }
 
+    /** Default font tag */
     FontTag FONTTAG_DEFAULT = FontTag.DEFAULT;
 
+    /** Title font tag */
     FontTag FONTTAG_TITLE = FontTag.TITLE;
 
+    /** Axis font tag */
     FontTag FONTTAG_AXIS = FontTag.AXIS;
 
+    /** Unit font tag */
     FontTag FONTTAG_UNIT = FontTag.UNIT;
 
+    /** Legend font tag */
     FontTag FONTTAG_LEGEND = FontTag.LEGEND;
 
+    /** Watermark font tag */
     FontTag FONTTAG_WATERMARK = FontTag.WATERMARK;
 }

@@ -23,6 +23,9 @@ class Draft extends Mail {
 	private String[] bcc;        // addresses only, enclosed by <>
 	private long size;
 	private static final String HDR_ATTACH = "X-I2P-Attachment: ";
+	/**
+	 * HDR_BCC.
+	 */
 	public static final String HDR_BCC = "Bcc: ";
 
 	/**
@@ -98,6 +101,9 @@ class Draft extends Mail {
 	@Override
 	public synchronized void setSize(long size) { /* no-op */ }
 
+	/**
+	 * hasAttachment.
+	 */
 	@Override
 	public synchronized boolean hasAttachment() {
 		return !attachments.isEmpty();

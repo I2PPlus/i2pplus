@@ -70,6 +70,7 @@ class IntroductionManager {
     private static final long PUNCH_CLEAN_TIME = 5*1000L;
     private static final int MAX_PUNCHES = 20;
 
+    /** method comment */
     public IntroductionManager(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
         _log = ctx.logManager().getLog(IntroductionManager.class);
@@ -83,11 +84,13 @@ class IntroductionManager {
         ctx.statManager().createRateStat("udp.relayBadIP", "Received IP or port was bad", "Transport [UDP]", UDPTransport.RATES);
     }
 
+    /** method comment */
     public void reset() {
         _inbound.clear();
         _outbound.clear();
     }
 
+    /** method comment */
     public void add(PeerState peer) {
         if (peer == null) return;
         // let's not use an introducer on a privileged port, sounds like trouble
@@ -103,6 +106,7 @@ class IntroductionManager {
         }
     }
 
+    /** method comment */
     public void remove(PeerState peer) {
         if (peer == null) return;
         long id = peer.getWeRelayToThemAs();
@@ -140,6 +144,7 @@ class IntroductionManager {
      * @param ipv6 what type is the current address we need introducers for?
      * @param ssuOptions out parameter, options are added
      * @return number of introducers added
+4 * @param howMany the howMany
      */
     public int pickInbound(RouterAddress current, boolean ipv6, Properties ssuOptions, int howMany) {
         if (_log.shouldDebug())
@@ -417,6 +422,8 @@ class IntroductionManager {
      *  SSU 2 only.
      *
      *  @since 0.9.55
+4 * @param alice the alice
+4 * @param data the data
      */
     void receiveRelayRequest(PeerState2 alice, byte[] data) {
         long time = DataHelper.fromLong(data, 8, 4) * 1000;
@@ -843,6 +850,9 @@ class IntroductionManager {
      *  SSU 2 only.
      *
      *  @since 0.9.55
+4 * @param peer the peer
+4 * @param status the status
+4 * @param data the data
      */
     @SuppressWarnings("UnconditionalIfStatement")
     void receiveRelayResponse(PeerState2 peer, int status, byte[] data) {
@@ -921,6 +931,8 @@ class IntroductionManager {
      *  SSU 2 only, out-of-session.
      *
      *  @since 0.9.55
+4 * @param charlie the charlie
+4 * @param data the data
      */
     void receiveHolePunch(RemoteHostId charlie, byte[] data) {
         // TODO: implement when needed

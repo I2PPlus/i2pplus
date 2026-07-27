@@ -19,6 +19,12 @@ class JobQueueRunner extends I2PThread {
     private volatile long _lastBegin;
     private volatile long _lastEnd;
 
+    /**
+     * Create a new job queue runner.
+     *
+     * @param context the router context
+     * @param id the runner id
+     */
     public JobQueueRunner(RouterContext context, int id) {
         _context = context;
         _id = id;
@@ -28,12 +34,19 @@ class JobQueueRunner extends I2PThread {
         // all createRateStat in JobQueue
     }
 
+    /** @return the current job */
     public Job getCurrentJob() {return _currentJob;}
+    /** @return the last job */
     public Job getLastJob() {return _lastJob;}
+    /** @return the runner id */
     public int getRunnerId() {return _id;}
+    /** Stop the runner. */
     public void stopRunning() {_keepRunning = false;}
+    /** Start the runner. */
     public void startRunning() {_keepRunning = true;}
+    /** @return the time the last job began */
     public long getLastBegin() {return _lastBegin;}
+    /** @return the time the last job ended */
     public long getLastEnd() {return _lastEnd;}
 
     public void run() {

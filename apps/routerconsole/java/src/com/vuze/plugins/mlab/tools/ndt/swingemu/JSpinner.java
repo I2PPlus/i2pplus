@@ -13,14 +13,17 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
 /**
  * Emulation of javax.swing.JSpinner for the NDT (Network Diagnostic Tool) plugin.
- * 
+ *
  * <p>This class provides a minimal stub implementation of a spinner component
  * to allow the NDT tool to run in headless environments. The spinner maintains
  * a number model and can return values but provides no actual UI functionality.</p>
- * 
+ *
  * <p>All operations except value retrieval are no-ops, maintaining API compatibility
  * without requiring an actual graphical display system.</p>
- * 
+ *
+ */
+/**
+ * Default constructor.
  */
 public class
 JSpinner
@@ -28,6 +31,11 @@ JSpinner
 {
 	private SpinnerNumberModel		model;
 
+	/**
+	 * Get the spinner value.
+	 *
+	 * @return the current value
+	 */
 	public int
 	getValue()
 	{
@@ -39,6 +47,11 @@ JSpinner
 		return( model.getValue());
 	}
 
+	/**
+	 * Set the spinner model.
+	 *
+	 * @param _model the spinner number model
+	 */
 	public void
 	setModel(
 		SpinnerNumberModel	_model )

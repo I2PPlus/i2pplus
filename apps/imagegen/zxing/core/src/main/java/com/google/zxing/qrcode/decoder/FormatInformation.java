@@ -26,6 +26,7 @@ package com.google.zxing.qrcode.decoder;
  */
 final class FormatInformation {
 
+  /** ignored */
   private static final int FORMAT_INFO_MASK_QR = 0x5412;
 
   /**
@@ -66,9 +67,12 @@ final class FormatInformation {
       {0x2BED, 0x1F},
   };
 
+  /** ignored */
   private final ErrorCorrectionLevel errorCorrectionLevel;
+  /** ignored */
   private final byte dataMask;
 
+  /** ignored */
   private FormatInformation(int formatInfo) {
     // Bits 3,4
     errorCorrectionLevel = ErrorCorrectionLevel.forBits((formatInfo >> 3) & 0x03);
@@ -76,6 +80,7 @@ final class FormatInformation {
     dataMask = (byte) (formatInfo & 0x07);
   }
 
+  /** @return number of differing bits */
   static int numBitsDiffering(int a, int b) {
     return Integer.bitCount(a ^ b);
   }
@@ -99,6 +104,7 @@ final class FormatInformation {
                                      maskedFormatInfo2 ^ FORMAT_INFO_MASK_QR);
   }
 
+  /** Decode with optional mask XOR applied */
   private static FormatInformation doDecodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) {
     // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
     int bestDifference = Integer.MAX_VALUE;
@@ -131,19 +137,27 @@ final class FormatInformation {
     return null;
   }
 
+  /** @return the error correction level */
   ErrorCorrectionLevel getErrorCorrectionLevel() {
     return errorCorrectionLevel;
   }
 
+  /** @return the data mask */
   byte getDataMask() {
     return dataMask;
   }
 
+  /**
+   * hashCode.
+   */
   @Override
   public int hashCode() {
     return (errorCorrectionLevel.ordinal() << 3) | dataMask;
   }
 
+  /**
+   * equals.
+   */
   @Override
   public boolean equals(Object o) {
     if (!(o instanceof FormatInformation)) {

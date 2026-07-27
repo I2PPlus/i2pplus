@@ -19,21 +19,37 @@ import net.i2p.util.SimpleByteCache;
  */
 abstract class EstablishBase implements EstablishState {
 
+    /**
+     * VERIFIED.
+     */
     public static final VerifiedEstablishState VERIFIED = new VerifiedEstablishState();
+    /**
+     * FAILED.
+     */
     public static final FailedEstablishState FAILED = new FailedEstablishState();
 
+    /**
+     * _context.
+     */
     protected final RouterContext _context;
+    /**
+     * _log.
+     */
     protected final Log _log;
 
     // bob receives (and alice sends)
+    /**
+     * _X.
+     */
     protected final byte[] _X;
     // alice receives (and bob sends)
+    /**
+     * _Y.
+     */
     protected final byte[] _Y;
     /**
-     *  OUR clock minus HIS clock, in seconds
-     *
-     *  Inbound: tsB - tsA - rtt/2
-     *  Outbound: tsA - tsB - rtt/2
+     *  OUR clock minus HIS clock, in seconds.
+     *  Inbound: tsB - tsA - rtt/2, Outbound: tsA - tsB - rtt/2
      */
     protected long _peerSkew;
 
@@ -43,18 +59,42 @@ abstract class EstablishBase implements EstablishState {
     /** bytes received so far */
     protected int _received;
 
+    /**
+     * _transport.
+     */
     protected final NTCPTransport _transport;
+    /**
+     * _con.
+     */
     protected final NTCPConnection _con;
 
+    /**
+     * MIN_RI_SIZE.
+     */
     protected static final int MIN_RI_SIZE = 387;
+    /**
+     * MAX_RI_SIZE.
+     */
     protected static final int MAX_RI_SIZE = 3072;
 
+    /**
+     * AES_SIZE.
+     */
     protected static final int AES_SIZE = 16;
 
+    /**
+     * _stateLock.
+     */
     protected final Object _stateLock = new Object();
+    /**
+     * _state.
+     */
     protected volatile State _state;
     private final AtomicBoolean _isCorrupt = new AtomicBoolean();
     private final AtomicBoolean _isComplete = new AtomicBoolean();
+    /**
+     * _failReason.
+     */
     protected String _failReason;
 
     /**
@@ -62,7 +102,9 @@ abstract class EstablishBase implements EstablishState {
      * Tracks the progression through various phases of the handshake.
      */
     protected enum State {
+        /** O b  i n i t */
         OB_INIT,
+        /** I b  i n i t */
         IB_INIT,
 
         /**
@@ -109,9 +151,13 @@ abstract class EstablishBase implements EstablishState {
 
         /** OB: got and verified 4; IB: got and verified 3 and sent 4 */
         VERIFIED,
+        /** C o r r u p t */
         CORRUPT
     }
 
+    /**
+     * STATES_DONE.
+     */
     protected static final Set<State> STATES_DONE = EnumSet.of(State.VERIFIED, State.CORRUPT);
 
     private EstablishBase() {
@@ -123,6 +169,9 @@ abstract class EstablishBase implements EstablishState {
         _con = null;
     }
 
+    /**
+     * EstablishBase.
+     */
     protected EstablishBase(RouterContext ctx, NTCPTransport transport, NTCPConnection con) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
@@ -157,7 +206,10 @@ abstract class EstablishBase implements EstablishState {
         }
     }
 
-    /** Change the handshake state */
+    /**
+     * Change the handshake state and update completion/corruption flags.
+     * @param state the new state
+     */
     protected void changeState(State state) {
         synchronized (_stateLock) {
             _state = state;
@@ -223,13 +275,20 @@ abstract class EstablishBase implements EstablishState {
         fail(reason, e);
     }
 
-    /** Caller must synch. */
+    /**
+     * Fail the handshake. Caller must synch.
+     * @param reason failure description
+     */
     protected void fail(String reason) { fail(reason, null); }
 
-    /** Caller must synch. */
+    /**
+     * Fail the handshake with exception. Caller must synch.
+     * @param reason failure description
+     * @param e the exception cause, may be null
+     */
     protected void fail(String reason, Exception e) { fail(reason, e, false); }
 
-    /** Caller must synch. */
+    /** Fail the handshake optionally suppressing skew stat. Caller must synch. */
     protected void fail(String reason, Exception e, boolean bySkew) {
         _failReason = reason;
         synchronized(_stateLock) {
@@ -248,7 +307,10 @@ abstract class EstablishBase implements EstablishState {
         releaseBufs(false);
     }
 
-    /** Get the failure reason if the handshake failed, or null if not failed/corrupt */
+    /**
+     * Get the failure reason if the handshake failed, or null if not failed/corrupt.
+     * @return failure reason string or null
+     */
     public String getFailReason() {
         if (_failReason != null) { return _failReason; }
         if (_isCorrupt.get()) {
@@ -271,8 +333,15 @@ abstract class EstablishBase implements EstablishState {
             SimpleByteCache.release(_prevEncrypted);
     }
 
+    /**
+     * Logging prefix string.
+     * @return string representation of this state
+     */
     protected String prefix() { return toString(); }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
@@ -288,15 +357,24 @@ abstract class EstablishBase implements EstablishState {
      */
     private static class VerifiedEstablishState extends EstablishBase {
 
+        /**
+         * VerifiedEstablishState.
+         */
         public VerifiedEstablishState() {
             super();
             changeState(State.VERIFIED);
         }
 
+        /**
+         * getVersion.
+         */
         public int getVersion() { return 1; }
 
         /*
          * @throws IllegalStateException always
+         */
+        /**
+         * receive.
          */
         @Override
         public void receive(ByteBuffer src) {
@@ -306,11 +384,17 @@ abstract class EstablishBase implements EstablishState {
         /*
          * @throws IllegalStateException always
          */
+        /**
+         * prepareOutbound.
+         */
         @Override
         public void prepareOutbound() {
             throw new IllegalStateException("prepareOutbound() on verified state, doing nothing!");
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() { return "VerifiedEstablishState: ";}
     }
@@ -320,15 +404,24 @@ abstract class EstablishBase implements EstablishState {
      */
     private static class FailedEstablishState extends EstablishBase {
 
+        /**
+         * FailedEstablishState.
+         */
         public FailedEstablishState() {
             super();
             changeState(State.CORRUPT);
         }
 
+        /**
+         * getVersion.
+         */
         public int getVersion() { return 1; }
 
         /*
          * @throws IllegalStateException always
+         */
+        /**
+         * receive.
          */
         @Override
         public void receive(ByteBuffer src) {
@@ -338,11 +431,17 @@ abstract class EstablishBase implements EstablishState {
         /*
          * @throws IllegalStateException always
          */
+        /**
+         * prepareOutbound.
+         */
         @Override
         public void prepareOutbound() {
             throw new IllegalStateException("prepareOutbound() on failed state, doing nothing!");
         }
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() { return "FailedEstablishState: ";}
     }
@@ -351,6 +450,7 @@ abstract class EstablishBase implements EstablishState {
      *  Mark a string for extraction by xgettext and translation.
      *  Use this only in static initializers.
      *  It does not translate!
+     *  @param s the string to mark for translation
      *  @return s
      */
     protected static final String _x(String s) { // NOSONAR S1845 i18n marker convention

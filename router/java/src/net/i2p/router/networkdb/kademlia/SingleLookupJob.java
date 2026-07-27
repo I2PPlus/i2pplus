@@ -31,11 +31,17 @@ class SingleLookupJob extends JobImpl {
      */
     public static final int MAX_TO_FOLLOW = SystemVersion.isSlow() || SystemVersion.getCPULoadAvg() > 90 ? 6 : 12;
 
+    /**
+     * SingleLookupJob.
+     */
     public SingleLookupJob(RouterContext ctx, DatabaseSearchReplyMessage dsrm) {
         super(ctx);
         _dsrm = dsrm;
     }
 
+    /**
+     * runJob.
+     */
     public void runJob() {
         Hash from = _dsrm.getFromHash();
         int limit = Math.min(_dsrm.getNumReplies(), MAX_TO_FOLLOW);
@@ -54,5 +60,8 @@ class SingleLookupJob extends JobImpl {
         }
     }
 
+    /**
+     * getName.
+     */
     public String getName() { return "Process DbStoreReplyMsg"; }
 }

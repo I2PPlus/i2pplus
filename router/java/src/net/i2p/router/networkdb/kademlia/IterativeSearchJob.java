@@ -209,6 +209,9 @@ public class IterativeSearchJob extends FloodSearchJob {
         _maxLeaseSetLookupTime = Math.max(3000, Math.min(MAX_SEARCH_TIME, val));
     }
 
+    /**
+     * PROP_ENCRYPT_RI.
+     */
     public static final String PROP_ENCRYPT_RI = "router.encryptRouterLookups";
 
     /** only on fast boxes, for now */
@@ -763,6 +766,9 @@ public class IterativeSearchJob extends FloodSearchJob {
         _facade.registerSearchTimeout(peer, this, expire);
     }
 
+    /**
+     * getName.
+     */
     @Override
     public String getName() {return "Start Iterative Search";}
 

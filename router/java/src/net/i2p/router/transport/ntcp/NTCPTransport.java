@@ -138,9 +138,21 @@ public class NTCPTransport extends TransportImpl {
     private long _lastInboundIPv6;
 
     // note: SSU version is i2np.udp.host, not hostname
+    /**
+     * PROP_I2NP_NTCP_HOSTNAME.
+     */
     public static final String PROP_I2NP_NTCP_HOSTNAME = "i2np.ntcp.hostname";
+    /**
+     * PROP_I2NP_NTCP_PORT.
+     */
     public static final String PROP_I2NP_NTCP_PORT = "i2np.ntcp.port";
+    /**
+     * PROP_I2NP_NTCP_AUTO_PORT.
+     */
     public static final String PROP_I2NP_NTCP_AUTO_PORT = "i2np.ntcp.autoport";
+    /**
+     * PROP_I2NP_NTCP_AUTO_IP.
+     */
     public static final String PROP_I2NP_NTCP_AUTO_IP = "i2np.ntcp.autoip";
     private static final int DEFAULT_COST = 10;
     private static final int NTCP2_OUTBOUND_COST = 14;
@@ -164,8 +176,15 @@ public class NTCPTransport extends TransportImpl {
     public static final String MIN_SIGTYPE_VERSION = "0.9.16";
 
     // NTCP2 stuff
+    /**
+     * STYLE.
+     */
     public static final String STYLE = "NTCP";
+    /**
+     * STYLE2.
+     */
     public static final String STYLE2 = "NTCP2";
+    /** N t c p2  i n t  v e r s i o n */
     static final int NTCP2_INT_VERSION = 2;
     /** "2" */
     static final String NTCP2_VERSION = Integer.toString(NTCP2_INT_VERSION);
@@ -173,6 +192,7 @@ public class NTCPTransport extends TransportImpl {
     static final String NTCP2_VERSION_ALT = NTCP2_VERSION + ',';
     /** 0 to disable, or 3/4/5 for enctypes 5/6/7 */
     static final int PQ_INT_VERSION = 4;
+    /** P q  v e r s i o n */
     static final String PQ_VERSION = Integer.toString(PQ_INT_VERSION);
     /** b64 static private key */
     public static final String PROP_NTCP2_SP = "i2np.ntcp2.sp";
@@ -189,6 +209,7 @@ public class NTCPTransport extends TransportImpl {
     private final String _b64Ntcp2StaticIV;
 
     /**
+     *  @param ctx the router context
      *  @param xdh null to disable NTCP2
      */
     public NTCPTransport(RouterContext ctx, X25519KeyFactory xdh) {
@@ -569,11 +590,17 @@ public class NTCPTransport extends TransportImpl {
         }
     }
 
+    /**
+     * afterSend.
+     */
     @Override
     public void afterSend(OutNetMessage msg, boolean sendSuccessful, boolean allowRequeue, long msToSend) {
         super.afterSend(msg, sendSuccessful, allowRequeue, msToSend);
     }
 
+    /**
+     * bid.
+     */
     public TransportBid bid(RouterInfo toAddress, int dataSize) {
         if (!isAlive()) {return null;}
         // passed in dataSize assumes 16 byte header, if NTCP2 then
@@ -701,6 +728,9 @@ public class NTCPTransport extends TransportImpl {
             (addr.length != 16 || _haveIPv6Address);
     }
 
+    /**
+     * allowConnection.
+     */
     public boolean allowConnection() {
         return _conByIdent.size() < getMaxConnections();
     }
@@ -708,18 +738,27 @@ public class NTCPTransport extends TransportImpl {
     /** queue up afterSend call, which can take some time w/ jobs, etc */
     void sendComplete(OutNetMessage msg) {_finisher.add(msg);}
 
+    /**
+     * isEstablished.
+     */
     @Override
     public boolean isEstablished(Hash dest) {
             NTCPConnection con = _conByIdent.get(dest);
             return (con != null) && con.isEstablished() && !con.isClosed();
     }
 
+    /**
+     * isConnecting.
+     */
     @Override
     public boolean isConnecting(Hash dest) {
             NTCPConnection con = _conByIdent.get(dest);
             return (con != null) && !con.isEstablished() && !con.isClosed();
     }
 
+    /**
+     * isBacklogged.
+     */
     @Override
     public boolean isBacklogged(Hash dest) {
             NTCPConnection con = _conByIdent.get(dest);
@@ -792,6 +831,9 @@ public class NTCPTransport extends TransportImpl {
         return removed;
     }
 
+    /**
+     * countPeers.
+     */
     public int countPeers() {
             return _conByIdent.size();
     }
@@ -1073,12 +1115,21 @@ public class NTCPTransport extends TransportImpl {
         _writer.startWriting(threads);
     }
 
+    /**
+     * isAlive.
+     */
     public boolean isAlive() {return _pumper.isAlive();}
 
-    /** Adjust reader threads to match configured count */
+    /**
+     * Adjust reader threads to match configured count.
+     * @since 0.9.70+
+     */
     public void adjustReaderThreads() { _reader.adjustThreads(); }
 
-    /** Adjust writer threads to match configured count */
+    /**
+     * Adjust writer threads to match configured count.
+     * @since 0.9.70+
+     */
     public void adjustWriterThreads() { _writer.adjustThreads(); }
 
     /**
@@ -1979,9 +2030,18 @@ public class NTCPTransport extends TransportImpl {
      * Cache the bid to reduce object churn
      */
     private class SharedBid extends TransportBid {
+        /**
+         * SharedBid.
+         */
         public SharedBid(int ms) {super(); setLatencyMs(ms);}
+        /**
+         * getTransport.
+         */
         @Override
         public Transport getTransport() {return NTCPTransport.this;}
+        /**
+         * toString.
+         */
         @Override
         public String toString() {return "NTCP bid @ " + getLatencyMs();}
     }

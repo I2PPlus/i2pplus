@@ -14,14 +14,18 @@ import java.io.IOException;
  */
 class RrdEnum<U extends RrdUpdater<U>, E extends Enum<E>> extends RrdPrimitive<U> {
 
+    /** ignored */
     private E cache;
+    /** ignored */
     private final Class<E> clazz;
 
+    /** Constructor */
     RrdEnum(RrdUpdater<U> updater, boolean isConstant, Class<E> clazz) {
         super(updater, RrdPrimitive.RRD_STRING, isConstant);
         this.clazz = clazz;
     }
 
+    /** Constructor */
     RrdEnum(RrdUpdater<U> updater, Class<E> clazz) {
         this(updater, false, clazz);
     }

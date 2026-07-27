@@ -30,36 +30,66 @@ package org.cybergarage.upnp.device;
  * @since 1.0
  */
 public class ST {
+    /**
+     * ALL_DEVICE.
+     */
     public static final String ALL_DEVICE = "ssdp:all";
+    /**
+     * ROOT_DEVICE.
+     */
     public static final String ROOT_DEVICE = "upnp:rootdevice";
+    /**
+     * UUID_DEVICE.
+     */
     public static final String UUID_DEVICE = "uuid";
+    /**
+     * URN_DEVICE.
+     */
     public static final String URN_DEVICE = "urn:schemas-upnp-org:device:";
+    /**
+     * URN_SERVICE.
+     */
     public static final String URN_SERVICE = "urn:schemas-upnp-org:service:";
 
+    /**
+     * isAllDevice.
+     */
     public static final boolean isAllDevice(String value) {
         if (value == null) return false;
         if (value.equals(ALL_DEVICE) == true) return true;
         return value.equals("\"" + ALL_DEVICE + "\"");
     }
 
+    /**
+     * isRootDevice.
+     */
     public static final boolean isRootDevice(String value) {
         if (value == null) return false;
         if (value.equals(ROOT_DEVICE) == true) return true;
         return value.equals("\"" + ROOT_DEVICE + "\"");
     }
 
+    /**
+     * isUUIDDevice.
+     */
     public static final boolean isUUIDDevice(String value) {
         if (value == null) return false;
         if (value.startsWith(UUID_DEVICE) == true) return true;
         return value.startsWith("\"" + UUID_DEVICE);
     }
 
+    /**
+     * isURNDevice.
+     */
     public static final boolean isURNDevice(String value) {
         if (value == null) return false;
         if (value.startsWith(URN_DEVICE) == true) return true;
         return value.startsWith("\"" + URN_DEVICE);
     }
 
+    /**
+     * isURNService.
+     */
     public static final boolean isURNService(String value) {
         if (value == null) return false;
         if (value.startsWith(URN_SERVICE) == true) return true;

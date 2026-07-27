@@ -35,6 +35,8 @@ public class RunStandalone {
     private String _host;
     private int _port;
     private static RunStandalone _instance;
+
+    /** The app context config file name */
     static final File APP_CONFIG_FILE = new File("i2psnark-appctx.config");
 
     private RunStandalone(String[] args) throws Exception {
@@ -68,7 +70,11 @@ public class RunStandalone {
         }
     }
 
-    /** Usage: RunStandalone [host [port]] (but must match what's in the jetty-i2psnark.xml file) */
+    /**
+     * Entry point for standalone I2PSnark.
+     *
+     * @param args args[0] host, args[1] port
+     */
     public static synchronized void main(String[] args) {
         try {
             RunStandalone runner = new RunStandalone(args);

@@ -18,6 +18,9 @@ import org.cybergarage.net.HostInterface;
 import org.cybergarage.util.Debug;
 import org.cybergarage.util.StringUtil;
 
+/**
+ * Represents a parsed HTTP packet with header and body handling.
+ */
 public class HTTPPacket {
     ////////////////////////////////////////////////
     //	Constructor
@@ -379,6 +382,11 @@ public class HTTPPacket {
         return lastToken;
     }
 
+    /**
+     * Checks if the first line of the HTTP packet has been set.
+     *
+     * @return true if the first line has content, false otherwise
+     */
     public boolean hasFirstLine() {
         return (0 < firstLine.length()) ? true : false;
     }
@@ -389,23 +397,51 @@ public class HTTPPacket {
 
     private Vector<HTTPHeader> httpHeaderList = new Vector<>();
 
+    /**
+     * Gets the number of headers in this HTTP packet.
+     *
+     * @return the number of headers
+     */
     public int getNHeaders() {
         return httpHeaderList.size();
     }
 
+    /**
+     * Adds a header to this HTTP packet.
+     *
+     * @param header the header to add
+     */
     public void addHeader(HTTPHeader header) {
         httpHeaderList.add(header);
     }
 
+    /**
+     * Adds a header with the specified name and value.
+     *
+     * @param name the header name
+     * @param value the header value
+     */
     public void addHeader(String name, String value) {
         HTTPHeader header = new HTTPHeader(name, value);
         httpHeaderList.add(header);
     }
 
+    /**
+     * Gets the header at the specified index.
+     *
+     * @param n the index of the header to retrieve
+     * @return the header at the specified index
+     */
     public HTTPHeader getHeader(int n) {
         return httpHeaderList.get(n);
     }
 
+    /**
+     * Gets the header with the specified name, ignoring case.
+     *
+     * @param name the header name
+     * @return the matching header, or null if not found
+     */
     public HTTPHeader getHeader(String name) {
         int nHeaders = getNHeaders();
         for (int n = 0; n < nHeaders; n++) {
@@ -416,15 +452,30 @@ public class HTTPPacket {
         return null;
     }
 
+    /**
+     * Clears all headers from this HTTP packet.
+     */
     public void clearHeaders() {
         httpHeaderList.clear();
         httpHeaderList = new Vector<>();
     }
 
+    /**
+     * Checks if a header with the specified name exists.
+     *
+     * @param name the header name
+     * @return true if the header exists, false otherwise
+     */
     public boolean hasHeader(String name) {
         return (getHeader(name) != null) ? true : false;
     }
 
+    /**
+     * Sets the value of a header. If the header does not exist, it is created.
+     *
+     * @param name the header name
+     * @param value the header value
+     */
     public void setHeader(String name, String value) {
         HTTPHeader header = getHeader(name);
         if (header != null) {
@@ -434,18 +485,41 @@ public class HTTPPacket {
         addHeader(name, value);
     }
 
+    /**
+     * Sets the value of a header from an integer.
+     *
+     * @param name the header name
+     * @param value the header value as integer
+     */
     public void setHeader(String name, int value) {
         setHeader(name, Integer.toString(value));
     }
 
+    /**
+     * Sets the value of a header from a long.
+     *
+     * @param name the header name
+     * @param value the header value as long
+     */
     public void setHeader(String name, long value) {
         setHeader(name, Long.toString(value));
     }
 
+    /**
+     * Sets the value of a header from an HTTP header object.
+     *
+     * @param header the header to set
+     */
     public void setHeader(HTTPHeader header) {
         setHeader(header.getName(), header.getValue());
     }
 
+    /**
+     * Gets the value of a header by name.
+     *
+     * @param name the header name
+     * @return the header value, or empty string if not found
+     */
     public String getHeaderValue(String name) {
         HTTPHeader header = getHeader(name);
         if (header == null) return "";
@@ -456,6 +530,14 @@ public class HTTPPacket {
     // set*Value
     ////////////////////////////////////////////////
 
+    /**
+     * Sets a string header value, wrapping it with the specified delimiters if not already wrapped.
+     *
+     * @param name the header name
+     * @param value the header value
+     * @param startWidth the start delimiter
+     * @param endWidth the end delimiter
+     */
     public void setStringHeader(String name, String value, String startWidth, String endWidth) {
         String headerValue = value;
         if (headerValue.startsWith(startWidth) == false) headerValue = startWidth + headerValue;
@@ -463,10 +545,24 @@ public class HTTPPacket {
         setHeader(name, headerValue);
     }
 
+    /**
+     * Sets a string header value, wrapping it with double quotes if not already wrapped.
+     *
+     * @param name the header name
+     * @param value the header value
+     */
     public void setStringHeader(String name, String value) {
         setStringHeader(name, value, "\"", "\"");
     }
 
+    /**
+     * Gets a string header value, stripping the specified delimiters if present.
+     *
+     * @param name the header name
+     * @param startWidth the start delimiter to strip
+     * @param endWidth the end delimiter to strip
+     * @return the header value with delimiters stripped
+     */
     public String getStringHeaderValue(String name, String startWidth, String endWidth) {
         String headerValue = getHeaderValue(name);
         if (headerValue.startsWith(startWidth) == true)
@@ -476,24 +572,54 @@ public class HTTPPacket {
         return headerValue;
     }
 
+    /**
+     * Gets a string header value, stripping double quotes if present.
+     *
+     * @param name the header name
+     * @return the header value with double quotes stripped
+     */
     public String getStringHeaderValue(String name) {
         return getStringHeaderValue(name, "\"", "\"");
     }
 
+    /**
+     * Sets an integer header value.
+     *
+     * @param name the header name
+     * @param value the header value as integer
+     */
     public void setIntegerHeader(String name, int value) {
         setHeader(name, Integer.toString(value));
     }
 
+    /**
+     * Sets a long header value.
+     *
+     * @param name the header name
+     * @param value the header value as long
+     */
     public void setLongHeader(String name, long value) {
         setHeader(name, Long.toString(value));
     }
 
+    /**
+     * Gets an integer header value by name.
+     *
+     * @param name the header name
+     * @return the header value as integer, or 0 if not found
+     */
     public int getIntegerHeaderValue(String name) {
         HTTPHeader header = getHeader(name);
         if (header == null) return 0;
         return StringUtil.toInteger(header.getValue());
     }
 
+    /**
+     * Gets a long header value by name.
+     *
+     * @param name the header name
+     * @return the header value as long, or 0 if not found
+     */
     public long getLongHeaderValue(String name) {
         HTTPHeader header = getHeader(name);
         if (header == null) return 0;
@@ -504,6 +630,11 @@ public class HTTPPacket {
     //	getHeader
     ////////////////////////////////////////////////
 
+    /**
+     * Gets all headers as a formatted string.
+     *
+     * @return the header string in "Name: Value" format, each header on its own line
+     */
     public String getHeaderString() {
         StringBuffer str = new StringBuffer();
 
@@ -533,10 +664,21 @@ public class HTTPPacket {
         if (updateWithContentLength == true) setContentLength(data.length);
     }
 
+    /**
+     * Sets the content of this HTTP packet. Automatically updates Content-Length header.
+     *
+     * @param data content data as byte array
+     */
     public void setContent(byte[] data) {
         setContent(data, true);
     }
 
+    /**
+     * Sets the content of this HTTP packet from a string.
+     *
+     * @param data content data as string
+     * @param updateWithContentLength whether to update Content-Length header automatically
+     */
     public void setContent(String data, boolean updateWithContentLength) {
         setContent(data.getBytes(StandardCharsets.UTF_8), updateWithContentLength);
     }
@@ -593,14 +735,29 @@ public class HTTPPacket {
 
     private InputStream contentInput = null;
 
+    /**
+     * Sets the content input stream.
+     *
+     * @param in the input stream to use as content source
+     */
     public void setContentInputStream(InputStream in) {
         contentInput = in;
     }
 
+    /**
+     * Gets the content input stream.
+     *
+     * @return the content input stream, or null if not set
+     */
     public InputStream getContentInputStream() {
         return contentInput;
     }
 
+    /**
+     * Checks if a content input stream has been set.
+     *
+     * @return true if a content input stream is set, false otherwise
+     */
     public boolean hasContentInputStream() {
         return (contentInput != null) ? true : false;
     }
@@ -609,10 +766,20 @@ public class HTTPPacket {
     //	ContentType
     ////////////////////////////////////////////////
 
+    /**
+     * Sets the Content-Type header.
+     *
+     * @param type the content type string
+     */
     public void setContentType(String type) {
         setHeader(HTTP.CONTENT_TYPE, type);
     }
 
+    /**
+     * Gets the Content-Type header value.
+     *
+     * @return the content type, or empty string if not set
+     */
     public String getContentType() {
         return getHeaderValue(HTTP.CONTENT_TYPE);
     }
@@ -621,10 +788,20 @@ public class HTTPPacket {
     //	ContentLanguage
     ////////////////////////////////////////////////
 
+    /**
+     * Sets the Content-Language header.
+     *
+     * @param code the language code
+     */
     public void setContentLanguage(String code) {
         setHeader(HTTP.CONTENT_LANGUAGE, code);
     }
 
+    /**
+     * Gets the Content-Language header value.
+     *
+     * @return the content language, or empty string if not set
+     */
     public String getContentLanguage() {
         return getHeaderValue(HTTP.CONTENT_LANGUAGE);
     }
@@ -633,6 +810,11 @@ public class HTTPPacket {
     //	Charset
     ////////////////////////////////////////////////
 
+    /**
+     * Gets the character set from the Content-Type header.
+     *
+     * @return the charset string, or empty string if not specified
+     */
     public String getCharSet() {
         String contentType = getContentType();
         if (contentType == null) return "";
@@ -658,10 +840,20 @@ public class HTTPPacket {
     //	ContentLength
     ////////////////////////////////////////////////
 
+    /**
+     * Sets the Content-Length header.
+     *
+     * @param len the content length
+     */
     public void setContentLength(long len) {
         setLongHeader(HTTP.CONTENT_LENGTH, len);
     }
 
+    /**
+     * Gets the content length from the Content-Length header.
+     *
+     * @return the content length
+     */
     public long getContentLength() {
         return getLongHeaderValue(HTTP.CONTENT_LENGTH);
     }
@@ -670,18 +862,38 @@ public class HTTPPacket {
     //	Connection
     ////////////////////////////////////////////////
 
+    /**
+     * Checks if the Connection header is set.
+     *
+     * @return true if the Connection header exists, false otherwise
+     */
     public boolean hasConnection() {
         return hasHeader(HTTP.CONNECTION);
     }
 
+    /**
+     * Sets the Connection header.
+     *
+     * @param value the connection directive
+     */
     public void setConnection(String value) {
         setHeader(HTTP.CONNECTION, value);
     }
 
+    /**
+     * Gets the Connection header value.
+     *
+     * @return the connection directive, or empty string if not set
+     */
     public String getConnection() {
         return getHeaderValue(HTTP.CONNECTION);
     }
 
+    /**
+     * Checks if the Connection header is set to close.
+     *
+     * @return true if close, false otherwise
+     */
     public boolean isCloseConnection() {
         if (hasConnection() == false) return false;
         String connection = getConnection();
@@ -689,6 +901,11 @@ public class HTTPPacket {
         return connection.equalsIgnoreCase(HTTP.CLOSE);
     }
 
+    /**
+     * Checks if the Connection header is set to keep-alive.
+     *
+     * @return true if keep-alive, false otherwise
+     */
     public boolean isKeepAliveConnection() {
         if (hasConnection() == false) return false;
         String connection = getConnection();
@@ -700,10 +917,22 @@ public class HTTPPacket {
     //	ContentRange
     ////////////////////////////////////////////////
 
+    /**
+     * Checks if the Content-Range or Range header is set.
+     *
+     * @return true if a range header exists, false otherwise
+     */
     public boolean hasContentRange() {
         return (hasHeader(HTTP.CONTENT_RANGE) || hasHeader(HTTP.RANGE));
     }
 
+    /**
+     * Sets the Content-Range header.
+     *
+     * @param firstPos the first byte position
+     * @param lastPos the last byte position
+     * @param length the total length, or 0 for unknown
+     */
     public void setContentRange(long firstPos, long lastPos, long length) {
         String rangeStr = "";
         rangeStr += HTTP.CONTENT_RANGE_BYTES + " ";
@@ -713,6 +942,11 @@ public class HTTPPacket {
         setHeader(HTTP.CONTENT_RANGE, rangeStr);
     }
 
+    /**
+     * Gets the content range values as an array.
+     *
+     * @return array containing first position, last position, and length
+     */
     public long[] getContentRange() {
         long[] range = new long[3];
         range[0] = range[1] = range[2] = 0;
@@ -748,16 +982,28 @@ public class HTTPPacket {
         return range;
     }
 
+    /**
+     * Get the first position from the content range.
+     * @return the first byte position
+     */
     public long getContentRangeFirstPosition() {
         long[] range = getContentRange();
         return range[0];
     }
 
+    /**
+     * Get the last position from the content range.
+     * @return the last byte position
+     */
     public long getContentRangeLastPosition() {
         long[] range = getContentRange();
         return range[1];
     }
 
+    /**
+     * Get the instance length from the content range.
+     * @return the instance length
+     */
     public long getContentRangeInstanceLength() {
         long[] range = getContentRange();
         return range[2];
@@ -767,19 +1013,36 @@ public class HTTPPacket {
     //	CacheControl
     ////////////////////////////////////////////////
 
+    /**
+     * Set the Cache-Control header.
+     * @param directive the cache directive
+     */
     public void setCacheControl(String directive) {
         setHeader(HTTP.CACHE_CONTROL, directive);
     }
 
+    /**
+     * Set the Cache-Control header with a directive and value.
+     * @param directive the cache directive
+     * @param value the directive value
+     */
     public void setCacheControl(String directive, int value) {
         String strVal = directive + "=" + Integer.toString(value);
         setHeader(HTTP.CACHE_CONTROL, strVal);
     }
 
+    /**
+     * Set the Cache-Control header with a max-age value.
+     * @param value the max age in seconds
+     */
     public void setCacheControl(int value) {
         setCacheControl(HTTP.MAX_AGE, value);
     }
 
+    /**
+     * Get the Cache-Control header value.
+     * @return the cache control string
+     */
     public String getCacheControl() {
         return getHeaderValue(HTTP.CACHE_CONTROL);
     }
@@ -788,10 +1051,18 @@ public class HTTPPacket {
     //	Server
     ////////////////////////////////////////////////
 
+    /**
+     * Set the Server header.
+     * @param name the server name
+     */
     public void setServer(String name) {
         setHeader(HTTP.SERVER, name);
     }
 
+    /**
+     * Get the Server header value.
+     * @return the server string
+     */
     public String getServer() {
         return getHeaderValue(HTTP.SERVER);
     }
@@ -800,6 +1071,11 @@ public class HTTPPacket {
     //	Host
     ////////////////////////////////////////////////
 
+    /**
+     * Set the Host header.
+     * @param host the host name
+     * @param port the port number
+     */
     public void setHost(String host, int port) {
         String hostAddr = host;
         if (HostInterface.isIPv6Address(host) == true) hostAddr = "[" + host + "]";
@@ -816,6 +1092,10 @@ public class HTTPPacket {
     	}
     */
 
+    /**
+     * Get the Host header value.
+     * @return the host string including port
+     */
     public String getHost() {
         return getHeaderValue(HTTP.HOST);
     }
@@ -824,11 +1104,19 @@ public class HTTPPacket {
     //	Date
     ////////////////////////////////////////////////
 
+    /**
+     * Set the Date header.
+     * @param cal the calendar to set as the date
+     */
     public void setDate(Calendar cal) {
         Date date = new Date(cal);
         setHeader(HTTP.DATE, date.getDateString());
     }
 
+    /**
+     * Get the Date header value.
+     * @return the date string
+     */
     public String getDate() {
         return getHeaderValue(HTTP.DATE);
     }
@@ -837,18 +1125,34 @@ public class HTTPPacket {
     //	Connection
     ////////////////////////////////////////////////
 
+    /**
+     * Check if the Transfer-Encoding header is set.
+     * @return true if Transfer-Encoding is present
+     */
     public boolean hasTransferEncoding() {
         return hasHeader(HTTP.TRANSFER_ENCODING);
     }
 
+    /**
+     * Set the Transfer-Encoding header.
+     * @param value the transfer encoding value
+     */
     public void setTransferEncoding(String value) {
         setHeader(HTTP.TRANSFER_ENCODING, value);
     }
 
+    /**
+     * Get the Transfer-Encoding header value.
+     * @return the transfer encoding string
+     */
     public String getTransferEncoding() {
         return getHeaderValue(HTTP.TRANSFER_ENCODING);
     }
 
+    /**
+     * Check if the content is chunked.
+     * @return true if chunked transfer encoding is set
+     */
     public boolean isChunked() {
         if (hasTransferEncoding() == false) return false;
         String transEnc = getTransferEncoding();

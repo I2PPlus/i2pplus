@@ -10,20 +10,28 @@ import org.bouncycastle.crypto.digests.SHAKEDigest;
 abstract class Symmetric
 {
 
+    /** ignored */
     final int xofBlockBytes;
 
+    /** Hash h operation. */
     abstract void hash_h(byte[] out, byte[] in, int outOffset);
 
+    /** Hash g operation. */
     abstract void hash_g(byte[] out, byte[] in);
 
+    /** XOF absorb operation. */
     abstract void xofAbsorb(byte[] seed, byte x, byte y);
 
+    /** XOF squeeze operation. */
     abstract void xofSqueezeBlocks(byte[] out, int outOffset, int outLen);
 
+    /** PRF operation. */
     abstract void prf(byte[] out, byte[] key, byte nonce);
 
+    /** KDF operation. */
     abstract void kdf(byte[] out, byte[] in);
 
+    /** Create symmetric. */
     Symmetric(int blockBytes)
     {
         this.xofBlockBytes = blockBytes;
@@ -37,11 +45,16 @@ abstract class Symmetric
     static class ShakeSymmetric
         extends Symmetric
         {
+        /** ignored */
         private final SHAKEDigest xof;
+        /** ignored */
         private final SHA3Digest sha3Digest512;
+        /** ignored */
         private final SHA3Digest sha3Digest256;
+        /** ignored */
         private final SHAKEDigest shakeDigest;
 
+        /** Create shake symmetric. */
         ShakeSymmetric()
         {
             super(168);

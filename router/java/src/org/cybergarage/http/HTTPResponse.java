@@ -8,6 +8,7 @@ package org.cybergarage.http;
 import java.io.InputStream;
 import org.cybergarage.util.Debug;
 
+/** comment */
 public class HTTPResponse extends HTTPPacket {
     ////////////////////////////////////////////////
     //	Constructor
@@ -105,6 +106,11 @@ public class HTTPResponse extends HTTPPacket {
     //	getHeader
     ////////////////////////////////////////////////
 
+    /**
+     * Return the full header string for this HTTP response.
+     *
+     * @return the header string
+     */
     public String getHeader() {
         StringBuffer str = new StringBuffer();
 
@@ -129,6 +135,7 @@ public class HTTPResponse extends HTTPPacket {
         return str.toString();
     }
 
+    /** method comment */
     public void print() {
         Debug.message(toString());
     }

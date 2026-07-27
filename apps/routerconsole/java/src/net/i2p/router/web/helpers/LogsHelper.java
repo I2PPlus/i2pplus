@@ -26,7 +26,9 @@ import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
 
-/** @since 0.9.33 */
+/** Helper for the logs page.
+ *  @since 0.9.33
+ */
 public class LogsHelper extends HelperBase {
 
     private static final Pattern LOG_LEVEL_PATTERN = Pattern.compile("\\|\\s*(DEBUG|INFO|WARN|ERROR|CRIT)\\s");
@@ -52,6 +54,9 @@ public class LogsHelper extends HelperBase {
         Pattern.compile("\\|.*\\[.*Queue.*\\].*?:")
     };
 
+    /**
+     * setContext.
+     */
     public void setContext(RouterContext context) {this._context = context;}
     private static final String _jstlVersion = jstlVersion();
     private static final int MAX_WRAPPER_LINES = 320;
@@ -515,6 +520,9 @@ public class LogsHelper extends HelperBase {
         return Translate.getString(s, _context, CORE_BUNDLE_NAME);
     }
 
+    /**
+     * isAdvanced.
+     */
     public boolean isAdvanced() {
         return _context.getBooleanProperty(PROP_ADVANCED);
     }

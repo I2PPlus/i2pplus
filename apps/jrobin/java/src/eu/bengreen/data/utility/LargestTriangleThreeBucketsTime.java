@@ -11,10 +11,16 @@ import org.rrd4j.graph.DownSampler;
  */
 public class LargestTriangleThreeBucketsTime extends DownSampleImpl {
 
+    /**
+     * LargestTriangleThreeBucketsTime.
+     */
     public LargestTriangleThreeBucketsTime(int threshold) {
         super(threshold);
     }
 
+    /**
+     * downsizeImpl.
+     */
     @Override
     public DataSet downsizeImpl(DownSampler.DataSet sampled, long[] timestamps, double[] values) {
         int inputLength = timestamps.length;

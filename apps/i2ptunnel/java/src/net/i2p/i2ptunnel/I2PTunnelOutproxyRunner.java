@@ -36,6 +36,9 @@ import net.i2p.util.Log;
  * @since 0.9.11
  */
 public class I2PTunnelOutproxyRunner extends I2PAppThread {
+    /**
+     * _log.
+     */
     protected final Log _log;
 
     private static final AtomicLong __runnerId = new AtomicLong();
@@ -234,6 +237,9 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
             setName((_toI2P ? "OutproxyFwdTo." : "OutproxyFwdFrom.") + _runnerId);
         }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             String from = "todo";  // Can be improved with socket info

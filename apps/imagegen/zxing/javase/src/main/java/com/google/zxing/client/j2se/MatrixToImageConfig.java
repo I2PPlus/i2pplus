@@ -23,7 +23,9 @@ import java.awt.image.BufferedImage;
  */
 public final class MatrixToImageConfig {
 
+  /** Default black on color. */
   public static final int BLACK = 0xFF000000;
+  /** Default white off color. */
   public static final int WHITE = 0xFFFFFFFF;
 
   private final int onColor;
@@ -38,6 +40,8 @@ public final class MatrixToImageConfig {
   }
 
   /**
+   * Creates a config with the given colors.
+   *
    * @param onColor pixel on color, specified as an ARGB value as an int
    * @param offColor pixel off color, specified as an ARGB value as an int
    */
@@ -46,14 +50,21 @@ public final class MatrixToImageConfig {
     this.offColor = offColor;
   }
 
+  /** @return the on color */
   public int getPixelOnColor() {
     return onColor;
   }
 
+  /** @return the off color */
   public int getPixelOffColor() {
     return offColor;
   }
 
+  /**
+   * Get the buffered image color model.
+   *
+   * @return the color model type
+   */
   int getBufferedImageColorModel() {
     if (onColor == BLACK && offColor == WHITE) {
       // Use faster BINARY if colors match default

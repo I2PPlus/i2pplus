@@ -58,14 +58,38 @@ final class ECConstants {
         BC_AVAILABLE = loaded;
     }
 
+    /**
+     * isBCAvailable.
+     */
+    /**
+     * Return whether Bouncy Castle is available.
+     */
     public static boolean isBCAvailable() { return BC_AVAILABLE; }
 
     private static class ECParms {
+        /**
+         * ps.
+         */
         public final String ps;
+        /**
+         * ns.
+         */
         public final String ns;
+        /**
+         * ss.
+         */
         public final String ss;
+        /**
+         * bs.
+         */
         public final String bs;
+        /**
+         * gxs.
+         */
         public final String gxs;
+        /**
+         * gys.
+         */
         public final String gys;
         private static final BigInteger A = new NativeBigInteger("-3");
         private static final int H = 1;
@@ -78,6 +102,12 @@ final class ECConstants {
             ps = pss; ns = nss; ss = sss; bs = bss; gxs = gxss; gys = gyss;
         }
 
+        /**
+         * genSpec.
+         */
+        /**
+         * Generate the EC parameter spec.
+         */
         public ECParameterSpec genSpec() {
             BigInteger pb = new NativeBigInteger(ps);
             BigInteger nb = new NativeBigInteger(ns);
@@ -324,8 +354,17 @@ final class ECConstants {
         return rv;
     }
 
+    /**
+     * P256_SPEC.
+     */
     public static final ECParameterSpec P256_SPEC = genSpec("secp256r1", "P-256", PARM_P256);
+    /**
+     * P384_SPEC.
+     */
     public static final ECParameterSpec P384_SPEC = genSpec("secp384r1", "P-384", PARM_P384);
+    /**
+     * P521_SPEC.
+     */
     public static final ECParameterSpec P521_SPEC = genSpec("secp521r1", "P-521", PARM_P521);
 
 
@@ -334,6 +373,9 @@ final class ECConstants {
      *  Needed to load family keys on Android via SigUtil.fromJavaKey().
      *
      *  @since 0.9.55
+     */
+    /**
+     * Compare for equality.
      */
     public static boolean equals(ECParameterSpec s1, ECParameterSpec s2) {
         if (s1 == s2)

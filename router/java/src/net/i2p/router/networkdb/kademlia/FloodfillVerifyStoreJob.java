@@ -59,10 +59,15 @@ class FloodfillVerifyStoreJob extends JobImpl {
 
     /**
      *  Delay a few seconds, then start the verify
+     *
+     *  @param ctx the router context
+     *  @param key the key to verify
      *  @param client generally the same as key, unless encrypted LS2; non-null
      *  @param published getDate() for RI or LS1, getPublished() for LS2
+     *  @param type the database entry type
      *  @param sentTo who to give the credit or blame to, can be null
      *  @param toSkip don't query any of these peers, may be null
+     *  @param facade the floodfill network database facade
      *  @since 0.9.53 added toSkip param
      */
     public FloodfillVerifyStoreJob(RouterContext ctx, Hash key, Hash client, long published, int type,

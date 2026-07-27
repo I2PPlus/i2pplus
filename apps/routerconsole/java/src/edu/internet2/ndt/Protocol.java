@@ -143,7 +143,7 @@ public class Protocol {
      *         <li>value= 3 : Error, mismatch between "length" field of
      *         ctrl-message and actual data read</li>
      *         </ul>
-     *
+     * @throws java.io.IOException if the read fails
      */
     public int recv_msg(Message msgParam) throws IOException {
         int length;
@@ -170,6 +170,7 @@ public class Protocol {
         } catch (IOException e) { /* ignored */ }
     }
 
+    /** @param jsonSupport whether to enable JSON support */
     public void setJsonSupport(boolean jsonSupport) {this.jsonSupport = jsonSupport;}
 
 }

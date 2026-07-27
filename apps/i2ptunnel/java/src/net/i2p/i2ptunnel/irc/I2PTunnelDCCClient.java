@@ -32,7 +32,13 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
 
     private static final long INBOUND_EXPIRE = 30*(long) 60*1000;
     private static final long INBOUND_STOP_EXPIRE = 30*(long) 60*1000;
+    /**
+     * CONNECT_START_EVENT.
+     */
     public static final String CONNECT_START_EVENT = "connectionStarted";
+    /**
+     * CONNECT_STOP_EVENT.
+     */
     public static final String CONNECT_STOP_EVENT = "connectionStopped";
 
     /**
@@ -153,6 +159,9 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
             super(s, i2ps, sockLock, null, null, mySockets, (FailCallback) null);
         }
 
+        /**
+         * run.
+         */
         @Override
         public void run() {
             _expires = getTunnel().getContext().clock().now() + INBOUND_STOP_EXPIRE;

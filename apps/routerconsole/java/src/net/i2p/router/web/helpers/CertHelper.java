@@ -16,6 +16,11 @@ import net.i2p.util.Log;
  */
 public class CertHelper extends HelperBase {
 
+    /**
+     *  Constructor.
+     */
+    public CertHelper() {}
+
     private static final String DIR = "certificates";
     private static final String I2CP = "i2cp/i2cp.local.crt";
     private static final String CONSOLE = "console/console.local.crt";
@@ -25,6 +30,10 @@ public class CertHelper extends HelperBase {
     private static final String slash = System.getProperty("file.separator");
     private Log _log;
 
+    /**
+     *  Generate the certificate summary HTML.
+     *  @return the HTML string
+     */
     public String getSummary() {
         if (_log == null)
             _log = _context.logManager().getLog(CertHelper.class);

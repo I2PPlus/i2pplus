@@ -15,13 +15,37 @@ package net.i2p.router.news;
  * @since 0.9.17
  */
 public class NewsEntry implements Comparable<NewsEntry> {
+    /**
+     * title.
+     */
     public String title;
+    /**
+     * link.
+     */
     public String link;
+    /**
+     * id.
+     */
     public String id;
+    /**
+     * updated.
+     */
     public long updated;
+    /**
+     * summary.
+     */
     public String summary;
+    /**
+     * content.
+     */
     public String content;
+    /**
+     * content.
+     */
     public String contentType; // attribute of content
+    /**
+     * author.
+     */
     public String authorName;  // subnode of author
 
     /** reverse, newest first */
@@ -34,6 +58,9 @@ public class NewsEntry implements Comparable<NewsEntry> {
         return 0;
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object o) {
         if(o == null) {
@@ -47,6 +74,9 @@ public class NewsEntry implements Comparable<NewsEntry> {
     	return this.compareTo(e) == 0;
     }
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
     	return (int) updated;

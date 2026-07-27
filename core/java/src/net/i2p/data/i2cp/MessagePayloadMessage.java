@@ -23,6 +23,9 @@ import java.io.OutputStream;
  * @author jrandom
  */
 public class MessagePayloadMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 31;
     private int _sessionId;
     private long _messageId;

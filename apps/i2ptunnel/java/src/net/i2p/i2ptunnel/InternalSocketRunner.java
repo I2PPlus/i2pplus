@@ -12,10 +12,15 @@ import net.i2p.util.Log;
  *
  * @since 0.7.9
  */
+/** Listens for in-JVM connections on internal socket */
 class InternalSocketRunner extends I2PAppThread {
+    /** ignored */
     private final I2PTunnelClientBase client;
+    /** ignored */
     private final int port;
+    /** ignored */
     private ServerSocket ss;
+    /** ignored */
     private volatile boolean open;
 
     /**
@@ -28,6 +33,9 @@ class InternalSocketRunner extends I2PAppThread {
         this.port = client.getLocalPort();
     }
 
+    /**
+     * run.
+     */
     @Override
     public final void run() {
         try {
@@ -46,6 +54,7 @@ class InternalSocketRunner extends I2PAppThread {
         }
     }
 
+    /** Stop the server socket and mark as closed */
     void stopRunning() {
         if (this.open) {
             this.open = false;

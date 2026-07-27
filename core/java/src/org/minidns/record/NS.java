@@ -22,15 +22,24 @@ import java.io.IOException;
  */
 public class NS extends RRWithTarget {
 
+    /**
+     * parse.
+     */
     public static NS parse(DataInputStream dis, byte[] data) throws IOException {
         DnsName target = DnsName.parse(dis, data);
         return new NS(target);
     }
 
+    /**
+     * NS.
+     */
     public NS(DnsName name) {
         super(name);
     }
 
+    /**
+     * getType.
+     */
     @Override
     public TYPE getType() {
         return TYPE.NS;

@@ -18,10 +18,12 @@ import net.i2p.router.web.Messages;
 import net.i2p.router.web.NewsHelper;
 
 /**
- * simple helper to control restarts/shutdowns in the left hand nav
- *
- */
+  * simple helper to control restarts/shutdowns in the left hand nav
+  *
+  */
 public class ConfigRestartBean {
+    /** Default constructor */
+    public ConfigRestartBean() {}
     /** all these are tagged below so no need to _x them here.
      *  order is: form value, form class, display text.
      */
@@ -32,6 +34,11 @@ public class ConfigRestartBean {
 
     private static final String PROP_ADVANCED = "routerconsole.advanced";
 
+    /**
+     * Check if advanced mode is enabled.
+     *
+     * @return true if advanced mode is enabled
+     */
     public static boolean isAdvanced() {
         RouterContext ctx = ContextHelper.getContext(null);
         return ctx.getBooleanProperty(PROP_ADVANCED);
@@ -40,8 +47,12 @@ public class ConfigRestartBean {
     /**
      * this also initiates the restart/shutdown based on action
      *
+     * @param urlBase the base URL
+     * @param action the action to perform
+     * @param session the HTTP session
      * @param nextNonce the next nonce to output in the form
      * @param nonce the nonce to be validated for actions
+     * @return the rendered HTML
      * @since 0.9.69
      */
     public static String renderStatus(String urlBase, String action, HttpSession session, String nextNonce, String nonce) {
@@ -188,17 +199,33 @@ public class ConfigRestartBean {
         buf.append("</form>\n");
     }
 
+    /**
+     * Check if the router is shutting down.
+     *
+     * @param ctx the router context
+     * @return true if shutting down
+     */
     public static boolean isShuttingDown(RouterContext ctx) {
         int code = ctx.router().scheduledGracefulExitCode();
         return Router.EXIT_GRACEFUL == code || Router.EXIT_HARD == code;
     }
 
+    /**
+     * Check if the router is restarting.
+     *
+     * @param ctx the router context
+     * @return true if restarting
+     */
     public static boolean isRestarting(RouterContext ctx) {
         int code = ctx.router().scheduledGracefulExitCode();
         return Router.EXIT_GRACEFUL_RESTART == code || Router.EXIT_HARD_RESTART == code;
     }
 
-    /** this is for sidebar.jsp */
+    /**
+     * this is for sidebar.jsp
+     *
+     * @return the time remaining until restart
+     */
     public static long getRestartTimeRemaining() {
         RouterContext ctx = ContextHelper.getContext(null);
         if (ctx.router().gracefulShutdownInProgress()) {return ctx.router().getShutdownTimeRemaining();}

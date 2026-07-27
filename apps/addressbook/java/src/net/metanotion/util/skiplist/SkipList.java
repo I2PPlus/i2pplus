@@ -44,14 +44,32 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 	protected static final int P = 2;
 	private static final int MIN_SLOTS = 4;
 	// these two are really final
+	/**
+	 * first.
+	 */
 	protected SkipSpan<K, V> first;
+	/**
+	 * stack.
+	 */
 	protected SkipLevels<K, V> stack;
 	// I2P mod
+	/**
+	 * rng.
+	 */
 	public static final Random rng = RandomSource.getInstance();
 
+	/**
+	 * size.
+	 */
 	protected int size;
 
+	/**
+	 * flush.
+	 */
 	public void flush() { /* no-op */ }
+	/**
+	 * SkipList.
+	 */
 	protected SkipList() {
         // Protected constructor for subclasses
     }
@@ -60,6 +78,9 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 	 *  @param span span size
 	 *  @throws IllegalArgumentException if size too big or too small
 	 */
+	/**
+	 * SkipList.
+	 */
 	public SkipList(int span) {
 		if(span < 1 || span > SkipSpan.MAX_SIZE)
 			throw new IllegalArgumentException("Invalid span size");
@@ -67,12 +88,21 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 		stack = new SkipLevels<>(1, first);
 	}
 
+	/**
+	 * size.
+	 */
 	public int size() { return size; }
 
+	/**
+	 * addItem.
+	 */
 	public void addItem() {
 		size++;
 	}
 
+	/**
+	 * delItem.
+	 */
 	public void delItem() {
 		if (size > 0)
 		       size--;
@@ -100,6 +130,9 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 		return max;
 	}
 
+	/**
+	 * put.
+	 */
 	@SuppressWarnings("unchecked")
 	public void put(K key, V val)	{
 		if(key == null) { throw new NullPointerException(); }
@@ -121,6 +154,9 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 		}
 	}
 
+	/**
+	 * remove.
+	 */
 	@SuppressWarnings("unchecked")
 	public V remove(K key) {
 		if(key == null) { throw new NullPointerException(); }
@@ -161,11 +197,17 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 		System.out.println(first.print());
 	}
 
+	/**
+	 * get.
+	 */
 	public V get(K key) {
 		if(key == null) { throw new NullPointerException(); }
 		return stack.get(stack.levels.length - 1, key);
 	}
 
+	/**
+	 * iterator.
+	 */
 	public SkipIterator<K, V> iterator() { return new SkipIterator<>(first, 0); }
 
 
@@ -179,6 +221,9 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 
 	// Levels adjusted to guarantee O(log n) search
 	// This is expensive proportional to the number of spans.
+	/**
+	 * balance.
+	 */
 	public void balance() {
 		// TODO Skip List Balancing Algorithm
 	}

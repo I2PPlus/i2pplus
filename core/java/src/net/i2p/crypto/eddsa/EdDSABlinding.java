@@ -17,10 +17,16 @@ import java.math.BigInteger;
  *
  * @since 0.9.38
  */
+/**
+ * EdDSABlinding.
+ */
 public final class EdDSABlinding {
 
     private static final byte[] ONE = Utils.hexToBytes("0100000000000000000000000000000000000000000000000000000000000000");
     private static final Field FIELD = EdDSANamedCurveTable.getByName("Ed25519").getCurve().getField();
+    /**
+     * ORDER.
+     */
     public static final BigInteger ORDER = new BigInteger("2").pow(252).add(new BigInteger("27742317777372353535851937790883648493"));
 
     private EdDSABlinding() {}
@@ -31,6 +37,9 @@ public final class EdDSABlinding {
      *  @param key must be SigType EdDSA_SHA512_Ed25519
      *  @param alpha generated from hash of secret data
      *  @throws UnsupportedOperationException unless supported
+     */
+    /**
+     * Blind an EdDSA key.
      */
     public static EdDSAPublicKey blind(EdDSAPublicKey key, EdDSAPrivateKey alpha) {
         GroupElement a = key.getA();
@@ -48,6 +57,9 @@ public final class EdDSABlinding {
      *  @param key must be SigType EdDSA_SHA512_Ed25519
      *  @param alpha generated from hash of secret data
      *  @throws UnsupportedOperationException unless supported
+     */
+    /**
+     * Blind an EdDSA key.
      */
     public static EdDSAPrivateKey blind(EdDSAPrivateKey key, EdDSAPrivateKey alpha) {
         byte[] a = key.geta();
@@ -70,6 +82,9 @@ public final class EdDSABlinding {
      *  @param alpha generated from hash of secret data
      *  @throws UnsupportedOperationException unless supported
      */
+    /**
+     * Unblind an EdDSA key using alpha.
+     */
     public static EdDSAPrivateKey unblind(EdDSAPrivateKey key, EdDSAPrivateKey alpha) {
         throw new UnsupportedOperationException();
     }
@@ -79,6 +94,9 @@ public final class EdDSABlinding {
      *
      *  @param b 64 bytes little endian of random
      *  @return 32 bytes little endian mod l
+     */
+    /**
+     * Reduce a 64-byte value modulo l.
      */
     public static byte[] reduce(byte[] b) {
         if (b.length != 64) throw new IllegalArgumentException("Must be 64 bytes");

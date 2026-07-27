@@ -65,6 +65,9 @@ public class SybilRenderer {
     private static final int[] HOURS = { 1, 3, 6, 12, 24, 7*24, 30*24, 0 };
     private static final int[] DAYS = { 2, 7, 30, 90, 365, 0 };
 
+    /**
+     * SybilRenderer.
+     */
     public SybilRenderer(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(SybilRenderer.class);
@@ -84,9 +87,15 @@ public class SybilRenderer {
     private static class PointsComparator implements Comparator<Hash>, Serializable {
          private final transient Map<Hash, Points> _points;
 
+         /**
+          * PointsComparator.
+          */
          public PointsComparator(Map<Hash, Points> points) {
              _points = points;
          }
+          /**
+           * compare.
+           */
           @Override
           public int compare(Hash l, Hash r) {
               // reverse
@@ -99,6 +108,9 @@ public class SybilRenderer {
      *  @since 0.9.38
      */
     private static class ReasonComparator implements Comparator<String>, Serializable {
+          /**
+           * compare.
+           */
           @Override
           public int compare(String l, String r) {
              int lc = l.indexOf(':');
@@ -696,7 +708,13 @@ public class SybilRenderer {
 
     private static class FooComparator<K extends Comparable> implements Comparator<K>, Serializable {
          private final Map<K, List<RouterInfo>> _o;
+         /**
+          * FooComparator.
+          */
          public FooComparator(Map<K, List<RouterInfo>> o) { _o = o;}
+          /**
+           * compare.
+           */
          @SuppressWarnings("unchecked")
           @Override
           public int compare(K l, K r) {
@@ -712,7 +730,13 @@ public class SybilRenderer {
     private static class FoofComparator implements Comparator<String>, Serializable {
          private final Map<String, List<RouterInfo>> _o;
          private final Collator _comp = Collator.getInstance();
+         /**
+          * FoofComparator.
+          */
          public FoofComparator(Map<String, List<RouterInfo>> o) { _o = o;}
+          /**
+           * compare.
+           */
           @Override
           public int compare(String l, String r) {
               // reverse by count

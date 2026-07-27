@@ -36,15 +36,24 @@ public abstract class InternetAddressRR<IA extends InetAddress> extends Data {
      */
     private transient IA inetAddress;
 
+    /**
+     * InternetAddressRR.
+     */
     protected InternetAddressRR(byte[] ip) {
         this.ip = ip;
     }
 
+    /**
+     * InternetAddressRR.
+     */
     protected InternetAddressRR(IA inetAddress) {
         this(inetAddress.getAddress());
         this.inetAddress = inetAddress;
     }
 
+    /**
+     * serialize.
+     */
     @Override
     public final void serialize(DataOutputStream dos) throws IOException {
         dos.write(ip);
@@ -59,6 +68,11 @@ public abstract class InternetAddressRR<IA extends InetAddress> extends Data {
         return ip.clone();
     }
 
+    /**
+     *  Get the InetAddress for this record.
+     *
+     *  @return the InetAddress, computed lazily and cached
+     */
     @SuppressWarnings("unchecked")
     public final IA getInetAddress() {
         if (inetAddress == null) {
@@ -71,6 +85,12 @@ public abstract class InternetAddressRR<IA extends InetAddress> extends Data {
         return inetAddress;
     }
 
+    /**
+     *  Create an InternetAddressRR from an InetAddress.
+     *
+     *  @param inetAddress the InetAddress to convert
+     *  @return an A or AAAA record as appropriate
+     */
     public static InternetAddressRR<? extends InetAddress> from(InetAddress inetAddress) {
         if (inetAddress instanceof Inet4Address) {
             return new A((Inet4Address) inetAddress);

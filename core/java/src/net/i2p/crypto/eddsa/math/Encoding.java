@@ -22,8 +22,14 @@ import java.io.Serializable;
  *
  */
 public abstract class Encoding implements Serializable {
+    /** The field */
     protected Field f;
 
+    /**
+     * Set the field.
+     *
+     * @param f the field to set
+     */
     public synchronized void setField(Field f) {
         if (this.f != null) throw new IllegalStateException("already set");
         this.f = f;

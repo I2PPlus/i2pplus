@@ -22,14 +22,23 @@ import java.io.InputStream;
  * @author jrandom
  */
 public class ReportAbuseMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 29;
     private SessionId _sessionId;
     private AbuseSeverity _severity;
     private AbuseReason _reason;
     private MessageId _messageId;
 
+    /**
+     * ReportAbuseMessage.
+     */
     public ReportAbuseMessage() { /* required for I2CP deserialization */ }
 
+    /**
+     * getSessionId.
+     */
     public SessionId getSessionId() {
         return _sessionId;
     }
@@ -44,34 +53,58 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
         return _sessionId;
     }
 
+    /**
+     * setSessionId.
+     */
     public void setSessionId(SessionId id) {
         _sessionId = id;
     }
 
+    /**
+     * getSeverity.
+     */
     public AbuseSeverity getSeverity() {
         return _severity;
     }
 
+    /**
+     * setSeverity.
+     */
     public void setSeverity(AbuseSeverity severity) {
         _severity = severity;
     }
 
+    /**
+     * getReason.
+     */
     public AbuseReason getReason() {
         return _reason;
     }
 
+    /**
+     * setReason.
+     */
     public void setReason(AbuseReason reason) {
         _reason = reason;
     }
 
+    /**
+     * getMessageId.
+     */
     public MessageId getMessageId() {
         return _messageId;
     }
 
+    /**
+     * setMessageId.
+     */
     public void setMessageId(MessageId id) {
         _messageId = id;
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
@@ -88,6 +121,9 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if ((_sessionId == null) || (_severity == null) || (_reason == null)) throw new I2CPMessageException("Not enough information to construct the message");
@@ -110,11 +146,17 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

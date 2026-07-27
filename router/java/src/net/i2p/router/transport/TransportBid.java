@@ -17,7 +17,13 @@ package net.i2p.router.transport;
 public class TransportBid {
     private int _latencyMs;
     private Transport _transport;
+    /**
+     * TRANSIENT_FAIL.
+     */
     public static final int TRANSIENT_FAIL = 999999;
+    /**
+     * TransportBid.
+     */
     public TransportBid() {_latencyMs = -1;}
 
     /**
@@ -26,11 +32,17 @@ public class TransportBid {
      * anything to do with latency.
      */
     public int getLatencyMs() {return _latencyMs;}
+    /**
+     * setLatencyMs.
+     */
     public void setLatencyMs(int milliseconds) {_latencyMs = milliseconds;}
 
     /**
      * Specifies the transport that offered this bid
      */
     public Transport getTransport() {return _transport;}
+    /**
+     * setTransport.
+     */
     public void setTransport(Transport transport) {_transport = transport;}
 }

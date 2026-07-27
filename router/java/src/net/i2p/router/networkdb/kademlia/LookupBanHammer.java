@@ -56,7 +56,7 @@ class LookupBanHammer {
     // Hard cap on unique (from, tunnel) pairs tracked to prevent memory leaks
     private static volatile int _maxEntries = 50000;
 
-    // Cleaner interval override (ms), controlled by Tuner
+    /** Cleaner interval override (ms), controlled by Tuner */
     static volatile long _cleanTimeMs = CLEAN_TIME;
 
     private final Cleaner _cleaner;
@@ -79,6 +79,7 @@ class LookupBanHammer {
 
     /**
      * Update the max entries cap (called by Tuner).
+     * @param max the new max entries
      * @since 0.9.70+
      */
     static void setMaxEntries(int max) {
@@ -91,8 +92,10 @@ class LookupBanHammer {
      */
     static int getMaxEntries() { return _maxEntries; }
 
+
     /**
      * Update the cleaner interval (called by Tuner).
+     * @param ms the new interval in ms
      * @since 0.9.70+
      */
     static void setCleanTimeMs(long ms) {
@@ -101,6 +104,7 @@ class LookupBanHammer {
 
     /**
      * Update the burst threshold (called by Tuner).
+     * @param t the new threshold
      * @since 0.9.70+
      */
     static void setBurstThreshold(int t) {

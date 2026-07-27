@@ -37,5 +37,11 @@ public interface Service {
      */
     public void restart();
 
+    /**
+     * Render the status as HTML.
+     *
+     * @param out the writer to write to
+     * @throws IOException if an error occurs writing
+     */
     public void renderStatusHTML(Writer out) throws IOException;
 }

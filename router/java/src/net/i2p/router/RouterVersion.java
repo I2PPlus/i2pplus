@@ -17,15 +17,27 @@ import net.i2p.CoreVersion;
 public class RouterVersion {
     /** deprecated */
     public static final String ID = "Git";
+    /**
+     * VERSION.
+     */
     public static final String VERSION = CoreVersion.VERSION;
     /** for example: "beta", "alpha", "rc" */
     public static final String STATUS = "";
+    /**
+     * BUILD.
+     */
     public static final long BUILD = 0;
 
     /** for example "-test" */
     public static final String EXTRA = "+";
+    /**
+     * FULL_VERSION.
+     */
     public static final String FULL_VERSION = VERSION + "-" + BUILD + EXTRA;
 
+    /**
+     * main.
+     */
     public static void main(String[] args) {
         System.out.println("I2P+ Router version: " + FULL_VERSION); // NOSONAR CLI tool
         System.out.println("I2P+ Core version: " + CoreVersion.VERSION + EXTRA); // NOSONAR CLI tool

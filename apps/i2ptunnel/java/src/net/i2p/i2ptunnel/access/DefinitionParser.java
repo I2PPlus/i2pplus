@@ -12,6 +12,9 @@ import net.i2p.data.DataHelper;
  */
 class DefinitionParser {
 
+    /** Default constructor */
+    private DefinitionParser() {}
+
     private static enum Rule { DEFAULT, EXPLICIT, FILE, RECORDER }
 
     /**
@@ -127,6 +130,7 @@ class DefinitionParser {
      * 60/5 record /path/suspicious.txt
      * </pre>
      *
+     * @param definition the string array defining the filter
      * @return a FilterDefinition POJO representation for internal use
      * @throws InvalidDefinitionException if the definition is malformed
      */

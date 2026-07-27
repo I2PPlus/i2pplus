@@ -26,23 +26,38 @@ import java.io.IOException;
  */
 public class DS extends DelegatingDnssecRR {
 
+    /**
+     * parse.
+     */
     public static DS parse(DataInputStream dis, int length) throws IOException {
         SharedData parsedData = DelegatingDnssecRR.parseSharedData(dis, length);
         return new DS(parsedData.keyTag, parsedData.algorithm, parsedData.digestType, parsedData.digest);
     }
 
+    /**
+     * DS.
+     */
     public DS(int keyTag, byte algorithm, byte digestType, byte[] digest) {
         super(keyTag, algorithm, digestType, digest);
     }
 
+    /**
+     * DS.
+     */
     public DS(int keyTag, SignatureAlgorithm algorithm, byte digestType, byte[] digest) {
         super(keyTag, algorithm, digestType, digest);
     }
 
+    /**
+     * DS.
+     */
     public DS(int keyTag, SignatureAlgorithm algorithm, DigestAlgorithm digestType, byte[] digest) {
         super(keyTag, algorithm, digestType, digest);
     }
 
+    /**
+     * getType.
+     */
     @Override
     public TYPE getType() {
         return TYPE.DS;

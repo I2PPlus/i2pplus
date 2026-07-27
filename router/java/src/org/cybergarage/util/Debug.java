@@ -24,6 +24,9 @@ import net.i2p.util.SystemVersion;
  * @since 1.0
  */
 public final class Debug {
+    /** Private constructor to prevent instantiation */
+    private Debug() {}
+
     private static Log _log;
 
     /**

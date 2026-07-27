@@ -22,7 +22,6 @@ import net.i2p.util.EventDispatcher;
   *   <li><b>Server:</b> Incoming HTTP connections via I2PServerSocket</li>
   *   <li><b>Client:</b> I2PTunnelHTTPBidirProxy for outbound HTTP requests</li>
   * </ul>
-  * </p>
   * <p>
   * Useful for applications requiring both server and client HTTP capabilities
   * through I2P, such as web applications making external API calls.

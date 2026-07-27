@@ -16,6 +16,10 @@ import net.i2p.router.web.PluginStarter;
  * refactored from confignav.jsp to reduce size and make translation easier
  */
 public class ConfigNavHelper extends HelperBase {
+    /**
+     * Construct a new ConfigNavHelper.
+     */
+    public ConfigNavHelper() {}
 
     /** configX.jsp */
     private static final String[] pages =
@@ -64,7 +68,11 @@ public class ConfigNavHelper extends HelperBase {
     }
 
     /**
+     *  Render the configuration navigation bar.
+     *
+     *  @param requestURI the current request URI
      *  @param graphical false for text-mode browsers
+     *  @throws java.io.IOException if writing to the output fails
      */
     public void renderNavBar(String requestURI, boolean graphical) throws IOException {
         StringBuilder buf = new StringBuilder(1024);

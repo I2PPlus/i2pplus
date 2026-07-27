@@ -40,8 +40,10 @@ import java.util.Arrays;
  * @author str4d
  */
 public class EdDSAEngine extends Signature {
+    /** The signature algorithm name. */
     public static final String SIGNATURE_ALGORITHM = "NONEwithEdDSA";
 
+    /** The message digest used for signing/verification. */
     protected MessageDigest digest;
     private ByteArrayOutputStream baos;
     private EdDSAKey key;
@@ -113,6 +115,11 @@ public class EdDSAEngine extends Signature {
         }
     }
 
+    /**
+     * Initialize the digest for signing.
+     *
+     * @param privKey the private key
+     */
     protected void digestInitSign(EdDSAPrivateKey privKey) {
         // Preparing for hash
         // r = H(h_b,...,h_2b-1,M)

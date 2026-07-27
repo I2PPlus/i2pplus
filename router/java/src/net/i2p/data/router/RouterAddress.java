@@ -42,17 +42,26 @@ import net.i2p.util.OrderedProperties;
  * @author jrandom
  */
 public class RouterAddress extends DataStructureImpl {
+    /** Cost value (0-255). */
     private volatile short _cost;
+    /** Expiration timestamp. */
     private long _expiration;
+    /** Transport style string. */
     private String _transportStyle;
+    /** Transport options. */
     private final Properties _options;
     // cached values
+    /** Cached IP address. */
     private byte[] _ip = NOT_LOOKED_UP;
+    /** Cached port number. */
     private int _port;
+    /** Property key for host */
 
     public static final String PROP_HOST = "host";
+    /** Property key for port */
     public static final String PROP_PORT = "port";
     private static final byte[] NOT_LOOKED_UP = new byte[0];
+    /** Routeraddress */
 
     public RouterAddress() {
         _options = new OrderedProperties();

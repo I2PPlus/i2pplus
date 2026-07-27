@@ -25,7 +25,8 @@ import java.util.Map;
  */
 public class TLSA extends Data {
 
-    private static final Map<Byte, CertUsage> CERT_USAGE_LUT = new HashMap<>();
+        /** ignored */
+        private static final Map<Byte, CertUsage> CERT_USAGE_LUT = new HashMap<>();
 
     /**
      * The certificate usage field.
@@ -79,39 +80,64 @@ public class TLSA extends Data {
         domainIssuedCertificate((byte) 3),
        ;
 
+        /**
+         * byteValue.
+         */
         public final byte byteValue;
 
+        /** ignored */
         CertUsage(byte byteValue) {
             this.byteValue = byteValue;
             CERT_USAGE_LUT.put(byteValue, this);
         }
     }
 
+    /** ignored */
     private static final Map<Byte, Selector> SELECTOR_LUT = new HashMap<>();
 
+    /**
+     * Selector.
+     */
     public enum Selector {
+        /** Full certificate */
         fullCertificate((byte) 0),
+        /** Subject public key info */
         subjectPublicKeyInfo((byte) 1),
        ;
 
+        /**
+         * byteValue.
+         */
         public final byte byteValue;
 
+        /** ignored */
         Selector(byte byteValue) {
             this.byteValue = byteValue;
             SELECTOR_LUT.put(byteValue, this);
         }
     }
 
+    /** ignored */
     private static final Map<Byte, MatchingType> MATCHING_TYPE_LUT = new HashMap<>();
 
+    /**
+     * MatchingType.
+     */
     public enum MatchingType {
+        /** No hash */
         noHash((byte) 0),
+        /** SHA-256 */
         sha256((byte) 1),
+        /** SHA-512 */
         sha512((byte) 2),
        ;
 
+        /**
+         * byteValue.
+         */
         public final byte byteValue;
 
+        /** ignored */
         MatchingType(byte byteValue) {
             this.byteValue = byteValue;
             MATCHING_TYPE_LUT.put(byteValue, this);
@@ -131,6 +157,9 @@ public class TLSA extends Data {
      */
     public final byte certUsageByte;
 
+    /**
+     * certUsage.
+     */
     public final CertUsage certUsage;
 
     /**
@@ -139,6 +168,9 @@ public class TLSA extends Data {
      */
     public final byte selectorByte;
 
+    /**
+     * selector.
+     */
     public final Selector selector;
 
     /**
@@ -146,6 +178,9 @@ public class TLSA extends Data {
      */
     public final byte matchingTypeByte;
 
+    /**
+     * matchingType.
+     */
     public final MatchingType matchingType;
 
     /**
@@ -153,6 +188,9 @@ public class TLSA extends Data {
      */
     private final byte[] certificateAssociation;
 
+    /**
+     * parse.
+     */
     public static TLSA parse(DataInputStream dis, int length) throws IOException {
         byte certUsage = dis.readByte();
         byte selector = dis.readByte();
@@ -162,6 +200,7 @@ public class TLSA extends Data {
         return new TLSA(certUsage, selector, matchingType, certificateAssociation);
     }
 
+    /** Create TLSA */
     TLSA(byte certUsageByte, byte selectorByte, byte matchingTypeByte, byte[] certificateAssociation) {
         this.certUsageByte = certUsageByte;
         this.certUsage = CERT_USAGE_LUT.get(certUsageByte);
@@ -175,11 +214,17 @@ public class TLSA extends Data {
         this.certificateAssociation = certificateAssociation;
     }
 
+    /**
+     * getType.
+     */
     @Override
     public Record.TYPE getType() {
         return Record.TYPE.TLSA;
     }
 
+    /**
+     * serialize.
+     */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
         dos.writeByte(certUsageByte);
@@ -188,16 +233,21 @@ public class TLSA extends Data {
         dos.write(certificateAssociation);
     }
 
+    /**
+     * toString.
+     */
     @Override
     @SuppressWarnings("UnnecessaryStringBuilder")
     public String toString() {
         return new StringBuilder().append(certUsageByte).append(' ').append(selectorByte).append(' ').append(matchingTypeByte).append(' ').append(new BigInteger(1, certificateAssociation).toString(16)).toString();
     }
 
+    /** @return copy of the certificate association data */
     public byte[] getCertificateAssociation() {
         return certificateAssociation.clone();
     }
 
+    /** @return true if the given data matches the certificate association */
     public boolean certificateAssociationEquals(byte[] otherCertificateAssociation) {
         return Arrays.equals(certificateAssociation, otherCertificateAssociation);
     }

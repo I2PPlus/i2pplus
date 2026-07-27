@@ -36,6 +36,9 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         return sb.toString();
     }
 
+    /**
+     * ExploratoryPeerSelector.
+     */
     public ExploratoryPeerSelector(RouterContext context) {
         super(context);
     }

@@ -5,7 +5,7 @@ package net.i2p.i2ptunnel.access;
  * <p>
  * Defined by maximum connection attempts over a time period in seconds.
  *
- * @since 0.9.40
+ *
  */
 class Threshold {
 
@@ -14,9 +14,12 @@ class Threshold {
     /** A Threshold that is always breached */
     static final Threshold DENY = new Threshold(0, 1);
 
+    /** ignored */
     private final int connections;
+    /** ignored */
     private final int seconds;
 
+    /** Threshold */
     Threshold(int connections, int seconds) {
         if (seconds < 1)
             throw new IllegalArgumentException("Threshold must be defined over at least 1 second");
@@ -26,10 +29,12 @@ class Threshold {
         this.seconds = seconds;
     }
 
+    /** @return the max connections */
     int getConnections() {
         return connections;
     }
 
+    /** @return the time window seconds */
     int getSeconds() {
         return seconds;
     }

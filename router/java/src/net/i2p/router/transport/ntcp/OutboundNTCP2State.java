@@ -46,15 +46,33 @@ class OutboundNTCP2State implements EstablishState {
     private int _received;
     private long _peerSkew;
 
+    /**
+     * KEY_SIZE.
+     */
     public static final int KEY_SIZE = 32;
+    /**
+     * MAC_SIZE.
+     */
     public static final int MAC_SIZE = 16;
+    /**
+     * IV_SIZE.
+     */
     public static final int IV_SIZE = 16;
+    /**
+     * OPTIONS1_SIZE.
+     */
     public static final int OPTIONS1_SIZE = 16;
     /** 64 */
     public static final int MSG1_SIZE = KEY_SIZE + OPTIONS1_SIZE + MAC_SIZE;
     private static final int PADDING1_MAX = 64;
     private static final int PADDING3_MAX = 64;
+    /**
+     * OPTIONS2_SIZE.
+     */
     public static final int OPTIONS2_SIZE = 16;
+    /**
+     * MSG2_SIZE.
+     */
     public static final int MSG2_SIZE = KEY_SIZE + OPTIONS2_SIZE + MAC_SIZE;
     /** 48 */
     public static final int MSG3P1_SIZE = KEY_SIZE + MAC_SIZE;
@@ -63,6 +81,9 @@ class OutboundNTCP2State implements EstablishState {
     public static final long MAX_SKEW = 60;
     // SipHash KDF things
     private static final byte[] ZEROLEN = new byte[0];
+    /**
+     * ZEROKEY.
+     */
     public static final byte[] ZEROKEY = new byte[KEY_SIZE];
     /** for SipHash keygen */
     private static final byte[] SIPHASH = DataHelper.getASCII("siphash");
@@ -556,9 +577,18 @@ class OutboundNTCP2State implements EstablishState {
      *  @since 0.9.16
      */
     public synchronized void close(String reason, Exception e) {fail(reason, e);}
+    /**
+     * fail.
+     */
     protected void fail(String reason) {fail(reason, null);}
+    /**
+     * fail.
+     */
     protected void fail(String reason, Exception e) {fail(reason, e, false);}
 
+    /**
+     * fail.
+     */
     protected synchronized void fail(String reason, Exception e, boolean bySkew) {
         if (_state == State.CORRUPT || _state == State.VERIFIED) {return;}
         changeState(State.CORRUPT);
@@ -595,6 +625,9 @@ class OutboundNTCP2State implements EstablishState {
         Arrays.fill(_tmp, (byte) 0);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);

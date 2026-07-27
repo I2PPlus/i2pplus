@@ -21,7 +21,8 @@ interface EstablishState {
      * If there are additional data in the buffer after the handshake is complete,
      * the EstablishState is responsible for passing it to NTCPConnection.
      *
-     * @throws IllegalStateException
+     * @param src the buffer to parse
+     * @throws IllegalStateException on invalid state
      */
     public void receive(ByteBuffer src);
 
@@ -30,14 +31,14 @@ interface EstablishState {
      * We are establishing an outbound connection, so prepare ourselves by
      * queueing up the write of the first part of the handshake
      *
-     * @throws IllegalStateException
+     * @throws IllegalStateException on invalid state
      */
     public void prepareOutbound();
 
-    /** did the handshake fail for some reason? */
+    /** @return whether the handshake failed */
     public boolean isCorrupt();
 
-    /** Get the failure reason if the handshake failed, or null if not failed/corrupt */
+    /** @return the failure reason, or null if not failed */
     public String getFailReason();
 
     /**
@@ -58,6 +59,7 @@ interface EstablishState {
 
     /**
      *  Release resources on timeout.
+     *  @param reason the reason for closing
      *  @param e may be null
      *  @since 0.9.16
      */

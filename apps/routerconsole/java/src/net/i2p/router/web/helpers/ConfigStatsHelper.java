@@ -36,6 +36,9 @@ public class ConfigStatsHelper extends HelperBase {
     private boolean _currentIsGraphed;
     private boolean _currentCanBeGraphed;
 
+    /**
+     * Construct a new ConfigStatsHelper.
+     */
     public ConfigStatsHelper() {
         _stats = new ArrayList<>();
         _graphs = new HashSet<>();
@@ -123,7 +126,11 @@ public class ConfigStatsHelper extends HelperBase {
         return true;
     }
 
-    /** Is the current stat the first in the group? */
+    /**
+     * Is the current stat the first in the group?
+     *
+     * @return true if the current stat is the first in the group
+     */
     public boolean groupRequired() {
         if (_currentIsFirstInGroup) {
             _currentIsFirstInGroup = false;
@@ -132,13 +139,47 @@ public class ConfigStatsHelper extends HelperBase {
             return false;
         }
     }
-    /** What group is the current stat in */
+    /**
+     * What group is the current stat in.
+     *
+     * @return the current group name
+     */
     public String getCurrentGroupName() { return _currentGroup; }
+    /**
+     * Get the current stat name.
+     *
+     * @return the current stat name
+     */
     public String getCurrentStatName() { return _currentStatName; }
+    /**
+     * Get the current graph name.
+     *
+     * @return the current graph name
+     */
     public String getCurrentGraphName() { return _currentGraphName; }
+    /**
+     * Get the description of the current stat.
+     *
+     * @return the current stat description
+     */
     public String getCurrentStatDescription() { return _currentStatDescription; }
+    /**
+     * Check whether the current stat is graphed.
+     *
+     * @return true if the current stat is graphed
+     */
     public boolean getCurrentIsGraphed() { return _currentIsGraphed; }
+    /**
+     * Check whether the current stat can be graphed.
+     *
+     * @return true if the current stat can be graphed
+     */
     public boolean getCurrentCanBeGraphed() { return _currentCanBeGraphed; }
+    /**
+     * Check whether the full stats are enabled.
+     *
+     * @return true if full stats are enabled
+     */
     public boolean getIsFull() { return _context.getBooleanProperty(StatManager.PROP_STAT_FULL); }
 
     /**

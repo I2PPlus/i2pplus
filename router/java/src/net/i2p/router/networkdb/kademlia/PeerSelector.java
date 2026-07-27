@@ -22,17 +22,25 @@ import java.util.Set;
  * This class only provides common constructor and logging functionality.</p>
  */
 abstract class PeerSelector {
+    /** _log. / */
     protected final Log _log;
+    /** _context. / */
     protected final RouterContext _context;
 
+    /** PeerSelector. / */
     public PeerSelector(RouterContext ctx) {
         _context = ctx;
         _log = _context.logManager().getLog(getClass());
     }
 
+    /** List */
     abstract List<Hash> selectNearest(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets);
+    /** List */
     abstract List<Hash> selectNearestExplicit(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets);
+    /** List */
     abstract List<Hash> selectNearestExplicitThin(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets);
+    /** List */
     abstract List<Hash> selectMostReliablePeers(Hash key, int numClosest, Set<Hash> alreadyChecked, KBucketSet<Hash> kbuckets);
 
 }
+

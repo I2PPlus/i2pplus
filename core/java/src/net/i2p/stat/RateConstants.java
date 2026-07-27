@@ -98,11 +98,16 @@ public final class RateConstants {
         60 * 60 * 1000L // 1 hour
     };
 
-    // Convenience constants for individual periods
+    /** Convenience constant for 1 minute (60,000 ms) */
     public static final long ONE_MINUTE = 60 * 1000L;
+    /** Convenience constant for 5 minutes (300,000 ms) */
     public static final long FIVE_MINUTES = 5 * 60 * 1000L;
+    /** Convenience constant for 10 minutes (600,000 ms) */
     public static final long TEN_MINUTES = 10 * 60 * 1000L;
+    /** Convenience constant for 30 minutes (1,800,000 ms) */
     public static final long THIRTY_MINUTES = 30 * 60 * 1000L;
+    /** Convenience constant for 1 hour (3,600,000 ms) */
     public static final long ONE_HOUR = 60 * 60 * 1000L;
+    /** Convenience constant for 1 day (86,400,000 ms) */
     public static final long ONE_DAY = 24 * 60 * 60 * 1000L;
 }

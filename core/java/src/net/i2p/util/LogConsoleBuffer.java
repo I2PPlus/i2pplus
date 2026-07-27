@@ -38,6 +38,7 @@ public class LogConsoleBuffer {
         _critBuffer = new UIMessages(lim + 4);
     }
 
+    /** Add */
     void add(String msg) {
         _buffer.addMessageNoEscape(msg);
     }

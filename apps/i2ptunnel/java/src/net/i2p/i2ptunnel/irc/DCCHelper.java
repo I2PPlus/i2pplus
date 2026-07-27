@@ -9,16 +9,22 @@ public interface DCCHelper {
 
     /**
      *  Is the DCC helper enabled?
+     *
+     *  @return true if enabled
      */
     public boolean isEnabled();
 
     /**
      *  String to put in the outgoing DCC
+     *
+     *  @return the b32 hostname string
      */
     public String getB32Hostname();
 
     /**
      *  Our IP address (taken from the socket), must be IPv4
+     *
+     *  @return the local IP address bytes
      */
     public byte[] getLocalAddress();
 

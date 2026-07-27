@@ -62,6 +62,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
      * Caller should call _mgr.addDownloader(this), which will start things off.
      *
      * @param dataDir null to default to snark data directory
+      * @param ctx the ctx
      */
     public FetchAndAdd(I2PAppContext ctx, SnarkManager mgr, String url, File dataDir) {
         // magnet constructor

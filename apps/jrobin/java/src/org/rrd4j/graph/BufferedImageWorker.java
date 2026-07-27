@@ -18,17 +18,23 @@ import javax.imageio.stream.ImageOutputStream;
  */
 class BufferedImageWorker extends ImageWorker {
 
-    /**
-     * Builder class for creating BufferedImageWorker instances with configurable parameters.
-     * Supports fluent API for setting image properties, writer, and output format.
-     */
-    static class Builder {
+/**
+ *  Builder class for creating BufferedImageWorker instances with configurable parameters.
+ *  Supports fluent API for setting image properties, writer, and output format.
+ *
+ *  <p>Use {@link BufferedImageWorker#getBuilder()} to create a new builder instance.</p>
+ */
+static class Builder {
         private int width = 1;
         private int height = 1;
         private RrdGraphDef gdef;
         private ImageWriter writer;
         private ImageWriteParam imageWriteParam;
 
+        /** Default constructor */
+        Builder() {}
+
+        /** @return the built BufferedImageWorker */
         BufferedImageWorker build() {
             return new BufferedImageWorker(this);
         }
@@ -124,12 +130,18 @@ class BufferedImageWorker extends ImageWorker {
     public static Builder getBuilder() {
         return new Builder();
     }
+    /** Img */
 
     private BufferedImage img;
+    /** Img width */
     private int imgWidth;
+    /** Img height */
     private int imgHeight;
+    /** Initial affine transform */
     private AffineTransform initialAffineTransform;
+    /** Writer */
     private final ImageWriter writer;
+    /** Iwp */
     private final ImageWriteParam iwp;
 
     private BufferedImageWorker(Builder builder) {
@@ -140,8 +152,11 @@ class BufferedImageWorker extends ImageWorker {
         resize(imgWidth, imgHeight);
     }
 
-    /*
-     * Not for use, only for tests
+    /**
+     *  Not for use, only for tests
+     *
+     *  @param width the width in pixels
+     *  @param height the height in pixels
      */
     BufferedImageWorker(int width, int height) {
         this.imgHeight = height;
@@ -171,6 +186,9 @@ class BufferedImageWorker extends ImageWorker {
 
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
     }
+    /**
+     * Reset the allocator state
+     */
 
     protected void reset(Graphics2D g2d) {
         g2d.setTransform(initialAffineTransform);

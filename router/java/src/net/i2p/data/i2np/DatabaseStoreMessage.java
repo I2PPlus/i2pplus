@@ -33,6 +33,9 @@ import net.i2p.data.router.RouterInfo;
  * @author jrandom
  */
 public class DatabaseStoreMessage extends FastI2NPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public final static int MESSAGE_TYPE = 1;
     private Hash _key;
     private DatabaseEntry _dbEntry;
@@ -42,22 +45,37 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     private Hash _replyGateway;
     private boolean _receivedAsReply;
 
+    /**
+     * Creates a new DatabaseStoreMessage.
+     *
+     * @param context the I2P app context
+     */
     public DatabaseStoreMessage(I2PAppContext context) {
         super(context);
     }
 
-    /** Defines the key in the network database being stored */
+    /**
+     * Defines the key in the network database being stored.
+     *
+     * @return the key, or null if not set
+     */
     public Hash getKey() {
         if (_key != null) {return _key;} // receive
         if (_dbEntry != null) {return _dbEntry.getHash();} // create
         return null;
     }
 
-    /** Defines the entry in the network database being stored */
+    /**
+     * Defines the entry in the network database being stored.
+     *
+     * @return the database entry
+     */
     public DatabaseEntry getEntry() {return _dbEntry;}
 
     /**
      * This also sets the key
+     *
+     * @param entry the entry to store
      * @throws IllegalStateException if data previously set, to protect saved checksum
      */
     public void setEntry(DatabaseEntry entry) {
@@ -86,9 +104,29 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
         _replyToken = token;
     }
 
+    /**
+     * Get the reply tunnel.
+     *
+     * @return the reply tunnel, or null
+     */
     public TunnelId getReplyTunnel() {return _replyTunnel;}
+    /**
+     * Set the reply tunnel.
+     *
+     * @param id the reply tunnel
+     */
     public void setReplyTunnel(TunnelId id) {_replyTunnel = id;}
+    /**
+     * Get the reply gateway.
+     *
+     * @return the reply gateway, or null
+     */
     public Hash getReplyGateway() {return _replyGateway;}
+    /**
+     * Set the reply gateway.
+     *
+     * @param peer the reply gateway
+     */
     public void setReplyGateway(Hash peer) {_replyGateway = peer;}
 
     /**
@@ -108,6 +146,9 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
      */
     public void setReceivedAsReply() {_receivedAsReply = true;}
 
+    /**
+     * readMessage.
+     */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
@@ -175,7 +216,8 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     /**
      *  Calculate the message body's length (not including the header and footer)
      *
-     *  @throws IllegalStateException
+     *  @return the length of the message body
+     *  @throws IllegalStateException if the entry is not set
      */
     protected int calculateWrittenLength() {
         // TODO if _byteCache is non-null, don't check _dbEntry
@@ -231,8 +273,14 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
         return curIndex;
     }
 
+    /**
+     * getType.
+     */
     public int getType() {return MESSAGE_TYPE;}
 
+    /**
+     * hashCode.
+     */
     @Override
     public int hashCode() {
         return DataHelper.hashCode(getKey()) +
@@ -242,6 +290,9 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
                DataHelper.hashCode(_replyGateway);
     }
 
+    /**
+     * equals.
+     */
     @Override
     public boolean equals(Object object) {
         if ( (object != null) && (object instanceof DatabaseStoreMessage) ) {
@@ -254,6 +305,9 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
         } else {return false;}
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();

@@ -15,6 +15,12 @@ class IPThrottler {
     private final int _max;
     private final long _cleanTime;
 
+    /**
+     * Create an IP throttler.
+     *
+     * @param max the maximum count before throttling
+     * @param time the cleanup interval in ms
+     */
     public IPThrottler(int max, long time) {
         _max = max;
         _cleanTime = time;
@@ -24,6 +30,9 @@ class IPThrottler {
 
     /**
      *  Increments before checking
+     *
+     *  @param ip the IP address bytes
+     *  @return true if the IP should be throttled
      */
     public boolean shouldThrottle(byte[] ip) {
         // for IPv4 we simply use the IP;

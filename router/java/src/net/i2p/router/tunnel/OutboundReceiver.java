@@ -28,6 +28,9 @@ class OutboundReceiver implements TunnelGateway.Receiver {
     private static final long MAX_LOOKUP_TIME = 15*1000L;
     private static final int PRIORITY = OutNetMessage.PRIORITY_MY_DATA;
 
+    /**
+     * OutboundReceiver.
+     */
     public OutboundReceiver(RouterContext ctx, PooledTunnelCreatorConfig cfg) {
         _context = ctx;
         _log = ctx.logManager().getLog(OutboundReceiver.class);
@@ -38,6 +41,9 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         // all createRateStat() in TunnelDispatcher
     }
 
+    /**
+     * receiveEncrypted.
+     */
     public long receiveEncrypted(byte[] encrypted) {
         TunnelDataMessage msg = new TunnelDataMessage(_context);
         msg.setData(encrypted);
@@ -85,13 +91,22 @@ class OutboundReceiver implements TunnelGateway.Receiver {
     private class SendJob extends JobImpl {
         private final TunnelDataMessage _msg;
 
+        /**
+         * SendJob.
+         */
         public SendJob(RouterContext ctx, TunnelDataMessage msg) {
             super(ctx);
             _msg = msg;
         }
 
+        /**
+         * getName.
+         */
         public String getName() { return "Send to OBGW after Lookup"; }
 
+        /**
+         * runJob.
+         */
         public void runJob() {
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(_config.getPeer(1));
             if (_log.shouldDebug())
@@ -113,12 +128,21 @@ class OutboundReceiver implements TunnelGateway.Receiver {
      *  This should be very rare, we should always have the RI locally.
      */
     private class LookupFailedJob extends JobImpl {
+        /**
+         * LookupFailedJob.
+         */
         public LookupFailedJob(RouterContext ctx) {
             super(ctx);
         }
 
+        /**
+         * getName.
+         */
         public String getName() { return "Timeout OBGW Lookup"; }
 
+        /**
+         * runJob.
+         */
         public void runJob() {
             if (_log.shouldWarn())
                 _log.warn("Lookup of [" + _config.getPeer(1).toBase64().substring(0,6) + "] failed for " + _config);
@@ -133,12 +157,21 @@ class OutboundReceiver implements TunnelGateway.Receiver {
      *  @since 0.9.53
      */
     private class SendFailedJob extends JobImpl {
+        /**
+         * SendFailedJob.
+         */
         public SendFailedJob(RouterContext ctx) {
             super(ctx);
         }
 
+        /**
+         * getName.
+         */
         public String getName() { return "OBGW Send Failure"; }
 
+        /**
+         * runJob.
+         */
         public void runJob() {
             if (_log.shouldWarn())
                 _log.warn("Send to [" + _config.getPeer(1).toBase64().substring(0,6) + "] failed for " + _config);

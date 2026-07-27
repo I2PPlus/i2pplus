@@ -55,6 +55,7 @@ import net.i2p.I2PAppContext;
  */
 public class SidebarHelper extends HelperBase {
 
+    /** Active HTTP session for nonce-based form validation */
     private HttpSession _session;
 
     /**
@@ -63,25 +64,43 @@ public class SidebarHelper extends HelperBase {
      */
     public void storeSession(HttpSession session) { _session = session; }
 
+    /** Thin space separator */
     static final String THINSP = " / ";
+    /** Separator character for summary bar section configuration */
     private static final char S = ',';
+    /** Integer formatter with thousands separators */
     private static final DecimalFormat INTEGER_FORMAT = new DecimalFormat("###,###,##0");
+    /** Format a long value with thousands separators */
     private static String fmtInt(long val) { synchronized (INTEGER_FORMAT) { return INTEGER_FORMAT.format(val); } }
+    /** One-decimal-place formatter */
     private static final DecimalFormat ONE_DECIMAL = new DecimalFormat("#0.0");
+    /** Two-decimal-place formatter */
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
+    /** Zero-decimal-place formatter */
     private static final DecimalFormat ZERO_DECIMAL = new DecimalFormat("##0");
+    /** Zero-decimal one-digit formatter */
     private static final DecimalFormat ZERO_ONE_DECIMAL = new DecimalFormat("##0.0");
+    /** Zero-decimal two-digit formatter */
     private static final DecimalFormat ZERO_TWO_DECIMALS = new DecimalFormat("##0.00");
+    /** Global application context */
     I2PAppContext ctx = I2PAppContext.getGlobalContext();
+    /** Property name for advanced mode toggle */
     private static final String PROP_ADVANCED = "routerconsole.advanced";
+    /** Property name for unified sidebar toggle */
     private static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
+    /** @return true if advanced mode is enabled in config */
     @Override
     public boolean isAdvanced() {return ctx.getBooleanProperty(PROP_ADVANCED);}
+    /** @return true if unified sidebar is enabled */
     public boolean unifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
+    /** Property prefix for summary bar section configuration per page */
     static final String PROP_SUMMARYBAR = "routerconsole.summaryBar.";
+    /** First version the router was started with, used to detect new installs */
     String firstVersion = ctx.getProperty("router.firstVersion");
+    /** Current I2P core version */
     String version = CoreVersion.VERSION;
 
+    /** Default full summary bar sections for new users */
     static final String DEFAULT_FULL_NEWUSER =
         "RouterInfo" + S +
         "CPUBar" + S +
@@ -102,6 +121,7 @@ public class SidebarHelper extends HelperBase {
         "Destinations" + S +
         "";
 
+    /** Default full summary bar sections */
     static final String DEFAULT_FULL =
         "RouterInfo" + S +
         "CPUBar" + S +
@@ -121,6 +141,7 @@ public class SidebarHelper extends HelperBase {
         "Destinations" + S +
         "";
 
+    /** Default full summary bar sections for advanced mode */
     static final String DEFAULT_FULL_ADVANCED =
         "AdvancedRouterInfo" + S +
         "CPUBar" + S +
@@ -141,6 +162,7 @@ public class SidebarHelper extends HelperBase {
         "Destinations" + S +
         "";
 
+    /** Default minimal summary bar sections */
     static final String DEFAULT_MINIMAL =
         "ShortRouterInfo" + S +
         "CPUBar" + S +
@@ -157,7 +179,7 @@ public class SidebarHelper extends HelperBase {
         "Destinations" + S +
         "";
 
-     /** @since 0.9.32 */
+     /** Default minimal summary bar sections for advanced mode @since 0.9.32 */
     static final String DEFAULT_MINIMAL_ADVANCED =
         "AdvancedRouterInfo" + S +
         "CPUBar" + S +
@@ -203,7 +225,10 @@ public class SidebarHelper extends HelperBase {
         return DataHelper.formatDuration2(router.getUptime());
     }
 
-    /** allowReseed */
+    /**
+     * Whether manual reseed should be allowed, based on uptime and known router count
+     * or the always-allow property.
+     */
     public boolean allowReseed() {
         long uptime = _context.router().getUptime();
         return _context.netDb().isInitialized() &&
@@ -211,7 +236,11 @@ public class SidebarHelper extends HelperBase {
                 _context.getBooleanProperty("i2p.alwaysAllowReseed");
     }
 
-    /** subtract one for ourselves, so if we know no other peers it displays zero */
+    /**
+     * How many routers we know about, minus ourselves
+     *
+     * @return peer count, minimum 0
+     */
     public int getAllPeers() {return Math.max(_context.netDb().getKnownRouters() - 1, 0);}
 
     /**
@@ -219,13 +248,21 @@ public class SidebarHelper extends HelperBase {
      * @since 0.9.33
      */
     public enum NetworkState {
+        /** Hidden mode active */
         HIDDEN,
+        /** Reachability testing in progress */
         TESTING,
+        /** Firewalled but operational */
         FIREWALLED,
+        /** Fully reachable */
         RUNNING,
+        /** Warning state */
         WARN,
+        /** Error state */
         ERROR,
+        /** Clock skew detected */
         CLOCKSKEW,
+        /** VM comm system active */
         VMCOMM;
     }
 
@@ -238,23 +275,42 @@ public class SidebarHelper extends HelperBase {
         private NetworkState state;
         private String msg;
 
+        /**
+         * Create a network state message
+         *
+         * @param state the reachability state
+         * @param msg   localized description
+         */
         NetworkStateMessage(NetworkState state, String msg) {setMessage(state, msg);}
 
+        /**
+         * Update the state and message
+         *
+         * @param state the reachability state
+         * @param msg   localized description
+         */
         public void setMessage(NetworkState state, String msg) {
             this.state = state;
             this.msg = msg;
         }
 
+        /** @return the reachability state */
         public NetworkState getState() {return state;}
 
+        /** @return the localized state description */
         public String getMessage() {return msg;}
 
+        /**
+         * toString.
+         */
         @Override
         public String toString() {return "(" + state + "; " + msg + ')';}
     }
 
+    /** @return network reachability state and message */
     public NetworkStateMessage getReachability() {return reachability();}
 
+    /** ignored */
     private NetworkStateMessage reachability() {
         if (_context.commSystem().isDummy()) {return new NetworkStateMessage(NetworkState.VMCOMM, "VM Comm System");}
 /*
@@ -383,7 +439,12 @@ public class SidebarHelper extends HelperBase {
         return fmtInt(used) + " / " + total + " M";
     }
 
-    /** @since 0.9.32 */
+    /**
+     * Render the memory usage bar with blended real-time and one-minute average
+     *
+     * @return HTML for the memory bar display
+     * @since 0.9.32
+     */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized String getMemoryBar() {
         long tot = SystemVersion.getMaxMemory();
@@ -594,6 +655,7 @@ public class SidebarHelper extends HelperBase {
     /**
      * How many active peers the router ranks as fast.
      *
+     * @return fast peer count
      */
     public int getFastPeers() {
         if (_context == null) {return 0;}
@@ -602,14 +664,16 @@ public class SidebarHelper extends HelperBase {
     /**
      * How many active peers the router ranks as having a high capacity.
      *
+     * @return high capacity peer count
      */
     public int getHighCapacityPeers() {
         if (_context == null) {return 0;}
         else {return _context.profileOrganizer().countHighCapacityPeers();}
     }
     /**
-     * How many active peers the router ranks as well integrated.
+     * How many active peers the router ranks as well integrated (floodfill).
      *
+     * @return floodfill peer count
      */
     public int getWellIntegratedPeers() {
         if (_context == null) {return 0;}
@@ -618,7 +682,9 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * How many peers are banned.
-     * @since 0.9.32 uncommented
+     *
+     * @return banned peer count
+     * @since 0.9.32
      */
     public int getBanlistedPeers() {
         if (_context == null) {return 0;}
@@ -628,6 +694,7 @@ public class SidebarHelper extends HelperBase {
     /**
      * How many peers are unreachable.
      *
+     * @return unreachable peer count
      */
     public int getUnreachablePeers() {
         if (_context == null) {return 0;}
@@ -863,6 +930,9 @@ public class SidebarHelper extends HelperBase {
         private final String xsc = _t("Shared Clients");
         private final String snark = _t("I2PSnark");
 
+        /**
+         * compare.
+         */
         @Override
         public int compare(Destination lhs, Destination rhs) {
             String lname = getTunnelName(lhs);
@@ -902,7 +972,13 @@ public class SidebarHelper extends HelperBase {
         }
     }
 
-    /** translate here so collation works above */
+    /**
+     * Look up the translated display name for a client destination,
+     * checking SessionConfig first then TunnelPoolSettings.
+     *
+     * @param d client destination
+     * @return translated tunnel name or base32 fallback
+     */
     private String getTunnelName(Destination d) {
         // First try to get nickname from SessionConfig (for socket manager clients like HostChecker)
         try {
@@ -977,6 +1053,12 @@ public class SidebarHelper extends HelperBase {
         else {return _context.tunnelManager().getParticipatingCount();}
     }
 
+    /**
+     * Maximum number of tunnels we are willing to participate in,
+     * either from config or a reasonable default based on system resources.
+     *
+     * @return max participating tunnel count as string
+     */
     public String getMaxParticipatingTunnels() {
         int defaultMax = SystemVersion.isSlow() ? 2*1000 :
                          SystemVersion.getMaxMemory() < 512*1024*1024 ? 5*1000 :
@@ -988,7 +1070,12 @@ public class SidebarHelper extends HelperBase {
         }
     }
 
-    /** @since 0.7.10 */
+    /**
+     * Participant-to-client tunnel share ratio
+     *
+     * @return ratio string formatted to appropriate precision
+     * @since 0.7.10
+     */
     public String getShareRatio() {
         if (_context == null) {return "0";}
         double sr = _context.tunnelManager().getShareRatio();
@@ -1056,11 +1143,21 @@ public class SidebarHelper extends HelperBase {
         return DataHelper.formatDuration2(_context.throttle().getTunnelLag());
     }
 
+    /**
+     * Localized tunnel status string (e.g. overload/congested/normal)
+     *
+     * @return tunnel status or empty string if no context
+     */
     public String getTunnelStatus() {
         if (_context == null) {return "";}
         return _context.throttle().getLocalizedTunnelStatus();
     }
 
+    /**
+     * Concurrent build count and average build request time
+     *
+     * @return formatted string "concurrent / requestTime"
+     */
     public String getConcurrency() {
         if (_context == null) {return "0 / 0";}
         RateStat cb = _context.statManager().getRate("tunnel.concurrentBuilds");
@@ -1082,12 +1179,22 @@ public class SidebarHelper extends HelperBase {
         }
     }
 
+    /**
+     * Inbound tunnel build queue size
+     *
+     * @return backlog count as string
+     */
     public String getInboundBacklog() {
         if (_context == null) {return "0";}
         return String.valueOf(_context.tunnelManager().getInboundBuildQueueSize());
     }
 
-    /** @since 0.9.49+ */
+    /**
+     * Average peer test round-trip time (good + too-slow combined)
+     *
+     * @return average test time in milliseconds
+     * @since 0.9.49
+     */
     public int getAvgPeerTestTime() {
         if (_context == null) {return 0;}
         RateStat ok = _context.statManager().getRate("peer.testOK");
@@ -1100,7 +1207,12 @@ public class SidebarHelper extends HelperBase {
         return avgTestTime;
     }
 
-    /** @since 0.9.50+ */
+    /**
+     * Average successful peer test round-trip time
+     *
+     * @return average good-test time in milliseconds
+     * @since 0.9.50
+     */
     public int getAvgPeerTestTimeGood() {
         if (_context == null) {return 0;}
         RateStat ok = _context.statManager().getRate("peer.testOK");
@@ -1111,6 +1223,11 @@ public class SidebarHelper extends HelperBase {
         return avgTestTimeGood;
     }
 
+    /**
+     * Number of router infos stored in the Kademlia netDb
+     *
+     * @return stored router info count
+     */
     public int getStoredRouterInfos() {
        if (_context == null) return 0;
        NetworkDatabaseFacade netDb = _context.netDb();
@@ -1120,29 +1237,33 @@ public class SidebarHelper extends HelperBase {
         return 0;
     }
 
+    /** @return true if a signed release update is available */
     private static boolean updateAvailable() {
         return NewsHelper.isUpdateAvailable();
     }
 
+    /** @return true if an unsigned update is available */
     private boolean unsignedUpdateAvailable() {
         return NewsHelper.isUnsignedUpdateAvailable(_context);
     }
 
-    /** @since 0.9.20 */
+    /** @return true if a signed development (SU3) update is available @since 0.9.20 */
     private boolean devSU3UpdateAvailable() {
         return NewsHelper.isDevSU3UpdateAvailable(_context);
     }
 
+    /** @return the signed release update version, HTML-escaped */
     private static String getUpdateVersion() {
         return DataHelper.escapeHTML(NewsHelper.updateVersion());
     }
 
+    /** @return the unsigned update version string */
     private static String getUnsignedUpdateVersion() {
         // value is a formatted date, does not need escaping
         return NewsHelper.unsignedUpdateVersion();
     }
 
-    /** @since 0.9.20 */
+    /** @return the development SU3 update version, HTML-escaped @since 0.9.20 */
     private static String getDevSU3UpdateVersion() {
         return DataHelper.escapeHTML(NewsHelper.devSU3UpdateVersion());
     }
@@ -1377,12 +1498,22 @@ public class SidebarHelper extends HelperBase {
         return buf.toString();
     }
 
+    /** Cached news helper instance */
     private NewsHelper _newshelper;
+    /** @param n NewsHelper to store for sidebar rendering */
     public void storeNewsHelper(NewsHelper n) {_newshelper = n;}
+    /** @return the stored NewsHelper */
     public NewsHelper getNewsHelper() {return _newshelper;}
 
+    /** Separator string for summary bar config */
     private static final String SS = Character.toString(S);
 
+    /**
+     * Get the list of active summary bar sections for a given page
+     *
+     * @param page the page name (e.g. "home" or "default")
+     * @return list of section identifiers, or empty list if none configured
+     */
     public List<String> getSummaryBarSections(String page) {
         String config;
         if ("home".equals(page) && !unifiedSidebar()) {
@@ -1401,13 +1532,22 @@ public class SidebarHelper extends HelperBase {
         return Arrays.asList(DataHelper.split(config, SS));
     }
 
+    /**
+     * Save the summary bar section order to router config
+     *
+     * @param ctx      router context
+     * @param page     page identifier
+     * @param sections ordered map of section index to section id
+     */
     static void saveSummaryBarSections(RouterContext ctx, String page, Map<Integer, String> sections) {
         StringBuilder buf = new StringBuilder(512);
         for(String section : sections.values()) {buf.append(section).append(S);}
         ctx.router().saveConfig(PROP_SUMMARYBAR + page, buf.toString());
     }
 
-    /** output the summary bar to _out */
+    /**
+     * Render the full summary bar HTML to the output writer
+     */
     public void renderSummaryBar() throws IOException {
         SidebarRenderer renderer = new SidebarRenderer(_context, this);
         renderer.renderSummaryHTML(_out);
@@ -1415,22 +1555,35 @@ public class SidebarHelper extends HelperBase {
 
     /* below here is stuff we need to get from sidebar_noframe.jsp to SidebarRenderer */
 
+    /** Action parameter from the sidebar form */
     private String _action;
+    /** @param s form action, HTML-stripped before storing */
     public void setAction(String s) {_action = s == null ? null : DataHelper.stripHTML(s);}
+    /** @return the form action or null */
     public String getAction() {return _action;}
 
+    /** Console nonce for form validation */
     private String _consoleNonce;
+    /** @param s console nonce, HTML-stripped before storing */
     public void setConsoleNonce(String s) {_consoleNonce = s == null ? null : DataHelper.stripHTML(s);}
+    /** @return the console nonce or null */
     public String getConsoleNonce() {return _consoleNonce;}
 
+    /** Update nonce for form validation */
     private String _updateNonce;
+    /** @param s update nonce, HTML-stripped before storing */
     public void setUpdateNonce(String s) {_updateNonce = s == null ? null : DataHelper.stripHTML(s);}
+    /** @return the update nonce or null */
     public String getUpdateNonce() {return _updateNonce;}
 
+    /** Cached request URI */
     private String _requestURI;
+    /** @param s the request URI, HTML-stripped before storing */
     public void setRequestURI(String s) {_requestURI = s == null ? null : DataHelper.stripHTML(s);}
 
+    /** The HTTP servlet request */
     private HttpServletRequest _request;
+    /** @param s the servlet request */
     public void setRequest(HttpServletRequest s) {_request = s;}
 
     /**
@@ -1440,6 +1593,12 @@ public class SidebarHelper extends HelperBase {
      */
     public String getRequestURI() {return _requestURI != null ? _requestURI : "/home";}
 
+    /**
+     * Build the HTML table for configuring which sidebar sections are shown
+     * and their display order.
+     *
+     * @return HTML table with move/delete/add controls
+     */
     public String getConfigTable() {
         String[] allSections = SidebarRenderer.ALL_SECTIONS;
         Map<String, String> sectionNames = SidebarRenderer.SECTION_NAMES;

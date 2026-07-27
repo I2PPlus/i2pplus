@@ -11,9 +11,12 @@ import org.bouncycastle.crypto.CryptoServicesRegistrar;
 public class ParametersWithRandom
     implements CipherParameters
 {
+    /** ignored */
     private SecureRandom        random;
+    /** ignored */
     private CipherParameters    parameters;
 
+    /** Wrap parameters with random. */
     public ParametersWithRandom(
         CipherParameters    parameters,
         SecureRandom        random)
@@ -22,17 +25,24 @@ public class ParametersWithRandom
         this.parameters = parameters;
     }
 
+    /** Wrap parameters with default random. */
     public ParametersWithRandom(
         CipherParameters    parameters)
     {
         this(parameters, null);
     }
 
+    /**
+     * getRandom.
+     */
     public SecureRandom getRandom()
     {
         return random;
     }
 
+    /**
+     * getParameters.
+     */
     public CipherParameters getParameters()
     {
         return parameters;

@@ -29,6 +29,9 @@ import net.i2p.util.SimpleByteCache;
  */
 public abstract class HMACGenerator {
 
+    /**
+     * HMACGenerator.
+     */
     public HMACGenerator() {}
 
     /**
@@ -67,6 +70,9 @@ public abstract class HMACGenerator {
         return rv;
     }
 
+    /**
+     * releaseTmp.
+     */
     protected void releaseTmp(byte[] tmp) {
         SimpleByteCache.release(tmp);
     }

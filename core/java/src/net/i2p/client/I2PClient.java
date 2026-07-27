@@ -121,6 +121,17 @@ public interface I2PClient {
      *
      * @return new destination
      */
+    /**
+     * Create a new destination with the default certificate creation properties and store
+     * it, along with the private encryption and signing keys at the specified location.
+     *
+     * Caller must close stream.
+     *
+     * @param destKeyStream stream to write destination and keys to
+     * @return new destination
+     * @throws I2PException on I2P protocol error
+     * @throws IOException on IO error
+     */
     public Destination createDestination(OutputStream destKeyStream) throws I2PException, IOException;
 
     /**
@@ -133,7 +144,10 @@ public interface I2PClient {
      *
      * @param destKeyStream location to write out the destination, PrivateKey, and SigningPrivateKey,
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     *
+     * @param type the signature type for the destination
+     * @return new destination
+     * @throws I2PException on I2P protocol error
+     * @throws IOException on IO error
      * @since 0.9.12
      */
     public Destination createDestination(OutputStream destKeyStream, SigType type) throws I2PException, IOException;
@@ -149,6 +163,18 @@ public interface I2PClient {
      *
      * @param cert certificate to tie to the destination
      * @return newly created destination
+     */
+    /**
+     * Create a new destination with the given certificate and store it, along with the private
+     * encryption and signing keys at the specified location.
+     *
+     * Caller must close stream.
+     *
+     * @param destKeyStream stream to write destination and keys to
+     * @param cert certificate to tie to the destination
+     * @return newly created destination
+     * @throws I2PException on I2P protocol error
+     * @throws IOException on IO error
      */
     public Destination createDestination(OutputStream destKeyStream, Certificate cert) throws I2PException, IOException;
 }

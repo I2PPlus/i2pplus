@@ -65,11 +65,12 @@ public abstract class Encoding {
     * and then calls encode(byte[]).
     * Most classes will not need to override.
     *
-    * @param str the string to encode
-    * @see Encoding#encode(byte[])
-    * @throws EncodingException if encoding fails
-    * @since 0.9.33 implementation moved from subclasses
-    */
+     * @param str the string to encode
+     * @return the encoded string, SMTP-safe
+     * @see Encoding#encode(byte[])
+     * @throws EncodingException if encoding fails
+     * @since 0.9.33 implementation moved from subclasses
+     */
    public String encode(String str) throws EncodingException {return encode(DataHelper.getUTF8(str));}
 
    /**

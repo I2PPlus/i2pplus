@@ -12,6 +12,10 @@ import net.i2p.data.SimpleDataStructure;
  */
 public class RandomIfOldTrimmer<T extends SimpleDataStructure> extends RandomTrimmer<T> {
 
+    /**
+     * @param ctx the context
+     * @param max maximum bucket size
+     */
     public RandomIfOldTrimmer(I2PAppContext ctx, int max) {
         super(ctx, max);
     }

@@ -6,7 +6,7 @@
  * to EdDSA-Java.
  *
  * You should have received a copy of the CC0 legalcode along with this
- * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>lt;https://creativecommons.org/publicdomain/zero/1.0/<https://creativecommons.org/publicdomain/zero/1.0/>gt;.
+ * work. If not, see &lt;https://creativecommons.org/publicdomain/zero/1.0/&gt;.
  *
  */
 package net.i2p.crypto.eddsa.spec;
@@ -18,21 +18,20 @@ import net.i2p.crypto.eddsa.math.ScalarOps;
 /**
  * EdDSA Curve specification that can also be referred to by name.
  *
- * @since 0.9.15
  * @author str4d
- *
  */
 public class EdDSANamedCurveSpec extends EdDSAParameterSpec {
+    /** Name */
     private final String name;
 
     /**
-     * Constructs a named EdDSA curve specification.
+     * Create a named curve specification.
      *
-     * @param name the name of the curve
+     * @param name the curve name
      * @param curve the curve parameters
-     * @param hashAlgo the hash algorithm name
-     * @param sc the scalar operations implementation
-     * @param B the base (generator) point
+     * @param hashAlgo the hash algorithm
+     * @param sc the scalar ops
+     * @param B the base point
      */
     public EdDSANamedCurveSpec(String name, Curve curve, String hashAlgo, ScalarOps sc, GroupElement B) {
         super(curve, hashAlgo, sc, B);
@@ -40,7 +39,7 @@ public class EdDSANamedCurveSpec extends EdDSAParameterSpec {
     }
 
     /**
-     * Returns the name of this curve.
+     * Return the curve name.
      *
      * @return the curve name
      */

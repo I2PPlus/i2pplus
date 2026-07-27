@@ -17,6 +17,10 @@ import org.minidns.idna.MiniDnsIdna;
  */
 public final class ALabel extends XnLabel {
 
+    /**
+     * Create an ALabel.
+     * @param label the ASCII label string
+     */
     ALabel(String label) {
         super(label);
     }

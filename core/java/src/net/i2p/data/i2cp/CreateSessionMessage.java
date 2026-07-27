@@ -22,25 +22,43 @@ import java.io.InputStream;
  * @author jrandom
  */
 public class CreateSessionMessage extends I2CPMessageImpl {
+    /**
+     * MESSAGE_TYPE.
+     */
     public static final int MESSAGE_TYPE = 1;
     private SessionConfig _sessionConfig;
 
+    /**
+     * CreateSessionMessage.
+     */
     public CreateSessionMessage(SessionConfig config) {
         _sessionConfig = config;
     }
 
+    /**
+     * CreateSessionMessage.
+     */
     public CreateSessionMessage() {
         _sessionConfig = new SessionConfig();
     }
 
+    /**
+     * getSessionConfig.
+     */
     public SessionConfig getSessionConfig() {
         return _sessionConfig;
     }
 
+    /**
+     * setSessionConfig.
+     */
     public void setSessionConfig(SessionConfig config) {
         _sessionConfig = config;
     }
 
+    /**
+     * doReadMessage.
+     */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         SessionConfig config = new SessionConfig();
@@ -52,6 +70,9 @@ public class CreateSessionMessage extends I2CPMessageImpl {
         setSessionConfig(config);
     }
 
+    /**
+     * doWriteMessage.
+     */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if (_sessionConfig == null) throw new I2CPMessageException("Unable to write out the message as there is not enough data");
@@ -64,11 +85,17 @@ public class CreateSessionMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    /**
+     * getType.
+     */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

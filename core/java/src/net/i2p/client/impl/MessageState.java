@@ -68,6 +68,9 @@ class MessageState {
         _session = session;
     }
 
+    /**
+     * receive.
+     */
     public void receive(int status) {
         State oldState;
         State newState;
@@ -82,20 +85,41 @@ class MessageState {
             _listener.messageStatus(_session, _nonce, status);
     }
 
+    /**
+     * setMessageId.
+     */
+    /**
+     * Set the message ID.
+     */
     public void setMessageId(MessageId id) {
         _id = id;
     }
 
+    /**
+     * getMessageId.
+     */
+    /**
+     * Return the message ID.
+     */
     public MessageId getMessageId() {
         return _id;
     }
 
+    /**
+     * getElapsed.
+     */
+    /**
+     * Return the elapsed time.
+     */
     public long getElapsed() {
         return _context.clock().now() - _created;
     }
 
     /**
      *  @since 0.9.14
+     */
+    /**
+     * Return the expiration time.
      */
     public long getExpires() {
         return _expires;
@@ -193,6 +217,9 @@ class MessageState {
         }
     }
 
+    /**
+     * cancel.
+     */
     public void cancel() {
         // Inject a fake status
         receive(SendMessageStatusListener.STATUS_CANCELLED);

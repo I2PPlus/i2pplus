@@ -18,13 +18,22 @@ import java.nio.charset.StandardCharsets;
  */
 public class RandomArtServlet extends HttpServlet {
 
+	/** ignored */
 	private static final long serialVersionUID = -3507466186902317988L;
+	/** ignored */
 	private static final String PARAM_IDENTICON_CODE_SHORT = "c";
+	/** ignored */
 	private static final String PARAM_IDENTICON_MODE_SHORT = "m";
+	/** ignored */
 	private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * (long) 60 * 1000;
+	/** ignored */
 	private int version = 1;
+	/** ignored */
 	private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
 
+	/**
+	 * Handle GET request: generate random art from destination hash.
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {

@@ -18,16 +18,22 @@ public interface PQEntry {
 
     /**
      *  Higher is higher priority
+     *
+     *  @return the priority value
      */
     public int getPriority();
 
     /**
-     *  To be set by the queue
+     *  Set the sequence number for FIFO ordering.
+     *
+     *  @param num the sequence number
      */
     public void setSeqNum(long num);
 
     /**
      *  Needed to ensure FIFO ordering within a single priority
+     *
+     *  @return the sequence number
      */
     public long getSeqNum();
 }

@@ -67,10 +67,16 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
         }
     }
 
+    /**
+     * distribute.
+     */
     public void distribute(I2NPMessage msg, Hash target) {
         distribute(msg, target, null);
     }
 
+    /**
+     * distribute.
+     */
     public void distribute(I2NPMessage msg, Hash target, TunnelId tunnel) {
         if (_log.shouldDebug()) {
             _log.debug("InboundMessageDistributor for " + _clientNickname + " [" +

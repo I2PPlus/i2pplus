@@ -54,7 +54,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     private static final String ALT_EXCLUDE_CAPS = String.valueOf(Router.CAPABILITY_BW12) +
                                                    String.valueOf(Router.CAPABILITY_NO_TUNNELS);
 
+    /** Threshold for detecting tunnel build attacks */
     protected static final double ATTACK_THRESHOLD = ProfileOrganizer.ATTACK_THRESHOLD;
+    /** Duration in ms to suppress startup warnings */
     protected static final long STARTUP_WARNING_SUPPRESS_MS = 5 * 60 * 1000L;
 
     /**
@@ -105,6 +107,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  During ghost cascades (high ghost count), the cooldown is shortened
      *  from 5 min to 60s to rehabilitate peers faster when the network
      *  is stressed — many peers are ghosted through no fault of their own.
+     *
+     *  @param ctx the router context
+     *  @param peer the peer to check
+     *  @return true if the peer should be excluded
      */
     public static boolean isFirstHopFailing(RouterContext ctx, Hash peer) {
         Long when = _firstHopFails.get(peer);
@@ -141,6 +147,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      *  Record that a peer failed as first hop (first hop unreachable).
+     *
+     *  @param ctx the router context
+     *  @param peer the peer that failed
      */
     protected static void recordFirstHopFail(RouterContext ctx, Hash peer) {
         _firstHopFails.put(peer, ctx.clock().now());
@@ -154,6 +163,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      *  Prune expired entries from static peer maps.
      *  Called periodically from peer selection to prevent unbounded growth.
+     *
+     *  @param ctx the router context
      *  @since 0.9.70
      */
     protected static void prunePeerMaps(RouterContext ctx) {
@@ -201,6 +212,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * Record that a peer failed during peer selection (first-hop or adjacent).
      * Used by ClientPeerSelector and ExploratoryPeerSelector to mark peers
      * that failed selection criteria, preventing re-selection for the cooldown.
+     *
+     * @param ctx the router context
+     * @param peer the peer that failed
      */
     protected static void recordPeerFailure(RouterContext ctx, Hash peer) {
         _firstHopFails.put(peer, ctx.clock().now());
@@ -213,6 +227,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      * Check if a peer has recovered from failure and can be reconsidered.
      * Uses the effective first-hop cooldown (shortened during ghost cascades).
+     *
+     * @param ctx the router context
+     * @param peer the peer to check
+     * @return true if the peer has recovered
      */
     protected static boolean hasRecoveredFromFailure(RouterContext ctx, Hash peer) {
         Long failTime = _firstHopFails.get(peer);
@@ -227,6 +245,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return false;
     }
 
+    /**
+     * TunnelPeerSelector.
+     */
     protected TunnelPeerSelector(RouterContext context) {
         super(context);
     }
@@ -246,6 +267,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Convenience instance method wrapping the static helper.
+     *
+     * @return true if the router is in the startup grace period
      */
     protected boolean isInStartupGracePeriod() {
         return isInStartupGracePeriod(ctx);
@@ -254,6 +277,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      * Which peers should go into the next tunnel for the given settings?
      *
+     * @param settings the tunnel pool settings
      * @return ordered list of Hash objects (one per peer) specifying what order
      *         they should appear in a tunnel (ENDPOINT FIRST).  This includes
      *         the local router in the list.  If there are no tunnels or peers
@@ -263,6 +287,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     public abstract List<Hash> selectPeers(TunnelPoolSettings settings);
 
     /**
+     *  Determine the tunnel length (number of hops).
+     *
+     *  @param settings the tunnel pool settings
      *  @return randomized number of hops 0-7, not including ourselves
      */
     protected int getLength(TunnelPoolSettings settings) {
@@ -302,6 +329,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      *  For debugging, also possibly for restricted routes?
      *  Needs analysis and testing
+     *
+     *  @param settings the tunnel pool settings
      *  @return usually false
      */
     protected boolean shouldSelectExplicit(TunnelPoolSettings settings) {
@@ -405,6 +434,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  As of 0.9.58, this returns a set populated only by TunnelManager.selectPeersInTooManyTunnels(),
      *  for passing to ProfileOrganizer.
      *  The set will be populated via the contains() calls.
+     *
+     *  @param isInbound true for inbound tunnels
+     *  @param isExploratory true for exploratory tunnels
+     *  @return set of excluded peers
      */
     protected Set<Hash> getExclude(boolean isInbound, boolean isExploratory) {
         return new Excluder(isInbound, isExploratory);
@@ -601,6 +634,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      *  Are we IPv6 only?
+     *
+     *  @return true if configured for IPv6 only
      *  @since 0.9.34
      */
     protected boolean isIPv6Only() {
@@ -616,6 +651,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  the RI. Will not force RI lookups.
      *  Default true.
      *
+     *  @param h the peer hash
+     *  @return true if the peer can be used as OBEP
      *  @since 0.9.34, protected since 0.9.58 for ClientPeerSelector
      */
     protected boolean allowAsOBEP(Hash h) {
@@ -633,6 +670,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  the RI. Will not force RI lookups.
      *  Default true.
      *
+     *  @param h the peer hash
+     *  @return true if the peer can be used as IBGW
      *  @since 0.9.34, protected since 0.9.58 for ClientPeerSelector
      */
     protected boolean allowAsIBGW(Hash h) {
@@ -668,7 +707,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  As of 0.9.58, this a set with only toAdd, for use in ProfileOrganizer.
      *  The set will be populated via the contains() calls.
      *
-     *  @param isInbound
+     *  @param isInbound true for inbound tunnels
+     *  @param toAdd set of peers to initially populate the exclusion set
      *  @return non-null
      *  @since 0.9.17
      */
@@ -823,6 +863,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * do we want to skip peers that are slow?
+     *
+     * @param isInbound true for inbound tunnels
+     * @param isExploratory true for exploratory tunnels
      * @return true unless configured otherwise
      */
     protected boolean filterSlow(boolean isInbound, boolean isExploratory) {
@@ -835,7 +878,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
     }
 
-    /** see HashComparator */
+    /**
+     * Order peers using the given key.
+     *
+     * @param rv the list to order
+     * @param key the session key for ordering
+     */
     protected void orderPeers(List<Hash> rv, SessionKey key) {
         if (rv.size() > 1) {Collections.sort(rv, new HashComparator(key));}
     }
@@ -940,6 +988,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             k1 = DataHelper.fromLong8(b, 24);
         }
 
+        /**
+         * compare.
+         */
         public int compare(Hash l, Hash r) {
             long lh = SipHashInline.hash24(k0, k1, l.getData());
             long rh = SipHashInline.hash24(k0, k1, r.getData());
@@ -956,6 +1007,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  reachable and not hidden or IPv6-only.
      *  Tells the profile manager to blame the hop, and returns false on failure.
      *
+     *  @param isInbound true for inbound tunnels
+     *  @param isExploratory true for exploratory tunnels
      *  @param tunnel ENDPOINT FIRST, GATEWAY LAST!!!!, length 2 or greater
      *  @return ok
      *  @since 0.9.34
@@ -1287,7 +1340,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  - 500+ active peers → 1 hour (very selective)
      *  - 200+ active peers → 2 hours
      *  - 100+ active peers → 4 hours
-     *  - <100 active peers → 8 hours (fresh router, building up picture)
+     *  - &lt;100 active peers → 8 hours (fresh router, building up picture)
      *  Peers in the netDb often go offline silently; this avoids wasting first-hop
      *  selection and keepalive resources on peers that are likely dead.
      *  Skipped during the first 15 minutes of uptime (startup grace) to allow
@@ -1320,6 +1373,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  last successful test has aged out are re-admitted instead of pruned in a
      *  self-reinforcing loop.
      *
+     *  @param ctx the router context
      *  @return activity window in milliseconds
      *  @since 0.9.70+
      */

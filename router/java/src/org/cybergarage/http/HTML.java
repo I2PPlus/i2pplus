@@ -9,6 +9,8 @@ package org.cybergarage.http;
  * HTML constants for HTTP responses. This class provides commonly used HTML content type constants.
  */
 public class HTML {
+    /** Utility class, not instantiable */
+    private HTML() {}
     /** Standard HTML content type with UTF-8 charset. */
     public static final String CONTENT_TYPE = "text/html; charset=\"utf-8\"";
 }

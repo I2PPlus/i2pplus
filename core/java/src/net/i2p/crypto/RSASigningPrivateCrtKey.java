@@ -52,6 +52,9 @@ final class RSASigningPrivateCrtKey extends SigningPrivateKey {
         _crt = pk;
     }
 
+    /**
+     * toJavaKey.
+     */
     public RSAPrivateCrtKey toJavaKey() {
         return _crt;
     }

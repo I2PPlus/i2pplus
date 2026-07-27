@@ -34,6 +34,10 @@ class BuildMessageProcessor {
     private final Log log;
     private final DecayingBloomFilter _filter;
 
+    /**
+     *  Creates a new BuildMessageProcessor.
+     *  @param ctx the router context
+     */
     public BuildMessageProcessor(RouterContext ctx) {
         this.ctx = ctx;
         log = ctx.logManager().getLog(getClass());
@@ -108,6 +112,9 @@ class BuildMessageProcessor {
      * Note that this layer-decrypts the build records in-place.
      * Do not call this more than once for a given message.
      *
+     * @param msg the tunnel build message
+     * @param ourHash our router hash
+     * @param privKey our private key
      * @return the current hop's decrypted record or null on failure
      */
     public BuildRequestRecord decrypt(TunnelBuildMessage msg, Hash ourHash, PrivateKey privKey) {

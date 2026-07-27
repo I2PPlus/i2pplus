@@ -14,24 +14,16 @@ import net.i2p.data.DateAndFlags;
  *
  *  GzipOption flags are as of 0.9.36, are client-side only, and are
  *  not included in the flags field or sent to the router.
- *
- *  @since 0.9.2
  */
 public class SendMessageOptions extends DateAndFlags {
 
+    /**  gzip */
     private GzipOption _gzip = GzipOption.DEFAULT;
 
-    /** all subject to change */
-
-    /**
-     *  1 means don't send, 0 means default
-     */
+    /** 1 means don't send, 0 means default. */
     private static final int LS_MASK = 0x0100;
 
-    /**
-     *  Tags to send field:
-     *  see below for possible values
-     */
+    /** Tags to send field, see below for possible values. */
     private static final int TAGS_SEND_MASK = 0x000f;
 
     /**
@@ -43,10 +35,7 @@ public class SendMessageOptions extends DateAndFlags {
         32, 40, 51, 64, 80, 100, 125, 160
     };
 
-    /**
-     *  Tags threshold field:
-     *  see below for possible values
-     */
+    /** Tags threshold field, see below for possible values. */
     private static final int TAGS_REQD_MASK = 0x00f0;
 
     /** Possible values. Configured values will be rounded down. */
@@ -55,20 +44,23 @@ public class SendMessageOptions extends DateAndFlags {
         35, 45, 57, 72, 92, 117, 147, 192
     };
 
-    /**
-     *  Reliability bits 9-10
-     *
-     *  @since 0.9.14
-     */
+    /** Reliability bits 9-10. */
     public enum Reliability {
+        /** D e f a u l t */
         DEFAULT,
+        /** B e s t  e f f o r t */
         BEST_EFFORT,
+        /** G u a r a n t e e d */
         GUARANTEED,
+        /** U n d e f i n e d */
         UNDEFINED
     }
 
+    /** best effort mask */
     private static final int BEST_EFFORT_MASK = 0x0200;
+    /** guaranteed mask */
     private static final int GUARANTEED_MASK = 0x0400;
+    /** reliability mask */
     private static final int RELIABILITY_MASK = BEST_EFFORT_MASK | GUARANTEED_MASK;
 
     /** default true */
@@ -165,11 +157,7 @@ public class SendMessageOptions extends DateAndFlags {
         return codes[code];
     }
 
-    /**
-     *  default Reliability.DEFAULT
-     *
-     *  @since 0.9.14
-     */
+    /** @param r reliability (default DEFAULT) */
     public void setReliability(Reliability r) {
         _flags &= ~RELIABILITY_MASK;
         switch (r) {
@@ -191,20 +179,12 @@ public class SendMessageOptions extends DateAndFlags {
         }
     }
 
-    /**
-     *  default Reliability.DEFAULT
-     *
-     *  @since 0.9.14
-     */
+    /** @return reliability (default DEFAULT) */
     public Reliability getReliability() {
         return getReliability(_flags);
     }
 
-    /**
-     *  default Reliability.DEFAULT
-     *
-     *  @since 0.9.14
-     */
+    /** @return reliability (default DEFAULT) */
     public static Reliability getReliability(int flags) {
         switch (flags & RELIABILITY_MASK) {
             case BEST_EFFORT_MASK:
@@ -222,35 +202,22 @@ public class SendMessageOptions extends DateAndFlags {
         }
     }
 
-    /**
-     *  Overrides i2cp.gzip session option and size threshold
-     *  for this message only.
-     *
-     *  @since 0.9.36
-     */
+    /** Overrides i2cp.gzip session option and size threshold for this message only. */
     public enum GzipOption {
+        /** D e f a u l t */
         DEFAULT,
+        /** G z i p  o f f */
         GZIP_OFF,
+        /** G z i p  o n */
         GZIP_ON
     }
 
-    /**
-     *  Overrides i2cp.gzip session option and size threshold
-     *  for this message only.
-     *
-     *  @return non-null, DEFAULT unless setGzip() was called
-     *  @since 0.9.36
-     */
+    /** @return non-null, DEFAULT unless setGzip() was called */
     public GzipOption getGzip() {
         return _gzip;
     }
 
-    /**
-     *  Overrides i2cp.gzip session option and size threshold
-     *  for this message only.
-     *
-     *  @since 0.9.36
-     */
+    /** @param yes GZIP_ON if true, GZIP_OFF if false */
     public void setGzip(boolean yes) {
         _gzip = yes ? GzipOption.GZIP_ON : GzipOption.GZIP_OFF;
     }

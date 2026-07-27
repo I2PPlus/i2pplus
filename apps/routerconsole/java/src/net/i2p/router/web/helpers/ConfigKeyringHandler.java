@@ -17,6 +17,11 @@ import net.i2p.util.ConvertToHash;
 /**
  * Support additions via B64 Destkey, B64 Desthash, blahblah.i2p, and others
  * supported by ConvertToHash
+ *
+ * Default constructor.
+ */
+/**
+ * Default constructor.
  */
 public class ConfigKeyringHandler extends FormHandler {
     private String _peer;
@@ -200,11 +205,21 @@ public class ConfigKeyringHandler extends FormHandler {
         }
     }
 
+    /**
+     *  Set the peer destination from form.
+     *
+     *  @param peer the peer destination
+     */
     public void setPeer(String peer) {
         if (peer != null)
             _peer = peer.trim();
     }
 
+    /**
+     *  Set the encryption key from form.
+     *
+     *  @param key the encryption key
+     */
     public void setKey(String key) {
         if (key != null)
             _key = key.trim();
@@ -212,6 +227,8 @@ public class ConfigKeyringHandler extends FormHandler {
 
     /**
      *  Set the blinded lookup password from form.
+     *
+     *  @param pw the blinded lookup password
      *  @since 0.9.41
      */
     public void setNofilter_blindedPassword(String pw) {
@@ -224,6 +241,8 @@ public class ConfigKeyringHandler extends FormHandler {
 
     /**
      *  Set the encryption type mode from form.
+     *
+     *  @param m the encryption mode string
      *  @since 0.9.41
      */
     public void setEncryptMode(String m) {
@@ -234,6 +253,8 @@ public class ConfigKeyringHandler extends FormHandler {
 
     /**
      *  Set the list of destinations to revoke from keyring.
+     *
+     *  @param revokes the list of destinations to revoke
      *  @since 0.9.41
      */
     public void setRevokeClient(String[] revokes) {

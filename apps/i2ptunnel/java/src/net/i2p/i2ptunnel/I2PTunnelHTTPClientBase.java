@@ -65,7 +65,7 @@ import java.nio.charset.StandardCharsets;
  * Common things for HTTPClient and ConnectClient
  * Retrofit over them in 0.8.2
  *
- * @since 0.8.2
+ *
  */
 public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implements Runnable {
 
@@ -75,9 +75,13 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     private static final int NONCE_BYTES = DataHelper.DATE_LENGTH + SHA256_BYTES;
     private static final long MAX_NONCE_AGE = 60*60*1000L;
     private static final int MAX_NONCE_COUNT = 1024;
-    /** @since 0.9.11, moved to Base in 0.9.29 */
+    /**
+     *  Property to use local outproxy plugin.
+     *  */
     public static final String PROP_USE_OUTPROXY_PLUGIN = "i2ptunnel.useLocalOutproxy";
-    /** @since 0.9.11, moved to Base in 0.9.39 */
+    /**
+     *  Property for SSL outproxies.
+     *  */
     public static final String PROP_SSL_OUTPROXIES = "i2ptunnel.httpclient.SSLOutproxies";
     private static final String SLASH = System.getProperty("file.separator");
 
@@ -85,13 +89,13 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  This is a standard soTimeout, not a total timeout.
      *  We have no slowloris protection on the client side.
      *  See I2PTunnelHTTPServer or SAM's ReadLine if we need that.
-     *  @since 0.9.33
+     *
      */
     protected static final int INITIAL_SO_TIMEOUT = 15*1000;
 
     /**
      *  Failsafe
-     *  @since 0.9.42
+     *
      */
     protected static final int BROWSER_READ_TIMEOUT = 4*60*60*1000;
 
@@ -107,8 +111,10 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             "<html><body><H1>I2P ERROR: PROXY AUTHENTICATION REQUIRED</H1>" +
             "This proxy is configured to require authentication.";
 
+    /** list of configured outproxies */
     protected final List<String> _proxyList;
 
+    /** error response when no outproxy is configured */
     protected final static String ERR_NO_OUTPROXY =
          "HTTP/1.1 503 No Outproxy Configured\r\n" +
          "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -119,6 +125,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
          "Your request was for a site outside of I2P, but you have no " +
          "outproxy configured.  Please configure an outproxy in I2PTunnel";
 
+    /** error response when destination is not found */
     protected final static String ERR_DESTINATION_UNKNOWN =
             "HTTP/1.1 503 Service Unavailable\r\n" +
             "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -132,6 +139,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             "be temporarily offline.  You may want to <b>retry</b>.  " +
             "Could not find the following Destination:<BR><BR><div>";
 
+    /** HTTP 200 response for established CONNECT tunnels */
     protected final static String SUCCESS_RESPONSE =
         "HTTP/1.1 200 Connection Established\r\n"+
          "Proxy-agent: I2P\r\n"+
@@ -169,7 +177,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *
      * @param requestId the unique identifier for this request
      * @return a formatted string suitable for logging
-     * @since 0.9.14
+     *
      */
     protected String getPrefix(long requestId) {
         return "[HTTPClient] [Request: " + _clientId + '/' + requestId + "] ";
@@ -233,8 +241,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * @param host the target hostname (may be used for proxy stickiness)
      * @return the selected SSL proxy destination, or null if none configured
      * @see #selectProxy(String)
-     * @since 0.9.11, moved from I2PTunnelHTTPClient in 0.9.39
-     */
+     * */
     protected String selectSSLProxy(String host) {
         String s = getTunnel().getClientOptions().getProperty(PROP_SSL_OUTPROXIES);
         if (s == null) {return null;}
@@ -272,7 +279,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  @param host clearnet hostname targeted
      *  @param isSSL set to FALSE for ConnectClient
      *  @param ok success or failure
-     *  @since 0.9.39
+     *
      */
     protected void noteProxyResult(String proxy, String host, boolean isSSL, boolean ok) {
         if (isSSL) {
@@ -317,8 +324,19 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      */
     protected static final int DEFAULT_READ_TIMEOUT = -1;
 
+    /** Counter for unique request IDs */
     protected static final AtomicLong __requestId = new AtomicLong();
 
+    /**
+     *  Create a new HTTP client tunnel.
+     *
+     *  @param localPort the local port to bind to
+     *  @param ownDest whether to use our own destination
+     *  @param l logging instance
+     *  @param notifyThis event dispatcher for notifications
+     *  @param handlerName the handler name
+     *  @param tunnel the parent I2PTunnel instance
+     */
     public I2PTunnelHTTPClientBase(int localPort, boolean ownDest, Logging l,
                                EventDispatcher notifyThis, String handlerName,
                                I2PTunnel tunnel) throws IllegalArgumentException {
@@ -337,7 +355,12 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  This constructor always starts the tunnel (ignoring the i2cp.delayOpen option).
      *  It is used to add a client to an existing socket manager.
      *
+     *  @param localPort the local port to bind to
+     *  @param l logging instance
      *  @param sktMgr the existing socket manager
+     *  @param tunnel the parent I2PTunnel instance
+     *  @param notifyThis event dispatcher for notifications
+     *  @param clientId the client identifier
      */
     public I2PTunnelHTTPClientBase(int localPort, Logging l, I2PSocketManager sktMgr,
             I2PTunnel tunnel, EventDispatcher notifyThis, long clientId )
@@ -355,44 +378,78 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     //////// Authorization stuff
 
-    /** all auth @since 0.8.2 */
+    /** all auth  */
     public static final String PROP_AUTH = "proxyAuth";
+    /** Proxy username property */
     public static final String PROP_USER = "proxyUsername";
+    /** Proxy password property */
     public static final String PROP_PW = "proxyPassword";
     /** additional users may be added with proxyPassword.user=pw */
     public static final String PROP_PW_PREFIX = PROP_PW + '.';
+    /** Outproxy auth property */
     public static final String PROP_OUTPROXY_AUTH = "outproxyAuth";
+    /** Outproxy username property */
     public static final String PROP_OUTPROXY_USER = "outproxyUsername";
+    /** Outproxy password property */
     public static final String PROP_OUTPROXY_PW = "outproxyPassword";
     /** passwords for specific outproxies may be added with outproxyUsername.fooproxy.i2p=user and outproxyPassword.fooproxy.i2p=pw */
     public static final String PROP_OUTPROXY_USER_PREFIX = PROP_OUTPROXY_USER + '.';
+    /**
+     * PROP_OUTPROXY_PW_PREFIX.
+     */
     public static final String PROP_OUTPROXY_PW_PREFIX = PROP_OUTPROXY_PW + '.';
     /** new style MD5 auth */
     public static final String PROP_PROXY_DIGEST_PREFIX = "proxy.auth.";
+    /** MD5 digest suffix */
     public static final String PROP_PROXY_DIGEST_SUFFIX = ".md5";
+    /** SHA-256 digest suffix */
     public static final String PROP_PROXY_DIGEST_SHA256_SUFFIX = ".sha256";
+    /** Basic auth type constant */
     public static final String BASIC_AUTH = "basic";
+    /** Digest auth type constant */
     public static final String DIGEST_AUTH = "digest";
 
+    /**
+     *  Get the authentication realm string.
+     *  @return realm string
+     */
     protected abstract String getRealm();
 
     /** Authentication result status for HTTP client connections */
-    protected enum AuthResult {AUTH_BAD_REQ, AUTH_BAD, AUTH_STALE, AUTH_GOOD}
+    protected enum AuthResult {
+        /** Bad request */
+        AUTH_BAD_REQ,
+        /** Authentication failed */
+        AUTH_BAD,
+        /** Stale nonce */
+        AUTH_STALE,
+        /** Authentication successful */
+        AUTH_GOOD
+    }
 
     /**
-     *  @since 0.9.6
+     *
      */
     private static class NonceInfo {
         private final long expires;
         private final BitSet counts;
 
+        /**
+         * NonceInfo.
+         */
         public NonceInfo(long exp) {
             expires = exp;
             counts = new BitSet(MAX_NONCE_COUNT);
         }
 
+        /**
+         * getExpires.
+         */
         public long getExpires() {return expires;}
 
+        /**
+         * isValid.
+         */
         public AuthResult isValid(int nc) {
             if (nc <= 0) {return AuthResult.AUTH_BAD;}
             if (nc >= MAX_NONCE_COUNT) {return AuthResult.AUTH_STALE;}
@@ -407,7 +464,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     /**
      *  Update the outproxy list then call super.
      *
-     *  @since 0.9.12
+     *
      */
     @Override
     public void optionsUpdated(I2PTunnel tunnel) {
@@ -431,9 +488,6 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     }
 
     /**
-     *  @since 0.9.4
-     */
-    /**
      *  Checks if HTTP Digest authentication is required by the outproxy.
      * <p>
      * This method checks the configured authentication requirements and
@@ -441,7 +495,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * </p>
      *
      * @return true if digest authentication is required, false otherwise
-     * @since 0.9.4
+     *
      */
     protected boolean isDigestAuthRequired() {
         String authRequired = getTunnel().getClientOptions().getProperty(PROP_AUTH);
@@ -454,6 +508,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  Ref: RFC 2617
      *  If the socket is an InternalSocket, no auth required.
      *
+     *  @param s the client socket
+     *  @param requestId the unique request identifier for logging
      *  @param method GET, POST, etc.
      *  @param authorization may be null, the full auth line e.g. "Basic lskjlksjf"
      *  @return success
@@ -536,7 +592,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  Ref: RFC 2617
      *
      *  @param s just to log the IP on failure
-     *  @since 0.9.4
+     *
      */
     private AuthResult validateDigest(String method, Map<String, String> args, Socket s) {
         String user = args.get("username");
@@ -603,7 +659,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     /**
      *  The Base 64 of 40 bytes: (now, sha256 of (now, proxy nonce))
-     *  @since 0.9.4
+     *
      */
     private String getNonce() {
         byte[] b = new byte[DataHelper.DATE_LENGTH + PROXYNONCE_BYTES];
@@ -624,7 +680,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  and the nonce count.
      *  @param b64 nonce non-null
      *  @param ncs nonce count string non-null
-     *  @since 0.9.4
+     *
      */
     private AuthResult verifyNonce(String b64, String ncs) {
         if (_nonceCleanCounter.incrementAndGet() % 16 == 0) {cleanNonces();}
@@ -656,7 +712,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     /**
      *  Remove expired nonces from map
-     *  @since 0.9.6
+     *
      */
     private void cleanNonces() {
         long now = _context.clock().now();
@@ -668,7 +724,10 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     /**
      *  What to send if digest auth fails
-     *  @since 0.9.4
+     *
+     *  @param isStale true if the previous nonce was stale
+     *  @return the HTTP error response string
+     *
      */
     protected String getAuthError(boolean isStale) {
         boolean isDigest = isDigestAuthRequired();
@@ -704,7 +763,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  Ref: RFC 2617
      *
      *  @param args non-null
-     *  @since 0.9.4
+     *
      */
     private static Map<String, String> parseArgs(String args) {
         // moved to EepGet, since it needs this too
@@ -721,9 +780,10 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  HTTP headers are conformant.
      *  We can't use FileUtil.readFile() because it strips \r
      *
+     *  @param base the error page base name
+     *  @param backup fallback string if the file cannot be read
      *  @return non-null
-     *  @since 0.9.4 moved from I2PTunnelHTTPClient
-     */
+     *  */
     protected String getErrorPage(String base, String backup) {
         return getErrorPage(_context, base, backup);
     }
@@ -736,9 +796,11 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  HTTP headers are conformant.
      *  We can't use FileUtil.readFile() because it strips \r
      *
+     *  @param ctx the I2P application context
+     *  @param base the error page base name
+     *  @param backup fallback string if the file cannot be read
      *  @return non-null
-     *  @since 0.9.4 moved from I2PTunnelHTTPClient
-     */
+     *  */
     protected static String getErrorPage(I2PAppContext ctx, String base, String backup) {
         File errorDir = new File(ctx.getBaseDir(), "docs" + SLASH + "proxy");
         File file = new File(errorDir, base + "-header.ht");
@@ -750,8 +812,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     private static final String BUNDLE_NAME = "net.i2p.i2ptunnel.proxy.messages";
 
     /**
-     *  @since 0.9.4 moved from I2PTunnelHTTPClient
-     */
+     *  */
     private static String readFile(I2PAppContext ctx, File file) throws IOException {
         Reader reader = null;
         char[] buf = new char[512];
@@ -811,8 +872,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     /**
      *  Callback for timeout events.
-     *  @since 0.9.14 moved from subclasses
-     */
+     *  */
     protected class OnTimeout implements I2PTunnelRunner.FailCallback {
         private final Socket _socket;
         private final OutputStream _out;
@@ -824,7 +884,14 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         private final boolean _isSSL;
 
         /**
+         *  Create a timeout callback.
+         *
+         *  @param s the client socket
+         *  @param out the output stream
          *  @param target the URI for an HTTP request, or the host name for CONNECT
+         *  @param usingProxy whether a WWW outproxy is in use
+         *  @param wwwProxy the outproxy destination
+         *  @param id the request identifier
          */
         public OnTimeout(Socket s, OutputStream out, String target, boolean usingProxy, String wwwProxy, long id) {
             _socket = s;
@@ -838,10 +905,17 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         }
 
         /**
+         *  Create a timeout callback with host tracking.
+         *
+         *  @param s the client socket
+         *  @param out the output stream
          *  @param target the URI for an HTTP request, or the host name for CONNECT
+         *  @param usingProxy whether a WWW outproxy is in use
+         *  @param wwwProxy the outproxy destination
+         *  @param id the request identifier
          *  @param targetHost if non-null, call noteProxyResult() with this as host
          *  @param isSSL to pass to noteProxyResult(). FALSE for ConnectClient.
-         *  @since 0.9.39
+         *
          */
         public OnTimeout(Socket s, OutputStream out, String target, boolean usingProxy,
                          String wwwProxy, long id, String targetHost, boolean isSSL) {
@@ -875,27 +949,42 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     /**
      *  Callback for successful proxy connections.
-     *  @since 0.9.39
+     *
      */
     protected class OnProxySuccess implements I2PTunnelRunner.SuccessCallback {
         private final String _proxy;
         private final String _host;
         private final boolean _isSSL;
 
-        /** @param isSSL FALSE for ConnectClient */
+        /**
+         *  Create a proxy success callback.
+         *
+         *  @param proxy the outproxy destination
+         *  @param host the target hostname
+         *  @param isSSL FALSE for ConnectClient
+         */
         public OnProxySuccess(String proxy, String host, boolean isSSL) {
             _proxy = proxy; _host = host; _isSSL = isSSL;
         }
 
+        /**
+         * onSuccess.
+         */
         public void onSuccess() {
             noteProxyResult(_proxy, _host, _isSSL, true);
         }
     }
 
     /**
+     *  Handle an exception from a client connection.
+     *
      *  @param ex may be null
-     *  @since 0.9.14 moved from subclasses
-     */
+     *  @param out the output stream for the error response
+     *  @param targetRequest the original request URI
+     *  @param usingWWWProxy whether a WWW outproxy is in use
+     *  @param wwwProxy the outproxy destination
+     *  @param requestId the request identifier for logging
+     *  */
     protected void handleClientException(Exception ex, OutputStream out, String targetRequest,
                                          boolean usingWWWProxy, String wwwProxy, long requestId) {
         if (out == null) {return;}
@@ -916,7 +1005,11 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  in our custom exception.
      *
      *  @param ise may be null
-     *  @since 0.9.14
+     *  @param out the output stream for the error response
+     *  @param targetRequest the original request URI
+     *  @param usingWWWProxy whether a WWW outproxy is in use
+     *  @param wwwProxy the outproxy destination
+     *
      */
     protected void handleI2PSocketException(I2PSocketException ise, OutputStream out, String targetRequest,
                                             boolean usingWWWProxy, String wwwProxy) {
@@ -942,7 +1035,14 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     /**
      *  No jump servers or extra message
-     *  @since 0.9.14
+     *
+     *  @param errMessage the error header
+     *  @param out the output stream
+     *  @param targetRequest the original request URI
+     *  @param usingWWWProxy whether a WWW outproxy is in use
+     *  @param wwwProxy the outproxy destination
+     *  @throws java.io.IOException on write error
+     *
      */
     protected void writeErrorMessage(String errMessage, OutputStream out, String targetRequest,
                                      boolean usingWWWProxy, String wwwProxy) throws IOException {
@@ -951,9 +1051,15 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     /**
      *  No extra message
+     *
+     *  @param errMessage the error header
+     *  @param out the output stream
+     *  @param targetRequest the original request URI
+     *  @param usingWWWProxy whether a WWW outproxy is in use
+     *  @param wwwProxy the outproxy destination
      *  @param jumpServers comma- or space-separated list, or null
-     *  @since 0.9.14 moved from subclasses
-     */
+     *  @throws java.io.IOException on write error
+     *  */
     protected void writeErrorMessage(String errMessage, OutputStream out, String targetRequest,
                                      boolean usingWWWProxy, String wwwProxy, String jumpServers) throws IOException {
         writeErrorMessage(errMessage, null, out, targetRequest, usingWWWProxy, wwwProxy, jumpServers);
@@ -961,8 +1067,15 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     /**
      *  No jump servers
+     *
+     *  @param errMessage the error header
      *  @param extraMessage extra message or null, will be HTML-escaped
-     *  @since 0.9.14
+     *  @param out the output stream
+     *  @param targetRequest the original request URI
+     *  @param usingWWWProxy whether a WWW outproxy is in use
+     *  @param wwwProxy the outproxy destination
+     *  @throws java.io.IOException on write error
+     *
      */
     protected void writeErrorMessage(String errMessage, String extraMessage,
                                      OutputStream out, String targetRequest,
@@ -971,9 +1084,17 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     }
 
     /**
-     *  @param jumpServers comma- or space-separated list, or null
+     *  Write the complete error message to the output stream.
+     *
+     *  @param errMessage the error header
      *  @param extraMessage extra message or null, will be HTML-escaped
-     *  @since 0.9.14
+     *  @param outs the output stream
+     *  @param targetRequest the original request URI
+     *  @param usingWWWProxy whether a WWW outproxy is in use
+     *  @param wwwProxy the outproxy destination
+     *  @param jumpServers comma- or space-separated list, or null
+     *  @throws java.io.IOException on write error
+     *
      */
     protected void writeErrorMessage(String errMessage, String extraMessage,
                                      OutputStream outs, String targetRequest,
@@ -1048,12 +1169,6 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     }
 
     /**
-     *  Decode the host part of a URI for display.
-     *  Returns original string on any error.
-     *
-     *  @since 0.9.50
-     */
-    /**
      *  Decodes Internationalized Domain Names in a URI for display.
      * <p>
      * This method converts punycode-encoded hostnames (xn--) in a URI
@@ -1064,6 +1179,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *
      * @param uri the URI string that may contain encoded hostnames
      * @return the URI with decoded hostname, or the original URI on error
+     *
      */
     private static String decodeIDNURI(String uri) {
         if (!_haveIDN) {return uri;}
@@ -1084,7 +1200,9 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  Decode a hostname for display.
      *  Returns original string on any error.
      *
-     *  @since 0.9.50
+     *  @param host the hostname to decode
+     *  @return the decoded hostname, or the original on error
+     *
      */
     public static String decodeIDNHost(String host) {
         if (!_haveIDN) {return host;}
@@ -1096,8 +1214,9 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  Flushes.
      *
      *  Public only for LocalHTTPServer, not for general use
-     *  @since 0.9.14 moved from I2PTunnelHTTPClient
-     */
+     *  @param out the output stream to write to
+     *  @throws java.io.IOException on write error
+     *  */
     public static void writeFooter(OutputStream out) throws IOException {
         out.write(getFooter().getBytes(StandardCharsets.UTF_8));
         out.flush();
@@ -1107,7 +1226,9 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  Flushes.
      *
      *  Public only for LocalHTTPServer, not for general use
-     *  @since 0.9.19
+     *  @param out the writer to write to
+     *  @throws java.io.IOException on write error
+     *
      */
     public static void writeFooter(Writer out) throws IOException {
         out.write(getFooter());
@@ -1122,26 +1243,33 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     /**
      *  Translate
-     *  @since 0.9.14 moved from I2PTunnelHTTPClient
-     */
+     *
+     *  @param key the translation key
+     *  @return the translated string
+     *  */
     protected String _t(String key) {
         return Translate.getString(key, _context, BUNDLE_NAME);
     }
 
     /**
-     *  Translate
-     *  {0}
-     *  @since 0.9.14 moved from I2PTunnelHTTPClient
-     */
+     *  Translate with one parameter {0}
+     *
+     *  @param key the translation key
+     *  @param o the parameter to insert
+     *  @return the translated string
+     *  */
     protected String _t(String key, Object o) {
         return Translate.getString(key, o, _context, BUNDLE_NAME);
     }
 
     /**
-     *  Translate
-     *  {0} and {1}
-     *  @since 0.9.14 moved from I2PTunnelHTTPClient
-     */
+     *  Translate with two parameters {0} and {1}
+     *
+     *  @param key the translation key
+     *  @param o the first parameter to insert
+     *  @param o2 the second parameter to insert
+     *  @return the translated string
+     *  */
     protected String _t(String key, Object o, Object o2) {
         return Translate.getString(key, o, o2, _context, BUNDLE_NAME);
     }

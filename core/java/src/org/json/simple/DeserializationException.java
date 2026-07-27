@@ -15,21 +15,24 @@ package org.json.simple;
 public class DeserializationException extends Exception {
     /** The kinds of exceptions that can trigger a DeserializationException. */
     public enum Problems {
-        @SuppressWarnings("javadoc")
+        /** A disallowed token was found in the input. */
         DISALLOWED_TOKEN,
         /** @since 2.3.0 to consolidate exceptions that occur during deserialization. */
         IOEXCEPTION,
-        @SuppressWarnings("javadoc")
+        /** An unexpected character was found in the input. */
         UNEXPECTED_CHARACTER,
-        @SuppressWarnings("javadoc")
+        /** An unexpected exception occurred during deserialization. */
         UNEXPECTED_EXCEPTION,
-        @SuppressWarnings("javadoc")
+        /** An unexpected token was found in the input. */
         UNEXPECTED_TOKEN;
     }
 
     private static final long serialVersionUID = 1L;
+    /** Position */
     private final int position;
+    /** Problem type */
     private final Problems problemType;
+    /** Unexpected object */
     private final Object unexpectedObject;
 
     /** Instantiates a DeserializationException without assumptions.
@@ -47,6 +50,9 @@ public class DeserializationException extends Exception {
         }
     }
 
+    /**
+     * getMessage.
+     */
     @Override
     public String getMessage() {
         final StringBuilder sb = new StringBuilder();

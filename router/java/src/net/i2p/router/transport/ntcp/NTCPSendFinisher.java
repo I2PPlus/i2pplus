@@ -31,6 +31,12 @@ class NTCPSendFinisher {
 
     private static final long[] RATES = {60*1000L, 10*60*1000L, 60*60*1000L};
 
+    /**
+     * Create a new send finisher.
+     *
+     * @param context the I2P app context
+     * @param transport the NTCP transport
+     */
     public NTCPSendFinisher(I2PAppContext context, NTCPTransport transport) {
         _context = context;
         _log = _context.logManager().getLog(NTCPSendFinisher.class);
@@ -43,12 +49,16 @@ class NTCPSendFinisher {
 
     /**
      * Returns the current max send finisher threads.
+     *
+     * @return the max thread count
      * @since 0.9.70+
      */
     public static int getMaxThreads() { return _maxThreads; }
 
     /**
      * Sets the max send finisher threads for new instances.
+     *
+     * @param threads the new max thread count
      * @since 0.9.70+
      */
     public static void setMaxThreads(int threads) {
@@ -57,12 +67,16 @@ class NTCPSendFinisher {
 
     /**
      * Returns the current send finisher queue capacity.
+     *
+     * @return the queue capacity
      * @since 0.9.70+
      */
     public static int getQueueCapacity() { return _queueCapacity; }
 
     /**
      * Sets the send finisher queue capacity for new instances.
+     *
+     * @param capacity the new queue capacity
      * @since 0.9.70+
      */
     public static void setQueueCapacity(int capacity) {
@@ -157,6 +171,7 @@ class NTCPSendFinisher {
      * Get send finisher pool utilization as a ratio (0.0-1.0).
      * Returns NaN if pool not started.
      *
+     * @return the utilization ratio
      * @since 0.9.70+
      */
     public double getUtilization() {
@@ -169,6 +184,8 @@ class NTCPSendFinisher {
     /**
      * Adds a message to the finishing queue to call afterSend asynchronously.
      * If the executor is stopped or saturated, falls back to caller running the task.
+     *
+     * @param msg the message to process after sending
      */
     public void add(OutNetMessage msg) {
         ThreadPoolExecutor executor;

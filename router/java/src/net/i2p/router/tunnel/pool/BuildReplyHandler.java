@@ -40,7 +40,8 @@ class BuildReplyHandler {
     /**
      * Create a new build reply handler.
      *
-     *  @since 0.9.8 (methods were static before)
+     * @param context the I2P app context
+     * @since 0.9.8 (methods were static before)
      */
     public BuildReplyHandler(I2PAppContext context) {
         ctx = context;
@@ -70,9 +71,13 @@ class BuildReplyHandler {
      * @since 0.9.66
      */
     public static class Result {
+        /** The result code. */
         public final int code;
+        /** The properties, or null. */
         public final Properties props;
         /**
+         * Create a new Result.
+         *
          * @param c 0-255 or -1
          * @param p may be null
          */
@@ -88,6 +93,9 @@ class BuildReplyHandler {
      * Note that this layer-decrypts the build records in-place.
      * Do not call this more than once for a given message.
      *
+     * @param reply the tunnel build reply message
+     * @param cfg the tunnel creator config
+     * @param recordOrder the order of records
      * @return status for the records (in record order), or null if the replies were not valid.  Fake records
      *         always have 0 as their value. If the array is non-null, all entries in the array are non-null.
      */

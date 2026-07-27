@@ -31,6 +31,7 @@ public class HopConfig {
     private int _oldMessagesProcessed;
     private volatile int _allocatedBW;
 
+    /** Creates a new HopConfig with default values */
     public HopConfig() {
         _creation = -1;
         _expiration = -1;
@@ -38,16 +39,25 @@ public class HopConfig {
 
     /**
      * What tunnel ID are we receiving on? (0 if uninitialized)
+     *
+     * @return the receive tunnel ID or 0
      */
     public long getReceiveTunnelId() { return (_receiveTunnel != null) ? _receiveTunnel.getTunnelId() : 0; }
 
     /**
      * What tunnel ID are we receiving on? (null if uninitialized)
+     *
+     * @return the receive tunnel or null
      */
     public TunnelId getReceiveTunnel() {
         return _receiveTunnel;
     }
 
+    /**
+     * Set the receive tunnel ID
+     *
+     * @param id the tunnel ID
+     */
     public void setReceiveTunnelId(TunnelId id) { _receiveTunnel = id; }
 
     /**
@@ -64,16 +74,22 @@ public class HopConfig {
 
     /**
      *  Do not set for gateway
+     *
+     *  @param from the previous peer hash
      */
     public void setReceiveFrom(Hash from) { _receiveFrom = from; }
 
     /**
      * What is the next tunnel ID we are sending to? (0 if endpoint)
+     *
+     * @return the send tunnel ID or 0
      */
     public long getSendTunnelId() { return (_sendTunnel != null) ? _sendTunnel.getTunnelId() : 0; }
 
     /**
      * What is the next tunnel ID we are sending to? (null if endpoint)
+     *
+     * @return the send tunnel or null
      */
     public TunnelId getSendTunnel() {
         return _sendTunnel;
@@ -83,6 +99,7 @@ public class HopConfig {
      * Set the send tunnel ID.
      *  Do not set for endpoint
      *
+     *  @param id the tunnel ID
      *  @since 0.9.48
      */
     public void setSendTunnelId(TunnelId id) { _sendTunnel = id; }
@@ -102,23 +119,29 @@ public class HopConfig {
 
     /**
      *  Do not set for endpoint
+     *
+     *  @param to the next peer hash
      */
     public void setSendTo(Hash to) { _sendTo = to; }
 
     /** what key should we use to encrypt the layer before passing it on? */
     public SessionKey getLayerKey() { return _layerKey; }
+    /** Set the layer encryption key */
     public void setLayerKey(SessionKey key) { _layerKey = key; }
 
     /** what key should we use to encrypt the preIV before passing it on? */
     public SessionKey getIVKey() { return _ivKey; }
+    /** Set the IV encryption key */
     public void setIVKey(SessionKey key) { _ivKey = key; }
 
     /** when does this tunnel expire (in ms since the epoch)? */
     public long getExpiration() { return _expiration; }
+    /** Set the tunnel expiration time */
     public void setExpiration(long when) { _expiration = when; }
 
     /** when was this tunnel created (in ms since the epoch)? */
     public long getCreation() { return _creation; }
+    /** Set the tunnel creation time */
     public void setCreation(long when) { _creation = when; }
 
     /**
@@ -147,6 +170,7 @@ public class HopConfig {
      */
     public synchronized void incrementProcessedMessages() { _messagesProcessed++; }
 
+    /** @return the processed messages count */
     public synchronized int getProcessedMessagesCount() { return _messagesProcessed; }
 
     /**

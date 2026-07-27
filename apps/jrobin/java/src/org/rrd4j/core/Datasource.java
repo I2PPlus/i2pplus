@@ -14,24 +14,37 @@ import org.rrd4j.DsType;
  * @author Sasa Markovic
  */
 public class Datasource implements RrdUpdater<Datasource> {
+    /** ignored */
     private static final double MAX_32_BIT = Math.pow(2, 32);
+    /** ignored */
     private static final double MAX_64_BIT = Math.pow(2, 64);
+    /** ignored */
     private static final String INVALID_MIN_MAX_VALUES = "Invalid min/max values: ";
+    /** ignored */
     private double accumLastValue;
 
+    /** ignored */
     private final RrdDb parentDb;
 
     // definition
+    /** ignored */
     private final RrdString<Datasource> dsName;
+    /** ignored */
     private final RrdEnum<Datasource, DsType> dsType;
+    /** ignored */
     private final RrdLong<Datasource> heartbeat;
+    /** ignored */
     private final RrdDouble<Datasource> minValue, maxValue;
 
     // state variables
+    /** ignored */
     private final RrdDouble<Datasource> lastValue;
+    /** ignored */
     private final RrdLong<Datasource> nanSeconds;
+    /** ignored */
     private final RrdDouble<Datasource> accumValue;
 
+    /** ignored */
     Datasource(RrdDb parentDb, DsDef dsDef) throws IOException {
         boolean shouldInitialize = dsDef != null;
         this.parentDb = parentDb;
@@ -57,6 +70,7 @@ public class Datasource implements RrdUpdater<Datasource> {
         }
     }
 
+    /** ignored */
     Datasource(RrdDb parentDb, DataImporter reader, int dsIndex) throws IOException {
         this(parentDb, null);
         dsName.set(reader.getDsName(dsIndex));
@@ -176,6 +190,7 @@ public class Datasource implements RrdUpdater<Datasource> {
         return nanSeconds.get();
     }
 
+    /** ignored */
     final void process(long newTime, double newValue) throws IOException {
         Header header = parentDb.getHeader();
         long step = header.getStep();
@@ -208,6 +223,7 @@ public class Datasource implements RrdUpdater<Datasource> {
         }
     }
 
+    /** ignored */
     private double calculateUpdateValue(
             long oldTime, double oldValue, long newTime, double newValue) throws IOException {
         double updateValue = Double.NaN;
@@ -257,6 +273,7 @@ public class Datasource implements RrdUpdater<Datasource> {
         return updateValue;
     }
 
+    /** ignored */
     private void accumulate(long oldTime, long newTime, double updateValue) throws IOException {
         if (Double.isNaN(updateValue)) {
             nanSeconds.set(nanSeconds.get() + (newTime - oldTime));
@@ -266,6 +283,7 @@ public class Datasource implements RrdUpdater<Datasource> {
         }
     }
 
+    /** ignored */
     private double calculateTotal(long startTime, long boundaryTime) throws IOException {
         double totalValue = Double.NaN;
         long validSeconds = boundaryTime - startTime - nanSeconds.get();
@@ -281,6 +299,7 @@ public class Datasource implements RrdUpdater<Datasource> {
         return totalValue;
     }
 
+    /** ignored */
     private double calculateLastTotal(long startTime, long boundaryTime) throws IOException {
         double totalValue = Double.NaN;
         long validSeconds = boundaryTime - startTime - nanSeconds.get();
@@ -294,6 +313,7 @@ public class Datasource implements RrdUpdater<Datasource> {
         return totalValue;
     }
 
+    /** ignored */
     void appendXml(XmlWriter writer) throws IOException {
         writer.startTag("ds");
         writer.writeTag("name", dsName.get());

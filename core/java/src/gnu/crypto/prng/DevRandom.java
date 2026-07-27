@@ -14,10 +14,15 @@ import net.i2p.data.DataHelper;
  */
 class DevRandom implements IRandomStandalone {
 
+    /** Default constructor */
+    DevRandom() {}
+
     private static final String F = "/dev/random";
     private final File file = new File(F);
 
     /**
+     *  Check if /dev/random is available.
+     *  @return true if /dev/random can be read
      *  @since 0.9.66
      */
     public static boolean isSupported() {

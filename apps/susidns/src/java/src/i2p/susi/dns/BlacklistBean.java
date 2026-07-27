@@ -31,6 +31,8 @@ import java.nio.charset.StandardCharsets;
  * Supports hostnames, b32, and b64 addresses.
  */
 public class BlacklistBean extends BaseBean {
+    /** Blacklist bean for address blacklisting. */
+    public BlacklistBean() {}
     private String fileName;
     private String content;
     private static String cachedContent = null;
@@ -46,7 +48,7 @@ public class BlacklistBean extends BaseBean {
     );
 
     /**
-     * Get the blacklist file path
+     * Blacklist file path
      * @return the absolute path to the blacklist file
      */
     public String getFileName() {
@@ -57,7 +59,7 @@ public class BlacklistBean extends BaseBean {
     }
 
     /**
-     * Get the blacklist file
+     * Blacklist file
      * @return the blacklist file
      */
     private File blacklistFile() {
@@ -324,7 +326,7 @@ public class BlacklistBean extends BaseBean {
     }
 
     /**
-     * Get status messages for the UI
+     * Status messages for the UI
      * @return HTML formatted status message
      */
     public String getMessages() {
@@ -357,7 +359,7 @@ public class BlacklistBean extends BaseBean {
     }
 
     /**
-     * Get the current blacklist content
+     * Current blacklist content
      * @return the blacklist content, or empty string if not loaded
      */
     public String getContent() {

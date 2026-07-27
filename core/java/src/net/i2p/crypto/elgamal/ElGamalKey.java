@@ -21,5 +21,8 @@ import javax.crypto.interfaces.DHKey;
  * @see <a href="https://en.wikipedia.org/wiki/ElGamal_encryption">ElGamal Encryption</a>
  */
 public interface ElGamalKey extends DHKey {
+    /**
+     * getParameters().
+     */
     public ElGamalParameterSpec getParameters();
 }

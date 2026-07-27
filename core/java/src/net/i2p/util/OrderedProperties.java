@@ -31,6 +31,9 @@ public class OrderedProperties extends Properties {
 
     private static final EntryComparator ECOMP = new EntryComparator();
 
+    /**
+     * Create a new OrderedProperties with default values.
+     */
     public OrderedProperties() {
         super();
     }

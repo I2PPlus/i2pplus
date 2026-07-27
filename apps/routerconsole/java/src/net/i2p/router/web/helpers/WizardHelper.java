@@ -16,7 +16,13 @@ import net.i2p.router.web.HelperBase;
  */
 public class WizardHelper extends HelperBase {
 
+    /**
+     * PROP_COMPLETE.
+     */
     public static final String PROP_COMPLETE = "routerconsole.welcomeWizardComplete";
+    /**
+     * BW_SCALE.
+     */
     public static final float BW_SCALE = 0.75f; // scale bw test results by this for limiter settings
     private static final float MIN_DOWN_BW = 32.0f; // KBps
     private static final float MIN_UP_BW = 12.0f;
@@ -39,9 +45,21 @@ public class WizardHelper extends HelperBase {
         }
     }
 
+    /**
+     * complete.
+     */
     public void complete() {_context.router().saveConfig(PROP_COMPLETE, "true");}
+    /**
+     * isNDTComplete.
+     */
     public synchronized boolean isNDTComplete() {return _listener != null && _listener.isComplete();}
+    /**
+     * isNDTRunning.
+     */
     public synchronized boolean isNDTRunning() {return _listener != null && !_listener.isComplete();}
+    /**
+     * isNDTSuccessful.
+     */
     public synchronized boolean isNDTSuccessful() {return isNDTComplete() && getUpBandwidth() > 0 && getDownBandwidth() > 0;}
 
     /**
@@ -274,12 +292,33 @@ public class WizardHelper extends HelperBase {
         private String _summary;
         private String _detail;
         private Map<String, Object> _results;
+        /**
+         * reportSummary.
+         */
         public synchronized void reportSummary(String str) {_summary = str;}
+        /**
+         * reportDetail.
+         */
         public synchronized void reportDetail(String str) {_detail = str;}
+        /**
+         * complete.
+         */
         public synchronized void complete(Map<String, Object> results) {_results = results;}
+        /**
+         * isComplete.
+         */
         public synchronized boolean isComplete() {return _results != null;}
+        /**
+         * getSummary.
+         */
         public synchronized String getSummary() {return _summary;}
+        /**
+         * getDetail.
+         */
         public synchronized String getDetail() {return _detail;}
+        /**
+         * getResults.
+         */
         public synchronized Map<String, Object> getResults() {return _results;}
     }
 

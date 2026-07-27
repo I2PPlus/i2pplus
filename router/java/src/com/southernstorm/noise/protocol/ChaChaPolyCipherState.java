@@ -57,7 +57,10 @@ public class ChaChaPolyCipherState implements CipherState {
     }
 
     /**
-     * Copy constructor for cloning
+     * Copy constructor for cloning.
+     *
+     * @param o the cipher state to copy
+     * @throws CloneNotSupportedException if cloning is not supported
      * @since 0.9.44
      */
     protected ChaChaPolyCipherState(ChaChaPolyCipherState o) throws CloneNotSupportedException {

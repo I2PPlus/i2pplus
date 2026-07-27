@@ -24,13 +24,22 @@ package com.google.zxing;
  */
 public final class WriterException extends Exception {
 
+  /**
+   * WriterException.
+   */
   public WriterException() {
   }
 
+  /**
+   * WriterException.
+   */
   public WriterException(String message) {
     super(message);
   }
 
+  /**
+   * WriterException.
+   */
   public WriterException(Throwable cause) {
     super(cause);
   }

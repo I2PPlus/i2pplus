@@ -46,6 +46,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
     /** set of MessageState objects, representing all of the messages in the process of being sent */
     protected final Map<Long, MessageState> _sendingStates;
+    /**
+     * _sendMessageNonce.
+     */
     protected final AtomicLong _sendMessageNonce;
     /** max # seconds to wait for confirmation of the message send */
     private final static long SEND_TIMEOUT = (long) 60 * 1000; // 60 seconds to send
@@ -93,6 +96,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @param options set of options to configure the router with, if null will use System properties
      * @since 0.9.21
      */
+    /**
+     * I2PSessionImpl2.
+     */
     protected I2PSessionImpl2(I2PSessionImpl primary, InputStream destKeyStream, Properties options) throws I2PSessionException {
         super(primary, destKeyStream, options);
         _sendingStates = new ConcurrentHashMap<>(32);
@@ -119,8 +125,14 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      */
     private class RemoveExpired extends SimpleTimer2.TimedEvent {
 
+        /**
+         * RemoveExpired.
+         */
         public RemoveExpired() {super(_context.simpleTimer2(), REMOVE_EXPIRED_TIME);}
 
+        /**
+         * timeReached.
+         */
         @Override
         public void timeReached() {
             if (isClosed()) {return;}
@@ -135,9 +147,21 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         }
     }
 
+    /**
+     * getTimeout.
+     */
+    /**
+     * Return the timeout value.
+     */
     protected long getTimeout() {return SEND_TIMEOUT;}
 
+    /**
+     * destroySession.
+     */
     @Override
+    /**
+     * Destroy the I2P session.
+     */
     public void destroySession(boolean sendDisconnect) {
         clearStates();
         super.destroySession(sendDisconnect);
@@ -157,6 +181,12 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
     private static final int DONT_COMPRESS_SIZE = 66; // Todo: don't compress if destination is local?
 
+    /**
+     * shouldCompress.
+     */
+    /**
+     * Return whether compression should be used.
+     */
     protected boolean shouldCompress(int size) {
         if (size <= DONT_COMPRESS_SIZE) {return false;}
         String p = getOptions().getProperty(I2PClient.PROP_GZIP);
@@ -170,6 +200,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @throws UnsupportedOperationException always
      */
     @Override
+    /**
+     * Register a session listener.
+     */
     public void addSessionListener(I2PSessionListener lsnr, int proto, int port) {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
@@ -179,6 +212,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @throws UnsupportedOperationException always
      */
     @Override
+    /**
+     * Register a muxed session listener.
+     */
     public void addMuxedSessionListener(I2PSessionMuxedListener l, int proto, int port) {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
@@ -188,6 +224,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @throws UnsupportedOperationException always
      */
     @Override
+    /**
+     * Remove a registered listener.
+     */
     public void removeListener(int proto, int port) {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
@@ -197,6 +236,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @throws UnsupportedOperationException always
      */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload, int proto, int fromport, int toport) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
@@ -206,6 +248,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @throws UnsupportedOperationException always
      */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent,
                                int proto, int fromport, int toport) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
@@ -216,6 +261,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @throws UnsupportedOperationException always
      */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire,
                                int proto, int fromport, int toport) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
@@ -226,6 +274,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @throws UnsupportedOperationException always
      */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire,
                                int proto, int fromport, int toport, int flags) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
@@ -236,6 +287,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @throws UnsupportedOperationException always
      */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size,
                                int proto, int fromport, int toport, SendMessageOptions options) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
@@ -246,6 +300,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @throws UnsupportedOperationException always
      */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public long sendMessage(Destination dest, byte[] payload, int offset, int size,
                                int proto, int fromport, int toport,
                                SendMessageOptions options, SendMessageStatusListener listener) throws I2PSessionException {
@@ -258,7 +315,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         return sendMessage(dest, payload, 0, payload.length);
     }
 
+    /**
+     * sendMessage.
+     */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size) throws I2PSessionException {
         // we don't do end-to-end crypto any more
         return sendMessage(dest, payload, offset, size, null, null, 0);
@@ -271,6 +334,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @param tagsSent unused - no end-to-end crypto
      */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload, SessionKey keyUsed, Set<SessionTag> tagsSent) throws I2PSessionException {
         return sendMessage(dest, payload, 0, payload.length, keyUsed, tagsSent, 0);
     }
@@ -282,6 +348,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @param tagsSent unused - no end-to-end crypto
      */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent)
                    throws I2PSessionException {
         return sendMessage(dest, payload, offset, size, keyUsed, tagsSent, 0);
@@ -294,6 +363,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @param tagsSent unused - no end-to-end crypto
      */
     @Override
+    /**
+     * Send an I2CP message.
+     */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires)
                    throws I2PSessionException {
         if (_log.shouldDebug()) {_log.debug("Sending message");}
@@ -330,6 +402,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * pull the unencrypted AND DECOMPRESSED data
      */
     @Override
+    /**
+     * Receive a message from the router.
+     */
     public byte[] receiveMessage(int msgId) throws I2PSessionException {
         byte[] compressed = super.receiveMessage(msgId);
         if (compressed == null) {
@@ -428,6 +503,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      *  @param status != 0
      */
     @Override
+    /**
+     * Handle a session status update.
+     */
     public void receiveStatus(int msgId, long nonce, int status) {
         if (_log.shouldDebug()) {
             _log.debug(getPrefix() + " -> Received status " + status + " for [MsgID " + msgId + " / " + nonce + "]");
@@ -471,6 +549,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      *
      */
     @Override
+    /**
+     * Reconnect the I2CP session.
+     */
     protected boolean reconnect() {
         // even if we succeed in reconnecting, we want to clear the old states,
         // since this will be a new sessionId
@@ -517,6 +598,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * {@inheritDoc}
      */
     @Override
+    /**
+     * Register a tunnel status listener.
+     */
     public void addTunnelStatusListener(TunnelStatusListener lsnr) {
         _tunnelStatusListeners.add(lsnr);
         // If in router context, also register with TunnelPoolManager for direct notifications
@@ -532,7 +616,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         }
     }
 
+    /**
+     * removeTunnelStatusListener.
+     */
     @Override
+    /**
+     * Remove a tunnel status listener.
+     */
     public void removeTunnelStatusListener(TunnelStatusListener lsnr) {
         _tunnelStatusListeners.remove(lsnr);
         // Also remove from TunnelPoolManager if in router context
@@ -548,19 +638,37 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         }
     }
 
+    /**
+     * switchToNewTunnel.
+     */
     @Override
+    /**
+     * Switch to the new tunnel set.
+     */
     public boolean switchToNewTunnel() {
         return false;
     }
 
+    /**
+     * setCurrentTunnelPair.
+     */
     @Override
+    /**
+     * Set the current tunnel pair.
+     */
     public void setCurrentTunnelPair(TunnelPair pair) {
         _currentTunnelPair = pair;
     }
 
     private volatile TunnelPair _currentTunnelPair;
 
+    /**
+     * getCurrentTunnelPair.
+     */
     @Override
+    /**
+     * Return the current tunnel pair.
+     */
     public TunnelPair getCurrentTunnelPair() {
         // First check if we have an explicitly set pair
         TunnelPair explicit = _currentTunnelPair;
@@ -588,7 +696,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         return null;
     }
 
+    /**
+     * rebuildTunnels.
+     */
     @Override
+    /**
+     * Rebuild the tunnel set.
+     */
     public void rebuildTunnels() {
         // Trigger the tunnel pool to build new tunnels
         if (_context.isRouterContext()) {
@@ -608,6 +722,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      *
      *  @since 0.9.69
      */
+    /**
+     * Notify listeners of a tunnel failure.
+     */
     protected void notifyTunnelFailed(String poolName, boolean isInbound) {
         for (TunnelStatusListener lsnr : _tunnelStatusListeners) {
             try {
@@ -624,6 +741,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      *
      *  @since 0.9.69+
      */
+    /**
+     * Notify listeners of a tunnel removal.
+     */
     protected void notifyTunnelRemoved(TunnelRemovalEvent event) {
         for (TunnelStatusListener lsnr : _tunnelStatusListeners) {
             try {
@@ -639,6 +759,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      *  Notify all tunnel status listeners of pool shutdown.
      *
      *  @since 0.9.69+
+     */
+    /**
+     * Notify listeners of pool shutdown.
      */
     protected void notifyPoolShuttingDown(String poolName, boolean isInbound) {
         for (TunnelStatusListener lsnr : _tunnelStatusListeners) {

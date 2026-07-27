@@ -33,10 +33,13 @@ class ValueAxis extends Axis {
         new YLabel(100000.0, 1, 2, 5, 10),
         new YLabel(0.0, 0, 0, 0, 0)
     };
-
+    /** Im */
     private final ImageParameters im;
+    /** Worker */
     private final ImageWorker worker;
+    /** Gdef */
     private final RrdGraphDef gdef;
+    /** Mapper */
     private final Mapper mapper;
 
     /**
@@ -52,13 +55,14 @@ class ValueAxis extends Axis {
         this.mapper = new Mapper(this.gdef, this.im);
     }
 
+    /** Constructor */
     ValueAxis(RrdGraphGenerator generator) {
         this.im = generator.im;
         this.gdef = generator.gdef;
         this.worker = generator.worker;
         this.mapper = generator.mapper;
     }
-
+    /** Draw */
     boolean draw() {
         Font font = gdef.getFont(FONTTAG_AXIS);
         Paint gridColor = gdef.getColor(ElementsNames.grid);
@@ -279,6 +283,7 @@ class ValueAxis extends Axis {
         return (int) (im.ysize / (scaledrange / thisYLabel.grid));
     }
 
+    /** @return the scaled range */
     private double getScaledRange() {
         double range = im.maxval - im.minval;
         return range / im.magfact;
@@ -300,9 +305,12 @@ class ValueAxis extends Axis {
      * for axis formatting.
      */
     static class YLabel {
+        /** The grid step */
         final double grid;
+        /** The label factors */
         final int[] labelFacts;
 
+        /** Constructor */
         YLabel(double grid, int lfac1, int lfac2, int lfac3, int lfac4) {
             this.grid = grid;
             labelFacts = new int[] {lfac1, lfac2, lfac3, lfac4};

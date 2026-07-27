@@ -38,6 +38,9 @@ public class SSDPSearchRequest extends SSDPRequest {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     * SSDPSearchRequest.
+     */
     public SSDPSearchRequest(String serachTarget, int mx) {
         setMethod(HTTP.M_SEARCH);
         setURI("*");
@@ -47,10 +50,16 @@ public class SSDPSearchRequest extends SSDPRequest {
         setHeader(HTTP.MAN, "\"" + MAN.DISCOVER + "\"");
     }
 
+    /**
+     * SSDPSearchRequest.
+     */
     public SSDPSearchRequest(String serachTarget) {
         this(serachTarget, SSDP.DEFAULT_MSEARCH_MX);
     }
 
+    /**
+     * SSDPSearchRequest.
+     */
     public SSDPSearchRequest() {
         this(ST.ROOT_DEVICE);
     }
@@ -59,6 +68,9 @@ public class SSDPSearchRequest extends SSDPRequest {
     //	HOST
     ////////////////////////////////////////////////
 
+    /**
+     * setLocalAddress.
+     */
     public void setLocalAddress(String bindAddr) {
         String ssdpAddr = SSDP.ADDRESS;
         if (HostInterface.isIPv6Address(bindAddr) == true) ssdpAddr = SSDP.getIPv6Address();

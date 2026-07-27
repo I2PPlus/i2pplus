@@ -106,12 +106,16 @@ import org.klomp.snark.dht.DHT;
 public class I2PSnarkServlet extends BasicServlet {
 
     private static final long serialVersionUID = 1L;
+    /**  context path */
     private String _contextPath; /* generally "/i2psnark" */
+    /**  context name */
     private String _contextName; /* generally "i2psnark" */
     private transient SnarkManager _manager;
     /** Rotating CSRF nonce, rotates every 5 minutes */
     private long _currentNonce;
+    /**  recent nonces */
     private final long[] _recentNonces = new long[2];
+    /**  last rotation */
     private long _lastRotation;
     private static final long NONCE_ROTATION_MS = 5 * (long) 60 * 1000; // 5 minutes
 
@@ -124,20 +128,36 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final Pattern BASE32_PATTERN = Pattern.compile("[a-zA-Z2-7]+");
     private static final Pattern NUMBER_PATTERN = Pattern.compile("\\d+");
 
+    /**  theme path */
     private String _themePath;
+    /**  resource path */
     private String _resourcePath;
+    /**  img path */
     private String _imgPath;
+    /**  last announce u r l */
     private String _lastAnnounceURL;
 
     private static final String DEFAULT_NAME = "i2psnark";
+    /**
+     * PROP_CONFIG_FILE.
+     */
     public static final String PROP_CONFIG_FILE = "i2psnark.configFile";
+    /**
+     * WARBASE.
+     */
     public static final String WARBASE = "/.res/";
+    /** H e l l i p */
     static final char HELLIP = '\u2026';
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
+    /** Search results */
     private int searchResults;
     private static boolean debug = false;
+    /** Csp nonce */
     String cspNonce = Integer.toHexString(_context.random().nextInt());
+    /**
+     * I2PSnarkServlet.
+     */
     public I2PSnarkServlet() {super();}
 
     /**
@@ -354,6 +374,9 @@ public class I2PSnarkServlet extends BasicServlet {
         return originHost.equals(requestHost) && originPort == requestPort;
     }
 
+    /**
+     * init.
+     */
     @Override
     public void init(ServletConfig cfg) throws ServletException {
         super.init(cfg);
@@ -376,6 +399,9 @@ public class I2PSnarkServlet extends BasicServlet {
         setWarBase(WARBASE);
     }
 
+    /**
+     * destroy.
+     */
     @Override
     public void destroy() {
         if (_manager != null) {_manager.stop();}
@@ -2791,7 +2817,7 @@ public class I2PSnarkServlet extends BasicServlet {
         return;
     }
 
-    /** @since 0.9 */
+    /** @param action the action @param req the request */
     private void processTrackerForm(String action, HttpServletRequest req) {
         if (action.equals(_t("Delete selected")) || action.equals(_t("Save tracker configuration"))) {
             boolean changed = false;
@@ -2868,7 +2894,7 @@ public class I2PSnarkServlet extends BasicServlet {
         } else {_manager.addMessage("Unknown POST action: \"" + action + '\"');}
     }
 
-    /** @since 0.9.62+ */
+    /** @param action the action @param req the request */
     private void processTorrentCreateFilterForm(String action, HttpServletRequest req) {
         if (action.equals(_t("Delete selected")) || action.equals(_t("Save Filter Configuration"))) {
             boolean changed = false;
@@ -2969,6 +2995,7 @@ public class I2PSnarkServlet extends BasicServlet {
         return rv;
     }
 
+    /** M a x  d i s p l a y e d  f i l e n a m e  l e n g t h */
     static final int MAX_DISPLAYED_FILENAME_LENGTH = 255;
 
     /**
@@ -3654,6 +3681,9 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private static class PeerComparator implements Comparator<Peer>, Serializable {
 
+        /**
+         * compare.
+         */
         public int compare(Peer l, Peer r) {
             int diff = r.completed() - l.completed(); // reverse
             if (diff != 0) {return diff;}
@@ -6106,7 +6136,7 @@ public class I2PSnarkServlet extends BasicServlet {
         return buf.toString();
     }
 
-    /** @since 0.8.1 */
+    /** @param snark the torrent @param postParams the form params */
     private void savePriorities(Snark snark, Map<String, String[]> postParams) {
         Storage storage = snark.getStorage();
         if (storage == null) {return;}
@@ -6126,7 +6156,7 @@ public class I2PSnarkServlet extends BasicServlet {
         _manager.saveTorrentStatus(snark);
     }
 
-    /** @since 0.9.31 */
+    /** @param snark the torrent @param postParams the form params */
     private void saveComments(Snark snark, Map<String, String[]> postParams) {
         String[] a = postParams.get("myRating");
         String r = (a != null) ? a[0] : null;
@@ -6141,7 +6171,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!changed) {_log.warn("Add of comment ID " + com.getID() + " failed");}
     }
 
-    /** @since 0.9.31 */
+    /** @param snark the torrent @param postParams the form params */
     private void deleteComments(Snark snark, Map<String, String[]> postParams) {
         CommentSet cs = snark.getComments();
         if (cs == null) {return;}
@@ -6159,7 +6189,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
     }
 
-    /** @since 0.9.31 */
+    /** @param snark the torrent @param postParams the form params */
     private void saveCommentsSetting(Snark snark, Map<String, String[]> postParams) {
         boolean yes = postParams.get("enableComments") != null;
         _manager.setSavedCommentsEnabled(snark, yes);
@@ -6167,7 +6197,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * @param snark non-null
-     * @since 0.9.53
+     * @param base the base path
+     * @param buf output buffer
      */
     private void displayTorrentEdit(Snark snark, String base, StringBuilder buf) {
         if (snark == null) {return;}
@@ -6395,7 +6426,7 @@ public class I2PSnarkServlet extends BasicServlet {
         _manager.addMessage("Torrent changes saved");
     }
 
-    /** @since 0.9.32 */
+    /** @param req the request */
     private static boolean noCollapsePanels(HttpServletRequest req) {
         // check for user agents that can't toggle the collapsible panels...
         // TODO: QupZilla supports panel collapse as of circa v2.1.2, so disable conditionally

@@ -83,6 +83,9 @@ public class DNSKEY extends Data {
      */
     private transient Integer keyTag;
 
+    /**
+     * parse.
+     */
     public static DNSKEY parse(DataInputStream dis, int length) throws IOException {
         if (length < 4) {
             throw new IOException("Invalid DNSKEY record: length too short");
@@ -106,14 +109,23 @@ public class DNSKEY extends Data {
         this.key = key;
     }
 
+    /**
+     * DNSKEY.
+     */
     public DNSKEY(short flags, byte protocol, byte algorithm, byte[] key) {
         this(flags, protocol, SignatureAlgorithm.forByte(algorithm), algorithm, key);
     }
 
+    /**
+     * DNSKEY.
+     */
     public DNSKEY(short flags, byte protocol, SignatureAlgorithm algorithm, byte[] key) {
         this(flags, protocol, algorithm, algorithm.number, key);
     }
 
+    /**
+     * getType.
+     */
     @Override
     public TYPE getType() {
         return TYPE.DNSKEY;
@@ -141,6 +153,9 @@ public class DNSKEY extends Data {
         return keyTag;
     }
 
+    /**
+     * serialize.
+     */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
         dos.writeShort(flags);
@@ -149,26 +164,41 @@ public class DNSKEY extends Data {
         dos.write(key);
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder().append(flags).append(' ').append(protocol).append(' ').append(algorithm).append(' ').append(Base64.encodeToString(key));
         return sb.toString();
     }
 
+    /**
+     * getKeyLength.
+     */
     public int getKeyLength() {
         return key.length;
     }
 
+    /**
+     * getKey.
+     */
     public byte[] getKey() {
         return key.clone();
     }
 
+    /**
+     * getKeyAsDataInputStream.
+     */
     public DataInputStream getKeyAsDataInputStream() {
         return new DataInputStream(new ByteArrayInputStream(key));
     }
 
     private transient String keyBase64Cache;
 
+    /**
+     * getKeyBase64.
+     */
     public String getKeyBase64() {
         if (keyBase64Cache == null) {
             keyBase64Cache = Base64.encodeToString(key);
@@ -178,6 +208,9 @@ public class DNSKEY extends Data {
 
     private transient BigInteger keyBigIntegerCache;
 
+    /**
+     * getKeyBigInteger.
+     */
     public BigInteger getKeyBigInteger() {
         if (keyBigIntegerCache == null) {
             keyBigIntegerCache = new BigInteger(key);
@@ -185,10 +218,16 @@ public class DNSKEY extends Data {
         return keyBigIntegerCache;
     }
 
+    /**
+     * keyEquals.
+     */
     public boolean keyEquals(byte[] otherKey) {
         return Arrays.equals(key, otherKey);
     }
 
+    /**
+     * isSecureEntryPoint.
+     */
     public boolean isSecureEntryPoint() {
         return (flags & FLAG_SECURE_ENTRY_POINT) == 1;
     }

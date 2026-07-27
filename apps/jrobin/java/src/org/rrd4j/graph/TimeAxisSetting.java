@@ -5,16 +5,26 @@ package org.rrd4j.graph;
  * formatting, and time span settings.
  */
 class TimeAxisSetting {
+    /** Sec per pix */
     final long secPerPix;
+    /** Major unit */
     final TimeUnit majorUnit;
+    /** Major unit count */
     final int majorUnitCount;
+    /** Minor unit */
     final TimeUnit minorUnit;
+    /** Minor unit count */
     final int minorUnitCount;
+    /** Label unit */
     final TimeUnit labelUnit;
+    /** Label unit count */
     final int labelUnitCount;
+    /** Label span */
     final int labelSpan;
+    /** Format */
     final TimeLabelFormat format;
 
+    /** Create TimeAxisSetting */
     TimeAxisSetting(
             long secPerPix,
             TimeUnit minorUnit,
@@ -36,6 +46,7 @@ class TimeAxisSetting {
         this.format = format;
     }
 
+    /** Create TimeAxisSetting */
     TimeAxisSetting(
             long secPerPix,
             TimeUnit minorUnit,
@@ -56,6 +67,7 @@ class TimeAxisSetting {
         this.format = new SimpleTimeLabelFormat(labelUnit.getLabel());
     }
 
+    /** Copy constructor */
     TimeAxisSetting(TimeAxisSetting s) {
         this.secPerPix = s.secPerPix;
         this.minorUnit = s.minorUnit;
@@ -68,6 +80,7 @@ class TimeAxisSetting {
         this.format = s.format;
     }
 
+    /** Create TimeAxisSetting */
     TimeAxisSetting(
             int minorUnit,
             int minorUnitCount,
@@ -88,6 +101,9 @@ class TimeAxisSetting {
                 labelSpan,
                 format);
     }
+    /**
+     * With label format
+     */
 
     TimeAxisSetting withLabelFormat(TimeLabelFormat f) {
         return new TimeAxisSetting(

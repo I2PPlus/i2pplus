@@ -44,6 +44,7 @@ public final class ElGamalAESEngine {
     public static final int MAX_TAGS_RECEIVED = 200;
     private static final int ELG_CLEARTEXT_LENGTH = 222;
     private static final int ELG_ENCRYPTED_LENGTH = 514;
+/** Elgamalaesengine */
 
     public ElGamalAESEngine(I2PAppContext ctx) {
         _context = ctx;
@@ -785,35 +786,4 @@ public final class ElGamalAESEngine {
         return aesData;
     }
 
-/****
-    public static void main(String[] args) {
-        I2PAppContext ctx = new I2PAppContext();
-        ElGamalAESEngine e = new ElGamalAESEngine(ctx);
-        Object[] kp = ctx.keyGenerator().generatePKIKeypair();
-        PublicKey pubKey = (PublicKey)kp[0];
-        PrivateKey privKey = (PrivateKey)kp[1];
-        SessionKey sessionKey = ctx.keyGenerator().generateSessionKey();
-        for (int i = 0; i < 10; i++) {
-            try {
-                Set tags = new HashSet(5);
-                if (i == 0) {
-                    for (int j = 0; j < 5; j++)
-                        tags.add(new SessionTag(true));
-                }
-                byte[] encrypted = e.encrypt("blah".getBytes(), pubKey, sessionKey, tags, 1024);
-                byte[] decrypted = e.decrypt(encrypted, privKey);
-                if ("blah".equals(new String(decrypted))) {
-                    System.out.println("equal on " + i);
-                } else {
-                    System.out.println("NOT equal on " + i + ": " + new String(decrypted));
-                    break;
-                }
-                ctx.sessionKeyManager().tagsDelivered(pubKey, sessionKey, tags);
-            } catch (Exception ee) {
-                ee.printStackTrace();
-                break;
-            }
-        }
-    }
-****/
 }

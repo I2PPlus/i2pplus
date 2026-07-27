@@ -46,11 +46,20 @@ import net.i2p.util.Log;
  * @since 0.8.8
  */
 class TransientDataStore implements DataStore {
+    /**
+     * _log.
+     */
     protected final Log _log;
     private final ConcurrentHashMap<Hash, DatabaseEntry> _data;
+    /**
+     * _context.
+     */
     protected final RouterContext _context;
     private final BanLogger _banLogger;
 
+    /**
+     * TransientDataStore.
+     */
     public TransientDataStore(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
@@ -59,11 +68,23 @@ class TransientDataStore implements DataStore {
         _banLogger.initialize(ctx);
     }
 
+    /**
+     * isInitialized.
+     */
     @Override
     public boolean isInitialized() {return true;}
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    /**
+     * enableReverseLookups.
+     */
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
+    /**
+     * stop.
+     */
     public void stop() {_data.clear();}
+    /**
+     * rescan.
+     */
     public void rescan() { /* No-op - in-memory store has no external state to rescan */ }
 
     /**
@@ -106,16 +127,25 @@ class TransientDataStore implements DataStore {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * get.
+     */
     public DatabaseEntry get(Hash key) {
         if (key != null) {return _data.get(key);}
         else {return null;}
     }
 
+    /**
+     * isKnown.
+     */
     @Override
     public boolean isKnown(Hash key) {
         return _data.containsKey(key);
     }
 
+    /**
+     * countLeaseSets.
+     */
     public int countLeaseSets() {
         int count = 0;
         for (DatabaseEntry d : _data.values()) {
@@ -276,12 +306,18 @@ class TransientDataStore implements DataStore {
      *  @param data non-null
      *  @since 0.9.64
      */
+    /**
+     * forcePut.
+     */
     @Override
     public boolean forcePut(Hash key, DatabaseEntry data) {
         _data.put(key, data);
         return true;
     }
 
+    /**
+     * toString.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
@@ -302,6 +338,9 @@ class TransientDataStore implements DataStore {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * remove.
+     */
     public DatabaseEntry remove(Hash key) {
         return _data.remove(key);
     }

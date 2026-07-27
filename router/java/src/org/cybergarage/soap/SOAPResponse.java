@@ -38,17 +38,26 @@ public class SOAPResponse extends HTTPResponse {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     * SOAPResponse.
+     */
     public SOAPResponse() {
         setRootNode(SOAP.createEnvelopeBodyNode());
         setContentType(XML.DEFAULT_CONTENT_TYPE);
     }
 
+    /**
+     * SOAPResponse.
+     */
     public SOAPResponse(HTTPResponse httpRes) {
         super(httpRes);
         setRootNode(SOAP.createEnvelopeBodyNode());
         setContentType(XML.DEFAULT_CONTENT_TYPE);
     }
 
+    /**
+     * SOAPResponse.
+     */
     public SOAPResponse(SOAPResponse soapRes) {
         super(soapRes);
         setEnvelopeNode(soapRes.getEnvelopeNode());
@@ -73,20 +82,41 @@ public class SOAPResponse extends HTTPResponse {
     //	SOAP Basic
     ////////////////////////////////////////////////
 
+    /**
+     * Set the SOAP envelope node.
+     *
+     * @param node the envelope node to set
+     */
     public void setEnvelopeNode(Node node) {
         setRootNode(node);
     }
 
+    /**
+     * Get the SOAP envelope node.
+     *
+     * @return the envelope node, or null if not set
+     */
     public Node getEnvelopeNode() {
         return getRootNode();
     }
 
+    /**
+     * Get the SOAP body node.
+     *
+     * @return the body node, or null if no envelope
+     */
     public Node getBodyNode() {
         Node envNode = getEnvelopeNode();
         if (envNode == null) return null;
         return envNode.getNodeEndsWith(SOAP.BODY);
     }
 
+    /**
+     * Get the method response node for the given name.
+     *
+     * @param name the method name
+     * @return the response node, or null if not found
+     */
     public Node getMethodResponseNode(String name) {
         Node bodyNode = getBodyNode();
         if (bodyNode == null) return null;
@@ -94,48 +124,88 @@ public class SOAPResponse extends HTTPResponse {
         return bodyNode.getNodeEndsWith(methodResName);
     }
 
+    /**
+     * Get the SOAP fault node.
+     *
+     * @return the fault node, or null if not found
+     */
     public Node getFaultNode() {
         Node bodyNode = getBodyNode();
         if (bodyNode == null) return null;
         return bodyNode.getNodeEndsWith(SOAP.FAULT);
     }
 
+    /**
+     * Get the SOAP fault code node.
+     *
+     * @return the fault code node, or null if not found
+     */
     public Node getFaultCodeNode() {
         Node faultNode = getFaultNode();
         if (faultNode == null) return null;
         return faultNode.getNodeEndsWith(SOAP.FAULT_CODE);
     }
 
+    /**
+     * Get the SOAP fault string node.
+     *
+     * @return the fault string node, or null if not found
+     */
     public Node getFaultStringNode() {
         Node faultNode = getFaultNode();
         if (faultNode == null) return null;
         return faultNode.getNodeEndsWith(SOAP.FAULT_STRING);
     }
 
+    /**
+     * Get the SOAP fault actor node.
+     *
+     * @return the fault actor node, or null if not found
+     */
     public Node getFaultActorNode() {
         Node faultNode = getFaultNode();
         if (faultNode == null) return null;
         return faultNode.getNodeEndsWith(SOAP.FAULTACTOR);
     }
 
+    /**
+     * Get the SOAP fault detail node.
+     *
+     * @return the fault detail node, or null if not found
+     */
     public Node getFaultDetailNode() {
         Node faultNode = getFaultNode();
         if (faultNode == null) return null;
         return faultNode.getNodeEndsWith(SOAP.DETAIL);
     }
 
+    /**
+     * Get the SOAP fault code string.
+     *
+     * @return the fault code, or empty string if not found
+     */
     public String getFaultCode() {
         Node node = getFaultCodeNode();
         if (node == null) return "";
         return node.getValue();
     }
 
+    /**
+     * Get the SOAP fault string.
+     *
+     * @return the fault string, or empty string if not found
+     */
     public String getFaultString() {
         Node node = getFaultStringNode();
         if (node == null) return "";
         return node.getValue();
     }
 
+    /**
+     * Get the SOAP fault actor string.
+     *
+     * @return the fault actor, or empty string if not found
+     */
     public String getFaultActor() {
         Node node = getFaultActorNode();
         if (node == null) return "";
@@ -146,6 +216,11 @@ public class SOAPResponse extends HTTPResponse {
     //	XML Contents
     ////////////////////////////////////////////////
 
+    /**
+     * Set the content from an XML node.
+     *
+     * @param node the XML node to set as content
+     */
     public void setContent(Node node) {
         // Thanks for Ralf G. R. Bergs <Ralf@Ber.gs>, Inma Marin Lopez <inma@dif.um.es>.
         String conStr = "";
@@ -159,6 +234,9 @@ public class SOAPResponse extends HTTPResponse {
     //	print
     ////////////////////////////////////////////////
 
+    /**
+     * print.
+     */
     public void print() {
         Debug.message(toString());
         if (hasContent() == true) return;

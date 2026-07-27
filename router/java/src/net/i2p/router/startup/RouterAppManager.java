@@ -30,6 +30,9 @@ public class RouterAppManager extends ClientAppManagerImpl {
     // this assumes clients do not override equals()
     private final ConcurrentHashMap<ClientApp, String[]> _clients;
 
+    /**
+     * RouterAppManager.
+     */
     public RouterAppManager(RouterContext ctx) {
         super(ctx);
         _log = ctx.logManager().getLog(RouterAppManager.class);
@@ -216,6 +219,9 @@ public class RouterAppManager extends ClientAppManagerImpl {
      *  @since 0.9.6
      */
     public class Shutdown implements Runnable {
+        /**
+         * run.
+         */
         @Override
         public void run() {
             shutdown();
