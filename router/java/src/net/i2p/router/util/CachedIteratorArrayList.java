@@ -1,6 +1,7 @@
 package net.i2p.router.util;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
@@ -76,25 +77,34 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
         int expectedModCount;
 
         /** Reference to the owning list, set on each call to iterator() */
-        private transient CachedIteratorArrayList<E> list;
+        private transient WeakReference<CachedIteratorArrayList<E>> listRef;
 
         void reset(CachedIteratorArrayList<E> list) {
-            this.list = list;
+            this.listRef = new WeakReference<CachedIteratorArrayList<E>>(list);
             cursor = 0;
             lastRet = -1;
             expectedModCount = list.modCount;
         }
 
+        private CachedIteratorArrayList<E> list() {
+            CachedIteratorArrayList<E> l = listRef != null ? listRef.get() : null;
+            if (l == null)
+                throw new ConcurrentModificationException();
+            return l;
+        }
+
         public boolean hasNext() {
-            return cursor != list.size();
+            CachedIteratorArrayList<E> l = listRef != null ? listRef.get() : null;
+            return l != null && cursor != l.size();
         }
 
         public E next() {
-            checkForComodification();
+            CachedIteratorArrayList<E> l = list();
+            checkForComodification(l);
             int i = cursor;
-            if (i >= list.size())
+            if (i >= l.size())
                 throw new NoSuchElementException();
-            E next = list.get(i);
+            E next = l.get(i);
             lastRet = i;
             cursor = i + 1;
             return next;
@@ -103,21 +113,22 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
         public void remove() {
             if (lastRet < 0)
                 throw new IllegalStateException();
-            checkForComodification();
+            CachedIteratorArrayList<E> l = list();
+            checkForComodification(l);
 
             try {
-                list.remove(lastRet);
+                l.remove(lastRet);
                 if (lastRet < cursor)
                     cursor--;
                 lastRet = -1;
-                expectedModCount = list.modCount;
+                expectedModCount = l.modCount;
             } catch (IndexOutOfBoundsException e) {
                 throw new ConcurrentModificationException();
             }
         }
 
-        final void checkForComodification() {
-            if (list.modCount != expectedModCount)
+        final void checkForComodification(CachedIteratorArrayList<E> l) {
+            if (l.modCount != expectedModCount)
                 throw new ConcurrentModificationException();
         }
 
