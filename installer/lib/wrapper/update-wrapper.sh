@@ -22,8 +22,9 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-SRC_DATE="20251218"
+SRC_DATE="20260716"
 case "$VERSION" in
+    3.7.0) SRC_DATE="20260716" ;;
     3.6.5) SRC_DATE="20260317" ;;
     3.6.4) SRC_DATE="20251218" ;;
     3.6.3) SRC_DATE="20250910" ;;

@@ -24,8 +24,9 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-SRC_DATE="20251218"
+SRC_DATE="20260716"
 case "$VERSION" in
+    3.7.0) SRC_DATE="20260716" ;;
     3.6.5) SRC_DATE="20260317" ;;
     3.6.4) SRC_DATE="20251218" ;;
     3.6.3) SRC_DATE="20250910" ;;
@@ -43,7 +44,7 @@ SRC_DIR="${WORK_DIR}/wrapper_${VERSION}_src"
 echo "Checking wrapper ${VERSION} win64..."
 
 if [ -f "${WRAPPER_DIR}/win64/I2Psvc.exe" ] && [ -f "${WRAPPER_DIR}/win-all/wrapper.jar" ]; then
-    local jar_ver=$(unzip -p "${WRAPPER_DIR}/win-all/wrapper.jar" META-INF/MANIFEST.MF 2>/dev/null | grep "Implementation-Version" | cut -d' ' -f2 | tr -d '\r')
+    jar_ver=$(unzip -p "${WRAPPER_DIR}/win-all/wrapper.jar" META-INF/MANIFEST.MF 2>/dev/null | grep "Implementation-Version" | cut -d' ' -f2 | tr -d '\r')
     if [ "${jar_ver}" = "${VERSION}" ]; then
         echo "Nothing to do, all win64 wrapper files are up to date."
         exit 0
@@ -98,8 +99,15 @@ sed -i 's/#include <errno.h>/#include <errno.h>\ntypedef int socklen_t;/' wrappe
 sed -i 's/const char\* inet_ntop(/const char* wrapper_inet_ntop(/g' wrapper.c
 sed -i 's/const char\* inet_pton(/const char* wrapper_inet_pton(/g' wrapper.c
 sed -i 's/Iphlpapi\.h/iphlpapi.h/g' wrapperjni_win.c
-sed -i '1s/^/#include <ws2tcpip.h>\n/' wrapper.c wrapper_win.c
-# Fix CERT_CHAIN_PARA members not in newer mingw-w64
+# Fix case-sensitive include paths for Linux cross-compilation
+sed -i 's/<Ws2tcpip\.h>/<ws2tcpip.h>/g' wrapper.c
+sed -i 's/<Sddl\.h>/<sddl.h>/g' wrapper.c wrapper_win.c wrapperjni_win.c
+sed -i 's/<Fcntl\.h>/<fcntl.h>/g' logger.c wrapper_win.c
+sed -i 's/<Softpub\.h>/<softpub.h>/g' wrapper_win.c
+sed -i 's/<DbgHelp\.h>/<dbghelp.h>/g' wrapper_win.c
+sed -i 's/"Winternl\.h"/"winternl.h"/g' wrapper.c
+# Workaround for InterlockedOrAcquire not in mingw-w64
+sed -i '48i// Workaround for missing InterlockedOrAcquire in mingw-w64\n#if !defined(InterlockedOrAcquire)\n#define InterlockedOrAcquire InterlockedOr\n#endif\n' wrapper_win.c
 sed -i 's/ChainPara.dwUrlRetrievalTimeout = timeout;/\/\/ ChainPara.dwUrlRetrievalTimeout = timeout;/' wrapper_win.c
 sed -i 's/ChainPara.RequestedIssuancePolicy = CertUsage;/\/\/ ChainPara.RequestedIssuancePolicy = CertUsage;/' wrapper_win.c
 [ ! -f wrapperinfo.c ] && [ -f wrapperinfo.c.in ] && cp wrapperinfo.c.in wrapperinfo.c
@@ -163,9 +171,9 @@ PYEND
 cat > Makefile-windows-x64.mingw << 'MAKEFILE'
 CC = x86_64-w64-mingw32-gcc
 WIN_FLAGS = -DWIN32 -D_UNICODE -DUNICODE -DHAVE_EADDRINUSE
-LDFLAGS = -L/usr/x86_64-w64-mingw32/lib -lws2_32 -lshlwapi -ladvapi32 -luser32 -lcrypt32 -lwintrust -lpdh -lpsapi -lole32 -loleaut32 -lactiveds -ladsiid -lmpr -lshell32 -lnetapi32
+LDFLAGS = -L/usr/x86_64-w64-mingw32/lib -lws2_32 -lshlwapi -ladvapi32 -luser32 -lcrypt32 -lwintrust -lpdh -lpsapi -lole32 -loleaut32 -lactiveds -ladsiid -lmpr -lshell32 -lnetapi32 -lbcrypt -lntdll -lwtsapi32 -lwevtapi -ldbghelp -liphlpapi
 
-OBJS = wrapper.o wrapperinfo.o wrappereventloop.o wrapper_jvm_launch.o wrapper_win.o property.o logger.o logger_file.o wrapper_file.o wrapper_i18n.o wrapper_hashmap.o wrapper_ulimit.o wrapper_encoding.o wrapper_jvminfo.o wrapper_secure_file.o wrapper_cipher.o wrapper_cipher_base.o wrapper_sysinfo.o
+OBJS = wrapper.o wrapperinfo.o wrappereventloop.o wrapper_jvm_launch.o wrapper_win.o property.o logger.o logger_file.o wrapper_file.o wrapper_i18n.o wrapper_hashmap.o wrapper_ulimit.o wrapper_encoding.o wrapper_jvminfo.o wrapper_secure_file.o wrapper_cipher.o wrapper_cipher_base.o wrapper_sysinfo.o wrapper_backend_base.o wrapper_integration.o
 
 .PHONY: all clean
 
