@@ -57,7 +57,7 @@ public class BanLogger {
     private static volatile boolean _initialized = false;
     private static volatile boolean _globalArchiveDone = false;
     private static volatile boolean _headerWritten = false;
-    private static final int MAX_LOGGED_ENTRIES = 5000;
+    private static final int MAX_LOGGED_ENTRIES = 2048;
     private static final Map<String, Long> _loggedHashes = Collections.synchronizedMap(new LHMCache<>(MAX_LOGGED_ENTRIES));
     private static final Map<String, Long> _loggedIPs = Collections.synchronizedMap(new LHMCache<>(MAX_LOGGED_ENTRIES));
 
