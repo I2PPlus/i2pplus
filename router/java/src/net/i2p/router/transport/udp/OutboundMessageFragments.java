@@ -310,7 +310,8 @@ class OutboundMessageFragments {
 
         // build the list of fragments to send
         List<Fragment> toSend = new ArrayList<>(8);
-        for (OutboundMessageState state : states) {
+        for (int i = 0; i < states.size(); i++) {
+            OutboundMessageState state = states.get(i);
             int queued = state.push(toSend);
             // per-state stats
             if (queued > 0 && state.getMaxSends() > 1) {

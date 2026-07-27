@@ -565,8 +565,7 @@ public class PeerState {
 
     /**
      *  Cached oldest message lifetime from the most recent finishAndAllocate() pass.
-     *  Updated during the finishAndAllocate() iteration, eliminating a separate
-     *  scan of _outboundMessages + _outboundQueue.
+     *  Updated during the finishAndAllocate() iteration across _outboundMessages.
      *
      *  @since 0.9.70+
      */
@@ -578,6 +577,9 @@ public class PeerState {
      * to send in one iteration.
      *
      * Sets _cachedOutboundCount for hasOutbound() and _cachedOldestLifetime for getNextDelay().
+     * Does NOT scan _outboundQueue for oldest start time — the _outboundMessages
+     * iteration is sufficient for the delay heuristic, avoiding per-volley
+     * PriorityBlockingQueue iterator allocation.
      *
      * @param now current time
      * @return messages to send, or null if none ready
@@ -701,19 +703,14 @@ public class PeerState {
                 }
             }
 
-            // Track oldest message from queue (priority-ordered, so scan is required)
-            for (OutboundMessageState state : _outboundQueue) {
-                long startedOn = state.getStartedOn();
-                if (startedOn < oldestStartedOn) oldestStartedOn = startedOn;
-            }
-
             _cachedOutboundCount = _outboundMessages.size() + _outboundQueue.size();
         }
 
         _cachedOldestLifetime = oldestStartedOn == Long.MAX_VALUE ? 0 : now - oldestStartedOn;
 
         // Process succeeded — callbacks outside lock
-        for (OutboundMessageState state : succeeded) {
+        for (int i = 0; i < succeeded.size(); i++) {
+            OutboundMessageState state = succeeded.get(i);
             _transport.succeeded(state);
             OutNetMessage msg = state.getMessage();
             if (msg != null) msg.timestamp("sending complete");
@@ -727,7 +724,8 @@ public class PeerState {
                 shouldLogInfo = false;
                 shouldLogWarn = false;
             }
-            for (OutboundMessageState state : failed) {
+            for (int i = 0; i < failed.size(); i++) {
+                OutboundMessageState state = failed.get(i);
                 OutNetMessage msg = state.getMessage();
                 if (msg != null) {
                     msg.timestamp("Expired in the active pool");
@@ -1709,8 +1707,7 @@ public class PeerState {
     public boolean getMayDisconnect() {return _mayDisconnect;}
 
     /**
-     *  Uses cached oldest lifetime from the most recent finishAndAllocate() pass,
-     *  eliminating a separate scan of _outboundMessages + _outboundQueue.
+     *  Uses cached oldest lifetime from the most recent finishAndAllocate() pass.
      *
      *  @param now what time it is now
      *  @return how long to wait before sending, or Integer.MAX_VALUE if we have nothing to send.
