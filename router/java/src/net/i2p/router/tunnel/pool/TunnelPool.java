@@ -1416,6 +1416,9 @@ public class TunnelPool {
                     }
                     if (replacee != null) {
                         _tunnels.remove(replacee);
+                        if (replacee instanceof PooledTunnelCreatorConfig) {
+                            ExpireJob.removeFromExpiration((PooledTunnelCreatorConfig) replacee);
+                        }
                         _tunnels.add(info);
                         _recentlyAddedTunnels.put(gatewayId, now);
                         if (_log.shouldWarn()) {
