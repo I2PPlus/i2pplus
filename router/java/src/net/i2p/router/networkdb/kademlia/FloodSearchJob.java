@@ -114,7 +114,9 @@ abstract class FloodSearchJob extends JobImpl {
      */
     public String getName() { return "NetDb Search (phase 1)"; }
 
-    /** @return the database entry hash being searched */
+    /**
+     * @return the database entry hash being searched
+     */
     public Hash getKey() { return _key; }
 
     /**
@@ -131,7 +133,9 @@ abstract class FloodSearchJob extends JobImpl {
         }
     }
 
-    /** @return number of flood lookups still pending */
+    /**
+     * @return number of flood lookups still pending
+     */
     protected int getLookupsRemaining() { return _lookupsRemaining.get(); }
 
     /**

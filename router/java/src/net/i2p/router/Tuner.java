@@ -1364,9 +1364,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** The current system health score for this update cycle. */
         void setHealth(SystemHealth health) { _health = health; }
 
-        /** @return rolling window of recent tunable values */
+        /**
+         * @return rolling window of recent tunable values
+         */
         public int[] getValueHistory() { return _valueHistory; }
-        /** @return rolling window of recent stat values */
+        /**
+         * @return rolling window of recent stat values
+         */
         public double[] getStatHistory() { return _statHistory; }
 
         /** Capture snapshot of current tunable state for display. */
@@ -1386,13 +1390,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                                      _statName, obsVal, vh, sh);
         }
 
-        /** @param value the tunable value to apply to router configuration */
+        /**
+         * @param value the tunable value to apply to router configuration
+         */
         protected abstract void applyValue(int value);
-        /** @return current runtime value read from router config */
+        /**
+         * @return current runtime value read from router config
+         */
         protected abstract int getRuntimeValue();
-        /** @param ctx router context @return observed stat value for autotuning */
+        /**
+         * @param ctx router context
+         * @return observed stat value for autotuning
+         */
         protected abstract double getObservedStat(RouterContext ctx);
-        /** @param observed current stat value @return target tunable value */
+        /**
+         * @param observed current stat value
+         * @return target tunable value
+         */
         protected abstract int computeTarget(double observed);
 
         /**

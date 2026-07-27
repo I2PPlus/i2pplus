@@ -62,7 +62,6 @@ class UDPReceiver {
         _keepRunning = false;
     }
 
-    /** if a packet been sitting in the queue for a full second (meaning the handlers are overwhelmed), drop subsequent packets */
 
     /** Receive a UDP packet */
     private int receive(UDPPacket packet) {return doReceive(packet);}

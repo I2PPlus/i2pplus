@@ -205,7 +205,9 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
     }
 
-    /** @return a snapshot of all inbound tag sets */
+    /**
+     * @return a snapshot of all inbound tag sets
+     */
     private Set<TagSet> getInboundTagSets() {
         synchronized (_inboundTagSets) {
             return new HashSet<>(_inboundTagSets.values());
@@ -1052,7 +1054,9 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             return null;
         }
 
-        /** @return the total number of tags in acked TagSets */
+        /**
+         * @return the total number of tags in acked TagSets
+         */
         public int availableTags() {
             int tags = 0;
             long now = _context.clock().now();
@@ -1106,7 +1110,10 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             }
         }
 
-        /** @since 0.9 for debugging */
+        /**
+         * Whether the outbound tag set has been acknowledged.
+         * @since 0.9 for debugging
+         */
         public boolean getAckReceived() {
             return _acked;
         }
@@ -1141,7 +1148,10 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             return _date;
         }
 
-        /** @since 0.9.3 for debugging */
+        /**
+         * Original number of tags in this set before any were consumed.
+         * @since 0.9.3 for debugging
+         */
         public int getOriginalSize() {
             return _origSize;
         }
@@ -1188,10 +1198,15 @@ public class TransientSessionKeyManager extends SessionKeyManager {
          */
         public boolean getAcked() { return _acked; }
 
-        /** @since 0.9 for debugging */
+        /**
+         * Unique identifier for this tag set.
+         * @since 0.9 for debugging
+         */
         public int getID() {return _id;}
 
-        /** @return debug string with ID, size, ack status, and key */
+        /**
+         * @return debug string with ID, size, ack status, and key
+         */
         @Override
         public String toString() {
             return "TagSet [" + _id + "]" +

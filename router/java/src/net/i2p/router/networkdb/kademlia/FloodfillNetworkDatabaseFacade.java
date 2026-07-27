@@ -200,9 +200,15 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 1000 : 500;
     /** Delay before publishing RouterInfo at startup. */
     private static final int PUBLISH_JOB_DELAY = 15*1000;
-    /** @since 0.9.66 moved from FloodfillMonitorJob */
+    /**
+     * Config property for floodfill participation.
+     * @since 0.9.66 moved from FloodfillMonitorJob
+     */
     public static final String PROP_FLOODFILL_PARTICIPANT = "router.floodfillParticipant";
-    /** @since 0.9.66 */
+    /**
+     * Config property recording floodfill status at previous restart.
+     * @since 0.9.66
+     */
     public static final String PROP_FLOODFILL_AT_RESTART = "router.wasFloodfill";
 
     /**
@@ -376,7 +382,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             reschedule(2000);
         }
 
-        /** @return "BatchedSearchTimeout" */
+        /** Job name for the job queue display. */
         public String getName() { return "BatchedSearchTimeout"; }
     }
 
@@ -461,7 +467,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      */
     private class DelayedPublish extends SimpleTimer2.TimedEvent {
         private final RouterInfo localRouterInfo;
-        /** @param local the RouterInfo to publish after delay */
+        /**
+         * @param local the RouterInfo to publish after delay
+         */
         public DelayedPublish(RouterInfo local) {
             super(_context.simpleTimer2());
             localRouterInfo = local;
@@ -758,16 +766,19 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         return StoreJob.shouldStoreTo(target);
     }
 
-    /** note in the profile that the store failed */
+    /** Record the store failure in the peer profile. */
     private static class FloodFailedJob extends JobImpl {
         private final Hash _peer;
 
-        /** @param ctx router context  @param peer the peer that failed */
+        /**
+         * @param ctx router context
+         * @param peer the peer that failed
+         */
         public FloodFailedJob(RouterContext ctx, Hash peer) {
             super(ctx);
             _peer = peer;
         }
-        /** @return "Flood failed" */
+
         public String getName() {return "Flood failed";}
         /** Record the store failure in the peer profile. */
         public void runJob() {getContext().profileManager().dbStoreFailed(_peer);}
@@ -780,12 +791,15 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static class FloodSuccessJob extends JobImpl {
         private final Hash _peer;
 
-        /** @param ctx router context  @param peer the floodfill peer */
+        /**
+         * @param ctx router context
+         * @param peer the floodfill peer
+         */
         public FloodSuccessJob(RouterContext ctx, Hash peer) {
             super(ctx);
             _peer = peer;
         }
-        /** @return "Flood succeeded" */
+
         public String getName() {return "Flood succeeded";}
         /** Record the store success in the peer profile. */
         public void runJob() {getContext().profileManager().dbStoreSuccessful(_peer);}
@@ -819,7 +833,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
     }
 
-    /** @return whether this router participates in floodfill */
+    /**
+     * @return whether this router participates in floodfill
+     */
     @Override
     public boolean floodfillEnabled() {
         return _floodfillEnabled;
@@ -1204,15 +1220,20 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 8*1000L, false);
     }
 
+    /** Remove a failing peer after a lookup timeout. */
     private class DropLookupFailedJob extends JobImpl {
         private final Hash _peer;
 
-        /** @param ctx router context  @param peer the peer that failed lookup  @param _info unused */
+        /**
+         * @param ctx router context
+         * @param peer the peer that failed lookup
+         * @param _info unused
+         */
         public DropLookupFailedJob(RouterContext ctx, Hash peer, RouterInfo _info) {
             super(ctx);
             _peer = peer;
         }
-        /** @return "Timeout NetDb Lookup for Failing Peer" */
+
         public String getName() { return "Timeout NetDb Lookup for Failing Peer"; }
         /** Remove the peer from the database after lookup failure. */
         public void runJob() {
@@ -1227,17 +1248,22 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
     }
 
+    /** Verify a failing peer after a successful lookup. */
     private class DropLookupFoundJob extends JobImpl {
         private final Hash _peer;
         private final RouterInfo _info;
 
-        /** @param ctx router context  @param peer the peer being verified  @param info the stored RouterInfo for comparison */
+        /**
+         * @param ctx router context
+         * @param peer the peer being verified
+         * @param info the stored RouterInfo for comparison
+         */
         public DropLookupFoundJob(RouterContext ctx, Hash peer, RouterInfo info) {
             super(ctx);
             _peer = peer;
             _info = info;
         }
-        /** @return "Verify NetDb Lookup for Failing Peer" */
+
         public String getName() { return "Verify NetDb Lookup for Failing Peer"; }
         /** Compare updated RouterInfo and drop peer if unchanged. */
         public void runJob() {

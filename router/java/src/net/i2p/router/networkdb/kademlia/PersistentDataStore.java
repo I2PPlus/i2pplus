@@ -91,7 +91,6 @@ public class PersistentDataStore extends TransientDataStore {
 
     /** Config property to enable reverse address lookups. */
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
-    /** @return true if reverse DNS lookups are enabled */
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     /** Default value for immediate disconnect on IP spoof. */
     private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
@@ -129,7 +128,9 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     @Override
-    /** @return true if the data store has completed initial loading */
+    /**
+     * @return true if the data store has completed initial loading
+     */
     public boolean isInitialized() {return _initialized || _readJob.isNetDbReady();}
 
     // this doesn't stop the read job or the writer, maybe it should?
@@ -147,7 +148,9 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     @Override
-    /** @return the entry or null */
+    /**
+     * @return the entry or null if not found
+     */
     public DatabaseEntry get(Hash key) {return get(key, true);}
 
     /**
@@ -617,7 +620,6 @@ public class PersistentDataStore extends TransientDataStore {
         return count;
     }
 
-    /** @return the publish date from a DatabaseEntry */
     private static long getPublishDate(DatabaseEntry data) {return data.getDate();}
 
     /**
@@ -646,7 +648,6 @@ public class PersistentDataStore extends TransientDataStore {
         public ReadJob() {super(PersistentDataStore.this._context);}
 
         @Override
-        /** @return the name */
         public String getName() {return "Read NetDb";}
 
         /**
@@ -728,7 +729,9 @@ public class PersistentDataStore extends TransientDataStore {
         /** Trigger an immediate rescan. */
         public void wakeup() {requeue(0);}
 
-        /** @return true once the netdb has enough routers to be usable */
+        /**
+         * @return true once the netdb has enough routers to be usable
+         */
         public boolean isNetDbReady() {return _setNetDbReady;}
 
         /**
@@ -841,10 +844,11 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         @Override
-        /** @return the name */
         public String getName() {return "Read RouterInfo";}
 
-        /** @return true if Read */
+        /**
+         * @return true if the file is newer than the cached entry
+         */
         private boolean shouldRead() {
             // persist = false to call only super.get()
             DatabaseEntry data = get(_key, false);
@@ -870,7 +874,7 @@ public class PersistentDataStore extends TransientDataStore {
         /**
          * Reads the RouterInfo from disk.
          *
-         * @return success
+         * @return true if the RouterInfo was read and stored successfully
          * @since 0.9.58
          */
         public boolean read() {

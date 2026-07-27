@@ -173,7 +173,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         return _type;
     }
 
-    /** @return a snapshot of all inbound ratchet tag sets */
+    /**
+     * @return a snapshot of all inbound ratchet tag sets
+     */
     private Set<RatchetTagSet> getRatchetTagSets() {
         synchronized (_inboundTagSets) {
             return new HashSet<>(_inboundTagSets.values());
@@ -1566,7 +1568,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             }
         }
 
-        /** @return the total number of tags in acked RatchetTagSets */
+        /**
+         * @return the total number of tags in acked RatchetTagSets
+         */
         public int availableTags() {
             long now = _context.clock().now();
             synchronized (_unackedTagSets) {

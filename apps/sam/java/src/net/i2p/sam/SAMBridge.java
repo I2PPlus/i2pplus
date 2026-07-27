@@ -1000,7 +1000,10 @@ public class SAMBridge implements Runnable, ClientApp {
                         }
                     }
 
-                    /** Close the handler socket. @since 0.9.20 */
+                    /**
+                     * Close the handler socket.
+                     * @since 0.9.20
+                     */
                     public void stopHandling() {
                         try { s.close(); } catch (IOException ioe) { /* ignored */ }
                     }

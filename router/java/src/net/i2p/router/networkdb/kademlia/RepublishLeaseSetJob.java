@@ -267,8 +267,9 @@ public class RepublishLeaseSetJob extends JobImpl {
     // At startup, defer first publication until target tunnels met.
     // Falls through after FIRST_PUBLISH_TIMEOUT so pools at partial
     // capacity (e.g. 70% build success) don't block indefinitely.
-    // Returns true if publication was deferred
-    /** @return true if deferred */
+    /**
+     * @return true if publication was deferred
+     */
     private boolean maybeDeferFirstPublish(int leaseCount, int targetLeases) {
         Long deferred = _firstDeferredAt.get(_dest);
         if (deferred == null && leaseCount < targetLeases) {
@@ -299,29 +300,23 @@ public class RepublishLeaseSetJob extends JobImpl {
      */
     public String getName() {return "Republish Local LeaseSet" + (highPriority ? " [High priority]" : "");}
 
-    /** @return the publishTimeout */
     private long getPublishTimeout() {
         return getContext().getProperty(PROP_TIMEOUT, REPUBLISH_LEASESET_TIMEOUT_DEFAULT);
     }
 
-    /** @return the retryDelay */
     private int getRetryDelay() {
         return getContext().getProperty(PROP_RETRY_DELAY, RETRY_DELAY_DEFAULT);
     }
 
-    /** @return the maxRetryDelay */
     private int getMaxRetryDelay() {
         return getContext().getProperty(PROP_MAX_RETRY_DELAY, RETRY_MAX_DELAY_DEFAULT);
     }
 
-    /** @return the republishInterval */
     private long getRepublishInterval() {
         return getContext().getProperty("i2p.netdb.republishInterval", 3L * 60 * 1000);
     }
 
     // Register a successor RepublishLeaseSetJob with timing set.
-    // Returns the registered job, or null if registration failed
-    /** @return the successor */
     private RepublishLeaseSetJob registerSuccessor(long delayMs) {
         RepublishLeaseSetJob job = new RepublishLeaseSetJob(getContext(), _facade, _dest);
         if (!job.registerSelf()) {
@@ -402,7 +397,6 @@ public class RepublishLeaseSetJob extends JobImpl {
         _retryInProgress.remove(_dest);
     }
 
-    /** @return short hash */
     private String shortHash() {
         return _dest.toBase32().substring(0, 8);
     }

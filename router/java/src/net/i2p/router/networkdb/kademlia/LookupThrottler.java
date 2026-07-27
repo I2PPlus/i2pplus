@@ -22,16 +22,16 @@ import net.i2p.util.SimpleTimer2;
  *
  */
 class LookupThrottler {
-    /** concurrent hash map */
+    /** Concurrent hash map */
     private final ConcurrentHashMap<Hash, ConcurrentHashMap<TunnelId, AtomicInteger>> counter;
     // Map to track timestamps of recent requests per (Hash, TunnelId) for burst detection.
     // Outer key is Hash (peer), inner key is TunnelId (reply tunnel).
     /** Map of peer hashes to sets of reply tunnel IDs for throttling. */
     private final Map<Hash, ConcurrentHashMap<TunnelId, Deque<Long>>> burstTimestamps;
 
-    /** the id of this is -1 */
+    /** The id of this is -1 */
     private static final TunnelId DUMMY_ID = new TunnelId();
-    /** this seems like plenty */
+    /** This seems like plenty */
     private static final int DEFAULT_MAX_LOOKUPS = 30;
     /** Max lookups per peer when not floodfill. */
     private static final int DEFAULT_MAX_NON_FF_LOOKUPS = 10;
@@ -49,15 +49,15 @@ class LookupThrottler {
     /** Hard cap on unique tracked (peer,tunnel) pairs. */
     private static final int MAX_ENTRIES = 10000;
 
-    /** max lookups limit */
+    /** Max lookups limit */
     private final int MAX_LOOKUPS;
-    /** max non-FF lookups limit */
+    /** Max non-FF lookups limit */
     private final int MAX_NON_FF_LOOKUPS;
-    /** clean time */
+    /** Clean time */
     private final long CLEAN_TIME;
     /** Floodfill network database facade for capability checks. */
     private final FloodfillNetworkDatabaseFacade _facade;
-    /** max value */
+    /** Max value */
     private volatile int _max;
     /** Periodic cleanup task for stale throttle entries. */
     private final Cleaner _cleaner;
@@ -78,7 +78,6 @@ class LookupThrottler {
         CLEAN_TIME = cleanTime;
         this.counter = new ConcurrentHashMap<Hash, ConcurrentHashMap<TunnelId, AtomicInteger>>();
         this.burstTimestamps = new LinkedHashMap<Hash, ConcurrentHashMap<TunnelId, Deque<Long>>>() {
-            /** Evict eldest entry to keep map bounded. */
             @Override
             /** Remove eldest entry */
             protected boolean removeEldestEntry(Map.Entry<Hash, ConcurrentHashMap<TunnelId, Deque<Long>>> eldest) {
@@ -100,7 +99,13 @@ class LookupThrottler {
         _cleaner.cancel();
     }
 
-    /** increments and checks throttling @param key non-null @param id null if for direct lookups @return true if throttled / */
+    /**
+     * Increment and check throttling for the given peer and tunnel.
+     *
+     * @param key non-null
+     * @param id null if for direct lookups
+     * @return true if throttled
+     */
     boolean shouldThrottle(Hash key, TunnelId id) {
         TunnelId lookupId = (id != null) ? id : DUMMY_ID;
         long now = System.currentTimeMillis();
@@ -151,7 +156,6 @@ class LookupThrottler {
     private class Cleaner extends SimpleTimer2.TimedEvent {
         /** Schedule cleanup on the shared timer. */
         public Cleaner() { super(SimpleTimer2.getInstance()); }
-        /** Clear all counters and reschedule. */
         @Override
         /** Time reached */
         public void timeReached() {

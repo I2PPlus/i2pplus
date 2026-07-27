@@ -153,7 +153,7 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * The transport tuner.
-     * @return the tuner
+     * @return adaptive tuner for transport parameters
      * @since 0.9.70+
      */
     public Tuner getTuner() { return _tuner; }
@@ -1194,7 +1194,7 @@ public class UDPTransport extends TransportImpl {
     /**
      *  MTU for the socket interface at addr.
      *  @param addr null ok
-     *  @return the mtu
+     *  @return the MTU in bytes
      *  @since 0.9.2
      */
     private int setMTU(InetAddress addr) {

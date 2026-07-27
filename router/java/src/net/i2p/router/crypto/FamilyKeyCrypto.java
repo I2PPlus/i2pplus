@@ -265,7 +265,11 @@ public class FamilyKeyCrypto {
         public final String sig;
         /** The verification result */
         public final Result result;
-        /** @param n family name @param s signature string @param r verification result */
+        /**
+         * @param n family name
+         * @param s signature string
+         * @param r verification result
+         */
         public Verified(String n, String s, Result r) {
             name = n; sig = s; result = r;
         }
@@ -277,7 +281,7 @@ public class FamilyKeyCrypto {
      *  or a certificate file for the family
      *  in certificates/family.
      *
-     *  @return Result
+     *  @return the verification result
      */
     public Result verify(RouterInfo ri) {
         String name = ri.getOption(OPT_NAME);
@@ -636,7 +640,10 @@ public class FamilyKeyCrypto {
         }
     }
 
-    /** @since 0.9.36 */
+    /**
+     * CLI entry point for manual family key operations.
+     * @since 0.9.36
+     */
     public static void main(String[] args) {
         if (args.length != 2) {
             System.err.println("Usage: FamilyKeyCrypto keystore.ks familyname"); // NOSONAR CLI tool
