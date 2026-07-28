@@ -19,8 +19,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.HashSet;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Locale;
 import java.util.Map;
@@ -75,6 +81,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     public static final String OPT_POST_TOTAL_MAX = "maxTotalPosts";
     /** Config key for post check time window. */
     public static final String OPT_POST_WINDOW = "postCheckTime";
+
+    /** Max wait for DNS resolution of non-I2P hostnames in the HTTP proxy. */
+    private static final int DNS_TIMEOUT_MS = 5000;
+
+    /** Dedicated executor for non-blocking DNS lookups with bounded timeout. */
+    private static final ExecutorService _dnsResolver = Executors.newCachedThreadPool(r -> {
+        Thread t = new Thread(r, "DNS-Resolver");
+        t.setDaemon(true);
+        return t;
+    });
 
     /** Config key to reject requests from inproxy. */
     public static final String OPT_REJECT_INPROXY = "rejectInproxy";
@@ -836,12 +852,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  If the hostname resolves to a private or loopback address, the peer is
      *  blocklisted and the socket is closed. If DNS resolves to 0.0.0.0 (blocked DNS),
      *  a 403 is sent.
-     *  UnknownHostException propagates to the caller for handling.
+     *  DNS is resolved asynchronously with a bounded timeout to avoid
+     *  blocking the shared client thread pool on slow or unreachable DNS servers.
      *
      *  @param headers the request headers map (to extract Host header)
      *  @param socket the incoming I2P socket
      *  @param peerB32 the peer's base32 address for logging/blocklisting
-     *  @throws UnknownHostException if the hostname cannot be resolved
      *  @throws IOException if blocklist writing fails
      */
     private void validateRequestHost(Map<String, List<String>> headers, I2PSocket socket, String peerB32) throws IOException {
@@ -863,7 +879,34 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
         if (_log.shouldDebug()) {_log.debug("[HTTPServer] Incoming request for: " + hostname + "\n* Client: " + peerB32);}
         if (hostname != null && !hostname.endsWith(".i2p") && !hostname.endsWith(".onion")) {
-            InetAddress address = InetAddress.getByName(hostname);
+            InetAddress address;
+            try {
+                final String lookupHost = hostname;
+                Future<InetAddress> future = _dnsResolver.submit(() -> InetAddress.getByName(lookupHost));
+                address = future.get(DNS_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+            } catch (TimeoutException e) {
+                if (_log.shouldWarn()) {
+                    _log.warn("[HTTPServer] DNS lookup timed out (" + DNS_TIMEOUT_MS + "ms) for " + hostname +
+                              " \n* Client: " + peerB32);
+                }
+                try {socket.close();}
+                catch (IOException ioe) { /* ignored */ }
+                return;
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                try {socket.close();}
+                catch (IOException ioe) { /* ignored */ }
+                return;
+            } catch (ExecutionException e) {
+                if (_log.shouldWarn()) {
+                    _log.warn("[HTTPServer] DNS lookup failed for " + hostname + " \n* Client: " + peerB32);
+                }
+                try {socket.close();}
+                catch (IOException ioe) { /* ignored */ }
+                return;
+            } catch (RejectedExecutionException e) {
+                address = InetAddress.getByName(hostname);
+            }
             if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
                 if (_log.shouldWarn()) {
                     _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "]" +
