@@ -229,7 +229,6 @@ public class RouterContext extends I2PAppContext {
         _outNetMessagePool = new OutNetMessagePool(this);
         _messageHistory = new MessageHistory(this);
         _messageRegistry = new OutboundMessageRegistry(this);
-        //_messageStateMonitor = new MessageStateMonitor(this);
         _routingKeyGenerator = new RouterKeyGenerator(this);
         if (!getBooleanProperty("i2p.dummyNetDb"))
             _netDb = new FloodfillNetworkDatabaseSegmentor(this);
@@ -683,7 +682,6 @@ public class RouterContext extends I2PAppContext {
                 PublicKey pk = keyManager().getPublicKey();
                 if (pk != null && pk.getType() == EncType.ECIES_X25519) {
                     RatchetSKM rskm = new RatchetSKM(this);
-                    //_sessionKeyManager = new MuxedSKM(tskm, rskm);
                     _sessionKeyManager = rskm;
                 } else {
                     TransientSessionKeyManager tskm = new TransientSessionKeyManager(this);

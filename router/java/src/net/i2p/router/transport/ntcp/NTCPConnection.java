@@ -108,7 +108,6 @@ public class NTCPConnection implements Closeable {
     /**
      * pending unprepared OutNetMessage instances
      */
-    //private final CoDelPriorityBlockingQueue<OutNetMessage> _outbound;
     private final PriBlockingQueue<OutNetMessage> _outbound;
     /**
      *  current prepared OutNetMessages, or empty - synchronize on _writeLock
@@ -140,7 +139,6 @@ public class NTCPConnection implements Closeable {
 
     private volatile boolean _sendingMeta;
     /** how many consecutive sends were failed due to (estimated) send queue time */
-    //private int _consecutiveBacklog;
     private long _nextInfoTime;
     private volatile boolean _mayDisconnect;
     private final AtomicBoolean _writeInterestPending = new AtomicBoolean(false);

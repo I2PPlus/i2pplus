@@ -59,14 +59,10 @@ class NegativeLookupCache {
     }
 
     /**
-     *  Negative cache the hash until the next clean time.
-     *
-     *  @since 0.9.56
-     */
-    /**
      * Negative cache the hash until the next clean time.
      *
      * @param h the hash to cache
+     * @since 0.9.56
      */
     public void cache(Hash h) {
         this.counter.max(h);
@@ -87,15 +83,11 @@ class NegativeLookupCache {
     }
 
     /**
-     *  Negative cache the hash until restart,
-     *  but cache the destination.
-     *
-     *  @since 0.9.16
-     */
-    /**
-     * Negative cache the hash permanently.
+     * Negative cache the hash permanently until restart,
+     * but cache the destination.
      *
      * @param dest the destination to permanently fail
+     * @since 0.9.16
      */
     public void failPermanently(Destination dest) {
         Hash h = dest.calculateHash();
@@ -105,16 +97,11 @@ class NegativeLookupCache {
     }
 
     /**
-     *  Get an unsupported but cached Destination
-     *
-     *  @return dest or null if not cached
-     *  @since 0.9.16
-     */
-    /**
      * Get a cached bad destination.
      *
      * @param h the hash to look up
      * @return the destination or null if not cached
+     * @since 0.9.16
      */
     public Destination getBadDest(Hash h) {
         synchronized(badDests) {

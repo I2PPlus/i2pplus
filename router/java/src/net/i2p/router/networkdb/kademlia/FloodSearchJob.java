@@ -75,8 +75,8 @@ abstract class FloodSearchJob extends JobImpl {
      *  Add jobs to an existing search
      *  @param onFind may be null
      *  @param onFailed may be null
-     *  @param timeoutMs ignored
-     *  @param isLease ignored
+     *  @param timeoutMs search timeout in ms
+     *  @param isLease whether searching for lease set
      */
     void addDeferred(Job onFind, Job onFailed, long timeoutMs, boolean isLease) {
         boolean success;

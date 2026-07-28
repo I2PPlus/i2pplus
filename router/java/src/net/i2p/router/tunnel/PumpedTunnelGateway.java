@@ -82,8 +82,6 @@ class PumpedTunnelGateway extends TunnelGateway {
     /** @since 0.9.70+ */
     public static int getMaxObMsgsPerPump() { return _maxObMsgsPerPump; }
 
-    /** @since 0.9.70+ */
-
     /**
      * Set the max outbound messages per pump
      * @since 0.9.70+

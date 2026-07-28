@@ -1345,14 +1345,16 @@ public class TunnelPool {
      * Throttle refresh — publish at most once per throttle window.
      * 5 min minimum prevents storms; with occasional emergency publishes
      * the actual interval averages ~10 min.
+     * Initialize to allow first request immediately.
      */
-    /** Initialize to allow first request immediately */
     private long _lastRefreshTime;
     /** Track last proactive LeaseSet publish time for rate limiting */
     private long _lastLeaseSetPublishTime;
-    /** Minimum interval between LeaseSet builds (matches getRefreshThrottle(_context)).
-     *  Prevents rapid LeaseSet object churn on every tunnel add/remove. */
-    /** Cached LeaseSet returned during rate-limit window */
+    /**
+     * Minimum interval between LeaseSet builds (matches getRefreshThrottle(_context)).
+     * Prevents rapid LeaseSet object churn on every tunnel add/remove.
+     * Cached LeaseSet returned during rate-limit window.
+     */
     private volatile LeaseSet _cachedLeaseSet;
     /** Timestamp of the last successful LeaseSet build */
     private long _lastLeaseSetBuildTime;

@@ -148,20 +148,6 @@ class CapacityCalculator {
         if (profile.isEstablished())
             capacity += BONUS_ESTABLISHED;
 
-/*
-        // boost same country
-        if (profile.isSameCountry()) {
-            double bonus = BONUS_SAME_COUNTRY;
-            String b = context.getProperty(PROP_COUNTRY_BONUS);
-            if (b != null) {
-                try {
-                    bonus = Double.parseDouble(b);
-                } catch (NumberFormatException nfe) {}
-            }
-            capacity += bonus;
-        }
-*/
-
         // penalize unreachable peers
         if (profile.wasUnreachable())
             capacity -= PENALTY_UNREACHABLE;

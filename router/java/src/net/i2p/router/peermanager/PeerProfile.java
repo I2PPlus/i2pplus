@@ -293,8 +293,7 @@ public class PeerProfile {
     /**
      *  Set when did we first heard about this peer, only if older.
      *  Package private, only set by profile management subsystem.
-     */
-    /**
+     *
      * @param when the time to set
      */
     synchronized void setFirstHeardAbout(long when) {
@@ -309,10 +308,9 @@ public class PeerProfile {
     public synchronized long getLastHeardAbout() {return _lastHeardAbout;}
 
     /**
-     *  Set when did we last hear about this peer, only if unset or newer
-     *  Also sets FirstHeardAbout if earlier
-     */
-    /**
+     *  Set when did we last hear about this peer, only if unset or newer.
+     *  Also sets FirstHeardAbout if earlier.
+     *
      * @param when the time to set
      */
     public synchronized void setLastHeardAbout(long when) {
@@ -458,8 +456,7 @@ public class PeerProfile {
      * Obsolete — prefer {@link #isLowLatency()}. Retained for backward compatibility
      * with stored profile data. Returns 0 unconditionally if not set, or the stored
      * value with a 4-hour expiry for existing profiles that still carry it.
-     */
-    /**
+     *
      * @return the speed bonus
      */
     public int getSpeedBonus() {
@@ -471,8 +468,7 @@ public class PeerProfile {
     /**
      * Obsolete — prefer {@link #setLowLatency(boolean)}. Retained for
      * backward compatibility with stored profile data.
-     */
-    /**
+     *
      * @param bonus the speed bonus
      */
     public void setSpeedBonus(int bonus) {_speedBonus = bonus; _speedBonusLastUpdate = _context.clock().now();}
@@ -491,8 +487,7 @@ public class PeerProfile {
      * extra factor added to the capacity ranking - this can be updated in the profile
      * written to disk to affect how the algorithm ranks capacity.  Negative values are
      * penalties. Expires after 4 hours if not refreshed.
-     */
-    /**
+     *
      * @return the capacity bonus
      */
     public int getCapacityBonus() {
@@ -524,9 +519,8 @@ public class PeerProfile {
     /**
      * extra factor added to the integration ranking - this can be updated in the profile
      * written to disk to affect how the algorithm ranks integration.  Negative values are
-     * penalties
-     */
-    /**
+     * penalties.
+     *
      * @return the integration bonus
      */
     public int getIntegrationBonus() {return _integrationBonus;}
@@ -541,25 +535,19 @@ public class PeerProfile {
      * This may even be made to take into consideration current rates vs. estimated
      * (or measured) max rates, allowing this speed to reflect the speed /available/.
      *
-     */
-    /**
      * @return the speed value
      */
     public float getSpeedValue() {return _speedValue;}
     /**
      * How many tunnels do we think this peer can handle over the next hour?
      *
-     */
-    /**
      * @return the capacity value
      */
     public float getCapacityValue() {return _capacityValue;}
     /**
      * How well integrated into the network is this peer (as measured by how much they've
-     * told us that we didn't already know).  Higher numbers means better integrated
+     * told us that we didn't already know).  Higher numbers means better integrated.
      *
-     */
-    /**
      * @return the integration value
      */
     public float getIntegrationValue() {return _integrationValue;}
@@ -666,8 +654,7 @@ public class PeerProfile {
 
     /**
      *  Only for restoration from persisted profile.
-     */
-    /**
+     *
      * @param kBps the peak throughput in KBps
      */
     void setPeakThroughputKBps(float kBps) {
@@ -716,8 +703,7 @@ public class PeerProfile {
 
     /**
      *  Only for restoration from persisted profile.
-     */
-    /**
+     *
      * @param kBps the peak tunnel throughput in KBps
      */
     void setPeakTunnelThroughputKBps(float kBps) {
@@ -775,8 +761,7 @@ public class PeerProfile {
 
     /**
      *  Only for restoration from persisted profile.
-     */
-    /**
+     *
      * @param kBps the peak 1-minute throughput in KBps
      */
     void setPeakTunnel1mThroughputKBps(float kBps) {
@@ -924,12 +909,10 @@ public class PeerProfile {
     }
 
     /**
- * Caller must next call updateValues()
- *
- * @since 0.9.4
- */
-    /**
+     * Caller must next call updateValues().
+     *
      * @param shouldDecay whether to decay peak throughput values
+     * @since 0.9.4
      */
     synchronized void coalesceOnly(boolean shouldDecay) {
         _coalescing = true;
@@ -956,12 +939,10 @@ public class PeerProfile {
     private float calculateIntegration() {return (float) IntegrationCalculator.calc(this);}
 
     /**
- * Helper for calculators
- *
- * @since 0.9.2
- */
-    /**
+     * Helper for calculators.
+     *
      * @return the router context
+     * @since 0.9.2
      */
     RouterContext getContext() {return _context;}
 

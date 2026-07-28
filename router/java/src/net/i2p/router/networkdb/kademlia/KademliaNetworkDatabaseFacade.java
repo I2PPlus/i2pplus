@@ -133,9 +133,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public static final String MIN_VERSION = "0.9.66";
     /** Current minor version identifier for net DB format. */
     public static String CURRENT_VERSION = "0.9.67";
-    /** Object. */
+    /** Lock object for netdb access. */
     private final Object kbInitLock = new Object();
-    /** AtomicInteger. */
+    /** Counter for lookups. */
     private final AtomicInteger knownLeaseSetsCount = new AtomicInteger(0);
 
     /**
@@ -178,12 +178,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Used to refresh remote LeaseSets we're actively accessing and remove after 90s inactivity.
      */
     private final ConcurrentHashMap<Hash, Long> _clientLeaseSetAccessTime = new ConcurrentHashMap<>(32);
-    /** Tracks destination hashes whose LeaseSets were fetched on behalf of
-     *  HostChecker.  When HostChecker is done and calls removeFromCache(),
-     *  only LeaseSets in this set are eligible for purge — pre-existing
-     *  LeaseSets that were independently cached by other clients are preserved.
-     *  @since 0.9.70+ */
-    /** ConcurrentHashMap.newKeySet. */
+    /**
+     * Tracks destination hashes whose LeaseSets were fetched on behalf of
+     * HostChecker.  When HostChecker is done and calls removeFromCache(),
+     * only LeaseSets in this set are eligible for purge — pre-existing
+     * LeaseSets that were independently cached by other clients are preserved.
+     * @since 0.9.70+
+     */
     private final Set<Hash> _hostCheckerLeaseSets = ConcurrentHashMap.newKeySet(8);
 
     /** Cached set of blocked countries - lazily initialized */
@@ -444,9 +445,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
     }
 
+    /**
+     * Unsupported, do not use.
+     *
+     * @deprecated Not supported, use the standard restart mechanism instead.
+     */
     @Deprecated
     @Override
-    /** Unsupported, do not use. */
     public synchronized void restart() {throw new UnsupportedOperationException();}
 
     /** Rescan the netdb directory for new RouterInfo files. */
@@ -481,7 +486,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     @Override
-    /** Startup. */
+    /** Startup time tracking. */
     public void startup() {
         RouterInfo ri = _context.router().getRouterInfo();
         String dbDir = _context.getProperty(PROP_DB_DIR, DEFAULT_DB_DIR);
@@ -1060,7 +1065,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         /** Purged count */
         private int _purged;
 
-        /** PurgeMatchingRoutersJob. */
+        /** Job to remove stale router entries. */
         public PurgeMatchingRoutersJob() {
             super(KademliaNetworkDatabaseFacade.this._context);
             _toCheck = getAllRouters();
@@ -2727,7 +2732,7 @@ return false;
      * @param onSuccess may be null, always called if we are ff and ds is an RI
      * @param onFailure may be null, ignored if we are ff and ds is an RI
      * @param ds the database entry
-     * @param sendTimeout ignored if we are ff and ds is an RI
+     * @param sendTimeout timeout in ms for send operations if we are ff and ds is an RI
      * @param toIgnore may be null, if non-null, all attempted and skipped targets will be added as of 0.9.53,
      *                 unused if we are ff and ds is an RI
      */

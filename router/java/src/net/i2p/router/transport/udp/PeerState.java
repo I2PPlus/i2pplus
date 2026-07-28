@@ -962,7 +962,7 @@ public class PeerState {
      */
     public long getTheyRelayToUsAs() {return _theyRelayToUsAs;}
 
-    /** MTU. */
+    /** Maximum transmission unit. */
     public int getMTU() {return _mtu;}
 
     /**

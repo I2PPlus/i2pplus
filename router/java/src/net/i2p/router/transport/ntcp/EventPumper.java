@@ -1172,12 +1172,11 @@ class EventPumper implements Runnable {
     /** Get the selector loop delay in milliseconds */
     public static long getSelectorLoopDelay() { return _selectorLoopDelay; }
 
-    /** Set the selector loop delay, bounded 1-SELECTOR_MAX_DELAY ms.
-     *  Updates the base delay the pumper relaxes toward and raises the live
-     *  delay immediately so Tuner-driven increases take effect without waiting
-     *  for the pumper's own 60s ramp. */
     /**
-     * setSelectorLoopDelay.
+     * Set the selector loop delay, bounded 1-SELECTOR_MAX_DELAY ms.
+     * Updates the base delay the pumper relaxes toward and raises the live
+     * delay immediately so Tuner-driven increases take effect without waiting
+     * for the pumper's own 60s ramp.
      */
     public static void setSelectorLoopDelay(long ms) {
         long v = Math.max(1, Math.min(SELECTOR_MAX_DELAY, ms));

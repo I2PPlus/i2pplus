@@ -19,13 +19,7 @@ public class OutNetMessagePool {
     private final RouterContext _context;
 
     /**
-     * Description.
-     */
-    /**
-     * Description.
-     */
-    /**
-     * Description.
+     * Constructor.
      */
     public OutNetMessagePool(RouterContext context) {
         _context = context;

@@ -1422,15 +1422,6 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * No ad
-     */
-/*
-    private final byte[] encryptAEADBlock(byte[] data, SessionKey key, long n) {
-        return encryptAEADBlock(null, data, key, n);
-    }
-*/
-
-    /**
      *
      * @param ad may be null
      * @return space will be left at beginning for ad (tag), null on error

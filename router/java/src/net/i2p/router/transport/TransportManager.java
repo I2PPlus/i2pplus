@@ -1098,13 +1098,6 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * Message received
-     *
-     * @param message non-null
-     * @param fromRouter may be null
-     * @param fromRouterHash may be null, calculated from fromRouter if null
-     */
-    /**
      * Handle incoming I2NP message from a peer.
      *
      * This method is called by transports when they receive an
@@ -1126,10 +1119,6 @@ public class TransportManager implements TransportEventListener {
         }
     }
 
-    /**
-     *  TransportEventListener
-     *  calls UPnPManager rescan() and update()
-     */
     /**
      * Handle transport address change notifications.
      *
@@ -1222,18 +1211,17 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  As of 0.9.31, only outputs UPnP status
-     *
-     *  Warning - blocking, very slow, queries the active UPnP router,
-     *  will take many seconds if it has vanished.
-     */
-    /**
      * Render transport status information as HTML for console display.
+     *
+     * As of 0.9.31, only outputs UPnP status.
      *
      * This method generates detailed HTML status for all
      * transports, including connection counts, peer information,
      * bandwidth usage, and transport-specific statistics. The output
      * is used by the router console for transport monitoring.
+     *
+     * Warning - blocking, very slow, queries the active UPnP router,
+     * will take many seconds if it has vanished.
      *
      * @param out writer to write HTML output to
      * @param urlBase base URL for generating links

@@ -56,10 +56,10 @@ public class OutNetMessage implements CDPQEntry {
 
     /**
      *  Priorities, higher is higher priority.
+     *  Lowest priority.
      *
      *  @since 0.9.3
      */
-    /** Lowest priority */
     public static final int PRIORITY_LOWEST = 100;
     /** Medium priority */
     public static final int PRIORITY_MEDIUM = 400;
@@ -128,7 +128,6 @@ public class OutNetMessage implements CDPQEntry {
         _expiration = expiration;
         _target = target;
 
-        //_createdBy = new Exception("Created by");
         _created = context.clock().now();
         Log log = context.logManager().getLog(OutNetMessage.class);
         _shouldTimestamp = log.shouldInfo();

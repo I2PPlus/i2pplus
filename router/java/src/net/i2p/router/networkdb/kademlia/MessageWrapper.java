@@ -32,7 +32,7 @@ import net.i2p.router.util.RemovableSingletonSet;
  */
 public class MessageWrapper {
 
-    /** MessageWrapper. */
+    /** Wraps an I2NP message with metadata. */
     private MessageWrapper() {}
 
     /** netdb_tags_to_deliver */
@@ -105,7 +105,7 @@ public class MessageWrapper {
             this.tsh = tsh;
         }
 
-        /** Message. */
+        /** The wrapped I2NP message. */
         GarlicMessage getMessage() {
             return this.msg;
         }

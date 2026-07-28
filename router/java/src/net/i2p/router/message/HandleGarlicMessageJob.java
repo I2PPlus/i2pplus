@@ -47,8 +47,8 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
      *
      * @param context              router context providing core services
      * @param msg                  garlic message to process
-     * @param from                 ignored (sender identity)
-     * @param fromHash             ignored (sender hash)
+     * @param from sending router identity (sender identity)
+     * @param fromHash sending router hash (sender hash)
      * @param msgIDBloomXorLocal   long unique to router/session for XOR with message ID in local inbound messages
      * @param msgIDBloomXorRouter  long unique to router/session for XOR with message ID in router-targeted messages
      * @param msgIDBloomXorTunnel  long unique to router/session for XOR with message ID in tunnel-targeted messages

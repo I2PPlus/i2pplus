@@ -172,7 +172,7 @@ public class UDPSender {
      * This method is deprecated; use {@link #add(UDPPacket)} instead.
      *
      * @param packet the UDP packet to add
-     * @param blockTime ignored parameter
+     * @param blockTime max blocking time in ms parameter
      * @deprecated use {@link #add(UDPPacket)} instead
      */
     @Deprecated

@@ -9149,33 +9149,6 @@ protected int computeTarget(double observed) {
     }
 
     /**
-     * Computes a composite system health score from multiple cross-cutting stats.
-     * Score ranges from 0.0 (severely degraded) to 1.0 (perfect).
-     *
-     * <p>Computed once per tuning cycle and shared by all params. Used for:
-     * <ul>
-     *   <li>Auto-revert: when score &lt; 0.3, all params snap to defaults</li>
-     *   <li>Dampening: when score &lt; 0.6, step sizes are reduced proportionally</li>
-     *   <li>Latency weighting: transport.sendProcessingTime gets 30% weight</li>
-     * </ul>
-     *
-     * <p>Scoring uses a weighted geometric mean so that poor performance in
-     * any factor drags the overall score down (multiplicative, not additive).
-     *
-     * <p>Factors and weights:
-     * <ul>
-     *   <li>Job queue lag (20%) — CPU saturation</li>
-     *   <li>Build success rate (15%) — network health</li>
-     *   <li>Message failure lifetime (15%) — congestion</li>
-     *   <li>Concurrent builds (10%) — build storms</li>
-     *   <li>Transit load (10%) — bandwidth utilization</li>
-     *   <li>Send latency (30%) — end-to-end responsiveness</li>
-     * </ul>
-     *
-     * @since 0.9.70+
-     */
-
-    /**
      * Tunes max concurrent test jobs based on transport latency.
      * When latency is high, fewer tests = less transport pressure.
      * When latency is low, more tests = faster pool recovery.

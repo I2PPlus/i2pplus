@@ -950,17 +950,7 @@ class IntroductionManager {
         return PeerTestManager.getAddress(addrs, isIPv6);
     }
 
-    /**
-     *  Are IP and port valid?
-     *  Reject all IPv6, for now, even if we are configured for it.
-     *  Refuse anybody in the same /16
-     *  @since 0.9.3
-     */
-/*
-    private boolean isValid(byte[] ip, int port) {
-        return isValid(ip, port, false);
-    }
-*/
+
 
     /**
      *  Are IP and port valid?

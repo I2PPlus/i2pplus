@@ -48,7 +48,7 @@ import net.i2p.util.SimpleTimer2;
     /** property to disable peer test */
     private static final String PROP_DISABLE_PEER_TEST = "i2np.udp.disablePeerTest";
 
-    /** Constructor. */
+    /** Peer test event. */
     PeerTestEvent(RouterContext ctx, UDPTransport udp, PeerTestManager ptmgr) {
         super(ctx.simpleTimer2());
         _context = ctx;

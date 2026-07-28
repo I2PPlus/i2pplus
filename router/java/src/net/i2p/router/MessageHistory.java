@@ -60,7 +60,6 @@ public class MessageHistory {
         _reinitializeJob = new ReinitializeJob();
         _writeJob = new WriteJob();
         _firstPass = true;
-        //_submitMessageHistoryJob = new SubmitMessageHistoryJob(_context);
         initialize(true);
     }
 
@@ -82,7 +81,7 @@ public class MessageHistory {
      */
     public boolean getDoLog() { return _doLog; }
 
-    /** Filename. */
+    /** History file name. */
     String getFilename() { return _historyFile; }
 
     private void updateSettings() {
@@ -111,7 +110,6 @@ public class MessageHistory {
             _context.jobQueue().addJob(_reinitializeJob);
         } else {
             _localIdent = getName(_context.routerHash());
-            // _unwrittenEntries = new ArrayList(64);
             updateSettings();
             // clear the history file on startup
             if (_firstPass) {
@@ -126,8 +124,6 @@ public class MessageHistory {
             }
             if (_doLog)
                 addEntry(getPrefix() + "** Router initialized (started up or changed identities)");
-            //_submitMessageHistoryJob.getTiming().setStartAfter(_context.clock().now() + 2*60*1000);
-            //_context.jobQueue().addJob(_submitMessageHistoryJob);
         }
     }
 

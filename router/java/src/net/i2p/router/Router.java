@@ -375,7 +375,6 @@ public class Router implements RouterClock.ClockShiftListener {
                     System.err.println("ERROR: There appears to be another router already running!"); // NOSONAR
                     System.err.println("       Make sure old instances are shut down before starting up a new one."); // NOSONAR
                     System.err.println("       If no other instance is running, delete: " + getPingFile().getAbsolutePath()); // NOSONAR
-                    //System.exit(-1);
                     throw new IllegalStateException(
                                        "ERROR: There appears to be another router already running!" +
                                        " Make sure old instances are shut down before starting up a new one." +
@@ -498,12 +497,6 @@ public class Router implements RouterClock.ClockShiftListener {
      * as whether to explicitly halt the JVM during the hard fail process.
      *
      * Defaults to true. Set to false for embedded before calling runRouter()
-     */
-    /**
-     * Configure the router to kill the JVM when the router shuts down, as well
-     * as whether to explicitly halt the JVM during the hard fail process.
-     *
-     * Defaults to true. Set to false for embedded before calling runRouter()
      *
      * @param shouldDie true to kill VM on shutdown, false for embedded use
      */
@@ -555,18 +548,12 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     *  @return unmodifiable Set, unsorted
-     */
-    /**
      * Get an unmodifiable set of all configuration property names.
      *
      * @return unmodifiable Set of configuration property names (unsorted)
      */
     public Set<String> getConfigSettings() {return Collections.unmodifiableSet(_config.keySet());}
 
-    /**
-     *  @return unmodifiable Map, unsorted
-     */
     /**
      * Get an unmodifiable map of all configuration settings.
      *
@@ -897,7 +884,7 @@ public class Router implements RouterClock.ClockShiftListener {
             log = _log;
         }
         if (log != null && oldState != state && state != State.STOPPED && log.shouldWarn()) {
-            log.warn("Router state change from " + oldState + " to " + state /* , new Exception() */ );
+            log.warn("Router state change from " + oldState + " to " + state);
             //for debugging
             _context.logManager().flush();
         }
@@ -1032,7 +1019,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *
      *  Warning - risk of deadlock - do not call while holding locks
      *
-     * @param blockingRebuild ignored, always nonblocking
+     * @param blockingRebuild ignored, operation is always nonblocking
      */
     public void rebuildRouterInfo(boolean blockingRebuild) {
         if (_log.shouldInfo()) {_log.info("Building us a new RouterInfo, publish inline? " + blockingRebuild);}
@@ -1775,7 +1762,6 @@ public class Router implements RouterClock.ClockShiftListener {
 
         if (_killVMOnEnd) {
             try {Thread.sleep(1000);}
-            //Runtime.getRuntime().halt(exitCode);
             catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
             }

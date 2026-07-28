@@ -34,7 +34,7 @@ class UDPPacket implements CDPQEntry {
      * Provides new instances for the {@link TryCache}.
      */
     private static class PacketFactory implements TryCache.ObjectFactory<UDPPacket> {
-        /** Context. */
+        /** I2P context for logging. */
         static volatile RouterContext context;
 
         /**
@@ -95,7 +95,7 @@ class UDPPacket implements CDPQEntry {
     /** Largest payload type value. */
     public static final int MAX_PAYLOAD_TYPE = PAYLOAD_TYPE_SESSION_DESTROY;
 
-    /** Type. */
+    /** Packet type enumeration. */
     public static String payloadTypeToString(int type) {
         switch (type) {
             case PAYLOAD_TYPE_SESSION_REQUEST:    return "Session Request";
@@ -172,7 +172,7 @@ class UDPPacket implements CDPQEntry {
         return _packet;
     }
 
-    /** Priority. */
+    /** Send priority. */
     public int getPriority() {
         return _priority;
     }
@@ -239,7 +239,7 @@ class UDPPacket implements CDPQEntry {
     RemoteHostId getRemoteHost() {
         RemoteHostId local = _remoteHost;
         if (local == null) {
-            /** Lock. */
+            /** Lock for packet access. */
             synchronized (this) {
                 if (_remoteHost == null) {
                     InetAddress addr = _packet.getAddress();

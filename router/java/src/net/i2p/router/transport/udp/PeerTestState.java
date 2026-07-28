@@ -51,11 +51,11 @@ class PeerTestState {
      * Defines the participant's role in connectivity testing.
      */
     public enum Role {
-        /** Initiator. */
+        /** Initiator peer hash. */
         ALICE,
-        /** Relay. */
+        /** Relay peer hash. */
         BOB,
-        /** Helper. */
+        /** Helper peer hash. */
         CHARLIE
     }
 

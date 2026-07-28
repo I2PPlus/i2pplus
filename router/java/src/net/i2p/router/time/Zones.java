@@ -22,7 +22,6 @@ class Zones {
 
     private final I2PAppContext _context;
     // can't log here, called from RouterClock constructor, stack overflow
-    //private final Log _log;
 
     // lower case country to NTP region
     private final Map<String, String> _countryToZone;

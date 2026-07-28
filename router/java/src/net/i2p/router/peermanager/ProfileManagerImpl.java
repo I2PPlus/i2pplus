@@ -96,7 +96,7 @@ public class ProfileManagerImpl implements ProfileManager {
     /**
      * Note that a router explicitly rejected joining a tunnel.
      *
-     * @param responseTimeMs ignored
+     * @param responseTimeMs response time in ms
      * @param severity how much the peer doesnt want to participate in the
      *                 tunnel (large == more severe)
      */

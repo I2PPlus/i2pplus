@@ -28,13 +28,7 @@ class InboundMessageState implements CDQEntry {
 
     private static final long MAX_RECEIVE_TIME = 10*1000L;
     /**
-     * Description.
-     */
-    /**
-     * Description.
-     */
-    /**
-     * Description.
+     * Maximum number of fragments per message.
      */
     public static final int MAX_FRAGMENTS = 32;
     private static final int MAX_FRAGMENT_SIZE = UDPPacket.MAX_PACKET_SIZE;

@@ -31,11 +31,11 @@ import net.i2p.util.Log;
  *
  */
 class GetBidsJob extends JobImpl {
-    /** Ignored. */
+    /** Transport manager state. */
     private final TransportManager _tmgr;
-    /** Ignored. */
+    /** Transport manager state. */
     private final OutNetMessage _msg;
-    /** Ignored. */
+    /** Transport manager state. */
     private static volatile BanLogger _banLogger;
 
     /**

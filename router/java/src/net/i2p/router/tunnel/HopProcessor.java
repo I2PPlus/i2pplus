@@ -19,10 +19,7 @@ import net.i2p.util.Log;
  */
 class HopProcessor {
     /**
-     * The value.
-     */
-    /**
-     * _context.
+     * Router context.
      */
     protected final I2PAppContext _context;
     private final Log _log;

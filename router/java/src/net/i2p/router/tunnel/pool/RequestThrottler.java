@@ -653,9 +653,6 @@ public class RequestThrottler {
     }
 
     /**
-     * Checks if router is unreachable based on capabilities.
-     */
-    /**
      * Extract IP address and port from RouterInfo for logging to sessionbans.txt.
      * Returns IP:PORT format for IPv4 or [IPv6]:PORT format for IPv6.
      * Uses getCompatibleIP to return an IP for our supported protocols.

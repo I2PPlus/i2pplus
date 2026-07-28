@@ -537,7 +537,7 @@ public class JobQueue {
         return j;
     }
 
-    /** Next. */
+    /** Next job in queue. */
     Job getNext() {
         while (_alive) {
             try {

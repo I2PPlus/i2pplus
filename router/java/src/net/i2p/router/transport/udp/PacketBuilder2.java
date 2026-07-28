@@ -42,8 +42,8 @@ class PacketBuilder2 {
      *  For debugging and stats only - does not go out on the wire.
      *  These are chosen to be higher than the highest I2NP message type,
      *  as a data packet is set to the underlying I2NP message type.
+     *  SSU2 packet type constant for debugging/stats.
      */
-    /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_FIRST = 62;
     /** SSU2 packet type constant for debugging/stats */
     static final int TYPE_ACK = TYPE_FIRST;
@@ -299,7 +299,7 @@ class PacketBuilder2 {
                 if (off + ipHeaderSize > currentMTU) {
                     _log.info("[SSU] Packet + header is larger than peer's current MTU (" + currentMTU + " bytes) " +
                               packet + "; Packet: " + off + " bytes; Header: " + ipHeaderSize + "bytes; Data: " + dataSize + " bytes; " +
-                              "Fragments: " + DataHelper.toString(fragments) /* , new Exception() */ );
+                              "Fragments: " + DataHelper.toString(fragments));
                 }
             } else if (_log.shouldInfo()) {
                 _log.info("[SSU] Packet + header is larger than peer's current MTU (" + currentMTU + " bytes)");

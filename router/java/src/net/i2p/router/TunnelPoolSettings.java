@@ -182,8 +182,6 @@ public class TunnelPoolSettings {
         return _quantity + _backupQuantity;
     }
 
-    /** how long before tunnel expiration should new tunnels be built */
-
     /**
      *  How many remote hops should be in the tunnel NOT including us
      *

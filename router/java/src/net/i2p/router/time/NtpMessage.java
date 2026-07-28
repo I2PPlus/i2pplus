@@ -517,41 +517,4 @@ class NtpMessage {
         return "";
     }
 
-/*
-    // Test 2036 rollover
-    public static void main(String[] args) {
-        byte[] x = new byte[8];
-        byte[] y = new byte[8];
-        test(x, y);
-        x[0] = (byte) 0x80;
-        test(x, y);
-        x[0] = (byte) 0x81;
-        test(x, y);
-        x[0] = (byte) 0xff;
-        test(x, y);
-        Arrays.fill(x, 1, 6, (byte) 0xff);
-        test(x, y);
-        x[0] = 0x40;
-        Arrays.fill(x, 1, 6, (byte) 0);
-        test(x, y);
-        x[0] = 0x7f;
-        test(x, y);
-        Arrays.fill(x, 1, 6, (byte) 0xff);
-        test(x, y);
-    }
-
-    private static void test(byte[] x, byte[] y) {
-        double d = decodeTimestamp(x, 0);
-        encodeTimestamp(y, 0, d);
-        System.out.println(net.i2p.util.HexDump.dump(x));
-        System.out.println(net.i2p.util.HexDump.dump(y));
-        System.out.println("Date: " + timestampToString(d));
-        // skip 2 random bytes at end
-        if (net.i2p.data.DataHelper.eq(x, 0, y, 0, 6))
-            System.out.println("PASS\n");
-        else
-            System.out.println("FAIL\n");
-
-    }
-*/
 }

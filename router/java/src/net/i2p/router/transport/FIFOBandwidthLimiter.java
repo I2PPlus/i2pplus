@@ -315,9 +315,6 @@ public class FIFOBandwidthLimiter {
         _maxOutbound = kbytesPerSecond * 1024;
     }
     /**
-     * getInboundBurstBytes.
-     */
-    /**
      * @return the inbound burst bytes
      */
     public int getInboundBurstBytes() { return _maxInboundBurst; }

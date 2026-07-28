@@ -50,17 +50,12 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
     private final int _maxSize;
 
     /**
-     * Default backlog and max size depending on system speed.
-     * @return whether slow
+     * Default backlog size threshold, depends on system speed.
      */
-    /** Default backlog size threshold */
     protected static final int DEFAULT_BACKLOG_SIZE = SystemVersion.isSlow() ? 256 : 384;
     /** Default maximum queue size */
     protected static final int DEFAULT_MAX_SIZE = SystemVersion.isSlow() ? 512 : 1024;
 
-    /**
-     * Configuration property keys for max size and backlog thresholds.
-     */
     /** Property key for maximum queue size */
     public static final String PROP_MAX_SIZE = "router.codelMaxQueue";
     /** Property key for backlog threshold */

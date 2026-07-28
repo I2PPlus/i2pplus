@@ -502,7 +502,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * @param key the DatabaseEntry hash
      * @param onSuccess may be null, always called if we are ff and ds is an RI
      * @param onFailure may be null, ignored if we are ff and ds is an RI
-     * @param sendTimeout ignored if we are ff and ds is an RI
+     * @param sendTimeout timeout in ms for send operations if we are ff and ds is an RI
      * @param toIgnore may be null, if non-null, all attempted and skipped targets will be added as of 0.9.53,
      *        unused if we are ff and ds is an RI
      */
@@ -1137,13 +1137,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 } else if (_context.jobQueue().getMaxLag() > MAX_LAG_BEFORE_SKIP_SEARCH) {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> High Job Lag");
                 }
-/*
-                } else if (isBadFF) {
-                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
-                    new DropLookupFailedJob(_context, peer, info);
-                } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
-                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> KBucket is full");
-*/
                 super.lookupBeforeDropping(peer, info);
                 return;
             }

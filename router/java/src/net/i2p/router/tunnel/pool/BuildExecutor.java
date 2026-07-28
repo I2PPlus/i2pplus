@@ -536,11 +536,6 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
-     * Determine if a tunnel config is for an outbound (non-inbound) tunnel.
-     * Uses the parent class isInbound() to avoid importing TunnelPoolSettings.
-     */
-
-    /**
      * Determines allowed number of concurrent tunnel builds based on system status,
      * bandwidth limits, build times, system resources, and current tunnel build activity.
      * Also handles expiration and cleanup of old build requests.

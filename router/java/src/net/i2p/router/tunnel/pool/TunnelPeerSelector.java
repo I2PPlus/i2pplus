@@ -447,17 +447,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      * Check if a peer should be excluded from closest hop selection.
      * This performs connectivity checks and version capability validation.
+     * Used by Excluder to classify exclusion reasons for diagnostics.
      *
      * @param peerHash the peer hash to check
      * @param isInbound true if this is for an inbound tunnel
      * @param isExploratory true if this is for exploratory tunnels
-     * @return true if the peer should be excluded
+     * @return the exclusion reason, or null if peer should not be excluded
      * @since 0.9.58
-     */
-    /**
-     *  Check if a peer should be excluded, returning the reason or null.
-     *  Used by Excluder to classify exclusion reasons for diagnostics.
-     * @return the exclusion reason
      */
     private String getExclusionReason(Hash peerHash, boolean isInbound, boolean isExploratory) {
         final long BANDWIDTH_REJECTION_CUTOFF_MS = 20_000L;

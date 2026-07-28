@@ -167,27 +167,6 @@ public class RandomIterator<E> implements Iterator<E> {
         throw new UnsupportedOperationException();
     }
 
-    /*
-    public static void main(String[] args) {
-        testAndroid();
-        test(0);
-        test(1);
-        test(2);
-        test(1000);
-    }
-
-    private static void test(int n) {
-        System.out.println("testing with " + n);
-        List<Integer> l = new ArrayList<>(n);
-        for (int i = 0; i < n; i++) {
-            l.add(Integer.valueOf(i));
-        }
-        for (Iterator<Integer> iter = new RandomIterator<>(l); iter.hasNext(); ) {
-            System.out.println(iter.next().toString());
-        }
-    }
-*/
-
     /**
  * Test case from android ticket above
  *

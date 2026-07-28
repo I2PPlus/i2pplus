@@ -1291,7 +1291,7 @@ public class UDPTransport extends TransportImpl {
      * @param port 0 if unknown
      */
     @Override
-    /** Port. */
+    /** Listening port. */
     public void externalAddressReceived(Transport.AddressSource source, byte[] ip, int port) {
         if (_log.shouldWarn())
             _log.warn("Received address: " + Addresses.toString(ip, port) + " from: " + source);
@@ -1381,7 +1381,6 @@ public class UDPTransport extends TransportImpl {
      *  Don't do anything if UPnP claims failure.
      */
     @Override
-    /** Reason. */
     public void forwardPortStatus(byte[] ip, int port, int externalPort, boolean success, String reason) {
         if (success)
             _haveUPnP = true;
@@ -2070,7 +2069,7 @@ public class UDPTransport extends TransportImpl {
 
     private class RemoveDropList extends SimpleTimer2.TimedEvent {
         private final RemoteHostId _peer;
-        /** Peer. */
+        /** @param peer peer to remove after delay */
         public RemoveDropList(RemoteHostId peer) { super(_context.simpleTimer2()); _peer = peer; }
         /** Time reached. */
         public void timeReached() {
@@ -3153,7 +3152,7 @@ public class UDPTransport extends TransportImpl {
      *  @param address the new address or null to remove all
      */
     @Override
-    /** Address. */
+    /** Router address. */
     protected void replaceAddress(RouterAddress address) {
         super.replaceAddress(address);
         _context.commSystem().notifyReplaceAddress(address);
@@ -3165,7 +3164,7 @@ public class UDPTransport extends TransportImpl {
      *  @since 0.9.20
      */
     @Override
-    /** Address. */
+    /** Router address. */
     protected void removeAddress(RouterAddress address) {
         super.removeAddress(address);
         _context.commSystem().notifyRemoveAddress(address);
@@ -3476,7 +3475,7 @@ public class UDPTransport extends TransportImpl {
      * @since 0.9.24
      */
     @Override
-    /** Peer. */
+    /** Check if peer can be disconnected. */
     public void mayDisconnect(final Hash peer) {
         /** Peer state. */
         final PeerState ps =  _peersByIdent.get(peer);
@@ -3488,12 +3487,12 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
-    /** Peer. */
+    /** Force disconnect a peer. */
     public void forceDisconnect(Hash peer) {
         forceDisconnect(peer, null);
     }
 
-    /** Reason. */
+    /** Force disconnect with reason. */
     public void forceDisconnect(Hash peer, String reason) {
         PeerState ps =  _peersByIdent.get(peer);
         boolean isBanned = _context.banlist().isBanlisted(peer);
@@ -4136,7 +4135,7 @@ public class UDPTransport extends TransportImpl {
      */
     private static class DestroyedCache extends LHMCache<Long, PeerStateDestroyed> {
 
-        /** Max. */
+        /** Maximum threshold. */
         public DestroyedCache(int max) {
             super(max);
         }
@@ -4145,7 +4144,7 @@ public class UDPTransport extends TransportImpl {
          * Remove eldest entry.
          */
         @Override
-        /** Eldest. */
+        /** Oldest entry age. */
         protected boolean removeEldestEntry(Map.Entry<Long, PeerStateDestroyed> eldest) {
             boolean rv = super.removeEldestEntry(eldest);
             if (rv) {

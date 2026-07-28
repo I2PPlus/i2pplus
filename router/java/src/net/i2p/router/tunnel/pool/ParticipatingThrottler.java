@@ -145,7 +145,6 @@ public class ParticipatingThrottler {
      * Result of throttling decision for tunnel participation requests.
      * Determines whether to accept, reject, or drop a tunnel request.
      */
-    /** The result of throttling a peer request. */
     public enum Result {
     /** Request accepted. */
     ACCEPT,

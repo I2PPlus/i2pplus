@@ -38,25 +38,25 @@ class UDPAddress {
     public static final String PROP_PORT = RouterAddress.PROP_PORT;
     /** Config key for SSU host. */
     public static final String PROP_HOST = RouterAddress.PROP_HOST;
-    /** Key. */
+    /** Introduction key. */
     public static final String PROP_INTRO_KEY = "key";
-    /** Mtu. */
+    /** Property key for MTU. */
     public static final String PROP_MTU = "mtu";
 
-    /** Caps. */
+    /** Property key for capabilities. */
     public static final String PROP_CAPACITY = "caps";
     /** 'B' */
     public static final char CAPACITY_TESTING = 'B';
     /** 'C' */
     public static final char CAPACITY_INTRODUCER = 'C';
 
-    /** Ihost. */
+    /** Introducer host. */
     public static final String PROP_INTRO_HOST_PREFIX = "ihost";
-    /** Iport. */
+    /** Introducer port. */
     public static final String PROP_INTRO_PORT_PREFIX = "iport";
-    /** Ikey. */
+    /** Introducer key. */
     public static final String PROP_INTRO_KEY_PREFIX = "ikey";
-    /** Itag. */
+    /** Introducer tag. */
     public static final String PROP_INTRO_TAG_PREFIX = "itag";
     /** Introduction expiration prefix */
     public static final String PROP_INTRO_EXP_PREFIX = "iexp";
@@ -91,7 +91,7 @@ class UDPAddress {
         }
     }
 
-    /** Addr. */
+    /** Parse and cache router address data. */
     public UDPAddress(RouterAddress addr) {
         if (addr == null) {
             _host = null;
@@ -305,7 +305,7 @@ class UDPAddress {
         _introHashes = cintroHashes;
     }
 
-    /** Host. */
+    /** Host string from the router address. */
     public String getHost() { return _host; }
 
     /**
@@ -319,7 +319,7 @@ class UDPAddress {
         return _hostAddress;
     }
 
-    /** Port. */
+    /** Port number from the router address. */
     public int getPort() { return _port; }
 
     /**

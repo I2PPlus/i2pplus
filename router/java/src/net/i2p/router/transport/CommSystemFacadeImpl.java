@@ -332,8 +332,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      *  Cannot be restarted after calling this. Use restart() for that.
-     */
-    /**
+     *
      * Gracefully shutdown the communication system.
      *
      * This method performs a clean shutdown of all transport
@@ -493,7 +492,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return sum * 1000 / frameSize;
     }
 
-    /** Send the message out */
     /**
      * Process and route an outbound message through the transport system.
      *

@@ -42,11 +42,12 @@ class LookupThrottler {
     private static final int BURST_THRESHOLD = 5;
     /** Length of the burst detection window in ms. */
     private static final long BURST_WINDOW_MS = 1000L;
-    /** Hard cap on unique (from, tunnel) pairs tracked to prevent memory leaks.
-     *  At ~25 peak lookups/sec with a 3-min clean window, ~4,500 keys is sufficient.
-     *  10,000 gives ~7 min headroom at peak — the clean runs every 3 min so this
-     *  cap is only hit during sustained attack. */
-    /** Hard cap on unique tracked (peer,tunnel) pairs. */
+    /**
+     * Hard cap on unique (from, tunnel) pairs tracked to prevent memory leaks.
+     * At ~25 peak lookups/sec with a 3-min clean window, ~4,500 keys is sufficient.
+     * 10,000 gives ~7 min headroom at peak — the clean runs every 3 min so this
+     * cap is only hit during sustained attack.
+     */
     private static final int MAX_ENTRIES = 10000;
 
     /** Max lookups limit */

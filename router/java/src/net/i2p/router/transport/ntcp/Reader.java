@@ -38,13 +38,7 @@ public class Reader {
     private final AtomicInteger _activeCount = new AtomicInteger();
 
     /**
-     * Description.
-     */
-    /**
-     * Description.
-     */
-    /**
-     * Description.
+     * Constructor.
      */
     public Reader(RouterContext ctx) {
         _context = ctx;

@@ -116,9 +116,9 @@ final class SSU2Util {
     public static final int DATA_HEADER_SIZE = SHORT_HEADER_SIZE;
 
     /**
-     *  The message types, 0-11, as bytes
+     *  The message types, 0-11, as bytes.
+     *  Message type flag for session request.
      */
-    /** Message type flag for session request */
     public static final byte SESSION_REQUEST_FLAG_BYTE = UDPPacket.PAYLOAD_TYPE_SESSION_REQUEST;
     /** Message type flag for session created */
     public static final byte SESSION_CREATED_FLAG_BYTE = UDPPacket.PAYLOAD_TYPE_SESSION_CREATED;
@@ -378,7 +378,7 @@ final class SSU2Util {
      *
      *  @param h Bob hash to be included in sig, not included in data
      *  @param ip may be null
-     *  @param port ignored if ip is null
+     *  @param port the UDP port number if ip is null
      *  @param token if nonzero, append it
      *  @return null on failure
      *  @since 0.9.55

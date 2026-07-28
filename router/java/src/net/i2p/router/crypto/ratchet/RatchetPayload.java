@@ -354,7 +354,12 @@ class RatchetPayload {
             this(null, size);
         }
 
-        /** with random data */
+        /**
+         * with random data
+         *
+         * @deprecated Use {@link #PaddingBlock(int)} instead.
+         * @since 0.9.70
+         */
         @Deprecated
         public PaddingBlock(I2PAppContext context, int size) {
             super(BLOCK_PADDING);

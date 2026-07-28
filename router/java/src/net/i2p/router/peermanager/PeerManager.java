@@ -66,7 +66,6 @@ class PeerManager {
      */
     static final long REORGANIZE_TIME_LONG = 250*1000L;
     /** After first two hours of uptime ~= 246 */
-    //static final long REORGANIZES_PER_DAY = (int) (24*60*60*1000L / REORGANIZE_TIME_LONG);
     static final int REORGANIZES_PER_DAY = 256;
     private static final long STORE_TIME = 15*60*1000L; // how frequently we write profiles to disk
     // for profiles stored to disk
