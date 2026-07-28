@@ -367,8 +367,9 @@ class Connection {
      */
     private long calculatePacingDelay(int packetSize) {
         long rate = calculatePacingRate();
-        if (rate == Long.MAX_VALUE)
+        if (rate == Long.MAX_VALUE) {
             return 0;
+        }
         return calculatePacingDelay(packetSize, rate);
     }
 
@@ -380,8 +381,9 @@ class Connection {
             long now = _context.clock().now();
             long timeSinceLastPacket = now - _lastPacketSendTime;
             long expectedInterval = (long) packetSize * 1000 / pacingRate;
-            if (timeSinceLastPacket >= expectedInterval)
+            if (timeSinceLastPacket >= expectedInterval) {
                 return 0;
+            }
             return expectedInterval - timeSinceLastPacket;
         }
     }
@@ -436,14 +438,14 @@ class Connection {
                 int wsz = _options.getWindowSize();
                 if (shouldWait(unacked, wsz)) {
                     if (_isChoked) {
-                        long persistDelay = _options.getRTO();
-                        if (persistDelay <= 0) persistDelay = 5000L;
-                        if (persistDelay < 5000L) persistDelay = 5000L;
-                        if (persistBackoff > 0)
+                        long persistDelay = Math.max(_options.getRTO(), 5000L);
+                        if (persistBackoff > 0) {
                             persistDelay = Math.min(persistDelay << persistBackoff, 60000L);
+                        }
                         if (now - start >= persistDelay) {
-                            if (_log.shouldWarn())
+                            if (_log.shouldWarn()) {
                                 _log.warn("Persist timer expired, auto-unchoking on " + this);
+                            }
                             persistBackoff = Math.min(persistBackoff + 1, 5);
                             setChoked(false);
                             continue;
@@ -506,7 +508,9 @@ class Connection {
      */
     private int getPTO() {
         int rtt = _options.getRTT();
-        if (rtt <= 0) return Math.min(3000, _options.getRTO() / 2);
+        if (rtt <= 0) {
+            return Math.min(3000, _options.getRTO() / 2);
+        }
         return Math.max(200, Math.min(2000, rtt * 2));
     }
 
@@ -610,7 +614,9 @@ class Connection {
      *  or in ConnectionManager or ConnectionHandler.
      */
     void sendPacket(PacketLocal packet) {
-        if (packet == null) return;
+        if (packet == null) {
+            return;
+        }
 
         setNextSendTime(-1);
         if (_options.getRequireFullySigned()) {
@@ -1242,7 +1248,6 @@ class Connection {
      * Set the ConnectionOptions.
      * @param opts ConnectionOptions non-null
      */
-    /** {_options */
     public void setOptions(ConnectionOptions opts) {_options = opts;}
 
     /** @since 0.9.21 */
@@ -1267,7 +1272,6 @@ class Connection {
      *
      * @param socket the socket
      */
-    /** {_socket */
     public void setSocket(I2PSocketFull socket) {_socket = socket;}
 
     /**
@@ -1295,7 +1299,6 @@ class Connection {
      *
      * @param err the error message
      */
-    /** {_connectionError */
     public void setConnectionError(String err) {_connectionError = err;}
 
     /**
@@ -1595,24 +1598,29 @@ class Connection {
           long expiry = 0;
           if (hasTimeout) {
               long cap = getMaxConnectTimeout();
-              if (totalTimeout > cap)
+              if (totalTimeout > cap) {
                   totalTimeout = cap;
+              }
               expiry = _context.clock().now() + totalTimeout;
           }
           long start = _context.clock().now();
-          if (_log.shouldInfo())
+          if (_log.shouldInfo()) {
               _log.info("waitForConnect() starting for " + _remotePeer + " (timeout=" + (hasTimeout ? totalTimeout : 0) + "ms)");
+          }
           while (true) {
               if (_connected.get() && (_receiveStreamId.get() > 0) && (_sendStreamId.get() > 0)) {
-                  if (_log.shouldInfo())
+                  if (_log.shouldInfo()) {
                       _log.info("waitForConnect() connected in " + (_context.clock().now() - start) + "ms for " + _remotePeer);
+                  }
                   return;
               }
-              if (_connectionError != null)
+              if (_connectionError != null) {
                   return;
+              }
               if (!_connected.get()) {
-                  if (_connectionError == null)
+                  if (_connectionError == null) {
                       _connectionError = "Connection failed";
+                  }
                   return;
               }
               if (hasTimeout) {
@@ -1622,14 +1630,16 @@ class Connection {
                           _connectionError = "Connection timed out";
                           disconnect(false);
                       }
-                      if (_log.shouldInfo())
+                      if (_log.shouldInfo()) {
                           _log.info("waitForConnect() timed out after " + (_context.clock().now() - start) + "ms for " + _remotePeer);
+                      }
                       return;
                   }
                   try {
                       synchronized (_connectLock) { _connectLock.wait(Math.min(timeLeft, 1000)); }
                   } catch (InterruptedException ie) {
                       _connectionError = "InterruptedException";
+                      Thread.currentThread().interrupt();
                       return;
                   }
               } else {
@@ -1637,6 +1647,7 @@ class Connection {
                       synchronized (_connectLock) { _connectLock.wait(60000); }
                   } catch (InterruptedException ie) {
                       _connectionError = "InterruptedException";
+                      Thread.currentThread().interrupt();
                       return;
                   }
               }
@@ -1669,7 +1680,9 @@ class Connection {
             }
             // uh, nothing more to do...
             if (!_connected.get()) {
-                if (_log.shouldDebug()) _log.debug("Inactivity timeout reached, but we are already closed!");
+                if (_log.shouldDebug()) {
+                    _log.debug("Inactivity timeout reached, but we are already closed!");
+                }
                 return;
             }
             // we got rescheduled already
@@ -2217,18 +2230,21 @@ class Connection {
             boolean sent = false;
             if (getLastSendTime() <= _created) {
                 if (getResetReceived() || getResetSent()) {
-                    if (_log.shouldDebug())
+                    if (_log.shouldDebug()) {
                         _log.debug("ACK DUP on " + Connection.this + ", but we have been reset");
+                    }
                     return;
                 }
 
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("Last sent was a while ago, and we want to ACK a DUP on " + Connection.this);
+                }
                 ackImmediately();
                 sent = true;
             } else {
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("ACK DUP on " + Connection.this + ", but we have sent (" + (getLastSendTime()-_created) + ")");
+                }
             }
             _context.statManager().addRateData("stream.ack.dup.sent", sent ? 1 : 0);
         }
