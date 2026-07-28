@@ -21,15 +21,23 @@ import java.util.Date;
  *
  */
 class LogRecordFormatter {
-    /** N l */
+    /** Line separator. */
     static final String NL = System.getProperty("line.separator");
-    // arbitrary max length for the classname property (this makes sure it lines up nicely)
+    /** Max length for the source class name column. */
     private static final int MAX_WHERE_LENGTH = 16;
+    /** Max length for the thread name column. */
     private static final int MAX_THREAD_LENGTH = 11;
+    /** Max length for the priority label column. */
     private static final int MAX_PRIORITY_LENGTH = 5;
+    private static final String SEPARATOR = "| ";
+    private static final String ELLIPSIS = "...";
 
     /**
      * Format a log record per manager settings.
+     *
+     * @param manager the log manager with format configuration
+     * @param rec the log record to format
+     * @return the formatted log line
      */
     public static String formatRecord(LogManager manager, LogRecord rec) {
         return formatRecord(manager, rec, true);
@@ -53,9 +61,9 @@ class LogRecordFormatter {
                     break;
                 case LogManager.THREAD: buf.append(getThread(rec));
                     break;
-                case LogManager.PRIORITY: buf.append("| ").append(getPriority(rec, manager.getContext()));
+                case LogManager.PRIORITY: buf.append(SEPARATOR).append(getPriority(rec, manager.getContext()));
                     break;
-                case LogManager.MESSAGE: String msg = getWhat(rec);
+                case LogManager.MESSAGE: String msg = rec.getMessage();
                     if (msg != null) buf.append(msg);
                     break;
                 default: buf.append(format[i]);
@@ -73,13 +81,17 @@ class LogRecordFormatter {
         return buf.toString();
     }
 
+    /**
+     * Format the thread name, padded or truncated to MAX_THREAD_LENGTH.
+     */
     private static String getThread(LogRecord logRecord) {
         return toString(logRecord.getThreadName(), MAX_THREAD_LENGTH);
     }
 
     /**
      * Format the record timestamp.
-     * @return the when
+     *
+     * @return the formatted timestamp string
      */
     public static String getWhen(LogManager manager, LogRecord logRecord) {
         SimpleDateFormat fmt = manager.getDateFormat();
@@ -90,42 +102,46 @@ class LogRecordFormatter {
     }
 
     /* don't translate */
-
     private static final String BUNDLE_NAME = "net.i2p.util.messages";
 
     static {
         // just for tagging
-        String[] levels = {_x("CRIT"), _x("ERROR"), _x("WARN"), _x("INFO"), _x("DEBUG")};
+        _x("CRIT"); _x("ERROR"); _x("WARN"); _x("INFO"); _x("DEBUG");
     }
 
-    /** translate @since 0.7.14 */
+    /**
+     * Return the localized priority label.
+     *
+     * @since 0.7.14
+     */
     private static String getPriority(LogRecord rec, I2PAppContext ctx) {
         int len;
-        if (Translate.getLanguage(ctx).equals("de")) len = 8; // KRITISCH
-        else len = MAX_PRIORITY_LENGTH;
-        StringBuilder buf = new StringBuilder();
-        while (buf.length() < len) buf.append(' ');
+        if (Translate.getLanguage(ctx).equals("de")) {
+            len = 8; // KRITISCH
+        } else {
+            len = MAX_PRIORITY_LENGTH;
+        }
         return toString(Translate.getString(Log.toLevelString(rec.getPriority()), ctx, BUNDLE_NAME), len);
     }
 
-    private static String getWhat(LogRecord rec) {
-        return rec.getMessage();
-    }
-
+    /**
+     * Format the source class name, padded or truncated to MAX_WHERE_LENGTH.
+     */
     private static String getWhere(LogRecord rec) {
         String src = (rec.getSource() != null ? rec.getSource().getName() : rec.getSourceName());
         if (src == null) src = "<none>";
         return toString(src, MAX_WHERE_LENGTH);
     }
 
-    /** truncates or pads to the specified size */
+    /**
+     * Truncate or pad to the specified size, adding an ellipsis prefix if truncated.
+     */
     private static String toString(String str, int size) {
-        String ellipsis = "...";
         StringBuilder buf = new StringBuilder();
         if (str == null) str = "";
         if (str.length() > size) {
             str = str.substring(str.length() - size);
-            buf.append(ellipsis);
+            buf.append(ELLIPSIS);
         }
         buf.append(str);
         while (buf.length() < size) buf.append(' ');
