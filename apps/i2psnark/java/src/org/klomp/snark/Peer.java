@@ -212,9 +212,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      *
      * @param p the peer to compare to
      * @return a negative, zero, or positive integer
-     * @deprecated unused?
      */
-    @Deprecated
     public int compareTo(Peer p) {
         int rv = peerID.compareTo(p.peerID);
         if (rv == 0) {
@@ -602,20 +600,6 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Are we currently requesting the piece?
-     *
-     * @param p the piece index
-     * @return true if requesting the piece
-     * @deprecated deadlocks
-     * @since 0.8.1
-     */
-    @Deprecated
-    boolean isRequesting(int p) {
-        PeerState s = state;
-        return s != null && s.isRequesting(p);
-    }
-
-    /**
      * Update the request queue. Call after adding wanted pieces.
      *
      * @since 0.8.1
@@ -635,22 +619,6 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     public boolean isInterested() {
         PeerState s = state;
         return (s != null) && s.interested;
-    }
-
-    /**
-     * Sets whether or not we are interested in pieces from this peer. Defaults to false. When
-     * interest is true and this peer unchokes us then we start downloading from it. Has no effect
-     * when not connected.
-     *
-     * @param interest true if interested, false otherwise
-     * @deprecated unused
-     */
-    @Deprecated
-    public void setInteresting(boolean interest) {
-        PeerState s = state;
-        if (s != null) {
-            s.setInteresting(interest);
-        }
     }
 
     /**

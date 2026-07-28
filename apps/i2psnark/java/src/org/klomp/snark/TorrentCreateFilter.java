@@ -13,21 +13,9 @@ import java.io.Serializable;
  */
 public class TorrentCreateFilter implements Serializable {
 
-    /**
-     * name.
-     */
     public final String name;
-    /**
-     * filterPattern.
-     */
     public final String filterPattern;
-    /**
-     * filterType.
-     */
     public final String filterType;
-    /**
-     * isDefault.
-     */
     public final boolean isDefault;
 
     /**

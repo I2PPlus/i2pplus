@@ -42,9 +42,6 @@ class MimeTypes {
 
     private final Map<String, String> _mimeMap;
 
-    /**
-     * MimeTypes.
-     */
     public MimeTypes() {
         _mimeMap = new ConcurrentHashMap<>();
         if (!(SystemVersion.isWindows()

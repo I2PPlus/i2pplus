@@ -174,27 +174,6 @@ public class PeerID implements Comparable<PeerID> {
     }
 
     /**
-     * Compares port, address and id.
-     *
-     * @deprecated unused? and will NPE now that address can be null?
-     */
-    @Deprecated
-    public int compareTo(PeerID pid) {
-        int result = port - pid.port;
-        if (result != 0) return result;
-
-        result = address.hashCode() - pid.address.hashCode();
-        if (result != 0) return result;
-
-        for (int i = 0; i < id.length; i++) {
-            result = id[i] - pid.id[i];
-            if (result != 0) return result;
-        }
-
-        return 0;
-    }
-
-    /**
      * Returns the String "id@address" where id is the first 4 chars of the base64 encoded id and
      * address is the first 6 chars of the base64 dest (was the base64 hash of the dest) which
      * should match what the bytemonsoon tracker reports on its web pages.
@@ -219,6 +198,27 @@ public class PeerID implements Comparable<PeerID> {
                         + "@"
                         + address.toBase64().substring(0, 6);
         return _toStringCache;
+    }
+
+    /**
+     * Compares port, address and id.
+     *
+     * @param pid the peer ID to compare to
+     * @return a negative, zero, or positive integer
+     */
+    public int compareTo(PeerID pid) {
+        int result = port - pid.port;
+        if (result != 0) return result;
+
+        result = address.hashCode() - pid.address.hashCode();
+        if (result != 0) return result;
+
+        for (int i = 0; i < id.length; i++) {
+            result = id[i] - pid.id[i];
+            if (result != 0) return result;
+        }
+
+        return 0;
     }
 
     /** Encode an id as a hex encoded string and remove leading zeros. */

@@ -71,16 +71,10 @@ import org.klomp.snark.URIUtil;
  */
 class BasicServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    /**
-     * _context.
-     */
     protected final transient I2PAppContext _context;
-    /**
-     * _log.
-     */
     protected final transient Log _log;
     /**
-     * _resourceBase.
+     * Base directory for serving static files.
      */
     protected File _resourceBase;
     private String _warBase;
@@ -95,9 +89,6 @@ class BasicServlet extends HttpServlet {
     private static final int WAR_CACHE_CONTROL_SECS = 7 * 24 * 60 * 60;
     private static final int FILE_CACHE_CONTROL_SECS = 30 * 24 * 60 * 60;
 
-    /**
-     * BasicServlet.
-     */
     public BasicServlet() {
         super();
         _context = I2PAppContext.getGlobalContext();
@@ -208,9 +199,6 @@ class BasicServlet extends HttpServlet {
         return r;
     }
 
-    /**
-     * doGet.
-     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // always starts with a '/'
@@ -493,9 +481,6 @@ class BasicServlet extends HttpServlet {
     private class FileContent implements HttpContent {
         private final File _file;
 
-        /**
-         * FileContent.
-         */
         public FileContent(File file) {
             _file = file;
         }
@@ -569,9 +554,6 @@ class BasicServlet extends HttpServlet {
     private class JarContent implements HttpContent {
         private final String _path;
 
-        /**
-         * JarContent.
-         */
         public JarContent(String path) {
             _path = path;
         }

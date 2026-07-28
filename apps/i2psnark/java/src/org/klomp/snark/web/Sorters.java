@@ -138,9 +138,6 @@ class Sorters {
             _p = getPattern(lang);
         }
 
-        /**
-         * compare.
-         */
         public int compare(Snark l, Snark r) {
             return comp(l, r, _p);
         }
@@ -178,17 +175,11 @@ class Sorters {
         private final boolean _rev;
         private final Pattern _p;
 
-        /**
-         * Sort.
-         */
         public Sort(boolean rev, String lang) {
             _rev = rev;
             _p = getPattern(lang);
         }
 
-        /**
-         * compare.
-         */
         public int compare(Snark l, Snark r) {
             int rv = compareIt(l, r);
             if (rv != 0) {
@@ -202,9 +193,6 @@ class Sorters {
          */
         protected abstract int compareIt(Snark l, Snark r);
 
-        /**
-         * compLong.
-         */
         protected static int compLong(long l, long r) {
             if (l < r) {
                 return -1;
@@ -236,9 +224,6 @@ class Sorters {
             super(rev, lang);
         }
 
-        /**
-         * compareIt.
-         */
         public int compareIt(Snark l, Snark r) {
             int rv = getStatus(l) - getStatus(r);
             if (rv != 0) {
@@ -313,16 +298,10 @@ class Sorters {
 
     private static class PeersComparator extends Sort {
 
-        /**
-         * PeersComparator.
-         */
         public PeersComparator(boolean rev, String lang) {
             super(rev, lang);
         }
 
-        /**
-         * compareIt.
-         */
         public int compareIt(Snark l, Snark r) {
             return l.getPeerCount() - r.getPeerCount();
         }
@@ -330,16 +309,10 @@ class Sorters {
 
     private static class RemainingComparator extends Sort {
 
-        /**
-         * RemainingComparator.
-         */
         public RemainingComparator(boolean rev, String lang) {
             super(rev, lang);
         }
 
-        /**
-         * compareIt.
-         */
         public int compareIt(Snark l, Snark r) {
             return compLong(l.getNeededLength(), r.getNeededLength());
         }
@@ -347,16 +320,10 @@ class Sorters {
 
     private static class ETAComparator extends Sort {
 
-        /**
-         * ETAComparator.
-         */
         public ETAComparator(boolean rev, String lang) {
             super(rev, lang);
         }
 
-        /**
-         * compareIt.
-         */
         public int compareIt(Snark l, Snark r) {
             return compLong(
                     eta(l), eta(r)); // TODO For completed torrents, sort by date of completion
@@ -416,16 +383,10 @@ class Sorters {
 
     private static class SizeComparator extends Sort {
 
-        /**
-         * SizeComparator.
-         */
         public SizeComparator(boolean rev, String lang) {
             super(rev, lang);
         }
 
-        /**
-         * compareIt.
-         */
         public int compareIt(Snark l, Snark r) {
             return compLong(l.getTotalLength(), r.getTotalLength());
         }
@@ -433,16 +394,10 @@ class Sorters {
 
     private static class DownloadedComparator extends Sort {
 
-        /**
-         * DownloadedComparator.
-         */
         public DownloadedComparator(boolean rev, String lang) {
             super(rev, lang);
         }
 
-        /**
-         * compareIt.
-         */
         public int compareIt(Snark l, Snark r) {
             long ld = l.getTotalLength() - l.getRemainingLength();
             long rd = r.getTotalLength() - r.getRemainingLength();
@@ -452,16 +407,10 @@ class Sorters {
 
     private static class UploadedComparator extends Sort {
 
-        /**
-         * UploadedComparator.
-         */
         public UploadedComparator(boolean rev, String lang) {
             super(rev, lang);
         }
 
-        /**
-         * compareIt.
-         */
         public int compareIt(Snark l, Snark r) {
             return compLong(l.getUploaded(), r.getUploaded());
         }
@@ -469,16 +418,10 @@ class Sorters {
 
     private static class DownRateComparator extends Sort {
 
-        /**
-         * DownRateComparator.
-         */
         public DownRateComparator(boolean rev, String lang) {
             super(rev, lang);
         }
 
-        /**
-         * compareIt.
-         */
         public int compareIt(Snark l, Snark r) {
             return compLong(l.getDownloadRate(), r.getDownloadRate());
         }
@@ -486,16 +429,10 @@ class Sorters {
 
     private static class UpRateComparator extends Sort {
 
-        /**
-         * UpRateComparator.
-         */
         public UpRateComparator(boolean rev, String lang) {
             super(rev, lang);
         }
 
-        /**
-         * compareIt.
-         */
         public int compareIt(Snark l, Snark r) {
             return compLong(l.getUploadRate(), r.getUploadRate());
         }
@@ -503,16 +440,10 @@ class Sorters {
 
     private static class RatioComparator extends Sort {
 
-        /**
-         * RatioComparator.
-         */
         public RatioComparator(boolean rev, String lang) {
             super(rev, lang);
         }
 
-        /**
-         * compareIt.
-         */
         public int compareIt(Snark l, Snark r) {
             double lt = l.getTotalLength();
             double ld = lt > 0 ? (l.getUploaded() / lt) : 0d;
@@ -532,17 +463,11 @@ class Sorters {
 
         private final I2PSnarkServlet servlet;
 
-        /**
-         * FileTypeComparator.
-         */
         public FileTypeComparator(boolean rev, String lang, I2PSnarkServlet servlet) {
             super(rev, lang);
             this.servlet = servlet;
         }
 
-        /**
-         * compareIt.
-         */
         public int compareIt(Snark l, Snark r) {
             String ls = toName(l);
             String rs = toName(r);
@@ -565,33 +490,12 @@ class Sorters {
 
     /** Class to precompute and efficiently sort data on a torrent file entry. */
     public static class FileAndIndex {
-        /**
-         * file.
-         */
         public final File file;
-        /**
-         * isDirectory.
-         */
         public final boolean isDirectory;
-        /**
-         * length.
-         */
         public final long length;
-        /**
-         * remaining.
-         */
         public final long remaining;
-        /**
-         * preview.
-         */
         public final long preview;
-        /**
-         * priority.
-         */
         public final int priority;
-        /**
-         * index.
-         */
         public final int index;
 
         /**
@@ -682,16 +586,10 @@ class Sorters {
      */
     private static class FileNameComparator implements Comparator<FileAndIndex>, Serializable {
 
-        /**
-         * compare.
-         */
         public int compare(FileAndIndex l, FileAndIndex r) {
             return comp(l, r);
         }
 
-        /**
-         * comp.
-         */
         public static int comp(FileAndIndex l, FileAndIndex r) {
             boolean ld = l.isDirectory;
             boolean rd = r.isDirectory;
@@ -710,16 +608,10 @@ class Sorters {
 
         private final boolean _rev;
 
-        /**
-         * FAISort.
-         */
         public FAISort(boolean rev) {
             _rev = rev;
         }
 
-        /**
-         * compare.
-         */
         public int compare(FileAndIndex l, FileAndIndex r) {
             int rv = compareIt(l, r);
             if (rv != 0) {
@@ -733,9 +625,6 @@ class Sorters {
          */
         protected abstract int compareIt(FileAndIndex l, FileAndIndex r);
 
-        /**
-         * compLong.
-         */
         protected static int compLong(long l, long r) {
             if (l < r) {
                 return -1;
@@ -749,16 +638,10 @@ class Sorters {
 
     private static class FAIRemainingComparator extends FAISort {
 
-        /**
-         * FAIRemainingComparator.
-         */
         public FAIRemainingComparator(boolean rev) {
             super(rev);
         }
 
-        /**
-         * compareIt.
-         */
         public int compareIt(FileAndIndex l, FileAndIndex r) {
             return compLong(l.remaining, r.remaining);
         }
@@ -766,16 +649,10 @@ class Sorters {
 
     private static class FAISizeComparator extends FAISort {
 
-        /**
-         * FAISizeComparator.
-         */
         public FAISizeComparator(boolean rev) {
             super(rev);
         }
 
-        /**
-         * compareIt.
-         */
         public int compareIt(FileAndIndex l, FileAndIndex r) {
             return compLong(l.length, r.length);
         }
@@ -785,17 +662,11 @@ class Sorters {
 
         private final I2PSnarkServlet servlet;
 
-        /**
-         * FAITypeComparator.
-         */
         public FAITypeComparator(boolean rev, I2PSnarkServlet servlet) {
             super(rev);
             this.servlet = servlet;
         }
 
-        /**
-         * compareIt.
-         */
         public int compareIt(FileAndIndex l, FileAndIndex r) {
             String ls = toName(l);
             String rs = toName(r);
@@ -811,9 +682,6 @@ class Sorters {
 
     private static class FAIPriorityComparator extends FAISort {
 
-        /**
-         * FAIPriorityComparator.
-         */
         public FAIPriorityComparator(boolean rev) {
             super(rev);
         }

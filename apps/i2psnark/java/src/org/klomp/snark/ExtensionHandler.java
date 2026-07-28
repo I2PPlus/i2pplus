@@ -23,19 +23,19 @@ import org.klomp.snark.comments.CommentSet;
 abstract class ExtensionHandler {
 
     /**
-     * ID_HANDSHAKE.
+     * Handshake extension message ID (0).
      */
     public static final int ID_HANDSHAKE = 0;
     /**
-     * ID_METADATA.
+     * Metadata extension message ID (1).
      */
     public static final int ID_METADATA = 1;
     /**
-     * TYPE_METADATA.
+     * Metadata extension type string.
      */
     public static final String TYPE_METADATA = "ut_metadata";
     /**
-     * ID_PEX.
+     * PEX extension message ID (2).
      */
     public static final int ID_PEX = 2;
 
@@ -43,7 +43,7 @@ abstract class ExtensionHandler {
     public static final String TYPE_PEX = "i2p_pex";
 
     /**
-     * ID_DHT.
+     * DHT extension message ID (3).
      */
     public static final int ID_DHT = 3;
 

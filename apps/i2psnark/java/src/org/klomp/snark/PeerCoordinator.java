@@ -79,12 +79,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /** M a x  u p l o a d e r s */
     static final int MAX_UPLOADERS = 16;
     /**
-     * MAX_INACTIVE.
+     * Inactivity timeout before disconnecting idle peers.
      */
     public static final long MAX_INACTIVE =
             5 * (long) 60 * 1000; // how long before we disconnect from an inactive peer
     /**
-     * MAX_SEED_INACTIVE.
+     * Inactivity timeout before disconnecting idle seeds.
      */
     public static final long MAX_SEED_INACTIVE = 3 * (long) 60 * 1000;
 

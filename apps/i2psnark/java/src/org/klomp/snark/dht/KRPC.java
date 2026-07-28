@@ -170,7 +170,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private static final int REPLY_NETWORK_FAIL = 4;
 
     /**
-     * SECURE_NID.
+     * When true, generated NIDs must satisfy a cryptographic puzzle.
      */
     public static final boolean SECURE_NID = true;
 
@@ -196,7 +196,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private static final long NODES_SAVE_TIME =
             30 * (long) 60 * 1000; // frequency of save of local dht node list
     /**
-     * DHT_FILE_SUFFIX.
+     * File suffix for DHT persistent storage.
      */
     public static final String DHT_FILE_SUFFIX = ".dht.dat";
 
@@ -1863,16 +1863,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** Cleaner-upper */
     private class Cleaner extends SimpleTimer2.TimedEvent {
 
-        /**
-         * Cleaner.
-         */
         public Cleaner() {
             super(SimpleTimer2.getInstance(), 7 * CLEAN_TIME);
         }
 
-        /**
-         * timeReached.
-         */
         public void timeReached() {
             if (!_isRunning) {
                 return;
@@ -1948,16 +1942,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** Fire off explorer thread */
     private class Explorer extends SimpleTimer2.TimedEvent {
 
-        /**
-         * Explorer.
-         */
         public Explorer(long delay) {
             super(SimpleTimer2.getInstance(), delay);
         }
 
-        /**
-         * timeReached.
-         */
         public void timeReached() {
             if (!_isRunning) {
                 return;
@@ -1973,9 +1961,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** explorer thread */
     private class ExplorerThread implements Runnable {
 
-        /**
-         * run.
-         */
         public void run() {
             if (!_isRunning) {
                 return;

@@ -56,9 +56,6 @@ class DHTTracker {
         _log = _context.logManager().getLog(DHTTracker.class);
     }
 
-    /**
-     * start.
-     */
     public void start() {
         _isRunning = true;
         new Cleaner();
@@ -182,16 +179,10 @@ class DHTTracker {
 
     private class Cleaner extends SimpleTimer2.TimedEvent {
 
-        /**
-         * Cleaner.
-         */
         public Cleaner() {
             super(SimpleTimer2.getInstance(), 2 * CLEAN_TIME);
         }
 
-        /**
-         * timeReached.
-         */
         public void timeReached() {
             if (!_isRunning) return;
             long now = _context.clock().now();
@@ -214,9 +205,6 @@ class DHTTracker {
                     // TODO per-torrent adjustable expiration?
                     List<Peer> sortedPeers = new ArrayList<>(p.values());
                     Collections.sort(sortedPeers, new Comparator<Peer>() {
-                        /**
-                         * compare.
-                         */
                         public int compare(Peer p1, Peer p2) {
                             return Long.compare(p1.lastSeen(), p2.lastSeen());
                         }

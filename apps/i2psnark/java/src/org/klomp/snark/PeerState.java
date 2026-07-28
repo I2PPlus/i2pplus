@@ -890,21 +890,6 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * Are we currently requesting the piece?
-     *
-     * @deprecated deadlocks
-     * @since 0.8.1
-     */
-    @Deprecated
-    synchronized boolean isRequesting(int piece) {
-        if (pendingRequest != null && pendingRequest.getPiece() == piece) return true;
-        for (Request req : outstandingRequests) {
-            if (req.getPiece() == piece) return true;
-        }
-        return false;
-    }
-
-    /**
      * Starts or resumes requesting pieces.
      *
      * @param resend should we resend outstanding requests?

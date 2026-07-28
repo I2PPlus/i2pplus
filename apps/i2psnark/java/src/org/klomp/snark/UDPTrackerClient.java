@@ -64,19 +64,19 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     private static final long INIT_CONN_ID = 0x41727101980L;
 
     /**
-     * EVENT_NONE.
+     * No event (periodic announce).
      */
     public static final int EVENT_NONE = 0;
     /**
-     * EVENT_COMPLETED.
+     * Torrent download completed.
      */
     public static final int EVENT_COMPLETED = 1;
     /**
-     * EVENT_STARTED.
+     * Torrent download started.
      */
     public static final int EVENT_STARTED = 2;
     /**
-     * EVENT_STOPPED.
+     * Torrent stopped.
      */
     public static final int EVENT_STOPPED = 3;
 
@@ -94,9 +94,6 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     private static final int MIN_INTERVAL = 15 * 60;
     private static final int MAX_INTERVAL = 8 * 60 * 60;
 
-    /**
-     * UDPTrackerClient.
-     */
     public UDPTrackerClient(I2PAppContext ctx, I2PSession session, I2PSnarkUtil util) {
         _context = ctx;
         _session = session;
@@ -798,13 +795,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
 
     private static class HostPort {
 
-        /**
-         * host.
-         */
         protected final String host;
-        /**
-         * port.
-         */
         protected final int port;
 
         /**
@@ -872,9 +863,6 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         private ConnState state = ConnState.INVALID;
 
 
-        /**
-         * Tracker.
-         */
         public Tracker(String host, int port) {
             super(host, port);
             responsePort = port;
@@ -894,7 +882,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
-         * setConnInProgress.
+         * Set whether a connection to the tracker is in progress.
          */
         public synchronized void setConnInProgress(boolean yes) {
             if (yes) {
@@ -919,7 +907,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
-         * connFailed.
+         * Called when tracker connection attempt fails.
          */
         public synchronized void connFailed() {
             replyTimeout();

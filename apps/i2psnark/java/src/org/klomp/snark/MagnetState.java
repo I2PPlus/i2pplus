@@ -21,7 +21,7 @@ import org.klomp.snark.bencode.BEValue;
  */
 class MagnetState {
     /**
-     * CHUNK_SIZE.
+     * Chunk size for magnet metadata fetches (16 KB).
      */
     public static final int CHUNK_SIZE = 16 * 1024;
 

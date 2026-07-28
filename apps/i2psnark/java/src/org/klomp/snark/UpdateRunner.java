@@ -174,16 +174,10 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     private class Timeout extends SimpleTimer2.TimedEvent {
         private final long _start = _context.clock().now();
 
-        /**
-         * Timeout.
-         */
         public Timeout() {
             super(_context.simpleTimer2(), METAINFO_TIMEOUT);
         }
 
-        /**
-         * timeReached.
-         */
         public void timeReached() {
             if (_isComplete || !_isRunning) return;
             if (!_hasMetaInfo) {
@@ -205,16 +199,10 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     private class Watcher extends SimpleTimer2.TimedEvent {
         private final long _start = _context.clock().now();
 
-        /**
-         * Watcher.
-         */
         public Watcher() {
             super(_context.simpleTimer2(), CHECK_INTERVAL);
         }
 
-        /**
-         * timeReached.
-         */
         public void timeReached() {
             if (_hasMetaInfo && _snark.getRemainingLength() == 0 && !_isComplete)
                 processComplete(_snark);

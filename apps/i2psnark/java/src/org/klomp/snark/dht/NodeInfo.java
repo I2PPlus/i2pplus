@@ -43,7 +43,7 @@ class NodeInfo extends SimpleDataStructure {
     private final int port;
 
     /**
-     * LENGTH.
+     * Serialized length in bytes (NID + Hash + 2).
      */
     public static final int LENGTH = NID.HASH_LENGTH + Hash.HASH_LENGTH + 2;
 
@@ -188,9 +188,6 @@ class NodeInfo extends SimpleDataStructure {
             throw new IllegalArgumentException("NID/Hash mismatch");
     }
 
-    /**
-     * length.
-     */
     public int length() {
         return LENGTH;
     }
@@ -244,9 +241,6 @@ class NodeInfo extends SimpleDataStructure {
         return this.port;
     }
 
-    /**
-     * lastSeen.
-     */
     public long lastSeen() {
         return nID.lastSeen();
     }

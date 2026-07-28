@@ -139,11 +139,11 @@ public class I2PSnarkServlet extends BasicServlet {
 
     private static final String DEFAULT_NAME = "i2psnark";
     /**
-     * PROP_CONFIG_FILE.
+     * Config file path property.
      */
     public static final String PROP_CONFIG_FILE = "i2psnark.configFile";
     /**
-     * WARBASE.
+     * Webapp resource base path.
      */
     public static final String WARBASE = "/.res/";
     /** H e l l i p */
@@ -155,9 +155,6 @@ public class I2PSnarkServlet extends BasicServlet {
     private static boolean debug = false;
     /** Csp nonce */
     String cspNonce = Integer.toHexString(_context.random().nextInt());
-    /**
-     * I2PSnarkServlet.
-     */
     public I2PSnarkServlet() {super();}
 
     /**
@@ -3687,9 +3684,6 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private static class PeerComparator implements Comparator<Peer>, Serializable {
 
-        /**
-         * compare.
-         */
         public int compare(Peer l, Peer r) {
             int diff = r.completed() - l.completed(); // reverse
             if (diff != 0) {return diff;}

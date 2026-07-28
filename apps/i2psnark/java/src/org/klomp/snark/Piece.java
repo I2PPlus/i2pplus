@@ -98,11 +98,6 @@ class Piece implements Comparable<Piece> {
     }
 
     /**
-     * Caller must synchronize.
-     *
-     * @return true if removed
-     */
-    /**
      * Removes a peer from those that have this piece.
      * Caller must synchronize.
      *
@@ -113,11 +108,6 @@ class Piece implements Comparable<Piece> {
         return this.peers.remove(peer.getPeerID());
     }
 
-    /**
-     * How many peers have this piece? Caller must synchronize
-     *
-     * @since 0.9.1
-     */
     /**
      * How many peers have this piece? Caller must synchronize.
      *
@@ -167,11 +157,6 @@ class Piece implements Comparable<Piece> {
         return this.requests != null && this.requests.contains(peer.getPeerID());
     }
 
-    /**
-     * How many peers are requesting this piece? Caller must synchronize
-     *
-     * @since 0.8.3
-     */
     /**
      * How many peers are requesting this piece? Caller must synchronize.
      *

@@ -491,13 +491,6 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
-     * setInteresting.
-     */
-    @Deprecated
-    @Override
-    public void setInteresting(boolean interest) { /* no-op */ }
-
-    /**
      * @return whether interesting
      */
     @Override

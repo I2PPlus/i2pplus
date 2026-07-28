@@ -123,25 +123,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private UpdateHandler _uhandler;
     private SimpleTimer2.TimedEvent _idleChecker;
 
-    /**
-     * PROP_I2CP_HOST.
-     */
     public static final String PROP_I2CP_HOST = "i2psnark.i2cpHost";
-    /**
-     * PROP_I2CP_PORT.
-     */
     public static final String PROP_I2CP_PORT = "i2psnark.i2cpPort";
-    /**
-     * PROP_I2CP_OPTS.
-     */
     public static final String PROP_I2CP_OPTS = "i2psnark.i2cpOptions";
-    /**
-     * PROP_UPLOADERS_TOTAL.
-     */
     public static final String PROP_UPLOADERS_TOTAL = "i2psnark.uploaders.total";
-    /**
-     * PROP_UPBW_MAX.
-     */
     public static final String PROP_UPBW_MAX = "i2psnark.upbw.max";
 
     /**
@@ -149,9 +134,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public static final String PROP_DOWNBW_MAX = "i2psnark.downbw.max";
 
-    /**
-     * PROP_DIR.
-     */
     public static final String PROP_DIR = "i2psnark.dir";
     private static final String PROP_META_PREFIX = "i2psnark.zmeta.";
     private static final String PROP_META_RUNNING = "running";
@@ -181,14 +163,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String PROP_META_ACTIVITY = "activity";
 
     private static final String CONFIG_FILE_SUFFIX = ".config";
-    /**
-     * CONFIG_FILE.
-     */
     public static final String CONFIG_FILE = "i2psnark" + CONFIG_FILE_SUFFIX;
     private static final String COMMENT_FILE_SUFFIX = ".comments.txt.gz";
-    /**
-     * PROP_FILES_PUBLIC.
-     */
     public static final String PROP_FILES_PUBLIC = "i2psnark.filesPublic";
 
     /**
@@ -196,47 +172,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public static final String PROP_PREALLOCATE_FILES = "i2psnark.preallocateFiles";
 
-    /**
-     * DEFAULT_PREALLOCATE_FILES.
-     */
     public static final String DEFAULT_PREALLOCATE_FILES = "true";
-    /**
-     * PROP_OLD_AUTO_START.
-     */
     public static final String PROP_OLD_AUTO_START = "i2snark.autoStart"; // oops
-    /**
-     * PROP_AUTO_START.
-     */
     public static final String PROP_AUTO_START =
             "i2psnark.autoStart"; // convert in migration to new config file
     private final boolean DEFAULT_AUTO_START;
-    /**
-     * PROP_STARTUP_DELAY.
-     */
     public static final String PROP_STARTUP_DELAY = "i2psnark.startupDelay";
-    /**
-     * PROP_REFRESH_DELAY.
-     */
     public static final String PROP_REFRESH_DELAY = "i2psnark.refreshSeconds";
-    /**
-     * PROP_PAGE_SIZE.
-     */
     public static final String PROP_PAGE_SIZE = "i2psnark.pageSize";
-    /**
-     * RC_PROP_THEME.
-     */
     public static final String RC_PROP_THEME = "routerconsole.theme";
-    /**
-     * RC_PROP_UNIVERSAL_THEMING.
-     */
     public static final String RC_PROP_UNIVERSAL_THEMING = "routerconsole.universal.theme";
-    /**
-     * PROP_THEME.
-     */
     public static final String PROP_THEME = "i2psnark.theme";
-    /**
-     * DEFAULT_THEME.
-     */
     public static final String DEFAULT_THEME = "ubergine";
 
     /**
@@ -249,9 +195,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public static final String PROP_SHOW_STATUSFILTER = "i2psnark.showStatusFilter";
 
-    /**
-     * DEFAULT_SHOW_STATUSFILTER.
-     */
     public static final String DEFAULT_SHOW_STATUSFILTER = "false";
 
     /**
@@ -259,9 +202,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public static final String PROP_ENABLE_LIGHTBOX = "i2psnark.enableLightbox";
 
-    /**
-     * DEFAULT_ENABLE_LIGHTBOX.
-     */
     public static final String DEFAULT_ENABLE_LIGHTBOX = "true";
 
     /**
@@ -269,18 +209,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public static final String PROP_ENABLE_ADDCREATE = "i2psnark.enableAddCreate";
 
-    /**
-     * DEFAULT_ENABLE_ADDCREATE.
-     */
     public static final String DEFAULT_ENABLE_ADDCREATE = "false";
     private static final String PROP_USE_OPENTRACKERS = "i2psnark.useOpentrackers";
-    /**
-     * PROP_OPENTRACKERS.
-     */
     public static final String PROP_OPENTRACKERS = "i2psnark.opentrackers";
-    /**
-     * PROP_PRIVATETRACKERS.
-     */
     public static final String PROP_PRIVATETRACKERS = "i2psnark.privatetrackers";
     private static final String PROP_USE_DHT = "i2psnark.enableDHT";
     private static final String PROP_SMART_SORT = "i2psnark.smartSort";
@@ -322,44 +253,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public static final String PROP_VARY_INBOUND_HOPS = "i2psnark.varyInboundHops";
 
-    /**
-     * PROP_VARY_OUTBOUND_HOPS.
-     */
     public static final String PROP_VARY_OUTBOUND_HOPS = "i2psnark.varyOutboundHops";
 
-    /**
-     * MIN_UP_BW.
-     */
     public static final int MIN_UP_BW = 5;
-    /**
-     * MIN_DOWN_BW.
-     */
     public static final int MIN_DOWN_BW = 2 * MIN_UP_BW;
-    /**
-     * DEFAULT_MAX_UP_BW.
-     */
     public static final int DEFAULT_MAX_UP_BW = 1024;
     private static final int DEFAULT_MAX_DOWN_BW = 1024;
-    /**
-     * DEFAULT_STARTUP_DELAY.
-     */
     public static final int DEFAULT_STARTUP_DELAY = 3;
-    /**
-     * DEFAULT_REFRESH_DELAY_SECS.
-     */
     public static final int DEFAULT_REFRESH_DELAY_SECS = 5;
     private static final int DEFAULT_PAGE_SIZE = 50;
-    /**
-     * DEFAULT_TUNNEL_QUANTITY.
-     */
     public static final int DEFAULT_TUNNEL_QUANTITY = 16;
-    /**
-     * DEFAULT_MAX_FILES_PER_TORRENT.
-     */
     public static final int DEFAULT_MAX_FILES_PER_TORRENT = 2000;
-    /**
-     * CONFIG_DIR_SUFFIX.
-     */
     public static final String CONFIG_DIR_SUFFIX = ".d";
     private static final String SUBDIR_PREFIX = "s";
     private static final String B64 = Base64.ALPHABET_I2P;
@@ -402,7 +306,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         "http://sigmatracker.i2p/a";
 
     /**
-     * DEFAULT_TRACKER_ANNOUNCES.
+     * Default set of tracker announce URLs to use when no torrent trackers are configured.
      */
     public static final Set<String> DEFAULT_TRACKER_ANNOUNCES;
 
@@ -550,16 +454,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static class TempDeleter implements Runnable {
         private final File file;
 
-        /**
-         * TempDeleter.
-         */
         public TempDeleter(File f) {
             file = f;
         }
 
-        /**
-         * run.
-         */
         public void run() {
             FileUtil.rmdir(file, false);
         }
@@ -569,9 +467,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.4
      */
     private class Register extends SimpleTimer2.TimedEvent {
-        /**
-         * timeReached.
-         */
         public void timeReached() {
             if (!_running) {
                 return;
@@ -1360,9 +1255,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             File dir = new File(_context.getBaseDir(), "docs/themes/snark");
             FileFilter fileFilter =
                     new FileFilter() {
-                        /**
-                         * accept.
-                         */
                         public boolean accept(File file) {
                             return file.isDirectory();
                         }
@@ -2282,9 +2174,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return rv;
     }
 
-    /**
-     * saveConfig.
-     */
     public void saveConfig() {
         try {
             synchronized (_configLock) {
@@ -3701,9 +3590,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * there, and restarting torrents once the router appears.
      */
     private class DirMonitor implements Runnable {
-        /**
-         * run.
-         */
         public void run() {
             File dir = getDataDir();
             getStorageSpace(dir);
@@ -4609,16 +4495,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private class ThreadedStarter implements Runnable {
         private final Snark snark;
 
-        /**
-         * ThreadedStarter.
-         */
         public ThreadedStarter(Snark s) {
             snark = s;
         }
 
-        /**
-         * run.
-         */
         public void run() {
             if (snark != null) {
                 if (snark.isStopped()) {
@@ -4772,9 +4652,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.1
      */
     private class Disconnector extends SimpleTimer2.TimedEvent {
-        /**
-         * timeReached.
-         */
         public void timeReached() {
             if (_util.connected()) {
                 _util.disconnect();
@@ -4819,9 +4696,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             snark = s;
         }
 
-        /**
-         * run.
-         */
         public void run() {
             try {
                 if (_log.shouldWarn()) {
@@ -4895,9 +4769,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static class IgnoreCaseComparator implements Comparator<Tracker>, Serializable {
         private final Collator coll = Collator.getInstance();
 
-        /**
-         * compare.
-         */
         public int compare(Tracker l, Tracker r) {
             return coll.compare(l.name, r.name);
         }
@@ -4912,9 +4783,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             implements Comparator<TorrentCreateFilter>, Serializable {
         private final Collator coll = Collator.getInstance();
 
-        /**
-         * compare.
-         */
         public int compare(TorrentCreateFilter l, TorrentCreateFilter r) {
             return coll.compare(l.name, r.name);
         }
