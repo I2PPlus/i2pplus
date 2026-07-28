@@ -97,72 +97,25 @@ public class TunnelController implements Logging {
         DELAYED_START_PENDING,
     }
 
-    /**
-     * KEY_BACKUP_DIR.
-     */
+    /** Key backup directory name. */
     public static final String KEY_BACKUP_DIR = "i2ptunnel-keyBackup";
 
     /** all of these  */
     public static final String PROP_DESCR = "description";
-    /**
-     * PROP_DEST.
-     */
     public static final String PROP_DEST = "targetDestination";
-    /**
-     * PROP_I2CP_HOST.
-     */
     public static final String PROP_I2CP_HOST = "i2cpHost";
-    /**
-     * PROP_I2CP_PORT.
-     */
     public static final String PROP_I2CP_PORT = "i2cpPort";
-    /**
-     * PROP_INTFC.
-     */
     public static final String PROP_INTFC = "interface";
-    /**
-     * PROP_FILE.
-     */
     public static final String PROP_FILE = "privKeyFile";
-    /**
-     * PROP_LISTEN_PORT.
-     */
     public static final String PROP_LISTEN_PORT = "listenPort";
-    /**
-     * PROP_NAME.
-     */
     public static final String PROP_NAME = "name";
-    /**
-     * PROP_PROXIES.
-     */
     public static final String PROP_PROXIES = "proxyList";
-    /**
-     * PROP_SHARED.
-     */
     public static final String PROP_SHARED = "sharedClient";
-    /**
-     * PROP_SPOOFED_HOST.
-     */
     public static final String PROP_SPOOFED_HOST = "spoofedHost";
-    /**
-     * PROP_START.
-     */
     public static final String PROP_START = "startOnLoad";
-    /**
-     * PROP_TARGET_HOST.
-     */
     public static final String PROP_TARGET_HOST = "targetHost";
-    /**
-     * PROP_TARGET_PORT.
-     */
     public static final String PROP_TARGET_PORT = "targetPort";
-    /**
-     * PROP_TYPE.
-     */
     public static final String PROP_TYPE = "type";
-    /**
-     * PROP_FILTER.
-     */
     public static final String PROP_FILTER = "filterDefinition";
         /** P r o p  c o n f i g  f i l e */
         public static final String PROP_CONFIG_FILE = "configFile";
@@ -213,61 +166,19 @@ public class TunnelController implements Logging {
      * all of these are  (moved from TunnelConfig)
      */
     public static final String PROP_MAX_CONNS_MIN = "i2p.streaming.maxConnsPerMinute";
-    /**
-     * PROP_MAX_CONNS_HOUR.
-     */
     public static final String PROP_MAX_CONNS_HOUR = "i2p.streaming.maxConnsPerHour";
-    /**
-     * PROP_MAX_CONNS_DAY.
-     */
     public static final String PROP_MAX_CONNS_DAY = "i2p.streaming.maxConnsPerDay";
-    /**
-     * PROP_MAX_TOTAL_CONNS_MIN.
-     */
     public static final String PROP_MAX_TOTAL_CONNS_MIN = "i2p.streaming.maxTotalConnsPerMinute";
-    /**
-     * PROP_MAX_TOTAL_CONNS_HOUR.
-     */
     public static final String PROP_MAX_TOTAL_CONNS_HOUR = "i2p.streaming.maxTotalConnsPerHour";
-    /**
-     * PROP_MAX_TOTAL_CONNS_DAY.
-     */
     public static final String PROP_MAX_TOTAL_CONNS_DAY = "i2p.streaming.maxTotalConnsPerDay";
-    /**
-     * PROP_MAX_STREAMS.
-     */
     public static final String PROP_MAX_STREAMS = "i2p.streaming.maxConcurrentStreams";
-    /**
-     * PROP_LIMITS_SET.
-     */
     public static final String PROP_LIMITS_SET = "i2p.streaming.limitsManuallySet";
-    /**
-     * DEFAULT_MAX_CONNS_MIN.
-     */
     public static final int DEFAULT_MAX_CONNS_MIN = 200;
-    /**
-     * DEFAULT_MAX_CONNS_HOUR.
-     */
     public static final int DEFAULT_MAX_CONNS_HOUR = 1200;
-    /**
-     * DEFAULT_MAX_CONNS_DAY.
-     */
     public static final int DEFAULT_MAX_CONNS_DAY = 4000;
-    /**
-     * DEFAULT_MAX_TOTAL_CONNS_MIN.
-     */
     public static final int DEFAULT_MAX_TOTAL_CONNS_MIN = 800;
-    /**
-     * DEFAULT_MAX_TOTAL_CONNS_HOUR.
-     */
     public static final int DEFAULT_MAX_TOTAL_CONNS_HOUR = 4800;
-    /**
-     * DEFAULT_MAX_TOTAL_CONNS_DAY.
-     */
     public static final int DEFAULT_MAX_TOTAL_CONNS_DAY = 19200;
-    /**
-     * DEFAULT_MAX_STREAMS.
-     */
     public static final int DEFAULT_MAX_STREAMS = 400;
 
         /** P r o p  l i m i t  a c t i o n */
@@ -277,9 +188,7 @@ public class TunnelController implements Logging {
         public static final String PFX_OPTION = "option.";
 
     private static final String OPT_PERSISTENT = PFX_OPTION + "persistentClientKey";
-    /**
-     * OPT_BUNDLE_REPLY.
-     */
+    /** Config key to bundle reply keys. */
     public static final String OPT_BUNDLE_REPLY = PFX_OPTION + "shouldBundleReplyInfo";
     private static final String OPT_TAGS_SEND = PFX_OPTION + "crypto.tagsToSend";
     private static final String OPT_LOW_TAGS = PFX_OPTION + "crypto.lowTagThreshold";
@@ -297,13 +206,9 @@ public class TunnelController implements Logging {
     private static final String OPT_MAX_TOTAL_CONNS_DAY = PFX_OPTION + PROP_MAX_TOTAL_CONNS_DAY;
     private static final String OPT_MAX_STREAMS = PFX_OPTION + PROP_MAX_STREAMS;
     private static final String OPT_LIMITS_SET = PFX_OPTION + PROP_LIMITS_SET;
-    /**
-     * OPT_POST_MAX.
-     */
+    /** Config key for max posts (delegated to HTTPServer). */
     public static final String OPT_POST_MAX = PFX_OPTION + I2PTunnelHTTPServer.OPT_POST_MAX;
-    /**
-     * OPT_POST_TOTAL_MAX.
-     */
+    /** Config key for max total posts (delegated to HTTPServer). */
     public static final String OPT_POST_TOTAL_MAX = PFX_OPTION + I2PTunnelHTTPServer.OPT_POST_TOTAL_MAX;
 
         private static final String OPT_LIMIT_ACTION = PFX_OPTION + PROP_LIMIT_ACTION;
@@ -315,41 +220,14 @@ public class TunnelController implements Logging {
 
     /** all of these  */
     public static final String TYPE_CONNECT = "connectclient";
-    /**
-     * TYPE_HTTP_BIDIR_SERVER.
-     */
     public static final String TYPE_HTTP_BIDIR_SERVER = "httpbidirserver";
-    /**
-     * TYPE_HTTP_CLIENT.
-     */
     public static final String TYPE_HTTP_CLIENT = "httpclient";
-    /**
-     * TYPE_HTTP_SERVER.
-     */
     public static final String TYPE_HTTP_SERVER = "httpserver";
-    /**
-     * TYPE_IRC_CLIENT.
-     */
     public static final String TYPE_IRC_CLIENT = "ircclient";
-    /**
-     * TYPE_IRC_SERVER.
-     */
     public static final String TYPE_IRC_SERVER = "ircserver";
-    /**
-     * TYPE_SOCKS.
-     */
     public static final String TYPE_SOCKS = "sockstunnel";
-    /**
-     * TYPE_SOCKS_IRC.
-     */
     public static final String TYPE_SOCKS_IRC = "socksirctunnel";
-    /**
-     * TYPE_STD_CLIENT.
-     */
     public static final String TYPE_STD_CLIENT = "client";
-    /**
-     * TYPE_STD_SERVER.
-     */
     public static final String TYPE_STD_SERVER = "server";
     /** Client in the UI and I2P side but a server on the localhost side */
     public static final String TYPE_STREAMR_CLIENT = "streamrclient";

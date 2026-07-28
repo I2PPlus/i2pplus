@@ -12,9 +12,6 @@ import net.i2p.data.Hash;
  */
 abstract class FilterDefinitionElement {
 
-    /**
-     * threshold.
-     */
     protected final Threshold threshold;
 
     /** @param threshold the threshold */

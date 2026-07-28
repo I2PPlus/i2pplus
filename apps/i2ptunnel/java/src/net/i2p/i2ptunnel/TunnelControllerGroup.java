@@ -130,9 +130,6 @@ public class TunnelControllerGroup implements ClientApp {
      * @return the server handler threads
      */
     public static int getServerHandlerThreads() { return _serverHandlerThreads; }
-    /**
-     * setServerHandlerThreads.
-     */
     public static void setServerHandlerThreads(int val) {
         _serverHandlerThreads = Math.max(2, Math.min(128, val));
     }
@@ -140,9 +137,6 @@ public class TunnelControllerGroup implements ClientApp {
      * @return the client runner max
      */
     public static int getClientRunnerMax() { return _clientRunnerMax; }
-    /**
-     * setClientRunnerMax.
-     */
     public static void setClientRunnerMax(int val) {
         _clientRunnerMax = Math.max(4, Math.min(8192, val));
     }
@@ -154,9 +148,6 @@ public class TunnelControllerGroup implements ClientApp {
      * @return the socket connect timeout
      */
     public static int getSocketConnectTimeout() { return _socketConnectTimeout; }
-    /**
-     * setSocketConnectTimeout.
-     */
     public static void setSocketConnectTimeout(int val) {
         _socketConnectTimeout = Math.max(5000, Math.min(120000, val));
     }

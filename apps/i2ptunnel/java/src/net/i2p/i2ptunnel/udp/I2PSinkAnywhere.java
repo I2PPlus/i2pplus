@@ -14,17 +14,8 @@ import net.i2p.data.Destination;
  */
 public class I2PSinkAnywhere implements Sink {
 
-    /**
-     * raw.
-     */
     protected final boolean raw;
-    /**
-     * sess.
-     */
     protected final I2PSession sess;
-    /**
-     * maker.
-     */
     protected final I2PDatagramMaker maker;
 
     /**

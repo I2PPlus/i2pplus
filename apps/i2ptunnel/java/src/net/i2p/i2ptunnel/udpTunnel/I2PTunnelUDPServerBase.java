@@ -46,14 +46,8 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     private final Log _log;
 
     private final Object lock = new Object();
-    /**
-     * slock.
-     */
     protected Object slock = new Object();
 
-    /**
-     * l.
-     */
     protected Logging l;
 
     private static final long DEFAULT_READ_TIMEOUT = -1;

@@ -33,35 +33,22 @@ abstract class SOCKSServer {
 
     private static final String PROP_MAPPING_PREFIX = "ipmapping.";
 
-    /* Details about the connection requested by client */
     /**
-     * connHostName.
+     * Hostname requested by the SOCKS client.
      */
     protected String connHostName;
     /**
-     * connPort.
+     * Port requested by the SOCKS client.
      */
     protected int connPort;
     /**
-     * addressType.
+     * SOCKS address type (e.g. DOMAINNAME, IPv4, IPv6).
      */
     protected int addressType;
 
-    /**
-     * _context.
-     */
     protected final I2PAppContext _context;
-    /**
-     * clientSock.
-     */
     protected final Socket clientSock;
-    /**
-     * props.
-     */
     protected final Properties props;
-    /**
-     * _log.
-     */
     protected final Log _log;
 
     /** @since 0.9.27 */

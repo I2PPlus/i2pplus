@@ -394,9 +394,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     public static final String PROP_OUTPROXY_PW = "outproxyPassword";
     /** passwords for specific outproxies may be added with outproxyUsername.fooproxy.i2p=user and outproxyPassword.fooproxy.i2p=pw */
     public static final String PROP_OUTPROXY_USER_PREFIX = PROP_OUTPROXY_USER + '.';
-    /**
-     * PROP_OUTPROXY_PW_PREFIX.
-     */
+    /** Outproxy password property prefix. */
     public static final String PROP_OUTPROXY_PW_PREFIX = PROP_OUTPROXY_PW + '.';
     /** new style MD5 auth */
     public static final String PROP_PROXY_DIGEST_PREFIX = "proxy.auth.";
@@ -427,16 +425,12 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         AUTH_GOOD
     }
 
-    /**
-     *
-     */
+    /** Tracks nonce values for digest authentication. */
     private static class NonceInfo {
         private final long expires;
         private final BitSet counts;
 
-        /**
-         * NonceInfo.
-         */
+        /** Constructor. */
         public NonceInfo(long exp) {
             expires = exp;
             counts = new BitSet(MAX_NONCE_COUNT);
@@ -968,9 +962,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             _proxy = proxy; _host = host; _isSSL = isSSL;
         }
 
-        /**
-         * onSuccess.
-         */
+        /** Record a successful proxy connection. */
         public void onSuccess() {
             noteProxyResult(_proxy, _host, _isSSL, true);
         }

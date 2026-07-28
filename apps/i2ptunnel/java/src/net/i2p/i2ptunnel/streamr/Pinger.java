@@ -12,18 +12,9 @@ import net.i2p.util.Log;
  * Pings streamr destinations.
  */
 public class Pinger implements Source, Runnable {
-    /**
-     * sink.
-     */
     protected Sink sink;
-    /**
-     * thread.
-     */
     protected final Thread thread;
     private final Object waitlock = new Object();
-    /**
-     * running.
-     */
     protected volatile boolean running;
     private final Log log;
     private final int fromPort;

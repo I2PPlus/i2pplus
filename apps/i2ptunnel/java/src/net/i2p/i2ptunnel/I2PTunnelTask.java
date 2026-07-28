@@ -20,18 +20,9 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
 
     private int id;
     private String name;
-    /**
-     * open.
-     */
     protected volatile boolean open;
-    /**
-     * tunnel.
-     */
     public I2PTunnel tunnel;
 
-    /**
-     * I2PTunnelTask.
-     */
     protected I2PTunnelTask(String name, EventDispatcher notifyThis, I2PTunnel tunnel) {
         attachEventDispatcher(notifyThis);
         this.name = name;
@@ -53,17 +44,8 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
      * @return whether open
      */
     public boolean isOpen() {return open;}
-    /**
-     * setId.
-     */
     public void setId(int id) {this.id = id;}
-    /**
-     * setName.
-     */
     protected void setName(String name) {this.name = name;}
-    /**
-     * routerDisconnected.
-     */
     protected void routerDisconnected() {tunnel.routerDisconnected();}
 
     /**

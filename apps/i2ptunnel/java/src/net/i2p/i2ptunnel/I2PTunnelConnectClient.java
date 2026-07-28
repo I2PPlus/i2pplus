@@ -37,9 +37,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements Runnable {
 
-    /**
-     * AUTH_REALM.
-     */
+    /** HTTP authentication realm for SSL CONNECT proxy. */
     public static final String AUTH_REALM = "I2P SSL Proxy";
 
     private final static String ERR_BAD_PROTOCOL =

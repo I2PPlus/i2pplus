@@ -58,9 +58,6 @@ import net.i2p.util.Log;
  * @see I2PTunnelServer
  */
 public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErrorListener, DoneCallback {
-    /**
-     * _log.
-     */
     protected final Log _log;
     private static final AtomicLong __runnerId = new AtomicLong();
     private final long _runnerId;
@@ -765,11 +762,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         public Exception getFailure() {return _failure;}
     }
 
-    /**
-     * Deprecated, unimplemented in streaming, never called.
-     * @deprecated unused
-     */
-    @Deprecated
+    @Override
     public void errorOccurred() {
         synchronized (finishLock) {
             finished = true;

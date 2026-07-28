@@ -59,9 +59,6 @@ public class GeneralHelper {
     private static final String OPT = TunnelController.PFX_OPTION;
 
     private final I2PAppContext _context;
-    /**
-     * _group.
-     */
     protected final TunnelControllerGroup _group;
 
     /**

@@ -22,13 +22,7 @@ public abstract class LimitOutputStream extends FilterOutputStream {
 
     /** ignored */
     private final byte[] _buf1;
-    /**
-     * _callback.
-     */
     protected final DoneCallback _callback;
-    /**
-     * _isDone.
-     */
     protected boolean _isDone;
 
     /** Callback interface for notification when a limited output stream completes */

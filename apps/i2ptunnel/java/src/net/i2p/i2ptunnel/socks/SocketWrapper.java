@@ -43,9 +43,6 @@ class SocketWrapper implements I2PSocket {
         }
     }
 
-    /**
-     * SocketWrapper.
-     */
     public SocketWrapper(Socket sock) {
         socket = sock;
     }
@@ -87,11 +84,6 @@ class SocketWrapper implements I2PSocket {
         return socket.getOutputStream();
     }
 
-    /**
-     *  @return null always
-     *  @deprecated unused
-     */
-    @Deprecated
     @Override
     public SelectableChannel getChannel() {
         return null;
@@ -124,9 +116,6 @@ class SocketWrapper implements I2PSocket {
     @Override
     public void setReadTimeout(long ms) { /* no-op */ }
 
-    /**
-     * close.
-     */
     public void close() throws IOException {
         socket.close();
     }

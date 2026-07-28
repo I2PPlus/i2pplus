@@ -78,9 +78,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      */
     private final String _proxyNonce;
 
-    /**
-     * AUTH_REALM.
-     */
+    /** HTTP authentication realm for HTTP proxy. */
     public static final String AUTH_REALM = "I2P HTTP Proxy";
     private static final String UA_I2P = "User-Agent: " + "MYOB/6.66 (AN/ON)" + "\r\n";
     // ESR version of Firefox, same as Tor Browser
@@ -88,13 +86,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     // overrides
     private static final String PROP_UA_I2P = "httpclient.userAgent.i2p";
     private static final String PROP_UA_CLEARNET = "httpclient.userAgent.outproxy";
-    /**
-     * OPT_KEEPALIVE_BROWSER.
-     */
+    /** Config key to enable browser-side keepalive. */
     public static final String OPT_KEEPALIVE_BROWSER = "keepalive.browser";
-    /**
-     * OPT_KEEPALIVE_I2P.
-     */
+    /** Config key to enable I2P-side keepalive. */
     public static final String OPT_KEEPALIVE_I2P = "keepalive.i2p";
 
     /** how long to wait for another request on the same socket */
@@ -358,28 +352,18 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     private static final String HELPER_PARAM = "i2paddresshelper";
-    /**
-     * LOCAL_SERVER.
-     */
+    /** Local HTTP proxy server hostname. */
     public static final String LOCAL_SERVER = "proxy.i2p";
     private static final boolean DEFAULT_GZIP = true;
     /** all default to false */
     public static final String PROP_REFERER = "i2ptunnel.httpclient.sendReferer";
-    /**
-     * PROP_USER_AGENT.
-     */
+    /** Config key to enable sending User-Agent header. */
     public static final String PROP_USER_AGENT = "i2ptunnel.httpclient.sendUserAgent";
-    /**
-     * PROP_VIA.
-     */
+    /** Config key to enable sending Via header. */
     public static final String PROP_VIA = "i2ptunnel.httpclient.sendVia";
-    /**
-     * PROP_JUMP_SERVERS.
-     */
+    /** Config key for jump server list. */
     public static final String PROP_JUMP_SERVERS = "i2ptunnel.httpclient.jumpServers";
-    /**
-     * PROP_DISABLE_HELPER.
-     */
+    /** Config key to disable address helper. */
     public static final String PROP_DISABLE_HELPER = "i2ptunnel.httpclient.disableAddressHelper";
     /** @since 0.9.14 */
     public static final String PROP_ACCEPT = "i2ptunnel.httpclient.sendAccept";
@@ -1698,9 +1682,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     private static class InputReader {
         InputStream _s;
 
-        /**
-         * InputReader.
-         */
+        /** Constructor. */
         public InputReader(InputStream s) {
             _s = s;
         }
@@ -1738,9 +1720,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         return dest.toBase32();
     }
 
-    /**
-     * DEFAULT_JUMP_SERVERS.
-     */
+    /** Default jump server URLs. */
     public static final String DEFAULT_JUMP_SERVERS =
             "http://notbob.i2p/cgi-bin/jump.cgi?q=," +
             "http://reg.i2p/jump/," +

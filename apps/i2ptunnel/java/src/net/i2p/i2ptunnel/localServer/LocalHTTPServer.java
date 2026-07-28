@@ -410,8 +410,8 @@ public abstract class LocalHTTPServer {
      * @param host the blinded host
      * @param url the URL to redirect to
      * @throws IOException if an I/O error occurs
+     * @since 0.9.43
      */
-    /** @since 0.9.43 */
     private static void writeB32RedirectPage(OutputStream out, String host, String url) throws IOException {
         PortMapper pm = I2PAppContext.getGlobalContext().portMapper();
         String conURL = pm.getConsoleURL();

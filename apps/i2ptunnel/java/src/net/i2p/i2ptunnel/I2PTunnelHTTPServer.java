@@ -52,84 +52,47 @@ import java.nio.charset.StandardCharsets;
  */
 public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
-    /* all of these in SECONDS */
     /**
-     * DEFAULT_POST_BAN_TIME.
+     * Post throttle window (seconds).
      */
     public static final int DEFAULT_POST_BAN_TIME = 15*60;
-    /**
-     * DEFAULT_POST_MAX.
-     */
+    /** Default max posts per window. */
     public static final int DEFAULT_POST_MAX = 16;
-    /**
-     * DEFAULT_POST_TOTAL_BAN_TIME.
-     */
+    /** Default total ban time for excessive posts. */
     public static final int DEFAULT_POST_TOTAL_BAN_TIME = 10*60;
-    /**
-     * DEFAULT_POST_TOTAL_MAX.
-     */
+    /** Default max total posts before ban. */
     public static final int DEFAULT_POST_TOTAL_MAX = 30;
-    /**
-     * DEFAULT_POST_WINDOW.
-     */
+    /** Default post rate-limit window (seconds). */
     public static final int DEFAULT_POST_WINDOW = 3*60;
     private static final boolean DEFAULT_KEEPALIVE = true;
-    /**
-     * OPT_POST_BAN_TIME.
-     */
+    /** Config key for post ban time. */
     public static final String OPT_POST_BAN_TIME = "postBanTime";
-    /**
-     * OPT_POST_MAX.
-     */
+    /** Config key for max posts. */
     public static final String OPT_POST_MAX = "maxPosts";
-    /**
-     * OPT_POST_TOTAL_BAN_TIME.
-     */
+    /** Config key for post total ban time. */
     public static final String OPT_POST_TOTAL_BAN_TIME = "postTotalBanTime";
-    /**
-     * OPT_POST_TOTAL_MAX.
-     */
+    /** Config key for max total posts. */
     public static final String OPT_POST_TOTAL_MAX = "maxTotalPosts";
-    /**
-     * OPT_POST_WINDOW.
-     */
+    /** Config key for post check time window. */
     public static final String OPT_POST_WINDOW = "postCheckTime";
 
-    /**
-     * OPT_REJECT_INPROXY.
-     */
+    /** Config key to reject requests from inproxy. */
     public static final String OPT_REJECT_INPROXY = "rejectInproxy";
-    /**
-     * OPT_REJECT_REFERER.
-     */
+    /** Config key to reject requests with Referer header. */
     public static final String OPT_REJECT_REFERER = "rejectReferer";
-    /**
-     * OPT_REJECT_USER_AGENTS.
-     */
+    /** Config key to reject specific User-Agents. */
     public static final String OPT_REJECT_USER_AGENTS = "rejectUserAgents";
-    /**
-     * OPT_USER_AGENTS.
-     */
+    /** Config key for User-Agent reject list. */
     public static final String OPT_USER_AGENTS = "userAgentRejectList";
-    /**
-     * OPT_KEEPALIVE.
-     */
+    /** Config key to enable keepalive. */
     public static final String OPT_KEEPALIVE = "keepalive.i2p";
-    /**
-     * OPT_ADD_RESPONSE_HEADER_ALLOW.
-     */
+    /** Config key to add Allow response header. */
     public static final String OPT_ADD_RESPONSE_HEADER_ALLOW = "addResponseHeaderAllow";
-    /**
-     * OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL.
-     */
+    /** Config key to add Cache-Control response header. */
     public static final String OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL = "addResponseHeaderCacheControl";
-    /**
-     * OPT_ADD_RESPONSE_HEADER_NOSNIFF.
-     */
+    /** Config key to add X-Content-Type-Options: nosniff. */
     public static final String OPT_ADD_RESPONSE_HEADER_NOSNIFF = "addResponseHeaderNoSniff";
-    /**
-     * OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY.
-     */
+    /** Config key to add Referrer-Policy response header. */
     public static final String OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY = "addResponseHeaderReferrerPolicy";
 
     /** what Host: should we seem to be to the webserver? */
@@ -1586,8 +1549,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    /* just a wrapper to provide stats for debugging */
-    /** wrapper providing deflater stats */
+    /** Wrapper providing deflater statistics. */
     private static class InternalGZIPOutputStream extends GZIPOutputStream {
         /** @param target the underlying output stream */
         public InternalGZIPOutputStream(OutputStream target) throws IOException {super(target);}
@@ -1851,7 +1813,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *
      *  @since 0.9.19
      */
-    /** Thrown when a header line or total size exceeds limits */
     private static class LineTooLongException extends IOException {
         /** @param s detail message */
         public LineTooLongException(String s) {super(s);}

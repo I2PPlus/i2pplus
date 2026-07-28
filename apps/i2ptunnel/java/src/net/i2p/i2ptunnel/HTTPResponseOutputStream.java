@@ -32,27 +32,12 @@ import net.i2p.util.Log;
  */
 class HTTPResponseOutputStream extends FilterOutputStream {
     private final Log _log;
-    /**
-     * _headerBuffer.
-     */
     protected ByteArray _headerBuffer;
     private volatile boolean _headerWritten;
     private final byte[] _buf1;
-    /**
-     * _gzip.
-     */
     protected volatile boolean _gzip;
-    /**
-     * _dataExpected.
-     */
     protected volatile long _dataExpected = -1;
-    /**
-     * _keepAliveIn.
-     */
     protected volatile boolean _keepAliveIn;
-    /**
-     * _keepAliveOut.
-     */
     protected volatile boolean _keepAliveOut;
     /** lower-case, trimmed */
     protected String _contentType;
@@ -69,9 +54,6 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     private static final byte[] CONNECTION_CLOSE = DataHelper.getASCII("Connection: close\r\n");
     private static final byte[] CRLF = DataHelper.getASCII("\r\n");
 
-    /**
-     * HTTPResponseOutputStream.
-     */
     public HTTPResponseOutputStream(OutputStream raw) {
         this(raw, null);
     }
@@ -401,9 +383,6 @@ class HTTPResponseOutputStream extends FilterOutputStream {
      */
     protected boolean shouldCompress() { return _gzip; }
 
-    /**
-     * finishHeaders.
-     */
     protected void finishHeaders() throws IOException {
         out.write(CRLF); // end of the headers
     }
@@ -429,9 +408,6 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         }
     }
 
-    /**
-     * beginProcessing.
-     */
     protected void beginProcessing() throws IOException {
         OutputStream po = new GunzipOutputStream(out, _callback);
         synchronized(this) {

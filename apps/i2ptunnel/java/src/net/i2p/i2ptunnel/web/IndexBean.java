@@ -61,21 +61,9 @@ import net.i2p.util.UIMessages;
  * Usage by classes outside of i2ptunnel.war is deprecated.</p>
  */
 public class IndexBean {
-    /**
-     * _context.
-     */
     protected final I2PAppContext _context;
-    /**
-     * _log.
-     */
     protected final Log _log;
-    /**
-     * _group.
-     */
     protected final TunnelControllerGroup _group;
-    /**
-     * _helper.
-     */
     protected final GeneralHelper _helper;
     private final String _fatalError;
     private String _action;
@@ -88,21 +76,13 @@ public class IndexBean {
     private int _certType;
     private String _certSigner;
 
-    /**
-     * RUNNING.
-     */
+    /** Tunnel status: running. */
     public static final int RUNNING = GeneralHelper.RUNNING;
-    /**
-     * STARTING.
-     */
+    /** Tunnel status: starting. */
     public static final int STARTING = GeneralHelper.STARTING;
-    /**
-     * NOT_RUNNING.
-     */
+    /** Tunnel status: not running. */
     public static final int NOT_RUNNING = GeneralHelper.NOT_RUNNING;
-    /**
-     * STANDBY.
-     */
+    /** Tunnel status: standby. */
     public static final int STANDBY = GeneralHelper.STANDBY;
     /** 3 wasn't enough for some browsers. They are reloading the page for some reason - maybe HEAD? @since 0.8.1 */
     private static final int MAX_NONCES = 8;
@@ -1468,37 +1448,22 @@ public class IndexBean {
         }
     }
 
-    /**
-     * setConnectDelay.
-     */
     public void setConnectDelay(String moo) {
         _config.setConnectDelay(true);
     }
 
-    /**
-     * setProfile.
-     */
     public void setProfile(String profile) {
         _config.setProfile(profile);
     }
 
-    /**
-     * setReduce.
-     */
     public void setReduce(String moo) {
         _config.setReduce(true);
     }
 
-    /**
-     * setClose.
-     */
     public void setClose(String moo) {
         _config.setClose(true);
     }
 
-    /**
-     * setEncrypt.
-     */
     public void setEncrypt(String moo) {
         _config.setEncrypt(true);
     }
@@ -1630,9 +1595,6 @@ public class IndexBean {
     /** @since 0.9.13 */
     public void setUniqueLocal(String moo) {_config.setUniqueLocal(true);}
 
-    /**
-     * setAccessMode.
-     */
     public void setAccessMode(String val) {
         if (val != null) {
             try {_config.setAccessMode(Integer.parseInt(val.trim()));}
@@ -1647,14 +1609,8 @@ public class IndexBean {
         if (val != null) {_config.setFilterDefinition(val);}
     }
 
-    /**
-     * setDelayOpen.
-     */
     public void setDelayOpen(String moo) {_config.setDelayOpen(true);}
 
-    /**
-     * setNewDest.
-     */
     public void setNewDest(String val) {
         if (val != null) {
             try {_config.setNewDest(Integer.parseInt(val.trim()));}
@@ -1662,48 +1618,30 @@ public class IndexBean {
         }
     }
 
-    /**
-     * setReduceTime.
-     */
     public void setReduceTime(String val) {
         if (val != null) {
             try {_config.setReduceTime(Integer.parseInt(val.trim()));}
             catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
-    /**
-     * setReduceCount.
-     */
     public void setReduceCount(String val) {
         if (val != null) {
             try {_config.setReduceCount(Integer.parseInt(val.trim()));}
             catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
-    /**
-     * setEncryptKey.
-     */
     public void setEncryptKey(String val) {
         _config.setEncryptKey(val);
     }
 
-    /**
-     * setAccessList.
-     */
     public void setAccessList(String val) {
         _config.setAccessList(val);
     }
 
-    /**
-     * setJumpList.
-     */
     public void setJumpList(String val) {
         _config.setJumpList(val);
     }
 
-    /**
-     * setCloseTime.
-     */
     public void setCloseTime(String val) {
         if (val != null) {
             try {_config.setCloseTime(Integer.parseInt(val.trim()));
@@ -1744,37 +1682,22 @@ public class IndexBean {
         _config.setProxyAuth(isSOCKS ? "true" : I2PTunnelHTTPClientBase.DIGEST_AUTH);
     }
 
-    /**
-     * setProxyUsername.
-     */
     public void setProxyUsername(String s) {
         _config.setProxyUsername(s);
     }
 
-    /**
-     * setNofilter_proxyPassword.
-     */
     public void setNofilter_proxyPassword(String s) {
         _config.setProxyPassword(s);
     }
 
-    /**
-     * setOutproxyAuth.
-     */
     public void setOutproxyAuth(String s) {
         _config.setOutproxyAuth(true);
     }
 
-    /**
-     * setOutproxyUsername.
-     */
     public void setOutproxyUsername(String s) {
         _config.setOutproxyUsername(s);
     }
 
-    /**
-     * setNofilter_outproxyPassword.
-     */
     public void setNofilter_outproxyPassword(String s) {
         _config.setOutproxyPassword(s);
     }
@@ -1797,9 +1720,6 @@ public class IndexBean {
         _config.setOutproxyType(s);
     }
 
-    /**
-     * setLimitMinute.
-     */
     public void setLimitMinute(String s) {
         if (s != null) {
             try {_config.setLimitMinute(Integer.parseInt(s.trim()));}
@@ -1807,9 +1727,6 @@ public class IndexBean {
         }
     }
 
-    /**
-     * setLimitHour.
-     */
     public void setLimitHour(String s) {
         if (s != null) {
             try {_config.setLimitHour(Integer.parseInt(s.trim()));}
@@ -1817,9 +1734,6 @@ public class IndexBean {
         }
     }
 
-    /**
-     * setLimitDay.
-     */
     public void setLimitDay(String s) {
         if (s != null) {
             try {_config.setLimitDay(Integer.parseInt(s.trim()));}
@@ -1827,9 +1741,6 @@ public class IndexBean {
         }
     }
 
-    /**
-     * setTotalMinute.
-     */
     public void setTotalMinute(String s) {
         if (s != null) {
             try {_config.setTotalMinute(Integer.parseInt(s.trim()));}
@@ -1837,9 +1748,6 @@ public class IndexBean {
         }
     }
 
-    /**
-     * setTotalHour.
-     */
     public void setTotalHour(String s) {
         if (s != null) {
             try {_config.setTotalHour(Integer.parseInt(s.trim()));}
@@ -1847,9 +1755,6 @@ public class IndexBean {
         }
     }
 
-    /**
-     * setTotalDay.
-     */
     public void setTotalDay(String s) {
         if (s != null) {
             try {_config.setTotalDay(Integer.parseInt(s.trim()));}
@@ -1857,9 +1762,6 @@ public class IndexBean {
         }
     }
 
-    /**
-     * setMaxStreams.
-     */
     public void setMaxStreams(String s) {
         if (s != null) {
             try {_config.setMaxStreams(Integer.parseInt(s.trim()));}
@@ -1878,9 +1780,6 @@ public class IndexBean {
         }
     }
 
-    /**
-     * setPostTotalMax.
-     */
     public void setPostTotalMax(String s) {
         if (s != null) {
             try {_config.setPostTotalMax(Integer.parseInt(s.trim()));}
@@ -1888,9 +1787,6 @@ public class IndexBean {
         }
     }
 
-    /**
-     * setPostCheckTime.
-     */
     public void setPostCheckTime(String s) {
         if (s != null) {
             try {_config.setPostCheckTime(Integer.parseInt(s.trim()));}
@@ -1898,9 +1794,6 @@ public class IndexBean {
         }
     }
 
-    /**
-     * setPostBanTime.
-     */
     public void setPostBanTime(String s) {
         if (s != null) {
             try {_config.setPostBanTime(Integer.parseInt(s.trim()));}
@@ -1908,9 +1801,6 @@ public class IndexBean {
         }
     }
 
-    /**
-     * setPostTotalBanTime.
-     */
     public void setPostTotalBanTime(String s) {
         if (s != null) {
             try {_config.setPostTotalBanTime(Integer.parseInt(s.trim()));}
@@ -1919,9 +1809,6 @@ public class IndexBean {
     }
 
 
-    /**
-     * setCert.
-     */
     public void setCert(String val) {
         if (val != null) {
             try {_certType = Integer.parseInt(val.trim());}
@@ -1929,9 +1816,6 @@ public class IndexBean {
         }
     }
 
-    /**
-     * setSigner.
-     */
     public void setSigner(String val) {_certSigner = val;}
 
     /** @since 0.9.12 */
@@ -1960,25 +1844,16 @@ public class IndexBean {
         _config.setInboundRandomKey(s);
     }
 
-    /**
-     * setKey2.
-     */
     public void setKey2(String s) {
         s = decrypt("outbound.randomKey", s);
         _config.setOutboundRandomKey(s);
     }
 
-    /**
-     * setKey3.
-     */
     public void setKey3(String s) {
         s = decrypt("i2cp.leaseSetSigningPrivateKey", s);
         _config.setLeaseSetSigningPrivateKey(s);
     }
 
-    /**
-     * setKey4.
-     */
     public void setKey4(String s) {
         s = decrypt("i2cp.leaseSetPrivateKey", s);
         _config.setLeaseSetPrivateKey(s);
@@ -2171,9 +2046,6 @@ public class IndexBean {
         }
     }
 
-    /**
-     * _t.
-     */
     protected String _t(String key) {
         return Messages._t(key, _context);
     }

@@ -74,9 +74,6 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         notifyEvent("openSOCKSTunnelResult", "ok");
     }
 
-    /**
-     * clientConnectionRun.
-     */
     protected void clientConnectionRun(Socket s) {
         I2PSocket destSock = null;
         try {
@@ -105,13 +102,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
 
     /** add "default" or port number */
     public static final String PROP_PROXY_PREFIX = "i2ptunnel.socks.proxy.";
-    /**
-     * DEFAULT.
-     */
     public static final String DEFAULT = "default";
-    /**
-     * PROP_PROXY_DEFAULT.
-     */
     public static final String PROP_PROXY_DEFAULT = PROP_PROXY_PREFIX + DEFAULT;
 
     /**

@@ -32,9 +32,6 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     private final List<I2PSocketAddress> _addrs;
     // application should ping timeout before this
     private static final long DEFAULT_READ_TIMEOUT = 10 * (long) 60 * 1000;
-    /**
-     * readTimeout.
-     */
     protected long readTimeout = DEFAULT_READ_TIMEOUT;
     private final boolean _dccEnabled;
     private I2PTunnelDCCServer _DCCServer;
@@ -341,9 +338,6 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         return -1;
     }
 
-    /**
-     * resumeIncoming.
-     */
     public int resumeIncoming(int port) {
         I2PTunnelDCCServer server = _DCCServer;
         if (server != null)
@@ -351,9 +345,6 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         return -1;
     }
 
-    /**
-     * acceptOutgoing.
-     */
     public int acceptOutgoing(int port) {
         I2PTunnelDCCServer server = _DCCServer;
         if (server != null)
@@ -361,9 +352,6 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         return -1;
     }
 
-    /**
-     * acceptIncoming.
-     */
     public int acceptIncoming(int port) {
         DCCClientManager tracker = _DCCClientManager;
         if (tracker != null)

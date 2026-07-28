@@ -96,79 +96,41 @@ import net.i2p.util.Log;
  */
 public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
-    /**
-     * _log.
-     */
     protected final Log _log;
-    /**
-     * sockMgr.
-     */
     protected final I2PSocketManager sockMgr;
-    /**
-     * i2pss.
-     */
     protected volatile I2PServerSocket i2pss;
 
     private final Object lock = new Object();
-    /**
-     * slock.
-     */
     protected final Object slock = new Object();
-    /**
-     * sslLock.
-     */
     protected final Object sslLock = new Object();
 
-    /**
-     * remoteHost.
-     */
     protected volatile InetAddress remoteHost;
-    /**
-     * remotePort.
-     */
     protected volatile int remotePort;
-    /**
-     * l.
-     */
     protected final Logging l;
     private I2PSSLSocketFactory _sslFactory;
     private static final long DEFAULT_READ_TIMEOUT = -1;
     /** default timeout - override if desired */
     protected volatile long readTimeout = DEFAULT_READ_TIMEOUT;
-    /**
-     * PROP_USE_SSL.
-     */
+    /** Config key to enable SSL. */
     public static final String PROP_USE_SSL = "useSSL";
-    /**
-     * PROP_UNIQUE_LOCAL.
-     */
+    /** Config key to enable unique local address. */
     public static final String PROP_UNIQUE_LOCAL = "enableUniqueLocal";
     /** @since 0.9.30 */
     public static final String PROP_ALT_PKF = "altPrivKeyFile";
-    /**
-     * _clientExecutor.
-     */
     protected volatile ThreadPoolExecutor _clientExecutor;
     private final Map<Integer, InetSocketAddress> _socketMap = new ConcurrentHashMap<>(4);
     private volatile StatefulConnectionFilter _filter;
 
-    /* the following are required for http bidir server */
     /**
-     * task.
+     * HTTP bidirectional server task, null for standard tunnel server.
      */
     protected I2PTunnelTask task;
     /**
-     * bidir.
+     * True for HTTP bidirectional server mode.
      */
     protected boolean bidir;
-    /**
-     * __serverId.
-     */
     protected static volatile long __serverId = 0;
     private int DEFAULT_LOCALPORT = 4488;
-    /**
-     * localPort.
-     */
     protected int localPort = DEFAULT_LOCALPORT;
 
     /**
@@ -759,9 +721,6 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     private class Handler implements Runnable {
         private final I2PSocket _i2ps;
 
-        /**
-         * Handler.
-         */
         public Handler(I2PSocket socket) {_i2ps = socket;}
 
         /**

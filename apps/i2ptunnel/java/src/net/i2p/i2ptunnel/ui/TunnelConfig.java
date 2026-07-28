@@ -42,16 +42,11 @@ import net.i2p.util.PasswordManager;
  * @since 0.9.19 logic moved from IndexBean
  */
 public class TunnelConfig {
-    /**
-     * SHARED_CLIENT_NICKNAME.
-     */
+    /** Nickname for the shared client tunnel config. */
     public static final String SHARED_CLIENT_NICKNAME = "Shared Clients";
 
     private static final String OPT = TunnelController.PFX_OPTION;
 
-    /**
-     * _context.
-     */
     protected final I2PAppContext _context;
 
     private String _type;
@@ -104,9 +99,6 @@ public class TunnelConfig {
     private String _newClientKey;
     private boolean _addClientAuth;
 
-    /**
-     * TunnelConfig.
-     */
     public TunnelConfig() {
         _context = I2PAppContext.getGlobalContext();
         _booleanOptions = new ConcurrentHashSet<>(4);
@@ -341,34 +333,22 @@ public class TunnelConfig {
     public void setConnectDelay(boolean val) {
         _connectDelay = val;
     }
-    /**
-     * setProfile.
-     */
     public void setProfile(String profile) {
         _profile = profile;
     }
 
-    /**
-     * setReduce.
-     */
     public void setReduce(boolean val) {
         if (val)
             _booleanOptions.add("i2cp.reduceOnIdle");
         else
             _booleanOptions.remove("i2cp.reduceOnIdle");
     }
-    /**
-     * setClose.
-     */
     public void setClose(boolean val) {
         if (val)
             _booleanOptions.add("i2cp.closeOnIdle");
         else
             _booleanOptions.remove("i2cp.closeOnIdle");
     }
-    /**
-     * setEncrypt.
-     */
     public void setEncrypt(boolean val) {
         if (val)
             _booleanOptions.add("i2cp.encryptLeaseSet");
@@ -443,27 +423,18 @@ public class TunnelConfig {
         _addClientAuth = val;
     }
 
-    /**
-     * setDCC.
-     */
     public void setDCC(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelIRCClient.PROP_DCC);
         else
             _booleanOptions.remove(I2PTunnelIRCClient.PROP_DCC);
     }
-    /**
-     * setUseSSL.
-     */
     public void setUseSSL(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelServer.PROP_USE_SSL);
         else
             _booleanOptions.remove(I2PTunnelServer.PROP_USE_SSL);
     }
-    /**
-     * setRejectInproxy.
-     */
     public void setRejectInproxy(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelHTTPServer.OPT_REJECT_INPROXY);
@@ -493,9 +464,6 @@ public class TunnelConfig {
             _otherOptions.put(I2PTunnelHTTPServer.OPT_USER_AGENTS, val.trim());
     }
 
-    /**
-     * setUniqueLocal.
-     */
     public void setUniqueLocal(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelServer.PROP_UNIQUE_LOCAL);
@@ -503,13 +471,7 @@ public class TunnelConfig {
             _booleanOptions.remove(I2PTunnelServer.PROP_UNIQUE_LOCAL);
     }
 
-    /**
-     * PROP_ENABLE_ACCESS_LIST.
-     */
     protected static final String PROP_ENABLE_ACCESS_LIST = "i2cp.enableAccessList";
-    /**
-     * PROP_ENABLE_BLACKLIST.
-     */
     protected static final String PROP_ENABLE_BLACKLIST = "i2cp.enableBlackList";
 
     /**
@@ -547,9 +509,6 @@ public class TunnelConfig {
         }
     }
 
-    /**
-     * setDelayOpen.
-     */
     public void setDelayOpen(boolean val) {
         if (val)
             _booleanOptions.add("i2cp.delayOpen");
@@ -580,79 +539,49 @@ public class TunnelConfig {
         }
     }
 
-    /**
-     * setReduceTime.
-     */
     public void setReduceTime(int val) {
         _otherOptions.put("i2cp.reduceIdleTime", Integer.toString(val * 60*1000));
     }
-    /**
-     * setReduceCount.
-     */
     public void setReduceCount(int val) {
         _otherOptions.put("i2cp.reduceQuantity", Integer.toString(val));
     }
-    /**
-     * setEncryptKey.
-     */
     public void setEncryptKey(String val) {
         if (val != null)
             _otherOptions.put("i2cp.leaseSetKey", val.trim());
     }
 
-    /**
-     * setAccessList.
-     */
     public void setAccessList(String val) {
         if (val != null)
             _otherOptions.put("i2cp.accessList", val.trim().replace("\r\n", ",").replace("\n", ",").replace(" ", ","));
     }
 
-    /**
-     * setJumpList.
-     */
     public void setJumpList(String val) {
         if (val != null)
             _otherOptions.put(I2PTunnelHTTPClient.PROP_JUMP_SERVERS, val.trim().replace("\r\n", ",").replace("\n", ",").replace(" ", ","));
     }
 
-    /**
-     * setCloseTime.
-     */
     public void setCloseTime(int val) {
         _otherOptions.put("i2cp.closeIdleTime", Integer.toString(val * 60*1000));
     }
 
-    /**
-     * setAllowUserAgent.
-     */
     public void setAllowUserAgent(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelHTTPClient.PROP_USER_AGENT);
         else
             _booleanOptions.remove(I2PTunnelHTTPClient.PROP_USER_AGENT);
     }
-    /**
-     * setAllowReferer.
-     */
     public void setAllowReferer(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelHTTPClient.PROP_REFERER);
         else
             _booleanOptions.remove(I2PTunnelHTTPClient.PROP_REFERER);
     }
-    /**
-     * setAllowAccept.
-     */
     public void setAllowAccept(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelHTTPClient.PROP_ACCEPT);
         else
             _booleanOptions.remove(I2PTunnelHTTPClient.PROP_ACCEPT);
     }
-    /**
-     * setAllowInternalSSL.
-     */
     public void setAllowInternalSSL(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelHTTPClient.PROP_INTERNAL_SSL);
@@ -660,9 +589,6 @@ public class TunnelConfig {
             _booleanOptions.remove(I2PTunnelHTTPClient.PROP_INTERNAL_SSL);
     }
 
-    /**
-     * setMultihome.
-     */
     public void setMultihome(boolean val) {
         if (val)
             _booleanOptions.add("shouldBundleReplyInfo");
@@ -681,17 +607,11 @@ public class TunnelConfig {
             _otherOptions.put(I2PTunnelHTTPClientBase.PROP_AUTH, authType.trim());
     }
 
-    /**
-     * setProxyUsername.
-     */
     public void setProxyUsername(String s) {
         if (s != null)
             _newProxyUser = s.trim();
     }
 
-    /**
-     * setProxyPassword.
-     */
     public void setProxyPassword(String s) {
         if (s != null)
             _newProxyPW = s.trim();
@@ -710,33 +630,21 @@ public class TunnelConfig {
             _booleanOptions.remove(I2PTunnelHTTPClientBase.PROP_OUTPROXY_AUTH);
     }
 
-    /**
-     * setOutproxyUsername.
-     */
     public void setOutproxyUsername(String s) {
         if (s != null)
             _otherOptions.put(I2PTunnelHTTPClientBase.PROP_OUTPROXY_USER, s.trim());
     }
 
-    /**
-     * setOutproxyPassword.
-     */
     public void setOutproxyPassword(String s) {
         if (s != null)
             _otherOptions.put(I2PTunnelHTTPClientBase.PROP_OUTPROXY_PW, s.trim());
     }
 
-    /**
-     * setSslProxies.
-     */
     public void setSslProxies(String s) {
         if (s != null)
             _otherOptions.put(I2PTunnelHTTPClient.PROP_SSL_OUTPROXIES, s.trim().replace(" ", ","));
     }
 
-    /**
-     * setUseOutproxyPlugin.
-     */
     public void setUseOutproxyPlugin(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelHTTPClientBase.PROP_USE_OUTPROXY_PLUGIN);
@@ -757,76 +665,37 @@ public class TunnelConfig {
      * all of these are @since 0.8.3 (moved from IndexBean)
      */
     public static final String PROP_MAX_CONNS_MIN = TunnelController.PROP_MAX_CONNS_MIN;
-    /**
-     * PROP_MAX_CONNS_HOUR.
-     */
     public static final String PROP_MAX_CONNS_HOUR = TunnelController.PROP_MAX_CONNS_HOUR;
-    /**
-     * PROP_MAX_CONNS_DAY.
-     */
     public static final String PROP_MAX_CONNS_DAY = TunnelController.PROP_MAX_CONNS_DAY;
-    /**
-     * PROP_MAX_TOTAL_CONNS_MIN.
-     */
     public static final String PROP_MAX_TOTAL_CONNS_MIN = TunnelController.PROP_MAX_TOTAL_CONNS_MIN;
-    /**
-     * PROP_MAX_TOTAL_CONNS_HOUR.
-     */
     public static final String PROP_MAX_TOTAL_CONNS_HOUR = TunnelController.PROP_MAX_TOTAL_CONNS_HOUR;
-    /**
-     * PROP_MAX_TOTAL_CONNS_DAY.
-     */
     public static final String PROP_MAX_TOTAL_CONNS_DAY = TunnelController.PROP_MAX_TOTAL_CONNS_DAY;
-    /**
-     * PROP_MAX_STREAMS.
-     */
     public static final String PROP_MAX_STREAMS = TunnelController.PROP_MAX_STREAMS;
 
-    /**
-     * setLimitMinute.
-     */
     public void setLimitMinute(int val) {
         _otherOptions.put(PROP_MAX_CONNS_MIN, Integer.toString(val));
     }
 
-    /**
-     * setLimitHour.
-     */
     public void setLimitHour(int val) {
         _otherOptions.put(PROP_MAX_CONNS_HOUR, Integer.toString(val));
     }
 
-    /**
-     * setLimitDay.
-     */
     public void setLimitDay(int val) {
         _otherOptions.put(PROP_MAX_CONNS_DAY, Integer.toString(val));
     }
 
-    /**
-     * setTotalMinute.
-     */
     public void setTotalMinute(int val) {
         _otherOptions.put(PROP_MAX_TOTAL_CONNS_MIN, Integer.toString(val));
     }
 
-    /**
-     * setTotalHour.
-     */
     public void setTotalHour(int val) {
         _otherOptions.put(PROP_MAX_TOTAL_CONNS_HOUR, Integer.toString(val));
     }
 
-    /**
-     * setTotalDay.
-     */
     public void setTotalDay(int val) {
         _otherOptions.put(PROP_MAX_TOTAL_CONNS_DAY, Integer.toString(val));
     }
 
-    /**
-     * setMaxStreams.
-     */
     public void setMaxStreams(int val) {
         _otherOptions.put(PROP_MAX_STREAMS, Integer.toString(val));
     }
@@ -838,37 +707,22 @@ public class TunnelConfig {
         _otherOptions.put(I2PTunnelHTTPServer.OPT_POST_MAX, Integer.toString(val));
     }
 
-    /**
-     * setPostTotalMax.
-     */
     public void setPostTotalMax(int val) {
         _otherOptions.put(I2PTunnelHTTPServer.OPT_POST_TOTAL_MAX, Integer.toString(val));
     }
 
-    /**
-     * setPostCheckTime.
-     */
     public void setPostCheckTime(int val) {
         _otherOptions.put(I2PTunnelHTTPServer.OPT_POST_WINDOW, Integer.toString(val * 60));
     }
 
-    /**
-     * setPostBanTime.
-     */
     public void setPostBanTime(int val) {
         _otherOptions.put(I2PTunnelHTTPServer.OPT_POST_BAN_TIME, Integer.toString(val * 60));
     }
 
-    /**
-     * setPostTotalBanTime.
-     */
     public void setPostTotalBanTime(int val) {
         _otherOptions.put(I2PTunnelHTTPServer.OPT_POST_TOTAL_BAN_TIME, Integer.toString(val * 60));
     }
 
-    /**
-     * setSigType.
-     */
     public void setSigType(String val) {
         if (val != null)
             _otherOptions.put(I2PClient.PROP_SIGTYPE, val.trim());
@@ -895,25 +749,16 @@ public class TunnelConfig {
             _otherOptions.put("inbound.randomKey", s.trim());
     }
 
-    /**
-     * setOutboundRandomKey.
-     */
     public void setOutboundRandomKey(String s) {
         if (s != null)
             _otherOptions.put("outbound.randomKey", s.trim());
     }
 
-    /**
-     * setLeaseSetSigningPrivateKey.
-     */
     public void setLeaseSetSigningPrivateKey(String s) {
         if (s != null)
             _otherOptions.put("i2cp.leaseSetSigningPrivateKey", s.trim());
     }
 
-    /**
-     * setLeaseSetPrivateKey.
-     */
     public void setLeaseSetPrivateKey(String s) {
         if (s != null)
             _otherOptions.put("i2cp.leaseSetPrivateKey", s.trim());

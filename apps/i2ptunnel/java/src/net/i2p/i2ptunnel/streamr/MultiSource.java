@@ -86,22 +86,10 @@ public class MultiSource implements Source, Sink {
      *  @since 0.9.53
      */
     static class MSink {
-        /**
-         * dest.
-         */
         public final Destination dest;
-        /**
-         * fromPort.
-         */
         public final int fromPort;
-        /**
-         * toPort.
-         */
         public final int toPort;
 
-        /**
-         * MSink.
-         */
         public MSink(Destination dest, int fromPort, int toPort) {
             this.dest = dest; this.fromPort = fromPort; this.toPort = toPort;
         }

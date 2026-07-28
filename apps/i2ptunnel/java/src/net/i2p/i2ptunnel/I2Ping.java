@@ -31,9 +31,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class I2Ping extends I2PTunnelClientBase {
 
-    /**
-     * PROP_COMMAND.
-     */
+    /** Config key for the ping command string. */
     public static final String PROP_COMMAND = "command";
     private static final int PING_COUNT = 10;
     private static final int CPING_COUNT = 5;
@@ -96,9 +94,6 @@ public class I2Ping extends I2PTunnelClientBase {
         close(false);
     }
 
-    /**
-     * runCommand.
-     */
     public void runCommand(String cmd) throws InterruptedException, IOException {
         long timeout = PING_TIMEOUT;
         int count = PING_COUNT;
@@ -204,9 +199,6 @@ public class I2Ping extends I2PTunnelClientBase {
         t.join();
     }
 
-    /**
-     * usage.
-     */
     public static String usage() {
         return
             "Usage:\n" +
