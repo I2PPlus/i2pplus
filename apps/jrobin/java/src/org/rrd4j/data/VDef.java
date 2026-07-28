@@ -31,7 +31,7 @@ class VDef extends Source implements NonRrdSource {
         var.calculate(source, tStart, tEnd);
     }
 
-    /** {@inheritDoc} */
+    /** Value from the wrapped variable. */
     public Variable.Value getValue() {
         return var.getValue();
     }

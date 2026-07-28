@@ -116,8 +116,6 @@ public class FIFOBandwidthRefiller implements Runnable {
      *  Max for reasonable Bloom filter false positive rate.
      *  Do not increase without adding a new Bloom filter size!
      *  See util/DecayingBloomFilter and tunnel/BloomFilterIVValidator.
-     *  @param ms the ms
-     *  @return the result
      */
     public static final int MAX_OUTBOUND_BANDWIDTH = SystemVersion.isSlow() || SystemVersion.getCores() == 1 ? 16384 :
                                                      SystemVersion.getCores() < 3 || SystemVersion.getMaxMemory() < 1024*1024*1024L ? 32768 :
