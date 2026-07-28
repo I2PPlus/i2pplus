@@ -12,23 +12,16 @@ import org.rrd4j.core.RrdDb;
  * backend configuration.
  */
 class Def extends Source {
-    /** Rrd uri */
     private final URI rrdUri;
-    /** Ds name */
     private final String dsName;
-    /** Backend */
     private final RrdBackendFactory backend;
-    /** Consol fun */
     private final ConsolFun consolFun;
-    /** Fetch data */
     private FetchData fetchData;
 
-    /** Def */
     Def(String name, FetchData fetchData) {
         this(name, name, fetchData);
     }
 
-    /** Def */
     Def(String name, String dsName, FetchData fetchData) {
         this(
                 name,
@@ -39,7 +32,6 @@ class Def extends Source {
         this.fetchData = fetchData;
     }
 
-    /** Def */
     Def(String name, URI rrdUri, String dsName, ConsolFun consolFunc, RrdBackendFactory backend) {
         super(name);
         this.rrdUri = backend.getCanonicalUri(rrdUri);

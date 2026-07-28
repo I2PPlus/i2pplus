@@ -52,7 +52,6 @@ public class Epoch extends JFrame {
         "HH:mm:ss yy-MM-dd"
     };
 
-    /** Parsers */
     private final SimpleDateFormat[] parsers = new SimpleDateFormat[supportedFormats.length];
     /** Help text */
     private final String helpText;

@@ -1,15 +1,9 @@
 package org.rrd4j.core.timespec;
 
-/**
- * Represents a I2P timescanner.
- */
-
+/** Tokenizes at-style time specification strings into tokens. */
 class TimeScanner {
-    /** Date string */
     private final String dateString;
-    /** Position in string */
     private int pos, pos_save;
-    /** Token save */
     private TimeToken token, token_save;
 
     /** Keyword tokens for time specification parsing */
@@ -99,14 +93,9 @@ class TimeScanner {
         new TimeToken("y", TimeToken.YEARS), /* (short generic) */
         new TimeToken(null, 0) /* SENTINEL */
     };
-    /** Specials */
     TimeToken[] specials = WORDS;
 
-    /**
-     * Constructor for TimeScanner.
-     *
-     * @param dateString The date as {@link java.lang.String} to parse.
-     */
+    /** @param dateString at-style time specification string to tokenize */
     public TimeScanner(String dateString) {
         this.dateString = dateString;
     }
@@ -115,7 +104,7 @@ class TimeScanner {
     void setContext(boolean parsingWords) {
         specials = parsingWords ? WORDS : MULTIPLIERS;
     }
-    /** Next token */
+    /** @return the next token from the date string */
     TimeToken nextToken() {
         StringBuilder buffer = new StringBuilder();
         while (pos < dateString.length()) {
@@ -170,23 +159,22 @@ class TimeScanner {
         }
         return token = new TimeToken(null, TimeToken.EOF);
     }
-    /** Resolve months minutes */
+    /** Resolve ambiguous MONTHS_MINUTES token to months or minutes. */
     TimeToken resolveMonthsMinutes(int newId) {
         assert token.token_id == TimeToken.MONTHS_MINUTES;
         assert newId == TimeToken.MONTHS || newId == TimeToken.MINUTES;
         return token = new TimeToken(token.value, newId);
     }
-    /** Save state */
+    /** Save current tokenizer position for backtracking. */
     void saveState() {
         token_save = token;
         pos_save = pos;
     }
-    /** Restore state */
+    /** Restore previously saved tokenizer position. */
     TimeToken restoreState() {
         pos = pos_save;
         return token = token_save;
     }
-    /** Parse token */
     private int parseToken(String arg) {
         for (int i = 0; specials[i].value != null; i++) {
             if (specials[i].value.equalsIgnoreCase(arg)) {

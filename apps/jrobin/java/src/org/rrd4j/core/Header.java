@@ -41,7 +41,6 @@ public class Header implements RrdUpdater<Header> {
     private final RrdInt<Header> arcCount;
     private final RrdLong<Header> lastUpdateTime;
 
-    /** Create header from definition */
     Header(RrdDb parentDb, RrdDef rrdDef) throws IOException {
         this.parentDb = parentDb;
 
@@ -68,7 +67,6 @@ public class Header implements RrdUpdater<Header> {
         }
     }
 
-    /** Create header from importer */
     Header(RrdDb parentDb, DataImporter reader) throws IOException {
         this(parentDb, (RrdDef) null);
         String importVersion = reader.getVersion();
@@ -101,20 +99,18 @@ public class Header implements RrdUpdater<Header> {
     }
 
     /**
-     * getInfo.
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
+     * @return the info string (everything after the signature prefix)
+     * @throws java.io.IOException if an I/O error occurs
      */
     public String getInfo() throws IOException {
         return getSignature().substring(SIGNATURE_LENGTH);
     }
 
     /**
-     * setInfo.
+     * Override the info portion of the RRD signature.
      *
-     * @param info a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
+     * @param info the new info string, or null/empty to clear it
+     * @throws java.io.IOException if an I/O error occurs
      */
     public void setInfo(String info) throws IOException {
         if (info != null && info.length() > 0) {
@@ -246,7 +242,7 @@ public class Header implements RrdUpdater<Header> {
         return version;
     }
 
-    /** Check if header is RRD4J format */
+    /** @return true if the header matches RRD4J or JRobin format */
     boolean isRrd4jHeader() {
         try {
             return signature.get().startsWith(SIGNATURE)
@@ -256,7 +252,7 @@ public class Header implements RrdUpdater<Header> {
         }
     }
 
-    /** Validate header signature */
+    /** @throws InvalidRrdException if the header is not a valid RRD4J/RRD file */
     void validateHeader() throws IOException {
         if (!isRrd4jHeader()) {
             throw new InvalidRrdException(

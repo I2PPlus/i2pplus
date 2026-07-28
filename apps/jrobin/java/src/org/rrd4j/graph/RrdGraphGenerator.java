@@ -16,35 +16,23 @@ import org.rrd4j.data.DataProcessor;
  */
 class RrdGraphGenerator {
 
-    /** ignored */
     private static final double[] SENSIBLE_VALUES = {
         1000.0, 900.0, 800.0, 750.0, 700.0, 600.0, 500.0, 400.0, 300.0, 250.0, 200.0, 125.0, 100.0,
         90.0, 80.0, 75.0, 70.0, 60.0, 50.0, 40.0, 30.0, 25.0, 20.0, 10.0, 9.0, 8.0, 7.0, 6.0, 5.0,
         4.0, 3.5, 3.0, 2.5, 2.0, 1.8, 1.5, 1.2, 1.0, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.0, -1
     };
-    /** ignored */
     private static final int SYMBOLS_CENTER = 8;
-    /** ignored */
     private static final char[] SYMBOLS = {
         'y', 'z', 'a', 'f', 'p', 'n', 'µ', 'm', ' ', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'
     };
-    /** Gdef */
-
     final RrdGraphDef gdef;
-    /** Worker */
     final ImageWorker worker;
-    /** Dproc */
     private final DataProcessor dproc;
-    /** Mapper */
     Mapper mapper;
-    /** Graph info */
     final RrdGraphInfo info = new RrdGraphInfo();
-    /** Signature */
     private final String signature;
-    /** Im */
     final ImageParameters im;
 
-    /** Create a graph generator */
     RrdGraphGenerator(RrdGraphDef gdef, ImageWorker worker, DataProcessor dproc) {
         this.gdef = gdef;
         this.worker = worker;
@@ -919,7 +907,6 @@ class RrdGraphGenerator {
                         * RrdGraphConstants.LEGEND_BOX_SPACE);
     }
 
-    /** ignored */
     private double getBox() {
         return getFontHeight(RrdGraphConstants.FONTTAG_LEGEND) * RrdGraphConstants.LEGEND_BOX;
     }

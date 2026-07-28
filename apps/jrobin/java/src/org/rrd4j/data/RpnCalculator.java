@@ -722,9 +722,7 @@ class RpnCalculator {
         /** Do method */
         abstract void do_method(RpnCalculator c, State s);
     }
-    /** Symbols */
     private static final Token_Symbol[] symbols;
-    /** Perfect */
     private static final PerfectStringHash perfect;
 
     static {
@@ -751,7 +749,6 @@ class RpnCalculator {
     private final String sourceName;
     /** Data processor */
     private final DataProcessor dataProcessor;
-    /** Tokens */
     private final Token[] tokens;
     private final RpnStack stack = new RpnStack();
     /** Calculated values */

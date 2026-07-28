@@ -10,12 +10,8 @@ import org.rrd4j.data.DataProcessor;
 
 /** Class which actually creates Rrd4j graphs (does the hard work). */
 public class RrdGraph implements RrdGraphConstants {
-    /** Gdef */
-
     final RrdGraphDef gdef;
-    /** Im */
     final ImageParameters im;
-    /** Info */
     private final RrdGraphInfo info;
 
     /**

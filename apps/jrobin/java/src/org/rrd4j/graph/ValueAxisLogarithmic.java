@@ -24,7 +24,7 @@ class ValueAxisLogarithmic extends Axis {
          * Accept
          */
         void accept(int a, double b, String formatPattern);
-        /** Accept */
+        /** Accept a numeric label at the given position using default format. */
         default void accept(int a, double b) {
             accept(a, b, "%.0e");
         }
@@ -37,17 +37,11 @@ class ValueAxisLogarithmic extends Axis {
          */
         void accept(int a, double b, Paint color);
     }
-    /** Im */
     private final ImageParameters im;
-    /** Worker */
     private final ImageWorker worker;
-    /** Gdef */
     private final RrdGraphDef gdef;
-    /** Font height */
     private final int fontHeight;
-    /** Mapper */
     private final Mapper mapper;
-    /** Locale */
     private final Locale locale;
 
     /**
@@ -65,7 +59,6 @@ class ValueAxisLogarithmic extends Axis {
         this.locale = locale;
     }
 
-    /** Constructor */
     ValueAxisLogarithmic(RrdGraphGenerator rrdGraph, ImageWorker worker, Locale locale) {
         this.im = rrdGraph.im;
         this.gdef = rrdGraph.gdef;
@@ -74,14 +67,13 @@ class ValueAxisLogarithmic extends Axis {
         this.mapper = rrdGraph.mapper;
         this.locale = locale;
     }
-    /** Find start */
     private double findStart(double positive, int idx) {
         return Math.pow(
                 10,
                 im.log.applyAsDouble(positive)
                         - im.log.applyAsDouble(positive) % im.log.applyAsDouble(yloglab[idx][0]));
     }
-    /** Draw */
+    /** @return true if axis labels were drawn */
     boolean draw() {
         Font font = gdef.getFont(FONTTAG_AXIS);
         Paint gridColor = gdef.getColor(ElementsNames.grid);

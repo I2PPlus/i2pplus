@@ -135,7 +135,6 @@ public abstract class DataImporter implements Closeable {
         return RrdDef.calculateSize(dsCount, arcCount, rowCount, dsNames);
     }
 
-    /** ignored */
     void release() throws IOException {
         // NOP
     }

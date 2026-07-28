@@ -26,18 +26,13 @@ import java.util.stream.Stream;
  * <p>In case of interruptions, it throws IllegalStateException.
  */
 public class RrdDbPool {
-    /** ignored */
     private static class RrdDbPoolSingletonHolder {
-        /** ignored */
         static final RrdDbPool instance = new RrdDbPool();
 
-        /** ignored */
         private RrdDbPoolSingletonHolder() {}
     }
 
-    /** ignored */
     private static class PoolFullException extends RuntimeException {
-        /** ignored */
         PoolFullException() {
             super("", null, false, false);
         }
@@ -58,24 +53,15 @@ public class RrdDbPool {
      *   only used by the current thread.
      *
      */
-    /** ignored */
     private static class RrdEntry {
-        /** ignored */
         RrdDb rrdDb = null;
-        /** ignored */
         int count = 0;
-        /** ignored */
         final CountDownLatch waitempty;
-        /** ignored */
         final ReentrantReadWriteLock inuse;
-        /** ignored */
         final Lock lock;
-        /** ignored */
         final boolean placeholder;
-        /** ignored */
         final URI uri;
 
-        /** ignored */
         RrdEntry(URI canonicalPath) {
             placeholder = false;
             uri = canonicalPath;
@@ -84,7 +70,6 @@ public class RrdDbPool {
             waitempty = new CountDownLatch(1);
         }
 
-        /** ignored */
         RrdEntry(RrdEntry parent) {
             assert !parent.placeholder;
             placeholder = true;
@@ -117,24 +102,16 @@ public class RrdDbPool {
         return RrdDbPoolSingletonHolder.instance;
     }
 
-    /** ignored */
     private int maxCapacity = INITIAL_CAPACITY;
-    /** ignored */
     private Semaphore usage = new Semaphore(maxCapacity);
-    /** ignored */
     private final ReentrantReadWriteLock.WriteLock usageWLock;
-    /** ignored */
     private final ReentrantReadWriteLock.ReadLock usageRLock;
-    /** ignored */
     private final Condition fullCondition;
     // Needed because external threads can detect waiting condition
-    /** ignored */
     private final AtomicBoolean waitFull = new AtomicBoolean(false);
 
-    /** ignored */
     private final ConcurrentMap<URI, RrdEntry> pool = new ConcurrentHashMap<>(INITIAL_CAPACITY);
 
-    /** ignored */
     private RrdBackendFactory defaultFactory;
 
     /**
@@ -197,7 +174,6 @@ public class RrdDbPool {
         return pool.keySet().stream().map(URI::getPath).toArray(String[]::new);
     }
 
-    /** ignored */
     private RrdEntry getEntry(URI uri, boolean cancreate) throws InterruptedException {
         RrdEntry ref = null;
         try {
@@ -279,13 +255,11 @@ public class RrdDbPool {
         }
     }
 
-    /** ignored */
     private enum ACTION {
         SWAP,
         DROP
     }
 
-    /** ignored */
     private void passNext(ACTION a, RrdEntry e) {
         if (e == null) {
             return;
@@ -428,7 +402,6 @@ public class RrdDbPool {
      * @return an reference with no usage
      * @throws InterruptedException
      */
-    /** ignored */
     private RrdEntry waitEmpty(URI uri) throws InterruptedException {
         RrdEntry ref = getEntry(uri, true);
         try {
@@ -454,7 +427,6 @@ public class RrdDbPool {
      * @return an reference with no usage
      * @throws InterruptedException
      */
-    /** ignored */
     private RrdEntry requestEmpty(URI uri) throws InterruptedException {
         return waitEmpty(uri);
     }
@@ -516,7 +488,6 @@ public class RrdDbPool {
         }
     }
 
-    /** ignored */
     private RrdDb requestRrdDb(RrdDb.Builder builder, URI uri, RrdBackendFactory factory)
             throws IOException {
         RrdEntry ref = null;
@@ -730,7 +701,6 @@ public class RrdDbPool {
         return getCanonicalUriUsage(checkFactory(uri).getCanonicalUri(uri));
     }
 
-    /** ignored */
     private int getCanonicalUriUsage(URI uri) {
         RrdEntry ref = null;
         try {
@@ -766,7 +736,6 @@ public class RrdDbPool {
         return usageWLock;
     }
 
-    /** ignored */
     private RrdBackendFactory checkFactory(URI uri) {
         return defaultFactory.canStore(uri) ? defaultFactory : RrdBackendFactory.findFactory(uri);
     }

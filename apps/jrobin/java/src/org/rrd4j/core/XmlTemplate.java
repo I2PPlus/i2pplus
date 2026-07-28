@@ -20,8 +20,6 @@ import org.xml.sax.InputSource;
 public abstract class XmlTemplate {
     private static final String PATTERN_STRING = "\\$\\{(\\w+)\\}";
     private static final Pattern PATTERN = Pattern.compile(PATTERN_STRING);
-    /** Root */
-
     protected Element root;
     private final HashMap<String, Object> valueMap = new HashMap<>();
     private final HashSet<Node> validatedNodes = new HashSet<>();

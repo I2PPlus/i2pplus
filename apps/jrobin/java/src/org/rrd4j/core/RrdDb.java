@@ -52,26 +52,16 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      * @since 3.5
      */
     public static class Builder {
-        /** ignored */
         private String path = null;
-        /** ignored */
         private URI uri = null;
-        /** ignored */
         private RrdBackendFactory factory = RrdBackendFactory.getDefaultFactory();
-        /** ignored */
         private boolean readOnly = false;
-        /** ignored */
         private String externalPath = null;
-        /** ignored */
         private DataImporter importer = null;
-        /** ignored */
         private RrdDef rrdDef = null;
-        /** ignored */
         private boolean usePool = false;
-        /** ignored */
         private RrdDbPool pool;
 
-        /** ignored */
         private Builder() {}
 
         /**
@@ -312,7 +302,6 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             return this;
         }
 
-        /** ignored */
         private static RrdBackendFactory checkFactory(URI uri, RrdBackendFactory factory) {
             if (factory == null) {
                 return RrdBackendFactory.findFactory(uri);
@@ -321,7 +310,6 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             }
         }
 
-        /** ignored */
         private static URI buildUri(String rrdPath, URI rrdUri, RrdBackendFactory factory) {
             if (rrdUri != null) {
                 return rrdUri;
@@ -332,7 +320,6 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             }
         }
 
-        /** ignored */
         private static DataImporter resoleImporter(String externalPath, DataImporter importer)
                 throws IOException {
             if (importer != null) {
@@ -350,7 +337,6 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             }
         }
 
-        /** ignored */
         private static RrdDbPool resolvePool(RrdDbPool pool) {
             return pool != null ? pool : RrdDbPool.getInstance();
         }
@@ -374,21 +360,14 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
     /** XML buffer capacity in bytes */
     static final int XML_BUFFER_CAPACITY = 100000; // bytes
 
-    /** ignored */
     private final RrdBackend backend;
-    /** ignored */
     private final RrdAllocator allocator = new RrdAllocator();
 
-    /** ignored */
     private final Header header;
-    /** ignored */
     private final Datasource[] datasources;
-    /** ignored */
     private final Archive[] archives;
-    /** ignored */
     private final RrdDbPool pool;
 
-    /** ignored */
     private boolean closed = false;
 
     /**
@@ -512,7 +491,6 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         this(rrdDef, factory, null);
     }
 
-    /** ignored */
     private RrdDb(RrdDef rrdDef, RrdBackendFactory factory, RrdDbPool pool) throws IOException {
         this.pool = pool;
         factory = Builder.checkFactory(rrdDef.getUri(), factory);
@@ -681,7 +659,6 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         this(path, null, false, factory, null);
     }
 
-    /** ignored */
     private RrdDb(
             String rrdPath, URI rrdUri, boolean readOnly, RrdBackendFactory factory, RrdDbPool pool)
             throws IOException {
@@ -904,7 +881,6 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         this(rrdPath, null, externalPath, null, factory, null);
     }
 
-    /** ignored */
     private RrdDb(
             String rrdPath,
             URI rrdUri,

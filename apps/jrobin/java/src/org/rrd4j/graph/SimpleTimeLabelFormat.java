@@ -14,8 +14,6 @@ import java.util.Locale;
  * </ul>
  */
 public class SimpleTimeLabelFormat implements TimeLabelFormat {
-    /** Format */
-
     private final String format;
 
     /**

@@ -11,7 +11,6 @@ class Line extends SourcedPlotElement {
     /** Stroke definition for line rendering */
     final BasicStroke stroke;
 
-    /** Create a line */
     Line(String srcName, Paint color, BasicStroke stroke, SourcedPlotElement parent) {
         super(srcName, color, parent);
         this.stroke = stroke;

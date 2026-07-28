@@ -36,7 +36,6 @@ public class DataChunk {
     /** Map datasource name to datasource index */
     private final Map<String, Integer> nameindex;
 
-    /** Create a data chunk */
     DataChunk(
             Map<String, Integer> nameindex,
             long startTime,

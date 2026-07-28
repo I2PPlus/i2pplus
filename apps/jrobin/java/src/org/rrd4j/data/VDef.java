@@ -7,12 +7,9 @@ import java.util.Arrays;
  * Creates computed data sources by applying aggregation functions to existing data sources.
  */
 class VDef extends Source implements NonRrdSource {
-    /** Def name */
     private final String defName;
-    /** Var */
     private final Variable var;
 
-    /** Create VDef */
     VDef(String name, String defName, Variable aggr) {
         super(name);
         this.defName = defName;
@@ -31,9 +28,7 @@ class VDef extends Source implements NonRrdSource {
         var.calculate(source, tStart, tEnd);
     }
 
-    /**
-     * getValue.
-     */
+    /** {@inheritDoc} */
     public Variable.Value getValue() {
         return var.getValue();
     }

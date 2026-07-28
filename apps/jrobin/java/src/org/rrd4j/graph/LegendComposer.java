@@ -8,9 +8,7 @@ import java.util.List;
  * spacing within the legend area.
  */
 class LegendComposer implements RrdGraphConstants {
-    /** Gdef */
     private final RrdGraphDef gdef;
-    /** Worker */
     private final ImageWorker worker;
 
     /** X-coordinate for legend placement */
@@ -82,7 +80,6 @@ class LegendComposer implements RrdGraphConstants {
         private boolean noJustification;
         private final List<CommentText> comments = new ArrayList<>();
 
-        /** Create a line */
         Line() {
             clear();
         }

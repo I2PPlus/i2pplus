@@ -11,28 +11,21 @@ import org.rrd4j.graph.DownSampler;
  */
 public abstract class DownSampleImpl implements DownSampler {
 
-    /**
-     * threshold.
-     */
+    /** Number of data points to downsample to. */
     protected final int threshold;
 
-    /**
-     * DownSampleImpl.
-     */
+    /** @param threshold number of data points to downsample to */
     protected DownSampleImpl(int threshold) {
         this.threshold = threshold;
     }
 
-    /** ignored */
+    /** Populate a single element in the downsampled data set. */
     protected void setDataSetLine(
             DownSampler.DataSet sampled, int rank, long timestamp, double value) {
         sampled.timestamps[rank] = timestamp;
         sampled.values[rank] = value;
     }
 
-    /**
-     * downsize.
-     */
     @Override
     public DataSet downsize(long[] timestamps, double[] values) {
         if (timestamps == null || values == null) {
@@ -54,6 +47,5 @@ public abstract class DownSampleImpl implements DownSampler {
         }
     }
 
-    /** ignored */
     protected abstract DataSet downsizeImpl(DataSet sampled, long[] timestamps, double[] values);
 }

@@ -51,12 +51,9 @@ public class Util {
     /** Constant <code>MIN_DOUBLE=-Double.MAX_VALUE</code> */
     public static final double MIN_DOUBLE = -Double.MAX_VALUE;
 
-    /** ignored */
     static final String PATTERN = "0.0000000000E00";
-    /** ignored */
     static final String RRD4J_DIR = "rrd4j-demo";
 
-    /** ignored */
     static final ThreadLocal<NumberFormat> df =
             ThreadLocal.withInitial(
                     () -> {
@@ -70,7 +67,6 @@ public class Util {
     private static final Pattern SPRINTF_PATTERN =
             Pattern.compile("([^%]|^)%([^a-zA-Z%]*)l(f|g|e)");
 
-    /** ignored */
     private Util() {}
 
     /**
@@ -471,7 +467,6 @@ public class Util {
         }
     }
 
-    /** ignored */
     static int getMatchingDatasourceIndex(RrdDb rrd1, int dsIndex, RrdDb rrd2) throws IOException {
         String dsName = rrd1.getDatasource(dsIndex).getName();
         try {
@@ -481,7 +476,6 @@ public class Util {
         }
     }
 
-    /** ignored */
     static int getMatchingArchiveIndex(RrdDb rrd1, int arcIndex, RrdDb rrd2) throws IOException {
         Archive archive = rrd1.getArchive(arcIndex);
         ConsolFun consolFun = archive.getConsolFun();
@@ -493,12 +487,10 @@ public class Util {
         }
     }
 
-    /** ignored */
     static String getTmpFilename() throws IOException {
         return File.createTempFile("rrd4j_", ".tmp").getCanonicalPath();
     }
 
-    /** ignored */
     static final String ISO_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"; // ISO
 
     /**
@@ -569,13 +561,11 @@ public class Util {
                     public void fatalError(SAXParseException exception) throws SAXException {
                         throw exception;
                     }
-                    /** Warning */
                     public void warning(SAXParseException exception) throws SAXException {
                         throw exception;
                     }
                 };
 
-        /** ignored */
         private Xml() {}
 
         /**
@@ -758,7 +748,6 @@ public class Util {
         }
     }
 
-    /** ignored */
     private static long lastLap = System.currentTimeMillis();
 
     /**

@@ -11,7 +11,6 @@ import java.util.Date;
  * graph time range and pixel density.
  */
 class TimeAxis extends Axis {
-    /** ignored */
     private static final TimeAxisSetting[] tickSettings = {
         new TimeAxisSetting(0, TimeUnit.SECOND, 30, TimeUnit.MINUTE, 5, TimeUnit.MINUTE, 5, 0),
         new TimeAxisSetting(2, TimeUnit.MINUTE, 1, TimeUnit.MINUTE, 5, TimeUnit.MINUTE, 5, 0),
@@ -47,21 +46,13 @@ class TimeAxis extends Axis {
                 1,
                 365 * 24 * 3600),
     };
-    /** Im */
-
     private final ImageParameters im;
-    /** Worker */
     private final ImageWorker worker;
-    /** Gdef */
     private final RrdGraphDef gdef;
-    /** Mapper */
     private final Mapper mapper;
     /** Tick setting */
     private TimeAxisSetting tickSetting;
-    /** Sec per pix */
-
     private final double secPerPix;
-    /** Calendar */
     private final Calendar calendar;
 
     /**
@@ -80,7 +71,6 @@ class TimeAxis extends Axis {
         this.calendar.setFirstDayOfWeek(gdef.firstDayOfWeek);
     }
 
-    /** Create TimeAxis */
     TimeAxis(RrdGraphGenerator generator) {
         this.im = generator.im;
         this.worker = generator.worker;

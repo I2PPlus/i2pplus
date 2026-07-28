@@ -7,10 +7,8 @@ import java.awt.*;
  * a range of values or time.
  */
 class Span extends PlotElement {
-    /** Legend */
     final LegendText legend;
 
-    /** Create Span */
     Span(Paint color, LegendText legend) {
         super(color);
         this.legend = legend;

@@ -31,24 +31,17 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
      * Array containing the size in bytes for each RRD primitive type. Index corresponds to the type
      * constants (RRD_INT, RRD_LONG, RRD_DOUBLE, RRD_STRING).
      */
-    /** Primitive byte sizes by type index */
     static final int[] RRD_PRIM_SIZES = {4, 8, 8, 2 * STRING_LENGTH};
 
-    /** ignored */
     private final RrdBackend backend;
-    /** ignored */
     private final int byteCount;
-    /** ignored */
     private final long pointer;
-    /** ignored */
     private final boolean cachingAllowed;
 
-    /** Constructor */
     RrdPrimitive(RrdUpdater<U> updater, int type, boolean isConstant) {
         this(updater, type, 1, isConstant);
     }
 
-    /** Constructor */
     RrdPrimitive(RrdUpdater<U> updater, int type, int count, boolean isConstant) {
         this.backend = updater.getRrdBackend();
         this.byteCount = RRD_PRIM_SIZES[type] * count;
@@ -56,92 +49,102 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
         this.cachingAllowed = isConstant || backend.isCachingAllowed();
     }
 
-    /** @return the bytes */
+    /** @return raw byte array from backend storage */
     final byte[] readBytes() throws IOException {
         byte[] b = new byte[byteCount];
         backend.read(pointer, b);
         return b;
     }
 
-    /** @param b the bytes */
+    /** @param b byte array to write to backend storage */
     final void writeBytes(byte[] b) throws IOException {
         assert b.length == byteCount
                 : "Invalid number of bytes supplied to RrdPrimitive.write method";
         backend.write(pointer, b);
     }
 
-    /** @return the int */
+    /** @return int value from backend storage */
     final int readInt() throws IOException {
         return backend.readInt(pointer);
     }
 
-    /** @param value the value */
+    /** @param value int value to write to backend storage */
     final void writeInt(int value) throws IOException {
         backend.writeInt(pointer, value);
     }
 
-    /** @return the long */
+    /** @return long value from backend storage */
     final long readLong() throws IOException {
         return backend.readLong(pointer);
     }
 
-    /** @param value the value */
+    /** @param value long value to write to backend storage */
     final void writeLong(long value) throws IOException {
         backend.writeLong(pointer, value);
     }
 
-    /** @return the double */
+    /** @return double value from backend storage */
     final double readDouble() throws IOException {
         return backend.readDouble(pointer);
     }
 
-    /** @param index the index @return the double */
+    /** @param index position in the primitive array
+     *  @return double value at the given array index */
     final double readDouble(int index) throws IOException {
         long offset = pointer + index * RRD_PRIM_SIZES[RRD_DOUBLE];
         return backend.readDouble(offset);
     }
 
-    /** @param index the index @param count the count @return the doubles */
+    /** @param index starting position in the primitive array
+     *  @param count number of consecutive doubles to read
+     *  @return array of double values */
     final double[] readDouble(int index, int count) throws IOException {
         long offset = pointer + index * RRD_PRIM_SIZES[RRD_DOUBLE];
         return backend.readDouble(offset, count);
     }
 
-    /** @param value the value */
+    /** @param value double value to write to backend storage */
     final void writeDouble(double value) throws IOException {
         backend.writeDouble(pointer, value);
     }
 
-    /** @param index the index @param value the value */
+    /** @param index position in the primitive array
+     *  @param value double value to write */
     final void writeDouble(int index, double value) throws IOException {
         long offset = pointer + index * RRD_PRIM_SIZES[RRD_DOUBLE];
         backend.writeDouble(offset, value);
     }
 
-    /** @param index the index @param value the value @param count the count */
+    /** @param index starting position in the primitive array
+     *  @param value double value to write
+     *  @param count number of consecutive slots to fill */
     final void writeDouble(int index, double value, int count) throws IOException {
         long offset = pointer + index * RRD_PRIM_SIZES[RRD_DOUBLE];
         backend.writeDouble(offset, value, count);
     }
 
-    /** @param index the index @param values the values */
+    /** @param index starting position in the primitive array
+     *  @param values array of doubles to write */
     final void writeDouble(int index, double[] values) throws IOException {
         long offset = pointer + index * RRD_PRIM_SIZES[RRD_DOUBLE];
         backend.writeDouble(offset, values);
     }
 
-    /** @return the string */
+    /** @return string value from backend storage */
     final String readString() throws IOException {
         return backend.readString(pointer);
     }
 
-    /** @param value the value */
+    /** @param value string value to write to backend storage */
     final void writeString(String value) throws IOException {
         backend.writeString(pointer, value);
     }
 
     /**
-     * readEnum.
+     * Deserialize an enum value from backend storage.
+     * @param <E> enum type
+     * @param clazz enum class to deserialize
+     * @return the enum value, or null if the stored value is empty
      */
     protected final <E extends Enum<E>> E readEnum(Class<E> clazz) throws IOException {
         String value = backend.readString(pointer);
@@ -156,9 +159,7 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
         }
     }
 
-    /**
-     * writeEnum.
-     */
+    /** Serialize an enum value to backend storage. */
     protected final <E extends Enum<E>> void writeEnum(E value) throws IOException {
         writeString(value.name());
     }

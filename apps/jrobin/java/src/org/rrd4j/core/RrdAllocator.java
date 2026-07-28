@@ -6,15 +6,13 @@ package org.rrd4j.core;
  * @author Sasa Markovic
  */
 public class RrdAllocator {
-    /** ignored */
     private long allocationPointer = 0L;
 
-    /** Default constructor */
     RrdAllocator() {
         super();
     }
 
-    /** @return the allocated pointer */
+    /** @return the next available byte offset in the allocation space */
     long allocate(long byteCount) {
         long pointer = allocationPointer;
         allocationPointer += byteCount;

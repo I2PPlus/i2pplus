@@ -28,7 +28,6 @@ public class DataSource {
     // initialized during RRDatabase construction
     private PDPStatusBlock pdpStatusBlock;
 
-    /** Create data source from file */
     DataSource(RRDFile file) {
 
         offset = file.getFilePointer();

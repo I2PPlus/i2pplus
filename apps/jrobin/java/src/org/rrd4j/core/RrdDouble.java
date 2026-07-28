@@ -11,27 +11,16 @@ class RrdDouble<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
     private double cache;
     private boolean cached = false;
 
-    /**
-     * Creates a new RRD double primitive.
-     *
-     * @param updater the updater
-     * @param isConstant whether this is a constant value
-     */
     RrdDouble(RrdUpdater<U> updater, boolean isConstant) {
         super(updater, RrdDouble.RRD_DOUBLE, isConstant);
     }
 
-    /**
-     * Creates a new RRD double primitive.
-     *
-     * @param updater the updater
-     */
     RrdDouble(RrdUpdater<U> updater) {
         super(updater, RrdDouble.RRD_DOUBLE, false);
     }
 
     /**
-     * Sets the double value.
+     * Store a double value with optional caching.
      *
      * @param value the value to set
      * @throws java.io.IOException if an I/O error occurs
@@ -49,9 +38,9 @@ class RrdDouble<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
     }
 
     /**
-     * Gets the double value.
+     * Retrieve the stored double value.
      *
-     * @return the double value
+     * @return the stored double
      * @throws java.io.IOException if an I/O error occurs
      */
     double get() throws IOException {

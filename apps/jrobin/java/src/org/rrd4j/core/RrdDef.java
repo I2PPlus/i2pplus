@@ -52,18 +52,12 @@ public class RrdDef {
     /** Default RRD file format version. */
     public static final int DEFAULTVERSION = 2;
 
-    /** ignored */
     private URI uri;
-    /** ignored */
     private long startTime = Util.getTime() + DEFAULT_INITIAL_SHIFT;
-    /** ignored */
     private long step = DEFAULT_STEP;
-    /** ignored */
     private int version = DEFAULTVERSION;
 
-    /** ignored */
     private final List<DsDef> dsDefs = new ArrayList<>();
-    /** ignored */
     private final List<ArcDef> arcDefs = new ArrayList<>();
 
     /**

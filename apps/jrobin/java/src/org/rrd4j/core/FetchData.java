@@ -36,26 +36,17 @@ import org.rrd4j.data.Variable;
 @SuppressWarnings("deprecation")
 public class FetchData {
     // anything funny will do
-    /** ignored */
     private static final String RPN_SOURCE_NAME = "WHERE THE SPEECHLES UNITE IN A SILENT ACCORD";
 
-    /** ignored */
     private final FetchRequest request;
-    /** ignored */
     private String[] dsNames;
-    /** ignored */
     private long[] timestamps;
-    /** ignored */
     private double[][] values;
 
-    /** ignored */
     private final Archive matchingArchive;
-    /** ignored */
     private final long arcStep;
-    /** ignored */
     private final long arcEndTime;
 
-    /** ignored */
     FetchData(Archive matchingArchive, FetchRequest request) throws IOException {
         this.matchingArchive = matchingArchive;
         this.arcStep = matchingArchive.getArcStep();
@@ -474,7 +465,6 @@ public class FetchData {
         return arcEndTime;
     }
 
-    /** ignored */
     private DataProcessor createDataProcessor(String rpnExpression) {
         DataProcessor dataProcessor =
                 new DataProcessor(request.getFetchStart(), request.getFetchEnd());

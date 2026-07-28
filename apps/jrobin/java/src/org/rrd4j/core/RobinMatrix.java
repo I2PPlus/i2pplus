@@ -16,15 +16,10 @@ import java.util.Arrays;
  * @author Fabrice Bacchella
  */
 class RobinMatrix implements Robin {
-    /** ignored */
     private final Archive parentArc;
-    /** ignored */
     private final RrdInt<Archive> pointer;
-    /** ignored */
     private final RrdDoubleMatrix<Archive> values;
-    /** ignored */
     private final int rows;
-    /** ignored */
     private final int column;
 
     /** Create robin matrix */

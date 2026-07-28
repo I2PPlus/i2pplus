@@ -66,13 +66,10 @@ public class LinearInterpolator extends Plottable {
     /** Array of timestamps for the data series */
 
     private final long[] timestamps;
-    /** Values */
     private final double[] values;
 
     // used only if INTERPOLATE_BESTFIT is specified
-    /** B0 */
     double b0 = Double.NaN;
-    /** B1 */
     double b1 = Double.NaN;
 
     /**

@@ -22,10 +22,8 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class RrdSyncThreadPool {
     /** The reference to the shutdown hook, or null. */
-    /** ignored */
     private final AtomicReference<Thread> shutdownHook = new AtomicReference<>();
 
-    /** ignored */
     private final ScheduledExecutorService syncExecutor;
 
     /**
@@ -141,7 +139,6 @@ public class RrdSyncThreadPool {
         /** Pool name */
         final String poolName;
 
-        /** Constructor */
         DaemonThreadFactory(String poolName) {
             SecurityManager s = System.getSecurityManager();
             group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();

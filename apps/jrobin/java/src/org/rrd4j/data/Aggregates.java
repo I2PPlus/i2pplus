@@ -20,7 +20,6 @@ public class Aggregates {
     /** Average and total values */
     double average = Double.NaN, total = Double.NaN;
 
-    /** Default constructor. */
     public Aggregates() {}
 
     /**

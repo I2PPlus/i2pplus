@@ -40,26 +40,19 @@ import java.util.GregorianCalendar;
  * @author Sasa Markovic
  */
 public class TimeSpec {
-    /** ignored */
+    /** Time specification represents an absolute date/time. */
     static final int TYPE_ABSOLUTE = 0;
-    /** ignored */
+    /** Time specification is relative to the start of the time range. */
     static final int TYPE_START = 1;
-    /** ignored */
+    /** Time specification is relative to the end of the time range. */
     static final int TYPE_END = 2;
-    /** Type */
     int type = TYPE_ABSOLUTE;
-    /** Sec */
     int year, month, day, hour, min, sec;
-    /** Wday */
     int wday;
-    /** Dsec */
     int dyear, dmonth, dday, dhour, dmin, dsec;
-    /** Date string */
     final String dateString;
-    /** Context */
     TimeSpec context;
 
-    /** Create TimeSpec */
     TimeSpec(String dateString) {
         this.dateString = dateString;
     }

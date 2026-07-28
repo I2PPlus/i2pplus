@@ -10,7 +10,6 @@ class TDef extends Source {
     /** Ds name */
     private final String dsName;
 
-    /** Create TDef */
     TDef(String name, String dsName, FetchData fetchData) {
         super(name);
         this.dsName = dsName;

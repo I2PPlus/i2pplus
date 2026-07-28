@@ -9,36 +9,32 @@ public abstract class RrdByteArrayBackend extends ByteBufferBackend {
     private byte[] buffer;
 
     /**
-     * Constructor for RrdByteArrayBackend.
-     *
-     * @param path a {@link java.lang.String} object.
+     * @param path path to the RRD file
      */
     protected RrdByteArrayBackend(String path) {
         super(path);
     }
 
     /**
-     * setBuffer.
+     * @param buffer byte array to wrap as backend storage
      */
     protected void setBuffer(byte[] buffer) {
         this.buffer = buffer;
         setByteBuffer(ByteBuffer.wrap(buffer));
     }
 
-    /**
-     * getBuffer.
-     */
+    /** @return the underlying byte buffer */
     protected byte[] getBuffer() {
         return buffer;
     }
 
     /**
-     * read.
+     * Read bytes from the in-memory buffer at the given offset.
      *
-     * @param offset a long.
-     * @param bytes an array of byte.
-     * @throws java.io.IOException if any.
-     * @throws java.lang.IllegalArgumentException if offset is bigger that the possible length.
+     * @param offset starting position in the buffer
+     * @param bytes array to receive the data
+     * @throws java.io.IOException if the read fails
+     * @throws java.lang.IllegalArgumentException if offset exceeds buffer length
      */
     @Override
     protected synchronized void read(long offset, byte[] bytes) throws IOException {

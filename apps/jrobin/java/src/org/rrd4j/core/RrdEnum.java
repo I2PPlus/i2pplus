@@ -14,24 +14,20 @@ import java.io.IOException;
  */
 class RrdEnum<U extends RrdUpdater<U>, E extends Enum<E>> extends RrdPrimitive<U> {
 
-    /** ignored */
     private E cache;
-    /** ignored */
     private final Class<E> clazz;
 
-    /** Constructor */
     RrdEnum(RrdUpdater<U> updater, boolean isConstant, Class<E> clazz) {
         super(updater, RrdPrimitive.RRD_STRING, isConstant);
         this.clazz = clazz;
     }
 
-    /** Constructor */
     RrdEnum(RrdUpdater<U> updater, Class<E> clazz) {
         this(updater, false, clazz);
     }
 
     /**
-     * Sets the enum value.
+     * Store an enum value with optional caching.
      *
      * @param value the enum value to set
      * @throws java.io.IOException if an I/O error occurs
@@ -48,9 +44,9 @@ class RrdEnum<U extends RrdUpdater<U>, E extends Enum<E>> extends RrdPrimitive<U
     }
 
     /**
-     * Gets the enum value.
+     * Retrieve the stored enum value.
      *
-     * @return the enum value
+     * @return the stored enum
      * @throws java.io.IOException if an I/O error occurs
      */
     E get() throws IOException {

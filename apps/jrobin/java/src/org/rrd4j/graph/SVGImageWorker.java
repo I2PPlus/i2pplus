@@ -13,26 +13,23 @@ import org.jfree.svg.SVGGraphics2D;
  * @author zzz
  */
 public class SVGImageWorker extends ImageWorker {
-    /** G2d */
     private SVGGraphics2D g2d;
     /** Img width */
     private int imgWidth;
     /** Img height */
     private int imgHeight;
-    /** Glow */
     private boolean glow;
 
-    /**
-     * SVGImageWorker.
-     */
+    /** @param width image width in pixels
+     *  @param height image height in pixels */
     public SVGImageWorker(int width, int height) {
         this.glow = false;
         initGraphics(width, height);
     }
 
-    /**
-     * SVGImageWorker.
-     */
+    /** @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param glow whether to enable glow effect */
     public SVGImageWorker(int width, int height, boolean glow) {
         this.glow = glow;
         initGraphics(width, height);

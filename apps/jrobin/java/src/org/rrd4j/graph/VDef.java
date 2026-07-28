@@ -8,18 +8,14 @@ import org.rrd4j.data.Variable;
  * values using variables like MIN, MAX, AVERAGE, etc.
  */
 class VDef extends Source {
-    /** Def name */
     private final String defName;
-    /** Var */
     private final Variable var;
 
-    /** Constructor */
     VDef(String name, String defName, Variable var) {
         super(name);
         this.defName = defName;
         this.var = var;
     }
-    /** Request data */
     void requestData(DataProcessor dproc) {
         dproc.datasource(name, defName, var);
     }

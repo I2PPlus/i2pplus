@@ -42,13 +42,9 @@ class RRDFile implements Constants {
     };
 
     // Reflective unmap support (mirrors RrdNioBackend pattern)
-    /** ignored */
     private static final Method CLEANER_METHOD;
-    /** ignored */
     private static final Method CLEAN_METHOD;
-    /** ignored */
     private static final Method INVOKE_CLEANER;
-    /** ignored */
     private static final Object UNSAFE;
 
     static {
@@ -85,17 +81,12 @@ class RRDFile implements Constants {
         UNSAFE = us;
     }
 
-    /** ignored */
     private int alignment;
-    /** ignored */
     private int longSize = 4;
 
-    /** ignored */
     private final FileInputStream underlying;
-    /** ignored */
     private final MappedByteBuffer mappedByteBuffer;
 
-    /** ignored */
     private ByteOrder order;
 
     /** Open RRD file */
@@ -128,7 +119,6 @@ class RRDFile implements Constants {
         }
     }
 
-    /** ignored */
     private void initDataLayout(File file) throws IOException {
 
         if (file.exists()) { // Load the data formats from the file
@@ -174,7 +164,6 @@ class RRDFile implements Constants {
         mappedByteBuffer.rewind();
     }
 
-    /** ignored */
     private int indexOf(byte[] pattern, byte[] array) {
         return (new String(array, StandardCharsets.UTF_8))
                 .indexOf(new String(pattern, StandardCharsets.UTF_8));
@@ -249,7 +238,6 @@ class RRDFile implements Constants {
         return mappedByteBuffer.position();
     }
 
-    /** ignored */
     private void unmapFile() {
         if (mappedByteBuffer != null && mappedByteBuffer.isDirect()) {
             try {

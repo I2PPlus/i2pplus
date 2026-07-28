@@ -57,15 +57,9 @@ public class DataProcessor implements DataHolder {
     /** Pixel count */
 
     private int pixelCount = 0;
-    /** Pool used */
-
     private boolean poolUsed = DEFAULT_POOL_USAGE_POLICY;
-    /** Pool */
     private RrdDbPool pool = null;
-    /** T start */
-
     private long tStart;
-    /** T end */
     private long tEnd;
     /** Array of timestamps for the data series */
     private long[] timestamps;

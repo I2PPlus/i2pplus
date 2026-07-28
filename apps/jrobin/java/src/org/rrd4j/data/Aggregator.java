@@ -20,10 +20,8 @@ class Aggregator {
     private final double[] values;
 
     /**
-     * Constructor for aggregator.
-     *
      * @param timestamps array of timestamps
-     * @param values array of data values
+     * @param values array of data values, same length as timestamps
      */
     Aggregator(long[] timestamps, double[] values) {
         assert timestamps.length == values.length

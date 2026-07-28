@@ -27,7 +27,6 @@ public abstract class Variable {
         /** timestamp. */
         public final long timestamp;
 
-        /** Value */
         Value(long timestamp, double value) {
             this.value = value;
             this.timestamp = timestamp;
@@ -42,7 +41,6 @@ public abstract class Variable {
 
     /** Represents an invalid value with NaN (Not a Number) value. */
     public static final Value INVALIDVALUE = new Value(0, Double.NaN);
-    /** Val */
     private Value val = null;
 
     /**
@@ -127,10 +125,8 @@ public abstract class Variable {
 
     /** Find the first valid data point and it's timestamp */
     public static class FIRST extends Variable {
-        /** Creates a new instance */
         public FIRST() {}
 
-        /** Fill */
         @Override
         protected Value fill(long[] timestamps, double[] values, long start, long end) {
             for (int i = 0; i < values.length; i++) {
@@ -144,10 +140,8 @@ public abstract class Variable {
 
     /** Find the first last valid point and it's timestamp */
     public static class LAST extends Variable {
-        /** Creates a new instance */
         public LAST() {}
 
-        /** Fill */
         @Override
         protected Value fill(long[] timestamps, double[] values, long start, long end) {
             for (int i = values.length - 1; i >= 0; i--) {
@@ -161,10 +155,8 @@ public abstract class Variable {
 
     /** The smallest of the data points and it's time stamp (the first one) is stored. */
     public static class MIN extends Variable {
-        /** Creates a new instance */
         public MIN() {}
 
-        /** Fill */
         @Override
         protected Value fill(long[] timestamps, double[] values, long start, long end) {
             long timestamp = 0;
@@ -184,10 +176,8 @@ public abstract class Variable {
 
     /** The biggest of the data points and it's time stamp (the first one) is stored. */
     public static class MAX extends Variable {
-        /** Creates a new instance */
         public MAX() {}
 
-        /** Fill */
         @Override
         protected Value fill(long[] timestamps, double[] values, long start, long end) {
             long timestamp = 0;
@@ -207,10 +197,8 @@ public abstract class Variable {
 
     /** Calculate the sum of the data points. */
     public static class TOTAL extends Variable {
-        /** Creates a new instance */
         public TOTAL() {}
 
-        /** Fill */
         @Override
         protected Value fill(long[] timestamps, double[] values, long start, long end) {
             double value = Double.NaN;
@@ -224,10 +212,8 @@ public abstract class Variable {
 
     /** Calculate the average of the data points. */
     public static class AVERAGE extends Variable {
-        /** Creates a new instance */
         public AVERAGE() {}
 
-        /** Fill */
         @Override
         protected Value fill(long[] timestamps, double[] values, long start, long end) {
             double value = 0;
@@ -249,10 +235,8 @@ public abstract class Variable {
 
     /** Calculate the standard deviation for the data point. */
     public static class STDDEV extends Variable {
-        /** Creates a new instance */
         public STDDEV() {}
 
-        /** Fill */
         @Override
         protected Value fill(long[] timestamps, double[] values, long start, long end) {
             double value = Double.NaN;
@@ -319,7 +303,6 @@ public abstract class Variable {
 
     /** The sort used by rrdtool for percent, where NaN &lt; -INF &lt; finite values &lt; INF */
     static final class ComparPercentElemen implements Comparator<PercentElem>, Serializable {
-        /** Compare */
         @Override
         public int compare(PercentElem arg0, PercentElem arg1) {
             if (Double.isNaN(arg0.value) && Double.isNaN(arg1.value))
@@ -358,7 +341,6 @@ public abstract class Variable {
         public PERCENTILE(float percentile) {
             this(percentile, true);
         }
-        /** Fill */
         @Override
         protected Value fill(long[] timestamps, double[] values, long start, long end) {
             // valuesSet will be a set with NaN packet at the start
@@ -400,10 +382,8 @@ public abstract class Variable {
 
     /** Calculate the slop of the least squares line. */
     public static class LSLSLOPE extends Variable {
-        /** Creates a new instance */
         public LSLSLOPE() {}
 
-        /** Fill */
         @Override
         protected Value fill(long[] timestamps, double[] values, long start, long end) {
             int cnt = 0;
@@ -438,10 +418,8 @@ public abstract class Variable {
 
     /** Calculate the y-intercept of the least squares line. */
     public static class LSLINT extends Variable {
-        /** Creates a new instance */
         public LSLINT() {}
 
-        /** Fill */
         @Override
         protected Value fill(long[] timestamps, double[] values, long start, long end) {
             int cnt = 0;
@@ -478,10 +456,8 @@ public abstract class Variable {
 
     /** Calculate the correlation coefficient of the least squares line. */
     public static class LSLCORREL extends Variable {
-        /** Creates a new instance */
         public LSLCORREL() {}
 
-        /** Fill */
         @Override
         protected Value fill(long[] timestamps, double[] values, long start, long end) {
             int cnt = 0;

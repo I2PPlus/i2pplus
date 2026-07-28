@@ -11,23 +11,19 @@ import java.io.IOException;
  * @param <U> The type of RrdUpdater this primitive belongs to
  */
 class RrdLong<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
-    /** ignored */
     private long cache;
-    /** ignored */
     private boolean cached = false;
 
-    /** Constructor */
     RrdLong(RrdUpdater<U> updater, boolean isConstant) {
         super(updater, RrdPrimitive.RRD_LONG, isConstant);
     }
 
-    /** Constructor */
     RrdLong(RrdUpdater<U> updater) {
         this(updater, false);
     }
 
     /**
-     * Sets the long value.
+     * Store a long value with optional caching.
      *
      * @param value the long value to set
      * @throws java.io.IOException if an I/O error occurs
@@ -45,7 +41,7 @@ class RrdLong<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
     }
 
     /**
-     * Gets the long value.
+     * Retrieve the stored long value.
      *
      * @return the long value
      * @throws java.io.IOException if an I/O error occurs

@@ -11,21 +11,18 @@ import java.io.IOException;
  * @param <U> The type of RrdUpdater this primitive belongs to
  */
 class RrdString<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
-    /** ignored */
     private String cache;
 
-    /** Constructor */
     RrdString(RrdUpdater<U> updater, boolean isConstant) {
         super(updater, RrdPrimitive.RRD_STRING, isConstant);
     }
 
-    /** Constructor */
     RrdString(RrdUpdater<U> updater) {
         this(updater, false);
     }
 
     /**
-     * Sets the string value.
+     * Store a string value with optional caching.
      *
      * @param value the string value to set
      * @throws java.io.IOException if an I/O error occurs
@@ -42,9 +39,9 @@ class RrdString<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
     }
 
     /**
-     * Gets the string value.
+     * Retrieve the stored string value.
      *
-     * @return the string value
+     * @return the stored string
      * @throws java.io.IOException if an I/O error occurs
      */
     String get() throws IOException {

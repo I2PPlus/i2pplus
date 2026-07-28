@@ -16,13 +16,9 @@ import java.util.Arrays;
  * @author Sasa Markovic
  */
 class RobinArray implements Robin {
-    /** ignored */
     private final Archive parentArc;
-    /** ignored */
     private final RrdInt<Robin> pointer;
-    /** ignored */
     private final RrdDoubleArray<Robin> values;
-    /** ignored */
     private final int rows;
 
     /** Create robin array */

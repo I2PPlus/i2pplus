@@ -7,24 +7,20 @@ import java.awt.Paint;
  * timestamps on x-axis.
  */
 class VSpan extends Span {
-    /** Start */
     final long start;
-    /** End */
     final long end;
 
-    /** Constructor */
     VSpan(long start, long end, Paint color, LegendText legend) {
         super(color, legend);
         this.start = start;
         this.end = end;
         assert (start < end);
     }
-    /** Check range */
+    /** @return true if v is between min and max inclusive */
     private boolean checkRange(long v, long min, long max) {
         return v >= min && v <= max;
     }
 
-    /** Legend visibility */
     void setLegendVisibility(long min, long max, boolean forceLegend) {
         legend.enabled =
                 legend.enabled
