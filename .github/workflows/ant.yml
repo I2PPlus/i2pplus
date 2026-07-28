@@ -102,4 +102,4 @@ jobs:
           makeLatest: true
           omitBodyDuringUpdate: true
           skipIfReleaseExists: false
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_TOKEN }}
