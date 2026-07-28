@@ -903,16 +903,21 @@ class ClientPeerSelector extends TunnelPeerSelector {
         if (rv != null && rv.size() > 2) {
             int attempts = 0;
             int maxAttempts = 3;
-            while (attempts < maxAttempts && isDuplicateSequence(settings, rv.subList(0, rv.size() - 1))) {
-                List<Hash> regenerated = regeneratePeers(settings, new ArrayList<>(rv.subList(0, rv.size() - 1)));
-                if (regenerated == null || regenerated.equals(rv.subList(0, rv.size() - 1))) {
-                    break; // No change possible, accept the duplicate
-                }
-                // Preserve self at end and update peer list
-                Hash self = rv.get(rv.size() - 1);
+            while (attempts < maxAttempts) {
+                List<Hash> nonSelf = new ArrayList<>(rv);
+                nonSelf.remove(ctx.routerHash());
+                if (!isDuplicateSequence(settings, nonSelf)) {break;}
+                List<Hash> regenerated = regeneratePeers(settings, nonSelf);
+                if (regenerated == null || regenerated.equals(nonSelf)) {break;}
+                // Rebuild with self in correct position
                 rv.clear();
-                rv.addAll(regenerated);
-                rv.add(self);
+                if (isInbound) {
+                    rv.add(ctx.routerHash());
+                    rv.addAll(regenerated);
+                } else {
+                    rv.addAll(regenerated);
+                    rv.add(ctx.routerHash());
+                }
                 attempts++;
             }
         }

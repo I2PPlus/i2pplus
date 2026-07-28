@@ -912,9 +912,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         for (TunnelInfo existing : existingTunnels) {
             if (existing.getLength() != newPeers.size() + 1) {continue;}
 
+            // newPeers excludes self. Compare from gateway side for inbound
+            // (existing index 0) or after self for outbound (existing index 1).
             boolean match = true;
+            int offset = settings.isInbound() ? 0 : 1;
             for (int i = 0; i < newPeers.size(); i++) {
-                Hash existingPeer = existing.getPeer(newPeers.size() - i);
+                Hash existingPeer = existing.getPeer(i + offset);
                 if (existingPeer == null || !existingPeer.equals(newPeers.get(i))) {
                     match = false;
                     break;
