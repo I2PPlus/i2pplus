@@ -680,7 +680,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public void setWindowSize(int numMsgs) {
         if (numMsgs <= 0) {numMsgs = 1;}
         if (numMsgs < MIN_WINDOW_SIZE) {numMsgs = MIN_WINDOW_SIZE;}
-        if (numMsgs > _maxWindowSize) {numMsgs = _maxWindowSize;}
+        int maxWin = getMaxWindowSize();
+        if (numMsgs > maxWin) {numMsgs = maxWin;}
         _windowSize = numMsgs;
     }
 
