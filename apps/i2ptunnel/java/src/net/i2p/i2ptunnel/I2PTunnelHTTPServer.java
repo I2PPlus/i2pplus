@@ -70,6 +70,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     public static final int DEFAULT_POST_TOTAL_MAX = 30;
     /** Default post rate-limit window (seconds). */
     public static final int DEFAULT_POST_WINDOW = 3*60;
+    /** Default keepalive setting for HTTP persistent connections. */
     private static final boolean DEFAULT_KEEPALIVE = true;
     /** Config key for post ban time. */
     public static final String OPT_POST_BAN_TIME = "postBanTime";
@@ -111,7 +112,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /** Config key to add Referrer-Policy response header. */
     public static final String OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY = "addResponseHeaderReferrerPolicy";
 
-    /** what Host: should we seem to be to the webserver? */
+    /** The hostname to inject as the Host header, or null for passthrough. */
     private String _spoofHost;
 
     /** client request headers to remove */
@@ -220,7 +221,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final int SERVER_READ_TIMEOUT_MEDIUM = 5*60*1000;
     private static final int SERVER_READ_TIMEOUT_POST = 4*60*60*1000;
 
-    /** ignored */
+    /** Timestamp when the tunnel started, used for error-level escalation timing. */
     private long _startedOn = 0L;
     /** POST/PUT throttler for rate limiting */
     private ConnThrottler _postThrottler;
@@ -278,7 +279,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</body>\n" +
          "</html>";
 
-    // TODO https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
     /** 403 Forbidden error response */
     final static String ERR_FORBIDDEN =
 
@@ -304,11 +304,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Connection: close\r\n" +
          "\r\n" +
          "<!doctype html>\n" +
-         "<html>\n<head><title>414 Request URI Too Long</title><meta name=color-scheme content=\"light dark\"></head>\n" +
+         "<html>\n" +
+         "<head><title>414 Request URI Too Long</title><meta name=color-scheme content=\"light dark\"></head>\n" +
+         "<body>\n" +
          "<center><h1>414 Request URI too long</h1></center>\n" +
          "<hr>\n" +
-         "</body>" +
-         "\n</html>";
+         "</body>\n" +
+         "</html>";
 
     /** 431 Request header fields too large error response */
     private final static String ERR_HEADERS_TOO_LARGE =
@@ -421,7 +423,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     * startRunning.
+     * Start the tunnel and initialize timing and throttling.
      */
     @Override
     public void startRunning() {
@@ -1084,6 +1086,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @param command the request command string (first line)
      *  @param peerHash the peer's hash for throttling lookup
      *  @param socket the incoming I2P socket
+     *  @param peerB32 the peer's base32 address for logging
      *  @return true if the request was throttled and the socket closed
      */
     private boolean isPostThrottled(StringBuilder command, Hash peerHash, I2PSocket socket, String peerB32) {
@@ -1139,6 +1142,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  Apply port-specific spoofed host header.
      *  If no port-specific spoof is configured for the socket's port,
      *  falls back to the default _spoofHost.
+     *
+     *  @param socket the incoming I2P socket
+     *  @param headers the request header map to modify
+     *  @param opts the tunnel client options
      */
     private void applySpoofedHost(I2PSocket socket, Map<String, List<String>> headers, Properties opts) {
         String spoofHost;
@@ -1670,7 +1677,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     private static String getEntryOrNull(Map<String, List<String>> headers, String key) {
       List<String> entries = headers.get(key);
-      if(entries == null || entries.size() < 1) {return null;}
+      if (entries == null || entries.isEmpty()) {return null;}
       else {return entries.get(0);}
     }
 
@@ -1701,13 +1708,38 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /**
      *  Read headers from the input stream, using an array of skip headers.
      *
+     *  @param socket if non-null, read from socket; otherwise read from in
+     *  @param in if non-null and socket is null, read from this stream
+     *  @param command output buffer for the first request line
+     *  @param skipHeaders array of lower-case header names to filter out
+     *  @param ctx I2P app context for clock and timeout
+     *  @param initialTimeout timeout for the first line read
+     *  @return the parsed header multimap
+     *  @throws IOException on I/O errors
      *  @since public since 0.9.57 for SOCKS
-      */
+       */
     public static Map<String, List<String>> readHeaders(I2PSocket socket, InputStream in, StringBuilder command,
                                                         String[] skipHeaders, I2PAppContext ctx, long initialTimeout) throws IOException {
         return readHeadersInternal(socket, in, command, new HashSet<>(Arrays.asList(skipHeaders)), ctx, initialTimeout);
     }
 
+    /**
+     * Read and parse HTTP headers, filtering out specified headers and enforcing size limits.
+     *
+     * @param socket if non-null, read from socket; otherwise read from in
+     * @param in if non-null and socket is null, read from this stream
+     * @param command output buffer for the first request line
+     * @param skipHeaders set of lower-case header names to filter out
+     * @param ctx I2P app context for clock and timeout
+     * @param initialTimeout timeout for the first line read
+     * @return the parsed header multimap
+     * @throws SocketTimeoutException on timeout
+     * @throws EOFException on unexpected EOF
+     * @throws LineTooLongException if a line, total, or count exceeds limits
+     * @throws RequestTooLongException if the request line is too long
+     * @throws BadRequestException on malformed headers
+     * @throws IOException on other I/O errors
+     */
     private static Map<String, List<String>> readHeadersInternal(I2PSocket socket, InputStream in, StringBuilder command,
                                                         Set<String> skipHeaders, I2PAppContext ctx, long initialTimeout) throws IOException {
         HashMap<String, List<String>> headers = new HashMap<>();
@@ -1857,19 +1889,29 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @since 0.9.19
      */
     private static class LineTooLongException extends IOException {
-        /** @param s detail message */
+        /**
+         * @param s detail message
+         */
         public LineTooLongException(String s) {super(s);}
     }
 
-    /** Thrown when the request line exceeds MAX_LINE_LENGTH */
+    /**
+     * Thrown when the request line exceeds MAX_LINE_LENGTH.
+     */
     private static class RequestTooLongException extends IOException {
-        /** @param s detail message */
+        /**
+         * @param s detail message
+         */
         public RequestTooLongException(String s) {super(s);}
     }
 
-    /** Thrown when HTTP headers are malformed */
+    /**
+     * Thrown when HTTP headers are malformed.
+     */
     private static class BadRequestException extends IOException {
-        /** @param s detail message */
+        /**
+         * @param s detail message
+         */
         public BadRequestException(String s) {super(s);}
     }
 }
