@@ -869,7 +869,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         if (peerB32.length() != 60) {
             _log.warn("[HTTPServer] Invalid B32 (expected 60 characters, got " + peerB32.length() + ") -> Denying request to [" + hostname + "]" +
             "\n* Client: " + peerB32);
-            isValidRequest = false;
+            try {socket.close();}
+            catch (IOException ioe) { /* ignored */ }
+            return;
         }
 
         if (host != null) {
