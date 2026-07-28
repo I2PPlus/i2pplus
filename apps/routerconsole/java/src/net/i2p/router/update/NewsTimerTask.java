@@ -93,7 +93,7 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
         }
     }
 
-    /** blocking */
+    /** Fetch news updates from the configured feed. */
     private void fetchNews() {
         _mgr.checkAvailable(NEWS, (long) 60*1000);
     }

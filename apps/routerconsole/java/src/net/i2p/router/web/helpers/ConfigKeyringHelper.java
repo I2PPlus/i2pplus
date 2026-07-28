@@ -20,7 +20,6 @@ import net.i2p.router.web.HelperBase;
  * @since 0.9.33
  */
 public class ConfigKeyringHelper extends HelperBase {
-    /** Default constructor */
     public ConfigKeyringHelper() { /* nop */ }
 
     /**

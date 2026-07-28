@@ -295,7 +295,6 @@ public class HomeHelper extends HelperBase {
                 "\">";
     }
 
-    /** ignored */
     private String homeTable(String prop, String dflt, Collection<App> toAdd) {
         String config = _context.getProperty(prop, dflt);
         Collection<App> apps = buildApps(_context, config);
@@ -303,7 +302,6 @@ public class HomeHelper extends HelperBase {
         return renderApps(apps);
     }
 
-    /** ignored */
     private String configTable(String prop, String dflt) {
         String config = _context.getProperty(prop, dflt);
         Collection<App> apps;
@@ -312,7 +310,6 @@ public class HomeHelper extends HelperBase {
         return renderConfig(apps);
     }
 
-    /** ignored */
     private static final String SS = Character.toString(S);
 
     /**  @param ctx context
@@ -359,7 +356,6 @@ public class HomeHelper extends HelperBase {
         ctx.router().saveConfig(prop, buf.toString());
     }
 
-    /** ignored */
     private String renderApps(Collection<App> apps) {
         String website = _t("Web Server");
         StringBuilder buf = new StringBuilder(6*1024);
@@ -424,7 +420,6 @@ public class HomeHelper extends HelperBase {
             return buf.toString();
         }
 
-    /** ignored */
     private String renderConfig(Collection<App> apps) {
         StringBuilder buf = new StringBuilder(64*1024);
         buf.append("<table class=homelinkedit><tr><th class=center title=\"")

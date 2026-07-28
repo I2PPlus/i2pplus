@@ -26,7 +26,6 @@ public class
 JLabel
 	extends Component
 {
-	/** Default constructor. */
 	public
 	JLabel()
 	{

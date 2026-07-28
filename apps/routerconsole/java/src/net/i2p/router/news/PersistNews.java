@@ -38,7 +38,6 @@ import java.nio.charset.StandardCharsets;
  * @since 0.9.23
  */
 class PersistNews {
-    /** Default constructor */
     PersistNews() {}
 
     private static final String DIR = "docs/feed/news";

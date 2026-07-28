@@ -26,14 +26,13 @@ JFrame
 {
 	private Panel content_pane = new Panel();
 
-	/** Default constructor. */
 	public
 	JFrame()
 	{
 
 	}
 
-	/** Title. */
+	/** Window title. */
 	public
 	JFrame(
 		String	s )

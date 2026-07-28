@@ -75,17 +75,11 @@ class SidebarRenderer {
         SECTION_NAMES = Collections.unmodifiableMap(aMap);
     }
 
-    /** ignored */
     private final RouterContext _context;
-    /** ignored */
     private final SidebarHelper _helper;
-    /** ignored */
     private static final String PROP_ADVANCED = "routerconsole.advanced";
-    /** ignored */
     private static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
-    /** ignored */
     private String toggleId = "";
-    /** ignored */
     private String getToggle() {return "<input type=checkbox id=" + toggleId + " class=\"toggleSection script\" checked hidden>";}
 
     /**
@@ -1267,7 +1261,6 @@ class SidebarRenderer {
         }
     }
 
-    /** ignored */
     private static void appendValues(StringBuilder sb, double[] values) {
         for (int i = 0; i < values.length; i++) {
             if (i > 0) {sb.append(',');}

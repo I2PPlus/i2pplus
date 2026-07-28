@@ -17,7 +17,6 @@ import net.i2p.router.web.FormHandler;
   * and advanced router properties. Validates permissions and applies configuration changes.
   */
 public class ConfigAdvancedHandler extends FormHandler {
-    /** Default constructor */
     public ConfigAdvancedHandler() {}
     private boolean _shouldSave;
     private String _oldConfig;

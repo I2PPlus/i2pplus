@@ -1410,7 +1410,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         _context.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
     }
 
-    /** Linkify */
+    /** Convert a URL to an HTML clickable link. */
     static String linkify(String url) {
         String durl = url;
         if (durl.startsWith("http://")) {durl = durl.substring(7);}
@@ -1764,7 +1764,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
     }
 
-    /** debug */
+    /** Render update manager status HTML for debug page. */
     @Override
     public void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
@@ -1801,7 +1801,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         out.append(buf);
     }
 
-    /** debug */
+    /** Dump collection to HTML for debug page. */
     private static void toString(StringBuilder buf, Collection<?> col) {
         List<String> list = new ArrayList<>(col.size());
         for (Object o : col) {list.add(o.toString());}
@@ -1809,7 +1809,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         for (String e : list) {buf.append(e).append("<br>");}
     }
 
-    /** debug */
+    /** Dump map to HTML for debug page. */
     private static void toString(StringBuilder buf, Map<?, ?> map) {
         List<String> list = new ArrayList<>(map.size());
         for (Map.Entry<?, ?> entry : map.entrySet()) {

@@ -31,7 +31,7 @@ import net.i2p.util.VersionComparator;
 class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusListener {
     /** router context */
     protected final RouterContext _context;
-    /** logger */
+    /** Class logger. */
     protected final Log _log;
     /** update manager */
     protected final ConsoleUpdateManager _mgr;

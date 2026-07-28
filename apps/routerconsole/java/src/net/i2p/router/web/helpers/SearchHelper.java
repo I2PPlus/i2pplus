@@ -12,20 +12,14 @@ import net.i2p.router.web.HelperBase;
  */
 public class SearchHelper extends HelperBase {
 
-    /** ignored */
     private String _engine;
-    /** ignored */
     private String _query;
-    /** ignored */
     private Map<String, String> _engines = new TreeMap<>();
 
-    /** ignored */
     private static final char S = ',';
     /** Search engines config property */
     static final String PROP_ENGINES = "routerconsole.searchEngines";
-    /** ignored */
     private static final String PROP_DEFAULT = "routerconsole.searchEngine";
-    /** ignored */
     private static final String DEFAULT = "shinobi.i2p";
 
     /** Default search engine list */
@@ -68,10 +62,8 @@ public class SearchHelper extends HelperBase {
      */
     public void setQuery(String s) {_query = s;}
 
-    /** ignored */
     private static final String SS = Character.toString(S);
 
-    /** ignored */
     private void buildEngineMap() {
         String config = _context.getProperty(PROP_ENGINES, ENGINES_DEFAULT);
         String[] args = DataHelper.split(config, SS);

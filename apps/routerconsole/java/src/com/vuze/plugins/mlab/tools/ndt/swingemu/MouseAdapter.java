@@ -23,7 +23,6 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  *
  */
 public class MouseAdapter {
-    /** Constructor */
     public MouseAdapter() {}
 
 }

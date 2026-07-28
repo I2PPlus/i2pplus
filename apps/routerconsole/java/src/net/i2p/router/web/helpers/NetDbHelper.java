@@ -34,7 +34,6 @@ import net.i2p.util.SystemVersion;
  */
 public class NetDbHelper extends FormHandler {
 
-    /** Default constructor */
     public NetDbHelper() {}
 
     private String _routerPrefix;

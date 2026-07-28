@@ -26,7 +26,6 @@ public class
 JCheckBox
 	extends Component
 {
-	/** ignored */
 	boolean	selected;
 
 	/** @param str checkbox label */

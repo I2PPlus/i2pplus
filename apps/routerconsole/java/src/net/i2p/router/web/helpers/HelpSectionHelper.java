@@ -18,7 +18,6 @@ import net.i2p.router.web.PluginStarter;
  */
 public class HelpSectionHelper extends HelperBase {
 
-    /** Default constructor */
     public HelpSectionHelper() { super(); }
 
     /** help-X.jsp */

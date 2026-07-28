@@ -181,13 +181,13 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     // These variables are self-explanatory. Do not follow naming convention, but left that way
     /** Half duplex */
     int half_duplex, congestion, bad_cable, mismatch;
-    /** Mylink */
+    /** Measured link speed. */
     double mylink;
-    /** Loss */
+    /** Packet loss rate. */
     double loss, estimate, avgrtt, spd, waitsec, timesec, rttsec;
-    /** Order */
+    /** Packet ordering metric. */
     double order, rwintime, sendtime, cwndtime, rwin, swin, cwin;
-    /** Aspd */
+    /** Achievable speed. */
     double aspd;
     // end naming convention-not-followed variables
 
@@ -2476,7 +2476,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         }
     }
 
-    /** bigly */
     private ThreadGroup _thread_group;
 
     /**
@@ -2530,7 +2529,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         }
     }
 
-    /** bigly */
     public synchronized void runIt() {
         _thread_group = new
         ThreadGroup("NDT") {

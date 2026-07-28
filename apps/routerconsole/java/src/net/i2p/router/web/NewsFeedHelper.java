@@ -18,7 +18,6 @@ import net.i2p.util.SystemVersion;
  *  @since 0.9.23
  */
 public class NewsFeedHelper extends HelperBase {
-    /** Default constructor */
     public NewsFeedHelper() {super();}
 
     private int _start;

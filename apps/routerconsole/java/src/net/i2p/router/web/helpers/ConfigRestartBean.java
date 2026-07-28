@@ -22,7 +22,6 @@ import net.i2p.router.web.NewsHelper;
   *
   */
 public class ConfigRestartBean {
-    /** Default constructor */
     public ConfigRestartBean() {}
     /** all these are tagged below so no need to _x them here.
      *  order is: form value, form class, display text.

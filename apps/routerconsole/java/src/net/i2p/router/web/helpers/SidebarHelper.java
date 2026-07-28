@@ -313,7 +313,6 @@ public class SidebarHelper extends HelperBase {
     /** @return network reachability state and message */
     public NetworkStateMessage getReachability() {return reachability();}
 
-    /** ignored */
     private NetworkStateMessage reachability() {
         if (_context.commSystem().isDummy()) {return new NetworkStateMessage(NetworkState.VMCOMM, "VM Comm System");}
 /*

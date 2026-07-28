@@ -13,7 +13,7 @@ package edu.internet2.ndt;
  */
 public class Message {
 
-    /** Creates a new Message */
+    /** Creates a new Message with default type and body. */
     public Message() {}
 
     /**  y type */

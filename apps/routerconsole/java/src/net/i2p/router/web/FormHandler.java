@@ -30,7 +30,7 @@ import net.i2p.util.Log;
 public abstract class FormHandler {
     /** Router context */
     protected RouterContext _context;
-    /** Logger */
+    /** Class logger. */
     protected Log _log;
     /** Not for multipart/form-data, will be null */
     @SuppressWarnings("rawtypes")

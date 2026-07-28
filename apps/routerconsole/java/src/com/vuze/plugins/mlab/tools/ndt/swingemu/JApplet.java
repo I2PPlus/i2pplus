@@ -53,7 +53,7 @@ public class JApplet extends JFrame{
 	{
 	}
 
-	/** Start */
+	/** Start the applet. */
 	public void
 	start()
 	{

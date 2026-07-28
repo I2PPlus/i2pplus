@@ -10,13 +10,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class RingRenderer {
 
-    /** ignored */
     private static final int RING_SIZE = 90;
-    /** ignored */
     private static final int RING_STROKE = 8;
-    /** ignored */
     private static final int RING_RADIUS = (RING_SIZE - RING_STROKE) / 2;
-    /** ignored */
     private static final double RING_CIRCUM = 2 * Math.PI * RING_RADIUS;
 
     /** Mode: health (green/yellow/red), activity (blue/cyan) */
@@ -47,7 +43,6 @@ public class RingRenderer {
     /** Plot type: line chart clipped to the inner circle area */
     public static final String PLOT_LINE = "line";
 
-    /** ignored */
     private static final AtomicInteger _clipId = new AtomicInteger();
 
     /**
@@ -167,7 +162,6 @@ public class RingRenderer {
         return buf.toString();
     }
 
-    /** ignored */
     private static void appendLinePlotDefs(StringBuilder buf) {
         int id = _clipId.incrementAndGet();
         int cr = RING_RADIUS - 6;
@@ -177,7 +171,6 @@ public class RingRenderer {
            .append("</clipPath></defs>");
     }
 
-    /** ignored */
     private static void appendLinePlot(StringBuilder buf, double[] history, String cls) {
         int count = 0;
         double min = Double.MAX_VALUE, max = -Double.MAX_VALUE;
