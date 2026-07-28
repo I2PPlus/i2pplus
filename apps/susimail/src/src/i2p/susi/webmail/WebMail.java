@@ -2566,10 +2566,6 @@ public class WebMail extends HttpServlet {
      * Determine if a user-provided override.css file is active
      * @since 0.9.65+
      */
-    /**
-     * Return whether override CSS is active.
-     * @return whether override css active
-     */
     public boolean isOverrideCssActive() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         String theme = ctx.getProperty(RC_PROP_THEME, DEFAULT_THEME);

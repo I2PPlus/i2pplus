@@ -18,7 +18,7 @@ class Sorters {
      * @since 0.9.13
      */
     private abstract static class SorterBase implements Comparator<String>, Serializable {
-        /** ignored */
+        /** Mail cache to fetch mail objects from */
         private final MailCache mailCache;
 
         /**
@@ -43,7 +43,7 @@ class Sorters {
         /** Compare two mail objects */
         protected abstract int compare(Mail a, Mail b);
 
-        /** ignored */
+        /** Date-based fallback comparator */
         private int fallbackCompare(Mail a, Mail b) {return DateSorter.scompare(a, b);}
     }
 
@@ -52,7 +52,7 @@ class Sorters {
      */
     public static class SenderSorter extends SorterBase {
 
-        /** ignored */
+        /** Locale-aware string collator */
         private final Comparator<Object> collator = Collator.getInstance();
 
         /** @param mailCache the mail cache */
@@ -75,7 +75,7 @@ class Sorters {
      */
     public static class ToSorter extends SorterBase {
 
-        /** ignored */
+        /** Locale-aware string collator */
         private final Comparator<Object> collator = Collator.getInstance();
 
         /** @param mailCache the mail cache */
@@ -108,7 +108,7 @@ class Sorters {
         private static final String xre = Messages.getString("Re:").toLowerCase(Locale.US);
         /** ignored */
         private static final String xfwd = Messages.getString("Fwd:").toLowerCase(Locale.US);
-        /** ignored */
+        /** Locale-aware string collator */
         private final Comparator<Object> collator = Collator.getInstance();
 
         /** @param mailCache the mail cache */

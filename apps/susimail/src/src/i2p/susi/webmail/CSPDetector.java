@@ -7,7 +7,6 @@ import java.util.Locale;
  * @since 0.9.62
  */
 class CSPDetector {
-    /** Constructor */
     CSPDetector() {}
 
     /**

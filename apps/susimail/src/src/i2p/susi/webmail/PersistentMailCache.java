@@ -111,10 +111,6 @@ class PersistentMailCache {
      *
      * @return a new collection
      */
-    /**
-     * Return the mail list.
-     * @return the mails
-     */
     public Collection<Mail> getMails() {
         synchronized(_lock) {
             return locked_getMails();
@@ -196,10 +192,6 @@ class PersistentMailCache {
      * Fetch any needed data from disk.
      *
      * @return success
-     */
-    /**
-     * Return a mail by UIDL.
-     * @return the mail
      */
     public boolean getMail(Mail mail, boolean headerOnly) {
         synchronized(_lock) {return locked_getMail(mail);}
@@ -317,19 +309,11 @@ class PersistentMailCache {
      *
      * @since 0.9.35
      */
-    /**
-     * Return the full mail buffer.
-     * @return the full buffer
-     */
     public GzipFileBuffer getFullBuffer(String uidl) {return new GzipFileBuffer(getFile(uidl, FULL_SUFFIX));}
 
     /**
      * @return non-null only for Drafts
      * @since 0.9.35
-     */
-    /**
-     * Return the attachment directory.
-     * @return the attachment dir
      */
     public File getAttachmentDir() {return _attachmentDir;}
 

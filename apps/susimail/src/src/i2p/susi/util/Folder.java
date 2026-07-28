@@ -70,7 +70,7 @@ public class Folder<O extends Object> {
 	}
 
 	/**
-	 * Sets the current page number.
+	 * Set the current page number.
 	 * Starts at 1.
 	 *
 	 * @param currentPage the page number to set (1-based)
@@ -318,7 +318,7 @@ public class Folder<O extends Object> {
 	/**
 	 * Activates sorting by the chosen Comparator. The id must
 	 * match the one stored with {@link #addSorter(String, Comparator)}.
-	 * Sets the sorting direction of the folder.
+	 * Set the sorting direction of the folder.
 	 *
 	 * Warning: this does not do the actual sort, only addElements() and setElements() do.
 	 *

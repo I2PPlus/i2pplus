@@ -278,10 +278,6 @@ class MailPart {
      *
      *  @since 0.9.34
      */
-    /**
-     * Return the part ID.
-     * @return the i d
-     */
     public int getID() {return intID;}
 
 

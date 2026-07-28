@@ -15,17 +15,17 @@ import net.i2p.util.Log;
  */
 public class RegexOutputStream extends FilterOutputStream {
 
-    /** ignored */
+    /** Pattern string to match, lowercased */
     private final String match;
-    /** ignored */
+    /** Replacement string */
     private final String repl;
     /** parse in progress */
     private final StringBuilder buf;
-    /** ignored */
+    /** On-no-match fallback string */
     private final String noMatch;
-    /** ignored */
+    /** Logger */
     private final Log _log;
-    /** ignored */
+    /** Whether a match was found */
     private boolean found;
     /** index */
     int idx;
@@ -50,8 +50,8 @@ public class RegexOutputStream extends FilterOutputStream {
             _log.debug("New regex replace '" + match + "' with '" + repl + "'");
     }
 
-    /**
-     * write.
+        /**
+     * Write a single byte, with streaming pattern matching.
      */
     @Override
     public void write(int val) throws IOException {
@@ -126,8 +126,8 @@ public class RegexOutputStream extends FilterOutputStream {
         idx = 0;
     }
 
-    /**
-     * close.
+        /**
+     * Flush pending output and close.
      */
     @Override
     public void close() throws IOException {

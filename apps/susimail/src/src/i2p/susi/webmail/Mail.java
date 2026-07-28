@@ -34,15 +34,15 @@ import net.i2p.util.SystemVersion;
  */
 class Mail {
 
-    /** ignored */
+    /** Default unknown date string */
     private static final String unknown = "unknown";
-    /** ignored */
+    /** Regex for email address without angle brackets */
     private static final String P1 = "^[^@< \t]+@[A-Za-z0-9-]+\\.[A-Za-z0-9\\.-]+$";
-    /** ignored */
+    /** Regex for email address with angle brackets */
     private static final String P2 = "^<[^@< \t]+@[A-Za-z0-9-]+\\.[A-Za-z0-9\\.-]+>$";
-    /** ignored */
+    /** Compiled pattern for bare email addresses */
     private static final Pattern PATTERN1 = Pattern.compile(P1);
-    /** ignored */
+    /** Compiled pattern for bracketed email addresses */
     private static final Pattern PATTERN2 = Pattern.compile(P2);
     /**
      *  Also used by MailPart
@@ -50,87 +50,57 @@ class Mail {
      */
     static final byte[] HEADER_MATCH = DataHelper.getASCII("\r\n\r");
 
-    /** ignored */
+    /** Message size in bytes */
     private long size;
-    /**
-     * escaped.
-     */
+    /** As received, trimmed only, not HTML escaped */
     public String sender;       // as received, trimmed only, not HTML escaped
     /** Address only, enclosed by {@code <>}. */
     public String reply;        // address only, enclosed by <>
-    /**
-     * "".
-     */
+    /** As received, trimmed only, not HTML escaped. Default "". */
     public String subject;      // as received, trimmed only, not HTML escaped, non-null, default ""
-    /**
-     * dateString.
-     */
+    /** Raw date string from the Date header */
     public String dateString;
-    /**
-     * UTC.
-     */
+    /** Formatted date string in UTC */
     public String formattedDate;       // US Locale, UTC
-    /**
-     * zone.
-     */
+    /** Formatted date string in local time zone */
     public String localFormattedDate;  // Current Locale, local time zone
-    /**
-     * hellip.
-     */
+    /** Sender name or address truncated with &hellip; */
     public String shortSender;         // Either name or address but not both, HTML escaped, double-quotes removed, truncated with hellip
-    /**
-     * "".
-     */
+    /** Subject truncated with &hellip;. Default "". */
     public String shortSubject;        // HTML escaped, truncated with hellip, non-null, default ""
-    /**
-     * format.
-     */
+    /** Quoted date in local time zone, longer format */
     public String quotedDate;          // Current Locale, local time zone, longer format
-    /**
-     * 1999.
-     */
+    /** Long date-only format for mail list tooltips */
     public String dateOnly;            // Long date only format for mail list date tooltips e.g. Tuesday 30th December, 1999
-    /**
-     * uidl.
-     */
+    /** Unique ID assigned by the POP3 server */
     public final String uidl;
-    /**
-     * date.
-     */
+    /** The parsed message date */
     public Date date;
-    /** ignored */
+    /** Raw header buffer */
     private Buffer header;
-    /** ignored */
+    /** Raw body buffer */
     private Buffer body;
-    /** ignored */
+    /** Parsed mail part tree */
     private MailPart part;
     /** May be null. Non-empty if non-null. Not HTML escaped. */
     String[] to; // addresses only, enclosed by <>
     /** addresses only, enclosed by {@code <>} */
     String[] cc;
-    /** ignored */
+    /** Whether this message is unread */
     private boolean isNew;
-    /** ignored */
+    /** Whether this message is flagged as spam */
     private boolean isSpam;
-    /** ignored */
+    /** Whether headers have been parsed */
     private boolean headersParsed;
-    /**
-     * contentType.
-     */
+    /** Content-Type header value */
     public String contentType;
-    /**
-     * escaped.
-     */
+    /** Message-ID as received, not HTML escaped */
     public String messageID; // as received, trimmed only, probably enclosed with <>, not HTML escaped
-    /**
-     * error.
-     */
+    /** Error message from parsing, or empty */
     public String error;
-    /**
-     * markForDeletion.
-     */
+    /** Whether this message is flagged for deletion */
     public boolean markForDeletion;
-    /** ignored */
+    /** Logger */
     private final Log _log;
 
     /**
@@ -387,13 +357,13 @@ class Mail {
         if (buf.length() > 0) {out.println(buf);}
     }
 
-    /** ignored */
+    /** Formatter for short UTC date display */
     private static final DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
-    /** ignored */
+    /** Formatter for long date-only tooltips */
     private static final DateFormat dateOnlyFormatter = new SimpleDateFormat("EEEE dd MMMM, yyyy", Locale.US);
-    /** ignored */
+    /** Formatter for short local time zone display */
     private static final DateFormat localDateFormatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-    /** ignored */
+    /** Formatter for medium local time zone display */
     private static final DateFormat longLocalDateFormatter = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
     static {
         // the router sets the JVM time zone to UTC but saves the original here so we can get it

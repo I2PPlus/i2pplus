@@ -22,9 +22,6 @@ import java.nio.charset.StandardCharsets;
  *  https://jeffreystedfast.blogspot.com/2013/08/why-decoding-rfc2047-encoded-headers-is.html
  *
  */
-/**
- * Email header line encoding/decoding.
- */
 public class HeaderLine extends Encoding {
 	/**
 	 * NAME.

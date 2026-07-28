@@ -33,9 +33,6 @@ import java.nio.charset.StandardCharsets;
  * Includes base64 size calculations and 8BITMIME support for efficient I2P mail delivery.
  *
  */
-/**
- * SMTPClient.
- */
 public class SMTPClient {
     /**
      *  10.00 MB
