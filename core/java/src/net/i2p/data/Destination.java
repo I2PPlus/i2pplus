@@ -261,6 +261,7 @@ public class Destination extends KeysAndCert {
     }
 
     /**
+     * Whether h code is present.
      * @return whether h code is present
      */
     @Override

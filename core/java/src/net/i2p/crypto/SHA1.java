@@ -1,5 +1,5 @@
 package net.i2p.crypto;
-/* @(#)SHA1.java	1.11 2004-04-26
+/* @(#)SHA1.java    1.11 2004-04-26
  * This file was freely contributed to the LimeWire project and is covered
  * by its existing GPL licence, but it may be used individually as a public
  * domain implementation of a published algorithm (see below for references).
@@ -135,6 +135,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
     }
 
     /**
+     * Clone of this object.
      * @return a clone of this object
      */
     @Override
@@ -756,15 +757,15 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      *
      *  Results: 2011-05 eeepc Atom
      *  <pre>
-     *  JVM	strlen	GNU ms	JVM  ms
-     *	Oracle	387	  1406	 2357
-     *	Oracle	 40	   522	  475
-     *	Harmony	387	  5504	 3474
-     *	Harmony	 40	  4396	 1593
-     *	JamVM	387	 25578	21966
-     *	JamVM	 40	  5380	 4195
-     *	gij	387	 47225	 3501
-     *	gij	 40	  9861    919
+     *  JVM strlen  GNU ms  JVM  ms
+     *  Oracle  387   1406   2357
+     *  Oracle   40    522    475
+     *  Harmony 387   5504   3474
+     *  Harmony  40   4396   1593
+     *  JamVM   387  25578  21966
+     *  JamVM    40   5380   4195
+     *  gij 387  47225   3501
+     *  gij  40   9861    919
      *  </pre>
      *
      *  @since 0.8.7

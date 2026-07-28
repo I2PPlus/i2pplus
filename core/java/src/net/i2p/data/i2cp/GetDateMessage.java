@@ -41,6 +41,7 @@ public class GetDateMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Client's version String to be sent to the router; may be null.
      *  @param version the client's version String to be sent to the router; may be null
      *  @since 0.8.7
      */
@@ -124,6 +125,7 @@ public class GetDateMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Type.
      * @return the type
      */
     @Override

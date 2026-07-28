@@ -34,6 +34,7 @@ public class DestroySessionMessage extends I2CPMessageImpl {
     public DestroySessionMessage() { /* required for I2CP deserialization */ }
 
     /**
+     * Session id.
      * @return the session id
      */
     public SessionId getSessionId() {
@@ -87,6 +88,7 @@ public class DestroySessionMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Type.
      * @return the type
      */
     @Override

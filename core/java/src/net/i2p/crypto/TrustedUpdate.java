@@ -112,6 +112,7 @@ public class TrustedUpdate {
     }
 
     /**
+     * Keys.
      *  @since 0.9.8, public since 0.9.14.1
      * @return the keys
      */
@@ -323,6 +324,7 @@ public class TrustedUpdate {
     }
 
     /**
+     * True if there's no version mismatch.
      *  @return true if there's no version mismatch
      *  @since 0.8.8
      */

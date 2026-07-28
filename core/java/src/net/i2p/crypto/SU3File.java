@@ -139,6 +139,7 @@ public class SU3File {
         }
 
         /**
+         * Code.
          * @return the code
          */
         public int getCode() {
@@ -146,6 +147,7 @@ public class SU3File {
         }
 
         /**
+         * Name.
          * @return the name
          */
         public String getName() {
@@ -715,6 +717,7 @@ public class SU3File {
     }
 
     /**
+     * String listing available signature types.
      * @return string listing available signature types
      * @since 0.9.9
      */
@@ -752,6 +755,7 @@ public class SU3File {
     }
 
     /**
+     * Number or name.
      *  @param ctype number or name
      *  @return null if not found
      *  @since 0.9.9
@@ -879,6 +883,7 @@ public class SU3File {
     }
 
     /**
+     * Success.
      *  @return success
      *  @since 0.9.9
      */
@@ -935,6 +940,7 @@ public class SU3File {
     }
 
     /**
+     * Success.
      *  @return success
      *  @since 0.9.9
      */
@@ -1011,6 +1017,7 @@ public class SU3File {
     }
 
     /**
+     * If null, will use a name derived from signedFile.
      *  @param outFile if null, will use a name derived from signedFile
      *  @return success
      *  @since 0.9.9
@@ -1074,6 +1081,7 @@ public class SU3File {
     }
 
     /**
+     * May be null; non-null to save.
      *  @param crlFile may be null; non-null to save
      *  @return success
      *  @since 0.9.9

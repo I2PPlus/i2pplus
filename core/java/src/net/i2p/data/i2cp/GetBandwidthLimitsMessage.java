@@ -44,6 +44,7 @@ public class GetBandwidthLimitsMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Type.
      * @return the type
      */
     @Override

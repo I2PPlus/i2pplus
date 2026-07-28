@@ -13,6 +13,7 @@ import java.security.spec.RSAKeyGenParameterSpec;
 final class RSAConstants {
 
     /**
+     * Parameter spec.
      *  @return the parameter spec
      */
     private static RSAKeyGenParameterSpec genSpec(int size, BigInteger exp) {

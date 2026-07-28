@@ -33,6 +33,7 @@ public class SessionId {
     }
 
     /**
+     * 0-65535.
      *  @param id 0-65535
      *  @since 0.9.11
      */
@@ -44,6 +45,7 @@ public class SessionId {
     }
 
     /**
+     * Session id.
      * @return the session id
      */
     public int getSessionId() {

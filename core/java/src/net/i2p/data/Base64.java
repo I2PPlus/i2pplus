@@ -370,6 +370,7 @@ public class Base64 {
 ******/
 
     /**
+     * Alphabet.
      *  @param alpha alphabet
      */
     private static void encode3to4(byte[] source, int srcOffset, int numSigBytes, StringBuilder buf, byte[] alpha) {

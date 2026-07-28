@@ -116,6 +116,7 @@ public class Payload extends DataStructureImpl {
     }
 
     /**
+     * Encrypted data, or null.
      * @return the encrypted data, or null
      */
     public byte[] getEncryptedData() {
@@ -134,6 +135,7 @@ public class Payload extends DataStructureImpl {
     }
 
     /**
+     * Size in bytes.
      * @return the size in bytes
      */
     public int getSize() {

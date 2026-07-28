@@ -60,6 +60,7 @@ public class SingleFileNamingService extends NamingService {
     private volatile boolean _isClosed;
 
     /**
+     * Application context.
      * @param context the application context
      * @param filename the hosts file name
      */

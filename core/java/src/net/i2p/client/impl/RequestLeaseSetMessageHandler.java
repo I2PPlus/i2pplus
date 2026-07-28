@@ -530,6 +530,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     }
 
     /**
+     * Non-null [type:]b64[,[type:]b64]...
      *  @param spkl non-null [type:]b64[,[type:]b64]...
      *  @param privKeys out parameter
      *  @param allowedTypes list of allowed encryption types

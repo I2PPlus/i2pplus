@@ -205,6 +205,7 @@ public abstract class SimpleDataStructure implements DataStructure {
     }
 
     /**
+     * Same thing as getData().
      * @return same thing as getData()
      */
     @Override

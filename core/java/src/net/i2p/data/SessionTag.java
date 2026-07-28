@@ -47,6 +47,7 @@ public class SessionTag {
     }
 
     /**
+     * As of 0.9.44, non-null.
      *  @param val as of 0.9.44, non-null
      */
     public SessionTag(byte[] val) {
@@ -58,6 +59,7 @@ public class SessionTag {
     }
 
     /**
+     * Data.
      * @return the data
      */
     public byte[] getData() {
@@ -65,6 +67,7 @@ public class SessionTag {
     }
 
     /**
+     * 32 (tag length in bytes).
      * @return 32 (tag length in bytes)
      */
     public int length() {

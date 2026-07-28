@@ -22,6 +22,7 @@ public class KeyPair {
     private final PrivateKey priv;
 
     /**
+     * Non-null, same EncType as privateKey.
      * @param publicKey non-null, same EncType as privateKey
      * @param privateKey non-null, same EncType as publicKey
      */

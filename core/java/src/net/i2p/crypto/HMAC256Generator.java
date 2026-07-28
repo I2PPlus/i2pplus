@@ -168,6 +168,7 @@ public final class HMAC256Generator extends HMACGenerator {
         private final byte[] _data;
 
         /**
+         * Key data.
          * @param data the key data
          */
         public HMACKey(byte[] data) {

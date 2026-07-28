@@ -239,6 +239,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Session id.
      * @return the session id
      */
     public long getSessionId() {
@@ -265,6 +266,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Status.
      * @return the status
      */
     public int getStatus() {
@@ -316,6 +318,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Size.
      * @return the size
      */
     public long getSize() {
@@ -345,6 +348,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Status string.
      * @return the status string
      */
     public static final String getStatusString(int status) {
@@ -413,6 +417,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Type.
      * @return the type
      */
     @Override

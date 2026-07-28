@@ -90,6 +90,7 @@ public class SessionKey extends SimpleDataStructure {
     }
 
     /**
+     * Key data.
      *  @param data the key data
      */
     public SessionKey(byte[] data) {

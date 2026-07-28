@@ -162,6 +162,7 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Type.
      * @return the type
      */
     @Override

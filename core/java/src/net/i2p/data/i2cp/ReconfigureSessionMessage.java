@@ -38,6 +38,7 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
     public ReconfigureSessionMessage() { /* required for I2CP deserialization */ }
 
     /**
+     * Session id.
      * @return the session id
      */
     public SessionId getSessionId() {
@@ -62,6 +63,7 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Session config.
      * @return the session config
      */
     public SessionConfig getSessionConfig() {
@@ -107,6 +109,7 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Type.
      * @return the type
      */
     @Override

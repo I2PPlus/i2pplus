@@ -190,6 +190,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
+     * Encryption public key.
      *  @return the encryption public key
      */
     public PublicKey getEncryptionKey() {
@@ -636,6 +637,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
+     * True if it was encrypted, and we decrypted it successfully.
      * @return true if it was encrypted, and we decrypted it successfully.
      * Decrypts on first call.
      */

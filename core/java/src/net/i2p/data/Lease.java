@@ -166,6 +166,7 @@ public class Lease extends DataStructureImpl {
     }
 
     /**
+     * True if the lease has expired.
      * @return true if the lease has expired
      */
     public boolean isExpired() {
@@ -173,6 +174,7 @@ public class Lease extends DataStructureImpl {
     }
 
     /**
+     * Fudge factor in milliseconds for clock skew.
      * @param fudgeFactor fudge factor in milliseconds for clock skew
      * @return true if the lease has expired
      */

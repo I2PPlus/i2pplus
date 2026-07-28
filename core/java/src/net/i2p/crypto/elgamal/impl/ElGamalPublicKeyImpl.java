@@ -95,6 +95,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
+     * Algorithm.
      * @return the algorithm
      */
     @Override
@@ -103,6 +104,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
+     * Format.
      * @return the format
      */
     @Override
@@ -111,6 +113,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
+     * Encoded.
      * @return the encoded
      */
     @Override
@@ -184,6 +187,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
+     * Parameters.
      * @return the parameters
      */
     @Override
@@ -192,6 +196,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
+     * Params.
      * @return the params
      */
     @Override
@@ -200,6 +205,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
+     * Y.
      * @return the y
      */
     @Override
@@ -208,6 +214,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
+     * True if the keys are equal.
      * @return true if the keys are equal
      */
     @Override
@@ -219,6 +226,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
+     * Whether h code is present.
      * @return whether h code is present
      */
     @Override

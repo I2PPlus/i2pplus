@@ -147,6 +147,7 @@ public class HostTxtEntry {
     }
 
     /**
+     * Part after the #!.
      * @param line part after the #!
      * @return the parsed properties
      * @throws IllegalArgumentException on dup key and other errors

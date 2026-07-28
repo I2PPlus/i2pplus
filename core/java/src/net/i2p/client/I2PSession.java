@@ -676,6 +676,7 @@ public interface I2PSession {
         private final TunnelId _outboundTunnelId;
 
         /**
+         * Inbound tunnel ID.
          * @param inbound inbound tunnel ID
          * @param outbound outbound tunnel ID
          */

@@ -125,6 +125,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Session id.
      * @return the session id
      */
     public SessionId getSessionId() {
@@ -169,6 +170,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Non-null only if result code is zero and options are present.
      *  @return non-null only if result code is zero and options are present
      *  @since 0.9.69 see proposal 167
      */
@@ -232,6 +234,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Type.
      * @return the type
      */
     @Override

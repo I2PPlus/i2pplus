@@ -19,6 +19,7 @@ import net.i2p.I2PException;
 public class DataFormatException extends I2PException {
 
     /**
+     * Detail message.
      * @param msg the detail message
      * @param t the cause
      */
@@ -27,6 +28,7 @@ public class DataFormatException extends I2PException {
     }
 
     /**
+     * Detail message.
      * @param msg the detail message
      */
     public DataFormatException(String msg) {

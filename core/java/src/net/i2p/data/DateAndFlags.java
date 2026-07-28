@@ -39,6 +39,7 @@ public class DateAndFlags extends DataStructureImpl {
     public DateAndFlags() {}
 
     /**
+     * Date in milliseconds since epoch.
      *  @param date the date in milliseconds since epoch
      *  @param flags 0 - 65535
      */
@@ -49,6 +50,7 @@ public class DateAndFlags extends DataStructureImpl {
     }
 
     /**
+     * Date.
      *  @param date the date
      *  @param flags 0 - 65535
      */
@@ -59,6 +61,7 @@ public class DateAndFlags extends DataStructureImpl {
     }
 
     /**
+     * 0 - 65535.
      *  @return 0 - 65535
      */
     public int getFlags() {
@@ -85,6 +88,7 @@ public class DateAndFlags extends DataStructureImpl {
     }
 
     /**
+     * Date in milliseconds since epoch.
      *  @return the date in milliseconds since epoch
      */
     public long getTime() {

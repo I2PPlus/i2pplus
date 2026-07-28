@@ -24,6 +24,7 @@ public class RateStat {
     protected final Rate[] _rates;
 
     /**
+     * Unique name of the statistic.
      * @param name unique name of the statistic
      * @param description simple description of the statistic
      * @param group used to group statistics together
@@ -174,6 +175,7 @@ public void addData(long value) {
     }
 
     /**
+     * Object to compare.
      * @param obj the object to compare
      * @return true if equal by name, group, description, and rates
      */

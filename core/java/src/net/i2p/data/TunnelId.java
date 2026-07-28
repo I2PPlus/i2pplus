@@ -83,6 +83,7 @@ public class TunnelId {
     }
 
     /**
+     * 1 to 0xffffffff.
      *  @param id 1 to 0xffffffff
      *  @throws IllegalArgumentException if less than or equal to zero or greater than max value
      */
@@ -91,6 +92,7 @@ public class TunnelId {
     }
 
     /**
+     * Tunnel ID.
      *  @return the tunnel ID
      */
     public long getTunnelId() {

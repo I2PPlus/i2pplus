@@ -50,6 +50,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
     public HostLookupMessage() {}
 
     /**
+     * Session id.
      *  @param id the session id
      *  @param h the hash to look up
      *  @param reqID 0 to 2**32 - 1
@@ -67,6 +68,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Session id.
      *  @param id the session id
      *  @param host the hostname to look up
      *  @param reqID 0 to 2**32 - 1
@@ -84,6 +86,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Session id.
      * @return the session id
      */
     public SessionId getSessionId() {
@@ -203,6 +206,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Type.
      * @return the type
      */
     @Override

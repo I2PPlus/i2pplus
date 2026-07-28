@@ -60,6 +60,7 @@ public class SHA1Hash extends SimpleDataStructure {
     }
 
     /**
+     * Hash length in bytes.
      * @return the hash length in bytes
      */
     @Override
@@ -67,7 +68,10 @@ public class SHA1Hash extends SimpleDataStructure {
         return HASH_LENGTH;
     }
 
-    /** @throws IllegalArgumentException if data is not 20 bytes (null is ok) */
+    /**
+     * IllegalArgumentException if data is not 20 bytes (null is ok).
+     * @throws IllegalArgumentException if data is not 20 bytes (null is ok)
+     */
     @Override
     public void setData(byte[] data) {
         super.setData(data);

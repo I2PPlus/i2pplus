@@ -666,6 +666,7 @@ public final class DSAEngine {
     }
 
     /**
+     * Algorithm name string.
      *  @return the algorithm name string
      *  @since 0.9.9
      */
@@ -680,6 +681,7 @@ public final class DSAEngine {
     }
 
     /**
+     * Algorithm name string.
      *  @return the algorithm name string
      *  @since 0.9.9
      */

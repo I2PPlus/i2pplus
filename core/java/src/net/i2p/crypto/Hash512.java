@@ -36,12 +36,16 @@ public class Hash512 extends SimpleDataStructure {
         super();
     }
 
-    /** @throws IllegalArgumentException if data is not correct length (null is ok) */
+    /**
+     * IllegalArgumentException if data is not correct length (null is ok).
+     * @throws IllegalArgumentException if data is not correct length (null is ok)
+     */
     public Hash512(byte[] data) {
         super(data);
     }
 
     /**
+     * Hash length in bytes.
      * @return the hash length in bytes
      */
     @Override

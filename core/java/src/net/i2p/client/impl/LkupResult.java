@@ -37,6 +37,7 @@ public class LkupResult implements LookupResult {
     }
 
     /**
+     * Zero for success, nonzero for failure.
      * @return zero for success, nonzero for failure
      */
     @Override
@@ -45,6 +46,7 @@ public class LkupResult implements LookupResult {
     }
 
     /**
+     * Destination on success, null on failure.
      * @return Destination on success, null on failure
      */
     @Override

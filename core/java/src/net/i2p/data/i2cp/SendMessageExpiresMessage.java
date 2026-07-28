@@ -173,6 +173,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
+     * Type.
      * @return the type
      */
     @Override

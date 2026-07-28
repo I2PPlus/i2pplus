@@ -68,6 +68,7 @@ public class SessionStatusMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Session id.
      * @return the session id
      */
     public SessionId getSessionId() {
@@ -92,6 +93,7 @@ public class SessionStatusMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Status.
      * @return the status
      */
     public int getStatus() {
@@ -141,6 +143,7 @@ public class SessionStatusMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Type.
      * @return the type
      */
     @Override

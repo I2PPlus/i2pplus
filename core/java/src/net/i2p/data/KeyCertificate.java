@@ -133,6 +133,7 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
+     * 4 bytes minimum if non-null.
      *  @param payload 4 bytes minimum if non-null
      *  @throws DataFormatException if payload is too short
      */

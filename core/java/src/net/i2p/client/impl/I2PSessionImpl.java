@@ -426,6 +426,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     }
 
     /**
+     * List of subsessions, non-null, does not include the primary session.
      *  @return a list of subsessions, non-null, does not include the primary session
      *  @since 0.9.21
      */
@@ -665,6 +666,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     public boolean isOffline() {return _offlineSignature != null;}
 
     /**
+     * Java time (ms) or 0 if not initialized or does not have offline keys.
      *  @return Java time (ms) or 0 if not initialized or does not have offline keys
      *  @since 0.9.38
      */
@@ -672,6 +674,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     public long getOfflineExpiration() {return _offlineExpiration;}
 
     /**
+     * Null on error or if not initialized or does not have offline keys.
      *  @return null on error or if not initialized or does not have offline keys
      *  @since 0.9.38
      */
@@ -679,6 +682,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     public Signature getOfflineSignature() {return _offlineSignature;}
 
     /**
+     * Null on error or if not initialized or does not have offline keys.
      *  @return null on error or if not initialized or does not have offline keys
      *  @since 0.9.38
      */

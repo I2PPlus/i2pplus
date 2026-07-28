@@ -97,6 +97,7 @@ public class MetaLease extends Lease {
     }
 
     /**
+     * UnsupportedOperationException always.
      * @throws UnsupportedOperationException always
      * @return the tunnel id
      */
@@ -106,6 +107,7 @@ public class MetaLease extends Lease {
     }
 
     /**
+     * UnsupportedOperationException always.
      * @throws UnsupportedOperationException always
      */
     @Override

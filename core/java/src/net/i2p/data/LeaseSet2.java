@@ -118,6 +118,7 @@ public class LeaseSet2 extends LeaseSet {
     public long getExpires() {return _expires;}
 
     /**
+     * True if unpublished.
      *  @return true if unpublished
      */
     public boolean isUnpublished() {return (_flags & FLAG_UNPUBLISHED) != 0;}
@@ -620,6 +621,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
+     * Must be a Lease2.
      * @param lease must be a Lease2
      * @throws IllegalArgumentException if not a Lease2
      */

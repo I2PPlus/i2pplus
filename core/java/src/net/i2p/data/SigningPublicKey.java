@@ -128,6 +128,7 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
+     * If null, type is unknown.
      *  @param type if null, type is unknown
      *  @since 0.9.8
      */
@@ -142,6 +143,7 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
+     * If null, type is unknown.
      *  @param type if null, type is unknown
      *  @param data the key data
      *  @since 0.9.8
@@ -167,6 +169,7 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
+     * If type unknown, the length of the data, or 128 if no data.
      *  @return if type unknown, the length of the data, or 128 if no data
      */
     @Override

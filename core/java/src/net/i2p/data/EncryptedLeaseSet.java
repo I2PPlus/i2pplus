@@ -123,6 +123,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
+     * Leaseset or null if not decrypted.
      *  @return leaseset or null if not decrypted.
      *  @since 0.9.39
      */
@@ -167,6 +168,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
+     * 0-16, or 0 if not decrypted.
      *  @return 0-16, or 0 if not decrypted.
      */
     @Override
@@ -175,6 +177,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
+     * Null if not decrypted.
      *  @return null if not decrypted.
      */
     @Override
@@ -183,6 +186,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
+     * Null if not decrypted.
      *  @return null if not decrypted.
      *  @since 0.9.39
      */

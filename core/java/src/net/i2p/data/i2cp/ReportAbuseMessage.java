@@ -37,6 +37,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     public ReportAbuseMessage() { /* required for I2CP deserialization */ }
 
     /**
+     * Session id.
      * @return the session id
      */
     public SessionId getSessionId() {
@@ -61,6 +62,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Severity.
      * @return the severity
      */
     public AbuseSeverity getSeverity() {
@@ -75,6 +77,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Reason.
      * @return the reason
      */
     public AbuseReason getReason() {
@@ -89,6 +92,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Message id.
      * @return the message id
      */
     public MessageId getMessageId() {
@@ -147,6 +151,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Type.
      * @return the type
      */
     @Override

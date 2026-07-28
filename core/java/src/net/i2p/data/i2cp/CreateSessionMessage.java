@@ -43,6 +43,7 @@ public class CreateSessionMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Session config.
      * @return the session config
      */
     public SessionConfig getSessionConfig() {
@@ -86,6 +87,7 @@ public class CreateSessionMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Type.
      * @return the type
      */
     @Override

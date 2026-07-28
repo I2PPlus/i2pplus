@@ -572,6 +572,7 @@ public final class KeyStoreUtil {
     }
 
     /**
+     * 48 char b32 string (30 bytes of entropy).
      *  @return 48 char b32 string (30 bytes of entropy)
      */
     public static String randomString() {

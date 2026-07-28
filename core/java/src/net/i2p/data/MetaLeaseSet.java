@@ -56,6 +56,7 @@ public class MetaLeaseSet extends LeaseSet2 {
     }
 
     /**
+     * UnsupportedOperationException always.
      *  @throws UnsupportedOperationException always
      */
     @Override
@@ -64,6 +65,7 @@ public class MetaLeaseSet extends LeaseSet2 {
     }
 
     /**
+     * UnsupportedOperationException always.
      *  @throws UnsupportedOperationException always
      */
     @Override
@@ -144,6 +146,7 @@ public class MetaLeaseSet extends LeaseSet2 {
     }
 
     /**
+     * Must be a MetaLease.
      * @param lease must be a MetaLease
      * @throws IllegalArgumentException if not a MetaLease
      */

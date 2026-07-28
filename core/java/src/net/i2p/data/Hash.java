@@ -137,7 +137,10 @@ public class Hash extends SimpleDataStructure {
         super();
     }
 
-    /** @throws IllegalArgumentException if data is not 32 bytes (null is ok) */
+    /**
+     * IllegalArgumentException if data is not 32 bytes (null is ok).
+     * @throws IllegalArgumentException if data is not 32 bytes (null is ok)
+     */
     public Hash(byte[] data) {
         super();
         setData(data);
@@ -149,7 +152,10 @@ public class Hash extends SimpleDataStructure {
         return HASH_LENGTH;
     }
 
-    /** @throws IllegalArgumentException if data is not 32 bytes (null is ok) */
+    /**
+     * IllegalArgumentException if data is not 32 bytes (null is ok).
+     * @throws IllegalArgumentException if data is not 32 bytes (null is ok)
+     */
     @Override
     public void setData(byte[] data) {
         super.setData(data);

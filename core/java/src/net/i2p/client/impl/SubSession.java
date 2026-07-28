@@ -36,6 +36,7 @@ class SubSession extends I2PSessionMuxedImpl {
     private final I2PSessionMuxedImpl _primary;
 
     /**
+     * Must be a I2PSessionMuxedImpl.
      *  @param primary must be a I2PSessionMuxedImpl
      *  @param destKeyStream location from which to read keys
      *  @param options session options
@@ -81,6 +82,7 @@ class SubSession extends I2PSessionMuxedImpl {
     public void updateOptions(Properties options) { /* nop */ }
 
     /**
+     * Primary options.
      *  @since 0.9.33
      * @return the primary options
      */

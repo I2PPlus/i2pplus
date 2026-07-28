@@ -23,6 +23,7 @@ public final class CryptixAESKeyCache {
     private static final int BC = BLOCKSIZE / 4;
 
     /**
+     * New key cache entry.
      * @return a new key cache entry
      */
     public static final KeyCacheEntry createNew() {

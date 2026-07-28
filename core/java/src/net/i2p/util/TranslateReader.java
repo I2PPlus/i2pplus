@@ -70,6 +70,7 @@ public class TranslateReader extends FilterReader {
     private static final int MAX_ARGS = 9;
 
     /**
+     * May be null for tagging only.
      *  @param bundle may be null for tagging only
      *  @param in UTF-8
      */
@@ -78,6 +79,7 @@ public class TranslateReader extends FilterReader {
     }
 
     /**
+     * May be null for tagging only.
      *  @param bundle may be null for tagging only
      *  @since 0.9.34
      */

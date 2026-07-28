@@ -35,6 +35,7 @@ public class DisconnectMessage extends I2CPMessageImpl {
     public DisconnectMessage() { /* required for I2CP deserialization */ }
 
     /**
+     * Reason.
      * @return the reason
      */
     public String getReason() {
@@ -73,6 +74,7 @@ public class DisconnectMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Type.
      * @return the type
      */
     @Override

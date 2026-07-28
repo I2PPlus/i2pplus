@@ -146,6 +146,7 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
+     * Signature.
      * @return the signature
      */
     public Signature getSignature() {
@@ -347,6 +348,7 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
+     * Serialized session config, or empty array on failure.
      * @return the serialized session config, or empty array on failure
      */
     private byte[] getBytes() {

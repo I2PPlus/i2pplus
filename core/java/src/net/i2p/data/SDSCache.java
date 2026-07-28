@@ -66,6 +66,7 @@ public class SDSCache<V extends SimpleDataStructure> {
     private final Constructor<V> _rvCon;
 
     /**
+     * Class that we are storing, i.e. an extension of SimpleDataStructure.
      *  @param rvClass the class that we are storing, i.e. an extension of SimpleDataStructure
      *  @param len the length of the byte array in the SimpleDataStructure
      *  @param max maximum size of the cache assuming 128MB of mem.
@@ -145,6 +146,7 @@ public class SDSCache<V extends SimpleDataStructure> {
     }
 
     /**
+     * Non-null byte array containing the data, data will be copied to not hold the reference.
      *  @param b non-null byte array containing the data, data will be copied to not hold the reference
      *  @param off offset in the array to start reading from
      *  @return the cached value if available, otherwise
@@ -159,6 +161,7 @@ public class SDSCache<V extends SimpleDataStructure> {
     }
 
     /**
+     * Stream from which the bytes will be read.
      *  @param in a stream from which the bytes will be read
      *  @return the cached value if available, otherwise
      *          makes a new object and returns it
