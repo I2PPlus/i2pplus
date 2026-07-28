@@ -1279,6 +1279,7 @@ public final class SVGGraphics2D extends Graphics2D {
 
     /**
      * Convert a Path2D to SVG path data without smoothing (original behavior).
+     * @return the s v g path data raw
      */
     private String getSVGPathDataRaw(Path2D path) {
         StringBuilder b = new StringBuilder("d=\"");

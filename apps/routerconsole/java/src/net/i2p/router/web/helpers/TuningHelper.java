@@ -319,6 +319,7 @@ public class TuningHelper extends HelperBase {
 
     /**
      * Main content: editable tables of tunable params with sparklines.
+     * @return the tuning
      */
     public String getTuning() {
         Tuner tuner = getTuner();
@@ -492,6 +493,7 @@ public class TuningHelper extends HelperBase {
     /**
      * Return a human-readable display name for a raw param name,
      * falling back to the raw name if unmapped.
+     * @return the display name
      */
     private String getDisplayName(String name) {
         String display = DISPLAY_NAMES.get(name);

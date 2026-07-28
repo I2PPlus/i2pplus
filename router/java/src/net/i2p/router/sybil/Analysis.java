@@ -340,7 +340,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     /**
      *  Stops the Sybil analysis service and changes state to STOPPED.
      *
-     *  @param args ignored (required by interface)
+     *  @param args not used, present only to satisfy the Service interface
      */
     public synchronized void shutdown(String[] args) {
         if (_state == STOPPED)
@@ -702,6 +702,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      * v6 only
  *
      * @since 0.9.57
+     * @return the i pv6
      */
     private static byte[] getIPv6(RouterInfo ri) {
         for (RouterAddress ra : ri.getAddresses()) {

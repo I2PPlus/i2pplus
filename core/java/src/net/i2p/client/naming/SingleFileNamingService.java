@@ -85,8 +85,8 @@ public class SingleFileNamingService extends NamingService {
      *  Will strip a "www." prefix and retry if lookup fails
      *
      *  @param hostname case-sensitive; caller should convert to lower case
-     *  @param lookupOptions ignored
-     *  @param storedOptions ignored
+     *  @param lookupOptions unused, may be null
+     *  @param storedOptions unused, may be null
      */
     @Override
     public Destination lookup(String hostname, Properties lookupOptions, Properties storedOptions) {
@@ -109,7 +109,7 @@ public class SingleFileNamingService extends NamingService {
     /**
      * Reverse lookup a destination to a hostname.
      *
-     *  @param options ignored
+     *  @param options unused, may be null
      */
     @Override
     public String reverseLookup(Destination dest, Properties options) {
@@ -145,6 +145,7 @@ public class SingleFileNamingService extends NamingService {
      *  and stops when it finds a match.
      *
      *  @param host case-sensitive; caller should convert to lower case
+     *  @return the key
      */
     @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     private String getKey(String host) throws IOException {
@@ -308,7 +309,7 @@ public class SingleFileNamingService extends NamingService {
      * Remove a hostname from the naming service.
      *
      *  @param hostname case-sensitive; caller should convert to lower case
-     *  @param options ignored
+     *  @param options unused, may be null
      */
     @Override
     public boolean remove(String hostname, Properties options) {
@@ -369,6 +370,7 @@ public class SingleFileNamingService extends NamingService {
      *                Key "search": return only those matching substring
      *                Key "startsWith": return only those starting with
      *                                  ("[0-9]" allowed)
+     * @return the entries
      */
     @Override
     public Map<String, Destination> getEntries(Properties options) {
@@ -494,7 +496,7 @@ public class SingleFileNamingService extends NamingService {
      *  Overridden for efficiency.
      *  Output is not sorted.
      *
-     *  @param options ignored
+     *  @param options unused, may be null
      *  @since 0.9.20
      */
     @Override
@@ -527,7 +529,7 @@ public class SingleFileNamingService extends NamingService {
     /**
      * Return all known host names.
      *
-     *  @param options ignored
+     *  @param options unused, may be null
      *  @return all known host names, unsorted
      */
     @Override
@@ -563,7 +565,7 @@ public class SingleFileNamingService extends NamingService {
     /**
      * Return the number of entries.
      *
-     *  @param options ignored
+     *  @param options unused, may be null
      */
     @Override
     public int size(Properties options) {

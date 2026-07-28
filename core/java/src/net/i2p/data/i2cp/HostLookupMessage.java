@@ -80,7 +80,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getSessionId.
+     * @return the session id
      */
     public SessionId getSessionId() {
         return _sessionId;
@@ -199,7 +199,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() {

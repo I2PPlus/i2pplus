@@ -121,6 +121,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *
      *  @since 0.8.9
+     * @return the total read
      */
     public long getTotalRead() {
         try {
@@ -134,6 +135,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *
      *  @since 0.8.9
+     * @return the total expanded
      */
     public long getTotalExpanded() {
         try {
@@ -148,6 +150,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *
      *  @since 0.8.9
+     * @return the remaining
      */
     public long getRemaining() {
         try {
@@ -162,6 +165,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *
      *  @since 0.8.9
+     * @return the finished
      */
     public boolean getFinished() {
         try {

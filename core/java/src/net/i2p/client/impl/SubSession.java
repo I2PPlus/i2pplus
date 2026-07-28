@@ -80,6 +80,7 @@ class SubSession extends I2PSessionMuxedImpl {
 
     /**
      *  @since 0.9.33
+     * @return the primary options
      */
     public Properties getPrimaryOptions() {
         return _primary.getOptions();
@@ -142,6 +143,7 @@ class SubSession extends I2PSessionMuxedImpl {
     /**
      *  Has the session been closed (or not yet connected)?
      *  False when open and during transitions.
+     * @return whether closed
      */
     @Override
     public boolean isClosed() {

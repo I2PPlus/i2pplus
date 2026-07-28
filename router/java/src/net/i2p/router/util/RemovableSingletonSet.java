@@ -49,7 +49,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
     }
 
     /**
-     * isEmpty.
+     * @return whether empty
      */
     @Override
     public boolean isEmpty() {
@@ -86,7 +86,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
         boolean done;
 
         /**
-         * hasNext.
+         * @return whether next is present
          */
         @Override
         public boolean hasNext() {

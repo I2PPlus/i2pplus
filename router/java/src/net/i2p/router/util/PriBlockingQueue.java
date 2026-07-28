@@ -51,6 +51,7 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
 
     /**
      * Default backlog and max size depending on system speed.
+     * @return whether slow
      */
     /** Default backlog size threshold */
     protected static final int DEFAULT_BACKLOG_SIZE = SystemVersion.isSlow() ? 256 : 384;

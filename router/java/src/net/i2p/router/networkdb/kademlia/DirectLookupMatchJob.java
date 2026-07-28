@@ -20,7 +20,7 @@ class DirectLookupMatchJob extends FloodOnlyLookupMatchJob {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     @Override
     public String getName() { return "Direct Lookup Match"; }

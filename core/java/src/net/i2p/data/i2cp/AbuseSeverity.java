@@ -25,7 +25,7 @@ import java.io.OutputStream;
  * @author jrandom
  */
 public class AbuseSeverity extends DataStructureImpl {
-    /** ignored */
+    /** Numeric severity level. */
     private int _severityId;
 
     /**
@@ -81,7 +81,7 @@ public class AbuseSeverity extends DataStructureImpl {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

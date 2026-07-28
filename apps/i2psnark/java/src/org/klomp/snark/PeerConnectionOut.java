@@ -43,7 +43,7 @@ class PeerConnectionOut implements Runnable {
     /**
      * Creates a new outgoing connection handler.
      *
-     * @param peer the peer this connection is to
+     * @param peer the peer
      * @param dout the output stream to send messages on
      */
     public PeerConnectionOut(Peer peer, DataOutputStream dout) {

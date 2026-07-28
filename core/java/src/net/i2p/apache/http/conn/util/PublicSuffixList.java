@@ -60,6 +60,7 @@ public final class PublicSuffixList {
      */
     /**
      * Return the suffix rules.
+     * @return the rules
      */
     public List<String> getRules() {
         return rules;
@@ -70,6 +71,7 @@ public final class PublicSuffixList {
      */
     /**
      * Return the exception rules.
+     * @return the exceptions
      */
     public List<String> getExceptions() {
         return exceptions;

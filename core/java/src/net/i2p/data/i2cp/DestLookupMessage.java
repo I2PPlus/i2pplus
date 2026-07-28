@@ -35,7 +35,7 @@ public class DestLookupMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getHash.
+     * @return the hash
      */
     public Hash getHash() {
         return _hash;
@@ -63,7 +63,7 @@ public class DestLookupMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() {

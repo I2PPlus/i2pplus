@@ -44,9 +44,7 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  * @since 0.1.0
  */
 public class Peer implements Comparable<Peer>, BandwidthListener {
-    /**
-     * Logger for this peer instance.
-     */
+    /** Logger for this peer instance. */
     protected final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
     // Identifying property, the peer id of the other side.
     private final PeerID peerID;
@@ -729,6 +727,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /**
      * Returns the number of bytes that have been downloaded. Can be reset to zero with <code>
      * resetCounters()</code> which is called every CHECK_PERIOD by PeerCheckerTask.
+     * @return the downloaded
      */
     public long getDownloaded() {
         return downloaded.get();
@@ -737,6 +736,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /**
      * Returns the number of bytes that have been uploaded. Can be reset to zero with <code>
      * resetCounters()</code> which is called every CHECK_PERIOD by PeerCheckerTask.
+     * @return the uploaded
      */
     public long getUploaded() {
         return uploaded.get();
@@ -764,6 +764,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      * Should we send this many bytes? Do NOT call uploaded() after this.
      *
      * @since 0.9.62
+     * @return whether send
      */
     public boolean shouldSend(int size) {
         PeerState s = state;
@@ -781,6 +782,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      * Should we request this many bytes?
      *
      * @since 0.9.62
+     * @return whether request
      */
     public boolean shouldRequest(int size) {
         PeerState s = state;
@@ -794,6 +796,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      * Should we request this many bytes?
      *
      * @since 0.9.62
+     * @return whether request
      */
     public boolean shouldRequest(Peer peer, int size) {
         if (peer != this) {
@@ -810,6 +813,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      * Current limit in Bps
      *
      * @since 0.9.62
+     * @return the up b w limit
      */
     public long getUpBWLimit() {
         PeerState s = state;
@@ -836,6 +840,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      * Current limit in Bps
      *
      * @since 0.9.62
+     * @return the down b w limit
      */
     public long getDownBWLimit() {
         PeerState s = state;

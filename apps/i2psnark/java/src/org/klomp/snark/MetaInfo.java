@@ -546,6 +546,7 @@ public class MetaInfo {
     /**
      * Returns the requested name for the file or toplevel directory. If it is a toplevel directory
      * name getFiles() will return a non-null List of file name hierarchy name.
+     * @return the name
      */
     public String getName() {
         return name;
@@ -555,6 +556,7 @@ public class MetaInfo {
      * Is it a private torrent?
      *
      * @since 0.9
+     * @return whether private
      */
     public boolean isPrivate() {
         return privateTorrent > 0;
@@ -571,6 +573,7 @@ public class MetaInfo {
     /**
      * Returns a list of lists of file name hierarchies or null if it is a single name. It has the
      * same size as the list returned by getLengths().
+     * @return the files
      */
     public List<List<String>> getFiles() {
         return files;
@@ -593,6 +596,7 @@ public class MetaInfo {
     /**
      * Returns a list of Longs indication the size of the individual files, or null if it is a
      * single file. It has the same size as the list returned by getFiles().
+     * @return the lengths
      */
     public List<Long> getLengths() {
         return lengths;
@@ -602,6 +606,7 @@ public class MetaInfo {
      * The comment string or null. Not available for locally-created torrents.
      *
      * @since 0.9.7
+     * @return the comment
      */
     public String getComment() {
         return this.comment;
@@ -611,6 +616,7 @@ public class MetaInfo {
      * The created-by string or null. Not available for locally-created torrents.
      *
      * @since 0.9.7
+     * @return the created by
      */
     public String getCreatedBy() {
         return this.created_by;
@@ -620,6 +626,7 @@ public class MetaInfo {
      * The creation date (ms) or zero. As of 0.9.19, available for locally-created torrents.
      *
      * @since 0.9.7
+     * @return the creation date
      */
     public long getCreationDate() {
         return this.creation_date;
@@ -640,6 +647,7 @@ public class MetaInfo {
      *
      * @throws IndexOutOfBoundsException when piece is equal to or greater then the number of pieces
      *     in the torrent.
+     * @return the piece length
      */
     public int getPieceLength(int piece) {
         int pieces = getPieces();
@@ -656,7 +664,7 @@ public class MetaInfo {
      * Checks that the given piece has the same SHA1 hash as the given byte array. Returns random
      * results or IndexOutOfBoundsExceptions when the piece number is unknown.
      *
-     * @param piece the piece index to verify
+     * @param piece the piece index
      * @param bs the byte array containing the piece data
      * @param off the offset within the byte array where the piece data starts
      * @param length the number of bytes in the piece
@@ -671,7 +679,7 @@ public class MetaInfo {
      * Fast path for piece hash verification. Computes SHA1 of the given data
      * and compares it against the stored piece hash.
      *
-     * @param piece the piece index to verify
+     * @param piece the piece index
      * @param bs the byte array containing the piece data
      * @param off the offset within the byte array where the piece data starts
      * @param length the number of bytes in the piece
@@ -805,6 +813,7 @@ public class MetaInfo {
      * Side effect: Caches infoBytesLength.
      *
      * @since 0.8.4
+     * @return the info bytes
      */
     public synchronized byte[] getInfoBytes() {
         if (infoMap == null) {
@@ -819,6 +828,7 @@ public class MetaInfo {
      * The size of getInfoBytes(). Cached.
      *
      * @since 0.9.48
+     * @return the info bytes length
      */
     public synchronized int getInfoBytesLength() {
         if (infoBytesLength > 0) {

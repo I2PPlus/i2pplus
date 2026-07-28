@@ -256,7 +256,7 @@ class StandardSocket extends Socket {
     }
 
     /**
-     * isClosed.
+     * @return whether closed
      */
     @Override
     public boolean isClosed() {
@@ -264,7 +264,7 @@ class StandardSocket extends Socket {
     }
 
     /**
-     * isConnected.
+     * @return whether connected
      */
     @Override
     public boolean isConnected() {
@@ -272,7 +272,7 @@ class StandardSocket extends Socket {
     }
 
     /**
-     * isInputShutdown.
+     * @return whether input shutdown
      */
     @Override
     public boolean isInputShutdown() {
@@ -280,7 +280,7 @@ class StandardSocket extends Socket {
     }
 
     /**
-     * isOutputShutdown.
+     * @return whether output shutdown
      */
     @Override
     public boolean isOutputShutdown() {

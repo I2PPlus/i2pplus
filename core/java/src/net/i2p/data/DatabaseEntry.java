@@ -226,7 +226,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     /**
      * Convenience method, is the type any variant of leaseset?
      *
-     * @param type the type to check
+     * @param type the type
      * @return true for any type of LeaseSet, false for RouterInfo, false for others
      * @since 0.9.38
      */

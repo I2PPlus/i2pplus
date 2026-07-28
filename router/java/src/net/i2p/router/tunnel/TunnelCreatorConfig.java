@@ -124,17 +124,19 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  How many hops are there in the tunnel?
      *  INCLUDING US.
      *  i.e. one more than the TunnelCreatorConfig length.
+     * @return the length
      */
     public int getLength() {return _config.length;}
 
     /**
-     * getOptions.
+     * @return the options
      */
     public Properties getOptions() {return null;}
 
     /**
      * retrieve the config for the given hop.  the gateway is
      * hop 0.
+     * @return the config
      */
     public HopConfig getConfig(int hop) {return _config[hop];}
 
@@ -142,6 +144,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * retrieve the tunnelId that the given hop receives messages on.
      * the gateway is hop 0.
      *
+     * @return the receive tunnel id
      */
     public TunnelId getReceiveTunnelId(int hop) {return _config[hop].getReceiveTunnel();}
 
@@ -149,6 +152,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * retrieve the tunnelId that the given hop sends messages on.
      * the gateway is hop 0.
      *
+     * @return the send tunnel id
      */
     public TunnelId getSendTunnelId(int hop) {return _config[hop].getSendTunnel();}
 
@@ -190,7 +194,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public Hash getDestination() {return _destination;}
 
     /**
-     * getExpiration.
+     * @return the expiration
      */
     public long getExpiration() {return _expiration;}
     /**
@@ -215,7 +219,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /** take note of a message being pumped through this tunnel */
     public void incrementProcessedMessages() {_messagesProcessed.incrementAndGet();}
     /**
-     * getProcessedMessagesCount.
+     * @return the processed messages count
      */
     public int getProcessedMessagesCount() {return _messagesProcessed.get();}
 
@@ -249,7 +253,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
                         }
                     }
                     /**
-                     * getName.
+                     * @return the name
                      */
                     @Override
                     public String getName() { return "TunnelCreatorConfig profile update"; }
@@ -259,12 +263,13 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     * getVerifiedBytesTransferred.
+     * @return the verified bytes transferred
      */
     public synchronized long getVerifiedBytesTransferred() {return _verifiedBytesTransferred;}
 
     /**
      *  When we last sent or received data on this tunnel
+     * @return the last transferred
      */
     public synchronized long getLastTransferred() { return _lastTransferredTime; }
 
@@ -304,11 +309,12 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * Has the tunnel failed completely?
      *
      * @since 0.9.53
+     * @return the tunnel failed
      */
     public boolean getTunnelFailed() {return _failures.get() > MAX_CONSECUTIVE_TEST_FAILURES;}
 
     /**
-     * getTunnelFailures.
+     * @return the tunnel failures
      */
     public int getTunnelFailures() {return _failures.get();}
 
@@ -326,6 +332,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      *  Get the number of recent-traffic test exemptions used.
      *  @since 0.9.69+
+     * @return the recent test exemptions
      */
     public int getRecentTestExemptions() {return _recentTestExemptions;}
 
@@ -405,6 +412,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      *  Checksum for blank record
      *  @since 0.9.48
+     * @return the blank hash
      */
     public Hash getBlankHash() {return _blankHash;}
 
@@ -559,6 +567,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      *  Is it an ECIES hop?
      *  @since 0.9.48
+     * @return whether e c
      */
     public boolean isEC(int hop) {
         if (_ChaReplyKeys == null) {return false;}
@@ -568,6 +577,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      *  Get ECIES reply key
      *  @since 0.9.48
+     * @return the cha cha reply key
      */
     public SessionKey getChaChaReplyKey(int hop) {
         if (_ChaReplyKeys == null) {return null;}
@@ -577,6 +587,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      *  Get ECIES reply AD
      *  @since 0.9.48
+     * @return the cha cha reply a d
      */
     public byte[] getChaChaReplyAD(int hop) {
         if (_ChaReplyADs == null) {return null;}

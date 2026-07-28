@@ -230,6 +230,7 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /**
      * @since 0.9.1
+     * @return the context
      */
     public I2PAppContext getContext() {
         return _context;
@@ -320,14 +321,14 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * getI2CPHost.
+     * @return the i2 c p host
      */
     public String getI2CPHost() {
         return _i2cpHost;
     }
 
     /**
-     * getI2CPPort.
+     * @return the i2 c p port
      */
     public int getI2CPPort() {
         return _i2cpPort;
@@ -343,28 +344,28 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * getEepProxyHost.
+     * @return the eep proxy host
      */
     public String getEepProxyHost() {
         return _proxyHost;
     }
 
     /**
-     * getEepProxyPort.
+     * @return the eep proxy port
      */
     public int getEepProxyPort() {
         return _proxyPort;
     }
 
     /**
-     * getEepProxySet.
+     * @return the eep proxy set
      */
     public boolean getEepProxySet() {
         return _shouldProxy;
     }
 
     /**
-     * getMaxUploaders.
+     * @return the max uploaders
      */
     public int getMaxUploaders() {
         return _maxUploaders;
@@ -378,14 +379,14 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * getMaxConnections.
+     * @return the max connections
      */
     public int getMaxConnections() {
         return _maxConnections;
     }
 
     /**
-     * getStartupDelay.
+     * @return the startup delay
      */
     public int getStartupDelay() {
         return _startupDelay;
@@ -396,6 +397,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     /**
      * @since 0.8.9
+     * @return the files public
      */
     public boolean getFilesPublic() {
         return _areFilesPublic;
@@ -413,6 +415,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     /**
      * @since 0.9.66+
+     * @return the preallocate files
      */
     public boolean getPreallocateFiles() {
         return _shouldPreallocateFiles;
@@ -427,6 +430,7 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /**
      * @since 0.9.1
+     * @return the temp dir
      */
     public File getTempDir() {
         return _tmpDir;
@@ -434,6 +438,7 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /**
      * @since 0.9.58
+     * @return the max files per torrent
      */
     public int getMaxFilesPerTorrent() {
         return _maxFilesPerTorrent;
@@ -448,6 +453,7 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /**
      * @since 0.9.67
+     * @return the a p i target
      */
     public String getAPITarget() {
         return _apiTarget;
@@ -456,6 +462,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Get the api key.
      * @since 0.9.67
+     * @return the a p i key
      */
     public String getAPIKey() {
         return _apiKey;
@@ -472,6 +479,7 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /**
      * @since 0.9.67
+     * @return whether a p i key is present
      */
     public boolean hasAPIKey() {
         return _apiTarget != null
@@ -483,6 +491,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Get the vary inbound hops.
      * @since 0.9.64+
+     * @return the vary inbound hops
      */
     public boolean getVaryInboundHops() {
         return _varyInboundHops;
@@ -491,6 +500,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Get the vary outbound hops.
      * @since 0.9.64+
+     * @return the vary outbound hops
      */
     public boolean getVaryOutboundHops() {
         return _varyOutboundHops;
@@ -681,6 +691,7 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /**
      * @since 0.9.1
+     * @return whether connecting
      */
     public boolean isConnecting() {
         return _manager == null && _connecting;
@@ -808,7 +819,6 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * get.
      * @param retries if &gt; 0, set timeout to a few seconds
      */
     public File get(String url, boolean rewrite, int retries) {
@@ -977,7 +987,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * getServerSocket.
+     * @return the server socket
      */
     public I2PServerSocket getServerSocket() {
         I2PSocketManager mgr = _manager;
@@ -990,6 +1000,7 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /**
      * The value.
+     * @return the our i p string
      */
     /** Full Base64 of Destination */
     public String getOurIPString() {
@@ -1148,6 +1159,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * Is this announce URL probably for an open tracker?
      *
      * @since 0.9.17
+     * @return whether known open tracker
      */
     public boolean isKnownOpenTracker(String url) {
         try {
@@ -1177,7 +1189,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * shouldUseOpenTrackers.
+     * @return whether use open trackers
      */
     public boolean shouldUseOpenTrackers() {
         return _shouldUseOT;
@@ -1201,6 +1213,7 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /**
      * @since DHT
+     * @return whether use d h t
      */
     public boolean shouldUseDHT() {
         return _shouldUseDHT;
@@ -1387,6 +1400,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @param o parameter, not translated. To translate parameter also, use _t("foo {0} bar",
      *     _t("baz")) Do not double the single quotes in the parameter. Use autoboxing to call with
      *     ints, longs, floats, etc.
+     * @return the string
      */
     public String getString(String s, Object o) {
         return Translate.getString(s, o, _context, BUNDLE_NAME);

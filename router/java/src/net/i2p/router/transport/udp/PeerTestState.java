@@ -354,7 +354,7 @@ class PeerTestState {
 
     /**
      *  Set the status code sent to Alice (SSU2 Bob only).
-     *  @param status the status code
+     * @param status the status
      *  @since 0.9.57
      */
     public void setStatus(int status) { _status = status; }

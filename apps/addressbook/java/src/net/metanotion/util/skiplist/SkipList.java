@@ -53,9 +53,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 	 */
 	protected SkipLevels<K, V> stack;
 	// I2P mod
-	/**
-	 * rng.
-	 */
+	/** rng. */
 	public static final Random rng = RandomSource.getInstance();
 
 	/**

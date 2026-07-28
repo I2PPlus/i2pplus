@@ -306,6 +306,7 @@ public class EstablishmentManager {
 
     /**
      * How many concurrent outbound sessions to deal with
+     * @return the max concurrent establish
      */
     private int getMaxConcurrentEstablish() {
         return _context.getProperty(PROP_MAX_CONCURRENT_ESTABLISH, DEFAULT_MAX_CONCURRENT_ESTABLISH);
@@ -613,6 +614,7 @@ public class EstablishmentManager {
 
     /**
      * How many concurrent inbound sessions to deal with
+     * @return the max inbound establishers
      */
     private int getMaxInboundEstablishers() {
         return getMaxConcurrentEstablish();
@@ -622,6 +624,7 @@ public class EstablishmentManager {
      * Should we allow another inbound establishment?
      *
      * @since 0.9.2
+     * @return whether allow inbound establishment
      */
     public boolean shouldAllowInboundEstablishment() {
         if (_inboundStates.size() >= getMaxInboundEstablishers())
@@ -1051,6 +1054,7 @@ public class EstablishmentManager {
     /**
      * Is the peer on the blocklist or banlist?
      * @since 0.9.68+
+     * @return whether peer banned
      */
     private boolean isPeerBanned(RemoteHostId hostId) {
         return isPeerBanned(hostId, "peer");
@@ -1059,6 +1063,7 @@ public class EstablishmentManager {
     /**
      * Is the peer on the blocklist or banlist?
      * @since 0.9.68+
+     * @return whether peer banned
      */
     private boolean isPeerBanned(RemoteHostId hostId, String context) {
         try {
@@ -1085,6 +1090,7 @@ public class EstablishmentManager {
     /**
      * Is the peer on the blocklist or banlist?
      * @since 0.9.68+
+     * @return whether peer banned
      */
     private boolean isPeerBanned(InboundEstablishState2 state) {
         return isPeerBanned(state.getRemoteHostId());
@@ -1093,6 +1099,7 @@ public class EstablishmentManager {
     /**
      * Is the peer on the blocklist or banlist?
      * @since 0.9.68+
+     * @return whether peer banned
      */
     private boolean isPeerBanned(OutboundEstablishState2 state) {
         return isPeerBanned(state.getRemoteHostId());
@@ -2395,6 +2402,7 @@ public class EstablishmentManager {
      *  Get a token that can be used later for the peer to connect to us
      *
      *  @since 0.9.54
+     * @return the inbound token
      */
     public Token getInboundToken(RemoteHostId peer) {
         return getInboundToken(peer, IB_TOKEN_EXPIRATION);

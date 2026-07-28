@@ -18,7 +18,7 @@ public class TunnelParticipatingFastestHelper extends HelperBase {
     public TunnelParticipatingFastestHelper() { /* nop */ }
 
     /**
-     * getTunnelParticipatingFastest.
+     * @return the tunnel participating fastest
      */
     public String getTunnelParticipatingFastest() {
         TunnelRenderer renderer = new TunnelRenderer(_context);

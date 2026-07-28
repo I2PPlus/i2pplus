@@ -103,6 +103,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Median clock skew of connected peers in seconds, or null if we cannot answer.
      * CommSystemFacadeImpl overrides this.
+     * @return the median peer clock skew
      */
     public Long getMedianPeerClockSkew() { return null; }
 
@@ -119,6 +120,7 @@ public abstract class CommSystemFacade implements Service {
      * Determine under what conditions we are remotely reachable.
      *
      * @since 0.9.20
+     * @return the status
      */
     public Status getStatus() { return Status.OK; }
 
@@ -126,6 +128,7 @@ public abstract class CommSystemFacade implements Service {
      *  Localized reachability status string.
      *
      *  @since 0.9.45
+     * @return the localized status string
      */
     public String getLocalizedStatusString() {
         return getStatus().toStatusString();
@@ -134,21 +137,21 @@ public abstract class CommSystemFacade implements Service {
     /**
      *  Check whether the given peer has excessive pending outbound messages.
      *
-     *  @param peer the peer to check
+     *  @param peer the peer
      *  @return true if the peer is backlogged
      */
     public boolean isBacklogged(Hash peer) { return false; }
     /**
      *  Check whether the given peer was recently unreachable.
      *
-     *  @param peer the peer to check
+     *  @param peer the peer
      *  @return true if the peer was unreachable
      */
     public boolean wasUnreachable(Hash peer) { return false; }
     /**
      *  Check whether a transport connection exists with the given peer.
      *
-     *  @param peer the peer to check
+     *  @param peer the peer
      *  @return true if a connection is established
      */
     public abstract boolean isEstablished(Hash peer);
@@ -194,7 +197,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Tell the comm system to disconnect from this peer with a reason.
      *
-     * @param peer the peer hash
+     * @param peer the peer
      * @param reason reason for disconnection (for logging), may be null
      * @since 0.9.38
      */
@@ -204,6 +207,7 @@ public abstract class CommSystemFacade implements Service {
      *  Our two-letter country code determined from our external IP.
      *
      *  @since 0.8.11
+     * @return the our country
      */
     public String getOurCountry() { return null; }
 
@@ -211,6 +215,7 @@ public abstract class CommSystemFacade implements Service {
      *  Whether country blocking is enabled at all.
      *
      *  @since 0.8.13
+     * @return whether in strict country
      */
     public boolean isInStrictCountry() { return false; }
 
@@ -219,6 +224,7 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @param peer peer to check
      *  @since 0.9.16
+     *  @return whether in strict country
      */
     public boolean isInStrictCountry(Hash peer) { return false; }
 
@@ -227,13 +233,14 @@ public abstract class CommSystemFacade implements Service {
      *
      *  @param ri router info to check
      *  @since 0.9.16
+     *  @return whether in strict country
      */
     public boolean isInStrictCountry(RouterInfo ri) { return false; }
 
     /**
      *  Get the two-letter country code for the given peer's IP address.
      *
-     *  @param peer the peer to look up
+     *  @param peer the peer
      *  @return two-letter country code or null if unknown
      */
     public String getCountry(Hash peer) { return null; }
@@ -265,7 +272,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      *  Render an HTML snippet identifying the given peer, optionally with extended details.
      *
-     *  @param peer the peer to render
+     *  @param peer the peer
      *  @param extended if true include extended information
      *  @return HTML string
      */
@@ -276,7 +283,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      *  Render the country flag for the given peer as HTML.
      *
-     *  @param peer the peer to render
+     *  @param peer the peer
      *  @return HTML string for the flag
      */
     public String renderPeerFlag(Hash peer) {
@@ -286,7 +293,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      *  Render the peer's capabilities as HTML, optionally inline.
      *
-     *  @param peer the peer to render
+     *  @param peer the peer
      *  @param inline if true render inline
      *  @return HTML string
      */
@@ -350,6 +357,7 @@ public abstract class CommSystemFacade implements Service {
      *  Whether this is a dummy implementation with no real transports.
      *
      *  @since 0.8.13
+     * @return whether dummy
      */
     public boolean isDummy() { return true; }
 
@@ -357,6 +365,7 @@ public abstract class CommSystemFacade implements Service {
      *  Whether the comm system is fully initialized and running.
      *
      *  @since 0.9.53
+     * @return whether running
      */
     public boolean isRunning() { return true; }
 
@@ -397,6 +406,7 @@ public abstract class CommSystemFacade implements Service {
      *  Factory for making X25519 key pairs.
      *
      *  @since 0.9.46
+     * @return the x d h factory
      */
     public X25519KeyFactory getXDHFactory() { return null; }
 
@@ -418,6 +428,7 @@ public abstract class CommSystemFacade implements Service {
      *  Is this IP exempt from any incoming throttles or rejections
      *
      *  @since 0.9.58
+     * @return whether exempt incoming
      */
     public boolean isExemptIncoming(String ip) { return false; }
 

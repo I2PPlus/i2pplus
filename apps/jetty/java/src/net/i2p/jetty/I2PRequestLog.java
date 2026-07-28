@@ -104,12 +104,12 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     }
 
     /**
-     * getFilename.
+     * @return the filename
      */
     public String getFilename() {return _filename;}
 
     /**
-     * getDatedFilename.
+     * @return the dated filename
      */
     public String getDatedFilename() {
         if (_fileOut instanceof RolloverFileOutputStream) {
@@ -124,7 +124,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
      */
     public void setLogDateFormat(String format) {_logDateFormat = format;}
     /**
-     * getLogDateFormat.
+     * @return the log date format
      */
     public String getLogDateFormat() {return _logDateFormat;}
     /**
@@ -132,7 +132,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
      */
     public void setLogLocale(Locale logLocale) {_logLocale = logLocale;}
     /**
-     * getLogLocale.
+     * @return the log locale
      */
     public Locale getLogLocale() {return _logLocale;}
     /**
@@ -140,7 +140,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
      */
     public void setLogTimeZone(String tz) {_logTimeZone = tz;}
     /**
-     * getLogTimeZone.
+     * @return the log time zone
      */
     public String getLogTimeZone() {return _logTimeZone;}
     /**
@@ -148,7 +148,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
      */
     public void setRetainDays(int retainDays) {_retainDays = retainDays;}
     /**
-     * getRetainDays.
+     * @return the retain days
      */
     public int getRetainDays() {return _retainDays;}
     /**
@@ -156,7 +156,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
      */
     public void setExtended(boolean extended) {_extended = extended;}
     /**
-     * isExtended.
+     * @return whether extended
      */
     public boolean isExtended() {return _extended;}
     /**
@@ -164,7 +164,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
      */
     public void setAppend(boolean append) {_append = append;}
     /**
-     * isAppend.
+     * @return whether append
      */
     public boolean isAppend() {return _append;}
     /**
@@ -172,7 +172,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
      */
     public void setIgnorePaths(String[] ignorePaths) {_ignorePaths = ignorePaths;}
     /**
-     * getIgnorePaths.
+     * @return the ignore paths
      */
     public String[] getIgnorePaths() {return _ignorePaths;}
     /**
@@ -180,11 +180,11 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
      */
     public void setLogCookies(boolean logCookies) {_logCookies = logCookies;}
     /**
-     * getLogCookies.
+     * @return the log cookies
      */
     public boolean getLogCookies() {return _logCookies;}
     /**
-     * getLogServer.
+     * @return the log server
      */
     public boolean getLogServer() {return _logServer;}
     /**
@@ -196,7 +196,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
      */
     public void setLogLatency(boolean logLatency) {_logLatency = logLatency;}
     /**
-     * getLogLatency.
+     * @return the log latency
      */
     public boolean getLogLatency() {return _logLatency;}
     /**

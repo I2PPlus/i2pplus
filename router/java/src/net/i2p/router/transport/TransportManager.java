@@ -179,6 +179,7 @@ public class TransportManager implements TransportEventListener {
      *  ref: https://docs.oracle.com/javase/8/docs/api/java/net/doc-files/net-properties.html
      *
      *  @since 0.9.47
+     * @return whether proxied
      */
     private boolean isProxied() {
         boolean rv = false;
@@ -915,6 +916,7 @@ public class TransportManager implements TransportEventListener {
     /**
      * Include the published port, or the requested port, for each transport
      * which we will pass along to UPnP
+     * @return the ports
      */
     private Set<Port> getPorts() {
         Set<Port> rv = new HashSet<>(4);

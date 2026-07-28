@@ -139,6 +139,7 @@ public interface TunnelManagerFacade extends Service {
     public int getInboundClientTunnelCount(Hash destination);
     /**
      * getShareRatio().
+     * @return the share ratio
      */
     public double getShareRatio();
 
@@ -184,18 +185,22 @@ public interface TunnelManagerFacade extends Service {
 
     /**
      * getInboundSettings().
+     * @return the inbound settings
      */
     public TunnelPoolSettings getInboundSettings();
     /**
      * getOutboundSettings().
+     * @return the outbound settings
      */
     public TunnelPoolSettings getOutboundSettings();
     /**
      * client).
+     * @return the inbound settings
      */
     public TunnelPoolSettings getInboundSettings(Hash client);
     /**
      * client).
+     * @return the outbound settings
      */
     public TunnelPoolSettings getOutboundSettings(Hash client);
     /**

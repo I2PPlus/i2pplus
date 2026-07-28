@@ -113,6 +113,7 @@ public class EventLogHelper extends FormHandler {
 
     /**
      * Get the form.
+     * @return the form
      */
     public String getForm() {
         // too hard to use the standard formhandler.jsi / FormHandler.java session nonces
@@ -181,6 +182,7 @@ public class EventLogHelper extends FormHandler {
 
     /**
      * Get the events.
+     * @return the events
      */
     public String getEvents() {
         EventLog ev = _context.router().eventLog();

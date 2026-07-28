@@ -49,7 +49,7 @@ interface CoordinatorListener {
     /**
      * Adds a status message for display to the user.
      *
-     * @param message the message to display
+     * @param message the message
      */
     public void addMessage(String message);
 }

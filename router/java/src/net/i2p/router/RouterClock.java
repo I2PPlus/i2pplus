@@ -246,7 +246,7 @@ public class RouterClock extends Clock {
      * Set the current time, used by the timestamper when synchronizing.
      *
      * @param realTime the current time from the time source
-     * @param stratum the stratum level of the time source (lower is better)
+     * @param stratum the stratum level
      */
     @Override
     public void setNow(long realTime, int stratum) {
@@ -375,7 +375,7 @@ public class RouterClock extends Clock {
      *  @deprecated for debugging only
      */
     /**
-     * getDeltaOffset.
+     * @return the delta offset
      */
     @Deprecated
     public long getDeltaOffset() {

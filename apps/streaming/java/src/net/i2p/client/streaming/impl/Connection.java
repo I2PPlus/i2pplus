@@ -24,102 +24,101 @@ import net.i2p.util.SystemVersion;
 /**
  * Maintain the state controlling a streaming connection between two destinations.
  */
-/** ignored */
 class Connection {
 
-    /** ignored */
+    /** Application context. */
     private final I2PAppContext _context;
-    /** ignored */
+    /** Logger. */
     private final Log _log;
-    /** ignored */
+    /** Connection manager. */
     private final ConnectionManager _connectionManager;
-    /** ignored */
+    /** I2P session. */
     private final I2PSession _session;
-    /** ignored */
+    /** Remote peer. */
     private Destination _remotePeer;
-    /** ignored */
+    /** Transient signing public key. */
     private SigningPublicKey _transientSPK;
-    /** ignored */
+    /** Atomic long. */
     private final AtomicLong _sendStreamId = new AtomicLong();
-    /** ignored */
+    /** Atomic long. */
     private final AtomicLong _receiveStreamId = new AtomicLong();
-    /** ignored */
+    /** Last send time. */
     private volatile long _lastSendTime;
-    /** ignored */
+    /** Last send id. */
     private final AtomicLong _lastSendId;
-    /** ignored */
+    /** Atomic boolean. */
     private final AtomicBoolean _resetReceived = new AtomicBoolean();
-    /** ignored */
+    /** Atomic long. */
     private final AtomicLong _resetSentOn = new AtomicLong();
-    /** ignored */
+    /** Atomic long. */
     private final AtomicLong _resetReceivedOn = new AtomicLong();
-    /** ignored */
+    /** Atomic boolean. */
     private final AtomicBoolean _connected = new AtomicBoolean(true);
-    /** ignored */
+    /** Atomic boolean. */
     private final AtomicBoolean _finalDisconnect = new AtomicBoolean();
-    /** ignored */
+    /** Whether the connection has been hard-disconnected. */
     private volatile boolean _hardDisconnected;
-    /** ignored */
+    /** Input stream. */
     private final MessageInputStream _inputStream;
-    /** ignored */
+    /** Output stream. */
     private final MessageOutputStream _outputStream;
-    /** ignored */
+    /** Scheduler chooser for packet scheduling. */
     private final SchedulerChooser _chooser;
     /** Locking: _nextSendLock */
     private long _nextSendTime;
-    /** ignored */
+    /** Atomic long. */
     private final AtomicLong _ackedPackets = new AtomicLong();
-    /** ignored */
+    /** Created on. */
     private final long _createdOn;
-    /** ignored */
+    /** Atomic long. */
     private final AtomicLong _closeSentOn = new AtomicLong();
-    /** ignored */
+    /** Atomic long. */
     private final AtomicLong _closeReceivedOn = new AtomicLong();
-    /** ignored */
+    /** Unacknowledged packets counter. */
     private final AtomicInteger _unackedPacketsReceived = new AtomicInteger();
-    /** ignored */
+    /** Congestion window end. */
     private long _congestionWindowEnd;
-    /** ignored */
+    /** Atomic long. */
     private final AtomicLong _highestAckedThrough = new AtomicLong(-1);
     /** Duplicate ACK tracking for fast retransmit (accessed inside _outboundPackets lock) */
     private int _dupAckCount;
-    /** ignored */
+    /** Last dup ack. */
     private long _lastDupAck;
-    /** ignored */
+    /** Slow start threshold. */
     private volatile int _ssthresh;
-    /** ignored */
+    /** Whether this is an inbound connection. */
     private final boolean _isInbound;
-    /** ignored */
+    /** Whether share options have been updated. */
     private boolean _updatedShareOpts;
     /** Packet ID (Long) to PacketLocal for sent but unacked packets */
     private final TreeMap<Long, PacketLocal> _outboundPackets;
-    /** ignored */
+    /** Outbound queue. */
     private final PacketQueue _outboundQueue;
-    /** ignored */
+    /** Packet handler for this connection. */
     private final ConnectionPacketHandler _handler;
-    /** ignored */
+    /** Connection options. */
     private ConnectionOptions _options;
-    /** ignored */
+    /** Data receiver for outbound packets. */
     private final ConnectionDataReceiver _receiver;
-    /** ignored */
+    /** I2P socket for this connection. */
     private I2PSocketFull _socket;
     /** set to an error cause if the connection could not be established */
     private String _connectionError;
-    /** ignored */
+    /** Atomic long. */
     private final AtomicLong _disconnectScheduledOn = new AtomicLong();
-    /** ignored */
+    /** Last received on. */
     private long _lastReceivedOn;
-    /** ignored */
+    /** Activity timer. */
     private final ActivityTimer _activityTimer;
-    /** ignored */
+    /** Last congestion highest unacked. */
     private volatile long _lastCongestionHighestUnacked;
 
     // Pacing fields for smooth transmission
-    /** ignored */
+    /** Pacing rate in bytes per second. */
     private volatile long _pacingRate; // bytes per second; last computed rate (recomputed live in calculatePacingDelay)
-    /** ignored */
+    /** Last packet send time. */
     private volatile long _lastPacketSendTime;
-    /** ignored */
+    /** Pacing lock. */
     private final Object _pacingLock = new Object();
 
     /** has the other side choked us? */
@@ -128,9 +127,9 @@ class Connection {
     private volatile boolean _isChoking;
     /** when we last sent a choke ACK, for persist-timer rate-limiting of re-asserts */
     private volatile long _lastChokeAckTime;
-    /** ignored */
+    /** Unchoke messages pending. */
     private final AtomicInteger _unchokesToSend = new AtomicInteger();
-    /** ignored */
+    /** Ack since congestion. */
     private final AtomicBoolean _ackSinceCongestion;
     /** Notify this on connection (or connection failure) */
     private final Object _connectLock;
@@ -138,42 +137,42 @@ class Connection {
     private final Object _nextSendLock;
     /** how many messages have been resent and not yet ACKed? */
     private final AtomicInteger _activeResends = new AtomicInteger();
-    /** ignored */
+    /** Connection event. */
     private final ConEvent _connectionEvent;
-    /** ignored */
+    /** Retransmit event. */
     private final RetransmitEvent _retransmitEvent;
-    /** ignored */
+    /** Paced event. */
     private final PacedPacketEvent _pacedEvent;
-    /** ignored */
+    /** Paced queue. */
     private final LinkedList<PacketLocal> _pacedQueue;
-    /** ignored */
+    /** Tlp event. */
     private final TLProbeEvent _tlpEvent;
-    /** ignored */
+    /** Ack dup event. */
     private final AckDupEvent _ackDupEvent;
     /** Reusable list for ackPackets() — avoids per-call allocation.
      *  Only accessed from the receive thread, serialized by _dataLock. */
-    /** ignored */
+    /** Acked list. */
     private final List<PacketLocal> _ackedList;
-    /** ignored */
+    /** Random wait. */
     private final int _randomWait;
-    /** ignored */
+    /** Local port. */
     private final int _localPort;
-    /** ignored */
+    /** Remote port. */
     private final int _remotePort;
-    /** ignored */
+    /** Retransmission timer. */
     private final SimpleTimer2 _timer;
-    /** ignored */
+    /** Bandwidth estimator. */
     private final BandwidthEstimator _bwEstimator;
 
-    /** ignored */
+    /** Atomic long. */
     private final AtomicLong _lifetimeBytesSent = new AtomicLong();
-    /** ignored */
+    /** Atomic long. */
     private final AtomicLong _lifetimeBytesReceived = new AtomicLong();
-    /** ignored */
+    /** Atomic long. */
     private final AtomicLong _lifetimeDupMessageSent = new AtomicLong();
-    /** ignored */
+    /** Atomic long. */
     private final AtomicLong _lifetimeDupMessageReceived = new AtomicLong();
-    /** ignored */
+    /** Atomic long. */
     private final AtomicLong _lifetimeDupBytesSent = new AtomicLong();
 
     /** @since 0.9.70+ */
@@ -202,6 +201,7 @@ class Connection {
      *  Default window size cap used when no per-connection or global override is set.
      *  The effective ceiling is managed by getGlobalMaxWindowSize(), which the Tuner
      *  adjusts based on observed RTT, bandwidth, and loss.
+     * @return whether slow
      */
     /** MAX_WINDOW_SIZE_DEFAULT */
     public static final int MAX_WINDOW_SIZE_DEFAULT = SystemVersion.isSlow() ? 192 : 256;
@@ -223,7 +223,7 @@ class Connection {
         _maxWindowSize = Math.max(128, Math.min(ABSOLUTE_MAX_WINDOW, val));
     }
 
-    /** ignored */
+    /** Number of remaining unchoke assertions to send. */
     private static final int UNCHOKES_TO_SEND = 8;
 
     /**
@@ -235,7 +235,6 @@ class Connection {
      *  maxSynResends of 12, the budget is 60s — matching the connect timeout.
      *  @since 0.9.70+ mutable for adaptive tuning
      */
-    /** ignored */
     private static volatile int _maxSynResends = 12;
 
     /**
@@ -244,7 +243,6 @@ class Connection {
      * backlog clears in 4 rounds instead of 8).
      * @since 0.9.70+
      */
-    /** ignored */
     private static volatile int _maxRetransmissions = 32;
     /** @since 0.9.70+ */
     public static int getMaxRetransmissionsStatic() { return _maxRetransmissions; }
@@ -260,8 +258,8 @@ class Connection {
      * This caps the resend batch size only; the give-up threshold is
      * {@link ConnectionOptions#getMaxResends()}, checked separately.
      * Tunable via i2p.streaming.maxRetransmissions (default: 32).
+     * @return the max rtx
      */
-    /** ignored */
     private int getMaxRtx() {
         return _maxRetransmissions;
     }
@@ -269,7 +267,6 @@ class Connection {
     /**
      *  @param opts may be null
      */
-    /** ignored */
     public Connection(I2PAppContext ctx, ConnectionManager manager,
                       I2PSession session, SchedulerChooser chooser,
                       SimpleTimer2 timer,
@@ -335,7 +332,6 @@ class Connection {
      * Calculate pacing rate based on current congestion window and RTT.
      * Rate = (cwnd * mss) / rtt to smooth transmission.
      */
-    /** ignored */
     private long calculatePacingRate() {
         int cwnd = _options.getWindowSize();
         int mss = _options.getMaxMessageSize();
@@ -358,7 +354,6 @@ class Connection {
      * Note that {@link #calculatePacingDelay(int)} also recomputes the rate
      * live, so this is now only an eager cache update for observability.
      */
-    /** ignored */
     private void updatePacingRate() {
         synchronized (_pacingLock) {
             _pacingRate = calculatePacingRate();
@@ -370,7 +365,6 @@ class Connection {
      * Pacing delay = (packetSize / rate) - timeSinceLastPacket.
      * @return delay in ms, 0 if no pacing needed
      */
-    /** ignored */
     private long calculatePacingDelay(int packetSize) {
         long rate = calculatePacingRate();
         if (rate == Long.MAX_VALUE)
@@ -381,7 +375,6 @@ class Connection {
     /**
      * Same as above but recomputes live to avoid stale-RTT pacing.
      */
-    /** ignored */
     private long calculatePacingDelay(int packetSize, long pacingRate) {
         synchronized (_pacingLock) {
             long now = _context.clock().now();
@@ -396,7 +389,6 @@ class Connection {
     /**
      * @since 0.9.46
      */
-    /** ignored */
     int getSSThresh() {return _ssthresh;}
 
     /**
@@ -404,7 +396,6 @@ class Connection {
      *
      * @return the next sequence number
      */
-    /** ignored */
     public long getNextOutboundPacketNum() {return _lastSendId.incrementAndGet();}
 
     /**
@@ -426,7 +417,6 @@ class Connection {
      * @return true if the packet should be sent, false for a fatal error
      *         will return false after 5 minutes even if timeoutMs is &lt;= 0.
      */
-    /** ignored */
     public boolean packetSendChoke(long timeoutMs) throws IOException, InterruptedException {
         long start = _context.clock().now();
         long now = start;
@@ -482,7 +472,7 @@ class Connection {
         }
     }
 
-    /** ignored */
+    /** Connected or error. */
     private boolean isConnectedOrError() throws IOException {
         if (!_connected.get()) {
             if (getResetReceived()) {throw new I2PSocketException(I2PSocketException.STATUS_CONNECTION_RESET);}
@@ -500,7 +490,6 @@ class Connection {
      *
      *  @return max allowed in-flight packets, in [globalMax, ABSOLUTE_MAX_WINDOW]
      */
-    /** ignored */
     private int getBDPBasedInFlightCap() {
         float bwe = _bwEstimator.getBandwidthEstimate(); // packets/ms
         int rtt = Math.max(_options.getRTT(), 500);       // ms
@@ -515,7 +504,6 @@ class Connection {
      *
      *  @return probe timeout in ms, in [200, 2000]
      */
-    /** ignored */
     private int getPTO() {
         int rtt = _options.getRTT();
         if (rtt <= 0) return Math.min(3000, _options.getRTO() / 2);
@@ -525,7 +513,6 @@ class Connection {
     /**
      *  @return true if the sender should block (window full or choked)
      */
-    /** ignored */
     private boolean shouldWait(int unacked, int wsz) {
         return _isChoked || unacked >= wsz ||
                _lastSendId.get() - _highestAckedThrough.get() >= getBDPBasedInFlightCap();
@@ -535,13 +522,12 @@ class Connection {
      * Notify all threads waiting in packetSendChoke().
      * Also update pacing rate since window size may have changed.
      */
-    /** ignored */
     void windowAdjusted() {
         synchronized (_outboundPackets) {_outboundPackets.notifyAll();}
         updatePacingRate();
     }
 
-    /** ignored */
+    /** Ack immediately. */
     void ackImmediately() {
         PacketLocal packet;
         // if we don't have anything to retransmit, send a small ACK
@@ -554,7 +540,6 @@ class Connection {
      * Got a packet we shouldn't have, send 'em a reset.
      * More than one reset may be sent.
      */
-    /** ignored */
     private void sendReset() {
         long now = _context.clock().now();
         if (_resetSentOn.get() + 10*1000 > now) {return;} // don't send resets too fast
@@ -585,7 +570,6 @@ class Connection {
     /**
      * Flush any data that we can. Non-blocking.
      */
-    /** ignored */
     void sendAvailable() {
         // this grabs the data, builds a packet, and queues it up via sendPacket
         try {_outputStream.flushAvailable(_receiver, false);}
@@ -601,7 +585,6 @@ class Connection {
      *
      *  @since 0.9.70+
      */
-    /** ignored */
     void scheduleSoftFailureRetransmit() {
         synchronized (_outboundPackets) {
             if (_outboundPackets.isEmpty()) {
@@ -626,7 +609,6 @@ class Connection {
      *  Resets, pings, and pongs are done elsewhere in this class,
      *  or in ConnectionManager or ConnectionHandler.
      */
-    /** ignored */
     void sendPacket(PacketLocal packet) {
         if (packet == null) return;
 
@@ -722,7 +704,6 @@ class Connection {
      *  @return List of packets acked for the first time (empty if none);
      *          a shared mutable buffer, not a fresh copy
      */
-    /** ignored */
     public List<PacketLocal> ackPackets(long ackThrough, long[] nacks) {
         long oldHighest = _highestAckedThrough.get();
         if (nacks == null || nacks.length == 0) {
@@ -732,7 +713,7 @@ class Connection {
             for (int i = 0; i < nacks.length; i++) {
                 if ((lowest < 0) || (nacks[i] < lowest)) {lowest = nacks[i];}
             }
-            /** ignored */
+            /** New val. */
             final long newVal = lowest - 1;
             _highestAckedThrough.updateAndGet(cur -> Math.max(cur, newVal));
         }
@@ -860,7 +841,6 @@ class Connection {
     /**
      * Notify the scheduler that an event occurred on this connection.
      */
-    /** ignored */
     void eventOccurred() {
         TaskScheduler sched = _chooser.getScheduler(this);
         long before = System.currentTimeMillis();
@@ -877,7 +857,6 @@ class Connection {
      *  Called by CPH when a CLOSE packet is sent.
      *  Idempotent: only the first call sets the timestamp.
      */
-    /** ignored */
     public void notifyCloseSent() {
         if (!_closeSentOn.compareAndSet(0, _context.clock().now()) && _log.shouldDebug()) {
             // TODO ackImmediately() after sending CLOSE causes this. Bad?
@@ -891,7 +870,6 @@ class Connection {
      *  Called by CPH.
      *  May be called multiple times.
      */
-    /** ignored */
     public void closeReceived() {
         if (_closeReceivedOn.compareAndSet(0, _context.clock().now())) {
             _inputStream.closeReceived();
@@ -913,7 +891,6 @@ class Connection {
      *  Called by CPH. Only call this once.
      *  @since 0.9.9
      */
-    /** ignored */
     public void notifyLastPacketAcked() {
         long cso = _closeSentOn.get();
         if (cso <= 0) {throw new IllegalStateException();}
@@ -927,7 +904,6 @@ class Connection {
      *  Notify that a reset was received.
      *  May be called multiple times.
      */
-    /** ignored */
     public void resetReceived() {
         if (!_resetReceived.compareAndSet(false, true)) {return;}
         _resetReceivedOn.set(_context.clock().now());
@@ -945,7 +921,6 @@ class Connection {
      *
      * @return true if a reset was received
      */
-    /** ignored */
     public boolean getResetReceived() {return _resetReceived.get();}
 
     /** @return 0 if not received */
@@ -956,7 +931,6 @@ class Connection {
      *
      * @return true if inbound
      */
-    /** ignored */
     public boolean isInbound() {return _isInbound;}
 
     /**
@@ -969,8 +943,8 @@ class Connection {
      *  - CLOSE received and CLOSE sent and our CLOSE is acked
      *  - RESET received or sent
      *  - closed on the socket side
+     * @return the is connected
      */
-    /** ignored */
     public boolean getIsConnected() {return _connected.get();}
 
     /**
@@ -978,7 +952,6 @@ class Connection {
      *
      * @return true if hard-disconnected
      */
-    /** ignored */
     public boolean getHardDisconnected() {return _hardDisconnected;}
 
     /**
@@ -986,7 +959,6 @@ class Connection {
      *
      * @return true if a reset was sent
      */
-    /** ignored */
     public boolean getResetSent() {return _resetSentOn.get() > 0;}
 
     /** @return 0 if not sent */
@@ -1008,7 +980,6 @@ class Connection {
      *
      *  @param cleanDisconnect if true, normal close; if false, send a RESET
      */
-    /** ignored */
     public void disconnect(boolean cleanDisconnect) {
         disconnect(cleanDisconnect, true);
     }
@@ -1028,7 +999,6 @@ class Connection {
      *                          if false, MUST call disconnectComplete() later.
      *                          Should always be true unless called from ConnectionManager.
      */
-    /** ignored */
     public void disconnect(boolean cleanDisconnect, boolean removeFromConMgr) {
         if (!_connected.compareAndSet(true, false)) {
             return;
@@ -1088,7 +1058,6 @@ class Connection {
      *  Final disconnect. Remove from conn manager.
      *  May be called multiple times.
      */
-    /** ignored */
     public void disconnectComplete() {
         if (!_finalDisconnect.compareAndSet(false, true)) {return;}
         _connected.set(false);
@@ -1112,7 +1081,6 @@ class Connection {
     /**
      *  Cancel and remove all packets awaiting ack
      */
-    /** ignored */
     private void killOutstandingPackets() {
         synchronized (_outboundPackets) {
             if (_outboundPackets.isEmpty()) {return;} // short circuit iterator
@@ -1130,14 +1098,13 @@ class Connection {
      *  @return true if a new event was scheduled; false if already scheduled
      *  @since 0.9.9
      */
-    /** ignored */
     private boolean scheduleDisconnectEvent() {
         if (!_disconnectScheduledOn.compareAndSet(0, _context.clock().now())) {return false;}
         _timer.addEvent(new DisconnectEvent(), getDisconnectTimeout());
         return true;
     }
 
-    /** ignored */
+    /** Disconnect scheduled event. */
     private class DisconnectEvent extends SimpleTimer2.TimedEvent {
         DisconnectEvent() {
             super();
@@ -1148,7 +1115,6 @@ class Connection {
         /**
          * timeReached.
          */
-        /** ignored */
         public void timeReached() {disconnectComplete();}
     }
 
@@ -1157,7 +1123,6 @@ class Connection {
      *
      *  @since 0.9.23 moved here so we can use our timer
      */
-    /** ignored */
     public void scheduleConnectionEvent(long msToWait) {
         _timer.addEvent(_connectionEvent, msToWait);
     }
@@ -1174,10 +1139,9 @@ class Connection {
     /** who are we talking with
      * @return peer Destination or null if unset
      */
-    /** ignored */
     public synchronized Destination getRemotePeer() {return _remotePeer;}
 
-    /** ignored */
+    /** Remote peer string. */
     private synchronized String getRemotePeerString() {
         if (_remotePeer != null) {return "[" + _remotePeer.calculateHash().toBase32().substring(0,8) + "]";}
         else {return "[Unknown]";}
@@ -1186,7 +1150,6 @@ class Connection {
     /**
      *  @param peer non-null
      */
-    /** ignored */
     public void setRemotePeer(Destination peer) {
         if (peer == null) {throw new NullPointerException();}
         synchronized(this) {
@@ -1208,7 +1171,6 @@ class Connection {
      *  @return peer Destination or null if unset
      *  @since 0.9.39
      */
-    /** ignored */
     public synchronized SigningPublicKey getRemoteSPK() {
         if (_transientSPK != null) {return _transientSPK;}
         if (_remotePeer != null) {return _remotePeer.getSigningPublicKey();}
@@ -1219,7 +1181,6 @@ class Connection {
      *  @param transientSPK null ok
      *  @since 0.9.39
      */
-    /** ignored */
     public void setRemoteTransientSPK(SigningPublicKey transientSPK) {
         synchronized(this) {
             if (_transientSPK != null) {
@@ -1233,14 +1194,12 @@ class Connection {
      *  What stream do we send data to the peer on?
      *  @return non-global stream sending ID, or 0 if unknown
      */
-    /** ignored */
     public long getSendStreamId() {return _sendStreamId.get();}
 
     /**
      *  @param id 0 to 0xffffffff
      *  @throws IllegalStateException if already set to nonzero
      */
-    /** ignored */
     public void setSendStreamId(long id) {
         if (!_sendStreamId.compareAndSet(0, id)) {
             throw new IllegalStateException("Send Stream ID already set [" + _sendStreamId + ", " + id + "]");
@@ -1252,14 +1211,12 @@ class Connection {
      *  The stream ID of a peer connection that sends data to us, or zero if unknown.
      *  @return receive stream ID, or 0 if unknown
      */
-    /** ignored */
     public long getReceiveStreamId() {return _receiveStreamId.get();}
 
     /**
      *  @param id 0 to 0xffffffff
      *  @throws IllegalStateException if already set to nonzero
      */
-    /** ignored */
     public void setReceiveStreamId(long id) {
         if (!_receiveStreamId.compareAndSet(0, id)) {
             throw new IllegalStateException("Receive Stream ID already set [" + _receiveStreamId + ", " + id + "]");
@@ -1270,19 +1227,16 @@ class Connection {
     /** When did we last send anything to the peer?
      * @return Last time we sent data
      */
-    /** ignored */
     public long getLastSendTime() {return _lastSendTime;}
 
     /** What was the last packet Id sent to the peer?
      * @return The last sent packet ID
      */
-    /** ignored */
     public long getLastSendId() {return _lastSendId.get();}
     /**
      * Retrieve the current ConnectionOptions.
      * @return the current ConnectionOptions, non-null
      */
-    /** ignored */
     public ConnectionOptions getOptions() {return _options;}
     /**
      * Set the ConnectionOptions.
@@ -1299,7 +1253,6 @@ class Connection {
      *
      * @return the session
      */
-    /** ignored */
     public I2PSession getSession() {return _session;}
 
     /**
@@ -1307,7 +1260,6 @@ class Connection {
      *
      * @return the socket, or null if not yet set
      */
-    /** ignored */
     public I2PSocketFull getSocket() {return _socket;}
 
     /**
@@ -1323,14 +1275,12 @@ class Connection {
      *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
      *  @since 0.8.9
      */
-    /** ignored */
     public int getPort() {return _remotePort;}
 
     /**
      *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
      *  @since 0.8.9
      */
-    /** ignored */
     public int getLocalPort() {return _localPort;}
 
     /**
@@ -1338,7 +1288,6 @@ class Connection {
      *
      * @return error message, or null if no error
      */
-    /** ignored */
     public String getConnectionError() {return _connectionError;}
 
     /**
@@ -1354,7 +1303,6 @@ class Connection {
      *
      * @return connection lifetime in ms
      */
-    /** ignored */
     public long getLifetime() {
         long cso = _closeSentOn.get();
         if (cso <= 0) {return _context.clock().now() - _createdOn;}
@@ -1366,7 +1314,6 @@ class Connection {
      *
      * @return the packet handler
      */
-    /** ignored */
     public ConnectionPacketHandler getPacketHandler() {return _handler;}
 
     /**
@@ -1374,7 +1321,6 @@ class Connection {
      *
      * @return lifetime bytes sent
      */
-    /** ignored */
     public long getLifetimeBytesSent() {return _lifetimeBytesSent.get();}
 
     /**
@@ -1382,7 +1328,6 @@ class Connection {
      *
      * @return lifetime bytes received
      */
-    /** ignored */
     public long getLifetimeBytesReceived() {return _lifetimeBytesReceived.get();}
 
     /**
@@ -1390,7 +1335,6 @@ class Connection {
      *
      * @return lifetime duplicate messages sent
      */
-    /** ignored */
     public long getLifetimeDupMessagesSent() {return _lifetimeDupMessageSent.get();}
 
     /**
@@ -1398,7 +1342,6 @@ class Connection {
      *
      * @return lifetime duplicate bytes sent
      */
-    /** ignored */
     public long getLifetimeDupBytesSent() {return _lifetimeDupBytesSent.get();}
 
     /**
@@ -1406,7 +1349,6 @@ class Connection {
      *
      * @return lifetime duplicate messages received
      */
-    /** ignored */
     public long getLifetimeDupMessagesReceived() {return _lifetimeDupMessageReceived.get();}
 
     /**
@@ -1414,7 +1356,6 @@ class Connection {
      *
      * @param bytes number of bytes to add
      */
-    /** ignored */
     public void incrementBytesSent(int bytes) {_lifetimeBytesSent.addAndGet(bytes);}
 
     /**
@@ -1422,7 +1363,6 @@ class Connection {
      *
      * @param msgs number of duplicate messages to add
      */
-    /** ignored */
     public void incrementDupMessagesSent(int msgs) {_lifetimeDupMessageSent.addAndGet(msgs);}
 
     /**
@@ -1430,7 +1370,6 @@ class Connection {
      *
      * @param bytes number of duplicate bytes to add
      */
-    /** ignored */
     public void incrementDupBytesSent(int bytes) {_lifetimeDupBytesSent.addAndGet(bytes);}
 
     /**
@@ -1438,7 +1377,6 @@ class Connection {
      *
      * @param bytes number of bytes to add
      */
-    /** ignored */
     public void incrementBytesReceived(int bytes) {_lifetimeBytesReceived.addAndGet(bytes);}
 
     /**
@@ -1446,7 +1384,6 @@ class Connection {
      *
      * @param msgs number of duplicate messages to add
      */
-    /** ignored */
     public void incrementDupMessagesReceived(int msgs) {_lifetimeDupMessageReceived.addAndGet(msgs);}
 
     /**
@@ -1455,7 +1392,6 @@ class Connection {
      * instance, or want to delay an ACK.
      * @return the next time the scheduler will want to send a packet, or -1 if never.
      */
-    /** ignored */
     public long getNextSendTime() {
         synchronized(_nextSendLock) {return _nextSendTime;}
     }
@@ -1467,7 +1403,6 @@ class Connection {
      *  this will set it to the time specified, but not later than
      *  options.getSendAckDelay() from now (1000 ms)
      */
-    /** ignored */
     public void setNextSendTime(long when) {
         synchronized(_nextSendLock) {
             if (_nextSendTime >= 0) {
@@ -1487,7 +1422,6 @@ class Connection {
      *  @param on true for choking
      *  @since 0.9.29
      */
-    /** ignored */
     public void setChoking(boolean on) {
         if (on != _isChoking) {
             _isChoking = on;
@@ -1513,7 +1447,6 @@ class Connection {
      *  @param on true for choked
      *  @since 0.9.29
      */
-    /** ignored */
     public void setChoked(boolean on) {
         if (on != _isChoked) {
            _isChoked = on;
@@ -1548,20 +1481,17 @@ class Connection {
      *  @return if choked
      *  @since 0.9.29
      */
-    /** ignored */
     public boolean isChoked() {return _isChoked;}
 
     /** how many packets have we sent and the other side has ACKed?
      * @return Count of how many packets ACKed.
      */
-    /** ignored */
     public long getAckedPackets() {return _ackedPackets.get();}
     /**
      * Get the timestamp when this connection was created.
      *
      * @return creation timestamp
      */
-    /** ignored */
     public long getCreatedOn() {return _createdOn;}
 
     /** @return 0 if not sent */
@@ -1573,7 +1503,6 @@ class Connection {
     /**
      * Update shared options from the TCB cache.
      */
-    /** ignored */
     public void updateShareOpts() {
         if (_closeSentOn.get() > 0 && !_updatedShareOpts) {
             _connectionManager.updateShareOpts(this);
@@ -1584,7 +1513,6 @@ class Connection {
     /**
      * Increment the count of unacked packets received.
      */
-    /** ignored */
     public void incrementUnackedPacketsReceived() {_unackedPacketsReceived.incrementAndGet();}
 
     /**
@@ -1592,13 +1520,11 @@ class Connection {
      *
      * @return number of unacked packets received
      */
-    /** ignored */
     public int getUnackedPacketsReceived() {return _unackedPacketsReceived.get();}
 
     /** how many packets have we sent but not yet received an ACK for?
      * @return Count of packets in-flight.
      */
-    /** ignored */
     public int getUnackedPacketsSent() {
         synchronized (_outboundPackets) {return _outboundPackets.size();}
     }
@@ -1608,7 +1534,6 @@ class Connection {
      *
      * @return the congestion window end
      */
-    /** ignored */
     public long getCongestionWindowEnd() {return _congestionWindowEnd;}
 
     /**
@@ -1627,12 +1552,11 @@ class Connection {
      *
      * @return the later of last send time and last receive time
      */
-    /** ignored */
     public long getLastActivityOn() {
         return (_lastSendTime > _lastReceivedOn ? _lastSendTime : _lastReceivedOn);
     }
 
-    /** ignored */
+    /** Congestion occurred. */
     private void congestionOccurred() {
         // Record the highest unacked packet ID at the time of congestion.
         // This is used by ResendPacketEvent to determine whether to shrink
@@ -1647,7 +1571,6 @@ class Connection {
      * Called when a packet is received on this connection.
      * Updates the last received timestamp and resets the activity timer.
      */
-    /** ignored */
     void packetReceived() {
         _lastReceivedOn = _context.clock().now();
         resetActivityTimer();
@@ -1657,7 +1580,6 @@ class Connection {
     /**
      * Wait for the connection to be established, with the option's connectTimeout.
      */
-     /** ignored */
      void waitForConnect() {
          waitForConnect(0);
      }
@@ -1667,7 +1589,6 @@ class Connection {
      * If the connection fails or the timeout is exceeded, sets _connectionError.
      * @param timeoutMs max wait in ms; if &lt;= 0 uses the connection option's connectTimeout
      */
-      /** ignored */
       void waitForConnect(int timeoutMs) {
           long totalTimeout = timeoutMs > 0 ? timeoutMs : _options.getConnectTimeout();
           boolean hasTimeout = totalTimeout > 0;
@@ -1722,7 +1643,7 @@ class Connection {
           }
       }
 
-    /** ignored */
+    /** Reset activity timer. */
     private void resetActivityTimer() {
         long howLong = _options.getInactivityTimeout();
         if (howLong <= 0) {return;}
@@ -1730,12 +1651,11 @@ class Connection {
         _activityTimer.reschedule(howLong, false); // use the later of current and previous timeout
     }
 
-    /** ignored */
+    /** Activity timer. */
     private class ActivityTimer extends SimpleTimer2.TimedEvent {
         /**
          * ActivityTimer.
          */
-        /** ignored */
         public ActivityTimer() {
             super(_timer);
             setFuzz(5*1000); // sloppy timer, don't reschedule unless at least 5s later
@@ -1743,7 +1663,6 @@ class Connection {
         /**
          * timeReached.
          */
-        /** ignored */
         public void timeReached() {
             if (_log.shouldDebug()) {
                 _log.debug("Invoking inactivity timer on connection to " + getRemotePeerString() + "...");
@@ -1828,9 +1747,8 @@ class Connection {
         }
 
         /**
-         * getTimeLeft.
+         * @return the time left
          */
-        /** ignored */
         public final long getTimeLeft() {
             if (getLastActivityOn() > 0) {
                 return getLastActivityOn() + _options.getInactivityTimeout() - _context.clock().now();
@@ -1845,7 +1763,6 @@ class Connection {
      *
      * @return the inbound message stream, non-null
      */
-    /** ignored */
     public MessageInputStream getInputStream() {return _inputStream;}
 
     /**
@@ -1853,14 +1770,12 @@ class Connection {
      *
      * @return the outbound message stream, non-null
      */
-    /** ignored */
     public MessageOutputStream getOutputStream() {return _outputStream;}
 
     /**
      * toString.
      */
     @Override
-    /** ignored */
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
         buf.append("Connection: ");
@@ -1924,14 +1839,13 @@ class Connection {
      *  Only one TLP per flight — subsequent loss falls back to RTO.
      *  Does NOT trigger congestion control (probe may not actually be lost).
      */
-    /** ignored */
     private class TLProbeEvent extends SimpleTimer2.TimedEvent {
-        /** ignored */
+        /** Whether a probe is already scheduled. */
         private volatile boolean _pending;
 
         TLProbeEvent() { super(_timer); }
 
-        /** ignored */
+        /** Schedule probe. */
         synchronized void scheduleProbe(int delayMs) {
             if (!_pending) {
                 _pending = true;
@@ -1943,7 +1857,6 @@ class Connection {
          * cancel.
          */
         @Override
-        /** ignored */
         public synchronized boolean cancel() {
             _pending = false;
             return super.cancel();
@@ -1953,7 +1866,6 @@ class Connection {
          * timeReached.
          */
         @Override
-        /** ignored */
         public void timeReached() {
             _pending = false;
             sendTLProbe();
@@ -1964,7 +1876,6 @@ class Connection {
      *  Send a tail loss probe: re-enqueue the oldest unacked packet.
      *  No congestion control — TLP is a probe, not a confirmed loss.
      */
-    /** ignored */
     private void sendTLProbe() {
         PacketLocal oldest;
         synchronized (_outboundPackets) {
@@ -1989,10 +1900,9 @@ class Connection {
      *
      *  @since 0.9.46
      */
-    /** ignored */
     class RetransmitEvent extends SimpleTimer2.TimedEvent {
 
-        /** ignored */
+        /** Whether the timer is active. */
         private boolean _scheduled;
 
         /** Retransmit event */
@@ -2002,7 +1912,6 @@ class Connection {
          * cancel.
          */
         @Override
-        /** ignored */
         public synchronized boolean cancel() {
             _scheduled = false;
             return super.cancel();
@@ -2011,7 +1920,6 @@ class Connection {
         /**
          * scheduleIfNotRunning.
          */
-        /** ignored */
         public synchronized boolean scheduleIfNotRunning(long delay) {
             if (_scheduled) {return false;}
             _scheduled = true;
@@ -2029,7 +1937,6 @@ class Connection {
          *  rather than relying on reschedule(..., false) which won't
          *  shorten a running timer.
          */
-        /** ignored */
         public synchronized void forceRescheduleNow() {
             super.cancel();
             _scheduled = true;
@@ -2039,7 +1946,6 @@ class Connection {
         /**
          * pushBackRTO.
          */
-        /** ignored */
         public synchronized void pushBackRTO(int rto) {
             if (!_scheduled) {
                 _scheduled = true;
@@ -2053,7 +1959,6 @@ class Connection {
          * timeReached.
          */
         @Override
-        /** ignored */
         public void timeReached() {
             _scheduled = false;
 
@@ -2127,7 +2032,7 @@ class Connection {
             boolean sentAny = false;
             int burstCount = 0;
             for (PacketLocal packet : toResend) {
-                /** ignored */
+                /** N resends. */
                 final int nResends = packet.getNumSends();
                 if (packet.getNumSends() > _options.getMaxResends()) {
                     if (_log.shouldDebug()) {
@@ -2243,7 +2148,6 @@ class Connection {
      * Drains from _pacedQueue, one packet per firing.
      * If more packets remain, reschedules itself with the next packet's delay.
      */
-    /** ignored */
     private class PacedPacketEvent extends SimpleTimer2.TimedEvent {
 
         PacedPacketEvent() {
@@ -2253,7 +2157,6 @@ class Connection {
         /**
          * timeReached.
          */
-        /** ignored */
         public void timeReached() {
             PacketLocal packet;
             long nextDelay;
@@ -2294,7 +2197,7 @@ class Connection {
 
     /** Reusable event to send an ACK for a duplicate packet after a short delay. */
     class AckDupEvent extends SimpleTimer2.TimedEvent {
-        /** ignored */
+        /** Timestamp of the last ACK DUP mark. */
         private long _created;
 
         /** Ack dup event */
@@ -2310,7 +2213,6 @@ class Connection {
         /**
          * timeReached.
          */
-        /** ignored */
         public void timeReached() {
             boolean sent = false;
             if (getLastSendTime() <= _created) {
@@ -2335,20 +2237,17 @@ class Connection {
     /**
      * fired to reschedule event notification
      */
-    /** ignored */
     class ConEvent extends SimpleTimer2.TimedEvent {
         /** Con event */
         ConEvent() {super();}
         /**
          * timeReached.
          */
-        /** ignored */
         public void timeReached() {eventOccurred();}
         /**
          * toString.
          */
         @Override
-        /** ignored */
         public String toString() {return "event on connection to " + getRemotePeerString();}
     }
 
@@ -2356,14 +2255,12 @@ class Connection {
      * If we have been explicitly NACKed three times, retransmit the packet even if
      * there are other packets in flight.
      */
-    /** ignored */
     static final int FAST_RETRANSMIT_THRESHOLD = 3;
 
     /**
      * A new ResendPacketEvent.
      * @since 0.9.46
      */
-    /** ignored */
     ResendPacketEvent newResendPacketEvent(PacketLocal packet) {
         return new ResendPacketEvent(packet);
     }
@@ -2373,15 +2270,13 @@ class Connection {
      * where it's scheduled with a delay of zero to put it on the timer queue.
      * Timeout retransmissions are handled by RetransmitEvent above.
      */
-    /** ignored */
     class ResendPacketEvent extends SimpleTimer2.TimedEvent {
-        /** ignored */
+        /** The packet to retransmit. */
         private final PacketLocal _packet;
 
         /**
          * ResendPacketEvent.
          */
-        /** ignored */
         public ResendPacketEvent(PacketLocal packet) {
             super(_timer);
             _packet = packet;
@@ -2390,13 +2285,11 @@ class Connection {
         /**
          * timeReached.
          */
-        /** ignored */
         public void timeReached() {retransmit();}
 
         /**
          * @since 0.9.46
          */
-        /** ignored */
         void fastRetransmit() {reschedule(0);}
 
         /**
@@ -2410,7 +2303,6 @@ class Connection {
          *
          * @return true if the packet was sent, false if it was not
          */
-        /** ignored */
         private boolean retransmit() {
             if (_packet.getAckTime() > 0) {return false;}
 

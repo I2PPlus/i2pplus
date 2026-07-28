@@ -443,12 +443,12 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         }
 
         /**
-         * getExpires.
+         * @return the expires
          */
         public long getExpires() {return expires;}
 
         /**
-         * isValid.
+         * @return whether valid
          */
         public AuthResult isValid(int nc) {
             if (nc <= 0) {return AuthResult.AUTH_BAD;}
@@ -660,6 +660,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     /**
      *  The Base 64 of 40 bytes: (now, sha256 of (now, proxy nonce))
      *
+     * @return the nonce
      */
     private String getNonce() {
         byte[] b = new byte[DataHelper.DATE_LENGTH + PROXYNONCE_BYTES];

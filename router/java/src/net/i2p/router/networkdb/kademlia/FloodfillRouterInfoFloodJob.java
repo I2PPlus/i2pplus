@@ -33,7 +33,7 @@ class FloodfillRouterInfoFloodJob extends JobImpl {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     public String getName() { return "Distribute Local RouterInfo to Floodfills"; }
 

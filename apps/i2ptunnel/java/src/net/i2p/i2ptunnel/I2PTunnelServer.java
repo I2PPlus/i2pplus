@@ -514,6 +514,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     /**
      *  @since 0.9.63
+     * @return the socket manager
      */
     @Override
     public I2PSocketManager getSocketManager() {

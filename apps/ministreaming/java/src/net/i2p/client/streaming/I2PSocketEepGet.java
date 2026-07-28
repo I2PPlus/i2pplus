@@ -118,7 +118,7 @@ public class I2PSocketEepGet extends EepGet {
      *  Look up the address, get a socket from the I2PSocketManager supplied in the constructor,
      *  and send the request.
      *
-     *  @param timeout ignored
+     *  @param timeout connect and inactivity timeout, used to detect hung connections
      */
     @Override
     protected void sendRequest(SocketTimeout timeout) throws IOException {
@@ -243,6 +243,7 @@ public class I2PSocketEepGet extends EepGet {
      *  super doesn't strip the http://host from the GET line
      *  which hoses some servers (opentracker)
      *  HTTP proxy was kind enough to do this for us
+     * @return the request
      */
     @Override
     protected String getRequest() throws IOException {

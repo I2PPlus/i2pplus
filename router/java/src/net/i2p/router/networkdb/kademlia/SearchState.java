@@ -69,11 +69,11 @@ class SearchState {
     }
 
     /**
-     * getTarget.
+     * @return the target
      */
     public Hash getTarget() {return _searchKey;}
     /**
-     * getPendingSize.
+     * @return the pending size
      */
     public int getPendingSize() {
         synchronized (_pendingPeers) {
@@ -81,7 +81,7 @@ class SearchState {
         }
     }
     /**
-     * getPending.
+     * @return the pending
      */
     public Set<Hash> getPending() {
         synchronized (_pendingPeers) {
@@ -89,7 +89,7 @@ class SearchState {
         }
     }
     /**
-     * getAttempted.
+     * @return the attempted
      */
     public Set<Hash> getAttempted() {
         synchronized (_attemptedPeers) {
@@ -97,7 +97,7 @@ class SearchState {
         }
     }
     /**
-     * getAttemptedSize.
+     * @return the attempted size
      */
     public int getAttemptedSize() {
         synchronized (_attemptedPeers) {
@@ -105,7 +105,7 @@ class SearchState {
         }
     }
     /**
-     * getClosestAttempted.
+     * @return the closest attempted
      */
     public Set<Hash> getClosestAttempted(int max) {
         synchronized (_attemptedPeers) {
@@ -134,7 +134,7 @@ class SearchState {
         }
     }
     /**
-     * getSuccessful.
+     * @return the successful
      */
     public Set<Hash> getSuccessful() {
         synchronized (_successfulPeers) {
@@ -142,7 +142,7 @@ class SearchState {
         }
     }
     /**
-     * getFailed.
+     * @return the failed
      */
     public Set<Hash> getFailed() {
         synchronized (_failedPeers) {
@@ -150,7 +150,7 @@ class SearchState {
         }
     }
     /**
-     * getFailedSize.
+     * @return the failed size
      */
     public int getFailedSize() {
         synchronized (_failedPeers) {
@@ -158,7 +158,7 @@ class SearchState {
         }
     }
     /**
-     * getSuccessfulSize.
+     * @return the successful size
      */
     public int getSuccessfulSize() {
         synchronized (_successfulPeers) {
@@ -186,6 +186,7 @@ class SearchState {
      * Checks if this search state has been aborted.
      *
      * @since 0.9.16
+     * @return whether aborted
      */
     public boolean isAborted() {return _aborted;}
 
@@ -197,11 +198,11 @@ class SearchState {
     public void abort() {_aborted = true;}
 
     /**
-     * getWhenStarted.
+     * @return the when started
      */
     public long getWhenStarted() {return _started;}
     /**
-     * getWhenCompleted.
+     * @return the when completed
      */
     public long getWhenCompleted() {return _completed;}
 
@@ -260,7 +261,7 @@ class SearchState {
     }
 
     /**
-     * getRepliedPeers.
+     * @return the replied peers
      */
     public Set<Hash> getRepliedPeers() {
         synchronized (_repliedPeers) {return new HashSet<>(_repliedPeers);}
@@ -295,7 +296,7 @@ class SearchState {
     }
 
     /**
-     * getNewestLeaseSet.
+     * @return the newest lease set
      */
     public LeaseSet getNewestLeaseSet() {
         synchronized (_leaseSetResponses) {
@@ -339,7 +340,7 @@ class SearchState {
     }
 
     /**
-     * shouldStoreInitial.
+     * @return whether store initial
      */
     public boolean shouldStoreInitial() {
         if (_initialResponseStart <= 0) {
@@ -351,7 +352,7 @@ class SearchState {
     }
 
     /**
-     * getBestInitialLeaseSet.
+     * @return the best initial lease set
      */
     public LeaseSet getBestInitialLeaseSet() {
         synchronized (_leaseSetResponses) {
@@ -386,7 +387,7 @@ class SearchState {
     }
 
     /**
-     * getStoredLeaseDate.
+     * @return the stored lease date
      */
     public long getStoredLeaseDate() {
         return _storedLeaseDate;
@@ -400,7 +401,7 @@ class SearchState {
     }
 
     /**
-     * shouldUpdateStored.
+     * @return whether update stored
      */
     public boolean shouldUpdateStored(LeaseSet ls) {
         return ls.getLatestLeaseDate() > _storedLeaseDate;

@@ -653,6 +653,7 @@ public class PersistentDataStore extends TransientDataStore {
         /**
          *  Check if the netdb directory or any subdirectory has been modified
          *  since the last scan, or if we need to check for reseed.
+         * @return whether scan
          */
         private boolean shouldScan() {
             long lastMod = _dbDir.lastModified();

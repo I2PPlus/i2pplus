@@ -268,6 +268,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * Warning, this does not make a copy of I2PTunnel's client options,
      * it modifies them directly.
      * unused?
+     * @return the default options
      */
     @Override
     protected I2PSocketOptions getDefaultOptions() {
@@ -289,6 +290,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * Warning, this does not make a copy of I2PTunnel's client options,
      * it modifies them directly.
      * Do not use overrides for per-socket options.
+     * @return the default options
      */
     @Override
     protected I2PSocketOptions getDefaultOptions(Properties overrides) {

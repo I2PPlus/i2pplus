@@ -74,7 +74,7 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     }
 
     /**
-     * getAlgorithm.
+     * @return the algorithm
      */
     @Override
     public String getAlgorithm() {
@@ -82,7 +82,7 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     }
 
     /**
-     * getFormat.
+     * @return the format
      */
     @Override
     public String getFormat() {
@@ -235,7 +235,7 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     }
 
     /**
-     * getParams.
+     * @return the params
      */
     @Override
     public EdDSAParameterSpec getParams() {
@@ -278,6 +278,7 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
 
     /**
      *  @since 0.9.25
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

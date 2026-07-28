@@ -970,7 +970,7 @@ public class UDPTransport extends TransportImpl {
     /**
      *  The endpoint has failed. Remove it.
      *
-     *  @param endpoint the endpoint to fail
+     * @param endpoint the endpoint
      *  @since 0.9.16
      */
     public void fail(UDPEndpoint endpoint) {
@@ -1167,6 +1167,7 @@ public class UDPTransport extends TransportImpl {
      *  UDPEndpoint should always be instantiated (and a random port picked if not configured)
      *  before this is called, so the returned value should be &gt; 0
      *  unless the endpoint failed to bind.
+     * @return the requested port
      */
     @Override
     /** Port configured or bound by the UDP endpoint. */
@@ -1179,6 +1180,7 @@ public class UDPTransport extends TransportImpl {
      *  UDPEndpoint should always be instantiated (and a random port picked if not configured)
      *  before this is called, so the returned value should be &gt; 0
      *  unless the endpoint failed to bind.
+     * @return the requested port
      */
     private int getRequestedPort(boolean ipv6) {
         int rv = getListenPort(ipv6);
@@ -1727,6 +1729,7 @@ public class UDPTransport extends TransportImpl {
      *  our signature of the SessionCreated packet will be invalid.
      *
      *  As of 0.9.58, returns false if status is UNKNOWN
+     * @return the is port fixed
      */
     private boolean getIsPortFixed(boolean isIPv6) {
         String prop = _context.getProperty(PROP_FIXED_PORT);
@@ -2556,6 +2559,7 @@ public class UDPTransport extends TransportImpl {
     /**
      * An alternate supported style, or null.
      * @since 0.9.54
+     * @return the alt style
      */
     @Override
     /** Returns "SSU2". */
@@ -3451,8 +3455,8 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Backlogged.
      *  @since 0.9.3
+     * @return whether backlogged
      */
     @Override
     public boolean isBacklogged(Hash dest) {
@@ -3536,6 +3540,7 @@ public class UDPTransport extends TransportImpl {
      * Return our peer clock skews on this transport.
      * List composed of Long, each element representing a peer skew in seconds.
      * A positive number means our clock is ahead of theirs.
+     * @return the clock skews
      */
     @Override
     /** Peer clock skews in seconds. */

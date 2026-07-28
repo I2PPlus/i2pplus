@@ -113,7 +113,7 @@ public final class ByteCache extends TryCache<ByteArray> {
     }
 
     /**
-     * getInstance.
+     * @return the instance
      */
     @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
     public static ByteCache getInstance(int cacheSize, int size) {

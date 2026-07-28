@@ -62,6 +62,7 @@ public class NamingServiceBean extends AddressbookBean {
 
     /**
      * {@inheritDoc}
+     * @return whether prefiltered
      */
     @Override
     protected boolean isPrefiltered() {
@@ -110,6 +111,7 @@ public class NamingServiceBean extends AddressbookBean {
 
     /**
      * {@inheritDoc}
+     * @return whether not empty
      */
     @Override
     public boolean isNotEmpty() {
@@ -119,6 +121,7 @@ public class NamingServiceBean extends AddressbookBean {
 
     /**
      * {@inheritDoc}
+     * @return the file name
      */
     @Override
     public String getFileName() {
@@ -131,6 +134,7 @@ public class NamingServiceBean extends AddressbookBean {
 
     /**
      * {@inheritDoc}
+     * @return the display name
      */
     @Override
     public String getDisplayName() {
@@ -376,6 +380,7 @@ public class NamingServiceBean extends AddressbookBean {
     /**
      * {@inheritDoc}
      * Forces reload of entries to ensure blacklist filtering is applied.
+     * @return the entries
      */
     @Override
     public AddressBean[] getEntries() {
@@ -873,7 +878,7 @@ public class NamingServiceBean extends AddressbookBean {
     /**
      * Style a message for display in the UI.
      *
-     * @param message the message to style
+     * @param message the message
      * @param fail true if the message indicates a failure
      * @return the styled HTML message
      * @since 0.9.40

@@ -52,12 +52,12 @@ public class ConfigUpdateHelper extends HelperBase {
     public boolean updateAvailable() {return true;}
 
     /**
-     * getNewsURL.
+     * @return the news u r l
      */
     public String getNewsURL() {return getNewsURL(_context);}
 
     /**
-     * getNewsURL.
+     * @return the news u r l
      */
     public static String getNewsURL(I2PAppContext ctx) {
         String url = ctx.getProperty(ConfigUpdateHandler.PROP_NEWS_URL);
@@ -65,7 +65,7 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     * getUpdateURL.
+     * @return the update u r l
      */
     public String getUpdateURL() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_URL);
@@ -74,7 +74,7 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     * getProxyHost.
+     * @return the proxy host
      */
     public String getProxyHost() {
         if (isInternal()) {return _t("internal") + "\" readonly";}
@@ -82,7 +82,7 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     * getProxyPort.
+     * @return the proxy port
      */
     public String getProxyPort() {
         if (isInternal()) {return _t("internal") + "\" readonly";}
@@ -103,7 +103,7 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     * getUpdateThroughProxy.
+     * @return the update through proxy
      */
     public String getUpdateThroughProxy() {
         if (_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY)) {
@@ -123,7 +123,7 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     * getUpdateUnsigned.
+     * @return the update unsigned
      */
     public String getUpdateUnsigned() {
         return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateUnsigned\" id=updateUnsigned " +
@@ -141,7 +141,7 @@ public class ConfigUpdateHelper extends HelperBase {
                                                        3*24*60*60*1000L, 7*24*60*60*1000L, -1L };
 
     /**
-     * getRefreshFrequencySelectBox.
+     * @return the refresh frequency select box
      */
     public String getRefreshFrequencySelectBox() {
         String freq = _context.getProperty(ConfigUpdateHandler.PROP_REFRESH_FREQUENCY,
@@ -168,6 +168,7 @@ public class ConfigUpdateHelper extends HelperBase {
 
     /**
      *  Right now the jsp hides the whole select box if _dontInstall is true but this could change
+     * @return the update policy select box
      */
     public String getUpdatePolicySelectBox() {
         String policy = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_POLICY, ConfigUpdateHandler.DEFAULT_UPDATE_POLICY);
@@ -197,12 +198,12 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     * getTrustedKeys.
+     * @return the trusted keys
      */
     public String getTrustedKeys() {return new TrustedUpdate(_context).getTrustedKeysString();}
 
     /**
-     * getZipURL.
+     * @return the zip u r l
      */
     public String getZipURL() {
         return _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL, "http://skank.i2p/i2pupdate.zip");
@@ -214,7 +215,7 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     * getNewsStatus.
+     * @return the news status
      */
     public String getNewsStatus() {return NewsHelper.status(_context, _session);}
 

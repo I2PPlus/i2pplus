@@ -27,7 +27,7 @@ public final class SHA256Generator {
     }
 
     /**
-     * getInstance.
+     * @return the instance
      */
     public static final SHA256Generator getInstance() {
         return I2PAppContext.getGlobalContext().sha();
@@ -116,6 +116,7 @@ public final class SHA256Generator {
      *  Return a new MessageDigest from the system libs.
      *
      *  @since 0.8.7, public since 0.8.8 for FortunaStandalone
+     * @return the digest instance
      */
     public static MessageDigest getDigestInstance() {
         try {

@@ -71,16 +71,19 @@ public interface CompleteListener {
 
     /**
      * @since 0.9.15
+     * @return the saved preserve names setting
      */
     public boolean getSavedPreserveNamesSetting(Snark snark);
 
     /**
      * @since 0.9.15
+     * @return the saved uploaded
      */
     public long getSavedUploaded(Snark snark);
 
     /**
      * @since 0.9.31
+     * @return the saved comments
      */
     public CommentSet getSavedComments(Snark snark);
 
@@ -91,11 +94,13 @@ public interface CompleteListener {
 
     /**
      * @since 0.9.42
+     * @return whether auto start
      */
     public boolean shouldAutoStart();
 
     /**
      * @since 0.9.62
+     * @return the bandwidth listener
      */
     public BandwidthListener getBandwidthListener();
 }

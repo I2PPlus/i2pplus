@@ -131,7 +131,7 @@ class TunnelParticipant {
         }
 
         /**
-         * getName.
+         * @return the name
          */
         public String getName() {
             return "Verify Next Hop Info Found";
@@ -233,14 +233,14 @@ class TunnelParticipant {
     }
 
     /**
-     * getCompleteCount.
+     * @return the complete count
      */
     public int getCompleteCount() {
         return _handler != null ? _handler.getCompleteCount() : 0;
     }
 
     /**
-     * getFailedCount.
+     * @return the failed count
      */
     public int getFailedCount() {
         return _handler != null ? _handler.getFailedCount() : 0;
@@ -338,7 +338,7 @@ class TunnelParticipant {
         }
 
         /**
-         * getName.
+         * @return the name
          */
         public String getName() {
             return "Participant send after lookup";
@@ -384,7 +384,7 @@ class TunnelParticipant {
         }
 
         /**
-         * getName.
+         * @return the name
          */
         public String getName() {
             return "Participant Next Hop Lookup Timeout";

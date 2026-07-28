@@ -244,6 +244,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
      * Return the current inbound tunnel count
      *
      * @since 0.9.66+
+     * @return the active inbound count
      */
     public int getActiveInboundCount() {
         return Integer.parseInt(_lastIn);
@@ -253,6 +254,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
      * Return the current outbound tunnel count
      *
      * @since 0.9.66+
+     * @return the active outbound count
      */
     public int getActiveOutboundCount() {
         return Integer.parseInt(_lastOut);

@@ -128,20 +128,20 @@ class FragmentedMessage {
     }
 
     /**
-     * getMessageId.
+     * @return the message id
      */
     public long getMessageId() { return _messageId; }
     /**
-     * getTargetRouter.
+     * @return the target router
      */
     public Hash getTargetRouter() { return _toRouter; }
     /**
-     * getTargetTunnel.
+     * @return the target tunnel
      */
     public TunnelId getTargetTunnel() { return _toTunnel; }
 
     /**
-     * getFragmentCount.
+     * @return the fragment count
      */
     public int getFragmentCount() {
         int found = 0;
@@ -169,7 +169,7 @@ class FragmentedMessage {
         return true;
     }
     /**
-     * getCompleteSize.
+     * @return the complete size
      */
     public int getCompleteSize() {
         if (!_lastReceived)
@@ -193,7 +193,7 @@ class FragmentedMessage {
     /** how long has this fragmented message been alive?  */
     public long getLifetime() { return _context.clock().now() - _createdOn; }
     /**
-     * getReleased.
+     * @return the released
      */
     public boolean getReleased() { return _completed; }
 
@@ -225,7 +225,7 @@ class FragmentedMessage {
     }
 
     /**
-     * getReleasedAfter.
+     * @return the released after
      */
     public synchronized long getReleasedAfter() { return _releasedAfter; }
     /**

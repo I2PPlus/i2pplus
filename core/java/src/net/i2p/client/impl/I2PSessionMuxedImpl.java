@@ -97,7 +97,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     /**
      * For extension by SubSession.
      *
-     * @param primary the primary session
+     * @param primary the primary
      * @param destKeyStream stream containing the private key data,
      *                             format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      *

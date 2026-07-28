@@ -122,6 +122,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
     /**
      *  Inflater statistic
+     * @return the total read
      */
     public long getTotalRead() {
         try {
@@ -133,6 +134,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
     /**
      *  Inflater statistic
+     * @return the total expanded
      */
     public long getTotalExpanded() {
         try {
@@ -145,6 +147,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
     /**
      *  Inflater statistic
+     * @return the remaining
      */
     public long getRemaining() {
         try {
@@ -157,6 +160,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
     /**
      *  Inflater statistic
+     * @return the finished
      */
     public boolean getFinished() {
         try {

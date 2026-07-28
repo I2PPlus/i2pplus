@@ -86,7 +86,7 @@ public class ConfigPeerHandler extends FormHandler {
 
     /**
      * Set the peer hash.
-     * @param peer the peer hash string
+     * @param peer the peer
      */
     public void setPeer(String peer) { _peer = peer; }
     /**

@@ -44,7 +44,7 @@ class PluginUpdateChecker extends UpdateRunner {
     }
 
     /**
-     * getID.
+     * @return the i d
      */
     @Override
     public String getID() { return _appName; }

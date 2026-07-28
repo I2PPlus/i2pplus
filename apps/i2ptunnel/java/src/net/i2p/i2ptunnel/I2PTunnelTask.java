@@ -42,15 +42,15 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
     /** for apps that use multiple I2PTunnel instances */
     public void setTunnel(I2PTunnel pTunnel) {tunnel = pTunnel;}
     /**
-     * getTunnel.
+     * @return the tunnel
      */
     public I2PTunnel getTunnel() {return tunnel;}
     /**
-     * getId.
+     * @return the id
      */
     public int getId() {return this.id;}
     /**
-     * isOpen.
+     * @return whether open
      */
     public boolean isOpen() {return open;}
     /**
@@ -113,7 +113,7 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
      * the router that disconnection occurred.
      * </p>
      *
-     * @param session the session that was disconnected
+     * @param session the session
      */
     public void disconnected(I2PSession session) {
         routerDisconnected();
@@ -122,6 +122,7 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
 
     /**
      *  @since 0.9.62
+     * @return the boolean option
      */
     protected boolean getBooleanOption(String opt, boolean dflt) {
         Properties opts = getTunnel().getClientOptions();
@@ -144,6 +145,7 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
      *  Returns the I2PSocketManager for this task, or null if not applicable.
      *  Extending classes may override to return their socket manager.
      *  @since 0.9.63
+     * @return the socket manager
      */
     public I2PSocketManager getSocketManager() {return null;}
 

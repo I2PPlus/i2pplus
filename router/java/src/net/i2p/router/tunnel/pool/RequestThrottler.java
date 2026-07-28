@@ -725,6 +725,7 @@ public class RequestThrottler {
 
     /**
      * Checks if router has low bandwidth sharing capabilities.
+     * @return whether low share
      */
     private boolean isLowShare(RouterInfo ri) {
         if (ri == null) return false;
@@ -736,6 +737,7 @@ public class RequestThrottler {
 
     /**
      * Checks if router has high bandwidth capabilities.
+     * @return whether fast
      */
     private boolean isFast(RouterInfo ri) {
         if (ri == null) return false;
@@ -747,6 +749,7 @@ public class RequestThrottler {
 
     /**
      * Checks if router is low tier (lowest bandwidth tiers).
+     * @return whether l tier
      */
     private boolean isLTier(RouterInfo ri) {
         if (ri == null) return false;

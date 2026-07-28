@@ -411,7 +411,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      * @param startAt first index in pending to send (inclusive)
      * @param sendThrough last index in pending to send (inclusive)
      * @param pending the list of pending messages
-     * @param sender the sender to deliver messages
+     * @param sender the sender
      * @param rec the receiver for preprocessed data
      */
     protected void send(List<PendingGatewayMessage> pending, int startAt, int sendThrough, TunnelGateway.Sender sender, TunnelGateway.Receiver rec) {

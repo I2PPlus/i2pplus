@@ -141,15 +141,15 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     /// begin SSU2Sender interface ///
 
     /**
-     * getRemoteHostId.
+     * @return the remote host id
      */
     public RemoteHostId getRemoteHostId() { return _remoteHostId; }
     /**
-     * isIPv6.
+     * @return whether i pv6
      */
     public boolean isIPv6() { return _remoteHostId.getIP().length == 16; }
     /**
-     * getRemoteIPAddress.
+     * @return the remote i p address
      */
     public InetAddress getRemoteIPAddress() {
         try {
@@ -159,31 +159,31 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         }
     }
     /**
-     * getRemotePort.
+     * @return the remote port
      */
     public int getRemotePort() { return _remoteHostId.getPort(); }
     /**
-     * getMTU.
+     * @return the m t u
      */
     public int getMTU() { return _mtu; }
     /**
-     * getNextPacketNumber.
+     * @return the next packet number
      */
     public long getNextPacketNumber() { return _packetNumber.getAndIncrement(); }
     /**
-     * getSendConnID.
+     * @return the send conn i d
      */
     public long getSendConnID() { return _sendConnID; }
     /**
-     * getSendCipher.
+     * @return the send cipher
      */
     public CipherState getSendCipher() { return _sendCha; }
     /**
-     * getSendHeaderEncryptKey1.
+     * @return the send header encrypt key1
      */
     public byte[] getSendHeaderEncryptKey1() { return _sendHeaderEncryptKey1; }
     /**
-     * getSendHeaderEncryptKey2.
+     * @return the send header encrypt key2
      */
     public byte[] getSendHeaderEncryptKey2() { return _sendHeaderEncryptKey2; }
     /**
@@ -193,7 +193,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         // No-op - intentionally empty
     }
     /**
-     * getReceivedMessages.
+     * @return the received messages
      */
     public SSU2Bitfield getReceivedMessages() { return _receivedMessages; }
     /**
@@ -207,7 +207,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         // No-op - intentionally empty
     }
     /**
-     * getFlags.
+     * @return the flags
      */
     public byte getFlags() { return 0; }
 

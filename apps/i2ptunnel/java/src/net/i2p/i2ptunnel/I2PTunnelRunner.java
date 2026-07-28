@@ -760,6 +760,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
 
         /**
          *
+         * @return the failure
          */
         public Exception getFailure() {return _failure;}
     }

@@ -323,6 +323,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /**
      *  @param opts may be null
      *  @since 0.9.21 copied from I2PSocketManagerFactory
+     *  @return the sig type
      */
     private SigType getSigType(Properties opts) {
         if (opts != null) {
@@ -503,6 +504,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *  Current options, not a copy, setters may be used to make changes.
      *
      *  TODO There is no facility to specify the session.
+     * @return the default options
      */
     public I2PSocketOptions getDefaultOptions() {
         return _defaultOptions;
@@ -530,6 +532,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *  incoming connections on a subsession.
      *
      *  @since 0.8.4
+     * @return the standard server socket
      */
     public synchronized ServerSocket getStandardServerSocket() throws IOException {
         if (_realServerSocket == null)
@@ -753,6 +756,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * Has the socket manager been destroyed?
      *
      * @since 0.9.9
+     * @return whether destroyed
      */
     public boolean isDestroyed() {
         return _isDestroyed.get();
@@ -775,6 +779,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      *  For logging / diagnostics only
+     * @return the name
      */
     public String getName() { return _name; }
 

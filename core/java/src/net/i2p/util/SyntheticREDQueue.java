@@ -120,6 +120,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * Returns current max drop probability across all instances.
      *
      * @since 0.9.70+
+     * @return the current max drop probability
      */
     public static float getCurrentMaxDropProbability() {
         return _maxDropProbability;
@@ -129,6 +130,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * Returns the minimum threshold from the first active instance, or -1 if none.
      *
      * @since 0.9.70+
+     * @return the current min threshold
      */
     public static int getCurrentMinThreshold() {
         for (WeakReference<SyntheticREDQueue> ref : INSTANCES) {
@@ -142,6 +144,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * Returns the maximum threshold from the first active instance, or -1 if none.
      *
      * @since 0.9.70+
+     * @return the current max threshold
      */
     public static int getCurrentMaxThreshold() {
         for (WeakReference<SyntheticREDQueue> ref : INSTANCES) {
@@ -155,6 +158,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * Returns a snapshot of all active SyntheticREDQueue instances.
      *
      * @since 0.9.70+
+     * @return the instances
      */
     public static List<SyntheticREDQueue> getInstances() {
         List<SyntheticREDQueue> result = new ArrayList<>();
@@ -245,6 +249,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * Returns the current minimum threshold in bytes.
      *
      * @since 0.9.70+
+     * @return the min threshold
      */
     public int getMinThreshold() {
         return _minThresholdBytes;
@@ -254,6 +259,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * Returns the current maximum threshold in bytes.
      *
      * @since 0.9.70+
+     * @return the max threshold
      */
     public int getMaxThreshold() {
         return _maxThresholdBytes;
@@ -263,6 +269,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * Returns the current max drop probability.
      *
      * @since 0.9.70+
+     * @return the max drop probability
      */
     public float getMaxDropProbability() {
         return _maxDropProbability;

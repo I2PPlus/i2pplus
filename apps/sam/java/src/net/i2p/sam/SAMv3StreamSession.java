@@ -60,7 +60,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     private final String nick;
 
     /**
-     * getNick.
+     * @return the nick
      */
     public String getNick() {
         return nick;
@@ -133,7 +133,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     }
 
     /**
-     * getDB.
+     * @return the d b
      */
     public static SessionsDB getDB() {
         return SAMv3Handler.sSessionsHash;
@@ -627,7 +627,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     }
 
     /**
-     * getSocketServer.
+     * @return the socket server
      */
     protected I2PServerSocket getSocketServer() {
         synchronized (this.socketServerLock) {

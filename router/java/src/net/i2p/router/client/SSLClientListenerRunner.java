@@ -153,6 +153,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
 
     /**
      * Get a SSLServerSocket.
+     * @return the server socket
      */
     @Override
     protected ServerSocket getServerSocket() throws IOException {

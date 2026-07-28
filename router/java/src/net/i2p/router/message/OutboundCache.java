@@ -102,7 +102,7 @@ public class OutboundCache {
         }
 
         /**
-         * hashCode.
+         * @return whether h code is present
          */
         @Override
         public int hashCode() {

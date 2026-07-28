@@ -22,7 +22,7 @@ class StartAcceptingClientsJob extends JobImpl {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     public String getName() { return "Start Accepting Clients"; }
 

@@ -37,7 +37,7 @@ import java.io.IOException;
  */
 public interface RandomAccessInterface extends Closeable {
 	/**
-	 * getFilePointer.
+	 * @return the file pointer
 	 */
 	public long getFilePointer() throws IOException;
 	/**

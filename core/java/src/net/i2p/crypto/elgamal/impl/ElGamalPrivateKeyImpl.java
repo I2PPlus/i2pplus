@@ -40,7 +40,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     /**
      * Create a copy of the given ElGamal private key.
      *
-     * @param key the key to copy
+     * @param key the key
      */
     public ElGamalPrivateKeyImpl(ElGamalPrivateKey key) {
         this.x = key.getX();
@@ -78,7 +78,6 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     }
 
     /**
-     * Constructor.
      * @param x the private exponent
      * @param elSpec the ElGamal parameters
      */
@@ -97,7 +96,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     }
 
     /**
-     * getAlgorithm.
+     * @return the algorithm
      */
     @Override
     public String getAlgorithm() {
@@ -107,7 +106,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     /**
      * return the encoding format we produce in getEncoded().
      *
-     * @return the string "PKCS#8"
+     * @return the format
      */
     @Override
     public String getFormat() {
@@ -181,7 +180,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     }
 
     /**
-     * getParameters.
+     * @return the parameters
      */
     @Override
     public ElGamalParameterSpec getParameters() {
@@ -189,7 +188,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     }
 
     /**
-     * getParams.
+     * @return the params
      */
     @Override
     public DHParameterSpec getParams() {
@@ -197,7 +196,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     }
 
     /**
-     * getX.
+     * @return the x
      */
     @Override
     public BigInteger getX() {

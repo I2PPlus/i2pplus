@@ -90,9 +90,7 @@ import java.util.Arrays;
  */
 public class PublicKey extends SimpleDataStructure {
     private static final EncType DEF_TYPE = EncType.ELGAMAL_2048;
-    /**
-     * Keysize bytes.
-     */
+    /** Keysize bytes. */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPubkeyLen();
     private static final int CACHE_SIZE = 1024;
     private static final SDSCache<PublicKey> _cache = new SDSCache<>(PublicKey.class, KEYSIZE_BYTES, CACHE_SIZE);
@@ -236,7 +234,7 @@ public class PublicKey extends SimpleDataStructure {
      *
      *  @throws IllegalArgumentException if this is already typed to a different type
      *  @since 0.9.42
-     * @param kcert the key certificate
+     *  @param kcert the key certificate
      */
     PublicKey toTypedKey(KeyCertificate kcert) {
         if (_data == null) {
@@ -273,7 +271,7 @@ public class PublicKey extends SimpleDataStructure {
      *  @return trailing padding length &gt; 0 or null if no padding or type is unknown
      *  @throws IllegalArgumentException if this is already typed to a different type
      *  @since 0.9.42
-     * @param kcert the key certificate
+     *  @param kcert the key certificate
      */
     public byte[] getPadding(KeyCertificate kcert) {
         if (_data == null) {
@@ -325,6 +323,7 @@ public class PublicKey extends SimpleDataStructure {
 
     /**
      *  @since 0.9.42
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

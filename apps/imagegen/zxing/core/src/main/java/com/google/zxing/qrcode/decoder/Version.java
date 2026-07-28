@@ -68,35 +68,35 @@ public final class Version {
   }
 
   /**
-   * getVersionNumber.
+   * @return the version number
    */
   public int getVersionNumber() {
     return versionNumber;
   }
 
   /**
-   * getAlignmentPatternCenters.
+   * @return the alignment pattern centers
    */
   public int[] getAlignmentPatternCenters() {
     return alignmentPatternCenters;
   }
 
   /**
-   * getTotalCodewords.
+   * @return the total codewords
    */
   public int getTotalCodewords() {
     return totalCodewords;
   }
 
   /**
-   * getDimensionForVersion.
+   * @return the dimension for version
    */
   public int getDimensionForVersion() {
     return 17 + 4 * versionNumber;
   }
 
   /**
-   * getECBlocksForLevel.
+   * @return the e c blocks for level
    */
   public ECBlocks getECBlocksForLevel(ErrorCorrectionLevel ecLevel) {
     return ecBlocks[ecLevel.ordinal()];
@@ -121,7 +121,7 @@ public final class Version {
   }
 
   /**
-   * getVersionForNumber.
+   * @return the version for number
    */
   public static Version getVersionForNumber(int versionNumber) {
     if (versionNumber < 1 || versionNumber > 40) {
@@ -215,14 +215,14 @@ public final class Version {
     }
 
     /**
-     * getECCodewordsPerBlock.
+     * @return the e c codewords per block
      */
     public int getECCodewordsPerBlock() {
       return ecCodewordsPerBlock;
     }
 
     /**
-     * getNumBlocks.
+     * @return the num blocks
      */
     public int getNumBlocks() {
       int total = 0;
@@ -233,14 +233,14 @@ public final class Version {
     }
 
     /**
-     * getTotalECCodewords.
+     * @return the total e c codewords
      */
     public int getTotalECCodewords() {
       return ecCodewordsPerBlock * getNumBlocks();
     }
 
     /**
-     * getECBlocks.
+     * @return the e c blocks
      */
     public ECB[] getECBlocks() {
       return ecBlocks;
@@ -263,14 +263,14 @@ public final class Version {
     }
 
     /**
-     * getCount.
+     * @return the count
      */
     public int getCount() {
       return count;
     }
 
     /**
-     * getDataCodewords.
+     * @return the data codewords
      */
     public int getDataCodewords() {
       return dataCodewords;

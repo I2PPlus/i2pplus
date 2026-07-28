@@ -381,7 +381,7 @@ public class SSLEepGet extends EepGet {
         }
 
         /**
-         * getAcceptedIssuers.
+         * @return the accepted issuers
          */
         @Override
         public X509Certificate[] getAcceptedIssuers() {
@@ -454,6 +454,7 @@ public class SSLEepGet extends EepGet {
      *  This may be called either after the constructor or after the fetch.
      *
      *  @since 0.8.2
+     * @return the s s l state
      */
     public SSLState getSSLState() {
         return new SSLState(_sslContext);

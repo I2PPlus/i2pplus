@@ -778,6 +778,7 @@ public class PluginStarter implements Runnable {
      *  Default true
      *
      *  @since 0.8.13
+     * @return whether plugin enabled
      */
     public static boolean isPluginEnabled(String appName) {
         Properties props = pluginProperties();
@@ -1052,7 +1053,7 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     * isPluginRunning.
+     * @return whether plugin running
      */
     public static boolean isPluginRunning(String pluginName, RouterContext ctx) {
         Server s = RouterConsoleRunner.getConsoleServer(ctx);
@@ -1061,6 +1062,7 @@ public class PluginStarter implements Runnable {
 
     /**
      *  @since 0.9.41
+     * @return whether plugin running
      */
     protected static boolean isPluginRunning(String pluginName, RouterContext ctx, Server s) {
         Log log = ctx.logManager().getLog(PluginStarter.class);
@@ -1222,6 +1224,7 @@ public class PluginStarter implements Runnable {
     /**
      * translate a string
      * @since 0.9.30
+     * @return the text
      */
     private static String gettext(String s, Object o, I2PAppContext ctx) {
         return Messages.getString(s, o, ctx);

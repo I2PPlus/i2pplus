@@ -154,6 +154,7 @@ public class Signature extends SimpleDataStructure {
 
     /**
      *  @since 0.9.17
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

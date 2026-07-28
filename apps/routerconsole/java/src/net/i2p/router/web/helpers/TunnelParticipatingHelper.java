@@ -17,7 +17,7 @@ public class TunnelParticipatingHelper extends HelperBase {
     public TunnelParticipatingHelper() { /* nop */ }
 
     /**
-     * getTunnelsParticipating.
+     * @return the tunnels participating
      */
     public String getTunnelsParticipating() {
         TunnelRenderer renderer = new TunnelRenderer(_context);

@@ -266,7 +266,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     * isEnabled.
+     * @return whether enabled
      */
     @Override
     public boolean isEnabled() {
@@ -274,14 +274,14 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     * getB32Hostname.
+     * @return the b32 hostname
      */
     public String getB32Hostname() {
         return sockMgr.getSession().getMyDestination().toBase32();
     }
 
     /**
-     * getLocalAddress.
+     * @return the local address
      */
     public byte[] getLocalAddress() {
         return _localAddr;

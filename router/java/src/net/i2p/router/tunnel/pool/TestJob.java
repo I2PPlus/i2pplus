@@ -66,6 +66,7 @@ public class TestJob extends JobImpl {
      * Prevents overwhelming the router with too many simultaneous tunnel tests.
      * This value can be adjusted based on system capacity.
      * Tunable via i2p.tunnel.testJob.maxConcurrent (default: 64 fast / 32 slow)
+     * @return the max concurrent tests
      */
     private int getMaxConcurrentTests() {
         return getContext().getProperty("i2p.tunnel.testJob.maxConcurrent",
@@ -75,6 +76,7 @@ public class TestJob extends JobImpl {
     /**
      * Get the minimum test period from config or default (15s).
      * Tunable via i2p.tunnel.testJob.minTestPeriod (default: 15000).
+     * @return the min test period
      */
     private int getMinTestPeriod() {
         // Must be >= the 20s minimum in dispatchOutbound to prevent the
@@ -85,6 +87,7 @@ public class TestJob extends JobImpl {
     /**
      * Get the maximum test period from config or default (30s).
      * Tunable via i2p.tunnel.testJob.maxTestPeriod (default: 30000).
+     * @return the max test period
      */
     private int getMaxTestPeriod() {
         return getContext().getProperty("i2p.tunnel.testJob.maxTestPeriod", 30*1000);
@@ -153,6 +156,7 @@ public class TestJob extends JobImpl {
      * Above this threshold, no new tests are scheduled until count decreases.
      * Prevents ever-increasing backlogs that could cause job lag.
      * Tunable via i2p.tunnel.testJob.hardLimit (default: 512 fast / 384 slow)
+     * @return the hard limit
      */
     public static int getHardLimit(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.testJob.hardLimit",
@@ -234,6 +238,7 @@ public class TestJob extends JobImpl {
     /**
      *  Get the current number of queued + active test jobs for capacity planning.
      *  @since 0.9.69+
+     * @return the current test job count
      */
     public static int getCurrentTestJobCount() {
         return TOTAL_TEST_JOBS.get();
@@ -242,6 +247,7 @@ public class TestJob extends JobImpl {
     /**
      *  Get the maximum number of queued test jobs allowed before deferring.
      *  @since 0.9.69+
+     * @return the max test jobs
      */
     public static int getMaxTestJobs() {
         return maxQueuedTests;
@@ -607,7 +613,7 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     @Override
     public String getName() {

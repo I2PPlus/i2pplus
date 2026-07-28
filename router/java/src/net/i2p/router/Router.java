@@ -174,7 +174,7 @@ public class Router implements RouterClock.ClockShiftListener {
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String PROP_RELAX_CONGESTION_CAP = "router.relaxCongestionCap";
     /**
-     * isAdvanced.
+     * @return whether advanced
      */
     public boolean isAdvanced() {return getContext().getBooleanProperty(PROP_ADVANCED);}
     private static final String ORIGINAL_TIMEZONE_ID;
@@ -584,6 +584,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  rebuild of the router info, this may take a long time.
      *  For determining the current status of the router, use
      *  RouterContext.commSystem().getStatus().
+     * @return the router info
      */
     public RouterInfo getRouterInfo() {
         _routerInfoLock.readLock().lock();
@@ -597,6 +598,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Lockless.
      *
      *  @since 0.9.67
+     * @return the router identity
      */
     public RouterIdentity getRouterIdentity() {return _routerIdent;}
 
@@ -606,6 +608,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Lockless.
      *
      *  @since 0.9.67
+     * @return the router hash
      */
     public Hash getRouterHash() {return _routerHash;}
 
@@ -645,6 +648,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * This uses System time, NOT context time, so context clock shifts will
      * not affect it. This is important if NTP fails and the
      * clock then shifts from a SSU peer source just after startup.
+     * @return the uptime
      */
     public long getUptime() {
         if (_started <= 0) {return 1000;} // racing on startup
@@ -796,6 +800,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Caller must synchronize
      *
      *  @param ctx will be null at startup when called from constructor
+     *  @return the config
      */
     private static Properties getConfig(RouterContext ctx, String filename) {
         Log log = null;
@@ -1000,6 +1005,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Is a final shutdown in progress? This may not be cancelled.
      *
      * @since 0.8.12
+     * @return whether final shutdown in progress
      */
     public boolean isFinalShutdownInProgress() {
         synchronized(_stateLock) {return STATES_FINAL.contains(_state);}
@@ -1337,7 +1343,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *
      */
     /**
-     * isHidden.
+     * @return whether hidden
      */
     public boolean isHidden() {
         if (_context.getBooleanProperty(PROP_HIDDEN)) {return true;}
@@ -2081,6 +2087,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Once called, the result is cached.
      *
      *  @since 0.9.47
+     * @return the estimated downtime
      */
     public long getEstimatedDowntime() {
         synchronized(_configFileLock) {
@@ -2143,12 +2150,14 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      *  Max of inbound and outbound rate in bytes per second
+     * @return the 1s rate
      */
     public int get1sRate() {return get1sRate(false);}
 
     /**
      *  When outboundOnly is false, outbound rate in bytes per second.
      *  When true, max of inbound and outbound rate in bytes per second.
+     * @return the 1s rate
      */
     public int get1sRate(boolean outboundOnly) {
         FIFOBandwidthLimiter bw = _context.bandwidthLimiter();
@@ -2159,6 +2168,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      *  Inbound rate in bytes per second
+     * @return the 1s rate in
      */
     public int get1sRateIn() {
         FIFOBandwidthLimiter bw = _context.bandwidthLimiter();
@@ -2167,12 +2177,14 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      *  Max of inbound and outbound rate in bytes per second
+     * @return the 15s rate
      */
     public int get15sRate() {return get15sRate(false);}
 
     /**
      *  When outboundOnly is false, outbound rate in bytes per second.
      *  When true, max of inbound and outbound rate in bytes per second.
+     * @return the 15s rate
      */
     public int get15sRate(boolean outboundOnly) {
         FIFOBandwidthLimiter bw = _context.bandwidthLimiter();
@@ -2183,6 +2195,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      *  Inbound rate in bytes per second
+     * @return the 15s rate in
      */
     public int get15sRateIn() {
         FIFOBandwidthLimiter bw = _context.bandwidthLimiter();
@@ -2191,12 +2204,14 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      *  Max of inbound and outbound rate in bytes per second
+     * @return the 1m rate
      */
     public int get1mRate() {return get1mRate(false);}
 
     /**
      *  When outboundOnly is false, outbound rate in bytes per second.
      *  When true, max of inbound and outbound rate in bytes per second.
+     * @return the 1m rate
      */
     public int get1mRate(boolean outboundOnly) {
         int send = 0;
@@ -2212,6 +2227,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      *  Inbound rate in bytes per second
+     * @return the 1m rate in
      */
     public int get1mRateIn() {
         StatManager mgr = _context.statManager();

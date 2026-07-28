@@ -122,7 +122,7 @@ public abstract class SimpleDataStructure implements DataStructure {
     /**
      * Get the data reference (not a copy)
      *
-     * @return the byte array, or null if unset
+     * @return the data
      */
     public byte[] getData() {
         return _data;

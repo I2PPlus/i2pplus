@@ -72,6 +72,7 @@ public class Rate {
     /**
      * when the max(totalValue) was achieved, how many events occurred in that period?
      * Note that this is not necesarily the highest event count; that isn't tracked.
+     * @return the extreme event count
      */
     public long getExtremeEventCount() {
         return _extremeEventCount;
@@ -296,6 +297,7 @@ public class Rate {
 
     /**
      * What was the average value across the events in the last period?
+     * @return the average value
      */
     public synchronized double getAverageValue() {
         int lec = _lastEventCount; // avoid race NPE
@@ -307,6 +309,7 @@ public class Rate {
     /**
      * During the extreme period (i.e. the period with the highest total value),
      * what was the average value?
+     * @return the extreme average value
      */
     public synchronized double getExtremeAverageValue() {
         if ((_extremeTotalValue != 0) && (_extremeEventCount > 0)) return _extremeTotalValue / _extremeEventCount;
@@ -316,6 +319,7 @@ public class Rate {
 
     /**
      * What was the average value across the events since the stat was created?
+     * @return the lifetime average value
      */
     public synchronized double getLifetimeAverageValue() {
         if ((_lifetimeTotalValue != 0) && (_lifetimeEventCount > 0)) return _lifetimeTotalValue / _lifetimeEventCount;
@@ -609,6 +613,7 @@ public class Rate {
     /**
      * It doesn't appear that Rates are ever stored in a Set or Map
      * (RateStat stores in an array) so let's make this easy.
+     * @return whether h code is present
      */
     @Override
     public synchronized int hashCode() {

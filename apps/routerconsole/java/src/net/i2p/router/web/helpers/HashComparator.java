@@ -19,6 +19,7 @@ class HashComparator implements Comparator<Hash>, Serializable {
 
     /**
      * Thread safe, no state
+     * @return the instance
      */
     public static HashComparator getInstance() { return _instance; }
 

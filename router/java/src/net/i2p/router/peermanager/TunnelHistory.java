@@ -143,11 +143,11 @@ public class TunnelHistory {
     }
 
     /**
-     * getRejectionRate.
+     * @return the rejection rate
      */
     public RateStat getRejectionRate() {return _rejectRate;}
     /**
-     * getFailedRate.
+     * @return the failed rate
      */
     public RateStat getFailedRate() {return _failRate;}
 

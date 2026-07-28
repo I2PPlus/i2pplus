@@ -122,6 +122,7 @@ class MailCache {
 	 * For writing a new full mail (NOT headers only)
 	 * Caller must close.
 	 * @since 0.9.35
+	 * @return the full write buffer
 	 */
 	public Buffer getFullWriteBuffer(String uidl) {
 		// no locking this way
@@ -208,6 +209,7 @@ class MailCache {
 	/**
 	 * Is loadFromDisk in progress?
 	 * @since 0.9.35
+	 * @return whether loading
 	 */
 	public synchronized boolean isLoading() {
 		return _loadInProgress != null;
@@ -216,6 +218,7 @@ class MailCache {
 	/**
 	 * Has loadFromDisk completed?
 	 * @since 0.9.35
+	 * @return whether loaded
 	 */
 	public synchronized boolean isLoaded() {
 		return _isLoaded;

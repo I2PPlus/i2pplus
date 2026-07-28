@@ -298,6 +298,7 @@ public enum SigType {
      *  The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA
      *
      *  @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
+     *  @return the params
      */
     public AlgorithmParameterSpec getParams() throws InvalidParameterSpecException {
         if (params == null) throw new InvalidParameterSpecException(toString() + " is not available in this JVM");
@@ -307,6 +308,7 @@ public enum SigType {
     /** Gets a MessageDigest instance for this signature type.
      *
      *  @throws UnsupportedOperationException if not supported
+     *  @return the digest instance
      */
     public MessageDigest getDigestInstance() {
         if (digestName.equals("SHA-1")) return SHA1.getInstance();
@@ -324,6 +326,7 @@ public enum SigType {
      *  @since 0.9.9
      *
      *  @throws UnsupportedOperationException if not supported
+     *  @return the hash instance
      */
     public SimpleDataStructure getHashInstance() {
         switch (getHashLen()) {
@@ -344,6 +347,7 @@ public enum SigType {
      *  The router version in which this type was first supported.
      *
      *  @since 0.9.15
+     * @return the supported since
      */
     public String getSupportedSince() {
         return since;
@@ -353,6 +357,7 @@ public enum SigType {
      *  The OID for the signature.
      *
      *  @since 0.9.25
+     * @return the o i d
      */
     public String getOID() {
         return oid;

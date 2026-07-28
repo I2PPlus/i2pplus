@@ -54,7 +54,7 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() { return MESSAGE_TYPE; }

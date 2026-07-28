@@ -148,7 +148,7 @@ final class FormatInformation {
   }
 
   /**
-   * hashCode.
+   * @return whether h code is present
    */
   @Override
   public int hashCode() {

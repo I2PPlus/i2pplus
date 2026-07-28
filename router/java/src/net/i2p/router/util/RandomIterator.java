@@ -63,6 +63,7 @@ public class RandomIterator<E> implements Iterator<E> {
     * See, for instance,
     * <a href="http://www.qbrundage.com/michaelb/pubs/essays/random_number_generation" title="http://www.qbrundage.com/michaelb/pubs/essays/random_number_generation" target="_blank">http://www.qbrundage.com/michaelb/pubs/e&#8230;</a>
     * for some implementations, which are faster than java.util.Random.
+     * @return the instance
     */
     private final Random rand = RandomSource.getInstance();
 
@@ -94,7 +95,7 @@ public class RandomIterator<E> implements Iterator<E> {
     }
 
     /**
-     * hasNext.
+     * @return whether next is present
      */
     public boolean hasNext() {
         return servedCount < LIST_SIZE;

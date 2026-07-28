@@ -178,7 +178,7 @@ public class Destination extends KeysAndCert {
      *  Deprecated, used only by Packet.java in streaming.
      *  Broken for sig types P521 and RSA before 0.9.15
      *
-     *  @param target the target buffer
+     *  @param target the target
      *  @param offset the offset to start writing
      *  @return the written length (NOT the new offset)
      */
@@ -258,7 +258,7 @@ public class Destination extends KeysAndCert {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

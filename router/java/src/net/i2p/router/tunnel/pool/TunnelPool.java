@@ -532,6 +532,7 @@ public class TunnelPool {
     /**
      * Suppress last-resort tunnel warning spam with rate limiting.
      * @since 0.9.69+
+     * @return whether log last resort warning
      */
     private boolean shouldLogLastResortWarning() {
         long now = System.currentTimeMillis();
@@ -679,6 +680,7 @@ public class TunnelPool {
      *  tunnel pool exhaustion after extended uptime.
      *
      *  @since 0.8.11
+     * @return the adjusted total quantity
      */
     private int getAdjustedTotalQuantity() {
         if (_settings.getLength() == 0 && _settings.getLengthVariance() == 0) {return 1;}
@@ -1299,6 +1301,7 @@ public class TunnelPool {
      *  global tunnel build success rate as a fraction (0.0-1.0).
      *  Reads the same StatManager rate the Tuner uses.
      *  Returns NaN if no data yet (early startup).
+     * @return the build success rate
      */
     private double getBuildSuccessRate() {
         RateStat rs = _context.statManager().getRate("tunnel.buildSuccessRate");
@@ -3331,6 +3334,7 @@ public class TunnelPool {
     /**
      * Suppress timeout warning spam when we have adequate tunnels
      * Enhanced to be much more aggressive about suppression to eliminate log spam
+     * @return whether suppress timeout warning
      */
     private boolean shouldSuppressTimeoutWarning() {
         long uptime = _context.router().getUptime();
@@ -3406,6 +3410,7 @@ public class TunnelPool {
 
     /**
      * Check if the destination is reachable by looking up its LeaseSet
+     * @return whether destination reachable
      */
     private boolean isDestinationReachable() {
         if (_settings.isExploratory()) {
@@ -3444,6 +3449,7 @@ public class TunnelPool {
     /**
      * Suppress "no tunnels available" warning spam with rate limiting
      * Uses adaptive suppression between 5 and 10 minutes based on failures
+     * @return whether log no tunnels warning
      */
     private boolean shouldLogNoTunnelsWarning() {
         long uptime = _context.router().getUptime();
@@ -3517,6 +3523,7 @@ public class TunnelPool {
     /**
      * Determine if we should perform detailed failure analysis
      * Only analyze every Nth failure to avoid excessive processing
+     * @return whether analyze failure
      */
     private boolean shouldAnalyzeFailure(TunnelInfo cfg) {
         int failures = _consecutiveBuildTimeouts.get();

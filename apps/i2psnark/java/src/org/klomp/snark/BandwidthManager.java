@@ -134,6 +134,7 @@ public class BandwidthManager implements BandwidthListener {
      * Should we request this many bytes?
      *
      * @param peer ignored
+     * @return whether request
      */
     @Override
     public boolean shouldRequest(Peer peer, int size) {

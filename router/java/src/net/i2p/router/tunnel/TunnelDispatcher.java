@@ -601,6 +601,7 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Get the total bandwidth allocated for participating tunnels
+     * @return the allocated b w
      */
     public int getAllocatedBW() {
         return _allocatedBW.get();
@@ -608,6 +609,7 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Get the number of participating tunnels
+     * @return the participating count
      */
     public int getParticipatingCount() {
         return _participatingConfig.size();
@@ -615,6 +617,7 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Get a new random send tunnel ID that isn't a duplicate
+     * @return the new o b g w i d
      */
     public TunnelId getNewOBGWID() {
         long id;
@@ -628,6 +631,7 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Get a new random receive tunnel ID that isn't a duplicate
+     * @return the new i b e p i d
      */
     public TunnelId getNewIBEPID() {
         long id;
@@ -641,6 +645,7 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Get a new random receive tunnel ID that isn't a duplicate (zero hop)
+     * @return the new i b zero hop i d
      */
     public TunnelId getNewIBZeroHopID() {
         long id;
@@ -1148,6 +1153,7 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Get the current bandwidth share in KBps
+     * @return the share bandwidth
      */
     public static int getShareBandwidth(RouterContext ctx) {
         int irateKBps = ctx.bandwidthLimiter().getInboundKBytesPerSecond();
@@ -1266,6 +1272,7 @@ public class TunnelDispatcher implements Service {
      * Returns NaN if not started.
      *
      * @since 0.9.70+
+     * @return the pumper utilization
      */
     public static double getPumperUtilization() { return TunnelGatewayPumper.getUtilization(); }
 

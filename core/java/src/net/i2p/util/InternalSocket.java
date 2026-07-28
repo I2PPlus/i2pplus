@@ -42,6 +42,7 @@ public class InternalSocket extends Socket {
      *  Convenience method to return either a Socket or an InternalSocket
      *
      *  @param port &gt; 0
+     *  @return the socket
      */
     public static Socket getSocket(String host, int port) throws IOException {
         if (I2PAppContext.getGlobalContext().isRouterContext() && (host.equals("127.0.0.1") || host.equals("localhost"))) {
@@ -55,6 +56,7 @@ public class InternalSocket extends Socket {
 
     /**
      * Input stream connected to the internal server.
+     * @return the input stream
      */
     @Override
     public synchronized InputStream getInputStream() {
@@ -63,6 +65,7 @@ public class InternalSocket extends Socket {
 
     /**
      * Output stream connected to the internal server.
+     * @return the output stream
      */
     @Override
     public synchronized OutputStream getOutputStream() {
@@ -100,6 +103,7 @@ public class InternalSocket extends Socket {
 
     /**
      * True if either stream is null.
+     * @return whether closed
      */
     @Override
     public synchronized boolean isClosed() {
@@ -129,6 +133,7 @@ public class InternalSocket extends Socket {
 
     /**
      *  Always returns 0, even if setSoTimeout() was called.
+     * @return the so timeout
      */
     @Override
     public int getSoTimeout() {
@@ -173,6 +178,7 @@ public class InternalSocket extends Socket {
 
     /**
      * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
+     * @return whether connected
      */
     @Override
     public synchronized boolean isConnected() {
@@ -181,6 +187,7 @@ public class InternalSocket extends Socket {
 
     /**
      * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
+     * @return whether input shutdown
      */
     @Override
     public synchronized boolean isInputShutdown() {
@@ -189,6 +196,7 @@ public class InternalSocket extends Socket {
 
     /**
      * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
+     * @return whether output shutdown
      */
     @Override
     public synchronized boolean isOutputShutdown() {

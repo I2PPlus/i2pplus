@@ -142,7 +142,7 @@ public class MessageHistory {
             initialize(true);
         }
         /**
-         * getName.
+         * @return the name
          */
         public String getName() { return "Reinitialize Message History"; }
     }
@@ -540,6 +540,7 @@ public class MessageHistory {
     /**
      * Prettify the hash by doing a base64 and returning the first 6 characters
      *
+     * @return the name
      */
     private static final String getName(Hash router) {
         if (router == null) return "UNKNOWN";
@@ -608,7 +609,7 @@ public class MessageHistory {
             super(MessageHistory.this._context);
         }
         /**
-         * getName.
+         * @return the name
          */
         public String getName() { return _doLog ? "Message Debug Log" : "Message Debug Log (disabled)"; }
         /**

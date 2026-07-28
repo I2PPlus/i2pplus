@@ -163,6 +163,7 @@ public class ReseedBundler {
 
     /**
      *  Copied/modded from PersistentDataStore
+     * @return the router info name
      */
     private static String getRouterInfoName(Hash hash) {
         String b64 = hash.toBase64();

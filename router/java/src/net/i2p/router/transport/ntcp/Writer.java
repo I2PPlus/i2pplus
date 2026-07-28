@@ -53,6 +53,7 @@ public class Writer {
     /**
      * Get writer pool utilization as a ratio (0.0-1.0).
      * Returns NaN if no writers are active (pool not started).
+     * @return the utilization
      */
     public double getUtilization() {
         int size = _runners.size();

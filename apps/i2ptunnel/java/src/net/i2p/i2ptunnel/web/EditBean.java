@@ -37,7 +37,7 @@ public class EditBean extends IndexBean {
      * Note that a streamr client is a UI and I2P client but a server on the localhost side.
      * Note that a streamr server is a UI and I2P server but a client on the localhost side.
      *
-     * @param tunnel the tunnel index
+     * @param tunnel the tunnel
      * @return true if the tunnel is a client type
      */
     public static boolean staticIsClient(int tunnel) {
@@ -95,7 +95,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if the tunnel is configured to start when the router starts
      *  @since 0.8.3
      */
@@ -104,7 +104,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the minimum startup delay in seconds for server tunnels
      *  @since 0.9.68+
      */
@@ -115,7 +115,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the maximum startup delay in seconds for server tunnels
      *  @since 0.9.68+
      */
@@ -126,7 +126,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the minimum shutdown delay in seconds for server tunnels
      *  @since 0.9.68+
      */
@@ -137,7 +137,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the maximum shutdown delay in seconds for server tunnels
      *  @since 0.9.68+
      */
@@ -148,7 +148,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if the tunnel connection should be delayed until the first client connects
      *  @since 0.8.3
      */
@@ -157,7 +157,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if the tunnel is interactive (requires immediate response)
      *  @since 0.8.3
      */
@@ -168,7 +168,7 @@ public class EditBean extends IndexBean {
     /**
      * Gets the tunnel depth (number of hops) for inbound tunnels.
      *
-     * @param tunnel the tunnel index
+     * @param tunnel the tunnel
      * @param defaultLength the default depth if not configured
      * @return the tunnel depth, or -1 for default
      */
@@ -179,7 +179,7 @@ public class EditBean extends IndexBean {
     /**
      * Gets the tunnel quantity for inbound or both in/out.
      *
-     * @param tunnel the tunnel index
+     * @param tunnel the tunnel
      * @param defaultQuantity the default quantity if not configured
      * @return the tunnel quantity
      */
@@ -190,7 +190,7 @@ public class EditBean extends IndexBean {
     /**
      * Gets the backup tunnel quantity for inbound or both in/out.
      *
-     * @param tunnel the tunnel index
+     * @param tunnel the tunnel
      * @param defaultBackupQuantity the default backup quantity if not configured
      * @return the backup tunnel quantity
      */
@@ -201,7 +201,7 @@ public class EditBean extends IndexBean {
     /**
      * Gets the tunnel variance for inbound or both in/out.
      *
-     * @param tunnel the tunnel index
+     * @param tunnel the tunnel
      * @param defaultVariance the default variance if not configured
      * @return the tunnel variance
      */
@@ -212,7 +212,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns the outbound tunnel depth.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param defaultLength the default depth if not configured
      *  @return the outbound tunnel depth, or -1 for default
      *  @since 0.9.33
@@ -224,7 +224,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns the outbound tunnel quantity.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param defaultQuantity the default quantity if not configured
      *  @return the outbound tunnel quantity
      *  @since 0.9.33
@@ -236,7 +236,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns the outbound backup tunnel quantity.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param defaultBackupQuantity the default backup quantity if not configured
      *  @return the outbound backup tunnel quantity
      *  @since 0.9.33
@@ -248,7 +248,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns the outbound tunnel variance.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param defaultVariance the default variance if not configured
      *  @return the outbound tunnel variance
      *  @since 0.9.33
@@ -295,7 +295,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns the encryption mode for the tunnel.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the encryption mode as a string
      *  @since 0.9.40
      */
@@ -306,7 +306,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns the blinded password for the tunnel.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the blinded password, or empty string if none
      *  @since 0.9.40
      */
@@ -328,7 +328,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns the signature type for the tunnel.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param newTunnelType used if tunnel &lt; 0
      *  @return the signature type code
      *  @since 0.9.12
@@ -352,7 +352,7 @@ public class EditBean extends IndexBean {
      *  Returns whether the tunnel signature type can be changed.
      *  The type is fixed if the tunnel has an existing destination.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if the signature type can be changed
      *  @since 0.9.33
      */
@@ -365,7 +365,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns whether the tunnel encryption type can be changed.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if the encryption type can be changed
      *  @since 0.9.46
      */
@@ -377,7 +377,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns whether the tunnel port setting can be changed.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if the port can be changed
      *  @since 0.9.46
      */
@@ -389,7 +389,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns whether the tunnel supports the specified encryption type.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param encType the encryption type code
      *  @return true if the tunnel has the encryption type
      *  @since 0.9.44
@@ -401,7 +401,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns the encrypted inbound random key, hidden in forms.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the encrypted inbound random key
      *  @since 0.9.18
      */
@@ -451,7 +451,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns the filter definition for the tunnel.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the filter definition, or empty string if none
      *  @since 0.9.40
      */
@@ -492,7 +492,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns whether User-Agent header passthrough is allowed.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if User-Agent passthrough is allowed
      *  @since 0.9.14
      */
@@ -503,7 +503,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns whether Referer header passthrough is allowed.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if Referer passthrough is allowed
      *  @since 0.9.14
      */
@@ -514,7 +514,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns whether Accept header passthrough is allowed.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if Accept passthrough is allowed
      *  @since 0.9.14
      */
@@ -525,7 +525,7 @@ public class EditBean extends IndexBean {
     /**
      *  Returns whether internal SSL connections are allowed.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if internal SSL is allowed
      *  @since 0.9.14
      */
@@ -617,6 +617,7 @@ public class EditBean extends IndexBean {
     /**
      * POST limits
      * @since 0.9.9
+     * @return the post max
      */
     public int getPostMax(int tunnel) {
         return _helper.getPostMax(tunnel);
@@ -694,6 +695,7 @@ public class EditBean extends IndexBean {
     /**
      *  @param mode 0=both, 1=in, 2=out
      *  @since 0.9.7
+     *  @return the quantity options
      */
     public String getQuantityOptions(int tunnel, int mode) {
         int tunnelDepth = getTunnelDepth(tunnel, DFLT_LENGTH);

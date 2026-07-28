@@ -44,7 +44,7 @@ class SAMv3DatagramServer implements Handler {
 	 *  Caller must call start().
 	 *
 	 *  @param parent may be null
-	 *  @param props ignored for now
+	 *  @param props configuration properties (reserved for future use)
 	 */
 	public SAMv3DatagramServer(SAMBridge parent, String host, int port, Properties props) throws IOException {
 		_parent = parent;

@@ -46,35 +46,35 @@ public final class QRCode {
   }
 
   /**
-   * getMode.
+   * @return the mode
    */
   public Mode getMode() {
     return mode;
   }
 
   /**
-   * getECLevel.
+   * @return the e c level
    */
   public ErrorCorrectionLevel getECLevel() {
     return ecLevel;
   }
 
   /**
-   * getVersion.
+   * @return the version
    */
   public Version getVersion() {
     return version;
   }
 
   /**
-   * getMaskPattern.
+   * @return the mask pattern
    */
   public int getMaskPattern() {
     return maskPattern;
   }
 
   /**
-   * getMatrix.
+   * @return the matrix
    */
   public ByteMatrix getMatrix() {
     return matrix;
@@ -142,7 +142,7 @@ public final class QRCode {
 
   // Check if "mask_pattern" is valid.
   /**
-   * isValidMaskPattern.
+   * @return whether valid mask pattern
    */
   public static boolean isValidMaskPattern(int maskPattern) {
     return maskPattern >= 0 && maskPattern < NUM_MASK_PATTERNS;

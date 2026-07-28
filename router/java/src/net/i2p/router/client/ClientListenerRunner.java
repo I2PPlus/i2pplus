@@ -56,7 +56,7 @@ class ClientListenerRunner implements Runnable {
      *
      * @param context the router context
      * @param manager the client manager
-     * @param port the port to listen on
+     * @param port the port number
      */
     public ClientListenerRunner(RouterContext context, ClientManager manager, int port) {
         _context = context;
@@ -181,6 +181,7 @@ class ClientListenerRunner implements Runnable {
  * Just so unit tests don't NPE, where router could be null.
  *
  * @since 0.9.20
+     * @return whether alive
  */
     private boolean isAlive() {
         Router r = _context.router();
@@ -193,7 +194,7 @@ class ClientListenerRunner implements Runnable {
     /**
      *  Verify the first byte.
      *
-     *  @param socket the socket to validate
+     *  @param socket the socket
      *  @return true if the first byte is the I2CP protocol byte
      */
     protected boolean validate(Socket socket) {

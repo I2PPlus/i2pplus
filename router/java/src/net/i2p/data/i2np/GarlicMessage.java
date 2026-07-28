@@ -31,7 +31,7 @@ public class GarlicMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * getData.
+     * @return the data
      */
     public byte[] getData() {
         return _data;
@@ -74,12 +74,12 @@ public class GarlicMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     public int getType() { return MESSAGE_TYPE; }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

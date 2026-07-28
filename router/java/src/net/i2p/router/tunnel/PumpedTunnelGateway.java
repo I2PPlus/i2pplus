@@ -93,6 +93,7 @@ class PumpedTunnelGateway extends TunnelGateway {
     /**
      * Get the max inbound messages per pump
      * @since 0.9.70+
+     * @return the max ib msgs per pump
      */
     public static int getMaxIbMsgsPerPump() { return _maxIbMsgsPerPump; }
 

@@ -106,7 +106,7 @@ public enum Mode {
   }
 
   /**
-   * getBits.
+   * @return the bits
    */
   public int getBits() {
     return bits;

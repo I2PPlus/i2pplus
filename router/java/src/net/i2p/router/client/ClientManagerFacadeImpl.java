@@ -87,7 +87,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     * isAlive.
+     * @return whether alive
      */
     @Override
     public boolean isAlive() {return _manager != null && _manager.isAlive();}
@@ -234,6 +234,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      * Determine if the destination specified is managed locally.  This call DOES block.
      *
      * @param dest Destination to be checked
+     * @return whether local
      */
     public boolean isLocal(Destination dest) {
         if (_manager != null) {return _manager.isLocal(dest);}
@@ -245,6 +246,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      * Determine if the destination specified is managed locally.  This call DOES block.
      *
      * @param destHash Hash of Destination to be checked
+     * @return whether local
      */
     @Override
     public boolean isLocal(Hash destHash) {
@@ -254,7 +256,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     * shouldPublishLeaseSet.
+     * @return whether publish lease set
      */
     @Override
     public boolean shouldPublishLeaseSet(Hash destinationHash) {
@@ -279,6 +281,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     /**
      * Return the client's current config, or null if not connected
      *
+     * @return the client session config
      */
     public SessionConfig getClientSessionConfig(Destination dest) {
         if (_manager != null) {return _manager.getClientSessionConfig(dest);}
@@ -289,6 +292,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     /**
      * Return the client's current manager or null if not connected
      *
+     * @return the client session key manager
      */
     @Override
     public SessionKeyManager getClientSessionKeyManager(Hash dest) {

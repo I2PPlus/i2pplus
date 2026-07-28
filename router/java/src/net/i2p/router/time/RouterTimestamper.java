@@ -116,7 +116,7 @@ public class RouterTimestamper extends Timestamper {
     }
 
     /**
-     * getServerCount.
+     * @return the server count
      */
     public int getServerCount() {
         synchronized (_servers) {
@@ -124,7 +124,7 @@ public class RouterTimestamper extends Timestamper {
         }
     }
     /**
-     * getServer.
+     * @return the server
      */
     public String getServer(int index) {
         synchronized (_servers) {
@@ -133,12 +133,12 @@ public class RouterTimestamper extends Timestamper {
     }
 
     /**
-     * getQueryFrequencyMs.
+     * @return the query frequency ms
      */
     public int getQueryFrequencyMs() { return _queryFrequency; }
 
     /**
-     * getIsDisabled.
+     * @return the is disabled
      */
     public boolean getIsDisabled() { return _disabled; }
 
@@ -155,13 +155,13 @@ public class RouterTimestamper extends Timestamper {
             _listeners.remove(lsnr);
     }
     /**
-     * getListenerCount.
+     * @return the listener count
      */
     public int getListenerCount() {
             return _listeners.size();
     }
     /**
-     * getListener.
+     * @return the listener
      */
     public UpdateListener getListener(int index) {
             return _listeners.get(index);

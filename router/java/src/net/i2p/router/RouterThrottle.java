@@ -35,6 +35,7 @@ public interface RouterThrottle {
 
     /**
      * Message on the state of participating tunnel acceptance
+     * @return the tunnel status
      */
     public String getTunnelStatus();
     /**
@@ -46,6 +47,7 @@ public interface RouterThrottle {
      * getTunnelStatus(), translated if available.
      *
      * @since 0.9.45
+     * @return the localized tunnel status
      */
     public String getLocalizedTunnelStatus();
 

@@ -33,7 +33,7 @@ public class RetransmissionTimer {
 
     /**
      * Schedule an event via the dedicated timer.
-     * @param event the event to schedule
+     * @param event the event
      * @param timeoutMs delay in ms
      * @since 0.9.70+
      */

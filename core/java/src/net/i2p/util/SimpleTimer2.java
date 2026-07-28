@@ -154,7 +154,7 @@ public class SimpleTimer2 {
      * Schedule a periodic event backed by SimpleTimer2.TimedEvent.
      * The event self-reschedules via schedule() in timeReached().
      *
-     * @param event the event to run periodically
+     * @param event the event
      * @param timeoutMs period in ms between executions
      * @throws IllegalArgumentException if timeoutMs less than 5000
      * @since 0.9.70+
@@ -166,7 +166,7 @@ public class SimpleTimer2 {
     /**
      * Schedule a periodic event backed by SimpleTimer2.TimedEvent.
      *
-     * @param event the event to run periodically
+     * @param event the event
      * @param delay run the first iteration after delay ms
      * @param timeoutMs period in ms between executions
      * @throws IllegalArgumentException if timeoutMs less than 5000

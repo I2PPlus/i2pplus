@@ -50,15 +50,15 @@ public class WizardHelper extends HelperBase {
      */
     public void complete() {_context.router().saveConfig(PROP_COMPLETE, "true");}
     /**
-     * isNDTComplete.
+     * @return whether n d t complete
      */
     public synchronized boolean isNDTComplete() {return _listener != null && _listener.isComplete();}
     /**
-     * isNDTRunning.
+     * @return whether n d t running
      */
     public synchronized boolean isNDTRunning() {return _listener != null && !_listener.isComplete();}
     /**
-     * isNDTSuccessful.
+     * @return whether n d t successful
      */
     public synchronized boolean isNDTSuccessful() {return isNDTComplete() && getUpBandwidth() > 0 && getDownBandwidth() > 0;}
 
@@ -305,19 +305,19 @@ public class WizardHelper extends HelperBase {
          */
         public synchronized void complete(Map<String, Object> results) {_results = results;}
         /**
-         * isComplete.
+         * @return whether complete
          */
         public synchronized boolean isComplete() {return _results != null;}
         /**
-         * getSummary.
+         * @return the summary
          */
         public synchronized String getSummary() {return _summary;}
         /**
-         * getDetail.
+         * @return the detail
          */
         public synchronized String getDetail() {return _detail;}
         /**
-         * getResults.
+         * @return the results
          */
         public synchronized Map<String, Object> getResults() {return _results;}
     }

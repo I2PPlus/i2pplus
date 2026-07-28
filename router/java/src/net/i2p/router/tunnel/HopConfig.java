@@ -177,6 +177,7 @@ public class HopConfig {
      *  This returns the number of processed messages since
      *  the last time getAndResetRecentMessagesCount() was called.
      *  As of 0.9.23, does NOT reset the count, see getAndResetRecentMessagesCount().
+     * @return the recent messages count
      */
     public synchronized int getRecentMessagesCount() {
         return _messagesProcessed - _oldMessagesProcessed;

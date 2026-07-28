@@ -51,7 +51,7 @@ public class RateStat {
 /**
  * Update all of the rates for the various periods with the given value.
  *
- * @param value the value to add
+ * @param value the value
  * @param eventDuration the event duration
  */
 public void addData(long value, long eventDuration) {
@@ -62,7 +62,7 @@ public void addData(long value, long eventDuration) {
      * Update all of the rates for the various periods with the given value.
      * Zero duration.
      *
- * @param value the value to add
+ * @param value the value
  * @since 0.8.10
  */
 public void addData(long value) {

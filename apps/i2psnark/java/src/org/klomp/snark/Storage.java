@@ -344,7 +344,7 @@ public class Storage implements Closeable {
 
     /* @since 0.9.62+ */
     /**
-     * getExcludedFiles.
+     * @return the excluded files
      */
     public List<String> getExcludedFiles(File base) {
         List<String> excludedNames = new ArrayList<>();
@@ -469,6 +469,7 @@ public class Storage implements Closeable {
      * Has the storage changed since instantiation?
      *
      * @since 0.8.5
+     * @return whether changed
      */
     public boolean isChanged() {
         return changed;
@@ -517,6 +518,7 @@ public class Storage implements Closeable {
      * File checking in progress.
      *
      * @since 0.9.3
+     * @return whether checking
      */
     public boolean isChecking() {
         return _isChecking;
@@ -526,6 +528,7 @@ public class Storage implements Closeable {
      * If checking is in progress, return completion 0.0 ... 1.0, else return 1.0.
      *
      * @since 0.9.23
+     * @return the checking progress
      */
     public double getCheckingProgress() {
         if (_isChecking) {
@@ -539,6 +542,7 @@ public class Storage implements Closeable {
      * Disk allocation (ballooning) in progress. Always false on Windows.
      *
      * @since 0.9.3
+     * @return whether allocating
      */
     public boolean isAllocating() {
         return _allocateCount.get() > 0;
@@ -620,6 +624,7 @@ public class Storage implements Closeable {
     /**
      * @param fileIndex as obtained from indexOf
      * @since 0.8.1
+     * @return the priority
      */
     public int getPriority(int fileIndex) {
         if (complete() || metainfo.getFiles() == null) {
@@ -834,6 +839,7 @@ public class Storage implements Closeable {
     /**
      * The BitField that tells which pieces this storage contains. Do not change this since this is
      * the current state of the storage.
+     * @return the bit field
      */
     public BitField getBitField() {
         return bitfield;
@@ -845,6 +851,7 @@ public class Storage implements Closeable {
      * dir.
      *
      * @since 0.7.14
+     * @return the base name
      */
     public String getBaseName() {
         return optFilterName(metainfo.getName());
@@ -1273,6 +1280,7 @@ public class Storage implements Closeable {
      * Does not include directories.
      *
      * @since 0.9.23
+     * @return the file count
      */
     public int getFileCount() {
         return _torrentFiles.size();
@@ -1524,6 +1532,7 @@ public class Storage implements Closeable {
     /**
      * Returns a byte array containing a portion of the requested piece or null if the storage
      * doesn't contain the piece yet.
+     * @return the piece
      */
     public ByteArray getPiece(int piece, int off, int len) throws IOException {
         if (!bitfield.get(piece)) {
@@ -1701,6 +1710,7 @@ public class Storage implements Closeable {
      * our second constructor.
      *
      * @since 0.8.5
+     * @return the piece length
      */
     private int getPieceLength(int piece) {
         if (piece >= 0 && piece < pieces - 1) {
@@ -1946,7 +1956,7 @@ public class Storage implements Closeable {
         }
 
         /**
-         * hashCode.
+         * @return whether h code is present
          */
         @Override
         public int hashCode() {

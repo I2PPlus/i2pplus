@@ -14,11 +14,11 @@ import net.i2p.util.Translate;
  */
 public class I2PSocketException extends SocketException {
 
-    /** ignored */
+    /** Status code for the exception. */
     private final int _status;
-    /** ignored */
+    /** Sentinel for custom message exceptions. */
     private static final int CUSTOM = -1;
-    /** ignored */
+    /** Bundle name. */
     private static final String BUNDLE_NAME = "net.i2p.client.streaming.messages";
 
     /**
@@ -54,7 +54,7 @@ public class I2PSocketException extends SocketException {
     /**
      *  For programmatic action based on specific failure code
      *
-     *  @return value from int constructor or -1 for String constructor
+     * @return the status
      */
     public int getStatus() {
         return _status;
@@ -141,6 +141,7 @@ public class I2PSocketException extends SocketException {
 
     /**
      *  Translated
+     * @return the localized message
      */
     @Override
     public String getLocalizedMessage() {

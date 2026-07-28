@@ -189,6 +189,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /**
      * @throws UnsupportedOperationException always
+     * @return the current key
      */
     @Override
     public SessionKey getCurrentKey(PublicKey target) {
@@ -197,6 +198,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /**
      * @throws UnsupportedOperationException always
+     * @return the current or new key
      */
     @Override
     public SessionKey getCurrentOrNewKey(PublicKey target) {
@@ -435,7 +437,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * and a New Session Reply message should be sent.
      * Otherwise, an Existing Session message should be sent.
      *
-     * @param target the target public key
+     * @param target the target
      * @return the next available tag, or null
      */
     public RatchetEntry consumeNextAvailableTag(PublicKey target) {
@@ -479,6 +481,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * Determine (approximately) how many available session tags for the current target
      * have been confirmed and are available
      *
+     * @return the available tags
      */
     @Override
     public int getAvailableTags(PublicKey target, SessionKey key) {
@@ -494,6 +497,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * Determine how long the available tags will be available for before expiring, in
      * milliseconds
+     * @return the available time left
      */
     @Override
     public long getAvailableTimeLeft(PublicKey target, SessionKey key) {
@@ -819,6 +823,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      *  Return a map of PublicKey to a set of inbound RatchetTagSets for that key.
      *  Only for renderStatusHTML() below.
      *  Does not return expired sets or sets with null keys.
+     * @return the ratchet tag sets by public key
      */
     private Map<PublicKey, Set<RatchetTagSet>> getRatchetTagSetsByPublicKey() {
         Set<RatchetTagSet> inbound = getRatchetTagSets();
@@ -1353,6 +1358,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
  * Reverse key to send, or null
  *
  * @since 0.9.46
+         * @return the reverse send key
  */
         private NextSessionKey getReverseSendKey() {
             synchronized (_unackedTagSets) {
@@ -1440,6 +1446,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
         /**
          *  Original outbound state, null for inbound.
+         * @return the handshake state
          */
         public HandshakeState getHandshakeState() {
             return _state;
@@ -1457,6 +1464,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
         /**
          *  NOT updated for inbound except for NSR and first ES tag used
+         * @return the last used date
          */
         public long getLastUsedDate() {
             return _lastUsed;
@@ -1466,6 +1474,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
  * ONLY updated for inbound NS/NSR/ES tag used
  *
  * @since 0.9.46
+         * @return the last received date
  */
         public long getLastReceivedDate() {
             return _lastReceived;
@@ -1588,6 +1597,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
          * Get the furthest away tag set expiration date - after which all of the
          * tags will have expired
          *
+         * @return the last expiration date
          */
         public long getLastExpirationDate() {
             synchronized (_unackedTagSets) {

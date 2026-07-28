@@ -40,7 +40,7 @@ public class StreamHelper extends HelperBase {
     public StreamHelper() { /* nop */ }
 
     /**
-     * getDirection.
+     * @return the direction
      */
     public String getDirection() { return _direction != null ? _direction : ""; }
     /**
@@ -50,6 +50,7 @@ public class StreamHelper extends HelperBase {
 
     /**
      * Render the streaming connections table(s).
+     * @return the stream summary
      */
     public String getStreamSummary() {
         try {
@@ -69,6 +70,7 @@ public class StreamHelper extends HelperBase {
 
     /**
      * Read a rate stat value from the stat manager, returning 0 if unavailable.
+     * @return the stat avg
      */
     private double getStatAvg(String name, long period) {
         RateStat rs = _context.statManager().getRate(name);
@@ -79,6 +81,7 @@ public class StreamHelper extends HelperBase {
 
     /**
      * Read the last-event-count from a rate stat, returning 0 if unavailable.
+     * @return the stat count
      */
     private long getStatCount(String name, long period) {
         RateStat rs = _context.statManager().getRate(name);

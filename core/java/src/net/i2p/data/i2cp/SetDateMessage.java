@@ -51,7 +51,7 @@ public class SetDateMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getDate.
+     * @return the date
      */
     public Date getDate() {
         return _date;
@@ -110,7 +110,7 @@ public class SetDateMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() {

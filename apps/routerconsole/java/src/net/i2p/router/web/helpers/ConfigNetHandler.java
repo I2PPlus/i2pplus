@@ -157,7 +157,7 @@ public class ConfigNetHandler extends FormHandler {
     }
     /**
      * Set the TCP port.
-     * @param port the port
+     * @param port the port number
      */
     public void setTcpPort(String port) {
         _tcpPort = (port != null ? port.trim() : null);
@@ -171,21 +171,21 @@ public class ConfigNetHandler extends FormHandler {
     }
     /**
      * Set the NTCP port.
-     * @param port the port
+     * @param port the port number
      */
     public void setNtcpport(String port) {
         _ntcpPort = (port != null ? port.trim() : null);
     }
     /**
      * Set the first UDP host.
-     * @param host the host
+     * @param host the hostname
      */
     public void setUdpHost1(String host) {
         _udpHost1 = (host != null ? host.trim() : null);
     }
     /**
      * Set the UDP port.
-     * @param port the port
+     * @param port the port number
      */
     public void setUdpPort(String port) {
         _udpPort = (port != null ? port.trim() : null);

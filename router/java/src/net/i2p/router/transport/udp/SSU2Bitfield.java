@@ -49,7 +49,7 @@ class SSU2Bitfield {
     public int size() {return size;}
 
     /**
-     * getOffset.
+     * @return the offset
      */
     public long getOffset() {return offset;}
 
@@ -116,6 +116,7 @@ class SSU2Bitfield {
 
     /**
      * Return the highest set bit, or -1 if none.
+     * @return the highest set
      */
     public synchronized long getHighestSet() {
         if (highestSet < 0) {return -1;}

@@ -246,7 +246,7 @@ public final class BitArray implements Cloneable {
    */
   /**
    * Appends a single bit to the end of the array.
-   * @param bit the bit value to append
+   * @param bit the bit
    */
   public void appendBit(boolean bit) {
     ensureCapacity(size + 1);

@@ -34,9 +34,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      * PROP_MAX_TUNNELS.
      */
     public static final String PROP_MAX_TUNNELS = "router.maxParticipatingTunnels";
-    /**
-     * _defaultMaxTunnels.
-     */
+    /** _defaultMaxTunnels. */
     public static volatile int _defaultMaxTunnels = SystemVersion.isSlow() ? 3*1000 :
                                                   SystemVersion.getMaxMemory() < 512*1024*1024L ? 5*1000 :
                                                   SystemVersion.getCores() >= 8 ? 12*1000 : 8*1000;
@@ -562,7 +560,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     /**
-     * getMessageDelay.
+     * @return the message delay
      */
     public long getMessageDelay() {
         RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
@@ -572,7 +570,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     /**
-     * getTunnelLag.
+     * @return the tunnel lag
      */
     public long getTunnelLag() {
         Rate lagRate = _context.statManager().getRate("tunnel.testSuccessTime").getRate(RateConstants.ONE_HOUR);
@@ -580,7 +578,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     /**
-     * getTunnelStatus.
+     * @return the tunnel status
      */
     public String getTunnelStatus() {return _tunnelStatus;}
 
@@ -588,6 +586,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      * getTunnelStatus(), translated if available.
      *
      * @since 0.9.45
+     * @return the localized tunnel status
      */
     public String getLocalizedTunnelStatus() {
         return Translate.getString(_tunnelStatus, _context, CommSystemFacade.ROUTER_BUNDLE_NAME);
@@ -598,7 +597,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     /**
-     * isShuttingDown.
+     * @return whether shutting down
      */
     public static boolean isShuttingDown(RouterContext _context) {
         int code = _context.router().scheduledGracefulExitCode();

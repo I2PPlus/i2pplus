@@ -63,6 +63,7 @@ final class ECConstants {
      */
     /**
      * Return whether Bouncy Castle is available.
+     * @return whether b c available
      */
     public static boolean isBCAvailable() { return BC_AVAILABLE; }
 

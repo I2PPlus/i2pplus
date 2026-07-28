@@ -161,7 +161,7 @@ class NodeInfo extends SimpleDataStructure {
      *
      * @param h the destination hash
      * @param p the port number
-     * @param random the random source for generating remaining bytes
+     * @param random the random
      * @return the generated NID
      */
     public static NID generateNID(Hash h, int p, RandomSource random) {
@@ -196,7 +196,7 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * getNID.
+     * @return the n i d
      */
     public NID getNID() {
         return this.nID;
@@ -210,7 +210,7 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * getHash.
+     * @return the hash
      */
     public Hash getHash() {
         return this.hash;
@@ -238,7 +238,7 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * getPort.
+     * @return the port
      */
     public int getPort() {
         return this.port;
@@ -252,7 +252,7 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

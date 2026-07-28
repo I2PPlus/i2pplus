@@ -75,22 +75,22 @@ public class LeaseSet2 extends LeaseSet {
     private List<PublicKey> _encryptionKeys;
     /** If this leaseset was formerly blinded, the blinded hash, so we can find it again */
     private Hash _blindedHash;
-    /** ignored */
+    /** If true, ignore server key preference (for testing). */
     private static final boolean IGNORE_SERVER_KEY_PREFERENCE = false; // true for testing
-    /** ignored */
+    /** Flag bit for offline keys. */
     private static final int FLAG_OFFLINE_KEYS = 0x01;
-    /** ignored */
+    /** Flag bit for unpublished lease set. */
     private static final int FLAG_UNPUBLISHED = 0x02;
     /**
      *  Set if the unencrypted LS, when published, will be blinded/encrypted
      *
      *  @since 0.9.42
      */
-    /** ignored */
+    /** Flag bit for blinded/encrypted lease set. */
     private static final int FLAG_BLINDED = 0x04;
-    /** ignored */
+    /** Maximum number of encryption keys. */
     private static final int MAX_KEYS = 8;
-    /** ignored */
+    /** Logger instance. */
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(LeaseSet2.class);
 
     /**
@@ -154,6 +154,7 @@ public class LeaseSet2 extends LeaseSet {
      *  Set if the unencrypted LS, when published, will be blinded/encrypted
      *
      *  @since 0.9.42
+     * @return whether blinded when published
      */
     public boolean isBlindedWhenPublished() {return (_flags & FLAG_BLINDED) != 0;}
 
@@ -176,6 +177,7 @@ public class LeaseSet2 extends LeaseSet {
      * Default false.
      *
      *  @since 0.9.39 overridden
+     * @return the received as published
      */
     @Override
     public boolean getReceivedAsPublished() {
@@ -206,6 +208,7 @@ public class LeaseSet2 extends LeaseSet {
      *  If none supported, return the first one.
      *
      *  @since 0.9.39 overridden
+     * @return the encryption key
      */
     @Override
     public PublicKey getEncryptionKey() {
@@ -294,6 +297,7 @@ public class LeaseSet2 extends LeaseSet {
 
     /**
       *  Checks if this leaseset uses offline keys.
+     * @return whether offline
       */
     public boolean isOffline() {return (_flags & FLAG_OFFLINE_KEYS) != 0;}
 

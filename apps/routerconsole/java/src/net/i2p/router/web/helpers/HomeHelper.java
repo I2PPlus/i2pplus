@@ -247,22 +247,22 @@ public class HomeHelper extends HelperBase {
         //_x("UpstreamJournal") + S + _x("A magazine about human rights and social justice") + S + "http://upstreamjournal.i2p/" + S + I + "news.svg" + S +
         "";
 
-    /** @return true if no language has been configured */
+    /**  @return true if no language has been configured */
     public boolean shouldShowWelcome() {return _context.getProperty(Messages.PROP_LANG) == null;}
 
-    /** @return true if bandwidth is not yet configured */
+    /**  @return true if bandwidth is not yet configured */
     public boolean shouldShowBandwidthConfig() {return _context.getProperty("i2np.bandwidth.outboundKBytesPerSecond") == null;}
 
-    /** @return true if search should be shown */
+    /**  @return true if search should be shown */
     public boolean shouldShowSearch() {return _context.getBooleanProperty(PROP_SEARCH);}
 
     /**
-     * isAdvanced.
+     * @return whether advanced
      */
     @Override
     public boolean isAdvanced() {return _context.getBooleanProperty(PROP_ADVANCED);}
 
-    /** @return the services HTML */
+    /**  @return the services HTML */
     public String getServices() {
         List<App> plugins = NavHelper.getInstance(_context).getClientApps(_context);
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -273,19 +273,19 @@ public class HomeHelper extends HelperBase {
         else {return homeTable(PROP_SERVICES, ADVANCED_SERVICES, plugins);}
     }
 
-    /** @return the favorites HTML */
+    /**  @return the favorites HTML */
     public String getFavorites() {return homeTable(PROP_FAVORITES, DEFAULT_FAVORITES, null);}
 
-    /** @return the config services HTML */
+    /**  @return the config services HTML */
     public String getConfigServices() {return configTable(PROP_SERVICES, DEFAULT_SERVICES);}
 
-    /** @return the config favorites HTML */
+    /**  @return the config favorites HTML */
     public String getConfigFavorites() {return configTable(PROP_FAVORITES, DEFAULT_FAVORITES);}
 
-    /** @return the config search HTML */
+    /**  @return the config search HTML */
     public String getConfigSearch() {return configTable(SearchHelper.PROP_ENGINES, SearchHelper.ENGINES_DEFAULT);}
 
-    /** @return the proxy status HTML */
+    /**  @return the proxy status HTML */
     public String getProxyStatus() {
         int port = _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY);
         if (port <= 0) {return _t("The HTTP proxy is not up");}
@@ -315,8 +315,8 @@ public class HomeHelper extends HelperBase {
     /** ignored */
     private static final String SS = Character.toString(S);
 
-    /** @param ctx context
-     *  @param config the config string
+    /**  @param ctx context
+     *  @param config the configuration
      *  @return collection of apps */
     static Collection<App> buildApps(RouterContext ctx, String config) {
         String[] args = DataHelper.split(config, SS);
@@ -331,7 +331,7 @@ public class HomeHelper extends HelperBase {
         return apps;
     }
 
-    /** @param config the config string
+    /**  @param config the config string
      *  @return collection of search apps */
     static Collection<App> buildSearchApps(String config) {
         String[] args = DataHelper.split(config, SS);
@@ -344,7 +344,7 @@ public class HomeHelper extends HelperBase {
         return apps;
     }
 
-    /** @param ctx context
+    /**  @param ctx context
      *  @param prop the property name
      *  @param apps the apps to save
      *  @param full whether to save full data */

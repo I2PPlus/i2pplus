@@ -414,18 +414,21 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      *  Is any download in progress?
      *  Does not include checks.
+     * @return whether update in progress
      */
     @Override
     public boolean isUpdateInProgress() {return !_downloaders.isEmpty();}
 
     /**
      *  Is a download in progress?
+     * @return whether update in progress
      */
     @Override
     public boolean isUpdateInProgress(UpdateType type) {return isUpdateInProgress(type, "");}
 
     /**
      *  Is a download in progress?
+     * @return whether update in progress
      */
     @Override
     public boolean isUpdateInProgress(UpdateType type, String id) {
@@ -464,16 +467,19 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      *  Is any check in progress?
      *  Does not include updates.
+     * @return whether check in progress
      */
     public boolean isCheckInProgress() {return !_activeCheckers.isEmpty();}
 
     /**
      *  Is a check in progress?
+     * @return whether check in progress
      */
     public boolean isCheckInProgress(UpdateType type) {return isCheckInProgress(type, "");}
 
     /**
      *  Is a check in progress?
+     * @return whether check in progress
      */
     public boolean isCheckInProgress(UpdateType type, String id) {
         for (UpdateTask t : _activeCheckers) {
@@ -515,6 +521,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  It will provide wrapper-like function to install the update and restart after shutdown.
      *
      *  @since 0.9.51
+     * @return whether external restart pending
      */
     public boolean isExternalRestartPending() {return _externalRestartPending;}
 
@@ -1515,7 +1522,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
-         * hashCode.
+         * @return whether h code is present
          */
         @Override
         public int hashCode() {return updater.hashCode() ^ type.hashCode() ^ method.hashCode();}
@@ -1575,7 +1582,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
-         * hashCode.
+         * @return whether h code is present
          */
         @Override
         public int hashCode() {return checker.hashCode() ^ type.hashCode() ^ method.hashCode();}
@@ -1621,7 +1628,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
-         * hashCode.
+         * @return whether h code is present
          */
         @Override
         public int hashCode() {return type.hashCode() ^ id.hashCode();}
@@ -1663,7 +1670,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public int compareTo(Version r) {return VersionComparator.comp(versionStr, r.versionStr);}
 
         /**
-         * hashCode.
+         * @return whether h code is present
          */
         @Override
         public int hashCode() {return versionStr.hashCode();}
@@ -1729,7 +1736,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public boolean equals(Object o) {return super.equals(o) && (o instanceof VersionAvailable);}
 
         /**
-         * hashCode.
+         * @return whether h code is present
          */
         @Override
         public int hashCode() {return super.hashCode();} // findbugs

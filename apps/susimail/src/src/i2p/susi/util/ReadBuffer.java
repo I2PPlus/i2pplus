@@ -51,6 +51,7 @@ public class ReadBuffer implements Buffer {
 	/**
 	 * @throws IllegalStateException always
 	 * @since 0.9.34
+	 * @return the output stream
 	 */
 	@Override
 	public OutputStream getOutputStream() {
@@ -72,6 +73,7 @@ public class ReadBuffer implements Buffer {
 
 	/**
 	 * Always valid
+	 * @return the length
 	 */
 	public int getLength() {
 		return length;
@@ -79,6 +81,7 @@ public class ReadBuffer implements Buffer {
 
 	/**
 	 * Always valid
+	 * @return the offset
 	 */
 	public int getOffset() {
 		return offset;

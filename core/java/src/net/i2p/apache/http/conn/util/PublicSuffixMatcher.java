@@ -84,6 +84,7 @@ public final class PublicSuffixMatcher {
      */
     /**
      * Find the registered domain root.
+     * @return the domain root
      */
     public String getDomainRoot(final String domain) {
         if (domain == null) {

@@ -140,6 +140,7 @@ public class PeerID implements Comparable<PeerID> {
 
     /**
      * @since 0.8.1
+     * @return the dest hash
      */
     public byte[] getDestHash() {
         return destHash;

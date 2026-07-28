@@ -20,7 +20,7 @@ public class TunnelHelper extends HelperBase {
     public TunnelHelper() { /* nop */ }
 
     /**
-     * getTunnelSummary.
+     * @return the tunnel summary
      */
     public String getTunnelSummary() {
         TunnelRenderer renderer = new TunnelRenderer(_context);
@@ -42,7 +42,7 @@ public class TunnelHelper extends HelperBase {
     }
 
     /**
-     * isAdvanced.
+     * @return whether advanced
      */
     @Override
     public boolean isAdvanced() {

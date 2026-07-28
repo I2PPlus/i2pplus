@@ -60,6 +60,7 @@ public class KeyStoreProvider {
     /**
      * Get the dynamically generated certificate password.
      * @since 0.9.70
+     * @return the certificate password
      */
     public static String getCertificatePassword() {
         return DEFAULT_CERTIFICATE_PASSWORD;

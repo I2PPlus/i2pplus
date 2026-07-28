@@ -40,6 +40,7 @@ public interface EventDispatcher {
     /**
      * Get an object to be used to deliver events (usually
      * <code>this</code>, but YMMV).
+     * @return the event dispatcher
      */
     public EventDispatcher getEventDispatcher();
 
@@ -73,7 +74,7 @@ public interface EventDispatcher {
      * event value
      *
      * @param name name of the event to query for
-     * @return value (or null if none are available)
+     * @return the event value
      */
     public Object getEventValue(String name);
 

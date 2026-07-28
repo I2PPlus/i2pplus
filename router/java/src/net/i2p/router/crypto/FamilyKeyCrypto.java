@@ -195,6 +195,7 @@ public class FamilyKeyCrypto {
  * Do we have a valid family?
  *
  * @since 0.9.28
+     * @return whether family is present
  */
     public boolean hasFamily() {
         return _pubkey != null;

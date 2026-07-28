@@ -61,7 +61,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
      *  Delay a few seconds, then start the verify
      *
      *  @param ctx the router context
-     *  @param key the key to verify
+     *  @param key the key
      *  @param client generally the same as key, unless encrypted LS2; non-null
      *  @param published getDate() for RI or LS1, getPublished() for LS2
      *  @param type the database entry type

@@ -183,9 +183,7 @@ public class ProfileOrganizer {
      * PROP_MAX_PROFILES.
      */
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
-    /**
-     * _defaultMaxProfiles.
-     */
+    /** _defaultMaxProfiles. */
     public static volatile int _defaultMaxProfiles = getDefaultMaxProfiles();
     /** @since 0.9.70+ */
     public static int getDefaultMaxProfilesValue() { return _defaultMaxProfiles; }
@@ -246,6 +244,7 @@ public class ProfileOrganizer {
 
     /**
      * Check if current router is firewalled to adjust peer selection thresholds
+     * @return whether firewalled
      */
     private boolean isFirewalled() {
         CommSystemFacade.Status status = _context.commSystem().getStatus();
@@ -1658,7 +1657,7 @@ public class ProfileOrganizer {
     }
 
     /**
-     * isSelectable.
+     * @return whether selectable
      */
     public boolean isSelectable(Hash peer) {
         NetworkDatabaseFacade netDb = _context.netDb();
@@ -2056,6 +2055,7 @@ public class ProfileOrganizer {
      * Check if peer has low tunnel acceptance ratio (< 40%)
      * Uses persisted accept/reject counts even with low sample sizes at startup.
      * Also checks for recent bandwidth rejections and applies cooldown.
+     * @return whether low tunnel acceptance
      */
     private boolean isLowTunnelAcceptance(PeerProfile profile) {
         TunnelHistory th = profile.getTunnelHistory();
@@ -2120,6 +2120,7 @@ public class ProfileOrganizer {
      * based on viable peers, not just raw counts.
      *
      * @since 0.9.70+
+     * @return whether quality peer
      */
     private boolean isQualityPeer(PeerProfile profile, long recentCutoff) {
         if (profile.getPeer().equals(_us)) return false;
@@ -2159,7 +2160,7 @@ public class ProfileOrganizer {
     }
 
     /**
-     * getMinimumFastPeers.
+     * @return the minimum fast peers
      */
     protected int getMinimumFastPeers() {
         if (_context.router() == null) return _defaultMinFastPeers;
@@ -2168,7 +2169,7 @@ public class ProfileOrganizer {
     }
 
     /**
-     * getMaximumFastPeers.
+     * @return the maximum fast peers
      */
     protected int getMaximumFastPeers() {
         if (_context.router() == null) return _defaultMaxFastPeers;
@@ -2186,7 +2187,7 @@ public class ProfileOrganizer {
     }
 
     /**
-     * getMaximumHighCapPeers.
+     * @return the maximum high cap peers
      */
     protected int getMaximumHighCapPeers() {
         if (_context.router() == null) return _defaultMaxHighCapPeers;
@@ -2203,7 +2204,7 @@ public class ProfileOrganizer {
     }
 
     /**
-     * getMinimumHighCapacityPeers.
+     * @return the minimum high capacity peers
      */
     protected int getMinimumHighCapacityPeers() {
         if (_context.router() == null) return _defaultMinHighCapPeers;
@@ -2270,7 +2271,7 @@ public class ProfileOrganizer {
     }
 
     /**
-     * getTunnelBuildSuccess.
+     * @return the tunnel build success
      */
     public double getTunnelBuildSuccess() {
         try {
@@ -2305,7 +2306,7 @@ public class ProfileOrganizer {
     }
 
     /**
-     * isLowBuildSuccess.
+     * @return whether low build success
      */
     public boolean isLowBuildSuccess() {
         double buildSuccess = getTunnelBuildSuccess();

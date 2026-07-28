@@ -397,7 +397,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     }
 
     /**
-     * shouldCompress.
+     * @return whether compress
      */
     protected boolean shouldCompress() { return _gzip; }
 

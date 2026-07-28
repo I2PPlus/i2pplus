@@ -273,6 +273,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *  For non-shared clients returns the instance socket manager.
      *  For shared clients returns the shared static socket manager.
      *  @since 0.9.63
+     * @return the socket manager
      */
     @Override
     public I2PSocketManager getSocketManager() {

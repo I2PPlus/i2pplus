@@ -200,9 +200,7 @@ class Packet {
      */
     public static final int FLAG_SIGNATURE_OFFLINE = (1 << 11);
 
-    /**
-     * DEFAULT_MAX_SIZE.
-     */
+    /** DEFAULT_MAX_SIZE. */
     public static final int DEFAULT_MAX_SIZE = SystemVersion.isSlow() ? 32*1024 : 128*1024;
     /**
      * MAX_DELAY_REQUEST.
@@ -423,6 +421,7 @@ class Packet {
      *  Only if an offline signing block was included, else null
      *
      *  @since 0.9.39
+     * @return the transient s p k
      */
     public SigningPublicKey getTransientSPK() {return _transientSigningPublicKey;}
 

@@ -49,6 +49,7 @@ public class SessionKeyManager {
      * or null if a new session key should be generated.
      *
      * Warning - don't generate a new session if this returns null, it's racy, use getCurrentOrNewKey()
+     * @return the current key
      */
     public SessionKey getCurrentKey(PublicKey target) {
         return null;
@@ -117,7 +118,7 @@ public class SessionKeyManager {
     /**
      * Determine if tags should be sent to the target.
      *
-     * @param target the target public key
+     * @param target the target
      * @param key the session key
      * @return true if we have less than the threshold or what we have is about to expire
      * @since 0.9.2
@@ -129,7 +130,7 @@ public class SessionKeyManager {
     /**
      * Determine if tags should be sent to the target with the specified threshold.
      *
-     * @param target the target public key
+     * @param target the target
      * @param key the session key
      * @param lowThreshold the low threshold
      * @return true if we have less than the threshold or what we have is about to expire
@@ -141,6 +142,7 @@ public class SessionKeyManager {
      * Determine (approximately) how many available session tags for the current target
      * have been confirmed and are available
      *
+     * @return the available tags
      */
     public int getAvailableTags(PublicKey target, SessionKey key) {
         return 0;
@@ -149,6 +151,7 @@ public class SessionKeyManager {
     /**
      * Determine how long the available tags will be available for before expiring, in
      * milliseconds
+     * @return the available time left
      */
     public long getAvailableTimeLeft(PublicKey target, SessionKey key) {
         return 0;
@@ -222,7 +225,7 @@ public class SessionKeyManager {
     /**
      * Fail tags for the given target, key, and tag set handle.
      *
-     * @param target the target public key
+     * @param target the target
      * @param key the session key
      * @param ts the tag set handle
      */
@@ -232,7 +235,7 @@ public class SessionKeyManager {
     /**
      * Acknowledge tags for the given target, key, and tag set handle.
      *
-     * @param target the target public key
+     * @param target the target
      * @param key the session key
      * @param ts the tag set handle
      */

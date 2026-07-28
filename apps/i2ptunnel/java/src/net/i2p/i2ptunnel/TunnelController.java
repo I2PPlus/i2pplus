@@ -427,6 +427,7 @@ public class TunnelController implements Logging {
      *  The I2PTunnel
      *
      *   for advanced plugin usage
+     * @return the tunnel
      */
     public I2PTunnel getTunnel() {
         return _tunnel;
@@ -1360,6 +1361,7 @@ public class TunnelController implements Logging {
     /**
      *  Absolute path to filter definition file
      *
+     * @return the filter
      */
     public String getFilter() { return _config.getProperty(PROP_FILTER); }
 
@@ -1369,6 +1371,7 @@ public class TunnelController implements Logging {
      *  Note that a streamr server is a UI and I2P server but a client on the localhost side.
      *
      *
+     * @return whether client
      */
     public boolean isClient() {
         return isClient(getType());
@@ -1423,6 +1426,7 @@ public class TunnelController implements Logging {
 
     /**
      *  Probably not absolute. May be null. getPrivateKeyFile() recommended.
+     * @return the priv key file
      */
     public String getPrivKeyFile() { return _config.getProperty(PROP_FILE); }
 

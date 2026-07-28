@@ -107,6 +107,7 @@ public class ConfigServiceHandler extends FormHandler {
         /**
          *  Make them all look the same since the hooks are stored in a set
          *  and we don't want dups
+         * @return whether h code is present
          */
         @Override
         public int hashCode() {return HASHCODE;}
@@ -144,6 +145,7 @@ public class ConfigServiceHandler extends FormHandler {
         /**
          *  Make them all look the same since the hooks are stored in a set
          *  and we don't want dups
+         * @return whether h code is present
          */
         @Override
         public int hashCode() {return HASHCODE;}

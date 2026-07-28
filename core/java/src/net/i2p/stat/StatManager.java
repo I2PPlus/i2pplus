@@ -187,6 +187,7 @@ public class StatManager {
 
     /**
      *  Misnamed, as it returns a FrequencyStat, not a Frequency.
+     * @return the frequency
      */
     public FrequencyStat getFrequency(String name) {
         return _frequencyStats.get(name);
@@ -194,6 +195,7 @@ public class StatManager {
 
     /**
      *  Misnamed, as it returns a RateStat, not a Rate.
+     * @return the rate
      */
     public RateStat getRate(String name) {
         return _rateStats.get(name);
@@ -230,6 +232,7 @@ public class StatManager {
     /**
      * Group name (untranslated String) to a SortedSet of untranslated stat names.
      * Map is unsorted.
+     * @return the stats by group
      */
     public Map<String, SortedSet<String>> getStatsByGroup() {
         Map<String, SortedSet<String>> groups = new HashMap<>(32);

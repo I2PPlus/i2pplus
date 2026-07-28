@@ -248,10 +248,10 @@ public class NTCPConnection implements Closeable {
      * Create an inbound connected (though not established) NTCP connection.
      * Caller MUST call transport.establishing(this) after construction.
      * Caller MUST key.attach(this) after construction.
-         * @param ctx the router context
-     * @param transport the NTCP transport
-     * @param chan the socket channel
-     * @param key the selection key
+         *  @param ctx the router context
+     *  @param transport the NTCP transport
+     *  @param chan the socket channel
+     *  @param key the selection key
      */
     public NTCPConnection(RouterContext ctx, NTCPTransport transport, SocketChannel chan, SelectionKey key) {
         this(ctx, transport, null, true);
@@ -343,7 +343,7 @@ public class NTCPConnection implements Closeable {
 
     /**
      *  Set the selection key.
-     *  @param key the key
+     * @param key the key
      */
     public void setKey(SelectionKey key) { _conKey = key; }
 

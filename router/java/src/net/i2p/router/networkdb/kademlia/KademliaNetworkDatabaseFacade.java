@@ -604,6 +604,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  This is only used by StatisticsManager to publish the count if we are floodfill.
      *  So to hide a clue that a popular eepsite is hosted on a floodfill router,
      *  only count leasesets that are "received as published", as of 0.7.14
+     * @return the known lease sets
      */
     @Override
     public int getKnownLeaseSets() {
@@ -931,6 +932,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * - blockMyCountry is enabled
      * - router is in our country (strict country mode)
      *
+     * @return whether banlist based on country
      */
     private boolean shouldBanlistBasedOnCountry(RouterInfo _ri, Hash key) {
         boolean isStrict = _context.commSystem().isInStrictCountry(key);
@@ -1192,6 +1194,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Get the proactive republish threshold from config or default (3 minutes).
      * If a lease is expiring within this threshold, it gets republished immediately.
      * Tunable via i2p.netdb.proactiveRepublishThreshold (default: 180000).
+     * @return the proactive republish threshold
      */
     private long getProactiveRepublishThreshold() {
         return _context.getProperty("i2p.netdb.proactiveRepublishThreshold", 3*60*1000);
@@ -1897,7 +1900,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * The minimum uptime is determined by the property "router.validateRoutersAfter" (in minutes),
      * or defaults to 20 minutes.
      *
-     * @param uptime the uptime of the local router in milliseconds
+     * @param uptime the uptime
      * @return true if the uptime is sufficient, false otherwise
      */
     private boolean isUptimeLongEnough(long uptime) {
@@ -2470,7 +2473,7 @@ return false;
     /**
      * Don't use directly - see F.N.D.F. override.
      *
-     * @param peer the peer hash
+     * @param peer the peer
      * @param info the router info
      */
     protected void lookupBeforeDropping(Hash peer, RouterInfo info) {dropAfterLookupFailed(peer);} // bah, humbug.
@@ -2702,7 +2705,7 @@ return false;
     /**
      * Get the timeout for a peer, based on the profile data, or the default timeout.
      *
-     * @param peer the peer hash
+     * @param peer the peer
      * @return the timeout for a peer, based on the profile data, or the default timeout
      */
     public int getPeerTimeout(Hash peer) {
@@ -2771,6 +2774,7 @@ return false;
      *  Is it permanently negative cached?
      *
      *  @param key only for Destinations; for RouterIdentities, see Banlist
+     *  @return whether negative cached forever
      */
     @Override
     /** @return whether the hash is in the negative cache */

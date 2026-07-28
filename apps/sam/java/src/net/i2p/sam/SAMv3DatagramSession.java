@@ -66,6 +66,7 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
      *  throwing if it has already disappeared.
      *
      *  @throws SAMException if the nickname is not registered
+     *  @return the rec
      */
     private static SessionRecord getRec(String nick) throws SAMException {
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
@@ -105,7 +106,7 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
     /**
      * Receive a datagram from I2P and forward to the SAM client.
      *
-     * @param sender the sender's Destination
+     * @param sender the sender
      * @param data the datagram payload
      * @param proto the I2CP protocol
      * @param fromPort the I2CP from port

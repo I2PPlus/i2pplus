@@ -36,7 +36,7 @@ class PeerAcceptor {
     /**
      * Creates a single-torrent PeerAcceptor.
      *
-     * @param coordinator the coordinator for the single torrent
+     * @param coordinator the coordinator
      */
     public PeerAcceptor(PeerCoordinator coordinator) {
         this.coordinator = coordinator;

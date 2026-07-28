@@ -47,6 +47,7 @@ public class DirKeyRing implements KeyRing {
     @Override
     /**
      * Look up a public key.
+     * @return the key
      */
     public PublicKey getKey(String keyName, String scope, SigType type) throws GeneralSecurityException, IOException {
         String fileName = keyName.replace("@", "_at_").replace("<", "_").replace(">", "_");

@@ -88,7 +88,7 @@ public class BitField {
     /**
      * Sets the given bit to true.
      *
-     * @param bit the bit index to set
+     * @param bit the bit
      * @throws IndexOutOfBoundsException if bit is smaller then zero or bigger then or equal to size
      */
     public void set(int bit) {
@@ -106,7 +106,7 @@ public class BitField {
     /**
      * Sets the given bit to false.
      *
-     * @param bit the bit index to clear
+     * @param bit the bit
      * @throws IndexOutOfBoundsException if bit is smaller then zero or bigger then or equal to size
      * @since 0.9.22
      */
@@ -135,7 +135,7 @@ public class BitField {
     /**
      * Returns true if the bit is set or false if it is not.
      *
-     * @param bit the bit index to check
+     * @param bit the bit
      * @return true if the bit is set, false otherwise
      * @throws IndexOutOfBoundsException if bit is smaller then zero or bigger then or equal to size
      */

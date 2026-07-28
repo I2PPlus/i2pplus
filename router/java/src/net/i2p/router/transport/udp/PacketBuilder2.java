@@ -1305,6 +1305,7 @@ class PacketBuilder2 {
     /**
      * Calculates the maximum payload size that can be sent to this peer in a single data packet.
      * @since 0.9.68+
+     * @return the max data size
      */
     public static int getMaxDataSize(PeerState peer) {
         if (peer == null) {return 0;}

@@ -86,6 +86,7 @@ public class RouterInfo extends DatabaseEntry {
     /**
      * Maybe we should check if we are floodfill?
      * If we do bring this back, don't do on ARM or Android
+     * @return the max memory
      */
     private static final boolean CACHE_ALL = false; // SystemVersion.getMaxMemory() > 128*1024*1024L;
     /** Property key for network id */
@@ -165,6 +166,7 @@ public class RouterInfo extends DatabaseEntry {
     /**
      * Retrieve the identity of the router represented
      *
+     * @return the identity
      */
     public RouterIdentity getIdentity() {
         return _identity;
@@ -191,6 +193,7 @@ public class RouterInfo extends DatabaseEntry {
      * essentially a version number for the RouterInfo.
      * This should be used to expire old RouterInfo structures.
      *
+     * @return the published
      */
     public long getPublished() {
         return _published;
@@ -212,6 +215,7 @@ public class RouterInfo extends DatabaseEntry {
      * More efficient than getAddresses().size()
      *
      * @since 0.9.27
+     * @return the address count
      */
     public int getAddressCount() {
         return _addresses.size();
@@ -247,6 +251,7 @@ public class RouterInfo extends DatabaseEntry {
      * Retrieve a set of SHA-256 hashes of RouterIdentities from routers
      * this router can be reached through.
      * Obsolete — peer set is typically empty.
+     * @return the peers
      */
     public Set<Hash> getPeers() {
         if (_peers == null)
@@ -329,6 +334,7 @@ public class RouterInfo extends DatabaseEntry {
      * caches the data in memory if possible.
      *
      * @throws DataFormatException if the data is somehow b0rked (missing props, etc)
+     * @return the bytes
      */
     protected byte[] getBytes() throws DataFormatException {
         if (_byteified != null) return _byteified;
@@ -384,6 +390,7 @@ public class RouterInfo extends DatabaseEntry {
     /**
      * Determine whether this router info is authorized with a valid signature
      *
+     * @return whether valid
      */
     public boolean isValid() {
         if (!_validated) doValidate();
@@ -438,6 +445,7 @@ public class RouterInfo extends DatabaseEntry {
     /**
      * Return a string representation of this node's bandwidth tier,
      * or "Unknown"
+     * @return the bandwidth tier
      */
     public String getBandwidthTier() {
         String bwTiers = BW_CAPABILITY_CHARS;
@@ -458,6 +466,7 @@ public class RouterInfo extends DatabaseEntry {
      * or "Unknown"
      *
      * @since 0.9.63+
+     * @return the congestion cap
      */
     public String getCongestionCap() {
         String congestionCaps = CONGESTION_CAPABILITY_CHARS;
@@ -493,6 +502,7 @@ public class RouterInfo extends DatabaseEntry {
      * Pull the first workable target address for the given transport.
      * Use to check for any address. For all addresses, use getTargetAddresses(),
      * which you probably want if you care about IPv6.
+     * @return the target address
      */
     public RouterAddress getTargetAddress(String transportStyle) {
         for (RouterAddress addr : _addresses) {
@@ -669,7 +679,7 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

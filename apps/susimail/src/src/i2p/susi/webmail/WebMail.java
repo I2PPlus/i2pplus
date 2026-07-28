@@ -334,6 +334,7 @@ public class WebMail extends HttpServlet {
         /**
          *  PBKDF2 hash for password verification with high iteration count
          *  @since 0.9.70+
+         * @return whether h password is present
          */
         private static String hashPassword(String password, String salt) {
             try {
@@ -1675,7 +1676,6 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * Recursive.
      * @param id as retrieved from getID()
      * @return the part or null
      */
@@ -1692,7 +1692,6 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * Recursive.
      * @param id a content-id, without the surrounding &lt;&gt; or trailing @ part
      * @return the part or null
      * @since 0.9.62
@@ -1894,6 +1893,7 @@ public class WebMail extends HttpServlet {
      * Copied from net.i2p.router.web.CSSHelper
      * @param ua null ok
      * @since 0.9.7
+     * @return whether mobile
      */
     private static boolean isMobile(String ua) {
         if (ua == null) {return false;}
@@ -2568,6 +2568,7 @@ public class WebMail extends HttpServlet {
      */
     /**
      * Return whether override CSS is active.
+     * @return whether override css active
      */
     public boolean isOverrideCssActive() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();

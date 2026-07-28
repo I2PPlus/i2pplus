@@ -47,7 +47,7 @@ public final class ChaCha20 {
      *  @param plaintextOffset offset in plaintext
      *  @param ciphertext the ciphertext output buffer
      *  @param ciphertextOffset offset in ciphertext
-     *  @param length the length to encrypt
+     *  @param length the length
      */
     public static void encrypt(byte[] key, byte[] iv, byte[] plaintext, int plaintextOffset, byte[] ciphertext, int ciphertextOffset, int length) {
         encrypt(key, iv, 0, plaintext, plaintextOffset, ciphertext, ciphertextOffset, length);
@@ -100,7 +100,7 @@ public final class ChaCha20 {
      *  @param ciphertextOffset offset in ciphertext
      *  @param plaintext the plaintext output buffer
      *  @param plaintextOffset offset in plaintext
-     *  @param length the length to decrypt
+     *  @param length the length
      */
     public static void decrypt(byte[] key, byte[] iv, byte[] ciphertext, int ciphertextOffset, byte[] plaintext, int plaintextOffset, int length) {
         // it's symmetric!
@@ -117,7 +117,7 @@ public final class ChaCha20 {
      *  @param ciphertextOffset offset in ciphertext
      *  @param plaintext the plaintext output buffer
      *  @param plaintextOffset offset in plaintext
-     *  @param length the length to decrypt
+     *  @param length the length
      *  @since 0.9.54
      */
     public static void decrypt(byte[] key, byte[] iv, int ivOffset, byte[] ciphertext, int ciphertextOffset, byte[] plaintext, int plaintextOffset, int length) {

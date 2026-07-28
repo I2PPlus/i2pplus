@@ -56,7 +56,7 @@ public class MarkLiveliness extends SimpleTimer2.TimedEvent {
     /**
      * Create a new liveliness marker.
      *
-     * @param router the router instance to monitor for liveliness
+     * @param router the router
      * @param pingFile the file to write timestamps to
      * @param period how often to ping (ms)
      * @since 0.8.12 moved from Router.java

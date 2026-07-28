@@ -49,7 +49,7 @@ class GetBidsJob extends JobImpl {
     }
 
     /**
-     * Name.
+     * @return the name
      */
     public String getName() { return "Fetch bids for a message to be delivered"; }
     /**

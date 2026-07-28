@@ -59,7 +59,7 @@ class DummyHandler implements Checker, Updater {
         }
 
         /**
-         * getMethod.
+         * @return the method
          */
         @Override
         public UpdateMethod getMethod() { return UpdateMethod.METHOD_DUMMY; }

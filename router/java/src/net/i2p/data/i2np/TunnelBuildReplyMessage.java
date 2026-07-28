@@ -31,7 +31,7 @@ public class TunnelBuildReplyMessage extends TunnelBuildMessageBase {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     public int getType() { return MESSAGE_TYPE; }
 

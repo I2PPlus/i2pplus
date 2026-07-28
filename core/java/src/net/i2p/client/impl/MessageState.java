@@ -100,6 +100,7 @@ class MessageState {
      */
     /**
      * Return the message ID.
+     * @return the message id
      */
     public MessageId getMessageId() {
         return _id;
@@ -110,6 +111,7 @@ class MessageState {
      */
     /**
      * Return the elapsed time.
+     * @return the elapsed
      */
     public long getElapsed() {
         return _context.clock().now() - _created;
@@ -120,6 +122,7 @@ class MessageState {
      */
     /**
      * Return the expiration time.
+     * @return the expires
      */
     public long getExpires() {
         return _expires;

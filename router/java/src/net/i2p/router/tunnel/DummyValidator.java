@@ -8,7 +8,7 @@ package net.i2p.router.tunnel;
 class DummyValidator implements IVValidator {
     private static final DummyValidator _instance = new DummyValidator();
     /**
-     * getInstance.
+     * @return the instance
      */
     public static DummyValidator getInstance() { return _instance; }
     private DummyValidator() {}

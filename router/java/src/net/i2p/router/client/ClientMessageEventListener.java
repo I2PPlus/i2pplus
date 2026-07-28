@@ -530,7 +530,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     /**
      *  Handle a CreateLeaseSet message. Override for testing.
      *
-     *  @param message the message to handle
+     * @param message the message
      */
     protected void handleCreateLeaseSet(CreateLeaseSetMessage message) {
         LeaseSet ls = message.getLeaseSet();
@@ -704,7 +704,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     /**
      *  Handle a DestLookup message. Override for testing.
      *
-     *  @param message the message to handle
+     * @param message the message
      */
     protected void handleDestLookup(DestLookupMessage message) {
         // no session id in DLM
@@ -715,7 +715,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     /**
  * Handle a HostLookup message. Override for testing.
  *
- * @param message the message to handle
+ * @param message the message
  * @since 0.9.11
  */
     protected void handleHostLookup(HostLookupMessage message) {
@@ -791,7 +791,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      *
      * protected for unit test override
      *
-     * @param message the message to handle
+     * @param message the message
      */
     protected void handleGetBWLimits(GetBandwidthLimitsMessage message) {
         if (_log.shouldInfo()) {_log.info("Received Bandwidth Limits request");}

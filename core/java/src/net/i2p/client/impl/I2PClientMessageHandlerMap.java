@@ -60,6 +60,7 @@ class I2PClientMessageHandlerMap {
      */
     /**
      * Return the handler for the given type.
+     * @return the handler
      */
     public I2CPMessageHandler getHandler(int messageTypeId) {
         if ((messageTypeId < 0) || (messageTypeId >= _handlers.length)) return null;

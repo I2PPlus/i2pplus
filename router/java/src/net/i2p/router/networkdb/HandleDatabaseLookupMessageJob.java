@@ -205,6 +205,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
      *  honoring the message's dontInclude set.
      *  Will not include us.
      *  Side effect - adds us to the message's dontInclude set.
+     * @return the nearest routers
      */
     private Set<Hash> getNearestRouters(DatabaseLookupMessage.Type lookupType) {
         // convert the new EXPL type flag to the old-style FAKE_HASH
@@ -273,7 +274,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
     /**
      * Send an I2NP message to the specified peer.
      *
-     * @param message the message to send
+     * @param message the message
      * @param toPeer the destination peer
      * @param replyTunnel the reply tunnel, or null for direct delivery
      */

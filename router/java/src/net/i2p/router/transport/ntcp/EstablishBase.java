@@ -366,7 +366,7 @@ abstract class EstablishBase implements EstablishState {
         }
 
         /**
-         * getVersion.
+         * @return the version
          */
         public int getVersion() { return 1; }
 
@@ -413,7 +413,7 @@ abstract class EstablishBase implements EstablishState {
         }
 
         /**
-         * getVersion.
+         * @return the version
          */
         public int getVersion() { return 1; }
 

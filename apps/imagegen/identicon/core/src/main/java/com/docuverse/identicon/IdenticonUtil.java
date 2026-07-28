@@ -49,7 +49,7 @@ public class IdenticonUtil {
 	/**
 	 * Returns current inetSalt value.
 	 *
-	 * @return the value
+	 * @return the inet salt
 	 */
 	public static String getInetSalt() {
 		return inetSalt;
@@ -135,7 +135,7 @@ public class IdenticonUtil {
 	}
 
 	/**
-	 * getIdenticonSize.
+	 * @return the identicon size
 	 */
 	public static int getIdenticonSize(String param) {
 		int size = DEFAULT_IDENTICON_SIZE;
@@ -155,7 +155,7 @@ public class IdenticonUtil {
 	}
 
 	/**
-	 * getIdenticonETag.
+	 * @return the identicon e tag
 	 */
 	public static String getIdenticonETag(int code, int size, int version) {
 		StringBuilder s = new StringBuilder("W/\"");

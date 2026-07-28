@@ -83,7 +83,7 @@ public class SearchHelper extends HelperBase {
     }
 
     /**
-     * getSelector.
+     * @return the selector
      */
     public String getSelector() {
         buildEngineMap();

@@ -60,7 +60,7 @@ public class AuthToken {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

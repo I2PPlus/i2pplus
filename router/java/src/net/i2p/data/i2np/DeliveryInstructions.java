@@ -27,7 +27,7 @@ import net.i2p.data.TunnelId;
  * @author jrandom
  */
 public class DeliveryInstructions extends DataStructureImpl {
-    /** ignored */
+    /** 0-3, set by delivery mode constants */
     private int _deliveryMode;
     /**
      * DELIVERY_MODE_LOCAL.
@@ -45,29 +45,29 @@ public class DeliveryInstructions extends DataStructureImpl {
      * DELIVERY_MODE_TUNNEL.
      */
     public final static int DELIVERY_MODE_TUNNEL = 3;
-    /** ignored */
+    /** Hash of the destination for DESTINATION mode */
     private Hash _destinationHash;
-    /** ignored */
+    /** Hash of the router for ROUTER or TUNNEL mode */
     private Hash _routerHash;
-    /** ignored */
+    /** Tunnel ID for TUNNEL mode */
     private TunnelId _tunnelId;
-    /** ignored */
+    /** Whether a delivery delay was requested */
     private boolean _delayRequested;
-    /** ignored */
+    /** Delay duration in seconds (obsolete, not implemented) */
     private long _delaySeconds;
 
-    /** ignored */
+    /** Flag bit pattern for local delivery mode */
     private final static int FLAG_MODE_LOCAL = 0;
-    /** ignored */
+    /** Flag bit pattern for destination delivery mode */
     private final static int FLAG_MODE_DESTINATION = 1;
-    /** ignored */
+    /** Flag bit pattern for router delivery mode */
     private final static int FLAG_MODE_ROUTER = 2;
-    /** ignored */
+    /** Flag bit pattern for tunnel delivery mode */
     private final static int FLAG_MODE_TUNNEL = 3;
 
-    /** ignored */
+    /** Bitmask isolating the mode field in the flag byte */
     private final static int FLAG_MODE = 96;
-    /** ignored */
+    /** Bitmask for the delay-requested flag */
     private final static int FLAG_DELAY = 16;
 
     /**
@@ -100,6 +100,7 @@ public class DeliveryInstructions extends DataStructureImpl {
     /**
      * For cloves only (not tunnels), default null
      * Unused — always returns null, feature not implemented.
+     * @return the encryption key
      */
     public SessionKey getEncryptionKey() { return /* _encryptionKey */ null; }
 
@@ -130,6 +131,7 @@ public class DeliveryInstructions extends DataStructureImpl {
     /**
      * default false
      * Obsolete — delay not implemented in this release.
+     * @return the delay requested
      */
     public boolean getDelayRequested() { return _delayRequested; }
 
@@ -142,6 +144,7 @@ public class DeliveryInstructions extends DataStructureImpl {
     /**
      * default 0
      * Obsolete — delay not implemented in this release.
+     * @return the delay seconds
      */
     public long getDelaySeconds() { return _delaySeconds; }
 
@@ -219,7 +222,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         return (0 != (flags & FLAG_DELAY));
     }
 
-    /** ignored */
+    /** Encodes the current delivery mode and delay into flag byte */
     private int getFlags() {
         int val = 0;
 
@@ -241,7 +244,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         return val;
     }
 
-    /** ignored */
+    /** Size of the serialized additional delivery info in bytes */
     private int getAdditionalInfoSize() {
         int additionalSize = 0;
 
@@ -269,7 +272,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         return additionalSize;
     }
 
-    /** ignored */
+    /** Serializes additional delivery info (hash, tunnel ID, delay) into buffer */
     private int getAdditionalInfo(byte[] rv, int offset) {
         int origOffset = offset;
 
@@ -322,7 +325,7 @@ public class DeliveryInstructions extends DataStructureImpl {
     }
 
     /**
-     * getSize.
+     * @return the size
      */
     public int getSize() {
         return 1 + getAdditionalInfoSize(); // flags +
@@ -346,7 +349,7 @@ public class DeliveryInstructions extends DataStructureImpl {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {
@@ -395,7 +398,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         //private static final byte flag = DELIVERY_MODE_LOCAL << 5;  // 0
 
         /**
-         * getDeliveryMode.
+         * @return the delivery mode
          */
         @Override
         public int getDeliveryMode() { return DELIVERY_MODE_LOCAL; }
@@ -466,7 +469,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
 
         /**
-         * getSize.
+         * @return the size
          */
         @Override
         public int getSize() {

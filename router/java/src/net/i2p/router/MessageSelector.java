@@ -27,6 +27,7 @@ public interface MessageSelector {
      * inside a lock and can lead to deadlocks if the selector does too much in isMatch().
      * Until the lock is removed, take care to keep it simple.
      *
+     * @return whether match
      */
     public boolean isMatch(I2NPMessage message);
 
@@ -44,6 +45,7 @@ public interface MessageSelector {
      * the job specified by OutNetMessage.getOnFailedReplyJob()
      * will be run for every OutNetMessage associated with this selector
      * (by OutboundMessageRegistry).
+     * @return the expiration
      */
     public long getExpiration();
 }

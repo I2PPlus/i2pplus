@@ -54,6 +54,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
      *
      *  Note that if you change the expiration on the embedded message it will
      *  mess up the checksum of this message, so don't do that.
+     * @return the message
      */
     public I2NPMessage getMessage() {return _msg;}
 
@@ -163,6 +164,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
 
     /**
      * Hash based on tunnel ID and embedded message.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

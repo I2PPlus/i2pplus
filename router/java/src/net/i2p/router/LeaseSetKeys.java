@@ -166,6 +166,7 @@ public class LeaseSetKeys {
      * Key with which a LeaseSet can be revoked (by republishing it with no Leases)
      *
      * Deprecated, unused
+     * @return the revocation key
      */
     public SigningPrivateKey getRevocationKey() { return _revocationKey; }
 
@@ -208,6 +209,7 @@ public class LeaseSetKeys {
      * Do we support this type of encryption?
      *
      * @since 0.9.44
+     * @return whether supported
      */
     public boolean isSupported(EncType type) {
         if (type == EncType.ELGAMAL_2048)
@@ -223,6 +225,7 @@ public class LeaseSetKeys {
      *  What types of encryption are supported?
      *
      *  @since 0.9.44
+     * @return the supported encryption
      */
     public Set<EncType> getSupportedEncryption() {
         if (_decryptionKey != null)

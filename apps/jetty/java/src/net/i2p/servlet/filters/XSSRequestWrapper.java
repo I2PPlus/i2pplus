@@ -35,6 +35,7 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
 
     /**
      *  Parameter names starting with "nofilter_" will not be filtered.
+     * @return the parameter values
      */
     @Override
     public String[] getParameterValues(String parameter) {
@@ -75,6 +76,7 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
 
     /**
      *  Parameter names starting with "nofilter_" will not be filtered.
+     * @return the parameter
      */
     @Override
     public String getParameter(String parameter) {
@@ -94,6 +96,7 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
 
     /**
      *  Parameter names starting with "nofilter_" will not be filtered.
+     * @return the parameter map
      */
     @Override
     public Map<String, String[]> getParameterMap() {
@@ -108,7 +111,7 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
     }
 
     /**
-     * getHeader.
+     * @return the header
      */
     @Override
     public String getHeader(String name) {

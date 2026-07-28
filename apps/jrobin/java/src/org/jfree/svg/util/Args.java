@@ -43,7 +43,7 @@ public class Args {
      * IllegalArgumentException} if it does not.
      *
      * @param length the required length.
-     * @param array the array to check.
+     * @param array the array
      * @param ref the text name of the array parameter (to include in the exception message).
      */
     public static void arrayMustHaveLength(int length, boolean[] array, String ref) {
@@ -58,7 +58,7 @@ public class Args {
      * IllegalArgumentException} if it does not.
      *
      * @param length the required length.
-     * @param array the array to check ({@code null} not permitted).
+     * @param array the array
      * @param ref the text name of the array parameter (to include in the exception message).
      */
     public static void arrayMustHaveLength(int length, double[] array, String ref) {

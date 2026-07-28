@@ -30,7 +30,7 @@ class IterativeTimeoutJob extends JobImpl {
      * Create a timeout job for an iterative search
      *
      * @param ctx the router context
-     * @param peer the peer that timed out
+     * @param peer the peer
      * @param job the parent search job
      */
     public IterativeTimeoutJob(RouterContext ctx, Hash peer, IterativeSearchJob job) {

@@ -105,6 +105,7 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
     /**
      *  Max delay including backoff.
      *  This should be a little shorter than for outbound.
+     * @return the max delay
      */
     protected static long getMaxDelay() { return EstablishmentManager.MAX_IB_ESTABLISH_TIME.get(); }
 

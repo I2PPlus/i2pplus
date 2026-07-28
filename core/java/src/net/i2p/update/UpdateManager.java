@@ -28,7 +28,7 @@ public interface UpdateManager {
     /**
      *  Call once for each type/method pair.
      *
-     *  @param updater the updater implementation
+     *  @param updater the updater
      *  @param type the update type
      *  @param method the update method
      *  @param priority the priority
@@ -38,7 +38,7 @@ public interface UpdateManager {
     /**
      *  Register a checker for updates.
      *
-     *  @param checker the checker implementation
+     *  @param checker the checker
      *  @param type the update type
      *  @param method the update method
      *  @param priority the priority
@@ -48,7 +48,7 @@ public interface UpdateManager {
     /**
      *  Unregister an updater.
      *
-     *  @param updater the updater implementation
+     *  @param updater the updater
      *  @param type the update type
      *  @param method the update method
      */
@@ -57,7 +57,7 @@ public interface UpdateManager {
     /**
      *  Unregister a checker.
      *
-     *  @param checker the checker implementation
+     *  @param checker the checker
      *  @param type the update type
      *  @param method the update method
      */

@@ -92,12 +92,13 @@ class BanlistRenderer {
         Map<String, String> ipMap = new HashMap<>();
         Map<String, String> hostnameMap = new HashMap<>();
         Map<String, String> capsMap = new HashMap<>();
+        Map<String, String> versionMap = new HashMap<>();
         List<IPBanEntry> ipBans = new ArrayList<>();
         Set<String> seenIPs = new HashSet<>();
         File logDir = new File(_context.getRouterDir(), "sessionbans");
         File logFile = new File(logDir, "sessionbans.txt");
         if (!logFile.exists()) {
-            return new Object[] { ipMap, hostnameMap, capsMap, ipBans };
+        return new Object[] { ipMap, hostnameMap, capsMap, ipBans, versionMap };
         }
         long now = _context.clock().now();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8))) {
@@ -128,6 +129,13 @@ class BanlistRenderer {
                         String caps = parts[5].trim();
                         if (!caps.isEmpty()) {
                             capsMap.put(hash, caps);
+                        }
+                    }
+                    // Read version from 7th field
+                    if (parts.length >= 7 && versionMap.get(hash) == null) {
+                        String version = parts[6].trim();
+                        if (!version.isEmpty() && !version.equals("null") && !version.equals("unknown")) {
+                            versionMap.put(hash, version);
                         }
                     }
                 }
@@ -282,6 +290,8 @@ class BanlistRenderer {
         List<IPBanEntry> ipOnlyBans = (List<IPBanEntry>) sessionBans[3];
         @SuppressWarnings("unchecked")
         Map<String, String> capsMap = sessionBans.length > 3 ? (Map<String, String>) sessionBans[2] : new HashMap<String, String>();
+        @SuppressWarnings("unchecked")
+        Map<String, String> versionMap = sessionBans.length > 4 ? (Map<String, String>) sessionBans[4] : new HashMap<String, String>();
 
         entries.putAll(_context.banlist().getEntries());
         if (entries.isEmpty() && ipOnlyBans.isEmpty()) {
@@ -422,8 +432,11 @@ class BanlistRenderer {
             }
 
             String countryName =  _context.commSystem().getCountryName(countryCode);
-            // Get router version from NetDB or reason, then clean reason
-            String routerVersion = getRouterVersion(key, reason);
+            // Get router version from sessionbans log first, then NetDB or reason
+            String routerVersion = versionMap.get(key.toBase64());
+            if (routerVersion == null) {
+                routerVersion = getRouterVersion(key, reason);
+            }
             String cleanedReason = cleanReason(reason, routerVersion);
             buf.append("<td class=country data-sort=").append(countryCode).append(">")
                .append("<img width=28 height=21 title=\"").append(countryName)

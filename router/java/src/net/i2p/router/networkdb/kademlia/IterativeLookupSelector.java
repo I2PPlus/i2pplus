@@ -39,12 +39,13 @@ class IterativeLookupSelector implements MessageSelector {
     }
 
     /**
-     * getExpiration.
+     * @return the expiration
      */
     public long getExpiration() { return (_matchFound ? -1 : _search.getExpiration()); }
 
     /**
      *  This only returns true for DSMs, not for DSRMs.
+     * @return whether match
      */
     public boolean isMatch(I2NPMessage message) {
         if (message == null) return false;

@@ -109,7 +109,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  is stressed — many peers are ghosted through no fault of their own.
      *
      *  @param ctx the router context
-     *  @param peer the peer to check
+     *  @param peer the peer
      *  @return true if the peer should be excluded
      */
     public static boolean isFirstHopFailing(RouterContext ctx, Hash peer) {
@@ -129,6 +129,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  During ghost cascades (>50 ghosts), shorten from 5 min to 60s
      *  to rehabilitate peers faster when the network is stressed.
      *  @since 0.9.70
+     * @return the effective first hop cooldown
      */
     private static long getEffectiveFirstHopCooldown(RouterContext ctx) {
         try {
@@ -149,7 +150,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  Record that a peer failed as first hop (first hop unreachable).
      *
      *  @param ctx the router context
-     *  @param peer the peer that failed
+     *  @param peer the peer
      */
     protected static void recordFirstHopFail(RouterContext ctx, Hash peer) {
         _firstHopFails.put(peer, ctx.clock().now());
@@ -214,7 +215,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * that failed selection criteria, preventing re-selection for the cooldown.
      *
      * @param ctx the router context
-     * @param peer the peer that failed
+     * @param peer the peer
      */
     protected static void recordPeerFailure(RouterContext ctx, Hash peer) {
         _firstHopFails.put(peer, ctx.clock().now());
@@ -229,7 +230,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * Uses the effective first-hop cooldown (shortened during ghost cascades).
      *
      * @param ctx the router context
-     * @param peer the peer to check
+     * @param peer the peer
      * @return true if the peer has recovered
      */
     protected static boolean hasRecoveredFromFailure(RouterContext ctx, Hash peer) {
@@ -456,6 +457,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      *  Check if a peer should be excluded, returning the reason or null.
      *  Used by Excluder to classify exclusion reasons for diagnostics.
+     * @return the exclusion reason
      */
     private String getExclusionReason(Hash peerHash, boolean isInbound, boolean isExploratory) {
         final long BANDWIDTH_REJECTION_CUTOFF_MS = 20_000L;

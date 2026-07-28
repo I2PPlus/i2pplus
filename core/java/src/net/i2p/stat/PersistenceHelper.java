@@ -23,7 +23,7 @@ class PersistenceHelper {
      * @param prefix property key prefix
      * @param name property key suffix
      * @param description description of the value (used as comment when addComments is true)
-     * @param value the value to store
+     * @param value the value
      */
     public static final void add(StringBuilder buf, boolean addComments, String prefix, String name, String description, double value) {
         if (addComments) buf.append("# ").append(description).append(NL);
@@ -78,7 +78,7 @@ class PersistenceHelper {
      * @param prefix property key prefix
      * @param name property key suffix
      * @param description description of the value (used as comment when addComments is true)
-     * @param value the value to store (non-negative)
+     * @param value the value
      */
     public static final void add(StringBuilder buf, boolean addComments, String prefix, String name, String description, long value) {
         if (addComments) buf.append("# ").append(description).append(NL);

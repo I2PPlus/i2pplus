@@ -65,6 +65,7 @@ public class JettyXmlConfigurationParser
      *  Return the value for the first node with the name set,
      *  e.g. [Set name="name"]value[/Set]
      *  @param name case insensitive
+     *  @return the value
      */
     public static String getValue(Node node, String name) {
         String nameLC = name.toLowerCase(Locale.US);

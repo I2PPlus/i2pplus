@@ -331,7 +331,7 @@ public class LogManager implements Flushable {
     }
 
     /**
-     * @param name the name to get the log for
+     * @param name the name
      * @return the log
      */
     public final Log getLog(String name) {
@@ -340,7 +340,7 @@ public class LogManager implements Flushable {
 
     /**
      * @param cls the class (may be null)
-     * @param name the name (may be null)
+     * @param name the name
      * @return the log
      */
     public final Log getLog(Class<?> cls, String name) {
@@ -727,6 +727,7 @@ public class LogManager implements Flushable {
      * Return a mapping of the explicit overrides - path prefix to (text
      * formatted) limit.
      *
+     * @return the limits
      */
     public Properties getLimits() {
         Properties rv = new Properties();
@@ -742,6 +743,7 @@ public class LogManager implements Flushable {
      * Spaces between the number and letter is are allowed.
      * The number may be in floating point.
      * 16K min, 2 GB max (returns int)
+     * @return the file size
      */
     public static int getFileSize(String size) {
         try {
@@ -853,6 +855,7 @@ public class LogManager implements Flushable {
      * Check if gzip compression should be used for rotated log files.
      *
      * @since 0.9.56, public since 0.9.57, was pkg private
+     * @return whether gzip
      */
     public boolean shouldGzip() {
         return _gzip;
@@ -958,6 +961,7 @@ public class LogManager implements Flushable {
 
     /**
      *  Any usage of returned formatter must be synchronized!
+     * @return the date format
      */
     public SimpleDateFormat getDateFormat() {
         return _dateFormat;

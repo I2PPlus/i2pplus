@@ -32,6 +32,7 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
 
     /**
      *  For CDPQ
+     * @return the seq num
      */
     public long getSeqNum() {
         return _seqNum;
@@ -39,6 +40,7 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
 
     /**
      *  For CDPQ
+     * @return the priority
      */
     public int getPriority() {
         return _priority;
@@ -54,6 +56,7 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
      *  any message fragment in a TunnelDataMessage to the OutboundReceiver, to
      *  set the OutNetMessage priority - but that may just make more of an
      *  out-of-order mess and failed reconstruction of fragments.
+     * @return the priority
      */
     private static int getPriority(I2NPMessage message) {
         switch (message.getType()) {

@@ -102,6 +102,7 @@ public class MuxedPQSKM extends SessionKeyManager {
 
     /**
      *  ElG only
+     * @return the current key
      */
     @Override
     public SessionKey getCurrentKey(PublicKey target) {
@@ -110,6 +111,7 @@ public class MuxedPQSKM extends SessionKeyManager {
 
     /**
      *  ElG only
+     * @return the current or new key
      */
     @Override
     public SessionKey getCurrentOrNewKey(PublicKey target) {
@@ -161,6 +163,7 @@ public class MuxedPQSKM extends SessionKeyManager {
 
     /**
      *  ElG only
+     * @return whether send tags
      */
     @Override
     public boolean shouldSendTags(PublicKey target, SessionKey key) {
@@ -169,6 +172,7 @@ public class MuxedPQSKM extends SessionKeyManager {
 
     /**
      *  ElG only
+     * @return whether send tags
      */
     @Override
     public boolean shouldSendTags(PublicKey target, SessionKey key, int lowThreshold) {

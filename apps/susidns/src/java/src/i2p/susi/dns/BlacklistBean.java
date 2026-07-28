@@ -165,7 +165,7 @@ public class BlacklistBean extends BaseBean {
 
     /**
      * Check if an address is a valid I2P address
-     * @param address the address to validate
+     * @param address the address
      * @return true if the address is a valid I2P address format, false otherwise
      */
     private boolean isValidI2PAddress(String address) {
@@ -177,7 +177,7 @@ public class BlacklistBean extends BaseBean {
 
     /**
      * Check if an address is blacklisted
-     * @param address the address to check
+     * @param address the address
      * @return true if the address is in the blacklist, false otherwise
      */
     public boolean isBlacklisted(String address) {
@@ -203,7 +203,7 @@ public class BlacklistBean extends BaseBean {
 
     /**
      * Check if a hostname is blacklisted (exact match)
-     * @param hostname the hostname to check
+     * @param hostname the hostname
      * @return true if the hostname is in the blacklist, false otherwise
      */
     public boolean isHostnameBlacklisted(String hostname) {
@@ -287,7 +287,7 @@ public class BlacklistBean extends BaseBean {
 
     /**
      * Enhanced blacklist check that tries hostname, b32, and b64 variations
-     * @param address the address to check in any form
+     * @param address the address
      * @return true if the address is found in the blacklist in any form, false otherwise
      */
     public boolean isBlacklistedByAnyForm(String address) {
@@ -432,7 +432,7 @@ public class BlacklistBean extends BaseBean {
     /**
      * Check if an entry exists in the given content string
      * @param entry the entry to search for
-     * @param content the content string to search in
+     * @param content the content
      * @return true if the entry is found, false otherwise
      */
     private boolean isEntryInContent(String entry, String content) {

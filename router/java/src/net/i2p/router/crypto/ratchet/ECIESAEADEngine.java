@@ -405,6 +405,7 @@ public final class ECIESAEADEngine {
 
     /**
      * @since 0.9.67
+     * @return the noise pattern
      */
     private static NoiseInit.PatternID getNoisePattern(EncType type) {
         switch(type) {
@@ -423,6 +424,7 @@ public final class ECIESAEADEngine {
 
     /**
      * @since 0.9.67, public since 0.9.69 for transports
+     * @return the hybrid key factory
      */
     public KeyFactory getHybridKeyFactory(EncType type) {
         switch(type) {
@@ -448,6 +450,7 @@ public final class ECIESAEADEngine {
 
     /**
      * @since 0.9.67
+     * @return the min n s size
      */
     private static int getMinNSSize(EncType type) {
         switch(type) {
@@ -466,6 +469,7 @@ public final class ECIESAEADEngine {
 
     /**
      * @since 0.9.67
+     * @return the min n s r size
      */
     private static int getMinNSRSize(EncType type) {
         switch(type) {
@@ -484,6 +488,7 @@ public final class ECIESAEADEngine {
 
     /**
      * @since 0.9.67
+     * @return the enc type set
      */
     private static Set<EncType> getEncTypeSet(EncType type) {
         switch(type) {
@@ -1054,13 +1059,13 @@ public final class ECIESAEADEngine {
      * This is the one called from GarlicMessageBuilder and is the primary entry point.
      *
      * @param target public key to which the data should be encrypted.
-     * @param to ignored if priv is null
+     * @param to destination to encrypt for, required when priv is non-null
      * @param priv local private key to encrypt with, from the leaseset
      *             may be null for anonymous (N-in-IK)
      *
-     * @param keyManager ignored if priv is null
+     * @param keyManager session key manager, required when priv is non-null
      * @param callback may be null, if non-null an ack will be requested (except NS/NSR),
-     *                 ignored if priv is null
+     *                 not used when priv is null
      *
      * @return encrypted data or null on failure
      *
@@ -1077,12 +1082,12 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * @param to ignored if priv is null
+     * @param to destination to encrypt for, required when priv is non-null
      * @param priv local private key to encrypt with, from the leaseset
      *             may be null for anonymous (N-in-IK)
      *
-     * @param keyManager ignored if priv is null
-     * @param callback may be null, ignored if priv is null
+     * @param keyManager session key manager, required when priv is non-null
+     * @param callback may be null, not used when priv is null
      * @return encrypted data or null on failure
      */
     private byte[] x_encrypt(CloveSet cloves, PublicKey target, Destination to, PrivateKey priv,
@@ -1148,12 +1153,12 @@ public final class ECIESAEADEngine {
      *  - 16 byte MAC
      * </pre>
      *
-     * @param to ignored if priv is null
+     * @param to destination to encrypt for, required when priv is non-null
      * @param priv local private key to encrypt with, from the leaseset
      *             may be null for anonymous (N-in-IK)
      *
-     * @param keyManager ignored if priv is null
-     * @param callback may be null, ignored if priv is null
+     * @param keyManager session key manager, required when priv is non-null
+     * @param callback may be null, not used when priv is null
      * @return encrypted data or null on failure
      */
     private byte[] encryptNewSession(CloveSet cloves, PublicKey target, Destination to, PrivateKey priv,

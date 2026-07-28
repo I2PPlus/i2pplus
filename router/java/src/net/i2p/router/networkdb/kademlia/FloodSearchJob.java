@@ -111,6 +111,7 @@ abstract class FloodSearchJob extends JobImpl {
 
     /**
      *  Deprecated, unused, see FOSJ override
+     * @return the name
      */
     public String getName() { return "NetDb Search (phase 1)"; }
 

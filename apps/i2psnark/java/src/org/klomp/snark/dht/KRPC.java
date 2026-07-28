@@ -568,7 +568,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param ih the Info Hash (torrent)
      * @param max maximum number of peers to announce to
      * @param maxWait the maximum total time to wait (ms) or 0 to do all in parallel and return
-     *     immediately.
      * @param isSeed true if seed, false if leech
      * @return the number of successful announces, not counting ourselves.
      */
@@ -1687,7 +1686,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
 
         /**
-         * getSentTo.
+         * @return the sent to
          */
         public NodeInfo getSentTo() {
             return sentTo;

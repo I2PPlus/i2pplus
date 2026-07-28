@@ -30,6 +30,7 @@ public class TransportBid {
      * How long this transport thinks it would take to send the message
      * This is the actual bid value, lower is better, and it doesn't really have
      * anything to do with latency.
+     * @return the latency ms
      */
     public int getLatencyMs() {return _latencyMs;}
     /**
@@ -39,6 +40,7 @@ public class TransportBid {
 
     /**
      * Specifies the transport that offered this bid
+     * @return the transport
      */
     public Transport getTransport() {return _transport;}
     /**

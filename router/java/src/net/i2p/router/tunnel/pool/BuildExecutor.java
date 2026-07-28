@@ -985,6 +985,7 @@ public class BuildExecutor implements Runnable {
     /**
      *  Get the paired pool (opposite direction) for IB/OB balance comparison.
      *  Handles both client pools (by destination) and exploratory pools (by pool reference).
+     * @return the paired pool
      */
     private static TunnelPool getPairedPool(TunnelPool pool) {
         if (pool == null) return null;
@@ -1189,8 +1190,8 @@ public class BuildExecutor implements Runnable {
     /**
      * Log that a peer did not reply to a tunnel build request.
      *
-     * @param tunnel the tunnel ID
-     * @param peer the peer hash that didn't reply
+     * @param tunnel the tunnel
+     * @param peer the peer
      */
     private void didNotReply(long tunnel, Hash peer) {
         if (_log.shouldDebug()) {

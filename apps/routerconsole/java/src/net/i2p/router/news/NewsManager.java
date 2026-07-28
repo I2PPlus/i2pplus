@@ -143,17 +143,17 @@ public class NewsManager implements ClientApp {
     @Override
     public synchronized void shutdown(String[] args) {changeState(STOPPED);}
     /**
-     * getState.
+     * @return the state
      */
     @Override
     public ClientAppState getState() {return _state;}
     /**
-     * getName.
+     * @return the name
      */
     @Override
     public String getName() {return APP_NAME;}
     /**
-     * getDisplayName.
+     * @return the display name
      */
     @Override
     public String getDisplayName() {return "News Manager";}

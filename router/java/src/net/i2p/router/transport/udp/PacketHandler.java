@@ -183,7 +183,7 @@ class PacketHandler {
     /**
      * Queue a received packet for processing.
      *
-     * @param packet the packet to queue
+     * @param packet the packet
      * @throws InterruptedException if interrupted while waiting
      * @since IPv6 moved from UDPReceiver
      */

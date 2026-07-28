@@ -30,6 +30,7 @@ public class RouterPrivateKeyFile extends PrivateKeyFile {
     /**
      *  Read it in from the file.
      *  Also sets the local privKey and signingPrivKey.
+     * @return the router identity
      */
     public RouterIdentity getRouterIdentity() throws IOException, DataFormatException {
         InputStream in = null;

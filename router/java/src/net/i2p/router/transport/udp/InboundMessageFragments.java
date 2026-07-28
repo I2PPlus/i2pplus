@@ -59,7 +59,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     }
 
     /**
-     * isAlive.
+     * @return whether alive
      */
     public boolean isAlive() {return _alive;}
 

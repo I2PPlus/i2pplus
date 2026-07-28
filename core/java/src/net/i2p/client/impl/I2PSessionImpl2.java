@@ -152,6 +152,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      */
     /**
      * Return the timeout value.
+     * @return the timeout
      */
     protected long getTimeout() {return SEND_TIMEOUT;}
 
@@ -186,6 +187,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      */
     /**
      * Return whether compression should be used.
+     * @return whether compress
      */
     protected boolean shouldCompress(int size) {
         if (size <= DONT_COMPRESS_SIZE) {return false;}
@@ -576,6 +578,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /**
      * Cached reflection access to RouterContext.tunnelManager().
      * Method is looked up once and reused to avoid repeated getMethod() overhead.
+     * @return the tunnel manager
      */
     private Object getTunnelManager() {
         Method m = _tunnelManagerMethod;
@@ -668,6 +671,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     @Override
     /**
      * Return the current tunnel pair.
+     * @return the current tunnel pair
      */
     public TunnelPair getCurrentTunnelPair() {
         // First check if we have an explicitly set pair

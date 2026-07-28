@@ -345,7 +345,7 @@ public class EepGet {
      * @param numRetries number of retries
      * @param minSize minimum acceptable response size, -1 for unlimited
      * @param maxSize maximum acceptable response size, -1 for unlimited
-     * @param outputFile ignored if outputStream is non-null
+     * @param outputFile not used if outputStream is non-null
      * @param outputStream takes precedence over outputFile
      * @param url URL to fetch
      * @param allowCaching whether to allow caching
@@ -368,7 +368,7 @@ public class EepGet {
      * @param numRetries number of retries
      * @param minSize minimum acceptable response size, -1 for unlimited
      * @param maxSize maximum acceptable response size, -1 for unlimited
-     * @param outputFile ignored if outputStream is non-null
+     * @param outputFile not used if outputStream is non-null
      * @param outputStream takes precedence over outputFile
      * @param url URL to fetch
      * @param allowCaching whether to allow caching
@@ -2606,7 +2606,7 @@ public class EepGet {
         }
 
         /**
-         * getAuthHeader.
+         * @return the auth header
          */
         public String getAuthHeader(String method, String uri) throws IOException {
             switch (authMode) {

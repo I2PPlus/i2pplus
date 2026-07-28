@@ -281,7 +281,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         private volatile long _lastSaveMs;
 
         /**
-         * AutotuneConfig.
          * @param ctx the router context
          */
         public AutotuneConfig(RouterContext ctx) {
@@ -652,6 +651,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Job queue pressure score (0.0 = idle, 1.0 = severe).
      * Combines jobLag, readyJobs, and droppedJobs into a single metric.
+     * @return the job queue pressure
      */
     private double getJobQueuePressure() {
         double jobLag = getAvgStat("jobQueue.jobLag");
@@ -970,7 +970,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         public final double[] statHistory;
 
         /**
-         * Constructor.
          * @param name the param name
          * @param description the param description
          * @param subsystem the subsystem name
@@ -1182,34 +1181,42 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Param name.
+         * @return the name
          */
         public String getName() { return _name; }
         /**
          * Param description.
+         * @return the description
          */
         public String getDescription() { return _description; }
         /**
          * Subsystem name.
+         * @return the subsystem
          */
         public String getSubsystem() { return _subsystem; }
         /**
          * Minimum value.
+         * @return the min
          */
         public int getMin() { return _min; }
         /**
          * Maximum value.
+         * @return the max
          */
         public int getMax() { return _max; }
         /**
          * Step size.
+         * @return the step
          */
         public int getStep() { return _step; }
         /**
          * Default value.
+         * @return the default value
          */
         public int getDefaultValue() { return _defaultValue; }
         /**
          * Whether auto-tuning is enabled.
+         * @return whether auto tuning
          */
         public boolean isAutoTuning() { return _autoTuning; }
 
@@ -1218,6 +1225,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Useful for params whose ranges should scale with bandwidth.
          *
          * @since 0.9.70+
+         * @return the share bps
          */
         protected static int getShareBps(RouterContext ctx) {
             return 1000 * TunnelDispatcher.getShareBandwidth(ctx);
@@ -1228,6 +1236,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Called by refreshRanges() instead of _defaultMin.
          *
          * @since 0.9.70+
+         * @return the default min
          */
         protected int getDefaultMin(RouterContext ctx) { return _defaultMin; }
 
@@ -1236,6 +1245,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Called by refreshRanges() instead of _defaultMax.
          *
          * @since 0.9.70+
+         * @return the default max
          */
         protected int getDefaultMax(RouterContext ctx) { return _defaultMax; }
 
@@ -1243,6 +1253,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Transit bandwidth threshold for "heavy" — 80% of configured share bandwidth.
          * Replaces the old hardcoded 50 KB/s which was far too low for any real router.
          * @since 0.9.70+
+         * @return the heavy transit threshold
          */
         protected static int getHeavyTransitThreshold(RouterContext ctx) {
             return getShareBps(ctx) * 4 / 5;
@@ -1251,6 +1262,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Transit bandwidth threshold for "sustained heavy" — 50% of configured share.
          * @since 0.9.70+
+         * @return the sustained heavy transit threshold
          */
         protected static int getSustainedHeavyTransitThreshold(RouterContext ctx) {
             return getShareBps(ctx) / 2;
@@ -1261,6 +1273,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Called by refreshRanges() instead of _defaultStep.
          *
          * @since 0.9.70+
+         * @return the default step
          */
         protected int getDefaultStep(RouterContext ctx) { return _defaultStep; }
 
@@ -1647,6 +1660,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * NTCP reader pool utilization (0.0-1.0).
          * @since 0.9.70+
+         * @return the reader utilization
          */
         protected double getReaderUtilization(RouterContext ctx) {
             Transport t = ctx.commSystem().getTransports().get(NTCPTransport.STYLE);
@@ -1656,6 +1670,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * NTCP writer pool utilization (0.0-1.0).
          * @since 0.9.70+
+         * @return the writer utilization
          */
         protected double getWriterUtilization(RouterContext ctx) {
             Transport t = ctx.commSystem().getTransports().get(NTCPTransport.STYLE);
@@ -1665,6 +1680,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * NTCP send finisher pool utilization (0.0-1.0).
          * @since 0.9.70+
+         * @return the send finisher utilization
          */
         protected double getSendFinisherUtilization(RouterContext ctx) {
             Transport t = ctx.commSystem().getTransports().get(NTCPTransport.STYLE);
@@ -1674,6 +1690,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * UDP packet handler pool utilization (0.0-1.0).
          * @since 0.9.70+
+         * @return the packet handler utilization
          */
         protected double getPacketHandlerUtilization(RouterContext ctx) {
             Transport t = ctx.commSystem().getTransports().get(UDPTransport.STYLE);
@@ -1683,6 +1700,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * UDP message receiver pool utilization (0.0-1.0).
          * @since 0.9.70+
+         * @return the message receiver utilization
          */
         protected double getMessageReceiverUtilization(RouterContext ctx) {
             Transport t = ctx.commSystem().getTransports().get(UDPTransport.STYLE);
@@ -1692,6 +1710,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Tunnel pumper pool utilization (0.0-1.0).
          * @since 0.9.70+
+         * @return the pumper utilization
          */
         protected double getPumperUtilization(RouterContext ctx) {
             return TunnelDispatcher.getPumperUtilization();
@@ -1699,6 +1718,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Current value.
+         * @return the current value
          */
         public int getCurrentValue() { return getRuntimeValue(); }
 
@@ -3966,6 +3986,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Scale min/max/step with share bandwidth.
          * Default = bwBps / 4; range = [bwBps/16 .. bwBps].
+         * @return the default min
          */
         @Override
         /** Router context. */
@@ -4044,6 +4065,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Scale min/max/step with share bandwidth.
          * Default = bwBps / 2; range = [bwBps/8 .. bwBps*2].
+         * @return the default min
          */
         @Override
         /** Router context. */
@@ -9815,6 +9837,7 @@ protected int computeTarget(double observed) {
 
         /**
          * Fetch the event count for a stat using the given period (ms).
+         * @return the event count
          */
         private double getEventCount(String statName, long period) {
             RateStat rs = _ctx.statManager().getRate(statName);
@@ -9826,6 +9849,7 @@ protected int computeTarget(double observed) {
 
         /**
          * Fetch the event count for a stat using the 60s period.
+         * @return the event count
          */
         private double getEventCount(String statName) {
             return getEventCount(statName, STAT_PERIOD);
@@ -9834,6 +9858,7 @@ protected int computeTarget(double observed) {
         /**
          * Return lifetime event count for a stat.
          * Use for low-frequency stats where 60s window is too narrow.
+         * @return the lifetime event count
          */
         private double getLifetimeEventCount(String statName) {
             RateStat rs = _ctx.statManager().getRate(statName);
@@ -10225,6 +10250,7 @@ protected int computeTarget(double observed) {
         /**
          * Read a stat's average value using the given period (ms).
          * Returns NaN if stat unavailable.
+         * @return the stat value
          */
         private double getStatValue(String statName, long period) {
             RateStat rs = _ctx.statManager().getRate(statName);
@@ -10237,6 +10263,7 @@ protected int computeTarget(double observed) {
         /**
          * Read a stat's average value using the 60s period.
          * Returns NaN if stat unavailable.
+         * @return the stat value
          */
         private double getStatValue(String statName) {
             return getStatValue(statName, STAT_PERIOD);

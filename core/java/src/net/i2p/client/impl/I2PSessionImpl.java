@@ -296,7 +296,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * For extension by SubSession via I2PSessionMuxedImpl and I2PSessionImpl2
      *
-     * @param primary the primary session
+     * @param primary the primary
      * @param destKeyStream stream containing the private key data,
      *                             format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      * @param options set of options to configure the router with, if null will use System properties
@@ -461,6 +461,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Get I2CP host from the config
      *
      * @since 0.9.7 was in loadConfig()
+     * @return the host
      */
     private String getHost() {
         if (_context.isRouterContext()) {return "[Internal connection]";} // just for logging
@@ -474,6 +475,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Get I2CP port from the config
      *
      * @since 0.9.7 was in loadConfig()
+     * @return the port
      */
     private int getPort() {
         if (_context.isRouterContext() || (SystemVersion.isAndroid() &&
@@ -652,6 +654,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  Does this session have offline and transient keys?
      *
      *  @since 0.9.38
+     * @return whether offline
      */
     @Override
     public boolean isOffline() {return _offlineSignature != null;}
@@ -920,7 +923,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *
      * @param msgId the message ID
      * @param nonce the nonce
-     * @param status the status code
+     * @param status the status
      */
     public abstract void receiveStatus(int msgId, long nonce, int status);
 
@@ -1009,7 +1012,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
          * Notify that a message is available
          *
          * @param msgId the message ID
-         * @param size the size of the message
+         * @param size the size
          */
         public void available(long msgId, int size) {
             synchronized (AvailabilityNotifier.this) {
@@ -1143,6 +1146,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     /**
      * Retrieve the destination of the session
+     * @return the my destination
      */
     @Override
     public Destination getMyDestination() {return _myDestination;}
@@ -1151,6 +1155,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Retrieve the decryption PrivateKey
      *
      * @deprecated this key is unused
+     * @return the decryption key
      */
     @Deprecated
     @Override
@@ -1159,6 +1164,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Retrieve the signing SigningPrivateKey.
      * As of 0.9.38, this will be the transient key if offline signed.
+     * @return the private key
      */
     @Override
     public SigningPrivateKey getPrivateKey() {return _signingPrivateKey;}
@@ -1226,6 +1232,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      *  Has the session been closed (or not yet connected)?
      *  False when open and during transitions. Synchronized.
+     * @return whether closed
      */
     @Override
     public boolean isClosed() {

@@ -61,7 +61,7 @@ class TCBShare {
      * Creates a new TCB share cache.
      *
      * @param ctx the application context
-     * @param timer the timer for periodic cache cleaning
+     * @param timer the timer
      */
     public TCBShare(I2PAppContext ctx, SimpleTimer2 timer) {
         _context = ctx;

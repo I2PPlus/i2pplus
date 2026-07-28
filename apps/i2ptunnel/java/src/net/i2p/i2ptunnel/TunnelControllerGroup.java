@@ -127,7 +127,7 @@ public class TunnelControllerGroup implements ClientApp {
     private static volatile int _clientRunnerMax = 8192;
 
     /**
-     * getServerHandlerThreads.
+     * @return the server handler threads
      */
     public static int getServerHandlerThreads() { return _serverHandlerThreads; }
     /**
@@ -137,7 +137,7 @@ public class TunnelControllerGroup implements ClientApp {
         _serverHandlerThreads = Math.max(2, Math.min(128, val));
     }
     /**
-     * getClientRunnerMax.
+     * @return the client runner max
      */
     public static int getClientRunnerMax() { return _clientRunnerMax; }
     /**
@@ -151,7 +151,7 @@ public class TunnelControllerGroup implements ClientApp {
     private static volatile int _socketConnectTimeout = 10000;
 
     /**
-     * getSocketConnectTimeout.
+     * @return the socket connect timeout
      */
     public static int getSocketConnectTimeout() { return _socketConnectTimeout; }
     /**
@@ -176,6 +176,7 @@ public class TunnelControllerGroup implements ClientApp {
      *  checks on the return value.
      *
      *  @throws IllegalArgumentException if unable to load from i2ptunnel.config
+     *  @return the instance
      */
     public static TunnelControllerGroup getInstance() {
         synchronized (TunnelControllerGroup.class) {
@@ -203,6 +204,7 @@ public class TunnelControllerGroup implements ClientApp {
      *
      *  @throws IllegalArgumentException if unable to load from i2ptunnel.config
      *  @since 0.9.41
+     *  @return the instance
      */
     public static TunnelControllerGroup getInstance(I2PAppContext ctx) {
         synchronized (TunnelControllerGroup.class) {
@@ -304,6 +306,7 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      *  Helper
      *  @since 0.9.49
+     * @return the context
      */
     public I2PAppContext getContext() {
         return _context;
@@ -344,6 +347,7 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      *  ClientApp interface
      *  @since 0.9.4
+     * @return the state
      */
     @Override
     public ClientAppState getState() {
@@ -353,6 +357,7 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      *  ClientApp interface
      *  @since 0.9.4
+     * @return the name
      */
     @Override
     public String getName() {
@@ -362,6 +367,7 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      *  ClientApp interface
      *  @since 0.9.4
+     * @return the display name
      */
     @Override
     public String getDisplayName() {

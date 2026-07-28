@@ -241,6 +241,7 @@ public class EepPost extends EepGet {
 
     /**
      *  Adapted from old jrandom EepPost
+     * @return the separator
      */
     private String getSeparator() {
         byte[] separator = new byte[32];

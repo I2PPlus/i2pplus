@@ -175,7 +175,7 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() {return MESSAGE_TYPE;}

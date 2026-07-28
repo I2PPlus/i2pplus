@@ -97,7 +97,7 @@ class SidebarRenderer {
     }
 
     /**
-     * isAdvanced.
+     * @return whether advanced
      */
     public boolean isAdvanced() {return _context.getBooleanProperty(PROP_ADVANCED);}
     /**
@@ -1204,6 +1204,7 @@ class SidebarRenderer {
      *  back to 1-min RRD averages + live BPS. Inbound renders in the top half
      *  (inverted), outbound in the bottom half.
      *  @since 0.9.70+
+     * @return the data attributes
      */
     private String getDataAttributes() {
         try {

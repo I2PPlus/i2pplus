@@ -2088,6 +2088,7 @@ public class TuningFormHandler extends FormHandler {
 
     /**
      * Build a map of property deletions to reset all tuner ranges to defaults.
+     * @return the reset changes
      */
     private Map<String, String> getResetChanges() {
         Map<String, String> deletions = new HashMap<>();
@@ -2142,6 +2143,7 @@ public class TuningFormHandler extends FormHandler {
 
     /**
      * Get the Tuner instance via the UDP transport.
+     * @return the tuner
      */
     private Tuner getTuner() {
         if (_context == null) return null;
@@ -2157,6 +2159,7 @@ public class TuningFormHandler extends FormHandler {
     /**
      * Read a tuner property with a default.
      * Used by TuningHelper for display.
+     * @return the prop
      */
     public static String getProp(RouterContext ctx,
                                  String param, String field, int defaultVal) {

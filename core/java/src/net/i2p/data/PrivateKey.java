@@ -85,9 +85,7 @@ import javax.security.auth.Destroyable;
  */
 public class PrivateKey extends SimpleDataStructure implements Destroyable {
     private static final EncType DEF_TYPE = EncType.ELGAMAL_2048;
-    /**
-     * KEYSIZE_BYTES.
-     */
+    /** KEYSIZE_BYTES. */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPrivkeyLen();
 
     private final EncType _type;
@@ -205,6 +203,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
      *  javax.security.auth.Destroyable interface
      *
      *  @since 0.9.40
+     * @return whether destroyed
      */
     @Override
     public boolean isDestroyed() {
@@ -232,6 +231,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     /**
      * We assume the data has enough randomness in it, so use the last 4 bytes for speed.
      * Overridden since we use short exponents, so the first 227 bytes are all zero.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

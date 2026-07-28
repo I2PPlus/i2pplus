@@ -345,6 +345,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
      *  This should return false most of the time, but if the not-failing pool's
      *  build success rate is much worse, return true so that reliability
      *  is maintained.
+     * @return whether pick high cap
      */
     private boolean shouldPickHighCap() {
         if (ctx.getBooleanProperty("router.exploreHighCapacity"))
@@ -407,6 +408,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
      *    100 * ((Efail - Cfail) / (100 - Cfail))
      * Even this isn't the "true" rate for the NonFailingPeers pool, since we
      * are often building exploratory tunnels using the HighCapacity pool.
+     * @return the exploratory fail percentage
      */
     private int getExploratoryFailPercentage() {
         int c = getFailPercentage("Client");

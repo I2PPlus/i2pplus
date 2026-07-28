@@ -64,7 +64,7 @@ public abstract class NamingService {
     /**
      * Look up a hostname.
      *
-     * @param hostname the hostname to look up
+     * @param hostname the hostname
      * @return the Destination for this hostname, or
      * <code>null</code> if name is unknown.
      */
@@ -401,7 +401,7 @@ public abstract class NamingService {
      *  Overwrites old entry if it exists.
      *  See also putIfAbsent() and update().
      *
-     * @param hostname the hostname to add
+     * @param hostname the hostname
      * @param d the destination for the hostname
      * @return success
      * @since 0.8.7
@@ -415,7 +415,7 @@ public abstract class NamingService {
      *  Overwrites old entry if it exists.
      *  See also putIfAbsent() and update().
      *
-     * @param hostname the hostname to add
+     * @param hostname the hostname
      * @param d the destination for the hostname
      * @param options NamingService-specific, can be null
      * @return success
@@ -430,7 +430,7 @@ public abstract class NamingService {
      *  Fails if entry previously exists.
      *  See also put() and update().
      *
-     * @param hostname the hostname to add
+     * @param hostname the hostname
      * @param d the destination for the hostname
      * @return success
      * @since 0.8.7
@@ -444,7 +444,7 @@ public abstract class NamingService {
      *  Fails if entry previously exists.
      *  See also put() and update().
      *
-     * @param hostname the hostname to add
+     * @param hostname the hostname
      * @param d the destination for the hostname
      * @param options NamingService-specific, can be null
      * @return success
@@ -459,7 +459,7 @@ public abstract class NamingService {
      *  This implementation calls put() for each entry.
      *  Subclasses may override if a more efficient implementation is available.
      *
-     * @param entries the entries to add
+     * @param entries the entries
      * @param options NamingService-specific, can be null
      * @return total success, or false if any put failed
      * @since 0.8.7
@@ -477,7 +477,7 @@ public abstract class NamingService {
      *  Warning - unimplemented in any subclass.
      *  This implementation returns false.
      *
-     * @param hostname the hostname to update
+     * @param hostname the hostname
      * @param d may be null if only options are changing
      * @param options NamingService-specific, can be null
      * @return success
@@ -490,7 +490,7 @@ public abstract class NamingService {
     /**
      *  Delete the entry.
      *
-     * @param hostname the hostname to remove
+     * @param hostname the hostname
      * @return true if removed successfully, false on error or if it did not exist
      * @since 0.8.7
      */
@@ -501,7 +501,7 @@ public abstract class NamingService {
     /**
      *  Delete the entry.
      *
-     * @param hostname the hostname to remove
+     * @param hostname the hostname
      * @param options NamingService-specific, can be null
      * @return true if removed successfully, false on error or if it did not exist
      * @since 0.8.7
@@ -567,7 +567,7 @@ public abstract class NamingService {
      *  Note that whether this (and lookup(hostname)) resolve Base 32 addresses
      *  in the form {52 chars}.b32.i2p is NamingService-specific.
      *
-     * @param hostname the hostname to look up
+     * @param hostname the hostname
      * @param lookupOptions input parameter, NamingService-specific, can be null
      * @param storedOptions output parameter, NamingService-specific, any stored properties will be added if non-null
      * @return dest or null
@@ -650,7 +650,7 @@ public abstract class NamingService {
      *  whether this does resolve Base 32 addresses
      *  in the form {52 chars}.b32.i2p is NamingService-specific.
      *
-     * @param hostname the hostname to look up
+     * @param hostname the hostname
      * @return non-empty List of Destinations, or null if nothing found
      * @since 0.9.26
      */
@@ -678,7 +678,7 @@ public abstract class NamingService {
      *  This implementation simply calls lookup().
      *  Subclasses implementing multiple destinations per hostname should override.
      *
-     * @param hostname the hostname to look up
+     * @param hostname the hostname
      * @param lookupOptions input parameter, NamingService-specific, may be null
      * @param storedOptions output parameter, NamingService-specific, any stored properties will be added if non-null
      * @return non-empty List of Destinations, or null if nothing found
@@ -700,7 +700,7 @@ public abstract class NamingService {
     /**
      *  Add a Destination to an existing hostname's entry in the addressbook.
      *
-     * @param hostname the hostname to add the destination to
+     * @param hostname the hostname
      * @param d the destination to add
      * @return success
      * @since 0.9.26
@@ -714,7 +714,7 @@ public abstract class NamingService {
      *  This implementation simply calls putIfAbsent().
      *  Subclasses implementing multiple destinations per hostname should override.
      *
-     * @param hostname the hostname to add the destination to
+     * @param hostname the hostname
      * @param d the destination to add
      * @param options NamingService-specific, may be null
      * @return success
@@ -731,7 +731,7 @@ public abstract class NamingService {
      *  If aditional Destinations remain, it only removes the
      *  specified Destination from the entry.
      *
-     * @param hostname the hostname to remove
+     * @param hostname the hostname
      * @param d the destination that must be present
      * @return true if entry containing d was successfully removed.
      * @since 0.9.26
@@ -752,7 +752,7 @@ public abstract class NamingService {
      *  or with more efficient implementations, should override.
      *  Fails if entry previously exists.
      *
-     * @param hostname the hostname to remove
+     * @param hostname the hostname
      * @param d the destination that must be present
      * @param options NamingService-specific, may be null
      * @return true if entry containing d was successfully removed.

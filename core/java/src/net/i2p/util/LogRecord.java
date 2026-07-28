@@ -36,49 +36,49 @@ class LogRecord {
     }
 
     /**
-     * getDate.
+     * @return the date
      */
     public long getDate() {
         return _date;
     }
 
     /**
-     * getSource.
+     * @return the source
      */
     public Class<?> getSource() {
         return _source;
     }
 
     /**
-     * getSourceName.
+     * @return the source name
      */
     public String getSourceName() {
         return _name;
     }
 
     /**
-     * getThreadName.
+     * @return the thread name
      */
     public String getThreadName() {
         return _threadName;
     }
 
     /**
-     * getPriority.
+     * @return the priority
      */
     public int getPriority() {
         return _priority;
     }
 
     /**
-     * getMessage.
+     * @return the message
      */
     public String getMessage() {
         return _message;
     }
 
     /**
-     * getThrowable.
+     * @return the throwable
      */
     public Throwable getThrowable() {
         return _throwable;
@@ -100,7 +100,7 @@ class LogRecord {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

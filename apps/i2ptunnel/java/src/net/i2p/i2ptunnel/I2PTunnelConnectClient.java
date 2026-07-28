@@ -86,6 +86,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
      * Create the default options (using the default timeout, etc).
      * Warning, this does not make a copy of I2PTunnel's client options,
      * it modifies them directly.
+     * @return the default options
      */
     @Override
     protected I2PSocketOptions getDefaultOptions() {
@@ -145,6 +146,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
 
     /**
      *  @since 0.9.4
+     * @return the realm
      */
     protected String getRealm() {
         return AUTH_REALM;

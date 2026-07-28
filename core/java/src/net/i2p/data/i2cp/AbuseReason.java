@@ -24,7 +24,7 @@ import java.io.OutputStream;
  * @author jrandom
  */
 public class AbuseReason extends DataStructureImpl {
-    /** ignored */
+    /** Text description of the abuse reason. */
     private String _reason;
 
     /**
@@ -77,7 +77,7 @@ public class AbuseReason extends DataStructureImpl {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

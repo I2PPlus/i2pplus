@@ -202,7 +202,7 @@ class MagnetState {
      * @param chunk the chunk number to save
      * @param data the byte array containing the chunk data
      * @param off the offset in the data array where the chunk starts
-     * @param length the length of the chunk data
+     * @param length the length
      * @return true if this was the last piece, false otherwise
      * @throws IllegalArgumentException if not initialized, chunk number is invalid, or length is
      *     incorrect

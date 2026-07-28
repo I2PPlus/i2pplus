@@ -556,7 +556,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  Called when tunnel options are updated.
      *  Re-initializes the POST throttler and updates the spoofed host.
      *
-     *  @param tunnel the tunnel whose options were updated
+     * @param tunnel the tunnel
      *  @since 0.9.9
      */
     @Override

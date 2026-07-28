@@ -91,7 +91,7 @@ public class PeerHelper extends HelperBase {
     public void allowGraphical() {_graphical = true;}
 
     /**
-     * getPeerSummary.
+     * @return the peer summary
      */
     public String getPeerSummary() {
         try {renderStatusHTML(_out, _urlBase, _sortFlags);}
@@ -164,6 +164,7 @@ public class PeerHelper extends HelperBase {
      *  Return the currently selected tab index.
      *
      *  @since 0.9.38
+     * @return the tab
      */
     private int getTab() {
         if ("ntcp".equals(_transport)) {return 1;}
@@ -175,6 +176,7 @@ public class PeerHelper extends HelperBase {
     /**
      * Get the 1-minute average of a RateStat, or 0 if unavailable.
      * @since 0.9.70+
+     * @return the stat avg
      */
     private double getStatAvg(String name) {
         RateStat rs = _context.statManager().getRate(name);
@@ -1121,6 +1123,7 @@ public class PeerHelper extends HelperBase {
      *  Return the transport legend/definitions HTML.
      *
      *  @since 0.9.31 moved from TransportManager
+     * @return the transports legend
      */
     private final String getTransportsLegend() {
         StringBuilder buf = new StringBuilder(1024);

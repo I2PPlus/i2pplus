@@ -265,6 +265,7 @@ public class HostTxtEntry {
 
     /**
      * Verify with the dest public key using the "sig" property
+     * @return whether valid sig is present
      */
     public boolean hasValidSig() {
         if (props == null || name == null || dest == null) return false;
@@ -306,6 +307,7 @@ public class HostTxtEntry {
 
     /**
      * Verify with the "olddest" property's public key using the "oldsig" property
+     * @return whether valid inner sig is present
      */
     public boolean hasValidInnerSig() {
         if (props == null || name == null || dest == null) return false;
@@ -347,6 +349,7 @@ public class HostTxtEntry {
 
     /**
      * Verify with the "dest" property's public key using the "sig" property
+     * @return whether valid remove sig is present
      */
     public boolean hasValidRemoveSig() {
         if (props == null) return false;

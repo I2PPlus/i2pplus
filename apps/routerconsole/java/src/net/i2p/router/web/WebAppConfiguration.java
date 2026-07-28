@@ -154,6 +154,7 @@ public class WebAppConfiguration implements Configuration {
      * not that there's really any hostnames in here,
      * but keep findbugs happy.
      * @since 0.9
+ * @return the system class path
      */
     private static Set<URI> getSystemClassPath(I2PAppContext ctx) {
         Set<URI> rv = new HashSet<>(32);

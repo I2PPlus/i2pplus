@@ -470,6 +470,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * Should we send this many bytes? Do NOT call uploaded() if this returns true.
      *
      * @since 0.9.62
+     * @return whether send
      */
     @Override
     public boolean shouldSend(int size) {
@@ -484,6 +485,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * Should we request this many bytes?
      *
      * @since 0.9.62
+     * @return whether request
      */
     @Override
     public boolean shouldRequest(Peer peer, int size) {
@@ -607,6 +609,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * Current limit in Bps
      *
      * @since 0.9.62
+     * @return the up b w limit
      */
     @Override
     public long getUpBWLimit() {
@@ -638,6 +641,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * Current limit in Bps
      *
      * @since 0.9.62
+     * @return the down b w limit
      */
     @Override
     public long getDownBWLimit() {
@@ -1460,7 +1464,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Called when a choke message is received. This does nothing but logging.
      *
-     * @param peer the peer that sent the message
+     * @param peer the peer
      * @param choke true for choke, false for unchoke
      */
     @Override
@@ -1473,7 +1477,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Called when an interested message is received.
      *
-     * @param peer the peer that sent the message
+     * @param peer the peer
      * @param interest true for interested, false for uninterested
      */
     @Override
@@ -2129,6 +2133,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * Convenience
      *
      * @since 0.9.2
+     * @return the util
      */
     @Override
     public I2PSnarkUtil getUtil() {
@@ -2138,7 +2143,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Ban a web peer for this torrent, for while or permanently.
      *
-     * @param host the host name
+     * @param host the hostname
      * @since 0.9.49
      */
     public synchronized void banWebPeer(String host, boolean isPermanent) {
@@ -2161,8 +2166,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Is a web peer banned?
      *
-     * @param host the host name
+     * @param host the hostname
      * @since 0.9.49
+     * @return whether web peer banned
      */
     public synchronized boolean isWebPeerBanned(String host) {
         if (_webPeerBans == null) {

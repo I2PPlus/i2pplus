@@ -479,6 +479,7 @@ public class I2PSocketManagerFactory {
     /**
      *  @param opts may be null
      *  @since 0.9.12
+     *  @return the sig type
      */
     private static SigType getSigType(Properties opts) {
         if (opts != null) {

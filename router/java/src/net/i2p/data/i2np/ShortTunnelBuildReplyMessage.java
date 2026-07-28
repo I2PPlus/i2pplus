@@ -43,7 +43,7 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     protected int calculateWrittenLength() { return 0; }
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() { return MESSAGE_TYPE; }

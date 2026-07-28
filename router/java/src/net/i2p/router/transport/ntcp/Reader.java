@@ -64,7 +64,7 @@ public class Reader {
     /**
      * Get reader pool utilization as a ratio (0.0-1.0).
      * Returns NaN if no runners are active (pool not started).
-      * @return the value
+      * @return the utilization
      */
     public double getUtilization() {
         int size = _runners.size();

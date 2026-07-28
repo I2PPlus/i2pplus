@@ -89,6 +89,7 @@ public class GraphHelper extends FormHandler {
     /**
      *  This must be output in the jsp since &lt;meta&gt; must be in the &lt;head&gt;
      *  @since 0.8.7
+     * @return the refresh meta
      */
     public String getRefreshMeta() {
         if (_refreshDelaySeconds <= 8 ||
@@ -202,7 +203,7 @@ public class GraphHelper extends FormHandler {
     public void setStat(String stat) {_stat = stat;}
 
     /**
-     * getImages.
+     * @return the images
      */
     public String getImages() {
         GraphGenerator ss = GraphGenerator.instance(_context);
@@ -304,6 +305,7 @@ public class GraphHelper extends FormHandler {
      *  stat = "bw.combined" treated specially
      *
      *  @since 0.9
+     * @return the single stat
      */
     public String getSingleStat() {
         GraphGenerator ss = GraphGenerator.instance(_context);
@@ -439,7 +441,7 @@ public class GraphHelper extends FormHandler {
     private static final int[] times = { 5, 10, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
 
     /**
-     * getForm.
+     * @return the form
      */
     public String getForm() {
         GraphGenerator ss = GraphGenerator.instance(_context);
@@ -550,6 +552,7 @@ public class GraphHelper extends FormHandler {
     /**
      *  We have to do this here because processForm() isn't called unless the nonces are good
      *  @since 0.8.7
+     * @return the all messages
      */
     @Override
     public String getAllMessages() {

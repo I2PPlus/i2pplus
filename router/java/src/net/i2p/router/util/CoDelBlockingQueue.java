@@ -172,7 +172,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *  @param ctx the I2P application context
      *  @param name for stats
      *  @param capacity the maximum capacity of the queue
-     *  @param target the target max latency (ms)
+     *  @param target the target
      *  @param interval how long above target to start dropping (ms)
      *  @since 0.9.50
      */

@@ -87,7 +87,7 @@ class PacketHandler {
      * Process a packet that matches a known connection.
      *
      * @param con    the connection this packet belongs to
-     * @param packet the packet to process
+     * @param packet the packet
      */
     private void receiveKnownConnection(Connection con, Packet packet) {
         if (I2PSocketManagerFull.pcapWriter != null &&
@@ -203,7 +203,7 @@ class PacketHandler {
     /**
      * Sends a reset packet back to the sender if the incoming packet is verified.
      *
-     * @param packet the packet to respond to with a reset
+     * @param packet the packet
      */
     private void sendReset(Packet packet) {
         if (packet == null) {return;}
@@ -226,7 +226,7 @@ class PacketHandler {
      * Sends a reset packet back to the sender without verifying the packet signature.
      * Packet MUST have a FROM option.
      *
-     * @param packet the packet to respond to with a reset
+     * @param packet the packet
      * @since 0.9.39
      */
     private void sendResetUnverified(Packet packet) {

@@ -114,15 +114,15 @@ public class LeaseSet extends DatabaseEntry {
      */
     protected final List<Lease> _leases;
     // Store these since isCurrent() and getEarliestLeaseDate() are called frequently
-    /** ignored */
+    /** Earliest expiration time among all leases. */
     private long _firstExpiration;
     /**
      * _lastExpiration.
      */
     protected long _lastExpiration;
-    /** ignored */
+    /** Decrypted leases backing store. */
     private List<Lease> _decryptedLeases;
-    /** ignored */
+    /** Whether decryption was successful. */
     private boolean _decrypted;
     /**
      * _checked.
@@ -159,6 +159,7 @@ public class LeaseSet extends DatabaseEntry {
 
     /**
      * Same as getEarliestLeaseDate()
+     * @return the date
      */
     @Override
     public long getDate() {
@@ -166,7 +167,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     * getKeysAndCert.
+     * @return the keys and cert
      */
     @Override
     public KeysAndCert getKeysAndCert() {
@@ -174,7 +175,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() {
@@ -535,9 +536,9 @@ public class LeaseSet extends DatabaseEntry {
         return buf.toString();
     }
 
-    /** ignored */
+    /** Combined length of gateway hash and tunnel ID. */
     private static final int DATA_LEN = Hash.HASH_LENGTH + 4;
-    /** ignored */
+    /** AES initialization vector length in bytes. */
     private static final int IV_LEN = 16;
 
     /**
@@ -567,7 +568,6 @@ public class LeaseSet extends DatabaseEntry {
      *  - Add an extra lease
      *  - Replace the Hash and TunnelID in each Lease
      */
-    /** ignored */
     private void encryp(SessionKey key) throws DataFormatException, IOException {
         int size = _leases.size();
         if (size < 1 || size > MAX_LEASES - 1) {
@@ -651,7 +651,6 @@ public class LeaseSet extends DatabaseEntry {
      * @return true if it was encrypted, and we decrypted it successfully.
      * Decrypts on first call.
      */
-    /** ignored */
     private synchronized boolean isEncrypted() {
         if (_decrypted) {
             return true;

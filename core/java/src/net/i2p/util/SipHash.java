@@ -31,6 +31,7 @@ public abstract class SipHash {
      *  caching recommended
      *
      *  @param data may be null
+     *  @return whether h code is present
      */
     public static int hashCode(byte[] data) {
         if (data == null) return 0;

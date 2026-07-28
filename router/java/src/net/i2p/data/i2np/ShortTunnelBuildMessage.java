@@ -47,7 +47,7 @@ public class ShortTunnelBuildMessage extends TunnelBuildMessage {
     protected int calculateWrittenLength() { return 1 + (RECORD_COUNT * SHORT_RECORD_SIZE); }
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() { return MESSAGE_TYPE; }

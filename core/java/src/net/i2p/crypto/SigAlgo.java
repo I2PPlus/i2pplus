@@ -30,7 +30,7 @@ public enum SigAlgo {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     public String getName() {
         return name;

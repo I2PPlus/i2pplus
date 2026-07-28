@@ -89,6 +89,7 @@ class Draft extends Mail {
 	 * Includes size of attachments
 	 *
 	 * @since 0.9.62
+	 * @return the size
 	 */
 	@Override
 	public synchronized long getSize() {
@@ -102,7 +103,7 @@ class Draft extends Mail {
 	public synchronized void setSize(long size) { /* no-op */ }
 
 	/**
-	 * hasAttachment.
+	 * @return whether attachment is present
 	 */
 	@Override
 	public synchronized boolean hasAttachment() {
@@ -142,7 +143,7 @@ class Draft extends Mail {
 	/**
 	 * Removes an attachment by index and deletes its data file.
 	 *
-	 * @param index the index of the attachment to remove
+	 * @param index the index
 	 */
 	public synchronized void removeAttachment(int index) {
 		if (index >= 0 && index < attachments.size()) {

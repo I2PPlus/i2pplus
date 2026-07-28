@@ -231,6 +231,7 @@ class OutboundNTCP2State implements EstablishState {
     /**
      *  Check if the connection is in initial state and ready for prepareOutbound()
      *  @since 0.9.59
+     * @return whether initial state
      */
     public boolean isInitialState() {
         return _state == State.OB_INIT;
@@ -239,6 +240,7 @@ class OutboundNTCP2State implements EstablishState {
     /**
      *  Check if the connection is in a state where prepareOutbound() has already been called
      *  to avoid duplicate calls that cause IllegalStateException
+     * @return whether prepare outbound called
      */
     public boolean isPrepareOutboundCalled() {
         return _state == State.OB_SENT_X || _state == State.OB_GOT_HXY ||

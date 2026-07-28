@@ -73,6 +73,7 @@ public class CryptoCheck {
      */
     /**
      * Return whether unlimited strength is available.
+     * @return whether unlimited
      */
     public static boolean isUnlimited() {
         return _isUnlimited;

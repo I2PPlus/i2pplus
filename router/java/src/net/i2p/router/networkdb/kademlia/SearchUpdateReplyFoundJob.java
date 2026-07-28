@@ -59,7 +59,7 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     @Override
     public String getName() { return "Update Kademlia Search Reply Found "; }

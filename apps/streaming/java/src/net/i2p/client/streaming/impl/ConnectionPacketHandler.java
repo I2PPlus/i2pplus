@@ -21,29 +21,28 @@ import net.i2p.util.Log;
  * (i.e. per-ConnectionManager, not per-Connection).
  * It doesn't store any state.
  */
-/** ignored */
 class ConnectionPacketHandler {
-    /** ignored */
+    /** Application context. */
     private final I2PAppContext _context;
-    /** ignored */
+    /** Logger. */
     private final Log _log;
-    /** ignored */
+    /** Byte cache for packet buffers. */
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
 
     /**
      * Get the maximum slow start window size.
      * Tunable via i2p.streaming.maxSlowStartWindow (default: 32).
+     * @return the max slow start window
      */
-    /** ignored */
     public static int getMaxSlowStartWindow(I2PAppContext ctx) {
         return ConnectionOptions.getMaxSlowStartWindowStatic();
     }
 
     // see tickets 1939 and 2584
-    /** ignored */
+    /** Prop immediate ack delay. */
     static final String PROP_IMMEDIATE_ACK_DELAY = "i2p.streaming.immediateAckDelay";
 
-    /** ignored */
+    /** Period for rates. */
     private static final long[] RATES = new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
     /**
@@ -51,7 +50,6 @@ class ConnectionPacketHandler {
      *
      * @param context the I2P application context
      */
-    /** ignored */
     public ConnectionPacketHandler(I2PAppContext context) {
         _context = context;
         _log = context.logManager().getLog(ConnectionPacketHandler.class);
@@ -73,7 +71,6 @@ class ConnectionPacketHandler {
      * @param con the connection the packet belongs to
      * @throws I2PException if the packet fails verification
      */
-    /** ignored */
     void receivePacket(Packet packet, Connection con) throws I2PException {
         boolean ok = verifyPacket(packet, con);
         if (!ok) {
@@ -85,7 +82,7 @@ class ConnectionPacketHandler {
             return;
         }
 
-        /** ignored */
+        /** Seq num. */
         final long seqNum = packet.getSequenceNum();
         if (con.getHardDisconnected()) {
             if ((seqNum > 0) || (packet.getPayloadSize() > 0) ||
@@ -138,7 +135,7 @@ class ConnectionPacketHandler {
         } else if (!con.isInbound() && packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
             // SYN ACK w/o MAX_PACKET_SIZE?
             // specs not clear if this is allowed
-            /** ignored */
+            /** Default MTU when SYN lacks size option. */
             final int size = ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE;
             if (size < con.getOptions().getMaxMessageSize()) {
                 if (_log.shouldInfo())
@@ -182,7 +179,7 @@ class ConnectionPacketHandler {
         _context.statManager().addRateData("stream.con.receiveMessageSize", packet.getPayloadSize());
 
         boolean allowAck = true;
-        /** ignored */
+        /** Whether the packet has the SYN flag set. */
         final boolean isSYN = packet.isFlagSet(Packet.FLAG_SYNCHRONIZE);
 
         // We allow the SendStreamID to be 0 so that the originator can send
@@ -249,11 +246,11 @@ class ConnectionPacketHandler {
 
                 // take note of congestion
 
-                /** ignored */
+                /** Current timestamp for congestion timing. */
                 final long now = _context.clock().now();
-                /** ignored */
+                /** Ack delay. */
                 final int ackDelay = con.getOptions().getSendAckDelay();
-                /** ignored */
+                /** Last send time. */
                 final long lastSendTime = con.getLastSendTime();
 
                 if (_log.shouldInfo())
@@ -263,7 +260,7 @@ class ConnectionPacketHandler {
                 // If this is longer than his RTO, he will always retransmit, and
                 // will be stuck at a window size of 1 forever. So we take the minimum
                 // of the ackDelay and half our estimated RTT to be sure.
-                /** ignored */
+                /** Next send time. */
                 final long nextSendTime = lastSendTime + Math.min(ackDelay, con.getOptions().getRTT() / 2);
                 if (nextSendTime <= now) {
                     if (_log.shouldInfo())
@@ -271,7 +268,7 @@ class ConnectionPacketHandler {
                     con.ackImmediately();
                     _context.statManager().updateFrequency("stream.ack.dup.immediate");
                 } else {
-                    /** ignored */
+                    /** Calculated delay for ACK scheduling. */
                     final long delay = nextSendTime - now;
                     if (_log.shouldInfo())
                         _log.info("Scheduling ACK in " + delay);
@@ -344,7 +341,6 @@ class ConnectionPacketHandler {
      * @param choke did we get a choke in the packet?
      * @return true if congested
      */
-    /** ignored */
     private boolean ack(Connection con, long ackThrough, long[] nacks, Packet packet, boolean isNew, boolean choke) {
         if (ackThrough < 0) return false;
         if (con == null) return false;
@@ -373,7 +369,7 @@ class ConnectionPacketHandler {
             return false;
 
         boolean lastPacketAcked = false;
-        /** ignored */
+        /** Received ack. */
         final boolean receivedAck = con.getOptions().receivedAck();
         if ((acked != null) && (!acked.isEmpty())) {
             if (_log.shouldDebug())
@@ -385,9 +381,9 @@ class ConnectionPacketHandler {
             for (int i = 0; i < acked.size(); i++) {
                 PacketLocal p = acked.get(i);
 
-                /** ignored */
+                /** Num sends. */
                 final int numSends = p.getNumSends();
-                /** ignored */
+                /** Ack time. */
                 final int ackTime = p.getAckTime();
 
                 if (numSends > 1 && receivedAck)
@@ -443,7 +439,6 @@ class ConnectionPacketHandler {
      * @param choke did we get a choke in the packet?
      * @return true if congested
      */
-    /** ignored */
     private boolean adjustWindow(Connection con, boolean isNew, long sequenceNum, int numResends, int acked, boolean choke) {
         boolean congested;
         if (choke || (!isNew && sequenceNum > 0) || con.isChoked()) {
@@ -554,7 +549,6 @@ class ConnectionPacketHandler {
      * @return true if the packet is ok for this connection, false if we shouldn't
      *         continue processing.
      */
-    /** ignored */
     private boolean verifyPacket(Packet packet, Connection con) throws I2PException {
         if (packet.isFlagSet(Packet.FLAG_RESET)) {
             verifyReset(packet, con);
@@ -615,7 +609,6 @@ class ConnectionPacketHandler {
      *
      * @param con non-null
      */
-    /** ignored */
     private void verifyReset(Packet packet, Connection con) {
         if (con.getReceiveStreamId() == packet.getSendStreamId()) {
             // check dest. match since 0.9.41
@@ -654,11 +647,10 @@ class ConnectionPacketHandler {
     /**
      * Verify the signature if necessary.
      *
-     * @param packet the packet to verify
+     * @param packet the packet
      * @param con the connection
      * @throws I2PException if the signature was necessary and it was invalid
      */
-    /** ignored */
     private void verifySignature(Packet packet, Connection con) throws I2PException {
         // check dest. match since 0.9.41
         Destination d1 = con.getRemotePeer();

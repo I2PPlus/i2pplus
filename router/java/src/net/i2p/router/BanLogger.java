@@ -112,6 +112,7 @@ public class BanLogger {
 
     /**
      * Check if an IP already has an active ban in sessionbans.txt.
+     * @return whether active ban is present
      */
     private boolean hasActiveBan(String ip) {
         if (_logFile == null || !_logFile.exists() || ip == null) {
@@ -525,6 +526,7 @@ public class BanLogger {
 
     /**
      * Get IP address from banlist for the given hash.
+     * @return the i p from context
      */
     private String getIPFromContext(Hash hash, RouterContext context) {
         if (hash == null) {return "UNKNOWN";}
@@ -604,6 +606,7 @@ public class BanLogger {
 
     /**
      * Extract IP address and port from RouterInfo.
+     * @return the i p from router info
      */
     private String getIPFromRouterInfo(RouterInfo router) {
         if (router == null) { return ""; }

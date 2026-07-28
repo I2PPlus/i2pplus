@@ -362,7 +362,7 @@ public class LoadClientAppsJob extends JobImpl {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     public String getName() { return "Load Client Applications"; }
 

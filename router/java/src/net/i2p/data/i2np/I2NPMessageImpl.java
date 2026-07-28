@@ -177,13 +177,14 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
 
     /**
      * Replay resistant message Id
+     * @return the unique id
      */
     public synchronized long getUniqueId(long msgIDBloomXor) {
         return getUniqueId() ^ msgIDBloomXor;
     }
 
     /**
-     * getUniqueId.
+     * @return the unique id
      */
     public synchronized long getUniqueId() {
         // Lazy initialization of value
@@ -201,6 +202,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     /**
      * Date after which the message should be dropped (and the associated uniqueId forgotten)
      *
+     * @return the message expiration
      */
     public long getMessageExpiration() { return _expiration; }
 
@@ -210,7 +212,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     public void setMessageExpiration(long exp) { _expiration = exp; }
 
     /**
-     * getMessageSize.
+     * @return the message size
      */
     public synchronized int getMessageSize() {
         return calculateWrittenLength() + (15 + CHECKSUM_LENGTH); // 16 bytes in the header
@@ -219,6 +221,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     /**
      *  The raw header consists of a one-byte type and a 4-byte expiration in seconds only.
      *  Used by SSU only!
+     * @return the raw message size
      */
     public synchronized int getRawMessageSize() {
             return calculateWrittenLength()+5;

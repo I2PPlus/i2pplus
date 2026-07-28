@@ -51,7 +51,7 @@ public class MetaLeaseSet extends LeaseSet2 {
     ///// overrides below here
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() {

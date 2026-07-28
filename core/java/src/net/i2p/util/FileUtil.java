@@ -264,6 +264,7 @@ public class FileUtil {
      * Public since 0.8.3
      *
      * @since 0.8.1
+     * @return whether pack200 supported
      */
     public static boolean isPack200Supported() {
         try {

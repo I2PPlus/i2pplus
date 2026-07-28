@@ -78,6 +78,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     /**
      *  The Date object is created here, it is not cached.
      *  Use getExpirationTime() if you only need the long value.
+     * @return the expiration
      */
     public Date getExpiration() {
         return _daf.getDate();
@@ -87,6 +88,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
      *  Use this instead of getExpiration().getTime()
      *
      *  @since 0.8.4
+     * @return the expiration time
      */
     public long getExpirationTime() {
         return _daf.getTime();
@@ -112,6 +114,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
      *  Gets the message flags.
      *
      * @since 0.8.4
+     * @return the flags
      */
     public int getFlags() {
         return _daf.getFlags();
@@ -170,7 +173,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() {

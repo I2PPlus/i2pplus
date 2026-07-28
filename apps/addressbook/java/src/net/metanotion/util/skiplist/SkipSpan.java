@@ -140,7 +140,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 	/**
 	 *  Get the span containing the given key.
 	 *
-	 *  @param key the key to search for
+	 *  @param key the key
 	 *  @param search search parameters and results
 	 *  @return the SkipSpan containing the key
 	 */
@@ -164,7 +164,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 	/**
 	 *  Get the value associated with the given key.
 	 *
-	 *  @param key the key to search for
+	 *  @param key the key
 	 *  @return the value, or null if not found
 	 */
 	public V get(K key) {
@@ -304,7 +304,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 	/**
 	 *  Remove a key-value pair from this span.
 	 *
-	 *  @param key the key to remove
+	 *  @param key the key
 	 *  @param sl the SkipList
 	 *  @return An array of two objects or null.
 	 *          rv[0] is the removed object.

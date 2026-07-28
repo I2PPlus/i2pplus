@@ -493,7 +493,7 @@ public class BlockFile implements Closeable {
 	 *
 	 *  @param <K> the type of keys in the skiplist
 	 *  @param <V> the type of values in the skiplist
-	 *  @param name the name of the skiplist index
+	 *  @param name the name
 	 *  @param key the Serializer for keys
 	 *  @param val the Serializer for values
 	 *  @return the BSkipList, or null if not found
@@ -526,7 +526,7 @@ public class BlockFile implements Closeable {
 	 *
 	 *  @param <K> the type of keys in the skiplist
 	 *  @param <V> the type of values in the skiplist
-	 *  @param name the name of the skiplist index
+	 *  @param name the name
 	 *  @param key the Serializer for keys
 	 *  @param val the Serializer for values
 	 *  @return the newly created BSkipList
@@ -547,7 +547,7 @@ public class BlockFile implements Closeable {
 	 *  Must be open. Throws IOException if exists but is closed.
 	 *  Broken before 0.9.26.
 	 *
-	 *  @param name the name of the skiplist index to delete
+	 *  @param name the name
 	 *  @throws IOException if it is closed.
 	 */
 	public void delIndex(String name) throws IOException {
@@ -564,7 +564,7 @@ public class BlockFile implements Closeable {
 	/**
 	 *  Close a skiplist if it is open.
 	 *
-	 *  @param name the name of the skiplist index to close
+	 *  @param name the name
 	 */
 	public void closeIndex(String name) {
 		BSkipList bsl = openIndices.remove(name);
@@ -580,7 +580,7 @@ public class BlockFile implements Closeable {
 	 *
 	 *  @param <K> the type of keys in the skiplist
 	 *  @param <V> the type of values in the skiplist
-	 *  @param name the name of the skiplist index
+	 *  @param name the name
 	 *  @param oldKey the current Serializer for keys
 	 *  @param oldVal the current Serializer for values
 	 *  @param newKey the new Serializer for keys

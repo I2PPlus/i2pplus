@@ -69,7 +69,7 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
 	}
 
 /**
- * hasNext.
+ * @return whether next is present
  */
 public boolean hasNext() {
 		return index < ss.nKeys;
@@ -109,7 +109,7 @@ public boolean hasNext() {
 	}
 
 /**
- * hasPrevious.
+ * @return whether previous is present
  */
 public boolean hasPrevious() {
 		return index > 0 || ((ss.prev != null) && (ss.prev.nKeys > 0));

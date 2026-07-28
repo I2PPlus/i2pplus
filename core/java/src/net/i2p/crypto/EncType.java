@@ -195,6 +195,7 @@ public enum EncType {
      *  The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA
      *
      *  @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
+     *  @return the params
      */
     public AlgorithmParameterSpec getParams() throws InvalidParameterSpecException {
         if (params == null) throw new InvalidParameterSpecException(toString() + " is not available in this JVM");
@@ -203,6 +204,7 @@ public enum EncType {
 
     /**
      *  The router version in which this type was first supported.
+     * @return the supported since
      */
     public String getSupportedSince() {
         return since;

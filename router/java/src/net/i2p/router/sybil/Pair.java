@@ -48,7 +48,7 @@ public class Pair implements Comparable<Pair> {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

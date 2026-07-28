@@ -228,6 +228,7 @@ public class DataHelper {
      *  The default formatting for date/time, current locale, local time zone
      *
      *  @since 0.9.43
+     * @return the date instance
      */
     private static final DateFormat DATE_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM);
 
@@ -954,7 +955,7 @@ public class DataHelper {
     /**
      * Big endian.
      *
-     * @param target the target byte array
+     * @param target the target
      * @param offset starting offset in target
      * @param numBytes 1-8
      * @param value non-negative
@@ -973,7 +974,7 @@ public class DataHelper {
     /**
      * Little endian, i.e. backwards. Not for use in I2P protocols.
      *
-     * @param target the target byte array
+     * @param target the target
      * @param offset starting offset in target
      * @param numBytes 1-8
      * @param value non-negative
@@ -1071,9 +1072,9 @@ public class DataHelper {
      * Big endian.
      * Same as toLong(target, offset, 8, value) but allows negative value
      *
-     * @param target the target byte array
+     * @param target the target
      * @param offset starting offset in target
-     * @param value the value to write, may be negative
+     * @param value the value
      * @throws ArrayIndexOutOfBoundsException if the target array is too short
      * @since 0.9.47 moved from NTCP2Payload
      */
@@ -1135,7 +1136,7 @@ public class DataHelper {
     /**
      * Write a date (8-byte timestamp) to a byte array.
      *
-     * @param target the target byte array
+     * @param target the target
      * @param offset the starting offset
      * @param when the time in milliseconds since epoch
      * @throws IllegalArgumentException if the offset is invalid
@@ -1590,7 +1591,7 @@ public class DataHelper {
      *  As of 0.9.27, throws EOFException if the full length is not read.
      *
      *  @param in the input stream
-     *  @param target the target byte array
+     *  @param target the target
      *  @return target.length
      *  @throws EOFException if the full length is not read (since 0.9.27)
      *  @throws IOException if an I/O error occurs
@@ -1609,7 +1610,7 @@ public class DataHelper {
      *  As of 0.9.27, throws EOFException if the full length is not read.
      *
      *  @param in the input stream
-     *  @param target the target byte array
+     *  @param target the target
      *  @param offset starting offset in target
      *  @param length number of bytes to read
      *  @return the new offset (== old offset + length)
@@ -2431,6 +2432,7 @@ public class DataHelper {
      *
      *  @param orig non-null, truncates to 8-bit chars
      *  @since 0.9.5
+     *  @return the a s c i i
      */
     public static byte[] getASCII(String orig) {
         byte[] rv = new byte[orig.length()];

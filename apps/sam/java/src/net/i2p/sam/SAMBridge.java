@@ -61,20 +61,17 @@ public class SAMBridge implements Runnable, ClientApp {
      * during the createSAMHandler call. If it's null, then no interactive session
      * will be used and SAM will work without it.
      */
-    /** ignored */
     private final SAMSecureSessionInterface _secureSession;
 
     /**
      * filename in which the name to private key mapping should
      * be stored (and loaded from)
      */
-    /** ignored */
     private final String persistFilename;
     /**
      * app designated destination name to the base64 of the I2P formatted
      * destination keys (Destination+PrivateKey+SigningPrivateKey)
      */
-    /** ignored */
     private final Map<String, String> nameToPrivKeys;
     private final Set<Handler> _handlers;
     private volatile SAMHandlerPool _handlerPool; // NOSONAR volatile is correct: single-assignment visibility flag read by shutdown
@@ -100,10 +97,10 @@ public class SAMBridge implements Runnable, ClientApp {
     /** Property suffix for SAM password hash entries. */
     public static final String PROP_PW_SUFFIX = ".shash";
     /** Default listen address for the SAM TCP socket. */
-    /** ignored */
+    /** Default TCP host. */
     protected static final String DEFAULT_TCP_HOST = "127.0.0.1";
     /** Default port for the SAM TCP socket. */
-    /** ignored */
+    /** Default TCP port. */
     protected static final String DEFAULT_TCP_PORT = "7656";
 
     /** Property for the SAM datagram listen address. */
@@ -111,13 +108,13 @@ public class SAMBridge implements Runnable, ClientApp {
     /** Property for the SAM datagram listen port. */
     public static final String PROP_DATAGRAM_PORT = "sam.udp.port";
     /** Default listen address for the SAM datagram socket. */
-    /** ignored */
+    /** Default datagram host. */
     protected static final String DEFAULT_DATAGRAM_HOST = "127.0.0.1";
     /** Default port for the SAM datagram socket. */
-    /** ignored */
+    /** Default datagram port int. */
     protected static final int DEFAULT_DATAGRAM_PORT_INT = 7655;
     /** Default port string for the SAM datagram socket. */
-    /** ignored */
+    /** Default datagram port. */
     protected static final String DEFAULT_DATAGRAM_PORT = Integer.toString(DEFAULT_DATAGRAM_PORT_INT);
 
     /**
@@ -131,7 +128,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @throws Exception on bad args
      * @since 0.9.6
      */
-    /** ignored */
     public SAMBridge(I2PAppContext context, ClientAppManager mgr, String[] args) throws Exception {
         _log = context.logManager().getLog(SAMBridge.class);
         _mgr = mgr;
@@ -164,7 +160,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @param persistFile location to store/load named keys to/from
      * @throws RuntimeException if a server socket can't be opened
      */
-    /** ignored */
     public SAMBridge(String listenHost, int listenPort, boolean isSSL, Properties i2cpProps,
                      String persistFile, File configFile) {
         this(listenHost, listenPort, isSSL, i2cpProps,
@@ -193,7 +188,6 @@ public class SAMBridge implements Runnable, ClientApp {
      *
      * @since 1.8.0
      */
-    /** ignored */
     public SAMBridge(String listenHost, int listenPort, boolean isSSL, Properties i2cpProps,
             String persistFile, File configFile, SAMSecureSessionInterface secureSession) {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(SAMBridge.class);
@@ -226,7 +220,6 @@ public class SAMBridge implements Runnable, ClientApp {
      *
      * @since 0.9.6
      */
-    /** ignored */
     private void openSocket() throws IOException {
         if (!DEFAULT_TCP_HOST.equals(_listenHost) &&
             !"localhost".equals(_listenHost) &&
@@ -271,7 +264,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @param name Name of the destination
      * @return null if the name does not exist, else the stream
      */
-    /** ignored */
     public String getKeystream(String name) {
         synchronized (nameToPrivKeys) {
             String val = nameToPrivKeys.get(name);
@@ -287,7 +279,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @param name   Name of the destination
      * @param stream Base64-encoded private key stream (Destination+PrivateKey+SigningPrivateKey)
      */
-    /** ignored */
     public void addKeystream(String name, String stream) {
         synchronized (nameToPrivKeys) {
             nameToPrivKeys.put(name, stream);
@@ -299,7 +290,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * Load up the keys from the persistFilename.
      */
     @SuppressWarnings("unchecked")
-    /** ignored */
     private void loadKeys() {
         synchronized (nameToPrivKeys) {
             nameToPrivKeys.clear();
@@ -329,7 +319,6 @@ public class SAMBridge implements Runnable, ClientApp {
     /**
      * Store the current keys to disk in the location specified on creation.
      */
-    /** ignored */
     private void storeKeys() {
         synchronized (nameToPrivKeys) {
             File file = new File(persistFilename);
@@ -353,7 +342,6 @@ public class SAMBridge implements Runnable, ClientApp {
      *
      * @since 0.9.20
      */
-    /** ignored */
     public void register(Handler handler) {
         if (_log.shouldDebug())
             _log.debug("Registered " + handler);
@@ -367,7 +355,6 @@ public class SAMBridge implements Runnable, ClientApp {
      *
      * @since 0.9.20
      */
-    /** ignored */
     public void unregister(Handler handler) {
         if (_log.shouldDebug())
             _log.debug("Unregistered " + handler);
@@ -382,7 +369,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @return the handler pool, or null if not started
      * @since 0.9.62
      */
-    /** ignored */
     SAMHandlerPool getHandlerPool() {
         return _handlerPool;
     }
@@ -391,7 +377,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @return number of registered streams from SessionsDB, or 0 if null
      * @since 0.9.70+
      */
-    /** ignored */
     public int getSessionCount() {
         return SAMv3Handler.sSessionsHash.size();
     }
@@ -400,7 +385,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @return number of connected handlers
      * @since 0.9.70+
      */
-    /** ignored */
     public int getHandlerCount() {
         synchronized (_handlers) { return _handlers.size(); }
     }
@@ -409,7 +393,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @return active pool worker threads, or 0 if pool not started
      * @since 0.9.70+
      */
-    /** ignored */
     public int getPoolActiveCount() {
         SAMHandlerPool p = _handlerPool;
         return p != null ? p.getActiveCount() : 0;
@@ -419,7 +402,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @return total pool worker threads, or 0 if pool not started
      * @since 0.9.70+
      */
-    /** ignored */
     public int getPoolSize() {
         SAMHandlerPool p = _handlerPool;
         return p != null ? p.getPoolSize() : 0;
@@ -429,7 +411,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @return commands queued in the pool, or 0 if pool not started
      * @since 0.9.70+
      */
-    /** ignored */
     public int getQueueSize() {
         SAMHandlerPool p = _handlerPool;
         return p != null ? p.getQueueSize() : 0;
@@ -439,7 +420,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @return handlers registered in the pool, or 0 if pool not started
      * @since 0.9.70+
      */
-    /** ignored */
     public int getPoolRegisteredCount() {
         SAMHandlerPool p = _handlerPool;
         return p != null ? p.getRegisteredCount() : 0;
@@ -448,8 +428,8 @@ public class SAMBridge implements Runnable, ClientApp {
     /**
      * Count handlers whose socket has been stolen for data streaming.
      * @since 0.9.70+
+     * @return the stolen socket count
      */
-    /** ignored */
     public int getStolenSocketCount() {
         synchronized (_handlers) {
             int count = 0;
@@ -468,7 +448,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @param handler non-null
      * @since 0.9.62
      */
-    /** ignored */
     void unregisterHandlerFromPool(SAMv3Handler handler) {
         SAMHandlerPool pool = _handlerPool;
         if (pool != null)
@@ -480,7 +459,6 @@ public class SAMBridge implements Runnable, ClientApp {
      *
      * @since 0.9.20
      */
-    /** ignored */
     private void stopHandlers() {
         List<Handler> handlers = null;
         synchronized (_handlers) {
@@ -510,7 +488,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @throws IOException if can't bind to host/port, or if different than existing
      * @since 0.9.24
      */
-    /** ignored */
     SAMv3DatagramServer getV3DatagramServer(Properties props) throws IOException {
         String host = props.getProperty(PROP_DATAGRAM_HOST, DEFAULT_DATAGRAM_HOST);
         int port;
@@ -538,7 +515,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * Start the bridge
      * @since 0.9.6
      */
-    /** ignored */
     public synchronized void startup() throws IOException {
         if (_state != INITIALIZED)
             return;
@@ -567,7 +543,6 @@ public class SAMBridge implements Runnable, ClientApp {
      *
      * @since 0.9.6
      */
-    /** ignored */
     public synchronized void shutdown(String[] args) {
         if (_state != RUNNING)
             return;
@@ -585,8 +560,8 @@ public class SAMBridge implements Runnable, ClientApp {
     /**
      * Return the state
      * @since 0.9.6
+     * @return the state
      */
-    /** ignored */
     public ClientAppState getState() {
         return _state;
     }
@@ -594,8 +569,8 @@ public class SAMBridge implements Runnable, ClientApp {
     /**
      * Return the name
      * @since 0.9.6
+     * @return the name
      */
-    /** ignored */
     public String getName() {
         return "SAM";
     }
@@ -603,8 +578,8 @@ public class SAMBridge implements Runnable, ClientApp {
     /**
      * Return the display name
      * @since 0.9.6
+     * @return the display name
      */
-    /** ignored */
     public String getDisplayName() {
         return "SAM " + _listenHost + ':' + _listenPort;
     }
@@ -615,7 +590,6 @@ public class SAMBridge implements Runnable, ClientApp {
     /**
      * @since 0.9.6
      */
-    /** ignored */
     private void changeState(ClientAppState state) {
         changeState(state, null);
     }
@@ -623,7 +597,6 @@ public class SAMBridge implements Runnable, ClientApp {
     /**
      * @since 0.9.6
      */
-    /** ignored */
     private synchronized void changeState(ClientAppState state, Exception e) {
         _state = state;
         if (_mgr != null)
@@ -655,7 +628,6 @@ public class SAMBridge implements Runnable, ClientApp {
      *
      * @param args [ keyfile [ listenHost ] listenPort [ name=val ]* ]
      */
-    /** ignored */
     public static void main(String[] args) {
         try {
             Options options = getOptions(args);
@@ -678,7 +650,6 @@ public class SAMBridge implements Runnable, ClientApp {
      *
      * @since 0.9.6
      */
-    /** ignored */
     private void startThread() {
         I2PAppThread t = new I2PAppThread(this, "SAM-Listen:" + _listenPort);
         if (Boolean.parseBoolean(System.getProperty("sam.shutdownOnOOM"))) {
@@ -686,7 +657,6 @@ public class SAMBridge implements Runnable, ClientApp {
                 /**
                  * Log the error and terminate on OutOfMemoryError.
                  */
-                /** ignored */
                 public void outOfMemory(OutOfMemoryError err) {
                     _log.error("Out of memory in SAM Bridge listener, exiting", err);
                     System.err.println("OOMed, die die die");
@@ -703,7 +673,6 @@ public class SAMBridge implements Runnable, ClientApp {
                  * Remove stale SAM sessions and reschedule the sweep.
                  */
                 @Override
-                /** ignored */
                 public void timeReached() {
                     int removed = SAMv3Handler.sSessionsHash.removeStale((long) 10 * 60 * 1000);
                     if (removed > 0) {
@@ -720,7 +689,6 @@ public class SAMBridge implements Runnable, ClientApp {
      *
      * @since 0.9.6
      */
-    /** ignored */
     private static class Options {
         private final String host;
         private final String keyFile;
@@ -732,7 +700,6 @@ public class SAMBridge implements Runnable, ClientApp {
         /**
          * Configure with parsed command-line values.
          */
-        /** ignored */
         public Options(String host, int port, boolean isSSL, Properties opts, String keyFile, File configFile) {
             this.host = host;
             this.port = port;
@@ -767,7 +734,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @throws IOException if specified config file cannot be read, or on SSL keystore problems
      * @since 0.9.6
      */
-    /** ignored */
     private static Options getOptions(String[] args) throws Exception {
         String keyfile = null;
         int port = -1;
@@ -878,7 +844,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @param props out parameter, any options found are added
      * @throws HelpRequestedException on any item not of the form key=value.
      */
-    /** ignored */
     private static void parseOptions(String[] args, int startArgs, Properties props) throws HelpRequestedException {
         for (int i = startArgs; i < args.length; i++) {
             int eq = args[i].indexOf('=');
@@ -926,7 +891,6 @@ public class SAMBridge implements Runnable, ClientApp {
     /**
      * Accept incoming SAM connections and dispatch to handlers.
      */
-    /** ignored */
     public void run() {
         if (serverSocket == null)
             return;
@@ -944,11 +908,11 @@ public class SAMBridge implements Runnable, ClientApp {
                                + s.socket().getInetAddress().getHostAddress() + ":"
                                + s.socket().getPort());
 
-                /** ignored */
+                /** Handles initial SAM hello messages. */
                 class HelloHandler implements Runnable, Handler {
-                    /** ignored */
+                    /** Incoming SAM socket channel. */
                     private final SocketChannel s;
-                    /** ignored */
+                    /** SAMBridge instance for this handler. */
                     private final SAMBridge parent;
 
                     HelloHandler(SocketChannel s, SAMBridge parent) {
@@ -959,7 +923,6 @@ public class SAMBridge implements Runnable, ClientApp {
                     /**
                      * Process a single SAM handshake and dispatch to the appropriate handler.
                      */
-                    /** ignored */
                     public void run() {
                         parent.register(this);
                         try {
@@ -1008,7 +971,7 @@ public class SAMBridge implements Runnable, ClientApp {
                         try { s.close(); } catch (IOException ioe) { /* ignored */ }
                     }
                 }
-                /** ignored */
+                /** I2P app thread. */
                 new I2PAppThread(new HelloHandler(s,this), "SAM-Hello").start();
             }
             changeState(STOPPING);
@@ -1037,7 +1000,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @throws IOException if the config file cannot be written
      * @since 0.9.24
      */
-    /** ignored */
     public void saveConfig() throws IOException {
         DataHelper.storeProps(i2cpProps, _configFile);
     }
@@ -1050,7 +1012,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @throws IOException if the writer fails
      * @since 0.9.70+
      */
-    /** ignored */
     public void renderSessionTableHTML(Writer out) throws IOException {
         Map<String, SessionRecord> sessions = SAMv3Handler.sSessionsHash.getAllEntries();
         if (sessions.isEmpty()) {
@@ -1122,7 +1083,6 @@ public class SAMBridge implements Runnable, ClientApp {
      * @return the secure session interface, or null if not configured
      * @since 1.8.0
      */
-    /** ignored */
     public SAMSecureSessionInterface secureSession() {
         if (_secureSession == null) {
             if (_log.shouldLog(Log.DEBUG))

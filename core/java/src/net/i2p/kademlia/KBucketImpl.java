@@ -160,6 +160,7 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
 
     /**
      *  The last-changed timestamp, which actually indicates last-added or last-seen.
+     * @return the last changed
      */
     @Override
     public long getLastChanged() {

@@ -277,6 +277,7 @@ public class Reseeder {
      *  https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=201446
      *
      *  @since 0.9.20
+     * @return whether s n i supported
      */
     private static boolean isSNISupported() {return SystemVersion.isJava7() || SystemVersion.isAndroid();}
 
@@ -1208,6 +1209,7 @@ public class Reseeder {
          *  Untranslated, for logs only.
          *
          *  @since 0.9.33
+         * @return the display string
          */
         private String getDisplayString(SSLEepGet.ProxyType type) {
             switch(type) {

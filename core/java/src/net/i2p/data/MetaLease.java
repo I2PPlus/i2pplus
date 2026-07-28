@@ -57,9 +57,9 @@ public class MetaLease extends Lease {
      */
     public static final int LENGTH = 40;
 
-    /** ignored */
+    /** Cost value for this meta lease. */
     private int _cost;
-    /** ignored */
+    /** Type identifier for this meta lease. */
     private int _type;
 
     /**
@@ -88,7 +88,7 @@ public class MetaLease extends Lease {
     /**
      *  Set the type of this lease.
      *
-     *  @param type the type value
+     * @param type the type
      */
     public void setType(int type) {
         _type = type;
@@ -96,6 +96,7 @@ public class MetaLease extends Lease {
 
     /**
      * @throws UnsupportedOperationException always
+     * @return the tunnel id
      */
     @Override
     public TunnelId getTunnelId() {

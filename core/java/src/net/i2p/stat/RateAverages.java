@@ -40,18 +40,18 @@ public class RateAverages {
         TEMP.remove();
     }
 
-    /** ignored */
+    /** Weighted average value. */
     private double average;
-    /** ignored */
+    /** Current period average value. */
     private double current;
-    /** ignored */
+    /** Last period average value. */
     private double last;
-    /** ignored */
+    /** Sum of current and last total values. */
     private double totalValues;
-    /** ignored */
+    /** Sum of current and last event counts. */
     private long totalEventCount;
 
-    /** ignored */
+    /** Reset all fields to zero. */
     void reset() {
         average = 0;
         current = 0;
@@ -75,7 +75,7 @@ public class RateAverages {
         return average;
     }
 
-    /** ignored */
+    /** Set the weighted average. */
     void setAverage(double average) {
         this.average = average;
     }
@@ -91,7 +91,7 @@ public class RateAverages {
         return current;
     }
 
-    /** ignored */
+    /** Set the current period average. */
     void setCurrent(double current) {
         this.current = current;
     }
@@ -107,7 +107,7 @@ public class RateAverages {
         return last;
     }
 
-    /** ignored */
+    /** Set the last period average. */
     void setLast(double last) {
         this.last = last;
     }
@@ -123,7 +123,7 @@ public class RateAverages {
         return totalEventCount;
     }
 
-    /** ignored */
+    /** Set the total event count. */
     void setTotalEventCount(long totalEventCount) {
         this.totalEventCount = totalEventCount;
     }
@@ -139,7 +139,7 @@ public class RateAverages {
         return totalValues;
     }
 
-    /** ignored */
+    /** Set the total values sum. */
     void setTotalValues(double totalValues) {
         this.totalValues = totalValues;
     }

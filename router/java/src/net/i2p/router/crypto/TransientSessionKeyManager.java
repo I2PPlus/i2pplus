@@ -226,6 +226,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * or null if a new session key should be generated.
      *
      * Warning - don't generate a new session if this returns null, it's racy, use getCurrentOrNewKey()
+     * @return the current key
      */
     @Override
     public SessionKey getCurrentKey(PublicKey target) {
@@ -357,6 +358,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * Determine (approximately) how many available session tags for the current target
      * have been confirmed and are available
      *
+     * @return the available tags
      */
     @Override
     public int getAvailableTags(PublicKey target, SessionKey key) {
@@ -371,6 +373,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     /**
      * Determine how long the available tags will be available for before expiring, in
      * milliseconds
+     * @return the available time left
      */
     @Override
     public long getAvailableTimeLeft(PublicKey target, SessionKey key) {
@@ -722,6 +725,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      *  Return a map of session key to a set of inbound TagSets for that SessionKey
      *
      *  @since 0.9.33 split out from renderStatusHTML()
+     * @return the inbound tag sets by session key
      */
     private Map<SessionKey, Set<TagSet>> getInboundTagSetsBySessionKey() {
         Set<TagSet> inbound = getInboundTagSets();
@@ -1081,6 +1085,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
          * Get the furthest away tag set expiration date - after which all of the
          * tags will have expired
          *
+         * @return the last expiration date
          */
         public long getLastExpirationDate() {
             long last = 0;
@@ -1113,6 +1118,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         /**
          * Whether the outbound tag set has been acknowledged.
          * @since 0.9 for debugging
+         * @return the ack received
          */
         public boolean getAckReceived() {
             return _acked;
@@ -1143,6 +1149,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
         /**
          *  For inbound: when the TagSet will expire; for outbound: creation time
+         * @return the date
          */
         public long getDate() {
             return _date;
@@ -1151,6 +1158,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         /**
          * Original number of tags in this set before any were consumed.
          * @since 0.9.3 for debugging
+         * @return the original size
          */
         public int getOriginalSize() {
             return _origSize;
@@ -1195,12 +1203,14 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
         /**
          *  For outbound only.
+         * @return the acked
          */
         public boolean getAcked() { return _acked; }
 
         /**
          * Unique identifier for this tag set.
          * @since 0.9 for debugging
+         * @return the i d
          */
         public int getID() {return _id;}
 

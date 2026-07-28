@@ -107,7 +107,7 @@ public class MultiSource implements Source, Sink {
         }
 
         /**
-         * hashCode.
+         * @return whether h code is present
          */
         @Override
         public int hashCode() {

@@ -970,6 +970,7 @@ public class PeerState {
      *  Estimate how large the other side's MTU is.
      *  This could be wrong.
      *  It is used only for the HTML status.
+     * @return the receive m t u
      */
     public int getReceiveMTU() {return _mtuReceive;}
 
@@ -1069,6 +1070,7 @@ public class PeerState {
 
     /**
      * Inactivity time.
+     * @return the inactivity time
      */
     public long getInactivityTime() {
         long now = _context.clock().now();
@@ -1734,6 +1736,7 @@ public class PeerState {
 
     /**
      *  @since 0.9.3
+     * @return whether backlogged
      */
     public boolean isBacklogged() {return _dead || _outboundQueue.isBacklogged();}
 
@@ -1952,6 +1955,7 @@ public class PeerState {
      * SSU 2 only
      *
      * @since 0.9.56
+     * @return whether request immediate ack
      */
     protected boolean shouldRequestImmediateAck() {
         synchronized(_sendWindowBytesRemainingLock) {

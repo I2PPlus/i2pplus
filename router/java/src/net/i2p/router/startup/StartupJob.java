@@ -36,7 +36,7 @@ public class StartupJob extends JobImpl {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     public String getName() { return "Boot Router"; }
     /**

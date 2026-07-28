@@ -107,7 +107,7 @@ abstract class ExtensionHandler {
     /**
      * Handles an incoming extension message from a peer.
      *
-     * @param peer the peer that sent the message
+     * @param peer the peer
      * @param listener the peer listener for callbacks
      * @param id the extension message ID
      * @param bs the raw message bytes
@@ -135,7 +135,7 @@ abstract class ExtensionHandler {
     /**
      * Handles an incoming extension handshake message.
      *
-     * @param peer the peer that sent the message
+     * @param peer the peer
      * @param listener the peer listener for callbacks
      * @param bs the raw message bytes
      * @param log the logger instance
@@ -242,7 +242,7 @@ abstract class ExtensionHandler {
     /**
      * Handles an incoming metadata extension message (BEP 9).
      *
-     * @param peer the peer that sent the message
+     * @param peer the peer
      * @param listener the peer listener for callbacks
      * @param bs the raw message bytes
      * @param log the logger instance
@@ -316,7 +316,7 @@ abstract class ExtensionHandler {
     /**
      * Sends a metadata chunk request to a peer.
      *
-     * @param peer the peer to send the request to
+     * @param peer the peer
      * @param piece the chunk number to request
      */
     private static void sendRequest(Peer peer, int piece) {
@@ -327,7 +327,7 @@ abstract class ExtensionHandler {
     /**
      * Sends a metadata request or reject message to a peer.
      *
-     * @param peer the peer to send the message to
+     * @param peer the peer
      * @param type the message type (TYPE_REQUEST or TYPE_REJECT)
      * @param piece the chunk number
      */
@@ -347,7 +347,7 @@ abstract class ExtensionHandler {
     /**
      * Sends a metadata chunk data message to a peer.
      *
-     * @param peer the peer to send the data to
+     * @param peer the peer
      * @param piece the chunk number
      * @param data the chunk data bytes
      * @param totalSize the total metadata size
@@ -375,7 +375,7 @@ abstract class ExtensionHandler {
      * Handles an incoming PEX message. Uses the "added" key as a single string of concatenated
      * 32-byte peer hashes. added.f and dropped are unsupported.
      *
-     * @param peer the peer that sent the message
+     * @param peer the peer
      * @param listener the peer listener for callbacks
      * @param bs the raw message bytes
      * @param log the logger instance
@@ -409,7 +409,7 @@ abstract class ExtensionHandler {
     /**
      * Handles an incoming DHT port message.
      *
-     * @param peer the peer that sent the message
+     * @param peer the peer
      * @param listener the peer listener for callbacks
      * @param bs the raw message bytes
      * @param log the logger instance
@@ -432,7 +432,7 @@ abstract class ExtensionHandler {
     /**
      * Sends a PEX message with the given peer list. added.f and dropped are unsupported.
      *
-     * @param peer the peer to send the PEX message to
+     * @param peer the peer
      * @param pList non-null list of peers to share
      */
     public static void sendPEX(Peer peer, List<Peer> pList) {
@@ -457,7 +457,7 @@ abstract class ExtensionHandler {
     /**
      * Sends DHT port numbers to a peer.
      *
-     * @param peer the peer to send the DHT ports to
+     * @param peer the peer
      * @param qport the query port
      * @param rport the response port
      */
@@ -477,7 +477,7 @@ abstract class ExtensionHandler {
     /**
      * Handles an incoming comment request or response message.
      *
-     * @param peer the peer that sent the message
+     * @param peer the peer
      * @param listener the peer listener for callbacks
      * @param bs the raw message bytes
      * @param log the logger instance
@@ -527,7 +527,7 @@ abstract class ExtensionHandler {
     /**
      * Sends a comment request to a peer.
      *
-     * @param peer the peer to request comments from
+     * @param peer the peer
      * @param num the maximum number of comments to request
      */
     public static void sendCommentReq(Peer peer, int num) {
@@ -547,7 +547,7 @@ abstract class ExtensionHandler {
     /**
      * Sends comments to a peer. Caller must synchronize on comments.
      *
-     * @param peer the peer to send comments to
+     * @param peer the peer
      * @param num the maximum number of comments to send
      * @param comments non-null set of comments to send
      */

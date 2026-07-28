@@ -39,13 +39,13 @@ import java.util.Properties;
  * @author jrandom
  */
 public class SessionConfig extends DataStructureImpl {
-    /** ignored */
+    /** The destination for this session. */
     private Destination _destination;
-    /** ignored */
+    /** Signature authorizing this session. */
     private Signature _signature;
-    /** ignored */
+    /** When this session config was created. */
     private Date _creationDate;
-    /** ignored */
+    /** Session configuration options. */
     private Properties _options;
 
     /**
@@ -76,7 +76,7 @@ public class SessionConfig extends DataStructureImpl {
      * Really? See also ClientManager.REQUEST_LEASESET_TIMEOUT.
      * If I2CP replay attacks are a thing, there's a lot more to do.
      */
-    /** ignored */
+    /** Maximum age of a session authorization in milliseconds. */
     private static final long OFFSET_VALIDITY = 3 * (long) 60 * 1000;
 
     /**
@@ -146,7 +146,7 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     * getSignature.
+     * @return the signature
      */
     public Signature getSignature() {
         return _signature;
@@ -344,7 +344,7 @@ public class SessionConfig extends DataStructureImpl {
         return false;
     }
 
-    /** ignored */
+    /** Serialize this session config to a byte array. */
     private byte[] getBytes() {
         if (_destination == null || _options == null || _creationDate == null) {
             return new byte[0];
@@ -410,7 +410,7 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

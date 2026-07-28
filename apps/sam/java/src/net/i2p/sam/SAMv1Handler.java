@@ -54,15 +54,15 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     protected SAMStreamSession streamSession;
 
     /**
-     * getRawSession.
+     * @return the raw session
      */
     protected final SAMMessageSess getRawSession() { return rawSession; }
     /**
-     * getDatagramSession.
+     * @return the datagram session
      */
     protected final SAMMessageSess getDatagramSession() { return datagramSession; }
     /**
-     * getStreamSession.
+     * @return the stream session
      */
     protected final SAMStreamSession getStreamSession() { return streamSession; }
 
@@ -857,7 +857,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     /**
      * Check whether a size is inside the limits allowed by this protocol.
      *
-     * @param size the size to check
+     * @param size the size
      * @return true if the size is within stream protocol limits
      */
     private boolean checkSize(int size) {
@@ -867,7 +867,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     /**
      * Check whether a size is inside the limits allowed by this protocol.
      *
-     * @param size the size to check
+     * @param size the size
      * @return true if the size is within datagram protocol limits
      */
     private boolean checkDatagramSize(int size) {

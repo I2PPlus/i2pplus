@@ -50,6 +50,7 @@ public abstract class EventReceiver implements EventDispatcher {
 
     /**
      *  @throws UnsupportedOperationException always
+     *  @return the event value
      */
     @Override
     public Object getEventValue(String name) {
@@ -58,6 +59,7 @@ public abstract class EventReceiver implements EventDispatcher {
 
     /**
      *  @throws UnsupportedOperationException always
+     *  @return the events
      */
     @Override
     public Set<String> getEvents() {

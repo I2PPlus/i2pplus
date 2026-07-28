@@ -66,6 +66,7 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
      *  throwing if it has already disappeared.
      *
      *  @throws InterruptedIOException if the nickname is not registered
+     *  @return the rec
      */
     private static SessionRecord getRec(String nick) throws InterruptedIOException {
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);

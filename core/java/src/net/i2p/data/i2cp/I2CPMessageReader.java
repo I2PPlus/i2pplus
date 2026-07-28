@@ -77,7 +77,7 @@ public class I2CPMessageReader {
     }
 
     /**
-     * getListener.
+     * @return the listener
      */
     public I2CPMessageEventListener getListener() {
         return _listener;

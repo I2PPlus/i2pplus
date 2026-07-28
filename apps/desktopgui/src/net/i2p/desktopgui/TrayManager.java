@@ -120,7 +120,7 @@ abstract class TrayManager {
     /**
      * Create an AWT tray icon with popup menu.
      *
-     * @param tooltip the tooltip text for the tray icon
+     * @param tooltip the tooltip text
      * @return the tray icon
      * @throws AWTException if the tray icon cannot be created
      */
@@ -142,7 +142,7 @@ abstract class TrayManager {
     /**
      * Create a Swing tray icon with JPopupMenu.
      *
-     * @param tooltip the tooltip text for the tray icon
+     * @param tooltip the tooltip text
      * @return the tray icon
      * @throws AWTException if the tray icon cannot be created
      */

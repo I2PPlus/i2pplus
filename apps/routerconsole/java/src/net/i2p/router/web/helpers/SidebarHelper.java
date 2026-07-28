@@ -201,6 +201,7 @@ public class SidebarHelper extends HelperBase {
      * Retrieve the shortened 4 character ident for the router located within
      * the current JVM at the given context.
      *
+     * @return the ident
      */
     public String getIdent() {
         if (_context == null) {return "[no router]";}
@@ -211,12 +212,14 @@ public class SidebarHelper extends HelperBase {
     /**
      * Retrieve the version number of the router.
      *
+     * @return the version
      */
     public String getVersion() {return RouterVersion.FULL_VERSION;}
 
     /**
      * Retrieve a pretty printed uptime count (ala 4d or 7h or 39m)
      *
+     * @return the uptime
      */
     public String getUptime() {
         if (_context == null) {return "[no router]";}
@@ -416,6 +419,7 @@ public class SidebarHelper extends HelperBase {
     /**
      * Retrieve amount of used memory.
      * @since 0.9.32 uncommented
+     * @return the memory
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized String getMemory() {
@@ -490,6 +494,7 @@ public class SidebarHelper extends HelperBase {
     /**
      * Retrieve CPU Load as a percentage.
      * @since 0.9.58+
+     * @return the c p u load
      */
     public int getCPULoad() {
         if (_context == null) {return 0;}
@@ -499,6 +504,7 @@ public class SidebarHelper extends HelperBase {
     /**
      * Retrieve CPU Load Average as a percentage.
      * @since 0.9.58+
+     * @return the c p u load avg
      */
     public int getCPULoadAvg() {
         if (_context == null) {return 0;}
@@ -508,6 +514,7 @@ public class SidebarHelper extends HelperBase {
     /**
      * Retrieve System Load Average as a percentage.
      * @since 0.9.58+
+     * @return the system load
      */
     public int getSystemLoad() {
         if (_context == null) {return 0;}
@@ -517,6 +524,7 @@ public class SidebarHelper extends HelperBase {
     /**
      * Render JVM CPU Load Bar
      * @since 0.9.58+
+     * @return the c p u bar
      */
     public String getCPUBar() {
         int cpu = getCPULoad();
@@ -530,6 +538,7 @@ public class SidebarHelper extends HelperBase {
      * Retrieve Tunnel build success as a percentage.
      * Returns the higher of the 1-minute or 10-minute average.
      * @since 0.9.58+
+     * @return the tunnel build success
      */
     public int getTunnelBuildSuccess() {
         if (_context == null) {return 0;}
@@ -625,6 +634,7 @@ public class SidebarHelper extends HelperBase {
     /**
      * How many peers we are talking to now
      *
+     * @return the active peers
      */
     public int getActivePeers() {
         if (_context == null) {return 0;}
@@ -647,6 +657,7 @@ public class SidebarHelper extends HelperBase {
     /**
      * How many active identities have we spoken with recently
      *
+     * @return the active profiles
      */
     public int getActiveProfiles() {
         if (_context == null) {return 0;}
@@ -785,6 +796,7 @@ public class SidebarHelper extends HelperBase {
      * How much data have we received since the router started (pretty printed
      * string with 2 decimal places and the appropriate units - GB/MB/KB/bytes)
      *
+     * @return the inbound transferred
      */
     public String getInboundTransferred() {
         if (_context == null) {return "0";}
@@ -796,6 +808,7 @@ public class SidebarHelper extends HelperBase {
      * How much data have we sent since the router started (pretty printed
      * string with 2 decimal places and the appropriate units - GB/MB/KB/bytes)
      *
+     * @return the outbound transferred
      */
     public String getOutboundTransferred() {
         if (_context == null) {return "0";}
@@ -807,6 +820,7 @@ public class SidebarHelper extends HelperBase {
      * Are both the webapp and TCG running?
      *
      * @since 0.9.58
+     * @return whether i2 p tunnel running
      */
     public boolean isI2PTunnelRunning() {
         if (!_context.portMapper().isRegistered(PortMapper.SVC_I2PTUNNEL)) {return false;}
@@ -1011,6 +1025,7 @@ public class SidebarHelper extends HelperBase {
     /**
      * How many free inbound tunnels we have.
      *
+     * @return the inbound tunnels
      */
     public int getInboundTunnels() {
         if (_context == null) {return 0;}
@@ -1020,6 +1035,7 @@ public class SidebarHelper extends HelperBase {
     /**
      * How many active outbound tunnels we have.
      *
+     * @return the outbound tunnels
      */
     public int getOutboundTunnels() {
         if (_context == null) {return 0;}
@@ -1029,6 +1045,7 @@ public class SidebarHelper extends HelperBase {
     /**
      * How many inbound client tunnels we have.
      *
+     * @return the inbound client tunnels
      */
     public int getInboundClientTunnels() {
         if (_context == null) {return 0;}
@@ -1038,6 +1055,7 @@ public class SidebarHelper extends HelperBase {
     /**
      * How many active outbound client tunnels we have.
      *
+     * @return the outbound client tunnels
      */
     public int getOutboundClientTunnels() {
         if (_context == null) {return 0;}
@@ -1047,6 +1065,7 @@ public class SidebarHelper extends HelperBase {
     /**
      * How many tunnels we are participating in.
      *
+     * @return the participating tunnels
      */
     public int getParticipatingTunnels() {
         if (_context == null) {return 0;}
@@ -1089,6 +1108,7 @@ public class SidebarHelper extends HelperBase {
      * How lagged our job queue is over the last minute (pretty printed with
      * the units attached)
      *
+     * @return the job lag
      */
     public String getJobLag() {
         if (_context == null) {return "0";}
@@ -1118,6 +1138,7 @@ public class SidebarHelper extends HelperBase {
      * How long it takes us to pump out a message, averaged over the last minute
      * (pretty printed with the units attached)
      *
+     * @return the message delay
      */
     public String getMessageDelay() {
         if (_context == null) {return "0";}
@@ -1137,6 +1158,7 @@ public class SidebarHelper extends HelperBase {
      * How long it takes us to test our tunnels, averaged over the last 10 minutes
      * (pretty printed with the units attached)
      *
+     * @return the tunnel lag
      */
     public String getTunnelLag() {
         if (_context == null) {return "0";}
@@ -1271,6 +1293,7 @@ public class SidebarHelper extends HelperBase {
     /**
      *  The update status and buttons
      *  @since 0.8.13 moved from SidebarRenderer
+     * @return the update status
      */
     public String getUpdateStatus() {
         StringBuilder buf = new StringBuilder(512);
@@ -1425,6 +1448,7 @@ public class SidebarHelper extends HelperBase {
     /**
      *  The restart status and buttons
      *  @since 0.8.13 moved from SidebarRenderer
+     * @return the restart status
      */
     public String getRestartStatus() {
         String nextNonce = null;
@@ -1440,6 +1464,7 @@ public class SidebarHelper extends HelperBase {
     /**
      *  The firewall status and reseed status/buttons
      *  @since 0.9 moved from SidebarRenderer
+     * @return the firewall and reseed status
      */
     public String getFirewallAndReseedStatus() {
         StringBuilder buf = new StringBuilder(256);

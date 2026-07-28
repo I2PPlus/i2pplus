@@ -210,7 +210,7 @@ public final class CertUtil {
      *
      *  @param cert the certificate
      *  @param type e.g. "CN"
-     *  @return value or null if not found
+     *  @return the subject value
      */
     public static String getSubjectValue(X509Certificate cert, String type) {
         X500Principal p = cert.getSubjectX500Principal();
@@ -224,7 +224,7 @@ public final class CertUtil {
      *
      *  @param cert the certificate
      *  @param type e.g. "CN"
-     *  @return value or null if not found
+     *  @return the issuer value
      *  @since 0.9.24
      */
     public static String getIssuerValue(X509Certificate cert, String type) {
@@ -239,7 +239,7 @@ public final class CertUtil {
      *
      *  @param p the X500Principal
      *  @param type e.g. "CN"
-     *  @return value or null if not found
+     *  @return the value
      */
     private static String getValue(X500Principal p, String type) {
         if (SystemVersion.isAndroid()) {

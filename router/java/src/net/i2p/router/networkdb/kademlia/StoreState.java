@@ -71,16 +71,16 @@ class StoreState {
     }
 
     /**
-     * getTarget.
+     * @return the target
      */
     public Hash getTarget() { return _key; }
     /**
-     * getData.
+     * @return the data
      */
     public DatabaseEntry getData() { return _data; }
 
     /**
-     * getPendingCount.
+     * @return the pending count
      */
     public int getPendingCount() {
         synchronized (_pendingPeers) {
@@ -92,6 +92,7 @@ class StoreState {
      *  The peers attempted OR skipped.
      *  DOES include skipped peers.
      *  Use getAttemptedCount for the number of attempts.
+     * @return the attempted
      */
     public Set<Hash> getAttempted() {
         synchronized (_attemptedPeers) {
@@ -105,6 +106,7 @@ class StoreState {
      *  Do not use getAttempted().size() as that does include skipped peers.
      *
      *  @since 0.9.53
+     * @return the attempted count
      */
     public int getAttemptedCount() {
         synchronized (_attemptedPeers) {
@@ -117,6 +119,7 @@ class StoreState {
      *  or null.
      *
      *  @since 0.9.53 formerly returned a copy of the Set
+     * @return the successful
      */
     public Hash getSuccessful() {
         synchronized (_successfulPeers) {
@@ -142,16 +145,16 @@ class StoreState {
             _completed = _context.clock().now();
     }
     /**
-     * getCompleteCount.
+     * @return the complete count
      */
     public int getCompleteCount() { return _completeCount; }
 
     /**
-     * getWhenStarted.
+     * @return the when started
      */
     public long getWhenStarted() { return _started; }
     /**
-     * getWhenCompleted.
+     * @return the when completed
      */
     public long getWhenCompleted() { return _completed; }
 

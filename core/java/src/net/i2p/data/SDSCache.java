@@ -181,6 +181,7 @@ public class SDSCache<V extends SimpleDataStructure> {
 
     /**
      * We assume the data has enough randomness in it, so use the first 4 bytes for speed.
+     * @return whether h code of is present
      */
     private static Integer hashCodeOf(byte[] data) {
         int rv = data[0];

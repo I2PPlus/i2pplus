@@ -185,7 +185,7 @@ public class PeerTestJob extends JobImpl {
      *
      * <p>Schedules the first test run based on router uptime:</p>
      * <ul>
-     *   <li>If uptime < 3 minutes: wait 3 minutes before starting</li>
+     *   <li>If uptime &lt; 3 minutes: wait 3 minutes before starting</li>
      *   <li>Otherwise: start immediately with configured delay</li>
      * </ul>
      *
@@ -237,7 +237,7 @@ public class PeerTestJob extends JobImpl {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     public String getName() { return "Test Peers"; }
 
@@ -555,11 +555,11 @@ public class PeerTestJob extends JobImpl {
          */
         public boolean continueMatching() { return false; }
         /**
-         * getExpiration.
+         * @return the expiration
          */
         public long getExpiration() { return _expiration; }
         /**
-         * isMatch.
+         * @return whether match
          */
         public boolean isMatch(I2NPMessage message) {
             if (message.getType() != DeliveryStatusMessage.MESSAGE_TYPE) {
@@ -706,7 +706,7 @@ public class PeerTestJob extends JobImpl {
             _testBegin = context.clock().now();
         }
         /**
-         * getName.
+         * @return the name
          */
         public String getName() { return "Verify Peer Test"; }
         /**
@@ -808,7 +808,7 @@ public class PeerTestJob extends JobImpl {
             _selector = sel;
         }
         /**
-         * getName.
+         * @return the name
          */
         public String getName() { return "Timeout Peer Test"; }
         private boolean getShouldFailPeer() { return true; }

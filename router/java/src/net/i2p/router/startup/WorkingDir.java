@@ -66,6 +66,7 @@ public class WorkingDir {
      * unless system property I2P_DISABLE_OUTPUT_OVERRIDE is set.
      *
      * @param migrateOldConfig whether to copy all data over from an existing install
+     * @return the working dir
      */
     public static String getWorkingDir(Properties envProps, boolean migrateOldConfig) {
         String dir = null;

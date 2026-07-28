@@ -79,7 +79,7 @@ abstract class StoreJob extends JobImpl {
      *
      * @param context the router context
      * @param facade the network database facade
-     * @param key the key to store
+     * @param key the key
      * @param data the data to store
      * @param onSuccess job to run on success
      * @param onFailure job to run on failure
@@ -95,7 +95,7 @@ abstract class StoreJob extends JobImpl {
      *
      * @param context the router context
      * @param facade the network database facade
-     * @param key the key to store
+     * @param key the key
      * @param data the data to store
      * @param onSuccess job to run on success
      * @param onFailure job to run on failure
@@ -295,7 +295,7 @@ abstract class StoreJob extends JobImpl {
     /**
      * Send a store message directly to a peer.
      *
-     * @param router the router to send to
+     * @param router the router
      * @param responseTime timeout for the response in milliseconds
      */
     private void sendStore(RouterInfo router, int responseTime) {
@@ -797,7 +797,7 @@ abstract class StoreJob extends JobImpl {
          * Create a success job for direct delivery.
          *
          * @param enclosingContext the router context
-         * @param peer the peer we sent to
+         * @param peer the peer
          */
         public SendSuccessJob(RouterContext enclosingContext, RouterInfo peer) {
             this(enclosingContext, peer, null, 0);
@@ -807,7 +807,7 @@ abstract class StoreJob extends JobImpl {
          * Create a success job for tunnel delivery.
          *
          * @param enclosingContext the router context
-         * @param peer the peer we sent to
+         * @param peer the peer
          * @param sendThrough the tunnel used for sending
          * @param size the message size
          */
@@ -888,7 +888,7 @@ abstract class StoreJob extends JobImpl {
          * Create a failed job for a peer.
          *
          * @param enclosingContext the router context
-         * @param peer the peer that failed
+         * @param peer the peer
          * @param sendOn when the message was sent
          */
         public FailedJob(RouterContext enclosingContext, RouterInfo peer, long sendOn) {

@@ -46,7 +46,7 @@ public class SessionId {
     }
 
     /**
-     * getSessionId.
+     * @return the session id
      */
     public int getSessionId() {
         return _sessionId;
@@ -103,7 +103,7 @@ public class SessionId {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

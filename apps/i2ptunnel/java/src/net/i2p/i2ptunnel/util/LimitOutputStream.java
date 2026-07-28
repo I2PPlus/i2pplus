@@ -66,7 +66,7 @@ public abstract class LimitOutputStream extends FilterOutputStream {
     }
 
     /**
-     * isDone.
+     * @return whether done
      */
     protected boolean isDone() { return _isDone; }
 

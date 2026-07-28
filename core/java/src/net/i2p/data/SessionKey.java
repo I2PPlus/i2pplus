@@ -119,6 +119,7 @@ public class SessionKey extends SimpleDataStructure {
     /**
      * retrieve an internal representation of the session key, as known
      * by the AES engine used.  this can be reused safely
+     * @return the prepared key
      */
     public Object getPreparedKey() {
         return _preparedKey;

@@ -87,7 +87,7 @@ public class GeneralHelper {
     /**
      *  Retrieve a tunnel controller by index.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the controller, or null if not found
      */
     public TunnelController getController(int tunnel) {
@@ -110,7 +110,7 @@ public class GeneralHelper {
      *  Save the configuration for a new or existing tunnel to disk.
      *  For new tunnels, adds to controller and (if configured) starts it.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param config the configuration to apply
      *  @return list of status messages
      */
@@ -303,7 +303,7 @@ public class GeneralHelper {
      *  Stop and delete the tunnel, remove its configuration, and rename
      *  the private key file if it uses a default name in the default directory.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param privKeyFile the private key file name from the edit form, may be null
      *  @return list of status messages
      */
@@ -370,7 +370,7 @@ public class GeneralHelper {
     /**
      *  Return the tunnel type string (e.g. &quot;httpclient&quot;, &quot;httpserver&quot;).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the type string, or empty string if tunnel not found
      */
     public String getTunnelType(int tunnel) {
@@ -381,7 +381,7 @@ public class GeneralHelper {
     /**
      *  Return the tunnel name.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return null if unset
      */
     public String getTunnelName(int tunnel) {
@@ -392,7 +392,7 @@ public class GeneralHelper {
      *  Return the tunnel name from a specific group.
      *
      *  @param tcg the controller group, may be null
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return null if unset
      */
     public static String getTunnelName(TunnelControllerGroup tcg, int tunnel) {
@@ -403,7 +403,7 @@ public class GeneralHelper {
     /**
      *  Return the tunnel description.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the description, or empty string if not found
      */
     public String getTunnelDescription(int tunnel) {
@@ -414,7 +414,7 @@ public class GeneralHelper {
     /**
      *  Return the target host for the tunnel.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the target host, defaults to &quot;127.0.0.1&quot;
      */
     public String getTargetHost(int tunnel) {
@@ -425,7 +425,7 @@ public class GeneralHelper {
     /**
      *  Return the target port for the tunnel.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the port number, or -1 if unset or invalid
      */
     public int getTargetPort(int tunnel) {
@@ -439,7 +439,7 @@ public class GeneralHelper {
     /**
      *  Return the spoofed HTTP host header.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the spoofed host, or empty string if not set
      */
     public String getSpoofedHost(int tunnel) {
@@ -450,7 +450,7 @@ public class GeneralHelper {
     /**
      *  Return the private key file path for the tunnel.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return path, non-null, non-empty
      */
     public String getPrivateKeyFile(int tunnel) {
@@ -461,7 +461,7 @@ public class GeneralHelper {
      *  Return the private key file path, computing a default if none is configured.
      *
      *  @param tcg the controller group, may be null
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return path, non-null, non-empty
      */
     public String getPrivateKeyFile(TunnelControllerGroup tcg, int tunnel) {
@@ -486,7 +486,7 @@ public class GeneralHelper {
     /**
      *  Return the alternate private key file path.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return path or &quot;&quot;
      *  @since 0.9.30
      */
@@ -498,7 +498,7 @@ public class GeneralHelper {
      *  Return the alternate private key file path from a specific group.
      *
      *  @param tcg the controller group, may be null
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return path or &quot;&quot;
      *  @since 0.9.30
      */
@@ -514,7 +514,7 @@ public class GeneralHelper {
     /**
      *  Return the interface address the client tunnel listens on.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the interface address, defaults to &quot;127.0.0.1&quot;
      */
     public String getClientInterface(int tunnel) {
@@ -528,7 +528,7 @@ public class GeneralHelper {
     /**
      *  Return the port the client tunnel listens on.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the port number, or -1 if unset or invalid
      */
     public int getClientPort(int tunnel) {
@@ -542,7 +542,7 @@ public class GeneralHelper {
     /**
      *  Return the operational status of the tunnel.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return RUNNING, STARTING, NOT_RUNNING, or STANDBY
      */
     public int getTunnelStatus(int tunnel) {
@@ -557,7 +557,7 @@ public class GeneralHelper {
 
     /**
      *  Get the remaining startup delay time for tunnels with delayed startup.
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return remaining delay in seconds, or 0 if not applicable
      *  @since 0.9.68+
      */
@@ -570,7 +570,7 @@ public class GeneralHelper {
     /**
      *  Return the client destination (base64) or proxy list for the tunnel.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the destination string or proxy list, never null
      */
     public String getClientDestination(int tunnel) {
@@ -588,7 +588,7 @@ public class GeneralHelper {
     /**
      *  Retrieve the tunnel Destination, reading from the key file if the tunnel is not running.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return Destination or null
      */
     public Destination getDestination(int tunnel) {
@@ -614,7 +614,7 @@ public class GeneralHelper {
     /**
      *  Retrieve the alternate tunnel Destination from the key file.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return Destination or null
      *  @since 0.9.30
      */
@@ -639,7 +639,7 @@ public class GeneralHelper {
     /**
      *  Check whether the tunnel uses offline keys.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if offline keys
      *  @since 0.9.40
      */
@@ -660,7 +660,7 @@ public class GeneralHelper {
     /**
      *  Check whether the tunnel is configured to start automatically.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if auto-start is enabled
      */
     public boolean shouldStartAutomatically(int tunnel) {
@@ -671,7 +671,7 @@ public class GeneralHelper {
     /**
      *  Check whether this tunnel shares its I2CP session with other clients.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if it is a shared client
      */
     public boolean isSharedClient(int tunnel) {
@@ -682,7 +682,7 @@ public class GeneralHelper {
     /**
      *  Check whether the tunnel has a streaming connect delay configured.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if connect delay is positive
      */
     public boolean shouldDelayConnect(int tunnel) {
@@ -692,7 +692,7 @@ public class GeneralHelper {
     /**
      *  Check whether the tunnel is configured for interactive streaming (small window).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if max window size is 16
      */
     public boolean isInteractive(int tunnel) {
@@ -702,7 +702,7 @@ public class GeneralHelper {
     /**
      *  Return the inbound tunnel depth (applies to both in/out if not split).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param defaultLength default value if not configured
      *  @return tunnel depth in hops
      */
@@ -713,7 +713,7 @@ public class GeneralHelper {
     /**
      *  Return the inbound tunnel quantity (applies to both in/out if not split).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param defaultQuantity default value if not configured
      *  @return number of tunnels
      */
@@ -724,7 +724,7 @@ public class GeneralHelper {
     /**
      *  Return the inbound backup tunnel quantity (applies to both in/out if not split).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param defaultBackupQuantity default value if not configured
      *  @return number of backup tunnels
      */
@@ -735,7 +735,7 @@ public class GeneralHelper {
     /**
      *  Return the inbound tunnel length variance (applies to both in/out if not split).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param defaultVariance default value if not configured
      *  @return length variance in hops
      */
@@ -746,7 +746,7 @@ public class GeneralHelper {
     /**
      *  Return the outbound tunnel depth.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param defaultLength default value if not configured
      *  @return tunnel depth in hops
      *  @since 0.9.33
@@ -758,7 +758,7 @@ public class GeneralHelper {
     /**
      *  Return the outbound tunnel quantity.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param defaultQuantity default value if not configured
      *  @return number of tunnels
      *  @since 0.9.33
@@ -770,7 +770,7 @@ public class GeneralHelper {
     /**
      *  Return the outbound backup tunnel quantity.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param defaultBackupQuantity default value if not configured
      *  @return number of backup tunnels
      *  @since 0.9.33
@@ -782,7 +782,7 @@ public class GeneralHelper {
     /**
      *  Return the outbound tunnel length variance.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param defaultVariance default value if not configured
      *  @return length variance in hops
      *  @since 0.9.33
@@ -794,7 +794,7 @@ public class GeneralHelper {
     /**
      *  Check whether I2CP session reduction on idle is enabled.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param def default value if not configured
      *  @return true if reduction on idle is enabled
      */
@@ -805,7 +805,7 @@ public class GeneralHelper {
     /**
      *  Return the I2CP reduce quantity (target number of tunnels when idle).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param def default value if not configured
      *  @return reduce quantity
      */
@@ -816,7 +816,7 @@ public class GeneralHelper {
     /**
      *  Return the I2CP idle reduction time threshold.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param def default idle time in minutes
      *  @return idle time in minutes
      */
@@ -827,28 +827,28 @@ public class GeneralHelper {
     /**
      *  Return the certificate type for the tunnel (currently unused, always 0).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return always 0
      */
     public int getCert(int tunnel) {return 0;}
     /**
      *  Return the proof-of-work effort for blinded leases (currently unused, always 23).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return always 23
      */
     public int getEffort(int tunnel) {return 23;}
     /**
      *  Return the signer for blinded leases (currently unused, always empty).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return always &quot;&quot;
      */
     public String getSigner(int tunnel) {return "";}
     /**
      *  Check whether the lease set should be encrypted.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if encryption is enabled
      */
     public boolean getEncrypt(int tunnel) {return getBooleanProperty(tunnel, "i2cp.encryptLeaseSet");}
@@ -856,7 +856,7 @@ public class GeneralHelper {
     /**
      *  Determine the encryption mode for the tunnel's lease set.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return encryption mode code (0=none, 1=full, 2=blinded, etc.)
      *  @since 0.9.40
      */
@@ -882,7 +882,7 @@ public class GeneralHelper {
     /**
      *  Return the blinded password for the tunnel's lease set.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the decoded blinded password, or empty string
      *  @since 0.9.40
      */
@@ -897,7 +897,7 @@ public class GeneralHelper {
      *  Return the list of authorized client authentications for the lease set.
      *  Each entry is a base64-encoded name:key pair.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param isDH true for DH public keys, false for PSK private keys
      *  @return non-null list of auth entries
      *  @since 0.9.41
@@ -917,7 +917,7 @@ public class GeneralHelper {
     /**
      *  Return the signature type code for the tunnel.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param newTunnelType used if tunnel &lt; 0 to determine default
      *  @return the current type if a destination exists, else the default for that tunnel type
      */
@@ -959,7 +959,7 @@ public class GeneralHelper {
     /**
      *  Check whether the tunnel supports a given encryption type.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param encType encryption type code
      *  @return true if the encryption type is in the configured list
      *  @since 0.9.44
@@ -980,7 +980,7 @@ public class GeneralHelper {
     /**
      *  Return the inbound random key (used for testing LS encryption).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the key, or empty string if not set
      */
     public String getInboundRandomKey(int tunnel) {
@@ -990,7 +990,7 @@ public class GeneralHelper {
     /**
      *  Return the outbound random key (used for testing LS encryption).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the key, or empty string if not set
      */
     public String getOutboundRandomKey(int tunnel) {
@@ -1000,7 +1000,7 @@ public class GeneralHelper {
     /**
      *  Return the lease set signing private key.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the key, or empty string if not set
      */
     public String getLeaseSetSigningPrivateKey(int tunnel) {
@@ -1010,7 +1010,7 @@ public class GeneralHelper {
     /**
      *  Return the lease set private key (for encrypted LS).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the key, or empty string if not set
      */
     public String getLeaseSetPrivateKey(int tunnel) {
@@ -1020,7 +1020,7 @@ public class GeneralHelper {
     /**
      *  Check whether DCC (direct client-to-client) is enabled for IRC tunnels.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if DCC is enabled
      */
     public boolean getDCC(int tunnel) {
@@ -1030,7 +1030,7 @@ public class GeneralHelper {
     /**
      *  Check whether SSL is enabled for the server tunnel.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if SSL is enabled
      */
     public boolean isSSLEnabled(int tunnel) {
@@ -1040,7 +1040,7 @@ public class GeneralHelper {
     /**
      *  Return the lease set encryption key.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the key, or empty string if not set
      */
     public String getEncryptKey(int tunnel) {
@@ -1050,7 +1050,7 @@ public class GeneralHelper {
     /**
      *  Return the access control mode for the tunnel.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return 0=none, 1=whitelist, 2=blacklist
      */
     public int getAccessMode(int tunnel) {
@@ -1062,7 +1062,7 @@ public class GeneralHelper {
     /**
      *  Return the access control list (comma-separated destinations), newline-delimited.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the access list entries, one per line
      */
     public String getAccessList(int tunnel) {
@@ -1072,7 +1072,7 @@ public class GeneralHelper {
     /**
      *  Return the connect filter definition for the tunnel.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the filter definition, or empty string if not set
      *  @since 0.9.40
      */
@@ -1095,7 +1095,7 @@ public class GeneralHelper {
     /**
      *  Return the jump server list for HTTP clients (one per line).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the jump server list, newline-delimited
      */
     public String getJumpList(int tunnel) {
@@ -1106,7 +1106,7 @@ public class GeneralHelper {
     /**
      *  Check whether I2CP close-on-idle is enabled.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param def default value if not configured
      *  @return true if close-on-idle is enabled
      */
@@ -1117,7 +1117,7 @@ public class GeneralHelper {
     /**
      *  Return the I2CP close-on-idle timeout in minutes.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @param def default value in minutes
      *  @return idle timeout in minutes
      */
@@ -1128,7 +1128,7 @@ public class GeneralHelper {
     /**
      *  Check whether the tunnel should get a new destination on resume.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if a new destination will be created on resume
      */
     public boolean getNewDest(int tunnel) {
@@ -1140,7 +1140,7 @@ public class GeneralHelper {
     /**
      *  Check whether the tunnel uses a persistent client key file.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if the key is persistent
      */
     public boolean getPersistentClientKey(int tunnel) {
@@ -1150,7 +1150,7 @@ public class GeneralHelper {
     /**
      *  Check whether I2CP delay-open is enabled.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if delay-open is enabled
      */
     public boolean getDelayOpen(int tunnel) {
@@ -1160,7 +1160,7 @@ public class GeneralHelper {
     /**
      *  Check whether the HTTP client allows custom User-Agent headers.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if custom User-Agent is allowed
      */
     public boolean getAllowUserAgent(int tunnel) {
@@ -1170,7 +1170,7 @@ public class GeneralHelper {
     /**
      *  Check whether the HTTP client allows custom Referer headers.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if custom Referer is allowed
      */
     public boolean getAllowReferer(int tunnel) {
@@ -1180,7 +1180,7 @@ public class GeneralHelper {
     /**
      *  Check whether the HTTP client allows custom Accept headers.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if custom Accept is allowed
      */
     public boolean getAllowAccept(int tunnel) {
@@ -1191,7 +1191,7 @@ public class GeneralHelper {
      *  Check whether internal SSL connections are allowed through the HTTP client.
      *  As of 0.9.35, defaults to true unless explicitly disabled.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if internal SSL is allowed
      */
     public boolean getAllowInternalSSL(int tunnel) {
@@ -1202,7 +1202,7 @@ public class GeneralHelper {
     /**
      *  Check whether the tunnel should bundle reply information (multihome mode).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if bundling is enabled
      */
     public boolean getMultihome(int tunnel) {
@@ -1212,7 +1212,7 @@ public class GeneralHelper {
     /**
      *  Return the proxy authentication mode.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return &quot;false&quot;, &quot;true&quot;, or &quot;basic&quot;
      */
     public String getProxyAuth(int tunnel) {
@@ -1222,7 +1222,7 @@ public class GeneralHelper {
     /**
      *  Check whether outproxy authentication is required.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if outproxy auth is enabled
      */
     public boolean getOutproxyAuth(int tunnel) {
@@ -1232,7 +1232,7 @@ public class GeneralHelper {
     /**
      *  Return the outproxy username.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the username, or empty string
      */
     public String getOutproxyUsername(int tunnel) {
@@ -1242,7 +1242,7 @@ public class GeneralHelper {
     /**
      *  Return the outproxy password (only if a username is set).
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the password, or empty string
      */
     public String getOutproxyPassword(int tunnel) {
@@ -1254,7 +1254,7 @@ public class GeneralHelper {
     /**
      *  Return the list of SSL outproxies.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return comma-separated SSL outproxy list
      */
     public String getSslProxies(int tunnel) {
@@ -1264,7 +1264,7 @@ public class GeneralHelper {
     /**
      *  Check whether the outproxy plugin is enabled.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if the outproxy plugin is used, defaults to true
      */
     public boolean getUseOutproxyPlugin(int tunnel) {
@@ -1274,7 +1274,7 @@ public class GeneralHelper {
     /**
      *  Return the outproxy connection type.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return &quot;connect&quot; or &quot;socks&quot;, default depends on tunnel type
      *  @since 0.9.57
      */
@@ -1287,7 +1287,7 @@ public class GeneralHelper {
     /**
      *  Return the per-minute connection limit.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return max connections per minute
      *  @since 0.8.3
      */
@@ -1298,7 +1298,7 @@ public class GeneralHelper {
     /**
      *  Return the per-hour connection limit.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return max connections per hour
      *  @since 0.8.3
      */
@@ -1309,7 +1309,7 @@ public class GeneralHelper {
     /**
      *  Return the per-day connection limit.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return max connections per day
      *  @since 0.8.3
      */
@@ -1320,7 +1320,7 @@ public class GeneralHelper {
     /**
      *  Return the per-minute total connection limit across all sources.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return max total connections per minute
      *  @since 0.8.3
      */
@@ -1331,7 +1331,7 @@ public class GeneralHelper {
     /**
      *  Return the per-hour total connection limit across all sources.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return max total connections per hour
      *  @since 0.8.3
      */
@@ -1342,7 +1342,7 @@ public class GeneralHelper {
     /**
      *  Return the per-day total connection limit across all sources.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return max total connections per day
      *  @since 0.8.3
      */
@@ -1353,7 +1353,7 @@ public class GeneralHelper {
     /**
      *  Return the maximum concurrent streams for the tunnel.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return max streams
      *  @since 0.8.3
      */
@@ -1364,7 +1364,7 @@ public class GeneralHelper {
     /**
      *  Return the maximum POST request size in bytes.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return max POST size in bytes
      *  @since 0.9.9
      */
@@ -1375,7 +1375,7 @@ public class GeneralHelper {
     /**
      *  Return the maximum total POST request size for the window.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return max total POST size in bytes
      *  @since 0.9.9
      */
@@ -1386,7 +1386,7 @@ public class GeneralHelper {
     /**
      *  Return the POST check window size in minutes.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return check window in minutes
      *  @since 0.9.9
      */
@@ -1397,7 +1397,7 @@ public class GeneralHelper {
     /**
      *  Return the POST ban duration in minutes.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return ban time in minutes
      *  @since 0.9.9
      */
@@ -1408,7 +1408,7 @@ public class GeneralHelper {
     /**
      *  Return the total POST ban duration in minutes.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return total ban time in minutes
      *  @since 0.9.9
      */
@@ -1419,7 +1419,7 @@ public class GeneralHelper {
     /**
      *  Check whether inproxy connections are rejected.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if inproxy connections are rejected
      *  @since 0.9.9
      */
@@ -1430,7 +1430,7 @@ public class GeneralHelper {
     /**
      *  Check whether connections with a Referer header are rejected.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if Referer connections are rejected
      *  @since 0.9.25
      */
@@ -1441,7 +1441,7 @@ public class GeneralHelper {
     /**
      *  Check whether connections with known bad User-Agents are rejected.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if User-Agent rejection is enabled
      *  @since 0.9.25
      */
@@ -1452,7 +1452,7 @@ public class GeneralHelper {
     /**
      *  Return the blocked User-Agent list.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return comma-separated user agents to block
      *  @since 0.9.25
      */
@@ -1463,7 +1463,7 @@ public class GeneralHelper {
     /**
      *  Check whether the server tunnel uses unique local addresses for each client.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return true if unique local addressing is enabled
      *  @since 0.9.9
      */
@@ -1474,7 +1474,7 @@ public class GeneralHelper {
     /**
      *  Return the custom client options as a single URL-parameter-style string.
      *
-     *  @param tunnel the tunnel index
+     *  @param tunnel the tunnel
      *  @return the options string, HTML-escaped, or empty string
      */
     public String getCustomOptionsString(int tunnel) {

@@ -143,6 +143,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     private int _maxConcurrent;
     /**
      * The default _maxConcurrent
+     * @return whether slow
      */
     private static volatile int _maxConcurrentDefault = SystemVersion.isSlow() ? 4 : 16;
 
@@ -150,6 +151,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      * Gets the maximum concurrent default value.
      *
      * @since 0.9.70+
+     * @return the max concurrent default
      */
     public static int getMaxConcurrentDefault() { return _maxConcurrentDefault; }
 
@@ -767,7 +769,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     @Override
     public String getName() {return "Start Iterative Search";}
@@ -841,7 +843,7 @@ public class IterativeSearchJob extends FloodSearchJob {
 
     /**
      *  Did we send a request to this peer?
-     *  @param peer the peer to check
+     *  @param peer the peer
      *  @return true if a query was sent to this peer
      *  @since 0.9.13
      */
@@ -852,7 +854,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * Was this peer recently queried (within grace period)?
      * Used to avoid false positive bans for late but legitimate replies.
-     * @param peer the peer to check
+     * @param peer the peer
      * @return true if the peer was queried recently and is in the grace period
      * @since 0.9.67
      */
@@ -863,7 +865,7 @@ public class IterativeSearchJob extends FloodSearchJob {
 
     /**
      * Clear peer from grace period cache (received their response).
-     * @param peer the peer to clear from the cache
+     * @param peer the peer
      * @since 0.9.67
      */
     public static void clearRecentlyQueried(Hash peer) {

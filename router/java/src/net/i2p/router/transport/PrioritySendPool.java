@@ -115,7 +115,7 @@ public final class PrioritySendPool {
     }
 
     /**
-     * getCapacity.
+     * @return the capacity
      */
     public int getCapacity() {
         return _capacity;
@@ -133,14 +133,15 @@ public final class PrioritySendPool {
     /**
      * Snapshot of added/evicted/dropped counters since construction.
      * Callers compute deltas over a time window.
+     * @return the added count
      */
     public int getAddedCount() { return _addedCount; }
     /**
-     * getEvictedCount.
+     * @return the evicted count
      */
     public int getEvictedCount() { return _evictedCount; }
     /**
-     * getDroppedCount.
+     * @return the dropped count
      */
     public int getDroppedCount() { return _droppedCount; }
 

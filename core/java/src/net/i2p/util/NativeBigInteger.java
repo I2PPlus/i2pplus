@@ -126,6 +126,7 @@ public class NativeBigInteger extends BigInteger {
      *
      * Set to false if not in router context, so scripts using TrustedUpdate
      * don't spew log messages. main() below overrides to true.
+     * @return the property
      */
     private static boolean _doLog = System.getProperty("jbigi.dontLog") == null
             && I2PAppContext.getCurrentContext() != null
@@ -371,6 +372,7 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      * Operating systems
+     * @return whether windows
      */
     private static final boolean _isWin = SystemVersion.isWindows();
 
@@ -812,6 +814,7 @@ public class NativeBigInteger extends BigInteger {
      *  Currently non-null only if extracted from jbigi.jar.
      *
      *  @since 0.9.17
+     * @return the loaded resource name
      */
     public static String getLoadedResourceName() {
         return _extractedResource;

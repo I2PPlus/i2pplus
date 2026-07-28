@@ -180,7 +180,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 
     /**
      *  Remove a session
-     *  @param props ignored, may be null
+     *  @param props session configuration properties, may be null
      *  @return null for success, or error message
      */
     public synchronized String remove(String nick, Properties props) {
@@ -295,7 +295,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
         /**
          * Called when an I2P error occurs.
          *
-         * @param session the session with the error
+         * @param session the session
          * @param message error description
          * @param error the exception, if any
          */

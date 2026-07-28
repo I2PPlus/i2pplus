@@ -173,6 +173,7 @@ public class MetaNamingService extends DummyNamingService {
 
     /**
      *  All services aggregated
+     * @return the entries
      */
     @Override
     public Map<String, Destination> getEntries(Properties options) {
@@ -187,6 +188,7 @@ public class MetaNamingService extends DummyNamingService {
      *  All services aggregated
      *
      *  @since 0.9.20
+     * @return the base64 entries
      */
     @Override
     public Map<String, String> getBase64Entries(Properties options) {
@@ -199,6 +201,7 @@ public class MetaNamingService extends DummyNamingService {
 
     /**
      *  All services aggregated
+     * @return the names
      */
     @Override
     public Set<String> getNames(Properties options) {

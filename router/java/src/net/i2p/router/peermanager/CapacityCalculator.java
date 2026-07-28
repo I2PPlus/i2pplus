@@ -58,6 +58,7 @@ class CapacityCalculator {
 
     /**
      *  Get the D-cap penalty, cached to avoid repeated Double.parseDouble.
+     * @return the cached dcap
      */
     private static double getCachedDcap(RouterContext ctx) {
         String p = ctx.getProperty(PROP_D_CAP);
@@ -72,6 +73,7 @@ class CapacityCalculator {
 
     /**
      *  Get the E-cap penalty, cached to avoid repeated Double.parseDouble.
+     * @return the cached ecap
      */
     private static double getCachedEcap(RouterContext ctx) {
         String p = ctx.getProperty(PROP_E_CAP);

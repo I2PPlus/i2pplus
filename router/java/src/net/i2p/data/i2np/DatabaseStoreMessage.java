@@ -137,6 +137,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
      * Default false.
      *
      * @since 0.9.58
+     * @return the received as reply
      */
     public boolean getReceivedAsReply() {return _receivedAsReply;}
 
@@ -274,12 +275,12 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     public int getType() {return MESSAGE_TYPE;}
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

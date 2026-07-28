@@ -50,7 +50,7 @@ class RebuildRouterInfoJob extends JobImpl {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     @Override
     public String getName() { return "Rebuild RouterInfo"; }

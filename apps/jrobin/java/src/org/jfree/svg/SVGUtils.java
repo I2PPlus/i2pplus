@@ -39,7 +39,7 @@ public class SVGUtils {
     /**
      * Returns a new string where any special characters in the source string have been encoded.
      *
-     * @param source the source string ({@code null} not permitted).
+     * @param source the source
      * @return A new string with special characters escaped for XML.
      * @since 1.5
      */
@@ -140,7 +140,7 @@ public class SVGUtils {
      * Writes an HTML file containing an SVG element.
      *
      * @param file the file.
-     * @param title the title.
+     * @param title the title
      * @param svgElement the SVG element.
      * @throws IOException if there is an I/O problem.
      */

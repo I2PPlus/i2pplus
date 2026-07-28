@@ -536,6 +536,7 @@ public class Getopt extends Object
 
 /**
   * The localized strings are kept in a separate file
+ * @return the bundle
   */
     private ResourceBundle _messages = ResourceBundle.getBundle(
                            "gnu/getopt/MessagesBundle", Locale.getDefault());

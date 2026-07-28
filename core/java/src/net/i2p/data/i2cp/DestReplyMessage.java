@@ -51,7 +51,7 @@ public class DestReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getDestination.
+     * @return the destination
      */
     public Destination getDestination() {
         return _dest;
@@ -61,6 +61,7 @@ public class DestReplyMessage extends I2CPMessageImpl {
      *  Gets the hash of the destination.
      *
      * @since 0.8.3
+     * @return the hash
      */
     public Hash getHash() {
         return _hash;
@@ -107,7 +108,7 @@ public class DestReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() {

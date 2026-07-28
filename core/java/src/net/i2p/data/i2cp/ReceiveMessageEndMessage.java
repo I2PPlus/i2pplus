@@ -42,6 +42,7 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
 
     /**
      * Get the session id.
+     * @return the session id
      */
     public long getSessionId() {
         return _sessionId;
@@ -71,6 +72,7 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
 
     /**
      * Get the message id.
+     * @return the message id
      */
     public long getMessageId() {
         return _messageId;

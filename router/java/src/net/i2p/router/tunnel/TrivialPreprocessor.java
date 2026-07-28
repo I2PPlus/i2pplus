@@ -153,7 +153,7 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
      * Write the first fragment of a tunnel message.
      *
      * @param msg the pending gateway message
-     * @param target the target byte array
+     * @param target the target
      * @param offset the starting offset
      * @return the new offset after writing
      */
@@ -225,7 +225,7 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
      * Write a subsequent fragment of a tunnel message.
      *
      * @param msg the pending gateway message
-     * @param target the target byte array
+     * @param target the target
      * @param offset the starting offset
      * @return the new offset after writing
      */

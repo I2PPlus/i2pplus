@@ -123,6 +123,7 @@ class IntroductionManager {
      *  i.e. is the peer still connected?
      *
      *  @since 0.9.50
+     * @return whether inbound tag valid
      */
     public boolean isInboundTagValid(long tag) {
         return _inbound.containsKey(Long.valueOf(tag));
@@ -964,6 +965,7 @@ class IntroductionManager {
     /**
      *  Are IP and port valid?
      *  @since 0.9.50
+     * @return whether valid
      */
     private boolean isValid(byte[] ip, int port, boolean allowIPv6) {
         return TransportUtil.isValidPort(port) &&

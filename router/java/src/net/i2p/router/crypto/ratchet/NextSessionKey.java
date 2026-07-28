@@ -70,6 +70,7 @@ class NextSessionKey extends PublicKey {
 
     /**
      *  @since 0.9.46
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

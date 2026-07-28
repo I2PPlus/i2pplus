@@ -516,14 +516,14 @@ public abstract class FormHandler {
         }
 
         /**
-         * getText.
+         * @return the text
          */
         public String getText() {
             return text;
         }
 
         /**
-         * isCanClose.
+         * @return whether can close
          */
         public boolean isCanClose() {
             return canClose;

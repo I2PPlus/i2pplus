@@ -44,8 +44,8 @@ public class ConfigurationManager {
     }
 
     /**
-     * Description.
      * @since 0.12
+     * @return the conf file
      */
     public File getConfFile() {
         return configLocation;

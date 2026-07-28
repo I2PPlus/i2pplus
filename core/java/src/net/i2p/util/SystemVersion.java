@@ -240,21 +240,21 @@ public abstract class SystemVersion {
     }
 
     /**
-     * isWindows.
+     * @return whether windows
      */
     public static boolean isWindows() {
         return _isWin;
     }
 
     /**
-     * isMac.
+     * @return whether mac
      */
     public static boolean isMac() {
         return _isMac;
     }
 
     /**
-     * isAndroid.
+     * @return whether android
      */
     public static boolean isAndroid() {
         return _isAndroid;
@@ -262,6 +262,7 @@ public abstract class SystemVersion {
 
     /**
      *  Apache Harmony JVM, or Android
+     * @return whether apache
      */
     public static boolean isApache() {
         return _isApache || _isAndroid;
@@ -269,6 +270,7 @@ public abstract class SystemVersion {
 
     /**
      *  gij or JamVM with GNU Classpath
+     * @return whether g n u
      */
     public static boolean isGNU() {
         return _isGNU;
@@ -276,6 +278,7 @@ public abstract class SystemVersion {
 
     /**
      *  @since 0.9.23
+     * @return whether gentoo
      */
     public static boolean isGentoo() {
         return _isGentoo;
@@ -283,6 +286,7 @@ public abstract class SystemVersion {
 
     /**
      *  @since 0.9.26
+     * @return whether open j d k
      */
     public static boolean isOpenJDK() {
         return _isOpenJDK;
@@ -291,6 +295,7 @@ public abstract class SystemVersion {
     /**
      *  @since 0.9.8
      * speed: do not cripple down for powerful ARM
+     * @return whether a r m
      */
     public static boolean isARM() {
         return _isArm && (getCores() < 4 || getCores() == 4 && System.getProperty("os.arch").startsWith("arm"));
@@ -298,6 +303,7 @@ public abstract class SystemVersion {
 
     /**
      *  @since 0.9.14
+     * @return whether x86
      */
     public static boolean isX86() {
         return _isX86;
@@ -307,6 +313,7 @@ public abstract class SystemVersion {
      *  Is this a very slow interpreted mode VM?
      *
      *  @since 0.9.38
+     * @return whether zero v m
      */
     public static boolean isZeroVM() {
         return _isZero;
@@ -317,6 +324,7 @@ public abstract class SystemVersion {
      *  using some simple heuristics.
      *
      *  @since 0.9.30
+     * @return whether slow
      */
     public static boolean isSlow() {
         // we don't put the NBI call in the static field,
@@ -542,6 +550,7 @@ public abstract class SystemVersion {
      * sun.arch.data.model == 64 =&gt; 64 bit processor
      * sun.arch.data.model == 32 =&gt; A 32 bit JVM but could be either 32 or 64 bit processor or libs
      * os.arch contains "64" could be 32 or 64 bit libs
+     * @return whether 64 bit
      */
     public static boolean is64Bit() {
         return _is64;
@@ -551,7 +560,7 @@ public abstract class SystemVersion {
      *  @since 0.9.28
      */
     /**
-     * isLinuxService.
+     * @return whether linux service
      */
     public static boolean isLinuxService() {
         return _isLinuxService;
@@ -561,7 +570,7 @@ public abstract class SystemVersion {
      *  @since 0.9.46
      */
     /**
-     * isWindowsService.
+     * @return whether windows service
      */
     public static boolean isWindowsService() {
         return _isWindowsService;
@@ -571,7 +580,7 @@ public abstract class SystemVersion {
      *  @since 0.9.46
      */
     /**
-     * isService.
+     * @return whether service
      */
     public static boolean isService() {
         return _isService;
@@ -590,6 +599,7 @@ public abstract class SystemVersion {
     /**
      *  Is the wrapper present?
      *  Same as I2PAppContext.hasWrapper()
+     * @return whether wrapper is present
      */
     public static boolean hasWrapper() {
         return _hasWrapper;
@@ -599,6 +609,7 @@ public abstract class SystemVersion {
      *  Runtime.getRuntime().maxMemory() but check for bogus values
      *
      *  @since 0.9.8
+     * @return the max memory
      */
     public static long getMaxMemory() {
         long maxMemory = Runtime.getRuntime().maxMemory();
@@ -749,6 +760,7 @@ public abstract class SystemVersion {
      * Retrieve CPU Load of the JVM.
      *
      * @since 0.9.57+
+     * @return the c p u load
      */
     public static int getCPULoad() {
         OperatingSystemMXBean osmxb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
@@ -762,6 +774,7 @@ public abstract class SystemVersion {
      * Retrieve CPU Load Average of the JVM.
      *
      * @since 0.9.57+
+     * @return the c p u load avg
      */
     public static int getCPULoadAvg() {
         if (_ctx == null || _ctx.statManager() == null || _ctx.statManager().getRate("router.cpuLoad") == null) {
@@ -788,6 +801,7 @@ public abstract class SystemVersion {
      * Retrieve System Load as percentage (100% equals full system load)
      *
      * @since 0.9.57+
+     * @return the system load
      */
     public static int getSystemLoad() {
         if (_ctx == null || _ctx.statManager() == null) {
@@ -829,6 +843,7 @@ public abstract class SystemVersion {
      * Retrieve Tunnel build success as a percentage.
      *
      * @since 0.9.58+
+     * @return the tunnel build success
      */
     public static int getTunnelBuildSuccess() {
         I2PAppContext context = I2PAppContext.getGlobalContext();

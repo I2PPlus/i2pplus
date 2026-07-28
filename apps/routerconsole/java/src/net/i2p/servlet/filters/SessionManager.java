@@ -52,7 +52,7 @@ public class SessionManager {
     }
 
     /**
-     * getInstance.
+     * @return the instance
      */
     public static SessionManager getInstance() {
         return INSTANCE;

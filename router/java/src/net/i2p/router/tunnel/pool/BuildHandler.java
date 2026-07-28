@@ -638,7 +638,7 @@ public class BuildHandler implements Runnable {
         }
 
         /**
-         * getName.
+         * @return the name
          */
         @Override
         public String getName() {return "Defer Tunnel Join Processing";}
@@ -697,7 +697,7 @@ public class BuildHandler implements Runnable {
         }
 
         /**
-         * getName.
+         * @return the name
          */
         @Override
         public String getName() {return "Timeout Locating Peer for Tunnel Join";}
@@ -1196,7 +1196,7 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     * getInboundBuildQueueSize.
+     * @return the inbound build queue size
      */
     public int getInboundBuildQueueSize() {return _inboundBuildMessages.size();}
 
@@ -1324,7 +1324,7 @@ public class BuildHandler implements Runnable {
             // intentionally empty - enqueue time is set at construction, no need to update
         }
         /**
-         * getEnqueueTime.
+         * @return the enqueue time
          */
         @Override
         public long getEnqueueTime() {return recvTime;}
@@ -1333,7 +1333,7 @@ public class BuildHandler implements Runnable {
          */
         public void setLookupStartTime(long time) {this.lookupStartTime = time;}
         /**
-         * getLookupStartTime.
+         * @return the lookup start time
          */
         public long getLookupStartTime() {return lookupStartTime;}
         /**
@@ -1385,7 +1385,7 @@ public class BuildHandler implements Runnable {
             // No-op - intentionally empty
         }
         /**
-         * getName.
+         * @return the name
          */
         @Override
         public String getName() {return "Receive Tunnel Build Message";}
@@ -1402,7 +1402,7 @@ public class BuildHandler implements Runnable {
             // No-op - intentionally empty
         }
         /**
-         * getName.
+         * @return the name
          */
         @Override
         public String getName() {return "Receive Tunnel Build Reply Message";}
@@ -1420,7 +1420,7 @@ public class BuildHandler implements Runnable {
             _cfg = cfg;
         }
         /**
-         * getName.
+         * @return the name
          */
         @Override
         public String getName() {return "Timeout Building Tunnel Hop";}
@@ -1451,6 +1451,7 @@ public class BuildHandler implements Runnable {
 
     /**
      * Extract IP:port from RouterInfo for a peer hash.
+     * @return the i p port from hash
      */
     private String getIPPortFromHash(Hash h) {
         try {

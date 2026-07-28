@@ -163,6 +163,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
 
     /**
      * Hash based on tunnel ID and data payload.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {return (int)_tunnelId +DataHelper.hashCode(_data);}

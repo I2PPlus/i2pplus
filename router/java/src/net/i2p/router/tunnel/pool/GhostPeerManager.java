@@ -53,7 +53,7 @@ public class GhostPeerManager {
      * Record that a peer timed out during tunnel build.
      * Called from BuildExecutor when a tunnel build expires.
      *
-     * @param peer the peer hash that timed out
+     * @param peer the peer
      */
     public void recordTimeout(Hash peer) {
         if (peer == null || peer.equals(_context.routerHash())) {return;}
@@ -81,7 +81,7 @@ public class GhostPeerManager {
      * Record successful tunnel participation by a peer.
      * Clears ghost status when a peer successfully participates in a tunnel.
      *
-     * @param peer the peer hash that participated successfully
+     * @param peer the peer
      */
     public void recordSuccess(Hash peer) {
         if (peer == null || peer.equals(_context.routerHash())) {return;}
@@ -96,7 +96,7 @@ public class GhostPeerManager {
     /**
      * Check if a peer should be excluded from tunnel selection.
      *
-     * @param peer the peer hash to check
+     * @param peer the peer
      * @return true if the peer is a ghost and should be skipped
      */
     public boolean isGhost(Hash peer) {
@@ -139,7 +139,7 @@ public class GhostPeerManager {
     /**
      * Clear ghost status for a peer (manual intervention).
      *
-     * @param peer the peer hash to clear
+     * @param peer the peer
      */
     public void clearGhost(Hash peer) {
         if (peer == null) {return;}

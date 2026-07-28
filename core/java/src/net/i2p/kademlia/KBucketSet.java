@@ -153,7 +153,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      * Add a peer to the appropriate bucket.
      * Will split the bucket if necessary.
      *
-     * @param peer the peer to add
+     * @param peer the peer
      * @return true if the peer is new to the bucket it goes in, or false if it was
      *  already in it. Always returns false on an attempt to add ourselves.
      */
@@ -195,6 +195,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      *  No lock required.
      *  FIXME will split the closest buckets too far if B &gt; 1 and K &lt; 2**B
      *  Won't ever really happen and if it does it still works.
+     * @return whether split
      */
     private boolean shouldSplit(KBucket<T> b) {
         return b.getRangeBegin() != b.getRangeEnd() && b.getKeyCount() > BUCKET_SIZE;

@@ -32,7 +32,7 @@ public class HeaderLine extends Encoding {
 	public static final String NAME = "HEADERLINE";
 
 	/**
-	 * getName.
+	 * @return the name
 	 */
 	@Override
 	public String getName() {

@@ -1159,6 +1159,7 @@ public class GeoIP {
    /**
     * Return the current GeoIP database version
     * @since 0.9.65+
+    * @return the geo i p build info
     */
     public String getGeoIPBuildInfo() {
         File geoFile = getGeoIP2();
@@ -1181,6 +1182,7 @@ public class GeoIP {
    /**
     * Return the current ASN database version
     * @since 0.9.65+
+    * @return the a s n build info
     */
     public String getASNBuildInfo() {
         File asnFile = getASN();

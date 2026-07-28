@@ -46,7 +46,7 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() {
@@ -54,7 +54,7 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

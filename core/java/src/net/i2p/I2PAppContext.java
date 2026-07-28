@@ -656,7 +656,7 @@ public class I2PAppContext {
      * Default false
      *
      * @param propName the property name
-     * @return the boolean value, or false if not set
+     * @return the boolean property
      * @since 0.7.12
      */
     public boolean getBooleanProperty(String propName) {
@@ -667,7 +667,7 @@ public class I2PAppContext {
      * Boolean property, defaulting to true if not set.
      *
      * @param propName the property name
-     * @return the boolean value, or true if the property is not set
+     * @return the boolean property default true
      * @since 0.7.12
      */
     public boolean getBooleanPropertyDefaultTrue(String propName) {
@@ -1045,7 +1045,7 @@ public class I2PAppContext {
      *  This method moved from Router in 0.7.1 so that clients
      *  may use it without depending on router.jar.
      *
-     *  @param task the task to add
+     * @param task the task
      *  @since 0.7.1
      */
     public void addShutdownTask(Runnable task) {
@@ -1055,7 +1055,7 @@ public class I2PAppContext {
     /**
      * Remove a shutdown task.
      *
-     * @param task the task to remove
+     * @param task the task
      * @since 0.9.53
      */
     public void removeShutdownTask(Runnable task) {

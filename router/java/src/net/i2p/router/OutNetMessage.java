@@ -385,6 +385,7 @@ public class OutNetMessage implements CDPQEntry {
      *  For CDQ
      *
      *  @since 0.9.3
+     * @return the enqueue time
      */
     public long getEnqueueTime() {return _enqueueTime;}
 
@@ -425,6 +426,7 @@ public class OutNetMessage implements CDPQEntry {
      *  For CDPQ
      *
      *  @since 0.9.3
+     * @return the seq num
      */
     public long getSeqNum() {return _seqNum;}
 

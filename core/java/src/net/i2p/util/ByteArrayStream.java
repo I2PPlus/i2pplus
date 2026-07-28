@@ -73,7 +73,7 @@ public class ByteArrayStream extends ByteArrayOutputStream {
     /**
      *  Copies all written data to the target array.
      *
-     * @param target the target array to copy to
+     * @param target the target
      * @param offset the offset in the target array
      */
     public void copyTo(byte[] target, int offset) {

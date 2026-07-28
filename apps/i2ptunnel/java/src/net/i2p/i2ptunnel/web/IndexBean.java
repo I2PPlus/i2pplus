@@ -299,7 +299,7 @@ public class IndexBean {
     /**
      * Set the tunnel number.
      *
-     * @param tunnel the tunnel number as a string
+     * @param tunnel the tunnel
      */
     public void setTunnel(String tunnel) {
         if ((tunnel == null) || (tunnel.trim().length() <= 0)) return;
@@ -600,7 +600,7 @@ public class IndexBean {
         /**
          *  Create a timestamped message with the current time.
          *
-         *  @param message the message text
+         * @param message the message
          */
         public TimestampedMessage(String message) {
             this.message = message;
@@ -685,7 +685,7 @@ public class IndexBean {
      *  Add a message to the timestamped message list if it has not been seen before.
      *  Maintains a bounded set of seen messages and removes oldest entries when full.
      *
-     *  @param message the message text to add
+     * @param message the message
      *  @since 0.9.67+
      */
     private void addUniqueMessage(String message) {
@@ -824,7 +824,7 @@ public class IndexBean {
     /**
      * Check if the tunnel is a shared client.
      *
-     * @param tunnel the tunnel number
+     * @param tunnel the tunnel
      * @return true if shared client
      * @since 0.9.46 moved from subclass
      */
@@ -835,7 +835,7 @@ public class IndexBean {
     /**
      * Get the tunnel name.
      *
-     * @param tunnel the tunnel number
+     * @param tunnel the tunnel
      * @return the tunnel name
      */
     public String getTunnelName(int tunnel) {
@@ -847,7 +847,7 @@ public class IndexBean {
     /**
      *  No validation
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return the client port
      */
     public String getClientPort(int tunnel) {
@@ -858,7 +858,7 @@ public class IndexBean {
     /**
      *  Returns error message if blank or invalid
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return the client port or error message
      *  @since 0.9.3
      */
@@ -898,7 +898,7 @@ public class IndexBean {
     /**
      * Get the tunnel type.
      *
-     * @param tunnel the tunnel number
+     * @param tunnel the tunnel
      * @return the tunnel type
      */
     public String getTunnelType(int tunnel) {
@@ -932,35 +932,35 @@ public class IndexBean {
     /**
      *  The internal type string for the specified tunnel.
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return the internal type
      */
     public String getInternalType(int tunnel) {return _helper.getTunnelType(tunnel);}
     /**
      *  The interface the specified client tunnel is configured to listen on.
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return the client interface
      */
     public String getClientInterface(int tunnel) {return _helper.getClientInterface(tunnel);}
     /**
      *  The current status of the specified tunnel.
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return the tunnel status
      */
     public int getTunnelStatus(int tunnel) {return _helper.getTunnelStatus(tunnel);}
     /**
      *  The remaining startup delay for the specified tunnel.
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return the remaining startup delay
      */
     public int getRemainingStartupDelay(int tunnel) {return _helper.getRemainingStartupDelay(tunnel);}
     /**
      *  The description for the specified tunnel, HTML-escaped.
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return the tunnel description
      */
     public String getTunnelDescription(int tunnel) {return DataHelper.escapeHTML(_helper.getTunnelDescription(tunnel));}
@@ -968,7 +968,7 @@ public class IndexBean {
     /**
      * Get the shared client for a tunnel.
      *
-     * @param tunnel the tunnel number
+     * @param tunnel the tunnel
      * @return the shared client
      */
     public String getSharedClient(int tunnel) {
@@ -980,7 +980,7 @@ public class IndexBean {
     /**
      *  The destination Base64 for the specified client tunnel.
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return the client destination
      */
     public String getClientDestination(int tunnel) {return _helper.getClientDestination(tunnel);}
@@ -988,7 +988,7 @@ public class IndexBean {
     /**
      * Call this to see if it is ok to linkify getServerTarget()
      *
-     * @param tunnel the tunnel number
+     * @param tunnel the tunnel
      * @return true if the server target link is valid
      * @since 0.8.3
      */
@@ -1004,7 +1004,7 @@ public class IndexBean {
      * Is this an IRC server? Call to establish if we should provide irc://
      * link on index page
      *
-     * @param tunnel the tunnel number
+     * @param tunnel the tunnel
      * @return true if it is a valid IRC server
      * @since 0.9.67+
      */
@@ -1017,7 +1017,7 @@ public class IndexBean {
     /**
      * Is this a server tunnel?
      *
-     * @param tunnel the tunnel number
+     * @param tunnel the tunnel
      * @return true if it is a server
      * @since 0.9.67+
      */
@@ -1034,7 +1034,7 @@ public class IndexBean {
     /**
      * Get the server target.
      *
-     * @param tunnel the tunnel number
+     * @param tunnel the tunnel
      * @return valid host:port only if isServerTargetLinkValid() is true
      */
     public String getServerTarget(int tunnel) {
@@ -1056,7 +1056,7 @@ public class IndexBean {
     /**
      *  Works even if tunnel is not running.
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return Destination or null
      *  @since 0.9.17
      */
@@ -1065,7 +1065,7 @@ public class IndexBean {
     /**
      *  Works even if tunnel is not running.
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return Base64 or ""
      */
     public String getDestinationBase64(int tunnel) {
@@ -1077,7 +1077,7 @@ public class IndexBean {
     /**
      *  Works even if tunnel is not running.
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return "{52 chars}.b32.i2p" or ""
      */
     public String getDestHashBase32(int tunnel) {
@@ -1089,7 +1089,7 @@ public class IndexBean {
     /**
      *  Works even if tunnel is not running.
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return "{56 chars}.b32.i2p" or "" if not blinded
      *  @since 0.9.40
      */
@@ -1113,7 +1113,7 @@ public class IndexBean {
     /**
      *  Works even if tunnel is not running.
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return Destination or null
      *  @since 0.9.30
      */
@@ -1122,7 +1122,7 @@ public class IndexBean {
     /**
      *  Works even if tunnel is not running.
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return Base64 or ""
      *  @since 0.9.30
      */
@@ -1135,7 +1135,7 @@ public class IndexBean {
     /**
      *  Works even if tunnel is not running.
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return "{52 chars}.b32.i2p" or ""
      *  @since 0.9.30
      */
@@ -1148,7 +1148,7 @@ public class IndexBean {
     /**
      *  Works even if tunnel is not running.
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return true if offline keys
      *  @since 0.9.40
      */
@@ -1157,7 +1157,7 @@ public class IndexBean {
     /**
      *  For index.jsp
      *
-     *  @param tunnel the tunnel number
+     *  @param tunnel the tunnel
      *  @return true if the plugin is enabled, installed, and running
      *  @since 0.9.11
      */
@@ -1176,7 +1176,7 @@ public class IndexBean {
     /**
      * Get the spoofed host for a tunnel.
      *
-     * @param tunnel the tunnel number
+     * @param tunnel the tunnel
      * @return the spoofed host
      * @since 0.9.32 moved from EditBean
      */
@@ -2140,6 +2140,7 @@ public class IndexBean {
      * suitable for use in a TunnelController.  This will replace (not add to)
      * any existing parameters, so this should return a comprehensive mapping.
      *
+     * @return the config
      */
     private Properties getConfig() {
         // This is easier than requiring TunnelConfig to talk to
@@ -2149,7 +2150,7 @@ public class IndexBean {
     }
 
     /**
-     * getController.
+     * @return the controller
      */
     protected TunnelController getController(int tunnel) {
         return _helper.getController(tunnel);

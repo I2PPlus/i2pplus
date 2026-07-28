@@ -482,7 +482,7 @@ public abstract class Addresses {
 /**
  *  Converts IPv6 to compressed form per RFC 5952. IPv4 returned unchanged.
  *
- *  @param host the host string to convert
+ *  @param host the hostname
  *  @return canonical string representation, or "null" for null input
  *  @since 0.9.57
  */
@@ -512,7 +512,7 @@ public abstract class Addresses {
      *  without throwing an exception.
      *  Does not trim.
      *
-     *  @param port the port string to convert
+     *  @param port the port number
      *  @return 1-65535 or 0 if invalid
      *  @since 0.9.3
      */
@@ -752,7 +752,7 @@ public abstract class Addresses {
     /**
      * Checks if the host is a valid IPv4 address.
      *
-     * @param host the host to check
+     * @param host the hostname
      * @return true if IPv4 address
      *  @since 0.9.34
      */
@@ -763,7 +763,7 @@ public abstract class Addresses {
     /**
      * Checks if the host is a valid IPv6 address.
      *
-     * @param host the host to check
+     * @param host the hostname
      * @return true if IPv6 address
      *  @since 0.9.34
      */
@@ -774,7 +774,7 @@ public abstract class Addresses {
     /**
      * Checks if the host is a valid IP address (IPv4 or IPv6).
      *
-     * @param host the host to check
+     * @param host the hostname
      * @return true if either IPv4 or IPv6
      *  @since 0.9.34
      */
@@ -1299,6 +1299,7 @@ public abstract class Addresses {
      * RFC 4941
      *
      * @since 0.9.34
+     * @return the privacy status
      */
     private static String getPrivacyStatus() {
         String rv = useIPv6TempAddresses();

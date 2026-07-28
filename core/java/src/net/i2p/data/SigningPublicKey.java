@@ -93,9 +93,7 @@ import java.util.Arrays;
  */
 public class SigningPublicKey extends SimpleDataStructure {
     private static final SigType DEF_TYPE = SigType.DSA_SHA1;
-    /**
-     * KEYSIZE_BYTES.
-     */
+    /** KEYSIZE_BYTES. */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPubkeyLen();
     private static final int CACHE_SIZE = 1024;
 
@@ -325,6 +323,7 @@ public class SigningPublicKey extends SimpleDataStructure {
 
     /**
      *  @since 0.9.17
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

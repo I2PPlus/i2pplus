@@ -105,6 +105,7 @@ public class LogsHelper extends HelperBase {
 
     /**
      *  Does not call logManager.flush(); call getCriticalLogs() first to flush
+     * @return the logs
      */
     public String getLogs() {
         String str = formatMessages(_context.logManager().getBuffer().getMostRecentMessages());
@@ -117,6 +118,7 @@ public class LogsHelper extends HelperBase {
 
     /**
      *  Return HTML rendering of the most recent critical log messages.
+     * @return the critical logs
      */
     public String getCriticalLogs() {
         return formatMessages(_context.logManager().getBuffer().getMostRecentCriticalMessages());
@@ -332,6 +334,7 @@ public class LogsHelper extends HelperBase {
      *  Return the Built-By attribute from the i2p.jar manifest.
      *
      * @since 0.9.35
+     * @return the built by
      */
     public String getBuiltBy() {
         File libDir = _context.getLibDir();
@@ -348,6 +351,7 @@ public class LogsHelper extends HelperBase {
      *  Return the build revision and date from the routerconsole.war manifest.
      *
      * @since 0.9.50+
+     * @return the revision
      */
     public String getRevision() {
         File baseDir = _context.getBaseDir();
@@ -521,7 +525,7 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     * isAdvanced.
+     * @return whether advanced
      */
     public boolean isAdvanced() {
         return _context.getBooleanProperty(PROP_ADVANCED);

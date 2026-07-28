@@ -81,7 +81,7 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     }
 
     /**
-     * getAlgorithm.
+     * @return the algorithm
      */
     @Override
     public String getAlgorithm() {
@@ -89,7 +89,7 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     }
 
     /**
-     * getFormat.
+     * @return the format
      */
     @Override
     public String getFormat() {
@@ -274,7 +274,7 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     }
 
     /**
-     * getParams.
+     * @return the params
      */
     @Override
     public EdDSAParameterSpec getParams() {
@@ -319,6 +319,7 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
 
     /**
      *  @since 0.9.25
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

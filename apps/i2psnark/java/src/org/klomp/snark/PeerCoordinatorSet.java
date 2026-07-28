@@ -47,7 +47,7 @@ class PeerCoordinatorSet implements Iterable<PeerCoordinator> {
     /**
      * Register a coordinator for its torrent's info hash.
      *
-     * @param coordinator the coordinator to add
+     * @param coordinator the coordinator
      */
     public void add(PeerCoordinator coordinator) {
         _coordinators.put(new SHA1Hash(coordinator.getInfoHash()), coordinator);
@@ -56,7 +56,7 @@ class PeerCoordinatorSet implements Iterable<PeerCoordinator> {
     /**
      * Unregister a coordinator.
      *
-     * @param coordinator the coordinator to remove
+     * @param coordinator the coordinator
      */
     public void remove(PeerCoordinator coordinator) {
         _coordinators.remove(new SHA1Hash(coordinator.getInfoHash()));

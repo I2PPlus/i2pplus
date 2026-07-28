@@ -80,7 +80,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private final Map<Hash, DelayedPoolCleanup> _pendingCleanups;
 
     /**
-     * TunnelPoolManager.
      * @param ctx the router context
      */
     public TunnelPoolManager(RouterContext ctx) {
@@ -688,7 +687,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *
      *  Uses delayed cleanup to allow tunnels to continue operating
      *  until they naturally expire. Prevents pool collapse when client disconnects.
-     *  @param destination the destination hash
+     * @param destination the destination
      */
     public synchronized void removeTunnels(Hash destination) {
         if (destination == null) return;
@@ -727,7 +726,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Force immediate removal of a pool - used for router shutdown.
-     * @param destination the destination hash
+     * @param destination the destination
      * @since 0.9.69+
      */
     public synchronized void forceRemoveTunnels(Hash destination) {
@@ -740,7 +739,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Actually perform pool removal.
-     * @param destination the destination hash
+     * @param destination the destination
      */
     private synchronized void doRemoveTunnels(Hash destination) {
         if (_log.shouldDebug()) {
@@ -918,7 +917,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             getTiming().setStartAfter(ctx.clock().now() + 5*1000);
         }
         /**
-         * getName.
+         * @return the name
          */
         public String getName() { return "Bootstrap Tunnel Pool"; }
         /**
@@ -940,7 +939,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             getTiming().setStartAfter(ctx.clock().now() + 2*1000);
         }
         /**
-         * getName.
+         * @return the name
          */
         public String getName() { return "Bootstrap Client Tunnel Pool"; }
         /**
@@ -967,7 +966,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
 
         /**
-         * getName.
+         * @return the name
          */
         public String getName() { return "Remove Slow Tunnels Job"; }
 
@@ -1066,7 +1065,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
 
         /**
-         * getName.
+         * @return the name
          */
         public String getName() { return "Refresh LeaseSets Job"; }
 

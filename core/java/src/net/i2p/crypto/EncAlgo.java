@@ -38,7 +38,7 @@ public enum EncAlgo {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     public String getName() {
         return name;

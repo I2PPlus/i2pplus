@@ -119,7 +119,7 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 	}
 
 	/**
-	 * getNextPage.
+	 * @return the next page
 	 */
 	public int getNextPage() {
 		return nextPage;
@@ -148,14 +148,14 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 	}
 
 	/**
-	 * isEmpty.
+	 * @return whether empty
 	 */
 	public boolean isEmpty() {
 		return len <= 0;
 	}
 
 	/**
-	 * isFull.
+	 * @return whether full
 	 */
 	public boolean isFull() {
 		return len >= MAX_SIZE;
@@ -220,7 +220,6 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 	}
 
 	/**
-	 * Recursive.
 	 * @since 0.9.7
 	 */
 	public boolean flbck(boolean fix) throws IOException {

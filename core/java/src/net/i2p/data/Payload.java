@@ -76,9 +76,9 @@ import java.util.Arrays;
  * @author jrandom
  */
 public class Payload extends DataStructureImpl {
-    /** ignored */
+    /** Encrypted payload data. */
     private byte[] _encryptedData;
-    /** ignored */
+    /** Unencrypted payload data. */
     private byte[] _unencryptedData;
 
     /** So we don't OOM on I2CP protocol errors. Actual max is smaller. */
@@ -123,8 +123,8 @@ public class Payload extends DataStructureImpl {
      /**
       * the real data
       *
-      * @throws IllegalArgumentException if bigger than 64KB
-     * @param data the data
+      *  @throws IllegalArgumentException if bigger than 64KB
+     *  @param data the data
      */
     public void setEncryptedData(byte[] data) {
         if (data.length > MAX_LENGTH) throw new IllegalArgumentException();
@@ -164,8 +164,8 @@ public class Payload extends DataStructureImpl {
      *  Writes the encrypted payload to the target array.
      *
      *  @return the written length (NOT the new offset)
-     * @param target the target
-     * @param offset the offset
+     *  @param target the target
+     *  @param offset the offset
      */
     public int writeBytes(byte[] target, int offset) {
         if (_encryptedData == null) throw new IllegalStateException("Not yet encrypted.  Please set the encrypted data");
@@ -187,7 +187,7 @@ public class Payload extends DataStructureImpl {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

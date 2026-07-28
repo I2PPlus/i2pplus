@@ -83,7 +83,7 @@ public final class GenericGF {
    * @param primitive irreducible polynomial whose coefficients are represented by
    *  the bits of an int, where the least-significant bit represents the constant
    *  coefficient
-   * @param size the size of the field
+   * @param size the size
    * @param b the factor b in the generator polynomial can be 0- or 1-based
    *  (g(x) = (x+a^b)(x+a^(b+1))...(x+a^(b+2t-1))).
    *  In most cases it should be 1, but for QR code it is 0.
@@ -184,14 +184,14 @@ public final class GenericGF {
   }
 
   /**
-   * getSize.
+   * @return the size
    */
   public int getSize() {
     return size;
   }
 
   /**
-   * getGeneratorBase.
+   * @return the generator base
    */
   public int getGeneratorBase() {
     return generatorBase;

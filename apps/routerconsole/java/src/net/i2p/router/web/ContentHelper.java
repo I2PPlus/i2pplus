@@ -67,7 +67,7 @@ public class ContentHelper extends HelperBase {
         }
     }
     /**
-     * getContent.
+     * @return the content
      */
     public String getContent() {
         String str = FileUtil.readTextFile(filename(), _maxLines, _startAtBeginning);
@@ -77,7 +77,7 @@ public class ContentHelper extends HelperBase {
             return str;
     }
     /**
-     * getTextContent.
+     * @return the text content
      */
     public String getTextContent() {
         String str = FileUtil.readTextFile(filename(), _maxLines, _startAtBeginning);

@@ -45,6 +45,7 @@ public class NewsHelper extends ContentHelper {
     /**
      *  If ANY update is in progress.
      *  @since 0.9.4 was stored in system properties
+     * @return whether any update in progress
      */
     public static boolean isAnyUpdateInProgress() {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
@@ -56,6 +57,7 @@ public class NewsHelper extends ContentHelper {
      *  If a signed or unsigned router update is in progress.
      *  Does NOT cover plugins, news, etc.
      *  @since 0.9.4 was stored in system properties
+     * @return whether update in progress
      */
     public static boolean isUpdateInProgress() {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
@@ -71,6 +73,7 @@ public class NewsHelper extends ContentHelper {
      *  Release update only.
      *  Will be false if already downloaded.
      *  @since 0.9.4 moved from NewsFetcher
+     * @return whether update available
      */
     public static boolean isUpdateAvailable() {
 /*
@@ -86,6 +89,7 @@ public class NewsHelper extends ContentHelper {
      *  It will provide wrapper-like function to install the update and restart after shutdown.
      *
      *  @since 0.9.51
+     * @return whether external restart pending
      */
     public static boolean isExternalRestartPending() {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
@@ -163,6 +167,7 @@ public class NewsHelper extends ContentHelper {
     /**
      *  Will be false if already downloaded or if dev update disabled.
      *  @since 0.9.4 moved from NewsFetcher
+     * @return whether unsigned update available
      */
     public static boolean isUnsignedUpdateAvailable(RouterContext ctx) {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
@@ -195,6 +200,7 @@ public class NewsHelper extends ContentHelper {
     /**
      *  Will be false if already downloaded or if dev update disabled.
      *  @since 0.9.20
+     * @return whether dev s u3 update available
      */
     public static boolean isDevSU3UpdateAvailable(RouterContext ctx) {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
@@ -252,6 +258,7 @@ public class NewsHelper extends ContentHelper {
 
     /**
      *  If we haven't downloaded news yet, use the translated initial news file
+     * @return the content
      */
     @Override
     public String getContent() {
@@ -262,6 +269,7 @@ public class NewsHelper extends ContentHelper {
     /**
      *  Is the news newer than the last time it was hidden?
      *  @since 0.8.12
+     * @return whether show news
      */
     public boolean shouldShowNews() {
         return shouldShowNews(_context);
@@ -269,6 +277,7 @@ public class NewsHelper extends ContentHelper {
 
     /**
      *  @since 0.9.4
+     * @return whether show news
      */
     public static boolean shouldShowNews(RouterContext ctx) {
         long lastUpdated = lastNewEntry(ctx);
@@ -371,6 +380,7 @@ public class NewsHelper extends ContentHelper {
 
     /**
      *  @since 0.9.9
+     * @return whether update disabled
      */
     public static boolean isUpdateDisabled(RouterContext ctx) {
         return ctx.getBooleanProperty(ConfigUpdateHandler.PROP_UPDATE_DISABLED);
@@ -378,6 +388,7 @@ public class NewsHelper extends ContentHelper {
 
     /**
      *  @since 0.9.9
+     * @return whether base readonly
      */
     public static boolean isBaseReadonly(RouterContext ctx) {
         File test = new File(ctx.getBaseDir(), "history.txt");

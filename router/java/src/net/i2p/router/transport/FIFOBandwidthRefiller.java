@@ -116,8 +116,8 @@ public class FIFOBandwidthRefiller implements Runnable {
      *  Max for reasonable Bloom filter false positive rate.
      *  Do not increase without adding a new Bloom filter size!
      *  See util/DecayingBloomFilter and tunnel/BloomFilterIVValidator.
-4 * @param ms the ms
-4 * @return the result
+     *  @param ms the ms
+     *  @return the result
      */
     public static final int MAX_OUTBOUND_BANDWIDTH = SystemVersion.isSlow() || SystemVersion.getCores() == 1 ? 16384 :
                                                      SystemVersion.getCores() < 3 || SystemVersion.getMaxMemory() < 1024*1024*1024L ? 32768 :
@@ -131,6 +131,7 @@ public class FIFOBandwidthRefiller implements Runnable {
     /**
      * how often we replenish the queues.
      * the bandwidth limiter will get an update this often (ms)
+     * @return whether slow
      */
     private static volatile long _replenishFrequency = SystemVersion.isSlow() || SystemVersion.getCPULoadAvg() > 80 ? 100 : 20;
 
@@ -220,6 +221,7 @@ public class FIFOBandwidthRefiller implements Runnable {
 
     /**
      *  In Bytes per second
+     * @return the share bandwidth
      */
     private int getShareBandwidth() {
         int maxKBps = Math.min(_inboundKBytesPerSecond, _outboundKBytesPerSecond);
@@ -366,9 +368,9 @@ public class FIFOBandwidthRefiller implements Runnable {
      *  Returns true if the message can be sent within the current
      *  share bandwidth limits, or false if it should be dropped.
      *
-     *  @param size bytes
-     *  @param factor multiplier of size for the drop calculation, 1 for no adjustment
-*  @return true for accepted, false for drop
+     * @param size bytes
+     * @param factor multiplier of size for the drop calculation, 1 for no adjustment
+* @return true for accepted, false for drop
       *  @since 0.8.12
       */
     boolean incrementParticipatingMessageBytes(int size, float factor) {
@@ -384,7 +386,7 @@ public class FIFOBandwidthRefiller implements Runnable {
      *  @param size bytes
      *  @param factor multiplier of size for the drop calculation, 1 for no adjustment
      *  @return true for accepted, false for drop
-4 * @return the result
+     *  @return the result
      */
     boolean incrementParticipatingMessageBytesIn(int size, float factor) {
         return _partBWEIn == null || _partBWEIn.offer(size, factor);

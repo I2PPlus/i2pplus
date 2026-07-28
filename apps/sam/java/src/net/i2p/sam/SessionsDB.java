@@ -49,7 +49,7 @@ class SessionsDB {
 	 * Store a session record. Both the nick and destination must be unique.
 	 *
 	 * @param nick the session nickname
-	 * @param session the session record to store
+	 * @param session the session
 	 * @throws ExistingIdException if a session with this nick already exists
 	 * @throws ExistingDestException if a session with this destination already exists
 	 */
@@ -73,7 +73,7 @@ class SessionsDB {
 	 * Only the nick must be unique.
 	 *
 	 * @param nick the session nickname
-	 * @param session the session record to store
+	 * @param session the session
 	 * @throws ExistingIdException if a session with this nick already exists
 	 * @since 0.9.25
 	 */

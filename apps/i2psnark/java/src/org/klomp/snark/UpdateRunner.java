@@ -55,7 +55,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     //////// begin UpdateTask methods
 
     /**
-     * isRunning.
+     * @return whether running
      */
     @Override
     public boolean isRunning() {
@@ -72,7 +72,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public UpdateType getType() {
@@ -80,7 +80,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * getMethod.
+     * @return the method
      */
     @Override
     public UpdateMethod getMethod() {
@@ -88,7 +88,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * getURI.
+     * @return the u r i
      */
     @Override
     public URI getURI() {
@@ -96,7 +96,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * getID.
+     * @return the i d
      */
     @Override
     public String getID() {
@@ -350,7 +350,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * getSavedTorrentTime.
+     * @return the saved torrent time
      */
     @Override
     public long getSavedTorrentTime(Snark snark) {
@@ -358,7 +358,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * getSavedTorrentBitField.
+     * @return the saved torrent bit field
      */
     @Override
     public BitField getSavedTorrentBitField(Snark snark) {
@@ -366,7 +366,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * getSavedPreserveNamesSetting.
+     * @return the saved preserve names setting
      */
     @Override
     public boolean getSavedPreserveNamesSetting(Snark snark) {
@@ -374,7 +374,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * getSavedUploaded.
+     * @return the saved uploaded
      */
     @Override
     public long getSavedUploaded(Snark snark) {

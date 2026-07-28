@@ -327,6 +327,7 @@ public class HostPing {
 
     /**
      * Validate destination format (B64, B32, or .i2p)
+     * @return whether valid destination
      */
     private boolean isValidDestination(String dest) {
         if (dest == null || dest.isEmpty()) {

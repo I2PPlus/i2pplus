@@ -128,6 +128,7 @@ public class InternalServerSocket extends ServerSocket {
 
     /**
      * Returns null as of 0.9.33, prior to that threw IllegalArgumentException
+     * @return the channel
      */
     @Override
     public ServerSocketChannel getChannel() {
@@ -136,6 +137,7 @@ public class InternalServerSocket extends ServerSocket {
 
     /**
      * Returns true as of 0.9.33, prior to that threw IllegalArgumentException
+     * @return whether bound
      */
     @Override
     public boolean isBound() {
@@ -144,6 +146,7 @@ public class InternalServerSocket extends ServerSocket {
 
     /**
      * Supported as of 0.9.33, prior to that threw IllegalArgumentException
+     * @return whether closed
      */
     @Override
     public boolean isClosed() {

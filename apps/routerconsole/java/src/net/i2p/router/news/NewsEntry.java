@@ -75,7 +75,7 @@ public class NewsEntry implements Comparable<NewsEntry> {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

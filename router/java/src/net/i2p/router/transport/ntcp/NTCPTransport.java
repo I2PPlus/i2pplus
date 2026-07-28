@@ -489,6 +489,7 @@ public class NTCPTransport extends TransportImpl {
 
     /**
      * Extract IP:port from RouterInfo for NTCP transport.
+     * @return the i p port from router info
      */
     private String getIPPortFromRouterInfo(RouterInfo ri) {
         if (ri == null) return "UNKNOWN";
@@ -721,6 +722,7 @@ public class NTCPTransport extends TransportImpl {
      *
      * @param addr may be null, returns false
      * @since 0.9.8
+     * @return whether valid
      */
     private boolean isValid(byte[] addr) {
         if (addr == null) return false;
@@ -739,7 +741,7 @@ public class NTCPTransport extends TransportImpl {
     void sendComplete(OutNetMessage msg) {_finisher.add(msg);}
 
     /**
-     * isEstablished.
+     * @return whether established
      */
     @Override
     public boolean isEstablished(Hash dest) {
@@ -748,7 +750,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * isConnecting.
+     * @return whether connecting
      */
     @Override
     public boolean isConnecting(Hash dest) {
@@ -757,7 +759,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * isBacklogged.
+     * @return whether backlogged
      */
     @Override
     public boolean isBacklogged(Hash dest) {
@@ -792,7 +794,7 @@ public class NTCPTransport extends TransportImpl {
     /**
      * Tell the transport to disconnect from this peer with a reason for logging.
      *
-     * @param peer the peer hash
+     * @param peer the peer
      * @param reason reason for disconnection (for logging), may be null
      * @since 0.9.38
      */
@@ -927,6 +929,7 @@ public class NTCPTransport extends TransportImpl {
      * Return our peer clock skews on this transport.
      * List composed of Long, each element representing a peer skew in seconds.
      * A positive number means our clock is ahead of theirs.
+     * @return the clock skews
      */
     @Override
     public List<Long> getClockSkews() {
@@ -1088,7 +1091,7 @@ public class NTCPTransport extends TransportImpl {
      *  If we had interface addresses before, we lost them.
      *
      *  @param addr may be null to indicate remove the address
-     *  @param ipv6 ignored if addr is non-null
+     *  @param ipv6 only used when addr is null, selects address family to remove
      */
     private synchronized void restartListening(RouterAddress addr, boolean ipv6) {
         if (addr != null) {
@@ -1116,7 +1119,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * isAlive.
+     * @return whether alive
      */
     public boolean isAlive() {return _pumper.isAlive();}
 
@@ -1482,6 +1485,7 @@ public class NTCPTransport extends TransportImpl {
      * Called at startup via createNTCPAddress() and later via externalAddressReceived().
      *
      * @since 0.9.32
+     * @return the configured i p
      */
     private String getConfiguredIP() {
         // Fixme doesn't check PROP_BIND_INTERFACE
@@ -1890,6 +1894,7 @@ public class NTCPTransport extends TransportImpl {
      * We leave the FIREWALLED status for UDP.
      *
      * Previously returned short, now enum as of 0.9.20
+     * @return the reachability status
      */
     public Status getReachabilityStatus() {
         boolean fwV4 = isIPv4Firewalled();
@@ -2035,7 +2040,7 @@ public class NTCPTransport extends TransportImpl {
          */
         public SharedBid(int ms) {super(); setLatencyMs(ms);}
         /**
-         * getTransport.
+         * @return the transport
          */
         @Override
         public Transport getTransport() {return NTCPTransport.this;}
@@ -2097,6 +2102,7 @@ public class NTCPTransport extends TransportImpl {
      * Returns NaN if pool not started.
      *
      * @since 0.9.70+
+     * @return the send finisher utilization
      */
     public double getSendFinisherUtilization() {
         return _finisher.getUtilization();
@@ -2107,6 +2113,7 @@ public class NTCPTransport extends TransportImpl {
      * Returns NaN if not started.
      *
      * @since 0.9.70+
+     * @return the reader utilization
      */
     public double getReaderUtilization() {
         return _reader.getUtilization();
@@ -2117,6 +2124,7 @@ public class NTCPTransport extends TransportImpl {
      * Returns NaN if not started.
      *
      * @since 0.9.70+
+     * @return the writer utilization
      */
     public double getWriterUtilization() {
         return _writer.getUtilization();

@@ -67,51 +67,51 @@ public class EncryptedLeaseSet extends LeaseSet2 {
 
     /** includes salt */
     private byte[] _encryptedData;
-    /** ignored */
+    /** Decrypted LeaseSet 2 instance. */
     private LeaseSet2 _decryptedLS2;
-    /** ignored */
+    /** Cached calculated hash value. */
     private Hash __calculatedHash;
-    /** ignored */
+    /** Alpha signing private key. */
     private SigningPrivateKey _alpha;
     /** to decrypt with if we don't have full dest */
     private SigningPublicKey _unblindedSPK;
-    /** ignored */
+    /** Secret passphrase for decryption. */
     private String _secret;
-    /** ignored */
+    /** Client private key for decryption. */
     private PrivateKey _clientPrivateKey;
-    /** ignored */
+    /** Logger instance. */
     private final Log _log;
     /** debug */
     private int _authType;
-    /** ignored */
+    /** Number of keys in the encrypted set. */
     private int _numKeys;
 
-    /** ignored */
+    /** Minimum encrypted data size (salt + IV). */
     private static final int MIN_ENCRYPTED_SIZE = 8 + 16;
-    /** ignored */
+    /** Maximum encrypted data size. */
     private static final int MAX_ENCRYPTED_SIZE = 4096;
 
-    /** ignored */
+    /** Salt length in bytes. */
     private static final int SALT_LEN = 32;
-    /** ignored */
+    /** Credential ASCII bytes. */
     private static final byte[] CREDENTIAL = DataHelper.getASCII("credential");
-    /** ignored */
+    /** Subcredential ASCII bytes. */
     private static final byte[] SUBCREDENTIAL = DataHelper.getASCII("subcredential");
-    /** ignored */
+    /** ELS2 level 1 key label. */
     private static final String ELS2L1K = "ELS2_L1K";
-    /** ignored */
+    /** ELS2 level 2 key label. */
     private static final String ELS2L2K = "ELS2_L2K";
-    /** ignored */
+    /** ELS2 Diffie-Hellman key label. */
     private static final String ELS2_DH = "ELS2_XCA";
-    /** ignored */
+    /** ELS2 pre-shared key label. */
     private static final String ELS2_PSK = "ELS2PSKA";
-    /** ignored */
+    /** AES-GCM initialization vector length. */
     private static final int IV_LEN = 12;
-    /** ignored */
+    /** Client identifier length in bytes. */
     private static final int ID_LEN = 8;
-    /** ignored */
+    /** Cookie length in bytes. */
     private static final int COOKIE_LEN = 32;
-    /** ignored */
+    /** Combined client ID and cookie length. */
     private static final int CLIENT_LEN = ID_LEN + COOKIE_LEN;
 
     /**
@@ -157,7 +157,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     ///// overrides below here
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() {
@@ -398,6 +398,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      *  Throws IllegalStateException if not initialized.
      *
      *  @throws IllegalStateException
+     *  @return the hash
      */
     @Override
     public Hash getHash() {
@@ -415,7 +416,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     /**
      *  Throws IllegalStateException if not initialized.
      *
-     *  @param skey ignored
+     *  @param skey unused in this implementation
      *  @throws IllegalStateException
      */
     @Override

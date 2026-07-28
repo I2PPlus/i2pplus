@@ -262,7 +262,7 @@ class ClientManager {
     /**
      *  Register a new client connection.
      *
-     *  @param runner the runner to register
+     * @param runner the runner
      */
     public void registerConnection(ClientConnectionRunner runner) {
         try {
@@ -277,7 +277,7 @@ class ClientManager {
     /**
      *  Remove all sessions for this runner.
      *
-     *  @param runner the runner to unregister
+     * @param runner the runner
      */
     public void unregisterConnection(ClientConnectionRunner runner) {
         synchronized (_pendingRunners) {_pendingRunners.remove(runner);}
@@ -453,7 +453,7 @@ class ClientManager {
      * @param toDest target destination
      * @param payload the message payload
      * @param expiration message expiration
-     * @param flags ignored for local
+     * @param flags not used for local delivery
      */
     void distributeMessage(ClientConnectionRunner sender, Destination fromDest, Destination toDest, Payload payload,
                            MessageId msgId, long messageNonce, long expiration, int flags) {
@@ -662,6 +662,7 @@ class ClientManager {
 
     /**
      *  Unsynchronized
+     * @return the runner
      */
     private ClientConnectionRunner getRunner(Hash destHash) {
         if (destHash == null) {return null;}

@@ -37,6 +37,7 @@ package net.metanotion.io;
 public interface Serializer<T> {
 	/**
 	 * o).
+	 * @return the bytes
 	 */
 	public byte[] getBytes(T o);
 	/**

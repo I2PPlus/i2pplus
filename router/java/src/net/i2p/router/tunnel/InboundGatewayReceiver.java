@@ -91,7 +91,7 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
         }
 
         /**
-         * getName.
+         * @return the name
          */
         public String getName() { return "Lookup IBGW First Hop"; }
 

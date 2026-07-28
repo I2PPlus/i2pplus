@@ -17,7 +17,7 @@ public class TransitSummaryHelper extends HelperBase {
     public TransitSummaryHelper() { /* nop */ }
 
     /**
-     * getTransitSummary.
+     * @return the transit summary
      */
     public String getTransitSummary() {
         TunnelRenderer renderer = new TunnelRenderer(_context);

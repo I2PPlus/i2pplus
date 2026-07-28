@@ -15,11 +15,11 @@ import net.i2p.data.Destination;
 public class I2PSocketAddress extends SocketAddress {
     /** Serial version unique identifier */
     private static final long serialVersionUID = 1L;
-    /** ignored */
+    /** Port number, 0 if not specified. */
     private final int _port;
-    /** ignored */
+    /** The I2P destination. */
     private transient Destination _dest;
-    /** ignored */
+    /** Hostname from the constructor. */
     private final String _host;
 
     /**
@@ -85,7 +85,7 @@ public class I2PSocketAddress extends SocketAddress {
         return new I2PSocketAddress(port, host);
     }
 
-    /** ignored */
+    /** I2P socket address. */
     private I2PSocketAddress(int port, String host) {
         if (port < 0 || port > 65535)
             throw new IllegalArgumentException("Bad port " + port);
@@ -105,6 +105,7 @@ public class I2PSocketAddress extends SocketAddress {
      *  Does a naming service lookup to resolve the dest if this was created unresolved
      *  or if the resolution failed in the constructor.
      *  If unresolved, this may take several seconds for b32.
+     * @return the address
      */
     public synchronized Destination getAddress() {
         if (_dest == null)
@@ -162,7 +163,7 @@ public class I2PSocketAddress extends SocketAddress {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

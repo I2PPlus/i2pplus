@@ -110,6 +110,7 @@ public class RouterAddress extends DataStructureImpl {
     /**
      * Retrieve the type of transport that must be used to communicate on this address.
      *
+     * @return the transport style
      */
     public String getTransportStyle() {
         return _transportStyle;
@@ -127,6 +128,7 @@ public class RouterAddress extends DataStructureImpl {
 
     /**
      * @since 0.8.13
+     * @return the option
      */
     public String getOption(String opt) {
         return _options.getProperty(opt);
@@ -265,6 +267,7 @@ public class RouterAddress extends DataStructureImpl {
     /**
      * Just use a few items for speed (expiration is always null).
      * Never look at cost or other properties.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

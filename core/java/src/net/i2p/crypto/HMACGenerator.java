@@ -40,7 +40,7 @@ public abstract class HMACGenerator {
      *  @param key the session key
      *  @param data the data to HMAC
      *  @param offset the starting offset in data
-     *  @param length the length of data to HMAC
+     *  @param length the length
      *  @param target out parameter the first 16 bytes contain the HMAC, the last 16 bytes are zero
      *  @param targetOffset offset into target to put the hmac
      *  @throws IllegalArgumentException for bad key or target too small

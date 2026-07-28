@@ -22,7 +22,7 @@ public class FilterFactory {
      * Creates an instance of IncomingConnectionFilter based on the definition
      * contained in the given file.
      *
-     * @param context the context this is running in
+     * @param context the context
      * @param definition file containing the filter definition
      */
     public static StatefulConnectionFilter createFilter(I2PAppContext context,

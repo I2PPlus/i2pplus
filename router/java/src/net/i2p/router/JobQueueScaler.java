@@ -269,6 +269,7 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Get current used memory in bytes.
+     * @return the used memory
      */
     private long getUsedMemory() {
         Runtime runtime = Runtime.getRuntime();
@@ -277,6 +278,7 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Get memory usage percentage.
+     * @return the memory usage percent
      */
     private double getMemoryUsagePercent() {
         long maxMemory = SystemVersion.getMaxMemory();
@@ -340,6 +342,7 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Check if dynamic scaling is enabled.
+     * @return whether dynamic scaling enabled
      */
     private boolean isDynamicScalingEnabled() {
         return _context.getBooleanPropertyDefaultTrue(PROP_DYNAMIC_SCALING);
@@ -347,6 +350,7 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Check if feedback mechanism is enabled.
+     * @return whether feedback enabled
      */
     private boolean isFeedbackEnabled() {
         return _context.getBooleanPropertyDefaultTrue(PROP_FEEDBACK_ENABLED);
@@ -368,6 +372,7 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Get the check interval in milliseconds.
+     * @return the check interval
      */
     private long getCheckInterval() {
         return _context.getProperty(PROP_SCALE_CHECK_INTERVAL, (int) DEFAULT_SCALE_CHECK_INTERVAL);
@@ -375,6 +380,7 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Get the cooldown period between scale events.
+     * @return the cooldown period
      */
     private long getCooldownPeriod() {
         long baseCooldown = _context.getProperty(PROP_SCALE_COOLDOWN, (int) DEFAULT_SCALE_COOLDOWN);
@@ -386,6 +392,7 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Get the lag threshold for scaling up.
+     * @return the scale up lag threshold
      */
     private int getScaleUpLagThreshold() {
         return _context.getProperty(PROP_SCALE_UP_LAG, DEFAULT_SCALE_UP_LAG_THRESHOLD);
@@ -393,6 +400,7 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Get the message delay threshold for scaling up.
+     * @return the scale up message delay threshold
      */
     private int getScaleUpMessageDelayThreshold() {
         return _context.getProperty(PROP_SCALE_UP_MSG_DELAY, DEFAULT_SCALE_UP_MESSAGE_DELAY_THRESHOLD);
@@ -400,6 +408,7 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Get the lag threshold for scaling down.
+     * @return the scale down lag threshold
      */
     private int getScaleDownLagThreshold() {
         return _context.getProperty(PROP_SCALE_DOWN_LAG, DEFAULT_SCALE_DOWN_LAG_THRESHOLD);
@@ -407,6 +416,7 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Get the jobs-to-runners ratio threshold for scaling up.
+     * @return the scale up jobs ratio
      */
     private double getScaleUpJobsRatio() {
         String prop = _context.getProperty(PROP_SCALE_JOBS_RATIO);
@@ -1047,6 +1057,7 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Check if the scaler is currently running.
+     * @return whether alive
      */
     public boolean isAlive() {
         return _isAlive;
@@ -1054,6 +1065,7 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Get the current maximum runner limit (may be up to 2x configured or RAM-limited).
+     * @return the current max runners
      */
     public int getCurrentMaxRunners() {
         return _currentMaxRunners;

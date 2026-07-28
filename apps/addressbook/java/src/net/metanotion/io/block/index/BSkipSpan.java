@@ -280,7 +280,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
 	 *  @param bf the BlockFile
 	 *  @param bsl the BSkipList
 	 *  @param spanPage the page number
-	 *  @param key the key serializer
+	 *  @param key the key
 	 *  @param val the value serializer
 	 *  @throws IOException if an I/O error occurs
 	 */
@@ -300,7 +300,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
 	 *  @param bf the BlockFile
 	 *  @param bsl the BSkipList
 	 *  @param spanPage the page number
-	 *  @param key the key serializer
+	 *  @param key the key
 	 *  @param val the value serializer
 	 *  @throws IOException if an I/O error occurs
 	 */
@@ -467,7 +467,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
 	 *  @param bf the BlockFile
 	 *  @param bsl the BSkipList
 	 *  @param spanPage the page number of this span
-	 *  @param key the key serializer
+	 *  @param key the key
 	 *  @param val the value serializer
 	 *  @throws IOException if an I/O error occurs
 	 */

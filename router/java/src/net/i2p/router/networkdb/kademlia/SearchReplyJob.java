@@ -55,7 +55,7 @@ class SearchReplyJob extends JobImpl {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     public String getName() { return "Process Kademlia Search Reply"; }
 

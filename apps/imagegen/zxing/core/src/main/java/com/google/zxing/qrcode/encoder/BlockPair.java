@@ -33,14 +33,14 @@ final class BlockPair {
   }
 
   /**
-   * getDataBytes.
+   * @return the data bytes
    */
   public byte[] getDataBytes() {
     return dataBytes;
   }
 
   /**
-   * getErrorCorrectionBytes.
+   * @return the error correction bytes
    */
   public byte[] getErrorCorrectionBytes() {
     return errorCorrectionBytes;

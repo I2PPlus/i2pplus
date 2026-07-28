@@ -87,7 +87,7 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
 	}
 
 	/**
-	 * getFilePointer.
+	 * @return the file pointer
 	 */
 	public long getFilePointer()		throws IOException { return delegate.getFilePointer(); }
 	/**

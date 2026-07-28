@@ -117,6 +117,7 @@ public class CPUID {
      *
      * Set to false if not in router context, so scripts using TrustedUpdate
      * don't spew log messages. main() below overrides to true.
+     * @return the property
      */
     private static boolean _doLog = System.getProperty("jcpuid.dontLog") == null &&
                                     I2PAppContext.getGlobalContext().isRouterContext();
@@ -141,6 +142,7 @@ public class CPUID {
      *  sun.arch.data.model == 64 => 64 bit processor
      *  sun.arch.data.model == 32 => A 32 bit JVM but could be either 32 or 64 bit processor or libs
      *  os.arch contains "64" could be 32 or 64 bit libs
+     * @return whether 64 bit
      */
     private static final boolean is64 = SystemVersion.is64Bit();
 
@@ -177,7 +179,7 @@ public class CPUID {
         final int ECX;
         /** EDX register value */
         final int EDX;
-        /** @param EAX EAX register value
+        /**  @param EAX EAX register value
          *  @param EBX EBX register value
          *  @param ECX ECX register value
          *  @param EDX EDX register value */
@@ -236,6 +238,7 @@ public class CPUID {
 
     /**
      * Returns cached CPUID leaf 1 result, performing the native call only once.
+     * @return the leaf1
      */
     private static CPUIDResult getLeaf1() {
         CPUIDResult c = _leaf1Cache;
@@ -330,7 +333,7 @@ public class CPUID {
         return (getLeaf1().EAX >> 16) & 0xf;
     }
 
-    /** @return 0-15 */
+    /**  @return 0-15 */
     static int getCPUType() {
         return (getLeaf1().EAX >> 12) & 0xf;
     }
@@ -351,7 +354,7 @@ public class CPUID {
         return (getLeaf1().EAX >> 20) & 0xff;
     }
 
-    /** @return 0-15 */
+    /**  @return 0-15 */
     static int getCPUStepping() {
         return getLeaf1().EAX & 0xf;
     }
@@ -469,6 +472,7 @@ public class CPUID {
      */
     /**
      * Return information.
+     * @return the info
      */
     public static CPUInfo getInfo() throws UnknownCPUException {
         if (!_nativeOk) {
@@ -717,7 +721,7 @@ public class CPUID {
         return true;
     }
 
-    /** @return non-null */
+    /**  @return non-null */
     private static final String getResourceName() {
         return getLibraryPrefix() + getLibraryMiddlePart() + getLibrarySuffix();
     }

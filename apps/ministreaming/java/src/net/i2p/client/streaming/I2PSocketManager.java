@@ -75,6 +75,7 @@ public interface I2PSocketManager {
     public void setAcceptTimeout(long ms);
     /**
      * getAcceptTimeout().
+     * @return the accept timeout
      */
     public long getAcceptTimeout();
 
@@ -229,7 +230,7 @@ public interface I2PSocketManager {
     /**
      *  For logging / diagnostics only
      *
-     *  @param name the name
+     * @param name the name
      */
     public void setName(String name);
 

@@ -196,7 +196,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
             };
     /** Whether to suppress the legend. */
     boolean noLegend = false;
-    /** Whether to render only the graph (height < 64). */
+    /** Whether to render only the graph (height &lt; 64). */
     boolean onlyGraph = false;
     /** Whether to always render rule legends even if rules are out of bounds. */
     boolean forceRulesLegend = false;

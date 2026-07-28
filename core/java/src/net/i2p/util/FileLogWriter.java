@@ -176,6 +176,7 @@ class FileLogWriter extends LogWriter {
      * Get the next file in the rotation
      *
      * Caller must synch
+     * @return the next file
      */
     private File getNextFile() {
         String pattern = _manager.getBaseLogfilename();
@@ -206,6 +207,7 @@ class FileLogWriter extends LogWriter {
      * Retrieve the first file, updating the rotation number accordingly
      *
      * Caller must synch
+     * @return the first file
      */
     private File getFirstFile(File base, String pattern, int max) {
         for (int i = 0; i < max; i++) {

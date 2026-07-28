@@ -34,35 +34,35 @@ class NTCP2Options {
     }
 
     /**
-     * getSendMin.
+     * @return the send min
      */
     public float getSendMin() { return _sendMin; }
     /**
-     * getSendMax.
+     * @return the send max
      */
     public float getSendMax() { return _sendMax; }
     /**
-     * getRecvMin.
+     * @return the recv min
      */
     public float getRecvMin() { return _recvMin; }
     /**
-     * getRecvMax.
+     * @return the recv max
      */
     public float getRecvMax() { return _recvMax; }
     /**
-     * getSendDummy.
+     * @return the send dummy
      */
     public int getSendDummy() { return _sendDummy; }
     /**
-     * getRecvDummy.
+     * @return the recv dummy
      */
     public int getRecvDummy() { return _recvDummy; }
     /**
-     * getSendDelay.
+     * @return the send delay
      */
     public int getSendDelay() { return _sendDelay; }
     /**
-     * getRecvDelay.
+     * @return the recv delay
      */
     public int getRecvDelay() { return _recvDelay; }
 

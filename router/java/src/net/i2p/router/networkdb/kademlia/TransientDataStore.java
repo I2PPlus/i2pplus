@@ -69,7 +69,7 @@ class TransientDataStore implements DataStore {
     }
 
     /**
-     * isInitialized.
+     * @return whether initialized
      */
     @Override
     public boolean isInitialized() {return true;}
@@ -136,7 +136,7 @@ class TransientDataStore implements DataStore {
     }
 
     /**
-     * isKnown.
+     * @return whether known
      */
     @Override
     public boolean isKnown(Hash key) {
@@ -385,6 +385,7 @@ class TransientDataStore implements DataStore {
      * from the transport layer over the RouterInfo's self-published address.
      * For U-capability (unreachable) routers, the transport IP shows where
      * the RouterInfo was actually received from, not the intermediate's address.
+     * @return the best router i p port
      */
     private String getBestRouterIPPort(Hash key, RouterInfo ri) {
         byte[] direct = TransportImpl.getIP(key);

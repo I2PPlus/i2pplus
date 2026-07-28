@@ -303,8 +303,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * Instead of creating individual IterativeTimeoutJob for each peer,
      * we register here and a single BatchedSearchTimeoutJob processes all at once.
      *
-     * @param peer the peer that didn't respond
-     * @param search the search job to notify on timeout
+     * @param peer the peer
+     * @param search the search term
      * @param timeoutMs the absolute time when the timeout expires
      */
     public void registerSearchTimeout(Hash peer, IterativeSearchJob search, long timeoutMs) {
@@ -772,7 +772,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
         /**
          * @param ctx router context
-         * @param peer the peer that failed
+         * @param peer the peer
          */
         public FloodFailedJob(RouterContext ctx, Hash peer) {
             super(ctx);
@@ -845,6 +845,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * Checks if a RouterInfo has floodfill capability.
      *
      * @param peer may be null, returns false if null
+     * @return whether floodfill
      */
     public static boolean isFloodfill(RouterInfo peer) {
         if (peer == null) {return false;}
@@ -963,7 +964,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  from them).  The ContactDrivenRefreshJob will consider refreshing their RouterInfo
      *  if it is stale.
      *
-     *  @param peer the peer we heard from
+     * @param peer the peer
      *  @since 0.9.70+
      */
     public void contactHeardFrom(Hash peer) {
@@ -1226,7 +1227,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
         /**
          * @param ctx router context
-         * @param peer the peer that failed lookup
+         * @param peer the peer
          * @param _info unused
          */
         public DropLookupFailedJob(RouterContext ctx, Hash peer, RouterInfo _info) {
@@ -1255,7 +1256,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
         /**
          * @param ctx router context
-         * @param peer the peer being verified
+         * @param peer the peer
          * @param info the stored RouterInfo for comparison
          */
         public DropLookupFoundJob(RouterContext ctx, Hash peer, RouterInfo info) {

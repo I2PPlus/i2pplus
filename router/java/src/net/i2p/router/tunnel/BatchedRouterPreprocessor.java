@@ -83,6 +83,7 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
 
     /**
      *  how long should we wait before flushing
+     * @return the send delay
      */
     @Override
     protected long getSendDelay() { return _sendDelay; }

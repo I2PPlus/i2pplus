@@ -58,11 +58,11 @@ abstract class ExcluderBase implements Set<Hash> {
      */
     public boolean equals(Object o) {return s.equals(o);}
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     public int hashCode() {return s.hashCode();}
     /**
-     * isEmpty.
+     * @return whether empty
      */
     public boolean isEmpty() {return s.isEmpty();}
     /**

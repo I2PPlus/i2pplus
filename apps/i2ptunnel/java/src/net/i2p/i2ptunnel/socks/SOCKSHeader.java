@@ -123,7 +123,7 @@ public class SOCKSHeader {
     }
 
     /**
-     * getBytes.
+     * @return the bytes
      */
     public byte[] getBytes() {
         return header;

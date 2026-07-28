@@ -26,6 +26,7 @@ public class SAMDebugHelper extends HelperBase {
 
     /**
      * Render the full SAM debug page content (rings + session table).
+     * @return the s a m d helper
      */
     public String getSAMDHelper() {
         try {

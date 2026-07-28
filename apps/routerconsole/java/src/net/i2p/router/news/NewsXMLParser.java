@@ -503,7 +503,7 @@ public class NewsXMLParser {
      *  Helper to get all Nodes matching the name
      *
      *  @param node the parent node to search
-     *  @param name the name to match
+     *  @param name the name
      *  @return non-null
      */
     public static List<Node> getNodes(Node node, String name) {

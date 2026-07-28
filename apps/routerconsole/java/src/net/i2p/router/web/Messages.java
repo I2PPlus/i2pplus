@@ -28,6 +28,7 @@ public class Messages extends Translate {
      *    To translate parameter also, use _t("foo {0} bar", _t("baz"))
      *    Do not double the single quotes in the parameter.
      *    Use autoboxing to call with ints, longs, floats, etc.
+     *  @return the string
      */
     public static String getString(String s, Object o, I2PAppContext ctx) {
         return Translate.getString(s, o, ctx, BUNDLE_NAME);
@@ -51,6 +52,7 @@ public class Messages extends Translate {
      *  @param langCode two-letter lower-case
      *  @param dflt e.g. "English"
      *  @since 0.9.5
+     *  @return the display language
      */
     public static String getDisplayLanguage(String langCode, String dflt, I2PAppContext ctx) {
         return Translate.getDisplayLanguage(langCode, dflt, ctx, BUNDLE_NAME);

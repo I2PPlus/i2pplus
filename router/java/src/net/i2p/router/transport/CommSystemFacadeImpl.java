@@ -183,6 +183,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Get the reverse DNS executor, initializing it if necessary.
+     * @return the reverse dns executor
      */
     private ExecutorService getReverseDnsExecutor() {
         synchronized (reverseDnsExecutorLock) {
@@ -232,6 +233,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * Returns rDNS executor pending lookup count, or 0 if not running.
      *
      * @since 0.9.70+
+     * @return the rdns queue size
      */
     public int getRdnsQueueSize() {
         synchronized (reverseDnsExecutorLock) {
@@ -249,6 +251,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * Returns rDNS executor active thread count, or 0 if not running.
      *
      * @since 0.9.70+
+     * @return the rdns active count
      */
     public int getRdnsActiveCount() {
         synchronized (reverseDnsExecutorLock) {
@@ -266,6 +269,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * Returns rDNS executor total thread count, or 0 if not running.
      *
      * @since 0.9.70+
+     * @return the rdns pool size
      */
     public int getRdnsPoolSize() {
         synchronized (reverseDnsExecutorLock) {
@@ -284,6 +288,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * or {@link Double#NaN} if not running.
      *
      * @since 0.9.70+
+     * @return the rdns utilization
      */
     public double getRdnsUtilization() {
         synchronized (reverseDnsExecutorLock) {
@@ -418,6 +423,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * @since 0.9.53
+     * @return whether running
      */
     @Override
     public synchronized boolean isRunning() { return _wasStarted; }
@@ -517,7 +523,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * isBacklogged.
+     * @return whether backlogged
      */
     @Override
     public boolean isBacklogged(Hash peer) {
@@ -525,7 +531,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * isEstablished.
+     * @return whether established
      */
     @Override
     public boolean isEstablished(Hash peer) {
@@ -549,7 +555,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * isConnecting.
+     * @return whether connecting
      */
     @Override
     public boolean isConnecting(Hash peer) {
@@ -557,7 +563,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * getIP.
+     * @return the i p
      */
     @Override
     public byte[] getIP(Hash peer) {
@@ -594,7 +600,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * getMostRecentErrorMessages.
+     * @return the most recent error messages
      */
     @Override
     public List<String> getMostRecentErrorMessages() {
@@ -603,6 +609,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      *  @since 0.9.20
+     * @return the status
      */
     @Override
     public Status getStatus() {
@@ -617,6 +624,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      * getStatus().toStatusString(), translated if available.
      * @since 0.9.45
+     * @return the localized status string
      */
     @Override
     public String getLocalizedStatusString() {
@@ -770,6 +778,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      *  @param ip canonical string
      *  @since 0.9.58
+     *  @return whether exempt incoming
      */
     @Override
     public boolean isExemptIncoming(String ip) {
@@ -824,6 +833,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      *  Factory for making X25519 key pairs.
      *  @since 0.9.46
+     * @return the x d h factory
      */
     @Override
     public X25519KeyFactory getXDHFactory() {
@@ -959,6 +969,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * Supports migration from older cache file formats missing timestamps.
      *
      * @since 0.9.61+
+     * @return the global context
      */
     private static final String RDNS_CACHE_FILE = I2PAppContext.getGlobalContext().getConfigDir() +
                                                   File.separator + "rdnscache.txt";
@@ -1014,28 +1025,28 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
 
         /**
-         * getIpAddress.
+         * @return the ip address
          */
         public String getIpAddress() {
             return ipAddress;
         }
 
         /**
-         * getHostname.
+         * @return the hostname
          */
         public String getHostname() {
             return hostname;
         }
 
         /**
-         * getTimestamp.
+         * @return the timestamp
          */
         public long getTimestamp() {
             return timestamp;
         }
 
         /**
-         * getRdnsEntry.
+         * @return the rdns entry
          */
         public String getRdnsEntry() {
             return rdnsEntryToString(this);
@@ -1375,7 +1386,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * getCanonicalHostNameSync.
+     * @return the canonical host name sync
      */
     @Override
     public String getCanonicalHostNameSync(String ipAddress) {
@@ -1453,6 +1464,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      * Convert IP string to Hash and call existing getCountry method
      * Return two-letter country code or null if unknown
+     * @return the country from i p address
      */
     private String getCountryFromIPAddress(String ipAddress) {
         try {
@@ -1537,6 +1549,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      *  Are we in a strict country
      *  @since 0.8.13
+     * @return whether in strict country
      */
     @Override
     public boolean isInStrictCountry() {
@@ -1553,6 +1566,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      *  @param peer non-null
      *  @since 0.9.16
+     *  @return whether in strict country
      */
     @Override
     public boolean isInStrictCountry(Hash peer) {
@@ -1564,6 +1578,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  Are they in a strict country
      *  @param ri non-null
      *  @since 0.9.16
+     *  @return whether in strict country
      */
     @Override
     public boolean isInStrictCountry(RouterInfo ri) {
@@ -1810,6 +1825,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      *  Get the first valid IP of the specified type (IPv4 or IPv6).
+     * @return the first valid i p of type
      */
     private static byte[] getFirstValidIPOfType(RouterInfo ri, boolean wantIPv6) {
         for (RouterAddress ra : ri.getAddresses()) {
@@ -2068,6 +2084,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      *  Is everything disabled for testing?
      *  @since 0.8.13
+     * @return whether dummy
      */
     @Override
     public boolean isDummy() {return _context.getBooleanProperty(PROP_DISABLED);}

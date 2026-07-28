@@ -62,6 +62,7 @@ public final class SimpleByteCache {
      * Get a cache responsible for arrays of the given size
      *
      * @param size how large should the objects cached be?
+     * @return the instance
      */
     @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
     public static SimpleByteCache getInstance(int size) {
@@ -76,6 +77,7 @@ public final class SimpleByteCache {
      *                  before discarding released objects.
      *
      * @param size how large should the objects cached be?
+     * @return the instance
      */
     public static SimpleByteCache getInstance(int cacheSize, int size) {
         Integer sz = Integer.valueOf(size);

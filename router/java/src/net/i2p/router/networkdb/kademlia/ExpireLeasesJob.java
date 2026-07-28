@@ -51,7 +51,7 @@ class ExpireLeasesJob extends JobImpl {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     public String getName() { return "Expire Leases"; }
 
@@ -149,7 +149,7 @@ class ExpireLeasesJob extends JobImpl {
     }
 
     /**
-     * getTunnelName.
+     * @return the tunnel name
      */
     public String getTunnelName(Destination d) {
         if (d != null) {

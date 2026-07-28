@@ -221,7 +221,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * getVersion.
+     * @return the version
      */
     @Override
     public int getVersion() {return _version;}
@@ -699,15 +699,15 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     // SSU 2 things
 
     /**
-     * getSendConnID.
+     * @return the send conn i d
      */
     public long getSendConnID() {return _sendConnID;}
     /**
-     * getRcvConnID.
+     * @return the rcv conn i d
      */
     public long getRcvConnID() {return _rcvConnID;}
     /**
-     * getToken.
+     * @return the token
      */
     public long getToken() {return _token;}
     /**
@@ -718,27 +718,27 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         return _transport.getEstablisher().getInboundToken(_remoteHostId);
     }
     /**
-     * getHandshakeState.
+     * @return the handshake state
      */
     public HandshakeState getHandshakeState() {return _handshakeState;}
     /**
-     * getSendHeaderEncryptKey1.
+     * @return the send header encrypt key1
      */
     public byte[] getSendHeaderEncryptKey1() {return _sendHeaderEncryptKey1;}
     /**
-     * getRcvHeaderEncryptKey1.
+     * @return the rcv header encrypt key1
      */
     public byte[] getRcvHeaderEncryptKey1() {return _transport.getSSU2StaticIntroKey();}
     /**
-     * getSendHeaderEncryptKey2.
+     * @return the send header encrypt key2
      */
     public byte[] getSendHeaderEncryptKey2() {return _sendHeaderEncryptKey2;}
     /**
-     * getRcvHeaderEncryptKey2.
+     * @return the rcv header encrypt key2
      */
     public synchronized byte[] getRcvHeaderEncryptKey2() {return _rcvHeaderEncryptKey2;}
     /**
-     * getSentAddress.
+     * @return the sent address
      */
     public InetSocketAddress getSentAddress() {return _aliceSocketAddress;}
 
@@ -1305,11 +1305,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             rsn = reason;
         }
         /**
-         * getReason.
+         * @return the reason
          */
         public int getReason() {return rsn;}
         /**
-         * getMessage.
+         * @return the message
          */
         @Override
         public String getMessage() {return "Code " + rsn + ": " + super.getMessage();}

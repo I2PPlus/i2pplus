@@ -112,6 +112,7 @@ class FloodfillStoreJob extends StoreJob {
 
     /**
      * Check if verify should be skipped due to existing verify or shutdown.
+     * @return whether skip verify
      */
     private boolean shouldSkipVerify(Hash key, String keyB64, boolean shouldLog) {
         if (_facade.isVerifyInProgress(key)) {
@@ -130,6 +131,7 @@ class FloodfillStoreJob extends StoreJob {
 
     /**
      * Check if verify should be skipped due to startup verification delay.
+     * @return whether skip verify for startup
      */
     private boolean shouldSkipVerifyForStartup(RouterContext ctx, String keyB64) {
         if (!ctx.getBooleanProperty(PROP_RI_VERIFY) && ctx.router().getUptime() > RI_VERIFY_STARTUP_TIME) {
@@ -141,6 +143,7 @@ class FloodfillStoreJob extends StoreJob {
 
     /**
      * Get the published timestamp from the data.
+     * @return the published timestamp
      */
     private long getPublishedTimestamp(DatabaseEntry data) {
         if (data instanceof LeaseSet2) {return ((LeaseSet2) data).getPublished();}
@@ -149,6 +152,7 @@ class FloodfillStoreJob extends StoreJob {
 
     /**
      * Get the client hash from the data or key if not available.
+     * @return the client hash
      */
     private Hash getClientHash(DatabaseEntry data, Hash key) {
         if (data.getType() == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {

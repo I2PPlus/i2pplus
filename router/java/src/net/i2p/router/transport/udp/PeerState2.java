@@ -211,7 +211,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     // SSU 1 overrides
 
     /**
-     * getVersion.
+     * @return the version
      */
     @Override
     public int getVersion() {return 2;}
@@ -387,6 +387,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * Next outbound packet number,
      * starts at 1 for Alice (0 is Session Confirmed) and 0 for Bob
      * @since public since 0.9.57 for SSU2Sender interface only
+     * @return the next packet number
      */
     public long getNextPacketNumber() throws IOException {
          if (_dead) {
@@ -400,24 +401,29 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      * For PeerStateDestroyed only, after we are dead
      * @since 0.9.57
+     * @return the next packet number no throw
      */
     protected long getNextPacketNumberNoThrow() {return _packetNumber.getAndIncrement();}
 
     /**
      * @since public since 0.9.57 for SSU2Sender interface only
+     * @return the send conn i d
      */
     public long getSendConnID() {return _sendConnID;}
     /**
      * Caller must sync on returned object when encrypting
      * @since public since 0.9.57 for SSU2Sender interface only
+     * @return the send cipher
      */
     public CipherState getSendCipher() {return _sendCha;}
     /**
      * @since public since 0.9.57 for SSU2Sender interface only
+     * @return the send header encrypt key1
      */
     public byte[] getSendHeaderEncryptKey1() {return _sendHeaderEncryptKey1;}
     /**
      * @since public since 0.9.57 for SSU2Sender interface only
+     * @return the send header encrypt key2
      */
     public byte[] getSendHeaderEncryptKey2() {return _sendHeaderEncryptKey2;}
     /**
@@ -478,6 +484,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     /**
      *  @since public since 0.9.57 for SSU2Sender interface only
+     * @return the received messages
      */
     public SSU2Bitfield getReceivedMessages() {
         synchronized(this) {
@@ -489,6 +496,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     /**
      *  @since public since 0.9.57 for SSU2Sender interface only
+     * @return the acked messages
      */
     public SSU2Bitfield getAckedMessages() {return _ackedMessages;}
 
@@ -1275,6 +1283,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      *  Flag byte to be sent in header
      *
      *  @since 0.9.56, public since 0.9.57 for SSU2Sender interface
+     * @return the flags
      */
     public byte getFlags() {return shouldRequestImmediateAck() ? (byte) 0x01 : 0;}
 

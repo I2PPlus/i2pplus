@@ -38,7 +38,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * getMessageId.
+     * @return the message id
      */
     public long getMessageId() { return _id; }
 
@@ -110,12 +110,12 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     public int getType() { return MESSAGE_TYPE; }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

@@ -39,6 +39,7 @@ abstract class HandlerImpl implements I2CPMessageHandler {
     @Override
     /**
      * Return the message type.
+     * @return the type
      */
     public int getType() {
         return _type;

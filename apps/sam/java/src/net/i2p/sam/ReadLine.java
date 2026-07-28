@@ -25,7 +25,7 @@ class ReadLine {
      *  Warning - strips \n but not \r
      *  Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
      *
-     *  @param socket the socket to read from
+     *  @param socket the socket
      *  @param buf output
      *  @param timeout forever if if zero or negative
      *  @throws SocketTimeoutException if timeout is reached before newline

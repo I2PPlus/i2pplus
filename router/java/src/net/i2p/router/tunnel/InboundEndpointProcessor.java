@@ -38,11 +38,11 @@ class InboundEndpointProcessor {
     }
 
     /**
-     * getDestination.
+     * @return the destination
      */
     public Hash getDestination() { return _config.getDestination(); }
     /**
-     * getConfig.
+     * @return the config
      */
     public TunnelCreatorConfig getConfig() { return _config; }
 

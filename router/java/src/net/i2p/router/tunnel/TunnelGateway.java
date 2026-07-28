@@ -191,7 +191,7 @@ abstract class TunnelGateway {
          *                Messages are not removed from the list until actually sent.
          *                The status of unsent and partially-sent messages is stored in
          *                the Pending structure.
-         * @param sender the sender to forward preprocessed data
+         * @param sender the sender
          * @param receiver the receiver to accept encrypted data
          * @return true if we should delay before preprocessing again
          */

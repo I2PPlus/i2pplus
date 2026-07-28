@@ -51,7 +51,7 @@ class RefreshRoutersJob extends JobImpl {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     @Override
     public String getName() {
@@ -86,6 +86,7 @@ class RefreshRoutersJob extends JobImpl {
 
     /**
      * Checks if conditions are suitable for running the refresh job.
+     * @return whether run job
      */
     private boolean shouldRunJob() {
         RouterContext ctx = getContext();
@@ -228,6 +229,7 @@ class RefreshRoutersJob extends JobImpl {
     /**
      * Determines whether to refresh the given router info.
      * Includes checks for age, version, capabilities, and context properties.
+     * @return whether refresh router
      */
     private boolean shouldRefreshRouter(RouterInfo ri, Hash _routerHash) {
         RouterContext ctx = getContext();
@@ -261,6 +263,7 @@ class RefreshRoutersJob extends JobImpl {
 
     /**
      * Returns the router age threshold in milliseconds for refresh decision.
+     * @return the router age threshold
      */
     private int getRouterAgeThreshold(boolean uninteresting, boolean refreshUninteresting, int netDbCount,
                                       long _uptime, boolean isFloodfill) {

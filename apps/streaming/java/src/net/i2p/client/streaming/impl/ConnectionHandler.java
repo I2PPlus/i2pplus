@@ -50,6 +50,7 @@ class ConnectionHandler {
      *  This is both SYNs and subsequent packets, and with an initial window size of 12,
      *  this is a backlog of 5 to 64 Syns, which seems like plenty for now
      *  Don't make this too big because the removal by all the TimeoutSyns is O(n**2) - sortof.
+     * @return the max queue size
      */
     private int getMaxQueueSize() {
         int def = SystemVersion.isSlow() ? 128 : 256;

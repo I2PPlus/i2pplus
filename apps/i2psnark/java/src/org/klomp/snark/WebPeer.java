@@ -37,9 +37,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     private int maxRequests;
 
     // to be recognized by the UI
-    /**
-     * IDBytes.
-     */
+    /** IDBytes. */
     public static final byte[] IDBytes = DataHelper.getASCII("WebSeedBEP19");
     private static final long HEADER_TIMEOUT = (long) 60 * 1000;
     private static final long TOTAL_TIMEOUT = 10 * (long) 60 * 1000;
@@ -448,7 +446,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
-     * getMaxPipeline.
+     * @return the max pipeline
      */
     @Override
     public int getMaxPipeline() {
@@ -456,7 +454,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
-     * isConnected.
+     * @return whether connected
      */
     @Override
     public boolean isConnected() {
@@ -485,7 +483,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
-     * isInterested.
+     * @return whether interested
      */
     @Override
     public boolean isInterested() {
@@ -500,7 +498,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     public void setInteresting(boolean interest) { /* no-op */ }
 
     /**
-     * isInteresting.
+     * @return whether interesting
      */
     @Override
     public boolean isInteresting() {
@@ -514,7 +512,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     public void setChoking(boolean choke) { /* no-op */ }
 
     /**
-     * isChoking.
+     * @return whether choking
      */
     @Override
     public boolean isChoking() {
@@ -522,7 +520,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
-     * isChoked.
+     * @return whether choked
      */
     @Override
     public boolean isChoked() {
@@ -530,7 +528,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
-     * getInactiveTime.
+     * @return the inactive time
      */
     @Override
     public long getInactiveTime() {
@@ -540,7 +538,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
-     * getMaxInactiveTime.
+     * @return the max inactive time
      */
     @Override
     public long getMaxInactiveTime() {
@@ -568,7 +566,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
-     * isCompleted.
+     * @return whether completed
      */
     @Override
     public boolean isCompleted() {
@@ -604,6 +602,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
      * Should we request this many bytes?
      *
      * @since 0.9.62
+     * @return whether request
      */
     @Override
     public boolean shouldRequest(int size) {
@@ -693,7 +692,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * Returns the index of the first outstanding request for the given piece.
      *
-     * @param piece the piece number
+     * @param piece the piece index
      * @return index in outstandingRequests, or -1 if not found
      */
     private synchronized int getFirstOutstandingRequest(int piece) {
@@ -722,7 +721,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * Returns the request with the lowest offset for the given piece.
      *
-     * @param piece the piece number
+     * @param piece the piece index
      * @return the lowest-offset request, or null
      */
     private synchronized Request getLowestOutstandingRequest(int piece) {

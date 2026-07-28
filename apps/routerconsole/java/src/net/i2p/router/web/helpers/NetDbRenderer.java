@@ -108,6 +108,7 @@ class NetDbRenderer {
     public static final int LOOKUP_WAIT = 3 * 1000;
     /**
      * Whether floodfill.
+     * @return whether floodfill
      */
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
     /**
@@ -808,7 +809,7 @@ class NetDbRenderer {
          */
         public void runJob() {synchronized(this) {notifyAll();}}
         /**
-         * getName.
+         * @return the name
          */
         public String getName() {return "Console NetDb Lookup";}
     }
@@ -1023,7 +1024,7 @@ class NetDbRenderer {
                 }
 
                 /**
-                 * getName.
+                 * @return the name
                  */
                 public String getName() {
                     return "Introducer Lookup: " + hash.toBase64().substring(0, 6);
@@ -1036,6 +1037,7 @@ class NetDbRenderer {
      *  Special handling for 'O' cap (high bandwidth but not P or X).
      *  @param caps non-null
      *  @since 0.9.38
+     *  @return whether cap is present
      */
     private static boolean hasCap(RouterInfo ri, String caps) {
         String ricaps = ri.getCapabilities();
@@ -1053,7 +1055,7 @@ class NetDbRenderer {
      *  @param debug if true, sort by distance and show debug info
      *  @param client if non-null, render only leasesets for that client
      *  @since 0.7.14
-     * @throws java.io.IOException if an I/O error occurs
+     *  @throws java.io.IOException if an I/O error occurs
      */
     public void renderLeaseSetHTML(Writer out, boolean debug, Hash client) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
@@ -1190,7 +1192,7 @@ class NetDbRenderer {
      *  @param hostname the destination b32, full hash, or hostname
      *  @param debug if true, show debug info
      *  @since 0.9.57
-     * @throws java.io.IOException if an I/O error occurs
+     *  @throws java.io.IOException if an I/O error occurs
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderLeaseSet(Writer out, String hostname, boolean debug) throws IOException {
@@ -1439,7 +1441,7 @@ class NetDbRenderer {
      *              1 = full router infos,
      *              2 = compact router infos,
      *              3 = summary charts sorted by country count
-     * @throws java.io.IOException if an I/O error occurs
+     *  @throws java.io.IOException if an I/O error occurs
      */
     public void renderStatusHTML(Writer out, int pageSize, int page, int mode) throws IOException {
         if (!_context.netDb().isInitialized()) {
@@ -1735,6 +1737,7 @@ class NetDbRenderer {
     /**
      *  Gets translated country name from code.
      *  @since 0.9.9
+     * @return the translated country
      */
     private String getTranslatedCountry(String code) {
         String name = _context.commSystem().getCountryName(code);
@@ -1823,6 +1826,7 @@ class NetDbRenderer {
 
     /**
      * Gets a value from cache if it's still valid.
+     * @return the cached reverse d n s
      */
     private String getCachedReverseDNS(String ip) {
         CacheEntry entry = reverseLookupCache.get(ip);
@@ -2396,7 +2400,7 @@ class NetDbRenderer {
     /**
      *  Gets the peer profile tier name.
      *
-     *  @param peer the peer hash
+     *  @param peer the peer
      *  @param fullname if true, return full name; else CSS class
      *  @return the tier name or class
      */

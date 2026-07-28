@@ -123,6 +123,7 @@ class EventPumper implements Runnable {
      * As the number of connections grows, we should try to make this happen
      * less frequently (or not at all), but while the connection count is small,
      * the time to iterate across them to check a few flags shouldn't be a problem.
+     * @return whether slow
      */
     private static final boolean IS_SLOW = SystemVersion.isSlow();
     private static volatile long _failsafeIterationFreq = 2 * 1000L;
@@ -214,6 +215,7 @@ class EventPumper implements Runnable {
 
     /**
      * Selector can take quite a while to close after calling stopPumping()
+     * @return whether alive
      */
     public boolean isAlive() {
         return _alive || (_selector != null && _selector.isOpen());
@@ -1161,7 +1163,7 @@ class EventPumper implements Runnable {
     }
 
     /**
-     * getIdleTimeout.
+     * @return the idle timeout
      */
     public long getIdleTimeout() {
         return _expireIdleWriteTime;

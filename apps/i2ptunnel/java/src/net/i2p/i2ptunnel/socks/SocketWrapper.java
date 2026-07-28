@@ -112,7 +112,7 @@ class SocketWrapper implements I2PSocket {
     public void setOptions(I2PSocketOptions options) { /* no-op */ }
 
     /**
-     * getReadTimeout.
+     * @return the read timeout
      */
     public long getReadTimeout() {
         return -1;
@@ -141,7 +141,7 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
-     * isClosed.
+     * @return whether closed
      */
     public boolean isClosed() {
         return socket.isClosed();

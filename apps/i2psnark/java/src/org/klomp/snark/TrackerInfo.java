@@ -156,6 +156,7 @@ class TrackerInfo {
      * One big string of concatenated 32-byte hashes
      *
      * @since 0.8.1
+     * @return the peers
      */
     private static Set<Peer> getPeers(
             byte[] l, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
@@ -183,6 +184,7 @@ class TrackerInfo {
      * From Hash to Peer
      *
      * @since 0.9.14
+     * @return the peers
      */
     private static Set<Peer> getPeers(
             Set<Hash> hashes, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util) {
@@ -205,14 +207,14 @@ class TrackerInfo {
     }
 
     /**
-     * getPeers.
+     * @return the peers
      */
     public Set<Peer> getPeers() {
         return peers;
     }
 
     /**
-     * getPeerCount.
+     * @return the peer count
      */
     public int getPeerCount() {
         int pc = peers == null ? 0 : peers.size();
@@ -221,6 +223,7 @@ class TrackerInfo {
 
     /**
      * @since 0.9.9
+     * @return the seed count
      */
     public int getSeedCount() {
         return complete;

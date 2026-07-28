@@ -61,6 +61,7 @@ public class UIMessages {
 
     /**
      * The ID of the last message added, or -1 if never.
+     * @return the last message i d
      */
     public synchronized int getLastMessageID() {
         return _count - 1;
@@ -141,6 +142,7 @@ public class UIMessages {
      * Check if there are any messages.
      *
      * @since 0.9.46
+     * @return whether empty
      */
     public synchronized boolean isEmpty() {
         return _messages.peekLast() == null;

@@ -490,11 +490,11 @@ public class SAMStreamSend {
         }
 
         /**
-         * getConnectionId.
+         * @return the connection id
          */
         public String getConnectionId() { return _connectionId; }
         /**
-         * getDestination.
+         * @return the destination
          */
         public String getDestination() { return _remoteDestination; }
 

@@ -105,6 +105,7 @@ public interface DataStore {
      * Gets all entries in the data store.
      *
      * @since 0.8.3
+     * @return the entries
      */
     public Collection<DatabaseEntry> getEntries();
 
@@ -112,6 +113,7 @@ public interface DataStore {
      * Gets all map entries in the data store.
      *
      * @since 0.8.3
+     * @return the map entries
      */
     public Set<Map.Entry<Hash, DatabaseEntry>> getMapEntries();
     /**

@@ -95,7 +95,7 @@ public class BlacklistBean {
     /**
      * Check if an address is a valid I2P address format.
      *
-     * @param address the address to validate
+     * @param address the address
      * @return true if the address matches a known I2P address pattern
      */
     private boolean isValidI2PAddress(String address) {

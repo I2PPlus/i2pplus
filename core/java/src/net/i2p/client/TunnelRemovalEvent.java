@@ -60,6 +60,7 @@ public class TunnelRemovalEvent {
      */
     /**
      * Return the tunnel pool name.
+     * @return the pool name
      */
     public String getPoolName() {
         return _poolName;
@@ -72,6 +73,7 @@ public class TunnelRemovalEvent {
      */
     /**
      * Return the tunnel ID.
+     * @return the tunnel id
      */
     public TunnelId getTunnelId() {
         return _tunnelId;
@@ -84,6 +86,7 @@ public class TunnelRemovalEvent {
      */
     /**
      * Return whether this is an inbound tunnel.
+     * @return whether inbound
      */
     public boolean isInbound() {
         return _isInbound;
@@ -96,6 +99,7 @@ public class TunnelRemovalEvent {
      */
     /**
      * Return the removal reason.
+     * @return the reason
      */
     public RemovalReason getReason() {
         return _reason;
@@ -108,6 +112,7 @@ public class TunnelRemovalEvent {
      */
     /**
      * Return the event time.
+     * @return the timestamp
      */
     public long getTimestamp() {
         return _timestamp;

@@ -698,6 +698,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      *  @since 0.8.9
+     * @return the reverse key
      */
     private static Integer getReverseKey(Destination dest) {
         return getReverseKey(dest.calculateHash());
@@ -705,6 +706,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      *  @since 0.8.9
+     * @return the reverse key
      */
     private static Integer getReverseKey(Hash hash) {
         byte[] hashBytes = hash.getData();
@@ -720,7 +722,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * @param hostname upper/lower case ok
      * @param lookupOptions If non-null and contains the key "list", lookup in
      *                that list only, otherwise all lists
-     * @param storedOptions ignored
+     * @param storedOptions options for persisting the result (unused)
      * @return the destination, or null if not found
      */
     @Override
@@ -807,7 +809,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * Multiple dests version lookup.
      * DB MUST be version 4.
      *
-     * @param hostname the hostname to look up
+     * @param hostname the hostname
      * @param lookupOptions If non-null and contains the key "list", lookup in
      *                that list only, otherwise all lists
      * @param storedOptions output list for stored properties, may be null
@@ -1091,6 +1093,7 @@ public class BlockfileNamingService extends DummyNamingService {
      *                Key "beginWith": start here in the iteration
      *                Don't use both startsWith and beginWith.
      *                Search, startsWith, and beginWith values must be lower case.
+     * @return the entries
      */
     @Override
     public Map<String, Destination> getEntries(Properties options) {
@@ -1189,6 +1192,7 @@ public class BlockfileNamingService extends DummyNamingService {
      *                Don't use both startsWith and beginWith.
      *                Search, startsWith, and beginWith values must be lower case.
      *  @since 0.9.20
+     * @return the base64 entries
      */
     @Override
     public Map<String, String> getBase64Entries(Properties options) {
@@ -1416,6 +1420,7 @@ public class BlockfileNamingService extends DummyNamingService {
      *                Don't use both startsWith and beginWith.
      *                Search, startsWith, and beginWith values must be lower case.
      *  @since 0.9.20
+     * @return the names
      */
     @Override
     public Set<String> getNames(Properties options) {
@@ -1495,7 +1500,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      *  Look up a hostname from a Destination's hash. Returns the first name found, or null.
-     * @param options ignored
+     * @param options to configure lookup behavior (unused)
      * @since 0.8.9
      */
     @Override
@@ -1522,7 +1527,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      *  Return all hostnames registered for this Destination's hash.
-     *  @param options ignored
+     *  @param options to configure lookup behavior (unused)
      *  @since 0.9.26
      */
     @Override
@@ -1821,6 +1826,7 @@ public class BlockfileNamingService extends DummyNamingService {
     private static class PropertiesSerializer implements Serializer<Properties> {
         /**
          *  A format error on the properties is non-fatal (returns an empty properties)
+         * @return the bytes
          */
         public byte[] getBytes(Properties p) {
             try {
@@ -1891,6 +1897,7 @@ public class BlockfileNamingService extends DummyNamingService {
         /**
          *  A format error on the properties is non-fatal (only the properties are lost)
          *  A format error on the destination is fatal
+         * @return the bytes
          */
         @Override
         public byte[] getBytes(DestEntry de) {
@@ -1939,6 +1946,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
         /**
          *  Serialize a DestEntry to bytes, including the destination list if present.
+         * @return the bytes
          */
         @Override
         public byte[] getBytes(DestEntry de) {

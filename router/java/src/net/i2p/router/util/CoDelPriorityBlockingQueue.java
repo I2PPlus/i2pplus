@@ -263,6 +263,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     /**
      *  Has the head of the queue been waiting too long,
      *  or is the queue too big?
+     * @return whether backlogged
      */
     @Override
     public synchronized boolean isBacklogged() {

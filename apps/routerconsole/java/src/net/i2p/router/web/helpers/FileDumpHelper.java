@@ -42,7 +42,7 @@ public class FileDumpHelper extends HelperBase {
      * Description.
      */
     /**
-     * Description.
+     * @return the file summary
      */
     public String getFileSummary() {
         StringBuilder buf = new StringBuilder(16*1024);

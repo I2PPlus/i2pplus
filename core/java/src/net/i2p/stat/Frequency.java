@@ -61,6 +61,7 @@ public class Frequency {
     /**
      * Calculate how many events would occur in a period given the current (rolling) average.
      * Use getStrictAverageInterval() for the real lifetime average.
+     * @return the average events per period
      */
     public synchronized double getAverageEventsPerPeriod() {
         if (_avgInterval > 0) return _period / _avgInterval;
@@ -71,6 +72,7 @@ public class Frequency {
     /**
      * Calculate how many events would occur in a period given the maximum rolling average.
      * Use getStrictAverageEventsPerPeriod() for the real lifetime average.
+     * @return the max average events per period
      */
     public synchronized double getMaxAverageEventsPerPeriod() {
         if (_minAverageInterval > 0 && _minAverageInterval <= _period) return _period / _minAverageInterval;

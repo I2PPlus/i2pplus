@@ -44,6 +44,7 @@ public final class CryptixAESEngine extends AESEngine {
      * Check for AES-NI support in processor and JVM.
      *
      * @since 0.9.14
+     * @return whether a e s n i is present
      */
     private static boolean hasAESNI() {
         if (SystemVersion.isX86() && SystemVersion.is64Bit() && SystemVersion.isJava7() && !SystemVersion.isApache() && !SystemVersion.isGNU()) {

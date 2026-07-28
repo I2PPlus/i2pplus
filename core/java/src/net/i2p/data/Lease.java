@@ -158,6 +158,7 @@ public class Lease extends DataStructureImpl {
      *  Gets the lease end time.
      *
      * @since 0.9.48
+     * @return the end time
      */
     public long getEndTime() {
         return _end;
@@ -222,7 +223,7 @@ public class Lease extends DataStructureImpl {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

@@ -100,7 +100,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         }
 
         /**
-         * getName.
+         * @return the name
          */
         public String getName() { return "Send to OBGW after Lookup"; }
 
@@ -136,7 +136,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         }
 
         /**
-         * getName.
+         * @return the name
          */
         public String getName() { return "Timeout OBGW Lookup"; }
 
@@ -165,7 +165,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         }
 
         /**
-         * getName.
+         * @return the name
          */
         public String getName() { return "OBGW Send Failure"; }
 

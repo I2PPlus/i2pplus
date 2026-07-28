@@ -66,7 +66,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * <p>Will not start itself. Caller must call startTorrent() if desired.
      *
      * @param util the I2PSnarkUtil
-     * @param torrent the torrent file name
+     * @param torrent the torrent
      * @param ip the IP address
      * @param user_port the user port
      * @param slistener the storage listener
@@ -109,7 +109,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * <p>Will not start itself. Caller must call startTorrent() if desired.
      *
      * @param util the I2PSnarkUtil
-     * @param torrent the torrent file name
+     * @param torrent the torrent
      * @param ip the IP address
      * @param user_port the user port
      * @param slistener the storage listener
@@ -249,7 +249,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * <p>Will not start itself. Caller must call startTorrent() if desired.
      *
      * @param util the I2PSnarkUtil
-     * @param torrent the torrent file name
+     * @param torrent the torrent
      * @param ih the info hash
      * @param trackerURL the tracker URL
      * @param complistener the complete listener
@@ -1099,7 +1099,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * StorageListener callback called when a piece check completes.
      *
-     * @param storage the storage being checked
+     * @param storage the storage
      * @param num the piece number
      * @param checked true if the piece hash was correct
      */
@@ -1116,7 +1116,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * StorageListener callback called when all pieces have been checked.
      *
-     * @param storage the storage that was checked
+     * @param storage the storage
      */
     @Override
     public void storageAllChecked(Storage storage) {
@@ -1139,7 +1139,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * StorageListener callback called when the torrent has completed.
      *
-     * @param storage the storage that completed
+     * @param storage the storage
      */
     @Override
     public void storageCompleted(Storage storage) {
@@ -1164,7 +1164,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * StorageListener callback to update the coordinator's wanted piece set.
      *
-     * @param storage the storage whose wanted pieces changed
+     * @param storage the storage
      */
     @Override
     public void setWantedPieces(Storage storage) {

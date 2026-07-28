@@ -46,6 +46,7 @@ class Sorters {
      * </ul>
      *
      * @param servlet for file type callback only
+     * @return the comparator
      */
     public static Comparator<Snark> getComparator(int type, String lang, I2PSnarkServlet servlet) {
         boolean rev = type < 0;
@@ -636,6 +637,7 @@ class Sorters {
      * </ul>
      *
      * @param servlet for file type callback only
+     * @return the file comparator
      */
     public static Comparator<FileAndIndex> getFileComparator(int type, I2PSnarkServlet servlet) {
         boolean rev = type < 0;

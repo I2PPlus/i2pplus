@@ -19,6 +19,7 @@ public interface KeyFactory {
      */
     /**
      * Get the keys.
+     * @return the keys
      */
     public KeyPair getKeys();
 }

@@ -89,6 +89,7 @@ public abstract class RoutingKeyGenerator {
     /**
      *  The version of the current (today's) mod data.
      *  Use to determine if the routing key should be regenerated.
+     * @return the last changed
      */
     public abstract long getLastChanged();
 
@@ -96,6 +97,7 @@ public abstract class RoutingKeyGenerator {
      * Get the routing key for a key.
      *
      * @throws IllegalArgumentException if origKey is null
+     * @return the routing key
      */
     public abstract Hash getRoutingKey(Hash origKey);
 }

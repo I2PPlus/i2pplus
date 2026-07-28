@@ -16,9 +16,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     private int _localPort;
     private int _remotePort;
 
-    /**
-     * DEFAULT_BUFFER_SIZE.
-     */
+    /** DEFAULT_BUFFER_SIZE. */
     public static final int DEFAULT_BUFFER_SIZE = SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512*1024*1024 ?
         // Slow systems: 1730 * (1.5*192 + 2) = 500KB, rounded to 512KB for safety margin
         512*1024 :
@@ -105,7 +103,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     }
 
     /**
-     * getInt.
+     * @return the int
      */
     protected static int getInt(Properties opts, String name, int defaultVal) {
         if (opts == null) return defaultVal;
@@ -229,6 +227,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * is no timeout.
      *
      * Default -1 (unlimited)
+     * @return the write timeout
      */
     @Override
     public long getWriteTimeout() {

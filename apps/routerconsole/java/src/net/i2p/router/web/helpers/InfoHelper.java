@@ -38,7 +38,7 @@ public class InfoHelper extends HelperBase {
     public void setFull(String f) {_full = f != null && !f.isEmpty();}
 
     /**
-     * getConsole.
+     * @return the console
      */
     public String getConsole() {
         try {
@@ -58,7 +58,7 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
-     * getStats.
+     * @return the stats
      */
     public String getStats() {
         StatsGenerator gen = new StatsGenerator(_context);
@@ -100,7 +100,7 @@ public class InfoHelper extends HelperBase {
      */
     public String lastCountry() {return _context.getProperty("i2np.lastCountry");}
     /**
-     * getUdpPort.
+     * @return the udp port
      */
     public String getUdpPort() {return _context.getProperty("i2np.udp.port");}
     /**
@@ -134,14 +134,14 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
-     * isRouterSlow.
+     * @return whether router slow
      */
     public boolean isRouterSlow() {
         return SystemVersion.isSlow();
     }
 
     /**
-     * getCoreCount.
+     * @return the core count
      */
     public String getCoreCount() {return Integer.toString(SystemVersion.getCores());}
 
@@ -191,7 +191,7 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
-     * getFamily.
+     * @return the family
      */
     public String getFamily() {
         RouterInfo ri = _context.router().getRouterInfo();
@@ -201,7 +201,7 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
-     * getGeoIPBuildInfo.
+     * @return the geo i p build info
      */
     public String getGeoIPBuildInfo() {
       GeoIP db = new GeoIP(_context);
@@ -209,7 +209,7 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
-     * getASNBuildInfo.
+     * @return the a s n build info
      */
     public String getASNBuildInfo() {
       GeoIP db = new GeoIP(_context);

@@ -250,7 +250,7 @@ class NTCP2Payload {
         }
 
         /**
-         * getDataLength.
+         * @return the data length
          */
         public int getDataLength() {
             return 1 + data.length;
@@ -281,7 +281,7 @@ class NTCP2Payload {
         }
 
         /**
-         * getDataLength.
+         * @return the data length
          */
         public int getDataLength() {
             return m.getMessageSize() - 7;
@@ -315,7 +315,7 @@ class NTCP2Payload {
         }
 
         /**
-         * getDataLength.
+         * @return the data length
          */
         public int getDataLength() {
             return sz;
@@ -349,7 +349,7 @@ class NTCP2Payload {
         }
 
         /**
-         * getDataLength.
+         * @return the data length
          */
         public int getDataLength() {
             return 4;
@@ -379,7 +379,7 @@ class NTCP2Payload {
         }
 
         /**
-         * getDataLength.
+         * @return the data length
          */
         public int getDataLength() {
             return opts.length;
@@ -411,7 +411,7 @@ class NTCP2Payload {
         }
 
         /**
-         * getDataLength.
+         * @return the data length
          */
         public int getDataLength() {
             return 9;

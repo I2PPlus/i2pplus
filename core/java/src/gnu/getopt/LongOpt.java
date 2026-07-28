@@ -98,6 +98,7 @@ public class LongOpt extends Object
 
 /**
   * Localized strings for error messages
+ * @return the bundle
   */
     private ResourceBundle _messages = ResourceBundle.getBundle(
                             "gnu/getopt/MessagesBundle", Locale.getDefault());

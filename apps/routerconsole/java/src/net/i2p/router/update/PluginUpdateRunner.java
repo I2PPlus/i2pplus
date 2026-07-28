@@ -96,7 +96,7 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     * getURI.
+     * @return the u r i
      */
     @Override
     public URI getURI() {
@@ -104,7 +104,7 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     * getID.
+     * @return the i d
      */
     @Override
     public String getID() {

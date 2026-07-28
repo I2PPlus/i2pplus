@@ -130,7 +130,7 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
         }
 
         /**
-         * hasNext.
+         * @return whether next is present
          */
         public boolean hasNext() {
             CachedIteratorArrayList<E> l = listRef != null ? listRef.get() : null;

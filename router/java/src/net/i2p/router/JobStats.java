@@ -66,6 +66,7 @@ public class JobStats {
     /**
      * Check if recent tracking should be active.
      * Returns true if enabled and within timeout period.
+     * @return whether recent tracking enabled
      */
     public static boolean isRecentTrackingEnabled() {
         if (!_recentTrackingEnabled) return false;
@@ -87,7 +88,7 @@ public class JobStats {
     /**
      * Create statistics tracker for a named job type.
      *
-     * @param name the name identifier for this job type
+     * @param name the name
      */
     public JobStats(String name) {
         _job = name;

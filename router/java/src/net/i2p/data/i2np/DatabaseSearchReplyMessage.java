@@ -41,6 +41,7 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
 
     /**
      * Defines the key being searched for
+     * @return the search key
      */
     public Hash getSearchKey() { return _key; }
 
@@ -54,11 +55,11 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * getNumReplies.
+     * @return the num replies
      */
     public int getNumReplies() { return _peerHashes.size(); }
     /**
-     * getReply.
+     * @return the reply
      */
     public Hash getReply(int index) { return _peerHashes.get(index); }
     /**
@@ -68,7 +69,7 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     //public void addReplies(Collection replies) { _peerHashes.addAll(replies); }
 
     /**
-     * getFromHash.
+     * @return the from hash
      */
     public Hash getFromHash() { return _from; }
     /**
@@ -134,7 +135,7 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     public int getType() { return MESSAGE_TYPE; }
 
@@ -154,7 +155,7 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

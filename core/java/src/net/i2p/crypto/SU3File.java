@@ -139,14 +139,14 @@ public class SU3File {
         }
 
         /**
-         * getCode.
+         * @return the code
          */
         public int getCode() {
             return code;
         }
 
         /**
-         * getName.
+         * @return the name
          */
         public String getName() {
             return name;
@@ -212,6 +212,7 @@ public class SU3File {
     /**
      *  This does not check the signature, but it will fail if the signer is unknown,
      *  unless setVerifySignature(false) has been called.
+     * @return the version string
      */
     public String getVersionString() throws IOException {
         verifyHeader();
@@ -221,6 +222,7 @@ public class SU3File {
     /**
      *  This does not check the signature, but it will fail if the signer is unknown,
      *  unless setVerifySignature(false) has been called.
+     * @return the signer string
      */
     public String getSignerString() throws IOException {
         verifyHeader();

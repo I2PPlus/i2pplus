@@ -78,6 +78,7 @@ public class SybilRenderer {
      *
      *  @param mode what tab to show
      *  @param date only for mode = 12
+     *  @return the net db summary
      */
     public String getNetDbSummary(Writer out, String nonce, int mode, long date) throws IOException {
         renderRouterInfoHTML(out, nonce, mode, date);
@@ -1042,6 +1043,7 @@ public class SybilRenderer {
      * Countries now in a separate bundle
      * @param code two-letter country code
      * @since 0.9.9
+     * @return the translated country
      */
     private String getTranslatedCountry(String code) {
         String name = _context.commSystem().getCountryName(code);

@@ -61,6 +61,7 @@ class SubscriptionIterator implements Iterator<AddressBook> {
 
     /**
      * {@inheritDoc}
+     * @return whether next is present
      */
     @Override
     public boolean hasNext() {

@@ -163,6 +163,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      *  Get current CSRF nonce, rotating every 5 minutes.
      *  @since 2.x.x
+     * @return the nonce
      */
     private synchronized long getNonce() {
         if (_currentNonce == 0) {
@@ -413,6 +414,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  for the torrent.
      *
      *  @param pathInContext should always start with /
+     *  @return the resource
      */
     @Override
     public File getResource(String pathInContext) {
@@ -1880,6 +1882,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      *  @param s search param override or "" for default or null to keep the same as in req
      *  @since 0.9.58
+     *  @return the query string
      */
     private static String getQueryString(HttpServletRequest req, String p, String st, String so, String search) {
         String url = req.getRequestURL().toString();
@@ -2241,6 +2244,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * Validates if a string is a valid 40-hex character info hash.
+     * @return whether valid hex info hash
      */
     private boolean isValidHexInfoHash(String s) {
         return s.length() == 40 && HEX_PATTERN.matcher(s).matches();
@@ -2248,6 +2252,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * Validates if a string is a valid 32-base32 character info hash.
+     * @return whether valid base32 info hash
      */
     private boolean isValidBase32InfoHash(String s) {
         return s.length() == 32 && BASE32_PATTERN.matcher(s).matches();
@@ -2255,6 +2260,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * Validates if string is version 2 hex multihash (68 characters starting with "1220").
+     * @return whether valid v2 info hash
      */
     private boolean isValidV2InfoHash(String s) {
         return s.length() == 68 && s.startsWith("1220") && HEX_PATTERN.matcher(s).matches();
@@ -3695,7 +3701,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  Generate link to details page if we know it supports it.
      *  Start of anchor only, caller must add anchor text or img and close anchor.
      *
-     *  @return string or null if unknown tracker
+     * @return the tracker link url
      *  @since 0.8.4
      */
     private String getTrackerLinkUrl(String announce, byte[] infohash) {
@@ -3728,7 +3734,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      *  Full link to details page with img
-     *  @return string or null if details page unsupported
+     * @return the tracker link
      *  @since 0.8.4
      */
     private String getTrackerLink(String announce, byte[] infohash) {
@@ -3745,7 +3751,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      *  Full anchor to home page or details page with shortened hostname as anchor text
-     *  @return string, non-null
+     * @return the short tracker link
      *  @since 0.9.5
      */
     private String getShortTrackerLink(String announce, byte[] infohash) {
@@ -5665,6 +5671,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Basic checks only, not as comprehensive as what TrackerClient does.
      * Just to hide non-i2p trackers from the details page.
      * @since 0.9.46
+     * @return whether i2 p tracker
      */
     private boolean isI2PTracker(String url) {
         try {
@@ -5680,6 +5687,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * @param mime non-null
      * @since 0.9.44
+     * @return whether audio
      */
     private static boolean isAudio(String mime) {
         /**
@@ -5693,6 +5701,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * @param mime non-null
      * @since 0.9.44
+     * @return whether video
      */
     private static boolean isVideo(String mime) {
         return mime.startsWith("video/") && !mime.equals("video/x-msvideo") && /*!mime.equals("video/x-matroska") &&*/
@@ -5704,6 +5713,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Recursive.
      *
      * @since 0.9.44
+     * @return whether complete audio is present
      */
     private boolean hasCompleteAudio(List<Sorters.FileAndIndex> fileList, Storage storage, long[] remainingArray) {
         for (Sorters.FileAndIndex fai : fileList) {
@@ -6441,6 +6451,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  Is "a" equal to "b", or is "a" a directory and a parent
      *  of file or directory "b", canonically speaking?
      *  @since 0.9.15
+     * @return whether parent of
      */
     private static boolean isParentOf(File a, File b) {
         try {
@@ -6462,6 +6473,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      *  Are we running in standalone mode?
      *  @since 0.9.54+
+     * @return whether standalone
      */
     private boolean isStandalone() {
         if (_context.isRouterContext()) {return false;}

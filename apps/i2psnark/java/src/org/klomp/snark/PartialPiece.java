@@ -187,7 +187,7 @@ class PartialPiece implements Comparable<PartialPiece> {
      * Computes and returns the SHA1 hash of the complete piece data. Caller must ensure piece
      * completeness and synchronize before calling.
      *
-     * @return byte[] SHA1 digest of piece data
+     * @return the hash
      * @throws IOException if data is incomplete or read fails
      * @since 0.9.1
      */

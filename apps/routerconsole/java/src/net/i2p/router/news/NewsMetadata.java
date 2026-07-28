@@ -83,6 +83,7 @@ public class NewsMetadata {
         /**
          *  For findbugs.
          *  @since 0.9.21
+         * @return whether h code is present
          */
         @Override
         public int hashCode() {
@@ -160,6 +161,7 @@ public class NewsMetadata {
         /**
          *  For findbugs.
          *  @since 0.9.21
+         * @return whether h code is present
          */
         @Override
         public int hashCode() {

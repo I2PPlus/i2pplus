@@ -86,7 +86,6 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     *  Internal.
      *  @param m null if msg is "injected"
      *  @throws IllegalArgumentException if too big or if msg or peer is null
      */
@@ -128,6 +127,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * @since 0.9.54
+     * @return the version
      */
     public int getVersion() { return _peer.getVersion(); }
 
@@ -139,12 +139,12 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     * getMessage.
+     * @return the message
      */
     public OutNetMessage getMessage() { return _message; }
 
     /**
-     * getMessageId.
+     * @return the message id
      */
     public long getMessageId() { return _i2npMessage.getUniqueId(); }
 
@@ -156,6 +156,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * @since 0.9.49
+     * @return the n a c ks
      */
     public int getNACKs() { return _nacks.get(); }
 
@@ -165,12 +166,12 @@ class OutboundMessageState implements CDPQEntry {
     public void clearNACKs() { _nacks.set(0); }
 
     /**
-     * getPeer.
+     * @return the peer
      */
     public PeerState getPeer() { return _peer; }
 
     /**
-     * isExpired.
+     * @return whether expired
      */
     public boolean isExpired() {
         return _expiration < _context.clock().now();
@@ -178,13 +179,14 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * @since 0.9.38
+     * @return whether expired
      */
     public boolean isExpired(long now) {
         return _expiration < now;
     }
 
     /**
-     * isComplete.
+     * @return whether complete
      */
     public synchronized boolean isComplete() {
         return _fragmentAcks == 0;
@@ -192,6 +194,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      *  As of 0.9.49, includes packet overhead
+     * @return the unacked size
      */
     public synchronized int getUnackedSize() {
         int rv = 0;
@@ -234,6 +237,7 @@ class OutboundMessageState implements CDPQEntry {
      *  Is any fragment unsent?
      *
      *  @since 0.9.49
+     * @return whether unsent fragments is present
      */
     public synchronized boolean hasUnsentFragments() {
         if (isComplete())
@@ -253,6 +257,7 @@ class OutboundMessageState implements CDPQEntry {
      *  Caller must synch.
      *
      *  @since 0.9.49
+     * @return the min send count
      */
     private int getMinSendCount() {
         int rv = 127;
@@ -344,7 +349,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     * getLifetime.
+     * @return the lifetime
      */
     public long getLifetime() { return _context.clock().now() - _startedOn; }
 
@@ -362,6 +367,7 @@ class OutboundMessageState implements CDPQEntry {
      * Falls back to total lifetime if message hasn't been sent yet.
      *
      * @since 0.9.70+
+     * @return the send lifetime
      */
     public long getSendLifetime() {
         if (_firstSendTime == 0) return getLifetime();
@@ -399,12 +405,14 @@ class OutboundMessageState implements CDPQEntry {
     /**
      *  The max number of sends for any fragment.
      *  As of 0.9.49, may be less than getPushCount() if we pushed only some fragments
+     * @return the max sends
      */
     public synchronized int getMaxSends() { return _maxSends; }
 
     /**
      *  The number of times we've pushed some fragments.
      *  As of 0.9.49, may be greater than getMaxSends() if we pushed only some fragments.
+     * @return the push count
      */
     public synchronized int getPushCount() { return _pushCount; }
 
@@ -485,6 +493,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * How many fragments in the message.
+     * @return the fragment count
      */
     public int getFragmentCount() {
             return _numFragments;
@@ -492,6 +501,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * The size of the I2NP message. Does not include any SSU overhead.
+     * @return the message size
      */
     public int getMessageSize() { return _messageBuf.length; }
 
@@ -554,6 +564,7 @@ class OutboundMessageState implements CDPQEntry {
     /**
      *  For CDQ
      *  @since 0.9.3
+     * @return the enqueue time
      */
     @Override
     public long getEnqueueTime() {
@@ -581,6 +592,7 @@ class OutboundMessageState implements CDPQEntry {
     /**
      *  For CDPQ
      *  @since 0.9.3
+     * @return the seq num
      */
     public long getSeqNum() {
         return _seqNum;

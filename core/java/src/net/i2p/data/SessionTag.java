@@ -60,7 +60,7 @@ public class SessionTag {
     }
 
     /**
-     * getData.
+     * @return the data
      */
     public byte[] getData() {
         return _data;
@@ -77,6 +77,7 @@ public class SessionTag {
      *  SessionTags are generated both locally and by peers, in quantity,
      *  and are used as keys in several datastructures (see TransientSessionKeyManager),
      *  so we use a secure hashCode function.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

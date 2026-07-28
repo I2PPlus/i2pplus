@@ -280,6 +280,7 @@ class MailPart {
      */
     /**
      * Return the part ID.
+     * @return the i d
      */
     public int getID() {return intID;}
 
@@ -390,6 +391,7 @@ class MailPart {
      *
      *  @param offset 2 for sendAttachment, 0 otherwise, probably for \r\n
      *  @since 0.9.35
+     *  @return the raw input stream
      */
     private synchronized LimitInputStream getRawInputStream(int offset) throws IOException {
         InputStream in = buffer.getInputStream();

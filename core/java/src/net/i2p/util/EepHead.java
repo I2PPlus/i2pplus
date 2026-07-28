@@ -328,7 +328,7 @@ public class EepHead extends EepGet {
     }
 
     /**
-     * getRequest.
+     * @return the request
      */
     @Override
     protected String getRequest() throws IOException {

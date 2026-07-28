@@ -34,6 +34,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
     /** Cooldown duration for client peer selections — shorter than exploratory
      *  to avoid exhausting the smaller client Fast pool (~447 peers vs full netdb).
      *  Tunable via i2p.tunnel.peerSelector.clientCooldownMs (default: 15000).
+     * @return the client cooldown ms
      */
     private long getClientCooldownMs() {
         String strat = ctx.getProperty(PROP_STRATEGY, STRATEGY_DEFAULT);

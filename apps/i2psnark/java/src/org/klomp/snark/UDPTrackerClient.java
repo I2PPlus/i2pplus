@@ -755,14 +755,14 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
-         * getPeers.
+         * @return the peers
          */
         public Set<Hash> getPeers() {
             return peers;
         }
 
         /**
-         * getPeerCount.
+         * @return the peer count
          */
         public int getPeerCount() {
             int pc = peers == null ? 0 : peers.size();
@@ -770,21 +770,21 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
-         * getSeedCount.
+         * @return the seed count
          */
         public int getSeedCount() {
             return complete;
         }
 
         /**
-         * getLeechCount.
+         * @return the leech count
          */
         public int getLeechCount() {
             return incomplete;
         }
 
         /**
-         * getFailureReason.
+         * @return the failure reason
          */
         public String getFailureReason() {
             return error;
@@ -823,7 +823,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
-         * hashCode.
+         * @return whether h code is present
          */
         @Override
         public int hashCode() {
@@ -905,14 +905,14 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
-         * isConnInProgress.
+         * @return whether conn in progress
          */
         public synchronized boolean isConnInProgress() {
             return state == ConnState.IN_PROGRESS;
         }
 
         /**
-         * isConnValid.
+         * @return whether conn valid
          */
         public synchronized boolean isConnValid() {
             return state == ConnState.VALID && expires > _context.clock().now();
@@ -959,7 +959,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
-         * getInterval.
+         * @return the interval
          */
         public synchronized int getInterval() {
             return interval;
@@ -1038,28 +1038,28 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
-         * getID.
+         * @return the i d
          */
         public int getID() {
             return tid;
         }
 
         /**
-         * getSentTo.
+         * @return the sent to
          */
         public Tracker getSentTo() {
             return sentTo;
         }
 
         /**
-         * getExpectedAction.
+         * @return the expected action
          */
         public int getExpectedAction() {
             return action;
         }
 
         /**
-         * getPayload.
+         * @return the payload
          */
         public byte[] getPayload() {
             return data;

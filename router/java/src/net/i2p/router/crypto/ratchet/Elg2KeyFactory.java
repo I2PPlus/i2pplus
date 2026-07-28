@@ -81,6 +81,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
  * Returns the last created instance.
  *
  * @since 0.9.70+
+     * @return the instance
  */
     public static Elg2KeyFactory getInstance() { return _lastInstance; }
 
@@ -88,6 +89,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
  * Returns the current minimum precalc queue size.
  *
  * @since 0.9.70+
+     * @return the min size
  */
     public int getMinSize() { return _minSize; }
 
@@ -102,6 +104,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
  * Returns the current maximum precalc queue size.
  *
  * @since 0.9.70+
+     * @return the max size
  */
     public int getMaxSize() { return _maxSize; }
 
@@ -116,6 +119,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
  * Returns the current number of precalc keys queued.
  *
  * @since 0.9.70+
+     * @return the size
  */
     public int getSize() { return _keys.size(); }
 
@@ -206,6 +210,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     /**
      * Pulls a prebuilt keypair from the queue,
      * or if not available, construct a new one.
+     * @return the keys
      */
     public Elg2KeyPair getKeys() {
         _context.statManager().addRateData("crypto.EDHUsed", 1);

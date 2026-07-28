@@ -113,6 +113,7 @@ public class TrustedUpdate {
 
     /**
      *  @since 0.9.8, public since 0.9.14.1
+     * @return the keys
      */
     public Map<SigningPublicKey, String> getKeys() {
         return Collections.unmodifiableMap(_trustedKeys);
@@ -155,7 +156,7 @@ public class TrustedUpdate {
     /**
      *  Do we know about the following key?
      *
-     *  @param key the key as a base-64 string
+     *  @param key the key
      *  @return true if the key is trusted
      *  @since 0.7.12
      */

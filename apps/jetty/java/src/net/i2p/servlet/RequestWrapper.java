@@ -57,6 +57,7 @@ public class RequestWrapper {
 
     /**
      * @param b
+     * @return the session
      */
     public HttpSession getSession(boolean b) {return httpRequest.getSession(b);}
 
@@ -67,7 +68,7 @@ public class RequestWrapper {
     public String getParameter(String name) {return getParameter(name, null);}
 
     /**
-     * getSession.
+     * @return the session
      */
     public HttpSession getSession() {return httpRequest.getSession();}
 
@@ -102,6 +103,7 @@ public class RequestWrapper {
 
     /**
      * @throws IllegalStateException if the request is too large
+     * @return the content type
      */
     public String getContentType(String partName) {
         String result = null;
@@ -117,12 +119,13 @@ public class RequestWrapper {
     }
 
     /**
-     * getAttribute.
+     * @return the attribute
      */
     public Object getAttribute(String string) {return httpRequest.getAttribute(string);}
 
     /**
      * @throws IllegalStateException if the request is too large
+     * @return the parameter
      */
     public String getParameter(String name, String defaultValue) {
       String result = defaultValue;
@@ -163,6 +166,7 @@ public class RequestWrapper {
 
     /**
      * @throws IllegalStateException if the request is too large
+     * @return the filename
      */
     public String getFilename(String partName) {
         String result = null;
@@ -179,6 +183,7 @@ public class RequestWrapper {
 
     /**
      * @throws IllegalStateException if the request is too large
+     * @return the input stream
      */
     public InputStream getInputStream(String partName) {
         InputStream result = null;

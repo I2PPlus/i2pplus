@@ -51,6 +51,7 @@ class SessionKeyAndNonce extends SessionKey {
 
     /**
      *  For ES, else 0
+     * @return the nonce
      */
     public int getNonce() {
         return _nonce;
@@ -60,6 +61,7 @@ class SessionKeyAndNonce extends SessionKey {
  * For inbound ES, else 0
  *
  * @since 0.9.46
+     * @return the i d
  */
     public int getID() {
         return _id;
@@ -70,6 +72,7 @@ class SessionKeyAndNonce extends SessionKey {
      *  For NSR, use getHansdhakeState().getRemotePublicKey().getPublicKey().
      *
      *  @since 0.9.46
+     * @return the remote key
      */
     public PublicKey getRemoteKey() {
         return _remoteKey;
@@ -78,6 +81,7 @@ class SessionKeyAndNonce extends SessionKey {
     /**
      *  For inbound NSR only, else null.
      *  MUST be cloned before processing NSR.
+     * @return the handshake state
      */
     public HandshakeState getHandshakeState() {
         return _state;

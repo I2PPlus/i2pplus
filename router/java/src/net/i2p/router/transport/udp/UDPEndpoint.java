@@ -143,7 +143,7 @@ class UDPEndpoint implements SocketListener {
     /** call after startup() to get actual port or -1 on startup failure */
     public int getListenPort() { return _listenPort; }
     /**
-     * getSender.
+     * @return the sender
      */
     public UDPSender getSender() { return _sender; }
 

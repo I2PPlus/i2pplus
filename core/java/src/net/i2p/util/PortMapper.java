@@ -188,7 +188,7 @@ public class PortMapper {
      *  the URL will be included in getEepsites()
      *
      *  @param service the service name
-     *  @param host the host address
+     *  @param host the hostname
      *  @param port &gt; 0
      *  @return success, false if already registered
      *  @since 0.9.21
@@ -227,7 +227,7 @@ public class PortMapper {
      *  the URL will be removed from getEepsites()
      *
      *  @param service the service name
-     *  @param port the port
+     *  @param port the port number
      *  @since 0.9.34
      */
     public void unregister(String service, int port) {
@@ -347,6 +347,7 @@ public class PortMapper {
      *  return http URL unless console is https only. Default http://127.0.0.1:7657/
      *
      *  @since 0.9.33 consolidated from i2ptunnel and desktopgui
+     * @return the console u r l
      */
     public String getConsoleURL() {
         return getConsoleURL(I2PAppContext.getGlobalContext().getBooleanPropertyDefaultTrue(PROP_PREFER_HTTPS));
@@ -359,6 +360,7 @@ public class PortMapper {
      *  return http URL unless console is https only. Default http://127.0.0.1:7657/
      *
      *  @since 0.9.34
+     * @return the console u r l
      */
     public String getConsoleURL(boolean preferHTTPS) {
         return preferHTTPS ? getHTTPSConsoleURL() : getHTTPConsoleURL();

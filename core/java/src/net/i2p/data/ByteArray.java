@@ -57,7 +57,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     /**
      *  Returns the underlying byte array.
      *
-     * @return the byte data, may be null
+     * @return the data
      */
     public byte[] getData() {
         return _data;
@@ -142,7 +142,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public final int hashCode() {

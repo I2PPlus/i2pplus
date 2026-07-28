@@ -302,7 +302,7 @@ public abstract class TransportImpl implements Transport {
     public RouterContext getContext() { return _context; }
 
     /**
-     * Description.
+     * @return the transport max connections
      */
     public static int getTransportMaxConnections(RouterContext ctx, String style) {
         if (ctx.commSystem().isDummy()) {return 0;} // testing
@@ -372,11 +372,12 @@ public abstract class TransportImpl implements Transport {
      * Return our peer clock skews on a transport.
      * List composed of Long, each element representing a peer skew in seconds.
      * Dummy version. Transports override it.
+     * @return the clock skews
      */
     public List<Long> getClockSkews() {return Collections.emptyList();}
 
     /**
-     * getMostRecentErrorMessages.
+     * @return the most recent error messages
      */
     public List<String> getMostRecentErrorMessages() {return Collections.emptyList();}
 
@@ -600,10 +601,10 @@ public abstract class TransportImpl implements Transport {
     /**
      * Message received from the I2NPMessageReader - send it to the listener
      *
-     * @param inMsg non-null
-     * @param remoteIdent may be null
-     * @param remoteIdentHash may be null, calculated from remoteIdent if null
-      * @param msToReceive the msToReceive
+     *  @param inMsg non-null
+     *  @param remoteIdent may be null
+     *  @param remoteIdentHash may be null, calculated from remoteIdent if null
+      *  @param msToReceive the msToReceive
      */
     public void messageReceived(I2NPMessage inMsg, RouterIdentity remoteIdent, Hash remoteIdentHash, long msToReceive, int bytesReceived) {
         int level = Log.DEBUG;
@@ -669,6 +670,7 @@ public abstract class TransportImpl implements Transport {
     /**
      *  Do we have any current address?
      *  @since IPv6
+     * @return whether current address is present
      */
     public boolean hasCurrentAddress() {
         synchronized(_currentAddresses) {return !_currentAddresses.isEmpty();}
@@ -786,7 +788,7 @@ public abstract class TransportImpl implements Transport {
      *  Return and then clear all saved local addresses.
      *
      *  @since IPv6
-       * @return the value
+       * @return the saved local addresses
      */
     protected Collection<InetAddress> getSavedLocalAddresses() {
         List<InetAddress> rv = new ArrayList<>(_localAddresses);
@@ -799,7 +801,7 @@ public abstract class TransportImpl implements Transport {
      *  Lowest cost (most preferred) first.
      *  @return non-null, possibly empty
      *  @since IPv6, public since 0.9.50, was protected
-      * @param target the target
+      *  @param target the target
      */
     public List<RouterAddress> getTargetAddresses(RouterInfo target) {
         List<RouterAddress> rv;
@@ -932,6 +934,7 @@ public abstract class TransportImpl implements Transport {
 
     /**
      *  Previously returned short, now enum as of 0.9.20
+     * @return the reachability status
      */
     public abstract Status getReachabilityStatus();
 
@@ -945,6 +948,7 @@ public abstract class TransportImpl implements Transport {
      *  This returns true if the force-firewalled setting is configured, false otherwise.
      *
      *  @since 0.9.20, public since 0.9.30
+     * @return whether i pv4 firewalled
      */
     public boolean isIPv4Firewalled() {
         return TransportUtil.isIPv4Firewalled(_context);
@@ -954,17 +958,18 @@ public abstract class TransportImpl implements Transport {
      *  This returns true if the force-firewalled setting is configured, false otherwise.
      *
      *  @since 0.9.27, public since 0.9.30
+     * @return whether i pv6 firewalled
      */
     public boolean isIPv6Firewalled() {
         return TransportUtil.isIPv6Firewalled(_context);
     }
 
     /**
-     * isBacklogged.
+     * @return whether backlogged
      */
     public boolean isBacklogged(Hash peer) {return false;}
     /**
-     * isEstablished.
+     * @return whether established
      */
     public boolean isEstablished(Hash peer) {return false;}
 
@@ -988,7 +993,7 @@ public abstract class TransportImpl implements Transport {
     public void mayDisconnect(Hash peer) { /* no-op */ }
 
     /**
-     * isUnreachable.
+     * @return whether unreachable
      */
     public boolean isUnreachable(Hash peer) {
         if (peer == _lastReachablePeer) {return false;}
@@ -1112,8 +1117,8 @@ public abstract class TransportImpl implements Transport {
     /**
      * IP of the peer from the last connection (in or out, any transport).
      *
-     * @param ip IPv4 or IPv6, non-null
-      * @param peer the peer
+     *  @param ip IPv4 or IPv6, non-null
+      *  @param peer the peer
      */
     public void setIP(Hash peer, byte[] ip) {
         byte[] old;
@@ -1124,8 +1129,8 @@ public abstract class TransportImpl implements Transport {
     /**
      * IP of the peer from the last connection (in or out, any transport).
      *
-     * @return IPv4 or IPv6 or null
-      * @param peer the peer
+     *  @return IPv4 or IPv6 or null
+      *  @param peer the peer
      */
     public static byte[] getIP(Hash peer) {
         synchronized (_IPMap) {return _IPMap.get(peer);}
@@ -1147,6 +1152,7 @@ public abstract class TransportImpl implements Transport {
 
     /**
      *  @since IPv6, public since 0.9.30
+     * @return the i pv6 config
      */
     public TransportUtil.IPv6Config getIPv6Config() {
         return TransportUtil.getIPv6Config(_context, getStyle());
@@ -1156,7 +1162,7 @@ public abstract class TransportImpl implements Transport {
      *  Allows IPv6 only if the transport is configured for it.
      *  Caller must check if we actually have a public IPv6 address.
      *  @param addr non-null
-      * @return the value
+      *  @return whether publicly routable
      */
     protected boolean isPubliclyRoutable(byte[] addr) {
         TransportUtil.IPv6Config cfg = getIPv6Config();

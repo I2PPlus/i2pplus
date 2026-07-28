@@ -22,12 +22,14 @@ public interface TunnelInfo {
      * retrieve the tunnelId that the given hop receives messages on.
      * the gateway is hop 0.
      *
+     * @return the receive tunnel id
      */
     public TunnelId getReceiveTunnelId(int hop);
     /**
      * retrieve the tunnelId that the given hop sends messages on.
      * the gateway is hop 0.
      *
+     * @return the send tunnel id
      */
     public TunnelId getSendTunnelId(int hop);
 
@@ -113,6 +115,7 @@ public interface TunnelInfo {
      * Has the tunnel failed completely?
      *
      * @since 0.9.53 copied from TunnelCreatorConfig
+     * @return the tunnel failed
      */
     public boolean getTunnelFailed();
 

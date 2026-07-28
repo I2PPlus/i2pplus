@@ -200,6 +200,7 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
     /**
      *  Cumulative GC pause time (ms) across all collectors since JVM start.
      *  Returns -1 if GC beans are unavailable.
+     * @return the cumulative gc pause time
      */
     private static long getCumulativeGcPauseTime() {
         List<GarbageCollectorMXBean> beans = ManagementFactory.getGarbageCollectorMXBeans();
@@ -220,6 +221,7 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
     /**
      *  GC pause time (ms) elapsed since the previous coalesce cycle.
      *  Returns -1 on the first call (no baseline) or if GC data is unavailable.
+     * @return the gc pause time
      */
     private long getGcPauseTime() {
         long cumulative = getCumulativeGcPauseTime();

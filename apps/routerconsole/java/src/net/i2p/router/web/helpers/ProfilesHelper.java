@@ -80,6 +80,7 @@ public class ProfilesHelper extends HelperBase {
      *  Return the currently selected profiles tab index.
      *
      *  @since 0.9.1
+     * @return the tab
      */
     private int getTab() {
         if (_full == 1) return 1;

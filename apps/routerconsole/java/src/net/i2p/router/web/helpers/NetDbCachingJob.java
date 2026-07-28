@@ -51,7 +51,7 @@ public class NetDbCachingJob extends JobImpl {
     }
 
     /**
-     * getName.
+     * @return the name
      */
     @Override
     public String getName() {

@@ -100,7 +100,7 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  @param destination the destination
+     * @param destination the destination
      *  @deprecated use 4-arg constructor
      */
     @Deprecated

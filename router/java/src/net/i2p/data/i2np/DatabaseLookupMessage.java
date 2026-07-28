@@ -107,6 +107,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
 
     /**
      * Defines the key being searched for
+     * @return the search key
      */
     public Hash getSearchKey() { return _key; }
 
@@ -146,6 +147,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     /**
      * Contains the router who requested this lookup
      *
+     * @return the from
      */
     public Hash getFrom() { return _fromHash; }
 
@@ -161,6 +163,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     /**
      * Contains the tunnel ID a reply should be sent to
      *
+     * @return the reply tunnel
      */
     public TunnelId getReplyTunnel() { return _replyTunnel; }
 
@@ -218,6 +221,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
      *  If non-null, either getReplyTag() or getRatchetReplyTag() is non-null.
      *
      *  @since 0.9.7
+     * @return the reply key
      */
     public SessionKey getReplyKey() { return _replyKey; }
 
@@ -225,6 +229,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
      *  The included session tag or null if unset
      *
      *  @since 0.9.7
+     * @return the reply tag
      */
     public SessionTag getReplyTag() { return _replyTag; }
 
@@ -248,6 +253,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
      *  The included session tag or null if unset
      *
      *  @since 0.9.46
+     * @return the ratchet reply tag
      */
     public RatchetSessionTag getRatchetReplyTag() { return _ratchetReplyTag; }
 
@@ -272,6 +278,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
      *  Preliminary, not fully supported, see proposal 154.
      *
      *  @since 0.9.46
+     * @return the ratchet public key
      */
     public PublicKey getRatchetPublicKey() { return _ratchetPubKey; }
 
@@ -563,12 +570,12 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     public int getType() { return MESSAGE_TYPE; }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

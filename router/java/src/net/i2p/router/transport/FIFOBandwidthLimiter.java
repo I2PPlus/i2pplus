@@ -121,10 +121,12 @@ public class FIFOBandwidthLimiter {
 
     /**
      * Total bytes allocated for inbound messages since start.
+     * @return the total allocated inbound bytes
      */
     public long getTotalAllocatedInboundBytes() { return _totalAllocatedInboundBytes.get(); }
     /**
      * Total bytes allocated for outbound messages since start.
+     * @return the total allocated outbound bytes
      */
     public long getTotalAllocatedOutboundBytes() { return _totalAllocatedOutboundBytes.get(); }
     /** @return smoothed one second rate */
@@ -142,24 +144,28 @@ public class FIFOBandwidthLimiter {
     /**
      *  The configured maximum, not the current rate.
      *  In binary K, i.e. rate / 1024.
+     * @return the outbound k bytes per second
      */
     public int getOutboundKBytesPerSecond() { return _refiller.getOutboundKBytesPerSecond(); }
 
     /**
      *  The configured maximum, not the current rate.
      *  In binary K, i.e. rate / 1024.
+     * @return the inbound k bytes per second
      */
     public int getInboundKBytesPerSecond() { return _refiller.getInboundKBytesPerSecond(); }
 
     /**
      *  The configured maximum, not the current rate.
      *  In binary K, i.e. rate / 1024.
+     * @return the outbound burst k bytes per second
      */
     public int getOutboundBurstKBytesPerSecond() { return _refiller.getOutboundBurstKBytesPerSecond(); }
 
     /**
      *  The configured maximum, not the current rate.
      *  In binary K, i.e. rate / 1024.
+     * @return the inbound burst k bytes per second
      */
     public int getInboundBurstKBytesPerSecond() { return _refiller.getInboundBurstKBytesPerSecond(); }
 
@@ -199,9 +205,9 @@ public class FIFOBandwidthLimiter {
      *  Returns true if the message can be sent within the current
      *  share bandwidth limits, or false if it should be dropped.
      *
-     *  @param size bytes
-*  @param factor multiplier of size for the drop calculation, 1 for no adjustment
-      *  @return true for accepted, false for drop
+     * @param size bytes
+* @param factor multiplier of size for the drop calculation, 1 for no adjustment
+      * @return true for accepted, false for drop
       *  @since 0.8.12
       */
     public boolean sentParticipatingMessage(int size, float factor) {
@@ -241,6 +247,7 @@ public class FIFOBandwidthLimiter {
     /**
      *  In Bytes per second
      *  @since 0.9.68
+     * @return the max share bandwidth
      */
     public int getMaxShareBandwidth() {
         return _refiller.getMaxShareBandwidth();
@@ -311,11 +318,11 @@ public class FIFOBandwidthLimiter {
      * getInboundBurstBytes.
      */
     /**
-     * getInboundBurstBytes.
+     * @return the inbound burst bytes
      */
     public int getInboundBurstBytes() { return _maxInboundBurst; }
     /**
-     * getOutboundBurstBytes.
+     * @return the outbound burst bytes
      */
     public int getOutboundBurstBytes() { return _maxOutboundBurst; }
     /** Set inbound burst bytes */
@@ -335,6 +342,7 @@ public class FIFOBandwidthLimiter {
 
     /**
      *  @since 0.9.53
+     * @return the inbound status
      */
     private StringBuilder getInboundStatus() {
         StringBuilder rv = new StringBuilder(128);
@@ -347,6 +355,7 @@ public class FIFOBandwidthLimiter {
 
     /**
      *  @since 0.9.53
+     * @return the outbound status
      */
     private StringBuilder getOutboundStatus() {
         StringBuilder rv = new StringBuilder(128);
@@ -797,15 +806,15 @@ public class FIFOBandwidthLimiter {
         /** uses System clock, not context clock */
         public long getRequestTime() { return _requestTime; }
         /**
-         * getTotalRequested.
+         * @return the total requested
          */
         public int getTotalRequested() { return _total; }
         /**
-         * getPendingRequested.
+         * @return the pending requested
          */
         public synchronized int getPendingRequested() { return _total - _allocated; }
         /**
-         * getAborted.
+         * @return the aborted
          */
         public boolean getAborted() { return _aborted; }
         /**
@@ -818,7 +827,7 @@ public class FIFOBandwidthLimiter {
             notifyAllocation();
         }
         /**
-         * getCompleteListener.
+         * @return the complete listener
          */
         public synchronized CompleteListener getCompleteListener() { return _lsnr; }
 
@@ -904,7 +913,7 @@ public class FIFOBandwidthLimiter {
 
         // PQEntry methods
         /**
-         * getPriority.
+         * @return the priority
          */
         public int getPriority() { return _priority; }
         // uncomment for switch to PBQ
@@ -956,6 +965,7 @@ public class FIFOBandwidthLimiter {
         public Object attachment();
         /**
          * getCompleteListener().
+         * @return the complete listener
          */
         public CompleteListener getCompleteListener();
     }
@@ -980,11 +990,11 @@ public class FIFOBandwidthLimiter {
             // No-op - intentionally empty
         }
         /**
-         * getAborted.
+         * @return the aborted
          */
         public boolean getAborted() { return false; }
         /**
-         * getPendingRequested.
+         * @return the pending requested
          */
         public int getPendingRequested() { return 0; }
         /**
@@ -993,11 +1003,11 @@ public class FIFOBandwidthLimiter {
         @Override
         public String toString() { return "noop"; }
         /**
-         * getRequestTime.
+         * @return the request time
          */
         public long getRequestTime() { return 0; }
         /**
-         * getTotalRequested.
+         * @return the total requested
          */
         public int getTotalRequested() { return 0; }
         /**
@@ -1007,7 +1017,7 @@ public class FIFOBandwidthLimiter {
             // No-op - intentionally empty
         }
         /**
-         * getCompleteListener.
+         * @return the complete listener
          */
         public CompleteListener getCompleteListener() { return null; }
         /**
@@ -1028,7 +1038,7 @@ public class FIFOBandwidthLimiter {
         public Object attachment() { return null; }
         // PQEntry methods
         /**
-         * getPriority.
+         * @return the priority
          */
         public int getPriority() { return 0; }
         /**
@@ -1038,7 +1048,7 @@ public class FIFOBandwidthLimiter {
             // No-op - intentionally empty
         }
         /**
-         * getSeqNum.
+         * @return the seq num
          */
         public long getSeqNum() { return 0; }
     }

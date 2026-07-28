@@ -91,6 +91,7 @@ class MessageOutputStream extends OutputStream {
     /**
      * Default passive flush delay optimized for lower latency while maintaining stability.
      * @since 0.9.70+ mutable for adaptive tuning
+     * @return whether slow
      */
     private static volatile int _defaultPassiveFlushDelay = SystemVersion.isSlow() ? 100 : 50;
 

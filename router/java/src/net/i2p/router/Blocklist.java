@@ -120,6 +120,7 @@ public class Blocklist {
      *  Limits of transient (in-memory) blocklists.
      *  Note that it's impossible to prevent clogging up
      *  the tables by a determined attacker, esp. on IPv6
+     * @return whether slow
      */
     private static final int MAX_IPV4_SINGLES = SystemVersion.isSlow() ? 2048 : 8192;
     private static final int MAX_IPV6_SINGLES = SystemVersion.isSlow() ? 1024 : 4096;
@@ -997,6 +998,7 @@ public class Blocklist {
     /**
      * @param ip IPv6 non-negative
      * @since IPv6
+     * @return whether on single list
      */
     private boolean isOnSingleList(BigInteger ip) {
         if (_singleIPv6Blocklist != null) {
@@ -1007,6 +1009,7 @@ public class Blocklist {
 
     /**
      * Will not contain duplicates.
+     * @return the addresses
      */
     private List<byte[]> getAddresses(Hash peer) {
         RouterInfo pinfo = _context.netDb().lookupRouterInfoLocally(peer);
@@ -1018,6 +1021,7 @@ public class Blocklist {
      * Will not contain duplicates.
      *
      * @since 0.9.29
+     * @return the addresses
      */
     private List<byte[]> getAddresses(RouterInfo pinfo) {
         List<byte[]> rv = new ArrayList<>(4);
@@ -1110,6 +1114,7 @@ public class Blocklist {
      * First check the single-IP list. Then do a binary search through the in-memory range list which
      * is a sorted array of longs. The array is sorted in signed order, but we don't care.
      * Each long is ((from << 32) | to)
+     * @return whether blocklisted
      */
     private synchronized boolean isBlocklisted(int ip) {
         if (isOnSingleList(ip)) {return true;}
@@ -1136,6 +1141,7 @@ public class Blocklist {
      * Each long is ((from << 32) | to)
      *
      * @since 0.9.48 split out from above
+     * @return whether permanently blocklisted
      */
     private static boolean isPermanentlyBlocklisted(int ip, long[] blocklist, int blocklistSize) {
         int hi = blocklistSize - 1;
@@ -1217,7 +1223,7 @@ public class Blocklist {
      *
      *  @param ip1 the starting IP as a byte array
      *  @param ip2 the ending IP as a byte array
-     *  @param blocklist the blocklist array to store in
+     *  @param blocklist the blocklist
      *  @param idx the index to store at
      */
     private static void store(byte[] ip1, byte[] ip2, long[] blocklist, int idx) {
@@ -1229,7 +1235,7 @@ public class Blocklist {
      *
      *  @param ip1 the starting IP as an integer
      *  @param ip2 the ending IP as an integer
-     *  @param blocklist the blocklist array to store in
+     *  @param blocklist the blocklist
      *  @param idx the index to store at
      */
     private static void store(int ip1, int ip2, long[] blocklist, int idx) {

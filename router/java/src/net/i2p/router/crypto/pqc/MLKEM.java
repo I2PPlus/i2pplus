@@ -127,6 +127,7 @@ public final class MLKEM {
 
     /**
      *  EncType to params
+     * @return the param
      */
     private static MLKEMParameters getParam(EncType type) throws GeneralSecurityException {
         switch(type) {

@@ -219,7 +219,7 @@ public final class SVGHints {
     /**
      * Adds a key to the list of keys that are synonyms for {@link SVGHints#KEY_BEGIN_GROUP}.
      *
-     * @param key the key ({@code null} not permitted).
+     * @param key the key
      * @since 1.8
      */
     public static void addBeginGroupKey(RenderingHints.Key key) {
@@ -229,7 +229,7 @@ public final class SVGHints {
     /**
      * Removes a key from the list of keys that are synonyms for {@link SVGHints#KEY_BEGIN_GROUP}.
      *
-     * @param key the key ({@code null} not permitted).
+     * @param key the key
      * @since 1.8
      */
     public static void removeBeginGroupKey(RenderingHints.Key key) {
@@ -253,7 +253,7 @@ public final class SVGHints {
      * JFreeSVG a direct dependency, and (2) it makes the grouping behaviour generic from the point
      * of view of the external package, rather than SVG-specific.
      *
-     * @param key the key ({@code null} not permitted)
+     * @param key the key
      * @return A boolean.
      * @since 1.8
      */
@@ -274,7 +274,7 @@ public final class SVGHints {
     /**
      * Adds a key to the list of keys that are synonyms for {@link SVGHints#KEY_END_GROUP}.
      *
-     * @param key the key ({@code null} not permitted).
+     * @param key the key
      * @since 1.8
      */
     public static void addEndGroupKey(RenderingHints.Key key) {
@@ -284,7 +284,7 @@ public final class SVGHints {
     /**
      * Removes a key from the list of keys that are synonyms for {@link SVGHints#KEY_END_GROUP}.
      *
-     * @param key the key ({@code null} not permitted).
+     * @param key the key
      * @since 1.8
      */
     public static void removeEndGroupKey(RenderingHints.Key key) {
@@ -308,7 +308,7 @@ public final class SVGHints {
      * a direct dependency, and (2) it makes the grouping behaviour generic from the point of view
      * of the external package, rather than SVG-specific.
      *
-     * @param key the key ({@code null} not permitted).
+     * @param key the key
      * @return A boolean.
      * @since 1.8
      */
@@ -329,7 +329,7 @@ public final class SVGHints {
     /**
      * Adds a key to the list of keys that are synonyms for {@link SVGHints#KEY_ELEMENT_TITLE}.
      *
-     * @param key the key ({@code null} not permitted).
+     * @param key the key
      * @since 1.9
      */
     public static void addElementTitleKey(RenderingHints.Key key) {
@@ -339,7 +339,7 @@ public final class SVGHints {
     /**
      * Removes a key from the list of keys that are synonyms for {@link SVGHints#KEY_ELEMENT_TITLE}.
      *
-     * @param key the key ({@code null} not permitted).
+     * @param key the key
      * @since 1.9
      */
     public static void removeElementTitleKey(RenderingHints.Key key) {
@@ -363,7 +363,7 @@ public final class SVGHints {
      * JFreeSVG a direct dependency, and (2) it makes the element title behaviour generic from the
      * point of view of the external package, rather than SVG-specific.
      *
-     * @param key the key ({@code null} not permitted)
+     * @param key the key
      * @return A boolean.
      * @since 1.9
      */

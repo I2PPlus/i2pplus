@@ -85,7 +85,7 @@ public class KeysAndCert extends DataStructureImpl {
      * _certificate.
      */
     protected Certificate _certificate;
-    /** ignored */
+    /** Cached calculated hash value. */
     private Hash __calculatedHash;
     /** if compressed, 32 bytes only */
     private byte[] _padding;
@@ -97,13 +97,13 @@ public class KeysAndCert extends DataStructureImpl {
      */
     protected int _paddingBlocks;
 
-    /** ignored */
+    /** Compressed padding block length in bytes. */
     private static final int PAD_COMP_LEN = 32;
-    /** ignored */
+    /** Logger instance. */
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(KeysAndCert.class);
 
     /**
-     * getCertificate.
+     * @return the certificate
      */
     public Certificate getCertificate() {
         return _certificate;
@@ -161,6 +161,7 @@ public class KeysAndCert extends DataStructureImpl {
      *  Valid for RouterIdentities. May contain random padding for Destinations.
      *
      *  @since 0.9.42
+     * @return the public key
      */
     public PublicKey getPublicKey() {
         return _publicKey;
@@ -177,7 +178,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     * getSigningPublicKey.
+     * @return the signing public key
      */
     public SigningPublicKey getSigningPublicKey() {
         return _signingKey;
@@ -197,6 +198,7 @@ public class KeysAndCert extends DataStructureImpl {
      *  Gets the padding bytes.
      *
      * @since 0.9.16
+     * @return the padding
      */
     public byte[] getPadding() {
         if (_paddingBlocks <= 1) {
@@ -227,6 +229,7 @@ public class KeysAndCert extends DataStructureImpl {
      * Is there compressible padding?
      *
      * @since 0.9.66
+     * @return whether compressible
      */
     public boolean isCompressible() {
         return _paddingBlocks > 1;
@@ -279,7 +282,6 @@ public class KeysAndCert extends DataStructureImpl {
      *
      * @since 0.9.62
      */
-    /** ignored */
     private void compressPadding() {
         _paddingBlocks = 0;
         // > 32 and a mult. of 32
@@ -418,6 +420,7 @@ public class KeysAndCert extends DataStructureImpl {
      *  as of 0.9.12. Prior to that, returned null.
      *
      *  @throws IllegalStateException if keys and cert are not initialized
+     *  @return the hash
      */
     public Hash getHash() {
         if (__calculatedHash != null) return __calculatedHash;

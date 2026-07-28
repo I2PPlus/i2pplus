@@ -58,6 +58,7 @@ public class DBHistory {
  * Not persisted until 0.9.24
  *
  * @since 0.7.8
+     * @return the last lookup successful
  */
     public long getLastLookupSuccessful() {return _lastLookupSuccessful;}
 
@@ -65,6 +66,7 @@ public class DBHistory {
  * Not persisted until 0.9.24
  *
  * @since 0.7.8
+     * @return the last lookup failed
  */
     public long getLastLookupFailed() {return _lastLookupFailed;}
 
@@ -72,6 +74,7 @@ public class DBHistory {
  * Not persisted until 0.9.24
  *
  * @since 0.7.8
+     * @return the last store successful
  */
     public long getLastStoreSuccessful() {return _lastStoreSuccessful;}
 
@@ -79,6 +82,7 @@ public class DBHistory {
  * Not persisted until 0.9.24
  *
  * @since 0.7.8
+     * @return the last store failed
  */
     public long getLastStoreFailed() {return _lastStoreFailed;}
 

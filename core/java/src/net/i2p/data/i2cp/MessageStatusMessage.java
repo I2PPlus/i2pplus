@@ -239,7 +239,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getSessionId.
+     * @return the session id
      */
     public long getSessionId() {
         return _sessionId;
@@ -265,7 +265,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getStatus.
+     * @return the status
      */
     public int getStatus() {
         return _status;
@@ -284,6 +284,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  Is the status code a success status code?
      *
      *  @since 0.9.5
+     * @return whether successful
      */
     public boolean isSuccessful() {
         return isSuccessful(_status);
@@ -293,6 +294,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  Is the status code a success status code?
      *
      *  @since 0.9.5
+     * @return whether successful
      */
     public static boolean isSuccessful(int status) {
         return status == STATUS_SEND_GUARANTEED_SUCCESS || status == STATUS_SEND_BEST_EFFORT_SUCCESS || status == STATUS_SEND_SUCCESS_LOCAL || status == STATUS_SEND_ACCEPTED || status == STATUS_AVAILABLE;
@@ -300,6 +302,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     /**
      *  This is the router's ID for the message
+     * @return the message id
      */
     public long getMessageId() {
         return _messageId;
@@ -313,7 +316,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getSize.
+     * @return the size
      */
     public long getSize() {
         return _size;
@@ -328,6 +331,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     /**
      *  This is the client's ID for the message
+     * @return the nonce
      */
     public long getNonce() {
         return _nonce;
@@ -341,7 +345,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getStatusString.
+     * @return the status string
      */
     public static final String getStatusString(int status) {
         switch (status) {
@@ -409,7 +413,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() {

@@ -720,6 +720,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	 * Get the addresses we want to bind to
 	 *
 	 * @since 0.9.46, public since 0.9.55 for HTTPServerList
+	 * @return the local addresses
 	 */
 	public static Set<String> getLocalAddresses() {
 		// older miniupnpd will send ipv6 ssdp search response to ipv4 address,
@@ -1990,7 +1991,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		}
 
 		/**
-		 * getIP.
+		 * @return the i p
 		 */
 		public String getIP() { return _ip; }
 
@@ -2015,7 +2016,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		public synchronized void setExpiration(long expires) { _expires = expires; }
 
 		/**
-		 * hashCode.
+		 * @return whether h code is present
 		 */
 		@Override
 		public int hashCode() {

@@ -95,7 +95,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * getAlgorithm.
+     * @return the algorithm
      */
     @Override
     public String getAlgorithm() {
@@ -103,7 +103,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * getFormat.
+     * @return the format
      */
     @Override
     public String getFormat() {
@@ -111,7 +111,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * getEncoded.
+     * @return the encoded
      */
     @Override
     public byte[] getEncoded() {
@@ -184,7 +184,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * getParameters.
+     * @return the parameters
      */
     @Override
     public ElGamalParameterSpec getParameters() {
@@ -192,7 +192,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * getParams.
+     * @return the params
      */
     @Override
     public DHParameterSpec getParams() {
@@ -200,7 +200,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * getY.
+     * @return the y
      */
     @Override
     public BigInteger getY() {
@@ -219,7 +219,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

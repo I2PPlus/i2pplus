@@ -207,6 +207,7 @@ public class TunnelPoolSettings {
      * getLength() + Math.min(getLengthVariance(), 0) &lt;= 0,
      * OR if getLengthOverride() == 0
      * OR if setAllowZeroHop(true) was called or set in properties.
+     * @return the allow zero hop
      */
     public boolean getAllowZeroHop() {
         return _allowZeroHop ||
@@ -244,6 +245,7 @@ public class TunnelPoolSettings {
      * (length - variance) to (length + variance), or if positive, from length
      * to (length + variance), inclusive.
      *
+     * @return the length variance
      */
     public int getLengthVariance() { return _lengthVariance; }
     /**
@@ -255,6 +257,7 @@ public class TunnelPoolSettings {
      * A temporary length to be used due to network conditions.
      * If less than zero, the standard length should be used.
      * Unused until 0.8.11
+     * @return the length override
      */
     public int getLengthOverride() { return _lengthOverride; }
 
@@ -279,6 +282,7 @@ public class TunnelPoolSettings {
      *  Modifiable, concurrent, not a copy
      *
      *  @since 0.9.21
+     * @return the aliases
      */
     public Set<Hash> getAliases() {
         return _aliases;
@@ -289,6 +293,7 @@ public class TunnelPoolSettings {
      *  If non-null, don't build tunnels.
      *
      *  @since 0.9.21
+     * @return the alias of
      */
     public Hash getAliasOf() {
         return _aliasOf;
@@ -387,7 +392,7 @@ public class TunnelPoolSettings {
     public Properties getUnknownOptions() { return _unknownOptions; }
 
     /**
-     * getMsgIdBloomXor.
+     * @return the msg id bloom xor
      */
     public long getMsgIdBloomXor() { return _msgIDBloomXor; }
 

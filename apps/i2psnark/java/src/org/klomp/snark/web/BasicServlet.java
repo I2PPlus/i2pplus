@@ -313,7 +313,7 @@ class BasicServlet extends HttpServlet {
      *
      * @param request the HTTP request
      * @param response the HTTP response
-     * @param content the content to check
+     * @param content the content
      * @return true to keep going, false if handled here
      * @throws IOException if an I/O error occurs
      */
@@ -348,7 +348,7 @@ class BasicServlet extends HttpServlet {
      *
      * @param request the HTTP request
      * @param response the HTTP response
-     * @param content the content to send
+     * @param content the content
      * @throws IOException if an I/O error occurs
      */
     protected void sendData(
@@ -421,7 +421,7 @@ class BasicServlet extends HttpServlet {
      * Write response headers for the content.
      *
      * @param response the HTTP response
-     * @param content the content to write headers for
+     * @param content the content
      * @param count the content length
      * @throws IOException if an I/O error occurs
      */
@@ -501,35 +501,35 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
-         * getContentType.
+         * @return the content type
          */
         public String getContentType() {
             return getMimeType(_file.toString());
         }
 
         /**
-         * getLastModified.
+         * @return the last modified
          */
         public long getLastModified() {
             return _file.lastModified();
         }
 
         /**
-         * getCacheTime.
+         * @return the cache time
          */
         public int getCacheTime() {
             return FILE_CACHE_CONTROL_SECS;
         }
 
         /**
-         * getContentLength.
+         * @return the content length
          */
         public long getContentLength() {
             return _file.length();
         }
 
         /**
-         * getInputStream.
+         * @return the input stream
          */
         public InputStream getInputStream() throws IOException {
             if (getContentLength() > 4 * 1024 * 1024) {
@@ -558,7 +558,7 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
-         * getContentLength.
+         * @return the content length
          */
         @Override
         public long getContentLength() {
@@ -577,14 +577,14 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
-         * getContentType.
+         * @return the content type
          */
         public String getContentType() {
             return getMimeType(_path);
         }
 
         /**
-         * getLastModified.
+         * @return the last modified
          */
         public long getLastModified() {
             String cpath = getServletContext().getContextPath();
@@ -597,21 +597,21 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
-         * getCacheTime.
+         * @return the cache time
          */
         public int getCacheTime() {
             return WAR_CACHE_CONTROL_SECS;
         }
 
         /**
-         * getContentLength.
+         * @return the content length
          */
         public long getContentLength() {
             return -1;
         }
 
         /**
-         * getInputStream.
+         * @return the input stream
          */
         public InputStream getInputStream() throws IOException {
             InputStream rv = getServletContext().getResourceAsStream(_path);

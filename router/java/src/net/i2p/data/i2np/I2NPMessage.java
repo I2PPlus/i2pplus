@@ -84,6 +84,7 @@ public interface I2NPMessage {
     /**
      * Return the unique identifier for this type of I2NP message, as defined in
      * the I2NP spec
+     * @return the type
      */
     public int getType();
 
@@ -93,10 +94,12 @@ public interface I2NPMessage {
      * return value will be Xor'ed with that value. Passing a msgIDBloomXor
      * value of 0 will result in the original ID being returned, instead of
      * passing 0 use the no-arg version.
+     * @return the unique id
      */
     public long getUniqueId(long msgIDBloomXor);
     /**
      * getUniqueId().
+     * @return the unique id
      */
     public long getUniqueId();
     /**
@@ -107,6 +110,7 @@ public interface I2NPMessage {
     /**
      * Date after which the message should be dropped (and the associated uniqueId forgotten)
      *
+     * @return the message expiration
      */
     public long getMessageExpiration();
     /**

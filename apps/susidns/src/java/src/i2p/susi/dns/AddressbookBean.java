@@ -185,7 +185,7 @@ public class AddressbookBean extends BaseBean {
      * Load properties for a hostname from the raw hosts.txt file.
      * This parses the #! format for properties.
      * @param bean the AddressBean to set properties on
-     * @param hostname the hostname to find properties for
+     * @param hostname the hostname
      */
     private void loadPropertiesFromFile(AddressBean bean, String hostname) {
         try (BufferedReader reader =
@@ -698,7 +698,7 @@ public class AddressbookBean extends BaseBean {
 
     /**
      * Sets the destination string.
-     * @param destination the destination string to set
+     * @param destination the destination
      */
     public void setDestination(String destination) {
         this.destination = DataHelper.stripHTML(destination).trim();
@@ -730,7 +730,7 @@ public class AddressbookBean extends BaseBean {
 
     /**
      * Marks an entry for deletion.
-     * @param name the name to mark for deletion
+     * @param name the name
      */
     public void setMarkedForDeletion(String name) {
         deletionMarks.addLast(DataHelper.stripHTML(name));
@@ -738,7 +738,7 @@ public class AddressbookBean extends BaseBean {
 
     /**
      * Sets the hostname string.
-     * @param hostname the hostname to set
+     * @param hostname the hostname
      */
     public void setHostname(String hostname) {
         this.hostname = DataHelper.stripHTML(hostname).trim();

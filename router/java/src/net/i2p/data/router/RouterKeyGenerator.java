@@ -88,6 +88,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
 
     /**
      * Time the routing key modifier data was last regenerated.
+     * @return the last changed
      */
     @Override
     public long getLastChanged() {
@@ -108,6 +109,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      *  Get the previous midnight (GMT) for the time given.
      *  Caller must synch.
      *  @since 0.9.10
+     * @return the previous midnight
      */
     private LocalDate getPreviousMidnight(long now) {
             return Instant.ofEpochMilli(now).atZone(GMT).toLocalDate();
@@ -164,6 +166,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      * whole keyspace.
      *
      * @throws IllegalArgumentException if origKey is null
+     * @return the routing key
      */
     @Override
     public Hash getRoutingKey(Hash origKey) {
@@ -174,6 +177,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      * Get the routing key using tomorrow's modData, not today's
      *
      * @since 0.9.10
+     * @return the next routing key
      */
     public Hash getNextRoutingKey(Hash origKey) {
         return getKey(origKey, _nextModData);
@@ -184,6 +188,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      *
      * @param time Java time
      * @since 0.9.28
+     * @return the routing key
      */
     public Hash getRoutingKey(Hash origKey, long time) {
         String modVal;
@@ -201,6 +206,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      * SHA256 of the targetKey with the specified modData appended to it
      *
      * @throws IllegalArgumentException if origKey is null
+     * @return the key
      */
     private static Hash getKey(Hash origKey, byte[] modData) {
         if (origKey == null) throw new IllegalArgumentException("Original key is null");

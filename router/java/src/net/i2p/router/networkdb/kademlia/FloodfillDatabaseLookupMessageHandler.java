@@ -256,7 +256,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
      * @param ourRI true if the lookup is for this router's identity
      * @param floodfillMode true if the local router participates as floodfill
      * @param isFF true if the sender router is a floodfill
-     * @param type the type of the lookup message
+     * @param type the type
      * @return true if the lookup is accepted, false if dropped
      *
      * @since 0.9.67+
@@ -288,6 +288,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
 
     /**
      * Extract IP:port from RouterInfo for a peer hash.
+     * @return the i p from hash
      */
     private String getIPFromHash(Hash h) {
         try {

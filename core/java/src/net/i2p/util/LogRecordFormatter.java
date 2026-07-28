@@ -79,6 +79,7 @@ class LogRecordFormatter {
 
     /**
      * Format the record timestamp.
+     * @return the when
      */
     public static String getWhen(LogManager manager, LogRecord logRecord) {
         SimpleDateFormat fmt = manager.getDateFormat();

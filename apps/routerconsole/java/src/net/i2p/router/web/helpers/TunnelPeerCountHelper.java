@@ -17,7 +17,7 @@ public class TunnelPeerCountHelper extends HelperBase {
     public TunnelPeerCountHelper() { /* nop */ }
 
     /**
-     * getTunnelPeerCount.
+     * @return the tunnel peer count
      */
     public String getTunnelPeerCount() {
         TunnelRenderer renderer = new TunnelRenderer(_context);

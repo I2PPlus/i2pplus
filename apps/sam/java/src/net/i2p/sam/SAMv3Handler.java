@@ -30,11 +30,10 @@ import net.i2p.util.PasswordManager;
  * @author mkvore
  */
 
-/** ignored */
 class SAMv3Handler extends SAMv1Handler
 {
 
-    /** ignored */
+    /** I2P session. */
     private Session session;
     // TODO remove singleton, hang off SAMBridge like dgserver
     /**
@@ -42,15 +41,15 @@ class SAMv3Handler extends SAMv1Handler
      */
     /** sSessionsHash */
     public static final SessionsDB sSessionsHash = new SessionsDB();
-    /** ignored */
+    /** Stolen socket. */
     volatile boolean stolenSocket;
-    /** ignored */
+    /** Stream forwarding socket. */
     volatile boolean streamForwardingSocket;
     /** true once the SESSION CREATE has fully initialized; guards against race in execStreamMessage */
     private volatile boolean sessionReady;
     /** package-visible for {@link SAMHandlerPool} */
     final boolean sendPorts;
-    /** ignored */
+    /** Authentication error message. */
     private static final String AUTH_ERROR = "AUTH STATUS RESULT=I2P_ERROR";
 
     /**
@@ -64,7 +63,6 @@ class SAMv3Handler extends SAMv1Handler
      * @throws SAMException if the version is not supported
      * @throws IOException if an I/O error occurs
     */
-    /** ignored */
     public SAMv3Handler(SocketChannel s, int verMajor, int verMinor, SAMBridge parent) throws SAMException, IOException {
         this(s, verMajor, verMinor, new Properties(), parent);
     }
@@ -82,7 +80,6 @@ class SAMv3Handler extends SAMv1Handler
      * @throws IOException if an I/O error occurs
      */
 
-    /** ignored */
     public SAMv3Handler(SocketChannel s, int verMajor, int verMinor, Properties i2cpProps, SAMBridge parent) throws SAMException, IOException {
         super(s, verMajor, verMinor, i2cpProps, parent);
         sendPorts = (verMajor == 3 && verMinor >= 2) || verMajor > 3;
@@ -96,7 +93,6 @@ class SAMv3Handler extends SAMv1Handler
      * @return true if the major version matches this handler's version
      */
     @Override
-    /** ignored */
     public boolean verifVersion() {
         return (verMajor == 3);
     }
@@ -106,7 +102,6 @@ class SAMv3Handler extends SAMv1Handler
      *
      * @return the client's IP address as a string
      */
-    /** ignored */
     public String getClientIP() {
         return this.socket.socket().getInetAddress().getHostAddress();
     }
@@ -114,7 +109,6 @@ class SAMv3Handler extends SAMv1Handler
     /**
      *  @return true if the handler has an active data stream (stolen or forwarding)
      */
-    /** ignored */
     boolean hasActiveStream() {
         return stolenSocket || streamForwardingSocket;
     }
@@ -122,7 +116,6 @@ class SAMv3Handler extends SAMv1Handler
     /**
      *  For SAMv3StreamSession connect and accept
      */
-    /** ignored */
     public void stealSocket() {
         stolenSocket = true;
         if (sendPorts) {
@@ -141,7 +134,6 @@ class SAMv3Handler extends SAMv1Handler
      *  For SAMv3StreamSession
      *  @since 0.9.20
      */
-    /** ignored */
     SAMBridge getBridge() {
         return bridge;
     }
@@ -151,7 +143,6 @@ class SAMv3Handler extends SAMv1Handler
      *  @return may be null
      *  @since 0.9.24
      */
-    /** ignored */
     Session getSession() {
         return session;
     }
@@ -160,7 +151,6 @@ class SAMv3Handler extends SAMv1Handler
      *  For subsessions created by MasterSession
      *  @since 0.9.25
      */
-    /** ignored */
     void setSession(SAMv3RawSession sess) {
         rawSession = sess; session = sess;
     }
@@ -169,7 +159,6 @@ class SAMv3Handler extends SAMv1Handler
      *  For subsessions created by MasterSession
      *  @since 0.9.25
      */
-    /** ignored */
     void setSession(SAMv3DatagramSession sess) {
         datagramSession = sess; session = sess;
     }
@@ -178,7 +167,6 @@ class SAMv3Handler extends SAMv1Handler
      *  For subsessions created by MasterSession
      *  @since 0.9.25
      */
-    /** ignored */
     void setSession(SAMv3StreamSession sess) {
         streamSession = sess; session = sess;
     }
@@ -191,7 +179,6 @@ class SAMv3Handler extends SAMv1Handler
      * @param line the complete command line (without trailing newline)
      * @return true if the handler should continue processing commands
      */
-    /** ignored */
     boolean processLine(String line) {
         if (_log.shouldInfo())
             _log.info("New message received: [" + line + ']');
@@ -266,7 +253,6 @@ class SAMv3Handler extends SAMv1Handler
      * Retained to fulfill the abstract contract in SAMHandler.
      */
     @Override
-    /** ignored */
     public void handle() {
         if (_log.shouldDebug())
             _log.debug("SAMv3Handler.handle() called (pool mode)");
@@ -284,7 +270,6 @@ class SAMv3Handler extends SAMv1Handler
      * @since 0.9.20
      */
     @Override
-    /** ignored */
     public void stopHandling() {
         boolean alreadyStopping;
         synchronized (stopLock) {
@@ -316,7 +301,7 @@ class SAMv3Handler extends SAMv1Handler
         bridge.unregister(this);
     }
 
-    /** ignored */
+    /** Terminate the handler. */
     private void die() {
         SessionRecord rec = null;
 
@@ -378,7 +363,6 @@ class SAMv3Handler extends SAMv1Handler
      * @return true if the handler should continue processing commands
      */
     @Override
-    /** ignored */
     protected boolean execSessionMessage(String opcode, Properties props) {
         String nick = (String) props.remove("ID");
         if (nick == null)
@@ -403,7 +387,6 @@ class SAMv3Handler extends SAMv1Handler
      * @param props parsed message properties
      * @return true if the handler should continue processing
      */
-    /** ignored */
     private boolean execSessionCreate(String nick, Properties props) {
         boolean ok = false;
         try {
@@ -493,7 +476,6 @@ class SAMv3Handler extends SAMv1Handler
      * @param props properties (SIGNATURE_TYPE consumed if TRANSIENT)
      * @return Base64-encoded private key
      */
-    /** ignored */
     private static String initDestination(String dest, Properties props) throws DataFormatException {
         if (dest.equals("TRANSIENT")) {
             String sigTypeStr = (String) props.remove("SIGNATURE_TYPE");
@@ -518,7 +500,6 @@ class SAMv3Handler extends SAMv1Handler
      * Create and start the session object for the given style.
      * Blocks in the session constructors while tunnels are built.
      */
-    /** ignored */
     private void instantiateSession(String style, String nick,
                                      Properties allProps, Properties props)
             throws DataFormatException, I2PSessionException, IOException, SAMException {
@@ -549,7 +530,6 @@ class SAMv3Handler extends SAMv1Handler
     /**
      * Execute SESSION ADD or REMOVE for MASTER sessions.
      */
-    /** ignored */
     private boolean execSessionAddRemove(String opcode, String nick, Properties props) {
         if (streamSession == null || datagramSession == null || rawSession == null)
             return writeString(SESSION_ERROR, "Not a MASTER session");
@@ -564,7 +544,6 @@ class SAMv3Handler extends SAMv1Handler
     /**
      * @throws NPE if login nickname is not registered
      */
-    /** ignored */
     private static SAMv3StreamSession newSAMStreamSession(String login )
         throws IOException, DataFormatException, SAMException {
             return new SAMv3StreamSession(login);
@@ -578,7 +557,6 @@ class SAMv3Handler extends SAMv1Handler
      * @return true if the handler should continue processing commands
      */
     @Override
-    /** ignored */
     protected boolean execStreamMessage ( String opcode, Properties props ) {
         String nick = null;
         SessionRecord rec = null;
@@ -661,7 +639,6 @@ class SAMv3Handler extends SAMv1Handler
      * @return true if the handler should continue processing commands
      */
     @Override
-    /** ignored */
     protected boolean execStreamConnect(Properties props) {
         boolean verbose = !Boolean.parseBoolean(props.getProperty("SILENT"));
         try {
@@ -696,7 +673,7 @@ class SAMv3Handler extends SAMv1Handler
         }
     }
 
-    /** ignored */
+    /** Exec stream forward incoming. */
     private boolean execStreamForwardIncoming( Properties props ) {
         // Messages ARE sent if SILENT=true,
         // which is different from CONNECT and ACCEPT.
@@ -723,7 +700,6 @@ class SAMv3Handler extends SAMv1Handler
      *
      * @return true if accept was launched, false on immediate error
      */
-    /** ignored */
     private boolean execStreamAccept(Properties props) {
         boolean verbose = !Boolean.parseBoolean(props.getProperty("SILENT"));
         try {
@@ -752,7 +728,6 @@ class SAMv3Handler extends SAMv1Handler
      * @param result non-null
      * @param message may be null
      */
-    /** ignored */
     public void notifyStreamResult(boolean verbose, String result, String message) throws IOException {
         if (!verbose) return;
         String msgString = createMessageString(message);
@@ -766,7 +741,6 @@ class SAMv3Handler extends SAMv1Handler
     /**
      * notifyStreamIncomingConnection.
      */
-    /** ignored */
     public void notifyStreamIncomingConnection(Destination d, int fromPort, int toPort) throws IOException {
         if (getStreamSession() == null) {
             _log.error("BUG! Received stream connection, but session is null!");
@@ -786,11 +760,10 @@ class SAMv3Handler extends SAMv1Handler
     /**
      * Notify the SAM client of an incoming stream connection on a static channel.
      *
-     * @param client the client socket channel
+     * @param client the client
      * @param d the destination of the remote peer
      * @throws IOException if writing to the client socket fails
      */
-    /** ignored */
     public static void notifyStreamIncomingConnection(SocketChannel client, Destination d) throws IOException {
         if (!writeString(d.toBase64() + "\n", client)) {
             throw new IOException("Error notifying connection to SAM client");
@@ -800,14 +773,13 @@ class SAMv3Handler extends SAMv1Handler
     /**
      * Notify the SAM client of an incoming stream connection with port information.
      *
-     * @param client the client socket channel
+     * @param client the client
      * @param d the destination of the remote peer
      * @param fromPort the source port
      * @param toPort the destination port
      * @throws IOException if writing to the client socket fails
      * @since 0.9.24
      */
-    /** ignored */
     public static void notifyStreamIncomingConnection(SocketChannel client, Destination d, int fromPort, int toPort) throws IOException {
         if (!writeString(d.toBase64() + " FROM_PORT=" + fromPort + " TO_PORT=" + toPort + '\n', client)) {
             throw new IOException("Error notifying connection to SAM client");

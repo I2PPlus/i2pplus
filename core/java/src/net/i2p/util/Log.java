@@ -75,7 +75,7 @@ public class Log {
     /**
      * Get the log level integer for a string level name.
      *
-     * @param level the level name
+     * @param level the level
      * @return the integer level
      */
     public static int getLevel(String level) {
@@ -287,6 +287,7 @@ public class Log {
      * Check if DEBUG level logging is enabled.
      *
      * @since 0.9.20
+     * @return whether debug
      */
     public boolean shouldDebug() {
         return DEBUG >= _minPriority;
@@ -296,6 +297,7 @@ public class Log {
      * Check if INFO level logging is enabled.
      *
      * @since 0.9.20
+     * @return whether info
      */
     public boolean shouldInfo() {
         return INFO >= _minPriority;
@@ -305,6 +307,7 @@ public class Log {
      * Check if WARN level logging is enabled.
      *
      * @since 0.9.20
+     * @return whether warn
      */
     public boolean shouldWarn() {
         return WARN >= _minPriority;
@@ -314,6 +317,7 @@ public class Log {
      * Check if ERROR level logging is enabled.
      *
      * @since 0.9.20
+     * @return whether error
      */
     public boolean shouldError() {
         return ERROR >= _minPriority;
@@ -419,6 +423,7 @@ public class Log {
 
         /**
          * Based on the scope cache string.
+         * @return whether h code is present
          */
         @Override
         public int hashCode() {

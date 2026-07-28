@@ -56,9 +56,7 @@ class Mail {
      * escaped.
      */
     public String sender;       // as received, trimmed only, not HTML escaped
-    /**
-     * <>.
-     */
+    /** Address only, enclosed by {@code <>}. */
     public String reply;        // address only, enclosed by <>
     /**
      * "".
@@ -108,7 +106,7 @@ class Mail {
     private MailPart part;
     /** May be null. Non-empty if non-null. Not HTML escaped. */
     String[] to; // addresses only, enclosed by <>
-    /** addresses only, enclosed by <> */
+    /** addresses only, enclosed by {@code <>} */
     String[] cc;
     /** ignored */
     private boolean isNew;
@@ -294,7 +292,7 @@ class Mail {
 
     /**
     * Returns the first email address portion, enclosed by &lt;&gt;
-    * @param address the address to parse
+    * @param address the address
     * @return the address enclosed in angle brackets, or null
     */
     public static String getAddress(String address) {

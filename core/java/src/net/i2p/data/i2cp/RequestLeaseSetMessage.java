@@ -47,7 +47,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getSessionId.
+     * @return the session id
      */
     public SessionId getSessionId() {
         return _sessionId;
@@ -71,14 +71,14 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getEndpoints.
+     * @return the endpoints
      */
     public int getEndpoints() {
         return _endpoints.size();
     }
 
     /**
-     * getRouter.
+     * @return the router
      */
     public Hash getRouter(int endpoint) {
         if ((endpoint < 0) || (_endpoints.size() <= endpoint)) {
@@ -88,7 +88,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getTunnelId.
+     * @return the tunnel id
      */
     public TunnelId getTunnelId(int endpoint) {
         if ((endpoint < 0) || (_endpoints.size() <= endpoint)) {
@@ -111,7 +111,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getEndDate.
+     * @return the end date
      */
     public Date getEndDate() {
         return _end;
@@ -174,7 +174,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() {
@@ -209,14 +209,14 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
         }
 
         /**
-         * getRouter.
+         * @return the router
          */
         public Hash getRouter() {
             return _router;
         }
 
         /**
-         * getTunnelId.
+         * @return the tunnel id
          */
         public TunnelId getTunnelId() {
             return _tunnelId;

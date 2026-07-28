@@ -58,6 +58,7 @@ import net.i2p.util.Log;
     /**
      *  Is SSU2 enabled?
      *  @since 0.9.56
+     * @return whether s s u2 enabled
      */
     private boolean isSSU2Enabled() {return true;}
 

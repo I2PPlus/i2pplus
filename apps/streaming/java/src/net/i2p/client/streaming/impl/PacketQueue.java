@@ -69,7 +69,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
      * This updates the acks.
      * keys and tags disabled since dropped in I2PSession
      *
-     * @param packet the packet to enqueue
+     * @param packet the packet
      * @return true if sent
      */
      public boolean enqueue(PacketLocal packet) {
@@ -375,13 +375,12 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
 
     /**
      * Check for expired message states, without wastefully setting a timer for each
-     * message.
      * @since 0.9.14
      */
     private class RemoveExpired extends SimpleTimer2.TimedEvent {
 
         /**
-         * @param timer the timer to schedule on
+         * @param timer the timer
          */
         public RemoveExpired(SimpleTimer2 timer) {
              super(timer, REMOVE_EXPIRED_TIME);

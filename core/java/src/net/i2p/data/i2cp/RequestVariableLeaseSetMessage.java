@@ -57,7 +57,7 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getSessionId.
+     * @return the session id
      */
     public SessionId getSessionId() {
         return _sessionId;
@@ -81,14 +81,14 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getEndpoints.
+     * @return the endpoints
      */
     public int getEndpoints() {
         return _endpoints.size();
     }
 
     /**
-     * getEndpoint.
+     * @return the endpoint
      */
     public Lease getEndpoint(int endpoint) {
         if ((endpoint < 0) || (_endpoints.size() <= endpoint)) {
@@ -155,7 +155,7 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * getType.
+     * @return the type
      */
     @Override
     public int getType() {

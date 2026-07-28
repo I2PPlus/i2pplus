@@ -47,7 +47,7 @@ public class HealthHelper extends HelperBase {
     }
 
     /**
-     * getHealthContent.
+     * @return the health content
      */
     public String getHealthContent() {
         try {

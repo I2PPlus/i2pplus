@@ -43,12 +43,12 @@ class FloodOnlyLookupSelector implements MessageSelector {
     }
 
     /**
-     * getExpiration.
+     * @return the expiration
      */
     public long getExpiration() { return (_matchFound ? -1 : _search.getExpiration()); }
 
     /**
-     * isMatch.
+     * @return whether match
      */
     public boolean isMatch(I2NPMessage message) {
         if (message == null) return false;

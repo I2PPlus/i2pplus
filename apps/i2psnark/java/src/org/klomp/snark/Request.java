@@ -68,6 +68,7 @@ class Request {
      * The piece number this Request is for
      *
      * @since 0.9.1
+     * @return the piece
      */
     public int getPiece() {
         return piece.getPiece();
@@ -77,6 +78,7 @@ class Request {
      * The PartialPiece this Request is for
      *
      * @since 0.9.1
+     * @return the partial piece
      */
     public PartialPiece getPartialPiece() {
         return piece;

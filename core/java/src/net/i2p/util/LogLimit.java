@@ -26,14 +26,14 @@ class LogLimit {
     }
 
     /**
-     * getRootName.
+     * @return the root name
      */
     public String getRootName() {
         return _rootName;
     }
 
     /**
-     * getLimit.
+     * @return the limit
      */
     public int getLimit() {
         return _limit;
@@ -58,7 +58,7 @@ class LogLimit {
     }
 
     /**
-     * hashCode.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {

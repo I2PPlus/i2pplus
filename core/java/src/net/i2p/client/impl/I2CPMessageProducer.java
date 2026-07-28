@@ -436,7 +436,7 @@ class I2CPMessageProducer {
      * This method is misnamed, it does not create the LeaseSet,
      * the caller does that.
      *
-     * @param signingPriv ignored for LS2
+     * @param signingPriv unused for LS2 lease sets
      */
     /**
      * Send a CreateLeaseSet message.

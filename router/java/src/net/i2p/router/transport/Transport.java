@@ -125,6 +125,7 @@ public interface Transport {
     /**
      *  Do we have any current address?
      *  @since IPv6
+     * @return whether current address is present
      */
     public boolean hasCurrentAddress();
 
@@ -190,7 +191,7 @@ public interface Transport {
      * Can be called before startListening() to set initial address,
      * or after transport is already running.
      *
-     * @param source the source of this address change (UPnP, interface, config, SSU)
+     * @param source the source
      * @param ip the new external IP address (IPv4 or IPv6), may be null to indicate IPv4 failure or port-only change
      * @param port the new external port number, 0 if unknown or unchanged
      */
@@ -206,7 +207,7 @@ public interface Transport {
      * notifications from this source.
      *
      * This can be called after the transport is running.
-     * @param source the source of the address removal
+     * @param source the source
      * @param ipv6 true for IPv6, false for IPv4
      * @since 0.9.20
      */

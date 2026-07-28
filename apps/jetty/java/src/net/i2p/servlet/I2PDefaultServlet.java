@@ -291,7 +291,7 @@ public class I2PDefaultServlet extends DefaultServlet {
      * The above example would parse incorrectly on various browsers as the "&lt;" or '"' characters
      * would end the href attribute value string prematurely.
      *
-     * @param raw the raw text to encode.
+     * @param raw the raw data
      * @return the defanged text.
      */
     private static String hrefEncodeURI(String raw) {
@@ -363,7 +363,7 @@ public class I2PDefaultServlet extends DefaultServlet {
     }
 
     /**
-     * getResource.
+     * @return the resource
      */
     @Override
     public Resource getResource(String path) {

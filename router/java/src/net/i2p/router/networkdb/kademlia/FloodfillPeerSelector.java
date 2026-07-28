@@ -607,6 +607,7 @@ class FloodfillPeerSelector extends PeerSelector {
 
     /**
      * Extract IP:port from RouterInfo.
+     * @return the i p from router info
      */
     private String getIPFromRouterInfo(RouterInfo ri) {
         if (ri == null) return null;

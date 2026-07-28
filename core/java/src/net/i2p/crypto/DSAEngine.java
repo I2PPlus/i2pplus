@@ -40,7 +40,7 @@ public final class DSAEngine {
     /**
      *  Create a DSA engine for the given context.
      *
-     *  @param context the context
+     * @param context the context
      */
     public DSAEngine(I2PAppContext context) {
         _log = context.logManager().getLog(DSAEngine.class);
@@ -436,7 +436,7 @@ public final class DSAEngine {
     /**
      * Calculate a SHA-1 hash of the source data.
      *
-     * @param source the source data
+     * @param source the source
      * @param offset the offset in the source data
      * @param len the length of data to hash
      * @return the SHA-1 hash

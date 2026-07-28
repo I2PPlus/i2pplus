@@ -487,6 +487,7 @@ public class RouterContext extends I2PAppContext {
      * Tie in the router's config as properties, as well as whatever the
      * I2PAppContext says.
      *
+     * @return the property
      */
     @Override
     public String getProperty(String propName) {
@@ -500,6 +501,7 @@ public class RouterContext extends I2PAppContext {
      * Tie in the router's config as properties, as well as whatever the
      * I2PAppContext says.
      *
+     * @return the property
      */
     @Override
     public String getProperty(String propName, String defaultVal) {
@@ -512,6 +514,7 @@ public class RouterContext extends I2PAppContext {
 
     /**
      * Return an int with an int default
+     * @return the property
      */
     @Override
     public int getProperty(String propName, int defaultVal) {
@@ -532,6 +535,7 @@ public class RouterContext extends I2PAppContext {
      * Return a long with a long default
      *
      * @since 0.9.4
+     * @return the property
      */
     @Override
     public long getProperty(String propName, long defaultVal) {

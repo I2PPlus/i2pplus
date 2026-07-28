@@ -42,7 +42,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      *  Lookup a database entry locally.
      *
-     *  @param key the key to look up
+     *  @param key the key
      *  @return RouterInfo, LeaseSet, or null
      *  @since 0.8.3
      */
@@ -51,7 +51,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      *  Not for use without validation
      *
-     *  @param key the key to look up
+     *  @param key the key
      *  @return RouterInfo, LeaseSet, or null, NOT validated
      *  @since 0.9.38
      */
@@ -60,7 +60,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      *  Lookup a LeaseSet in the network database.
      *
-     *  @param key the key to look up
+     *  @param key the key
      *  @param onFindJob job to run on success
      *  @param onFailedLookupJob job to run on failure
      *  @param timeoutMs timeout in milliseconds
@@ -159,7 +159,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      *  Store a DatabaseEntry in the network database.
      *
-     *  @param key the key to store under
+     *  @param key the key
      *  @param entry the entry to store
      *  @return the old entry if it already existed at that key
      *  @throws IllegalArgumentException if the data is not valid
@@ -256,25 +256,25 @@ public abstract class NetworkDatabaseFacade implements Service {
     /** public for NetDbRenderer in routerconsole */
     /* @since 0.9.64+ */
     /**
-     * getClientLeases.
+     * @return the client leases
      */
     public Set<LeaseSet> getClientLeases() {return Collections.emptySet();}
     /** public for NetDbRenderer in routerconsole */
     /* @since 0.9.64+ */
     /**
-     * getPublishedLeases.
+     * @return the published leases
      */
     public Set<LeaseSet> getPublishedLeases() {return Collections.emptySet();}
     /** public for NetDbRenderer in routerconsole */
     /* @since 0.9.64+ */
     /**
-     * getUnpublishedLeases.
+     * @return the unpublished leases
      */
     public Set<LeaseSet> getUnpublishedLeases() {return Collections.emptySet();}
     /** public for NetDbRenderer in routerconsole */
     /* @since 0.9.64+ */
     /**
-     * getFloodfillLeases.
+     * @return the floodfill leases
      */
     public Set<LeaseSet> getFloodfillLeases() {return Collections.emptySet();}
     /** @since 0.9 */
@@ -294,6 +294,7 @@ public abstract class NetworkDatabaseFacade implements Service {
      *
      *  @param key only for Destinations; for RouterIdentities, see Banlist
      *  @since 0.9.16
+     *  @return whether negative cached forever
      */
     public boolean isNegativeCachedForever(Hash key) {return false;}
 
@@ -316,6 +317,7 @@ public abstract class NetworkDatabaseFacade implements Service {
      *  For console ConfigKeyringHelper
      *
      *  @since 0.9.41
+     * @return the blind data
      */
     public List<BlindData> getBlindData() {
         return null;

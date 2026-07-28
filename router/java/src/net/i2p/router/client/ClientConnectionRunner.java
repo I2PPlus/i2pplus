@@ -958,7 +958,7 @@ class ClientConnectionRunner {
      * Send async abuse message to the client
      *
      * @param dest the offending destination
-     * @param reason the reason for the abuse report
+     * @param reason the reason
      * @param severity the severity level
      */
     public void reportAbuse(Destination dest, String reason, int severity) {

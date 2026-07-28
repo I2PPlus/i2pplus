@@ -122,7 +122,7 @@ public class TunnelConfig {
         _type = (type != null ? type.trim() : null);
     }
     /**
-     * getType.
+     * @return the type
      */
     public String getType() {
         return _type;
@@ -241,7 +241,7 @@ public class TunnelConfig {
         _privKeyFile = (file != null ? file.trim() : null);
     }
     /**
-     * getPrivKeyFile.
+     * @return the priv key file
      */
     public String getPrivKeyFile() {
         return _privKeyFile;
@@ -934,6 +934,7 @@ public class TunnelConfig {
      * suitable for use in a TunnelController.  This will replace (not add to)
      * any existing parameters, so this should return a comprehensive mapping.
      *
+     * @return the config
      */
     public Properties getConfig() {
         Properties config = new Properties();
@@ -1520,7 +1521,7 @@ public class TunnelConfig {
     /**
      * Update tunnel quantities for the provided config from this TunnelConfig.
      *
-     * @param config the config to update.
+     * @param config the configuration
      */
     public void updateTunnelQuantities(Properties config) {
         if (_tunnelQuantity >= 0) {

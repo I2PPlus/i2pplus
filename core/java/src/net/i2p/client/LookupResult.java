@@ -49,13 +49,11 @@ public interface LookupResult {
     public static final int RESULT_DEFERRED = -1;
 
     /**
-     * Description.
      * @return zero for success, nonzero for failure
      */
     public int getResultCode();
 
     /**
-     * Description.
      * @return Destination on success, null on failure
      */
     public Destination getDestination();
@@ -65,6 +63,7 @@ public interface LookupResult {
      * Callback will be called later with the final result and the same nonce.
      *
      * @since 0.9.67
+     * @return the nonce
      */
     public int getNonce();
 }

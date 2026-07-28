@@ -33,6 +33,7 @@ public class StatHelper extends HelperBase {
 
     /**
      * Retrieve peer profile or stats based on usage
+     * @return the profile
      */
     public String getProfile() {
         if (_peer == null || _peer.length() <= 0) {
@@ -52,6 +53,7 @@ public class StatHelper extends HelperBase {
 
     /**
      * Get stats page as string or write to output stream
+     * @return the stats
      */
     public String getStats() {
         StatsGenerator gen = new StatsGenerator(_context);

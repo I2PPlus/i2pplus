@@ -85,6 +85,7 @@ public abstract class ZipFileComment {
 
     /**
      *  go backwards from the end
+     * @return the comment
      */
     private static String getComment(byte[] buffer) throws IOException {
         for (int i = buffer.length - (1 + BLOCK_LEN - MAGIC_LEN); i >= 0; i--) {

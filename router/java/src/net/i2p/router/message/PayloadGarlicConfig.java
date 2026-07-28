@@ -77,6 +77,7 @@ public class PayloadGarlicConfig extends GarlicConfig {
      *
      *  @since 0.9.12
      *  @throws UnsupportedOperationException always
+     *  @return the clove
      */
     @Override
     public GarlicConfig getClove(int index) {

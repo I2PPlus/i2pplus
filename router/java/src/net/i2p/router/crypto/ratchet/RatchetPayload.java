@@ -122,7 +122,7 @@ class RatchetPayload {
  * @param cb the payload callback
  * @param payload the payload data
  * @param off the offset into the payload
- * @param length the length of the payload
+ * @param length the length
  * @param isHandshake true for handshake messages
  * @return the number of blocks processed
  * @throws IOException on I/O error
@@ -254,7 +254,7 @@ class RatchetPayload {
      *
      *  @param payload writes to it starting at off
      *  @param off the starting offset
-     *  @param blocks the blocks to write
+     *  @param blocks the blocks
      *  @return the new offset
      */
     public static int writePayload(byte[] payload, int off, List<Block> blocks) {
@@ -579,9 +579,9 @@ class RatchetPayload {
      * Big endian.
      * Same as DataHelper.toLong(target, offset, 4, value) but allows negative value
      *
-     * @param target the target array
+     * @param target the target
      * @param offset the offset
-     * @param value the value to write
+     * @param value the value
      * @throws ArrayIndexOutOfBoundsException
      * @since 0.9.46
      */

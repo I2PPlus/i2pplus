@@ -35,6 +35,7 @@ public final class SipHashInline {
     /**
      *  @param k0 the first 8 bytes of the key
      *  @param k1 the last 8 bytes of the key
+     *  @return whether h24 is present
      */
     public static long hash24(long k0, long k1, byte[] data) {
         return hash24(k0, k1, data, 0, data.length);
@@ -43,6 +44,7 @@ public final class SipHashInline {
     /**
      *  @param k0 the first 8 bytes of the key
      *  @param k1 the last 8 bytes of the key
+     *  @return whether h24 is present
      */
     public static long hash24(long k0, long k1, byte[] data, int off, int len) {
         long v0 = 0x736f6d6570736575L ^ k0;

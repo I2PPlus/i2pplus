@@ -638,6 +638,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * @since 0.9.1
+     * @return whether stopping
      */
     public boolean isStopping() {
         return _stopping;
@@ -674,6 +675,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * ClientApp method.
      *
      * @since 0.9.30
+     * @return the name
      */
     @Override
     public String getName() {
@@ -684,6 +686,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * ClientApp method.
      *
      * @since 0.9.30
+     * @return the display name
      */
     @Override
     public String getDisplayName() {
@@ -892,6 +895,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * @since 0.9.46 (I2P+)
+     * @return the max files per torrent
      */
     public int getMaxFilesPerTorrent() {
         try {
@@ -903,6 +907,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * @since 0.9.61+ (I2P+)
+     * @return the max log messages
      */
     public int getMaxLogMessages() {
         try {
@@ -916,6 +921,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * For GUI
      *
      * @since 0.9.6
+     * @return the page size
      */
     public int getPageSize() {
         try {
@@ -961,6 +967,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * For RPC
      *
      * @since 0.9.30
+     * @return the config dir
      */
     public File getConfigDir() {
         return _configDir;
@@ -1302,6 +1309,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * @since 0.9.31
+     * @return the universal theming
      */
     public boolean getUniversalTheming() {
         return _context.getBooleanProperty(RC_PROP_UNIVERSAL_THEMING);
@@ -2311,6 +2319,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Unmodifiable
      *
      * @since 0.9.4
+     * @return the torrents
      */
     public Collection<Snark> getTorrents() {
         return Collections.unmodifiableCollection(_snarks.values());
@@ -3027,6 +3036,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Get the saved bitfield for a torrent from the config file. Convert "." to a full bitfield. A
      * Snark.CompleteListener method.
+     * @return the saved torrent bit field
      */
     @Override
     public BitField getSavedTorrentBitField(Snark snark) {
@@ -3159,6 +3169,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * I2PSnarkUtil.commentsEnabled() Default true.
      *
      * @since 0.9.31
+     * @return the saved comments enabled
      */
     public boolean getSavedCommentsEnabled(Snark snark) {
         boolean rv = true;
@@ -4252,6 +4263,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Unsorted map of name to Tracker object Modifiable, not a copy
      *
      * @since 0.9.1
+     * @return the tracker map
      */
     public Map<String, Tracker> getTrackerMap() {
         return _trackerMap;
@@ -4261,6 +4273,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Unsorted map of name to TorrentCreateFilter object Modifiable, not a copy
      *
      * @since 0.9.62+
+     * @return the torrent create filter map
      */
     public Map<String, TorrentCreateFilter> getTorrentCreateFilterMap() {
         return _torrentCreateFilterMap;
@@ -4270,6 +4283,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Returns the current number of configured file filters
      *
      * @since 0.9.62+
+     * @return the create filter count
      */
     public int getCreateFilterCount() {
         return _torrentCreateFilterMap.size();
@@ -4284,6 +4298,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Unsorted, do not modify
      *
      * @since 0.9.62+
+     * @return the torrent create filter strings
      */
     public Collection<TorrentCreateFilter> getTorrentCreateFilterStrings() {
         return _torrentCreateFilterMap.values();
@@ -4293,6 +4308,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Sorted copy
      *
      * @since 0.9.1
+     * @return the sorted trackers
      */
     public List<Tracker> getSortedTrackers() {
         List<Tracker> rv = new ArrayList<>(_trackerMap.values());
@@ -4312,6 +4328,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Sorted copy
      *
      * @since 0.9.62+
+     * @return the sorted torrent create filter strings
      */
     public List<TorrentCreateFilter> getSortedTorrentCreateFilterStrings() {
         List<TorrentCreateFilter> fv =
@@ -4324,6 +4341,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Has the default tracker list been modified?
      *
      * @since 0.9.35
+     * @return whether modified trackers is present
      */
     public boolean hasModifiedTrackers() {
         return _config.containsKey(PROP_TRACKERS);
@@ -4904,7 +4922,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /* @since 0.9.64+ */
     /**
-     * getDiskUsage.
+     * @return the disk usage
      */
     public String getDiskUsage() {
         try {

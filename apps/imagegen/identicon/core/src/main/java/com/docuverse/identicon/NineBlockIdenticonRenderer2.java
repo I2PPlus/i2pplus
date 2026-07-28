@@ -64,6 +64,7 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
 
     /**
      * Size of each patch in the identicon.
+     * @return the patch size
      */
     public float getPatchSize() {
         return patchSize;
@@ -103,6 +104,7 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
 
     /**
      * Background color of the identicon.
+     * @return the background color
      */
     public Color getBackgroundColor() {
         return backgroundColor;

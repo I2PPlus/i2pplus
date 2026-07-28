@@ -190,6 +190,7 @@ class SearchJob extends JobImpl {
     /**
      * Let each peer take up to the average successful search RTT
      *
+     * @return the per peer timeout ms
      */
     protected int getPerPeerTimeoutMs() {
         if (_floodfillPeersExhausted && _floodfillSearchesOutstanding <= 0) {return PER_PEER_TIMEOUT;}
@@ -232,6 +233,7 @@ class SearchJob extends JobImpl {
     /**
      * True if the data is already locally stored
      *
+     * @return whether local
      */
     private boolean isLocal() {return _facade.getDataStore().isKnown(_state.getTarget());}
 
@@ -542,7 +544,7 @@ class SearchJob extends JobImpl {
         private long _sentOn;
         /**
          * @param enclosingContext the router context
-         * @param peer the peer that failed
+         * @param peer the peer
          */
         public FailedJob(RouterContext enclosingContext, RouterInfo peer) {
             this(enclosingContext, peer, true);

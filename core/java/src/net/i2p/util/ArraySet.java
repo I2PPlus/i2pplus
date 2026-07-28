@@ -252,7 +252,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     /**
      *  Returns the element at the specified index.
      *
-     * @param index the index to retrieve
+     * @param index the index
      * @return the element at the specified index
      * @throws IndexOutOfBoundsException if index is out of bounds
      * @since 0.9.58

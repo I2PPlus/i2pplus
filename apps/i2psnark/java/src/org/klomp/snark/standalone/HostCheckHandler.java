@@ -120,6 +120,7 @@ public class HostCheckHandler extends AbstractHandler {
      * Strip [] and port from a host header
      *
      * @param host the HTTP Host header non-null
+     * @return the host
      */
     private static String getHost(String host) {
         if (host.startsWith("[")) {

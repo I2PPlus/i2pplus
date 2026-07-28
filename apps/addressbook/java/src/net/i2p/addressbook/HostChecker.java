@@ -1166,6 +1166,7 @@ public class HostChecker {
 
     /**
      * Get destination for a hostname from naming service
+     * @return the destination
      */
     private Destination getDestination(String hostname) {
         return _namingService.lookup(hostname);
@@ -1173,6 +1174,7 @@ public class HostChecker {
 
     /**
      * Get all hostnames from the naming service
+     * @return the all hostnames
      */
     private Set<String> getAllHostnames() {
         Set<String> hostnames = new HashSet<>();
@@ -1441,6 +1443,7 @@ public class HostChecker {
 
     /**
      * Get category for a hostname
+     * @return the category
      */
     public String getCategory(String hostname) {
         return _hostCategories.get(hostname);
@@ -1519,6 +1522,7 @@ public class HostChecker {
 
     /**
      * Get all host categories
+     * @return the all categories
      */
     public Map<String, String> getAllCategories() {
         return new HashMap<>(_hostCategories);

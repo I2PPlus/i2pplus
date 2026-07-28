@@ -1141,7 +1141,7 @@ class SSU2Payload {
         }
 
         /**
-         * getDataLength.
+         * @return the data length
          */
         public int getDataLength() {
             return d.length;
@@ -1172,7 +1172,7 @@ class SSU2Payload {
         }
 
         /**
-         * getDataLength.
+         * @return the data length
          */
         public int getDataLength() {
             return d.length;
@@ -1209,7 +1209,7 @@ class SSU2Payload {
         }
 
         /**
-         * getDataLength.
+         * @return the data length
          */
         public int getDataLength() {
             int rv = 3 + d.length;
@@ -1250,7 +1250,7 @@ class SSU2Payload {
         }
 
         /**
-         * getDataLength.
+         * @return the data length
          */
         public int getDataLength() {
             return 12;
@@ -1283,7 +1283,7 @@ class SSU2Payload {
         }
 
         /**
-         * getDataLength.
+         * @return the data length
          */
         public int getDataLength() {
             return d.length;
@@ -1314,7 +1314,7 @@ class SSU2Payload {
         }
 
         /**
-         * getDataLength.
+         * @return the data length
          */
         public int getDataLength() {
             return d.length;
