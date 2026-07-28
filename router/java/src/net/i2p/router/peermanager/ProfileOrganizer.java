@@ -61,16 +61,6 @@ public class ProfileOrganizer {
     public static final double ATTACK_THRESHOLD = 0.40;
     private static final Comparator<PeerProfile> CAPACITY_COMPARATOR =
             Comparator.comparingDouble(PeerProfile::getCapacityValue);
-    private static final Comparator<Map.Entry<Hash, PeerProfile>> PEER_TEST_LATENCY_COMPARATOR =
-            (a, b) -> {
-                float latA = a.getValue().getPeerTestTimeAverage();
-                float latB = b.getValue().getPeerTestTimeAverage();
-                // No test data: treat as high latency (5000ms)
-                if (latA <= 0) latA = 5000f;
-                if (latB <= 0) latB = 5000f;
-                return Float.compare(latA, latB);
-            };
-
     private final Log _log;
     private final RouterContext _context;
     private final Map<Hash, PeerProfile> _fastPeers;
@@ -1581,13 +1571,24 @@ public class ProfileOrganizer {
             if (ok) candidates.add(entry);
         }
 
-        // Sort by peer test response time (lower latency preferred)
-        // Peers with no test data get a high default to deprioritize them
-        candidates.sort(PEER_TEST_LATENCY_COMPARATOR);
-
-        // Select the lowest-latency candidates
-        for (int i = 0; i < candidates.size() && matches.size() < howMany; i++) {
-            matches.add(candidates.get(i).getKey());
+        // Select with random priority proportional to latency:
+        // lower latency = smaller range for random score = higher chance of selection
+        int sz = candidates.size();
+        float[] priority = new float[sz];
+        for (int i = 0; i < sz; i++) {
+            float lat = candidates.get(i).getValue().getPeerTestTimeAverage();
+            priority[i] = _context.random().nextFloat() * (lat > 0 ? lat : 5000f);
+        }
+        for (int s = 0; s < howMany && s < sz; s++) {
+            int best = s;
+            for (int i = s + 1; i < sz; i++) {
+                if (priority[i] < priority[best]) best = i;
+            }
+            matches.add(candidates.get(best).getKey());
+            float tmp = priority[s]; priority[s] = priority[best]; priority[best] = tmp;
+            Map.Entry<Hash, PeerProfile> tmpE = candidates.get(s);
+            candidates.set(s, candidates.get(best));
+            candidates.set(best, tmpE);
         }
     }
 
@@ -1619,11 +1620,23 @@ public class ProfileOrganizer {
             if (ok) candidates.add(entry);
         }
 
-        // Sort by peer test response time (lower latency preferred)
-        candidates.sort(PEER_TEST_LATENCY_COMPARATOR);
-
-        for (int i = 0; i < candidates.size() && matches.size() < howMany; i++) {
-            matches.add(candidates.get(i).getKey());
+        // Select with random priority proportional to latency
+        int sz = candidates.size();
+        float[] priority = new float[sz];
+        for (int i = 0; i < sz; i++) {
+            float lat = candidates.get(i).getValue().getPeerTestTimeAverage();
+            priority[i] = _context.random().nextFloat() * (lat > 0 ? lat : 5000f);
+        }
+        for (int s = 0; s < howMany && s < sz; s++) {
+            int best = s;
+            for (int i = s + 1; i < sz; i++) {
+                if (priority[i] < priority[best]) best = i;
+            }
+            matches.add(candidates.get(best).getKey());
+            float tmp = priority[s]; priority[s] = priority[best]; priority[best] = tmp;
+            Map.Entry<Hash, PeerProfile> tmpE = candidates.get(s);
+            candidates.set(s, candidates.get(best));
+            candidates.set(best, tmpE);
         }
     }
 
