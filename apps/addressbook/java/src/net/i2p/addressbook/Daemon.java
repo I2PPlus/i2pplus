@@ -27,9 +27,7 @@ import net.i2p.util.SystemVersion;
  *
  */
 public class Daemon {
-    /**
-     * VERSION.
-     */
+    /** Version string. */
     public static final String VERSION = "2.0.4";
     private volatile boolean _running;
     private static HostChecker _hostChecker;

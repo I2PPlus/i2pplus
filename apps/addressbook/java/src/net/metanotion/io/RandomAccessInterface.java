@@ -40,29 +40,17 @@ public interface RandomAccessInterface extends Closeable {
 	 * @return the file pointer
 	 */
 	public long getFilePointer() throws IOException;
-	/**
-	 * length.
-	 */
+	/** @return the file length */
 	public long length() throws IOException;
-	/**
-	 * read.
-	 */
+	/** @see java.io.RandomAccessFile#read() */
 	public int read() throws IOException;
-	/**
-	 * read.
-	 */
+	/** @see java.io.RandomAccessFile#read(byte[]) */
 	public int read(byte[] b) throws IOException;
-	/**
-	 * read.
-	 */
+	/** @see java.io.RandomAccessFile#read(byte[],int,int) */
 	public int read(byte[] b, int off, int len) throws IOException;
-	/**
-	 * seek.
-	 */
+	/** @see java.io.RandomAccessFile#seek(long) */
 	public void seek(long pos) throws IOException;
-	/**
-	 * setLength.
-	 */
+	/** @see java.io.RandomAccessFile#setLength(long) */
 	public void setLength(long newLength) throws IOException;
 
 /**
@@ -73,133 +61,71 @@ public interface RandomAccessInterface extends Closeable {
 	public boolean canWrite();
 
 	// Closeable Methods
-	/**
-	 * close.
-	 */
+	/** @see java.io.RandomAccessFile#close() */
 	public void close() throws IOException;
 
 	// DataInput Methods
-	/**
-	 * readBoolean.
-	 */
+	/** @see java.io.RandomAccessFile#readBoolean() */
 	public boolean readBoolean() throws IOException;
-	/**
-	 * readByte.
-	 */
+	/** @see java.io.RandomAccessFile#readByte() */
 	public byte readByte() throws IOException;
-	/**
-	 * readChar.
-	 */
+	/** @see java.io.RandomAccessFile#readChar() */
 	public char readChar() throws IOException;
-	/**
-	 * readDouble.
-	 */
+	/** @see java.io.RandomAccessFile#readDouble() */
 	public double readDouble() throws IOException;
-	/**
-	 * readFloat.
-	 */
+	/** @see java.io.RandomAccessFile#readFloat() */
 	public float readFloat() throws IOException;
-	/**
-	 * readFully.
-	 */
+	/** @see java.io.RandomAccessFile#readFully(byte[]) */
 	public void readFully(byte[] b) throws IOException;
-	/**
-	 * readFully.
-	 */
+	/** @see java.io.RandomAccessFile#readFully(byte[],int,int) */
 	public void readFully(byte[] b, int off, int len) throws IOException;
-	/**
-	 * readInt.
-	 */
+	/** @see java.io.RandomAccessFile#readInt() */
 	public int readInt() throws IOException;
-	/**
-	 * readLine.
-	 */
+	/** @see java.io.RandomAccessFile#readLine() */
 	public String readLine() throws IOException;
-	/**
-	 * readLong.
-	 */
+	/** @see java.io.RandomAccessFile#readLong() */
 	public long readLong() throws IOException;
-	/**
-	 * readShort.
-	 */
+	/** @see java.io.RandomAccessFile#readShort() */
 	public short readShort() throws IOException;
-	/**
-	 * readUnsignedByte.
-	 */
+	/** @see java.io.RandomAccessFile#readUnsignedByte() */
 	public int readUnsignedByte() throws IOException;
-	/**
-	 * readUnsignedShort.
-	 */
+	/** @see java.io.RandomAccessFile#readUnsignedShort() */
 	public int readUnsignedShort() throws IOException;
 	// I2P
-	/**
-	 * readUnsignedInt.
-	 */
+	/** Read a 4-byte big-endian unsigned int. */
 	public int readUnsignedInt() throws IOException;
-	/**
-	 * readUTF.
-	 */
+	/** @see java.io.RandomAccessFile#readUTF() */
 	public String readUTF() throws IOException;
-	/**
-	 * skipBytes.
-	 */
+	/** @see java.io.RandomAccessFile#skipBytes(int) */
 	public int skipBytes(int n) throws IOException;
 
 	// DataOutput Methods
-	/**
-	 * write.
-	 */
+	/** @see java.io.RandomAccessFile#write(int) */
 	public void write(int b) throws IOException;
-	/**
-	 * write.
-	 */
+	/** @see java.io.RandomAccessFile#write(byte[]) */
 	public void write(byte[] b) throws IOException;
-	/**
-	 * write.
-	 */
+	/** @see java.io.RandomAccessFile#write(byte[],int,int) */
 	public void write(byte[] b, int off, int len) throws IOException;
-	/**
-	 * writeBoolean.
-	 */
+	/** @see java.io.RandomAccessFile#writeBoolean(boolean) */
 	public void writeBoolean(boolean v) throws IOException;
-	/**
-	 * writeByte.
-	 */
+	/** @see java.io.RandomAccessFile#writeByte(int) */
 	public void writeByte(int v) throws IOException;
-	/**
-	 * writeShort.
-	 */
+	/** @see java.io.RandomAccessFile#writeShort(int) */
 	public void writeShort(int v) throws IOException;
-	/**
-	 * writeChar.
-	 */
+	/** @see java.io.RandomAccessFile#writeChar(int) */
 	public void writeChar(int v) throws IOException;
-	/**
-	 * writeInt.
-	 */
+	/** @see java.io.RandomAccessFile#writeInt(int) */
 	public void writeInt(int v) throws IOException;
-	/**
-	 * writeLong.
-	 */
+	/** @see java.io.RandomAccessFile#writeLong(long) */
 	public void writeLong(long v) throws IOException;
-	/**
-	 * writeFloat.
-	 */
+	/** @see java.io.RandomAccessFile#writeFloat(float) */
 	public void writeFloat(float v) throws IOException;
-	/**
-	 * writeDouble.
-	 */
+	/** @see java.io.RandomAccessFile#writeDouble(double) */
 	public void writeDouble(double v) throws IOException;
-	/**
-	 * writeBytes.
-	 */
+	/** @see java.io.RandomAccessFile#writeBytes(String) */
 	public void writeBytes(String s) throws IOException;
-	/**
-	 * writeChars.
-	 */
+	/** @see java.io.RandomAccessFile#writeChars(String) */
 	public void writeChars(String s) throws IOException;
-	/**
-	 * writeUTF.
-	 */
+	/** @see java.io.RandomAccessFile#writeUTF(String) */
 	public void writeUTF(String str) throws IOException;
 }

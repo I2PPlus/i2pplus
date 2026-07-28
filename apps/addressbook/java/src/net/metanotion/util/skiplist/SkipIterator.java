@@ -43,24 +43,21 @@ import java.util.NoSuchElementException;
  * @param <V> type of values returned by this iterator
  */
 public class SkipIterator<K extends Comparable<? super K>, V> implements ListIterator<V> {
-	/**
-	 * ss.
-	 */
+	/** The current span being iterated over. */
 	protected SkipSpan<K, V> ss;
-	/**
-	 * index.
-	 */
+	/** Current index position. */
 	protected int index;
 
-	/**
-	 * SkipIterator.
-	 */
+	/** Constructor for subclass use. */
 	protected SkipIterator() {
         // Protected constructor for subclasses
     }
 
 	/**
-	 * SkipIterator.
+	 * Constructor.
+	 *
+	 * @param ss the span to iterate over
+	 * @param index starting position
 	 */
 	public SkipIterator(SkipSpan<K, V> ss, int index) {
 		if(ss==null) { throw new NullPointerException(); }
@@ -131,26 +128,16 @@ public boolean hasPrevious() {
 	}
 
 
-	// Optional methods
-	/**
-	 * add.
-	 */
-	public void add(V o)	{ throw new UnsupportedOperationException(); }
-	/**
-	 * remove.
-	 */
-	public void remove()		{ throw new UnsupportedOperationException(); }
-	/**
-	 * set.
-	 */
-	public void set(V o)	{ throw new UnsupportedOperationException(); }
-	/**
-	 * nextIndex.
-	 */
-	public int nextIndex()		{ throw new UnsupportedOperationException(); }
-	/**
-	 * previousIndex.
-	 */
-	public int previousIndex()	{ throw new UnsupportedOperationException(); }
+	// Optional ListIterator methods - all unsupported
+	/** Not supported. */
+	public void add(V o) { throw new UnsupportedOperationException(); }
+	/** Not supported. */
+	public void remove() { throw new UnsupportedOperationException(); }
+	/** Not supported. */
+	public void set(V o) { throw new UnsupportedOperationException(); }
+	/** Not supported. */
+	public int nextIndex() { throw new UnsupportedOperationException(); }
+	/** Not supported. */
+	public int previousIndex() { throw new UnsupportedOperationException(); }
 
 }

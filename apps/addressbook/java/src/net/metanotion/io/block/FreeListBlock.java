@@ -58,9 +58,7 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 	private static final int HEADER_LEN = 16;
 	private static final int MAX_SIZE = (BlockFile.PAGESIZE - HEADER_LEN) / 4;
 
-	/**
-	 * page.
-	 */
+	/** Page number of this free list block. */
 	public final int page;
 	private int nextPage;
 	private int len;
@@ -68,7 +66,11 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 	private final RandomAccessInterface file;
 
 	/**
-	 * FreeListBlock.
+	 * Constructor.
+	 *
+	 * @param file the block file
+	 * @param startPage starting page number
+	 * @throws IOException on I/O error
 	 */
 	public FreeListBlock(RandomAccessInterface file, int startPage) throws IOException {
 		this.file = file;
@@ -98,9 +100,7 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 		}
 	}
 
-	/**
-	 * writeBlock.
-	 */
+	/** Write this block's data to disk. */
 	public void writeBlock() throws IOException {
 		BlockFile.pageSeek(file, page);
 		file.writeLong(MAGIC);
@@ -209,9 +209,7 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 		return magic;
 	}
 
-	/**
-	 * initPage.
-	 */
+	/** Initialize a new free list block page with default values. */
 	public static void initPage(RandomAccessInterface file, int page) throws IOException {
 		BlockFile.pageSeek(file, page);
 		file.writeLong(MAGIC);
@@ -231,7 +229,7 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 	}
 
 	/**
-	 * toString.
+	 * @return a string representation of this block
 	 */
 	@Override
 	public String toString() {

@@ -63,7 +63,10 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 	private K firstKey;
 
 	/**
-	 * newInstance.
+	 * Create a new span instance for a page split.
+	 *
+	 * @param sl the parent skip list
+	 * @return the new span
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -251,7 +254,14 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 	}
 
 	/**
-	 * IBSkipSpan.
+	 * Constructor.
+	 *
+	 * @param bf the block file
+	 * @param bsl the B-skip list
+	 * @param spanPage page number of the span
+	 * @param key key serializer
+	 * @param val value serializer
+	 * @throws IOException on I/O error
 	 */
 	public IBSkipSpan(BlockFile bf, BSkipList<K, V> bsl, int spanPage, Serializer<K> key, Serializer<V> val) throws IOException {
 		super(bf, bsl);

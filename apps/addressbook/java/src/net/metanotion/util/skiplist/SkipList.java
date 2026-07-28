@@ -40,44 +40,35 @@ import net.i2p.util.RandomSource;
  * @param <V> type of values
  */
 public class SkipList<K extends Comparable<? super K>, V> implements Flushable, Iterable<V> {
-	/** the probability of each next higher level */
+	/** The probability of each next higher level. */
 	protected static final int P = 2;
 	private static final int MIN_SLOTS = 4;
 	// these two are really final
-	/**
-	 * first.
-	 */
+	/** First span in the list. */
 	protected SkipSpan<K, V> first;
-	/**
-	 * stack.
-	 */
+	/** Level stack above the first span. */
 	protected SkipLevels<K, V> stack;
 	// I2P mod
-	/** rng. */
+	/** Random number generator. */
 	public static final Random rng = RandomSource.getInstance();
 
-	/**
-	 * size.
-	 */
+	/** Number of items in the list. */
 	protected int size;
 
-	/**
-	 * flush.
-	 */
+	/** Flush any pending writes. */
 	public void flush() { /* no-op */ }
 	/**
-	 * SkipList.
+	 * Constructor for subclass use.
 	 */
 	protected SkipList() {
         // Protected constructor for subclasses
     }
 
-	/*
-	 *  @param span span size
-	 *  @throws IllegalArgumentException if size too big or too small
-	 */
 	/**
-	 * SkipList.
+	 * Create a new skip list.
+	 *
+	 * @param span span size
+	 * @throws IllegalArgumentException if size too big or too small
 	 */
 	public SkipList(int span) {
 		if(span < 1 || span > SkipSpan.MAX_SIZE)
@@ -87,19 +78,17 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 	}
 
 	/**
-	 * size.
+	 * Return the number of items.
 	 */
 	public int size() { return size; }
 
-	/**
-	 * addItem.
-	 */
+	/** Increment item count. */
 	public void addItem() {
 		size++;
 	}
 
 	/**
-	 * delItem.
+	 * Decrement item count, minimum zero.
 	 */
 	public void delItem() {
 		if (size > 0)
@@ -129,7 +118,10 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 	}
 
 	/**
-	 * put.
+	 * Insert or update a key-value pair in the skip list.
+	 *
+	 * @param key the key
+	 * @param val the value
 	 */
 	@SuppressWarnings("unchecked")
 	public void put(K key, V val)	{
@@ -153,7 +145,10 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 	}
 
 	/**
-	 * remove.
+	 * Remove a key-value pair from the skip list.
+	 *
+	 * @param key the key
+	 * @return the previous value, or null if not found
 	 */
 	@SuppressWarnings("unchecked")
 	public V remove(K key) {
@@ -176,27 +171,10 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 	}
 
 	/**
-	 * dumps all the skip levels
-	 * @deprecated goes to System.out
-	 */
-	@Deprecated
-	public void printSL() {
-		System.out.println("List size " + size);
-		System.out.println(stack.printAll());
-	}
-
-	/**
-	 * dumps all the data
-	 * @deprecated goes to System.out
-	 */
-	@Deprecated
-	public void print() {
-		System.out.println("List size " + size);
-		System.out.println(first.print());
-	}
-
-	/**
-	 * get.
+	 * Get the value for a key.
+	 *
+	 * @param key the key
+	 * @return the value, or null if not found
 	 */
 	public V get(K key) {
 		if(key == null) { throw new NullPointerException(); }
@@ -204,7 +182,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 	}
 
 	/**
-	 * iterator.
+	 * Return an iterator over all entries.
 	 */
 	public SkipIterator<K, V> iterator() { return new SkipIterator<>(first, 0); }
 
@@ -219,9 +197,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 
 	// Levels adjusted to guarantee O(log n) search
 	// This is expensive proportional to the number of spans.
-	/**
-	 * balance.
-	 */
+	/** Rebalance the skip list levels. */
 	public void balance() {
 		// TODO Skip List Balancing Algorithm
 	}

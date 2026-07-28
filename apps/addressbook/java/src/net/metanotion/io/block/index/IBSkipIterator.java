@@ -49,7 +49,10 @@ import net.metanotion.util.skiplist.SkipSpan;
 public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIterator<K, V> {
 
 	/**
-	 * IBSkipIterator.
+	 * Constructor.
+	 *
+	 * @param ss the span to iterate from
+	 * @param index starting position
 	 */
 	public IBSkipIterator(SkipSpan<K, V> ss, int index) {
 		super(ss, index);
