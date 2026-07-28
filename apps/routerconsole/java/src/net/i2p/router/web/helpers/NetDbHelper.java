@@ -426,6 +426,7 @@ public class NetDbHelper extends FormHandler {
     public String getFloodfillNetDbSummary() {return getNetDbSummary();}
 
     /**
+     * Net db summary.
      * @return the net db summary
      */
     public String getNetDbSummary() {

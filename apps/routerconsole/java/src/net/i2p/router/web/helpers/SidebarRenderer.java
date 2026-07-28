@@ -91,6 +91,7 @@ class SidebarRenderer {
     }
 
     /**
+     * Whether advanced.
      * @return whether advanced
      */
     public boolean isAdvanced() {return _context.getBooleanProperty(PROP_ADVANCED);}

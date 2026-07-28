@@ -137,9 +137,15 @@ public abstract class FormHandler {
         } catch (Throwable t) {_log.error("Error processing form", t);}
     }
 
-    /** @param val the nonce value */
+    /**
+     * Nonce value.
+     * @param val the nonce value
+     */
     public void setNonce(String val) {_nonce = val == null ? null : DataHelper.stripHTML(val);}
-    /** @param val the action value */
+    /**
+     * Action value.
+     * @param val the action value
+     */
     public void setAction(String val) {_action = val == null ? null : DataHelper.stripHTML(val);}
 
     /**
@@ -516,6 +522,7 @@ public abstract class FormHandler {
         }
 
         /**
+         * Text.
          * @return the text
          */
         public String getText() {
@@ -523,6 +530,7 @@ public abstract class FormHandler {
         }
 
         /**
+         * Whether can close.
          * @return whether can close
          */
         public boolean isCanClose() {

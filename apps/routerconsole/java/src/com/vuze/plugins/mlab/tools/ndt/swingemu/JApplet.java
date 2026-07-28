@@ -24,39 +24,52 @@ import java.net.URL;
  */
 public class JApplet extends JFrame{
 
-	/** @return the code base */
-	public URL
-	getCodeBase()
-	{
-		return( null );
-	}
+    /**
+     * Code base.
+     * @return the code base
+     */
+    public URL
+    getCodeBase()
+    {
+        return( null );
+    }
 
-	/** @return the applet context */
-	public AppletContext
-	getAppletContext()
-	{
-		return( null );
-	}
+    /**
+     * Applet context.
+     * @return the applet context
+     */
+    public AppletContext
+    getAppletContext()
+    {
+        return( null );
+    }
 
-	/** @param name parameter name @return the parameter value */
-	public String
-	getParameter(
-		String	name )
-	{
-		return( null );
-	}
+    /**
+     * Parameter value for the given name.
+     * @param name parameter name
+     * @return the parameter value
+     */
+    public String
+    getParameter(
+        String  name )
+    {
+        return( null );
+    }
 
-	/** @param str status text */
-	public void
-	showStatus(
-		String		str )
-	{
-	}
+    /**
+     * Status text.
+     * @param str status text
+     */
+    public void
+    showStatus(
+        String      str )
+    {
+    }
 
-	/** Start the applet. */
-	public void
-	start()
-	{
+    /** Start the applet. */
+    public void
+    start()
+    {
 
-	}
+    }
 }

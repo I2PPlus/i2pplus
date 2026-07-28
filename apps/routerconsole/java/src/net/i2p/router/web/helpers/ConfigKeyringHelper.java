@@ -53,6 +53,7 @@ public class ConfigKeyringHelper extends HelperBase {
     }
 
     /**
+     * True for local (Enc. LS1 only), false for remote (all types).
      *  @since 0.9.33 moved from PersistentKeyRing
      *  @param local true for local (Enc. LS1 only), false for remote (all types)
      *  @return true if there were any entries

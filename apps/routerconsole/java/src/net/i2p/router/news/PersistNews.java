@@ -230,6 +230,7 @@ class PersistNews {
     }
 
     /**
+     * Non-null.
      *  @param id non-null
      */
     private static String idToName(I2PAppContext ctx, String id) {

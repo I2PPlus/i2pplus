@@ -181,7 +181,10 @@ public class ConfigRestartBean {
         return false;
     }
 
-    /** @param s value,class,label,... triplets */
+    /**
+     * Value,class,label,... triplets.
+     * @param s value,class,label,... triplets
+     */
     private static void buttons(RouterContext ctx, StringBuilder buf, String url, String nonce, String[] s) {
         buf.append("<form id=sb_routerControl class=\"volatile collapse\" action=\"")
            .append(url)

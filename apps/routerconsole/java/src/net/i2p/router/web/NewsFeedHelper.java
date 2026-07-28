@@ -24,10 +24,14 @@ public class NewsFeedHelper extends HelperBase {
     private int _limit = 2;
 
     /**
+     * Less than or equal to zero means all.
      *  @param limit less than or equal to zero means all
      */
     public void setLimit(int limit) {_limit = limit;}
-    /** @param start the starting index */
+    /**
+     * Starting index.
+     * @param start the starting index
+     */
     public void setStart(int start) {_start = start;}
     /**
      *  Get the formatted HTML entries.

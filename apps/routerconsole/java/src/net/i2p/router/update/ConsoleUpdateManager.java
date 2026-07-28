@@ -97,6 +97,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private static final boolean DEFAULT_ENABLE_TORRENT_UPDATES = false;
 
     /**
+     * Ignored.
      *  @param args ignored
      */
     public ConsoleUpdateManager(RouterContext ctx, ClientAppManager listener, String[] args) {
@@ -117,6 +118,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
+     * Null if not found.
      *  @return null if not found
      */
     public static ConsoleUpdateManager getInstance() {
@@ -238,15 +240,24 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         changeState(STOPPED);
     }
 
-    /** @return the current state @since 0.9.12 */
+    /**
+     * Current state @since 0.9.12.
+     * @return the current state @since 0.9.12
+     */
     @Override
     public ClientAppState getState() {return _state;}
 
-    /** @return the app name @since 0.9.12 */
+    /**
+     * App name @since 0.9.12.
+     * @return the app name @since 0.9.12
+     */
     @Override
     public String getName() {return APP_NAME;}
 
-    /** @return the display name @since 0.9.12 */
+    /**
+     * Display name @since 0.9.12.
+     * @return the display name @since 0.9.12
+     */
     @Override
     public String getDisplayName() {return "Console Update Manager";}
 
@@ -993,6 +1004,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
+     * May be null.
      *  @param task may be null
      */
     @Override
@@ -1399,6 +1411,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
+     * Success.
      *  @return success
      */
     private boolean handlePluginFile(URI uri, String actualVersion, File sudFile) {return false;} //handled elsewhere?
@@ -1522,6 +1535,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
+         * Whether h code is present.
          * @return whether h code is present
          */
         @Override
@@ -1582,6 +1596,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
+         * Whether h code is present.
          * @return whether h code is present
          */
         @Override
@@ -1628,6 +1643,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
+         * Whether h code is present.
          * @return whether h code is present
          */
         @Override
@@ -1670,6 +1686,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public int compareTo(Version r) {return VersionComparator.comp(versionStr, r.versionStr);}
 
         /**
+         * Whether h code is present.
          * @return whether h code is present
          */
         @Override
@@ -1736,6 +1753,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public boolean equals(Object o) {return super.equals(o) && (o instanceof VersionAvailable);}
 
         /**
+         * Whether h code is present.
          * @return whether h code is present
          */
         @Override

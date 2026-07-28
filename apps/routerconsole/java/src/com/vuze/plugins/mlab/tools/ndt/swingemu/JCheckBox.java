@@ -24,38 +24,50 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class
 JCheckBox
-	extends Component
+    extends Component
 {
-	boolean	selected;
+    boolean selected;
 
-	/** @param str checkbox label */
-	public
-	JCheckBox(
-		String	str )
-	{
+    /**
+     * Checkbox label.
+     * @param str checkbox label
+     */
+    public
+    JCheckBox(
+        String  str )
+    {
 
-	}
+    }
 
-	/** @param b selection state */
-	public void
-	setSelected(
-		boolean	b )
-	{
-		selected = b;
-	}
+    /**
+     * Selection state.
+     * @param b selection state
+     */
+    public void
+    setSelected(
+        boolean b )
+    {
+        selected = b;
+    }
 
-	/** @return selection state */
-	public boolean
-	isSelected()
-	{
-		return( selected );
-	}
+    /**
+     * Selection state.
+     * @return selection state
+     */
+    public boolean
+    isSelected()
+    {
+        return( selected );
+    }
 
-	/** @param l action listener */
-	public void
-	addActionListener(
-		ActionListener	l )
-	{
+    /**
+     * Action listener.
+     * @param l action listener
+     */
+    public void
+    addActionListener(
+        ActionListener  l )
+    {
 
-	}
+    }
 }

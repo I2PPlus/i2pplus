@@ -88,10 +88,16 @@ public class SidebarHelper extends HelperBase {
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     /** Property name for unified sidebar toggle */
     private static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
-    /** @return true if advanced mode is enabled in config */
+    /**
+     * True if advanced mode is enabled in config.
+     * @return true if advanced mode is enabled in config
+     */
     @Override
     public boolean isAdvanced() {return ctx.getBooleanProperty(PROP_ADVANCED);}
-    /** @return true if unified sidebar is enabled */
+    /**
+     * True if unified sidebar is enabled.
+     * @return true if unified sidebar is enabled
+     */
     public boolean unifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
     /** Property prefix for summary bar section configuration per page */
     static final String PROP_SUMMARYBAR = "routerconsole.summaryBar.";
@@ -297,10 +303,16 @@ public class SidebarHelper extends HelperBase {
             this.msg = msg;
         }
 
-        /** @return the reachability state */
+        /**
+         * Reachability state.
+         * @return the reachability state
+         */
         public NetworkState getState() {return state;}
 
-        /** @return the localized state description */
+        /**
+         * Localized state description.
+         * @return the localized state description
+         */
         public String getMessage() {return msg;}
 
         /**
@@ -310,7 +322,10 @@ public class SidebarHelper extends HelperBase {
         public String toString() {return "(" + state + "; " + msg + ')';}
     }
 
-    /** @return network reachability state and message */
+    /**
+     * Network reachability state and message.
+     * @return network reachability state and message
+     */
     public NetworkStateMessage getReachability() {return reachability();}
 
     private NetworkStateMessage reachability() {
@@ -1258,33 +1273,51 @@ public class SidebarHelper extends HelperBase {
         return 0;
     }
 
-    /** @return true if a signed release update is available */
+    /**
+     * True if a signed release update is available.
+     * @return true if a signed release update is available
+     */
     private static boolean updateAvailable() {
         return NewsHelper.isUpdateAvailable();
     }
 
-    /** @return true if an unsigned update is available */
+    /**
+     * True if an unsigned update is available.
+     * @return true if an unsigned update is available
+     */
     private boolean unsignedUpdateAvailable() {
         return NewsHelper.isUnsignedUpdateAvailable(_context);
     }
 
-    /** @return true if a signed development (SU3) update is available @since 0.9.20 */
+    /**
+     * True if a signed development (SU3) update is available @since 0.9.20.
+     * @return true if a signed development (SU3) update is available @since 0.9.20
+     */
     private boolean devSU3UpdateAvailable() {
         return NewsHelper.isDevSU3UpdateAvailable(_context);
     }
 
-    /** @return the signed release update version, HTML-escaped */
+    /**
+     * Signed release update version, HTML-escaped.
+     * @return the signed release update version, HTML-escaped
+     */
     private static String getUpdateVersion() {
         return DataHelper.escapeHTML(NewsHelper.updateVersion());
     }
 
-    /** @return the unsigned update version string */
+    /**
+     * Unsigned update version string.
+     * @return the unsigned update version string
+     */
     private static String getUnsignedUpdateVersion() {
         // value is a formatted date, does not need escaping
         return NewsHelper.unsignedUpdateVersion();
     }
 
-    /** @return the development SU3 update version, HTML-escaped @since 0.9.20 */
+    /**
+     * Development SU3 update version, HTML-escaped @since 0.9.20.
+     * @return the development SU3 update version, HTML-escaped @since 0.9.20
+     */
     private static String getDevSU3UpdateVersion() {
         return DataHelper.escapeHTML(NewsHelper.devSU3UpdateVersion());
     }
@@ -1524,9 +1557,15 @@ public class SidebarHelper extends HelperBase {
 
     /** Cached news helper instance */
     private NewsHelper _newshelper;
-    /** @param n NewsHelper to store for sidebar rendering */
+    /**
+     * NewsHelper to store for sidebar rendering.
+     * @param n NewsHelper to store for sidebar rendering
+     */
     public void storeNewsHelper(NewsHelper n) {_newshelper = n;}
-    /** @return the stored NewsHelper */
+    /**
+     * Stored NewsHelper.
+     * @return the stored NewsHelper
+     */
     public NewsHelper getNewsHelper() {return _newshelper;}
 
     /** Separator string for summary bar config */
@@ -1581,33 +1620,57 @@ public class SidebarHelper extends HelperBase {
 
     /** Action parameter from the sidebar form */
     private String _action;
-    /** @param s form action, HTML-stripped before storing */
+    /**
+     * Form action, HTML-stripped before storing.
+     * @param s form action, HTML-stripped before storing
+     */
     public void setAction(String s) {_action = s == null ? null : DataHelper.stripHTML(s);}
-    /** @return the form action or null */
+    /**
+     * Form action or null.
+     * @return the form action or null
+     */
     public String getAction() {return _action;}
 
     /** Console nonce for form validation */
     private String _consoleNonce;
-    /** @param s console nonce, HTML-stripped before storing */
+    /**
+     * Console nonce, HTML-stripped before storing.
+     * @param s console nonce, HTML-stripped before storing
+     */
     public void setConsoleNonce(String s) {_consoleNonce = s == null ? null : DataHelper.stripHTML(s);}
-    /** @return the console nonce or null */
+    /**
+     * Console nonce or null.
+     * @return the console nonce or null
+     */
     public String getConsoleNonce() {return _consoleNonce;}
 
     /** Update nonce for form validation */
     private String _updateNonce;
-    /** @param s update nonce, HTML-stripped before storing */
+    /**
+     * Update nonce, HTML-stripped before storing.
+     * @param s update nonce, HTML-stripped before storing
+     */
     public void setUpdateNonce(String s) {_updateNonce = s == null ? null : DataHelper.stripHTML(s);}
-    /** @return the update nonce or null */
+    /**
+     * Update nonce or null.
+     * @return the update nonce or null
+     */
     public String getUpdateNonce() {return _updateNonce;}
 
     /** Cached request URI */
     private String _requestURI;
-    /** @param s the request URI, HTML-stripped before storing */
+    /**
+     * Request URI, HTML-stripped before storing.
+     * @param s the request URI, HTML-stripped before storing
+     */
     public void setRequestURI(String s) {_requestURI = s == null ? null : DataHelper.stripHTML(s);}
 
     /** The HTTP servlet request */
     private HttpServletRequest _request;
-    /** @param s the servlet request */
+    /**
+     * Servlet request.
+     * @param s the servlet request
+     */
     public void setRequest(HttpServletRequest s) {_request = s;}
 
     /**

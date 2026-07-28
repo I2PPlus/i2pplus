@@ -75,6 +75,7 @@ public class SearchHelper extends HelperBase {
     }
 
     /**
+     * Selector.
      * @return the selector
      */
     public String getSelector() {
