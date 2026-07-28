@@ -2867,7 +2867,7 @@ public class TunnelPool {
         // Reduced from target + 2 to match the tighter pool capacity.
         // EMERGENCY has its own inProgress check (target-based) and is
         // reached after this early exit when safeActive == 0.
-        if (inProgress >= Math.max(target + 1, 2)) {
+        if (safeActive > 0 && inProgress >= Math.max(target + 1, 2)) {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping build: inProgress(" +
                           inProgress + ") >= cap " + Math.max(target + 1, 2) +
@@ -2908,26 +2908,27 @@ public class TunnelPool {
             // drains.  Cap at base target to avoid a build storm when every
             // tunnel fails simultaneously.
             int failingBoost = safeActive == 0 ? 0 : Math.min(failingCount, target);
-            if (safeActive == 0 && nearExpiry > 0 && inProgress > 0) {
+            int currentInProgress = getInProgressCount();
+            if (safeActive == 0 && nearExpiry > 0 && currentInProgress > 0) {
                 // When safeActive is 0 and tunnels are expiring, in-progress
                 // builds haven't produced GOOD tunnels yet (~40s build+test).
                 // The expiring tunnels will die before in-progress builds
                 // become usable, leaving the pool at 0 safe forever.
                 // However, don't ignore inProgress entirely — queuing more
-                // builds when inProgress >= effectiveTarget creates a build storm:
+                // builds when currentInProgress >= effectiveTarget creates a build storm:
                 // timeout → ensureSufficientTunnels → deficit=target → build
                 // more → timeout → repeat.  Only build the gap.
                 // Count untested tunnels against the deficit — the hard cap at
                 // target + 2 bounds accumulation, preventing test queue flooding.
-                deficit = Math.max(0, effectiveTarget - inProgress - untestedCount) + failingBoost;
+                deficit = Math.max(0, effectiveTarget - currentInProgress - untestedCount) + failingBoost;
             } else if (safeActive == 0) {
                 // Pool has zero GOOD tunnels — count untested tunnels against
                 // the deficit so builds don't pile up faster than the test
                 // queue can process.  The hard cap at target + 2 bounds
                 // untested accumulation so it won't block replacement builds.
-                deficit = Math.max(0, effectiveTarget - inProgress - untestedCount) + failingBoost;
+                deficit = Math.max(0, effectiveTarget - currentInProgress - untestedCount) + failingBoost;
             } else {
-                deficit = effectiveTarget - safeActive - inProgress - untestedCount + failingBoost;
+                deficit = effectiveTarget - safeActive - currentInProgress - untestedCount + failingBoost;
             }
             if (deficit > 0) {
                 // Cap per-cycle builds at base target — scale up gradually
@@ -2949,7 +2950,7 @@ public class TunnelPool {
                         _log.info(toString() + " -> Proactive: " + safeActive +
                                   " safe + " + nearExpiry + " expiring + " + failingCount +
                                   " failing, building " + needed +
-                                  " replacements (deficit=" + deficit + ", ip=" + inProgress + ")" + boost);
+                                   " replacements (deficit=" + deficit + ", ip=" + currentInProgress + ")" + boost);
                     }
                     _lastDeficitBuildTime = now;
                     for (int i = 0; i < needed; i++) {
@@ -3001,14 +3002,15 @@ public class TunnelPool {
             // If builds are already queued, don't stack more — let the
             // existing builds resolve first.  Use base target for the cap,
             // not effectiveTarget — we don't need all slots filled instantly.
-            if (inProgress >= target) {
+            int currentInProgress = getInProgressCount();
+            if (currentInProgress >= target) {
                 if (_log.shouldDebug()) {
                     _log.debug(toString() + " -> Skipping EMERGENCY: " +
-                              inProgress + " in-progress >= target " + target);
+                              currentInProgress + " in-progress >= target " + target);
                 }
                 return;
             }
-            if (inProgress > 0) { needed = Math.max(1, target - inProgress); }
+            if (currentInProgress > 0) { needed = Math.max(1, target - currentInProgress); }
             // IB/OB balance: don't emergency-build if this direction already has
             // MORE usable tunnels than its paired direction.  When both pools are at
             // zero usable, both must build — skipping both causes a deadlock where
@@ -3032,7 +3034,7 @@ public class TunnelPool {
                 String boost = _consecutiveEmergencies > 0 ?
                     " (dynamic target " + effectiveTarget + ", collapse #" + _consecutiveEmergencies + ")" : "";
                 _log.warn(toString() + " -> EMERGENCY: Zero usable tunnels, " +
-                          inProgress + " in-progress, forcing " + needed +
+                          currentInProgress + " in-progress, forcing " + needed +
                           " replacement builds" + boost);
             }
             for (int i = 0; i < needed; i++) {
