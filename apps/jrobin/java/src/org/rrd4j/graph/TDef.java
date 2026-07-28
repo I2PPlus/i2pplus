@@ -16,6 +16,7 @@ class TDef extends Source {
         this.fetchData = fetchData;
     }
     /**
+     * Data processor to register the datasource with.
      * @param dproc data processor to register the datasource with
      */
 

@@ -73,7 +73,10 @@ class ValueAxisLogarithmic extends Axis {
                 im.log.applyAsDouble(positive)
                         - im.log.applyAsDouble(positive) % im.log.applyAsDouble(yloglab[idx][0]));
     }
-    /** @return true if axis labels were drawn */
+    /**
+     * True if axis labels were drawn.
+     * @return true if axis labels were drawn
+     */
     boolean draw() {
         Font font = gdef.getFont(FONTTAG_AXIS);
         Paint gridColor = gdef.getColor(ElementsNames.grid);

@@ -54,7 +54,10 @@ class RrdDoubleArray<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
         return readDouble(index);
     }
 
-    /** @return array of count double values starting at index */
+    /**
+     * Array of count double values starting at index.
+     * @return array of count double values starting at index
+     */
     double[] get(int index, int count) throws IOException {
         assert index + count <= length
                 : "Invalid index/count supplied: "

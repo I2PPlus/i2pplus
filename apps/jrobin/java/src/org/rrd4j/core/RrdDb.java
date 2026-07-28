@@ -1248,12 +1248,18 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         return false;
     }
 
-    /** @return the datasources */
+    /**
+     * Datasources.
+     * @return the datasources
+     */
     Datasource[] getDatasources() {
         return datasources;
     }
 
-    /** @return the archives */
+    /**
+     * Archives.
+     * @return the archives
+     */
     Archive[] getArchives() {
         return archives;
     }

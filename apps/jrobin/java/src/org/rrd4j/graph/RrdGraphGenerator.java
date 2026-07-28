@@ -894,13 +894,19 @@ class RrdGraphGenerator {
         return getFontHeight(RrdGraphConstants.FONTTAG_LEGEND) * RrdGraphConstants.LEGEND_LEADING;
     }
 
-    /** @return the small leading */
+    /**
+     * Small leading.
+     * @return the small leading
+     */
     double getSmallLeading() {
         return getFontHeight(RrdGraphConstants.FONTTAG_LEGEND)
                 * RrdGraphConstants.LEGEND_LEADING_SMALL;
     }
 
-    /** @return the box space */
+    /**
+     * Box space.
+     * @return the box space
+     */
     double getBoxSpace() {
         return Math.ceil(
                 getFontHeight(RrdGraphConstants.FONTTAG_LEGEND)

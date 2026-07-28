@@ -12,7 +12,10 @@ public class RrdAllocator {
         super();
     }
 
-    /** @return the next available byte offset in the allocation space */
+    /**
+     * Next available byte offset in the allocation space.
+     * @return the next available byte offset in the allocation space
+     */
     long allocate(long byteCount) {
         long pointer = allocationPointer;
         allocationPointer += byteCount;

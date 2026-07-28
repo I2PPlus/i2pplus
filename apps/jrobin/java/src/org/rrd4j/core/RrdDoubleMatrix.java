@@ -70,12 +70,18 @@ class RrdDoubleMatrix<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
         return values;
     }
 
-    /** @return number of columns */
+    /**
+     * Number of columns.
+     * @return number of columns
+     */
     public int getColumns() {
         return columns;
     }
 
-    /** @return number of rows */
+    /**
+     * Number of rows.
+     * @return number of rows
+     */
     public int getRows() {
         return rows;
     }

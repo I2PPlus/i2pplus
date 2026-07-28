@@ -575,7 +575,10 @@ public class RrdDef {
         return sb.toString().trim();
     }
 
-    /** @return the rrdtool command */
+    /**
+     * Rrdtool command.
+     * @return the rrdtool command
+     */
     String getRrdToolCommand() {
         return dump();
     }
@@ -606,7 +609,10 @@ public class RrdDef {
         }
     }
 
-    /** @return the archive */
+    /**
+     * Archive.
+     * @return the archive
+     */
     ArcDef findArchive(ConsolFun consolFun, int steps) {
         for (ArcDef arcDef : arcDefs) {
             if (arcDef.getConsolFun() == consolFun && arcDef.getSteps() == steps) {

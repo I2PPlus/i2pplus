@@ -10,6 +10,7 @@ public class RrdMemoryBackend extends ByteBufferBackend {
     private final AtomicReference<ByteBuffer> refbb;
 
     /**
+     * Path to the RRD file.
      * @param path path to the RRD file
      * @param refbb atomic reference holding the byte buffer
      */

@@ -15,6 +15,7 @@ class PDef extends Source {
         this.plottable = plottable;
     }
     /**
+     * Data processor to register the datasource with.
      * @param dproc data processor to register the datasource with
      */
 

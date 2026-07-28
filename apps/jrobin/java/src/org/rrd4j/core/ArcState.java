@@ -15,6 +15,7 @@ public class ArcState implements RrdUpdater<ArcState> {
     private final RrdLong<ArcState> nanSteps;
 
     /**
+     * Owning archive.
      * @param parentArc the owning archive
      * @param shouldInitialize whether to initialize accumulator and NaN steps
      * @throws IOException if an I/O error occurs

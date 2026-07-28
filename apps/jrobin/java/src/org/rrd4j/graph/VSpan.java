@@ -16,7 +16,10 @@ class VSpan extends Span {
         this.end = end;
         assert (start < end);
     }
-    /** @return true if v is between min and max inclusive */
+    /**
+     * True if v is between min and max inclusive.
+     * @return true if v is between min and max inclusive
+     */
     private boolean checkRange(long v, long min, long max) {
         return v >= min && v <= max;
     }

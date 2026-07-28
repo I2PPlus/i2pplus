@@ -20,14 +20,16 @@ public class SVGImageWorker extends ImageWorker {
     private int imgHeight;
     private boolean glow;
 
-    /** @param width image width in pixels
+    /*** Image width in pixels.
+ @param width image width in pixels
      *  @param height image height in pixels */
     public SVGImageWorker(int width, int height) {
         this.glow = false;
         initGraphics(width, height);
     }
 
-    /** @param width image width in pixels
+    /*** Image width in pixels.
+ @param width image width in pixels
      *  @param height image height in pixels
      *  @param glow whether to enable glow effect */
     public SVGImageWorker(int width, int height, boolean glow) {

@@ -16,7 +16,10 @@ class VDef extends Source implements NonRrdSource {
         this.var = aggr;
     }
 
-    /** @return the def name */
+    /**
+     * Def name.
+     * @return the def name
+     */
     String getDefName() {
         return defName;
     }

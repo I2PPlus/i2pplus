@@ -95,7 +95,10 @@ class TimeScanner {
     };
     TimeToken[] specials = WORDS;
 
-    /** @param dateString at-style time specification string to tokenize */
+    /**
+     * At-style time specification string to tokenize.
+     * @param dateString at-style time specification string to tokenize
+     */
     public TimeScanner(String dateString) {
         this.dateString = dateString;
     }
@@ -104,7 +107,10 @@ class TimeScanner {
     void setContext(boolean parsingWords) {
         specials = parsingWords ? WORDS : MULTIPLIERS;
     }
-    /** @return the next token from the date string */
+    /**
+     * Next token from the date string.
+     * @return the next token from the date string
+     */
     TimeToken nextToken() {
         StringBuilder buffer = new StringBuilder();
         while (pos < dateString.length()) {

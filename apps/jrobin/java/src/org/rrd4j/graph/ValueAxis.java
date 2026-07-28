@@ -57,7 +57,10 @@ class ValueAxis extends Axis {
         this.worker = generator.worker;
         this.mapper = generator.mapper;
     }
-    /** @return true if axis labels were drawn */
+    /**
+     * True if axis labels were drawn.
+     * @return true if axis labels were drawn
+     */
     boolean draw() {
         Font font = gdef.getFont(FONTTAG_AXIS);
         Paint gridColor = gdef.getColor(ElementsNames.grid);
@@ -278,7 +281,10 @@ class ValueAxis extends Axis {
         return (int) (im.ysize / (scaledrange / thisYLabel.grid));
     }
 
-    /** @return the scaled range */
+    /**
+     * Scaled range.
+     * @return the scaled range
+     */
     private double getScaledRange() {
         double range = im.maxval - im.minval;
         return range / im.magfact;

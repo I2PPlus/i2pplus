@@ -169,27 +169,42 @@ class RRDFile implements Constants {
                 .indexOf(new String(pattern, StandardCharsets.UTF_8));
     }
 
-    /** @return true if big endian */
+    /**
+     * True if big endian.
+     * @return true if big endian
+     */
     boolean isBigEndian() {
         return order == ByteOrder.BIG_ENDIAN;
     }
 
-    /** @return the alignment */
+    /**
+     * Alignment.
+     * @return the alignment
+     */
     int getAlignment() {
         return alignment;
     }
 
-    /** @return the double */
+    /**
+     * Double.
+     * @return the double
+     */
     double readDouble() {
         return mappedByteBuffer.getDouble();
     }
 
-    /** @return the int */
+    /**
+     * Int.
+     * @return the int
+     */
     int readInt() {
         return mappedByteBuffer.getInt();
     }
 
-    /** @return the long */
+    /**
+     * Long.
+     * @return the long
+     */
     int readLong() {
         if (longSize == 4) {
             return mappedByteBuffer.getInt();
@@ -198,7 +213,10 @@ class RRDFile implements Constants {
         }
     }
 
-    /** @return the string */
+    /**
+     * String.
+     * @return the string
+     */
     String readString(int maxLength) {
         byte[] array = new byte[maxLength];
         mappedByteBuffer.get(array);
@@ -211,7 +229,10 @@ class RRDFile implements Constants {
         mappedByteBuffer.position(mappedByteBuffer.position() + n);
     }
 
-    /** @return the skip count */
+    /**
+     * Skip count.
+     * @return the skip count
+     */
     int align(int boundary) {
 
         int skip = (boundary - (mappedByteBuffer.position() % boundary)) % boundary;
@@ -223,17 +244,26 @@ class RRDFile implements Constants {
         return skip;
     }
 
-    /** @return the skip count */
+    /**
+     * Skip count.
+     * @return the skip count
+     */
     int align() {
         return align(alignment);
     }
 
-    /** @return the position */
+    /**
+     * Position.
+     * @return the position
+     */
     long info() {
         return mappedByteBuffer.position();
     }
 
-    /** @return the file pointer */
+    /**
+     * File pointer.
+     * @return the file pointer
+     */
     long getFilePointer() {
         return mappedByteBuffer.position();
     }
@@ -278,12 +308,16 @@ class RRDFile implements Constants {
         mappedByteBuffer.position(mappedByteBuffer.position() + count);
     }
 
-    /** @return the unival array */
+    /**
+     * Unival array.
+     * @return the unival array
+     */
     UnivalArray getUnivalArray(int size) {
         return new UnivalArray(this, size);
     }
 
     /**
+     * Long size in bits for this file.
      * @return the long size in bits for this file
      */
     int getBits() {

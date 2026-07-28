@@ -29,7 +29,10 @@ class ValueAxisMrtg extends Axis {
         this.gdef = generator.gdef;
         this.worker = generator.worker;
     }
-    /** @return true if axis labels were drawn */
+    /**
+     * True if axis labels were drawn.
+     * @return true if axis labels were drawn
+     */
     boolean draw() {
         Font font = gdef.getFont(FONTTAG_AXIS);
         Paint mGridColor = gdef.getColor(ElementsNames.mgrid);

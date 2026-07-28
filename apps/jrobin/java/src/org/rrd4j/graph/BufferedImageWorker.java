@@ -34,7 +34,10 @@ class BufferedImageWorker extends ImageWorker {
         /** Use {@link BufferedImageWorker#getBuilder()} to obtain an instance. */
         Builder() {}
 
-        /** @return the built BufferedImageWorker */
+        /**
+         * Built BufferedImageWorker.
+         * @return the built BufferedImageWorker
+         */
         BufferedImageWorker build() {
             return new BufferedImageWorker(this);
         }

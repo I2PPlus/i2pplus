@@ -14,7 +14,10 @@ public abstract class DownSampleImpl implements DownSampler {
     /** Number of data points to downsample to. */
     protected final int threshold;
 
-    /** @param threshold number of data points to downsample to */
+    /**
+     * Number of data points to downsample to.
+     * @param threshold number of data points to downsample to
+     */
     protected DownSampleImpl(int threshold) {
         this.threshold = threshold;
     }

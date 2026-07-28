@@ -823,7 +823,10 @@ class RpnCalculator {
         return calculatedValues;
     }
 
-    /** @return calendar field value from timestamp */
+    /**
+     * Calendar field value from timestamp.
+     * @return calendar field value from timestamp
+     */
     private double getCalendarField(double timestamp, int field) {
         Calendar calendar = Util.getCalendar((long) (timestamp));
         return calendar.get(field);
@@ -849,7 +852,10 @@ class RpnCalculator {
         stack.reset();
     }
 
-    /** @return true if stack is empty */
+    /**
+     * True if stack is empty.
+     * @return true if stack is empty
+     */
     private boolean isStackEmpty() {
         return stack.isEmpty();
     }
@@ -889,7 +895,10 @@ class RpnCalculator {
             pos = 0;
         }
 
-        /** @return true if stack is empty */
+        /**
+         * True if stack is empty.
+         * @return true if stack is empty
+         */
         boolean isEmpty() {
             return pos <= 0;
         }

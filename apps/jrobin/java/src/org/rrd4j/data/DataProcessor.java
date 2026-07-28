@@ -477,7 +477,10 @@ public class DataProcessor implements DataHolder {
         return values;
     }
 
-    /** @param sourceName datasource name @return the matching Source */
+    /**
+     * Datasource name @return the matching Source.
+     * @param sourceName datasource name @return the matching Source
+     */
     Source getSource(String sourceName) {
         Source source = sources.get(sourceName);
         if (source != null) {
@@ -1209,19 +1212,28 @@ public class DataProcessor implements DataHolder {
         return b.toString();
     }
 
-    /** @param time ending timestamp */
+    /**
+     * Ending timestamp.
+     * @param time ending timestamp
+     */
     @Override
     public void setEndTime(long time) {
         this.tEnd = time;
     }
 
-    /** @return ending timestamp */
+    /**
+     * Ending timestamp.
+     * @return ending timestamp
+     */
     @Override
     public long getEndTime() {
         return tEnd;
     }
 
-    /** @param time starting timestamp */
+    /**
+     * Starting timestamp.
+     * @param time starting timestamp
+     */
     @Override
     public void setStartTime(long time) {
         this.tStart = time;

@@ -99,6 +99,7 @@ public class Header implements RrdUpdater<Header> {
     }
 
     /**
+     * Info string (everything after the signature prefix).
      * @return the info string (everything after the signature prefix)
      * @throws java.io.IOException if an I/O error occurs
      */
@@ -242,7 +243,10 @@ public class Header implements RrdUpdater<Header> {
         return version;
     }
 
-    /** @return true if the header matches RRD4J or JRobin format */
+    /**
+     * True if the header matches RRD4J or JRobin format.
+     * @return true if the header matches RRD4J or JRobin format
+     */
     boolean isRrd4jHeader() {
         try {
             return signature.get().startsWith(SIGNATURE)
@@ -252,7 +256,10 @@ public class Header implements RrdUpdater<Header> {
         }
     }
 
-    /** @throws InvalidRrdException if the header is not a valid RRD4J/RRD file */
+    /**
+     * InvalidRrdException if the header is not a valid RRD4J/RRD file.
+     * @throws InvalidRrdException if the header is not a valid RRD4J/RRD file
+     */
     void validateHeader() throws IOException {
         if (!isRrd4jHeader()) {
             throw new InvalidRrdException(

@@ -9,6 +9,7 @@ public abstract class RrdByteArrayBackend extends ByteBufferBackend {
     private byte[] buffer;
 
     /**
+     * Path to the RRD file.
      * @param path path to the RRD file
      */
     protected RrdByteArrayBackend(String path) {
@@ -16,6 +17,7 @@ public abstract class RrdByteArrayBackend extends ByteBufferBackend {
     }
 
     /**
+     * Byte array to wrap as backend storage.
      * @param buffer byte array to wrap as backend storage
      */
     protected void setBuffer(byte[] buffer) {
@@ -23,7 +25,10 @@ public abstract class RrdByteArrayBackend extends ByteBufferBackend {
         setByteBuffer(ByteBuffer.wrap(buffer));
     }
 
-    /** @return the underlying byte buffer */
+    /**
+     * Underlying byte buffer.
+     * @return the underlying byte buffer
+     */
     protected byte[] getBuffer() {
         return buffer;
     }

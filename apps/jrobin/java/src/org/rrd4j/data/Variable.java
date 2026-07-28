@@ -271,7 +271,10 @@ public abstract class Variable {
         /** Value of the data point */
         final double value;
 
-        /** @param pos position (unused, for sorting tie-break ordering) @param timestamp the timestamp @param value the value */
+        /**
+         * Position (unused, for sorting tie-break ordering) @param timestamp the timestamp @param value the value.
+         * @param pos position (unused, for sorting tie-break ordering) @param timestamp the timestamp @param value the value
+         */
         PercentElem(int pos, long timestamp, double value) {
             this.timestamp = timestamp;
             this.value = value;

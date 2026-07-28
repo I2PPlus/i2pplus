@@ -20,6 +20,7 @@ class Aggregator {
     private final double[] values;
 
     /**
+     * Array of timestamps.
      * @param timestamps array of timestamps
      * @param values array of data values, same length as timestamps
      */
