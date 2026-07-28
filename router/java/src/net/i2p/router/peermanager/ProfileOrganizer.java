@@ -1687,7 +1687,7 @@ public class ProfileOrganizer {
         // bans.  Without this check, peers with 200+ failures keep getting selected
         // because the ghost peer system clears on any success and the first-hop
         // cooldown is only 5 minutes.
-        PeerProfile prof = locked_getProfile(peer);
+        PeerProfile prof = getProfileNonblocking(peer);
         if (prof != null) {
             long lifetimeFailed = prof.getTunnelHistory().getLifetimeFailed();
             if (lifetimeFailed > MAX_LIFETIME_TUNNEL_FAILURES) return false;
