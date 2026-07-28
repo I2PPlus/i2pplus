@@ -341,7 +341,7 @@ public abstract class LocalHTTPServer {
                                .append("<p>").append(_t("Copy the key and send it to the server operator.")).append(' ')
                                .append(_t("After you are granted permission, you may proceed to the website."))
                                .append("</p>\n")
-                               .append("<p><a href=\"").append(url).append("\">").append(url).append("</a></p></div>");
+                               .append("<p><a href=\"").append(DataHelper.escapeHTML(url)).append("\">").append(DataHelper.escapeHTML(url)).append("</a></p></div>");
                             out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
                             I2PTunnelHTTPClientBase.writeFooter(out);
                         } else {
@@ -385,7 +385,7 @@ public abstract class LocalHTTPServer {
                   "Access-Control-Allow-Origin: *\r\n" +
                   "Connection: close\r\n\r\n" +
                   "<!DOCTYPE html>\n<html>\n<head>\n<title>" + _t("Redirecting to {0}", idn) + "</title>\n" + headerLinks +
-                  "<meta http-equiv=\"Refresh\" content=\"1; url=" + url + "\">\n</head>\n<body>\n" +
+                  "<meta http-equiv=\"Refresh\" content=\"1; url=" + DataHelper.escapeHTML(url) + "\">\n</head>\n<body>\n" +
                   "<div class=logo>\n<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\">" + logo +
                   "</a><hr>\n").getBytes(StandardCharsets.UTF_8));
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS))
@@ -396,7 +396,7 @@ public abstract class LocalHTTPServer {
                   (success ?
                            _t("Saved {0} to the {1} addressbook, redirecting now.", idn, tbook).replace("now.", "now&hellip;") :
                            _t("Failed to save {0} to the {1} addressbook, redirecting now.", idn, tbook).replace("now.", "now&hellip;")) +
-                  "</h3>\n<hr><p><a href=\"" + url + "\">" +
+                  "</h3>\n<hr><p><a href=\"" + DataHelper.escapeHTML(url) + "\">" +
                   _t("Click here if you are not redirected automatically.") +
                   "</a></p>\n<br></div>\n").getBytes(StandardCharsets.UTF_8));
         I2PTunnelHTTPClientBase.writeFooter(out);
@@ -422,7 +422,7 @@ public abstract class LocalHTTPServer {
                   "Access-Control-Allow-Origin: *\r\n" +
                   "Connection: close\r\n\r\n" +
                   "<!DOCTYPE html>\n<html>\n<head>\n<title>" + _t("Redirecting to {0}", idn) + "</title>\n" + headerLinks +
-                  "<meta http-equiv=\"Refresh\" content=\"1; url=" + url + "\">\n</head>\n<body>\n" +
+                  "<meta http-equiv=\"Refresh\" content=\"1; url=" + DataHelper.escapeHTML(url) + "\">\n</head>\n<body>\n" +
                   "<div class=logo>\n<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\">" + logo +
                   "</a><hr>\n").getBytes(StandardCharsets.UTF_8));
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS))
@@ -431,7 +431,7 @@ public abstract class LocalHTTPServer {
                   "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes(StandardCharsets.UTF_8));
         out.write(("</div>\n<div class=\"warning redirect\" id=warning>\n<h3>" +
                   _t("Saved the authentication for {0}, redirecting now.", idn).replace("now.", "now&hellip;") +
-                  "</b></p>\n<hr>\n<p><a href=\"" + url + "\">" +
+                  "</b></p>\n<hr>\n<p><a href=\"" + DataHelper.escapeHTML(url) + "\">" +
                   _t("Click here if you are not redirected automatically.") +
                   "</a></p>\n<br>\n</div>\n").getBytes(StandardCharsets.UTF_8));
         I2PTunnelHTTPClientBase.writeFooter(out);
