@@ -774,8 +774,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @return the new RTO value in ms
      */
     synchronized int doubleRTO() {
-        long now = System.currentTimeMillis();
-        if (now - _lastRtoDoubleTime < _smoothedRtt) {
+        long now = System.nanoTime();
+        if (_lastRtoDoubleTime != 0 &&
+            now - _lastRtoDoubleTime < _smoothedRtt * 1_000_000L) {
             return _retransmitTimeout;
         }
         _lastRtoDoubleTime = now;
