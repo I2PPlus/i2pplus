@@ -286,6 +286,7 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     }
 
     /**
+     *  @return true if equal
      *  @since 0.9.25
      */
     @Override

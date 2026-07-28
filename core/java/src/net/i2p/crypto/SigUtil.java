@@ -112,6 +112,7 @@ public final class SigUtil {
      *  For efficiency, use fromJavakey(pk, type) if type is known.
      *
      *  @param pk JAVA key!
+     *  @return the I2P signing public key
      *  @throws InvalidKeyException on unknown type
      *  @since 0.9.18
      */
@@ -179,6 +180,7 @@ public final class SigUtil {
      *  For efficiency, use fromJavakey(pk, type) if type is known.
      *
      *  @param pk JAVA key!
+     *  @return the I2P signing private key
      *  @throws InvalidKeyException on unknown type
      *  @since 0.9.18
      */

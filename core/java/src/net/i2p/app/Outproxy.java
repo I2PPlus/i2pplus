@@ -26,8 +26,5 @@ public interface Outproxy {
      * @return a connected socket
      * @throws IOException if the connection fails
      */
-    /**
-     * Connect to the server.
-     */
     public Socket connect(String host, int port) throws IOException;
 }

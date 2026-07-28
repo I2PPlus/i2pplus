@@ -437,6 +437,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Parse the config for anything we know about.
      * Also fill in the authorization properties if missing.
+     *
+     * @return the configuration properties
      */
     private final Properties loadConfig(Properties opts) {
         Properties options = new Properties();
@@ -587,7 +589,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      */
     public boolean supportsLS2() {return _routerSupportsLS2;}
 
-    /** Set the lease set for this session */
+    /** Lease set published by this session. */
     void setLeaseSet(LeaseSet ls) {
         _leaseSet = ls;
         if (ls != null) {
@@ -602,7 +604,10 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         }
     }
 
-    /** @return the current lease set */
+    /**
+     * Current lease set published by this session.
+     * @return the current lease set
+     */
     LeaseSet getLeaseSet() {return _leaseSet;}
 
     /** Change the session state */
@@ -897,6 +902,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Pull the unencrypted data from the message that we've already prefetched and
      * notified the user that its available.
      *
+     * @return the data, or null on error
      */
     @Override
     public byte[] receiveMessage(int msgId) throws I2PSessionException {
@@ -1206,7 +1212,10 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @return null if unset
      */
     SessionId getSessionId() {return _sessionId;}
-    /** @param id the session ID to set */
+    /**
+     * Session ID assigned by the router.
+     * @param id the session ID to set
+     */
     void setSessionId(SessionId id) {_sessionId = id;}
 
     /**
@@ -1479,7 +1488,10 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     private final static int MAX_RECONNECT_DELAY = 320*1000;
     private final static int BASE_RECONNECT_DELAY = 10*1000;
 
-    /** @return true if the session should attempt to reconnect */
+    /**
+     * Whether the session should attempt reconnection on disconnect.
+     * @return true if the session should attempt to reconnect
+     */
     protected boolean shouldReconnect() {return true;}
 
     /**
@@ -1893,6 +1905,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  Ask the router to lookup a Destination by host name.
      *  Blocking. See above for details.
      *
+     *  @param name the hostname to look up
      *  @param maxWait ms
      *  @since 0.9.11
      *  @return null on failure
@@ -2137,7 +2150,10 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         }
     }
 
-    /** @return the last activity timestamp */
+    /**
+     * Time of last session activity in milliseconds.
+     * @return the last activity timestamp
+     */
     public long lastActivity() {return _lastActivity.get();}
 
     /** Mark the session as reduced */

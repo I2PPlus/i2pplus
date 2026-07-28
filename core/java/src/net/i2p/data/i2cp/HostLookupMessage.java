@@ -50,6 +50,8 @@ public class HostLookupMessage extends I2CPMessageImpl {
     public HostLookupMessage() {}
 
     /**
+     *  @param id the session id
+     *  @param h the hash to look up
      *  @param reqID 0 to 2**32 - 1
      *  @param timeout ms 1 to 2**32 - 1
      */
@@ -65,6 +67,8 @@ public class HostLookupMessage extends I2CPMessageImpl {
     }
 
     /**
+     *  @param id the session id
+     *  @param host the hostname to look up
      *  @param reqID 0 to 2**32 - 1
      *  @param timeout ms 1 to 2**32 - 1
      */
@@ -205,10 +209,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
     public int getType() {
         return MESSAGE_TYPE;
     }
-
-    /**
-     * toString.
-     */
+/** Returns a string representation of this message. */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

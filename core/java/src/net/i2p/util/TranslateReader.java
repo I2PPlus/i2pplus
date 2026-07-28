@@ -414,7 +414,10 @@ public class TranslateReader extends FilterReader {
         }
     }
 
-    /** @param files ignore 0 */
+    /**
+     * Tag PO files with translation metadata.
+     * @param files ignore 0
+     */
     private static void tag(String[] files) throws IOException {
         char[] buf = new char[256];
         String outfile;

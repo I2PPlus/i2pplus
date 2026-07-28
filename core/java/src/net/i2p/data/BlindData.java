@@ -305,8 +305,6 @@ public class BlindData {
     /**
      *  Encodes the blinded key in b33 format.
      *
-     *  Encodes the blinded key in b33 format.
-     *
      * @return the b33 encoded string
      * @since 0.9.41
      */

@@ -31,7 +31,9 @@ final class ECUtil {
     private static final BigInteger THREE = new BigInteger("3");
 
     /**
-     * scalarMult.
+     * Scalar multiplication on the curve.
+     *
+     * @return the resulting ECPoint
      */
     public static ECPoint scalarMult(ECPoint p, BigInteger kin, EllipticCurve curve) {
         ECPoint r = ECPoint.POINT_INFINITY;

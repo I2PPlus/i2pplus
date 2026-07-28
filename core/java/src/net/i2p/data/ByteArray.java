@@ -17,11 +17,11 @@ import java.io.Serializable;
  *
  */
 public class ByteArray implements Serializable, Comparable<ByteArray> {
-    /**  data */
+    /** Underlying byte array data. */
     private byte[] _data;
-    /**  valid */
+    /** Number of valid bytes in the array. */
     private int _valid;
-    /**  offset */
+    /** Offset into the byte array where valid data begins. */
     private int _offset;
 
     /**
@@ -112,7 +112,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     }
 
     /**
-     * equals.
+     * Compares this ByteArray with another object for equality.
      */
     @Override
     public final boolean equals(Object o) {
@@ -134,7 +134,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     }
 
     /**
-     * compareTo.
+     * Compares this ByteArray with another ByteArray.
      */
     @Override
     public final int compareTo(ByteArray ba) {
@@ -142,7 +142,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     }
 
     /**
-     * @return whether h code is present
+     * Hash code based on the underlying byte array data.
      */
     @Override
     public final int hashCode() {
@@ -150,7 +150,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     }
 
     /**
-     * toString.
+     * Returns a string representation of this ByteArray.
      */
     @Override
     public String toString() {

@@ -50,43 +50,33 @@ public class AbuseReason extends DataStructureImpl {
         _reason = reason;
     }
 
-    /**
-     * readBytes.
-     */
+    /** Reads the abuse reason from a stream. */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _reason = DataHelper.readString(in);
     }
 
-    /**
-     * writeBytes.
-     */
+    /** Writes the abuse reason to a stream. */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_reason == null) throw new DataFormatException("Invalid abuse reason");
         DataHelper.writeString(out, _reason);
     }
 
-    /**
-     * equals.
-     */
+    /** Compares this abuse reason with another object for equality. */
     @Override
     public boolean equals(Object object) {
         if ((object == null) || !(object instanceof AbuseReason)) return false;
         return DataHelper.eq(_reason, ((AbuseReason) object).getReason());
     }
 
-    /**
-     * @return whether h code is present
-     */
+    /** Hash code derived from the reason string. */
     @Override
     public int hashCode() {
         return DataHelper.hashCode(_reason);
     }
 
-    /**
-     * toString.
-     */
+    /** Returns a string representation of this abuse reason. */
     @Override
     public String toString() {
         return "[AbuseReason: " + _reason + "]";

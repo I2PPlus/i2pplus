@@ -112,6 +112,9 @@ public final class KeyGenerator {
      *  PBE the passphrase with the salt.
      *  Warning - SLOW
      *
+     *  @param salt the salt
+     *  @param passphrase the passphrase
+     *  @return the session key
      *  @since 0.7.1
      */
     public SessionKey generateSessionKey(byte[] salt, byte[] passphrase) {
@@ -180,7 +183,7 @@ public final class KeyGenerator {
         return _context.getProperty(PROP_LONG_EXPONENT, DEFAULT_USE_LONG_EXPONENT);
     }
 
-    /** Get the size of the ElGamal exponent in bits.
+    /** Size of the ElGamal exponent in bits.
      *
      * @return the size in bits
      * @since 0.9.8

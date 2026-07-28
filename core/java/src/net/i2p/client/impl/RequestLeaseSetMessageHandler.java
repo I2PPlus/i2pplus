@@ -68,9 +68,8 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     private static final String PROP_LS_KEY = "i2cp.leaseSetKey";
     private static final String PROP_LS_PK = "i2cp.leaseSetPrivateKey";
     private static final String PROP_LS_SPK = "i2cp.leaseSetSigningPrivateKey";
-    // LS 2
     /**
-     * PROP_LS_TYPE.
+     * PROP_LS_TYPE — used for LS2.
      */
     public static final String PROP_LS_TYPE = "i2cp.leaseSetType";
     private static final String PROP_LS_ENCTYPE = "i2cp.leaseSetEncType";
@@ -106,6 +105,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      *
      *  Side effect: sets _ls2Type
      *
+     *  @return true if LS2 should be used
      *  @since 0.9.38
      */
     protected boolean requiresLS2(I2PSessionImpl session) {
@@ -530,8 +530,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     }
 
     /**
-     *  @param spk non-null [type:]b64[,[type:]b64]...
+     *  @param spkl non-null [type:]b64[,[type:]b64]...
      *  @param privKeys out parameter
+     *  @param allowedTypes list of allowed encryption types
      *  @since 0.9.39
      */
     private void parsePrivateKeys(String spkl, List<PrivateKey> privKeys, List<EncType> allowedTypes) {
@@ -623,6 +624,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
          *  Existing keys, LS1 only
          *
          *  @param privKeys all EncTypes must be available
+         *  @param signingPrivKey the signing private key
          *  @since 0.9.18
          */
         public LeaseInfo(List<PrivateKey> privKeys, SigningPrivateKey signingPrivKey) {
@@ -642,6 +644,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
          *  Existing crypto keys, new signing key, LS1 only
          *
          *  @param privKeys all EncTypes must be available
+         *  @param dest the destination for key generation
          *  @since 0.9.21
          */
         public LeaseInfo(List<PrivateKey> privKeys, Destination dest) {
@@ -679,12 +682,18 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             _signingPrivKey = null;
         }
 
-        /** @return the first one if more than one */
+        /**
+         * First public key; returns the first when multiple are present.
+         * @return the first one if more than one
+         */
         public PublicKey getPublicKey() {
             return _pubKeys.get(0);
         }
 
-        /** @return the first one if more than one */
+        /**
+         * First private key; returns the first when multiple are present.
+         * @return the first one if more than one
+         */
         public PrivateKey getPrivateKey() {
             return _privKeys.get(0);
         }
@@ -699,12 +708,18 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             return _privKeys;
         }
 
-        /** @return null for LS2 */
+        /**
+         * Signing public key; null for LS2.
+         * @return null for LS2
+         */
         public SigningPublicKey getSigningPublicKey() {
             return _signingPubKey;
         }
 
-        /** @return null for LS2 */
+        /**
+         * Signing private key; null for LS2.
+         * @return null for LS2
+         */
         public SigningPrivateKey getSigningPrivateKey() {
             return _signingPrivKey;
         }

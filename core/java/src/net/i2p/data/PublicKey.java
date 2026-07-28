@@ -90,7 +90,7 @@ import java.util.Arrays;
  */
 public class PublicKey extends SimpleDataStructure {
     private static final EncType DEF_TYPE = EncType.ELGAMAL_2048;
-    /** Keysize bytes. */
+    /** Default key size in bytes (256 for ElGamal). */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPubkeyLen();
     private static final int CACHE_SIZE = 1024;
     private static final SDSCache<PublicKey> _cache = new SDSCache<>(PublicKey.class, KEYSIZE_BYTES, CACHE_SIZE);
@@ -124,9 +124,7 @@ public class PublicKey extends SimpleDataStructure {
         return _cache.get(in);
     }
 
-    /**
-     * PublicKey.
-     */
+    /** Creates a new PublicKey with the default ElGamal type. */
     public PublicKey() {
         this(DEF_TYPE);
     }
@@ -142,7 +140,10 @@ public class PublicKey extends SimpleDataStructure {
         _unknownTypeCode = (type != null) ? type.getCode() : -1;
     }
 
-    /** @param data must be non-null */
+    /**
+     * Construct from raw key data.
+     * @param data must be non-null
+     */
     public PublicKey(byte[] data) {
         this(DEF_TYPE, data);
     }
@@ -192,9 +193,7 @@ public class PublicKey extends SimpleDataStructure {
         fromBase64(base64Data);
     }
 
-    /**
-     * length.
-     */
+    /** Key length in bytes, determined by the encryption type. */
     @Override
     public int length() {
         if (_type != null) {
@@ -232,9 +231,10 @@ public class PublicKey extends SimpleDataStructure {
      *  Up-convert this from an untyped (type 0) PK to a typed PK based on the Key Cert given.
      *  The type of the returned key will be null if the kcert sigtype is null.
      *
+     *  @param kcert the key certificate
+     *  @return the typed public key
      *  @throws IllegalArgumentException if this is already typed to a different type
      *  @since 0.9.42
-     *  @param kcert the key certificate
      */
     PublicKey toTypedKey(KeyCertificate kcert) {
         if (_data == null) {
@@ -304,6 +304,8 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
+     *  String representation showing type and data size.
+     *
      *  @since 0.9.38
      */
     @Override
@@ -322,8 +324,9 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
+     *  Hash code combining the type and data.
+     *
      *  @since 0.9.42
-     * @return whether h code is present
      */
     @Override
     public int hashCode() {
@@ -331,6 +334,8 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
+     *  Compares this public key with another object for equality.
+     *
      *  @since 0.9.42
      */
     @Override

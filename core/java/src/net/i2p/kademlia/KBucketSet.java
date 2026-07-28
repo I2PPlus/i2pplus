@@ -131,7 +131,10 @@ public class KBucketSet<T extends SimpleDataStructure> {
         _bucketsLock.readLock().unlock();
     }
 
-    /** Try to acquire the write lock. @return true if the lock was acquired */
+    /**
+     * Try to acquire the write lock.
+     * @return true if the lock was acquired
+     */
     private boolean getWriteLock() {
         try {
             boolean rv = _bucketsLock.writeLock().tryLock(3000, TimeUnit.MILLISECONDS);
@@ -742,7 +745,10 @@ public class KBucketSet<T extends SimpleDataStructure> {
             _distanceCache = new LHMCache<>(256);
         }
 
-        /** @return 0 to max-1 or -1 for us */
+        /**
+         * Bucket index for the given key.
+         * @return 0 to max-1 or -1 for us
+         */
         public int getRange(T key) {
             Integer rv;
             synchronized (_distanceCache) {

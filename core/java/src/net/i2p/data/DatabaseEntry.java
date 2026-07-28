@@ -90,9 +90,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      */
     public static final int KEY_TYPE_ROUTERINFO = 0;
 
-    /**
-     * KEY_TYPE_LEASESET.
-     */
+    /** LeaseSet (v1) type. */
     public static final int KEY_TYPE_LEASESET = 1;
 
     /** LeaseSet 2 type.
@@ -131,14 +129,15 @@ public abstract class DatabaseEntry extends DataStructureImpl {
 
     /** cryptographic signature */
     protected volatile Signature _signature;
-    // synch: this
-    /**  current routing key */
+    /**
+     * Current routing key, cached. Synchronize on this object.
+     */
     private Hash _currentRoutingKey;
-    /**  routing key gen mod */
+    /** Routing key generation modifier, for cache invalidation. */
     private long _routingKeyGenMod;
-    /**  received as published */
+    /** Whether this entry was received via a remote publish. */
     private volatile boolean _receivedAsPublished;
-    /**  received as reply */
+    /** Whether this entry was received as a reply to a search. */
     private volatile boolean _receivedAsReply;
 
     /**
@@ -181,7 +180,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     public abstract long getDate();
 
     /**
-     * Get the keys and the cert
+     * Keys and certificate for this entry.
      * Identical to getDestination() in LeaseSet,
      * and getIdentity() in RouterInfo.
      *
@@ -205,7 +204,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-     * Get the type of the data structure.
+     * Type of the data structure.
      * This should be faster than instanceof.
      *
      * @return KEY_TYPE_ROUTERINFO or KEY_TYPE_LEASESET or LS2 types
@@ -256,7 +255,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     protected abstract byte[] getBytes() throws DataFormatException;
 
     /**
-     * Get the routing key for the structure using the current modifier in the RoutingKeyGenerator.
+     * Routing key for the structure using the current modifier in the RoutingKeyGenerator.
      * This only calculates a new one when necessary though (if the generator's key modifier changes)
      *
      * @return the routing key
@@ -403,7 +402,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-     * set to true
+     * Marks this entry as received via reply.
      *
      * @since 0.7.14, moved up from LeaseSet in 0.9.58
      */

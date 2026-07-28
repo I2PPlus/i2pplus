@@ -571,7 +571,9 @@ public final class KeyStoreUtil {
         return true;
     }
 
-    /** 48 char b32 string (30 bytes of entropy) */
+    /**
+     *  @return 48 char b32 string (30 bytes of entropy)
+     */
     public static String randomString() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         // make a random 48 character password (30 * 8 / 5)

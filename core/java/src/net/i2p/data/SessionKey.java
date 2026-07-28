@@ -79,9 +79,7 @@ package net.i2p.data;
 public class SessionKey extends SimpleDataStructure {
     private Object _preparedKey;
 
-    /**
-     * KEYSIZE_BYTES.
-     */
+    /** Key size in bytes (32). */
     public static final int KEYSIZE_BYTES = 32;
 
     /** A key with all zeroes in the data */

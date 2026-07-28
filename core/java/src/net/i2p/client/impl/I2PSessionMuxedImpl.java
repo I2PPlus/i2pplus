@@ -165,10 +165,12 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
 
     /**
      * sendMessage.
+     * @return success
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return success
      */
     public boolean sendMessage(Destination dest, byte[] payload) throws I2PSessionException {
         return sendMessage(dest, payload, 0, payload.length, null, null, 0, PROTO_UNSPECIFIED, PORT_UNSPECIFIED, PORT_UNSPECIFIED);
@@ -176,10 +178,12 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
 
     /**
      * sendMessage.
+     * @return success
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return success
      */
     public boolean sendMessage(Destination dest, byte[] payload, int proto, int fromport, int toport) throws I2PSessionException {
         return sendMessage(dest, payload, 0, payload.length, null, null, 0, proto, fromport, toport);
@@ -190,10 +194,12 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
+     * @return success
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return success
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires) throws I2PSessionException {
         return sendMessage(dest, payload, offset, size, keyUsed, tagsSent, 0, PROTO_UNSPECIFIED, PORT_UNSPECIFIED, PORT_UNSPECIFIED);
@@ -204,10 +210,12 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
+     * @return success
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return success
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, int proto, int fromport, int toport) throws I2PSessionException {
         return sendMessage(dest, payload, offset, size, keyUsed, tagsSent, 0, proto, fromport, toport);
@@ -226,11 +234,13 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *
      *  @param fromPort 1-65535 or 0 for unset
      *  @param toPort 1-65535 or 0 for unset
+     *  @return success
      *  @since 0.7.1
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return success
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires, int proto, int fromPort, int toPort) throws I2PSessionException {
         return sendMessage(dest, payload, offset, size, keyUsed, tagsSent, 0, proto, fromPort, toPort, 0);
@@ -250,11 +260,13 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *  @param fromPort 1-65535 or 0 for unset
      *  @param toPort 1-65535 or 0 for unset
      *  @param flags to be passed to the router
+     *  @return success
      *  @since 0.8.4
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return success
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires, int proto, int fromPort, int toPort, int flags) throws I2PSessionException {
         payload = prepPayload(payload, offset, size, proto, fromPort, toPort, SendMessageOptions.GzipOption.DEFAULT);
@@ -276,11 +288,13 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *  @param fromPort 1-65535 or 0 for unset
      *  @param toPort 1-65535 or 0 for unset
      *  @param options to be passed to the router
+     *  @return true always
      *  @since 0.9.2
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return true always
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, int proto, int fromPort, int toPort, SendMessageOptions options) throws I2PSessionException {
         payload = prepPayload(payload, offset, size, proto, fromPort, toPort, options.getGzip());
@@ -303,6 +317,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     @Override
     /**
      * Send an I2CP message.
+     * @return the message ID
      */
     public long sendMessage(Destination dest, byte[] payload, int offset, int size, int proto, int fromPort, int toPort, SendMessageOptions options, SendMessageStatusListener listener) throws I2PSessionException {
         payload = prepPayload(payload, offset, size, proto, fromPort, toPort, options.getGzip());

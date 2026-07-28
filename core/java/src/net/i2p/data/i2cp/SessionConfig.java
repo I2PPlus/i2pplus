@@ -333,6 +333,8 @@ public class SessionConfig extends DataStructureImpl {
 
     /**
      *  Misnamed, could be too old or too far in the future.
+     *
+     *  @return true if the creation date is out of range
      */
     public boolean tooOld() {
         long now = Clock.getInstance().now();
@@ -344,7 +346,9 @@ public class SessionConfig extends DataStructureImpl {
         return false;
     }
 
-    /** Serialize this session config to a byte array. */
+    /**
+     * @return the serialized session config, or empty array on failure
+     */
     private byte[] getBytes() {
         if (_destination == null || _options == null || _creationDate == null) {
             return new byte[0];
@@ -367,9 +371,7 @@ public class SessionConfig extends DataStructureImpl {
         return out.toByteArray();
     }
 
-    /**
-     * readBytes.
-     */
+    /** Reads the session config from a stream. */
     @Override
     public void readBytes(InputStream rawConfig) throws DataFormatException, IOException {
         _destination = Destination.create(rawConfig);
@@ -383,9 +385,7 @@ public class SessionConfig extends DataStructureImpl {
         _signature.readBytes(rawConfig);
     }
 
-    /**
-     * writeBytes.
-     */
+    /** Writes the session config to a stream. */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if ((_destination == null) || (_options == null) || (_signature == null) || (_creationDate == null)) {
@@ -397,9 +397,7 @@ public class SessionConfig extends DataStructureImpl {
         _signature.writeBytes(out);
     }
 
-    /**
-     * equals.
-     */
+    /** Compares this session config with another object for equality. */
     @Override
     public boolean equals(Object object) {
         if ((object != null) && (object instanceof SessionConfig)) {
@@ -409,17 +407,13 @@ public class SessionConfig extends DataStructureImpl {
         return false;
     }
 
-    /**
-     * @return whether h code is present
-     */
+    /** Hash code derived from the session signature. */
     @Override
     public int hashCode() {
         return _signature != null ? _signature.hashCode() : 0;
     }
 
-    /**
-     * toString.
-     */
+    /** Returns a string representation of this session config. */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder("SessionConfig: ");

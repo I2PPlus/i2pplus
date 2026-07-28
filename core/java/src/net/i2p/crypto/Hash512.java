@@ -42,7 +42,7 @@ public class Hash512 extends SimpleDataStructure {
     }
 
     /**
-     * length.
+     * @return the hash length in bytes
      */
     @Override
     public int length() {

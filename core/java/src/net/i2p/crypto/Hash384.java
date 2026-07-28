@@ -41,7 +41,7 @@ public class Hash384 extends SimpleDataStructure {
     }
 
     /**
-     * length.
+     * @return the hash length in bytes
      */
     @Override
     public int length() {

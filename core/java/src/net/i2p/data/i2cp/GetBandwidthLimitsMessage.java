@@ -50,10 +50,7 @@ public class GetBandwidthLimitsMessage extends I2CPMessageImpl {
     public int getType() {
         return MESSAGE_TYPE;
     }
-
-    /**
-     * toString.
-     */
+/** Returns a string representation of this message. */
     @Override
     public String toString() {
         return "[GetBandwidthLimitsMessage]";

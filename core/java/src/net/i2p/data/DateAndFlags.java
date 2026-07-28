@@ -31,16 +31,15 @@ import java.util.Date;
  * @since 0.8.4
  */
 public class DateAndFlags extends DataStructureImpl {
-    /**
-     * _flags.
-     */
+    /** Application-specific flags (bottom 16 bits). */
     protected int _flags;
-    /**  date */
+    /** Date in milliseconds since epoch. */
     private long _date;
 
     public DateAndFlags() {}
 
     /**
+     *  @param date the date in milliseconds since epoch
      *  @param flags 0 - 65535
      */
     public DateAndFlags(long date, int flags) {
@@ -50,6 +49,7 @@ public class DateAndFlags extends DataStructureImpl {
     }
 
     /**
+     *  @param date the date
      *  @param flags 0 - 65535
      */
     public DateAndFlags(Date date, int flags) {

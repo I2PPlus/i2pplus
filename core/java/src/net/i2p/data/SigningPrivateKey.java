@@ -93,14 +93,12 @@ import javax.security.auth.Destroyable;
  */
 public class SigningPrivateKey extends SimpleDataStructure implements Destroyable {
     private static final SigType DEF_TYPE = SigType.DSA_SHA1;
-    /** KEYSIZE_BYTES. */
+    /** Default key size in bytes (20 for DSA-SHA1). */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPrivkeyLen();
 
     private final SigType _type;
 
-    /**
-     * SigningPrivateKey.
-     */
+    /** Creates a new SigningPrivateKey with the default DSA-SHA1 type. */
     public SigningPrivateKey() {
         this(DEF_TYPE);
     }
@@ -113,9 +111,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
         _type = type;
     }
 
-    /**
-     * SigningPrivateKey.
-     */
+    /** Creates a new SigningPrivateKey from byte data with default type. */
     public SigningPrivateKey(byte[] data) {
         this(DEF_TYPE, data);
     }
@@ -139,9 +135,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
         fromBase64(base64Data);
     }
 
-    /**
-     * length.
-     */
+    /** Key length in bytes, determined by the signature type. */
     @Override
     public int length() {
         return _type.getPrivkeyLen();
@@ -172,6 +166,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
      *  Only for SigType EdDSA_SHA512_Ed25519
      *
      *  @param alpha the secret data
+     *  @return the blinded private key
      *  @throws UnsupportedOperationException unless supported
      *  @since 0.9.38
      */
@@ -240,8 +235,9 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     }
 
     /**
+     *  Hash code combining the type and data.
+     *
      *  @since 0.9.17
-     * @return whether h code is present
      */
     @Override
     public int hashCode() {

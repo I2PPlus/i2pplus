@@ -354,7 +354,10 @@ public final class CryptixRijndael_Algorithm {
     // Rijndael own methods
     //...........................................................................
 
-    /** @return The default length in bytes of the Algorithm input block. */
+    /**
+     * Default input block length for Rijndael.
+     * @return The default length in bytes of the Algorithm input block.
+     */
     public static final int blockSize() {
         return _BLOCK_SIZE;
     }
@@ -589,6 +592,8 @@ public final class CryptixRijndael_Algorithm {
      * Returns a string of 8 hexadecimal digits (most significant
      * digit first) corresponding to the integer <i>n</i>, which is
      * treated as unsigned.
+     *
+     * @return the hex string
      */
     private static final String intToString(int n) {
         char[] buf = new char[8];
@@ -602,6 +607,8 @@ public final class CryptixRijndael_Algorithm {
     /**
      * Returns a string of hexadecimal digits from a byte array. Each
      * byte is converted to 2 hex symbols.
+     *
+     * @return the hex string
      */
     private static final String toString(byte[] ba) {
         int length = ba.length;
@@ -617,6 +624,8 @@ public final class CryptixRijndael_Algorithm {
     /**
      * Returns a string of hexadecimal digits from an integer array. Each
      * int is converted to 4 hex symbols.
+     *
+     * @return the hex string
      */
     private static final String toString(int[] ia) {
         int length = ia.length;

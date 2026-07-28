@@ -135,7 +135,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
     }
 
     /**
-     * Clones this object.
+     * @return a clone of this object
      */
     @Override
     public Object clone() throws CloneNotSupportedException {

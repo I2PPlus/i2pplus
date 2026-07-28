@@ -43,34 +43,20 @@ import net.i2p.util.OrderedProperties;
  * @since 0.9.38
  */
 public class LeaseSet2 extends LeaseSet {
-    /**
-     * _flags.
-     */
+    /** Flags for options, offline, unpublished, blinded. */
     protected int _flags;
-    /**
-     * ms.
-     */
-    protected long _published; // stored as absolute ms
-    /**
-     * ms.
-     */
-    protected long _expires; // stored as absolute ms
-    /**
-     * ms.
-     */
-    protected long _transientExpires; // stored as absolute ms
-    /**
-     * super.
-     */
-    protected SigningPublicKey _transientSigningPublicKey; // if non-null, type of this is type of _signature in super
-    /**
-     * dest.
-     */
-    protected Signature _offlineSignature; // if non-null, type of this is type of SPK in the dest
-    /**
-     * null.
-     */
-    protected Properties _options; // may be null
+    /** Published timestamp in ms (1-second resolution). */
+    protected long _published;
+    /** Expiration timestamp in ms (1-second resolution). */
+    protected long _expires;
+    /** Transient key expiration in ms. */
+    protected long _transientExpires;
+    /** Transient signing public key for offline signing. */
+    protected SigningPublicKey _transientSigningPublicKey;
+    /** Offline signature. */
+    protected Signature _offlineSignature;
+    /** Options and statistics properties, may be null. */
+    protected Properties _options;
     /** only used if more than one key, otherwise null */
     private List<PublicKey> _encryptionKeys;
     /** If this leaseset was formerly blinded, the blinded hash, so we can find it again */
@@ -93,9 +79,7 @@ public class LeaseSet2 extends LeaseSet {
     /** Logger instance. */
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(LeaseSet2.class);
 
-    /**
-     * LeaseSet2.
-     */
+    /** Creates a new LeaseSet2 with default values. */
     public LeaseSet2() {
         super();
         _checked = true; // prevents decryption in super

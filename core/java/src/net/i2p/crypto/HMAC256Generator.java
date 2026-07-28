@@ -101,6 +101,7 @@ public final class HMAC256Generator extends HMACGenerator {
      *  @param origMAC what do we expect the MAC of curData to equal
      *  @param origMACOffset index into origMAC
      *  @param origMACLength how much of the MAC do we want to verify, use 32 for HMAC256
+     *  @return true if the MAC matches
      *  @since 0.9.12 overrides HMACGenerator
      */
     @Override
@@ -166,7 +167,7 @@ public final class HMAC256Generator extends HMACGenerator {
     static final class HMACKey implements SecretKey {
         private final byte[] _data;
 
-        /** Constructor.
+        /**
          * @param data the key data
          */
         public HMACKey(byte[] data) {

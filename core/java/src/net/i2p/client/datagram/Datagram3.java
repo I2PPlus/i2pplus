@@ -61,6 +61,8 @@ public class Datagram3 {
     /**
      * Make a repliable I2P datagram3 containing the specified payload.
      *
+     * @param ctx non-null
+     * @param session non-null
      * @param payload non-null Bytes to be contained in the I2P datagram.
      * @return non-null, throws on all errors
      * @throws DataFormatException if payload is too big
@@ -72,6 +74,8 @@ public class Datagram3 {
     /**
      * Make a repliable I2P datagram3 containing the specified payload.
      *
+     * @param ctx non-null
+     * @param session non-null
      * @param payload non-null Bytes to be contained in the I2P datagram.
      * @param options may be null
      * @return non-null, throws on all errors
@@ -95,6 +99,8 @@ public class Datagram3 {
     /**
      * Load an I2P repliable datagram3.
      *
+     * @param ctx non-null
+     * @param session non-null
      * @param dgram non-null I2P repliable datagram to be loaded
      * @return non-null, throws on all errors
      * @throws DataFormatException If there is an error in the datagram format

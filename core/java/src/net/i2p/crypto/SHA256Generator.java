@@ -83,6 +83,7 @@ public final class SHA256Generator {
      *  would require copying the data.
      *  Return the instance via release() when done.
      *
+     *  @return a MessageDigest instance
      *  @since public since 0.9.66
      */
     public MessageDigest acquire() {

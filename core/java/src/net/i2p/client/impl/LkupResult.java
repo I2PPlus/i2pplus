@@ -15,12 +15,21 @@ public class LkupResult implements LookupResult {
         this(code, dest, 0);
     }
 
-    /** Deferred. @param nonce the nonce */
+    /**
+     * Deferred.
+     * @param nonce the nonce
+     */
     LkupResult(int nonce) {
         this(RESULT_DEFERRED, null, nonce);
     }
 
-    /** @param code result code @param dest destination @param nonce the nonce */
+    /**
+     * Full constructor.
+     *
+     * @param code result code
+     * @param dest destination
+     * @param nonce the nonce
+     */
     LkupResult(int code, Destination dest, int nonce) {
         _code = code;
         _dest = dest;

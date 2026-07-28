@@ -19,17 +19,16 @@ import net.i2p.I2PException;
 public class DataFormatException extends I2PException {
 
     /**
-     * DataFormatException.
+     * @param msg the detail message
+     * @param t the cause
      */
-    /** @param msg the detail message */
     public DataFormatException(String msg, Throwable t) {
         super(msg, t);
     }
 
     /**
-     * DataFormatException.
+     * @param msg the detail message
      */
-    /** @param msg the detail message */
     public DataFormatException(String msg) {
         super(msg);
     }

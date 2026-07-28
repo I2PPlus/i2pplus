@@ -37,7 +37,7 @@ public class Base32 {
      * Translates a Base32 value to either its 5-bit reconstruction value
      * or a negative number indicating some other meaning.
      * Allow upper or lower case.
-     **/
+     */
     private static final byte[] DECODABET = {
         26,
         27,
@@ -232,6 +232,7 @@ public class Base32 {
      * Encodes a byte array into Base32 notation.
      *
      * @param source The data to convert non-null
+     * @param out the output buffer
      */
     private static void encodeBytes(byte[] source, StringBuilder out) {
         int usedbits = 0;

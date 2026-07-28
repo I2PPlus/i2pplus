@@ -208,7 +208,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * equals.
+     * @return true if the keys are equal
      */
     @Override
     public boolean equals(Object obj) {

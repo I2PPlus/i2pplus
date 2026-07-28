@@ -74,6 +74,8 @@ class MessagePayloadMessageHandler extends HandlerImpl {
      *
      * We don't really decrypt (no more end-to-end crypto)
      * If we do, we need to use the correct key manager in the decrypt() call below
+     *
+     * @return the decrypted payload
      */
     private Payload decryptPayload(MessagePayloadMessage msg, I2PSessionImpl session) {
         Payload payload = msg.getPayload();

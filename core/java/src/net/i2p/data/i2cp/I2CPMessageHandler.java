@@ -21,8 +21,6 @@ import java.io.InputStream;
  *
  */
 public class I2CPMessageHandler {
-    /** default constructor */
-
     /**
      *  This is huge. Mainly to catch a completly bogus response, possibly not an I2CP socket.
      *
@@ -61,6 +59,8 @@ public class I2CPMessageHandler {
     /**
      * Yes, this is fairly ugly, but its the only place it ever happens.
      *
+     * @param type the message type
+     * @return the new I2CPMessage instance
      */
     private static I2CPMessage createMessage(int type) throws I2CPMessageException {
         switch (type) {

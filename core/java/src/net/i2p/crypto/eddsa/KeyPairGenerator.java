@@ -103,7 +103,7 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
     }
 
     /**
-     * generateKeyPair.
+     *  @return the generated key pair
      */
     @Override
     public KeyPair generateKeyPair() {

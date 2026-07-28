@@ -152,7 +152,10 @@ public class SU3File {
             return name;
         }
 
-        /** @return null if not supported */
+        /**
+         * Lookup content type by numeric code.
+         * @return null if not supported
+         */
         public static ContentType getByCode(int code) {
             return BY_CODE.get(Integer.valueOf(code));
         }
@@ -711,7 +714,10 @@ public class SU3File {
         System.err.println(dumpTypes());
     }
 
-    /** @since 0.9.9 */
+    /**
+     * @return string listing available signature types
+     * @since 0.9.9
+     */
     private static String dumpTypes() {
         StringBuilder buf = new StringBuilder(256);
         buf.append("Available signature types (-t):\n");
@@ -763,7 +769,10 @@ public class SU3File {
         }
     }
 
-    /** @return success */
+    /**
+     * Display version from a signed SU3 file via CLI.
+     * @return true if version was displayed successfully
+     */
     private static final boolean showVersionCLI(String signedFile) {
         try {
             SU3File file = new SU3File(signedFile);
@@ -978,7 +987,10 @@ public class SU3File {
         }
     }
 
-    /** @return valid */
+    /**
+     * Verify signature on a signed file via CLI.
+     * @return true if the signature verified successfully
+     */
     private static final boolean verifySigCLI(String signedFile, String pkFile) {
         InputStream in = null;
         try {

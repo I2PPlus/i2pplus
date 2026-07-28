@@ -95,43 +95,33 @@ import java.util.Set;
  * @author jrandom
  */
 public class LeaseSet extends DatabaseEntry {
-    /**
-     * _destination.
-     */
+    /** Destination this LeaseSet is for. */
     protected Destination _destination;
-    /**
-     * _encryptionKey.
-     */
+    /** Encryption public key for the destination. */
     protected PublicKey _encryptionKey;
-    // The revocation key for LS1, null for LS2 except blinded key for encrypted LS2
     /**
-     * _signingKey.
+     * Revocation or blinded signing key.
+     * For LS1, the revocation key; for LS2, null except the blinded key for encrypted LS2.
      */
     protected SigningPublicKey _signingKey;
-    // Keep leases in the order received, or else signature verification will fail!
     /**
-     * _leases.
+     * Leases must stay in the order received, or signature verification will fail.
      */
     protected final List<Lease> _leases;
-    // Store these since isCurrent() and getEarliestLeaseDate() are called frequently
-    /** Earliest expiration time among all leases. */
-    private long _firstExpiration;
     /**
-     * _lastExpiration.
+     * Earliest expiration time among all leases.
+     * Cached because isCurrent() and getEarliestLeaseDate() are called frequently.
      */
+    private long _firstExpiration;
+    /** Latest expiration time among all leases. */
     protected long _lastExpiration;
     /** Decrypted leases backing store. */
     private List<Lease> _decryptedLeases;
     /** Whether decryption was successful. */
     private boolean _decrypted;
-    /**
-     * _checked.
-     */
+    /** Whether decryption has been attempted. */
     protected boolean _checked;
-    // cached byte version
-    /**
-     * _byteified.
-     */
+    /** Cached serialized byte array for performance. */
     protected volatile byte[] _byteified;
 
     /**
@@ -166,17 +156,13 @@ public class LeaseSet extends DatabaseEntry {
         return getEarliestLeaseDate();
     }
 
-    /**
-     * @return the keys and cert
-     */
+    /** Keys and certificate for this lease set. */
     @Override
     public KeysAndCert getKeysAndCert() {
         return _destination;
     }
 
-    /**
-     * @return the type
-     */
+    /** Lease set type for the network database. */
     @Override
     public int getType() {
         return KEY_TYPE_LEASESET;
@@ -484,6 +470,8 @@ public class LeaseSet extends DatabaseEntry {
 
     /**
      *  Number of bytes, NOT including signature
+     *
+     *  @return the size in bytes
      */
     public int size() {
         return _destination.size() + PublicKey.KEYSIZE_BYTES // encryptionKey

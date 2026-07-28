@@ -157,7 +157,10 @@ public class SendMessageOptions extends DateAndFlags {
         return codes[code];
     }
 
-    /** @param r reliability (default DEFAULT) */
+    /**
+     * Set message delivery reliability.
+     * @param r reliability (default DEFAULT)
+     */
     public void setReliability(Reliability r) {
         _flags &= ~RELIABILITY_MASK;
         switch (r) {
@@ -179,12 +182,18 @@ public class SendMessageOptions extends DateAndFlags {
         }
     }
 
-    /** @return reliability (default DEFAULT) */
+    /**
+     * Message delivery reliability.
+     * @return reliability (default DEFAULT)
+     */
     public Reliability getReliability() {
         return getReliability(_flags);
     }
 
-    /** @return reliability (default DEFAULT) */
+    /**
+     * Message delivery reliability from raw flags.
+     * @return reliability (default DEFAULT)
+     */
     public static Reliability getReliability(int flags) {
         switch (flags & RELIABILITY_MASK) {
             case BEST_EFFORT_MASK:
@@ -212,12 +221,18 @@ public class SendMessageOptions extends DateAndFlags {
         GZIP_ON
     }
 
-    /** @return non-null, DEFAULT unless setGzip() was called */
+    /**
+     * Gzip compression setting.
+     * @return non-null, DEFAULT unless setGzip() was called
+     */
     public GzipOption getGzip() {
         return _gzip;
     }
 
-    /** @param yes GZIP_ON if true, GZIP_OFF if false */
+    /**
+     * Enable or disable gzip compression.
+     * @param yes GZIP_ON if true, GZIP_OFF if false
+     */
     public void setGzip(boolean yes) {
         _gzip = yes ? GzipOption.GZIP_ON : GzipOption.GZIP_OFF;
     }

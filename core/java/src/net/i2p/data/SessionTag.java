@@ -23,9 +23,7 @@ import java.util.Arrays;
  *  As of 0.9.44, does NOT extend SimpleDataStructure, to save space
  */
 public class SessionTag {
-    /**
-     * BYTE_LENGTH.
-     */
+    /** Tag length in bytes (32). */
     public static final int BYTE_LENGTH = 32;
     private final int _cachedHashCode;
     private final byte[] _data;
@@ -67,26 +65,21 @@ public class SessionTag {
     }
 
     /**
-     * length.
+     * @return 32 (tag length in bytes)
      */
     public int length() {
         return BYTE_LENGTH;
     }
 
-    /**
-     *  SessionTags are generated both locally and by peers, in quantity,
-     *  and are used as keys in several datastructures (see TransientSessionKeyManager),
-     *  so we use a secure hashCode function.
-     * @return whether h code is present
-     */
+    /** SessionTags are generated both locally and by peers, in quantity,
+     * and are used as keys in several datastructures (see TransientSessionKeyManager),
+     * so we use a secure hashCode function. */
     @Override
     public int hashCode() {
         return _cachedHashCode;
     }
 
-    /**
-     * equals.
-     */
+    /** Compares this session tag with another object for equality. */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -98,9 +91,7 @@ public class SessionTag {
         return Arrays.equals(_data, ((SessionTag) obj)._data);
     }
 
-    /**
-     * toString.
-     */
+    /** Returns a string representation of this session tag. */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);

@@ -41,7 +41,10 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
     /** @since 0.9.38 */
     public CreateLeaseSetMessage() { /* required for I2CP deserialization */ }
 
-    /** @return the session ID */
+    /**
+     * Session identifier for this message.
+     * @return the session ID
+     */
     public SessionId getSessionId() {
         return _sessionId;
     }
@@ -56,37 +59,58 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
         return _sessionId;
     }
 
-    /** @param id the session ID */
+    /**
+     * Session identifier for this message.
+     * @param id the session ID
+     */
     public void setSessionId(SessionId id) {
         _sessionId = id;
     }
 
-    /** @return the signing private key */
+    /**
+     * Signing private key for the lease set.
+     * @return the signing private key
+     */
     public SigningPrivateKey getSigningPrivateKey() {
         return _signingPrivateKey;
     }
 
-    /** @param key the signing private key */
+    /**
+     * Signing private key for the lease set.
+     * @param key the signing private key
+     */
     public void setSigningPrivateKey(SigningPrivateKey key) {
         _signingPrivateKey = key;
     }
 
-    /** @return the private key */
+    /**
+     * ElGamal encryption key.
+     * @return the private key
+     */
     public PrivateKey getPrivateKey() {
         return _privateKey;
     }
 
-    /** @param privateKey the private key */
+    /**
+     * ElGamal encryption key.
+     * @param privateKey the private key
+     */
     public void setPrivateKey(PrivateKey privateKey) {
         _privateKey = privateKey;
     }
 
-    /** @return the lease set */
+    /**
+     * Lease set being created.
+     * @return the lease set
+     */
     public LeaseSet getLeaseSet() {
         return _leaseSet;
     }
 
-    /** @param leaseSet the lease set */
+    /**
+     * Lease set being created.
+     * @param leaseSet the lease set
+     */
     public void setLeaseSet(LeaseSet leaseSet) {
         _leaseSet = leaseSet;
     }
@@ -144,10 +168,7 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
     public int getType() {
         return MESSAGE_TYPE;
     }
-
-    /**
-     * toString.
-     */
+/** Returns a string representation of this message. */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

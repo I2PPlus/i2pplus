@@ -32,13 +32,19 @@ public class KeyPair {
     }
 
 
-    /** @return the public key */
+    /**
+     * Public key of this keypair.
+     * @return the public key
+     */
     public PublicKey getPublic() {
         return pub;
     }
 
 
-    /** @return the private key */
+    /**
+     * Private key of this keypair.
+     * @return the private key
+     */
     public PrivateKey getPrivate() {
         return priv;
     }

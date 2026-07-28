@@ -60,7 +60,7 @@ public class SHA1Hash extends SimpleDataStructure {
     }
 
     /**
-     * length.
+     * @return the hash length in bytes
      */
     @Override
     public int length() {

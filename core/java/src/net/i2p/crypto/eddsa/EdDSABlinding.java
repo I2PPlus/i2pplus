@@ -32,14 +32,13 @@ public final class EdDSABlinding {
     private EdDSABlinding() {}
 
     /**
+     *  Blind an EdDSA key.
      *  Only for SigType EdDSA_SHA512_Ed25519.
      *
      *  @param key must be SigType EdDSA_SHA512_Ed25519
      *  @param alpha generated from hash of secret data
+     *  @return the blinded public key
      *  @throws UnsupportedOperationException unless supported
-     */
-    /**
-     * Blind an EdDSA key.
      */
     public static EdDSAPublicKey blind(EdDSAPublicKey key, EdDSAPrivateKey alpha) {
         GroupElement a = key.getA();
@@ -52,14 +51,13 @@ public final class EdDSABlinding {
     }
 
     /**
+     *  Blind an EdDSA private key.
      *  Only for SigType EdDSA_SHA512_Ed25519.
      *
      *  @param key must be SigType EdDSA_SHA512_Ed25519
      *  @param alpha generated from hash of secret data
+     *  @return the blinded private key
      *  @throws UnsupportedOperationException unless supported
-     */
-    /**
-     * Blind an EdDSA key.
      */
     public static EdDSAPrivateKey blind(EdDSAPrivateKey key, EdDSAPrivateKey alpha) {
         byte[] a = key.geta();
@@ -76,27 +74,24 @@ public final class EdDSABlinding {
     }
 
     /**
+     *  Unblind an EdDSA key using alpha.
      *  Unimplemented, probably not needed except for testing.
      *
      *  @param key must be SigType EdDSA_SHA512_Ed25519
      *  @param alpha generated from hash of secret data
+     *  @return the unblinded private key
      *  @throws UnsupportedOperationException unless supported
-     */
-    /**
-     * Unblind an EdDSA key using alpha.
      */
     public static EdDSAPrivateKey unblind(EdDSAPrivateKey key, EdDSAPrivateKey alpha) {
         throw new UnsupportedOperationException();
     }
 
     /**
+     *  Reduce a 64-byte value modulo l.
      *  Use to generate alpha
      *
      *  @param b 64 bytes little endian of random
      *  @return 32 bytes little endian mod l
-     */
-    /**
-     * Reduce a 64-byte value modulo l.
      */
     public static byte[] reduce(byte[] b) {
         if (b.length != 64) throw new IllegalArgumentException("Must be 64 bytes");

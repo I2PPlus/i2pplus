@@ -330,6 +330,7 @@ class I2CPMessageProducer {
      *  imposed by the router for the leaseset, tags, encryption,
      *  and fixed-size tunnel messages.
      *
+     *  @param len the length
      *  @param expires if $gt; 0, an expiration date
      *  @return true if we should send the message, false to drop it
      */
@@ -402,6 +403,8 @@ class I2CPMessageProducer {
     /**
      * Create a new payload.
      * No more end-to-end encryption, just set the "encrypted" data to the payload.
+     *
+     * @return the payload
      */
     private static Payload createPayload(byte[] payload) throws I2PSessionException {
         if (payload == null) throw new I2PSessionException("No payload specified");

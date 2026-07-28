@@ -284,6 +284,7 @@ public class SingleFileNamingService extends NamingService {
      *  Does not write a newline.
      *
      *  @param options non-null
+     *  @param out the writer to write to
      *  @since 0.9.26, package private since 0.9.30, public since 0.9.31
      */
     public static void writeOptions(Properties options, Writer out) throws IOException {
@@ -614,7 +615,10 @@ public class SingleFileNamingService extends NamingService {
         _fileLock.readLock().unlock();
     }
 
-    /** Try to acquire the write lock. @return true if the lock was acquired */
+    /**
+     * Try to acquire the write lock.
+     * @return true if the lock was acquired
+     */
     private boolean getWriteLock() {
         try {
             boolean rv = _fileLock.writeLock().tryLock(10000, TimeUnit.MILLISECONDS);

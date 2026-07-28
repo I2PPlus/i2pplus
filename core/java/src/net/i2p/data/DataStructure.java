@@ -133,7 +133,7 @@ public interface DataStructure /* extends Serializable */ {
     public byte[] toByteArray();
 
     /**
-     * Load's structure from the data provided
+     * Loads structure from the data provided
      *
      * Warning - many classes will throw IllegalStateException if data is already set.
      * Warning - many classes will throw IllegalArgumentException if data is the wrong size.

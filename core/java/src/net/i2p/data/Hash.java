@@ -85,13 +85,9 @@ public class Hash extends SimpleDataStructure {
     private volatile String _base64ed;
     private volatile int _cachedHashCode;
 
-    /**
-     * HASH_LENGTH.
-     */
+    /** Length of SHA-256 hash in bytes. */
     public static final int HASH_LENGTH = 32;
-    /**
-     * FAKE_HASH.
-     */
+    /** Placeholder all-zero hash for testing. */
     public static final Hash FAKE_HASH = new Hash(new byte[HASH_LENGTH]);
     private static final int CACHE_SIZE = 2048;
 
@@ -107,6 +103,7 @@ public class Hash extends SimpleDataStructure {
      *
      *  Ignore this warning and you WILL corrupt the cache or other data structures.
      *
+     * @return the cached or new hash
      * @throws IllegalArgumentException if data is not the correct number of bytes
      * @since 0.8.3
      */
@@ -117,6 +114,7 @@ public class Hash extends SimpleDataStructure {
     /**
      * Pull from cache or return new
      *
+     * @return the cached or new hash
      * @throws ArrayIndexOutOfBoundsException if not enough bytes
      * @since 0.8.3
      */
@@ -127,6 +125,7 @@ public class Hash extends SimpleDataStructure {
     /**
      * Pull from cache or return new
      *
+     * @return the cached or new hash
      * @since 0.8.3
      */
     public static Hash create(InputStream in) throws IOException {
@@ -144,9 +143,7 @@ public class Hash extends SimpleDataStructure {
         setData(data);
     }
 
-    /**
-     * length.
-     */
+    /** Hash length in bytes. */
     @Override
     public int length() {
         return HASH_LENGTH;
@@ -160,9 +157,7 @@ public class Hash extends SimpleDataStructure {
         _cachedHashCode = super.hashCode();
     }
 
-    /**
-     * readBytes.
-     */
+    /** Reads the hash from an input stream. */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         super.readBytes(in);
@@ -176,9 +171,7 @@ public class Hash extends SimpleDataStructure {
         return _cachedHashCode;
     }
 
-    /**
-     * toBase64.
-     */
+    /** Returns the hash as a Base64 string. */
     @Override
     public String toBase64() {
         if (_base64ed == null) {

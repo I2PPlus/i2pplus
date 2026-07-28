@@ -327,6 +327,7 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     }
 
     /**
+     *  @return true if equal
      *  @since 0.9.25
      */
     @Override

@@ -82,8 +82,10 @@ public class SOCKS5Constants {
          */
         public static final int UDP_ASSOCIATE = 0x03;
 
-        // https://github.com/torproject/torspec/blob/main/socks-extensions.txt
-        /** @since 0.9.57 */
+        /**
+         * @see <a href="https://github.com/torproject/torspec/blob/main/socks-extensions.txt">Tor SOCKS extensions</a>
+         * @since 0.9.57
+         */
         public static final int TOR_RESOLVE = 0xf0;
 
         /** @since 0.9.57 */

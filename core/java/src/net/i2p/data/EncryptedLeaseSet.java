@@ -115,7 +115,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     private static final int CLIENT_LEN = ID_LEN + COOKIE_LEN;
 
     /**
-     * EncryptedLeaseSet.
+     * Creates a new EncryptedLeaseSet with default values.
      */
     public EncryptedLeaseSet() {
         super();
@@ -157,7 +157,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     ///// overrides below here
 
     /**
-     * @return the type
+     * Entry type for the network database.
+     *
+     * @return KEY_TYPE_ENCRYPTED_LS2 or KEY_TYPE_LS2
      */
     @Override
     public int getType() {
@@ -246,10 +248,11 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * Generate blinded pubkey from the unblinded pubkey in the destination,
-     * which must have been previously set.
+     *  Generate blinded pubkey from the unblinded pubkey in the destination,
+     *  which must have been previously set.
      *
-     * @since 0.9.39
+     *  @return the blinded public key
+     *  @since 0.9.39
      */
     private SigningPublicKey blind(SigningPublicKey spk) {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -588,7 +591,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     /**
      *  Throws IllegalStateException if not initialized.
      *
-     *  @param clientKey PrivateKey for DH or PSK, or null if none
+     *  @param csk PrivateKey for DH or PSK, or null if none
      *  @throws IllegalStateException
      */
     private void decrypt(PrivateKey csk) throws DataFormatException, IOException {
@@ -602,7 +605,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     /**
      *  Throws IllegalStateException if not initialized.
      *
-     *  @param clientKey PrivateKey for DH or PSK, or null if none
+     *  @param csk PrivateKey for DH or PSK, or null if none
      *  @throws IllegalStateException
      */
     private void x_decrypt(PrivateKey csk) throws DataFormatException, IOException {
@@ -730,6 +733,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     /**
      *  The HKDF input (no per-client auth)
      *
+     *  @param ctx the context
      *  @return 36 bytes
      *  @since 0.9.39
      */
@@ -799,6 +803,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      * Overridden because we sign the inner, then blind and encrypt
      * and sign the outer.
      *
+     * @param key the signing key
      * @throws IllegalStateException if already signed
      */
     @Override
@@ -811,6 +816,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      * Overridden because we sign the inner, then blind and encrypt
      * and sign the outer.
      *
+     * @param key the signing key
      * @param authType 0, 1, or 3, see BlindData
      * @param clientKeys X25519 public keys for DH, private keys for PSK
      * @throws IllegalStateException if already signed
@@ -914,7 +920,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * equals.
+     * Compares this EncryptedLeaseSet with another object for equality.
      */
     @Override
     public boolean equals(Object object) {
@@ -934,7 +940,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * toString.
+     * Returns a string representation of this EncryptedLeaseSet.
      */
     @Override
     public String toString() {

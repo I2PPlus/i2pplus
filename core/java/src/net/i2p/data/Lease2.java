@@ -42,9 +42,6 @@ import java.io.OutputStream;
  *
  * @since 0.9.38
  */
-/**
- * Creates a new Lease2 instance.
- */
 public class Lease2 extends Lease {
 
     /**

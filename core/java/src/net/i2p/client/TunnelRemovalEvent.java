@@ -120,10 +120,12 @@ public class TunnelRemovalEvent {
 
     /**
      * toString.
+     * @return a string representation
      */
     @Override
     /**
      * Return a string representation.
+     * @return a string representation
      */
     public String toString() {
         return "TunnelRemovalEvent [" + _poolName + " id=" + _tunnelId +

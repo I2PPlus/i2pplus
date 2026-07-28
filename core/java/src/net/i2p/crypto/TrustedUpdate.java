@@ -215,7 +215,10 @@ public class TrustedUpdate {
         return VersionComparator.comp(currentVersion, newVersion) < 0;
     }
 
-    /** @return success */
+    /**
+     * Generate signing key pair files via CLI.
+     * @return true if key files were generated successfully
+     */
     private static final boolean genKeysCLI(String publicKeyFile, String privateKeyFile) {
         File pubFile = new File(publicKeyFile);
         File privFile = new File(privateKeyFile);
@@ -270,7 +273,10 @@ public class TrustedUpdate {
         System.err.println("       TrustedUpdate verifyversion signedFile");
     }
 
-    /** @return success */
+    /**
+     * Display version string from a signed file via CLI.
+     * @return true if version string was extracted from the file
+     */
     private static final boolean showVersionCLI(String signedFile) {
         String versionString = getVersionString(new File(signedFile));
 
@@ -279,7 +285,10 @@ public class TrustedUpdate {
         return !versionString.isEmpty();
     }
 
-    /** @return success */
+    /**
+     * Sign an input file via CLI.
+     * @return true if the file was signed successfully
+     */
     private static final boolean signCLI(String inputFile, String signedFile, String privateKeyFile, String version) {
         Signature signature = new TrustedUpdate().sign(inputFile, signedFile, privateKeyFile, version);
 
@@ -288,7 +297,10 @@ public class TrustedUpdate {
         return signature != null;
     }
 
-    /** @return valid */
+    /**
+     * Verify signature on a signed file via CLI.
+     * @return true if the signature is valid
+     */
     private static final boolean verifySigCLI(String signedFile) {
         boolean isValidSignature = new TrustedUpdate().verify(new File(signedFile));
 
@@ -297,7 +309,10 @@ public class TrustedUpdate {
         return isValidSignature;
     }
 
-    /** @return if newer */
+    /**
+     * Check whether a signed file is a newer version via CLI.
+     * @return true if the signed file is a newer version
+     */
     private static final boolean verifyUpdateCLI(String signedFile) {
         boolean isUpdate = new TrustedUpdate().isUpdatedVersion(CoreVersion.VERSION, new File(signedFile));
 

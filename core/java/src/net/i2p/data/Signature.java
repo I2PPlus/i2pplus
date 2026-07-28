@@ -73,9 +73,7 @@ public class Signature extends SimpleDataStructure {
 
     private final SigType _type;
 
-    /**
-     * Signature.
-     */
+    /** Creates a new Signature with the default DSA-SHA1 type. */
     public Signature() {
         this(DEF_TYPE);
     }
@@ -94,9 +92,7 @@ public class Signature extends SimpleDataStructure {
         _type = type;
     }
 
-    /**
-     * Signature.
-     */
+    /** Creates a new Signature from byte data with default type. */
     public Signature(byte[] data) {
         this(DEF_TYPE, data);
     }
@@ -105,6 +101,7 @@ public class Signature extends SimpleDataStructure {
      *  Should we allow an unknown type here?
      *
      *  @param type non-null
+     *  @param data the signature data
      *  @since 0.9.8
      */
     public Signature(SigType type, byte[] data) {
@@ -116,9 +113,7 @@ public class Signature extends SimpleDataStructure {
         setData(data);
     }
 
-    /**
-     * length.
-     */
+    /** Signature length in bytes, determined by the signature type. */
     @Override
     public int length() {
         return _type.getSigLen();
@@ -153,8 +148,9 @@ public class Signature extends SimpleDataStructure {
     }
 
     /**
+     *  Hash code combining the type and data.
+     *
      *  @since 0.9.17
-     * @return whether h code is present
      */
     @Override
     public int hashCode() {
@@ -162,6 +158,8 @@ public class Signature extends SimpleDataStructure {
     }
 
     /**
+     *  Compares this signature with another object for equality.
+     *
      *  @since 0.9.17
      */
     @Override

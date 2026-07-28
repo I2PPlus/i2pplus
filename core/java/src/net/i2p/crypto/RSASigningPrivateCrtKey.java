@@ -31,6 +31,8 @@ final class RSASigningPrivateCrtKey extends SigningPrivateKey {
     private final RSAPrivateCrtKey _crt;
 
     /**
+     * @param pk the Java private CRT key
+     * @return the I2P signing private key
      * @throws IllegalArgumentException if data is not correct length
      */
     public static RSASigningPrivateCrtKey fromJavaKey(RSAPrivateCrtKey pk) throws GeneralSecurityException {
@@ -53,7 +55,7 @@ final class RSASigningPrivateCrtKey extends SigningPrivateKey {
     }
 
     /**
-     * toJavaKey.
+     * @return the Java private CRT key
      */
     public RSAPrivateCrtKey toJavaKey() {
         return _crt;

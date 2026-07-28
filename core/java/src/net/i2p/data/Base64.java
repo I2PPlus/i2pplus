@@ -304,14 +304,6 @@ public class Base64 {
     /* ********  E N C O D I N G   M E T H O D S  ******** */
 
     /**
-     * Encodes the first three bytes of array <var>threeBytes</var>
-     * and returns a four-byte array in Base64 notation.
-     *
-     * @param threeBytes the array to convert
-     * @return four byte array in Base64 notation.
-     * @since 1.3
-     */
-    /**
      * Encodes up to three bytes of the array <var>source</var>
      * and writes the resulting four Base64 bytes to <var>destination</var>.
      * The source and destination arrays can be manipulated
@@ -434,6 +426,8 @@ public class Base64 {
     /**
      * Same as encodeBytes, except uses a filesystem / URL friendly set of characters,
      * replacing / with ~, and + with -
+     *
+     * @return the Base64 encoded string
      */
     private static String safeEncode(byte[] source, int off, int len, boolean useStandardAlphabet) {
         if (len + off > source.length)
@@ -449,6 +443,8 @@ public class Base64 {
     /**
      * Same as decode, except from a filesystem / URL friendly set of characters,
      * replacing / with ~, and + with -
+     *
+     * @return the decoded data, null on error
      */
     private static byte[] safeDecode(String source, boolean useStandardAlphabet) {
         if (source == null) return null;
@@ -481,14 +477,6 @@ public class Base64 {
     } // end encodeBytes
 ******/
 
-    /**
-     * Encodes a byte array into Base64 notation.
-     *
-     * @param source The data to convert
-     * @param off Offset in array where conversion should begin
-     * @param len Length of data to convert
-     * @since 1.4
-     */
     /**
      * Encodes a byte array into Base64 notation.
      *

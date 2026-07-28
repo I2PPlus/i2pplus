@@ -94,8 +94,8 @@ public final class ElGamalEngine {
      *         The parts appear to always be 256 bytes or less, in other words,
      *         bytes 0 and 257 are always zero.
      *
-     * @param publicKey public key encrypt to
      * @param data data to encrypt, must be 222 bytes or less
+     * @param publicKey public key encrypt to
      *         As the encrypted data may contain a substantial number of zeros if the
      *         cleartext is smaller than 222 bytes, it is recommended that the caller pad
      *         the cleartext to 222 bytes with random data.

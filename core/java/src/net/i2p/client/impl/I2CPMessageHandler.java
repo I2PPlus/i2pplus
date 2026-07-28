@@ -17,7 +17,10 @@ import net.i2p.data.i2cp.I2CPMessage;
  * @author jrandom
  */
 interface I2CPMessageHandler {
-    /** @return the message type this handler can process */
+    /**
+     * I2CP message type this handler processes.
+     * @return the message type this handler can process
+     */
     public int getType();
 
     /**

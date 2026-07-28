@@ -675,7 +675,7 @@ public interface I2PSession {
         private final TunnelId _inboundTunnelId;
         private final TunnelId _outboundTunnelId;
 
-        /** Constructor.
+        /**
          * @param inbound inbound tunnel ID
          * @param outbound outbound tunnel ID
          */
@@ -684,11 +684,20 @@ public interface I2PSession {
             _outboundTunnelId = outbound;
         }
 
-        /** @return the inbound tunnel ID */
+        /**
+         * Inbound tunnel for this pair.
+         * @return the inbound tunnel ID
+         */
         public TunnelId getInboundTunnelId() { return _inboundTunnelId; }
-        /** @return the outbound tunnel ID */
+        /**
+         * Outbound tunnel for this pair.
+         * @return the outbound tunnel ID
+         */
         public TunnelId getOutboundTunnelId() { return _outboundTunnelId; }
-        /** @return true if both tunnel IDs are null */
+        /**
+         * Whether neither tunnel is set.
+         * @return true if both tunnel IDs are null
+         */
         public boolean isEmpty() { return _inboundTunnelId == null && _outboundTunnelId == null; }
     }
 

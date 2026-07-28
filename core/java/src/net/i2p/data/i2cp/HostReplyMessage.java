@@ -83,6 +83,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
     /**
      *  A message with RESULT_SUCCESS and a non-null Destination.
      *
+     *  @param id the session id
      *  @param d non-null
      *  @param reqID 0 to 2**32 - 1
      *  @param options for replies to lookup types 2-4, may be null, see proposal 167
@@ -104,6 +105,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
     /**
      *  A message with a failure code and no Destination.
      *
+     *  @param id the session id
      *  @param failureCode 1-255
      *  @param reqID from the HostLookup 0 to 2**32 - 1
      */
@@ -236,10 +238,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
     public int getType() {
         return MESSAGE_TYPE;
     }
-
-    /**
-     * toString.
-     */
+/** Returns a string representation of this message. */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();

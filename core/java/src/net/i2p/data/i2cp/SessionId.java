@@ -27,9 +27,7 @@ import java.io.OutputStream;
 public class SessionId {
     private int _sessionId;
 
-    /**
-     * SessionId.
-     */
+    /** Creates a new SessionId with default value -1. */
     public SessionId() {
         _sessionId = -1;
     }
@@ -81,9 +79,7 @@ public class SessionId {
         _sessionId = (int) DataHelper.readLong(in, 2);
     }
 
-    /**
-     * writeBytes.
-     */
+    /** Writes the session ID to a stream. */
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_sessionId < 0) {
             throw new DataFormatException("Invalid Session ID: " + _sessionId);
@@ -91,9 +87,7 @@ public class SessionId {
         DataHelper.writeLong(out, 2, _sessionId);
     }
 
-    /**
-     * equals.
-     */
+    /** Compares this session ID with another object for equality. */
     @Override
     public boolean equals(Object obj) {
         if ((obj == null) || !(obj instanceof SessionId)) {
@@ -102,17 +96,13 @@ public class SessionId {
         return _sessionId == ((SessionId) obj)._sessionId;
     }
 
-    /**
-     * @return whether h code is present
-     */
+    /** Hash code derived from the session ID value. */
     @Override
     public int hashCode() {
         return 777 * _sessionId;
     }
 
-    /**
-     * toString.
-     */
+    /** Returns a string representation of this session ID. */
     @Override
     public String toString() {
         return "[SessionID " + _sessionId + "]";

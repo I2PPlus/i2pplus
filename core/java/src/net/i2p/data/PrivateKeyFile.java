@@ -585,6 +585,7 @@ public class PrivateKeyFile {
      *  which aren't available from I2PClient.
      *
      *  @return the destination
+     *  @return the destination
      *  @throws I2PException if creation fails
      *  @throws IOException if file operations fail
      */

@@ -91,9 +91,7 @@ import java.util.Arrays;
  * @author zzz
  */
 public abstract class SimpleDataStructure implements DataStructure {
-    /**
-     * _data.
-     */
+    /** The byte array data for this structure. */
     protected byte[] _data;
 
     /**
@@ -169,18 +167,14 @@ public abstract class SimpleDataStructure implements DataStructure {
         return DataHelper.read(in, target);
     }
 
-    /**
-     * writeBytes.
-     */
+    /** Writes the data to the output stream. */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_data == null) throw new DataFormatException("No data to write out");
         out.write(_data);
     }
 
-    /**
-     * toBase64.
-     */
+    /** Renders the structure into modified base 64 notation. */
     @Override
     public String toBase64() {
         if (_data == null) return null;
@@ -203,7 +197,7 @@ public abstract class SimpleDataStructure implements DataStructure {
         setData(d);
     }
 
-    /** @return the SHA256 hash of the byte array, or null if the data is null */
+    /** SHA256 hash of the byte array, or null if data is null. */
     @Override
     public Hash calculateHash() {
         if (_data != null) return SHA256Generator.getInstance().calculateHash(_data);
@@ -233,9 +227,7 @@ public abstract class SimpleDataStructure implements DataStructure {
         setData(data);
     }
 
-    /**
-     * toString.
-     */
+    /** Returns a string representation of this data structure. */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);

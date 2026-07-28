@@ -70,6 +70,8 @@ public final class DSAEngine {
 
     /**
      *  Verify using any sig type as of 0.9.12 (DSA only prior to that)
+     *
+     *  @return true if valid, false otherwise
      */
     public boolean verifySignature(Signature signature, byte[] signedData, int offset, int size, SigningPublicKey verifyingKey) {
         boolean rv;
@@ -102,6 +104,8 @@ public final class DSAEngine {
 
     /**
      *  Verify using DSA-SHA1 ONLY
+     *
+     *  @return true if valid, false otherwise
      */
     public boolean verifySignature(Signature signature, InputStream in, SigningPublicKey verifyingKey) {
         return verifySignature(signature, calculateHash(in), verifyingKey);
@@ -111,6 +115,7 @@ public final class DSAEngine {
      *  Verify using DSA-SHA1 ONLY
      *
      *  @param hash SHA-1 hash, NOT a SHA-256 hash
+     *  @return true if valid, false otherwise
      */
     public boolean verifySignature(Signature signature, SHA1Hash hash, SigningPublicKey verifyingKey) {
         return verifySig(signature, hash, verifyingKey);
@@ -120,6 +125,7 @@ public final class DSAEngine {
      *  Nonstandard.
      *  Used by Syndie.
      *
+     *  @return true if valid, false otherwise
      *  @since 0.8.3 (restored, was removed in 0.8.1 and 0.8.2)
      */
     public boolean verifySignature(Signature signature, Hash hash, SigningPublicKey verifyingKey) {
@@ -132,6 +138,7 @@ public final class DSAEngine {
      *  Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
      *  @param hash SHA1Hash, Hash, Hash384, or Hash512
+     *  @return true if valid, false otherwise
      *  @since 0.9.9
      */
     public boolean verifySignature(Signature signature, SimpleDataStructure hash, SigningPublicKey verifyingKey) {
@@ -157,6 +164,7 @@ public final class DSAEngine {
      *
      *  @param hash SHA1Hash, Hash, Hash384, or Hash512
      *  @param pubKey Java key
+     *  @return true if valid, false otherwise
      *  @since 0.9.9
      */
     public boolean verifySignature(Signature signature, SimpleDataStructure hash, PublicKey pubKey) {
@@ -172,6 +180,7 @@ public final class DSAEngine {
      *  Verify using DSA-SHA1 or Syndie DSA-SHA256 ONLY.
      *
      *  @param hash either a Hash or a SHA1Hash
+     *  @return true if valid, false otherwise
      *  @since 0.8.3
      */
     private boolean verifySig(Signature signature, SimpleDataStructure hash, SigningPublicKey verifyingKey) {
@@ -451,6 +460,7 @@ public final class DSAEngine {
     /**
      *  Generic verify any type.
      *
+     *  @return true if valid, false otherwise
      *  @throws GeneralSecurityException if algorithm unvailable or on other errors
      *  @since 0.9.9 added off/len 0.9.12
      */
@@ -482,6 +492,7 @@ public final class DSAEngine {
      *
      *  Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
+     *  @return true if valid, false otherwise
      *  @throws GeneralSecurityException if algorithm unvailable or on other errors
      *  @since 0.9.9
      */
@@ -500,6 +511,7 @@ public final class DSAEngine {
      *
      *  Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
+     *  @return true if valid, false otherwise
      *  @throws GeneralSecurityException if algorithm unvailable or on other errors
      *  @param verifyingKey Java key
      *  @since 0.9.9
@@ -530,6 +542,7 @@ public final class DSAEngine {
     /**
      *  Alternate to verifySignature() using java.security libraries.
      *
+     *  @return true if valid, false otherwise
      *  @throws GeneralSecurityException if algorithm unvailable or on other errors
      *  @since 0.8.7 added off/len 0.9.12
      */
@@ -545,6 +558,7 @@ public final class DSAEngine {
     /**
      *  Generic sign any type.
      *
+     *  @return the Signature, or null on error
      *  @throws GeneralSecurityException if algorithm unvailable or on other errors
      *  @since 0.9.9 added off/len 0.9.12
      */
@@ -585,6 +599,7 @@ public final class DSAEngine {
      *  Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
      *  @param hash SHA1Hash, Hash, Hash384, or Hash512
+     *  @return the Signature
      *  @throws GeneralSecurityException if algorithm unvailable or on other errors
      *  @since 0.9.9
      */
@@ -602,6 +617,7 @@ public final class DSAEngine {
      *
      *  @param hash SHA1Hash, Hash, Hash384, or Hash512
      *  @param type returns a Signature of this type
+     *  @return the Signature
      *  @throws GeneralSecurityException if algorithm unvailable or on other errors
      *  @since 0.9.9
      */
@@ -649,7 +665,10 @@ public final class DSAEngine {
         return SigUtil.fromJavaSig(jsig.sign(), SigType.DSA_SHA1);
     }
 
-    /** @since 0.9.9 */
+    /**
+     *  @return the algorithm name string
+     *  @since 0.9.9
+     */
     private static String getRawAlgo(SigType type) {
         switch (type.getBaseAlgorithm()) {
             case DSA: return "NONEwithDSA";
@@ -660,7 +679,10 @@ public final class DSAEngine {
         }
     }
 
-    /** @since 0.9.9 */
+    /**
+     *  @return the algorithm name string
+     *  @since 0.9.9
+     */
     private static String getRawAlgo(Key key) {
         if (key instanceof DSAKey) return "NONEwithDSA";
         if (key instanceof ECKey) return "NONEwithECDSA";

@@ -235,11 +235,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /**
      * Not supported.
      *
+     * @return false always
      * @throws UnsupportedOperationException always
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return false always
      */
     public boolean sendMessage(Destination dest, byte[] payload, int proto, int fromport, int toport) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
@@ -247,11 +249,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /**
      * Not supported.
      *
+     * @return false always
      * @throws UnsupportedOperationException always
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return false always
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent,
                                int proto, int fromport, int toport) throws I2PSessionException {
@@ -260,11 +264,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /**
      * Not supported.
      *
+     * @return false always
      * @throws UnsupportedOperationException always
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return false always
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire,
                                int proto, int fromport, int toport) throws I2PSessionException {
@@ -273,11 +279,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /**
      * Not supported.
      *
+     * @return false always
      * @throws UnsupportedOperationException always
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return false always
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire,
                                int proto, int fromport, int toport, int flags) throws I2PSessionException {
@@ -286,11 +294,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /**
      * Not supported.
      *
+     * @return false always
      * @throws UnsupportedOperationException always
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return false always
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size,
                                int proto, int fromport, int toport, SendMessageOptions options) throws I2PSessionException {
@@ -299,11 +309,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /**
      * Not supported.
      *
+     * @return -1 always
      * @throws UnsupportedOperationException always
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return -1 always
      */
     public long sendMessage(Destination dest, byte[] payload, int offset, int size,
                                int proto, int fromport, int toport,
@@ -319,10 +331,12 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
     /**
      * sendMessage.
+     * @return success
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return success
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size) throws I2PSessionException {
         // we don't do end-to-end crypto any more
@@ -334,10 +348,12 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
+     * @return success
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return success
      */
     public boolean sendMessage(Destination dest, byte[] payload, SessionKey keyUsed, Set<SessionTag> tagsSent) throws I2PSessionException {
         return sendMessage(dest, payload, 0, payload.length, keyUsed, tagsSent, 0);
@@ -348,10 +364,12 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
+     * @return success
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return success
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent)
                    throws I2PSessionException {
@@ -363,10 +381,12 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
+     * @return success
      */
     @Override
     /**
      * Send an I2CP message.
+     * @return success
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires)
                    throws I2PSessionException {
@@ -402,10 +422,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
     /**
      * pull the unencrypted AND DECOMPRESSED data
+     *
+     * @return the data, or null on error
      */
     @Override
     /**
      * Receive a message from the router.
+     * @return the data, or null on error
      */
     public byte[] receiveMessage(int msgId) throws I2PSessionException {
         byte[] compressed = super.receiveMessage(msgId);
@@ -426,8 +449,12 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /**
      * Send a message with best effort delivery.
      *
+     * @param dest the destination
+     * @param payload the payload
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
+     * @param expires expiration time
+     * @return success
      */
     protected boolean sendBestEffort(Destination dest, byte[] payload, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires) throws I2PSessionException {
         return sendBestEffort(dest, payload, expires, 0);
@@ -437,7 +464,11 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * TODO - Don't need to save MessageState since actuallyWait is false...
      * But for now just use sendNoEffort() instead.
      *
+     * @param dest the destination
+     * @param payload the payload
+     * @param expires expiration time
      * @param flags to be passed to the router
+     * @return success
      * @since 0.8.4
      */
     protected boolean sendBestEffort(Destination dest, byte[] payload, long expires, int flags) throws I2PSessionException {
@@ -549,10 +580,12 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Called whenever we want to reconnect (used only in the superclass).  We need
      * to override this to clear out the message state
      *
+     * @return success
      */
     @Override
     /**
      * Reconnect the I2CP session.
+     * @return success
      */
     protected boolean reconnect() {
         // even if we succeed in reconnecting, we want to clear the old states,
@@ -643,10 +676,12 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
     /**
      * switchToNewTunnel.
+     * @return success
      */
     @Override
     /**
      * Switch to the new tunnel set.
+     * @return success
      */
     public boolean switchToNewTunnel() {
         return false;

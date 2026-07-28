@@ -73,17 +73,11 @@ import java.util.Arrays;
  * @author zzz
  */
 public class KeysAndCert extends DataStructureImpl {
-    /**
-     * _publicKey.
-     */
+    /** Public encryption key. */
     protected PublicKey _publicKey;
-    /**
-     * _signingKey.
-     */
+    /** Public signing key. */
     protected SigningPublicKey _signingKey;
-    /**
-     * _certificate.
-     */
+    /** Certificate specifying key types and metadata. */
     protected Certificate _certificate;
     /** Cached calculated hash value. */
     private Hash __calculatedHash;
@@ -103,6 +97,8 @@ public class KeysAndCert extends DataStructureImpl {
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(KeysAndCert.class);
 
     /**
+     * Certificate for this identity.
+     *
      * @return the certificate
      */
     public Certificate getCertificate() {
@@ -110,7 +106,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Sets the certificate.
+     *  Certificate to set.
      *
      * @throws IllegalStateException if was already set
      */
@@ -120,7 +116,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Gets the signature type from the certificate.
+     *  Signature type from the certificate.
      *
      *  @return null if not set or unknown
      *  @since 0.9.17
@@ -139,7 +135,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Gets the encryption type from the certificate.
+     *  Encryption type from the certificate.
      *
      *  @return null if not set or unknown
      *  @since 0.9.42
@@ -168,7 +164,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Sets the public key.
+     *  Public key to set.
      *
      * @throws IllegalStateException if was already set
      */
@@ -178,6 +174,8 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
+     * Signing public key for this identity.
+     *
      * @return the signing public key
      */
     public SigningPublicKey getSigningPublicKey() {
@@ -185,7 +183,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Sets the signing public key.
+     *  Signing public key to set.
      *
      * @throws IllegalStateException if was already set
      */
@@ -195,7 +193,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Gets the padding bytes.
+     *  Padding bytes for key alignment.
      *
      * @since 0.9.16
      * @return the padding
@@ -212,7 +210,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Sets the padding bytes.
+     *  Padding bytes to set.
      *
      * @throws IllegalStateException if was already set
      * @since 0.9.12
@@ -236,6 +234,8 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
+     * Reads the keys and certificate from an input stream.
+     *
      * @throws IllegalStateException if data already set
      */
     @Override
@@ -320,9 +320,7 @@ public class KeysAndCert extends DataStructureImpl {
         return off;
     }
 
-    /**
-     * writeBytes.
-     */
+    /** Writes the keys and certificate to an output stream. */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if ((_certificate == null) || (_publicKey == null) || (_signingKey == null)) throw new DataFormatException("Not enough data to format the router identity");
@@ -342,9 +340,7 @@ public class KeysAndCert extends DataStructureImpl {
         _certificate.writeBytes(out);
     }
 
-    /**
-     * equals.
-     */
+    /** Compares this KeysAndCert with another object for equality. */
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -367,9 +363,7 @@ public class KeysAndCert extends DataStructureImpl {
         return _signingKey.hashCode();
     }
 
-    /**
-     * toString.
-     */
+    /** Returns a string representation of this KeysAndCert. */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);

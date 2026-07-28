@@ -37,7 +37,10 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
         _messageId = -1;
     }
 
-    /** @return the session ID */
+    /**
+     * Session identifier for this message.
+     * @return the session ID
+     */
     public long getSessionId() {
         return _sessionId;
     }
@@ -61,12 +64,18 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
         _sessionId = (int) id;
     }
 
-    /** @return the message ID */
+    /**
+     * Message identifier for delivery tracking.
+     * @return the message ID
+     */
     public long getMessageId() {
         return _messageId;
     }
 
-    /** @param id the message ID */
+    /**
+     * Message identifier for delivery tracking.
+     * @param id the message ID
+     */
     public void setMessageId(long id) {
         _messageId = id;
     }
@@ -120,10 +129,7 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
     public int getType() {
         return MESSAGE_TYPE;
     }
-
-    /**
-     * toString.
-     */
+/** Returns a string representation of this message. */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

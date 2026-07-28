@@ -21,9 +21,7 @@ package net.i2p.data;
  */
 public class VerifiedDestination extends Destination {
 
-    /**
-     * VerifiedDestination.
-     */
+    /** Creates a new VerifiedDestination with default values. */
     public VerifiedDestination() {
         super();
     }
@@ -51,6 +49,7 @@ public class VerifiedDestination extends Destination {
      * verify the certificate.
      *
      * @param allowNone If true, allow a NULL or HIDDEN certificate.
+     * @return true if the certificate is valid
      */
     public boolean verifyCert(boolean allowNone) {
         if (_publicKey == null || _signingKey == null || _certificate == null) return false;
@@ -68,9 +67,7 @@ public class VerifiedDestination extends Destination {
     /** Defaults for Signed Certs */
     public static final int CERTIFICATE_LENGTH_SIGNED = Signature.SIGNATURE_BYTES;
 
-    /**
-     * CERTIFICATE_LENGTH_SIGNED_WITH_HASH.
-     */
+    /** Length of a signed certificate including the signer hash. */
     public static final int CERTIFICATE_LENGTH_SIGNED_WITH_HASH = Signature.SIGNATURE_BYTES + Hash.HASH_LENGTH;
 
     /**
@@ -95,6 +92,7 @@ public class VerifiedDestination extends Destination {
      *
      *  See PrivateKeyFile.verifySignature() for sample verification code.
      *
+     *  @return true if the signed certificate payload length is valid
      */
     protected boolean verifySignedCert() {
         return _certificate.getPayload() != null
@@ -104,14 +102,14 @@ public class VerifiedDestination extends Destination {
 
     /**
      *  Reject all unknown certs
+     *
+     *  @return false always
      */
     protected boolean verifyUnknownCert() {
         return false;
     }
 
-    /**
-     * toString.
-     */
+    /** Returns a string representation including verification status. */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation

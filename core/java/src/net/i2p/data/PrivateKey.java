@@ -85,7 +85,7 @@ import javax.security.auth.Destroyable;
  */
 public class PrivateKey extends SimpleDataStructure implements Destroyable {
     private static final EncType DEF_TYPE = EncType.ELGAMAL_2048;
-    /** KEYSIZE_BYTES. */
+    /** Default key size in bytes (256 for ElGamal). */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPrivkeyLen();
 
     private final EncType _type;
@@ -108,7 +108,10 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
         _type = type;
     }
 
-    /** @param data key data */
+    /**
+     * Construct from raw key data.
+     * @param data key data
+     */
     public PrivateKey(byte[] data) {
         this(DEF_TYPE, data);
     }
@@ -152,9 +155,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
         fromBase64(base64Data);
     }
 
-    /**
-     * length.
-     */
+    /** Key length in bytes, determined by the encryption type. */
     @Override
     public int length() {
         return _type.getPrivkeyLen();
@@ -228,11 +229,8 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
         return buf.toString();
     }
 
-    /**
-     * We assume the data has enough randomness in it, so use the last 4 bytes for speed.
-     * Overridden since we use short exponents, so the first 227 bytes are all zero.
-     * @return whether h code is present
-     */
+    /** We assume the data has enough randomness in it, so use the last 4 bytes for speed.
+     * Overridden since we use short exponents, so the first 227 bytes are all zero. */
     @Override
     public int hashCode() {
         if (_data == null) return 0;
@@ -242,9 +240,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
         return rv;
     }
 
-    /**
-     * equals.
-     */
+    /** Compares this private key with another object for equality. */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;

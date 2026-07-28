@@ -465,6 +465,7 @@ public class EdDSAEngine extends Signature {
     }
 
     /**
+     * @return nothing, always throws
      * @deprecated
      */
     @Override

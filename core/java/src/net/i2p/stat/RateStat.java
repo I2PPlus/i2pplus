@@ -74,34 +74,52 @@ public void addData(long value) {
         for (Rate r : _rates) r.coalesce();
     }
 
-    /** @return the unique name of this statistic */
+    /**
+     * Unique name for this rate stat.
+     * @return the unique name of this statistic
+     */
     public String getName() {
         return _statName;
     }
 
-    /** @return the grouping name under which this statistic is kept */
+    /**
+     * Grouping name for this rate stat.
+     * @return the grouping name under which this statistic is kept
+     */
     public String getGroupName() {
         return _groupName;
     }
 
-    /** @return a simple description of this statistic */
+    /**
+     * Description of what this rate stat measures.
+     * @return a simple description of this statistic
+     */
     public String getDescription() {
         return _description;
     }
 
-    /** @return the periods this rate is tracked over, in milliseconds */
+    /**
+     * Tracked periods for this rate.
+     * @return the periods this rate is tracked over, in milliseconds
+     */
     public long[] getPeriods() {
         long[] rv = new long[_rates.length];
         for (int i = 0; i < _rates.length; i++) rv[i] = _rates[i].getPeriod();
         return rv;
     }
 
-    /** @return the lifetime average value from the shortest period's rate */
+    /**
+     * Lifetime average from the shortest period.
+     * @return the lifetime average value from the shortest period's rate
+     */
     public double getLifetimeAverageValue() {
         return _rates[0].getLifetimeAverageValue();
     }
 
-    /** @return the lifetime event count from the shortest period's rate */
+    /**
+     * Lifetime event count from the shortest period.
+     * @return the lifetime event count from the shortest period's rate
+     */
     public long getLifetimeEventCount() {
         return _rates[0].getLifetimeEventCount();
     }
@@ -169,7 +187,10 @@ public void addData(long value) {
         return false;
     }
 
-    /** @param rs the other RateStat */
+    /**
+     * Whether the other stat shares name, group, and description.
+     * @param rs the other RateStat
+     */
     boolean nameGroupDescEquals(RateStat rs) {
         return DataHelper.eq(getGroupName(), rs.getGroupName()) && DataHelper.eq(getDescription(), rs.getDescription()) && DataHelper.eq(getName(), rs.getName());
     }

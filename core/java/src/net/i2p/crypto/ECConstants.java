@@ -104,10 +104,9 @@ final class ECConstants {
         }
 
         /**
-         * genSpec.
-         */
-        /**
          * Generate the EC parameter spec.
+         *
+         * @return the EC parameter spec
          */
         public ECParameterSpec genSpec() {
             BigInteger pb = new NativeBigInteger(ps);
@@ -373,10 +372,10 @@ final class ECConstants {
      *  There is no ECParameterSpec.equals().
      *  Needed to load family keys on Android via SigUtil.fromJavaKey().
      *
+     *  @param s1 first spec
+     *  @param s2 second spec
+     *  @return true if equal
      *  @since 0.9.55
-     */
-    /**
-     * Compare for equality.
      */
     public static boolean equals(ECParameterSpec s1, ECParameterSpec s2) {
         if (s1 == s2)

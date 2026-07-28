@@ -22,8 +22,6 @@ import java.util.Properties;
  * just used to talk to the router.
  */
 public class I2PSimpleClient implements I2PClient {
-    /** default constructor */
-
     /**
      * This method is not supported.
      *

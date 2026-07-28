@@ -113,6 +113,7 @@ public final class ElGamalSigEngine extends Signature {
 
     /**
      *  @param sigBytes ASN.1 R,S
+     *  @return true if the signature is valid
      */
     @Override
     protected boolean engineVerify(byte[] sigBytes) throws SignatureException {
@@ -151,6 +152,7 @@ public final class ElGamalSigEngine extends Signature {
     }
 
     /**
+     * @return nothing, always throws
      * @deprecated
      */
     @Override

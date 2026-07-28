@@ -171,10 +171,12 @@ public class I2PClientImpl implements I2PClient {
     /**
      * Create a new session (though do not connect it yet)
      *
+     * @param context the I2PAppContext to use
      * @param destKeyStream location from which to read the Destination, PrivateKey, and SigningPrivateKey from,
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      *
      * @param options set of options to configure the router with, if null will use System properties
+     * @return the session
      */
     public I2PSession createSession(I2PAppContext context, InputStream destKeyStream, Properties options) throws I2PSessionException {
         return new I2PSessionMuxedImpl(context, destKeyStream, options); // thread safe and muxed

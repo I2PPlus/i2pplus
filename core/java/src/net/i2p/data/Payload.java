@@ -84,7 +84,7 @@ public class Payload extends DataStructureImpl {
     /** So we don't OOM on I2CP protocol errors. Actual max is smaller. */
     private static final int MAX_LENGTH = 64 * 1024;
 
-    /** method comment */
+    /** Required for deserialization. */
     public Payload() { /* required for deserialization */ }
 
     /**
@@ -115,7 +115,9 @@ public class Payload extends DataStructureImpl {
         _unencryptedData = data;
     }
 
-    /** the real data */
+    /**
+     * @return the encrypted data, or null
+     */
     public byte[] getEncryptedData() {
         return _encryptedData;
     }
@@ -131,16 +133,16 @@ public class Payload extends DataStructureImpl {
         _encryptedData = data;
     }
 
-    /** method comment */
+    /**
+     * @return the size in bytes
+     */
     public int getSize() {
         if (_unencryptedData != null) return _unencryptedData.length;
         else if (_encryptedData != null) return _encryptedData.length;
         else return 0;
     }
 
-    /**
-     * readBytes.
-     */
+    /** Reads this payload from an input stream (4-byte length-prefixed data). */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         int size = (int) DataHelper.readLong(in, 4);
@@ -150,9 +152,7 @@ public class Payload extends DataStructureImpl {
         if (read != size) throw new DataFormatException("Incorrect number of bytes read in the payload structure");
     }
 
-    /**
-     * writeBytes.
-     */
+    /** Writes this payload to an output stream (4-byte length-prefixed data). */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_encryptedData == null) throw new DataFormatException("Not yet encrypted.  Please set the encrypted data");
@@ -175,9 +175,7 @@ public class Payload extends DataStructureImpl {
         return 4 + _encryptedData.length;
     }
 
-    /**
-     * equals.
-     */
+    /** Compares this payload with another object for equality. */
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -186,17 +184,13 @@ public class Payload extends DataStructureImpl {
         return Arrays.equals(_unencryptedData, p.getUnencryptedData()) && Arrays.equals(_encryptedData, p.getEncryptedData());
     }
 
-    /**
-     * @return whether h code is present
-     */
+    /** Hash code based on the encrypted or unencrypted data. */
     @Override
     public int hashCode() {
         return DataHelper.hashCode(_encryptedData != null ? _encryptedData : _unencryptedData);
     }
 
-    /**
-     * toString.
-     */
+    /** Returns a string representation of this payload. */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(32); // NOPMD - AvoidUnnecessaryStringBuilderCreation

@@ -81,6 +81,8 @@ public class SessionKeyManager {
      *
      * Racy if called after getCurrentKey() to check for a current session;
      * use getCurrentOrNewKey() in that case.
+     *
+     * @return the session key
      */
     public SessionKey createSession(PublicKey target) {
         SessionKey key = KeyGenerator.getInstance().generateSessionKey();
@@ -94,6 +96,7 @@ public class SessionKeyManager {
      * available so ElG should be used with the given key (a new sessionKey should
      * NOT be used)
      *
+     * @return the next available tag, or null
      */
     public SessionTag consumeNextAvailableTag(PublicKey target, SessionKey key) {
         return null;
@@ -162,6 +165,7 @@ public class SessionKeyManager {
      * encryption to the target have definitely been received at the target (aka call this
      * method after receiving an ack to a message delivering them)
      *
+     * @return the tag set handle
      */
     public TagSetHandle tagsDelivered(PublicKey target, SessionKey key, Set<SessionTag> sessionTags) { // nop
         return null;
@@ -200,6 +204,7 @@ public class SessionKeyManager {
      * key it was received with (via tagsReceived(...)).  returns null if no session key
      * matches
      *
+     * @return the session key, or null
      */
     public SessionKey consumeTag(SessionTag tag) {
         return null;

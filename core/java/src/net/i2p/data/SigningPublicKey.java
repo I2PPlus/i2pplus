@@ -93,7 +93,7 @@ import java.util.Arrays;
  */
 public class SigningPublicKey extends SimpleDataStructure {
     private static final SigType DEF_TYPE = SigType.DSA_SHA1;
-    /** KEYSIZE_BYTES. */
+    /** Default key size in bytes (128 for DSA-SHA1). */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPubkeyLen();
     private static final int CACHE_SIZE = 1024;
 
@@ -105,6 +105,7 @@ public class SigningPublicKey extends SimpleDataStructure {
      * Pull from cache or return new.
      * Deprecated - used only by deprecated Destination.readBytes(data, off)
      *
+     * @return the cached or new key
      * @since 0.8.3
      */
     public static SigningPublicKey create(byte[] data, int off) {
@@ -114,15 +115,14 @@ public class SigningPublicKey extends SimpleDataStructure {
     /**
      * Pull from cache or return new
      *
+     * @return the cached or new key
      * @since 0.8.3
      */
     public static SigningPublicKey create(InputStream in) throws IOException {
         return _cache.get(in);
     }
 
-    /**
-     * SigningPublicKey.
-     */
+    /** Creates a new SigningPublicKey with the default DSA-SHA1 type. */
     public SigningPublicKey() {
         this(DEF_TYPE);
     }
@@ -136,15 +136,14 @@ public class SigningPublicKey extends SimpleDataStructure {
         _type = type;
     }
 
-    /**
-     * SigningPublicKey.
-     */
+    /** Creates a new SigningPublicKey from byte data with default type. */
     public SigningPublicKey(byte[] data) {
         this(DEF_TYPE, data);
     }
 
     /**
      *  @param type if null, type is unknown
+     *  @param data the key data
      *  @since 0.9.8
      */
     public SigningPublicKey(SigType type, byte[] data) {
@@ -195,6 +194,8 @@ public class SigningPublicKey extends SimpleDataStructure {
      *  Up-convert this from an untyped (type 0) SPK to a typed SPK based on the Key Cert given.
      *  The type of the returned key will be null if the kcert sigtype is null.
      *
+     *  @param kcert the key certificate
+     *  @return the typed signing public key
      *  @throws IllegalArgumentException if this is already typed to a different type
      *  @since 0.9.12 (changed from public to package private in 0.9.66, not for external use)
      *
@@ -287,6 +288,7 @@ public class SigningPublicKey extends SimpleDataStructure {
      *  Only for SigType EdDSA_SHA512_Ed25519
      *
      *  @param alpha the secret data
+     *  @return the blinded public key
      *  @throws UnsupportedOperationException unless supported
      *  @since 0.9.38
      */
@@ -322,8 +324,9 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
+     *  Hash code combining the type and data.
+     *
      *  @since 0.9.17
-     * @return whether h code is present
      */
     @Override
     public int hashCode() {

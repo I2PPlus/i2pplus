@@ -84,7 +84,9 @@ public class LookupDest {
     /**
      * Any hostname, but this is for long-format b32
      *
+     * @param ctx the context
      * @param hostname a "b33" hostname, 64+ chars ending with ".b32.i2p"
+     * @return the destination, or null on failure
      * @since 0.9.40
      */
     static Destination lookupHostname(I2PAppContext ctx, String hostname) throws I2PSessionException {

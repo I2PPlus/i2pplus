@@ -57,6 +57,7 @@ public abstract class HMACGenerator {
      * @param origMAC what do we expect the MAC of curData to equal
      * @param origMACOffset index into origMAC
      * @param origMACLength how much of the MAC do we want to verify
+     * @return true if the MAC matches
      * @throws IllegalArgumentException for bad key
      */
     public abstract boolean verify(SessionKey key, byte[] curData, int curOffset, int curLength, byte[] origMAC, int origMACOffset, int origMACLength);
@@ -64,6 +65,8 @@ public abstract class HMACGenerator {
     /**
      * 32 bytes from the byte array cache.
      * Does NOT zero.
+     *
+     * @return 32-byte tmp array
      */
     protected byte[] acquireTmp() {
         byte[] rv = SimpleByteCache.acquire(Hash.HASH_LENGTH);

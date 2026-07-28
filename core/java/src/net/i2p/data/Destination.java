@@ -147,7 +147,7 @@ public class Destination extends KeysAndCert {
         return rv;
     }
 
-    /** default constructor */
+    /** Empty destination with no data set. */
     public Destination() {}
 
     /**
@@ -194,7 +194,10 @@ public class Destination extends KeysAndCert {
         return cur - offset;
     }
 
-    /** @return the size in bytes */
+    /**
+     * Serialized size of this destination.
+     * @return the size in bytes
+     */
     public int size() {
         int rv = PublicKey.KEYSIZE_BYTES + _signingKey.length();
         if (_certificate.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {

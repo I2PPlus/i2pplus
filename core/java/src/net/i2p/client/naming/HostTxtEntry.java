@@ -148,6 +148,7 @@ public class HostTxtEntry {
 
     /**
      * @param line part after the #!
+     * @return the parsed properties
      * @throws IllegalArgumentException on dup key and other errors
      */
     private static OrderedProperties parseProps(String line) throws IllegalArgumentException {
@@ -444,6 +445,7 @@ public class HostTxtEntry {
     /**
      * Sign the entry and set the specified signature property.
      *
+     * @param spk the signing private key
      * @param sigprop The signature property to set
      */
     private void signIt(SigningPrivateKey spk, String sigprop) {

@@ -53,44 +53,34 @@ public class AbuseSeverity extends DataStructureImpl {
         _severityId = id;
     }
 
-    /**
-     * readBytes.
-     */
+    /** Reads the severity level from a stream. */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _severityId = in.read();
         if (_severityId < 0) throw new EOFException();
     }
 
-    /**
-     * writeBytes.
-     */
+    /** Writes the severity level to a stream. */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_severityId < 0) throw new DataFormatException("Invalid abuse severity: " + _severityId);
         out.write((byte) _severityId);
     }
 
-    /**
-     * equals.
-     */
+    /** Compares this abuse severity with another object for equality. */
     @Override
     public boolean equals(Object object) {
         if ((object == null) || !(object instanceof AbuseSeverity)) return false;
         return _severityId == ((AbuseSeverity) object).getSeverity();
     }
 
-    /**
-     * @return whether h code is present
-     */
+    /** Hash code based on the severity level. */
     @Override
     public int hashCode() {
         return _severityId;
     }
 
-    /**
-     * toString.
-     */
+    /** Returns a string representation of this abuse severity. */
     @Override
     public String toString() {
         return "[AbuseSeverity: " + _severityId + "]";

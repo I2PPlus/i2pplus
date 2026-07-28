@@ -67,9 +67,7 @@ import java.io.OutputStream;
 @SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
 public class KeyCertificate extends Certificate {
 
-    /**
-     * HEADER_LENGTH.
-     */
+    /** Key certificate header length in bytes. */
     public static final int HEADER_LENGTH = 4;
 
     /**
@@ -317,17 +315,13 @@ public class KeyCertificate extends Certificate {
     // getCryptoType()
     // getCryptoDataOffset()
 
-    /**
-     * toKeyCertificate.
-     */
+    /** Returns this certificate as a KeyCertificate. */
     @Override
     public KeyCertificate toKeyCertificate() {
         return this;
     }
 
-    /**
-     * toString.
-     */
+    /** Returns a string representation of this KeyCertificate. */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
@@ -350,27 +344,25 @@ public class KeyCertificate extends Certificate {
         private static final int ECDSA256_LENGTH = ECDSA256_DATA.length;
         private final int _hashcode;
 
-        /**
-         * ECDSA256Cert.
-         */
+        /** Creates an immutable ElG/ECDSA-P256 certificate. */
         public ECDSA256Cert() throws DataFormatException {
             super(ECDSA256_PAYLOAD);
             _hashcode = super.hashCode();
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable certificate. */
         @Override
         public void setCertificateType(int type) {
             throw new RuntimeException("Data already set");
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable certificate. */
         @Override
         public void setPayload(byte[] payload) {
             throw new RuntimeException("Data already set");
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable certificate. */
         @Override
         public void readBytes(InputStream in) throws DataFormatException, IOException {
             throw new RuntimeException("Data already set");
@@ -389,7 +381,7 @@ public class KeyCertificate extends Certificate {
             return ECDSA256_LENGTH;
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable certificate. */
         @Override
         public int readBytes(byte[] source, int offset) throws DataFormatException {
             throw new RuntimeException("Data already set");
@@ -419,27 +411,25 @@ public class KeyCertificate extends Certificate {
         private static final int ED_LENGTH = ED_DATA.length;
         private final int _hashcode;
 
-        /**
-         * Ed25519Cert.
-         */
+        /** Creates an immutable ElG/Ed25519 certificate. */
         public Ed25519Cert() throws DataFormatException {
             super(Ed25519_PAYLOAD);
             _hashcode = super.hashCode();
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable certificate. */
         @Override
         public void setCertificateType(int type) {
             throw new RuntimeException("Data already set");
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable certificate. */
         @Override
         public void setPayload(byte[] payload) {
             throw new RuntimeException("Data already set");
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable certificate. */
         @Override
         public void readBytes(InputStream in) throws DataFormatException, IOException {
             throw new RuntimeException("Data already set");
@@ -458,7 +448,7 @@ public class KeyCertificate extends Certificate {
             return ED_LENGTH;
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable certificate. */
         @Override
         public int readBytes(byte[] source, int offset) throws DataFormatException {
             throw new RuntimeException("Data already set");
@@ -488,27 +478,25 @@ public class KeyCertificate extends Certificate {
         private static final int ED_LENGTH = ED_DATA.length;
         private final int _hashcode;
 
-        /**
-         * X25519_Ed25519Cert.
-         */
+        /** Creates an immutable X25519/Ed25519 certificate. */
         public X25519_Ed25519Cert() throws DataFormatException {
             super(X25519_Ed25519_PAYLOAD);
             _hashcode = super.hashCode();
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable certificate. */
         @Override
         public void setCertificateType(int type) {
             throw new RuntimeException("Data already set");
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable certificate. */
         @Override
         public void setPayload(byte[] payload) {
             throw new RuntimeException("Data already set");
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable certificate. */
         @Override
         public void readBytes(InputStream in) throws DataFormatException, IOException {
             throw new RuntimeException("Data already set");
@@ -527,7 +515,7 @@ public class KeyCertificate extends Certificate {
             return ED_LENGTH;
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable certificate. */
         @Override
         public int readBytes(byte[] source, int offset) throws DataFormatException {
             throw new RuntimeException("Data already set");

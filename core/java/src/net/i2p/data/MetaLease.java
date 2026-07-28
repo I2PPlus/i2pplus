@@ -52,9 +52,7 @@ import java.io.OutputStream;
  */
 public class MetaLease extends Lease {
 
-    /**
-     * LENGTH.
-     */
+    /** MetaLease length in bytes. */
     public static final int LENGTH = 40;
 
     /** Cost value for this meta lease. */
@@ -63,6 +61,8 @@ public class MetaLease extends Lease {
     private int _type;
 
     /**
+     *  Cost value for this lease.
+     *
      *  @return the cost
      */
     public int getCost() {
@@ -79,6 +79,8 @@ public class MetaLease extends Lease {
     }
 
     /**
+     *  Type identifier for this lease.
+     *
      *  @return the type
      */
     public int getType() {

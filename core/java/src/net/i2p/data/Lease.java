@@ -86,22 +86,14 @@ import java.util.Date;
  * @author jrandom
  */
 public class Lease extends DataStructureImpl {
-    /**
-     * _gateway.
-     */
+    /** Gateway router hash. */
     protected Hash _gateway;
-    /**
-     * _tunnelId.
-     */
+    /** Tunnel identifier on the gateway. */
     protected TunnelId _tunnelId;
-    /**
-     * _end.
-     */
+    /** Lease expiration time in milliseconds since epoch. */
     protected long _end;
 
-    /**
-     * Lease.
-     */
+    /** Required for deserialization. */
     public Lease() { /* required for deserialization */ }
 
     /** Retrieve the router at which the destination can be contacted
@@ -173,19 +165,22 @@ public class Lease extends DataStructureImpl {
         _end = date;
     }
 
-    /** has this lease already expired? */
+    /**
+     * @return true if the lease has expired
+     */
     public boolean isExpired() {
         return isExpired(0);
     }
 
-    /** has this lease already expired (giving allowing up the fudgeFactor milliseconds for clock skew)? */
+    /**
+     * @param fudgeFactor fudge factor in milliseconds for clock skew
+     * @return true if the lease has expired
+     */
     public boolean isExpired(long fudgeFactor) {
         return _end < Clock.getInstance().now() - fudgeFactor;
     }
 
-    /**
-     * readBytes.
-     */
+    /** Reads the lease from an input stream. */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _gateway = Hash.create(in);
@@ -194,9 +189,7 @@ public class Lease extends DataStructureImpl {
         _end = DataHelper.readLong(in, 8);
     }
 
-    /**
-     * writeBytes.
-     */
+    /** Writes the lease to an output stream. */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if ((_gateway == null) || (_tunnelId == null)) {
@@ -207,9 +200,7 @@ public class Lease extends DataStructureImpl {
         DataHelper.writeLong(out, 8, _end);
     }
 
-    /**
-     * equals.
-     */
+    /** Compares this Lease with another object for equality. */
     @Override
     public boolean equals(Object object) {
         if (object == this) {
@@ -222,17 +213,13 @@ public class Lease extends DataStructureImpl {
         return _end == lse.getEndTime() && DataHelper.eq(_tunnelId, lse.getTunnelId()) && DataHelper.eq(_gateway, lse.getGateway());
     }
 
-    /**
-     * @return whether h code is present
-     */
+    /** Hash code based on end time, gateway, and tunnel ID. */
     @Override
     public int hashCode() {
         return (int) _end ^ DataHelper.hashCode(_gateway) ^ DataHelper.hashCode(_tunnelId);
     }
 
-    /**
-     * toString.
-     */
+    /** Returns a string representation of this Lease. */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation

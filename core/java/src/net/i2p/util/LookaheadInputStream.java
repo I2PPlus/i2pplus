@@ -35,7 +35,10 @@ public class LookaheadInputStream extends FilterInputStream {
         size = lookaheadSize;
     }
 
-    /** @return whether EOF has been reached */
+    /**
+     * Whether the end of the stream has been reached.
+     * @return whether EOF has been reached
+     */
     public boolean getEOFReached() {
         return _eofReached;
     }

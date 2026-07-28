@@ -112,12 +112,15 @@ final class YKGenerator {
         return _values.size();
     }
 
-    /** @return true if successful, false if full */
+    /**
+     * Add a precomputed YK value to the buffer.
+     * @return true if successful, false if full
+     */
     private final boolean addValues(BigInteger[] yk) {
         return _values.offer(yk);
     }
 
-    /** Gets the next YK value.
+    /** Next precomputed YK value.
      *
      *  @return rv[0] = Y; rv[1] = K
      */
@@ -139,7 +142,10 @@ final class YKGenerator {
 
     private static final BigInteger TWO = new NativeBigInteger(1, new byte[] {0x02});
 
-    /** @return rv[0] = Y; rv[1] = K */
+    /**
+     * Generate a new YK pair.
+     * @return rv[0] = Y; rv[1] = K
+     */
     private final BigInteger[] generateYK() {
         NativeBigInteger k = null;
         BigInteger y = null;

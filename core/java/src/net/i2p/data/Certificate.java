@@ -184,7 +184,7 @@ public class Certificate extends DataStructureImpl {
         _payload = payload;
     }
 
-    /** Gets the certificate type.
+    /** Certificate type.
      *
      * @return the certificate type
      */
@@ -193,7 +193,7 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     *  Sets the certificate type.
+     *  Certificate type to set.
      *
      *  @param type the certificate type to set
      *  @throws IllegalArgumentException if type &lt; 0
@@ -206,7 +206,7 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     * Get the certificate payload.
+     * Certificate payload, or null.
      *
      * @return the certificate payload, or null
      */
@@ -215,7 +215,7 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     *  Sets the certificate payload.
+     *  Certificate payload to set.
      *
      *  @param payload the payload to set
      *  @throws IllegalStateException if already set
@@ -226,6 +226,8 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
+     * Reads the certificate from an input stream.
+     *
      *  @throws IllegalStateException if already set
      */
     @Override
@@ -311,7 +313,7 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     * Get the serialized size.
+     * Serialized size in bytes.
      *
      * @return the serialized size in bytes
      */
@@ -386,19 +388,19 @@ public class Certificate extends DataStructureImpl {
         public NullCert() {
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable null certificate. */
         @Override
         public void setCertificateType(int type) {
             throw new RuntimeException("Data already set");
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable null certificate. */
         @Override
         public void setPayload(byte[] payload) {
             throw new RuntimeException("Data already set");
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable null certificate. */
         @Override
         public void readBytes(InputStream in) throws DataFormatException, IOException {
             throw new RuntimeException("Data already set");
@@ -417,7 +419,7 @@ public class Certificate extends DataStructureImpl {
             return NULL_LENGTH;
         }
 
-        /** @throws RuntimeException always */
+        /** Prevent mutation of the immutable null certificate. */
         @Override
         public int readBytes(byte[] source, int offset) throws DataFormatException {
             throw new RuntimeException("Data already set");

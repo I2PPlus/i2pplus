@@ -75,9 +75,7 @@ import java.io.OutputStream;
 public class TunnelId {
     private long _tunnelId;
 
-    /**
-     * MAX_ID_VALUE.
-     */
+    /** Maximum tunnel ID value (2^32 - 1). */
     public static final long MAX_ID_VALUE = 0xffffffffL;
 
     public TunnelId() {

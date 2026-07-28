@@ -89,9 +89,7 @@ public class SDSCache<V extends SimpleDataStructure> {
     private static class Shutdown implements Runnable {
         private final SDSCache _cache;
         Shutdown(SDSCache cache) { _cache = cache; }
-        /**
-         * run.
-         */
+        /** Clear the cache on shutdown. */
         @Override
         public void run() {
             _cache.clear();
@@ -146,7 +144,7 @@ public class SDSCache<V extends SimpleDataStructure> {
         return rv;
     }
 
-    /*
+    /**
      *  @param b non-null byte array containing the data, data will be copied to not hold the reference
      *  @param off offset in the array to start reading from
      *  @return the cached value if available, otherwise
@@ -154,23 +152,17 @@ public class SDSCache<V extends SimpleDataStructure> {
      *  @throws ArrayIndexOutOfBoundsException if not enough bytes
      *  @throws NullPointerException
      */
-    /**
-     * get.
-     */
     public V get(byte[] b, int off) {
         byte[] data = SimpleByteCache.acquire(_datalen);
         System.arraycopy(b, off, data, 0, _datalen);
         return get(data);
     }
 
-    /*
+    /**
      *  @param in a stream from which the bytes will be read
      *  @return the cached value if available, otherwise
      *          makes a new object and returns it
      *  @throws IOException if not enough bytes
-     */
-    /**
-     * get.
      */
     public V get(InputStream in) throws IOException {
         byte[] data = SimpleByteCache.acquire(_datalen);
@@ -179,10 +171,7 @@ public class SDSCache<V extends SimpleDataStructure> {
         return get(data);
     }
 
-    /**
-     * We assume the data has enough randomness in it, so use the first 4 bytes for speed.
-     * @return whether h code of is present
-     */
+    /** We assume the data has enough randomness in it, so use the first 4 bytes for speed. */
     private static Integer hashCodeOf(byte[] data) {
         int rv = data[0];
         for (int i = 1; i < 4; i++) rv ^= (data[i] << (i * 8));

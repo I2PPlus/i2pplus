@@ -2189,6 +2189,9 @@ public class DataHelper {
      *  which is a good space/speed tradeoff.
      *  Prior to that, it used MAX_COMPRESSION.
      *
+     *  @param orig the data to compress
+     *  @param offset the offset into the data
+     *  @param size the number of bytes to compress
      *  @throws IllegalArgumentException if size is over 40KB
      *  @throws IllegalStateException on compression failure, as of 0.9.29
      *  @return null if orig is null
@@ -2432,7 +2435,7 @@ public class DataHelper {
      *
      *  @param orig non-null, truncates to 8-bit chars
      *  @since 0.9.5
-     *  @return the a s c i i
+     *  @return a copy of the byte array, or null
      */
     public static byte[] getASCII(String orig) {
         byte[] rv = new byte[orig.length()];
@@ -2451,6 +2454,7 @@ public class DataHelper {
      *
      *  @param s non-null
      *  @param regex non-null, don't forget to enclose multiple choices with []
+     *  @return the array of strings
      *  @throws java.util.regex.PatternSyntaxException unchecked
      *  @since 0.9.24
      */
@@ -2470,6 +2474,7 @@ public class DataHelper {
      *  @param s non-null
      *  @param regex non-null, don't forget to enclose multiple choices with []
      *  @param limit result threshold
+     *  @return the array of strings
      *  @throws java.util.regex.PatternSyntaxException unchecked
      *  @since 0.9.24
      */
