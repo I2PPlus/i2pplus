@@ -154,7 +154,7 @@ class BanlistRenderer {
                 }
             }
         } catch (IOException e) { /* ignored */ }
-        return new Object[] { ipMap, hostnameMap, capsMap, ipBans };
+        return new Object[] { ipMap, hostnameMap, capsMap, ipBans, versionMap };
     }
 
     /**
