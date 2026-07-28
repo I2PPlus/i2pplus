@@ -69,10 +69,6 @@ class FloodfillStoreJob extends StoreJob {
 
         if (shouldSkipVerify(key, keyB64, shouldLog)) {return;}
 
-        RouterContext ctx = getContext();
-
-        if (shouldSkipVerifyForStartup(ctx, keyB64)) {return;}
-
         DatabaseEntry data = _state.getData();
         if (data == null) {
             if (shouldLog) {
@@ -81,12 +77,15 @@ class FloodfillStoreJob extends StoreJob {
             return;
         }
 
+        RouterContext ctx = getContext();
+
         final int type = data.getType();
         final boolean isRouterInfo = type == DatabaseEntry.KEY_TYPE_ROUTERINFO;
 
-        // Skip verify if router info and condition met
+        // Skip verify only for RouterInfos after startup period; LeaseSets always verify
         if (isRouterInfo && !ctx.getBooleanProperty(PROP_RI_VERIFY)
             && ctx.router().getUptime() > RI_VERIFY_STARTUP_TIME) {
+            if (_log.shouldInfo()) {_log.info("Skipping RouterInfo verify of [" + keyB64 + "] after startup period");}
             _facade.routerInfoPublishSuccessful();
             return;
         }
@@ -126,18 +125,6 @@ class FloodfillStoreJob extends StoreJob {
             return true;
         }
 
-        return false;
-    }
-
-    /**
-     * Check if verify should be skipped due to startup verification delay.
-     * @return whether skip verify for startup
-     */
-    private boolean shouldSkipVerifyForStartup(RouterContext ctx, String keyB64) {
-        if (!ctx.getBooleanProperty(PROP_RI_VERIFY) && ctx.router().getUptime() > RI_VERIFY_STARTUP_TIME) {
-            if (_log.shouldInfo()) {_log.info("Skipping verify of [" + keyB64 + "] -> Startup period not yet complete.");}
-            return true;
-        }
         return false;
     }
 
