@@ -53,12 +53,13 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
     private static String formatExcludedPeers(Set<Hash> peers) {
         if (peers == null || peers.isEmpty()) {return "[no exclusions]";}
+        if (peers instanceof Excluder) {
+            return ((Excluder) peers).formatByReasonWithPeers();
+        }
         StringBuilder sb = new StringBuilder(peers.size() * 10);
         int count = 0;
         for (Hash h : peers) {
-            if (count % 12 == 0) {
-                sb.append("\n* ");
-            }
+            if (count % 12 == 0) {sb.append("\n* ");}
             sb.append('[').append(h.toBase64(), 0, 6).append("] ");
             count++;
         }

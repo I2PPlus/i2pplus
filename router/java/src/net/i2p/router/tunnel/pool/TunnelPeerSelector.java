@@ -49,7 +49,6 @@ import net.i2p.router.peermanager.ProfileOrganizer;
 public abstract class TunnelPeerSelector extends ConnectChecker {
 
     private static final String DEFAULT_EXCLUDE_CAPS = String.valueOf(Router.CAPABILITY_BW12) +
-                                                        String.valueOf(Router.CAPABILITY_CONGESTION_SEVERE) +
                                                         String.valueOf(Router.CAPABILITY_NO_TUNNELS);
     private static final String ALT_EXCLUDE_CAPS = String.valueOf(Router.CAPABILITY_BW12) +
                                                    String.valueOf(Router.CAPABILITY_NO_TUNNELS);
@@ -485,6 +484,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         if (filterSlow(isInbound, isExploratory)) {
+            String caps = routerInfo.getCapabilities();
+            if (caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0) {
+                return "severe-congestion";
+            }
+            if (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0) {
+                return "moderate-congestion";
+            }
             String excludeCaps = getEffectiveExcludeCaps(ctx);
             if (shouldExclude(ctx, routerInfo, excludeCaps, isExploratory)) {
                 return "slow/capped";
@@ -1089,6 +1095,20 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     protected class Excluder extends ExcluderBase {
         private static final int MAX_EXCLUDED_PEERS = 384;
+        private static final Map<String, String> REASON_LABELS = new LinkedHashMap<>(8);
+        static {
+            REASON_LABELS.put("too-many-tunnels", "Too many tunnels");
+            REASON_LABELS.put("recently-rejected", "Recently rejected");
+            REASON_LABELS.put("unreachable", "Unreachable");
+            REASON_LABELS.put("no-routerinfo", "No router info");
+            REASON_LABELS.put("floodfill", "Floodfill");
+            REASON_LABELS.put("U-cap", "Unreachable cap");
+            REASON_LABELS.put("moderate-congestion", "Moderate congestion");
+            REASON_LABELS.put("severe-congestion", "Severe congestion");
+            REASON_LABELS.put("slow/capped", "Slow or capped");
+            REASON_LABELS.put("no-signal", "No signal");
+        }
+
         private final boolean _isIn;
         private final boolean _isExpl;
         /** Maps peer hash to the reason it was excluded, for diagnostic logging */
@@ -1102,6 +1122,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                                                               : new LinkedHashSet<>(ctx.tunnelManager().selectPeersInTooManyTunnels()));
             _isIn = isInbound;
             _isExpl = isExploratory;
+            for (Hash h : s) {_reasons.put(h, "too-many-tunnels");}
         }
 
         /**
@@ -1116,15 +1137,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             _isExpl = isExploratory;
         }
 
-    /**
-     * Check if a peer should be excluded.
-     * Automatically adds to the set if excluded.
-     * Capped at MAX_EXCLUDED_PEERS — evicts oldest entry when over limit.
-     * Tracks exclusion reason for diagnostic logging.
-     *
-     * @param o a Hash object to check
-     * @return true if peer should be excluded (and added to set)
-     */
     @Override
     public boolean contains(Object o) {
             if (s.contains(o)) {return true;}
@@ -1147,22 +1159,37 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         /**
-         *  Format exclusion summary grouped by reason.
+         *  Format excluded peers grouped by reason, sorted by hash within each group.
+         *  @return multi-line string like "Too many tunnels (128): peer1 peer2..."
          */
-        String formatByReason() {
+        String formatByReasonWithPeers() {
             if (_reasons.isEmpty()) return "";
-            Map<String, Integer> counts = new LinkedHashMap<>();
-            for (String r : _reasons.values()) {
-                Integer c = counts.get(r);
-                counts.put(r, c != null ? c + 1 : 1);
+            Map<String, List<Hash>> byReason = new LinkedHashMap<>();
+            List<String> reasonOrder = new ArrayList<>();
+            for (Map.Entry<Hash, String> e : _reasons.entrySet()) {
+                String reason = e.getValue();
+                List<Hash> list = byReason.get(reason);
+                if (list == null) {
+                    list = new ArrayList<>();
+                    byReason.put(reason, list);
+                    reasonOrder.add(reason);
+                }
+                list.add(e.getKey());
+            }
+            for (List<Hash> list : byReason.values()) {
+                list.sort(Comparator.comparing(h -> h.toBase64()));
             }
             StringBuilder sb = new StringBuilder();
-            sb.append(s.size()).append(" excluded \n* Reason: ");
-            boolean first = true;
-            for (Map.Entry<String, Integer> e : counts.entrySet()) {
-                if (!first) sb.append(", ");
-                sb.append(e.getValue()).append(" ").append(e.getKey());
-                first = false;
+            sb.append(s.size()).append(" excluded\n");
+            for (int i = 0; i < reasonOrder.size(); i++) {
+                List<Hash> list = byReason.get(reasonOrder.get(i));
+                String label = REASON_LABELS.get(reasonOrder.get(i));
+                if (label == null) {label = reasonOrder.get(i);}
+                sb.append("* ").append(label).append(" (").append(list.size()).append("):");
+                for (Hash h : list) {
+                    sb.append(' ').append(h.toBase64(), 0, 6);
+                }
+                if (i + 1 < reasonOrder.size()) {sb.append('\n');}
             }
             return sb.toString();
         }
