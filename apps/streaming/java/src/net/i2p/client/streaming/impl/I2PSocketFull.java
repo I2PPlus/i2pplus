@@ -3,7 +3,6 @@ package net.i2p.client.streaming.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.channels.SelectableChannel;
 import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
@@ -122,18 +121,6 @@ class I2PSocketFull implements I2PSocket {
             return c.getOptions();
         else
             return null;
-    }
-
-    /**
-     *  Unimplemented, unlikely to ever be implemented.
-     *
-     *  @deprecated
-     *  @return null always
-     *  @since 0.8.9
-     */
-    @Deprecated
-    public synchronized SelectableChannel getChannel() {
-        return null;
     }
 
     /**

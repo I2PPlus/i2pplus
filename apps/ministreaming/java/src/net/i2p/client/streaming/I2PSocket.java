@@ -4,7 +4,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.channels.SelectableChannel;
 import net.i2p.data.Destination;
 
 /**
@@ -57,16 +56,6 @@ public interface I2PSocket extends Closeable {
      * @throws IOException on failure
      */
     public OutputStream getOutputStream() throws IOException;
-
-    /**
-     *  Unimplemented, unlikely to ever be implemented.
-     *
-     *  @deprecated
-     *  @return null always
-     *  @since 0.8.9
-     */
-    @Deprecated
-    public SelectableChannel getChannel() throws IOException;
 
     /**
      * Returns the socket's configuration.
