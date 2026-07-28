@@ -672,7 +672,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             }
             if (log.shouldInfo()) {
                 log.info("ClientPeerSelector " + length + (isInbound ? " Inbound" : " Outbound") +
-                         ", " + excluder.formatByReason() +
+                          ", " + excluder.formatByReason() +
                          "\n* Cooldowns: " + cooldownExcluded + " client(" + _clientCooldowns.size() +
                          "), " + peerCooldownExcluded + " shared(" + _peerCooldowns.size() +
                          "), firstHopFails=" + firstHopFailCount +

@@ -100,6 +100,15 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
+     *  @deprecated unused, use byte array method to avoid copying
+     *  @throws UnsupportedOperationException always
+     */
+    @Deprecated
+    public void writeBytes(OutputStream out) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      *  @return length read
      */
     public int readBytes(byte[] source, int offset) throws DataFormatException {
@@ -140,15 +149,6 @@ public class GarlicClove extends DataStructureImpl {
         } catch (I2NPMessageException ime) {
             throw new DataFormatException("Unable to read message from garlic clove", ime);
         }
-    }
-
-    /**
-     *  @deprecated unused, use byte array method to avoid copying
-     *  @throws UnsupportedOperationException always
-     */
-    @Deprecated
-    public void writeBytes(OutputStream out) {
-        throw new UnsupportedOperationException();
     }
 
     /** @return serialized clove */

@@ -18,14 +18,8 @@ import net.i2p.util.Log;
  *
  */
 class HopProcessor {
-    /**
-     * Router context.
-     */
     protected final I2PAppContext _context;
     private final Log _log;
-    /**
-     * _config.
-     */
     protected final HopConfig _config;
     private final IVValidator _validator;
 
@@ -38,30 +32,11 @@ class HopProcessor {
      */
     static final int IV_LENGTH = 16;
 
-    /**
-     *  @deprecated used only by unit tests
-     */
-    @Deprecated
-    HopProcessor(I2PAppContext ctx, HopConfig config) {
-        this(ctx, config, createValidator());
-    }
-
-    /**
-     * Construct a new instance.
-     */
     public HopProcessor(I2PAppContext ctx, HopConfig config, IVValidator validator) {
         _context = ctx;
         _log = ctx.logManager().getLog(HopProcessor.class);
         _config = config;
         _validator = validator;
-    }
-
-    /**
-     *  @deprecated used only by unit test constructor
-     */
-    @Deprecated
-    private static IVValidator createValidator() {
-        return new HashSetIVValidator();
     }
 
     /**

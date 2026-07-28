@@ -1,6 +1,5 @@
 package net.i2p.router;
 
-import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.stat.Rate;
@@ -18,9 +17,6 @@ import net.i2p.util.Translate;
  *
  */
 public class RouterThrottleImpl implements RouterThrottle {
-    /**
-     * _context.
-     */
     protected final RouterContext _context;
     private final Log _log;
     private volatile String _tunnelStatus;
@@ -28,13 +24,9 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     /** Arbitrary hard limit - if it's taking this long to get to a job, we're congested. */
     private static final long JOB_LAG_LIMIT_NETWORK = 3*1000L;
-    private static final long JOB_LAG_LIMIT_NETDB = 3*1000L;
 
-    /**
-     * PROP_MAX_TUNNELS.
-     */
     public static final String PROP_MAX_TUNNELS = "router.maxParticipatingTunnels";
-    /** _defaultMaxTunnels. */
+    /** Default maximum tunnels, adjusted by system speed and memory. */
     public static volatile int _defaultMaxTunnels = SystemVersion.isSlow() ? 3*1000 :
                                                   SystemVersion.getMaxMemory() < 512*1024*1024L ? 5*1000 :
                                                   SystemVersion.getCores() >= 8 ? 12*1000 : 8*1000;
@@ -63,7 +55,6 @@ public class RouterThrottleImpl implements RouterThrottle {
     /** Timestamp (ms) the message-delay average first crossed the threshold, or -1. */
     private volatile long _msgDelayOverSince = -1;
 
-    /* TO BE FIXED - SEE COMMENTS BELOW */
     private static final int DEFAULT_MAX_PROCESSINGTIME = SystemVersion.isSlow() ? 3000 : 2000;
 
     /** tunnel acceptance */
@@ -74,9 +65,6 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
-    /**
-     * RouterThrottleImpl.
-     */
     public RouterThrottleImpl(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(RouterThrottleImpl.class);
@@ -93,9 +81,6 @@ public class RouterThrottleImpl implements RouterThrottle {
      *  @since 0.8.12
      */
     private class ResetStatus extends SimpleTimer2.TimedEvent {
-        /**
-         * timeReached.
-         */
         public void timeReached() {
             if (_tunnelStatus.contains(_x("Starting up"))) {cancelShutdownStatus();}
         }
@@ -113,16 +98,6 @@ public class RouterThrottleImpl implements RouterThrottle {
         long lag = _context.jobQueue().getMaxLag();
         if ((lag > JOB_LAG_LIMIT_NETWORK) && (_context.router().getUptime() > 60*1000L)) {
             if (_log.shouldWarn()) {_log.warn("Throttling Network Reader -> Job lag is " + lag + "ms");}
-            return false;
-        } else {return true;}
-    }
-
-    /** @deprecated unused, function moved to netdb */
-    @Deprecated
-    public boolean acceptNetDbLookupRequest(Hash key) {
-        long lag = _context.jobQueue().getMaxLag();
-        if (lag > JOB_LAG_LIMIT_NETDB) {
-            if (_log.shouldDebug()) {_log.debug("Refusing NetDb Lookup request -> Job lag is " + lag + "ms");}
             return false;
         } else {return true;}
     }

@@ -523,20 +523,6 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Mark all of the tags delivered to the target up to this point as invalid, since the peer
-     * has failed to respond when they should have.  This call essentially lets the system recover
-     * from corrupted tag sets and crashes
-     *
-     * @deprecated unused and rather drastic
-     * @throws UnsupportedOperationException always
-     */
-    @Override
-    @Deprecated
-    public void failTags(PublicKey target) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
      * @throws UnsupportedOperationException always
      */
     @Override

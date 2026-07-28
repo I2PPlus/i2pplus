@@ -161,7 +161,7 @@ public abstract class GatewayITBase extends RouterITBase {
             // fake all the hops...
 
             for (int i = 1; i <= _config.getLength() - getLastHop(); i++) {
-                HopProcessor hop = new HopProcessor(_context, _config.getConfig(i));
+                HopProcessor hop = new HopProcessor(_context, _config.getConfig(i), DummyValidator.getInstance());
                 assertTrue(hop.process(encrypted, 0, encrypted.length, _config.getConfig(i).getReceiveFrom()));
             }
 

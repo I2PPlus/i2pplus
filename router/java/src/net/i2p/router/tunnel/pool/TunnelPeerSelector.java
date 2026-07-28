@@ -1088,6 +1088,20 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return rv;
     }
 
+    private static final Map<String, String> REASON_LABELS = new LinkedHashMap<>(8);
+    static {
+        REASON_LABELS.put("too-many-tunnels", "Too many tunnels");
+        REASON_LABELS.put("recently-rejected", "Recently rejected");
+        REASON_LABELS.put("unreachable", "Unreachable");
+        REASON_LABELS.put("no-routerinfo", "No router info");
+        REASON_LABELS.put("floodfill", "Floodfill");
+        REASON_LABELS.put("U-cap", "Unreachable cap");
+        REASON_LABELS.put("moderate-congestion", "Moderate congestion");
+        REASON_LABELS.put("severe-congestion", "Severe congestion");
+        REASON_LABELS.put("slow/capped", "Slow or capped");
+        REASON_LABELS.put("no-signal", "No signal");
+    }
+
     /**
      * Excluder that automatically adds peers to the set when they should be excluded.
      *
@@ -1095,19 +1109,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     protected class Excluder extends ExcluderBase {
         private static final int MAX_EXCLUDED_PEERS = 384;
-        private static final Map<String, String> REASON_LABELS = new LinkedHashMap<>(8);
-        static {
-            REASON_LABELS.put("too-many-tunnels", "Too many tunnels");
-            REASON_LABELS.put("recently-rejected", "Recently rejected");
-            REASON_LABELS.put("unreachable", "Unreachable");
-            REASON_LABELS.put("no-routerinfo", "No router info");
-            REASON_LABELS.put("floodfill", "Floodfill");
-            REASON_LABELS.put("U-cap", "Unreachable cap");
-            REASON_LABELS.put("moderate-congestion", "Moderate congestion");
-            REASON_LABELS.put("severe-congestion", "Severe congestion");
-            REASON_LABELS.put("slow/capped", "Slow or capped");
-            REASON_LABELS.put("no-signal", "No signal");
-        }
 
         private final boolean _isIn;
         private final boolean _isExpl;
@@ -1156,6 +1157,28 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 return true;
             }
             return false;
+        }
+
+        /**
+         *  Format exclusion summary grouped by reason.
+         *  @return string like "128 excluded \n* Reason: 50 too-many-tunnels, 30 unreachable"
+         */
+        String formatByReason() {
+            if (_reasons.isEmpty()) return "";
+            Map<String, Integer> counts = new LinkedHashMap<>();
+            for (String r : _reasons.values()) {
+                Integer c = counts.get(r);
+                counts.put(r, c != null ? c + 1 : 1);
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.append(s.size()).append(" excluded \n* Reason: ");
+            boolean first = true;
+            for (Map.Entry<String, Integer> e : counts.entrySet()) {
+                if (!first) sb.append(", ");
+                sb.append(e.getValue()).append(" ").append(e.getKey());
+                first = false;
+            }
+            return sb.toString();
         }
 
         /**

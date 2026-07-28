@@ -368,17 +368,4 @@ public class RouterClock extends Clock {
         public void clockShift(long delta);
     }
 
-    /*
-     *  How far we still have to slew, for diagnostics
-     *
-     *  @since 0.7.12
-     *  @deprecated for debugging only
-     */
-    /**
-     * @return the delta offset
-     */
-    @Deprecated
-    public long getDeltaOffset() {
-        return _desiredOffset - _offset;
-    }
 }

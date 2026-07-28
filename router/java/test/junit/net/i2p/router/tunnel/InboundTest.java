@@ -47,7 +47,7 @@ public class InboundTest extends TestCase {
         p.process(message, 0, message.length, null);
 
         for (int i = 1; i < numHops - 1; i++) {
-            HopProcessor hop = new HopProcessor(_context, config.getConfig(i));
+            HopProcessor hop = new HopProcessor(_context, config.getConfig(i), DummyValidator.getInstance());
             Hash prev = config.getConfig(i).getReceiveFrom();
             assertTrue(hop.process(message, 0, message.length, prev));
         }

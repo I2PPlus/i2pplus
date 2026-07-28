@@ -42,7 +42,7 @@ public class OutboundTest extends TestCase {
         p.process(message, 0, message.length);
 
         for (int i = 1; i < numHops; i++) {
-            HopProcessor hop = new HopProcessor(_context, config.getConfig(i));
+            HopProcessor hop = new HopProcessor(_context, config.getConfig(i), DummyValidator.getInstance());
             Hash prev = config.getConfig(i).getReceiveFrom();
             assertTrue(hop.process(message, 0, message.length, prev));
         }

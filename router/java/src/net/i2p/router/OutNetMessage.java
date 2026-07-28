@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.util.CDPQEntry;
@@ -152,43 +151,12 @@ public class OutNetMessage implements CDPQEntry {
         }
     }
 
-    /** @deprecated unused */
-    @Deprecated
-    public Map<String, Long> getTimestamps() {
-        if (_shouldTimestamp) {
-            synchronized (this) {
-                locked_initTimestamps();
-                return new HashMap<>(_timestamps);
-            }
-        }
-        return Collections.emptyMap();
-    }
-
-    /** @deprecated unused */
-    @Deprecated
-    public Long getTimestamp(String eventName) {
-        if (_shouldTimestamp) {
-            synchronized (this) {
-                locked_initTimestamps();
-                return _timestamps.get(eventName);
-            }
-        }
-        return Long.valueOf(0);
-    }
-
     private void locked_initTimestamps() {
         if (_timestamps == null) {
             _timestamps = new HashMap<>(8);
             _timestampOrder = new ArrayList<>(8);
         }
     }
-
-    /**
-     * @deprecated
-     * @return null always
-     */
-    @Deprecated
-    public Exception getCreatedBy() {return null;}
 
     /**
      * Specifies the router to which the message should be delivered.

@@ -1,7 +1,5 @@
 package net.i2p.router;
 
-import net.i2p.data.Hash;
-
 /**
  * Controls router load by throttling message processing and tunnel participation.
  * Monitors system performance metrics to decide when to reject or limit activities based on current load and bandwidth constraints.
@@ -21,13 +19,6 @@ public interface RouterThrottle {
      * @return 0 if it should be accepted, higher values for more severe rejection
      */
     public int acceptTunnelRequest();
-    /**
-     * Should we accept the netDb lookup message, replying either with the
-     * value or some closer peers, or should we simply drop it due to overload?
-     *
-     */
-    public boolean acceptNetDbLookupRequest(Hash key);
-
     /** How backed up we are at the moment processing messages (in milliseconds) */
     public long getMessageDelay();
     /** How backed up our tunnels are at the moment (in milliseconds) */
@@ -39,15 +30,13 @@ public interface RouterThrottle {
      */
     public String getTunnelStatus();
     /**
-     * msg).
+     * Update the tunnel acceptance status message.
      */
     public void setTunnelStatus(String msg);
 
     /**
-     * getTunnelStatus(), translated if available.
-     *
      * @since 0.9.45
-     * @return the localized tunnel status
+     * @return the tunnel status, translated via the router resource bundle
      */
     public String getLocalizedTunnelStatus();
 
