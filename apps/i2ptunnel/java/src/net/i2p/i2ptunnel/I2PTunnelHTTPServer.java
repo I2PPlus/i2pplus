@@ -966,20 +966,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         if (h == null)
             return false;
         String referer = h.get(0);
-        if (referer.length() <= 9)
-            return false;
-        referer = referer.substring(9);
-        if (!referer.startsWith("http://") && !referer.startsWith("https://"))
-            return false;
-        if (_log.shouldWarn()) {
-            _log.warn("[HTTPServer] Refusing access (Bad referer) \n* Client: " + peerB32 +
-                      "\n* Referer: " + referer);
+        if (referer.startsWith("http://") || referer.startsWith("https://")) {
+            if (_log.shouldWarn()) {
+                _log.warn("[HTTPServer] Refusing access (Bad referer) \n* Client: " + peerB32 +
+                          "\n* Referer: " + referer);
+            }
+            try {sendError(socket, ERR_FORBIDDEN);}
+            catch (IOException ioe) { /* ignored */ }
+            try {socket.close();}
+            catch (IOException ioe) { /* ignored */ }
+            return true;
         }
-        try {sendError(socket, ERR_FORBIDDEN);}
-        catch (IOException ioe) { /* ignored */ }
-        try {socket.close();}
-        catch (IOException ioe) { /* ignored */ }
-        return true;
+        return false;
     }
 
     /**
