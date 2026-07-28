@@ -169,12 +169,6 @@ public class NDTConstants {
     public static final String OC_48_STR = "OC-48";
     /** Human-readable label for 10 Gigabit Ethernet data rate. */
     public static final String TENGIGABIT_ETHERNET_STR = "10 Gig";
-    /** Human-readable label for system fault data rate. */
-    public static final String SYSTEM_FAULT_STR = "systemFault";
-    /** Human-readable label for dial-up data rate. */
-    public static final String DIALUP_STR = "dialup2";
-    /** Human-readable label for RTT-only data rate. */
-    public static final String RTT_STR = "rtt";
 
     /** RFC 1323 window scaling disabled. */
     public static final int RFC_1323_DISABLED = 0;

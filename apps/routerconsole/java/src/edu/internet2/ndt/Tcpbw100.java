@@ -2225,16 +2225,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
     } // end testResults()
 
-    /**
-     * Pop up a window to display some information about TCP packet queuing.
-     */
-    public void showBufferedBytesInfo() {
-        JOptionPane.showMessageDialog(null,
-                _resBundDisplayMsgs.getString("packetQueuingInfo"),
-                _resBundDisplayMsgs.getString("packetQueuing"),
-                JOptionPane.INFORMATION_MESSAGE);
-    }
-
     /*
      * This routine saves the specific value into the variable of the same name.
      * There should probably be an easier way to do this.
