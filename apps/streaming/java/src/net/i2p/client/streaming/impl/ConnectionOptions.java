@@ -128,19 +128,24 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** Prop max rto. */
     static final String PROP_MAX_RTO = "i2p.streaming.maxRTO";
 
-    /** @since 0.9.70+ mutable for adaptive tuning */
-    private static volatile int _defaultInitialRTO = 8000;
+    /**
+     * Default initial RTO (ms) before any RTT measurement. Set to 15000 — accommodates
+     * typical I2P RTT up to ~10s without premature SYN retransmit. The Tuner adjusts
+     * this adaptively based on network conditions.
+     * @since 0.9.70+ mutable for adaptive tuning
+     */
+    private static volatile int _defaultInitialRTO = 15000;
 
     /** Initial rto. */
     static int getInitialRTO() { return _defaultInitialRTO; }
     /** Initial rto. */
-    static void setInitialRTO(int val) { _defaultInitialRTO = Math.max(500, Math.min(15000, val)); }
+    static void setInitialRTO(int val) { _defaultInitialRTO = Math.max(500, Math.min(30000, val)); }
 
     /**
-     * Default 15000 accommodates RTT up to ~7s with standard TCP deviation.
-     * Tuner may raise this for high-latency networks to avoid spurious retransmits.
+     * Default 30000 accommodates RTT up to ~15s with standard TCP deviation.
+     * Tuner may raise this for very high-latency networks.
      */
-    private static volatile int _maxRTO = 15000;
+    private static volatile int _maxRTO = 30000;
 
     /** @since 0.9.70+ */
     public static int getMaxRTOStatic() { return _maxRTO; }
@@ -166,8 +171,10 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** @since 0.9.70+ */
     public static void setMinResendDelay(int val) { _minResendDelay = Math.max(300, Math.min(5000, val)); }
 
-    /** Max resend delay. */
-    private static volatile int _maxResendDelay = 15000;
+    /**
+     * Max resend delay. Raised to 30000 to accommodate high-RTT paths without premature retransmit.
+     */
+    private static volatile int _maxResendDelay = 30000;
 
     /** @since 0.9.70+ */
     public static int getMaxResendDelayStatic() { return _maxResendDelay; }

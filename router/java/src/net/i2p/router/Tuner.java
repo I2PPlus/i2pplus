@@ -3299,7 +3299,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("INITIAL_RTO", "First retransmit timeout (ms)",
                   SUB_STREAMING,
 
-                  1000, 15000, 1000, "stream.con.initialRTT.out", _context);
+                  1000, 30000, 3000, "stream.con.initialRTT.out", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
