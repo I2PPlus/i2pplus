@@ -508,7 +508,7 @@ public class BuildHandler implements Runnable {
             // don't even bother, since we are so overloaded locally
             _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping Tunnel Requests: Overloaded"));
             if (_log.shouldWarn()) {
-                _log.warn("Not trying to handle/decrypt stale request " + state.msg.getUniqueId() +
+                _log.warn("Not trying to handle/decrypt stale request " + (state.msg != null ? String.valueOf(state.msg.getUniqueId()) : "null") +
                            " -> Received " + timeSinceReceived + "ms ago");
             }
             _context.statManager().addRateData("tunnel.dropLoadDelay", timeSinceReceived);
@@ -523,7 +523,7 @@ public class BuildHandler implements Runnable {
         long decryptTime = System.currentTimeMillis() - beforeDecrypt;
         _context.statManager().addRateData("tunnel.decryptRequestTime", decryptTime);
         if (decryptTime > 500 && _log.shouldWarn()) {
-            _log.warn("Timeout decrypting request: " + decryptTime + " for message: " + state.msg.getUniqueId() +
+            _log.warn("Timeout decrypting request: " + decryptTime + " for message: " + (state.msg != null ? String.valueOf(state.msg.getUniqueId()) : "null") +
                       " received " + (timeSinceReceived+decryptTime) + "ms ago");
         }
         if (req == null) {
@@ -532,7 +532,7 @@ public class BuildHandler implements Runnable {
                 _context.commSystem().mayDisconnect(from);
                 // no records matched, or the decryption failed. bah
                 if (_log.shouldInfo()) {
-                    _log.info("Request [MsgID " + state.msg.getUniqueId() + "] could not be decrypted from [" +
+                    _log.info("Request [MsgID " + (state.msg != null ? String.valueOf(state.msg.getUniqueId()) : "null") + "] could not be decrypted from [" +
                               from.toBase64().substring(0,6) + "]");
                 }
             }
@@ -540,6 +540,10 @@ public class BuildHandler implements Runnable {
         }
 
         Hash nextPeer = req.readNextIdentity();
+        if (nextPeer == null) {
+            if (from != null) {_context.commSystem().mayDisconnect(from);}
+            return -1;
+        }
         if (_context.banlist().isBanlisted(nextPeer)) {
             if (_log.shouldWarn()) {
                 _log.warn("Dropping Tunnel Request -> Next peer [" + nextPeer.toBase64().substring(0,6) + "] is banned");
@@ -577,7 +581,7 @@ public class BuildHandler implements Runnable {
                 } else {
                     _context.statManager().addRateData("tunnel.dropLookupThrottle", 1);
                     if (_log.shouldInfo()) {
-                        _log.info("Dropping tunnel build [MsgID " + state.msg.getUniqueId() + "] -> Lookup queue full (" + _pendingLookups.size() + ")");
+                        _log.info("Dropping tunnel build [MsgID " + (state.msg != null ? String.valueOf(state.msg.getUniqueId()) : "null") + "] -> Lookup queue full (" + _pendingLookups.size() + ")");
                     }
                 }
                 return -1;
@@ -869,7 +873,7 @@ public class BuildHandler implements Runnable {
         if ((!isOutEnd) && (!isInGW)) {
             // Previous and next hop the same? Don't help somebody be evil. Drop it without a reply.
             // A-B-C-A is not preventable
-            if (nextPeer.equals(from)) {
+            if (nextPeer != null && nextPeer.equals(from)) {
                 // i2pd does this
                 _context.statManager().addRateData("tunnel.rejectHostile", 1);
                 if (from != null) {
@@ -1413,7 +1417,7 @@ public class BuildHandler implements Runnable {
      *  Not strictly necessary, as the entry doesn't use that much space,
      *  but it affects capacity calculations
      */
-    private class TunnelBuildNextHopFailJob extends JobImpl {
+    private static class TunnelBuildNextHopFailJob extends JobImpl {
         private final HopConfig _cfg;
         private TunnelBuildNextHopFailJob(RouterContext ctx, HopConfig cfg) {
             super(ctx);

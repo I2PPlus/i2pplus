@@ -82,10 +82,10 @@ class OutboundMessageDistributor {
             _context.statManager().addRateData("tunnel.dropAtOBEP", 1);
             if (_log.shouldInfo()) {
                  _log.warn("Dropping I2NPMessage to [" + target.toBase64().substring(0,6) + "] at Outbound Endpoint [TunnelID " +
-                           tunnel.getTunnelId() + "] -> New connection throttle" + msg);
+                           (tunnel != null ? tunnel.getTunnelId() : "null") + "] -> New connection throttle" + msg);
             } else if (_log.shouldWarn()) {
                  _log.warn("Dropping I2NPMessage (" + msg.getType() + ") to [" + target.toBase64().substring(0,6) + "] " +
-                           "at Outbound Endpoint [TunnelID " + tunnel.getTunnelId() + "] -> New connection throttle");
+                           "at Outbound Endpoint [TunnelID " + (tunnel != null ? tunnel.getTunnelId() : "null") + "] -> New connection throttle");
             }
             return;
         }

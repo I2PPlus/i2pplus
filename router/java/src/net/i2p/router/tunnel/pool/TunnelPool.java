@@ -1855,7 +1855,7 @@ public class TunnelPool {
                 pct = Math.max(pct * 3 / 4, 15); // Reduce by 25%, minimum 15% blame
             }
 
-            if (uptime > getStartupTime(_context) && _log.shouldWarn() && consecutiveFailures > 5) {
+            if (peer != null && uptime > getStartupTime(_context) && _log.shouldWarn() && consecutiveFailures > 5) {
                 _log.warn("Tunnel from " + toString() + " failed -> Blaming [" + peer.toBase64().substring(0,6) + "] -> " + pct + '%' +
                           " (" + consecutiveFailures + " consecutive failures)");
             }

@@ -79,7 +79,7 @@ class TunnelParticipant {
         if ((config == null) || (config.getSendTo() == null)) {
             // Only inbound endpoints or endpoints needing fragment handling need this
             _handler = new FragmentHandler(ctx, new DefragmentedHandler(), true);
-            _inboundDistributor = new InboundMessageDistributor(ctx, inEndProc.getDestination());
+            _inboundDistributor = (inEndProc != null) ? new InboundMessageDistributor(ctx, inEndProc.getDestination()) : null;
         } else {
             _handler = null;
             _inboundDistributor = null;
@@ -192,7 +192,7 @@ class TunnelParticipant {
                               _config.getSendTo().toBase64().substring(0, 6) + "] for " + msg);
                 }
             }
-        } else {
+        } else if (_inboundEndpointProcessor != null) {
             TunnelCreatorConfig cfg = _inboundEndpointProcessor.getConfig();
             cfg.incrementProcessedMessages();
             ok = _handler.receiveTunnelMessage(data, 0, data.length);
