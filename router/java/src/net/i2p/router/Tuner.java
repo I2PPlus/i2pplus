@@ -1874,10 +1874,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (!_resolved) {
                 try {
                     _cls = Class.forName(FULL_CLASS);
+                    _resolved = true;
                 } catch (ClassNotFoundException e) {
-                    // streaming not loaded
+                    // streaming not loaded — retry next cycle
                 }
-                _resolved = true;
             }
             return _cls;
         }
@@ -1993,10 +1993,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (!_resolved) {
                 try {
                     _cls = Class.forName(TCG);
+                    _resolved = true;
                 } catch (ClassNotFoundException e) {
-                    // i2ptunnel not loaded
+                    // i2ptunnel not loaded — retry next cycle
                 }
-                _resolved = true;
             }
             return _cls;
         }
@@ -7373,13 +7373,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean tunnelSlow = !Double.isNaN(testTime) && testTime > 5000;
             boolean buildsBackedUp = !Double.isNaN(backlog) && backlog > 10;
 
-            // Build storm: DON'T increase timeout (storm = too many concurrent builds, not timeout issue)
-            // Only decrease or hold during storms
+            // Build storm: DON'T decrease timeout when builds are timing out.
+            // If builds expire, the timeout is too short — the storm may be *caused* by
+            // short timeouts triggering replacement builds.  Only decrease when the
+            // storm has zero expirations (genuine load, not timeout-driven churn).
+            // When builds are expiring during a storm, fall through to the normal
+            // increase logic below so the timeout grows until expirations stop.
             if (buildStorm) {
-                // Storm + decent success = decrease (the storm is the problem, not timeout)
-                if (buildSuccess > 0.7)
+                if (observed <= 2 && buildSuccess > 0.7)
                     return Math.max(_min, current - _step * 2);
-                return current;
+                if (observed <= 2)
+                    return current;
             }
 
             // Builds backed up + expiring: increase timeout (queue pressure means peers need more time)
@@ -11088,15 +11092,18 @@ protected int computeTarget(double observed) {
             // Spare tunnels cost memory; don't build a buffer when the heap is tight
             boolean memOk = memPressure < 0.75;
 
-            // Check pool deficits
+            // Check pool deficits: only count pools with ZERO active tunnels.
+            // A pool with 1 of 2 active is cycling normally — the spare buffer
+            // covers that.  Counting every `activeCount < target` pool drives the
+            // buffer to max and inflates the target to wantedCount + 8, creating
+            // 37+ concurrent builds for pools that need 2 tunnels.
             TunnelManagerFacade mgr = _context.tunnelManager();
             boolean anyDeficit = false;
             List<TunnelPool> pools = new ArrayList<>();
             mgr.listPools(pools);
             for (TunnelPool p : pools) {
                 if (!p.isAlive()) continue;
-                int target = p.getSettings().getTotalQuantity();
-                if (p.getActiveTunnelCount() < target) {
+                if (p.getActiveTunnelCount() == 0) {
                     anyDeficit = true;
                     break;
                 }
