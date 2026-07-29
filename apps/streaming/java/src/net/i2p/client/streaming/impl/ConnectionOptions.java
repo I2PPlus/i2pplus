@@ -129,7 +129,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static final String PROP_MAX_RTO = "i2p.streaming.maxRTO";
 
     /** @since 0.9.70+ mutable for adaptive tuning */
-    private static volatile int _defaultInitialRTO = 3000;
+    private static volatile int _defaultInitialRTO = 8000;
 
     /** Initial rto. */
     static int getInitialRTO() { return _defaultInitialRTO; }
