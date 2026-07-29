@@ -1,5 +1,6 @@
 package net.i2p.router.client;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -133,7 +134,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
                        " in " + (new File(_context.getConfigDir(), "router.config")).getAbsolutePath());
             return false;
         }
-        try (InputStream fis = new FileInputStream(ks)) {
+        try (InputStream fis = new BufferedInputStream(new FileInputStream(ks))) {
             SSLContext sslc = SSLContext.getInstance("TLS");
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             keyStore.load(fis, ksPass.toCharArray());

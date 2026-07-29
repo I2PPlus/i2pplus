@@ -681,7 +681,8 @@ class ClientConnectionRunner {
                                 _log.error("Bad encryption type combination in i2cp.leaseSetEncType for " + dest.toBase32());
                                 return SessionStatusMessage.STATUS_INVALID;
                             }
-                            pqType = Integer.parseInt(sencaa);
+                            try {pqType = Integer.parseInt(sencaa);}
+                            catch (NumberFormatException nfe) {pqType = 0;}
                             hasPQ = true;
                         }
                     }

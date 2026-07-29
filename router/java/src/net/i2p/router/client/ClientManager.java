@@ -288,7 +288,9 @@ class ClientManager {
             _log.warn("Dropping Client connection with IDs: " + ids);
         }
         synchronized (_runners) {
-            for (SessionId id : ids) {_runnerSessionIds.remove(id);}
+            if (ids != null) {
+                for (SessionId id : ids) {_runnerSessionIds.remove(id);}
+            }
             for (Destination dest : dests) {
                 _runners.remove(dest);
                 _runnersByHash.remove(dest.calculateHash());
@@ -464,7 +466,7 @@ class ClientManager {
             if (_log.shouldDebug()) {_log.debug("[Message " + msgId + "] is targeting a LOCAL destination -> Distributing locally");}
             if (runner != sender) {
             // run this inline so we don't clog up the job queue
-            Job j = new DistributeLocal(toDest, runner, sender, fromDest, payload, msgId, messageNonce);
+            Job j = new DistributeLocal(_ctx, toDest, runner, sender, fromDest, payload, msgId, messageNonce);
             j.runJob();
             } else {
                 if (_log.shouldWarn()) {_log.warn("Loopback attempt from client " + fromDest.getHash());}
@@ -491,7 +493,7 @@ class ClientManager {
         }
     }
 
-    private class DistributeLocal extends JobImpl {
+    private static class DistributeLocal extends JobImpl {
         private final Destination _toDest;
         private final ClientConnectionRunner _to;
         private final ClientConnectionRunner _from;
@@ -504,9 +506,9 @@ class ClientManager {
          * @param msgId the router's ID for this message
          * @param messageNonce the client's ID for this message
          */
-        public DistributeLocal(Destination toDest, ClientConnectionRunner to, ClientConnectionRunner from,
+        public DistributeLocal(RouterContext ctx, Destination toDest, ClientConnectionRunner to, ClientConnectionRunner from,
                                Destination fromDest, Payload payload, MessageId id, long messageNonce) {
-            super(_ctx);
+            super(ctx);
             _toDest = toDest;
             _to = to;
             _from = from;

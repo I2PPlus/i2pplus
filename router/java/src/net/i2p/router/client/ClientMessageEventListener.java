@@ -458,7 +458,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             _log.error("Error sending message", e);
             MessageStatusMessage status = new MessageStatusMessage();
             status.setMessageId(_runner.getNextMessageId());
-            status.setSessionId(sid.getSessionId());
+            if (sid != null) {status.setSessionId(sid.getSessionId());}
             status.setSize(0);
             status.setNonce(message.getNonce());
             status.setStatus(MessageStatusMessage.STATUS_SEND_FAILURE_ROUTER);
@@ -595,7 +595,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             }
         } else {
             Destination ndest = ls.getDestination();
-            if (!dest.equals(ndest)) {
+            if (dest == null || !dest.equals(ndest)) {
                 if (_log.shouldError()) {_log.error("Different destination in LeaseSet");}
                 _runner.disconnectClient("Different destination in LeaseSet");
                 return;
@@ -673,7 +673,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 // store the decrypted ls also
                 EncryptedLeaseSet encls = (EncryptedLeaseSet) ls;
                 if (_log.shouldDebug()) {_log.debug("Storing decrypted: " + encls.getDecryptedLeaseSet());}
-                _runner.getFloodfillNetworkDatabaseFacade().store(dest.getHash(), encls.getDecryptedLeaseSet());
+                if (dest != null) {_runner.getFloodfillNetworkDatabaseFacade().store(dest.getHash(), encls.getDecryptedLeaseSet());}
             }
         } catch (IllegalArgumentException iae) {
             String msg = iae.getMessage();
