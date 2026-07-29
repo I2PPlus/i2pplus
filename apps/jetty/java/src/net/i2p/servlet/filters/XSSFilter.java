@@ -40,9 +40,7 @@ public class XSSFilter implements Filter {
              */
             I2PAppContext.getGlobalContext().logManager().getLog(XSSFilter.class).error("XSS Filter Error", ise);
             try {
-                String msg = ise.getMessage();
-                if (msg == null) {msg = ise.toString();}
-                ((HttpServletResponse)response).sendError(413, "XSS Filter " + msg);
+                ((HttpServletResponse)response).sendError(413);
             } catch (IllegalStateException ise2) {
                 // Committed, probably wasn't a multipart form error after all
             }

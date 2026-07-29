@@ -220,7 +220,7 @@ public class ErrorServlet extends HttpServlet {
         if (errorCause != null && _context.getBooleanProperty("routerconsole.showErrorStack")) {
             out.print("<p>" + getSanitizedStackTrace(errorCause) + "</p>\n");
         } else if (errorCause != null && errorMsg.isEmpty()) {
-            out.print("<p>" + errorCause.getMessage() + "</p>\n");
+            out.print("<p>" + DataHelper.escapeHTML(errorCause.getMessage()) + "</p>\n");
         }
         out.print("</div>\n");
         out.print("<h3>" + _t("I2P Version and Running Environment").replace("I2P", "I2P+") + "</h3>\n");
