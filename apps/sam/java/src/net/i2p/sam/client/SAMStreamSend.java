@@ -1,6 +1,7 @@
 package net.i2p.sam.client;
 
 import gnu.getopt.Getopt;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -445,9 +446,9 @@ public class SAMStreamSend {
          * openConnection.
          */
         public boolean openConnection() {
-            FileInputStream fin = null;
+            InputStream fin = null;
             try {
-                fin = new FileInputStream(_destFile);
+                fin = new BufferedInputStream(new FileInputStream(_destFile));
                 byte[] dest = new byte[1024];
                 int read = DataHelper.read(fin, dest);
 
@@ -475,7 +476,7 @@ public class SAMStreamSend {
                         throw new IOException("STREAM CONNECT failed");
                 }
 
-                _in = new FileInputStream(_dataFile);
+                _in = new BufferedInputStream(new FileInputStream(_dataFile));
                 return true;
             } catch (IOException ioe) {
                 _log.error("Unable to connect", ioe);
