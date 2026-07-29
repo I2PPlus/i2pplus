@@ -1,6 +1,7 @@
 package net.i2p.router.util;
 
 import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -219,7 +220,7 @@ public class EventLog {
         }
         rv = new TreeMap<>();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(_file), StandardCharsets.UTF_8))) {
+                    new BufferedInputStream(new FileInputStream(_file)), StandardCharsets.UTF_8))) {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 try {
@@ -255,7 +256,7 @@ public class EventLog {
     public synchronized SortedMap<Long, String> getEvents(long since) {
         SortedMap<Long, String> rv = new TreeMap<>();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(_file), StandardCharsets.UTF_8))) {
+                    new BufferedInputStream(new FileInputStream(_file)), StandardCharsets.UTF_8))) {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 try {
@@ -285,7 +286,7 @@ public class EventLog {
     public synchronized long getLastEvent(String event, long since) {
         long rv = 0;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(_file), StandardCharsets.UTF_8))) {
+                    new BufferedInputStream(new FileInputStream(_file)), StandardCharsets.UTF_8))) {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 try {

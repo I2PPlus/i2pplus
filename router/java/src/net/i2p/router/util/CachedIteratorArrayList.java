@@ -47,11 +47,11 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
     }
 
     /**
-     * clone.
+     * Returns a shallow copy of this list.
      */
     @Override
-    public Object clone() {
-        return super.clone();
+    public CachedIteratorArrayList clone() {
+        return (CachedIteratorArrayList) super.clone();
     }
 
     /**
@@ -63,7 +63,7 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
     }
 
     /**
-     * iterator.
+     * Returns a per-thread cached iterator over the elements in this list.
      */
     @Override
     public Iterator<E> iterator() {
@@ -130,6 +130,8 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
         }
 
         /**
+         * Whether there is a next element available.
+         *
          * @return whether next is present
          */
         public boolean hasNext() {
@@ -138,7 +140,9 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
         }
 
         /**
-         * next.
+         * Returns the next element in the iteration.
+         *
+         * @return the next element
          */
         public E next() {
             CachedIteratorArrayList<E> l = list();
@@ -153,7 +157,7 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
         }
 
         /**
-         * remove.
+         * Removes from the underlying list the last element returned by next().
          */
         public void remove() {
             if (lastRet < 0)
