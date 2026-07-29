@@ -297,17 +297,14 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 break;
 
             case MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET:
-                // Ideally we would like to make this a hard failure,
-                // but it caused far too many fast-fails that were then
-                // resolved by the user clicking reload in his browser.
-                // Until the LS fetch is faster and more reliable,
-                // or we increase the timeout for it,
-                // we can't treat this one as a hard fail.
-                // Let the streaming retransmission paper over the problem.
+                // Immediate retransmit so the message goes out on a new
+                // tunnel/lease combo once the LS fetch completes, rather
+                // than waiting for the full RTO (which can be 3-15s).
                 if (_log.shouldWarn()) {
                     _log.warn("LeaseSet lookup: Soft Failure for [MsgID " + msgId + "] \n* " + con);
                 }
                 _messageStatusMap.remove(id);
+                con.scheduleSoftFailureRetransmit();
                 break;
 
             case MessageStatusMessage.STATUS_SEND_FAILURE_ROUTER:

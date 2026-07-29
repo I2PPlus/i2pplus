@@ -2026,7 +2026,11 @@ class Connection {
                     // Without this floor, a low bandwidth estimate (from the current
                     // slow window) caps ssthresh at ~4, collapsing CWND from 256 to 4.
                     _ssthresh = Math.max(_ssthresh, Math.max(1, wsize / 2));
-                    _options.setWindowSize(Math.min(_ssthresh, Math.max(1, wsize / 2)));
+                    // Floor at 4 so repeated RTO events don't collapse the window
+                    // below a usable minimum — prevents degenerative behavior
+                    // where each retransmit halves the window to 1, making every
+                    // subsequent send a single-packet-at-a-time ordeal.
+                    _options.setWindowSize(Math.max(4, Math.min(_ssthresh, Math.max(1, wsize / 2))));
                     updatePacingRate();
                 } else if (_log.shouldDebug()) {
                     _log.debug(Connection.this + " not cutting SlowStartThreshold and Window");

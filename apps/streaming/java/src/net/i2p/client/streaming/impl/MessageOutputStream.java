@@ -93,7 +93,7 @@ class MessageOutputStream extends OutputStream {
      * @since 0.9.70+ mutable for adaptive tuning
      * @return whether slow
      */
-    private static volatile int _defaultPassiveFlushDelay = SystemVersion.isSlow() ? 100 : 50;
+    private static volatile int _defaultPassiveFlushDelay = SystemVersion.isSlow() ? 200 : 100;
 
     /** @since 0.9.70+ */
     public static int getDefaultPassiveFlushDelay() { return _defaultPassiveFlushDelay; }
