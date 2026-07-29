@@ -1084,7 +1084,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // following are some special situations, we don't want to drop the peer in these cases
         long uptime = _context.router().getUptime();
         String nofail = _context.getProperty("router.noFailGracePeriod");
-        if (nofail != null) {FloodfillNetworkDatabaseFacade.DONT_FAIL_PERIOD = Long.parseLong(nofail)*60*1000L;}
+        if (nofail != null) {
+            try {FloodfillNetworkDatabaseFacade.DONT_FAIL_PERIOD = Long.parseLong(nofail)*60*1000L;}
+            catch (NumberFormatException nfe) {}
+        }
         int knownRouters = getKBucketSetSize();
         if (info.getNetworkId() == _networkID && (knownRouters < MIN_REMAINING_ROUTERS || (uptime < DONT_FAIL_PERIOD && knownRouters < 2000) ||
             _context.commSystem().countActivePeers() <= MIN_ACTIVE_PEERS) || _context.commSystem().getStatus() == Status.DISCONNECTED) {

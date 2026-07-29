@@ -184,10 +184,11 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             for (RouterAddress ra : ri.getAddresses()) {
                 if (ra != null && ra.getHost() != null && ra.getPort() > 0) {
                     String host = ra.getHost();
+                    StringBuilder ipBuf = new StringBuilder(64);
                     if (host.contains(":") && !host.startsWith("["))
-                        _riIP = "[" + host + "]:" + ra.getPort();
+                        _riIP = ipBuf.append('[').append(host).append("]:").append(ra.getPort()).toString();
                     else
-                        _riIP = host + ":" + ra.getPort();
+                        _riIP = ipBuf.append(host).append(':').append(ra.getPort()).toString();
                     break;
                 }
             }

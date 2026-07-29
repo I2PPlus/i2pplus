@@ -522,7 +522,7 @@ abstract class StoreJob extends JobImpl {
                 }
                 sent = wm.getMessage();
                 _state.addPending(to, wm);
-            } else if (type == EncType.ECIES_X25519 || lsk.isSupported(EncType.ECIES_X25519)) {
+            } else if (type == EncType.ECIES_X25519 || (lsk != null && lsk.isSupported(EncType.ECIES_X25519))) {
                 sent = MessageWrapper.wrap(ctx, msg, peer); // force full ElG for ECIES-only
                 if (sent == null) {
                     if (_log.shouldWarn()) {

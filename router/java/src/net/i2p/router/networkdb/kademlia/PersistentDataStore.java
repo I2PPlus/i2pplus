@@ -450,7 +450,7 @@ public class PersistentDataStore extends TransientDataStore {
         // IP spoof detection — skip if firewalled (introducer IP in our RI)
         if (f.hasIP && !_context.commSystem().getStatus().toString().contains("Firewalled")) {
             boolean peerIsFirewalled = ri.isHidden() || f.unreachable;
-            if (f.ip.equals(f.ourIP) && !peerIsFirewalled) {
+            if (f.ip != null && f.ip.equals(f.ourIP) && !peerIsFirewalled) {
                 if (_log.shouldWarn()) {
                     _log.warn("Banning and disconnecting from [" + key.toBase64().substring(0,6) + "] for 72h -> Router is spoofing our IP address!");
                 }

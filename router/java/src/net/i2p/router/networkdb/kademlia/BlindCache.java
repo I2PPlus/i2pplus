@@ -1,5 +1,6 @@
 package net.i2p.router.networkdb.kademlia;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -326,7 +327,7 @@ class BlindCache {
         long now = _context.clock().now();
         int count = 0;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
-            		new FileInputStream(file), StandardCharsets.ISO_8859_1))) {
+                    new BufferedInputStream(new FileInputStream(file)), StandardCharsets.ISO_8859_1))) {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 if (line.startsWith("#"))

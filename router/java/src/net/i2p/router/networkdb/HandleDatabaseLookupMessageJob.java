@@ -145,7 +145,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             if (info == null) return;
             String cap = info.getCapabilities();
             String bw = info.getBandwidthTier();
-            boolean isReachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
+            boolean isReachable = cap != null && cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
             boolean isFast = cap != null && isReachable && (bw.equals("O") || bw.equals("P") || bw.equals("X"));
             if (searchKey.equals(_us)) {
                 sendData(searchKey, info, fromKey, toTunnel);

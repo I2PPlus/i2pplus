@@ -662,7 +662,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             if (ri != null) {
                 // Request encrypted reply - now covered by version check above, which is more recent
                 if (!(type == EncType.ELGAMAL_2048 || (type == EncType.ECIES_X25519 && DatabaseLookupMessage.USE_ECIES_FF))) {
-                    failed(peer, false);
+                    if (peer != null) {failed(peer, false);}
                     if (_log.shouldWarn()) {
                         _log.warn("Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) + "] with EncType " + type);
                     }
@@ -677,7 +677,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                     boolean ratchet1 = ourType.equals(EncType.ECIES_X25519);
                     boolean ratchet2 = DatabaseLookupMessage.supportsRatchetReplies(ri);
                     if (ratchet1 && !ratchet2) {
-                        failed(peer, false);
+                        if (peer != null) {failed(peer, false);}
                         if (_log.shouldWarn()) {
                             _log.warn("Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) +
                                       "] -> Router does not support AEAD replies");

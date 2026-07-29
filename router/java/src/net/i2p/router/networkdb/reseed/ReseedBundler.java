@@ -8,6 +8,7 @@ package net.i2p.router.networkdb.reseed;
  *
  */
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -138,7 +139,7 @@ public class ReseedBundler {
                                   " but only found " + toWrite.size() + " valid RouterInfos. Please try again later.");
 
         File rv = new File(_context.getTempDir(), "genreseed-" + _context.random().nextInt() + ".zip");
-        try (ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(rv))) {
+        try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(rv)))) {
             for (RouterInfo ri : toWrite) {
                 String name = getRouterInfoName(ri.getIdentity().calculateHash());
                 ZipEntry entry = new ZipEntry(name);

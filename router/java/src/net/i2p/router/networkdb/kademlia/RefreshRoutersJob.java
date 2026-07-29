@@ -296,7 +296,8 @@ class RefreshRoutersJob extends JobImpl {
         int refreshTimeoutSeconds;
 
         if (refreshTimeoutProp != null) {
-            refreshTimeoutSeconds = Integer.parseInt(refreshTimeoutProp);
+            try {refreshTimeoutSeconds = Integer.parseInt(refreshTimeoutProp);}
+            catch (NumberFormatException nfe) {refreshTimeoutSeconds = 20;}
         } else {
             if (uptime < 60 * 60 * 1000L) {refreshTimeoutSeconds = 20;}
             else if (uptime < 8 * 60 * 60 * 1000L) {refreshTimeoutSeconds = 15;}
@@ -376,7 +377,9 @@ class RefreshRoutersJob extends JobImpl {
             }
             requeue(baseDelay);
         } else {
-            int delay = Integer.parseInt(refreshProp);
+            int delay;
+            try {delay = Integer.parseInt(refreshProp);}
+            catch (NumberFormatException nfe) {delay = 15000;}
             if (_log.shouldDebug()) {
                 _log.debug("Next RouterInfo check in " + delay + "ms");
             }
