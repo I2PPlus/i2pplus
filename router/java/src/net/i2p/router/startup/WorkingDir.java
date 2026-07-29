@@ -1,5 +1,7 @@
 package net.i2p.router.startup;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -236,11 +238,7 @@ public class WorkingDir {
         }
 
         setupSystemOut(dirf.getAbsolutePath());
-        // Do the copying
-        if (migrateOldData)
-            System.err.println("Migrating data files to new user directory " + rv); // NOSONAR S106 setup tool output
-        else
-            System.err.println("Setting up new user directory " + rv); // NOSONAR S106 setup tool output
+        System.err.println("Setting up new user directory " + rv); // NOSONAR S106 setup tool output
         boolean success = migrate(MIGRATE_BASE, oldDirf, dirf);
         // this one must be after MIGRATE_BASE
         File oldEep = new File(oldDirf, "eepsite");
@@ -374,13 +372,12 @@ public class WorkingDir {
         if (!oldFile.exists())
             return true;
         File newFile = new File(todir, "clients.config");
-        try (FileInputStream in = new FileInputStream(oldFile);
+        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(oldFile));
              PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(newFile), StandardCharsets.UTF_8)))) {
             out.println("# Modified by I2P User dir migration script");
             String s = null;
             boolean isDaemon = SystemVersion.isLinuxService();
             while ((s = DataHelper.readLine(in)) != null) {
-                // readLine() doesn't strip \r
                 if (s.endsWith("\r"))
                     s = s.substring(0, s.length() - 1);
                 if (s.endsWith("=\"eepsite/jetty.xml\"")) {
@@ -388,7 +385,6 @@ public class WorkingDir {
                                                             File.separatorChar + "eepsite" +
                                                             File.separatorChar + "jetty.xml\"");
                 } else if (isDaemon && s.equals("clientApp.4.startOnLoad=true")) {
-                    // disable browser launch for daemon
                     s = "clientApp.4.startOnLoad=false";
                 }
                 out.println(s);
@@ -438,11 +434,10 @@ public class WorkingDir {
      */
     static void migrateFileXML(File oldFile, File newFile, String oldString, String newString,
                                String oldString2, String newString2) throws IOException {
-        try (FileInputStream in = new FileInputStream(oldFile);
+        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(oldFile));
              PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(newFile), StandardCharsets.UTF_8)))) {
             String s = null;
             while ((s = DataHelper.readLine(in)) != null) {
-                // readLine() doesn't strip \r
                 if (s.endsWith("\r"))
                     s = s.substring(0, s.length() - 1);
                 if (s.indexOf(oldString) >= 0) {
@@ -510,8 +505,8 @@ public class WorkingDir {
         if (!src.exists()) return false;
         boolean rv = true;
 
-        try (FileInputStream in = new FileInputStream(src);
-             FileOutputStream out = new SecureFileOutputStream(dst)) {
+        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(src));
+             BufferedOutputStream out = new BufferedOutputStream(new SecureFileOutputStream(dst))) {
             DataHelper.copy(in, out);
             System.err.println("Copied file: " + src.getPath()); // NOSONAR S106 setup tool output
         } catch (IOException ioe) {

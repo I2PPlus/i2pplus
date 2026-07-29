@@ -62,7 +62,7 @@ class CapacityCalculator {
      */
     private static double getCachedDcap(RouterContext ctx) {
         String p = ctx.getProperty(PROP_D_CAP);
-        if (p == _cachedDcapProp) {return _cachedDcap;}
+        if (p != null ? p.equals(_cachedDcapProp) : _cachedDcapProp == null) {return _cachedDcap;}
         _cachedDcapProp = p;
         if (p != null) {
             try {_cachedDcap = Double.parseDouble(p);}
@@ -77,7 +77,7 @@ class CapacityCalculator {
      */
     private static double getCachedEcap(RouterContext ctx) {
         String p = ctx.getProperty(PROP_E_CAP);
-        if (p == _cachedEcapProp) {return _cachedEcap;}
+        if (p != null ? p.equals(_cachedEcapProp) : _cachedEcapProp == null) {return _cachedEcap;}
         _cachedEcapProp = p;
         if (p != null) {
             try {_cachedEcap = Double.parseDouble(p);}

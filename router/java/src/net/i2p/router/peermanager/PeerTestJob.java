@@ -731,7 +731,7 @@ public class PeerTestJob extends JobImpl {
                 RouterInfo peerInfo = getContext().netDb().lookupRouterInfoLocally(h);
                 if (peerInfo != null) {
                     String cap = peerInfo.getCapabilities();
-                    boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
+                    boolean reachable = cap != null && cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
                     String bw = peerInfo.getBandwidthTier();
                     PeerProfile prof = getContext().profileOrganizer().getProfile(h);
                     if (prof != null && cap != null && reachable && (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {

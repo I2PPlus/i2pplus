@@ -147,7 +147,7 @@ class LoadRouterInfoJob extends JobImpl {
                     if (riTime > now || now - riTime > 45*60*1000) {
                         // prevent netdb store failure and rekey
                         _us = null;
-                        try { fis1.close(); } catch (IOException ioe2) { /* ignored */ }
+                        if (fis1 != null) try { fis1.close(); } catch (IOException ioe2) { /* ignored */ }
                         fis1 = null;
                         rif.delete();
                     }

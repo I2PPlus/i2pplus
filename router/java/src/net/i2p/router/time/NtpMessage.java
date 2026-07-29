@@ -1,5 +1,6 @@
 package net.i2p.router.time;
 // License: BSD. See docs/LICENSES.md
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -441,18 +442,16 @@ class NtpMessage {
      * Returns a timestamp (number of seconds since 00:00 1-Jan-1900) as a
      * formatted date/time string.
      */
+    private static final ThreadLocal<DateFormat> _DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.US));
+
     private static String timestampToString(double timestamp) {
         if(timestamp==0) return "0";
 
-        // timestamp is relative to 1900, utc is used by Java and is relative
-        // to 1970
         double utc = timestamp - NtpClient.SECONDS_1900_TO_EPOCH;
 
-        // milliseconds
         long ms = (long) (utc * 1000.0);
 
-        // date/time
-        String date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.US).format(new Date(ms));
+        String date = _DATE_FORMAT.get().format(new Date(ms));
 
         // fraction
         double fraction = timestamp - ((long) timestamp);

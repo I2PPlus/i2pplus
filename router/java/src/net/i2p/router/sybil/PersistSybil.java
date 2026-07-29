@@ -1,5 +1,6 @@
 package net.i2p.router.sybil;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -118,7 +119,7 @@ public class PersistSybil {
         File dir = new File(_context.getConfigDir(), DIR);
         File file = new File(dir, PFX + date + SFX);
         Map<Hash, Points> rv = new HashMap<>();
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), StandardCharsets.UTF_8))) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new BufferedInputStream(new FileInputStream(file))), StandardCharsets.UTF_8))) {
             String line;
             while ((line = in.readLine()) != null) {
                 if (line.startsWith("#"))
@@ -157,7 +158,7 @@ public class PersistSybil {
         List<Long> dates = load();
         for (Long date : dates) {
             File file = new File(dir, PFX + date + SFX);
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), StandardCharsets.UTF_8))) {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new BufferedInputStream(new FileInputStream(file))), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = in.readLine()) != null) {
                     if (!line.startsWith(bh))
@@ -288,7 +289,7 @@ public class PersistSybil {
         Map<String, Long> rv = null;
         if (blFile.exists()) {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                        new FileInputStream(blFile), StandardCharsets.UTF_8))) {
+                        new BufferedInputStream(new FileInputStream(blFile)), StandardCharsets.UTF_8))) {
                 rv = new HashMap<>();
                 String buf = null;
                 long now = _context.clock().now() + 5*60*1000L;

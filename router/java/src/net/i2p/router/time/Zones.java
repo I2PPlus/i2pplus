@@ -1,5 +1,6 @@
 package net.i2p.router.time;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -95,7 +96,7 @@ class Zones {
             return;
         }
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(geoFile), StandardCharsets.UTF_8))) {
+                    new BufferedInputStream(new FileInputStream(geoFile)), StandardCharsets.UTF_8))) {
             String line = null;
             while ((line = br.readLine()) != null) {
                 try {

@@ -1,5 +1,6 @@
 package net.i2p.router.tasks;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -202,7 +203,7 @@ public class InstallUpdate {
         int deleted = 0;
         int failed = 0;
         // this is similar to FileUtil.readTextFile() but we can't use any I2P classes here
-        try (FileInputStream fis = new FileInputStream(deleteFile);
+        try (BufferedInputStream fis = new BufferedInputStream(new FileInputStream(deleteFile));
              BufferedReader in = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8))) {
             String line;
             while ( (line = in.readLine()) != null) {
