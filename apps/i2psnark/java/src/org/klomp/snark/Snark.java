@@ -1002,12 +1002,21 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.9.46
      */
     static class RouterException extends RuntimeException {
-        /** @param s error message */
+        /**
+         * With message only.
+         *
+         * @param s error message
+         */
         public RouterException(String s) {
             super(s);
         }
 
-        /** @param s error message @param t cause */
+        /**
+         * With message and cause.
+         *
+         * @param s error message
+         * @param t cause
+         */
         public RouterException(String s, Throwable t) {
             super(s, t);
         }
@@ -1265,6 +1274,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     public CommentSet getComments() {
         synchronized (_commentLock) {
+            if (_comments != null) {
+                return new CommentSet(_comments);
+            }
             return _comments;
         }
     }

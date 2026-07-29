@@ -107,8 +107,18 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
     private void reduceTunnels() {
         _isIdle = true;
         boolean isStandalone = !_util.getContext().isRouterContext();
-        int ibtunnels = Integer.parseInt(_util.getI2CPOptions().get("inbound.quantity"));
-        int obtunnels = Integer.parseInt(_util.getI2CPOptions().get("outbound.quantity"));
+        int ibtunnels;
+        int obtunnels;
+        try {
+            ibtunnels = Integer.parseInt(_util.getI2CPOptions().get("inbound.quantity"));
+        } catch (NumberFormatException nfe) {
+            ibtunnels = 1;
+        }
+        try {
+            obtunnels = Integer.parseInt(_util.getI2CPOptions().get("outbound.quantity"));
+        } catch (NumberFormatException nfe) {
+            obtunnels = 1;
+        }
         int minTunnels = isStandalone ? 2 : 1;
         if (ibtunnels > minTunnels || obtunnels > minTunnels) {
             String msg =
@@ -247,7 +257,11 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
      * @return the active inbound count
      */
     public int getActiveInboundCount() {
-        return Integer.parseInt(_lastIn);
+        try {
+            return Integer.parseInt(_lastIn);
+        } catch (NumberFormatException nfe) {
+            return 2;
+        }
     }
 
     /**
@@ -257,6 +271,10 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
      * @return the active outbound count
      */
     public int getActiveOutboundCount() {
-        return Integer.parseInt(_lastOut);
+        try {
+            return Integer.parseInt(_lastOut);
+        } catch (NumberFormatException nfe) {
+            return 2;
+        }
     }
 }

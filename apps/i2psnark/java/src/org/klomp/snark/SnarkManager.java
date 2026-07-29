@@ -2,6 +2,8 @@ package org.klomp.snark;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.Collator;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +30,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import net.i2p.I2PAppContext;
@@ -647,11 +651,18 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * @return current time or 0 if no util
      */
+    private static final ThreadLocal<DateFormat> DATE_FORMAT = new ThreadLocal<DateFormat>() {
+        @Override
+        protected DateFormat initialValue() {
+            SimpleDateFormat fmt = new SimpleDateFormat("dd/MM HH:mm:ss", Locale.US);
+            fmt.setTimeZone(TimeZone.getTimeZone("UTC"));
+            return fmt;
+        }
+    };
+
     public String getTime() {
-        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM HH:mm:ss", Locale.US);
         long now = System.currentTimeMillis();
-        fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
-        String date = fmt.format(new Date(now));
+        String date = DATE_FORMAT.get().format(new Date(now));
         return "<b class=date>" + date + "</b>";
     }
 
@@ -3928,7 +3939,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 return name;
             } catch (IOException ioe) {
                 addMessage(_t("Failed to copy torrent file to {0}", name));
-                _log.error("Failed to write torrent file -> " + ioe.getMessage());
+                _log.error("Failed to write torrent file", ioe);
             }
         }
         return null;
@@ -4152,7 +4163,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @return the tracker map
      */
     public Map<String, Tracker> getTrackerMap() {
-        return _trackerMap;
+        return new HashMap<>(_trackerMap);
     }
 
     /**
@@ -4162,7 +4173,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @return the torrent create filter map
      */
     public Map<String, TorrentCreateFilter> getTorrentCreateFilterMap() {
-        return _torrentCreateFilterMap;
+        return new HashMap<>(_torrentCreateFilterMap);
     }
 
     /**
@@ -4298,7 +4309,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         try (FileInputStream file =
                     new FileInputStream(_configDir + "/" + PROP_TORRENT_FILTERS_CONFIG);
-             ObjectInputStream in = new ObjectInputStream(file)) {
+             BufferedInputStream buf = new BufferedInputStream(file);
+             ObjectInputStream in = new ObjectInputStream(buf)) {
             Map<String, TorrentCreateFilter> filterMap = (Map) in.readObject();
             for (Map.Entry<String, TorrentCreateFilter> entry : filterMap.entrySet()) {
                 _torrentCreateFilterMap.put(entry.getKey(), entry.getValue());
@@ -4339,7 +4351,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private void setDefaultTrackerMap(boolean save) {
         _trackerMap.clear();
-        for (int i = 0; i < DEFAULT_TRACKERS.length; i += 2) {
+        for (int i = 0; i < DEFAULT_TRACKERS.length - 1; i += 2) {
             String name = DEFAULT_TRACKERS[i];
             if (name.equals("TheBland") && !SigType.ECDSA_SHA256_P256.isAvailable()) {
                 continue;
@@ -4358,7 +4370,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private void setDefaultTorrentCreateFilterMap(boolean save) {
         _torrentCreateFilterMap.clear();
-        for (int i = 0; i < DEFAULT_TORRENT_CREATE_FILTERS.length; i += 3) {
+        for (int i = 0; i < DEFAULT_TORRENT_CREATE_FILTERS.length - 2; i += 3) {
             String name = DEFAULT_TORRENT_CREATE_FILTERS[i];
             String filterPattern = DEFAULT_TORRENT_CREATE_FILTERS[i + 1];
             String filterType = DEFAULT_TORRENT_CREATE_FILTERS[i + 2];
@@ -4400,7 +4412,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public void saveTorrentCreateFilterMap() {
         try (FileOutputStream file =
                     new FileOutputStream(_configDir + "/" + PROP_TORRENT_FILTERS_CONFIG);
-             ObjectOutputStream out = new ObjectOutputStream(file)) {
+             BufferedOutputStream buf = new BufferedOutputStream(file);
+             ObjectOutputStream out = new ObjectOutputStream(buf)) {
             out.writeObject(_torrentCreateFilterMap);
         } catch (IOException ex) {
             String msg = _t("Unable to save torrent create file filter config: ");

@@ -234,7 +234,7 @@ class BasicServlet extends HttpServlet {
                 _log.warn("Error sending " + pathInContext, e);
             }
             if (!response.isCommitted()) {
-                response.sendError(500, e.getMessage());
+                response.sendError(500);
             }
         } catch (IOException e) { // typical browser abort
             if (_log.shouldWarn()) {
@@ -324,7 +324,7 @@ class BasicServlet extends HttpServlet {
             }
         } catch (IllegalArgumentException iae) {
             if (!response.isCommitted()) {
-                response.sendError(400, iae.getMessage());
+                response.sendError(400);
             }
             throw iae;
         }
@@ -536,7 +536,10 @@ class BasicServlet extends HttpServlet {
     private class LimitFileContent extends FileContent {
         private final long _limit;
 
-        /** @param file the file @param limit max bytes to serve */
+        /**
+         * @param file the file
+         * @param limit max bytes to serve
+         */
         public LimitFileContent(File file, long limit) {
             super(file);
             _limit = Math.min(limit, file.length());

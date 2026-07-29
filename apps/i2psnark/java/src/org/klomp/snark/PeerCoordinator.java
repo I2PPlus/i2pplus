@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -669,7 +670,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         return metainfo;
     }
 
-    /** @return info hash */
+    /**
+     * The info hash for this torrent.
+     *
+     * @return info hash
+     */
     public byte[] getInfoHash() {
         return infohash;
     }
@@ -2018,7 +2023,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @since 0.8.4
      */
     Set<PeerID> getPEXPeers() {
-        return pexPeers;
+        return new HashSet<>(pexPeers);
     }
 
     /**

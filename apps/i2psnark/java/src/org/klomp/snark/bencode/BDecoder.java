@@ -210,9 +210,19 @@ public class BDecoder {
         int len = s.length();
         // save a little space if we're sure it will fit
         Number num;
-        if (len < 10) num = Integer.valueOf(s);
-        else if (len < 19) num = Long.valueOf(s);
-        else if (len > 256) throw new InvalidBEncodingException("Too many digits: " + len);
+        if (len < 10) {
+            try {
+                num = Integer.valueOf(s);
+            } catch (NumberFormatException nfe) {
+                num = Long.valueOf(s);
+            }
+        } else if (len < 19) {
+            try {
+                num = Long.valueOf(s);
+            } catch (NumberFormatException nfe) {
+                num = new BigInteger(s);
+            }
+        } else if (len > 256) throw new InvalidBEncodingException("Too many digits: " + len);
         else num = new BigInteger(s);
         return new BEValue(num);
     }

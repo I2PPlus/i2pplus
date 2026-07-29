@@ -13,6 +13,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
@@ -150,6 +151,25 @@ public class I2PSnarkServlet extends BasicServlet {
     static final char HELLIP = '\u2026';
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
+    private static final ThreadLocal<DateFormat> _DATE_FMT1 = new ThreadLocal<DateFormat>() {
+        @Override
+        protected DateFormat initialValue() {
+            return new SimpleDateFormat("HH:mm, EEE dd MMM yyyy", Locale.US);
+        }
+    };
+    private static final ThreadLocal<DateFormat> _DATE_FMT2 = new ThreadLocal<DateFormat>() {
+        @Override
+        protected DateFormat initialValue() {
+            return new SimpleDateFormat("HH:mm, EEE dd MMMM yyyy", Locale.US);
+        }
+    };
+    private static final ThreadLocal<DateFormat> _DATE_FMT3 = new ThreadLocal<DateFormat>() {
+        @Override
+        protected DateFormat initialValue() {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
+        }
+    };
+
     /** Search results */
     private int searchResults;
     private static boolean debug = false;
@@ -497,7 +517,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // Set Content Security Policy header for JS requests
         String csp = "default-src 'self'; base-uri 'self'; connect-src 'self'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ";
-        if (path.contains(".js")) {resp.setHeader("Content-Security-Policy", csp);}
+        if (path != null && path.contains(".js")) {resp.setHeader("Content-Security-Policy", csp);}
 
         // Handle static resource under WARBASE only supporting GET/HEAD
         if (path != null && path.startsWith(WARBASE)) {
@@ -946,7 +966,8 @@ public class I2PSnarkServlet extends BasicServlet {
         String refresh = String.valueOf(_manager.getRefreshDelaySeconds());
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=utf-8");
-        int maxAge = Math.min(Integer.parseInt(refresh), 60);
+        int maxAge = 60;
+        try { maxAge = Math.min(Integer.parseInt(refresh), 60); } catch (NumberFormatException nfe) {}
         resp.setHeader("Cache-Control", "private, no-cache, max-age=" + maxAge);
         resp.setHeader("Content-Security-Policy", "default-src 'none'; child-src 'self'");
     }
@@ -2820,7 +2841,12 @@ public class I2PSnarkServlet extends BasicServlet {
         return;
     }
 
-    /** @param action the action @param req the request */
+    /**
+     * Process tracker form submission.
+     *
+     * @param action the action
+     * @param req the request
+     */
     private void processTrackerForm(String action, HttpServletRequest req) {
         if (action.equals(_t("Delete selected")) || action.equals(_t("Save tracker configuration"))) {
             boolean changed = false;
@@ -2897,7 +2923,12 @@ public class I2PSnarkServlet extends BasicServlet {
         } else {_manager.addMessage("Unknown POST action: \"" + action + '\"');}
     }
 
-    /** @param action the action @param req the request */
+    /**
+     * Process torrent create filter form submission.
+     *
+     * @param action the action
+     * @param req the request
+     */
     private void processTorrentCreateFilterForm(String action, HttpServletRequest req) {
         if (action.equals(_t("Delete selected")) || action.equals(_t("Save Filter Configuration"))) {
             boolean changed = false;
@@ -3195,7 +3226,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (remaining > 0) {
                 buf.append(buildProgressBar(total, remaining, true, true, noThinsp, true));
             } else if (remaining == 0) {
-                SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy", Locale.US);
+                DateFormat fmt = _DATE_FMT1.get();
                 fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
                 long[] dates = _manager.getSavedAddedAndCompleted(snark);
                 String date = fmt.format(new Date(dates[1]));
@@ -3228,7 +3259,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                 } else if (uploaded > 0) {
                     buf.append("<span class=tx title=\"").append(_t("Share ratio")).append(": ").append(txPercent).append(" %");
-                    SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy", Locale.US);
+                    DateFormat fmt = _DATE_FMT1.get();
                     Storage storage = snark.getStorage();
                     if (storage != null) {
                         long lastActive = storage.getActivity();
@@ -5302,12 +5333,12 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</a></th></tr>\n");
 
         long dat = (meta != null) ? meta.getCreationDate() : 0;
-        SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMMM yyyy", Locale.US);
         long[] dates = _manager.getSavedAddedAndCompleted(snark);
+        DateFormat fmt = _DATE_FMT2.get();
 
         buf.append("<tr id=torrentInfoStats>").append("<td colspan=3><span class=nowrap");
         if (dat > 0) {
-            String date = fmt.format(new Date(dat));
+            String date = _DATE_FMT2.get().format(new Date(dat));
             buf.append(" title=\"").append(_t("Created")).append(": ").append(date).append("\"");
         }
         buf.append(">");
@@ -5906,7 +5937,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</table>\n");
         int ccount = 0;
         if (iter != null) {
-            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
+            DateFormat fmt = _DATE_FMT3.get();
             fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
             buf.append("<table id=userComments>\n");
             while (iter.hasNext()) {
@@ -6140,7 +6171,12 @@ public class I2PSnarkServlet extends BasicServlet {
         return buf.toString();
     }
 
-    /** @param snark the torrent @param postParams the form params */
+    /**
+     * Save file priority changes for a torrent.
+     *
+     * @param snark the torrent
+     * @param postParams the form params
+     */
     private void savePriorities(Snark snark, Map<String, String[]> postParams) {
         Storage storage = snark.getStorage();
         if (storage == null) {return;}
@@ -6160,7 +6196,12 @@ public class I2PSnarkServlet extends BasicServlet {
         _manager.saveTorrentStatus(snark);
     }
 
-    /** @param snark the torrent @param postParams the form params */
+    /**
+     * Save comment changes for a torrent.
+     *
+     * @param snark the torrent
+     * @param postParams the form params
+     */
     private void saveComments(Snark snark, Map<String, String[]> postParams) {
         String[] a = postParams.get("myRating");
         String r = (a != null) ? a[0] : null;
@@ -6175,7 +6216,12 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!changed) {_log.warn("Add of comment ID " + com.getID() + " failed");}
     }
 
-    /** @param snark the torrent @param postParams the form params */
+    /**
+     * Delete comments for a torrent.
+     *
+     * @param snark the torrent
+     * @param postParams the form params
+     */
     private void deleteComments(Snark snark, Map<String, String[]> postParams) {
         CommentSet cs = snark.getComments();
         if (cs == null) {return;}
@@ -6193,7 +6239,12 @@ public class I2PSnarkServlet extends BasicServlet {
         }
     }
 
-    /** @param snark the torrent @param postParams the form params */
+    /**
+     * Save comment enabled setting for a torrent.
+     *
+     * @param snark the torrent
+     * @param postParams the form params
+     */
     private void saveCommentsSetting(Snark snark, Map<String, String[]> postParams) {
         boolean yes = postParams.get("enableComments") != null;
         _manager.setSavedCommentsEnabled(snark, yes);
@@ -6430,7 +6481,12 @@ public class I2PSnarkServlet extends BasicServlet {
         _manager.addMessage("Torrent changes saved");
     }
 
-    /** @param req the request */
+    /**
+     * Whether the user agent cannot handle collapsible panels.
+     *
+     * @param req the request
+     * @return true if panels should not be collapsed
+     */
     private static boolean noCollapsePanels(HttpServletRequest req) {
         // check for user agents that can't toggle the collapsible panels...
         // TODO: QupZilla supports panel collapse as of circa v2.1.2, so disable conditionally
