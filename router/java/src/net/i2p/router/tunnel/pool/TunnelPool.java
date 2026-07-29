@@ -524,7 +524,7 @@ public class TunnelPool {
             }
         }
 
-        if (_alive && !avoidZeroHop) {buildFallback();}
+        if (_alive) {buildFallback();}
         if (allowRecurseOnFail) {return selectTunnel(false);}
         else {return null;}
     }
@@ -1499,6 +1499,10 @@ public class TunnelPool {
                     _tunnels.add(info);
                     _recentlyAddedTunnels.put(gatewayId, now);
                 }
+                // After adding a non-zero-hop tunnel, prune any bootstrap zero-hop tunnels
+                if (_settings.getLength() > 0 && info.getLength() > 1) {
+                    pruneZeroHopTunnels();
+                }
                 if (_settings.isInbound() && !_settings.isExploratory()) {ls = locked_buildNewLeaseSet();}
             }
         } finally {_tunnelsLock.unlock();}
@@ -1615,9 +1619,7 @@ public class TunnelPool {
                 if (_log.shouldWarn()) {
                     _log.warn(toString() + " -> Unable to build LeaseSet on sync removal (" + remaining + " remaining)");
                 }
-                if (_settings.getAllowZeroHop()) {
-                    buildFallback();
-                }
+                buildFallback();
             }
         }
 
@@ -1629,6 +1631,27 @@ public class TunnelPool {
         }
 
         return removed;
+    }
+
+    /**
+     * Remove any zero-hop bootstrap tunnels from the pool.
+     * Only removes tunnels with getLength() &lt;= 1 when the pool is configured
+     * for &gt;0 hops.  Caller must hold _tunnelsLock.
+     */
+    private void pruneZeroHopTunnels() {
+        Iterator<TunnelInfo> iter = _tunnels.iterator();
+        while (iter.hasNext()) {
+            TunnelInfo t = iter.next();
+            if (t.getLength() <= 1) {
+                if (_log.shouldInfo()) {
+                    _log.info(toString() + " -> Removing bootstrap zero-hop tunnel " + t);
+                }
+                if (t instanceof PooledTunnelCreatorConfig) {
+                    ExpireJob.removeFromExpiration((PooledTunnelCreatorConfig) t);
+                }
+                iter.remove();
+            }
+        }
     }
 
     /**
@@ -1666,6 +1689,10 @@ public class TunnelPool {
                 continue;
             }
             // else: no GOOD tunnels exist and this is UNTESTED — include as fallback
+            // Never publish zero-hop tunnels for pools configured for >0 hops
+            if (tunnel.getLength() <= 1 && _settings.getLength() > 0) {
+                continue;
+            }
 
             TunnelId inId = tunnel.getReceiveTunnelId(0);
             Hash gw = tunnel.getPeer(0);
@@ -2122,19 +2149,15 @@ public class TunnelPool {
      *  @return true if a fallback tunnel is built, false otherwise
      */
     boolean buildFallback() {
-        int quantity = getAdjustedTotalQuantity();
         int usable = getValidTunnelCount();
         if (usable > 0) {return false;}
 
-        if (_settings.isExploratory() || _settings.getAllowZeroHop()) {
-            if (_log.shouldInfo()) {
-                _log.info(toString() + "\n* Building a fallback tunnel (Usable: " + usable + "; Needed: " + quantity + ")");
-            }
-            // runs inline, since its 0hop
-            _manager.getExecutor().buildTunnel(configureNewTunnel(true));
-            return true;
+        if (_log.shouldInfo()) {
+            _log.info(toString() + "\n* Building a fallback tunnel");
         }
-        return false;
+        // runs inline, since its 0hop
+        _manager.getExecutor().buildTunnel(configureNewTunnel(true));
+        return true;
     }
 
     /**
@@ -2276,6 +2299,11 @@ public class TunnelPool {
             if (tunnel.getExpiration() <= expireAfter) {continue;}
 
             if (tunnel.getLength() <= 1) {
+                // For pools configured for >0 hops, never publish zero-hop tunnels
+                // to LeaseSets — they expose the router directly.
+                if (_settings.getLength() > 0) {
+                    continue;
+                }
                 // More than one zero-hop tunnel in a lease is pointless
                 // and increases the leaseset size needlessly.
                 // Keep only the one that expires the latest.
