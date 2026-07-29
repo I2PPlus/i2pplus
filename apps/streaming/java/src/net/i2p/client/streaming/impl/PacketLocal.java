@@ -194,7 +194,8 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     public void incrementNACKs() {
         final int cnt = _nackCount.incrementAndGet();
         if (cnt >= Connection.FAST_RETRANSMIT_THRESHOLD && (!_retransmitted) &&
-            (_numSends.get() == 1 || _lastSend < _context.clock().now() - 4*1000)) {  // Don't fast retx if we recently resent it
+            _lastSend > 0 && _lastSend < _context.clock().now() -
+                Math.max(4000, _connection != null ? _connection.getOptions().getRTT() : 4000)) {
             _retransmitted = true;
             Connection.ResendPacketEvent evt = _connection.newResendPacketEvent(this);
             evt.fastRetransmit();

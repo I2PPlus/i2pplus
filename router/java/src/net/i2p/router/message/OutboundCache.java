@@ -49,6 +49,13 @@ public class OutboundCache {
     final ConcurrentHashMap<HashPair, TunnelInfo> backloggedTunnelCache = new ConcurrentHashMap<>(128, 0.9f, 16);
 
     /**
+     * Tracks when each tunnel was first selected for a source-destination pair,
+     * to prevent rapid tunnel switching that causes out-of-order delivery
+     * and unnecessary NACKs in the streaming layer.
+     */
+    final ConcurrentHashMap<HashPair, Long> tunnelStartTime = new ConcurrentHashMap<>(128, 0.9f, 16);
+
+    /**
      * LeaseSet cache keyed by source-destination pairs.
      * Controls when to bundle our own LeaseSet to reduce overhead on repeated communications.
      */
@@ -141,6 +148,7 @@ public class OutboundCache {
         if (outTunnel != null) {
             backloggedTunnelCache.remove(hashPair, outTunnel);
             tunnelCache.remove(hashPair, outTunnel);
+            tunnelStartTime.remove(hashPair);
         }
     }
 
@@ -154,6 +162,7 @@ public class OutboundCache {
         leaseSetCache.clear();
         leaseCache.clear();
         backloggedTunnelCache.clear();
+        tunnelStartTime.clear();
         tunnelCache.clear();
         lastReplyRequestCache.clear();
         multihomedCache.clear();
@@ -257,6 +266,8 @@ public class OutboundCache {
             cleanLeaseCache(leaseCache);
             cleanTunnelCache(_context, tunnelCache);
             cleanTunnelCache(_context, backloggedTunnelCache);
+            // Remove stale tunnel start times for tunnels no longer cached
+            tunnelStartTime.keySet().removeIf(k -> !tunnelCache.containsKey(k));
             cleanReplyCache(_context, lastReplyRequestCache);
             cleanMultihomedCache(_context, multihomedCache);
             schedule(CLEAN_INTERVAL);

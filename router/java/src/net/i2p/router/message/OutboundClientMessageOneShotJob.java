@@ -181,6 +181,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     private static final int REPLY_REQUEST_INTERVAL = 60*1000;
 
+    /**
+     * Minimum time in ms to keep using the same outbound tunnel for a given
+     * source-destination pair, to prevent rapid tunnel switching that causes
+     * out-of-order delivery and unnecessary NACKs in the streaming layer.
+     */
+    private static final long MIN_TUNNEL_USAGE = 5*1000L;
+
     private static final long[] RATES = new long[] { 60*1000L };
 
     /**
@@ -616,8 +623,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             return;
         }
 
-        boolean isStale = _leaseSet != null && !_leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR / 4);
-        if (isStale && _log.shouldWarn()) {
+        if (_leaseSet != null && !_leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR / 4) && _log.shouldWarn()) {
             _log.warn("[MSG-TRACE] Sending with STALE LeaseSet for " + _toString + " (expires " +
                       DataHelper.formatDuration(now - _leaseSet.getLatestLeaseDate()) + " ago)");
         }
@@ -809,8 +815,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     // so we can keep waiting for the reply and restore the tags (success-after-failure)
                     // We cancel the timeout job in the success job
                     getContext().messageRegistry().registerPending(_selector, _replyFound, null);
-                    _replyTimeout.getTiming().setStartAfter(_overallExpiration);
-                    getContext().jobQueue().addJob(_replyTimeout);
+                    if (_replyTimeout != null) {
+                        _replyTimeout.getTiming().setStartAfter(_overallExpiration);
+                        getContext().jobQueue().addJob(_replyTimeout);
+                    }
                     if (_log.shouldInfo()) {
                         _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() + "] Reply selector expires " +
                                   DataHelper.formatDuration(_selector.getExpiration() - _overallExpiration) +
@@ -917,6 +925,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                         return tunnel;
                     }
                     // backlogged
+                    // Keep using the same tunnel if we just started, to prevent
+                    // out-of-order delivery that causes unnecessary NACK storms.
+                    Long startTime = _cache.tunnelStartTime.get(_hashPair);
+                    if (startTime != null &&
+                        getContext().clock().now() - startTime.longValue() < MIN_TUNNEL_USAGE) {
+                        return tunnel;
+                    }
                     if (_log.shouldWarn()) {
                         _log.warn("Switching from backlogged [Tunnel " + tunnel + "] for " + _toString);
                     }
@@ -926,7 +941,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
             // Pick a new tunnel
             tunnel = selectOutboundTunnel();
-            if (tunnel != null) {_cache.tunnelCache.put(_hashPair, tunnel);}
+            if (tunnel != null) {
+                _cache.tunnelCache.put(_hashPair, tunnel);
+                _cache.tunnelStartTime.put(_hashPair, Long.valueOf(getContext().clock().now()));
+            }
             _wantACK = true;
         }
         return tunnel;
