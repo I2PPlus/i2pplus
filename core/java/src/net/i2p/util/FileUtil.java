@@ -3,6 +3,7 @@ package net.i2p.util;
 import net.i2p.data.DataHelper;
 
 import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -392,7 +393,8 @@ public class FileUtil {
         File f = new File(filename);
         if (!f.exists()) return null;
         try (FileInputStream fis = new FileInputStream(f);
-             BufferedReader in = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8))) {
+             BufferedInputStream bis = new BufferedInputStream(fis);
+             BufferedReader in = new BufferedReader(new InputStreamReader(bis, StandardCharsets.UTF_8))) {
             List<String> lines = new ArrayList<>(maxNumLines > 0 ? maxNumLines : 64);
             String line = null;
             while ((line = in.readLine()) != null) {

@@ -725,10 +725,10 @@ public class NativeBigInteger extends BigInteger {
     /**
      *  Copy constructor from a BigInteger. Warning, not very efficient.
      */
-    public NativeBigInteger(BigInteger integer) {
+    public NativeBigInteger(BigInteger val) {
         // Now, why doesn't sun provide a constructor
         // like this one in BigInteger?
-        this(integer.toByteArray());
+        this(val.toByteArray());
     }
 
     /**

@@ -474,8 +474,10 @@ public class LogManager implements Flushable {
             }
             // the writer waits 10 seconds *or* until we tell them to wake up
             // before rereading the config and writing out any log messages
-            synchronized (_writer) {
-                _writer.notifyAll();
+            if (_writer != null) {
+                synchronized (_writer) {
+                    _writer.notifyAll();
+                }
             }
             // block as a way of slowing down out-of-control loggers (a little)
             try {
@@ -484,8 +486,10 @@ public class LogManager implements Flushable {
                 // interrupted while waiting to add log record, drop it
             }
         } else if (_flushInterval <= 0) {
-            synchronized (_writer) {
-                _writer.notifyAll();
+            if (_writer != null) {
+                synchronized (_writer) {
+                    _writer.notifyAll();
+                }
             }
         }
     }

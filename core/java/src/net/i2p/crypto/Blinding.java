@@ -38,11 +38,14 @@ public final class Blinding {
     // following copied from RouterKeyGenerator
     private static final String FORMAT = "yyyyMMdd";
     private static final int LENGTH = FORMAT.length();
-    private static final SimpleDateFormat _fmt = new SimpleDateFormat(FORMAT, Locale.US);
-
-    static {
-        _fmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-    }
+    private static final ThreadLocal<SimpleDateFormat> _DATE_FMT = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            SimpleDateFormat fmt = new SimpleDateFormat(FORMAT, Locale.US);
+            fmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+            return fmt;
+        }
+    };
 
     private Blinding() {}
 
@@ -140,9 +143,7 @@ public final class Blinding {
         SigType type = destspk.getType();
         if (type != TYPE && type != TYPER) throw new IllegalArgumentException("Unsupported blinding from " + type);
         String modVal;
-        synchronized (_fmt) {
-            modVal = _fmt.format(now);
-        }
+        modVal = _DATE_FMT.get().format(now);
         if (modVal.length() != LENGTH) throw new IllegalStateException();
         byte[] mod = DataHelper.getASCII(modVal);
         byte[] data;

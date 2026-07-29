@@ -2071,7 +2071,7 @@ public class EepGet {
             buf.append("Content-length: ");
             if (_postData != null) {buf.append(_postData.length());}
             else if (_postBinaryData != null) {buf.append(_postBinaryData.length);}
-            else {buf.append(_postDataFile.length());}
+            else if (_postDataFile != null) {buf.append(_postDataFile.length());}
             buf.append("\r\n");
         }
         // This will be replaced if we are going through I2PTunnelHTTPClient

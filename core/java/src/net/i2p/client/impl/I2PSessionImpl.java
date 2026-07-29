@@ -1683,12 +1683,12 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * called by the message handler
      *
-     * @param i the bandwidth limits
+     * @param limits the bandwidth limits
      */
-    void bwReceived(int[] i) {
-        _bwLimits = i;
+    void bwReceived(int[] limits) {
+        _bwLimits = limits;
         synchronized (_bwReceivedLock) {
-            _bwLimits = i; // State change for SpotBugs
+            _bwLimits = limits; // State change for SpotBugs
             _bwReceivedLock.notifyAll();
         }
     }

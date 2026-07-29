@@ -78,10 +78,12 @@ class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandle
             }
 
             // Service records, proposal 167
-            String k = "i2cp.leaseSetOption.0";
             Properties props = null;
+            StringBuilder buf = new StringBuilder(32);
             for (int i = 0; i < 10; i++) {
-                String v = opts.getProperty(k);
+                buf.setLength(0);
+                buf.append("i2cp.leaseSetOption.").append(i);
+                String v = opts.getProperty(buf.toString());
                 if (v == null) {
                     break;
                 }
@@ -93,7 +95,6 @@ class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandle
                     props = new OrderedProperties();
                 }
                 props.setProperty(vs[0], vs[1]);
-                k = "i2cp.leaseSetOption." + (i + 1);
             }
             if (props != null) {
                 ls2.setOptions(props);

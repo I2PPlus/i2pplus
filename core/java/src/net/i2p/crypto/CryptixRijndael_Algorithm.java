@@ -126,7 +126,7 @@ public final class CryptixRijndael_Algorithm {
             pivot = AA[i][i];
             if (pivot == 0) {
                 t = i + 1;
-                while ((AA[t][i] == 0) && (t < 4))
+                while ((t < 4) && (AA[t][i] == 0))
                     t++;
                 if (t == 4)
                     throw new RuntimeException("G matrix is not invertible");

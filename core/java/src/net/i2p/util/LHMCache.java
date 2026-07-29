@@ -12,12 +12,13 @@ import java.util.Map;
  *  @param <K> type of keys in this cache
  *  @param <V> type of values in this cache
  */
-@SuppressWarnings("java:S2975")
 public class LHMCache<K, V> extends LinkedHashMap<K, V> {
     /**  max */
     private final int _max;
 
     /**
+     * Bounded cache with LRU eviction.
+     *
      * @param max maximum entries before oldest are evicted
      */
     public LHMCache(int max) {
@@ -29,8 +30,9 @@ public class LHMCache<K, V> extends LinkedHashMap<K, V> {
      * Shallow clone.
      */
     @Override
-    public Object clone() {
-        return super.clone();
+    @SuppressWarnings("unchecked")
+    public LHMCache<K, V> clone() {
+        return (LHMCache<K, V>) super.clone();
     }
 
     /**

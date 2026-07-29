@@ -12,7 +12,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Mathiasdm
  *
  */
-@SuppressWarnings("java:S2975")
 public class I2PProperties extends Properties {
 
     /**
@@ -22,43 +21,51 @@ public class I2PProperties extends Properties {
     private final List<I2PPropertyCallback> _callbacks = new CopyOnWriteArrayList<>();
 
     /**
-     * clone.
+     * Returns a shallow copy of this properties instance.
      */
     @Override
-    public Object clone() {
-        return super.clone();
+    public I2PProperties clone() {
+        return (I2PProperties) super.clone();
     }
 
     /**
-     * I2PProperties.
+     * Constructs an empty I2PProperties with no default values.
      */
     public I2PProperties() {
         super();
     }
 
     /**
-     * I2PProperties.
+     * Constructs an I2PProperties with the given default values.
+     *
+     * @param defaults the default property values
      */
     public I2PProperties(Properties defaults) {
         super(defaults);
     }
 
     /**
-     * addCallBack.
+     * Registers a callback for property change notifications.
+     *
+     * @param callback the callback to register
      */
     public void addCallBack(I2PPropertyCallback callback) {
         _callbacks.add(callback);
     }
 
     /**
-     * removeCallBack.
+     * Unregisters a callback.
+     *
+     * @param callback the callback to remove
      */
     public void removeCallBack(I2PPropertyCallback callback) {
         _callbacks.remove(callback);
     }
 
     /**
-     * setProperty.
+     * Sets a property and notifies registered callbacks.
+     *
+     * @return the previous value, or null
      */
     @Override
     public Object setProperty(String key, String value) {

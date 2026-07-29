@@ -609,7 +609,7 @@ public class SSLEepGet extends EepGet {
         if (_out != null) _out.close();
         _out = null;
 
-        if (_isGzippedResponse) {
+        if (_isGzippedResponse && pusher != null) {
             try {
                 pusher.join();
             } catch (InterruptedException ie) { /* ignored */ }
