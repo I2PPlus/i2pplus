@@ -282,6 +282,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *
      */
     protected void noteProxyResult(String proxy, String host, boolean isSSL, boolean ok) {
+        if (proxy == null) { return; }
         if (isSSL) {
             synchronized (_proxySSLCache) {
                 if (ok) {
@@ -430,7 +431,9 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         private final long expires;
         private final BitSet counts;
 
-        /** Constructor. */
+        /**
+         * @param exp expiration time
+         */
         public NonceInfo(long exp) {
             expires = exp;
             counts = new BitSet(MAX_NONCE_COUNT);

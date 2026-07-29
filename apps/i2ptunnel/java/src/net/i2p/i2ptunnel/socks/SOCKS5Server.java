@@ -401,12 +401,16 @@ class SOCKS5Server extends SOCKSServer {
         switch (addressType) {
             case AddressType.IPV4:
             case AddressType.IPV6:
-                dreps.write(inetAddr.getAddress());
+                if (inetAddr != null) {
+                    dreps.write(inetAddr.getAddress());
+                }
                 break;
 
             case AddressType.DOMAINNAME:
-                dreps.writeByte(domainName.length());
-                dreps.writeBytes(domainName);
+                if (domainName != null) {
+                    dreps.writeByte(domainName.length());
+                    dreps.writeBytes(domainName);
+                }
                 break;
 
             default:

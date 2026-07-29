@@ -320,9 +320,10 @@ public abstract class LocalHTTPServer {
                         if ("newdh".equals(action) || "newpsk".equals(action)) {
                             String key;
                             if ("newdh".equals(action))
-                                key = publicKey.toBase64();
+                                key = publicKey != null ? publicKey.toBase64() : null;
                             else
-                                key = privateKey.toBase64();
+                                key = privateKey != null ? privateKey.toBase64() : null;
+                            if (key == null) { return; }
                             StringBuilder buf = new StringBuilder(1024);
                             PortMapper pm = context.portMapper();
                             String conURL = pm.getConsoleURL();

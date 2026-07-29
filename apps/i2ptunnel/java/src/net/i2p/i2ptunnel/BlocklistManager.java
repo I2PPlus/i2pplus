@@ -1,5 +1,7 @@
 package net.i2p.i2ptunnel;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -138,7 +140,7 @@ public class BlocklistManager {
     private Pattern compileRegexPattern(File blocklistFile) {
         StringBuilder regexBuilder = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(blocklistFile), StandardCharsets.UTF_8))) {
+                new InputStreamReader(new BufferedInputStream(new FileInputStream(blocklistFile)), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -205,7 +207,7 @@ public class BlocklistManager {
                 _clientBlockList.remove(0);
             }
             try (BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(new FileOutputStream(blocklistClients, true), StandardCharsets.UTF_8))) {
+                    new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(blocklistClients, true)), StandardCharsets.UTF_8))) {
                 writer.write(destination);
                 writer.newLine();
             } catch (IOException e) {
@@ -226,7 +228,7 @@ public class BlocklistManager {
         if (currentLastModified != _blocklistClientsLastModified) {
             _clientBlockList.clear();
             try (BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(new FileInputStream(blocklistClients), StandardCharsets.UTF_8))) {
+                    new InputStreamReader(new BufferedInputStream(new FileInputStream(blocklistClients)), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     line = line.trim();

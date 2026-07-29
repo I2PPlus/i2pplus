@@ -11,6 +11,7 @@ package net.i2p.i2ptunnel.web;
 import java.io.File;
 import java.io.IOException;
 import java.text.Collator;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -299,7 +300,11 @@ public class IndexBean {
         catch (NumberFormatException nfe) {_msgID = -1;}
     }
 
-    /** @return non-null */
+    /**
+     * Process the current action.
+     *
+     * @return non-null
+     */
     private String processAction() {
         if ((_action == null) || (_action.trim().length() <= 0) || ("Cancel".equals(_action))) {return "";}
         if (_group == null) {return _t("Error - tunnels are not initialized yet");}
@@ -574,6 +579,12 @@ public class IndexBean {
      *  Used to show ordered status updates with time information.
      */
     private static class TimestampedMessage {
+        private static final ThreadLocal<DateFormat> _FORMAT = new ThreadLocal<DateFormat>() {
+            @Override
+            protected DateFormat initialValue() {
+                return new SimpleDateFormat("dd/MM HH:mm:ss", Locale.US);
+            }
+        };
         final long timestamp;
         final String message;
 
@@ -593,7 +604,7 @@ public class IndexBean {
          *  @return the formatted timestamp string
          */
         public String getFormattedTimestamp() {
-            return new SimpleDateFormat("dd/MM HH:mm:ss", Locale.US).format(new Date(timestamp));
+            return _FORMAT.get().format(new Date(timestamp));
         }
     }
 
@@ -1174,7 +1185,11 @@ public class IndexBean {
      */
     public void setType(String type) {_config.setType(type);}
 
-    /** @return the tunnel type */
+    /**
+     * The tunnel type.
+     *
+     * @return the tunnel type
+     */
     String getType() { return _config.getType(); }
 
     /**

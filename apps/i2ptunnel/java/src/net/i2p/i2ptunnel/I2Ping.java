@@ -109,13 +109,22 @@ public class I2Ping extends I2PTunnelClientBase {
         while ((c = g.getopt()) != -1) {
             switch (c) {
                 case 't':
-                    timeout = Long.parseLong(g.getOptarg());
+                    try {
+                        timeout = Long.parseLong(g.getOptarg());
+                    } catch (NumberFormatException nfe) {
+                        error = true;
+                        break;
+                    }
                     if (timeout < 100) {
                         timeout *= 1000;
                     }
                     break;
                 case 'n':
-                    count = Integer.parseInt(g.getOptarg());
+                    try {
+                        count = Integer.parseInt(g.getOptarg());
+                    } catch (NumberFormatException nfe) {
+                        error = true;
+                    }
                     break;
                 case 'c':
                     countPing = true;
@@ -138,10 +147,18 @@ public class I2Ping extends I2PTunnelClientBase {
                     }
                     break;
                 case 'f':
-                    localPort = Integer.parseInt(g.getOptarg());
+                    try {
+                        localPort = Integer.parseInt(g.getOptarg());
+                    } catch (NumberFormatException nfe) {
+                        error = true;
+                    }
                     break;
                 case 'p':
-                    remotePort = Integer.parseInt(g.getOptarg());
+                    try {
+                        remotePort = Integer.parseInt(g.getOptarg());
+                    } catch (NumberFormatException nfe) {
+                        error = true;
+                    }
                     break;
                 case '?':
                 case ':':

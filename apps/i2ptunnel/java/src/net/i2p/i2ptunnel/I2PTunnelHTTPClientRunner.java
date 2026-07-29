@@ -141,7 +141,7 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
         } else {
             if (!keepaliveI2P) closeQuietly(i2pin);
             try {
-                if (keepaliveI2P) {i2pout.flush();}
+                if (keepaliveI2P) {if (i2pout != null) {i2pout.flush();}}
                 else {closeQuietly(i2pout);}
             } catch (IOException ignored) { /* ignored */ }
         }

@@ -187,7 +187,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                     break;
                 }
                 line = line.trim();
-                if (_log.shouldDebug() && line != null)
+                if (_log.shouldDebug())
                     _log.debug(getPrefix(requestId) + "Request: " + line);
 
                 if (method == null) { // first line CONNECT blah.i2p:80 HTTP/1.1

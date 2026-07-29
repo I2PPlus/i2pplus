@@ -6,6 +6,7 @@ package net.i2p.i2ptunnel;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ConnectException;
@@ -156,9 +157,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         _log = tunnel.getContext().logManager().getLog(getClass());
         this.l = l;
         init(host, port, tunnel);
-        FileInputStream fis = null;
+        InputStream fis = null;
         try {
-            fis = new FileInputStream(privkey);
+            fis = new BufferedInputStream(new FileInputStream(privkey));
             sockMgr = createManager(fis);
         } catch (IOException ioe) {
             _log.error("Cannot read private key data for " + privkeyname, ioe);
@@ -281,9 +282,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         name = props.getProperty("outbound.nickname");
         if (name != null) {props.setProperty("outbound.nickname", name + " (EdDSA)");}
         props.setProperty(I2PClient.PROP_SIGTYPE, "EdDSA_SHA512_Ed25519");
-        FileInputStream privData = null;
+        InputStream privData = null;
         try {
-            privData = new FileInputStream(altFile);
+            privData = new BufferedInputStream(new FileInputStream(altFile));
             I2PSession rv = sMgr.addSubsession(privData, props);
             checkOfflineExpiration(rv, name, " alternate destination");
             return rv;

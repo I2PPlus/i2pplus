@@ -5,6 +5,8 @@
 
 package net.i2p.i2ptunnel;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -65,7 +67,7 @@ public class BlacklistBean {
         File file = blacklistFile();
         if (file.isFile()) {
             StringBuilder buf = new StringBuilder();
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(file)), StandardCharsets.UTF_8))) {
                 String line;
                 while((line = br.readLine()) != null) {
                     buf.append(line);
@@ -83,7 +85,7 @@ public class BlacklistBean {
             if (parentDir != null && !parentDir.exists()) {
                 parentDir.mkdirs();
             }
-            try (FileOutputStream fos = new FileOutputStream(file)) {
+            try (BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(file))) {
                 // Create empty blacklist file
             } catch (IOException e) {
                 if (_log.shouldLog(Log.WARN))

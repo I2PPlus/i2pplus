@@ -400,7 +400,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      *  NOT a copy, Do NOT modify for per-connection options, make a copy.
      *  @return non-null, NOT a copy, do NOT modify for per-connection options
      */
-    public Properties getClientOptions() { return _clientOptions; }
+    public Properties getClientOptions() { return (Properties) _clientOptions.clone(); }
 
     /**
      *  TunnelController that constructed this, or null.
@@ -1754,7 +1754,12 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
               break;
 
             case 'e':
-              expires = Long.parseLong(g.getOptarg());
+              try {
+                expires = Long.parseLong(g.getOptarg());
+              } catch (NumberFormatException nfe) {
+                error = true;
+                break;
+              }
               break;
 
             case '?':
