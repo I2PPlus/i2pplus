@@ -420,7 +420,7 @@ class JobQueueScaler implements Runnable {
      */
     private double getScaleUpJobsRatio() {
         String prop = _context.getProperty(PROP_SCALE_JOBS_RATIO);
-        if (prop == _cachedScaleJobsRatioProp && _cachedScaleJobsRatioProp != null) {
+        if ((prop != null && prop.equals(_cachedScaleJobsRatioProp)) || prop == _cachedScaleJobsRatioProp) {
             return _cachedScaleJobsRatio;
         }
         _cachedScaleJobsRatioProp = prop;

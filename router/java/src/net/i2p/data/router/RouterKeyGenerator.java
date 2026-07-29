@@ -9,6 +9,7 @@ package net.i2p.data.router;
  *
  */
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -48,8 +49,6 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     public RouterKeyGenerator(I2PAppContext context) {
         _log = context.logManager().getLog(RoutingKeyGenerator.class);
         _context = context;
-        // make sure GMT is set, azi2phelper Vuze plugin is disabling static JVM TZ setting in Router.java
-        _fmt.setTimeZone(TimeZone.getTimeZone("GMT"));
         // ensure non-null mod data
         generateDateBasedModData();
     }
@@ -62,7 +61,14 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     private static final ZoneId GMT = ZoneId.of("GMT");
     private static final String FORMAT = "yyyyMMdd";
     private static final int LENGTH = FORMAT.length();
-    private final SimpleDateFormat _fmt = new SimpleDateFormat(FORMAT, Locale.US);
+    private final ThreadLocal<DateFormat> _fmt = new ThreadLocal<DateFormat>() {
+        @Override
+        protected DateFormat initialValue() {
+            SimpleDateFormat fmt = new SimpleDateFormat(FORMAT, Locale.US);
+            fmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+            return fmt;
+        }
+    };
 
     /**
      *  The current (today's) mod data.
@@ -123,7 +129,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     private byte[] generateModDataFromCal(LocalDate day) {
         Date today = Date.from(day.atStartOfDay(GMT).toInstant());
 
-        String modVal = _fmt.format(today);
+        String modVal = _fmt.get().format(today);
         if (modVal.length() != LENGTH)
             throw new IllegalStateException();
         byte[] mod = DataHelper.getASCII(modVal);
@@ -193,7 +199,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     public Hash getRoutingKey(Hash origKey, long time) {
         String modVal;
         synchronized(this) {
-            modVal = _fmt.format(time);
+            modVal = _fmt.get().format(time);
         }
         if (modVal.length() != LENGTH)
             throw new IllegalStateException();
@@ -227,11 +233,16 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
         long now = System.currentTimeMillis();
         int st = 0;
         if (args.length > 1 && (args[0].startsWith("+") || args[0].startsWith("-"))) {
-            now += Integer.parseInt(args[0]) * (24*60*60*1000L);
+            try {
+                now += Integer.parseInt(args[0]) * (24*60*60*1000L);
+            } catch (NumberFormatException nfe) {
+                System.err.println("Invalid number: " + args[0]);
+                System.exit(1);
+            }
             st++;
         }
         RouterKeyGenerator rkg = new RouterKeyGenerator(I2PAppContext.getGlobalContext());
-        System.out.println("Date: " + rkg._fmt.format(now) + '\n' +
+        System.out.println("Date: " + rkg._fmt.get().format(now) + '\n' +
                            "Hash                                         Routing Key\n" +
                            "----                                         -----------");
         for (int i = st; i < args.length; i++) {

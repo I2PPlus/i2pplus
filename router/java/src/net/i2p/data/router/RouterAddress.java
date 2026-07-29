@@ -73,7 +73,8 @@ public class RouterAddress extends DataStructureImpl {
      */
     public RouterAddress(String style, OrderedProperties options, int cost) {
         _transportStyle = style;
-        _options = options;
+        _options = new OrderedProperties();
+        _options.putAll(options);
         if (cost < 0 || cost > 255)
             throw new IllegalArgumentException();
         _cost = (short) cost;

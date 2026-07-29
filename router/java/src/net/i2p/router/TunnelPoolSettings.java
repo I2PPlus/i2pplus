@@ -133,7 +133,6 @@ public class TunnelPoolSettings {
         _isInbound = isInbound;
         _quantity = DEFAULT_QUANTITY;
         _backupQuantity = DEFAULT_BACKUP_QUANTITY;
-        //_duration = DEFAULT_DURATION;
 
         if (isInbound) {
             _length = _isExploratory ? DEFAULT_IB_EXPL_LENGTH : DEFAULT_IB_LENGTH;
@@ -410,7 +409,6 @@ public class TunnelPoolSettings {
                         _allowZeroHop = getBoolean(value, DEFAULT_ALLOW_ZERO_HOP);
                 } else if (name.equalsIgnoreCase(prefix + PROP_BACKUP_QUANTITY))
                     _backupQuantity = getInt(value, DEFAULT_BACKUP_QUANTITY);
-                //    _duration = getInt(value, DEFAULT_DURATION);
                 else if (name.equalsIgnoreCase(prefix + PROP_LENGTH))
                     _length = getInt(value, _isInbound ?
                                             (_isExploratory ? DEFAULT_IB_EXPL_LENGTH : DEFAULT_IB_LENGTH) :
@@ -423,7 +421,6 @@ public class TunnelPoolSettings {
                                                         DEFAULT_LENGTH_VARIANCE);
                 else if (name.equalsIgnoreCase(prefix + PROP_QUANTITY))
                     _quantity = getInt(value, DEFAULT_QUANTITY);
-                //     _rebuildPeriod = getInt(value, DEFAULT_REBUILD_PERIOD);
                 else if (name.equalsIgnoreCase(prefix + PROP_NICKNAME))
                     _destinationNickname = value;
                 else if (name.equalsIgnoreCase(prefix + PROP_IP_RESTRICTION)) {

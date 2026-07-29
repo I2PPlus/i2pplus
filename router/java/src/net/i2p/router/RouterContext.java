@@ -621,7 +621,7 @@ public class RouterContext extends I2PAppContext {
      * @since 0.8.8
      */
     Set<Runnable> getFinalShutdownTasks() {
-        return _finalShutdownTasks;
+        return new java.util.HashSet<Runnable>(_finalShutdownTasks);
     }
 
     /**

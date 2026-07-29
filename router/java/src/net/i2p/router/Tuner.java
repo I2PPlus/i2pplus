@@ -1133,7 +1133,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 _autotune.setProperty(valueKey, String.valueOf(runtimeDefault));
                 changed = true;
             } else {
-                _defaultValue = Integer.parseInt(existingDefault);
+                try {_defaultValue = Integer.parseInt(existingDefault);}
+                catch (NumberFormatException nfe) {_defaultValue = _min;}
                 // 1. Clamp to [min, max] — catches out-of-range (e.g. -1)
                 if (_defaultValue < _min || _defaultValue > _max) {
                     int prev = _defaultValue;
@@ -1152,7 +1153,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     if (_log.shouldWarn())
                         _log.warn(_name + " default healed: " + prev + " -> " + _defaultValue);
                 }
-                if (_defaultValue != Integer.parseInt(existingDefault)) {
+                int parsedExisting;
+                try {parsedExisting = Integer.parseInt(existingDefault);}
+                catch (NumberFormatException nfe) {parsedExisting = _defaultValue;}
+                if (_defaultValue != parsedExisting) {
                     _autotune.setProperty(defaultKey, String.valueOf(_defaultValue));
                     changed = true;
                 }

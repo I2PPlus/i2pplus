@@ -1,6 +1,7 @@
 package net.i2p.router;
 
 import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -40,7 +42,14 @@ public class BanLogger {
     private RouterContext _context;
     private Log _log;
     private File _logFile;
-    private SimpleDateFormat _dateFormat;
+    private final ThreadLocal<DateFormat> _dateFormat = new ThreadLocal<DateFormat>() {
+        @Override
+        protected DateFormat initialValue() {
+            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+            fmt.setTimeZone(TimeZone.getTimeZone("UTC"));
+            return fmt;
+        }
+    };
     private AtomicInteger _banCount;
     private long _startTime;
     private final Object _writeLock = new Object();
@@ -59,8 +68,6 @@ public class BanLogger {
 
     /** No-arg constructor for deferred initialization. */
     public BanLogger() {
-        _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
-        _dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         _banCount = new AtomicInteger();
     }
 
@@ -70,8 +77,7 @@ public class BanLogger {
      * @param context the router context
      */
     public BanLogger(RouterContext context) {
-        _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
-        _dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        _banCount = new AtomicInteger();
         initialize(context);
     }
 
@@ -119,7 +125,7 @@ public class BanLogger {
             return false;
         }
         long now = System.currentTimeMillis();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(_logFile), StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(_logFile)), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
@@ -170,7 +176,7 @@ public class BanLogger {
         if (!_logFile.exists()) {return;}
         long mtime = _logFile.lastModified();
         if (mtime <= 0) {mtime = System.currentTimeMillis();}
-        String timestamp = _dateFormat.format(new Date(mtime));
+        String timestamp = _dateFormat.get().format(new Date(mtime));
         String safeTimestamp = timestamp.replace(':', '-').replace('T', '_');
         String archiveName = ARCHIVE_PREFIX + safeTimestamp + ".txt";
         File archiveFile = new File(_logFile.getParentFile(), archiveName);
@@ -191,7 +197,7 @@ public class BanLogger {
     public void archiveIfNeeded() {
         if (!_logFile.exists()) {return;}
         if (_banCount.get() <= 0) {return;}
-        String timestamp = _dateFormat.format(new Date(_startTime));
+        String timestamp = _dateFormat.get().format(new Date(_startTime));
         String safeTimestamp = timestamp.replace(':', '-').replace('T', '_');
         String archiveName = ARCHIVE_PREFIX + safeTimestamp + ".txt";
         File archiveFile = new File(_logFile.getParentFile(), archiveName);
@@ -253,7 +259,7 @@ public class BanLogger {
         if (_writer == null) {return;}
         _writer.println();
         _writer.println("############################################################");
-        _writer.println("# Router started: " + _dateFormat.format(new Date(_startTime)));
+        _writer.println("# Router started: " + _dateFormat.get().format(new Date(_startTime)));
         _writer.println("############################################################");
         _writer.println();
         _writer.println("# Ban event log");
@@ -574,7 +580,7 @@ public class BanLogger {
                         String ip = getIPFromRouterInfo(ri);
                         if (ip.isEmpty()) ip = "UNKNOWN";
                         String dur = formatDuration(durationMs);
-                        String ts = _dateFormat.format(new Date());
+                        String ts = _dateFormat.get().format(new Date());
                         String entry = String.format("%s | %s | %s | %s | %s | %s | %s | %s | %s",
                             ts, hash.toBase64(), ip, reason, dur,
                             caps, ver, getCountry(ip), getHost(ip));
@@ -662,7 +668,7 @@ public class BanLogger {
             return;
         }
 
-        String timestamp = _dateFormat.format(new Date());
+        String timestamp = _dateFormat.get().format(new Date());
         String capsStr = (caps != null && !caps.isEmpty()) ? caps : "";
         String verStr = (version != null && !version.isEmpty()) ? version : "";
         String countryStr = (country != null && !country.isEmpty()) ? country : "";

@@ -1,5 +1,6 @@
 package net.i2p.router;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -194,7 +195,7 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
         long now = System.currentTimeMillis();
         long cutoff = now - MAX_FILE_AGE;
         List<long[]> entries = new ArrayList<>(_capacity);
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(_file)), StandardCharsets.UTF_8))) {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim();
