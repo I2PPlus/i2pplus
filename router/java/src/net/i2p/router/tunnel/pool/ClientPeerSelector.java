@@ -56,6 +56,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
         if (peers instanceof Excluder) {
             return ((Excluder) peers).formatByReasonWithPeers();
         }
+        if (peers instanceof ExcluderBase) {
+            return ((ExcluderBase) peers).getReasonsSummary();
+        }
         StringBuilder sb = new StringBuilder(peers.size() * 10);
         int count = 0;
         for (Hash h : peers) {
@@ -380,7 +383,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     } else {pickFurthest = false;} // shouldn't happen
                     if (pickFurthest) {
                         if (log.shouldInfo()) {
-                            log.info("Selecting non-failing peer for OutboundEndpoint... " + lastHopExclude);
+                            log.info("Selecting non-failing peer for OutboundEndpoint... " + formatExcludedPeers(lastHopExclude));
                         }
                         if (ctx.getBooleanProperty(PROP_LEGACY_SELECTION)) {
                             ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
@@ -672,7 +675,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             }
             if (log.shouldInfo()) {
                 log.info("ClientPeerSelector " + length + (isInbound ? " Inbound" : " Outbound") +
-                          ", " + excluder.formatByReason() +
+                          ", " + excluder.getReasonsSummary() +
                          "\n* Cooldowns: " + cooldownExcluded + " client(" + _clientCooldowns.size() +
                          "), " + peerCooldownExcluded + " shared(" + _peerCooldowns.size() +
                          "), firstHopFails=" + firstHopFailCount +
@@ -1249,6 +1252,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             boolean rv = !allowAsIBGW(h);
             if (rv) {
                 s.add(h);
+                recordExclusion(h, "not-ibgw");
                 if (log.shouldDebug()) {
                     log.debug("InboundGateway exclude [" + h.toBase64().substring(0,6) + "]");
                 }
@@ -1288,6 +1292,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             boolean rv = !allowAsOBEP(h);
             if (rv) {
                 s.add(h);
+                recordExclusion(h, "not-obep");
                 if (log.shouldDebug()) {
                     log.debug("OutboundEndpoint exclude [" + h.toBase64().substring(0,6) + "]");
                 }

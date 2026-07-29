@@ -1112,8 +1112,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
         private final boolean _isIn;
         private final boolean _isExpl;
-        /** Maps peer hash to the reason it was excluded, for diagnostic logging */
-        final Map<Hash, String> _reasons = new LinkedHashMap<>();
 
         /**
          *  Automatically adds selectPeersInTooManyTunnels(), unless i2np.allowLocal.
@@ -1123,7 +1121,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                                                               : new LinkedHashSet<>(ctx.tunnelManager().selectPeersInTooManyTunnels()));
             _isIn = isInbound;
             _isExpl = isExploratory;
-            for (Hash h : s) {_reasons.put(h, "too-many-tunnels");}
+            for (Hash h : s) {recordExclusion(h, "too-many-tunnels");}
         }
 
         /**
@@ -1145,7 +1143,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             String reason = getExclusionReason(h, _isIn, _isExpl);
             if (reason != null) {
                 s.add(h);
-                _reasons.put(h, reason);
+                recordExclusion(h, reason);
                 if (s.size() > MAX_EXCLUDED_PEERS) {
                     Iterator<Hash> it = s.iterator();
                     if (it.hasNext()) {
@@ -1157,28 +1155,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 return true;
             }
             return false;
-        }
-
-        /**
-         *  Format exclusion summary grouped by reason.
-         *  @return string like "128 excluded \n* Reason: 50 too-many-tunnels, 30 unreachable"
-         */
-        String formatByReason() {
-            if (_reasons.isEmpty()) return "";
-            Map<String, Integer> counts = new LinkedHashMap<>();
-            for (String r : _reasons.values()) {
-                Integer c = counts.get(r);
-                counts.put(r, c != null ? c + 1 : 1);
-            }
-            StringBuilder sb = new StringBuilder();
-            sb.append(s.size()).append(" excluded \n* Reason: ");
-            boolean first = true;
-            for (Map.Entry<String, Integer> e : counts.entrySet()) {
-                if (!first) sb.append(", ");
-                sb.append(e.getValue()).append(" ").append(e.getKey());
-                first = false;
-            }
-            return sb.toString();
         }
 
         /**
@@ -1261,7 +1237,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (peer == null) {canConnect = false;}
             else if (isIn) {canConnect = canConnect(peer, ourMask);}
             else {canConnect = canConnect(ourMask, peer);}
-            if (!canConnect) {s.add(h);}
+            if (!canConnect) {
+                s.add(h);
+                recordExclusion(h, "unreachable");
+            }
             return !canConnect;
         }
     }

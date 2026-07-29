@@ -2,6 +2,8 @@ package net.i2p.router.tunnel.pool;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 import net.i2p.data.Hash;
 
@@ -19,6 +21,13 @@ abstract class ExcluderBase implements Set<Hash> {
      * s.
      */
     protected final Set<Hash> s;
+
+    /**
+     *  Maps peer hash to the reason it was excluded, for diagnostic logging.
+     *  Populated by subclasses via {@link #recordExclusion}.
+     *  @since 0.9.70+
+     */
+    protected final Map<Hash, String> _reasons = new LinkedHashMap<Hash, String>();
 
     /**
      *  Automatically check if peer is connected
@@ -93,6 +102,44 @@ abstract class ExcluderBase implements Set<Hash> {
      * toArray.
      */
     public <Hash> Hash[] toArray(Hash[] a) {return s.toArray(a);}
+
+    /**
+     *  Record why a peer was excluded, for diagnostic logging.
+     *  Each peer is recorded once; subsequent calls for the same peer
+     *  overwrite the earlier reason.
+     *
+     *  @param h the excluded peer
+     *  @param reason short reason string like "unreachable" or "not-ibgw"
+     *  @since 0.9.70+
+     */
+    protected void recordExclusion(Hash h, String reason) {
+        _reasons.put(h, reason);
+    }
+
+    /**
+     *  Format exclusion summary grouped by reason (counts only, no peer hashes).
+     *  Uses raw reason strings from {@link #_reasons}.
+     *
+     *  @return string like "128 excluded \n* Reason: 50 unreachable, 30 not-ibgw"
+     *  @since 0.9.70+
+     */
+    protected String getReasonsSummary() {
+        if (_reasons.isEmpty()) {return "";}
+        Map<String, Integer> counts = new LinkedHashMap<String, Integer>();
+        for (String r : _reasons.values()) {
+            Integer c = counts.get(r);
+            counts.put(r, c != null ? c + 1 : 1);
+        }
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(s.size()).append(" excluded \n* Reason: ");
+        boolean first = true;
+        for (Map.Entry<String, Integer> e : counts.entrySet()) {
+            if (!first) {sb.append(", ");}
+            sb.append(e.getValue()).append(' ').append(e.getKey());
+            first = false;
+        }
+        return sb.toString();
+    }
 
     /**
      * toString.
