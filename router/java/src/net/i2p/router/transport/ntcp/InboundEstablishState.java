@@ -95,9 +95,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     private NTCP2Options _hisPadding;
     private int _version = 2;
 
-    /** Reusable options array for message 1 processing to eliminate per-call allocation */
-
-
     /** Buffer size for reading data phase packets (16 KB), same as I2PTunnelRunner */
     private static final int BUFFER_SIZE = 16*1024;
     /** Maximum number of read buffers to cache (32 on slow devices, 64 otherwise) */

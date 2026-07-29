@@ -504,9 +504,14 @@ public class UDPTransport extends TransportImpl {
             }
         }
         if (priv == null || priv.length != SSU2Util.KEY_LEN) {
-            KeyPair keys = xdh.getKeys();
-            _ssu2StaticPrivKey = keys.getPrivate().getData();
-            _ssu2StaticPubKey = keys.getPublic().getData();
+            if (_xdhFactory != null) {
+                KeyPair keys = _xdhFactory.getKeys();
+                _ssu2StaticPrivKey = keys.getPrivate().getData();
+                _ssu2StaticPubKey = keys.getPublic().getData();
+            } else {
+                _ssu2StaticPrivKey = null;
+                _ssu2StaticPubKey = null;
+            }
             shouldSave = true;
         } else {
             _ssu2StaticPrivKey = priv;
@@ -2069,7 +2074,9 @@ public class UDPTransport extends TransportImpl {
 
     private class RemoveDropList extends SimpleTimer2.TimedEvent {
         private final RemoteHostId _peer;
-        /** @param peer peer to remove after delay */
+        /**
+         * @param peer peer to remove after delay
+         */
         public RemoveDropList(RemoteHostId peer) { super(_context.simpleTimer2()); _peer = peer; }
         /** Time reached. */
         public void timeReached() {

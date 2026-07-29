@@ -453,6 +453,7 @@ final class SSU2Util {
      *  @param data not including relay response token
      */
     public static boolean validateSig(I2PAppContext ctx, byte[] prologue, Hash h, Hash h2, byte[] data, SigningPublicKey spk) {
+        if (h == null) return false;
         SigType type = spk.getType();
         int siglen = type.getSigLen();
         int len = prologue.length + Hash.HASH_LENGTH + data.length - siglen;

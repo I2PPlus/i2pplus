@@ -790,20 +790,6 @@ public class EstablishmentManager {
 
             _context.statManager().addRateData("udp.inboundConn", 1);
 
-          /****
-            // A token request or session request with a bad token is
-            // inexpensive to reply to.
-            // A token can only be used once, so a replayed session request
-            // will only generate a retry.
-            // So probably don't need a replay detector at all
-            if (_replayFilter.add(state.getReceivedX(), 0, 8)) {
-                if (_log.shouldWarn())
-                    _log.warn("Duplicate X in Session Request from: " + from);
-                _context.statManager().addRateData("udp.dupDHX", 1);
-                return; // drop the packet
-            }
-          ****/
-
             InboundEstablishState oldState = _inboundStates.putIfAbsent(from, state);
             isNew = oldState == null;
             if (!isNew) {

@@ -333,11 +333,12 @@ class UDPAddress {
     /**
      *  As of 0.9.32, will NOT resolve hostnames.
      *
-     *  @throws ArrayIndexOutOfBoundsException if i &lt; 0 or i &gt;= getIntroducerCount()
      *  @return null if invalid or for SSU2
      */
     InetAddress getIntroducerHost(int i) {
         if (_introAddresses == null)
+            return null;
+        if (i < 0 || i >= getIntroducerCount())
             return null;
         if (_introAddresses[i] == null)
             _introAddresses[i] = getByName(_introHosts[i]);
@@ -345,38 +346,60 @@ class UDPAddress {
     }
 
     /**
-     *  @throws ArrayIndexOutOfBoundsException if i &lt; 0 or i &gt;= getIntroducerCount()
+     *  Port number for the given introducer.
+     *
      *  @return greater than zero or zero for SSU2
      */
-    int getIntroducerPort(int i) { return _introPorts != null ? _introPorts[i] : 0; }
+    int getIntroducerPort(int i) {
+        if (_introPorts == null || i < 0 || i >= getIntroducerCount())
+            return 0;
+        return _introPorts[i];
+    }
 
     /**
-     *  @throws ArrayIndexOutOfBoundsException if i &lt; 0 or i &gt;= getIntroducerCount()
+     *  Introducer key for the given introducer.
+     *
      *  @return null if no keys or for SSU2
      */
-    byte[] getIntroducerKey(int i) { return _introKeys != null ? _introKeys[i] : null; }
+    byte[] getIntroducerKey(int i) {
+        if (_introKeys == null || i < 0 || i >= getIntroducerCount())
+            return null;
+        return _introKeys[i];
+    }
 
     /**
-     *  @throws NullPointerException if getIntroducerCount() == 0
-     *  @throws ArrayIndexOutOfBoundsException if i &lt; 0 or i &gt;= getIntroducerCount()
+     *  Introducer tag for the given introducer.
+     *
      *  @return greater than zero
      */
-    long getIntroducerTag(int i) { return _introTags[i]; }
+    long getIntroducerTag(int i) {
+        if (_introTags == null || i < 0 || i >= getIntroducerCount())
+            return 0;
+        return _introTags[i];
+    }
 
     /**
-     *  @throws NullPointerException if getIntroducerCount() == 0
-     *  @throws ArrayIndexOutOfBoundsException if i &lt; 0 or i &gt;= getIntroducerCount()
+     *  Expiration for the given introducer.
+     *
      *  @return ms since epoch, zero if unset
      *  @since 0.9.30
      */
-    long getIntroducerExpiration(int i) { return _introExps[i]; }
+    long getIntroducerExpiration(int i) {
+        if (_introExps == null || i < 0 || i >= getIntroducerCount())
+            return 0;
+        return _introExps[i];
+    }
 
     /**
-     *  @throws ArrayIndexOutOfBoundsException if i &lt; 0 or i &gt;= getIntroducerCount()
-     *  @return null if no keys or for SSU1
+     *  Introducer hash for the given introducer.
+     *
      *  @since 0.9.55
      */
-    Hash getIntroducerHash(int i) { return _introHashes != null ? _introHashes[i] : null; }
+    Hash getIntroducerHash(int i) {
+        if (_introHashes == null || i < 0 || i >= getIntroducerCount())
+            return null;
+        return _introHashes[i];
+    }
 
     /**
      *  @since 0.9.55

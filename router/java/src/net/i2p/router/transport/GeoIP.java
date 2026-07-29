@@ -13,6 +13,7 @@ import com.maxmind.geoip.InvalidDatabaseException;
 import com.maxmind.geoip.LookupService;
 import com.maxmind.geoip2.DatabaseReader;
 import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +22,7 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1161,6 +1163,8 @@ public class GeoIP {
     * @since 0.9.65+
     * @return the geo i p build info
     */
+    private static final ThreadLocal<DateFormat> _GEOIP_DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("MMM d, yyyy", Locale.US));
+
     public String getGeoIPBuildInfo() {
         File geoFile = getGeoIP2();
         if (geoFile == null) {return "GeoIP Db not found";}
@@ -1174,8 +1178,7 @@ public class GeoIP {
         try (DatabaseReader reader = openGeoIP2(geoFile)) {
             long buildTime = reader.getMetadata().getBuildDate().getTime();
             Date buildDate = new Date(buildTime);
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.US);
-            return "<b>Built:</b> " + sdf.format(buildDate) + "&ensp;<b>Size:</b> " + formattedFileSize + "MB&ensp;<b>Location:</b> " + filePath;
+            return "<b>Built:</b> " + _GEOIP_DATE_FORMAT.get().format(buildDate) + "&ensp;<b>Size:</b> " + formattedFileSize + "MB&ensp;<b>Location:</b> " + filePath;
         } catch (Exception e) {return "Unknown GeoIP Db version";}
     }
 
@@ -1198,8 +1201,7 @@ public class GeoIP {
             if (reader == null) {return "ASN Db not found";}
             long buildTime = reader.getMetadata().getBuildDate().getTime();
             Date buildDate = new Date(buildTime);
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.US);
-            return "<b>Built:</b> " + sdf.format(buildDate) + "&ensp;<b>Size:</b> " + formattedFileSize + "MB&ensp;<b>Location:</b> " + filePath;
+            return "<b>Built:</b> " + _GEOIP_DATE_FORMAT.get().format(buildDate) + "&ensp;<b>Size:</b> " + formattedFileSize + "MB&ensp;<b>Location:</b> " + filePath;
         } catch (Exception e) {return "Unknown ASN Db version";}
     }
 
@@ -1232,7 +1234,7 @@ public class GeoIP {
             return;
         }
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(geoFile), StandardCharsets.UTF_8))) {
+                    new BufferedInputStream(new FileInputStream(geoFile)), StandardCharsets.UTF_8))) {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 try {
@@ -1289,7 +1291,7 @@ public class GeoIP {
         }
         String[] rv = new String[search.length];
         int idx = 0;
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(geoFile), StandardCharsets.ISO_8859_1))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(geoFile)), StandardCharsets.ISO_8859_1))) {
             String buf = null;
             notifyVersion("Torv4", geoFile.lastModified());
             while ((buf = br.readLine()) != null && idx < search.length) {

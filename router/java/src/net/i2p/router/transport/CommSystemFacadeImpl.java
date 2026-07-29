@@ -9,6 +9,7 @@ package net.i2p.router.transport;
  */
 
 import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -1079,7 +1080,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             createRdnsCacheFile();
             return;
         }
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fCache), StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(fCache)), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.isEmpty() || line.charAt(0) == '#') {

@@ -446,6 +446,7 @@ class OutboundMessageState implements CDPQEntry {
             if (_fragmentSends == null)
                 _maxSends++;
         } else {
+            if (_fragmentSends == null) {return rv;}
             // hard way.
             // send the fragments we've sent the least, up to the max size
             int minSendCount = getMinSendCount();

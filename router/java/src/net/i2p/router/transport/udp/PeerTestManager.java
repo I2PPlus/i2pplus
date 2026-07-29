@@ -1097,7 +1097,7 @@ class PeerTestManager {
                         }
                     } else {
                         if (_log.shouldWarn())
-                            _log.warn("Alice's RouterInfo [" + h.toBase64().substring(0,6) + "] not found for peer test " + fromPeer);
+                            _log.warn("Alice's RouterInfo [" + (h != null ? h.toBase64().substring(0,6) : "null") + "] not found for peer test " + fromPeer);
                         rcode = SSU2Util.TEST_REJECT_CHARLIE_UNKNOWN_ALICE;
                     }
                 }
@@ -1188,19 +1188,13 @@ class PeerTestManager {
                 Hash charlie = fromPeer.getRemotePeer();
                 RouterInfo charlieRI = (status == SSU2Util.TEST_ACCEPT) ? _context.netDb().lookupRouterInfoLocally(charlie) : null;
                 if (charlieRI != null) {
-                    // send charlie RI to alice, only if ACCEPT.
-                    // Alice would need it to verify sig, but not worth the bandwidth
                     if (_log.shouldDebug())
                         _log.debug("Sending Charlie's RouterInfo to Alice on " + state);
-                    if (true) {
-                        // Debug - validate signed data
-                        // we forward it to alice even on failure
-                        SigningPublicKey spk = charlieRI.getIdentity().getSigningPublicKey();
-                        if (!SSU2Util.validateSig(_context, SSU2Util.PEER_TEST_PROLOGUE,
-                                                  _context.routerHash(), alice.getRemotePeer(), data, spk) &&
-                            _log.shouldWarn())
-                            _log.warn("Signature failed on message #3\n" + charlieRI);
-                    }
+                    SigningPublicKey spk = charlieRI.getIdentity().getSigningPublicKey();
+                    if (!SSU2Util.validateSig(_context, SSU2Util.PEER_TEST_PROLOGUE,
+                                              _context.routerHash(), alice.getRemotePeer(), data, spk) &&
+                        _log.shouldWarn())
+                        _log.warn("Signature failed on message #3\n" + charlieRI);
                 } else  {
                     // oh well, maybe alice has it
                     if (status == SSU2Util.TEST_ACCEPT && _log.shouldWarn())
