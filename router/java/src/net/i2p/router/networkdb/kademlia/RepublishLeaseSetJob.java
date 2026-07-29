@@ -45,7 +45,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     /** Default base delay before retrying a failed publish. */
     public static final int RETRY_DELAY_DEFAULT = (int) (10L * 1000);
     /** Maximum backoff delay for publish retries. */
-    public static final int RETRY_MAX_DELAY_DEFAULT = (int) (30L * 1000);
+    public static final int RETRY_MAX_DELAY_DEFAULT = (int) (120L * 1000);
     /** Window before lease expiry to trigger early republish. */
     private static final long EXPIRY_WINDOW = 3L * 60 * 1000;
     /** Staleness threshold for cleaning up tracking maps. */
@@ -571,10 +571,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         public void runJob() {
             cleanupStaleEntries();
             _firstDeferredAt.remove(_dest);
-            AtomicInteger counter = _globalFailCount.get(_dest);
-            if (counter != null) {
-                counter.set(0);
-            }
+            _globalFailCount.remove(_dest);
             if (_log.shouldInfo()) {
                 long now = getContext().clock().now();
                 Long lastLog = _lastPublishLogTime.get(_dest);
