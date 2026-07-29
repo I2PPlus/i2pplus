@@ -167,7 +167,7 @@ public class Daemon {
                     if (key == null && !he.hasValidRemoveSig()) {
                         if (log != null) {
                             log.append("Bad signature of action " + action + " for key " +
-                                       hprops.getProperty(HostTxtEntry.PROP_NAME) +
+                                       (hprops != null ? hprops.getProperty(HostTxtEntry.PROP_NAME) : "null") +
                                        ". [" + addressbook.getLocation() + "]");
                         }
                         invalid++;
@@ -675,10 +675,16 @@ public class Daemon {
 
         List<String> defaultSubs = new ArrayList<>(4);
         defaultSubs.add(DEFAULT_SUB);
+        int proxyPort = 4444;
+        try {
+            proxyPort = Integer.parseInt(settings.get("proxy_port"));
+        } catch (NumberFormatException nfe) {
+            proxyPort = 4444;
+        }
         SubscriptionList subscriptions = new SubscriptionList(subscriptionFile,
                                                               etagsFile, lastModifiedFile, lastFetchedFile,
                                                               delay, defaultSubs, settings.get("proxy_host"),
-                                                              Integer.parseInt(settings.get("proxy_port")));
+                                                              proxyPort);
         Log log = SystemVersion.isAndroid() ? null : new Log(logFile);
 
         // If false, add hosts via naming service; if true, write hosts.txt file directly
@@ -717,7 +723,11 @@ public class Daemon {
         return null;
     }
 
-    /** @return the configured NamingService, or the root NamingService */
+    /**
+     * Find the configured NamingService, or return the root.
+     *
+     * @return the configured NamingService, or the root NamingService
+     */
     private static NamingService getNamingService(String srch) {
         NamingService root = I2PAppContext.getGlobalContext().namingService();
         NamingService rv = searchNamingService(root, srch);
@@ -820,7 +830,12 @@ public class Daemon {
         } catch (InterruptedException ie) { /* ignored */ }
 
         while (_running) {
-            long delay = Long.parseLong(settings.get("update_delay"));
+            long delay;
+            try {
+                delay = Long.parseLong(settings.get("update_delay"));
+            } catch (NumberFormatException nfe) {
+                delay = 3;
+            }
             if (delay < 1) {delay = 1;}
 
             update(settings, homeFile.getAbsolutePath());

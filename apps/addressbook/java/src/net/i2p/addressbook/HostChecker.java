@@ -1,5 +1,7 @@
 package net.i2p.addressbook;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -91,6 +94,13 @@ public class HostChecker {
     private volatile long _blacklistLastModified;
     private int _categoryRetryCount = 0;
 
+    private static final ThreadLocal<DateFormat> _DATE_FORMAT = new ThreadLocal<DateFormat>() {
+        @Override
+        protected DateFormat initialValue() {
+            return new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
+        }
+    };
+
     // Configuration defaults
     private static final long DEFAULT_PING_INTERVAL = 4 * 60 * 60 * 1000L; // 4 hours
     private static final long DEFAULT_PING_TIMEOUT = 60 * 1000L; // 60 seconds
@@ -115,7 +125,7 @@ public class HostChecker {
             return;
         }
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(configFile), StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(configFile)), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -1030,7 +1040,7 @@ public class HostChecker {
         List<String> validLines = new ArrayList<>();
         boolean hasInvalidLines = false;
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(_hostsCheckFile), StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(_hostsCheckFile)), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -1156,7 +1166,7 @@ public class HostChecker {
      * Write cleaned hosts_check.txt file with only valid entries
      */
     private void writeCleanHostsCheckFile(List<String> validLines) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_hostsCheckFile), StandardCharsets.UTF_8))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(_hostsCheckFile)), StandardCharsets.UTF_8))) {
             for (String line : validLines) {
                 writer.write(line);
                 writer.newLine();
@@ -1271,7 +1281,7 @@ public class HostChecker {
                 // Read the downloaded content to verify it's valid
                 List<String> downloadedLines = new ArrayList<>();
                 int dataLineCount = 0;
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(tempFile), StandardCharsets.UTF_8))) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(tempFile)), StandardCharsets.UTF_8))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         downloadedLines.add(line);
@@ -1287,14 +1297,14 @@ public class HostChecker {
                     }
 
                     // Now write to the final file with header
-                    try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_categoriesFile), StandardCharsets.UTF_8))) {
+                    try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(_categoriesFile)), StandardCharsets.UTF_8))) {
                         writer.write("# I2P+ Address Book Host Categories");
                         writer.newLine();
                         writer.write("# Format: hostname,category");
                         writer.newLine();
                         writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
                         writer.newLine();
-                        writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(new Date()));
+                        writer.write("# Generated: " + _DATE_FORMAT.get().format(new Date()));
                         writer.newLine();
                         writer.newLine();
 
@@ -1361,7 +1371,7 @@ public class HostChecker {
      * Write cleaned categories.txt file with only valid entries (no empty lines)
      */
     private void writeCleanCategoriesFile(List<String> validLines) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_categoriesFile), StandardCharsets.UTF_8))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(_categoriesFile)), StandardCharsets.UTF_8))) {
             for (String line : validLines) {
                 writer.write(line);
                 writer.newLine();
@@ -1387,7 +1397,7 @@ public class HostChecker {
         List<String> validLines = new ArrayList<>();
         boolean hasEmptyLines = false;
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(_categoriesFile), StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(_categoriesFile)), StandardCharsets.UTF_8))) {
             String line;
             int lineCount = 0;
             int entryCount = 0;
@@ -1615,7 +1625,7 @@ public class HostChecker {
                 // Read the downloaded content to verify it's valid
                 List<String> downloadedLines = new ArrayList<>();
                 int dataLineCount = 0;
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(tempFile), StandardCharsets.UTF_8))) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(tempFile)), StandardCharsets.UTF_8))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         downloadedLines.add(line);
@@ -1627,14 +1637,14 @@ public class HostChecker {
 
                 if (dataLineCount > 0) {
                     // Now write to the final file with header
-                    try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_categoriesFile), StandardCharsets.UTF_8))) {
+                    try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(_categoriesFile)), StandardCharsets.UTF_8))) {
                         writer.write("# I2P+ Address Book Host Categories");
                         writer.newLine();
                         writer.write("# Format: hostname,category");
                         writer.newLine();
                         writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
                         writer.newLine();
-                        writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(new Date()));
+                        writer.write("# Generated: " + _DATE_FORMAT.get().format(new Date()));
                         writer.newLine();
                         writer.newLine();
 
@@ -1711,7 +1721,7 @@ public class HostChecker {
                 // Read the downloaded content to verify it's valid
                 List<String> downloadedLines = new ArrayList<>();
                 int dataLineCount = 0;
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(tempFile), StandardCharsets.UTF_8))) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(tempFile)), StandardCharsets.UTF_8))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         downloadedLines.add(line);
@@ -1723,14 +1733,14 @@ public class HostChecker {
 
                 if (dataLineCount > 0) {
                     // Now write to the final file with header
-                    try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_categoriesFile), StandardCharsets.UTF_8))) {
+                    try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(_categoriesFile)), StandardCharsets.UTF_8))) {
                         writer.write("# I2P+ Address Book Host Categories");
                         writer.newLine();
                         writer.write("# Format: hostname,category");
                         writer.newLine();
                         writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
                         writer.newLine();
-                        writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(new Date()));
+                        writer.write("# Generated: " + _DATE_FORMAT.get().format(new Date()));
                         writer.newLine();
                         writer.newLine();
 

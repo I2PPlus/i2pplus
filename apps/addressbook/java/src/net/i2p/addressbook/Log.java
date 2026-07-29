@@ -21,6 +21,7 @@
 
 package net.i2p.addressbook;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -63,7 +64,7 @@ class Log {
      *            A String containing a message to append to the log.
      */
     public void append(String entry) {
-        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.file, true), StandardCharsets.UTF_8))) {
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(this.file, true)), StandardCharsets.UTF_8))) {
             String timestamp = Instant.now().toString();
             bw.write(timestamp);
             bw.write(" -- ");
