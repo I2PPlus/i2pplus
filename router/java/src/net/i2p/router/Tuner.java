@@ -478,6 +478,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new SlowStartGrowthParam());
         _params.add(new InactivityTimeoutParam());
         _params.add(new MaxSynResendsParam());
+        _params.add(new ConnectTimeoutMultiplierParam());
 
         // I2CP
         _params.add(new InternalQueueSizeParam());
@@ -3390,6 +3391,51 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (current >= target * 0.5 && current <= target * 1.5 && !spuriousRetransmits)
                 return current;
 
+            return clamp(current, target, _step);
+        }
+    }
+
+    /**
+     * Tunes connect timeout multiplier based on observed RTT.
+     * Scales each client's desired connect timeout so low-latency paths fail fast
+     * and high-latency paths have enough time for SYN retransmits.
+     * Multiplier range: 30-200 (0.3x-2.0x), centered on 100 (1.0x) at RTO=5000.
+     * Target: RTO / 5000 * 100, i.e. proportional to the dynamic initial RTO.
+     */
+    private class ConnectTimeoutMultiplierParam extends BaseParam {
+
+        ConnectTimeoutMultiplierParam() {
+            super("CONNECT_TIMEOUT_MULTIPLIER", "Connect timeout multiplier (30-200%)",
+                  SUB_STREAMING,
+                  30, 200, 10, "stream.con.initialRTT.out", _context);
+        }
+
+        /** Apply to Connection's static multiplier, clamped to [50,200]. */
+        protected void applyValue(int value) {
+            StreamingConnectionReflector.invokeConnectionSet("setConnectTimeoutMultiplier", value);
+        }
+
+        /** Read current multiplier from Connection. */
+        protected int getRuntimeValue() {
+            int v = StreamingConnectionReflector.invokeConnectionInt("getConnectTimeoutMultiplier");
+            return v >= 0 ? v : 100;
+        }
+
+        /** Read RTT stat as the basis for multiplier computation. */
+        protected double getObservedStat(RouterContext ctx) {
+            return getObservedRTT(_context, _statName);
+        }
+
+        /** Compute multiplier: proportional to current RTO with a floor/ceiling. */
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            int rto = StreamingReflector.invokeGetInt("getInitialRTO");
+            if (rto <= 0) { rto = 5000; }
+            // Target: RTO / 5000 * 100, clamped to param range
+            int target = (int) Math.round((double) rto * 100.0 / 5000.0);
+            target = Math.max(_min, Math.min(_max, target));
+            // Dead zone: avoid thrashing when within 10% of target
+            if (Math.abs(current - target) <= 10) { return current; }
             return clamp(current, target, _step);
         }
     }

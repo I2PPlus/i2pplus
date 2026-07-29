@@ -198,6 +198,24 @@ class Connection {
     }
 
     /**
+     * Connect timeout multiplier (50-200, 100=1.0x), set by the Tuner based on
+     * observed RTT. Scales each client's desired timeout so fast networks fail
+     * fast and slow networks get enough time. Applied in waitForConnect().
+     * @since 0.9.70+
+     */
+    private static volatile int _connectTimeoutMultiplier = 100;
+
+    /** @since 0.9.70+ */
+    static void setConnectTimeoutMultiplier(int pct) {
+        _connectTimeoutMultiplier = Math.max(30, Math.min(200, pct));
+    }
+
+    /** @since 0.9.70+ */
+    static int getConnectTimeoutMultiplier() {
+        return _connectTimeoutMultiplier;
+    }
+
+    /**
      *  Default window size cap used when no per-connection or global override is set.
      *  The effective ceiling is managed by getGlobalMaxWindowSize(), which the Tuner
      *  adjusts based on observed RTT, bandwidth, and loss.
@@ -1598,6 +1616,11 @@ class Connection {
           boolean hasTimeout = totalTimeout > 0;
           long expiry = 0;
           if (hasTimeout) {
+              // Apply network-condition multiplier from the Tuner so fast networks
+              // fail fast and slow networks have enough time for retransmits.
+              int multiplier = getConnectTimeoutMultiplier();
+              totalTimeout = totalTimeout * multiplier / 100;
+              if (totalTimeout < 10000) { totalTimeout = 10000; }
               long cap = getMaxConnectTimeout();
               if (totalTimeout > cap) {
                   totalTimeout = cap;

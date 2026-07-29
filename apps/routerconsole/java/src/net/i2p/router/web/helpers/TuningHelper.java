@@ -125,6 +125,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2p.streaming.immediateAckDelay", _x("Dup ACK Delay"));
         DISPLAY_NAMES.put("i2p.streaming.inactivityTimeout", _x("Inactivity Timeout"));
         DISPLAY_NAMES.put("i2p.streaming.maxWindowSize", _x("Max Window Size"));
+        DISPLAY_NAMES.put("CONNECT_TIMEOUT_MULTIPLIER", _x("Connect Timeout Multiplier"));
         DISPLAY_NAMES.put("i2p.router.maxDispatchAge", _x("Max Message Queue Age"));
         DISPLAY_NAMES.put("i2p.router.handlerThreadPriority", _x("I/O Thread Priority"));
         DISPLAY_NAMES.put("tunnel.pumper.queueCapacity", _x("Pumper Queue Capacity"));
@@ -250,6 +251,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.streaming.slowStartGrowthRateFactor", _x("Window multiplier per RTT during slow start."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.minPacingRate", _x("Minimum send rate before pacing kicks in (KB/s)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxRtt", _x("Upper bound on RTT estimate (ms)."));
+        PARAM_DESCRIPTIONS.put("CONNECT_TIMEOUT_MULTIPLIER", _x("Scales each client's connect timeout by network RTT (30-200%)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.initialResendDelay", _x("Delay before first retransmit (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.immediateAckDelay", _x("Delay for dup or OOO packet ACKs (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.router.maxDispatchAge", _x("Max message age in queue before drop (ms)."));
