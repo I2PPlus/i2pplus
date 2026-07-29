@@ -281,16 +281,21 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         lastHopExclude = getClosestHopExclude(true, exclude);
                     } else {lastHopExclude = exclude;}
                     if (log.shouldInfo()) {
-                        log.info("Selecting fast peer for closest Inbound, excluding: " + formatExcludedPeers(lastHopExclude));
+                        log.info("Selecting fast peer for closest Inbound..." +
+                                 (lastHopExclude.size() > 0 ? "\n* Excluding: " + formatExcludedPeers(lastHopExclude) : ""));
                     }
                 } else {
                     lastHopExclude = new OBEPExcluder(exclude);
-                    if (log.shouldInfo()) {log.info("Selecting fast peer for OutboundEndpoint, excluding: " + formatExcludedPeers(lastHopExclude));}
+                    if (log.shouldInfo()) {
+                        log.info("Selecting fast peer for OutboundEndpoint..." +
+                                 (lastHopExclude.size() > 0 ? "\n* Excluding: " + formatExcludedPeers(lastHopExclude) : ""));
+                    }
                 }
                 if (hiddenInbound) {
                     // IB closest hop
                     if (log.shouldInfo()) {
-                        log.info("Selecting fast/non-failing peer for (hidden) closest Inbound... \n* Excluding: " + formatExcludedPeers(lastHopExclude));
+                        log.info("Selecting fast/non-failing peer for (hidden) closest Inbound..." +
+                                 (lastHopExclude.size() > 0 ? "\n* Excluding: " + formatExcludedPeers(lastHopExclude) : ""));
                     }
                     if (ctx.getBooleanProperty(PROP_LEGACY_SELECTION)) {
                         ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
@@ -447,7 +452,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     // middle hop(s)
                     // group 2 or 3
                     if (log.shouldInfo()) {
-                        log.info("Selecting middle hop peers (Client style)... \n* Excluding: " + formatExcludedPeers(exclude));
+                        log.info("Selecting middle hop peers (Client style)..." +
+                                 (exclude.size() > 0 ? "\n* Excluding: " + formatExcludedPeers(exclude) : ""));
                     }
                     int middleCount = length - 2;
 
@@ -529,18 +535,20 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 if (isInbound) {
                     exclude = new IBGWExcluder(exclude);
                     if (log.shouldInfo()) {
-                        log.info("Selecting InboundGateway... \n* Excluding: " + formatExcludedPeers(exclude));
+                        log.info("Selecting InboundGateway..." +
+                                 (exclude.size() > 0 ? "\n* Excluding: " + formatExcludedPeers(exclude) : ""));
                     }
                 } else {
                     if (checkClosestHop) {
                         exclude = getClosestHopExclude(false, exclude);
                     }
                     if (log.shouldInfo()) {
-                        log.info("Selecting closest Outbound... \n* Excluding: " + formatExcludedPeers(exclude));
+                        log.info("Selecting closest Outbound..." +
+                                 (exclude.size() > 0 ? "\n* Excluding: " + formatExcludedPeers(exclude) : ""));
                     }
                 }
                 if (log.shouldInfo()) {
-                    log.info("Selecting first hop for " + (isInbound ? "inbound" : "outbound") + "...");
+                    log.info("Selecting first hop for " + (isInbound ? "Inbound" : "Outbound") + "...");
                 }
                 // Prefer vetted HighCap/Fast peers first — they've been tested
                 // and are more reliable for tunnel builds than random connected peers.
