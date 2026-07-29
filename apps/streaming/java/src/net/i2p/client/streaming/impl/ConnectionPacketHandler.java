@@ -161,6 +161,18 @@ class ConnectionPacketHandler {
             con.setChoked(choke);
         }
 
+        if (packet.isFlagSet(Packet.FLAG_PROFILE_INTERACTIVE)) {
+            MessageOutputStream os = con.getOutputStream();
+            int current = os.getPassiveFlushDelay();
+            int reduced = Math.max(10, current / 2);
+            if (reduced < current) {
+                if (_log.shouldInfo())
+                    _log.info("Reducing passive flush delay from " + current + " to " + reduced
+                              + " due to interactive profile on " + con);
+                os.setPassiveFlushDelay(reduced);
+            }
+        }
+
         if (!con.getInputStream().canAccept(seqNum, packet.getPayloadSize())) {
             if (con.getInputStream().isLocallyClosed()) {
                 if (_log.shouldWarn())

@@ -84,6 +84,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private volatile int _maxTotalConnsPerHour;
     /** Max total conns per day. */
     private volatile int _maxTotalConnsPerDay;
+    /** Per-connection passive flush delay; <= 0 means use Tuner-managed global default. */
+    private volatile int _passiveFlushDelay;
     /** Max conns. */
     private volatile int _maxConns;
     /** Disable reject log. */
@@ -247,6 +249,14 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /** @since 0.9.34 */
     public static final String PROP_TAG_THRESHOLD = "crypto.lowTagThreshold";
+
+    /**
+     * Passive flush delay in ms for MessageOutputStream. When set to 0 (default),
+     * uses the Tuner-managed global default. When profile is INTERACTIVE and no
+     * explicit value is set, defaults to half the Tuner global (min 10).
+     * @since 0.9.70+
+     */
+    public static final String PROP_PASSIVE_FLUSH_DELAY = "i2p.streaming.passiveFlushDelay";
 
     /**
      * RFC 6928 recommends 10; increased to 16 for I2P's high-latency environment.
@@ -509,6 +519,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             setMaxWindowSize(opts.getMaxWindowSize());
             setConnectDelay(opts.getConnectDelay());
             setProfile(opts.getProfile());
+            setPassiveFlushDelay(opts.getPassiveFlushDelay());
             setRTTDev(opts.getRTTDev());
             setRTT(opts.getRTT());
             setRequireFullySigned(opts.getRequireFullySigned());
@@ -545,6 +556,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     private void initFromProperties(Properties opts) {
         applyProperties(opts, false);
+        if (_passiveFlushDelay <= 0 && _profile == PROFILE_INTERACTIVE) {
+            _passiveFlushDelay = Math.max(10, MessageOutputStream.getDefaultPassiveFlushDelay() / 2);
+        }
     }
 
     /**
@@ -593,6 +607,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         applyInt(opts, PROP_SLOW_START_GROWTH_RATE_FACTOR,
                  _defaultSlowStartGrowthRateFactor, onlyIfSet,
                  this::setSlowStartGrowthRateFactor);
+        applyInt(opts, PROP_PASSIVE_FLUSH_DELAY, 0, onlyIfSet, this::setPassiveFlushDelay);
+
         if (!onlyIfSet || opts.getProperty(PROP_ANSWER_PINGS) != null)
             setAnswerPings(getBool(opts, PROP_ANSWER_PINGS, DEFAULT_ANSWER_PINGS));
         if (!onlyIfSet || opts.getProperty(PROP_ENFORCE_PROTO) != null)
@@ -867,6 +883,16 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     /** {_profile */
     public void setProfile(int profile) {_profile = profile;}
+
+    /**
+     * @return effective passive flush delay in ms: explicit value if set,
+     *         otherwise the Tuner-managed global default
+     */
+    public int getPassiveFlushDelay() {
+        return _passiveFlushDelay > 0 ? _passiveFlushDelay : MessageOutputStream.getDefaultPassiveFlushDelay();
+    }
+    /** @param delayMs 0 to use Tuner-managed global default, positive for explicit delay */
+    public void setPassiveFlushDelay(int delayMs) { _passiveFlushDelay = delayMs; }
 
     /** Maximum retries per message */
     public int getMaxResends() {return _maxResends;}

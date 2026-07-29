@@ -86,7 +86,7 @@ class MessageOutputStream extends OutputStream {
     private volatile long _lastBuffered;
 
     // How long to wait before passive flush triggers (milliseconds)
-    private final int _passiveFlushDelay;
+    private volatile int _passiveFlushDelay;
 
     /**
      * Default passive flush delay optimized for lower latency while maintaining stability.
@@ -175,6 +175,23 @@ class MessageOutputStream extends OutputStream {
      */
     public int getWriteTimeout() {
         return _writeTimeout;
+    }
+
+    /**
+     * @return current passive flush delay in ms
+     */
+    public int getPassiveFlushDelay() { return _passiveFlushDelay; }
+
+    /**
+     * Dynamically adjust the passive flush delay. Clamped to [10, 500].
+     * Used by the interactive profile to reduce flush latency mid-connection.
+     *
+     * @param delayMs new delay, will be clamped to valid range
+     */
+    public void setPassiveFlushDelay(int delayMs) {
+        if (delayMs < 10) delayMs = 10;
+        if (delayMs > 500) delayMs = 500;
+        _passiveFlushDelay = delayMs;
     }
 
     /**

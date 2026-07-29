@@ -2,6 +2,7 @@ package net.i2p.client.streaming.impl;
 
 import java.io.IOException;
 import net.i2p.I2PAppContext;
+import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.util.ByteCache;
@@ -267,6 +268,9 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
             ((size > 0) || (_connection.getUnackedPacketsSent() <= 0) || (packet.getSequenceNum() > 0)) ) {
             packet.setFlag(Packet.FLAG_CLOSE);
             _connection.notifyCloseSent();
+        }
+        if (_connection.getOptions().getProfile() == I2PSocketOptions.PROFILE_INTERACTIVE) {
+            packet.setFlag(Packet.FLAG_PROFILE_INTERACTIVE);
         }
         if (_log.shouldDebug()) {
             _log.debug("New Outbound packet (ACKs not yet filled in): " + packet + " on " + _connection);

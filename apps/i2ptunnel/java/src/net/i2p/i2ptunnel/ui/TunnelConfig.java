@@ -1354,13 +1354,9 @@ public class TunnelConfig {
             config.setProperty("option.outbound.nickname", _name);
         }
         if ("interactive".equals(_profile))
-            // This was 1 which doesn't make much sense
-            // The real way to make it interactive is to make the streaming lib
-            // MessageInputStream flush faster but there's no option for that yet,
-            // Setting it to 16 instead of the default but not sure what good that is either.
-            config.setProperty("option.i2p.streaming.maxWindowSize", "16");
+            config.setProperty("option.i2p.streaming.profile", "2");
         else
-            config.remove("option.i2p.streaming.maxWindowSize");
+            config.remove("option.i2p.streaming.profile");
     }
 
     /**

@@ -286,7 +286,8 @@ class Connection {
                                               _options.getMaxWindowSize(), _options.getInboundBufferSize(),
                                                _options.getMaxPacketCount());
         _outputStream = new MessageOutputStream(_context, timer, _receiver,
-                                                _options.getMaxMessageSize(), _options.getMaxInitialMessageSize());
+                                                _options.getMaxMessageSize(), _options.getMaxInitialMessageSize(),
+                                                _options.getPassiveFlushDelay());
         _timer = timer;
         _outboundPackets = new TreeMap<>();
         if (opts != null) {
