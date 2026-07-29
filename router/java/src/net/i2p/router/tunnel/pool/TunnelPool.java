@@ -3024,23 +3024,7 @@ public class TunnelPool {
                                                MAX_EMERGENCY_BOOST);
             effectiveTarget = Math.min(target + _consecutiveEmergencies,
                                        target + MAX_EMERGENCY_BOOST);
-            // Cap per-cycle builds at base target — pool scales up gradually
-            // over multiple EMERGENCY cycles, not all at once.  Flooding the
-            // build queue with 5+ concurrent builds wastes build slots that
-            // other pools need, and most will timeout anyway.
             int needed = Math.max(target, 2);
-            // If builds are already queued, don't stack more — let the
-            // existing builds resolve first.  Use base target for the cap,
-            // not effectiveTarget — we don't need all slots filled instantly.
-            int currentInProgress = getInProgressCount();
-            if (currentInProgress >= target) {
-                if (_log.shouldDebug()) {
-                    _log.debug(toString() + " -> Skipping EMERGENCY: " +
-                              currentInProgress + " in-progress >= target " + target);
-                }
-                return;
-            }
-            if (currentInProgress > 0) { needed = Math.max(1, target - currentInProgress); }
             // IB/OB balance: don't emergency-build if this direction already has
             // MORE usable tunnels than its paired direction.  When both pools are at
             // zero usable, both must build — skipping both causes a deadlock where
@@ -3064,8 +3048,7 @@ public class TunnelPool {
                 String boost = _consecutiveEmergencies > 0 ?
                     " (dynamic target " + effectiveTarget + ", collapse #" + _consecutiveEmergencies + ")" : "";
                 _log.warn(toString() + " -> EMERGENCY: Zero usable tunnels, " +
-                          currentInProgress + " in-progress, forcing " + needed +
-                          " replacement builds" + boost);
+                          "forcing " + needed + " replacement builds" + boost);
             }
             for (int i = 0; i < needed; i++) {
                 PooledTunnelCreatorConfig cfg = configureNewTunnel(false);
