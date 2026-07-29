@@ -93,9 +93,14 @@ import net.i2p.util.Log;
 		// used in ETag to force identicons to be updated as needed.
 		// Change version whenever rendering codes changes result in
 		// visual changes.
-		if (cfg.getInitParameter(INIT_PARAM_VERSION) != null)
-			this.version = Integer.parseInt(cfg
-					.getInitParameter(INIT_PARAM_VERSION));
+		if (cfg.getInitParameter(INIT_PARAM_VERSION) != null) {
+			try {
+				this.version = Integer.parseInt(cfg
+						.getInitParameter(INIT_PARAM_VERSION));
+			} catch (NumberFormatException nfe) {
+				this.version = 1;
+			}
+		}
 
 		String cacheProvider = cfg.getInitParameter(INIT_PARAM_CACHE_PROVIDER);
 		if (cacheProvider != null) {
