@@ -32,7 +32,11 @@ public class AdvancedSettingsHandler implements RequestHandler {
         _context = ctx;
     }
 
-    /** @return method names handled by this handler */
+    /**
+     * Requests handled by this handler.
+     *
+     * @return method names handled by this handler
+     */
     @Override
     public String[] handledRequests() {
         return new String[] {"AdvancedSettings"};
@@ -193,8 +197,10 @@ public class AdvancedSettingsHandler implements RequestHandler {
         if (clearConfig) {
             unsetKeys = new HashSet<>(_context.router().getConfigSettings());
 
-            for (String key : newSettings.keySet()) {
-                unsetKeys.remove(key);
+            if (newSettings != null) {
+                for (String key : newSettings.keySet()) {
+                    unsetKeys.remove(key);
+                }
             }
         }
 

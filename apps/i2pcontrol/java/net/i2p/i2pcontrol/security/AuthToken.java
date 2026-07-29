@@ -1,5 +1,6 @@
 package net.i2p.i2pcontrol.security;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -13,13 +14,16 @@ import java.util.Locale;
 public class AuthToken {
     /** The VALIDITY_TIME. */
     static final int VALIDITY_TIME = 1; // Measured in days
-    private static final SimpleDateFormat EXPIRY_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+    private static final ThreadLocal<DateFormat> EXPIRY_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US));
     private final SecurityManager _secMan;
     private final String id;
     private final Date expiry;
 
     /**
-     * AuthToken.
+     * Creates a token from a password hash.
+     *
+     * @param secMan the security manager
+     * @param password the password to hash
      */
     public AuthToken(SecurityManager secMan, String password) {
         _secMan = secMan;
@@ -29,6 +33,8 @@ public class AuthToken {
     }
 
     /**
+     * The unique token ID.
+     *
      * @return the token ID
      */
     public String getId() {
@@ -37,6 +43,7 @@ public class AuthToken {
 
     /**
      * Checks whether the AuthToken has expired.
+     *
      * @return True if AuthToken hasn't expired. False in any other case.
      */
     public boolean isValid() {
@@ -44,15 +51,18 @@ public class AuthToken {
     }
 
     /**
+     * The expiry time as a formatted string.
+     *
      * @return the expiry time string
      */
-    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
-    public synchronized String getExpiryTime() {
-        return EXPIRY_FORMAT.format(expiry);
+    public String getExpiryTime() {
+        return EXPIRY_FORMAT.get().format(expiry);
     }
 
     /**
-     * toString.
+     * The token ID as a string.
+     *
+     * @return the token ID
      */
     @Override
     public String toString() {
@@ -60,7 +70,9 @@ public class AuthToken {
     }
 
     /**
-     * @return whether h code is present
+     * Hash code based on the token ID.
+     *
+     * @return the hash code
      */
     @Override
     public int hashCode() {
@@ -68,7 +80,10 @@ public class AuthToken {
     }
 
     /**
-     * equals.
+     * Equality based on the token ID.
+     *
+     * @param o the object to compare
+     * @return true if equal
      */
     @Override
     public boolean equals(Object o) {
