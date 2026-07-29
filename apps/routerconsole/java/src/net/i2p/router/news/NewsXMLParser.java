@@ -199,7 +199,7 @@ public class NewsXMLParser {
         if (n != null) {
             rv.feedSubtitle = n.getValue();
             if (rv.feedSubtitle != null)
-                rv.feedSubtitle = rv.feedTitle.trim();
+                rv.feedSubtitle = rv.feedSubtitle.trim();
         }
         n = feed.getNode("id");
         if (n != null) {

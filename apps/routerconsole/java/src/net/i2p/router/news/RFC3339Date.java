@@ -1,5 +1,6 @@
 package net.i2p.router.news;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,7 +19,7 @@ import net.i2p.util.SystemVersion;
  * date formats and timezone specifications. Handles both numeric
  * and named timezone offsets with proper validation.
  * <p>
- * Thread-safe implementation with synchronized methods for
+ * Thread-safe implementation with ThreadLocal formatters for
  * concurrent access. Includes comprehensive format support for
  * various date representations encountered in news feeds.
  *
@@ -26,53 +27,45 @@ import net.i2p.util.SystemVersion;
  */
 public abstract class RFC3339Date {
 
-    // SimpleDateFormat is not thread-safe, methods must be synchronized
-    private static final SimpleDateFormat OUTPUT_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-
     private static final String TZF1;
     private static final String TZF2;
     static {
-        // Android's SimpleDateFormat doesn't support XXX at any API
         if (SystemVersion.isJava7() && !SystemVersion.isAndroid()) {
-            // ISO 8601
-            // These handle timezones like +1000, +10, and +10:00
             TZF1 = "yyyy-MM-dd'T'HH:mm:ssXXX";
             TZF2 = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
         } else {
-            // These handle timezones like +1000
-            // These do NOT handle timezones like +10:00
-            // This is fixed below
             TZF1 = "yyyy-MM-dd'T'HH:mm:ssZZZZZ";
             TZF2 = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ";
         }
     }
 
-    /**
-     *  This only supports parsing of the dates specified by Atom, RFC 4287,
-     *  together with the date only.
-     */
-    private static final SimpleDateFormat[] rfc3339DateFormats = new SimpleDateFormat[] {
-                 OUTPUT_FORMAT,
-                 // .S or .SS will get the milliseconds wrong,
-                 // e.g. .1 will become 1 ms, .11 will become 11 ms
-                 // This is NOT fixed below
-                 new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US),
-                 new SimpleDateFormat(TZF1, Locale.US),
-                 new SimpleDateFormat(TZF2, Locale.US),
-                 new SimpleDateFormat("yyyy-MM-dd", Locale.US),
-                 // old school for backward compatibility
-                 new SimpleDateFormat("yyyy/MM/dd", Locale.US)
+    private static final ThreadLocal<DateFormat> OUTPUT_FORMAT = new ThreadLocal<DateFormat>() {
+        @Override
+        protected DateFormat initialValue() {
+            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+            fmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+            return fmt;
+        }
     };
 
-    //
-    // The router JVM is forced to UTC but do this just in case
-    //
-    static {
-        TimeZone utc = TimeZone.getTimeZone("GMT");
-        for (int i = 0; i < rfc3339DateFormats.length; i++) {
-            rfc3339DateFormats[i].setTimeZone(utc);
+    private static final ThreadLocal<DateFormat[]> DATE_FORMATS = new ThreadLocal<DateFormat[]>() {
+        @Override
+        protected DateFormat[] initialValue() {
+            TimeZone utc = TimeZone.getTimeZone("GMT");
+            SimpleDateFormat[] formats = new SimpleDateFormat[] {
+                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US),
+                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US),
+                new SimpleDateFormat(TZF1, Locale.US),
+                new SimpleDateFormat(TZF2, Locale.US),
+                new SimpleDateFormat("yyyy-MM-dd", Locale.US),
+                new SimpleDateFormat("yyyy/MM/dd", Locale.US)
+            };
+            for (int i = 0; i < formats.length; i++) {
+                formats[i].setTimeZone(utc);
+            }
+            return formats;
         }
-    }
+    };
 
     /**
      * Parse the date
@@ -80,10 +73,8 @@ public abstract class RFC3339Date {
      * @param s non-null
      * @return -1 on failure
      */
-    public synchronized static long parse3339Date(String s) {
+    public static long parse3339Date(String s) {
         s = s.trim();
-        // strip the ':' out of the time zone, if present,
-        // for Java 6 where we don't have the 'X' format
         int len = s.length();
         if ((!SystemVersion.isJava7() || SystemVersion.isAndroid()) &&
             s.charAt(len - 1) != 'Z' &&
@@ -91,9 +82,10 @@ public abstract class RFC3339Date {
             (s.charAt(len - 6) == '+' || s.charAt(len - 6) == '-')) {
             s = s.substring(0, len - 3) + s.substring(len - 2);
         }
-        for (int i = 0; i < rfc3339DateFormats.length; i++) {
+        DateFormat[] formats = DATE_FORMATS.get();
+        for (int i = 0; i < formats.length; i++) {
             try {
-                Date date = rfc3339DateFormats[i].parse(s);
+                Date date = formats[i].parse(s);
                 if (date != null)
                     return date.getTime();
             } catch (ParseException pe) { /* ignored */ }
@@ -104,9 +96,8 @@ public abstract class RFC3339Date {
     /**
      * Format is "yyyy-MM-ddTHH:mm:ssZ"
      */
-    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
-    public synchronized static String to3339Date(long t) {
-        return OUTPUT_FORMAT.format(new Date(t));
+    public static String to3339Date(long t) {
+        return OUTPUT_FORMAT.get().format(new Date(t));
     }
 
 }

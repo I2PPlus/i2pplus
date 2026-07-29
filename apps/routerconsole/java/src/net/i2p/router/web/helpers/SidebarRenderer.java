@@ -433,15 +433,17 @@ class SidebarRenderer {
         return buf.toString();
     }
 
+    private static final ThreadLocal<DateFormat> CLOCK_FMT = ThreadLocal.withInitial(() -> {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.UK);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return sdf;
+    });
+
     /**
      * renderClockHTML.
      */
     public String renderClockHTML() {
-        String FORMAT = "HH:mm:ss";
-        DateFormat dfmt = new SimpleDateFormat(FORMAT, Locale.UK);
-        TimeZone utc = TimeZone.getTimeZone("GMT");
-        dfmt.setTimeZone(utc);
-        return "<div id=clock class=volatile>" + dfmt.format(new Date()) + "</div>";
+        return "<div id=clock class=volatile>" + CLOCK_FMT.get().format(new Date()) + "</div>";
     }
 
     /**

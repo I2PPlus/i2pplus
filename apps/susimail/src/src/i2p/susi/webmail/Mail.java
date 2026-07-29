@@ -125,7 +125,9 @@ class Mail {
     */
     public synchronized Buffer getHeader() {return header;}
 
-    /** @param rb buffer containing header data */
+    /**
+     * @param rb buffer containing header data
+     */
     public synchronized void setHeader(Buffer rb) {
         try {setHeader(rb, rb.getInputStream(), true);}
         catch (IOException ioe) { // TODO...
@@ -160,7 +162,9 @@ class Mail {
         */
     public synchronized Buffer getBody() {return body;}
 
-    /** @param rb buffer containing body data */
+    /**
+     * @param rb buffer containing body data
+     */
     public synchronized void setBody(Buffer rb) {
         if (rb == null) {return;}
         // In the common case where we have the body, we only parse the headers once.
@@ -190,13 +194,25 @@ class Mail {
         }
     }
 
-    /** @return true if body is loaded */
+    /**
+     * Whether the body has been loaded.
+     *
+     * @return true if body is loaded
+     */
     public synchronized boolean hasBody() {return body != null;}
 
-    /** @return the parsed MailPart, or null */
+    /**
+     * The parsed message part.
+     *
+     * @return the parsed MailPart, or null
+     */
     public synchronized MailPart getPart() {return part;}
 
-    /** @return true if the body has been parsed into a MailPart */
+    /**
+     * Whether the body has been parsed into a MailPart.
+     *
+     * @return true if the body has been parsed into a MailPart
+     */
     public synchronized boolean hasPart() {return part != null;}
 
     /**
@@ -204,22 +220,38 @@ class Mail {
     */
     public synchronized long getSize() {return size;}
 
-    /** @param size the message size */
+    /**
+     * @param size the message size
+     */
     public synchronized void setSize(long size) {
         if (body != null) {return;}
         this.size = size;
     }
 
-    /** @return true if identified as spam */
+    /**
+     * Whether this message is identified as spam.
+     *
+     * @return true if identified as spam
+     */
     public synchronized boolean isSpam() {return isSpam;}
 
-    /** @return true if mail is new (unread) */
+    /**
+     * Whether this message is new (unread).
+     *
+     * @return true if mail is new (unread)
+     */
     public synchronized boolean isNew() {return isNew;}
 
-    /** @param isNew the new/unread flag */
+    /**
+     * @param isNew the new/unread flag
+     */
     public synchronized void setNew(boolean isNew) {this.isNew = isNew;}
 
-    /** @return true if the content type suggests an attachment */
+    /**
+     * Whether the content type suggests an attachment.
+     *
+     * @return true if the content type suggests an attachment
+     */
     public synchronized boolean hasAttachment() {
         // this isn't right but good enough to start
         // if part != null query parts instead?
@@ -358,33 +390,36 @@ class Mail {
     }
 
     /** Formatter for short UTC date display */
-    private static final DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
+    private static final ThreadLocal<DateFormat> dateFormatter = ThreadLocal.withInitial(
+        () -> new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US));
     /** Formatter for long date-only tooltips */
-    private static final DateFormat dateOnlyFormatter = new SimpleDateFormat("EEEE dd MMMM, yyyy", Locale.US);
+    private static final ThreadLocal<DateFormat> dateOnlyFormatter = ThreadLocal.withInitial(
+        () -> new SimpleDateFormat("EEEE dd MMMM, yyyy", Locale.US));
     /** Formatter for short local time zone display */
-    private static final DateFormat localDateFormatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+    private static final ThreadLocal<DateFormat> localDateFormatter = ThreadLocal.withInitial(() -> {
+        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+        df.setTimeZone(SystemVersion.getSystemTimeZone());
+        return df;
+    });
     /** Formatter for medium local time zone display */
-    private static final DateFormat longLocalDateFormatter = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
-    static {
-        // the router sets the JVM time zone to UTC but saves the original here so we can get it
-        TimeZone tz = SystemVersion.getSystemTimeZone();
-        localDateFormatter.setTimeZone(tz);
-        longLocalDateFormatter.setTimeZone(tz);
-    }
+    private static final ThreadLocal<DateFormat> longLocalDateFormatter = ThreadLocal.withInitial(() -> {
+        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
+        df.setTimeZone(SystemVersion.getSystemTimeZone());
+        return df;
+    });
 
     /**
-    * @param dateLong non-negative
-    * @since 0.9.34 pulled from parseHeaders()
-    */
-    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
+     * Sets the date from a long value.
+     *
+     * @param dateLong non-negative
+     * @since 0.9.34 pulled from parseHeaders()
+     */
     private synchronized void setDate(long dateLong) {
         date = new Date(dateLong);
-        synchronized(dateFormatter) {
-            formattedDate = dateFormatter.format(date);
-            localFormattedDate = localDateFormatter.format(date);
-            quotedDate = longLocalDateFormatter.format(date);
-            dateOnly = dateOnlyFormatter.format(date);
-        }
+        formattedDate = dateFormatter.get().format(date);
+        localFormattedDate = localDateFormatter.get().format(date);
+        quotedDate = longLocalDateFormatter.get().format(date);
+        dateOnly = dateOnlyFormatter.get().format(date);
     }
 
     /**
