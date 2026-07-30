@@ -110,7 +110,7 @@ public class RouterContext extends I2PAppContext {
         _router = router;
         if (router == null) {
             // disable NTP when doing unit tests
-            setProperty("time.disabled", "true");
+            _overrideProps.setProperty("time.disabled", "true");
         }
 
         // Disabled here so that the router can get a context and get the
@@ -160,20 +160,6 @@ public class RouterContext extends I2PAppContext {
             return Long.toString(maxBuffs / 2);
         });
         return envProps;
-    }
-
-    /**
-     * Modify the configuration attributes of this context, changing
-     * one of the properties provided during the context construction.
-     *
-     * @param propName The name of the property.
-     * @param value The new value for the property.
-     * @since 0.8.4
-     * @deprecated Use Router.saveConfig()
-     */
-    @Deprecated
-    public void setProperty(String propName, String value) {
-        _overrideProps.setProperty(propName, value);
     }
 
     /**

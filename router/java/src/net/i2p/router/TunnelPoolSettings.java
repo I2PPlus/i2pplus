@@ -203,7 +203,6 @@ public class TunnelPoolSettings {
      * As of 0.9.35, generally false for client, but true if
      * getLength() + Math.min(getLengthVariance(), 0) &lt;= 0,
      * OR if getLengthOverride() == 0
-     * OR if setAllowZeroHop(true) was called or set in properties.
      * @return the allow zero hop
      */
     public boolean getAllowZeroHop() {
@@ -220,21 +219,6 @@ public class TunnelPoolSettings {
      */
     public boolean shouldTest() {
         return _shouldTest;
-    }
-
-    /**
-     * If there are no tunnels to build with, will this pool allow 0 hop tunnels?
-     * No effect on exploratory (always true)
-     *
-     * @param ok if true, getAllowZeroHop() will always return true
-     *           if false, getAllowZeroHop will return as documented.
-     *
-     * @deprecated unused
-     */
-    @Deprecated
-    public void setAllowZeroHop(boolean ok) {
-        if (!_isExploratory)
-            _allowZeroHop = ok;
     }
 
     /**

@@ -96,7 +96,6 @@ public class UDPTransport extends TransportImpl {
     private volatile Status _reachabilityStatus;
     private volatile Status _reachabilityStatusPending;
     // only for logging, to be removed
-    private volatile long _reachabilityStatusLastUpdated;
     private volatile int _reachabilityStatusUnchanged;
     private long _v4IntroducersSelectedOn;
     private long _v6IntroducersSelectedOn;
@@ -1552,8 +1551,7 @@ public class UDPTransport extends TransportImpl {
 
             if (_log.shouldDebug()) {
                 _log.debug("Change address? Status: " + _reachabilityStatus +
-                          "; Last updated: " + (_context.clock().now() - _reachabilityStatusLastUpdated) +
-                          "ms ago; Old: " + Addresses.toString(externalListenHost, externalListenPort) +
+                          "; Old: " + Addresses.toString(externalListenHost, externalListenPort) +
                           "; New: " + Addresses.toString(ourIP, ourPort));
             }
 
@@ -3926,8 +3924,6 @@ public class UDPTransport extends TransportImpl {
                     }
                 }
                 _reachabilityStatusUnchanged = 0;
-                long now = _context.clock().now();
-                _reachabilityStatusLastUpdated = now;
                 _reachabilityStatus = status;
             } else {
                 _reachabilityStatusUnchanged++;
@@ -3978,8 +3974,7 @@ public class UDPTransport extends TransportImpl {
             if (_log.shouldInfo())
                 _log.info("Status unchanged: " + _reachabilityStatus +
                           " after update: " + newStatus +
-                          " (unchanged " + _reachabilityStatusUnchanged + " consecutive times), last updated " +
-                          DataHelper.formatDuration(_context.clock().now() - _reachabilityStatusLastUpdated) + " ago");
+                          " (unchanged " + _reachabilityStatusUnchanged + " consecutive times)");
         }
     }
 

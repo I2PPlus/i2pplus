@@ -436,14 +436,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public int countActivePeers() { return _manager.countActivePeers(); }
 
     /**
-     *  How many peers are we currently connected to, that we have
-     *  sent a message to in the last minute.
-     *  Unused for anything, to be removed.
-     */
-    @Override
-    public int countActiveSendPeers() { return _manager.countActiveSendPeers(); }
-
-    /**
      * haveInboundCapacity.
      */
     @Override

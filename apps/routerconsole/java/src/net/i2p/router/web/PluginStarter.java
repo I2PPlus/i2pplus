@@ -448,9 +448,7 @@ public class PluginStarter implements Runnable {
             for (int i = 0; i < tfiles.length; i++) {
                 String name = tfiles[i].getName();
                 if (tfiles[i].isDirectory() && (!Arrays.asList(STANDARD_THEMES).contains(name))) {
-                    // deprecated
-                    ctx.router().setConfigSetting(CSSHelper.PROP_THEME_PFX + name, tfiles[i].getAbsolutePath());
-                    // we don't need to save
+                    ctx.router().saveConfig(CSSHelper.PROP_THEME_PFX + name, tfiles[i].getAbsolutePath());
                 }
             }
         }

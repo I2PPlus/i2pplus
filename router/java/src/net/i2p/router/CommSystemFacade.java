@@ -67,13 +67,6 @@ public abstract class CommSystemFacade implements Service {
     public abstract int countActivePeers();
 
     /**
-     *  How many peers are we currently connected to, that we have
-     *  sent a message to in the last minute.
-     *  Unused for anything, to be removed.
-     */
-    public abstract int countActiveSendPeers();
-
-    /**
      *  Report whether inbound bandwidth has capacity for the given percentage load.
      *
      *  @param pct percentage of bandwidth currently in use

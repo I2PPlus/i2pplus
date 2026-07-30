@@ -20,14 +20,6 @@ class InboundEndpointProcessor {
     private final IVValidator _validator;
 
     /**
-     *  @deprecated used only by unit tests
-     */
-    @Deprecated
-    InboundEndpointProcessor(RouterContext ctx, TunnelCreatorConfig cfg) {
-        this(ctx, cfg, DummyValidator.getInstance());
-    }
-
-    /**
      * InboundEndpointProcessor.
      */
     public InboundEndpointProcessor(RouterContext ctx, TunnelCreatorConfig cfg, IVValidator validator) {

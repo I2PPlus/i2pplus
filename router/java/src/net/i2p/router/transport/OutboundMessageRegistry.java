@@ -249,12 +249,6 @@ public class OutboundMessageRegistry {
         _activeMessages.remove(msg);
     }
 
-    /** @deprecated unused */
-    @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {
-        // Deprecated - unused
-    }
-
     private class CleanupTask extends SimpleTimer2.TimedEvent {
         /** LOCKING: _selectors */
         private long _nextExpire;

@@ -629,19 +629,6 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  How many peers are we currently connected to, that we have
-     *  sent a message to in the last minute.
-     *  Unused for anything, to be removed.
-     */
-    int countActiveSendPeers() {
-        int peers = 0;
-        for (Transport t : _transports.values()) {
-            peers += t.countActiveSendPeers();
-        }
-        return peers;
-    }
-
-    /**
       * Is at least one transport below its outbound connection limit + some margin
       * Use for throttling in the router.
       *
@@ -712,15 +699,6 @@ public class TransportManager implements TransportEventListener {
                 rv = s;
         }
         return rv;
-    }
-
-    /**
-     * @deprecated unused
-     */
-    @Deprecated
-    void recheckReachability() {
-        for (Transport t : _transports.values())
-            t.recheckReachability();
     }
 
     /**

@@ -33,7 +33,6 @@ public class InboundTest extends TestCase {
     }
 
     @Test
-    @SuppressWarnings("deprecation")
     public void testInbound() {
         int numHops = 8;
         TunnelCreatorConfig config = prepareConfig(numHops);
@@ -52,7 +51,7 @@ public class InboundTest extends TestCase {
             assertTrue(hop.process(message, 0, message.length, prev));
         }
 
-        InboundEndpointProcessor end = new InboundEndpointProcessor(_context, config);
+        InboundEndpointProcessor end = new InboundEndpointProcessor(_context, config, DummyValidator.getInstance());
         assertTrue(end.retrievePreprocessedData(message, 0, message.length, config.getPeer(numHops - 2)));
 
         assertTrue(DataHelper.eq(orig, 16, message, 16, orig.length - 16));

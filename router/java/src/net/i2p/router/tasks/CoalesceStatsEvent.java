@@ -125,9 +125,6 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
         int active = _ctx.commSystem().countActivePeers();
         sm.addRateData("router.activePeers", active, 60L*1000);
 
-        int activeSend = _ctx.commSystem().countActiveSendPeers();
-        sm.addRateData("router.activeSendPeers", activeSend, 60L*1000);
-
         int fast = _ctx.profileOrganizer().countFastPeers();
         sm.addRateData("router.fastPeers", fast, 60L*1000);
 

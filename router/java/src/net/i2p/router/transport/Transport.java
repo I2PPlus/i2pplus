@@ -364,12 +364,6 @@ public interface Transport {
     public Status getReachabilityStatus();
 
     /**
-     * @deprecated unused
-     */
-    @Deprecated
-    public void recheckReachability();
-
-    /**
      * @return IPv6 config
      */
     public TransportUtil.IPv6Config getIPv6Config();

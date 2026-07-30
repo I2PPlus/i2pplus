@@ -34,10 +34,9 @@ public class InboundGatewayIT extends GatewayITBase {
         }
 
         @Override
-        @SuppressWarnings("deprecation")
         protected void handleAtEndpoint(byte[] encrypted) {
             // now handle it at the endpoint
-            InboundEndpointProcessor end = new InboundEndpointProcessor(_context, _config);
+            InboundEndpointProcessor end = new InboundEndpointProcessor(_context, _config, DummyValidator.getInstance());
             assertTrue(end.retrievePreprocessedData(encrypted, 0, encrypted.length, _config.getPeer(_config.getLength() - 2)));
         }
     }

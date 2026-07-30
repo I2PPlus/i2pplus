@@ -528,25 +528,6 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Warning, race between here and saveConfig(),
      *  saveConfig(String name, String value) or saveConfig(Map toAdd, Set toRemove) is recommended.
      *
-     *  @since 0.8.13
-     *  @deprecated use saveConfig(String name, String value) or saveConfig(Map toAdd, Set toRemove)
-     */
-    @Deprecated
-    public void setConfigSetting(String name, String value) {_config.put(name, value);}
-
-    /**
-     *  Warning, race between here and saveConfig(),
-     *  saveConfig(String name, String value) or saveConfig(Map toAdd, Set toRemove) is recommended.
-     *
-     *  @since 0.8.13
-     *  @deprecated use saveConfig(String name, String value) or saveConfig(Map toAdd, Set toRemove)
-     */
-    @Deprecated
-    public void removeConfigSetting(String name) {
-        _config.remove(name);
-        _context.removeProperty(name); // remove the backing default also
-    }
-
     /**
      * Get an unmodifiable set of all configuration property names.
      *
@@ -1352,13 +1333,11 @@ public class Router implements RouterClock.ClockShiftListener {
         CreateRouterInfoJob.INFO_FILENAME,
         CreateRouterInfoJob.KEYS_FILENAME,
         CreateRouterInfoJob.KEYS2_FILENAME,
-        "netDb/my.info",      // no longer used
-        "connectionTag.keys", // never used?
+        "connectionTag.keys",
         KeyManager.DEFAULT_KEYDIR + '/' + KeyManager.KEYFILE_PRIVATE_ENC,
         KeyManager.DEFAULT_KEYDIR + '/' + KeyManager.KEYFILE_PUBLIC_ENC,
         KeyManager.DEFAULT_KEYDIR + '/' + KeyManager.KEYFILE_PRIVATE_SIGNING,
         KeyManager.DEFAULT_KEYDIR + '/' + KeyManager.KEYFILE_PUBLIC_SIGNING,
-        "sessionKeys.dat",     // no longer used
         "ssu2tokens.txt"
     };
 
@@ -1382,17 +1361,28 @@ public class Router implements RouterClock.ClockShiftListener {
 
         // now that we have random ports, keeping the same port would be bad
         synchronized(_configFileLock) {
-            removeConfigSetting(UDPTransport.PROP_INTERNAL_PORT);
-            removeConfigSetting(UDPTransport.PROP_EXTERNAL_PORT);
-            removeConfigSetting(UDPTransport.PROP_INTRO_KEY);
-            removeConfigSetting(UDPTransport.PROP_SSU2_SP);
-            removeConfigSetting(UDPTransport.PROP_SSU2_IKEY);
-            removeConfigSetting(NTCPTransport.PROP_I2NP_NTCP_PORT);
-            removeConfigSetting(NTCPTransport.PROP_NTCP2_SP);
-            removeConfigSetting(NTCPTransport.PROP_NTCP2_IV);
-            removeConfigSetting(PROP_IB_RANDOM_KEY);
-            removeConfigSetting(PROP_OB_RANDOM_KEY);
-            removeConfigSetting(PROP_REBUILD_KEYS);
+            _config.remove(UDPTransport.PROP_INTERNAL_PORT);
+            _context.removeProperty(UDPTransport.PROP_INTERNAL_PORT);
+            _config.remove(UDPTransport.PROP_EXTERNAL_PORT);
+            _context.removeProperty(UDPTransport.PROP_EXTERNAL_PORT);
+            _config.remove(UDPTransport.PROP_INTRO_KEY);
+            _context.removeProperty(UDPTransport.PROP_INTRO_KEY);
+            _config.remove(UDPTransport.PROP_SSU2_SP);
+            _context.removeProperty(UDPTransport.PROP_SSU2_SP);
+            _config.remove(UDPTransport.PROP_SSU2_IKEY);
+            _context.removeProperty(UDPTransport.PROP_SSU2_IKEY);
+            _config.remove(NTCPTransport.PROP_I2NP_NTCP_PORT);
+            _context.removeProperty(NTCPTransport.PROP_I2NP_NTCP_PORT);
+            _config.remove(NTCPTransport.PROP_NTCP2_SP);
+            _context.removeProperty(NTCPTransport.PROP_NTCP2_SP);
+            _config.remove(NTCPTransport.PROP_NTCP2_IV);
+            _context.removeProperty(NTCPTransport.PROP_NTCP2_IV);
+            _config.remove(PROP_IB_RANDOM_KEY);
+            _context.removeProperty(PROP_IB_RANDOM_KEY);
+            _config.remove(PROP_OB_RANDOM_KEY);
+            _context.removeProperty(PROP_OB_RANDOM_KEY);
+            _config.remove(PROP_REBUILD_KEYS);
+            _context.removeProperty(PROP_REBUILD_KEYS);
             saveConfig();
         }
     }
@@ -1880,7 +1870,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      * Updates the current config with the given key/value and then saves it.
-     * Prevents a race in the interval between setConfigSetting() / removeConfigSetting() and saveConfig(),
+     * Prevents a race in the interval between _config.put()/_config.remove() and saveConfig(),
      * Synchronized with getConfig() / saveConfig()
      *
      * @param name setting to add/change/remove before saving
@@ -1891,14 +1881,14 @@ public class Router implements RouterClock.ClockShiftListener {
     public boolean saveConfig(String name, String value) {
         synchronized(_configFileLock) {
             if (value != null) {_config.put(name, value);}
-            else {removeConfigSetting(name);}
+            else {_config.remove(name); _context.removeProperty(name);}
             return saveConfig();
         }
     }
 
     /**
      * Updates the current config and then saves it.
-     * Prevents a race in the interval between setConfigSetting() / removeConfigSetting() and saveConfig(),
+     * Prevents a race in the interval between _config.putAll()/_config.remove() and saveConfig(),
      * Synchronized with getConfig() / saveConfig()
      *
      * @param toAdd settings to add/change before saving, may be null or empty
@@ -1911,7 +1901,7 @@ public class Router implements RouterClock.ClockShiftListener {
         synchronized(_configFileLock) {
             if (toAdd != null) {_config.putAll(toAdd);}
             if (toRemove != null) {
-                for (String s : toRemove) {removeConfigSetting(s);}
+                for (String s : toRemove) {_config.remove(s); _context.removeProperty(s);}
             }
             return saveConfig();
         }

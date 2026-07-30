@@ -457,8 +457,6 @@ public class NetDbHelper extends FormHandler {
                                  _ssucaps != null || _transport != null || _cost != 0 || _etype != null ||
                                  _icount > 0;
         boolean renderCompactSearch = isSearchResult || getTab() == 0;
-        //try {renderNavBar();}
-        //catch (IOException ignore) {}
         try {
             if (renderCompactSearch) {renderCompactLookupForm();}
             if (isSearchResult) {

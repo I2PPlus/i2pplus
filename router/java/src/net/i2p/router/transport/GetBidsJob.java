@@ -15,7 +15,6 @@ import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.BanLogger;
 import net.i2p.router.Banlist;
-import net.i2p.router.JobImpl;
 import net.i2p.router.MessageSelector;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
@@ -30,34 +29,8 @@ import net.i2p.util.Log;
  * pass it on to the transport for processing
  *
  */
-class GetBidsJob extends JobImpl {
-    /** Transport manager state. */
-    private final TransportManager _tmgr;
-    /** Transport manager state. */
-    private final OutNetMessage _msg;
-    /** Transport manager state. */
+class GetBidsJob {
     private static volatile BanLogger _banLogger;
-
-    /**
-     * @deprecated unused, see static getBids()
-     */
-    @Deprecated
-    public GetBidsJob(RouterContext ctx, TransportManager tmgr, OutNetMessage msg) {
-        super(ctx);
-        _tmgr = tmgr;
-        _msg = msg;
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() { return "Fetch bids for a message to be delivered"; }
-    /**
-     * Run the job.
-     */
-    public void runJob() {
-        getBids(getContext(), _tmgr, _msg);
-    }
 
     /** Transport bids for a message and send it if a suitable bid is found */
     static void getBids(RouterContext context, TransportManager tmgr, OutNetMessage msg) {

@@ -236,13 +236,6 @@ public abstract class TransportImpl implements Transport {
      */
     public abstract int countActivePeers();
 
-    /**
-     *  How many peers are we currently connected to, that we have
-     *  sent a message to in the last minute.
-     *  Unused for anything, to be removed.
-     */
-    public abstract int countActiveSendPeers();
-
     /** Per-transport connection limit */
     public int getMaxConnections() {
         if (_context.commSystem().isDummy()) {return 0;} // testing
@@ -937,12 +930,6 @@ public abstract class TransportImpl implements Transport {
      * @return the reachability status
      */
     public abstract Status getReachabilityStatus();
-
-    /**
-     * @deprecated unused
-     */
-    @Deprecated
-    public void recheckReachability() { /* no-op */ }
 
     /**
      *  This returns true if the force-firewalled setting is configured, false otherwise.

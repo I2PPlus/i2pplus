@@ -35,8 +35,6 @@ class RatchetTagSet implements TagSetHandle {
     private final PublicKey _remoteKey;
 /** The session key */
     protected final SessionKey _key;
-    // debug only, to be removed
-    private final SessionKey _tagsetKey;
     // NSR only, else null
     private final HandshakeState _state;
     // inbound only, else null
@@ -184,7 +182,6 @@ class RatchetTagSet implements TagSetHandle {
         _state = state;
         _remoteKey = remoteKey;
         _key = rootKey;
-        _tagsetKey = data;
         _created = date;
         _timeout = timeout;
         _date = date;
@@ -234,7 +231,6 @@ class RatchetTagSet implements TagSetHandle {
         _state = null;
         _remoteKey = null;
         _key = rootKey;
-        _tagsetKey = null;
         _created = date;
         _timeout = timeout;
         _date = date;
@@ -648,8 +644,6 @@ class RatchetTagSet implements TagSetHandle {
         if (pk != null)
             buf.append("\n* Remote Public Key: ").append(pk.toBase64());
         buf.append("\n* Root Key: ").append(_key.toBase64());
-        if (_tagsetKey != null)
-            buf.append("\n* Tagset Key: ").append(_tagsetKey.toBase64());
         if (_nextKey != null)
             buf.append("\n* Next Key: ").append(_nextKey);
         int sz = size();

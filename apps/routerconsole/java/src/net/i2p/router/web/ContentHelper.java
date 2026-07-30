@@ -44,8 +44,7 @@ public class ContentHelper extends HelperBase {
 
             if (_context.getBooleanProperty("desktopgui.enabled")) {
                 //Set language persistently throughout I2P
-                _context.router().setConfigSetting(Messages.PROP_LANG, _lang);
-                _context.router().saveConfig();
+                _context.router().saveConfig(Messages.PROP_LANG, _lang);
                 _context.setProperty(Messages.PROP_LANG, _lang);
             }
         }
