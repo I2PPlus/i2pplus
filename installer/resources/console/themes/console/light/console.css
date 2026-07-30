@@ -13,17 +13,28 @@
 --isE:linear-gradient(135deg,#717 18%,#0000 18%);
 --isG:linear-gradient(135deg,#711 18%,#0000 18%);
 --graphbar:#78a;
---minigraph_in:#48f8;
---minigraph_out:#4a88;
---minigraph_in_fill:linear-gradient(#48f5,#48f2);
---minigraph_out_fill:linear-gradient(#4a85,#4a82);
---minigraph_grid:#5598;
---minigraph_glow_width:4;
 --minigraph_glow_alpha:.3;
+--minigraph_glow_alpha_combined:.3;
 --minigraph_glow_blur:6;
+--minigraph_glow_blur_combined:6;
+--minigraph_glow_width:4;
+--minigraph_glow_width_combined:4;
+--minigraph_grid:#5598;
+--minigraph_grid_combined:#5598;
+--minigraph_in:#48f8;
+--minigraph_in_combined:#48f8;
+--minigraph_in_fill_combined:linear-gradient(#48f5,#48f2);
+--minigraph_in_fill:linear-gradient(#48f5,#48f2);
 --minigraph_line_width:1.5;
---minigraph_tension:.5;
+--minigraph_line_width_combined:1.5;
+--minigraph_out:#4a88;
+--minigraph_out_combined:#4a88;
+--minigraph_out_fill_combined:linear-gradient(#4a85,#4a82);
+--minigraph_out_fill:linear-gradient(#4a85,#4a82);
+--minigraph_overlay_blend_combined:difference;
 --minigraph_overlay_blend:difference;
+--minigraph_tension:.5;
+--minigraph_tension_combined:.5;
 }
 
 /* globals */

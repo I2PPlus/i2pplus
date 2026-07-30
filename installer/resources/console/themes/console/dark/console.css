@@ -16,16 +16,27 @@
 --isG:linear-gradient(135deg,#711 18%,#0000 18%);
 --isU:linear-gradient(45deg,#0000 82%,rgba(192,0,0,.8) 82%);
 --minigraph_glow_alpha:.1;
+--minigraph_glow_alpha_combined:.1;
 --minigraph_glow_blur:6;
+--minigraph_glow_blur_combined:6;
 --minigraph_glow_width:3;
+--minigraph_glow_width_combined:3;
 --minigraph_grid:#252;
+--minigraph_grid_combined:#252;
 --minigraph_in:#099b;
+--minigraph_in_combined:#099b;
+--minigraph_in_fill_combined:linear-gradient(#0993,#0997);
 --minigraph_in_fill:linear-gradient(#0993,#0997);
 --minigraph_line_width:2;
+--minigraph_line_width_combined:2;
 --minigraph_out:#5a5b;
+--minigraph_out_combined:#5a5b;
+--minigraph_out_fill_combined:linear-gradient(#5a53,#5a57);
 --minigraph_out_fill:linear-gradient(#5a53,#5a57);
+--minigraph_overlay_blend_combined:screen;
 --minigraph_overlay_blend:screen;
 --minigraph_tension:.5;
+--minigraph_tension_combined:.5;
 }
 
 /* global */
@@ -765,6 +776,7 @@ h3.stats{border:var(--border);border-radius:0}
 #stats .tab:not(.tab2):active{color:var(--ink)}
 #stats .tab2{text-shadow:var(--textshadow);box-shadow:var(--highlight),inset 3px 3px 2px #010;background:linear-gradient(180deg,#030,#003800)}
 #stats #gatherstats{margin:12px 0 2px}
+.filtered #stats #gatherstats{margin:12px 0 17px}
 #statsWrap{margin-top:-4px;margin-bottom:-9px;padding-bottom:6px;overflow:hidden}
 .confignav+#statsWrap{margin-top:0}
 
