@@ -45,14 +45,11 @@ import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
 
 /**
- * Moved from ReseedHandler in routerconsole. See ReseedChecker for additional comments.
+ * Reseed handler that fetches router infos from configured seed URLs.
+ * Uses the built-in URL list unless "i2p.reseedURL" is overridden.
+ * Writes results to ./netDb/. Logs to console, router log, and wrapper log.
  *
- * Handler to deal with reseed requests.  This will reseed from the URLs
- * specified below unless the I2P configuration property "i2p.reseedURL" is
- * set.  It always writes to ./netDb/, so don't mess with that.
- *
- * This is somewhat complicated by trying to log to three places - the console,
- * the router log, and the wrapper log.
+ * Moved from ReseedHandler in routerconsole; see ReseedChecker for additional validation.
  */
 public class Reseeder {
     private final RouterContext _context;
@@ -62,16 +59,16 @@ public class Reseeder {
     // Reject unreasonably big files, because we download into a ByteArrayOutputStream.
     private static final long MAX_RESEED_RESPONSE_SIZE = 2 * 1024 * 1024L;
     private static final long MAX_SU3_RESPONSE_SIZE = 1024 * 1024L;
-    /** limit to spend on a single host, to avoid getting stuck on one that is seriously overloaded */
+    /** Limit per host to avoid getting stuck on one that is seriously overloaded. */
     private static final int MAX_TIME_PER_HOST = 10 * 1000;
     private static final long MAX_FILE_AGE = 3*24*60*60*1000L;
     /** Don't disable this! */
     private static final boolean ENABLE_SU3 = true;
-    /** if false, use su3 only, and disable fallback reading directory index and individual dat files */
+    /** If false, use SU3 only; disable fallback to directory index and individual dat files. */
     private static final boolean ENABLE_NON_SU3 = false;
     private static final int MIN_RI_WANTED = 800;
     private static final int MIN_RESEED_SERVERS = 12;
-    // network ID cross-check, proposal 147, as of 0.9.42
+    // Network ID cross-check, proposal 147, as of 0.9.42
     private static final String NETID_PARAM = "?netid=";
     private static final String MIN_VERSION = "0.9.64";
 
@@ -108,31 +105,24 @@ public class Reseeder {
         //
         // https url:port, ending with "/"                    certificates/reseed/                 certificates/ssl/                 notes
         // ----------------------------------                 ---------------------------------    ------------------------------    --------------------------
-        "https://coconut.incognet.io/"              + ',' +   // rambler_at_mail.i2p.crt           CA
+        "https://cubicchaos.net:8443/"              + ',' +   // unixeno_at_cubicchaos.net.crt     cubicchaos.net.crt
         "https://i2p.diyarciftci.xyz/"              + ',' +   // diyarciftci_at_protonmail.com.crt CA                                Java 8+
         "https://i2p.novg.net/"                     + ',' +   // igor_at_novg.net.crt              CA                                Java 8+
         "https://i2pseed.creativecowpat.net:8443/"  + ',' +   // creativecowpat_at_mail.i2p.crt    i2pseed.creativecowpat.net.crt    Java 7+
-        "https://reseed2.i2p.net/"                  + ',' +   // echelon3_at_mail.i2p.crt          CA
-        "https://reseed.diva.exchange/"             + ',' +   // reseed_at_diva.exchange.crt       CA
         "https://reseed-fr.i2pd.xyz/"               + ',' +   // r4sas-reseed_at_mail.i2p.crt      CA
         "https://reseed.i2pgit.org/"                + ',' +   // hankhill19580_at_gmail.com.crt    CA                                Java 8+
-        "https://reseed.onion.im/"                  + ',' +   // lazygravy_at_mail.i2p             CA                                Java 8+
         "https://reseed-pl.i2pd.xyz/"               + ',' +   // r4sas-reseed_at_mail.i2p.crt      CA
-        "https://reseed.stormycloud.org/"           + ',' +   // admin_at_stormycloud.org.crt      CA
         "https://reseed.sahil.world/"               + ',' +   // sahil_at_mail.i2p.crt             CA
+        "https://reseed.stormycloud.org/"           + ',' +   // admin_at_stormycloud.org.crt      CA
+        "https://reseed2.i2p.net/"                  + ',' +   // echelon3_at_mail.i2p.crt          CA
+        "https://spiral.likogan.dev/"               + ',' +   // admin_at_likogan.dev.crt          CA
         "https://www2.mk16.de/";                              // i2p-reseed_at_mk16.de.crt         CA
-
-
 
     private static final String SU3_FILENAME = "i2pseeds.su3";
 
-    /**
-     * PROP_PROXY_HOST.
-     */
+    /** Host for the HTTP proxy used during reseed. */
     public static final String PROP_PROXY_HOST = "router.reseedProxyHost";
-    /**
-     * PROP_PROXY_PORT.
-     */
+    /** Port for the HTTP proxy used during reseed. */
     public static final String PROP_PROXY_PORT = "router.reseedProxyPort";
     /** @since 0.8.2 */
     public static final String PROP_PROXY_ENABLE = "router.reseedProxyEnable";
@@ -142,53 +132,42 @@ public class Reseeder {
     public static final String PROP_SSL_REQUIRED = "router.reseedSSLRequired";
     /** @since 0.8.3 */
     public static final String PROP_RESEED_URL = "i2p.reseedURL";
-    /** all these @since 0.8.9 */
+    /** @since 0.8.9 */
     public static final String PROP_PROXY_USERNAME = "router.reseedProxy.username";
-    /**
-     * PROP_PROXY_PASSWORD.
-     */
+    /** Password for HTTP proxy authentication. */
     public static final String PROP_PROXY_PASSWORD = "router.reseedProxy.password";
-    /**
-     * PROP_PROXY_AUTH_ENABLE.
-     */
+    /** If true, enable HTTP proxy authentication. */
     public static final String PROP_PROXY_AUTH_ENABLE = "router.reseedProxy.authEnable";
-    /**
-     * PROP_SPROXY_HOST.
-     */
+    /** Host for the SSL proxy used during reseed. */
     public static final String PROP_SPROXY_HOST = "router.reseedSSLProxyHost";
-    /**
-     * PROP_SPROXY_PORT.
-     */
+    /** Port for the SSL proxy used during reseed. */
     public static final String PROP_SPROXY_PORT = "router.reseedSSLProxyPort";
-    /**
-     * PROP_SPROXY_ENABLE.
-     */
+    /** If true, enable SSL proxy for reseed. */
     public static final String PROP_SPROXY_ENABLE = "router.reseedSSLProxyEnable";
-    /**
-     * PROP_SPROXY_USERNAME.
-     */
+    /** Username for SSL proxy authentication. */
     public static final String PROP_SPROXY_USERNAME = "router.reseedSSLProxy.username";
-    /**
-     * PROP_SPROXY_PASSWORD.
-     */
+    /** Password for SSL proxy authentication. */
     public static final String PROP_SPROXY_PASSWORD = "router.reseedSSLProxy.password";
-    /**
-     * PROP_SPROXY_AUTH_ENABLE.
-     */
+    /** If true, enable SSL proxy authentication. */
     public static final String PROP_SPROXY_AUTH_ENABLE = "router.reseedSSLProxy.authEnable";
     /** @since 0.9.33 */
     public static final String PROP_SPROXY_TYPE = "router.reseedSSLProxyType";
     /** @since 0.9 */
     public static final String PROP_DISABLE = "router.reseedDisable";
 
-    // from PersistentDataStore
+    // From PersistentDataStore
     private static final String ROUTERINFO_PREFIX = "routerInfo-";
     private static final String ROUTERINFO_SUFFIX = ".dat";
     private static final Pattern PAREN_PATTERN = Pattern.compile("\\([^)]*\\)");
     private static final Pattern VERIFY_FAIL_PATTERN = Pattern.compile("verification failed for .*");
     private static final Pattern URL_SPLIT_PATTERN = Pattern.compile("[ ,]+");
 
-    /** Create a new Reseeder */
+    /**
+     *  Holds context and checker references for reseed operations.
+     *
+     *  @param ctx the router context
+     *  @param rc  status and error reporting
+     */
     Reseeder(RouterContext ctx, ReseedChecker rc) {
         _context = ctx;
         _log = ctx.logManager().getLog(Reseeder.class);
@@ -202,7 +181,7 @@ public class Reseeder {
      */
     void requestReseed() {
         ReseedRunner reseedRunner = new ReseedRunner();
-        // set to daemon so it doesn't hang a shutdown
+        // Set to daemon so it doesn't hang a shutdown
         Thread reseed = new I2PAppThread(reseedRunner, "Reseed", true);
         reseed.start();
     }
@@ -216,7 +195,7 @@ public class Reseeder {
      */
     void requestReseed(URI url) throws IllegalArgumentException {
         ReseedRunner reseedRunner = new ReseedRunner(url);
-        // set to daemon so it doesn't hang a shutdown
+        // Set to daemon so it doesn't hang a shutdown
         Thread reseed = new I2PAppThread(reseedRunner, "Reseed", true);
         reseed.start();
     }
@@ -251,7 +230,7 @@ public class Reseeder {
             }
             int[] stats;
             ReseedRunner reseedRunner = new ReseedRunner();
-            // inline
+            // Inline extraction (no new thread)
             if (isSU3) {stats = reseedRunner.extractSU3(tmp);}
             else {stats = reseedRunner.extractZip(tmp);}
             int fetched = stats[0];
@@ -270,14 +249,13 @@ public class Reseeder {
     }
 
     /**
-     *  Since Java 7 or Android 2.3 (API 9),
-     *  which is the lowest Android we support anyway.
-     *
-     *  Not guaranteed to be correct, e.g. FreeBSD:
+     *  Whether the current JVM supports Server Name Indication (SNI).
+     *  True for Java 7+ and Android 2.3+ (API 9).
+     *  Not guaranteed on all platforms, e.g. FreeBSD:
      *  https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=201446
      *
+     *  @return true if SNI is supported
      *  @since 0.9.20
-     * @return whether s n i supported
      */
     private static boolean isSNISupported() {return SystemVersion.isJava7() || SystemVersion.isAndroid();}
 
@@ -293,7 +271,7 @@ public class Reseeder {
         private SSLEepGet.SSLState _sslState;
         private int _gotDate;
         private long _attemptStarted;
-        /** bytes per sec for each su3 downloaded */
+        /** Bytes per second for each SU3 download. */
         private final List<Long> _bandwidths;
         private static final int MAX_DATE_SETS = 4;
         private final URI _url;
@@ -422,9 +400,7 @@ public class Reseeder {
             }
         }
 
-        /**
-         *  @since 0.9.18
-         */
+        /** Record and log download bandwidth samples. @since 0.9.18 */
         private void processBandwidths() {
             if (_bandwidths.isEmpty()) {return;}
             long tot = 0;
@@ -436,14 +412,17 @@ public class Reseeder {
             // TODO _context.bandwidthLimiter().....
         }
 
-        // EepGet status listeners
-        /** Log and report a failed reseed attempt */
+        /** Log and report a failed reseed attempt.
+         * readURL() runs an EepGet with 0 retries, so errors arrive here
+         * with the failure cause (unlike transferFailed()).
+         * @param url the full URL that failed
+         * @param bytesTransferred bytes transferred before failure
+         * @param bytesRemaining bytes remaining when failed
+         * @param currentAttempt attempt number
+         * @param numRetries retries remaining
+         * @param cause the exception that caused the failure
+         */
         public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {
-            /*
-             * Since readURL() runs an EepGet with 0 retries, we can report errors with
-             * attemptFailed() instead of transferFailed() which has the benefit of providing
-             * cause of failure, which helps resolve issues.
-             */
             String truncatedURL = url.replace("https://", "");
             int slashIndex = truncatedURL.indexOf('/');
             String hostname = slashIndex > 0 ? truncatedURL.substring(0, slashIndex) : truncatedURL;
@@ -457,16 +436,18 @@ public class Reseeder {
             }
         }
 
-        /** No-op - progress not tracked */
+        /** Progress not tracked here. @see #attemptFailed */
         @Override
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {}
-        /** No-op - completion handled elsewhere */
+        /** Completion handled in caller. */
         public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {}
-        /** No-op - failure handled in error callback */
+        /** Failure handled in attemptFailed(). */
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {}
 
         /**
-         *  Use the Date header as a backup time source
+         *  Use the Date header as a backup time source.
+         *  May be called multiple times; the first call has lower stratum
+         *  than subsequent refinements.
          */
         public void headerReceived(String url, int attemptNum, String key, String val) {
             /*
@@ -491,7 +472,7 @@ public class Reseeder {
                                       DataHelper.formatDuration(Math.abs(offset)));
                     } else {
                         // No peers or NTP yet, this is probably better than the peer average will be for a while
-                        // default stratum - 1, so the peer average is a worse stratum
+                        // Default stratum - 1, so the peer average is a worse stratum
                         _context.clock().setNow(now, RouterClock.DEFAULT_STRATUM - 1);
                         _log.logAlways(Log.WARN, "NTP failure, Reseed adjusting clock by " +
                                                  DataHelper.formatDuration(Math.abs(offset)));
@@ -501,14 +482,13 @@ public class Reseeder {
             }
         }
 
-        /** save the start time */
+        /** Record the attempt start time for RTT-based clock adjustment. */
         @Override
         public void attempting(String url) {
             if (_gotDate < MAX_DATE_SETS)
                 _attemptStarted = System.currentTimeMillis();
         }
 
-        // End of EepGet status listeners
 
         /**
          * Performs reseed operation using configured URLs or defaults.
@@ -803,12 +783,11 @@ public class Reseeder {
         }
 
         /**
-         *  Fetch an su3 file containing routerInfo files
-         *
-         *  We update the status here.
+         *  Fetch an su3 file containing routerInfo files.
+         *  Updates status on the checker.
          *
          *  @param seedURL the URL of the SU3 file
-         *  @param echoStatus apparently always false
+         *  @param echoStatus if true, print debug dots per routerinfo
          *  @return count of routerinfos successfully fetched
          *  @since 0.9.14
          */
@@ -817,12 +796,11 @@ public class Reseeder {
         }
 
         /**
-         *  Fetch a zip file containing routerInfo files
-         *
-         *  We update the status here.
+         *  Fetch a zip file containing routerInfo files.
+         *  Updates status on the checker.
          *
          *  @param seedURL the URL of the zip file
-         *  @param echoStatus apparently always false
+         *  @param echoStatus if true, print debug dots per routerinfo
          *  @return count of routerinfos successfully fetched
          *  @since 0.9.19
          */
@@ -831,12 +809,12 @@ public class Reseeder {
         }
 
         /**
-         *  Fetch an su3 or zip file containing routerInfo files
-         *
-         *  We update the status here.
+         *  Fetch an su3 or zip file containing routerInfo files.
+         *  Updates status on the checker.
          *
          *  @param seedURL the URL of the SU3 or zip file
-         *  @param echoStatus apparently always false
+         *  @param isSU3 true for SU3, false for zip
+         *  @param echoStatus if true, print debug dots per routerinfo
          *  @return count of routerinfos successfully fetched
          *  @since 0.9.19
          */
@@ -850,7 +828,7 @@ public class Reseeder {
             try {
                 _checker.setStatus(_t("Contacting reseed host") + ":<br>" + DataHelper.escapeHTML(trimmed));
                 _log.info("Reseeding " + s);
-                // don't use context time, as we may be step-changing it
+                // Don't use context time, as we may be step-changing it
                 // from the server header
                 long startTime = System.currentTimeMillis();
                 contentRaw = fetchURL(seedURL);
@@ -887,6 +865,8 @@ public class Reseeder {
 
 
         /**
+         *  Verify and extract router infos from a downloaded SU3 bundle.
+         *
          *  @return 2 ints: number successful and number of errors
          *  @since 0.9.19 pulled from reseedSU3
          */
@@ -934,6 +914,8 @@ public class Reseeder {
         }
 
         /**
+         *  Extract and validate router info files from a zip bundle.
+         *
          *  @return 2 ints: number successful and number of errors
          *  @since 0.9.19 pulled from reseedSU3
          */
@@ -1023,7 +1005,12 @@ public class Reseeder {
             return writeSeed(b64, data);
         }
 
-        /** @return null on error */
+        /**
+         *  Fetch a URL into a byte array.
+         *
+         *  @param url the URL to fetch
+         *  @return the response body, or null on error
+         */
         private byte[] readURL(URI url) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream(4*1024);
             EepGet get;
@@ -1074,9 +1061,10 @@ public class Reseeder {
         }
 
         /**
-         *  Fetch a URL to a file.
+         *  Fetch a URL to a temporary file.
          *
-         *  @return null on error
+         *  @param url the URL to fetch
+         *  @return temp file with content, or null on error
          *  @since 0.9.14
          */
         private File fetchURL(URI url) {
@@ -1129,7 +1117,11 @@ public class Reseeder {
         }
 
         /**
+         *  Write a fetched router info to disk.
+         *  Skips if a recent copy already exists.
+         *
          *  @param name valid Base64 hash
+         *  @param data raw router info bytes
          *  @return true on success, false if skipped
          */
         private boolean writeSeed(String name, byte[] data) throws IOException {
@@ -1155,8 +1147,10 @@ public class Reseeder {
         }
 
         /**
+         *  Resolve the SSL proxy type from configuration.
+         *
+         *  @return non-null proxy type
          *  @throws IllegalArgumentException if unknown, default is HTTP
-         *  @return non-null
          *  @since 0.9.33
          */
         private SSLEepGet.ProxyType getProxyType() throws IllegalArgumentException {
@@ -1230,26 +1224,24 @@ public class Reseeder {
 
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
-    /** translate */
+    /** Look up a localized string from the router console bundle. */
     private String _t(String key) {
         return Translate.getString(key, _context, BUNDLE_NAME);
     }
 
-    /** translate */
+    /** Look up a localized string with one {0} substitution. */
     private String _t(String s, Object o) {
         return Translate.getString(s, o, _context, BUNDLE_NAME);
     }
 
-    /** translate */
+    /** Look up a localized string with {0} and {1} substitutions. */
     private String _t(String s, Object o, Object o2) {
         return Translate.getString(s, o, o2, _context, BUNDLE_NAME);
     }
 
-    /** translate */
+    /** Look up a localized string with singular/plural forms. */
     private String ngettext(String s, String p, int n) {
         return Translate.getString(n, s, p, _context, BUNDLE_NAME);
     }
-
-
 
 }
