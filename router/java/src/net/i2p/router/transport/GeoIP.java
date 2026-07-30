@@ -655,6 +655,10 @@ public class GeoIP {
         ASN_DB_OVERRIDES.put("Matteo Filiberto Sciacca Trading Sa Loclix", "Matteo Filiberto Sciacca Trading");
         // Word-order reversed personal name
         ASN_DB_OVERRIDES.put("Ip-projects Sa Trading Schinzel Sebastian Michael", "IP Projects");
+        // db-ip.com ASN DB naming fixes
+        ASN_DB_OVERRIDES.put("Telefonica Germany GMBH & Co.ohg", "Telefonica Germany");
+        ASN_DB_OVERRIDES.put("PJSC Rostelecom", "Rostelecom");
+        ASN_DB_OVERRIDES.put("Comcast Cable Comms", "Comcast Cable");
     }
 
     /**
