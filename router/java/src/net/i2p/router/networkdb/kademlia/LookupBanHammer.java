@@ -83,7 +83,11 @@ class LookupBanHammer {
         return false;
     }
 
-    /** @return true if ban is active; removes expired entries. */
+    /**
+     * Check whether the requester has an active ban. Removes expired entries inline.
+     *
+     * @return true if the ban is still active
+     */
     private boolean isBanned(ReplyTunnel rt, long now) {
         Long until = banExpiration.get(rt);
         if (until == null) return false;
