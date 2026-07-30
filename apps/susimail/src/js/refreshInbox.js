@@ -2,7 +2,8 @@
  * @module refreshInbox
  * @file I2P+ SusiMail inbox refresher.
  * Performs AJAX polling to refresh the mailbox view and notification
- * elements without a full page reload.
+ * elements without a full page reload. The "Refresh Page" button also
+ * triggers an immediate fetch on click.
  * @author dr|z3d
  * @license AGPLv3 or later
  */
@@ -23,35 +24,53 @@ const serverRefresh = document.getElementById("serverRefresh");
 if (notify) { setTimeout(() => { notify.remove(); }, 4000); }
 
 /**
+ * Fetches the current mailbox HTML and diffs/updates the relevant DOM
+ * sections (mailbox, notifications, refresh button) in-place.
+ * @function doRefresh
+ * @returns {void}
+ */
+function doRefresh() {
+  if (document.getElementById("serverRefresh")) { return; }
+  if (pageRefresh) { pageRefresh.classList.add("checking"); }
+  fetch(`/susimail?${new Date().getTime()}`)
+    .then(response => response.text())
+    .then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+      const refresh = doc.getElementById("pageRefresh") || doc.getElementById("serverRefresh");
+      const newMailbox = doc.getElementById("mailbox");
+      const newNotify = doc.getElementById("notify");
+      if (pageRefresh && refresh && pageRefresh.outerHTML !== refresh.outerHTML) {
+        pageRefresh.outerHTML = refresh.outerHTML;
+      }
+      if (mailbox && newMailbox && mailbox.innerHTML !== newMailbox.innerHTML) {
+        mailbox.innerHTML = newMailbox.innerHTML;
+      }
+      if (newNotify && (!notify || notify.innerHTML !== newNotify.innerHTML)) {
+        if (notify) { notify.remove(); }
+        if (form) { form.appendChild(newNotify); }
+      }
+      removeDupeNotices();
+    })
+    .catch(() => {});
+}
+
+/**
  * Starts the inbox polling interval when the mailbox and refresh button
- * are present. Fetches the page, diffs relevant DOM sections, and
- * updates them in-place.
+ * are present. Also wires the "Refresh Page" button to trigger an
+ * immediate fetch.
  */
 if (mailbox && pageRefresh) {
   removeDupeNotices();
+  if (pageRefresh) {
+    pageRefresh.addEventListener("click", e => { e.preventDefault(); doRefresh(); });
+  }
   const interval = setInterval(() => {
     if (document.getElementById("serverRefresh")) {
       clearInterval(interval);
       return;
     }
-    if (pageRefresh) {pageRefresh.classList.add("checking");}
-    fetch(`/susimail?${new Date().getTime()}`)
-      .then(response => response.text())
-      .then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, "text/html");
-        const refresh = doc.getElementById("pageRefresh") || doc.getElementById("serverRefresh");
-        const newMailbox = doc.getElementById("mailbox");
-        const newNotify = doc.getElementById("notify");
-        if (pageRefresh.outerHTML !== refresh.outerHTML) { pageRefresh.outerHTML = refresh.outerHTML;}
-        if (mailbox.innerHTML !== newMailbox.innerHTML) {mailbox.innerHTML = newMailbox.innerHTML;}
-        if (newNotify && (notify.innerHTML !== newNotify.innerHTML || !notify)) {
-          if (notify) {notify.remove();}
-          form.appendChild(newNotify);
-        }
-        removeDupeNotices();
-      })
-      .catch(() => {});
+    doRefresh();
   }, 5000);
 }
 

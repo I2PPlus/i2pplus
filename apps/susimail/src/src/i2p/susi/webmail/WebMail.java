@@ -3449,7 +3449,7 @@ public class WebMail extends HttpServlet {
                 floc = '&' + CURRENT_FOLDER + '=' + folderName;
             }
         } else {
-            sb.append("<a id=pageRefresh class=fakebutton>")
+            sb.append("<a id=pageRefresh class=fakebutton href=/susimail>")
               .append(_t("Refresh Page"))
               .append("</a>");
         }
