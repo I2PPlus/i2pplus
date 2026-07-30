@@ -669,7 +669,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         if (sockMgr == null) {
             throw new IllegalStateException("Socket manager not initialized; call verifySocketManager() first");
         }
-        Properties defaultOpts = getTunnel().getClientOptions();
+        Properties defaultOpts = new Properties();
+        defaultOpts.putAll(getTunnel().getClientOptions());
         defaultOpts.putAll(overrides);
         I2PSocketOptions opts = sockMgr.buildOptions(defaultOpts);
         if (!defaultOpts.containsKey(I2PSocketOptions.PROP_CONNECT_TIMEOUT)) {
