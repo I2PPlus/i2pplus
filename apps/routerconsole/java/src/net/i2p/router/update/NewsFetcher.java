@@ -148,6 +148,11 @@ class NewsFetcher extends UpdateRunner {
             String newsURL = _currentURI.toString();
             String newsHost = _currentURI.getHost().substring(0,6) + "...b32.i2p";
 
+            if (_log.shouldDebug()) {
+                _log.debug("News fetch: lang=" + Translate.getLanguage(_context)
+                    + " url=" + newsURL + " lastModified=" + _lastModified);
+            }
+
             if (_tempFile.exists()) {_tempFile.delete();}
 
             try {
@@ -481,10 +486,19 @@ class NewsFetcher extends UpdateRunner {
         }
 
         if (_tempFile.exists() && _tempFile.length() > 0) {
+            if (_log.shouldDebug()) {
+                _log.debug("News SU3 download: url=" + url + " size=" + _tempFile.length());
+                File debugCopy = new File(_context.getTempDir(),
+                    "news-debug-" + _context.random().nextInt() + ".su3");
+                FileUtil.copy(_tempFile, debugCopy, false, true);
+            }
             File from;
             try {from = processSU3();}
             catch (IOException ioe) {
                 _log.error("Failed to extract the news file", ioe);
+                if (_log.shouldDebug()) {
+                    _log.debug("Deleting failed news temp file: " + _tempFile.getAbsolutePath());
+                }
                 _tempFile.delete();
                 return;
             }
