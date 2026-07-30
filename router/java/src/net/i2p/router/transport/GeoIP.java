@@ -619,14 +619,42 @@ public class GeoIP {
     static {
         ASN_DB_OVERRIDES = new HashMap<>();
         // Word-by-word character-reversed names from MaxMind ASN DB
-        ASN_DB_OVERRIDES.put("setarimE moceleT puorG oC talasitepuorG CSJP", "Emirates Telecom Group Co PJSC");
+        ASN_DB_OVERRIDES.put("setarimE moceleT puorG oC talasitepuorG CSJP", "Emirates Telecom Group");
         ASN_DB_OVERRIDES.put("ciT san. ireltemziH misiliB moceleT sitnaltA", "Atlantis Telecom Bilisim Hizmetleri Tic. San.");
-        ASN_DB_OVERRIDES.put("CSJP )puorG talasite( oC puorG moceleT setarimE", "Emirates Telecom Group Co (etisalat Group) PJSC");
-        ASN_DB_OVERRIDES.put("eteicoS esiacnarF uD enohpeletoidaR", "Societe France Du RadioTelephone");
+        ASN_DB_OVERRIDES.put("CSJP )puorG talasite( oC puorG moceleT setarimE", "Emirates Telecom Group (etisalat Group)");
+        ASN_DB_OVERRIDES.put("eteicoS esiacnarF uD enohpeletoidaR", "SFR");
+        ASN_DB_OVERRIDES.put("eteicoS esiacnarF uD enohpeletoidaR - RFS", "SFR");
+        ASN_DB_OVERRIDES.put("RFS - enohpeletoidaR uD esiacnarF eteicoS", "SFR");
+        ASN_DB_OVERRIDES.put("eteicoS esiacnarF uD enohpeletoidaR - RFS  SFR - Radiotelephone Du Francaise Societe", "SFR");
+        // NetCologne (German ISP) — doubly reversed
+        ASN_DB_OVERRIDES.put("engolocteN tfahcslleseG ruF noitakinummokeleT mbH", "NetCologne");
+        ASN_DB_OVERRIDES.put("Hbm Telekommunikation Fur Gesellschaft Netcologne", "NetCologne");
+        ASN_DB_OVERRIDES.put("engolocteN tfahcslleseG ruF noitakinummokeleT mbH  Hbm Telekommunikation Fur Gesellschaft Netcologne", "NetCologne");
+        // Peru Telecom infrastructure company — fully reversed string
+        ASN_DB_OVERRIDES.put("ollorraseD arutcurtsearfnI moceleT UREP .S C", "Peru Telecom");
+        ASN_DB_OVERRIDES.put("C S. PERU Telecom Infraestructura Desarrollo", "Peru Telecom");
         ASN_DB_OVERRIDES.put("etavirP namssenisuB vonayruB nitnatsnoK", "Private Business von Knutsen");
         ASN_DB_OVERRIDES.put("oixenI eigolonhcetsnoitamrofnI dnU", "Und Informationstechnologie Inexio");
+        // Moroccan ONPT — fully reversed French name
+        ASN_DB_OVERRIDES.put("MAI /tpnO moceleT tE setsoP seD ltaN eciffO", "Morocco Telecom");
+        ASN_DB_OVERRIDES.put("Office Natl Des Postes Et Telecom Onpt/ IAM", "Morocco Telecom");
         // First/last char case-swap corrupted names from MaxMind ASN DB
-        ASN_DB_OVERRIDES.put("techteL LMDS comunicacioneS interactivaS S", "Techtel LMDS Comunicaciones Interactivas S.A.");
+        ASN_DB_OVERRIDES.put("techteL LMDS comunicacioneS interactivaS S", "Techtel");
+        ASN_DB_OVERRIDES.put("lethceT SDML senoicacinumoC savitcaretnI S", "Techtel");
+        // Vodafone Portugal — doubly reversed Portuguese name
+        ASN_DB_OVERRIDES.put("enofadoV lagutroP - seocacinummoC siaosseP S", "Vodafone Portugal");
+        ASN_DB_OVERRIDES.put("S Pessoais Communicacoes - Portugal Vodafone", "Vodafone Portugal");
+        // Doubly-reversed "Cloud Technologies LLC Trading ..." with domain fragments
+        ASN_DB_OVERRIDES.put("Cloud Seigolonhcet CLL Gnidart Sa Ur.duolc", "Cloud.RU");
+        ASN_DB_OVERRIDES.put("Ur.duolc Sa Gnidart CLL Seigolonhcet Cloud", "Cloud.RU");
+        // Word-order + char-reversed: "Matteo Martelloni Trading as Deluxhost"
+        ASN_DB_OVERRIDES.put("Tsohxuled Sa Gnidart Inolletram Oettam", "Matteo Martelloni");
+        // Title-case variant of Techtel not caught by existing reversed-word overrides
+        ASN_DB_OVERRIDES.put("Techtel LMDS Comunicaciones Interactivas S", "Techtel");
+        // Personal name with "as trading" reversed
+        ASN_DB_OVERRIDES.put("Matteo Filiberto Sciacca Trading Sa Loclix", "Matteo Filiberto Sciacca Trading");
+        // Word-order reversed personal name
+        ASN_DB_OVERRIDES.put("Ip-projects Sa Trading Schinzel Sebastian Michael", "IP Projects");
     }
 
     /**
@@ -637,7 +665,7 @@ public class GeoIP {
         // Core business/org terms
         "private", "business", "telecom", "group", "network", "internet",
         "services", "systems", "technology", "communications", "corporate",
-        "international", "national", "global", "online", "digital",
+        "trading", "international", "national", "global", "online", "digital",
         "security", "hosting", "solutions", "consulting", "management",
         "information", "development", "engineering",
         "university", "college", "institute", "foundation", "association",
@@ -712,7 +740,7 @@ public class GeoIP {
         ",?\\s+Limited\\s+Liability\\s+Partnership\\.?|" +
         ",?\\s+Limited\\.?|,?\\s+LIMITED\\.?|" +
         ",?\\s+Ltd\\.?\\s+Co\\.?|,?\\s+LTD\\.?\\s+CO\\.?|" +
-        ",?\\s+Ltd\\.?|,?\\s+LTD\\.?|" +
+        ",?\\s+Ltd\\.?|,?\\s+LTD\\.?|,\\s*Ltd\\.?|,\\s*LTD\\.?|" +
         ",?\\s+Inc\\.?|,?\\s+INC\\.?|,?\\s+Incorporated\\.?|" +
         ",?\\s+LLC\\.?|,?\\s+LLP\\.?|" +
         ",?\\s+Corporation\\.?|,?\\s+CORPORATION\\.?|" +
@@ -725,14 +753,15 @@ public class GeoIP {
         ",?\\s+S\\.?\\s+A\\.?|,?\\s+SA\\.?|" +
         ",?\\s+GmbH\\s*&\\s+Co\\.?\\s+KG\\.?|" +
         ",?\\s+GmbH\\s*&\\s+Co\\.?|,?\\s+GmbH\\.?|" +
-        ",?\\s+B\\.?\\s+V\\.?|,?\\s+BV\\.?|" +
+        ",?\\s+B\\.?\\s*V\\.?|,?\\s+BV\\.?|" +
         ",?\\s+N\\.?\\s+V\\.?|,?\\s+NV\\.?|" +
         ",?\\s+PLC\\.?|" +
         ",?\\s+Group\\.?|,?\\s+GROUP\\.?|" +
         ",?\\s+SpA\\.?|" +
         ",?\\s+Sp\\.?\\s+Z\\s+o\\.?\\s+o\\.?\\s+L\\.?|" +
         ",?\\s+Pvt\\.?\\s*(?:Ltd\\.?)?|" +
-        ",?\\s+PVT\\.?\\s*(?:LTD\\.?)?)$",
+        ",?\\s+PVT\\.?\\s*(?:LTD\\.?)?|" +
+        ",?\\s+PJSC\\.?|,?\\s+Copjsc\\.?)$",
         Pattern.CASE_INSENSITIVE
     );
 
@@ -763,9 +792,16 @@ public class GeoIP {
         for (String[] b : brands) {BRAND_NAMES.put(b[0], b[1]);}
     }
 
-    /** Abbreviation map for verbose Spanish/Portuguese/etc words */
+    /** Trailing generic words to drop (redundant suffixes like "Communications", "Services") */
+    private static final Pattern TRAILING_VERBOSE = Pattern.compile(
+        "\\s*(?:\\bCommunications?\\b|\\bTelecommunications?\\b|\\bNetworks?\\b|\\bSolutions?\\b|" +
+        "\\bServices?\\b|\\bSystems?\\b|\\bTechnolog(?:y|ies)\\b|\\bComputer\\b|\\bPrivate\\b)\\s*$",
+        Pattern.CASE_INSENSITIVE
+    );
+
+    /** Abbreviation map for verbose words */
     private static final Map<String, String> ABBREV_MAP;
-    /** Single combined abbreviation pattern (29 word-boundary patterns → 1) */
+    /** Single combined abbreviation pattern */
     private static final Pattern ABBREV_ALL;
     static {
         Map<String, String> map = new HashMap<>();
@@ -774,10 +810,14 @@ public class GeoIP {
             {"Companhia", "Co"}, {"Compania", "Co"},
             {"Servicios", "Svc"}, {"Servicio", "Svc"}, {"Servicos", "Svc"},
             {"Redes", "Net"}, {"Cooperativa", "Coop"}, {"Sociedad", "SA"},
-            {"Comunicacao", "Comms"}, {"Informatica", "IT"}, {"Tecnologia", "Tech"},
+            {"Comunicacao", "Comms"}, {"Comunicacoes", "Comms"},
+            {"Communications", "Comms"},
+            {"Informatica", "IT"}, {"Tecnologia", "Tech"},
+            {"Technology", "Tech"}, {"Technologies", "Tech"},
             {"Multimidia", "Multi"}, {"Equipamentos", "Equip"},
             {"Provedores", "Prov"}, {"Provedor", "Prov"},
-            {"Solucoes", "Sols"}, {"Associacao", "Assoc"}, {"Comercio", "Comm"},
+            {"Solucoes", "Sols"}, {"Solutions", "Sols"},
+            {"Associacao", "Assoc"}, {"Comercio", "Comm"},
             {"Desenvolvimento", "Dev"}, {"Economico", "Econ"},
             {"Nacional", "Natl"}, {"Internacional", "Intl"},
             {"University", "Univ"}, {"Company", "Co"},
@@ -797,6 +837,7 @@ public class GeoIP {
             {"Ingenieria", "Eng"}, {"Ingenieur", "Eng"},
             {"Kommunale", "Muni"}, {"Regionalis", "Regional"},
             {"Autonomous", "Auto"}, {"Non-profit", "Nonprofit"},
+            {"Networks", "Net"}, {"Services", "Svc"}, {"Telephone", "Phone"},
         };
         for (String[] e : entries) { map.put(e[0].toLowerCase(Locale.ROOT), e[1]); }
         ABBREV_MAP = Collections.unmodifiableMap(map);
@@ -885,10 +926,15 @@ public class GeoIP {
      * Detect and fix character-reversed words from MaxMind ASN DB.
      * e.g. "eteicoS esiacnarF uD enohpeletoidaR" -> "Societe France Du RadioTelephone"
      *
-     * Two-pass detection:
+     * Four-pass detection:
      * 1. Word-by-word: words starting lowercase and ending uppercase are likely reversed.
      * 2. Full-string: try reversing the entire name for compound words without spaces.
-     * Picks whichever pass matches more known words.
+     * 3. Full word-level char reversal: reverse every word unconditionally (catches
+     *    all-lowercase reversed words like "enofadov" where decode isn't in known-words).
+     * 4. Word-order reversal: reverse word order (catches "loclix as trading sciacca...").
+     * 5. Combined: char-reversal then word-order (catches both like "tsohxuled sa gnidart...").
+     * Also detects "as trading" pattern which strongly signals word-order is reversed.
+     * Picks whichever pass scores highest (known-word matches + title-case words).
      *
      * AS numbers must be stripped before calling this (see normalizeOrgName).
      */
@@ -905,18 +951,96 @@ public class GeoIP {
         // Pass 3: first/last char case-swap (handles "techteL" → "Techtel" corruption)
         String caseResult = tryCaseSwap(words);
 
-        // Pick the result with more known-word matches.
-        // On tie, prefer full-string reversal (most robust for whole-string reversals).
-        int fullScore = countKnownWordMatches(fullResult);
-        int wordScore = countKnownWordMatches(wordResult);
-        int caseScore = countKnownWordMatches(caseResult);
-        if (fullScore > 0 && fullScore >= wordScore && fullScore >= caseScore) {return fullResult;}
-        if (wordScore > fullScore && wordScore >= caseScore) {return wordResult;}
-        if (caseScore > fullScore && caseScore > wordScore) {return caseResult;}
-        // Fallback: if we detected reversed words but no known-word matches
-        // (e.g. non-English org names), accept the word-reversal result
-        if (!wordResult.isEmpty()) {return wordResult;}
-        return name;
+        // Pass 4: full word-level character reversal (every word, no detection needed)
+        String allWordResult = tryFullWordReversal(words);
+
+        // Pass 5: word-order reversal (reverse word sequence)
+        String wordOrderResult = tryWordOrderReversal(name);
+
+        // Pass 6: combined — char-reversal then word-order reversal
+        // Catches names reversed at both levels like "tsohxuled sa gnidart inolletram oettam"
+        String combinedResult = "";
+        if (!allWordResult.isEmpty()) {
+            combinedResult = tryWordOrderReversal(allWordResult);
+        }
+
+        // "as trading" pattern detection — strong signal of word-order reversal
+        String asTradingResult = tryFixAsTrading(name, allWordResult);
+
+        // Score by known-word matches (weighted) + title-case words
+        int fullScore = scoreCandidate(fullResult);
+        int wordScore = scoreCandidate(wordResult);
+        int caseScore = scoreCandidate(caseResult);
+        int allWordScore = scoreCandidate(allWordResult);
+        int wordOrderScore = scoreCandidate(wordOrderResult);
+        int combinedScore = scoreCandidate(combinedResult);
+        int asTradingScore = scoreCandidate(asTradingResult);
+
+        // Pick the best scoring result
+        String best = name;
+        int bestScore = scoreCandidate(name);
+        if (fullScore > bestScore) {best = fullResult; bestScore = fullScore;}
+        if (wordScore > bestScore) {best = wordResult; bestScore = wordScore;}
+        if (caseScore > bestScore) {best = caseResult; bestScore = caseScore;}
+        if (allWordScore > bestScore) {best = allWordResult; bestScore = allWordScore;}
+        if (wordOrderScore > bestScore) {best = wordOrderResult; bestScore = wordOrderScore;}
+        if (combinedScore > bestScore) {best = combinedResult; bestScore = combinedScore;}
+        if (asTradingScore > bestScore) {best = asTradingResult; bestScore = asTradingScore;}
+
+        // Fallback: if any pass detected reversed words, accept even without known-word matches
+        if (best == name && !wordResult.isEmpty()) {return wordResult;}
+        if (best == name && !allWordResult.isEmpty() && allWordScore > scoreCandidate(name)) {
+            return allWordResult;
+        }
+        return best;
+    }
+
+    /**
+     * Score a candidate by known-word matches (weighted 3x) plus title-case word count.
+     * Title-case words are a strong signal because ASN org names are stored title-cased,
+     * and reversed names are all-lowercase.
+     */
+    private static int scoreCandidate(String text) {
+        if (text.isEmpty()) return -1;
+        return countKnownWordMatches(text) * 3 + countTitleCaseWords(text);
+    }
+
+    /** Count words starting with uppercase (title-case signal for proper org names). */
+    private static int countTitleCaseWords(String text) {
+        int count = 0;
+        for (String w : SPACE_SPLIT.split(text)) {
+            if (w.length() >= 2 && Character.isUpperCase(w.charAt(0))) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Detect "as trading" pattern (lowercase) — strong signal that word order is reversed.
+     * A correct org name has "Trading as X", but word-order reversal produces "X as trading".
+     * Also checks the char-reversed candidate for the same pattern.
+     */
+    private static String tryFixAsTrading(String name, String allWordReversed) {
+        // Check original name
+        String direct = tryWordOrderIfHasAsTrading(name);
+        if (!direct.isEmpty()) return direct;
+        // Check char-reversed name (catches "sa gnidart" in "tsohxuled sa gnidart...")
+        if (!allWordReversed.isEmpty()) {
+            String viaCharRev = tryWordOrderIfHasAsTrading(allWordReversed);
+            if (!viaCharRev.isEmpty()) return viaCharRev;
+        }
+        return "";
+    }
+
+    /** If text contains "as trading", reverse word order and check for "trading as". */
+    private static String tryWordOrderIfHasAsTrading(String text) {
+        String lower = text.toLowerCase(Locale.US);
+        if (!lower.contains("as trading")) return "";
+        String reversed = tryWordOrderReversal(text);
+        if (reversed.isEmpty()) return "";
+        if (reversed.toLowerCase(Locale.US).contains("trading as")) return reversed;
+        return "";
     }
 
     /** Try reversing individual words that look reversed (lowercase start, uppercase end). */
@@ -976,6 +1100,37 @@ public class GeoIP {
             if (w.length() > 1 && Character.isUpperCase(w.charAt(0))) {return reversed;}
         }
         return "";
+    }
+
+    /**
+     * Reverse every word at character level unconditionally.
+     * Catches all-lowercase reversed words like "enofadov" where the decoded
+     * form ("vodafone") isn't in the known-words list, so case-pattern detection
+     * wouldn't trigger.
+     */
+    private static String tryFullWordReversal(String[] words) {
+        StringBuilder fixed = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+            if (i > 0) {fixed.append(' ');}
+            fixed.append(reverseWord(words[i]));
+        }
+        return fixed.toString();
+    }
+
+    /**
+     * Reverse the order of words.
+     * Catches word-order reversal like "loclix as trading sciacca filiberto matteo"
+     * → "matteo filiberto sciacca trading as loclix".
+     */
+    private static String tryWordOrderReversal(String name) {
+        String[] words = SPACE_SPLIT.split(name);
+        if (words.length < 2) {return "";}
+        StringBuilder fixed = new StringBuilder();
+        for (int i = words.length - 1; i >= 0; i--) {
+            if (i < words.length - 1) {fixed.append(' ');}
+            fixed.append(words[i]);
+        }
+        return fixed.toString();
     }
 
     /** Count how many space-separated words match known words. */
@@ -1052,6 +1207,18 @@ public class GeoIP {
         // Strip verbose prefixes
         name = STRIP_PREFIX_ALL.matcher(name).replaceAll("");
 
+        // Drop trailing generic words (communications, services, computer, etc.)
+        while (true) {
+            String before = name;
+            name = TRAILING_VERBOSE.matcher(name).replaceAll("").trim();
+            if (name.equals(before) || name.isEmpty()) break;
+            // Don't drop if it would leave fewer than 2 words (preserves "Alaska Communications")
+            if (name.indexOf(' ') < 0) {
+                name = before;
+                break;
+            }
+        }
+
         // Abbreviate verbose words
         name = applyAbbreviation(name);
 
@@ -1095,11 +1262,11 @@ public class GeoIP {
                     && FILLER_WORDS.matcher(words[i]).matches()) {
                     continue;
                 }
-                if (trimmed.length() > 0) {trimmed.append(' ');}
-                trimmed.append(words[i]);
+                if (trimmed.length() > 0) {trimmed.insert(0, ' ');}
+                trimmed.insert(0, words[i]);
             }
             if (trimmed.length() > 5) {
-                name = trimmed.reverse().toString();
+                name = trimmed.toString();
             }
         }
 
