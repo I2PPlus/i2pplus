@@ -141,3 +141,5 @@ eepsite-jetty9/resources/
 lib/jfreesvg.jar
 # old licenses folder - replaced by docs/LICENSES.md
 licenses/
+# old worker location - moved to js/tablesort/
+js/sortWorker.js

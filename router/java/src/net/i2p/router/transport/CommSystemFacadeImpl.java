@@ -1486,34 +1486,39 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public static String getDomain(String hostname) {
         if (hostname == null || hostname.isEmpty()) return "";
 
-        hostname = hostname.toLowerCase();
+        hostname = hostname.toLowerCase().trim();
         if (hostname.startsWith(".")) hostname = hostname.substring(1);
 
-        String[] parts = DOT_SPLIT.split(hostname);
-        int len = parts.length;
+        // Filter out empty parts from consecutive dots
+        String[] raw = DOT_SPLIT.split(hostname);
+        List<String> filtered = new ArrayList<>(raw.length);
+        for (String p : raw) {
+            if (!p.isEmpty()) filtered.add(p);
+        }
+        int len = filtered.size();
 
-        if (len < 2 || parts[0].isEmpty()) return hostname;
+        if (len < 2) return hostname;
 
         // Try to match known multi-part TLDs
         for (int i = 1; i < len; i++) {
             StringBuilder tldBuilder = new StringBuilder();
             for (int j = i; j < len; j++) {
                 if (j > i) tldBuilder.append(".");
-                tldBuilder.append(parts[j]);
+                tldBuilder.append(filtered.get(j));
             }
             if (MULTI_PART_TLDS.contains(tldBuilder.toString())) {
                 int domainIndex = len - DOT_SPLIT.split(tldBuilder.toString()).length - 1;
                 StringBuilder domain = new StringBuilder();
                 for (int k = domainIndex; k < len; k++) {
                     if (k > domainIndex) domain.append(".");
-                    domain.append(parts[k]);
+                    domain.append(filtered.get(k));
                 }
                 return domain.toString();
             }
         }
 
         // Default to 2-part domain
-        return parts[len - 2] + "." + parts[len - 1];
+        return filtered.get(len - 2) + "." + filtered.get(len - 1);
     }
 
     /** Pre-compiled dot split for domain parsing */

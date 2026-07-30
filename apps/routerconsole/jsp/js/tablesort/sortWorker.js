@@ -1,8 +1,10 @@
 /**
  * @module sortWorker
- * @description Handles table sorting in a background worker for large tables.
+ * @description Handles table sorting in a background worker for all tables.
  * Comparison functions are shared with the main thread via sortShared.js.
  * Empty cells always sort to the bottom.
+ * Based on tristen/tablesort (MIT) https://github.com/tristen/tablesort;
+ * worker implementation by dr|z3d for I2P+ (AGPLv3).
  * @license AGPLv3 or later
  */
 

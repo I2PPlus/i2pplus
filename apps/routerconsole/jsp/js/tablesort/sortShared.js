@@ -3,6 +3,8 @@
  * @description Pure comparison functions shared between tablesort.js (main thread)
  * and sortWorker.js (web worker). All comparators return ascending order;
  * empty/null cells always sort after non-empty values. The caller inverts direction.
+ * Based on tristen/tablesort (MIT) https://github.com/tristen/tablesort,
+ * ported to standalone functions by dr|z3d for I2P+ (AGPLv3).
  * @license AGPLv3 or later
  */
 
