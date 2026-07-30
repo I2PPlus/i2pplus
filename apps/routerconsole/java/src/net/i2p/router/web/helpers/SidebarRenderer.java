@@ -1039,7 +1039,7 @@ class SidebarRenderer {
            .append(_helper.getFastPeers())
            .append("</span></td></tr>\n<tr title=\"")
            .append(_t("The number of peers available for building exploratory tunnels"))
-           .append("\"><td><a href=\"/profiles?show=fast#highcap_peers\"><b>")
+           .append("\"><td><a href=\"/profiles?show=highcap\"><b>")
            .append(_t("High capacity"))
            .append("</b></a></td><td class=digits><span class=volatile>")
            .append(_helper.getHighCapacityPeers())
