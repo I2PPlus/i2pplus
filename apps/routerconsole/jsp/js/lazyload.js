@@ -1,16 +1,17 @@
 /**
  * @module lazyload
- * @description Implements lazy loading for elements with the "lazy" CSS class.
- * Uses IntersectionObserver to toggle "lazyshow"/"lazyhide" classes as elements
- * enter and exit the viewport. Falls back to simple class removal for small sets.
+ * @description Lazy loading for elements with the "lazy" CSS class.
+ * Toggles lazyshow/lazyhide classes via IntersectionObserver as elements enter
+ * or leave the viewport. Falls back to class removal for small sets.
  * @author dr|z3d
  * @license AGPL3 or later
  */
 
 (function initLazyload() {
-  const lazyElementsSet = new Set();
+  let lazyElementsSet = new Set();
+  let observer = null;
 
-  const observer = new IntersectionObserver(entries => {
+  const initObserver = () => new IntersectionObserver(entries => {
     entries.forEach(entry => {
       const lazyElement = entry.target;
       if (entry.isIntersecting) {
@@ -23,18 +24,15 @@
     });
   }, { rootMargin: "100px 0px 100px 0px", threshold: 0.1 });
 
-  const doc = document.documentElement;
   const body = document.body;
 
-  /**
-   * Finds all elements with the "lazy" class and either removes the class directly
-   * (for < 10 elements) or sets up IntersectionObserver for larger sets.
-   * @function lazyload
-   * @returns {void}
-   */
   const lazyload = () => {
     const lazyElements = document.querySelectorAll(".lazy");
     if (lazyElements.length === 0) { return; }
+
+    if (observer) observer.disconnect();
+    lazyElementsSet = new Set();
+    observer = initObserver();
 
     if (lazyElements.length < 10) {
       for (let i = 0; i < lazyElements.length; i++) {
@@ -55,4 +53,6 @@
     body.classList.add("ready", "loaded");
     lazyload();
   });
+
+  document.addEventListener("afterSort", lazyload);
 })();

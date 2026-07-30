@@ -23,6 +23,7 @@
   }
 
   let sortWorker = null;
+  let sortGen = 0;
   const getSortWorker = () => {
     if (!sortWorker) sortWorker = new Worker("/js/tablesort/sortWorker.js");
     return sortWorker;
@@ -113,10 +114,11 @@
     sortTable(header, update) {
       const columnKey = header.getAttribute("data-sort-column-key"), column = header.cellIndex;
       const sortMethod = header.getAttribute("data-sort-method"), sortOrder = header.getAttribute("aria-sort");
+      const caseInsensitive = header.hasAttribute("data-sort-caseinsensitive");
 
       this.table.dispatchEvent(createEvent("beforeSort"));
 
-      this.sortWithWorker(header, update, columnKey, column, sortMethod, sortOrder);
+      this.sortWithWorker(header, update, columnKey, column, sortMethod, sortOrder, caseInsensitive);
     },
 
     /**
@@ -128,20 +130,24 @@
      * @param {number} column
      * @param {string|null} sortMethod
      * @param {string} sortOrder
+     * @param {boolean} [caseInsensitive]
      */
-    sortWithWorker(header, update, columnKey, column, sortMethod, sortOrder) {
+    sortWithWorker(header, update, columnKey, column, sortMethod, sortOrder, caseInsensitive) {
       const worker = getSortWorker();
-      const rowData = [];
+      sortGen++;
+      const gen = sortGen;
       const tbody = this.table.tBodies[0];
       if (!tbody) return;
 
+      const rowData = [];
       const rowElements = [];
       for (let j = 0; j < tbody.rows.length; j++) {
         const row = tbody.rows[j];
         if (row.getAttribute("data-sort-method") === "none") continue;
         const cell = columnKey ? getCellByKey(row.cells, columnKey) : row.cells[column];
+        const text = cell ? getInnerText(cell) : "";
         rowData.push({
-          td: cell ? getInnerText(cell) : "",
+          td: caseInsensitive ? text.toLowerCase() : text,
           index: j
         });
         rowElements.push(row);
@@ -152,11 +158,13 @@
       if (sortMethod) {
         if (knownTypes.includes(sortMethod)) {columnType = sortMethod;}
       } else {
-        const sampleItems = rowData.slice(0, 3).map(r => r.td).filter(t => t);
-        for (const opt of sortOptions) {
-          if (sampleItems.every(opt.pattern)) {
-            columnType = opt.name;
-            break;
+        if (!caseInsensitive) {
+          const sampleItems = rowData.slice(0, 3).map(r => r.td).filter(t => t);
+          for (const opt of sortOptions) {
+            if (sampleItems.every(opt.pattern)) {
+              columnType = opt.name;
+              break;
+            }
           }
         }
       }
@@ -176,13 +184,13 @@
       const direction = sortOrder;
 
       const handleMessage = (e) => {
+        if (gen !== sortGen) return;
         const sorted = e.data.sorted;
         worker.removeEventListener("message", handleMessage);
 
         const fragment = document.createDocumentFragment();
         sorted.forEach(item => {
-          const originalIndex = item.index;
-          fragment.appendChild(rowElements[originalIndex]);
+          fragment.appendChild(rowElements[item.index]);
         });
         tbody.appendChild(fragment);
 
