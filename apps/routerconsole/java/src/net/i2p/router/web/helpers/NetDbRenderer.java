@@ -1899,7 +1899,7 @@ class NetDbRenderer {
                .append(_t("Router")).append(":</b><th><code>").append(routerHashBase64).append("</code></th><th>");
         }
         if (_context.banlist().isBanlisted(routerHash)) {
-            buf.append("<a class=banlisted href=\"/profiles?f=3\" title=\"").append(_t("Router is banlisted")).append("\">Banned</a> ");
+            buf.append("<a class=banlisted href=\"/profiles?show=banned\" title=\"").append(_t("Router is banlisted")).append("\">Banned</a> ");
         }
         boolean isJavaI2PVariant = false;
         boolean isI2PdVariant = false;

@@ -55,7 +55,7 @@ public class HomeHelper extends HelperBase {
         _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "pluginconfig.svg" + S +
         _x("NetDb Search") + S + _x("Network database search tool") + S + "/netdb?f=4" + S + I + "searchnetdb.svg" + S +
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "globe.svg" + S +
-        _x("Peer Profiles") + S + _x("List of recently connected peers with profiling info") + S + "/profiles?f=1" + S + I + "profile.svg" + S +
+        _x("Peer Profiles") + S + _x("List of recently connected peers with profiling info") + S + "/profiles?show=fast" + S + I + "profile.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info.svg" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/routerlogs" + S + I + "logs.svg" + S +
         _x("Router Updates") + S + _x("Configure update URLs and policy") + S + "/configupdate" + S + I + "update.svg" + S +
@@ -79,7 +79,7 @@ public class HomeHelper extends HelperBase {
         _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "mail.svg" + S +
         _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "pluginconfig.svg" + S +
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "globe.svg" + S +
-        _x("Peer Profiles") + S + _x("List of recently connected peers with profiling info") + S + "/profiles?f=1" + S + I + "profile.svg" + S +
+        _x("Peer Profiles") + S + _x("List of recently connected peers with profiling info") + S + "/profiles?show=fast" + S + I + "profile.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info.svg" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/routerlogs" + S + I + "logs.svg" + S +
         _x("Router Updates") + S + _x("Configure update URLs and policy") + S + "/configupdate" + S + I + "update.svg" + S +
@@ -104,7 +104,7 @@ public class HomeHelper extends HelperBase {
         _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "pluginconfig.svg" + S +
         _x("NetDb Search") + S + _x("Network database search tool") + S + "/netdb?f=4" + S + I + "searchnetdb.svg" + S +
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "globe.svg" + S +
-        _x("Peer Profiles") + S + _x("List of recently connected peers with profiling info") + S + "/profiles?f=1" + S + I + "profile.svg" + S +
+        _x("Peer Profiles") + S + _x("List of recently connected peers with profiling info") + S + "/profiles?show=fast" + S + I + "profile.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info.svg" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/routerlogs" + S + I + "logs.svg" + S +
         _x("Router Updates") + S + _x("Configure update URLs and policy") + S + "/configupdate" + S + I + "update.svg" + S +

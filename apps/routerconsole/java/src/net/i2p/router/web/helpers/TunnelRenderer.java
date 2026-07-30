@@ -516,7 +516,7 @@ class TunnelRenderer {
 
                 sb.append("<td class=isBanned hidden>");
                 if (isBanned) {
-                    sb.append("<span hidden>ban</span><a class=banlisted href=\"/profiles?f=3\" title=\"")
+                    sb.append("<span hidden>ban</span><a class=banlisted href=\"/profiles?show=banned\" title=\"")
                       .append(_t("Router is banlisted")).append("\">Banned</a> ");
                     bannedCount++;
                 }

@@ -14,16 +14,18 @@ public class ProfilesHelper extends HelperBase {
 
     private static final String[] titles = {
                                             _x("All"),             // 0
-                                            _x("High Capacity"),   // 1
-                                            _x("Floodfill"),       // 2
-                                            _x("Banned")          // 3
+                                            _x("Fast"),            // 1
+                                            _x("High Capacity"),   // 2
+                                            _x("Floodfill"),       // 3
+                                            _x("Banned")           // 4
                                            };
 
     private static final String[] links =  {
                                             "",                    // 0
-                                            "?f=1",                // 1
-                                            "?f=2",                // 2
-                                            "?f=3"                 // 3 (Session Bans)
+                                            "?show=fast",          // 1
+                                            "?show=highcap",       // 2
+                                            "?show=floodfill",     // 3
+                                            "?show=banned"         // 4
                                            };
 
     /**
@@ -33,8 +35,22 @@ public class ProfilesHelper extends HelperBase {
         if (f != null) {
             try {
                 _full = Integer.parseInt(f);
-                if (_full < 0 || _full > 3) {_full = 0;}
+                if (_full < 0 || _full > 4) {_full = 0;}
             } catch (NumberFormatException nfe) { /* ignored */ }
+        }
+    }
+
+    /**
+     * Set by show=fast|highcap|floodfill|banned param (alternative to f=N).
+     * Overrides _full if present.
+     * @since 0.9.70+
+     */
+    public void setShow(String show) {
+        if (show != null) {
+            if ("fast".equals(show)) _full = 1;
+            else if ("highcap".equals(show)) _full = 2;
+            else if ("floodfill".equals(show)) _full = 3;
+            else if ("banned".equals(show)) _full = 4;
         }
     }
 
@@ -53,7 +69,7 @@ public class ProfilesHelper extends HelperBase {
     public String getSummary() {
         try {renderNavBar();}
         catch (IOException ioe) { /* ignored */ }
-        if (_full == 3) getBanlistCompact();
+        if (_full == 4) getBanlistCompact();
         else getProfileSummary();
         return "";
     }
@@ -83,10 +99,7 @@ public class ProfilesHelper extends HelperBase {
      * @return the tab
      */
     private int getTab() {
-        if (_full == 1) return 1;
-        if (_full == 2) return 2;
-        if (_full == 3) return 3;
-        return 0;
+        return _full;
     }
 
     /**

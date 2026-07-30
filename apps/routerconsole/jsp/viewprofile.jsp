@@ -6,7 +6,7 @@
 %>
 <%@include file="head.jsi"%>
 <%=intl.title("Peer Profile")%>
-<%  if (!isValid) { %><meta http-equiv=refresh content="5;url=/profiles?f=1"/><%  } %>
+<%  if (!isValid) { %><meta http-equiv=refresh content="5;url=/profiles"/><%  } %>
 </head>
 <body>
 <%@include file="sidebar.jsi"%>
@@ -14,10 +14,10 @@
 <div class=main id=view_profile>
 <div class=confignav id=confignav>
 <span class=tab><a href="/profiles"><%=intl._t("All")%></a></span>
-<span class=tab><a href="/profiles?f=1"><%=intl._t("High Capacity")%></a></span>
-<span class=tab><a href="/profiles?f=2"><%=intl._t("Floodfill")%></a></span>
-<span class=tab><a href="/profiles?f=3"><%=intl._t("Banned")%></a></span>
-<span class=tab><a href="/profiles?f=4"><%=intl._t("Session Bans")%></a></span>
+<span class=tab><a href="/profiles?show=fast"><%=intl._t("Fast")%></a></span>
+<span class=tab><a href="/profiles?show=highcap"><%=intl._t("High Capacity")%></a></span>
+<span class=tab><a href="/profiles?show=floodfill"><%=intl._t("Floodfill")%></a></span>
+<span class=tab><a href="/profiles?show=banned"><%=intl._t("Banned")%></a></span>
 <span class=tab2><%=intl._t("Profile View")%></span>
 </div>
 <%  if (!isValid) {out.print("<p class=infohelp id=nopeer>No peer specified</p>");}

@@ -52,7 +52,7 @@ class ProfileOrganizerRenderer {
      *  Render the peer profile status table.
      *
      *  @param out the writer to render to
-     *  @param mode 0 = high cap; 1 = all; 2 = floodfill; 3 = banned; 4 = ban summary by hash
+     *  @param mode 0 = all; 1 = fast; 2 = high capacity (non-fast); 3 = floodfill; 4 = banned
      *  @throws IOException if an I/O error occurs
      */
     public void renderStatusHTML(Writer out, int mode) throws IOException {
@@ -63,7 +63,7 @@ class ProfileOrganizerRenderer {
         Set<Hash> peers = _organizer.selectAllPeers();
         long now = _context.clock().now();
         long hideBefore = now - 4*60*60*1000;
-        Set<PeerProfile> order = new TreeSet<>(mode == 2 ? new ProfComparator() : new ProfileComparator());
+        Set<PeerProfile> order = new TreeSet<>(mode == 3 ? new ProfComparator() : new ProfileComparator());
         int older = 0;
         int standard = 0;
         int ff = 0;
@@ -75,7 +75,7 @@ class ProfileOrganizerRenderer {
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
             if (_organizer.getUs().equals(peer) || prof.getLastHeardFrom() <= 0 || (agreed <= 0 && rejected <= 0 && prof.getFirstHeardAbout() <= 0)) {continue;}
-            if (mode != 2) {
+            if (mode != 3) {
                 boolean isActive = prof.getIsActive() || prof.getLastSendSuccessful() > hideBefore || prof.getLastHeardFrom() > hideBefore;
                 boolean underAttack = _organizer.isLowBuildSuccess();
                 if (!isActive && prof.getLastHeardFrom() <= hideBefore && prof.getFirstHeardAbout() < now - 60*60*1000) {
@@ -85,9 +85,23 @@ class ProfileOrganizerRenderer {
                     }
                 }
             }
-            if (!full && !_organizer.isHighCapacity(peer)) {
-                standard++;
-                continue;
+            if (!full) {
+                if (mode == 1) {
+                    // Fast tier only
+                    if (!_organizer.isFast(peer)) {
+                        standard++;
+                        continue;
+                    }
+        } else if (mode == 2) {
+                    // High Capacity (non-fast) only
+                    if (!_organizer.isHighCapacity(peer) || _organizer.isFast(peer)) {
+                        standard++;
+                        continue;
+                    }
+                } else if (mode != 3 && !_organizer.isHighCapacity(peer)) {
+                    standard++;
+                    continue;
+                }
             }
             order.add(prof);
         }
@@ -97,7 +111,7 @@ class ProfileOrganizerRenderer {
         boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
         StringBuilder buf = new StringBuilder(32*1024);
 
-        if (mode < 2) {
+        if (mode < 3) {
             buf.append("<p id=profiles_overview class=infohelp>")
                .append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", order.size())).append('\n');
             if (older > 0) {
@@ -373,7 +387,7 @@ class ProfileOrganizerRenderer {
                .append("</td><td>")
                .append(ngettext("{0} integrated peer", "{0} integrated peers", integrated))
                .append("</td></tr>\n</tbody>\n</table>\n</div>\n</div>\n"); // thresholds
-        } else if (mode == 2) {
+        } else if (mode == 3) {
             buf.append("<div class=widescroll id=ff>\n<table id=floodfills data-sort-direction=descending>\n")
                .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
                .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>")

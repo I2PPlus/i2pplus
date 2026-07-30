@@ -169,8 +169,8 @@ public class SybilRenderer {
                    .append(_t("Run new analysis"))
                    .append("</a></li>\n").append("<li id=configurePeriodic><a href=\"netdb?f=3&amp;m=15\">")
                    .append(_t("Configure periodic analysis"))
-                   .append("</a></li>\n").append("<li id=banlisted><a href=\"/profiles?f=3\">")
-                   .append(_t("Review session bans"))
+.append("</a></li>\n").append("<li id=banlisted><a href=\"/profiles?show=banned\">")
+.append(_t("Review session bans"))
                    .append("</a></li>\n");
         if (blocklistFileExists) {
             buf.append("<li id=purgeBans><a href=\"netdb?f=3&amp;m=100\">")
@@ -1074,7 +1074,7 @@ public class SybilRenderer {
         buf.append("</th><th>");
         Hash h = info.getHash();
         if (_context.banlist().isBanlisted(h)) {
-            buf.append("<a class=banlisted href=\"/profiles?f=3\" title=\"").append(_t("Router is banlisted")).append("\">Banned</a> ");
+            buf.append("<a class=banlisted href=\"/profiles?show=banned\" title=\"").append(_t("Router is banlisted")).append("\">Banned</a> ");
         }
         String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
         boolean hasD = DataHelper.stripHTML(info.getCapabilities()).contains("D");

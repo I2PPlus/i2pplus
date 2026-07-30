@@ -1,27 +1,35 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb"%>
 <!DOCTYPE HTML>
 <%@include file="head.jsi"%>
-<%=intl.title("peer profiles")%>
+<%
+    String fParam = request.getParameter("f");
+    String showParam = request.getParameter("show");
+    String tab = "all";
+    if (showParam != null) {
+        tab = showParam;
+    } else if (fParam != null) {
+        if ("1".equals(fParam)) tab = "fast";
+        else if ("2".equals(fParam)) tab = "highcap";
+        else if ("3".equals(fParam)) tab = "floodfill";
+        else if ("4".equals(fParam)) tab = "banned";
+    }
+    String title;
+    if ("fast".equals(tab)) title = intl._t("Fast Peers");
+    else if ("highcap".equals(tab)) title = intl._t("High Capacity Peers");
+    else if ("floodfill".equals(tab)) title = intl._t("Floodfill Peers");
+    else if ("banned".equals(tab)) title = intl._t("Banned Peers");
+    else title = intl._t("Recent Peer Profiles");
+%>
+<%=intl.title(title)%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body>
 <%@include file="sidebar.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ProfilesHelper" id="profilesHelper" scope="request"/>
 <jsp:setProperty name="profilesHelper" property="contextId" value="<%=i2pcontextId%>"/>
-<jsp:setProperty name="profilesHelper" property="full" value="<%=request.getParameter(\"f\")%>"/>
-<%  String req = request.getParameter("f");
-    if (req == null) {
-%>
-<h1 class=netwrk><%=intl._t("Peer Profiles")%></h1>
-<%  } else if (req.equals("4")) { %>
-<h1 class=netwrk><%=intl._t("Session Banned Peers")%></h1>
-<% } else if (req.equals("3")) { %>
-<h1 class=netwrk><%=intl._t("Banned Peers")%></h1>
-<%  } else if (req.equals("2")) { %>
-<h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Floodfills")%></h1>
-<%  } else if (req.equals("1")) { %>
-<h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Fast / High Capacity")%></h1>
-<%  } %>
+<jsp:setProperty name="profilesHelper" property="full" value="<%=fParam%>"/>
+<jsp:setProperty name="profilesHelper" property="show" value="<%=showParam%>"/>
+<h1 class=netwrk><%=title%></h1>
 <div class=main id=profiles>
 <div class=wideload style=height:5px;opacity:0>
 <%  profilesHelper.storeWriter(out);
