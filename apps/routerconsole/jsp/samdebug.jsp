@@ -19,8 +19,8 @@
 <jsp:getProperty name="samDebugHelper" property="SAMDHelper"/>
 </div>
 </div>
+<script src=/js/tablesort/sortShared.js></script>
 <script src=/js/tablesort/tablesort.js type=module></script>
-<script src=/js/tablesort/tablesort.number.js type=module></script>
 <script nonce=<%=cspNonce%> type=module>
   import {refreshElements} from "/js/refreshElements.js";
   refreshElements("#activeStreams", "/samdebug", 10000);

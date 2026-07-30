@@ -20,8 +20,8 @@
 <% tunnelPeerCountHelper.storeWriter(out);%>
 <jsp:getProperty name="tunnelPeerCountHelper" property="tunnelPeerCount"/>
 </div>
+<script src=/js/tablesort/sortShared.js></script>
 <script src=/js/tablesort/tablesort.js type=module></script>
-<script src=/js/tablesort/tablesort.number.js type=module></script>
 <script src=/js/lazyload.js type=module></script>
 <script src=/js/tunnelpeercount.js type=module></script>
 </body>

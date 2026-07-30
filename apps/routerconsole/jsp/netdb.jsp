@@ -81,8 +81,8 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
     if (f == null && l == null && ls == null && r == null) {
 %>
 <link href=/themes/console/tablesort.css rel=stylesheet>
+<script src=/js/tablesort/sortShared.js></script>
 <script src=/js/tablesort/tablesort.js type=module></script>
-<script src=/js/tablesort/tablesort.number.js type=module></script>
 <%  } else if (f != null) {
         //delayLoad = "1".equals(f) || "2".equals(f) || "3".equals(f);
         switch (f) {
@@ -130,8 +130,8 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <style>#pagenav{display:block!important}</style>
 <script src=/js/refreshElements.js type=module></script>
 <script src=/js/lazyload.js></script>
+<script src=/js/tablesort/sortShared.js></script>
 <script src=/js/tablesort/tablesort.js></script>
-<script src=/js/tablesort/tablesort.number.js></script>
 <script src=/js/netdb.js type=module></script>
 <script src=/js/lsCompact.js type=module></script>
 </body>

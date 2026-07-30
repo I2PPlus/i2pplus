@@ -4,10 +4,8 @@
 <%=intl.title("Transit Tunnels by Peer")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 <script src=/js/convertKBtoMB.js type=module></script>
+<script src=/js/tablesort/sortShared.js></script>
 <script src=/js/tablesort/tablesort.js type=module></script>
-<script src=/js/tablesort/tablesort.number.js type=module></script>
-<script src=/js/tablesort/tablesort.natural.js type=module></script>
-<script src=/js/tablesort/tablesort.dotsep.js type=module></script>
 <script src=/js/lazyload.js type=module></script>
 <script src=/js/transitsummary.js type=module></script>
 <link rel=prefetch href=/tunnelpeercount>

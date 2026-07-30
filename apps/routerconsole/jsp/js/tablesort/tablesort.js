@@ -1,12 +1,25 @@
+/**
+ * @module tablesort
+ * @description Sortable HTML tables with auto-detected column types.
+ * Delegates large tables (>100 rows) to a web worker. Comparison functions
+ * shared with sortWorker.js via sortShared.js. Extends Tablesort.extend().
+ * Derived from tristen/tablesort (MIT), modified for I2P+ (AGPLv3).
+ * @license AGPLv3 or later
+ */
+
 ;(function() {
-  // Tablesort: constructor for sorting tables on click of header
+  /**
+   * @param {HTMLTableElement} el
+   * @param {Object} [options]
+   * @param {boolean} [options.descending] - Default to descending on first click
+   */
   function Tablesort(el, options) {
     if (!(this instanceof Tablesort)) return new Tablesort(el, options);
     if (!el || el.tagName !== "TABLE") throw new Error("Element must be a table");
     this.init(el, options || {});
   }
 
-  // Web Worker for large table sorting
+  /** Delegate to web worker above this row count. */
   const LARGE_TABLE_THRESHOLD = 100;
   let sortWorker = null;
   const getSortWorker = () => {
@@ -14,10 +27,14 @@
     return sortWorker;
   };
 
-  // Stores custom sort options
+  /** Registered sort extensions (name, pattern, sort). */
   const sortOptions = [];
 
-  // Creates a custom event, fallback for older browsers
+  /**
+   * Create a CustomEvent (old-browser fallback).
+   * @param {string} name
+   * @returns {CustomEvent}
+   */
   const createEvent = (name) =>
     typeof CustomEvent === "function" ? new CustomEvent(name) : (() => {
       const evt = document.createEvent("CustomEvent");
@@ -25,25 +42,50 @@
       return evt;
     })();
 
-  // Gets sortable text from cell, prioritizing data-sort attribute
+  /**
+   * Read cell text; prefers data-sort attribute.
+   * @param {HTMLElement} el
+   * @returns {string}
+   */
   const getInnerText = (el) => el.getAttribute("data-sort") ?? el.textContent ?? el.innerText ?? "";
 
-  // Default case-insensitive descending text sort
+  /**
+   * Default fallback sort (ascending). Trims and case-folds.
+   * @param {string} a
+   * @param {string} b
+   * @returns {number}
+   */
   const caseInsensitiveSort = (a, b) => {
     a = a.trim().toLowerCase(); b = b.trim().toLowerCase();
-    return a === b ? 0 : (a < b ? 1 : -1);
+    return a === b ? 0 : (a < b ? -1 : 1);
   };
 
-  // Finds a cell by data-sort-column-key attribute
+  /**
+   * Find a cell by data-sort-column-key attribute.
+   * @param {HTMLCollection} cells
+   * @param {string} key
+   * @returns {HTMLElement|undefined}
+   */
   const getCellByKey = (cells, key) => Array.from(cells).find(cell => cell.getAttribute("data-sort-column-key") === key);
 
-  // Stable sort wrapper, optionally reverses tie order
+  /**
+   * Stable-sort wrapper. Ties resolved by original index.
+   * antiStabilize reverses tie order for the inverted sort pass.
+   * @param {function} sort
+   * @param {boolean} antiStabilize
+   * @returns {function(Object, Object): number}
+   */
   const stabilize = (sort, antiStabilize) => (a, b) => {
     const res = sort(a.td, b.td);
     return res === 0 ? (antiStabilize ? b.index - a.index : a.index - b.index) : res;
   };
 
-  // Add custom sort options by name, pattern, and sort function
+  /**
+   * Register a named sort extension.
+   * @param {string} name
+   * @param {function(string): boolean} pattern - Auto-detection predicate
+   * @param {function(string, string): number} sort - Ascending comparator
+   */
   Tablesort.extend = (name, pattern, sort) => {
     if (typeof pattern !== "function" || typeof sort !== "function")
       throw new Error("Pattern and sort must be functions");
@@ -51,7 +93,12 @@
   };
 
   Tablesort.prototype = {
-    // Initialize table sorting on header clickable cells
+    /**
+     * Attach click and keydown listeners to header cells.
+     * Skips cells with data-sort-method="none".
+     * @param {HTMLTableElement} el
+     * @param {Object} options
+     */
     init(el, options) {
       this.table = el; this.options = options;
       this.thead = !!el.tHead && el.tHead.rows.length > 0;
@@ -64,13 +111,27 @@
       for (const cell of headerRow.cells) {
         cell.setAttribute("role", "columnheader");
         if (cell.getAttribute("data-sort-method") !== "none") {
-          cell.tabIndex = 0; cell.addEventListener("click", onClick);
+          cell.tabIndex = 0;
+          cell.addEventListener("click", onClick);
+          cell.addEventListener("keydown", event => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              onClick.call(cell, event);
+            }
+          });
           if (cell.hasAttribute("data-sort-default")) this.current = cell;
         }
       }
       if (this.current) this.sortTable(this.current);
     },
 
+    /**
+     * Sort the table by the clicked header.
+     * Dispatches beforeSort / afterSort events.
+     * Delegates to web worker for tables > LARGE_TABLE_THRESHOLD rows.
+     * @param {HTMLElement} header
+     * @param {boolean} [update] - True to refresh without toggling direction
+     */
     sortTable(header, update) {
       const columnKey = header.getAttribute("data-sort-column-key"), column = header.cellIndex;
       let sortFunction = caseInsensitiveSort, sortMethod = header.getAttribute("data-sort-method"), sortOrder = header.getAttribute("aria-sort");
@@ -86,6 +147,16 @@
       this.sortNative(header, update, columnKey, column, sortFunction, sortMethod, sortOrder);
     },
 
+    /**
+     * Sort via web worker. Extracts row text, determines sort type,
+     * sends to worker, re-appends rows on response.
+     * @param {HTMLElement} header
+     * @param {boolean} update
+     * @param {string|null} columnKey
+     * @param {number} column
+     * @param {string|null} sortMethod
+     * @param {string} sortOrder
+     */
     sortWithWorker(header, update, columnKey, column, sortMethod, sortOrder) {
       const worker = getSortWorker();
       const rowData = [];
@@ -105,15 +176,14 @@
       }
 
       let columnType = "string";
+      const knownTypes = ["number","date","natural","dotsep","filesize","monthname","intl"];
       if (sortMethod) {
-        if (sortMethod === "number") columnType = "number";
-        else if (sortMethod === "date") columnType = "date";
+        if (knownTypes.includes(sortMethod)) {columnType = sortMethod;}
       } else {
         const sampleItems = rowData.slice(0, 3).map(r => r.td).filter(t => t);
         for (const opt of sortOptions) {
           if (sampleItems.every(opt.pattern)) {
-            if (opt.name === "number") columnType = "number";
-            else if (opt.name === "date") columnType = "date";
+            columnType = opt.name;
             break;
           }
         }
@@ -156,6 +226,17 @@
       });
     },
 
+    /**
+     * Sort small tables synchronously on the main thread.
+     * Uses registered sort extensions; falls back to case-insensitive.
+     * @param {HTMLElement} header
+     * @param {boolean} update
+     * @param {string|null} columnKey
+     * @param {number} column
+     * @param {function} sortFunction
+     * @param {string|null} sortMethod
+     * @param {string} sortOrder
+     */
     sortNative(header, update, columnKey, column, sortFunction, sortMethod, sortOrder) {
       window.requestAnimationFrame(() => {
         if (!update) {
@@ -214,9 +295,9 @@
           }
 
           if (sortOrder === "descending") {
-            newRows.sort(stabilize(sortFunction, true));
-          } else {
             newRows.sort(stabilize(sortFunction, false)).reverse();
+          } else {
+            newRows.sort(stabilize(sortFunction, true));
           }
 
           let noSortsSoFar = 0;
@@ -231,11 +312,23 @@
       });
     },
 
-    // Refresh current sort without changing order
+    /**
+     * Re-apply current sort without toggling direction.
+     * Use after row data changes.
+     */
     refresh() {
       if (this.current) this.sortTable(this.current, true);
     }
   }
+
+  // Register all sort extensions (shared with worker via sortShared.js)
+  Tablesort.extend("number", numberPattern, numberCmpEL);
+  Tablesort.extend("date", datePattern, dateCmpEL);
+  Tablesort.extend("natural", naturalPattern, naturalCmpEL);
+  Tablesort.extend("dotsep", dotsepPattern, dotsepCmpEL);
+  Tablesort.extend("filesize", filesizePattern, filesizeCmpEL);
+  Tablesort.extend("monthname", monthnamePattern, monthnameCmpEL);
+  Tablesort.extend("intl", intlPattern, intlCmpEL);
 
   if (typeof module !== "undefined" && module.exports) module.exports = Tablesort;
   else window.Tablesort = Tablesort;

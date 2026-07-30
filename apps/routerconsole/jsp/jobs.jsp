@@ -17,8 +17,8 @@
 <% jobQueueHelper.storeWriter(out);%>
 <jsp:getProperty name="jobQueueHelper" property="jobQueueStats"/>
 </div>
+<script src=/js/tablesort/sortShared.js></script>
 <script src=/js/tablesort/tablesort.js></script>
-<script src=/js/tablesort/tablesort.number.js></script>
 <script src=/js/jobs.js></script>
 </body>
 </html>

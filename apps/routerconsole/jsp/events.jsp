@@ -33,9 +33,8 @@
 </div>
 </div>
 </div>
+<script src=/js/tablesort/sortShared.js></script>
 <script src=/js/tablesort/tablesort.js></script>
-<script src=/js/tablesort/tablesort.number.js></script>
-<script src=/js/tablesort/tablesort.date.js></script>
 <script nonce=<%=cspNonce%>>new Tablesort(document.getElementById("eventlog"));</script>
 <script src=/js/lazyload.js></script>
 
