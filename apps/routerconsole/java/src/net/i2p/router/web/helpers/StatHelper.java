@@ -16,6 +16,8 @@ import net.i2p.util.Log;
 public class StatHelper extends HelperBase {
     private String _peer;
     private boolean _full;
+    private String _statFilter;
+    private String _export;
 
     /**
      * Caller should strip HTML (XSS)
@@ -29,6 +31,46 @@ public class StatHelper extends HelperBase {
      */
     public void setFull(String f) {
         _full = f != null && !f.isEmpty();
+    }
+
+    /**
+     * Optional stat name filter (substring match, case-insensitive).
+     * Only stats whose name contains this string will be rendered.
+     * @since 0.9.70+
+     */
+    public void setStatFilter(String filter) {
+        if (filter != null && !filter.isEmpty())
+            _statFilter = filter;
+    }
+
+    /**
+     * Export format (csv or xml).
+     * @since 0.9.70+
+     */
+    public void setExport(String export) {
+        if (export != null && ("csv".equals(export) || "xml".equals(export)))
+            _export = export;
+    }
+
+    /**
+     * Export data as CSV or XML.
+     * @return the export data
+     */
+    public String getExportData() {
+        if (_export == null) return "";
+        try {
+            StatsGenerator gen = new StatsGenerator(_context);
+            if (_out != null) {
+                gen.generateCSV(_out, _statFilter);
+                return "";
+            } else {
+                java.io.StringWriter sw = new java.io.StringWriter(32 * 1024);
+                gen.generateCSV(sw, _statFilter);
+                return sw.toString();
+            }
+        } catch (IOException ioe) {
+            return "Error exporting stats: " + ioe.getMessage();
+        }
     }
 
     /**
@@ -59,11 +101,11 @@ public class StatHelper extends HelperBase {
         StatsGenerator gen = new StatsGenerator(_context);
         try {
             if (_out != null) {
-                gen.generateStatsPage(_out, _full);
+                gen.generateStatsPage(_out, _full, _statFilter);
                 return "";
             } else {
                 StringWriter sw = new StringWriter(32 * 1024);
-                gen.generateStatsPage(sw, _full);
+                gen.generateStatsPage(sw, _full, _statFilter);
                 return sw.toString();
             }
         } catch (IOException ioe) {

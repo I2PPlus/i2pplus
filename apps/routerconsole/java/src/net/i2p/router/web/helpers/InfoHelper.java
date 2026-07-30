@@ -64,11 +64,11 @@ public class InfoHelper extends HelperBase {
         StatsGenerator gen = new StatsGenerator(_context);
         try {
             if (_out != null) {
-                gen.generateStatsPage(_out, _full);
+                gen.generateStatsPage(_out, _full, null);
                 return "";
             } else {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream(32*1024);
-                gen.generateStatsPage(new OutputStreamWriter(baos, StandardCharsets.UTF_8), _full);
+                gen.generateStatsPage(new OutputStreamWriter(baos, StandardCharsets.UTF_8), _full, null);
                 try {
                     return baos.toString(StandardCharsets.UTF_8.name());
                 } catch (UnsupportedEncodingException e) {

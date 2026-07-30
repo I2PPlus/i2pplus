@@ -29,7 +29,9 @@
     progressx.show(theme);
     progressx.progress(0.5);
     const xhrstats = new XMLHttpRequest();
-    xhrstats.open("GET", "/stats", true);
+    const statFilter = new URLSearchParams(window.location.search).get("stat");
+    const url = statFilter ? "/stats?stat=" + encodeURIComponent(statFilter) : "/stats";
+    xhrstats.open("GET", url, true);
     xhrstats.responseType = "document";
     xhrstats.onreadystatechange = function () {
       if (xhrstats.readyState === 4 && xhrstats.status === 200) {

@@ -30,10 +30,81 @@ public class StatsGenerator {
     public StatsGenerator(RouterContext context) {_context = context;}
 
     /**
-     * generateStatsPage.
+     *  Generate CSV export of all stats (optionally filtered by name).
+     *  @since 0.9.70+
      */
-    public void generateStatsPage(Writer out, boolean showAll) throws IOException {
+    public void generateCSV(Writer out, String filter) throws IOException {
+        StringBuilder buf = new StringBuilder(512);
+        boolean hasFilter = filter != null && !filter.isEmpty();
+        String lcFilter = hasFilter ? filter.toLowerCase() : null;
+        buf.append("group,stat,type,period,description,average_value,last_event_count,lifetime_events\n");
+        out.write(buf.toString());
+        buf.setLength(0);
+        Map<String, SortedSet<String>> groups = new TreeMap<>(new AlphaComparator());
+        groups.putAll(_context.statManager().getStatsByGroup());
+        for (Map.Entry<String, SortedSet<String>> entry : groups.entrySet()) {
+            String group = entry.getKey();
+            for (String stat : entry.getValue()) {
+                if (hasFilter && !stat.toLowerCase().contains(lcFilter)) continue;
+                if (_context.statManager().isFrequency(stat)) {
+                    FrequencyStat freq = _context.statManager().getFrequency(stat);
+                    if (freq == null) continue;
+                    String d = freq.getDescription();
+                    if (d.isEmpty()) d = " ";
+                    // escape quotes in description
+                    d = d.replace("\"", "\"\"");
+                    buf.append(group).append(',')
+                       .append(stat).append(",frequency,0,\"")
+                       .append(d).append("\",")
+                       .append(freq.getEventCount() > 0 ? freq.getFrequency() : 0).append(',')
+                       .append(0).append(',')
+                       .append(freq.getEventCount()).append('\n');
+                } else {
+                    RateStat rate = _context.statManager().getRate(stat);
+                    if (rate == null) continue;
+                    String d = rate.getDescription();
+                    if (d.isEmpty()) d = " ";
+                    d = d.replace("\"", "\"\"");
+                    long[] periods = rate.getPeriods();
+                    Arrays.sort(periods);
+                    if (periods.length == 0) {
+                        buf.append(group).append(',')
+                           .append(stat).append(",rate,0,\"")
+                           .append(d).append("\",0,0,")
+                           .append(rate.getLifetimeEventCount()).append('\n');
+                    } else {
+                        for (int i = 0; i < periods.length; i++) {
+                            Rate curRate = rate.getRate(periods[i]);
+                            if (curRate.getLastCoalesceDate() <= curRate.getCreationDate()) continue;
+                            buf.append(group).append(',')
+                               .append(stat).append(",rate,")
+                               .append(periods[i]).append(",\"")
+                               .append(d).append("\",")
+                               .append(curRate.getAverageValue()).append(',')
+                               .append((int) curRate.getLastEventCount()).append(',')
+                               .append(rate.getLifetimeEventCount()).append('\n');
+                            if (buf.length() > 4096) {
+                                out.write(buf.toString());
+                                buf.setLength(0);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        out.write(buf.toString());
+        out.flush();
+    }
+
+    /**
+     * generateStatsPage.
+     * @param filter optional stat name substring filter (case-insensitive), null for all
+     * @since 0.9.70+
+     */
+    public void generateStatsPage(Writer out, boolean showAll, String filter) throws IOException {
         StringBuilder buf = new StringBuilder(16*1024);
+        boolean hasFilter = filter != null && !filter.isEmpty();
+        String lcFilter = hasFilter ? filter.toLowerCase() : null;
 
         buf.append("<div class=\"confignav\">");
 
@@ -41,17 +112,21 @@ public class StatsGenerator {
         Map<String, Set<String>> groups = new TreeMap<>(new AlphaComparator());
         groups.putAll(unsorted);
 
+        // Tab labels — filter groups to only show tabs with matching stats
         for (Map.Entry<String, Set<String>> entry : groups.entrySet()) {
-            String group = entry.getKey();
-            Set<String> stats = entry.getValue();
-            buf.append("<label class=\"togglestat tab");
-            buf.append("\" id=\"");
-            buf.append(group.replace(" ", "_").replace("[", "").replace("]", ""));
-            buf.append("\" for=\"toggle_");
-            buf.append(group.replace(" ", "_").replace("[", "").replace("]", ""));
-            buf.append("\">");
-            buf.append(_t(group));
-            buf.append("</label>");
+            if (hasFilter) {
+                boolean anyMatch = false;
+                for (String stat : entry.getValue()) {
+                    if (stat.toLowerCase().contains(lcFilter)) {anyMatch = true; break;}
+                }
+                if (!anyMatch) continue;
+            }
+            String g = entry.getKey();
+            buf.append("<label class=\"togglestat tab\" id=\"")
+               .append(g.replace(" ", "_").replace("[", "").replace("]", ""))
+               .append("\" for=\"toggle_")
+               .append(g.replace(" ", "_").replace("[", "").replace("]", ""))
+               .append("\">").append(_t(g)).append("</label>");
             out.append(buf);
             buf.setLength(0);
         }
@@ -62,7 +137,7 @@ public class StatsGenerator {
         buf.append(DataHelper.formatDuration2(uptime));
         buf.append(").  ").append( _t("The data gathered is quantized over a 1 minute period, so should just be used as an estimate."));
         buf.append(' ').append( _t("These statistics are primarily used for development and debugging."));
-        buf.append(' ').append("<a href=\"/configstats\">[").append(_t("Configure")).append("]</a>");
+        buf.append(' ').append("<a href=/configstats>[").append(_t("Configure")).append("]</a>");
         buf.append("</p>");
         buf.append("<div id=statsWrap>\n");
         out.append(buf);
@@ -71,7 +146,15 @@ public class StatsGenerator {
         for (Map.Entry<String, Set<String>> entry : groups.entrySet()) {
             String group = entry.getKey();
             Set<String> stats = entry.getValue();
-            buf.append("<input name=\"statgroup\" type=radio class=toggle_input id=\"toggle_")
+            // When filtering, skip groups with no matching stats
+            if (hasFilter) {
+                boolean anyMatch = false;
+                for (String stat : stats) {
+                    if (stat.toLowerCase().contains(lcFilter)) {anyMatch = true; break;}
+                }
+                if (!anyMatch) continue;
+            }
+            buf.append("<input name=statgroup type=radio class=toggle_input id=\"toggle_")
                .append(group.replace(" ", "_").replace("[", "").replace("]", "")).append("\"");
             if (group.equals("Router")) {buf.append(" checked");}
             buf.append(" hidden>\n");
@@ -80,6 +163,7 @@ public class StatsGenerator {
             out.append(buf);
             buf.setLength(0);
             for (String stat : stats) {
+                if (hasFilter && !stat.toLowerCase().contains(lcFilter)) continue;
                 buf.append("<li class=statsName id=\"").append(stat.replace(" ", "_").replace("[", "").replace("]", ""))
                    .append("\"><b>").append(stat).append("</b> ");
                 if (_context.statManager().isFrequency(stat)) {renderFrequency(stat, buf);}
