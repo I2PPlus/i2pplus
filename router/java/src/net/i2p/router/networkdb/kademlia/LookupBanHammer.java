@@ -9,273 +9,167 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
-import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * Tracks the frequency of recent lookup requests targeting a specific reply peer/tunnel pair
- * to provide basic denial-of-service (DOS) protection by banning excessive requesters.
- * <p>
- * Uses burst detection over a 1-second window and a sustained-rate threshold over a
- * 30-second sliding window (combined into a single deque per key) to decide when to ban.
- * Bans last for a fixed duration and expire automatically.
- * <p>
- * Thread-safe implementation utilizing concurrent data structures and finer-grained synchronization
- * for improved performance under concurrent access.
- * <p>
- * All internal maps are size-bounded to prevent memory exhaustion under high lookup volume.
+ * Tracks lookup frequency per (peer, tunnel) pair to provide DOS protection
+ * via temporary bans on excessive requesters. Uses burst detection over a
+ * 1-second window and sustained-rate threshold over a 30-second sliding window.
+ * Maps are size-bounded to prevent memory exhaustion.
  *
  * @since 0.9.59
  */
 class LookupBanHammer {
-    // Concurrent map tracking timestamps of recent requests per ReplyTunnel for burst + sustained detection.
-    // Uses a unified 30-second sliding window (trimmed inline during shouldBan()); the periodic Cleaner bounds
-    // this map by size so it cannot grow without limit as distinct active lookup sources accumulate.
-    // Each value is a ConcurrentLinkedDeque of epoch-millisecond timestamps.
     private final ConcurrentHashMap<ReplyTunnel, ConcurrentLinkedDeque<Long>> burstTimestamps;
-
-    // Concurrent map storing expiration times of active bans per ReplyTunnel
     private final ConcurrentHashMap<ReplyTunnel, Long> banExpiration;
 
-    // Dummy TunnelId used to represent null TunnelId values in ReplyTunnel keys
     private static final TunnelId DUMMY_ID = new TunnelId();
-
-    // Maximum allowed lookups in 30-second sliding window before sustained-rate ban
     private static final int MAX_LOOKUPS = 120;
-
-    // Timer interval for periodic cleaner task (30 seconds)
     private static final long CLEAN_TIME = 30 * 1000L;
-
-    // Burst ban parameters: number of requests and time window in ms
-    private static final int BURST_THRESHOLD_FOR_BAN = 10; // Requests per second to trigger ban
+    private static volatile int _burstThreshold = 10;
     private static final long BURST_WINDOW_MS = 1000L;
-
-    // Duration of ban in milliseconds (5 minutes)
     private static final long BAN_DURATION_MS = 5 * 60 * 1000L;
-
-    // Hard cap on unique (from, tunnel) pairs tracked to prevent memory leaks
     private static volatile int _maxEntries = 50000;
-
-    /** Cleaner interval override (ms), controlled by Tuner */
     static volatile long _cleanTimeMs = CLEAN_TIME;
 
     private final Cleaner _cleaner;
 
-    /**
-     * Constructs a newly initialized LookupBanHammer instance.
-     * Registers a periodic cleanup event to remove expired bans.
-     */
     LookupBanHammer() {
-        this.burstTimestamps = new ConcurrentHashMap<ReplyTunnel, ConcurrentLinkedDeque<Long>>();
-        this.banExpiration = new ConcurrentHashMap<ReplyTunnel, Long>();
+        burstTimestamps = new ConcurrentHashMap<ReplyTunnel, ConcurrentLinkedDeque<Long>>();
+        banExpiration = new ConcurrentHashMap<ReplyTunnel, Long>();
         _cleaner = new Cleaner();
         _cleaner.schedule(CLEAN_TIME);
     }
 
-    /** Stop the periodic cleaner. Call on facade shutdown. @since 0.9.70+ */
-    void cancel() {
-        _cleaner.cancel();
-    }
+    void cancel() { _cleaner.cancel(); }
 
-    /**
-     * Update the max entries cap (called by Tuner).
-     * @param max the new max entries
-     * @since 0.9.70+
-     */
+    /** @since 0.9.70+ */
     static void setMaxEntries(int max) {
         _maxEntries = Math.max(1000, Math.min(200000, max));
     }
 
-    /**
-     * @return current max entries cap
-     * @since 0.9.70+
-     */
     static int getMaxEntries() { return _maxEntries; }
 
-
-    /**
-     * Update the cleaner interval (called by Tuner).
-     * @param ms the new interval in ms
-     * @since 0.9.70+
-     */
+    /** @since 0.9.70+ */
     static void setCleanTimeMs(long ms) {
         _cleanTimeMs = Math.max(5000, Math.min(120000, ms));
     }
 
-    /**
-     * Update the burst threshold (called by Tuner).
-     * @param t the new threshold
-     * @since 0.9.70+
-     */
+    /** @since 0.9.70+ */
     static void setBurstThreshold(int t) {
-        // no-op for now; threshold is a constant
+        _burstThreshold = Math.max(2, Math.min(100, t));
     }
 
     /**
-     * Records a lookup request from a requester identified by key and tunnel ID,
-     * and determines whether the requester should be banned based on recent activity.
-     * <p>
-     * Uses a single 30-second sliding window per key for both burst detection
-     * (entries in last 1 second) and sustained-rate detection (total entries).
-     * Inline trimming removes entries older than 30s; the periodic Cleaner additionally
-     * bounds the map by size so idle and least-active sources are eventually evicted.
-     *
-     * @param key non-null Hash representing the requester identifying key
-     * @param id TunnelId of the target reply tunnel, or null if direct lookups
-     * @return true if the requester is currently banned and should be blocked; false otherwise
+     * Record a lookup and check if the requester should be banned.
+     * @param key requester Hash
+     * @param id reply tunnel, or null for direct
+     * @return true if currently banned
      */
     boolean shouldBan(Hash key, TunnelId id) {
         ReplyTunnel rt = new ReplyTunnel(key, id);
         long now = System.currentTimeMillis();
-
-        // Quick check if the requester is banned with active ban expiration
-        Long banUntil = banExpiration.get(rt);
-        if (banUntil != null) {
-            if (now < banUntil) {
-                return true;
-            } else {
-                banExpiration.remove(rt);
-            }
-        }
-
-        // Unified sliding window for burst + sustained rate detection.
-        // Inline trimming removes entries &gt;30s old, so no periodic clearing is needed.
+        if (isBanned(rt, now))
+            return true;
         ConcurrentLinkedDeque<Long> deque = burstTimestamps.computeIfAbsent(rt, k -> new ConcurrentLinkedDeque<Long>());
         synchronized (deque) {
-            // Slide window: remove entries older than 30 seconds
-            while (!deque.isEmpty() && (now - deque.peekFirst() > 30000)) {
-                deque.pollFirst();
-            }
+            slideWindow(deque, now);
             deque.addLast(now);
-
-            // Count entries in the last 1 second for burst detection.
-            // Since entries are ordered (oldest first), iterate from the end.
-            int burstCount = 0;
-            Iterator<Long> descIt = deque.descendingIterator();
-            while (descIt.hasNext()) {
-                if (now - descIt.next() <= BURST_WINDOW_MS) {
-                    burstCount++;
-                } else {
-                    break;
-                }
-            }
-
-            // Burst ban: 10+ requests in 1 second
-            if (burstCount > BURST_THRESHOLD_FOR_BAN) {
-                if (banExpiration.size() >= _maxEntries) {
-                    expireOrEvictBan(now);
-                }
-                banExpiration.put(rt, now + BAN_DURATION_MS);
-                // Once banned, the burstTimestamps entry is dead — every future
-                // request hits banExpiration.get() first and returns true immediately.
-                // Remove it to free the ReplyTunnel key.
-                burstTimestamps.remove(rt);
-                return true;
-            }
-
-            // Sustained-rate ban: 120+ requests in 30-second window
-            if (deque.size() > MAX_LOOKUPS) {
-                if (banExpiration.size() >= _maxEntries) {
-                    expireOrEvictBan(now);
-                }
-                banExpiration.put(rt, now + BAN_DURATION_MS);
-                // Same rationale as above — no need to keep tracking rate for a banned source.
-                burstTimestamps.remove(rt);
-                return true;
-            }
+            if (burstCount(deque, now) > _burstThreshold)
+                return imposeBan(rt, now);
+            if (deque.size() > MAX_LOOKUPS)
+                return imposeBan(rt, now);
         }
-
         return false;
     }
 
-    /**
-     * Try to make room in the ban map. Remove expired entries first.
-     * If still full, remove a random entry (any single ban is expendable
-     * since the burst detector will re-ban on the next burst).
-     */
-    private void expireOrEvictBan(long now) {
-        for (Map.Entry<ReplyTunnel, Long> e : banExpiration.entrySet()) {
-            if (e.getValue() <= now) {
-                banExpiration.remove(e.getKey());
-                return;
-            }
+    /** @return true if ban is active; removes expired entries. */
+    private boolean isBanned(ReplyTunnel rt, long now) {
+        Long until = banExpiration.get(rt);
+        if (until == null) return false;
+        if (now < until) return true;
+        banExpiration.remove(rt);
+        return false;
+    }
+
+    /** Remove entries older than 30s from the deque. */
+    private static void slideWindow(ConcurrentLinkedDeque<Long> deque, long now) {
+        while (!deque.isEmpty() && (now - deque.peekFirst() > 30000))
+            deque.pollFirst();
+    }
+
+    /** Count entries in the last 1-second window (newest-first iteration). */
+    private static int burstCount(ConcurrentLinkedDeque<Long> deque, long now) {
+        int count = 0;
+        Iterator<Long> it = deque.descendingIterator();
+        while (it.hasNext()) {
+            if (now - it.next() <= BURST_WINDOW_MS)
+                count++;
+            else
+                break;
         }
-        Map.Entry<ReplyTunnel, Long> first = null;
+        return count;
+    }
+
+    /** Record a ban, evicting the oldest if at capacity. Returns true. */
+    private boolean imposeBan(ReplyTunnel rt, long now) {
+        if (banExpiration.size() >= _maxEntries)
+            evictOneBan();
+        banExpiration.put(rt, now + BAN_DURATION_MS);
+        burstTimestamps.remove(rt);
+        return true;
+    }
+
+    /** Evict the first available ban entry (the Cleaner handles bulk expiry). */
+    private void evictOneBan() {
         for (Map.Entry<ReplyTunnel, Long> e : banExpiration.entrySet()) {
-            first = e;
-            break;
-        }
-        if (first != null) {
-            banExpiration.remove(first.getKey());
+            banExpiration.remove(e.getKey());
+            return;
         }
     }
 
-    /**
-     * Periodic cleanup task that removes expired bans and prunes stale
-     * burstTimestamps entries. The sliding window in shouldBan() only trims
-     * deque contents, not map entries, and never evicts continuously-active
-     * sources — so once the tracked-source count exceeds the cap we evict the
-     * least-recently-active entries here to keep the map bounded.
-     */
+    /** Periodic cleanup: remove expired bans, prune idle burst trackers, size-bound. */
     private class Cleaner extends SimpleTimer2.TimedEvent {
         public Cleaner() { super(SimpleTimer2.getInstance()); }
+
         @Override
         public void timeReached() {
             long now = System.currentTimeMillis();
-            int banSize = banExpiration.size();
-            // Remove expired bans
-            banExpiration.entrySet().removeIf(entry -> entry.getValue() <= now);
-            // Remove stale burstTimestamps entries: empty deque or all entries > 30s old
+            banExpiration.entrySet().removeIf(e -> e.getValue() <= now);
             if (!burstTimestamps.isEmpty()) {
                 long cutoff = now - 30000;
-                burstTimestamps.entrySet().removeIf(entry -> {
-                    Long last = entry.getValue().peekLast();
+                burstTimestamps.entrySet().removeIf(e -> {
+                    Long last = e.getValue().peekLast();
                     return last == null || last < cutoff;
                 });
             }
-            // Size-bound burstTimestamps. The map otherwise grows without limit, because every
-            // distinct (Hash, TunnelId) pair that performs lookups retains an entry for as long
-            // as it stays active (continuously-active sources are never caught by the 30s idle
-            // check above). When over the cap, evict the least-recently-active sources (oldest
-            // last-activity) so the most active requesters — the ones DoS protection cares about
-            // — stay tracked. The eviction cutoff is estimated from a fixed-size sample of
-            // last-activity timestamps (no full sort), then applied in a single pass.
             if (burstTimestamps.size() > _maxEntries) {
                 int over = burstTimestamps.size() - _maxEntries;
                 List<Long> sample = new ArrayList<Long>();
                 int s = 0;
                 for (ConcurrentLinkedDeque<Long> d : burstTimestamps.values()) {
-                    if (s++ >= 8192)
-                        break;
+                    if (s++ >= 8192) break;
                     Long last = d.peekLast();
-                    sample.add(last == null ? Long.MIN_VALUE : last);
+                    sample.add(last == null ? Long.MAX_VALUE : last);
                 }
                 if (!sample.isEmpty()) {
                     Collections.sort(sample);
-                    int idx = (over * sample.size()) / burstTimestamps.size();
-                    if (idx >= sample.size())
-                        idx = sample.size() - 1;
-                    final long cutoff = sample.get(idx);
+                    int idx = Math.min((over * sample.size()) / burstTimestamps.size(), sample.size() - 1);
+                    long cutoff = sample.get(idx);
                     burstTimestamps.entrySet().removeIf(e -> {
                         Long last = e.getValue().peekLast();
                         return last != null && last <= cutoff;
                     });
                 }
             }
-            // Under heavy load, clean more frequently to stay bounded
             long interval = _cleanTimeMs;
-            if (burstTimestamps.size() + banExpiration.size() > _maxEntries * 2) {
+            if (burstTimestamps.size() + banExpiration.size() > _maxEntries * 3 / 2)
                 interval = Math.max(interval / 6, 1000);
-            }
             reschedule(interval);
         }
     }
 
-    /**
-     * Key class representing a reply peer/tunnel combination.
-     * Implements equality and hash code based on both Hash key and TunnelId.
-     * Caches hashcode for performance on repeated access.
-     */
+    /** (peer, tunnel) key with cached hash. */
     private static class ReplyTunnel {
         public final Hash h;
         public final TunnelId id;
@@ -284,19 +178,17 @@ class LookupBanHammer {
         ReplyTunnel(Hash h, TunnelId id) {
             this.h = h;
             this.id = (id != null) ? id : DUMMY_ID;
-            this.cachedHash = this.h.hashCode() ^ this.id.hashCode();
+            this.cachedHash = h.hashCode() ^ this.id.hashCode();
         }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof ReplyTunnel)) return false;
-            ReplyTunnel other = (ReplyTunnel) obj;
-            return this.h.equals(other.h) && this.id.equals(other.id);
+            ReplyTunnel o = (ReplyTunnel) obj;
+            return id.equals(o.id) && h.equals(o.h);
         }
 
         @Override
-        public int hashCode() {
-            return cachedHash;
-        }
+        public int hashCode() { return cachedHash; }
     }
 }
