@@ -3698,7 +3698,6 @@ public class I2PSnarkServlet extends BasicServlet {
      * &lt;p&gt;Special cases:
      * &lt;ul&gt;
      *   &lt;li&gt;I2PSnark PeerID starts with "AwMD" (Base64 encoding of \3\3\3)&lt;/li&gt;
-     *   &lt;li&gt;Clients starting with "LU" or "ZV" may indicate Az or Robert versions&lt;/li&gt;
      *   &lt;li&gt;Handshake "v" field is used as a fallback to identify unknown clients&lt;/li&gt;
      * &lt;/ul&gt;
      *
@@ -3710,13 +3709,6 @@ public class I2PSnarkServlet extends BasicServlet {
         if (pid == null) {return "Unknown";}
 
         String ch = pid.toString().substring(0, 4); // First 4 chars of PeerID
-        String version = null;
-
-        // Special cases for known clients
-        if (ch.startsWith("ZV") || "VUZP".equals(ch)) {version = getRobtVersion(pid.getID());}
-        else if (ch.startsWith("LU")) {version = getAzVersion(pid.getID());}
-
-        boolean hasVersion = version != null && !version.isEmpty();
 
         if ("AwMD".equals(ch)) {return "I2PSnark";}
         else if ("LUFa".equals(ch)) {return "Vuze";}
@@ -3729,6 +3721,7 @@ public class I2PSnarkServlet extends BasicServlet {
         else if ("LXFC".equals(ch)) {return "qBittorrent";}
         else if ("LUxU".equals(ch)) {return "libtorrent";}
         else if ("VElY".equals(ch)) {return "Tixati";}
+        else if ("LUky".equals(ch)) {return "i2pd";}
         else if ("ZV".equals(ch.substring(2, 4)) || "VUZP".equals(ch)) {return "Robert";}
         else if ("CwsL".equals(ch)) {return "I2PSnarkXL";}
         else if ("BFJT".equals(ch)) {return "I2PRufus";}
@@ -3786,46 +3779,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 .replace("\"", "\\u0022")
                 .replace("'", "\\u0027")
                 .replace("&", "\\u0026");
-    }
-
-    /**
-     * Version from bytes 3-6.
-     *
-     * @return " w.x.y.z" or ""
-     * @since 0.9.14
-     */
-    private static String getAzVersion(byte[] id) {
-        if (id[7] != '-') {return "";}
-        StringBuilder buf = new StringBuilder(8);
-        buf.append(' ');
-        for (int i = 3; i <= 6; i++) {
-            int val = id[i] - '0';
-            if (val < 0) {return "";}
-            if (val > 9) {val = id[i] - 'A';}
-            if (i != 6 || val != 0) {
-                if (i != 3) {buf.append('.');}
-                buf.append(val);
-            }
-        }
-        return buf.toString();
-    }
-
-    /**
-     * Version from bytes 3-5.
-     *
-     * @return " w.x.y" or ""
-     * @since 0.9.14
-     */
-    private static String getRobtVersion(byte[] id) {
-        StringBuilder buf = new StringBuilder(8);
-        buf.append(' ');
-        for (int i = 3; i <= 5; i++) {
-            int val = id[i];
-            if (val < 0) {return "";}
-            if (i != 3) {buf.append('.');}
-            buf.append(val);
-        }
-        return buf.toString();
     }
 
     /** @since 0.8.2 */

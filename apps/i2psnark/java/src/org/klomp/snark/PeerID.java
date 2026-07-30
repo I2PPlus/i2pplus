@@ -6,13 +6,11 @@
 
 package org.klomp.snark;
 
-import java.io.IOException;
 import java.util.Map;
 import net.i2p.data.Base32;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
-import org.klomp.snark.bencode.BDecoder;
 import org.klomp.snark.bencode.BEValue;
 import org.klomp.snark.bencode.InvalidBEncodingException;
 
@@ -52,21 +50,13 @@ public class PeerID implements Comparable<PeerID> {
     }
 
     /**
-     * Creates a PeerID from a BDecoder.
-     *
-     * @param be the BDecoder to read from
-     * @throws IOException if the bencoded data is invalid
-     */
-    public PeerID(BDecoder be) throws IOException {
-        this(be.bdecodeMap().getMap());
-    }
-
-    /**
      * Creates a PeerID from a Map containing BEncoded peer id, ip and port.
      *
+     * @deprecated non-compact
      * @param m the map containing peer id and ip entries
      * @throws InvalidBEncodingException if the map entries are missing or invalid
      */
+    @Deprecated
     public PeerID(Map<String, BEValue> m) throws InvalidBEncodingException {
         BEValue bevalue = m.get("peer id");
         if (bevalue == null) throw new InvalidBEncodingException("peer id missing");
@@ -192,7 +182,7 @@ public class PeerID implements Comparable<PeerID> {
             _toStringCache = "WebSeed@" + Base32.encode(destHash) + ".b32.i2p";
             return _toStringCache;
         }
-        if (id == null || address == null) return "unkn@" + Base64.encode(destHash).substring(0, 6);
+        if (id == null || address == null) return "unkn@" + Base64.encode(destHash, 0, 3);
         int nonZero = 0;
         for (int i = 0; i < id.length; i++) {
             if (id[i] != 0) {
@@ -201,9 +191,9 @@ public class PeerID implements Comparable<PeerID> {
             }
         }
         _toStringCache =
-                Base64.encode(id, nonZero, id.length - nonZero).substring(0, 4)
+                Base64.encode(id, nonZero, Math.min(3, id.length - nonZero))
                         + "@"
-                        + address.toBase64().substring(0, 6);
+                        + Base64.encode(address.getPublicKey().getData(), 0, 3);
         return _toStringCache;
     }
 
