@@ -173,7 +173,7 @@ class ConnectionPacketHandler {
             }
         }
 
-        if (!con.getInputStream().canAccept(seqNum, packet.getPayloadSize())) {
+        if (!con.getInputStream().ensureCanAccept(seqNum, packet.getPayloadSize())) {
             if (con.getInputStream().isLocallyClosed()) {
                 if (_log.shouldWarn())
                     _log.warn("More data received after local close on " + con +

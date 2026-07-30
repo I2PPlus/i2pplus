@@ -222,7 +222,7 @@ class Connection {
      * @return whether slow
      */
     /** MAX_WINDOW_SIZE_DEFAULT */
-    public static final int MAX_WINDOW_SIZE_DEFAULT = SystemVersion.isSlow() ? 192 : 256;
+    public static final int MAX_WINDOW_SIZE_DEFAULT = SystemVersion.isSlow() ? 384 : 512;
 
     /**
      *  Absolute ceiling on in-flight packets regardless of BDP estimate.
@@ -457,7 +457,7 @@ class Connection {
                 int wsz = _options.getWindowSize();
                 if (shouldWait(unacked, wsz)) {
                     if (_isChoked) {
-                        long persistDelay = Math.max(_options.getRTO(), 5000L);
+                        long persistDelay = Math.max(_options.getRTO(), 2000L);
                         if (persistBackoff > 0) {
                             persistDelay = Math.min(persistDelay << persistBackoff, 60000L);
                         }

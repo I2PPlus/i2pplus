@@ -80,7 +80,14 @@ class MessageInputStream extends InputStream {
 
     private final int _maxMessageSize; // Max size per message block
     private final int _maxWindowSize;  // Max number of messages in window
-    private final int _maxBufferSize;  // Max total buffer size in bytes
+
+    /**
+     * Maximum size the receive buffer can grow to via dynamic growth.
+     * Matches ConnectionOptions default cap.
+     */
+    private static final int MAX_GROW_BUFFER = 8 * 1024 * 1024;
+
+    private int _maxBufferSize;  // Max total buffer size in bytes
     private final int _maxPacketCount; // Max number of packets regardless of size
 
     private final byte[] _oneByte = new byte[1]; // For single-byte reads
@@ -236,6 +243,44 @@ class MessageInputStream extends InputStream {
 
             return true;
         }
+    }
+
+    /**
+     * Try to grow the receive buffer when canAccept() returns false.
+     * Doubles the buffer size up to a reasonable cap (8MB) to reduce
+     * choke frequency for high-throughput connections.
+     *
+     * @return true if the buffer was grown, false if already at cap
+     */
+    public boolean growBuffer() {
+        synchronized (_dataLock) {
+            int newSize = _maxBufferSize * 2;
+            if (newSize > MAX_GROW_BUFFER) {
+                if (_maxBufferSize < MAX_GROW_BUFFER) {
+                    _maxBufferSize = MAX_GROW_BUFFER;
+                    return true;
+                }
+                return false;
+            }
+            _maxBufferSize = newSize;
+            return true;
+        }
+    }
+
+    /**
+     * Combined canAccept with automatic buffer growth.
+     * If the buffer is full, tries to grow it before rejecting.
+     *
+     * @return true if the message can be accepted (possibly after buffer growth)
+     */
+    public boolean ensureCanAccept(long messageId, int payloadSize) {
+        if (canAccept(messageId, payloadSize)) {
+            return true;
+        }
+        if (growBuffer()) {
+            return canAccept(messageId, payloadSize);
+        }
+        return false;
     }
 
     private void logBufferFull(long messageId, int available) {

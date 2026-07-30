@@ -479,6 +479,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new InactivityTimeoutParam());
         _params.add(new MaxSynResendsParam());
         _params.add(new ConnectTimeoutMultiplierParam());
+        _params.add(new MaxInboundBufferParam());
 
         // I2CP
         _params.add(new InternalQueueSizeParam());
@@ -3444,6 +3445,68 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Dead zone: avoid thrashing when within 10% of target
             if (Math.abs(current - target) <= 10) { return current; }
             return clamp(current, target, _step);
+        }
+    }
+
+    /**
+     * Per-connection inbound buffer cap (bytes).
+     * Raise when choke pressure is high (receiver can't keep up) or retransmissions are
+     * frequent (more in-flight capacity needed). Lower when memory pressure is high.
+     *
+     * @since 0.9.70+
+     */
+    private class MaxInboundBufferParam extends BaseParam {
+
+        MaxInboundBufferParam() {
+            super("i2p.streaming.maxInboundBuffer", "Max inbound buffer (bytes)",
+                  SUB_STREAMING,
+                  262144, 134217728, 262144, "stream.chokeSizeBegin", _context);
+        }
+
+        /** Apply the cap via I2PSocketManagerFull. */
+        protected void applyValue(int value) {
+            StreamingReflector.invokeSetInt("setMaxInboundBuffer", value);
+        }
+
+        /** Read current cap from I2PSocketManagerFull. */
+        protected int getRuntimeValue() {
+            int v = StreamingReflector.invokeGetInt("getMaxInboundBuffer");
+            return v > 0 ? v : 8 * 1024 * 1024;
+        }
+
+        /** Observed stat: choke activations per 60s window. */
+        protected double getObservedStat(RouterContext ctx) {
+            return getAdditionalEventCount(_context, _statName);
+        }
+
+        /** Compute target based on choke pressure, retransmissions, and memory pressure. */
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // primary stat = stream.chokeSizeBegin (choke events per 60s)
+            // Cross-refs: retransmission ratio, memory pressure
+            double rtxRatio = getAdditionalStat(_context, "stream.rtxRatio");
+            double memPressure = Tuner.getMemoryPressure();
+
+            boolean choking = !Double.isNaN(observed) && observed > 0;
+            boolean highRtx = !Double.isNaN(rtxRatio) && rtxRatio > 50;
+            boolean memoryTight = memPressure > 0.75;
+
+            // Choking or high retransmissions = increase buffer
+            if (choking || highRtx) {
+                return Math.min(_max, current + _step);
+            }
+
+            // Memory pressure = decrease buffer
+            if (memoryTight && current > _defaultValue) {
+                return Math.max(_defaultValue, current - _step);
+            }
+
+            // No pressure = ease back toward default
+            if (current > _defaultValue) {
+                return Math.max(_defaultValue, current - _step);
+            }
+
+            return current;
         }
     }
 

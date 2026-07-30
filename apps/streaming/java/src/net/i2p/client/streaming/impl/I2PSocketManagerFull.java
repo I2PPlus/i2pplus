@@ -890,4 +890,16 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @since 0.9.70+
      */
     public static void setDefaultInactivityTimeout(int val) { ConnectionOptions.setDefaultInactivityTimeout(val); }
+
+    /**
+     * @return the maximum inbound buffer cap (bytes)
+     * @since 0.9.70+
+     */
+    public static int getMaxInboundBuffer() { return ConnectionOptions.getMaxInboundBufferStatic(); }
+
+    /**
+     * @param val the new maximum inbound buffer cap (bytes)
+     * @since 0.9.70+
+     */
+    public static void setMaxInboundBuffer(int val) { ConnectionOptions.setMaxInboundBufferStatic(val); }
 }

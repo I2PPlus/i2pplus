@@ -75,6 +75,9 @@ public class TuningFormHandler extends FormHandler {
     private String _maxSlowStartWindowMin;
     private String _maxSlowStartWindowMax;
     private String _maxSlowStartWindowStep;
+    private String _maxInboundBufferMin;
+    private String _maxInboundBufferMax;
+    private String _maxInboundBufferStep;
     private String _xdhPreCalcMinMin;
     private String _xdhPreCalcMinMax;
     private String _xdhPreCalcMinStep;
@@ -191,6 +194,7 @@ public class TuningFormHandler extends FormHandler {
     private String _codelIntervalDefault;
     private String _westwoodDecayFactorDefault;
     private String _maxSlowStartWindowDefault;
+    private String _maxInboundBufferDefault;
     private String _xdhPreCalcMinDefault;
     private String _ntcpThreadsDefault;
     private String _ntcpQueueCapacityDefault;
@@ -552,6 +556,24 @@ public class TuningFormHandler extends FormHandler {
      * @param v the string value to set
      */
     public void setMaxSlowStartWindowStep(String v) { _maxSlowStartWindowStep = v; }
+    /**
+     * Sets the minimum value for the MAX_INBOUND_BUFFER tuning parameter.
+     *
+     * @param v the string value to set
+     */
+    public void setMaxInboundBufferMin(String v) { _maxInboundBufferMin = v; }
+    /**
+     * Sets the maximum value for the MAX_INBOUND_BUFFER tuning parameter.
+     *
+     * @param v the string value to set
+     */
+    public void setMaxInboundBufferMax(String v) { _maxInboundBufferMax = v; }
+    /**
+     * Sets the step value for the MAX_INBOUND_BUFFER tuning parameter.
+     *
+     * @param v the string value to set
+     */
+    public void setMaxInboundBufferStep(String v) { _maxInboundBufferStep = v; }
     /**
      * Sets the minimum value for the XDH_PRE_CALC_MIN tuning parameter.
      *
@@ -1239,6 +1261,12 @@ public class TuningFormHandler extends FormHandler {
      */
     public void setMaxSlowStartWindowDefault(String v) { _maxSlowStartWindowDefault = v; }
     /**
+     * Sets the factory-default value for the MAX_INBOUND_BUFFER tuning parameter.
+     *
+     * @param v the string value to set
+     */
+    public void setMaxInboundBufferDefault(String v) { _maxInboundBufferDefault = v; }
+    /**
      * Sets the factory-default value for the XDH_PRE_CALC_MIN tuning parameter.
      *
      * @param v the string value to set
@@ -1535,6 +1563,12 @@ public class TuningFormHandler extends FormHandler {
      */
     public void setMaxSlowStartWindowOverride(String v) { _maxSlowStartWindowOverride = v; }
     /**
+     * Sets the override control for the MAX_INBOUND_BUFFER tuning parameter. -1 enables auto-tuning, any non-negative value locks the parameter.
+     *
+     * @param v the string value to set
+     */
+    public void setMaxInboundBufferOverride(String v) { _maxInboundBufferOverride = v; }
+    /**
      * Sets the override control for the WRITER_QUEUE_SIZE tuning parameter. -1 enables auto-tuning, any non-negative value locks the parameter.
      *
      * @param v the string value to set
@@ -1828,6 +1862,9 @@ public class TuningFormHandler extends FormHandler {
         saveField(changes, "i2p.streaming.maxSlowStartWindow", "Min", _maxSlowStartWindowMin);
         saveField(changes, "i2p.streaming.maxSlowStartWindow", "Max", _maxSlowStartWindowMax);
         saveField(changes, "i2p.streaming.maxSlowStartWindow", "Step", _maxSlowStartWindowStep);
+        saveField(changes, "i2p.streaming.maxInboundBuffer", "Min", _maxInboundBufferMin);
+        saveField(changes, "i2p.streaming.maxInboundBuffer", "Max", _maxInboundBufferMax);
+        saveField(changes, "i2p.streaming.maxInboundBuffer", "Step", _maxInboundBufferStep);
 
         // Buffers & Threads
         saveField(changes, "crypto.x25519.precalcMin", "Min", _xdhPreCalcMinMin);
@@ -1958,6 +1995,7 @@ public class TuningFormHandler extends FormHandler {
         saveField(changes, "CODEL_INTERVAL", "Default", _codelIntervalDefault);
         saveField(changes, "WESTWOOD_DECAY_FACTOR", "Default", _westwoodDecayFactorDefault);
         saveField(changes, "i2p.streaming.maxSlowStartWindow", "Default", _maxSlowStartWindowDefault);
+        saveField(changes, "i2p.streaming.maxInboundBuffer", "Default", _maxInboundBufferDefault);
         saveField(changes, "crypto.x25519.precalcMin", "Default", _xdhPreCalcMinDefault);
         saveField(changes, "ntcp.sendFinisher.maxThreads", "Default", _ntcpThreadsDefault);
         saveField(changes, "ntcp.sendFinisher.queueCapacity", "Default", _ntcpQueueCapacityDefault);
@@ -2011,6 +2049,7 @@ public class TuningFormHandler extends FormHandler {
             applyOverride(tuner, "INITIAL_ACK_DELAY", _initialAckDelayOverride);
             applyOverride(tuner, "PASSIVE_FLUSH_DELAY", _passiveFlushDelayOverride);
             applyOverride(tuner, "i2p.streaming.maxSlowStartWindow", _maxSlowStartWindowOverride);
+            applyOverride(tuner, "i2p.streaming.maxInboundBuffer", _maxInboundBufferOverride);
             applyOverride(tuner, "CLIENT_WRITER_QUEUE_SIZE", _writerQueueSizeOverride);
             applyOverride(tuner, "CODEL_TARGET", _codelTargetOverride);
             applyOverride(tuner, "CODEL_INTERVAL", _codelIntervalOverride);
@@ -2182,6 +2221,7 @@ public class TuningFormHandler extends FormHandler {
     private String _initialAckDelayOverride;
     private String _passiveFlushDelayOverride;
     private String _maxSlowStartWindowOverride;
+    private String _maxInboundBufferOverride;
     private String _writerQueueSizeOverride;
     private String _codelTargetOverride;
     private String _codelIntervalOverride;

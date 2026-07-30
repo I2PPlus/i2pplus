@@ -262,7 +262,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * RFC 6928 recommends 10; increased to 16 for I2P's high-latency environment.
      * @since 0.9.70+ mutable for adaptive tuning
      */
-    static volatile int _initialWindowSize = 16;
+    static volatile int _initialWindowSize = 64;
 
     /** Default maximum number of times a single message will be retransmitted */
     static final int DEFAULT_MAX_SENDS = 30;
@@ -277,7 +277,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * I2P typically has 2-10s RTT, so 5s provides a conservative starting point.
      */
     /** DEFAULT_INITIAL_RTT */
-    public static final int DEFAULT_INITIAL_RTT = 5*1000;
+    public static final int DEFAULT_INITIAL_RTT = 2*1000;
 
     /** Max RTT to prevent pathological RTO cases. Tunable via i2p.streaming.maxRtt (default 10000). */
     private static volatile int _maxRTT = 10*1000;
@@ -1115,13 +1115,22 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         return buf.toString();
     }
 
-    /** Calculate min inbound buffer to accommodate full window: 1.5*maxWindowSize + 2 */
-    private static final int MAX_INBOUND_BUFFER = 8 * 1024 * 1024;
+    /**
+     * Maximum inbound buffer cap, tunable via Tuner.
+     * Default 8MB accommodates high-BDP paths without excess memory use.
+     * @since 0.9.70+ mutable for adaptive tuning
+     */
+    private static volatile int _maxInboundBuffer = 8 * 1024 * 1024;
+
+    /** @since 0.9.70+ */
+    public static int getMaxInboundBufferStatic() { return _maxInboundBuffer; }
+    /** @since 0.9.70+ */
+    public static void setMaxInboundBufferStatic(int val) { _maxInboundBuffer = Math.max(512 * 1024, Math.min(64 * 1024 * 1024, val)); }
 
     /** Initialize inbound buffer size. */
     private void initializeInboundBufferSize() {
-        int minRequiredBufferSize = getMaxMessageSize() * ((3 * getMaxWindowSize()) / 2 + 2);
-        setInboundBufferSize(Math.min(minRequiredBufferSize, MAX_INBOUND_BUFFER));
+        int minRequiredBufferSize = getMaxMessageSize() * ((6 * getMaxWindowSize()) / 2 + 2);
+        setInboundBufferSize(Math.min(minRequiredBufferSize, _maxInboundBuffer));
     }
 
     /** Parse a boolean property from opts. */
