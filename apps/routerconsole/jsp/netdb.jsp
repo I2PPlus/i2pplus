@@ -3,6 +3,10 @@
 <%@include file="head.jsi"%>
 <%
     String showParam = request.getParameter("show");
+    String lsParam = request.getParameter("ls");
+    String rParam = request.getParameter("r");
+    String lParam = request.getParameter("l");
+    String cParam = request.getParameter("c");
     String pageTitle;
     if ("all".equals(showParam)) pageTitle = intl._t("All Routers");
     else if ("all_debug".equals(showParam)) pageTitle = intl._t("All Routers [Advanced]");
@@ -14,6 +18,11 @@
     else if ("ls_local".equals(showParam)) pageTitle = intl._t("LeaseSets");
     else if ("client".equals(showParam)) pageTitle = intl._t("All Routers (Client NetDb)");
     else if ("client_debug".equals(showParam)) pageTitle = intl._t("All Routers (Client NetDb) [Advanced]");
+    else if (lsParam != null) pageTitle = intl._t("LeaseSet Lookup");
+    else if (".".equals(rParam)) pageTitle = intl._t("Local Router");
+    else if (rParam != null) pageTitle = intl._t("Router Lookup");
+    else if (lParam != null) pageTitle = intl._t("LeaseSets");
+    else if (cParam != null) pageTitle = intl._t("Routers");
     else pageTitle = intl._t("Network Database");
 %>
 <%=intl.title(pageTitle)%>

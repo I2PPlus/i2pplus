@@ -688,7 +688,6 @@ public class NetDbHelper extends FormHandler {
            .append("<td><input type=\"text\" name=\"query\" title=\"").append(_t("Enter search value here")).append("\"></td>\n")
            .append("<td><button type=\"submit\" class=search value=\"Lookup\">").append(_t("Lookup")).append("</button></td>\n")
            .append("</tr>\n</table>\n</form>\n</div>\n")
-           .append("<script src=/js/netdbLookup.js></script>\n")
            .append("<noscript><style>#compactLookup{display:none!important}</style></noscript>\n");
 
         _out.append(buf);
