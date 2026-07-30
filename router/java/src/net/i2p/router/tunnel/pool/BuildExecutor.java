@@ -44,27 +44,9 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
-     *  Orders paired destinations by how far behind their target each direction is,
-     *  prioritizing the direction with fewer active tunnels and the larger deficit.
-     *  @since 0.9.70+
-     */
-    private static final Comparator<TunnelPool> POOLED_DESTINATION_COMPARATOR =
-            (a, b) -> {
-                // Build a single comparable score per pool so the ordering is a strict
-                // total order (transitive + antisymmetric), avoiding the
-                // "Comparison method violates its general contract!" TimSort crash.
-                // Higher score = build sooner: collapsed pools first, then near-collapse,
-                // then by largest deficit, then by IB/OB pair balance.
-                int cmp = Integer.compare(score(b), score(a));
-                if (cmp != 0) {return cmp;}
-                // Stable tiebreaker for equal scores — never non-symmetric.
-                return Integer.compare(System.identityHashCode(a), System.identityHashCode(b));
-            };
-
-    /**
-     *  Priority score for {@link #POOLED_DESTINATION_COMPARATOR}.
+     *  Priority score for build urgency.
      *  Higher = build sooner. Must be a pure function of pool state so the
-     *  comparator remains a consistent total order.
+     *  snapshot comparator remains a consistent total order.
      */
     private static int score(TunnelPool p) {
         int active = p.getActiveTunnelCount();
@@ -87,29 +69,19 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
-     *  Orders pools by collapse severity: collapsed (0 usable) first, then
-     *  near-collapse (1-2 usable), then by largest deficit first.
-     *  @since 0.9.70+
+     *  Comparator for snapshotted {@code Object[2]} rows where
+     *  {@code row[0]} is the score (Integer) and {@code row[1]} is the
+     *  pool.  Higher score first, then stable tiebreaker.
+     *  Must never be called with rows from different array instances
+     *  (identityHashCode is only unique within one snapshot).
      */
-    private static final Comparator<TunnelPool> POOL_COLLAPSE_COMPARATOR =
+    private static final Comparator<Object[]> SCORE_COMPARATOR =
             (a, b) -> {
-                int aUsable = a.getUsableTunnelCount();
-                int bUsable = b.getUsableTunnelCount();
-                // Collapsed pools (0 usable) always first
-                if (aUsable == 0 && bUsable > 0) return -1;
-                if (bUsable == 0 && aUsable > 0) return 1;
-                // Near-collapse (1-2 usable) next
-                boolean aNear = aUsable <= 2;
-                boolean bNear = bUsable <= 2;
-                if (aNear && !bNear) return -1;
-                if (bNear && !aNear) return 1;
-                // Then by deficit (largest first)
-                int aTarget = Math.max(2, a.getSettings().getTotalQuantity());
-                int bTarget = Math.max(2, b.getSettings().getTotalQuantity());
-                int aDeficit = aTarget - aUsable;
-                int bDeficit = bTarget - bUsable;
-                return Integer.compare(bDeficit, aDeficit);
+                int cmp = Integer.compare((int) b[0], (int) a[0]);
+                if (cmp != 0) return cmp;
+                return Integer.compare(System.identityHashCode(a[1]), System.identityHashCode(b[1]));
             };
+
     private final Set<Long> _recentBuildIds = ConcurrentHashMap.newKeySet();
     private final RouterContext _context;
     private final Log _log;
@@ -820,11 +792,7 @@ public class BuildExecutor implements Runnable {
                             scored[si][0] = score(p);
                             scored[si][1] = p;
                         }
-                        Arrays.sort(scored, (a, b) -> {
-                            int cmp = Integer.compare((int) b[0], (int) a[0]);
-                            if (cmp != 0) return cmp;
-                            return Integer.compare(System.identityHashCode(a[1]), System.identityHashCode(b[1]));
-                        });
+                        Arrays.sort(scored, SCORE_COMPARATOR);
                         for (int si = 0; si < sz; si++) {
                             wanted.set(si, (TunnelPool) scored[si][1]);
                         }
@@ -1269,8 +1237,27 @@ public class BuildExecutor implements Runnable {
         // (1-2 usable), then the rest.  Without this, a healthy pool early in the
         // list consumes build slots (or triggers the proportional cap) before a
         // collapsed pool later in the list gets any.
+        // Snapshot scores before sorting to avoid TimSort crash from concurrent
+        // state changes (usableTunnelCount can change mid-sort).
         List<TunnelPool> sorted = new ArrayList<>(pools);
-        sorted.sort(POOL_COLLAPSE_COMPARATOR);
+        int ss = sorted.size();
+        Object[][] scored2 = new Object[ss][2];
+        for (int si = 0; si < ss; si++) {
+            TunnelPool p = sorted.get(si);
+            int usable = p.getUsableTunnelCount();
+            int target = Math.max(2, p.getSettings().getTotalQuantity());
+            int deficit = target - usable;
+            int s;
+            if (usable == 0) {s = 1 << 20;}
+            else if (usable <= 2) {s = 1 << 16;}
+            else {s = Math.max(0, deficit);}
+            scored2[si][0] = s;
+            scored2[si][1] = p;
+        }
+        Arrays.sort(scored2, SCORE_COMPARATOR);
+        for (int si = 0; si < ss; si++) {
+            sorted.set(si, (TunnelPool) scored2[si][1]);
+        }
 
         for (TunnelPool pool : sorted) {
             if (!pool.isAlive()) {continue;}
