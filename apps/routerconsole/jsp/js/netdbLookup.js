@@ -1,13 +1,27 @@
 /**
  * @module netdbLookup
- * @description Implements a compact search form for the /netdb page with
+ * @description Compact search form for the /netdb page with
  * dropdown selectors for encryption, signature, transport, and country fields.
- * Removes empty query parameters and syncs form state with URL.
+ * Strips empty params and nonce from URL on every page load.
  * @author dr|z3d
  * @license AGPLv3 or later
  */
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Clean URL — strip empty params and nonce on every page load
+  const url = new URL(window.location.href);
+  let dirty = false;
+  for (const key of Array.from(url.searchParams.keys())) {
+    if (url.searchParams.get(key) === "" || key === "nonce") {
+      url.searchParams.delete(key);
+      dirty = true;
+    }
+  }
+  if (dirty) {
+    const cleanUrl = url.origin + url.pathname + (url.searchParams.toString() ? "?" + url.searchParams.toString() : "");
+    window.history.replaceState(null, "", cleanUrl);
+  }
+
   const form = document.getElementById("netdbSearchCompact");
   if (!form) return;
 
@@ -323,11 +337,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentQueryElement = form.querySelector('input[name="query"]');
 
   /**
-   * Creates a <select> element populated with options for a given dropdown field.
-   * @function createSelectForField
+   * Populated &lt;select&gt; for the given dropdown field.
    * @param   {string}  field - Key into dropdownFields (etype, type, tr, c)
    * @param   {string}  [value=""] - Pre-selected value
-   * @returns {HTMLSelectElement}
    */
   function createSelectForField(field, value = "") {
     const select = document.createElement("select");
@@ -354,10 +366,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /**
-   * Creates a text <input> for free-form query entry.
-   * @function createTextInput
+   * Text input for free-form query entry.
    * @param   {string} [value=""] - Initial input value
-   * @returns {HTMLInputElement}
    */
   function createTextInput(value = "") {
     const input = document.createElement("input");
@@ -370,9 +380,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let lastField = fieldSelect.value;
   /**
-   * Switches the query input between text and select based on the selected field type.
-   * @function switchQueryField
-   * @returns {void}
+   * Swap query input between text and &lt;select&gt; depending on the field type.
    */
   function switchQueryField() {
     const newField = fieldSelect.value;
@@ -412,16 +420,6 @@ document.addEventListener("DOMContentLoaded", () => {
     url.searchParams.delete("nonce");
     window.location.href = url.toString();
   });
-
-  // Clean URL
-  const url = new URL(window.location.href);
-  for (const key of Array.from(url.searchParams.keys())) {
-    if (url.searchParams.get(key) === "" || key === "nonce") {
-      url.searchParams.delete(key);
-    }
-  }
-  const cleanUrl = url.origin + url.pathname + (url.searchParams.toString() ? "?" + url.searchParams.toString() : "");
-  window.history.replaceState(null, "", cleanUrl);
 
   // Populate from URL — must run AFTER initial DOM setup
   const urlParams = new URLSearchParams(window.location.search);

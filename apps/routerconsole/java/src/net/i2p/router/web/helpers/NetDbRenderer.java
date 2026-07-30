@@ -106,6 +106,8 @@ class NetDbRenderer {
      * Lookup wait.
      */
     public static final int LOOKUP_WAIT = 3 * 1000;
+    /** @since 0.9.70+ */
+    public static final int LS_LOOKUP_WAIT = 10 * 1000;
     /**
      * Whether floodfill.
      * @return whether floodfill
@@ -1212,8 +1214,8 @@ class NetDbRenderer {
             if (ls == null) {
                 LookupWaiter lw = new LookupWaiter();
                 synchronized(lw) {
-                    _context.netDb().lookupLeaseSetRemotely(hash, lw, lw, LOOKUP_WAIT, null);
-                    try {lw.wait((long) LOOKUP_WAIT + 1000);}
+                    _context.netDb().lookupLeaseSetRemotely(hash, lw, lw, LS_LOOKUP_WAIT, null);
+                    try {lw.wait((long) LS_LOOKUP_WAIT + 1000);}
                     catch (InterruptedException ie) { /* ignored */ }
                 }
                 ls = _context.netDb().lookupLeaseSetLocally(hash);

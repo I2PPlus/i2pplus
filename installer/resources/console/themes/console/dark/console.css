@@ -1482,6 +1482,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .leaseset tr,#netdb .leaseset td{box-shadow:none}
 #netdb .sybil_addresses .netdb_transport{width:auto;text-align:right}
 #noleasesets,#notinitialized,.netdbnotfound{margin:12px auto 10px;padding:20px 24px 20px 58px;column-span:all;text-align:left;border:var(--border);background:#000 var(--infohelp) no-repeat 15px center/28px}
+.netdbnotfound{margin-bottom:2px}
 .leasesets_container #notinitialized,.leasesets_container #noleasesets{margin-bottom:10px;column-span:all}
 .distance{margin:0 0 0 4px;height:16px;width:16px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--distance) no-repeat center center/16px}
 .leaseset .ekey,.leaseset .rkey,.leaseset .rxAsPub,.leaseset .rxAsRep,.leaseset .stype{margin-left:6px;padding-left:14px;background:var(--crypto) no-repeat left center/12px}

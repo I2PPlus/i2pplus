@@ -676,9 +676,9 @@ class SidebarRenderer {
         rbuf.setLength(0);
         rbuf.append("<a title=\"")
             .append(_t("Network database search tool"))
-            .append("\" href=\"/netdb?f=4\" target=_top>")
+            .append("\" href=\"/netdb?show=lookup\" target=_top>")
             .append(nbsp(tx))
-            .append("</a>\n<a class=sb_icon target=_top href=\"/netdb?f=4\" title=\"")
+            .append("</a>\n<a class=sb_icon target=_top href=\"/netdb?show=lookup\" title=\"")
             .append(tx)
             .append("\" hidden><span><img src=/themes/console/images/searchnetdb.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
@@ -698,9 +698,9 @@ class SidebarRenderer {
         rbuf.setLength(0);
         rbuf.append("<a title=\"")
             .append(_t("Review possible sybils in network database"))
-            .append("\" href=\"/netdb?f=3\" target=_top>")
+            .append("\" href=\"/netdb?show=sybils\" target=_top>")
             .append(nbsp(tx))
-            .append("</a>\n<a class=sb_icon target=_top href=\"/netdb?f=3\" title=\"")
+            .append("</a>\n<a class=sb_icon target=_top href=\"/netdb?show=sybils\" title=\"")
             .append(tx)
             .append("\" hidden><span><img src=/themes/console/images/sybil.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());

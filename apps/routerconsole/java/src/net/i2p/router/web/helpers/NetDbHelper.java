@@ -91,20 +91,20 @@ public class NetDbHelper extends FormHandler {
                                           };
 
     private static final String[] links =
-                                          {"",                                  // 0
-                                           "?r=.",                              // 1
-                                           "",                                  // 2
-                                           "?f=2",                              // 3
-                                           "?f=1",                              // 4
-                                           "?l=1",                              // 5
-                                           "?l=2",                              // 6
-                                           "?l=3",                              // 7
-                                           "?f=4",                              // 8
-                                           "",                                  // 9
-                                           "?f=5",                              // 10
-                                           "?f=6",                              // 11
-                                           "?f=3",                              // 12
-                                          };
+                                           {"",                                  // 0
+                                            "?show=local",                       // 1
+                                            "",                                  // 2
+                                            "?show=all",                         // 3
+                                            "?show=all_debug",                   // 4
+                                            "?show=ls_remote",                   // 5
+                                            "?show=ls_debug",                    // 6
+                                            "?show=ls_local",                    // 7
+                                            "?show=lookup",                      // 8
+                                            "",                                  // 9
+                                            "?show=client",                      // 10
+                                            "?show=client_debug",                // 11
+                                            "?show=sybils",                      // 12
+                                           };
 
 
     /**
@@ -288,6 +288,26 @@ public class NetDbHelper extends FormHandler {
     public void setFull(String f) {
         try {_full = Integer.parseInt(f);}
         catch (NumberFormatException nfe) { /* ignored */ }
+    }
+
+    /**
+     * Set by show= param (alternative to f=N).
+     * Overrides _full if present.
+     * @since 0.9.70+
+     */
+    public void setShow(String show) {
+        if (show != null) {
+            if ("all".equals(show)) _full = 2;
+            else if ("all_debug".equals(show)) _full = 1;
+            else if ("sybils".equals(show)) _full = 3;
+            else if ("lookup".equals(show)) _full = 4;
+            else if ("client".equals(show)) _full = 5;
+            else if ("client_debug".equals(show)) _full = 6;
+            else if ("local".equals(show)) _routerPrefix = ".";
+            else if ("ls_remote".equals(show)) {_lease = true; _debug = false; _clientOnly = false;}
+            else if ("ls_debug".equals(show)) {_lease = true; _debug = true; _clientOnly = false;}
+            else if ("ls_local".equals(show)) {_clientOnly = true; _lease = false; _debug = false;}
+        }
     }
 
     /**

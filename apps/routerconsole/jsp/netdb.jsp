@@ -1,7 +1,22 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="1024kb"%>
 <!DOCTYPE HTML>
 <%@include file="head.jsi"%>
-<%=intl.title("network database")%>
+<%
+    String showParam = request.getParameter("show");
+    String pageTitle;
+    if ("all".equals(showParam)) pageTitle = intl._t("All Routers");
+    else if ("all_debug".equals(showParam)) pageTitle = intl._t("All Routers [Advanced]");
+    else if ("sybils".equals(showParam)) pageTitle = intl._t("Sybil Analysis");
+    else if ("lookup".equals(showParam)) pageTitle = intl._t("NetDb Search");
+    else if ("local".equals(showParam)) pageTitle = intl._t("Local Router");
+    else if ("ls_remote".equals(showParam)) pageTitle = intl._t("LeaseSets") + " [" + intl._t("Remote") + "]";
+    else if ("ls_debug".equals(showParam)) pageTitle = intl._t("LeaseSets") + " [" + intl._t("Remote") + " - " + intl._t("Debug") + "]";
+    else if ("ls_local".equals(showParam)) pageTitle = intl._t("LeaseSets");
+    else if ("client".equals(showParam)) pageTitle = intl._t("All Routers (Client NetDb)");
+    else if ("client_debug".equals(showParam)) pageTitle = intl._t("All Routers (Client NetDb) [Advanced]");
+    else pageTitle = intl._t("Network Database");
+%>
+<%=intl.title(pageTitle)%>
 <script nonce=<%=cspNonce%>>
 const translate_encType = "<%=intl._t("Encryption type")%>";
 const translate_encTypes = "<%=intl._t("Encryption types")%>";
@@ -37,6 +52,7 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <%@include file="sidebar.jsi"%>
 <jsp:useBean id="formhandler" class="net.i2p.router.web.helpers.NetDbHelper" scope="request"/>
 <jsp:setProperty name="formhandler" property="full" value="<%=request.getParameter(\"f\")%>"/>
+<jsp:setProperty name="formhandler" property="show" value="<%=request.getParameter(\"show\")%>"/>
 <jsp:setProperty name="formhandler" property="router" value="<%=request.getParameter(\"r\")%>"/>
 <jsp:setProperty name="formhandler" property="lease" value="<%=request.getParameter(\"l\")%>"/>
 <jsp:setProperty name="formhandler" property="version" value="<%=request.getParameter(\"v\")%>"/>
@@ -78,13 +94,25 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
     String c = request.getParameter("c");
     String heading = intl._t("Network Database");
 
-    if (f == null && l == null && ls == null && r == null) {
+    if (showParam != null) {
+        switch (showParam) {
+            case "all": heading += " – " + intl._t("All Routers"); break;
+            case "all_debug": heading += " – " + intl._t("All Routers") + " [" + intl._t("Advanced") + "]"; break;
+            case "sybils": heading += " – " + intl._t("Sybil Analysis"); break;
+            case "lookup": heading += " – " + intl._t("Advanced Lookup"); break;
+            case "local": heading += " – " + intl._t("Local Router"); break;
+            case "ls_remote": delayLoad = true; heading += " – " + intl._t("LeaseSets") + " [" + intl._t("Remote") + "]"; break;
+            case "ls_debug": delayLoad = true; heading += " – " + intl._t("LeaseSets") + " [" + intl._t("Remote") + " - " + intl._t("Debug") + "]"; break;
+            case "ls_local": delayLoad = true; heading += " – " + intl._t("LeaseSets"); break;
+            case "client": heading += " – " + intl._t("All Routers (Client NetDb)"); break;
+            case "client_debug": heading += " – " + intl._t("All Routers (Client NetDb)") + " [" + intl._t("Advanced") + "]"; break;
+        }
+    } else if (f == null && l == null && ls == null && r == null) {
 %>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 <script src=/js/tablesort/sortShared.js></script>
 <script src=/js/tablesort/tablesort.js type=module></script>
 <%  } else if (f != null) {
-        //delayLoad = "1".equals(f) || "2".equals(f) || "3".equals(f);
         switch (f) {
             case "1": heading += " – " + intl._t("All Routers") + " [" + intl._t("Advanced") + "]";
                 break;
@@ -92,13 +120,9 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
                 break;
             case "3": heading += " – " + intl._t("Sybil Analysis");
                 break;
-            case "4": heading += " – " + intl._t("Advanced Lookup");
-%>
-<script src=/js/netdbLookup.js></script>
-<%              break;
+            case "4": heading += " – " + intl._t("Advanced Lookup"); break;
         }
     } else {
-        // f == null case
         if (".".equals(r)) heading += " – " + intl._t("Local Router");
         else if (r != null) heading += " – " + intl._t("Router Lookup");
         else if (ls != null) heading += " – " + intl._t("LeaseSet Lookup");
@@ -133,6 +157,7 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <script src=/js/tablesort/sortShared.js></script>
 <script src=/js/tablesort/tablesort.js></script>
 <script src=/js/netdb.js type=module></script>
+<script src=/js/netdbLookup.js></script>
 <script src=/js/lsCompact.js type=module></script>
 </body>
 </html>
