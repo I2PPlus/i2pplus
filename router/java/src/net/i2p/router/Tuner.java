@@ -3367,7 +3367,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
 
             // Connect failures = raise initial RTO (handshake needs more patience)
-            if (connectsFailing && !congested)
+            // Only raise if current is BELOW the RTT-based target — if already above,
+            // the RTO is not the bottleneck and further increases just waste time.
+            if (connectsFailing && !congested && current < target)
                 return Math.min(_max, current + _step);
 
             // FAST PATH: latency target violated — raise RTO toward target
@@ -3384,8 +3386,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.min(_max, current + _step);
 
             // Congested or network unhealthy = don't lower RTO
-            if ((congested || !networkHealthy) && target < current)
-                return current;
+            // ...unless RTO far exceeds the RTT-based target, meaning the high RTO
+            // itself is causing the failures (connections time out before completing).
+            if ((congested || !networkHealthy) && target < current) {
+                if (current <= target * 2)
+                    return current;
+                // else RTO >> target — fall through to decrease toward RTT target
+            }
 
             // Dead zone: if current is within 50% of target and no drops, hold
             if (current >= target * 0.5 && current <= target * 1.5 && !spuriousRetransmits)
