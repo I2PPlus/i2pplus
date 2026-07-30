@@ -117,7 +117,7 @@ class ProfileOrganizerRenderer {
                .append("<th>").append(_t("Peer")).append("</th>")
                .append("<th>").append(_t("Caps")).append("</th>")
                .append("<th>").append(_t("Version")).append("</th>");
-            buf.append("<th class=host>").append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>");
+             buf.append("<th class=host data-sort-method=string data-sort-caseinsensitive>").append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>");
             buf.append("<th class=status>").append(_t("Status")).append("</th>")
                .append("<th class=groups>").append(_t("Groups")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("Speed")).append("</th>")

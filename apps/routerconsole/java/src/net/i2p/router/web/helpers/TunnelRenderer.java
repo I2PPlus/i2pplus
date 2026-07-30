@@ -414,7 +414,7 @@ class TunnelRenderer {
                 .append("</th><th id=address>")
                 .append(_t("Address"))
                 .append("</th>")
-                .append("<th id=domain>").append(_t("Domain")).append("</th>");
+                .append("<th id=domain data-sort-method=string data-sort-caseinsensitive>").append(_t("Domain")).append("</th>");
             tbuf.append("<th class=tcount data-sort-method=number data-sort-default>")
                 .append(_t("Tunnels"))
                 .append("</th><th id=data data-sort-method=number>")
@@ -580,7 +580,7 @@ class TunnelRenderer {
                   .append(_t("Tier")).append("</th><th id=address title=\"")
                   .append(_t("Primary IP address"))
                   .append("\">").append(_t("Address")).append("</th>");
-            headerSb.append("<th id=domain>").append(_t("Domain")).append("</th>");
+            headerSb.append("<th id=domain data-sort-method=string data-sort-caseinsensitive>").append(_t("Domain")).append("</th>");
             headerSb.append("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" data-sort-method=number data-sort-column-key=localCount>")
                     .append(_t("Local"))
                     .append("</th><th class=tcount colspan=2 data-sort-method=number data-sort-column-key=transitCount>")
