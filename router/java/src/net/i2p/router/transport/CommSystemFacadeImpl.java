@@ -1489,15 +1489,16 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         hostname = hostname.toLowerCase().trim();
         if (hostname.startsWith(".")) hostname = hostname.substring(1);
 
-        // Filter out empty parts from consecutive dots
+        // Filter out empty or whitespace-only parts (malformed RDNS entries with spaces)
         String[] raw = DOT_SPLIT.split(hostname);
         List<String> filtered = new ArrayList<>(raw.length);
         for (String p : raw) {
+            p = p.trim();
             if (!p.isEmpty()) filtered.add(p);
         }
         int len = filtered.size();
 
-        if (len < 2) return hostname;
+        if (len < 2) return filtered.isEmpty() ? hostname : filtered.get(0);
 
         // Try to match known multi-part TLDs
         for (int i = 1; i < len; i++) {
