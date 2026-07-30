@@ -523,21 +523,22 @@ function renderNewGraph() {
     const txMax = Math.max(...txValues, 1);
     const globalMax = Math.max(rxMax, txMax);
 
-    // Read theme colors from CSS variables
-    const rxColor = getCSSVar("--minigraph_in") || "#0cc";
-    const txColor = getCSSVar("--minigraph_out") || "#f90";
-    const rxFill = getCSSVar("--minigraph_in_fill") || "rgba(0,204,204,.15)";
-    const txFill = getCSSVar("--minigraph_out_fill") || "rgba(255,153,0,.15)";
-    const rtl = window.graphDirection === "rtl";
-    const glowWidth = parseFloat(getCSSVar("--minigraph_glow_width")) || 4;
-    const glowAlpha = parseFloat(getCSSVar("--minigraph_glow_alpha")) || 0.3;
-    const glowBlur = parseFloat(getCSSVar("--minigraph_glow_blur")) || 6;
-    const lineWidth = parseFloat(getCSSVar("--minigraph_line_width")) || 1.5;
-    const tension = parseFloat(getCSSVar("--minigraph_tension")) || 0.5;
-
     // Split mode: true = split display (inbound top, outbound bottom), false = overlay
     const split = graphCanvas.dataset.split !== "0";
-    const blendMode = getCSSVar("--minigraph_overlay_blend") || "screen";
+    const s = split ? "" : "_combined";
+
+    // Read theme colors from CSS variables (use _combined suffix for overlay mode)
+    const rxColor = getCSSVar("--minigraph_in" + s) || "#0cc";
+    const txColor = getCSSVar("--minigraph_out" + s) || "#f90";
+    const rxFill = getCSSVar("--minigraph_in_fill" + s) || "rgba(0,204,204,.15)";
+    const txFill = getCSSVar("--minigraph_out_fill" + s) || "rgba(255,153,0,.15)";
+    const rtl = window.graphDirection === "rtl";
+    const glowWidth = parseFloat(getCSSVar("--minigraph_glow_width" + s)) || 4;
+    const glowAlpha = parseFloat(getCSSVar("--minigraph_glow_alpha" + s)) || 0.3;
+    const glowBlur = parseFloat(getCSSVar("--minigraph_glow_blur" + s)) || 6;
+    const lineWidth = parseFloat(getCSSVar("--minigraph_line_width" + s)) || 1.5;
+    const tension = parseFloat(getCSSVar("--minigraph_tension" + s)) || 0.5;
+    const blendMode = getCSSVar("--minigraph_overlay_blend" + s) || "screen";
 
     // Draw to offscreen canvas
     offscreenCtx.clearRect(0, 0, WIDTH, HEIGHT);
@@ -572,6 +573,11 @@ function initNewGraph() {
     // Initial render
     renderNewGraph();
 
+    // Combined (overlay) mode class for styling
+    if (graphCanvas.dataset.split === "0") {
+        document.body.classList.add("minigraphCombined");
+    }
+
     // Re-render immediately after full sidebar replacement (refreshAll)
     document.addEventListener("sidebarRefreshed", () => {
         const el = document.getElementById("minigraph");
@@ -579,7 +585,14 @@ function initNewGraph() {
             graphCanvas = el;
             graphCtx = null;
         }
-        if (graphCanvas) {renderNewGraph();}
+        if (graphCanvas) {
+            renderNewGraph();
+            if (graphCanvas.dataset.split === "0") {
+                document.body.classList.add("minigraphCombined");
+            } else {
+                document.body.classList.remove("minigraphCombined");
+            }
+        }
     });
 
     // In continuous scroll mode, render every 1s for smooth per-pixel shift
