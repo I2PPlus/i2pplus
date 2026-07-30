@@ -1127,10 +1127,11 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** @since 0.9.70+ */
     public static void setMaxInboundBufferStatic(int val) { _maxInboundBuffer = Math.max(512 * 1024, Math.min(64 * 1024 * 1024, val)); }
 
-    /** Initialize inbound buffer size. */
+    /** Initialize inbound buffer size and packet count cap. */
     private void initializeInboundBufferSize() {
         int minRequiredBufferSize = getMaxMessageSize() * ((6 * getMaxWindowSize()) / 2 + 2);
         setInboundBufferSize(Math.min(minRequiredBufferSize, _maxInboundBuffer));
+        _maxPacketCount = Math.max(_maxPacketCount, _inboundBufferSize / getMaxMessageSize() + 32);
     }
 
     /** Parse a boolean property from opts. */

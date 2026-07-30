@@ -94,7 +94,8 @@ public class ConnectionOptionsRTTTest {
         opts.updateRTT(1000);
         int before = opts.getRTO();
         int after = opts.doubleRTO();
-        assertEquals("Double RTO should be 2x", before * 2, after);
+        int multiplier = ConnectionOptions.getRTOMultiplier();
+        assertEquals("Double RTO should scale by multiplier", before * multiplier / 100, after);
     }
 
     @Test

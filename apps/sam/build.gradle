@@ -24,4 +24,6 @@ dependencies {
 
 test {
     failOnNoDiscoveredTests = false
+    // SAM tests are manual integration tests with main() methods, not JUnit
+    exclude '**/*'
 }

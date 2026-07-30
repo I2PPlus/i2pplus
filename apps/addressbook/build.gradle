@@ -35,3 +35,6 @@ task bundle {
 }
 
 jar.dependsOn bundle
+
+// Explicit dependency: test classpath resolves i2ptunnel.jar transitively via :router
+test.dependsOn ':apps:i2ptunnel:i2ptunnelJar'

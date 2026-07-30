@@ -28,6 +28,11 @@ class DestTracker {
         return hash;
     }
 
+    /** @return the access counter */
+    AccessCounter getCounter() {
+        return counter;
+    }
+
     /**
      * @return true if the counter has breached the given threshold
      * @since 0.9.70+

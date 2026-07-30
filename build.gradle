@@ -6,7 +6,7 @@ buildDir = file("/tmp/build-i2p/gradle")
 String getReleaseVersion() {
     def releaseVersion
     file("core/java/src/net/i2p/CoreVersion.java").readLines().findAll({ line ->
-        line.contains("static final String VERSION") || line.contains("final static String VERSION")
+        line.contains("static final String VERSION")
     }).first().eachMatch('.*"([^"]+)";', {
         releaseVersion = it[1]
     })
@@ -16,7 +16,7 @@ String getReleaseVersion() {
 String getBuildVersion() {
     def buildVersion
     file("router/java/src/net/i2p/router/RouterVersion.java").readLines().findAll({ line ->
-        line.contains("public final static long BUILD")
+        line.contains("static final long BUILD")
     }).first().eachMatch('.*=\\s+([0-9]+);', {
         buildVersion = it[1]
     })
@@ -26,7 +26,7 @@ String getBuildVersion() {
 String getBuildExtra() {
     def buildExtra
     file("router/java/src/net/i2p/router/RouterVersion.java").readLines().findAll({ line ->
-        line.contains("public final static String EXTRA")
+        line.contains("static final String EXTRA")
     }).first().eachMatch('.*"(.*)";', {
         buildExtra = it[1]
     })
