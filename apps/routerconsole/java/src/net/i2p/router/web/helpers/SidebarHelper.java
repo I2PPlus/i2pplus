@@ -880,6 +880,7 @@ public class SidebarHelper extends HelperBase {
                 else if (isI2PChat) {buf.append("class=tunnelI2PChat ");}
                 else if (isPing) {buf.append("class=ping ");}
                 else if (server) {buf.append("class=tunnelServer ");}
+                else {buf.append("class=tunnelClient ");}
                 buf.append("><img src=/themes/console/images/");
                 if (isSnark) {buf.append("snark.svg alt=I2PSnark title=\"").append(_t("Torrents"));}
                 else if (isI2PChat) {buf.append("i2pchat.svg alt=I2PChat title=\"").append(_t("I2PChat"));}
