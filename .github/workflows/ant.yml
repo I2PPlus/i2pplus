@@ -41,10 +41,6 @@ jobs:
       - name: Build all artifacts
         run: ant updaterWithGeoIP installer i2psnark buildDeb
 
-      - name: Build javadoc
-        continue-on-error: true
-        run: ant javadoc-zip-ci
-
       - name: Build jsdoc
         continue-on-error: true
         run: ant jsdoc-zip
