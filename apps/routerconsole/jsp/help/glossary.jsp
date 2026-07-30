@@ -94,7 +94,7 @@
 <%=intl._t("A simple CGI application that takes a hostname as a parameter and returns a 301 redirect to the proper URL with a <code>?i2paddresshelper=key</code> string appended. The HTTP proxy will interpret the appended string and use the key as the actual destination. In addition, the proxy will cache the key so the address helper is not necessary until restart, and offer the option to add the resolved address to the addressbook.")%></p>
 
 <p><b><%=intl._t("Laptop Mode")%></b><br>
-<%=intl._t("An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations.")%></p>
+<%=intl._t("An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?show=local>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations.")%></p>
 
 <p><b><%=intl._t("Lease")%></b><br>
 <%=intl._t("The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>.")%></p>

@@ -7011,8 +7011,8 @@ msgstr "高级设置"
 msgid "The router configuration options listed below are not available in the user interface, usually because they are rarely used or provide access to advanced settings that most users will not need. This is not a comprehensive list. Some settings will require a restart of the router to take effect. Note that all settings are case sensitive. You will need to edit your <code>router.config</code> file to add options, or, once you have added <code>routerconsole.advanced=true</code> to the router.config file, you may edit settings within the console on the <a href=/configadvanced>Advanced Configuration page</a>."
 msgstr "下面列出的路由器配置选项在用户界面中不可用，通常是因为它们很少使用或提供对大多数用户不需要的高级设置，这不是一个全面的列表。 某些设置将需要重新启动路由器才能生效。 请注意，所有设置均大小写敏感。 您将需要编辑<code> router.config </code>文件以添加选项，或者，一旦添加<code> routerconsole.advanced = true </code> true </code>到router.config文件，您可以在高级配置页面上的控制台中编辑设置<a href=/configadvanced></a>。"
 
-msgid "When set to true, additional functionality will be enabled in the console and the user will be able to edit settings directly on the <a href=/configadvanced>Advanced Configuration page</a>. Extra display options are provided in the <a href=/netdb>Network Database section</a>, including the <a href='/netdb?f=3'>Sybil Analysis tool</a>, and there are additional configuration options on the <a href=/configclients>Clients Configuration page</a>. This will also enable the installation of unsigned updates, manual configuration of the news URL, and additional sections on the sidebar."
-msgstr "当此项设置为true时,控制台将启用额外功能,用户可以直接在<a href=/configadvanced>高级配置页面</a>编辑设置。<a href=/netdb>网络数据库部分</a>提供额外的显示选项,包括<a href='/netdb?f=3'>同花顺分析工具</a>,<a href=/configclients>客户端配置页面</a>也提供额外的配置选项。同时也将启用未签名更新的安装,手动配置新闻URL,以及侧栏额外部分。"
+msgid "When set to true, additional functionality will be enabled in the console and the user will be able to edit settings directly on the <a href=/configadvanced>Advanced Configuration page</a>. Extra display options are provided in the <a href=/netdb>Network Database section</a>, including the <a href='/netdb?show=sybils'>Sybil Analysis tool</a>, and there are additional configuration options on the <a href=/configclients>Clients Configuration page</a>. This will also enable the installation of unsigned updates, manual configuration of the news URL, and additional sections on the sidebar."
+msgstr "当此项设置为true时,控制台将启用额外功能,用户可以直接在<a href=/configadvanced>高级配置页面</a>编辑设置。<a href=/netdb>网络数据库部分</a>提供额外的显示选项,包括<a href='/netdb?show=sybils'>同花顺分析工具</a>,<a href=/configclients>客户端配置页面</a>也提供额外的配置选项。同时也将启用未签名更新的安装,手动配置新闻URL,以及侧栏额外部分。"
 
 msgid "Plugins signed with the cryptographic key of the developer are the recommended format, but if you wish to install unsigned plugins (.zip) you can set this to true. Note that you may still encounter issues attempting to install an unsigned plugin if the developer has included additional checks in the plugin build process."
 msgstr "推荐使用开发人员的加密密钥签名的插件，但如果您希望安装未签名的插件 (.zip)，您可以将其设置为 true。 请注意，如果开发人员在插件构建过程中包含了额外的检查，您在尝试安装未签名插件时仍可能会遇到问题。"
@@ -8079,8 +8079,8 @@ msgstr "一个简单的 CGI 应用程序，它将主机名作为参数并返回 
 msgid "Laptop Mode"
 msgstr "笔记本模式"
 
-msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
-msgstr "一个可选<a href=\"http://127.0.0.1:7657/confignet#ipchange\">配置</a> 以自动更改 <a href=\"http://127.0.0.1:7657/netdb?r=.\">路由器身份</a> 和 <a href=\"http://127.0.0.1:7657/confignet#udpconfig\">外部端口</a> 。当您的系统所在的公共 IP 地址发生更改时 ，这可以防止攻击者将您的路由器身份和 IP 地址关联起来。尤其是 IP 地址可能会经常更改，例如当您从多个位置在笔记本电脑上运行 I2P 时。"
+msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?show=local>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
+msgstr "一个可选<a href=\"http://127.0.0.1:7657/confignet#ipchange\">配置</a> 以自动更改 <a href=\"http://127.0.0.1:7657/netdb?show=local\">路由器身份</a> 和 <a href=\"http://127.0.0.1:7657/confignet#udpconfig\">外部端口</a> 。当您的系统所在的公共 IP 地址发生更改时 ，这可以防止攻击者将您的路由器身份和 IP 地址关联起来。尤其是 IP 地址可能会经常更改，例如当您从多个位置在笔记本电脑上运行 I2P 时。"
 
 msgid "Lease"
 msgstr "租约"
@@ -9038,8 +9038,8 @@ msgstr "侧边栏上的许多统计数据可以被<a href='/configstats'>设置<
 msgid "Local Identity"
 msgstr "本地身份"
 
-msgid "If you hover over the <i>Router Info</i> heading, your truncated router identity will be shown (the first four characters (24 bits) of your 44-character (256-bit) Base64 router hash). The full hash is shown on your <a href='netdb?r=.'>Network Database entry</a>. Never reveal this to anyone, as your router identity is uniquely linked to your IP address in the network database."
-msgstr "如果您将鼠标悬停在<i>路由器信息</i>标题上，则会显示部分路由器标识（ Base64路由器哈希的前四个字符（ 24bits） ）。 完整的哈希值显示在您的<a href='netdb?r=.'>网络数据库条目</a>上。 切勿向任何人透露此信息，因为您的路由器标识与网络数据库中的IP地址绑定。"
+msgid "If you hover over the <i>Router Info</i> heading, your truncated router identity will be shown (the first four characters (24 bits) of your 44-character (256-bit) Base64 router hash). The full hash is shown on your <a href='netdb?show=local'>Network Database entry</a>. Never reveal this to anyone, as your router identity is uniquely linked to your IP address in the network database."
+msgstr "如果您将鼠标悬停在<i>路由器信息</i>标题上，则会显示部分路由器标识（ Base64路由器哈希的前四个字符（ 24bits） ）。 完整的哈希值显示在您的<a href='netdb?show=local'>网络数据库条目</a>上。 切勿向任何人透露此信息，因为您的路由器标识与网络数据库中的IP地址绑定。"
 
 msgid "The version of the I2P software you are running. If a new version is available, you will be notified in the Sidebar. It is recommended to keep your router up to date to ensure optimal performance and security. Router updates are usually made available on average every 2-3 months."
 msgstr "您所运行的I2P软件的版本。如果有新的版本，您会在侧边栏得到通知。建议保持您的路由器为最新版本，以确保最佳性能和安全。路由器的更新平均每2-3个月发布一次。"

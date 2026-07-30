@@ -240,7 +240,7 @@ public class InfoHelper extends HelperBase {
         // basic router information
         buf.append("<table>\n");
         if (h != null) {
-            buf.append("<tr><td><b>").append(_t("Identity")).append(":</b></td><td><code><a href=\"/netdb?r=.\" title =\"")
+            buf.append("<tr><td><b>").append(_t("Identity")).append(":</b></td><td><code><a href=\"/netdb?show=local\" title =\"")
                .append(_t("Network Database entry")).append("\">").append(h.toBase64()).append("</a></code>");
             if (getFamily() != null) {buf.append("&ensp;<b>").append(_t("Family")).append(":</b> ").append(getFamily());}
             buf.append("</td></tr>\n");
