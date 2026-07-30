@@ -1,10 +1,3 @@
-/**
- * WTFPL
- * Version 2, December 2004
- *
- * Copyright (C) sponge
- * Planet Earth
- */
 package net.i2p.i2ptunnel;
 
 import net.i2p.client.streaming.I2PSocketManager;
@@ -14,7 +7,6 @@ import net.i2p.util.EventDispatcher;
  * HTTP proxy reusing server's I2PSocketManager without outproxy capability.
  */
 public class I2PTunnelHTTPBidirProxy extends I2PTunnelHTTPClient implements Runnable {
-
 
     /**
      *  As of 0.9.20 this is fast, and does NOT connect the manager to the router,

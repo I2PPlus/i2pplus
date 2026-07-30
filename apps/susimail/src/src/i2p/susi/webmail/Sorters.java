@@ -22,8 +22,8 @@ class Sorters {
         private final MailCache mailCache;
 
         /**
-         * Set MailCache object, where to get Mails from
-         * @param mailCache
+         * Mail cache for fetching mail objects to compare.
+         * @param mailCache the cache to retrieve Mail objects from
          */
         protected SorterBase(MailCache mailCache) {this.mailCache = mailCache;}
 
@@ -55,7 +55,10 @@ class Sorters {
         /** Locale-aware string collator */
         private final Comparator<Object> collator = Collator.getInstance();
 
-        /** @param mailCache the mail cache */
+        /**
+         * Sorts by sender field.
+         * @param mailCache the mail cache
+         */
         public SenderSorter(MailCache mailCache) {super(mailCache);}
 
         /**
@@ -78,7 +81,10 @@ class Sorters {
         /** Locale-aware string collator */
         private final Comparator<Object> collator = Collator.getInstance();
 
-        /** @param mailCache the mail cache */
+        /**
+         * Sorts by recipient field.
+         * @param mailCache the mail cache
+         */
         public ToSorter(MailCache mailCache) {super(mailCache);}
 
         /**
@@ -104,14 +110,15 @@ class Sorters {
      * Sorts Mail objects by subject field.
      */
     public static class SubjectSorter extends SorterBase {
-        /** ignored */
         private static final String xre = Messages.getString("Re:").toLowerCase(Locale.US);
-        /** ignored */
         private static final String xfwd = Messages.getString("Fwd:").toLowerCase(Locale.US);
         /** Locale-aware string collator */
         private final Comparator<Object> collator = Collator.getInstance();
 
-        /** @param mailCache the mail cache */
+        /**
+         * Sorts by subject field.
+         * @param mailCache the mail cache
+         */
         public SubjectSorter(MailCache mailCache) {super(mailCache);}
 
         /**
@@ -147,7 +154,10 @@ class Sorters {
      */
     public static class DateSorter extends SorterBase {
 
-        /** @param mailCache the mail cache */
+        /**
+         * Sorts by date field.
+         * @param mailCache the mail cache
+         */
         public DateSorter(MailCache mailCache) {super(mailCache);}
 
         /**
@@ -170,7 +180,10 @@ class Sorters {
      */
     public static class SizeSorter extends SorterBase {
 
-        /** @param mailCache the mail cache */
+        /**
+         * Sorts by message size.
+         * @param mailCache the mail cache
+         */
         public SizeSorter(MailCache mailCache) {super(mailCache);}
 
         /**

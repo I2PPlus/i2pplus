@@ -37,7 +37,6 @@ public class NSEC3 extends Data {
      */
     public static final byte FLAG_OPT_OUT = 0x1;
 
-    /** ignored */
     private static final Map<Byte, HashAlgorithm> HASH_ALGORITHM_LUT = new HashMap<>();
 
     /**
@@ -54,7 +53,6 @@ public class NSEC3 extends Data {
         SHA1(1, "SHA-1"),
        ;
 
-        /** ignored */
         HashAlgorithm(int value, String description) {
             if (value < 0 || value > 255) {
                 throw new IllegalArgumentException();
@@ -148,7 +146,6 @@ public class NSEC3 extends Data {
         return new NSEC3(hashAlgorithm, flags, iterations, salt, nextHashed, types);
     }
 
-    /** ignored */
     private NSEC3(HashAlgorithm hashAlgorithm, byte hashAlgorithmByte, byte flags, int iterations, byte[] salt, byte[] nextHashed, List<TYPE> types) {
         assert hashAlgorithmByte == (hashAlgorithm != null ? hashAlgorithm.value : hashAlgorithmByte);
         this.hashAlgorithmByte = hashAlgorithmByte;
@@ -237,7 +234,6 @@ public class NSEC3 extends Data {
         return nextHashed.clone();
     }
 
-    /** ignored */
     private String nextHashedBase32Cache;
 
     /**
@@ -250,7 +246,6 @@ public class NSEC3 extends Data {
         return nextHashedBase32Cache;
     }
 
-    /** ignored */
     private DnsLabel nextHashedDnsLabelCache;
 
     /**

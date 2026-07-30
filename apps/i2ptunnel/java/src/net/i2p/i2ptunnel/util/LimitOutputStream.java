@@ -20,7 +20,7 @@ import java.io.OutputStream;
  */
 public abstract class LimitOutputStream extends FilterOutputStream {
 
-    /** ignored */
+    /** Single-byte buffer for the write(int) method. */
     private final byte[] _buf1;
     protected final DoneCallback _callback;
     protected boolean _isDone;

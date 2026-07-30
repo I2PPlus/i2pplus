@@ -38,16 +38,12 @@ import org.cybergarage.util.Debug;
  */
 public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
     ////////////////////////////////////////////////
-    //	Constructor
+    //  Constructor
     ////////////////////////////////////////////////
 
-    /** ignored */
     private InetAddress[] binds = null;
-    /** ignored */
     private String multicastIPv4 = SSDP.ADDRESS;
-    /** ignored */
     private String multicastIPv6 = SSDP.getIPv6Address();
-    /** ignored */
     private int port = SSDP.PORT;
 
     /** Default constructor. */
@@ -75,7 +71,7 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
     }
 
     ////////////////////////////////////////////////
-    //	Methods
+    //  Methods
     ////////////////////////////////////////////////
 
     /** Returns the socket at the given index. */
@@ -93,7 +89,7 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
     }
 
     ////////////////////////////////////////////////
-    //	Methods
+    //  Methods
     ////////////////////////////////////////////////
 
     /** Opens all search sockets. */
@@ -143,7 +139,7 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
     }
 
     ////////////////////////////////////////////////
-    //	Methods
+    //  Methods
     ////////////////////////////////////////////////
 
     /** Starts all search sockets. */

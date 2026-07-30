@@ -51,25 +51,15 @@ import net.i2p.util.SystemVersion;
  * take care to maintain the public methods as a stable API.
  */
 public class TunnelController implements Logging {
-    /** ignored */
     private final Log _log;
-    /** ignored */
     private Properties _config;
-    /** ignored */
     private File _configFile;
-    /** ignored */
     private final I2PTunnel _tunnel;
-    /** ignored */
     private final List<String> _messages;
-    /** ignored */
     private List<I2PSession> _sessions;
-    /** ignored */
     private volatile TunnelState _state;
-    /** ignored */
     private volatile SimpleTimer2.TimedEvent _pkfc;
-    /** ignored */
     private volatile Thread _pendingStartupThread;
-    /** ignored */
     private volatile long _startupDelayEndTime;
     /** Suppress log messages during tunnel restart */
     private boolean _suppressLog;

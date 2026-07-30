@@ -9,11 +9,8 @@ import net.i2p.data.Hash;
  */
 class DestTracker {
 
-    /** ignored */
     private final Hash hash;
-    /** ignored */
     private final Threshold threshold;
-    /** ignored */
     private final AccessCounter counter;
 
     /**

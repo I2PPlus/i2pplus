@@ -26,7 +26,6 @@ package com.google.zxing.qrcode.decoder;
  */
 final class FormatInformation {
 
-  /** ignored */
   private static final int FORMAT_INFO_MASK_QR = 0x5412;
 
   /**
@@ -67,12 +66,9 @@ final class FormatInformation {
       {0x2BED, 0x1F},
   };
 
-  /** ignored */
   private final ErrorCorrectionLevel errorCorrectionLevel;
-  /** ignored */
   private final byte dataMask;
 
-  /** ignored */
   private FormatInformation(int formatInfo) {
     // Bits 3,4
     errorCorrectionLevel = ErrorCorrectionLevel.forBits((formatInfo >> 3) & 0x03);
@@ -137,18 +133,18 @@ final class FormatInformation {
     return null;
   }
 
-  /** @return the error correction level */
+  /** Error correction level decoded from format info bits. */
   ErrorCorrectionLevel getErrorCorrectionLevel() {
     return errorCorrectionLevel;
   }
 
-  /** @return the data mask */
+  /** Data mask reference decoded from format info bits. */
   byte getDataMask() {
     return dataMask;
   }
 
   /**
-   * @return whether h code is present
+   * Hash of the error correction level combined with the data mask.
    */
   @Override
   public int hashCode() {
@@ -156,7 +152,7 @@ final class FormatInformation {
   }
 
   /**
-   * equals.
+   * True if the other object has the same error correction level and data mask.
    */
   @Override
   public boolean equals(Object o) {

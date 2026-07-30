@@ -41,7 +41,6 @@ import org.eclipse.jetty.server.Server;
  */
 public class ErrorServlet extends HttpServlet {
 
-    /** ignored */
     private static final long serialVersionUID = 99356750L;
     /** The context */
     private final I2PAppContext _context;
@@ -71,7 +70,7 @@ public class ErrorServlet extends HttpServlet {
     private String _defaultBundle;
 
     /**
-     * ErrorServlet.
+     * Servlet for rendering error pages in webapps and plugins.
      */
     public ErrorServlet() {
         super();
@@ -79,7 +78,7 @@ public class ErrorServlet extends HttpServlet {
     }
 
     /**
-     * init.
+     * Load CSS path, webapp name, and bundle from init parameters.
      */
     @Override
     public void init() throws ServletException {
@@ -96,7 +95,7 @@ public class ErrorServlet extends HttpServlet {
     }
 
     /**
-     * doGet.
+     * Handle GET request and render error page HTML.
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -265,7 +264,6 @@ public class ErrorServlet extends HttpServlet {
         out.print("<b>" + _t("Charset") + ":</b> " + Charset.defaultCharset().name());
         out.print("</p>\n");
     }
-
 
     /** translate a string, with webapp bundle */
     protected String _w(String s) {return Translate.getString(s, _context, _defaultBundle);}

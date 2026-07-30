@@ -444,7 +444,7 @@ public enum SigType {
         }
     }
 
-    /** Gets the signature type by code.
+    /** signature type by code.
      *
      *  @return null if not supported
      */

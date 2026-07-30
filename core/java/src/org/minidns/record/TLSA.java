@@ -25,7 +25,6 @@ import java.util.Map;
  */
 public class TLSA extends Data {
 
-        /** ignored */
         private static final Map<Byte, CertUsage> CERT_USAGE_LUT = new HashMap<>();
 
     /**
@@ -85,14 +84,12 @@ public class TLSA extends Data {
          */
         public final byte byteValue;
 
-        /** ignored */
         CertUsage(byte byteValue) {
             this.byteValue = byteValue;
             CERT_USAGE_LUT.put(byteValue, this);
         }
     }
 
-    /** ignored */
     private static final Map<Byte, Selector> SELECTOR_LUT = new HashMap<>();
 
     /**
@@ -110,14 +107,12 @@ public class TLSA extends Data {
          */
         public final byte byteValue;
 
-        /** ignored */
         Selector(byte byteValue) {
             this.byteValue = byteValue;
             SELECTOR_LUT.put(byteValue, this);
         }
     }
 
-    /** ignored */
     private static final Map<Byte, MatchingType> MATCHING_TYPE_LUT = new HashMap<>();
 
     /**
@@ -137,7 +132,6 @@ public class TLSA extends Data {
          */
         public final byte byteValue;
 
-        /** ignored */
         MatchingType(byte byteValue) {
             this.byteValue = byteValue;
             MATCHING_TYPE_LUT.put(byteValue, this);

@@ -16,13 +16,12 @@ public class I2PSource implements Source {
     protected final I2PSession sess;
     /** The sink to receive datagrams */
     protected Sink sink;
-    /** ignored */
+    /** UDP protocol (unencrypted or encrypted). */
     private final Protocol protocol;
-    /** ignored */
+    /** Local UDP port. */
     private final int port;
-    /** ignored */
+    /** Datagram dissector for parsing I2P UDP frames. */
     private final I2PDatagramDissector diss;
-    /** ignored */
     private final Log log;
 
     /**
@@ -134,14 +133,11 @@ public class I2PSource implements Source {
             }
         }
 
-        /** ignored */
         @Override
         public void reportAbuse(I2PSession arg0, int arg1) {}
 
-        /** ignored */
         public void disconnected(I2PSession arg0) {}
 
-        /** ignored */
         public void errorOccurred(I2PSession arg0, String arg1, Throwable arg2) {
             log.error(arg1, arg2);
         }

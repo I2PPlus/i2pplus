@@ -19,27 +19,20 @@ import java.util.Map;
  */
 final class Decoder {
 
-    /** ignored */
     private static final Charset UTF_8 = Charset.forName("UTF-8");
 
-    /** ignored */
     private static final int[] POINTER_VALUE_OFFSETS = { 0, 0, 1 << 11, (1 << 19) + ((1) << 11), 0 };
 
-    /** ignored */
     // XXX - This is only for unit testings. We should possibly make a
     // constructor to set this
     boolean POINTER_TEST_HACK = false;
 
-    /** ignored */
     private final NodeCache cache;
 
-    /** ignored */
     private final long pointerBase;
 
-    /** ignored */
     private final CharsetDecoder utfDecoder = UTF_8.newDecoder();
 
-    /** ignored */
     private final ByteBuffer buffer;
 
     /**
@@ -81,7 +74,6 @@ final class Decoder {
 
         // Java clones the array when you call values(). Caching it increased
         // the speed by about 5000 requests per second on my machine.
-        /** ignored */
         final static Type[] values = Type.values();
 
         /**
@@ -91,7 +83,6 @@ final class Decoder {
             return Type.values[i];
         }
 
-        /** ignored */
         private static Type get(byte b) {
             // bytes are signed, but we want to treat them as unsigned here
             return Type.get(b & 0xFF);
@@ -113,7 +104,6 @@ final class Decoder {
         this.buffer = buffer;
     }
 
-    /** ignored */
     private final NodeCache.Loader cacheLoader = new NodeCache.Loader() {
         /**
          * load.
@@ -197,7 +187,6 @@ final class Decoder {
         return this.decodeByType(type, size);
     }
 
-    /** ignored */
     private Object decodeByType(Type type, int size)
             throws IOException {
         switch (type) {
@@ -231,7 +220,6 @@ final class Decoder {
         }
     }
 
-    /** ignored */
     private String decodeString(int size) throws CharacterCodingException {
         int oldLimit = buffer.limit();
         buffer.limit(buffer.position() + size);
@@ -240,17 +228,14 @@ final class Decoder {
         return s;
     }
 
-    /** ignored */
     private Integer decodeUint16(int size) {
         return Integer.valueOf(this.decodeInteger(size));
     }
 
-    /** ignored */
     private Integer decodeInt32(int size) {
         return Integer.valueOf(this.decodeInteger(size));
     }
 
-    /** ignored */
     private long decodeLong(int size) {
         long integer = 0;
         for (int i = 0; i < size; i++) {

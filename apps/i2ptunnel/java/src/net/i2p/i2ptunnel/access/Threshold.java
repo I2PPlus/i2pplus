@@ -14,9 +14,7 @@ class Threshold {
     /** A Threshold that is always breached */
     static final Threshold DENY = new Threshold(0, 1);
 
-    /** ignored */
     private final int connections;
-    /** ignored */
     private final int seconds;
 
     /** Threshold */

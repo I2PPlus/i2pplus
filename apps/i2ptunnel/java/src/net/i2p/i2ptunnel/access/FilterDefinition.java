@@ -9,13 +9,9 @@ package net.i2p.i2ptunnel.access;
  */
 class FilterDefinition {
 
-    /** ignored */
     private final Threshold defaultThreshold;
-    /** ignored */
     private final FilterDefinitionElement[] elements;
-    /** ignored */
     private final Recorder[] recorders;
-    /** ignored */
     private final int purgeSeconds;
 
     /**

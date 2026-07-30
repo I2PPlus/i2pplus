@@ -30,51 +30,44 @@ package com.google.zxing.common.reedsolomon;
 public final class GenericGF {
 
   /**
-   * AZTEC_DATA_12.
+   * Galois field for Aztec 12-bit data symbols (4096 elements).
    */
   public static final GenericGF AZTEC_DATA_12 = new GenericGF(0x1069, 4096, 1); // x^12 + x^6 + x^5 + x^3 + 1
   /**
-   * AZTEC_DATA_10.
+   * Galois field for Aztec 10-bit data symbols (1024 elements).
    */
   public static final GenericGF AZTEC_DATA_10 = new GenericGF(0x409, 1024, 1); // x^10 + x^3 + 1
   /**
-   * AZTEC_DATA_6.
+   * Galois field for Aztec 6-bit data symbols (64 elements).
    */
   public static final GenericGF AZTEC_DATA_6 = new GenericGF(0x43, 64, 1); // x^6 + x + 1
   /**
-   * AZTEC_PARAM.
+   * Galois field for Aztec parameter symbols (16 elements).
    */
   public static final GenericGF AZTEC_PARAM = new GenericGF(0x13, 16, 1); // x^4 + x + 1
   /**
-   * QR_CODE_FIELD_256.
+   * Galois field for QR Code symbols (256 elements).
    */
   public static final GenericGF QR_CODE_FIELD_256 = new GenericGF(0x011D, 256, 0); // x^8 + x^4 + x^3 + x^2 + 1
   /**
-   * DATA_MATRIX_FIELD_256.
+   * Galois field for Data Matrix symbols (256 elements).
    */
   public static final GenericGF DATA_MATRIX_FIELD_256 = new GenericGF(0x012D, 256, 1); // x^8 + x^5 + x^3 + x^2 + 1
   /**
-   * AZTEC_DATA_8.
+   * Alias for DATA_MATRIX_FIELD_256.
    */
   public static final GenericGF AZTEC_DATA_8 = DATA_MATRIX_FIELD_256;
   /**
-   * MAXICODE_FIELD_64.
+   * Alias for AZTEC_DATA_6.
    */
   public static final GenericGF MAXICODE_FIELD_64 = AZTEC_DATA_6;
 
-  /** ignored */
   private final int[] expTable;
-  /** ignored */
   private final int[] logTable;
-  /** ignored */
   private final GenericGFPoly zero;
-  /** ignored */
   private final GenericGFPoly one;
-  /** ignored */
   private final int size;
-  /** ignored */
   private final int primitive;
-  /** ignored */
   private final int generatorBase;
 
   /**
@@ -112,12 +105,12 @@ public final class GenericGF {
     one = new GenericGFPoly(this, new int[]{1});
   }
 
-  /** @return the zero polynomial */
+  /** Additive identity (zero polynomial). */
   GenericGFPoly getZero() {
     return zero;
   }
 
-  /** @return the one polynomial */
+  /** Multiplicative identity (one polynomial). */
   GenericGFPoly getOne() {
     return one;
   }
@@ -198,7 +191,7 @@ public final class GenericGF {
   }
 
   /**
-   * toString.
+   * Human-readable string representation of this Galois field.
    */
   @Override
   public String toString() {

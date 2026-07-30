@@ -27,15 +27,23 @@ The following standard licenses are incorporated by reference:
 Public domain except as listed below:
 
 - **AES code (Cryptix)** — Cryptix General License. Copyright (c) 1995-2005 The Cryptix Foundation Limited.
+- **Apache httpcomponents** — Apache License 2.0. Copyright (c) The Apache Software Foundation.
 - **BlockFile** — BSD-3-Clause. Copyright (c) 2006 Matthew Estes. https://metanotion.net/software/sandbox/block.html
 - **Bouncy Castle (ElGamal / AES / SSU HMAC)** — MIT-style. Copyright (c) 2000-2023 The Legion Of The Bouncy Castle Inc.
+- **ChaCha20** — MIT License. Copyright (C) 2016 Southern Storm Software, Pty Ltd (derived from Noise protocol).
 - **Crypto filters (I2P Project BSD)** — BSD-style. Copyright (c) 2009 The I2P Project.
+- **EdDSA (Ed25519)** — CC0 1.0 Universal. Copyright (c) 2015-2019 the str4d project contributors.
 - **ElGamal and DSA code** — BSD-style. Copyright (c) 2003 TheCrypto.
+- **GNU getopt** — LGPLv2. Copyright (c) 1987-1997 Free Software Foundation / 1998 Aaron M. Renn.
+- **GNU gettext** — LGPLv2.1+. Copyright (C) 2001, 2007, 2015-2016 Free Software Foundation.
+- **GNU Crypto (Fortuna PRNG)** — GPLv2+ with linking exception. Copyright (C) 2004 Free Software Foundation, Inc.
+- **json-simple** — Apache License 2.0. Copyright (c) 2011-2019 The json-simple Authors.
+- **MiniDNS** — Apache License 2.0 / LGPLv2.1+ / WTFPL (triple-licensed). Copyright (c) 2015-2021 the MiniDNS project authors.
+- **Noise protocol** — MIT License. Copyright (C) 2016 Southern Storm Software, Pty Ltd.
 - **SNTP code** — BSD-style. Copyright (c) 2004 Adam Buckley.
 - **SSLEepGet (InstallCert)** — BSD-style. Copyright 2006 Sun Microsystems.
 - **Android array utilities (ratchet)** — Apache License 2.0. Copyright (C) 2006 The Android Open Source Project.
 - **CachedIteratorCollection** — GPLv2 with Classpath exception. Copyright (c) 1997, 2013, Oracle and/or its affiliates.
-- **Noise protocol (ML-KEM)** — MIT License. Copyright (C) 2016 Southern Storm Software, Pty Ltd.
 
 ## JAVA SERVICE WRAPPER
 
@@ -67,6 +75,12 @@ GPLv2+. Copyright (c) 2003-2004 mihi, 2004 human (SOCKS). With special exception
 **Imagegen - Identicon**
 MIT License. Copyright (c) 2007-2014 Don Park. Contributor 2014 Paulo Miguel Almeida Rodenas.
 
+**Imagegen - JRObin QR Code**
+LGPLv2.1+. Contains QR code encoding adapted from jrobin. Copyright (c) 2001-2005 Sasa Markovic and Ciaran Treanor. Copyright (c) 2011 The OpenNMS Group, Inc.
+
+**Imagegen - OpenSSH RandomArt**
+BSD-style. Copyright (c) 2000, 2001 Markus Friedl. Copyright (c) 2008 Alexander von Gernler.
+
 **SusiMail / SusiDNS**
 GPLv2+. Copyright (C) 2004-2005 susi23@mail.i2p.
 
@@ -92,8 +106,9 @@ The following components are in the public domain:
 - **Streaming Lib** (streaming.jar)
 - **Systray** (systray.jar)
 
-## GEOIP DATABASE
+## GEOIP
 
+- **GeoIP library (MaxMind)** — LGPLv2. Copyright (C) 2003-2004 MaxMind LLC.
 - **GeoLite2 Country (db-ip)** — CC BY-SA 4.0 - https://db-ip.com/db/
 - **db-ip ASN Lite (db-ip)** — CC BY-SA 4.0 - https://db-ip.com/db/
 - **countries.txt** — CC BY-SA 3.0 (MaxMind GeoLite Country, discontinued)
@@ -116,6 +131,34 @@ This product includes software developed at The Apache Software Foundation (http
 
 LGPLv2.1. Bundled dependencies: ASM (BSD 3-Clause), Commons, DocBook XSL, Dom4j, Error Prone, Gson, Jaxen, JCIP, JSR305, Log4j, Logback (EPL/LGPL), Saxon-HE, SLF4J, XML Resolver (various licenses).
 
+## IMAGE RENDERING
+
+- **ZXing (QR code)** — Apache License 2.0. Copyright 2007 ZXing authors. https://github.com/zxing/zxing
+- **JFreeSVG** — GPLv3+ (commercial license available from Object Refinery Limited). Copyright (c) 2013-2020, Object Refinery Limited.
+- **RRD4J (jrobin.jar)** — Apache License 2.0. https://github.com/rrd4j/rrd4j
+- **Crinch hashing** — Apache License 2.0. Copyright 2010 Tom Gibara.
+- **RyuDouble** — Apache License 2.0. Copyright 2018 Ulf Adams.
+
+## PACK200 (apps/pack200)
+
+GPLv2 only with Classpath exception. Copyright (c) Oracle and/or its affiliates. Derived from OpenJDK.
+
+## FREENET / UPnP
+
+GPLv2+. Contains code from Freenet (DetectedIP, UPnP). Copyright (c) The Freenet Project.
+
+## FREESOFTWARE / ACNS (Cybergarage UPnP)
+
+Copyright (C) Satoshi Konno 2002-2004. No explicit license text accompanies this code.
+
+## XLATTICE
+
+BSD-style. Copyright (c) The xlattice Project (Bloom filter).
+
+## WTFPL
+
+- **I2PTunnelHTTPBidirProxy** — WTFPL v2. Copyright (C) sponge. Do What The F*ck You Want To Public License.
+
 ## JAVASCRIPT LIBRARIES
 
 The following third-party JavaScript libraries are bundled:
@@ -127,6 +170,7 @@ The following third-party JavaScript libraries are bundled:
 - **morphdom** — MIT License. https://github.com/patrick-steele-idem/morphdom
 - **progressx** — MIT License. https://github.com/ryadpasha/progressx
 - **snowflakes** — MIT License. https://github.com/hcodes/snowflakes/
+- **tablesort** — MIT License. Copyright (c) 2012 tristen. https://github.com/tristen/tablesort
 
 ## IDENTICON (apps/imagegen/identicon/)
 
@@ -142,10 +186,6 @@ The following custom JavaScript scripts were written by dr|z3d for I2P+. License
 - **ImageGen**: imagegen
 - **SusiDNS**: togglePanels, toggleAllHosts, refreshStatus, deleteHosts, clearSearch
 - **SusiMail**: toggleHeaders, sanitizeHTML, refreshInbox, previewMail, notifications, htmlView, folder, deleteMail, compose, markdown
-
-## RRD4J (jrobin.jar)
-
-RRD4J is a high performance data logging and graphing system — Apache License 2.0. https://github.com/rrd4j/rrd4j
 
 ## CONSOLE / WEBAPPS THEMES & GRAPHICS
 

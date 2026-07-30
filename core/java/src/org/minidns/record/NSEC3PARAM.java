@@ -66,7 +66,6 @@ public class NSEC3PARAM extends Data {
         return new NSEC3PARAM(hashAlgorithm, flags, iterations, salt);
     }
 
-    /** ignored */
     private NSEC3PARAM(HashAlgorithm hashAlgorithm, byte hashAlgorithmByte, byte flags, int iterations, byte[] salt) {
         assert hashAlgorithmByte == (hashAlgorithm != null ? hashAlgorithm.value : hashAlgorithmByte);
         this.hashAlgorithmByte = hashAlgorithmByte;

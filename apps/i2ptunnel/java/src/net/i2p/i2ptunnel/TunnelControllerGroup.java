@@ -43,15 +43,10 @@ import net.i2p.util.SystemVersion;
  * Entry point from clients.config.
  */
 public class TunnelControllerGroup implements ClientApp {
-    /** ignored */
     private final Log _log;
-    /** ignored */
     private volatile ClientAppState _state;
-    /** ignored */
     private final I2PAppContext _context;
-    /** ignored */
     private final ClientAppManager _mgr;
-    /** ignored */
     private static volatile TunnelControllerGroup _instance;
     /** Default config file name */
     static final String DEFAULT_CONFIG_FILE = "i2ptunnel.config";
@@ -60,15 +55,10 @@ public class TunnelControllerGroup implements ClientApp {
     /** Config key prefix */
     private static final String PREFIX = "tunnel.";
 
-    /** ignored */
     private final List<TunnelController> _controllers;
-    /** ignored */
     private final ReadWriteLock _controllersLock;
-    /** ignored */
     private boolean _controllersLoaded;
-    /** ignored */
     private final String _configFile;
-    /** ignored */
     private final String _configDirectory;
 
     /** Service name for ClientApp registration */
@@ -105,18 +95,14 @@ public class TunnelControllerGroup implements ClientApp {
 
     /** Pool of socket handlers for all clients */
     private ThreadPoolExecutor _executor;
-    /** ignored */
     private static final AtomicLong _executorThreadCount = new AtomicLong();
-    /** ignored */
     private final Object _executorLock = new Object();
     /** how long to wait before dropping an idle thread */
     private static final long HANDLER_KEEPALIVE_MS = (long) 30*1000;
 
     /** Shared bounded executor for server tunnel connection handlers */
     private ThreadPoolExecutor _serverExecutor;
-    /** ignored */
     private static final AtomicLong _serverExecutorThreadCount = new AtomicLong();
-    /** ignored */
     private final Object _serverExecutorLock = new Object();
     /** Server handler idle keepalive */
     private static final long SERVER_KEEPALIVE_MS = (long) 30*1000;
@@ -154,7 +140,6 @@ public class TunnelControllerGroup implements ClientApp {
 
     /** Rate stat intervals */
     static final long[] RATES = {60*1000L, 10*60*1000L, 60*60*1000L};
-
 
     /**
      *  In I2PAppContext will instantiate if necessary and always return non-null.

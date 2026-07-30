@@ -8,13 +8,9 @@ import java.util.Arrays;
  */
 class PolyVec
 {
-    /** ignored */
     Poly[] vec;
-    /** ignored */
     private MLKEMEngine engine;
-    /** ignored */
     private int kyberK;
-    /** ignored */
     private int polyVecBytes;
 
     /**

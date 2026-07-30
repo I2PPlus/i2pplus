@@ -51,7 +51,7 @@ public class JSONRPC2Servlet extends HttpServlet {
     private static final String SVC_HTTPS_I2PCONTROL = "https_i2pcontrol";
     /** JSON-RPC 2.0 request dispatcher. */
     private Dispatcher disp;
-    /** Logger. */
+    /** Class logger. */
     private Log _log;
     /** Security manager. */
     private final SecurityManager _secMan;
@@ -179,7 +179,6 @@ public class JSONRPC2Servlet extends HttpServlet {
         out.println("</body>\n</html>");
         out.close();
     }
-
 
     /** HTTP security headers. */
     private static void setHeaders(HttpServletResponse resp) {

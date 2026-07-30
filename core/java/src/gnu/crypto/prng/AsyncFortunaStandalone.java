@@ -22,29 +22,18 @@ import net.i2p.util.SystemVersion;
  */
 @SuppressWarnings("java:S2975")
 public class AsyncFortunaStandalone extends FortunaStandalone implements Runnable {
-    /** ignored */
     private static final int DEFAULT_BUFFERS = 2;
-    /** ignored */
     private static final int DEFAULT_BUFSIZE = SystemVersion.isAndroid() ? 64*1024 : 256*1024;
-    /** ignored */
     private final int _bufferCount;
-    /** ignored */
     private final int _bufferSize;
     /** the lock */
     private final Object asyncBuffers = new Object();
-    /** ignored */
     private final I2PAppContext _context;
-    /** ignored */
     private final Log _log;
-    /** ignored */
     private volatile boolean _isRunning;
-    /** ignored */
     private Thread _refillThread;
-    /** ignored */
     private final LinkedBlockingQueue<AsyncBuffer> _fullBuffers;
-    /** ignored */
     private final LinkedBlockingQueue<AsyncBuffer> _emptyBuffers;
-    /** ignored */
     private AsyncBuffer _currentBuffer;
 
     /**
@@ -96,14 +85,10 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
     }
 
     private static class AsyncBuffer {
-        /**
-         * buffer.
-         */
+        /** The buffer data. */
         public final byte[] buffer;
 
-        /**
-         * AsyncBuffer.
-         */
+        /** Creates a buffer of the given size. */
         public AsyncBuffer(int size) {
             buffer = new byte[size];
         }
@@ -159,13 +144,8 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         }
     }
 
-    /**
-     * fillBlock.
-     */
+    /** Fill the PRNG output block. */
     @Override
-    /**
-     * Fill the PRNG output block.
-     */
     public void fillBlock() {rotateBuffer();}
 
     private void doFill(byte[] buf) {

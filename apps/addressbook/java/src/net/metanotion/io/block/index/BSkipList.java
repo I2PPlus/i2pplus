@@ -1,32 +1,5 @@
-/*
-Copyright (c) 2006, Matthew Estes
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-	* Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-	* Redistributions in binary form must reproduce the above copyright
-notice, this list of conditions and the following disclaimer in the
-documentation and/or other materials provided with the distribution.
-	* Neither the name of Metanotion Software nor the names of its
-contributors may be used to endorse or promote products derived from this
-software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
 package net.metanotion.io.block.index;
+// License: BSD-3-Clause. See docs/LICENSES.md
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -57,256 +30,255 @@ import net.metanotion.util.skiplist.*;
  * @param <V> type of mapped values
  */
 public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V> implements Closeable {
-	private static final long MAGIC = 0x536b69704c697374L;  // "SkipList"
-	/** Page number of the first span */
-	public int firstSpanPage = 0;
-	/** Page number of the first level */
-	public int firstLevelPage = 0;
-	/** Page number of this skiplist header */
-	public int skipPage = 0;
-	/** Reference to the BlockFile */
-	public final BlockFile bf;
-	/** Whether this skiplist is closed */
-	private boolean isClosed;
+    private static final long MAGIC = 0x536b69704c697374L;  // "SkipList"
+    /** Page number of the first span */
+    public int firstSpanPage = 0;
+    /** Page number of the first level */
+    public int firstLevelPage = 0;
+    /** Page number of this skiplist header */
+    public int skipPage = 0;
+    /** Reference to the BlockFile */
+    public final BlockFile bf;
+    /** Whether this skiplist is closed */
+    private boolean isClosed;
 
-	/** Span cache */
-	final HashMap<Integer, BSkipSpan<K, V>> spanHash = new HashMap<>();
-	/** Level cache */
-	final HashMap<Integer, SkipLevels<K, V>> levelHash = new HashMap<>();
+    /** Span cache */
+    final HashMap<Integer, BSkipSpan<K, V>> spanHash = new HashMap<>();
+    /** Level cache */
+    final HashMap<Integer, SkipLevels<K, V>> levelHash = new HashMap<>();
 
-	private final boolean fileOnly;
+    private final boolean fileOnly;
 
-	/**
-	 *  Create a BSkipList from a BlockFile.
-	 *
-	 *  @param spanSize the size of spans
-	 *  @param bf the BlockFile
-	 *  @param skipPage the page number of this skiplist
-	 *  @param key the key
-	 *  @param val the value serializer
-	 *  @throws IOException if an I/O error occurs
-	 */
-	public BSkipList(int spanSize, BlockFile bf, int skipPage, Serializer<K> key, Serializer<V> val) throws IOException {
-		this(spanSize, bf, skipPage, key, val, false);
-	}
+    /**
+     *  Create a BSkipList from a BlockFile.
+     *
+     *  @param spanSize the size of spans
+     *  @param bf the BlockFile
+     *  @param skipPage the page number of this skiplist
+     *  @param key the key
+     *  @param val the value serializer
+     *  @throws IOException if an I/O error occurs
+     */
+    public BSkipList(int spanSize, BlockFile bf, int skipPage, Serializer<K> key, Serializer<V> val) throws IOException {
+        this(spanSize, bf, skipPage, key, val, false);
+    }
 
-	/**
-	 *  Create a BSkipList from a BlockFile.
-	 *
-	 *  @param spanSize the size of spans
-	 *  @param bf the BlockFile
-	 *  @param skipPage the page number of this skiplist
-	 *  @param key the key
-	 *  @param val the value serializer
-	 *  @param fileOnly if true, only read from file (no caching)
-	 *  @throws IOException if an I/O error occurs
-	 */
-	public BSkipList(int spanSize, BlockFile bf, int skipPage, Serializer<K> key, Serializer<V> val, boolean fileOnly) throws IOException {
-		if(spanSize < 1) { throw new RuntimeException("Span size too small"); }
+    /**
+     *  Create a BSkipList from a BlockFile.
+     *
+     *  @param spanSize the size of spans
+     *  @param bf the BlockFile
+     *  @param skipPage the page number of this skiplist
+     *  @param key the key
+     *  @param val the value serializer
+     *  @param fileOnly if true, only read from file (no caching)
+     *  @throws IOException if an I/O error occurs
+     */
+    public BSkipList(int spanSize, BlockFile bf, int skipPage, Serializer<K> key, Serializer<V> val, boolean fileOnly) throws IOException {
+        if(spanSize < 1) { throw new RuntimeException("Span size too small"); }
 
-		this.skipPage = skipPage;
-		this.bf = bf;
+        this.skipPage = skipPage;
+        this.bf = bf;
 
-		BlockFile.pageSeek(bf.file, skipPage);
-		long magic = bf.file.readLong();
-		if (magic != MAGIC)
-			throw new IOException("Bad SkipList magic number 0x" + Long.toHexString(magic) + " on page " + skipPage);
-		firstSpanPage = bf.file.readUnsignedInt();
-		firstLevelPage = bf.file.readUnsignedInt();
-		size = bf.file.readUnsignedInt();
-		int spans = bf.file.readInt();
-		int levelCount = bf.file.readInt();
+        BlockFile.pageSeek(bf.file, skipPage);
+        long magic = bf.file.readLong();
+        if (magic != MAGIC)
+            throw new IOException("Bad SkipList magic number 0x" + Long.toHexString(magic) + " on page " + skipPage);
+        firstSpanPage = bf.file.readUnsignedInt();
+        firstLevelPage = bf.file.readUnsignedInt();
+        size = bf.file.readUnsignedInt();
+        int spans = bf.file.readInt();
+        int levelCount = bf.file.readInt();
                 // two byte spansize as of version 1.2, ignore for now
 
-		this.fileOnly = fileOnly;
-		if (fileOnly)
-			first = new IBSkipSpan<>(bf, this, firstSpanPage, key, val);
-		else
-			first = new BSkipSpan<>(bf, this, firstSpanPage, key, val);
-		BSkipLevels<K, V> bstack = new BSkipLevels<>(bf, firstLevelPage, this);
-		bstack.initializeLevels();
-		stack = bstack;
-		int total = 0;
-		for (BSkipSpan ss : spanHash.values()) {
-			total += ss.nKeys;
-		}
-		if (bf.log.shouldDebug())
-			bf.log.debug("Loaded " + this + " cached " + levelHash.size() + " levels and " + spanHash.size() + " spans with " + total + " entries");
-		if (bf.file.canWrite() &&
-		    (levelCount != levelHash.size() || spans != spanHash.size() || size != total)) {
-			if (bf.log.shouldWarn())
-				bf.log.warn("On-disk counts were " + levelCount + " levels / " + spans +
-				            " spans / " +  size + " entries, correcting to " + total + " entries");
-			size = total;
-			flush();
-		}
-	}
+        this.fileOnly = fileOnly;
+        if (fileOnly)
+            first = new IBSkipSpan<>(bf, this, firstSpanPage, key, val);
+        else
+            first = new BSkipSpan<>(bf, this, firstSpanPage, key, val);
+        BSkipLevels<K, V> bstack = new BSkipLevels<>(bf, firstLevelPage, this);
+        bstack.initializeLevels();
+        stack = bstack;
+        int total = 0;
+        for (BSkipSpan ss : spanHash.values()) {
+            total += ss.nKeys;
+        }
+        if (bf.log.shouldDebug())
+            bf.log.debug("Loaded " + this + " cached " + levelHash.size() + " levels and " + spanHash.size() + " spans with " + total + " entries");
+        if (bf.file.canWrite() &&
+            (levelCount != levelHash.size() || spans != spanHash.size() || size != total)) {
+            if (bf.log.shouldWarn())
+                bf.log.warn("On-disk counts were " + levelCount + " levels / " + spans +
+                            " spans / " +  size + " entries, correcting to " + total + " entries");
+            size = total;
+            flush();
+        }
+    }
 
-	/**
-	 *  Close this skiplist and flush all data to disk.
-	 */
-	public void close() {
-		flush();
-		spanHash.clear();
-		levelHash.clear();
-		isClosed = true;
-	}
+    /**
+     *  Close this skiplist and flush all data to disk.
+     */
+    public void close() {
+        flush();
+        spanHash.clear();
+        levelHash.clear();
+        isClosed = true;
+    }
 
-	/**
-	 *  Flush all data to disk.
-	 */
-	@Override
-	public void flush() {
+    /**
+     *  Flush all data to disk.
+     */
+    @Override
+    public void flush() {
                 if (!bf.file.canWrite())
                     return;
-		if (isClosed) {
-			bf.log.error("Already closed!! " + this, new Exception());
-			return;
-		}
-		try {
-			BlockFile.pageSeek(bf.file, skipPage);
-			bf.file.writeLong(MAGIC);
-			bf.file.writeInt(firstSpanPage);
-			bf.file.writeInt(firstLevelPage);
-			bf.file.writeInt(Math.max(0, size));
-			bf.file.writeInt(spanHash.size());
-			bf.file.writeInt(levelHash.size());
+        if (isClosed) {
+            bf.log.error("Already closed!! " + this, new Exception());
+            return;
+        }
+        try {
+            BlockFile.pageSeek(bf.file, skipPage);
+            bf.file.writeLong(MAGIC);
+            bf.file.writeInt(firstSpanPage);
+            bf.file.writeInt(firstLevelPage);
+            bf.file.writeInt(Math.max(0, size));
+            bf.file.writeInt(spanHash.size());
+            bf.file.writeInt(levelHash.size());
 
-		} catch (IOException ioe) { throw new RuntimeException("Error writing to database", ioe); }
-	}
+        } catch (IOException ioe) { throw new RuntimeException("Error writing to database", ioe); }
+    }
 
-	/**
-	 *  Delete this skiplist and free all its pages.
-	 *  Must be open (do not call close() first).
-	 *
-	 *  @throws IOException if an I/O error occurs
-	 */
-	public void delete() throws IOException {
-		if (isClosed) {
-			bf.log.error("Already closed!! " + this, new Exception());
-			return;
-		}
-		SkipLevels curLevel = stack;
-		while(curLevel != null) {
-			SkipLevels nextLevel = curLevel.levels[0];
-			curLevel.killInstance();
-			curLevel = nextLevel;
-		}
+    /**
+     *  Delete this skiplist and free all its pages.
+     *  Must be open (do not call close() first).
+     *
+     *  @throws IOException if an I/O error occurs
+     */
+    public void delete() throws IOException {
+        if (isClosed) {
+            bf.log.error("Already closed!! " + this, new Exception());
+            return;
+        }
+        SkipLevels curLevel = stack;
+        while(curLevel != null) {
+            SkipLevels nextLevel = curLevel.levels[0];
+            curLevel.killInstance();
+            curLevel = nextLevel;
+        }
 
-		SkipSpan curSpan = first;
-		while(curSpan != null) {
-			SkipSpan nextSpan = curSpan.next;
-			curSpan.killInstance();
-			curSpan = nextSpan;
-		}
+        SkipSpan curSpan = first;
+        while(curSpan != null) {
+            SkipSpan nextSpan = curSpan.next;
+            curSpan.killInstance();
+            curSpan = nextSpan;
+        }
 
-		bf.freePage(skipPage);
-		spanHash.clear();
-		levelHash.clear();
-		isClosed = true;
-	}
+        bf.freePage(skipPage);
+        spanHash.clear();
+        levelHash.clear();
+        isClosed = true;
+    }
 
-	/**
-	 *  Initialize a new skiplist on disk.
-	 *
-	 *  @param bf the BlockFile
-	 *  @param page the page number for the skiplist header
-	 *  @param spanSize the span size to use
-	 *  @throws IOException if an I/O error occurs
-	 */
-	public static void init(BlockFile bf, int page, int spanSize) throws IOException {
-		int firstSpan = bf.allocPage();
-		int firstLevel = bf.allocPage();
-		BlockFile.pageSeek(bf.file, page);
-		bf.file.writeLong(MAGIC);
-		bf.file.writeInt(firstSpan);
-		bf.file.writeInt(firstLevel);
-		bf.file.writeInt(0);
-		bf.file.writeInt(1);
-		bf.file.writeInt(1);
+    /**
+     *  Initialize a new skiplist on disk.
+     *
+     *  @param bf the BlockFile
+     *  @param page the page number for the skiplist header
+     *  @param spanSize the span size to use
+     *  @throws IOException if an I/O error occurs
+     */
+    public static void init(BlockFile bf, int page, int spanSize) throws IOException {
+        int firstSpan = bf.allocPage();
+        int firstLevel = bf.allocPage();
+        BlockFile.pageSeek(bf.file, page);
+        bf.file.writeLong(MAGIC);
+        bf.file.writeInt(firstSpan);
+        bf.file.writeInt(firstLevel);
+        bf.file.writeInt(0);
+        bf.file.writeInt(1);
+        bf.file.writeInt(1);
                 // added in version 1.2
-		bf.file.writeShort(spanSize);
-		BSkipSpan.init(bf, firstSpan, spanSize);
-		BSkipLevels.init(bf, firstLevel, firstSpan, 4);
-	}
+        bf.file.writeShort(spanSize);
+        BSkipSpan.init(bf, firstSpan, spanSize);
+        BSkipLevels.init(bf, firstLevel, firstSpan, 4);
+    }
 
-	/**
-	 *  Calculate the maximum number of levels for this skiplist.
-	 *
-	 *  @return log2(span count), minimum 4
-	 */
-	@Override
-	public int maxLevels() {
-		int hob = 0;
-		int s = spanHash.size();
-		while(s > 0) {
-			hob++;
-			s /= P;
-		}
-		int max = Math.max(hob, super.maxLevels());
-		// 252
-		return Math.min(BSkipLevels.MAX_SIZE, max);
-	}
+    /**
+     *  Calculate the maximum number of levels for this skiplist.
+     *
+     *  @return log2(span count), minimum 4
+     */
+    @Override
+    public int maxLevels() {
+        int hob = 0;
+        int s = spanHash.size();
+        while(s > 0) {
+            hob++;
+            s /= P;
+        }
+        int max = Math.max(hob, super.maxLevels());
+        // 252
+        return Math.min(BSkipLevels.MAX_SIZE, max);
+    }
 
-	/**
-	 *  Get an iterator over all entries in this skiplist.
-	 *
-	 *  @return a SkipIterator
-	 */
-	@Override
-	public SkipIterator<K, V> iterator() {
-		if (!this.fileOnly)
-			return super.iterator();
-		return new IBSkipIterator<>(first, 0);
-	}
+    /**
+     *  Get an iterator over all entries in this skiplist.
+     *
+     *  @return a SkipIterator
+     */
+    @Override
+    public SkipIterator<K, V> iterator() {
+        if (!this.fileOnly)
+            return super.iterator();
+        return new IBSkipIterator<>(first, 0);
+    }
 
+    /**
+     *  Find the entry with the given key.
+     *
+     *  @param key the key
+     *  @return a SkipIterator pointing to the entry, or end if not found
+     */
+    @Override
+    public SkipIterator<K, V> find(K key) {
+        if (!this.fileOnly)
+            return super.find(key);
+        int[] search = new int[1];
+        SkipSpan<K, V> ss = stack.getSpan(stack.levels.length - 1, key, search);
+        if(search[0] < 0) { search[0] = -1 * (search[0] + 1); }
+        return new IBSkipIterator<>(ss, search[0]);
+    }
 
-	/**
-	 *  Find the entry with the given key.
-	 *
-	 *  @param key the key
-	 *  @return a SkipIterator pointing to the entry, or end if not found
-	 */
-	@Override
-	public SkipIterator<K, V> find(K key) {
-		if (!this.fileOnly)
-			return super.find(key);
-		int[] search = new int[1];
-		SkipSpan<K, V> ss = stack.getSpan(stack.levels.length - 1, key, search);
-		if(search[0] < 0) { search[0] = -1 * (search[0] + 1); }
-		return new IBSkipIterator<>(ss, search[0]);
-	}
+    /**
+     *  Run an integrity check on the skiplist and all the levels in it.
+     *
+     *  @param fix if true, attempt to fix any corruption found
+     *  @param isMeta if true, this is a metaindex skiplist
+     *  @return true if the levels were modified.
+     */
+    public boolean bslck(boolean fix, boolean isMeta) {
+        bf.log.info("    size " + this.size);
+        bf.log.info("    spans " + this.spanHash.size());
+        bf.log.info("    levels " + this.levelHash.size());
+        bf.log.info("    skipPage " + this.skipPage);
+        bf.log.info("    firstSpanPage " + this.firstSpanPage);
+        bf.log.info("    firstLevelPage " + this.firstLevelPage);
+        bf.log.info("    maxLevels " + this.maxLevels());
 
-	/**
-	 *  Run an integrity check on the skiplist and all the levels in it.
-	 *
-	 *  @param fix if true, attempt to fix any corruption found
-	 *  @param isMeta if true, this is a metaindex skiplist
-	 *  @return true if the levels were modified.
-	 */
-	public boolean bslck(boolean fix, boolean isMeta) {
-		bf.log.info("    size " + this.size);
-		bf.log.info("    spans " + this.spanHash.size());
-		bf.log.info("    levels " + this.levelHash.size());
-		bf.log.info("    skipPage " + this.skipPage);
-		bf.log.info("    firstSpanPage " + this.firstSpanPage);
-		bf.log.info("    firstLevelPage " + this.firstLevelPage);
-		bf.log.info("    maxLevels " + this.maxLevels());
+        boolean rv = stack.blvlck(fix);
+        return rv;
+    }
 
-		boolean rv = stack.blvlck(fix);
-		return rv;
-	}
-
-	/**
-	 *  Get a string representation of this skiplist.
-	 *
-	 *  @return a string representation
-	 */
-	@Override
-	public String toString() {
-		String rv = getClass().getSimpleName() + " page " + skipPage;
-		if (isClosed)
-			rv += " CLOSED";
-		return rv;
-	}
+    /**
+     *  Get a string representation of this skiplist.
+     *
+     *  @return a string representation
+     */
+    @Override
+    public String toString() {
+        String rv = getClass().getSimpleName() + " page " + skipPage;
+        if (isClosed)
+            rv += " CLOSED";
+        return rv;
+    }
 }

@@ -17,12 +17,10 @@ import org.cybergarage.upnp.Device;
  */
 public class HTTPServerList extends Vector<HTTPServer> {
     ////////////////////////////////////////////////
-    //	Constructor
+    //  Constructor
     ////////////////////////////////////////////////
 
-    /** ignored */
     private InetAddress[] binds = null;
-    /** ignored */
     private int port = Device.HTTP_DEFAULT_PORT;
 
     /** Creates a new empty HTTPServerList. */
@@ -40,7 +38,7 @@ public class HTTPServerList extends Vector<HTTPServer> {
     }
 
     ////////////////////////////////////////////////
-    //	Methods
+    //  Methods
     ////////////////////////////////////////////////
 
     /**
@@ -67,7 +65,7 @@ public class HTTPServerList extends Vector<HTTPServer> {
     }
 
     ////////////////////////////////////////////////
-    //	open/close
+    //  open/close
     ////////////////////////////////////////////////
 
     /** Closes all HTTP servers in this list. */
@@ -124,7 +122,7 @@ public class HTTPServerList extends Vector<HTTPServer> {
     }
 
     ////////////////////////////////////////////////
-    //	start/stop
+    //  start/stop
     ////////////////////////////////////////////////
 
     /** Starts all HTTP servers in this list. */

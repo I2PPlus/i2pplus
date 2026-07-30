@@ -48,7 +48,6 @@ public class Edns {
         NSID(3, Nsid.class),
        ;
 
-        /** ignored */
         private static Map<Integer, OptionCode> INVERSE_LUT = new HashMap<>(OptionCode.values().length);
 
         static {
@@ -117,7 +116,6 @@ public class Edns {
      */
     public final boolean dnssecOk;
 
-    /** ignored */
     private Record<OPT> optRecord;
 
     /**
@@ -189,7 +187,6 @@ public class Edns {
         return optRecord;
     }
 
-    /** ignored */
     private String terminalOutputCache;
 
     /**

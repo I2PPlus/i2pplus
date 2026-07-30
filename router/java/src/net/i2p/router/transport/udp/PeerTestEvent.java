@@ -17,7 +17,7 @@ import net.i2p.util.SimpleTimer2;
     class PeerTestEvent extends SimpleTimer2.TimedEvent {
     /** Router context. */
     private final RouterContext _context;
-    /** Logger. */
+    /** Class logger. */
     private final Log _log;
     /** UDP transport. */
     private final UDPTransport _transport;

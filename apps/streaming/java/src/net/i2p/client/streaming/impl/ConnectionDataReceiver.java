@@ -24,7 +24,7 @@ import net.i2p.util.Log;
 class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
     /** Application context. */
     private final I2PAppContext _context;
-    /** Logger. */
+    /** Class logger. */
     private final Log _log;
     /** Streaming connection. */
     private final Connection _connection;

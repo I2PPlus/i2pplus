@@ -24,7 +24,7 @@ import net.i2p.util.Log;
 class ConnectionPacketHandler {
     /** Application context. */
     private final I2PAppContext _context;
-    /** Logger. */
+    /** Class logger. */
     private final Log _log;
     /** Byte cache for packet buffers. */
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);

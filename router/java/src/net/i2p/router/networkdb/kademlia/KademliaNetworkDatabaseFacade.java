@@ -77,7 +77,7 @@ import net.i2p.util.SimpleTimer2;
 public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacade {
     /** Pattern.compile. */
     private static final Pattern COMMA_SPLIT = Pattern.compile("\\s*,\\s*");
-    /** Logger. */
+    /** Class logger. */
     protected final Log _log;
     /** Ban logger */
     private BanLogger _banLogger;
@@ -2863,7 +2863,7 @@ return false;
         return "ClientNetDb [" + _dbid.toBase32().substring(0,8) + "]";
     }
 
-    /** Gets the set of blocked countries. */
+    /** set of blocked countries. */
     private synchronized Set<String> getBlockedCountries() {
         Set<String> cached = _blockedCountries;
         if (cached != null) return cached;

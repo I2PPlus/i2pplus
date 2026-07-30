@@ -28,7 +28,7 @@ class Connection {
 
     /** Application context. */
     private final I2PAppContext _context;
-    /** Logger. */
+    /** Class logger. */
     private final Log _log;
     /** Connection manager. */
     private final ConnectionManager _connectionManager;

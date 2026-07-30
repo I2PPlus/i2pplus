@@ -10,7 +10,6 @@ import org.bouncycastle.crypto.digests.SHAKEDigest;
 abstract class Symmetric
 {
 
-    /** ignored */
     final int xofBlockBytes;
 
     /** Hash h operation. */
@@ -37,7 +36,6 @@ abstract class Symmetric
         this.xofBlockBytes = blockBytes;
     }
 
-
     /**
      * SHAKE-based symmetric implementation for ML-KEM operations.
      * Uses SHAKE extendable output functions for cryptographic hashing.
@@ -45,13 +43,9 @@ abstract class Symmetric
     static class ShakeSymmetric
         extends Symmetric
         {
-        /** ignored */
         private final SHAKEDigest xof;
-        /** ignored */
         private final SHA3Digest sha3Digest512;
-        /** ignored */
         private final SHA3Digest sha3Digest256;
-        /** ignored */
         private final SHAKEDigest shakeDigest;
 
         /** Create shake symmetric. */

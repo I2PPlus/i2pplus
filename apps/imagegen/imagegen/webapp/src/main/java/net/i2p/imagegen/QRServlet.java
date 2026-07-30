@@ -1,24 +1,6 @@
 package net.i2p.imagegen;
 
-/* contains code adapted from jrobin: */
-/*
- * Copyright (c) 2001-2005 Sasa Markovic and Ciaran Treanor.
- * Copyright (c) 2011 The OpenNMS Group, Inc.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+// License: LGPLv2.1+. See docs/LICENSES.md
 
 import com.docuverse.identicon.IdenticonCache;
 import com.docuverse.identicon.IdenticonUtil;
@@ -53,36 +35,21 @@ import java.nio.charset.StandardCharsets;
  */
 public class QRServlet extends HttpServlet {
 
-    /** ignored */
     private static final long serialVersionUID = -3507466186902317988L;
-    /** ignored */
     private static final String INIT_PARAM_VERSION = "version";
-    /** ignored */
     private static final String INIT_PARAM_CACHE_PROVIDER = "cacheProvider";
-    /** ignored */
     private static final String PARAM_IDENTICON_SIZE_SHORT = "s";
-    /** ignored */
     private static final String PARAM_IDENTICON_CODE_SHORT = "c";
-    /** ignored */
     private static final String PARAM_IDENTICON_TEXT_SHORT = "t";
-    /** ignored */
     private static final String PARAM_FORMAT = "fmt";
-    /** ignored */
     private static final String IDENTICON_IMAGE_FORMAT = "PNG";
-    /** ignored */
     private static final String IDENTICON_IMAGE_MIMETYPE = "image/png";
-    /** ignored */
     private static final String IDENTICON_SVG_MIMETYPE = "image/svg+xml";
-    /** ignored */
     private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * (long) 60 * 1000;
-    /** ignored */
     private static final String DEFAULT_FONT_NAME = SystemVersion.isWindows() ?
                                                     "Lucida Sans Typewriter" : Font.MONOSPACED;
-    /** ignored */
     private int version = 1;
-    /** ignored */
     private IdenticonCache cache;
-    /** ignored */
     private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
 
     /** Check if client accepts SVG */
@@ -181,7 +148,7 @@ public class QRServlet extends HttpServlet {
     }
 
     /**
-     * init.
+     * Load configuration from servlet initialization parameters.
      */
     @Override
     public void init(ServletConfig cfg) throws ServletException {

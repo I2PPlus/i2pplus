@@ -94,7 +94,6 @@ public class I2PDefaultServlet extends DefaultServlet {
     }
 
     /* copied from DefaultServlet unchanged */
-    /** ignored */
     private boolean getInitBoolean(String name, boolean dft) {
         String value = getInitParameter(name);
         if (value == null || value.isEmpty()) {return dft;}
@@ -248,18 +247,16 @@ public class I2PDefaultServlet extends DefaultServlet {
     }
 
     /**
-     *  I2P
+     *  Compares files in directory listing, directories before files.
      *
      *  @since 0.9.51
      */
     private static class FileComparator implements Comparator<String> {
-        /** ignored */
         private final Comparator<Object> _coll;
-        /** ignored */
         private final Resource _base;
 
         /**
-         * FileComparator.
+         * @param base the resource base for resolving file entries
          */
         public FileComparator(Resource base) {
             _base = base;
@@ -267,7 +264,7 @@ public class I2PDefaultServlet extends DefaultServlet {
         }
 
         /**
-         * compare.
+         * Compare two file or directory names, directories first.
          */
         public int compare(String a, String b) {
             try {
@@ -341,7 +338,7 @@ public class I2PDefaultServlet extends DefaultServlet {
     private static String deTag(String raw) {return StringUtil.sanitizeXmlString(raw);}
 
     /**
-     * doGet.
+     * Handle GET request, set Last-Modified header, delegate to super.
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

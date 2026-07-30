@@ -11,9 +11,7 @@ import java.io.File;
  */
 class Recorder {
 
-    /** ignored */
     private final File file;
-    /** ignored */
     private final Threshold threshold;
 
     /**

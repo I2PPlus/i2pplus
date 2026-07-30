@@ -285,7 +285,7 @@ public enum EncType {
         }
     }
 
-    /** Gets the encryption type by code.
+    /** encryption type by code.
      *
      *  @return null if not supported
      */

@@ -13,12 +13,9 @@ import org.bouncycastle.util.Util;
 public class SecretWithEncapsulationImpl
     implements SecretWithEncapsulation
 {
-    /** ignored */
     private final AtomicBoolean hasBeenDestroyed = new AtomicBoolean(false);
 
-    /** ignored */
     private final byte[] sessionKey;
-    /** ignored */
     private final byte[] cipher_text;
 
     /**
@@ -75,7 +72,6 @@ public class SecretWithEncapsulationImpl
         return hasBeenDestroyed.get();
     }
 
-    /** ignored */
     void checkDestroyed()
     {
         if (isDestroyed())

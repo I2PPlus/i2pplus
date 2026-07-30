@@ -1,25 +1,3 @@
-/*
- * Copyright (C) 2016 Southern Storm Software, Pty Ltd.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
- * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
- */
-
 package com.southernstorm.noise.protocol;
 
 import java.security.NoSuchAlgorithmException;
@@ -153,28 +131,28 @@ public class HandshakeState implements Destroyable, Cloneable {
      * protocolName7.
      */
     public static final String protocolName7 = "Noise_IKhfselg2_25519+MLKEM1024_ChaChaPoly_SHA256";
-	/**
-	 * Hybrid NTCP2
-	 * @since 0.9.69
-	 */
-	public static final String protocolName8 = "Noise_XKhfsaesobfse+hs2+hs3_25519+MLKEM512_ChaChaPoly_SHA256";
-	/**
-	 * protocolName9.
-	 */
-	public static final String protocolName9 = "Noise_XKhfsaesobfse+hs2+hs3_25519+MLKEM768_ChaChaPoly_SHA256";
-	/**
-	 * protocolName10.
-	 */
-	public static final String protocolName10 = "Noise_XKhfsaesobfse+hs2+hs3_25519+MLKEM1024_ChaChaPoly_SHA256";
-	/**
-	 * Hybrid SSU2
-	 * @since 0.9.69
-	 */
-	public static final String protocolName11 = "Noise_XKhfschaobfse+hs1+hs2+hs3_25519+MLKEM512_ChaChaPoly_SHA256";
-	/**
-	 * protocolName12.
-	 */
-	public static final String protocolName12 = "Noise_XKhfschaobfse+hs1+hs2+hs3_25519+MLKEM768_ChaChaPoly_SHA256";
+    /**
+     * Hybrid NTCP2
+     * @since 0.9.69
+     */
+    public static final String protocolName8 = "Noise_XKhfsaesobfse+hs2+hs3_25519+MLKEM512_ChaChaPoly_SHA256";
+    /**
+     * protocolName9.
+     */
+    public static final String protocolName9 = "Noise_XKhfsaesobfse+hs2+hs3_25519+MLKEM768_ChaChaPoly_SHA256";
+    /**
+     * protocolName10.
+     */
+    public static final String protocolName10 = "Noise_XKhfsaesobfse+hs2+hs3_25519+MLKEM1024_ChaChaPoly_SHA256";
+    /**
+     * Hybrid SSU2
+     * @since 0.9.69
+     */
+    public static final String protocolName11 = "Noise_XKhfschaobfse+hs1+hs2+hs3_25519+MLKEM512_ChaChaPoly_SHA256";
+    /**
+     * protocolName12.
+     */
+    public static final String protocolName12 = "Noise_XKhfschaobfse+hs1+hs2+hs3_25519+MLKEM768_ChaChaPoly_SHA256";
     private final NoiseInit.PatternID patternId;
     /** NTCP2 */
     public static final String PATTERN_ID_XK = "XK";
@@ -188,7 +166,7 @@ public class HandshakeState implements Destroyable, Cloneable {
     public static final String PATTERN_ID_XK_SSU2 = "XK-SSU2";
     /** Hybrid Base */
     private static final String PATTERN_ID_IKHFS = "IKhfs";
-	private static final String PATTERN_ID_XKHFS = "XKhfs";
+    private static final String PATTERN_ID_XKHFS = "XKhfs";
     /**
      * Hybrid Ratchet
      * @since 0.9.67
@@ -202,29 +180,29 @@ public class HandshakeState implements Destroyable, Cloneable {
      * PATTERN_ID_IKHFS_1024.
      */
     public static final String PATTERN_ID_IKHFS_1024 = "IKhfs1024";
-	/**
-	 * Hybrid NTCP2
-	 * @since 0.9.69
-	 */
-	public static final String PATTERN_ID_XKHFS_512 = "XKhfs512";
-	/**
-	 * PATTERN_ID_XKHFS_768.
-	 */
-	public static final String PATTERN_ID_XKHFS_768 = "XKhfs768";
-	/**
-	 * PATTERN_ID_XKHFS_1024.
-	 */
-	public static final String PATTERN_ID_XKHFS_1024 = "XKhfs1024";
-	/**
-	 * Hybrid SSU2
-	 * @since 0.9.69
-	 */
+    /**
+     * Hybrid NTCP2
+     * @since 0.9.69
+     */
+    public static final String PATTERN_ID_XKHFS_512 = "XKhfs512";
+    /**
+     * PATTERN_ID_XKHFS_768.
+     */
+    public static final String PATTERN_ID_XKHFS_768 = "XKhfs768";
+    /**
+     * PATTERN_ID_XKHFS_1024.
+     */
+    public static final String PATTERN_ID_XKHFS_1024 = "XKhfs1024";
+    /**
+     * Hybrid SSU2
+     * @since 0.9.69
+     */
 public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
-	/**
-	 * PATTERN_ID_XKHFS_768_SSU2.
-	 */
-	public static final String PATTERN_ID_XKHFS_768_SSU2 = "XKhfs768-SSU2";
-	// no 1024, too big
+    /**
+     * PATTERN_ID_XKHFS_768_SSU2.
+     */
+    public static final String PATTERN_ID_XKHFS_768_SSU2 = "XKhfs768-SSU2";
+    // no 1024, too big
 
     private final short[] pattern;
 
@@ -794,7 +772,6 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
                     }
                     break;
 
-
                     case Pattern.FF:
                     {
                         // DH operation with initiator and responder hybrid keys.
@@ -1184,7 +1161,6 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
                     throw new IllegalStateException("destroyed");
         return new HandshakeState(this);
     }
-
 
     /**
      *  I2P debug

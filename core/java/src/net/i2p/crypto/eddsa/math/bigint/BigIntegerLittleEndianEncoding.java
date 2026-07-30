@@ -1,11 +1,3 @@
-/**
- * EdDSA-Java by str4d
- *
- * To the extent possible under law, the person who associated
- * <a href=https://creativecommons.org/publicdomain/zero/1.0/>CC0</a> with
- * EdDSA-Java has waived all copyright and related or neighboring rights
- * to EdDSA-Java.
- */
 package net.i2p.crypto.eddsa.math.bigint;
 
 import net.i2p.crypto.eddsa.math.Encoding;

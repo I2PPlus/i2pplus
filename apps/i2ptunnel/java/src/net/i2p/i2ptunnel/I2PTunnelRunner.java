@@ -69,33 +69,26 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     static final int MAX_PACKET_SIZE = 4 * 1024;
     /** network buffer size for buffered streams */
     static final int NETWORK_BUFFER_SIZE = MAX_PACKET_SIZE * 8;
-    /** ignored */
+    /** Plain TCP socket (local or remote endpoint). */
     private final Socket s;
-    /** ignored */
+    /** I2P socket (the tunnel connection). */
     private final I2PSocket i2ps;
-    /** ignored */
+    /** Synchronization lock for socket access. */
     private final Object slock;
-    /** ignored */
     private final Object finishLock = new Object();
-    /** ignored */
     private volatile boolean finished;
-    /** ignored */
+    /** Data to send over I2P before normal forwarding starts. */
     private final byte[] initialI2PData;
-    /** ignored */
+    /** Data to send over TCP before normal forwarding starts. */
     private final byte[] initialSocketData;
     /** when runner started up */
     private final long startedOn;
-    /** ignored */
     private final List<I2PSocket> sockList;
     /** if we die before receiving any data, run this job */
     private final Runnable onTimeout;
-    /** ignored */
     private final FailCallback _onFail;
-    /** ignored */
     private SuccessCallback _onSuccess;
-    /** ignored */
     private volatile long totalSent;
-    /** ignored */
     private volatile long totalReceived;
     /** Keep I2P socket alive after data transfer */
     protected volatile boolean _keepAliveI2P;
@@ -103,9 +96,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     protected volatile boolean _keepAliveSocket;
     /** Executor for submitting tasks; null = fallback to new Thread */
     private volatile Executor _runnerExecutor;
-    /** ignored */
     private volatile StreamForwarder toI2P;
-    /** ignored */
     private volatile StreamForwarder fromI2P;
 
     /**
@@ -527,7 +518,6 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 }
             }
 
-
         } catch (SSLException she) {
             _log.error("SSL error", she);
             _keepAliveI2P = false;
@@ -626,19 +616,12 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      */
     private class StreamForwarder implements Runnable {
 
-        /** ignored */
         private final InputStream in;
-        /** ignored */
         private final OutputStream out;
-        /** ignored */
         private final String direction;
-        /** ignored */
         private final boolean _toI2P;
-        /** ignored */
         private final ByteCache _cache;
-        /** ignored */
         private final SuccessCallback _callback;
-        /** ignored */
         private volatile Exception _failure;
         /** flag to signal this forwarder should stop */
         public volatile boolean done;

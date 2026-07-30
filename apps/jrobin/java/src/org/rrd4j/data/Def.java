@@ -55,7 +55,7 @@ class Def extends Source {
         return consolFun;
     }
 
-    /** Backend. */
+    /** Data backend. */
     RrdBackendFactory getBackend() {
         return backend;
     }
