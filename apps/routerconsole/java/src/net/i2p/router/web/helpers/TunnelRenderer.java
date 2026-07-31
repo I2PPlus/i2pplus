@@ -792,6 +792,7 @@ class TunnelRenderer {
                     .replace("unknown", _t("unknown"))
                     .replaceAll(TUNNEL_PAREN.pattern(), "")
                     .replaceAll("(?i)AT\\s*&\\s*T\\s+.*", "AT&T")
+                    .replaceAll("(?i)&\\s*T\\b.*", "AT&T")
                     .trim();
                 result.whois = whois;
                 result.domain = null;

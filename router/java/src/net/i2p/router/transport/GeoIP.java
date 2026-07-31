@@ -662,6 +662,10 @@ public class GeoIP {
         ASN_DB_OVERRIDES.put("AT&T Enterprises, LLC", "AT&T");
         ASN_DB_OVERRIDES.put("AT&T Enterprises", "AT&T");
         ASN_DB_OVERRIDES.put("AT&T Services, Inc.", "AT&T");
+        ASN_DB_OVERRIDES.put("&T Enterprises", "AT&T");
+        ASN_DB_OVERRIDES.put("&t Enterprises", "AT&T");
+        ASN_DB_OVERRIDES.put("&T", "AT&T");
+        ASN_DB_OVERRIDES.put("&t", "AT&T");
     }
 
     /**
