@@ -160,6 +160,7 @@
         <fileset dir="../res/"/>
       </copy>
       <copy file="../../routerconsole/jsp/js/onVisible.js" todir="${build.dir}/res/.res/js"/>
+      <copy file="../../routerconsole/jsp/js/morphdom.js" todir="${build.dir}/res/.res/js"/>
       <!-- mime.properties must be in with the classes -->
       <copy file="../mime.properties" todir="${build.dir}/obj/org/klomp/snark/web"/>
     </parallel>
@@ -223,7 +224,7 @@
 
   <target name="warUpToDate">
     <uptodate property="war.uptodate" targetfile="${build.dir}/i2psnark.war">
-      <srcfiles dir="." includes="build/obj/org/klomp/snark/web/*.class ../res/**/* ../web.xml"/>
+      <srcfiles dir="." includes="build/obj/org/klomp/snark/web/*.class ../res/**/* ../web.xml ../../routerconsole/jsp/js/onVisible.js ../../routerconsole/jsp/js/morphdom.js"/>
     </uptodate>
   </target>
 
@@ -425,6 +426,7 @@
       <mkdir dir="${build.dir}/standalone-resources/.res/js"/>
       <copy file="../../routerconsole/jsp/js/onVisible.js" todir="${build.dir}/standalone-resources/.res/js"/>
       <copy file="../../routerconsole/jsp/js/detectPageZoom.js" todir="${build.dir}/standalone-resources/.res/js"/>
+      <copy file="../../routerconsole/jsp/js/morphdom.js" todir="${build.dir}/standalone-resources/.res/js"/>
       <copy file="../../i2psnark/res/js/refreshTorrents.js" todir="${build.dir}/standalone-resources/.res/js"/>
     </parallel>
     <parallel>
