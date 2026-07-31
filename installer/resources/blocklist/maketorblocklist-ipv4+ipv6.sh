@@ -10,8 +10,37 @@
 input_file="/tmp/torbulkexitlist"
 second_list_input_file="/tmp/torlist_exit"
 output_file="blocklist_tor.txt"
-http_proxy=${http_proxy:-"http://127.0.0.1:4001"}
-backup_http_proxy=${http_backup_proxy:-"http://127.0.0.1:4001"}
+
+# Parse optional --host and --port arguments that override the default proxy
+host="127.0.0.1"
+port="4001"
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --host)
+      if [ $# -lt 2 ]; then
+        echo " > --host requires an argument"
+        exit 1
+      fi
+      host="$2"
+      shift 2
+      ;;
+    --port)
+      if [ $# -lt 2 ]; then
+        echo " > --port requires an argument"
+        exit 1
+      fi
+      port="$2"
+      shift 2
+      ;;
+    *)
+      echo " > Unknown argument: $1"
+      exit 1
+      ;;
+  esac
+done
+
+http_proxy=${http_proxy:-"http://${host}:${port}"}
+backup_http_proxy=${http_backup_proxy:-"http://${host}:${port}"}
 UA="Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0"
 
 # Check the availability of the primary proxy
