@@ -4,7 +4,7 @@
  * @description Fetches a bandwidth graph image from the I2P stats servlet at a configurable
  * interval, converts it to a blob URL, and applies it as a CSS custom property so the UI
  * can display a live download graph. Also applies the graph as a background in the message
- * log when available. Caches responses and auto-disables on HTTP 400 errors.
+ * log when available. Auto-disables on HTTP 400 errors.
  * @author dr|3d
  * @license AGPL3 or later
  */
@@ -22,10 +22,10 @@ let lastSnarkGraphRefresh = 0;
 let graphEnabled = true;
 
 /**
- * @type {Map<string, string>}
- * @description Cache mapping graph URLs to their blob/URL representations.
+ * @type {?string}
+ * @description The blob URL of the last applied graph image, revoked when replaced.
  */
-let refreshCache = new Map();
+let currentGraphUrl = null;
 
 /**
  * @type {number}
@@ -42,8 +42,8 @@ const noload = document.getElementById("noload");
 /**
  * @function refreshGraph
  * @description Fetches the I2PSnark bandwidth graph image if the refresh interval has elapsed
- * and graph fetching is enabled. Caches the result as a blob URL and applies it to the
- * CSS custom property --snarkGraph. Disables graph fetching on HTTP 400 errors.
+ * and graph fetching is enabled. Applies the result as a blob URL to the CSS custom property
+ * --snarkGraph, revoking the previous blob. Disables graph fetching on HTTP 400 errors.
  * @returns {void}
  * @example
  * // Manually trigger a graph refresh
@@ -61,10 +61,6 @@ function refreshGraph() {
   const applyGraph = (cssValue) => {
     if (graphcss) {graphcss.innerText = ":root{--snarkGraph:" + cssValue + "}";}
   };
-  if (refreshCache.has(graphUrl)) {
-    applyGraph("url('" + refreshCache.get(graphUrl) + "')");
-    return;
-  }
   fetch(graphUrl).then(response => {
     if (response.ok) {return response.blob();}
     if (response.status === 400) {
@@ -74,9 +70,9 @@ function refreshGraph() {
     throw new Error("Network response was not ok");
   }).then(blob => {
     const graphDataUrl = URL.createObjectURL(blob);
+    if (currentGraphUrl) {URL.revokeObjectURL(currentGraphUrl);}
+    currentGraphUrl = graphDataUrl;
     applyGraph("url('" + graphDataUrl + "')");
-    refreshCache.set(graphUrl, graphDataUrl);
-    setTimeout(() => refreshCache.delete(graphUrl), 5*60*1000);
     refreshCount++;
   }).catch(error => {
     if (error.message === "400 Bad Request" || !graphEnabled) {

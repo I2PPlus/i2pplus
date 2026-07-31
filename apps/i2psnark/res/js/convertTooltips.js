@@ -50,13 +50,25 @@
 
   convertTooltip(".tx[title], .barComplete[title]");
 
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.addedNodes.length) {
-        convertTooltip(".tx[title], .barComplete[title]");
-      }
+  let convertPending = false;
+
+  /**
+   * @function queueConvert
+   * @description Schedules a single tooltip conversion per animation frame, coalescing
+   * the observer's per-record callbacks so a morphdom row update triggers one table
+   * scan instead of one per mutation.
+   * @returns {void}
+   */
+  function queueConvert() {
+    if (convertPending) {return;}
+    convertPending = true;
+    requestAnimationFrame(() => {
+      convertPending = false;
+      convertTooltip(".tx[title], .barComplete[title]");
     });
-  });
+  }
+
+  const observer = new MutationObserver(() => {queueConvert();});
 
   const targetNode = document.querySelector('#torrents tbody');
   if (targetNode) {

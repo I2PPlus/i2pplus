@@ -13,6 +13,9 @@
  * @property {string} FETCH_HTML_DOCUMENT - Main thread requests an HTML document fetch.
  * @property {string} FETCH_HTML_DOCUMENT_RESPONSE - Worker returns the fetched HTML text.
  * @property {string} FETCH_HTML_DOCUMENT_ERROR - Worker reports a fetch failure.
+ * @property {string} FETCH_TUNNEL_COUNTS - Main thread requests snark tunnel count extraction.
+ * @property {string} FETCH_TUNNEL_COUNTS_RESPONSE - Worker returns the extracted tunnel counts.
+ * @property {string} FETCH_TUNNEL_COUNTS_ERROR - Worker reports a tunnel count fetch failure.
  * @property {string} ABORT - Main thread requests cancellation of an in-flight fetch.
  * @example
  * // Send a fetch request to the worker
@@ -23,6 +26,9 @@ const MESSAGE_TYPES = {
   FETCH_HTML_DOCUMENT: "FETCH_HTML_DOCUMENT",
   FETCH_HTML_DOCUMENT_RESPONSE: "FETCH_HTML_DOCUMENT_RESPONSE",
   FETCH_HTML_DOCUMENT_ERROR: "FETCH_HTML_DOCUMENT_ERROR",
+  FETCH_TUNNEL_COUNTS: "FETCH_TUNNEL_COUNTS",
+  FETCH_TUNNEL_COUNTS_RESPONSE: "FETCH_TUNNEL_COUNTS_RESPONSE",
+  FETCH_TUNNEL_COUNTS_ERROR: "FETCH_TUNNEL_COUNTS_ERROR",
   ABORT: "ABORT"
 };
 

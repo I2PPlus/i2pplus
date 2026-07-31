@@ -29,6 +29,12 @@ let filterbar;
 let observer;
 
 /**
+ * @type {boolean}
+ * @description Guards against scheduling multiple badge count updates per animation frame.
+ */
+let countPending = false;
+
+/**
  * @type {number}
  * @description Count of snark torrents matching the current filter.
  */
@@ -39,6 +45,39 @@ let snarkCount;
  * @description The id of the currently active filter, used to detect filter changes.
  */
 let activeFilterId = null;
+
+/**
+ * @function scheduleBadgeUpdate
+ * @description Coalesces torrent-count badge updates triggered by DOM mutations into a
+ * single requestAnimationFrame callback. Re-queries the active filter's badge by id so
+ * the observer stays valid across filter-bar re-renders.
+ * @returns {void}
+ */
+function scheduleBadgeUpdate() {
+  if (countPending) {return;}
+  countPending = true;
+  requestAnimationFrame(() => {
+    countPending = false;
+    const filterElement = document.getElementById(activeFilterId);
+    const badge = filterElement ? filterElement.querySelector(".badge") : null;
+    if (!filterElement || !badge) {return;}
+    if (activeFilterId !== "all") {badge.textContent = countSnarks();}
+    badge.hidden = false;
+  });
+}
+
+/**
+ * @function ensureObserver
+ * @description Creates the badge-count MutationObserver once and attaches it to the
+ * torrents container. Reused across showBadge calls because its callback reads module
+ * state instead of capturing filter elements.
+ * @returns {void}
+ */
+function ensureObserver() {
+  if (observer || !torrents) {return;}
+  observer = new MutationObserver(scheduleBadgeUpdate);
+  observer.observe(torrents, { childList: true, subtree: true });
+}
 
 /**
  * @async
@@ -86,15 +125,7 @@ async function showBadge() {
         else if (filter && filter.id !== "all") { badge.hidden = true; badge.textContent = ""; badge.id = ""; }
       });
     } else {
-      if (observer) {observer.disconnect();}
-      observer = new MutationObserver(() => {
-        if (activeFilter.id !== "all") {
-          snarkCount = countSnarks();
-          activeBadge.textContent = snarkCount;
-        }
-        activeBadge.hidden = false;
-      });
-      observer.observe(torrents, { childList: true, subtree: true });
+      ensureObserver();
     }
 
     if (filter !== activeFilter && filterChanged) {

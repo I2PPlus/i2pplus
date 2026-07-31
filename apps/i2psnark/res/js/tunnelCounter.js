@@ -3,12 +3,15 @@
  * @file tunnelCounter.js - Counts active in/out I2PSnark tunnels and displays them in the UI.
  * @description Periodically fetches tunnel data from the I2P tunnel configuration page, counts
  * active inbound and outbound snark tunnels, and injects the counts into the UI via CSS
- * pseudo-element content. Requires I2P+ and does not work with standalone I2PSnark.
+ * pseudo-element content. Fetches and extracts through the snarkWork worker, falling back
+ * to a direct fetch when the worker is unavailable. Requires I2P+ and does not work with
+ * standalone I2PSnark.
  * @author dr|z3d
  * @license AGPL3 or later
  */
 
-import {isDocumentVisible} from "./refreshTorrents.js";
+import {fetchTunnelCounts, isDocumentVisible} from "./refreshTorrents.js";
+import {extractTunnelCounts} from "./refreshPayload.js";
 
 /**
  * @type {Object}
@@ -33,23 +36,27 @@ let outLabel = "";
 /**
  * @async
  * @function fetchTunnelData
- * @description Fetches the I2P tunnel configuration page, parses the HTML response,
- * and extracts the snark inbound and outbound tunnel counts from the #snarkIn and
- * #snarkOut elements.
+ * @description Fetches the I2P tunnel configuration page and extracts the snark inbound
+ * and outbound tunnel counts from the #snarkIn and #snarkOut elements. Prefers the
+ * snark worker so the download and extraction happen off the main thread, falling back
+ * to a direct fetch with a timeout when the worker is unavailable.
  * @param {string} [url="/configtunnels"] - The URL of the tunnel configuration page.
- * @param {number} [timeout=10000] - Request timeout in milliseconds.
+ * @param {number} [timeout=10000] - Request timeout in milliseconds for the direct fallback.
  * @returns {Promise<?Object>} An object with inCount and outCount properties, or null on failure.
  */
 async function fetchTunnelData(url = "/configtunnels", timeout = 10000) {
   if (!isDocumentVisible) {return;}
+  try {
+    const counts = await fetchTunnelCounts();
+    if (counts) {return counts;}
+    return null;
+  } catch (error) {}
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
   try {
     const response = await fetch(url, { signal: controller.signal });
     if (!response.ok) { throw new Error(response.statusText); }
-    const doc = new DOMParser().parseFromString(await response.text(), "text/html");
-    const data = { inCount: doc.querySelector("#snarkIn")?.textContent.trim(), outCount: doc.querySelector("#snarkOut")?.textContent.trim() };
-    if (data.inCount && data.outCount) { return data; }
+    return extractTunnelCounts(await response.text());
   } catch (error) {}
   finally { clearTimeout(id); }
   return null;

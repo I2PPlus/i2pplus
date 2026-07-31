@@ -146,6 +146,12 @@ let snarkRefreshIntervalId;
 
 /**
  * @type {?number}
+ * @description Interval ID for the server connectivity check timer.
+ */
+let serverOKIntervalId;
+
+/**
+ * @type {?number}
  * @description Interval ID for the screen log refresh timer.
  */
 let screenLogIntervalId;
@@ -317,8 +323,8 @@ function initWorker() {
             const pending = workerRequests.get(requestId);
             if (!pending) {return;}
             workerRequests.delete(requestId);
-            if (type === MESSAGE_TYPES.FETCH_HTML_DOCUMENT_RESPONSE) {pending.resolve(payload);}
-            else if (type === MESSAGE_TYPES.FETCH_HTML_DOCUMENT_ERROR) {pending.reject(new Error(message || "Worker fetch failed"));}
+            if (type === MESSAGE_TYPES.FETCH_HTML_DOCUMENT_RESPONSE || type === MESSAGE_TYPES.FETCH_TUNNEL_COUNTS_RESPONSE) {pending.resolve(payload);}
+            else if (type === MESSAGE_TYPES.FETCH_HTML_DOCUMENT_ERROR || type === MESSAGE_TYPES.FETCH_TUNNEL_COUNTS_ERROR) {pending.reject(new Error(message || "Worker fetch failed"));}
         });
         worker.addEventListener("error", () => {workerFailed();});
     } catch {workerFailed();}
@@ -341,13 +347,15 @@ function workerFailed() {
  * @function fetchViaWorker
  * @description Fetches the URL through the worker, correlating the response by
  * requestId. Rejects immediately when the worker is unavailable; HTTP-level failures
- * arrive as FETCH_HTML_DOCUMENT_ERROR messages. Times out after workerTimeout so a
- * wedged worker cannot stall refreshes indefinitely.
+ * arrive as <type>_ERROR messages. Times out after the given duration so a wedged
+ * worker cannot stall refreshes indefinitely.
  * @param {string} url - The URL to fetch.
  * @param {AbortSignal} signal - Cancels the in-flight worker request when aborted.
- * @returns {Promise<Object>} The refresh payload extracted from the fetched document.
+ * @param {string} [type=MESSAGE_TYPES.FETCH_HTML_DOCUMENT] - The worker message type to post.
+ * @param {number} [timeout=workerTimeout] - How long to wait for a worker response before timing out.
+ * @returns {Promise<Object>} The payload returned by the worker for the request type.
  */
-function fetchViaWorker(url, signal) {
+function fetchViaWorker(url, signal, type = MESSAGE_TYPES.FETCH_HTML_DOCUMENT, timeout = workerTimeout) {
     if (!worker || !workerReady) {return Promise.reject(new Error("Worker unavailable"));}
     const requestId = ++workerRequestId;
     return new Promise((resolve, reject) => {
@@ -361,10 +369,22 @@ function fetchViaWorker(url, signal) {
             workerRequests.delete(requestId);
             worker.postMessage({type: MESSAGE_TYPES.ABORT, requestId});
             reject(new Error("Worker timeout"));
-        }, workerTimeout);
+        }, timeout);
         signal.addEventListener("abort", onAbort, {once: true});
-        worker.postMessage({type: MESSAGE_TYPES.FETCH_HTML_DOCUMENT, requestId, url});
+        worker.postMessage({type, requestId, url});
     });
+}
+
+/**
+ * @function fetchTunnelCounts
+ * @description Fetches the snark tunnel counts through the worker, which downloads and
+ * parses the tunnel configuration page off the main thread. Rejects when the worker is
+ * unavailable so callers can fall back to a direct fetch.
+ * @returns {Promise<?Object>} An object with inCount and outCount properties, or null
+ * when the page contains neither count.
+ */
+function fetchTunnelCounts() {
+    return fetchViaWorker("/configtunnels", new AbortController().signal, MESSAGE_TYPES.FETCH_TUNNEL_COUNTS, 10000);
 }
 
 /**
@@ -491,7 +511,6 @@ async function refreshTorrents(payload) {
     if (!payload || typeof payload !== "object" || !("snarkTbody" in payload)) {
       payload = await fetchRefreshPayload(await getURL());
     }
-    const complete = document.getElementsByClassName("completed");
     const control = document.getElementById("torrentInfoControl");
     const dirlist = document.getElementById("dirlist");
     const down = document.getElementById("NotFound") || document.getElementById("down");
@@ -620,12 +639,13 @@ async function refreshTorrents(payload) {
         const responseValues = [payload.fileTds, payload.fileStats];
         for (let selectorIndex = 0; selectorIndex < selectors.length; selectorIndex++) {
           const elements = document.querySelectorAll(selectors[selectorIndex]);
-          if (responseValues[selectorIndex].length === elements.length) {
-            for (let index = 0; index < elements.length; index++) {
-              const element = elements[index];
-              if (element.innerHTML.trim() !== responseValues[selectorIndex][index].trim()) {
-                element.innerHTML = responseValues[selectorIndex][index];
-              }
+          const values = responseValues[selectorIndex];
+          if (values.length !== elements.length) {continue;}
+          const trimmedValues = values.map(value => value.trim());
+          for (let index = 0; index < elements.length; index++) {
+            const element = elements[index];
+            if (element.innerHTML.trim() !== trimmedValues[index]) {
+              element.innerHTML = values[index];
             }
           }
         }
@@ -684,45 +704,39 @@ async function refreshTorrents(payload) {
  * @async
  * @function refreshScreenLog
  * @description Fetches and updates the screen log (#messages) element. Uses a cache with
- * triple the normal duration. Optionally executes a callback after the update and supports
- * forced fetches to bypass the cache.
+ * triple the normal duration, keyed on the messages HTML only. Converts URL-encoded
+ * spaces only when newly rendered messages contain them. Optionally executes a callback
+ * after the update and supports forced fetches to bypass the cache.
  * @param {Function} [callback] - Optional callback to execute after the screen log is updated.
  * @param {boolean} [forceFetch=false] - Whether to bypass the cache and fetch fresh data.
  * @returns {Promise<void>}
  */
 async function refreshScreenLog(callback, forceFetch = false) {
-  return new Promise(async (resolve) => {
-    try {
-      const screenlog = document.getElementById("messages");
-      if (!screenlog || (screenlog.hidden && screenlog.textContent.trim() === "")) {
-        resolve();
-        return;
-      }
-      screenlog.removeAttribute("hidden");
-      let payload;
-      if (!callback && !forceFetch && cache.has("screenlog")) {
-        const [cachedPayload, expiry] = cache.get("screenlog");
-        if (expiry > Date.now()) {payload = cachedPayload;}
-        else {cache.delete("screenlog");}
-      }
-      if (!payload || forceFetch) {
-        payload = await fetchRefreshPayload("/i2psnark/.ajax/xhrscreenlog.html", forceFetch);
-        if (!payload) {
-          resolve();
-          return;
-        }
-        cache.set("screenlog", [payload, Date.now() + cacheDuration * 3]);
-      }
-      if (payload.messages === null) {
-        resolve();
-        return;
-      }
-      if (screenlog.innerHTML !== payload.messages) {screenlog.innerHTML = payload.messages;}
+  try {
+    const screenlog = document.getElementById("messages");
+    if (!screenlog || (screenlog.hidden && screenlog.textContent.trim() === "")) {
+      return;
+    }
+    screenlog.removeAttribute("hidden");
+    let messages;
+    if (!callback && !forceFetch && cache.has("screenlog")) {
+      const [cachedMessages, expiry] = cache.get("screenlog");
+      if (expiry > Date.now()) {messages = cachedMessages;}
+      else {cache.delete("screenlog");}
+    }
+    if (messages === undefined || forceFetch) {
+      const payload = await fetchRefreshPayload("/i2psnark/.ajax/xhrscreenlog.html", forceFetch);
+      if (!payload) {return;}
+      cache.set("screenlog", [payload.messages, Date.now() + cacheDuration * 3]);
+      messages = payload.messages;
+    }
+    if (messages === null) {return;}
+    if (screenlog.innerHTML !== messages) {
+      screenlog.innerHTML = messages;
       convertEncodedSpaces();
-      if (callback) {callback();}
-      resolve();
-    } catch (error) {resolve();}
-  });
+    }
+    if (callback) {callback();}
+  } catch (error) {}
 }
 
 /**
@@ -736,8 +750,7 @@ function convertEncodedSpaces() {
 
   /**
    * @function replaceEncodedSpaces
-   * @description Recursively traverses DOM nodes, replacing %20 with spaces in text nodes
-   * and within anchor element children.
+   * @description Recursively traverses DOM nodes, replacing %20 with spaces in text nodes.
    * @param {Node} node - The DOM node to process.
    * @returns {void}
    */
@@ -745,11 +758,7 @@ function convertEncodedSpaces() {
     if (node.nodeType === Node.TEXT_NODE) {
       node.nodeValue = node.nodeValue.replace(/%20/g, " ");
     } else if (node.nodeType === Node.ELEMENT_NODE) {
-      if (node.tagName.toLowerCase() === "a") {
-        Array.from(node.childNodes).forEach(replaceEncodedSpaces);
-      } else {
-        Array.from(node.childNodes).forEach(replaceEncodedSpaces);
-      }
+      Array.from(node.childNodes).forEach(replaceEncodedSpaces);
     }
   }
   const msgElements = screenlog.querySelectorAll("li.msg");
@@ -782,7 +791,6 @@ function refreshOnSubmit() {
         await formSubmitted;
         await new Promise(resolve => setTimeout(resolve, 2000));
         await refreshScreenLog(undefined, true);
-        convertEncodedSpaces();
       };
     }
   });
@@ -823,7 +831,8 @@ function refreshOnSubmit() {
  * @returns {Promise<void>}
  */
 async function initSnarkRefresh() {
-  let serverOKIntervalId = setInterval(checkIfUp, 5000);
+  clearInterval(serverOKIntervalId);
+  serverOKIntervalId = setInterval(checkIfUp, 5000);
   clearInterval(snarkRefreshIntervalId);
   document.documentElement.removeAttribute("style");
   const loaded = torrentsBody?.querySelector(".rowEven");
@@ -834,9 +843,7 @@ async function initSnarkRefresh() {
       try {
         if (isDocumentVisible) {
           await doRefresh();
-          await showBadge();
           await refreshScreenLog();
-          convertEncodedSpaces();
         }
       } catch (error) {
         if (debugging) console.error(error);
@@ -956,4 +963,4 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.removeAttribute("style");
 });
 
-export { doRefresh, getURL, initSnarkRefresh, refreshScreenLog, refreshTorrents, snarkRefreshIntervalId, isDocumentVisible };
+export { doRefresh, fetchTunnelCounts, getURL, initSnarkRefresh, refreshScreenLog, refreshTorrents, snarkRefreshIntervalId, isDocumentVisible };
