@@ -609,7 +609,6 @@ public class TrackerClient implements Runnable {
                         }
                         info = doRequest(tr, infoHash, peerID, uploaded, downloaded, left, event);
                     }
-                    snark.setTrackerProblems(null);
                     tr.trackerProblems = null;
                     tr.registerFails = 0;
                     tr.consecutiveFails = 0;
@@ -680,16 +679,6 @@ public class TrackerClient implements Runnable {
                                   trackerB32ToHostname(tr.announce) + "]");
                     }
                     tr.trackerProblems = ioe.getMessage();
-                    // Don't show secondary tracker problems to the user
-                    // ... and only if we don't have any peers at all. Otherwise, PEX/DHT will save
-                    // us.
-                    if (tr.isPrimary
-                            && coordinator.getPeers() <= 0
-                            && (!completed
-                                    || _util.getDHT() == null
-                                    || _util.getDHT().size() <= 0)) {
-                        snark.setTrackerProblems(tr.trackerProblems);
-                    }
                     String tplc = tr.trackerProblems.toLowerCase(Locale.US);
                     if (tplc.startsWith(NOT_REGISTERED)
                             || tplc.startsWith(NOT_REGISTERED_2)
@@ -736,7 +725,35 @@ public class TrackerClient implements Runnable {
                 maxSeenPeers = tr.seenPeers;
             }
         } // End of trackers loop here
+        updateTrackerProblems();
         return maxSeenPeers;
+    }
+
+    /**
+     * Update the torrent-level tracker problem state. Problems are only reported
+     * when announces to every active tracker have failed; a single working
+     * tracker clears the error state.
+     */
+    private void updateTrackerProblems() {
+        boolean anyActive = false;
+        boolean allFailed = true;
+        String firstProblem = null;
+        for (TCTracker tr : trackers) {
+            if (tr.stop) {
+                continue;
+            }
+            anyActive = true;
+            if (tr.trackerProblems == null) {
+                allFailed = false;
+            } else if (firstProblem == null) {
+                firstProblem = tr.trackerProblems;
+            }
+        }
+        if (anyActive && allFailed) {
+            snark.setTrackerProblems(firstProblem);
+        } else {
+            snark.setTrackerProblems(null);
+        }
     }
 
     private String trackerB32ToHostname(String url) {

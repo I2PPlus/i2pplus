@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
       handleInputClick(clickTarget);
     }
     if (clickTarget.classList.contains("action") || clickTarget.id.includes("action")) {
-      clickTarget.setAttribute("disabled");
+      clickTarget.disabled = true;
       clickTarget.classList.add("depress");
     }
     setTimeout(() => {refreshTorrents(refreshScreenLog);}, 3000);
@@ -289,6 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
        */
       function handleResize() {
           const dialog = document.getElementById("confirmDialog");
+          if (!dialog) {return;}
           const dialogHeight = dialog.offsetHeight;
           const viewportHeight = htmlTag.classList.contains("iframed") ? parent.window.innerHeight : window.innerHeight;
           const topOffset = viewportHeight > 600 ? viewportHeight * 0.05 : 0;
@@ -310,7 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
    * @returns {string} The formatted HTML confirmation message.
    */
   function getConfirmationMessage(targetElement) {
-    const torrent = targetElement.getAttribute("data-name");
+    let torrent = targetElement.getAttribute("data-name");
     if (torrent.length > 50) {
       torrent = torrent.substring(0, 48) + "&hellip;";
     }

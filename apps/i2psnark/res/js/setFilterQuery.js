@@ -16,15 +16,15 @@ const navbar = document.getElementById("navbar");
 
 /**
  * @type {?HTMLElement}
- * @description The .nav_main link within the navbar.
+ * @description The #nav_main link within the navbar.
  */
-const navMain = navbar.querySelector(".nav_main");
+const navMain = navbar ? navbar.querySelector("#nav_main") : null;
 
 /**
  * @type {?HTMLElement}
  * @description The cancel-search anchor inside the #searchwrap element.
  */
-const cancelSearch = navbar.querySelector("#searchwrap a");
+const cancelSearch = navbar ? navbar.querySelector("#searchwrap a") : null;
 
 /**
  * @function setFilterQuery
@@ -51,7 +51,7 @@ function setFilterQuery() {
   }
 
   navbar.addEventListener("click", (event) => {
-    if (event.target.classList.contains("nav_main")) {updateHref(navMain);}
+    if (event.target.id === "nav_main" || event.target.classList.contains("nav_main")) {updateHref(navMain);}
   });
   cancelSearch.addEventListener("click", (event) => {
     if (event.target.href.includes("i2psnark")) {updateHref(cancelSearch);}

@@ -128,6 +128,7 @@ class Lightbox {
    * @returns {void}
    */
   load(opt = {}) {
+    if (!snarkFiles) return;
     this.setOpt(opt);
     this.thumbnails = [...document.querySelectorAll(".thumb")];
     this.thumbnails.forEach((thumbnail, index) => {

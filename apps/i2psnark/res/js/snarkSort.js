@@ -32,15 +32,14 @@ function snarkSort() {
  * @returns {void}
  */
 let sortListener = function(event) {
-  if (event.target.closest(".sorter")) {
-    event.preventDefault();
-    const link = event.target.closest(".sorter");
-    const sortURL = new URL(link.href);
-    const sortURLString = sortURL.toString().replace("html&", "html?").replace("/&", "/?");
-    const reqSortURL = "/i2psnark/.ajax/xhr1.html" + sortURL.search;
-    history.replaceState({}, "", new URL(sortURLString));
-    doRefresh(reqSortURL);
-  }
+  const link = event.target.closest(".sorter");
+  if (!link) {return;}
+  event.preventDefault();
+  const sortURL = new URL(link.href);
+  const sortURLString = sortURL.toString().replace("html&", "html?").replace("/&", "/?");
+  const reqSortURL = "/i2psnark/.ajax/xhr1.html" + sortURL.search;
+  history.replaceState({}, "", new URL(sortURLString));
+  doRefresh({url: reqSortURL});
 };
 
 document.addEventListener("DOMContentLoaded", snarkSort);

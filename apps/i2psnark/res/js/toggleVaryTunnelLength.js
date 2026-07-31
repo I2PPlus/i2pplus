@@ -22,6 +22,7 @@
 function toggleVaryTunnelLength(checkboxId, string) {
   const checkbox = document.getElementById(checkboxId);
   const input = document.getElementById("i2cpOpts");
+  if (!checkbox || !input) {return;}
 
   checkbox.addEventListener("change", () => {
     if (checkbox.checked) {

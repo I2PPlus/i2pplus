@@ -82,13 +82,17 @@ async function handleTorrentNotify(event, notificationElement, inputElement, for
 function showNotification(notificationElement, inputElement, displayText) {
   if (hideAlertTimeoutId) {clearTimeout(hideAlertTimeoutId);}
 
-  notificationElement.querySelector("td").innerHTML = displayText;
+  const messageCell = notificationElement.querySelector("td");
+  if (!messageCell) {return;}
+  messageCell.innerHTML = displayText;
   notificationElement.removeAttribute("hidden");
 
   hideAlertTimeoutId = setTimeout(() => {
     hideAlert(notificationElement);
-    inputElement.value = "";
-    inputElement.focus();
+    if (inputElement) {
+      inputElement.value = "";
+      inputElement.focus();
+    }
   }, 6000);
 }
 
@@ -129,7 +133,10 @@ async function submitForm(form) {
  */
 function getLastMessage() {
   const screenlog = document.getElementById("messages");
-  const messageText = screenlog.querySelector("li.msg").innerHTML.trim();
+  if (!screenlog) {return "";}
+  const messageElement = screenlog.querySelector("li.msg");
+  if (!messageElement) {return "";}
+  const messageText = messageElement.innerHTML.trim();
   const index = messageText.indexOf("&nbsp; ");
   lastMessage = index !== -1 ? messageText.substring(index + 7) : messageText;
   return lastMessage;

@@ -291,8 +291,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         "DgTrack", "http://opentracker.dg2.i2p/a=http://opentracker.dg2.i2p/",
         "R4SAS", "http://opentracker.r4sas.i2p/a=http://opentracker.r4sas.i2p/stats",
         "Sigma", "http://sigmatracker.i2p/a=http://sigmatracker.i2p/",
-        "Simp", "http://opentracker.simp.i2p/a=http://opentracker.simp.i2p/tracker",
-        "Simp [UDP]", "udp://opentracker.simp.i2p:6969/=http://opentracker.simp.i2p/tracker/",
+        //"Simp", "http://opentracker.simp.i2p/a=http://opentracker.simp.i2p/tracker",
+        //"Simp [UDP]", "udp://opentracker.simp.i2p:6969/=http://opentracker.simp.i2p/tracker/",
         "Skank", "http://opentracker.skank.i2p/a=http://opentracker.skank.i2p/tracker",
         "Skank [UDP]", "udp://opentracker.skank.i2p:6969/=http://opentracker.skank.i2p/tracker/"
     };
@@ -305,7 +305,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         "http://opentracker.bt.i2p/a," +
         "http://opentracker.dg2.i2p/a," +
         "http://opentracker.r4sas.i2p/a," +
-        "http://opentracker.simp.i2p/a," +
+        //"http://opentracker.simp.i2p/a," +
         "http://opentracker.skank.i2p/a," +
         "http://sigmatracker.i2p/a";
 
@@ -319,7 +319,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         "opentracker.bt.i2p", "ev5dpxvcmshi6mil7gaon3b2wbplwylzraxs4wtz7dd5lzdsc2dq.b32.i2p",
         "opentracker.dg2.i2p", "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p",
         "opentracker.r4sas.i2p", "punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p",
-        "opentracker.simp.i2p", "wc4sciqgkceddn6twerzkfod6p2npm733p7z3zwsjfzhc4yulita.b32.i2p",
+        //"opentracker.simp.i2p", "wc4sciqgkceddn6twerzkfod6p2npm733p7z3zwsjfzhc4yulita.b32.i2p",
         "opentracker.skank.i2p", "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p",
         "sigmatracker.i2p", "qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p",
     }));

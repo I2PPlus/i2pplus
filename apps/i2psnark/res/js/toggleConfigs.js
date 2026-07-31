@@ -70,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const setupClickListener = async (elementId, configTable) => {
     const button = document.getElementById(elementId);
+    if (!button || !configTable) {return;}
     button.addEventListener("click", async (e) => {
       const clickedTitle = e.target.closest(".configTitle");
       if (clickedTitle) {

@@ -106,10 +106,11 @@ function createStyleTag() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   const result = await getSnarkTunnelCount();
-  const refresh = snarkRefreshDelay !== null ? snarkRefreshDelay - 500 : 10000;
+  const configured = typeof snarkRefreshDelay === "number" ? snarkRefreshDelay - 500 : 10000;
+  const refresh = Number.isFinite(configured) ? Math.max(configured, 10000) : 10000;
   updateTunnelCounts(result);
   setInterval(async () => {
     const result = await getSnarkTunnelCount();
     updateTunnelCounts(result);
-  }, Math.max(refresh, 10000));
+  }, refresh);
 });

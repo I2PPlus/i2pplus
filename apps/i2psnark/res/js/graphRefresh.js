@@ -58,8 +58,11 @@ function refreshGraph() {
   if ((now - lastSnarkGraphRefresh < 5 * 60 * 1000 && refreshCount !== 0) || !graphEnabled) {return;}
   lastSnarkGraphRefresh = now;
   const graphUrl = graphUrlBase + "t=" + now;
+  const applyGraph = (cssValue) => {
+    if (graphcss) {graphcss.innerText = ":root{--snarkGraph:" + cssValue + "}";}
+  };
   if (refreshCache.has(graphUrl)) {
-    graphcss.innerText = ":root{--snarkGraph:url(" + refreshCache.get(graphUrl) + ")}";
+    applyGraph("url('" + refreshCache.get(graphUrl) + "')");
     return;
   }
   fetch(graphUrl).then(response => {
@@ -71,19 +74,13 @@ function refreshGraph() {
     throw new Error("Network response was not ok");
   }).then(blob => {
     const graphDataUrl = URL.createObjectURL(blob);
-    graphcss.innerText = ":root{--snarkGraph:url('" + graphDataUrl + "')}";
-    refreshCache.set(graphUrl, `url("${graphDataUrl}")`);
+    applyGraph("url('" + graphDataUrl + "')");
+    refreshCache.set(graphUrl, graphDataUrl);
     setTimeout(() => refreshCache.delete(graphUrl), 5*60*1000);
     refreshCount++;
   }).catch(error => {
     if (error.message === "400 Bad Request" || !graphEnabled) {
       if (graphcss) {graphcss.textContent = "";}
-      else {
-        const graphcss = document.createElement("style");
-        graphcss.id = "graphcss";
-        graphcss.textContent = ":root{--snarkGraph{url()}";
-        document.body.appendChild(graphcss);
-      }
       return;
     }
   });

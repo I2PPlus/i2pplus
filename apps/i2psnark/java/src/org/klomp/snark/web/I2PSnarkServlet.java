@@ -857,11 +857,9 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  const snarkPageSize = ").append(pageSize).append(";\n")
                .append("  const snarkRefreshDelay = ").append(delay).append(";\n")
                .append("  const totalSnarks = ").append(_manager.listTorrentFiles().size()).append(";\n")
-               .append("  window.snarkPageSize = snarkPageSize;\n")
-               .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
-               .append("  window.totalSnarks = totalSnarks;\n</script>\n")
-               .append("<script src=").append(resourcePath).append("js/snarkWork.js type=module></script>\n")
-               .append("<script src=").append(resourcePath).append("js/messageTypes.js type=module></script>\n");
+                .append("  window.snarkPageSize = snarkPageSize;\n")
+                .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
+                .append("  window.totalSnarks = totalSnarks;\n</script>\n");
             if (!isStandalone()) {
                 buf.append("<script src=").append(resourcePath).append("js/tunnelCounter.js type=module></script>\n");
             }
@@ -3364,7 +3362,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String tooltip = snark.getTrackerProblems();
             appendIcon(iconBuf, "error", "", tooltip, false, true);
             statusBuf.append(iconBuf).append(peerCountHtml);
-            snarkSt = "inactive downloading incomplete neterror";
+            snarkSt = isComplete ? "inactive complete neterror" : "inactive downloading incomplete neterror";
         } else if (isStarting) {
             appendIcon(iconBuf, "stalled", "", _t("Starting"), false, true);
             statusBuf.append(iconBuf).append("</td><td class=peerCount><b>");

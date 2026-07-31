@@ -42,37 +42,35 @@ document.addEventListener("DOMContentLoaded", function() {
   headerRow.parentNode.insertBefore(toggleRow, headerRow.nextSibling);
 
   document.body.addEventListener("click", function(event) {
-    const target = event.target;
-    if (target.matches("input[type='checkbox'][id^='toggle-']")) {
-      const toggleId = target.id;
-      const column = toggleId.substr(7);
-      const radios = document.querySelectorAll(`#dirInfo .${column}`);
-      const normalPriority = document.querySelectorAll("#dirInfo .prinorm");
-      let allChecked = true;
-      radios.forEach(function(radio) {
-        if (!radio.checked) {allChecked = false;}
-      });
-      if (allChecked) {
+      const target = event.target;
+      if (target.matches("input[type='checkbox'][id^='toggle-']")) {
+        const toggleId = target.id;
+        const column = toggleId.substr(7);
+        const radios = document.querySelectorAll(`#dirInfo .${column}`);
+        const normalPriority = document.querySelectorAll("#dirInfo .prinorm");
+        let allChecked = true;
         radios.forEach(function(radio) {
-          radio.checked = false;
-          normalPriority.forEach(function(radio) {radio.checked = true;});
+          if (!radio.checked) {allChecked = false;}
         });
-      } else {
-        radios.forEach(function(radio) {radio.checked = target.checked;});
-      }
-      const checkedToggles = document.querySelectorAll("#dirInfo input[type=checkbox]:checked");
-      if (checkedToggles.length === 0) {
-        normalPriority.forEach(function(radio) {radio.checked = true;});
-      }
-      columns.forEach(function(col, i) {
-        if (col !== column) {
-          const otherToggle = document.getElementById(`toggle-${col}`);
-          if (otherToggle.checked) {
-            otherToggle.checked = false;
-            const otherRadios = document.querySelectorAll(`#dirInfo .${col}`);
-          }
+        if (allChecked) {
+          radios.forEach(function(radio) {radio.checked = false;});
+          normalPriority.forEach(function(radio) {radio.checked = true;});
+        } else {
+          radios.forEach(function(radio) {radio.checked = target.checked;});
         }
-      });
-    }
+        const checkedToggles = document.querySelectorAll("#dirInfo input[type=checkbox]:checked");
+        if (checkedToggles.length === 0) {
+          normalPriority.forEach(function(radio) {radio.checked = true;});
+        }
+        if (target.checked) {
+          columns.forEach(function(col) {
+            if (col !== column) {
+              const otherToggle = document.getElementById(`toggle-${col}`);
+              if (otherToggle) {otherToggle.checked = false;}
+              document.querySelectorAll(`#dirInfo .${col}`).forEach(function(radio) {radio.checked = false;});
+            }
+          });
+        }
+      }
   });
 });

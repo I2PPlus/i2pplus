@@ -14,6 +14,9 @@ import {showBadge} from "./filterBar.js";
 import {snarkSort} from "./snarkSort.js";
 import {toggleDebug} from "./toggleDebug.js";
 import {Lightbox} from "./lightbox.js";
+import {MESSAGE_TYPES} from "./messageTypes.js";
+import {extractRefreshPayload} from "./refreshPayload.js";
+import morphdom from "./morphdom.js";
 
 /**
  * @type {Map<string, Object>}
@@ -49,13 +52,13 @@ const filterbar = document.getElementById("filterBar");
  * @type {?HTMLElement}
  * @description The main navigation link element (.nav_main) in the navbar.
  */
-const home = document.querySelector("#navbar .nav_main");
+const home = document.querySelector("#navbar #nav_main");
 
 /**
  * @type {boolean}
  * @description Whether the page is running inside an iframe.
  */
-const isIframed = document.documentElement.classList.contains("iframed") || window.parent;
+const isIframed = document.documentElement.classList.contains("iframed") || window.top !== window.self;
 
 /**
  * @type {boolean}
@@ -172,12 +175,6 @@ let isDocumentVisible = true;
 let lastCheckTime = 0;
 
 /**
- * @type {boolean}
- * @description Whether a full refresh of the torrent table is required.
- */
-let requireFullRefresh = true;
-
-/**
  * @function requestAnimationFramePromise
  * @description Wraps requestAnimationFrame in a Promise, executing the callback within
  * the animation frame. Provides a cancel method to abort pending frames.
@@ -188,6 +185,8 @@ let requireFullRefresh = true;
  */
 const requestAnimationFramePromise = (callback) => {
   let requestId;
+  let resolvePromise;
+  const promise = new Promise((resolve) => { resolvePromise = resolve; });
   const execCallback = () => {
     try {
       callback();
@@ -195,24 +194,11 @@ const requestAnimationFramePromise = (callback) => {
       if (debugging) console.error(error);
     } finally {
       cancelAnimationFrame(requestId);
+      resolvePromise();
     }
   };
 
-  const promise = new Promise((resolve) => {
-    const clear = () => {
-      cancelAnimationFrame(requestId);
-      resolve();
-    };
-
-    requestId = requestAnimationFrame(execCallback);
-
-    if (!requestAnimationFramePromise.cancel) {
-      requestAnimationFramePromise.cancel = clear;
-    }
-
-    return clear;
-  });
-
+  requestId = requestAnimationFrame(execCallback);
   return promise;
 };
 
@@ -233,11 +219,15 @@ async function getRefreshInterval() {
 /**
  * @async
  * @function getURL
- * @description Constructs the AJAX refresh URL by replacing "/i2psnark/" with
- * "/i2psnark/.ajax/xhr1.html" in the current page URL.
+ * @description Constructs the AJAX refresh URL by replacing the "/i2psnark/" path
+ * segment with "/i2psnark/.ajax/xhr1.html" in the current page URL.
  * @returns {Promise<string>} The AJAX-compatible refresh URL.
  */
-async function getURL() { return window.location.href.replace("/i2psnark/", "/i2psnark/.ajax/xhr1.html"); }
+async function getURL() {
+  const url = new URL(window.location.href);
+  url.pathname = url.pathname.replace("/i2psnark/", "/i2psnark/.ajax/xhr1.html");
+  return url.href;
+}
 
 /**
  * @async
@@ -270,42 +260,6 @@ async function initHandlers() {
 }
 
 /**
- * @async
- * @function updateElement
- * @description Updates a DOM element's content if it differs from the response element's content.
- * Compares trimmed content of the specified property and only updates if changed.
- * @param {?HTMLElement} elem - The DOM element to update.
- * @param {?HTMLElement} respElem - The response element containing the new content.
- * @param {string} [property="innerHTML"] - The property to compare and update (e.g., "innerHTML", "textContent").
- * @returns {Promise<void>}
- */
-async function updateElement(elem, respElem, property = "innerHTML") {
-  if (elem && respElem) {
-    const currentContent = elem[property].trim();
-    const newContent = respElem[property].trim();
-    if (currentContent !== newContent) {elem[property] = newContent;}
-  }
-}
-
-/**
- * @type {Worker}
- * @description Web Worker instance for offloading fetch requests.
- */
-const worker = new Worker("/i2psnark/.res/js/snarkWork.js");
-
-/**
- * @type {DOMParser}
- * @description Reusable DOMParser instance for parsing fetched HTML.
- */
-const parser = new DOMParser();
-
-/**
- * @type {HTMLDivElement}
- * @description Reusable container element for parsing response HTML.
- */
-const container = document.createElement("div");
-
-/**
  * @type {AbortController}
  * @description Controller for aborting in-progress fetch requests.
  */
@@ -318,39 +272,159 @@ let abortController = new AbortController();
 const ongoingRequests = new Map();
 
 /**
+ * @type {?Worker}
+ * @description The snarkWork Web Worker, constructed lazily on the first fetch.
+ */
+let worker = null;
+
+/**
+ * @type {boolean}
+ * @description Whether the worker has signaled readiness after startup.
+ */
+let workerReady = false;
+
+/**
+ * @type {number}
+ * @description Monotonic counter for correlating worker responses with requests.
+ */
+let workerRequestId = 0;
+
+/**
+ * @type {Map<number, {resolve: Function, reject: Function}>}
+ * @description Pending worker requests keyed by requestId.
+ */
+const workerRequests = new Map();
+
+/**
+ * @type {number}
+ * @description How long to wait for a worker response before falling back to direct fetching.
+ */
+const workerTimeout = 30000;
+
+/**
+ * @function initWorker
+ * @description Constructs the snarkWork worker once. Falls back to direct fetching
+ * when Web Workers are unavailable or the worker script cannot be loaded.
+ * @returns {void}
+ */
+function initWorker() {
+    if (worker || typeof Worker === "undefined") {return;}
+    try {
+        worker = new Worker("/i2psnark/.res/js/snarkWork.js", {type: "module"});
+        worker.addEventListener("message", (event) => {
+            const {type, requestId, payload, message} = event.data || {};
+            if (type === MESSAGE_TYPES.READY) {workerReady = true; return;}
+            const pending = workerRequests.get(requestId);
+            if (!pending) {return;}
+            workerRequests.delete(requestId);
+            if (type === MESSAGE_TYPES.FETCH_HTML_DOCUMENT_RESPONSE) {pending.resolve(payload);}
+            else if (type === MESSAGE_TYPES.FETCH_HTML_DOCUMENT_ERROR) {pending.reject(new Error(message || "Worker fetch failed"));}
+        });
+        worker.addEventListener("error", () => {workerFailed();});
+    } catch {workerFailed();}
+}
+
+/**
+ * @function workerFailed
+ * @description Marks the worker as unusable and rejects all pending requests so
+ * callers fall back to direct fetching.
+ * @returns {void}
+ */
+function workerFailed() {
+    worker = null;
+    workerReady = false;
+    workerRequests.forEach((pending) => {pending.reject(new Error("Worker unavailable"));});
+    workerRequests.clear();
+}
+
+/**
+ * @function fetchViaWorker
+ * @description Fetches the URL through the worker, correlating the response by
+ * requestId. Rejects immediately when the worker is unavailable; HTTP-level failures
+ * arrive as FETCH_HTML_DOCUMENT_ERROR messages. Times out after workerTimeout so a
+ * wedged worker cannot stall refreshes indefinitely.
+ * @param {string} url - The URL to fetch.
+ * @param {AbortSignal} signal - Cancels the in-flight worker request when aborted.
+ * @returns {Promise<Object>} The refresh payload extracted from the fetched document.
+ */
+function fetchViaWorker(url, signal) {
+    if (!worker || !workerReady) {return Promise.reject(new Error("Worker unavailable"));}
+    const requestId = ++workerRequestId;
+    return new Promise((resolve, reject) => {
+        workerRequests.set(requestId, {resolve, reject});
+        const onAbort = () => {
+            clearTimeout(timer);
+            workerRequests.delete(requestId);
+            reject(new DOMException("Aborted", "AbortError"));
+        };
+        const timer = setTimeout(() => {
+            workerRequests.delete(requestId);
+            worker.postMessage({type: MESSAGE_TYPES.ABORT, requestId});
+            reject(new Error("Worker timeout"));
+        }, workerTimeout);
+        signal.addEventListener("abort", onAbort, {once: true});
+        worker.postMessage({type: MESSAGE_TYPES.FETCH_HTML_DOCUMENT, requestId, url});
+    });
+}
+
+/**
  * @async
- * @function fetchHTMLDocument
- * @description Fetches an HTML document from the given URL, parsing it into a Document.
- * Uses a cache layer to avoid redundant fetches within the cacheDuration window.
- * Deduplicates concurrent requests to the same URL. Supports forced fetches that bypass the cache.
- * @param {string} url - The URL to fetch the HTML document from.
+ * @function fetchRefreshPayload
+ * @description Fetches the refresh payload for the given URL, preferring the worker so
+ * the network request and HTML parsing happen off the main thread. Uses a cache layer to
+ * avoid redundant fetches within the cacheDuration window. Deduplicates concurrent
+ * requests to the same URL. Supports forced fetches that bypass the cache.
+ * @param {string} url - The URL to fetch the refresh payload for.
  * @param {boolean} [forceFetch=false] - If true, bypasses the cache and fetches fresh data.
- * @returns {Promise<Document>} The parsed HTML Document.
+ * @returns {Promise<Object>} The refresh payload.
  * @throws {Error} If the network request fails or returns a non-OK status.
  */
-async function fetchHTMLDocument(url, forceFetch = false) {
-  cleanupCache();
-  if (!forceFetch && ongoingRequests.has(url)) {return ongoingRequests.get(url);}
-  try {
-    if (!forceFetch) {
-      const cachedDocument = cache.get(url), now = Date.now();
-      if (cachedDocument && (now - cachedDocument.timestamp < cacheDuration)) {return cachedDocument.doc;}
-    }
-    const { signal } = abortController, promise = (async () => {
-      const response = await fetch(url, { signal });
-      if (!response.ok) {throw new Error(`Network error: ${response.status} ${response.statusText}`);}
-      const htmlString = await response.text(), doc = parser.parseFromString(htmlString, "text/html");
-      cache.set(url, { doc, timestamp: Date.now() });
-      return doc;
-    })();
-    ongoingRequests.set(url, promise);
-    const result = await promise;
-    ongoingRequests.delete(url);
-    return result;
-  } catch (error) {
-    if (debugging && error.name !== "AbortError") {console.error(error);}
-    throw error;
-  } finally {abortController = new AbortController();}
+async function fetchRefreshPayload(url, forceFetch = false) {
+    cleanupCache();
+    if (!forceFetch && ongoingRequests.has(url)) {return ongoingRequests.get(url);}
+    try {
+        if (!forceFetch) {
+            const cachedPayload = cache.get(url), now = Date.now();
+            if (cachedPayload && (now - cachedPayload.timestamp < cacheDuration)) {return cachedPayload.payload;}
+        }
+        const { signal } = abortController, promise = (async () => {
+            let payload;
+            initWorker();
+            if (worker) {
+                try {payload = await fetchViaWorker(url, signal);}
+                catch (error) {
+                    if (error.name === "AbortError") {throw error;}
+                    if (debugging) {console.error(error);}
+                    payload = extractRefreshPayload(new DOMParser().parseFromString(await fetchDirect(url, signal), "text/html"));
+                }
+            } else {payload = extractRefreshPayload(new DOMParser().parseFromString(await fetchDirect(url, signal), "text/html"));}
+            cache.set(url, { payload, timestamp: Date.now() });
+            return payload;
+        })();
+        ongoingRequests.set(url, promise);
+        const result = await promise;
+        ongoingRequests.delete(url);
+        return result;
+    } catch (error) {
+        if (debugging && error.name !== "AbortError") {console.error(error);}
+        throw error;
+    } finally {abortController = new AbortController();}
+}
+
+/**
+ * @async
+ * @function fetchDirect
+ * @description Fetches the URL on the main thread and returns the response text.
+ * Used as the fallback when the worker is unavailable or fails.
+ * @param {string} url - The URL to fetch.
+ * @param {AbortSignal} signal - Cancels the fetch when aborted.
+ * @returns {Promise<string>} The fetched HTML text.
+ * @throws {Error} If the network request fails or returns a non-OK status.
+ */
+async function fetchDirect(url, signal) {
+    const response = await fetch(url, { signal });
+    if (!response.ok) {throw new Error(`Network error: ${response.status} ${response.statusText}`);}
+    return response.text();
 }
 
 /**
@@ -387,15 +461,18 @@ function removeStaleCacheKeys() {
  * @function doRefresh
  * @description Main refresh entry point. Fetches the AJAX HTML document for the given URL,
  * refreshes the torrent display, reinitializes handlers, and updates the filter badge.
- * @param {Object} [options={}] - Refresh options.
+ * Accepts either an options object or a plain URL string.
+ * @param {Object|string} [options={}] - Refresh options, or a URL string to fetch.
  * @param {string} [options.url] - The URL to fetch; defaults to the current AJAX URL.
  * @param {boolean} [options.forceFetch=false] - Whether to bypass the cache.
  * @returns {Promise<void>}
  */
-async function doRefresh({ url = window.location.href, forceFetch = false } = {}) {
+async function doRefresh(options = {}) {
+  const url = typeof options === "string" ? options : options.url;
+  const forceFetch = typeof options === "string" ? false : Boolean(options.forceFetch);
   const defaultUrl = await getURL();
-  const responseDoc = await fetchHTMLDocument(url || defaultUrl, forceFetch);
-  await requestAnimationFramePromise(async () => await refreshTorrents(responseDoc));
+  const payload = await fetchRefreshPayload(url || defaultUrl, forceFetch);
+  await requestAnimationFramePromise(async () => await refreshTorrents(payload));
   await initHandlers();
   await showBadge();
 }
@@ -406,20 +483,22 @@ async function doRefresh({ url = window.location.href, forceFetch = false } = {}
  * @description Core refresh function that updates the I2PSnark UI. Detects the current view
  * (torrent list, file directory, or offline state) and delegates to the appropriate update
  * function. Handles iframe detection, initialization delays, and volatile row updates.
- * @param {Function} [callback] - Optional callback to execute after refresh completes.
+ * @param {Object} [payload] - Refresh payload; when absent or incomplete it is fetched.
  * @returns {Promise<void>}
  */
-async function refreshTorrents(callback) {
+async function refreshTorrents(payload) {
   try {
+    if (!payload || typeof payload !== "object" || !("snarkTbody" in payload)) {
+      payload = await fetchRefreshPayload(await getURL());
+    }
     const complete = document.getElementsByClassName("completed");
     const control = document.getElementById("torrentInfoControl");
     const dirlist = document.getElementById("dirlist");
     const down = document.getElementById("NotFound") || document.getElementById("down");
-    const filterEnabled = localStorage.hasOwnProperty("snarkFilter");
 
     if (!initialized && !down) {
       initialized = true;
-      if (window.top !== parent.window.top && !document.documentElement.classList.contains("iframed")) {
+      if (window.top !== window.self && !document.documentElement.classList.contains("iframed")) {
         document.documentElement.classList.add("iframed");
       }
       if (!document.getElementById("tnlInCount")) {
@@ -436,34 +515,50 @@ async function refreshTorrents(callback) {
     }
 
     await setLinks(query);
-
     if (torrents) { await requestAnimationFramePromise(async () => await updateVolatile()); }
     else if (dirlist) {await requestAnimationFramePromise(async () => await updateFiles()); }
     else if (down) { await requestAnimationFramePromise(async () => await refreshAll()); }
 
     /**
+     * @function morphTorrentsBody
+     * @description Morphs the live torrent tbody to match the response rows, diffing by
+     * row key so matching torrents update in place and filters show the correct subset.
+     * @param {?string} newTbodyHTML - Inner HTML of the response #snarkTbody.
+     * @returns {void}
+     */
+    function morphTorrentsBody(newTbodyHTML) {
+      if (!torrentsBody || newTbodyHTML === null) {return;}
+      if (newTbodyHTML === "") {
+        if (torrentsBody.children.length > 0) {torrentsBody.innerHTML = "";}
+        return;
+      }
+      const newTbody = document.createElement("tbody");
+      newTbody.innerHTML = newTbodyHTML;
+      morphdom(torrentsBody, newTbody, {
+        getKey: (el) => el.getAttribute("data-name") || el.id || null,
+        childrenOnly: true
+      });
+    }
+
+    /**
      * @async
      * @function refreshAll
-     * @description Performs a full refresh of the torrent table by fetching the complete
-     * AJAX document and replacing the tbody content. Also refreshes the header/footer and screen log.
+     * @description Performs a full refresh of the torrent table from the payload,
+     * morphing the tbody and refreshing the header/footer and screen log.
      * @returns {Promise<void>}
      */
     async function refreshAll() {
       try {
-        const url = await getURL();
-        const mainsectionContainer = await fetchHTMLDocument(url);
-        const newTorrentsBody = mainsectionContainer.querySelector("#snarkTbody");
-        if (newTorrentsBody) {
+        if (payload.snarkTbody !== null) {
           await requestAnimationFramePromise(async () => {
-            updateElement(torrentsBody, newTorrentsBody);
+            morphTorrentsBody(payload.snarkTbody);
             refreshHeaderAndFooter();
             refreshScreenLog(undefined);
             if (noTorrents) {noTorrents.remove();}
             if (debugging) {console.log("refreshAll()");}
           });
-        } else {
-          const newMainsection = mainsectionContainer.querySelector("#mainsection");
-          if (newMainSection) {await updateElement(mainsection, newMainsection);}
+        } else if (payload.mainsection !== null && mainsection) {
+          mainsection.innerHTML = payload.mainsection;
         }
       } catch (error) {
         if (debugging) console.error(error);
@@ -473,61 +568,38 @@ async function refreshTorrents(callback) {
     /**
      * @async
      * @function updateVolatile
-     * @description Performs an incremental update of torrent table rows. Compares each cell's
-     * text content with the response and updates only changed cells. Falls back to a full
-     * refresh if the number of rows differs or requireFullRefresh is set.
+     * @description Performs an incremental update of the torrent table from the payload.
+     * Morphs the tbody so only changed rows and cells are written, and refreshes the
+     * filter badge, pagination, and DHT debug rows.
      * @returns {Promise<void>}
      */
     async function updateVolatile() {
-      let updated = false;
       try {
-        const url = await getURL();
-        const responseDoc = await fetchHTMLDocument(url);
-
-        const updating = torrents.querySelectorAll("#snarkTbody tr, #dhtDebug .dht");
-        const updatingResponse = [...responseDoc.querySelectorAll("#snarkTbody tr, #dhtDebug .dht")];
-
-        if (torrents) {
-          if (noTorrents) {noTorrents.remove();}
-          if (filterbar) {
-            const activeBadge = filterbar.querySelector("#filterBar .filter#all .badge"),
-                  activeBadgeResponse = responseDoc.querySelector("#filterBar .filter#all.enabled .badge");
-            await updateElement(activeBadge, activeBadgeResponse, "textContent");
-
-            const pagenavtop = document.getElementById("pagenavtop"),
-                  pagenavtopResponse = responseDoc.querySelector("#pagenavtop"),
-                  filterbarResponse = responseDoc.querySelector("#filterBar");
-
-            if ((filterbar && !filterbarResponse) || (!pagenavtop && pagenavtopResponse)) {
-              const torrentFormResponse = responseDoc.querySelector("#torrentlist");
-              if (torrentFormResponse) {
-                await updateElement(torrentForm, torrentFormResponse);
-              }
-              await initHandlers();
-            } else if (pagenavtop && pagenavtopResponse && pagenavtop.outerHTML.trim() !== pagenavtopResponse.outerHTML.trim()) {
-              pagenavtop.outerHTML = pagenavtopResponse.outerHTML;
-              requireFullRefresh = true;
-            }
+        if (noTorrents) {noTorrents.remove();}
+        if (filterbar) {
+          if (payload.badgeText !== null) {
+            const activeBadge = filterbar.querySelector("#filterBar .filter#all .badge");
+            if (activeBadge && activeBadge.textContent !== payload.badgeText) {activeBadge.textContent = payload.badgeText;}
           }
 
-          if (updatingResponse.length === updating.length && !requireFullRefresh) {
-            updating.forEach(async (currentRow, rowIndex) => {
-              const currentRowTds = currentRow.querySelectorAll("td");
-              const responseRowTds = updatingResponse[rowIndex].querySelectorAll("td");
-              if (currentRowTds.length === responseRowTds.length) {
-                currentRowTds.forEach((currentTd, tdIndex) => {
-                  currentTd.textContent = responseRowTds[tdIndex].textContent;
-                });
+          const pagenavtop = document.getElementById("pagenavtop");
 
-                if (currentRow.classList.toString() !== updatingResponse[rowIndex].classList.toString()) {
-                  currentRow.classList = updatingResponse[rowIndex].classList;
-                }
-              }
-            });
-          } else if (requireFullRefresh && updatingResponse) {
-            refreshAll();
-            updated = true;
+          if (!payload.filterBarPresent || (!pagenavtop && payload.pagenavtop !== null)) {
+            if (payload.torrentlist !== null && torrentForm) {torrentForm.innerHTML = payload.torrentlist;}
+            await initHandlers();
+          } else if (pagenavtop && payload.pagenavtop && pagenavtop.outerHTML !== payload.pagenavtop) {
+            pagenavtop.outerHTML = payload.pagenavtop;
+            await initHandlers();
           }
+        }
+        morphTorrentsBody(payload.snarkTbody);
+        await refreshHeaderAndFooter();
+
+        const dhtRows = document.querySelectorAll("#dhtDebug .dht");
+        if (dhtRows.length && payload.dhtDebug.length === dhtRows.length) {
+          dhtRows.forEach((row, index) => {
+            if (row.outerHTML !== payload.dhtDebug[index]) {row.outerHTML = payload.dhtDebug[index];}
+          });
         }
       } catch (error) {
         if (debugging) console.error(error);
@@ -538,22 +610,22 @@ async function refreshTorrents(callback) {
      * @async
      * @function updateFiles
      * @description Updates file listing information by comparing and refreshing
-     * incomplete file cells and torrent info stats from the fetched document.
+     * incomplete file cells and torrent info stats from the payload.
      * @returns {Promise<void>}
      */
     async function updateFiles() {
       try {
-        const url = window.location.href;
-        const responseDoc = await fetchHTMLDocument(url);
+        if (!payload.fileTds || !payload.fileStats) {payload = await fetchRefreshPayload(window.location.href);}
         const selectors = ["#dirInfo tbody tr.incomplete td", "#torrentInfoStats .nowrap"];
-        for (const selector of selectors) {
-          const elements = document.querySelectorAll(selector);
-          const responseElements = responseDoc.querySelectorAll(selector);
-          if (responseElements.length === elements.length) {
+        const responseValues = [payload.fileTds, payload.fileStats];
+        for (let selectorIndex = 0; selectorIndex < selectors.length; selectorIndex++) {
+          const elements = document.querySelectorAll(selectors[selectorIndex]);
+          if (responseValues[selectorIndex].length === elements.length) {
             for (let index = 0; index < elements.length; index++) {
               const element = elements[index];
-              const responseElement = responseElements[index];
-              if (responseElement) {updateElement(element, responseElement);}
+              if (element.innerHTML.trim() !== responseValues[selectorIndex][index].trim()) {
+                element.innerHTML = responseValues[selectorIndex][index];
+              }
             }
           }
         }
@@ -563,37 +635,31 @@ async function refreshTorrents(callback) {
     /**
      * @async
      * @function refreshHeaderAndFooter
-     * @description Refreshes the header and footer table header cells from the fetched document.
+     * @description Refreshes the header and footer table header cells from the payload.
      * Also adjusts sort icon and option box visibility based on the number of torrent rows.
      * @returns {Promise<void>}
      */
     async function refreshHeaderAndFooter() {
       try {
-        const url = await getURL();
-        const responseDoc = await fetchHTMLDocument(url);
         const snarkFooter = document.getElementById("snarkFoot");
-        const snarkFooterResponse = responseDoc.querySelector("#snarkFoot");
         const snarkHeader = document.getElementById("snarkHead");
-        const snarkHeaderResponse = responseDoc.querySelector("#snarkHead");
 
-        if (snarkFooter && snarkFooterResponse) {
+        if (snarkFooter) {
           const thElements = snarkFooter.querySelectorAll("th");
-          const thElementsResponse = snarkFooterResponse.querySelectorAll("th");
 
-          if (thElements.length === thElementsResponse.length) {
+          if (thElements.length === payload.footerTH.length) {
             thElements.forEach((th, index) => {
-              th.innerHTML = thElementsResponse[index].innerHTML;
+              if (th.innerHTML !== payload.footerTH[index]) {th.innerHTML = payload.footerTH[index];}
             });
           }
         }
 
-        if (snarkHeader && snarkHeaderResponse) {
+        if (snarkHeader) {
           const thElements = snarkHeader.querySelectorAll("th");
-          const thElementsResponse = snarkHeaderResponse.querySelectorAll("th");
 
-          if (thElements.length === thElementsResponse.length) {
+          if (thElements.length === payload.headerTH.length) {
             thElements.forEach((th, index) => {
-              th.innerHTML = thElementsResponse[index].innerHTML;
+              if (th.innerHTML !== payload.headerTH[index]) {th.innerHTML = payload.headerTH[index];}
             });
           }
           const noload = torrents?.querySelector("#noTorrents");
@@ -633,30 +699,28 @@ async function refreshScreenLog(callback, forceFetch = false) {
         return;
       }
       screenlog.removeAttribute("hidden");
-      let responseDoc;
+      let payload;
       if (!callback && !forceFetch && cache.has("screenlog")) {
-        const [doc, expiry] = cache.get("screenlog");
-        if (expiry > Date.now()) {responseDoc = doc;}
+        const [cachedPayload, expiry] = cache.get("screenlog");
+        if (expiry > Date.now()) {payload = cachedPayload;}
         else {cache.delete("screenlog");}
       }
-      if (!responseDoc || forceFetch) {
-        responseDoc = await fetchHTMLDocument("/i2psnark/.ajax/xhrscreenlog.html", forceFetch);
-        if (!responseDoc) {
+      if (!payload || forceFetch) {
+        payload = await fetchRefreshPayload("/i2psnark/.ajax/xhrscreenlog.html", forceFetch);
+        if (!payload) {
           resolve();
           return;
         }
-        cache.set("screenlog", [responseDoc, Date.now() + cacheDuration * 3]);
+        cache.set("screenlog", [payload, Date.now() + cacheDuration * 3]);
       }
-      const screenlogResponse = responseDoc.getElementById("messages");
-      if (!screenlogResponse) {
+      if (payload.messages === null) {
         resolve();
         return;
       }
-      await updateElement(screenlog, screenlogResponse);
+      if (screenlog.innerHTML !== payload.messages) {screenlog.innerHTML = payload.messages;}
       convertEncodedSpaces();
       if (callback) {callback();}
       resolve();
-      convertEncodedSpaces();
     } catch (error) {resolve();}
   });
 }
@@ -732,10 +796,12 @@ function refreshOnSubmit() {
       event.stopPropagation();
       clickTarget.form.requestSubmit();
       if (clickTarget.matches('input[id^="action"]')) {
-        stopAllOrStartAllInactive.classList.add("tempDisabled");
-        setTimeout(() => {stopAllOrStartAll.classList.remove("tempDisabled")}, 4000);
+        if (stopAllOrStartAllInactive) {
+          stopAllOrStartAllInactive.classList.add("tempDisabled");
+          setTimeout(() => {stopAllOrStartAllInactive.classList.remove("tempDisabled")}, 4000);
+        }
       }
-    } else if (clickTarget.matches("#nav_main:not(.isConfig") && !dirlist) {
+    } else if (clickTarget.matches("#nav_main:not(.isConfig)") && !dirlist) {
       const navMain = document.querySelector("#nav_main:not(.isConfig)");
       navMain.classList.add("isRefreshing");
       event.preventDefault();
@@ -778,8 +844,12 @@ async function initSnarkRefresh() {
     }, await getRefreshInterval());
 
     if (files && document.getElementById("lightbox")) {
-      const lightbox = new Lightbox();
-      lightbox.load();
+      try {
+        const lightbox = new Lightbox();
+        lightbox.load();
+      } catch (error) {
+        if (debugging) console.error(error);
+      }
     }
 
     const events = document._events?.click || [];
@@ -837,67 +907,15 @@ async function checkIfUp(minDelay = 14000) {
 
 /**
  * @function preloadImage
- * @description Preloads an image into the browser cache using the Cache API. Falls back to
- * direct loading if the Cache API is unavailable. Periodically re-caches the image to
- * prevent cache expiration.
+ * @description Preloads an image into the browser HTTP cache by creating an Image object
+ * and periodically refreshing it to prevent cache expiration.
  * @param {string} src - The image source URL to preload and cache.
  * @returns {void}
  */
 function preloadImage(src) {
-  const CACHE_NAME = "my-image-cache";
-  const INTERVAL_MS = 10 * 60 * 1000;
-
-  const show = (url) => {};
-
-  const loadImage = (url) => show(url);
-
-  /**
-   * @async
-   * @function tryFromCache
-   * @description Attempts to load the image from the browser cache via the Cache API.
-   * @param {string} u - The URL of the image to retrieve from cache.
-   * @returns {Promise<boolean>} True if the image was found in cache and displayed, false otherwise.
-   */
-  async function tryFromCache(u) {
-    if (!("caches" in window)) return false;
-    try {
-      const cache = await caches.open(CACHE_NAME);
-      const res = await cache.match(new Request(u, { mode: "cors" }));
-      if (res) {
-        show(URL.createObjectURL(await res.blob()));
-        return true;
-      }
-    } catch {}
-    return false;
-  }
-
-  /**
-   * @async
-   * @function ensureCached
-   * @description Ensures the image is cached in the browser. First checks the cache, then
-   * fetches and caches the image if not found. Falls back to direct loading on failure.
-   * @param {string} u - The URL of the image to ensure is cached.
-   * @returns {Promise<void>}
-   */
-  async function ensureCached(u) {
-    if (await tryFromCache(u)) return;
-    if (!("caches" in window)) return loadImage(u);
-
-    try {
-      const req = new Request(u, { mode: "cors" });
-      const res = await fetch(req, { cache: "reload" });
-      if (!res.ok) return loadImage(u);
-
-      const cache = await caches.open(CACHE_NAME);
-      await cache.put(req, res.clone());
-      show(URL.createObjectURL(await res.blob()));
-    } catch {
-      loadImage(u);
-    }
-  }
-
-  ensureCached(src);
-  setInterval(() => ensureCached(src), INTERVAL_MS);
+  const load = () => {new Image().src = src;};
+  load();
+  setInterval(load, 10 * 60 * 1000);
 }
 
 /**

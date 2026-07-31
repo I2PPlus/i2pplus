@@ -45,7 +45,7 @@
     '.barTooltip::after{bottom:calc(120% - 6px);z-index:999;border:6px solid var(--tooltip);content:"";transform:translateX(-50%) rotate(45deg)}'+
     '.txd .barTooltip::before{bottom:calc(128%)}' +
     '.txd .barTooltip::after{bottom:calc(128% - 6px)}' +
-    '.barTooltip:hover::before,.barTooltip:hover::after,txd:hover .barTooltip::before,txd:hover .barTooltip::after{opacity:1}';
+    '.barTooltip:hover::before,.barTooltip:hover::after,.txd:hover .barTooltip::before,.txd:hover .barTooltip::after{opacity:1}';
   document.head.appendChild(styleElement);
 
   convertTooltip(".tx[title], .barComplete[title]");
@@ -59,5 +59,7 @@
   });
 
   const targetNode = document.querySelector('#torrents tbody');
-  observer.observe(targetNode, { childList: true, subtree: true });
+  if (targetNode) {
+    observer.observe(targetNode, { childList: true, subtree: true });
+  }
 })();

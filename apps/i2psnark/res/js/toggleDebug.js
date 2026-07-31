@@ -16,9 +16,10 @@
  */
 function toggleDebug() {
   const bodyTag = document.body;
-  const active = bodyTag.classList.contains("debugListener");
+  if (bodyTag.classList.contains("debugListener")) {return;}
   const snarkFoot = document.getElementById("snarkFoot");
   if (!snarkFoot) {return;}
+  bodyTag.classList.add("debugListener");
   document.addEventListener("click", debugListener);
 }
 

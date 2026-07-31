@@ -48,17 +48,19 @@ function initToggleLog() {
     if (!target) { return; }
     requestAnimationFrame(() => {
       clean();
-      toggleLogCss.innerHTML = target.id === "expand" ? exCss : shCss;
+      if (toggleLogCss) {toggleLogCss.innerHTML = target.id === "expand" ? exCss : shCss;}
       screenlog.classList.toggle("xpanded", target.id === "expand");
       screenlog.classList.toggle("collapsed", target.id === "shrink");
       isScreenlogExpanded = target.id === "expand";
-      document.querySelector("#expand").hidden = isScreenlogExpanded;
-      document.querySelector("#shrink").hidden = !isScreenlogExpanded;
+      const expandBtn = document.querySelector("#expand");
+      const shrinkBtn = document.querySelector("#shrink");
+      if (expandBtn) {expandBtn.hidden = isScreenlogExpanded;}
+      if (shrinkBtn) {shrinkBtn.hidden = !isScreenlogExpanded;}
     });
   });
 
   clean();
-  toggleLogCss.innerHTML = shCss;
+  if (toggleLogCss) {toggleLogCss.innerHTML = shCss;}
   screenlog.classList.add("collapsed");
   const expand = document.getElementById("expand");
   if (expand) {expand.hidden = false;}

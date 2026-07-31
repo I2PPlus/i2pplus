@@ -79,7 +79,7 @@ function initLinkToggler() { // NOPMD - ConsistentReturn (nested scrollToTop ret
    */
   async function scrollToTop(timeout) {
     const X = window.pageXOffset, Y = window.pageYOffset;
-    const iframed = htmlTag.classList.contains("iframed") || window.top !== parent.window.top;
+    const iframed = htmlTag.classList.contains("iframed") || window.top !== window.self;
     const delay = iframed ? 3500 : 3750;
     return new Promise((resolve) => {
       window.scrollTo(0, 0);
@@ -148,20 +148,27 @@ function initLinkToggler() { // NOPMD - ConsistentReturn (nested scrollToTop ret
    * @returns {void}
    */
   function copyMagnetHandler(event) {
-    if (event.target.matches(".copyMagnet")) {
-      d.body.classList.add("copyingToClipboard");
-      event.preventDefault();
-      event.stopPropagation();
-      const anchor = event.target.closest("a").href;
+    const magnetLink = event.target.closest(".copyMagnet, a.magnetlink");
+    if (!magnetLink) { return; }
+    const anchorEl = magnetLink.matches("a.magnetlink") ? magnetLink : magnetLink.closest("a.magnetlink");
+    if (!anchorEl) { return; }
+    d.body.classList.add("copyingToClipboard");
+    event.preventDefault();
+    event.stopPropagation();
+    const anchor = anchorEl.href;
 
-      if (anchor && anchor.startsWith("magnet:?xt=urn:btih:")) {
-        copyToClipboard(anchor);
-        let magnetHash = anchor.substring(anchor.indexOf(":") + 1, anchor.indexOf("&"));
-        let magnetName = anchor.substring(anchor.lastIndexOf("=") + 1);
-        magnetName = decodeURIComponent(magnetName);
-        showToast("Magnet link copied to clipboard: <b>" + magnetName + "</b><br>Hash: <b>" + magnetHash + "</b>");
-        setTimeout(() => { d.body.classList.remove("copyingToClipboard"); }, 4000);
-      } else {showToast("Invalid magnet link.");}
+    if (anchor && anchor.startsWith("magnet:?xt=urn:btih:")) {
+      copyToClipboard(anchor);
+      const magnetURL = new URL(anchor);
+      let magnetHash = magnetURL.searchParams.get("xt") || "";
+      magnetHash = magnetHash.replace("urn:btih:", "");
+      let magnetName = magnetURL.searchParams.get("dn") || "";
+      magnetName = magnetName.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      showToast("Magnet link copied to clipboard: <b>" + magnetName + "</b><br>Hash: <b>" + magnetHash + "</b>");
+      setTimeout(() => { d.body.classList.remove("copyingToClipboard"); }, 4000);
+    } else {
+      d.body.classList.remove("copyingToClipboard");
+      showToast("Invalid magnet link.");
     }
   }
 

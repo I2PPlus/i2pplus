@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const doc = document;
   const parentDoc = window.parent.document;
-  const isIframed = doc.documentElement.classList.contains("iframed") || window.parent;
+  const isIframed = doc.documentElement.classList.contains("iframed") || window.top !== window.self;
   const snarkFileNameLinks = doc.querySelectorAll(":where(" + viewLinks.join(",") + ")");
   /**
    * @type {Set<string>}
@@ -111,6 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
    */
   function loadCSS(href) {
     const snarkTheme = doc.getElementById("snarkTheme");
+    if (!snarkTheme) {return;}
     const css = doc.createElement("link");
     css.rel = "stylesheet";
     css.href = href;
@@ -178,6 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     fetch(linkHref).then(response => response.text()).then(data => {
+      if (responseCache.size >= 50) {responseCache.delete(responseCache.keys().next().value);}
       responseCache.set(linkHref, data);
       renderContent(fileName, fileExt, data);
     }).catch(() => {});
@@ -190,33 +192,25 @@ document.addEventListener("DOMContentLoaded", function () {
   /**
    * @function resetScrollPosition
    * @description Resets the text view content scroll position to the top. Retries after
-   * a short delay if the content element is not yet available.
+   * a short delay if the content element is not yet rendered.
    * @returns {void}
    */
   const resetScrollPosition = () => {
     const txtContent = doc.getElementById("textview-content");
     if (txtContent && txtContent.innerHTML !== "") { txtContent.scrollTop = 0; }
-    else { setTimeout(resetScrollPosition, 100); }
   }
 
   /**
    * @function preventScroll
-   * @description Adds or removes scroll prevention handlers on elements matching the given
-   * selectors. When active, prevents default scroll behavior (useful for locking body scroll
-   * while the text viewer is open).
-   * @param {string|string[]} selectors - CSS selector(s) for elements to lock/unlock scrolling.
+   * @description Adds or removes scroll prevention on the given elements by toggling
+   * overflow:hidden, which locks scrolling while the text viewer is open.
+   * @param {Element[]} elements - Elements to lock/unlock scrolling on.
    * @param {boolean} prevent - Whether to enable (true) or disable (false) scroll prevention.
    * @returns {void}
    */
-  function preventScroll(selectors, prevent) {
-    if (typeof selectors === "string") { selectors = [selectors]; }
-    selectors.forEach(selector => {
-      const elements = document.querySelectorAll(selector);
-      const handleScroll = (event) => { event.preventDefault(); };
-      elements.forEach(element => {
-        if (prevent) {element.addEventListener("scroll", handleScroll);}
-        else {element.removeEventListener("scroll", handleScroll);}
-      });
+  function preventScroll(elements, prevent) {
+    elements.forEach(element => {
+      if (element) {element.style.overflow = prevent ? "hidden" : "";}
     });
   }
 
@@ -234,48 +228,49 @@ document.addEventListener("DOMContentLoaded", function () {
     if (fileExt !== "txt" && fileExt !== "srt") { viewerContent.classList.add("pre"); }
     const escaped = parser.parseFromString(data, "text/html").body.textContent || data;
     const needsHardSpaces = numberedFileExts.has(fileExt) || viewerContent.classList.contains("pre");
-    const encoded = escaped.replace(/ /g, needsHardSpaces ? " " : " ");
+    const encoded = needsHardSpaces ? escaped.replace(/ /g, "\u00A0") : escaped;
     viewerContent.innerHTML = numberedFileExts.has(fileExt) ? displayWithLineNumbers(encoded) : encoded;
     viewerContent.classList.toggle("lines", numberedFileExts.has(fileExt));
     viewerContent.insertBefore(viewerFilename, viewerContent.firstChild);
     viewerWrapper.hidden = false;
     requestAnimationFrame(resetScrollPosition);
-    preventScroll("document.documentElement, document.body", true);
+    preventScroll([doc.documentElement, doc.body], true);
   };
 
   /**
    * @function addListeners
-   * @description Attaches click handlers to file links for opening the text viewer, and
-   * click handlers on the viewer for closing it. Prevents duplicate listener attachment.
+   * @description Registers a delegated click handler that opens the text viewer for
+   * file links, and click handlers on the viewer for closing it. Prevents duplicate
+   * listener attachment.
    * @returns {void}
    */
   const addListeners = () => {
     if (listenersActive) { return; }
-    snarkFileNameLinks.forEach(link => {
-      link.addEventListener("click", event => {
-        if (event.target.classList.contains("newtab")) { return; }
-        event.preventDefault();
-        const fileIconLink = link.closest("tr").querySelector("td.fileIcon > a");
-        if (fileIconLink) {
-          doc.documentElement.classList.add("textviewer");
-          if (isIframed && !parentDoc.documentElement.classList.contains("fullscreen")) {
-            parentDoc.documentElement.classList.add("textviewer", "fullscreen");
-          }
-          const fileName = decodeURIComponent(fileIconLink.href.split("/").pop());
-          const fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-          if (supportedFileTypes.has(fileExt)) { displayText(fileIconLink, fileName, fileExt, fileIconLink.href); }
+    doc.addEventListener("click", event => {
+      const link = event.target.closest(viewLinks.join(","));
+      if (!link) { return; }
+      if (event.target.classList.contains("newtab")) { return; }
+      event.preventDefault();
+      const fileIconLink = link.closest("tr").querySelector("td.fileIcon > a");
+      if (fileIconLink) {
+        doc.documentElement.classList.add("textviewer");
+        if (isIframed && !parentDoc.documentElement.classList.contains("fullscreen")) {
+          parentDoc.documentElement.classList.add("textviewer", "fullscreen");
         }
-      });
+        const fileName = decodeURIComponent(fileIconLink.href.split("/").pop());
+        const fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+        if (supportedFileTypes.has(fileExt)) { displayText(fileIconLink, fileName, fileExt, fileIconLink.href); }
+      }
     });
 
     viewerContent.addEventListener("click", event => event.stopPropagation());
     viewerWrapper.addEventListener("click", () => {
       viewerWrapper.hidden = true;
       doc.documentElement.classList.remove("textviewer", "fullscreen");
-      preventScroll("document.documentElement, document.body", false);
+      preventScroll([doc.documentElement, doc.body], false);
       if (isIframed) {
         parentDoc.documentElement.classList.remove("textviewer", "fullscreen");
-        preventScroll("window.parent.document.documentElement, window.parent.document.body", false);
+        preventScroll([parentDoc.documentElement, parentDoc.body], false);
       }
     });
     listenersActive = true;

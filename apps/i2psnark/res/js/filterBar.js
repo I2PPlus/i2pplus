@@ -35,6 +35,12 @@ let observer;
 let snarkCount;
 
 /**
+ * @type {?string}
+ * @description The id of the currently active filter, used to detect filter changes.
+ */
+let activeFilterId = null;
+
+/**
  * @async
  * @function showBadge
  * @description Updates the filter bar badge display based on the current URL filter/search
@@ -54,27 +60,30 @@ async function showBadge() {
 
   const allFilters = filterbar.querySelectorAll(".filter");
 
-  const activeFilter = document.getElementById(filterId);
+  const activeFilter = document.getElementById(filterId) || filterbar.querySelector(".filter#all");
+  if (!activeFilter) {return;}
+  const filterChanged = activeFilterId !== activeFilter.id;
+  activeFilterId = activeFilter.id;
   const activeBadge = activeFilter.querySelector(".badge");
+  if (!activeBadge) {return;}
   activeBadge.id = "filtercount";
   if (activeFilter.id === "all") {
     activeBadge.hidden = false;
-    const allBadge = filterbar.querySelector(".filter#all .badge");
   } else {activeBadge.hidden = true;}
 
   allFilters.forEach(filter => {
     if (filter !== activeFilter) {
       filter.classList.remove("enabled");
-      const tempDisabled = { pointerEvents: "none", opacity: ".5" };
-      Object.assign(filter, tempDisabled);
-      filter.style.pointerEvents = "none";
-      filter.style.opacity = ".5";
+      if (filterChanged) {
+        filter.style.pointerEvents = "none";
+        filter.style.opacity = ".5";
+      }
 
       const badges = filter.querySelectorAll(".badge");
       badges.forEach(badge => {
         const filterAll = badge.closest(".filter#all");
-        if (filterAll) { Object.assign(badge, { hidden: true, id: "" }); }
-        else if (filter && filter.id !== "all") { Object.assign(badge, { hidden: true, textContent: "", id: "" }); }
+        if (filterAll) { badge.hidden = true; badge.id = ""; }
+        else if (filter && filter.id !== "all") { badge.hidden = true; badge.textContent = ""; badge.id = ""; }
       });
     } else {
       if (observer) {observer.disconnect();}
@@ -88,7 +97,7 @@ async function showBadge() {
       observer.observe(torrents, { childList: true, subtree: true });
     }
 
-    if (filter !== activeFilter) {
+    if (filter !== activeFilter && filterChanged) {
       setTimeout(() => {
         filter.style.pointerEvents = "";
         filter.style.opacity = "";
@@ -121,10 +130,6 @@ function countSnarks() {
  * @returns {void}
  */
 function updateURLs() {
-  const torrentform = document.getElementById("torrentlist");
-  if (!torrentform) {return;}
-  var xhrURL = "/i2psnark/.ajax/xhr1.html" + window.location.search;
-  const noload = document.getElementById("noload");
   const sortIcon = document.querySelectorAll(".sorter");
 
   sortIcon.forEach((item) => { item.addEventListener("click", () => { setQuery(); }); });
@@ -137,7 +142,7 @@ function updateURLs() {
    */
   function setQuery() {
     const params = window.location.search;
-    if (params) {const storage = window.localStorage.setItem("queryString", params);}
+    if (params) {window.localStorage.setItem("queryString", params);}
   }
 }
 
@@ -163,7 +168,7 @@ async function filterNav() {
       const xhrURL = "/i2psnark/.ajax/xhr1.html" + filterURL.search;
       history.replaceState({}, "", filterURL);
       showBadge();
-      try {await doRefresh(xhrURL, true);}
+      try {await doRefresh({url: xhrURL, forceFetch: true});}
       catch {}
       if (pagenavtop) {pagenavtop.hidden = filterElement.id !== "all";}
     }
