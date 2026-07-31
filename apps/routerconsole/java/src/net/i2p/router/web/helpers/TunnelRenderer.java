@@ -781,6 +781,7 @@ class TunnelRenderer {
                     .replace("Data Bridge Limited (DBL-136)", "DATA BRIDGE LTD")
                     .replace("Mediacom Communications Corp (MCC-244)", "MEDIACOM")
                     .replace("AT&T Enterprises, LLC (AEL-360)", "AT&T")
+                    .replace("AT&T Services, Inc.", "AT&T")
                     .replace("YELCOT TELEPHONE COMPANY (YELCOT)", "YELCOT")
                     .replace("State University of New York at Stony Brook (SUNYASB-Z)", "SUNYASB")
                     .replace("Cloudflare, Inc. (CLOUD14)", "CLOUDFLARE")
@@ -790,6 +791,7 @@ class TunnelRenderer {
                     .replace("NON-RIPE-NCC-MANAGED-ADDRESS-BLOCK", "unknown")
                     .replace("unknown", _t("unknown"))
                     .replaceAll(TUNNEL_PAREN.pattern(), "")
+                    .replaceAll("(?i)AT\\s*&\\s*T\\s+.*", "AT&T")
                     .trim();
                 result.whois = whois;
                 result.domain = null;
