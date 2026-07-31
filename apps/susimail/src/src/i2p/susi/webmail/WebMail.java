@@ -2347,8 +2347,7 @@ public class WebMail extends HttpServlet {
             if (state == State.NEW || state == State.CONFIG) {
                 buf.append("<script src=\"/susimail/js/compose.js?").append(CoreVersion.VERSION).append("\"></script>\n");
             } else if (state == State.LIST) {
-                buf.append("<script src=\"/susimail/js/folder.js?").append(CoreVersion.VERSION).append("\"></script>\n")
-                   .append("<script src=\"/js/scrollTo.js?").append(CoreVersion.VERSION).append("\"></script>\n");
+                buf.append("<script src=\"/susimail/js/folder.js?").append(CoreVersion.VERSION).append("\"></script>\n");
             } else if (state == State.LOADING) {
                 buf.append("<noscript><meta http-equiv=refresh content=\"5;url=").append(myself).append("\"></noscript>\n");
             } else if (state == State.SHOW) {

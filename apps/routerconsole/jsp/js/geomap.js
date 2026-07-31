@@ -27,13 +27,12 @@
   // ============ DOM REFERENCES ============
   const geomap = document.querySelector("#geomap");
   const infobox = document.querySelector("#netdbmap #info");
-  const parser = new DOMParser();
 
   // ============ STATE ============
   let debugging = false;
   let verbose = false;
   let currentRouterClass = getQueryParameter("class") || "countries";
-  let routerCounts = {};
+  let routerCounts = JSON.parse(localStorage.getItem("routerCounts")) || {};
   let retryAttempt = 0;
   let fetchIntervalId = null;
 
@@ -391,79 +390,63 @@
    * @returns {Promise<void>}
    */
   async function storeRouterCounts() {
-    const url = "/netdb";
     try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const response = await fetch("/netdb");
+      if (!response.ok) throw new Error("HTTP " + response.status);
 
+      const parser = new DOMParser();
       const doc = parser.parseFromString(await response.text(), "text/html");
       const rows = doc.querySelectorAll("#cclist tr");
 
-      // Initialize with existing data to preserve any cached values
       routerCounts = {
         countries: {},
         floodfill: {},
-        tierX: {},
-        ...(JSON.parse(localStorage.getItem("routerCounts")) || {})
+        tierX: {}
       };
 
       rows.forEach(row => {
-        const processRow = (type, selector, countSelector) => {
-          const link = row.querySelector(selector);
-          const countEl = row.querySelector(countSelector);
-          const count = countEl?.textContent.trim();
-          if (link && count) {
-            const cc = link.href.match(/cc=([a-zA-Z]{2})/)?.[1];
-            if (cc) routerCounts[type][cc] = parseInt(count, 10);
-          }
-        };
-        processRow("tierX", 'td.countX a', 'td.countX');
-        processRow("floodfill", 'td.countFF a', 'td.countFF');
-
-        const country = row.querySelector('a[href^="/netdb?c="]');
-        if (country && row.children[3]) {
-          const cc = country.href.split("=")[1];
+        const countryLink = row.querySelector('a[href^="/netdb?c="]');
+        if (countryLink && row.children[3]) {
+          const cc = countryLink.href.split("=")[1];
           const count = parseInt(row.children[3].textContent.trim(), 10);
           if (!isNaN(count)) routerCounts.countries[cc] = count;
         }
+
+        ["floodfill", "tierX"].forEach(type => {
+          const sel = type === "floodfill" ? "td.countFF a" : "td.countX a";
+          const link = row.querySelector(sel);
+          if (link) {
+            const cc = link.href.match(/cc=([a-zA-Z]{2})/)?.[1];
+            if (cc) {
+              const count = parseInt(link.textContent.trim(), 10);
+              if (!isNaN(count)) routerCounts[type][cc] = count;
+            }
+          }
+        });
       });
 
-      // Calculate totals efficiently
-      const totals = {
+      routerCounts.totals = {
         countries: Object.values(routerCounts.countries).reduce((a, b) => a + b, 0),
         floodfill: Object.values(routerCounts.floodfill).reduce((a, b) => a + b, 0),
         tierX: Object.values(routerCounts.tierX).reduce((a, b) => a + b, 0)
       };
-      routerCounts.totals = totals;
 
-      // Persist to localStorage
       localStorage.setItem("routerCounts", JSON.stringify(routerCounts));
       localStorage.setItem("currentRouterClass", currentRouterClass);
-
-      // Reset retry counter on success
       retryAttempt = 0;
 
       if (debugging) console.log("Router counts updated:", routerCounts);
-
-      // Update UI
       updateShapeClasses(currentRouterClass);
 
-      // Start/restart interval if not already running
       if (!fetchIntervalId) {
         fetchIntervalId = setInterval(() => {
           storeRouterCounts();
-          updateShapeClasses(currentRouterClass);
         }, CONFIG.STORE_INTERVAL);
       }
-
     } catch (error) {
       if (debugging) console.error("Error fetching router counts:", error);
-
-      // Clear cached data on error to avoid stale display
       localStorage.removeItem("routerCounts");
       localStorage.removeItem("currentRouterClass");
-
-      // Schedule retry with exponential backoff
       scheduleRetry(storeRouterCounts, ++retryAttempt);
     }
   }
@@ -752,6 +735,7 @@
       clearInterval(fetchIntervalId);
       fetchIntervalId = null;
     }
+    netdbWorker.terminate();
   });
 
 })();

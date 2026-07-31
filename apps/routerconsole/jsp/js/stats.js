@@ -1,7 +1,7 @@
 /**
  * @module stats
  * @description Handles periodic refresh and tab switching for the /stats page.
- * Fetches updated stat data via XHR and replaces stat list elements.
+ * Fetches updated stat data via SharedWorker and replaces stat list elements.
  * @author dr|z3d
  * @license AGPL3 or later
  */
@@ -9,62 +9,55 @@
 (function() {
   const infohelp = document.querySelector("#gatherstats");
   const nav = document.querySelector(".confignav");
-  const routerTab = document.getElementById("Router");
   const tabs = document.querySelectorAll(".togglestat");
   const REFRESH_INTERVAL = 60*1000;
 
-  /**
-   * Starts the periodic stats refresh interval.
-   * @function initRefresh
-   * @returns {void}
-   */
-  function initRefresh() {setInterval(updateStats, REFRESH_INTERVAL);}
+  const fetchWorker = new SharedWorker("/js/fetchWorker.js");
+  fetchWorker.port.start();
+  fetchWorker.port.onmessage = function(e) {
+    const { responseText } = e.data;
+    if (!responseText) return;
 
-  /**
-   * Fetches the latest stats page via XHR and updates stat list elements.
-   * @function updateStats
-   * @returns {void}
-   */
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(responseText, "text/html");
+
+    requestAnimationFrame(() => {
+      const info = document.getElementById("gatherstats");
+      if (info) {
+        const infoResponse = doc.getElementById("gatherstats");
+        if (infoResponse && !Object.is(info.innerHTML, infoResponse.innerHTML)) {
+          info.innerHTML = infoResponse.innerHTML;
+        }
+      }
+      const statlistElements = document.querySelectorAll(".statlist");
+      const statlistResponseElements = doc.querySelectorAll(".statlist");
+      statlistResponseElements.forEach((statlistResponse, index) => {
+        if (index < statlistElements.length) {
+          const statlist = statlistElements[index];
+          const statlistParent = statlist.parentNode;
+          if (statlist.innerHTML !== statlistResponse.innerHTML) {
+            const newStatlist = document.importNode(statlistResponse, true);
+            statlistParent.replaceChild(newStatlist, statlist);
+          }
+        }
+      });
+      progressx.hide();
+    });
+  };
+
+  function getStatsUrl() {
+    const statFilter = new URLSearchParams(window.location.search).get("stat");
+    return statFilter ? "/stats?stat=" + encodeURIComponent(statFilter) : "/stats";
+  }
+
   function updateStats() {
     progressx.show(theme);
     progressx.progress(0.5);
-    const xhrstats = new XMLHttpRequest();
-    const statFilter = new URLSearchParams(window.location.search).get("stat");
-    const url = statFilter ? "/stats?stat=" + encodeURIComponent(statFilter) : "/stats";
-    xhrstats.open("GET", url, true);
-    xhrstats.responseType = "document";
-    xhrstats.onreadystatechange = function () {
-      if (xhrstats.readyState === 4 && xhrstats.status === 200) {
-        const info = document.getElementById("gatherstats");
-        if (info) {
-          const infoResponse = xhrstats.responseXML.getElementById("gatherstats");
-          if (infoResponse && !Object.is(info.innerHTML, infoResponse.innerHTML)) {
-            info.innerHTML = infoResponse.innerHTML;
-          }
-        }
-        const statlistElements = document.querySelectorAll(".statlist");
-        const statlistResponseElements = xhrstats.responseXML.querySelectorAll(".statlist");
-        statlistResponseElements.forEach((statlistResponse, index) => {
-          if (index < statlistElements.length) {
-            const statlist = statlistElements[index];
-            const statlistParent = statlist.parentNode;
-            if (statlist.innerHTML !== statlistResponse.innerHTML) {
-              const newStatlist = document.importNode(statlistResponse, true);
-              statlistParent.replaceChild(newStatlist, statlist);
-            }
-          }
-        });
-      }
-    }
-    xhrstats.send();
-    progressx.hide();
+    fetchWorker.port.postMessage({url: getStatsUrl(), force: true});
   }
 
-  /**
-   * Removes the "tab2" class from all toggle stat tab elements.
-   * @function initTabs
-   * @returns {void}
-   */
+  function initRefresh() {setInterval(updateStats, REFRESH_INTERVAL);}
+
   function initTabs() {
     for (let i = 0; i < tabs.length; i++) {tabs[i].classList.remove("tab2");}
   }

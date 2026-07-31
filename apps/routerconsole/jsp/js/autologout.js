@@ -1,41 +1,32 @@
 /**
  * @module autologout
  * @description Auto-redirect to login on session expiry. Polls /session/check
- * and redirects to /login when the session is no longer valid.
+ * via SharedWorker and redirects to /login when the session is no longer valid.
  * @author dr|z3d
  * @license AGPL3 or later
  */
 
 (function() {
-  /** @constant {number} check interval in ms (60 seconds) */
-  var CHECK_INTERVAL = 60000;
-  /** @constant {string} session validation endpoint */
+  var CHECK_INTERVAL = 10000;
   var CHECK_URL = '/session/check';
-  /** @constant {number} consecutive failures before redirect */
   var MAX_FAILURES = 2;
-
   var failures = 0;
 
-  function checkSession() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', CHECK_URL, true);
-    xhr.onload = function() {
-      if (xhr.status === 401) {
-        failures++;
-        if (failures >= MAX_FAILURES) {
-          window.location.href = '/login';
-        }
-      } else {
-        failures = 0;
-      }
-    };
-    xhr.onerror = function() {
+  var fetchWorker = new SharedWorker("/js/fetchWorker.js");
+  fetchWorker.port.start();
+  fetchWorker.port.onmessage = function(e) {
+    if (e.data.isDown) {
       failures++;
       if (failures >= MAX_FAILURES) {
         window.location.href = '/login';
       }
-    };
-    xhr.send();
+    } else {
+      failures = 0;
+    }
+  };
+
+  function checkSession() {
+    fetchWorker.port.postMessage({ url: CHECK_URL, force: true });
   }
 
   function init() {
