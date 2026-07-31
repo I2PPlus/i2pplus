@@ -127,6 +127,13 @@ const torrentsBody = document.getElementById("snarkTbody");
 const torrentForm = document.getElementById("torrentlist");
 
 /**
+ * @type {string}
+ * @description The active realtime search term appended to AJAX refresh URLs,
+ * empty when no search filter is applied.
+ */
+let activeSearch = "";
+
+/**
  * @type {boolean}
  * @description Whether the chimp image has been preloaded and cached.
  */
@@ -232,8 +239,18 @@ async function getRefreshInterval() {
 async function getURL() {
   const url = new URL(window.location.href);
   url.pathname = url.pathname.replace("/i2psnark/", "/i2psnark/.ajax/xhr1.html");
+  if (activeSearch) {url.searchParams.set("search", activeSearch);}
   return url.href;
 }
+
+/**
+ * @function setActiveSearch
+ * @description The active search term appended to AJAX refresh URLs so refreshes
+ * keep the realtime search filter applied.
+ * @param {string} value - The search term; empty clears the filter.
+ * @returns {void}
+ */
+function setActiveSearch(value) {activeSearch = value;}
 
 /**
  * @async
@@ -363,6 +380,7 @@ function fetchViaWorker(url, signal, type = MESSAGE_TYPES.FETCH_HTML_DOCUMENT, t
         const onAbort = () => {
             clearTimeout(timer);
             workerRequests.delete(requestId);
+            worker.postMessage({type: MESSAGE_TYPES.ABORT, requestId});
             reject(new DOMException("Aborted", "AbortError"));
         };
         const timer = setTimeout(() => {
@@ -396,10 +414,11 @@ function fetchTunnelCounts() {
  * requests to the same URL. Supports forced fetches that bypass the cache.
  * @param {string} url - The URL to fetch the refresh payload for.
  * @param {boolean} [forceFetch=false] - If true, bypasses the cache and fetches fresh data.
+ * @param {?AbortSignal} [signal=null] - Aborts the in-flight fetch; defaults to the shared refresh signal.
  * @returns {Promise<Object>} The refresh payload.
  * @throws {Error} If the network request fails or returns a non-OK status.
  */
-async function fetchRefreshPayload(url, forceFetch = false) {
+async function fetchRefreshPayload(url, forceFetch = false, signal = null) {
     cleanupCache();
     if (!forceFetch && ongoingRequests.has(url)) {return ongoingRequests.get(url);}
     try {
@@ -407,24 +426,27 @@ async function fetchRefreshPayload(url, forceFetch = false) {
             const cachedPayload = cache.get(url), now = Date.now();
             if (cachedPayload && (now - cachedPayload.timestamp < cacheDuration)) {return cachedPayload.payload;}
         }
-        const { signal } = abortController, promise = (async () => {
+        const activeSignal = signal || abortController.signal, promise = (async () => {
             let payload;
             initWorker();
             if (worker) {
-                try {payload = await fetchViaWorker(url, signal);}
+                try {payload = await fetchViaWorker(url, activeSignal);}
                 catch (error) {
                     if (error.name === "AbortError") {throw error;}
                     if (debugging) {console.error(error);}
-                    payload = extractRefreshPayload(new DOMParser().parseFromString(await fetchDirect(url, signal), "text/html"));
+                    payload = extractRefreshPayload(new DOMParser().parseFromString(await fetchDirect(url, activeSignal), "text/html"));
                 }
-            } else {payload = extractRefreshPayload(new DOMParser().parseFromString(await fetchDirect(url, signal), "text/html"));}
+            } else {payload = extractRefreshPayload(new DOMParser().parseFromString(await fetchDirect(url, activeSignal), "text/html"));}
             cache.set(url, { payload, timestamp: Date.now() });
             return payload;
         })();
         ongoingRequests.set(url, promise);
-        const result = await promise;
-        ongoingRequests.delete(url);
-        return result;
+        try {
+            const result = await promise;
+            return result;
+        } finally {
+            ongoingRequests.delete(url);
+        }
     } catch (error) {
         if (debugging && error.name !== "AbortError") {console.error(error);}
         throw error;
@@ -485,13 +507,15 @@ function removeStaleCacheKeys() {
  * @param {Object|string} [options={}] - Refresh options, or a URL string to fetch.
  * @param {string} [options.url] - The URL to fetch; defaults to the current AJAX URL.
  * @param {boolean} [options.forceFetch=false] - Whether to bypass the cache.
+ * @param {?AbortSignal} [options.signal=null] - Aborts the in-flight fetch.
  * @returns {Promise<void>}
  */
 async function doRefresh(options = {}) {
   const url = typeof options === "string" ? options : options.url;
   const forceFetch = typeof options === "string" ? false : Boolean(options.forceFetch);
+  const signal = typeof options === "string" ? null : options.signal || null;
   const defaultUrl = await getURL();
-  const payload = await fetchRefreshPayload(url || defaultUrl, forceFetch);
+  const payload = await fetchRefreshPayload(url || defaultUrl, forceFetch, signal);
   await requestAnimationFramePromise(async () => await refreshTorrents(payload));
   await initHandlers();
   await showBadge();
@@ -838,7 +862,7 @@ function refreshOnSubmit() {
   const forms = document.querySelectorAll("form");
   const iframe = document.getElementById("processForm");
   forms.forEach((form) => {
-    if (form && iframe) {
+    if (form && iframe && form.id !== "snarkSearch") {
       form.onsubmit = async (event) => {
         const submitter = event.submitter;
         if (!(submitter instanceof HTMLInputElement && submitter.classList) && submitter !== null) {return;}
@@ -1011,4 +1035,4 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.removeAttribute("style");
 });
 
-export { doRefresh, fetchTunnelCounts, getURL, initSnarkRefresh, markStartingRows, refreshScreenLog, refreshTorrents, snarkRefreshIntervalId, isDocumentVisible };
+export { doRefresh, fetchTunnelCounts, getURL, initSnarkRefresh, markStartingRows, refreshScreenLog, refreshTorrents, setActiveSearch, snarkRefreshIntervalId, isDocumentVisible };

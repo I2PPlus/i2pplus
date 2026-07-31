@@ -769,6 +769,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(jsPath + "toggleLinks.js type=module></script>\n");
         }
         out.write(jsPath + "setFilterQuery.js type=module></script>\n");
+        out.write(jsPath + "realtimeSearch.js type=module></script>\n");
 
         if (!isStandalone()) {
             out.write(FOOTER);
@@ -818,6 +819,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         if (!isConfigure) {
             buf.append("<link rel=modulepreload href=").append(resourcePath).append("js/refreshTorrents.js>\n")
+               .append("<link rel=modulepreload href=").append(resourcePath).append("js/realtimeSearch.js>\n")
                .append("<link rel=modulepreload href=").append(resourcePath).append("js/snarkSort.js>\n")
                .append("<link rel=modulepreload href=").append(resourcePath).append("js/toggleLinks.js>\n")
                .append("<link rel=modulepreload href=").append(resourcePath).append("js/toggleLog.js>\n");
