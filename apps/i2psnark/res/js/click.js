@@ -9,7 +9,7 @@
  * @license AGPL3 or later
  */
 
-import {refreshScreenLog, refreshTorrents} from "./refreshTorrents.js";
+import {refreshScreenLog} from "./refreshTorrents.js";
 
 /**
  * @type {boolean}
@@ -79,51 +79,40 @@ document.addEventListener("DOMContentLoaded", () => {
    * @function handleInputClick
    * @description Handles clicks on interactive UI elements (toggle views, tabs, navigation,
    * filters, action buttons, form buttons). Adds a .depress class for visual feedback,
-   * handles delete/remove confirmation dialogs, manages action button state (disabling
-   * other buttons during processing), and refreshes the screen log after operations.
+   * manages action button state (disabling other buttons during processing), and submits
+   * action forms with the clicked button as submitter.
    * @param {HTMLElement} clickTarget - The element that was clicked.
+   * @param {Event} event - The originating click event.
    * @returns {Promise<void>}
    */
-  async function handleInputClick(clickTarget) {
-    const clickable = ".toggleview, .tab_label, .snarkNav, .filter, input[class^='action'], input.add, input.create";
+  async function handleInputClick(clickTarget, event) {
+    const clickable = ".toggleview, .tab_label, .snarkNav, .filter, input[class^='action'], input[id^='action'], input.add, input.create";
     if (!clickTarget.closest(clickable)) {return;}
 
     const targetElement = clickTarget.matches(clickable) ? clickTarget : clickTarget.closest(clickable);
     if (!targetElement) {return;}
 
     const isAction = targetElement.matches("input[class^='action'], input[id^='action']");
-    const isDeleteOrRemoved = targetElement.matches("input[class='actionDelete'], input[class='actionRemove']");
     const isFormButton = targetElement.matches("input[type=submit]");
-    const isUIElement = targetElement.closest(".toggleview, .snarkNav, .filter");
 
-    let currentForm = targetElement.closest("form");
+    let currentForm;
     let delay = 360;
 
     targetElement.classList.add("depress");
 
-    if (isDeleteOrRemoved) {
-      event.preventDefault();
-      const confirmed = await showConfirmationDialog(targetElement, getConfirmationMessage(targetElement), targetElement.name, targetElement.value, targetElement.dataset.action);
-      if (!confirmed) {return;}
-    }
-
     if (isAction) {
       const iframe = document.getElementById("processForm");
       currentForm = document.getElementById("torrentlist");
-      if (!currentForm) {return;}
-      if (iframe) {
-        const formTarget = targetElement.form.target;
-        if (formTarget === "processForm" && isAction) {delay = 4000;}
-      } else {return;}
+      if (!iframe || !currentForm) {return;}
+      const formTarget = targetElement.form.target;
+      if (formTarget === "processForm") {delay = 4000;}
       const nonClickedActionButtons = currentForm.querySelectorAll("input[type=submit][class^='action']:not(.depress), input[type=submit][id^='action']:not(.depress)");
       nonClickedActionButtons.forEach((el) => el.classList.add("tempDisabled"));
-      currentForm.onsubmit = async (event) => {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await refreshScreenLog(undefined, true);
-        await new Promise(resolve => setTimeout(resolve, 3000));
-        targetElement.classList.replace("depress", "inert");
+      setTimeout(() => {
         nonClickedActionButtons.forEach((input) => input.classList.remove("tempDisabled"));
-      };
+      }, 4000);
+      event.preventDefault();
+      currentForm.requestSubmit(targetElement);
     } else if (isFormButton) {
       setTimeout(async () => {
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -143,42 +132,32 @@ document.addEventListener("DOMContentLoaded", () => {
     eventListenerActive = true;
     const clickTarget = event.target;
     const form = document.getElementById("torrentlist");
-    const className = clickTarget.className;
 
-    if (className === "actionRemove" || className === "actionDelete") {
+    if (clickTarget.classList.contains("actionDelete") || clickTarget.classList.contains("actionRemove")) {
       event.preventDefault();
       let torrent = clickTarget.getAttribute("data-name");
       if (torrent.length > 50) {torrent = torrent.substring(0, 48) + "&hellip;";}
-      let msg;
-      msg = className === "actionRemove" ? `<p id=msg>${removeMsg}<span class=hr></span>${removeMsg2}</p>` : `<p id=msg>${deleteMsg}</p>`;
+      const msg = clickTarget.classList.contains("actionRemove") ? `<p id=msg>${removeMsg}<span class=hr></span>${removeMsg2}</p>` : `<p id=msg>${deleteMsg}</p>`;
       const name = clickTarget.name;
       const value = clickTarget.value;
       const action = clickTarget.dataset.action;
 
       const confirmed = await showConfirmationDialog(clickTarget, msg.replace("{0}", `<b>${torrent}</b>`), name, value, action);
       if (form && confirmed) {
-        const existingHiddenInputs = form.querySelectorAll("input[type=hidden]:not([name=nonce]):not([name=sort])");
-        const hiddenInput = document.createElement("input");
-        existingHiddenInputs.forEach(input => input.remove());
-        hiddenInput.type = "hidden";
-        hiddenInput.name = name;
-        hiddenInput.value = value;
-        form.appendChild(hiddenInput);
-        form.requestSubmit();
+        form.requestSubmit(clickTarget);
       }
     } else {
       if ((clickTarget.matches("input.add") || clickTarget.matches("input.create"))) {
         event.preventDefault();
         event.stopPropagation();
-        clickTarget.form.requestSubmit();
+        clickTarget.form.requestSubmit(clickTarget);
       }
-      handleInputClick(clickTarget);
+      handleInputClick(clickTarget, event);
     }
     if (clickTarget.classList.contains("action") || clickTarget.id.includes("action")) {
       clickTarget.disabled = true;
       clickTarget.classList.add("depress");
     }
-    setTimeout(() => {refreshTorrents(refreshScreenLog);}, 3000);
   });
 
   /**
@@ -267,8 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
       /**
        * @function removeDialog
        * @description Removes the confirmation dialog and overlay from the DOM, cleans up
-       * keyboard and resize listeners, removes the modal class, and triggers a torrent
-       * refresh after a short delay.
+       * keyboard and resize listeners, and removes the modal class.
        * @returns {void}
        */
       function removeDialog() {
@@ -277,7 +255,6 @@ document.addEventListener("DOMContentLoaded", () => {
           document.getElementById("confirmDialog")?.remove();
           document.getElementById("confirmOverlay")?.remove();
           htmlTag.classList.remove("modal");
-          setTimeout(refreshTorrents, 1000);
       }
 
       /**
@@ -300,24 +277,5 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       return promise;
-  }
-
-  /**
-   * @function getConfirmationMessage
-   * @description Generates the appropriate confirmation message HTML based on the action
-   * class (actionRemove or actionDelete). Truncates long torrent names and formats the
-   * message with the torrent name in bold.
-   * @param {HTMLElement} targetElement - The action button element with data-name attribute.
-   * @returns {string} The formatted HTML confirmation message.
-   */
-  function getConfirmationMessage(targetElement) {
-    let torrent = targetElement.getAttribute("data-name");
-    if (torrent.length > 50) {
-      torrent = torrent.substring(0, 48) + "&hellip;";
-    }
-    const className = targetElement.className;
-    let msg;
-    msg = className === "actionRemove" ? `<p id=msg>${removeMsg}<span class=hr></span>${removeMsg2}</p>` : `<p id=msg>${deleteMsg}</p>`;
-    return msg.replace("{0}", `<b>${torrent}</b>`);
   }
 });

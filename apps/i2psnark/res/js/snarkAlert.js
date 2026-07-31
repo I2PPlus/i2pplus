@@ -8,7 +8,7 @@
  * @license AGPL3 or later
  */
 
-import { refreshScreenLog } from "./refreshTorrents.js"; // NOSONAR S1128
+import { refreshScreenLog, doRefresh } from "./refreshTorrents.js";
 
 "use strict";
 
@@ -48,8 +48,8 @@ let lastMessage = "";
  * @async
  * @function handleTorrentNotify
  * @description Handles torrent form submission events. Prevents default form behavior,
- * submits the form via fetch, waits briefly for processing, refreshes the screen log,
- * and displays a notification with the result message.
+ * submits the form via fetch, refreshes the torrent display and screen log once the
+ * submission completes, and displays a notification with the result message.
  * @param {Event} event - The form submit event.
  * @param {HTMLElement} notificationElement - The DOM element to display the notification in.
  * @param {HTMLInputElement} inputElement - The form input field to clear after submission.
@@ -61,7 +61,7 @@ async function handleTorrentNotify(event, notificationElement, inputElement, for
   if (elements.addNotify || elements.createNotify) {
     try {
       await submitForm(form);
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await doRefresh({forceFetch: true});
       await refreshScreenLog(() => {
         requestAnimationFrame(() => { showNotification(notificationElement, inputElement, getLastMessage()); });
       }, true);

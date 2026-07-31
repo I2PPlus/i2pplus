@@ -538,6 +538,8 @@ async function refreshTorrents(payload) {
     else if (dirlist) {await requestAnimationFramePromise(async () => await updateFiles()); }
     else if (down) { await requestAnimationFramePromise(async () => await refreshAll()); }
 
+    markStartingRows();
+
     /**
      * @function morphTorrentsBody
      * @description Morphs the live torrent tbody to match the response rows, diffing by
@@ -766,50 +768,96 @@ function convertEncodedSpaces() {
 }
 
 /**
+ * @type {?{handler: Function}}
+ * @description Pending processForm iframe load waiter for the most recent form submission.
+ */
+let pendingIframeLoad = null;
+
+/**
+ * @function waitForIframeLoad
+ * @description Returns a promise that resolves when the processForm iframe next fires
+ * load, which is the signal that the submission response has been swallowed by the hidden
+ * iframe and the server finished processing. Re-arms on each submission so only the most
+ * recent submit triggers a refresh; earlier waiters are discarded.
+ * @param {HTMLIFrameElement} iframe - The processForm iframe element.
+ * @returns {Promise<void>} Resolves when the iframe fires load.
+ */
+function waitForIframeLoad(iframe) {
+  if (pendingIframeLoad) {iframe.removeEventListener("load", pendingIframeLoad.handler);}
+  return new Promise((resolve) => {
+    const handler = () => {
+      iframe.removeEventListener("load", handler);
+      resolve();
+    };
+    pendingIframeLoad = {handler};
+    iframe.addEventListener("load", handler);
+  });
+}
+
+/**
+ * @function invalidateCache
+ * @description Clears all cached fetch payloads so the next refresh fetches fresh data.
+ * Called on form submission so a concurrent interval refresh cannot re-render the
+ * pre-action state.
+ * @returns {void}
+ */
+function invalidateCache() {
+  cache.clear();
+  staleCacheKeys.clear();
+}
+
+/**
+ * @function markStartingRows
+ * @description Adds a <span class=loading> indicator to the action cell of rows that
+ * currently have no action buttons (the transient state while a torrent is starting),
+ * and removes it again once the next refresh restores the buttons.
+ * @returns {void}
+ */
+function markStartingRows() {
+  if (!torrentsBody) {return;}
+  torrentsBody.querySelectorAll("tr").forEach((row) => {
+    const cell = row.querySelector(".tAction");
+    if (!cell) {return;}
+    if (cell.querySelector("input[type=submit]")) {
+      cell.querySelector(".loading")?.remove();
+    } else if (!cell.querySelector(".loading")) {
+      cell.insertAdjacentHTML("beforeend", "<span class=loading></span>");
+    }
+  });
+}
+
+/**
  * @function refreshOnSubmit
- * @description Attaches form submission handlers that refresh the screen log and torrent
- * display after forms are submitted via the hidden iframe. Also handles click delegation
- * for submit buttons, stop/start all actions, and the navigation refresh link.
+ * @description Attaches form submission handlers that refresh the torrent display and
+ * screen log once the processForm iframe reports the submission complete, instead of
+ * waiting for the next refresh interval. Also handles click delegation for the
+ * navigation refresh link.
  * @returns {void}
  */
 function refreshOnSubmit() {
   const forms = document.querySelectorAll("form");
+  const iframe = document.getElementById("processForm");
   forms.forEach((form) => {
-    const iframe = document.getElementById("processForm");
     if (form && iframe) {
-      const formSubmitted = new Promise((resolve) => {
-        const loadHandler = () => {
-          iframe.removeEventListener("load", loadHandler);
-          resolve();
-        };
-        iframe.addEventListener("load", loadHandler);
-      });
-
       form.onsubmit = async (event) => {
         const submitter = event.submitter;
         if (!(submitter instanceof HTMLInputElement && submitter.classList) && submitter !== null) {return;}
-        await formSubmitted;
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        await refreshScreenLog(undefined, true);
+        invalidateCache();
+        try {
+          await waitForIframeLoad(iframe);
+          await doRefresh({forceFetch: true});
+          await refreshScreenLog(undefined, true);
+        } catch (error) {
+          if (debugging) {console.error(error);}
+        }
       };
     }
   });
 
   document.addEventListener("click", (event) => {
     const clickTarget = event.target;
-    const form = clickTarget.closest("form");
-    const stopAllOrStartAllInactive = document.querySelector('input[id^="action"]:not(.depress)');
     const dirlist = document.getElementById("dirlist");
-    if (clickTarget.matches("input[type=submit]")) {
-      event.stopPropagation();
-      clickTarget.form.requestSubmit();
-      if (clickTarget.matches('input[id^="action"]')) {
-        if (stopAllOrStartAllInactive) {
-          stopAllOrStartAllInactive.classList.add("tempDisabled");
-          setTimeout(() => {stopAllOrStartAllInactive.classList.remove("tempDisabled")}, 4000);
-        }
-      }
-    } else if (clickTarget.matches("#nav_main:not(.isConfig)") && !dirlist) {
+    if (clickTarget.matches("#nav_main:not(.isConfig)") && !dirlist) {
       const navMain = document.querySelector("#nav_main:not(.isConfig)");
       navMain.classList.add("isRefreshing");
       event.preventDefault();
@@ -963,4 +1011,4 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.removeAttribute("style");
 });
 
-export { doRefresh, fetchTunnelCounts, getURL, initSnarkRefresh, refreshScreenLog, refreshTorrents, snarkRefreshIntervalId, isDocumentVisible };
+export { doRefresh, fetchTunnelCounts, getURL, initSnarkRefresh, markStartingRows, refreshScreenLog, refreshTorrents, snarkRefreshIntervalId, isDocumentVisible };

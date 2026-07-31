@@ -87,6 +87,8 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .configPanel,.configPanel td,.snarkNewTorrent,.snarkNewTorrent td,select,input,input.r,input[name="nofilter_dataDir"],a.control{font:9pt var(--bodyfont)}
 .hidden{display:none!important}
 .infohash{font-family:var(--monospaced);color:#cc0;text-transform:uppercase;text-shadow:var(--txt_shadow);user-select:all}
+.loading,.routerdown::after,#snarkHead.initializing::after{display:inline-block;width:40px;height:40px;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:40px;content:"";mix-blend-mode:difference;animation:linear spin 5s reverse infinite}
+.loading{width:24px;height:24px;background-size:24px}
 .mainsection,.section{padding:10px;word-wrap:break-word;overflow:hidden;color:#001}
 .mainsection table{border-radius:0}
 .mainsection table:not(#torrents){animation:fade .05s ease-out}
@@ -97,7 +99,6 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
 .notify td{text-shadow:1px 1px 1px #0008;background:linear-gradient(to bottom,rgba(72,0,72,.2),rgba(24,0,24,.3))}
 .routerdown{padding:15px 10px;vertical-align:middle;color:#ee9;font-size:10pt;border:var(--border_soft);border-radius:3px;box-shadow:inset 0 0 0 1px #313,inset 0 0 6px 4px #101,inset 0 0 0 8px rgba(0,0,0,.7);background:var(--isDown)}
-.routerdown::after,#snarkHead.initializing::after{display:inline-block;width:40px;height:40px;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:40px;content:"";mix-blend-mode:difference;animation:linear spin 5s reverse infinite}
 .routerdown span{display:none}
 .rowOdd{background:var(--row_odd)}
 .rowEven{background:var(--row)}
@@ -1155,6 +1156,7 @@ select{padding:5px 18px 5px 7px}
 /* responsive layout */
 @media (max-width:1499px){
 #dirInfo thead img{max-height:20px}
+.loading{width:20px;height:20px;background-size:20px}
 .magnetLabel{max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .peerCount b{min-width:90px}
 .peerCount b .left,.peerCount b .right{min-width:32px}
