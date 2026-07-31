@@ -1,3 +1,122 @@
+2026-07-31 dr|z3d
+  * I2PSnark:
+    - Real-time search-as-you-type (debounced, worker-fetched) that filters the
+      torrent list without page navigation; native GET form remains the fallback
+      when JavaScript is disabled; clear button restores the full list
+    - Start/stop/pause/delete/add actions refresh the list immediately once the
+      server finishes processing, instead of waiting for the next refresh
+      interval; loading spinner shown in the action cell while a torrent is
+      starting
+    - Refresh pipeline reworked: AJAX payloads fetched and parsed by a Web Worker
+      and applied with morphdom diffing, so only changed rows and cells update in
+      place; snark tunnel counts fetched off-thread
+    - Tracker errors aggregated: a problem is only shown when announces to every
+      active tracker fail, and clears as soon as one succeeds
+    - Inactive torrents show a "complete" status distinct from incomplete
+    - Lightbox: crossfade transitions, images sized to viewport constraints,
+      slideshow timer resets on navigation
+  * Console: transit pages consolidated to shared JS; stats and autologout
+    checks moved to fetchWorker; scrollTo rewritten natively
+  * GeoIP: normalize AT&T ASN/whois peer names to "AT&T"
+
+2026-07-30 dr|z3d
+  * Streaming: Larger default buffers with dynamic buffer growth and
+    MaxInboundBuffer tuning for higher throughput
+  * Console: Stats CSV export with stat filter param; sortable tables moved to
+    the worker with case-insensitive sort, empty-last, and keyboard support;
+    profiles page gains Fast tab and show= param; netdb show= param and longer
+    lease lookup timeout; netdb/profiles links refreshed
+  * Reseed: New hosts, remove expiring certificates, drop reseed.onion.im and
+    diva.exchange
+  * Susimail: Refresh Page button works without JavaScript
+  * I2PTunnel: Fix dontPublishLeaseSet broken by getClientOptions() clone
+  * GeoIP: Fix ASN names (AT&T, Telefonica Germany, Rostelecom, Comcast),
+    strip Copjsc/PJSC/B.v suffixes, outlier ASN overrides
+  * Tunnel: Snapshot collapse-pool sort in BuildExecutor to prevent comparator
+    crashes from concurrent pool state changes
+
+2026-07-29 dr|z3d
+  * Streaming: Raise default initial RTO to 8s (ceiling 30s), Tuner-controlled
+    connect timeout multiplier, retransmit on NO_LEASESET, RESET on full SYN
+    queue, floor CWND at 4, reduce spurious NACK storms via tunnel stickiness
+    and SRTT-based fast-retransmit guard
+  * Tunnel: Prune zero-hop tunnels after bootstrap (never published to
+    LeaseSet); remove inProgress check from EMERGENCY build path
+  * LeaseSet: Raise retry backoff max to 120s, clear global fail count on
+    success
+  * Tuner: Fix reflector caching, storm timeout logic, and pool buffer deficit
+    check
+
+2026-07-28 dr|z3d
+  * I2PTunnel: Async DNS lookup with 5s timeout in validateRequestHost (prevents
+    thread pool exhaustion), close socket immediately on invalid B32, fix
+    OPT_REJECT_REFERER dead code, XSS fix in address-helper pages
+  * Peer selection: Probabilistic latency-biased peer selection in
+    ProfileOrganizer
+  * Tunnel: Fix direction-blind peer sequence dedup for inbound pools, stale
+    inProgress readings, and dead-pool early exit in ensureSufficientTunnels
+  * Console: Custom bans show the correct version (BanlistRenderer versionMap)
+
+2026-07-27 dr|z3d
+  * Wrapper: Update Tanuki Wrapper to 3.7.0
+  * i18n: Full routerconsole/susidns translation coverage (100%) across all 64
+    locale files
+  * Router: Fix memory leaks — ThreadLocal caches in NTCP/PacketBuilder,
+    CachedIteratorArrayList and WeakRef accumulation in CoDel queues, Tuner,
+    SyntheticREDQueue, and RatchetSessionTag aggressive-expire cleanup
+  * Profile: Evict stale profiles not in netdb, trim rate periods and lazily
+    expand PeerProfile/DBHistory to bound memory
+  * Banlist: Aggressive halving when ban count exceeds 8000
+
+2026-07-26 dr|z3d
+  * Streaming: HTTP/1.1 connection pooling for reuse, latency reduction with
+    pacing, TLP window cut fix, and fixes for four connection regressions
+  * I2PTunnel: Restore HTTP keepalive by running GET/HEAD inline, reduce
+    default connect timeout to 30s
+  * Transport: Priority send pool, non-blocking send, faster selector
+  * NetDB: Defer LeaseSet publish until tunnels are built, shorten republish
+    intervals, fix retry backoff
+  * Tunnel: Reduce pool churn (target+1), widen peer activity windows, soft
+    fallback for no-signal peers
+  * i18n: Add Bengali and Slovak translations
+
+2026-07-25 dr|z3d
+  * Streaming: Improve initial RTO signal quality with wider caps, retry HTTP
+    proxy 6x, auto-unchoke after RTO when remote never unchokes, dynamic
+    MAX_WINDOW_SIZE with Tuner BDP ceiling, floor ssthresh at wsize/2 on RTO,
+    deficit-driven congestion-avoidance growth, promote out-of-order blocks
+    before EOF
+  * Transport: Fix deadlock between NTCP2 locked_close() and
+    OutboundNTCP2State.receive()
+  * NetDB: Client-initiated searches bypass floodfill dedup to prevent deferral
+  * Tunnel: Prevent build churn by relaxing peer diversity and preserving
+    UNTESTED/TESTING tunnels
+  * Console: Fix sidebar double-refresh and broken-content flash on connection
+    loss
+  * I2PTunnel: Offload CompressedRequestor to executor pool to prevent handler
+    thread blocking
+
+2026-07-24 dr|z3d
+  * Router: Fix memory leaks, allocation hotspots, and cleanup gaps; cache
+    config values on hot paths; ensure keystore directory exists before SSL
+    setup
+  * Tunnel: Fix TestJob counter leaks on failure paths; include TESTING in
+    active count, dedup builds, pre-empt replacement at cap, skip reserve for
+    non-publishing pools
+  * Console: Downgrade SSL keystore errors to warnings (optional feature)
+
+2026-07-23 dr|z3d
+  * Tunnel: Fix pool capacity deadlock (exclude UNTESTED from maxTotal, cap at
+    target+3), dynamic untested-tunnel cap via Tuner, Tuner-driven retest
+    backoff replaces per-pool test budgets, align cancellation cap with
+    effective pool target
+  * NetDB: Proactive LeaseSet refresh at 90s threshold, remove tunnel-count
+    gates
+  * Streaming: Fixes — SU3 download corruption, EOF hang, cache leak, TLP race,
+    socket API cleanup
+  * Tuner: Overhaul ring scoring and precalc pool backlog scaling, align cap
+    ranges with enforcement, fix NaN floor, ISJ reply fallback
+
 2026-07-22 2.13+ (API 0.9.70) released
 
 2026-07-22 dr|z3d

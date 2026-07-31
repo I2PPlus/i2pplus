@@ -26,7 +26,7 @@ public class RouterVersion {
     /**
      * BUILD.
      */
-    public static final long BUILD = 0;
+    public static final long BUILD = 1;
 
     /** for example "-test" */
     public static final String EXTRA = "+";
