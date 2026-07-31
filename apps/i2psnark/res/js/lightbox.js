@@ -42,6 +42,9 @@ class Lightbox {
     this.opt = {};
     this.intervalId = null;
     this.slideshowDelay = 5000;
+    this.transition = null;       // active crossfade: { out, in }
+    this.settleTimer = null;      // fires settleDone at the end of the fade
+    this.transitionToken = 0;     // invalidates decode callbacks from superseded clicks
     this.initialize();
   }
 
@@ -173,7 +176,8 @@ class Lightbox {
    * @method openBox
    * @description Opens the lightbox for the given element. Creates a new Image, sets its
    * source from the data attribute or element src, displays the lightbox container, and
-   * triggers resize and positioning on image load.
+   * triggers resize and positioning on image load. This is the initial-open path only;
+   * in-gallery navigation goes through transitionTo for a crossfade.
    * @param {HTMLElement} el - The thumbnail element whose image to display.
    * @returns {void}
    */
@@ -184,6 +188,9 @@ class Lightbox {
     this.currImage.img = new Image();
     const src = el.getAttribute(this.data_attr) || el.src;
     this.currImage.img.src = src;
+    // Kill the CSS fadeAndBlur entrance animation: its 0.4s delay holds the image at
+    // opacity 0 and would corrupt the first transition's fade-out start state.
+    this.currImage.img.style.animation = "none";
     this.box.style.display = "flex";
     this.currImages = Array.from(document.querySelectorAll(`[${this.data_attr}-group="${this.currGroup}"]`));
     this.currImage.img.onload = () => this.onImageLoad();
@@ -237,39 +244,44 @@ class Lightbox {
 
   /**
    * @method resize
-   * @description Resizes the current lightbox image to fit within the viewport while
-   * maintaining aspect ratio, constrained by the maxImgSize option.
+   * @description Constrains the current lightbox image with max-width/max-height so the
+   * browser scales it proportionally from its natural dimensions. Never sets explicit
+   * width or height: the computed size keeps the image's true aspect ratio, so the frame
+   * (border included) always matches the rendered content exactly.
    * @returns {void}
    */
   resize() {
     if (!this.currImage.img) return;
-    const maxWidth = window.innerWidth * this.opt.maxImgSize;
-    const maxHeight = window.innerHeight * this.opt.maxImgSize;
-    const imgRatio = this.currImage.img.naturalWidth / this.currImage.img.naturalHeight;
-    let newImgWidth = maxWidth;
-    let newImgHeight = maxWidth / imgRatio;
-    if (newImgHeight > maxHeight) {
-      newImgHeight = maxHeight;
-      newImgWidth = maxHeight * imgRatio;
-    }
-    Object.assign(this.currImage.img.style, {
-      height: `${newImgHeight}px`,
-      maxWidth: `${maxWidth}px`,
-      maxHeight: `${maxHeight}px`
-    });
+    Object.assign(this.currImage.img.style, this.getMaxSizing());
+  }
+
+  /**
+   * @method getMaxSizing
+   * @description Computes the max-width/max-height style object that fits images within
+   * the viewport, constrained by the maxImgSize option. Flooring keeps the computed size
+   * stable between calls so the frame cannot reflow at the end of a transition.
+   * @returns {{maxWidth: string, maxHeight: string}} The constraint styles.
+   */
+  getMaxSizing() {
+    const maxWidth = Math.floor(window.innerWidth * this.opt.maxImgSize);
+    const maxHeight = Math.floor(window.innerHeight * this.opt.maxImgSize);
+    return { maxWidth: `${maxWidth}px`, maxHeight: `${maxHeight}px` };
   }
 
   /**
    * @method close
-   * @description Closes the lightbox, removes the active class, removes the image from the DOM,
-   * resets parent styles, cleans up observers, and pauses any active slideshow.
+   * @description Closes the lightbox: aborts any transition in progress, removes the image
+   * from the DOM, resets parent styles, cleans up observers, and pauses the slideshow.
    * @returns {void}
    */
   close() {
+    this.cancelTransition();
     this.isOpen = false;
     this.body.classList.remove("lightbox");
     this.box.classList.remove("active");
-    this.currImage.img.remove();
+    // Removes the displayed image in every state: settled, mid-fade, or still decoding
+    // (when currImage.img is an unattached placeholder and the shown image is in the box).
+    this.box.querySelectorAll("img").forEach((img) => img.remove());
     this.resetParentStyles();
     this.cleanupObserversAndListeners();
     this.pause();
@@ -347,6 +359,19 @@ class Lightbox {
   }
 
   /**
+   * @method resetSlideshowTimer
+   * @description Restarts the slideshow interval from zero when the timer is running, so a
+   * manual navigation during playback gets the full delay before the next auto-advance.
+   * @returns {void}
+   */
+  resetSlideshowTimer() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = setInterval(() => this.next(), this.slideshowDelay);
+    }
+  }
+
+  /**
    * @method togglePlayPauseButtons
    * @description Toggles the active state of play, pause, prev, and next buttons based
    * on whether the slideshow is paused.
@@ -384,32 +409,154 @@ class Lightbox {
 
   /**
    * @method next
-   * @description Advances to the next image in the current group. Wraps around to the
-   * first image if at the end of the group.
+   * @description Advances to the next image in the current group, crossfading between the
+   * current and next image. Wraps around to the first image if at the end of the group.
    * @returns {void}
    */
   next() {
     if (!this.currGroup) return;
-    this.currImage.img.remove();
     const pos = this.currImages.findIndex((thumbnail) => thumbnail === this.currThumb) + 1;
-    if (this.currImages[pos]) { this.currThumb = this.currImages[pos]; }
-    else { this.currThumb = this.currImages[0]; }
-    this.openBox(this.currThumb);
+    this.transitionTo(this.currImages[pos] || this.currImages[0]);
   }
 
   /**
    * @method prev
-   * @description Goes to the previous image in the current group. Wraps around to the
-   * last image if at the beginning of the group.
+   * @description Goes to the previous image in the current group, crossfading between the
+   * current and previous image. Wraps around to the last image if at the beginning of the group.
    * @returns {void}
    */
   prev() {
     if (!this.currGroup) return;
-    this.currImage.img.remove();
     const pos = this.currImages.findIndex((thumbnail) => thumbnail === this.currThumb) - 1;
-    if (this.currImages[pos]) { this.currThumb = this.currImages[pos]; }
-    else { this.currThumb = this.currImages[this.currImages.length - 1]; }
-    this.openBox(this.currThumb);
+    this.transitionTo(this.currImages[pos] || this.currImages[this.currImages.length - 1]);
+  }
+
+  /**
+   * @method transitionTo
+   * @description Starts a crossfade transition to the given thumbnail image. Cancels any
+   * transition in progress and keeps the current image displayed while the next one decodes,
+   * so a slow load never leaves the box blank. Warms the preload cache for the following images.
+   * @param {HTMLElement} thumb - The thumbnail element whose image to transition to.
+   * @returns {void}
+   */
+  transitionTo(thumb) {
+    if (!thumb) return;
+    this.cancelTransition();
+    // A manual jump restarts the slideshow countdown so the next auto-advance gets the
+    // full delay instead of firing off the tail of the previous interval.
+    this.resetSlideshowTimer();
+    const oldImg = this.currImage.img;
+    // Decode is async, so rapid next/prev clicks can leave several callbacks pending;
+    // the token makes only the latest click's callback run the transition.
+    const token = ++this.transitionToken;
+    this.currThumb = thumb;
+    const newImg = new Image();
+    // currImage.img still names the displayed image until the fade actually starts
+    // (runTransition), so a click that lands before the target decodes keeps working
+    // with the visible image and a close() never targets an unattached placeholder.
+    newImg.src = thumb.getAttribute(this.data_attr) || thumb.src;
+    if (typeof newImg.decode === "function") {
+      newImg.decode().then(() => {
+        if (token !== this.transitionToken) { return; }
+        this.runTransition(oldImg, newImg);
+      }).catch(() => {
+        // keep the current image displayed when the next one cannot be decoded
+      });
+    } else {
+      newImg.onload = () => {
+        if (token === this.transitionToken) { this.runTransition(oldImg, newImg); }
+      };
+      newImg.onerror = () => {};
+      // img.complete is true for failed loads too; require actual dimensions
+      if (newImg.complete && newImg.naturalWidth > 0) { this.runTransition(oldImg, newImg); }
+    }
+    this.preload();
+  }
+
+  /**
+   * @method cancelTransition
+   * @description Aborts any transition in progress: clears the settle timer and removes the
+   * image that is not on screen. The image that is visible (or starting to fade in) becomes
+   * the current display for the next transition.
+   * @returns {void}
+   */
+  cancelTransition() {
+    if (this.transition) {
+      clearTimeout(this.settleTimer);
+      this.settleTimer = null;
+      // The incoming image is invisible until its fade-in starts, so when a transition is
+      // canceled before the fade begins the outgoing image must be restored as the current
+      // display. No sizes ever change during a transition, so opacity is all to restore.
+      if (parseFloat(this.transition.in.style.opacity) === 0) {
+        this.transition.in.remove();
+        this.currImage.img = this.transition.out;
+        this.transition.out.style.transition = "none";
+        this.transition.out.style.opacity = "1";
+      } else {
+        this.transition.out.remove();
+      }
+      this.transition = null;
+    }
+  }
+
+  /**
+   * @method runTransition
+   * @description Performs the image swap as a pure opacity cross-fade. Both images carry
+   * the same max-width/max-height constraints, so the browser scales each proportionally
+   * from its natural dimensions and the frame (border included) always matches the
+   * rendered content exactly - images never distort and the border never has to adjust
+   * to the image after it appears. The incoming image is first staged offscreen as a
+   * direct child of the lightbox so the full CSS cascade (border, padding, radius) is
+   * laid out and rasterized at final size before it fades in.
+   * @param {HTMLImageElement} oldImg - The image being replaced.
+   * @param {HTMLImageElement} newImg - The incoming image.
+   * @returns {void}
+   */
+  runTransition(oldImg, newImg) {
+    const fadeMs = 1000;
+    // The new image becomes the displayed image only once the fade starts.
+    this.currImage.img = newImg;
+    const centered = { left: "0", right: "0", top: "0", bottom: "0", margin: "auto" };
+    Object.assign(newImg.style, { position: "fixed", left: "-9999px", top: "0", animation: "none", opacity: "0" }, this.getMaxSizing());
+    this.box.appendChild(newImg);
+    // Fixed-position elements still paint, so the flush commits the offscreen raster too.
+    void newImg.offsetWidth;
+    Object.assign(newImg.style, centered);
+    // Flush again: both images must be committed at their final positions with opacity 0
+    // before the fade, otherwise the style changes coalesce into one frame and it jumps.
+    void newImg.offsetWidth;
+    // Fade the old out while the new fades in - the only animated property is opacity.
+    oldImg.style.transition = `opacity ${fadeMs}ms ease`;
+    oldImg.style.opacity = "0";
+    newImg.style.transition = `opacity ${fadeMs}ms ease`;
+    newImg.style.opacity = "1";
+    // transition stays set until settleDone so a click (or close) mid-fade can abort both
+    // the fade and the settle cleanup together.
+    this.transition = { out: oldImg, in: newImg };
+    this.settleTimer = setTimeout(() => this.settleDone(newImg, oldImg), fadeMs);
+  }
+
+  /**
+   * @method settleDone
+   * @description Removes the transition styling once the cross-fade finishes and drops the
+   * outgoing image. The max-width/max-height constraints stay inline - the browser keeps
+   * scaling proportionally - so the border stays exactly where the transition left it.
+   * @param {HTMLImageElement} newImg - The image to restore normal styling on.
+   * @param {HTMLImageElement} oldImg - The outgoing image to remove from the lightbox.
+   * @returns {void}
+   */
+  settleDone(newImg, oldImg) {
+    this.settleTimer = null;
+    this.transition = null;
+    oldImg.remove();
+    // animation stays "none" inline: restoring the CSS fadeAndBlur here would re-trigger
+    // the entrance animation and flash the settled image. Everything else returns to the
+    // resize()-managed state; position returns to the CSS absolute/flex-centered layout.
+    Object.assign(newImg.style, {
+      left: "", right: "", top: "", bottom: "", margin: "",
+      opacity: "", transform: "", transition: "", position: ""
+    });
+    this.resize();
   }
 
   /**
