@@ -124,6 +124,8 @@ For the various sub-component licenses, see: [README.md](docs/LICENSES.md)
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Headless (console mode) installation
 - [docs/HACKING.md](docs/HACKING.md) - Developer guide and build systems
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Source tree layout and where to find things
+- [router/java/src/net/i2p/README.md](router/java/src/net/i2p/README.md) - Router source tree overview
+- [core/java/src/net/i2p/README.md](core/java/src/net/i2p/README.md) - Core library source tree overview
 - [docs/DEBUGGING.md](docs/DEBUGGING.md) - Runtime debugging with JDWP and other tools
 - [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
 - [docs/LICENSES.md](docs/LICENSES.md) - Third-party licenses

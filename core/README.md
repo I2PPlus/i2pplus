@@ -9,6 +9,8 @@ The core module is the foundation of the I2P router. It provides the low-level A
 | `java/src/net/i2p/client/`   | I2P client API for applications connecting to the router              |
 | `java/src/net/i2p/crypto/`   | Cryptographic engines (AES, ElGamal, EdDSA, ECDSA, HMAC, SHA)         |
 | `java/src/net/i2p/data/`     | I2P data structures (Hash, Destination, LeaseSet, Keys, Certificates) |
+| `java/src/net/i2p/app/`      | `ClientApp` lifecycle interface for apps run via `clients.config`     |
+| `java/src/net/i2p/apache/`   | Vendored Apache HttpComponents helpers (hostname verifier, etc.)      |
 | `java/src/net/i2p/internal/` | Internal router interfaces consumed by other modules                  |
 | `java/src/net/i2p/kademlia/` | Kademlia DHT implementation used for network database lookups         |
 | `java/src/net/i2p/stat/`     | Statistics and frequency tracking                                     |
