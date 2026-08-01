@@ -798,6 +798,17 @@ public abstract class SystemVersion {
     }
 
     /**
+     * 60s-smoothed process CPU load expressed in cores, e.g. 2.3 on a 4-core
+     * machine means the JVM recently consumed 2.3 cores on average.
+     *
+     * @return the cores used, from 0.0 to getCores()
+     * @since 0.9.70+
+     */
+    public static double getCPULoadCores() {
+        return getCPULoadAvg() * getCores() / 100.0;
+    }
+
+    /**
      * Retrieve System Load as percentage (100% equals full system load)
      *
      * @since 0.9.57+
