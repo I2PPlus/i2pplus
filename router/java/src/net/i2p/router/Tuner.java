@@ -56,8 +56,10 @@ import net.i2p.util.SystemVersion;
  * General-purpose adaptive tuner. Observes network and system stats,
  * adjusts tunable parameters to optimize router performance.
  *
- * <p>Runs every 30 seconds via {@link SimpleTimer2}. Each parameter
- * implements an AIMD-style feedback loop bounded within safe ranges:
+ * <p>Runs every 5 seconds via {@link SimpleTimer2}. Each tick samples
+ * transport worker-stage CPU and updates the transport thread pool params;
+ * every 15th-second tick runs the full cycle for all other params. Each
+ * parameter implements an AIMD-style feedback loop bounded within safe ranges:
  * <ol>
  *   <li>Read observed stat (60s rolling average)</li>
  *   <li>Compute target value from observed stat + cross-references</li>
@@ -89,13 +91,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private final Log _log;
     private final List<TunableParam> _params;
     private final AutotuneConfig _autotune;
+    /** Transport worker thread params updated every 5s instead of the 15s cycle */
+    private final Set<TunableParam> _fastParams = new HashSet<TunableParam>();
+    private long _lastFastCycle;
+    private long _lastSlowCycle;
+    /** Health from the most recent slow cycle, shared with fast-cycle params */
+    private SystemHealth _lastHealth;
 
     /** Period for short-term bandwidth stats. */
     static final long STAT_PERIOD = RateConstants.ONE_MINUTE;
     /** Period for long-term bandwidth stats. */
     static final long STAT_PERIOD_LONG = RateConstants.TEN_MINUTES;
-    /** Max history samples for sparklines (30 samples @ 30s = 15min) */
-    static final int MAX_HISTORY = 30;
+    /** Max history samples for sparklines (120 samples @ 15s = 30min; transport thread params sample every 5s = 10min) */
+    static final int MAX_HISTORY = 120;
 
     /** Stat prefix for per-stage CPU usage (pct of one core, 100 = full core). */
     static final String STAGE_STAT_PREFIX = "tuner.stageCpu.";
@@ -129,7 +137,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         StageCpu(String name) { this.name = name; }
     }
 
-    /** Sample per-thread CPU time per stage, once per tune cycle. */
+    /** Sample per-thread CPU time per stage, once per fast tune cycle (5s). */
     private void sampleStageCpu() {
         long now = System.currentTimeMillis();
         if (_lastCpuSampleMs > 0) {
@@ -180,15 +188,26 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Whether a transport worker stage has been CPU-saturated (>= 75% of one core)
-     * for two or more consecutive cycles.
+     * Thread growth step for a CPU-saturated stage: +1 at &gt;= 75% of a core
+     * sustained over two cycles, +2 at &gt;= 150%, +3 at &gt;= 300%.  Severe
+     * saturation (&gt;= 200% total) triggers immediately after a single cycle.
      *
      * @param stage a {@link #CPU_STAGES} prefix
-     * @return true if saturated
+     * @return 0 when not saturated, else the number of threads to add
      */
-    private boolean stageSaturated(String stage) {
+    private int stageGrowth(String stage) {
         StageCpu sc = _stageCpu.get(stage);
-        return sc != null && sc.streak >= 2 && sc.coresPct >= 75;
+        if (sc == null || sc.coresPct < 75)
+            return 0;
+        if (sc.coresPct >= 200 && sc.streak >= 1)
+            return 3;
+        if (sc.streak < 2)
+            return 0;
+        if (sc.coresPct >= 300)
+            return 3;
+        if (sc.coresPct >= 150)
+            return 2;
+        return 1;
     }
 
     /**
@@ -534,15 +553,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new MaxWriteBufsParam());
         _params.add(new NtcpFailsafeFreqParam());
         _params.add(new NTCPQueueCapacityParam());
-        _params.add(new NtcpReaderThreadsParam());
-        _params.add(new NtcpSendFinisherThreadsParam());
-        _params.add(new NtcpWriterThreadsParam());
+        NtcpReaderThreadsParam ntcpReader = new NtcpReaderThreadsParam();
+        _params.add(ntcpReader);
+        _fastParams.add(ntcpReader);
+        NtcpSendFinisherThreadsParam ntcpFinisher = new NtcpSendFinisherThreadsParam();
+        _params.add(ntcpFinisher);
+        _fastParams.add(ntcpFinisher);
+        NtcpWriterThreadsParam ntcpWriter = new NtcpWriterThreadsParam();
+        _params.add(ntcpWriter);
+        _fastParams.add(ntcpWriter);
         _params.add(new NtcpEstablishTimeParam());
         _params.add(new ObEstablishTimeParam());
         _params.add(new RdnsPoolSizeParam());
         _params.add(new SendPoolCapacityParam());
-        _params.add(new UDPHandlerThreadsParam());
-        _params.add(new UDPMessageReceiverThreadsParam());
+        UDPHandlerThreadsParam udpHandler = new UDPHandlerThreadsParam();
+        _params.add(udpHandler);
+        _fastParams.add(udpHandler);
+        UDPMessageReceiverThreadsParam udpReceiver = new UDPMessageReceiverThreadsParam();
+        _params.add(udpReceiver);
+        _fastParams.add(udpReceiver);
         _params.add(new SentMessagesCleanTimeParam());
         _params.add(new OutboundMsgExpirationParam());
 
@@ -665,7 +694,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         // Per-stage CPU usage stats, one per tracked transport worker stage
         long[] cpuRates = new long[] { RateConstants.ONE_MINUTE };
         for (String stage : CPU_STAGES) {
-            _context.statManager().createRateStat(STAGE_STAT_PREFIX + stage,
+            _context.statManager().createRequiredRateStat(STAGE_STAT_PREFIX + stage,
                 "CPU usage of " + stage + " worker threads (pct of one core)", "Tuner", cpuRates);
         }
     }
@@ -695,64 +724,87 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /** Expire entries and reschedule the next check. */
     public void timeReached() {
-        schedule(30*1000L);
-        // Compute system health once per cycle, shared by all params
-        SystemHealth health = new SystemHealth(_context);
-        _lastHealthScore = health.getScore();
-        _lastSubsystemScores = health.computeSubsystemScores();
-        // Sample per-stage thread CPU first so params can trigger on saturation
-        sampleStageCpu();
-        for (TunableParam param : _params) {
-            try {
-                if (param instanceof BaseParam) {
+        schedule(5*1000L);
+        long now = _context.clock().now();
+        // Fast cycle (5s): transport worker thread pools react to CPU saturation
+        // and idle-drain quickly. Everything else stays on the 15s cycle.
+        if (now - _lastFastCycle >= 5000) {
+            _lastFastCycle = now;
+            sampleStageCpu();
+            for (TunableParam param : _fastParams) {
+                try {
                     BaseParam bp = (BaseParam) param;
                     bp.refreshRanges(_context);
                     bp.refreshDefault(_context);
-                    bp.setHealth(health);
+                    bp.setHealth(_lastHealth);
+                    param.update();
+                } catch (Exception e) {
+                    if (_log.shouldWarn())
+                        _log.warn("Tuner: error updating " + param.getName(), e);
                 }
-                param.update();
-            } catch (Exception e) {
-                if (_log.shouldWarn())
-                    _log.warn("Tuner: error updating " + param.getName(), e);
             }
         }
-        // Refresh XDH pool sizes based on current system conditions
-        X25519KeyFactory xdh = X25519KeyFactory.getInstance();
-        if (xdh != null) {
-            try { xdh.refreshPoolSize(); }
-            catch (Exception e) {
-                if (_log.shouldWarn())
-                    _log.warn("Tuner: error refreshing XDH pool", e);
+        if (now - _lastSlowCycle >= 15000) {
+            _lastSlowCycle = now;
+            // Compute system health once per cycle, shared by all params
+            SystemHealth health = new SystemHealth(_context);
+            _lastHealth = health;
+            _lastHealthScore = health.getScore();
+            _lastSubsystemScores = health.computeSubsystemScores();
+            for (TunableParam param : _params) {
+                try {
+                    if (_fastParams.contains(param))
+                        continue;
+                    if (param instanceof BaseParam) {
+                        BaseParam bp = (BaseParam) param;
+                        bp.refreshRanges(_context);
+                        bp.refreshDefault(_context);
+                        bp.setHealth(health);
+                    }
+                    param.update();
+                } catch (Exception e) {
+                    if (_log.shouldWarn())
+                        _log.warn("Tuner: error updating " + param.getName(), e);
+                }
             }
-        }
-        // Refresh EDH pool sizes based on current system conditions
-        net.i2p.router.crypto.ratchet.Elg2KeyFactory edh =
-            net.i2p.router.crypto.ratchet.Elg2KeyFactory.getInstance();
-        if (edh != null) {
-            try { edh.refreshPoolSize(); }
-            catch (Exception e) {
-                if (_log.shouldWarn())
-                    _log.warn("Tuner: error refreshing EDH pool", e);
+            // Refresh XDH pool sizes based on current system conditions
+            X25519KeyFactory xdh = X25519KeyFactory.getInstance();
+            if (xdh != null) {
+                try { xdh.refreshPoolSize(); }
+                catch (Exception e) {
+                    if (_log.shouldWarn())
+                        _log.warn("Tuner: error refreshing XDH pool", e);
+                }
             }
-        }
-        // Refresh MLKEM pool sizes based on current system conditions
-        net.i2p.router.crypto.pqc.MLKEMKeyFactory mlkem =
-            net.i2p.router.crypto.pqc.MLKEMKeyFactory.getInstance();
-        if (mlkem != null) {
-            try { mlkem.refreshPoolSize(); }
-            catch (Exception e) {
-                if (_log.shouldWarn())
-                    _log.warn("Tuner: error refreshing MLKEM pool", e);
+            // Refresh EDH pool sizes based on current system conditions
+            net.i2p.router.crypto.ratchet.Elg2KeyFactory edh =
+                net.i2p.router.crypto.ratchet.Elg2KeyFactory.getInstance();
+            if (edh != null) {
+                try { edh.refreshPoolSize(); }
+                catch (Exception e) {
+                    if (_log.shouldWarn())
+                        _log.warn("Tuner: error refreshing EDH pool", e);
+                }
             }
+            // Refresh MLKEM pool sizes based on current system conditions
+            net.i2p.router.crypto.pqc.MLKEMKeyFactory mlkem =
+                net.i2p.router.crypto.pqc.MLKEMKeyFactory.getInstance();
+            if (mlkem != null) {
+                try { mlkem.refreshPoolSize(); }
+                catch (Exception e) {
+                    if (_log.shouldWarn())
+                        _log.warn("Tuner: error refreshing MLKEM pool", e);
+                }
+            }
+            // Compute derived test/build tuning values from subsystem scores
+            computeTuningValues();
+            // Expunge stale queue weak references (queues from cycled tunnels)
+            SyntheticREDQueue.expungeStaleInstances();
+            CoDelBlockingQueue.expungeStaleInstances();
+            CoDelPriorityBlockingQueue.expungeStaleInstances();
+            // Flush dirty state to disk (at most once per 5min, per AutotuneConfig throttle)
+            _autotune.save();
         }
-        // Compute derived test/build tuning values from subsystem scores
-        computeTuningValues();
-        // Expunge stale queue weak references (queues from cycled tunnels)
-        SyntheticREDQueue.expungeStaleInstances();
-        CoDelBlockingQueue.expungeStaleInstances();
-        CoDelPriorityBlockingQueue.expungeStaleInstances();
-        // Flush dirty state to disk (at most once per 5min, per AutotuneConfig throttle)
-        _autotune.save();
     }
 
     /**
@@ -1225,6 +1277,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected volatile boolean _autoTuning;
         /** Health score and subsystem for autotune decisions. */
         protected SystemHealth _health;
+        /**
+         * Whether this param reacts to CPU saturation and idle-drain even when
+         * its observed stat is quiet (no events in the window).  Transport
+         * worker thread pools must shed parked threads and grow on CPU signals
+         * without waiting for latency events.
+         */
+        protected boolean _cpuDriven;
         /** Rolling window of recent tunable values for trend analysis. */
         protected final int[] _valueHistory;
         /** Rolling window of recent stat values for trend analysis. */
@@ -1897,7 +1956,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         private boolean _reverted;
 
         /**
-         * Main tuning loop for this param. Called once per cycle (60s).
+         * Main tuning loop for this param. Called each tune cycle: every 5s
+         * for transport thread pool params, every 15s for all others.
          *
          * <p>Sequence:
          * <ol>
@@ -1930,7 +1990,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
             if (!_autoTuning)
                 return;
-            if (Double.isNaN(observed))
+            if (Double.isNaN(observed) && !_cpuDriven)
                 return;
             // Auto-revert to factory default when system is severely degraded
             if (_health != null && _health.getScore() < DEGRADED_THRESHOLD) {
@@ -4255,12 +4315,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Scale min/max/step with share bandwidth.
          * Default = bwBps / 4; range = [bwBps/16 .. bwBps].
+         * Min is clamped to half the 256KB max cap so the range stays
+         * non-inverted at high share bandwidth.
          * @return the default min
          */
         @Override
         /** Router context. */
         protected int getDefaultMin(RouterContext ctx) {
-            return Math.max(1024, getShareBps(ctx) / 16);
+            return Math.min(Math.max(1024, getShareBps(ctx) / 16), 131072);
         }
 
         @Override
@@ -4334,12 +4396,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Scale min/max/step with share bandwidth.
          * Default = bwBps / 2; range = [bwBps/8 .. bwBps*2].
+         * Min is clamped to half the 512KB max cap so the range stays
+         * non-inverted at high share bandwidth.
          * @return the default min
          */
         @Override
         /** Router context. */
         protected int getDefaultMin(RouterContext ctx) {
-            return Math.max(2048, getShareBps(ctx) / 8);
+            return Math.min(Math.max(2048, getShareBps(ctx) / 8), 262144);
         }
 
         @Override
@@ -4776,6 +4840,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   SUB_TRANSPORT,
 
                   2, 16, 1, "udp.pushTime", _context);
+            _cpuDriven = true;
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -4808,14 +4873,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Reclaim parked threads when the pool is massively under-utilized
             int reclaimed = reclaimIfIdle(getPacketHandlerUtilization(_context), current, _min, 0.05);
             if (reclaimed >= 0) return reclaimed;
-            // CPU saturation trigger: handlers pegging >= 75% of a core for 2 cycles.
-            // Checked before latency signals — a pegged stage that keeps queues short
-            // never fires them. Distributes work to another core preemptively.
-            boolean cpuSaturated = stageSaturated("UDPPktHandler");
+            // CPU saturation trigger: handlers pegging >= 75% of a core, growing
+            // +1/+2/+3 with severity, immediate on >= 200%. Checked before latency
+            // signals — a pegged stage that keeps queues short never fires them.
             boolean headroom = cpuHeadroom();
             int cap = peerScaledCap(getUDPTransport(), _min, _max, 512);
-            if (cpuSaturated && headroom && current < cap)
-                return Math.min(cap, current + 1);
+            int growth = stageGrowth("UDPPktHandler");
+            if (growth > 0 && headroom && current < cap)
+                return Math.min(cap, current + growth);
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double hourlyBps = getAdditionalStatHourly(_context, "tunnel.participating InBps");
@@ -4848,7 +4913,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.min(cap, current + 1);
 
             // Any push time pressure + no CPU = add threads (max throughput)
-            if (observed > 10 && !systemBusy && !highLoad)
+            if (!Double.isNaN(observed) && observed > 10 && !systemBusy && !highLoad)
                 return Math.min(cap, current + 1);
 
             // Heavy transit + headroom = add threads proactively
@@ -4882,6 +4947,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   SUB_TRANSPORT,
 
                   2, 16, 1, "codel.UDP-Receiver.delay", _context);
+            _cpuDriven = true;
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -4911,14 +4977,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Reclaim parked threads when the pool is massively under-utilized
             int reclaimed = reclaimIfIdle(getMessageReceiverUtilization(_context), current, _min, 0.05);
             if (reclaimed >= 0) return reclaimed;
-            // CPU saturation trigger: receivers pegging >= 75% of a core for 2 cycles.
-            // Checked before latency signals — a pegged stage that keeps queues short
-            // never fires them. Distributes reassembly to another core preemptively.
-            boolean cpuSaturated = stageSaturated("UDMMsgRX");
+            // CPU saturation trigger: receivers pegging >= 75% of a core, growing
+            // +1/+2/+3 with severity, immediate on >= 200%. Checked before latency
+            // signals — a pegged stage that keeps queues short never fires them.
             boolean headroom = cpuHeadroom();
             int cap = peerScaledCap(getUDPTransport(), _min, _max, 512);
-            if (cpuSaturated && headroom && current < cap)
-                return Math.min(cap, current + 1);
+            int growth = stageGrowth("UDMMsgRX");
+            if (growth > 0 && headroom && current < cap)
+                return Math.min(cap, current + growth);
             // observed = codel.UDP-Receiver.delay (upstream queue sojourn time, ms)
             // Cross-refs: udp.inboundExpired, udp.msgRx.queueSize, codel.UDP-MessageReceiver.delay,
             //             jobLag (CPU), udp.pushTime (downstream handler pressure),
@@ -4933,7 +4999,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double memPressure = getMemoryPressure();
 
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean upstreamBackpressure = observed > 5;
+            boolean upstreamBackpressure = !Double.isNaN(observed) && observed > 5;
             boolean queueBackedUp = !Double.isNaN(queueSize) && queueSize > 50;
             boolean messagesExpiring = !Double.isNaN(expired) && expired > 0;
             boolean longSojourn = !Double.isNaN(sojournTime) && sojournTime > 2;
@@ -6357,7 +6423,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.minPacingRate", "Min pacing rate (KB/s)",
                   SUB_STREAMING,
 
-                  1, 256, 4, "transport.sendBps", _context);
+                  1, 256, 4, "bw.sendBps", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -6386,7 +6452,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = transport.sendBps (average send bandwidth in KB/s)
+            // observed = bw.sendBps (average send bandwidth in KB/s)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
 
@@ -7745,7 +7811,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("tunnel.build.maxConcurrent", "Tunnel max concurrent builds",
                   SUB_TUNNEL,
 
-                   Math.max(SystemVersion.getCores() * 2, 16), 32, 4, "tunnel.buildSuccessRate", _context);
+                  16, Math.max(SystemVersion.getCores() * 2, 32), 4, "tunnel.buildSuccessRate", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -8111,6 +8177,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   SUB_TRANSPORT,
 
                   2, 16, 1, "ntcp.readQueueSize", _context);
+            _cpuDriven = true;
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -8138,14 +8205,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Reclaim parked threads when the pool is massively under-utilized
             int reclaimed = reclaimIfIdle(getReaderUtilization(_context), current, _min, 0.05);
             if (reclaimed >= 0) return reclaimed;
-            // CPU saturation trigger: readers pegging >= 75% of a core for 2 cycles.
-            // Checked before latency signals — a pegged stage that keeps queues short
-            // never fires them. Distributes decryption to another core preemptively.
-            boolean cpuSaturated = stageSaturated("NTCPReader");
+            // CPU saturation trigger: readers pegging >= 75% of a core, growing
+            // +1/+2/+3 with severity, immediate on >= 200%. Checked before latency
+            // signals — a pegged stage that keeps queues short never fires them.
             boolean headroom = cpuHeadroom();
             int cap = peerScaledCap(getNTCPTransport(), _min, _max, 64);
-            if (cpuSaturated && headroom && current < cap)
-                return Math.min(cap, current + 1);
+            int growth = stageGrowth("NTCPReader");
+            if (growth > 0 && headroom && current < cap)
+                return Math.min(cap, current + growth);
             // observed = ntcp.readQueueSize (avg pending connections waiting for a reader)
             // With 300+ connections, queue averages ~1. Threads grab a connection,
             // decrypt + parse, return it. No I/O blocking — EventPumper fills buffers.
@@ -8222,6 +8289,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   SUB_TRANSPORT,
 
                   2, 16, 1, "ntcp.sendTime", _context);
+            _cpuDriven = true;
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -8249,14 +8317,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Reclaim parked threads when the pool is massively under-utilized
             int reclaimed = reclaimIfIdle(getWriterUtilization(_context), current, _min, 0.05);
             if (reclaimed >= 0) return reclaimed;
-            // CPU saturation trigger: writers pegging >= 75% of a core for 2 cycles.
-            // Checked before latency signals — a pegged stage that keeps queues short
-            // never fires them. Distributes encryption to another core preemptively.
-            boolean cpuSaturated = stageSaturated("NTCPWriter");
+            // CPU saturation trigger: writers pegging >= 75% of a core, growing
+            // +1/+2/+3 with severity, immediate on >= 200%. Checked before latency
+            // signals — a pegged stage that keeps queues short never fires them.
             boolean headroom = cpuHeadroom();
             int cap = peerScaledCap(getNTCPTransport(), _min, _max, 64);
-            if (cpuSaturated && headroom && current < cap)
-                return Math.min(cap, current + 1);
+            int growth = stageGrowth("NTCPWriter");
+            if (growth > 0 && headroom && current < cap)
+                return Math.min(cap, current + growth);
             // observed = ntcp.sendTime (ms, avg message send latency)
             // Writers are pure CPU — encrypt + prepare buffer. EventPumper does NIO write.
             // Scale based on send latency and downstream pressure.
@@ -8268,7 +8336,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double finisherQueue = getAdditionalStat(_context, "ntcp.sendFinisher.queueSize");
             double evicted = getAdditionalStat(_context, "transport.sendPool.evicted");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean sendSlow = observed > 50;
+            boolean sendSlow = !Double.isNaN(observed) && observed > 50;
             boolean queueFull = !Double.isNaN(writeQueueFull) && writeQueueFull > 0;
             boolean backlogged = !Double.isNaN(backlogTime) && backlogTime > 20;
             boolean poolBusy = !Double.isNaN(sendPoolUtil) && sendPoolUtil > 50;
@@ -8403,6 +8471,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   SUB_TRANSPORT,
 
                   2, 16, 1, "ntcp.sendPool.utilization", _context);
+            _cpuDriven = true;
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -8433,14 +8502,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Reclaim parked threads when the pool is massively under-utilized
             int reclaimed = reclaimIfIdle(getSendFinisherUtilization(_context), current, _min, 0.05);
             if (reclaimed >= 0) return reclaimed;
-            // CPU saturation trigger: finishers pegging >= 75% of a core for 2 cycles.
-            // Checked before latency signals — a pegged stage that keeps queues short
-            // never fires them. Distributes send completion to another core preemptively.
-            boolean cpuSaturated = stageSaturated("NTCPTXFinis");
+            // CPU saturation trigger: finishers pegging >= 75% of a core, growing
+            // +1/+2/+3 with severity, immediate on >= 200%. Checked before latency
+            // signals — a pegged stage that keeps queues short never fires them.
             boolean headroom = cpuHeadroom();
             int cap = peerScaledCap(getNTCPTransport(), _min, _max, 64);
-            if (cpuSaturated && headroom && current < cap)
-                return Math.min(cap, current + 1);
+            int growth = stageGrowth("NTCPTXFinis");
+            if (growth > 0 && headroom && current < cap)
+                return Math.min(cap, current + growth);
             // observed = ntcp.sendPool.utilization (0-100%)
             // Cross-refs: ntcp.sendFinisher.queueSize, ntcp.writeBufs.size,
             //             transport.sendPool.evicted (priority eviction rate)
@@ -11298,9 +11367,11 @@ protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double memPressure = getMemoryPressure();
+            double buildTimeoutRate = getAdditionalStatHourly(_context, "tunnel.buildTimeoutRate");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean healthy = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
-            boolean failing = !Double.isNaN(observed) && observed < 70;
+            boolean failing = (!Double.isNaN(observed) && observed < 85)
+                              || (!Double.isNaN(buildTimeoutRate) && buildTimeoutRate > 20);
             // Under memory pressure, recover faster (shorter cooldown) so pools
             // stop holding rebuild resources they can't afford
             if (memPressure > 0.85)
