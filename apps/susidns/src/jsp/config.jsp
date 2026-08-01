@@ -6,7 +6,7 @@
  * License: GPL2 or later
  */
 %>
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" import="net.i2p.addressbook.HostCheckerBridge" %>
 <%@include file="headers.jsi"%>
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application"/>
 <jsp:useBean id="cfg" class="i2p.susi.dns.ConfigBean" scope="session"/>
@@ -49,6 +49,12 @@
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid Origin header for POST request");
             return;
         }
+    }
+    // Run HostChecker button: trigger a cycle now, then reflect its running state
+    boolean checkerRunning = HostCheckerBridge.isScanRunning();
+    if ("POST".equals(request.getMethod()) && request.getParameter("runchecker") != null) {
+        HostCheckerBridge.runCheckNow();
+        checkerRunning = true;
     }
     boolean overrideCssActive = base.isOverrideCssActive();
     String theme = base.getTheme().replace("/themes/susidns/", "").replace("/", "");
@@ -94,6 +100,11 @@
 <div id=buttons>
 <input class=reload type=submit name=action value="<%=intl._t("Reload")%>">
 <input class=accept type=submit name=action value="<%=intl._t("Save")%>">
+<% if (checkerRunning) { %>
+<span title="<%=intl._t("HostChecker is already running a scan")%>"><input class=accept type=submit name=runchecker value="<%=intl._t("Run HostChecker")%>" style="float:left" disabled></span>
+<% } else { %>
+<input class=accept type=submit name=runchecker value="<%=intl._t("Run HostChecker")%>" style="float:left">
+<% } %>
 </div>
 </form>
 <div class=help id=helpconfig>
@@ -118,8 +129,8 @@
 <li><b>last_modified</b> - <%=intl._t("File containing the modification timestamp for each fetched subscription URL (no need to change)")%></li>
 <li><b>log</b> - <%=intl._t("File to log activity to (change to /dev/null if you like)")%></li>
 <li><b>theme</b> - <%=intl._t("Name of override theme to use (defaults to console-selected theme)")%></li>
-<li><b>pingInterval</b> - <%=intl._t("Interval (in hours) for running host checker (default is 8 hours)")%></li>
-<li><b>maxConcurrentPings</b> - <%=intl._t("Maximum concurrent pings when running host checker (Default is 12, max is 100)")%></li>
+<li><b>pingInterval</b> - <%=intl._t("Interval (in hours) for running host checker (default is 4 hours)")%></li>
+<li><b>maxConcurrentPings</b> - <%=intl._t("Maximum concurrent pings when running host checker (Default is 16, max is 160)")%></li>
 </ul>
 </div>
 </div>
