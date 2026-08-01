@@ -3420,6 +3420,7 @@ th code{font-size:9pt}
 #help .confignav .tab a{padding:0;display:inline-block}
 #help #changelog pre{margin-left:0;padding:20px 20px 20px 40px;width:calc(100% - 62px);overflow-y:hidden;font-size:10.5pt;columns:auto 2;column-gap:60px;column-rule:var(--dotted);background-size:300px}
 #changelog pre span{width:calc(100% - 22px);break-inside:avoid}
+#stats .tab, #stats .tab2{min-width:9%}
 }
 
 @media (min-width:1840px){
