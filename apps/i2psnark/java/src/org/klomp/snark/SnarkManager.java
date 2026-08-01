@@ -4163,7 +4163,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @return the tracker map
      */
     public Map<String, Tracker> getTrackerMap() {
-        return new HashMap<>(_trackerMap);
+        return _trackerMap;
     }
 
     /**
@@ -4173,7 +4173,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @return the torrent create filter map
      */
     public Map<String, TorrentCreateFilter> getTorrentCreateFilterMap() {
-        return new HashMap<>(_torrentCreateFilterMap);
+        return _torrentCreateFilterMap;
     }
 
     /**
