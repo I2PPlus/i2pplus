@@ -102,7 +102,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /** Transport worker thread name prefixes tracked for CPU saturation. */
     private static final String[] CPU_STAGES = {
-        "UDPPktHandler", "UDPMsgRX", "NTCPReader", "NTCPWriter", "NTCPTXFinis",
+        "UDPPktHandler", "UDMMsgRX", "NTCPReader", "NTCPWriter", "NTCPTXFinis",
         "UDPReceiver", "UDPSender", "UDPEstablisher", "UDPPktPusher", "NTCPPumper"
     };
 
@@ -4914,7 +4914,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // CPU saturation trigger: receivers pegging >= 75% of a core for 2 cycles.
             // Checked before latency signals — a pegged stage that keeps queues short
             // never fires them. Distributes reassembly to another core preemptively.
-            boolean cpuSaturated = stageSaturated("UDPMsgRX");
+            boolean cpuSaturated = stageSaturated("UDMMsgRX");
             boolean headroom = cpuHeadroom();
             int cap = peerScaledCap(getUDPTransport(), _min, _max, 512);
             if (cpuSaturated && headroom && current < cap)
