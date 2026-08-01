@@ -202,10 +202,10 @@ public class BuildExecutor implements Runnable {
      */
     public static void setMaxConcurrentBuilds(int val) { _maxConcurrentBuilds = Math.max(8, Math.min(256, val)); }
 
-    private static final int LOOP_TIME = 60000; // tunnel builds take 10-40s, no point polling faster
+    private static final int LOOP_TIME = 15000;
     private static final int TUNNEL_POOLS = 8;
     /** Max multi-hop builds started per second, paces build requests to avoid flooding peers */
-    private static final int MAX_BUILDS_PER_SECOND = 3;
+    private static final int MAX_BUILDS_PER_SECOND = 8;
     private long _paceWindowStart;
     private int _buildsInPaceWindow;
 
