@@ -200,10 +200,34 @@ public class BuildExecutor implements Runnable {
      * @param val the maximum concurrent builds
      * @since 0.9.70+
      */
-    public static void setMaxConcurrentBuilds(int val) { _maxConcurrentBuilds = Math.max(Math.max(SystemVersion.getCores() * 2, 24), Math.min(256, val)); }
+    public static void setMaxConcurrentBuilds(int val) { _maxConcurrentBuilds = Math.max(8, Math.min(256, val)); }
 
     private static final int LOOP_TIME = 60000; // tunnel builds take 10-40s, no point polling faster
     private static final int TUNNEL_POOLS = 8;
+    /** Max multi-hop builds started per second, paces build requests to avoid flooding peers */
+    private static final int MAX_BUILDS_PER_SECOND = 3;
+    private long _paceWindowStart;
+    private int _buildsInPaceWindow;
+
+    /**
+     * Pace build requests to at most {@link #MAX_BUILDS_PER_SECOND} per second.
+     * Only gates multi-hop builds; zero-hop tunnels build inline.
+     *
+     * @return true if the build may proceed
+     */
+    private synchronized boolean paceAllowed() {
+        long now = _context.clock().now();
+        if (now - _paceWindowStart >= 1000) {
+            _paceWindowStart = now;
+            _buildsInPaceWindow = 0;
+        }
+        if (_buildsInPaceWindow >= MAX_BUILDS_PER_SECOND) {
+            return false;
+        }
+        _buildsInPaceWindow++;
+        return true;
+    }
+
     private static long getGracePeriod(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.gracePeriod", 60*1000);
     }
@@ -963,10 +987,16 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Build a tunnel with the given configuration.
+     * Multi-hop builds are paced to at most {@link #MAX_BUILDS_PER_SECOND}
+     * per second; when paced out, the build is skipped entirely.
      *
      * @param cfg the tunnel configuration to build
      */
     void buildTunnel(PooledTunnelCreatorConfig cfg) {
+        if (cfg.getLength() > 1 && !paceAllowed()) {
+            _context.statManager().addRateData("tunnel.buildPacedOut", 1);
+            return;
+        }
         long beforeBuild = System.currentTimeMillis();
         if (cfg.getLength() > 1) {
             do {cfg.setReplyMessageId(_context.random().nextLong(I2NPMessage.MAX_ID_VALUE));} // should we allow an ID of 0?
