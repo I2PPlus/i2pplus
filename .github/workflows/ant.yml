@@ -41,6 +41,11 @@ jobs:
       - name: Build all artifacts
         run: ant updaterWithGeoIP installer i2psnark buildDeb
 
+      - name: Create source archive
+        run: |
+          SHA="${{ github.sha }}"
+          git archive --format=zip -o "dist/i2p-src-${SHA:0:8}.zip" HEAD
+
       - name: Build jsdoc
         continue-on-error: true
         run: ant jsdoc-zip
@@ -56,6 +61,7 @@ jobs:
             dist/i2psnark-standalone.zip
             dist/javadoc.zip
             dist/jsdoc.zip
+            dist/i2p-src-*.zip
             dist/*.deb
           retention-days: 7
 
@@ -70,6 +76,7 @@ jobs:
             dist/i2psnark-standalone.zip
             dist/javadoc.zip
             dist/jsdoc.zip
+            dist/i2p-src-*.zip
             dist/*.deb
           generate_release_notes: true
 
@@ -85,17 +92,15 @@ jobs:
           name: i2p-build-artifacts
           path: artifacts/
 
+      - name: Checkout vendored release action
+        uses: actions/checkout@v4
+
       - name: Upload continuous release
-        uses: ncipollo/release-action@v1
+        uses: ./.github/actions/release-action
         with:
           tag: continuous
-          name: Continuous Build
+          name: ${{ substring(github.sha, 0, 8) }}
           body: "Automated build from ${{ github.sha }}"
           commit: ${{ github.sha }}
           artifacts: artifacts/*
-          allowUpdates: true
-          removeArtifacts: true
           makeLatest: true
-          omitBodyDuringUpdate: true
-          skipIfReleaseExists: false
-          token: ${{ secrets.RELEASE_TOKEN }}
