@@ -44,7 +44,11 @@ jobs:
       - name: Create source archive
         run: |
           SHA="${{ github.sha }}"
-          git archive --format=zip -o "dist/i2p-src-${SHA:0:8}.zip" HEAD
+          if [ ! -d .git ]; then
+            echo "error: .git missing; cannot create source archive" >&2
+            exit 1
+          fi
+          git archive --format=zip -o "dist/i2p-src-${SHA:0:8}.zip" "$SHA"
 
       - name: Build jsdoc
         continue-on-error: true
@@ -105,19 +109,22 @@ jobs:
         run: |
           set -euo pipefail
           TAG=continuous
+          REPO="$GITHUB_REPOSITORY"
           NAME="${GITHUB_SHA:0:8}"
 
           # Recreate on every run: a PATCH keeps the original published_at, so
           # the sidebar date would stay at the first build. Deleting the release
           # and tag also lets --target move the tag to the current commit.
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release delete "$TAG" --yes --cleanup-tag
+          # --repo avoids needing a git checkout; gh can't resolve owner/repo
+          # without one.
+          if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
+            gh release delete "$TAG" --repo "$REPO" --yes --cleanup-tag
           fi
 
-          CREATE=(gh release create "$TAG" --title "$NAME")
+          CREATE=(gh release create "$TAG" --title "$NAME" --repo "$REPO")
           CREATE+=(--target "$GITHUB_SHA")
           CREATE+=(--notes "Automated build from $GITHUB_SHA")
           CREATE+=(--latest)
           "${CREATE[@]}"
 
-          gh release upload "$TAG" artifacts/* --clobber
+          gh release upload "$TAG" --repo "$REPO" artifacts/* --clobber
