@@ -1082,18 +1082,17 @@ public class SybilRenderer {
         boolean hasE = capsRaw.contains("E");
         boolean hasG = capsRaw.contains("G");
         boolean isU = capsRaw.contains("U");
-        String caps = CapabilitiesRenderer.linkify(
-                capsRaw
-                   .replace("XO", "X")
-                   .replace("PO", "P")
-                   .replace("Kf", "fK")
-                   .replace("Lf", "fL")
-                   .replace("Mf", "fM")
-                   .replace("Nf", "fN")
-                   .replace("Of", "fO")
-                   .replace("Pf", "fP")
-                   .replace("Xf", "fX")
-                , CapabilitiesRenderer.SYBIL_REPLACEMENTS);
+        String caps = CapabilitiesRenderer.linkify(capsRaw
+               .replace("XO", "X")
+               .replace("PO", "P")
+               .replace("Kf", "fK")
+               .replace("Lf", "fL")
+               .replace("Mf", "fM")
+               .replace("Nf", "fN")
+               .replace("Of", "fO")
+               .replace("Pf", "fP")
+               .replace("Xf", "fX"),
+               CapabilitiesRenderer.SYBIL_REPLACEMENTS);
         char tier = hasD ? 'D' : hasE ? 'E' : hasG ? 'G' : '\0';
         if (tier != 0) {
             caps = CapabilitiesRenderer.applyTierState(caps, tier, isU ? 'U' : 'R', true);

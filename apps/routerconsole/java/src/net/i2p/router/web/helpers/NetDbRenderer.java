@@ -1912,7 +1912,7 @@ class NetDbRenderer {
         char tier = hasD ? 'D' : hasE ? 'E' : hasG ? 'G' : '\0';
         if (tier != 0) {
             processedCapsStr = CapabilitiesRenderer.applyTierState(processedCapsStr, tier,
-                                                                    isReachable ? 'R' : isUnreachable ? 'U' : '\0', false);
+                    isReachable ? 'R' : isUnreachable ? 'U' : '\0', false);
             processedCapsStr = processedCapsStr.replace("class=\"tier\"", "class=\"tier is" + tier + "\"");
         }
         processedCapsStr = processedCapsStr.replace("\"><span", CapabilitiesRenderer.capTooltip(_context));

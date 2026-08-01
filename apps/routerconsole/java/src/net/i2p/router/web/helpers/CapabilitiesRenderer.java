@@ -70,12 +70,13 @@ class CapabilitiesRenderer {
      * @since 0.9.70+
      */
     static String applyTierState(String caps, char tier, char suffix, boolean suffixAll) {
-        if (tier == 0) { return caps; }
+        if (tier == 0) {return caps;}
         String rv = caps.replace(String.valueOf(tier), "");
         rv = rv.replace("class=tier", "class=\"tier is" + tier + "\"");
         if (suffix != 0) {
             if (suffixAll) {
-                rv = rv.replace("\"><span class", suffix + "" + tier + "\"><span class");            } else {
+                rv = rv.replace("\"><span class", suffix + "" + tier + "\"><span class");
+            } else {
                 for (char c : TIER_LINK_LETTERS) {
                     rv = rv.replace("href=\"/netdb?caps=" + c, "href=\"/netdb?caps=" + c + suffix + tier);
                 }
