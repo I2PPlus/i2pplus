@@ -9,9 +9,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -30,7 +28,6 @@ import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.web.Messages;
-import net.i2p.util.LHMCache;
 
 /**
  * Helper class to refactor HTML rendering from out of the ProfileOrganizer
@@ -59,471 +56,394 @@ class ProfileOrganizerRenderer {
      *  Render the peer profile status table.
      *
      *  @param out the writer to render to
-     *  @param mode 0 = all; 1 = fast; 2 = high capacity (non-fast); 3 = floodfill; 4 = banned
+     *  @param mode 0 = all; 1 = fast; 2 = high capacity (non-fast); 3 = floodfill
      *  @throws IOException if an I/O error occurs
      */
     public void renderStatusHTML(Writer out, int mode) throws IOException {
-        boolean full = mode == 0;
-        Hash us = _context.routerHash();
-        RouterInfo local = _context.netDb().lookupRouterInfoLocally(us);
-        boolean ffmode = local != null && local.getCapabilities().indexOf('f') >= 0;
+        ProfileSelection sel = loadProfiles(mode);
+        if (mode == 3) {
+            renderFloodfill(out, sel.order);
+        } else {
+            renderProfiles(out, sel, mode);
+        }
+    }
+
+    /**
+     *  The sorted peer set and the skip counters from loadProfiles().
+     *  @since 0.9.70+
+     */
+    private static class ProfileSelection {
+        final Set<PeerProfile> order;
+        final int older;
+        final int standard;
+        ProfileSelection(Set<PeerProfile> order, int older, int standard) {
+            this.order = order;
+            this.older = older;
+            this.standard = standard;
+        }
+    }
+
+    /**
+     *  Load, filter, and sort the profiles for the given mode. Modes 1 and 2
+     *  drop peers that do not match the tier; mode 3 keeps all peers in binary
+     *  hash order.
+     *
+     *  @param mode 0 = all; 1 = fast; 2 = high capacity (non-fast); 3 = floodfill
+     *  @return the sorted set and the skip counters (zero for mode 3)
+     *  @since 0.9.70+
+     */
+    private ProfileSelection loadProfiles(int mode) {
         Set<Hash> peers = _organizer.selectAllPeers();
         long now = _context.clock().now();
         long hideBefore = now - 4*60*60*1000;
         Set<PeerProfile> order = new TreeSet<>(mode == 3 ? new ProfComparator() : new ProfileComparator());
         int older = 0;
         int standard = 0;
-        int ff = 0;
         for (Hash peer : peers) {
             PeerProfile prof = _organizer.getProfileNonblocking(peer);
             if (prof == null) {continue;}
             int agreed = (int) prof.getTunnelHistory().getLifetimeAgreedTo();
             int rejected = (int) prof.getTunnelHistory().getLifetimeRejected();
-            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-            boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
-            if (_organizer.getUs().equals(peer) || prof.getLastHeardFrom() <= 0 || (agreed <= 0 && rejected <= 0 && prof.getFirstHeardAbout() <= 0)) {continue;}
+            if (_organizer.getUs().equals(peer) || prof.getLastHeardFrom() <= 0 ||
+                (agreed <= 0 && rejected <= 0 && prof.getFirstHeardAbout() <= 0)) {continue;}
             if (mode != 3) {
-                boolean isActive = prof.getIsActive() || prof.getLastSendSuccessful() > hideBefore || prof.getLastHeardFrom() > hideBefore;
+                boolean isActive = prof.getIsActive() || prof.getLastSendSuccessful() > hideBefore ||
+                                   prof.getLastHeardFrom() > hideBefore;
                 boolean underAttack = _organizer.isLowBuildSuccess();
-                if (!isActive && prof.getLastHeardFrom() <= hideBefore && prof.getFirstHeardAbout() < now - 60*60*1000) {
+                if (!isActive && prof.getLastHeardFrom() <= hideBefore &&
+                    prof.getFirstHeardAbout() < now - 60*60*1000) {
                     if (!underAttack || !_organizer.isFast(peer)) {
                         older++;
                         continue;
                     }
                 }
             }
-            if (!full) {
-                if (mode == 1) {
-                    // Fast tier only
-                    if (!_organizer.isFast(peer)) {
-                        standard++;
-                        continue;
-                    }
-        } else if (mode == 2) {
-                    // High Capacity (non-fast) only
-                    if (!_organizer.isHighCapacity(peer) || _organizer.isFast(peer)) {
-                        standard++;
-                        continue;
-                    }
-                } else if (mode != 3 && !_organizer.isHighCapacity(peer)) {
+            if (mode == 1) {
+                // Fast tier only
+                if (!_organizer.isFast(peer)) {
+                    standard++;
+                    continue;
+                }
+            } else if (mode == 2) {
+                // High Capacity (non-fast) only
+                if (!_organizer.isHighCapacity(peer) || _organizer.isFast(peer)) {
                     standard++;
                     continue;
                 }
             }
             order.add(prof);
         }
+        return new ProfileSelection(order, older, standard);
+    }
+
+    /**
+     *  Render the all/fast/high-capacity profile table, the threshold summary,
+     *  and the definitions block (mode 0 only).
+     *
+     *  @param out the writer to render to
+     *  @param sel the selected profiles
+     *  @param mode 0 = all; 1 = fast; 2 = high capacity (non-fast)
+     *  @throws IOException if an I/O error occurs
+     *  @since 0.9.70+
+     */
+    private void renderProfiles(Writer out, ProfileSelection sel, int mode) throws IOException {
+        Set<PeerProfile> order = sel.order;
+        int older = sel.older;
+        int standard = sel.standard;
         int fast = 0;
         int reliable = 0;
         int integrated = 0;
         boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
         StringBuilder buf = new StringBuilder(32*1024);
 
-        if (mode < 3) {
-            buf.append("<p id=profiles_overview class=infohelp>")
-               .append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", order.size())).append('\n');
-            if (older > 0) {
-                buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", older)).append('\n');
+        buf.append("<p id=profiles_overview class=infohelp>")
+           .append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", order.size())).append('\n');
+        if (older > 0) {
+            buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", older)).append('\n');
+        }
+        if (standard > 0) {
+            buf.append("<a href=\"/profiles\">")
+               .append(ngettext("Hiding {0} standard profile.","Hiding {0} standard profiles.", standard))
+               .append("</a>\n");
+        }
+        buf.append(_t("Note that the profiler relies on sustained client tunnel usage to accurately profile peers.")).append("</p>");
+        buf.append("<div class=widescroll id=peerprofiles>\n<table id=profilelist data-sort-direction=descending>\n")
+           .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup>")
+           .append("</colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
+           .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
+           .append("<thead>\n<tr>")
+           .append("<th>").append(_t("Peer")).append("</th>")
+           .append("<th>").append(_t("Caps")).append("</th>")
+           .append("<th>").append(_t("Version")).append("</th>");
+         buf.append("<th class=host data-sort-method=string data-sort-caseinsensitive>").append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>");
+        buf.append("<th class=status>").append(_t("Status")).append("</th>")
+           .append("<th class=groups>").append(_t("Groups")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Speed")).append("</th>")
+           .append("<th class=latency data-sort-method=number>").append(_t("Low Latency")).append("</th>")
+           .append("<th title=\"").append(_t("Tunnels peer has agreed to participate in"))
+           .append("\" data-sort-method=number>").append(_t("Accepted")).append("</th>")
+           .append("<th title=\"").append(_t("Tunnels peer has refused to participate in"))
+           .append("\" data-sort-method=number>").append(_t("Rejected")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("First Heard About")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Last Heard From")).append("</th>")
+           .append("<th data-sort-method=none>").append(_t("View/Edit")).append("</th>")
+           .append("</tr>\n</thead>\n<tbody id=pbody>\n");
+
+        boolean stream = order.size() > MAX_BEFORE_STREAMING;
+        if (stream) {
+            out.append(buf);
+            out.flush();
+            buf.setLength(0);
+        }
+        int rowsSinceFlush = 0;
+
+        for (PeerProfile prof : order) {
+            Hash peer = prof.getPeer();
+            int tier = 0;
+            boolean isIntegrated = false;
+            if (_organizer.isFast(peer)) {
+                tier = 1;
+                fast++;
+                reliable++;
+            } else if (_organizer.isHighCapacity(peer)) {
+                tier = 2;
+                reliable++;
+            } else {tier = 3;}
+            if (_organizer.isWellIntegrated(peer)) {
+                isIntegrated = true;
+                integrated++;
             }
-            if (standard > 0) {
-                buf.append("<a href=\"/profiles\">")
-                   .append(ngettext("Hiding {0} standard profile.","Hiding {0} standard profiles.", standard))
-                   .append("</a>\n");
+            buf.append("<tr class=lazy><td nowrap>");
+            buf.append(_context.commSystem().renderPeerHTML(peer, false));
+            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+            buf.append("</td><td>");
+            if (info != null) {buf.append(_context.commSystem().renderPeerCaps(peer, false));}
+            buf.append("</td><td>");
+            String v = info != null ? info.getOption("router.version") : null;
+            if (v != null) {
+                buf.append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
+                   .append("\"><a href=\"/netdb?v=").append(DataHelper.stripHTML(v)).append("\">").append(DataHelper.stripHTML(v))
+                   .append("</a></span>");
+            } else {buf.append("<span>&ensp;</span>");}
+            buf.append("</td><td class=host>");
+            long uptime = _context.router().getUptime();
+            String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getCompatibleIP(info)) : null;
+            String rl = null;
+            if (ip != null && uptime > 30*1000) {
+                rl = _context.commSystem().getLocalHostName(ip);
             }
-            buf.append(_t("Note that the profiler relies on sustained client tunnel usage to accurately profile peers.")).append("</p>");
-            buf.append("<div class=widescroll id=peerprofiles>\n<table id=profilelist data-sort-direction=descending>\n")
-               .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup>")
-               .append("</colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
-               .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
-               .append("<thead>\n<tr>")
-               .append("<th>").append(_t("Peer")).append("</th>")
-               .append("<th>").append(_t("Caps")).append("</th>")
-               .append("<th>").append(_t("Version")).append("</th>");
-             buf.append("<th class=host data-sort-method=string data-sort-caseinsensitive>").append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>");
-            buf.append("<th class=status>").append(_t("Status")).append("</th>")
-               .append("<th class=groups>").append(_t("Groups")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("Speed")).append("</th>")
-               .append("<th class=latency data-sort-method=number>").append(_t("Low Latency")).append("</th>")
-               .append("<th title=\"").append(_t("Tunnels peer has agreed to participate in"))
-               .append("\" data-sort-method=number>").append(_t("Accepted")).append("</th>")
-               .append("<th title=\"").append(_t("Tunnels peer has refused to participate in"))
-               .append("\" data-sort-method=number>").append(_t("Rejected")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("First Heard About")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("Last Heard From")).append("</th>")
-               .append("<th data-sort-method=none>").append(_t("View/Edit")).append("</th>")
-               .append("</tr>\n</thead>\n<tbody id=pbody>\n");
-
-            boolean stream = order.size() > MAX_BEFORE_STREAMING;
-            if (stream) {
-                out.append(buf);
-                out.flush();
-                buf.setLength(0);
+            if (rl != null && rl.equals("unknown")) {rl = ip;}
+            if (rl != null && !rl.equals("null") && !rl.isEmpty() && !ip.equals(rl)) {
+                String whois = CommSystemFacadeImpl.getDomain(rl);
+                String whoisShort = WHOIS_PAREN.matcher(whois).replaceAll("").toLowerCase().trim();
+                whoisShort = whoisShort.replace("latin american and caribbean ip address regional registry", "lacnic")
+                                       .replace("asia pacific network information centre", "apnic")
+                                       .replace("mediacom communications corp", "mediacom")
+                                       .replace(", inc", "")
+                                       .replace(" inc", "")
+                                       .replace(" llc", "")
+                                       .replace("administered by ", "")
+                                       .trim();
+                buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"").append(DataHelper.escapeHTML(whois)).append("\">").append(DataHelper.escapeHTML(whoisShort));
+            } else if (ip == null || ip.isEmpty() || ip.equals("null")) {buf.append("<span>").append(_t("unknown"));}
+            else {
+                if (ip != null && ip.contains(":")) {buf.append("<span hidden>[IPv6]</span>");}
+                buf.append("<span class=host_ipv6>").append(ip);
             }
-            int rowsSinceFlush = 0;
+            buf.append("</span>");
+            buf.append("</td><td class=status>");
+            boolean ok = true;
+            boolean isBanned = false;
+            boolean isUnreachable = false;
+            if (_context.banlist().isBanlisted(peer)) {
+                ok = false;
+                isBanned = true;
+            }
+            if (_context.commSystem().wasUnreachable(peer)) {
+                ok = false;
+                isUnreachable = true;
+            }
+            RateAverages ra = RateAverages.getTemp();
+            Rate failed = prof.getTunnelHistory().getFailedRate().getRate(RateConstants.ONE_HOUR);
+            long fails = failed.computeAverages(ra, false).getTotalEventCount();
+            long bonus = prof.getSpeedBonus();
+            long capBonus = prof.getCapacityBonus();
+            boolean isTesting = prof != null && prof.getLastTestStarted() > 0 &&
+                                (_context.clock().now() - prof.getLastTestStarted() < 15000);
+            if (ok && fails == 0) {buf.append("<span class=\"ok").append(isTesting ? " testing" : "").append("\">").append(_t("OK")).append("</span>");}
+            else if (!ok) {
+                buf.append("<span class=\"notOk").append(isBanned ? " banned" : "")
+                   .append(isUnreachable ? " unreachable" : "").append(isTesting ? " testing" : "");
 
-            for (PeerProfile prof : order) {
-                Hash peer = prof.getPeer();
-                int tier = 0;
-                boolean isIntegrated = false;
-                if (_organizer.isFast(peer)) {
-                    tier = 1;
-                    fast++;
-                    reliable++;
-                } else if (_organizer.isHighCapacity(peer)) {
-                    tier = 2;
-                    reliable++;
-                } else {tier = 3;}
-                if (_organizer.isWellIntegrated(peer)) {
-                    isIntegrated = true;
-                    integrated++;
-                }
-                buf.append("<tr class=lazy><td nowrap>");
-                buf.append(_context.commSystem().renderPeerHTML(peer, false));
-                RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-                buf.append("</td><td>");
-                if (info != null) {buf.append(_context.commSystem().renderPeerCaps(peer, false));}
-                buf.append("</td><td>");
-                String v = info != null ? info.getOption("router.version") : null;
-                if (v != null) {
-                    buf.append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
-                       .append("\"><a href=\"/netdb?v=").append(DataHelper.stripHTML(v)).append("\">").append(DataHelper.stripHTML(v))
-                       .append("</a></span>");
-                } else {buf.append("<span>&ensp;</span>");}
-                buf.append("</td><td class=host>");
-                long uptime = _context.router().getUptime();
-                String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getCompatibleIP(info)) : null;
-                String rl = null;
-                if (ip != null && uptime > 30*1000) {
-                    rl = _context.commSystem().getLocalHostName(ip);
-                }
-                if (rl != null && rl.equals("unknown")) {rl = ip;}
-                if (rl != null && !rl.equals("null") && !rl.isEmpty() && !ip.equals(rl)) {
-                    String whois = CommSystemFacadeImpl.getDomain(rl);
-                    String whoisShort = WHOIS_PAREN.matcher(whois).replaceAll("").toLowerCase().trim();
-                    whoisShort = whoisShort.replace("latin american and caribbean ip address regional registry", "lacnic")
-                                           .replace("asia pacific network information centre", "apnic")
-                                           .replace("mediacom communications corp", "mediacom")
-                                           .replace(", inc", "")
-                                           .replace(" inc", "")
-                                           .replace(" llc", "")
-                                           .replace("administered by ", "")
-                                           .trim();
-                    buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"").append(DataHelper.escapeHTML(whois)).append("\">").append(DataHelper.escapeHTML(whoisShort));
-                } else if (ip == null || ip.isEmpty() || ip.equals("null")) {buf.append("<span>").append(_t("unknown"));}
-                else {
-                    if (ip != null && ip.contains(":")) {buf.append("<span hidden>[IPv6]</span>");}
-                    buf.append("<span class=host_ipv6>").append(ip);
-                }
-                buf.append("</span>");
-                buf.append("</td><td class=status>");
-                boolean ok = true;
-                boolean isBanned = false;
-                boolean isUnreachable = false;
-                if (_context.banlist().isBanlisted(peer)) {
-                    ok = false;
-                    isBanned = true;
-                }
-                if (_context.commSystem().wasUnreachable(peer)) {
-                    ok = false;
-                    isUnreachable = true;
-                }
-                RateAverages ra = RateAverages.getTemp();
-                Rate failed = prof.getTunnelHistory().getFailedRate().getRate(RateConstants.ONE_HOUR);
-                long fails = failed.computeAverages(ra, false).getTotalEventCount();
-                long bonus = prof.getSpeedBonus();
-                long capBonus = prof.getCapacityBonus();
-                boolean isTesting = prof != null && prof.getLastTestStarted() > 0 &&
-                                    (_context.clock().now() - prof.getLastTestStarted() < 15000);
-                if (ok && fails == 0) {buf.append("<span class=\"ok").append(isTesting ? " testing" : "").append("\">").append(_t("OK")).append("</span>");}
-                else if (!ok) {
-                    buf.append("<span class=\"notOk").append(isBanned ? " banned" : "")
-                       .append(isUnreachable ? " unreachable" : "").append(isTesting ? " testing" : "");
+                if (fails > 0) {
+                    Rate accepted = prof.getTunnelCreateResponseTime().getRate(RateConstants.ONE_HOUR);
+                    long total = fails + accepted.computeAverages(ra, false).getTotalEventCount();
+                    double failPercentage = (double) fails / total * 100;
 
-                    if (fails > 0) {
-                        Rate accepted = prof.getTunnelCreateResponseTime().getRate(RateConstants.ONE_HOUR);
-                        long total = fails + accepted.computeAverages(ra, false).getTotalEventCount();
-                        double failPercentage = (double) fails / total * 100;
-
-                        if (failPercentage > 5.0) { // demote if failure rate exceeds 5%
-                            if (bonus == 9999999) {prof.setSpeedBonus(0);}
-                            prof.setCapacityBonus(-30);
-                            _context.profileOrganizer().demoteIfHighLatency(peer);
-                        }
-
-                        boolean failHigh = failPercentage >= 10.0;
-                        if (failHigh) {
-                            buf.append(" failing").append(failPercentage >= 50.0 ? " fiftyPercent" : "");
-                        }
-                        buf.append("\" title=\"");
-                        long passed = total - fails;
-                        buf.append(passed).append('/').append(total).append(' ').append(_t("tests passed"));
-                        if (isUnreachable) buf.append(" \u2022 ").append(_t("Unreachable"));
-                        if (isBanned) buf.append(" \u2022 ").append(_t("Banned"));
-                        buf.append("\">");
-
-                        if (failHigh) {
-                            buf.append("\u2022 ").append(fails).append('/').append(total).append(' ').append(_t("Test Fails"));
-                        }
-                        if (isUnreachable) buf.append(" \u2022 ").append(_t("Unreachable"));
-                        if (isBanned) buf.append(" \u2022 ").append(_t("Banned"));
-                    } else if (isUnreachable) {
-                        buf.append("\" title=\"\u2022 ").append(_t("Unreachable"));
+                    if (failPercentage > 5.0) { // demote if failure rate exceeds 5%
                         if (bonus == 9999999) {prof.setSpeedBonus(0);}
                         prof.setCapacityBonus(-30);
                         _context.profileOrganizer().demoteIfHighLatency(peer);
-                    } else if (isBanned) {
-                        buf.append("\" title=\"\u2022 ").append(_t("Banned"));
                     }
-                    buf.append("\"></span>");
-                } else {
-                    buf.append("<span class=\"mostPass").append(isTesting ? " testing" : "")
-                       .append("\" title=\"").append(_t("Most tests passing")).append("\">&ensp;</span>");
-                }
 
-                // Check for congestion caps (D/E) and demote immediately
-                if (info != null && prof != null) {
-                    String caps = info.getCapabilities();
-                    if (caps != null && (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
-                                         caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0)) {
-                        prof.setCapacityBonus(-30);
-                        _context.profileOrganizer().demoteIfCongested(peer);
+                    boolean failHigh = failPercentage >= 10.0;
+                    if (failHigh) {
+                        buf.append(" failing").append(failPercentage >= 50.0 ? " fiftyPercent" : "");
                     }
-                }
-                buf.append("</td><td class=groups><span class=\"");
-                if (isIntegrated) buf.append("integrated ");
-                switch (tier) {
-                    case 1: buf.append("fast\">").append(_t("Fast, High Capacity")); break;
-                    case 2: buf.append("highcap\">").append(_t("High Capacity")); break;
-                    case 3: buf.append("standard\">").append(_t("Standard")); break;
-                    default: buf.append("failing\">").append(_t("Failing")); break;
-                }
-                if (isIntegrated) buf.append(", ").append(_t("Integrated"));
-                String spd = num(Math.round(prof.getSpeedValue())).replace(",", "");
-                String speedApprox = spd.substring(0, spd.indexOf("."));
-                int speed = Integer.parseInt(speedApprox);
-                buf.append("</span></td><td data-sort=").append(speed).append(">");
-                if (prof.getSpeedValue() > 0.1) {
-                    buf.append("<span class=\"");
-                    if (prof.isLowLatency()) {buf.append("testOK ");}
-                    else if (capBonus == -30) {buf.append("testFail ");}
-                    if (speed >= 9999999) {speed = speed - 9999999;}
-                    if (speed > 1025) {
-                        speed = speed / 1024;
-                        buf.append("kilobytes\">");
-                        buf.append(speed).append(" K/s");
-                    } else {
-                        buf.append("bytes\">");
-                        buf.append(speed).append(" B/s");
+                    buf.append("\" title=\"");
+                    long passed = total - fails;
+                    buf.append(passed).append('/').append(total).append(' ').append(_t("tests passed"));
+                    if (isUnreachable) buf.append(" \u2022 ").append(_t("Unreachable"));
+                    if (isBanned) buf.append(" \u2022 ").append(_t("Banned"));
+                    buf.append("\">");
+
+                    if (failHigh) {
+                        buf.append("\u2022 ").append(fails).append('/').append(total).append(' ').append(_t("Test Fails"));
                     }
-                    if (bonus != 0 && bonus != 9999999) {
-                        if (bonus > 0) {buf.append(" (+");}
-                        else {buf.append(" (");}
-                        buf.append(bonus).append(')');
-                    }
-                    buf.append("</span>");
-                } else {
-                    buf.append("<span hidden>0</span><span class=\"");
-                    if (prof.isLowLatency()) {buf.append("testOK ");}
-                    else if (capBonus <= -30) {buf.append("testFail ");}
-                    buf.append("nospeed\">&ensp;</span>");
+                    if (isUnreachable) buf.append(" \u2022 ").append(_t("Unreachable"));
+                    if (isBanned) buf.append(" \u2022 ").append(_t("Banned"));
+                } else if (isUnreachable) {
+                    buf.append("\" title=\"\u2022 ").append(_t("Unreachable"));
+                    if (bonus == 9999999) {prof.setSpeedBonus(0);}
+                    prof.setCapacityBonus(-30);
+                    _context.profileOrganizer().demoteIfHighLatency(peer);
+                } else if (isBanned) {
+                    buf.append("\" title=\"\u2022 ").append(_t("Banned"));
                 }
-                int score = 0;
-                if (prof.isLowLatency()) {score = 2;}
-                else if (capBonus == -30) {score = 1;}
-                buf.append("</td><td class=latency data-sort=").append(score).append(">");
-                if (prof.isLowLatency()) {buf.append("<span class=lowlatency>✔</span>");}
-                else if (capBonus == -30) {buf.append("<span class=highlatency>✖</span>");}
-                else {buf.append("<span>&ensp;</span>");}
-                int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
-                int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
-                buf.append("</td><td data-sort=")
-                   .append(prof.getTunnelHistory().getLifetimeAgreedTo())
-                   .append(">")
-                   .append(agreed)
-                   .append("</td><td data-sort=")
-                   .append(prof.getTunnelHistory().getLifetimeRejected())
-                   .append(">")
-                   .append(rejected)
-                   .append("</td><td data-sort=")
-                   .append(prof.getFirstHeardAbout())
-                   .append(">");
-                now = _context.clock().now();
-                if (prof.getFirstHeardAbout() > 0) {
-                   buf.append(formatInterval(now, prof.getFirstHeardAbout()));
-                }
-                buf.append("</td><td data-sort=").append(prof.getLastHeardFrom() - now).append(">")
-                   .append(formatInterval(now, prof.getLastHeardFrom())).append("</td><td nowrap class=viewedit>");
-                String viewProfile = _t("View profile");
-                String configurePeer = _t("Configure Peer");
-                if (prof != null) {
-                    buf.append("<a class=viewprofile href=\"/viewprofile?peer=")
-                       .append(peer.toBase64())
-                       .append("\" title=\"")
-                       .append(viewProfile)
-                       .append("\" alt=\"[")
-                       .append(viewProfile)
-                       .append("]\">")
-                       .append(_t("Profile"))
-                       .append("</a>");
-                }
-                buf.append("<br><a class=configpeer href=\"/configpeer?peer=")
-                   .append(peer.toBase64())
-                   .append("\" title=\"")
-                   .append(configurePeer)
-                   .append("\" alt=\"[")
-                   .append(configurePeer)
-                   .append("]\">")
-                    .append(_t("Edit"))
-                    .append("</a></td></tr>\n");
-                if (stream && ++rowsSinceFlush >= STREAM_BATCH) {
-                    out.append(buf);
-                    out.flush();
-                    buf.setLength(0);
-                    rowsSinceFlush = 0;
+                buf.append("\"></span>");
+            } else {
+                buf.append("<span class=\"mostPass").append(isTesting ? " testing" : "")
+                   .append("\" title=\"").append(_t("Most tests passing")).append("\">&ensp;</span>");
+            }
+
+            // Check for congestion caps (D/E) and demote immediately
+            if (info != null && prof != null) {
+                String caps = info.getCapabilities();
+                if (caps != null && (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
+                                     caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0)) {
+                    prof.setCapacityBonus(-30);
+                    _context.profileOrganizer().demoteIfCongested(peer);
                 }
             }
-            buf.append("</tbody>\n</table>\n<div id=peer_thresholds>\n<h3 class=tabletitle>")
-               .append(_t("Thresholds"))
-               .append("</h3>\n<table id=thresholds>\n<thead><tr><th><b>")
-               .append(_t("Speed"))
-               .append(": </b>");
-            double speed = Math.max(1, _organizer.getSpeedThreshold());
-            if (speed < -10240) {speed += 10240;}
-            else if (speed < 0) {speed = 0;}
-            if (speed > 1025) {
-                speed = speed / 1024;
-                buf.append((int)speed).append(' ' ).append("KB");
-            } else {buf.append((int)speed).append(' ' ).append("B");}
-            buf.append("ps</th><th><b>").append(_t("Capacity")).append(": </b>");
-            double capThresh = Math.max(1, Math.round(_organizer.getCapacityThreshold()));
-            double integThresh = Math.max(1, _organizer.getIntegrationThreshold());
-            buf.append((int)Math.round(capThresh)).append(' ').append(_t("tunnels per hour")).append("</th><th><b>")
-               .append(_t("Integration")).append(": </b>").append((int)Math.round(integThresh)).append(' ');
-            if (capThresh > 0 && capThresh < 2) {buf.append(_t("peer"));}
-            else {buf.append(_t("peers"));}
-            buf.append("</th></tr></thead>\n<tbody>\n<tr><td>")
-               .append(ngettext("{0} fast peer", "{0} fast peers", fast))
-               .append("</td><td>")
-               .append(ngettext("{0} high capacity peer", "{0} high capacity peers", reliable))
-               .append("</td><td>")
-               .append(ngettext("{0} integrated peer", "{0} integrated peers", integrated))
-               .append("</td></tr>\n</tbody>\n</table>\n</div>\n</div>\n"); // thresholds
-        } else if (mode == 3) {
-            buf.append("<div class=widescroll id=ff>\n<table id=floodfills>\n")
-               .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
-               .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>")
-               .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=bad></colgroup>")
-               .append("<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>")
-               .append("<thead class=smallhead><tr>")
-               .append("<th data-sort-direction=ascending>").append(_t("Peer")).append("</th>")
-               .append("<th data-sort-direction=ascending data-sort-method=number>").append(_t("1h Fail Rate").replace("Rate","")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("1h Resp. Time")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("First Heard About")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("Last Heard From")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("Good Lookups")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("Last Good Lookup")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("Last Good Send")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("Last Good Store")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("Bad Lookups")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("Last Bad Lookup")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("Last Bad Send")).append("</th>")
-                .append("<th data-sort-method=number>").append(_t("Last Bad Store")).append("</th>")
-                .append("</tr></thead>\n<tbody id=ffProfiles>\n");
-            RateAverages ra = RateAverages.getTemp();
-            List<PeerProfile> sorted = new ArrayList<>(order);
-            Collections.sort(sorted, new FloodfillComparator(ra));
-            boolean stream = sorted.size() > MAX_BEFORE_STREAMING;
-            if (stream) {
+            buf.append("</td><td class=groups><span class=\"");
+            if (isIntegrated) buf.append("integrated ");
+            switch (tier) {
+                case 1: buf.append("fast\">").append(_t("Fast, High Capacity")); break;
+                case 2: buf.append("highcap\">").append(_t("High Capacity")); break;
+                case 3: buf.append("standard\">").append(_t("Standard")); break;
+                default: buf.append("failing\">").append(_t("Failing")); break;
+            }
+            if (isIntegrated) buf.append(", ").append(_t("Integrated"));
+            String spd = num(Math.round(prof.getSpeedValue())).replace(",", "");
+            String speedApprox = spd.substring(0, spd.indexOf("."));
+            int speed = Integer.parseInt(speedApprox);
+            buf.append("</span></td><td data-sort=").append(speed).append(">");
+            if (prof.getSpeedValue() > 0.1) {
+                buf.append("<span class=\"");
+                if (prof.isLowLatency()) {buf.append("testOK ");}
+                else if (capBonus == -30) {buf.append("testFail ");}
+                if (speed >= 9999999) {speed = speed - 9999999;}
+                if (speed > 1025) {
+                    speed = speed / 1024;
+                    buf.append("kilobytes\">");
+                    buf.append(speed).append(" K/s");
+                } else {
+                    buf.append("bytes\">");
+                    buf.append(speed).append(" B/s");
+                }
+                if (bonus != 0 && bonus != 9999999) {
+                    if (bonus > 0) {buf.append(" (+");}
+                    else {buf.append(" (");}
+                    buf.append(bonus).append(')');
+                }
+                buf.append("</span>");
+            } else {
+                buf.append("<span hidden>0</span><span class=\"");
+                if (prof.isLowLatency()) {buf.append("testOK ");}
+                else if (capBonus <= -30) {buf.append("testFail ");}
+                buf.append("nospeed\">&ensp;</span>");
+            }
+            int score = 0;
+            if (prof.isLowLatency()) {score = 2;}
+            else if (capBonus == -30) {score = 1;}
+            buf.append("</td><td class=latency data-sort=").append(score).append(">");
+            if (prof.isLowLatency()) {buf.append("<span class=lowlatency>✔</span>");}
+            else if (capBonus == -30) {buf.append("<span class=highlatency>✖</span>");}
+            else {buf.append("<span>&ensp;</span>");}
+            int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
+            int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
+            buf.append("</td><td data-sort=")
+               .append(prof.getTunnelHistory().getLifetimeAgreedTo())
+               .append(">")
+               .append(agreed)
+               .append("</td><td data-sort=")
+               .append(prof.getTunnelHistory().getLifetimeRejected())
+               .append(">")
+               .append(rejected)
+               .append("</td><td data-sort=")
+               .append(prof.getFirstHeardAbout())
+               .append(">");
+             long now = _context.clock().now();
+            if (prof.getFirstHeardAbout() > 0) {
+               buf.append(formatInterval(now, prof.getFirstHeardAbout()));
+            }
+            buf.append("</td><td data-sort=").append(prof.getLastHeardFrom() - now).append(">")
+               .append(formatInterval(now, prof.getLastHeardFrom())).append("</td><td nowrap class=viewedit>");
+            String viewProfile = _t("View profile");
+            String configurePeer = _t("Configure Peer");
+            if (prof != null) {
+                buf.append("<a class=viewprofile href=\"/viewprofile?peer=")
+                   .append(peer.toBase64())
+                   .append("\" title=\"")
+                   .append(viewProfile)
+                   .append("\" alt=\"[")
+                   .append(viewProfile)
+                   .append("]\">")
+                   .append(_t("Profile"))
+                   .append("</a>");
+            }
+            buf.append("<br><a class=configpeer href=\"/configpeer?peer=")
+               .append(peer.toBase64())
+               .append("\" title=\"")
+               .append(configurePeer)
+               .append("\" alt=\"[")
+               .append(configurePeer)
+               .append("]\">")
+                .append(_t("Edit"))
+                .append("</a></td></tr>\n");
+            if (stream && ++rowsSinceFlush >= STREAM_BATCH) {
                 out.append(buf);
                 out.flush();
                 buf.setLength(0);
+                rowsSinceFlush = 0;
             }
-            int rowsSinceFlush = 0;
-            for (PeerProfile prof : sorted) {
-                Hash peer = prof.getPeer();
-                DBHistory dbh = prof.getDBHistory();
-                RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-                boolean isBanned = _context.banlist().isBanlisted(peer) || _context.banlist().isBanlistedHostile(peer);
-                boolean isUnreachable = info != null && info.getCapabilities().indexOf('U') >= 0;
-                boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
-                int displayed = 0;
-                boolean isResponding = prof.getDbResponseTime() != null;
-                boolean isGood = prof.getLastSendSuccessful() > 0 && isResponding &&
-                                 (dbh != null && (dbh.getLastStoreSuccessful() > 0 ||
-                                 dbh.getLastLookupSuccessful() > 0));
-                if (dbh != null && isFF && !isUnreachable && !isBanned && prof.getLastHeardFrom() > 0) {
-                    displayed++;
-                    String integration = num(prof.getIntegrationValue()).replace(".00", "");
-                    String hourfail = davg(dbh, 60*60*1000L, ra);
-                    String hourfailValue = hourfail.replace("%", "");
-                    String dayfail = davg(dbh, 24*60*60*1000L, ra);
-                    now = _context.clock().now();
-                    long heard = prof.getFirstHeardAbout();
-
-                    buf.append("<tr class=lazy><td nowrap>")
-                       .append(_context.commSystem().renderPeerHTML(peer, true))
-                       .append("</td><td data-sort=")
-                       .append(hourfailValue)
-                       .append("><span class=\"percentBarOuter");
-                    if (hourfail.equals("0%")) {buf.append(" nofail");}
-                    buf.append("\"><span class=percentBarInner style=\"width:")
-                       .append(hourfail)
-                       .append("\"><span class=percentBarText>")
-                       .append(hourfail)
-                       .append("</span></span></span></td><td data-sort=")
-                       .append(avg(prof, 60*60*1000L, ra))
-                       .append(">")
-                       .append(avg(prof, 60*60*1000L, ra))
-                       .append("</td><td data-sort=")
-                       .append(heard)
-                       .append(">")
-                       .append(formatInterval(now, heard))
-                       .append("</td><td data-sort=")
-                       .append(prof.getLastHeardFrom())
-                       .append(">")
-                       .append(formatInterval(now, prof.getLastHeardFrom()))
-                       .append("</td><td data-sort=")
-                       .append(dbh.getSuccessfulLookups())
-                       .append(">")
-                       .append(dbh.getSuccessfulLookups())
-                       .append("</td><td data-sort=")
-                       .append(dbh.getLastLookupSuccessful())
-                       .append(">")
-                       .append(formatInterval(now, dbh.getLastLookupSuccessful()))
-                       .append("</td><td data-sort=")
-                       .append(prof.getLastSendSuccessful())
-                       .append(">")
-                       .append(formatInterval(now, prof.getLastSendSuccessful()))
-                       .append("</td><td data-sort=")
-                       .append(dbh.getLastStoreSuccessful())
-                       .append(">")
-                       .append(formatInterval(now, dbh.getLastStoreSuccessful()))
-                       .append("</td><td data-sort=")
-                       .append(dbh.getFailedLookups())
-                       .append(">")
-                       .append(dbh.getFailedLookups())
-                       .append("</td><td data-sort=")
-                       .append(dbh.getLastLookupFailed())
-                       .append(">")
-                       .append(formatInterval(now, dbh.getLastLookupFailed()))
-                       .append("</td><td data-sort=")
-                       .append(prof.getLastSendFailed())
-                       .append(">")
-                       .append(formatInterval(now, prof.getLastSendFailed()))
-                       .append("</td><td data-sort=")
-                       .append(dbh.getLastStoreFailed())
-                       .append(">")
-                       .append(formatInterval(now, dbh.getLastStoreFailed()))
-                       .append("</td></tr>\n");
-                    if (stream && ++rowsSinceFlush >= STREAM_BATCH) {
-                        out.append(buf);
-                        out.flush();
-                        buf.setLength(0);
-                        rowsSinceFlush = 0;
-                    }
-                }
-            }
-            buf.append("</tbody>\n</table>\n</div>\n");
         }
+        buf.append("</tbody>\n</table>\n<div id=peer_thresholds>\n<h3 class=tabletitle>")
+           .append(_t("Thresholds"))
+           .append("</h3>\n<table id=thresholds>\n<thead><tr><th><b>")
+           .append(_t("Speed"))
+           .append(": </b>");
+        double speed = Math.max(1, _organizer.getSpeedThreshold());
+        if (speed < -10240) {speed += 10240;}
+        else if (speed < 0) {speed = 0;}
+        if (speed > 1025) {
+            speed = speed / 1024;
+            buf.append((int)speed).append(' ' ).append("KB");
+        } else {buf.append((int)speed).append(' ' ).append("B");}
+        buf.append("ps</th><th><b>").append(_t("Capacity")).append(": </b>");
+        double capThresh = Math.max(1, Math.round(_organizer.getCapacityThreshold()));
+        double integThresh = Math.max(1, _organizer.getIntegrationThreshold());
+        buf.append((int)Math.round(capThresh)).append(' ').append(_t("tunnels per hour")).append("</th><th><b>")
+           .append(_t("Integration")).append(": </b>").append((int)Math.round(integThresh)).append(' ');
+        if (capThresh > 0 && capThresh < 2) {buf.append(_t("peer"));}
+        else {buf.append(_t("peers"));}
+        buf.append("</th></tr></thead>\n<tbody>\n<tr><td>")
+           .append(ngettext("{0} fast peer", "{0} fast peers", fast))
+           .append("</td><td>")
+           .append(ngettext("{0} high capacity peer", "{0} high capacity peers", reliable))
+           .append("</td><td>")
+           .append(ngettext("{0} integrated peer", "{0} integrated peers", integrated))
+           .append("</td></tr>\n</tbody>\n</table>\n</div>\n</div>\n"); // thresholds
         if (mode == 0 && !isAdvanced) {
             buf.append("<h3 class=tabletitle>")
                .append(_t("Definitions"))
@@ -597,10 +517,134 @@ class ProfileOrganizerRenderer {
                .append(":</b></td><td>")
                .append(_t("how many new peers have they told us about lately?"))
                .append("</td></tr>\n</tbody>\n</table>\n");
-        }  // mode < 2
+        }  // mode == 0
         out.append(buf);
         out.flush();
-        buf.setLength(0);
+    }
+
+    /**
+     *  Render the floodfill table, sorted by 1h fail rate ascending.
+     *
+     *  @param out the writer to render to
+     *  @param order the selected profiles
+     *  @throws IOException if an I/O error occurs
+     *  @since 0.9.70+
+     */
+    private void renderFloodfill(Writer out, Set<PeerProfile> order) throws IOException {
+        StringBuilder buf = new StringBuilder(32*1024);
+        buf.append("<div class=widescroll id=ff>\n<table id=floodfills>\n")
+           .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
+           .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>")
+           .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=bad></colgroup>")
+           .append("<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>")
+           .append("<thead class=smallhead><tr>")
+           .append("<th data-sort-direction=ascending>").append(_t("Peer")).append("</th>")
+           .append("<th data-sort-direction=ascending data-sort-method=number>").append(_t("1h Fail Rate").replace("Rate","")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("1h Resp. Time")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("First Heard About")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Last Heard From")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Good Lookups")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Last Good Lookup")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Last Good Send")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Last Good Store")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Bad Lookups")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Last Bad Lookup")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Last Bad Send")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Last Bad Store")).append("</th>")
+           .append("</tr></thead>\n<tbody id=ffProfiles>\n");
+        RateAverages ra = RateAverages.getTemp();
+        List<FloodfillRow> sorted = new ArrayList<>(order.size());
+        for (PeerProfile prof : order) {
+            sorted.add(new FloodfillRow(prof, ra));
+        }
+        Collections.sort(sorted, new FloodfillRowComparator());
+        boolean stream = sorted.size() > MAX_BEFORE_STREAMING;
+        if (stream) {
+            out.append(buf);
+            out.flush();
+            buf.setLength(0);
+        }
+        int rowsSinceFlush = 0;
+        for (FloodfillRow row : sorted) {
+            PeerProfile prof = row.prof;
+            Hash peer = prof.getPeer();
+            DBHistory dbh = prof.getDBHistory();
+            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+            boolean isBanned = _context.banlist().isBanlisted(peer) || _context.banlist().isBanlistedHostile(peer);
+            boolean isUnreachable = info != null && info.getCapabilities().indexOf('U') >= 0;
+            boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
+            if (dbh != null && isFF && !isUnreachable && !isBanned && prof.getLastHeardFrom() > 0) {
+                String hourfail = row.hourFailPct + "%";
+                String respTime = avg(prof, 60*60*1000L, ra);
+                long now = _context.clock().now();
+                long heard = prof.getFirstHeardAbout();
+
+                buf.append("<tr class=lazy><td nowrap>")
+                   .append(_context.commSystem().renderPeerHTML(peer, true))
+                   .append("</td><td data-sort=")
+                   .append(row.hourFailPct)
+                   .append("><span class=\"percentBarOuter");
+                if (row.hourFailPct == 0) {buf.append(" nofail");}
+                buf.append("\"><span class=percentBarInner style=\"width:")
+                   .append(hourfail)
+                   .append("\"><span class=percentBarText>")
+                   .append(hourfail)
+                   .append("</span></span></span></td><td data-sort=")
+                   .append(respTime)
+                   .append(">")
+                   .append(respTime)
+                   .append("</td><td data-sort=")
+                   .append(heard)
+                   .append(">")
+                   .append(formatInterval(now, heard))
+                   .append("</td><td data-sort=")
+                   .append(prof.getLastHeardFrom())
+                   .append(">")
+                   .append(formatInterval(now, prof.getLastHeardFrom()))
+                   .append("</td><td data-sort=")
+                   .append(dbh.getSuccessfulLookups())
+                   .append(">")
+                   .append(dbh.getSuccessfulLookups())
+                   .append("</td><td data-sort=")
+                   .append(dbh.getLastLookupSuccessful())
+                   .append(">")
+                   .append(formatInterval(now, dbh.getLastLookupSuccessful()))
+                   .append("</td><td data-sort=")
+                   .append(prof.getLastSendSuccessful())
+                   .append(">")
+                   .append(formatInterval(now, prof.getLastSendSuccessful()))
+                   .append("</td><td data-sort=")
+                   .append(dbh.getLastStoreSuccessful())
+                   .append(">")
+                   .append(formatInterval(now, dbh.getLastStoreSuccessful()))
+                   .append("</td><td data-sort=")
+                   .append(dbh.getFailedLookups())
+                   .append(">")
+                   .append(dbh.getFailedLookups())
+                   .append("</td><td data-sort=")
+                   .append(dbh.getLastLookupFailed())
+                   .append(">")
+                   .append(formatInterval(now, dbh.getLastLookupFailed()))
+                   .append("</td><td data-sort=")
+                   .append(prof.getLastSendFailed())
+                   .append(">")
+                   .append(formatInterval(now, prof.getLastSendFailed()))
+                   .append("</td><td data-sort=")
+                   .append(dbh.getLastStoreFailed())
+                   .append(">")
+                   .append(formatInterval(now, dbh.getLastStoreFailed()))
+                   .append("</td></tr>\n");
+                if (stream && ++rowsSinceFlush >= STREAM_BATCH) {
+                    out.append(buf);
+                    out.flush();
+                    buf.setLength(0);
+                    rowsSinceFlush = 0;
+                }
+            }
+        }
+        buf.append("</tbody>\n</table>\n</div>\n");
+        out.append(buf);
+        out.flush();
     }
 
     private class ProfileComparator extends ProfComparator {
@@ -634,19 +678,29 @@ class ProfileOrganizerRenderer {
     }
 
     /**
+     *  A peer profile bundled with its 1h lookup fail rate, computed once so
+     *  the sort key and the rendered value cannot diverge.
+     *  @since 0.9.70+
+     */
+    private static class FloodfillRow {
+        final PeerProfile prof;
+        final int hourFailPct;
+        FloodfillRow(PeerProfile prof, RateAverages ra) {
+            this.prof = prof;
+            this.hourFailPct = failRatePct(prof, ra);
+        }
+    }
+
+    /**
      *  Sorts floodfill rows by 1h fail rate ascending (best first) so the
      *  initial render needs no client-side re-sort. Ties keep the binary
      *  hash order of the source set.
      *  @since 0.9.70+
      */
-    private static class FloodfillComparator implements Comparator<PeerProfile>, Serializable {
-        private final transient RateAverages _ra;
-
-        public FloodfillComparator(RateAverages ra) {_ra = ra;}
-
+    private static class FloodfillRowComparator implements Comparator<FloodfillRow>, Serializable {
         @Override
-        public int compare(PeerProfile left, PeerProfile right) {
-            return failRatePct(left, _ra) - failRatePct(right, _ra);
+        public int compare(FloodfillRow left, FloodfillRow right) {
+            return left.hourFailPct - right.hourFailPct;
         }
     }
 
@@ -669,25 +723,14 @@ class ProfileOrganizerRenderer {
     private final static String num(double num) { synchronized (_fmt) { return _fmt.format(num); } }
     private final static String NA = "&ensp;";
 
-    private String avg (PeerProfile prof, long rate, RateAverages ra) {
-            RateStat rs = prof.getDbResponseTime();
-            if (rs == null) {return _t(NA);}
-            Rate r = rs.getRate(rate);
-            if (r == null) {return _t(NA);}
-            r.computeAverages(ra, false);
-            if (ra.getTotalEventCount() == 0) {return _t(NA);}
-            return DataHelper.formatDuration2(Math.round(ra.getAverage()));
-    }
-
-    private String davg (DBHistory dbh, long rate, RateAverages ra) {
-            RateStat rs = dbh != null ? dbh.getFailedLookupRate() : null;
-            if (rs == null) {return "0%";}
-            Rate r = rs.getRate(rate);
-            if (r == null) {return "0%";}
-            r.computeAverages(ra, false);
-            if (ra.getTotalEventCount() <= 0) {return "0%";}
-            double avg = 0.5 + 100 * ra.getAverage();
-            return ((int) avg) + "%";
+    private String avg(PeerProfile prof, long rate, RateAverages ra) {
+        RateStat rs = prof.getDbResponseTime();
+        if (rs == null) {return _t(NA);}
+        Rate r = rs.getRate(rate);
+        if (r == null) {return _t(NA);}
+        r.computeAverages(ra, false);
+        if (ra.getTotalEventCount() == 0) {return _t(NA);}
+        return DataHelper.formatDuration2(Math.round(ra.getAverage()));
     }
 
     /** @since 0.9.21 */
