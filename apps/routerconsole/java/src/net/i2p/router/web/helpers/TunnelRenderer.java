@@ -95,6 +95,10 @@ class TunnelRenderer {
     }
 
     private int DISPLAY_LIMIT = 100;
+    /** Render rows in a single write up to this count; above it, flush every {@link #STREAM_BATCH} rows so the page paints progressively. */
+    private static final int MAX_BEFORE_STREAMING = 100;
+    /** Rows rendered per flush when streaming a large table. */
+    private static final int STREAM_BATCH = 100;
     private int displayed;
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
     private static String fmt(double val) { synchronized (TWO_DECIMALS) { return TWO_DECIMALS.format(val); } }
@@ -264,6 +268,13 @@ class TunnelRenderer {
                 sb.append("<th data-sort-method=number>")
                   .append(_t("To"))
                   .append("</th></tr>\n</thead>\n<tbody id=transitPeers>\n");
+                boolean stream = participating.size() > MAX_BEFORE_STREAMING;
+                if (stream) {
+                    out.write(sb.toString());
+                    out.flush();
+                    sb.setLength(0);
+                }
+                int rowsSinceFlush = 0;
                 long processed = 0;
                 RateStat rs = _context.statManager().getRate("tunnel.participatingMessageCount");
                 if (rs != null) {processed = (long)rs.getRate(RateConstants.TEN_MINUTES).getLifetimeTotalValue();}
@@ -344,6 +355,12 @@ class TunnelRenderer {
                     if (to != null) {sb.append("<td><div class=tunnel_peer>").append(netDbLink(to)).append("</div></td>");}
                     else {sb.append("<td><span hidden>&ndash;</span></td>");}
                     sb.append("</tr>\n");
+                    if (stream && ++rowsSinceFlush >= STREAM_BATCH) {
+                        out.write(sb.toString());
+                        out.flush();
+                        sb.setLength(0);
+                        rowsSinceFlush = 0;
+                    }
                 }
                 sb.append("</tbody>\n<tfoot id=statusnotes><tr><td colspan=8>");
                 if (displayed >= 2) {
@@ -991,6 +1008,13 @@ class TunnelRenderer {
         }
         final String tib = _t("Inbound");
         final String tob = _t("Outbound");
+        boolean stream = tunnels.size() > MAX_BEFORE_STREAMING;
+        if (stream) {
+            out.append(buf);
+            out.flush();
+            buf.setLength(0);
+        }
+        int rowsSinceFlush = 0;
         for (int i = 0; i < tunnels.size(); i++) {
             TunnelInfo info = tunnels.get(i);
             long timeLeft = info.getExpiration()-_context.clock().now();
@@ -1106,6 +1130,12 @@ class TunnelRenderer {
 
             if (info.isInbound()) {processedIn += count;}
             else {processedOut += count;}
+            if (stream && ++rowsSinceFlush >= STREAM_BATCH) {
+                out.append(buf);
+                out.flush();
+                buf.setLength(0);
+                rowsSinceFlush = 0;
+            }
         }
 
         if (live > 0) {

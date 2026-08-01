@@ -35,6 +35,10 @@ import net.i2p.util.LHMCache;
  */
 class ProfileOrganizerRenderer {
     private static final Pattern WHOIS_PAREN = Pattern.compile("\\([^)]+\\)");
+    /** Render rows in a single write up to this count; above it, flush every {@link #STREAM_BATCH} rows so the page paints progressively. */
+    private static final int MAX_BEFORE_STREAMING = 100;
+    /** Rows rendered per flush when streaming a large table. */
+    private static final int STREAM_BATCH = 100;
     private final RouterContext _context;
     private final ProfileOrganizer _organizer;
 
@@ -145,7 +149,14 @@ class ProfileOrganizerRenderer {
                .append("<th data-sort-method=none>").append(_t("View/Edit")).append("</th>")
                .append("</tr>\n</thead>\n<tbody id=pbody>\n");
 
-            int prevTier = 1;
+            boolean stream = order.size() > MAX_BEFORE_STREAMING;
+            if (stream) {
+                out.append(buf);
+                out.flush();
+                buf.setLength(0);
+            }
+            int rowsSinceFlush = 0;
+
             for (PeerProfile prof : order) {
                 Hash peer = prof.getPeer();
                 int tier = 0;
@@ -358,8 +369,14 @@ class ProfileOrganizerRenderer {
                    .append("\" alt=\"[")
                    .append(configurePeer)
                    .append("]\">")
-                   .append(_t("Edit"))
-                   .append("</a></td></tr>\n");
+                    .append(_t("Edit"))
+                    .append("</a></td></tr>\n");
+                if (stream && ++rowsSinceFlush >= STREAM_BATCH) {
+                    out.append(buf);
+                    out.flush();
+                    buf.setLength(0);
+                    rowsSinceFlush = 0;
+                }
             }
             buf.append("</tbody>\n</table>\n<div id=peer_thresholds>\n<h3 class=tabletitle>")
                .append(_t("Thresholds"))
@@ -406,9 +423,16 @@ class ProfileOrganizerRenderer {
                .append("<th data-sort-method=number>").append(_t("Bad Lookups")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("Last Bad Lookup")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("Last Bad Send")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("Last Bad Store")).append("</th>")
-               .append("</tr></thead>\n<tbody id=ffProfiles>\n");
+                .append("<th data-sort-method=number>").append(_t("Last Bad Store")).append("</th>")
+                .append("</tr></thead>\n<tbody id=ffProfiles>\n");
             RateAverages ra = RateAverages.getTemp();
+            boolean stream = order.size() > MAX_BEFORE_STREAMING;
+            if (stream) {
+                out.append(buf);
+                out.flush();
+                buf.setLength(0);
+            }
+            int rowsSinceFlush = 0;
             for (PeerProfile prof : order) {
                 Hash peer = prof.getPeer();
                 DBHistory dbh = prof.getDBHistory();
@@ -485,6 +509,12 @@ class ProfileOrganizerRenderer {
                        .append(">")
                        .append(formatInterval(now, dbh.getLastStoreFailed()))
                        .append("</td></tr>\n");
+                    if (stream && ++rowsSinceFlush >= STREAM_BATCH) {
+                        out.append(buf);
+                        out.flush();
+                        buf.setLength(0);
+                        rowsSinceFlush = 0;
+                    }
                 }
             }
             buf.append("</tbody>\n</table>\n</div>\n");
