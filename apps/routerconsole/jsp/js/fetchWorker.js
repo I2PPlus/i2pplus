@@ -103,19 +103,19 @@ async function processFetchRequest(url, now, clientData) {
       const contentType = response.headers.get("Content-Type");
       if (contentType && contentType.includes("text/html")) {
         const responseText = await response.text();
-        messagePayload = { url, responseText, isDown: false, noResponse: 0 };
+        messagePayload = { url, responseText, isDown: false, noResponse: 0, status: response.status };
       } else {
         const responseBlob = await response.blob();
-        messagePayload = { url, responseBlob, isDown: false, noResponse: 0 };
+        messagePayload = { url, responseBlob, isDown: false, noResponse: 0, status: response.status };
       }
       updateLastRequestTime(clientId, now);
     } else {
-      messagePayload = { url, isDown: true, noResponse: incrementNoResponse() };
+      messagePayload = { url, isDown: true, noResponse: incrementNoResponse(), status: response.status };
     }
 
     port.postMessage(messagePayload);
   } catch (error) {
-    port.postMessage({ url, isDown: true, noResponse: incrementNoResponse() });
+    port.postMessage({ url, isDown: true, noResponse: incrementNoResponse(), status: 0 });
   } finally {
     decrementActiveRequests();
     processNextFetchRequest();

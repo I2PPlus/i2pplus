@@ -1,7 +1,10 @@
 /**
  * @module autologout
  * @description Auto-redirect to login on session expiry. Polls /session/check
- * via SharedWorker and redirects to /login when the session is no longer valid.
+ * via SharedWorker and redirects to /login when the session has expired
+ * (HTTP 401). Network failures (e.g. router restart) never redirect — the
+ * check resumes when the router is back. Without a console password the
+ * endpoint always returns 200, so no redirect ever occurs.
  * @author dr|z3d
  * @license AGPL3 or later
  */
@@ -15,7 +18,7 @@
   var fetchWorker = new SharedWorker("/js/fetchWorker.js");
   fetchWorker.port.start();
   fetchWorker.port.onmessage = function(e) {
-    if (e.data.isDown) {
+    if (e.data.status === 401) {
       failures++;
       if (failures >= MAX_FAILURES) {
         window.location.href = '/login';
