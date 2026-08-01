@@ -45,8 +45,6 @@ class UDPSorters {
     static final int FLAG_DUP = 15;
     /** Sort by uptime */
     static final int FLAG_UPTIME = 16;
-    /** Debug sort flag */
-    static final int FLAG_DEBUG = 99;
 
     /** @return a comparator for the given sort flag */
     static Comparator<PeerState> getComparator(int sortFlags) {
