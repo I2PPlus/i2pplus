@@ -4,12 +4,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.udp.PeerState;
 import net.i2p.router.transport.Transport;
@@ -90,6 +96,141 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     static final long STAT_PERIOD_LONG = RateConstants.TEN_MINUTES;
     /** Max history samples for sparklines (30 samples @ 30s = 15min) */
     static final int MAX_HISTORY = 30;
+
+    /** Stat prefix for per-stage CPU usage (pct of one core, 100 = full core). */
+    static final String STAGE_STAT_PREFIX = "tuner.stageCpu.";
+
+    /** Transport worker thread name prefixes tracked for CPU saturation. */
+    private static final String[] CPU_STAGES = {
+        "UDPPktHandler", "UDPMsgRX", "NTCPReader", "NTCPWriter", "NTCPTXFinis",
+        "UDPReceiver", "UDPSender", "UDPEstablisher", "UDPPktPusher", "NTCPPumper"
+    };
+
+    /** Per-thread CPU time source; getThreadCpuTime() returns -1 on unsupported JVMs. */
+    private static final ThreadMXBean _threadMXBean = ManagementFactory.getThreadMXBean();
+    /** Per-stage CPU state, updated each cycle by {@link #sampleStageCpu()}. */
+    private final Map<String, StageCpu> _stageCpu = new HashMap<String, StageCpu>();
+    /** Cumulative CPU ns per thread id, from the previous sample cycle. */
+    private final Map<Long, Long> _threadCpuPrev = new HashMap<Long, Long>();
+    /** Wall clock of the previous CPU sample cycle. */
+    private long _lastCpuSampleMs;
+
+    /** CPU saturation state of one transport worker stage. */
+    private static class StageCpu {
+        /** Stage name, matches a {@link #CPU_STAGES} prefix. */
+        final String name;
+        /** Per-cycle accumulator, flushed to {@link #coresPct} at cycle end. */
+        double sum;
+        /** Total cores consumed last cycle (1.0 = one full core). */
+        double coresPct;
+        /** Consecutive cycles at or above 75% of a core. */
+        int streak;
+
+        StageCpu(String name) { this.name = name; }
+    }
+
+    /** Sample per-thread CPU time per stage, once per tune cycle. */
+    private void sampleStageCpu() {
+        long now = System.currentTimeMillis();
+        if (_lastCpuSampleMs > 0) {
+            long wallMs = now - _lastCpuSampleMs;
+            long[] ids = _threadMXBean.getAllThreadIds();
+            ThreadInfo[] infos = _threadMXBean.getThreadInfo(ids, 0);
+            Set<Long> live = new HashSet<Long>();
+            for (int i = 0; i < ids.length; i++) {
+                long id = ids[i];
+                live.add(Long.valueOf(id));
+                ThreadInfo info = infos[i];
+                if (info == null) continue;
+                String name = info.getThreadName();
+                if (name == null) continue;
+                long cpu = _threadMXBean.getThreadCpuTime(id);
+                if (cpu < 0) continue;
+                Long prev = _threadCpuPrev.get(Long.valueOf(id));
+                _threadCpuPrev.put(Long.valueOf(id), Long.valueOf(cpu));
+                if (prev == null) continue;
+                double cores = (cpu - prev.longValue()) / 1e9 / (wallMs / 1000.0);
+                if (cores <= 0) continue;
+                double pct = Math.min(1000.0, cores * 100.0);
+                for (String stage : CPU_STAGES) {
+                    if (name.startsWith(stage)) {
+                        StageCpu sc = _stageCpu.get(stage);
+                        if (sc == null) {
+                            sc = new StageCpu(stage);
+                            _stageCpu.put(stage, sc);
+                        }
+                        sc.sum += pct;
+                        _context.statManager().addRateData(STAGE_STAT_PREFIX + stage, Math.round(pct));
+                        break;
+                    }
+                }
+            }
+            _threadCpuPrev.keySet().retainAll(live);
+            for (StageCpu sc : _stageCpu.values()) {
+                sc.coresPct = sc.sum;
+                sc.sum = 0;
+                if (sc.coresPct >= 75) {
+                    sc.streak++;
+                } else {
+                    sc.streak = 0;
+                }
+            }
+        }
+        _lastCpuSampleMs = now;
+    }
+
+    /**
+     * Whether a transport worker stage has been CPU-saturated (>= 75% of one core)
+     * for two or more consecutive cycles.
+     *
+     * @param stage a {@link #CPU_STAGES} prefix
+     * @return true if saturated
+     */
+    private boolean stageSaturated(String stage) {
+        StageCpu sc = _stageCpu.get(stage);
+        return sc != null && sc.streak >= 2 && sc.coresPct >= 75;
+    }
+
+    /**
+     * Whether the JVM has CPU headroom to add worker threads.
+     * Gated on 60s-smoothed process load: growth is allowed while at least one
+     * full core of capacity remains unused, so 1-core machines never grow.
+     *
+     * @return true if at least one core of capacity is free
+     */
+    private boolean cpuHeadroom() {
+        return SystemVersion.getCPULoadCores() < SystemVersion.getCores() - 1;
+    }
+
+    /**
+     * Cap pool size by active transport connections: one extra thread above the
+     * minimum per {@code divisor} connections. Bounds worst-case thread count
+     * without creating threads on its own — demand signals drive actual growth.
+     *
+     * @param t the transport, or null if not running (no constraint)
+     * @param min the pool minimum
+     * @param max the pool maximum
+     * @param divisor connections per extra thread
+     * @return the effective cap
+     */
+    private int peerScaledCap(Transport t, int min, int max, int divisor) {
+        if (t == null) return max;
+        int peers = t.countActivePeers();
+        if (peers <= 0) return max;
+        return Math.max(min, Math.min(max, min + peers / divisor));
+    }
+
+    /** @return the UDP transport or null */
+    private UDPTransport getUDPTransport() {
+        Transport t = _context.commSystem().getTransports().get(UDPTransport.STYLE);
+        return t instanceof UDPTransport ? (UDPTransport) t : null;
+    }
+
+    /** @return the NTCP transport or null */
+    private NTCPTransport getNTCPTransport() {
+        Transport t = _context.commSystem().getTransports().get(NTCPTransport.STYLE);
+        return t instanceof NTCPTransport ? (NTCPTransport) t : null;
+    }
 
     /** I2CP internal queue size — static so ClientManager can read it without circular dep */
     private static volatile int _internalQueueSize = SystemVersion.isSlow() ? 256 : 512;
@@ -521,6 +662,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         // Purge stale tuner.* keys from router.config (one-time cleanup)
         purgeOldTunerProps(ctx);
+        // Per-stage CPU usage stats, one per tracked transport worker stage
+        long[] cpuRates = new long[] { RateConstants.ONE_MINUTE };
+        for (String stage : CPU_STAGES) {
+            _context.statManager().createRateStat(STAGE_STAT_PREFIX + stage,
+                "CPU usage of " + stage + " worker threads (pct of one core)", "Tuner", cpuRates);
+        }
     }
 
     /**
@@ -553,6 +700,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         SystemHealth health = new SystemHealth(_context);
         _lastHealthScore = health.getScore();
         _lastSubsystemScores = health.computeSubsystemScores();
+        // Sample per-stage thread CPU first so params can trigger on saturation
+        sampleStageCpu();
         for (TunableParam param : _params) {
             try {
                 if (param instanceof BaseParam) {
@@ -4659,13 +4808,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Reclaim parked threads when the pool is massively under-utilized
             int reclaimed = reclaimIfIdle(getPacketHandlerUtilization(_context), current, _min, 0.05);
             if (reclaimed >= 0) return reclaimed;
+            // CPU saturation trigger: handlers pegging >= 75% of a core for 2 cycles.
+            // Checked before latency signals — a pegged stage that keeps queues short
+            // never fires them. Distributes work to another core preemptively.
+            boolean cpuSaturated = stageSaturated("UDPPktHandler");
+            boolean headroom = cpuHeadroom();
+            int cap = peerScaledCap(getUDPTransport(), _min, _max, 512);
+            if (cpuSaturated && headroom && current < cap)
+                return Math.min(cap, current + 1);
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double hourlyBps = getAdditionalStatHourly(_context, "tunnel.participating InBps");
             double msgRxQueue = getAdditionalStat(_context, "udp.msgRx.queueSize");
             double queueDepth = getAdditionalStat(_context, "udp.outboundQueueDepth");
-            int sysLoad = SystemVersion.getSystemLoad();
-            boolean highLoad = sysLoad > 80;
+            boolean highLoad = !headroom;
             double memPressure = getMemoryPressure();
 
             boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > getHeavyTransitThreshold(_context);
@@ -4689,23 +4845,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // Deep outbound queue = add threads (process acks faster to drain)
             if (deepQueue && !systemBusy && !highLoad && memPressure < 0.7)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // Any push time pressure + no CPU = add threads (max throughput)
             if (observed > 10 && !systemBusy && !highLoad)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // Heavy transit + headroom = add threads proactively
             if (heavyTransit && !systemBusy && !highLoad && memPressure < 0.7)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // High utilization + downstream pressure = add threads
             if (highUtilization && downstreamBackedUp && !systemBusy)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // Downstream backed up = add threads to drain faster
             if (downstreamBackedUp && !systemBusy && !highLoad)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             return current;
         }
@@ -4755,6 +4911,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Reclaim parked threads when the pool is massively under-utilized
             int reclaimed = reclaimIfIdle(getMessageReceiverUtilization(_context), current, _min, 0.05);
             if (reclaimed >= 0) return reclaimed;
+            // CPU saturation trigger: receivers pegging >= 75% of a core for 2 cycles.
+            // Checked before latency signals — a pegged stage that keeps queues short
+            // never fires them. Distributes reassembly to another core preemptively.
+            boolean cpuSaturated = stageSaturated("UDPMsgRX");
+            boolean headroom = cpuHeadroom();
+            int cap = peerScaledCap(getUDPTransport(), _min, _max, 512);
+            if (cpuSaturated && headroom && current < cap)
+                return Math.min(cap, current + 1);
             // observed = codel.UDP-Receiver.delay (upstream queue sojourn time, ms)
             // Cross-refs: udp.inboundExpired, udp.msgRx.queueSize, codel.UDP-MessageReceiver.delay,
             //             jobLag (CPU), udp.pushTime (downstream handler pressure),
@@ -4765,8 +4929,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double pushTime = getAdditionalStat(_context, "udp.pushTime");
             double queueDepth = getAdditionalStat(_context, "udp.outboundQueueDepth");
-            int sysLoad = SystemVersion.getSystemLoad();
-            boolean highLoad = sysLoad > 80;
+            boolean highLoad = !headroom;
             double memPressure = getMemoryPressure();
 
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
@@ -4784,31 +4947,31 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // Deep outbound queue = process acks faster to free outbound messages
             if (deepQueue && !cpuPressure && !highLoad && memPressure < 0.7)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // Any upstream pressure + no CPU = add threads (max throughput)
             if (upstreamBackpressure && !cpuPressure && !highLoad)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // High utilization + queue backed up = add threads
             if (highUtilization && queueBackedUp && !cpuPressure)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // Queue backed up + no CPU = add threads
             if (queueBackedUp && !cpuPressure && !highLoad)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // Messages expiring + no CPU = add threads (loss = urgency)
             if (messagesExpiring && !cpuPressure && !highLoad)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // Long sojourn + headroom = add threads proactively
             if (longSojourn && !cpuPressure && !highLoad && memPressure < 0.7)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // High utilization alone = runners saturated, add a thread to meet demand
             if (highUtilization && !cpuPressure && !highLoad)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // Idle + no work = shrink (threads doing nothing useful)
             // Drive shrink off utilization rather than a near-zero queue so a
@@ -7975,6 +8138,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Reclaim parked threads when the pool is massively under-utilized
             int reclaimed = reclaimIfIdle(getReaderUtilization(_context), current, _min, 0.05);
             if (reclaimed >= 0) return reclaimed;
+            // CPU saturation trigger: readers pegging >= 75% of a core for 2 cycles.
+            // Checked before latency signals — a pegged stage that keeps queues short
+            // never fires them. Distributes decryption to another core preemptively.
+            boolean cpuSaturated = stageSaturated("NTCPReader");
+            boolean headroom = cpuHeadroom();
+            int cap = peerScaledCap(getNTCPTransport(), _min, _max, 64);
+            if (cpuSaturated && headroom && current < cap)
+                return Math.min(cap, current + 1);
             // observed = ntcp.readQueueSize (avg pending connections waiting for a reader)
             // With 300+ connections, queue averages ~1. Threads grab a connection,
             // decrypt + parse, return it. No I/O blocking — EventPumper fills buffers.
@@ -7995,20 +8166,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // Growing: queue is backing up faster than current threads can drain
             if (queue > current * 2 && !cpuPressure)
-                return Math.min(_max, current + Math.max(1, queue / current));
+                return Math.min(cap, current + Math.max(1, queue / current));
 
             // High utilization + queue pressure = definitely need more threads
             if (highUtilization && queue > current && !cpuPressure)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // High utilization alone (threads saturated, queue drained as fast as
             // filled) = demand exceeds capacity, add a thread to keep up
             if (highUtilization && !cpuPressure)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // Urgent: errors + queue backing up
             if (errorsHigh && queue > current && !cpuPressure)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // Shrinking: queue is well below capacity — threads sitting idle
             // Shrink faster when queue is empty and utilization is low
@@ -8078,6 +8249,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Reclaim parked threads when the pool is massively under-utilized
             int reclaimed = reclaimIfIdle(getWriterUtilization(_context), current, _min, 0.05);
             if (reclaimed >= 0) return reclaimed;
+            // CPU saturation trigger: writers pegging >= 75% of a core for 2 cycles.
+            // Checked before latency signals — a pegged stage that keeps queues short
+            // never fires them. Distributes encryption to another core preemptively.
+            boolean cpuSaturated = stageSaturated("NTCPWriter");
+            boolean headroom = cpuHeadroom();
+            int cap = peerScaledCap(getNTCPTransport(), _min, _max, 64);
+            if (cpuSaturated && headroom && current < cap)
+                return Math.min(cap, current + 1);
             // observed = ntcp.sendTime (ms, avg message send latency)
             // Writers are pure CPU — encrypt + prepare buffer. EventPumper does NIO write.
             // Scale based on send latency and downstream pressure.
@@ -8109,19 +8288,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // High pressure: multiple signals firing + no CPU = add threads
             if (pressure >= 2 && !cpuPressure)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // Severe finisher backlog + no CPU = add threads immediately (write pipeline blocked)
             if (finisherSevere && !cpuPressure)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // High utilization + any pressure = add threads
             if (highUtilization && (sendSlow || backlogged || poolBusy || highEvictions) && !cpuPressure)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // Moderate pressure: single signal + no CPU = add threads only if near saturation
             if (pressure == 1 && !cpuPressure && (sendSlow || backlogged || poolBusy || highEvictions))
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // Idle: no pressure signals, queue not backing up = shrink
             if (pressure == 0 && current > _min) {
@@ -8254,6 +8433,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Reclaim parked threads when the pool is massively under-utilized
             int reclaimed = reclaimIfIdle(getSendFinisherUtilization(_context), current, _min, 0.05);
             if (reclaimed >= 0) return reclaimed;
+            // CPU saturation trigger: finishers pegging >= 75% of a core for 2 cycles.
+            // Checked before latency signals — a pegged stage that keeps queues short
+            // never fires them. Distributes send completion to another core preemptively.
+            boolean cpuSaturated = stageSaturated("NTCPTXFinis");
+            boolean headroom = cpuHeadroom();
+            int cap = peerScaledCap(getNTCPTransport(), _min, _max, 64);
+            if (cpuSaturated && headroom && current < cap)
+                return Math.min(cap, current + 1);
             // observed = ntcp.sendPool.utilization (0-100%)
             // Cross-refs: ntcp.sendFinisher.queueSize, ntcp.writeBufs.size,
             //             transport.sendPool.evicted (priority eviction rate)
@@ -8272,11 +8459,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // High send pool utilization, finisher backlog, or evictions = increase threads
             if (highUtilization || finisherBacklog || highWriteBufs || highEvictions)
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // High utilization + any queue pressure = add threads
             if (highUtil && (finisherBacklog || highWriteBufs))
-                return Math.min(_max, current + 1);
+                return Math.min(cap, current + 1);
 
             // Idle + no work = shrink (threads doing nothing useful)
             if (!highUtilization && !finisherBacklog && !highWriteBufs && !highEvictions && lowUtil && current > _min)
