@@ -19,10 +19,10 @@ jobs:
       - name: PackageInstall
         run: sudo apt install -y gettext ant-contrib parallel uglifyjs
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up JDK 8
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '8'
           distribution: 'temurin'
@@ -51,7 +51,7 @@ jobs:
         run: ant jsdoc-zip
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: i2p-build-artifacts
           path: |
@@ -87,19 +87,37 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: i2p-build-artifacts
           path: artifacts/
 
-      - name: Checkout vendored release action
-        uses: actions/checkout@v4
+      - name: Flatten downloaded artifacts
+        run: |
+          if [ -d artifacts/dist ]; then
+            mv artifacts/dist/* artifacts/
+            rm -rf artifacts/dist
+          fi
 
-      - name: Upload continuous release
-        uses: ./.github/actions/release-action
-        with:
-          tag: continuous
-          body: "Automated build from ${{ github.sha }}"
-          commit: ${{ github.sha }}
-          artifacts: artifacts/*
-          makeLatest: true
+      - name: Recreate continuous release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG=continuous
+          NAME="${GITHUB_SHA:0:8}"
+
+          # Recreate on every run: a PATCH keeps the original published_at, so
+          # the sidebar date would stay at the first build. Deleting the release
+          # and tag also lets --target move the tag to the current commit.
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release delete "$TAG" --yes --cleanup-tag
+          fi
+
+          CREATE=(gh release create "$TAG" --title "$NAME")
+          CREATE+=(--target "$GITHUB_SHA")
+          CREATE+=(--notes "Automated build from $GITHUB_SHA")
+          CREATE+=(--latest)
+          "${CREATE[@]}"
+
+          gh release upload "$TAG" artifacts/* --clobber
