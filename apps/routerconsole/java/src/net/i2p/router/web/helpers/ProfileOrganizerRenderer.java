@@ -6,8 +6,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -405,13 +408,13 @@ class ProfileOrganizerRenderer {
                .append(ngettext("{0} integrated peer", "{0} integrated peers", integrated))
                .append("</td></tr>\n</tbody>\n</table>\n</div>\n</div>\n"); // thresholds
         } else if (mode == 3) {
-            buf.append("<div class=widescroll id=ff>\n<table id=floodfills data-sort-direction=descending>\n")
+            buf.append("<div class=widescroll id=ff>\n<table id=floodfills>\n")
                .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
                .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>")
                .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=bad></colgroup>")
                .append("<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>")
                .append("<thead class=smallhead><tr>")
-               .append("<th data-sort-default data-sort-direction=ascending>").append(_t("Peer")).append("</th>")
+               .append("<th data-sort-direction=ascending>").append(_t("Peer")).append("</th>")
                .append("<th data-sort-direction=ascending data-sort-method=number>").append(_t("1h Fail Rate").replace("Rate","")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("1h Resp. Time")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("First Heard About")).append("</th>")
@@ -426,14 +429,16 @@ class ProfileOrganizerRenderer {
                 .append("<th data-sort-method=number>").append(_t("Last Bad Store")).append("</th>")
                 .append("</tr></thead>\n<tbody id=ffProfiles>\n");
             RateAverages ra = RateAverages.getTemp();
-            boolean stream = order.size() > MAX_BEFORE_STREAMING;
+            List<PeerProfile> sorted = new ArrayList<>(order);
+            Collections.sort(sorted, new FloodfillComparator(ra));
+            boolean stream = sorted.size() > MAX_BEFORE_STREAMING;
             if (stream) {
                 out.append(buf);
                 out.flush();
                 buf.setLength(0);
             }
             int rowsSinceFlush = 0;
-            for (PeerProfile prof : order) {
+            for (PeerProfile prof : sorted) {
                 Hash peer = prof.getPeer();
                 DBHistory dbh = prof.getDBHistory();
                 RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
@@ -626,6 +631,38 @@ class ProfileOrganizerRenderer {
         public int compare(PeerProfile left, PeerProfile right) {
             return HashComparator.comp(left.getPeer(), right.getPeer());
         }
+    }
+
+    /**
+     *  Sorts floodfill rows by 1h fail rate ascending (best first) so the
+     *  initial render needs no client-side re-sort. Ties keep the binary
+     *  hash order of the source set.
+     *  @since 0.9.70+
+     */
+    private static class FloodfillComparator implements Comparator<PeerProfile>, Serializable {
+        private final transient RateAverages _ra;
+
+        public FloodfillComparator(RateAverages ra) {_ra = ra;}
+
+        @Override
+        public int compare(PeerProfile left, PeerProfile right) {
+            return failRatePct(left, _ra) - failRatePct(right, _ra);
+        }
+    }
+
+    /**
+     *  1h lookup fail rate as an integer percent, the same value the render emits.
+     */
+    private static int failRatePct(PeerProfile prof, RateAverages ra) {
+        DBHistory dbh = prof.getDBHistory();
+        RateStat rs = dbh != null ? dbh.getFailedLookupRate() : null;
+        if (rs == null) {return 0;}
+        Rate r = rs.getRate(60*60*1000L);
+        if (r == null) {return 0;}
+        r.computeAverages(ra, false);
+        if (ra.getTotalEventCount() <= 0) {return 0;}
+        double avg = 0.5 + 100 * ra.getAverage();
+        return (int) avg;
     }
 
     private final static DecimalFormat _fmt = new DecimalFormat("###,##0.00");
