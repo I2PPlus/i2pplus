@@ -7,9 +7,8 @@ inputs:
     required: false
     default: 'continuous'
   name:
-    description: 'Release name'
+    description: 'Release name; defaults to the 8-char commit hash'
     required: false
-    default: 'Continuous Build'
   body:
     description: 'Release body'
     required: false
@@ -37,6 +36,10 @@ runs:
       run: |
         set -euo pipefail
         TAG="${{ inputs.tag }}"
+        NAME="${{ inputs.name }}"
+        if [ -z "$NAME" ]; then
+            NAME="${GITHUB_SHA:0:8}"
+        fi
 
         # Recreate on every run: a PATCH keeps the original published_at, so
         # the sidebar date would stay at the first build. Deleting the release
@@ -45,7 +48,7 @@ runs:
           gh release delete "$TAG" --yes --cleanup-tag
         fi
 
-        CREATE=(gh release create "$TAG" --title "${{ inputs.name }}")
+        CREATE=(gh release create "$TAG" --title "$NAME")
         if [ -n "${{ inputs.commit }}" ]; then
           CREATE+=(--target "${{ inputs.commit }}")
         fi
