@@ -62,7 +62,7 @@ export function initTransit(config) {
   }
 
   /** Fetches fresh transit data via SharedWorker and replaces matching DOM elements. */
-  function refreshData() {
+  function refreshData(immediate = false) {
     startRefresh();
     getDOM();
     if (tunnels) {
@@ -71,18 +71,18 @@ export function initTransit(config) {
         if (config.usePeerRowTracking) {
           const currentRows = peers.querySelectorAll("tr").length;
           if (currentRows === lastPeerRowCount && currentRows > 0) {
-            refreshElements("#transitPeers td>*, #statusnotes", FETCH_URL, REFRESH_INTERVAL);
+            refreshElements("#transitPeers td>*, #statusnotes", FETCH_URL, REFRESH_INTERVAL, immediate);
           } else if (currentRows !== lastPeerRowCount) {
-            refreshElements("#transitPeers, #statusnotes", FETCH_URL, REFRESH_INTERVAL);
+            refreshElements("#transitPeers, #statusnotes", FETCH_URL, REFRESH_INTERVAL, immediate);
             lastPeerRowCount = currentRows;
           } else {
-            refreshElements("#tunnels", FETCH_URL, RETRY_DELAY);
+            refreshElements("#tunnels", FETCH_URL, RETRY_DELAY, immediate);
           }
         } else {
-          refreshElements("#statusnotes, #transitPeers", FETCH_URL, REFRESH_INTERVAL);
+          refreshElements("#statusnotes, #transitPeers", FETCH_URL, REFRESH_INTERVAL, immediate);
         }
       } else if (main) {
-        refreshElements("#tunnels", FETCH_URL, RETRY_DELAY);
+        refreshElements("#tunnels", FETCH_URL, RETRY_DELAY, immediate);
       }
     }
     endRefresh();
@@ -101,7 +101,7 @@ export function initTransit(config) {
     }
     refreshBtn.addEventListener("click", (e) => {
       e.preventDefault();
-      refreshData();
+      refreshData(true);
     });
     refreshData();
   }

@@ -56,12 +56,12 @@ fetchWorker.port.onmessage = function(e) {
  * @param {string|string[]} targetSelectors - CSS selector(s) for elements to refresh
  * @param {string} url - The URL to fetch content from
  * @param {number} delay - The refresh interval in milliseconds
- * @param {boolean} [immediate=true] - Fetch right away on setup, or wait for the first interval tick
+ * @param {boolean} [immediate=false] - Fetch right away on setup, or wait for the first interval tick
  * @returns {void}
  * @example refreshElements("#sidebar", "/sidebar", 10000)
  * @example refreshElements(["#peers", "#status"], "/peers", 5000)
  */
-export function refreshElements(targetSelectors, url, delay, immediate = true) {
+export function refreshElements(targetSelectors, url, delay, immediate = false) {
   let selectors = [];
 
   if (typeof targetSelectors === "string") {

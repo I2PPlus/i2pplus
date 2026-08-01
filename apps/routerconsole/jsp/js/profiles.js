@@ -103,25 +103,25 @@ import { refreshElements } from "./refreshElements.js";
     // Refresh profiles overview and thresholds every 5 seconds
     if (info || thresholds) {
       const targetSelectors = [info, thresholds].filter(el => el).map(el => `#${el.id}`).join(", ");
-      refreshElements(targetSelectors, uri, 5000, false);
+      refreshElements(targetSelectors, uri, 5000);
     }
 
     // Refresh profile list every 15 seconds
     if (plist) {
       const targetSelectors = pbody ? `#pbody, #profiles_overview, #thresholds` : `#profilelist`;
-      refreshElements(targetSelectors, uri, 15000, false);
+      refreshElements(targetSelectors, uri, 15000);
     }
 
     // Refresh floodfill profiles every 15 seconds
     if (ff) {
       const targetSelectors = ffprofiles ? `#ffProfiles` : `#floodfills`;
-      refreshElements(targetSelectors, uri, 15000, false);
+      refreshElements(targetSelectors, uri, 15000);
     }
 
     // Refresh session bans every 15 seconds
     if (sessionBans) {
       const targetSelectors = "#sessionBanlist, #banSummary h2";
-      refreshElements(targetSelectors, uri, 15000, false);
+      refreshElements(targetSelectors, uri, 15000);
     }
 
     document.addEventListener("refreshComplete", () => {
