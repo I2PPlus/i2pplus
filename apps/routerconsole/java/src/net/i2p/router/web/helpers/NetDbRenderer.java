@@ -1789,21 +1789,6 @@ class NetDbRenderer {
         }
     }
 
-    private static final Map<Character, String> CAP_REPLACEMENTS;
-    static {
-        CAP_REPLACEMENTS = new HashMap<>();
-        CAP_REPLACEMENTS.put('f', "<a href=\"/netdb?caps=f\"><span class=ff>F</span></a>");
-        CAP_REPLACEMENTS.put('R', "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>");
-        CAP_REPLACEMENTS.put('U', "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>");
-        CAP_REPLACEMENTS.put('K', "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>");
-        CAP_REPLACEMENTS.put('L', "<a href=\"/netdb?caps=L\"><span class=tier>L</span></a>");
-        CAP_REPLACEMENTS.put('M', "<a href=\"/netdb?caps=M\"><span class=tier>M</span></a>");
-        CAP_REPLACEMENTS.put('N', "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>");
-        CAP_REPLACEMENTS.put('O', "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>");
-        CAP_REPLACEMENTS.put('P', "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>");
-        CAP_REPLACEMENTS.put('X', "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>");
-    }
-
     /**
      * Internal class to hold reverse DNS cache entries with expiration time.
      */
@@ -1923,93 +1908,14 @@ class NetDbRenderer {
         if (identity.isCompressible()) {
             buf.append("<span class=compressible title=\"").append(_t("RouterInfo is compressible")).append("\"></span> ");
         }
-        StringBuilder processedCaps = new StringBuilder(caps.length() * 2);
-        for (int i = 0; i < caps.length(); i++) {
-            char c = caps.charAt(i);
-            processedCaps.append(CAP_REPLACEMENTS.getOrDefault(c, String.valueOf(c)));
+        String processedCapsStr = CapabilitiesRenderer.linkify(caps, CapabilitiesRenderer.CAP_REPLACEMENTS);
+        char tier = hasD ? 'D' : hasE ? 'E' : hasG ? 'G' : '\0';
+        if (tier != 0) {
+            processedCapsStr = CapabilitiesRenderer.applyTierState(processedCapsStr, tier,
+                                                                    isReachable ? 'R' : isUnreachable ? 'U' : '\0', false);
+            processedCapsStr = processedCapsStr.replace("class=\"tier\"", "class=\"tier is" + tier + "\"");
         }
-        String processedCapsStr = processedCaps.toString();
-        if (hasD || hasE || hasG) {
-            if (hasD && processedCapsStr.contains("D")) {
-                processedCapsStr = processedCapsStr.replace("D", "");
-            } else if (hasE && processedCapsStr.contains("E")) {
-                processedCapsStr = processedCapsStr.replace("E", "");
-            } else if (hasG && processedCapsStr.contains("G")) {
-                processedCapsStr = processedCapsStr.replace("G", "");
-            }
-            if (hasD) {
-                processedCapsStr = processedCapsStr
-                    .replace("class=\"tier\"", "class=\"tier isD\"")
-                    .replace("class=tier", "class=\"tier isD\"");
-                if (isReachable) {
-                    processedCapsStr = processedCapsStr
-                        .replace("href=\"/netdb?caps=K", "href=\"/netdb?caps=KRD")
-                        .replace("href=\"/netdb?caps=L", "href=\"/netdb?caps=LRD")
-                        .replace("href=\"/netdb?caps=M", "href=\"/netdb?caps=MRD")
-                        .replace("href=\"/netdb?caps=N", "href=\"/netdb?caps=NRD")
-                        .replace("href=\"/netdb?caps=O", "href=\"/netdb?caps=ORD")
-                        .replace("href=\"/netdb?caps=P", "href=\"/netdb?caps=PRD")
-                        .replace("href=\"/netdb?caps=X", "href=\"/netdb?caps=XRD");
-                } else if (isUnreachable) {
-                    processedCapsStr = processedCapsStr
-                        .replace("href=\"/netdb?caps=K", "href=\"/netdb?caps=KUD")
-                        .replace("href=\"/netdb?caps=L", "href=\"/netdb?caps=LUD")
-                        .replace("href=\"/netdb?caps=M", "href=\"/netdb?caps=MUD")
-                        .replace("href=\"/netdb?caps=N", "href=\"/netdb?caps=NUD")
-                        .replace("href=\"/netdb?caps=O", "href=\"/netdb?caps=OUD")
-                        .replace("href=\"/netdb?caps=P", "href=\"/netdb?caps=PUD")
-                        .replace("href=\"/netdb?caps=X", "href=\"/netdb?caps=XUD");
-                }
-            } else if (hasE) {
-                processedCapsStr = processedCapsStr
-                    .replace("class=\"tier\"", "class=\"tier isE\"")
-                    .replace("class=tier", "class=\"tier isE\"");
-                if (isReachable) {
-                    processedCapsStr = processedCapsStr
-                        .replace("href=\"/netdb?caps=K", "href=\"/netdb?caps=KRE")
-                        .replace("href=\"/netdb?caps=L", "href=\"/netdb?caps=LRE")
-                        .replace("href=\"/netdb?caps=M", "href=\"/netdb?caps=MRE")
-                        .replace("href=\"/netdb?caps=N", "href=\"/netdb?caps=NRE")
-                        .replace("href=\"/netdb?caps=O", "href=\"/netdb?caps=ORE")
-                        .replace("href=\"/netdb?caps=P", "href=\"/netdb?caps=PRE")
-                        .replace("href=\"/netdb?caps=X", "href=\"/netdb?caps=XRE");
-                } else if (isUnreachable) {
-                    processedCapsStr = processedCapsStr
-                        .replace("href=\"/netdb?caps=K", "href=\"/netdb?caps=KUE")
-                        .replace("href=\"/netdb?caps=L", "href=\"/netdb?caps=LUE")
-                        .replace("href=\"/netdb?caps=M", "href=\"/netdb?caps=MUE")
-                        .replace("href=\"/netdb?caps=N", "href=\"/netdb?caps=NUE")
-                        .replace("href=\"/netdb?caps=O", "href=\"/netdb?caps=OUE")
-                        .replace("href=\"/netdb?caps=P", "href=\"/netdb?caps=PUE")
-                        .replace("href=\"/netdb?caps=X", "href=\"/netdb?caps=XUE");
-                }
-            } else if (hasG) {
-                processedCapsStr = processedCapsStr
-                    .replace("class=\"tier\"", "class=\"tier isG\"")
-                    .replace("class=tier", "class=\"tier isG\"");
-                if (isReachable) {
-                    processedCapsStr = processedCapsStr
-                        .replace("href=\"/netdb?caps=K", "href=\"/netdb?caps=KRG")
-                        .replace("href=\"/netdb?caps=L", "href=\"/netdb?caps=LRG")
-                        .replace("href=\"/netdb?caps=M", "href=\"/netdb?caps=MRG")
-                        .replace("href=\"/netdb?caps=N", "href=\"/netdb?caps=NRG")
-                        .replace("href=\"/netdb?caps=O", "href=\"/netdb?caps=ORG")
-                        .replace("href=\"/netdb?caps=P", "href=\"/netdb?caps=PRG")
-                        .replace("href=\"/netdb?caps=X", "href=\"/netdb?caps=XRG");
-                } else if (isUnreachable) {
-                    processedCapsStr = processedCapsStr
-                        .replace("href=\"/netdb?caps=K", "href=\"/netdb?caps=KUG")
-                        .replace("href=\"/netdb?caps=L", "href=\"/netdb?caps=LUG")
-                        .replace("href=\"/netdb?caps=M", "href=\"/netdb?caps=MUG")
-                        .replace("href=\"/netdb?caps=N", "href=\"/netdb?caps=NUG")
-                        .replace("href=\"/netdb?caps=O", "href=\"/netdb?caps=OUG")
-                        .replace("href=\"/netdb?caps=P", "href=\"/netdb?caps=PUG")
-                        .replace("href=\"/netdb?caps=X", "href=\"/netdb?caps=XUG");
-                }
-            }
-        }
-        String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
-        processedCapsStr = processedCapsStr.replace("\"><span", tooltip);
+        processedCapsStr = processedCapsStr.replace("\"><span", CapabilitiesRenderer.capTooltip(_context));
         buf.append(processedCapsStr);
         String version = DataHelper.stripHTML(routerInfo.getVersion());
         buf.append("&nbsp;<a href=\"/netdb?v=").append(version).append("\">")
