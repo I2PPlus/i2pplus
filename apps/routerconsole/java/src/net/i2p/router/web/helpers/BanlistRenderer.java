@@ -53,6 +53,13 @@ class BanlistRenderer {
     private static final Pattern VERSION_EXTRACT = Pattern.compile("(?:^|\\()(\\d+\\.\\d+(?:\\.\\d+)?(?:-\\d+)?)");
 
     /**
+     * Render rows in a single write up to this count; above it, flush every {@link #STREAM_BATCH} rows so the page paints progressively.
+     */
+    private static final int MAX_BEFORE_STREAMING = 100;
+    /** Rows rendered per flush when streaming a large table. */
+    private static final int STREAM_BATCH = 100;
+
+    /**
      *  Constructor.
      *
      *  @param context the router context
@@ -319,8 +326,15 @@ class BanlistRenderer {
            .append(_t("Reason"))
            .append("</th><th class=expires data-sort-method=number data-sort-direction=ascending>")
            .append(_t("Expiry"))
-           .append("</th></tr></thead>\n<tbody id=sessionBanlist>\n");
+            .append("</th></tr></thead>\n<tbody id=sessionBanlist>\n");
         int tempBanned = 0;
+        boolean stream = entries.size() + ipOnlyBans.size() > MAX_BEFORE_STREAMING;
+        if (stream) {
+            out.append(buf);
+            out.flush();
+            buf.setLength(0);
+        }
+        int rowsSinceFlush = 0;
 
         // Render hash-based bans
         for (Map.Entry<Hash, Banlist.Entry> e : entries.entrySet()) {
@@ -459,6 +473,12 @@ class BanlistRenderer {
                .append(expireString)
                .append("</td></tr>\n");
             tempBanned++;
+            if (stream && ++rowsSinceFlush >= STREAM_BATCH) {
+                out.append(buf);
+                out.flush();
+                buf.setLength(0);
+                rowsSinceFlush = 0;
+            }
         }
 
         // Render IP-only bans
@@ -510,6 +530,12 @@ class BanlistRenderer {
                .append(expireString)
                .append("</td></tr>\n");
             tempBanned++;
+            if (stream && ++rowsSinceFlush >= STREAM_BATCH) {
+                out.append(buf);
+                out.flush();
+                buf.setLength(0);
+                rowsSinceFlush = 0;
+            }
         }
 
         buf.append("</tbody>\n<tfoot id=sessionBanlistFooter><tr><th colspan=")

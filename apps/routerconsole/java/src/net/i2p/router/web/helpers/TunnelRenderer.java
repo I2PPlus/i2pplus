@@ -446,6 +446,11 @@ class TunnelRenderer {
             long uptime = _context.router().getUptime();
             int bannedCount = 0;
             StringBuilder sb = new StringBuilder(4 * 512);
+            boolean stream = sorted.size() > MAX_BEFORE_STREAMING;
+            if (stream) {
+                out.flush();
+            }
+            int rowsSinceFlush = 0;
 
             for (Hash h : sorted) {
                 int count = counts.count(h);
@@ -548,6 +553,12 @@ class TunnelRenderer {
                       .append("</a>");
                 }
                 sb.append("</td></tr>\n");
+                if (stream && ++rowsSinceFlush >= STREAM_BATCH) {
+                    out.write(sb.toString());
+                    out.flush();
+                    sb.setLength(0);
+                    rowsSinceFlush = 0;
+                }
             }
 
             sb.append("</tbody>\n</table>\n</div>\n");
