@@ -117,13 +117,31 @@ jobs:
           # and tag also lets --target move the tag to the current commit.
           # --repo avoids needing a git checkout; gh can't resolve owner/repo
           # without one.
+          # Capture the previous build's SHA from the old release body before
+          # deleting it, so the compare API can list what changed since then.
+          PREV_SHA=""
           if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
+            PREV_SHA="$(gh release view "$TAG" --repo "$REPO" --json body \
+              --jq '.body | capture("^Automated build from (?<sha>[0-9a-f]{40})").sha // empty')"
             gh release delete "$TAG" --repo "$REPO" --yes --cleanup-tag
+          fi
+
+          BODY="Automated build from $GITHUB_SHA"
+          if [ -n "$PREV_SHA" ] && [ "$PREV_SHA" != "$GITHUB_SHA" ]; then
+            CHANGES="$(gh api "repos/$REPO/compare/$PREV_SHA...$GITHUB_SHA" \
+              --jq '[.commits[].commit.message | split("\n")[0] | select(length > 0) | "- " + .] | join("\n")' \
+              2>/dev/null || true)"
+            if [ -n "$CHANGES" ]; then
+              BODY="$BODY
+
+          ## Changes since last build
+          $CHANGES"
+            fi
           fi
 
           CREATE=(gh release create "$TAG" --title "$NAME" --repo "$REPO")
           CREATE+=(--target "$GITHUB_SHA")
-          CREATE+=(--notes "Automated build from $GITHUB_SHA")
+          CREATE+=(--notes "$BODY")
           CREATE+=(--latest)
           "${CREATE[@]}"
 
