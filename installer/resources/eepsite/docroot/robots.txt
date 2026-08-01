@@ -37,7 +37,7 @@
 # To control the eepsites.i2p robot you can use the HTML <meta> tag instead.
 # Example: <META name="ROBOTS" content="NOINDEX, NOFOLLOW">
 # If the robot sees above line it will neither index that url not will it
-# follow links on it to further pages. 
+# follow links on it to further pages.
 # Options for the content attribut are: INDEX or NOINDEX and FOLLOW or NOFOLLOW.
 # You can also use <meta name="robots" content="noarchive"> to disable caching.
 
@@ -62,7 +62,7 @@
 # To disallow any well-behaving robots from accessing your /secret/ and
 # /private/ directories:
 # Keep in mind that this is NOT blocking anyone else. Use proper authentication
-# if you want your private and secret things to stay private and secret. Also 
+# if you want your private and secret things to stay private and secret. Also
 # everyone can read the robots.txt file and see what things you want to hide.
 # User-agent: *
 # Disallow: /secret/
