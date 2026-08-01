@@ -11,6 +11,11 @@ import { stickySidebar } from "/js/stickySidebar.js";
 
 const sb = document.getElementById("sidebar");
 
+/** @type {HTMLElement|null} */
+let listenersTarget = null;
+/** @type {EventListener|null} */
+let listenersHandler = null;
+
 /**
  * Initializes sidebar section toggle controls, restoring persisted states
  * and attaching click listeners for toggle interactions.
@@ -40,10 +45,8 @@ function sectionToggler() {
   const sb_tunnels_condensed = document.getElementById("sb_tunnels_condensed");
   const sb_updatesection = document.getElementById("sb_updatesection");
   const sb_wrap = document.getElementById("sb_wrap") || sb;
-  const xhr = document.getElementById("xhr");
   const savedConfigs = localStorage.getItem("sidebarSections");
-  const main = document.querySelector(".main");
-  const sidebarSections = savedConfigs !== null ? JSON.parse(savedConfigs) : null;
+  let sidebarSections = savedConfigs !== null ? JSON.parse(savedConfigs) : null;
 
   const toggleElements = {
     toggle_sb_advancedgeneral: sb_advancedgeneral,
@@ -60,8 +63,6 @@ function sectionToggler() {
     toggle_sb_tunnels: sb_tunnels,
     toggle_sb_updatesection: sb_updatesection
   };
-
-  let listenersAdded = false;
 
   /**
    * Initializes localStorage with default sidebar section visibility states.
@@ -101,7 +102,7 @@ function sectionToggler() {
     if (toggleInput && toggleInput.id.startsWith("toggle_sb_")) {
       const key = toggleInput.id.replace("toggle_sb_", "");
       if (!savedConfigs) {
-        await initializeLocalStorage();
+        sidebarSections = await initializeLocalStorage();
       }
       sidebarSections[key] = toggleInput.checked;
       localStorage.setItem("sidebarSections", JSON.stringify(sidebarSections));
@@ -149,7 +150,6 @@ function sectionToggler() {
    * @returns {void}
    */
   function addToggleListeners() {
-    if (listenersAdded) { return; }
     const handleToggle = (event) => {
       const id = event.target.id;
       if (!(id in toggleElements)) { return; }
@@ -158,8 +158,16 @@ function sectionToggler() {
       saveToggleStates();
       stickySidebar();
     };
+    // Keep exactly one delegated handler on sb_wrap at any time. The handler
+    // is swapped each call so its captured element references are always the
+    // freshest (refreshAll replaces the toggle nodes inside #xhr), while the
+    // listener count never grows.
+    if (listenersTarget && listenersHandler) {
+      listenersTarget.removeEventListener("click", listenersHandler);
+    }
     sb_wrap.addEventListener("click", handleToggle);
-    listenersAdded = true;
+    listenersTarget = sb_wrap;
+    listenersHandler = handleToggle;
   }
 
   /**
@@ -366,10 +374,6 @@ function sectionToggler() {
   }
   restoreToggleStates();
   addToggleListeners();
-
-  document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(() => { xhr.classList.remove("fadein"); }, 120);
-  });
 }
 
 /**

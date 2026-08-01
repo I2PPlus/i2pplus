@@ -7,6 +7,58 @@
  * @license AGPLv3 or later
  */
 
+/** @type {number|null} */
+let newHostsInterval = null;
+/** @type {boolean} */
+let tooltipInitialized = false;
+/** @type {HTMLElement|null} */
+let tooltipBadge = null;
+/** @type {HTMLElement|null} */
+let tooltipServices = null;
+
+/**
+ * Shows the new hosts tooltip; looks elements up at event time so the
+ * handlers stay valid across sidebar full refreshes.
+ * @function tooltipShow
+ * @returns {void}
+ */
+function tooltipShow() {
+  const newHostsList = document.getElementById("newHostsList");
+  if (newHostsList) {newHostsList.hidden = false;}
+  document.getElementById("sb_services")?.classList.add("tooltipped");
+}
+
+/**
+ * Hides the new hosts tooltip; looks elements up at event time.
+ * @function tooltipHide
+ * @returns {void}
+ */
+function tooltipHide() {
+  const newHostsList = document.getElementById("newHostsList");
+  if (newHostsList) {newHostsList.hidden = true;}
+  document.getElementById("sb_services")?.classList.remove("tooltipped");
+}
+
+/**
+ * Attaches the tooltip listeners to the current badge node exactly once;
+ * re-attaches if the badge was replaced by a sidebar full refresh.
+ * @function ensureTooltipListeners
+ * @param {HTMLElement} badge - The new hosts badge element
+ * @returns {void}
+ */
+function ensureTooltipListeners(badge) {
+  if (tooltipInitialized && tooltipBadge === badge) {return;}
+  if (tooltipInitialized && tooltipBadge) {
+    tooltipBadge.removeEventListener("mouseenter", tooltipShow);
+    tooltipServices?.removeEventListener("mouseleave", tooltipHide);
+  }
+  badge.addEventListener("mouseenter", tooltipShow, { passive: true });
+  tooltipServices = document.getElementById("sb_services");
+  tooltipServices?.addEventListener("mouseleave", tooltipHide, { passive: true });
+  tooltipBadge = badge;
+  tooltipInitialized = true;
+}
+
 /**
  * Initializes the new hosts badge with periodic fetching, caching, and tooltip management.
  * @function newHosts
@@ -21,8 +73,6 @@ export function newHosts() {
   }
 
   const period = 30 * 60 * 1000;
-  let newHostsInterval;
-  let tooltipInitialized = false;
 
   /**
    * Retrieves cached new hosts data from localStorage.
@@ -159,7 +209,7 @@ export function newHosts() {
     const newHostsTd = newHosts?.querySelector("td");
 
     if (!hostnames.length) {
-      newHosts.hidden = true;
+      if (newHosts) { newHosts.hidden = true; }
       if (newHostsTd) { newHostsTd.innerHTML = ""; }
       return;
     }
@@ -169,27 +219,13 @@ export function newHosts() {
       return `<a href="http://${hostname}" target="_blank">${shortName}</a>`;
     }).join("<br>");
 
-    if (newHostsTd) { newHostsTd.innerHTML = newHostsList; }
+    if (newHostsTd && newHostsTd.innerHTML !== newHostsList) { newHostsTd.innerHTML = newHostsList; }
 
-    newHosts.hidden = true;
+    if (newHosts) { newHosts.hidden = true; }
 
-    if (!tooltipInitialized) {
-      newHostsBadge.addEventListener("mouseenter", () => {
-        newHosts.hidden = false;
-        const services = document.getElementById("sb_services");
-        services?.classList.add("tooltipped");
-      }, { passive: true });
-
-      const services = document.getElementById("sb_services");
-      services?.addEventListener("mouseleave", () => {
-        newHosts.hidden = true;
-        services.classList.remove("tooltipped");
-      }, { passive: true });
-
-      tooltipInitialized = true;
-    }
+    ensureTooltipListeners(newHostsBadge);
   }
-  if (newHostsInterval) clearInterval(newHostsInterval);
+  if (newHostsInterval) {clearInterval(newHostsInterval);}
   getNewHosts();
   newHostsInterval = setInterval(fetchNewHosts, period);
 }

@@ -1,3 +1,25 @@
+2026-08-01 dr|z3d
+  * Console: Profiles, tunnels, banlist, and transit summary tables render
+    progressively in 100-row batches so large pages paint before fully
+    loaded; auto-redirect to login now fires only on real session expiry,
+    not router downtime
+  * SusiDNS: Addressbook loads and size queries cached to avoid repeated
+    blockfile scans per page render; Run HostChecker button on the config
+    page
+  * Addressbook: Fix HostChecker LeaseSet caching/persistence, add live
+    interval and concurrency reload, manual scan API
+  * I2PSnark: Fix tracker and torrent-create filter config changes not
+    persisting (getters returned copies, mutations were lost)
+  * Tunnel: Pace multi-hop builds at 3/s with a token bucket; relax the max
+    concurrent builds floor to 8
+  * Tuner: Transport worker pools scale on stage CPU saturation with
+    connection-scaled caps; 5s fast cycle with proportional growth, 15s slow
+    cycle; fix inverted ranges and pool backoff dead band
+  * Console: Sidebar auto-refresh hardened — request timeouts with a watchdog
+    so a hung fetch cannot pin the in-flight guard, per-tab SharedWorker
+    client ids, tooltip/interval/listener leak fixes, and removal of dead
+    observer code
+
 2026-07-31 dr|z3d
   * I2PSnark:
     - Real-time search-as-you-type (debounced, worker-fetched) that filters the

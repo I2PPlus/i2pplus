@@ -11,20 +11,24 @@
 import { sectionToggler, countNewsItems } from "/js/sectionToggle.js";
 import { stickySidebar } from "/js/stickySidebar.js";
 import { newHosts } from "/js/newHosts.js";
-import { miniGraph } from "/js/miniGraph.js"; // NOSONAR S1128
+import "/js/miniGraph.js";
+
+/** @type {number} */
+const REQUEST_TIMEOUT = 15000;
 
 let alwaysUpdate = new Set();
 let autoRefreshInterval = null;
 let connectionStatusTimeout;
-let debounceTimeoutId = null;
+let rAFPending = false;
 let isDown = false;
 let isRefreshing = false;
 let recoveryPending = false;
 let lastRefreshTime = 0;
+let lastRequestTime = 0;
 let noResponse = 0;
-let refreshActive = true;
 let responseDoc = null;
 let xhrContainer = document.getElementById("xhr");
+let statusIntervalId = setInterval(updateConnectionStatus, 15000);
 
 const parser = new DOMParser();
 const sb = document.querySelector("#sidebar");
@@ -68,24 +72,33 @@ worker.port.addEventListener("message", ({ data }) => {
     if (responseText && responseText.includes("<body id=sb>")) {
       noResponse = 0;
       responseDoc = parser.parseFromString(responseText, "text/html");
-      requestAnimationFrame(applySidebarUpdates);
+      // Skip applying while the tab is hidden: rAF is suspended in hidden
+      // tabs, and the stale response is replaced by a fresh fetch on regain.
+      if (!document.hidden && !rAFPending) {
+        rAFPending = true;
+        requestAnimationFrame(() => {
+          rAFPending = false;
+          if (document.hidden) {return;}
+          applySidebarUpdates();
+        });
+      }
     } else {
       noResponse = Math.min(noResponse + 1, 10);
+      isRefreshing = false;
     }
   } catch {
     noResponse = Math.min(noResponse + 1, 10);
+    isRefreshing = false;
   }
   checkConnectionStatus();
 });
 
 /**
  * Initializes all sidebar components and starts auto-refresh.
- * @async
  * @function start
- * @returns {Promise<void>}
+ * @returns {void}
  */
-async function start() {
-  isSidebarVisible();
+function start() {
   updateCachedElements();
   sectionToggler();
   newHosts();
@@ -102,12 +115,11 @@ async function start() {
  * @returns {void}
  */
 function startAutoRefresh() {
-  if (autoRefreshInterval) return;
+  if (autoRefreshInterval) {return;}
 
   autoRefreshInterval = setInterval(() => {
-    if (!document.hidden && navigator.onLine && !isDown && refreshActive && !isRefreshing) {
-      isRefreshing = true;
-      refreshSidebar().finally(() => { isRefreshing = false; });
+    if (!document.hidden && navigator.onLine && !isDown && !isRefreshing) {
+      refreshSidebar();
     }
   }, getRefreshInterval());
 }
@@ -126,22 +138,28 @@ function stopAutoRefresh() {
 
 /**
  * Triggers a sidebar refresh by posting a fetch request to the SharedWorker.
- * @async
+ * Sets the in-flight guard for the duration of the request; the guard is
+ * released when the response is applied (or when the request fails), and a
+ * watchdog in updateConnectionStatus clears it if no response arrives within
+ * REQUEST_TIMEOUT.
  * @function refreshSidebar
  * @param {boolean} [force=false] - Whether to force the refresh regardless of rate limits
- * @returns {Promise<void>}
+ * @returns {void}
  */
-export async function refreshSidebar(force = false) {
-  if (!refreshActive || document.hidden || !navigator.onLine) return;
-  if (!force && isDown) return;
+function refreshSidebar(force = false) {
+  if (document.hidden || !navigator.onLine) {return;}
+  if (!force && isDown) {return;}
+  if (isRefreshing) {return;}
+  isRefreshing = true;
+  lastRequestTime = Date.now();
   try {
     worker.port.postMessage({ url: `/xhr1.jsp?requestURI=${uri}`, force });
   } catch (e) {
     noResponse = Math.min(noResponse + 1, 10);
     console.warn("refreshSidebar: postMessage failed", e);
+    isRefreshing = false;
   } finally {
     checkConnectionStatus();
-    isRefreshing = false;
   }
 }
 
@@ -152,27 +170,38 @@ export async function refreshSidebar(force = false) {
  */
 function applySidebarUpdates() {
   xhrContainer = document.getElementById("xhr");
-  if (!responseDoc || !xhrContainer) return;
-  if (isDown && !recoveryPending) return;
+  if (!responseDoc || !xhrContainer) {
+    isRefreshing = false;
+    return;
+  }
+  if (isDown && !recoveryPending) {
+    isRefreshing = false;
+    return;
+  }
 
   updateCachedElements();
 
+  const volatileResponse = Array.from(responseDoc.querySelectorAll(".volatile"));
   const responseElements = {
-    volatileElements: Array.from(responseDoc.querySelectorAll(".volatile:not(.badge)")),
+    volatileElements: volatileResponse.filter(el => !el.classList.contains("badge")),
     badges: Array.from(responseDoc.querySelectorAll(".badge:not(#newHosts)")),
   };
 
   const volatile = xhrContainer.querySelectorAll(".volatile");
-  const volatileResponse = responseDoc.querySelectorAll(".volatile");
 
   if (volatile.length !== volatileResponse.length) {
     return refreshAll();
   }
 
+  const responseById = new Map();
+  responseElements.volatileElements.forEach(el => {
+    if (el.id) {responseById.set(el.id, el);}
+  });
+
   const updates = [];
   let needsFullRefresh = false;
   elements.volatileElements.forEach((elem, i) => {
-    const respElem = responseElements.volatileElements[i];
+    const respElem = (elem.id && responseById.get(elem.id)) || responseElements.volatileElements[i];
     if (!respElem) {
       requestAnimationFrame(checkConnectionStatus);
       return;
@@ -196,8 +225,13 @@ function applySidebarUpdates() {
     return;
   }
 
+  const badgesById = new Map();
+  responseElements.badges.forEach(el => {
+    if (el.id) {badgesById.set(el.id, el);}
+  });
+
   elements.badges.forEach((elem, i) => {
-    const respElem = responseElements.badges[i];
+    const respElem = (elem.id && badgesById.get(elem.id)) || responseElements.badges[i];
     if ((respElem && elem.textContent !== respElem.textContent) || alwaysUpdate.has(elem.id)) {
       updates.push(() => {
         if (respElem) {
@@ -241,14 +275,12 @@ function applySidebarUpdates() {
  */
 function updatePersistentBars(responseDoc) {
   ["sb_memoryBar", "sb_CPUBar"].forEach(function(id) {
-    var r = responseDoc.querySelector("#" + id + " .percentBarInner");
-    var d = document.querySelector("#" + id + " .percentBarInner");
-    if (r && d && r.style.width !== d.style.width)
-      d.style.width = r.style.width;
-    var rt = responseDoc.querySelector("#" + id + " .percentBarText");
-    var dt = document.querySelector("#" + id + " .percentBarText");
-    if (rt && dt && rt.textContent !== dt.textContent)
-      dt.textContent = rt.textContent;
+    const r = responseDoc.querySelector("#" + id + " .percentBarInner");
+    const d = document.querySelector("#" + id + " .percentBarInner");
+    if (r && d && r.style.width !== d.style.width) {d.style.width = r.style.width;}
+    const rt = responseDoc.querySelector("#" + id + " .percentBarText");
+    const dt = document.querySelector("#" + id + " .percentBarText");
+    if (rt && dt && rt.textContent !== dt.textContent) {dt.textContent = rt.textContent;}
   });
 }
 
@@ -275,16 +307,26 @@ function syncGraphDataAttributes() {
  * @returns {void}
  */
 function refreshAll() {
-  if (isDown && !recoveryPending) return;
+  if (isDown && !recoveryPending) {
+    isRefreshing = false;
+    return;
+  }
   if (!responseDoc) {
     noResponse = Math.min(noResponse + 1, 10);
+    isRefreshing = false;
     return;
   }
   const sbResponse = responseDoc.getElementById("sb");
-  if (!sbResponse) return;
+  if (!sbResponse) {
+    isRefreshing = false;
+    return;
+  }
 
   xhrContainer = document.getElementById("xhr");
-  if (!xhrContainer) return;
+  if (!xhrContainer) {
+    isRefreshing = false;
+    return;
+  }
 
   xhrContainer.innerHTML = sbResponse.innerHTML;
   updateCachedElements();
@@ -315,14 +357,18 @@ function isOnline() {
 /**
  * Updates the connection status, adding/removing "isDown" class and triggering
  * appropriate refresh actions.
- * @async
  * @function updateConnectionStatus
- * @returns {Promise<void>}
+ * @returns {void}
  */
-async function updateConnectionStatus() {
+function updateConnectionStatus() {
   clearTimeout(connectionStatusTimeout);
-  connectionStatusTimeout = setTimeout(async() => {
+  connectionStatusTimeout = setTimeout(() => {
     const online = isOnline();
+    // Watchdog: a request with no response within REQUEST_TIMEOUT (hung
+    // fetch, dead worker) would otherwise pin the in-flight guard forever.
+    if (isRefreshing && Date.now() - lastRequestTime > REQUEST_TIMEOUT) {
+      isRefreshing = false;
+    }
     const currentlyDown = noResponse > 3 || !online;
     if (currentlyDown && !isDown) {
       isDown = true;
@@ -333,7 +379,6 @@ async function updateConnectionStatus() {
     }
     if (!currentlyDown && isDown && !recoveryPending) {
       recoveryPending = true;
-      isRefreshing = true;
       setTimeout(() => {
         if (recoveryPending) {
           recoveryPending = false;
@@ -353,93 +398,59 @@ function checkConnectionStatus() {
   updateConnectionStatus();
 }
 
-window.addEventListener("online", updateConnectionStatus);
 window.addEventListener("offline", updateConnectionStatus);
-setInterval(updateConnectionStatus, 15000);
-
-window.addEventListener("message", (event) => {
-  if (event.origin !== window.location.origin) return;
-  if (event.data === "iframeLoaded" && !isRefreshing) {
-    startAutoRefresh();
-    isRefreshing = true;
-  }
-});
-
-let observer;
-
-/**
- * Sets up a MutationObserver on the xhr container to detect DOM changes
- * and trigger sidebar refreshes as a backup if the interval timer stalls.
- * The debounce is set to 2x the refresh interval so the observer does not
- * fire alongside the regular interval timer — it only fires when the
- * interval has missed a cycle (e.g. tab was backgrounded).
- * @function isSidebarVisible
- * @returns {void}
- */
-function isSidebarVisible() {
-  const target = document.getElementById("xhr");
-  if (!target) return;
-
-  observer = new MutationObserver(() => {
-    if (document.hidden || isRefreshing) return;
-    const timeSinceLastRefresh = Date.now() - lastRefreshTime;
-    if (timeSinceLastRefresh < getRefreshInterval() * 1.5) return;
-    clearTimeout(debounceTimeoutId);
-    debounceTimeoutId = setTimeout(() => {
-      if (isRefreshing) return;
-      isRefreshing = true;
-      refreshSidebar(true).finally(() => {
-        isRefreshing = false;
-        observer.observe(target, { childList: true, subtree: true });
-      });
-    }, getRefreshInterval() * 2);
-  });
-
-  observer.observe(target, { childList: true, subtree: true });
-}
-
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) {
-    observer?.disconnect();
-  } else {
-    isSidebarVisible();
-  }
-});
 
 /**
  * Handles online/offline/visibility events by triggering a forced sidebar refresh.
+ * While the tab is hidden, all refresh activity is paused (refresh interval and
+ * status interval) so the browser never accumulates throttled timer events to
+ * replay on regain. On regain, the in-flight guard is released and any stale
+ * response discarded before refreshing with fresh data.
  * @function handleStatus
  * @returns {void}
  */
 function handleStatus() {
   if (document.hidden) {
     stopAutoRefresh();
+    clearTimeout(connectionStatusTimeout);
+    clearInterval(statusIntervalId);
+    statusIntervalId = null;
     return;
   }
-  if (isRefreshing) return;
-  isRefreshing = true;
+  isRefreshing = false;
+  rAFPending = false;
+  responseDoc = null;
   startAutoRefresh();
-  refreshSidebar(true).finally(() => {
-    isRefreshing = false;
-  });
+  if (!statusIntervalId) {
+    statusIntervalId = setInterval(updateConnectionStatus, 15000);
+  }
+  refreshSidebar(true);
+  checkConnectionStatus();
 }
 
 /**
- * Polls for the xhr container element and initializes the sidebar when available.
+ * Initializes the sidebar when the xhr container is available, with a bounded
+ * retry for the (rare) case the container is inserted after script execution.
  * @function initSidebar
  * @returns {void}
  */
 function initSidebar() {
+  if (xhrContainer) {
+    start();
+    return;
+  }
+  let attempts = 0;
   const interval = setInterval(() => {
     if (xhrContainer) {
       clearInterval(interval);
       start();
+    } else if (++attempts >= 50) {
+      clearInterval(interval);
     }
-  }, 5);
+  }, 100);
 }
 
 initSidebar();
 
 window.addEventListener("online", handleStatus);
-window.addEventListener("offline", checkConnectionStatus);
 document.addEventListener("visibilitychange", handleStatus);

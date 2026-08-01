@@ -15,10 +15,10 @@ const MAX_QUEUE_SIZE = 16;
 const MIN_INTERVAL = 500;
 /** @type {number} */
 const DEBOUNCE_DELAY = 200;
+/** @type {number} */
+const FETCH_TIMEOUT = 10000;
 /** @type {Map<string, {lastRequestTime: number}>} */
 const responseCountMap = new Map();
-/** @type {string} */
-const clientId = Math.random().toString(36).substr(2, 9);
 
 /** @type {number} */
 let activeRequests = 0;
@@ -26,20 +26,22 @@ let activeRequests = 0;
 let fetchQueue = [];
 /** @type {number} */
 let noResponse = 0;
-/** @type {Map<string, number>} */
+/** @type {Map<string, {timeoutId: number, clientId: string}>} */
 let debounceTimeouts = new Map();
 
 /**
  * Handles new SharedWorker connections by setting up message and close handlers.
+ * Each connection gets its own client id so closing one tab cannot purge the
+ * shared queue or rate limit for other tabs.
  * @function self.onconnect
  * @param {MessageEvent} e - The connection event containing ports
  * @returns {void}
  */
 self.onconnect = function(e) {
   const port = e.ports[0];
-  const clientData = { port, clientId };
+  const clientData = { port, clientId: Math.random().toString(36).substr(2, 9) };
   port.onmessage = function(event) {handleClientMessage(event, clientData);};
-  port.onclose = () => {cleanupClient(clientId);};
+  port.onclose = () => {cleanupClient(clientData.clientId);};
 };
 
 /**
@@ -54,17 +56,18 @@ self.onconnect = function(e) {
 function handleClientMessage(event, clientData) {
   const { url, force = false } = event.data;
   const now = Date.now();
-  const lastRequestTime = responseCountMap.get(clientId)?.lastRequestTime || 0;
+  const lastRequestTime = responseCountMap.get(clientData.clientId)?.lastRequestTime || 0;
 
   if (!force && (now - lastRequestTime < MIN_INTERVAL)) { return; }
   if (fetchQueue.length >= MAX_QUEUE_SIZE) { return; }
-  if (force) {enqueueFetchRequest(url, now, clientData);}
-  else if (debounceTimeouts.has(url)) {clearTimeout(debounceTimeouts.get(url));}
+  if (force) {enqueueFetchRequest(url, now, clientData); return;}
+  if (debounceTimeouts.has(url)) {clearTimeout(debounceTimeouts.get(url).timeoutId);}
 
-  debounceTimeouts.set(url, setTimeout(() => {
+  const timeoutId = setTimeout(() => {
     enqueueFetchRequest(url, now, clientData);
     debounceTimeouts.delete(url);
-  }, DEBOUNCE_DELAY));
+  }, DEBOUNCE_DELAY);
+  debounceTimeouts.set(url, { timeoutId, clientId: clientData.clientId });
 }
 
 /**
@@ -86,7 +89,8 @@ function enqueueFetchRequest(url, now, clientData) {
 
 /**
  * Executes a fetch request and posts the response back to the client port.
- * @async
+ * Requests are aborted after FETCH_TIMEOUT so a stalled connection cannot
+ * pin a concurrency slot (or the page's in-flight guard) forever.
  * @function processFetchRequest
  * @param {string} url - The URL to fetch
  * @param {number} now - Timestamp of the request
@@ -95,8 +99,10 @@ function enqueueFetchRequest(url, now, clientData) {
  */
 async function processFetchRequest(url, now, clientData) {
   const {port, clientId} = clientData;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {controller.abort();}, FETCH_TIMEOUT);
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { signal: controller.signal });
     let messagePayload;
 
     if (response.ok) {
@@ -109,6 +115,7 @@ async function processFetchRequest(url, now, clientData) {
         messagePayload = { url, responseBlob, isDown: false, noResponse: 0, status: response.status };
       }
       updateLastRequestTime(clientId, now);
+      noResponse = 0;
     } else {
       messagePayload = { url, isDown: true, noResponse: incrementNoResponse(), status: response.status };
     }
@@ -117,6 +124,7 @@ async function processFetchRequest(url, now, clientData) {
   } catch (error) {
     port.postMessage({ url, isDown: true, noResponse: incrementNoResponse(), status: 0 });
   } finally {
+    clearTimeout(timeoutId);
     decrementActiveRequests();
     processNextFetchRequest();
   }
@@ -169,4 +177,10 @@ function processNextFetchRequest() {
 function cleanupClient(clientId) {
   responseCountMap.delete(clientId);
   fetchQueue = fetchQueue.filter(item => item.clientData.clientId !== clientId);
+  for (const [url, entry] of debounceTimeouts) {
+    if (entry.clientId === clientId) {
+      clearTimeout(entry.timeoutId);
+      debounceTimeouts.delete(url);
+    }
+  }
 }
