@@ -52,6 +52,20 @@ public class NamingServiceBean extends AddressbookBean {
     private boolean fail = false;
     private int filteredCount;
     private AddressBean[] fullFilteredEntries;
+    /** How long a cached addressbook load or book size is reused before the naming service is re-queried. */
+    private static final long CACHE_TTL = 60*1000;
+    /** Key of the currently cached load (filter, search, category, pagination, book). */
+    private String _loadKey;
+    /** When the cached load was performed. */
+    private long _loadTime;
+    /** Message from the cached load, null until the first successful load. */
+    private String _cachedLoadMessage;
+    /** Key of the currently cached book size. */
+    private String _sizeKey;
+    /** When the cached book size was computed. */
+    private long _sizeTime;
+    /** Cached book size, -1 until computed. */
+    private int _cachedSize = -1;
 
     /**
      * Check if the published addressbook is in use (direct file access).
@@ -103,10 +117,23 @@ public class NamingServiceBean extends AddressbookBean {
     @Override
     protected int totalSize() {
         if (isDirect()) {return super.totalSize();}
+        String key = getFileName();
+        long now = _context.clock().now();
+        synchronized (this) {
+            if (_sizeKey != null && key.equals(_sizeKey) && now - _sizeTime < CACHE_TTL) {
+                return _cachedSize;
+            }
+        }
         // only blockfile needs the list property
         Properties props = new Properties();
         props.setProperty("list", getFileName());
-        return getNamingService().size(props);
+        int size = getNamingService().size(props);
+        synchronized (this) {
+            _sizeKey = key;
+            _sizeTime = now;
+            _cachedSize = size;
+        }
+        return size;
     }
 
     /**
@@ -187,18 +214,56 @@ public class NamingServiceBean extends AddressbookBean {
     }
 
     /**
+     * Key for the load cache; changes whenever an input that affects the
+     * displayed entries changes.
+     *
+     * @return the cache key
+     */
+    private String loadKey() {
+        return (filter != null ? filter : "") + '|' +
+               (search != null ? search : "") + '|' +
+               (category != null ? category : "") + '|' +
+               beginIndex + '|' + endIndex + '|' + getFileName();
+    }
+
+    /**
+     * Drop cached load results and book size so the next access re-queries
+     * the naming service. Called after actions that mutate the addressbook.
+     */
+    private void clearCaches() {
+        synchronized (this) {
+            _loadKey = null;
+            _loadTime = 0;
+            _cachedLoadMessage = null;
+            _sizeKey = null;
+            _sizeTime = 0;
+            _cachedSize = -1;
+        }
+    }
+
+    /**
      * Load addressbook and apply filter, returning messages about this.
      * To control memory, don't load the whole addressbook if we can help it...
      * only load what is searched for.
+     * Results are cached for {@link #CACHE_TTL} and reused while the inputs
+     * (filter, search, category, pagination, book) are unchanged.
      *
      * @return messages about loading the address book
      */
     @Override
     public String getLoadBookMessages() {
         if (isDirect()) {return super.getLoadBookMessages();}
+        String key = loadKey();
+        long now = _context.clock().now();
+        synchronized (this) {
+            if (_loadKey != null && key.equals(_loadKey) && now - _loadTime < CACHE_TTL) {
+                return _cachedLoadMessage;
+            }
+        }
         NamingService service = getNamingService();
         debug("[" + service + "] Performing search for: '" + search + "' with filter: '" + filter + "'");
         String message = "";
+        boolean loaded = false;
         try {
             LinkedList<AddressBean> list = new LinkedList<>();
             Map<String, Destination> results;
@@ -249,6 +314,8 @@ public class NamingServiceBean extends AddressbookBean {
 
             debug("Results returned by search: " + results.size());
             int blacklistedHosts = 0;
+            // Reused for every host in the list; the bean caches the file content itself
+            BlacklistBean blacklist = new BlacklistBean();
             for (Map.Entry<String, Destination> entry : results.entrySet()) {
                 String name = entry.getKey();
 
@@ -323,7 +390,6 @@ public class NamingServiceBean extends AddressbookBean {
                 }
 
                 // Check if host is blacklisted
-                BlacklistBean blacklist = new BlacklistBean();
                 boolean isBlacklisted = blacklist.isBlacklistedByAnyForm(name);
                 if (isBlacklisted) {
                     blacklistedHosts++;
@@ -368,18 +434,27 @@ public class NamingServiceBean extends AddressbookBean {
                        " of " + filteredCount + " total" +
                        (blacklistedHosts > 0 ? " (Blacklisted: " + blacklistedHosts + ")" : ""));
             message = generateLoadMessage();
+            loaded = true;
         } catch (RuntimeException e) {warn(e);}
         if (!message.isEmpty()) {
             if ((filter != null && filter.length() > 0)) {
                 message = "<span id=filtered>" + message; // span closed in AddressbookBean
             } else {message = "<span id=showing>" + message;}
         }
+        synchronized (this) {
+            if (loaded) {
+                _loadKey = key;
+                _loadTime = now;
+                _cachedLoadMessage = message;
+            }
+        }
         return message;
     }
 
     /**
      * {@inheritDoc}
-     * Forces reload of entries to ensure blacklist filtering is applied.
+     * Returns the entries with blacklist filtering and the current filter,
+     * search, and pagination applied, loading or reusing the cached load.
      * @return the entries
      */
     @Override
@@ -546,6 +621,8 @@ public class NamingServiceBean extends AddressbookBean {
                 if (changed) {
                     message += "<br>" + _t("Address book saved.");
                 }
+                // Blacklist changes affect the displayed entries even though they don't touch the addressbook
+                if (changed || action.equals(_t("Blacklist Selected"))) {clearCaches();}
             }
             else {
                 fail = true;
@@ -603,6 +680,7 @@ public class NamingServiceBean extends AddressbookBean {
                 getNamingService().remove(detail, dests.get(i), nsOptions);
                 getNamingService().addDestination(detail, dests.get(i), props);
             } else {getNamingService().put(detail, dests.get(i), props);}
+            clearCaches();
             return;
         }
     }
