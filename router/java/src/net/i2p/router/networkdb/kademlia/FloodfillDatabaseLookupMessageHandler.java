@@ -59,7 +59,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         // following are for ../HDLMJ
         _context.statManager().createRequiredRateStat("netDb.lookupsHandled", "NetDb lookups we have handled", "NetworkDatabase", RATES);
         _context.statManager().createRequiredRateStat("netDb.lookupsMatched", "Successful NetDb lookups", "NetworkDatabase", RATES);
-        _context.statManager().createRateStat("netDb.lookupsMatchedLeaseSet", "Successful NetDb LeaseSet lookups", "NetworkDatabase", RATES);
+        _context.statManager().createRequiredRateStat("netDb.lookupsMatchedLeaseSet", "Successful NetDb LeaseSet lookups", "NetworkDatabase", RATES);
         _context.statManager().createRateStat("netDb.lookupsMatchedReceivedPublished", "Successful NetDb lookups (published to us)", "NetworkDatabase", RATES);
         _context.statManager().createRateStat("netDb.lookupsMatchedLocalClosest", "NetDb lookups received for local data (closest peer)", "NetworkDatabase", RATES);
         _context.statManager().createRateStat("netDb.lookupsMatchedLocalNotClosest", "NetDb lookups received for local data (not closest peer)", "NetworkDatabase", RATES);

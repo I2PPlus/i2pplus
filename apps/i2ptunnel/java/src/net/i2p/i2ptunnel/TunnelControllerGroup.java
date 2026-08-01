@@ -1397,6 +1397,7 @@ public class TunnelControllerGroup implements ClientApp {
                     ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.active", "Server handler active threads", "I2PTunnel", RATES);
                     ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.threads", "Server handler thread count", "I2PTunnel", RATES);
                     ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.blockingHandleTime", "Handler socket connect time (ms)", "I2PTunnel", RATES);
+                    ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.socketConnectTime", "Socket connect time (ms)", "I2PTunnel", RATES);
                 }
             } else if (_serverExecutor.getCorePoolSize() != _serverHandlerThreads) {
                 resizeServerExecutor(_serverHandlerThreads);
