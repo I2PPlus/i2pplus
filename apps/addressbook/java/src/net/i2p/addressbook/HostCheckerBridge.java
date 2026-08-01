@@ -99,6 +99,26 @@ public class HostCheckerBridge {
     }
 
     /**
+     * Run a host check cycle immediately, unless one is already running.
+     */
+    public static void runCheckNow() {
+        HostChecker checker = getInstance();
+        if (checker != null) {
+            checker.runCheckNow();
+        }
+    }
+
+    /**
+     * Whether a host check cycle is currently in progress.
+     *
+     * @return true if a cycle is running
+     */
+    public static boolean isScanRunning() {
+        HostChecker checker = getInstance();
+        return checker != null && checker.isScanRunning();
+    }
+
+    /**
      * Get description for a category
      * @param category category name
      * @return category description, or category itself if unknown

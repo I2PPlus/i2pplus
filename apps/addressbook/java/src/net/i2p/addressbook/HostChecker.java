@@ -34,8 +34,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -88,10 +89,13 @@ public class HostChecker {
     private final File _hostsCheckFile;
     private final File _categoriesFile;
     private final File _blacklistFile;
-    private final Semaphore _pingSemaphore;
+    private final File _configFile;
+    private final DynamicSemaphore _pingSemaphore;
     private volatile I2PSocketManager _sharedPingSocketManager;
     private Set<String> _blacklistedHosts;
     private volatile long _blacklistLastModified;
+    private volatile long _configLastModified;
+    private volatile ScheduledFuture<?> _pingTaskFuture;
     private int _categoryRetryCount = 0;
 
     private static final ThreadLocal<DateFormat> _DATE_FORMAT = new ThreadLocal<DateFormat>() {
@@ -113,19 +117,25 @@ public class HostChecker {
     /**
      * Load configuration from addressbook/config.txt file
      * Reads pingInterval and maxConcurrent properties if present
-     *
-     * @param configDir addressbook configuration directory
      */
-    private void loadConfiguration(File configDir) {
-        File configFile = new File(configDir, "config.txt");
-        if (!configFile.exists()) {
+    private void loadConfiguration() {
+        if (!_configFile.exists()) {
             if (_log.shouldInfo()) {
                 _log.info("No addressbook config.txt found -> Using default interval and concurrency values...");
             }
             return;
         }
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(configFile)), StandardCharsets.UTF_8))) {
+        parseConfigFile();
+        _configLastModified = _configFile.lastModified();
+    }
+
+    /**
+     * Parse addressbook/config.txt and update the ping interval and concurrency
+     * fields. Invalid values leave the current settings untouched.
+     */
+    private void parseConfigFile() {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(_configFile)), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -188,6 +198,51 @@ public class HostChecker {
         }
     }
 
+    /**
+     * Re-read addressbook/config.txt when it changed and apply the new values
+     * live. A new interval reschedules the cycle task (next cycle only); a new
+     * concurrency limit takes effect in the in-progress cycle immediately.
+     */
+    private void refreshConfiguration() {
+        if (!_configFile.exists()) {
+            return;
+        }
+        long lastModified = _configFile.lastModified();
+        if (lastModified == _configLastModified) {
+            return;
+        }
+        long oldInterval = _pingInterval;
+        int oldMaxConcurrent = _maxConcurrent;
+        parseConfigFile();
+        _configLastModified = lastModified;
+        // Skip rescheduling until the initial cycle schedule exists; the
+        // initial schedule picks up the new interval anyway.
+        if (_pingInterval != oldInterval && _pingTaskFuture != null) {
+            reschedulePingTask();
+        }
+        if (_maxConcurrent != oldMaxConcurrent) {
+            _pingSemaphore.setMaxPermits(_maxConcurrent);
+            if (_log.shouldInfo()) {
+                _log.info("Applied new max concurrent from config: " + _maxConcurrent);
+            }
+        }
+    }
+
+    /**
+     * Cancel the current cycle schedule and restart it with the current
+     * interval. A cycle already in progress keeps running; the single-flight
+     * guard skips the next scheduled run if it would overlap.
+     */
+    private void reschedulePingTask() {
+        if (_pingTaskFuture != null) {
+            _pingTaskFuture.cancel(false);
+        }
+        _pingTaskFuture = _scheduler.scheduleAtFixedRate(new PingTask(), _pingInterval, _pingInterval, TimeUnit.MILLISECONDS);
+        if (_log.shouldInfo()) {
+            _log.info("Rescheduled HostChecker cycle with a " + (_pingInterval / 60000) + " minute interval");
+        }
+    }
+
     // Startup delay to allow router and socket manager to fully initialize
     private static final long STARTUP_DELAY_MS = 60 * 1000L; // 1 minute
 
@@ -204,9 +259,9 @@ public class HostChecker {
     private static final int MAX_CATEGORY_RETRIES = -1; // -1 for infinite retries
     private static final Pattern COMMA_SPLIT = Pattern.compile(",");
 
-    private long _pingInterval = DEFAULT_PING_INTERVAL;
+    private volatile long _pingInterval = DEFAULT_PING_INTERVAL;
     private long _pingTimeout = DEFAULT_PING_TIMEOUT;
-    private int _maxConcurrent = DEFAULT_MAX_CONCURRENT;
+    private volatile int _maxConcurrent = DEFAULT_MAX_CONCURRENT;
     private boolean _useLeaseSetCheck = true;
 
     /**
@@ -257,6 +312,56 @@ public class HostChecker {
     }
 
     /**
+     * Semaphore whose permit limit can change at runtime, so concurrency
+     * adjustments apply to a cycle already in progress. Raising the limit
+     * wakes blocked acquirers; lowering it only affects future acquisitions,
+     * never in-flight ones.
+     */
+    private static final class DynamicSemaphore {
+        private final Object _lock = new Object();
+        private int _permits;
+        private volatile int _maxPermits;
+
+        DynamicSemaphore(int maxPermits) {
+            _maxPermits = maxPermits;
+        }
+
+        /**
+         * Raise or lower the concurrent acquisition limit.
+         *
+         * @param maxPermits the new limit
+         */
+        void setMaxPermits(int maxPermits) {
+            synchronized (_lock) {
+                _maxPermits = maxPermits;
+                _lock.notifyAll();
+            }
+        }
+
+        /**
+         * Block until below the concurrent limit, then count one more acquisition.
+         */
+        void acquire() throws InterruptedException {
+            synchronized (_lock) {
+                while (_permits >= _maxPermits) {
+                    _lock.wait();
+                }
+                _permits++;
+            }
+        }
+
+        /**
+         * Release one acquisition and wake a blocked acquirer.
+         */
+        void release() {
+            synchronized (_lock) {
+                _permits--;
+                _lock.notifyAll();
+            }
+        }
+    }
+
+    /**
      * Construct a HostChecker that uses the default naming service
      * This works with the blockfile format (hostsdb.blockfile)
      */
@@ -300,11 +405,12 @@ public class HostChecker {
         _hostsCheckFile = new File(addressbookDir, "hosts_check.txt");
         _categoriesFile = new File(addressbookDir, "categories.txt");
         _blacklistFile = new File(addressbookDir, "blacklist.txt");
+        _configFile = new File(addressbookDir, "config.txt");
         _blacklistedHosts = new ConcurrentHashMap<String, String>().keySet();
         loadBlacklist();
 
         // Load configuration from addressbook/config.txt
-        loadConfiguration(addressbookDir);
+        loadConfiguration();
 
         // Initialize scheduler and semaphore AFTER loading config to use configured values
         ThreadFactory threadFactory = new ThreadFactory() {
@@ -318,7 +424,7 @@ public class HostChecker {
             }
         };
         _scheduler = Executors.newScheduledThreadPool(_maxConcurrent + 2, threadFactory);
-        _pingSemaphore = new Semaphore(_maxConcurrent);
+        _pingSemaphore = new DynamicSemaphore(_maxConcurrent);
 
         // Load existing categories file first (non-blocking)
         loadCategories();
@@ -337,6 +443,14 @@ public class HostChecker {
         }
 
         _running.set(true);
+
+        // Watch addressbook/config.txt so interval/concurrency changes apply live
+        _scheduler.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() {
+                refreshConfiguration();
+            }
+        }, 15, 15, TimeUnit.SECONDS);
 
         if (_log.shouldInfo()) {
             _log.info("Starting HostChecker with a " + (_pingInterval/1000/60) + " minute interval...");
@@ -361,7 +475,7 @@ public class HostChecker {
                     for (int i = 0; i < 300; i++) {
                         if (_categoriesDownloaded.get()) {
                             _log.info("Categories downloaded successfully from notbob.i2p -> Starting ping cycle...");
-                            _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
+                            _pingTaskFuture = _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
                             return;
                         }
                         Thread.sleep(1000); // Wait 1 second
@@ -369,7 +483,7 @@ public class HostChecker {
 
                     // Timeout reached - start ping cycle anyway
                     _log.warn("Categories failed to download from notbob.i2p (timeout) -> Starting ping cycle...");
-                    _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
+                    _pingTaskFuture = _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
                 } catch (InterruptedException e) {
                     if (_log.shouldWarn()) {
                         _log.warn("Category download waiter interrupted");
@@ -409,16 +523,43 @@ public class HostChecker {
     }
 
     /**
+     * Run a host check cycle immediately, unless one is already in progress.
+     * The periodic cycle schedule is unaffected.
+     */
+    public void runCheckNow() {
+        if (!_running.get()) {
+            return;
+        }
+        try {
+            _scheduler.execute(new PingTask());
+        } catch (RejectedExecutionException e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Cannot run HostChecker cycle, scheduler is shutting down", e);
+            }
+        }
+    }
+
+    /**
+     * Whether a host check cycle is currently in progress.
+     *
+     * @return true if a cycle is running
+     */
+    public boolean isScanRunning() {
+        return _cycleInProgress.get();
+    }
+
+    /**
      * Perform LeaseSet lookup as the first check
-     * If lookup fails, responseTime is set to -1 and we skip ping/eephead
+     * A current cached LeaseSet marks the host up directly; a stale cached
+     * LeaseSet triggers a fresh remote fetch. If the lookup fails, responseTime
+     * is set to -1 and we skip ping/eephead
      *
      * @param hostname hostname to test
      * @param destination destination for the hostname
-     * @return PingResult with LeaseSet lookup result (responseTime (preserves existing responseTime) for LeaseSet lookup)
+     * @return PingResult; responseTime preserves the existing value on success, -1 if the lookup failed
      */
     private PingResult performLeaseSetLookup(String hostname, Destination destination) {
         long startTime = System.currentTimeMillis();
-        boolean reachable;
         String leaseSetTypes = "[]";
 
         if (!(_context instanceof RouterContext)) {
@@ -446,39 +587,34 @@ public class HostChecker {
         try {
             LeaseSet leaseSet = netDb.lookupLeaseSetLocally(destHash);
 
-            if (leaseSet != null) {
+            if (leaseSet != null && leaseSet.isCurrent(_context.clock().now())) {
                 leaseSetTypes = formatLeaseSetTypes(leaseSet);
 
-                boolean isCurrent = leaseSet.isCurrent(_context.clock().now());
-                reachable = isCurrent;
-
-                // Only save if we have a previous result to preserve
-                if (existingResponseTime > -1) {
-                    synchronized (_pingResults) {
-                        _pingResults.put(hostname, createPingResult(reachable, startTime, existingResponseTime, hostname, leaseSetTypes));
-                    }
+                // A current LeaseSet means the host is up — this is the primary
+                // check, no ping needed.
+                PingResult result = createPingResult(true, startTime, existingResponseTime, hostname, leaseSetTypes);
+                synchronized (_pingResults) {
+                    _pingResults.put(hostname, result);
                 }
 
-                if (_log.shouldInfo() && !reachable) {
-                    _log.info("HostChecker lset [FAILURE] -> Found expired LeaseSet " + leaseSetTypes + " for " + hostname);
+                if (_log.shouldInfo()) {
+                    _log.info("HostChecker lset [SUCCESS] -> LeaseSet " + leaseSetTypes + " found for " + hostname);
                 }
 
-                if (reachable && existingResponseTime > -1) {
-                    savePingResults();
-                }
-                PingResult result = createPingResult(reachable, startTime, existingResponseTime, hostname, leaseSetTypes);
+                savePingResults();
                 removeFromClientTracking(destHash);
                 return result;
-            } else {
-                // Not in local cache — will be fetched remotely for HostChecker.
-                // Mark it so removeFromCache() only purges if this LS was
-                // freshly fetched for us, not if it was independently cached
-                // by another client (e.g. HTTP Proxy).
-                if (netDb instanceof KademliaNetworkDatabaseFacade) {
-                    ((KademliaNetworkDatabaseFacade) netDb).markHostCheckerLeaseSet(destHash);
-                }
-                return lookupLeaseSetRemotely(hostname, destHash, startTime, existingResponseTime);
             }
+
+            if (leaseSet != null && _log.shouldInfo()) {
+                _log.info("HostChecker lset [STALE] -> Found expired LeaseSet " + formatLeaseSetTypes(leaseSet) +
+                          " for " + hostname + ", re-fetching remotely");
+            }
+
+            // Not in local cache (or stale) — fetch remotely for HostChecker.
+            // The fetched LeaseSet is kept in the netdb cache so later cycles
+            // hit it locally instead of re-fetching over the network.
+            return lookupLeaseSetRemotely(hostname, destHash, startTime, existingResponseTime);
         } catch (Exception e) {
             if (_log.shouldWarn()) {
                 _log.warn("HostChecker LeaseSet lookup error for " + hostname + " -> " + e.getMessage());
@@ -629,20 +765,11 @@ public class HostChecker {
                     leaseSetTypes = formatLeaseSetTypes(leaseSet);
                 }
 
-                if (existingResponseTime > -1) {
-                    PingResult result = createPingResult(true, startTime, existingResponseTime, hostname, leaseSetTypes);
-                    synchronized (_pingResults) {
-                        _pingResults.put(hostname, result);
-                    }
-                    savePingResults();
-                    removeFromClientTracking(destHash);
-                    return result;
-                }
-
-                PingResult result = createPingResult(true, startTime, -1, hostname, leaseSetTypes);
+                PingResult result = createPingResult(true, startTime, existingResponseTime, hostname, leaseSetTypes);
                 synchronized (_pingResults) {
                     _pingResults.put(hostname, result);
                 }
+                savePingResults();
                 removeFromClientTracking(destHash);
                 return result;
             } else {
@@ -693,7 +820,6 @@ public class HostChecker {
             NetworkDatabaseFacade netDb = routerContext.netDb();
             if (netDb instanceof KademliaNetworkDatabaseFacade) {
                 ((KademliaNetworkDatabaseFacade) netDb).removeLeaseSetFromTracking(destHash);
-                ((KademliaNetworkDatabaseFacade) netDb).removeFromCache(destHash);
             }
         } catch (Exception e) {
             if (_log.shouldDebug()) {
@@ -2024,6 +2150,7 @@ public class HostChecker {
                                   configuredIntervalMinutes + " minutes -> Adjusting interval to " + (newInterval / 60000) + " minutes");
                     }
                     _pingInterval = newInterval;
+                    reschedulePingTask();
                 }
 
                 // Save ping results to file after each cycle
