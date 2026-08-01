@@ -8,6 +8,10 @@ on:
     tags:
       - '*'
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -119,11 +123,14 @@ jobs:
           # without one.
           # Capture the previous build's SHA from the old release body before
           # deleting it, so the compare API can list what changed since then.
+          # Tolerate the release being absent (first run) or already deleted by
+          # a concurrent run (gh resolves tag -> release id, and a stale id
+          # 404s under the delete).
           PREV_SHA=""
           if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
             PREV_SHA="$(gh release view "$TAG" --repo "$REPO" --json body \
-              --jq '.body | capture("^Automated build from (?<sha>[0-9a-f]{40})").sha // empty')"
-            gh release delete "$TAG" --repo "$REPO" --yes --cleanup-tag
+              --jq '.body | capture("^Automated build from (?<sha>[0-9a-f]{40})").sha // empty' 2>/dev/null || true)"
+            gh release delete "$TAG" --repo "$REPO" --yes --cleanup-tag || true
           fi
 
           BODY="Automated build from $GITHUB_SHA"
@@ -139,10 +146,38 @@ jobs:
             fi
           fi
 
-          CREATE=(gh release create "$TAG" --title "$NAME" --repo "$REPO")
-          CREATE+=(--target "$GITHUB_SHA")
-          CREATE+=(--notes "$BODY")
-          CREATE+=(--latest)
-          "${CREATE[@]}"
+          # Create the release. If a concurrent run already recreated the tag,
+          # create fails with "already exists"; update that release in place
+          # instead of retrying a doomed create.
+          if ! gh release create "$TAG" --title "$NAME" --repo "$REPO" \
+              --target "$GITHUB_SHA" --notes "$BODY" --latest; then
+            if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
+              echo "Release $TAG already exists; updating it in place."
+              gh release edit "$TAG" --repo "$REPO" --title "$NAME" \
+                --target "$GITHUB_SHA" --notes "$BODY" --latest
+            else
+              echo "gh release create failed and no existing release found" >&2
+              exit 1
+            fi
+          fi
 
-          gh release upload "$TAG" --repo "$REPO" artifacts/* --clobber
+          # Upload artifacts; skip cleanly when there are none.
+          if ! compgen -G "artifacts/*" > /dev/null; then
+            echo "No artifacts found to upload; skipping."
+            exit 0
+          fi
+
+          # Upload with retries for transient API failures (rate limits etc.).
+          retries=0
+          until gh release upload "$TAG" --repo "$REPO" artifacts/* --clobber; do
+            retries=$((retries + 1))
+            if [ "$retries" -ge 5 ]; then
+              echo "gh release upload failed after $retries attempts" >&2
+              ls -la artifacts || true
+              exit 1
+            fi
+            echo "gh release upload failed, retrying in $((retries * 3))s..."
+            sleep $((retries * 3))
+          done
+
+          echo "Release ${TAG} recreated and artifacts uploaded."
