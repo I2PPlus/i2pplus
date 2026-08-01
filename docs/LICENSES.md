@@ -69,6 +69,9 @@ GPLv2. Copyright (C) 2009 Mathias De Maré.
 **I2PControl**
 Apache v2.0. Copyright (c) 2011 hottuna (dev@robertfoss.se).
 
+**I2PSnark**
+GPLv2. I2P port of Snark, the BitTorrent client written by Mark J. Wielaard (Copyright (C) 2003, klomp.org); ported to I2P by the I2P Project. License text: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
 **I2PTunnel**
 GPLv2+. Copyright (c) 2003-2004 mihi, 2004 human (SOCKS). With special exception for proprietary Java linking.
 
