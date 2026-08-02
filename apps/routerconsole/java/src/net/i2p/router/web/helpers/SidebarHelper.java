@@ -590,48 +590,25 @@ public class SidebarHelper extends HelperBase {
         // Only show after 1 minute of uptime (since we're now showing 1m or 10m average)
         if (_context.router().getUptime() < 60*1000) {return cacheBuildSuccess(0);}
 
-        // Get 10-minute rates (original) - with null checks
-        RateStat stat;
-        Rate explSuccess10 = null;
-        Rate explReject10 = null;
-        Rate explExpire10 = null;
-        Rate clientSuccess10 = null;
-        Rate clientReject10 = null;
-        Rate clientExpire10 = null;
-
-        stat = _context.statManager().getRate("tunnel.buildExploratorySuccess");
-        if (stat != null) explSuccess10 = stat.getRate(RateConstants.TEN_MINUTES);
-        stat = _context.statManager().getRate("tunnel.buildExploratoryReject");
-        if (stat != null) explReject10 = stat.getRate(RateConstants.TEN_MINUTES);
-        stat = _context.statManager().getRate("tunnel.buildExploratoryExpire");
-        if (stat != null) explExpire10 = stat.getRate(RateConstants.TEN_MINUTES);
-        stat = _context.statManager().getRate("tunnel.buildClientSuccess");
-        if (stat != null) clientSuccess10 = stat.getRate(RateConstants.TEN_MINUTES);
-        stat = _context.statManager().getRate("tunnel.buildClientReject");
-        if (stat != null) clientReject10 = stat.getRate(RateConstants.TEN_MINUTES);
-        stat = _context.statManager().getRate("tunnel.buildClientExpire");
-        if (stat != null) clientExpire10 = stat.getRate(RateConstants.TEN_MINUTES);
-
-        // Get 1-minute rates - with null checks
-        Rate explSuccess1 = null;
-        Rate explReject1 = null;
-        Rate explExpire1 = null;
-        Rate clientSuccess1 = null;
-        Rate clientReject1 = null;
-        Rate clientExpire1 = null;
-
-        stat = _context.statManager().getRate("tunnel.buildExploratorySuccess");
-        if (stat != null) explSuccess1 = stat.getRate(RateConstants.ONE_MINUTE);
-        stat = _context.statManager().getRate("tunnel.buildExploratoryReject");
-        if (stat != null) explReject1 = stat.getRate(RateConstants.ONE_MINUTE);
-        stat = _context.statManager().getRate("tunnel.buildExploratoryExpire");
-        if (stat != null) explExpire1 = stat.getRate(RateConstants.ONE_MINUTE);
-        stat = _context.statManager().getRate("tunnel.buildClientSuccess");
-        if (stat != null) clientSuccess1 = stat.getRate(RateConstants.ONE_MINUTE);
-        stat = _context.statManager().getRate("tunnel.buildClientReject");
-        if (stat != null) clientReject1 = stat.getRate(RateConstants.ONE_MINUTE);
-        stat = _context.statManager().getRate("tunnel.buildClientExpire");
-        if (stat != null) clientExpire1 = stat.getRate(RateConstants.ONE_MINUTE);
+        // Fetch the 1-minute and 10-minute rates, one manager lookup per stat
+        Rate[] rates = getTunnelBuildRates("tunnel.buildExploratorySuccess");
+        Rate explSuccess1 = rates[0];
+        Rate explSuccess10 = rates[1];
+        rates = getTunnelBuildRates("tunnel.buildExploratoryReject");
+        Rate explReject1 = rates[0];
+        Rate explReject10 = rates[1];
+        rates = getTunnelBuildRates("tunnel.buildExploratoryExpire");
+        Rate explExpire1 = rates[0];
+        Rate explExpire10 = rates[1];
+        rates = getTunnelBuildRates("tunnel.buildClientSuccess");
+        Rate clientSuccess1 = rates[0];
+        Rate clientSuccess10 = rates[1];
+        rates = getTunnelBuildRates("tunnel.buildClientReject");
+        Rate clientReject1 = rates[0];
+        Rate clientReject10 = rates[1];
+        rates = getTunnelBuildRates("tunnel.buildClientExpire");
+        Rate clientExpire1 = rates[0];
+        Rate clientExpire10 = rates[1];
 
         // Return 0 if no stats available yet (check both 10m and 1m rates)
         if (explSuccess10 == null && explReject10 == null && explExpire10 == null &&
@@ -673,6 +650,18 @@ public class SidebarHelper extends HelperBase {
 
         // Return the higher of the two
         return cacheBuildSuccess(Math.max(percentage10, percentage1));
+    }
+
+    /**
+     *  Fetch the 1-minute and 10-minute rates for a named tunnel build stat.
+     *
+     *  @param name the stat name
+     *  @return two-element array [ONE_MINUTE, TEN_MINUTES], entries null if the stat is missing
+     */
+    private Rate[] getTunnelBuildRates(String name) {
+        RateStat stat = _context.statManager().getRate(name);
+        if (stat == null) {return new Rate[]{null, null};}
+        return new Rate[]{stat.getRate(RateConstants.ONE_MINUTE), stat.getRate(RateConstants.TEN_MINUTES)};
     }
 
     /**
