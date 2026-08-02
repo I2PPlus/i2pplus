@@ -107,6 +107,10 @@ public class TrackerClient implements Runnable {
     private volatile int _runCount;
     // running thread so it can be interrupted
     private volatile Thread _thread;
+    // running DHT fetch thread so it can be interrupted
+    private volatile Thread _dhtThread;
+    // peers last seen in the DHT fetch, updated by the fetch thread
+    private volatile int _dhtPeersSeen;
     // queued event so it can be cancelled
     private volatile SimpleTimer2.TimedEvent _event;
     // these 2 used in loop()
@@ -117,7 +121,8 @@ public class TrackerClient implements Runnable {
     // Not necessarily seeding, as we may have skipped some files.
     private boolean completed;
     private volatile boolean _fastUnannounce;
-    private long lastDHTAnnounce;
+    // read by the loop thread, written by the DHT fetch thread
+    private volatile long lastDHTAnnounce;
     private final List<TCTracker> trackers;
     private final List<TCTracker> backupTrackers;
     private long _startedOn;
@@ -223,6 +228,13 @@ public class TrackerClient implements Runnable {
                 _log.debug("Interrupting " + t.getName());
             }
             t.interrupt();
+        }
+        Thread dt = _dhtThread;
+        if (dt != null) {
+            if (_log.shouldDebug()) {
+                _log.debug("Interrupting " + dt.getName());
+            }
+            dt.interrupt();
         }
         _fastUnannounce = true;
         if (!wasStopped) {
@@ -487,7 +499,8 @@ public class TrackerClient implements Runnable {
                 }
                 int p = getPeersFromPEX();
                 if (p > maxSeenPeers) maxSeenPeers = p;
-                p = getPeersFromDHT();
+                fetchPeersFromDHT();
+                p = _dhtPeersSeen;
                 if (p > maxSeenPeers) {
                     maxSeenPeers = p;
                     // fast update for UI at startup
@@ -815,21 +828,43 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * Get peers from the DHT.
+     * Start a DHT peer fetch in a separate thread, if one is not already running.
+     * The lookup and announce can take minutes, so it must not block the announce loop.
      *
-     * @return max peers seen
+     * @since 0.9.71+
      */
-    private int getPeersFromDHT() {
-        // Get peers from DHT
-        // FIXME this needs to be in its own thread
-        int rv = 0;
+    private void fetchPeersFromDHT() {
         DHT dht = _util.getDHT();
-        if (dht != null
-                && (meta == null || !meta.isPrivate())
-                && (!stop)
-                && (meta == null
-                        || _util.getContext().clock().now()
-                                > lastDHTAnnounce + MIN_DHT_ANNOUNCE_INTERVAL)) {
+        if (dht == null || (meta != null && meta.isPrivate()) || stop) {
+            return;
+        }
+        if (meta != null
+                && _util.getContext().clock().now()
+                        <= lastDHTAnnounce + MIN_DHT_ANNOUNCE_INTERVAL) {
+            return;
+        }
+        Thread t = _dhtThread;
+        if (t != null && t.isAlive()) {
+            return;
+        }
+        _dhtThread = new I2PAppThread(new DHTFetcher(dht), _threadName + ".DHT", true);
+        _dhtThread.start();
+    }
+
+    /**
+     * DHT peer lookup and announce, run off the announce loop thread so a slow or
+     * unreachable DHT cannot delay HTTP tracker announces or PEX.
+     *
+     * @since 0.9.71+
+     */
+    private class DHTFetcher implements Runnable {
+        private final DHT dht;
+
+        public DHTFetcher(DHT dht) {
+            this.dht = dht;
+        }
+
+        public void run() {
             int numwant;
             if (!coordinator.needOutboundPeers()) {
                 numwant = 1;
@@ -848,7 +883,11 @@ public class TrackerClient implements Runnable {
             if (!hashes.isEmpty()) {
                 runStarted = true;
                 lastDHTAnnounce = _util.getContext().clock().now();
-                rv = hashes.size();
+                _dhtPeersSeen = hashes.size();
+                // fast update for UI
+                if (snark.getTrackerSeenPeers() < _dhtPeersSeen) {
+                    snark.setTrackerSeenPeers(_dhtPeersSeen);
+                }
             } else {
                 lastDHTAnnounce = 0;
             }
@@ -883,14 +922,14 @@ public class TrackerClient implements Runnable {
                         int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
                         try {
                             Thread.sleep(delay);
-                        } catch (InterruptedException ie) { /* ignored */ }
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                            return;
+                        }
                     }
                 }
             }
-        } else if (_log.shouldInfo()) {
-            _log.info("Not getting DHT peers");
         }
-        return rv;
     }
 
     /**
