@@ -523,7 +523,7 @@ public class NetDbHelper extends FormHandler {
             if (i == 9 && tab != 9) {continue;} // can't nav to lookup
             if (i == 4) {continue;} // show compact mode for all routers
             if (i == 5 || i == 6) {continue;} // hide standard Leasesets tab in normal/adv. mode,
-            if (i == 10 || i == 11 || _context.netDb().getRouters().isEmpty()) {continue;}
+            if (i == 10 || i == 11 || _context.netDb().getKnownRouters() == 0) {continue;}
             if (i == tab || (i == 3 && tab == 4) || (i == 7 && (tab == 5 || tab == 6))) {buf.append("<span class=tab2>").append(_t(titles[i]));} // we are there
             else { // we are not there, make a link
                 buf.append("<span class=tab>").append("<a href=\"netdb")
