@@ -611,15 +611,26 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private long lastAddedMessageTimestamp;
     private String lastAddedMessage;
 
+    /**
+     *  Escape a message for HTML display, preserving intentional '&amp;nbsp;' spacers.
+     *  Order matters: '&amp;' first so the later entity-escapes of '&lt;' and '&gt;'
+     *  are not undone, and restore the literal '&nbsp;' entries afterwards.
+     *
+     *  @param message the raw message text, not null
+     *  @return the message with HTML metacharacters escaped
+     */
+    public static String escapeMessage(String message) {
+        return message.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("&amp;nbsp;", "&nbsp;");
+    }
+
     /** Use if it does not include a link. Escapes '&lt;' and '&gt;' before queueing */
     public void addMessage(String message) {
         long currentTime = System.currentTimeMillis() / 1000;
         if (lastAddedMessageTimestamp != currentTime || !lastAddedMessage.equals(message)) {
-            addMessageNoEscape(
-                    message.replace("&", "&amp;")
-                            .replace("&lt;", "<")
-                            .replace("&gt;", ">")
-                            .replace("&amp;nbsp", "&nbsp;"));
+            addMessageNoEscape(escapeMessage(message));
         } else if (lastAddedMessage.startsWith(_t("Download already running: "))
                 && lastAddedMessage.contains(_t("Downloading"))) {
             lastAddedMessage = lastAddedMessage.replace(_t("Download already running: "), "");
