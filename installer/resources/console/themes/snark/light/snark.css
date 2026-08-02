@@ -857,7 +857,7 @@ img[src$="magnet.png"]{margin-top:-2px;margin-bottom:-2px;display:inline-block;v
 
 /*responsive layout */
 @media (max-width:1499px){
-.loading{width:20px;height:20px;background-size:20px}
+tr:not(.peerinfo) .loading{width:20px;height:20px;background-size:20px}
 .tAction input[type=submit]{padding:11px;background-size:13px,100%}
 .tAction input:active{background-size:auto 11px,100%}
 .trackerLink img{margin-right:-10px;height:14px}

@@ -88,7 +88,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .hidden{display:none!important}
 .infohash{font-family:var(--monospaced);color:#cc0;text-transform:uppercase;text-shadow:var(--txt_shadow);user-select:all}
 tr:not(.peerinfo) .loading,.routerdown::after,#snarkHead.initializing::after{display:inline-block;width:40px;height:40px;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:40px;content:"";mix-blend-mode:difference;animation:linear spin 5s reverse infinite}
-.loading{width:24px;height:24px;background-size:24px}
+tr:not(.peerinfo) .loading{width:24px;height:24px;background-size:24px}
 .mainsection,.section{padding:10px;word-wrap:break-word;overflow:hidden;color:#001}
 .mainsection table{border-radius:0}
 .mainsection table:not(#torrents){animation:fade .05s ease-out}
@@ -1156,7 +1156,7 @@ select{padding:5px 18px 5px 7px}
 /* responsive layout */
 @media (max-width:1499px){
 #dirInfo thead img{max-height:20px}
-.loading{width:20px;height:20px;background-size:20px}
+tr:not(.peerinfo) .loading{width:20px;height:20px;background-size:20px}
 .magnetLabel{max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .peerCount b{min-width:90px}
 .peerCount b .left,.peerCount b .right{min-width:32px}

@@ -329,6 +329,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 #ourDest{margin:0 -1px 0 0;float:right;line-height:1.3;text-transform:none}
 
 /* action buttons */
+tr:not(.peerinfo) .loading{display:inline-block;width:24px;height:24px;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:24px;content:"";animation:linear spin 5s reverse infinite}
 .tAction{padding-right:5px;white-space:nowrap}
 .active .tAction,.active:hover .tAction{background:linear-gradient(270deg,#cb4dcb 3px,#0000 3px);animation:ease-in-out active .5s 3s forwards}
 #torrents .tAction{padding-right:4px;text-align:center}
@@ -743,6 +744,7 @@ form[action^="/i2psnark/configure"]{display:block}
 @keyframes progress{from{background-position:0}to{background-position:-12px}}
 @keyframes progressTX{from{background-position:-12px}to{background-position:0}}
 @keyframes refresh{0%{width:0:opacity:1}50%{width:calc(100% - 2px);opacity:1}90%,100%{opacity:0}}
+@keyframes spin{from{transform:rotate(360deg)}}
 
 @supports (-moz-user-select:all){
 #torrentSort img{margin-right:-3px}
@@ -755,6 +757,7 @@ td.status{background-size:24px auto}
 .commented{top:-1px;right:1px}
 .peerclient{width:90px}
 .peerCount .left,.peerCount .right{padding:4px 3px 3px}
+tr:not(.peerinfo) .loading{width:20px;height:20px;background-size:20px}
 #torrents .infohash{width:60px}
 #torrents .magnetlink img{width:18px;height:18px}
 #torrents .txd{padding-left:0;padding-right:0}

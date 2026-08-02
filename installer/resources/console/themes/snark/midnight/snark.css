@@ -901,7 +901,7 @@ body.textview{height:100vh}
 .configPanel .configTitle{margin-top:-1px}
 .iframed #screenlog,.iframed #torrentInfo{margin-top:-5px}
 .barComplete{padding:3px 0}
-.loading{width:20px;height:20px;background-size:20px}
+tr:not(.peerinfo) .loading{width:20px;height:20px;background-size:20px}
 #addSection,#createSection{margin-left:0;margin-right:0}
 #commentSection{margin:23px -1px 0}
 #mediaContainer{margin-bottom:-13px}

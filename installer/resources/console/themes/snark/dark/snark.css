@@ -906,7 +906,7 @@ body.textview{height:100vh}
 
 /* responsive layout */
 @media (max-width:1499px){
-.loading{width:20px;height:20px;background-size:20px}
+tr:not(.peerinfo) .loading{width:20px;height:20px;background-size:20px}
 .magnetLabel{max-width:240px;overflow:hidden;text-overflow:ellipsis}
 .peerCount{padding-right:5px}
 .peerCount b{padding:2px 4px;min-width:48px;display:inline-block;vertical-align:middle;text-align:center;background:var(--badge)}
