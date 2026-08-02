@@ -165,4 +165,68 @@ public class I2PSnarkEscapingAndValidationTest {
             // expected
         }
     }
+
+    // ----- bencoded nesting depth: deep recursion must not overflow the stack -----
+
+    /**
+     * Bencoded stream of the given number of nested lists.
+     *
+     * @param depth how many nested lists
+     * @return the bencoded bytes
+     */
+    private static String nestedLists(int depth) {
+        StringBuilder sb = new StringBuilder(depth * 2);
+        for (int i = 0; i < depth; i++) {
+            sb.append('l');
+        }
+        for (int i = 0; i < depth; i++) {
+            sb.append('e');
+        }
+        return sb.toString();
+    }
+
+    @Test
+    public void testBencodeRejectsDeeplyNestedLists() throws Exception {
+        // 100000 levels of nesting used to throw StackOverflowError, an Error
+        // that is not caught by callers and killed the I2CP listener thread
+        try {
+            BDecoder.bdecode(
+                    new ByteArrayInputStream(
+                            nestedLists(100000).getBytes(StandardCharsets.US_ASCII)));
+            fail("expected InvalidBEncodingException for deep nesting");
+        } catch (InvalidBEncodingException ibe) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testBencodeAcceptsReasonableNesting() throws Exception {
+        BDecoder.bdecode(
+                new ByteArrayInputStream(nestedLists(10).getBytes(StandardCharsets.US_ASCII)));
+    }
+
+    @Test
+    public void testBencodeAcceptsNestingAtTheLimit() throws Exception {
+        BDecoder.bdecode(
+                new ByteArrayInputStream(nestedLists(64).getBytes(StandardCharsets.US_ASCII)));
+    }
+
+    @Test
+    public void testBencodeRejectsDeeplyNestedMaps() throws Exception {
+        StringBuilder sb = new StringBuilder(4096);
+        for (int i = 0; i < 100000; i++) {
+            sb.append("d1:x");
+        }
+        sb.append("6:value");
+        for (int i = 0; i < 100000; i++) {
+            sb.append('e');
+        }
+        try {
+            BDecoder.bdecode(
+                    new ByteArrayInputStream(sb.toString().getBytes(StandardCharsets.US_ASCII)));
+            fail("expected InvalidBEncodingException for deep map nesting");
+        } catch (InvalidBEncodingException ibe) {
+            // expected
+        }
+    }
 }

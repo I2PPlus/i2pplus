@@ -31,6 +31,10 @@ public class BDecoder {
     // allocation of an attacker-controlled amount of memory
     private static final int MAX_BYTE_ARRAY_LENGTH = 64 * 1024 * 1024;
 
+    // The maximum allowed nesting depth of lists and maps, to prevent
+    // a StackOverflowError on attacker-controlled input
+    private static final int MAX_DEPTH = 64;
+
     // The InputStream to BDecode.
     private final InputStream in;
 
@@ -44,6 +48,9 @@ public class BDecoder {
     // -1 indicates end of stream.
     // Call getNextIndicator to get the current value (will never return zero).
     private int indicator = 0;
+
+    // The current nesting depth of lists and maps being decoded.
+    private int depth = 0;
 
     // Used for ugly hack to get SHA hash over the metainfo info map
     private static final String special_map = "info";
@@ -245,16 +252,23 @@ public class BDecoder {
         int c = getNextIndicator();
         if (c != 'l') throw new InvalidBEncodingException("Expected 'l', not '" + (char) c + "'");
         indicator = 0;
-
-        List<BEValue> result = new ArrayList<>();
-        c = getNextIndicator();
-        while (c != 'e') {
-            result.add(bdecode());
-            c = getNextIndicator();
+        if (++depth > MAX_DEPTH) {
+            throw new InvalidBEncodingException("Too many nested lists or maps");
         }
-        indicator = 0;
 
-        return new BEValue(result);
+        try {
+            List<BEValue> result = new ArrayList<>();
+            c = getNextIndicator();
+            while (c != 'e') {
+                result.add(bdecode());
+                c = getNextIndicator();
+            }
+            indicator = 0;
+
+            return new BEValue(result);
+        } finally {
+            depth--;
+        }
     }
 
     /**
@@ -273,33 +287,40 @@ public class BDecoder {
         else if (c != 'd')
             throw new InvalidBEncodingException("Expected 'd', not '" + (char) c + "'");
         indicator = 0;
-
-        Map<String, BEValue> result = new HashMap<>();
-        c = getNextIndicator();
-        while (c != 'e') {
-            // Dictionary keys are always strings.
-            String key = bdecode().getString();
-
-            // XXX ugly hack
-            // This will not screw up if an info map contains an info map,
-            // but it will if there are two info maps (not one inside the other)
-            boolean special = (!in_special_map) && special_map.equals(key);
-            if (special) {
-                createDigest();
-                in_special_map = true;
-            }
-
-            BEValue value = bdecode();
-            result.put(key, value);
-
-            // XXX ugly hack continued
-            if (special) in_special_map = false;
-
-            c = getNextIndicator();
+        if (++depth > MAX_DEPTH) {
+            throw new InvalidBEncodingException("Too many nested lists or maps");
         }
-        indicator = 0;
 
-        return new BEValue(result);
+        try {
+            Map<String, BEValue> result = new HashMap<>();
+            c = getNextIndicator();
+            while (c != 'e') {
+                // Dictionary keys are always strings.
+                String key = bdecode().getString();
+
+                // XXX ugly hack
+                // This will not screw up if an info map contains an info map,
+                // but it will if there are two info maps (not one inside the other)
+                boolean special = (!in_special_map) && special_map.equals(key);
+                if (special) {
+                    createDigest();
+                    in_special_map = true;
+                }
+
+                BEValue value = bdecode();
+                result.put(key, value);
+
+                // XXX ugly hack continued
+                if (special) in_special_map = false;
+
+                c = getNextIndicator();
+            }
+            indicator = 0;
+
+            return new BEValue(result);
+        } finally {
+            depth--;
+        }
     }
 
     /**
