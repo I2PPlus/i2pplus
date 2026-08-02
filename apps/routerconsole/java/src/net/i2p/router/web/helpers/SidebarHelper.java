@@ -59,6 +59,35 @@ public class SidebarHelper extends HelperBase {
     private HttpSession _session;
 
     /**
+     *  Cached stats survive the request-scoped bean, so they are recomputed
+     *  once per sidebar refresh cycle instead of on every render.
+     */
+    /** Expiry for the cached tunnel build success */
+    private static volatile long _buildSuccessCachedUntil;
+    /** Expiry for the cached concurrency string */
+    private static volatile long _concurrencyCachedUntil;
+    /** Expiry for the cached share ratio string */
+    private static volatile long _shareRatioCachedUntil;
+    /** Cached tunnel build success percentage */
+    private static volatile int _cachedTunnelBuildSuccess;
+    /** Cached concurrency string */
+    private static volatile String _cachedConcurrency;
+    /** Cached share ratio string */
+    private static volatile String _cachedShareRatio;
+
+    /**
+     *  How long cached sidebar stats stay valid: one sidebar refresh interval.
+     *  Never shorter than 1 second so concurrent renders still share the cache.
+     *
+     *  @return the refresh interval, in milliseconds
+     */
+    private long statsCacheMs() {
+        int refresh = _context.getProperty(CSSHelper.PROP_REFRESH, 3);
+        if (refresh < 1) {refresh = 3;}
+        return refresh * 1000L;
+    }
+
+    /**
      *  For form validation and session-bound nonce generation
      *  @since 0.9.69
      */
@@ -556,9 +585,10 @@ public class SidebarHelper extends HelperBase {
      */
     public int getTunnelBuildSuccess() {
         if (_context == null) {return 0;}
+        if (_context.clock().now() < _buildSuccessCachedUntil) {return _cachedTunnelBuildSuccess;}
 
         // Only show after 1 minute of uptime (since we're now showing 1m or 10m average)
-        if (_context.router().getUptime() < 60*1000) {return 0;}
+        if (_context.router().getUptime() < 60*1000) {return cacheBuildSuccess(0);}
 
         // Get 10-minute rates (original) - with null checks
         RateStat stat;
@@ -607,7 +637,7 @@ public class SidebarHelper extends HelperBase {
         if (explSuccess10 == null && explReject10 == null && explExpire10 == null &&
             clientSuccess10 == null && clientReject10 == null && clientExpire10 == null &&
             explSuccess1 == null && explReject1 == null && explExpire1 == null &&
-            clientSuccess1 == null && clientReject1 == null && clientExpire1 == null) {return 0;}
+            clientSuccess1 == null && clientReject1 == null && clientExpire1 == null) {return cacheBuildSuccess(0);}
 
         // Calculate 10-minute percentage
         int success10 = 0;
@@ -642,7 +672,19 @@ public class SidebarHelper extends HelperBase {
         }
 
         // Return the higher of the two
-        return Math.max(percentage10, percentage1);
+        return cacheBuildSuccess(Math.max(percentage10, percentage1));
+    }
+
+    /**
+     *  Cache the tunnel build success result for the current sidebar refresh cycle.
+     *
+     *  @param value the computed percentage
+     *  @return the value
+     */
+    private int cacheBuildSuccess(int value) {
+        _buildSuccessCachedUntil = _context.clock().now() + statsCacheMs();
+        _cachedTunnelBuildSuccess = value;
+        return value;
     }
 
     /**
@@ -853,6 +895,7 @@ public class SidebarHelper extends HelperBase {
 
         StringBuilder buf = new StringBuilder(512);
         boolean link = isI2PTunnelRunning();
+        long now = _context.clock().now();
         int clientCount = 0;
         if (!clients.isEmpty()) {
             DataHelper.sort(clients, new AlphaComparator());
@@ -903,12 +946,12 @@ public class SidebarHelper extends HelperBase {
                 if (name.length() <= 32) {buf.append(DataHelper.escapeHTML(name));}
                 else {buf.append(DataHelper.escapeHTML(ServletUtil.truncate(name, 29))).append("&hellip;");}
                 buf.append("</a></b></td>\n");
-                LeaseSet ls = _context.clientNetDb(client.calculateHash()).lookupLeaseSetLocally(h);
+                LeaseSet ls = _context.clientNetDb(h).lookupLeaseSetLocally(h);
                 int outboundCount = _context.tunnelManager().getOutboundClientTunnelCount(h);
                 int inboundCount = _context.tunnelManager().getInboundClientTunnelCount(h);
                 boolean hasTunnels = outboundCount > 0 && inboundCount > 0;
                 if (ls != null && hasTunnels) {
-                    long timeToExpire = ls.getEarliestLeaseDate() - _context.clock().now();
+                    long timeToExpire = ls.getEarliestLeaseDate() - now;
                     if ((timeToExpire < 0) || !ls.isCurrent(0)) {
                         // red light
                         buf.append("<td class=tunnelRebuilding><img src=/themes/console/images/local_down.svg alt=\"")
@@ -1112,11 +1155,15 @@ public class SidebarHelper extends HelperBase {
      */
     public String getShareRatio() {
         if (_context == null) {return "0";}
+        if (_context.clock().now() < _shareRatioCachedUntil) {return _cachedShareRatio;}
         double sr = _context.tunnelManager().getShareRatio();
         DecimalFormat fmt = ZERO_DECIMAL;
         if (sr < 1) {fmt = ZERO_TWO_DECIMALS;}
         else if (sr < 10) {fmt = ZERO_ONE_DECIMAL;}
-        return fmt.format(sr).replace("0.00", "0");
+        String result = fmt.format(sr).replace("0.00", "0");
+        _shareRatioCachedUntil = _context.clock().now() + statsCacheMs();
+        _cachedShareRatio = result;
+        return result;
     }
 
     /**
@@ -1197,23 +1244,31 @@ public class SidebarHelper extends HelperBase {
      */
     public String getConcurrency() {
         if (_context == null) {return "0 / 0";}
+        if (_context.clock().now() < _concurrencyCachedUntil) {return _cachedConcurrency;}
         RateStat cb = _context.statManager().getRate("tunnel.concurrentBuilds");
         RateStat brt = _context.statManager().getRate("tunnel.buildRequestTime");
-        if (cb == null || brt == null) {return "0 / 0";}
-        Rate concurrentBuilds = cb.getRate(RateConstants.ONE_MINUTE);
-        Rate buildRequestTime = brt.getRate(RateConstants.ONE_MINUTE);
-        double cbavg = concurrentBuilds.getAvgOrLifetimeAvg();
-        String brtavg = DataHelper.formatDuration2((long)buildRequestTime.getAvgOrLifetimeAvg());
-        Router router = _context.router();
-        if (router.getUptime() < 15 * 1000) {return "0 / 0";}
-        else {
-            DecimalFormat fmt = ZERO_ONE_DECIMAL;
-            if (cbavg < 0.1 || cbavg > 10) {
-                if (cbavg < 0.1) {fmt = ZERO_TWO_DECIMALS;}
-                if (cbavg > 10) {fmt = ZERO_DECIMAL;}
-                return String.valueOf(fmt.format(cbavg).replace(".00", "")) + " / " + brtavg;
-            } else {return String.valueOf(fmt.format(cbavg).replace(".0", "")) + " / " + brtavg;}
+        String result;
+        if (cb == null || brt == null) {
+            result = "0 / 0";
+        } else {
+            Rate concurrentBuilds = cb.getRate(RateConstants.ONE_MINUTE);
+            Rate buildRequestTime = brt.getRate(RateConstants.ONE_MINUTE);
+            double cbavg = concurrentBuilds.getAvgOrLifetimeAvg();
+            String brtavg = DataHelper.formatDuration2((long)buildRequestTime.getAvgOrLifetimeAvg());
+            Router router = _context.router();
+            if (router.getUptime() < 15 * 1000) {result = "0 / 0";}
+            else {
+                DecimalFormat fmt = ZERO_ONE_DECIMAL;
+                if (cbavg < 0.1 || cbavg > 10) {
+                    if (cbavg < 0.1) {fmt = ZERO_TWO_DECIMALS;}
+                    if (cbavg > 10) {fmt = ZERO_DECIMAL;}
+                    result = String.valueOf(fmt.format(cbavg).replace(".00", "")) + " / " + brtavg;
+                } else {result = String.valueOf(fmt.format(cbavg).replace(".0", "")) + " / " + brtavg;}
+            }
         }
+        _concurrencyCachedUntil = _context.clock().now() + statsCacheMs();
+        _cachedConcurrency = result;
+        return result;
     }
 
     /**
