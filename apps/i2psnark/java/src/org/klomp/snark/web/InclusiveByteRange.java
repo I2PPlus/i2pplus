@@ -122,6 +122,9 @@ public class InclusiveByteRange {
                         if (first == -1 && last == -1) {
                             continue headers;
                         }
+                        if (first == -1 && last == 0) {
+                            continue; // suffix length 0 ("bytes=-0") is unsatisfiable
+                        }
                         if (first != -1 && last != -1 && (first > last)) {
                             continue headers;
                         }

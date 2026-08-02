@@ -373,6 +373,7 @@ class BasicServlet extends HttpServlet {
                 if (_log.shouldInfo()) {
                     _log.info("HEAD: " + content);
                 }
+                in.close();
             } else {
                 copy(in, out);
             } // GET or unknown size for HEAD

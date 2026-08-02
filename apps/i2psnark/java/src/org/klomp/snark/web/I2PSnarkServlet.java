@@ -125,6 +125,13 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String SESSION_NONCE_INNER = "__i2psnark.nonce.inner__";
     private static final int SESSION_NONCE_QUEUE_SIZE = 10;
     private static final Pattern INFOHASH_PAREN = Pattern.compile(" \\(");
+    /** Cumulative stats array indices: [downloaded, uploaded, download rate, upload rate, peers, total size] */
+    private static final int STAT_DOWNLOADED = 0;
+    private static final int STAT_UPLOADED = 1;
+    private static final int STAT_DOWNLOAD_RATE = 2;
+    private static final int STAT_UPLOAD_RATE = 3;
+    private static final int STAT_PEERS = 4;
+    private static final int STAT_TOTAL_SIZE = 5;
     private static final Pattern HEX_PATTERN = Pattern.compile("[a-fA-F0-9]+");
     private static final Pattern BASE32_PATTERN = Pattern.compile("[a-zA-Z2-7]+");
 
@@ -437,7 +444,7 @@ public class I2PSnarkServlet extends BasicServlet {
         synchronized(this) {
         if (pathInContext == null || pathInContext.equals("/") || pathInContext.equals("/index.jsp") ||
             !pathInContext.startsWith("/") || pathInContext.isEmpty() || pathInContext.equals("/index.html") ||
-            pathInContext.startsWith(WARBASE)) {
+            pathInContext.startsWith(WARBASE) || pathInContext.contains("..")) {
             return super.getResource(pathInContext);
         }
 
@@ -1027,7 +1034,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 String msg = msgs.get(i).message
                                         .replace("Adding Magnet ", "Magnet added: " + "<span class=infohash>")
                                         .replace("Starting torrent: Magnet", "Starting torrent: <span class=infohash>");
-                if (msg.contains("class=infohash")) {msg = msg.replaceFirst(INFOHASH_PAREN.pattern(), "</span> (");} // does this fix the display snafu?
+                if (msg.contains("class=infohash")) {msg = INFOHASH_PAREN.matcher(msg).replaceFirst("</span> (");}
                 if (msg.contains(_t("Warning - No I2P"))) {msg = msg.replace("</span>", "");}
                 buf.append("<li class=msg>").append(msg).append("</li>\n");
             }
@@ -1097,7 +1104,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String ps = req.getParameter("ps");
         if ("null".equals(ps)) ps = Integer.toString(pageSize);
         if (ps != null) {
-            try { pageSize = Integer.parseInt(ps); } catch(NumberFormatException ignored) { /* ignored */ }
+            try { pageSize = Math.min(Math.max(Integer.parseInt(ps), 10), 9999); } catch(NumberFormatException ignored) { /* ignored */ }
         }
 
         boolean isDegraded = false;
@@ -1140,7 +1147,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 hasPeers = true;
                 long needed = snark.getNeededLength();
                 if (needed > total) needed = total;
-                if (stats[2] > 0 && needed > 0) totalETA += needed / stats[2];
+                if (stats[STAT_DOWNLOAD_RATE] > 0 && needed > 0) totalETA += needed / stats[STAT_DOWNLOAD_RATE];
             }
         }
 
@@ -1158,7 +1165,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</i></td></tr></tbody>");
         }
 
-        appendSnarkFooter(out, buf, stats, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), debug, peerParam);
+        appendSnarkFooter(out, buf, stats, totalETA, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), debug, peerParam);
 
         if (showDebug) out.write("<tr id=dhtDebug>");
         else out.write("<tfoot><tr id=dhtDebug hidden>");
@@ -1504,6 +1511,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param out          the PrintWriter to write HTML output to
      * @param buf          a reusable StringBuilder used for generating icon HTML snippets
      * @param stats        a long array of cumulative stats: [downloaded, uploaded, download rate, upload rate, peers, total size]
+     * @param totalETA     total estimated download time for all torrents, seconds
      * @param total        total number of torrents
      * @param isConnected  whether the system is connected
      * @param noSnarks     true if no torrents are loaded (empty list)
@@ -1515,7 +1523,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param peerParam    the peer parameter from the request query, affects debug mode toggle links
      * @throws IOException if writing to the output stream fails
      */
-    private void appendSnarkFooter(PrintWriter out, StringBuilder buf, long[] stats, int total, boolean isConnected,
+    private void appendSnarkFooter(PrintWriter out, StringBuilder buf, long[] stats, long totalETA, int total, boolean isConnected,
                                    boolean noSnarks, boolean hasPeers, boolean isUploading, DHT dht,
                                    boolean isStandalone, boolean debug, String peerParam) throws IOException {
 
@@ -1526,7 +1534,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // Cache constant localized strings that are reused
         final String titleTotalSize = _t("Total size of loaded torrents");
-        final String titleConnectedPeers = ngettext("1 connected peer", "{0} peer connections", (int) stats[4]);
+        final String titleConnectedPeers = ngettext("1 connected peer", "{0} peer connections", (int) stats[STAT_PEERS]);
         final String titleActiveDownloads = _t("Active downloads");
         final String titleActiveUploads = _t("Active uploads");
         final String titleInboundTunnels = _t("Active Inbound tunnels");
@@ -1563,7 +1571,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("\">");
         appendIcon(buf, "size", "", "", true, false);
         buf.append("<span class=badge>");
-        buf.append(DataHelper.formatSize2(stats[5]).replace("i", ""));
+        buf.append(DataHelper.formatSize2(stats[STAT_TOTAL_SIZE]).replace("i", ""));
         buf.append("</span></span>");
         out.write(buf.toString());
 
@@ -1574,7 +1582,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("\">");
         appendIcon(buf, "showpeers", "", "", true, false);
         buf.append("<span class=badge>");
-        buf.append((int) stats[4]);
+        buf.append((int) stats[STAT_PEERS]);
         buf.append("</span></span>");
         out.write(buf.toString());
 
@@ -1582,7 +1590,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // actively downloading
         int downloads = 0;
-        int start = 1;
+        int start = 0;
 
         for (int i = start; i < snarks.size(); i++) {
             if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getDownloadRate() > 0)) {downloads++;}
@@ -1639,29 +1647,29 @@ public class I2PSnarkServlet extends BasicServlet {
 
         if (isConnected && total > 0) {
             out.write("<th class=ETA>");
-            if (!noSnarks && hasPeers && stats[2] > 0) {
+            if (!noSnarks && hasPeers && totalETA > 0) {
                 out.write("<span title=\"");
                 out.write(titleEstimatedDownload);
                 out.write("\">");
-                out.write(DataHelper.formatDuration2(Math.max(stats[2], 10) * 1000));
+                out.write(DataHelper.formatDuration2(Math.max(totalETA, 10) * 1000));
                 out.write("</span>");
             }
             out.write("</th><th class=rxd title=\"");
             out.write(titleDataDownloaded);
             out.write("\">");
-            if (stats[0] > 0) out.write(formatSize(stats[0]).replace("iB", ""));
+            if (stats[STAT_DOWNLOADED] > 0) out.write(formatSize(stats[STAT_DOWNLOADED]).replace("iB", ""));
             out.write("</th><th class=rateDown title=\"");
             out.write(titleTotalDownloadSpeed);
             out.write("\">");
-            if (stats[2] > 0) out.write(formatSize(stats[2]).replace("iB", "") + "/s");
+            if (stats[STAT_DOWNLOAD_RATE] > 0) out.write(formatSize(stats[STAT_DOWNLOAD_RATE]).replace("iB", "") + "/s");
             out.write("</th><th class=txd title=\"");
             out.write(titleTotalUploaded);
             out.write("\">");
-            if (stats[1] > 0) out.write(formatSize(stats[1]).replace("iB", ""));
+            if (stats[STAT_UPLOADED] > 0) out.write(formatSize(stats[STAT_UPLOADED]).replace("iB", ""));
             out.write("</th><th class=rateUp title=\"");
             out.write(titleTotalUploadSpeed);
             out.write("\">");
-            if (stats[3] > 0 && isUploading) out.write(formatSize(stats[3]).replace("iB", "") + "/s");
+            if (stats[STAT_UPLOAD_RATE] > 0 && isUploading) out.write(formatSize(stats[STAT_UPLOAD_RATE]).replace("iB", "") + "/s");
             out.write("</th><th class=tAction>");
 
             if (dht != null && !"2".equals(peerParam)) {
@@ -3092,19 +3100,19 @@ public class I2PSnarkServlet extends BasicServlet {
                               StringBuilder buf) throws IOException {
         // Update stats first (minimal processing)
         long uploaded = snark.getUploaded();
-        stats[0] += snark.getDownloaded();
-        stats[1] += uploaded;
+        stats[STAT_DOWNLOADED] += snark.getDownloaded();
+        stats[STAT_UPLOADED] += uploaded;
         long downBps = snark.getDownloadRate();
         long upBps = snark.getUploadRate();
         boolean isRunning = !snark.isStopped();
         if (isRunning) {
-            stats[2] += downBps;
-            stats[3] += upBps;
+            stats[STAT_DOWNLOAD_RATE] += downBps;
+            stats[STAT_UPLOAD_RATE] += upBps;
         }
         int curPeers = snark.getPeerList().size();
-        stats[4] += curPeers;
+        stats[STAT_PEERS] += curPeers;
         long total = snark.getTotalLength();
-        if (total > 0) stats[5] += total;
+        if (total > 0) stats[STAT_TOTAL_SIZE] += total;
         if (statsOnly) return;
 
         // Cache repeated computations
@@ -4659,24 +4667,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 .replace("[", "%5B").replace("]", "%5D");
     }
 
-    private static final String[] escapeChars = {"\"", "<", ">", "'"};
-    private static final String[] escapeCodes = {"&quot;", "&lt;", "&gt;", "&apos;"};
-
-    /**
-     * Modded from DataHelper.
-     * Does not escape ampersand. String must already have escaped ampersand.
-     * @param unescaped the unescaped string, non-null
-     * @return the escaped string
-     * @since 0.9.33
-     */
-    private static String escapeHTML2(String unescaped) {
-        String escaped = unescaped;
-        for (int i = 0; i < escapeChars.length; i++) {
-            escaped = escaped.replace(escapeChars[i], escapeCodes[i]);
-        }
-        return escaped;
-    }
-
     private static final String DOCTYPE = "<!DOCTYPE HTML>\n";
     private static final String HEADER_A = "<link href=\"";
     private static final String HEADER_B = "snark.css?" + CoreVersion.VERSION + "\" rel=stylesheet id=snarkTheme>";
@@ -5120,13 +5110,13 @@ public class I2PSnarkServlet extends BasicServlet {
                     // thumbnail
                     buf.append("<img alt=\"\" border=0 class=thumb src=\"")
                        .append(ppath).append("\" data-lb data-lb-caption=\"")
-                       .append(item.getName()).append("\" data-lb-group=allInDir></a>");
+                       .append(DataHelper.escapeHTML(item.getName())).append("\" data-lb-group=allInDir></a>");
                    imgCount++;
                 } else if (mime.startsWith("image/") && ppath.endsWith(".ico")) {
                     // favicon without scaling
                     buf.append("<img alt=\"\" width=16 height=16 class=favicon border=0 src=\"")
                        .append(ppath).append("\" data-lb data-lb-caption=\"")
-                       .append(item.getName()).append("\" data-lb-group=allInDir></a>");
+                       .append(DataHelper.escapeHTML(item.getName())).append("\" data-lb-group=allInDir></a>");
                 } else {
                     appendIcon(buf, icon, _t("Open"), "", false, true);
                     buf.append("</a>");

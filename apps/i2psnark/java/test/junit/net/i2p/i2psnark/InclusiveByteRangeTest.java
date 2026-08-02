@@ -48,6 +48,25 @@ public class InclusiveByteRangeTest {
     }
 
     @Test
+    public void testZeroSuffixRangeInvalid() {
+        // "bytes=-0" is an unsatisfiable suffix range and must not produce a bogus 206
+        List<InclusiveByteRange> ranges = InclusiveByteRange.satisfiableRanges(
+                Collections.enumeration(Collections.singleton("bytes=-0")), 1000);
+        assertNull(ranges);
+    }
+
+    @Test
+    public void testZeroSuffixSkipsOnlyBadRange() {
+        List<InclusiveByteRange> ranges = InclusiveByteRange.satisfiableRanges(
+                Collections.enumeration(Collections.singleton("bytes=-0,100-200")), 1000);
+        assertNotNull(ranges);
+        assertEquals(1, ranges.size());
+        InclusiveByteRange r = ranges.get(0);
+        assertEquals(100, r.getFirst(1000));
+        assertEquals(200, r.getLast(1000));
+    }
+
+    @Test
     public void testSingleByteRange() {
         List<InclusiveByteRange> ranges = InclusiveByteRange.satisfiableRanges(
                 Collections.enumeration(Collections.singleton("bytes=0-0")), 1000);
