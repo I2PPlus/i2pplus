@@ -78,8 +78,9 @@ class PeerAcceptor {
             } catch (IOException ioe) {
                 // unique exception so ConnectionAcceptor can blame the peer
                 throw new ProtocolException(ioe.toString());
+            } finally {
+                socket.setReadTimeout(timeout);
             }
-            socket.setReadTimeout(timeout);
             in.reset();
         } else {
             // Single torrent - is this working right?
