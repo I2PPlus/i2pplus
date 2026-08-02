@@ -391,9 +391,10 @@ class ProfileOrganizerRenderer {
                .append(formatInterval(now, prof.getLastHeardFrom())).append("</td><td nowrap class=viewedit>");
             String viewProfile = _t("View profile");
             String configurePeer = _t("Configure Peer");
+            String peerB64 = peer.toBase64();
             if (prof != null) {
                 buf.append("<a class=viewprofile href=\"/viewprofile?peer=")
-                   .append(peer.toBase64())
+                   .append(peerB64)
                    .append("\" title=\"")
                    .append(viewProfile)
                    .append("\" alt=\"[")
@@ -403,7 +404,7 @@ class ProfileOrganizerRenderer {
                    .append("</a>");
             }
             buf.append("<br><a class=configpeer href=\"/configpeer?peer=")
-               .append(peer.toBase64())
+               .append(peerB64)
                .append("\" title=\"")
                .append(configurePeer)
                .append("\" alt=\"[")
