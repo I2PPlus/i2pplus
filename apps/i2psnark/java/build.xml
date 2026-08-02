@@ -521,8 +521,8 @@
   </target>
 
   <target name="compileTest" depends="compile">
-    <property name="junit.home" value="../../tools/test/junit"/>
-    <property name="hamcrest.home" value="../../tools/test/hamcrest"/>
+    <property name="junit.home" value="../../../tools/test/junit"/>
+    <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
     <mkdir dir="${build.dir}/obj_test"/>
     <javac
       srcdir="./test/junit"
@@ -547,8 +547,8 @@
 
   <target name="junit.test" depends="compileTest">
     <property name="junit.reports.dir" value="../../reports"/>
-    <property name="junit.home" value="../../tools/test/junit"/>
-    <property name="hamcrest.home" value="../../tools/test/hamcrest"/>
+    <property name="junit.home" value="../../../tools/test/junit"/>
+    <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
     <mkdir dir="${junit.reports.dir}/i2psnark/junit"/>
     <delete>
       <fileset dir="${junit.reports.dir}/i2psnark/junit">
