@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import org.klomp.snark.I2PSnarkUtil;
 import org.klomp.snark.SnarkManager;
 import org.klomp.snark.bencode.BDecoder;
 import org.klomp.snark.bencode.BEValue;
@@ -228,5 +229,29 @@ public class I2PSnarkEscapingAndValidationTest {
         } catch (InvalidBEncodingException ibe) {
             // expected
         }
+    }
+
+    @Test
+    public void testTrackerB32ToHostnameConvertsKnownHosts() {
+        assertEquals(
+                "tracker2.postman.i2p/announce",
+                I2PSnarkUtil.trackerB32ToHostname(
+                        "http://ahsplxkbhemefwvvml7qovzl5a2b5xo5i7lyai7ntdunvcyfdtna.b32.i2p/announce"));
+        assertEquals(
+                "opentracker.skank.i2p/announce",
+                I2PSnarkUtil.trackerB32ToHostname(
+                        "http://by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p/announce"));
+        assertEquals(
+                "sigmatracker.i2p/announce",
+                I2PSnarkUtil.trackerB32ToHostname(
+                        "http://qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p/announce"));
+    }
+
+    @Test
+    public void testTrackerB32ToHostnameLeavesUnknownHostsAndStripScheme() {
+        assertEquals(
+                "tracker.example.i2p/announce",
+                I2PSnarkUtil.trackerB32ToHostname("http://tracker.example.i2p/announce"));
+        assertNull(I2PSnarkUtil.trackerB32ToHostname(null));
     }
 }

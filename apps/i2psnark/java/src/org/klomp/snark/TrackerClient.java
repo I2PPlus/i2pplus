@@ -600,28 +600,15 @@ public class TrackerClient implements Runnable {
                         downloaded = len;
                     }
                     left = coordinator.getLeft();
-                    TrackerInfo info;
-                    if (tr.isUDP) {
-                        int event;
-                        if (!tr.started) {
-                            event = UDPTrackerClient.EVENT_STARTED;
-                        } else if (newlyCompleted) {
-                            event = UDPTrackerClient.EVENT_COMPLETED;
-                        } else {
-                            event = UDPTrackerClient.EVENT_NONE;
-                        }
-                        info = doRequest(tr, uploaded, downloaded, left, event);
+                    int event;
+                    if (!tr.started) {
+                        event = UDPTrackerClient.EVENT_STARTED;
+                    } else if (newlyCompleted) {
+                        event = UDPTrackerClient.EVENT_COMPLETED;
                     } else {
-                        String event;
-                        if (!tr.started) {
-                            event = STARTED_EVENT;
-                        } else if (newlyCompleted) {
-                            event = COMPLETED_EVENT;
-                        } else {
-                            event = NO_EVENT;
-                        }
-                        info = doRequest(tr, infoHash, peerID, uploaded, downloaded, left, event);
+                        event = UDPTrackerClient.EVENT_NONE;
                     }
+                    TrackerInfo info = doRequest(tr, uploaded, downloaded, left, event);
                     tr.trackerProblems = null;
                     tr.registerFails = 0;
                     tr.consecutiveFails = 0;
@@ -671,25 +658,13 @@ public class TrackerClient implements Runnable {
                     if (coordinator.needOutboundPeers()) {
                         // We only want to talk to new people if we need things
                         // from them (duh)
-                        List<Peer> ordered = new ArrayList<>(peers);
-                        Random r = _util.getContext().random();
-                        Collections.shuffle(ordered, r);
-                        Iterator<Peer> it = ordered.iterator();
-                        while ((!stop) && it.hasNext() && coordinator.needOutboundPeers()) {
-                            Peer cur = it.next();
-                            if (coordinator.addPeer(cur) && it.hasNext()) {
-                                int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
-                                try {
-                                    Thread.sleep(delay);
-                                } catch (InterruptedException ie) { /* ignored */ }
-                            }
-                        }
+                        tryAddPeers(peers);
                     }
                 } catch (IOException ioe) {
                     // Probably not fatal (if it doesn't last too long...)
                     if (_log.shouldWarn()) {
                         _log.warn("Error communicating with tracker [" +
-                                  trackerB32ToHostname(tr.announce) + "]");
+                                  I2PSnarkUtil.trackerB32ToHostname(tr.announce) + "]");
                     }
                     tr.trackerProblems = ioe.getMessage();
                     String tplc = tr.trackerProblems.toLowerCase(Locale.US);
@@ -769,24 +744,6 @@ public class TrackerClient implements Runnable {
         }
     }
 
-    private String trackerB32ToHostname(String url) {
-        if (url == null) return null;
-
-        String result = url.replace("http://", "");
-
-        result = result.replace("ahsplxkbhemefwvvml7qovzl5a2b5xo5i7lyai7ntdunvcyfdtna.b32.i2p", "tracker2.postman.i2p");
-        result = result.replace("lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA.i2p", "tracker2.postman.i2p");
-        result = result.replace("w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p", "opentracker.dg2.i2p");
-        result = result.replace("afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p", "lyoko.i2p");
-        result = result.replace("s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p", "tracker.thebland.i2p");
-        result = result.replace("nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p", "torrfreedom.i2p");
-        result = result.replace("by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p", "opentracker.skank.i2p");
-        result = result.replace("punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p", "opentracker.r4sas.i2p");
-        result = result.replace("qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p", "sigmatracker.i2p");
-
-        return result;
-    }
-
     /**
      * Get peers from Peer Exchange (PEX).
      *
@@ -806,18 +763,7 @@ public class TrackerClient implements Runnable {
                     peers.add(
                             new Peer(pID, snark.getID(), snark.getInfoHash(), snark.getMetaInfo()));
                 }
-                Random r = _util.getContext().random();
-                Collections.shuffle(peers, r);
-                Iterator<Peer> it = peers.iterator();
-                while ((!stop) && it.hasNext() && coordinator.needOutboundPeers()) {
-                    Peer cur = it.next();
-                    if (coordinator.addPeer(cur) && it.hasNext()) {
-                        int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
-                        try {
-                            Thread.sleep(delay);
-                        } catch (InterruptedException ie) { /* ignored */ }
-                    }
-                }
+                tryAddPeers(peers);
                 rv = pids.size();
                 pids.clear();
             }
@@ -913,21 +859,7 @@ public class TrackerClient implements Runnable {
                                         snark.getMetaInfo()));
                     } catch (InvalidBEncodingException ibe) { /* ignored */ }
                 }
-                Random r = _util.getContext().random();
-                Collections.shuffle(peers, r);
-                Iterator<Peer> it = peers.iterator();
-                while ((!stop) && it.hasNext() && coordinator.needOutboundPeers()) {
-                    Peer cur = it.next();
-                    if (coordinator.addPeer(cur) && it.hasNext()) {
-                        int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
-                        try {
-                            Thread.sleep(delay);
-                        } catch (InterruptedException ie) {
-                            Thread.currentThread().interrupt();
-                            return;
-                        }
-                    }
-                }
+                tryAddPeers(peers);
             }
         }
     }
@@ -977,21 +909,39 @@ public class TrackerClient implements Runnable {
         if (peers.isEmpty()) {
             return 0;
         }
-        Random r = _util.getContext().random();
-        if (peers.size() > 1) {
-            Collections.shuffle(peers, r);
+        tryAddPeers(peers);
+        return peers.size();
+    }
+
+    /**
+     * Try to connect to the given peers, spreading the connection attempts over time. The peers are
+     * shuffled first so no single peer is always first; the passed collection is not modified.
+     *
+     * @param peers the peers to try to connect to
+     * @since 0.9.71+
+     */
+    private void tryAddPeers(Collection<Peer> peers) {
+        if (peers.isEmpty()) {
+            return;
         }
-        Iterator<Peer> it = peers.iterator();
+        List<Peer> ordered = new ArrayList<>(peers);
+        Random r = _util.getContext().random();
+        if (ordered.size() > 1) {
+            Collections.shuffle(ordered, r);
+        }
+        Iterator<Peer> it = ordered.iterator();
         while ((!stop) && it.hasNext() && coordinator.needOutboundPeers()) {
             Peer cur = it.next();
             if (coordinator.addPeer(cur) && it.hasNext()) {
                 int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
                 try {
                     Thread.sleep(delay);
-                } catch (InterruptedException ie) { /* ignored */ }
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
             }
         }
-        return peers.size();
     }
 
     /**
@@ -1046,19 +996,8 @@ public class TrackerClient implements Runnable {
                 // Don't try to restart I2CP connection just to say goodbye
                 if (_util.connected()) {
                     if (tr.started && (!tr.stop) && tr.trackerProblems == null) {
-                        if (tr.isUDP) {
-                            doRequest(
-                                    tr, uploaded, downloaded, left, UDPTrackerClient.EVENT_STOPPED);
-                        } else {
-                            doRequest(
-                                    tr,
-                                    infoHash,
-                                    peerID,
-                                    uploaded,
-                                    downloaded,
-                                    left,
-                                    STOPPED_EVENT);
-                        }
+                        doRequest(
+                                tr, uploaded, downloaded, left, UDPTrackerClient.EVENT_STOPPED);
                     }
                 }
             } catch (IOException ioe) {
@@ -1069,18 +1008,35 @@ public class TrackerClient implements Runnable {
     }
 
     /**
+     * Announce - blocking, dispatches to HTTP or UDP by tracker type.
+     *
+     * <p>Note: IOException message text gets displayed in the UI
+     *
+     * @return null if _fastUnannounce &amp;&amp; event == STOPPED
+     * @since 0.9.71+
+     */
+    private TrackerInfo doRequest(
+            TCTracker tr, long uploaded, long downloaded, long left, int event)
+            throws IOException {
+        if (tr.isUDP) {
+            return doRequestUDP(tr, uploaded, downloaded, left, event);
+        }
+        return doRequestHTTP(tr, infoHash, peerID, uploaded, downloaded, left, event);
+    }
+
+    /**
      * HTTP - blocking
      *
      * <p>Note: IOException message text gets displayed in the UI
      */
-    private TrackerInfo doRequest(
+    private TrackerInfo doRequestHTTP(
             TCTracker tr,
             String infoHash,
             String peerID,
             long uploaded,
             long downloaded,
             long left,
-            String event)
+            int event)
             throws IOException {
         StringBuilder buf = new StringBuilder(512);
         buf.append(tr.announce);
@@ -1113,12 +1069,11 @@ public class TrackerClient implements Runnable {
             buf.append('1');
         }
         buf.append("&compact=1"); // NOTE: opentracker will return 400 for &compact alone
-        if (!event.equals(NO_EVENT)) {
-            buf.append("&event=").append(event);
+        if (event != UDPTrackerClient.EVENT_NONE) {
+            buf.append("&event=").append(eventToString(event));
         }
         buf.append("&numwant=");
-        boolean small =
-                left == 0 || event.equals(STOPPED_EVENT) || !coordinator.needOutboundPeers();
+        boolean small = smallAnnounce(left, event);
         if (small) {
             buf.append('0');
         } else {
@@ -1131,7 +1086,7 @@ public class TrackerClient implements Runnable {
 
         tr.lastRequestTime = System.currentTimeMillis();
         // Don't wait for a response to stopped when shutting down
-        boolean fast = _fastUnannounce && event.equals(STOPPED_EVENT);
+        boolean fast = _fastUnannounce && event == UDPTrackerClient.EVENT_STOPPED;
         byte[] fetched =
                 _util.get(s, true, fast ? -1 : 0, small ? 128 : 1024, small ? 1024 : 32 * 1024);
         if (fetched == null) {
@@ -1157,18 +1112,19 @@ public class TrackerClient implements Runnable {
         if (failure != null) {
             throw new IOException(tr.host + " response: " + failure);
         }
-        tr.interval = Math.max(MIN_TRACKER_ANNOUNCE_INTERVAL, info.getInterval() * 1000L);
+        updateInterval(tr, info);
         return info;
     }
 
     /**
      * UDP - blocking
      *
-     * @return null if _fastUnannounce && event == STOPPED
+     * @return null if _fastUnannounce &amp;&amp; event == STOPPED
      * @since 0.9.54
      */
-    private TrackerInfo doRequest(
-            TCTracker tr, long uploaded, long downloaded, long left, int event) throws IOException {
+    private TrackerInfo doRequestUDP(
+            TCTracker tr, long uploaded, long downloaded, long left, int event)
+            throws IOException {
         UDPTrackerClient udptc = _util.getUDPTrackerClient();
         if (udptc == null) {
             throw new IOException("no UDPTC");
@@ -1180,10 +1136,7 @@ public class TrackerClient implements Runnable {
         // Don't wait for a response to stopped when shutting down
         boolean fast = _fastUnannounce && event == UDPTrackerClient.EVENT_STOPPED;
         long maxWait = fast ? 5 * 1000 : 60 * 1000;
-        boolean small =
-                left == 0
-                        || event == UDPTrackerClient.EVENT_STOPPED
-                        || !coordinator.needOutboundPeers();
+        boolean small = smallAnnounce(left, event);
         int numWant = small ? 0 : _util.getMaxConnections();
         UDPTrackerClient.TrackerResponse fetched =
                 udptc.announce(
@@ -1222,8 +1175,49 @@ public class TrackerClient implements Runnable {
         if (failure != null) {
             throw new IOException(failure);
         }
-        tr.interval = Math.max(MIN_TRACKER_ANNOUNCE_INTERVAL, info.getInterval() * 1000L);
+        updateInterval(tr, info);
         return info;
+    }
+
+    /**
+     * The announce needs few peers, either the download is complete, we are stopping, or we do not
+     * need outbound peers.
+     *
+     * @param left the bytes left to download, -1 for magnet
+     * @param event the announce event
+     * @return whether the announce should request few or no peers
+     */
+    private boolean smallAnnounce(long left, int event) {
+        return left == 0 || event == UDPTrackerClient.EVENT_STOPPED || !coordinator.needOutboundPeers();
+    }
+
+    /**
+     * Clamp the tracker interval to the minimum and record it.
+     *
+     * @param tr the tracker
+     * @param info the announce response
+     */
+    private void updateInterval(TCTracker tr, TrackerInfo info) {
+        tr.interval = Math.max(MIN_TRACKER_ANNOUNCE_INTERVAL, info.getInterval() * 1000L);
+    }
+
+    /**
+     * The HTTP announce event name for a UDP-style event code.
+     *
+     * @param event the UDP event code
+     * @return the event name
+     */
+    private static String eventToString(int event) {
+        switch (event) {
+            case UDPTrackerClient.EVENT_STARTED:
+                return STARTED_EVENT;
+            case UDPTrackerClient.EVENT_COMPLETED:
+                return COMPLETED_EVENT;
+            case UDPTrackerClient.EVENT_STOPPED:
+                return STOPPED_EVENT;
+            default:
+                return NO_EVENT;
+        }
     }
 
     /**
