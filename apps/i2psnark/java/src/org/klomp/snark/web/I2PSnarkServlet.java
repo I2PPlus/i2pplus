@@ -1141,7 +1141,7 @@ public class I2PSnarkServlet extends BasicServlet {
                          hide, false, canWrite, filter, filterEnabled, srt, sortEnabled, buf);
 
             // additionally accumulate downloads, uploads, ETA, flags
-            if (snark.getPeerList().size() >= 1) {
+            if (snark.getPeerCount() >= 1) {
                 if (snark.getDownloadRate() > 0) downloads++;
                 if (snark.getUploadRate() > 0) { uploads++; isUploading = true; }
                 hasPeers = true;
@@ -1250,7 +1250,7 @@ public class I2PSnarkServlet extends BasicServlet {
         int end = Math.min(start + pageSize, total);
         for (int i = start; i < end && !(hasPeers && isDownloading && isUploading); i++) {
             Snark s = snarks.get(i);
-            if (!s.getPeerList().isEmpty()) {
+            if (s.getPeerCount() > 0) {
                 hasPeers = true;
                 if (s.getDownloadRate() > 0) {
                     isDownloading = true;
@@ -1593,7 +1593,7 @@ public class I2PSnarkServlet extends BasicServlet {
         int start = 0;
 
         for (int i = start; i < snarks.size(); i++) {
-            if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getDownloadRate() > 0)) {downloads++;}
+            if ((snarks.get(i).getPeerCount() >= 1) && (snarks.get(i).getDownloadRate() > 0)) {downloads++;}
         }
 
         // RX count span
@@ -1610,7 +1610,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // actively uploading
         int uploads = 0;
         for (int i = start; i < snarks.size(); i++) {
-            if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getUploadRate() > 0)) {uploads++;}
+            if ((snarks.get(i).getPeerCount() >= 1) && (snarks.get(i).getUploadRate() > 0)) {uploads++;}
         }
 
         // TX count span
@@ -3109,7 +3109,7 @@ public class I2PSnarkServlet extends BasicServlet {
             stats[STAT_DOWNLOAD_RATE] += downBps;
             stats[STAT_UPLOAD_RATE] += upBps;
         }
-        int curPeers = snark.getPeerList().size();
+        int curPeers = snark.getPeerCount();
         stats[STAT_PEERS] += curPeers;
         long total = snark.getTotalLength();
         if (total > 0) stats[STAT_TOTAL_SIZE] += total;
@@ -5195,6 +5195,57 @@ public class I2PSnarkServlet extends BasicServlet {
         return buf.toString();
     }
 
+    /** known postman tracker b64 announce, both old and new */
+    private static final String POSTMAN_B64 =
+            "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA";
+    private static final String POSTMAN_B64_NEW =
+            "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICrsRuil8qK~whOvj8uNTv~ohZnTZHxTLgi~sDyo98BwJ-4Y4NMSuF4GLzcgLypcR1D1WY2tDqMKRYFVyLE~MTPVjRRgXfcKolykQ666~Go~A~~CNV4qc~zlO6F4bsUhVZDU7WJ7mxCAwqaMiJsL-NgIkb~SMHNxIzaE~oy0agHJMBQAEAAcAAA==";
+    /** known tracker b32 announces */
+    private static final String BT_B32 = "ev5dpxvcmshi6mil7gaon3b2wbplwylzraxs4wtz7dd5lzdsc2dq.b32.i2p";
+    private static final String CHUDO_B32 = "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p";
+    private static final String CRYPT_B32 = "ri5a27ioqd4vkik72fawbcryglkmwyy4726uu5j3eg6zqh2jswfq.b32.i2p";
+    private static final String FREEDOM_B32 = "nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p";
+    private static final String ICU812_B32 = "h77hk3pr622mx5c6qmybvbtrdo5la7pxo6my4kzr47x2mlpnvm2a.b32.i2p";
+    private static final String LODIKON_B32 = "q2a7tqlyddbyhxhtuia4bmtqpohpp266wsnrkm6cgoahdqrjo3ra.b32.i2p";
+    private static final String LYOKO_B32 = "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p";
+    private static final String ODIFT_B32 = "bikpeyxci4zuyy36eau5ycw665dplun4yxamn7vmsastejdqtfoq.b32.i2p";
+    private static final String OMITRACK_B32 = "a5ruhsktpdhfk5w46i6yf6oqovgdlyzty7ku6t5yrrpf4qedznjq.b32.i2p";
+    private static final String OTDG_B32 = "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p";
+    private static final String POSTMAN_B32_NEW = "6a4kxkg5wp33p25qqhgwl6sj4yh4xuf5b3p3qldwgclebchm3eea.b32.i2p";
+    private static final String R4SAS_B32 = "punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p";
+    private static final String SKANK_B32 = "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p";
+    private static final String SIMP_B32 = "wc4sciqgkceddn6twerzkfod6p2npm733p7z3zwsjfzhc4yulita.b32.i2p";
+    private static final String THEBLAND_B32 = "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p";
+    private static final String SIGMA_B32 = "qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p";
+
+    /**
+     * Rewrite known tracker b64 and b32 announces to their domain names for display.
+     *
+     * @param announce the raw announce URL, non-null
+     * @return the rewritten URL
+     */
+    private static String prettyAnnounce(String announce) {
+        return DataHelper.stripHTML(announce)
+                .replace(POSTMAN_B64, "tracker2.postman.i2p")
+                .replace(POSTMAN_B64_NEW, "tracker2.postman.i2p")
+                .replace(POSTMAN_B32_NEW, "tracker2.postman.i2p")
+                .replaceAll(BT_B32, "opentracker.bt.i2p")
+                .replaceAll(CHUDO_B32, "tracker.chudo.i2p")
+                .replaceAll(CRYPT_B32, "tracker.crypthost.i2p")
+                .replaceAll(FREEDOM_B32, "torrfreedom.i2p")
+                .replaceAll(ICU812_B32, "tracker.icu812.i2p")
+                .replaceAll(LODIKON_B32, "tracker.lodikon.i2p")
+                .replaceAll(LYOKO_B32, "lyoko.i2p")
+                .replaceAll(ODIFT_B32, "opendiftracker.i2p")
+                .replaceAll(OMITRACK_B32, "omitracker.i2p")
+                .replaceAll(OTDG_B32, "opentracker.dg2.i2p")
+                .replaceAll(R4SAS_B32, "opentracker.r4sas.i2p")
+                .replaceAll(SKANK_B32, "opentracker.skank.i2p")
+                .replaceAll(SIMP_B32, "opentracker.simp.i2p")
+                .replaceAll(THEBLAND_B32, "tracker.thebland.i2p")
+                .replaceAll(SIGMA_B32, "sigmatracker.i2p");
+    }
+
     /**
      * Appends detailed torrent information as HTML to the provided StringBuilder buffer.
      * <p>
@@ -5242,48 +5293,10 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</span>");
 
         String announce = null;
-        // FIXME: if b64 appears in link, convert to b32 or domain name (if known)
-        String postmanb64 = "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA";
-        String postmanb64_new = "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICrsRuil8qK~whOvj8uNTv~ohZnTZHxTLgi~sDyo98BwJ-4Y4NMSuF4GLzcgLypcR1D1WY2tDqMKRYFVyLE~MTPVjRRgXfcKolykQ666~Go~A~~CNV4qc~zlO6F4bsUhVZDU7WJ7mxCAwqaMiJsL-NgIkb~SMHNxIzaE~oy0agHJMBQAEAAcAAA==";
-        String btb32 = "ev5dpxvcmshi6mil7gaon3b2wbplwylzraxs4wtz7dd5lzdsc2dq.b32.i2p";
-        String chudob32 = "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p";
-        String cryptb32 = "ri5a27ioqd4vkik72fawbcryglkmwyy4726uu5j3eg6zqh2jswfq.b32.i2p";
-        String freedomb32 = "nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p";
-        String icu812b32 = "h77hk3pr622mx5c6qmybvbtrdo5la7pxo6my4kzr47x2mlpnvm2a.b32.i2p";
-        String lodikonb32 = "q2a7tqlyddbyhxhtuia4bmtqpohpp266wsnrkm6cgoahdqrjo3ra.b32.i2p";
-        String lyokob32 = "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p";
-        String odiftb32 = "bikpeyxci4zuyy36eau5ycw665dplun4yxamn7vmsastejdqtfoq.b32.i2p";
-        String omitrackb32 = "a5ruhsktpdhfk5w46i6yf6oqovgdlyzty7ku6t5yrrpf4qedznjq.b32.i2p";
-        String otdgb32 = "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p";
-        String postmanb32_new = "6a4kxkg5wp33p25qqhgwl6sj4yh4xuf5b3p3qldwgclebchm3eea.b32.i2p";
-        String r4sasb32 = "punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p";
-        String simpb32 = "wc4sciqgkceddn6twerzkfod6p2npm733p7z3zwsjfzhc4yulita.b32.i2p";
-        String skankb32 = "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p";
-        String theblandb32 = "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p";
-        String sigmab32 = "qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p";
-
         if (meta != null) {
             announce = meta.getAnnounce();
             if (announce == null) { announce = snark.getTrackerURL(); }
-            announce = DataHelper.stripHTML(announce)
-                .replace(postmanb64, "tracker2.postman.i2p")
-                .replace(postmanb64_new, "tracker2.postman.i2p")
-                .replace(postmanb32_new, "tracker2.postman.i2p")
-                .replaceAll(btb32, "opentracker.bt.i2p")
-                .replaceAll(chudob32, "tracker.chudo.i2p")
-                .replaceAll(cryptb32, "tracker.crypthost.i2p")
-                .replaceAll(freedomb32, "torrfreedom.i2p")
-                .replaceAll(icu812b32, "tracker.icu812.i2p")
-                .replaceAll(lodikonb32, "tracker.lodikon.i2p")
-                .replaceAll(lyokob32, "lyoko.i2p")
-                .replaceAll(odiftb32, "opendiftracker.i2p")
-                .replaceAll(omitrackb32, "omitracker.i2p")
-                .replaceAll(otdgb32, "opentracker.dg2.i2p")
-                .replaceAll(r4sasb32, "opentracker.r4sas.i2p")
-                .replaceAll(skankb32, "opentracker.skank.i2p")
-                .replaceAll(simpb32, "opentracker.simp.i2p")
-                .replaceAll(theblandb32, "tracker.thebland.i2p")
-                .replaceAll(sigmab32, "sigmatracker.i2p");
+            announce = prettyAnnounce(announce);
         }
         if (meta != null && !meta.isPrivate()) {
             buf.append("<a class=magnetlink href=\"").append(MagnetURI.MAGNET_FULL).append(hex);
@@ -5440,13 +5453,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     for (String s : alist2) {
                         if (more) { buf.append("<span class=info_tracker>"); }
                         else { more = true; }
-                        buf.append(getShortTrackerLink(DataHelper.stripHTML(s)
-                           .replaceAll(cryptb32, "tracker.crypthost.i2p")
-                           .replaceAll(freedomb32, "torrfreedom.i2p")
-                           .replaceAll(lodikonb32, "tracker.lodikon.i2p")
-                           .replaceAll(otdgb32, "opentracker.dg2.i2p")
-                           .replaceAll(odiftb32, "opendiftracker.i2p")
-                           .replaceAll(theblandb32, "tracker.thebland.i2p"), snark.getInfoHash()));
+                        buf.append(getShortTrackerLink(prettyAnnounce(s), snark.getInfoHash()));
                         buf.append("</span> ");
                     }
                 }
@@ -5455,13 +5462,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 for (String s : alist2) {
                     if (more) { buf.append("<span class=info_tracker>"); }
                     else { more = true; }
-                    buf.append(getShortTrackerLink(DataHelper.stripHTML(s)
-                       .replaceAll(cryptb32, "tracker.crypthost.i2p")
-                       .replaceAll(freedomb32, "torrfreedom.i2p")
-                       .replaceAll(lodikonb32, "tracker.lodikon.i2p")
-                       .replaceAll(otdgb32, "opentracker.dg2.i2p")
-                       .replaceAll(odiftb32, "opendiftracker.i2p")
-                       .replaceAll(theblandb32, "tracker.thebland.i2p"), snark.getInfoHash()));
+                    buf.append(getShortTrackerLink(prettyAnnounce(s), snark.getInfoHash()));
                     buf.append("</span> ");
                 }
             }
@@ -5470,16 +5471,7 @@ public class I2PSnarkServlet extends BasicServlet {
             announce = meta.getAnnounce();
             if (announce == null) { announce = snark.getTrackerURL(); }
             if (announce != null) {
-                announce = DataHelper.stripHTML(announce)
-                   .replace(postmanb64, "tracker2.postman")
-                   .replaceAll(cryptb32, "tracker.crypthost.i2p")
-                   .replaceAll(freedomb32, "torrfreedom.i2p")
-                   .replaceAll(lodikonb32, "tracker.lodikon.i2p")
-                   .replaceAll(otdgb32, "opentracker.dg2.i2p")
-                   .replaceAll(odiftb32, "opendiftracker.i2p")
-                   .replaceAll(theblandb32, "tracker.thebland.i2p")
-                   .replaceAll(icu812b32, "tracker.icu812.i2p")
-                   .replaceAll(chudob32, "tracker.chudo.i2p");
+                announce = prettyAnnounce(announce);
                 buf.append("<tr id=trackers title=\"")
                    .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
                    .append("\"><td colspan=3>");
