@@ -27,6 +27,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.TunnelTestStatus;
 import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.tunnel.HopConfig;
@@ -282,6 +283,11 @@ class TunnelRenderer {
                 displayed = 0;
                 if (bySpeed) {DataHelper.sort(participating, new TunnelComparatorBySpeed());}
                 else {DataHelper.sort(participating, new TunnelComparator());}
+                final String outboundEndpoint = _t("Outbound Endpoint");
+                final String inboundGateway = _t("Inbound Gateway");
+                final String participant = _t("Participant");
+                final String gracePeriodTip = _t("grace period");
+                final String tunnelIdTip = _t("Tunnel identity");
                 for (int i = 0; i < participating.size(); i++) {
                     HopConfig cfg = participating.get(i);
                     int count = cfg.getProcessedMessagesCount();
@@ -296,21 +302,21 @@ class TunnelRenderer {
                     if (++displayed > DISPLAY_LIMIT) {continue;}
                     sb.append("<tr class=lazy>");
                     if (to == null) {
-                        sb.append("<td class=\"cells obep\" title=\"").append(_t("Outbound Endpoint")).append("\">")
-                          .append(_t("Outbound Endpoint")).append("</td>");
+                        sb.append("<td class=\"cells obep\" title=\"").append(outboundEndpoint).append("\">")
+                          .append(outboundEndpoint).append("</td>");
                     } else if (from == null) {
-                        sb.append("<td class=\"cells ibgw\" title=\"").append(_t("Inbound Gateway"))
-                          .append("\">").append(_t("Inbound Gateway")).append("</td>");
+                        sb.append("<td class=\"cells ibgw\" title=\"").append(inboundGateway)
+                          .append("\">").append(inboundGateway).append("</td>");
                     } else {
-                        sb.append("<td class=\"cells ptcp\" title=\"").append(_t("Participant"))
-                          .append("\">").append(_t("Participant")).append("</td>");
+                        sb.append("<td class=\"cells ptcp\" title=\"").append(participant)
+                          .append("\">").append(participant).append("</td>");
                     }
                     long timeLeft = cfg.getExpiration()-_context.clock().now();
                     sb.append("<td class=\"cells expiry\" data-sort=").append(timeLeft).append(">");
                     if (timeLeft > 0) {
                         sb.append(renderExpiryBar(timeLeft));
                     } else {
-                        sb.append("<i>").append(_t("grace period")).append("</i>");
+                        sb.append("<i>").append(gracePeriodTip).append("</i>");
                     }
                     sb.append("</td>");
 
@@ -337,7 +343,7 @@ class TunnelRenderer {
                         //    sb.append("<span>").append(DataHelper.formatSize2Decimal(cfg.getAllocatedBW())).append("B/s").append("</span>");
                         //sb.append("</td>");
                         if (recv != 0) {
-                            sb.append("<td title=\"").append(_t("Tunnel identity")).append("\"><span class=tunnel_id>")
+                            sb.append("<td title=\"").append(tunnelIdTip).append("\"><span class=tunnel_id>")
                               .append(recv).append("</span></td>");
                         } else {sb.append("<td><span hidden>&ndash;</span></td>");}
                     }
@@ -346,7 +352,7 @@ class TunnelRenderer {
                     long send = cfg.getSendTunnelId();
                     if (isAdvanced) {
                         if (send != 0) {
-                            sb.append("<td title=\"").append(_t("Tunnel identity")).append("\"><span class=tunnel_id>")
+                            sb.append("<td title=\"").append(tunnelIdTip).append("\"><span class=tunnel_id>")
                               .append(send).append("</span></td>");
                         } else {
                             sb.append("<td><span hidden>&ndash;</span></td>");
@@ -451,6 +457,11 @@ class TunnelRenderer {
                 out.flush();
             }
             int rowsSinceFlush = 0;
+            final String versionTip = _t("Show all routers with this version in the NetDb");
+            final String banlistedTip = _t("Router is banlisted");
+            final String unknownLabel = _t("unknown");
+            final String configurePeerTip = _t("Configure peer");
+            final String editLabel = _t("Edit");
 
             for (Hash h : sorted) {
                 int count = counts.count(h);
@@ -491,7 +502,7 @@ class TunnelRenderer {
 
                 if (version != null) {
                     sb.append("<span class=version title=\"")
-                      .append(_t("Show all routers with this version in the NetDb"))
+                      .append(versionTip)
                       .append("\"><a href=\"/netdb?v=")
                       .append(DataHelper.stripHTML(version))
                       .append("\">")
@@ -499,7 +510,7 @@ class TunnelRenderer {
                       .append("</a></span>");
                 } else if (isBanned) {
                     sb.append("<span class=banlisted title=\"")
-                      .append(_t("Router is banlisted"))
+                      .append(banlistedTip)
                       .append("\">???</span>");
                 } else {sb.append("<span>???</span>");}
                 sb.append("</td><td>");
@@ -519,11 +530,11 @@ class TunnelRenderer {
                 if (rlResult != null && rlResult.canonicalHostName != null &&
                     !rlResult.canonicalHostName.isEmpty() && !rlResult.ip.equals(rlResult.canonicalHostName)) {
                     String display = (rlResult.whois != null) ? rlResult.whois : rlResult.domain;
-                    if (display == null) display = _t("unknown");
+                    if (display == null) display = unknownLabel;
                     sb.append("<span class=rlookup title=\"").append(DataHelper.escapeHTML(rlResult.canonicalHostName)).append("\">")
                       .append(DataHelper.escapeHTML(display)).append("</span>");
                 } else {
-                    sb.append("<span>").append(_t("unknown")).append("</span>");
+                    sb.append("<span>").append(unknownLabel).append("</span>");
                 }
                 sb.append("</td>");
 
@@ -539,7 +550,7 @@ class TunnelRenderer {
                 sb.append("<td class=isBanned hidden>");
                 if (isBanned) {
                     sb.append("<span hidden>ban</span><a class=banlisted href=\"/profiles?show=banned\" title=\"")
-                      .append(_t("Router is banlisted")).append("\">Banned</a> ");
+                      .append(banlistedTip).append("\">Banned</a> ");
                     bannedCount++;
                 }
                 sb.append("</td>");
@@ -548,8 +559,8 @@ class TunnelRenderer {
                 if (info != null && info.getHash() != null) {
                     sb.append("<a class=configpeer href=\"/configpeer?peer=")
                       .append(info.getHash())
-                      .append("\" title=\"Configure peer\">")
-                      .append(_t("Edit"))
+                      .append("\" title=\"").append(configurePeerTip).append("\">")
+                      .append(editLabel)
                       .append("</a>");
                 }
                 sb.append("</td></tr>\n");
@@ -634,6 +645,10 @@ class TunnelRenderer {
             }
 
             final int chunkSize = 50;
+            final String versionTip = _t("Show all routers with this version in the NetDb");
+            final String unknownLabel = _t("unknown");
+            final String configurePeerTip = _t("Configure peer");
+            final String editLabel = _t("Edit");
             for (int start = 0; start < validPeerList.size(); start += chunkSize) {
                 int end = Math.min(start + chunkSize, validPeerList.size());
 
@@ -660,7 +675,7 @@ class TunnelRenderer {
                            .append(">");
                     if (version != null) {
                         chunkSb.append("<span class=version title=\"")
-                               .append(_t("Show all routers with this version in the NetDb"))
+                               .append(versionTip)
                                .append("\"><a href=\"/netdb?v=")
                                .append(DataHelper.stripHTML(version))
                                .append("\">")
@@ -680,7 +695,7 @@ class TunnelRenderer {
                     if (rlResult != null && rlResult.canonicalHostName != null &&
                         !rlResult.canonicalHostName.isEmpty() && !rlResult.ip.equals(rlResult.canonicalHostName)) {
                         String display = (rlResult.whois != null) ? rlResult.whois : rlResult.domain;
-                        if (display == null) display = _t("unknown");
+                        if (display == null) display = unknownLabel;
                         chunkSb.append("<span class=rlookup title=\"").append(DataHelper.escapeHTML(rlResult.canonicalHostName)).append("\">")
                                .append(DataHelper.escapeHTML(display)).append("</span>");
                     } else {
@@ -718,8 +733,8 @@ class TunnelRenderer {
                     }
                     chunkSb.append(String.format("<td><a class=configpeer href=\"/configpeer?peer=%s\" title=\"%s\">%s</a></td></tr>%n",
                         info.getHash(),
-                        _t("Configure peer"),
-                        _t("Edit")));
+                        configurePeerTip,
+                        editLabel));
                 }
                 out.write(chunkSb.toString());
                 out.flush();
@@ -1019,6 +1034,9 @@ class TunnelRenderer {
         }
         final String tib = _t("Inbound");
         final String tob = _t("Outbound");
+        final String localHopTip = _t("Locally hosted tunnel");
+        final String localLabel = _t("Local");
+        final String tunnelIdTip = _t("Tunnel identity");
         boolean stream = tunnels.size() > MAX_BEFORE_STREAMING;
         if (stream) {
             out.append(buf);
@@ -1030,15 +1048,15 @@ class TunnelRenderer {
             TunnelInfo info = tunnels.get(i);
             long timeLeft = info.getExpiration()-_context.clock().now();
             if (timeLeft <= 0) {continue;} // don't display tunnels in their grace period
-            net.i2p.router.TunnelTestStatus testStatus = info.getTestStatus();
+            TunnelTestStatus testStatus = info.getTestStatus();
             live++;
             boolean isInbound = info.isInbound();
-            boolean isFailed = (testStatus == net.i2p.router.TunnelTestStatus.FAILED ||
-                                testStatus == net.i2p.router.TunnelTestStatus.TOO_SLOW ||
-                                testStatus == net.i2p.router.TunnelTestStatus.OVER_BUDGET);
-            boolean isFailing = (testStatus == net.i2p.router.TunnelTestStatus.FAILING);
-            boolean isGood = (testStatus == net.i2p.router.TunnelTestStatus.GOOD);
-            boolean isTesting = (testStatus == net.i2p.router.TunnelTestStatus.TESTING);
+            boolean isFailed = (testStatus == TunnelTestStatus.FAILED ||
+                                testStatus == TunnelTestStatus.TOO_SLOW ||
+                                testStatus == TunnelTestStatus.OVER_BUDGET);
+            boolean isFailing = (testStatus == TunnelTestStatus.FAILING);
+            boolean isGood = (testStatus == TunnelTestStatus.GOOD);
+            boolean isTesting = (testStatus == TunnelTestStatus.TESTING);
             String rowClass = isFailed ? " class=failed" :
                               isFailing ? " class=failing" :
                               isGood ? " class=good" :
@@ -1057,32 +1075,7 @@ class TunnelRenderer {
                     .append(tob)
                     .append("\"></span></td>");
             }
-            buf.append("<td class=status>");
-            switch (testStatus) {
-                case GOOD:
-                    buf.append("<span class=ok title=\"").append(_t("Test successful")).append("\"></span>");
-                    break;
-                case TESTING:
-                    buf.append("<span class=testing title=\"").append(_t("Test in progress")).append("\"></span>");
-                    break;
-                case FAILING:
-                    int fails = info.getConsecutiveFailures();
-                    buf.append("<span class=failing title=\"").append(_t("Test failing (failures: {0})", fails)).append("\"></span>");
-                    break;
-                case FAILED:
-                    buf.append("<span class=failed title=\"").append(_t("Test failed (3 consecutive failures)")).append("\"></span>");
-                    break;
-                case TOO_SLOW:
-                    buf.append("<span class=failed title=\"").append(_t("Tunnel too slow - scheduled for early expiry")).append("\"></span>");
-                    break;
-                case OVER_BUDGET:
-                    buf.append("<span class=failed title=\"").append(_t("Pool over budget - scheduled for early expiry")).append("\"></span>");
-                    break;
-                default:
-                    buf.append("<span class=untested title=\"").append(_t("Not yet tested")).append("\"></span>");
-                    break;
-            }
-            buf.append("</td>");
+            renderTestStatus(buf, info);
             buf.append("<td class=expiry>").append(renderExpiryBar(timeLeft)).append("</td>");
 
             int latency = info.getLastLatency();
@@ -1118,16 +1111,16 @@ class TunnelRenderer {
                     }
                     // Add empty content placeholders to force alignment
                     buf.append(" <td><span class=\"tunnel_peer tunnel_local\" title=\"")
-                       .append(_t("Locally hosted tunnel")).append("\">").append(_t("Local")).append("</span>");
+                       .append(localHopTip).append("\">").append(localLabel).append("</span>");
                     if (isAdvanced) {
-                        buf.append("<span class=tunnel_id title=\"").append(_t("Tunnel identity")).append("\">")
+                        buf.append("<span class=tunnel_id title=\"").append(tunnelIdTip).append("\">")
                            .append((id == null ? "" : "" + id)).append("</span>");
                     }
                     buf.append("</td>");
                 } else {
                     buf.append(" <td><div class=tunnel_peer>").append(netDbLink(peer)).append("</div>");
                     if (isAdvanced) {
-                        buf.append("<span class=tunnel_id title=\"").append(_t("Tunnel identity")).append("\">")
+                        buf.append("<span class=tunnel_id title=\"").append(tunnelIdTip).append("\">")
                            .append((id == null ? "" : " " + id)).append("</span>");
                     }
                     buf.append("</td>");
@@ -1164,6 +1157,41 @@ class TunnelRenderer {
         out.append(buf);
         out.flush();
         buf.setLength(0);
+    }
+
+    /**
+     * Append the tunnel test status cell, with the status-specific tooltip.
+     *
+     * @since 0.9.70+
+     */
+    private void renderTestStatus(StringBuilder buf, TunnelInfo info) {
+        TunnelTestStatus testStatus = info.getTestStatus();
+        buf.append("<td class=status>");
+        switch (testStatus) {
+            case GOOD:
+                buf.append("<span class=ok title=\"").append(_t("Test successful")).append("\"></span>");
+                break;
+            case TESTING:
+                buf.append("<span class=testing title=\"").append(_t("Test in progress")).append("\"></span>");
+                break;
+            case FAILING:
+                int fails = info.getConsecutiveFailures();
+                buf.append("<span class=failing title=\"").append(_t("Test failing (failures: {0})", fails)).append("\"></span>");
+                break;
+            case FAILED:
+                buf.append("<span class=failed title=\"").append(_t("Test failed (3 consecutive failures)")).append("\"></span>");
+                break;
+            case TOO_SLOW:
+                buf.append("<span class=failed title=\"").append(_t("Tunnel too slow - scheduled for early expiry")).append("\"></span>");
+                break;
+            case OVER_BUDGET:
+                buf.append("<span class=failed title=\"").append(_t("Pool over budget - scheduled for early expiry")).append("\"></span>");
+                break;
+            default:
+                buf.append("<span class=untested title=\"").append(_t("Not yet tested")).append("\"></span>");
+                break;
+        }
+        buf.append("</td>");
     }
 
     /**
@@ -1361,7 +1389,7 @@ class TunnelRenderer {
         for (TunnelInfo ti : pool.listTunnels()) {
             // Skip failed tunnels - they should not affect expiry sorting
             if (ti.getTunnelFailed() ||
-                ti.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
+                ti.getTestStatus() == TunnelTestStatus.FAILED ||
                 ti.getConsecutiveFailures() > 1) {
                 continue;
             }
