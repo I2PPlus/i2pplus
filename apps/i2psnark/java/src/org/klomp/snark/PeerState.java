@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -59,7 +60,7 @@ class PeerState implements DataLoader {
     final PeerConnectionOut out;
 
     // Outstanding request
-    private final List<Request> outstandingRequests = new ArrayList<>();
+    private final List<Request> outstandingRequests = new LinkedList<>();
 
     /** the tail (NOT the head) of the request queue */
     private Request lastRequest;

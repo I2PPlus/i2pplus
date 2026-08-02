@@ -192,8 +192,7 @@ class PeerConnectionOut implements Runnable {
                         remainder = m.len - PeerState.PARTSIZE;
                     }
 
-                    m.sendMessage(dout);
-                    if (remainder > 0) {
+                    if (m.sendMessage(dout) && remainder > 0) {
                         peer.uploaded(remainder);
                     }
                 }

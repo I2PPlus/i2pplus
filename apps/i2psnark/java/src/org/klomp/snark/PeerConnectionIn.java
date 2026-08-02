@@ -45,6 +45,35 @@ class PeerConnectionIn implements Runnable {
         lastRcvd = System.currentTimeMillis();
     }
 
+    /**
+     * The minimum complete message length in bytes for a message type, including the type byte.
+     * Messages with variable-length data (PIECE, BITFIELD, EXTENSION) have a minimum of just their
+     * fixed header.
+     *
+     * @param type the message type byte
+     * @return the minimum length for the given type
+     */
+    private static int minLengthFor(byte type) {
+        switch (type) {
+            case Message.HAVE:
+            case Message.SUGGEST:
+            case Message.ALLOWED_FAST:
+                return 5;
+            case Message.PIECE:
+                return 9;
+            case Message.REQUEST:
+            case Message.CANCEL:
+            case Message.REJECT:
+                return 13;
+            case Message.PORT:
+                return 3;
+            case Message.EXTENSION:
+                return 2;
+            default:
+                return 1;
+        }
+    }
+
     /** Disconnect from the peer and release resources. */
     void disconnect() {
         if (quit) {
@@ -96,6 +125,11 @@ class PeerConnectionIn implements Runnable {
                 }
 
                 byte b = din.readByte();
+                // Validate the payload length against the minimum for this message type;
+                // a short prefix is a protocol error and would desync the stream
+                if (i < minLengthFor(b)) {
+                    throw new IOException("Unexpected length prefix: " + i + " for type " + b);
+                }
                 switch (b) {
                     case Message.CHOKE:
                         if (_log.shouldDebug()) {

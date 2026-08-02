@@ -194,20 +194,22 @@ class Message {
      * Sends this message through the given DataOutputStream.
      *
      * @param dos the output stream to write to
+     * @return true if the message was written, false if the deferred data could not be loaded and
+     *     the message was dropped
      * @throws IOException if an I/O error occurs
      */
-    void sendMessage(DataOutputStream dos) throws IOException {
+    boolean sendMessage(DataOutputStream dos) throws IOException {
         // KEEP_ALIVE is special.
         if (type == KEEP_ALIVE) {
             dos.writeInt(0);
-            return;
+            return true;
         }
 
         ByteArray ba;
         // Get deferred data
         if (data == null && dataLoader != null) {
             ba = dataLoader.loadData(piece, begin, length);
-            if (ba == null) return; // hmm will get retried, but shouldn't happen
+            if (ba == null) return false; // dropped, caller must not count it as sent
             data = ba.getData();
         } else {
             ba = null;
@@ -267,6 +269,7 @@ class Message {
 
         // Was pulled from cache in Storage.getPiece() via dataLoader
         if (ba != null && ba.getData().length == BUFSIZE) _cache.release(ba, false);
+        return true;
     }
 
     /** @return a string representation of the message */
