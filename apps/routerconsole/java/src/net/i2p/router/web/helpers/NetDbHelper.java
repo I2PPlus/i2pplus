@@ -61,7 +61,6 @@ public class NetDbHelper extends FormHandler {
     private boolean _lease;
     private boolean _clientOnly;
     private boolean _debug;
-    private boolean _graphical;
     private SigType _type;
     private EncType _etype;
     private boolean _postOK;
@@ -379,12 +378,6 @@ public class NetDbHelper extends FormHandler {
         try { /* ignored */ }
         catch(Exception e) { /* ignored */ }
     }
-
-    /**
-     *  call for non-text-mode browsers
-     *  @since 0.9.1
-     */
-    public void allowGraphical() {_graphical = true;}
 
     /**
      *  Get a session-bound nonce for forms in this page.

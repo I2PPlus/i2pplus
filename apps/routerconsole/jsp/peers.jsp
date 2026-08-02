@@ -23,9 +23,7 @@
 <h1 class=netwrk><%=intl._t("Network Peers")%> &ndash; SSU (<%=intl._t("Advanced")%>)</h1>
 <%  } %>
 <div class=main id=peers>
-<%  peerHelper.storeWriter(out);
-    if (allowIFrame) {peerHelper.allowGraphical();}
-%>
+<%  peerHelper.storeWriter(out);%>
 <jsp:getProperty name="peerHelper" property="peerSummary"/>
 </div>
 <script src=/js/tablesort/sortShared.js></script>

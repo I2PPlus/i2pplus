@@ -10,7 +10,6 @@ import net.i2p.util.Log;
  */
 public class ProfilesHelper extends HelperBase {
     private int _full;
-    private boolean _graphical;
 
     private static final String[] titles = {
                                             _x("All"),             // 0
@@ -53,12 +52,6 @@ public class ProfilesHelper extends HelperBase {
             else if ("banned".equals(show)) _full = 4;
         }
     }
-
-    /**
-     *  call for non-text-mode browsers
-     *  @since 0.9.1
-     */
-    public void allowGraphical() {_graphical = true;}
 
     /**
      *  Render and return the profile summary page.

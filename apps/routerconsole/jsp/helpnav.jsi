@@ -9,7 +9,6 @@
 <div class=confignav id=confignav>
 <%
     // moved to java for ease of translation and to avoid 10 copies
-    // allowIFrame variable from sidebar.jsi
-    navHelper.renderNavBar(request.getRequestURI(), allowIFrame);
+    navHelper.renderNavBar(request.getRequestURI());
 %>
 </div>

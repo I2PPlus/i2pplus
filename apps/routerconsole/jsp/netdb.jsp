@@ -145,9 +145,7 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 %>
 <h1 class=netwrk><%=heading%></h1>
 <div class=main id=netdb>
-<%  formhandler.storeWriter(out);
-    if (allowIFrame) formhandler.allowGraphical();
-%>
+<%  formhandler.storeWriter(out);%>
 <%@include file="formhandler.jsi"%>
 <% if (delayLoad) {%><div id=netdbwrap style=height:5px;opacity:0><% } %>
 <% if ((r == null && ls != null) || l != null || ls != null) {%><div class=leasesets_container><% } %>

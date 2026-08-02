@@ -62,10 +62,9 @@ public class HelpSectionHelper extends HelperBase {
      * Render the help navigation bar
      *
      * @param requestURI the current request URI
-     * @param graphical false for text-mode browsers
      * @throws IOException if rendering fails
      */
-    public void renderNavBar(String requestURI, boolean graphical) throws IOException {
+    public void renderNavBar(String requestURI) throws IOException {
         if (_context == null) { return; }
         StringBuilder buf = new StringBuilder(1024);
         int numTabs = Math.min(pages.length, titles.length);

@@ -40,7 +40,6 @@ public class PeerHelper extends HelperBase {
     private int _sortFlags;
     private String _urlBase;
     private String _transport;
-    private boolean _graphical;
 
     private static final String[] titles = {
                                             _x("Summary"),
@@ -80,12 +79,6 @@ public class PeerHelper extends HelperBase {
 
     /** @since 0.9.38 */
     public void setTransport(String t) {_transport = t;}
-
-    /**
-     *  call for non-text-mode browsers
-     *  @since 0.9.38
-     */
-    public void allowGraphical() {_graphical = true;}
 
     /**
      * @return the peer summary

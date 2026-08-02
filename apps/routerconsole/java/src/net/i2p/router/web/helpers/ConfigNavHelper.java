@@ -71,10 +71,9 @@ public class ConfigNavHelper extends HelperBase {
      *  Render the configuration navigation bar.
      *
      *  @param requestURI the current request URI
-     *  @param graphical false for text-mode browsers
      *  @throws java.io.IOException if writing to the output fails
      */
-    public void renderNavBar(String requestURI, boolean graphical) throws IOException {
+    public void renderNavBar(String requestURI) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<link rel=stylesheet href=/themes/console/confignav.css>\n");
         List<Tab> tabs = new ArrayList<>(pages.length);

@@ -32,9 +32,7 @@
 <h1 class=netwrk><%=title%></h1>
 <div class=main id=profiles>
 <div class=wideload style=height:5px;opacity:0>
-<%  profilesHelper.storeWriter(out);
-    if (allowIFrame) {profilesHelper.allowGraphical();}
-%>
+<%  profilesHelper.storeWriter(out);%>
 <jsp:getProperty name="profilesHelper" property="summary"/>
 </div>
 </div>
