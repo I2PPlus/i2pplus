@@ -8,7 +8,7 @@
 
 /**
  * Finds the changelog pre element, splits content by blank lines,
- * and wraps each block in a lazy-loading span with HTML escaping and marker styling.
+ * and wraps each block in a span with HTML escaping and marker styling.
  * @function spanify
  * @returns {void}
  */
@@ -18,7 +18,7 @@
     const blocks = content.textContent.trim().split("\n\n");
     const wrappedBlocks = blocks.map(function(block) {
       let transformedBlock = block.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/ \* /g, "<b class=star>*</b> ").replace(/   - /g, "<b class=bullet>-</b> ");
-      return "<span class=lazy>" + transformedBlock + "</span>";
+      return "<span>" + transformedBlock + "</span>";
     });
     const wrappedContent = wrappedBlocks.join("\n\n");
     content.innerHTML = wrappedContent;
