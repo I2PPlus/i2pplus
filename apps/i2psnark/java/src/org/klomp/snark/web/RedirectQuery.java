@@ -15,11 +15,11 @@ package org.klomp.snark.web;
  *  scheme, host, or embedded HTML entity must be rejected so the redirect
  *  target can never be an external URL.
  *
- *  @since 0.9.71
+ *  @since 0.9.71+
  */
 public final class RedirectQuery {
 
-    /** @since 0.9.71 */
+    /** @since 0.9.71+ */
     private RedirectQuery() {}
 
     /**
