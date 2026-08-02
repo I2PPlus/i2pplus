@@ -752,6 +752,7 @@ tfoot .rateDown::after,tfoot .rateUp::after{width:6px;display:inline-block;verti
 #torrentSort .ascending,th#torrentSort .descending{right:-11px}
 
 /* action buttons */
+tr:not(.peerinfo) .loading{display:inline-block;width:24px;height:24px;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:24px;content:"";mix-blend-mode:difference;animation:linear spin 5s reverse infinite}
 td.tAction input[type=submit]{margin-top:1px}
 #torrents .tAction input[type=submit]{margin:0 2px;padding:11px;min-width:0;min-height:0;float:none;vertical-align:middle;font-size:0;border:var(--border_input);border-radius:2px;box-shadow:var(--highlight),var(--btn_shadow);background-position:center center;opacity:.9;cursor:pointer;transition:ease 1.s all;will-change:transform}
 #torrents .tAction input:hover,#torrents .tAction input:focus{border:1px solid var(--hover);opacity:1;transition:ease 1.s all}
@@ -856,12 +857,13 @@ img[src$="magnet.png"]{margin-top:-2px;margin-bottom:-2px;display:inline-block;v
 
 /*responsive layout */
 @media (max-width:1499px){
-#filterBar{top:40px}
-.trackerLink img{margin-right:-10px;height:14px}
+.loading{width:20px;height:20px;background-size:20px}
 .tAction input[type=submit]{padding:11px;background-size:13px,100%}
 .tAction input:active{background-size:auto 11px,100%}
+.trackerLink img{margin-right:-10px;height:14px}
 #actionStopAll,#actionStartAll{padding:11px 18px}
 #configs a[href="/config.jsp"]{margin-top:2px}
+#filterBar{top:40px}
 }
 
 @media (max-width:1200px){

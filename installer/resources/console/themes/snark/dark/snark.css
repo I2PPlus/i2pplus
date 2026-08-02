@@ -344,7 +344,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-right:0;
 .tempDisabled{filter:opacity(.3);pointer-events:none;transition:filter ease .5s}
 
 /* action buttons */
-.loading{display:inline-block;width:24px;height:24px;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:24px;content:"";mix-blend-mode:difference;animation:linear spin 5s reverse infinite}
+tr:not(.peerinfo) .loading{display:inline-block;width:24px;height:24px;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:24px;content:"";mix-blend-mode:difference;animation:linear spin 5s reverse infinite}
 #torrents .tAction{padding:1px;width:1%;white-space:nowrap;text-align:center}
 #torrents .tAction input{margin:1px 2px;padding:11px;min-width:0;min-height:0;float:none;vertical-align:middle;font-size:0;border:1px solid #262;border-radius:1px;box-shadow:var(--highlight);background-position:center center;opacity:.75;cursor:pointer;will-change:transform}
 #torrents .actionStart{background:var(--start) no-repeat center center/14px,var(--btnAction),var(--start_hover) no-repeat center center/14px}

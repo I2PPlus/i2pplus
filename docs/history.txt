@@ -1,8 +1,33 @@
+2026-08-02 dr|z3d
+  * I2PSnark:
+    - HTTP and UDP tracker announces retried up to three times
+      before failing, tolerating transient proxy timeouts; UDP retransmit,
+      connect and transaction ID handling fixed
+    - DHT peer lookup runs on its own thread, so slow lookups no
+      longer stall announces; the fixed 30s DHT wait floor is gone
+    - Dashboard ETA/counters fixed, download stream and traversal
+      permission holes closed, XSS in torrent messages escaped, page-size
+      input capped
+    - Robustness pass — bencoding depth and byte-array caps,
+      validated peer message lengths, bounded handshake reads, safer
+      send-queue handling. Long file rechecks no longer hold the global
+      torrent lock, and disk usage is cached for faster pages
+  * Console: NetDB table keeps router row order and filters hashes
+    byte-exact again; changelog page no longer relies on lazy loading;
+    dark-theme graph cosmetics
+  * Router: Avoid NTCP pumper busy-loop when sockets idle (less CPU
+    spin); IPv6 ban-log lines formatted to match IPv4 entries
+
 2026-08-01 dr|z3d
-  * Console: Profiles, tunnels, banlist, and transit summary tables render
-    progressively in 100-row batches so large pages paint before fully
-    loaded; auto-redirect to login now fires only on real session expiry,
-    not router downtime
+  * Console:
+    - Profiles, tunnels, banlist, and transit summary tables render
+      progressively in 100-row batches so large pages paint before fully
+      loaded; auto-redirect to login now fires only on real session expiry,
+      not router downtime
+    - Sidebar auto-refresh hardened — request timeouts with a watchdog
+      so a hung fetch cannot pin the in-flight guard, per-tab SharedWorker
+      client ids, tooltip/interval/listener leak fixes, and removal of dead
+      observer code
   * SusiDNS: Addressbook loads and size queries cached to avoid repeated
     blockfile scans per page render; Run HostChecker button on the config
     page
@@ -15,10 +40,6 @@
   * Tuner: Transport worker pools scale on stage CPU saturation with
     connection-scaled caps; 5s fast cycle with proportional growth, 15s slow
     cycle; fix inverted ranges and pool backoff dead band
-  * Console: Sidebar auto-refresh hardened — request timeouts with a watchdog
-    so a hung fetch cannot pin the in-flight guard, per-tab SharedWorker
-    client ids, tooltip/interval/listener leak fixes, and removal of dead
-    observer code
 
 2026-07-31 dr|z3d
   * I2PSnark:

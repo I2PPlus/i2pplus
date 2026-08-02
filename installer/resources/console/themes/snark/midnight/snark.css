@@ -270,7 +270,7 @@ td.peerCount{padding-left:0;padding-right:5px;width:1%;white-space:nowrap;text-a
 #torrents .peerCount b:hover a,#torrents .peerCount b:hover a span,#torrents .peerCount b a:focus span,#torrents .peerCount b a:active span{color:#fff}
 
  /* action buttons */
-.loading{display:inline-block;width:24px;height:24px;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:24px;content:"";mix-blend-mode:difference;animation:linear spin 5s reverse infinite}
+tr:not(.peerinfo) .loading{display:inline-block;width:24px;height:24px;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:24px;content:"";mix-blend-mode:difference;animation:linear spin 5s reverse infinite}
 td.tAction input{margin-top:1px}
 #torrents #actionStopAll,#torrents #actionStartAll{padding:11px 19px}
 #torrents .actionStart{background:var(--start) no-repeat center center/14px,var(--btnAction),var(--start_hover) no-repeat center center/14px}
