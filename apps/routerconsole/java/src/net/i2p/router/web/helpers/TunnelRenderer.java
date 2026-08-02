@@ -182,7 +182,7 @@ class TunnelRenderer {
                 }
                 else {out.write("client ");}
                 out.write("tabletitle\" ");
-                out.write("id=\"" + client.toBase64().substring(0,4) + "\">");
+                out.write("id=\"" + b64 + "\">");
                 out.write(getTunnelName(in));
                 // links are set to float:right in CSS so they will be displayed in reverse order
                 if (isAdvanced) {
@@ -288,6 +288,7 @@ class TunnelRenderer {
                 final String participant = _t("Participant");
                 final String gracePeriodTip = _t("grace period");
                 final String tunnelIdTip = _t("Tunnel identity");
+                long now = _context.clock().now();
                 for (int i = 0; i < participating.size(); i++) {
                     HopConfig cfg = participating.get(i);
                     int count = cfg.getProcessedMessagesCount();
@@ -311,7 +312,7 @@ class TunnelRenderer {
                         sb.append("<td class=\"cells ptcp\" title=\"").append(participant)
                           .append("\">").append(participant).append("</td>");
                     }
-                    long timeLeft = cfg.getExpiration()-_context.clock().now();
+                    long timeLeft = cfg.getExpiration()-now;
                     sb.append("<td class=\"cells expiry\" data-sort=").append(timeLeft).append(">");
                     if (timeLeft > 0) {
                         sb.append(renderExpiryBar(timeLeft));
@@ -329,7 +330,7 @@ class TunnelRenderer {
                       .append(sizeInKB >= 1024 ? "MB" : "KB")
                       .append("</span></td>");
 
-                    int lifetime = (int) ((_context.clock().now() - cfg.getCreation()) / 1000);
+                    int lifetime = (int) ((now - cfg.getCreation()) / 1000);
                     if (lifetime <= 0) {lifetime = 1;}
                     else if (lifetime > 10*60) {lifetime = 10*60;}
                     float bps = 1024f * count / lifetime;
@@ -474,7 +475,8 @@ class TunnelRenderer {
                 //RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
                 RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(hash));
 
-                String truncHash = h.toBase64().substring(0,4);
+                String hB64 = h.toBase64();
+                String truncHash = hB64.substring(0,4);
 
                 String ip = peerToIP.get(h);
                 if (ip == null) {
@@ -494,7 +496,7 @@ class TunnelRenderer {
                 sb.append("<tr class=lazy><td>")
                   .append(peerFlag(h))
                   .append("</td><td><span class=routerHash><a href=\"netdb?r=")
-                  .append(h.toBase64())
+                  .append(hB64)
                   .append("\">")
                   .append(truncHash)
                   .append("</a></span></td><td data-sort=")
@@ -661,13 +663,14 @@ class TunnelRenderer {
                     int transitTunnelCount = transitCount.count(h);
                     String ip = peerToIP.get(h);
                     String version = info.getOption("router.version");
-                    String truncHash = h.toBase64().substring(0,4);
+                    String hB64 = h.toBase64();
+                    String truncHash = hB64.substring(0,4);
                     ReverseLookupResult rlResult = reverseLookupResults.get(h);
 
                     chunkSb.append("<tr class=lazy><td>")
                            .append(peerFlag(h))
                            .append("</td><td><span class=routerHash><a href=\"netdb?r=")
-                           .append(h.toBase64())
+                           .append(hB64)
                            .append("\">")
                            .append(truncHash)
                            .append("</a></span></td><td data-sort=")
@@ -1044,9 +1047,10 @@ class TunnelRenderer {
             buf.setLength(0);
         }
         int rowsSinceFlush = 0;
+        long now = _context.clock().now();
         for (int i = 0; i < tunnels.size(); i++) {
             TunnelInfo info = tunnels.get(i);
-            long timeLeft = info.getExpiration()-_context.clock().now();
+            long timeLeft = info.getExpiration()-now;
             if (timeLeft <= 0) {continue;} // don't display tunnels in their grace period
             TunnelTestStatus testStatus = info.getTestStatus();
             live++;
