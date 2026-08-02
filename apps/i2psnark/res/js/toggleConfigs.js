@@ -41,8 +41,8 @@ function toggleConfig(table, title) {
     title.classList.add("expanded");
 
     if (isIframed) {
-      parent.postMessage({ command: "scrollToElement", id: title.id }, location.origin);
-      parent.postMessage({ action: 'resize', iframeId: 'i2psnarkframe' }, location.origin);
+      parent.postMessage({ origin: "parent", command: "scrollToElement", id: title.id }, location.origin);
+      parent.postMessage({ origin: "parent", command: "resize", iframeId: "i2psnarkframe" }, location.origin);
     } else {scrollToElement(title);}
   } else {
     table.style.display = "none";

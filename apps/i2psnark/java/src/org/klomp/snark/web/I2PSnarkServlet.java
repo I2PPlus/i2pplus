@@ -773,6 +773,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         if (!isConfigure) {
             out.write(jsPath + "toggleLinks.js type=module></script>\n");
+            out.write(jsPath + "toggleAddCreate.js type=module></script>\n");
         }
         out.write(jsPath + "setFilterQuery.js type=module></script>\n");
         out.write(jsPath + "realtimeSearch.js type=module></script>\n");
@@ -828,7 +829,8 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("<link rel=modulepreload href=").append(resourcePath).append("js/realtimeSearch.js>\n")
                .append("<link rel=modulepreload href=").append(resourcePath).append("js/snarkSort.js>\n")
                .append("<link rel=modulepreload href=").append(resourcePath).append("js/toggleLinks.js>\n")
-               .append("<link rel=modulepreload href=").append(resourcePath).append("js/toggleLog.js>\n");
+               .append("<link rel=modulepreload href=").append(resourcePath).append("js/toggleLog.js>\n")
+               .append("<link rel=modulepreload href=").append(resourcePath).append("js/toggleAddCreate.js>\n");
             if (showStatusFilter) {
                 buf.append("<link rel=modulepreload href=").append(resourcePath).append("js/filterBar.js>\n")
                    .append("<link rel=modulepreload href=").append(resourcePath).append("js/setFilterQuery.js>\n");
@@ -1166,13 +1168,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         appendSnarkFooter(out, buf, stats, totalETA, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), debug, peerParam);
-
-        if (showDebug) out.write("<tr id=dhtDebug>");
-        else out.write("<tfoot><tr id=dhtDebug hidden>");
-        out.write("<th colspan=12><div class=volatile>");
-        if (dht != null) out.write(_manager.getBandwidthListener().toString() + dht.renderStatusHTML());
-        else out.write("<b id=noDHTpeers>" + _t("No DHT Peers") + "</b>");
-        out.write("</div></th></tr></tfoot>\n</table>\n");
+        out.write("</table>\n");
 
         if (isForm) out.write("</form>\n");
         if (total > 0) out.write("<script src=/i2psnark/.res/js/convertTooltips.js></script>\n");
@@ -1527,10 +1523,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                    boolean noSnarks, boolean hasPeers, boolean isUploading, DHT dht,
                                    boolean isStandalone, boolean debug, String peerParam) throws IOException {
 
-        if (_manager.util().isConnecting()) {
-            out.write("<tfoot id=snarkFoot class=initializing><tr><th id=torrentTotals class=left colspan=12></th></tr></tfoot>\n");
-            return;
-        }
+        final boolean connecting = _manager.util().isConnecting();
 
         // Cache constant localized strings that are reused
         final String titleTotalSize = _t("Total size of loaded torrents");
@@ -1550,7 +1543,9 @@ public class I2PSnarkServlet extends BasicServlet {
 
         final String resourcePath = !isStandalone ? (debug ? "/themes/" : _contextPath + WARBASE) : null;
 
-        out.write("<tfoot id=snarkFoot><tr class=volatile><th id=torrentTotals class=left colspan=6><span id=totals>");
+        out.write("<tfoot id=snarkFoot");
+        if (connecting) {out.write(" class=initializing");}
+        out.write("><tr class=volatile><th id=torrentTotals class=left colspan=6><span id=totals>");
         out.write(_manager.getDiskUsage());
 
         // Torrent count span
@@ -1682,7 +1677,27 @@ public class I2PSnarkServlet extends BasicServlet {
         } else {
             out.write("<th colspan=6></th>");
         }
-        out.write("</tr>\n</tfoot>");
+        out.write("</tr>");
+        appendDebugRow(out, dht, peerParam);
+        out.write("</tfoot>");
+    }
+
+    /**
+     * Renders the DHT debug row as the second row of the snark footer, hidden unless
+     * debug mode (?p=2) is active. Kept inside the single #snarkFoot tfoot so browsers
+     * lay it out below the totals row, as multiple tfoot elements render out of order.
+     *
+     * @param out target for the HTML
+     * @param dht the DHT, or null if not running
+     * @param peerParam the query parameter
+     */
+    private void appendDebugRow(PrintWriter out, DHT dht, String peerParam) throws IOException {
+        out.write("\n<tr id=dhtDebug");
+        if (!"2".equals(peerParam)) {out.write(" hidden");}
+        out.write("><th colspan=12><div class=volatile>");
+        if (dht != null) {out.write(_manager.getBandwidthListener().toString() + dht.renderStatusHTML());}
+        else {out.write("<b id=noDHTpeers>" + _t("No DHT Peers") + "</b>");}
+        out.write("</div></th></tr>");
     }
 
     /**

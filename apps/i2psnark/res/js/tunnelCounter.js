@@ -81,20 +81,18 @@ async function getSnarkTunnelCount(interval = 30000) {
  * @function updateTunnelCounts
  * @description Updates the UI badges for inbound and outbound tunnel counts by injecting
  * CSS content rules. Creates a style element if one doesn't exist, and only updates
- * the content if the values have changed.
+ * the content if the values have changed. Without tunnel data the badges show 0.
  * @param {?Object} result - The tunnel count data with inCount and outCount properties.
  * @returns {void}
  */
 function updateTunnelCounts(result) {
-  if (result) {
-    const snarkInCount = document.querySelector("#tnlInCount .badge");
-    const snarkOutCount = document.querySelector("#tnlOutCount .badge");
-    if (snarkInCount && snarkOutCount) {
-      [inLabel, outLabel] = [result.inCount, result.outCount];
-      const styleTag = document.head.querySelector("#tc") || createStyleTag();
-      const styles = `#tnlInCount .badge::after{content:"${inLabel}"}#tnlOutCount .badge::after{content:"${outLabel}"}`;
-      if (styleTag.textContent !== styles) { styleTag.textContent = styles; }
-    }
+  const snarkInCount = document.querySelector("#tnlInCount .badge");
+  const snarkOutCount = document.querySelector("#tnlOutCount .badge");
+  if (snarkInCount && snarkOutCount) {
+    [inLabel, outLabel] = result ? [result.inCount, result.outCount] : ["0", "0"];
+    const styleTag = document.head.querySelector("#tc") || createStyleTag();
+    const styles = `#tnlInCount .badge::after{content:"${inLabel}"}#tnlOutCount .badge::after{content:"${outLabel}"}`;
+    if (styleTag.textContent !== styles) { styleTag.textContent = styles; }
   }
 }
 

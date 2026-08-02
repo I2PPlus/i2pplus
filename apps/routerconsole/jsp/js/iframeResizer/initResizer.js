@@ -26,7 +26,7 @@ function initResizer(frameId) {
           switch (event.data.command) {
             case "scrollToElement":
               const element = iframeChild.document.getElementById(event.data.id);
-              scrollToElement(element, iframeChild);
+              scrollToElement(element);
               break;
             case "resize":
               iFrameResize();
