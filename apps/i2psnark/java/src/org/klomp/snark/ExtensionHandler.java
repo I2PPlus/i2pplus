@@ -66,6 +66,23 @@ abstract class ExtensionHandler {
     private static final int PARALLEL_REQUESTS = 8;
 
     /**
+     * Send an extension message to a peer, looking up its message code for the given type in the
+     * handshake. Silently ignores peers that did not advertise the extension.
+     *
+     * @param peer the peer to send to
+     * @param type the extension type name (TYPE_* constant)
+     * @param payload the bencoded message payload
+     */
+    private static void sendExtension(Peer peer, String type, byte[] payload) {
+        try {
+            int hisMsgCode = peer.getHandshakeMap().get("m").getMap().get(type).getInt();
+            peer.sendExtension(hisMsgCode, payload);
+        } catch (Exception e) {
+            // NPE, no capability
+        }
+    }
+
+    /**
      * Creates a bencoded extension handshake message.
      *
      * @param metasize the metadata size in bytes, or -1 if unknown
@@ -323,7 +340,6 @@ abstract class ExtensionHandler {
         sendMessage(peer, TYPE_REQUEST, piece);
     }
 
-    /** REQUEST and REJECT are the same except for message type */
     /**
      * Sends a metadata request or reject message to a peer.
      *
@@ -336,12 +352,7 @@ abstract class ExtensionHandler {
         map.put("msg_type", Integer.valueOf(type));
         map.put("piece", Integer.valueOf(piece));
         byte[] payload = BEncoder.bencode(map);
-        try {
-            int hisMsgCode = peer.getHandshakeMap().get("m").getMap().get(TYPE_METADATA).getInt();
-            peer.sendExtension(hisMsgCode, payload);
-        } catch (Exception e) {
-            // NPE, no metadata capability
-        }
+        sendExtension(peer, TYPE_METADATA, payload);
     }
 
     /**
@@ -361,12 +372,7 @@ abstract class ExtensionHandler {
         byte[] payload = new byte[dict.length + data.length];
         System.arraycopy(dict, 0, payload, 0, dict.length);
         System.arraycopy(data, 0, payload, dict.length, data.length);
-        try {
-            int hisMsgCode = peer.getHandshakeMap().get("m").getMap().get(TYPE_METADATA).getInt();
-            peer.sendExtension(hisMsgCode, payload);
-        } catch (Exception e) {
-            // NPE, no metadata caps
-        }
+        sendExtension(peer, TYPE_METADATA, payload);
     }
 
     private static final int HASH_LENGTH = 32;
@@ -446,12 +452,7 @@ abstract class ExtensionHandler {
         }
         map.put("added", peers);
         byte[] payload = BEncoder.bencode(map);
-        try {
-            int hisMsgCode = peer.getHandshakeMap().get("m").getMap().get(TYPE_PEX).getInt();
-            peer.sendExtension(hisMsgCode, payload);
-        } catch (Exception e) {
-            // NPE, no PEX caps
-        }
+        sendExtension(peer, TYPE_PEX, payload);
     }
 
     /**
@@ -466,12 +467,7 @@ abstract class ExtensionHandler {
         map.put("port", Integer.valueOf(qport));
         map.put("rport", Integer.valueOf(rport));
         byte[] payload = BEncoder.bencode(map);
-        try {
-            int hisMsgCode = peer.getHandshakeMap().get("m").getMap().get(TYPE_DHT).getInt();
-            peer.sendExtension(hisMsgCode, payload);
-        } catch (Exception e) {
-            // NPE, no DHT caps
-        }
+        sendExtension(peer, TYPE_DHT, payload);
     }
 
     /**
@@ -536,12 +532,7 @@ abstract class ExtensionHandler {
         map.put("num", Integer.valueOf(num));
         map.put("filter", COMMENTS_FILTER);
         byte[] payload = BEncoder.bencode(map);
-        try {
-            int hisMsgCode = peer.getHandshakeMap().get("m").getMap().get(TYPE_COMMENT).getInt();
-            peer.sendExtension(hisMsgCode, payload);
-        } catch (Exception e) {
-            // NPE, no caps
-        }
+        sendExtension(peer, TYPE_COMMENT, payload);
     }
 
     /**
@@ -572,11 +563,6 @@ abstract class ExtensionHandler {
         }
         map.put("comments", lc);
         byte[] payload = BEncoder.bencode(map);
-        try {
-            int hisMsgCode = peer.getHandshakeMap().get("m").getMap().get(TYPE_COMMENT).getInt();
-            peer.sendExtension(hisMsgCode, payload);
-        } catch (Exception e) {
-            // NPE, no caps
-        }
+        sendExtension(peer, TYPE_COMMENT, payload);
     }
 }
