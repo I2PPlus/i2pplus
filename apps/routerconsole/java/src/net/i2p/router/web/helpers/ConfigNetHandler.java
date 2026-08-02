@@ -30,17 +30,13 @@ public class ConfigNetHandler extends FormHandler {
      */
     public ConfigNetHandler() {}
 
-    private String _hostname;
     private boolean _saveRequested;
-    private boolean _recheckReachabilityRequested;
     private boolean _requireIntroductions;
     private boolean _hiddenMode;
     private boolean _dynamicKeys;
     private String _ntcpHostname;
     private String _ntcpPort;
-    private String _tcpPort;
     private String _udpHost1;
-    private String _udpHost2;
     private String _udpPort;
     private String _udpAutoIP;
     private String _ntcpAutoIP;
@@ -69,10 +65,6 @@ public class ConfigNetHandler extends FormHandler {
     protected void processForm() {
         if (_saveRequested || ((_action != null) && (_t("Save changes").equals(_action)))) {
             saveChanges();
-        //} else if (_recheckReachabilityRequested) {
-        //    recheckReachability();
-        } else {
-            // noop
         }
     }
 
@@ -81,11 +73,6 @@ public class ConfigNetHandler extends FormHandler {
      * @param moo ignored
      */
     public void setSave(String moo) { _saveRequested = true; }
-    /**
-     * Set that the user wants to recheck reachability.
-     * @param moo ignored
-     */
-    public void setRecheckReachability(String moo) { _recheckReachabilityRequested = true; }
     /**
      * Set that the user wants to require introducers.
      * @param moo ignored
@@ -148,20 +135,6 @@ public class ConfigNetHandler extends FormHandler {
      */
     public void setIPv6Firewalled(String moo) { _ipv6Firewalled = true; }
 
-    /**
-     * Set the hostname.
-     * @param hostname the hostname
-     */
-    public void setHostname(String hostname) {
-        _hostname = (hostname != null ? hostname.trim() : null);
-    }
-    /**
-     * Set the TCP port.
-     * @param port the port number
-     */
-    public void setTcpPort(String port) {
-        _tcpPort = (port != null ? port.trim() : null);
-    }
     /**
      * Set the NTCP hostname.
      * @param host the hostname
