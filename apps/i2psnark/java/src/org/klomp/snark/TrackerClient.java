@@ -1087,8 +1087,10 @@ public class TrackerClient implements Runnable {
         tr.lastRequestTime = System.currentTimeMillis();
         // Don't wait for a response to stopped when shutting down
         boolean fast = _fastUnannounce && event == UDPTrackerClient.EVENT_STOPPED;
+        // Retry each announce up to 3 times total; EepGet waits 5-65s between attempts and
+        // also retries HTTP 504 gateway timeouts, so transient proxy failures are tolerated
         byte[] fetched =
-                _util.get(s, true, fast ? -1 : 0, small ? 128 : 1024, small ? 1024 : 32 * 1024);
+                _util.get(s, true, fast ? -1 : 2, small ? 128 : 1024, small ? 1024 : 32 * 1024);
         if (fetched == null) {
             throw new IOException("No response from " + tr.host);
         }
