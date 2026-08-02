@@ -1592,21 +1592,13 @@ public class Storage implements Closeable {
             }
 
             // Early typecast, avoid possibly overflowing a temp integer
-            long start = (long) piece * (long) piece_size;
-            int i = 0;
-            long raflen = _torrentFiles.get(i).length;
-            while (start > raflen) {
-                i++;
-                start -= raflen;
-                raflen = _torrentFiles.get(i).length;
-            }
-
+            FileCursor fc = new FileCursor((long) piece * (long) piece_size);
             int written = 0;
             int length = metainfo.getPieceLength(piece);
             while (written < length) {
                 int need = length - written;
-                int len = (start + need < raflen) ? need : (int) (raflen - start);
-                TorrentFile tf = _torrentFiles.get(i);
+                int len = fc.chunk(need);
+                TorrentFile tf = fc.getFile();
                 synchronized (tf) {
                     try {
                         RandomAccessFile raf = tf.checkRAF();
@@ -1641,7 +1633,7 @@ public class Storage implements Closeable {
                                 }
                             }
                         }
-                        raf.seek(start);
+                        raf.seek(fc.getOffset());
                         pp.write(raf, written, len);
                     } catch (IOException ioe) {
                         try {
@@ -1655,11 +1647,7 @@ public class Storage implements Closeable {
                     }
                 }
                 written += len;
-                if (need - len > 0) {
-                    i++;
-                    raflen = _torrentFiles.get(i).length;
-                    start = 0;
-                }
+                fc.advance(len, need);
             }
         } finally {
             pp.release();
@@ -1724,26 +1712,17 @@ public class Storage implements Closeable {
     }
 
     private int getUncheckedPiece(int piece, byte[] bs, int off, int length) throws IOException {
-        // XXX - copy/paste code from putPiece().
         // Early typecast, avoid possibly overflowing a temp integer
-        long start = ((long) piece * (long) piece_size) + off;
-        int i = 0;
-        long raflen = _torrentFiles.get(i).length;
-        while (start > raflen) {
-            i++;
-            start -= raflen;
-            raflen = _torrentFiles.get(i).length;
-        }
-
+        FileCursor fc = new FileCursor(((long) piece * (long) piece_size) + off);
         int read = 0;
         while (read < length) {
             int need = length - read;
-            int len = (start + need < raflen) ? need : (int) (raflen - start);
-            TorrentFile tf = _torrentFiles.get(i);
+            int len = fc.chunk(need);
+            TorrentFile tf = fc.getFile();
             synchronized (tf) {
                 try {
                     RandomAccessFile raf = tf.checkRAF();
-                    raf.seek(start);
+                    raf.seek(fc.getOffset());
                     raf.readFully(bs, read, len);
                 } catch (IOException ioe) {
                     try {
@@ -1757,13 +1736,74 @@ public class Storage implements Closeable {
                 }
             }
             read += len;
+            fc.advance(len, need);
+        }
+        return length;
+    }
+
+    /**
+     * Cursor over the torrent's files, mapping an absolute byte position in the torrent to the
+     * containing file and the offset within it. Used for sequential reads and writes across file
+     * boundaries.
+     *
+     * @since 0.9.71+
+     */
+    private final class FileCursor {
+        private int i;
+        private long raflen;
+        private long start;
+
+        /**
+         * Position the cursor at the given absolute byte offset in the torrent.
+         *
+         * @param pos the byte position in the torrent
+         */
+        FileCursor(long pos) {
+            start = pos;
+            i = 0;
+            raflen = _torrentFiles.get(i).length;
+            while (start > raflen) {
+                i++;
+                start -= raflen;
+                raflen = _torrentFiles.get(i).length;
+            }
+        }
+
+        /** @return the file containing the cursor position */
+        TorrentFile getFile() {
+            return _torrentFiles.get(i);
+        }
+
+        /** @return the offset of the cursor within the current file */
+        long getOffset() {
+            return start;
+        }
+
+        /**
+         * The chunk length from the cursor position to the end of the current file, or need,
+         * whichever is smaller.
+         *
+         * @param need the number of bytes wanted
+         * @return the chunk length
+         */
+        int chunk(int need) {
+            return (start + need < raflen) ? need : (int) (raflen - start);
+        }
+
+        /**
+         * Advance the cursor past a consumed chunk, moving to the next file when the chunk ended at
+         * a file boundary.
+         *
+         * @param len the chunk length just consumed
+         * @param need the number of bytes wanted before the chunk was taken
+         */
+        void advance(int len, int need) {
             if (need - len > 0) {
                 i++;
                 raflen = _torrentFiles.get(i).length;
                 start = 0;
             }
         }
-        return length;
     }
 
     private static final long RAF_CLOSE_DELAY = 4 * (long) 60 * 1000;

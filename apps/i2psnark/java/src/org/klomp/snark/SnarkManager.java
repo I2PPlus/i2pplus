@@ -2804,9 +2804,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Add a torrent from a MetaInfo. Save the MetaInfo data to filename. Holds the snarks lock to
-     * prevent interference from the DirMonitor. This verifies that a torrent with this infohash is
-     * not already added. This may take a LONG time to create or check the storage.
+     * Add a torrent from a MetaInfo. Save the MetaInfo data to filename. Serialized on the add
+     * lock to prevent interference from the DirMonitor. This verifies that a torrent with this
+     * infohash is not already added. This may take a LONG time to create or check the storage, so
+     * the global snarks lock is only held for the duplicate checks.
      *
      * <p>Called from servlet. This is only for the 'create torrent' form.
      *
@@ -2827,60 +2828,71 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             File baseFile,
             boolean dontAutoStart)
             throws IOException {
-        // prevent interference by DirMonitor
-        synchronized (_snarks) {
-            Snark snark = getTorrentByInfoHash(metainfo.getInfoHash());
-            String msg;
-            if (snark != null) {
-                msg =
-                        _t(
-                                "Torrent with this info hash is already running: {0}",
-                                snark.getBaseName());
-                addMessage(msg);
-                if (!_context.isRouterContext()) {
-                    System.out.println(" • " + msg);
-                }
-                return false;
-            }
-            String filtered = Storage.filterName(metainfo.getName());
-            snark = getTorrentByBaseName(filtered);
-            if (snark != null) {
-                msg =
-                        _t(
-                                "Torrent with the same data location is already running: {0}",
-                                snark.getBaseName());
-                addMessage(msg);
-                if (!_context.isRouterContext()) {
-                    System.out.println(" • " + msg);
-                }
-                return false;
-            }
-            if (bitfield != null) {
-                saveTorrentStatus(
-                        metainfo, bitfield, null, false, baseFile, true, 0, 0,
-                        true); // no file priorities
-            }
-            // Prevent addTorrent from rechecking
-            if (filename == null) {
-                File f = new File(getDataDir(), filtered + ".torrent");
-                if (f.exists()) {
+        // Serialize with the DirMonitor, which also takes this lock in addTorrent()
+        synchronized (_addSnarkLock) { // Double-check
+            synchronized (_snarks) {
+                Snark snark = getTorrentByInfoHash(metainfo.getInfoHash());
+                String msg;
+                if (snark != null) {
                     msg =
-                            _t("Failed to copy torrent file to {0}", f.getAbsolutePath())
-                                    + _t(" - torrent file already exists");
+                            _t(
+                                    "Torrent with this info hash is already running: {0}",
+                                    snark.getBaseName());
                     addMessage(msg);
                     if (!_context.isRouterContext()) {
                         System.out.println(" • " + msg);
                     }
-                    _log.error("[I2PSnark] Torrent file already exists: " + f);
+                    return false;
                 }
-                filename = f.getAbsolutePath();
+                String filtered = Storage.filterName(metainfo.getName());
+                snark = getTorrentByBaseName(filtered);
+                if (snark != null) {
+                    msg =
+                            _t(
+                                    "Torrent with the same data location is already running: {0}",
+                                    snark.getBaseName());
+                    addMessage(msg);
+                    if (!_context.isRouterContext()) {
+                        System.out.println(" • " + msg);
+                    }
+                    return false;
+                }
+                if (filename == null) {
+                    File f = new File(getDataDir(), filtered + ".torrent");
+                    if (f.exists()) {
+                        msg =
+                                _t("Failed to copy torrent file to {0}", f.getAbsolutePath())
+                                        + _t(" - torrent file already exists");
+                        addMessage(msg);
+                        if (!_context.isRouterContext()) {
+                            System.out.println(" • " + msg);
+                        }
+                        _log.error("[I2PSnark] Torrent file already exists: " + f);
+                    }
+                    filename = f.getAbsolutePath();
+                }
+                if (bitfield != null) {
+                    saveTorrentStatus(
+                            metainfo,
+                            bitfield,
+                            null,
+                            false,
+                            baseFile,
+                            true,
+                            0,
+                            0,
+                            true); // no file priorities
+                }
             }
             try {
                 locked_writeMetaInfo(
-                        metainfo, filename, areFilesPublic()); // hold the lock for a long time
+                        metainfo, filename, areFilesPublic());
+                // Prevent addTorrent from rechecking
+                // The long storage check runs without the global snarks lock;
+                // addTorrent() re-verifies duplicates under this same add lock
                 return addTorrent(filename, baseFile, dontAutoStart);
             } catch (IOException ioe) {
-                msg = _t("Failed to copy torrent file to {0}", filename);
+                String msg = _t("Failed to copy torrent file to {0}", filename);
                 addMessage(msg);
                 if (!_context.isRouterContext()) {
                     System.out.println(" • " + msg);
