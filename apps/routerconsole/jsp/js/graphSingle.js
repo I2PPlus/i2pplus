@@ -154,16 +154,16 @@ function initButtons() {
 }
 
 /**
- * Initializes CSS injection, clearing any existing interval and setting up
- * the injection timer.
+ * Injects the graph container width style in one shot. Safe to call before
+ * the image has loaded - the width falls back to the image attribute until
+ * the next onload event re-injects with the natural width.
  * @function initCss
  * @returns {void}
  */
 function initCss() {
-  let graphcss;
   if (window._graphCssTimer) {clearInterval(window._graphCssTimer);}
-  if (!graphcss || !graphImage) {window._graphCssTimer = setInterval(() => injectCss(), 500);}
-  else {injectCss();}
+  if (!graphImage) {return;}
+  injectCss();
 }
 
 /**
@@ -172,7 +172,7 @@ function initCss() {
  * @returns {void}
  */
 function injectCss() {
-  if (!graphImage) {setTimeout(() => {injectCss();}, 100);}
+  if (!graphImage) {return;}
   var graphWidth = graphImage.naturalWidth;
   var graphHeight = graphImage.naturalHeight;
   var graphcss = document.getElementById("graphcss");
