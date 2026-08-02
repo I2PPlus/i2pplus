@@ -5704,6 +5704,28 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * List the files in a directory and wrap each in a FileAndIndex with the given remaining
+     * array.
+     *
+     * @param dir the directory to list
+     * @param storage the storage for the torrent
+     * @param remainingArray the precomputed remaining byte counts
+     * @return the wrapped file list, or null if the directory cannot be listed or is empty
+     */
+    private static List<Sorters.FileAndIndex> listFileAndIndex(
+            File dir, Storage storage, long[] remainingArray) {
+        File[] ls = dir.listFiles();
+        if (ls == null || ls.length == 0) {
+            return null;
+        }
+        List<Sorters.FileAndIndex> rv = new ArrayList<>(ls.length);
+        for (int i = 0; i < ls.length; i++) {
+            rv.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray));
+        }
+        return rv;
+    }
+
+    /**
      * Is there at least one complete audio file in this directory or below?
      * Recursive.
      *
@@ -5714,12 +5736,8 @@ public class I2PSnarkServlet extends BasicServlet {
         for (Sorters.FileAndIndex fai : fileList) {
             if (fai.isDirectory) {
                 // recurse
-                File[] ls = fai.file.listFiles();
-                if (ls != null && ls.length > 0) {
-                    List<Sorters.FileAndIndex> fl2 = new ArrayList<>(ls.length);
-                    for (int i = 0; i < ls.length; i++) {fl2.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray));}
-                    if (hasCompleteAudio(fl2, storage, remainingArray)) {return true;}
-                }
+                List<Sorters.FileAndIndex> fl2 = listFileAndIndex(fai.file, storage, remainingArray);
+                if (fl2 != null && hasCompleteAudio(fl2, storage, remainingArray)) {return true;}
                 continue;
             }
             if (fai.remaining != 0) {continue;}
@@ -5759,12 +5777,10 @@ public class I2PSnarkServlet extends BasicServlet {
         if (pathInTorrent.equals("/")) {r = sbase;}
         else {r = new File(sbase, pathInTorrent);}
         if (!r.isDirectory()) {return null;}
-        File[] ls = r.listFiles();
-        if (ls == null) {return null;}
-        List<Sorters.FileAndIndex> fileList = new ArrayList<>(ls.length);
         // precompute remaining for all files for efficiency
         long[] remainingArray = storage.remaining();
-        for (int i = 0; i < ls.length; i++) {fileList.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray));}
+        List<Sorters.FileAndIndex> fileList = listFileAndIndex(r, storage, remainingArray);
+        if (fileList == null) {return null;}
 
         boolean showSort = fileList.size() > 1;
         int sort = 0;
@@ -5794,11 +5810,9 @@ public class I2PSnarkServlet extends BasicServlet {
         for (Sorters.FileAndIndex fai : fileList) {
             if (fai.isDirectory) {
                 // recurse
-                File[] ls = fai.file.listFiles();
-                if (ls != null && ls.length > 0) {
-                    List<Sorters.FileAndIndex> fl2 = new ArrayList<>(ls.length);
-                    for (int i = 0; i < ls.length; i++) {fl2.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray));}
-                    if (ls.length > 1) {DataHelper.sort(fl2, Sorters.getFileComparator(sort, this));}
+                List<Sorters.FileAndIndex> fl2 = listFileAndIndex(fai.file, storage, remainingArray);
+                if (fl2 != null) {
+                    if (fl2.size() > 1) {DataHelper.sort(fl2, Sorters.getFileComparator(sort, this));}
                     String name = fai.file.getName();
                     String url2 = reqURL + encodePath(name) + '/';
                     getPlaylist(buf, fl2, url2, sort, storage, remainingArray);
