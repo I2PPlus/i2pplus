@@ -127,7 +127,6 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final Pattern INFOHASH_PAREN = Pattern.compile(" \\(");
     private static final Pattern HEX_PATTERN = Pattern.compile("[a-fA-F0-9]+");
     private static final Pattern BASE32_PATTERN = Pattern.compile("[a-zA-Z2-7]+");
-    private static final Pattern NUMBER_PATTERN = Pattern.compile("\\d+");
 
     /**  theme path */
     private String _themePath;
@@ -1870,20 +1869,6 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Validates that a string is a valid numeric value (optionally negative).
-     *
-     * @param str the string to validate, may be null
-     * @return true if the string represents a valid integer
-     */
-    private static boolean isValidNumeric(String str) {
-        if (str == null || str.isEmpty()) {return false;}
-        String regex = "^-?[0-9]\\d*$";
-        if (!str.matches(regex)) {return false;}
-        int num = Integer.parseInt(str);
-        return true;
-    }
-
-    /**
      *  Build HTML-escaped and stripped query string.
      *  Keeps any existing search param.
      *
@@ -1925,7 +1910,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     } else if ("search".equals(paramName)) {value = DataHelper.escapeHTML(value);}
                 }
             }
-            if (isValidNumeric(value) && value != null && !value.isEmpty()) {
+            if (RedirectQuery.isValidNumeric(value) && value != null && !value.isEmpty()) {
                 if (buf.length() <= 0) {buf.append("?").append(paramName).append("=");}
                 else {buf.append("&").append(paramName).append("=");}
                 buf.append(value);
@@ -2814,7 +2799,15 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Redirect a POST to a GET (P-R-G), preserving the peer string
+     *  Redirect a POST to a GET (P-R-G), preserving the query string.
+     *  The query string must only contain the numeric params that
+     *  {@link #getQueryString} emits, so the redirect target can never
+     *  be an attacker-supplied URL.
+     *
+     *  @param req the request
+     *  @param resp the response
+     *  @param p the query string, may be null or empty
+     *  @throws IOException on write failure
      *  @since 0.9.5
      */
     private void sendRedirect(HttpServletRequest req, HttpServletResponse resp, String p) throws IOException {
@@ -2822,14 +2815,10 @@ public class I2PSnarkServlet extends BasicServlet {
         // Trim trailing "_post" if present
         if (url.endsWith("_post")) {url = url.substring(0, url.length() - 5);}
 
-        // Validate parameter p as numeric (digits only)
         if (p != null && !p.isEmpty()) {
             // Remove any HTML entities &amp; before validating
             String decodedP = p.replace("&amp;", "&");
-            // Check that decodedP only contains digits and optional query characters
-            // Example: if p is query string starting with '?', allow appropriate format
-            // For strict numeric only:
-            if (!NUMBER_PATTERN.matcher(decodedP).matches()) {
+            if (!RedirectQuery.isSafeRedirectQuery(decodedP)) {
                 // Invalid redirect parameter, reject request
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid redirect parameter");
                 return;
@@ -2838,7 +2827,6 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         // Perform redirect safely
         resp.sendRedirect(url);
-        return;
     }
 
     /**
