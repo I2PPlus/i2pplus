@@ -27,6 +27,10 @@ import java.util.Map;
  */
 public class BDecoder {
 
+    // The maximum allowed length of a bencoded byte array, to prevent
+    // allocation of an attacker-controlled amount of memory
+    private static final int MAX_BYTE_ARRAY_LENGTH = 64 * 1024 * 1024;
+
     // The InputStream to BDecode.
     private final InputStream in;
 
@@ -153,7 +157,9 @@ public class BDecoder {
         c = read();
         int i = c - '0';
         while (i >= 0 && i <= 9) {
-            // XXX - This can overflow!
+            if (num > (MAX_BYTE_ARRAY_LENGTH - i) / 10) {
+                throw new InvalidBEncodingException("Byte array length too large");
+            }
             num = num * 10 + i;
             c = read();
             i = c - '0';
