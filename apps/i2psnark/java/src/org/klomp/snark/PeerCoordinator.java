@@ -153,6 +153,27 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     private final List<PartialPiece> partialPieces;
 
+    /**
+     * piece ids currently in partialPieces, for O(1) membership checks. Sync on wantedPieces.
+     *
+     * @since 0.9.68+
+     */
+    private final Set<Integer> partialIds = new HashSet<>(8);
+
+    /**
+     * index of wantedPieces by piece id, for O(1) lookups. Sync on wantedPieces.
+     *
+     * @since 0.9.68+
+     */
+    private final Map<Integer, Piece> wantedMap = new HashMap<>(64);
+
+    /**
+     * whether wantedPieces needs resorting (rarest-first). Sync on wantedPieces.
+     *
+     * @since 0.9.68+
+     */
+    private boolean wantedDirty = true;
+
     private volatile boolean halted;
 
     private final MagnetState magnetState;
@@ -315,6 +336,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             }
             wantedBytes = count;
             Collections.shuffle(wantedPieces, _random);
+            wantedMap.clear();
+            for (Piece p : wantedPieces) {
+                wantedMap.put(Integer.valueOf(p.getId()), p);
+            }
+            wantedDirty = true;
         }
     }
 
@@ -770,6 +796,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 pp.release();
             }
             partialPieces.clear();
+            partialIds.clear();
         }
     }
 
@@ -787,6 +814,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             for (Piece pc : wantedPieces) {
                 pc.clear();
             }
+            wantedDirty = true;
         }
         timer.schedule((CHECK_PERIOD / 2) + _random.nextInt((int) CHECK_PERIOD));
     }
@@ -1037,11 +1065,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     @Override
     public boolean gotHave(Peer peer, int piece) {
         synchronized (wantedPieces) {
-            for (Piece pc : wantedPieces) {
-                if (pc.getId() == piece) {
-                    pc.addPeer(peer);
-                    return true;
-                }
+            Piece pc = wantedMap.get(Integer.valueOf(piece));
+            if (pc != null) {
+                pc.addPeer(peer);
+                wantedDirty = true;
+                return true;
             }
             return false;
         }
@@ -1058,6 +1086,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     p.addPeer(peer);
                     rv = true;
                 }
+            }
+            if (rv) {
+                wantedDirty = true;
             }
         }
         return rv;
@@ -1099,8 +1130,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         List<Piece> requested = new ArrayList<>();
         int wantedSize = END_GAME_THRESHOLD + 1;
         synchronized (wantedPieces) {
-            if (record) {
+            if (record && wantedDirty) {
                 Collections.sort(wantedPieces);
+                wantedDirty = false;
             } // Sort in order of rarest first.
             Iterator<Piece> it = wantedPieces.iterator();
             while (piece == null && it.hasNext()) {
@@ -1112,20 +1144,14 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 if (havePieces.get(p.getId()) && !p.isRequested()) {
                     // never ever choose one that's in partialPieces, or we
                     // will create a second one and leak
-                    boolean hasPartial = false;
-                    for (PartialPiece pp : partialPieces) {
-                        if (pp.getPiece() == p.getId()) {
-                            if (_log.shouldDebug()) {
-                                _log.debug(
-                                        "wantPiece() skipping partial for ["
-                                                + peer
-                                                + "] [Piece "
-                                                + pp
-                                                + "]");
-                            }
-                            hasPartial = true;
-                            break;
-                        }
+                    boolean hasPartial = partialIds.contains(Integer.valueOf(p.getId()));
+                    if (hasPartial && _log.shouldDebug()) {
+                        _log.debug(
+                                "wantPiece() skipping partial for ["
+                                        + peer
+                                        + "] [Piece "
+                                        + p.getId()
+                                        + "]");
                     }
                     if (!hasPartial) {
                         piece = p;
@@ -1248,6 +1274,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 if (pri[i] >= 0 && !bitfield.get(i) && !want.get(i)) {
                     Piece piece = new Piece(i);
                     wantedPieces.add(piece);
+                    wantedMap.put(Integer.valueOf(i), piece);
                     wantedBytes += metainfo.getPieceLength(i);
                     // As connections are already up, new Pieces will
                     // not have their PeerID list populated, so do that.
@@ -1272,10 +1299,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     p.setPriority(priority);
                 } else {
                     iter.remove();
+                    wantedMap.remove(Integer.valueOf(p.getId()));
                     toCancel.add(p);
                     wantedBytes -= metainfo.getPieceLength(p.getId());
                 }
             }
+            wantedDirty = true;
             if (_log.shouldDebug()) {
                 _log.debug("Updated piece priorities, now wanted: " + wantedPieces);
             }
@@ -1352,9 +1381,10 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
         // try/catch outside the sync to avoid deadlock in the catch
         try {
+            Piece p;
             synchronized (wantedPieces) {
-                Piece p = new Piece(piece);
-                if (!wantedPieces.contains(p)) {
+                p = wantedMap.get(Integer.valueOf(piece));
+                if (p == null) {
                     if (_log.shouldDebug()) {
                         _log.debug(
                                 "Received unwanted piece ["
@@ -1375,49 +1405,72 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                         pp.release();
                         return true;
                     }
-                }
-
-                // try/catch moved outside of sync
-                // this takes forever if complete, as it rechecks
-                if (storage.putPiece(pp)) {
-                    if (_log.shouldDebug()) {
-                        _log.debug(
-                                "Received valid piece ["
-                                        + piece
-                                        + "/"
-                                        + metainfo.getPieces()
-                                        + "] from ["
-                                        + peer
-                                        + "] for "
-                                        + metainfo.getName());
-                    }
                 } else {
-                    // so we will try again
-                    markUnrequested(peer, piece);
-                    removePartialPiece(piece); // just in case
-                    // Mark this peer as not having the piece. PeerState will update its bitfield.
-                    for (Piece pc : wantedPieces) {
-                        if (pc.getId() == piece) {
-                            pc.removePeer(peer);
-                            break;
-                        }
-                    }
-                    if (_log.shouldDebug()) {
-                        _log.debug(
-                                "Received BAD piece ["
-                                        + piece
-                                        + "/"
-                                        + metainfo.getPieces()
-                                        + "] from ["
-                                        + peer
-                                        + "] for "
-                                        + metainfo.getName());
-                    }
-                    return false; // No need to announce BAD piece to peers.
+                    // claim the piece so no other peer writes it while we do the disk I/O
+                    wantedMap.remove(Integer.valueOf(piece));
+                    wantedPieces.remove(p);
                 }
-                wantedPieces.remove(p);
-                wantedBytes -= metainfo.getPieceLength(p.getId());
-            } // synch
+            }
+
+            // try/catch moved outside of sync
+            // this takes forever if complete, as it rechecks
+            if (storage.putPiece(pp)) {
+                if (_log.shouldDebug()) {
+                    _log.debug(
+                            "Received valid piece ["
+                                    + piece
+                                    + "/"
+                                    + metainfo.getPieces()
+                                    + "] from ["
+                                    + peer
+                                    + "] for "
+                                    + metainfo.getName());
+                }
+            } else {
+                // so we will try again
+                markUnrequested(peer, piece);
+                removePartialPiece(piece); // just in case
+                // Mark this peer as not having the piece. PeerState will update its bitfield.
+                synchronized (wantedPieces) {
+                    if (p != null) {
+                        Piece dup = wantedMap.remove(Integer.valueOf(piece));
+                        if (dup != null) {
+                            wantedPieces.remove(dup);
+                        } else {
+                            wantedBytes += metainfo.getPieceLength(piece);
+                        }
+                        p.removePeer(peer);
+                        p.setRequested(peer, false);
+                        wantedPieces.add(p);
+                        wantedMap.put(Integer.valueOf(piece), p);
+                        wantedDirty = true;
+                    }
+                }
+                if (_log.shouldDebug()) {
+                    _log.debug(
+                            "Received BAD piece ["
+                                    + piece
+                                    + "/"
+                                    + metainfo.getPieces()
+                                    + "] from ["
+                                    + peer
+                                    + "] for "
+                                    + metainfo.getName());
+                }
+                return false; // No need to announce BAD piece to peers.
+            }
+            if (p != null) {
+                synchronized (wantedPieces) {
+                    // discard a stale re-add from updatePiecePriorities during the write
+                    Piece dup = wantedMap.remove(Integer.valueOf(piece));
+                    if (dup != null) {
+                        wantedPieces.remove(dup);
+                        wantedBytes -= metainfo.getPieceLength(piece);
+                    }
+                    wantedBytes -= metainfo.getPieceLength(piece);
+                    wantedDirty = true;
+                }
+            }
         } catch (IOException ioe) {
             String msg = "Error writing to storage [piece " + piece + "] for " + metainfo.getName();
             msg = msg + "\n* ";
@@ -1462,6 +1515,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 ppp.release();
             }
             partialPieces.clear();
+            partialIds.clear();
         }
         return true;
     }
@@ -1533,6 +1587,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 piece.removePeer(peer);
                 piece.setRequested(peer, false);
             }
+            wantedDirty = true;
         }
     }
 
@@ -1568,6 +1623,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     int idx = partialPieces.indexOf(pp);
                     if (idx < 0) {
                         partialPieces.add(pp);
+                        partialIds.add(Integer.valueOf(pp.getPiece()));
                         if (_log.shouldInfo()) {
                             _log.info("Saving orphaned partial piece (new) " + pp);
                         }
@@ -1589,6 +1645,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                         // sorts by preference, highest first
                         Collections.sort(partialPieces);
                         PartialPiece gone = partialPieces.remove(partialPieces.size() - 1);
+                        partialIds.remove(Integer.valueOf(gone.getPiece()));
                         gone.release();
                         if (_log.shouldInfo()) {
                             _log.info("Discarding orphaned partial piece (list full) " + gone);
@@ -1751,17 +1808,16 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     // there should be only one but keep going to be sure
                 }
             }
+            partialIds.remove(Integer.valueOf(piece));
         }
     }
 
     /** Clear the requested flag for a piece */
     private void markUnrequested(Peer peer, int piece) {
         synchronized (wantedPieces) {
-            for (Piece pc : wantedPieces) {
-                if (pc.getId() == piece) {
-                    pc.setRequested(peer, false);
-                    return;
-                }
+            Piece pc = wantedMap.get(Integer.valueOf(piece));
+            if (pc != null) {
+                pc.setRequested(peer, false);
             }
         }
     }
