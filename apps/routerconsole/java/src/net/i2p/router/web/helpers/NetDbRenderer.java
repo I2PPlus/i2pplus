@@ -271,7 +271,9 @@ class NetDbRenderer {
 
         // Apply filters
         if (routerPrefix != null) {
-            routerStream = routerStream.filter(ri -> ri.getIdentity().getHash().toBase64().startsWith(routerPrefix));
+            final byte[] prefixBytes = Base64.decode(routerPrefix);
+            routerStream = routerStream.filter(ri -> prefixBytes != null && prefixBytes.length > 0 &&
+                                                startsWith(ri.getIdentity().getHash().getData(), prefixBytes));
         }
         if (version != null) {
             routerStream = routerStream.filter(ri -> version.equals(ri.getVersion()));
@@ -1003,8 +1005,9 @@ class NetDbRenderer {
         } else {buf.append("<table class=\"leaseset").append(!debug ? " lazy" : "").append("\">");}
         buf.append("<tr><th><b class=lskey>");
         if (type == DatabaseEntry.KEY_TYPE_META_LS2) {buf.append(_t("Meta"));}
+        String keyB64 = key != null ? key.toBase64() : null;
         buf.append(_t("LeaseSet")).append(":</b> <code title =\"")
-           .append(_t("LeaseSet Key")).append("\">").append(key != null ? key.toBase64() : "null").append("</code>");
+           .append(_t("LeaseSet Key")).append("\">").append(keyB64 != null ? keyB64 : "null").append("</code>");
         if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 || _context.keyRing().get(key) != null) {
             buf.append(" <b class=encls>[").append(_t("Encrypted")).append("]</b>");
         }
@@ -1012,7 +1015,7 @@ class NetDbRenderer {
         if (_context.clientManager().isLocal(key)) {
             buf.append("<th>");
             boolean published = _context.clientManager().shouldPublishLeaseSet(key);
-            buf.append("<a href=\"tunnels#").append(key.toBase64().substring(0,4)).append("\"><span class=\"lsdest");
+            buf.append("<a href=\"tunnels#").append(keyB64.substring(0,4)).append("\"><span class=\"lsdest");
             if (published) {buf.append(" published");}
             buf.append("\" title=\"").append(_t("View local tunnels for destination"));
             if (published) {buf.append(" (").append(_t("published")).append(")");}
@@ -1980,23 +1983,39 @@ class NetDbRenderer {
         int chunkSize = BATCH_SIZE;
         List<RouterInfo> list = new ArrayList<>(routerInfos);
         StringBuilder fullHtml = new StringBuilder();
-        Object lock = new Object();
         for (int start = 0; start < list.size(); start += chunkSize) {
             int end = Math.min(start + chunkSize, list.size());
             List<RouterInfo> chunk = list.subList(start, end);
-            List<CompletableFuture<Void>> futures = new ArrayList<>();
+            List<CompletableFuture<StringBuilder>> futures = new ArrayList<>();
             for (RouterInfo routerInfo : chunk) {
                 futures.add(
-                    CompletableFuture.runAsync(() -> {
+                    CompletableFuture.supplyAsync(() -> {
                         StringBuilder buffer = new StringBuilder();
                         renderRouterInfo(buffer, routerInfo, isLocalRouter);
-                        synchronized (lock) {fullHtml.append(buffer);}
+                        return buffer;
                     }, executor)
                 );
             }
-            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+            for (CompletableFuture<StringBuilder> future : futures) {
+                fullHtml.append(future.join());
+            }
         }
         return fullHtml.toString();
+    }
+
+    /**
+     *  True if the needle is a prefix of the haystack.
+     *
+     *  @param haystack the data to check, never null
+     *  @param needle non-empty prefix to find
+     *  @return whether haystack starts with needle
+     */
+    private static boolean startsWith(byte[] haystack, byte[] needle) {
+        if (needle.length > haystack.length) {return false;}
+        for (int i = 0; i < needle.length; i++) {
+            if (haystack[i] != needle[i]) {return false;}
+        }
+        return true;
     }
 
     private static final int SSU = 1;
