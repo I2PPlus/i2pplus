@@ -335,19 +335,21 @@ class BanlistRenderer {
             buf.setLength(0);
         }
         int rowsSinceFlush = 0;
+        long now = _context.clock().now();
 
         // Render hash-based bans
         for (Map.Entry<Hash, Banlist.Entry> e : entries.entrySet()) {
             Hash key = e.getKey();
             Banlist.Entry entry = e.getValue();
-            long expires = entry.expireOn - _context.clock().now();
+            long expires = entry.expireOn - now;
             String expireString = DataHelper.formatDuration2(expires);
             if (expires <= 0 || key.equals(Hash.FAKE_HASH) || entry.cause == null ||
                 (entry.cause.toLowerCase().contains("hash") &&
                  !entry.cause.toLowerCase().contains("hashpatterndetector"))) {
                 continue;
             }
-            String caps = capsMap.get(key.toBase64());
+            String b64 = key.toBase64();
+            String caps = capsMap.get(b64);
             if (caps == null) {
                 caps = getRouterCaps(key);
             }
@@ -383,7 +385,7 @@ class BanlistRenderer {
                 reason = "Sybil Analysis";
             }
             // Always try to get IP:PORT from sessionbans log first, as it contains port info
-            String ipPort = ipMap.get(key.toBase64());
+            String ipPort = ipMap.get(b64);
             if (ipPort != null) {
                 ip = extractIP(ipPort);
                 port = extractPort(ipPort);
@@ -391,7 +393,7 @@ class BanlistRenderer {
                  // Debug: Check if hash exists in banlist but not in sessionbans
                  if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(Log.DEBUG)) {
                      _context.logManager().getLog(BanlistRenderer.class).debug(
-                         "Hash not found in ipMap: " + key.toBase64().substring(0, 8));
+                         "Hash not found in ipMap: " + b64.substring(0, 8));
                  }
              }
             // If still no IP, try extractedIP from reason
@@ -407,7 +409,7 @@ class BanlistRenderer {
                 ip = "";
             }
             // First try to get hostname from log (already includes IP and rdns), fallback to reverse lookup
-            String hostname = hostnameMap.get(key.toBase64());
+            String hostname = hostnameMap.get(b64);
             if (hostname == null && ip != null && !ip.isEmpty()) {
                 hostname = reverseLookup(ip);
             }
@@ -420,12 +422,12 @@ class BanlistRenderer {
             // Fallback to IP lookup if hash lookup failed or returned "xx"
             if (("xx".equals(countryCode) || countryCode.isEmpty()) && ip != null && !ip.isEmpty()) {
                 // Check if ipPort was actually in the map (for debugging)
-                String ipPortDebug = ipMap.get(key.toBase64());
+                String ipPortDebug = ipMap.get(b64);
                 if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(Log.DEBUG)) {
                     _context.logManager().getLog(BanlistRenderer.class).debug(
-                        "GeoIP lookup for hash " + key.toBase64().substring(0, 8) +
+                        "GeoIP lookup for hash " + b64.substring(0, 8) +
                         ": ipPort=" + ipPortDebug + ", extractedIP=" + ip +
-                        ", ipFromMap=" + (ipMap.get(key.toBase64()) != null ? "yes" : "no"));
+                        ", ipFromMap=" + (ipMap.get(b64) != null ? "yes" : "no"));
                 }
                 // Queue the IP for GeoIP lookup if not already in database
                 byte[] geoIpBytes = Addresses.getIPOnly(ip);
@@ -447,7 +449,7 @@ class BanlistRenderer {
 
             String countryName =  _context.commSystem().getCountryName(countryCode);
             // Get router version from sessionbans log first, then NetDB or reason
-            String routerVersion = versionMap.get(key.toBase64());
+            String routerVersion = versionMap.get(b64);
             if (routerVersion == null) {
                 routerVersion = getRouterVersion(key, reason);
             }
@@ -456,7 +458,7 @@ class BanlistRenderer {
                .append("<img width=28 height=21 title=\"").append(countryName)
                .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\">")
                .append("</td><td class=hash>")
-               .append("<span class=b64>").append(key.toBase64()).append("</span>")
+               .append("<span class=b64>").append(b64).append("</span>")
                .append("</td><td class=caps>").append(caps != null ? caps : "")
                .append("</td><td class=routerversion>").append(routerVersion != null ? routerVersion : "")
                .append("</td><td class=ip>")
@@ -483,7 +485,7 @@ class BanlistRenderer {
 
         // Render IP-only bans
         for (IPBanEntry ipBan : ipOnlyBans) {
-            String expireString = DataHelper.formatDuration2(ipBan.expires - _context.clock().now());
+            String expireString = DataHelper.formatDuration2(ipBan.expires - now);
             // Extract IP and port from the IP field
             String ip = extractIP(ipBan.ip);
             String port = extractPort(ipBan.ip);
