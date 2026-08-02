@@ -1060,7 +1060,7 @@ public class SybilRenderer {
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized double renderRouterInfo(StringBuilder buf, RouterInfo info, Hash us, boolean isUs, boolean full) {
-        String hash = info.getIdentity().getHash().toBase64();
+        String hash = info.getHash().toBase64();
 
         buf.append("<table class=sybil_routerinfo id=hash_").append(hash,0,6).append(">\n");
         double distance = 0;
@@ -1113,7 +1113,7 @@ public class SybilRenderer {
               .append("\">").append(_t("Profile")).append("</a>")
               .append("<a class=configpeer href=\"/configpeer?peer=").append(hash).append("\" title=\"").append(_t("Configure peer"))
               .append("\">").append(_t("Edit")).append("</a>");
-           String country = _context.commSystem().getCountry(info.getIdentity().getHash());
+           String country = _context.commSystem().getCountry(h);
            if(country != null) {
                buf.append("<a href=\"/netdb?c=").append(country).append("\">")
                   .append("<img height=12 width=16 loading=lazy alt=\"").append(country.toUpperCase(Locale.US)).append('\"')
