@@ -430,9 +430,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             synchronized (waiter) {
                 try {
                     waiter.wait(
-                            Math.max(
-                                    (long) 30 * 1000,
-                                    (Math.min((long) 45 * 1000, endTime - _context.clock().now()))));
+                            Math.min(
+                                    (long) 45 * 1000,
+                                    Math.max(0, endTime - _context.clock().now())));
                 } catch (InterruptedException ie) { /* ignored */ }
             }
 
@@ -1556,10 +1556,22 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private List<NodeInfo> receiveNodes(NodeInfo nInfo, byte[] ids)
             throws InvalidBEncodingException {
         // Azureus sends 20
+        if (ids.length % NodeInfo.LENGTH != 0) {
+            throw new InvalidBEncodingException(
+                    "Invalid node list length " + ids.length + ", not divisible by " + NodeInfo.LENGTH);
+        }
         int max = Math.min(3 * K, ids.length / NodeInfo.LENGTH);
         List<NodeInfo> rv = new ArrayList<>(max);
         for (int off = 0; off < ids.length && rv.size() < max; off += NodeInfo.LENGTH) {
-            NodeInfo nInf = new NodeInfo(ids, off);
+            NodeInfo nInf;
+            try {
+                nInf = new NodeInfo(ids, off);
+            } catch (IllegalArgumentException iae) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Ignoring invalid node in list received from " + nInfo);
+                }
+                continue;
+            }
             if (_blacklist.contains(nInf.getNID())) {
                 if (_log.shouldInfo()) {
                     _log.info(
