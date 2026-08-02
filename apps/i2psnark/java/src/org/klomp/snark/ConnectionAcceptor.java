@@ -21,6 +21,7 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer2;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Accepts incoming I2P connections and routes them to the appropriate PeerAcceptor.
@@ -57,6 +58,9 @@ class ConnectionAcceptor implements Runnable {
     private volatile boolean stop; // protocol errors before blacklisting.
     private static final int MAX_BAD = 1;
     private static final long BAD_CLEAN_INTERVAL = 15 * (long) 60 * 1000;
+    /** Maximum concurrent incoming connections in handshake */
+    private static final int MAX_HANDLERS = 64;
+    private final AtomicInteger activeHandlers = new AtomicInteger();
 
     /** Multitorrent. Caller MUST call startAccepting() */
     public ConnectionAcceptor(I2PSnarkUtil util, PeerCoordinatorSet set) {
@@ -211,6 +215,21 @@ class ConnectionAcceptor implements Runnable {
                         } catch (IOException ioe) { /* ignored */ }
                         continue;
                     }
+                    if (activeHandlers.get() >= MAX_HANDLERS) {
+                        if (_log.shouldWarn()) {
+                            _log.warn(
+                                    "[I2PSnark] Too many incoming connections in handshake ("
+                                            + activeHandlers.get()
+                                            + "), dropping connection from ["
+                                            + h.toBase32().substring(0, 8)
+                                            + "]");
+                        }
+                        try {
+                            socket.close();
+                        } catch (IOException ioe) { /* ignored */ }
+                        continue;
+                    }
+                    activeHandlers.incrementAndGet();
                     Thread t =
                             new I2PAppThread(new Handler(socket), "SnarkIncoming");
                     t.start();
@@ -298,8 +317,8 @@ class ConnectionAcceptor implements Runnable {
             _socket = socket;
         }
 
-    @Override
-    public void run() {
+        @Override
+        public void run() {
             try {
                 InputStream in = _socket.getInputStream();
                 OutputStream out = _socket.getOutputStream();
@@ -335,6 +354,8 @@ class ConnectionAcceptor implements Runnable {
                 try {
                     _socket.close();
                 } catch (IOException ignored) { /* ignored */ }
+            } finally {
+                activeHandlers.decrementAndGet();
             }
         }
     }

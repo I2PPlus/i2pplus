@@ -334,6 +334,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         }
     }
 
+    /** Bound on the socket read timeout while reading the handshake, to avoid hanging a thread on a stalled peer */
+    private static final long HANDSHAKE_READ_TIMEOUT = (long) 45 * 1000;
+
     /**
      * Sets DataIn/OutputStreams, does the handshake and returns the id reported by the other side.
      */
@@ -357,31 +360,39 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         if (_log.shouldDebug()) _log.debug("Wrote our shared hash and ID to [" + toString() + "]");
 
         // Handshake read - header
-        din = new DataInputStream(in);
-        byte b = din.readByte();
-        if (b != HANDSHAKE.length) {
-            throw new IOException(
-                    "Handshake failure, expected 19, got " + (b & 0xff) + " on " + sock);
+        long timeout = sock.getReadTimeout();
+        sock.setReadTimeout(HANDSHAKE_READ_TIMEOUT);
+        byte[] bs;
+        try {
+            din = new DataInputStream(in);
+            byte b = din.readByte();
+            if (b != HANDSHAKE.length) {
+                throw new IOException(
+                        "Handshake failure, expected 19, got " + (b & 0xff) + " on " + sock);
+            }
+
+            bs = new byte[HANDSHAKE.length];
+            din.readFully(bs);
+            if (!Arrays.equals(HANDSHAKE, bs)) {
+                throw new IOException("Handshake failure, expected " + "'BitTorrent protocol'");
+            }
+
+            // Handshake read - options
+            options = din.readLong();
+
+            // Handshake read - metainfo hash
+            bs = new byte[20];
+            din.readFully(bs);
+            if (!Arrays.equals(infohash, bs)) {
+                throw new IOException("Unexpected MetaInfo hash");
+            }
+
+            // Handshake read - peer id
+            bs = new byte[20];
+            din.readFully(bs);
+        } finally {
+            sock.setReadTimeout(timeout);
         }
-
-        byte[] bs = new byte[HANDSHAKE.length];
-        din.readFully(bs);
-        if (!Arrays.equals(HANDSHAKE, bs)) {
-            throw new IOException("Handshake failure, expected " + "'BitTorrent protocol'");
-        }
-
-        // Handshake read - options
-        options = din.readLong();
-
-        // Handshake read - metainfo hash
-        bs = new byte[20];
-        din.readFully(bs);
-        if (!Arrays.equals(infohash, bs)) {
-            throw new IOException("Unexpected MetaInfo hash");
-        }
-
-        // Handshake read - peer id
-        din.readFully(bs);
         if (_log.shouldDebug())
             _log.debug("Read the remote side's hash and peerID fully from " + toString());
 
