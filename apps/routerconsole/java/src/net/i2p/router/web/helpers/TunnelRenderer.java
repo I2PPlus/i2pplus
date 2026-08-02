@@ -3,6 +3,7 @@ package net.i2p.router.web.helpers;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import java.math.RoundingMode;
 import net.i2p.stat.RateConstants;
 import java.text.Collator;
 import java.text.DecimalFormat;
@@ -103,6 +104,9 @@ class TunnelRenderer {
     private int displayed;
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
     private static String fmt(double val) { synchronized (TWO_DECIMALS) { return TWO_DECIMALS.format(val); } }
+    private static final DecimalFormat ZERO_DECIMALS = new DecimalFormat("#0");
+    static {ZERO_DECIMALS.setRoundingMode(RoundingMode.HALF_UP);}
+    private static String fmt0(double val) { synchronized (ZERO_DECIMALS) { return ZERO_DECIMALS.format(val); } }
 
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     /**
@@ -325,7 +329,7 @@ class TunnelRenderer {
                     double sizeInMB = sizeInKB / 1024.0;
                     sb.append("<td class=\"cells datatransfer\" data-sort=")
                       .append(count).append("><span class=right>")
-                      .append(sizeInKB >= 1024 ? String.format("%.2f", sizeInMB) : String.format("%.0f", sizeInKB))
+                      .append(sizeInKB >= 1024 ? fmt(sizeInMB) : fmt0(sizeInKB))
                       .append("</span><span class=left>&#8239;")
                       .append(sizeInKB >= 1024 ? "MB" : "KB")
                       .append("</span></td>");
@@ -493,52 +497,8 @@ class TunnelRenderer {
                 boolean isBanned = _context.banlist().isBanlisted(h) ||
                                    _context.banlist().isBanlistedHostile(h);
 
-                sb.append("<tr class=lazy><td>")
-                  .append(peerFlag(h))
-                  .append("</td><td><span class=routerHash><a href=\"netdb?r=")
-                  .append(hB64)
-                  .append("\">")
-                  .append(truncHash)
-                  .append("</a></span></td><td data-sort=")
-                  .append(version != null ? DataHelper.stripHTML(version) : "0").append(">");
-
-                if (version != null) {
-                    sb.append("<span class=version title=\"")
-                      .append(versionTip)
-                      .append("\"><a href=\"/netdb?v=")
-                      .append(DataHelper.stripHTML(version))
-                      .append("\">")
-                      .append(DataHelper.stripHTML(version))
-                      .append("</a></span>");
-                } else if (isBanned) {
-                    sb.append("<span class=banlisted title=\"")
-                      .append(banlistedTip)
-                      .append("\">???</span>");
-                } else {sb.append("<span>???</span>");}
-                sb.append("</td><td>");
-                if (info != null) {
-                    sb.append(_context.commSystem().renderPeerCaps(h, false));
-                } else {
-                    sb.append("<table class=\"rid ric\"><tr><td class=rbw>?</td></tr></table>");
-                }
-                sb.append("</td><td><span class=ipaddress>");
-                if (ip != null && !"null".equals(ip)) {
-                    if (ip.contains(":")) sb.append("<span hidden>[IPv6]</span>");
-                    sb.append(ip);
-                } else {sb.append("&ndash;");}
-                sb.append("</span></td>");
-
-                sb.append("<td>");
-                if (rlResult != null && rlResult.canonicalHostName != null &&
-                    !rlResult.canonicalHostName.isEmpty() && !rlResult.ip.equals(rlResult.canonicalHostName)) {
-                    String display = (rlResult.whois != null) ? rlResult.whois : rlResult.domain;
-                    if (display == null) display = unknownLabel;
-                    sb.append("<span class=rlookup title=\"").append(DataHelper.escapeHTML(rlResult.canonicalHostName)).append("\">")
-                      .append(DataHelper.escapeHTML(display)).append("</span>");
-                } else {
-                    sb.append("<span>").append(unknownLabel).append("</span>");
-                }
-                sb.append("</td>");
+                appendPeerIdentity(sb, h, hB64, truncHash, version, info, ip, rlResult,
+                                   versionTip, banlistedTip, unknownLabel, isBanned);
 
                 sb.append("<td class=tcount>").append(count).append("</td>");
 
@@ -667,77 +627,40 @@ class TunnelRenderer {
                     String truncHash = hB64.substring(0,4);
                     ReverseLookupResult rlResult = reverseLookupResults.get(h);
 
-                    chunkSb.append("<tr class=lazy><td>")
-                           .append(peerFlag(h))
-                           .append("</td><td><span class=routerHash><a href=\"netdb?r=")
-                           .append(hB64)
-                           .append("\">")
-                           .append(truncHash)
-                           .append("</a></span></td><td data-sort=")
-                           .append(version != null ? DataHelper.stripHTML(version) : "0")
-                           .append(">");
-                    if (version != null) {
-                        chunkSb.append("<span class=version title=\"")
-                               .append(versionTip)
-                               .append("\"><a href=\"/netdb?v=")
-                               .append(DataHelper.stripHTML(version))
-                               .append("\">")
-                               .append(DataHelper.stripHTML(version))
-                               .append("</a></span>");
-                    }
-                    chunkSb.append("</td><td>")
-                           .append(_context.commSystem().renderPeerCaps(h, false))
-                           .append("</td><td><span class=ipaddress>");
-                    if (ip != null && !ip.isEmpty()) {
-                        if (ip.contains(":")) {chunkSb.append("<span hidden>[IPv6]</span>");}
-                        chunkSb.append(ip);
-                    } else {chunkSb.append("&ndash;");}
-                    chunkSb.append("</span>");
-
-                    chunkSb.append("<td>");
-                    if (rlResult != null && rlResult.canonicalHostName != null &&
-                        !rlResult.canonicalHostName.isEmpty() && !rlResult.ip.equals(rlResult.canonicalHostName)) {
-                        String display = (rlResult.whois != null) ? rlResult.whois : rlResult.domain;
-                        if (display == null) display = unknownLabel;
-                        chunkSb.append("<span class=rlookup title=\"").append(DataHelper.escapeHTML(rlResult.canonicalHostName)).append("\">")
-                               .append(DataHelper.escapeHTML(display)).append("</span>");
-                    } else {
-                        chunkSb.append("&ndash;");
-                    }
-                    chunkSb.append("</td>");
+                    appendPeerIdentity(chunkSb, h, hB64, truncHash, version, info, ip, rlResult,
+                                       versionTip, null, unknownLabel, false);
 
                     if (localTunnelCount > 0) {
-                        chunkSb.append(String.format(
-                                       "<td class=tcount data-sort-column-key=localCount data-sort=%d>%d</td><td class=bar data-sort-column-key=localCount>",
-                                       localTunnelCount, localTunnelCount)
-                                      );
-                        chunkSb.append(String.format(
-                                       "<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
-                                       fmt(localTunnelCount * 100.0 / tunnelCount).replace(".00", ""),
-                                       localTunnelCount * 100 / tunnelCount));
+                        chunkSb.append("<td class=tcount data-sort-column-key=localCount data-sort=")
+                               .append(localTunnelCount)
+                               .append(">").append(localTunnelCount)
+                               .append("</td><td class=bar data-sort-column-key=localCount>")
+                               .append("<span class=percentBarOuter><span class=percentBarInner style=\"width:")
+                               .append(fmt(localTunnelCount * 100.0 / tunnelCount).replace(".00", ""))
+                               .append("%\"><span class=percentBarText>").append(localTunnelCount * 100 / tunnelCount)
+                               .append("%</span></span></span>");
                     } else {
                         chunkSb.append("<td class=tcount colspan=2 data-sort=0></td>");
                     }
                     chunkSb.append("</td>");
-                    if (!peerList.isEmpty()) {
-                        if (transitTunnelCount > 0) {
-                            chunkSb.append(String.format(
-                                "<td class=tcount data-sort-column-key=transitCount data-sort=%d>%d</td><td class=bar data-sort-column-key=transitCount>",
-                                transitTunnelCount, transitTunnelCount))
-                                   .append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
-                                            fmt(transitTunnelCount * 100.0 / partCount).replace(".00", ""),
-                                           transitTunnelCount * 100 / partCount))
-                                   .append("</td>");
-                        } else {
-                             chunkSb.append("<td class=tcount colspan=2 data-sort=0></td>");
-                        }
+                    if (transitTunnelCount > 0) {
+                        chunkSb.append("<td class=tcount data-sort-column-key=transitCount data-sort=")
+                               .append(transitTunnelCount)
+                               .append(">").append(transitTunnelCount)
+                               .append("</td><td class=bar data-sort-column-key=transitCount>")
+                               .append("<span class=percentBarOuter><span class=percentBarInner style=\"width:")
+                               .append(fmt(transitTunnelCount * 100.0 / partCount).replace(".00", ""))
+                               .append("%\"><span class=percentBarText>").append(transitTunnelCount * 100 / partCount)
+                               .append("%</span></span></span>")
+                               .append("</td>");
                     } else {
-                        chunkSb.append("<td></td>");
+                        chunkSb.append("<td class=tcount colspan=2 data-sort=0></td>");
                     }
-                    chunkSb.append(String.format("<td><a class=configpeer href=\"/configpeer?peer=%s\" title=\"%s\">%s</a></td></tr>%n",
-                        info.getHash(),
-                        configurePeerTip,
-                        editLabel));
+                    chunkSb.append("<td><a class=configpeer href=\"/configpeer?peer=")
+                           .append(info.getHash())
+                           .append("\" title=\"").append(configurePeerTip).append("\">")
+                           .append(editLabel)
+                           .append("</a></td></tr>\n");
                 }
                 out.write(chunkSb.toString());
                 out.flush();
@@ -1095,7 +1018,7 @@ class TunnelRenderer {
             buf.append("<td class=\"cells datatransfer\" data-sort=").append(count).append(">");
             if (count > 0) {
                 buf.append("<span class=right>")
-                   .append(sizeInKB >= 1024 ? String.format("%.2f", sizeInMB) : String.format("%.0f", sizeInKB))
+                   .append(sizeInKB >= 1024 ? fmt(sizeInMB) : fmt0(sizeInKB))
                    .append("</span><span class=left>&#8239;")
                    .append(sizeInKB >= 1024 ? "MB" : "KB")
                    .append("</span>");
@@ -1323,6 +1246,75 @@ class TunnelRenderer {
 
     private String peerFlag(Hash peer) {
         return _context.commSystem().renderPeerFlag(peer);
+    }
+
+    /**
+     *  Append the identity cells shared by the peer tables: country flag,
+     *  router hash link, version with netdb link, tier caps, IP address,
+     *  and reverse-lookup domain. The callers append the data cells and
+     *  the row terminator.
+     *
+     *  @param sb target buffer
+     *  @param h peer hash
+     *  @param hB64 base64 of the peer hash for the netdb link
+     *  @param truncHash short hash label
+     *  @param version router version, may be null
+     *  @param info RouterInfo for the caps cell, may be null
+     *  @param ip primary IP address, may be null
+     *  @param rl reverse lookup result, may be null
+     *  @param versionTip tooltip for the version link
+     *  @param banlistedTip tooltip for the banlisted marker
+     *  @param unknownLabel fallback label for missing domains
+     *  @param isBanned whether the peer is banlisted
+     */
+    private void appendPeerIdentity(StringBuilder sb, Hash h, String hB64, String truncHash,
+                                    String version, RouterInfo info, String ip, ReverseLookupResult rl,
+                                    String versionTip, String banlistedTip, String unknownLabel,
+                                    boolean isBanned) {
+        sb.append("<tr class=lazy><td>")
+          .append(peerFlag(h))
+          .append("</td><td><span class=routerHash><a href=\"netdb?r=")
+          .append(hB64)
+          .append("\">")
+          .append(truncHash)
+          .append("</a></span></td><td data-sort=")
+          .append(version != null ? DataHelper.stripHTML(version) : "0").append(">");
+        if (version != null) {
+            sb.append("<span class=version title=\"")
+              .append(versionTip)
+              .append("\"><a href=\"/netdb?v=")
+              .append(DataHelper.stripHTML(version))
+              .append("\">")
+              .append(DataHelper.stripHTML(version))
+              .append("</a></span>");
+        } else if (isBanned) {
+            sb.append("<span class=banlisted title=\"")
+              .append(banlistedTip)
+              .append("\">???</span>");
+        } else {sb.append("<span>???</span>");}
+        sb.append("</td><td>");
+        if (info != null) {
+            sb.append(_context.commSystem().renderPeerCaps(h, false));
+        } else {
+            sb.append("<table class=\"rid ric\"><tr><td class=rbw>?</td></tr></table>");
+        }
+        sb.append("</td><td><span class=ipaddress>");
+        if (ip != null && !ip.isEmpty() && !"null".equals(ip)) {
+            if (ip.contains(":")) {sb.append("<span hidden>[IPv6]</span>");}
+            sb.append(ip);
+        } else {sb.append("&ndash;");}
+        sb.append("</span></td>");
+        sb.append("<td>");
+        if (rl != null && rl.canonicalHostName != null &&
+            !rl.canonicalHostName.isEmpty() && !rl.ip.equals(rl.canonicalHostName)) {
+            String display = (rl.whois != null) ? rl.whois : rl.domain;
+            if (display == null) {display = unknownLabel;}
+            sb.append("<span class=rlookup title=\"").append(DataHelper.escapeHTML(rl.canonicalHostName)).append("\">")
+              .append(DataHelper.escapeHTML(display)).append("</span>");
+        } else {
+            sb.append("&ndash;");
+        }
+        sb.append("</td>");
     }
 
     /**
