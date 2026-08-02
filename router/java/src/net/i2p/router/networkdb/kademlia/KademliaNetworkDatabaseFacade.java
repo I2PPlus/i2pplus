@@ -999,7 +999,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
         _context.banlist().banlistRouter(key, reason, null, null,
                                          _context.clock().now() + banDuration);
-        String ipPort = getRouterIPPort(ri);
+        String ipPort = TransportImpl.getRouterIPPort(ri);
         _banLogger.logBan(key, ipPort, reason, banDuration, ri);
         removeFromNetDb(key);
         if (onFailedLookupJob != null) {
@@ -1114,7 +1114,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _context.banlist().banlistRouter(key, "➜ LU and older than " + MIN_VERSION, null, null,
                                          _context.clock().now() + 60 * 60 * 1000);
         // Log to sessionbans.txt with IP address
-        String ipPort = getRouterIPPort(ri);
+        String ipPort = TransportImpl.getRouterIPPort(ri);
         _banLogger.logBan(key, ipPort, "LU and older than " + MIN_VERSION, 60 * 60 * 1000L, ri);
 
         _ds.remove(key);
@@ -1749,7 +1749,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
         int id = routerInfo.getNetworkId();
         if (id != _networkID) {
-            String ipPort = getRouterIPPort(routerInfo);
+            String ipPort = TransportImpl.getRouterIPPort(routerInfo);
             if (id == -1) {
                 // old i2pd bug, possibly at startup, don't ban forever
                 _banLogger.logBan(key, ipPort, "No Network specified", Banlist.BANLIST_DURATION_NO_NETWORK, routerInfo);
@@ -1879,7 +1879,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             String i = ra.getOption("i");
             if (i != null && i.length() != 24) {
                 Hash h = routerInfo.getIdentity().calculateHash();
-                String ipPort = getRouterIPPort(routerInfo);
+                String ipPort = TransportImpl.getRouterIPPort(routerInfo);
                 _banLogger.logBan(h, ipPort, "Invalid NTCP address", 24*60*60*1000L, routerInfo);
                 _context.banlist().banlistRouter(h, "Invalid NTCP address", null, null, now + 24*60*60*1000L);
                 if (_log.shouldWarn()) {
@@ -1967,7 +1967,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean isBanned = _context.banlist().isBanlisted(h);
 
         if ((isStrict || isHidden || blockMyCountry) && myCountry != null && myCountry.equals(country) && !isBanned) {
-            String ipPort = getRouterIPPort(routerInfo);
+            String ipPort = TransportImpl.getRouterIPPort(routerInfo);
             if (_log.shouldWarn()) {
                 String reason = isHidden ? "Hidden mode active and router is in same country" :
                                 isStrict ? "We are in a strict country and so is this router" :
@@ -1989,7 +1989,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             return true;
         }
 if (blockedCountries.contains(country) && !isBanned) {
-            String ipPort = getRouterIPPort(routerInfo);
+            String ipPort = TransportImpl.getRouterIPPort(routerInfo);
             if (_log.shouldWarn()) {
                 _log.warn("Banning [" + routerId + "] -> Blocked country: " + country);
             }
@@ -2007,7 +2007,7 @@ return false;
         if (isRouterXG(routerInfo, h.equals(_context.routerHash()))) {
             if (!_context.banlist().isBanlisted(h)) {
                 boolean isFF = caps != null && caps.contains("f");
-                String ipPort = getRouterIPPort(routerInfo);
+                String ipPort = TransportImpl.getRouterIPPort(routerInfo);
                 if (_log.shouldInfo()) {
                     _log.info("Banning Router [" + routerId + "] -> X tier and G Cap (probable botnet participant)");
                 }
@@ -2031,7 +2031,7 @@ return false;
         boolean isUnreachable = caps.indexOf('U') >= 0 || caps.indexOf('R') < 0;
         if (isLowTier && isUnreachable) {
             if (!_context.banlist().isBanlisted(h)) {
-                String ipPort = getRouterIPPort(routerInfo);
+                String ipPort = TransportImpl.getRouterIPPort(routerInfo);
                 String version = routerInfo.getVersion();
                 String reason = version != null ? "LU Router (" + version + ")" : "LU Router";
                 _log.warn("Banning Router [" + routerId + "] -> " + reason);
@@ -2060,7 +2060,7 @@ return false;
                 Hash h = ri.getIdentity().getHash();
                 if (_context.banlist().isBanlisted(h)) continue;
                 String routerId = h.toBase64().substring(0, 6);
-                String ipPort = getRouterIPPort(ri);
+                String ipPort = TransportImpl.getRouterIPPort(ri);
                 String version = ri.getVersion();
                 String reason = version != null ? "LU Router (" + version + ")" : "LU Router";
                 if (_log.shouldWarn()) {
@@ -2113,7 +2113,7 @@ return false;
             long age = routerInfo.getPublished() - now;
             if (!_context.banlist().isBanlisted(h) && _log.shouldWarn()) {
                 _log.warn("Banning [" + routerId + "] for 4h -> RouterInfo from the future!\n* Published: " + new Date(routerInfo.getPublished()));
-                String ipPort = getRouterIPPort(routerInfo);
+                String ipPort = TransportImpl.getRouterIPPort(routerInfo);
                 _banLogger.logBan(h, ipPort, "RouterInfo from the future (" + new Date(routerInfo.getPublished()) + ")", 4*60*60*1000L, routerInfo);
                 _context.banlist().banlistRouter(h, "RouterInfo from the future (" + new Date(routerInfo.getPublished()) + ")", null, null, 4L*60*60*1000);
             }
@@ -2137,7 +2137,7 @@ return false;
         if (routerInfo == null) {return null;}
         String v = routerInfo.getVersion();
         String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
-        String ipPort = getRouterIPPort(routerInfo);
+        String ipPort = TransportImpl.getRouterIPPort(routerInfo);
         if (minVersionAllowed != null) {
             if (VersionComparator.comp(v, minVersionAllowed) < 0) {
                 _banLogger.logBanForever(h, ipPort, "Router too old (" + v + ")", routerInfo);
@@ -2412,7 +2412,7 @@ return false;
                         SigType type = kc.getSigType();
                         if (type == null || !type.isAvailable()) {
                             String stype = (type != null) ? type.toString() : Integer.toString(kc.getSigTypeCode());
-                            String ipPort = getRouterIPPort(ri);
+                            String ipPort = TransportImpl.getRouterIPPort(ri);
                             _banLogger.logBanForever(h, ipPort, "Unsupported Signature type " + stype, ri);
                             _context.banlist().banlistRouterForever(h, "" + "Unsupported Signature type " + stype);
                             if (_log.shouldWarn()) {
@@ -2727,70 +2727,6 @@ return false;
     @Override
     /** @return whether the hash is in the negative cache */
     public boolean isNegativeCachedForever(Hash key) {return key != null && _negativeCache.getBadDest(key) != null;}
-
-    /**
-     * Extract IP address and port from RouterInfo for logging to sessionbans.txt.
-     * Returns IP:PORT format for IPv4 or [IPv6]:PORT format for IPv6.
-     *
-     * @param router the RouterInfo to extract from
-     * @return IP:PORT string or "UNKNOWN" if not available
-     */
-    public String getRouterIPPort(RouterInfo router) {
-        if (router == null) { return "UNKNOWN"; }
-        try {
-            // Prefer direct connection IP from transport layer
-            byte[] direct = TransportImpl.getIP(router.getHash());
-            if (direct != null)
-                return formatIPPort(direct, 0);
-            // Try getCompatibleIP first - returns IP for our supported protocols
-            byte[] ip = CommSystemFacadeImpl.getCompatibleIP(router);
-            if (ip != null) {
-                int port = 0;
-                for (RouterAddress addr : router.getAddresses()) {
-                    if (addr != null && addr.getIP() != null && Arrays.equals(addr.getIP(), ip)) {
-                        port = addr.getPort();
-                        break;
-                    }
-                }
-                return formatIPPort(ip, port);
-            }
-            // Fallback to first available
-            for (RouterAddress addr : router.getAddresses()) {
-                if (addr != null && addr.getHost() != null) {
-                    String ipAddr = addr.getHost();
-                    int port = addr.getPort();
-                    if (port > 0) {
-                        if (ipAddr.contains(":") && !ipAddr.startsWith("[")) {
-                            return "[" + ipAddr + "]:" + port;
-                        } else {
-                            return ipAddr + ":" + port;
-                        }
-                    } else {
-                        return ipAddr;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // Ignore extraction errors
-        }
-        return "UNKNOWN";
-    }
-
-    /** Format IP byte array to string with port. */
-    private String formatIPPort(byte[] ip, int port) {
-        if (ip.length == 4) {
-            return (ip[0] & 0xff) + "." + (ip[1] & 0xff) + "." + (ip[2] & 0xff) + "." + (ip[3] & 0xff) + ":" + port;
-        } else if (ip.length == 16) {
-            StringBuilder sb = new StringBuilder("[");
-            for (int i = 0; i < 16; i += 2) {
-                if (i > 0) sb.append(":");
-                sb.append(String.format("%x", (ip[i] << 8 | ip[i + 1] & 0xff)));
-            }
-            sb.append("]").append(":").append(port);
-            return sb.toString();
-        }
-        return "UNKNOWN";
-    }
 
     @Override
     /** Render status HTML */

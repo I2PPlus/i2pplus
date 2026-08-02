@@ -8,7 +8,6 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -20,7 +19,6 @@ import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.LeaseSet2;
-import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.BanLogger;
@@ -200,7 +198,7 @@ class TransientDataStore implements DataStore {
                     }
                     _context.banlist().banlistRouter(key, "LU Router", null, null,
                                                      _context.clock().now() + 60 * 60 * 1000);
-                    String ipPort = getBestRouterIPPort(key, ri);
+                    String ipPort = TransportImpl.getRouterIPPort(ri);
                     _banLogger.logBan(key, ipPort, "LU Router", 60 * 60 * 1000L, ri);
                 }
                 rv = false;
@@ -214,7 +212,7 @@ class TransientDataStore implements DataStore {
                     }
                     _context.banlist().banlistRouter(key, "XG Router", null, null,
                                                      _context.clock().now() + 60 * 60 * 1000);
-                    String ipPort = getBestRouterIPPort(key, ri);
+                    String ipPort = TransportImpl.getRouterIPPort(ri);
                     _banLogger.logBan(key, ipPort, "XG Router", 60 * 60 * 1000L, ri);
                 }
                 rv = false;
@@ -343,55 +341,6 @@ class TransientDataStore implements DataStore {
      */
     public DatabaseEntry remove(Hash key) {
         return _data.remove(key);
-    }
-
-    private String getRouterIPPort(RouterInfo router) {
-        if (router == null) { return "UNKNOWN"; }
-        try {
-            byte[] ip = net.i2p.router.transport.CommSystemFacadeImpl.getCompatibleIP(router);
-            if (ip != null) {
-                int port = 0;
-                for (RouterAddress addr : router.getAddresses()) {
-                    if (addr != null && addr.getIP() != null && Arrays.equals(addr.getIP(), ip)) {
-                        port = addr.getPort();
-                        break;
-                    }
-                }
-                return formatIPPort(ip, port);
-            }
-            for (RouterAddress addr : router.getAddresses()) {
-                if (addr != null && addr.getHost() != null) {
-                    String ipAddr = addr.getHost();
-                    int port = addr.getPort();
-                    if (port > 0) {
-                        if (ipAddr.contains(":") && !ipAddr.startsWith("[")) {
-                            ipAddr = "[" + ipAddr + "]";
-                        }
-                        return ipAddr + ":" + port;
-                    }
-                }
-            }
-        } catch (Exception e) { /* ignored */ }
-        return "UNKNOWN";
-    }
-
-    private String formatIPPort(byte[] ip, int port) {
-        String ipStr = ip[0] + "." + ip[1] + "." + ip[2] + "." + ip[3];
-        return ipStr + ":" + port;
-    }
-
-    /**
-     * Get the best IP:port for ban logging, preferring the direct connection IP
-     * from the transport layer over the RouterInfo's self-published address.
-     * For U-capability (unreachable) routers, the transport IP shows where
-     * the RouterInfo was actually received from, not the intermediate's address.
-     * @return the best router i p port
-     */
-    private String getBestRouterIPPort(Hash key, RouterInfo ri) {
-        byte[] direct = TransportImpl.getIP(key);
-        if (direct != null)
-            return formatIPPort(direct, 0);
-        return getRouterIPPort(ri);
     }
 
     private boolean containsCapability(RouterInfo ri, char capability) {

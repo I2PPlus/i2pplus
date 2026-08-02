@@ -15,7 +15,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.BanLogger;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-import net.i2p.router.transport.CommSystemFacadeImpl;
+import net.i2p.router.transport.TransportImpl;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.stat.RateConstants;
@@ -390,7 +390,7 @@ public class RequestThrottler {
                     if (_log.shouldWarn()) {
                         _log.warn("Banning LU Router at throttle: " + routerId);
                     }
-                    String ipPort = getRouterIPPort(ri);
+                    String ipPort = TransportImpl.getRouterIPPort(ri);
                     _banLogger.logBan(h, ipPort, "LU Router", 60*60*1000L);
                     context.banlist().banlistRouter(h, "LU Router", null, null, context.clock().now() + 60*60*1000);
                 }
@@ -437,7 +437,7 @@ public class RequestThrottler {
                     _log.warn("Severe transit request burst detected from Router [" + routerId + "] -> " +
                               "Requests: " + currentBucketCount + " in 1s (threshold: " + burstThreshold + ")");
                 }
-                String ipPort = getRouterIPPort(ri);
+                String ipPort = TransportImpl.getRouterIPPort(ri);
                 _banLogger.logBan(h, ipPort, "Transit request burst (10 in 1s)", 4*60*60*1000L);
                 context.banlist().banlistRouter(h, "Transit request burst", null, null, context.clock().now() + 4*60*60*1000);
                 if (cachedShouldDisconnect) {
@@ -467,7 +467,7 @@ public class RequestThrottler {
                     _log.warn("Transit request burst from Router [" + routerId + "] -> " + reason +
                               " (ban: " + (banTime/60/60) + "h)");
                 }
-                String ipPort = getRouterIPPort(ri);
+                String ipPort = TransportImpl.getRouterIPPort(ri);
                 _banLogger.logBan(h, ipPort, reason, banTime);
                 context.banlist().banlistRouter(h, "" + reason, null, null,
                     context.clock().now() + banTime);
@@ -534,7 +534,7 @@ public class RequestThrottler {
             boolean banEnabled = "true".equals(context.getProperty("router.banlist.enableExcessiveTunnelRequestsBan", "true"));
             if (ratio >= 3.0f) {
                 if (banEnabled) {
-                    String ipPort = getRouterIPPort(ri);
+                    String ipPort = TransportImpl.getRouterIPPort(ri);
                     String banReason = "Excessive tunnel requests";
                     _banLogger.logBan(h, ipPort, banReason, 30*60*1000L);
                     context.banlist().banlistRouter(h, banReason, null, null, context.clock().now() + 30*60*1000L);
@@ -546,7 +546,7 @@ public class RequestThrottler {
             } else if (ratio >= 1.5f) {
                 if (banEnabled) {
                     int bantime2 = (isLowShare || isUnreachable) ? 60*60*1000 : 30*60*1000;
-                    String ipPort = getRouterIPPort(ri);
+                    String ipPort = TransportImpl.getRouterIPPort(ri);
                     String banReason = "Excessive tunnel requests";
                     _banLogger.logBan(h, ipPort, banReason, bantime2);
                     context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime2);
@@ -650,69 +650,6 @@ public class RequestThrottler {
             String reason = (version == null || version.isEmpty()) ? "Old version" : "Old version (" + version + ")";
             context.commSystem().forceDisconnect(h, reason);
         }
-    }
-
-    /**
-     * Extract IP address and port from RouterInfo for logging to sessionbans.txt.
-     * Returns IP:PORT format for IPv4 or [IPv6]:PORT format for IPv6.
-     * Uses getCompatibleIP to return an IP for our supported protocols.
-     *
-     * @param router the RouterInfo to extract from
-     * @return IP:PORT string or "UNKNOWN" if not available
-     */
-    private String getRouterIPPort(RouterInfo router) {
-        if (router == null) { return "UNKNOWN"; }
-        try {
-            // Try getCompatibleIP first - returns IP for our supported protocols
-            byte[] ip = CommSystemFacadeImpl.getCompatibleIP(router);
-            if (ip != null) {
-                int port = 0;
-                for (RouterAddress addr : router.getAddresses()) {
-                    if (addr != null && addr.getIP() != null && Arrays.equals(addr.getIP(), ip)) {
-                        port = addr.getPort();
-                        break;
-                    }
-                }
-                return formatIPPort(ip, port);
-            }
-            // Fallback to first available
-            for (RouterAddress addr : router.getAddresses()) {
-                if (addr != null && addr.getHost() != null) {
-                    String ipAddr = addr.getHost();
-                    int port = addr.getPort();
-                    if (port > 0) {
-                        if (ipAddr.contains(":") && !ipAddr.startsWith("[")) {
-                            return "[" + ipAddr + "]:" + port;
-                        } else {
-                            return ipAddr + ":" + port;
-                        }
-                    } else {
-                        return ipAddr;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // Ignore extraction errors
-        }
-        return "UNKNOWN";
-    }
-
-    /**
-     * Format IP byte array to string with port.
-     */
-    private String formatIPPort(byte[] ip, int port) {
-        if (ip.length == 4) {
-            return (ip[0] & 0xff) + "." + (ip[1] & 0xff) + "." + (ip[2] & 0xff) + "." + (ip[3] & 0xff) + ":" + port;
-        } else if (ip.length == 16) {
-            StringBuilder sb = new StringBuilder("[");
-            for (int i = 0; i < 16; i += 2) {
-                if (i > 0) sb.append(":");
-                sb.append(String.format("%x", (ip[i] << 8 | ip[i + 1] & 0xff)));
-            }
-            sb.append("]").append(":").append(port);
-            return sb.toString();
-        }
-        return "UNKNOWN";
     }
 
     private boolean isUnreachable(RouterInfo ri) {

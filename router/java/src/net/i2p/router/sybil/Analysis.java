@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -35,7 +34,7 @@ import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.peermanager.DBHistory;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.tunnel.pool.TunnelPool;
-import net.i2p.router.transport.CommSystemFacadeImpl;
+import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.util.HashDistance;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
@@ -157,68 +156,6 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     * Extract IP address and port from RouterInfo for logging to sessionbans.txt.
-     * Returns IP:PORT format for IPv4 or [IPv6]:PORT format for IPv6.
-     *
-     * @param router the RouterInfo to extract from
-     * @return IP:PORT string or empty string if not available
-     */
-    private String getRouterIPPort(RouterInfo router) {
-        if (router == null) { return ""; }
-        try {
-            // Try getCompatibleIP first - returns IP for our supported protocols
-            byte[] ip = CommSystemFacadeImpl.getCompatibleIP(router);
-            if (ip != null) {
-                int port = 0;
-                for (RouterAddress addr : router.getAddresses()) {
-                    if (addr != null && addr.getIP() != null && Arrays.equals(addr.getIP(), ip)) {
-                        port = addr.getPort();
-                        break;
-                    }
-                }
-                return formatIPPort(ip, port);
-            }
-            // Fallback to first available
-            for (RouterAddress addr : router.getAddresses()) {
-                if (addr != null && addr.getHost() != null) {
-                    String ipAddr = addr.getHost();
-                    int port = addr.getPort();
-                    if (port > 0) {
-                        if (ipAddr.contains(":") && !ipAddr.startsWith("[")) {
-                            return "[" + ipAddr + "]:" + port;
-                        } else {
-                            return ipAddr + ":" + port;
-                        }
-                    } else {
-                        return ipAddr;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // Ignore extraction errors
-        }
-        return "";
-    }
-
-    /**
-     * Format IP byte array to string with port.
-     */
-    private String formatIPPort(byte[] ip, int port) {
-        if (ip.length == 4) {
-            return (ip[0] & 0xff) + "." + (ip[1] & 0xff) + "." + (ip[2] & 0xff) + "." + (ip[3] & 0xff) + ":" + port;
-        } else if (ip.length == 16) {
-            StringBuilder sb = new StringBuilder("[");
-            for (int i = 0; i < 16; i += 2) {
-                if (i > 0) sb.append(":");
-                sb.append(String.format("%x", (ip[i] << 8 | ip[i + 1] & 0xff)));
-            }
-            sb.append("]").append(":").append(port);
-            return sb.toString();
-        }
-        return "";
-    }
-
-    /**
      * Gets the singleton Analysis instance, creating it if necessary.
      *
      * @param ctx the router context
@@ -274,7 +211,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                         String version = null;
                         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
                         if (ri != null) {
-                            ipPort = getRouterIPPort(ri);
+                            ipPort = TransportImpl.getRouterIPPort(ri);
                             version = ri.getVersion();
                             if (ipPort == null || ipPort.isEmpty()) ipPort = "UNKNOWN";
                         }
@@ -597,7 +534,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                 String ipPort = "UNKNOWN";
                 String version = null;
                 if (ri != null) {
-                    ipPort = getRouterIPPort(ri);
+                    ipPort = TransportImpl.getRouterIPPort(ri);
                     version = ri.getVersion();
                     if (ipPort == null || ipPort.isEmpty()) ipPort = "UNKNOWN";
                     for (RouterAddress ra : ri.getAddresses()) {

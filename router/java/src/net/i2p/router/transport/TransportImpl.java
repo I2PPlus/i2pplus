@@ -45,6 +45,7 @@ import java.io.Serializable;
 import java.io.Writer;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -1121,6 +1122,73 @@ public abstract class TransportImpl implements Transport {
      */
     public static byte[] getIP(Hash peer) {
         synchronized (_IPMap) {return _IPMap.get(peer);}
+    }
+
+    /**
+     *  Format an IP byte array (4 or 16 bytes) as host:port, for logging.
+     *
+     *  @param ip 4 or 16 byte address
+     *  @param port port number, may be 0
+     *  @return "host:port" or "[host]:port", "UNKNOWN" for other lengths
+     *  @since 0.9.70
+     */
+    public static String formatIPPort(byte[] ip, int port) {
+        if (ip.length == 4) {
+            return (ip[0] & 0xff) + "." + (ip[1] & 0xff) + "." + (ip[2] & 0xff) + "." + (ip[3] & 0xff) + ":" + port;
+        }
+        if (ip.length == 16) {
+            StringBuilder sb = new StringBuilder(40).append('[');
+            for (int i = 0; i < 16; i += 2) {
+                if (i > 0) {sb.append(':');}
+                sb.append(Integer.toHexString(((ip[i] & 0xff) << 8) | (ip[i + 1] & 0xff)));
+            }
+            return sb.append("]:").append(port).toString();
+        }
+        return "UNKNOWN";
+    }
+
+    /**
+     *  Best IP:port for a router, for ban logging: the direct connection
+     *  IP from the transport layer, else a compatible address, else any
+     *  announced address.
+     *
+     *  @param router may be null
+     *  @return "host:port" or "UNKNOWN"
+     *  @since 0.9.70
+     */
+    public static String getRouterIPPort(RouterInfo router) {
+        if (router == null) {return "UNKNOWN";}
+        try {
+            byte[] direct = getIP(router.getHash());
+            if (direct != null) {return formatIPPort(direct, 0);}
+            byte[] ip = CommSystemFacadeImpl.getCompatibleIP(router);
+            if (ip != null) {
+                int port = 0;
+                for (RouterAddress addr : router.getAddresses()) {
+                    if (addr != null && addr.getIP() != null && Arrays.equals(addr.getIP(), ip)) {
+                        port = addr.getPort();
+                        break;
+                    }
+                }
+                return formatIPPort(ip, port);
+            }
+            for (RouterAddress addr : router.getAddresses()) {
+                if (addr != null && addr.getHost() != null) {
+                    String ipAddr = addr.getHost();
+                    int port = addr.getPort();
+                    if (port > 0) {
+                        if (ipAddr.contains(":") && !ipAddr.startsWith("[")) {
+                            return "[" + ipAddr + "]:" + port;
+                        }
+                        return ipAddr + ":" + port;
+                    }
+                    return ipAddr;
+                }
+            }
+        } catch (Exception e) {
+            // Ignore extraction errors
+        }
+        return "UNKNOWN";
     }
 
     /**

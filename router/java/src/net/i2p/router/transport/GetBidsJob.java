@@ -8,16 +8,14 @@ package net.i2p.router.transport;
  *
  */
 
-import java.util.Arrays;
-
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.BanLogger;
 import net.i2p.router.Banlist;
 import net.i2p.router.MessageSelector;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
+import net.i2p.router.transport.TransportImpl;
 
 import net.i2p.router.Tuner;
 import net.i2p.util.Log;
@@ -92,7 +90,7 @@ class GetBidsJob {
             if (failedCount == 0) {
                 context.statManager().addRateData("transport.bidFailNoTransports", msg.getLifetime());
                 // This used to be "no common transports" but it is almost always no transports at all
-                String ipPort = getRouterIPPort(msg.getTarget());
+                String ipPort = TransportImpl.getRouterIPPort(msg.getTarget());
                 String banReason = _x("No transports");
                 context.banlist().banlistRouter(to, "" + banReason);
                 // Log to sessionbans.txt with IP address (use default duration)
@@ -107,7 +105,6 @@ class GetBidsJob {
             bid.getTransport().send(msg);
         }
     }
-
 
     /** Fail a message and trigger failure callbacks */
     static void fail(RouterContext context, OutNetMessage msg) {
@@ -137,65 +134,4 @@ class GetBidsJob {
         return s;
     }
 
-    /**
-     * Extract IP address and port from RouterInfo for logging to sessionbans.txt.
-     * Returns IP:PORT format for IPv4 or [IPv6]:PORT format for IPv6.
-     *
-     * @param router the RouterInfo to extract from
-     * @return IP:PORT string or empty string if not available
-     */
-    private static String getRouterIPPort(RouterInfo router) {
-        if (router == null) { return ""; }
-        try {
-            // Try getCompatibleIP first - returns IP for our supported protocols
-            byte[] ip = CommSystemFacadeImpl.getCompatibleIP(router);
-            if (ip != null) {
-                int port = 0;
-                for (RouterAddress addr : router.getAddresses()) {
-                    if (addr != null && addr.getIP() != null && Arrays.equals(addr.getIP(), ip)) {
-                        port = addr.getPort();
-                        break;
-                    }
-                }
-                return formatIPPort(ip, port);
-            }
-            // Fallback to first available
-            for (RouterAddress addr : router.getAddresses()) {
-                if (addr != null && addr.getHost() != null) {
-                    String ipAddr = addr.getHost();
-                    int port = addr.getPort();
-                    if (port > 0) {
-                        if (ipAddr.contains(":") && !ipAddr.startsWith("[")) {
-                            return "[" + ipAddr + "]:" + port;
-                        } else {
-                            return ipAddr + ":" + port;
-                        }
-                    } else {
-                        return ipAddr;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // Ignore extraction errors
-        }
-        return "";
-    }
-
-    /**
-     * Format IP byte array to string with port.
-     */
-    private static String formatIPPort(byte[] ip, int port) {
-        if (ip.length == 4) {
-            return (ip[0] & 0xff) + "." + (ip[1] & 0xff) + "." + (ip[2] & 0xff) + "." + (ip[3] & 0xff) + ":" + port;
-        } else if (ip.length == 16) {
-            StringBuilder sb = new StringBuilder("[");
-            for (int i = 0; i < 16; i += 2) {
-                if (i > 0) sb.append(":");
-                sb.append(String.format("%x", (ip[i] << 8 | ip[i + 1] & 0xff)));
-            }
-            sb.append("]").append(":").append(port);
-            return sb.toString();
-        }
-        return "";
-    }
 }
