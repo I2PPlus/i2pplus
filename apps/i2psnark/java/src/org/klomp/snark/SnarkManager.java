@@ -1005,6 +1005,27 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return dir;
     }
 
+    /** how long to cache a per-torrent config before reloading, covers manual file edits */
+    private static final long CONFIG_CACHE_TTL = 60 * 1000;
+
+    /** guarded by _configLock */
+    private final Map<SHA1Hash, ConfigCacheEntry> _configCache = new HashMap<>(8);
+
+    /**
+     * A cached per-torrent config.
+     *
+     * @since 0.9.68+
+     */
+    private static class ConfigCacheEntry {
+        private final Properties props;
+        private final long loaded;
+
+        public ConfigCacheEntry(Properties props) {
+            this.props = props;
+            loaded = System.currentTimeMillis();
+        }
+    }
+
     /**
      * The config for a torrent
      *
@@ -1023,14 +1044,23 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.15
      */
     private Properties getConfig(byte[] ih) {
-        Properties rv = new OrderedProperties();
-        File conf = configFile(_configDir, ih);
+        SHA1Hash hash = new SHA1Hash(ih);
         synchronized (_configLock) { // one lock for all
+            ConfigCacheEntry ce = _configCache.get(hash);
+            if (ce != null && ce.loaded + CONFIG_CACHE_TTL > System.currentTimeMillis()) {
+                // return a copy: callers mutate the result before saving it
+                Properties rv = new OrderedProperties();
+                rv.putAll(ce.props);
+                return rv;
+            }
+            Properties rv = new OrderedProperties();
+            File conf = configFile(_configDir, ih);
             try {
                 I2PSnarkUtil.loadProps(rv, conf);
             } catch (IOException ioe) { /* ignored */ }
+            _configCache.put(hash, new ConfigCacheEntry(rv));
+            return rv;
         }
-        return rv;
     }
 
     /**
@@ -3306,6 +3336,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         } catch (IOException ioe) {
             _log.error("Unable to save the config to " + conf);
         }
+        _configCache.remove(new SHA1Hash(ih));
     }
 
     /** Remove the status of a torrent by removing the config file. */
@@ -3316,6 +3347,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         synchronized (_configLock) {
             comm.delete();
             boolean ok = conf.delete();
+            _configCache.remove(new SHA1Hash(ih));
             if (ok) {
                 if (_log.shouldInfo()) {
                     _log.info("Deleted " + conf + " for " + snark.getName());
@@ -4809,11 +4841,22 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
+    /** how long to cache the disk usage string, avoids a statfs per render */
+    private static final long DISK_USAGE_TTL = 30 * 1000;
+    /** last time the disk usage string was computed */
+    private long _diskUsageCheckedAt;
+    /** cached disk usage string */
+    private String _diskUsageCached;
+
     /* @since 0.9.64+ */
     /**
      * @return the disk usage
      */
     public String getDiskUsage() {
+        long now = System.currentTimeMillis();
+        if (_diskUsageCached != null && now - _diskUsageCheckedAt < DISK_USAGE_TTL) {
+            return _diskUsageCached;
+        }
         try {
             File dir = getDataDir();
             if (dir == null || !dir.exists()) {
@@ -4887,7 +4930,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             } else if (mCount > 1) {
                 bar = bar.substring(0, mIndex) + bar.substring(mIndex + 1);
             }
-            return String.format(bar, (int) usagePercent);
+            String rv = String.format(bar, (int) usagePercent);
+            _diskUsageCached = rv;
+            _diskUsageCheckedAt = now;
+            return rv;
         } catch (Exception e) {
             if (_log.shouldError()) {
                 _log.error("[I2PSnark] Error retrieving disk usage: " + e.getMessage());
