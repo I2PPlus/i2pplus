@@ -71,9 +71,10 @@ public class NewsFeedHelper extends HelperBase {
             // the router sets the JVM time zone to UTC but saves the original here so we can get it
             fmt.setTimeZone(SystemVersion.getSystemTimeZone(ctx));
             int i = 0;
+            long now = ctx.clock().now();
             for (NewsEntry entry : entries) {
                 if (i < start) {i++; continue;}
-                if (i > start && entry.updated > 0 && ageLimit > 0 && entry.updated < ctx.clock().now() - ageLimit) {break;}
+                if (i > start && entry.updated > 0 && ageLimit > 0 && entry.updated < now - ageLimit) {break;}
                 buf.append("<div class=\"newsentry lazy\">\n<h3>");
                 if (entry.updated > 0) {
                     Date date = new Date(entry.updated);
