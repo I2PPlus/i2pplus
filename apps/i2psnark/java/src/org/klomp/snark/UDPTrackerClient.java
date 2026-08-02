@@ -18,6 +18,7 @@ import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+import org.klomp.snark.dht.DatagramSender;
 
 /**
  * One of these for all trackers and info hashes. Ref: BEP 15, proposal 160
@@ -507,15 +508,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
         try {
             boolean success =
-                    _session.sendMessage(
-                            dest,
-                            payload,
-                            0,
-                            payload.length,
-                            repliable ? I2PSession.PROTO_DATAGRAM : I2PSession.PROTO_DATAGRAM_RAW,
-                            _rPort,
-                            toPort,
-                            opts);
+                    DatagramSender.send(_session, opts, dest, payload, _rPort, toPort, repliable);
             if (!success && _log.shouldWarn()) {
                 _log.warn("sendMessage failure");
             }

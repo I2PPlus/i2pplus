@@ -1178,15 +1178,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
         try {
             boolean success =
-                    _session.sendMessage(
-                            dest,
-                            payload,
-                            0,
-                            payload.length,
-                            repliable ? I2PSession.PROTO_DATAGRAM : I2PSession.PROTO_DATAGRAM_RAW,
-                            fromPort,
-                            toPort,
-                            opts);
+                    DatagramSender.send(_session, opts, dest, payload, fromPort, toPort, repliable);
             if (success) {
                 _txPkts.incrementAndGet();
                 _txBytes.addAndGet(payload.length);
@@ -1435,13 +1427,24 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             List<NodeInfo> nodes = _knownNodes.findClosest(tID, K);
             nodes.remove(nInfo); // him
             nodes.remove(_myNodeInfo); // me
-            byte[] nodeArray = new byte[nodes.size() * NodeInfo.LENGTH];
-            for (int i = 0; i < nodes.size(); i++) {
-                System.arraycopy(
-                        nodes.get(i).getData(), 0, nodeArray, i * NodeInfo.LENGTH, NodeInfo.LENGTH);
-            }
+            byte[] nodeArray = packNodes(nodes);
             sendNodes(nInfo, msgID, nodeArray);
         }
+    }
+
+    /**
+     * Pack the given nodes' data into a single byte array for a nodes response.
+     *
+     * @param nodes the nodes to pack
+     * @return the packed node data
+     */
+    private static byte[] packNodes(List<NodeInfo> nodes) {
+        byte[] nodeArray = new byte[nodes.size() * NodeInfo.LENGTH];
+        for (int i = 0; i < nodes.size(); i++) {
+            System.arraycopy(
+                    nodes.get(i).getData(), 0, nodeArray, i * NodeInfo.LENGTH, NodeInfo.LENGTH);
+        }
+        return nodeArray;
     }
 
     /** Handle and respond to the query */
@@ -1474,11 +1477,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             List<NodeInfo> nodes = _knownNodes.findClosest(ih, K);
             nodes.remove(nInfo); // him
             nodes.remove(_myNodeInfo); // me
-            byte[] nodeArray = new byte[nodes.size() * NodeInfo.LENGTH];
-            for (int i = 0; i < nodes.size(); i++) {
-                System.arraycopy(
-                        nodes.get(i).getData(), 0, nodeArray, i * NodeInfo.LENGTH, NodeInfo.LENGTH);
-            }
+            byte[] nodeArray = packNodes(nodes);
             sendNodes(nInfo, msgID, token, nodeArray);
         } else {
             List<byte[]> hashes;
