@@ -889,6 +889,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
                 state = ConnState.IN_PROGRESS;
             } else if (state == ConnState.IN_PROGRESS) {
                 state = ConnState.INVALID;
+                notifyAll();
             }
         }
 
@@ -913,6 +914,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             replyTimeout();
             expires = 0;
             state = ConnState.INVALID;
+            notifyAll();
         }
 
         /** does not change state */
@@ -934,6 +936,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             expires = now + lifetime;
             consecFails = 0;
             state = ConnState.VALID;
+            notifyAll();
         }
 
         /**

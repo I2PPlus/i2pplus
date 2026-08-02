@@ -331,7 +331,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 // It seems like we are just going to get back ourselves all the time
                 if (_log.shouldDebug()) _log.debug("Received " + reply.size() + " nodes");
                 for (NodeInfo ni : reply) {
-                    if (!(ni.equals(_myNodeInfo) || (toTry.contains(ni) && tried.contains(ni))))
+                    if (!(ni.equals(_myNodeInfo) || tried.contains(ni) || toTry.contains(ni)))
                         toTry.add(ni);
                 }
             } else if (replyType == REPLY_NETWORK_FAIL) {

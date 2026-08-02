@@ -370,7 +370,7 @@ public class TrackerClient implements Runnable {
             // configured open trackers
             urls.addAll(_util.getOpenTrackers());
             if (urls.size() > 1) {
-                Collections.shuffle(trackers, _util.getContext().random());
+                Collections.shuffle(urls, _util.getContext().random());
                 if (_util.udpEnabled()) {
                     Collections.sort(urls, new URLComparator());
                 } // sort the list to put udp first so it will trump http
@@ -401,7 +401,7 @@ public class TrackerClient implements Runnable {
             }
             if (backupTrackers.isEmpty()) {
                 backupTrackers.add(new TCTracker(SnarkManager.DEFAULT_BACKUP_TRACKER, false));
-            } else if (trackers.size() > 1) {
+            } else if (backupTrackers.size() > 1) {
                 Collections.shuffle(backupTrackers, _util.getContext().random());
             }
         }
@@ -1306,7 +1306,7 @@ public class TrackerClient implements Runnable {
                 return -1;
             }
             if (ur && !ul) {
-                return -1;
+                return 1;
             }
             return 0;
         }
