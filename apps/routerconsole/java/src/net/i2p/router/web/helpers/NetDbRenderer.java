@@ -88,6 +88,33 @@ class NetDbRenderer {
     private final RouterContext _context;
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
     private static String fmt(double val) { synchronized (TWO_DECIMALS) { return TWO_DECIMALS.format(val); } }
+
+    /**
+     *  The /netdb page auto-refreshes every 10 seconds (netdb.js
+     *  REFRESH_INTERVAL_SHORT), so a snapshot up to this age is never
+     *  visible to a client; caching it avoids re-sorting the full
+     *  network database on every render.
+     */
+    private static final long NETDB_REFRESH_PERIOD = 10 * 1000L;
+    private static volatile long _routersCachedUntil;
+    private static volatile List<RouterInfo> _cachedRouters;
+
+    /**
+     *  Snapshot of the network database sorted by RouterInfoComparator,
+     *  cached for the /netdb auto-refresh period.
+     */
+    private List<RouterInfo> getSortedRouters() {
+        long now = _context.clock().now();
+        List<RouterInfo> cached = _cachedRouters;
+        if (cached != null && now < _routersCachedUntil) {
+            return cached;
+        }
+        List<RouterInfo> routers = new ArrayList<>(_context.netDb().getRouters());
+        Collections.sort(routers, RouterInfoComparator.getInstance());
+        _cachedRouters = routers;
+        _routersCachedUntil = now + NETDB_REFRESH_PERIOD;
+        return routers;
+    }
     /**
      * Construct a new instance.
      */
@@ -492,34 +519,6 @@ class NetDbRenderer {
      *  Counts floodfills in a country.
      *  @since 0.9.64
      */
-    private int countFloodfillsInCountry(Set<RouterInfo> routers, String countryCode) {
-        int count = 0;
-        for (RouterInfo ri : routers) {
-            String caps = ri.getCapabilities();
-            Hash key = ri.getIdentity().getHash();
-            if (_context.commSystem().getCountry(key).equalsIgnoreCase(countryCode.trim()) && caps.indexOf("f") >=0) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    /**
-     *  Counts X-tier routers in a country.
-     *  @since 0.9.64
-     */
-    private int countXTierInCountry(Set<RouterInfo> routers, String countryCode) {
-        int count = 0;
-        for (RouterInfo ri : routers) {
-            String caps = ri.getCapabilities();
-            Hash key = ri.getIdentity().getHash();
-            if (_context.commSystem().getCountry(key).equalsIgnoreCase(countryCode.trim()) && caps.indexOf("X") >=0) {
-                count++;
-            }
-        }
-        return count;
-    }
-
     /**
      *  Filters routers by exact IP match.
      *  @since 0.9.64
@@ -1204,8 +1203,7 @@ class NetDbRenderer {
         boolean showStats = full || shortStats;
         boolean isLocal = false;
         Hash us = _context.routerHash();
-        Set<RouterInfo> routers = new TreeSet<>(RouterInfoComparator.getInstance());
-        routers.addAll(_context.netDb().getRouters());
+        List<RouterInfo> routers = getSortedRouters();
         int offset = pageSize * page;
         boolean hasNextPage = routers.size() > offset + pageSize;
         StringBuilder buf = new StringBuilder(8192);
@@ -1218,6 +1216,7 @@ class NetDbRenderer {
         ObjectCounterUnsafe<String> versions = new ObjectCounterUnsafe<>();
         ObjectCounterUnsafe<String> countries = new ObjectCounterUnsafe<>();
         int[] transportCount = new int[TNAMES.length];
+        Map<String, int[]> countryTiers = new HashMap<>();
         List<RouterInfo> pagedRouters = new ArrayList<>();
         int skipped = 0;
         if (mode == 1 || mode == 2) {
@@ -1240,7 +1239,7 @@ class NetDbRenderer {
                 transportCount[classifyTransports(ri)]++;
             }
         } else if (!showStats) {
-            countFullRouterStats(routers, versions, countries, transportCount);
+            countFullRouterStats(routers, versions, countries, transportCount, countryTiers);
         }
         if (showStats) {
             renderRoutersToWriter(routers, out, isLocal, page, pageSize);
@@ -1248,7 +1247,7 @@ class NetDbRenderer {
             out.append(buf);
             buf.setLength(0);
         } else {
-            renderSummaryTables(buf, versions, countries, transportCount, routers);
+            renderSummaryTables(buf, versions, countries, transportCount, countryTiers);
             out.append(buf);
             buf.setLength(0);
         }
@@ -1257,7 +1256,7 @@ class NetDbRenderer {
 
     /**
      * Renders a list of RouterInfo objects to given Writer.
-     * Uses parallel rendering for small sets (&lt; 300), streams for large sets.
+     * Uses parallel rendering for sets up to 100 routers, streams for larger sets.
      */
     public void renderRoutersToWriter(Collection<RouterInfo> routers, Writer out, boolean isLocal, int page, int pageSize) throws IOException {
         renderRoutersToWriter(routers, out, isLocal, page, pageSize, true);
@@ -1265,13 +1264,13 @@ class NetDbRenderer {
 
     /**
      * Renders a list of RouterInfo objects to given Writer.
-     * Uses parallel rendering for small sets (&lt; 300), streams for large sets.
+     * Uses parallel rendering for sets up to 100 routers, streams for larger sets.
      * @param applyPagination whether to apply pagination internally (false if list is already paginated)
      */
     public void renderRoutersToWriter(Collection<RouterInfo> routers, Writer out, boolean isLocal, int page, int pageSize, boolean applyPagination) throws IOException {
         if (routers == null || routers.isEmpty()) return;
 
-        List<RouterInfo> list = new ArrayList<>(routers);
+        List<RouterInfo> list = routers instanceof List ? (List<RouterInfo>) routers : new ArrayList<>(routers);
         List<RouterInfo> pageList;
         if (applyPagination) {
             int total = list.size();
@@ -1308,10 +1307,11 @@ class NetDbRenderer {
 
     /**
      *  Renders the summary tables (versions, bandwidth, transports, countries).
+     *  @param countryTiers per-country [X-tier, floodfill] counts
      */
     private void renderSummaryTables(StringBuilder buf, ObjectCounterUnsafe<String> versions,
                                      ObjectCounterUnsafe<String> countries, int[] transportCount,
-                                     Set<RouterInfo> routers) {
+                                     Map<String, int[]> countryTiers) {
         buf.append("<table id=netdboverview width=100%>\n<tr><th colspan=3>")
            .append(_t("Network Database Router Statistics"))
            .append("</th></tr>\n<tr><td style=vertical-align:top>");
@@ -1321,7 +1321,7 @@ class NetDbRenderer {
         renderCongestionCaps(buf);
         renderTransportsTable(buf, transportCount);
         buf.append("</td><td style=vertical-align:top>\n");
-        renderCountryTable(buf, countries, routers);
+        renderCountryTable(buf, countries, countryTiers);
         buf.append("</td>\n</tr>\n</table>\n");
     }
 
@@ -1440,7 +1440,8 @@ class NetDbRenderer {
     /**
      *  Renders the country list table.
      */
-    private void renderCountryTable(StringBuilder buf, ObjectCounterUnsafe<String> countries, Set<RouterInfo> routers) {
+    private void renderCountryTable(StringBuilder buf, ObjectCounterUnsafe<String> countries,
+                                    Map<String, int[]> countryTiers) {
         List<String> countryList = new ArrayList<>(countries.objects());
         buf.append("<table id=netdbcountrylist>\n<thead><tr>")
            .append("<th data-sort-direction=ascending>").append(_t("Country")).append("</th>")
@@ -1453,14 +1454,17 @@ class NetDbRenderer {
             buf.append("<tbody id=cclist>\n");
             for (String country : countryList) {
                 int totalCount = Math.max(countries.count(country) - 1, 0);
+                int[] tier = countryTiers.get(country);
+                int xtier = tier != null ? tier[0] : 0;
+                int flood = tier != null ? tier[1] : 0;
                 buf.append("<tr><td><a href=\"/netdb?c=").append(country).append("\">")
                    .append("<img width=20 height=15 alt=\"").append(country.toUpperCase(Locale.US)).append("\"")
                    .append(" src=\"/flags.jsp?c=").append(country).append("\">")
                    .append(getTranslatedCountry(country).replace("xx", _t("Unknown"))).append("</a></td>")
                    .append("<td class=countX><a href=\"/netdb?caps=X&amp;cc=").append(country).append("\">")
-                   .append(countXTierInCountry(routers, country)).append("</a></td>")
+                   .append(xtier).append("</a></td>")
                    .append("<td class=countFF><a href=\"/netdb?caps=f&amp;cc=").append(country).append("\">")
-                   .append(countFloodfillsInCountry(routers, country)).append("</a></td>")
+                   .append(flood).append("</a></td>")
                    .append("<td class=countCC>").append(totalCount).append("</td></tr>\n");
             }
             buf.append("</tbody>\n</table>\n");
@@ -1470,16 +1474,29 @@ class NetDbRenderer {
     }
 
     /**
-     *  Counts full router stats for summary mode.
+     *  Counts the summary statistics for the /netdb overview in a single
+     *  pass: versions, countries, transports, and per-country X-tier /
+     *  floodfill totals.
      */
-    private void countFullRouterStats(Set<RouterInfo> routers, ObjectCounterUnsafe<String> versions,
-                                     ObjectCounterUnsafe<String> countries, int[] transportCount) {
+    private void countFullRouterStats(List<RouterInfo> routers, ObjectCounterUnsafe<String> versions,
+                                     ObjectCounterUnsafe<String> countries, int[] transportCount,
+                                     Map<String, int[]> countryTiers) {
         for (RouterInfo ri : routers) {
             Hash key = ri.getIdentity().getHash();
             String routerVersion = ri.getOption("router.version");
             if (routerVersion != null) versions.increment(routerVersion);
             String country = _context.commSystem().getCountry(key);
-            if (country != null) countries.increment(country);
+            if (country != null) {
+                countries.increment(country);
+                int[] tier = countryTiers.get(country);
+                if (tier == null) {
+                    tier = new int[2];
+                    countryTiers.put(country, tier);
+                }
+                String caps = ri.getCapabilities();
+                if (caps.indexOf("X") >= 0) {tier[0]++;}
+                if (caps.indexOf("f") >= 0) {tier[1]++;}
+            }
             transportCount[classifyTransports(ri)]++;
         }
     }
@@ -1959,7 +1976,9 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders multiple RouterInfo objects in parallel.
+     *  Renders multiple RouterInfo objects in parallel, in ordered chunks
+     *  of BATCH_SIZE. Falls back to synchronous rendering when the set is
+     *  larger than one batch, to bound peak memory.
      *
      *  @param routerInfos collection of routers to render
      *  @param isLocalRouter true if rendering the local router
