@@ -611,15 +611,16 @@ public class SybilRenderer {
             Hash rkey = ls.getRoutingKey();
             TunnelPool in = clientInboundPools.get(client);
             String name = (in != null) ? DataHelper.escapeHTML(in.getSettings().getDestinationNickname()) : client.toBase64().substring(0,4);
+            String lsHash = ls.getHash().toBase64();
             buf.append("<h3 class=sybils>").append(_t("Closest floodfills to the Routing Key for"))
                .append(" ").append(name).append(" (").append(_t("where we store our LS")).append(")</h3>")
-               .append("<p class=sybil_info><a href=\"/netdb?caps=f&amp;sybil=").append(ls.getHash().toBase64()).append("\">See all</a></p>\n");
+               .append("<p class=sybil_info><a href=\"/netdb?caps=f&amp;sybil=").append(lsHash).append("\">See all</a></p>\n");
             analysis.calculateRouterInfo(rkey, name, ris, points);
             renderRouterInfoHTML(out, buf, rkey, avgMinDist, ris);
             Hash nkey = rkgen.getNextRoutingKey(ls.getHash());
             buf.append("<h3 class=sybils>").append(_t("Closest floodfills to Tomorrow's Routing Key for"))
                .append(" ").append(name).append(" (").append(_t("where we will store our LS")).append(")</h3>")
-               .append("<p class=sybil_info><a href=\"/netdb?caps=f&amp;sybil=").append(ls.getHash().toBase64()).append("\">See all</a></p>\n");
+               .append("<p class=sybil_info><a href=\"/netdb?caps=f&amp;sybil=").append(lsHash).append("\">See all</a></p>\n");
             analysis.calculateRouterInfo(nkey, name + " (tomorrow)", ris, points);
             renderRouterInfoHTML(out, buf, nkey, avgMinDist, ris);
         }
