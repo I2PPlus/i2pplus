@@ -118,9 +118,6 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
         }
     } else if (f == null && l == null && ls == null && r == null) {
 %>
-<link href=/themes/console/tablesort.css rel=stylesheet>
-<script src=/js/tablesort/sortShared.js></script>
-<script src=/js/tablesort/tablesort.js type=module></script>
 <%  } else if (f != null) {
         switch (f) {
             case "1": heading += " – " + intl._t("All Routers") + " [" + intl._t("Advanced") + "]";
@@ -159,6 +156,7 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <noscript><style>body:not(.ready) .lazy{display:table!important}</style></noscript>
 <% } %>
 <style>#pagenav{display:block!important}</style>
+<link href=/themes/console/tablesort.css rel=stylesheet>
 <script src=/js/refreshElements.js type=module></script>
 <script src=/js/lazyload.js></script>
 <script src=/js/tablesort/sortShared.js></script>
