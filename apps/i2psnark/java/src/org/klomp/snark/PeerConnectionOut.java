@@ -34,6 +34,8 @@ class PeerConnectionOut implements Runnable {
     // Contains Messages.
     // Bounded queue to prevent unbounded memory growth under slow network conditions
     private static final int MAX_QUEUE_SIZE = 1000;
+    /** max consecutive PIECE messages the priority scan walks before giving up */
+    private static final int MAX_PRIORITY_SCAN = 16;
     private final BlockingQueue<Message> sendQueue = new LinkedBlockingQueue<>(MAX_QUEUE_SIZE);
     private static final AtomicLong __id = new AtomicLong();
     private final long _id;
@@ -102,9 +104,11 @@ class PeerConnectionOut implements Runnable {
                         // being sent even if we get unchoked a little later (since we will resend
                         // them anyway in that case).
                         // And remove piece messages if we are choking.
-                        Iterator<Message> it =
-                                sendQueue.iterator(); // this should get fixed for starvation
-                        while (m == null && it.hasNext()) {
+                        // Bound the scan so a long run of piece messages
+                        // doesn't cost O(n) per message sent
+                        int skipped = 0;
+                        Iterator<Message> it = sendQueue.iterator();
+                        while (m == null && it.hasNext() && skipped < MAX_PRIORITY_SCAN) {
                             Message nm = it.next();
                             if (nm.type == Message.PIECE) {
                                 if (state.choking) {
@@ -123,6 +127,7 @@ class PeerConnectionOut implements Runnable {
                                     }
                                 }
                                 nm = null;
+                                skipped++;
                             } else if (nm.type == Message.REQUEST) {
                                 if (state.choked) {
                                     it.remove();
@@ -231,10 +236,20 @@ class PeerConnectionOut implements Runnable {
 
     /**
      * Adds a message to the sendQueue and notifies the method waiting on the sendQueue to change.
+     * Control messages are never silently dropped: if the queue is full, a queued piece message is
+     * dropped to make room for it. Piece messages are dropped instead, the requester will retry.
      */
     private void addMessage(Message m) {
         synchronized (sendQueue) {
-            sendQueue.offer(m);
+            if (!sendQueue.offer(m)) {
+                if (m.type != Message.PIECE && removeMessage(Message.PIECE)) {
+                    sendQueue.offer(m);
+                } else {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Send queue full, dropping " + m + " to [" + peer + "]");
+                    }
+                }
+            }
             sendQueue.notifyAll();
         }
     }
