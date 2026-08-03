@@ -6,8 +6,7 @@
       "apps/imagegen/imagegen/webapp/src/main/webapp",
       "apps/routerconsole/jsp/js",
       "apps/susidns/src/js",
-      "apps/susimail/src/js",
-      "installer/resources/themes/geomap"
+      "apps/susimail/src/js"
     ],
     "exclude": [
       "apps/routerconsole/jsp/js/morphdom.js"

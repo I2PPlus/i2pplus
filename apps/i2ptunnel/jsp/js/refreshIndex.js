@@ -42,7 +42,10 @@ try {
 } catch (e) {
   console.warn('[refreshIndex] Cannot access parent document:', e);
 }
-/** @type {Function|null} resize-event guard that re-pins the iframe to 100% while down */
+/**
+ * Resize-event guard that re-pins the iframe to 100% while down.
+ * @type {Function|null}
+ */
 let _resizeGuard = null;
 /** @type {HTMLElement|null} */
 const isDownElement = document.getElementById("down");

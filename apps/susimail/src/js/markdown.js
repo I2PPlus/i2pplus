@@ -61,16 +61,31 @@ const CLS = Object.freeze({
   HEADING:    (level) => `md heading h${level}`,
 });
 
-/** @type {string[]} Allowed URL schemes for links */
+/**
+ * Allowed URL schemes for links.
+ * @type {string[]}
+ */
 const _ALLOWED_SCHEMES = Object.freeze(["http:", "https:", "mailto:"]);
-/** @type {string} Characters that need escaping in markdown */
+/**
+ * Characters that need escaping in markdown.
+ * @type {string}
+ */
 const _ESCAPE_CHARS = "\\`*{}[]()>#+.!-_|";
-/** @type {RegExp} Trailing double-space for hard line break */
+/**
+ * Trailing double-space for hard line break.
+ * @type {RegExp}
+ */
 const _BR_REGEX = /  $/;
-/** @type {string} Placeholder for <br> to avoid early escaping */
+/**
+ * Placeholder for <br> to avoid early escaping.
+ * @type {string}
+ */
 const _BR_PLACEHOLDER = "\x02BR\x02";
 
-/** @type {Object<string, RegExp>} Regular expressions for parsing */
+/**
+ * Regular expressions for parsing.
+ * @type {Object<string, RegExp>}
+ */
 const RE_BLANK = /^\s*$/;
 const RE_HR = /^(?:[*\-+_]\s*){3,}(\s+[\d.]+)?\s*$/;         // Horizontal rule
 const RE_ATX_H = /^(#{1,6})\s+(.*)$/;                        // Atx heading

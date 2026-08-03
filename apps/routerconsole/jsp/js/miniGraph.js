@@ -8,30 +8,63 @@
  * @license AGPL3 or later
  */
 
-/** @type {boolean} Whether the new dual-baseline renderer is enabled */
+/**
+ * Whether the new dual-baseline renderer is enabled.
+ * @type {boolean}
+ */
 const useNewRenderer = window.graphNewRenderer === true;
 
 // ─── Shared constants ────────────────────────────────────────────────
 
-/** @type {number} Canvas width in pixels */
+/**
+ * Canvas width in pixels.
+ * @type {number}
+ */
 const WIDTH = 245;
-/** @type {number} Canvas height in pixels */
+/**
+ * Canvas height in pixels.
+ * @type {number}
+ */
 const HEIGHT = 50;
-/** @type {number} Padding inset in pixels */
+/**
+ * Padding inset in pixels.
+ * @type {number}
+ */
 const PAD = 4;
-/** @type {number} Drawing area width (excluding padding) */
+/**
+ * Drawing area width (excluding padding).
+ * @type {number}
+ */
 const DRAW_W = WIDTH - PAD * 2;
-/** @type {number} Drawing area height (excluding padding) */
+/**
+ * Drawing area height (excluding padding).
+ * @type {number}
+ */
 const DRAW_H = HEIGHT - PAD * 2;
-/** @type {number} Center Y coordinate — baseline for both halves (padded) */
+/**
+ * Center Y coordinate — baseline for both halves (padded).
+ * @type {number}
+ */
 const CENTER_Y = PAD + DRAW_H / 2;
-/** @type {string} sessionStorage key for shift buffers */
+/**
+ * sessionStorage key for shift buffers.
+ * @type {string}
+ */
 const BUFFER_KEY = "minigraph_buffers";
-/** @type {number} Target buffer length for the interpolated RRD fallback (~20 min at 3s) */
+/**
+ * Target buffer length for the interpolated RRD fallback (~20 min at 3s).
+ * @type {number}
+ */
 const TARGET_BUFFER = 400;
-/** @type {number} Max buffer length — matches server BandwidthHistory CAPACITY (1200 = 20 min @1s) */
+/**
+ * Max buffer length — matches server BandwidthHistory CAPACITY (1200 = 20 min @1s).
+ * @type {number}
+ */
 const MAX_BUFFER = 1200;
-/** @type {number} Real seconds represented by each buffer sample (BandwidthHistory samples @1s) */
+/**
+ * Real seconds represented by each buffer sample (BandwidthHistory samples @1s).
+ * @type {number}
+ */
 const SAMPLE_SECONDS = 1;
 /**
  * Buffer length that represents the configured period. One sample per
@@ -46,21 +79,36 @@ function periodLength(minutes) {
 
 // ─── Shared state ────────────────────────────────────────────────────
 
-/** @type {number} Sidebar refresh interval in ms */
+/**
+ * Sidebar refresh interval in ms.
+ * @type {number}
+ */
 const POLL_INTERVAL = refresh != null ? Math.max(refresh * 1000, 1000) : 3000;
 /** @type {?HTMLCanvasElement} */
 let graphCanvas = null;
 /** @type {?CanvasRenderingContext2D} */
 let graphCtx = null;
-/** @type {?HTMLCanvasElement} Offscreen canvas for double-buffering */
+/**
+ * Offscreen canvas for double-buffering.
+ * @type {?HTMLCanvasElement}
+ */
 let offscreenCanvas = null;
 /** @type {?CanvasRenderingContext2D} */
 let offscreenCtx = null;
-/** @type {?number[]} Shift buffer for rx data */
+/**
+ * Shift buffer for rx data.
+ * @type {?number[]}
+ */
 let rxBuffer = null;
-/** @type {?number[]} Shift buffer for tx data */
+/**
+ * Shift buffer for tx data.
+ * @type {?number[]}
+ */
 let txBuffer = null;
-/** @type {number} Timestamp of last buffer shift (ms) — prevents double-shift from dual callers */
+/**
+ * Timestamp of last buffer shift (ms) — prevents double-shift from dual callers.
+ * @type {number}
+ */
 let lastShiftTime = 0;
 
 // ─── Legacy-only state ───────────────────────────────────────────────
