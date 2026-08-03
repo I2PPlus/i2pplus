@@ -614,13 +614,21 @@ async function refreshTorrents(payload) {
      * @async
      * @function updateVolatile
      * @description Performs an incremental update of the torrent table from the payload.
-     * Morphs the tbody so only changed rows and cells are written, and refreshes the
-     * filter badge, pagination, and DHT debug rows.
+     * Morphs the tbody so only changed rows and cells are written, refreshes the
+     * filter badge, pagination, and DHT debug rows, and syncs the form's hidden nonce
+     * from the payload so it never goes stale between page loads.
      * @returns {Promise<void>}
      */
     async function updateVolatile() {
       try {
         if (noTorrents) {noTorrents.remove();}
+
+        const nonceMatch = payload.torrentlist && payload.torrentlist.match(/name=nonce value="([^"]*)/);
+        if (nonceMatch && torrentForm) {
+          const hidden = torrentForm.querySelector('input[name=nonce]');
+          if (hidden && hidden.value !== nonceMatch[1]) {hidden.value = nonceMatch[1];}
+        }
+
         if (filterbar) {
           if (payload.badgeText !== null) {
             const activeBadge = filterbar.querySelector("#filterBar .filter#all .badge");
