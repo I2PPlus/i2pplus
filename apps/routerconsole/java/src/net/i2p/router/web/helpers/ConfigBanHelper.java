@@ -13,24 +13,24 @@ public class ConfigBanHelper extends HelperBase {
      */
     public ConfigBanHelper() {}
 
-    private static final String PROP_MAX_OFFENSES = "router.banlist.maxOffenses";
-    private static final String PROP_OFFENSE_WINDOW = "router.banlist.offenseWindow";
-    private static final String PROP_STARTUP_GRACE = "router.banlist.startupGrace";
-    private static final String PROP_BAD_PACKET_DURATION = "router.banlist.badPacketDuration";
-    private static final String PROP_ENABLE_BAD_PACKET_BAN = "router.banlist.enableBadPacketBan";
-    private static final String PROP_ENABLE_CORRUPT_CONNECTION_BAN = "router.banlist.enableCorruptConnectionBan";
-    private static final String PROP_ENABLE_PORT_HOPPING_BAN = "router.banlist.enablePortHoppingBan";
-    private static final String PROP_ENABLE_BLOCKLIST = "router.blocklist.enable";
-    private static final String PROP_ENABLE_TOR_BLOCKLIST = "router.blocklistTor.enable";
-    private static final String PROP_ENABLE_COUNTRY_BAN = "router.blocklistCountries.enable";
-    private static final String PROP_ENABLE_XG_BAN = "router.banlistXG";
-    private static final String PROP_ENABLE_LU_BAN = "router.banlistLU";
-    private static final String PROP_ENABLE_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
-    private static final String PROP_CUSTOM_CAPABILITY_BANS = "router.banlistCapabilities";
-    private static final String PROP_COUNTRY_CODES = "router.blockCountries";
-    private static final String PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN = "router.banlist.enableUnresponsiveFloodfillBan";
-    private static final String PROP_ENABLE_NO_VERSION_BAN = "router.banlist.enableNoVersionBan";
-    private static final String PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN = "router.banlist.enableExcessiveTunnelRequestsBan";
+    public static final String PROP_MAX_OFFENSES = "router.banlist.maxOffenses";
+    public static final String PROP_OFFENSE_WINDOW = "router.banlist.offenseWindow";
+    public static final String PROP_STARTUP_GRACE = "router.banlist.startupGrace";
+    public static final String PROP_BAD_PACKET_DURATION = "router.banlist.badPacketDuration";
+    public static final String PROP_ENABLE_BAD_PACKET_BAN = "router.banlist.enableBadPacketBan";
+    public static final String PROP_ENABLE_CORRUPT_CONNECTION_BAN = "router.banlist.enableCorruptConnectionBan";
+    public static final String PROP_ENABLE_PORT_HOPPING_BAN = "router.banlist.enablePortHoppingBan";
+    public static final String PROP_ENABLE_BLOCKLIST = "router.blocklist.enable";
+    public static final String PROP_ENABLE_TOR_BLOCKLIST = "router.blocklistTor.enable";
+    public static final String PROP_ENABLE_COUNTRY_BAN = "router.blocklistCountries.enable";
+    public static final String PROP_ENABLE_XG_BAN = "router.banlistXG";
+    public static final String PROP_ENABLE_LU_BAN = "router.banlistLU";
+    public static final String PROP_ENABLE_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
+    public static final String PROP_CUSTOM_CAPABILITY_BANS = "router.banlistCapabilities";
+    public static final String PROP_COUNTRY_CODES = "router.blockCountries";
+    public static final String PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN = "router.banlist.enableUnresponsiveFloodfillBan";
+    public static final String PROP_ENABLE_NO_VERSION_BAN = "router.banlist.enableNoVersionBan";
+    public static final String PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN = "router.banlist.enableExcessiveTunnelRequestsBan";
 
     /**
      * Get the maximum number of offenses before a peer is banned.

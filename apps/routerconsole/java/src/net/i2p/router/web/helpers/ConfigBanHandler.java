@@ -1,5 +1,6 @@
 package net.i2p.router.web.helpers;
 
+import static net.i2p.router.web.helpers.ConfigBanHelper.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,26 +37,8 @@ public class ConfigBanHandler extends FormHandler {
     private String _customCapabilityBans;
     private String _customCountryCodes;
 
-    private static final String PROP_MAX_OFFENSES = "router.banlist.maxOffenses";
-    private static final String PROP_OFFENSE_WINDOW = "router.banlist.offenseWindow";
-    private static final String PROP_STARTUP_GRACE = "router.banlist.startupGrace";
-    private static final String PROP_BAD_PACKET_DURATION = "router.banlist.badPacketDuration";
-    private static final String PROP_ENABLE_BAD_PACKET_BAN = "router.banlist.enableBadPacketBan";
-    private static final String PROP_ENABLE_CORRUPT_CONNECTION_BAN = "router.banlist.enableCorruptConnectionBan";
-    private static final String PROP_ENABLE_PORT_HOPPING_BAN = "router.banlist.enablePortHoppingBan";
     private static final Pattern COMMA_SPLIT = Pattern.compile("[,\\s]+");
     private static final Pattern COUNTRY_CODE = Pattern.compile("[a-z][a-z]");
-    private static final String PROP_ENABLE_BLOCKLIST = "router.blocklist.enable";
-    private static final String PROP_ENABLE_TOR_BLOCKLIST = "router.blocklistTor.enable";
-    private static final String PROP_ENABLE_COUNTRY_BAN = "router.blocklistCountries.enable";
-    private static final String PROP_ENABLE_XG_BAN = "router.banlistXG";
-    private static final String PROP_ENABLE_LU_BAN = "router.banlistLU";
-    private static final String PROP_ENABLE_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
-    private static final String PROP_CUSTOM_CAPABILITY_BANS = "router.banlistCapabilities";
-    private static final String PROP_COUNTRY_CODES = "router.blockCountries";
-    private static final String PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN = "router.banlist.enableUnresponsiveFloodfillBan";
-    private static final String PROP_ENABLE_NO_VERSION_BAN = "router.banlist.enableNoVersionBan";
-    private static final String PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN = "router.banlist.enableExcessiveTunnelRequestsBan";
 
     @Override
     protected void processForm() {
