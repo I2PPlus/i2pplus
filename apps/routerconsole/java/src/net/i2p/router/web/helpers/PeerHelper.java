@@ -112,7 +112,7 @@ public class PeerHelper extends HelperBase {
                 Transport t = e.getValue();
                 if (style.equals("NTCP") && "ntcp".equals(_transport)) {
                     NTCPTransport nt = (NTCPTransport) t;
-                    render(nt, out, urlBase, sortFlags);
+                    render(nt, out, sortFlags);
                     rendered = true;
                     break;
                 } else if (style.contains("SSU") && "ssu".equals(_transport)) {
@@ -473,222 +473,253 @@ public class PeerHelper extends HelperBase {
      *
      *  @since 0.9.31 moved from NTCPTransport
      */
-    private void render(NTCPTransport nt, Writer out, String urlBase, int sortFlags) throws IOException {
+    private void render(NTCPTransport nt, Writer out, int sortFlags) throws IOException {
         boolean IPv6Enabled = _context.getBooleanProperty("i2np.ntcp.ipv6") ||
                               _context.getBooleanProperty("i2np.udp.ipv6");
         TreeSet<NTCPConnection> peers = new TreeSet<>(getNTCPComparator(sortFlags));
         peers.addAll(nt.getPeers());
 
-        long offsetTotal = 0;
-        float bpsSend = 0;
-        float bpsRecv = 0;
-        long totalUptime = 0;
-        long totalSend = 0;
-        long totalRecv = 0;
-        int notEstablished = 0;
-
         for (Iterator<NTCPConnection> iter = peers.iterator(); iter.hasNext();) {
-             // outbound conns get put in the map before they are established
-             if (!iter.next().isEstablished()) {
-                 iter.remove();
-                 notEstablished++;
-             }
+            // outbound conns get put in the map before they are established
+            if (!iter.next().isEstablished()) {
+                iter.remove();
+            }
         }
 
         StringBuilder buf = new StringBuilder(4*1024);
+        renderNTCPHeader(buf, IPv6Enabled, nt.countActivePeers(), nt.getMaxConnections(), !peers.isEmpty());
+        out.append(buf);
+        buf.setLength(0);
+        long now = _context.clock().now();
+        int peerCount = peers.size();
+        NTCPTotals totals = new NTCPTotals();
+        for (NTCPConnection con : peers) {
+            // exclude older peers
+            if (peerCount >= 300 && (con.getTimeSinceReceive(now) > 60*1000 || con.getTimeSinceSend(now) > 60*1000)) {
+                continue;
+            } else if (peerCount >= 100 && (con.getTimeSinceReceive(now) > 3*60*1000 || con.getTimeSinceSend(now) > 3*60*1000)) {
+                continue;
+            } else if (con.getTimeSinceReceive(now) > 10*60*1000 || con.getTimeSinceSend(now) > 10*60*1000) {
+                continue;
+            }
+            renderNTCPRow(buf, con, now, IPv6Enabled, peerCount, totals);
+            out.append(buf);
+            buf.setLength(0);
+        }
+        buf.append("</tbody>");
+        if (!peers.isEmpty()) {
+            renderNTCPFooter(buf, IPv6Enabled, nt.countActivePeers(), peerCount, totals);
+        }
+        buf.append("</tfoot></table>\n</div></div>\n");
+        out.append(buf);
+        buf.setLength(0);
+    }
+
+    /**
+     *  Append the NTCP peer table header, including the IPv6 column when enabled.
+     *
+     *  @since 0.9.70+
+     */
+    private void renderNTCPHeader(StringBuilder buf, boolean ipv6Enabled, int activePeers,
+                                  int maxConnections, boolean hasPeers) {
         buf.append("<div id=ntcp>\n<h3 id=ntcpcon title=\"")
            .append(_t("Current / maximum permitted"))
            .append("\">")
            .append(_t("NTCP connections"))
            .append(":&nbsp; ")
-           .append(nt.countActivePeers())
+           .append(activePeers)
            .append(" / ")
-           .append(nt.getMaxConnections())
+           .append(maxConnections)
            .append("<span id=topCount hidden></span></h3>\n<div class=widescroll>\n<table id=ntcpconnections class=cells>\n");
-        if (!peers.isEmpty()) {
-            buf.append("<thead><tr><th class=peer>")
-               .append(_t("Peer"))
-               .append("</th><th class=caps title=\"")
-               .append(_t("Peer capabilities"))
-               .append("\">")
-               .append(_t("Caps"))
-               .append("</th><th class=direction title=\"")
-               .append(_t("Direction/Introduction"))
-               .append("\">")
-               .append(_t("Dir"))
+        if (!hasPeers) {return;}
+        buf.append("<thead><tr><th class=peer>")
+           .append(_t("Peer"))
+           .append("</th><th class=caps title=\"")
+           .append(_t("Peer capabilities"))
+           .append("\">")
+           .append(_t("Caps"))
+           .append("</th><th class=direction title=\"")
+           .append(_t("Direction/Introduction"))
+           .append("\">")
+           .append(_t("Dir"))
+           .append("</th>");
+        if (ipv6Enabled) {
+            buf.append("<th class=ipv6>")
+               .append(_t("IPv6"))
                .append("</th>");
-            if (IPv6Enabled) {
-                buf.append("<th class=ipv6>")
-                   .append(_t("IPv6"))
-                   .append("</th>");
-            }
-            buf.append("<th class=idle title=\"")
-               .append(_t("Peer inactivity"))
-               .append("\">")
-               .append(_t("Idle"))
-               .append("</th><th class=inout title=\"")
-               .append(_t("Average inbound/outbound rate (KBps)"))
-               .append("\" data-sort-method=number>")
-               .append(_t("In / Out"))
-               .append ("</th><th class=uptime title=\"")
-               .append(_t("Duration of connection to peer"))
-               .append("\" data-sort-method=number>")
-               .append(_t("Up"))
-               .append("</th><th class=skew title=\"")
-               .append(_t("Peer's clockskew relative to our clock"))
-               .append("\" data-sort-method=number>")
-               .append(_t("Skew"))
-               .append("</th><th class=tx title=\"")
-               .append(_t("Messages sent"))
-               .append("\" data-sort-method=number>")
-               .append(_t("TX"))
-               .append("</th><th class=rx title=\"")
-               .append(_t("Messages received"))
-               .append("\">")
-               .append(_t("RX"))
-               .append("</th><th class=queue title=\"")
-               .append(_t("Queued messages to send to peer"))
-               .append("\" data-sort-method=number>")
-               .append(_t("Out Queue"))
-               .append("</th><th class=edit></th></tr></thead>\n<tbody id=peersNTCP>\n");
         }
-        out.append(buf);
-        buf.setLength(0);
-        long now = _context.clock().now();
-        int inactive = 0;
-        for (NTCPConnection con : peers) {
-            // exclude older peers
-            if (peers.size() >= 300 && (con.getTimeSinceReceive(now) > 60*1000 || con.getTimeSinceSend(now) > 60*1000)) {
-                inactive += 1;
-                continue;
-            } else if (peers.size() >= 100 && (con.getTimeSinceReceive(now) > 3*60*1000 || con.getTimeSinceSend(now) > 3*60*1000)) {
-                inactive += 1;
-                continue;
-            } else if (con.getTimeSinceReceive(now) > 10*60*1000 || con.getTimeSinceSend(now) > 10*60*1000) {
-                inactive += 1;
-                continue;
-            }
-            Hash h = con.getRemotePeer().calculateHash();
-            boolean isInbound = con.isInbound();
-            buf.append("<tr class=lazy><td class=peer data-sort-direction=ascending>")
-               .append(_context.commSystem().renderPeerHTML(h, false))
-               .append("</td><td class=caps>")
-               .append(_context.commSystem().renderPeerCaps(h, false))
-               .append("</td><td class=direction data-sort=").append(isInbound ? "in" : "out").append(">");
-            if (isInbound) {
-                buf.append("<span class=inbound title=\"").append(_t("Inbound")).append("\"></span>");
-            } else {
-                buf.append("<span class=outbound title=\"").append(_t("Outbound")).append("\"></span>");
-            }
+        buf.append("<th class=idle title=\"")
+           .append(_t("Peer inactivity"))
+           .append("\">")
+           .append(_t("Idle"))
+           .append("</th><th class=inout title=\"")
+           .append(_t("Average inbound/outbound rate (KBps)"))
+           .append("\" data-sort-method=number>")
+           .append(_t("In / Out"))
+           .append("</th><th class=uptime title=\"")
+           .append(_t("Duration of connection to peer"))
+           .append("\" data-sort-method=number>")
+           .append(_t("Up"))
+           .append("</th><th class=skew title=\"")
+           .append(_t("Peer's clockskew relative to our clock"))
+           .append("\" data-sort-method=number>")
+           .append(_t("Skew"))
+           .append("</th><th class=tx title=\"")
+           .append(_t("Messages sent"))
+           .append("\" data-sort-method=number>")
+           .append(_t("TX"))
+           .append("</th><th class=rx title=\"")
+           .append(_t("Messages received"))
+           .append("\">")
+           .append(_t("RX"))
+           .append("</th><th class=queue title=\"")
+           .append(_t("Queued messages to send to peer"))
+           .append("\" data-sort-method=number>")
+           .append(_t("Out Queue"))
+           .append("</th><th class=edit></th></tr></thead>\n<tbody id=peersNTCP>\n");
+    }
+
+    /**
+     *  Append one NTCP peer row and accumulate its stats into totals.
+     *
+     *  @since 0.9.70+
+     */
+    private void renderNTCPRow(StringBuilder buf, NTCPConnection con, long now, boolean ipv6Enabled,
+                               int peerCount, NTCPTotals totals) {
+        Hash h = con.getRemotePeer().calculateHash();
+        boolean isInbound = con.isInbound();
+        buf.append("<tr class=lazy><td class=peer data-sort-direction=ascending>")
+           .append(_context.commSystem().renderPeerHTML(h, false))
+           .append("</td><td class=caps>")
+           .append(_context.commSystem().renderPeerCaps(h, false))
+           .append("</td><td class=direction data-sort=").append(isInbound ? "in" : "out").append(">");
+        if (isInbound) {
+            buf.append("<span class=inbound title=\"").append(_t("Inbound")).append("\"></span>");
+        } else {
+            buf.append("<span class=outbound title=\"").append(_t("Outbound")).append("\"></span>");
+        }
+        buf.append("</td>");
+        if (ipv6Enabled) {
+            buf.append("<td class=ipv6>");
+            if (con.isIPv6()) {buf.append("<span class=isIPv6>&#x2713;</span>");}
+            else {buf.append("");}
             buf.append("</td>");
-            if (IPv6Enabled) {
-                buf.append("<td class=ipv6>");
-                if (con.isIPv6()) {buf.append("<span class=isIPv6>&#x2713;</span>");}
-                else {buf.append("");}
-                buf.append("</td>");
-            }
-            buf.append("<td class=idle><span class=right data-sort=").append(con.getTimeSinceReceive(now)).append(">")
-               .append(DataHelper.formatDuration2(con.getTimeSinceReceive(now)))
-               .append("</span>")
-               .append(THINSP)
-               .append("<span class=left>")
-               .append(DataHelper.formatDuration2(con.getTimeSinceSend(now)))
-               .append("</span></td>");
-
-            buf.append("<td class=inout data-sort=").append(con.getRecvRate()/1024 > 0.01 ? con.getRecvRate() / 1024 : 0).append(">");
-            String rx = formatRate(con.getRecvRate() / 1024).replace(".00", "");
-            String tx = formatRate(con.getSendRate() / 1024).replace(".00", "");
-            if (con.getRecvRate() >= 0.01 || con.getSendRate() >= 0.01) {
-                buf.append("<span class=right>");
-                if ((peers.size() >= 300 && con.getTimeSinceReceive(now) <= 60*1000) ||
-                    (peers.size() >= 100 && con.getTimeSinceReceive(now) <= 3*60*1000) ||
-                    con.getTimeSinceReceive(now) <= 10*60*1000) {
-                    float r = con.getRecvRate();
-                    buf.append(rx);
-                    bpsRecv += r;
-                } else {buf.append("0");}
-                buf.append("</span>")
-                   .append(THINSP)
-                   .append("<span class=left>");
-                if ((peers.size() >= 300 && con.getTimeSinceSend(now) <= 60*1000) ||
-                    (peers.size() >= 100 && con.getTimeSinceSend(now) <= 3*60*1000) ||
-                    con.getTimeSinceSend(now) <= 10*60*1000) {
-                    float r = con.getSendRate();
-                    buf.append(tx);
-                    bpsSend += r;
-                } else {buf.append("0");}
-                buf.append("</span>");
-            }
-            totalUptime += con.getUptime();
-            offsetTotal += con.getClockSkew();
-            buf.append("</td><td class=uptime data-sort=").append(con.getUptime()).append("><span>")
-               .append(DataHelper.formatDuration2(con.getUptime()))
-               .append("</span></td><td class=skew data-sort=").append(con.getClockSkew()).append(">");
-            if (con.getClockSkew() > 0) {
-                buf.append("<span>")
-                   .append(DataHelper.formatDuration2(con.getClockSkew()))
-                   .append("</span>");
-            }
-            totalSend += con.getMessagesSent();
-            totalRecv += con.getMessagesReceived();
-            long outQueue = con.getOutboundQueueSize();
-            buf.append("</td><td class=tx><span>")
-               .append(con.getMessagesSent())
-               .append("</span></td><td class=rx><span>")
-               .append(con.getMessagesReceived())
-               .append("</span></td><td class=queue>");
-            if (outQueue > 0) {
-                buf.append("<span class=qmsg title=\"Queued messages: ")
-                   .append(outQueue)
-                   .append("\">")
-                   .append(outQueue)
-                   .append("</span>");
-            }
-            if (con.isBacklogged()) {
-                buf.append("&nbsp;<span class=backlogged title=\"")
-                   .append(_t("Connection is backlogged"))
-                   .append("\">!!</span>");
-            }
-            buf.append("<td class=edit><a class=configpeer href=\"/configpeer?peer=")
-               .append(h.toBase64())
-               .append("\" title=\"")
-               .append(_t("Configure peer"))
-               .append("\" alt=\"[")
-               .append(_t("Configure peer"))
-               .append("]\">")
-               .append(_t("Edit"))
-               .append("</a></td></tr>\n");
-            out.append(buf);
-            buf.setLength(0);
         }
-        buf.append("</tbody>");
+        buf.append("<td class=idle><span class=right data-sort=").append(con.getTimeSinceReceive(now)).append(">")
+           .append(DataHelper.formatDuration2(con.getTimeSinceReceive(now)))
+           .append("</span>")
+           .append(THINSP)
+           .append("<span class=left>")
+           .append(DataHelper.formatDuration2(con.getTimeSinceSend(now)))
+           .append("</span></td>");
 
-        if (!peers.isEmpty()) {
-            String rx = formatRate(bpsRecv/1024).replace(".00", "");
-            String tx = formatRate(bpsSend/1024).replace(".00", "");
-            buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=")
-               .append(IPv6Enabled ? "5" : "4")
-               .append("><b>")
-               .append(ngettext("{0} peer", "{0} peers", nt.countActivePeers()))
-               .append("</b></td><td class=inout nowrap><span class=right><b>")
-               .append(rx)
-               .append("</b></span>")
+        buf.append("<td class=inout data-sort=").append(con.getRecvRate()/1024 > 0.01 ? con.getRecvRate() / 1024 : 0).append(">");
+        String rx = formatRate(con.getRecvRate() / 1024).replace(".00", "");
+        String tx = formatRate(con.getSendRate() / 1024).replace(".00", "");
+        if (con.getRecvRate() >= 0.01 || con.getSendRate() >= 0.01) {
+            buf.append("<span class=right>");
+            if ((peerCount >= 300 && con.getTimeSinceReceive(now) <= 60*1000) ||
+                (peerCount >= 100 && con.getTimeSinceReceive(now) <= 3*60*1000) ||
+                con.getTimeSinceReceive(now) <= 10*60*1000) {
+                float r = con.getRecvRate();
+                buf.append(rx);
+                totals.bpsRecv += r;
+            } else {buf.append("0");}
+            buf.append("</span>")
                .append(THINSP)
-               .append("<span class=left><b>")
-               .append(tx)
-               .append("</b></span></td><td class=uptime><span><b>")
-               .append(DataHelper.formatDuration2(totalUptime/peers.size()))
-               .append("</b></span></td><td class=skew><span><b>")
-               .append(DataHelper.formatDuration2(offsetTotal*1000/peers.size()))
-               .append("</b></span></td><td class=tx><span><b>")
-               .append(totalSend)
-               .append("</b></span></td><td class=rx><span><b>")
-               .append(totalRecv)
-               .append("</b></span></td><td colspan=2></td></tr>\n");
+               .append("<span class=left>");
+            if ((peerCount >= 300 && con.getTimeSinceSend(now) <= 60*1000) ||
+                (peerCount >= 100 && con.getTimeSinceSend(now) <= 3*60*1000) ||
+                con.getTimeSinceSend(now) <= 10*60*1000) {
+                float r = con.getSendRate();
+                buf.append(tx);
+                totals.bpsSend += r;
+            } else {buf.append("0");}
+            buf.append("</span>");
         }
-        buf.append("</tfoot></table>\n</div></div>\n");
-        out.append(buf);
-        buf.setLength(0);
+        totals.totalUptime += con.getUptime();
+        totals.offsetTotal += con.getClockSkew();
+        buf.append("</td><td class=uptime data-sort=").append(con.getUptime()).append("><span>")
+           .append(DataHelper.formatDuration2(con.getUptime()))
+           .append("</span></td><td class=skew data-sort=").append(con.getClockSkew()).append(">");
+        if (con.getClockSkew() > 0) {
+            buf.append("<span>")
+               .append(DataHelper.formatDuration2(1000 * con.getClockSkew()))
+               .append("</span>");
+        }
+        totals.totalSend += con.getMessagesSent();
+        totals.totalRecv += con.getMessagesReceived();
+        long outQueue = con.getOutboundQueueSize();
+        buf.append("</td><td class=tx><span>")
+           .append(con.getMessagesSent())
+           .append("</span></td><td class=rx><span>")
+           .append(con.getMessagesReceived())
+           .append("</span></td><td class=queue>");
+        if (outQueue > 0) {
+            buf.append("<span class=qmsg title=\"Queued messages: ")
+               .append(outQueue)
+               .append("\">")
+               .append(outQueue)
+               .append("</span>");
+        }
+        if (con.isBacklogged()) {
+            buf.append("&nbsp;<span class=backlogged title=\"")
+               .append(_t("Connection is backlogged"))
+               .append("\">!!</span>");
+        }
+        buf.append("<td class=edit><a class=configpeer href=\"/configpeer?peer=")
+           .append(h.toBase64())
+           .append("\" title=\"")
+           .append(_t("Configure peer"))
+           .append("\" alt=\"[")
+           .append(_t("Configure peer"))
+           .append("]\">")
+           .append(_t("Edit"))
+           .append("</a></td></tr>\n");
+    }
+
+    /**
+     *  Append the NTCP peer table footer with the accumulated totals.
+     *
+     *  @since 0.9.70+
+     */
+    private void renderNTCPFooter(StringBuilder buf, boolean ipv6Enabled, int activePeers,
+                                  int peerCount, NTCPTotals totals) {
+        String rx = formatRate(totals.bpsRecv/1024).replace(".00", "");
+        String tx = formatRate(totals.bpsSend/1024).replace(".00", "");
+        buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=")
+           .append(ipv6Enabled ? "5" : "4")
+           .append("><b>")
+           .append(ngettext("{0} peer", "{0} peers", activePeers))
+           .append("</b></td><td class=inout nowrap><span class=right><b>")
+           .append(rx)
+           .append("</b></span>")
+           .append(THINSP)
+           .append("<span class=left><b>")
+           .append(tx)
+           .append("</b></span></td><td class=uptime><span><b>")
+           .append(DataHelper.formatDuration2(totals.totalUptime/peerCount))
+           .append("</b></span></td><td class=skew><span><b>")
+           .append(DataHelper.formatDuration2(totals.offsetTotal*1000/peerCount))
+           .append("</b></span></td><td class=tx><span><b>")
+           .append(totals.totalSend)
+           .append("</b></span></td><td class=rx><span><b>")
+           .append(totals.totalRecv)
+           .append("</b></span></td><td colspan=2></td></tr>\n");
+    }
+
+    /**
+     *  Totals accumulated while rendering NTCP peer rows.
+     *
+     *  @since 0.9.70+
+     */
+    private static final class NTCPTotals {
+        float bpsSend;
+        float bpsRecv;
+        long totalUptime;
+        long offsetTotal;
+        long totalSend;
+        long totalRecv;
     }
 
     private static final NumberFormat _rateFmt = new DecimalFormat("#,##0.00");
