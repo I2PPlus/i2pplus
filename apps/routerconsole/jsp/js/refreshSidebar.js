@@ -67,6 +67,7 @@ function getRefreshInterval() {
 }
 
 worker.port.start();
+worker.port.postMessage({ visibility: !document.hidden });
 worker.port.addEventListener("message", ({ data }) => {
   try {
     const { responseText } = data;
@@ -417,21 +418,25 @@ window.addEventListener("offline", updateConnectionStatus);
 
 /**
  * Handles online/offline/visibility events by triggering a forced sidebar refresh.
- * While the tab is hidden, all refresh activity is paused (refresh interval and
- * status interval) so the browser never accumulates throttled timer events to
- * replay on regain. On regain, the in-flight guard is released and any stale
- * response discarded before refreshing with fresh data.
+ * Reports the page's visibility to the SharedWorker so the fetch worker can
+ * suspend the client while the tab is hidden. While the tab is hidden, all
+ * refresh activity is paused (refresh interval and status interval) so the
+ * browser never accumulates throttled timer events to replay on regain. On
+ * regain, the in-flight guard is released and any stale response discarded
+ * before refreshing with fresh data.
  * @function handleStatus
  * @returns {void}
  */
 function handleStatus() {
   if (document.hidden) {
+    worker.port.postMessage({ visibility: false });
     stopAutoRefresh();
     clearTimeout(connectionStatusTimeout);
     clearInterval(statusIntervalId);
     statusIntervalId = null;
     return;
   }
+  worker.port.postMessage({ visibility: true });
   isRefreshing = false;
   rAFPending = false;
   responseDoc = null;

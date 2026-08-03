@@ -31,7 +31,7 @@ let debounceTimeouts = new Map();
 
 /**
  * Handles new SharedWorker connections by setting up message and close handlers.
- * Each connection gets its own client id so closing one tab cannot purge the
+ * Each connection gets its own unique id so closing one tab cannot purge the
  * shared queue or rate limit for other tabs.
  * @function self.onconnect
  * @param {MessageEvent} e - The connection event containing ports
@@ -39,13 +39,16 @@ let debounceTimeouts = new Map();
  */
 self.onconnect = function(e) {
   const port = e.ports[0];
-  const clientData = { port, clientId: Math.random().toString(36).substr(2, 9) };
+  const clientData = { port, clientId: Math.random().toString(36).substr(2, 9), visible: true };
   port.onmessage = function(event) {handleClientMessage(event, clientData);};
-  port.onclose = () => {cleanupClient(clientData.clientId);};
+  port.onclose = () => {cleanupClient(clientData);};
 };
 
 /**
  * Processes incoming messages from a client port, debouncing or force-enqueueing fetch requests.
+ * Clients report their visibility with `{visibility: bool}` so hidden tabs are
+ * suspended (their pending work is purged and new requests ignored) until they
+ * report visible again.
  * @function handleClientMessage
  * @param {MessageEvent} event - The message event containing fetch data
  * @param {Object} clientData - Client data with port and clientId
@@ -54,7 +57,14 @@ self.onconnect = function(e) {
  * @returns {void}
  */
 function handleClientMessage(event, clientData) {
-  const { url, force = false } = event.data;
+  const { url, force = false, visibility } = event.data;
+
+  if (visibility !== undefined) {
+    setClientVisibility(clientData, visibility);
+    return;
+  }
+  if (!url || !clientData.visible) { return; }
+
   const now = Date.now();
   const lastRequestTime = responseCountMap.get(clientData.clientId)?.lastRequestTime || 0;
 
@@ -68,6 +78,36 @@ function handleClientMessage(event, clientData) {
     debounceTimeouts.delete(url);
   }, DEBOUNCE_DELAY);
   debounceTimeouts.set(url, { timeoutId, clientId: clientData.clientId });
+}
+
+/**
+ * Updates a client's visibility state, purging all its pending work when it
+ * becomes hidden so nothing fetches for an invisible tab.
+ * @function setClientVisibility
+ * @param {Object} clientData - Client data with port and clientId
+ * @param {boolean} visible - Whether the client's page is visible
+ * @returns {void}
+ */
+function setClientVisibility(clientData, visible) {
+  if (clientData.visible === visible) { return; }
+  clientData.visible = visible;
+  if (!visible) { purgeClientWork(clientData.clientId); }
+}
+
+/**
+ * Removes all pending debounce timers and queued fetches for a client.
+ * @function purgeClientWork
+ * @param {string} clientId - The client's unique identifier
+ * @returns {void}
+ */
+function purgeClientWork(clientId) {
+  for (const [url, entry] of debounceTimeouts) {
+    if (entry.clientId === clientId) {
+      clearTimeout(entry.timeoutId);
+      debounceTimeouts.delete(url);
+    }
+  }
+  fetchQueue = fetchQueue.filter(item => item.clientData.clientId !== clientId);
 }
 
 /**
@@ -157,12 +197,14 @@ function decrementActiveRequests() {activeRequests--;}
 
 /**
  * Processes the next fetch request in the queue if concurrency limit allows.
+ * Skips queued items belonging to clients that went hidden since enqueue.
  * @function processNextFetchRequest
  * @returns {void}
  */
 function processNextFetchRequest() {
   while (activeRequests < MAX_CONCURRENT_REQUESTS && fetchQueue.length > 0) {
     const { url, now, clientData } = fetchQueue.shift();
+    if (!clientData.visible) { continue; }
     activeRequests++;
     processFetchRequest(url, now, clientData);
   }
@@ -171,16 +213,11 @@ function processNextFetchRequest() {
 /**
  * Cleans up resources associated with a disconnected client.
  * @function cleanupClient
- * @param {string} clientId - The client's unique identifier
+ * @param {Object} clientData - Client data with port and clientId
  * @returns {void}
  */
-function cleanupClient(clientId) {
+function cleanupClient(clientData) {
+  const { clientId } = clientData;
   responseCountMap.delete(clientId);
-  fetchQueue = fetchQueue.filter(item => item.clientData.clientId !== clientId);
-  for (const [url, entry] of debounceTimeouts) {
-    if (entry.clientId === clientId) {
-      clearTimeout(entry.timeoutId);
-      debounceTimeouts.delete(url);
-    }
-  }
+  purgeClientWork(clientId);
 }

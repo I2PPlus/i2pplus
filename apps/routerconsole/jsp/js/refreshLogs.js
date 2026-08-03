@@ -49,8 +49,13 @@ function start() {
       const parser = new DOMParser();
       const doc = parser.parseFromString(responseText, "text/html");
 
+      const arrivedHidden = document.hidden;
       processUpdates(doc, els, state);
       requestAnimationFrame(() => {
+        if (arrivedHidden || document.hidden) {
+          state.updates = [];
+          return;
+        }
         state.updates.forEach(fn => fn());
         if ($("routerlogs")) {
           applyFilter(els);
@@ -60,6 +65,10 @@ function start() {
     };
 
     state.worker.port.start();
+    state.worker.port.postMessage({ visibility: !document.hidden });
+    document.addEventListener("visibilitychange", () => {
+      state.worker.port.postMessage({ visibility: !document.hidden });
+    });
     state.worker.port.postMessage({ url: "/logs" });
   }
 

@@ -14,14 +14,33 @@
 
   const fetchWorker = new SharedWorker("/js/fetchWorker.js");
   fetchWorker.port.start();
+
+  /**
+   * Reports the page's visibility to the SharedWorker so the fetch worker can
+   * suspend requests for tabs that aren't visible.
+   * @function reportVisibility
+   * @returns {void}
+   */
+  function reportVisibility() {
+    fetchWorker.port.postMessage({ visibility: !document.hidden });
+  }
+  document.addEventListener("visibilitychange", () => {
+    reportVisibility();
+    if (!document.hidden) { updateStats(); }
+  });
+  reportVisibility();
   fetchWorker.port.onmessage = function(e) {
     const { responseText } = e.data;
     if (!responseText) return;
 
+    const arrivedHidden = document.hidden;
     const parser = new DOMParser();
     const doc = parser.parseFromString(responseText, "text/html");
 
     requestAnimationFrame(() => {
+      // Drop responses that arrived while the tab was hidden; rAF is suspended
+      // when hidden, so they'd otherwise render stale data on regain.
+      if (arrivedHidden || document.hidden) { return; }
       const info = document.getElementById("gatherstats");
       if (info) {
         const infoResponse = doc.getElementById("gatherstats");
