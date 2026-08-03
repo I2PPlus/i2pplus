@@ -180,7 +180,7 @@ class ConnectionAcceptor implements Runnable {
                     if (socket.getPeerDestination().equals(_util.getMyDestination())) {
                         _log.error("[I2PSnark] Dropping incoming connection from our own router");
                         try {
-                            socket.close();
+                            socket.reset();
                         } catch (IOException ioe) { /* ignored */ }
                         continue;
                     }
@@ -194,7 +194,7 @@ class ConnectionAcceptor implements Runnable {
                                             + "]");
                         }
                         try {
-                            socket.close();
+                            socket.reset();
                         } catch (IOException ioe) { /* ignored */ }
                         continue;
                     }
@@ -211,7 +211,7 @@ class ConnectionAcceptor implements Runnable {
                                             + ")");
                         }
                         try {
-                            socket.close();
+                            socket.reset();
                         } catch (IOException ioe) { /* ignored */ }
                         continue;
                     }
@@ -341,7 +341,7 @@ class ConnectionAcceptor implements Runnable {
                             ihe);
                 }
                 try {
-                    _socket.close();
+                    _socket.reset();
                 } catch (IOException ignored) { /* ignored */ }
             } catch (IOException ioe) {
                 if (_log.shouldDebug()) {
@@ -352,7 +352,7 @@ class ConnectionAcceptor implements Runnable {
                             ioe);
                 }
                 try {
-                    _socket.close();
+                    _socket.reset();
                 } catch (IOException ignored) { /* ignored */ }
             } finally {
                 activeHandlers.decrementAndGet();

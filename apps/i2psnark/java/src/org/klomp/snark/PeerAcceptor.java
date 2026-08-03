@@ -77,7 +77,7 @@ class PeerAcceptor {
                 peerInfoHash = readHash(in);
             } catch (IOException ioe) {
                 // unique exception so ConnectionAcceptor can blame the peer
-                throw new ProtocolException(ioe.toString());
+                throw new ProtocolException("bad protocol", ioe);
             } finally {
                 socket.setReadTimeout(timeout);
             }
@@ -200,6 +200,11 @@ class PeerAcceptor {
         /** @param s the detail message */
         public ProtocolException(String s) {
             super(s);
+        }
+
+        /** @since 0.9.71 */
+        public ProtocolException(String s, Throwable t) {
+            super(s, t);
         }
     }
 }
