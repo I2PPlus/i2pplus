@@ -12,16 +12,13 @@ package net.i2p.router.web.helpers;
 import static net.i2p.router.sybil.Util.biLog2;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.Writer;
 import java.math.BigInteger;
-import java.text.Collator;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -86,127 +83,58 @@ import net.i2p.util.VersionComparator;
  */
 class NetDbRenderer {
     private final RouterContext _context;
+    private final NetDbRouterCache _routerCache;
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
     private static String fmt(double val) { synchronized (TWO_DECIMALS) { return TWO_DECIMALS.format(val); } }
 
     /**
-     *  The /netdb page auto-refreshes every 10 seconds (netdb.js
-     *  REFRESH_INTERVAL_SHORT), so a snapshot up to this age is never
-     *  visible to a client; caching it avoids re-sorting the full
-     *  network database on every render.
-     */
-    private static final long NETDB_REFRESH_PERIOD = 10 * 1000L;
-    private static volatile long _routersCachedUntil;
-    private static volatile List<RouterInfo> _cachedRouters;
-
-    /**
-     *  Snapshot of the network database sorted by RouterInfoComparator,
-     *  cached for the /netdb auto-refresh period.
-     */
-    private List<RouterInfo> getSortedRouters() {
-        long now = _context.clock().now();
-        List<RouterInfo> cached = _cachedRouters;
-        if (cached != null && now < _routersCachedUntil) {
-            return cached;
-        }
-        List<RouterInfo> routers = new ArrayList<>(_context.netDb().getRouters());
-        Collections.sort(routers, RouterInfoComparator.getInstance());
-        _cachedRouters = routers;
-        _routersCachedUntil = now + NETDB_REFRESH_PERIOD;
-        return routers;
-    }
-    /**
-     * Construct a new instance.
+     *  Create a renderer bound to the given context.
+     *
+     *  @param ctx the router context
      */
     public NetDbRenderer (RouterContext ctx) {
         _context = ctx;
         _organizer = ctx.profileOrganizer();
-        //NetDbCachingJob.schedule(_context);
+        _routerCache = new NetDbRouterCache(ctx);
     }
-    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     private static final Pattern COMMA_SPACE_SPLIT = Pattern.compile("[, ]+");
     /**
-     * enableReverseLookups.
-     */
-    public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
-    /**
-     * Lookup wait.
+     *  How long to wait for a router lookup before giving up.
      */
     public static final int LOOKUP_WAIT = 3 * 1000;
-    /** @since 0.9.70+ */
+    /**
+     *  How long to wait for a remote lease set lookup.
+     *  @since 0.9.70+
+     */
     public static final int LS_LOOKUP_WAIT = 10 * 1000;
     /**
-     * Whether floodfill.
+     * Whether the router is a floodfill.
      * @return whether floodfill
      */
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
     /**
-     * Local ls count.
+     * Number of local lease sets, set during lease set rendering.
      */
     public int localLSCount;
     private final ProfileOrganizer _organizer;
     private final int BATCH_SIZE = SystemVersion.isSlow() ? 8 : Math.max(SystemVersion.getCores() - 2, 16);
-    /**
-     * Now.
-     */
-    private long now = System.currentTimeMillis();
+    private long now;
 
     /**
-     *  Comparator for LeaseSets, used in the leaseset listing.
-     *  Prioritizes published, nicknamed, named, client, and meta leasesets.
+     * Whether the router matches all capability characters in the filter.
+     *
+     *  @param ri the router to check
+     *  @param capabilities capability characters that must all be present (e.g. "fK")
+     *  @return whether the router's capability string contains every character
      */
-    private class LeaseSetComparator implements Comparator<LeaseSet> {
-          /**
-           * compare.
-           */
-          @Override
-          public int compare(LeaseSet l, LeaseSet r) {
-             Hash keyL = l.getHash();
-             Hash keyR = r.getHash();
-             TunnelPoolSettings inL = _context.tunnelManager().getInboundSettings(keyL);
-             TunnelPoolSettings inR = _context.tunnelManager().getInboundSettings(keyR);
-             boolean isClientL = !_context.clientNetDb(keyL).toString().contains("Main");
-             boolean isClientR = !_context.clientNetDb(keyR).toString().contains("Main");
-             boolean isMetaL = l.getType() == DatabaseEntry.KEY_TYPE_META_LS2;
-             boolean isMetaR = r.getType() == DatabaseEntry.KEY_TYPE_META_LS2;
-             boolean nicknameL = inL != null && inL.getDestinationNickname() != null;
-             boolean nicknameR = inR != null && inR.getDestinationNickname() != null;
-             boolean nameL =  _context.namingService().reverseLookup(keyL) != null && !isMetaL;
-             boolean nameR =  _context.namingService().reverseLookup(keyR) != null && !isMetaR;
-             boolean publishedL = _context.clientManager().shouldPublishLeaseSet(keyL) && !isMetaL;
-             boolean publishedR = _context.clientManager().shouldPublishLeaseSet(keyR) && !isMetaR;
-             boolean localL = _context.clientManager().isLocal(keyL) && !isMetaL;
-             boolean localR = _context.clientManager().isLocal(keyR) && !isMetaR;
-             if (publishedL && !publishedR) return -1;
-             if (publishedR && !publishedL) return 1;
-             if (nicknameL && !nicknameR) return -1;
-             if (nicknameR && !nicknameL) return 1;
-             if (nameL && !nameR) return -1;
-             if (nameR && !nameL) return 1;
-             if (isClientL && !isClientR) return -1;
-             if (isClientR && !isClientL) return 1;
-             return keyL.toBase32().compareTo(keyR.toBase32());
+    private boolean matchesCapabilities(RouterInfo ri, String capabilities) {
+        String caps = ri.getCapabilities();
+        for (int i = 0; i < capabilities.length(); i++) {
+            if (caps.indexOf(capabilities.charAt(i)) < 0) {
+                return false;
+            }
         }
-    }
-
-    /**
-     *  Comparator for LeaseSets sorted by hash distance from local router.
-     *  Used in debug/floodfill mode.
-     *  @since 0.7.14
-     */
-    private static class LeaseSetRoutingKeyComparator implements Comparator<LeaseSet>, Serializable {
-          private final transient Hash _us;
-          /**
-           * LeaseSetRoutingKeyComparator.
-           */
-          public LeaseSetRoutingKeyComparator(Hash us) {_us = us;}
-          /**
-           * compare.
-           */
-          @Override
-          public int compare(LeaseSet l, LeaseSet r) {
-             return HashDistance.getDistance(_us, l.getRoutingKey()).compareTo(HashDistance.getDistance(_us, r.getRoutingKey()));
-        }
+        return true;
     }
 
     /**
@@ -236,24 +164,6 @@ class NetDbRenderer {
      *  @param cost optional cost value to filter router addresses
      *  @param introducerCount unused
      *  @throws IOException if writing fails
-     */
-    private boolean matchesCapabilities(RouterInfo ri, String capabilities) {
-        String caps = ri.getCapabilities();
-        // Include router only if it contains ALL characters in the filter string
-        // e.g., filter="f" matches routers with caps="f", "fR", "Mf" etc.
-        for (int i = 0; i < capabilities.length(); i++) {
-            if (caps.indexOf(capabilities.charAt(i)) < 0) {
-                return false;
-            }
-        }
-        return true;
-    /**
-     * The value.
-     */
-    }
-
-    /**
-     * render router info html.
      */
     public void renderRouterInfoHTML(Writer out, int pageSize, int page, String routerPrefix, String version,
                                      String country, String family, String capabilities, String ipAddress, String sybil,
@@ -516,10 +426,6 @@ class NetDbRenderer {
     }
 
     /**
-     *  Counts floodfills in a country.
-     *  @since 0.9.64
-     */
-    /**
      *  Filters routers by exact IP match.
      *  @since 0.9.64
      */
@@ -563,17 +469,8 @@ class NetDbRenderer {
      *  @since 0.9.48
      */
     private class LookupWaiter extends JobImpl {
-        /**
-         * LookupWaiter.
-         */
         public LookupWaiter() {super(_context);}
-        /**
-         * runJob.
-         */
         public void runJob() {synchronized(this) {notifyAll();}}
-        /**
-         * @return the name
-         */
         public String getName() {return "Console NetDb Lookup";}
     }
 
@@ -626,7 +523,11 @@ class NetDbRenderer {
     private static final AtomicBoolean _rdnsWorkerRunning = new AtomicBoolean(false);
 
     /**
-     * precacheReverseDNSLookups.
+     *  Pre-resolves reverse DNS for the given routers, returning the cached
+     *  results and queuing the rest for background staggered lookups.
+     *
+     *  @param routers routers whose primary IPs to resolve
+     *  @return map of IP to hostname for already-cached lookups
      */
     public Map<String, String> precacheReverseDNSLookups(Collection<RouterInfo> routers) {
         if (_context.router().isHidden()) {
@@ -727,76 +628,6 @@ class NetDbRenderer {
     }
 
     /**
-     * Precaches RouterInfo for all known introducers by querying the network database.
-     * This helps ensure we have up-to-date info for routers we might need to contact.
-     */
-    public void precacheIntroducerInfos() {
-        final int MAX_INTRODUCERS = 5000;
-        Set<RouterInfo> allRouters = _context.netDb().getRouters();
-        Set<Hash> introducerHashes = new LinkedHashSet<>();
-
-        for (RouterInfo ri : allRouters) {
-            if (isUnreachable(ri)) {
-                for (RouterAddress address : ri.getAddresses()) {
-                    if ("SSU".equals(address.getTransportStyle())) {
-                        Map<Object, Object> options = address.getOptionsMap();
-                        for (Map.Entry<Object, Object> entry : options.entrySet()) {
-                            String key = entry.getKey().toString();
-                            if (key.toLowerCase(Locale.US).startsWith("ih")) {
-                                String value = entry.getValue().toString();
-                                Hash ihost = ConvertToHash.getHash(value);
-                                if (ihost != null) {
-                                    introducerHashes.add(ihost);
-                                    if (introducerHashes.size() > MAX_INTRODUCERS) {
-                                        // Remove the oldest entry (first inserted due to LinkedHashSet)
-                                        Iterator<Hash> it = introducerHashes.iterator();
-                                        if (it.hasNext()) {
-                                            it.next();
-                                            it.remove();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        _context.logManager().getLog(NetDbRenderer.class).info("Pre-caching " + introducerHashes.size() + " introducer RouterInfos");
-
-        for (Hash hash : introducerHashes) {
-            scheduleLookup(hash);
-        }
-    }
-
-    /**
-     * Schedule a lookup job for a specific router if it's not already in the local netDb.
-     *
-     * @param hash Hash of the router to look up
-     */
-    private void scheduleLookup(Hash hash) {
-        _context.netDb().lookupRouterInfoLocally(hash);
-        if (_context.netDb().lookupRouterInfoLocally(hash) == null) {
-            _context.jobQueue().addJob(new JobImpl(_context) {
-                /**
-                 * runJob.
-                 */
-                public void runJob() {
-                    lookupRouterInfoWithWait(_context.netDb(), hash, LOOKUP_WAIT);
-                }
-
-                /**
-                 * @return the name
-                 */
-                public String getName() {
-                    return "Introducer Lookup: " + hash.toBase64().substring(0, 6);
-                }
-            });
-        }
-    }
-
-    /**
      *  Renders all leasesets.
      *
      *  @param out Writer to output HTML
@@ -823,11 +654,11 @@ class NetDbRenderer {
         else {netdb = _context.clientNetDb(client);}
         if (notLocal) {
             ourRKey = _context.routerHash();
-            leases = new TreeSet<>(new LeaseSetRoutingKeyComparator(ourRKey));
+            leases = new TreeSet<>(new NetDbComparators.LeaseSetRoutingKeyComparator(ourRKey));
             fmt = TWO_DECIMALS;
         } else {
             ourRKey = null;
-            leases = new TreeSet<>(new LeaseSetComparator());
+            leases = new TreeSet<>(new NetDbComparators.LeaseSetComparator(_context));
             fmt = null;
         }
         if (notLocal) {leases.addAll(netdb.getLeases());}
@@ -1161,7 +992,7 @@ class NetDbRenderer {
     }
 
     /**
-     *  Gets the local client nickname for a destination hash.
+     *  Local client nickname for a destination hash.
      *
      *  @param key the destination hash
      *  @return the nickname or a truncated base64 hash
@@ -1203,7 +1034,7 @@ class NetDbRenderer {
         boolean showStats = full || shortStats;
         boolean isLocal = false;
         Hash us = _context.routerHash();
-        List<RouterInfo> routers = getSortedRouters();
+        List<RouterInfo> routers = _routerCache.getSortedRouters();
         int offset = pageSize * page;
         boolean hasNextPage = routers.size() > offset + pageSize;
         StringBuilder buf = new StringBuilder(8192);
@@ -1255,7 +1086,7 @@ class NetDbRenderer {
     }
 
     /**
-     * Renders a list of RouterInfo objects to given Writer.
+     * Renders a list of RouterInfo objects to the given Writer.
      * Uses parallel rendering for sets up to 100 routers, streams for larger sets.
      */
     public void renderRoutersToWriter(Collection<RouterInfo> routers, Writer out, boolean isLocal, int page, int pageSize) throws IOException {
@@ -1263,7 +1094,7 @@ class NetDbRenderer {
     }
 
     /**
-     * Renders a list of RouterInfo objects to given Writer.
+     * Renders a list of RouterInfo objects to the given Writer.
      * Uses parallel rendering for sets up to 100 routers, streams for larger sets.
      * @param applyPagination whether to apply pagination internally (false if list is already paginated)
      */
@@ -1450,7 +1281,7 @@ class NetDbRenderer {
            .append("<th class=countCC data-sort-default>").append(_t("Total")).append("</th>")
            .append("</tr></thead>\n");
         if (!countryList.isEmpty()) {
-            Collections.sort(countryList, new CountryComparator());
+            Collections.sort(countryList, new NetDbComparators.CountryComparator(_context));
             buf.append("<tbody id=cclist>\n");
             for (String country : countryList) {
                 int totalCount = Math.max(countries.count(country) - 1, 0);
@@ -1502,56 +1333,13 @@ class NetDbRenderer {
     }
 
     /**
-     *  Gets translated country name from code.
+     *  Translated country name for the given country code.
      *  @since 0.9.9
      * @return the translated country
      */
     private String getTranslatedCountry(String code) {
         String name = _context.commSystem().getCountryName(code);
         return Translate.getString(name, _context, Messages.COUNTRY_BUNDLE_NAME);
-    }
-
-    /**
-     *  Comparator for countries by translated name.
-     */
-    private class CountryComparator implements Comparator<String> {
-         private static final long serialVersionUID = 1L;
-         private final Collator coll;
-         /**
-          * CountryComparator.
-          */
-         public CountryComparator() {
-             super();
-             coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
-         }
-          /**
-           * compare.
-           */
-          @Override
-          public int compare(String l, String r) {
-              return coll.compare(getTranslatedCountry(l), getTranslatedCountry(r));
-        }
-    }
-
-    /**
-     *  Comparator for router addresses by transport then host.
-     *  @since 0.9.38
-     */
-    static class RAComparator implements Comparator<RouterAddress>, Serializable {
-         private static final long serialVersionUID = 1L;
-          /**
-           * compare.
-           */
-          @Override
-          public int compare(RouterAddress l, RouterAddress r) {
-             int rv = l.getTransportStyle().compareTo(r.getTransportStyle());
-             if (rv != 0) {return rv;}
-             String lh = l.getHost();
-             String rh = r.getHost();
-             if (lh == null) {return (rh == null) ? 0 : -1;}
-             if (rh == null) {return 1;}
-             return lh.compareTo(rh);
-        }
     }
 
     /**
@@ -1577,8 +1365,8 @@ class NetDbRenderer {
     private static final long TTL_24_HOURS = 24 * 60 * (long) 60 * 1000; // 24 hours
 
     /**
-     * Gets a value from cache if it's still valid.
-     * @return the cached reverse d n s
+     * Cached reverse DNS hostname for the IP, or null if absent or expired.
+     * @return the cached hostname or null
      */
     private String getCachedReverseDNS(String ip) {
         CacheEntry entry = reverseLookupCache.get(ip);
@@ -1799,7 +1587,7 @@ class NetDbRenderer {
 
                 List<RouterAddress> listAddresses = new ArrayList<>(addresses);
                 if (listAddresses.size() > 1) {
-                    listAddresses.sort(new RAComparator());
+                    listAddresses.sort(new NetDbComparators.RAComparator());
                 }
 
                 boolean hasSSU = false;
@@ -2089,7 +1877,7 @@ class NetDbRenderer {
     }
 
     /**
-     *  Gets the peer profile tier name.
+     *  Peer profile tier name or CSS class.
      *
      *  @param peer the peer
      *  @param fullname if true, return full name; else CSS class
@@ -2103,13 +1891,13 @@ class NetDbRenderer {
         return (fullname ? _t("Standard Tier") : "isStandard");
     }
 
-    /** translate a string */
+    /** Translate a string via the router console messages bundle. */
     private String _t(String s) {return Messages.getString(s, _context);}
-    /** tag only */
+    /** Mark a string for translation extraction (no-op at runtime). */
     private static final String _x(String s) {return s;}
 
     /**
-     *  translate a string with a parameter
+     *  Translate a string with a parameter via the router console messages bundle.
      *
      *  @param s string to be translated containing {0}
      *  @param o parameter, not translated

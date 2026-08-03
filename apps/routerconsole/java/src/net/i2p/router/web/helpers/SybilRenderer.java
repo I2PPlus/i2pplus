@@ -1211,7 +1211,7 @@ public class SybilRenderer {
         if (addrs.size() > 1) {
             // addrs is unmodifiable
             List<RouterAddress> laddrs = new ArrayList<>(addrs);
-            Collections.sort(laddrs, new NetDbRenderer.RAComparator());
+            Collections.sort(laddrs, new NetDbComparators.RAComparator());
             addrs = laddrs;
         }
         for (RouterAddress addr : addrs) {
