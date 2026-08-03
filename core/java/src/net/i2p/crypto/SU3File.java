@@ -318,7 +318,7 @@ public class SU3File {
         _signatureLength = (int) DataHelper.readLong(in, 2);
         if (_signatureLength != _sigType.getSigLen()) throw new IOException("Bad signature length");
         skip(in, 1);
-        int _versionLength = in.read();
+        _versionLength = in.read();
         if (_versionLength < MIN_VERSION_BYTES) throw new IOException("Bad version length");
         skip(in, 1);
         _signerLength = in.read();
@@ -388,14 +388,8 @@ public class SU3File {
 
     /** skip but update digest */
     private static void skip(InputStream in, int cnt) throws IOException {
-        while (cnt > 0) {
-            long skipped = in.skip(cnt);
-            if (skipped <= 0) {
-                if (in.read() < 0) throw new EOFException();
-                cnt--;
-            } else {
-                cnt -= (int) skipped;
-            }
+        for (int i = 0; i < cnt; i++) {
+            if (in.read() < 0) throw new EOFException();
         }
     }
 
