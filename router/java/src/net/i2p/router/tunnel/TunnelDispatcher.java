@@ -985,6 +985,13 @@ public class TunnelDispatcher implements Service {
         _context.statManager().addRateData("tunnel.participatingMessageCount", bw, ms);
         _context.statManager().addRateData("tunnel.participating InBps", bw * 1024 / (ms / 1000), ms);
         _context.statManager().addRateData("tunnel.participatingTunnels", partCount);
+        // Cache sizes per role — the actual memory footprint of transit tunnels.
+        // Recorded each coalesce (50s); rates aggregate over 1m/10m/1h windows.
+        _context.statManager().addRateData("tunnel.cache.outboundGateways", _outboundGateways.size());
+        _context.statManager().addRateData("tunnel.cache.outboundEndpoints", _outboundEndpoints.size());
+        _context.statManager().addRateData("tunnel.cache.participants", _participants.size());
+        _context.statManager().addRateData("tunnel.cache.inboundGateways", _inboundGateways.size());
+        _context.statManager().addRateData("tunnel.cache.participatingConfig", _participatingConfig.size());
     }
 
     /**
