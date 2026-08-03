@@ -879,7 +879,7 @@ class NetDbRenderer {
         buf.append("<span class=\"nowrap expiry").append(isExpired ? " expired" : "").append("\" title=\"")
            .append(_t("Expiry")).append("\">").append(bullet).append("<b>");
         if (!isExpired) {buf.append(_t("Expires{0}", ":</b> ")).append(DataHelper.formatDuration2(exp).replace(" in", ""));}
-        else {buf.append(_t("Expired{0} ago", ":</b> ")).append(DataHelper.formatDuration2(0-exp));}
+        else {buf.append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));}
         buf.append("</span>");
         if (debug) {
             buf.append(' ').append(bullet).append("<b class=distance title=\"").append(_t("Distance")).append("\">")

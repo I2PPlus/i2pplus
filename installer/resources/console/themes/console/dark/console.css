@@ -1451,7 +1451,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .netdb_leases .tunnel_peer a{margin:0;padding:0;letter-spacing:.1em}
 .netdb_name{text-transform:capitalize;font-weight:700;color:var(--ink)}
 .netdb_tunnel{margin:0 5px 0 -1px;padding:1px 4px;display:inline-block;border:var(--border_badge);border-radius:2px;box-shadow:var(--outline);background:#020}
-#leasesetsummary{margin:0 0 10px;column-span:all;box-shadow:var(--border_table)}
+#leasesetsummary{margin:0 0 14px;box-shadow:var(--border_table)}
 #leasesetdebug td:nth-child(even),#leasesetsummary td:nth-child(even){width:24%;word-break:break-all;text-align:left}
 #leasesetdebug td:nth-child(odd),#leasesetsummary td:nth-child(odd){padding-left:20px;width:1%;white-space:nowrap;text-align:right}
 #leasesetsummary td,#leasesetsummary td:nth-child(odd){padding:8px}
@@ -1464,6 +1464,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .confignav{position:relative;z-index:9999}
 #netdb .netdbentry,#netdb .leaseset{margin-bottom:10px;width:100%;box-shadow:var(--border_table)}
 #netdb .netdbentry{margin:2px auto 14px;width:calc(100% - 6px)}
+#netdb .leaseset{margin-bottom:12px}
 #singleLS+.leaseset{margin-bottom:1px;column-span:all}
 #netdb .leasesets_container #debugmode,#netdb #leasesetdebug,#leasesetKeyspace{box-shadow:var(--border_table)}
 #netdb .leasesets_container #leasesetdebug,#leasesetKeyspace{column-span:all}

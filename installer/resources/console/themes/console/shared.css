@@ -44,6 +44,10 @@
 #compactLookup #netdblookup tr{background:var(--th)}
 #config_summarybar input[type=text]{width:64px;min-width:0}
 #netdbSearchCompact{width:100%}
+#netdbwrap{padding-bottom:10px;columns: 2 500px}
+#netdbwrap .confignav{margin-bottom:12px}
+#netdbwrap .leaseset:last-of-type{margin-bottom:0}
+#netdbwrap .confignav,#netdbwrap #leasesetsummary{column-span:all}
 #netdb .netdbentry th.router{text-align:center}
 #netdb .netdbentry th.router b{display:inline-block;width:24px;height:24px;min-width:unset;vertical-align:middle;font-size:0;color:#0000;background:var(--client) no-repeat center center/24px}
 #netdb .netdbentry th.router:not(.isStandard) b{margin-left:-24px}
