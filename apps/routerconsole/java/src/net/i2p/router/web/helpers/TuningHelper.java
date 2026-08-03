@@ -102,6 +102,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("ntcp.reader.threads", _x("NTCP Reader Threads"));
         DISPLAY_NAMES.put("ntcp.writer.threads", _x("NTCP Writer Threads"));
         DISPLAY_NAMES.put("ntcp.failsafe.iterationFreq", _x("NTCP Pumper Failsafe Interval"));
+        DISPLAY_NAMES.put("ntcp.pumper.maxIdleLps", _x("NTCP Pumper Max Idle Loop Rate"));
         DISPLAY_NAMES.put("udp.peer.concurrentMaxMessages", _x("Max Concurrent Peer Messages"));
         DISPLAY_NAMES.put("udp.peer.initConcurrentMsgs", _x("Initial UDP Concurrent Messages"));
         DISPLAY_NAMES.put("udp.peer.minConcurrentMsgs", _x("Min UDP Concurrent Messages"));
@@ -233,6 +234,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("ntcp.reader.threads", _x("Threads decrypting inbound NTCP data."));
         PARAM_DESCRIPTIONS.put("ntcp.writer.threads", _x("Threads that encrypt outbound NTCP messages."));
         PARAM_DESCRIPTIONS.put("ntcp.failsafe.iterationFreq", _x("Failsafe scan interval for stuck NTCP pumps (ms)."));
+        PARAM_DESCRIPTIONS.put("ntcp.pumper.maxIdleLps", _x("Cap on idle NTCP pump iterations per second (loops/s)."));
         PARAM_DESCRIPTIONS.put("udp.peer.concurrentMaxMessages", _x("In-flight message limit per UDP peer."));
         PARAM_DESCRIPTIONS.put("udp.peer.initConcurrentMsgs", _x("Initial concurrent messages per peer."));
         PARAM_DESCRIPTIONS.put("udp.peer.minConcurrentMsgs", _x("Min concurrent messages per peer."));

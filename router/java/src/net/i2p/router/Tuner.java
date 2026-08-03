@@ -592,6 +592,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new ReplenishFrequencyParam());
         _params.add(new RequeueTimeParam());
         _params.add(new SelectorLoopDelayParam());
+        _params.add(new PumperIdleLpsParam());
         _params.add(new TestJobMaxDelayParam());
         _params.add(new TestJobMaxQueuedParam());
         _params.add(new TestJobMinDelayParam());
@@ -3141,6 +3142,66 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 if (systemBusy) return current;
                 return Math.min(_max, current + _step);
             }
+
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the EventPumper max idle loop rate (ntcp.pumper.maxIdleLps) against
+     * the observed NTCP loop rate. This is the real CPU governor for idle
+     * busy-spin: the pumper enforces a minimum idle iteration time, so lowering
+     * the rate curbs busy-spin even when selector wakeups defeat the select()
+     * timeout. Target: raise the ceiling when real I/O is flowing so work is
+     * never throttled, hold when idle (observed rate tracks the cap while the
+     * limiter is engaged), and settle back to default.
+     */
+    private class PumperIdleLpsParam extends BaseParam {
+
+        PumperIdleLpsParam() {
+            super("ntcp.pumper.maxIdleLps", "NTCP pumper max idle loops/s",
+                  SUB_TRANSPORT,
+                  1, 5000, 200, "ntcp.pumperLoopsPerSecond", _context);
+        }
+
+        /** Apply the tunable value to the router configuration. */
+        protected void applyValue(int value) {
+            NTCPTransport.setMaxIdleLps(value);
+        }
+
+        /** Read the current runtime value of this tunable from router config. */
+        protected int getRuntimeValue() {
+            return NTCPTransport.getMaxIdleLps();
+        }
+
+        /** Read the observed stat value for autotuning decisions. */
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null)
+                return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0)
+                return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        /** Compute the target value based on observed stat and configured limits. */
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            if (current <= 0)
+                return _defaultValue;
+            // observed = ntcp.pumperLoopsPerSecond (the pumper's actual loop rate).
+            // When the limiter is engaged the observed idle rate tracks the cap, so
+            // observed > current signals real I/O pushing the rate up — raise the
+            // ceiling so that work is never throttled.
+            if (observed > current && current < _max)
+                return Math.min(_max, current + _step);
+
+            // Rate well under the cap: the loop is naturally slow (e.g. select()
+            // blocking properly), so the cap is unnecessarily high — settle back
+            // toward the default rather than holding an inflated ceiling.
+            if (observed > 0 && observed < current * 0.5 && current > _defaultValue)
+                return Math.max(_defaultValue, current - _step);
 
             return current;
         }

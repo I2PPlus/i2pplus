@@ -2059,6 +2059,12 @@ public class NTCPTransport extends TransportImpl {
     /** Set the selector loop delay, bounded 1-100ms */
     public static void setSelectorLoopDelay(long ms) { EventPumper.setSelectorLoopDelay(ms); }
 
+    /** Get the max idle loop rate in loops per second */
+    public static int getMaxIdleLps() { return EventPumper.getMaxIdleLps(); }
+
+    /** Set the max idle loop rate in loops per second, bounded 1-5000 */
+    public static void setMaxIdleLps(int lps) { EventPumper.setMaxIdleLps(lps); }
+
     /** Get the failsafe iteration frequency in milliseconds */
     public static long getFailsafeIterationFreq() { return EventPumper.getFailsafeIterationFreq(); }
 

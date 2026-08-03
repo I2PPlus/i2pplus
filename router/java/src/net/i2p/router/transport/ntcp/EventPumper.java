@@ -129,7 +129,15 @@ class EventPumper implements Runnable {
     private static volatile long _failsafeIterationFreq = 2 * 1000L;
     private static final long MIN_FAILSAFE_FREQ = 2 * 1000L;
     private static final long MAX_FAILSAFE_FREQ = 30 * 1000L;
-    private static final int FAILSAFE_LOOP_COUNT = IS_SLOW ? 512 : 2048;
+    /**
+     * Max idle loop iterations per second before the pumper sleeps to cap CPU.
+     * This is the real governor for idle busy-spin: the selector timeout alone
+     * is defeated by wakeup() storms, so we enforce a minimum idle iteration
+     * time (1e9 / this) instead of the old fixed 25ms-per-2048-loops failsafe.
+     */
+    private static volatile int _maxIdleLps = 1000;
+    private static final int MIN_MAX_IDLE_LPS = 1;
+    private static final int MAX_MAX_IDLE_LPS = 5000;
     private static volatile long _selectorLoopDelay = IS_SLOW ? 100 : 5;
     /** Max delay when idle — must stay low for client responsiveness */
     private static final long SELECTOR_MAX_DELAY = 20;
@@ -278,7 +286,6 @@ class EventPumper implements Runnable {
      */
     @Override
     public void run() {
-        int loopCount = 0;
         int loopCountSinceLastRate = 0;
         int idleLoopCountSinceLastRate = 0;
         long lastFailsafeIteration = System.currentTimeMillis();
@@ -290,7 +297,7 @@ class EventPumper implements Runnable {
 
         while (_alive && _selector != null && _selector.isOpen()) {
             try {
-                loopCount++;
+                long iterStartNanos = System.nanoTime();
                 loopCountSinceLastRate++;
                 int selectedCount;
                 try {
@@ -317,14 +324,33 @@ class EventPumper implements Runnable {
                 } else {
                     _consecutiveFastSelects = 0;
                     idleLoopCountSinceLastRate++;
+                    // Rate-based idle limiter: cap idle busy-spin even when selector
+                    // wakeup() storms defeat the select() timeout. When select()
+                    // found no work we hold the loop to a minimum idle iteration time
+                    // (1e9 / maxIdleLps), so the real work path never sleeps.
+                    int maxIdleLps = _maxIdleLps;
+                    if (maxIdleLps > 0) {
+                        long minNanos = 1_000_000_000L / maxIdleLps;
+                        long elapsed = System.nanoTime() - iterStartNanos;
+                        if (elapsed < minNanos) {
+                            long toSleepNanos = minNanos - elapsed;
+                            _context.statManager().addRateData("ntcp.failsafeThrottle", 1);
+                            try {
+                                Thread.sleep(toSleepNanos / 1_000_000L, (int) (toSleepNanos % 1_000_000L));
+                            } catch (InterruptedException ie) {
+                                Thread.currentThread().interrupt();
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 runDelayedEvents();
 
                 long now = _context.clock().now();
 
-                // Update loop rate stat 60 seconds
-                if (now - lastLoopRateUpdate >= 60_000) {
+                // Update loop rate stat every 5 seconds
+                if (now - lastLoopRateUpdate >= 5_000) {
                     long elapsedMs = now - lastLoopRateUpdate;
                     int elapsedSeconds = (int) (elapsedMs / 1000);
                     if (elapsedSeconds <= 0) elapsedSeconds = 1;
@@ -337,7 +363,8 @@ class EventPumper implements Runnable {
                     // Scale delay based on loop rate to curb idle busy-spinning.
                     // Raise the delay proportionally to how far over the spin threshold
                     // we are, so an extreme rate (e.g. 80K/s) is corrected within a
-                    // window or two rather than creeping up at +5ms/60s.
+                    // window or two rather than creeping up at +5ms/5s. The idle limiter
+                    // above now caps the hard spin; this stays as a responsiveness lever.
                     if (loopsPerSecond > 1000 && _currentDelay < SELECTOR_MAX_DELAY) {
                         long step = Math.min(50, (loopsPerSecond - 1000) / 2000 + 5);
                         _currentDelay = Math.min(_currentDelay + step, SELECTOR_MAX_DELAY);
@@ -367,19 +394,6 @@ class EventPumper implements Runnable {
                 if (now - lastFailsafeIteration >= _failsafeIterationFreq) {
                     doFailsafeCheck();
                     lastFailsafeIteration = now;
-                }
-
-                // CPU protection: light sleep after many loops
-                if ((loopCount % FAILSAFE_LOOP_COUNT) == FAILSAFE_LOOP_COUNT - 1) {
-                    if (shouldDebug)
-                        _log.debug("EventPumper throttle after " + loopCount + " loops");
-                    _context.statManager().addRateData("ntcp.failsafeThrottle", 1);
-                    try {
-                        Thread.sleep(25);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                        break;
-                    }
                 }
 
                 // Clear blocked IP table periodically
@@ -1171,6 +1185,18 @@ class EventPumper implements Runnable {
 
     /** Get the selector loop delay in milliseconds */
     public static long getSelectorLoopDelay() { return _selectorLoopDelay; }
+
+    /** Get the max idle loop rate in loops per second */
+    public static int getMaxIdleLps() { return _maxIdleLps; }
+
+    /**
+     * Set the max idle loop rate in loops per second, bounded 1-5000.
+     * The pumper enforces this as a minimum idle iteration time (1e9 / rate),
+     * capping idle busy-spin even when selector wakeups defeat the timeout.
+     */
+    public static void setMaxIdleLps(int lps) {
+        _maxIdleLps = Math.max(MIN_MAX_IDLE_LPS, Math.min(MAX_MAX_IDLE_LPS, lps));
+    }
 
     /**
      * Set the selector loop delay, bounded 1-SELECTOR_MAX_DELAY ms.
