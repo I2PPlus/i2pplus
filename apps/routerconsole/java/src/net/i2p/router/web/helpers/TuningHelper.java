@@ -8,13 +8,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
-import java.util.regex.Pattern;
 import net.i2p.router.CommSystemFacade;
 import net.i2p.router.Tuner;
 import net.i2p.router.Tuner.ParamSnapshot;
 import net.i2p.router.transport.Transport;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.web.HelperBase;
+import net.i2p.router.web.TuningFormHandler;
 
 /**
  * Helper for the transport tuning page (tuning.jsp).
@@ -26,7 +26,6 @@ public class TuningHelper extends HelperBase {
 
     private static final int SPARK_W = 140;
     private static final int SPARK_H = 36;
-    private static final Pattern UNDERSCORE_SPLIT = Pattern.compile("_");
     private String _nonce;
 
     /**
@@ -355,7 +354,7 @@ public class TuningHelper extends HelperBase {
         for (List<ParamSnapshot> list : groups.values()) {
             Collections.sort(list, new Comparator<ParamSnapshot>() {
                 /**
-                 * compare.
+                 * Order params by display name within a subsystem group.
                  */
                 @Override
                 public int compare(ParamSnapshot a, ParamSnapshot b) {
@@ -422,10 +421,13 @@ public class TuningHelper extends HelperBase {
             buf.append("<tbody>");
 
             for (ParamSnapshot s : params) {
-                String prefix = toFormPrefix(s.name);
+                String prefix = TuningFormHandler.getFormPrefix(s.name);
                 String sparkSvg = renderSparkline(s.valueHistory, s.defaultValue);
 
-                buf.append("<tr data-prefix=\"").append(prefix).append("\" data-current=\"").append(s.currentValue).append("\">")
+                buf.append("<tr");
+                if (prefix != null)
+                    buf.append(" data-prefix=\"").append(prefix).append("\"");
+                buf.append(" data-current=\"").append(s.currentValue).append("\">")
                    .append("<td class=parameter title=\"").append(esc(s.name)).append("\">").append(esc(getDisplayName(s.name)));
                 String desc = PARAM_DESCRIPTIONS.get(s.name);
                 if (desc != null) {
@@ -441,20 +443,30 @@ public class TuningHelper extends HelperBase {
                 }
                 buf.append("</td>");
 
-                // col3: editable default value
-                buf.append("<td class=default><input type=number size=6 name=\"").append(prefix).append("Default\" value=\"").append(s.defaultValue).append("\"></td>");
+                if (prefix != null) {
+                    // col3: editable default value
+                    buf.append("<td class=default><input type=number size=6 name=\"").append(prefix).append("Default\" value=\"").append(s.defaultValue).append("\"></td>");
 
-                buf.append("<td class=min><input type=number size=6 name=\"").append(prefix).append("Min\" value=\"").append(s.min).append("\"></td>")
-                   .append("<td class=max><input type=number size=6 name=\"").append(prefix).append("Max\" value=\"").append(s.max).append("\"></td>")
-                   .append("<td class=step><input type=number size=4 name=\"").append(prefix).append("Step\" value=\"").append(s.step).append("\"></td>")
-                   .append("<td class=history>").append(sparkSvg).append("</td>")
-                   .append("<td class=auto>")
-                   // hidden field sends current value when checkbox unchecked
-                   .append("<input type=hidden name=\"").append(prefix).append("Override\" value=\"").append(s.currentValue).append("\">")
-                   // checkbox sends -1 when checked (auto-tuning on)
-                   .append("<input type=checkbox class=\"optbox slider\" name=\"").append(prefix).append("Override\" value=\"-1\"")
-                   .append(s.autoTuning ? " checked" : "").append("></td>")
-                   .append("</tr>");
+                    buf.append("<td class=min><input type=number size=6 name=\"").append(prefix).append("Min\" value=\"").append(s.min).append("\"></td>")
+                       .append("<td class=max><input type=number size=6 name=\"").append(prefix).append("Max\" value=\"").append(s.max).append("\"></td>")
+                       .append("<td class=step><input type=number size=4 name=\"").append(prefix).append("Step\" value=\"").append(s.step).append("\"></td>")
+                       .append("<td class=history>").append(sparkSvg).append("</td>")
+                       .append("<td class=auto>")
+                       // hidden field sends current value when checkbox unchecked
+                       .append("<input type=hidden name=\"").append(prefix).append("Override\" value=\"").append(s.currentValue).append("\">")
+                       // checkbox sends -1 when checked (auto-tuning on)
+                       .append("<input type=checkbox class=\"optbox slider tuning-toggle\" name=\"").append(prefix).append("Override\" value=\"-1\"")
+                       .append(s.autoTuning ? " checked" : "").append("></td>");
+                } else {
+                    // autotuner-only param: no user overrides, display read-only
+                    buf.append("<td class=default>").append(s.defaultValue).append("</td>")
+                       .append("<td class=min>").append(s.min).append("</td>")
+                       .append("<td class=max>").append(s.max).append("</td>")
+                       .append("<td class=step>").append(s.step).append("</td>")
+                       .append("<td class=history>").append(sparkSvg).append("</td>")
+                       .append("<td class=auto></td>");
+                }
+                buf.append("</tr>");
             }
 
             buf.append("</tbody>");
@@ -466,32 +478,6 @@ public class TuningHelper extends HelperBase {
            .append(_t("Save"))
            .append("\"></td></tr></table></form></div>");
         return buf.toString();
-    }
-
-    /**
-     * Convert a param name like "ACK_FREQUENCY" or "i2p.streaming.maxSlowStartWindow"
-     * to a form prefix like "ackFrequency" or "maxSlowStartWindow".
-     * Strips domain prefixes (i2p., crypto., ntcp., udp., router., etc.).
-     */
-    private static String toFormPrefix(String name) {
-        // strip domain prefix (e.g. "i2p.streaming." -> "maxSlowStartWindow")
-        String bare = name;
-        int lastDot = name.lastIndexOf('.');
-        if (lastDot >= 0 && lastDot < name.length() - 1)
-            bare = name.substring(lastDot + 1);
-
-        String[] parts = UNDERSCORE_SPLIT.split(bare);
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < parts.length; i++) {
-            String p = parts[i].toLowerCase();
-            if (i == 0) {
-                sb.append(p);
-            } else {
-                sb.append(Character.toUpperCase(p.charAt(0)))
-                  .append(p.substring(1));
-            }
-        }
-        return sb.toString();
     }
 
     /**
