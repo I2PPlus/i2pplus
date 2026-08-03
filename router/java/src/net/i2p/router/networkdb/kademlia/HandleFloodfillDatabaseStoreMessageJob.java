@@ -245,7 +245,15 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 boolean shouldStore = true;
                 if (ri.getReceivedAsPublished()) {
                     // these are often just dup stores from concurrent lookups
-                    prevNetDb = (RouterInfo) _facade.lookupLocallyWithoutValidation(key);
+                    DatabaseEntry dbe = _facade.lookupLocallyWithoutValidation(key);
+                    if (dbe != null) {
+                        if (dbe.getType() != DatabaseEntry.KEY_TYPE_ROUTERINFO) {
+                            // hash collision
+                            // prevent ClassCastException here
+                            throw new IllegalArgumentException("Attempt to replace LS with " + ri);
+                        }
+                        prevNetDb = (RouterInfo) dbe;
+                    }
                     boolean isUnreachable = cap.indexOf(Router.CAPABILITY_REACHABLE) < 0;
                     boolean isSlow = cap.contains("K") || cap.contains("L") || cap.contains("M") || cap.contains("N");
                     boolean isFast = cap.contains("P") || cap.contains("Q") || cap.contains("X");
@@ -312,6 +320,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                           " [" + key.toBase64().substring(0,6) + "] -> Slow (" + v + ")");
                             }
                         }
+
                         int count = _facade.getDataStore().size();
                         if (count > LIMIT_ROUTERS && !bypassThrottle) {
                             if (_facade.floodfillEnabled()) {
