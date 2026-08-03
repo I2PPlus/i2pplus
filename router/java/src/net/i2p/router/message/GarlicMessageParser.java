@@ -224,21 +224,25 @@ public class GarlicMessageParser {
      *  @since public since 0.9.44
      */
     public CloveSet readCloveSet(byte[] data, int offset) throws DataFormatException {
-        int numCloves = data[offset] & 0xff;
-        offset++;
-        if (numCloves <= 0 || numCloves > MAX_CLOVES) {throw new DataFormatException("Bad clove count " + numCloves);}
-        GarlicClove[] cloves = new GarlicClove[numCloves];
-        for (int i = 0; i < numCloves; i++) {
-            GarlicClove clove = new GarlicClove(_context);
-            offset += clove.readBytes(data, offset);
-            cloves[i] = clove;
+        try {
+            int numCloves = data[offset] & 0xff;
+            offset++;
+            if (numCloves <= 0 || numCloves > MAX_CLOVES) {throw new DataFormatException("Bad clove count " + numCloves);}
+            GarlicClove[] cloves = new GarlicClove[numCloves];
+            for (int i = 0; i < numCloves; i++) {
+                GarlicClove clove = new GarlicClove(_context);
+                offset += clove.readBytes(data, offset);
+                cloves[i] = clove;
+            }
+            Certificate cert = Certificate.create(data, offset);
+            offset += cert.size();
+            long msgId = DataHelper.fromLong(data, offset, 4);
+            offset += 4;
+            long expiration = DataHelper.fromLong(data, offset, 8);
+            return new CloveSet(cloves, cert, msgId, expiration);
+        } catch (IndexOutOfBoundsException e) {
+            throw new DataFormatException("corrupt clove set", e);
         }
-        Certificate cert = Certificate.create(data, offset);
-        offset += cert.size();
-        long msgId = DataHelper.fromLong(data, offset, 4);
-        offset += 4;
-        long expiration = DataHelper.fromLong(data, offset, 8);
-        return new CloveSet(cloves, cert, msgId, expiration);
     }
 
 }
