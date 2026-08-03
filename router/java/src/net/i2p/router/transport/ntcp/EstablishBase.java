@@ -69,15 +69,6 @@ abstract class EstablishBase implements EstablishState {
     protected final NTCPConnection _con;
 
     /**
-     * MIN_RI_SIZE.
-     */
-    protected static final int MIN_RI_SIZE = 387;
-    /**
-     * MAX_RI_SIZE.
-     */
-    protected static final int MAX_RI_SIZE = 3072;
-
-    /**
      * AES_SIZE.
      */
     protected static final int AES_SIZE = 16;
