@@ -927,36 +927,7 @@ class TunnelRenderer {
         }
         StringBuilder buf = new StringBuilder(32*1024);
         if (!tunnels.isEmpty()) {
-            buf.append("<table class=\"tunneldisplay tunnels_client\">\n<tr><th title=\"")
-               .append(_t("Inbound or outbound?"))
-               .append("\">")
-               .append(_t("In/Out"))
-               .append("</th><th class=status title=\"")
-               .append(_t("Tunnel test status"))
-               .append("\">")
-               .append(_t("Status"))
-               .append("</th><th>")
-               .append(_t("Expiry"))
-               .append("</th><th class=latency title=\"")
-               .append(_t("Latency"))
-               .append("\">")
-               .append(_t("Latency"))
-               .append("</th><th title=\"")
-               .append(_t("Data transferred"))
-               .append("\">")
-               .append(_t("Data"))
-               .append("</th><th>")
-               .append(_t("Gateway"))
-               .append("</th>");
-            if (maxLength > 3) {
-                buf.append("<th colspan=\"")
-                   .append(maxLength - 2)
-                   .append("\">")
-                   .append(_t("Participants"))
-                   .append("</th>");
-            } else if (maxLength == 3) {buf.append("<th>").append(_t("Participant")).append("</th>");}
-            if (maxLength > 1) {buf.append("<th>").append(_t("Endpoint")).append("</th>");}
-            buf.append("</tr>\n");
+            appendTableHeader(buf, maxLength);
         }
         final String tib = _t("Inbound");
         final String tob = _t("Outbound");
@@ -965,9 +936,7 @@ class TunnelRenderer {
         final String tunnelIdTip = _t("Tunnel identity");
         boolean stream = tunnels.size() > MAX_BEFORE_STREAMING;
         if (stream) {
-            out.append(buf);
-            out.flush();
-            buf.setLength(0);
+            flushBuf(out, buf);
         }
         int rowsSinceFlush = 0;
         long now = _context.clock().now();
@@ -975,96 +944,12 @@ class TunnelRenderer {
             TunnelInfo info = tunnels.get(i);
             long timeLeft = info.getExpiration()-now;
             if (timeLeft <= 0) {continue;} // don't display tunnels in their grace period
-            TunnelTestStatus testStatus = info.getTestStatus();
             live++;
-            boolean isInbound = info.isInbound();
-            boolean isFailed = (testStatus == TunnelTestStatus.FAILED ||
-                                testStatus == TunnelTestStatus.TOO_SLOW ||
-                                testStatus == TunnelTestStatus.OVER_BUDGET);
-            boolean isFailing = (testStatus == TunnelTestStatus.FAILING);
-            boolean isGood = (testStatus == TunnelTestStatus.GOOD);
-            boolean isTesting = (testStatus == TunnelTestStatus.TESTING);
-            String rowClass = isFailed ? " class=failed" :
-                              isFailing ? " class=failing" :
-                              isGood ? " class=good" :
-                              isTesting ? " class=testing" :
-                              " class=untested";
-            if (isInbound) {
-                buf.append("<tr").append(rowClass).append("><td class=direction data-sort=in><span class=inbound title=\"")
-                   .append(tib)
-                   .append("\"><img src=/themes/console/images/inbound.svg alt=\"")
-                   .append(tib)
-                   .append("\"></span></td>");
-            } else {
-                buf.append("<tr").append(rowClass).append("><td class=direction data-sort=out><span class=outbound title=\"")
-                   .append(tob)
-                    .append("\"><img src=/themes/console/images/outbound.svg alt=\"")
-                    .append(tob)
-                    .append("\"></span></td>");
-            }
-            renderTestStatus(buf, info);
-            buf.append("<td class=expiry>").append(renderExpiryBar(timeLeft)).append("</td>");
-
-            int latency = info.getLastLatency();
-            buf.append("<td class=latency data-sort=").append(latency).append(">");
-            if (latency >= 0) {
-                buf.append("<span>").append(latency).append("</span><span class=left>&#8239;ms</span>");
-            }
-            buf.append("</td>");
-
-            int count = info.getProcessedMessagesCount() * 1024 / 1000;
-            double sizeInKB = count * 1024.0 / 1000.0;
-            double sizeInMB = sizeInKB / 1024.0;
-            buf.append("<td class=\"cells datatransfer\" data-sort=").append(count).append(">");
-            if (count > 0) {
-                buf.append("<span class=right>")
-                   .append(sizeInKB >= 1024 ? fmt(sizeInMB) : fmt0(sizeInKB))
-                   .append("</span><span class=left>&#8239;")
-                   .append(sizeInKB >= 1024 ? "MB" : "KB")
-                   .append("</span>");
-            }
-            buf.append("</td>");
-            int length = info.getLength();
-            boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
-            for (int j = 0; j < length; j++) {
-                Hash peer = info.getPeer(j);
-                TunnelId id = (info.isInbound() ? info.getReceiveTunnelId(j) : info.getSendTunnelId(j));
-                char cap = getCapacity(peer);
-                if (_context.routerHash().equals(peer)) {
-                    if (length < maxLength && length == 1 && isInbound) {
-                        for (int k = 1; k < maxLength; k++) { // pad before inbound zero hop
-                            buf.append("<td></td>");
-                        }
-                    }
-                    // Add empty content placeholders to force alignment
-                    buf.append(" <td><span class=\"tunnel_peer tunnel_local\" title=\"")
-                       .append(localHopTip).append("\">").append(localLabel).append("</span>");
-                    if (isAdvanced) {
-                        buf.append("<span class=tunnel_id title=\"").append(tunnelIdTip).append("\">")
-                           .append((id == null ? "" : "" + id)).append("</span>");
-                    }
-                    buf.append("</td>");
-                } else {
-                    buf.append(" <td><div class=tunnel_peer>").append(netDbLink(peer)).append("</div>");
-                    if (isAdvanced) {
-                        buf.append("<span class=tunnel_id title=\"").append(tunnelIdTip).append("\">")
-                           .append((id == null ? "" : " " + id)).append("</span>");
-                    }
-                    buf.append("</td>");
-                }
-                if (length < maxLength && ((length == 1 && !isInbound) || j == length - 2)) {
-                    // pad out outbound zero hop; non-zero-hop pads in middle
-                    for (int k = length; k < maxLength; k++) {buf.append("<td></td>");}
-                }
-            }
-            buf.append("</tr>\n</tbody>\n");
-
+            int count = renderTunnelRow(buf, info, timeLeft, maxLength, tib, tob, localHopTip, localLabel, tunnelIdTip);
             if (info.isInbound()) {processedIn += count;}
             else {processedOut += count;}
             if (stream && ++rowsSinceFlush >= STREAM_BATCH) {
-                out.append(buf);
-                out.flush();
-                buf.setLength(0);
+                flushBuf(out, buf);
                 rowsSinceFlush = 0;
             }
         }
@@ -1081,6 +966,163 @@ class TunnelRenderer {
         }
 
         buf.append("</table>\n");
+        flushBuf(out, buf);
+    }
+
+    /**
+     *  Append the tunnel table header row: In/Out, Status, Expiry, Latency,
+     *  Data, Gateway, Participants, and Endpoint columns. The Participants
+     *  column spans the longest tunnel minus the first and last hops.
+     *
+     *  @since 0.9.70+
+     */
+    private void appendTableHeader(StringBuilder buf, int maxLength) {
+        buf.append("<table class=\"tunneldisplay tunnels_client\">\n<tr><th title=\"")
+           .append(_t("Inbound or outbound?"))
+           .append("\">")
+           .append(_t("In/Out"))
+           .append("</th><th class=status title=\"")
+           .append(_t("Tunnel test status"))
+           .append("\">")
+           .append(_t("Status"))
+           .append("</th><th>")
+           .append(_t("Expiry"))
+           .append("</th><th class=latency title=\"")
+           .append(_t("Latency"))
+           .append("\">")
+           .append(_t("Latency"))
+           .append("</th><th title=\"")
+           .append(_t("Data transferred"))
+           .append("\">")
+           .append(_t("Data"))
+           .append("</th><th>")
+           .append(_t("Gateway"))
+           .append("</th>");
+        if (maxLength > 3) {
+            buf.append("<th colspan=\"")
+               .append(maxLength - 2)
+               .append("\">")
+               .append(_t("Participants"))
+               .append("</th>");
+        } else if (maxLength == 3) {buf.append("<th>").append(_t("Participant")).append("</th>");}
+        if (maxLength > 1) {buf.append("<th>").append(_t("Endpoint")).append("</th>");}
+        buf.append("</tr>\n");
+    }
+
+    /**
+     *  Append one tunnel row: direction badge, test status, expiry bar,
+     *  latency, data transferred, and the peer cells, terminated with the
+     *  row and table body closers.
+     *
+     *  @return the processed message count, for the bandwidth footer
+     *  @since 0.9.70+
+     */
+    private int renderTunnelRow(StringBuilder buf, TunnelInfo info, long timeLeft, int maxLength,
+                                String tib, String tob, String localHopTip, String localLabel, String tunnelIdTip) {
+        TunnelTestStatus testStatus = info.getTestStatus();
+        boolean isInbound = info.isInbound();
+        boolean isFailed = (testStatus == TunnelTestStatus.FAILED ||
+                            testStatus == TunnelTestStatus.TOO_SLOW ||
+                            testStatus == TunnelTestStatus.OVER_BUDGET);
+        boolean isFailing = (testStatus == TunnelTestStatus.FAILING);
+        boolean isGood = (testStatus == TunnelTestStatus.GOOD);
+        boolean isTesting = (testStatus == TunnelTestStatus.TESTING);
+        String rowClass = isFailed ? " class=failed" :
+                          isFailing ? " class=failing" :
+                          isGood ? " class=good" :
+                          isTesting ? " class=testing" :
+                          " class=untested";
+        if (isInbound) {
+            buf.append("<tr").append(rowClass).append("><td class=direction data-sort=in><span class=inbound title=\"")
+               .append(tib)
+               .append("\"><img src=/themes/console/images/inbound.svg alt=\"")
+               .append(tib)
+               .append("\"></span></td>");
+        } else {
+            buf.append("<tr").append(rowClass).append("><td class=direction data-sort=out><span class=outbound title=\"")
+               .append(tob)
+               .append("\"><img src=/themes/console/images/outbound.svg alt=\"")
+               .append(tob)
+               .append("\"></span></td>");
+        }
+        renderTestStatus(buf, info);
+        buf.append("<td class=expiry>").append(renderExpiryBar(timeLeft)).append("</td>");
+
+        int latency = info.getLastLatency();
+        buf.append("<td class=latency data-sort=").append(latency).append(">");
+        if (latency >= 0) {
+            buf.append("<span>").append(latency).append("</span><span class=left>&#8239;ms</span>");
+        }
+        buf.append("</td>");
+
+        int count = info.getProcessedMessagesCount() * 1024 / 1000;
+        double sizeInKB = count * 1024.0 / 1000.0;
+        double sizeInMB = sizeInKB / 1024.0;
+        buf.append("<td class=\"cells datatransfer\" data-sort=").append(count).append(">");
+        if (count > 0) {
+            buf.append("<span class=right>")
+               .append(sizeInKB >= 1024 ? fmt(sizeInMB) : fmt0(sizeInKB))
+               .append("</span><span class=left>&#8239;")
+               .append(sizeInKB >= 1024 ? "MB" : "KB")
+               .append("</span>");
+        }
+        buf.append("</td>");
+        int length = info.getLength();
+        boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
+        appendPeerCells(buf, info, length, maxLength, isAdvanced, localHopTip, localLabel, tunnelIdTip);
+        buf.append("</tr>\n</tbody>\n");
+        return count;
+    }
+
+    /**
+     *  Append the peer cells for one tunnel: the local hop renders as a
+     *  "Local" badge with the tunnel id when advanced mode is on, other hops
+     *  render as netdb links with their tunnel ids. Zero-hop and short tunnels
+     *  are padded with empty cells to align the table columns.
+     *
+     *  @since 0.9.70+
+     */
+    private void appendPeerCells(StringBuilder buf, TunnelInfo info, int length, int maxLength,
+                                 boolean isAdvanced, String localHopTip, String localLabel, String tunnelIdTip) {
+        boolean isInbound = info.isInbound();
+        for (int j = 0; j < length; j++) {
+            Hash peer = info.getPeer(j);
+            TunnelId id = (info.isInbound() ? info.getReceiveTunnelId(j) : info.getSendTunnelId(j));
+            if (_context.routerHash().equals(peer)) {
+                if (length < maxLength && length == 1 && isInbound) {
+                    for (int k = 1; k < maxLength; k++) { // pad before inbound zero hop
+                        buf.append("<td></td>");
+                    }
+                }
+                buf.append(" <td><span class=\"tunnel_peer tunnel_local\" title=\"")
+                   .append(localHopTip).append("\">").append(localLabel).append("</span>");
+                if (isAdvanced) {
+                    buf.append("<span class=tunnel_id title=\"").append(tunnelIdTip).append("\">")
+                       .append((id == null ? "" : "" + id)).append("</span>");
+                }
+                buf.append("</td>");
+            } else {
+                buf.append(" <td><div class=tunnel_peer>").append(netDbLink(peer)).append("</div>");
+                if (isAdvanced) {
+                    buf.append("<span class=tunnel_id title=\"").append(tunnelIdTip).append("\">")
+                       .append((id == null ? "" : " " + id)).append("</span>");
+                }
+                buf.append("</td>");
+            }
+            if (length < maxLength && ((length == 1 && !isInbound) || j == length - 2)) {
+                // pad out outbound zero hop; non-zero-hop pads in middle
+                for (int k = length; k < maxLength; k++) {buf.append("<td></td>");}
+            }
+        }
+    }
+
+    /**
+     *  Write the buffered HTML to the output writer and clear the buffer,
+     *  used to flush large tables in batches so the page paints progressively.
+     *
+     *  @since 0.9.70+
+     */
+    private void flushBuf(Writer out, StringBuilder buf) throws IOException {
         out.append(buf);
         out.flush();
         buf.setLength(0);
@@ -1225,19 +1267,6 @@ class TunnelRenderer {
         }
 
         private CommSystemFacade comm;
-    }
-
-    /** @return cap char or '?' */
-    private char getCapacity(Hash peer) {
-        RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-        if (info != null) {
-            String caps = info.getCapabilities();
-            for (int i = 0; i < RouterInfo.BW_CAPABILITY_CHARS.length(); i++) {
-                char c = RouterInfo.BW_CAPABILITY_CHARS.charAt(i);
-                if (caps.indexOf(c) >= 0) {return c;}
-            }
-        }
-        return '?';
     }
 
     private String netDbLink(Hash peer) {
