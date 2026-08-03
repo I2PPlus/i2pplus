@@ -2467,8 +2467,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         }
                         return false;
                     }
-                    String filtered = Storage.filterName(info.getName());
-                    snark = getTorrentByBaseName(filtered);
+                    String name = info.getName();
+                    snark = getTorrentByBaseName(name);
                     if (snark != null) {
                         msg =
                                 _t(
@@ -2480,6 +2480,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                             System.out.println(" • " + msg);
                         }
                         return false;
+                    }
+                    String filtered = Storage.filterName(name);
+                    if (!filtered.equals(name)) {
+                        snark = getTorrentByBaseName(filtered);
+                        if (snark != null) {
+                            addMessage(_t("Torrent with the same data location is already running: {0}", snark.getBaseName()));
+                            return false;
+                        }
                     }
 
                     String rejectMessage = validateTorrent(info);
