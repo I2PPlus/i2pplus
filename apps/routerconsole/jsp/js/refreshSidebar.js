@@ -3,7 +3,9 @@
  * @description Manages the sidebar auto-refresh system for the I2P+ console.
  * Uses a SharedWorker for background fetches, applies differential DOM updates,
  * monitors connection status, and coordinates sidebar components (section toggles,
- * sticky positioning, new hosts, and mini graph).
+ * sticky positioning, new hosts, and mini graph). Consumes the sidebar response
+ * prefetched at parse time by refreshKick.js so the refresh cadence is
+ * independent of page load.
  * @author dr|z3d
  * @license AGPLv3 or later
  */
@@ -11,7 +13,6 @@
 import { sectionToggler, countNewsItems } from "/js/sectionToggle.js";
 import { stickySidebar } from "/js/stickySidebar.js";
 import { newHosts } from "/js/newHosts.js";
-import "/js/miniGraph.js";
 
 /** @type {number} */
 const REQUEST_TIMEOUT = 15000;
@@ -107,6 +108,34 @@ function start() {
   checkConnectionStatus();
   window.addEventListener("resize", stickySidebar, { passive: true });
   stickySidebar();
+  consumeKick();
+}
+
+/**
+ * Applies the sidebar response prefetched by refreshKick.js as the first
+ * refresh, so the sidebar shows fresh data without waiting for the first
+ * worker fetch. Deletes the cache key in all cases so the kickoff loop
+ * stops; a response still in flight is discarded by the kickoff.
+ * @function consumeKick
+ * @returns {void}
+ */
+function consumeKick() {
+  const kick = window.__i2pSidebarKick;
+  delete window.__i2pSidebarKick;
+  if (!kick || !kick.done || !kick.text) {return;}
+  try {
+    if (document.hidden) {return;}
+    responseDoc = parser.parseFromString(kick.text, "text/html");
+    if (!responseDoc.getElementById("sb")) {
+      responseDoc = null;
+      return;
+    }
+    isRefreshing = true;
+    applySidebarUpdates();
+  } catch (e) {
+    responseDoc = null;
+    isRefreshing = false;
+  }
 }
 
 /**
