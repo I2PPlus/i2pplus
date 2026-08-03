@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -298,65 +299,97 @@ class GraphRenderer {
         String name = cfg.rate.getRateStat().getName();
         cfg.derivedTitle = deriveTitle(name);
 
-        cfg.singleDecimalPlace = true;
-        cfg.noDecimalPlace = false;
-
-        // heuristic to set K=1024
-        if ((name.toLowerCase().indexOf("size") >= 0
-                        || name.toLowerCase().indexOf("memory") >= 0
-                        || name.toLowerCase().indexOf("b/s") >= 0
-                        || name.toLowerCase().indexOf("bps") >= 0
-                        || name.toLowerCase().indexOf("bandwidth") >= 0
-                        || name.toLowerCase().indexOf("bytecache") >= 0)
-                && !cfg.showEvents) {
-            cfg.base = 1024;
-            cfg.singleDecimalPlace = false;
-        } else if (!cfg.noDecimalPlace) {
-            cfg.base = 1000;
-        }
-
-        // Percentages need no fractional precision
-        if (!cfg.noDecimalPlace) {
-            String lname = name.toLowerCase();
-            if (lname.indexOf("percent") >= 0 || lname.indexOf("%") >= 0) {
-                cfg.noDecimalPlace = true;
+        // Look up explicit metadata for this stat; fall back to heuristics if unknown
+        StatMeta meta = STAT_META.get(name);
+        if (meta != null) {
+            cfg.base = meta.base;
+            cfg.noDecimalPlace = meta.noDecimalPlace;
+            cfg.singleDecimalPlace = meta.singleDecimalPlace;
+        } else {
+            // Legacy heuristic fallback (should rarely trigger)
+            cfg.singleDecimalPlace = true;
+            cfg.noDecimalPlace = false;
+            boolean isByteOrRate = name.toLowerCase().contains("b/s") || name.toLowerCase().contains("bps")
+                    || name.toLowerCase().contains("bandwidth") || name.toLowerCase().contains("byte")
+                    || name.toLowerCase().contains("memory");
+            boolean isSize = name.toLowerCase().contains("size") || name.toLowerCase().contains("memory")
+                    || name.toLowerCase().contains("bytecache");
+            if (isSize && !cfg.showEvents) {
+                cfg.base = 1024;
+                cfg.singleDecimalPlace = false;
+            } else {
+                cfg.base = 1000;
             }
-        }
-
-        // Integer/count metrics
-        if (!cfg.noDecimalPlace) {
-            String lname = name.toLowerCase();
-            boolean isByteOrRate = lname.indexOf("b/s") >= 0 || lname.indexOf("bps") >= 0
-                    || lname.indexOf("bandwidth") >= 0 || lname.indexOf("byte") >= 0
-                    || lname.indexOf("memory") >= 0;
-            boolean isCountSize = lname.indexOf("keyset") >= 0 || lname.indexOf("keysize") >= 0;
-            if (!isByteOrRate || isCountSize) {
-                if (lname.endsWith("rate")) {
-                    // not an integer metric
-                } else if (lname.endsWith("count") || lname.indexOf(".threads") >= 0
-                        || lname.indexOf("thread") >= 0 || lname.indexOf("queuedepth") >= 0
-                        || lname.indexOf("queuesize") >= 0 || lname.indexOf("peercount") >= 0
-                        || lname.indexOf("profilecount") >= 0 || lname.indexOf("tunnelcount") >= 0
-                        || lname.indexOf("activepeers") >= 0 || lname.indexOf("fastpeer") >= 0
-                        || lname.indexOf("highcap") >= 0 || lname.indexOf("qualitypeer") >= 0
-                        || lname.indexOf("tunnels") >= 0 || lname.indexOf("numtunnels") >= 0
-                        || lname.indexOf("concurrent") >= 0 || lname.indexOf("handshakes") >= 0
-                        || lname.indexOf("builds") >= 0 || lname.indexOf("reject") >= 0
-                        || lname.indexOf("refused") >= 0 || lname.indexOf("dropped") >= 0
-                        || lname.indexOf("expired") >= 0 || lname.indexOf("failed") >= 0
-                        || lname.indexOf("timeouts") >= 0 || lname.indexOf("messages") >= 0
-                        || lname.indexOf("jobs") >= 0 || lname.indexOf("loops") >= 0
-                        || lname.indexOf("keyset") >= 0
-                        || lname.indexOf("inboundconn") >= 0 || lname.indexOf("outboundconn") >= 0
-                        || lname.indexOf("participating") >= 0 || lname.indexOf("clienttunnels") >= 0
-                        || lname.indexOf("servertunnels") >= 0 || lname.indexOf("exploratory") >= 0
-                        || lname.indexOf("peer") >= 0) {
+            if (name.toLowerCase().contains("percent") || name.contains("%")) {
+                cfg.noDecimalPlace = true;
+            } else if (!isByteOrRate || name.toLowerCase().contains("keyset") || name.toLowerCase().contains("keysize")) {
+                // Count-like metrics
+                if (!name.toLowerCase().endsWith("rate")) {
                     cfg.noDecimalPlace = true;
                 }
             }
         }
 
         cfg.numberFormat = cfg.noDecimalPlace ? "%.0f" : cfg.singleDecimalPlace ? "%.1f%s" : "%.2f%s";
+    }
+
+    /**
+     * Explicit metadata for stat rendering behavior.
+     * Replaces fragile string-index heuristics with typed lookups.
+     */
+    private static final class StatMeta {
+        final int base;              // 1000 or 1024
+        final boolean noDecimalPlace; // true for integer-only metrics
+        final boolean singleDecimalPlace; // true for single decimal, false for two
+
+        StatMeta(int base, boolean noDecimalPlace, boolean singleDecimalPlace) {
+            this.base = base;
+            this.noDecimalPlace = noDecimalPlace;
+            this.singleDecimalPlace = singleDecimalPlace;
+        }
+    }
+
+    /** Known stat metadata — add entries for new stats instead of extending heuristics. */
+    private static final Map<String, StatMeta> STAT_META;
+    static {
+        Map<String, StatMeta> m = new java.util.HashMap<>();
+        // Byte-based metrics (base 1024, fractional)
+        m.put("bw.sendRate", new StatMeta(1024, false, false));
+        m.put("bw.recvRate", new StatMeta(1024, false, false));
+        m.put("router.memoryUsed", new StatMeta(1024, false, false));
+        m.put("router.memoryMax", new StatMeta(1024, false, false));
+        m.put("router.byteCacheSize", new StatMeta(1024, false, false));
+        m.put("tunnel.participatingBytesIn", new StatMeta(1024, false, false));
+        m.put("tunnel.participatingBytesOut", new StatMeta(1024, false, false));
+
+        // Count/integer metrics (base 1000, no decimals)
+        m.put("router.activePeers", new StatMeta(1000, true, false));
+        m.put("router.cpuLoad", new StatMeta(1000, false, true));
+        m.put("router.clockSkew", new StatMeta(1000, false, true));
+        m.put("router.uptime", new StatMeta(1000, true, false));
+        m.put("tunnel.participatingTunnels", new StatMeta(1000, true, false));
+        m.put("tunnel.buildSuccessAvg", new StatMeta(1000, false, true));
+        m.put("tunnel.buildSuccessRate", new StatMeta(1000, false, true));
+        m.put("tunnel.testSuccessTime", new StatMeta(1000, false, true));
+        m.put("jobQueue.jobLag", new StatMeta(1000, false, true));
+        m.put("jobQueue.jobs", new StatMeta(1000, true, false));
+        m.put("netDb.knownRouters", new StatMeta(1000, true, false));
+        m.put("netDb.knownLeaseSets", new StatMeta(1000, true, false));
+        m.put("ntcp.pumperLoopsPerSecond", new StatMeta(1000, true, false));
+        m.put("ntcp.pumperIdleLoops", new StatMeta(1000, true, false));
+        m.put("ntcp.pumperKeySetSize", new StatMeta(1000, true, false));
+        m.put("ntcp.inboundConn", new StatMeta(1000, true, false));
+        m.put("ntcp.inboundEstablishFailed", new StatMeta(1000, true, false));
+        m.put("udp.sendRate", new StatMeta(1024, false, false));
+        m.put("udp.recvRate", new StatMeta(1024, false, false));
+        m.put("transport.sendRate", new StatMeta(1024, false, false));
+        m.put("transport.recvRate", new StatMeta(1024, false, false));
+
+        // Percentage metrics (base 1000, no decimals)
+        m.put("tunnel.buildSuccessPercent", new StatMeta(1000, true, false));
+        m.put("router.cpuPercent", new StatMeta(1000, true, false));
+        m.put("router.memoryPercent", new StatMeta(1000, true, false));
+        STAT_META = Collections.unmodifiableMap(m);
     }
 
     private void configureTitle(RrdGraphDef def, GraphRenderConfig cfg) {
@@ -631,178 +664,159 @@ out.write(graph.getRrdGraphInfo().getBytes());
     }
 
     /**
-     *  Derive a human-readable graph title from the rate stat name.
-     *  Pure function — no side effects — extracted from render() so the
-     *  (large) prefix/substring rewriting is isolated and testable.
+     * Title replacement rules, ordered by key length descending (longest first)
+     * so that longer prefixes are matched before their shorter ancestors.
+     * Each entry: key -> replacement.
+     */
+    private static final List<Map.Entry<String, String>> TITLE_REPLACEMENTS;
+    static {
+        List<Map.Entry<String, String>> list = new java.util.ArrayList<>();
+        list.add(new java.util.AbstractMap.SimpleEntry<>("tunnel.participatingTunnels", "[Transit] Tunnel Count"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("tunnel.participatingMessage", "[Transit] Message"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("tunnel.buildRatio.exploratory.", "[Exploratory] Build Ratio"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("tunnel.buildExploratory", "[Exploratory] Build"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("tunnel.buildClient", "[Tunnel] BuildClient"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("tunnel.participating", "[Transit]"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("Tunnel.participating", "[Transit]"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("router.", "[Router] "));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("bw.", "[Router] "));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("Bandwidth usage", "[Router] Bandwidth Usage"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("tunnel.build", "[Tunnel] Build"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("tunnel.", "[Tunnel] "));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("netDb.", "[NetDb] "));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("jobQueue.", "[JobQueue] "));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("udp.", "[UDP] "));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("ntcp.", "[NTCP] "));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("transport.", "[Transport] "));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("client.", "[Client] "));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("peer.", "[Peer] "));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("prng.", "[Crypto] pnrg."));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("crypto.", "[Crypto] "));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("bwLimiter.", "[BWLimiter] "));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("codel.", "[Router] CODEL."));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("stream.", "[Stream] "));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("MessageCountAvg", "Message Count Average"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("clock.skew", "[Router] Clock Skew"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("InBps", "Inbound B/s"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("OutBps", "Outbound B/s"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("Bps", "B/s"));
+        TITLE_REPLACEMENTS = Collections.unmodifiableList(list);
+    }
+
+    /**
+     * Post-processing replacements applied after prefix rules.
+     * These fix artifacts created by earlier replacements (e.g., "[Tunnel] [Tunnel]").
+     */
+    private static final List<Map.Entry<String, String>> TITLE_POST_REPLACEMENTS;
+    static {
+        List<Map.Entry<String, String>> list = new java.util.ArrayList<>();
+        list.add(new java.util.AbstractMap.SimpleEntry<>("[Tunnel] Tunnel", "[Tunnel]"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("Tunnel.participating", "[Transit]"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("[Tunnel] Participating Tunnels", "[Transit] Tunnel Count"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("Cpu", "CPU"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("CPULoad", "CPU Load"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>(" Avg", " Average"));
+        list.add(new java.util.AbstractMap.SimpleEntry<>("[Tunnel]Build", "[Tunnel] Build"));
+        TITLE_POST_REPLACEMENTS = Collections.unmodifiableList(list);
+    }
+
+    /**
+     * Derive a human-readable graph title from the rate stat name.
+     * Pure function — no side effects — uses ordered prefix map for deterministic results.
      */
     private static String deriveTitle(String name) {
         String graphTitle = name;
-        if (name.startsWith("tunnel.participatingTunnels")) {
-            graphTitle = graphTitle.replace("tunnel.participatingTunnels", "[Transit] Tunnel Count");
+        for (Map.Entry<String, String> entry : TITLE_REPLACEMENTS) {
+            if (entry.getKey().endsWith(".") || entry.getKey().endsWith(" ")) {
+                if (graphTitle.startsWith(entry.getKey())) {
+                    graphTitle = entry.getValue() + graphTitle.substring(entry.getKey().length());
+                    break; // longest prefix matched, stop
+                }
+            } else {
+                if (graphTitle.equals(entry.getKey()) || graphTitle.startsWith(entry.getKey())) {
+                    graphTitle = graphTitle.replace(entry.getKey(), entry.getValue());
+                }
+            }
         }
-        if (name.startsWith("tunnel.participatingMessage")) {
-            graphTitle = graphTitle.replace("tunnel.participatingMessage", "[Transit] Message");
-        } else if (name.startsWith("tunnel.participating")) {
-            graphTitle = graphTitle.replace("tunnel.participating", "[Transit]");
-        } else if (name.startsWith("Tunnel.participating")) {
-            graphTitle = graphTitle.replace("Tunnel.participating", "[Transit]");
-        }
-        if (name.startsWith("router.")) {
-            graphTitle = graphTitle.replace("router.", "[Router] ");
-        }
-        if (name.startsWith("bw.")) {
-            graphTitle = graphTitle.replace("bw.", "[Router] ");
-        }
-        if (name.startsWith("Bandwidth usage")) {
-            graphTitle = graphTitle.replace("Bandwidth usage", "[Router] Bandwidth Usage");
-        }
-        if (name.startsWith("tunnel.buildRatio.exploratory.")) {
-            graphTitle = graphTitle.replace("tunnel.buildRatio.exploratory.", "[Exploratory] Build Ratio");
-        }
-        if (name.startsWith("tunnel.buildExploratory")) {
-            graphTitle = graphTitle.replace("tunnel.buildExploratory", "[Exploratory] Build");
-        }
-        if (name.startsWith("tunnel.buildClient")) {
-            graphTitle = graphTitle.replace("tunnel.buildClient", "[Tunnel] BuildClient");
-        } else if (name.startsWith("tunnel.build")) {
-            graphTitle = graphTitle.replace("tunnel.build", "[Tunnel] Build");
-        } else if (name.startsWith("tunnel.")) {
-            graphTitle = graphTitle.replace("tunnel.", "[Tunnel] ");
-        }
-        if (name.contains("MessageCountAvg")) {
-            graphTitle = graphTitle.replace("MessageCountAvg", "Messsage Count Average");
-        }
-        if (name.startsWith("netDb.")) {
-            graphTitle = graphTitle.replace("netDb.", "[NetDb] ");
-        }
-        if (name.startsWith("jobQueue.")) {
-            graphTitle = graphTitle.replace("jobQueue.", "[JobQueue] ");
-        }
-        if (name.startsWith("udp.")) {
-            graphTitle = graphTitle.replace("udp.", "[UDP] ");
-        }
-        if (name.startsWith("ntcp.")) {
-            graphTitle = graphTitle.replace("ntcp.", "[NTCP] ");
-        }
-        if (name.startsWith("transport.")) {
-            graphTitle = graphTitle.replace("transport.", "[Transport] ");
-        }
-        if (name.startsWith("client.")) {
-            graphTitle = graphTitle.replace("client.", "[Client] ");
-        }
-        if (name.startsWith("peer.")) {
-            graphTitle = graphTitle.replace("peer.", "[Peer] ");
-        }
-        if (name.startsWith("prng.")) {
-            graphTitle = graphTitle.replace("prng.", "[Crypto] pnrg.");
-        }
-        if (name.startsWith("crypto.")) {
-            graphTitle = graphTitle.replace("crypto.", "[Crypto] ");
-        }
-        if (name.startsWith("bwLimiter.")) {
-            graphTitle = graphTitle.replace("bwLimiter.", "[BWLimiter] ");
-        }
-        if (name.startsWith("codel.")) {
-            graphTitle = graphTitle.replace("codel.", "[Router] CODEL.");
-        }
-        if (name.startsWith("stream.")) {
-            graphTitle = graphTitle.replace("stream.", "[Stream] ");
-        }
+        // Special handling for exact match
         if (name.equals("clock.skew")) {
-            graphTitle = graphTitle.replace("clock.skew", "[Router] Clock Skew");
+            graphTitle = "[Router] Clock Skew";
         }
-        if (name.endsWith("InBps")) {
-            graphTitle = graphTitle.replace("InBps", "Inbound B/s");
-        }
-        if (name.endsWith("OutBps")) {
-            graphTitle = graphTitle.replace("OutBps", "Outbound B/s");
-        }
-        if (name.endsWith("Bps")) {
-            graphTitle = graphTitle.replace("Bps", "B/s");
+        for (Map.Entry<String, String> entry : TITLE_POST_REPLACEMENTS) {
+            graphTitle = graphTitle.replace(entry.getKey(), entry.getValue());
         }
         graphTitle = CSSHelper.StringFormatter.capitalizeWord(graphTitle);
-        graphTitle = graphTitle
-                .replace("[Tunnel] Tunnel", "[Tunnel]")
-                .replace("Tunnel.participating", "[Transit]")
-                .replace("[Tunnel] Participating Tunnels", "[Transit] Tunnel Count")
-                .replace("Cpu", "CPU")
-                .replace("CPULoad", "CPU Load")
-                .replace(" Avg", " Average")
-                .replace("[Tunnel]Build", "[Tunnel] Build");
         return graphTitle;
     }
 
     /**
-     *  Per-language font family selection for graph rendering.
-     *  Pure function — no side effects — so it is safe to call from any thread.
+     * Font family configuration for a specific language.
+     * Ordered by preference: first available font in the list is used.
+     */
+    private static final class FontConfig {
+        final List<String> titleCandidates;
+        final List<String> monoCandidates;
+        final String fallbackTitle;
+        final String fallbackMono;
+
+        FontConfig(List<String> titleCandidates, List<String> monoCandidates,
+                   String fallbackTitle, String fallbackMono) {
+            this.titleCandidates = titleCandidates;
+            this.monoCandidates = monoCandidates;
+            this.fallbackTitle = fallbackTitle;
+            this.fallbackMono = fallbackMono;
+        }
+    }
+
+    /** Per-language font configuration. Legend uses title candidates. */
+    private static final Map<String, FontConfig> FONT_CONFIGS;
+    static {
+        Map<String, FontConfig> m = new java.util.HashMap<>();
+        m.put("zh", new FontConfig(
+            Arrays.asList("Noto Sans SC", "Noto Sans CJK SC", "Source Han Sans SC"),
+            Arrays.asList("Noto Sans Mono SC", "Noto Sans Mono CJK SC"),
+            "Dialog", "Monospaced"));
+        m.put("jp", new FontConfig(
+            Arrays.asList("Noto Sans JP", "Noto Sans CJK JP", "Source Han Sans JP"),
+            Arrays.asList("Noto Sans Mono JP", "Noto Sans Mono CJK JP"),
+            "Dialog", "Monospaced"));
+        m.put("ko", new FontConfig(
+            Arrays.asList("Noto Sans KO", "Noto Sans CJK KO", "Source Han Sans KO"),
+            Arrays.asList("Noto Sans Mono KO", "Noto Sans Mono CJK KO"),
+            "Dialog", "Monospaced"));
+        FONT_CONFIGS = Collections.unmodifiableMap(m);
+    }
+
+    /**
+     * Per-language font family selection for graph rendering.
+     * Pure function — no side effects — so it is safe to call from any thread.
      *
-     *  @param lang the active UI language code (e.g. "en", "zh", "jp", "ko")
-     *  @return resolved mono / legend / title family names for the current platform
+     * @param lang the active UI language code (e.g. "en", "zh", "jp", "ko")
+     * @return resolved mono / legend / title family names for the current platform
      */
     private static FontNames selectFontNames(String lang) {
-        String mono = DEFAULT_FONT_NAME;
-        String legend = DEFAULT_LEGEND_FONT_NAME;
-        String title = DEFAULT_TITLE_FONT_NAME;
-        if ("zh".equals(lang)) {
-            if (FONTLIST.contains("Noto Sans SC")) {
-                title = legend = "Noto Sans SC";
-            } else if (FONTLIST.contains("Noto Sans CJK SC")) {
-                title = legend = "Noto Sans CJK SC";
-            } else if (FONTLIST.contains("Source Han Sans SC")) {
-                title = legend = "Source Han Sans SC";
-            } else {
-                title = legend = "Dialog";
+        FontConfig config = FONT_CONFIGS.get(lang);
+        if (config != null) {
+            String title = config.fallbackTitle;
+            for (String candidate : config.titleCandidates) {
+                if (FONTLIST.contains(candidate)) {
+                    title = candidate;
+                    break;
+                }
             }
-            if (FONTLIST.contains("Noto Sans Mono SC")) {
-                mono = "Noto Sans Mono SC";
-            } else if (FONTLIST.contains("Noto Sans Mono CJK SC")) {
-                mono = "Noto Sans Mono CJK SC";
-            } else {
-                mono = "Monospaced";
+            String mono = config.fallbackMono;
+            for (String candidate : config.monoCandidates) {
+                if (FONTLIST.contains(candidate)) {
+                    mono = candidate;
+                    break;
+                }
             }
-        } else if ("jp".equals(lang)) {
-            if (FONTLIST.contains("Noto Sans JP")) {
-                title = legend = "Noto Sans JP";
-            } else if (FONTLIST.contains("Noto Sans CJK JP")) {
-                title = legend = "Noto Sans CJK JP";
-            } else if (FONTLIST.contains("Source Han Sans JP")) {
-                title = legend = "Noto Sans CJK JP";
-            } else {
-                title = legend = "Dialog";
-            }
-            if (FONTLIST.contains("Noto Sans Mono JP")) {
-                mono = "Noto Sans Mono JP";
-            } else if (FONTLIST.contains("Noto Sans Mono CJK JP")) {
-                mono = "Noto Sans Mono CJK JP";
-            } else {
-                mono = "Monospaced";
-            }
-        } else if ("ko".equals(lang)) {
-            if (FONTLIST.contains("Noto Sans KO")) {
-                title = legend = "Noto Sans KO";
-            } else if (FONTLIST.contains("Noto Sans CJK KO")) {
-                title = legend = "Noto Sans CJK KO";
-            } else if (FONTLIST.contains("Source Han Sans KO")) {
-                title = legend = "Noto Sans CJK KO";
-            } else {
-                title = legend = "Dialog";
-            }
-            if (FONTLIST.contains("Noto Sans Mono KO")) {
-                mono = "Noto Sans Mono KO";
-            } else if (FONTLIST.contains("Noto Sans Mono CJK KO")) {
-                mono = "Noto Sans Mono CJK KO";
-            } else {
-                mono = "Monospaced";
-            }
-        } else {
-            // fall back to generic family names; the renderer selects the
-            // concrete face per output format. Legend uses a sans-serif face,
-            // while the unit/axis metric text stays monospaced for alignment.
-            mono = "Monospaced";
-            legend = "SansSerif";
-            title = "SansSerif";
+            return new FontNames(mono, title, title); // legend == title
         }
-        return new FontNames(mono, legend, title);
+        // fall back to generic family names; the renderer selects the
+        // concrete face per output format. Legend uses a sans-serif face,
+        // while the unit/axis metric text stays monospaced for alignment.
+        return new FontNames("Monospaced", "SansSerif", "SansSerif");
     }
 
     /** Resolved font family names for a render pass. */
