@@ -295,10 +295,18 @@ class PacketHandler {
                 }
                 log.debug("Connections: " + buf + " SendID: " + Packet.toId(sendId));
             }
-            if (log.shouldDebug()) {
-                log.debug("PacketHandler queuing non-SYN packet to ConnectionHandler: " + packet);
+            if (packet.isFlagSet(Packet.FLAG_CLOSE | Packet.FLAG_RESET)) {
+                // A close/reset for a connection we don't know must not be
+                // replayed as a new SYN
+                if (log.shouldDebug())
+                    log.debug("Close/reset on unknown connection -> " + packet);
+                packet.releasePayload();
+            } else {
+                if (log.shouldDebug()) {
+                    log.debug("PacketHandler queuing non-SYN packet to ConnectionHandler: " + packet);
+                }
+                manager.getConnectionHandler().receiveNewSyn(packet);
             }
-            manager.getConnectionHandler().receiveNewSyn(packet);
         } else {
             if (I2PSocketManagerFull.pcapWriter != null &&
                 context.getBooleanProperty(I2PSocketManagerFull.PROP_PCAP)) {
