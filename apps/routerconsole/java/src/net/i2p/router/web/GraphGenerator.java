@@ -71,11 +71,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * @return null if disabled
-     */
-    public static GraphGenerator instance() {return instance(I2PAppContext.getGlobalContext());}
-
-    /**
-     * @return null if disabled
      * @since 0.9.38
      */
     public static GraphGenerator instance(I2PAppContext ctx) {
@@ -262,8 +257,10 @@ public class GraphGenerator implements Runnable, ClientApp {
     public int countGraphs() {return _listeners.size();}
 
     private String adjustDatabases(String oldSpecs) {
+        // Read the property every tick so config changes take effect; the string
+        // compare is the common case, parsing only runs after a change
         String spec = _context.getProperty("stat.summaries", DEFAULT_DATABASES);
-        if (spec == null ? oldSpecs == null : spec.equals(oldSpecs)) {
+        if (spec.equals(oldSpecs)) {
             return oldSpecs;
         }
 
@@ -274,7 +271,7 @@ public class GraphGenerator implements Runnable, ClientApp {
         for (Rate r : old) {
             if (!newSpecs.contains(r)) {removeDb(r);}
         }
-        // add new ones
+        // add new ones, rebuilding the canonical spec string so the next tick short-circuits
         StringBuilder buf = new StringBuilder();
         boolean comma = false;
         for (Rate r : newSpecs) {
@@ -314,45 +311,9 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Render a single-data graph with default dimensions and options.
-     *
-     *  @param rate the rate to graph
-     *  @param out the output stream to write the graph image to
-     *  @return true if the graph was rendered successfully
-     *  @throws IOException if rendering fails
-     */
-    public boolean renderGraph(Rate rate, OutputStream out) throws IOException {
-        return renderGraph(rate, out, DEFAULT_X, DEFAULT_Y, false, false, false, false, -1, 0, true, true);
-    }
-
-    /**
      *  Render a single-data graph with the specified options.
      *  For the two-data bandwidth graph see renderCombinedGraph().
      *  Synchronized to conserve memory.
-     *
-     *  @param rate the rate to graph
-     *  @param out the output stream to write the graph image to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, draw event markers
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now to end at
-     *  @param showCredit if true, show the I2P+ credit line
-     *  @return success
-     *  @throws IOException if rendering fails
-     */
-    public boolean renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
-                                          boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
-                                          int end, boolean showCredit) throws IOException {
-        return renderGraph(rate, out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
-                           periodCount, end, showCredit, true);
-    }
-
-    /**
-     *  Render a single-data graph with the specified options.
      *
      *  @param rate the rate to graph
      *  @param out the output stream to write the graph image to
