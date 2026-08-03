@@ -4,7 +4,7 @@
  * requests. Uses morphdom for efficient DOM diffing and supports visibility-based
  * refresh scheduling.
  * @author dr|z3d
- * @license AGPL3 or later
+ * @license AGPLv3 or later
  */
 
 import morphdom from "/js/morphdom.js";
@@ -57,11 +57,12 @@ fetchWorker.port.onmessage = function(e) {
  * @param {string} url - The URL to fetch content from
  * @param {number} delay - The refresh interval in milliseconds
  * @param {boolean} [immediate=false] - Fetch right away on setup, or wait for the first interval tick
- * @returns {void}
+ * @param {boolean} [silent=false] - Skip the progress bar on each refresh
+ * @returns {Function} The stop function that halts the refresh loop
  * @example refreshElements("#sidebar", "/sidebar", 10000)
  * @example refreshElements(["#peers", "#status"], "/peers", 5000)
  */
-export function refreshElements(targetSelectors, url, delay, immediate = false) {
+export function refreshElements(targetSelectors, url, delay, immediate = false, silent = false) {
   let selectors = [];
 
   if (typeof targetSelectors === "string") {
@@ -73,16 +74,18 @@ export function refreshElements(targetSelectors, url, delay, immediate = false) 
   currentTargetSelector = selectors;
   currentUrl = url;
 
+  let instanceIntervalId = null;
+
   function refresh() {
     if (document.visibilityState !== "visible" || isRefreshing) { return; }
 
     isRefreshing = true;
-    progressx?.show(theme);
+    if (!silent) { progressx?.show(theme); }
 
     fetchWorker.port.postMessage({ url: currentUrl });
 
     setTimeout(() => {
-      progressx?.hide();
+      if (!silent) { progressx?.hide(); }
       isRefreshing = false;
     }, 1000);
 
@@ -94,17 +97,20 @@ export function refreshElements(targetSelectors, url, delay, immediate = false) 
 
   if (document.visibilityState === "visible") {
     if (immediate) { refresh(); }
-    refreshIntervalId = setInterval(refresh, delay);
+    instanceIntervalId = setInterval(refresh, delay);
+    refreshIntervalId = instanceIntervalId;
   }
 
   function handleVisibilityChange() {
     if (document.visibilityState === "visible") {
       refresh();
-      if (!refreshIntervalId) {
-        refreshIntervalId = setInterval(refresh, delay);
+      if (!instanceIntervalId) {
+        instanceIntervalId = setInterval(refresh, delay);
+        refreshIntervalId = instanceIntervalId;
       }
     } else {
-      clearInterval(refreshIntervalId);
+      clearInterval(instanceIntervalId);
+      instanceIntervalId = null;
       refreshIntervalId = null;
       isRefreshing = false;
     }
@@ -115,4 +121,24 @@ export function refreshElements(targetSelectors, url, delay, immediate = false) 
   }
   visibilityHandler = handleVisibilityChange;
   document.addEventListener("visibilitychange", visibilityHandler);
+
+  /**
+   * Halts the refresh loop for this instance. Does nothing if another
+   * refreshElements call has since taken over the singleton state.
+   * @function stop
+   * @returns {void}
+   */
+  function stop() {
+    if (visibilityHandler !== handleVisibilityChange) { return; }
+    document.removeEventListener("visibilitychange", handleVisibilityChange);
+    visibilityHandler = null;
+    clearInterval(instanceIntervalId);
+    instanceIntervalId = null;
+    refreshIntervalId = null;
+    currentUrl = null;
+    currentTargetSelector = null;
+    isRefreshing = false;
+  }
+
+  return stop;
 }

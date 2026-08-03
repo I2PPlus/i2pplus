@@ -112,30 +112,16 @@ function start() {
 }
 
 /**
- * Applies the sidebar response prefetched by refreshKick.js as the first
- * refresh, so the sidebar shows fresh data without waiting for the first
- * worker fetch. Deletes the cache key in all cases so the kickoff loop
- * stops; a response still in flight is discarded by the kickoff.
+ * Hands off from the parse-time kicker (refreshKick.js): stops its
+ * refreshElements loop. The module's own interval cadence takes over,
+ * so the sidebar values shown at load stay current.
  * @function consumeKick
  * @returns {void}
  */
 function consumeKick() {
   const kick = window.__i2pSidebarKick;
   delete window.__i2pSidebarKick;
-  if (!kick || !kick.done || !kick.text) {return;}
-  try {
-    if (document.hidden) {return;}
-    responseDoc = parser.parseFromString(kick.text, "text/html");
-    if (!responseDoc.getElementById("sb")) {
-      responseDoc = null;
-      return;
-    }
-    isRefreshing = true;
-    applySidebarUpdates();
-  } catch (e) {
-    responseDoc = null;
-    isRefreshing = false;
-  }
+  if (kick && typeof kick.stop === "function") {kick.stop();}
 }
 
 /**
