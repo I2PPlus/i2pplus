@@ -77,13 +77,11 @@ class SidebarRenderer {
 
     private final RouterContext _context;
     private final SidebarHelper _helper;
-    private static final String PROP_ADVANCED = "routerconsole.advanced";
-    private static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
     private String toggleId = "";
     private String getToggle() {return "<input type=checkbox id=" + toggleId + " class=\"toggleSection script\" checked hidden>";}
 
     /**
-     * SidebarRenderer.
+     *  Create the renderer bound to the helper that supplies sidebar data.
      */
     public SidebarRenderer(RouterContext context, SidebarHelper helper) {
         _context = context;
@@ -91,16 +89,7 @@ class SidebarRenderer {
     }
 
     /**
-     * Whether advanced.
-     * @return whether advanced
-     */
-    public boolean isAdvanced() {return _context.getBooleanProperty(PROP_ADVANCED);}
-    /**
-     * unifiedSidebar.
-     */
-    public boolean unifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
-    /**
-     * floodfillEnabled.
+     *  True if the router is a floodfill router.
      */
     public boolean floodfillEnabled() {return _context.netDb().floodfillEnabled();}
 
@@ -113,7 +102,7 @@ class SidebarRenderer {
         boolean isXHR = requestURI.contains("/xhr1");
         String page = requestURI.replace("/", "").replace(".jsp", "");
         List<String> sections = _helper.getSummaryBarSections(page);
-        boolean isUnified = unifiedSidebar();
+        boolean isUnified = _helper.unifiedSidebar();
         boolean isHelp = requestURI.contains("help");
         boolean isHome = requestURI.contains("home");
         boolean isSitemap = requestURI.contains("sitemap");
@@ -1001,7 +990,7 @@ class SidebarRenderer {
         StringBuilder buf = new StringBuilder(512);
         int active = _helper.getActivePeers();
         int allPeers = _helper.getAllPeers();
-        boolean isAdvanced = isAdvanced();
+        boolean isAdvanced = _helper.isAdvanced();
         toggleId = "toggle_sb_peers";
 
         buf.append("<h3><a href=/peers target=_top title=\"")
@@ -1439,7 +1428,7 @@ class SidebarRenderer {
         buf.append("</a>")
            .append(getToggle())
            .append("</h3>\n<hr class=b>\n<table id=sb_queue>\n<tr title=\"");
-        if (isAdvanced() && maxLag >= 30) {buf.append(_t("Average job delay / maximum delay"));}
+        if (_helper.isAdvanced() && maxLag >= 30) {buf.append(_t("Average job delay / maximum delay"));}
         else {buf.append(_t("Average delay before scheduled jobs are run"));}
         buf.append("\"><td><b>")
            .append(_t("Job lag"))
