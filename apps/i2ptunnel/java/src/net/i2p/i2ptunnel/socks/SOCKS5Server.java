@@ -214,11 +214,6 @@ class SOCKS5Server extends SOCKSServer {
             throw new SOCKSException("BIND command not supported");
 
         case Command.UDP_ASSOCIATE:
-          /*** if(!Boolean.parseBoolean(tunnel.getOptions().getProperty("i2ptunnel.socks.allowUDP"))) {
-            _log.debug("UDP ASSOCIATE command is not supported!");
-            sendRequestReply(Reply.COMMAND_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-            throw new SOCKSException("UDP ASSOCIATE command not supported");
-           ***/
             break;
 
         case Command.TOR_RESOLVE:
@@ -479,18 +474,6 @@ class SOCKS5Server extends SOCKSServer {
                     sendRequestReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
                 } catch (IOException ioe) { /* ignored */ }
                 throw new SOCKSException(err);
-          /****
-            } else if (connPort == 80) {
-                // rewrite GET line to include hostname??? or add Host: line???
-                // or forward to local eepProxy (but that's a Socket not an I2PSocket)
-                // use eepProxy configured outproxies?
-                String err = "No handler for HTTP outproxy implemented";
-                _log.error(err);
-                try {
-                    sendRequestReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                } catch (IOException ioe) {}
-                throw new SOCKSException(err);
-           ****/
             } else {
                 Outproxy outproxy = getOutproxyPlugin();
                 if (outproxy != null) {
