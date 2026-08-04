@@ -871,14 +871,7 @@ public class TunnelController implements Logging {
      *
      */
     public int getStartupDelayMin() {
-        String val = _config.getProperty(PROP_STARTUP_DELAY_MIN);
-        if (val == null) return DEFAULT_STARTUP_DELAY_MIN;
-        try {
-            int i = Integer.parseInt(val.trim());
-            return Math.max(0, i);
-        } catch (NumberFormatException e) {
-            return DEFAULT_STARTUP_DELAY_MIN;
-        }
+        return getDelay(PROP_STARTUP_DELAY_MIN, DEFAULT_STARTUP_DELAY_MIN);
     }
 
     /**
@@ -888,14 +881,7 @@ public class TunnelController implements Logging {
      *
      */
     public int getStartupDelayMax() {
-        String val = _config.getProperty(PROP_STARTUP_DELAY_MAX);
-        if (val == null) return DEFAULT_STARTUP_DELAY_MAX;
-        try {
-            int i = Integer.parseInt(val.trim());
-            return Math.max(0, i);
-        } catch (NumberFormatException e) {
-            return DEFAULT_STARTUP_DELAY_MAX;
-        }
+        return getDelay(PROP_STARTUP_DELAY_MAX, DEFAULT_STARTUP_DELAY_MAX);
     }
 
     /**
@@ -905,14 +891,7 @@ public class TunnelController implements Logging {
      *
      */
     public int getShutdownDelayMin() {
-        String val = _config.getProperty(PROP_SHUTDOWN_DELAY_MIN);
-        if (val == null) return DEFAULT_SHUTDOWN_DELAY_MIN;
-        try {
-            int i = Integer.parseInt(val.trim());
-            return Math.max(0, i);
-        } catch (NumberFormatException e) {
-            return DEFAULT_SHUTDOWN_DELAY_MIN;
-        }
+        return getDelay(PROP_SHUTDOWN_DELAY_MIN, DEFAULT_SHUTDOWN_DELAY_MIN);
     }
 
      /**
@@ -922,13 +901,25 @@ public class TunnelController implements Logging {
       *
       */
      public int getShutdownDelayMax() {
-         String val = _config.getProperty(PROP_SHUTDOWN_DELAY_MAX);
-         if (val == null) return DEFAULT_SHUTDOWN_DELAY_MAX;
+         return getDelay(PROP_SHUTDOWN_DELAY_MAX, DEFAULT_SHUTDOWN_DELAY_MAX);
+     }
+
+     /**
+      *  Read a delay option, clamped to non-negative.
+      *
+      *  @param key the config key
+      *  @param def the default when unset or unparsable
+      *  @return the delay in seconds
+      *
+      */
+     private int getDelay(String key, int def) {
+         String val = _config.getProperty(key);
+         if (val == null) return def;
          try {
              int i = Integer.parseInt(val.trim());
              return Math.max(0, i);
          } catch (NumberFormatException e) {
-             return DEFAULT_SHUTDOWN_DELAY_MAX;
+             return def;
          }
      }
 

@@ -251,19 +251,30 @@ public class TunnelControllerGroup implements ClientApp {
      * @param args must be the args passed to TunnelControllerGroup.
      * @return an array of exactly 2 strings, where [0] is the the value for
      * _configFile and [1] is the value for _configDirectory
-    */
+     */
     private String[] setupArguments(String[] args){
         String configFile = DEFAULT_CONFIG_FILE;
         String configDirectory = CONFIG_DIR;
-        File check = new File(args[0]);
-        if (!check.isAbsolute())
-            check = new File(_context.getConfigDir(), args[0]);
+        File check = resolveConfig(args[0]);
         if (check.isFile()) {
             configFile = args[0];
         } else if (check.isDirectory()) {
             configDirectory = args[0];
         }
         return new String[]{configFile, configDirectory};
+    }
+
+    /**
+     *  Resolve a config path to an absolute file under the config dir.
+     *
+     *  @param name the config file or directory path
+     *  @return the resolved file
+     */
+    private File resolveConfig(String name) {
+        File file = new File(name);
+        if (!file.isAbsolute())
+            file = new File(_context.getConfigDir(), name);
+        return file;
     }
 
     /**
@@ -294,9 +305,7 @@ public class TunnelControllerGroup implements ClientApp {
      *  @since 0.9.4
      */
     public void startup() {
-        File configFile = new File(_configFile);
-        if (!configFile.isAbsolute())
-            configFile = new File(_context.getConfigDir(), _configFile);
+        File configFile = resolveConfig(_configFile);
         try {
             if (_log.shouldInfo())
                 _log.info("Configuring tunnels from " + configFile);
@@ -848,9 +857,7 @@ public class TunnelControllerGroup implements ClientApp {
      */
     public synchronized void reloadControllers() {
         unloadControllers();
-        File cfgFile = new File(_configFile);
-        if (!cfgFile.isAbsolute())
-            cfgFile = new File(_context.getConfigDir(), _configFile);
+        File cfgFile = resolveConfig(_configFile);
         loadControllers(cfgFile);
         startControllers();
     }
@@ -1027,9 +1034,7 @@ public class TunnelControllerGroup implements ClientApp {
             }
         } else {
             try {
-                File cfgFile = new File(_configFile);
-                if (!cfgFile.isAbsolute())
-                    cfgFile = new File(_context.getConfigDir(), _configFile);
+                File cfgFile = resolveConfig(_configFile);
                 saveConfig(cfgFile);
             } finally {
                 _controllersLock.readLock().unlock();
@@ -1151,9 +1156,7 @@ public class TunnelControllerGroup implements ClientApp {
         String configFileName = _controllers.size() + "-" + fileName + "-i2ptunnel.config";
         if (_controllers.size() < 10)
             configFileName = '0' + configFileName;
-        File folder = new File(_configDirectory);
-        if (!folder.isAbsolute())
-            folder = new File(_context.getConfigDir(), _configDirectory);
+        File folder = resolveConfig(_configDirectory);
         file = new File(folder, configFileName);
         tc.setConfigFile(file);
         return file;
@@ -1167,9 +1170,7 @@ public class TunnelControllerGroup implements ClientApp {
      * @since 0.9.42
      */
     private List<File> listFiles() {
-        File folder = new File(_configDirectory);
-        if (!folder.isAbsolute())
-            folder = new File(_context.getConfigDir(), _configDirectory);
+        File folder = resolveConfig(_configDirectory);
         if (_log.shouldInfo())
             _log.info("Seeking controller configs in " + folder.toString());
         File[] listOfFiles = folder.listFiles(new FileSuffixFilter(".config"));
@@ -1182,9 +1183,7 @@ public class TunnelControllerGroup implements ClientApp {
             }
             Collections.sort(files);
         } else {
-            File cfgFile = new File(_configFile);
-            if (!cfgFile.isAbsolute())
-                cfgFile = new File(_context.getConfigDir(), _configFile);
+            File cfgFile = resolveConfig(_configFile);
             files.add(cfgFile);
         }
         return files;
@@ -1259,9 +1258,7 @@ public class TunnelControllerGroup implements ClientApp {
      */
     public List<TunnelController> getControllers() {
         List<TunnelController> rv = new ArrayList<>();
-        File cfgFile = new File(_configFile);
-        if (!cfgFile.isAbsolute())
-            cfgFile = new File(_context.getConfigDir(), _configFile);
+        File cfgFile = resolveConfig(_configFile);
         rv.addAll(getControllers(cfgFile));
         return rv;
      }
@@ -1430,20 +1427,39 @@ public class TunnelControllerGroup implements ClientApp {
      *  Shutdown the server executor
      */
     private void killServerExecutor() {
-        synchronized (_serverExecutorLock) {
-            if (_serverExecutor != null) {
-                _serverExecutor.shutdown();
+        killExecutor(_serverExecutorLock, "Server");
+    }
+
+    /**
+     *  Shutdown the client executor
+     */
+    private void killClientExecutor() {
+        killExecutor(_executorLock, "Client");
+    }
+
+    /**
+     *  Shutdown an executor, waiting for termination.
+     *
+     *  @param lock the monitor guarding the executor
+     *  @param name "Server" or "Client" for logging
+     */
+    private void killExecutor(Object lock, String name) {
+        synchronized (lock) {
+            ThreadPoolExecutor executor = name.equals("Server") ? _serverExecutor : _executor;
+            if (executor != null) {
+                executor.shutdown();
                 try {
-                    if (!_serverExecutor.awaitTermination(60, TimeUnit.SECONDS)) {
-                        _serverExecutor.shutdownNow();
-                        if (!_serverExecutor.awaitTermination(60, TimeUnit.SECONDS))
-                            _log.error("Server executor did not terminate");
+                    if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
+                        executor.shutdownNow();
+                        if (!executor.awaitTermination(60, TimeUnit.SECONDS))
+                            _log.error(name + " executor did not terminate");
                     }
                 } catch (InterruptedException ie) {
-                    _serverExecutor.shutdownNow();
+                    executor.shutdownNow();
                     Thread.currentThread().interrupt();
                 }
-                _serverExecutor = null;
+                if (name.equals("Server")) {_serverExecutor = null;}
+                else {_executor = null;}
             }
         }
     }
@@ -1458,28 +1474,6 @@ public class TunnelControllerGroup implements ClientApp {
                 I2PAppContext ctx = _context;
                 if (ctx != null)
                     ctx.statManager().addRateData("i2ptunnel.clientRunner.poolSize", newMax);
-            }
-        }
-    }
-
-    /**
-     *  Shutdown the client executor
-     */
-    private void killClientExecutor() {
-        synchronized (_executorLock) {
-            if (_executor != null) {
-                _executor.shutdown();
-                try {
-                    if (!_executor.awaitTermination(60, TimeUnit.SECONDS)) {
-                        _executor.shutdownNow();
-                        if (!_executor.awaitTermination(60, TimeUnit.SECONDS))
-                            _log.error("Client executor did not terminate");
-                    }
-                } catch (InterruptedException ie) {
-                    _executor.shutdownNow();
-                    Thread.currentThread().interrupt();
-                }
-                _executor = null;
             }
         }
     }
