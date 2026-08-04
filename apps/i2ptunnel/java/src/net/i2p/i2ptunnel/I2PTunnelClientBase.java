@@ -758,31 +758,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
 
         try {
             Properties opts = getTunnel().getClientOptions();
-            boolean useSSL = Boolean.parseBoolean(opts.getProperty(PROP_USE_SSL));
-            if (useSSL) {
-                // Was already done in GeneralHelper.updateTunnelConfig() when saving the config.
-                // We should never be generating the cert here.
-                // Add the local interface and all targets to the cert.
-                Set<String> altNames = new HashSet<>(4);
-                String intfc = getTunnel().listenHost;
-                if (intfc != null && !intfc.equals("0.0.0.0") && !intfc.equals("::") &&
-                    !intfc.equals("0:0:0:0:0:0:0:0")) {altNames.add(intfc);}
-
-                // We can't easily get to the targetDestination property,
-                // or the _addrs List in I2PTunnelClient, or the target argument in I2PTunnel from here,
-                // but it shouldn't matter, we should never be generating the cert here.
-
-                boolean wasCreated = SSLClientUtil.verifyKeyStore(opts, "", altNames);
-                if (wasCreated) {
-                    // From here, we can't save the config.
-                    // We shouldn't get here, as SSL isn't the default, so it would be enabled via the GUI only.
-                    // If it was done manually, the keys will be regenerated at every startup, which is bad.
-                    _log.logAlways(Log.WARN, "Created new I2PTunnel SSL keys but can't save the config -> Disable and enable via I2PTunnel GUI");
-                }
-                SSLServerSocketFactory fact = SSLClientUtil.initializeFactory(opts);
-                ss = fact.createServerSocket(localPort, 0, addr);
-                I2PSSLSocketFactory.setProtocolsAndCiphers((SSLServerSocket) ss);
-            } else {ss = new ServerSocket(localPort, 0, addr);}
+            ss = createServerSocket(opts, addr);
 
             // If a free port was requested, find out what we got
             if (localPort == 0) {localPort = ss.getLocalPort();}
@@ -794,23 +770,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             }
 
             // Wait until we are authorized to process data
-            synchronized (startLock) {
-                while (!startRunning) {
-                    try {startLock.wait();}
-                    catch (InterruptedException ie) { /* ignored */ }
-                }
-            }
+            waitForStartRunning();
 
-            TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
-            if (tcg != null) {_executor = tcg.getClientExecutor();}
-            else {
-                /* Fallback in case TCG.getInstance() is null, never instantiated and we were not started by TCG.
-                 * Maybe a plugin loaded before TCG? Should be rare.
-                 * Locally owned, so we shut it down in close().
-                 */
-                _executor = new TunnelControllerGroup.CustomThreadPoolExecutor();
-                _ownExecutor = true;
-            }
+            initializeExecutor();
             while (open) {
                 Socket s = ss.accept();
                 manageConnection(s);
@@ -836,6 +798,71 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 notifyEvent("openBaseClientResult", "error");
             }
             synchronized (this) {notifyAll();}
+        }
+    }
+
+    /**
+     *  Create the local server socket, with SSL if enabled.
+     *
+     *  @param opts the client options
+     *  @param addr the local bind address
+     *  @return the bound server socket
+     *  @throws IOException if the socket cannot be created
+     */
+    private ServerSocket createServerSocket(Properties opts, InetAddress addr) throws IOException {
+        boolean useSSL = Boolean.parseBoolean(opts.getProperty(PROP_USE_SSL));
+        if (!useSSL) {return new ServerSocket(localPort, 0, addr);}
+        // Was already done in GeneralHelper.updateTunnelConfig() when saving the config.
+        // We should never be generating the cert here.
+        // Add the local interface and all targets to the cert.
+        Set<String> altNames = new HashSet<>(4);
+        String intfc = getTunnel().listenHost;
+        if (intfc != null && !intfc.equals("0.0.0.0") && !intfc.equals("::") &&
+            !intfc.equals("0:0:0:0:0:0:0:0")) {altNames.add(intfc);}
+
+        // We can't easily get to the targetDestination property,
+        // or the _addrs List in I2PTunnelClient, or the target argument in I2PTunnel from here,
+        // but it shouldn't matter, we should never be generating the cert here.
+
+        boolean wasCreated = SSLClientUtil.verifyKeyStore(opts, "", altNames);
+        if (wasCreated) {
+            // From here, we can't save the config.
+            // We shouldn't get here, as SSL isn't the default, so it would be enabled via the GUI only.
+            // If it was done manually, the keys will be regenerated at every startup, which is bad.
+            _log.logAlways(Log.WARN, "Created new I2PTunnel SSL keys but can't save the config -> Disable and enable via I2PTunnel GUI");
+        }
+        SSLServerSocketFactory fact = SSLClientUtil.initializeFactory(opts);
+        ServerSocket rv = fact.createServerSocket(localPort, 0, addr);
+        I2PSSLSocketFactory.setProtocolsAndCiphers((SSLServerSocket) rv);
+        return rv;
+    }
+
+    /**
+     *  Wait until startRunning() authorizes connection processing.
+     */
+    private void waitForStartRunning() {
+        synchronized (startLock) {
+            while (!startRunning) {
+                try {startLock.wait();}
+                catch (InterruptedException ie) { /* ignored */ }
+            }
+        }
+    }
+
+    /**
+     *  Get the executor from the tunnel controller group, or create one locally
+     *  if the group was never started.
+     */
+    private void initializeExecutor() {
+        TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
+        if (tcg != null) {_executor = tcg.getClientExecutor();}
+        else {
+            /* Fallback in case TCG.getInstance() is null, never instantiated and we were not started by TCG.
+             * Maybe a plugin loaded before TCG? Should be rare.
+             * Locally owned, so we shut it down in close().
+             */
+            _executor = new TunnelControllerGroup.CustomThreadPoolExecutor();
+            _ownExecutor = true;
         }
     }
 
