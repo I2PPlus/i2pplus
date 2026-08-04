@@ -55,8 +55,8 @@ public class RouterAddress extends DataStructureImpl {
     private byte[] _ip = NOT_LOOKED_UP;
     /** Cached port number. */
     private int _port;
-    /** Property key for host */
 
+    /** Property key for host */
     public static final String PROP_HOST = "host";
     /** Property key for port */
     public static final String PROP_PORT = "port";
@@ -66,15 +66,18 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     *  For efficiency when created by a Transport.
-     *  @param options not copied; do not reuse or modify
+     *  Creates an address with a copy of the given options, so the caller
+     *  may reuse or modify them after construction.
+     *
+     *  @param options may be null
      *  @param cost 0-255
      *  @since IPv6
      */
     public RouterAddress(String style, OrderedProperties options, int cost) {
         _transportStyle = style;
         _options = new OrderedProperties();
-        _options.putAll(options);
+        if (options != null)
+            _options.putAll(options);
         if (cost < 0 || cost > 255)
             throw new IllegalArgumentException();
         _cost = (short) cost;
