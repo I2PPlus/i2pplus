@@ -294,20 +294,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * Call verifySocketManager() for that.
      *
      * @param tunnel the I2PTunnel instance
-     * @return non-null
-     * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     *                                  badly that we cant create a socketManager
-     */
-    protected static I2PSocketManager getSocketManager(I2PTunnel tunnel) {
-        return getSocketManager(tunnel, null);
-    }
-
-    /**
-     * This is ONLY for shared clients.
-     * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
-     * Call verifySocketManager() for that.
-     *
-     * @param tunnel the I2PTunnel instance
      * @param pkf the private key file path, or null
      * @return non-null
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
