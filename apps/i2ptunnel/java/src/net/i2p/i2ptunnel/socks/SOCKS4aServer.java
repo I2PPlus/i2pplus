@@ -9,6 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -106,20 +107,33 @@ class SOCKS4aServer extends SOCKSServer {
             throw new SOCKSException("Invalid port number in request");
         }
 
+        byte[] addrBytes = new byte[4];
         StringBuilder builder = new StringBuilder();
-        boolean alreadyWarned = false;
         for (int i = 0; i < 4; ++i) {
             int octet = in.readByte() & 0xff;
+            addrBytes[i] = (byte) octet;
             builder.append(Integer.toString(octet));
             if (i != 3) {
                 builder.append(".");
-                if (octet != 0 && !alreadyWarned) {
-                    _log.warn("IPV4 address type in request: " + connHostName + ". Is your client secure?");
-                    alreadyWarned = true;
-                }
             }
         }
         connHostName = builder.toString();
+
+        // SOCKS4a signals a domain name follows with 0.0.0.x; a literal
+        // address means the client resolved the name locally.
+        boolean literalAddress = !connHostName.startsWith("0.0.0.");
+        if (literalAddress) {
+            InetAddress addr;
+            try {
+                addr = InetAddress.getByAddress(addrBytes);
+            } catch (UnknownHostException e) {
+                addr = null;
+            }
+            if (addr != null && !addr.isLoopbackAddress() &&
+                !addr.isSiteLocalAddress() && !addr.isLinkLocalAddress()) {
+                _log.warn("IPV4 address type in request: " + connHostName + ". Is your client secure?");
+            }
+        }
 
         // Check if the requested IP should be mapped to a domain name
         String mappedDomainName = getMappedDomainNameForIP(connHostName);
@@ -275,18 +289,16 @@ class SOCKS4aServer extends SOCKSServer {
                     }
                     int p = _context.random().nextInt(proxies.size());
                     String proxy = proxies.get(p);
-                    Destination dest = _context.namingService().lookup(proxy);
-                    if (dest == null) {
+                    if (_log.shouldDebug())
+                        _log.debug("Connecting to port " + connPort + " proxy " + proxy + " for " + connHostName + "...");
+                    try {
+                        destSock = outproxyConnect(t, proxy);
+                    } catch (SOCKSException se) {
                         try {
                             sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
                         } catch (IOException ioe) { /* ignored */ }
-                        throw new SOCKSException("Outproxy not found");
+                        throw se;
                     }
-                    if (_log.shouldDebug())
-                        _log.debug("Connecting to port " + connPort + " proxy " + proxy + " for " + connHostName + "...");
-                    // this isn't going to work, these need to be socks outproxies so we need
-                    // to do a socks session to them?
-                    destSock = t.createI2PSocket(dest);
                 }
             }
             confirmConnection();

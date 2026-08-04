@@ -7,8 +7,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -28,8 +26,6 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.i2ptunnel.I2PTunnel;
 import net.i2p.i2ptunnel.I2PTunnelHTTPClientBase;
-import net.i2p.i2ptunnel.I2PTunnelHTTPServer;
-import net.i2p.socks.SOCKS5Client;
 import net.i2p.socks.SOCKSException;
 import net.i2p.util.Addresses;
 import net.i2p.util.HexDump;
@@ -65,7 +61,6 @@ class SOCKS5Server extends SOCKSServer {
      * The IPs will change at restart, but torsocks doesn't appear to do any caching.
      */
     private static final Map<String, String> _torCache = new LHMCache<>(256);
-    private static final String[] _skipHeaders = new String[0];
 
     /**
      * Create a SOCKS5 server that communicates with the client using
@@ -558,109 +553,6 @@ class SOCKS5Server extends SOCKSServer {
         }
 
         return destSock;
-    }
-
-    /**
-     *  Act as a SOCKS 5 client to connect to an outproxy
-     *  Caller must send success or error to local socks client.
-     *
-     *  @return open socket or throws error
-     *  @since 0.8.2
-     */
-    private I2PSocket outproxyConnect(I2PSOCKSTunnel tun, String proxy) throws IOException, I2PException {
-        Properties overrides = new Properties();
-        overrides.setProperty("option.i2p.streaming.connectDelay", "150");
-        I2PSocketOptions proxyOpts = tun.buildOptions(overrides);
-        int proxyPort = 0;
-        int colon = proxy.indexOf(':');
-        if (colon > 0) {
-            try {
-                proxyPort = Integer.parseInt(proxy.substring(colon + 1));
-                if (proxyPort > 0)
-                    proxyOpts.setPort(proxyPort);
-            } catch (NumberFormatException nfe) { /* ignored */ }
-            proxy = proxy.substring(0, colon);
-        }
-        Destination dest = _context.namingService().lookup(proxy);
-        if (dest == null)
-            throw new SOCKSException("Outproxy not found");
-        I2PSocket destSock = tun.createI2PSocket(dest, proxyOpts);
-        OutputStream out = null;
-        InputStream in = null;
-        try {
-            out = destSock.getOutputStream();
-            boolean authAvail = Boolean.parseBoolean(props.getProperty(I2PTunnelHTTPClientBase.PROP_OUTPROXY_AUTH));
-            String configUser =  null;
-            String configPW = null;
-            if (authAvail) {
-                configUser =  props.getProperty(I2PTunnelHTTPClientBase.PROP_OUTPROXY_USER_PREFIX + proxy);
-                configPW = props.getProperty(I2PTunnelHTTPClientBase.PROP_OUTPROXY_PW_PREFIX + proxy);
-                if (configUser == null || configPW == null) {
-                    configUser =  props.getProperty(I2PTunnelHTTPClientBase.PROP_OUTPROXY_USER);
-                    configPW = props.getProperty(I2PTunnelHTTPClientBase.PROP_OUTPROXY_PW);
-                }
-            }
-            boolean https = "connect".equals(props.getProperty(I2PSOCKSTunnel.PROP_OUTPROXY_TYPE));
-            if (_log.shouldDebug())
-                _log.debug("Connecting to " + (https ? "HTTPS" : "SOCKS") + " outproxy " + proxy + " -> " + connHostName + ":" + connPort);
-
-            if (https) {
-                httpsConnect(destSock, out, connHostName, connPort, configUser, configPW);
-            } else {
-                in = destSock.getInputStream();
-                SOCKS5Client.connect(in, out, connHostName, connPort, configUser, configPW);
-            }
-        } catch (IOException e) {
-            try { destSock.close(); } catch (IOException ioe) { /* ignored */ }
-            if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
-            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
-            throw e;
-        }
-        // that's it, caller will send confirmation to our client
-        return destSock;
-    }
-
-    /**
-     *  Act as a https client to connect to a CONNECT outproxy.
-     *
-     *  Caller must send success or error to local socks client.
-     *  Caller must close destSock and pout.
-     *
-     *  @param destSock socket to the proxy
-     *  @param pout output stream to the proxy
-     *  @param connHostName hostname or IP for the proxy to connect to
-     *  @param connPort port for the proxy to connect to
-     *  @param configUser username unsupported
-     *  @param configPW password unsupported
-     *  @since 0.9.57
-     */
-    public void httpsConnect(I2PSocket destSock, OutputStream pout, String connHostName,
-                             int connPort, String configUser, String configPW) throws IOException {
-        StringBuilder buf = new StringBuilder(64);
-        buf.append("CONNECT ");
-        boolean v6 = connHostName.contains(":");
-        if (v6)
-            buf.append('[');
-        buf.append(connHostName);
-        if (v6)
-            buf.append(']');
-        buf.append(':');
-        buf.append(connPort);
-        buf.append(" HTTP/1.1\r\n\r\n");
-        if (_log.shouldDebug())
-            _log.debug("Request to outproxy: " + buf);
-        pout.write(DataHelper.getASCII(buf.toString()));
-        pout.flush();
-        // eat the response and headers
-        buf.setLength(0);
-        I2PTunnelHTTPServer.readHeaders(destSock, null, buf, _skipHeaders, _context, (long) 30*1000);
-        String[] f = DataHelper.split(buf.toString(), " ", 2);
-        if (f.length < 2)
-            throw new IOException("Bad response from SOCKS5 proxy");
-        if (!f[1].startsWith("200 "))
-            throw new IOException("Error from SOCKS5 proxy: " + f[1]);
-        if (_log.shouldDebug())
-            _log.debug("Response from SOCKS5 proxy: " + buf);
     }
 
     // This isn't really the right place for this, we can't stop the tunnel once it starts.
