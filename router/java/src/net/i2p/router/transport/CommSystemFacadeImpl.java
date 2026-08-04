@@ -44,6 +44,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
@@ -1680,13 +1681,15 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             });
             // If still over capacity, remove oldest remaining
             if (countryCache.size() >= MAX_COUNTRY_CACHE_SIZE) {
-                countryCacheTimestamps.entrySet().stream()
-                    .sorted((a, b) -> Long.compare(a.getValue(), b.getValue()))
+                List<Hash> toRemove = countryCacheTimestamps.entrySet().stream()
+                    .sorted(Map.Entry.comparingByValue())
                     .limit(MAX_COUNTRY_CACHE_SIZE / 4)
-                    .forEach(e -> {
-                        countryCache.remove(e.getKey());
-                        countryCacheTimestamps.remove(e.getKey());
-                    });
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+                for (Hash key : toRemove) {
+                    countryCache.remove(key);
+                    countryCacheTimestamps.remove(key);
+                }
             }
         }
 
