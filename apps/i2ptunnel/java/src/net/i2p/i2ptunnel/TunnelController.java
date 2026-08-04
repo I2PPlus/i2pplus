@@ -59,7 +59,6 @@ public class TunnelController implements Logging {
     private List<I2PSession> _sessions;
     private volatile TunnelState _state;
     private volatile SimpleTimer2.TimedEvent _pkfc;
-    private volatile Thread _pendingStartupThread;
     private volatile long _startupDelayEndTime;
     /** Suppress log messages during tunnel restart */
     private boolean _suppressLog;
@@ -475,9 +474,7 @@ public class TunnelController implements Logging {
                 return;
             changeState(TunnelState.STARTING);
         }
-        Thread starter = new I2PAppThread(new Runnable() { public void run() { startTunnel(); } }, "TunnelStarter." + getName());
-        _pendingStartupThread = starter;
-        starter.start();
+        new I2PAppThread(new Runnable() { public void run() { startTunnel(); } }, "TunnelStarter." + getName()).start();
     }
 
     /**
@@ -849,10 +846,6 @@ public class TunnelController implements Logging {
     public void stopTunnel() {
         synchronized (this) {
             if (_state == TunnelState.DELAYED_START_PENDING) {
-                if (_pendingStartupThread != null) {
-                    _pendingStartupThread.interrupt();
-                    _pendingStartupThread = null;
-                }
                 changeState(TunnelState.STOPPED);
                 return;
             }
