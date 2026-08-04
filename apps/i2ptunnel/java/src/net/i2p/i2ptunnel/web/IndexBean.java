@@ -1383,22 +1383,22 @@ public class IndexBean {
      * If called with any value (and the form submitted with action=Remove),
      * we really do want to stop and remove the tunnel.
      */
-    public void setRemoveConfirm(String moo) {
+    public void setRemoveConfirm(String val) {
         _removeConfirmed = true;
     }
     /**
      *  If called with any value, we want this tunnel to start whenever it is
      *  loaded (aka right now and whenever the router is started up)
-     *  @param moo any value triggers startup on load
+     *  @param val any value triggers startup on load
      */
-    public void setStartOnLoad(String moo) {
+    public void setStartOnLoad(String val) {
         _config.setStartOnLoad(true);
     }
 
     /**
-     *  @param moo any value triggers shared private key mode
+     *  @param val any value triggers shared private key mode
      */
-    public void setShared(String moo) {
+    public void setShared(String val) {
         _config.setShared(true);
     }
 
@@ -1457,7 +1457,7 @@ public class IndexBean {
         }
     }
 
-    public void setConnectDelay(String moo) {
+    public void setConnectDelay(String val) {
         _config.setConnectDelay(true);
     }
 
@@ -1465,15 +1465,15 @@ public class IndexBean {
         _config.setProfile(profile);
     }
 
-    public void setReduce(String moo) {
+    public void setReduce(String val) {
         _config.setReduce(true);
     }
 
-    public void setClose(String moo) {
+    public void setClose(String val) {
         _config.setClose(true);
     }
 
-    public void setEncrypt(String moo) {
+    public void setEncrypt(String val) {
         _config.setEncrypt(true);
     }
 
@@ -1547,17 +1547,17 @@ public class IndexBean {
     /**
      * @since 0.9.41
      */
-    public void setAddClient(String moo) {
+    public void setAddClient(String val) {
         _config.setAddClient(true);
     }
 
     /** @since 0.8.9 */
-    public void setDCC(String moo) {
+    public void setDCC(String val) {
         _config.setDCC(true);
     }
 
     /** @since 0.9.9 */
-    public void setUseSSL(String moo) {
+    public void setUseSSL(String val) {
         _config.setUseSSL(true);
     }
 
@@ -1567,7 +1567,7 @@ public class IndexBean {
     }
 
     /** @since 0.9.12 */
-    public void setRejectInproxy(String moo) {
+    public void setRejectInproxy(String val) {
         _config.setRejectInproxy(true);
     }
 
@@ -1577,7 +1577,7 @@ public class IndexBean {
     }
 
     /** @since 0.9.25 */
-    public void setRejectReferer(String moo) {
+    public void setRejectReferer(String val) {
         _config.setRejectReferer(true);
     }
 
@@ -1587,7 +1587,7 @@ public class IndexBean {
     }
 
     /** @since 0.9.25 */
-    public void setRejectUserAgents(String moo) {
+    public void setRejectUserAgents(String val) {
         _config.setRejectUserAgents(true);
     }
 
@@ -1602,7 +1602,7 @@ public class IndexBean {
     }
 
     /** @since 0.9.13 */
-    public void setUniqueLocal(String moo) {_config.setUniqueLocal(true);}
+    public void setUniqueLocal(String val) {_config.setUniqueLocal(true);}
 
     public void setAccessMode(String val) {
         if (val != null) {
@@ -1618,7 +1618,7 @@ public class IndexBean {
         if (val != null) {_config.setFilterDefinition(val);}
     }
 
-    public void setDelayOpen(String moo) {_config.setDelayOpen(true);}
+    public void setDelayOpen(String val) {_config.setDelayOpen(true);}
 
     public void setNewDest(String val) {
         if (val != null) {
@@ -1659,27 +1659,27 @@ public class IndexBean {
     }
 
     /** @since 0.9.14 */
-    public void setAllowUserAgent(String moo) {
+    public void setAllowUserAgent(String val) {
         _config.setAllowUserAgent(true);
     }
 
     /** @since 0.9.14 */
-    public void setAllowReferer(String moo) {
+    public void setAllowReferer(String val) {
         _config.setAllowReferer(true);
     }
 
     /** @since 0.9.14 */
-    public void setAllowAccept(String moo) {
+    public void setAllowAccept(String val) {
         _config.setAllowAccept(true);
     }
 
     /** @since 0.9.14 */
-    public void setAllowInternalSSL(String moo) {
+    public void setAllowInternalSSL(String val) {
         _config.setAllowInternalSSL(true);
     }
 
     /** @since 0.9.18 */
-    public void setMultihome(String moo) {
+    public void setMultihome(String val) {
         _config.setMultihome(true);
     }
 
@@ -1717,7 +1717,7 @@ public class IndexBean {
     }
 
     /** @since 0.9.11 */
-    public void setUseOutproxyPlugin(String moo) {
+    public void setUseOutproxyPlugin(String val) {
         _config.setUseOutproxyPlugin(true);
     }
 
