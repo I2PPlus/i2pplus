@@ -373,6 +373,22 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     public static final String PROP_SSL_SET = "sslManuallySet";
 
     /**
+     *  Write an error page and drain any remaining request data.
+     *
+     *  @param out the output stream
+     *  @param reader reads the browser's request data
+     *  @param page the error page type
+     *  @param body the error body
+     */
+    private void writeErrorPage(OutputStream out, InputReader reader, String page, String body) {
+        try {
+            out.write(getErrorPage(page, body).getBytes(StandardCharsets.UTF_8));
+            writeFooter(out);
+            reader.drain();
+        } catch (IOException ioe) { /* ignored */ }
+    }
+
+    /**
      *
      *  Note: This does not handle RFC 2616 header line splitting,
      *  which is obsoleted in RFC 7230.
@@ -827,11 +843,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     } else if (hostLowerCase.equals("localhost") || host.equals("127.0.0.1") || host.startsWith("10.0.") ||
                                host.startsWith("172.16.") || host.startsWith("192.168.") || host.equals("[::1]")) {
                         // if somebody is trying to get to 192.168.example.com, oh well
-                        try {
-                            out.write(getErrorPage("localhost", ERR_LOCALHOST).getBytes(StandardCharsets.UTF_8));
-                            writeFooter(out);
-                            reader.drain();
-                        } catch (IOException ioe) { /* ignored */ } // ignore
+                        writeErrorPage(out, reader, "localhost", ERR_LOCALHOST);
                         return;
                     } else if (host.contains(".") || host.startsWith("[")) {
                         if (Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USE_OUTPROXY_PLUGIN, "true"))) {
@@ -887,11 +899,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 if (_log.shouldWarn()) {
                                     _log.warn("[HTTPClient] Cannot connect to site; no outproxy configured \n* Request: " + requestURI);
                                 }
-                                try {
-                                    out.write(getErrorPage("noproxy", ERR_NO_OUTPROXY).getBytes(StandardCharsets.UTF_8));
-                                    writeFooter(out);
-                                    reader.drain();
-                                } catch (IOException ioe) { /* ignored */ } // ignore
+                                writeErrorPage(out, reader, "noproxy", ERR_NO_OUTPROXY);
                                 return;
                             }
                             destination = currentProxy;
@@ -913,11 +921,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         if (_log.shouldWarn()) {
                             _log.warn("[HTTPClient] Malformed hostname " + request + " - aborting...");
                         }
-                        try {
-                            out.write(getErrorPage("denied", ERR_REQUEST_DENIED).getBytes(StandardCharsets.UTF_8));
-                            writeFooter(out);
-                            reader.drain();
-                        } catch (IOException ioe) { /* ignored */ } // ignore
+                        writeErrorPage(out, reader, "denied", ERR_REQUEST_DENIED);
                         return;
                     }   // end host name processing
 
