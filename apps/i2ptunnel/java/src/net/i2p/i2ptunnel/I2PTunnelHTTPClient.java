@@ -76,7 +76,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     /**
      *  Used to protect actions via http://proxy.i2p/
      */
-    private final String _proxyNonce;
+    private final String _pageNonce;
 
     /** HTTP authentication realm for HTTP proxy. */
     public static final String AUTH_REALM = "I2P HTTP Proxy";
@@ -218,7 +218,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      */
     public I2PTunnelHTTPClient(int localPort, Logging l, I2PSocketManager sockMgr, I2PTunnel tunnel, EventDispatcher notifyThis, long clientId) {
         super(localPort, l, sockMgr, tunnel, notifyThis, clientId);
-        _proxyNonce = Long.toString(_context.random().nextLong());
+        _pageNonce = Long.toString(_context.random().nextLong());
         setName("HTTP Proxy on " + getTunnel().listenHost + ':' + localPort);
         notifyEvent("openHTTPClientResult", "ok");
     }
@@ -234,7 +234,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                String wwwProxy, EventDispatcher notifyThis,
                                I2PTunnel tunnel) throws IllegalArgumentException {
         super(localPort, ownDest, l, notifyThis, "HTTP Proxy on " + tunnel.listenHost + ':' + localPort, tunnel);
-        _proxyNonce = Long.toString(_context.random().nextLong());
+        _pageNonce = Long.toString(_context.random().nextLong());
 
         if (wwwProxy != null) {
             StringTokenizer tok = new StringTokenizer(wwwProxy, ", ");
@@ -1199,7 +1199,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_DISABLE_HELPER))) {
                         out.write(ERR_HELPER_DISABLED.getBytes(StandardCharsets.UTF_8));
                     } else {
-                        LocalHTTPServer.serveLocalFile(_context, sockMgr, out, method, internalPath, internalRawQuery, _proxyNonce, allowGzip);
+                        LocalHTTPServer.serveLocalFile(_context, sockMgr, out, method, internalPath, internalRawQuery, _pageNonce, allowGzip);
                     }
                 } catch (IOException ioe) { /* ignored */ } // ignore
                 return;
@@ -1616,7 +1616,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                   "<form method=GET action=\"http://" + LOCAL_SERVER + "/add\">\n" +
                   "<input type=hidden name=\"host\" value=\"" + DataHelper.escapeHTML(destination) + "\">\n" +
                   "<input type=hidden name=\"dest\" value=\"" + ahelperKey + "\">\n" +
-                  "<input type=hidden name=\"nonce\" value=\"" + _proxyNonce + "\">\n" +
+                  "<input type=hidden name=\"nonce\" value=\"" + _pageNonce + "\">\n" +
 
                   "<hr>\n<div class=option>\n<h4>" + _t("Save {0} to router address book and continue to website", DataHelper.escapeHTML(destination)) + "</h4>\n<p>" +
                   _t("This address will be saved to your Router addressbook where your subscription-based addresses are stored."));
@@ -1682,7 +1682,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                   "<input type=hidden name=\"host\" value=\"" + DataHelper.escapeHTML(destination) + "\">\n" +
                   "<input type=hidden name=\"url\" value=\"" + DataHelper.escapeHTML(targetRequest) + "\">\n" +
                   "<input type=hidden name=\"code\" value=\"" + code + "\">\n" +
-                  "<input type=hidden name=\"nonce\" value=\"" + _proxyNonce + "\">\n");
+                  "<input type=hidden name=\"nonce\" value=\"" + _pageNonce + "\">\n");
 
         if (code == LookupResult.RESULT_KEY_REQUIRED || code == LookupResult.RESULT_SECRET_AND_KEY_REQUIRED) {
             String label = _t("Generate");
