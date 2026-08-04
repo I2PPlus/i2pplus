@@ -420,6 +420,19 @@ class SOCKS5Server extends SOCKSServer {
     }
 
     /**
+     * Send a failure reply and swallow any IOException.
+     * Only for use in the connectTo() failure paths.
+     *
+     * @param reply the reply code
+     * @param out the output stream
+     */
+    private void sendFailureReply(int reply, DataOutputStream out) {
+        try {
+            sendRequestReply(reply, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
+        } catch (IOException ioe) { /* ignored */ }
+    }
+
+    /**
      * Get an I2PSocket that can be used to send/receive 8-bit clean data
      * to/from the destination of the SOCKS connection.
      *
@@ -454,9 +467,7 @@ class SOCKS5Server extends SOCKSServer {
             if (NamingService.isI2PHost(hostLowerCase)) {
                 Destination dest = _context.namingService().lookup(connHostName);
                 if (dest == null) {
-                    try {
-                        sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                    } catch (IOException ioe) { /* ignored */ }
+                    sendFailureReply(Reply.HOST_UNREACHABLE, out);
                     throw new SOCKSException("Host not found");
                 }
                 if (_log.shouldDebug())
@@ -470,9 +481,7 @@ class SOCKS5Server extends SOCKSServer {
                        connHostName.startsWith("192.168.") || connHostName.equals("[::1]")) {
                 String err = "No localhost accesses allowed through the Socks Proxy";
                 _log.error(err);
-                try {
-                    sendRequestReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                } catch (IOException ioe) { /* ignored */ }
+                sendFailureReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, out);
                 throw new SOCKSException(err);
             } else {
                 Outproxy outproxy = getOutproxyPlugin();
@@ -492,9 +501,7 @@ class SOCKS5Server extends SOCKSServer {
                     if (proxies == null || proxies.isEmpty()) {
                         String err = "No outproxy configured for port " + connPort + " and no default configured either";
                         _log.error(err);
-                        try {
-                            sendRequestReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                        } catch (IOException ioe) { /* ignored */ }
+                        sendFailureReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, out);
                         throw new SOCKSException(err);
                     }
                     // TODO sticky proxy selection like in HTTP client
@@ -503,9 +510,7 @@ class SOCKS5Server extends SOCKSServer {
                     try {
                         destSock = outproxyConnect(t, proxy);
                     } catch (SOCKSException se) {
-                        try {
-                            sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                        } catch (IOException ioe) { /* ignored */ }
+                        sendFailureReply(Reply.HOST_UNREACHABLE, out);
                         throw se;
                     }
                 }
@@ -515,23 +520,17 @@ class SOCKS5Server extends SOCKSServer {
         } catch (DataFormatException e) {
             if (_log.shouldWarn())
                 _log.warn("SOCKS error", e);
-            try {
-                sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-            } catch (IOException ioe) { /* ignored */ }
+            sendFailureReply(Reply.HOST_UNREACHABLE, out);
             throw new SOCKSException("Error in destination format");
         } catch (IOException e) {
             if (_log.shouldWarn())
                 _log.warn("socks error", e);
-            try {
-                sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-            } catch (IOException ioe) { /* ignored */ }
+            sendFailureReply(Reply.HOST_UNREACHABLE, out);
             throw new SOCKSException("Connection error", e);
         } catch (I2PException e) {
             if (_log.shouldWarn())
                 _log.warn("socks error", e);
-            try {
-                sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-            } catch (IOException ioe) { /* ignored */ }
+            sendFailureReply(Reply.HOST_UNREACHABLE, out);
             throw new SOCKSException("Connection error", e);
         }
 
