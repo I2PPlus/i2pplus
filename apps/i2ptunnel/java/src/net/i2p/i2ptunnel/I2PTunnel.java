@@ -1004,6 +1004,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Run a CONNECT client on the given port number
      *
+     * Event "connectclientTaskId" = Integer(taskId) after the tunnel has
+     * been started (or -1 on error).
+     *
      * @param args {portNumber[, sharedClient][, proxy to be used for the WWW]}
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
@@ -1045,11 +1048,13 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 I2PTunnelClientBase task = new I2PTunnelConnectClient(_port, l, ownDest, proxy, this, this);
                 task.startRunning();
                 addtask(task);
+                notifyEvent("connectclientTaskId", Integer.valueOf(task.getId()));
             } catch (IllegalArgumentException iae) {
                 String msg = "Invalid I2PTunnel configuration to create a CONNECT client connecting to the router at " + host + ':' + port +
                              " and listening on " + listenHost + ':' + _port;
                 _log.error(getPrefix() + msg, iae);
                 l.log(msg);
+                notifyEvent("connectclientTaskId", Integer.valueOf(-1));
                 // Since nothing listens to TaskID events, use this to propagate the error to TunnelController
                 // Otherwise, the tunnel stays up even though the port is down
                 // This doesn't work for CLI though... and the tunnel doesn't close itself after error,
@@ -1186,6 +1191,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Run an SOCKS IRC tunnel on the given port number
      *
+     * Event "socksirctunnelTaskId" = Integer(taskId) after the
+     * tunnel has been started (or -1 on error).
+     *
      * @param args {portNumber [, sharedClient]} or (portNumber, ignored (false), privKeyFile)
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
@@ -1199,7 +1207,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             } catch (NumberFormatException nfe) {
                 l.log("invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[0], nfe);
-                notifyEvent("sockstunnelTaskId", Integer.valueOf(-1));
+                notifyEvent("socksirctunnelTaskId", Integer.valueOf(-1));
             }
             if (_port <= 0)
                 throw new IllegalArgumentException(getPrefix() + "Bad port " + args[0]);
@@ -1216,19 +1224,19 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 I2PTunnelClientBase task = new I2PSOCKSIRCTunnel(_port, l, ownDest, this, this, privateKeyFile);
                 task.startRunning();
                 addtask(task);
-                notifyEvent("sockstunnelTaskId", Integer.valueOf(task.getId()));
+                notifyEvent("socksirctunnelTaskId", Integer.valueOf(task.getId()));
             } catch (IllegalArgumentException iae) {
                 String msg = "Invalid I2PTunnel configuration to create a SOCKS IRC Proxy connecting to the router at " + host + ':'+ port +
                              " and listening on " + listenHost + ':' + _port;
                 _log.error(getPrefix() + msg, iae);
                 l.log(msg);
-                notifyEvent("sockstunnelTaskId", Integer.valueOf(-1));
+                notifyEvent("socksirctunnelTaskId", Integer.valueOf(-1));
                 throw iae;
             }
         } else {
             l.log("socksirctunnel <port> [<sharedClient> [<privKeyFile>]]\n" +
                   "  Creates a SOCKS IRC proxy on the specified port.");
-            notifyEvent("sockstunnelTaskId", Integer.valueOf(-1));
+            notifyEvent("socksirctunnelTaskId", Integer.valueOf(-1));
         }
     }
 
