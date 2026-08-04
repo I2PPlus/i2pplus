@@ -1007,20 +1007,7 @@ public class TunnelController implements Logging {
      *  As of 0.9.1, updates the options on an existing session
      */
     public void setConfig(Properties config, String prefix) {
-        Properties props;
-        if (!prefix.isEmpty()) {
-            props = new Properties();
-            for (Map.Entry<Object, Object> e : config.entrySet()) {
-                String key = (String) e.getKey();
-                if (key.startsWith(prefix)) {
-                    key = key.substring(prefix.length());
-                    String val = (String) e.getValue();
-                    props.setProperty(key, val);
-                }
-            }
-        } else {
-            props = config;
-        }
+        Properties props = filterProperties(config, prefix);
         Properties oldConfig = _config;
         _config = props;
 
@@ -1035,93 +1022,11 @@ public class TunnelController implements Logging {
         // is done in the I2PTunnelServer constructor.
         String type = getType();
         if (type != null) {
-            if (type.equals(TYPE_HTTP_SERVER)) {
-                if (!_config.containsKey(OPT_LIMIT_ACTION))
-                    _config.setProperty(OPT_LIMIT_ACTION, "http");
-            }
-            if (type.equals(TYPE_HTTP_SERVER) || type.equals(TYPE_STREAMR_SERVER)) {
-                String tgzip = _config.getProperty(PROP_TUN_GZIP);
-                if (tgzip == null || Boolean.parseBoolean(tgzip)) {
-                    // Web server will gzip
-                    // If web server doesn't gzip, I2PTunnelHTTPServer will.
-                    // Streaming will force gzip on first packet for header compression,
-                    // regardless of this setting
-                    if (!_config.containsKey(OPT_I2CP_GZIP))
-                        _config.setProperty(OPT_I2CP_GZIP, "false");
-                }
-                if (!_config.containsKey(OPT_BUNDLE_REPLY))
-                    _config.setProperty(OPT_BUNDLE_REPLY, "false");
-                if (!_config.containsKey(OPT_ENCTYPE))
-                    _config.setProperty(OPT_ENCTYPE, "6,4");
-            } else if (!isClient(type)) {
-                // override UI that sets it to false
-                _config.setProperty(OPT_BUNDLE_REPLY, "true");
-            }
-            if (type.contains("irc") || type.equals(TYPE_STREAMR_CLIENT)) {
-                // maybe a bad idea for ircclient if DCC is enabled
-                if (!_config.containsKey(OPT_TAGS_SEND))
-                    _config.setProperty(OPT_TAGS_SEND, "20");
-                if (!_config.containsKey(OPT_LOW_TAGS))
-                    _config.setProperty(OPT_LOW_TAGS, "14");
-                if (!_config.containsKey(OPT_ENCTYPE))
-                    _config.setProperty(OPT_ENCTYPE, "6,4");
-            }
-            // same default logic as in EditBean.getSigType() and GeneralHelper.getSigType()
-            if (!isClient(type) ||
-                type.equals(TYPE_IRC_CLIENT) || type.equals(TYPE_STD_CLIENT) ||
-                type.equals(TYPE_SOCKS) || type.equals(TYPE_CONNECT) ||
-                type.equals(TYPE_SOCKS_IRC) || type.equals(TYPE_STREAMR_CLIENT) ||
-                type.equals(TYPE_HTTP_CLIENT)) {
-                if (!_config.containsKey(OPT_SIG_TYPE))
-                    _config.setProperty(OPT_SIG_TYPE, PREFERRED_SIGTYPE.name());
-            }
-            if (type.equals(TYPE_IRC_CLIENT) || type.equals(TYPE_STD_CLIENT) ||
-                type.equals(TYPE_IRC_SERVER) || type.equals(TYPE_STD_SERVER) ||
-                type.equals(TYPE_SOCKS_IRC)) {
-                if (!_config.containsKey(OPT_PRIORITY))
-                    _config.setProperty(OPT_PRIORITY, "10");
-            }
-            if (!isClient(type)) {
-                _tunnel.filterDefinition = _config.getProperty(PROP_FILTER);
-
-                String p1 = _config.getProperty(OPT_MAX_CONNS_MIN, "0");
-                String p2 = _config.getProperty(OPT_MAX_CONNS_HOUR, "0");
-                String p3 = _config.getProperty(OPT_MAX_CONNS_DAY, "0");
-                String p4 = _config.getProperty(OPT_MAX_TOTAL_CONNS_MIN, "0");
-                String p5 = _config.getProperty(OPT_MAX_TOTAL_CONNS_HOUR, "0");
-                String p6 = _config.getProperty(OPT_MAX_TOTAL_CONNS_DAY, "0");
-                String p7 = _config.getProperty(OPT_MAX_STREAMS, "0");
-                String p8 = _config.getProperty(OPT_LIMITS_SET, "false");
-                if (p1.equals("0") && p2.equals("0") && p3.equals("0") &&
-                    p4.equals("0") && p5.equals("0") && p6.equals("0") &&
-                    p7.equals("0") && !p8.equals("true")) {
-                    // No limits set, let's set some defaults
-                    _config.setProperty(OPT_MAX_CONNS_MIN, Integer.toString(DEFAULT_MAX_CONNS_MIN));
-                    _config.setProperty(OPT_MAX_CONNS_HOUR, Integer.toString(DEFAULT_MAX_CONNS_HOUR));
-                    _config.setProperty(OPT_MAX_CONNS_DAY, Integer.toString(DEFAULT_MAX_CONNS_DAY));
-                    _config.setProperty(OPT_MAX_TOTAL_CONNS_MIN, Integer.toString(DEFAULT_MAX_TOTAL_CONNS_MIN));
-                    _config.setProperty(OPT_MAX_TOTAL_CONNS_HOUR, Integer.toString(DEFAULT_MAX_TOTAL_CONNS_HOUR));
-                    _config.setProperty(OPT_MAX_TOTAL_CONNS_DAY, Integer.toString(DEFAULT_MAX_TOTAL_CONNS_DAY));
-                    _config.setProperty(OPT_MAX_STREAMS, Integer.toString(DEFAULT_MAX_STREAMS));
-                }
-                if (type.equals(TYPE_HTTP_SERVER) && !p8.equals("true")) {
-                    String p9 = _config.getProperty(OPT_POST_MAX, "0");
-                    String p10 = _config.getProperty(OPT_POST_TOTAL_MAX, "0");
-                    if (p9.equals("0") && p10.equals("0")) {
-                        _config.setProperty(OPT_POST_MAX, Integer.toString(I2PTunnelHTTPServer.DEFAULT_POST_MAX));
-                        _config.setProperty(OPT_POST_TOTAL_MAX, Integer.toString(I2PTunnelHTTPServer.DEFAULT_POST_TOTAL_MAX));
-                    }
-                }
-                if (!_config.containsKey(I2PSocketOptions.PROP_PROFILE)) {
-                    _config.setProperty(I2PSocketOptions.PROP_PROFILE, Integer.toString(I2PSocketOptions.PROFILE_BULK));
-                }
-            }
-            if (isClient(type) &&
-                (type.equals(TYPE_HTTP_CLIENT) || Boolean.parseBoolean(_config.getProperty(PROP_SHARED)))) {
-                // migration: HTTP proxy and shared clients default to MLKEM768+ECIES
-                if (!_config.containsKey(OPT_ENCTYPE))
-                    _config.setProperty(OPT_ENCTYPE, "6,4");
-            }
+            setServerDefaults(type);
+            setIrcDefaults(type);
+            setSignatureDefault(type);
+            setConnectionLimitsDefaults(type);
+            setClientDefaults(type);
         }
 
         // tell i2ptunnel, who will tell the TunnelTask, who will tell the SocketManager
@@ -1160,6 +1065,164 @@ public class TunnelController implements Logging {
                 if (_log.shouldDebug())
                     _log.debug("Session is closed, not updating: " + s);
             }
+        }
+    }
+
+    /**
+     * Copy the properties with the given prefix stripped, or return
+     * the given properties unchanged if the prefix is empty.
+     *
+     * @param config the incoming properties
+     * @param prefix the key prefix to strip
+     * @return the filtered properties
+     */
+    private static Properties filterProperties(Properties config, String prefix) {
+        Properties props;
+        if (!prefix.isEmpty()) {
+            props = new Properties();
+            for (Map.Entry<Object, Object> e : config.entrySet()) {
+                String key = (String) e.getKey();
+                if (key.startsWith(prefix)) {
+                    key = key.substring(prefix.length());
+                    String val = (String) e.getValue();
+                    props.setProperty(key, val);
+                }
+            }
+        } else {
+            props = config;
+        }
+        return props;
+    }
+
+    /**
+     * Apply the default options for web server tunnels, including
+     * gzip and bundle-reply handling.
+     *
+     * @param type the tunnel type
+     */
+    private void setServerDefaults(String type) {
+        if (type.equals(TYPE_HTTP_SERVER)) {
+            if (!_config.containsKey(OPT_LIMIT_ACTION))
+                _config.setProperty(OPT_LIMIT_ACTION, "http");
+        }
+        if (type.equals(TYPE_HTTP_SERVER) || type.equals(TYPE_STREAMR_SERVER)) {
+            String tgzip = _config.getProperty(PROP_TUN_GZIP);
+            if (tgzip == null || Boolean.parseBoolean(tgzip)) {
+                // Web server will gzip
+                // If web server doesn't gzip, I2PTunnelHTTPServer will.
+                // Streaming will force gzip on first packet for header compression,
+                // regardless of this setting
+                if (!_config.containsKey(OPT_I2CP_GZIP))
+                    _config.setProperty(OPT_I2CP_GZIP, "false");
+            }
+            if (!_config.containsKey(OPT_BUNDLE_REPLY))
+                _config.setProperty(OPT_BUNDLE_REPLY, "false");
+            if (!_config.containsKey(OPT_ENCTYPE))
+                _config.setProperty(OPT_ENCTYPE, "6,4");
+        } else if (!isClient(type)) {
+            // override UI that sets it to false
+            _config.setProperty(OPT_BUNDLE_REPLY, "true");
+        }
+    }
+
+    /**
+     * Apply the default session tags, enctype, and priority for IRC
+     * and streaming tunnels.
+     *
+     * @param type the tunnel type
+     */
+    private void setIrcDefaults(String type) {
+        if (type.contains("irc") || type.equals(TYPE_STREAMR_CLIENT)) {
+            // maybe a bad idea for ircclient if DCC is enabled
+            if (!_config.containsKey(OPT_TAGS_SEND))
+                _config.setProperty(OPT_TAGS_SEND, "20");
+            if (!_config.containsKey(OPT_LOW_TAGS))
+                _config.setProperty(OPT_LOW_TAGS, "14");
+            if (!_config.containsKey(OPT_ENCTYPE))
+                _config.setProperty(OPT_ENCTYPE, "6,4");
+        }
+        if (type.equals(TYPE_IRC_CLIENT) || type.equals(TYPE_STD_CLIENT) ||
+            type.equals(TYPE_IRC_SERVER) || type.equals(TYPE_STD_SERVER) ||
+            type.equals(TYPE_SOCKS_IRC)) {
+            if (!_config.containsKey(OPT_PRIORITY))
+                _config.setProperty(OPT_PRIORITY, "10");
+        }
+    }
+
+    /**
+     * Apply the default signature type for tunnels that support it,
+     * mirroring EditBean.getSigType() and GeneralHelper.getSigType().
+     *
+     * @param type the tunnel type
+     */
+    private void setSignatureDefault(String type) {
+        // same default logic as in EditBean.getSigType() and GeneralHelper.getSigType()
+        if (!isClient(type) ||
+            type.equals(TYPE_IRC_CLIENT) || type.equals(TYPE_STD_CLIENT) ||
+            type.equals(TYPE_SOCKS) || type.equals(TYPE_CONNECT) ||
+            type.equals(TYPE_SOCKS_IRC) || type.equals(TYPE_STREAMR_CLIENT) ||
+            type.equals(TYPE_HTTP_CLIENT)) {
+            if (!_config.containsKey(OPT_SIG_TYPE))
+                _config.setProperty(OPT_SIG_TYPE, PREFERRED_SIGTYPE.name());
+        }
+    }
+
+    /**
+     * Apply the default connection and post limits, plus the filter
+     * definition and profile, for server tunnels.
+     *
+     * @param type the tunnel type
+     */
+    private void setConnectionLimitsDefaults(String type) {
+        if (!isClient(type)) {
+            _tunnel.filterDefinition = _config.getProperty(PROP_FILTER);
+
+            String p1 = _config.getProperty(OPT_MAX_CONNS_MIN, "0");
+            String p2 = _config.getProperty(OPT_MAX_CONNS_HOUR, "0");
+            String p3 = _config.getProperty(OPT_MAX_CONNS_DAY, "0");
+            String p4 = _config.getProperty(OPT_MAX_TOTAL_CONNS_MIN, "0");
+            String p5 = _config.getProperty(OPT_MAX_TOTAL_CONNS_HOUR, "0");
+            String p6 = _config.getProperty(OPT_MAX_TOTAL_CONNS_DAY, "0");
+            String p7 = _config.getProperty(OPT_MAX_STREAMS, "0");
+            String p8 = _config.getProperty(OPT_LIMITS_SET, "false");
+            if (p1.equals("0") && p2.equals("0") && p3.equals("0") &&
+                p4.equals("0") && p5.equals("0") && p6.equals("0") &&
+                p7.equals("0") && !p8.equals("true")) {
+                // No limits set, let's set some defaults
+                _config.setProperty(OPT_MAX_CONNS_MIN, Integer.toString(DEFAULT_MAX_CONNS_MIN));
+                _config.setProperty(OPT_MAX_CONNS_HOUR, Integer.toString(DEFAULT_MAX_CONNS_HOUR));
+                _config.setProperty(OPT_MAX_CONNS_DAY, Integer.toString(DEFAULT_MAX_CONNS_DAY));
+                _config.setProperty(OPT_MAX_TOTAL_CONNS_MIN, Integer.toString(DEFAULT_MAX_TOTAL_CONNS_MIN));
+                _config.setProperty(OPT_MAX_TOTAL_CONNS_HOUR, Integer.toString(DEFAULT_MAX_TOTAL_CONNS_HOUR));
+                _config.setProperty(OPT_MAX_TOTAL_CONNS_DAY, Integer.toString(DEFAULT_MAX_TOTAL_CONNS_DAY));
+                _config.setProperty(OPT_MAX_STREAMS, Integer.toString(DEFAULT_MAX_STREAMS));
+            }
+            if (type.equals(TYPE_HTTP_SERVER) && !p8.equals("true")) {
+                String p9 = _config.getProperty(OPT_POST_MAX, "0");
+                String p10 = _config.getProperty(OPT_POST_TOTAL_MAX, "0");
+                if (p9.equals("0") && p10.equals("0")) {
+                    _config.setProperty(OPT_POST_MAX, Integer.toString(I2PTunnelHTTPServer.DEFAULT_POST_MAX));
+                    _config.setProperty(OPT_POST_TOTAL_MAX, Integer.toString(I2PTunnelHTTPServer.DEFAULT_POST_TOTAL_MAX));
+                }
+            }
+            if (!_config.containsKey(I2PSocketOptions.PROP_PROFILE)) {
+                _config.setProperty(I2PSocketOptions.PROP_PROFILE, Integer.toString(I2PSocketOptions.PROFILE_BULK));
+            }
+        }
+    }
+
+    /**
+     * Apply the default encryption type for HTTP proxy and shared
+     * client tunnels.
+     *
+     * @param type the tunnel type
+     */
+    private void setClientDefaults(String type) {
+        if (isClient(type) &&
+            (type.equals(TYPE_HTTP_CLIENT) || Boolean.parseBoolean(_config.getProperty(PROP_SHARED)))) {
+            // migration: HTTP proxy and shared clients default to MLKEM768+ECIES
+            if (!_config.containsKey(OPT_ENCTYPE))
+                _config.setProperty(OPT_ENCTYPE, "6,4");
         }
     }
 
