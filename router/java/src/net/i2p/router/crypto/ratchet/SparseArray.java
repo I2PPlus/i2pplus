@@ -98,6 +98,13 @@ class SparseArray<E> implements Cloneable {
         mGarbage = source.mGarbage;
     }
 
+    /**
+     * Returns a shallow copy of this SparseArray with deep-copied key and
+     * value arrays so the clone's internal arrays are independent of the
+     * original's.
+     *
+     * @return a clone of this SparseArray
+     */
     @Override
     @SuppressWarnings("unchecked")
     public SparseArray<E> clone() {

@@ -233,8 +233,6 @@ public class RouterThrottleImpl implements RouterThrottle {
                             _log.warn("Probabalistically refusing Tunnel Request (avg=" + avg
                                       + " current=" + numTunnels + ")");
                         }
-                        // hard to do {0} from here
-                        //setTunnelStatus("Rejecting " + (100 - (int) probAccept*100) + "% of tunnels: High number of requests");
                         if (probAccept <= 0.5) {
                             setTunnelStatus("[rejecting/overload]" + _x("Rejecting most tunnel requests" + ":<br>" + _x("High number of requests")));
                         }
@@ -286,7 +284,6 @@ public class RouterThrottleImpl implements RouterThrottle {
         double bytesAllocated = messagesPerTunnel * numTunnels * PREPROCESSED_SIZE;
 
         if (!allowTunnel(bytesAllocated, numTunnels)) {
-            //setTunnelStatus("[rejecting/max]" + _x("Declining tunnel requests" + ":<br>" + _x("Bandwidth Limit")));
             return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
         }
         return TUNNEL_ACCEPT;
@@ -425,7 +422,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         return !reject;
     }
 
-    /** Don't ever probabalistically throttle tunnels if we have less than this many */
+    /** Don't ever probabilistically throttle tunnels if we have less than this many */
     private int getMinThrottleTunnels() {
         String p = _context.getProperty(PROP_MIN_THROTTLE_TUNNELS);
         if (!(p != null && p.equals(_cachedMinThrottleTunnelsProp))) {
