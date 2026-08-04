@@ -1015,7 +1015,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @param opts the tunnel client options
      *  @return true if the request was rejected and the socket closed
      */
-    private boolean isInproxyRejection(Map<String, List<String>> headers, I2PSocket socket, String peerB32, Properties opts) {
+    boolean isInproxyRejection(Map<String, List<String>> headers, I2PSocket socket, String peerB32, Properties opts) {
         if (!Boolean.parseBoolean(opts.getProperty(OPT_REJECT_INPROXY)))
             return false;
         if (!headers.containsKey("X-Forwarded-For") &&
@@ -1056,7 +1056,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @param opts the tunnel client options
      *  @return true if the request was rejected and the socket closed
      */
-    private boolean isRefererRejection(Map<String, List<String>> headers, I2PSocket socket, String peerB32, Properties opts) {
+    boolean isRefererRejection(Map<String, List<String>> headers, I2PSocket socket, String peerB32, Properties opts) {
         if (!Boolean.parseBoolean(opts.getProperty(OPT_REJECT_REFERER)))
             return false;
         List<String> h = headers.get("Referer");
@@ -1086,7 +1086,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @param opts the tunnel client options
      *  @return true if the request was rejected and the socket closed
      */
-    private boolean isUserAgentRejection(Map<String, List<String>> headers, I2PSocket socket, String peerB32, Properties opts) {
+    boolean isUserAgentRejection(Map<String, List<String>> headers, I2PSocket socket, String peerB32, Properties opts) {
         if (!Boolean.parseBoolean(opts.getProperty(OPT_REJECT_USER_AGENTS)))
             return false;
         String blockAgents = opts.getProperty(OPT_USER_AGENTS);
@@ -1139,7 +1139,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @param peerB32 the peer's base32 address for logging
      *  @return true if the request was throttled and the socket closed
      */
-    private boolean isPostThrottled(StringBuilder command, Hash peerHash, I2PSocket socket, String peerB32) {
+    boolean isPostThrottled(StringBuilder command, Hash peerHash, I2PSocket socket, String peerB32) {
         ConnThrottler postThrottler;
         synchronized(this) {
             postThrottler = _postThrottler;

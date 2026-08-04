@@ -510,51 +510,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         keepalive = false;
                     }
 
-                    // Now use the Java URI parser
-                    // This will be the incoming URI but will then get modified
-                    // to be the outgoing URI (with http:// if going to outproxy, otherwise without)
-                    URI requestURI = null;
-                    try {
-                        try {
-                            requestURI = new URI(request);
-                        } catch(URISyntaxException use) {
-                            // fixup []| in path/query not escaped by browsers, see ticket #2130
-                            boolean error = true;
-                            // find 3rd /
-                            int idx = 0;
-                            for (int i = 0; i < 2; i++) {
-                                idx = request.indexOf('/', idx);
-                                if (idx < 0) {
-                                    break;
-                                }
-                                idx++;
-                            }
-                            if (idx > 0) {
-                                String schemeHostPort = request.substring(0, idx);
-                                String rest = request.substring(idx);
-                                // not escaped by all browsers, may be specific to query, see ticket #2130
-                                rest = rest.replace("[", "%5B");
-                                rest = rest.replace("]", "%5D");
-                                rest = rest.replace("|", "%7C");
-                                rest = rest.replace("{", "%7B");
-                                rest = rest.replace("}", "%7D");
-                                String testRequest = schemeHostPort + rest;
-                                if (!testRequest.equals(request)) {
-                                    try {
-                                        requestURI = new URI(testRequest);
-                                        request = testRequest;
-                                        error = false;
-                                    } catch(URISyntaxException use2) {
-                                        // didn't work, give up
-                                    }
-                                }
-                            }
-                            // guess it wasn't []|
-                            if (error) {
-                                throw use;
-                            }
-                        }
-                        origRequestURI = requestURI;
+                     // Now use the Java URI parser
+                     // This will be the incoming URI but will then get modified
+                     // to be the outgoing URI (with http:// if going to outproxy, otherwise without)
+                     URI requestURI = null;
+                     try {
+                         requestURI = fixupURI(request);
+                         origRequestURI = requestURI;
                         if (requestURI.getRawUserInfo() != null || requestURI.getRawFragment() != null) {
                             // these should never be sent to the proxy in the request line
                             if (_log.shouldWarn()) {
@@ -1771,6 +1733,52 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         if (protocol == null) {return false;}
         String lc = protocol.toLowerCase(Locale.US);
         return lc.equals("http") || lc.equals("https");
+    }
+
+    /**
+     * Fix up URI strings with unescaped bracket and pipe characters
+     * that browsers don't properly escape, see ticket #2130.
+     *
+     * @param request the raw URI string from the request line
+     * @return the fixed URI
+     * @throws URISyntaxException if the URI is invalid even after fixup
+     * @since 0.9
+     */
+    static URI fixupURI(String request) throws URISyntaxException {
+        try {
+            return new URI(request);
+        } catch (URISyntaxException use) {
+            // fixup []| in path/query not escaped by browsers, see ticket #2130
+            boolean error = true;
+            // find 3rd /
+            int idx = 0;
+            for (int i = 0; i < 2; i++) {
+                idx = request.indexOf('/', idx);
+                if (idx < 0) {
+                    break;
+                }
+                idx++;
+            }
+            if (idx > 0) {
+                String schemeHostPort = request.substring(0, idx);
+                String rest = request.substring(idx);
+                // not escaped by all browsers, may be specific to query, see ticket #2130
+                rest = rest.replace("[", "%5B");
+                rest = rest.replace("]", "%5D");
+                rest = rest.replace("|", "%7C");
+                rest = rest.replace("{", "%7B");
+                rest = rest.replace("}", "%7D");
+                String testRequest = schemeHostPort + rest;
+                if (!testRequest.equals(request)) {
+                    try {
+                        return new URI(testRequest);
+                    } catch (URISyntaxException use2) {
+                        // didn't work, give up
+                    }
+                }
+            }
+            throw use;
+        }
     }
 
     private final static String ERR_HELPER_DISABLED =

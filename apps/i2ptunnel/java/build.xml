@@ -591,6 +591,7 @@
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/obj"/>
     <property name="junit.home" value="${ant.home}/lib/"/>
+    <property name="mockito.home" value="${ant.home}/lib/"/>
     <!-- We need the ant runtime, as it includes junit -->
     <javac srcdir="./src:./test/junit" debug="true" source="${javac.version}"
       target="${javac.version}"
@@ -606,6 +607,10 @@
         <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
         <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${mockito.home}/mockito-core.jar"/>
+        <pathelement location="${mockito.home}/byte-buddy.jar"/>
+        <pathelement location="${mockito.home}/byte-buddy-agent.jar"/>
+        <pathelement location="${mockito.home}/objenesis.jar"/>
       </classpath>
     </javac>
   </target>
@@ -619,6 +624,7 @@
       </fileset>
     </delete>
     <property name="hamcrest.home" value="${ant.home}/lib/"/>
+    <property name="mockito.home" value="${ant.home}/lib/"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
       <classpath>
         <pathelement path="${classpath}"/>
@@ -631,6 +637,10 @@
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
+        <pathelement location="${mockito.home}/mockito-core.jar"/>
+        <pathelement location="${mockito.home}/byte-buddy.jar"/>
+        <pathelement location="${mockito.home}/byte-buddy-agent.jar"/>
+        <pathelement location="${mockito.home}/objenesis.jar"/>
       </classpath>
       <batchtest todir="${junit.reports.dir}/i2ptunnel/junit/">
         <fileset dir="./test/junit/">
