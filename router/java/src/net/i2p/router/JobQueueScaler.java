@@ -1,6 +1,7 @@
 package net.i2p.router;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.stat.Rate;
@@ -420,7 +421,7 @@ class JobQueueScaler implements Runnable {
      */
     private double getScaleUpJobsRatio() {
         String prop = _context.getProperty(PROP_SCALE_JOBS_RATIO);
-        if ((prop != null && prop.equals(_cachedScaleJobsRatioProp)) || prop == _cachedScaleJobsRatioProp) {
+        if (Objects.equals(prop, _cachedScaleJobsRatioProp)) {
             return _cachedScaleJobsRatio;
         }
         _cachedScaleJobsRatioProp = prop;
