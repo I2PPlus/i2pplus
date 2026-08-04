@@ -394,25 +394,29 @@ public class TunnelControllerGroup implements ClientApp {
      *  @param waitForDelayed true to wait for shutdown-delayed tunnels, false for immediate
      *  @since 0.8.8
      */
-    public synchronized void shutdown(boolean waitForDelayed) {
-        if (_state != STARTING && _state != RUNNING)
-            return;
-        changeState(STOPPING);
-        if (_mgr != null)
-            _mgr.unregister(this);
+    public void shutdown(boolean waitForDelayed) {
+        synchronized (this) {
+            if (_state != STARTING && _state != RUNNING)
+                return;
+            changeState(STOPPING);
+            if (_mgr != null)
+                _mgr.unregister(this);
+        }
 
         if (waitForDelayed) {
             shutdownDelayedServers();
         }
 
-        unloadControllers();
-        synchronized (TunnelControllerGroup.class) {
-            if (_instance == this)
-                _instance = null;
+        synchronized (this) {
+            unloadControllers();
+            synchronized (TunnelControllerGroup.class) {
+                if (_instance == this)
+                    _instance = null;
+            }
+            killServerExecutor();
+            killClientExecutor();
+            changeState(STOPPED);
         }
-        killServerExecutor();
-        killClientExecutor();
-        changeState(STOPPED);
     }
 
     /**
