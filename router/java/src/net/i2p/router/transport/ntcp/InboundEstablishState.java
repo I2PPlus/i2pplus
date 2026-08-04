@@ -118,7 +118,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         EnumSet.of(State.IB_NTCP2_INIT, State.IB_NTCP2_GOT_X, State.IB_NTCP2_GOT_MSG1, State.IB_NTCP2_GOT_PADDING,
                    State.IB_NTCP2_SENT_Y, State.IB_NTCP2_GOT_RI, State.IB_NTCP2_READ_RANDOM);
 
-    private BanLogger _banLogger;
+    private final BanLogger _banLogger;
 
     /**
      * Creates a new InboundEstablishState for the given context, transport, and connection
