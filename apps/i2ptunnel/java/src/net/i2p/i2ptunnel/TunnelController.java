@@ -1315,8 +1315,8 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  @return true if this tunnel is configured to start when the router starts
-     *  Default is true for clients, false for servers.
+     *  @return true if this tunnel is configured to start when the router starts.
+     *  Defaults to true when unset.
      */
     public boolean getStartOnLoad() { return Boolean.parseBoolean(_config.getProperty(PROP_START, "true")); }
 
