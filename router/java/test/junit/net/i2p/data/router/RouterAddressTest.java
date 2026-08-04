@@ -38,6 +38,17 @@ public class RouterAddressTest extends StructureTest {
         assertEquals("Blah", addr.getTransportStyle());
     }
 
+    @Test
+    public void testOptionsCopied() {
+        OrderedProperties options = new OrderedProperties();
+        options.setProperty("host", "1.2.3.4");
+        RouterAddress addr = new RouterAddress("Blah", options, 42);
+        options.setProperty("host", "5.6.7.8");
+        assertEquals("1.2.3.4", addr.getOption("host"));
+        options.setProperty("port", "1234");
+        assertNull(addr.getOption("port"));
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testNegativeCostThrows() {
         OrderedProperties options = new OrderedProperties();
