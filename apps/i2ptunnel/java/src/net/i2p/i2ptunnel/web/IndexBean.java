@@ -349,9 +349,9 @@ public class IndexBean {
      *
      *  @return formatted messages from the stop operation
      */
-    private String stopAll() {
+    private void stopAll() {
         List<String> msgs = _group.stopAllControllers();
-        return getMessages(msgs);
+        getMessages(msgs);
     }
 
     /**
@@ -359,9 +359,9 @@ public class IndexBean {
      *
      *  @return formatted messages from the start operation
      */
-    private String startAll() {
+    private void startAll() {
         List<String> msgs = _group.startAllControllers();
-        return getMessages(msgs);
+        getMessages(msgs);
     }
 
     /**
@@ -554,23 +554,18 @@ public class IndexBean {
 
     /**
      * Only call this ONCE! Or you will get duplicate tunnels on save.
-     *
-     * @return not HTML escaped, or "" if empty
      */
-    private String saveChanges() {
-        // FIXME name will be HTML escaped twice
-        return getMessages(_helper.saveTunnel(_tunnel, _config));
+    private void saveChanges() {
+        getMessages(_helper.saveTunnel(_tunnel, _config));
     }
 
     /**
      *  Stop the tunnel, delete from config,
      *  rename the private key file if in the default directory.
-     *
-     *  @return result messages from the delete operation
      */
-    private String deleteTunnel() {
-        if (!_removeConfirmed) {return _t("Please confirm removal");}
-        return getMessages(_helper.deleteTunnel(_tunnel, _config.getPrivKeyFile()));
+    private void deleteTunnel() {
+        if (!_removeConfirmed) {return;}
+        getMessages(_helper.deleteTunnel(_tunnel, _config.getPrivKeyFile()));
     }
 
     /**
@@ -2045,18 +2040,11 @@ public class IndexBean {
         return _helper.getController(tunnel);
     }
 
-    private static String getMessages(List<String> msgs) {
-        StringBuilder buf = new StringBuilder(128);
-        getMessages(msgs, buf);
-        return buf.toString();
-    }
-
-    private static void getMessages(List<String> msgs, StringBuilder buf) {
+    private static void getMessages(List<String> msgs) {
         if (msgs == null) return;
         for (int i = 0; i < msgs.size(); i++) {
             String msg = msgs.get(i);
             _timestampedMessages.add(new TimestampedMessage(msg));
-            buf.append("• ").append(msg.replace("->", "➜")).append("\n");
         }
     }
 
