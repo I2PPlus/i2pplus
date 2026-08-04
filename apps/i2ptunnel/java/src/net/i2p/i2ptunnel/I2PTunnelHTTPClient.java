@@ -471,10 +471,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     String request = params[1];
 
                     // various obscure fixups
-                    if (request != null && request.startsWith("/") && getTunnel().getClientOptions().getProperty("i2ptunnel.noproxy") != null) {
-                        // what is this for ???
-                        request = "http://i2p" + request;
-                    } else if (request != null && request.startsWith("/eepproxy/")) {
+                    if (request != null && request.startsWith("/eepproxy/")) {
                         // Deprecated
                         // /eepproxy/foo.i2p/bar/baz.html
                         String subRequest = request.substring("/eepproxy/".length());
