@@ -38,11 +38,15 @@ import java.io.Serializable;
 class ExpireLeasesJob extends JobImpl {
     private final Log _log;
     private final KademliaNetworkDatabaseFacade _facade;
-    private static final long RERUN_DELAY_MS = 45*1000L;
+    private static final long RERUN_DELAY_MS = 30*1000L;
     private static final int LIMIT_LEASES_FF = 1250;
     private static final int LIMIT_LEASES_CLIENT = SystemVersion.isSlow() ? 300 : 750;
     /** Refresh leasesets with less than this much time remaining before expiry */
     private static final long REFRESH_THRESHOLD_MS = 2 * 60 * 1000L;
+    /** Aggressive purge interval for client databases (ms) */
+    private static final long AGGRESSIVE_PURGE_INTERVAL_MS = 10 * 1000L;
+    /** After this long past expiry, a leaseset is considered stale and purged immediately */
+    private static final long STALE_EXPIRED_MS = 5 * 60 * 1000L;
 
     /**
      * ExpireLeasesJob.
@@ -69,7 +73,34 @@ class ExpireLeasesJob extends JobImpl {
             if (_log.shouldInfo()) {_log.info("Leases expired: " + toExpire.size());}
         }
         refreshAboutToExpire();
+        if (_facade.isClientDb()) {purgeStaleLeasesets();}
         requeue(RERUN_DELAY_MS);
+    }
+
+    /**
+     * Aggressively purge leasesets that have been expired for longer than
+     * the stale threshold. This ensures expired leasesets don't linger
+     * in the netdb for extended periods.
+     */
+    private void purgeStaleLeasesets() {
+        RouterContext ctx = getContext();
+        long now = ctx.clock().now();
+        Set<Map.Entry<Hash, DatabaseEntry>> entries = _facade.getDataStore().getMapEntries();
+        for (Map.Entry<Hash, DatabaseEntry> entry : entries) {
+            DatabaseEntry obj = entry.getValue();
+            if (obj == null || !obj.isLeaseSet()) {continue;}
+            LeaseSet ls = (LeaseSet) obj;
+            Hash h = entry.getKey();
+            boolean isLocal = ctx.clientManager().isLocal(h);
+            if (isLocal) {continue;}
+            if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
+                long expiredAgo = now - ls.getLatestLeaseDate();
+                if (expiredAgo > STALE_EXPIRED_MS) {
+                    if (_log.shouldInfo()) {_log.info("Purging stale LeaseSet [" + h.toBase32().substring(0,8) + "] expired " + expiredAgo + "ms ago");}
+                    _facade.fail(h);
+                }
+            }
+        }
     }
 
     /**
