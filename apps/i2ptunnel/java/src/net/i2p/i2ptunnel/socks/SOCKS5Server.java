@@ -323,7 +323,7 @@ class SOCKS5Server extends SOCKSServer {
 
             default:
                 if (_log.shouldDebug())
-                    _log.debug("Unknown address type in request (" + Integer.toHexString(command) + ")");
+                    _log.debug("Unknown address type in request (" + Integer.toHexString(addressType) + ")");
                 sendRequestReply(Reply.ADDRESS_TYPE_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
                 throw new SOCKSException("Invalid addresses type in request");
         }
