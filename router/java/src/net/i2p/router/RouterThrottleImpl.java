@@ -428,7 +428,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     /** Don't ever probabalistically throttle tunnels if we have less than this many */
     private int getMinThrottleTunnels() {
         String p = _context.getProperty(PROP_MIN_THROTTLE_TUNNELS);
-        if (!(p == _cachedMinThrottleTunnelsProp || (p != null && p.equals(_cachedMinThrottleTunnelsProp)))) {
+        if (!(p != null && p.equals(_cachedMinThrottleTunnelsProp))) {
             _cachedMinThrottleTunnelsProp = p;
             if (p == null) {
                 _cachedMinThrottleTunnels = -1;
@@ -464,7 +464,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     private int getMaxTunnels() {
         String p = _context.getProperty(PROP_MAX_TUNNELS);
-        if (p == _cachedMaxTunnelsProp || (p != null && p.equals(_cachedMaxTunnelsProp))) {
+        if (p != null && p.equals(_cachedMaxTunnelsProp)) {
             return _cachedMaxTunnels;
         }
         _cachedMaxTunnelsProp = p;
@@ -482,7 +482,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     private int getMaxProcessingTime() {
         String p = _context.getProperty(PROP_MAX_PROCESSINGTIME);
-        if (p == _cachedMaxProcessingTimeProp || (p != null && p.equals(_cachedMaxProcessingTimeProp))) {
+        if (p != null && p.equals(_cachedMaxProcessingTimeProp)) {
             return _cachedMaxProcessingTime;
         }
         _cachedMaxProcessingTimeProp = p;
@@ -500,7 +500,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     private double getTunnelGrowthFactor() {
         String p = _context.getProperty(PROP_TUNNEL_GROWTH_FACTOR);
-        if (p == _cachedGrowthFactorProp || (p != null && p.equals(_cachedGrowthFactorProp))) {
+        if (p != null && p.equals(_cachedGrowthFactorProp)) {
             return _cachedGrowthFactor;
         }
         _cachedGrowthFactorProp = p;
@@ -518,7 +518,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     private double getTunnelTestTimeGrowthFactor() {
         String p = _context.getProperty(PROP_TUNNEL_TEST_TIME_GROWTH_FACTOR);
-        if (p == _cachedTestTimeGrowthFactorProp || (p != null && p.equals(_cachedTestTimeGrowthFactorProp))) {
+        if (p != null && p.equals(_cachedTestTimeGrowthFactorProp)) {
             return _cachedTestTimeGrowthFactor;
         }
         _cachedTestTimeGrowthFactorProp = p;

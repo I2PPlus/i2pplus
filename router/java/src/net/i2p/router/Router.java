@@ -2107,7 +2107,7 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public double getSharePercentage() {
         String pct = _context.getProperty(PROP_BANDWIDTH_SHARE_PERCENTAGE);
-        if (pct == _cachedSharePctProp || (pct != null && pct.equals(_cachedSharePctProp))) {
+        if (pct != null && pct.equals(_cachedSharePctProp)) {
             return _cachedSharePct;
         }
         _cachedSharePctProp = pct;
