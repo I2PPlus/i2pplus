@@ -39,6 +39,10 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     protected volatile long _dataExpected = -1;
     protected volatile boolean _keepAliveIn;
     protected volatile boolean _keepAliveOut;
+    /** response-scoped, set during header parsing */
+    private boolean _chunked;
+    /** response-scoped, set during header parsing */
+    private boolean _connectionSent;
     /** lower-case, trimmed */
     protected String _contentType;
     /** lower-case, trimmed */
@@ -195,142 +199,13 @@ class HTTPResponseOutputStream extends FilterOutputStream {
 
     /** ok, received, now munge & write it */
     private void writeHeader() throws IOException {
-        boolean connectionSent = false;
-        boolean chunked = false;
+        _chunked = false;
+        _connectionSent = false;
+        parseHeaders();
 
-        int lastEnd = -1;
-        byte[] data = _headerBuffer.getData();
-        int valid = _headerBuffer.getValid();
-        for (int i = 0; i < valid; i++) {
-            if (data[i] == NL) {
-                if (lastEnd == -1) {
-                    String responseLine = DataHelper.getUTF8(data, 0, i+1); // includes NL
-                    if (responseLine.charAt(0) != 'H') {
-                        // corrupt, no HTTP/x.x response
-                        if (_log.shouldWarn())
-                            _log.warn("Bad HTTP Response:\n" + HexDump.dump(data, 0, valid));
-                        _keepAliveIn = false;
-                        _keepAliveOut = false;
-                        throw new IOException("Bad HTTP Response: " + responseLine);
-                    }
-                    responseLine = responseLine.trim();
-                    if (_log.shouldInfo())
-                        _log.info("Response: " + responseLine);
-                    responseLine = responseLine + "\r\n";
-                    // Persistent conn requires HTTP/1.1
-                    if (!responseLine.startsWith("HTTP/1.1 ")) {
-                        _keepAliveIn = false;
-                        _keepAliveOut = false;
-                    }
-                    // force zero datalen for 1xx, 204, 304 (RFC 2616 sec. 4.4)
-                    // so that these don't prevent keepalive
-                    int sp = responseLine.indexOf(" ");
-                    if (sp > 0) {
-                        String s = responseLine.substring(sp + 1);
-                        if (s.startsWith("1") || s.startsWith("204") || s.startsWith("304"))
-                            _dataExpected = 0;
-                    } else {
-                        // no status?
-                        _keepAliveIn = false;
-                        _keepAliveOut = false;
-                    }
+        finalizeKeepAlive();
 
-                    out.write(DataHelper.getUTF8(responseLine));
-                } else {
-                    for (int j = lastEnd+1; j < i; j++) {
-                        if (data[j] == ':') {
-                            int keyLen = j-(lastEnd+1);
-                            int valLen = i-(j+1);
-                            if ( (keyLen <= 0) || (valLen < 0) )
-                                throw new IOException("Invalid header @ " + j);
-                            String key = DataHelper.getUTF8(data, lastEnd+1, keyLen);
-                            String val;
-                            if (valLen == 0)
-                                val = "";
-                            else
-                                val = DataHelper.getUTF8(data, j+2, valLen).trim();
-
-                            if (_log.shouldInfo()) {
-                                _log.info("Response header: [" + key + ": " + val + "]");
-                            }
-
-                            String lcKey = key.toLowerCase(Locale.US);
-                            if ("connection".equals(lcKey)) {
-                                if (val.toLowerCase(Locale.US).contains("upgrade")) {
-                                    // pass through for websocket
-                                    out.write(DataHelper.getASCII("Connection: " + val + "\r\n"));
-                                    // Disable persistence
-                                    _keepAliveOut = false;
-                                } else {
-                                    // Strip to allow persistence, replace to disallow
-                                    if (!_keepAliveOut)
-                                    out.write(CONNECTION_CLOSE);
-                                }
-                                // We do not expect Connection: keep-alive here,
-                                // as it's the default for HTTP/1.1, the server proxy doesn't support it,
-                                // and we don't support keepalive for HTTP/1.0
-                                _keepAliveIn = false;
-                                connectionSent = true;
-                            } else if ("proxy-connection".equals(lcKey)) {
-                                // Nonstandard, strip
-                            } else if ("content-encoding".equals(lcKey) && "x-i2p-gzip".equals(val.toLowerCase(Locale.US))) {
-                                _gzip = true;
-                                // client side only
-                                // x-i2p-gzip is not chunked, which is nonstandard, but we track the
-                                // end of data in GunzipOutputStream and call the callback,
-                                // so we can support i2p-side keepalive here.
-                            } else if ("proxy-authenticate".equals(lcKey)) {
-                                // filter this hop-by-hop header; outproxy authentication must be configured in I2PTunnelHTTPClient
-                                // see e.g. http://blog.c22.cc/2013/03/11/privoxy-proxy-authentication-credential-exposure-cve-2013-2503/
-                            } else {
-                                if ("content-length".equals(lcKey)) {
-                                    // save for compress decision on server side
-                                    try {
-                                        _dataExpected = Long.parseLong(val);
-                                    } catch (NumberFormatException nfe) { /* ignored */ }
-                                } else if ("content-type".equals(lcKey)) {
-                                    // save for compress decision on server side
-                                    _contentType = val.toLowerCase(Locale.US);
-                                } else if ("content-encoding".equals(lcKey)) {
-                                    // save for compress decision on server side
-                                    _contentEncoding = val.toLowerCase(Locale.US);
-                                } else if ("transfer-encoding".equals(lcKey) && val.toLowerCase(Locale.US).contains("chunked")) {
-                                    // save for keepalive decision on client side
-                                    chunked = true;
-                                } else if ("set-cookie".equals(lcKey)) {
-                                    String lcVal = val.toLowerCase(Locale.US);
-                                    if (lcVal.contains("domain=b32.i2p") ||
-                                        lcVal.contains("domain=.b32.i2p") ||
-                                        lcVal.contains("domain=i2p") ||
-                                        lcVal.contains("domain=.i2p")) {
-                                        // Strip privacy-damaging "supercookies" for i2p and b32.i2p
-                                        // See RFC 6265 and http://publicsuffix.org/
-                                        if (_log.shouldInfo())
-                                            _log.info("Stripping \"" + key + ": " + val + "\" from response ");
-                                        break;
-                                    }
-                                }
-                                out.write(DataHelper.getUTF8(key.trim() + ": " + val + "\r\n"));
-                            }
-                            break;
-                        }
-                    }
-                }
-                lastEnd = i;
-            }
-        }
-
-        // Now make the final keepalive decisions
-        // we need one but not both
-        if (_keepAliveOut && ((chunked && _dataExpected >= 0) ||
-            (!chunked && _dataExpected < 0)))
-            _keepAliveOut = false;
-        // we need one but not both
-        if (_keepAliveIn && ((chunked && _dataExpected >= 0) ||
-            (!chunked && _dataExpected < 0)))
-            _keepAliveIn = false;
-
-        if (!connectionSent && !_keepAliveOut)
+        if (!_connectionSent && !_keepAliveOut)
             out.write(CONNECTION_CLOSE);
 
         finishHeaders();
@@ -339,11 +214,198 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         if (_log.shouldInfo())
             _log.info("After headers: GZIP? " + _gzip + " Compressed? " + shouldCompress + " KeepAliveIn? " + _keepAliveIn + " KeepAliveOut? " + _keepAliveOut);
 
-        if (data.length == CACHE_SIZE)
+        if (_headerBuffer.getData().length == CACHE_SIZE)
             _cache.release(_headerBuffer);
         _headerBuffer = null;
 
-        // Setup the keepalive streams
+        setupStreams(shouldCompress);
+
+        if (shouldCompress) {
+            beginProcessing();
+        }
+    }
+
+    /**
+     * Split the header buffer into lines and process each one.
+     * Sets the response-scoped _chunked and _connectionSent flags.
+     *
+     * @throws IOException on malformed headers
+     */
+    private void parseHeaders() throws IOException {
+        int lastEnd = -1;
+        byte[] data = _headerBuffer.getData();
+        int valid = _headerBuffer.getValid();
+        for (int i = 0; i < valid; i++) {
+            if (data[i] == NL) {
+                if (lastEnd == -1) {
+                    handleResponseLine(data, i + 1, valid);
+                } else {
+                    handleHeaderLine(data, lastEnd + 1, i);
+                }
+                lastEnd = i;
+            }
+        }
+    }
+
+    /**
+     * Write the first line of the response, validating it is an
+     * HTTP/x.x response and disabling persistence for non-1.1 or
+     * zero-data responses.
+     *
+     * @param data the header buffer
+     * @param len the length of the response line, including the NL
+     * @param valid the total number of valid bytes in the buffer
+     * @throws IOException on a corrupt response line
+     */
+    private void handleResponseLine(byte[] data, int len, int valid) throws IOException {
+        String responseLine = DataHelper.getUTF8(data, 0, len); // includes NL
+        if (responseLine.charAt(0) != 'H') {
+            // corrupt, no HTTP/x.x response
+            if (_log.shouldWarn())
+                _log.warn("Bad HTTP Response:\n" + HexDump.dump(data, 0, valid));
+            _keepAliveIn = false;
+            _keepAliveOut = false;
+            throw new IOException("Bad HTTP Response: " + responseLine);
+        }
+        responseLine = responseLine.trim();
+        if (_log.shouldInfo())
+            _log.info("Response: " + responseLine);
+        responseLine = responseLine + "\r\n";
+        // Persistent conn requires HTTP/1.1
+        if (!responseLine.startsWith("HTTP/1.1 ")) {
+            _keepAliveIn = false;
+            _keepAliveOut = false;
+        }
+        // force zero datalen for 1xx, 204, 304 (RFC 2616 sec. 4.4)
+        // so that these don't prevent keepalive
+        int sp = responseLine.indexOf(" ");
+        if (sp > 0) {
+            String s = responseLine.substring(sp + 1);
+            if (s.startsWith("1") || s.startsWith("204") || s.startsWith("304"))
+                _dataExpected = 0;
+        } else {
+            // no status?
+            _keepAliveIn = false;
+            _keepAliveOut = false;
+        }
+
+        out.write(DataHelper.getUTF8(responseLine));
+    }
+
+    /**
+     * Parse and write out one header line, stripping hop-by-hop
+     * headers and saving the fields needed for the keepalive and
+     * compress decisions.
+     *
+     * @param data the header buffer
+     * @param start the first byte of the header
+     * @param end one past the last byte of the header (the NL)
+     * @throws IOException on a malformed header
+     */
+    private void handleHeaderLine(byte[] data, int start, int end) throws IOException {
+        for (int j = start; j < end; j++) {
+            if (data[j] == ':') {
+                int keyLen = j - start;
+                int valLen = end - (j + 1);
+                if ( (keyLen <= 0) || (valLen < 0) )
+                    throw new IOException("Invalid header @ " + j);
+                String key = DataHelper.getUTF8(data, start, keyLen);
+                String val;
+                if (valLen == 0)
+                    val = "";
+                else
+                    val = DataHelper.getUTF8(data, j + 2, valLen).trim();
+
+                if (_log.shouldInfo()) {
+                    _log.info("Response header: [" + key + ": " + val + "]");
+                }
+
+                String lcKey = key.toLowerCase(Locale.US);
+                if ("connection".equals(lcKey)) {
+                    if (val.toLowerCase(Locale.US).contains("upgrade")) {
+                        // pass through for websocket
+                        out.write(DataHelper.getASCII("Connection: " + val + "\r\n"));
+                        // Disable persistence
+                        _keepAliveOut = false;
+                    } else {
+                        // Strip to allow persistence, replace to disallow
+                        if (!_keepAliveOut)
+                            out.write(CONNECTION_CLOSE);
+                    }
+                    // We do not expect Connection: keep-alive here,
+                    // as it's the default for HTTP/1.1, the server proxy doesn't support it,
+                    // and we don't support keepalive for HTTP/1.0
+                    _keepAliveIn = false;
+                    _connectionSent = true;
+                } else if ("proxy-connection".equals(lcKey)) {
+                    // Nonstandard, strip
+                } else if ("content-encoding".equals(lcKey) && "x-i2p-gzip".equals(val.toLowerCase(Locale.US))) {
+                    _gzip = true;
+                    // client side only
+                    // x-i2p-gzip is not chunked, which is nonstandard, but we track the
+                    // end of data in GunzipOutputStream and call the callback,
+                    // so we can support i2p-side keepalive here.
+                } else if ("proxy-authenticate".equals(lcKey)) {
+                    // filter this hop-by-hop header; outproxy authentication must be configured in I2PTunnelHTTPClient
+                    // see e.g. http://blog.c22.cc/2013/03/11/privoxy-proxy-authentication-credential-exposure-cve-2013-2503/
+                } else {
+                    if ("content-length".equals(lcKey)) {
+                        // save for compress decision on server side
+                        try {
+                            _dataExpected = Long.parseLong(val);
+                        } catch (NumberFormatException nfe) { /* ignored */ }
+                    } else if ("content-type".equals(lcKey)) {
+                        // save for compress decision on server side
+                        _contentType = val.toLowerCase(Locale.US);
+                    } else if ("content-encoding".equals(lcKey)) {
+                        // save for compress decision on server side
+                        _contentEncoding = val.toLowerCase(Locale.US);
+                    } else if ("transfer-encoding".equals(lcKey) && val.toLowerCase(Locale.US).contains("chunked")) {
+                        // save for keepalive decision on client side
+                        _chunked = true;
+                    } else if ("set-cookie".equals(lcKey)) {
+                        String lcVal = val.toLowerCase(Locale.US);
+                        if (lcVal.contains("domain=b32.i2p") ||
+                            lcVal.contains("domain=.b32.i2p") ||
+                            lcVal.contains("domain=i2p") ||
+                            lcVal.contains("domain=.i2p")) {
+                            // Strip privacy-damaging "supercookies" for i2p and b32.i2p
+                            // See RFC 6265 and http://publicsuffix.org/
+                            if (_log.shouldInfo())
+                                _log.info("Stripping \"" + key + ": " + val + "\" from response ");
+                            break;
+                        }
+                    }
+                    out.write(DataHelper.getUTF8(key.trim() + ": " + val + "\r\n"));
+                }
+                break;
+            }
+        }
+    }
+
+    /**
+     * Disable keepalive where the data length cannot be determined,
+     * so the end of the response would be ambiguous.
+     */
+    private void finalizeKeepAlive() {
+        // we need one but not both
+        if (_keepAliveOut && ((_chunked && _dataExpected >= 0) ||
+            (!_chunked && _dataExpected < 0)))
+            _keepAliveOut = false;
+        // we need one but not both
+        if (_keepAliveIn && ((_chunked && _dataExpected >= 0) ||
+            (!_chunked && _dataExpected < 0)))
+            _keepAliveIn = false;
+    }
+
+    /**
+     * Set up the filter streams to count the data or look for the
+     * end of a chunked transfer, so the callback fires when the
+     * response is done.
+     *
+     * @param shouldCompress whether the data will be gzip-compressed
+     */
+    private void setupStreams(boolean shouldCompress) {
         // Until we have keepalive for the i2p socket, the client side
         // does not need to do this, we just wait for the socket to close.
         // Until we have keepalive for the server socket, the server side
@@ -362,10 +424,6 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                 // do not strip the chunking; pass it through
                 out = new DechunkedOutputStream(out, _callback, false);
             }
-        }
-
-        if (shouldCompress) {
-            beginProcessing();
         }
     }
 
