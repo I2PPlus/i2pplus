@@ -202,29 +202,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * @see #_proxyList
      */
     protected String selectProxy(String host) {
-        String rv;
-        synchronized (_proxyList) {
-            int size = _proxyList.size();
-            if (size <= 0) {return null;}
-            if (size == 1) {return _proxyList.get(0);}
-            rv = _proxyCache.get(host);
-            if (rv == null) {
-                List<String> tmpList;
-                if (_lastFailedProxy != null) {
-                    // don't use last failed one
-                    tmpList = new ArrayList<>(_proxyList);
-                    tmpList.remove(_lastFailedProxy);
-                    size = tmpList.size();
-                } else {tmpList = _proxyList;}
-                int index = _context.random().nextInt(size);
-                rv = tmpList.get(index);
-                _proxyCache.put(host, rv);
-            }
-        }
-        if (_log.shouldInfo()) {
-            _log.info("[HTTPClient] Using outproxy [" + rv + "] for " + host);
-        }
-        return rv;
+        return selectProxy(host, _proxyList, _proxyList, _lastFailedProxy, _proxyCache, "[HTTPClient] Using outproxy [");
     }
 
     /**
@@ -246,28 +224,46 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         String s = getTunnel().getClientOptions().getProperty(PROP_SSL_OUTPROXIES);
         if (s == null) {return null;}
         String[] p = DataHelper.split(s, "[,; \r\n\t]");
-        int size = p.length;
-        if (size == 0) {return null;}
+        if (p.length == 0) {return null;}
         // todo doesn't check for ""
-        if (size == 1) {return p[0];}
+        return selectProxy(host, _proxySSLCache, Arrays.asList(p), _lastFailedSSLProxy, _proxySSLCache, "[HTTPClient] Using SSL outproxy [");
+    }
+
+    /**
+     *  Select an outproxy for the given host with load balancing.
+     *  Failed proxies are remembered and temporarily skipped.
+     *
+     *  @param host the target hostname (may be used for proxy stickiness)
+     *  @param lock the monitor guarding the proxy state
+     *  @param proxies the configured outproxies
+     *  @param lastFailed the last failed proxy, or null
+     *  @param cache clearnet host to proxy stickiness cache
+     *  @param logPrefix the message prefix
+     *  @return the selected proxy destination string, or null if none configured
+     */
+    private String selectProxy(String host, Object lock, List<String> proxies, String lastFailed,
+                               Map<String, String> cache, String logPrefix) {
         String rv;
-        synchronized (_proxySSLCache) {
-            rv = _proxySSLCache.get(host);
+        synchronized (lock) {
+            int size = proxies.size();
+            if (size <= 0) {return null;}
+            if (size == 1) {return proxies.get(0);}
+            rv = cache.get(host);
             if (rv == null) {
                 List<String> tmpList;
-                if (_lastFailedSSLProxy != null) {
+                if (lastFailed != null) {
                     // don't use last failed one
-                    tmpList = new ArrayList<>(Arrays.asList(p));
-                    tmpList.remove(_lastFailedSSLProxy);
+                    tmpList = new ArrayList<>(proxies);
+                    tmpList.remove(lastFailed);
                     size = tmpList.size();
-                } else {tmpList = Arrays.asList(p);}
+                } else {tmpList = proxies;}
                 int index = _context.random().nextInt(size);
                 rv = tmpList.get(index);
-                _proxySSLCache.put(host, rv);
+                cache.put(host, rv);
             }
         }
         if (_log.shouldInfo()) {
-            _log.info("[HTTPClient] Using SSL outproxy [" + rv + "] for " + host);
+            _log.info(logPrefix + rv + "] for " + host);
         }
         return rv;
     }
