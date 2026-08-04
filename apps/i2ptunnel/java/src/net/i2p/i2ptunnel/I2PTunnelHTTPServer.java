@@ -1485,7 +1485,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final int MIN_TO_COMPRESS = 1024;
 
     private static class CompressedResponseOutputStream extends HTTPResponseOutputStream {
-        private InternalGZIPOutputStream _gzipOut;
+        private GZIPOutputStream _gzipOut;
 
         /**
          *  Create a compressed response output stream.
@@ -1560,48 +1560,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         @Override
         protected void beginProcessing() throws IOException {
             if (shouldCompress()) {
-                _gzipOut = new InternalGZIPOutputStream(out);
+                _gzipOut = new GZIPOutputStream(out);
                 out = _gzipOut;
             }
-        }
-
-        /**
-         *  Get the total number of bytes read before compression.
-         *
-         *  @return total bytes read, or 0 if compression is not active
-         */
-        public long getTotalRead() {
-            InternalGZIPOutputStream gzipOut = _gzipOut;
-            if (gzipOut != null) {return gzipOut.getTotalRead();}
-            else {return 0;}
-        }
-
-        /**
-         *  Get the total number of bytes written after compression.
-         *
-         *  @return total compressed bytes written, or 0 if compression is not active
-         */
-        public long getTotalCompressed() {
-            InternalGZIPOutputStream gzipOut = _gzipOut;
-            if (gzipOut != null) {return gzipOut.getTotalCompressed();}
-            else {return 0;}
-        }
-    }
-
-    /** Wrapper providing deflater statistics. */
-    private static class InternalGZIPOutputStream extends GZIPOutputStream {
-        /** @param target the underlying output stream */
-        public InternalGZIPOutputStream(OutputStream target) throws IOException {super(target);}
-        /** @return total bytes read before compression */
-        public long getTotalRead() {
-            try {return def.getTotalIn();}
-            catch (RuntimeException e) {return 0;}
-        }
-        /** @return total bytes written after compression */
-        public long getTotalCompressed() {
-            try {return def.getTotalOut();}
-            // j2se 1.4.2_08 on linux is sometimes throwing an NPE in the getTotalOut() implementation
-            catch (RuntimeException e) {return 0;}
         }
     }
 
