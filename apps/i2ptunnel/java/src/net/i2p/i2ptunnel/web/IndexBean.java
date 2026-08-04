@@ -450,7 +450,6 @@ public class IndexBean {
 
         int restarted = 0;
         int serversToRestart = 0;
-        boolean msgSent = false;
 
         for (TunnelController controller : controllers) {
             if (!controller.isClient() && controller.getIsRunning()) {
@@ -483,7 +482,7 @@ public class IndexBean {
         String count = String.valueOf(restarted);
         String doneMsg = "";
 
-        if (!msgSent && serversToRestart == restarted && restarted >= 1) {
+        if (serversToRestart == restarted && restarted >= 1) {
             doneMsg = "✔ Restarted " + count + " running server " + (restarted > 1 ? "tunnels" : "tunnel");
             _timestampedMessages.add(new TimestampedMessage(doneMsg));
         }
