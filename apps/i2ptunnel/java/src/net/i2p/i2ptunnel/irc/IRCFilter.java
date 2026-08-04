@@ -298,35 +298,8 @@ abstract class IRCFilter {
             idx++;
         String command = field[idx++].toUpperCase(Locale.US);
 
-        if ("PING".equals(command)) {
-            // Most clients just send a PING and are happy with any old PONG.  Others,
-            // like BitchX, actually expect certain behavior.  It sends two different pings:
-            // "PING :irc.freshcoffee.i2p" and "PING 1234567890 127.0.0.1" (where the IP is the proxy)
-            // the PONG to the former seems to be "PONG 127.0.0.1", while the PONG to the later is
-            // ":irc.freshcoffee.i2p PONG irc.freshcoffe.i2p :1234567890".
-            // We don't want to send them our proxy's IP address, so we need to rewrite the PING
-            // sent to the server, but when we get a PONG back, use what we expected, rather than
-            // what they sent.
-            //
-            // Yuck.
-
-            String rv = null;
-            expectedPong.setLength(0);
-            if (field.length == idx) { // PING
-                rv = "PING";
-                // If we aren't rewriting the PING don't rewrite the PONG
-            } else if (field.length == idx + 1) { // PING nonce
-                rv = "PING " + field[idx];
-                // If we aren't rewriting the PING don't rewrite the PONG
-            } else if (field.length == idx + 2) { // PING nonce serverLocation
-                rv = "PING " + field[idx];
-                expectedPong.append("PONG ").append(field[idx + 1]).append(" :").append(field[idx]); // PONG serverLocation nonce
-            } else {
-                rv = null;
-            }
-
-            return rv;
-        }
+        if ("PING".equals(command))
+            return filterPing(field, idx, expectedPong);
 
         // Allow all allowedCommands
         if (_allowedOutbound.contains(command))
@@ -334,86 +307,21 @@ abstract class IRCFilter {
 
         // mIRC sends "NOTICE user :DCC Send file (IP)"
         // in addition to the CTCP version
-        if("NOTICE".equals(command))
-        {
+        if ("NOTICE".equals(command)) {
             if (field.length < idx + 2)
                 return s;  // invalid, allow server response
             String msg = field[idx + 1];
-            if(msg.startsWith(":DCC "))
+            if (msg.startsWith(":DCC "))
                 return filterDCCOut(field[idx - 1] + ' ' + field[idx] + " :DCC ", msg.substring(5), helper);
             // fall through
         }
 
         // Allow PRIVMSG, but block CTCP (except ACTION).
-        if("PRIVMSG".equals(command) || "NOTICE".equals(command))
-        {
-            if (field.length < idx + 2)
-                return s;  // invalid, allow server response
-            String msg = field[idx + 1];
-            if (idx + 2 < field.length)
-                msg += ' ' + field[idx + 2];
+        if ("PRIVMSG".equals(command) || "NOTICE".equals(command))
+            return filterPrivmsgOrNotice(s, field, idx, helper);
 
-            if(msg.indexOf(0x01) >= 0) // CTCP marker ^A can be anywhere, not just immediately after the ':'
-            {
-                    // CTCP
-
-                // don't even try to parse multiple CTCP in the same message
-                int count = 0;
-                for (int i = 0; i < msg.length(); i++) {
-                    if (msg.charAt(i) == 0x01)
-                        count++;
-                }
-                if (count != 2)
-                    return null;
-
-                msg=msg.substring(2);
-                if(msg.startsWith("ACTION ")) {
-                    // /me says hello
-                    return s;
-                }
-                if (msg.startsWith("DCC "))
-                    return filterDCCOut(field[idx - 1] + ' ' + field[idx] + " :\001DCC ", msg.substring(4), helper);
-                // XDCC looks safe, ip/port happens over regular DCC
-                // http://en.wikipedia.org/wiki/XDCC
-                if (msg.toUpperCase(Locale.US).startsWith("XDCC ") && helper != null && helper.isEnabled())
-                    return s;
-                if (ALLOW_ALL_CTCP_OUT)
-                    return s;
-                return null; // Block all other ctcp
-            }
-            return s;
-        }
-
-        if("USER".equals(command)) {
-            // USER <username> <hostname> <servername> <realname> (RFC 1459)
-            // USER <user> <mode> <unused> <realname> (RFC 2812)
-            // <realname> may contain spaces, and thus must be prefixed with a colon.
-            if (field.length < idx + 3)
-                return s;  // invalid, allow server response
-            // Replace hostname/servername; pass numeric mode and unused '*' through unchanged
-            String hostname = field[idx + 1];
-            try {
-                Integer.parseInt(hostname);
-                // mode
-            } catch (NumberFormatException nfe) {
-                hostname = "hostname";
-            }
-            // Warning: max field size is 4, so servername or unused is combined with realname
-            // in field[idx + 2]
-            String servername;
-            if (field[idx + 2].startsWith("* "))
-                servername = "*";
-            else
-                servername = "localhost";
-            String realname;
-            int cidx = field[idx + 2].lastIndexOf(':');
-            if (cidx < 0)
-                realname = "realname";
-            else
-                realname = field[idx + 2].substring(cidx + 1);
-            String ret = "USER " + field[idx] + ' ' + hostname + ' ' + servername + " :" + realname;
-            return ret;
-        }
+        if ("USER".equals(command))
+            return filterUser(s, field, idx);
 
         if ("PART".equals(command)) {
             // hide client message
@@ -426,6 +334,129 @@ abstract class IRCFilter {
 
         // Block the rest
         return null;
+    }
+
+    /**
+     *  Rewrite a PING so the server replies to a nonce we remember.
+     *  Rewriting avoids sending our proxy's IP address in the PONG.
+     *
+     *  @param field the split line
+     *  @param idx index of the command in field
+     *  @param expectedPong filled with the expected PONG for a 3-field PING
+     *  @return the rewritten line, or null if it should be dropped
+     */
+    private static String filterPing(String[] field, int idx, StringBuffer expectedPong) {
+        // Most clients just send a PING and are happy with any old PONG.  Others,
+        // like BitchX, actually expect certain behavior.  It sends two different pings:
+        // "PING :irc.freshcoffee.i2p" and "PING 1234567890 127.0.0.1" (where the IP is the proxy)
+        // the PONG to the former seems to be "PONG 127.0.0.1", while the PONG to the later is
+        // ":irc.freshcoffee.i2p PONG irc.freshcoffe.i2p :1234567890".
+        // We don't want to send them our proxy's IP address, so we need to rewrite the PING
+        // sent to the server, but when we get a PONG back, use what we expected, rather than
+        // what they sent.
+        //
+        // Yuck.
+
+        String rv = null;
+        expectedPong.setLength(0);
+        if (field.length == idx) { // PING
+            rv = "PING";
+            // If we aren't rewriting the PING don't rewrite the PONG
+        } else if (field.length == idx + 1) { // PING nonce
+            rv = "PING " + field[idx];
+            // If we aren't rewriting the PING don't rewrite the PONG
+        } else if (field.length == idx + 2) { // PING nonce serverLocation
+            rv = "PING " + field[idx];
+            expectedPong.append("PONG ").append(field[idx + 1]).append(" :").append(field[idx]); // PONG serverLocation nonce
+        } else {
+            rv = null;
+        }
+
+        return rv;
+    }
+
+    /**
+     *  Allow PRIVMSG/NOTICE, blocking CTCP (except ACTION, DCC, and XDCC).
+     *
+     *  @param s the original line
+     *  @param field the split line
+     *  @param idx index of the command in field
+     *  @param helper may be null
+     *  @return the original or rewritten line, or null if it should be dropped
+     */
+    private static String filterPrivmsgOrNotice(String s, String[] field, int idx, DCCHelper helper) {
+        if (field.length < idx + 2)
+            return s;  // invalid, allow server response
+        String msg = field[idx + 1];
+        if (idx + 2 < field.length)
+            msg += ' ' + field[idx + 2];
+
+        if (msg.indexOf(0x01) >= 0) { // CTCP marker ^A can be anywhere, not just immediately after the ':'
+            // CTCP
+
+            // don't even try to parse multiple CTCP in the same message
+            int count = 0;
+            for (int i = 0; i < msg.length(); i++) {
+                if (msg.charAt(i) == 0x01)
+                    count++;
+            }
+            if (count != 2)
+                return null;
+
+            msg = msg.substring(2);
+            if (msg.startsWith("ACTION ")) {
+                // /me says hello
+                return s;
+            }
+            if (msg.startsWith("DCC "))
+                return filterDCCOut(field[idx - 1] + ' ' + field[idx] + " :\001DCC ", msg.substring(4), helper);
+            // XDCC looks safe, ip/port happens over regular DCC
+            // http://en.wikipedia.org/wiki/XDCC
+            if (msg.toUpperCase(Locale.US).startsWith("XDCC ") && helper != null && helper.isEnabled())
+                return s;
+            if (ALLOW_ALL_CTCP_OUT)
+                return s;
+            return null; // Block all other ctcp
+        }
+        return s;
+    }
+
+    /**
+     *  Sanitize a USER line, replacing hostname and servername.
+     *
+     *  @param s the original line
+     *  @param field the split line
+     *  @param idx index of the command in field
+     *  @return the rewritten line
+     */
+    private static String filterUser(String s, String[] field, int idx) {
+        // USER <username> <hostname> <servername> <realname> (RFC 1459)
+        // USER <user> <mode> <unused> <realname> (RFC 2812)
+        // <realname> may contain spaces, and thus must be prefixed with a colon.
+        if (field.length < idx + 3)
+            return s;  // invalid, allow server response
+        // Replace hostname/servername; pass numeric mode and unused '*' through unchanged
+        String hostname = field[idx + 1];
+        try {
+            Integer.parseInt(hostname);
+            // mode
+        } catch (NumberFormatException nfe) {
+            hostname = "hostname";
+        }
+        // Warning: max field size is 4, so servername or unused is combined with realname
+        // in field[idx + 2]
+        String servername;
+        if (field[idx + 2].startsWith("* "))
+            servername = "*";
+        else
+            servername = "localhost";
+        String realname;
+        int cidx = field[idx + 2].lastIndexOf(':');
+        if (cidx < 0)
+            realname = "realname";
+        else
+            realname = field[idx + 2].substring(cidx + 1);
+        return "USER " + field[idx] + ' ' + hostname + ' ' + servername + " :" + realname;
     }
 
     /**
