@@ -31,6 +31,7 @@ import java.io.Serializable;
  * Periodically searches through all leases to find expired ones, failing those
  * keys and firing up a new search for each (in case we want it later, might as
  * well preemptively fetch it).
+ * Also refreshes leasesets that are about to expire to ensure continuity of service.
  *
  * @since 0.8.9
  */
@@ -40,6 +41,8 @@ class ExpireLeasesJob extends JobImpl {
     private static final long RERUN_DELAY_MS = 45*1000L;
     private static final int LIMIT_LEASES_FF = 1250;
     private static final int LIMIT_LEASES_CLIENT = SystemVersion.isSlow() ? 300 : 750;
+    /** Refresh leasesets with less than this much time remaining before expiry */
+    private static final long REFRESH_THRESHOLD_MS = 2 * 60 * 1000L;
 
     /**
      * ExpireLeasesJob.
@@ -55,9 +58,9 @@ class ExpireLeasesJob extends JobImpl {
      */
     public String getName() { return "Expire Leases"; }
 
-    /**
-     * runJob.
-     */
+/**
+      * runJob.
+      */
     public void runJob() {
         long uptime = getContext().router().getUptime();
         List<Hash> toExpire = selectKeysToExpire();
@@ -65,7 +68,32 @@ class ExpireLeasesJob extends JobImpl {
             for (Hash key : toExpire) {_facade.fail(key);}
             if (_log.shouldInfo()) {_log.info("Leases expired: " + toExpire.size());}
         }
+        refreshAboutToExpire();
         requeue(RERUN_DELAY_MS);
+    }
+
+    /**
+     * Refresh leasesets that are about to expire to ensure continuity of service.
+     * This preemptively fetches new leasesets before the old ones expire,
+     * avoiding any gap in service.
+     */
+    private void refreshAboutToExpire() {
+        RouterContext ctx = getContext();
+        long now = ctx.clock().now();
+        Set<Map.Entry<Hash, DatabaseEntry>> entries = _facade.getDataStore().getMapEntries();
+        for (Map.Entry<Hash, DatabaseEntry> entry : entries) {
+            DatabaseEntry obj = entry.getValue();
+            if (obj == null || !obj.isLeaseSet()) {continue;}
+            LeaseSet ls = (LeaseSet) obj;
+            Hash h = entry.getKey();
+            boolean isLocal = ctx.clientManager().isLocal(h);
+            if (isLocal) {continue;}
+            long expiry = ls.getLatestLeaseDate();
+            if (expiry > now && expiry - now < REFRESH_THRESHOLD_MS) {
+                if (_log.shouldInfo()) {_log.info("Refreshing LeaseSet [" + h.toBase32().substring(0,8) + "] before expiry");}
+                _facade.lookupLeaseSetRemotely(h, null);
+            }
+        }
     }
 
     /**
