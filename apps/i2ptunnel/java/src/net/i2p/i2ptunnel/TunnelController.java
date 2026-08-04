@@ -1004,14 +1004,17 @@ public class TunnelController implements Logging {
         }
         if (oldState != TunnelState.STOPPED) {
             // Wait up to 10s for tunnel to actually stop (stopTunnel is async)
-            int waited = 0;
-            while (_state != TunnelState.STOPPED && waited < 10000) {
-                try {Thread.sleep(50);}
-                catch (InterruptedException ie) {break;}
-                waited += 50;
+            synchronized (this) {
+                long deadline = System.currentTimeMillis() + 10000;
+                while (_state != TunnelState.STOPPED) {
+                    long remaining = deadline - System.currentTimeMillis();
+                    if (remaining <= 0) {break;}
+                    try {wait(remaining);}
+                    catch (InterruptedException ie) {break;}
+                }
             }
             if (_state != TunnelState.STOPPED && _log.shouldWarn())
-                _log.warn("Tunnel [" + getName() + "] didn't stop after " + waited + "ms -> Forcing restart...");
+                _log.warn("Tunnel [" + getName() + "] didn't stop after 10s -> Forcing restart...");
         }
         startTunnel();
     }
@@ -1474,6 +1477,7 @@ public class TunnelController implements Logging {
         /** Void */
         public synchronized void changeState(TunnelState state) {
         _state = state;
+        notifyAll();
     }
 
     /**
