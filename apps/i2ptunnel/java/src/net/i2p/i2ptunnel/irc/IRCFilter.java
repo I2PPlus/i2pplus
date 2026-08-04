@@ -203,7 +203,6 @@ abstract class IRCFilter {
                 "USERHOST",
                 "USERS", // Ticket 1249
                 "VHOST",
-                "VHOST",
                 "WATCH",
                 "WHO",
                 "WHOIS",
