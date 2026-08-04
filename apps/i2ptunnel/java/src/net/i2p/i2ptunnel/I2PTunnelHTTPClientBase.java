@@ -550,7 +550,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                     }
                     if (configPW != null && pw != null && DataHelper.eqCT(pw, configPW)) {
                         if (_log.shouldInfo()) {
-                            _log.info(getPrefix(requestId) + "Good auth - user: " + user + " pw: " + pw);
+                            _log.info(getPrefix(requestId) + "Good auth - user: " + user);
                         }
                         return AuthResult.AUTH_GOOD;
                     }
