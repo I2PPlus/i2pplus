@@ -202,7 +202,34 @@ class SOCKS5Server extends SOCKSServer {
             throw new SOCKSException("Invalid protocol version in request: " + socksVer);
         }
 
-        int command = in.readUnsignedByte();
+        int command = checkCommand(in.readUnsignedByte(), out);
+
+        // Reserved byte, should be 0x00
+        in.readByte();
+
+        parseAddressType(in, command, out);
+
+        connPort = in.readUnsignedShort();
+        if (connPort == 0) {
+            if (_log.shouldDebug())
+                _log.debug("Trying to connect to TCP port 0?  Dropping!");
+            sendRequestReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
+            throw new SOCKSException("Invalid port number in request");
+        }
+        return command;
+    }
+
+    /**
+     * Validate the SOCKS5 command byte, replying and throwing for
+     * unsupported or unknown commands.
+     *
+     * @param command the command byte
+     * @param out the output stream for the failure reply
+     * @return the command byte
+     * @throws IOException on stream errors
+     * @throws SOCKSException if the command is not supported
+     */
+    private int checkCommand(int command, DataOutputStream out) throws IOException {
         switch (command) {
         case Command.CONNECT:
             break;
@@ -235,10 +262,20 @@ class SOCKS5Server extends SOCKSServer {
             sendRequestReply(Reply.COMMAND_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
             throw new SOCKSException("Unsupported command in request");
         }
+        return command;
+    }
 
-        // Reserved byte, should be 0x00
-        in.readByte();
-
+    /**
+     * Parse and validate the address type and host bytes of a SOCKS5
+     * request, filling in connHostName and addressType.  TOR_RESOLVE
+     * requests cache the hostname under a fake 255.x.x.x address.
+     *
+     * @param in the request stream
+     * @param command the command byte
+     * @param out the output stream for failure replies
+     * @throws IOException on stream errors
+     */
+    private void parseAddressType(DataInputStream in, int command, DataOutputStream out) throws IOException {
         addressType = in.readUnsignedByte();
         switch (addressType) {
             case AddressType.IPV4: {
@@ -288,7 +325,7 @@ class SOCKS5Server extends SOCKSServer {
                     throw new SOCKSException("ignore");
                 }
                 if (host.startsWith("255.")) {
-                // For Tor, where hostname was sent previously in the RESOLVE
+                    // For Tor, where hostname was sent previously in the RESOLVE
                     synchronized(_torCache) {
                         connHostName = _torCache.get(host);
                     }
@@ -303,7 +340,7 @@ class SOCKS5Server extends SOCKSServer {
                 }
             }
             if (_log.shouldDebug())
-            _log.debug("DOMAINNAME address type in request: " + connHostName);
+                _log.debug("DOMAINNAME address type in request: " + connHostName);
             break;
 
             case AddressType.IPV6:
@@ -322,15 +359,6 @@ class SOCKS5Server extends SOCKSServer {
                 sendRequestReply(Reply.ADDRESS_TYPE_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
                 throw new SOCKSException("Invalid addresses type in request");
         }
-
-        connPort = in.readUnsignedShort();
-        if (connPort == 0) {
-            if (_log.shouldDebug())
-                _log.debug("Trying to connect to TCP port 0?  Dropping!");
-            sendRequestReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-            throw new SOCKSException("Invalid port number in request");
-        }
-        return command;
     }
 
     @Override
@@ -457,66 +485,11 @@ class SOCKS5Server extends SOCKSServer {
             throw new SOCKSException("Connection error", e);
         }
 
-        // FIXME: here we should read our config file, select an
-        // outproxy, and instantiate the proper socket class that
-        // handles the outproxy itself (SOCKS4a, SOCKS5, HTTP CONNECT...).
-        I2PSocket destSock;
-
         try {
-            String hostLowerCase = connHostName.toLowerCase(Locale.US);
-            if (NamingService.isI2PHost(hostLowerCase)) {
-                Destination dest = _context.namingService().lookup(connHostName);
-                if (dest == null) {
-                    sendFailureReply(Reply.HOST_UNREACHABLE, out);
-                    throw new SOCKSException("Host not found");
-                }
-                if (_log.shouldDebug())
-                    _log.debug("Connecting to " + connHostName + "...");
-                Properties overrides = new Properties();
-                I2PSocketOptions sktOpts = t.buildOptions(overrides);
-                sktOpts.setPort(connPort);
-                destSock = t.createI2PSocket(dest, sktOpts);
-            } else if (hostLowerCase.equals("localhost") || connHostName.equals("127.0.0.1") ||
-                       hostLowerCase.endsWith(".localhost") ||
-                       connHostName.startsWith("192.168.") || connHostName.equals("[::1]")) {
-                String err = "No localhost accesses allowed through the Socks Proxy";
-                _log.error(err);
-                sendFailureReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, out);
-                throw new SOCKSException(err);
-            } else {
-                Outproxy outproxy = getOutproxyPlugin();
-                if (outproxy != null) {
-                    // In HTTPClient, we use OutproxyRunner to run a Socket,
-                    // but here, we wrap a Socket in a I2PSocket and use the regular Runner.
-                    try {
-                        destSock = new SocketWrapper(outproxy.connect(connHostName, connPort));
-                    } catch (IOException ioe) {
-                        try {
-                            sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-                        } catch (IOException ioe2) { /* ignored */ }
-                        throw new SOCKSException("connect failed via outproxy plugin", ioe);
-                    }
-                } else {
-                    List<String> proxies = t.getProxies(connPort);
-                    if (proxies == null || proxies.isEmpty()) {
-                        String err = "No outproxy configured for port " + connPort + " and no default configured either";
-                        _log.error(err);
-                        sendFailureReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, out);
-                        throw new SOCKSException(err);
-                    }
-                    // TODO sticky proxy selection like in HTTP client
-                    int p = _context.random().nextInt(proxies.size());
-                    String proxy = proxies.get(p);
-                    try {
-                        destSock = outproxyConnect(t, proxy);
-                    } catch (SOCKSException se) {
-                        sendFailureReply(Reply.HOST_UNREACHABLE, out);
-                        throw se;
-                    }
-                }
-            }
+            I2PSocket destSock = connectToDestination(t, out);
             confirmConnection();
             _log.debug("Connection confirmed - exchanging data...");
+            return destSock;
         } catch (DataFormatException e) {
             if (_log.shouldWarn())
                 _log.warn("SOCKS error", e);
@@ -533,8 +506,77 @@ class SOCKS5Server extends SOCKSServer {
             sendFailureReply(Reply.HOST_UNREACHABLE, out);
             throw new SOCKSException("Connection error", e);
         }
+    }
 
-        return destSock;
+    /**
+     * Connect to the requested destination via I2P, an outproxy plugin,
+     * or a configured outproxy.
+     *
+     * @param t the owning tunnel
+     * @param out the output stream for failure replies
+     * @return the connected socket
+     * @throws SOCKSException on any connection failure
+     * @throws DataFormatException if the destination is malformed
+     * @throws IOException on stream errors
+     * @throws I2PException on I2P errors
+     */
+    private I2PSocket connectToDestination(I2PSOCKSTunnel t, DataOutputStream out)
+        throws SOCKSException, DataFormatException, IOException, I2PException {
+        // FIXME: here we should read our config file, select an
+        // outproxy, and instantiate the proper socket class that
+        // handles the outproxy itself (SOCKS4a, SOCKS5, HTTP CONNECT...).
+        String hostLowerCase = connHostName.toLowerCase(Locale.US);
+        if (NamingService.isI2PHost(hostLowerCase)) {
+            Destination dest = _context.namingService().lookup(connHostName);
+            if (dest == null) {
+                sendFailureReply(Reply.HOST_UNREACHABLE, out);
+                throw new SOCKSException("Host not found");
+            }
+            if (_log.shouldDebug())
+                _log.debug("Connecting to " + connHostName + "...");
+            Properties overrides = new Properties();
+            I2PSocketOptions sktOpts = t.buildOptions(overrides);
+            sktOpts.setPort(connPort);
+            return t.createI2PSocket(dest, sktOpts);
+        } else if (hostLowerCase.equals("localhost") || connHostName.equals("127.0.0.1") ||
+                   hostLowerCase.endsWith(".localhost") ||
+                   connHostName.startsWith("192.168.") || connHostName.equals("[::1]")) {
+            String err = "No localhost accesses allowed through the Socks Proxy";
+            _log.error(err);
+            sendFailureReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, out);
+            throw new SOCKSException(err);
+        } else {
+            Outproxy outproxy = getOutproxyPlugin();
+            if (outproxy != null) {
+                // In HTTPClient, we use OutproxyRunner to run a Socket,
+                // but here, we wrap a Socket in a I2PSocket and use the regular Runner.
+                try {
+                    return new SocketWrapper(outproxy.connect(connHostName, connPort));
+                } catch (IOException ioe) {
+                    try {
+                        sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
+                    } catch (IOException ioe2) { /* ignored */ }
+                    throw new SOCKSException("connect failed via outproxy plugin", ioe);
+                }
+            } else {
+                List<String> proxies = t.getProxies(connPort);
+                if (proxies == null || proxies.isEmpty()) {
+                    String err = "No outproxy configured for port " + connPort + " and no default configured either";
+                    _log.error(err);
+                    sendFailureReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, out);
+                    throw new SOCKSException(err);
+                }
+                // TODO sticky proxy selection like in HTTP client
+                int p = _context.random().nextInt(proxies.size());
+                String proxy = proxies.get(p);
+                try {
+                    return outproxyConnect(t, proxy);
+                } catch (SOCKSException se) {
+                    sendFailureReply(Reply.HOST_UNREACHABLE, out);
+                    throw se;
+                }
+            }
+        }
     }
 
     // This isn't really the right place for this, we can't stop the tunnel once it starts.
