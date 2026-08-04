@@ -160,7 +160,7 @@ class PeerTestManager {
     private static final int MAX_PER_IP = 12;
     private static final long THROTTLE_CLEAN_TIME = 10*60*1000L;
 
-    /** initial - ContinueTest adds backoff */
+    /** initial - ContinueTimer adds backoff */
     private static final int RESEND_TIMEOUT = 4*1000;
     private static final int MAX_TEST_TIME = 20*1000;
     private static final long MAX_SKEW = 2*60*1000L;
@@ -270,18 +270,18 @@ class PeerTestManager {
         test.incrementPacketsRelayed();
         sendTestToBob();
 
-        new ContinueTest(test.getNonce());
+        new ContinueTimer(test.getNonce());
         return true;
     }
 
     /**
      * SSU 1 or 2. We are Alice.
      */
-    private class ContinueTest extends SimpleTimer2.TimedEvent {
+    private class ContinueTimer extends SimpleTimer2.TimedEvent {
         private final long _nonce;
 
         /** schedules itself */
-        public ContinueTest(long nonce) {
+        public ContinueTimer(long nonce) {
             super(_context.simpleTimer2());
             _nonce = nonce;
             schedule(RESEND_TIMEOUT);
