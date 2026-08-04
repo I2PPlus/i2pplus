@@ -1228,6 +1228,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             _waiter = waiter;
         }
 
+        private static String urlSuffix(String req) {
+            return req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : "";
+        }
+
         /**
          * This thread handles the response from the server back to the browser.
          * If the request was not GET or HEAD, (typically POST or CONNECT), it spawns another thread
@@ -1298,16 +1302,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     compressedout = new CompressedResponseOutputStream(browserout, _keepalive);
                     compressedout.write(DataHelper.getUTF8(modifiedHeaders));
                     s = new Sender(compressedout, serverin, "Server -> Client (Gzip) " +
-                                   (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""), _log);
+                                   urlSuffix(req), _log);
                     browserout = compressedout;
                 } else {
                     browserout.write(DataHelper.getUTF8(modifiedHeaders));
                     s = new Sender(browserout, serverin, "Server -> Client " +
-                                   (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""), _log);
+                                   urlSuffix(req), _log);
                 }
                 if (_log.shouldDebug())
                     _log.debug("[HTTPServer] Running server-to-browser Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
-                               (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                               urlSuffix(req));
                 s.run(); // same thread
             } catch (SSLException she) {
                 if (_log.shouldError()) {_log.error("[HTTPServer] SSL error", she);}
@@ -1322,7 +1326,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             } catch (IOException ioe) {
                 if (_log.shouldWarn()) {
                     _log.warn("[HTTPServer] Error compressing -> " + ioe.getMessage()  +
-                              (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                              urlSuffix(req));
                 }
                 ioex = ioe;
                 _keepalive = false;
@@ -1342,7 +1346,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         if (i2pReset) {
                             if (_log.shouldDebug()) {
                                 _log.warn("[HTTPServer] Received I2P RESET -> Resetting socket..." +
-                                          (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                                          urlSuffix(req));
                             }
                             try {_webserver.setSoLinger(true, 0);}
                             catch (IOException ioe) { /* ignored */ }
@@ -1354,7 +1358,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         if (sockReset) {
                             if (_log.shouldDebug()) {
                                 _log.warn("[HTTPServer] Received socket RESET ->  Resetting I2P socket..." +
-                                          (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                                          urlSuffix(req));
                             }
                             try {_browser.reset();}
                             catch (IOException ioe) { /* ignored */ }
@@ -1377,7 +1381,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (!_keepalive) try { _browser.close(); } catch (IOException ioe) { /* ignored */ }
                 if (_log.shouldDebug()) {
                     _log.debug("Finished server-to-browser: Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
-                               (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                               urlSuffix(req));
                 }
             }
         }
