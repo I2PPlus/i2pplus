@@ -784,7 +784,29 @@ public class TunnelConfig {
     public Properties getConfig() {
         Properties config = new Properties();
         updateConfigGeneric(config);
+        setClientServerConfig(config);
 
+        // override bundle setting set above
+        if (!TunnelController.isClient(_type) &&
+            !TunnelController.TYPE_HTTP_SERVER.equals(_type) &&
+            !TunnelController.TYPE_STREAMR_SERVER.equals(_type)) {
+            config.setProperty(TunnelController.OPT_BUNDLE_REPLY, "true");
+        }
+
+        setProxyOptions(config);
+        setDestinationConfig(config);
+        setPersistentKeysConfig(config);
+
+        return config;
+    }
+
+    /**
+     * Set the interface or target host and the generic client or
+     * server options, including the encryption mode for servers.
+     *
+     * @param config the config to fill
+     */
+    private void setClientServerConfig(Properties config) {
         if ((TunnelController.isClient(_type) && !TunnelController.TYPE_STREAMR_CLIENT.equals(_type)) ||
             TunnelController.TYPE_STREAMR_SERVER.equals(_type)) {
             // streamrserver uses interface
@@ -832,14 +854,15 @@ public class TunnelConfig {
             }
             processEncryptMode(config);
         }
+    }
 
-        // override bundle setting set above
-        if (!TunnelController.isClient(_type) &&
-            !TunnelController.TYPE_HTTP_SERVER.equals(_type) &&
-            !TunnelController.TYPE_STREAMR_SERVER.equals(_type)) {
-            config.setProperty(TunnelController.OPT_BUNDLE_REPLY, "true");
-        }
-
+    /**
+     * Set the outproxy list and migrate or add proxy authentication
+     * digests for HTTP, CONNECT, and SOCKS tunnels.
+     *
+     * @param config the config to fill
+     */
+    private void setProxyOptions(Properties config) {
         // generic proxy stuff
         if (TunnelController.TYPE_HTTP_CLIENT.equals(_type) || TunnelController.TYPE_CONNECT.equals(_type) ||
             TunnelController.TYPE_SOCKS.equals(_type) ||TunnelController.TYPE_SOCKS_IRC.equals(_type)) {
@@ -917,7 +940,15 @@ public class TunnelConfig {
                 }
             }
         }
+    }
 
+    /**
+     * Set the destination, spoofed host, bidirectional server
+     * interface, and IRC DCC options.
+     *
+     * @param config the config to fill
+     */
+    private void setDestinationConfig(Properties config) {
         if (TunnelController.TYPE_IRC_CLIENT.equals(_type) ||
             TunnelController.TYPE_STD_CLIENT.equals(_type) ||
             TunnelController.TYPE_STREAMR_CLIENT.equals(_type)) {
@@ -954,7 +985,15 @@ public class TunnelConfig {
                 config.setProperty(OPT + PROP_MAX_TOTAL_CONNS_HOUR, "25");
             }
         }
+    }
 
+    /**
+     * Add persistent random keys and lease set signing and encryption
+     * keys for non-client tunnels and clients with persistent keys.
+     *
+     * @param config the config to fill
+     */
+    private void setPersistentKeysConfig(Properties config) {
         if (!TunnelController.isClient(_type) || _booleanOptions.contains("persistentClientKey")) {
             // As of 0.9.17, add a persistent random key if not present
             String p = OPT + "inbound.randomKey";
@@ -1027,8 +1066,6 @@ public class TunnelConfig {
                 }
             }
         }
-
-        return config;
     }
 
     /**
@@ -1109,6 +1146,16 @@ public class TunnelConfig {
 
         }
 
+        setPerClientKeys(config);
+    }
+
+    /**
+     * Add the per-client PSK or DH keys for encrypt modes 6-9,
+     * generating new keys as needed.
+     *
+     * @param config the config to fill
+     */
+    private void setPerClientKeys(Properties config) {
         // per-client keys
         String pfx;
         if (_encryptMode == 6 || _encryptMode == 7) {
