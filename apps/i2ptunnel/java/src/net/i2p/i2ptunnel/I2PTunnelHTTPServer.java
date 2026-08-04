@@ -1419,17 +1419,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    /**
-     *  Extract the Host header value from formatted headers string.
-     *
-     *  @param headers the formatted headers string
-     *  @return the Host header value, or null if not found
-     *  @since 0.9.63+
-     */
-    private static synchronized String getHostFromHeaders(String headers) {
-        return HttpHeaderFormatter.getHostFromHeaders(headers);
-    }
-
     private static class Sender implements Runnable {
         private final OutputStream _out;
         private final InputStream _in;
@@ -1614,30 +1603,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             // j2se 1.4.2_08 on linux is sometimes throwing an NPE in the getTotalOut() implementation
             catch (RuntimeException e) {return 0;}
         }
-    }
-
-    /**
-     *  Format headers as a string for transmission to the server.
-     *
-     *  @param headers the header multimap
-     *  @param command the request line (e.g. "GET / HTTP/1.1")
-     *  @return the command followed by the header lines
-     */
-    protected static String formatHeaders(Map<String, List<String>> headers, StringBuilder command) {
-        return HttpHeaderFormatter.formatHeaders(headers, command);
-    }
-
-    /**
-     *  Format headers as a compact string for logging.
-     *
-     *  @param headers the header multimap
-     *  @param command the request line (e.g. "GET / HTTP/1.1")
-     *  @return the command followed by the header lines (compact version for logging)
-     *
-     *  @since 0.9.63+
-     */
-    protected static String formatHeadersCompact(Map<String, List<String>> headers, StringBuilder command) {
-        return HttpHeaderFormatter.formatHeadersCompact(headers, command);
     }
 
     /**
