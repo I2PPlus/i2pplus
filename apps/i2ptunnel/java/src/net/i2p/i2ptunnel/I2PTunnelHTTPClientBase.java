@@ -191,9 +191,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     /**
      *  Selects an appropriate outproxy for the given host from the proxy pool.
      * <p>
-     * This method implements load balancing across multiple configured outproxies.
-     * It uses a simple round-robin or hash-based selection to distribute requests
-     * evenly across the available proxies. Failed proxies are remembered and
+     * The selection is random, but sticky per host: the first chosen proxy
+     * for a host is cached and reused. Failed proxies are remembered and
      * temporarily skipped.
      * </p>
      *
@@ -219,7 +218,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * @param host the target hostname (may be used for proxy stickiness)
      * @return the selected SSL proxy destination, or null if none configured
      * @see #selectProxy(String)
-     * */
+     */
     protected String selectSSLProxy(String host) {
         String s = getTunnel().getClientOptions().getProperty(PROP_SSL_OUTPROXIES);
         if (s == null) {return null;}
@@ -767,8 +766,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     //////// Error page stuff
 
     /**
-     *  foo =&gt; errordir/foo-header_xx.ht for lang xx, or errordir/foo-header.ht,
-     *  or the backup byte array on fail.
+     *  Load the error page header file, e.g. foo => errordir/foo-header_xx.ht for lang xx,
+     *  or errordir/foo-header.ht, or the backup byte array on fail.
      *
      *  .ht files must be UTF-8 encoded and use \r\n terminators so the
      *  HTTP headers are conformant.
@@ -783,8 +782,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     }
 
     /**
-     *  foo =&gt; errordir/foo-header_xx.ht for lang xx, or errordir/foo-header.ht,
-     *  or the backup byte array on fail.
+     *  Load the error page header file, e.g. foo => errordir/foo-header_xx.ht for lang xx,
+     *  or errordir/foo-header.ht, or the backup byte array on fail.
      *
      *  .ht files must be UTF-8 encoded and use \r\n terminators so the
      *  HTTP headers are conformant.

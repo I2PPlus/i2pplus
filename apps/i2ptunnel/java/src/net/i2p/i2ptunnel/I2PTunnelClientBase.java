@@ -224,8 +224,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * This may take a LONG time if building a new manager.
      *
      * We need a socket manager before getDefaultOptions() and most other things
-     * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     *                                  badly that we cant create a socketManager
+     * @throws IllegalStateException if the I2CP configuration is b0rked so
+     *                               badly that we cant create a socketManager
      */
     protected void verifySocketManager() {
         synchronized(sockLock) {

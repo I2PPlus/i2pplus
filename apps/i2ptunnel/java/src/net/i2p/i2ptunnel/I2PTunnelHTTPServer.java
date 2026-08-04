@@ -1711,6 +1711,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @param in if null, use socket.getInputStream() as InputStream
      *  @param command out parameter, first line
      *  @param skipHeaders MUST be lower case
+     *  @return the parsed header multimap
      *  @throws SocketTimeoutException if timeout is reached before newline
      *  @throws EOFException if EOF is reached before newline
      *  @throws LineTooLongException if one header too long, or too many headers, or total size too big

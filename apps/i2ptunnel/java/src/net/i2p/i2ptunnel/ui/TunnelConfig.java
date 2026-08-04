@@ -99,6 +99,9 @@ public class TunnelConfig {
     private String _newClientKey;
     private boolean _addClientAuth;
 
+    /**
+     *  Creates an empty config, using the global context.
+     */
     public TunnelConfig() {
         _context = I2PAppContext.getGlobalContext();
         _booleanOptions = new ConcurrentHashSet<>(4);
@@ -114,7 +117,8 @@ public class TunnelConfig {
         _type = (type != null ? type.trim() : null);
     }
     /**
-     * @return the type
+     *  The type of tunnel.
+     *  @return the type
      */
     public String getType() {
         return _type;
@@ -233,7 +237,8 @@ public class TunnelConfig {
         _privKeyFile = (file != null ? file.trim() : null);
     }
     /**
-     * @return the priv key file
+     *  The filename of the private key file.
+     *  @return the priv key file
      */
     public String getPrivKeyFile() {
         return _privKeyFile;
@@ -257,6 +262,7 @@ public class TunnelConfig {
     }
 
     /**
+     *  Share the private key with other client tunnels.
      *  @param val true to share the private key with other client tunnels
      */
     public void setShared(boolean val) {
@@ -264,6 +270,7 @@ public class TunnelConfig {
     }
 
     /**
+     *  The minimum startup delay in seconds for server tunnels.
      *  @param val the minimum startup delay in seconds for server tunnels
      *  @since 0.9.68+
      */
@@ -272,6 +279,7 @@ public class TunnelConfig {
     }
 
     /**
+     *  The minimum startup delay in seconds.
      *  @return the minimum startup delay in seconds
      *  @since 0.9.68+
      */
@@ -280,6 +288,7 @@ public class TunnelConfig {
     }
 
     /**
+     *  The maximum startup delay in seconds for server tunnels.
      *  @param val the maximum startup delay in seconds for server tunnels
      *  @since 0.9.68+
      */
@@ -288,6 +297,7 @@ public class TunnelConfig {
     }
 
     /**
+     *  The maximum startup delay in seconds.
      *  @return the maximum startup delay in seconds
      *  @since 0.9.68+
      */
@@ -296,6 +306,7 @@ public class TunnelConfig {
     }
 
     /**
+     *  The minimum shutdown delay in seconds for server tunnels.
      *  @param val the minimum shutdown delay in seconds for server tunnels
      *  @since 0.9.68+
      */
@@ -304,6 +315,7 @@ public class TunnelConfig {
     }
 
     /**
+     *  The minimum shutdown delay in seconds.
      *  @return the minimum shutdown delay in seconds
      *  @since 0.9.68+
      */
@@ -312,6 +324,7 @@ public class TunnelConfig {
     }
 
     /**
+     *  The maximum shutdown delay in seconds for server tunnels.
      *  @param val the maximum shutdown delay in seconds for server tunnels
      *  @since 0.9.68+
      */
@@ -320,6 +333,7 @@ public class TunnelConfig {
     }
 
     /**
+     *  The maximum shutdown delay in seconds.
      *  @return the maximum shutdown delay in seconds
      *  @since 0.9.68+
      */
@@ -328,27 +342,32 @@ public class TunnelConfig {
     }
 
     /**
+     *  Delay the connection to the target until the first client connects.
      *  @param val true to delay the connection to the target until the first client connects
      */
     public void setConnectDelay(boolean val) {
         _connectDelay = val;
     }
+    /** Streaming profile, only "interactive" has an effect */
     public void setProfile(String profile) {
         _profile = profile;
     }
 
+    /** Reduce the number of connections when idle */
     public void setReduce(boolean val) {
         if (val)
             _booleanOptions.add("i2cp.reduceOnIdle");
         else
             _booleanOptions.remove("i2cp.reduceOnIdle");
     }
+    /** Close connections when idle */
     public void setClose(boolean val) {
         if (val)
             _booleanOptions.add("i2cp.closeOnIdle");
         else
             _booleanOptions.remove("i2cp.closeOnIdle");
     }
+    /** Encrypt the lease set */
     public void setEncrypt(boolean val) {
         if (val)
             _booleanOptions.add("i2cp.encryptLeaseSet");
@@ -423,18 +442,21 @@ public class TunnelConfig {
         _addClientAuth = val;
     }
 
+    /** Allow DCC in IRC clients */
     public void setDCC(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelIRCClient.PROP_DCC);
         else
             _booleanOptions.remove(I2PTunnelIRCClient.PROP_DCC);
     }
+    /** Use SSL on the server port */
     public void setUseSSL(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelServer.PROP_USE_SSL);
         else
             _booleanOptions.remove(I2PTunnelServer.PROP_USE_SSL);
     }
+    /** Reject requests from inproxies */
     public void setRejectInproxy(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelHTTPServer.OPT_REJECT_INPROXY);
@@ -464,6 +486,7 @@ public class TunnelConfig {
             _otherOptions.put(I2PTunnelHTTPServer.OPT_USER_AGENTS, val.trim());
     }
 
+    /** Assign unique local hostnames for destination lookup */
     public void setUniqueLocal(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelServer.PROP_UNIQUE_LOCAL);
@@ -509,6 +532,7 @@ public class TunnelConfig {
         }
     }
 
+    /** Delay opening to the target until the first client connects */
     public void setDelayOpen(boolean val) {
         if (val)
             _booleanOptions.add("i2cp.delayOpen");
@@ -539,49 +563,59 @@ public class TunnelConfig {
         }
     }
 
+    /** Idle time in minutes before reducing connections */
     public void setReduceTime(int val) {
         _otherOptions.put("i2cp.reduceIdleTime", Integer.toString(val * 60*1000));
     }
+    /** Number of connections to reduce to when idle */
     public void setReduceCount(int val) {
         _otherOptions.put("i2cp.reduceQuantity", Integer.toString(val));
     }
+    /** Key for encrypting the lease set */
     public void setEncryptKey(String val) {
         if (val != null)
             _otherOptions.put("i2cp.leaseSetKey", val.trim());
     }
 
+    /** Comma-separated list of destinations to whitelist or blacklist */
     public void setAccessList(String val) {
         if (val != null)
             _otherOptions.put("i2cp.accessList", val.trim().replace("\r\n", ",").replace("\n", ",").replace(" ", ","));
     }
 
+    /** Comma-separated list of HTTP outproxy jump servers */
     public void setJumpList(String val) {
         if (val != null)
             _otherOptions.put(I2PTunnelHTTPClient.PROP_JUMP_SERVERS, val.trim().replace("\r\n", ",").replace("\n", ",").replace(" ", ","));
     }
 
+    /** Idle time in minutes before closing connections */
     public void setCloseTime(int val) {
         _otherOptions.put("i2cp.closeIdleTime", Integer.toString(val * 60*1000));
     }
 
+    /** Allow the User-Agent header to pass through the HTTP client */
     public void setAllowUserAgent(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelHTTPClient.PROP_USER_AGENT);
         else
             _booleanOptions.remove(I2PTunnelHTTPClient.PROP_USER_AGENT);
     }
+    /** Allow the Referer header to pass through the HTTP client */
     public void setAllowReferer(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelHTTPClient.PROP_REFERER);
         else
             _booleanOptions.remove(I2PTunnelHTTPClient.PROP_REFERER);
     }
+    /** Allow the Accept header to pass through the HTTP client */
     public void setAllowAccept(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelHTTPClient.PROP_ACCEPT);
         else
             _booleanOptions.remove(I2PTunnelHTTPClient.PROP_ACCEPT);
     }
+    /** Allow SSL connections through the HTTP client */
     public void setAllowInternalSSL(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelHTTPClient.PROP_INTERNAL_SSL);
@@ -589,6 +623,7 @@ public class TunnelConfig {
             _booleanOptions.remove(I2PTunnelHTTPClient.PROP_INTERNAL_SSL);
     }
 
+    /** Bundle reply info for multihoming */
     public void setMultihome(boolean val) {
         if (val)
             _booleanOptions.add("shouldBundleReplyInfo");
@@ -607,11 +642,13 @@ public class TunnelConfig {
             _otherOptions.put(I2PTunnelHTTPClientBase.PROP_AUTH, authType.trim());
     }
 
+    /** Username for client proxy authentication */
     public void setProxyUsername(String s) {
         if (s != null)
             _newProxyUser = s.trim();
     }
 
+    /** Password for client proxy authentication */
     public void setProxyPassword(String s) {
         if (s != null)
             _newProxyPW = s.trim();
@@ -630,21 +667,25 @@ public class TunnelConfig {
             _booleanOptions.remove(I2PTunnelHTTPClientBase.PROP_OUTPROXY_AUTH);
     }
 
+    /** Username for outproxy authentication */
     public void setOutproxyUsername(String s) {
         if (s != null)
             _otherOptions.put(I2PTunnelHTTPClientBase.PROP_OUTPROXY_USER, s.trim());
     }
 
+    /** Password for outproxy authentication */
     public void setOutproxyPassword(String s) {
         if (s != null)
             _otherOptions.put(I2PTunnelHTTPClientBase.PROP_OUTPROXY_PW, s.trim());
     }
 
+    /** Comma-separated list of SSL-capable outproxies */
     public void setSslProxies(String s) {
         if (s != null)
             _otherOptions.put(I2PTunnelHTTPClient.PROP_SSL_OUTPROXIES, s.trim().replace(" ", ","));
     }
 
+    /** Use the outproxy plugin for HTTP requests */
     public void setUseOutproxyPlugin(boolean val) {
         if (val)
             _booleanOptions.add(I2PTunnelHTTPClientBase.PROP_USE_OUTPROXY_PLUGIN);
@@ -653,6 +694,7 @@ public class TunnelConfig {
     }
 
     /**
+     *  Set the type of the outproxy.
      *  @param s "connect" or "socks"
      *  @since 0.9.57
      */
@@ -662,7 +704,7 @@ public class TunnelConfig {
     }
 
     /**
-     * all of these are @since 0.8.3 (moved from IndexBean)
+     * Streaming connection limit properties, moved from IndexBean.
      */
     public static final String PROP_MAX_CONNS_MIN = TunnelController.PROP_MAX_CONNS_MIN;
     public static final String PROP_MAX_CONNS_HOUR = TunnelController.PROP_MAX_CONNS_HOUR;
@@ -672,30 +714,37 @@ public class TunnelConfig {
     public static final String PROP_MAX_TOTAL_CONNS_DAY = TunnelController.PROP_MAX_TOTAL_CONNS_DAY;
     public static final String PROP_MAX_STREAMS = TunnelController.PROP_MAX_STREAMS;
 
+    /** Max connections per minute */
     public void setLimitMinute(int val) {
         _otherOptions.put(PROP_MAX_CONNS_MIN, Integer.toString(val));
     }
 
+    /** Max connections per hour */
     public void setLimitHour(int val) {
         _otherOptions.put(PROP_MAX_CONNS_HOUR, Integer.toString(val));
     }
 
+    /** Max connections per day */
     public void setLimitDay(int val) {
         _otherOptions.put(PROP_MAX_CONNS_DAY, Integer.toString(val));
     }
 
+    /** Max total connections per minute */
     public void setTotalMinute(int val) {
         _otherOptions.put(PROP_MAX_TOTAL_CONNS_MIN, Integer.toString(val));
     }
 
+    /** Max total connections per hour */
     public void setTotalHour(int val) {
         _otherOptions.put(PROP_MAX_TOTAL_CONNS_HOUR, Integer.toString(val));
     }
 
+    /** Max total connections per day */
     public void setTotalDay(int val) {
         _otherOptions.put(PROP_MAX_TOTAL_CONNS_DAY, Integer.toString(val));
     }
 
+    /** Max concurrent streams */
     public void setMaxStreams(int val) {
         _otherOptions.put(PROP_MAX_STREAMS, Integer.toString(val));
     }
@@ -707,22 +756,27 @@ public class TunnelConfig {
         _otherOptions.put(I2PTunnelHTTPServer.OPT_POST_MAX, Integer.toString(val));
     }
 
+    /** Max total POST size in the check window */
     public void setPostTotalMax(int val) {
         _otherOptions.put(I2PTunnelHTTPServer.OPT_POST_TOTAL_MAX, Integer.toString(val));
     }
 
+    /** POST check window in minutes */
     public void setPostCheckTime(int val) {
         _otherOptions.put(I2PTunnelHTTPServer.OPT_POST_WINDOW, Integer.toString(val * 60));
     }
 
+    /** POST ban duration in minutes */
     public void setPostBanTime(int val) {
         _otherOptions.put(I2PTunnelHTTPServer.OPT_POST_BAN_TIME, Integer.toString(val * 60));
     }
 
+    /** Total POST ban duration in minutes */
     public void setPostTotalBanTime(int val) {
         _otherOptions.put(I2PTunnelHTTPServer.OPT_POST_TOTAL_BAN_TIME, Integer.toString(val * 60));
     }
 
+    /** Signature type for the destination */
     public void setSigType(String val) {
         if (val != null)
             _otherOptions.put(I2PClient.PROP_SIGTYPE, val.trim());
@@ -741,24 +795,25 @@ public class TunnelConfig {
         }
     }
 
-    /**
-     * Random keys
-     */
+    /** Random key for inbound tunnels */
     public void setInboundRandomKey(String s) {
         if (s != null)
             _otherOptions.put("inbound.randomKey", s.trim());
     }
 
+    /** Random key for outbound tunnels */
     public void setOutboundRandomKey(String s) {
         if (s != null)
             _otherOptions.put("outbound.randomKey", s.trim());
     }
 
+    /** Private key used to sign the lease set */
     public void setLeaseSetSigningPrivateKey(String s) {
         if (s != null)
             _otherOptions.put("i2cp.leaseSetSigningPrivateKey", s.trim());
     }
 
+    /** Private key used to encrypt the lease set */
     public void setLeaseSetPrivateKey(String s) {
         if (s != null)
             _otherOptions.put("i2cp.leaseSetPrivateKey", s.trim());
@@ -1318,7 +1373,7 @@ public class TunnelConfig {
         };
 
     /**
-     *  do NOT add these to noShoOpts, we must leave them in for HTTPClient and ConnectCLient
+     *  Do NOT add these to noShoOpts, we must leave them in for HTTPClient and ConnectCLient
      *  so they will get migrated to MD5
      *  TODO migrate socks to MD5
      */

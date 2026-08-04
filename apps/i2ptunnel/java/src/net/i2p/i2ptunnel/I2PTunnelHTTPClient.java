@@ -248,8 +248,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     * Execute a runnable task, running inline when called from an unlimited thread pool
-     * to avoid creating unnecessary threads, otherwise start a new thread.
+     * Execute a runnable task inline.
      *
      * @param task Thread task to execute
      */
@@ -261,7 +260,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * Create the default options (using the default timeout, etc).
      * Warning, this does not make a copy of I2PTunnel's client options,
      * it modifies them directly.
-     * unused?
      * @return the default options
      */
     @Override
@@ -1713,14 +1711,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Read the first line unbuffered.
-     *  After that, switch to a BufferedReader, unless the method is "POST".
-     *  We can't use BufferedReader for POST because we can't have readahead,
+     *  Read the first line unbuffered, then subsequent lines.
+     *  We can't use a BufferedReader for POST because we can't have readahead,
      *  since we are passing the stream on to I2PTunnelRunner for the POST data.
      *
-     *  Warning - BufferedReader removes \r, DataHelper does not
-     *  Warning - DataHelper limits line length, BufferedReader does not
-     *  Todo: Limit line length for buffered reads, or go back to unbuffered for all
+     *  Warning - DataHelper limits line length
      */
     private static class InputReader {
         InputStream _s;
@@ -1754,6 +1749,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
+     *  The hostname of the given host.
      *  @return b32hash.b32.i2p, or "i2p" on lookup failure.
      *  Prior to 0.7.12, returned b64 key
      */

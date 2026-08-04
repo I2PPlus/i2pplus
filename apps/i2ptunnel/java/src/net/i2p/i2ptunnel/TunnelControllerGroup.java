@@ -113,16 +113,26 @@ public class TunnelControllerGroup implements ClientApp {
     private static volatile int _clientRunnerMax = 8192;
 
     /**
-     * @return the server handler threads
+     *  The number of threads handling connections to server tunnels.
+     *  @return the server handler threads
      */
     public static int getServerHandlerThreads() { return _serverHandlerThreads; }
+    /**
+     *  Clamp and set the number of server handler threads, 2 to 128.
+     *  @param val the desired count
+     */
     public static void setServerHandlerThreads(int val) {
         _serverHandlerThreads = Math.max(2, Math.min(128, val));
     }
     /**
-     * @return the client runner max
+     *  The maximum number of concurrent client connections.
+     *  @return the client runner max
      */
     public static int getClientRunnerMax() { return _clientRunnerMax; }
+    /**
+     *  Clamp and set the maximum concurrent client connections, 4 to 8192.
+     *  @param val the desired maximum
+     */
     public static void setClientRunnerMax(int val) {
         _clientRunnerMax = Math.max(4, Math.min(8192, val));
     }
@@ -131,9 +141,14 @@ public class TunnelControllerGroup implements ClientApp {
     private static volatile int _socketConnectTimeout = 10000;
 
     /**
-     * @return the socket connect timeout
+     *  The socket connect timeout in milliseconds.
+     *  @return the socket connect timeout
      */
     public static int getSocketConnectTimeout() { return _socketConnectTimeout; }
+    /**
+     *  Clamp and set the socket connect timeout, 5000 to 120000 ms.
+     *  @param val the timeout in milliseconds
+     */
     public static void setSocketConnectTimeout(int val) {
         _socketConnectTimeout = Math.max(5000, Math.min(120000, val));
     }
@@ -278,6 +293,7 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
+     *  Load the tunnel configs from a file, for running standalone.
      *  @param args one arg, the config file, if not absolute will be relative to the context's config dir,
      *              if no args, the default is i2ptunnel.config
      *  @throws IllegalArgumentException if unable to load from config from file
@@ -340,9 +356,9 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     *  ClientApp interface
+     *  The registered name of this tunnel group, for the ClientApp interface.
      *  @since 0.9.4
-     * @return the name
+     *  @return the name
      */
     @Override
     public String getName() {
@@ -350,21 +366,28 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     *  ClientApp interface
+     *  The display name of this tunnel group, for the ClientApp interface.
      *  @since 0.9.4
-     * @return the display name
+     *  @return the display name
      */
     @Override
     public String getDisplayName() {
         return REGISTERED_NAME;
     }
 
-    /** @param state the new state */
+    /**
+     *  Change the client app state.
+     *  @param state the new state
+     */
     private void changeState(ClientAppState state) {
         changeState(state, null);
     }
 
-    /** @param state the new state, @param e optional cause */
+    /**
+     *  Change the client app state and notify the manager.
+     *  @param state the new state
+     *  @param e optional cause
+     */
     private synchronized void changeState(ClientAppState state, Exception e) {
         _state = state;
         if (_mgr != null)
@@ -682,9 +705,10 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     * @param shouldMigrate migrate to, and load from, i2ptunnel.config.d
-     * @since 0.9.42
-     * @throws IllegalArgumentException if unable to load from file
+     *  Load the controllers from the config file.
+     *  @param shouldMigrate migrate to, and load from, i2ptunnel.config.d
+     *  @since 0.9.42
+     *  @throws IllegalArgumentException if unable to load from file
      */
     private synchronized void loadControllers(File cfgFile, boolean shouldMigrate) {
         if (_log.shouldInfo())
@@ -1381,6 +1405,7 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
+     *  The executor pool for client tunnel tasks.
      *  @return non-null
      *  @since 0.9.8 Moved from I2PTunnelClientBase in 0.9.18
      */

@@ -194,11 +194,11 @@ public class IndexBean {
     }
 
     /**
-      * do we know this nonce?
-      * @param nonce the nonce to check
-      * @return true if the nonce is known
-      * @since 0.8.1 public since 0.9.35
-      */
+     *  Whether we know this nonce.
+     *  @param nonce the nonce to check
+     *  @return true if the nonce is known
+     *  @since 0.8.1 public since 0.9.35
+     */
     public static boolean haveNonce(String nonce) {
         synchronized (_nonces) {return _nonces.contains(nonce);}
     }
@@ -770,7 +770,7 @@ public class IndexBean {
     private class TCComparator implements Comparator<Integer> {
          private final Collator _comp = Collator.getInstance();
          /**
-          * compare.
+          *  Compare two tunnel numbers by tunnel name, then by number.
           */
          @Override
          public int compare(Integer l, Integer r) {
@@ -1396,6 +1396,7 @@ public class IndexBean {
     }
 
     /**
+     *  Share the private key with other client tunnels.
      *  @param val any value triggers shared private key mode
      */
     public void setShared(String val) {
@@ -1403,6 +1404,7 @@ public class IndexBean {
     }
 
     /**
+     *  Share the private key with other client tunnels.
      *  @param val true to share the private key with other client tunnels
      */
     public void setShared(boolean val) {
@@ -1410,6 +1412,7 @@ public class IndexBean {
     }
 
     /**
+     *  The minimum startup delay in seconds for server tunnels.
      *  @param val the minimum startup delay in seconds for server tunnels
      *  @since 0.9.68+
      */
@@ -1422,6 +1425,7 @@ public class IndexBean {
     }
 
     /**
+     *  The maximum startup delay in seconds for server tunnels.
      *  @param val the maximum startup delay in seconds for server tunnels
      *  @since 0.9.68+
      */
@@ -1434,6 +1438,7 @@ public class IndexBean {
     }
 
     /**
+     *  The minimum shutdown delay in seconds for server tunnels.
      *  @param val the minimum shutdown delay in seconds for server tunnels
      *  @since 0.9.68+
      */
@@ -1446,6 +1451,7 @@ public class IndexBean {
     }
 
     /**
+     *  The maximum shutdown delay in seconds for server tunnels.
      *  @param val the maximum shutdown delay in seconds for server tunnels
      *  @since 0.9.68+
      */
@@ -1457,22 +1463,27 @@ public class IndexBean {
         }
     }
 
+    /** Delay the connection to the target until the first client connects. */
     public void setConnectDelay(String val) {
         _config.setConnectDelay(true);
     }
 
+    /** Set the streaming profile. */
     public void setProfile(String profile) {
         _config.setProfile(profile);
     }
 
+    /** Reduce the number of connections when idle. */
     public void setReduce(String val) {
         _config.setReduce(true);
     }
 
+    /** Close connections when idle. */
     public void setClose(String val) {
         _config.setClose(true);
     }
 
+    /** Encrypt the lease set. */
     public void setEncrypt(String val) {
         _config.setEncrypt(true);
     }
@@ -1604,6 +1615,7 @@ public class IndexBean {
     /** @since 0.9.13 */
     public void setUniqueLocal(String val) {_config.setUniqueLocal(true);}
 
+    /** Set the access mode, 0 for none, 1 for whitelist, 2 for blacklist. */
     public void setAccessMode(String val) {
         if (val != null) {
             try {_config.setAccessMode(Integer.parseInt(val.trim()));}
@@ -1611,15 +1623,15 @@ public class IndexBean {
         }
     }
 
-    /**
-     *  @since 0.9.40
-     */
+    /** Set the filter definition. @since 0.9.40 */
     public void setFilterDefinition(String val) {
         if (val != null) {_config.setFilterDefinition(val);}
     }
 
+    /** Delay opening to the target until the first client connects. */
     public void setDelayOpen(String val) {_config.setDelayOpen(true);}
 
+    /** Control how ephemeral the destination is. */
     public void setNewDest(String val) {
         if (val != null) {
             try {_config.setNewDest(Integer.parseInt(val.trim()));}
@@ -1627,30 +1639,36 @@ public class IndexBean {
         }
     }
 
+    /** Idle time in minutes before reducing connections. */
     public void setReduceTime(String val) {
         if (val != null) {
             try {_config.setReduceTime(Integer.parseInt(val.trim()));}
             catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
+    /** Number of connections to reduce to when idle. */
     public void setReduceCount(String val) {
         if (val != null) {
             try {_config.setReduceCount(Integer.parseInt(val.trim()));}
             catch (NumberFormatException nfe) { /* ignored */ }
         }
     }
+    /** Key for encrypting the lease set. */
     public void setEncryptKey(String val) {
         _config.setEncryptKey(val);
     }
 
+    /** Comma-separated list of destinations to whitelist or blacklist. */
     public void setAccessList(String val) {
         _config.setAccessList(val);
     }
 
+    /** Comma-separated list of HTTP outproxy jump servers. */
     public void setJumpList(String val) {
         _config.setJumpList(val);
     }
 
+    /** Idle time in minutes before closing connections. */
     public void setCloseTime(String val) {
         if (val != null) {
             try {_config.setCloseTime(Integer.parseInt(val.trim()));
@@ -1658,32 +1676,32 @@ public class IndexBean {
         }
     }
 
-    /** @since 0.9.14 */
+    /** Allow the User-Agent header to pass through the HTTP client. @since 0.9.14 */
     public void setAllowUserAgent(String val) {
         _config.setAllowUserAgent(true);
     }
 
-    /** @since 0.9.14 */
+    /** Allow the Referer header to pass through the HTTP client. @since 0.9.14 */
     public void setAllowReferer(String val) {
         _config.setAllowReferer(true);
     }
 
-    /** @since 0.9.14 */
+    /** Allow the Accept header to pass through the HTTP client. @since 0.9.14 */
     public void setAllowAccept(String val) {
         _config.setAllowAccept(true);
     }
 
-    /** @since 0.9.14 */
+    /** Allow SSL connections through the HTTP client. @since 0.9.14 */
     public void setAllowInternalSSL(String val) {
         _config.setAllowInternalSSL(true);
     }
 
-    /** @since 0.9.18 */
+    /** Bundle reply info for multihoming. @since 0.9.18 */
     public void setMultihome(String val) {
         _config.setMultihome(true);
     }
 
-    /** all proxy auth @since 0.8.2 */
+    /** Set the proxy authentication type. @since 0.8.2 */
     public void setProxyAuth(String s) {
         String type = getType();
         boolean isSOCKS = TunnelController.TYPE_SOCKS.equals(type) ||
@@ -1691,37 +1709,46 @@ public class IndexBean {
         _config.setProxyAuth(isSOCKS ? "true" : I2PTunnelHTTPClientBase.DIGEST_AUTH);
     }
 
+    /** Username for client proxy authentication. */
     public void setProxyUsername(String s) {
         _config.setProxyUsername(s);
     }
 
+    /** Password for client proxy authentication. */
     public void setNofilter_proxyPassword(String s) {
         _config.setProxyPassword(s);
     }
 
+    /** Require authentication for the outproxies. */
     public void setOutproxyAuth(String s) {
         _config.setOutproxyAuth(true);
     }
 
+    /** Username for outproxy authentication. */
     public void setOutproxyUsername(String s) {
         _config.setOutproxyUsername(s);
     }
 
+    /** Password for outproxy authentication. */
     public void setNofilter_outproxyPassword(String s) {
         _config.setOutproxyPassword(s);
     }
 
-    /** @since 0.9.11 */
+    /** Comma-separated list of SSL-capable outproxies. @since 0.9.11 */
     public void setSslProxies(String s) {
         _config.setSslProxies(s);
     }
 
-    /** @since 0.9.11 */
+    /**
+     *  Use the outproxy plugin for HTTP requests.
+     *  @since 0.9.11
+     */
     public void setUseOutproxyPlugin(String val) {
         _config.setUseOutproxyPlugin(true);
     }
 
     /**
+     *  Set the type of the outproxy.
      *  @param s "connect" or "socks"
      *  @since 0.9.57
      */
@@ -1729,6 +1756,7 @@ public class IndexBean {
         _config.setOutproxyType(s);
     }
 
+    /** Maximum total number of connections per minute. */
     public void setLimitMinute(String s) {
         if (s != null) {
             try {_config.setLimitMinute(Integer.parseInt(s.trim()));}
@@ -1736,6 +1764,7 @@ public class IndexBean {
         }
     }
 
+    /** Maximum total number of connections per hour. */
     public void setLimitHour(String s) {
         if (s != null) {
             try {_config.setLimitHour(Integer.parseInt(s.trim()));}
@@ -1743,6 +1772,7 @@ public class IndexBean {
         }
     }
 
+    /** Maximum total number of connections per day. */
     public void setLimitDay(String s) {
         if (s != null) {
             try {_config.setLimitDay(Integer.parseInt(s.trim()));}
@@ -1750,6 +1780,7 @@ public class IndexBean {
         }
     }
 
+    /** Maximum total number of connections per minute, enforced by the total limit. */
     public void setTotalMinute(String s) {
         if (s != null) {
             try {_config.setTotalMinute(Integer.parseInt(s.trim()));}
@@ -1757,6 +1788,7 @@ public class IndexBean {
         }
     }
 
+    /** Maximum total number of connections per hour, enforced by the total limit. */
     public void setTotalHour(String s) {
         if (s != null) {
             try {_config.setTotalHour(Integer.parseInt(s.trim()));}
@@ -1764,6 +1796,7 @@ public class IndexBean {
         }
     }
 
+    /** Maximum total number of connections per day, enforced by the total limit. */
     public void setTotalDay(String s) {
         if (s != null) {
             try {_config.setTotalDay(Integer.parseInt(s.trim()));}
@@ -1771,6 +1804,7 @@ public class IndexBean {
         }
     }
 
+    /** Maximum number of concurrent streams. */
     public void setMaxStreams(String s) {
         if (s != null) {
             try {_config.setMaxStreams(Integer.parseInt(s.trim()));}
@@ -1778,10 +1812,7 @@ public class IndexBean {
         }
     }
 
-    /**
-     * POST limits
-     * @since 0.9.9
-     */
+    /** Maximum total size of POST requests. @since 0.9.9 */
     public void setPostMax(String s) {
         if (s != null) {
             try {_config.setPostMax(Integer.parseInt(s.trim()));}
@@ -1789,6 +1820,7 @@ public class IndexBean {
         }
     }
 
+    /** Maximum total size of all POST requests in the check interval. */
     public void setPostTotalMax(String s) {
         if (s != null) {
             try {_config.setPostTotalMax(Integer.parseInt(s.trim()));}
@@ -1796,6 +1828,7 @@ public class IndexBean {
         }
     }
 
+    /** How often the total POST limit is checked, in minutes. */
     public void setPostCheckTime(String s) {
         if (s != null) {
             try {_config.setPostCheckTime(Integer.parseInt(s.trim()));}
@@ -1803,6 +1836,7 @@ public class IndexBean {
         }
     }
 
+    /** How long to ban a client that exceeds the POST limits, in minutes. */
     public void setPostBanTime(String s) {
         if (s != null) {
             try {_config.setPostBanTime(Integer.parseInt(s.trim()));}
@@ -1810,6 +1844,7 @@ public class IndexBean {
         }
     }
 
+    /** How long to ban a client that exceeds the total POST limit, in minutes. */
     public void setPostTotalBanTime(String s) {
         if (s != null) {
             try {_config.setPostTotalBanTime(Integer.parseInt(s.trim()));}
@@ -1817,7 +1852,7 @@ public class IndexBean {
         }
     }
 
-
+    /** Set the certificate type, from the form selection. */
     public void setCert(String val) {
         if (val != null) {
             try {_certType = Integer.parseInt(val.trim());}
@@ -1825,6 +1860,7 @@ public class IndexBean {
         }
     }
 
+    /** Set the certificate signer. */
     public void setSigner(String val) {_certSigner = val;}
 
     /** @since 0.9.12 */
@@ -1853,16 +1889,19 @@ public class IndexBean {
         _config.setInboundRandomKey(s);
     }
 
+    /** Random outbound key, hidden in forms. @since 0.9.18 */
     public void setKey2(String s) {
         s = decrypt("outbound.randomKey", s);
         _config.setOutboundRandomKey(s);
     }
 
+    /** Lease set signing private key, hidden in forms. @since 0.9.18 */
     public void setKey3(String s) {
         s = decrypt("i2cp.leaseSetSigningPrivateKey", s);
         _config.setLeaseSetSigningPrivateKey(s);
     }
 
+    /** Lease set private key, hidden in forms. @since 0.9.18 */
     public void setKey4(String s) {
         s = decrypt("i2cp.leaseSetPrivateKey", s);
         _config.setLeaseSetPrivateKey(s);
@@ -2034,7 +2073,8 @@ public class IndexBean {
     }
 
     /**
-     * @return the controller
+     *  The controller for the given tunnel index.
+     *  @return the controller
      */
     protected TunnelController getController(int tunnel) {
         return _helper.getController(tunnel);

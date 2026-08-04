@@ -92,6 +92,7 @@ public class GeneralHelper {
     }
 
     /**
+     *  Get the controller for the given tunnel index.
      *  @param tcg may be null
      *  @return null if not found or tcg is null
      */
@@ -1083,12 +1084,6 @@ public class GeneralHelper {
         return "";
     }
 
-    /**
-     *  Return the list of jump servers (one per line).
-     *
-     *  @param tunnel the tunnel index
-     *  @return the jump server list, newline-delimited
-     */
     /**
      *  Return the jump server list for HTTP clients (one per line).
      *
