@@ -193,15 +193,6 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         return second == NL; //   \n\n
     }
 
-    /**
-     * Possibly tweak that first HTTP response line (HTTP/1.0 200 OK, etc).
-     * Overridden on server side.
-     *
-     */
-    protected String filterResponseLine(String line) {
-        return line;
-    }
-
     /** ok, received, now munge & write it */
     private void writeHeader() throws IOException {
         boolean connectionSent = false;
