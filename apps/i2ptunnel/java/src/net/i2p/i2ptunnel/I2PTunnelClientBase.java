@@ -349,14 +349,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
-     *  Kill the shared client, so that on restart in android
-     *  we won't latch onto the old one
-     *
-     *  @since 0.9.18
-     */
-    protected static synchronized void killSharedClient() {socketManager = null;}
-
-    /**
      * For NON-SHARED clients (ownDest = true).
      *
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
