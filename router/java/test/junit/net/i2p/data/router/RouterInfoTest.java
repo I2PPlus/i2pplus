@@ -22,8 +22,14 @@ import net.i2p.data.SigningPublicKey;
 import net.i2p.data.StructureTest;
 import net.i2p.util.Log;
 
+import org.junit.Test;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.HashSet;
 import java.util.Properties;
+
+import static org.junit.Assert.*;
 
 /**
  * Test harness for loading / storing Hash objects
@@ -85,5 +91,29 @@ public class RouterInfoTest extends StructureTest {
 
     public DataStructure createStructureToRead() {
         return new RouterInfo();
+    }
+
+    @Test
+    public void testSignatureVerify() throws Exception {
+        RouterInfo info = (RouterInfo) createDataStructure();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        info.writeBytes(baos);
+
+        RouterInfo round = new RouterInfo();
+        round.readBytes(new ByteArrayInputStream(baos.toByteArray()), true);
+        assertTrue("signed RouterInfo should verify", round.isValid());
+
+        // tamper a byte in the middle and expect rejection
+        byte[] tampered = baos.toByteArray();
+        tampered[tampered.length / 2] ^= 0x01;
+        RouterInfo bad = new RouterInfo();
+        try {
+            bad.readBytes(new ByteArrayInputStream(tampered), true);
+            fail("tampered RouterInfo should not verify");
+        } catch (net.i2p.data.DataFormatException dfe) {
+            // expected
+        } catch (java.io.IOException ioe) {
+            // expected, corrupted structure may hit EOF
+        }
     }
 }
