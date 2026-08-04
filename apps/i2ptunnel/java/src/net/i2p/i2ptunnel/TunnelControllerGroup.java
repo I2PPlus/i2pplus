@@ -506,23 +506,7 @@ public class TunnelControllerGroup implements ClientApp {
      *  @since 0.9.68+
      */
     private void shutdownDelayedServers() {
-        _controllersLock.readLock().lock();
-        List<TunnelController> delayedServers;
-        try {
-            delayedServers = new ArrayList<>();
-            for (TunnelController controller : _controllers) {
-                if (!controller.isClient() && controller.getIsRunning()) {
-                    int delayMin = controller.getShutdownDelayMin();
-                    int delayMax = controller.getShutdownDelayMax();
-                    if (delayMax > delayMin && delayMin >= 0) {
-                        delayedServers.add(controller);
-                    }
-                }
-            }
-        } finally {
-            _controllersLock.readLock().unlock();
-        }
-
+        List<TunnelController> delayedServers = getDelayedServers();
         if (delayedServers.isEmpty()) {
             return;
         }
@@ -545,6 +529,60 @@ public class TunnelControllerGroup implements ClientApp {
             return t;
         });
 
+        scheduleDelayedShutdowns(delayedServers, stoppedServers);
+
+        _delayedShutdownExecutor.shutdown();
+        try {
+            long maxWait = Math.min(maxDelay + 30, 300) * 1000L;
+            boolean completed = _delayedShutdownExecutor.awaitTermination(maxWait, TimeUnit.MILLISECONDS);
+            long elapsed = (System.currentTimeMillis() - _delayedShutdownStartTime) / 1000;
+            if (completed) {
+                if (_log.shouldInfo())
+                    _log.info("All delayed servers stopped in " + elapsed + "s");
+            } else {
+                if (_log.shouldWarn())
+                    _log.warn("Timeout waiting for servers to stop after " + elapsed + "s");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } finally {
+            cleanupShutdown(stoppedServers);
+        }
+    }
+
+    /**
+     * Collect the running server tunnels that have a shutdown delay.
+     *
+     * @return the delayed servers, empty if none
+     */
+    private List<TunnelController> getDelayedServers() {
+        _controllersLock.readLock().lock();
+        List<TunnelController> delayedServers;
+        try {
+            delayedServers = new ArrayList<>();
+            for (TunnelController controller : _controllers) {
+                if (!controller.isClient() && controller.getIsRunning()) {
+                    int delayMin = controller.getShutdownDelayMin();
+                    int delayMax = controller.getShutdownDelayMax();
+                    if (delayMax > delayMin && delayMin >= 0) {
+                        delayedServers.add(controller);
+                    }
+                }
+            }
+        } finally {
+            _controllersLock.readLock().unlock();
+        }
+        return delayedServers;
+    }
+
+    /**
+     * Submit one shutdown task per delayed server, each waiting a
+     * random delay in the configured range before stopping its tunnel.
+     *
+     * @param delayedServers the servers to stop
+     * @param stoppedServers the list to record the stopped servers in
+     */
+    private void scheduleDelayedShutdowns(List<TunnelController> delayedServers, List<TunnelController> stoppedServers) {
         for (TunnelController controller : delayedServers) {
             int delayMin = controller.getShutdownDelayMin();
             int delayMax = controller.getShutdownDelayMax();
@@ -576,37 +614,29 @@ public class TunnelControllerGroup implements ClientApp {
                 }
             }, "Shutdown timer for " + name));
         }
+    }
 
-        _delayedShutdownExecutor.shutdown();
-        try {
-            long maxWait = Math.min(maxDelay + 30, 300) * 1000L;
-            boolean completed = _delayedShutdownExecutor.awaitTermination(maxWait, TimeUnit.MILLISECONDS);
-            long elapsed = (System.currentTimeMillis() - _delayedShutdownStartTime) / 1000;
-            if (completed) {
-                if (_log.shouldInfo())
-                    _log.info("All delayed servers stopped in " + elapsed + "s");
-            } else {
-                if (_log.shouldWarn())
-                    _log.warn("Timeout waiting for servers to stop after " + elapsed + "s");
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } finally {
-            _delayedShutdownExecutor.shutdownNow();
-            if (_cancelDelayedShutdown) {
-                synchronized(stoppedServers) {
-                    for (TunnelController tc : stoppedServers) {
-                        tc.startTunnelBackground();
-                        if (_log.shouldInfo())
-                            _log.info("Restarted " + tc.getName() + " after shutdown cancelled");
-                    }
+    /**
+     * Stop the shutdown executor, restarting any servers that were
+     * stopped if the shutdown was cancelled.
+     *
+     * @param stoppedServers the servers stopped by the shutdown tasks
+     */
+    private void cleanupShutdown(List<TunnelController> stoppedServers) {
+        _delayedShutdownExecutor.shutdownNow();
+        if (_cancelDelayedShutdown) {
+            synchronized(stoppedServers) {
+                for (TunnelController tc : stoppedServers) {
+                    tc.startTunnelBackground();
+                    if (_log.shouldInfo())
+                        _log.info("Restarted " + tc.getName() + " after shutdown cancelled");
                 }
             }
-            _delayedShutdownInProgress = false;
-            _delayedShutdownStartTime = 0;
-            _cancelDelayedShutdown = false;
-            _delayedShutdownExecutor = null;
         }
+        _delayedShutdownInProgress = false;
+        _delayedShutdownStartTime = 0;
+        _cancelDelayedShutdown = false;
+        _delayedShutdownExecutor = null;
     }
 
     /**
