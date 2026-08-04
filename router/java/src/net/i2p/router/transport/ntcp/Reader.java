@@ -165,7 +165,7 @@ public class Reader {
         synchronized (_pendingConnections) {
             _readAfterLive.remove(con);
             _pendingConnections.remove(con);
-            _pendingConnections.notifyAll(); // necessary?
+            _pendingConnections.notifyAll();
         }
     }
 
