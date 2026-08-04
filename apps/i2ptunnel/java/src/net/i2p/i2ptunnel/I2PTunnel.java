@@ -270,27 +270,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         }
 
         if (gui) {
-            try {
-                Class<?> cls = Class.forName("net.i2p.i2ptunnel.I2PTunnelGUI");
-                Constructor<?> con = cls.getConstructor(I2PTunnel.class);
-                con.newInstance(this);
-            } catch (Throwable t) {
-                System.err.println(" • GUI is not available, run with -cli");
-                System.exit(1);
-            }
+            runGUI();
         } else if (cli) {
-            try {
-                System.out.println("Enter 'help' for help.");
-                BufferedReader r = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
-                while (true) {
-                    System.out.print("I2PTunnel> ");
-                    String cmd = r.readLine();
-                    if (cmd == null) break;
-                    if (cmd.length() <= 0) continue;
-                    try {runCommand(cmd, this);}
-                    catch (Throwable t) {System.err.println("Error: " + t);}
-                }
-            } catch (IOException ex) {System.err.println("Error: " + ex);}
+            runCLI();
         } else if (eargs == null && remaining == 0 && dontDie) {
             System.err.println(usage());
             System.err.println(" • Waiting for nothing! Specify cli, command, command file, or die");
@@ -303,6 +285,38 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 catch (InterruptedException ie) {break;}
             }
         }
+    }
+
+    /**
+     * Launch the GUI, exiting if it is not available.
+     */
+    private void runGUI() {
+        try {
+            Class<?> cls = Class.forName("net.i2p.i2ptunnel.I2PTunnelGUI");
+            Constructor<?> con = cls.getConstructor(I2PTunnel.class);
+            con.newInstance(this);
+        } catch (Throwable t) {
+            System.err.println(" • GUI is not available, run with -cli");
+            System.exit(1);
+        }
+    }
+
+    /**
+     * Run an interactive command-line interface on stdin.
+     */
+    private void runCLI() {
+        try {
+            System.out.println("Enter 'help' for help.");
+            BufferedReader r = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
+            while (true) {
+                System.out.print("I2PTunnel> ");
+                String cmd = r.readLine();
+                if (cmd == null) break;
+                if (cmd.length() <= 0) continue;
+                try {runCommand(cmd, this);}
+                catch (Throwable t) {System.err.println("Error: " + t);}
+            }
+        } catch (IOException ex) {System.err.println("Error: " + ex);}
     }
 
     /** With newlines except for last line */
