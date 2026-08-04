@@ -481,6 +481,69 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
+     *  Resolve a server host argument.
+     *
+     *  @param hostArg the hostname argument
+     *  @param l logger to receive events and output
+     *  @return the resolved address
+     *  @throws IllegalArgumentException if the host cannot be resolved
+     */
+    private InetAddress parseServerHost(String hostArg, Logging l) {
+        try {
+            return InetAddress.getByName(hostArg);
+        } catch (UnknownHostException uhe) {
+            l.log("unknown host");
+            _log.error(getPrefix() + "Error resolving " + hostArg, uhe);
+            notifyEvent("serverTaskId", Integer.valueOf(-1));
+            throw new IllegalArgumentException(getPrefix() + "Error resolving " + hostArg + uhe.getMessage());
+        }
+    }
+
+    /**
+     *  Parse a server port argument.
+     *
+     *  @param portArg the port argument
+     *  @param l logger to receive events and output
+     *  @return the parsed port
+     *  @throws IllegalArgumentException if the port is not a valid positive integer
+     */
+    private int parseServerPort(String portArg, Logging l) {
+        int portNum;
+        try {
+            portNum = Integer.parseInt(portArg);
+        } catch (NumberFormatException nfe) {
+            l.log("invalid port");
+            _log.error(getPrefix() + "Port specified is not valid: " + portArg, nfe);
+            notifyEvent("serverTaskId", Integer.valueOf(-1));
+            return -1;
+        }
+        if (portNum <= 0)
+            throw new IllegalArgumentException(getPrefix() + "Bad port " + portArg);
+        return portNum;
+    }
+
+    /**
+     *  Resolve a private key file argument relative to the config dir.
+     *
+     *  @param fileArg the key file argument
+     *  @param l logger to receive events and output
+     *  @return the readable key file
+     *  @throws IllegalArgumentException if the file does not exist or is not readable
+     */
+    private File getPrivKeyFile(String fileArg, Logging l) {
+        File privKeyFile = new File(fileArg);
+        if (!privKeyFile.isAbsolute())
+            privKeyFile = new File(_context.getConfigDir(), fileArg);
+        if (!privKeyFile.canRead()) {
+            l.log(getPrefix() + "Private key file does not exist or is not readable: " + fileArg);
+            _log.error(getPrefix() + "Private key file does not exist or is not readable: " + fileArg);
+            notifyEvent("serverTaskId", Integer.valueOf(-1));
+            throw new IllegalArgumentException(getPrefix() + "Cannot open private key file " + fileArg);
+        }
+        return privKeyFile;
+    }
+
+    /**
      * Display help information through the given logger.
      *
      * Does not fire any events to the logger
@@ -605,35 +668,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public void runServer(String[] args, Logging l) {
         if (args.length == 3) {
-            InetAddress serverHost = null;
-            int portNum = -1;
-            File privKeyFile = null;
-            try {serverHost = InetAddress.getByName(args[0]);}
-            catch (UnknownHostException uhe) {
-                l.log("unknown host");
-                _log.error(getPrefix() + "Error resolving " + args[0], uhe);
-                notifyEvent("serverTaskId", Integer.valueOf(-1));
-                throw new IllegalArgumentException(getPrefix() + "Error resolving " + args[0] + uhe.getMessage());
-            }
-
-            try {portNum = Integer.parseInt(args[1]);}
-            catch (NumberFormatException nfe) {
-                l.log("invalid port");
-                _log.error(getPrefix() + "Port specified is not valid: " + args[1], nfe);
-                notifyEvent("serverTaskId", Integer.valueOf(-1));
-            }
-            if (portNum <= 0) {
-                throw new IllegalArgumentException(getPrefix() + "Bad port " + args[1]);
-            }
-
-            privKeyFile = new File(args[2]);
-            if (!privKeyFile.isAbsolute()) {privKeyFile = new File(_context.getConfigDir(), args[2]);}
-            if (!privKeyFile.canRead()) {
-                l.log(getPrefix() + "Private key file does not exist or is not readable: " + args[2]);
-                _log.error(getPrefix() + "Private key file does not exist or is not readable: " + args[2]);
-                notifyEvent("serverTaskId", Integer.valueOf(-1));
-                throw new IllegalArgumentException(getPrefix() + "Cannot open private key file " + args[2]);
-            }
+            InetAddress serverHost = parseServerHost(args[0], l);
+            int portNum = parseServerPort(args[1], l);
+            File privKeyFile = getPrivKeyFile(args[2], l);
             I2PTunnelServer serv = new I2PTunnelServer(serverHost, portNum, privKeyFile, args[2], l, this, this);
             serv.setReadTimeout(readTimeout);
             serv.startRunning();
@@ -658,35 +695,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public void runIrcServer(String[] args, Logging l) {
         if (args.length == 3) {
-            InetAddress serverHost = null;
-            int portNum = -1;
-            File privKeyFile = null;
-            try {serverHost = InetAddress.getByName(args[0]);}
-            catch (UnknownHostException uhe) {
-                l.log("unknown host");
-                _log.error(getPrefix() + "Error resolving " + args[0], uhe);
-                notifyEvent("serverTaskId", Integer.valueOf(-1));
-                throw new IllegalArgumentException(getPrefix() + "Error resolving " + args[0] + uhe.getMessage());
-            }
-
-            try {portNum = Integer.parseInt(args[1]);}
-            catch (NumberFormatException nfe) {
-                l.log("invalid port");
-                _log.error(getPrefix() + "Port specified is not valid: " + args[1], nfe);
-                notifyEvent("serverTaskId", Integer.valueOf(-1));
-            }
-            if (portNum <= 0) {
-                throw new IllegalArgumentException(getPrefix() + "Bad port " + args[1]);
-            }
-
-            privKeyFile = new File(args[2]);
-            if (!privKeyFile.isAbsolute()) {privKeyFile = new File(_context.getConfigDir(), args[2]);}
-            if (!privKeyFile.canRead()) {
-                l.log(getPrefix() + "Private key file does not exist or is not readable: " + args[2]);
-                _log.error(getPrefix() + "Private key file does not exist or is not readable: " + args[2]);
-                notifyEvent("serverTaskId", Integer.valueOf(-1));
-                throw new IllegalArgumentException(getPrefix() + "Cannot open private key file " + args[2]);
-            }
+            InetAddress serverHost = parseServerHost(args[0], l);
+            int portNum = parseServerPort(args[1], l);
+            File privKeyFile = getPrivKeyFile(args[2], l);
             I2PTunnelServer serv = new I2PTunnelIRCServer(serverHost, portNum, privKeyFile, args[2], l, this, this);
             serv.setReadTimeout(readTimeout);
             serv.startRunning();
@@ -716,37 +727,12 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public void runHttpServer(String[] args, Logging l) {
         if (args.length == 4) {
-            InetAddress serverHost = null;
-            int portNum = -1;
-            File privKeyFile = null;
-            try {serverHost = InetAddress.getByName(args[0]);}
-            catch (UnknownHostException uhe) {
-                l.log("unknown host");
-                _log.error(getPrefix() + "Error resolving " + args[0], uhe);
-                notifyEvent("serverTaskId", Integer.valueOf(-1));
-                throw new IllegalArgumentException(getPrefix() + "Error resolving " + args[0] + uhe.getMessage());
-            }
-
-            try {portNum = Integer.parseInt(args[1]);}
-            catch (NumberFormatException nfe) {
-                l.log("invalid port");
-                _log.error(getPrefix() + "Port specified is not valid: " + args[1], nfe);
-                notifyEvent("serverTaskId", Integer.valueOf(-1));
-            }
-            if (portNum <= 0) {
-                throw new IllegalArgumentException(getPrefix() + "Bad port " + args[1]);
-            }
+            InetAddress serverHost = parseServerHost(args[0], l);
+            int portNum = parseServerPort(args[1], l);
 
             String spoofedHost = args[2];
 
-            privKeyFile = new File(args[3]);
-            if (!privKeyFile.isAbsolute()) {privKeyFile = new File(_context.getConfigDir(), args[3]);}
-            if (!privKeyFile.canRead()) {
-                l.log(getPrefix() + "Private key file does not exist or is not readable: " + args[3]);
-                _log.error(getPrefix() + "Private key file does not exist or is not readable: " + args[3]);
-                notifyEvent("serverTaskId", Integer.valueOf(-1));
-                throw new IllegalArgumentException(getPrefix() + "Cannot open private key file " + args[3]);
-            }
+            File privKeyFile = getPrivKeyFile(args[3], l);
             I2PTunnelHTTPServer serv = new I2PTunnelHTTPServer(serverHost, portNum, privKeyFile, args[3], spoofedHost, l, this, this);
             serv.setReadTimeout(readTimeout);
             serv.startRunning();
@@ -778,49 +764,13 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public void runHttpBidirServer(String[] args, Logging l) {
         if (args.length == 5) {
-            InetAddress serverHost = null;
-            int portNum = -1;
-            int port2Num = -1;
-            File privKeyFile = null;
-            try {serverHost = InetAddress.getByName(args[0]);}
-            catch (UnknownHostException uhe) {
-                l.log("unknown host");
-                _log.error(getPrefix() + "Error resolving " + args[0], uhe);
-                notifyEvent("serverTaskId", Integer.valueOf(-1));
-                throw new IllegalArgumentException(getPrefix() + "Error resolving " + args[0] + uhe.getMessage());
-            }
-
-            try {portNum = Integer.parseInt(args[1]);}
-            catch (NumberFormatException nfe) {
-                l.log("invalid port");
-                _log.error(getPrefix() + "Port specified is not valid: " + args[1], nfe);
-                notifyEvent("serverTaskId", Integer.valueOf(-1));
-            }
-
-            try {
-                port2Num = Integer.parseInt(args[2]);
-            } catch (NumberFormatException nfe) {
-                l.log("invalid port");
-                _log.error(getPrefix() + "Port specified is not valid: " + args[2], nfe);
-                notifyEvent("serverTaskId", Integer.valueOf(-1));
-            }
-            if (portNum <= 0)
-                throw new IllegalArgumentException(getPrefix() + "Bad port " + args[1]);
-            if (port2Num <= 0)
-                throw new IllegalArgumentException(getPrefix() + "Bad port " + args[2]);
+            InetAddress serverHost = parseServerHost(args[0], l);
+            int portNum = parseServerPort(args[1], l);
+            int port2Num = parseServerPort(args[2], l);
 
             String spoofedHost = args[3];
 
-            privKeyFile = new File(args[4]);
-            if (!privKeyFile.isAbsolute())
-                privKeyFile = new File(_context.getConfigDir(), args[4]);
-            if (!privKeyFile.canRead()) {
-                l.log(getPrefix() + "Private key file does not exist or is not readable: " + args[4]);
-                _log.error(getPrefix() + "Private key file does not exist or is not readable: " + args[4]);
-                notifyEvent("serverTaskId", Integer.valueOf(-1));
-                throw new IllegalArgumentException(getPrefix() + "Cannot open private key file " + args[4]);
-            }
-
+            File privKeyFile = getPrivKeyFile(args[4], l);
             I2PTunnelHTTPBidirServer serv = new I2PTunnelHTTPBidirServer(serverHost, portNum, port2Num, privKeyFile, args[3], spoofedHost, l, this, this);
             serv.setReadTimeout(readTimeout);
             serv.startRunning();
@@ -854,26 +804,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public void runTextServer(String[] args, Logging l) {
         if (args.length == 3) {
-            InetAddress serverHost = null;
-            int portNum = -1;
-            try {
-                serverHost = InetAddress.getByName(args[0]);
-            } catch (UnknownHostException uhe) {
-                l.log("unknown host");
-                _log.error(getPrefix() + "Error resolving " + args[0], uhe);
-                notifyEvent("serverTaskId", Integer.valueOf(-1));
-                throw new IllegalArgumentException(getPrefix() + "Error resolving " + args[0] + uhe.getMessage());
-            }
-
-            try {
-                portNum = Integer.parseInt(args[1]);
-            } catch (NumberFormatException nfe) {
-                l.log("invalid port");
-                _log.error(getPrefix() + "Port specified is not valid: " + args[1], nfe);
-                notifyEvent("serverTaskId", Integer.valueOf(-1));
-            }
-            if (portNum <= 0)
-                throw new IllegalArgumentException(getPrefix() + "Bad port " + args[1]);
+            InetAddress serverHost = parseServerHost(args[0], l);
+            int portNum = parseServerPort(args[1], l);
 
             I2PTunnelServer serv = new I2PTunnelServer(serverHost, portNum, args[2], l, this, this);
             serv.setReadTimeout(readTimeout);
