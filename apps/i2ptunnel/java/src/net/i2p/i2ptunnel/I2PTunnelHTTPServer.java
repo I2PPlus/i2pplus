@@ -780,14 +780,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
         } catch (SocketException ex) {
             int port = socket.getLocalPort();
-            try {
-                // Send a 503, so the user doesn't get an HTTP Proxy error message
-                // and blame his router or the network.
-                sendError(socket, ERR_UNAVAILABLE);
-            } catch (IOException ioe) { /* ignored */ }
-            try {
-                socket.close();
-            } catch (IOException ioe) { /* ignored */ }
+            sendErrorAndClose(socket);
             // Don't complain too early, Jetty may not be ready.
             int level = getTunnel().getContext().clock().now() - _startedOn > START_INTERVAL ? Log.ERROR : Log.WARN;
             if (_log.shouldLog(level))
@@ -806,14 +799,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         } catch (OutOfMemoryError oom) {
             // Often actually a file handle limit problem so we can safely send a response
             // java.lang.OutOfMemoryError: unable to create new native thread
-            try {
-                // Send a 503, so the user doesn't get an HTTP Proxy error message
-                // and blame his router or the network.
-                sendError(socket, ERR_UNAVAILABLE);
-            } catch (IOException ioe) { /* ignored */ }
-            try {
-                socket.close();
-            } catch (IOException ioe) { /* ignored */ }
+            sendErrorAndClose(socket);
             if (_log.shouldError())
                 _log.error("[HTTPServer] Out of Memory error (" + oom.getMessage() + ")");
         }
@@ -1193,6 +1179,22 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static void sendError(I2PSocket socket, String resp) throws IOException {
         if (socket.getLocalPort() == 443) {socket.reset();}
         else {socket.getOutputStream().write(resp.getBytes(StandardCharsets.UTF_8));}
+    }
+
+    /**
+     *  Send a 503 and close the socket, ignoring any failures.
+     *
+     *  @param socket the socket to respond on
+     */
+    private static void sendErrorAndClose(I2PSocket socket) {
+        try {
+            // Send a 503, so the user doesn't get an HTTP Proxy error message
+            // and blame his router or the network.
+            sendError(socket, ERR_UNAVAILABLE);
+        } catch (IOException ioe) { /* ignored */ }
+        try {
+            socket.close();
+        } catch (IOException ioe) { /* ignored */ }
     }
 
     private static class CompressedRequestor implements Runnable {
