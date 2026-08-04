@@ -701,9 +701,6 @@ public class NTCPTransport extends TransportImpl {
                 continue;
             byte[] ip = addr.getIP();
             if (!TransportUtil.isValidPort(addr.getPort()) || ip == null) {
-                //_context.statManager().addRateData("ntcp.connectFailedInvalidPort", 1);
-                //_context.banlist().banlistRouter(toAddress.getIdentity().calculateHash(), "Invalid NTCP address", STYLE);
-                //if (_log.shouldDebug())
                 continue;
             }
             if (!isValid(ip)) {
@@ -1680,13 +1677,13 @@ public class NTCPTransport extends TransportImpl {
             cost = oldAddr.getCost();
             newProps.putAll(oldAddr.getOptionsMap());
         }
-        RouterAddress newAddr = new RouterAddress(getPublishStyle(), newProps, cost);
-
+        String style = getPublishStyle();
+        // newAddr is constructed below, after all options are set,
+        // because RouterAddress copies the options at construction.
         boolean changed = false;
 
         // Auto Port Setting
-        // old behavior (<= 0.7.3): auto-port defaults to false, and true trumps explicit setting
-        // new behavior (>= 0.7.4): auto-port defaults to true, but explicit setting trumps auto
+        // auto-port defaults to true, but an explicit setting trumps auto
 
         String oport = newProps.getProperty(RouterAddress.PROP_PORT);
         String nport = null;
@@ -1714,13 +1711,9 @@ public class NTCPTransport extends TransportImpl {
         }
 
         // Auto IP Setting
-        // old behavior (<= 0.7.3): auto-ip defaults to false, and trumps configured hostname,
-        //                          and ignores reachability status - leading to
-        //                          "firewalled with inbound TCP enabled" warnings.
-        // new behavior (>= 0.7.4): auto-ip defaults to true, and explicit setting trumps auto,
-        //                          and only takes effect if reachability is OK.
-        //                          And new "always" setting ignores reachability status, like
-        //                          "true" was in 0.7.3
+        // auto-ip defaults to true, and an explicit hostname setting trumps auto,
+        // and only takes effect if reachability is OK.
+        // The "always" setting ignores reachability status, like "true" was in 0.7.3
         String ohost = newProps.getProperty(RouterAddress.PROP_HOST);
         String enabled = _context.getProperty(PROP_I2NP_NTCP_AUTO_IP, "true").toLowerCase(Locale.US);
         String name = getConfiguredIP();
@@ -1749,7 +1742,7 @@ public class NTCPTransport extends TransportImpl {
             if (ohost == null || ! ohost.equalsIgnoreCase(nhost)) {
                 newProps.setProperty(RouterAddress.PROP_HOST, nhost);
                 if (cost == NTCP2_OUTBOUND_COST)
-                    newAddr.setCost(DEFAULT_COST);
+                    cost = DEFAULT_COST;
                 changed = true;
             }
         } else if (enabled.equals("false") &&
@@ -1762,7 +1755,7 @@ public class NTCPTransport extends TransportImpl {
                 _log.info("old host: " + ohost + " Config: " + name + " New: " + name);
             newProps.setProperty(RouterAddress.PROP_HOST, name);
             if (cost == NTCP2_OUTBOUND_COST)
-                newAddr.setCost(DEFAULT_COST);
+                cost = DEFAULT_COST;
             changed = true;
         } else if (ohost == null || ohost.length() <= 0) {
             // SSU2 told us to remove our IPv6 address
@@ -1796,7 +1789,8 @@ public class NTCPTransport extends TransportImpl {
                 _log.info("Old host: " + ohost + " Config: " + name + " New: null");
             // addNTCP2Options() called below
             newProps.clear();
-            newAddr = new RouterAddress(STYLE2, newProps, NTCP2_OUTBOUND_COST);
+            style = STYLE2;
+            cost = NTCP2_OUTBOUND_COST;
             changed = true;
         }
 
@@ -1808,7 +1802,7 @@ public class NTCPTransport extends TransportImpl {
                 if (ADJUST_COST && !haveCapacity())
                     newCost += CONGESTION_COST_ADJUSTMENT;
                 if (newCost != oldCost) {
-                    newAddr.setCost(newCost);
+                    cost = newCost;
                     if (_log.shouldWarn())
                         _log.warn("Changing NTCP cost from " + oldCost + " to " + newCost);
                     // fall thru and republish
@@ -1832,6 +1826,9 @@ public class NTCPTransport extends TransportImpl {
             setOutboundNTCP2Address(true);
             return true;
         }
+
+        // now that all options are set, build the address
+        RouterAddress newAddr = new RouterAddress(style, newProps, cost);
 
         // do not restart on transition to firewalled
         if (ip != null || port > 0) {
