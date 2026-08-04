@@ -1484,8 +1484,7 @@ public class TunnelController implements Logging {
         if (_suppressLog) {return;}
         synchronized (_messages) {
             _messages.add(s);
-            while (_messages.size() > 10)
-                _messages.remove(0);
+            if (_messages.size() > 10) {_messages.remove(0);}
         }
         if (_log.shouldInfo())
             _log.info(s);
