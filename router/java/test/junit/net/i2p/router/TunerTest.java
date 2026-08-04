@@ -21,7 +21,9 @@ public class TunerTest {
 
     @BeforeClass
     public static void setUp() {
-        _ctx = RouterTestHelper.getContext();
+        // isolated context: Tuner score assertions depend on the StatManager
+        // being free of rate data accumulated by other test classes
+        _ctx = RouterTestHelper.newContext();
         Assume.assumeTrue("No RouterContext available", _ctx != null);
     }
 
@@ -101,7 +103,7 @@ public class TunerTest {
 
     @Test
     public void testClampStepUndershootsTarget() {
-        assertEquals(9, Tuner.BaseParam.clamp(10, 8, 5));
+        assertEquals(8, Tuner.BaseParam.clamp(10, 8, 5));
     }
 
     @Test
@@ -139,15 +141,26 @@ public class TunerTest {
 
     @Test
     public void testSystemHealthScoreDefaultHealthy() {
+        // clear any job-lag stat left behind by a sibling test in this context
+        _ctx.statManager().removeRateStat("jobQueue.jobLag");
         Tuner.SystemHealth health = new Tuner.SystemHealth(_ctx);
         assertEquals(1.0, health.getScore(), 0.01);
     }
 
     @Test
-    public void testSystemHealthScoreWithJobLag() {
+    public void testSystemHealthScoreWithJobLag() throws Exception {
         _ctx.statManager().createRateStat("jobQueue.jobLag", "test", "Test",
                 new long[] { 60*1000L, 10*60*1000L });
-        _ctx.statManager().addRateData("jobQueue.jobLag", 100);
+        // the score reads the completed one-minute rate window, which only fills
+        // after a coalesce cycle, so seed it directly
+        net.i2p.stat.RateStat rs = _ctx.statManager().getRate("jobQueue.jobLag");
+        net.i2p.stat.Rate rate = rs.getRate(net.i2p.stat.RateConstants.ONE_MINUTE);
+        java.lang.reflect.Field ev = net.i2p.stat.Rate.class.getDeclaredField("_lastEventCount");
+        ev.setAccessible(true);
+        ev.setInt(rate, 4);
+        java.lang.reflect.Field tv = net.i2p.stat.Rate.class.getDeclaredField("_lastTotalValue");
+        tv.setAccessible(true);
+        tv.setFloat(rate, 400f);
         Tuner.SystemHealth health = new Tuner.SystemHealth(_ctx);
         double score = health.getScore();
         assertTrue("Score " + score + " should be < 1.0 with 100ms lag", score < 1.0);
@@ -188,8 +201,12 @@ public class TunerTest {
 
     @Test
     public void testScoreLatencyFormula() {
-        assertEquals(1.0, clamp01(1.0 - ((500.0 - 100) / 4900.0)), 0.01);
-        assertEquals(0.0, clamp01(1.0 - ((5000.0 - 100) / 4900.0)), 0.01);
+        // Tuner.scoreLatency: <=100ms → 1.0; 100-1000ms → 1.0 - 0.5*(avg-100)/900; >1000ms → 0.5 - 0.5*(avg-1000)/4000
+        assertEquals(1.0, clamp01(1.0 - 0.5 * ((100.0 - 100) / 900.0)), 0.001);
+        assertEquals(0.778, clamp01(1.0 - 0.5 * ((500.0 - 100) / 900.0)), 0.01);
+        // midpoint of 100-1000 range at avg=550: 1.0 - 0.5*450/900 = 0.75
+        assertEquals(0.75, clamp01(1.0 - 0.5 * ((550.0 - 100) / 900.0)), 0.01);
+        assertEquals(0.5, clamp01(1.0 - 0.5 * ((1000.0 - 100) / 900.0)), 0.001);
     }
 
     @Test

@@ -10,6 +10,7 @@ import org.junit.Test;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterTestHelper;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.tunnel.TunnelCreatorConfig;
 
 /**
  * Tests for PooledTunnelCreatorConfig state tracking.
@@ -71,7 +72,11 @@ public class PooledTunnelCreatorConfigTest {
     public void testTunnelFailure() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
         PooledTunnelCreatorConfig cfg = createConfig(3, false);
-        assertFalse(cfg.tunnelFailed());
+        // the first MAX failures are allowed; only after that does the tunnel fail
+        for (int i = 0; i < TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES; i++) {
+            assertTrue("Failure " + (i + 1) + " should still be allowed", cfg.tunnelFailed());
+        }
+        assertFalse("Exhausted test failures should fail the tunnel", cfg.tunnelFailed());
     }
 
     @Test

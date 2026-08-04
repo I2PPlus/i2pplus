@@ -333,7 +333,7 @@ public class KeysAndCert extends DataStructureImpl {
                     out.write(_padding, 0, PAD_COMP_LEN);
                 }
             }
-        } else if (_signingKey.length() < SigningPublicKey.KEYSIZE_BYTES || _publicKey.length() < PublicKey.KEYSIZE_BYTES) {
+        } else if (_signingKey.length() < _signingKey.getType().getPubkeyLen() || _publicKey.length() < _publicKey.getType().getPubkeyLen()) {
             throw new DataFormatException("No padding set");
         }
         _signingKey.writeTruncatedBytes(out);

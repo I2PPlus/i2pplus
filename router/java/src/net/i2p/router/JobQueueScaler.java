@@ -364,7 +364,8 @@ class JobQueueScaler implements Runnable {
     int getMinRunnersDynamic() {
         int baseMin = Math.max(1, _context.getProperty(PROP_MIN_RUNNERS, 4));
         // On startup (first 3 minutes), use more runners to handle startup load
-        long uptime = _context.router().getUptime();
+        // router() may be null before the router is fully wired (e.g. test contexts)
+        long uptime = _context.router() != null ? _context.router().getUptime() : Long.MAX_VALUE;
         if (uptime < 3 * 60 * 1000L) {
             return Math.max(baseMin, 8);  // At least 8 runners during startup
         }

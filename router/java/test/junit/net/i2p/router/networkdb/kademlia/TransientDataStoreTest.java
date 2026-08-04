@@ -2,8 +2,12 @@ package net.i2p.router.networkdb.kademlia;
 
 import static org.junit.Assert.*;
 
+import net.i2p.data.Certificate;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
+import net.i2p.data.PublicKey;
+import net.i2p.data.SigningPublicKey;
+import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterTestHelper;
@@ -38,8 +42,18 @@ public class TransientDataStoreTest {
         return h;
     }
 
-    private RouterInfo createRouterInfo() {
+    private RouterInfo createRouterInfo(int seed) {
         RouterInfo ri = new RouterInfo();
+        RouterIdentity ident = new RouterIdentity();
+        ident.setCertificate(new Certificate(Certificate.CERTIFICATE_TYPE_NULL, null));
+        byte[] pk = new byte[PublicKey.KEYSIZE_BYTES];
+        pk[pk.length - 1] = (byte) seed;
+        ident.setPublicKey(new PublicKey(pk));
+        byte[] spk = new byte[SigningPublicKey.KEYSIZE_BYTES];
+        spk[0] = (byte) seed;
+        spk[1] = (byte) (seed >> 8);
+        ident.setSigningPublicKey(new SigningPublicKey(spk));
+        ri.setIdentity(ident);
         ri.setPublished(_context.clock().now());
         return ri;
     }
@@ -58,7 +72,7 @@ public class TransientDataStoreTest {
     @Test
     public void testPutRouterInfo() {
         Hash key = randomHash();
-        RouterInfo ri = createRouterInfo();
+        RouterInfo ri = createRouterInfo(1);
         assertTrue(_store.put(key, ri));
         assertEquals(1, _store.size());
     }
@@ -66,7 +80,7 @@ public class TransientDataStoreTest {
     @Test
     public void testGetRouterInfo() {
         Hash key = randomHash();
-        RouterInfo ri = createRouterInfo();
+        RouterInfo ri = createRouterInfo(1);
         _store.put(key, ri);
         assertEquals(ri, _store.get(key));
     }
@@ -84,7 +98,7 @@ public class TransientDataStoreTest {
     @Test
     public void testRemoveExisting() {
         Hash key = randomHash();
-        RouterInfo ri = createRouterInfo();
+        RouterInfo ri = createRouterInfo(1);
         _store.put(key, ri);
         assertEquals(ri, _store.remove(key));
         assertEquals(0, _store.size());
@@ -100,14 +114,14 @@ public class TransientDataStoreTest {
     public void testIsKnown() {
         Hash key = randomHash();
         assertFalse(_store.isKnown(key));
-        _store.put(key, createRouterInfo());
+        _store.put(key, createRouterInfo(1));
         assertTrue(_store.isKnown(key));
     }
 
     @Test
     public void testStopClearsStore() {
         Hash key = randomHash();
-        _store.put(key, createRouterInfo());
+        _store.put(key, createRouterInfo(1));
         assertEquals(1, _store.size());
         _store.stop();
         assertEquals(0, _store.size());
@@ -117,21 +131,21 @@ public class TransientDataStoreTest {
     public void testGetKeys() {
         Hash key1 = randomHash();
         Hash key2 = randomHash();
-        _store.put(key1, createRouterInfo());
-        _store.put(key2, createRouterInfo());
+        _store.put(key1, createRouterInfo(1));
+        _store.put(key2, createRouterInfo(1));
         assertTrue(_store.getKeys().contains(key1));
         assertTrue(_store.getKeys().contains(key2));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testGetKeysUnmodifiable() {
-        _store.put(randomHash(), createRouterInfo());
+        _store.put(randomHash(), createRouterInfo(1));
         _store.getKeys().clear();
     }
 
     @Test
     public void testGetEntries() {
-        RouterInfo ri = createRouterInfo();
+        RouterInfo ri = createRouterInfo(1);
         Hash key = randomHash();
         _store.put(key, ri);
         assertTrue(_store.getEntries().contains(ri));
@@ -139,7 +153,7 @@ public class TransientDataStoreTest {
 
     @Test
     public void testGetEntriesUnmodifiable() {
-        _store.put(randomHash(), createRouterInfo());
+        _store.put(randomHash(), createRouterInfo(1));
         try {
             _store.getEntries().clear();
             fail("Should throw UnsupportedOperationException");
@@ -150,8 +164,8 @@ public class TransientDataStoreTest {
     @Test
     public void testForcePut() {
         Hash key = randomHash();
-        RouterInfo ri1 = createRouterInfo();
-        RouterInfo ri2 = createRouterInfo();
+        RouterInfo ri1 = createRouterInfo(1);
+        RouterInfo ri2 = createRouterInfo(1);
         assertTrue(_store.forcePut(key, ri1));
         assertTrue(_store.forcePut(key, ri2));
         assertEquals(1, _store.size());
@@ -166,7 +180,7 @@ public class TransientDataStoreTest {
     @Test
     public void testPutPersistThrows() {
         try {
-            _store.put(randomHash(), createRouterInfo(), true);
+            _store.put(randomHash(), createRouterInfo(1), true);
             fail("Should throw UnsupportedOperationException");
         } catch (UnsupportedOperationException expected) {
         }
@@ -197,8 +211,8 @@ public class TransientDataStoreTest {
 
     @Test
     public void testCountLeaseSetsRouterInfosDontCount() {
-        _store.put(randomHash(), createRouterInfo());
-        _store.put(randomHash(), createRouterInfo());
+        _store.put(randomHash(), createRouterInfo(1));
+        _store.put(randomHash(), createRouterInfo(1));
         assertEquals(0, _store.countLeaseSets());
     }
 
@@ -213,14 +227,14 @@ public class TransientDataStoreTest {
     @Test
     public void testMultiplePuts() {
         for (int i = 0; i < 100; i++) {
-            _store.put(randomHash(), createRouterInfo());
+            _store.put(randomHash(), createRouterInfo(1));
         }
         assertEquals(100, _store.size());
     }
 
     @Test
     public void testToString() {
-        _store.put(randomHash(), createRouterInfo());
+        _store.put(randomHash(), createRouterInfo(1));
         String s = _store.toString();
         assertNotNull(s);
         assertTrue(s.contains("Transient DataStore"));

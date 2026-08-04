@@ -25,7 +25,7 @@ public class PeerProfileTest {
     @Test
     public void testConstruction() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer = new Hash();
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
         assertNotNull(profile);
         assertEquals(peer, profile.getPeer());
@@ -34,7 +34,7 @@ public class PeerProfileTest {
     @Test
     public void testTunnelHistoryNotNull() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer = new Hash();
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
         assertNotNull(profile.getTunnelHistory());
     }
@@ -42,7 +42,7 @@ public class PeerProfileTest {
     @Test
     public void testDBHistoryNotNull() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer = new Hash();
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
         assertNotNull(profile.getDBHistory());
     }
@@ -50,7 +50,7 @@ public class PeerProfileTest {
     @Test
     public void testSpeedValueGetter() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer = new Hash();
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
         float val = profile.getSpeedValue();
         assertTrue(val >= 0);
@@ -59,7 +59,7 @@ public class PeerProfileTest {
     @Test
     public void testCapacityValueGetter() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer = new Hash();
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
         float val = profile.getCapacityValue();
         assertTrue(val >= 0);
@@ -68,7 +68,7 @@ public class PeerProfileTest {
     @Test
     public void testIntegrationValueGetter() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer = new Hash();
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
         float val = profile.getIntegrationValue();
         assertTrue(val >= 0);
@@ -77,7 +77,7 @@ public class PeerProfileTest {
     @Test
     public void testSpeedBonus() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer = new Hash();
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
         profile.setSpeedBonus(5);
         assertEquals(5, profile.getSpeedBonus());
@@ -86,7 +86,7 @@ public class PeerProfileTest {
     @Test
     public void testCapacityBonus() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer = new Hash();
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
         profile.setCapacityBonus(10);
         assertEquals(10, profile.getCapacityBonus());
@@ -95,7 +95,7 @@ public class PeerProfileTest {
     @Test
     public void testIntegrationBonus() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer = new Hash();
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
         profile.setIntegrationBonus(3);
         assertEquals(3, profile.getIntegrationBonus());
@@ -104,7 +104,7 @@ public class PeerProfileTest {
     @Test
     public void testLastHeardAbout() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer = new Hash();
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
         long now = System.currentTimeMillis();
         profile.setLastHeardAbout(now);
@@ -114,7 +114,7 @@ public class PeerProfileTest {
     @Test
     public void testLastSendSuccessful() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer = new Hash();
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
         long now = System.currentTimeMillis();
         profile.setLastSendSuccessful(now);
@@ -124,7 +124,7 @@ public class PeerProfileTest {
     @Test
     public void testLastSendFailed() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer = new Hash();
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
         long now = System.currentTimeMillis();
         profile.setLastSendFailed(now);
@@ -134,7 +134,7 @@ public class PeerProfileTest {
     @Test
     public void testLastHeardFrom() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer = new Hash();
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
         long now = System.currentTimeMillis();
         profile.setLastHeardFrom(now);
@@ -144,16 +144,18 @@ public class PeerProfileTest {
     @Test
     public void testIsExpandedDefault() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer = new Hash();
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
-        // default is expanded
+        // profiles are created unexpanded and expanded lazily on first use
+        assertFalse(profile.getIsExpanded());
+        profile.getTunnelHistory();
         assertTrue(profile.getIsExpanded());
     }
 
     @Test
     public void testDefaultSpeedValue() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer = new Hash();
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
         // default speed value is 0
         assertEquals(0.0f, profile.getSpeedValue(), 0.001f);
@@ -162,9 +164,10 @@ public class PeerProfileTest {
     @Test
     public void testDifferentPeersNotEqual() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Hash peer1 = new Hash();
-        Hash peer2 = new Hash();
-        peer2.getData()[0] = 1;
+        Hash peer1 = Hash.create(new byte[Hash.HASH_LENGTH]);
+        byte[] d2 = new byte[Hash.HASH_LENGTH];
+        d2[0] = 1;
+        Hash peer2 = Hash.create(d2);
         PeerProfile p1 = new PeerProfile(_ctx, peer1);
         PeerProfile p2 = new PeerProfile(_ctx, peer2);
         assertNotEquals(p1.getPeer(), p2.getPeer());

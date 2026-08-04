@@ -468,6 +468,10 @@
         <pathelement location="${hamcrest.home}/hamcrest-integration.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${mockito.home}/mockito-core.jar"/>
+        <pathelement location="${mockito.home}/byte-buddy.jar"/>
+        <pathelement location="${mockito.home}/byte-buddy-agent.jar"/>
+        <pathelement location="${mockito.home}/objenesis.jar"/>
         <pathelement location="${build.dir}/obj_cobertura"/>
         <pathelement location="${build.dir}/obj"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>

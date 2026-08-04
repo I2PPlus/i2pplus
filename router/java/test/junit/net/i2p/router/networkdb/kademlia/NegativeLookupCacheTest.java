@@ -2,8 +2,11 @@ package net.i2p.router.networkdb.kademlia;
 
 import static org.junit.Assert.*;
 
+import net.i2p.data.Certificate;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
+import net.i2p.data.PublicKey;
+import net.i2p.data.SigningPublicKey;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterTestHelper;
 
@@ -35,6 +38,20 @@ public class NegativeLookupCacheTest {
         _context.random().nextBytes(d);
         h.setData(d);
         return h;
+    }
+
+    /** a Destination with a complete KeysAndCert so calculateHash() works */
+    private static Destination destination(int seed) {
+        Destination d = new Destination();
+        d.setCertificate(new Certificate(Certificate.CERTIFICATE_TYPE_NULL, null));
+        byte[] pk = new byte[PublicKey.KEYSIZE_BYTES];
+        pk[pk.length - 1] = (byte) seed;
+        d.setPublicKey(new PublicKey(pk));
+        byte[] spk = new byte[SigningPublicKey.KEYSIZE_BYTES];
+        spk[0] = (byte) seed;
+        spk[1] = (byte) (seed >> 8);
+        d.setSigningPublicKey(new SigningPublicKey(spk));
+        return d;
     }
 
     @Test
@@ -82,14 +99,14 @@ public class NegativeLookupCacheTest {
     @Test
     public void testFailPermanently() {
         Hash h = randomHash();
-        Destination dest = new Destination();
+        Destination dest = destination(1);
         _cache.failPermanently(dest);
         assertTrue("Permanently failed destination should be cached", _cache.isCached(dest.calculateHash()));
     }
 
     @Test
     public void testGetBadDestReturnsCached() {
-        Destination dest = new Destination();
+        Destination dest = destination(1);
         Hash h = dest.calculateHash();
         _cache.failPermanently(dest);
         assertEquals(dest, _cache.getBadDest(h));
@@ -113,7 +130,7 @@ public class NegativeLookupCacheTest {
 
     @Test
     public void testClearResetsBadDests() {
-        Destination dest = new Destination();
+        Destination dest = destination(1);
         _cache.failPermanently(dest);
         assertNotNull(_cache.getBadDest(dest.calculateHash()));
         _cache.clear();
@@ -129,8 +146,8 @@ public class NegativeLookupCacheTest {
 
     @Test
     public void testMultipleDestinations() {
-        Destination dest1 = new Destination();
-        Destination dest2 = new Destination();
+        Destination dest1 = destination(1);
+        Destination dest2 = destination(2);
         _cache.failPermanently(dest1);
         _cache.failPermanently(dest2);
         assertNotNull(_cache.getBadDest(dest1.calculateHash()));

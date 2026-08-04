@@ -9,6 +9,7 @@ package net.i2p.router.dummy;
  */
 
 import java.io.Writer;
+import java.util.Collections;
 import java.util.Set;
 import net.i2p.data.Hash;
 import net.i2p.router.PeerManagerFacade;
@@ -26,7 +27,7 @@ public class DummyPeerManagerFacade implements PeerManagerFacade {
     public void startup() { /* Intentionally empty - dummy implementation */ }
     public void restart() { /* Intentionally empty - dummy implementation */ }
     public void renderStatusHTML(Writer out) { /* Intentionally empty - dummy implementation */ }
-    public Set<Hash> getPeersByCapability(char capability) {return null;}
+    public Set<Hash> getPeersByCapability(char capability) {return Collections.emptySet();}
     public int countPeersByCapability(char capability) {return 0;}
     public void setCapabilities(Hash peer, String caps) { /* Intentionally empty - dummy implementation */ }
     public void removeCapabilities(Hash peer) { /* Intentionally empty - dummy implementation */ }

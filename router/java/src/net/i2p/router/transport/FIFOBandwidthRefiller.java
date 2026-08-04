@@ -2,6 +2,7 @@ package net.i2p.router.transport;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 
 import net.i2p.stat.RateConstants;
@@ -224,7 +225,10 @@ public class FIFOBandwidthRefiller implements Runnable {
     private int getShareBandwidth() {
         int maxKBps = Math.min(_inboundKBytesPerSecond, _outboundKBytesPerSecond);
         // limit to 90% so it doesn't clog up at the transport bandwidth limiter
-        float share = Math.min((float) _context.router().getSharePercentage(), MAX_SHARE_PERCENTAGE);
+        // router() may be null before the router is fully wired (e.g. test contexts)
+        double sharePct = _context.router() != null ? _context.router().getSharePercentage()
+                                                    : Router.DEFAULT_SHARE_PERCENTAGE / 100.0d;
+        float share = Math.min((float) sharePct, MAX_SHARE_PERCENTAGE);
         return (int) (maxKBps * share * 1024f * SHARE_LIMIT_FACTOR);
     }
 

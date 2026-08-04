@@ -1339,9 +1339,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             String existingDefault = _autotune.getProperty(defaultKey);
             boolean changed = false;
             if (existingDefault == null) {
-                _defaultValue = runtimeDefault;
-                _autotune.setProperty(defaultKey, String.valueOf(runtimeDefault));
-                _autotune.setProperty(valueKey, String.valueOf(runtimeDefault));
+                // Clamp the factory default into the computed range, same as a
+                // persisted default would be, so the invariant min <= default <= max
+                // holds even when hardware scales the range above the code default.
+                _defaultValue = Math.max(_min, Math.min(_max, runtimeDefault));
+                _autotune.setProperty(defaultKey, String.valueOf(_defaultValue));
+                _autotune.setProperty(valueKey, String.valueOf(_defaultValue));
                 changed = true;
             } else {
                 try {_defaultValue = Integer.parseInt(existingDefault);}
@@ -1360,7 +1363,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 //    when the module's getDefaultInitialAckDelay() now returns 500).
                 if (runtimeDefault > 0 && _defaultValue != runtimeDefault) {
                     int prev = _defaultValue;
-                    _defaultValue = runtimeDefault;
+                    _defaultValue = Math.max(_min, Math.min(_max, runtimeDefault));
                     if (_log.shouldWarn())
                         _log.warn(_name + " default healed: " + prev + " -> " + _defaultValue);
                 }
@@ -2059,6 +2062,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @since 0.9.70+
         /** Clamp and apply a step change to a tunable parameter. */
         protected static int clamp(int current, int target, int step) {
+            if (step <= 0) {return current;}
             if (target > current)
                 return Math.min(target, current + step);
             else if (target < current)
