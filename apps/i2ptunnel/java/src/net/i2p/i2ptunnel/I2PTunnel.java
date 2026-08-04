@@ -1272,7 +1272,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                              " and sending to " + _host + ':' + _port;
                 _log.error(getPrefix() + msg, iae);
                 l.log(msg);
-                notifyEvent("streamrtunnnelTaskId", Integer.valueOf(-1));
+                notifyEvent("streamrtunnelTaskId", Integer.valueOf(-1));
                 throw iae;
             }
         } else {
