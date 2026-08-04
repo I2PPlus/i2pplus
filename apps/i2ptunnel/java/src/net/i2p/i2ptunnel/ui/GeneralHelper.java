@@ -158,38 +158,38 @@ public class GeneralHelper {
             Boolean.parseBoolean(props.getProperty(OPT + I2PTunnelClientBase.PROP_USE_SSL))) {
             // If we switch to SSL, create the keystore here, so we can store the new properties.
             // Down in I2PTunnelClientBase it's very hard to save the config.
-                // Add the local interface and all targets to the cert
-                String intfc = props.getProperty(TunnelController.PROP_INTFC);
-                Set<String> altNames = new HashSet<>(4);
-                if (intfc != null && !intfc.equals("0.0.0.0") && !intfc.equals("::") &&
-                    !intfc.equals("0:0:0:0:0:0:0:0")) {
-                    altNames.add(intfc);
-                }
-                String tgts = props.getProperty(TunnelController.PROP_DEST);
-                if (tgts != null) {
-                    altNames.add(intfc);
-                    String[] hosts = DataHelper.split(tgts, "[ ,]");
-                    for (String h : hosts) {
-                        int colon = h.indexOf(':');
-                        if (colon >= 0) {h = h.substring(0, colon);}
-                        altNames.add(h);
-                        if (!h.endsWith(".b32.i2p")) {
-                            Hash hash = ConvertToHash.getHash(h);
-                            if (hash != null) {altNames.add(hash.toBase32());}
-                        }
+            // Add the local interface and all targets to the cert
+            String intfc = props.getProperty(TunnelController.PROP_INTFC);
+            Set<String> altNames = new HashSet<>(4);
+            if (intfc != null && !intfc.equals("0.0.0.0") && !intfc.equals("::") &&
+                !intfc.equals("0:0:0:0:0:0:0:0")) {
+                altNames.add(intfc);
+            }
+            String tgts = props.getProperty(TunnelController.PROP_DEST);
+            if (tgts != null) {
+                altNames.add(intfc);
+                String[] hosts = DataHelper.split(tgts, "[ ,]");
+                for (String h : hosts) {
+                    int colon = h.indexOf(':');
+                    if (colon >= 0) {h = h.substring(0, colon);}
+                    altNames.add(h);
+                    if (!h.endsWith(".b32.i2p")) {
+                        Hash hash = ConvertToHash.getHash(h);
+                        if (hash != null) {altNames.add(hash.toBase32());}
                     }
                 }
-                try {
-                    boolean created = SSLClientUtil.verifyKeyStore(props, OPT, altNames);
-                    if (created) {
-                        // config now contains new keystore props
-                        String name = props.getProperty(TunnelController.PROP_NAME, "");
-                        msgs.add("Created new self-signed certificate for tunnel " + name);
-                    }
-                } catch (IOException ioe) {
-                    msgs.add("Failed to create new self-signed certificate for tunnel " +
-                            getTunnelName(tcg, tunnel) + ", check logs: " + ioe);
+            }
+            try {
+                boolean created = SSLClientUtil.verifyKeyStore(props, OPT, altNames);
+                if (created) {
+                    // config now contains new keystore props
+                    String name = props.getProperty(TunnelController.PROP_NAME, "");
+                    msgs.add("Created new self-signed certificate for tunnel " + name);
                 }
+            } catch (IOException ioe) {
+                msgs.add("Failed to create new self-signed certificate for tunnel " +
+                        getTunnelName(tcg, tunnel) + ", check logs: " + ioe);
+            }
         }
         if (cur == null) {
             // creating new
