@@ -154,7 +154,11 @@ class LookupBanHammer {
                 for (ConcurrentLinkedDeque<Long> d : burstTimestamps.values()) {
                     if (s++ >= 8192) break;
                     Long last = d.peekLast();
-                    sample.add(last == null ? Long.MAX_VALUE : last);
+                    if (last != null) {
+                        sample.add(last);
+                    } else {
+                        sample.add(Long.MAX_VALUE);
+                    }
                 }
                 if (!sample.isEmpty()) {
                     Collections.sort(sample);
