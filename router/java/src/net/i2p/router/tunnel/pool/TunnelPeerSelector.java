@@ -961,6 +961,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return peers;
     }
 
+    private static final Comparator<Hash> HASH_BASE64_COMPARATOR = Comparator.comparing(h -> h.toBase64());
+
     /**
      *  Implement a deterministic comparison that cannot be predicted by
      *  others. A naive implementation (using the distance from a random key)
@@ -1176,7 +1178,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 list.add(e.getKey());
             }
             for (List<Hash> list : byReason.values()) {
-                list.sort(Comparator.comparing(h -> h.toBase64()));
+                list.sort(HASH_BASE64_COMPARATOR);
             }
             StringBuilder sb = new StringBuilder();
             sb.append(s.size()).append(" excluded\n");
