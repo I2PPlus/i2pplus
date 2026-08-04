@@ -64,17 +64,6 @@ public class KeyManager {
     }
 
     /**
-     * Initialize the key manager and load keys from disk.
-     *
-     * @deprecated Keys are no longer read from disk at startup
-     */
-    @Deprecated
-    public void startup() {
-        // run inline so keys are loaded immediately
-        (new SynchronizeKeysJob()).runJob();
-    }
-
-    /**
      *  Configure the router's keys.
      *
      *  @since 0.9.4 replace individual setters
