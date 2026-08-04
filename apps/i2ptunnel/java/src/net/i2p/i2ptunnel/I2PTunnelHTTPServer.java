@@ -583,76 +583,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // The headers _should_ be in the first packet, but may not be, depending on the client-side options
 
                 StringBuilder command = new StringBuilder(128);
-                Map<String, List<String>> headers;
-                try {
-                    /*
-                     * Catch specific exceptions thrown, to return a good error to the client.
-                     * Add 10s to client-side timeout so the client will timeout first and minimize races.
-                     */
-                    long timeout = requestCount > 0 ? I2PTunnelHTTPClient.BROWSER_KEEPALIVE_TIMEOUT + 10*1000 : HEADER_TIMEOUT;
-                    headers = readHeaders(socket, null, command, CLIENT_SKIPHEADERS, getTunnel().getContext(), timeout);
-                } catch (SocketTimeoutException ste) {
-                    if (requestCount > 0) {
-                        if (_log.shouldDebug())
-                             _log.debug("[HTTPServer] Timeout reached awaiting request [#" + requestCount + "]");
-                    } else {
-                        try {sendError(socket, ERR_REQUEST_TIMEOUT);}
-                        catch (IOException ioe) { /* ignored */ }
-                        if (_log.shouldWarn() && ste.getMessage() != null) {
-                            _log.warn("[HTTPServer] Request error: " + ste.getMessage() + " \n* Client: " + peerB32);
-                        }
-                    }
-                    try {socket.close();}
-                    catch (IOException ioe) { /* ignored */ }
-                    return;
-                } catch (EOFException eofe) {
-                    if (requestCount > 0) {
-                        if (_log.shouldDebug())
-                             _log.debug("[HTTPServer] Client closed awaiting request [#" + requestCount + "]");
-                    } else {
-                        try {sendError(socket, ERR_BAD_REQUEST);}
-                        catch (IOException ioe) { /* ignored */ }
-                        if (_log.shouldWarn() && eofe.getMessage() != null) {
-                            _log.warn("[HTTPServer] Request error: " + eofe.getMessage() + " \n* Client: " + peerB32);
-                        }
-                    }
-                    try {socket.close();}
-                    catch (IOException ioe) { /* ignored */ }
-                    return;
-                } catch (LineTooLongException ltle) {
-                    try {sendError(socket, ERR_HEADERS_TOO_LARGE);}
-                    catch (IOException ioe) { /* ignored */ }
-                    finally {
-                        try {socket.close();}
-                        catch (IOException ioe) { /* ignored */ }
-                    }
-                    if (_log.shouldWarn()) {
-                        _log.warn("[HTTPServer] Request error: Headers too large \n* Client: " + peerB32);
-                    }
-                    return;
-                } catch (RequestTooLongException rtle) {
-                    try {sendError(socket, ERR_REQUEST_URI_TOO_LONG);}
-                    catch (IOException ioe) { /* ignored */ }
-                    finally {
-                        try {socket.close();}
-                        catch (IOException ioe) { /* ignored */ }
-                    }
-                    if (_log.shouldWarn()) {
-                        _log.warn("[HTTPServer] Request error: URI too long \n* Client: " + peerB32);
-                    }
-                    return;
-                } catch (BadRequestException bre) {
-                    try {sendError(socket, ERR_BAD_REQUEST);}
-                    catch (IOException ioe) { /* ignored */ }
-                    finally {
-                        try {socket.close();}
-                        catch (IOException ioe) { /* ignored */ }
-                    }
-                    if (_log.shouldDebug() && bre.getMessage() != null) {
-                        _log.warn("[HTTPServer] Request error: " + bre.getMessage() + " \n* Client: " + peerB32);
-                    }
-                    return;
-                }
+                Map<String, List<String>> headers = readRequestHeaders(socket, command, requestCount, peerB32, getTunnel().getContext(), _log);
+                if (headers == null) {return;}
 
                 validateRequestHost(headers, socket, peerB32);
 
@@ -679,18 +611,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 // Force Connection: close, unless websocket
                 boolean upgrade = false;
-                String conn = getEntryOrNull(headers, "Connection");
-                if (conn == null) {setEntry(headers, "Connection", "close");}
-                else {
-                    String connlc = conn.toLowerCase(Locale.US);
-                    if (connlc.contains("upgrade")) {
-                        upgrade = true;
-                        keepalive = false;
-                    } else {
-                        if (!connlc.contains("keep-alive")) {keepalive = false;}
-                        setEntry(headers, "Connection", "close");
-                    }
-                }
+                int connType = getConnectionType(headers);
+                if (connType == CONN_UPGRADE || connType == CONN_CLOSE) {keepalive = false;}
+                if (connType == CONN_UPGRADE) {upgrade = true;}
+                else {setEntry(headers, "Connection", "close");}
 
                 // process http_blocklist.txt entries
                 if (command.length() > 0) {processBlocklist(socket, command);}
@@ -707,7 +631,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  */
                 String cmd = command.toString().trim();
                 boolean isGetOrHead = cmd.startsWith("GET ") || cmd.startsWith("HEAD ");
-                if (!cmd.endsWith(" HTTP/1.1") || !isGetOrHead) {keepalive = false;}
+                if (!isKeepAliveRequest(cmd)) {keepalive = false;}
 
                 // we keep the enc sent by the browser before clobbering it, since it may have been x-i2p-gzip
                 String enc = getEntryOrNull(headers, "Accept-Encoding");
@@ -729,14 +653,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  *  rewriting to include 'Content-Encoding: x-i2p-gzip' if it was one of the
                  *  Accept-Encoding: values, and gzip the payload
                  */
-                boolean allowGZIP = true;
-                String val = opts.getProperty(TunnelController.PROP_TUN_GZIP);
-                if ((val != null) && (!Boolean.parseBoolean(val))) {allowGZIP = false;}
+                boolean allowGZIP = isGzipAllowed(opts);
                 if (_log.shouldDebug() && (enc != null || altEnc != null)) {
                     _log.debug("[HTTPServer] Encoding header: " + enc + "/" + altEnc);
                 }
-                boolean alt = (altEnc != null) && (altEnc.indexOf("x-i2p-gzip") >= 0);
-                boolean useGZIP = alt || ( (enc != null) && (enc.indexOf("x-i2p-gzip") >= 0) );
+                boolean alt = hasGzipEncoding(altEnc);
+                boolean useGZIP = alt || hasGzipEncoding(enc);
                 // Don't pass this on, outproxies should strip so I2P traffic isn't so obvious but they probably don't
                 if (alt) {headers.remove("X-Accept-Encoding");}
 
@@ -803,6 +725,148 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             if (_log.shouldError())
                 _log.error("[HTTPServer] Out of Memory error (" + oom.getMessage() + ")");
         }
+    }
+
+    /**
+     *  Read the request headers, handling the specific errors that can occur
+     *  by sending the appropriate error response to the client.
+     *  The 5 error handlers share this shape: send error, log, close, return null.
+     *
+     *  @param socket the client socket
+     *  @param command buffer for the request line
+     *  @param requestCount the number of requests already handled on this connection (0 = first)
+     *  @param peerB32 the client's base32 for logging
+     *  @param ctx the I2P app context
+     *  @param log the logging instance
+     *  @return the parsed headers, or null if the request failed and the client was notified
+     *  @throws IOException on other I/O errors, propagated to the caller
+     */
+    static Map<String, List<String>> readRequestHeaders(I2PSocket socket, StringBuilder command, int requestCount,
+                                                        String peerB32, I2PAppContext ctx, Log log) throws IOException {
+        try {
+            /*
+             * Catch specific exceptions thrown, to return a good error to the client.
+             * Add 10s to client-side timeout so the client will timeout first and minimize races.
+             */
+            long timeout = requestCount > 0 ? I2PTunnelHTTPClient.BROWSER_KEEPALIVE_TIMEOUT + 10*1000 : HEADER_TIMEOUT;
+            return readHeaders(socket, null, command, CLIENT_SKIPHEADERS, ctx, timeout);
+        } catch (SocketTimeoutException ste) {
+            if (requestCount > 0) {
+                if (log.shouldDebug())
+                     log.debug("[HTTPServer] Timeout reached awaiting request [#" + requestCount + "]");
+            } else {
+                try {sendError(socket, ERR_REQUEST_TIMEOUT);}
+                catch (IOException ioe) { /* ignored */ }
+                if (log.shouldWarn() && ste.getMessage() != null) {
+                    log.warn("[HTTPServer] Request error: " + ste.getMessage() + " \n* Client: " + peerB32);
+                }
+            }
+            try {socket.close();}
+            catch (IOException ioe) { /* ignored */ }
+            return null;
+        } catch (EOFException eofe) {
+            if (requestCount > 0) {
+                if (log.shouldDebug())
+                     log.debug("[HTTPServer] Client closed awaiting request [#" + requestCount + "]");
+            } else {
+                try {sendError(socket, ERR_BAD_REQUEST);}
+                catch (IOException ioe) { /* ignored */ }
+                if (log.shouldWarn() && eofe.getMessage() != null) {
+                    log.warn("[HTTPServer] Request error: " + eofe.getMessage() + " \n* Client: " + peerB32);
+                }
+            }
+            try {socket.close();}
+            catch (IOException ioe) { /* ignored */ }
+            return null;
+        } catch (LineTooLongException ltle) {
+            try {sendError(socket, ERR_HEADERS_TOO_LARGE);}
+            catch (IOException ioe) { /* ignored */ }
+            finally {
+                try {socket.close();}
+                catch (IOException ioe) { /* ignored */ }
+            }
+            if (log.shouldWarn()) {
+                log.warn("[HTTPServer] Request error: Headers too large \n* Client: " + peerB32);
+            }
+            return null;
+        } catch (RequestTooLongException rtle) {
+            try {sendError(socket, ERR_REQUEST_URI_TOO_LONG);}
+            catch (IOException ioe) { /* ignored */ }
+            finally {
+                try {socket.close();}
+                catch (IOException ioe) { /* ignored */ }
+            }
+            if (log.shouldWarn()) {
+                log.warn("[HTTPServer] Request error: URI too long \n* Client: " + peerB32);
+            }
+            return null;
+        } catch (BadRequestException bre) {
+            try {sendError(socket, ERR_BAD_REQUEST);}
+            catch (IOException ioe) { /* ignored */ }
+            finally {
+                try {socket.close();}
+                catch (IOException ioe) { /* ignored */ }
+            }
+            if (log.shouldDebug() && bre.getMessage() != null) {
+                log.warn("[HTTPServer] Request error: " + bre.getMessage() + " \n* Client: " + peerB32);
+            }
+            return null;
+        }
+    }
+
+    /** Connection header absent */
+    static final int CONN_NONE = 0;
+    /** Connection: keep-alive */
+    static final int CONN_KEEPALIVE = 1;
+    /** Connection: upgrade (websocket) */
+    static final int CONN_UPGRADE = 2;
+    /** Connection: close or unknown value */
+    static final int CONN_CLOSE = 3;
+
+    /**
+     *  Classify the request's Connection header value.
+     *
+     *  @param headers request headers
+     *  @return CONN_NONE, CONN_KEEPALIVE, CONN_UPGRADE, or CONN_CLOSE
+     */
+    static int getConnectionType(Map<String, List<String>> headers) {
+        String conn = getEntryOrNull(headers, "Connection");
+        if (conn == null) {return CONN_NONE;}
+        String connlc = conn.toLowerCase(Locale.US);
+        if (connlc.contains("upgrade")) {return CONN_UPGRADE;}
+        if (connlc.contains("keep-alive")) {return CONN_KEEPALIVE;}
+        return CONN_CLOSE;
+    }
+
+    /**
+     *  Whether the request can keep the connection alive: GET or HEAD with HTTP/1.1.
+     *
+     *  @param cmd the trimmed request line
+     *  @return true if keepalive may continue
+     */
+    static boolean isKeepAliveRequest(String cmd) {
+        return (cmd.startsWith("GET ") || cmd.startsWith("HEAD ")) && cmd.endsWith(" HTTP/1.1");
+    }
+
+    /**
+     *  Whether the Accept-Encoding value includes x-i2p-gzip.
+     *
+     *  @param enc an Accept-Encoding header value, or null
+     *  @return true if it includes x-i2p-gzip
+     */
+    static boolean hasGzipEncoding(String enc) {
+        return enc != null && enc.indexOf("x-i2p-gzip") >= 0;
+    }
+
+    /**
+     *  Whether the tunnel allows gzip responses, from the tunnel options.
+     *
+     *  @param opts the client options
+     *  @return true unless PROP_TUN_GZIP is set to false
+     */
+    static boolean isGzipAllowed(Properties opts) {
+        String val = opts.getProperty(TunnelController.PROP_TUN_GZIP);
+        return val == null || Boolean.parseBoolean(val);
     }
 
     /**
@@ -1281,22 +1345,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 try {serverin = new BufferedInputStream(_webserver.getInputStream(), BUF_SIZE);}
                 catch (NullPointerException npe) {throw new IOException("getInputStream NPE");}
-                StringBuilder command = new StringBuilder(512);
-                // Change headers to protect server identity
-                Map<String, List<String>> headers = readHeaders(null, serverin, command, SERVER_SKIPHEADERS, _ctx, timeout);
-
-                SecurityHeaderBuilder.filterCacheControlHeaders(headers);
-                SecurityHeaderBuilder.filterSetCookieHeaders(headers);
-
-                List<String> contentTypeList = headers.get("Content-Type");
-                String mimeType = "application/octet-stream";
-                if (contentTypeList != null && !contentTypeList.isEmpty()) {
-                    mimeType = contentTypeList.get(0);
-                }
-
-                SecurityHeaderBuilder.addSecurityHeaders(headers, mimeType);
-
-                String modifiedHeaders = HttpHeaderFormatter.formatHeaders(headers, command);
+                String modifiedHeaders = readAndRewriteServerResponse(serverin, timeout, _ctx);
                 // after the headers, set a short timeout
                 _webserver.setSoTimeout(SERVER_READ_TIMEOUT_GET);
 
@@ -1337,36 +1386,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     ioex = s.getFailure();
                     if (ioex == null && sender != null) {ioex = sender.getFailure();}
                 }
-                if (ioex != null) {
-                    _keepalive = false;
-                    // Reset propagation, simplified from I2PTunnelRunner
-                    boolean i2pReset = false;
-                    if (ioex instanceof I2PSocketException) {
-                        I2PSocketException ise = (I2PSocketException) ioex;
-                        int status = ise.getStatus();
-                        i2pReset = status == I2PSocketException.STATUS_CONNECTION_RESET;
-                        if (i2pReset) {
-                            if (_log.shouldDebug()) {
-                                _log.warn("[HTTPServer] Received I2P RESET -> Resetting socket..." +
-                                          urlSuffix(req));
-                            }
-                            try {_webserver.setSoLinger(true, 0);}
-                            catch (IOException ioe) { /* ignored */ }
-                        }
-                    }
-                    if (!i2pReset && ioex instanceof SocketException) {
-                        String msg = ioex.getMessage();
-                        boolean sockReset = msg != null && msg.contains("reset");
-                        if (sockReset) {
-                            if (_log.shouldDebug()) {
-                                _log.warn("[HTTPServer] Received socket RESET ->  Resetting I2P socket..." +
-                                          urlSuffix(req));
-                            }
-                            try {_browser.reset();}
-                            catch (IOException ioe) { /* ignored */ }
-                        }
-                    }
-                }
+                if (ioex != null) {propagateFailure(ioex, req);}
                 if (_waiter != null) {_waiter.set(_keepalive ? 2 : 1);} // We are now run inline, no need to notify()
                 if (browserout != null) {
                     try {
@@ -1422,6 +1442,73 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             if (host != null && host.contains("b32.i2p"))
                 host = host.substring(0, 12) + "...b32.i2p";
             return host != null ? host : "Unknown request";
+        }
+
+        /**
+         *  Read the server response headers, filter them for security,
+         *  and re-format them for the client.
+         *
+         *  @param serverin stream from the webserver
+         *  @param timeout timeout for the header read
+         *  @param ctx the I2P app context
+         *  @return the formatted, filtered headers
+         *  @throws IOException on error
+         */
+        static String readAndRewriteServerResponse(InputStream serverin, int timeout, I2PAppContext ctx) throws IOException {
+            StringBuilder command = new StringBuilder(512);
+            // Change headers to protect server identity
+            Map<String, List<String>> headers = readHeaders(null, serverin, command, SERVER_SKIPHEADERS, ctx, timeout);
+
+            SecurityHeaderBuilder.filterCacheControlHeaders(headers);
+            SecurityHeaderBuilder.filterSetCookieHeaders(headers);
+
+            List<String> contentTypeList = headers.get("Content-Type");
+            String mimeType = "application/octet-stream";
+            if (contentTypeList != null && !contentTypeList.isEmpty()) {
+                mimeType = contentTypeList.get(0);
+            }
+
+            SecurityHeaderBuilder.addSecurityHeaders(headers, mimeType);
+
+            return HttpHeaderFormatter.formatHeaders(headers, command);
+        }
+
+        /**
+         *  On failure, propagate a reset to the other end of the connection,
+         *  simplified from I2PTunnelRunner.
+         *
+         *  @param ioex the failure
+         *  @param req the request URL for logging
+         */
+        private void propagateFailure(IOException ioex, String req) {
+            _keepalive = false;
+            // Reset propagation, simplified from I2PTunnelRunner
+            boolean i2pReset = false;
+            if (ioex instanceof I2PSocketException) {
+                I2PSocketException ise = (I2PSocketException) ioex;
+                int status = ise.getStatus();
+                i2pReset = status == I2PSocketException.STATUS_CONNECTION_RESET;
+                if (i2pReset) {
+                    if (_log.shouldDebug()) {
+                        _log.warn("[HTTPServer] Received I2P RESET -> Resetting socket..." +
+                                  urlSuffix(req));
+                    }
+                    try {_webserver.setSoLinger(true, 0);}
+                    catch (IOException ioe) { /* ignored */ }
+                }
+            }
+            if (!i2pReset && ioex instanceof SocketException) {
+                String msg = ioex.getMessage();
+                boolean sockReset = msg != null && msg.contains("reset");
+                if (sockReset) {
+                    if (_log.shouldDebug()) {
+                        _log.warn("[HTTPServer] Received socket RESET ->  Resetting I2P socket..." +
+                                  urlSuffix(req));
+                    }
+                    try {_browser.reset();}
+                    catch (IOException ioe) { /* ignored */ }
+                }
+            }
         }
     }
 
