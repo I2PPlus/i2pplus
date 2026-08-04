@@ -1113,6 +1113,8 @@ public class TunnelController implements Logging {
                     _config.setProperty(OPT_MAX_CONNS_HOUR, Integer.toString(DEFAULT_MAX_CONNS_HOUR));
                     _config.setProperty(OPT_MAX_CONNS_DAY, Integer.toString(DEFAULT_MAX_CONNS_DAY));
                     _config.setProperty(OPT_MAX_TOTAL_CONNS_MIN, Integer.toString(DEFAULT_MAX_TOTAL_CONNS_MIN));
+                    _config.setProperty(OPT_MAX_TOTAL_CONNS_HOUR, Integer.toString(DEFAULT_MAX_TOTAL_CONNS_HOUR));
+                    _config.setProperty(OPT_MAX_TOTAL_CONNS_DAY, Integer.toString(DEFAULT_MAX_TOTAL_CONNS_DAY));
                     _config.setProperty(OPT_MAX_STREAMS, Integer.toString(DEFAULT_MAX_STREAMS));
                 }
                 if (type.equals(TYPE_HTTP_SERVER) && !p8.equals("true")) {
