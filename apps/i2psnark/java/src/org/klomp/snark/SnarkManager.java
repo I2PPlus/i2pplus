@@ -138,6 +138,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public static final String PROP_DOWNBW_MAX = "i2psnark.downbw.max";
 
+    /** Minimum request pipeline depth for outbound requests. @since 0.9.71+ */
+    public static final String PROP_MIN_PIPELINE = "i2psnark.pipeline.min";
+    /** Maximum request pipeline depth for outbound requests. @since 0.9.71+ */
+    public static final String PROP_MAX_PIPELINE = "i2psnark.pipeline.max";
+    /** Chunk size for outbound piece requests. @since 0.9.71+ */
+    public static final String PROP_PARTSIZE = "i2psnark.pipeline.partsize";
+    /** Cap on a single piece request from a peer. @since 0.9.71+ */
+    public static final String PROP_MAX_PARTSIZE = "i2psnark.pipeline.maxPartsize";
+
     public static final String PROP_DIR = "i2psnark.dir";
     private static final String PROP_META_PREFIX = "i2psnark.zmeta.";
     private static final String PROP_META_RUNNING = "running";
@@ -1243,6 +1252,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (!_config.containsKey(PROP_DOWNBW_MAX)) {
             _config.setProperty(PROP_DOWNBW_MAX, Integer.toString(DEFAULT_MAX_DOWN_BW));
         }
+        // Pipeline tunables. Apply before any PeerState exists so standalone config is honored.
+        int minPipe = getInt(PROP_MIN_PIPELINE, PeerState.MIN_PIPELINE);
+        int maxPipe = getInt(PROP_MAX_PIPELINE, PeerState.MAX_PIPELINE);
+        int chunkSize = getInt(PROP_PARTSIZE, PeerState.PARTSIZE);
+        int maxChunk = getInt(PROP_MAX_PARTSIZE, PeerState.MAX_PARTSIZE);
+        PeerState.setPipelineParams(minPipe, maxPipe, chunkSize, maxChunk);
         updateConfig();
         // Initialize bandwidth from config (not from I2CP detection)
         int maxdown = getInt(PROP_DOWNBW_MAX, DEFAULT_MAX_DOWN_BW);

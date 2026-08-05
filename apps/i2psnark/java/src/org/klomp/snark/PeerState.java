@@ -67,27 +67,96 @@ class PeerState implements DataLoader {
 
     private int currentMaxPipeline;
 
-    // FIXME if piece size < PARTSIZE, pipeline could be bigger
+    /** Default minimum request pipeline depth for outbound requests. */
+    private static final int DEFAULT_MIN_PIPELINE = 5;
+
+    /** Default maximum request pipeline depth for outbound requests. */
+    private static final int DEFAULT_MAX_PIPELINE = 32;
+
+    /** Default chunk size for outbound piece requests. */
+    private static final int DEFAULT_PARTSIZE = 16 * 1024;
+
+    /** Default cap on a single piece request from a peer. */
+    private static final int DEFAULT_MAX_PARTSIZE = 128 * 1024;
+
+    /** Absolute cap on pipeline depth, outbound or inbound. */
+    private static final int MAX_PIPELINE_CAP = 256;
+
     /**
      * Minimum request pipeline depth for outbound requests.
      *
      * @since 0.9.47
      */
-    public static final int MIN_PIPELINE = 5; // this is for outbound requests
+    public static volatile int MIN_PIPELINE = DEFAULT_MIN_PIPELINE;
 
     /**
-     * Maximum request pipeline depth for outbound requests.
+     * Maximum request pipeline depth for outbound requests. Bumped from 16 to 32 so a single
+     * peer can keep enough chunks in flight to saturate a fast connection at tunnel latency;
+     * the per-connection AIMD still dials this down under bandwidth pressure.
      *
      * @since public since 0.9.47
      */
-    public static final int MAX_PIPELINE = 16; // this is for outbound requests
+    public static volatile int MAX_PIPELINE = DEFAULT_MAX_PIPELINE;
+
     /**
      * Chunk size for outbound piece requests.
      */
-    public static final int PARTSIZE = 16 * 1024; // outbound request
-    private static final int MAX_PIPELINE_BYTES = (MAX_PIPELINE + 2) * PARTSIZE; // this is for inbound requests
-    private static final int MAX_PARTSIZE = 128 * 1024; // Don't let anybody request more than this
+    public static volatile int PARTSIZE = DEFAULT_PARTSIZE;
+
+    /**
+     * Maximum bytes of pipelined inbound requests to a single peer. Derived from MAX_PIPELINE
+     * and PARTSIZE, so it follows the configurable values.
+     *
+     * @return the inbound pipeline byte ceiling
+     */
+    public static int maxPipelineBytes() {
+        return (MAX_PIPELINE + 2) * PARTSIZE;
+    }
+
+    /**
+     * Cap on a single piece request from a peer.
+     *
+     * @since 0.9.71+
+     */
+    public static volatile int MAX_PARTSIZE = DEFAULT_MAX_PARTSIZE;
     private static final Integer PIECE_ALL = Integer.valueOf(-1);
+
+    /**
+     * Apply configurable pipeline bounds, chunk size, and per-request cap, clamped to safe
+     * limits. Call once at startup; standalone snark reads these from its own config file.
+     *
+     * @param min minimum pipeline depth, clamped to [1, max]
+     * @param max maximum pipeline depth, clamped to [min, MAX_PIPELINE_CAP]
+     * @param chunk request chunk size in bytes, clamped to [1KiB, maxPart]
+     * @param maxPart cap on a single request in bytes, clamped to [chunk, 1MiB]
+     * @since 0.9.71+
+     */
+    public static void setPipelineParams(int min, int max, int chunk, int maxPart) {
+        MAX_PIPELINE = Math.max(1, Math.min(MAX_PIPELINE_CAP, max));
+        MIN_PIPELINE = Math.max(1, Math.min(min, MAX_PIPELINE));
+        PARTSIZE = Math.max(1024, Math.min(chunk, 1024 * 1024));
+        MAX_PARTSIZE = Math.max(PARTSIZE, Math.min(maxPart, 1024 * 1024));
+    }
+
+    /**
+     * Effective request pipeline depth for this peer. When the torrent's piece length is
+     * smaller than a chunk size, each request carries fewer bytes, so we scale the count up to
+     * keep roughly the same volume in flight. Starts from the negotiated peer reqq and is
+     * capped at the absolute pipeline limit, keeping the byte volume intact for small pieces.
+     *
+     * @return the pipeline limit for the current torrent, at least MIN_PIPELINE
+     */
+    private int getPipelineLimit() {
+        int max = peer.getMaxPipeline();
+        if (metainfo != null && metainfo.getPieces() > 0) {
+            int pieceLen = metainfo.getPieceLength(0);
+            if (pieceLen > 0 && pieceLen < PARTSIZE) {
+                long scaled = (long) max * PARTSIZE / pieceLen;
+                max = (int) Math.min(MAX_PIPELINE_CAP, scaled);
+            }
+        }
+        return Math.max(MIN_PIPELINE, max);
+    }
 
     /**
      * @param metainfo null if in magnet mode
@@ -358,7 +427,7 @@ class PeerState implements DataLoader {
         // Limit total pipelined requests to MAX_PIPELINE bytes
         // to conserve memory and prevent DOS
         // Todo: limit number of requests also? (robert 64 x 4KB)
-        if (out.queuedBytes() + length > MAX_PIPELINE_BYTES) {
+        if (out.queuedBytes() + length > maxPipelineBytes()) {
             if (peer.supportsFast()) {
                 if (_log.shouldInfo())
                     _log.info("Rejecting request over pipeline limit from [" + peer + "]");
@@ -958,7 +1027,7 @@ class PeerState implements DataLoader {
             long rate = bwListener.getDownloadRate();
             long limit = bwListener.getDownBWLimit();
             if (rate < limit * 7 / 10) {
-                if (currentMaxPipeline < peer.getMaxPipeline()) {
+                if (currentMaxPipeline < getPipelineLimit()) {
                     currentMaxPipeline++;
                 } else if (rate > limit * 9 / 10) {
                     currentMaxPipeline = 1;
