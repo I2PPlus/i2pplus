@@ -41,7 +41,9 @@ import net.i2p.router.transport.ntcp.Writer;
 import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.util.SyntheticREDQueue;
 import net.i2p.router.client.ClientManagerFacadeImpl;
+import net.i2p.router.networkdb.kademlia.ExploreJob;
 import net.i2p.router.networkdb.kademlia.IterativeSearchJob;
+import net.i2p.router.networkdb.kademlia.SearchJob;
 import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.router.util.CoDelPriorityBlockingQueue;
@@ -680,8 +682,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new NetDBMaxConcurrentParam());
         _params.add(new NetDBSearchLimitParam());
         _params.add(new NetDBSingleSearchTimeParam());
+        _params.add(new NetDBMaxSearchTimeParam());
         _params.add(new LsLookupTimeoutParam());
         _params.add(new RiLookupTimeoutParam());
+        _params.add(new ResendTimeoutParam());
+        _params.add(new LeaseResendCountParam());
+        _params.add(new ExploreBredthParam());
 
         // Peers
         _params.add(new MaxFastPeersParam());
@@ -6913,6 +6919,61 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * NetDB total search time cap (ms) — the hard deadline each iterative search
+     * works within, bounding the LS deadline cap and the per-hop message window.
+     * Grows toward its ceiling while failing lookups run up against it, and
+     * follows network success time otherwise.
+     */
+    private class NetDBMaxSearchTimeParam extends BaseParam {
+
+        NetDBMaxSearchTimeParam() {
+            super(IterativeSearchJob.PROP_MAX_SEARCH_TIME, "NetDB search cap (ms)",
+                  SUB_NETDB,
+
+                  10 * 1000, 30 * 1000, 1000, "transport.sendProcessingTime", _context);
+        }
+
+        /** Apply the tunable value to the router configuration. */
+        protected void applyValue(int value) {
+            IterativeSearchJob.setMaxSearchTime(value);
+            _context.router().saveConfig(IterativeSearchJob.PROP_MAX_SEARCH_TIME, Integer.toString(value));
+        }
+
+        /** Read the current runtime value of this tunable from router config. */
+        protected int getRuntimeValue() {
+            return (int) IterativeSearchJob.getMaxSearchTime();
+        }
+
+        /** Read the observed stat value for autotuning decisions. */
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        /** Compute the target value based on observed stat and configured limits. */
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = transport.sendProcessingTime (ms, network latency proxy)
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
+
+            if (systemBusy)
+                return current;
+
+            // Slow network: keep a generous cap so searches can converge across hops.
+            if (observed > 300)
+                return Math.min(_max, current + _step);
+
+            // Fast network with healthy lookups: relax toward the floor, but keep
+            // enough headroom for multi-round searches.
+            return Math.max(10 * 1000, current - _step);
+        }
+    }
+
+    /**
      * NetDB max concurrent searches.
      * Scales with network latency.
      */
@@ -7270,6 +7331,200 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return current;
 
             return clamp(current, target, _step);
+        }
+    }
+
+    // =====================================================================
+    // NetDB: lease republish window and fanout
+    // =====================================================================
+
+    /**
+     * Lease republish message window (ms) — how long the store sent to heal
+     * the network after a successful search may live. A too-short window drops
+     * the multi-hop store messages on a loaded network, so lease copies never
+     * reach the closest floodfills. Scales with network latency and grows when
+     * republished searches are failing.
+     */
+    private class ResendTimeoutParam extends BaseParam {
+
+        ResendTimeoutParam() {
+            super("netdb.resendTimeout", "NetDB republish window (ms)",
+                  SUB_NETDB,
+
+                  10 * 1000, 30 * 1000, 2000, "transport.sendProcessingTime", _context);
+        }
+
+        /** Apply the tunable value to the router configuration. */
+        protected void applyValue(int value) {
+            SearchJob.setResendTimeout(value);
+            _context.router().saveConfig("netdb.resendTimeout", Integer.toString(value));
+        }
+
+        /** Read the current runtime value of this tunable from router config. */
+        protected int getRuntimeValue() {
+            return (int) SearchJob.getResendTimeout();
+        }
+
+        /** Read the observed stat value for autotuning decisions. */
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        /** Compute the target value based on observed stat and configured limits. */
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = transport.sendProcessingTime (ms, network latency proxy)
+            // Cross-refs: client.leaseSetFailedRemoteTime and netDb.lookupsFailedLeaseSet
+            // tell us republish heals aren't landing; honor failures even when the
+            // latency signal is quiet.
+            double leaseFailTime = getAdditionalStat(_context, "client.leaseSetFailedRemoteTime");
+            double lsFails = getAdditionalEventCount(_context, "netDb.lookupsFailedLeaseSet");
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+
+            boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean failsElevated = !Double.isNaN(lsFails) && lsFails > 0;
+            // Failed lookups running up against the current window mean the store
+            // is dying in transit — widen it.
+            boolean capBinding = failsElevated && !Double.isNaN(leaseFailTime) &&
+                                 leaseFailTime >= current * 0.9;
+
+            if (systemBusy)
+                return current;
+
+            // Republish messages are losing the race: widen the window.
+            if (capBinding)
+                return Math.min(_max, current + _step);
+
+            // Slow network: keep a generous window so stores survive the trip.
+            if (observed > 300)
+                return current;
+
+            // Fast network with no failures: relax toward the floor, but floor
+            // at 15s so we never go back to the 5s drop-ball behavior.
+            if (!failsElevated)
+                return Math.max(15 * 1000, current - _step);
+
+            return current;
+        }
+    }
+
+    /**
+     * Max peers a lease is republished to after a successful search, on top of
+     * the peers that already answered. More copies = healthier lease storage,
+     * but each copy is a real store message. AIMD on the republish volume:
+     * grow the fanout when republished stores stay missing, shrink it when the
+     * system or the network is congested.
+     */
+    private class LeaseResendCountParam extends BaseParam {
+
+        LeaseResendCountParam() {
+            super("netdb.leaseResendCount", "Lease republish fanout",
+                  SUB_NETDB,
+
+                  5, 10, 1, "netDb.republishQuantity", _context);
+        }
+
+        /** Apply the tunable value to the router configuration. */
+        protected void applyValue(int value) {
+            SearchJob.setLeaseResendCount(value);
+            _context.router().saveConfig("netdb.leaseResendCount", Integer.toString(value));
+        }
+
+        /** Read the current runtime value of this tunable from router config. */
+        protected int getRuntimeValue() {
+            return SearchJob.getLeaseResendCount();
+        }
+
+        /** Read the observed stat value for autotuning decisions. */
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        /** Compute the target value based on observed stat and configured limits. */
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = netDb.republishQuantity: how many peers got a republish
+            // per completed successful search. Near the cap means the heal fanout
+            // is saturating; a trickle or silence (NaN) means copies are few.
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
+
+            if (systemBusy)
+                return current;
+
+            // No republish events at all: searches aren't healing, fan out.
+            if (Double.isNaN(observed) || observed <= 0)
+                return Math.min(_max, current + _step);
+
+            // Copy volume near the cap: leave headroom instead of sitting maxed.
+            if (observed >= current)
+                return Math.max(_min, current - _step);
+
+            return current;
+        }
+    }
+
+    /**
+     * Breadth (concurrent exploratory searches) of the exploratory search
+     * cycle. Scaffolds the network while there are few routers known; raising
+     * it warms more neighbors at the cost of more query traffic. Config value
+     * is read by ExploreJob at each job construction.
+     */
+    private class ExploreBredthParam extends BaseParam {
+
+        ExploreBredthParam() {
+            super("router.exploreBredth", "Exploratory search breadth",
+                  SUB_NETDB,
+
+                  1, 6, 1, "netDb.searchCount", _context);
+        }
+
+        /** Apply the tunable value to the router configuration. */
+        protected void applyValue(int value) {
+            _context.router().saveConfig(ExploreJob.PROP_EXPLORE_BREDTH, Integer.toString(value));
+        }
+
+        /** Read the current runtime value of this tunable from router config. */
+        protected int getRuntimeValue() {
+            int rv = _context.getProperty(ExploreJob.PROP_EXPLORE_BREDTH, -1);
+            if (rv < 1 || rv > _max)
+                rv = ExploreJob.EXPLORE_BREDTH;
+            return rv;
+        }
+
+        /** Read the observed stat for autotuning decisions. */
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        /** Compute the target value based on observed stat and configured limits. */
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // Low known-router count needs more explorer attempts; a busy system
+            // wants fewer concurrent searches. Scale within the configured bounds.
+            double known = _context.netDb().getKnownRouters();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
+
+            if (systemBusy)
+                return Math.max(_min, current - 1);
+
+            if (known > 0 && known < 1500)
+                return Math.min(_max, current + 1);
+
+            return Math.max(_min, current - 1);
         }
     }
 

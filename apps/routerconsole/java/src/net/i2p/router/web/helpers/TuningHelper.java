@@ -83,6 +83,10 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("netdb.searchLimit", _x("Peers Per Search"));
         DISPLAY_NAMES.put("netdb.maxConcurrent", _x("Max Concurrent Searches"));
         DISPLAY_NAMES.put("netdb.singleSearchTime", _x("Search Timeout"));
+        DISPLAY_NAMES.put("netdb.maxSearchTime", _x("Search Cap"));
+        DISPLAY_NAMES.put("netdb.resendTimeout", _x("Republish Window"));
+        DISPLAY_NAMES.put("netdb.leaseResendCount", _x("Republish Fanout"));
+        DISPLAY_NAMES.put("router.exploreBredth", _x("Exploratory Breadth"));
         DISPLAY_NAMES.put("MAX_LS_LOOKUP_TIME", _x("LeaseSet Lookup Timeout"));
         DISPLAY_NAMES.put("MAX_RI_LOOKUP_TIME", _x("RouterInfo Lookup Timeout"));
         DISPLAY_NAMES.put("i2np.udp.maxConcurrentEstablish", _x("Max Concurrent Handshakes"));
@@ -215,6 +219,10 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("netdb.searchLimit", _x("Peers queried per iterative search."));
         PARAM_DESCRIPTIONS.put("netdb.maxConcurrent", _x("Max simultaneous NetDB lookups."));
         PARAM_DESCRIPTIONS.put("netdb.singleSearchTime", _x("Per-peer lookup timeout (ms)."));
+        PARAM_DESCRIPTIONS.put("netdb.maxSearchTime", _x("Hard deadline for each iterative search (ms)."));
+        PARAM_DESCRIPTIONS.put("netdb.resendTimeout", _x("Lifetime of lease republish store messages (ms)."));
+        PARAM_DESCRIPTIONS.put("netdb.leaseResendCount", _x("Max peers that receive a republished lease after a search."));
+        PARAM_DESCRIPTIONS.put("router.exploreBredth", _x("Concurrent exploratory searches per cycle."));
         PARAM_DESCRIPTIONS.put("MAX_LS_LOOKUP_TIME", _x("Adaptive deadline cap for LeaseSet lookups (ms)."));
         PARAM_DESCRIPTIONS.put("MAX_RI_LOOKUP_TIME", _x("Adaptive deadline cap for RouterInfo lookups (ms)."));
         PARAM_DESCRIPTIONS.put("i2np.udp.maxConcurrentEstablish", _x("Max simultaneous SSU handshakes."));

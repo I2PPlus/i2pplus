@@ -93,7 +93,29 @@ public class IterativeSearchJob extends FloodSearchJob {
     /** Extra peers to get from peer selector, as we may discard some before querying */
     private static final int EXTRA_PEERS = 2;
     private static final int IP_CLOSE_BYTES = 3;
-    private static final int MAX_SEARCH_TIME = 15*1000;
+
+    /** Config key for the total search time cap */
+    public static final String PROP_MAX_SEARCH_TIME = "netdb.maxSearchTime";
+    /** Default total search time cap (15s) */
+    private static final long MAX_SEARCH_TIME_DEFAULT = 15*1000;
+    /** Total search time cap - dynamically loadable */
+    private static volatile long _maxSearchTime = MAX_SEARCH_TIME_DEFAULT;
+
+    /**
+     * The current total search time cap.
+     * @return the cap in ms
+     * @since 0.9.71+
+     */
+    public static long getMaxSearchTime() { return _maxSearchTime; }
+
+    /**
+     * Set the total search time cap. Tuner may call this.
+     * @param val ms, clamped to [10s, 30s]
+     * @since 0.9.71+
+     */
+    public static void setMaxSearchTime(int val) {
+        _maxSearchTime = Math.max(10*1000, Math.min(30*1000, val));
+    }
 
     /** Cache size for recently completed peer replies to avoid false positive bans */
     private static final int COMPLETED_CACHE_SIZE = 8192;
@@ -164,19 +186,19 @@ public class IterativeSearchJob extends FloodSearchJob {
 
     /**
      *  Adaptive deadline cap (ms) for LeaseSet lookups only.
-     *  RouterInfo lookups continue to use {@link #MAX_SEARCH_TIME}.
+     *  RouterInfo lookups continue to use {@link #getMaxSearchTime()}.
      *  Tuned live by the Tuner toward ~4x the observed netDb.successTime,
      *  floored so healthy-but-slow searches aren't abandoned. Defaults to
-     *  MAX_SEARCH_TIME so behavior is unchanged until the Tuner adjusts it.
+     *  the max search time so behavior is unchanged until the Tuner adjusts it.
      *  @since 0.9.70+
      */
-    private static volatile int _maxLeaseSetLookupTime = MAX_SEARCH_TIME;
+    private static volatile int _maxLeaseSetLookupTime = (int) MAX_SEARCH_TIME_DEFAULT;
 
     /**
      *  Adaptive deadline cap (ms) for RouterInfo lookups.
      *  Used for transit next-hop lookups, where a message is held until the
      *  lookup completes or times out; a long hold during a spike tanks transit
-     *  throughput. Defaults to a shorter cap than MAX_SEARCH_TIME so a missing
+     *  throughput. Defaults to a shorter cap than the max search time so a missing
      *  or unreachable RouterInfo fails fast and the source can reroute. Tuned
      *  live by the Tuner toward ~4x the observed netDb.successTime.
      *  @since 0.9.70+
@@ -190,11 +212,11 @@ public class IterativeSearchJob extends FloodSearchJob {
     public static int getMaxRouterInfoLookupTime() { return _maxRouterInfoLookupTime; }
 
     /**
-     *  @param val RouterInfo lookup deadline cap in ms, clamped to [3000, MAX_SEARCH_TIME]
+     *  @param val RouterInfo lookup deadline cap in ms, clamped to [2000, max search time]
      *  @since 0.9.70+
      */
     public static void setMaxRouterInfoLookupTime(int val) {
-        _maxRouterInfoLookupTime = Math.max(2000, Math.min(MAX_SEARCH_TIME, val));
+        _maxRouterInfoLookupTime = Math.max(2000, Math.min((int) getMaxSearchTime(), val));
     }
 
     /**
@@ -204,11 +226,11 @@ public class IterativeSearchJob extends FloodSearchJob {
     public static int getMaxLeaseSetLookupTime() { return _maxLeaseSetLookupTime; }
 
     /**
-     *  @param val LeaseSet lookup deadline cap in ms, clamped to [3000, MAX_SEARCH_TIME]
+     *  @param val LeaseSet lookup deadline cap in ms, clamped to [3000, max search time]
      *  @since 0.9.70+
      */
     public static void setMaxLeaseSetLookupTime(int val) {
-        _maxLeaseSetLookupTime = Math.max(3000, Math.min(MAX_SEARCH_TIME, val));
+        _maxLeaseSetLookupTime = Math.max(3000, Math.min((int) getMaxSearchTime(), val));
     }
 
     /**
@@ -241,7 +263,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
         // RouterInfo lookups use the message timeout, capped at the adaptive
-        // RouterInfo deadline (shorter than MAX_SEARCH_TIME) so transit next-hop
+        // RouterInfo deadline (shorter than the max search time) so transit next-hop
         // lookups for a missing/unreachable peer fail fast instead of holding the
         // message for the full search window. LeaseSet lookups below use their own
         // adaptive, shorter cap instead.
@@ -249,7 +271,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         // LeaseSet lookups use an adaptive, shorter deadline cap so client
         // connect don't stall behind a doomed search (streaming retransmits
         // paper over the miss).
-        if (isLease) {_timeoutMs = Math.min(Math.min(timeoutMs * 3, MAX_SEARCH_TIME), _maxLeaseSetLookupTime);}
+        if (isLease) {_timeoutMs = Math.min(Math.min(timeoutMs * 3, (int) getMaxSearchTime()), _maxLeaseSetLookupTime);}
         _expiration = _timeoutMs + ctx.clock().now();
         _rkey = ctx.routingKeyGenerator().getRoutingKey(key);
         _toTry = new TreeSet<>(new XORComparator<>(_rkey));

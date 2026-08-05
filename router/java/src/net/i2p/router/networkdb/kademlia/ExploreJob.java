@@ -46,10 +46,10 @@ public class ExploreJob extends SearchJob {
     private static final long MAX_EXPLORE_TIME = 40 * 1000L;
 
     /** Configuration property key for controlling the maximum concurrent exploratory searches. */
-    static final String PROP_EXPLORE_BREDTH = "router.exploreBredth";
+    public static final String PROP_EXPLORE_BREDTH = "router.exploreBredth";
 
     /** Default number of concurrent exploratory searches, adjusted for slower systems. */
-    private static final int EXPLORE_BREDTH = SystemVersion.isSlow() ? 1 : 2;
+    public static final int EXPLORE_BREDTH = SystemVersion.isSlow() ? 1 : 2;
 
     /**
      * Maximum number of closest peers to exclude in queries.

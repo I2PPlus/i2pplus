@@ -146,6 +146,14 @@ public class TuningFormHandler extends FormHandler {
         TUNED.add(t);
         t = new Tunable("netdb.singleSearchTime", "netDBSingleSearchTime", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
+        t = new Tunable("netdb.maxSearchTime", "netDBMaxSearchTime", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
+        t = new Tunable("netdb.resendTimeout", "netDBResendTimeout", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
+        t = new Tunable("netdb.leaseResendCount", "netDBLeaseResend", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
+        t = new Tunable("router.exploreBredth", "exploreBredth", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
         // Peer management
         t = new Tunable("profileOrganizer.maxProfiles", "maxProfiles", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);

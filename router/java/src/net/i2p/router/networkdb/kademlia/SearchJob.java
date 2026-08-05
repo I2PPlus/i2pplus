@@ -40,8 +40,10 @@ import net.i2p.util.SystemVersion;
  * Note that this is rarely used directly and primarily serves as a base for ExploreJob.
  * FloodOnlySearchJob and FloodSearchJob do not extend this class.
  * Does not update peer profile statistics.
+ *
+ * @since 0.9.71+
  */
-class SearchJob extends JobImpl {
+public class SearchJob extends JobImpl {
     /** Class logger. */
     protected final Log _log;
     /** Network database facade for peer lookups and storage. */
@@ -90,12 +92,29 @@ class SearchJob extends JobImpl {
     private static final int PER_PEER_TIMEOUT = 8*1000;
 
     /**
-     * give ourselves 5 seconds to send out the value found to the closest
+     * give ourselves 30 seconds to send out the value found to the closest
      * peers /after/ we get a successful match.  If this fails, no biggie, but
      * this'll help heal the network so subsequent searches will find the data.
-     *
+     * Tunable via the Tuner (netdb.resendTimeout).
+     * @since 0.9.71+
      */
-    private static final long RESEND_TIMEOUT = 5*1000L;
+    private static volatile long RESEND_TIMEOUT = 30*1000L;
+
+    /**
+     * The current lease republish message window.
+     * @return the window in ms
+     * @since 0.9.71+
+     */
+    public static long getResendTimeout() { return RESEND_TIMEOUT; }
+
+    /**
+     * Set the lease republish message window. Tuner may call this.
+     * @param val ms, clamped to [10s, 30s]
+     * @since 0.9.71+
+     */
+    public static void setResendTimeout(int val) {
+        RESEND_TIMEOUT = Math.max(10*1000, Math.min(30*1000, val));
+    }
 
     /**
      * When we're just waiting for something to change, requeue the search status test
@@ -625,10 +644,26 @@ class SearchJob extends JobImpl {
      * After a successful search for a leaseSet, we resend that leaseSet to all
      * of the peers we tried and failed to query.  This var bounds how many of
      * those peers will get the data, in case a search had to crawl about
-     * substantially.
-     *
+     * substantially. Tunable via the Tuner (netdb.leaseResendCount).
+     * @since 0.9.71+
      */
-    private static final int MAX_LEASE_RESEND = 5;
+    private static volatile int MAX_LEASE_RESEND = 8;
+
+    /**
+     * The current max peers that get a lease republish after a search.
+     * @return the max peers
+     * @since 0.9.71+
+     */
+    public static int getLeaseResendCount() { return MAX_LEASE_RESEND; }
+
+    /**
+     * Set the max peers that get a lease republish after a search. Tuner may call this.
+     * @param val clamped to [5, 10]
+     * @since 0.9.71+
+     */
+    public static void setLeaseResendCount(int val) {
+        MAX_LEASE_RESEND = Math.max(5, Math.min(10, val));
+    }
 
     /**
      * Should we republish a routerInfo received?  Probably not worthwhile, since
