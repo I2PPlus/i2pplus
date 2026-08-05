@@ -294,8 +294,6 @@ class ClientManager {
             for (Destination dest : dests) {
                 _runners.remove(dest);
                 _runnersByHash.remove(dest.calculateHash());
-                // Clean up orphaned LeaseSets to prevent expiration errors
-                _ctx.netDb().fail(dest.calculateHash());
             }
         }
     }
