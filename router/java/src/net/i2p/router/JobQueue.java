@@ -225,15 +225,32 @@ public class JobQueue {
     }
 
     /**
-     * Enqueue the specified job to be processed at the top of the queue.
-     * This is a high-priority job that will be run before any normal-priority jobs.
+     * Enqueue the specified job at the top of the queue, ahead of all
+     * normal-priority jobs.  The job is exempt from the drop policy and its
+     * scheduled start time is overridden to run immediately.  Any existing
+     * copy in the timed or ready queues is removed first, so promotion can
+     * never cause the job to run twice.
      *
-     * @param job job to add to the front of the queue
+     * @param job the job to promote to the front of the queue
      */
     public void addJobToTop(Job job) {
-        if (job == null || !_alive) return;
+        if (job == null || !_alive) {
+            if (_log.shouldWarn() && job != null) {
+                _log.warn("JobQueue.addJobToTop: job=" + job + ", alive=" + _alive + ", returning");
+            }
+            return;
+        }
 
         synchronized (_jobLock) {
+            // Promote any scheduled copy so the job runs once (now) instead of
+            // twice (now, plus again when the timed copy matures).
+            if (_timedJobs.remove(job)) {
+                if (_log.shouldWarn()) {
+                    _log.warn(job + " removed from queue and promoted to top -> Duplicate instance");
+                }
+            }
+            _timedJobsReady.remove(job);
+            _readyJobs.remove(job);
             // remove() is O(n) on a LinkedBlockingQueue but the queue is always small (< 100).
             // Calling it unconditionally avoids a second linear scan for contains().
             _highPriorityJobs.remove(job);
@@ -413,6 +430,16 @@ public class JobQueue {
             String jobName = cls.getName();
             if (getMaxLag() >= MIN_LAG_TO_DROP) {
                 if (cls == RepublishLeaseSetJob.class) {return false;}
+                // Never drop leaseset lifecycle jobs: renewal, refresh, and batch
+                // minting must always proceed even when the queue is backlogged,
+                // otherwise the renewal cycle dies and services become unreachable
+                if (jobName.contains("ExpireLeasesJob") ||
+                    jobName.contains("RefreshClientLeaseSetsJob") ||
+                    jobName.contains("BatchRepublishJob") ||
+                    jobName.contains("OnRepublishFailure") ||
+                    jobName.contains("OnRepublishSuccess")) {
+                    return false;
+                }
                 // Don't drop critical tunnel management jobs
                 if (jobName.equals("net.i2p.router.tunnel.pool.TunnelPoolManager$RemoveSlowTunnelsJob")) {return false;}
                 // Drop timeout-based jobs when lagging to reduce queue pressure

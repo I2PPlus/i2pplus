@@ -1198,11 +1198,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     * Publishes a local LeaseSet by storing it and scheduling republishing if applicable.
-     * Ensures LeaseSet expiry dates are valid (not expired before publish).
+     * Publishes a local LeaseSet to the network: stores it in this facade and,
+     * for a client facade, also in the floodfill facade, then schedules
+     * republishing.  LeaseSet expiry dates are validated first (not expired
+     * before publish).
      *
      * @param localLeaseSet the LeaseSet to publish
-     * @throws IllegalArgumentException if LeaseSet is invalid or expired
+     * @throws IllegalArgumentException if the LeaseSet is invalid or expired
      */
     @Override
     public void publish(LeaseSet localLeaseSet) throws IllegalArgumentException {
@@ -1227,6 +1229,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         // Skip publishing if client manager advises against it
         if (!_context.clientManager().shouldPublishLeaseSet(hash)) {
+            // A local client whose LS is not published to the network
+            // (i2cp.dontPublishLeaseSet, e.g. HTTP proxy) still needs the local
+            // copy re-minted while it is active.  Client leases last ~6 min but
+            // tunnels rotate on a ~10-min cycle, so without a republish schedule
+            // the local LeaseSet shows expired in the netdb for minutes at a time.
+            if (_context.clientManager().isLocal(hash) &&
+                !_context.router().gracefulShutdownInProgress()) {
+                scheduleRepublish(hash);
+            }
             return;
         }
 
@@ -1235,6 +1246,34 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             int code = _context.router().scheduledGracefulExitCode();
             if (code == Router.EXIT_GRACEFUL || code == Router.EXIT_HARD) {
                 return;
+            }
+        }
+
+        // A locally-published LeaseSet legitimately occupies both the client
+        // facade (where the client pushed it) and the floodfill facade (where
+        // the router console and the network look it up).  Storing the copy
+        // into the floodfill facade here makes hosted services retrievable
+        // immediately, without waiting for the network to flood the LeaseSet
+        // back to us.  The NetDbRenderer dedups the two facades' entries on
+        // the netdb page.
+        if (isClientDb()) {
+            KademliaNetworkDatabaseFacade main = (KademliaNetworkDatabaseFacade) _context.netDb();
+            if (main != null && main != this) {
+                try {
+                    main.store(hash, localLeaseSet, true);
+                    if (localLeaseSet instanceof EncryptedLeaseSet) {
+                        // LS2s are keyed in the netDb by their hash; store the
+                        // decrypted copy under the destination hash too, so
+                        // lookups by destination resolve hosted services
+                        EncryptedLeaseSet encls = (EncryptedLeaseSet) localLeaseSet;
+                        Destination dest = encls.getDestination();
+                        if (dest != null) {
+                            main.store(dest.getHash(), encls.getDecryptedLeaseSet(), true);
+                        }
+                    }
+                } catch (IllegalArgumentException iae) {
+                    _log.error("Error storing LeaseSet into floodfill facade", iae);
+                }
             }
         }
 

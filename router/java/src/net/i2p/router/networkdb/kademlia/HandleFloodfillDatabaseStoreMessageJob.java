@@ -145,10 +145,10 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     if (!ls.getReceivedAsReply()) {ls.setReceivedAsPublished();}
                 } else {
                     /**
-                     *  This is where we deal with what happens if a client subDB tries to store
-                     *  a leaseSet which it is the owner/publisher of.
-                     *  Look up a ls hash in the netDbSegmentor, and compare it to the _facade that we have.
-                     *  If they are equal, reject the store.
+                     *  A client subDB whose owner tries to store its own
+                     *  LeaseSet is rejected: resolve the LeaseSet hash in the
+                     *  netDbSegmentor and compare it to the owning _facade.  If
+                     *  they are equal, reject the store without blaming the peer.
                      */
                     if (getContext().netDbSegmentor().clientNetDB(ls.getHash()).equals(_facade)) {
                         getContext().statManager().addRateData("netDb.storeLocalLeaseSetToLocalClient", 1, 0);

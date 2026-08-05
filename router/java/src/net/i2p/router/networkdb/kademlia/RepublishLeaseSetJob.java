@@ -14,6 +14,7 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelPoolSettings;
 
+import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.util.Log;
 
 /**
@@ -123,7 +124,12 @@ public class RepublishLeaseSetJob extends JobImpl {
 
         long uptime = getContext().router().getUptime();
         try {
-            if (!getContext().clientManager().shouldPublishLeaseSet(_dest)) {
+            // A local client that does not publish to the network
+            // (i2cp.dontPublishLeaseSet, e.g. HTTP proxy) still needs its local
+            // LeaseSet kept fresh.  Only treat "should not publish" as a stop
+            // signal when the client is no longer local (stopped).
+            if (!getContext().clientManager().shouldPublishLeaseSet(_dest) &&
+                !getContext().clientManager().isLocal(_dest)) {
                 handleShouldNotPublish();
                 return;
             }
@@ -187,7 +193,16 @@ public class RepublishLeaseSetJob extends JobImpl {
             _log.warn("LeaseSet EXPIRED - triggering immediate rebuild for " + name +
                       " [" + shortHash() + "]");
         }
-        getContext().clientManager().requestLeaseSet(_dest, ls);
+        // Send the pool's current leases so the client re-signs fresh tunnels,
+        // not the expired stored copy (which would fail expiry validation).
+        // When the pool has no usable leases (e.g. rebuilding after a build
+        // failure), skip the request — re-signing the expired copy would just
+        // produce another invalid LS — and retry after the 30s pool rebuild
+        // window.
+        LeaseSet fresh = getFreshPoolLeaseSet();
+        if (fresh != null) {
+            getContext().clientManager().requestLeaseSet(_dest, fresh);
+        }
         scheduleRepublish(30L * 1000);
     }
 
@@ -228,7 +243,13 @@ public class RepublishLeaseSetJob extends JobImpl {
                 _log.info("LeaseSet expiring soon for " + name + " [" + shortHash() +
                           "] (expires in " + (timeUntilExpiry / 1000) + "s) — requesting immediate renew");
             }
-            getContext().clientManager().requestLeaseSet(_dest, ls);
+            // Local-only clients (i2cp.dontPublishLeaseSet) are re-minted in the
+            // local-only branch below from the tunnel pool's current tunnels.
+            // Re-signing the stored copy here would recycle the same near-expiry
+            // leases, keeping the LS perpetually close to expiry.
+            if (getContext().clientManager().shouldPublishLeaseSet(_dest)) {
+                getContext().clientManager().requestLeaseSet(_dest, ls);
+            }
             lastPubLog = null;
         }
         if (_log.shouldInfo() && (lastPubLog == null || (now - lastPubLog > 10L * 1000))) {
@@ -240,6 +261,45 @@ public class RepublishLeaseSetJob extends JobImpl {
         int leaseCount = ls.getLeaseCount();
         TunnelPoolSettings settings = getContext().tunnelManager().getInboundSettings(_dest);
         int targetLeases = settings != null ? settings.getQuantity() : 1;
+
+        // Active local client with publication disabled (i2cp.dontPublishLeaseSet,
+        // e.g. HTTP proxy): keep the local copy fresh but never floodfill.
+        // publish() stores the re-minted LeaseSet locally; this just keeps the
+        // republish cycle alive so it re-mints before the lease expires.
+        if (!getContext().clientManager().shouldPublishLeaseSet(_dest)) {
+            if (_log.shouldInfo()) {
+                _log.info("Local-only LeaseSet maintenance for " + name + " [" + shortHash() +
+                           "] (not published to network)");
+            }
+            _lastPublished = now;
+            // Re-mint from the tunnel pool's current tunnels rather than
+            // re-signing the stored copy, whose leases may be near expiry.
+            // The client signs whatever leases we send, so sending the stored
+            // (dying) copy would keep the local LS perpetually close to expiry.
+            LeaseSet fresh = getFreshPoolLeaseSet();
+            long freshTimeUntilExpiry = fresh != null ? fresh.getLatestLeaseDate() - now : 0;
+            if (fresh != null && freshTimeUntilExpiry > timeUntilExpiry) {
+                if (_log.shouldInfo()) {
+                    _log.info("Requesting re-mint of LeaseSet for " + name + " [" + shortHash() +
+                              "] (extends expiry from " + (timeUntilExpiry / 1000) +
+                              "s to " + (freshTimeUntilExpiry / 1000) + "s)");
+                }
+                getContext().clientManager().requestLeaseSet(_dest, fresh);
+            }
+            long nextRepublish;
+            if (fresh != null && freshTimeUntilExpiry > EXPIRY_WINDOW) {
+                nextRepublish = Math.max(30L * 1000,
+                                         Math.min(getRepublishInterval(),
+                                                  freshTimeUntilExpiry - EXPIRY_WINDOW));
+            } else {
+                // Pool cannot build a healthy LeaseSet right now — retry at a
+                // moderate cadence instead of a 30s treadmill; the pool's
+                // addTunnel path re-mints as soon as a usable tunnel exists.
+                nextRepublish = Math.max(30L * 1000, getRepublishInterval() / 2);
+            }
+            scheduleRepublish(nextRepublish);
+            return;
+        }
 
         if (maybeDeferFirstPublish(leaseCount, targetLeases))
             return;
@@ -314,6 +374,20 @@ public class RepublishLeaseSetJob extends JobImpl {
 
     private long getRepublishInterval() {
         return getContext().getProperty("i2p.netdb.republishInterval", 3L * 60 * 1000);
+    }
+
+    /**
+     *  The inbound pool's current tunnels as a re-mintable LeaseSet, or null
+     *  if the client has no inbound pool or no usable leases.
+     *
+     *  @return current-pool LeaseSet, or null
+     */
+    private LeaseSet getFreshPoolLeaseSet() {
+        TunnelPool pool = getContext().tunnelManager().getInboundPool(_dest);
+        if (pool != null) {
+            return pool.getInboundTunnelsAsLeaseSet();
+        }
+        return null;
     }
 
     // Register a successor RepublishLeaseSetJob with timing set.

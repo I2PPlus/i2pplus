@@ -116,6 +116,12 @@ class NetDbRenderer {
      * Number of local lease sets, set during lease set rendering.
      */
     public int localLSCount;
+    /**
+     * LeaseSet keys already rendered for this request, so a LeaseSet stored
+     * in more than one facade is shown only once on the local netdb page.
+     * A fresh NetDbRenderer is created per request, so no reset is needed.
+     */
+    private final Set<Hash> _renderedLeaseSetKeys = new HashSet<>();
     private final ProfileOrganizer _organizer;
     private final int BATCH_SIZE = SystemVersion.isSlow() ? 8 : Math.max(SystemVersion.getCores() - 2, 16);
     private long now;
@@ -710,6 +716,7 @@ class NetDbRenderer {
             boolean linkSusi = _context.portMapper().isRegistered("susidns");
             now = _context.clock().now();
             for (LeaseSet ls : leases) {
+                if (!_renderedLeaseSetKeys.add(ls.getHash())) {continue;}
                 String distance;
                 if (debug) {
                     medianCount = rapCount / 2;
