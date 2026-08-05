@@ -1,20 +1,43 @@
+2026-08-05 dr|z3d
+  * Console: Implement content-only fragments for auto-refreshing large
+    tables (peers, profiles, session bans, tunnel peer counts, leasesets)
+    patching only the rows that changed, so each refresh tick transfers
+    far less data and updates in place instead of reloading the whole page
+  * Router: Fix hosted service availability — LeaseSet re-mint, renew, and
+    floodfill publication; refresh leasesets before expiry so services stay up
+
+2026-08-04 dr|z3d
+  * Router: Refresh leasesets before expiry to preserve service availability;
+    tighter expiry rerun delay with aggressive stale purging
+  * Console: Expose all Tuner params on the tuning page; dark theme tweaks
+
+2026-08-03 dr|z3d
+  * Core: Fix SU3 signature verification
+  * Router: Guard clove-set parsing against out-of-bounds reads; fix
+    ClassCastException on NetDB hash collisions; handle empty datagram
+    payloads; cap NTCP pumper idle spin (less CPU usage)
+  * Console: Suspend sidebar refreshes for hidden tabs; minigraph and
+    sidebar refresh start at parse time; leasesets presentational fix
+  * I2PSnark: Refresh form nonce on every poll
+
+2026-08-02 zzz
+  * I2PSnark: Dup-check torrent base name when filtering
+
 2026-08-02 dr|z3d
   * I2PSnark:
-    - HTTP and UDP tracker announces retried up to three times
-      before failing, tolerating transient proxy timeouts; UDP retransmit,
+    - HTTP and UDP tracker announces retried up to three times before
+      failing, tolerating transient proxy timeouts; UDP retransmit,
       connect and transaction ID handling fixed
-    - DHT peer lookup runs on its own thread, so slow lookups no
-      longer stall announces; the fixed 30s DHT wait floor is gone
+    - DHT peer lookup runs on its own thread, so slow lookups no longer
+      stall announces; the fixed 30s DHT wait floor is gone
     - Dashboard ETA/counters fixed, download stream and traversal
       permission holes closed, XSS in torrent messages escaped, page-size
       input capped
-    - Robustness pass — bencoding depth and byte-array caps,
-      validated peer message lengths, bounded handshake reads, safer
-      send-queue handling. Long file rechecks no longer hold the global
-      torrent lock, and disk usage is cached for faster pages
-  * Console: NetDB table keeps router row order and filters hashes
-    byte-exact again; changelog page no longer relies on lazy loading;
-    dark-theme graph cosmetics
+    - Robustness pass — bencoding depth and byte-array caps, validated peer
+      message lengths, bounded handshake reads, safer send-queue handling.
+      Long file rechecks no longer hold the global torrent lock, and disk
+      usage is cached for faster pages
+  * Console: Remove lazy loading on changelog page
   * Router: Avoid NTCP pumper busy-loop when sockets idle (less CPU
     spin); IPv6 ban-log lines formatted to match IPv4 entries
 
