@@ -36,14 +36,14 @@ class DHTNodes {
     private static final long CLEAN_TIME = (long) 117 * 1000;
 
     /** how long since last heard from do we delete - BEP 5 says 15 minutes */
-    private static final long MAX_EXPIRE_TIME = 10 * (long) 60 * 1000;
-    private static final long MIN_EXPIRE_TIME = 8 * (long) 60 * 1000;
+    private static final long MAX_EXPIRE_TIME = 30 * (long) 60 * 1000;
+    private static final long MIN_EXPIRE_TIME = 15 * (long) 60 * 1000;
     private static final long DELTA_EXPIRE_TIME = 3 * (long) 60 * 1000;
-    private static final int MAX_PEERS = 500;
+    private static final int MAX_PEERS = 1000;
 
     /** Buckets older than this are refreshed - BEP 5 says 15 minutes */
     private static final long MAX_BUCKET_AGE = 15 * (long) 60 * 1000;
-    private static final int KAD_K = 8;
+    private static final int KAD_K = 20;
     private static final int KAD_B = 1;
 
     /**
