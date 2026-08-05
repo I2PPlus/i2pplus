@@ -39,13 +39,26 @@ class ProfileOrganizerRenderer {
     private static final int MAX_BEFORE_STREAMING = 100;
     /** Rows rendered per flush when streaming a large table. */
     private static final int STREAM_BATCH = 100;
+    /** Length of the truncated base64 hash used as a per-row data-key in fragment mode; 16 chars = 96 bits, collision-free at 10K-20K rows. */
+    private static final int KEY_LEN = 16;
     private final RouterContext _context;
     private final ProfileOrganizer _organizer;
+    /** Emit a data-key (peer hash) per row for worker-side row diffing; fragment renders only, so full pages stay byte-for-byte identical. */
+    private final boolean _fragmentKeys;
 
     /** Creates a new ProfileOrganizerRenderer */
     public ProfileOrganizerRenderer(ProfileOrganizer organizer, RouterContext context) {
+        this(organizer, context, false);
+    }
+
+    /**
+     * Creates a new ProfileOrganizerRenderer
+     * @param fragmentKeys when true, rows carry a data-key attribute for the contentonly fragment mode
+     */
+    public ProfileOrganizerRenderer(ProfileOrganizer organizer, RouterContext context, boolean fragmentKeys) {
         _context = context;
         _organizer = organizer;
+        _fragmentKeys = fragmentKeys;
     }
 
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
@@ -64,8 +77,36 @@ class ProfileOrganizerRenderer {
         if (mode == 3) {
             renderFloodfill(out, sel.order);
         } else {
-            renderProfiles(out, sel, mode);
+            renderOverview(out, sel);
+            int[] counts = renderPbody(out, sel.order);
+            renderThresholds(out, counts);
+            out.append("</div>\n");
+            out.flush();
+            if (mode == 0 && !_context.getBooleanProperty("routerconsole.advanced")) {renderDefinitions(out);}
         }
+    }
+
+    /**
+     *  Render a single named element for the contentonly fragment mode.
+     *  Renders nothing for ids the given mode does not own.
+     *
+     *  @param out the writer to render to
+     *  @param mode 0 = all; 1 = fast; 2 = high capacity (non-fast); 3 = floodfill
+     *  @param id the element id
+     *  @throws IOException if an I/O error occurs
+     *  @since 0.9.70+
+     */
+    public void renderFragment(Writer out, int mode, String id) throws IOException {
+        if (mode == 3) {
+            if ("floodfills".equals(id) || "ffProfiles".equals(id)) {
+                renderFloodfill(out, loadProfiles(mode).order);
+            }
+            return;
+        }
+        ProfileSelection sel = loadProfiles(mode);
+        if ("profiles_overview".equals(id)) {renderOverview(out, sel);}
+        else if ("pbody".equals(id)) {renderPbody(out, sel.order);}
+        else if ("thresholds".equals(id)) {renderThresholds(out, countStats(sel.order));}
     }
 
     /**
@@ -137,57 +178,72 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Render the all/fast/high-capacity profile table, the threshold summary,
-     *  and the definitions block (mode 0 only).
+     *  Render the profile count overview paragraph.
      *
      *  @param out the writer to render to
      *  @param sel the selected profiles
-     *  @param mode 0 = all; 1 = fast; 2 = high capacity (non-fast)
      *  @throws IOException if an I/O error occurs
      *  @since 0.9.70+
      */
-    private void renderProfiles(Writer out, ProfileSelection sel, int mode) throws IOException {
-        Set<PeerProfile> order = sel.order;
-        int older = sel.older;
-        int standard = sel.standard;
-        int fast = 0;
-        int reliable = 0;
-        int integrated = 0;
-        boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
-        StringBuilder buf = new StringBuilder(32*1024);
-
+    private void renderOverview(Writer out, ProfileSelection sel) throws IOException {
+        StringBuilder buf = new StringBuilder(1024);
         buf.append("<p id=profiles_overview class=infohelp>")
-           .append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", order.size())).append('\n');
-        if (older > 0) {
-            buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", older)).append('\n');
+           .append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", sel.order.size())).append('\n');
+        if (sel.older > 0) {
+            buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", sel.older)).append('\n');
         }
-        if (standard > 0) {
+        if (sel.standard > 0) {
             buf.append("<a href=\"/profiles\">")
-               .append(ngettext("Hiding {0} standard profile.","Hiding {0} standard profiles.", standard))
+               .append(ngettext("Hiding {0} standard profile.","Hiding {0} standard profiles.", sel.standard))
                .append("</a>\n");
         }
         buf.append(_t("Note that the profiler relies on sustained client tunnel usage to accurately profile peers.")).append("</p>");
-        buf.append("<div class=widescroll id=peerprofiles>\n<table id=profilelist data-sort-direction=descending>\n")
-           .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup>")
-           .append("</colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
-           .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
-           .append("<thead>\n<tr>")
-           .append("<th>").append(_t("Peer")).append("</th>")
-           .append("<th>").append(_t("Caps")).append("</th>")
-           .append("<th>").append(_t("Version")).append("</th>");
-         buf.append("<th class=host data-sort-method=string data-sort-caseinsensitive>").append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>");
-        buf.append("<th class=status>").append(_t("Status")).append("</th>")
-           .append("<th class=groups>").append(_t("Groups")).append("</th>")
-           .append("<th data-sort-method=number>").append(_t("Speed")).append("</th>")
-           .append("<th class=latency data-sort-method=number>").append(_t("Low Latency")).append("</th>")
-           .append("<th title=\"").append(_t("Tunnels peer has agreed to participate in"))
-           .append("\" data-sort-method=number>").append(_t("Accepted")).append("</th>")
-           .append("<th title=\"").append(_t("Tunnels peer has refused to participate in"))
-           .append("\" data-sort-method=number>").append(_t("Rejected")).append("</th>")
-           .append("<th data-sort-method=number>").append(_t("First Heard About")).append("</th>")
-           .append("<th data-sort-method=number>").append(_t("Last Heard From")).append("</th>")
-           .append("<th data-sort-method=none>").append(_t("View/Edit")).append("</th>")
-           .append("</tr>\n</thead>\n<tbody id=pbody>\n");
+        out.append(buf);
+        out.flush();
+    }
+
+    /**
+     *  Render the profile table body. In fragment mode only the bare
+     *  {@code <tbody id=pbody>} is emitted, with a data-key per row for the
+     *  worker-side row diff; the full page emits the wrapper table and thead
+     *  and stays byte-for-byte identical to previous versions.
+     *
+     *  @param out the writer to render to
+     *  @param order the selected profiles
+     *  @return {fast, reliable, integrated} profile counts, for the thresholds table
+     *  @throws IOException if an I/O error occurs
+     *  @since 0.9.70+
+     */
+    private int[] renderPbody(Writer out, Set<PeerProfile> order) throws IOException {
+        int fast = 0;
+        int reliable = 0;
+        int integrated = 0;
+        StringBuilder buf = new StringBuilder(32*1024);
+
+        if (!_fragmentKeys) {
+            buf.append("<div class=widescroll id=peerprofiles>\n<table id=profilelist data-sort-direction=descending>\n")
+               .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup>")
+               .append("</colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
+               .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
+               .append("<thead>\n<tr>")
+               .append("<th>").append(_t("Peer")).append("</th>")
+               .append("<th>").append(_t("Caps")).append("</th>")
+               .append("<th>").append(_t("Version")).append("</th>");
+             buf.append("<th class=host data-sort-method=string data-sort-caseinsensitive>").append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>");
+            buf.append("<th class=status>").append(_t("Status")).append("</th>")
+               .append("<th class=groups>").append(_t("Groups")).append("</th>")
+               .append("<th data-sort-method=number>").append(_t("Speed")).append("</th>")
+               .append("<th class=latency data-sort-method=number>").append(_t("Low Latency")).append("</th>")
+               .append("<th title=\"").append(_t("Tunnels peer has agreed to participate in"))
+               .append("\" data-sort-method=number>").append(_t("Accepted")).append("</th>")
+               .append("<th title=\"").append(_t("Tunnels peer has refused to participate in"))
+               .append("\" data-sort-method=number>").append(_t("Rejected")).append("</th>")
+               .append("<th data-sort-method=number>").append(_t("First Heard About")).append("</th>")
+               .append("<th data-sort-method=number>").append(_t("Last Heard From")).append("</th>")
+               .append("<th data-sort-method=none>").append(_t("View/Edit")).append("</th>")
+               .append("</tr>\n</thead>\n");
+        }
+        buf.append("<tbody id=pbody>\n");
 
         boolean stream = order.size() > MAX_BEFORE_STREAMING;
         if (stream) {
@@ -199,6 +255,7 @@ class ProfileOrganizerRenderer {
 
         for (PeerProfile prof : order) {
             Hash peer = prof.getPeer();
+            String peerB64 = peer.toBase64();
             int tier = 0;
             boolean isIntegrated = false;
             if (_organizer.isFast(peer)) {
@@ -213,7 +270,9 @@ class ProfileOrganizerRenderer {
                 isIntegrated = true;
                 integrated++;
             }
-            buf.append("<tr class=lazy><td nowrap>");
+            buf.append("<tr class=lazy");
+            if (_fragmentKeys) {buf.append(" data-key=\"").append(peerB64, 0, KEY_LEN).append("\"");}
+            buf.append("><td nowrap>");
             buf.append(_context.commSystem().renderPeerHTML(peer, false));
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             buf.append("</td><td>");
@@ -389,10 +448,9 @@ class ProfileOrganizerRenderer {
             }
             buf.append("</td><td data-sort=").append(prof.getLastHeardFrom() - now).append(">")
                .append(formatInterval(now, prof.getLastHeardFrom())).append("</td><td nowrap class=viewedit>");
-            String viewProfile = _t("View profile");
-            String configurePeer = _t("Configure Peer");
-            String peerB64 = peer.toBase64();
-            if (prof != null) {
+             String viewProfile = _t("View profile");
+             String configurePeer = _t("Configure Peer");
+             if (prof != null) {
                 buf.append("<a class=viewprofile href=\"/viewprofile?peer=")
                    .append(peerB64)
                    .append("\" title=\"")
@@ -419,7 +477,27 @@ class ProfileOrganizerRenderer {
                 rowsSinceFlush = 0;
             }
         }
-        buf.append("</tbody>\n</table>\n<div id=peer_thresholds>\n<h3 class=tabletitle>")
+        buf.append("</tbody>\n");
+        if (!_fragmentKeys) {buf.append("</table>\n");}
+        out.append(buf);
+        out.flush();
+        return new int[] {fast, reliable, integrated};
+    }
+
+    /**
+     *  Render the threshold summary table.
+     *
+     *  @param out the writer to render to
+     *  @param counts {fast, reliable, integrated} profile counts
+     *  @throws IOException if an I/O error occurs
+     *  @since 0.9.70+
+     */
+    private void renderThresholds(Writer out, int[] counts) throws IOException {
+        int fast = counts[0];
+        int reliable = counts[1];
+        int integrated = counts[2];
+        StringBuilder buf = new StringBuilder(2048);
+        buf.append("<div id=peer_thresholds>\n<h3 class=tabletitle>")
            .append(_t("Thresholds"))
            .append("</h3>\n<table id=thresholds>\n<thead><tr><th><b>")
            .append(_t("Speed"))
@@ -444,83 +522,117 @@ class ProfileOrganizerRenderer {
            .append(ngettext("{0} high capacity peer", "{0} high capacity peers", reliable))
            .append("</td><td>")
            .append(ngettext("{0} integrated peer", "{0} integrated peers", integrated))
-           .append("</td></tr>\n</tbody>\n</table>\n</div>\n</div>\n"); // thresholds
-        if (mode == 0 && !isAdvanced) {
-            buf.append("<h3 class=tabletitle>")
-               .append(_t("Definitions"))
-               .append("</h3>\n<table id=profile_defs>\n<tbody>\n<tr><td><b>")
-               .append(_t("caps"))
-               .append(":</b></td><td>")
-               .append(_t("Capabilities in the NetDb, not used to determine profiles"))
-               .append("</td></tr>\n<tr id=capabilities_key><td></td><td><table><tbody><tr><td><a href=\"/netdb?caps=f\" title=\"")
-               .append(_t("Show all routers with this capability in the NetDb"))
-               .append("\"><b class=ff>F</b></a></td><td>")
-               .append(_t("Floodfill"))
-               .append("</td><td><a href=\"/netdb?caps=R\" title=\"")
-               .append(_t("Show all routers with this capability in the NetDb"))
-               .append("\"><b class=reachable>R</b></a></td><td>")
-               .append(_t("Reachable"))
-               .append("</td></tr>\n<tr><td><a href=\"/netdb?caps=N\" title=\"")
-               .append(_t("Show all routers with this capability in the NetDb"))
-               .append("\"><b>N</b></a></td><td>")
-               .append(_t("{0} shared bandwidth", range(Router.MIN_BW_N, Router.MIN_BW_O)))
-               .append("</td><td><a href=\"/netdb?caps=O\" title=\"")
-               .append(_t("Show all routers with this capability in the NetDb"))
-               .append("\"><b>O</b></a></td><td>")
-               .append(_t("{0} shared bandwidth", range(Router.MIN_BW_O, Router.MIN_BW_P)))
-               .append("</td></tr>\n<tr><td><a href=\"/netdb?caps=P\" title=\"")
-               .append(_t("Show all routers with this capability in the NetDb"))
-               .append("\"><b>P</b></a></td><td>")
-               .append(_t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X)))
-               .append("</td><td><a href=\"/netdb?caps=X\" title=\"")
-               .append(_t("Show all routers with this capability in the NetDb"))
-               .append("\"><b>X</b></a></td><td>")
-               .append(_t("Over {0} KB/s shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f)))
-               .append("</td></tr>\n</tbody>\n</table>\n</td></tr>\n<tr><td><b>")
-               .append(_t("status"))
-               .append(":</b></td><td>")
-               .append(_t("is the peer banned, or unreachable, or failing tunnel tests?"))
-               .append("</td></tr>\n<tr><td><b>")
-               .append(_t("groups"))
-               .append(":</b></td><td>")
-               .append(_t("Note: Peers are categorized by the profile organizer based on observable performance, not from capabilities they advertise in the NetDB."))
-               .append("<br><span class=\"profilegroup fast\"><b>")
-               .append(_t("Fast"))
-               .append(":</b>&nbsp; ")
-               .append(_t("Peers marked as high capacity that also meet or exceed speed average for all profiled peers."))
-               .append("</span><br><span class=\"profilegroup highcap\"><b>")
-               .append(_t("High Capacity"))
-               .append(":</b>&nbsp; ")
-               .append(_t("Peers that meet or exceed tunnel build rate average for all profiled peers."))
-               .append("</span><br><span class=\"profilegroup integrated\"><b>")
-               .append(_t("Integrated"))
-               .append(":</b>&nbsp; ")
-               .append(_t("Floodfill peers currently available for NetDb inquiries."))
-               .append("</span><br><span class=\"profilegroup standard\"><b>")
-               .append(_t("Standard"))
-               .append(":</b>&nbsp; ")
-               .append(_t("Peers not profiled as high capacity (lower build rate than average peer)."))
-               .append("</span></td></tr>\n<tr><td><b>")
-               .append(_t("speed"))
-               .append(":</b></td><td>")
-               .append(_t("Peak throughput (bytes per second) over a 1 minute period that the peer has sustained in a single tunnel."))
-               .append("</td></tr>\n<tr><td><b>")
-               .append(_t("latency"))
-               .append(":</b></td><td>")
-               .append(_t("Is the peer responding to tests in a timely fashion? To configure the timeout value: " +
-                          "<code>router.peerTestTimeout={n}</code> (value is milliseconds, default 1000ms)"))
-               .append("</td></tr>\n<tr><td><b>")
-               .append(_t("capacity"))
-               .append(":</b></td><td>")
-               .append(_t("how many tunnels can we ask them to join in an hour?"))
-               .append("</td></tr>\n<tr><td><b>")
-               .append(_t("integration"))
-               .append(":</b></td><td>")
-               .append(_t("how many new peers have they told us about lately?"))
-               .append("</td></tr>\n</tbody>\n</table>\n");
-        }  // mode == 0
+           .append("</td></tr>\n</tbody>\n</table>\n</div>\n");
         out.append(buf);
         out.flush();
+    }
+
+    /**
+     *  Render the definitions block shown on the full "all" page when the
+     *  advanced setting is off. Never part of a fragment response.
+     *
+     *  @param out the writer to render to
+     *  @throws IOException if an I/O error occurs
+     *  @since 0.9.70+
+     */
+    private void renderDefinitions(Writer out) throws IOException {
+        StringBuilder buf = new StringBuilder(4096);
+        buf.append("<h3 class=tabletitle>")
+           .append(_t("Definitions"))
+           .append("</h3>\n<table id=profile_defs>\n<tbody>\n<tr><td><b>")
+           .append(_t("caps"))
+           .append(":</b></td><td>")
+           .append(_t("Capabilities in the NetDb, not used to determine profiles"))
+           .append("</td></tr>\n<tr id=capabilities_key><td></td><td><table><tbody><tr><td><a href=\"/netdb?caps=f\" title=\"")
+           .append(_t("Show all routers with this capability in the NetDb"))
+           .append("\"><b class=ff>F</b></a></td><td>")
+           .append(_t("Floodfill"))
+           .append("</td><td><a href=\"/netdb?caps=R\" title=\"")
+           .append(_t("Show all routers with this capability in the NetDb"))
+           .append("\"><b class=reachable>R</b></a></td><td>")
+           .append(_t("Reachable"))
+           .append("</td></tr>\n<tr><td><a href=\"/netdb?caps=N\" title=\"")
+           .append(_t("Show all routers with this capability in the NetDb"))
+           .append("\"><b>N</b></a></td><td>")
+           .append(_t("{0} shared bandwidth", range(Router.MIN_BW_N, Router.MIN_BW_O)))
+           .append("</td><td><a href=\"/netdb?caps=O\" title=\"")
+           .append(_t("Show all routers with this capability in the NetDb"))
+           .append("\"><b>O</b></a></td><td>")
+           .append(_t("{0} shared bandwidth", range(Router.MIN_BW_O, Router.MIN_BW_P)))
+           .append("</td></tr>\n<tr><td><a href=\"/netdb?caps=P\" title=\"")
+           .append(_t("Show all routers with this capability in the NetDb"))
+           .append("\"><b>P</b></a></td><td>")
+           .append(_t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X)))
+           .append("</td><td><a href=\"/netdb?caps=X\" title=\"")
+           .append(_t("Show all routers with this capability in the NetDb"))
+           .append("\"><b>X</b></a></td><td>")
+           .append(_t("Over {0} KB/s shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f)))
+           .append("</td></tr>\n</tbody>\n</table>\n</td></tr>\n<tr><td><b>")
+           .append(_t("status"))
+           .append(":</b></td><td>")
+           .append(_t("is the peer banned, or unreachable, or failing tunnel tests?"))
+           .append("</td></tr>\n<tr><td><b>")
+           .append(_t("groups"))
+           .append(":</b></td><td>")
+           .append(_t("Note: Peers are categorized by the profile organizer based on observable performance, not from capabilities they advertise in the NetDB."))
+           .append("<br><span class=\"profilegroup fast\"><b>")
+           .append(_t("Fast"))
+           .append(":</b>&nbsp; ")
+           .append(_t("Peers marked as high capacity that also meet or exceed speed average for all profiled peers."))
+           .append("</span><br><span class=\"profilegroup highcap\"><b>")
+           .append(_t("High Capacity"))
+           .append(":</b>&nbsp; ")
+           .append(_t("Peers that meet or exceed tunnel build rate average for all profiled peers."))
+           .append("</span><br><span class=\"profilegroup integrated\"><b>")
+           .append(_t("Integrated"))
+           .append(":</b>&nbsp; ")
+           .append(_t("Floodfill peers currently available for NetDb inquiries."))
+           .append("</span><br><span class=\"profilegroup standard\"><b>")
+           .append(_t("Standard"))
+           .append(":</b>&nbsp; ")
+           .append(_t("Peers not profiled as high capacity (lower build rate than average peer)."))
+           .append("</span></td></tr>\n<tr><td><b>")
+           .append(_t("speed"))
+           .append(":</b></td><td>")
+           .append(_t("Peak throughput (bytes per second) over a 1 minute period that the peer has sustained in a single tunnel."))
+           .append("</td></tr>\n<tr><td><b>")
+           .append(_t("latency"))
+           .append(":</b></td><td>")
+           .append(_t("Is the peer responding to tests in a timely fashion? To configure the timeout value: " +
+                      "<code>router.peerTestTimeout={n}</code> (value is milliseconds, default 1000ms)"))
+           .append("</td></tr>\n<tr><td><b>")
+           .append(_t("capacity"))
+           .append(":</b></td><td>")
+           .append(_t("how many tunnels can we ask them to join in an hour?"))
+           .append("</td></tr>\n<tr><td><b>")
+           .append(_t("integration"))
+           .append(":</b></td><td>")
+           .append(_t("how many new peers have they told us about lately?"))
+           .append("</td></tr>\n</tbody>\n</table>\n");
+        out.append(buf);
+        out.flush();
+    }
+
+    /**
+     *  Count fast, high-capacity, and integrated peers for the thresholds
+     *  table without rendering rows, used by the fragment path when only
+     *  the thresholds element is requested.
+     *
+     *  @param order the selected profiles
+     *  @return {fast, reliable, integrated} profile counts
+     *  @since 0.9.70+
+     */
+    private int[] countStats(Set<PeerProfile> order) {
+        int fast = 0;
+        int reliable = 0;
+        int integrated = 0;
+        for (PeerProfile prof : order) {
+            Hash peer = prof.getPeer();
+            if (_organizer.isFast(peer)) {fast++; reliable++;}
+            else if (_organizer.isHighCapacity(peer)) {reliable++;}
+            if (_organizer.isWellIntegrated(peer)) {integrated++;}
+        }
+        return new int[] {fast, reliable, integrated};
     }
 
     /**
@@ -580,7 +692,9 @@ class ProfileOrganizerRenderer {
                 long now = _context.clock().now();
                 long heard = prof.getFirstHeardAbout();
 
-                buf.append("<tr class=lazy><td nowrap>")
+                buf.append("<tr class=lazy");
+                if (_fragmentKeys) {buf.append(" data-key=\"").append(peer.toBase64(), 0, KEY_LEN).append("\"");}
+                buf.append("><td nowrap>")
                    .append(_context.commSystem().renderPeerHTML(peer, true))
                    .append("</td><td data-sort=")
                    .append(row.hourFailPct)

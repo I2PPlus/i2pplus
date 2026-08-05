@@ -115,13 +115,27 @@ import { refreshElements } from '/js/refreshElements.js';
 
   /**
    * Sets up periodic element refresh for the given selector.
-   * @function setupRefresh
-   * @param {string} selector - CSS selector for elements to refresh
+   * @function setupEngineRefresh
+   * @param {string} selector - CSS selector for tbody elements to refresh
+   * @param {string} tbodyId - tbody element id for row-level diffing
    * @returns {void}
    */
-  function setupRefresh(selector) {
+  function setupEngineRefresh(selector, tbodyId) {
+    const connUrl = queryParams.has("transport") ? path + query : "/peers";
+    refreshElements(selector, connUrl, REFRESH_INTERVAL, false, false, tbodyId, tbodyId);
+  }
+
+  /**
+   * Sets up periodic element refresh for the given selector, requesting
+   * only the named server-side elements when fragmentIds is provided.
+   * @function setupRefresh
+   * @param {string} selector - CSS selector for elements to refresh
+   * @param {string} fragmentIds - Comma-joined element ids for contentonly mode
+   * @returns {void}
+   */
+  function setupRefresh(selector, fragmentIds) {
     const fetchUrl = queryParams.has("transport") ? path + query : "/peers";
-    refreshElements(selector, fetchUrl, REFRESH_INTERVAL);
+    refreshElements(selector, fetchUrl, REFRESH_INTERVAL, false, false, fragmentIds);
   }
 
   /**
@@ -141,9 +155,11 @@ import { refreshElements } from '/js/refreshElements.js';
     countTiers();
 
     if (peersNTCP) {
-      setupRefresh("#peersNTCP, #ntcpcon, #ntcpconnections tfoot");
+      setupEngineRefresh("#peersNTCP", "peersNTCP");
+      setupRefresh("#ntcpcon, #ntcpconnections tfoot", "ntcpcon,ntcpfoot");
     } else if (peersSSU) {
-      setupRefresh("#peersSSU, #udpcon, #udpconnections tfoot");
+      setupEngineRefresh("#peersSSU", "peersSSU");
+      setupRefresh("#udpcon, #udpconnections tfoot", "ssucon,ssufoot");
     } else {
       setupSummaryRefresh();
     }

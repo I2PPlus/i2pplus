@@ -673,10 +673,6 @@ class NetDbRenderer {
             if (!netdb.getUnpublishedLeases().isEmpty()) {leases.addAll(netdb.getUnpublishedLeases());}
             localLSCount = netdb.getPublishedLeases().size() + netdb.getUnpublishedLeases().size();
         }
-        int medianCount = 0;
-        int rapCount = 0;
-        BigInteger median = null;
-        int c = 0;
         boolean ffEnabled = netdb.floodfillEnabled();
         if (debug) {buf.append("<table id=leasesetdebug>\n");}
         else if (client == null) {buf.append("<table id=leasesetsummary>\n");}
@@ -712,9 +708,14 @@ class NetDbRenderer {
         if (debug) {buf.append("</td><td><b>").append(_t("Routing Key")).append("</b></td><td>").append(ourRKey.toBase64());}
         else if (client == null) {buf.append("</td><td colspan=2>");}
         if (notLocal) {buf.append("</td></tr>\n</table>\n");}
+        if (client == null && !leases.isEmpty()) {buf.append("<div id=lsWrapper>\n");}
         if (!leases.isEmpty()) {
             boolean linkSusi = _context.portMapper().isRegistered("susidns");
             now = _context.clock().now();
+            int medianCount = 0;
+            int rapCount = 0;
+            BigInteger median = null;
+            int c = 0;
             for (LeaseSet ls : leases) {
                 if (!_renderedLeaseSetKeys.add(ls.getHash())) {continue;}
                 String distance;
@@ -731,6 +732,7 @@ class NetDbRenderer {
                 out.append(buf);
                 buf.setLength(0);
             }
+            if (client == null) {buf.append("</div>\n");}
             if (debug && isFloodfill()) {
                 int ffCount = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL).size();
                 int ffEstimated = Math.max(ffCount*4, 6000);
@@ -749,6 +751,19 @@ class NetDbRenderer {
         }
         out.append(buf);
         out.flush();
+    }
+
+    /**
+     *  Renders the leaseset listing and keyspace estimate for the contentonly
+     *  fragment mode of the netdb page, reusing the full lease list render.
+     *
+     *  @param out output
+     *  @param debug if true, show debug info
+     *  @since 0.9.70+
+     *  @throws java.io.IOException if an I/O error occurs
+     */
+    public void renderLeaseSetListFragment(Writer out, boolean debug) throws IOException {
+        renderLeaseSetHTML(out, debug, null);
     }
 
     private boolean isRendered = false;

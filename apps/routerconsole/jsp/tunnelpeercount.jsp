@@ -1,11 +1,24 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb"%>
+<% if (!net.i2p.router.web.ContentOnly.isContentOnly(request)) { %>
 <!DOCTYPE HTML>
+<% } %>
 <%@include file="head.jsi"%>
+<% if (!net.i2p.router.web.ContentOnly.isContentOnly(request)) { %>
 <%=intl.title("tunnel peer count")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body id=routertunnels>
+<% } %>
 <%@include file="sidebar.jsi"%>
+<jsp:useBean class="net.i2p.router.web.helpers.TunnelPeerCountHelper" id="tunnelPeerCountHelper" scope="request"/>
+<jsp:setProperty name="tunnelPeerCountHelper" property="contextId" value="<%=i2pcontextId%>"/>
+<%  tunnelPeerCountHelper.storeWriter(out);
+    if (net.i2p.router.web.ContentOnly.isContentOnly(request)) {
+        for (String id : net.i2p.router.web.ContentOnly.requestedIds(request)) {
+            tunnelPeerCountHelper.renderFragment(id);
+        }
+    } else {
+%>
 <h1 class=netwrk><%=intl._t("Tunnel Count by Peer")%></h1>
 <div class=main id=tunnels>
 <div class=confignav>
@@ -15,9 +28,6 @@
 <span class=tab title="<%=intl._t("Top 50 peers by transit tunnel requests")%>"><a href=/transitsummary><%=intl._t("Transit by Peer")%></a></span>
 <span class=tab2><%=intl._t("Tunnel Count by Peer")%></span>
 </div>
-<jsp:useBean class="net.i2p.router.web.helpers.TunnelPeerCountHelper" id="tunnelPeerCountHelper" scope="request"/>
-<jsp:setProperty name="tunnelPeerCountHelper" property="contextId" value="<%=i2pcontextId%>"/>
-<% tunnelPeerCountHelper.storeWriter(out);%>
 <jsp:getProperty name="tunnelPeerCountHelper" property="tunnelPeerCount"/>
 </div>
 <script src=/js/tablesort/sortShared.js></script>
@@ -26,3 +36,4 @@
 <script src=/js/tunnelpeercount.js type=module></script>
 </body>
 </html>
+<%  } %>

@@ -479,6 +479,22 @@ public class NetDbHelper extends FormHandler {
     }
 
     /**
+     *  Render a single named element for the contentonly fragment mode of the
+     *  netdb page. Only the remote leasesets listing is currently fragmentable.
+     *
+     *  @param id the element id to render
+     *  @since 0.9.70+
+     */
+    public void renderFragment(String id) {
+        NetDbRenderer renderer = new NetDbRenderer(_context);
+        try {
+            if ("lsWrapper".equals(id) && _lease) {
+                renderer.renderLeaseSetListFragment(_out, _debug);
+            }
+        } catch (IOException e) { _log.error("Error rendering netdb fragment " + id, e);}
+    }
+
+    /**
      *  Return the currently selected NetDb tab index.
      *
      *  @since 0.9.1

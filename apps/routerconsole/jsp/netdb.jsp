@@ -1,5 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="1024kb"%>
+<% if (!net.i2p.router.web.ContentOnly.isContentOnly(request)) { %>
 <!DOCTYPE HTML>
+<% } %>
 <%@include file="head.jsi"%>
 <%
     String showParam = request.getParameter("show");
@@ -25,6 +27,7 @@
     else if (cParam != null) pageTitle = intl._t("Routers");
     else pageTitle = intl._t("Network Database");
 %>
+<% if (!net.i2p.router.web.ContentOnly.isContentOnly(request)) { %>
 <%=intl.title(pageTitle)%>
 <script nonce=<%=cspNonce%>>
 const translate_encType = "<%=intl._t("Encryption type")%>";
@@ -58,6 +61,7 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <% } %>
 </head>
 <body>
+<% } %>
 <%@include file="sidebar.jsi"%>
 <jsp:useBean id="formhandler" class="net.i2p.router.web.helpers.NetDbHelper" scope="request"/>
 <jsp:setProperty name="formhandler" property="full" value="<%=request.getParameter(\"f\")%>"/>
@@ -140,9 +144,15 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
         } else if (c != null) heading += " – " + intl._t("Routers");
     }
 %>
+<%  formhandler.storeWriter(out);
+    if (net.i2p.router.web.ContentOnly.isContentOnly(request)) {
+        for (String id : net.i2p.router.web.ContentOnly.requestedIds(request)) {
+            formhandler.renderFragment(id);
+        }
+    } else {
+%>
 <h1 class=netwrk><%=heading%></h1>
 <div class=main id=netdb>
-<%  formhandler.storeWriter(out);%>
 <%@include file="formhandler.jsi"%>
 <% if (delayLoad) {%><div id=netdbwrap style=height:5px;opacity:0><% } %>
 <% if ((r == null && ls != null) || l != null || ls != null) {%><div class=leasesets_container><% } %>
@@ -166,3 +176,4 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <script src=/js/lsCompact.js type=module></script>
 </body>
 </html>
+<%  } %>

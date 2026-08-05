@@ -40,6 +40,10 @@ public class PeerHelper extends HelperBase {
     private int _sortFlags;
     private String _urlBase;
     private String _transport;
+    /** Emit a data-key (peer hash) per row for worker-side row diffing; fragment renders only, so full pages stay byte-for-byte identical. */
+    private boolean _fragmentKeys;
+    /** Length of the truncated base64 hash used as a per-row data-key in fragment mode. */
+    private static final int KEY_LEN = 16;
 
     private static final String[] titles = {
                                             _x("Summary"),
@@ -440,6 +444,171 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
+     *  Render a single named element for the contentonly fragment mode.
+     *  Renders nothing for ids the current transport view does not own.
+     *
+     *  @param id the element id
+     *  @throws IOException if an I/O error occurs
+     *  @since 0.9.70+
+     */
+    public void renderFragment(String id) throws IOException {
+        if (_context.commSystem().isDummy() || _transport == null) {return;}
+        _fragmentKeys = true;
+        SortedMap<String, Transport> transports = _context.commSystem().getTransports();
+        for (Map.Entry<String, Transport> e : transports.entrySet()) {
+            String style = e.getKey();
+            Transport t = e.getValue();
+            if (style.equals("NTCP") && "ntcp".equals(_transport)) {
+                renderNTCPFragment((NTCPTransport) t, _out, id, _sortFlags);
+                return;
+            } else if (style.contains("SSU") && ("ssu".equals(_transport) || "ssudebug".equals(_transport))) {
+                renderSSUFragment((UDPTransport) t, _out, id, _sortFlags, "ssudebug".equals(_transport));
+                return;
+            }
+        }
+    }
+
+    /**
+     *  Render a named NTCP element in fragment mode: the count heading,
+     *  the tbody with data-key rows, or the totals tfoot.
+     *
+     *  @param nt the NTCP transport
+     *  @param out the writer to render to
+     *  @param id the element id
+     *  @param sortFlags the sort flags
+     *  @throws IOException if writing fails
+     *  @since 0.9.70+
+     */
+    private void renderNTCPFragment(NTCPTransport nt, Writer out, String id, int sortFlags) throws IOException {
+        boolean IPv6Enabled = _context.getBooleanProperty("i2np.ntcp.ipv6") ||
+                              _context.getBooleanProperty("i2np.udp.ipv6");
+        TreeSet<NTCPConnection> peers = new TreeSet<>(getNTCPComparator(sortFlags));
+        peers.addAll(nt.getPeers());
+        for (Iterator<NTCPConnection> iter = peers.iterator(); iter.hasNext();) {
+            if (!iter.next().isEstablished()) {iter.remove();}
+        }
+        if ("ntcpcon".equals(id)) {
+            StringBuilder buf = new StringBuilder(256);
+            renderNTCPCount(buf, nt.countActivePeers(), nt.getMaxConnections());
+            out.append(buf);
+            return;
+        }
+        long now = _context.clock().now();
+        int peerCount = peers.size();
+        if ("peersNTCP".equals(id)) {
+            StringBuilder buf = new StringBuilder(4*1024);
+            buf.append("<tbody id=peersNTCP>\n");
+            NTCPTotals totals = new NTCPTotals();
+            for (NTCPConnection con : peers) {
+                if (!includeNTCP(con, peerCount, now)) {continue;}
+                renderNTCPRow(buf, con, now, IPv6Enabled, peerCount, totals);
+                if (buf.length() > 64*1024) {out.append(buf); buf.setLength(0);}
+            }
+            buf.append("</tbody>\n");
+            out.append(buf);
+            return;
+        }
+        if ("ntcpfoot".equals(id)) {
+            StringBuilder scratch = new StringBuilder(512);
+            NTCPTotals totals = new NTCPTotals();
+            for (NTCPConnection con : peers) {
+                if (!includeNTCP(con, peerCount, now)) {continue;}
+                renderNTCPRow(scratch, con, now, IPv6Enabled, peerCount, totals);
+            }
+            if (!peers.isEmpty()) {
+                StringBuilder buf = new StringBuilder(512);
+                buf.append("<table id=ntcpconnections>");
+                renderNTCPFooter(buf, IPv6Enabled, nt.countActivePeers(), peerCount, totals);
+                buf.append("</tfoot></table>");
+                out.append(buf);
+            }
+        }
+    }
+
+    /**
+     *  Render a named SSU element in fragment mode: the count heading,
+     *  the tbody with data-key rows, or the totals tfoot.
+     *
+     *  @param ut the SSU transport
+     *  @param out the writer to render to
+     *  @param id the element id
+     *  @param sortFlags the sort flags
+     *  @param debugmode render the advanced view
+     *  @throws IOException if writing fails
+     *  @since 0.9.70+
+     */
+    private void renderSSUFragment(UDPTransport ut, Writer out, String id, int sortFlags, boolean debugmode) throws IOException {
+        TreeSet<PeerState> peers = new TreeSet<>(getComparator(sortFlags));
+        peers.addAll(ut.getPeers());
+        if ("ssucon".equals(id)) {
+            StringBuilder buf = new StringBuilder(256);
+            renderSSUCount(buf, ut.countActivePeers(), ut.getMaxConnections(), debugmode);
+            out.append(buf);
+            return;
+        }
+        long now = _context.clock().now();
+        int peerCount = peers.size();
+        if ("peersSSU".equals(id)) {
+            StringBuilder buf = new StringBuilder(4*1024);
+            buf.append("<tbody id=peersSSU>\n");
+            SSUTotals totals = new SSUTotals();
+            for (PeerState peer : peers) {
+                if (!includeSSU(peer, peerCount, now)) {continue;}
+                renderSSURow(buf, peer, now, debugmode, totals);
+                if (buf.length() > 64*1024) {out.append(buf); buf.setLength(0);}
+            }
+            buf.append("</tbody>\n");
+            out.append(buf);
+            return;
+        }
+        if ("ssufoot".equals(id)) {
+            StringBuilder scratch = new StringBuilder(512);
+            SSUTotals totals = new SSUTotals();
+            for (PeerState peer : peers) {
+                if (!includeSSU(peer, peerCount, now)) {continue;}
+                renderSSURow(scratch, peer, now, debugmode, totals);
+            }
+            if (totals.numPeers > 0) {
+                StringBuilder buf = new StringBuilder(512);
+                buf.append("<table id=udpconnections>");
+                renderSSUFooter(buf, debugmode, ut, totals);
+                buf.append("</table>");
+                out.append(buf);
+            }
+        }
+    }
+
+    /**
+     *  Whether an NTCP connection is recent enough to render.
+     *
+     *  @param con the connection
+     *  @param peerCount total established connections
+     *  @param now the current time
+     *  @return true when the connection is rendered
+     *  @since 0.9.70+
+     */
+    private static boolean includeNTCP(NTCPConnection con, int peerCount, long now) {
+        if (peerCount >= 300 && (con.getTimeSinceReceive(now) > 60*1000 || con.getTimeSinceSend(now) > 60*1000)) {return false;}
+        if (peerCount >= 100 && (con.getTimeSinceReceive(now) > 3*60*1000 || con.getTimeSinceSend(now) > 3*60*1000)) {return false;}
+        return !(con.getTimeSinceReceive(now) > 10*60*1000 || con.getTimeSinceSend(now) > 10*60*1000);
+    }
+
+    /**
+     *  Whether an SSU peer is recent enough to render.
+     *
+     *  @param peer the peer
+     *  @param peerCount total peers
+     *  @param now the current time
+     *  @return true when the peer is rendered
+     *  @since 0.9.70+
+     */
+    private static boolean includeSSU(PeerState peer, int peerCount, long now) {
+        if (peerCount >= 300 && now-peer.getLastReceiveTime() > 60*1000) {return false;}
+        if (peerCount >= 100 && now-peer.getLastReceiveTime() > 3*60*1000) {return false;}
+        return now-peer.getLastReceiveTime() <= 10*60*1000;
+    }
+
+    /**
      *  Render the peer page navigation bar.
      *
      *  @since 0.9.38
@@ -576,7 +745,27 @@ public class PeerHelper extends HelperBase {
            .append(_t("Queued messages to send to peer"))
            .append("\" data-sort-method=number>")
            .append(_t("Out Queue"))
-           .append("</th><th class=edit></th></tr></thead>\n<tbody id=peersNTCP>\n");
+            .append("</th><th class=edit></th></tr></thead>\n<tbody id=peersNTCP>\n");
+    }
+
+    /**
+     *  Append the NTCP connections heading fragment containing the count.
+     *
+     *  @param buf the buffer to append to
+     *  @param activePeers the established connection count
+     *  @param maxConnections the configured connection limit
+     *  @since 0.9.70+
+     */
+    private void renderNTCPCount(StringBuilder buf, int activePeers, int maxConnections) {
+        buf.append("<h3 id=ntcpcon title=\"")
+           .append(_t("Current / maximum permitted"))
+           .append("\">")
+           .append(_t("NTCP connections"))
+           .append(":&nbsp; ")
+           .append(activePeers)
+           .append(" / ")
+           .append(maxConnections)
+           .append("<span id=topCount hidden></span></h3>\n");
     }
 
     /**
@@ -588,7 +777,9 @@ public class PeerHelper extends HelperBase {
                                int peerCount, NTCPTotals totals) {
         Hash h = con.getRemotePeer().calculateHash();
         boolean isInbound = con.isInbound();
-        buf.append("<tr class=lazy><td class=peer data-sort-direction=ascending>")
+        buf.append("<tr class=lazy");
+        if (_fragmentKeys) {buf.append(" data-key=\"").append(h.toBase64(), 0, KEY_LEN).append("\"");}
+        buf.append("><td class=peer data-sort-direction=ascending>")
            .append(_context.commSystem().renderPeerHTML(h, false))
            .append("</td><td class=caps>")
            .append(_context.commSystem().renderPeerCaps(h, false))
@@ -927,6 +1118,32 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
+     *  Append the UDP connections heading fragment containing the count.
+     *
+     *  @param buf the buffer to append to
+     *  @param activePeers the established connection count
+     *  @param maxConnections the configured connection limit
+     *  @param debugmode render the advanced view link
+     *  @since 0.9.70+
+     */
+    private void renderSSUCount(StringBuilder buf, int activePeers, int maxConnections, boolean debugmode) {
+        buf.append("<h3 id=udpcon title=\"")
+           .append(_t("Current / maximum permitted"))
+           .append("\">")
+           .append(_t("UDP connections"))
+           .append(":&nbsp; ")
+           .append(activePeers)
+           .append(" / ")
+           .append(maxConnections);
+        if (!debugmode) {
+            buf.append("<span id=ssuadv><a href=\"/peers?transport=ssudebug\">[")
+               .append(_t("Advanced View"))
+               .append("]</a></span>");
+        }
+        buf.append("<span id=topCount hidden></span></h3>\n");
+    }
+
+    /**
      *  Append one SSU peer row and accumulate its stats into totals.
      *
      *  @since 0.9.70+
@@ -936,7 +1153,9 @@ public class PeerHelper extends HelperBase {
         boolean isInbound = peer.isInbound();
         boolean introToUs = peer.getTheyRelayToUsAs() > 0;
         boolean introToThem = peer.getWeRelayToThemAs() > 0;
-        buf.append("<tr class=lazy><td class=peer nowrap>")
+        buf.append("<tr class=lazy");
+        if (_fragmentKeys) {buf.append(" data-key=\"").append(h.toBase64(), 0, KEY_LEN).append("\"");}
+        buf.append("><td class=peer nowrap>")
            .append(_context.commSystem().renderPeerHTML(h, false))
            .append("</td><td class=caps>")
            .append(_context.commSystem().renderPeerCaps(h, false))

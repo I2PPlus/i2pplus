@@ -58,6 +58,8 @@ class BanlistRenderer {
     private static final int MAX_BEFORE_STREAMING = 100;
     /** Rows rendered per flush when streaming a large table. */
     private static final int STREAM_BATCH = 100;
+    /** Length of the truncated base64 hash used as a per-row data-key in fragment mode; 16 chars = 96 bits, collision-free at 10K-20K rows. */
+    private static final int KEY_LEN = 16;
 
     /**
      *  Constructor.
@@ -286,6 +288,31 @@ class BanlistRenderer {
      *  @since 0.9.59+
      */
     public void renderBanlistCompact(Writer out) throws IOException {
+        renderBanlist(out, false);
+    }
+
+    /**
+     *  Render only the {@code <tbody id=sessionBanlist>} for the contentonly
+     *  fragment mode, with a data-key per row for the worker-side row diff.
+     *  The full page keeps the wrapper div, thead, and tfoot.
+     *
+     *  @param out the writer to render to
+     *  @throws IOException if writing fails
+     *  @since 0.9.70+
+     */
+    public void renderBanlistFragment(Writer out) throws IOException {
+        renderBanlist(out, true);
+    }
+
+    /**
+     *  Render the compact banlist table; both renderBanlistCompact() and
+     *  renderBanlistFragment() delegate here.
+     *
+     *  @param out the writer to render to
+     *  @param fragmentKeys when true, emit only the tbody with data-key rows
+     *  @throws IOException if writing fails
+     */
+    private void renderBanlist(Writer out, boolean fragmentKeys) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         Map<Hash, Banlist.Entry> entries = new TreeMap<>(new HashComparator());
         Object[] sessionBans = readSessionBans();
@@ -302,11 +329,14 @@ class BanlistRenderer {
 
         entries.putAll(_context.banlist().getEntries());
         if (entries.isEmpty() && ipOnlyBans.isEmpty()) {
-            buf.append("<p class=infohelp><i>").append(_t("No bans currently active")).append("</i></p>\n");
+            if (fragmentKeys) {buf.append("<tbody id=sessionBanlist>\n</tbody>\n");}
+            else {buf.append("<p class=infohelp><i>").append(_t("No bans currently active")).append("</i></p>\n");}
             out.append(buf);
             return;
         }
 
+        if (fragmentKeys) {buf.append("<tbody id=sessionBanlist>\n");}
+        else {
         // Column order: Country, Router, Caps, Version, IP, Port, Host, Reason, Expiry
         buf.append("<div class=tablewrap id=sessionBanned>\n<table id=sbans>\n<thead><tr><th class=country>")
            .append(_t("Country"))
@@ -327,6 +357,7 @@ class BanlistRenderer {
            .append("</th><th class=expires data-sort-method=number data-sort-direction=ascending>")
            .append(_t("Expiry"))
             .append("</th></tr></thead>\n<tbody id=sessionBanlist>\n");
+        }
         int tempBanned = 0;
         boolean stream = entries.size() + ipOnlyBans.size() > MAX_BEFORE_STREAMING;
         if (stream) {
@@ -354,6 +385,7 @@ class BanlistRenderer {
                 caps = getRouterCaps(key);
             }
             buf.append("<tr");
+            if (fragmentKeys) {buf.append(" data-key=\"").append(b64, 0, KEY_LEN).append("\"");}
             if (entry.cause.toLowerCase().contains("floodfill") ||
                 (caps != null && caps.indexOf('f') >= 0)) {
                 buf.append(" class=\"banFF\"");
@@ -511,7 +543,9 @@ class BanlistRenderer {
                 countryCode = "xx";
             }
             String countryName =  _context.commSystem().getCountryName(countryCode);
-            buf.append("<tr class=ipOnly>")
+            buf.append("<tr");
+            if (fragmentKeys) {buf.append(" data-key=\"").append(ip).append("\"");}
+            buf.append(" class=ipOnly>")
                .append("<td class=country data-sort=").append(countryCode).append(">")
                .append("<img width=28 height=21 title=\"").append(countryName)
                .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\">")
@@ -540,12 +574,13 @@ class BanlistRenderer {
             }
         }
 
-        buf.append("</tbody>\n<tfoot id=sessionBanlistFooter><tr><th colspan=")
-           .append("9")
-           .append(">")
-           .append(_t("Total session-only bans"))
-           .append(": ").append(tempBanned)
-           .append("</th></tr></tfoot>\n</table>\n</div>\n");
+        if (fragmentKeys) {buf.append("</tbody>\n");}
+        else {buf.append("</tbody>\n<tfoot id=sessionBanlistFooter><tr><th colspan=")
+                   .append("9")
+                   .append(">")
+                   .append(_t("Total session-only bans"))
+                   .append(": ").append(tempBanned)
+                   .append("</th></tr></tfoot>\n</table>\n</div>\n");}
         out.append(buf);
         out.flush();
     }

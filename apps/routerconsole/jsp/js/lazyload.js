@@ -55,4 +55,5 @@
   });
 
   document.addEventListener("afterSort", lazyload);
+  document.addEventListener("elementsPatched", lazyload);
 })();

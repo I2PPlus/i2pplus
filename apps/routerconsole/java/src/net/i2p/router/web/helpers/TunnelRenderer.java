@@ -101,6 +101,10 @@ class TunnelRenderer {
     private static final int MAX_BEFORE_STREAMING = 100;
     /** Rows rendered per flush when streaming a large table. */
     private static final int STREAM_BATCH = 100;
+    /** Emit a per-row data-key (peer hash) for worker-side row diffing; fragment renders only, so full pages stay byte-for-byte identical. */
+    private boolean _fragmentKeys;
+    /** Length of the truncated base64 hash used as a per-row data-key in fragment mode. */
+    private static final int KEY_LEN = 16;
     private int displayed;
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
     private static String fmt(double val) { synchronized (TWO_DECIMALS) { return TWO_DECIMALS.format(val); } }
@@ -550,26 +554,20 @@ class TunnelRenderer {
     }
 
     /**
-     * renderPeers.
+     *  Render the tunnel peer count table, the "all peers" tbody, or the
+     *  totals footer row.
+     *  <p>
+     *  Full-page mode renders header, rows, and footer as one table; fragment
+     *  mode (contentonly) renders just the named element so the page can
+     *  refresh the tbody rows and footer without re-sending the full table.
+     *
+     *  @since 0.9.70+
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderPeers(Writer out) throws IOException {
-        long uptime = _context.router().getUptime();
-
-        // Count tunnels per peer local and transit
-        ObjectCounter<Hash> localCount = new ObjectCounter<>();
-        int tunnelCount = countTunnelsPerPeer(localCount);
-        ObjectCounter<Hash> transitCount = new ObjectCounter<>();
-        int partCount = countParticipatingPerPeer(transitCount);
-
-        Set<Hash> peers = new HashSet<>();
-        peers.addAll(localCount.objects());
-        peers.addAll(transitCount.objects());
-        List<Hash> peerList = new ArrayList<>(peers);
-        Collections.sort(peerList, new CountryComparator(_context.commSystem()));
-
-        if (!peerList.isEmpty() && (tunnelCount > 0 || partCount > 0)) {
-            StringBuilder headerSb = new StringBuilder(peerList.size() * 640 + 2048);
+        PeerRows pr = preparePeerRows();
+        if (!pr.validPeerList.isEmpty() && (pr.tunnelCount > 0 || pr.partCount > 0)) {
+            StringBuilder headerSb = new StringBuilder(pr.validPeerList.size() * 640 + 2048);
             headerSb.append("<div class=tablewrap>\n<h3 class=tabletitle id=peercount>")
                   .append(_t("All Tunnels by Peer"))
                   .append("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=/tunnelpeercount>")
@@ -592,101 +590,26 @@ class TunnelRenderer {
             out.write(headerSb.toString());
             out.flush();
 
-            List<Hash> validPeerList = new ArrayList<>(peerList.size());
-            for (Hash h : peerList) {
-                RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(hash));
-                if (info == null) continue;
-                validPeerList.add(h);
-                byte[] direct = TransportImpl.getIP(h);
-                String directIP = (direct != null) ? Addresses.toString(direct) : "";
-                String ip = !directIP.isEmpty() ? directIP : Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
-                peerToIP.put(h, ip);
-
-                ReverseLookupResult rlr = getReverseLookupInfo(h, info, uptime);
-                reverseLookupResults.put(h, rlr);
-            }
-
-            final int chunkSize = 50;
             final String versionTip = _t("Show all routers with this version in the NetDb");
             final String unknownLabel = _t("unknown");
             final String configurePeerTip = _t("Configure peer");
             final String editLabel = _t("Edit");
-            for (int start = 0; start < validPeerList.size(); start += chunkSize) {
-                int end = Math.min(start + chunkSize, validPeerList.size());
-
+            final int chunkSize = 50;
+            for (int start = 0; start < pr.validPeerList.size(); start += chunkSize) {
+                int end = Math.min(start + chunkSize, pr.validPeerList.size());
                 StringBuilder chunkSb = new StringBuilder();
                 for (int i = start; i < end; i++) {
-                    Hash h = validPeerList.get(i);
+                    Hash h = pr.validPeerList.get(i);
                     RouterInfo info = routerInfoCache.get(h);
-
-                    int localTunnelCount = localCount.count(h);
-                    int transitTunnelCount = transitCount.count(h);
-                    String ip = peerToIP.get(h);
-                    String version = info.getOption("router.version");
-                    String hB64 = h.toBase64();
-                    String truncHash = hB64.substring(0,4);
-                    ReverseLookupResult rlResult = reverseLookupResults.get(h);
-
-                    appendPeerIdentity(chunkSb, h, hB64, truncHash, version, info, ip, rlResult,
-                                       versionTip, null, unknownLabel, false);
-
-                    if (localTunnelCount > 0) {
-                        chunkSb.append("<td class=tcount data-sort-column-key=localCount data-sort=")
-                               .append(localTunnelCount)
-                               .append(">").append(localTunnelCount)
-                               .append("</td><td class=bar data-sort-column-key=localCount>")
-                               .append("<span class=percentBarOuter><span class=percentBarInner style=\"width:")
-                               .append(fmt(localTunnelCount * 100.0 / tunnelCount).replace(".00", ""))
-                               .append("%\"><span class=percentBarText>").append(localTunnelCount * 100 / tunnelCount)
-                               .append("%</span></span></span>");
-                    } else {
-                        chunkSb.append("<td class=tcount colspan=2 data-sort=0></td>");
-                    }
-                    chunkSb.append("</td>");
-                    if (transitTunnelCount > 0) {
-                        chunkSb.append("<td class=tcount data-sort-column-key=transitCount data-sort=")
-                               .append(transitTunnelCount)
-                               .append(">").append(transitTunnelCount)
-                               .append("</td><td class=bar data-sort-column-key=transitCount>")
-                               .append("<span class=percentBarOuter><span class=percentBarInner style=\"width:")
-                               .append(fmt(transitTunnelCount * 100.0 / partCount).replace(".00", ""))
-                               .append("%\"><span class=percentBarText>").append(transitTunnelCount * 100 / partCount)
-                               .append("%</span></span></span>")
-                               .append("</td>");
-                    } else {
-                        chunkSb.append("<td class=tcount colspan=2 data-sort=0></td>");
-                    }
-                    chunkSb.append("<td><a class=configpeer href=\"/configpeer?peer=")
-                           .append(info.getHash())
-                           .append("\" title=\"").append(configurePeerTip).append("\">")
-                           .append(editLabel)
-                           .append("</a></td></tr>\n");
+                    appendPeerRow(chunkSb, h, info, pr.tunnelCount, pr.partCount,
+                                  pr.localCount.count(h), pr.transitCount.count(h),
+                                  versionTip, unknownLabel, configurePeerTip, editLabel);
                 }
                 out.write(chunkSb.toString());
                 out.flush();
             }
             StringBuilder footerSb = new StringBuilder();
-            footerSb.append("</tbody>\n<tfoot class=lazy><tr class=tablefooter data-sort-method=none><td colspan=4><b>")
-                  .append(validPeerList.size())
-                  .append(" ")
-                  .append(_t("unique peers"))
-                  .append("</b></td><td></td>");
-            footerSb.append("<td></td>");
-            footerSb.append("<td colspan=2><b>")
-                  .append(tunnelCount)
-                  .append(" ")
-                  .append(_t("local"))
-                  .append("</b></td>");
-            if (partCount > 0) {
-                footerSb.append("<td colspan=2><b>")
-                      .append(partCount)
-                      .append(" ")
-                      .append(_t("transit"))
-                      .append("</b></td>");
-            } else {
-                footerSb.append("<td></td>");
-            }
-            footerSb.append("<td></td></tr></tfoot>\n</table>\n</div>\n");
+            appendPeerFooter(footerSb, pr.validPeerList.size(), pr.tunnelCount, pr.partCount);
             out.write(footerSb.toString());
             out.flush();
         } else {
@@ -694,6 +617,179 @@ class TunnelRenderer {
             out.write(_t("No local or transit tunnels currently active."));
             out.write("</p>\n");
         }
+    }
+
+    /**
+     *  Render a single named element for the contentonly fragment mode of the
+     *  tunnel peer count page: the "all peers" tbody with data-key rows, or
+     *  the totals footer row. Renders nothing for unknown ids.
+     *
+     *  @param out the writer to render to
+     *  @param id the element id
+     *  @throws IOException if writing fails
+     *  @since 0.9.70+
+     */
+    public void renderPeerFragment(Writer out, String id) throws IOException {
+        PeerRows pr = preparePeerRows();
+        if (pr.validPeerList.isEmpty()) {return;}
+        if ("allPeers".equals(id)) {
+            _fragmentKeys = true;
+            final String versionTip = _t("Show all routers with this version in the NetDb");
+            final String unknownLabel = _t("unknown");
+            final String configurePeerTip = _t("Configure peer");
+            final String editLabel = _t("Edit");
+            StringBuilder sb = new StringBuilder(4 * 1024);
+            sb.append("<tbody id=allPeers>\n");
+            for (Hash h : pr.validPeerList) {
+                RouterInfo info = routerInfoCache.get(h);
+                appendPeerRow(sb, h, info, pr.tunnelCount, pr.partCount,
+                              pr.localCount.count(h), pr.transitCount.count(h),
+                              versionTip, unknownLabel, configurePeerTip, editLabel);
+                if (sb.length() > 64 * 1024) {out.write(sb.toString()); out.flush(); sb.setLength(0);}
+            }
+            sb.append("</tbody>\n");
+            out.write(sb.toString());
+        } else if ("tableFooter".equals(id)) {
+            StringBuilder sb = new StringBuilder(512);
+            sb.append("<table><tbody>");
+            appendPeerFooterRow(sb, pr.validPeerList.size(), pr.tunnelCount, pr.partCount);
+            sb.append("</tbody></table>\n");
+            out.write(sb.toString());
+        }
+    }
+
+    /**
+     *  Data for the tunnel peer count page: the counts per peer plus the
+     *  validated, sorted peer list shared by the full and fragment renders.
+     */
+    private static class PeerRows {
+        final ObjectCounter<Hash> localCount = new ObjectCounter<>();
+        final ObjectCounter<Hash> transitCount = new ObjectCounter<>();
+        int tunnelCount;
+        int partCount;
+        final List<Hash> validPeerList = new ArrayList<>();
+    }
+
+    /**
+     *  Count tunnels per peer, resolve RouterInfos and reverse lookups, and
+     *  build the validated peer list shared by the full and fragment renders.
+     *
+     *  @return the prepared counts and peer list
+     *  @since 0.9.70+
+     */
+    private PeerRows preparePeerRows() {
+        PeerRows pr = new PeerRows();
+        pr.tunnelCount = countTunnelsPerPeer(pr.localCount);
+        pr.partCount = countParticipatingPerPeer(pr.transitCount);
+        long uptime = _context.router().getUptime();
+        Set<Hash> peers = new HashSet<>();
+        peers.addAll(pr.localCount.objects());
+        peers.addAll(pr.transitCount.objects());
+        List<Hash> peerList = new ArrayList<>(peers);
+        Collections.sort(peerList, new CountryComparator(_context.commSystem()));
+        for (Hash h : peerList) {
+            RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(hash));
+            if (info == null) {continue;}
+            pr.validPeerList.add(h);
+            byte[] direct = TransportImpl.getIP(h);
+            String directIP = (direct != null) ? Addresses.toString(direct) : "";
+            String ip = !directIP.isEmpty() ? directIP : Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
+            peerToIP.put(h, ip);
+            ReverseLookupResult rlr = getReverseLookupInfo(h, info, uptime);
+            reverseLookupResults.put(h, rlr);
+        }
+        return pr;
+    }
+
+    /**
+     *  Append one tunnel peer count row: identity cells plus local and transit
+     *  tunnel bars and the edit link.
+     *
+     *  @since 0.9.70+
+     */
+    private void appendPeerRow(StringBuilder chunkSb, Hash h, RouterInfo info, int tunnelCount, int partCount,
+                               int localTunnelCount, int transitTunnelCount, String versionTip,
+                               String unknownLabel, String configurePeerTip, String editLabel) {
+        String version = info != null ? info.getOption("router.version") : null;
+        String ip = peerToIP.get(h);
+        String hB64 = h.toBase64();
+        String truncHash = hB64.substring(0, 4);
+        ReverseLookupResult rlResult = reverseLookupResults.get(h);
+
+        appendPeerIdentity(chunkSb, h, hB64, truncHash, version, info, ip, rlResult,
+                           versionTip, null, unknownLabel, false);
+
+        if (localTunnelCount > 0) {
+            chunkSb.append("<td class=tcount data-sort-column-key=localCount data-sort=")
+                   .append(localTunnelCount)
+                   .append(">").append(localTunnelCount)
+                   .append("</td><td class=bar data-sort-column-key=localCount>")
+                   .append("<span class=percentBarOuter><span class=percentBarInner style=\"width:")
+                   .append(fmt(localTunnelCount * 100.0 / tunnelCount).replace(".00", ""))
+                   .append("%\"><span class=percentBarText>").append(localTunnelCount * 100 / tunnelCount)
+                   .append("%</span></span></span>");
+        } else {
+            chunkSb.append("<td class=tcount colspan=2 data-sort=0></td>");
+        }
+        chunkSb.append("</td>");
+        if (transitTunnelCount > 0) {
+            chunkSb.append("<td class=tcount data-sort-column-key=transitCount data-sort=")
+                   .append(transitTunnelCount)
+                   .append(">").append(transitTunnelCount)
+                   .append("</td><td class=bar data-sort-column-key=transitCount>")
+                   .append("<span class=percentBarOuter><span class=percentBarInner style=\"width:")
+                   .append(fmt(transitTunnelCount * 100.0 / partCount).replace(".00", ""))
+                   .append("%\"><span class=percentBarText>").append(transitTunnelCount * 100 / partCount)
+                   .append("%</span></span></span>")
+                   .append("</td>");
+        } else {
+            chunkSb.append("<td class=tcount colspan=2 data-sort=0></td>");
+        }
+        chunkSb.append("<td><a class=configpeer href=\"/configpeer?peer=")
+               .append(info.getHash())
+               .append("\" title=\"").append(configurePeerTip).append("\">")
+               .append(editLabel)
+               .append("</a></td></tr>\n");
+    }
+
+    /**
+     *  Append the totals footer row of the tunnel peer count table.
+     *
+     *  @since 0.9.70+
+     */
+    private void appendPeerFooterRow(StringBuilder footerSb, int validPeerCount, int tunnelCount, int partCount) {
+        footerSb.append("<tr class=tablefooter data-sort-method=none><td colspan=4><b>")
+                .append(validPeerCount)
+                .append(" ")
+                .append(_t("unique peers"))
+                .append("</b></td><td></td>");
+        footerSb.append("<td></td>");
+        footerSb.append("<td colspan=2><b>")
+                .append(tunnelCount)
+                .append(" ")
+                .append(_t("local"))
+                .append("</b></td>");
+        if (partCount > 0) {
+            footerSb.append("<td colspan=2><b>")
+                    .append(partCount)
+                    .append(" ")
+                    .append(_t("transit"))
+                    .append("</b></td>");
+        } else {
+            footerSb.append("<td></td>");
+        }
+        footerSb.append("<td></td></tr>");
+    }
+
+    /**
+     *  Append the closing tfoot and wrapper for the tunnel peer count table.
+     *
+     *  @since 0.9.70+
+     */
+    private void appendPeerFooter(StringBuilder footerSb, int validPeerCount, int tunnelCount, int partCount) {
+        footerSb.append("</tbody>\n<tfoot class=lazy>");
+        appendPeerFooterRow(footerSb, validPeerCount, tunnelCount, partCount);
+        footerSb.append("</tfoot>\n</table>\n</div>\n");
     }
 
     /**
@@ -1300,7 +1396,9 @@ class TunnelRenderer {
                                     String version, RouterInfo info, String ip, ReverseLookupResult rl,
                                     String versionTip, String banlistedTip, String unknownLabel,
                                     boolean isBanned) {
-        sb.append("<tr class=lazy><td>")
+        sb.append("<tr class=lazy");
+        if (_fragmentKeys) {sb.append(" data-key=\"").append(hB64, 0, KEY_LEN).append("\"");}
+        sb.append("><td>")
           .append(peerFlag(h))
           .append("</td><td><span class=routerHash><a href=\"netdb?r=")
           .append(hB64)

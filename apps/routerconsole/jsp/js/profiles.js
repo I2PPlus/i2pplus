@@ -100,28 +100,27 @@ import { refreshElements } from "./refreshElements.js";
    * @returns {void}
    */
   function setupRefreshes() {
-    // Refresh profiles overview and thresholds every 5 seconds
+    // Refresh profiles overview and thresholds every 15 seconds, silently
     if (info || thresholds) {
       const targetSelectors = [info, thresholds].filter(el => el).map(el => `#${el.id}`).join(", ");
-      refreshElements(targetSelectors, uri, 5000);
+      refreshElements(targetSelectors, uri, 15000, false, true, "profiles_overview,thresholds");
     }
 
-    // Refresh profile list every 15 seconds
+    // Refresh profile list every 15 seconds; rows are diffed in a worker
     if (plist) {
-      const targetSelectors = pbody ? `#pbody, #profiles_overview, #thresholds` : `#profilelist`;
-      refreshElements(targetSelectors, uri, 15000);
+      const targetSelectors = pbody ? `#pbody` : `#profilelist`;
+      refreshElements(targetSelectors, uri, 15000, false, false, pbody ? "pbody" : null, pbody ? "pbody" : null);
     }
 
-    // Refresh floodfill profiles every 15 seconds
+    // Refresh floodfill profiles every 15 seconds; rows are diffed in a worker
     if (ff) {
       const targetSelectors = ffprofiles ? `#ffProfiles` : `#floodfills`;
-      refreshElements(targetSelectors, uri, 15000);
+      refreshElements(targetSelectors, uri, 15000, false, false, ffprofiles ? "ffProfiles" : "floodfills", ffprofiles ? "ffProfiles" : null);
     }
 
-    // Refresh session bans every 15 seconds
+    // Refresh session bans every 15 seconds; rows are diffed in a worker
     if (sessionBans) {
-      const targetSelectors = "#sessionBanlist, #banSummary h2";
-      refreshElements(targetSelectors, uri, 15000);
+      refreshElements("#sessionBanlist", uri, 15000, false, false, "sessionBanlist", "sessionBanlist");
     }
 
     document.addEventListener("refreshComplete", () => {
@@ -172,6 +171,7 @@ import { refreshElements } from "./refreshElements.js";
    * @returns {void}
    */
   function updateBanSummary(banBody) {
+    if (!banBody) {return;}
     const rows = banBody.querySelectorAll("tr");
     const reasonCounts = {};
     const total = rows.length;

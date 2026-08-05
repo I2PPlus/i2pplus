@@ -35,4 +35,22 @@ public class TunnelPeerCountHelper extends HelperBase {
             return "";
         }
     }
+
+    /**
+     *  Render a single named element for the contentonly fragment mode of the
+     *  tunnel peer count page.
+     *
+     *  @param id the element id
+     *  @since 0.9.70+
+     */
+    public void renderFragment(String id) {
+        TunnelRenderer renderer = new TunnelRenderer(_context);
+        try {
+            if (_out != null) {
+                renderer.renderPeerFragment(_out, id);
+            }
+        } catch (IOException ioe) {
+            _log.error("Error rendering tunnel peer count fragment for " + id, ioe);
+        }
+    }
 }

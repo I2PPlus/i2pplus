@@ -86,6 +86,29 @@ public class ProfilesHelper extends HelperBase {
     }
 
     /**
+     *  Render only the named element for the contentonly fragment mode.
+     *  Renders nothing for ids the current tab does not own; unknown ids
+     *  produce an empty response.
+     *
+     *  @param id the element id
+     *  @throws IOException if an I/O error occurs
+     *  @since 0.9.70+
+     */
+    public void renderFragment(String id) throws IOException {
+        if (_full == 4) {
+            if ("sessionBanlist".equals(id)) {
+                try {
+                    BanlistRenderer rend = new BanlistRenderer(_context);
+                    rend.renderBanlistFragment(_out);
+                } catch (IOException ioe) {_log.error("Error rendering banlist", ioe);}
+            }
+            return;
+        }
+        ProfileOrganizerRenderer rend = new ProfileOrganizerRenderer(_context.profileOrganizer(), _context, true);
+        rend.renderFragment(_out, _full, id);
+    }
+
+    /**
      *  Return the currently selected profiles tab index.
      *
      *  @since 0.9.1

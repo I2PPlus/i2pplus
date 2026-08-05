@@ -1498,14 +1498,14 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .leaseset .stype{margin-right:-1px;padding:3px 6px 3px 21px;display:inline-block;vertical-align:middle;line-height:1.3;font-size:95%;font-weight:500;box-shadow:var(--bevel);background:var(--lock) no-repeat 6px center/12px,var(--badge)}
 .leaseset .ekey b,.leaseset .rkey b,.leaseset .rxAsPub b,.leaseset .rxAsRep b,.leaseset .stype b,.leaseset .expiry b, .leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .rkey .bullet,.leaseset .rxAsPub .bullet,.leaseset .rxAsRep .bullet,.leaseset .stype .bullet{display:none}
 .leaseset .ekeys td:empty,.leaseset .netdb_leases:empty{display:none}
+.lsCounter,.lsBadge{color:var(--ink);text-shadow:1px 1px 1px #0008;background:#2529}
 .lsDebugLabel{margin:0 8px 0 0;padding:2px 8px 2px 2px;white-space:nowrap;background:var(--badge)}
 .lsLabelType{font-weight:500}
-#netdb .leasesets_container p,#netdb .leasesets_container .confignav{column-span:all}
+#netdb .leasesets_container p,#netdb .leasesets_container .confignav,#netdbwrap #leasesetsummary{column-span:all}
 #netdb .leasesets_container .confignav{margin-bottom:11px}
 #netdb .yes,#netdb .no{width:16px;height:16px;display:inline-block;vertical-align:middle;font-size:0;background:var(--yes) no-repeat center calc(50% - 1px)/14px}
 #netdb .no{background:var(--no) no-repeat center calc(50% - 1px)/12px}
 #leasesetsummary #leasesetCounts td{padding:10px;border-top:3px solid #252;background:var(--th)}
-.lsCounter,.lsBadge{color:var(--ink);text-shadow:1px 1px 1px #0008;background:#2529}
 #leasesetsummary .vsep{margin:0 1px 0 4px;width:1px;height:26px;display:inline-block;vertical-align:middle;background:#252;}
 
 /* sybils */

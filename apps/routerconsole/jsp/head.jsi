@@ -24,6 +24,7 @@ boolean _hasConsolePW = !_cpm.getMD5(net.i2p.router.web.RouterConsoleRunner.PROP
 boolean loggedIn = request.getAttribute("user") != null;
 boolean noAuth = !_hasConsolePW;
 %>
+<% if (!net.i2p.router.web.ContentOnly.isContentOnly(request)) { %>
 <html lang="<%=lang%>" class="<%=isAdvancedMode ? "advmode " : ""%><%=useUnifiedSidebar ? "unified " : ""%><%=useSoraFont ? "sora" : "opensans"%><%=loggedIn ? " logged-in" : ""%><%=noAuth ? " noauth" : ""%>" <%=theme.equals("dark") || theme.equals("midnight") ? "style=\"background:var(--bodybg,#000)\"" : ""%>>
 <head>
 <script src=/js/progressx.js></script>
@@ -68,3 +69,4 @@ else if (lang.equals("bo")) {%> <link rel=stylesheet href="<%=themePath%>console
 <script src=/js/autologout.js></script>
 <script src=/js/detectPageZoom.js></script>
 <noscript><style>.script{display:none!important}</style></noscript>
+<% } %>

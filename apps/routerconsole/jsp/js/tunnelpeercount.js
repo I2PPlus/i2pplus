@@ -16,7 +16,6 @@ const refreshButton = d.getElementById("refreshPage");
 const tunnels = d.getElementById("tunnelPeerCount");
 const footer = tunnels?.querySelector(".tablefooter");
 const REFRESH_INTERVAL = 10 * 1000;
-const REFRESH_INTERVAL_SHORT = 5 * 1000;
 const sorter = tunnels ? new Tablesort(tunnels, { descending: true }) : null;
 
 let debugging = false;
@@ -32,10 +31,10 @@ let debounceTimeout;
  * @returns {Promise<void>}
  */
 const updateTunnels = async () => {
-  if (peers) {
-    refreshElements(["#allPeers", ".tablefooter"], "/tunnelpeercount", REFRESH_INTERVAL);
-  } else if (tunnels) {
-    refreshElements("#tunnelPeerCount", "/tunnelpeercount", REFRESH_INTERVAL_SHORT);
+  if (tunnels) {
+    // Rows are diffed in a worker; the footer total refreshes as a fragment
+    refreshElements("#allPeers", "/tunnelpeercount", REFRESH_INTERVAL, false, false, "allPeers", "allPeers");
+    refreshElements(".tablefooter", "/tunnelpeercount", REFRESH_INTERVAL, false, false, "tableFooter");
   }
   checkForCachedFilter();
   applyQueryParamsFilter();

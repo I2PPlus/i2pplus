@@ -1,5 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="64kb"%>
+<% if (!net.i2p.router.web.ContentOnly.isContentOnly(request)) { %>
 <!DOCTYPE HTML>
+<% } %>
 <%@include file="head.jsi"%>
 <%
     String fParam = request.getParameter("f");
@@ -20,19 +22,28 @@
     else if ("banned".equals(tab)) title = intl._t("Banned Peers");
     else title = intl._t("Recent Peer Profiles");
 %>
+<% if (!net.i2p.router.web.ContentOnly.isContentOnly(request)) { %>
 <%=intl.title(title)%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body>
+<% } %>
 <%@include file="sidebar.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ProfilesHelper" id="profilesHelper" scope="request"/>
 <jsp:setProperty name="profilesHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <jsp:setProperty name="profilesHelper" property="full" value="<%=fParam%>"/>
 <jsp:setProperty name="profilesHelper" property="show" value="<%=showParam%>"/>
+<%
+    profilesHelper.storeWriter(out);
+    if (net.i2p.router.web.ContentOnly.isContentOnly(request)) {
+        for (String id : net.i2p.router.web.ContentOnly.requestedIds(request)) {
+            profilesHelper.renderFragment(id);
+        }
+    } else {
+%>
 <h1 class=netwrk><%=title%></h1>
 <div class=main id=profiles>
 <div class=wideload style=height:5px;opacity:0>
-<%  profilesHelper.storeWriter(out);%>
 <jsp:getProperty name="profilesHelper" property="summary"/>
 </div>
 </div>
@@ -43,3 +54,4 @@
 <style>.wideload{height:unset!important;opacity:1!important}#profiles::before{display:none}</style>
 </body>
 </html>
+<%  } %>
