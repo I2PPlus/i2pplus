@@ -321,8 +321,8 @@ class ConnectionHandler {
         reply.setAckThrough(packet.getSequenceNum());
         reply.setSendStreamId(packet.getReceiveStreamId());
         reply.setReceiveStreamId(0);
-        // As of 0.9.20 we do not require FROM
-        // Removed in 0.9.39
+        reply.setLocalPort(packet.getLocalPort());
+        reply.setRemotePort(packet.getRemotePort());
         if (_log.shouldDebug()) {_log.debug("Sending RESET: " + reply + " because of " + packet);}
         _manager.getPacketQueue().enqueue(reply); // this just sends the packet - no retries or whatnot
     }

@@ -383,11 +383,12 @@ class ConnectionManager {
                                 DataHelper.toLong(g, j << 2, 4, nacks[j]);
                             }
                             Hash ghash = new Hash(g);
-                            if (_log.shouldWarn())
-                                _log.warn("Signature passed but hash failed \n* Expected: " + hash.toBase32() + "\n* Received: " + ghash.toBase32());
+                            _log.warn("Signature passed but hash failed, sending reset, expected: " + hash.toBase32() +
+                                      " received: " + ghash.toBase32() +
+                                      " from: " + from.calculateHash().toBase32());
                         }
-                        sigOk = false;
-                        break;
+                        _packetHandler.sendResetUnverified(synPacket);
+                        return null;
                     }
                 }
                 if (sigOk && _log.shouldInfo())

@@ -227,12 +227,11 @@ class PacketHandler {
      * Packet MUST have a FROM option.
      *
      * @param packet the packet
-     * @since 0.9.39
+     * @since 0.9.39, public since 0.9.71 for ConnectionManager
      */
-    private void sendResetUnverified(Packet packet) {
+    public void sendResetUnverified(Packet packet) {
         PacketLocal reply = new PacketLocal(context, packet.getOptionalFrom(), packet.getSession());
-        reply.setFlag(Packet.FLAG_RESET);
-        reply.setFlag(Packet.FLAG_SIGNATURE_INCLUDED);
+        reply.setFlag(Packet.FLAG_RESET | Packet.FLAG_SIGNATURE_INCLUDED | Packet.FLAG_NO_ACK);
         reply.setSendStreamId(packet.getReceiveStreamId());
         reply.setReceiveStreamId(packet.getSendStreamId());
         reply.setLocalPort(packet.getLocalPort());
