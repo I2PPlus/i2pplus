@@ -5,6 +5,7 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.BufferOverflowException;
 import java.nio.channels.CancelledKeyException;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.ClosedSelectorException;
@@ -900,6 +901,16 @@ class EventPumper implements Runnable {
             if (buf != null) releaseBuf(buf);
             clearInterest(key, SelectionKey.OP_READ);
             if (shouldInfo) _log.info("Error reading: " + con, nyce);
+        } catch (BufferOverflowException boe) {
+            // Rare unchecked exception on read() call, unknown cause
+            // Not even listed on SocketChannel.read() javadoc
+            // Do not release the buf, maybe it was in the pool twice?
+            // We assume this is fatal for the con so we close it.
+            clearInterest(key, SelectionKey.OP_READ);
+            con.close();
+            _context.statManager().addRateData("ntcp.readError", 1);
+            if (_log.shouldWarn())
+                _log.warn("Error reading on " + con, boe);
         }
     }
 
