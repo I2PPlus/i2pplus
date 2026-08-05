@@ -766,6 +766,26 @@ class NetDbRenderer {
         renderLeaseSetHTML(out, debug, null);
     }
 
+    /**
+     *  Renders the local (per-client) leaseset listing, wrapping the lease
+     *  tables in the #lsWrapper div so the netdb page refreshes them with the
+     *  same contentonly fragment path as the remote listing. The summary table
+     *  is emitted before the div, mirroring the remote layout. Used by both the
+     *  full local netdb page and the fragment mode.
+     *
+     *  @param out output
+     *  @since 0.9.70+
+     *  @throws java.io.IOException if an I/O error occurs
+     */
+    public void renderLocalLeaseSetList(Writer out) throws IOException {
+        renderLocalSummary(out);
+        out.append("<div id=lsWrapper>\n");
+        for (Hash client : _context.clientManager().getPrimaryHashes()) {
+            renderLeaseSetHTML(out, false, client);
+        }
+        out.append("</div>\n");
+    }
+
     private boolean isRendered = false;
 
     /**

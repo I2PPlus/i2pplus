@@ -14,7 +14,6 @@ import java.util.TreeMap;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
-import net.i2p.data.Hash;
 import net.i2p.router.sybil.Analysis;
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.FormHandler;
@@ -466,11 +465,7 @@ public class NetDbHelper extends FormHandler {
             } else if (_full == 4) {renderLookupForm();}
             else if (_full == 5) {renderer.renderStatusHTML(_out, _limit, _page, _full);}
             else if (_full == 6) {renderer.renderStatusHTML(_out, _limit, _page, _full);}
-            else if (_clientOnly) {
-                for (Hash client : _context.clientManager().getPrimaryHashes()) {
-                    renderer.renderLeaseSetHTML(_out, false, client);
-                }
-            } else {
+            else if (_clientOnly) {renderer.renderLocalLeaseSetList(_out);} else {
                 if (_full == 0 && _sort != null) {_full = 3;}
                 renderer.renderStatusHTML(_out, _limit, _page, _full);
             }
@@ -480,7 +475,8 @@ public class NetDbHelper extends FormHandler {
 
     /**
      *  Render a single named element for the contentonly fragment mode of the
-     *  netdb page. Only the remote leasesets listing is currently fragmentable.
+     *  netdb page. Only the remote and local leasesets listings are currently
+     *  fragmentable.
      *
      *  @param id the element id to render
      *  @since 0.9.70+
@@ -490,6 +486,8 @@ public class NetDbHelper extends FormHandler {
         try {
             if ("lsWrapper".equals(id) && _lease) {
                 renderer.renderLeaseSetListFragment(_out, _debug);
+            } else if ("lsWrapper".equals(id) && _clientOnly) {
+                renderer.renderLocalLeaseSetList(_out);
             }
         } catch (IOException e) { _log.error("Error rendering netdb fragment " + id, e);}
     }
