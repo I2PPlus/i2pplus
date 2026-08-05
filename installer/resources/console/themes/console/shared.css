@@ -43,6 +43,7 @@
 #compactLookup #netdblookup td:last-child{padding-right:6px;width:10%;min-width:120px}
 #compactLookup #netdblookup tr{background:var(--th)}
 #config_summarybar input[type=text]{width:64px;min-width:0}
+#lsWrapper{columns:2 500px;margin-bottom:10px}
 #netdbSearchCompact{width:100%}
 #netdbwrap .leasesets_container{columns: 2 500px}
 #netdbwrap .confignav{margin-bottom:12px}
