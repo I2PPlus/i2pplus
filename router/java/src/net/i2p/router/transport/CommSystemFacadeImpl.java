@@ -1908,9 +1908,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
                 if (ip != null && !"null".equals(ip)) {
                     if (enableReverseLookups()) {
-                        String canonicalHost = reverseLookupCache.computeIfAbsent(ip, k -> _context.commSystem().getCanonicalHostName(k));
-                        if (!"unknown".equals(canonicalHost)) {buf.append(" &bullet; ").append(canonicalHost);}
-                        else {buf.append(" &bullet; ").append(ip);}
+                        // Non-blocking: returns the resolved name from rdnsCache or the raw IP
+                        // immediately while queuing a background lookup on a miss.
+                        String canonicalHost = _context.commSystem().getCanonicalHostName(ip);
+                        if (!canonicalHost.equals(ip) && !_t("unknown").equals(canonicalHost)) {
+                            buf.append(" &bullet; ").append(canonicalHost);
+                        } else {
+                            buf.append(" &bullet; ").append(ip);
+                        }
                     } else {buf.append(" &bullet; ").append(ip);}
                 }
                 buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
@@ -1963,18 +1968,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (ip != null && ip.length() > 6) {
                     buf.append(" &bullet; ");
                     if (enableReverseLookups()) {
-                        // Don't block on reverse DNS lookup - just use the IP for now
-                        // The lookup will happen asynchronously and update the cache
-                        // The next page refresh will show the hostname
-                        String canonicalHost = reverseLookupCache.get(ip);
-                        if (canonicalHost != null && !"unknown".equals(canonicalHost)) {
+                        // Non-blocking: never wait on DNS. getCanonicalHostName returns the cached
+                        // name or the raw IP and queues a background lookup on a miss.
+                        String canonicalHost = _context.commSystem().getCanonicalHostName(ip);
+                        if (canonicalHost != null && !canonicalHost.equals(ip)
+                                && !_t("unknown").equals(canonicalHost)) {
                             buf.append(canonicalHost).append(" (").append(ip).append(")");
                         } else {
                             buf.append(ip);
-                            // Trigger async lookup if not already in cache
-                            if (canonicalHost == null) {
-                                _context.commSystem().getCanonicalHostName(ip);
-                            }
                         }
                     } else {buf.append(ip);}
                 }
@@ -2040,9 +2041,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         if (!inline) {buf.append("</tr></table>\n");}
         return buf.toString();
     }
-
-    /** Cache for reverse DNS lookups - small since we rely on file-backed rdnsCache */
-    private final Map<String, String> reverseLookupCache = Collections.synchronizedMap(new LHMCache<>(50));
 
     // Cache RouterInfo and Capacity to improve repeated lookup efficiency
     private final Map<Hash, RouterInfo> routerInfoCache = Collections.synchronizedMap(new LHMCache<>(5000));
