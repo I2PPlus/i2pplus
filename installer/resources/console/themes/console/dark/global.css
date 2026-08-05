@@ -61,7 +61,7 @@
 --isdown:repeating-linear-gradient(135deg,#131,#131 10px,#300 11px,#000 12px,#000 19px,#300 19px,#000 20px);
 --label:linear-gradient(180deg,#001800 50%,#000 50%);
 --mainbg:repeating-linear-gradient(90deg,#000c 2px,rgba(0,24,0,.7) 4px) center center/100%,repeating-linear-gradient(180deg,#000c 2px,rgba(0,24,0,.7) 4px) left top/100%,var(--camo) center center/2048px;
---msg:repeating-linear-gradient(180deg,#0009 2px,rgba(0,32,0,.3) 4px) center center/100% 4px,var(--hat) no-repeat right 2px bottom -2px/auto 56px,linear-gradient(180deg,#010,#000400);
+--msg:repeating-linear-gradient(180deg,#0009 2px,rgba(0,32,0,.3) 4px) center center/100%,var(--hat) no-repeat right 2px bottom -2px/auto 56px,linear-gradient(180deg,#010,#000400) center center/100% 100%;
 --msg_nohat:repeating-linear-gradient(180deg,#0009 2px,rgba(0,32,0,.3) 4px) center center/100%,linear-gradient(180deg,#010,#000400);
 --msg_warn:repeating-linear-gradient(180deg,#0009 2px,rgba(96,0,0,.3) 4px) center center/100%,var(--hat) no-repeat right 2px bottom -2px/auto 56px,linear-gradient(180deg,#100,#040000);
 --msg_warn_nohat:repeating-linear-gradient(180deg,#0009 2px,rgba(96,0,0,.3) 4px) center center/100%,linear-gradient(180deg,#100,#040000);
@@ -93,7 +93,7 @@ button::-moz-focus-inner,input::-moz-focus-inner{outline:none;border:0}
 :-moz-broken{display:none}
 
 html,body{min-height:100%;background:#000}
-html{scrollbar-color:rgba(16,72,16,.8) rgba(0,16,0,.5)}
+html{scrollbar-color:#131 #000}
 body{font-family:var(--bodyfont);color:var(--ink);background:var(--hstripe);background-size:100% 4px,2048px}
 .iframed body{background:var(--vstripe) #000;background-size:100% 4px}
 a:link,a:visited{word-wrap:break-word;text-decoration:none;font-weight:700;color:var(--a)}
