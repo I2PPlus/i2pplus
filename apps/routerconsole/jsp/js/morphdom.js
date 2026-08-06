@@ -16,6 +16,35 @@ var COMMENT_NODE = 8;
 var NS_XHTML = 'http://www.w3.org/1999/xhtml';
 
 /**
+ * True when a string is whitespace-only (empty, spaces, newlines, nbsp).
+ * @param {string} value - The text value to check.
+ * @returns {boolean} True for whitespace-only text.
+ */
+function isWsOnlyText(value) {
+  return /^\s*$/.test(value);
+}
+
+/**
+ * True when an element is inside a context where whitespace-only text nodes
+ * are rendered (pre-formatted or raw-text content). In every other context
+ * whitespace-only text nodes are collapsed by CSS and can be ignored when
+ * diffing.
+ * @param {Element} el - The element to check.
+ * @returns {boolean} True inside a pre-like context.
+ */
+function inPreContext(el) {
+  while (el) {
+    var tag = el.tagName;
+    if (tag === 'PRE' || tag === 'TEXTAREA' || tag === 'SCRIPT' || tag === 'STYLE') {
+      return true;
+    }
+    el = el.parentNode;
+  }
+  return false;
+}
+
+
+/**
  * Default function to get a node's key for identification.
  * @param {Node} node - The DOM node to get a key for.
  * @returns {string|null} The node's id attribute or id property, or null if not found.
@@ -309,7 +338,7 @@ function morphdomFactory(morphAttrs) {
 
         if (curFromNodeKey) {
           addKeyedRemoval(curFromNodeKey);
-        } else {
+        } else if (!(curFromNodeChild.nodeType === TEXT_NODE && !inPreContext(fromEl) && isWsOnlyText(curFromNodeChild.nodeValue))) {
           removeNode(curFromNodeChild, fromEl, true);
         }
 
@@ -351,6 +380,15 @@ function morphdomFactory(morphAttrs) {
         var toNextSibling = curToNodeChild.nextSibling;
         var curToNodeKey = getNodeKey(curToNodeChild);
 
+        // Whitespace-only text nodes never render outside pre-like contexts,
+        // and the VDOM side may split or merge them differently than the
+        // live DOM (parsers differ in text-node merging). Skip them so they
+        // neither trigger writes nor insert/remove churn.
+        if (!inPreContext(fromEl) && curToNodeChild.nodeType === TEXT_NODE && isWsOnlyText(curToNodeChild.nodeValue)) {
+          curToNodeChild = toNextSibling;
+          continue outer;
+        }
+
         while (!skipFrom && curFromNodeChild) {
           var fromNextSibling = curFromNodeChild.nextSibling;
           var curFromNodeKey = getNodeKey(curFromNodeChild);
@@ -385,7 +423,9 @@ function morphdomFactory(morphAttrs) {
                 morphEl(curFromNodeChild, curToNodeChild);
               }
             } else if (curFromNodeType === TEXT_NODE || curFromNodeType === COMMENT_NODE) {
-              if (curFromNodeChild.nodeValue !== curToNodeChild.nodeValue) {
+              if (curFromNodeChild.nodeValue !== curToNodeChild.nodeValue &&
+                  !(curFromNodeType === TEXT_NODE && !inPreContext(fromEl) &&
+                    isWsOnlyText(curFromNodeChild.nodeValue) && isWsOnlyText(curToNodeChild.nodeValue))) {
                 curFromNodeChild.nodeValue = curToNodeChild.nodeValue;
               }
             }
@@ -399,7 +439,7 @@ function morphdomFactory(morphAttrs) {
 
           if (curFromNodeKey) {
             addKeyedRemoval(curFromNodeKey);
-          } else {
+          } else if (!(curFromNodeChild.nodeType === TEXT_NODE && !inPreContext(fromEl) && isWsOnlyText(curFromNodeChild.nodeValue))) {
             removeNode(curFromNodeChild, fromEl, true);
           }
 
@@ -441,7 +481,9 @@ function morphdomFactory(morphAttrs) {
           morphedNode = moveChildren(fromNode, createElementNS(toNode.nodeName, toNode.namespaceURI));
         }
       } else if (morphedNodeType === TEXT_NODE || morphedNodeType === COMMENT_NODE) {
-        if (toNodeType === morphedNodeType && morphedNode.nodeValue !== toNode.nodeValue) {
+        if (toNodeType === morphedNodeType && morphedNode.nodeValue !== toNode.nodeValue &&
+            !(morphedNodeType === TEXT_NODE && !inPreContext(morphedNode.parentNode) &&
+              isWsOnlyText(morphedNode.nodeValue) && isWsOnlyText(toNode.nodeValue))) {
           morphedNode.nodeValue = toNode.nodeValue;
           return morphedNode;
         }

@@ -13,6 +13,10 @@
  * and morphdom pass entirely when nothing changed. In row-diff mode the
  * response is never patched via morphdom, so companion elements must use
  * their own refreshElements call.
+ *
+ * All parsing happens in the SharedWorker: diffWorker.js turns fragment HTML
+ * into a serializable VDOM tree (vdomParser.js) and this module realizes only
+ * the rows or elements it receives. No DOMParser runs on the main thread.
  * @author dr|z3d
  * @license AGPLv3 or later
  */
@@ -70,15 +74,34 @@ function appendContentOnly(url, ids) {
 }
 
 /**
- * Parses a row HTML string into a tr element. A bare <tr> outside a table is
- * ignored by the HTML parser, so the row is wrapped in a table body.
- * @function parseRow
- * @param {string} html - The row HTML
- * @returns {HTMLElement|null} The parsed tr element
+ * Realizes a serializable VDOM node (from diffWorker.js) as a live DOM node.
+ * Script elements are dropped: refresh fragments are server-rendered rows and
+ * never carry executable scripts, and the DOMParser-based flow they replace
+ * kept parsed scripts inert anyway. Dropping keeps the same visible DOM at
+ * lower cost.
+ * @function realizeVdom
+ * @param {Object} vnode - The VDOM node ({tagName, attributes, children} or
+ * {nodeName:"#text"|"#comment", nodeValue})
+ * @returns {Node|null} The realized node, or null for skipped script elements
  */
-function parseRow(html) {
-  const doc = new DOMParser().parseFromString("<table><tbody>" + html + "</tbody></table>", "text/html");
-  return doc.querySelector("tr");
+function realizeVdom(vnode) {
+  if (!vnode) { return null; }
+  if (vnode.nodeName === "#text") { return document.createTextNode(vnode.nodeValue); }
+  if (vnode.nodeName === "#comment") { return document.createComment(vnode.nodeValue); }
+  if (vnode.tagName === "script") { return null; }
+  const el = document.createElement(vnode.tagName);
+  const attrs = vnode.attributes;
+  if (attrs) {
+    for (const name in attrs) { el.setAttribute(name, attrs[name]); }
+  }
+  const kids = vnode.children;
+  if (Array.isArray(kids)) {
+    for (let i = 0; i < kids.length; i++) {
+      const child = realizeVdom(kids[i]);
+      if (child) { el.appendChild(child); }
+    }
+  }
+  return el;
 }
 
 /**
@@ -108,8 +131,8 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
   document.addEventListener("visibilitychange", visibilityListener);
   reportVisibility(fetchWorker.port);
 
-  const diffWorker = diffRows ? new SharedWorker("/js/diffWorker.js") : null;
-  if (diffWorker) { diffWorker.port.start(); }
+  const diffWorker = new SharedWorker("/js/diffWorker.js");
+  diffWorker.port.start();
 
   let instanceIntervalId = null;
   let isRefreshing = false;
@@ -129,7 +152,7 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
    * their target position (the key of the following row in server order) and
    * are inserted before it; an unknown predecessor falls back to appending,
    * which the sorter refresh on refreshComplete corrects when the user has
-   * an active sort.
+   * an active sort. Rows arrive as VDOM and are realized per row.
    * @function patchRows
    * @param {string} tbodyId - The tbody element id
    * @param {Object} result - The diff result (changed, inserts, removed)
@@ -146,15 +169,15 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
         return true;
       }
     };
-    (result.changed || []).forEach(html => {
-      const row = parseRow(html);
+    (result.changed || []).forEach(vdom => {
+      const row = realizeVdom(vdom);
       if (!row) { return; }
       const key = row.getAttribute("data-key");
       const existing = key ? rowByKey(key) : null;
       if (existing) { morphdom(existing, row, morphOptions); }
     });
     (result.inserts || []).slice().reverse().forEach(insert => {
-      const row = parseRow(insert.html);
+      const row = realizeVdom(insert.vdom);
       if (!row) { return; }
       if (row.classList.contains("lazy")) { lazyAdded = true; }
       const before = insert.before ? rowByKey(insert.before) : null;
@@ -173,18 +196,15 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
    * order changes, or rows without keys).
    * @function patchFull
    * @param {string} tbodyId - The tbody element id
-   * @param {string} tbodyHtml - The tbody HTML from the diff worker
+   * @param {Object} vdom - The tbody VDOM from the diff worker
    * @returns {{changed: boolean, lazyAdded: boolean}} Whether the DOM changed and whether new lazy rows were added
    */
-  function patchFull(tbodyId, tbodyHtml) {
+  function patchFull(tbodyId, vdom) {
     const tbody = document.getElementById(tbodyId);
-    if (!tbody || !tbodyHtml) { return { changed: false, lazyAdded: false }; }
+    if (!tbody || !vdom) { return { changed: false, lazyAdded: false }; }
     let changed = false;
     let lazyAdded = false;
-    // A bare <tbody> outside a table is ignored by the HTML parser, so the
-    // whole-tbody fragment is wrapped before parsing.
-    const doc = new DOMParser().parseFromString("<table>" + tbodyHtml + "</table>", "text/html");
-    const newTbody = doc.getElementById(tbodyId);
+    const newTbody = realizeVdom(vdom);
     if (!newTbody) { return { changed: false, lazyAdded: false }; }
     morphdom(tbody, newTbody, {
       onBeforeElUpdated: (fromEl, toEl) => {
@@ -202,16 +222,23 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
 
   /**
    * Patch the document from a fetched response with morphdom (no row diff).
+   * The response arrived as VDOM from the diff worker; the fragment roots are
+   * realized into a detached container before the selectors are matched.
    * @function patchResponse
-   * @param {string} responseText - The fetched fragment HTML
+   * @param {Object} vdom - The parsed fragment VDOM (nodeName "#document")
    * @returns {void}
    */
-  function patchResponse(responseText) {
+  function patchResponse(vdom) {
     let lazyAdded = false;
-    const doc = new DOMParser().parseFromString(responseText, "text/html");
+    const container = document.createElement("div");
+    const kids = vdom.children || [];
+    for (let i = 0; i < kids.length; i++) {
+      const el = realizeVdom(kids[i]);
+      if (el) { container.appendChild(el); }
+    }
     selectors.forEach(selector => {
       const targetElements = document.querySelectorAll(selector);
-      const targetElementsResponse = doc.querySelectorAll(selector);
+      const targetElementsResponse = container.querySelectorAll(selector);
       targetElements.forEach((targetElement, index) => {
         const targetElementResponse = targetElementsResponse[index];
         if (targetElement && targetElementResponse) {
@@ -241,29 +268,29 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
       // while hidden, so it would otherwise render stale data on regain before
       // the visibilitychange-triggered refresh replaces it.
       if (arrivedHidden || document.hidden) { return; }
-      if (diffWorker) {
-        diffWorker.port.postMessage({ url: fetchUrl, html: responseText, tbodyId: diffRows });
-      } else {
-        patchResponse(responseText);
-      }
+      diffWorker.port.postMessage({
+        url: fetchUrl,
+        html: responseText,
+        ...(diffRows ? { tbodyId: diffRows } : {})
+      });
     });
   };
 
-  if (diffWorker) {
-    diffWorker.port.onmessage = function(e) {
-      const data = e.data;
-      if (!data || data.action === "unchanged") { return; }
-      if (data.action === "rows") {
-        const lazyAdded = patchRows(diffRows, data);
-        if (lazyAdded) { document.dispatchEvent(new Event("elementsPatched")); }
-        dispatchDone();
-      } else if (data.action === "full") {
-        const result = patchFull(diffRows, data.tbodyHtml);
-        if (result.lazyAdded) { document.dispatchEvent(new Event("elementsPatched")); }
-        if (result.changed) { dispatchDone(); }
-      }
-    };
-  }
+  diffWorker.port.onmessage = function(e) {
+    const data = e.data;
+    if (!data || data.action === "unchanged") { return; }
+    if (data.action === "rows") {
+      const lazyAdded = patchRows(diffRows, data);
+      if (lazyAdded) { document.dispatchEvent(new Event("elementsPatched")); }
+      dispatchDone();
+    } else if (data.action === "full") {
+      const result = patchFull(diffRows, data.vdom);
+      if (result.lazyAdded) { document.dispatchEvent(new Event("elementsPatched")); }
+      if (result.changed) { dispatchDone(); }
+    } else if (data.action === "parsed") {
+      patchResponse(data.vdom);
+    }
+  };
 
   function refresh() {
     if (document.visibilityState !== "visible" || isRefreshing) { return; }

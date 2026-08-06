@@ -1,97 +1,70 @@
 /**
  * @module diffWorker
- * @description A SharedWorker that diffs table row HTML between snapshots.
+ * @description A SharedWorker that parses fragment HTML to a serializable
+ * VDOM tree (vdomParser.js) and diffs table rows between snapshots.
+ *
  * Receives fragment HTML containing a named tbody whose rows carry data-key
  * attributes (emitted by the server in contentonly fragment mode) and posts
  * back only the changed, inserted, and removed rows, so the main thread
  * patches a handful of rows instead of re-parsing and re-diffing the whole
  * table on every refresh tick.
  *
- * Workers cannot parse DOM, so rows are extracted by string scanning with
- * depth counting: profile rows embed a mini table (renderPeerHTML), so a row
- * can contain nested <tr> elements, and scanning to the first </tr> would
- * truncate it. When row order changes, rows lack keys, or there is no
- * snapshot yet, the result is a "full" fallback carrying the whole tbody,
- * which the main thread patches wholesale.
+ * Parsing happens entirely in this worker: vdomParser.js produces a plain
+ * data tree ({tagName, attributes, children} / {nodeName, nodeValue}) that
+ * survives structured clone, and the main thread realizes only the rows it
+ * receives. Row extraction is a tree walk, so nested tables inside a row
+ * (renderPeerHTML) need no string depth counting. When row order changes,
+ * rows lack keys, or there is no snapshot yet, the result is a "full"
+ * fallback carrying the whole tbody VDOM, which the main thread patches
+ * wholesale.
+ *
+ * Without a tbodyId the worker acts as a pure parser and posts the fragment
+ * VDOM back ("parsed" action), so the main thread never calls DOMParser.
  * @author dr|z3d
  * @license AGPLv3 or later
  */
+
+importScripts("vdomParser.js");
 
 /** @type {Map<string, {keys: string[], rows: Map<string,string>}>} */
 const snapshots = new Map();
 
 /**
- * Extracts the opening tag of a tbody by id.
- * @function findTbodyOpenTag
- * @param {string} html - The HTML to scan
+ * Finds the first tbody element with the given id in a VDOM tree.
+ * @function findTbody
+ * @param {Object} root - The parsed VDOM root
  * @param {string} id - The tbody element id
- * @returns {string|null} The full opening tag, or null
+ * @returns {Object|null} The tbody node, or null
  */
-function findTbodyOpenTag(html, id) {
-  const re = new RegExp("<tbody[^>]*\\bid=[\"']?" + id + "[\"']?[^>]*>");
-  const match = html.match(re);
-  return match ? match[0] : null;
+function findTbody(root, id) {
+  const stack = [root];
+  while (stack.length > 0) {
+    const node = stack.pop();
+    if (node.tagName === "tbody" && node.attributes && node.attributes.id === id) {
+      return node;
+    }
+    const kids = node.children;
+    if (Array.isArray(kids)) {
+      for (let i = 0; i < kids.length; i++) { stack.push(kids[i]); }
+    }
+  }
+  return null;
 }
 
 /**
- * Extracts the inner HTML of a tbody by id.
- * @function extractTbody
- * @param {string} html - The HTML to scan
- * @param {string} id - The tbody element id
- * @returns {string|null} The tbody inner HTML, or null
- */
-function extractTbody(html, id) {
-  const openTag = findTbodyOpenTag(html, id);
-  if (!openTag) { return null; }
-  const start = html.indexOf(openTag) + openTag.length;
-  const end = html.indexOf("</tbody>", start);
-  if (end < 0) { return null; }
-  return html.substring(start, end);
-}
-
-/**
- * Extracts the full tbody element (opening tag through closing tag) by id,
- * for wholesale replacement by the main thread.
- * @function extractTbodyOuter
- * @param {string} html - The HTML to scan
- * @param {string} id - The tbody element id
- * @returns {string|null} The full tbody element HTML, or null
- */
-function extractTbodyOuter(html, id) {
-  const openTag = findTbodyOpenTag(html, id);
-  if (!openTag) { return null; }
-  const start = html.indexOf(openTag);
-  const end = html.indexOf("</tbody>", start);
-  if (end < 0) { return null; }
-  return html.substring(start, end + "</tbody>".length);
-}
-
-/**
- * Extracts rows as keyed HTML entries, tracking nesting so rows that embed
- * a table (nested <tr> elements) are captured in full.
+ * Extracts the direct tr children of a tbody as keyed VDOM entries.
  * @function extractRows
- * @param {string} html - The tbody inner HTML
- * @returns {Array<{key: string|null, html: string}>}
+ * @param {Object} tbody - The tbody VDOM node
+ * @returns {Array<{key: string|null, vdom: Object}>}
  */
-function extractRows(html) {
+function extractRows(tbody) {
   const rows = [];
-  const re = /<tr\b[^>]*>|<\/tr>/g;
-  let match;
-  let depth = 0;
-  let rowStart = -1;
-  while ((match = re.exec(html)) !== null) {
-    if (match[0].charAt(1) === "/") {
-      depth--;
-      if (depth === 0 && rowStart >= 0) {
-        const rowHtml = html.substring(rowStart, re.lastIndex);
-        const openTag = rowHtml.substring(0, rowHtml.indexOf(">") + 1);
-        const keyMatch = openTag.match(/data-key=["']([^"']+)["']/);
-        rows.push({ key: keyMatch ? keyMatch[1] : null, html: rowHtml });
-        rowStart = -1;
-      }
-    } else {
-      depth++;
-      if (depth === 1) { rowStart = match.index; }
+  const kids = tbody.children;
+  for (let i = 0; i < kids.length; i++) {
+    const child = kids[i];
+    if (child.tagName === "tr") {
+      const attrs = child.attributes || {};
+      rows.push({ key: attrs["data-key"] !== undefined ? attrs["data-key"] : null, vdom: child });
     }
   }
   return rows;
@@ -112,7 +85,7 @@ function postResult(port, url, payload) {
 /**
  * Diffs a new row set against the stored snapshot for the url and posts the
  * result: "unchanged" (nothing to patch), "rows" (changed, inserted, and
- * removed rows), or "full" (main thread replaces the whole tbody).
+ * removed rows as VDOM), or "full" (main thread replaces the whole tbody).
  * @function handleDiff
  * @param {MessagePort} port - The requesting port
  * @param {string} url - The snapshot key
@@ -121,22 +94,23 @@ function postResult(port, url, payload) {
  * @returns {void}
  */
 function handleDiff(port, url, html, tbodyId) {
-  const tbodyHtml = extractTbody(html, tbodyId);
-  if (!tbodyHtml) {
+  const root = VdomParser.parse(html);
+  const tbody = findTbody(root, tbodyId);
+  if (!tbody) {
     postResult(port, url, { action: "full" });
     return;
   }
-  const rows = extractRows(tbodyHtml);
+  const rows = extractRows(tbody);
   const keys = rows.map(r => r.key);
   if (keys.some(k => k === null)) {
-    postResult(port, url, { action: "full", tbodyHtml: extractTbodyOuter(html, tbodyId) });
+    postResult(port, url, { action: "full", vdom: tbody });
     return;
   }
-  const newRows = new Map(rows.map(r => [r.key, r.html]));
+  const newRows = new Map(rows.map(r => [r.key, JSON.stringify(r.vdom)]));
   const snapshot = snapshots.get(url);
   if (!snapshot) {
     snapshots.set(url, { keys, rows: newRows });
-    postResult(port, url, { action: "full", tbodyHtml: extractTbodyOuter(html, tbodyId) });
+    postResult(port, url, { action: "full", vdom: tbody });
     return;
   }
 
@@ -162,18 +136,18 @@ function handleDiff(port, url, html, tbodyId) {
 
   snapshots.set(url, { keys, rows: newRows });
   if (orderChanged) {
-    postResult(port, url, { action: "full", tbodyHtml: extractTbodyOuter(html, tbodyId) });
+    postResult(port, url, { action: "full", vdom: tbody });
     return;
   }
 
+  const rowVdom = new Map(rows.map(r => [r.key, r.vdom]));
   const changed = [];
   for (const k of survivorOrder) {
-    const newHtml = newRows.get(k);
-    if (newHtml !== oldRows.get(k)) { changed.push(newHtml); }
+    if (newRows.get(k) !== oldRows.get(k)) { changed.push(rowVdom.get(k)); }
   }
   const inserts = inserted.map(k => ({
     key: k,
-    html: newRows.get(k),
+    vdom: rowVdom.get(k),
     before: keys[keys.indexOf(k) + 1] || null
   }));
 
@@ -194,7 +168,11 @@ self.onconnect = function(e) {
   const port = e.ports[0];
   port.onmessage = function(event) {
     const { url, html, tbodyId } = event.data;
-    if (!url || !html || !tbodyId) { return; }
-    handleDiff(port, url, html, tbodyId);
+    if (!url || !html) { return; }
+    if (tbodyId) {
+      handleDiff(port, url, html, tbodyId);
+    } else {
+      port.postMessage({ url, action: "parsed", vdom: VdomParser.parse(html) });
+    }
   };
 };
