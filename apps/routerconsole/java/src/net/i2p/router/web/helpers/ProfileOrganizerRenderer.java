@@ -150,7 +150,7 @@ class ProfileOrganizerRenderer {
             // Pass 1: collect the tier's candidates to size the cutoff
             List<PeerProfile> candidates = new ArrayList<>();
             for (Hash peer : peers) {
-                PeerProfile prof = _organizer.getProfileNonblocking(peer);
+                PeerProfile prof = _organizer.getProfile(peer);
                 if (prof == null || !isValid(prof, peer, _organizer.getUs(), true)) {continue;}
                 if (mode == 1) {
                     // Fast tier only
@@ -199,7 +199,7 @@ class ProfileOrganizerRenderer {
             }
         } else {
             for (Hash peer : peers) {
-                PeerProfile prof = _organizer.getProfileNonblocking(peer);
+                PeerProfile prof = _organizer.getProfile(peer);
                 if (prof == null || !isValid(prof, peer, _organizer.getUs(), false)) {continue;}
                 order.add(prof);
             }
