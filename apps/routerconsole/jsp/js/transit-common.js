@@ -28,6 +28,7 @@ export function initTransit(config) {
   let isSetup = false;
   let isRefreshing = false;
   let lastPeerRowCount = -1;
+  let stopRefresh = null;
 
   /** Caches DOM element references. */
   function getDOM() {
@@ -65,26 +66,29 @@ export function initTransit(config) {
   function refreshData(immediate = false) {
     startRefresh();
     getDOM();
+    if (stopRefresh) { stopRefresh(); stopRefresh = null; }
+    let stop = null;
     if (tunnels) {
       setupTablesort();
       if (peers) {
         if (config.usePeerRowTracking) {
           const currentRows = peers.querySelectorAll("tr").length;
           if (currentRows === lastPeerRowCount && currentRows > 0) {
-            refreshElements("#transitPeers td>*, #statusnotes", FETCH_URL, REFRESH_INTERVAL, immediate);
+            stop = refreshElements("#transitPeers td>*, #statusnotes", FETCH_URL, REFRESH_INTERVAL, immediate);
           } else if (currentRows !== lastPeerRowCount) {
-            refreshElements("#transitPeers, #statusnotes", FETCH_URL, REFRESH_INTERVAL, immediate);
+            stop = refreshElements("#transitPeers, #statusnotes", FETCH_URL, REFRESH_INTERVAL, immediate);
             lastPeerRowCount = currentRows;
           } else {
-            refreshElements("#tunnels", FETCH_URL, RETRY_DELAY, immediate);
+            stop = refreshElements("#tunnels", FETCH_URL, RETRY_DELAY, immediate);
           }
         } else {
-          refreshElements("#statusnotes, #transitPeers", FETCH_URL, REFRESH_INTERVAL, immediate);
+          stop = refreshElements("#statusnotes, #transitPeers", FETCH_URL, REFRESH_INTERVAL, immediate);
         }
       } else if (main) {
-        refreshElements("#tunnels", FETCH_URL, RETRY_DELAY, immediate);
+        stop = refreshElements("#tunnels", FETCH_URL, RETRY_DELAY, immediate);
       }
     }
+    stopRefresh = stop;
     endRefresh();
   }
 

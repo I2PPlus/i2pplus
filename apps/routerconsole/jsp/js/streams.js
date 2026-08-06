@@ -17,6 +17,7 @@ import { refreshElements } from "/js/refreshElements.js";
 
 let sorters = [];
 let currentRefreshTarget = "#streamsWrap, #streamstats";
+let stopRefresh = null;
 const baseUrl = "/streams" + (window.location.search || "");
 
 /**
@@ -45,7 +46,8 @@ function initTablesort() {
 function switchToBodyRefresh() {
   if (currentRefreshTarget === "table.streams tbody, #streamstats") return;
   currentRefreshTarget = "table.streams tbody, #streamstats";
-  refreshElements(currentRefreshTarget, baseUrl, 10000);
+  if (stopRefresh) { stopRefresh(); }
+  stopRefresh = refreshElements(currentRefreshTarget, baseUrl, 10000);
 }
 
 /**
@@ -55,7 +57,7 @@ function switchToBodyRefresh() {
  */
 document.addEventListener("DOMContentLoaded", function() {
   initTablesort();
-  refreshElements(currentRefreshTarget, baseUrl, 10000);
+  stopRefresh = refreshElements(currentRefreshTarget, baseUrl, 10000);
 
   document.addEventListener("elementsRefreshed", function() {
     if (initTablesort()) {
