@@ -1404,8 +1404,8 @@ sb.append("<th>")
           .append(hB64)
           .append("\">")
           .append(truncHash)
-          .append("</a></span></td><td data-sort=")
-          .append(version != null ? DataHelper.stripHTML(version) : "0").append(">");
+           .append("</a></span></td><td data-sort=")
+           .append(version != null ? DataHelper.stripHTML(version) : "").append(">");
         if (version != null) {
             sb.append("<span class=version title=\"")
               .append(versionTip)
