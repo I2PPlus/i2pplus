@@ -116,11 +116,12 @@ function realizeVdom(vnode) {
  * @param {boolean} [silent=false] - Skip the progress bar on each refresh
  * @param {string|string[]} [fragmentIds=null] - Element ids the server should render (contentonly fragment mode)
  * @param {string} [diffRows=null] - Id of a tbody whose rows are diffed in a worker; only changed rows are patched
+ * @param {number} [minInterval=0] - Minimum period between refreshes in ms. A refresh request (interval tick or visibility regain) is skipped when the last refresh started less than this long ago; zero disables the check
  * @returns {Function} The stop function that halts the refresh loop
  * @example refreshElements("#sidebar", "/sidebar", 10000)
  * @example refreshElements(["#peers", "#status"], "/peers", 5000)
  */
-export function refreshElements(targetSelectors, url, delay, immediate = false, silent = false, fragmentIds = null, diffRows = null) {
+export function refreshElements(targetSelectors, url, delay, immediate = false, silent = false, fragmentIds = null, diffRows = null, minInterval = 0) {
   const selectors = normalizeSelectors(targetSelectors);
   const contentOnlyIds = normalizeFragmentIds(fragmentIds);
   const fetchUrl = contentOnlyIds ? appendContentOnly(url, contentOnlyIds) : url;
@@ -136,6 +137,7 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
 
   let instanceIntervalId = null;
   let isRefreshing = false;
+  let lastRefreshAt = 0;
 
   /**
    * Dispatches the refresh events after a patch is applied.
@@ -294,8 +296,11 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
 
   function refresh() {
     if (document.visibilityState !== "visible" || isRefreshing) { return; }
+    const now = Date.now();
+    if (minInterval > 0 && now - lastRefreshAt < minInterval) { return; }
 
     isRefreshing = true;
+    lastRefreshAt = now;
     if (!silent) { progressx?.show(theme); }
 
     fetchWorker.port.postMessage({ url: fetchUrl });

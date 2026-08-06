@@ -106,10 +106,12 @@ import { refreshElements } from "./refreshElements.js";
       refreshElements(targetSelectors, uri, 15000, false, true, "profiles_overview,thresholds");
     }
 
-    // Refresh profile list every 15 seconds; rows are diffed in a worker
+    // Refresh profile list every 15 seconds; rows are diffed in a worker.
+    // 10s min interval suppresses the redundant fetch when a short tab hide
+    // falls right after a completed refresh
     if (plist) {
       const targetSelectors = pbody ? `#pbody` : `#profilelist`;
-      refreshElements(targetSelectors, uri, 15000, false, false, pbody ? "pbody" : null, pbody ? "pbody" : null);
+      refreshElements(targetSelectors, uri, 15000, false, false, pbody ? "pbody" : null, pbody ? "pbody" : null, 10000);
     }
 
     // Refresh floodfill profiles every 15 seconds; rows are diffed in a worker
@@ -118,9 +120,11 @@ import { refreshElements } from "./refreshElements.js";
       refreshElements(targetSelectors, uri, 15000, false, false, ffprofiles ? "ffProfiles" : "floodfills", ffprofiles ? "ffProfiles" : null);
     }
 
-    // Refresh session bans every 15 seconds; rows are diffed in a worker
+    // Refresh session bans every 15 seconds; rows are diffed in a worker.
+    // 10s min interval suppresses the redundant fetch when a short tab hide
+    // falls right after a completed refresh
     if (sessionBans) {
-      refreshElements("#sessionBanlist", uri, 15000, false, false, "sessionBanlist", "sessionBanlist");
+      refreshElements("#sessionBanlist", uri, 15000, false, false, "sessionBanlist", "sessionBanlist", 10000);
     }
 
     document.addEventListener("refreshComplete", () => {
