@@ -118,6 +118,8 @@ import { refreshElements } from "./refreshElements.js";
     if (ff) {
       const targetSelectors = ffprofiles ? `#ffProfiles` : `#floodfills`;
       refreshElements(targetSelectors, uri, 15000, false, false, ffprofiles ? "ffProfiles" : "floodfills", ffprofiles ? "ffProfiles" : null);
+      // Refresh the floodfill health rings, silently
+      refreshElements("#ffstats", uri, 15000, false, true, "ffstats");
     }
 
     // Refresh session bans every 15 seconds; rows are diffed in a worker.

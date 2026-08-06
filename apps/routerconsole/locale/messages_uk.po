@@ -3369,9 +3369,6 @@ msgstr "Відомі"
 msgid "Total entries in network database"
 msgstr "Загальна кількість записів у базі даних мережі"
 
-msgid "Active%"
-msgstr "активний%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Профілі з активністю за останні 24 години"
 

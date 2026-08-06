@@ -3353,9 +3353,6 @@ msgstr "既知"
 msgid "Total entries in network database"
 msgstr "ネットワーク データベースのエントリの合計"
 
-msgid "Active%"
-msgstr "アクティブ％"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "過去 24 時間にアクティビティがあったプロファイル"
 

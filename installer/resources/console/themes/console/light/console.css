@@ -1382,6 +1382,7 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 .profilegroup.integrated::before{background:var(--integrated) no-repeat left center}
 .profilegroup.standard::before{background:var(--standard) no-repeat left center}
 #peerprofiles.widescroll{margin-top:-12px;padding-top:120px;position:relative}
+#ffstats{width:calc(100% - 10px);margin: 14px auto 4px;border:var(--border_inner);border-radius:0;background:var(--th)}
 #profiles .ok,#ntcpconnections td.queue:empty::before,#profiles .ok,#profiles .notOk,#profiles .mostPass{width:15px;height:15px;display:inline-block;font-size:0;background-size:10px}
 #profiles_overview{margin-bottom:13px;background-image:url(../images/profile.svg)}
 #profiles_overview+.widescroll{margin-bottom:-5px}

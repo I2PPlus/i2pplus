@@ -103,6 +103,12 @@ class CapacityCalculator {
         RouterContext context = profile.getContext();
         long now = context.clock().now();
         TunnelHistory history = profile.getTunnelHistory();
+        RateStat acceptStat = profile.getTunnelCreateResponseTime();
+        if (acceptStat == null) {
+            // Never accepted or rejected a tunnel build request for us; there
+            // is no tunnel response data to estimate capacity from.
+            return 1.0d;
+        }
         Router r = context.router();
         long down = (r != null) ? r.getEstimatedDowntime() : 0;
         long up = (r != null) ? r.getUptime() : 0;
@@ -110,7 +116,6 @@ class CapacityCalculator {
         if (enableAgeChecks && tooOld(profile, now)) {
             capacity = 1;
         } else {
-            RateStat acceptStat = profile.getTunnelCreateResponseTime();
             RateStat rejectStat = history.getRejectionRate();
             RateStat failedStat = history.getFailedRate();
 

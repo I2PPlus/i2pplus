@@ -242,7 +242,7 @@ public class PeerHelper extends HelperBase {
                        (activeProfileCount * 100 / profileCount) + "%" : "\u2014";
         double apScore = (activeProfileCount > 0 && profileCount > 0) ?
                          Math.min((double) activeProfileCount / profileCount, 1.0) : -1;
-        buf.append(RingRenderer.renderRingCell(apScore, _t("Active%"), apStr,
+        buf.append(RingRenderer.renderRingCell(apScore, _t("Active"), apStr,
                   new String[]{_t("Profiles with activity in the last 24h")}, RingRenderer.MODE_HEALTH));
 
         // 8. Unreachable

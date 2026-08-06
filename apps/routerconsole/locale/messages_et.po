@@ -3362,9 +3362,6 @@ msgstr "Tuntud"
 msgid "Total entries in network database"
 msgstr "Kirjete koguarv võrgu andmebaasis"
 
-msgid "Active%"
-msgstr "Aktiivne%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Viimase 24 tunni tegevustega profiilid"
 

@@ -3345,9 +3345,6 @@ msgstr "알려진"
 msgid "Total entries in network database"
 msgstr "네트워크 데이터베이스의 총 항목"
 
-msgid "Active%"
-msgstr "활동적인%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "지난 24시간 동안 활동이 있는 프로필"
 

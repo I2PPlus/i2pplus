@@ -3345,9 +3345,6 @@ msgstr "Được biết"
 msgid "Total entries in network database"
 msgstr "Tổng số mục trong cơ sở dữ liệu mạng"
 
-msgid "Active%"
-msgstr "Tích cực%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Hồ sơ có hoạt động trong 24h qua"
 

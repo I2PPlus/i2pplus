@@ -3361,9 +3361,6 @@ msgstr "Γνωστό"
 msgid "Total entries in network database"
 msgstr "Συνολικές καταχωρήσεις στη βάση δεδομένων δικτύου"
 
-msgid "Active%"
-msgstr "Ενεργός%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Προφίλ με δραστηριότητα τις τελευταίες 24 ώρες"
 

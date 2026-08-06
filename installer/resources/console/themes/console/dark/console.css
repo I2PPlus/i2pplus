@@ -910,6 +910,7 @@ td.ipv6{width:1%;max-width:24px}
 .profilegroup.integrated::before{background:var(--integrated) no-repeat left center}
 .profilegroup.standard::before{background:var(--standard) no-repeat left center}
 .profilegroup::before{width:20px;height:16px;display:inline-block;vertical-align:middle;content:""}
+#ffstats{margin-top:12px;width:calc(100% - 16px);border:4px solid #252;background:var(--badge)}
 #netdb::before,#profiles::before{display:block;height:5px;position:absolute;top:0;left:1px;right:1px;z-index:999;background:linear-gradient(180deg,#f60 50%,#d30 50%);opacity:.7;content:"";animation:mainload 5s ease-out 0s both,fade 2s ease 5s both}
 #netdb::before{animation:mainload 10s ease-out 0s both,fade 2s ease 10s both}
 #nopeer{margin:11px auto 10px}

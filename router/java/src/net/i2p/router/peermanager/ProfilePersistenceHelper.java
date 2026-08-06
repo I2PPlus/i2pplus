@@ -22,6 +22,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
+import net.i2p.stat.RateStat;
 import net.i2p.util.FileUtil;
 import net.i2p.util.Log;
 import net.i2p.util.SecureDirectory;
@@ -185,6 +186,10 @@ class ProfilePersistenceHelper {
         if (profile.getIsExpanded()) { // only write out expanded data if, uh, we've got it
             profile.getTunnelHistory().store(out, addComments);
             profile.getTunnelCreateResponseTime().store(out, "tunnelCreateResponseTime", addComments);
+        } else if (profile.hasTunnelHistory()) {
+            // Never expanded (no tunnel create response stats) but did
+            // participate in tunnel builds — persist the tunnel history anyway.
+            profile.getTunnelHistory().store(out, addComments);
         }
 
         if (profile.getIsExpandedDB()) {
@@ -418,7 +423,8 @@ class ProfilePersistenceHelper {
             }
 
             if (!caps.isEmpty() && !caps.contains("K") && !caps.contains("L") && !caps.contains("M") && !caps.contains("U")) {
-                profile.getTunnelCreateResponseTime().load(props, "tunnelCreateResponseTime", true);
+                RateStat rts = profile.getTunnelCreateResponseTime();
+                if (rts != null) {rts.load(props, "tunnelCreateResponseTime", true);}
             }
 
             if (_log.shouldDebug()) {

@@ -3361,9 +3361,6 @@ msgstr ""
 msgid "Total entries in network database"
 msgstr ""
 
-msgid "Active%"
-msgstr ""
-
 msgid "Profiles with activity in the last 24h"
 msgstr ""
 

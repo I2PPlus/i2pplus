@@ -3427,9 +3427,6 @@ msgstr "Kjent"
 msgid "Total entries in network database"
 msgstr "Totalt antall oppføringer i nettverksdatabasen"
 
-msgid "Active%"
-msgstr "Aktiv%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Profiler med aktivitet siste 24 timer"
 

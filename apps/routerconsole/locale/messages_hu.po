@@ -3361,9 +3361,6 @@ msgstr "Ismert"
 msgid "Total entries in network database"
 msgstr "Összes bejegyzés a hálózati adatbázisban"
 
-msgid "Active%"
-msgstr "Aktív%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Profilok tevékenységekkel az elmúlt 24 órában"
 

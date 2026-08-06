@@ -3361,9 +3361,6 @@ msgstr "Tuttu"
 msgid "Total entries in network database"
 msgstr "Tietojen kokonaismäärä verkkotietokannassa"
 
-msgid "Active%"
-msgstr "aktiivinen %"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Profiilit, joissa on toimintaa viimeisen 24 tunnin aikana"
 

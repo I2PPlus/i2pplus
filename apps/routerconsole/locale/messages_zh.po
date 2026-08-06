@@ -3353,9 +3353,6 @@ msgstr "已知"
 msgid "Total entries in network database"
 msgstr "网络数据库中的总条目"
 
-msgid "Active%"
-msgstr "积极的％"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "过去 24 小时内有活动的个人资料"
 

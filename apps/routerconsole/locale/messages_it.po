@@ -3362,9 +3362,6 @@ msgstr "Conosciuto"
 msgid "Total entries in network database"
 msgstr "Voci totali nel database di rete"
 
-msgid "Active%"
-msgstr "Attivo%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Profili con attività nelle ultime 24 ore"
 

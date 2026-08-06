@@ -3369,9 +3369,6 @@ msgstr "Cunoscute"
 msgid "Total entries in network database"
 msgstr "Total intrări în baza de date a rețelei"
 
-msgid "Active%"
-msgstr "Activ%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Profiluri cu activitate în ultimele 24 de ore"
 

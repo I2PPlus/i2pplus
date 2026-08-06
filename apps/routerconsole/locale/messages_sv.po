@@ -3361,9 +3361,6 @@ msgstr "Kända"
 msgid "Total entries in network database"
 msgstr "Totalt antal poster i nätverksdatabasen"
 
-msgid "Active%"
-msgstr "Aktiv%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Profiler med aktivitet under de senaste 24 timmarna"
 

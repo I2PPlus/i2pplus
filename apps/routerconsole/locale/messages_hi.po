@@ -3361,9 +3361,6 @@ msgstr "परिचित"
 msgid "Total entries in network database"
 msgstr "नेटवर्क डेटाबेस में कुल प्रविष्टियाँ"
 
-msgid "Active%"
-msgstr "सक्रिय%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "पिछले 24 घंटों में गतिविधि वाली प्रोफ़ाइल"
 

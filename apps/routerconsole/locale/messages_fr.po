@@ -3361,9 +3361,6 @@ msgstr "Connus"
 msgid "Total entries in network database"
 msgstr "Total des entrées dans la base de données du réseau"
 
-msgid "Active%"
-msgstr "Actif%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Profils avec activité au cours des dernières 24 heures"
 

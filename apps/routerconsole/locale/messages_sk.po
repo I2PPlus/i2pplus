@@ -3369,9 +3369,6 @@ msgstr "Ismert"
 msgid "Total entries in network database"
 msgstr "Celkový počet záznamov v databáze siete"
 
-msgid "Active%"
-msgstr "% aktívnych"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Profily s aktivitou za posledných 24 hodín"
 

@@ -3345,9 +3345,6 @@ msgstr "ཤེས་པ།"
 msgid "Total entries in network database"
 msgstr "Total entries in network database"
 
-msgid "Active%"
-msgstr "Active%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Profiles with activity in the last 24h"
 

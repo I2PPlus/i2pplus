@@ -3361,9 +3361,6 @@ msgstr "Bilinen"
 msgid "Total entries in network database"
 msgstr "Ağ veritabanındaki toplam girişler"
 
-msgid "Active%"
-msgstr "Aktif%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Son 24 saat içinde etkinliği olan profiller"
 

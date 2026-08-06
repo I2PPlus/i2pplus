@@ -3393,9 +3393,6 @@ msgstr "معروف"
 msgid "Total entries in network database"
 msgstr "إجمالي الإدخالات في قاعدة بيانات الشبكة"
 
-msgid "Active%"
-msgstr "نشيط٪"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "الملفات الشخصية ذات النشاط خلال الـ 24 ساعة الماضية"
 

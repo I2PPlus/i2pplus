@@ -3345,9 +3345,6 @@ msgstr "Diketahui"
 msgid "Total entries in network database"
 msgstr "Total entri dalam database jaringan"
 
-msgid "Active%"
-msgstr "Aktif%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Profil dengan aktivitas dalam 24 jam terakhir"
 

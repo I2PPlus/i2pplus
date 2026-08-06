@@ -551,6 +551,7 @@ a.viewfullentry:hover{filter:drop-shadow(0 0 1px var(--hover))}
 #capabilities_key table td:nth-child(odd){width:1%;max-width:24px;text-align:center}
 #capabilities_key table td:nth-child(2)::first-letter{text-transform:none}
 #capabilities_key b{padding:1px 2px;min-width:16px;display:inline-block;text-transform:none;text-align:center;text-shadow:0 1px 1px var(--bg);background:var(--badge)}
+#ffstats{width:calc(100% - 10px);margin: 14px auto 4px;border:var(--border);border-radius:0;background:var(--th)}
 #floodfills{margin-top:10px}
 #floodfills th,#floodfills td:not(.rif):not(.rih):not(.rbw){text-align:center}
 #floodfills th{font-size:90%}

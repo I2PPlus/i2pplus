@@ -3361,9 +3361,6 @@ msgstr "Məlumdur"
 msgid "Total entries in network database"
 msgstr "Şəbəkə verilənlər bazasındakı ümumi qeydlər"
 
-msgid "Active%"
-msgstr "Aktiv%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Son 24 saat ərzində aktivliyi olan profillər"
 

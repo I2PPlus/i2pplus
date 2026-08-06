@@ -981,6 +981,10 @@ public class ProfileOrganizer {
           final long expireActive = 7 * 24 * 60 * 60 * 1000L;    // 7 days
           final long expirePassive = 3 * 24 * 60 * 60 * 1000L;   // 3 days
           final long expireGossip = 24 * 60 * 60 * 1000L;        // 24 hours
+          // Peers that never accepted or rejected a tunnel build for us aren't
+          // useful — drop them from memory aggressively. They'll be recreated
+          // on demand if they ever respond to a build request.
+          final long expireUntracked = 30 * 60 * 1000L;         // 30 minutes
 
          // Optional coalescing (read-only, safe to skip if lock fails)
          if (shouldCoalesce && _context.router() != null &&
@@ -1045,6 +1049,11 @@ public class ProfileOrganizer {
                     expireWindow = expirePassive;
                 } else {
                     expireWindow = expireGossip;
+                }
+                if (!profile.hasTunnelHistory()) {
+                    // No tunnel build participation — purge from memory quickly
+                    // regardless of activity tier.
+                    expireWindow = Math.min(expireWindow, expireUntracked);
                 }
 
                  long cutoff = Math.max(lastSend, Math.max(lastHeard, lastHeardAbout));

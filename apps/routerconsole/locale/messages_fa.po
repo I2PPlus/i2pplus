@@ -3361,9 +3361,6 @@ msgstr "معروف"
 msgid "Total entries in network database"
 msgstr "کل ورودی ها در پایگاه داده شبکه"
 
-msgid "Active%"
-msgstr "% فعال"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "نمایه هایی با فعالیت در 24 ساعت گذشته"
 

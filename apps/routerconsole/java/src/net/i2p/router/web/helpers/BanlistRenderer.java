@@ -292,6 +292,40 @@ class BanlistRenderer {
     }
 
     /**
+     *  Count active bans of floodfill-capable peers, matching the banFF
+     *  classification used by {@link #renderBanlist(Writer, boolean)}:
+     *  caps from the session log or netdb, or a "floodfill" cause.
+     *
+     *  @return how many active bans are floodfills
+     *  @since 0.9.71+
+     */
+    public int countBannedFloodfills() {
+        Object[] sessionBans = readSessionBans();
+        @SuppressWarnings("unchecked")
+        Map<String, String> capsMap = (Map<String, String>) sessionBans[2];
+        int count = 0;
+        long now = _context.clock().now();
+        for (Map.Entry<Hash, Banlist.Entry> e : _context.banlist().getEntries().entrySet()) {
+            Hash key = e.getKey();
+            Banlist.Entry entry = e.getValue();
+            long expires = entry.expireOn - now;
+            if (expires <= 0 || key.equals(Hash.FAKE_HASH) || entry.cause == null ||
+                (entry.cause.toLowerCase().contains("hash") &&
+                 !entry.cause.toLowerCase().contains("hashpatterndetector"))) {
+                continue;
+            }
+            String b64 = key.toBase64();
+            String caps = capsMap.get(b64);
+            if (caps == null) {caps = getRouterCaps(key);}
+            if (entry.cause.toLowerCase().contains("floodfill") ||
+                (caps != null && caps.indexOf('f') >= 0)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
      *  Render only the {@code <tbody id=sessionBanlist>} for the contentonly
      *  fragment mode, with a data-key per row for the worker-side row diff.
      *  The full page keeps the wrapper div, thead, and tfoot.

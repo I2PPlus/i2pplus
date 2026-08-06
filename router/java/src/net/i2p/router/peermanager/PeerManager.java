@@ -227,6 +227,9 @@ class PeerManager {
         // Recalculate low-latency flag from accumulated peer test data before persisting,
         // so the flag reflects current conditions on the next startup.
         prof.recalculateLowLatency();
+        // Don't persist profiles that never accepted or rejected one of our tunnel
+        // builds — they're not useful across restarts.
+        if (!prof.hasTunnelHistory()) {return false;}
         // Only persist Tier 1 (Active) and Tier 2 (Passive) profiles.
         // Gossip-only profiles (Tier 3) are kept in memory briefly but never written to disk.
         if (prof.getLastSendSuccessful() > 0 || prof.getLastHeardFrom() > 0) {

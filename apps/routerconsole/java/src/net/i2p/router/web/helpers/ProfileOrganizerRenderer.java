@@ -23,6 +23,7 @@ import net.i2p.util.Addresses;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.peermanager.DBHistory;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.peermanager.ProfileOrganizer;
@@ -75,6 +76,7 @@ class ProfileOrganizerRenderer {
     public void renderStatusHTML(Writer out, int mode) throws IOException {
         ProfileSelection sel = loadProfiles(mode);
         if (mode == 3) {
+            renderFloodfillRings(out, sel.order);
             renderFloodfill(out, sel.order);
         } else {
             renderOverview(out, sel);
@@ -98,7 +100,9 @@ class ProfileOrganizerRenderer {
      */
     public void renderFragment(Writer out, int mode, String id) throws IOException {
         if (mode == 3) {
-            if ("floodfills".equals(id) || "ffProfiles".equals(id)) {
+            if ("ffstats".equals(id)) {
+                renderFloodfillRings(out, loadProfiles(mode).order);
+            } else if ("floodfills".equals(id) || "ffProfiles".equals(id)) {
                 renderFloodfill(out, loadProfiles(mode).order);
             }
             return;
@@ -127,7 +131,10 @@ class ProfileOrganizerRenderer {
     /**
      *  Load, filter, and sort the profiles for the given mode. Modes 1 and 2
      *  drop peers that do not match the tier; mode 3 keeps all peers in binary
-     *  hash order.
+     *  hash order. Modes 0-2 hide inactive peers not heard from within a cutoff
+     *  that scales with the candidate count (4h above 500, 2h above 1000, 1h
+     *  above 2000, 30m above 3000, 15m above 4000, 10m above 5000) to keep the
+     *  displayed table manageable; mode 3 has no cutoff.
      *
      *  @param mode 0 = all; 1 = fast; 2 = high capacity (non-fast); 3 = floodfill
      *  @return the sorted set and the skip counters (zero for mode 3)
@@ -136,45 +143,84 @@ class ProfileOrganizerRenderer {
     private ProfileSelection loadProfiles(int mode) {
         Set<Hash> peers = _organizer.selectAllPeers();
         long now = _context.clock().now();
-        long hideBefore = now - 4*60*60*1000;
         Set<PeerProfile> order = new TreeSet<>(mode == 3 ? new ProfComparator() : new ProfileComparator());
         int older = 0;
         int standard = 0;
-        for (Hash peer : peers) {
-            PeerProfile prof = _organizer.getProfileNonblocking(peer);
-            if (prof == null) {continue;}
-            int agreed = (int) prof.getTunnelHistory().getLifetimeAgreedTo();
-            int rejected = (int) prof.getTunnelHistory().getLifetimeRejected();
-            if (_organizer.getUs().equals(peer) || prof.getLastHeardFrom() <= 0 ||
-                (agreed <= 0 && rejected <= 0 && prof.getFirstHeardAbout() <= 0)) {continue;}
-            if (mode != 3) {
-                boolean isActive = prof.getIsActive() || prof.getLastSendSuccessful() > hideBefore ||
-                                   prof.getLastHeardFrom() > hideBefore;
-                boolean underAttack = _organizer.isLowBuildSuccess();
-                if (!isActive && prof.getLastHeardFrom() <= hideBefore &&
-                    prof.getFirstHeardAbout() < now - 60*60*1000) {
-                    if (!underAttack || !_organizer.isFast(peer)) {
+        if (mode != 3) {
+            // Pass 1: collect the tier's candidates to size the cutoff
+            List<PeerProfile> candidates = new ArrayList<>();
+            for (Hash peer : peers) {
+                PeerProfile prof = _organizer.getProfileNonblocking(peer);
+                if (prof == null || !isValid(prof, peer, _organizer.getUs(), true)) {continue;}
+                if (mode == 1) {
+                    // Fast tier only
+                    if (!_organizer.isFast(peer)) {
+                        standard++;
+                        continue;
+                    }
+                } else if (mode == 2) {
+                    // High Capacity (non-fast) only
+                    if (!_organizer.isHighCapacity(peer) || _organizer.isFast(peer)) {
+                        standard++;
+                        continue;
+                    }
+                }
+                candidates.add(prof);
+            }
+            long hideWindow;
+            int size = candidates.size();
+            if (size >= 5000) {
+                hideWindow = 10*60*1000;
+            } else if (size >= 4000) {
+                hideWindow = 15*60*1000;
+            } else if (size >= 3000) {
+                hideWindow = 30*60*1000;
+            } else if (size >= 2000) {
+                hideWindow = 60*60*1000;
+            } else if (size >= 1000) {
+                hideWindow = 2*60*60*1000;
+            } else if (size >= 500) {
+                hideWindow = 4*60*60*1000;
+            } else {
+                hideWindow = 0;
+            }
+            long hideBefore = hideWindow > 0 ? now - hideWindow : Long.MIN_VALUE;
+            long freshBefore = now - Math.min(60*60*1000, hideWindow);
+            boolean underAttack = _organizer.isLowBuildSuccess();
+            for (PeerProfile prof : candidates) {
+                if (prof.getLastHeardFrom() <= hideBefore &&
+                    prof.getFirstHeardAbout() < freshBefore) {
+                    if (!underAttack || !_organizer.isFast(prof.getPeer())) {
                         older++;
                         continue;
                     }
                 }
+                order.add(prof);
             }
-            if (mode == 1) {
-                // Fast tier only
-                if (!_organizer.isFast(peer)) {
-                    standard++;
-                    continue;
-                }
-            } else if (mode == 2) {
-                // High Capacity (non-fast) only
-                if (!_organizer.isHighCapacity(peer) || _organizer.isFast(peer)) {
-                    standard++;
-                    continue;
-                }
+        } else {
+            for (Hash peer : peers) {
+                PeerProfile prof = _organizer.getProfileNonblocking(peer);
+                if (prof == null || !isValid(prof, peer, _organizer.getUs(), false)) {continue;}
+                order.add(prof);
             }
-            order.add(prof);
         }
         return new ProfileSelection(order, older, standard);
+    }
+
+    /**
+     *  Exclude ourself and profiles never heard from. With
+     *  {@code requireTunnelHistory}, also exclude profiles that have never
+     *  participated in a tunnel build (neither agreed to nor rejected a build
+     *  request).
+     *
+     *  @param requireTunnelHistory true for modes 0-2, false for mode 3
+     *  @since 0.9.71+
+     */
+    private static boolean isValid(PeerProfile prof, Hash peer, Hash us, boolean requireTunnelHistory) {
+        if (!requireTunnelHistory) {
+            return !us.equals(peer) && prof.getLastHeardFrom() > 0;
+        }
+        return !us.equals(peer) && prof.getLastHeardFrom() > 0 && prof.hasTunnelHistory();
     }
 
     /**
@@ -221,7 +267,7 @@ class ProfileOrganizerRenderer {
         StringBuilder buf = new StringBuilder(32*1024);
 
         if (!_fragmentKeys) {
-            buf.append("<div class=widescroll id=peerprofiles>\n<table id=profilelist data-sort-direction=descending>\n")
+            buf.append("<div class=widescroll id=peerprofiles>\n<div class=wrap><table id=profilelist data-sort-direction=descending>\n")
                .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup>")
                .append("</colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
                .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
@@ -335,8 +381,10 @@ class ProfileOrganizerRenderer {
                    .append(isUnreachable ? " unreachable" : "").append(isTesting ? " testing" : "");
 
                 if (fails > 0) {
-                    Rate accepted = prof.getTunnelCreateResponseTime().getRate(RateConstants.ONE_HOUR);
-                    long total = fails + accepted.computeAverages(ra, false).getTotalEventCount();
+                    Rate accepted = null;
+                    RateStat acceptedStat = prof.getTunnelCreateResponseTime();
+                    if (acceptedStat != null) {accepted = acceptedStat.getRate(RateConstants.ONE_HOUR);}
+                    long total = fails + (accepted != null ? accepted.computeAverages(ra, false).getTotalEventCount() : 0);
                     double failPercentage = (double) fails / total * 100;
 
                     if (failPercentage > 5.0) { // demote if failure rate exceeds 5%
@@ -478,7 +526,7 @@ class ProfileOrganizerRenderer {
             }
         }
         buf.append("</tbody>\n");
-        if (!_fragmentKeys) {buf.append("</table>\n");}
+        if (!_fragmentKeys) {buf.append("</table></div>\n");}
         out.append(buf);
         out.flush();
         return new int[] {fast, reliable, integrated};
@@ -497,7 +545,7 @@ class ProfileOrganizerRenderer {
         int reliable = counts[1];
         int integrated = counts[2];
         StringBuilder buf = new StringBuilder(2048);
-        buf.append("<div id=peer_thresholds>\n<h3 class=tabletitle>")
+        buf.append("<div id=peer_thresholds class=wrap>\n<h3 class=tabletitle>")
            .append(_t("Thresholds"))
            .append("</h3>\n<table id=thresholds>\n<thead><tr><th><b>")
            .append(_t("Speed"))
@@ -537,7 +585,7 @@ class ProfileOrganizerRenderer {
      */
     private void renderDefinitions(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(4096);
-        buf.append("<h3 class=tabletitle>")
+        buf.append("<div class=wrap><h3 class=tabletitle>")
            .append(_t("Definitions"))
            .append("</h3>\n<table id=profile_defs>\n<tbody>\n<tr><td><b>")
            .append(_t("caps"))
@@ -608,7 +656,7 @@ class ProfileOrganizerRenderer {
            .append(_t("integration"))
            .append(":</b></td><td>")
            .append(_t("how many new peers have they told us about lately?"))
-           .append("</td></tr>\n</tbody>\n</table>\n");
+           .append("</td></tr>\n</tbody>\n</table></div>\n");
         out.append(buf);
         out.flush();
     }
@@ -636,6 +684,185 @@ class ProfileOrganizerRenderer {
     }
 
     /**
+     *  Aggregates over the floodfill-capable peer set; every field is meant to
+     *  describe the observed floodfill peers, fed to the health rings above the
+     *  table. All counts are gathered in one pass over {@code order}, and a row
+     *  is only counted as "shown" when it would actually be emitted by
+     *  {@link #renderFloodfill} (has DB history, floodfill-capable, reachable,
+     *  unbanlisted, heard from).
+     *  @since 0.9.71+
+     */
+    private static class FloodfillStats {
+        /** floodfill-capable peers known to the peer manager (matches sidebar) */
+        int known;
+        /** peers passing the table's emit filter */
+        int listed;
+        /** listed && lastHeardFrom within the last hour */
+        int recentlyHeard;
+        /** active bans of floodfill-capable peers (banFF classification) */
+        int banned;
+        /** sum of row.hourFailPct over listed peers */
+        long failPctSum;
+        /** listed peers contributing to failPctSum */
+        int failCount;
+        /** sum of 1h response times (ms) over listed peers with non-negative avg */
+        long respMsSum;
+        /** listed peers contributing to respMsSum */
+        int respCount;
+        /** aggregated lifetime lookups good and bad */
+        long lookupsGood, lookupsBad;
+        /** listed peers whose most recent store was good vs bad */
+        int storeGood, storeBad;
+    }
+
+    /**
+     *  Render the floodfill health rings above the floodfill table: peer count,
+     *  reachability, banned floodfills, mean 1h failure, mean response time,
+     *  recent activity, lookup reliability and store health — all aggregated
+     *  over the observed floodfill peers.
+     *
+     *  @param out the writer to render to
+     *  @param order the selected profiles
+     *  @throws IOException if an I/O error occurs
+     *  @since 0.9.71+
+     */
+    private void renderFloodfillRings(Writer out, Set<PeerProfile> order) throws IOException {
+        FloodfillStats stats = floodfillStats(order);
+        StringBuilder buf = new StringBuilder(2048);
+        buf.append("<div class=ring-grid id=ffstats>\n");
+
+        // Peer count leads, identical to the sidebar count
+        double score = stats.known > 0 ? Math.min(stats.known / 2000.0, 1.0) : -1;
+        buf.append(RingRenderer.renderRingCell(score, _t("Floodfills"), String.valueOf(stats.known),
+                  new String[]{_t("Known floodfills")}, RingRenderer.MODE_NEUTRAL, null));
+
+        // Reachability
+        if (stats.known > 0) {
+            double reach = (double) stats.listed / stats.known;
+            buf.append(RingRenderer.renderRingCell(reach, _t("Reachable"), pct(reach),
+                      new String[]{_t("Reachable")},
+                      RingRenderer.MODE_HEALTH, null));
+        } else {
+            buf.append(RingRenderer.renderRingCell(-1, _t("Reachable"), "\u2014",
+                      new String[]{_t("Reachable")},
+                      RingRenderer.MODE_HEALTH, null));
+        }
+
+        // Banned
+        buf.append(RingRenderer.renderRingCell(stats.banned == 0 ? 1 : Math.max(0.0, 1.0 - stats.banned / 50.0),
+                  _t("Banned"), String.valueOf(stats.banned),
+                  new String[]{_t("Banned")},
+                  RingRenderer.MODE_HEALTH, null));
+
+        // 1h failure rate
+        if (stats.failCount > 0) {
+            double fail = stats.failPctSum / (stats.failCount * 100.0);
+            buf.append(RingRenderer.renderRingCell(1.0 - fail, _t("No-Fail"), pct(fail),
+                      new String[]{_t("No lookup failures (1h)")},
+                      RingRenderer.MODE_HEALTH, null));
+        } else {
+            buf.append(RingRenderer.renderRingCell(-1, _t("No-Fail"), "\u2014",
+                      new String[]{_t("No lookup failures (1h)")},
+                      RingRenderer.MODE_HEALTH, null));
+        }
+
+        // Response time
+        if (stats.respCount > 0) {
+            double avgMs = stats.respMsSum / stats.respCount;
+            buf.append(RingRenderer.renderRingCell(Math.max(0.0, 1.0 - avgMs / 15000.0),
+                      _t("Response"), DataHelper.formatDuration2((long) avgMs).replace("&nbsp;", ""),
+                      new String[]{_t("Lookup response time (1h)")},
+                      RingRenderer.MODE_LATENCY, null));
+        } else {
+            buf.append(RingRenderer.renderRingCell(-1, _t("Response"), "\u2014",
+                      new String[]{_t("Lookup response time (1h)")},
+                      RingRenderer.MODE_LATENCY, null));
+        }
+
+        // Recent activity
+        if (stats.listed > 0) {
+            double recent = (double) stats.recentlyHeard / stats.listed;
+            buf.append(RingRenderer.renderRingCell(recent, _t("1h Contact"), pct(recent),
+                      new String[]{_t("Contacted within 1h")},
+                      RingRenderer.MODE_ACTIVITY, null));
+        } else {
+            buf.append(RingRenderer.renderRingCell(-1, _t("1h Contact"), "\u2014",
+                      new String[]{_t("Contacted within 1h")},
+                      RingRenderer.MODE_ACTIVITY, null));
+        }
+
+        // Lookup health
+        long total = stats.lookupsGood + stats.lookupsBad;
+        if (total > 0) {
+            double good = (double) stats.lookupsGood / total;
+            buf.append(RingRenderer.renderRingCell(good, _t("Lookups"), pct(good),
+                      new String[]{_t("Lookup success rate")},
+                      RingRenderer.MODE_HEALTH, null));
+        } else {
+            buf.append(RingRenderer.renderRingCell(-1, _t("Lookups"), "\u2014",
+                      new String[]{_t("Lookup success rate")},
+                      RingRenderer.MODE_HEALTH, null));
+        }
+
+        // Store health
+        int storeTotal = stats.storeGood + stats.storeBad;
+        if (storeTotal > 0) {
+            double good = (double) stats.storeGood / storeTotal;
+            buf.append(RingRenderer.renderRingCell(good, _t("Stores"), pct(good),
+                      new String[]{_t("Store success rate")},
+                      RingRenderer.MODE_HEALTH, null));
+        } else {
+            buf.append(RingRenderer.renderRingCell(-1, _t("Stores"), "\u2014",
+                      new String[]{_t("Store success rate")},
+                      RingRenderer.MODE_HEALTH, null));
+        }
+        buf.append("</div>\n");
+        out.append(buf);
+    }
+
+    /**
+     *  Compute {@link FloodfillStats} in a single pass over the ordered profiles.
+     *  @param order the selected profiles
+     *  @return aggregated statistics, never null
+     *  @since 0.9.71+
+     */
+    private FloodfillStats floodfillStats(Set<PeerProfile> order) {
+        FloodfillStats stats = new FloodfillStats();
+        RateAverages ra = RateAverages.getTemp();
+        long now = _context.clock().now();
+        long hour = 60*60*1000L;
+        stats.known = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL).size();
+        stats.banned = new BanlistRenderer(_context).countBannedFloodfills();
+        for (PeerProfile prof : order) {
+            DBHistory dbh = prof.getDBHistory();
+            Hash peer = prof.getPeer();
+            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+            boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
+            if (!isFF) {continue;}
+            if (info.getCapabilities().indexOf('U') >= 0 || dbh == null) {continue;}
+            stats.listed++;
+            if (prof.getLastHeardFrom() >= now - hour) {stats.recentlyHeard++;}
+            int fail = failRatePct(prof, ra);
+            stats.failCount++;
+            stats.failPctSum += fail;
+            long respMs = avgMs(prof, hour, ra);
+            if (respMs >= 0) {
+                stats.respCount++;
+                stats.respMsSum += respMs;
+            }
+            stats.lookupsGood += dbh.getSuccessfulLookups();
+            stats.lookupsBad += dbh.getFailedLookups();
+            long goodStore = dbh.getLastStoreSuccessful();
+            long badStore = dbh.getLastStoreFailed();
+            if (goodStore > 0 || badStore > 0) {
+                if (goodStore > badStore) {stats.storeGood++;}
+                else {stats.storeBad++;}
+            }
+        }
+        return stats;
+    }
+
+    /**
      *  Render the floodfill table, sorted by 1h fail rate ascending.
      *
      *  @param out the writer to render to
@@ -645,7 +872,7 @@ class ProfileOrganizerRenderer {
      */
     private void renderFloodfill(Writer out, Set<PeerProfile> order) throws IOException {
         StringBuilder buf = new StringBuilder(32*1024);
-        buf.append("<div class=widescroll id=ff>\n<table id=floodfills>\n")
+        buf.append("<div class=widescroll id=ff>\n<div class=wrap><table id=floodfills>\n")
            .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
            .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>")
            .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=bad></colgroup>")
@@ -761,7 +988,7 @@ class ProfileOrganizerRenderer {
                 }
             }
         }
-        buf.append("</tbody>\n</table>\n</div>\n");
+        buf.append("</tbody>\n</table></div>\n</div>\n");
         out.append(buf);
         out.flush();
     }
@@ -841,6 +1068,9 @@ class ProfileOrganizerRenderer {
     private final static DecimalFormat _fmt = new DecimalFormat("###,##0.00");
     private final static String num(double num) { synchronized (_fmt) { return _fmt.format(num); } }
     private final static String NA = "&ensp;";
+
+    /** Format a 0.0-1.0 fraction as an integer percent, e.g. "62%". */
+    private final static String pct(double frac) { return (int) (frac * 100) + "%"; }
 
     /**
      * Average DB response time for the rate in ms, or -1 when no data.

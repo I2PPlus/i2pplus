@@ -1506,6 +1506,7 @@ h3[id="udpcon"]{width:auto}
 #capabilities_key td[colspan="5"]{text-align:left}
 #capabilities_key td:last-child{border-right:0}
 #capabilities_key td{padding:0}
+#ffstats{width:calc(100% - 10px);margin: -4px auto 14px;border:var(--border_inner);border-radius:0;background:var(--th)}
 #ntcpconnections{overflow-x:scroll}
 #ntcpconnections td.queue:empty::before{content:""}
 #ntcpconnections td,#udpconnections td,#tunnels td:not(.rif):not(.rih):not(.rbw),#profiles td{box-shadow:var(--highlight),inset 0 0 2px 0 #26235c}

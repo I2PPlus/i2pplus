@@ -368,8 +368,24 @@ public class PeerProfile {
      * @return TunnelHistory, non-null after first access
      */
     public synchronized TunnelHistory getTunnelHistory() {
-        if (!_expanded) {expandProfile();}
+        if (_tunnelHistory == null) {
+            String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0,6));
+            _tunnelHistory = new TunnelHistory(_context, group);
+        }
         return _tunnelHistory;
+    }
+
+    /**
+     * Whether the peer has accepted or rejected at least one of our tunnel
+     * build requests. Profiles without any tunnel history are not expanded,
+     * not persisted, and dropped from memory quickly.
+     *
+     * @return true if the peer has participated in our tunnel building
+     * @since 0.9.71+
+     */
+    public boolean hasTunnelHistory() {
+        TunnelHistory th = _tunnelHistory;
+        return th != null && (th.getLifetimeAgreedTo() > 0 || th.getLifetimeRejected() > 0);
     }
 
     /**
@@ -432,9 +448,11 @@ public class PeerProfile {
 
     /**
      * How long it takes to get a tunnel create response from the peer (in milliseconds).
-     * Expands the profile lazily on first access.
+     * Expands the profile lazily on first access. The profile is not expanded
+     * (and this returns null) until the peer has accepted or rejected at least
+     * one of our tunnel builds.
      *
-     * @return RateStat, non-null after first access
+     * @return RateStat, or null if the peer has no tunnel history
      */
     public synchronized RateStat getTunnelCreateResponseTime() {
         if (!_expanded) {expandProfile();}
@@ -798,6 +816,9 @@ public class PeerProfile {
      *
      */
     public synchronized void expandProfile() {
+        // Don't expand profiles that have never accepted or rejected one of our
+        // tunnel builds; they'll be dropped from memory instead.
+        if (!hasTunnelHistory()) {return;}
         String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0,6));
 
         if (_tunnelCreateResponseTime == null) {

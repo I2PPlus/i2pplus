@@ -3369,9 +3369,6 @@ msgstr "Známý"
 msgid "Total entries in network database"
 msgstr "Celkový počet záznamů v síťové databázi"
 
-msgid "Active%"
-msgstr "Aktivní%"
-
 msgid "Profiles with activity in the last 24h"
 msgstr "Profily s aktivitou za posledních 24 hodin"
 

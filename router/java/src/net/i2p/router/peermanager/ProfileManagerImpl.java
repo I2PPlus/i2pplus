@@ -88,9 +88,11 @@ public class ProfileManagerImpl implements ProfileManager {
     public void tunnelJoined(Hash peer, long responseTimeMs) {
         PeerProfile data = getProfile(peer);
         if (data == null) return;
+        // Record the acceptance first so the profile expands (the expansion
+        // gate requires at least one accept or reject).
+        data.getTunnelHistory().incrementAgreedTo();
         data.getTunnelCreateResponseTime().addData(responseTimeMs, responseTimeMs);
         data.setLastHeardFrom(_context.clock().now());
-        data.getTunnelHistory().incrementAgreedTo();
     }
 
     /**
