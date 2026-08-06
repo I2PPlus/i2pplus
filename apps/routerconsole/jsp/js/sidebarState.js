@@ -25,7 +25,40 @@
     ping: "/themes/console/images/ping.svg"
   };
 
-  let cachedCounts = null;
+  /**
+   * Rebuilds the collapsed local-tunnel summary counts from the current
+   * #sb_localtunnels rows. Runs on every sidebar refresh regardless of the
+   * toggle state, so the summary never shows stale or empty counts.
+   * @function refreshLocalTunnelsSummary
+   * @returns {void}
+   */
+  function refreshLocalTunnelsSummary() {
+    const localtunnelSummary = document.getElementById("localtunnelSummary");
+    const row = localtunnelSummary ? localtunnelSummary.querySelector("tr#localtunnelsActive") : null;
+    const cell = row ? row.querySelector("td") : null;
+    const table = document.getElementById("sb_localtunnels");
+    if (!cell || !table) { return; }
+
+    const newCounts = {};
+    for (const key in iconTypes) {
+      newCounts[key] = table.querySelectorAll(`img[src='${iconTypes[key]}']`).length;
+    }
+
+    const fragment = document.createDocumentFragment();
+    for (const [type, count] of Object.entries(newCounts)) {
+      if (count === 0) continue;
+      const span = document.createElement("span");
+      span.className = `count_${count}`;
+      const img = document.createElement("img");
+      img.src = iconTypes[type];
+      img.alt = `${type} tunnel icon`;
+      span.appendChild(document.createTextNode(`${count} x `));
+      span.appendChild(img);
+      fragment.appendChild(span);
+    }
+    cell.innerHTML = "";
+    cell.appendChild(fragment);
+  }
 
   /**
    * Reads the saved section state, preferring localStorage and falling back
@@ -150,7 +183,9 @@
   }
 
   /**
-   * Refreshes the local tunnels summary counts when the section is collapsed.
+   * Refreshes the local-tunnel summary counts and toggles the summary
+   * visibility from the toggle state. Counts always recompute from the
+   * current rows, independent of the toggle state.
    * @function handleLocalTunnelsVisibility
    * @param {HTMLElement} element - The local tunnels section element
    * @param {boolean} isVisible - Whether the section is expanded
@@ -159,42 +194,12 @@
   function handleLocalTunnelsVisibility(element, isVisible) {
     const localtunnelSummary = document.getElementById("localtunnelSummary");
     if (!localtunnelSummary) { return; }
+    refreshLocalTunnelsSummary();
     if (isVisible) {
       if (!localtunnelSummary.hidden) { localtunnelSummary.hidden = true; }
-      return;
-    }
-
-    const newCounts = {};
-    for (const key in iconTypes) {
-      newCounts[key] = element.querySelectorAll(`img[src='${iconTypes[key]}']`).length;
-    }
-
-    if (cachedCounts && Object.entries(newCounts).every(([key, val]) => cachedCounts[key] === val)) {
+    } else {
       if (localtunnelSummary.hidden) { localtunnelSummary.hidden = false; }
-      return;
     }
-
-    cachedCounts = newCounts;
-    const row = localtunnelSummary.querySelector("tr#localtunnelsActive");
-    if (!row) { return; }
-    const cell = row.querySelector("td");
-    if (!cell) { return; }
-
-    const fragment = document.createDocumentFragment();
-    for (const [type, count] of Object.entries(newCounts)) {
-      if (count === 0) continue;
-      const span = document.createElement("span");
-      span.className = `count_${count}`;
-      const img = document.createElement("img");
-      img.src = iconTypes[type];
-      img.alt = `${type} tunnel icon`;
-      span.appendChild(document.createTextNode(`${count} x `));
-      span.appendChild(img);
-      fragment.appendChild(span);
-    }
-    cell.innerHTML = "";
-    cell.appendChild(fragment);
-    if (localtunnelSummary.hidden) { localtunnelSummary.hidden = false; }
   }
 
   /**
@@ -291,6 +296,21 @@
   window.setSidebarSectionState = setSidebarSectionState;
   window.readSidebarState = readSidebarState;
   window.saveSidebarState = saveSidebarState;
+
+  /**
+   * Recompute local-tunnel counts after any element or sidebar refresh,
+   * regardless of toggle state.
+   * @returns {void}
+   */
+  function refreshLocalTunnelsOnRefresh() {
+    if (document.getElementById("localtunnelSummary")) {
+      refreshLocalTunnelsSummary();
+    }
+  }
+
+  document.addEventListener("elementsRefreshed", refreshLocalTunnelsOnRefresh);
+  document.addEventListener("sidebarRefreshed", refreshLocalTunnelsOnRefresh);
+  document.addEventListener("refreshComplete", refreshLocalTunnelsOnRefresh);
 
   applySidebarState();
 })();
