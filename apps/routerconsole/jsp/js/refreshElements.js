@@ -17,6 +17,11 @@
  * All parsing happens in the SharedWorker: diffWorker.js turns fragment HTML
  * into a serializable VDOM tree (vdomParser.js) and this module realizes only
  * the rows or elements it receives. No DOMParser runs on the main thread.
+ *
+ * Patch application is deferred while the user is actively scrolling so
+ * DOM mutation never lands inside a scroll frame; a deferred result is
+ * flushed once scrolling settles, coalescing any refreshes that arrived
+ * during the scroll.
  * @author dr|z3d
  * @license AGPLv3 or later
  */
@@ -60,6 +65,63 @@ function normalizeFragmentIds(fragmentIds) {
   if (!fragmentIds) { return null; }
   const ids = typeof fragmentIds === "string" ? fragmentIds.split(",") : fragmentIds;
   return ids.map(s => s.trim()).filter(s => s.length > 0).join(",") || null;
+}
+
+let isPageScrolling = false;
+let scrollCleanupTimer = null;
+let scrollGateInstalled = false;
+const SCROLL_DEBOUNCE_MS = 150;
+
+/**
+ * Shared per-page scroll gate: flips a flag while the user is actively
+ * scrolling and clears it after scrolling stops. One capture listener
+ * serves every refreshElements instance; the flag is module-global so all
+ * instances defer their DOM work together.
+ * @function installScrollGate
+ * @returns {void}
+ */
+function installScrollGate() {
+  if (scrollGateInstalled) { return; }
+  scrollGateInstalled = true;
+  window.addEventListener("scroll", () => {
+    isPageScrolling = true;
+    clearTimeout(scrollCleanupTimer);
+    scrollCleanupTimer = setTimeout(() => { isPageScrolling = false; }, SCROLL_DEBOUNCE_MS);
+  }, { passive: true, capture: true });
+}
+
+/**
+ * Runs an apply function immediately, or holds the latest one until the
+ * user stops scrolling. Concurrent calls while scrolling coalesce (latest
+ * wins), so a burst of refresh results flushed after a scroll settle into
+ * one later patch.
+ * @function createScrollDeferred
+ * @returns {Function} A deferred-apply function for one target slot
+ */
+function createScrollDeferred() {
+  let pending = null;
+  let retry = null;
+
+  function flush() {
+    const fn = pending;
+    pending = null;
+    retry = null;
+    if (document.hidden) { return; }
+    if (fn) { fn(); }
+  }
+
+  return function(applyFn) {
+    if (!isPageScrolling) { applyFn(); return; }
+    pending = applyFn;
+    if (retry) { return; }
+    retry = setTimeout(function tick() {
+      if (isPageScrolling) {
+        retry = setTimeout(tick, 100);
+        return;
+      }
+      flush();
+    }, 100);
+  };
 }
 
 /**
@@ -125,6 +187,8 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
   const selectors = normalizeSelectors(targetSelectors);
   const contentOnlyIds = normalizeFragmentIds(fragmentIds);
   const fetchUrl = contentOnlyIds ? appendContentOnly(url, contentOnlyIds) : url;
+  installScrollGate();
+  const deferPatch = createScrollDeferred();
 
   const fetchWorker = new SharedWorker("/js/fetchWorker.js");
   fetchWorker.port.start();
@@ -282,15 +346,19 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
     const data = e.data;
     if (!data || data.action === "unchanged") { return; }
     if (data.action === "rows") {
-      const lazyAdded = patchRows(diffRows, data);
-      if (lazyAdded) { document.dispatchEvent(new Event("elementsPatched")); }
-      dispatchDone();
+      deferPatch(() => {
+        const lazyAdded = patchRows(diffRows, data);
+        if (lazyAdded) { document.dispatchEvent(new Event("elementsPatched")); }
+        dispatchDone();
+      });
     } else if (data.action === "full") {
-      const result = patchFull(diffRows, data.vdom);
-      if (result.lazyAdded) { document.dispatchEvent(new Event("elementsPatched")); }
-      if (result.changed) { dispatchDone(); }
+      deferPatch(() => {
+        const result = patchFull(diffRows, data.vdom);
+        if (result.lazyAdded) { document.dispatchEvent(new Event("elementsPatched")); }
+        if (result.changed) { dispatchDone(); }
+      });
     } else if (data.action === "parsed") {
-      patchResponse(data.vdom);
+      deferPatch(() => { patchResponse(data.vdom); });
     }
   };
 
