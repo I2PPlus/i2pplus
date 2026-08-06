@@ -181,3 +181,35 @@ const monthnameCmpEL = emptyLast(monthnameCmp);
 const dateCmpEL = emptyLast(dateCmp);
 const intlCmpEL = emptyLast(intlCmp);
 const stringCmpEL = emptyLast(stringCmp);
+
+/**
+ * Sort an array of row data in place by a column, applying the selected comparator and
+ * direction. Empty cells sort to the bottom in ascending order; the direction
+ * multiplier inverts the comparator, so empty cells lead in descending order.
+ * Shared between the main thread fallback and the sort worker.
+ *
+ * @param {Array<Object<string, string>>} rows - Objects mapping the sort column to a string
+ * @param {string} sortColumn - Key holding the cell text
+ * @param {string} direction - "ascending" or "descending"
+ * @param {string} columnType - Comparator key, or the default string sort
+ * @returns {Array<Object<string, string>>} the sorted array
+ */
+function sortRows(rows, sortColumn, direction, columnType) {
+  const multiplier = direction === "descending" ? -1 : 1;
+  rows.sort((a, b) => {
+    const valA = a[sortColumn], valB = b[sortColumn];
+    let res;
+    switch (columnType) {
+      case "number":    res = numberCmpEL(valA, valB); break;
+      case "date":      res = dateCmpEL(valA, valB); break;
+      case "natural":   res = naturalCmpEL(valA, valB); break;
+      case "dotsep":    res = dotsepCmpEL(valA, valB); break;
+      case "filesize":  res = filesizeCmpEL(valA, valB); break;
+      case "monthname": res = monthnameCmpEL(valA, valB); break;
+      case "intl":      res = intlCmpEL(valA, valB); break;
+      default:          res = stringCmpEL(valA, valB); break;
+    }
+    return res * multiplier;
+  });
+  return rows;
+}

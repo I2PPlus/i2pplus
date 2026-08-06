@@ -1,7 +1,8 @@
 /**
  * @module tablesort
  * @description Sortable HTML tables with auto-detected column types.
- * All sorting is delegated to a dedicated web worker (sortWorker.js).
+ * All sorting is delegated to a dedicated web worker (sortWorker.js), with a
+ * main-thread fallback when Workers are unavailable.
  * Comparison functions shared between the main thread and the worker
  * via sortShared.js. Extends Tablesort.extend().
  * Derived from tristen/tablesort (MIT) https://github.com/tristen/tablesort;
@@ -25,7 +26,14 @@
   let sortWorker = null;
   let sortGen = 0;
   const getSortWorker = () => {
-    if (!sortWorker) sortWorker = new Worker("/js/tablesort/sortWorker.js");
+    if (sortWorker) return sortWorker;
+    try {
+      // Fall back to main-thread sorting when Workers are unavailable (private browsing,
+      // some embedded browsers) or the worker script fails to load.
+      sortWorker = new Worker("/js/tablesort/sortWorker.js");
+    } catch (e) {
+      sortWorker = null;
+    }
     return sortWorker;
   };
 
@@ -122,8 +130,9 @@
     },
 
     /**
-     * Sort via web worker. Extracts row text, determines sort type,
-     * sends to worker, re-appends rows on response.
+     * Sort table rows. Extracts row text and determines the sort type, then sorts via
+     * the web worker, or on the main thread when Workers are unavailable, re-appending
+     * rows in sorted order within a single DocumentFragment.
      * @param {HTMLElement} header
      * @param {boolean} update
      * @param {string|null} columnKey
@@ -133,7 +142,6 @@
      * @param {boolean} [caseInsensitive]
      */
     sortWithWorker(header, update, columnKey, column, sortMethod, sortOrder, caseInsensitive) {
-      const worker = getSortWorker();
       sortGen++;
       const gen = sortGen;
       const tbody = this.table.tBodies[0];
@@ -197,13 +205,27 @@
         this.table.dispatchEvent(createEvent("afterSort"));
       };
 
-      worker.addEventListener("message", handleMessage);
-      worker.postMessage({
-        rows: rowData,
-        sortColumn: "td",
-        direction,
-        columnType
-      });
+      const worker = getSortWorker();
+      if (worker) {
+        worker.addEventListener("message", handleMessage);
+        worker.postMessage({
+          rows: rowData,
+          sortColumn: "td",
+          direction,
+          columnType
+        });
+      } else {
+        // Worker unavailable (private browsing, some embedded browsers). Sort on the main
+        // thread with the same shared comparators. Events fire synchronously so the
+        // afterSort handler runs the same as with a worker.
+        const sorted = sortRows([...rowData], "td", direction, columnType);
+        const fragment = document.createDocumentFragment();
+        sorted.forEach(item => {
+          fragment.appendChild(rowElements[item.index]);
+        });
+        tbody.appendChild(fragment);
+        this.table.dispatchEvent(createEvent("afterSort"));
+      }
     },
 
     /**
