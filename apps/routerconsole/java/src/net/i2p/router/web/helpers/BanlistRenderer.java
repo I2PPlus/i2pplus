@@ -488,7 +488,7 @@ class BanlistRenderer {
             String cleanedReason = cleanReason(reason, routerVersion);
             buf.append("<td class=country data-sort=").append(countryCode).append(">")
                .append("<img width=28 height=21 title=\"").append(countryName)
-               .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\">")
+               .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\" loading=lazy>")
                .append("</td><td class=hash>")
                .append("<span class=b64>").append(b64).append("</span>")
                .append("</td><td class=caps>").append(caps != null ? caps : "")
@@ -549,7 +549,7 @@ class BanlistRenderer {
             buf.append(" class=ipOnly>")
                .append("<td class=country data-sort=").append(countryCode).append(">")
                .append("<img width=28 height=21 title=\"").append(countryName)
-               .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\">")
+               .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\" loading=lazy>")
                 .append("</td>").append("<td class=hash></td>")
                 .append("<td class=caps></td>")
                 .append("<td class=routerversion></td>")

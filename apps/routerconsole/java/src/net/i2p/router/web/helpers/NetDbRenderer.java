@@ -1332,7 +1332,7 @@ class NetDbRenderer {
                 int flood = tier != null ? tier[1] : 0;
                 buf.append("<tr><td><a href=\"/netdb?c=").append(country).append("\">")
                    .append("<img width=20 height=15 alt=\"").append(country.toUpperCase(Locale.US)).append("\"")
-                   .append(" src=\"/flags.jsp?c=").append(country).append("\">")
+                   .append(" src=\"/flags.jsp?c=").append(country).append("\" loading=lazy>")
                    .append(getTranslatedCountry(country).replace("xx", _t("Unknown"))).append("</a></td>")
                    .append("<td class=countX><a href=\"/netdb?caps=X&amp;cc=").append(country).append("\">")
                    .append(xtier).append("</a></td>")

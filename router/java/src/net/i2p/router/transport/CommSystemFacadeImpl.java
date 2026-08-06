@@ -1918,11 +1918,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                         }
                     } else {buf.append(" &bullet; ").append(ip);}
                 }
-                buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
+                buf.append("\" src=\"/flags.jsp?c=").append(c).append("\" loading=lazy></a>");
             } else {
                 buf.append("<img width=20 height=15 alt=\"??\" src=\"/flags.jsp?c=xx\" title=\"").append(_t("unknown"));
                 if (ip != null) {buf.append(" &bullet; ").append(ip);}
-                buf.append("\">");
+                buf.append("\" loading=lazy>");
             }
             buf.append("</td><td class=rih>");
             buf.append("<a title=\"");
@@ -1948,7 +1948,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public String renderPeerFlag(Hash peer) {
         StringBuilder buf = new StringBuilder(128);
         RouterInfo ri = getRouterInfoCached(peer);
-        String unknownFlag = "<img class=unknownflag width=24 height=18 alt=\"??\" src=\"/flags.jsp?c=xx\">";
+        String unknownFlag = "<img class=unknownflag width=24 height=18 alt=\"??\" src=\"/flags.jsp?c=xx\" loading=lazy>";
         String countryCode = getCountry(peer);
         if (countryCode == null) {countryCode = "xx";}
         String countryName = getCountryName(countryCode);
@@ -1984,7 +1984,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             if (!"xx".equals(countryCode)) {
                 buf.append("<a href=\"/netdb?c=").append(countryCode).append("\"><img width=24 height=18 alt=\"")
                    .append(countryCode.toUpperCase(Locale.US)).append("\" src=\"/flags.jsp?c=")
-                   .append(countryCode).append("\"></a>");
+                   .append(countryCode).append("\" loading=lazy></a>");
             } else {buf.append(unknownFlag);}
         } else {buf.append(_t("unknown")).append("\">").append(unknownFlag);}
         buf.append("</span>");
