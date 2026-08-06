@@ -238,17 +238,11 @@ public class RepublishLeaseSetJob extends JobImpl {
     /** Handle valid lease set */
     private void handleValidLeaseSet(LeaseSet ls, String name, long now, long timeUntilExpiry) {
         Long lastPubLog = _lastPublishLogTime.get(_dest);
-        if (timeUntilExpiry <= EXPIRY_WINDOW) {
+        boolean expiring = timeUntilExpiry <= EXPIRY_WINDOW;
+        if (expiring) {
             if (_log.shouldInfo()) {
                 _log.info("LeaseSet expiring soon for " + name + " [" + shortHash() +
                           "] (expires in " + (timeUntilExpiry / 1000) + "s) — requesting immediate renew");
-            }
-            // Local-only clients (i2cp.dontPublishLeaseSet) are re-minted in the
-            // local-only branch below from the tunnel pool's current tunnels.
-            // Re-signing the stored copy here would recycle the same near-expiry
-            // leases, keeping the LS perpetually close to expiry.
-            if (getContext().clientManager().shouldPublishLeaseSet(_dest)) {
-                getContext().clientManager().requestLeaseSet(_dest, ls);
             }
             lastPubLog = null;
         }
@@ -272,37 +266,26 @@ public class RepublishLeaseSetJob extends JobImpl {
                            "] (not published to network)");
             }
             _lastPublished = now;
-            // Re-mint from the tunnel pool's current tunnels rather than
-            // re-signing the stored copy, whose leases may be near expiry.
-            // The client signs whatever leases we send, so sending the stored
-            // (dying) copy would keep the local LS perpetually close to expiry.
-            LeaseSet fresh = getFreshPoolLeaseSet();
-            long freshTimeUntilExpiry = fresh != null ? fresh.getLatestLeaseDate() - now : 0;
-            if (fresh != null && freshTimeUntilExpiry > timeUntilExpiry) {
-                if (_log.shouldInfo()) {
-                    _log.info("Requesting re-mint of LeaseSet for " + name + " [" + shortHash() +
-                              "] (extends expiry from " + (timeUntilExpiry / 1000) +
-                              "s to " + (freshTimeUntilExpiry / 1000) + "s)");
-                }
-                getContext().clientManager().requestLeaseSet(_dest, fresh);
-            }
-            long nextRepublish;
-            if (fresh != null && freshTimeUntilExpiry > EXPIRY_WINDOW) {
-                nextRepublish = Math.max(30L * 1000,
-                                         Math.min(getRepublishInterval(),
-                                                  freshTimeUntilExpiry - EXPIRY_WINDOW));
-            } else {
-                // Pool cannot build a healthy LeaseSet right now — retry at a
-                // moderate cadence instead of a 30s treadmill; the pool's
-                // addTunnel path re-mints as soon as a usable tunnel exists.
-                nextRepublish = Math.max(30L * 1000, getRepublishInterval() / 2);
-            }
-            scheduleRepublish(nextRepublish);
+            refloatLeaseSet(name, now, timeUntilExpiry);
             return;
         }
 
         if (maybeDeferFirstPublish(leaseCount, targetLeases))
             return;
+
+        // Published LeaseSet expiring soon: don't flood the near-expiry copy to
+        // the network — it would expire before propagation completes.  Re-mint
+        // from the tunnel pool's current tunnels and request a fresh re-signed
+        // LeaseSet; the client's Reply re-floods the new LS with full expiry.
+        if (expiring) {
+            if (_log.shouldInfo()) {
+                _log.info("Published LeaseSet for " + name + " [" + shortHash() +
+                          "] expires in " + (timeUntilExpiry / 1000) +
+                          "s — re-minting instead of flooding dying copy");
+            }
+            refloatLeaseSet(name, now, timeUntilExpiry);
+            return;
+        }
 
         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
         _facade.sendStore(_dest, ls, new OnRepublishSuccess(),
@@ -388,6 +371,38 @@ public class RepublishLeaseSetJob extends JobImpl {
             return pool.getInboundTunnelsAsLeaseSet();
         }
         return null;
+    }
+
+    // Re-mint from the tunnel pool's current tunnels rather than re-signing or
+    // flooding the stored copy, whose leases may be near expiry.  The client
+    // signs whatever leases we send, so sending the stored (dying) copy would
+    // keep the local LeaseSet perpetually close to expiry.  Never floods a
+    // LeaseSet that expires before the next cycle; schedules the successor at
+    // a cadence that keeps the cycle alive without a 30s treadmill.
+    /** Re-mint and reschedule */
+    private void refloatLeaseSet(String name, long now, long timeUntilExpiry) {
+        LeaseSet fresh = getFreshPoolLeaseSet();
+        long freshTimeUntilExpiry = fresh != null ? fresh.getLatestLeaseDate() - now : 0;
+        if (fresh != null && freshTimeUntilExpiry > timeUntilExpiry) {
+            if (_log.shouldInfo()) {
+                _log.info("Requesting re-mint of LeaseSet for " + name + " [" + shortHash() +
+                          "] (extends expiry from " + (timeUntilExpiry / 1000) +
+                          "s to " + (freshTimeUntilExpiry / 1000) + "s)");
+            }
+            getContext().clientManager().requestLeaseSet(_dest, fresh);
+        }
+        long nextRepublish;
+        if (fresh != null && freshTimeUntilExpiry > EXPIRY_WINDOW) {
+            nextRepublish = Math.max(30L * 1000,
+                                     Math.min(getRepublishInterval(),
+                                              freshTimeUntilExpiry - EXPIRY_WINDOW));
+        } else {
+            // Pool cannot build a healthy LeaseSet right now — retry at a
+            // moderate cadence instead of a 30s treadmill; the pool's
+            // addTunnel path re-mints as soon as a usable tunnel exists.
+            nextRepublish = Math.max(30L * 1000, getRepublishInterval() / 2);
+        }
+        scheduleRepublish(nextRepublish);
     }
 
     // Register a successor RepublishLeaseSetJob with timing set.

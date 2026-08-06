@@ -27,6 +27,7 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.stat.StatManager;
 import net.i2p.util.Clock;
 import net.i2p.util.Log;
@@ -60,6 +61,9 @@ public class RepublishLeaseSetJobTest {
         when(_ctx.router()).thenReturn(router);
 
         when(_ctx.clock()).thenReturn(mock(Clock.class));
+        Clock clock = mock(Clock.class);
+        when(clock.now()).thenReturn(NOW);
+        when(_ctx.clock()).thenReturn(clock);
 
         _cm = mock(ClientManagerFacade.class);
         when(_ctx.clientManager()).thenReturn(_cm);
@@ -135,6 +139,69 @@ public class RepublishLeaseSetJobTest {
         verify(_jobQueue).addJob(any(Job.class));
     }
 
+/**
+     * A publishing client whose stored LeaseSet is expiring must never flood
+     * the near-expiry copy to the network — it would die before propagation.
+     * Instead the job must request a re-mint from the pool's current tunnels
+     * (whose LS expiry extends beyond the stored copy) and reschedule.
+     */
+    @Test
+    public void testExpiringPublishingClientRemintsInsteadOfFlooding() {
+        Hash hash = newHash(5);
+        when(_cm.shouldPublishLeaseSet(hash)).thenReturn(true);
+        when(_cm.isLocal(hash)).thenReturn(true);
+
+        // stored LS expiring soon (within the 3-minute EXPIRY_WINDOW)
+        LeaseSet ls = localLeaseSet(hash, NOW + 60L * 1000);
+        when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
+
+        // the pool's current LeaseSet extends well beyond the stored copy
+        LeaseSet freshPoolLs = mock(LeaseSet.class);
+        when(freshPoolLs.getLatestLeaseDate()).thenReturn(NOW + 5L * 60 * 1000);
+        TunnelPool pool = mock(TunnelPool.class);
+        when(pool.getInboundTunnelsAsLeaseSet()).thenReturn(freshPoolLs);
+        TunnelManagerFacade tm = mock(TunnelManagerFacade.class);
+        when(tm.getInboundPool(hash)).thenReturn(pool);
+        when(_ctx.tunnelManager()).thenReturn(tm);
+
+        RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);
+        assertTrue(job.registerSelf());
+        job.runJob();
+
+        // never flood the expiring stored copy
+        verify(_facade, never()).sendStore(eq(hash), eq(ls), any(Job.class), any(Job.class), anyLong(), any());
+        // re-mint requested with the pool's healthy current LS, not the stored copy
+        verify(_cm).requestLeaseSet(eq(hash), eq(freshPoolLs));
+        verify(_jobQueue).addJob(any(Job.class));
+    }
+
+    /**
+     * A publishing client whose stored LeaseSet is expiring but whose pool has
+     * no usable LeaseSet right now must NOT flood the dying copy either —
+     * it requests the client to build fresh tunnels and reschedules.
+     */
+    @Test
+    public void testExpiringPublishingClientWithoutPoolStillSkipsFlood() {
+        Hash hash = newHash(6);
+        when(_cm.shouldPublishLeaseSet(hash)).thenReturn(true);
+        when(_cm.isLocal(hash)).thenReturn(true);
+
+        LeaseSet ls = localLeaseSet(hash, NOW + 60L * 1000);
+        when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
+
+        TunnelManagerFacade tm = mock(TunnelManagerFacade.class);
+        when(tm.getInboundPool(hash)).thenReturn(null);
+        when(_ctx.tunnelManager()).thenReturn(tm);
+
+        RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);
+        assertTrue(job.registerSelf());
+        job.runJob();
+
+        verify(_facade, never()).sendStore(eq(hash), eq(ls), any(Job.class), any(Job.class), anyLong(), any());
+        verify(_cm, never()).requestLeaseSet(eq(hash), any());
+        verify(_jobQueue).addJob(any(Job.class));
+    }
+
     /**
      * A client that is no longer local AND should not publish has stopped —
      * its LeaseSet is failed and publishing stopped.
@@ -199,12 +266,23 @@ public class RepublishLeaseSetJobTest {
      * @return the mocked LeaseSet
      */
     private LeaseSet localLeaseSet(Hash hash) {
+        return localLeaseSet(hash, NOW + 5L * 60 * 1000);
+    }
+
+    /**
+     * A valid local LeaseSet mock with an explicit latest-lease date.
+     *
+     * @param hash the destination hash
+     * @param latestLeaseDate the expiry the mocked LeaseSet reports
+     * @return the mocked LeaseSet
+     */
+    private LeaseSet localLeaseSet(Hash hash, long latestLeaseDate) {
         Destination dest = mock(Destination.class);
         when(dest.calculateHash()).thenReturn(hash);
         LeaseSet ls = mock(LeaseSet.class);
         when(ls.getDestination()).thenReturn(dest);
         when(ls.isCurrent(anyLong())).thenReturn(true);
-        when(ls.getLatestLeaseDate()).thenReturn(NOW + 5L * 60 * 1000);
+        when(ls.getLatestLeaseDate()).thenReturn(latestLeaseDate);
         when(ls.getLeaseCount()).thenReturn(2);
         return ls;
     }

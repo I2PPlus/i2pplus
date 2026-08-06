@@ -11,6 +11,9 @@
       with candidate count
   * Router: Drop peer profiles for non-transit peers after 30m and
     don't write to disk
+  * Router: Fix disappearing hosted services — never flood a LeaseSet
+    that is about to expire; re-mint from the pool's current tunnels
+    instead and publish the fresh copy
 
 2026-08-05 dr|z3d
   * Console: Content-only fragment refresh for large tables — patch
