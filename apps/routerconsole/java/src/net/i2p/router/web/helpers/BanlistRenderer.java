@@ -517,7 +517,8 @@ class BanlistRenderer {
 
         // Render IP-only bans
         for (IPBanEntry ipBan : ipOnlyBans) {
-            String expireString = DataHelper.formatDuration2(ipBan.expires - now);
+            long msLeft = ipBan.expires - now;
+            String expireString = DataHelper.formatDuration2(msLeft);
             // Extract IP and port from the IP field
             String ip = extractIP(ipBan.ip);
             String port = extractPort(ipBan.ip);
@@ -562,7 +563,7 @@ class BanlistRenderer {
                .append("</td>");
             buf.append("<td class=reason>")
                .append(ipBan.reason.isEmpty() ? "IP Ban" : ipBan.reason)
-               .append("</td><td class=expires data-sort=").append(ipBan.expires).append(">")
+               .append("</td><td class=expires data-sort=").append(msLeft).append(">")
                .append(expireString)
                .append("</td></tr>\n");
             tempBanned++;
