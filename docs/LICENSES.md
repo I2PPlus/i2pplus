@@ -174,6 +174,7 @@ The following third-party JavaScript libraries are bundled:
 - **progressx** — MIT License. https://github.com/ryadpasha/progressx
 - **snowflakes** — MIT License. https://github.com/hcodes/snowflakes/
 - **tablesort** — MIT License. Copyright (c) 2012 tristen. https://github.com/tristen/tablesort
+- **vdomParser** — MIT License. Fork of @thednp/domparser (Copyright 2026 © thednp, https://github.com/thednp/domparser) with I2P+ modifications for exact browser-DOM equivalence on console markup (verbatim text, single-pass entity decoding, HTML5-lite table rules).
 
 ## IDENTICON (apps/imagegen/identicon/)
 
