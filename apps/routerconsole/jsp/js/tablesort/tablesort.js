@@ -240,10 +240,10 @@
   // Register all sort extensions (shared with worker via sortShared.js)
   Tablesort.extend("number", numberPattern, numberCmpEL);
   Tablesort.extend("date", datePattern, dateCmpEL);
-  Tablesort.extend("natural", naturalPattern, naturalCmpEL);
   Tablesort.extend("dotsep", dotsepPattern, dotsepCmpEL);
   Tablesort.extend("filesize", filesizePattern, filesizeCmpEL);
   Tablesort.extend("monthname", monthnamePattern, monthnameCmpEL);
+  Tablesort.extend("natural", naturalPattern, naturalCmpEL);
   Tablesort.extend("intl", intlPattern, intlCmpEL);
 
   if (typeof module !== "undefined" && module.exports) module.exports = Tablesort;

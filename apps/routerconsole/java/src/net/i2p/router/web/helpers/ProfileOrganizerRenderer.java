@@ -688,7 +688,7 @@ class ProfileOrganizerRenderer {
             boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
             if (dbh != null && isFF && !isUnreachable && !isBanned && prof.getLastHeardFrom() > 0) {
                 String hourfail = row.hourFailPct + "%";
-                String respTime = avg(prof, 60*60*1000L, ra);
+                long respTime = avgMs(prof, 60*60*1000L, ra);
                 long now = _context.clock().now();
                 long heard = prof.getFirstHeardAbout();
 
@@ -704,11 +704,15 @@ class ProfileOrganizerRenderer {
                    .append(hourfail)
                    .append("\"><span class=percentBarText>")
                    .append(hourfail)
-                   .append("</span></span></span></td><td data-sort=")
-                   .append(respTime)
-                   .append(">")
-                   .append(respTime)
-                   .append("</td><td data-sort=")
+                   .append("</span></span></span></td>");
+                if (respTime >= 0) {
+                    buf.append("<td data-sort=").append(respTime).append(">")
+                       .append(DataHelper.formatDuration2(respTime))
+                       .append("</td>");
+                } else {
+                    buf.append("<td>").append(_t(NA)).append("</td>");
+                }
+                buf.append("<td data-sort=")
                    .append(heard)
                    .append(">")
                    .append(formatInterval(now, heard))
@@ -838,14 +842,19 @@ class ProfileOrganizerRenderer {
     private final static String num(double num) { synchronized (_fmt) { return _fmt.format(num); } }
     private final static String NA = "&ensp;";
 
-    private String avg(PeerProfile prof, long rate, RateAverages ra) {
+    /**
+     * Average DB response time for the rate in ms, or -1 when no data.
+     * Used for the raw sort key of the 1h Resp. Time column; display uses
+     * formatDuration2() so the two never share varying units.
+     */
+    private long avgMs(PeerProfile prof, long rate, RateAverages ra) {
         RateStat rs = prof.getDbResponseTime();
-        if (rs == null) {return _t(NA);}
+        if (rs == null) {return -1;}
         Rate r = rs.getRate(rate);
-        if (r == null) {return _t(NA);}
+        if (r == null) {return -1;}
         r.computeAverages(ra, false);
-        if (ra.getTotalEventCount() == 0) {return _t(NA);}
-        return DataHelper.formatDuration2(Math.round(ra.getAverage()));
+        if (ra.getTotalEventCount() == 0) {return -1;}
+        return Math.round(ra.getAverage());
     }
 
     /** @since 0.9.21 */

@@ -270,13 +270,13 @@ class TunnelRenderer {
                     .append(_t("Receive on"))
                     .append("</th>");
                 }
-                sb.append("<th data-sort-method=number>")
-                  .append(_t("From"))
-                  .append("</th>");
+sb.append("<th>")
+                    .append(_t("From"))
+                    .append("</th>");
                 if (isAdvanced) {sb.append("<th>").append(_t("Send on")).append("</th>");}
-                sb.append("<th data-sort-method=number>")
-                  .append(_t("To"))
-                  .append("</th></tr>\n</thead>\n<tbody id=transitPeers>\n");
+                sb.append("<th>")
+                    .append(_t("To"))
+                    .append("</th></tr>\n</thead>\n<tbody id=transitPeers>\n");
                 boolean stream = participating.size() > MAX_BEFORE_STREAMING;
                 if (stream) {
                     out.write(sb.toString());
@@ -729,7 +729,7 @@ class TunnelRenderer {
                    .append("%\"><span class=percentBarText>").append(localTunnelCount * 100 / tunnelCount)
                    .append("%</span></span></span>");
         } else {
-            chunkSb.append("<td class=tcount colspan=2 data-sort=0></td>");
+            chunkSb.append("<td class=tcount colspan=2 data-sort-column-key=localCount data-sort=0></td>");
         }
         chunkSb.append("</td>");
         if (transitTunnelCount > 0) {
@@ -743,7 +743,7 @@ class TunnelRenderer {
                    .append("%</span></span></span>")
                    .append("</td>");
         } else {
-            chunkSb.append("<td class=tcount colspan=2 data-sort=0></td>");
+            chunkSb.append("<td class=tcount colspan=2 data-sort-column-key=transitCount data-sort=0></td>");
         }
         chunkSb.append("<td><a class=configpeer href=\"/configpeer?peer=")
                .append(info.getHash())

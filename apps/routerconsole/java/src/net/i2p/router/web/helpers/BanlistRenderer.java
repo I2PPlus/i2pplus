@@ -340,7 +340,7 @@ class BanlistRenderer {
         // Column order: Country, Router, Caps, Version, IP, Port, Host, Reason, Expiry
         buf.append("<div class=tablewrap id=sessionBanned>\n<table id=sbans>\n<thead><tr><th class=country>")
            .append(_t("Country"))
-           .append("</th><th class=hash data-sort-use-group=true>")
+           .append("</th><th class=hash>")
            .append(_t("Router"))
            .append("</th><th class=caps>")
            .append(_t("Caps"))

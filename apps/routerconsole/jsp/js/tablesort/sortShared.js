@@ -2,7 +2,7 @@
  * @module sortShared
  * @description Pure comparison functions shared between tablesort.js (main thread)
  * and sortWorker.js (web worker). All comparators return ascending order;
- * empty/null cells always sort after non-empty values. The caller inverts direction.
+ * empty/null cells always sort to the bottom, regardless of sort direction.
  * Based on tristen/tablesort (MIT) https://github.com/tristen/tablesort,
  * ported to standalone functions by dr|z3d for I2P+ (AGPLv3).
  * @license AGPLv3 or later
@@ -12,7 +12,7 @@
 function empty(v) { return v == null || String(v).trim() === ""; }
 
 /**
- * Wrap a comparator so empty cells always sort to the bottom in ascending order.
+ * Wrap a comparator so empty cells always sort to the bottom, regardless of direction.
  * @param {function(string, string): number} cmp - Ascending comparator
  * @returns {function(string, string): number}
  */
@@ -39,12 +39,15 @@ function numberCmp(a, b) {
   return na - nb;
 }
 
-/** @param {string} item */
+/**
+ * Match only pure numbers/percentages. Previously any string containing a digit
+ * matched (e.g. "0.9.69" -> 0.9, "3KiB" -> 3, "Aug 5, 2026" -> 520261148), which
+ * hijacked columns that need dotsep, filesize or date sorting.
+ * @param {string} item
+ */
 function numberPattern(item) {
-  const cleaned = typeof item === "string" ? item.replace(/[^-0-9.Ee%]/g, "") : "";
-  if (cleaned === "") return false;
-  const n = parseFloat(cleaned);
-  return !isNaN(n) && isFinite(n);
+  if (typeof item !== "string" || item.trim() === "") return false;
+  return /^[+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?%?$/.test(item.trim());
 }
 
 /**
@@ -184,8 +187,7 @@ const stringCmpEL = emptyLast(stringCmp);
 
 /**
  * Sort an array of row data in place by a column, applying the selected comparator and
- * direction. Empty cells sort to the bottom in ascending order; the direction
- * multiplier inverts the comparator, so empty cells lead in descending order.
+ * direction. Empty cells always sort to the bottom, regardless of direction.
  * Shared between the main thread fallback and the sort worker.
  *
  * @param {Array<Object<string, string>>} rows - Objects mapping the sort column to a string
@@ -198,16 +200,21 @@ function sortRows(rows, sortColumn, direction, columnType) {
   const multiplier = direction === "descending" ? -1 : 1;
   rows.sort((a, b) => {
     const valA = a[sortColumn], valB = b[sortColumn];
+    const aEmpty = empty(valA), bEmpty = empty(valB);
+    if (aEmpty || bEmpty) {
+      if (aEmpty && bEmpty) return 0;
+      return aEmpty ? 1 : -1;
+    }
     let res;
     switch (columnType) {
-      case "number":    res = numberCmpEL(valA, valB); break;
-      case "date":      res = dateCmpEL(valA, valB); break;
-      case "natural":   res = naturalCmpEL(valA, valB); break;
-      case "dotsep":    res = dotsepCmpEL(valA, valB); break;
-      case "filesize":  res = filesizeCmpEL(valA, valB); break;
-      case "monthname": res = monthnameCmpEL(valA, valB); break;
-      case "intl":      res = intlCmpEL(valA, valB); break;
-      default:          res = stringCmpEL(valA, valB); break;
+      case "number":    res = numberCmp(valA, valB); break;
+      case "date":      res = dateCmp(valA, valB); break;
+      case "natural":   res = naturalCmp(valA, valB); break;
+      case "dotsep":    res = dotsepCmp(valA, valB); break;
+      case "filesize":  res = filesizeCmp(valA, valB); break;
+      case "monthname": res = monthnameCmp(valA, valB); break;
+      case "intl":      res = intlCmp(valA, valB); break;
+      default:          res = stringCmp(valA, valB); break;
     }
     return res * multiplier;
   });

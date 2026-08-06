@@ -796,7 +796,7 @@ public class PeerHelper extends HelperBase {
             else {buf.append("");}
             buf.append("</td>");
         }
-        buf.append("<td class=idle><span class=right data-sort=").append(con.getTimeSinceReceive(now)).append(">")
+        buf.append("<td class=idle data-sort=").append(con.getTimeSinceReceive(now)).append("><span class=right>")
            .append(DataHelper.formatDuration2(con.getTimeSinceReceive(now)))
            .append("</span>")
            .append(THINSP)
@@ -804,7 +804,9 @@ public class PeerHelper extends HelperBase {
            .append(DataHelper.formatDuration2(con.getTimeSinceSend(now)))
            .append("</span></td>");
 
-        buf.append("<td class=inout data-sort=").append(con.getRecvRate()/1024 > 0.01 ? con.getRecvRate() / 1024 : 0).append(">");
+        buf.append("<td class=inout data-sort=")
+           .append((con.getRecvRate() + con.getSendRate()) / 1024 > 0.01 ? (con.getRecvRate() + con.getSendRate()) / 1024 : 0)
+           .append(">");
         String rx = formatRate(con.getRecvRate() / 1024).replace(".00", "");
         String tx = formatRate(con.getSendRate() / 1024).replace(".00", "");
         if (con.getRecvRate() >= 0.01 || con.getSendRate() >= 0.01) {
@@ -1209,6 +1211,7 @@ public class PeerHelper extends HelperBase {
         long idleOut = Math.max(now-peer.getLastSendTime(), 0);
         int recvBps = peer.getReceiveBps(now);
         int sendBps = peer.getSendBps(now);
+        int totalBps = recvBps + sendBps;
         String rx = formatKBps(recvBps).replace(".00", "");
         String tx = formatKBps(sendBps).replace(".00", "");
         buf.append("<td class=idle data-sort=").append(idleIn).append("><span class=right>")
@@ -1217,7 +1220,9 @@ public class PeerHelper extends HelperBase {
            .append(THINSP)
            .append("<span class=left>")
            .append(DataHelper.formatDuration2(idleOut))
-           .append("</span></td><td class=inout nowrap>");
+           .append("</span></td><td class=inout nowrap data-sort=")
+           .append(totalBps / 1024f > 0.01f ? totalBps / 1024f : 0f)
+           .append(">");
         if (recvBps > 0 || sendBps > 0) {
             buf.append("<span class=right>")
                .append(rx)

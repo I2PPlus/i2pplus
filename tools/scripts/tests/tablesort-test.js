@@ -13,8 +13,12 @@
  * Facts under test (as documented in sortShared.js / tablesort.js):
  *   - comparators return ascending order with empty cells last;
  *   - sortRows() applies the comparator and multiplies by -1 for "descending",
- *     i.e. the caller inverts direction (so empties flip to the top in desc);
+ *     but empty cells sort to the bottom in both directions;
  *   - sortRows() does not mutate the caller's array (worker/fallback spread);
+ *   - auto-detected types use pattern priority number > date > dotsep >
+ *     filesize > monthname > natural, i.e. natural is the catch-all, so
+ *     versions/IPs (dotsep), "512KiB" (filesize) and "Aug 5, 2026" (date)
+ *     are not hijacked by the number pattern;
  *   - tablesort.js sorts via a worker, falling back to a synchronous
  *     main-thread sort when Workers are missing or throw.
  *
@@ -55,13 +59,15 @@ function check(name, actual, expected) {
 
 function suiteShared() {
   const sandbox = {};
-  const exportShim = "this.__export = { sortRows, numberCmpEL, naturalCmpEL, dotsepCmpEL, " +
-                      "filesizeCmpEL, monthnameCmpEL, dateCmpEL, intlCmpEL, stringCmpEL };";
+  const exportShim = "this.__export = { sortRows, numberPattern, datePattern, dotsepPattern, " +
+                      "filesizePattern, monthnamePattern, naturalPattern, numberCmpEL, naturalCmpEL, " +
+                      "dotsepCmpEL, filesizeCmpEL, monthnameCmpEL, dateCmpEL, intlCmpEL, stringCmpEL };";
   vm.createContext(sandbox);
   vm.runInContext(SHARED_SRC + "\n" + exportShim, sandbox, { filename: "sortShared.js" });
 
-  const { sortRows, numberCmpEL, naturalCmpEL, dotsepCmpEL, filesizeCmpEL,
-          monthnameCmpEL, dateCmpEL, intlCmpEL, stringCmpEL } = sandbox.__export;
+const { sortRows, numberPattern, datePattern, dotsepPattern, filesizePattern,
+        monthnamePattern, naturalPattern, numberCmpEL, naturalCmpEL, dotsepCmpEL,
+        filesizeCmpEL, monthnameCmpEL, dateCmpEL, intlCmpEL, stringCmpEL } = sandbox.__export;
 
   /* --- 1. Individual comparators (ascending, empty-last) --- */
   assert("numberCmpEL sorts numbers", numberCmpEL("10", "9") === 1);
@@ -98,14 +104,16 @@ function suiteShared() {
         sortRows(rowsOf([3, 1, 2]), "td", "descending", "number").map(r => r.td),
         ["3", "2", "1"]);
 
-  /* --- 3. Empties at the opposite end of the direction --- */
+  /* --- 3. Empties sort to the bottom regardless of direction --- */
   check("sortRows asc empties last",
         sortRows(rowsOf(["b", "", "a", "  "]), "td", "ascending", "string").map(r => r.td),
         ["a", "b", "", "  "]);
-  /* documented: descending inverts the comparator, so empty cells lead */
-  check("sortRows desc empties first",
+  check("sortRows desc empties last",
         sortRows(rowsOf(["b", "", "a"]), "td", "descending", "string").map(r => r.td),
-        ["", "b", "a"]);
+        ["b", "a", ""]);
+  check("sortRows desc numbers empties last",
+        sortRows(rowsOf([3, "", 1, 2]), "td", "descending", "number").map(r => r.td),
+        ["3", "2", "1", ""]);
 
   /* --- 4. index field is preserved for DOM reordering --- */
   const indexed = rowsOf([30, 10, 20]);
@@ -153,6 +161,38 @@ function suiteShared() {
     const got = sortRows(rowsOf(scrambled[type]), "td", "descending", type).map(r => r.td);
     check("type desc " + type, got, [...want].reverse());
   }
+
+  /* --- 7c. auto-detection waterfall (number > date > dotsep > filesize >
+             monthname > natural); natural is the catch-all and wins only
+             when nothing more specific matches the sampled cells. --- */
+  function detectType(samples) {
+    const opts = [["number", numberPattern], ["date", datePattern],
+                  ["dotsep", dotsepPattern], ["filesize", filesizePattern],
+                  ["monthname", monthnamePattern], ["natural", naturalPattern]];
+    for (const [name, pattern] of opts) {
+      if (samples.every(pattern)) return name;
+    }
+    return "string";
+  }
+  assert("detect pure numbers", detectType(["10", "20", "30"]) === "number");
+  assert("detect versions as dotsep", detectType(["0.9.69", "0.9.70", "0.9.68"]) === "dotsep");
+  assert("detect IPv4 as dotsep", detectType(["10.0.0.2", "10.0.0.10", "73.1.1.1"]) === "dotsep");
+  assert("detect filesizes as filesize", detectType(["1KiB", "512KiB", "1MiB"]) === "filesize");
+  assert("detect dates as date", detectType(["Aug 5, 2026, 11:48 PM", "Aug 4, 2026, 11:48 PM"]) === "date");
+  assert("detect words as natural", detectType(["Fast", "Failing", "Standard"]) === "natural");
+  /* mixed-unit columns must NOT resolve to number: they need a data-sort key */
+  assert("mixed units reject number", detectType(["821 ms", "3 sec", "5 sec"]) === "natural");
+  assert("numberPattern rejects versions", !numberPattern("0.9.69"));
+  assert("numberPattern rejects a version with trailing build", !numberPattern("2.13.0-2+"));
+  assert("numberPattern rejects filesizes", !numberPattern("3KiB"));
+  assert("numberPattern rejects IPv4", !numberPattern("1.2.3.4"));
+  assert("numberPattern rejects durations", !numberPattern("63 sec ago"));
+  assert("numberPattern rejects dates", !numberPattern("Aug 5, 2026, 11:48 PM"));
+  assert("numberPattern accepts plain ints", numberPattern("5"));
+  assert("numberPattern accepts decimals", numberPattern("12.3"));
+  assert("numberPattern accepts negatives", numberPattern("-5"));
+  assert("numberPattern accepts percents", numberPattern("42%"));
+  assert("numberPattern accepts exponents", numberPattern("1e6"));
 
   /* --- 8. the worker contract (payload -> postMessage shape) --- */
   const workerRows = rowsOf([5, 1, 3]);
