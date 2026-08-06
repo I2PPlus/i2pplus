@@ -1,3 +1,15 @@
+2026-08-06 dr|z3d
+  * Console:
+    - Table sorting fixes — empty cells sort to the bottom in any
+      direction, session ban expiry and port columns sort correctly,
+      and sorting keeps working when Web Workers are unavailable
+    - Table auto-refresh parses and diffs in a background worker so
+      large tables (peers, profiles, bans) update in place without
+      janking the page; redundant refreshes after tab switches are
+      skipped, and streams/transit pages no longer double-refresh
+    - Row flag images load as you scroll instead of all at once, so
+      large peer tables load faster
+
 2026-08-05 dr|z3d
   * Console: Implement content-only fragments for auto-refreshing large
     tables (peers, profiles, session bans, tunnel peer counts, leasesets)
