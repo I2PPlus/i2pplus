@@ -3,6 +3,7 @@ package net.i2p.router;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
 import java.util.List;
 import java.util.Properties;
 
@@ -42,6 +43,19 @@ public class RouterTestHelper {
             props.setProperty("i2p.dummyPeerManager", "true");
             props.setProperty("i2p.dummyTunnelManager", "true");
             props.setProperty("i2p.vmCommSystem", "true");
+            // Keep every data file the context writes (autotune.config,
+            // sessionbans/, netDb/, peerProfiles/, ...) out of the source
+            // tree. Defaults to the ant build.root; the junit target passes
+            // i2p.build.root explicitly.
+            String buildRoot = System.getProperty("i2p.build.root",
+                                                  System.getProperty("java.io.tmpdir") + File.separator + "build-i2p" + File.separator);
+            String dataDir = new File(buildRoot, "test-router").getAbsolutePath();
+            props.setProperty("i2p.dir.config", dataDir);
+            props.setProperty("i2p.dir.router", dataDir);
+            props.setProperty("i2p.dir.log", dataDir);
+            props.setProperty("i2p.dir.temp", dataDir);
+            props.setProperty("i2p.dir.pid", dataDir);
+            props.setProperty("i2p.dir.app", dataDir);
             RouterContext ctx = new RouterContext(mockRouter(), props);
             ctx.initAll();
             return ctx;

@@ -461,6 +461,13 @@
     </delete>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
       <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser"/>
+      <sysproperty key="i2p.build.root" value="${build.root}"/>
+      <sysproperty key="i2p.dir.config" value="${build.root}test-router"/>
+      <sysproperty key="i2p.dir.router" value="${build.root}test-router"/>
+      <sysproperty key="i2p.dir.log" value="${build.root}test-router"/>
+      <sysproperty key="i2p.dir.temp" value="${build.root}test-router"/>
+      <sysproperty key="i2p.dir.pid" value="${build.root}test-router"/>
+      <sysproperty key="i2p.dir.app" value="${build.root}test-router"/>
       <classpath>
         <pathelement path="${javac.classpath}"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
