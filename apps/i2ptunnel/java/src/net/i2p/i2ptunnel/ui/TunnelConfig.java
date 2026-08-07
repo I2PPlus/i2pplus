@@ -1,5 +1,6 @@
 package net.i2p.i2ptunnel.ui;
 
+import java.io.File;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -232,9 +233,19 @@ public class TunnelConfig {
     public void setSpoofedHost(String host) {
         _spoofedHost = (host != null ? host.trim() : null);
     }
-    /** What filename is this server tunnel's private keys stored in */
+    /**
+     *  Set the private key filename for this server tunnel.
+     *  Absolute paths and paths containing ".." are rejected to prevent
+     *  writes outside the config directory.
+     *
+     *  @param file the private key filename, or null to clear
+     */
     public void setPrivKeyFile(String file) {
-        _privKeyFile = (file != null ? file.trim() : null);
+        if (file != null) {
+            file = file.trim();
+            if (new File(file).isAbsolute() || file.contains("..")) {file = null;}
+        }
+        _privKeyFile = file;
     }
     /**
      *  The filename of the private key file.
