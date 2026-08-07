@@ -39,6 +39,7 @@ public class Ed25519FieldElement extends FieldElement {
      *  allocating a new int[10] + wrapper for each op.
      *
      *  @param source the field element to copy from
+     *  @since 0.9.71+
      */
     void set(Ed25519FieldElement source) {
         System.arraycopy(source.t, 0, t, 0, 10);
@@ -49,6 +50,7 @@ public class Ed25519FieldElement extends FieldElement {
      *  Package-private accumulator support.
      *
      *  @param val the field element to add
+     *  @since 0.9.71+
      */
     void addInPlace(Ed25519FieldElement val) {
         int[] g = val.t;
@@ -60,6 +62,7 @@ public class Ed25519FieldElement extends FieldElement {
      *  Package-private accumulator support.
      *
      *  @param val the field element to subtract
+     *  @since 0.9.71+
      */
     void subInPlace(Ed25519FieldElement val) {
         int[] g = val.t;
@@ -72,6 +75,7 @@ public class Ed25519FieldElement extends FieldElement {
      *  final result after a sequence of in-place operations.
      *
      *  @return a new Ed25519FieldElement with a copy of the data
+     *  @since 0.9.71+
      */
     Ed25519FieldElement toFieldElement() {
         int[] copy = new int[10];
