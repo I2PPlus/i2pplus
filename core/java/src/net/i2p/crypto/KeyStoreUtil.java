@@ -367,11 +367,11 @@ public final class KeyStoreUtil {
                             try {
                                 cert.checkValidity();
                                 long expiresIn = cert.getNotAfter().getTime() - System.currentTimeMillis();
+                                String subj = cert.getIssuerX500Principal().toString();
                                 if (expiresIn < expiresWithin) {
                                     Log l = I2PAppContext.getGlobalContext()
                                             .logManager()
                                             .getLog(KeyStoreUtil.class);
-                                    String subj = cert.getIssuerX500Principal().toString();
                                     l.logAlways(
                                             Log.WARN,
                                             "Certificate " + subj
@@ -381,9 +381,7 @@ public final class KeyStoreUtil {
                                                     + DataHelper.formatDuration2(expiresIn)
                                                             .replace("&nbsp; ", " ")
                                                     + "\n* You should renew the certificate soon."
-                                                    +
-                                                    // TODO better help or tools, or autorenew
-                                                    "\n"
+                                                    + "\n"
                                                     + "* For a local self-signed certificate, you may delete the"
                                                     + " keystore and restart, or ask for help on how to renew.");
                                 }
@@ -394,9 +392,7 @@ public final class KeyStoreUtil {
                                                 + " in key store "
                                                 + location
                                                 + "\n* You must renew the certificate."
-                                                +
-                                                // TODO better help or tools, or autorenew
-                                                "\n"
+                                                + "\n"
                                                 + "* For a local self-signed certificate, you may simply delete the"
                                                 + " keystore and restart, or ask for help on how to renew.",
                                         null);

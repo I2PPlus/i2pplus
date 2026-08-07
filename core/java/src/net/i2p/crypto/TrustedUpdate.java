@@ -385,8 +385,6 @@ public class TrustedUpdate {
                 }
 
             return new String(data, StandardCharsets.UTF_8);
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("your JVM doesnt support utf-8? " + uee.getMessage());
         } catch (IOException ioe) {
             return "";
         } finally {
@@ -421,8 +419,6 @@ public class TrustedUpdate {
                 }
 
             return new String(data, StandardCharsets.UTF_8);
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("your JVM doesnt support utf-8? " + uee.getMessage());
         } catch (IOException ioe) {
             return "";
         } finally {
