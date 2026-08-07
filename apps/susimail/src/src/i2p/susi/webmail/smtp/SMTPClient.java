@@ -288,7 +288,6 @@ public class SMTPClient {
                 writeMail(out, body, attachments, boundary);
                 out.write("\r\n.\r\n");
                 out.flush();
-                socket.setSoTimeout(0);
                 int result = sendCmd(null);
                 if (result == 250) {mailSent = true;}
                 else {error += _t("Error sending mail") + " (" + result +  ")\n";}
