@@ -194,11 +194,12 @@ public class Reader {
                             }
                             if (_pendingConnections.isEmpty()) {_pendingConnections.wait();}
                             else {
-                                _context.statManager().addRateData("ntcp.readQueueSize", _pendingConnections.size(), _pendingConnections.size());
+                                int queueSize = _pendingConnections.size();
                                 Iterator<NTCPConnection> iter = _pendingConnections.iterator();
                                 con = iter.next();
                                 iter.remove();
                                 _liveReads.add(con);
+                                _context.statManager().addRateData("ntcp.readQueueSize", queueSize, queueSize);
                             }
                         }
                     }
