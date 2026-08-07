@@ -222,6 +222,20 @@ class TrackerInfo {
     }
 
     /**
+     *  Compute peer count from tracker response data.
+     *  Shared by TrackerInfo and UDPTrackerClient.TrackerResponse.
+     *
+     *  @param peers the peer set from the tracker, may be null
+     *  @param complete the seed count
+     *  @param incomplete the leech count
+     *  @return the peer count
+     */
+    static int getPeerCount(Set<Hash> peers, int complete, int incomplete) {
+        int pc = peers == null ? 0 : peers.size();
+        return Math.max(pc, complete + incomplete - 1);
+    }
+
+    /**
      * @since 0.9.9
      * @return the seed count
      */
