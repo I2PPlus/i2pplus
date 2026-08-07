@@ -618,7 +618,7 @@ class ClientManager {
             return true;
         }
         String prop = config.getOptions().getProperty(ClientManagerFacade.PROP_CLIENT_ONLY);
-        if (_log.shouldDebug()) {_log.debug("Should Publish LeaseSet: " + destHash.toBase32().substring(0,8) + " prop=" + prop);}
+        if (_log.shouldDebug()) {_log.debug("Should Publish LeaseSet: " + destHash.toBase32().substring(0,8) + " dontPublishLeaseSet=" + prop);}
         return !Boolean.parseBoolean(prop);
     }
 

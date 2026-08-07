@@ -132,10 +132,16 @@ public class RepublishLeaseSetJob extends JobImpl {
             // A local client that does not publish to the network
             // (i2cp.dontPublishLeaseSet, e.g. HTTP proxy) still needs its local
             // LeaseSet kept fresh.  Only treat "should not publish" as a stop
-            // signal when the client is no longer local (stopped).
+            // signal when the client is truly gone: its I2CP session may be
+            // temporarily closed by close-on-idle while the tunnel pools still
+            // exist, so keep the re-mint cycle alive while the pools remain.
             if (!getContext().clientManager().shouldPublishLeaseSet(_dest) &&
                 !getContext().clientManager().isLocal(_dest)) {
-                handleShouldNotPublish();
+                if (isTrackedLocal()) {
+                    handleLocalLeaseSet();
+                } else {
+                    handleShouldNotPublish();
+                }
                 return;
             }
             if (uptime < 5L * 1000) {
@@ -162,12 +168,13 @@ public class RepublishLeaseSetJob extends JobImpl {
     /** Handle should not publish */
     private void handleShouldNotPublish() {
         LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
-        if (ls != null) {
-            _facade.fail(_dest);
-            if (_log.shouldDebug()) {
-                _log.debug("Cleaning up local LeaseSet [" + shortHash() + "] on service stop");
-            }
+        if (ls != null && _log.shouldDebug()) {
+            _log.debug("Cleaning up local LeaseSet [" + shortHash() + "] on service stop");
         }
+        // Drop the store entry unconditionally.  lookupLeaseSetLocally() hides
+        // an expired copy (returns null), but the raw store still holds it —
+        // without this the expired LeaseSet lingers in the netdb indefinitely.
+        _facade.fail(_dest);
         _facade.stopPublishing(_dest);
     }
 
@@ -231,10 +238,30 @@ public class RepublishLeaseSetJob extends JobImpl {
                       "] is no longer LOCAL -> Not republishing LeaseSet");
         }
         LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
-        if (ls != null && !ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
+        if (ls == null) {
+            // lookupLeaseSetLocally() hides an expired copy, but the raw store
+            // may still hold it — drop it so it can't linger stale.  No-op if
+            // no entry exists.
             _facade.fail(_dest);
+            _facade.stopPublishing(_dest);
+        } else if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
+            _facade.fail(_dest);
+            _facade.stopPublishing(_dest);
+        } else {
+            // LeaseSet still current: keep the chain alive until expiry so the
+            // stale copy is dropped instead of lingering forever.
+            long untilExpiry = ls.getLatestLeaseDate() - getContext().clock().now() + 1000;
+            scheduleRepublish(Math.max(MIN_RESCHEDULE, untilExpiry));
         }
-        _facade.stopPublishing(_dest);
+    }
+
+    // True if the destination is still a configured local tunnel even when
+    // its I2CP session is closed (close-on-idle), i.e. a pool still exists.
+    /** Determine if client is still a configured local tunnel */
+    private boolean isTrackedLocal() {
+        return getContext().clientManager().isLocal(_dest) ||
+               getContext().tunnelManager().getInboundSettings(_dest) != null ||
+               getContext().tunnelManager().getOutboundSettings(_dest) != null;
     }
 
     // Publish a valid LeaseSet.  Startup gate defers first publication until
