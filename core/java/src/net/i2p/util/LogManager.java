@@ -203,7 +203,7 @@ public class LogManager implements Flushable {
     private final ConcurrentHashMap<Object, Log> _logs;
 
     /** who clears and writes our records */
-    private LogWriter _writer;
+    private volatile LogWriter _writer;
 
     private volatile boolean _shutdown;
 
@@ -214,7 +214,7 @@ public class LogManager implements Flushable {
     private volatile int _defaultLimit;
 
     /** Log record format string */
-    private char[] _format;
+    private volatile char[] _format;
 
     /** Date format instance */
     private SimpleDateFormat _dateFormat;
@@ -232,10 +232,10 @@ public class LogManager implements Flushable {
     private int _rotationLimit;
 
     /** minimum log level to be displayed on stdout */
-    private int _onScreenLimit;
+    private volatile int _onScreenLimit;
 
     /** whether or not we even want to display anything on stdout */
-    private boolean _displayOnScreen;
+    private volatile boolean _displayOnScreen;
 
     /** how many records we want to buffer in the "recent logs" list */
     private int _consoleBufferSize = DEFAULT_CONSOLEBUFFERSIZE;

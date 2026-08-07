@@ -32,7 +32,7 @@ abstract class LogWriter implements Runnable {
     // true for newest first on /logs page; false for oldest first
     private static final boolean BUFFER_DISPLAYED_REVERSE = true;
     /** Timestamp of last config reread */
-    private long _lastReadConfig;
+    private volatile long _lastReadConfig;
     /**
      * _manager.
      */

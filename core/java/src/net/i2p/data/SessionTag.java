@@ -59,11 +59,11 @@ public class SessionTag {
     }
 
     /**
-     * Data.
-     * @return the data
+     *  Session tag data.
+     *  @return a copy of the internal data to prevent callers from mutating the tag
      */
     public byte[] getData() {
-        return _data;
+        return _data.clone();
     }
 
     /**
