@@ -551,7 +551,7 @@ a.viewfullentry:hover{filter:drop-shadow(0 0 1px var(--hover))}
 #capabilities_key table td:nth-child(odd){width:1%;max-width:24px;text-align:center}
 #capabilities_key table td:nth-child(2)::first-letter{text-transform:none}
 #capabilities_key b{padding:1px 2px;min-width:16px;display:inline-block;text-transform:none;text-align:center;text-shadow:0 1px 1px var(--bg);background:var(--badge)}
-#ffstats{width:calc(100% - 10px);margin: 14px auto 4px;border:var(--border);border-radius:0;background:var(--th)}
+#ffstats,#profilestats{width:calc(100% - 10px);margin: 14px auto 4px;border:var(--border);border-radius:0;background:var(--th)}
 #floodfills{margin-top:10px}
 #floodfills th,#floodfills td:not(.rif):not(.rih):not(.rbw){text-align:center}
 #floodfills th{font-size:90%}
@@ -587,7 +587,7 @@ a.viewfullentry:hover{filter:drop-shadow(0 0 1px var(--hover))}
 #thresholds th,#thresholds td{width:auto;text-align:center}
 #thresholds tr:last-child:hover td{background:var(--bg)}
 #thresholds p{margin-top:0;padding:0 10px 0 5px}
-#profilelist{margin:0}
+#profilelist{margin:8px auto 0}
 #profilelist tr:hover,#floodfills tr:hover,#ntcpconnections tr:hover,#udpconnections tr:hover,.homelinkedit tr:hover,#portmapper tr:hover,.tx tr:hover td{color:var(--ink_hover);background:var(--row_hover)}
 #profilelist th,#profilelist td{text-align:center}
 #profilelist th{padding:3px 4px;white-space:nowrap;font-size:90%}

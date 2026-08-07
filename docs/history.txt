@@ -1,4 +1,11 @@
 2026-08-07 dr|z3d
+  * Tunnel: Restore LeaseSet lease expiry to the full 10-minute tunnel
+    lifetime plus clock fudge, instead of the shortened 6-minute cap
+  * Tunnel: Build replacement tunnels 3 minutes before existing tunnels
+    expire, so fresh builds are ready before old leases die
+  * Router: Schedule LeaseSet republish relative to actual lease expiry,
+    re-flooding a thin re-mint before the copy dies instead of waiting on
+    a fixed 5-minute cadence
   * I2PTunnel: Escape HTML in tunnel config getters to prevent stored XSS;
     reject absolute and traversal paths in setPrivKeyFile
   * Core: Return copy from SessionTag.getData; add volatile to LogManager
@@ -8,6 +15,10 @@
     add GarlicClovePool to reduce per-clove allocation in hot loop
   * SusiMail: Skip folded headers without colon in debug header rendering
   * Console: Fix handling of tfoot elements in morphdom.js
+  * Console: Replace the /profiles thresholds table with profile summary
+    rings (known peers, tier counts, floodfills, activity, DB health) and
+    drop the overview paragraph; the auto-refresh cycle now updates only
+    the rings and the profile list
 
 2026-08-06 dr|z3d
   * Console:
