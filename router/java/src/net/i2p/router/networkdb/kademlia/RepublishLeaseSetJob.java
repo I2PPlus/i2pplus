@@ -302,7 +302,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                           new OnRepublishFailure(ls), getPublishTimeout(), null);
         _lastPublished = now;
 
-        scheduleRepublish(computeNextRepublish());
+        scheduleRepublish(computeNextRepublish(timeUntilExpiry));
     }
 
     // At startup, defer first publication until target tunnels met.
@@ -362,14 +362,22 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     /**
-     * Next republish delay: the configured interval, floored at MIN_RESCHEDULE
-     * so a healthy service floods no more than once per interval and never
-     * faster than once per minute.
+     * Next republish delay: the configured interval floored at MIN_RESCHEDULE,
+     * but capped so the next check fires before the current LeaseSet hits the
+     * EXPIRY_WINDOW re-mint threshold.  A healthy 10-minute lease with a 5-min
+     * interval schedules at the interval; a shorter/thinner lease schedules
+     * sooner, so a re-mint that only slightly extends expiry is re-flooded
+     * again before the copy dies instead of rotting for a full interval.
      *
+     * @param timeUntilExpiry ms until the current LeaseSet expires
      * @return delay in ms
      */
-    private long computeNextRepublish() {
-        return Math.max(MIN_RESCHEDULE, getRepublishInterval());
+    private long computeNextRepublish(long timeUntilExpiry) {
+        long interval = getRepublishInterval();
+        long expiryAnchored = timeUntilExpiry - EXPIRY_WINDOW;
+        if (expiryAnchored > interval)
+            expiryAnchored = interval;
+        return Math.max(MIN_RESCHEDULE, expiryAnchored);
     }
 
     /**
@@ -390,7 +398,8 @@ public class RepublishLeaseSetJob extends JobImpl {
     // flooding the stored copy, whose leases may be near expiry.  The client
     // signs whatever leases we send, so sending the stored (dying) copy would
     // keep the local LeaseSet perpetually close to expiry.  Schedules the
-    // successor at the republish interval, floored at MIN_RESCHEDULE.
+    // successor based on the fresh copy's expiry so a thin extension is
+    // re-flooded before it can die.
     /** Re-mint and reschedule */
     private void refloatLeaseSet(String name, long now, long timeUntilExpiry) {
         LeaseSet fresh = getFreshPoolLeaseSet();
@@ -403,7 +412,8 @@ public class RepublishLeaseSetJob extends JobImpl {
             }
             getContext().clientManager().requestLeaseSet(_dest, fresh);
         }
-        scheduleRepublish(computeNextRepublish());
+        long effectiveExpiry = freshTimeUntilExpiry > 0 ? freshTimeUntilExpiry : timeUntilExpiry;
+        scheduleRepublish(computeNextRepublish(effectiveExpiry));
     }
 
     // Register a successor RepublishLeaseSetJob with timing set.
