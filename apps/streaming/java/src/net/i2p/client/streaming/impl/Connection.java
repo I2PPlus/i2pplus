@@ -26,43 +26,43 @@ import net.i2p.util.SystemVersion;
  */
 class Connection {
 
-    /** Application context. */
+    /** Router context for accessing services and configuration. */
     private final I2PAppContext _context;
-    /** Class logger. */
+    /** Logger for this connection. */
     private final Log _log;
-    /** Connection manager. */
+    /** Manager that created and tracks this connection. */
     private final ConnectionManager _connectionManager;
-    /** I2P session. */
+    /** I2P session used to send and receive messages. */
     private final I2PSession _session;
-    /** Remote peer. */
+    /** Destination of the remote peer, or null if not yet established. */
     private Destination _remotePeer;
-    /** Transient signing public key. */
+    /** Transient signing key for this connection, or null if not using offline keys. */
     private SigningPublicKey _transientSPK;
-    /** Atomic long. */
+    /** Next outbound stream ID to assign. */
     private final AtomicLong _sendStreamId = new AtomicLong();
-    /** Atomic long. */
+    /** Next inbound stream ID to assign. */
     private final AtomicLong _receiveStreamId = new AtomicLong();
-    /** Last send time. */
+    /** Timestamp of the last packet sent, in context clock ms. */
     private volatile long _lastSendTime;
-    /** Last send id. */
+    /** ID of the last message sent. */
     private final AtomicLong _lastSendId;
-    /** Atomic boolean. */
+    /** Whether a RESET packet has been received from the remote peer. */
     private final AtomicBoolean _resetReceived = new AtomicBoolean();
-    /** Atomic long. */
+    /** Timestamp when a RESET was sent, or 0 if none. */
     private final AtomicLong _resetSentOn = new AtomicLong();
-    /** Atomic long. */
+    /** Timestamp when a RESET was received, or 0 if none. */
     private final AtomicLong _resetReceivedOn = new AtomicLong();
-    /** Atomic boolean. */
+    /** Whether the connection is currently established and usable. */
     private final AtomicBoolean _connected = new AtomicBoolean(true);
-    /** Atomic boolean. */
+    /** Whether the final disconnect sequence has been initiated. */
     private final AtomicBoolean _finalDisconnect = new AtomicBoolean();
-    /** Whether the connection has been hard-disconnected. */
+    /** Whether the connection has been hard-disconnected (unrecoverable). */
     private volatile boolean _hardDisconnected;
-    /** Input stream. */
+    /** Stream for receiving incoming data from the remote peer. */
     private final MessageInputStream _inputStream;
-    /** Output stream. */
+    /** Stream for sending outgoing data to the remote peer. */
     private final MessageOutputStream _outputStream;
-    /** Scheduler chooser for packet scheduling. */
+    /** Selects the appropriate scheduler for packet pacing. */
     private final SchedulerChooser _chooser;
     /** Locking: _nextSendLock */
     private long _nextSendTime;

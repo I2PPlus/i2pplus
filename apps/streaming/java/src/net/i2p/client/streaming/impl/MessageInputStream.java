@@ -66,17 +66,27 @@ class MessageInputStream extends InputStream {
     private static final int MAX_PACKET_COUNT = 2048;
 
     private final Log _log;
-    private final List<ByteArray> _readyDataBlocks; // Ordered list of ready data blocks
-    private int _readyDataBlockIndex;               // Index in the current ready block
-    private long _highestReadyBlockId;              // Highest fully received block ID
-    private long _highestBlockId;                   // Highest received block ID (includes out-of-order)
-    private final Map<Long, ByteArray> _notYetReadyBlocks; // Out-of-order blocks
+    /** Ordered list of fully received data blocks ready for reading. */
+    private final List<ByteArray> _readyDataBlocks;
+    /** Current read position within the active ready block. */
+    private int _readyDataBlockIndex;
+    /** ID of the highest block fully received in order. */
+    private long _highestReadyBlockId;
+    /** ID of the highest block received (including out-of-order). */
+    private long _highestBlockId;
+    /** Blocks received out of order, keyed by block ID. */
+    private final Map<Long, ByteArray> _notYetReadyBlocks;
 
-    private boolean _closeReceived; // EOF signal received
-    private final AtomicBoolean _locallyClosed = new AtomicBoolean(false); // Stream closed for reading
-    private volatile int _readTimeout = I2PSocketOptionsImpl.DEFAULT_READ_TIMEOUT; // Read timeout in milliseconds
+    /** Whether an EOF signal has been received from the remote peer. */
+    private boolean _closeReceived;
+    /** Whether this stream has been closed locally for reading. */
+    private final AtomicBoolean _locallyClosed = new AtomicBoolean(false);
+    /** Read timeout in milliseconds before returning -1. */
+    private volatile int _readTimeout = I2PSocketOptionsImpl.DEFAULT_READ_TIMEOUT;
+    /** Error that caused the stream to fail, or null if healthy. */
     private IOException _streamError;
-    private long _readTotal; // Total bytes read so far
+    /** Total number of bytes read from this stream. */
+    private long _readTotal;
 
     private final int _maxMessageSize; // Max size per message block
     private final int _maxWindowSize;  // Max number of messages in window

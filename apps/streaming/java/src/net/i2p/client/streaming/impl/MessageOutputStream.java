@@ -76,16 +76,13 @@ class MessageOutputStream extends OutputStream {
     private final int _originalBufferSize;
     private int _currentBufferSize;
 
-    // Buffer requested size for next flush (will update only when buffer is empty)
+    /** Buffer size requested by the next flush, updated when buffer drains. */
     private volatile int _nextBufferSize = 0;
-
-    // Flusher that passively flushes data after inactivity period
+    /** Flusher that sends buffered data after a period of inactivity. */
     private final Flusher _flusher;
-
-    // Timestamp of last buffered data for flush delay computation
+    /** Timestamp of the most recently buffered data, in context clock ms. */
     private volatile long _lastBuffered;
-
-    // How long to wait before passive flush triggers (milliseconds)
+    /** Delay in milliseconds before a passive flush is triggered. */
     private volatile int _passiveFlushDelay;
 
     /**
