@@ -1367,20 +1367,18 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     *  Check if a peer is stale — no contact (heard from or heard about) within
-     *  the dynamic activity window.  Window adapts to network visibility:
-     *  - 500+ active peers → 1 hour (very selective)
-     *  - 200+ active peers → 2 hours
-     *  - 100+ active peers → 4 hours
-     *  - &lt;100 active peers → 8 hours (fresh router, building up picture)
-     *  Peers in the netDb often go offline silently; this avoids wasting first-hop
-     *  selection and keepalive resources on peers that are likely dead.
-     *  Skipped during the first 15 minutes of uptime (startup grace) to allow
-     *  the router to build initial tunnels before profile data accumulates.
+     *  Check whether a peer is stale — no contact (heard from or heard about)
+     *  within the dynamic activity window. The window adapts to network
+     *  visibility: 500+ active peers use 1 hour, 200+ use 2 hours, 100+ use
+     *  4 hours, fewer than 100 use 8 hours (fresh router building up picture).
+     *
+     *  Stale peers are skipped during first-hop selection and keepalive to
+     *  avoid wasting resources on peers that are likely offline. Skipped
+     *  during the first 15 minutes of uptime (startup grace).
      *
      *  @param ctx the router context
      *  @param peer hash of the peer to check
-     *  @return true if the peer hasn't been heard from or about within the activity window
+     *  @return true if the peer has not been heard from or about within the activity window
      */
     static boolean isStalePeer(RouterContext ctx, Hash peer) {
         if (ctx.router() != null && ctx.router().getUptime() < 15*60*1000L)
