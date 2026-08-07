@@ -518,4 +518,4 @@ function parse(htmlString) {
 }
 
 const VdomParser = { parse };
-if (typeof self !== "undefined") { self.VdomParser = VdomParser; }
+if (typeof self !== "undefined") { self.VdomParser = VdomParser; } else if (typeof globalThis !== "undefined") { globalThis.VdomParser = VdomParser; }

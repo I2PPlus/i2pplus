@@ -270,13 +270,13 @@ class TunnelRenderer {
                     .append(_t("Receive on"))
                     .append("</th>");
                 }
-sb.append("<th>")
-                    .append(_t("From"))
-                    .append("</th>");
+                sb.append("<th>")
+                   .append(_t("From"))
+                   .append("</th>");
                 if (isAdvanced) {sb.append("<th>").append(_t("Send on")).append("</th>");}
                 sb.append("<th>")
-                    .append(_t("To"))
-                    .append("</th></tr>\n</thead>\n<tbody id=transitPeers>\n");
+                   .append(_t("To"))
+                   .append("</th></tr>\n</thead>\n<tbody id=transitPeers>\n");
                 boolean stream = participating.size() > MAX_BEFORE_STREAMING;
                 if (stream) {
                     out.write(sb.toString());
