@@ -1449,12 +1449,11 @@ public class TunnelPool {
                         usable++;
                     }
                 }
-                // Capacity: target + 1 (reduced from +2) to reduce churn.
-                // The old +2 formula kept 2 extra tunnels beyond target, causing
-                // constant "Pool at capacity" warnings and replacement builds.
-                // With +1, pools hold just 1 extra tunnel as a buffer, reducing
-                // build churn while still providing resilience against expiry.
-                int maxUsable = Math.max(target + 1, 2);
+                // Capacity: target + 2 so a pool that lost a tunnel to expiry
+                // or test failure still holds a full target's worth of usable
+                // leases while replacements build.  The extra slot absorbs
+                // churn without starving the LeaseSet.
+                int maxUsable = Math.max(target + 2, 2);
                 if (usable >= maxUsable) {
                     // At capacity — try replacing a non-GOOD tunnel instead of
                     // dropping a freshly-built tunnel.  Only replace FAILED
@@ -2871,16 +2870,17 @@ public class TunnelPool {
             _consecutiveEmergencies--;
         }
 
-        // Early exit: cap in-progress at target + 1 to prevent
-        // emergency-boosted effectiveTarget from inflating the tolerance.
-        // Reduced from target + 2 to match the tighter pool capacity.
-        // EMERGENCY has its own inProgress check (target-based) and is
-        // reached after this early exit when safeActive == 0.
-        if (safeActive > 0 && inProgress >= Math.max(target + 1, 2)) {
+        // Early exit: cap in-progress to prevent build storms.  When the pool
+        // is at partial capacity (safeActive < target), allow up to 2x target
+        // concurrent builds (capped at 6) so timed-out constructions can be
+        // replaced without waiting for the slot to clear.  Healthy pools
+        // (safeActive >= target) stay at target + 1 to limit churn.
+        int cap = (safeActive < target) ? Math.min(Math.max(target * 2, 4), 6) : Math.max(target + 1, 2);
+        if (safeActive > 0 && inProgress >= cap) {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping build: inProgress(" +
-                          inProgress + ") >= cap " + Math.max(target + 1, 2) +
-                          " (target=" + target + ")");
+                          inProgress + ") >= cap " + cap +
+                          " (target=" + target + ", safeActive=" + safeActive + ")");
             }
             return;
         }
