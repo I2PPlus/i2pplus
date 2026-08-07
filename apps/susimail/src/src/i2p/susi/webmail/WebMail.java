@@ -525,6 +525,7 @@ public class WebMail extends HttpServlet {
             List<Map.Entry<String, String>> headerEntries = new ArrayList<>();
             for (String headerLine : mailPart.headerLines) {
                 int colonIndex = headerLine.indexOf(':');
+                if (colonIndex < 0) {continue;}
                 String headerName = toTitleCase(headerLine.substring(0, colonIndex));
                 String headerValue = headerLine.substring(colonIndex + 1).trim();
 
