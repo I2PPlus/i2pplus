@@ -12,7 +12,6 @@ import { refreshElements } from './refreshElements.js';
 const bodyTag = document.querySelector("body");
 const container = document.querySelector("#tunnelsContainer");
 const nav = document.querySelector(".confignav");
-const tables = document.querySelectorAll("#tunnels table");
 const toggleIds = document.getElementById("toggleTunnelIds");
 const toggleTunnels = document.getElementById("toggleTunnels");
 const tunnelIdsHidden = document.querySelector(".idsHidden");
@@ -126,28 +125,36 @@ document.addEventListener("DOMContentLoaded", function() {
 
   document.addEventListener("elementsRefreshed", function(event) {
     if (tunnelRefreshPending) return;
-    if (event.detail.selectors.includes("#tunnelsContainer")) {
-      tunnelRefreshPending = true;
-      const currentTables = container.querySelectorAll("table").length;
-      fetch("/tunnels")
-        .then(response => response.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, "text/html");
-          const fetchedTables = doc.querySelectorAll("#tunnelsContainer table").length;
+    if (!event.detail.selectors.some(sel => sel.includes("tunnelsContainer"))) return;
+    tunnelRefreshPending = true;
+    const currentTables = container.querySelectorAll("table").length;
+    const currentRows = container.querySelectorAll("tr").length;
+    fetch("/tunnels")
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const fetchedTables = doc.querySelectorAll("#tunnelsContainer table").length;
+        const fetchedRows = doc.querySelectorAll("#tunnelsContainer tr").length;
 
-          if (fetchedTables > currentTables) {
-            const newContainer = doc.querySelector("#tunnelsContainer");
-            if (newContainer) {
-              container.innerHTML = newContainer.innerHTML;
-            }
+        if (fetchedTables !== currentTables || fetchedRows !== currentRows) {
+          const newContainer = doc.querySelector("#tunnelsContainer");
+          if (newContainer) {
+            container.innerHTML = newContainer.innerHTML;
           }
-          updateTunnelCounts();
-        })
-        .catch(error => {})
-        .finally(() => { tunnelRefreshPending = false; });
-    }
+        }
+        updateTunnelCounts();
+      })
+      .catch(error => {})
+      .finally(() => { tunnelRefreshPending = false; });
   });
 
-  refreshElements("#tunnelsContainer", "/tunnels", 10000);
+  // Steady-state refresh morphs only the volatile cells (test status,
+  // expiry, latency, data, footer bandwidth) so morphdom never recombines
+  // tbody/tfoot table sections; structural changes trigger the full
+  // #tunnelsContainer replace above.
+  refreshElements(
+    "#tunnelsContainer td.status, #tunnelsContainer td.expiry, #tunnelsContainer td.latency, #tunnelsContainer td.datatransfer, #tunnelsContainer tfoot td",
+    "/tunnels", 10000
+  );
 });

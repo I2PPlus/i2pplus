@@ -405,6 +405,7 @@ function morphdomFactory(morphAttrs) {
       var skipFrom = skipFromChildren(fromEl, toEl);
       var curToNodeChild = toEl.firstChild;
       var curFromNodeChild = fromEl.firstChild;
+      var lastSectionNode = null;
 
       outer: while (curToNodeChild) {
         var toNextSibling = curToNodeChild.nextSibling;
@@ -416,11 +417,30 @@ function morphdomFactory(morphAttrs) {
         // section and breaking colspan/layout (e.g. tfoot bandwidth footer).
         if (fromEl.nodeName === "TABLE" && isTableSection(curToNodeChild)) {
           var existing = findTableSection(fromEl, curToNodeChild.nodeName);
-          if (existing) { morphEl(existing, curToNodeChild); }
-          // Advance curFromNodeChild past every table section — they're all
-          // handled by tag name above, so the general loop must not touch them
-          // (or cleanupFromEl would remove them as leftover children).
-          while (curFromNodeChild && isTableSection(curFromNodeChild)) {
+          if (existing) {
+            morphEl(existing, curToNodeChild);
+            lastSectionNode = existing;
+          } else {
+            // Section missing in the live table — insert it after the
+            // previously handled section so section order matches the
+            // response (response sections come in canonical thead/tbody/tfoot
+            // order, so this preserves the document order).
+            if (lastSectionNode) {
+              fromEl.insertBefore(curToNodeChild, lastSectionNode.nextSibling);
+            } else {
+              fromEl.insertBefore(curToNodeChild, fromEl.firstChild);
+            }
+            lastSectionNode = curToNodeChild;
+            handleNodeAdded(curToNodeChild);
+          }
+          // Advance curFromNodeChild past every table section and the
+          // whitespace-only text nodes between them — sections are all handled
+          // by tag name above, so the general loop and cleanupFromEl must not
+          // treat them as leftover children (a live table parsed from HTML
+          // keeps "\n" text nodes between thead/tbody/tfoot).
+          while (curFromNodeChild &&
+                 (isTableSection(curFromNodeChild) ||
+                  (curFromNodeChild.nodeType === TEXT_NODE && isWsOnlyText(curFromNodeChild.nodeValue)))) {
             curFromNodeChild = curFromNodeChild.nextSibling;
           }
           curToNodeChild = toNextSibling;

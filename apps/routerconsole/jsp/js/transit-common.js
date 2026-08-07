@@ -74,15 +74,15 @@ export function initTransit(config) {
         if (config.usePeerRowTracking) {
           const currentRows = peers.querySelectorAll("tr").length;
           if (currentRows === lastPeerRowCount && currentRows > 0) {
-            stop = refreshElements("#transitPeers td>*, #statusnotes", FETCH_URL, REFRESH_INTERVAL, immediate);
+            stop = refreshElements("#transitPeers td>*, #statusnotes td", FETCH_URL, REFRESH_INTERVAL, immediate);
           } else if (currentRows !== lastPeerRowCount) {
-            stop = refreshElements("#transitPeers, #statusnotes", FETCH_URL, REFRESH_INTERVAL, immediate);
+            stop = refreshElements("#transitPeers, #statusnotes td", FETCH_URL, REFRESH_INTERVAL, immediate);
             lastPeerRowCount = currentRows;
           } else {
             stop = refreshElements("#tunnels", FETCH_URL, RETRY_DELAY, immediate);
           }
         } else {
-          stop = refreshElements("#statusnotes, #transitPeers", FETCH_URL, REFRESH_INTERVAL, immediate);
+          stop = refreshElements("#statusnotes td, #transitPeers", FETCH_URL, REFRESH_INTERVAL, immediate);
         }
       } else if (main) {
         stop = refreshElements("#tunnels", FETCH_URL, RETRY_DELAY, immediate);
