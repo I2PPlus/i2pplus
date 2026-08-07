@@ -1962,6 +1962,20 @@
       <delete includeEmptyDirs="true" quiet="true">
         <fileset dir="." includes="apps/*/build/**,core/build/**,router/build/**"/>
       </delete>
+      <!-- Runtime/test artifacts that must never live in the source tree -->
+      <delete includeEmptyDirs="true" quiet="true">
+        <fileset dir=".">
+          <include name="sessionbans/"/>
+          <include name="peerProfiles/"/>
+          <include name="autotune.config"/>
+          <include name="logger.config"/>
+          <include name="messages.mo"/>
+          <include name="build/"/>
+          <include name="]*"/>
+        </fileset>
+      </delete>
+      <delete dir="router/java/sessionbans" quiet="true"/>
+      <delete file="router/java/autotune.config" quiet="true"/>
       <delete dir="installer/java/build" quiet="true"/>
       <delete dir="installer/build" quiet="true"/>
       <delete dir="reproducible/build" quiet="true"/>
