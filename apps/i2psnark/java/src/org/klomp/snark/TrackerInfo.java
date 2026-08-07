@@ -207,14 +207,18 @@ class TrackerInfo {
     }
 
     /**
-     * @return the peers
+     *  Peers returned by the tracker, or an empty set if none.
+     *
+     *  @return an unmodifiable set of peers, never null
      */
     public Set<Peer> getPeers() {
         return peers;
     }
 
     /**
-     * @return the peer count
+     *  Peer count including seeds and leeches from the tracker response.
+     *
+     *  @return the number of known peers, or 0 if none
      */
     public int getPeerCount() {
         int pc = peers == null ? 0 : peers.size();
