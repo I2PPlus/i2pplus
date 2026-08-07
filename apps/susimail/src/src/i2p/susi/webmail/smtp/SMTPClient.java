@@ -100,7 +100,10 @@ public class SMTPClient {
      *  @since 0.9.13
      */
     private void sendCmdNoWait(String cmd) throws IOException {
-        if (_log.shouldDebug()) {_log.debug("SMTP sendCmd(" + cmd +")");}
+        if (_log.shouldDebug()) {
+            String logCmd = cmd.startsWith("PASS ") ? "PASS ****" : cmd;
+            _log.debug("SMTP sendCmd(" + logCmd + ")");
+        }
         if (socket == null) {throw new IOException("No socket");}
         OutputStream out = socket.getOutputStream();
         cmd += "\r\n";
