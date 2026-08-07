@@ -2,6 +2,7 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,9 +24,9 @@ import net.i2p.util.Log;
  * Handles the lifecycle of lease set publication including:
  * <ul>
  *   <li>Initial publication after sufficient uptime (deferred until target tunnels built)</li>
- *   <li>Periodic republishing before lease expiration (default 3 min)</li>
+ *   <li>Periodic republishing before lease expiration (default 5 min)</li>
  *   <li>On-success global fail count reset</li>
- *   <li>Retry with exponential backoff (20-30s) on failure</li>
+ *   <li>Retry with exponential backoff on failure</li>
  *   <li>Floodfill verification after repeated failures</li>
  *   <li>Cleanup when the client is no longer local</li>
  * </ul>
@@ -47,8 +48,10 @@ public class RepublishLeaseSetJob extends JobImpl {
     public static final int RETRY_DELAY_DEFAULT = (int) (10L * 1000);
     /** Maximum backoff delay for publish retries. */
     public static final int RETRY_MAX_DELAY_DEFAULT = (int) (120L * 1000);
-    /** Window before lease expiry to trigger early republish. */
+    /** Window before lease expiry to trigger a re-mint instead of flooding the dying copy. */
     private static final long EXPIRY_WINDOW = 3L * 60 * 1000;
+    /** Minimum reschedule interval — prevents sub-minute flood treadmills. */
+    private static final long MIN_RESCHEDULE = 60L * 1000;
     /** Staleness threshold for cleaning up tracking maps. */
     private static final long CACHE_CLEANUP_THRESHOLD = 15L * 60 * 1000;
     // Last time cleanupStaleEntries() ran — guards against redundant sweeps
@@ -73,6 +76,8 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static final ConcurrentHashMap<Hash, Long> _firstDeferredAt = new ConcurrentHashMap<>();
     /** Max time to defer first publish while waiting for target tunnels. */
     private static final long FIRST_PUBLISH_TIMEOUT = 60L * 1000;
+    /** Destinations that have published successfully at least once — never defer these again. */
+    private static final Set<Hash> _publishedOnce = ConcurrentHashMap.newKeySet();
     /** destination hash */
     private final Hash _dest;
     /** Kademlia network database facade instance. */
@@ -270,13 +275,12 @@ public class RepublishLeaseSetJob extends JobImpl {
             return;
         }
 
-        if (maybeDeferFirstPublish(leaseCount, targetLeases))
-            return;
-
         // Published LeaseSet expiring soon: don't flood the near-expiry copy to
         // the network — it would expire before propagation completes.  Re-mint
         // from the tunnel pool's current tunnels and request a fresh re-signed
         // LeaseSet; the client's Reply re-floods the new LS with full expiry.
+        // This check runs before the startup deferral gate so an expiring LS
+        // always re-mints immediately — never waits behind the gate.
         if (expiring) {
             if (_log.shouldInfo()) {
                 _log.info("Published LeaseSet for " + name + " [" + shortHash() +
@@ -287,33 +291,31 @@ public class RepublishLeaseSetJob extends JobImpl {
             return;
         }
 
+        // Startup gate: defer first publication until target tunnel count met
+        // (or FIRST_PUBLISH_TIMEOUT elapses).  After a successful publish the
+        // destination is marked _publishedOnce and never deferred again.
+        if (maybeDeferFirstPublish(leaseCount, targetLeases))
+            return;
+
         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
         _facade.sendStore(_dest, ls, new OnRepublishSuccess(),
                           new OnRepublishFailure(ls), getPublishTimeout(), null);
         _lastPublished = now;
 
-        long nextRepublish;
-        if (leaseCount < targetLeases) {
-            if (_log.shouldInfo()) {
-                _log.info("LeaseSet has fewer leases (" + leaseCount +
-                          "/" + targetLeases + ") — scheduling early republish");
-            }
-            nextRepublish = 30L * 1000;
-        } else {
-            nextRepublish = Math.max(30L * 1000,
-                                      Math.min(getRepublishInterval(),
-                                               timeUntilExpiry - EXPIRY_WINDOW));
-        }
-        scheduleRepublish(nextRepublish);
+        scheduleRepublish(computeNextRepublish());
     }
 
     // At startup, defer first publication until target tunnels met.
     // Falls through after FIRST_PUBLISH_TIMEOUT so pools at partial
     // capacity (e.g. 70% build success) don't block indefinitely.
+    // One-time only: once a destination publishes, _publishedOnce prevents
+    // re-deferral on subsequent cycles (no 15s treadmill).
     /**
      * @return true if publication was deferred
      */
     private boolean maybeDeferFirstPublish(int leaseCount, int targetLeases) {
+        if (_publishedOnce.contains(_dest))
+            return false;
         Long deferred = _firstDeferredAt.get(_dest);
         if (deferred == null && leaseCount < targetLeases) {
             deferred = getContext().clock().now();
@@ -329,7 +331,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                               "] — " + leaseCount + "/" + targetLeases + " tunnels " +
                               "(elapsed " + (elapsed / 1000) + "s)");
                 }
-                scheduleRepublish(15L * 1000);
+                scheduleRepublish(MIN_RESCHEDULE);
                 return true;
             }
             _firstDeferredAt.remove(_dest);
@@ -356,7 +358,18 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     private long getRepublishInterval() {
-        return getContext().getProperty("i2p.netdb.republishInterval", 3L * 60 * 1000);
+        return getContext().getProperty("i2p.netdb.republishInterval", 5L * 60 * 1000);
+    }
+
+    /**
+     * Next republish delay: the configured interval, floored at MIN_RESCHEDULE
+     * so a healthy service floods no more than once per interval and never
+     * faster than once per minute.
+     *
+     * @return delay in ms
+     */
+    private long computeNextRepublish() {
+        return Math.max(MIN_RESCHEDULE, getRepublishInterval());
     }
 
     /**
@@ -376,9 +389,8 @@ public class RepublishLeaseSetJob extends JobImpl {
     // Re-mint from the tunnel pool's current tunnels rather than re-signing or
     // flooding the stored copy, whose leases may be near expiry.  The client
     // signs whatever leases we send, so sending the stored (dying) copy would
-    // keep the local LeaseSet perpetually close to expiry.  Never floods a
-    // LeaseSet that expires before the next cycle; schedules the successor at
-    // a cadence that keeps the cycle alive without a 30s treadmill.
+    // keep the local LeaseSet perpetually close to expiry.  Schedules the
+    // successor at the republish interval, floored at MIN_RESCHEDULE.
     /** Re-mint and reschedule */
     private void refloatLeaseSet(String name, long now, long timeUntilExpiry) {
         LeaseSet fresh = getFreshPoolLeaseSet();
@@ -391,18 +403,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             }
             getContext().clientManager().requestLeaseSet(_dest, fresh);
         }
-        long nextRepublish;
-        if (fresh != null && freshTimeUntilExpiry > EXPIRY_WINDOW) {
-            nextRepublish = Math.max(30L * 1000,
-                                     Math.min(getRepublishInterval(),
-                                              freshTimeUntilExpiry - EXPIRY_WINDOW));
-        } else {
-            // Pool cannot build a healthy LeaseSet right now — retry at a
-            // moderate cadence instead of a 30s treadmill; the pool's
-            // addTunnel path re-mints as soon as a usable tunnel exists.
-            nextRepublish = Math.max(30L * 1000, getRepublishInterval() / 2);
-        }
-        scheduleRepublish(nextRepublish);
+        scheduleRepublish(computeNextRepublish());
     }
 
     // Register a successor RepublishLeaseSetJob with timing set.
@@ -500,6 +501,12 @@ public class RepublishLeaseSetJob extends JobImpl {
         cleanupMap(_lastVerifyLogTime, now);
         cleanupMap(_lastNotRequeueLogTime, now);
         cleanupGlobalFailCount(now);
+        cleanupPublishedOnce();
+    }
+
+    /** Drop _publishedOnce entries for destinations no longer being tracked. */
+    private static void cleanupPublishedOnce() {
+        _publishedOnce.retainAll(_lastPublishLogTime.keySet());
     }
 
     /** Cleanup map */
@@ -660,6 +667,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         public void runJob() {
             cleanupStaleEntries();
             _firstDeferredAt.remove(_dest);
+            _publishedOnce.add(_dest);
             _globalFailCount.remove(_dest);
             if (_log.shouldInfo()) {
                 long now = getContext().clock().now();

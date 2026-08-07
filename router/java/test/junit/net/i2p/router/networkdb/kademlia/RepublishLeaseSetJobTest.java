@@ -176,6 +176,44 @@ public class RepublishLeaseSetJobTest {
     }
 
     /**
+     * An expiring LeaseSet with below-target tunnel count must re-mint
+     * immediately — the expiring check runs before the startup deferral gate,
+     * so a near-expiry LS never waits behind the gate waiting for tunnels.
+     * Regression test for the case where a service at 1/3 tunnels was deferred
+     * at 176s instead of re-minted.
+     */
+    @Test
+    public void testExpiringBelowTargetRemintsInsteadOfDeferring() {
+        Hash hash = newHash(7);
+        when(_cm.shouldPublishLeaseSet(hash)).thenReturn(true);
+        when(_cm.isLocal(hash)).thenReturn(true);
+
+        // stored LS expiring soon with only 1 lease against a target of 2
+        LeaseSet ls = localLeaseSet(hash, NOW + 60L * 1000);
+        when(ls.getLeaseCount()).thenReturn(1);
+        when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
+
+        // pool's current LeaseSet extends beyond the stored copy
+        LeaseSet freshPoolLs = mock(LeaseSet.class);
+        when(freshPoolLs.getLatestLeaseDate()).thenReturn(NOW + 5L * 60 * 1000);
+        TunnelPool pool = mock(TunnelPool.class);
+        when(pool.getInboundTunnelsAsLeaseSet()).thenReturn(freshPoolLs);
+        TunnelManagerFacade tm = mock(TunnelManagerFacade.class);
+        when(tm.getInboundPool(hash)).thenReturn(pool);
+        when(_ctx.tunnelManager()).thenReturn(tm);
+
+        RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);
+        assertTrue(job.registerSelf());
+        job.runJob();
+
+        // never flood the expiring stored copy, never defer
+        verify(_facade, never()).sendStore(eq(hash), eq(ls), any(Job.class), any(Job.class), anyLong(), any());
+        // re-mint requested with the pool's healthy current LS
+        verify(_cm).requestLeaseSet(eq(hash), eq(freshPoolLs));
+        verify(_jobQueue).addJob(any(Job.class));
+    }
+
+    /**
      * A publishing client whose stored LeaseSet is expiring but whose pool has
      * no usable LeaseSet right now must NOT flood the dying copy either —
      * it requests the client to build fresh tunnels and reschedules.
