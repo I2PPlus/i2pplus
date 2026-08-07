@@ -32,6 +32,53 @@ public class Ed25519FieldElement extends FieldElement {
         this.t = t;
     }
 
+    /**
+     *  Copy the source field element's data into this element's array.
+     *  Package-private accumulator support — allows reuse of a single
+     *  field element instance across multiple operations instead of
+     *  allocating a new int[10] + wrapper for each op.
+     *
+     *  @param source the field element to copy from
+     */
+    void set(Ed25519FieldElement source) {
+        System.arraycopy(source.t, 0, t, 0, 10);
+    }
+
+    /**
+     *  Add a field element into this element's array in place.
+     *  Package-private accumulator support.
+     *
+     *  @param val the field element to add
+     */
+    void addInPlace(Ed25519FieldElement val) {
+        int[] g = val.t;
+        for (int i = 0; i < 10; i++) {t[i] += g[i];}
+    }
+
+    /**
+     *  Subtract a field element from this element's array in place.
+     *  Package-private accumulator support.
+     *
+     *  @param val the field element to subtract
+     */
+    void subInPlace(Ed25519FieldElement val) {
+        int[] g = val.t;
+        for (int i = 0; i < 10; i++) {t[i] -= g[i];}
+    }
+
+    /**
+     *  Return a new field element with a copy of this element's data.
+     *  Package-private accumulator support — call this to extract the
+     *  final result after a sequence of in-place operations.
+     *
+     *  @return a new Ed25519FieldElement with a copy of the data
+     */
+    Ed25519FieldElement toFieldElement() {
+        int[] copy = new int[10];
+        System.arraycopy(t, 0, copy, 0, 10);
+        return new Ed25519FieldElement(f, copy);
+    }
+
     private static final byte[] ZERO = new byte[32];
 
     /**
