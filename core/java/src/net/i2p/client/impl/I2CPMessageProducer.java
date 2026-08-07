@@ -111,12 +111,9 @@ class I2CPMessageProducer {
     }
 
     /**
-     * Update the bandwidth setting
+     *  Update bandwidth limits from session options.
      *
-     * @since 0.8.4
-     */
-    /**
-     * Update bandwidth limits.
+     *  @since 0.8.4
      */
     public void updateBandwidth(I2PSessionImpl session) {
         String max = session.getOptions().getProperty(PROP_MAX_BW);
