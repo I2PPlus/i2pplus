@@ -1018,14 +1018,16 @@ public final class ECIESAEADEngine {
      * @param ad may be null
      * @return success
      */
+    private static final ThreadLocal<ChaChaPolyCipherState> _chachaLocal = ThreadLocal.withInitial(ChaChaPolyCipherState::new);
+
     private boolean decryptAEADBlock(byte[] ad, byte[] encrypted, int offset, int encryptedLen, SessionKey key,
                                     long n) {
-        ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
+        ChaChaPolyCipherState chacha = _chachaLocal.get();
         chacha.initializeKey(key.getData(), 0);
         chacha.setNonce(n);
         try {
-            // this is safe to do in-place, it checks the mac before starting decryption
             chacha.decryptWithAd(ad, encrypted, offset, encrypted, offset, encryptedLen);
+            return true;
         } catch (GeneralSecurityException e) {
             if (_log.shouldWarn()) {
                 String failureType = e.getMessage();
@@ -1048,7 +1050,6 @@ public final class ECIESAEADEngine {
         } finally {
             chacha.destroy();
         }
-        return true;
     }
 
     //// end decrypt, start encrypt ////
@@ -1427,7 +1428,7 @@ public final class ECIESAEADEngine {
      * @return space will be left at beginning for ad (tag), null on error
      */
     private final byte[] encryptAEADBlock(byte[] ad, byte[] data, SessionKey key, long n) {
-        ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
+        ChaChaPolyCipherState chacha = _chachaLocal.get();
         chacha.initializeKey(key.getData(), 0);
         chacha.setNonce(n);
         int adsz = ad != null ? ad.length : 0;
