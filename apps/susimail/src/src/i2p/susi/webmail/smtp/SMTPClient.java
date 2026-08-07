@@ -49,10 +49,9 @@ public class SMTPClient {
     public static final long BINARY_MAX_SIZE = (long) ((DEFAULT_MAX_SIZE * 57.0d / 78) - 32*1024);
 
     private final Log _log;
+    /** Socket connection to the SMTP server. */
     private Socket socket;
-    /**
-     * error.
-     */
+    /** Error message from the last failed operation, or empty if none. */
     public String error;
     private String lastResponse;
     private boolean supportsPipelining;
