@@ -87,7 +87,9 @@ class I2CPMessageProducer {
     };
 
     /**
-     * I2CPMessageProducer.
+     *  Create a message producer for the given context.
+     *
+     *  @param context the router context
      */
     public I2CPMessageProducer(I2PAppContext context) {
         _context = context;
