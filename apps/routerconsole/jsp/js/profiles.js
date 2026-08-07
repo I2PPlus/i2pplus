@@ -14,11 +14,10 @@ import { refreshElements } from "./refreshElements.js";
   const bfoot = document.getElementById("sessionBanlistFooter");
   const ff = document.getElementById("floodfills");
   const ffprofiles = document.getElementById("ffProfiles");
-  const info = document.getElementById("profiles_overview");
   const main = document.getElementById("profiles");
   const pbody = document.getElementById("pbody");
   const plist = document.getElementById("profilelist");
-  const thresholds = document.getElementById("thresholds");
+  const rings = document.getElementById("profilestats");
   const sessionBans = document.getElementById("sbans");
   const uri = window.location.search.substring(1) !== "" ? window.location.pathname + "?" + window.location.search.substring(1) : window.location.pathname;
   let sorterFF = null;
@@ -95,15 +94,14 @@ import { refreshElements } from "./refreshElements.js";
   }
 
   /**
-   * Configures periodic element refresh for profiles overview, lists, floodfills, and bans.
+   * Configures periodic element refresh for profile rings, lists, floodfills, and bans.
    * @function setupRefreshes
    * @returns {void}
    */
   function setupRefreshes() {
-    // Refresh profiles overview and thresholds every 15 seconds, silently
-    if (info || thresholds) {
-      const targetSelectors = [info, thresholds].filter(el => el).map(el => `#${el.id}`).join(", ");
-      refreshElements(targetSelectors, uri, 15000, false, true, "profiles_overview,thresholds");
+    // Refresh the profile summary rings every 15 seconds, silently
+    if (rings) {
+      refreshElements("#profilestats", uri, 15000, false, true, "profilestats");
     }
 
     // Refresh profile list every 15 seconds; rows are diffed in a worker.

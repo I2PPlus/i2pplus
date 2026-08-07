@@ -79,9 +79,8 @@ class ProfileOrganizerRenderer {
             renderFloodfillRings(out, sel.order);
             renderFloodfill(out, sel.order);
         } else {
-            renderOverview(out, sel);
-            int[] counts = renderPbody(out, sel.order);
-            renderThresholds(out, counts);
+            renderProfileRings(out, sel);
+            renderPbody(out, sel.order);
             out.append("</div>\n");
             out.flush();
             if (mode == 0 && !_context.getBooleanProperty("routerconsole.advanced")) {renderDefinitions(out);}
@@ -108,23 +107,23 @@ class ProfileOrganizerRenderer {
             return;
         }
         ProfileSelection sel = loadProfiles(mode);
-        if ("profiles_overview".equals(id)) {renderOverview(out, sel);}
-        else if ("pbody".equals(id)) {renderPbody(out, sel.order);}
-        else if ("thresholds".equals(id)) {renderThresholds(out, countStats(sel.order));}
+        if ("pbody".equals(id)) {renderPbody(out, sel.order);}
+        else if ("profilestats".equals(id)) {renderProfileRings(out, sel);}
     }
 
     /**
-     *  The sorted peer set and the skip counters from loadProfiles().
+     *  The sorted peer set, hidden-stale count, and hide window from loadProfiles().
      *  @since 0.9.70+
      */
     private static class ProfileSelection {
         final Set<PeerProfile> order;
         final int older;
-        final int standard;
-        ProfileSelection(Set<PeerProfile> order, int older, int standard) {
+        /** Hide window for stale profiles, 0 for none */
+        final long hideWindow;
+        ProfileSelection(Set<PeerProfile> order, int older, long hideWindow) {
             this.order = order;
             this.older = older;
-            this.standard = standard;
+            this.hideWindow = hideWindow;
         }
     }
 
@@ -137,7 +136,7 @@ class ProfileOrganizerRenderer {
      *  displayed table manageable; mode 3 has no cutoff.
      *
      *  @param mode 0 = all; 1 = fast; 2 = high capacity (non-fast); 3 = floodfill
-     *  @return the sorted set and the skip counters (zero for mode 3)
+     *  @return the sorted set, the hidden-stale profile count, and the hide window (zero for mode 3)
      *  @since 0.9.70+
      */
     private ProfileSelection loadProfiles(int mode) {
@@ -145,7 +144,7 @@ class ProfileOrganizerRenderer {
         long now = _context.clock().now();
         Set<PeerProfile> order = new TreeSet<>(mode == 3 ? new ProfComparator() : new ProfileComparator());
         int older = 0;
-        int standard = 0;
+        long hideWindow = 0;
         if (mode != 3) {
             // Pass 1: collect the tier's candidates to size the cutoff
             List<PeerProfile> candidates = new ArrayList<>();
@@ -154,22 +153,14 @@ class ProfileOrganizerRenderer {
                 if (prof == null || !isValid(prof, peer, _organizer.getUs(), true)) {continue;}
                 if (mode == 1) {
                     // Fast tier only
-                    if (!_organizer.isFast(peer)) {
-                        standard++;
-                        continue;
-                    }
+                    if (!_organizer.isFast(peer)) {continue;}
                 } else if (mode == 2) {
                     // High Capacity (non-fast) only
-                    if (!_organizer.isHighCapacity(peer) || _organizer.isFast(peer)) {
-                        standard++;
-                        continue;
-                    }
+                    if (!_organizer.isHighCapacity(peer) || _organizer.isFast(peer)) {continue;}
                 }
                 candidates.add(prof);
             }
-            long hideWindow;
-            int size = candidates.size();
-            if (size >= 5000) {
+            int size = candidates.size();            if (size >= 5000) {
                 hideWindow = 10*60*1000;
             } else if (size >= 4000) {
                 hideWindow = 15*60*1000;
@@ -204,7 +195,7 @@ class ProfileOrganizerRenderer {
                 order.add(prof);
             }
         }
-        return new ProfileSelection(order, older, standard);
+        return new ProfileSelection(order, older, hideWindow);
     }
 
     /**
@@ -224,31 +215,6 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Render the profile count overview paragraph.
-     *
-     *  @param out the writer to render to
-     *  @param sel the selected profiles
-     *  @throws IOException if an I/O error occurs
-     *  @since 0.9.70+
-     */
-    private void renderOverview(Writer out, ProfileSelection sel) throws IOException {
-        StringBuilder buf = new StringBuilder(1024);
-        buf.append("<p id=profiles_overview class=infohelp>")
-           .append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", sel.order.size())).append('\n');
-        if (sel.older > 0) {
-            buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", sel.older)).append('\n');
-        }
-        if (sel.standard > 0) {
-            buf.append("<a href=\"/profiles\">")
-               .append(ngettext("Hiding {0} standard profile.","Hiding {0} standard profiles.", sel.standard))
-               .append("</a>\n");
-        }
-        buf.append(_t("Note that the profiler relies on sustained client tunnel usage to accurately profile peers.")).append("</p>");
-        out.append(buf);
-        out.flush();
-    }
-
-    /**
      *  Render the profile table body. In fragment mode only the bare
      *  {@code <tbody id=pbody>} is emitted, with a data-key per row for the
      *  worker-side row diff; the full page emits the wrapper table and thead
@@ -256,14 +222,10 @@ class ProfileOrganizerRenderer {
      *
      *  @param out the writer to render to
      *  @param order the selected profiles
-     *  @return {fast, reliable, integrated} profile counts, for the thresholds table
      *  @throws IOException if an I/O error occurs
      *  @since 0.9.70+
      */
-    private int[] renderPbody(Writer out, Set<PeerProfile> order) throws IOException {
-        int fast = 0;
-        int reliable = 0;
-        int integrated = 0;
+    private void renderPbody(Writer out, Set<PeerProfile> order) throws IOException {
         StringBuilder buf = new StringBuilder(32*1024);
 
         if (!_fragmentKeys) {
@@ -306,15 +268,11 @@ class ProfileOrganizerRenderer {
             boolean isIntegrated = false;
             if (_organizer.isFast(peer)) {
                 tier = 1;
-                fast++;
-                reliable++;
             } else if (_organizer.isHighCapacity(peer)) {
                 tier = 2;
-                reliable++;
             } else {tier = 3;}
             if (_organizer.isWellIntegrated(peer)) {
                 isIntegrated = true;
-                integrated++;
             }
             buf.append("<tr class=lazy");
             if (_fragmentKeys) {buf.append(" data-key=\"").append(peerB64, 0, KEY_LEN).append("\"");}
@@ -529,48 +487,126 @@ class ProfileOrganizerRenderer {
         if (!_fragmentKeys) {buf.append("</table></div>\n");}
         out.append(buf);
         out.flush();
-        return new int[] {fast, reliable, integrated};
     }
 
     /**
-     *  Render the threshold summary table.
+     *  Render the profile summary rings above the profile table: total profile
+     *  count, share displayed for the current mode, the display cutoff window,
+     *  tier counts, activity, and DB health.
      *
      *  @param out the writer to render to
-     *  @param counts {fast, reliable, integrated} profile counts
+     *  @param sel the selected profiles
      *  @throws IOException if an I/O error occurs
      *  @since 0.9.70+
      */
-    private void renderThresholds(Writer out, int[] counts) throws IOException {
-        int fast = counts[0];
-        int reliable = counts[1];
-        int integrated = counts[2];
-        StringBuilder buf = new StringBuilder(2048);
-        buf.append("<div id=peer_thresholds class=wrap>\n<h3 class=tabletitle>")
-           .append(_t("Thresholds"))
-           .append("</h3>\n<table id=thresholds>\n<thead><tr><th><b>")
-           .append(_t("Speed"))
-           .append(": </b>");
-        double speed = Math.max(1, _organizer.getSpeedThreshold());
-        if (speed < -10240) {speed += 10240;}
-        else if (speed < 0) {speed = 0;}
-        if (speed > 1025) {
-            speed = speed / 1024;
-            buf.append((int)speed).append(' ' ).append("KB");
-        } else {buf.append((int)speed).append(' ' ).append("B");}
-        buf.append("ps</th><th><b>").append(_t("Capacity")).append(": </b>");
-        double capThresh = Math.max(1, Math.round(_organizer.getCapacityThreshold()));
-        double integThresh = Math.max(1, _organizer.getIntegrationThreshold());
-        buf.append((int)Math.round(capThresh)).append(' ').append(_t("tunnels per hour")).append("</th><th><b>")
-           .append(_t("Integration")).append(": </b>").append((int)Math.round(integThresh)).append(' ');
-        if (capThresh > 0 && capThresh < 2) {buf.append(_t("peer"));}
-        else {buf.append(_t("peers"));}
-        buf.append("</th></tr></thead>\n<tbody>\n<tr><td>")
-           .append(ngettext("{0} fast peer", "{0} fast peers", fast))
-           .append("</td><td>")
-           .append(ngettext("{0} high capacity peer", "{0} high capacity peers", reliable))
-           .append("</td><td>")
-           .append(ngettext("{0} integrated peer", "{0} integrated peers", integrated))
-           .append("</td></tr>\n</tbody>\n</table>\n</div>\n");
+    private void renderProfileRings(Writer out, ProfileSelection sel) throws IOException {
+        Set<PeerProfile> order = sel.order;
+        int known = order.size() + sel.older;
+        int fast = 0;
+        int reliable = 0;
+        long lookupsGood = 0;
+        long lookupsBad = 0;
+        int storeGood = 0;
+        int storeBad = 0;
+        for (PeerProfile prof : order) {
+            if (_organizer.isFast(prof.getPeer())) {
+                fast++;
+                reliable++;
+            } else if (_organizer.isHighCapacity(prof.getPeer())) {
+                reliable++;
+            }
+            DBHistory dbh = prof.getDBHistory();
+            if (dbh != null) {
+                lookupsGood += dbh.getSuccessfulLookups();
+                lookupsBad += dbh.getFailedLookups();
+                long goodStore = dbh.getLastStoreSuccessful();
+                long badStore = dbh.getLastStoreFailed();
+                if (goodStore > 0 || badStore > 0) {
+                    if (goodStore > badStore) {storeGood++;}
+                    else {storeBad++;}
+                }
+            }
+        }
+        StringBuilder buf = new StringBuilder(4096);
+        buf.append("<div class=ring-grid id=profilestats>\n");
+
+        // Total profiles: everything in memory, loaded from the store on disk
+        int total = _organizer.selectAllPeers().size();
+        double totalScore = total > 0 ? Math.min(total / 2000.0, 1.0) : -1;
+        buf.append(RingRenderer.renderRingCell(totalScore, _t("Total"), String.valueOf(total),
+                  new String[]{_t("Total profiles, on disk and in memory")}, RingRenderer.MODE_NEUTRAL, null));
+
+        // Share of total profiles shown for this page mode
+        if (total > 0) {
+            double shown = (double) order.size() / total;
+            buf.append(RingRenderer.renderRingCell(shown, _t("Displayed"), pct(shown),
+                      new String[]{Messages.getString("Showing {0} of {1} profiles", order.size(), total, _context),
+                                   ngettext("{0} stale profile hidden", "{0} stale profiles hidden", sel.older)},
+                      RingRenderer.MODE_ACTIVITY, null));
+        } else {
+            buf.append(RingRenderer.renderRingCell(-1, _t("Displayed"), "\u2014",
+                      new String[]{_t("Share of total profiles shown")},
+                      RingRenderer.MODE_ACTIVITY, null));
+        }
+
+        // Display cutoff: stale profiles not heard from within this window are hidden
+        double windowScore = sel.hideWindow > 0 ? Math.min(sel.hideWindow / (4*60*60*1000.0), 1.0) : -1;
+        buf.append(RingRenderer.renderRingCell(windowScore, _t("Window"),
+                  sel.hideWindow > 0 ? DataHelper.formatDuration(sel.hideWindow) : "\u2014",
+                  new String[]{ngettext("{0} stale profile hidden", "{0} stale profiles hidden", sel.older)},
+                  RingRenderer.MODE_NEUTRAL, null));
+
+        // Fast tier
+        double fastScore = known > 0 ? (double) fast / known : -1;
+        buf.append(RingRenderer.renderRingCell(fastScore, _t("Fast"), String.valueOf(fast),
+                  new String[]{ngettext("{0} fast peer", "{0} fast peers", fast)},
+                  RingRenderer.MODE_NEUTRAL, null));
+
+        // High capacity tier (includes fast peers)
+        double capScore = known > 0 ? (double) reliable / known : -1;
+        buf.append(RingRenderer.renderRingCell(capScore, _t("High Cap"), String.valueOf(reliable),
+                  new String[]{ngettext("{0} high capacity peer", "{0} high capacity peers", reliable)},
+                  RingRenderer.MODE_NEUTRAL, null));
+
+        // Active share of known profiles
+        if (known > 0) {
+            double active = (double) order.size() / known;
+            buf.append(RingRenderer.renderRingCell(active, _t("Active"), pct(active),
+                      new String[]{_t("Heard from within the display cutoff")},
+                      RingRenderer.MODE_ACTIVITY, null));
+        } else {
+            buf.append(RingRenderer.renderRingCell(-1, _t("Active"), "\u2014",
+                      new String[]{_t("Heard from within the display cutoff")},
+                      RingRenderer.MODE_ACTIVITY, null));
+        }
+
+        // Lookup health
+        long lookupTotal = lookupsGood + lookupsBad;
+        if (lookupTotal > 0) {
+            double good = (double) lookupsGood / lookupTotal;
+            buf.append(RingRenderer.renderRingCell(good, _t("Lookups"), pct(good),
+                      new String[]{_t("Lookup success rate")},
+                      RingRenderer.MODE_HEALTH, null));
+        } else {
+            buf.append(RingRenderer.renderRingCell(-1, _t("Lookups"), "\u2014",
+                      new String[]{_t("Lookup success rate")},
+                      RingRenderer.MODE_HEALTH, null));
+        }
+
+        // Store health
+        int storeTotal = storeGood + storeBad;
+        if (storeTotal > 0) {
+            double good = (double) storeGood / storeTotal;
+            buf.append(RingRenderer.renderRingCell(good, _t("Stores"), pct(good),
+                      new String[]{_t("Store success rate")},
+                      RingRenderer.MODE_HEALTH, null));
+        } else {
+            buf.append(RingRenderer.renderRingCell(-1, _t("Stores"), "\u2014",
+                      new String[]{_t("Store success rate")},
+                      RingRenderer.MODE_HEALTH, null));
+        }
+
+        buf.append("</div>\n");
         out.append(buf);
         out.flush();
     }
@@ -659,28 +695,6 @@ class ProfileOrganizerRenderer {
            .append("</td></tr>\n</tbody>\n</table></div>\n");
         out.append(buf);
         out.flush();
-    }
-
-    /**
-     *  Count fast, high-capacity, and integrated peers for the thresholds
-     *  table without rendering rows, used by the fragment path when only
-     *  the thresholds element is requested.
-     *
-     *  @param order the selected profiles
-     *  @return {fast, reliable, integrated} profile counts
-     *  @since 0.9.70+
-     */
-    private int[] countStats(Set<PeerProfile> order) {
-        int fast = 0;
-        int reliable = 0;
-        int integrated = 0;
-        for (PeerProfile prof : order) {
-            Hash peer = prof.getPeer();
-            if (_organizer.isFast(peer)) {fast++; reliable++;}
-            else if (_organizer.isHighCapacity(peer)) {reliable++;}
-            if (_organizer.isWellIntegrated(peer)) {integrated++;}
-        }
-        return new int[] {fast, reliable, integrated};
     }
 
     /**
