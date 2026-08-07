@@ -76,7 +76,7 @@ public class Folder<O extends Object> {
 	 * @param currentPage the page number to set (1-based)
 	 */
 	public synchronized void setCurrentPage(int currentPage) {
-		if( currentPage >= 1 && currentPage <= pages )
+		if (  currentPage >= 1 && currentPage <= pages )
 			this.currentPage = currentPage;
 	}
 
@@ -115,7 +115,7 @@ public class Folder<O extends Object> {
 	 * @param pageSize the new page size
 	 */
 	public synchronized void setPageSize(int pageSize) {
-		if( pageSize > 0 )
+		if (  pageSize > 0 )
 			this.pageSize = pageSize;
 		update();
 	}
@@ -124,16 +124,12 @@ public class Folder<O extends Object> {
 	 * Recalculates variables.
 	 */
 	private void update() {
-		if( elements != null ) {
+		if (elements != null) {
 			pages = elements.length / getPageSize();
-			if( pages * getPageSize() < elements.length )
-				pages++;
-			if( pages < 1 )
-				pages = 1;
-			if( currentPage > pages )
-				currentPage = pages;
-		}
-		else {
+			if (pages * getPageSize() < elements.length) {pages++;}
+			if (pages < 1) {pages = 1;}
+			if (currentPage > pages) {currentPage = pages;}
+		} else {
 			pages = 1;
 			currentPage = 1;
 		}
@@ -258,7 +254,7 @@ public class Folder<O extends Object> {
 	public synchronized Iterator<O> currentPageIterator()
 	{
 		ArrayList<O> list = new ArrayList<>();
-		if( elements != null ) {
+		if (  elements != null ) {
 			int pageSize = getPageSize();
 			int offset = ( currentPage - 1 ) * pageSize;
 			for( int i = 0; i < pageSize && offset >= 0 && offset < elements.length; i++ ) {
@@ -275,7 +271,7 @@ public class Folder<O extends Object> {
 	public synchronized void nextPage()
 	{
 		currentPage++;
-		if( currentPage > pages )
+		if (  currentPage > pages )
 			currentPage = pages;
 	}
 
@@ -285,7 +281,7 @@ public class Folder<O extends Object> {
 	public synchronized void previousPage()
 	{
 		currentPage--;
-		if( currentPage < 1 )
+		if (  currentPage < 1 )
 			currentPage = 1;
 	}
 
@@ -388,9 +384,9 @@ public class Folder<O extends Object> {
 	 */
 	private int getIndexOf( O element )
 	{
-		if( elements != null ) {
+		if (  elements != null ) {
 			for( int i = 0; i < elements.length; i++ )
-				if( elements[i].equals( element ) )
+				if (  elements[i].equals( element ) )
 					return i;
 		}
 		return -1;
@@ -408,9 +404,9 @@ public class Folder<O extends Object> {
 
 		int i = getIndexOf( element );
 
-		if( i != -1 && elements != null ) {
+		if (  i != -1 && elements != null ) {
 			i++;
-			if( i >= 0 && i < elements.length )
+			if (  i >= 0 && i < elements.length )
 				result = elements[i];
 		}
 		return result;
@@ -428,9 +424,9 @@ public class Folder<O extends Object> {
 
 		int i = getIndexOf( element );
 
-		if( i != -1 && elements != null ) {
+		if (  i != -1 && elements != null ) {
 			i--;
-			if( i >= 0 && i < elements.length )
+			if (  i >= 0 && i < elements.length )
 				result = elements[i];
 		}
 		return result;
@@ -445,7 +441,7 @@ public class Folder<O extends Object> {
 	{
 		O result = null;
 
-		if( elements != null ) {
+		if (  elements != null ) {
 			result = elements[i];
 		}
 		return result;
@@ -479,7 +475,7 @@ public class Folder<O extends Object> {
 	 */
 	public synchronized boolean isLastElement( O element )
 	{
-		if( elements == null )
+		if (  elements == null )
 			return false;
 		return elements[elements.length - 1].equals( element );
 	}
@@ -492,7 +488,7 @@ public class Folder<O extends Object> {
 	 */
 	public synchronized boolean isFirstElement( O element )
 	{
-		if( elements == null )
+		if (  elements == null )
 			return false;
 		return elements[0].equals( element );
 	}
