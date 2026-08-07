@@ -24,6 +24,7 @@ import net.i2p.stat.RateConstants;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.TunnelId;
 import net.i2p.router.CommSystemFacade;
+import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.Tuner;
@@ -219,17 +220,16 @@ public class TunnelPool {
      * tunnel lifetime. The tunnel itself continues to process messages; only the
      * cached LeaseSet on the requesting side expires earlier, triggering a re-fetch.
      *
-     * The default is auto-computed as (i2p.netdb.republishInterval + 60s) to ensure
-     * the lease outlives the RepublishLeaseSetJob backup cycle, preventing a gap
-     * where peers have no valid LS.  With the default republish interval of 5 min
-     * this gives a 6-minute lease &#x2014; plenty of margin over the pool&#x2019;s 2-minute
-     * refresh cycle.  Set &quot;i2p.tunnel.leaseMaxDuration&quot; explicitly to override.
+     * The default is the full tunnel lifetime (10 minutes) plus CLOCK_FUDGE_FACTOR,
+     * matching the stock lease expiry — peers hold a valid LeaseSet for the whole
+     * tunnel life, and the republish cycle (default 5 min) re-floods well before
+     * the lease dies.  Set &quot;i2p.tunnel.leaseMaxDuration&quot; explicitly to override.
      *
      * @param ctx the router context
      * @return the maximum lease duration in milliseconds
      */
     static long getLeaseMaxDuration(RouterContext ctx) {
-        long autoDefault = ctx.getProperty("i2p.netdb.republishInterval", 5L * 60 * 1000) + 60L * 1000;
+        long autoDefault = TunnelPoolSettings.DEFAULT_DURATION + Router.CLOCK_FUDGE_FACTOR;
         return ctx.getProperty("i2p.tunnel.leaseMaxDuration", autoDefault);
     }
 
@@ -2780,10 +2780,13 @@ public class TunnelPool {
         int effectiveTarget = Math.min(target + _consecutiveEmergencies + failureBuffer,
                                        target + MAX_EMERGENCY_BOOST + failureBuffer);
         long now = _context.clock().now();
-        long preBuildThreshold = now + 5L * 60 * 1000;
+        // Build replacements 3 minutes before the existing tunnels expire, so
+        // fresh builds (10-40s) complete well before the old tunnels die and
+        // the pool never holds a LeaseSet whose leases are about to expire.
+        long preBuildThreshold = now + 3L * 60 * 1000;
 
-        int safeActive = 0;  // tunnels with > 5min remaining
-        int nearExpiry = 0;  // tunnels with <= 5min remaining but not yet expired
+        int safeActive = 0;  // tunnels with > 3min remaining
+        int nearExpiry = 0;  // tunnels with <= 3min remaining but not yet expired
         int expiredZombies = 0;  // tunnels past expiration still in pool
         int untestedCount = 0;  // tunnels awaiting first test — in pool, just unproven
         int staleUntestedCount = 0;  // UNTESTED tunnels the test queue never reached
@@ -2809,7 +2812,7 @@ public class TunnelPool {
                 // Count UNTESTED — they're in the pool awaiting test.
                 if (t.getTestStatus() == TunnelTestStatus.UNTESTED) {
                     // A tunnel still UNTESTED within the pre-build window
-                    // (expiring in < 5 min) is stuck — the test queue never
+                    // (expiring in < 3 min) is stuck — the test queue never
                     // reached it (saturated) or it was abandoned after a pool
                     // reset.  It can never become a usable lease, so prune it:
                     // otherwise it blocks EMERGENCY (untestedCount > 0) and
@@ -2847,7 +2850,7 @@ public class TunnelPool {
         }
 
         // Proactive pre-building: if safeActive is below target AND tunnels
-        // are expiring within 5 min, build replacements NOW so they're ready
+        // are expiring within 3 min, build replacements NOW so they're ready
         // before the old tunnels expire.  This prevents synchronized expiry
         // cascades where all tunnels expire at once, leaving the pool empty
         // while new builds queue (inProgress blocks EMERGENCY).
