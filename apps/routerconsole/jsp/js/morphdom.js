@@ -4,6 +4,10 @@
  * @description morphdom provides efficient DOM updates by diffing and patching changes.
  * @see {@link https://github.com/patrick-steele-idem/morphdom}
  * @license MIT
+ *
+ * This is an I2P+ fork.  Table-section handling (thead/tbody/tfoot matched by
+ * tag name, never moved) was added to prevent the browser HTML parser from
+ * restructuring tables on refresh, which detaches <tfoot> and breaks colspan.
  */
 'use strict';
 
@@ -75,6 +79,32 @@ function compareNodeNames(fromEl, toEl) {
     return toNodeName === fromNodeName.toUpperCase();
   }
   return false;
+}
+
+/**
+ * Whether a node is a table-section element (thead/tbody/tfoot).
+ * @param {Node} node - The node to check.
+ * @returns {boolean} True if the node is a table section.
+ */
+function isTableSection(node) {
+  if (!node || node.nodeType !== ELEMENT_NODE) { return false; }
+  var name = node.nodeName;
+  return name === "THEAD" || name === "TBODY" || name === "TFOOT";
+}
+
+/**
+ * Find a table-section element by tag name within a table.
+ * @param {Element} fromEl - The live table element.
+ * @param {string} tagName - The section tag name to find.
+ * @returns {Element|null} The matching element, or null.
+ */
+function findTableSection(fromEl, tagName) {
+  var child = fromEl.firstChild;
+  while (child) {
+    if (child.nodeType === ELEMENT_NODE && child.nodeName === tagName) { return child; }
+    child = child.nextSibling;
+  }
+  return null;
 }
 
 /**
@@ -380,6 +410,23 @@ function morphdomFactory(morphAttrs) {
         var toNextSibling = curToNodeChild.nextSibling;
         var curToNodeKey = getNodeKey(curToNodeChild);
 
+        // Table sections (thead/tbody/tfoot) must be matched by tag name and
+        // updated in place.  Moving them via insertBefore/appendChild triggers
+        // the browser HTML parser to restructure the table, detaching the
+        // section and breaking colspan/layout (e.g. tfoot bandwidth footer).
+        if (fromEl.nodeName === "TABLE" && isTableSection(curToNodeChild)) {
+          var existing = findTableSection(fromEl, curToNodeChild.nodeName);
+          if (existing) { morphEl(existing, curToNodeChild); }
+          // Advance curFromNodeChild past every table section — they're all
+          // handled by tag name above, so the general loop must not touch them
+          // (or cleanupFromEl would remove them as leftover children).
+          while (curFromNodeChild && isTableSection(curFromNodeChild)) {
+            curFromNodeChild = curFromNodeChild.nextSibling;
+          }
+          curToNodeChild = toNextSibling;
+          continue outer;
+        }
+
         // Whitespace-only text nodes never render outside pre-like contexts,
         // and the VDOM side may split or merge them differently than the
         // live DOM (parsers differ in text-node merging). Skip them so they
@@ -393,6 +440,13 @@ function morphdomFactory(morphAttrs) {
           var fromNextSibling = curFromNodeChild.nextSibling;
           var curFromNodeKey = getNodeKey(curFromNodeChild);
           var curFromNodeType = curFromNodeChild.nodeType;
+
+          // Skip table sections in the source — they're matched by tag name
+          // above and must not be removed as "incompatible" children.
+          if (fromEl.nodeName === "TABLE" && isTableSection(curFromNodeChild)) {
+            curFromNodeChild = fromNextSibling;
+            continue;
+          }
 
           var isCompatible = undefined;
 

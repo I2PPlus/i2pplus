@@ -1,12 +1,13 @@
 2026-08-07 dr|z3d
-  * i2ptunnel: escape HTML in tunnel config getters to prevent stored XSS;
+  * I2PTunnel: Escape HTML in tunnel config getters to prevent stored XSS;
     reject absolute and traversal paths in setPrivKeyFile
-  * core: return copy from SessionTag.getData; add volatile to LogManager
+  * Core: Return copy from SessionTag.getData; add volatile to LogManager
     and LogWriter fields; add package-private accumulator API to
     Ed25519FieldElement for reuse across operations
-  * router: reuse ChaChaPolyCipherState via ThreadLocal on decrypt path;
+  * Router: Reuse ChaChaPolyCipherState via ThreadLocal on decrypt path;
     add GarlicClovePool to reduce per-clove allocation in hot loop
-  * susimail: skip folded headers without colon in debug header rendering
+  * SusiMail: Skip folded headers without colon in debug header rendering
+  * Console: Fix handling of tfoot elements in morphdom.js
 
 2026-08-06 dr|z3d
   * Console:
