@@ -580,7 +580,7 @@ public class GeneralHelper {
             TunnelController.TYPE_STREAMR_CLIENT.equals(tun.getType())) {
             rv = tun.getTargetDestination();
         } else {rv = tun.getProxyList();}
-        return rv != null ? rv : "";
+        return rv != null ? DataHelper.escapeHTML(rv) : "";
     }
 
     /**
@@ -1042,7 +1042,7 @@ public class GeneralHelper {
      *  @return the key, or empty string if not set
      */
     public String getEncryptKey(int tunnel) {
-        return getProperty(tunnel, "i2cp.leaseSetKey", "");
+        return DataHelper.escapeHTML(getProperty(tunnel, "i2cp.leaseSetKey", ""));
     }
 
     /**
@@ -1064,7 +1064,7 @@ public class GeneralHelper {
      *  @return the access list entries, one per line
      */
     public String getAccessList(int tunnel) {
-        return getProperty(tunnel, "i2cp.accessList", "").replace(",", "\n");
+        return DataHelper.escapeHTML(getProperty(tunnel, "i2cp.accessList", "").replace(",", "\n"));
     }
 
     /**
@@ -1079,7 +1079,7 @@ public class GeneralHelper {
         if (tunnelController != null) {
             String filter = tunnelController.getFilter();
             if (filter != null)
-                return filter;
+                return DataHelper.escapeHTML(filter);
         }
         return "";
     }
@@ -1091,8 +1091,8 @@ public class GeneralHelper {
      *  @return the jump server list, newline-delimited
      */
     public String getJumpList(int tunnel) {
-        return getProperty(tunnel, I2PTunnelHTTPClient.PROP_JUMP_SERVERS,
-                           I2PTunnelHTTPClient.DEFAULT_JUMP_SERVERS).replace(",", "\n");
+        return DataHelper.escapeHTML(getProperty(tunnel, I2PTunnelHTTPClient.PROP_JUMP_SERVERS,
+                           I2PTunnelHTTPClient.DEFAULT_JUMP_SERVERS).replace(",", "\n"));
     }
 
     /**
@@ -1250,7 +1250,7 @@ public class GeneralHelper {
      *  @return comma-separated SSL outproxy list
      */
     public String getSslProxies(int tunnel) {
-        return getProperty(tunnel, I2PTunnelHTTPClient.PROP_SSL_OUTPROXIES, "");
+        return DataHelper.escapeHTML(getProperty(tunnel, I2PTunnelHTTPClient.PROP_SSL_OUTPROXIES, ""));
     }
 
     /**
@@ -1449,7 +1449,7 @@ public class GeneralHelper {
      *  @since 0.9.25
      */
     public String getUserAgents(int tunnel) {
-        return getProperty(tunnel, I2PTunnelHTTPServer.OPT_USER_AGENTS, "");
+        return DataHelper.escapeHTML(getProperty(tunnel, I2PTunnelHTTPServer.OPT_USER_AGENTS, ""));
     }
 
     /**
