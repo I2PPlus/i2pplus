@@ -2085,7 +2085,7 @@ public class WebMail extends HttpServlet {
                 // get new sessionObject so we can put the nonce in it below, otherwise
                 // user will get nonce error on login
                 sessionObject = getSessionObject( httpSession );
-                sessionObject.themePath = "themes/" + theme + '/';
+                sessionObject.themePath = "/themes/susimail/" + theme + '/';
                 sessionObject.imgPath = sessionObject.themePath + "images/";
                 sessionObject.isMobile = isMobile;
                 // and now we're synched inside the old sessionObject, not the new one, oh well
