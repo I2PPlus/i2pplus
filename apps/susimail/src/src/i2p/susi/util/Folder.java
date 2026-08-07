@@ -128,6 +128,8 @@ public class Folder<O extends Object> {
 			pages = elements.length / getPageSize();
 			if( pages * getPageSize() < elements.length )
 				pages++;
+			if( pages < 1 )
+				pages = 1;
 			if( currentPage > pages )
 				currentPage = pages;
 		}

@@ -3614,7 +3614,7 @@ public class WebMail extends HttpServlet {
                     if (j < mail.to.length - 1) {buf.append(", ");}
                     if (buf.length() > 45) {break;}
                 }
-                String to = escapeHtml(buf.toString().replace("@.*", ""));
+                String to = escapeHtml(buf.toString().replaceAll("@.*", ""));
                 if (to.contains("(")) {
                     int index = to.indexOf("(");
                     to = to.substring(0, index);
