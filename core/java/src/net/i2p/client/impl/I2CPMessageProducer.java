@@ -59,6 +59,7 @@ class I2CPMessageProducer {
     private volatile int _sendPeriodBytes;
     private volatile long _sendPeriodBeginTime;
     private final ReentrantLock _lock;
+    private final java.util.concurrent.locks.Condition _throttleCondition;
     private static final String PROP_MAX_BW = "i2cp.outboundBytesPerSecond";
 
     /** see ConnectionOptions in streaming  - MTU + streaming overhead + gzip overhead */
@@ -92,6 +93,7 @@ class I2CPMessageProducer {
         _context = context;
         _log = context.logManager().getLog(I2CPMessageProducer.class);
         _lock = new ReentrantLock(true);
+        _throttleCondition = _lock.newCondition();
         context.statManager()
                 .createRateStat(
                         "client.sendThrottled",
@@ -392,7 +394,7 @@ class I2CPMessageProducer {
                     _log.debug("Throttled " + len + " bytes, wait #" + waitCount + ' ' + (1000 - period)
                             + "ms" /*, new Exception()*/);
                 try {
-                    _lock.newCondition().await(1000 - period, TimeUnit.MILLISECONDS);
+                    _throttleCondition.await(1000 - period, TimeUnit.MILLISECONDS);
                 } catch (InterruptedException ie) { /* ignored */ }
             }
         } finally {
