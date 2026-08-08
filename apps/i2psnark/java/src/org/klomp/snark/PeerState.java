@@ -77,8 +77,11 @@ class PeerState implements DataLoader {
     /** Time of the last inbound request from the peer */
     private long _lastRequestTime;
 
-    /** Anti-snub: unchoked peers that send no request for this long are snubbing */
-    private static final long SNUB_TIMEOUT = 3 * 60 * 1000;
+    /**
+     * Anti-snub: unchoked peers that send no request for this long are snubbing.
+     * Measured from the last request, or from the last unchoke we sent.
+     */
+    private static final long SNUB_TIMEOUT = 60 * 1000;
 
     /** The tail (NOT the head) of the request queue. */
     private Request lastRequest;
@@ -546,7 +549,8 @@ class PeerState implements DataLoader {
 
     /**
      * True if the peer is snubbing us: it is unchoked by us and interested but has sent no request
-     * for SNUB_TIMEOUT, and nothing is queued to send it. Generous timeout to tolerate I2P latency.
+     * for SNUB_TIMEOUT, and nothing is queued to send it. The clock restarts when we unchoke the
+     * peer, so a freshly unchoked peer always gets the full window to respond.
      *
      * @return true if the peer is snubbing
      * @since 0.9.71+
@@ -1525,6 +1529,11 @@ class PeerState implements DataLoader {
             choking = choke;
             out.sendChoke(choke);
             lastChokeSendTime = now;
+            if (!choke) {
+                // Restart the snub clock: the peer gets a full SNUB_TIMEOUT from the moment
+                // we unchoke it, so a just-unchoked peer is never re-choked before it can respond
+                _lastRequestTime = now;
+            }
         }
     }
 
