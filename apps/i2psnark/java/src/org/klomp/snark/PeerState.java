@@ -1025,6 +1025,10 @@ class PeerState implements DataLoader {
             if (getRequestedPieces().contains(Integer.valueOf(piece))) {
                 return; // already in flight
             }
+            if (outstandingRequests.size() >= currentMaxPipeline) {
+                // Pipeline full, drop the one-shot hint; the pump will re-fill it
+                return;
+            }
             PartialPiece pp = listener.getPartialPiece(peer, piece);
             if (pp == null) {
                 return; // not wanted or already being fetched elsewhere
