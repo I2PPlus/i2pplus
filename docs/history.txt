@@ -1,4 +1,7 @@
 2026-08-08 dr|z3d
+  * I2PSnark: The session no longer shuts down after all torrents have
+    been idle for a while, so the DHT node cache and tunnel state survive
+    pauses and torrents resume without waiting for a fresh bootstrap
   * I2PSnark: Peer exchange peers handed to the connection pool are
     dropped from the pending list again, so a long-running torrent no
     longer accumulates stale peer addresses that are never retried

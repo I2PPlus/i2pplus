@@ -20,12 +20,10 @@ import net.i2p.util.SimpleTimer2;
  */
 class IdleChecker extends SimpleTimer2.TimedEvent {
 
-    private final SnarkManager _mgr;
     private final I2PSnarkUtil _util;
     private final PeerCoordinatorSet _pcs;
     private final Log _log;
     private int _consec;
-    private int _consecNotRunning;
     private boolean _isIdle;
     private String _lastInbound = DEFAULT_QTY;
     private String _lastOutbound = DEFAULT_QTY;
@@ -33,7 +31,6 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
 
     private static final long CHECK_TIME = (long) 63 * 1000;
     private static final int MAX_CONSEC_IDLE = 4;
-    private static final int MAX_CONSEC_NOT_RUNNING = 20;
     private static final String DEFAULT_QTY = "2";
 
     /** Caller must schedule */
@@ -41,7 +38,6 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         super(mgr.util().getContext().simpleTimer2());
         _util = mgr.util();
         _log = _util.getContext().logManager().getLog(IdleChecker.class);
-        _mgr = mgr;
         _pcs = pcs;
     }
 
@@ -54,29 +50,10 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
 
     private void locked_timeReached() {
         if (_util.connected()) {
-            boolean torrentRunning = false;
             int peerCount = 0;
             for (PeerCoordinator pc : _pcs) {
                 if (!pc.halted()) {
-                    torrentRunning = true;
                     peerCount += pc.getPeers();
-                }
-            }
-
-            if (torrentRunning) {
-                _consecNotRunning = 0;
-            } else {
-                if (_consecNotRunning++ >= MAX_CONSEC_NOT_RUNNING) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("[I2PSnark] Closing tunnels on idle...");
-                    }
-                    _util.disconnect();
-                    _mgr.addMessage(
-                            _util.getString("No more torrents running.")
-                                    + ' '
-                                    + _util.getString("I2P tunnel closed."));
-                    schedule(3 * CHECK_TIME);
-                    return;
                 }
             }
 
@@ -94,7 +71,6 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         } else {
             _isIdle = false;
             _consec = 0;
-            _consecNotRunning = 0;
             _lastInbound = DEFAULT_QTY;
             _lastOutbound = DEFAULT_QTY;
         }
