@@ -2137,9 +2137,25 @@ public class TunnelPool {
                 force = true;
             }
             if (!force && now - _lastRefreshTime < getRefreshThrottle(_context)) {
-                // Instead of dropping, schedule a deferred refresh.
-                scheduleDeferredRefresh();
-                return;
+                // If the currently published LeaseSet is missing (already expired)
+                // or will expire before the deferred refresh fires, throttling
+                // would leave the network with a stale/expired LeaseSet for the
+                // rest of the throttle window.  Force the refresh now instead so
+                // the new LeaseSet is pushed to the republish queue immediately.
+                // lookupLeaseSetLocally() returns null once the published
+                // LeaseSet expires, so null means it is already stale.
+                LeaseSet published = _context.netDb().lookupLeaseSetLocally(_settings.getDestination());
+                if (published != null &&
+                    published.getLatestLeaseDate() - now >= getRefreshThrottle(_context)) {
+                    // Published LeaseSet healthy and outlasting the defer window.
+                    // Instead of dropping, schedule a deferred refresh.
+                    scheduleDeferredRefresh();
+                    return;
+                }
+                if (_log.shouldDebug()) {
+                    _log.debug(toString() + " -> Published LeaseSet missing or expiring within throttle, forcing refresh now");
+                }
+                force = true;
             }
             _lastRefreshTime = now;
             if (_log.shouldDebug()) {
