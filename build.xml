@@ -181,6 +181,8 @@
     <echo message="  javadoc-java8                                Generate javadoc with Java 8 using custom theme and javascript &#10140; ./dist/javadoc"/>
     <echo message="  javadoc-test                                 Javadocs for unit test classes &#10140; ${build.dir}/javadoc-test"/>
     <echo message="  javadoc-zip                                  Create javadocs zip for project &#10140; ./dist/javadoc.zip"/>
+    <echo message="  devdocs                                      Build consolidated developer documentation (READMEs + package.html) &#10140; ./dist/devdocs/"/>
+    <echo message="  devdocs-zip                                  Package dev docs as zip &#10140; ./dist/devdocs.zip"/>
 
     <echo message="  jsdoc                                        Create jsdoc with docdash template (requires npm) &#10140; ./dist/jsdoc"/>
     <echo message="  jsdoc-minami                                 Create jsdoc with minami template (requires npm) &#10140; ./dist/jsdoc"/>
@@ -1575,6 +1577,26 @@
 
   <target name="javadoc-zip" depends="javadoc">
     <zip destfile="dist/javadoc.zip" basedir="dist" level="9" includes="javadoc\**"/>
+  </target>
+
+  <target name="devdocs" description="Build consolidated developer documentation (README.md + package.html) &#10140; ./dist/devdocs/ (see mainline javadoc for API reference)">
+    <exec executable="python3" failonerror="true">
+      <arg value="tools/scripts/build-devdocs.py"/>
+    </exec>
+    <if>
+      <isset property="htmlmin.present"/>
+      <then>
+        <exec executable="sh" failonerror="false">
+          <arg value="-c"/>
+          <arg value="minify -q -r dist/devdocs -o dist"/>
+        </exec>
+      </then>
+    </if>
+    <echo message="Dev docs: dist/devdocs/index.html"/>
+  </target>
+
+  <target name="devdocs-zip" depends="devdocs" description="Package dev docs as zip &#10140; ./dist/devdocs.zip">
+    <zip destfile="dist/devdocs.zip" basedir="dist" level="9" includes="devdocs\**"/>
   </target>
 
   <!-- Also see javadoc-java8 target below -->
