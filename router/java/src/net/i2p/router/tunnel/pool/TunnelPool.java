@@ -141,14 +141,28 @@ public class TunnelPool {
     }
 
     /**
-     * Tunnel lifetime from config or default (10 minutes).
-     * Tunable via i2p.tunnel.lifetime (default: 600000).
+     *  Tunnel lifetime from config or default (10 minutes).
+     *  Tunable via i2p.tunnel.lifetime (default: 600000).
      *
-     * @param ctx the router context
-     * @return the tunnel lifetime in milliseconds
+     *  @param ctx the router context
+     *  @return the tunnel lifetime in milliseconds
      */
-    static int getTunnelLifetime(RouterContext ctx) {
+    public static int getTunnelLifetime(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.lifetime", 10 * 60 * 1000);
+    }
+
+    /**
+     *  A lease is "fresh" enough to re-mint while it has at least this much
+     *  remaining: two minutes less than the tunnel lifetime, so a lease born
+     *  in the current build wave still spans most of a full tunnel life.
+     *  Scales with i2p.tunnel.lifetime so short-lifetime configs aren't
+     *  stuck deferring forever.
+     *
+     *  @param ctx the router context
+     *  @return the fresh window in ms
+     */
+    public static long getFreshLeaseWindow(RouterContext ctx) {
+        return Math.max(2L * 60 * 1000, getTunnelLifetime(ctx) - 2L * 60 * 1000);
     }
 
     /**
@@ -3055,6 +3069,71 @@ public class TunnelPool {
                 }
             }
         }
+        } finally { _ensuringTunnels.set(false); }
+    }
+
+    /**
+     *  Request new inbound tunnels so the pool holds the target count with at
+     *  least {@link #getFreshLeaseWindow(RouterContext)} remaining.  Called by
+     *  the LeaseSet republisher before a re-mint: the normal build logic only
+     *  replaces tunnels inside its 3-minute pre-expiry window or below-target
+     *  count, so a pool at target with aging leases never rebuilds on its own,
+     *  and a re-mint would re-sign the same near-expired leases.
+     *  Respects the in-progress cap, the per-period dedup guard and pool
+     *  backoff to avoid build storms.
+     */
+    public void requestFreshTunnelBuild() {
+        if (!_alive || !_settings.isInbound() || _settings.isExploratory())
+            return;
+        if (!_ensuringTunnels.compareAndSet(false, true))
+            return;
+        try {
+            int target = _settings.getQuantity();
+            long now = _context.clock().now();
+            long freshUntil = now + getFreshLeaseWindow(_context);
+            _tunnelsLock.lock();
+            int fresh = 0;
+            try {
+                for (int i = 0; i < _tunnels.size(); i++) {
+                    TunnelInfo t = _tunnels.get(i);
+                    if (t.getExpiration() > freshUntil &&
+                        !t.getTunnelFailed() &&
+                        t.getTestStatus() != TunnelTestStatus.FAILED) {
+                        fresh++;
+                    }
+                }
+            } finally {_tunnelsLock.unlock();}
+            int deficit = target - fresh;
+            if (deficit <= 0) {
+                return;
+            }
+            int inProgress = getInProgressCount();
+            int cap = Math.min(Math.max(target * 2, 4), 6);
+            int room = Math.max(0, cap - inProgress);
+            int needed = Math.min(deficit, room);
+            if (needed <= 0) {
+                return;
+            }
+            if (now - _lastDeficitBuildTime < 5000) {
+                return;
+            }
+            if (_manager.getExecutor().isPoolInBackoff(this)) {
+                if (_log.shouldDebug()) {
+                    _log.debug(toString() + " -> Skipping fresh build, pool in backoff");
+                }
+                return;
+            }
+            _lastDeficitBuildTime = now;
+            if (_log.shouldInfo()) {
+                _log.info(toString() + " -> Fresh build: " + fresh + "/" + target +
+                          " leases fresh, building " + needed + " replacement(s) for re-mint");
+            }
+            for (int i = 0; i < needed; i++) {
+                PooledTunnelCreatorConfig cfg = configureNewTunnel(false);
+                if (cfg != null) {
+                    _manager.getExecutor().buildTunnel(cfg);
+                }
+            }
         } finally { _ensuringTunnels.set(false); }
     }
 

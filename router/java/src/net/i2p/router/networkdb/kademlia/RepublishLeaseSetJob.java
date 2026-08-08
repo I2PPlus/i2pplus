@@ -52,6 +52,20 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static final long EXPIRY_WINDOW = 3L * 60 * 1000;
     /** Minimum reschedule interval — prevents sub-minute flood treadmills. */
     private static final long MIN_RESCHEDULE = 60L * 1000;
+    /**
+     *  A lease is "fresh" enough to re-mint while it has at least two minutes
+     *  less than the tunnel lifetime remaining, so a lease born in the current
+     *  build wave still spans most of a full tunnel life.  Scales with
+     *  i2p.tunnel.lifetime so short-lifetime configs aren't stuck deferring.
+     *
+     *  @param ctx the router context
+     *  @return the fresh window in ms
+     */
+    private static long getFreshLeaseWindow(RouterContext ctx) {
+        return TunnelPool.getFreshLeaseWindow(ctx);
+    }
+    /** Consecutive fresh-build deferrals before falling back to a thin re-mint. */
+    private static final int MAX_REMINT_DEFERS = 3;
     /** Staleness threshold for cleaning up tracking maps. */
     private static final long CACHE_CLEANUP_THRESHOLD = 15L * 60 * 1000;
     // Last time cleanupStaleEntries() ran — guards against redundant sweeps
@@ -69,6 +83,8 @@ public class RepublishLeaseSetJob extends JobImpl {
     // Used to decide when to perform expensive floodfill verification.
     /** Persistent per-destination store failure count. */
     private static final ConcurrentHashMap<Hash, AtomicInteger> _globalFailCount = new ConcurrentHashMap<>();
+    /** Consecutive re-mint deferral count per destination, to bound fresh-build waiting. */
+    private static final ConcurrentHashMap<Hash, AtomicInteger> _remintDefers = new ConcurrentHashMap<>();
     /** Max verifications per destination before falling back to direct retry. */
     private static final int MAX_FLOODFILL_VERIFICATIONS = 3;
     // Tracks defer start for startup-gate; cleared on success or FIRST_PUBLISH_TIMEOUT
@@ -214,6 +230,10 @@ public class RepublishLeaseSetJob extends JobImpl {
         LeaseSet fresh = getFreshPoolLeaseSet();
         if (fresh != null) {
             getContext().clientManager().requestLeaseSet(_dest, fresh);
+        }
+        TunnelPool pool = getContext().tunnelManager().getInboundPool(_dest);
+        if (pool != null) {
+            pool.requestFreshTunnelBuild();
         }
         scheduleRepublish(30L * 1000);
     }
@@ -421,26 +441,111 @@ public class RepublishLeaseSetJob extends JobImpl {
         return null;
     }
 
-    // Re-mint from the tunnel pool's current tunnels rather than re-signing or
-    // flooding the stored copy, whose leases may be near expiry.  The client
-    // signs whatever leases we send, so sending the stored (dying) copy would
-    // keep the local LeaseSet perpetually close to expiry.  Schedules the
-    // successor based on the fresh copy's expiry so a thin extension is
-    // re-flooded before it can die.
-    /** Re-mint and reschedule */
+    /**
+     *  Re-mint from the tunnel pool's current tunnels rather than re-signing or
+     *  flooding the stored copy, whose leases may be near expiry.  The client
+     *  signs whatever leases we send, so sending the stored (dying) copy would
+     *  keep the local LeaseSet perpetually close to expiry.  Schedules the
+     *  successor based on the fresh copy's expiry so a thin extension is
+     *  re-flooded before it can die.
+     *
+     *  Re-mints are gated on the pool actually holding enough fresh tunnels: a
+     *  pool at its target count with aging leases never rebuilds on its own
+     *  (the pool only replaces inside its 3-minute pre-expiry window), so an
+     *  ungated re-mint just re-signs the same near-expired leases — the
+     *  "extends expiry from 629s to 630s" no-op.  When the pool falls short,
+     *  request fresh tunnel builds and re-check after a minute; only after
+     *  several consecutive deferred tries does it fall back to re-minting the
+     *  current copy, so a congested network can't leave the LeaseSet empty.
+     *
+     *  @param name the destination name for logging
+     *  @param now current time in ms
+     *  @param timeUntilExpiry time until the stored copy expires, in ms
+     */
     private void refloatLeaseSet(String name, long now, long timeUntilExpiry) {
         LeaseSet fresh = getFreshPoolLeaseSet();
         long freshTimeUntilExpiry = fresh != null ? fresh.getLatestLeaseDate() - now : 0;
-        if (fresh != null && freshTimeUntilExpiry > timeUntilExpiry) {
+        TunnelPool pool = getContext().tunnelManager().getInboundPool(_dest);
+        int freshCount = countFreshLeases(fresh, now);
+        int target = getTargetLeaseCount();
+        boolean requested = false;
+
+        if (fresh != null && freshTimeUntilExpiry > timeUntilExpiry && freshCount >= target) {
             if (_log.shouldInfo()) {
                 _log.info("Requesting re-mint of LeaseSet for " + name + " [" + shortHash() +
                           "] (extends expiry from " + (timeUntilExpiry / 1000) +
-                          "s to " + (freshTimeUntilExpiry / 1000) + "s)");
+                          "s to " + (freshTimeUntilExpiry / 1000) + "s, " +
+                          freshCount + "/" + target + " fresh leases)");
             }
             getContext().clientManager().requestLeaseSet(_dest, fresh);
+            _remintDefers.remove(_dest);
+            requested = true;
+        } else if (fresh != null && freshTimeUntilExpiry > timeUntilExpiry && freshCount > 0 && pool != null) {
+            AtomicInteger defers = _remintDefers.computeIfAbsent(_dest, k -> new AtomicInteger(0));
+            if (defers.get() >= MAX_REMINT_DEFERS) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Re-mint for " + name + " [" + shortHash() +
+                              "] falling back after " + defers.get() +
+                              " deferred tries (" + freshCount + "/" + target + " fresh leases)");
+                }
+                getContext().clientManager().requestLeaseSet(_dest, fresh);
+                requested = true;
+            } else {
+                defers.incrementAndGet();
+                if (_log.shouldInfo()) {
+                    _log.info("Deferring re-mint for " + name + " [" + shortHash() +
+                              "] — " + freshCount + "/" + target + " fresh leases, requesting build");
+                }
+                pool.requestFreshTunnelBuild();
+            }
+        } else {
+            // No extension possible (or pool missing): request fresh builds so
+            // the next cycle can re-mint, but keep the republish cycle alive so
+            // the LS is never abandoned while the network recovers.
+            if (pool != null) {
+                if (_log.shouldInfo()) {
+                    _log.info("Requesting fresh tunnels for " + name + " [" + shortHash() +
+                              "] — pool has " + freshCount + "/" + target + " fresh leases");
+                }
+                pool.requestFreshTunnelBuild();
+            }
         }
-        long effectiveExpiry = freshTimeUntilExpiry > 0 ? freshTimeUntilExpiry : timeUntilExpiry;
+        long effectiveExpiry = requested ? freshTimeUntilExpiry : timeUntilExpiry;
         scheduleRepublish(computeNextRepublish(effectiveExpiry));
+    }
+
+    /**
+     *  Count leases still well within the tunnel lifetime, i.e. usable for a
+     *  re-mint that actually extends exposure rather than re-signing
+     *  near-expired leases.
+     *
+     *  @param ls the LeaseSet to inspect, may be null
+     *  @param now current time in ms
+     *  @return the number of leases with at least a fresh lease window remaining
+     */
+    private int countFreshLeases(LeaseSet ls, long now) {
+        if (ls == null) {
+            return 0;
+        }
+        long window = getFreshLeaseWindow(getContext());
+        int count = 0;
+        for (int i = 0; i < ls.getLeaseCount(); i++) {
+            if (ls.getLease(i).getEndTime() - now >= window) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     *  The number of inbound leases a re-mint should carry to be useful:
+     *  the inbound tunnel quantity for a server pool, 1 otherwise.
+     *
+     *  @return the target lease count
+     */
+    private int getTargetLeaseCount() {
+        TunnelPoolSettings settings = getContext().tunnelManager().getInboundSettings(_dest);
+        return settings != null ? settings.getQuantity() : 1;
     }
 
     // Register a successor RepublishLeaseSetJob with timing set.
@@ -538,6 +643,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         cleanupMap(_lastVerifyLogTime, now);
         cleanupMap(_lastNotRequeueLogTime, now);
         cleanupGlobalFailCount(now);
+        cleanupRemintDefers();
         cleanupPublishedOnce();
     }
 
@@ -572,6 +678,13 @@ public class RepublishLeaseSetJob extends JobImpl {
                 iter.remove();
             }
         }
+    }
+
+    /**
+     *  Reset re-mint deferral counters for destinations no longer tracked.
+     */
+    private static void cleanupRemintDefers() {
+        _remintDefers.keySet().removeIf(h -> !_lastPublishLogTime.containsKey(h));
     }
 
     /**
@@ -706,6 +819,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             _firstDeferredAt.remove(_dest);
             _publishedOnce.add(_dest);
             _globalFailCount.remove(_dest);
+            _remintDefers.remove(_dest);
             if (_log.shouldInfo()) {
                 long now = getContext().clock().now();
                 Long lastLog = _lastPublishLogTime.get(_dest);
