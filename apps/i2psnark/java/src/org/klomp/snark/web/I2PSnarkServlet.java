@@ -4249,9 +4249,19 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<tr><th class=suboption>").append(_t("Tunnel Configuration")).append("&nbsp;");
         if (!IPString.equals("unknown")) {
             // Only truncate if it's an actual dest
-            buf.append("&nbsp;<span id=ourDest title=\"")
-               .append(_t("Our destination (identity) for this session")).append("\">")
-               .append(_t("Dest.")).append("<code>").append(IPString.substring(0,4)).append("</code></span>");
+            buf.append("&nbsp;<span id=ourDest title=\"");
+            if (_manager.util().getMultiDest()) {
+                buf.append(_t("Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"));
+            } else {
+                buf.append(_t("Our destination (identity) for this session"));
+            }
+            buf.append("\">");
+            if (_manager.util().getMultiDest()) {
+                buf.append(_t("Primary Dest."));
+            } else {
+                buf.append(_t("Dest."));
+            }
+            buf.append("<code>").append(IPString.substring(0,4)).append("</code></span>");
         }
         buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
            .append("<span class=configOption><b>")
