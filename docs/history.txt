@@ -1,3 +1,8 @@
+2026-08-08 dr|z3d
+  * I2PSnark: Re-verify only the pieces overlapping files that changed
+    since the last save when resuming a torrent, instead of re-hashing
+    every piece; unchanged files keep their saved state
+
 2026-08-07 dr|z3d
   * Tunnel: Restore LeaseSet lease expiry to the full 10-minute tunnel
     lifetime plus clock fudge, instead of the shortened 6-minute cap

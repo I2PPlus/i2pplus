@@ -887,6 +887,7 @@ public class Storage implements Closeable {
             throw new IllegalStateException();
         }
         List<List<String>> files = metainfo.getFiles();
+        List<Boolean> trusted = null;
         if (files == null) {
             // Create base as file.
             if (_log.shouldInfo()) {
@@ -918,6 +919,7 @@ public class Storage implements Closeable {
             List<Long> ls = metainfo.getLengths();
             int size = files.size();
             long total = 0;
+            trusted = new ArrayList<>(size);
             for (int i = 0; i < size; i++) {
                 List<String> path = files.get(i);
                 File f = createFileFromNames(_base, path, areFilesPublic);
@@ -946,11 +948,9 @@ public class Storage implements Closeable {
                 total += len;
                 if (useSavedBitField) {
                     long lm = f.lastModified();
-                    if (lm <= 0 || lm > savedTime) {
-                        useSavedBitField = false;
-                    } else if (f.length() != len) {
-                        useSavedBitField = false;
-                    }
+                    trusted.add(Boolean.valueOf(lm > 0 && lm <= savedTime && f.length() == len));
+                } else {
+                    trusted.add(Boolean.FALSE);
                 }
             }
 
@@ -961,13 +961,35 @@ public class Storage implements Closeable {
             }
         }
         if (useSavedBitField) {
-            bitfield = savedBitField;
-            needed = metainfo.getPieces() - bitfield.count();
-            _probablyComplete = complete();
-            if (_log.shouldInfo())
-                _log.info(
-                        "[I2PSnark] Found saved state and files unchanged, skipping integrity"
-                            + " check");
+            if (files == null || !trusted.contains(Boolean.FALSE)) {
+                bitfield = savedBitField;
+                needed = metainfo.getPieces() - bitfield.count();
+                _probablyComplete = complete();
+                if (_log.shouldInfo())
+                    _log.info(
+                            "[I2PSnark] Found saved state and files unchanged, skipping integrity"
+                                + " check");
+            } else {
+                // Some files changed since the save: re-verify only the pieces overlapping those
+                // files, keeping the saved bits for pieces that lie entirely within unchanged files
+                changed = true;
+                if (_log.shouldInfo()) {
+                    _log.info(
+                            "[I2PSnark] Found saved state, rechecking "
+                                + (trusted.size() - Collections.frequency(trusted, Boolean.TRUE))
+                                + " of "
+                                + trusted.size()
+                                + " files");
+                }
+                boolean[] pieceTrusted = computeTrustedPieces(trusted);
+                bitfield = new BitField(savedBitField.getFieldBytes(), metainfo.getPieces());
+                for (int i = 0; i < pieces; i++) {
+                    if (!pieceTrusted[i]) {
+                        bitfield.clear(i);
+                    }
+                }
+                checkCreateFiles(false, pieceTrusted);
+            }
         } else {
             // the following sets the needed variable
             changed = true;
@@ -991,6 +1013,32 @@ public class Storage implements Closeable {
                                 + " pieces");
             }
         }
+    }
+
+    /**
+     * For a multi-file torrent with some files trusted from a saved state, marks the pieces that
+     * lie entirely within a trusted file. A piece overlapping any changed file must be re-verified.
+     *
+     * @param fileTrusted one entry per file, in metainfo order
+     * @return array indexed by piece, true if the piece may be trusted without re-hashing
+     */
+    private boolean[] computeTrustedPieces(List<Boolean> fileTrusted) {
+        boolean[] rv = new boolean[pieces];
+        int file = 0;
+        long fileEnd = _torrentFiles.get(0).length;
+        long pieceEnd = 0;
+        for (int i = 0; i < pieces; i++) {
+            while (fileEnd <= pieceEnd && file + 1 < _torrentFiles.size()) {
+                file++;
+                fileEnd += _torrentFiles.get(file).length;
+            }
+            long pieceStart = pieceEnd;
+            pieceEnd = Math.min(pieceStart + piece_size, total_length);
+            if (fileTrusted.get(file).booleanValue() && pieceEnd <= fileEnd) {
+                rv[i] = true;
+            }
+        }
+        return rv;
     }
 
     /**
@@ -1327,10 +1375,20 @@ public class Storage implements Closeable {
      * @return true if changed (only valid if recheck == true)
      */
     private boolean checkCreateFiles(boolean recheck) throws IOException {
+        return checkCreateFiles(recheck, null);
+    }
+
+    /**
+     * Variant that skips hashing pieces marked trusted, for resuming with a partially trusted
+     * saved state.
+     *
+     * @param pieceTrusted array indexed by piece, or null to hash everything
+     */
+    private boolean checkCreateFiles(boolean recheck, boolean[] pieceTrusted) throws IOException {
         synchronized (this) {
             _isChecking = true;
             try {
-                return locked_checkCreateFiles(recheck);
+                return locked_checkCreateFiles(recheck, pieceTrusted);
             } finally {
                 _isChecking = false;
             }
@@ -1341,6 +1399,14 @@ public class Storage implements Closeable {
      * @return true if changed (only valid if recheck == true)
      */
     private boolean locked_checkCreateFiles(boolean recheck) throws IOException {
+        return locked_checkCreateFiles(recheck, null);
+    }
+
+    /**
+     * @param pieceTrusted array indexed by piece, or null to hash everything
+     * @return true if changed (only valid if recheck == true)
+     */
+    private boolean locked_checkCreateFiles(boolean recheck, boolean[] pieceTrusted) throws IOException {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         _checkProgress.set(0);
         // Whether we are resuming or not,
@@ -1350,6 +1416,13 @@ public class Storage implements Closeable {
         _probablyComplete = true;
         // use local variables during the check
         int need = metainfo.getPieces();
+        if (pieceTrusted != null) {
+            for (boolean trusted : pieceTrusted) {
+                if (trusted) {
+                    need--;
+                }
+            }
+        }
         BitField bfield;
         if (recheck) {
             bfield = new BitField(need);
@@ -1446,8 +1519,16 @@ public class Storage implements Closeable {
             long pieceEnd = 0;
             for (int i = 0; i < pieces; i++) {
                 _checkProgress.set(i);
-                int length = getUncheckedPiece(i, piece);
-                boolean correctHash = metainfo.checkPiece(i, piece, 0, length);
+                boolean trusted = pieceTrusted != null && pieceTrusted[i];
+                int length;
+                boolean correctHash;
+                if (trusted) {
+                    length = (int) Math.min(piece_size, total_length - pieceEnd);
+                    correctHash = false;
+                } else {
+                    length = getUncheckedPiece(i, piece);
+                    correctHash = metainfo.checkPiece(i, piece, 0, length);
+                }
                 // close as we go so we don't run out of file descriptors
                 pieceEnd += length;
                 while (fileEnd <= pieceEnd) {
@@ -1460,9 +1541,14 @@ public class Storage implements Closeable {
                     }
                     fileEnd += _torrentFiles.get(file).length;
                 }
+                if (trusted) {
+                    continue;
+                }
                 if (correctHash) {
                     bfield.set(i);
                     need--;
+                } else {
+                    bfield.clear(i);
                 }
 
                 if (listener != null) {
