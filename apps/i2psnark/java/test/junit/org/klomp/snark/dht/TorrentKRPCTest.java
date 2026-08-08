@@ -205,8 +205,8 @@ public class TorrentKRPCTest {
             invoke(
                     t1,
                     "receiveGetPeers",
-                    new Class<?>[] {MsgID.class, NodeInfo.class, InfoHash.class, boolean.class},
-                    new Object[] {msgID, nInfo, ih, Boolean.FALSE});
+                    new Class<?>[] {MsgID.class, NodeInfo.class, InfoHash.class, boolean.class, boolean.class},
+                    new Object[] {msgID, nInfo, ih, Boolean.FALSE, Boolean.FALSE});
             Map<?, ?> tokens1 = (Map<?, ?>) getField(t1, "_outgoingTokens");
             Map<?, ?> tokens2 = (Map<?, ?>) getField(t2, "_outgoingTokens");
             assertEquals(1, tokens1.size());
