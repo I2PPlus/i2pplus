@@ -59,10 +59,7 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
     }
 
     /**
-     * The value.
-     */
-    /**
-     *  Sets the session ID for this message.
+     *  Session ID for this message.
      *
      * @param id 0-65535
      */

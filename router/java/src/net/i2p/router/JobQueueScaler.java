@@ -106,7 +106,6 @@ class JobQueueScaler implements Runnable {
     private static final double MAX_MEMORY_PERCENTAGE = 0.10; // Use max 10% of heap for runners
 
     // Configuration defaults
-    //
     // Scale-up: add runners when lag is consistently high, not on every transient spike.
     // Scale-down: remove idle runners when load drops, don't require impossible conditions.
     // Max runners capped at 2× cores to prevent context-switching death spirals.

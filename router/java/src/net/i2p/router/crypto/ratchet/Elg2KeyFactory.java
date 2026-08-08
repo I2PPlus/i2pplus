@@ -78,49 +78,49 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     }
 
     /**
- * Returns the last created instance.
- *
- * @since 0.9.70+
+     * Last created instance.
+     *
+     * @since 0.9.70+
      * @return the instance
- */
+     */
     public static Elg2KeyFactory getInstance() { return _lastInstance; }
 
     /**
- * Returns the current minimum precalc queue size.
- *
- * @since 0.9.70+
+     * Current minimum precalc queue size.
+     *
+     * @since 0.9.70+
      * @return the min size
- */
+     */
     public int getMinSize() { return _minSize; }
 
     /**
- * Sets the minimum precalc queue size.
- *
- * @since 0.9.70+
- */
+     * Minimum precalc queue size.
+     *
+     * @since 0.9.70+
+     */
     public void setMinSize(int min) { _minSize = Math.max(1, min); }
 
     /**
- * Returns the current maximum precalc queue size.
- *
- * @since 0.9.70+
+     * Current maximum precalc queue size.
+     *
+     * @since 0.9.70+
      * @return the max size
- */
+     */
     public int getMaxSize() { return _maxSize; }
 
     /**
- * Sets the maximum precalc queue size.
- *
- * @since 0.9.70+
- */
+     * Maximum precalc queue size.
+     *
+     * @since 0.9.70+
+     */
     public void setMaxSize(int max) { _maxSize = Math.max(_minSize, max); }
 
     /**
- * Returns the current number of precalc keys queued.
- *
- * @since 0.9.70+
+     * Current number of precalc keys queued.
+     *
+     * @since 0.9.70+
      * @return the size
- */
+     */
     public int getSize() { return _keys.size(); }
 
     /**
@@ -156,8 +156,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         this.interrupt();
         _keys.clear();
     }
-    /** Execute the task */
-
+    /** Precalc queue fill loop. */
     public void run() {
         try {run2();}
         catch (IllegalStateException ise) {
@@ -246,14 +245,17 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     }
 
     /**
-     * Return an unused DH key builder
-     * to be put back onto the queue for reuse.
+     * Unused DH key builder; keys are discarded, not pooled.
      */
     public void returnUnused(Elg2KeyPair kp) {
         // intentionally empty - unused keys are discarded, not pooled
     }
 
-    /** @return true if successful, false if full */
+    /**
+     *  Adds a precomputed key pair to the pool.
+     *
+     *  @return true if successful, false if full
+     */
     private final boolean addKeys(Elg2KeyPair kp) {return _keys.offer(kp);}
 
 }

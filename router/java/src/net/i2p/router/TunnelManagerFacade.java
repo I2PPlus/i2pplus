@@ -149,7 +149,11 @@ public interface TunnelManagerFacade extends Service {
     /** count how many inbound tunnel requests we have received but not yet processed */
     public int getInboundBuildQueueSize();
 
-    /** @return Set of peers that should not be allowed to be in another tunnel */
+    /**
+     *  Peers that should not be allowed to be in another tunnel.
+     *
+     *  @return Set of peers that should not be allowed to be in another tunnel
+     */
     public Set<Hash> selectPeersInTooManyTunnels();
 
     /**

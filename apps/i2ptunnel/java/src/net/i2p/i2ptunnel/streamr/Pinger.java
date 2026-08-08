@@ -6,10 +6,7 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 
 /**
- * Connectivity tester that pings I2P destinations at regular intervals to monitor network status
- */
-/**
- * Pings streamr destinations.
+ * Connectivity tester that pings streamr destinations at regular intervals to monitor network status.
  */
 public class Pinger implements Source, Runnable {
     protected Sink sink;
@@ -20,6 +17,8 @@ public class Pinger implements Source, Runnable {
     private final int fromPort;
 
     /**
+     *  Creates a pinger for the given I2CP from port.
+     *
      *  @param fromPort the I2CP from port
      *  @since 0.9.53 added ctx and fromPort params
      */

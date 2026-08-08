@@ -310,20 +310,6 @@ public class I2PSocketManagerFactory {
      * @return the newly created socket manager, non-null (throws on error)
      * @since 0.9.8
      */
-    /**
-     * Create a disconnected socket manager using the destination loaded from the given private key
-     * stream, or null for a transient destination.
-     *
-     * Non-blocking. Does not connect to the router or build tunnels.
-     *
-     * @param myPrivateKeyStream private key stream or null for transient destination
-     * @param i2cpHost I2CP host null to use default
-     * @param i2cpPort I2CP port &lt;= 0 to use default
-     * @param opts Streaming and I2CP options, may be null
-     * @return the newly created socket manager
-     * @throws I2PSessionException on session creation error
-     * @since 0.9.8
-     */
     public static I2PSocketManager createDisconnectedManager(InputStream myPrivateKeyStream, String i2cpHost,
                                                               int i2cpPort, Properties opts) throws I2PSessionException {
         return createDisconnectedManager(myPrivateKeyStream,
@@ -348,23 +334,8 @@ public class I2PSocketManagerFactory {
      * @param i2cpHost I2CP host null to use default, ignored if in router context
      * @param i2cpPort I2CP port &lt;= 0 to use default, ignored if in router context
      * @param opts Streaming and I2CP options, may be null
-     * @param filter The filter to use for incoming connections
+     * @param filter the incoming connection filter providing allow/deny decisions
      * @return the newly created socket manager, non-null (throws on error)
-     * @since 0.9.40
-     */
-    /**
-     * Create a disconnected socket manager using the destination loaded from the given private key
-     * stream, or null for a transient destination.
-     *
-     * Non-blocking. Does not connect to the router or build tunnels.
-     *
-     * @param myPrivateKeyStream private key stream or null for transient destination
-     * @param i2cpHost I2CP host null to use default
-     * @param i2cpPort I2CP port &lt;= 0 to use default
-     * @param opts Streaming and I2CP options, may be null
-     * @param filter the incoming connection filter
-     * @return the newly created socket manager
-     * @throws I2PSessionException on session creation error
      * @since 0.9.40
      */
     public static I2PSocketManager createDisconnectedManager(InputStream myPrivateKeyStream,

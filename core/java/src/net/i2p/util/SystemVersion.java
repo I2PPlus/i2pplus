@@ -32,15 +32,9 @@ public abstract class SystemVersion {
     /*
      *  @since 0.9.28
      */
-    /**
-     * DAEMON_USER.
-     */
     public static final String DAEMON_USER = "i2psvc";
     /*
      *  @since 0.9.29
-     */
-    /**
-     * GENTOO_USER.
      */
     public static final String GENTOO_USER = "i2p";
 
@@ -556,31 +550,31 @@ public abstract class SystemVersion {
         return _is64;
     }
 
-    /*
-     *  @since 0.9.28
-     */
-    /**
+/**
+     * Whether running as a Linux service.
+     *
      * @return whether linux service
+     * @since 0.9.28
      */
     public static boolean isLinuxService() {
         return _isLinuxService;
     }
 
-    /*
-     *  @since 0.9.46
-     */
     /**
+     * Whether running as a Windows service.
+     *
      * @return whether windows service
+     * @since 0.9.46
      */
     public static boolean isWindowsService() {
         return _isWindowsService;
     }
 
-    /*
-     *  @since 0.9.46
-     */
     /**
+     * Whether running as a service under either platform.
+     *
      * @return whether service
+     * @since 0.9.46
      */
     public static boolean isService() {
         return _isService;

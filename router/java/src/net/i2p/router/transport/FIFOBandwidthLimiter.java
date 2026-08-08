@@ -129,16 +129,32 @@ public class FIFOBandwidthLimiter {
      * @return the total allocated outbound bytes
      */
     public long getTotalAllocatedOutboundBytes() { return _totalAllocatedOutboundBytes.get(); }
-    /** @return smoothed one second rate */
+    /**
+     *  Smoothed one-second send rate.
+     *
+     *  @return smoothed one second rate
+     */
     public float getSendBps() { return _sendBps; }
 
-    /** @return smoothed one second rate */
+    /**
+     *  Smoothed one-second receive rate.
+     *
+     *  @return smoothed one second rate
+     */
     public float getReceiveBps() { return _recvBps; }
 
-    /** @return smoothed 15 second rate */
+    /**
+     *  Smoothed 15-second send rate.
+     *
+     *  @return smoothed 15 second rate
+     */
     public float getSendBps15s() { return _sendBps15s; }
 
-    /** @return smoothed 15 second rate */
+    /**
+     *  Smoothed 15-second receive rate.
+     *
+     *  @return smoothed 15 second rate
+     */
     public float getReceiveBps15s() { return _recvBps15s; }
 
     /**

@@ -151,7 +151,11 @@ public class GarlicClove extends DataStructureImpl {
         }
     }
 
-    /** @return serialized clove */
+    /**
+     *  Serialized clove.
+     *
+     *  @return serialized clove
+     */
     @Override
     public byte[] toByteArray() {
         byte[] rv = new byte[estimateSize()];
@@ -177,9 +181,7 @@ public class GarlicClove extends DataStructureImpl {
      *  @since 0.9.44
      */
     public int writeBytesRatchet(byte[] tgt, int offset) {
-        // returns length written
         offset += _instructions.writeBytes(tgt, offset);
-        // returns new offset
         offset = _msg.toRawByteArrayNTCP2(tgt, offset);
         return offset;
     }

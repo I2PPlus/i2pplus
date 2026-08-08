@@ -179,10 +179,8 @@ public class Router implements RouterClock.ClockShiftListener {
     public boolean isAdvanced() {return getContext().getBooleanProperty(PROP_ADVANCED);}
     private static final String ORIGINAL_TIMEZONE_ID;
     static {
-        //
         // If embedding I2P you may wish to disable one or more of the following
         // via the associated System property. Since 0.9.19.
-        //
         if (System.getProperty("I2P_DISABLE_DNS_CACHE_OVERRIDE") == null) {
             // grumble about sun's java caching DNS entries *forever* by default
             // so let's just keep 'em for a short time
@@ -421,7 +419,6 @@ public class Router implements RouterClock.ClockShiftListener {
         // *********  Start no threads before here ********* //
         _log = _context.logManager().getLog(Router.class);
 
-        //
         // NOW we can start the ping file thread.
         if (!SystemVersion.isAndroid()) {beginMarkingLiveliness();}
 
@@ -525,11 +522,12 @@ public class Router implements RouterClock.ClockShiftListener {
     public String getConfigSetting(String name) {return _config.get(name);}
 
     /**
-     *  Warning, race between here and saveConfig(),
-     *  saveConfig(String name, String value) or saveConfig(Map toAdd, Set toRemove) is recommended.
-     *
-    /**
      * Get an unmodifiable set of all configuration property names.
+     *
+     * <p>Warning: this is a live view of the configuration - use
+     * {@link #saveConfig()} or {@link #saveConfig(String, String)} when you
+     * modify the returned set, otherwise the router may race with a concurrent
+     * write.</p>
      *
      * @return unmodifiable Set of configuration property names (unsorted)
      */

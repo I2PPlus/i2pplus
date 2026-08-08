@@ -48,7 +48,7 @@ class NTCPSendFinisher {
     }
 
     /**
-     * Returns the current max send finisher threads.
+     * Current max send finisher threads.
      *
      * @return the max thread count
      * @since 0.9.70+
@@ -56,7 +56,7 @@ class NTCPSendFinisher {
     public static int getMaxThreads() { return _maxThreads; }
 
     /**
-     * Sets the max send finisher threads for new instances.
+     * Max send finisher threads for new instances.
      *
      * @param threads the new max thread count
      * @since 0.9.70+
@@ -66,7 +66,7 @@ class NTCPSendFinisher {
     }
 
     /**
-     * Returns the current send finisher queue capacity.
+     * Current send finisher queue capacity.
      *
      * @return the queue capacity
      * @since 0.9.70+
@@ -74,7 +74,7 @@ class NTCPSendFinisher {
     public static int getQueueCapacity() { return _queueCapacity; }
 
     /**
-     * Sets the send finisher queue capacity for new instances.
+     * Send finisher queue capacity for new instances.
      *
      * @param capacity the new queue capacity
      * @since 0.9.70+
@@ -132,7 +132,7 @@ class NTCPSendFinisher {
     }
 
     /**
-     * Returns the current queue size (pending send-finish tasks).
+     * Current queue size (pending send-finish tasks).
      *
      * @return current queue depth, or 0 if not running
      * @since 0.9.70+
@@ -144,7 +144,7 @@ class NTCPSendFinisher {
     }
 
     /**
-     * Returns the number of threads currently processing tasks.
+     * Number of threads currently processing tasks.
      *
      * @return active thread count, or 0 if not running
      * @since 0.9.70+
@@ -156,7 +156,7 @@ class NTCPSendFinisher {
     }
 
     /**
-     * Returns the current pool size (total threads).
+     * Current pool size (total threads).
      *
      * @return pool size, or 0 if not running
      * @since 0.9.70+

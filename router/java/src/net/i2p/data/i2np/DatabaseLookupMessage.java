@@ -99,7 +99,11 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         this(context, false);
     }
 
-    /** @param locallyCreated ignored */
+    /**
+     *  Lookup message for the given context.
+     *
+     *  @param locallyCreated ignored
+     */
     public DatabaseLookupMessage(I2PAppContext context, boolean locallyCreated) {
         super(context);
         _type = Type.ANY;

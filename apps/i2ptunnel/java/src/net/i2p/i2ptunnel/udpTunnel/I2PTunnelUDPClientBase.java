@@ -60,10 +60,17 @@ import net.i2p.util.EventDispatcher;
     private final Sink _i2pSink;
 
     /**
-     * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     *                                  badly that we cant create a socketManager
+     * Set up the I2P client, destination keypair, and I2CP session for
+     * this tunnel.
+     *
+     * @param destination I2P destination to send to; null for send-to-anyone
+     * @param l logging facility
+     * @param notifyThis event dispatcher for notifications
+     * @param tunnel the tunnel
+     * @throws IllegalArgumentException if the I2CP configuration is so broken
+     *                                  that we can't create a socketManager
      */
-   public I2PTunnelUDPClientBase(String destination, Logging l, EventDispatcher notifyThis,
+    public I2PTunnelUDPClientBase(String destination, Logging l, EventDispatcher notifyThis,
                                   I2PTunnel tunnel) throws IllegalArgumentException {
         super("UDPServer", notifyThis, tunnel);
         _clientId = __clientId.incrementAndGet();
@@ -73,7 +80,7 @@ import net.i2p.util.EventDispatcher;
 
         tunnel.getClientOptions().setProperty("i2cp.dontPublishLeaseSet", "true");
 
-        // create i2pclient and destination
+        // Create the I2P client and its destination keypair.
         I2PClient client = I2PClientFactory.createClient();
         byte[] key;
         try {
@@ -93,7 +100,7 @@ import net.i2p.util.EventDispatcher;
             throw new RuntimeException("failed to create i2p-destination", exc);
         }
 
-        // create a session
+        // Create an I2CP session from the destination keypair.
         try {
             ByteArrayInputStream in = new ByteArrayInputStream(key);
             // FIXME this may not pick up non-default I2CP host/port settings from tunnel

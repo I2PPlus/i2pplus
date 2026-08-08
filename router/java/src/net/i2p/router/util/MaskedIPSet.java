@@ -29,12 +29,15 @@ import net.i2p.router.RouterContext;
  */
 public class MaskedIPSet extends HashSet<String> {
 
-    /** Default constructor */
     public MaskedIPSet() {
         super();
     }
 
-    /** @param initialCapacity the initial capacity */
+    /**
+     *  Masked IP set with a given initial capacity.
+     *
+     *  @param initialCapacity the initial capacity
+     */
     public MaskedIPSet(int initialCapacity) {
         super(initialCapacity);
     }

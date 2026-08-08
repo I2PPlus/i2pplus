@@ -35,10 +35,18 @@ interface EstablishState {
      */
     public void prepareOutbound();
 
-    /** @return whether the handshake failed */
+    /**
+     *  Whether the handshake failed.
+     *
+     *  @return whether the handshake failed
+     */
     public boolean isCorrupt();
 
-    /** @return the failure reason, or null if not failed */
+    /**
+     *  Failure reason, or null if not failed.
+     *
+     *  @return the failure reason, or null if not failed
+     */
     public String getFailReason();
 
     /**
@@ -51,7 +59,7 @@ interface EstablishState {
     public boolean isComplete();
 
     /**
-     *  Get the NTCP version
+     *  NTCP version.
      *  @return 1, 2, or 0 if unknown
      *  @since 0.9.35
      */

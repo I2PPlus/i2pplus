@@ -59,7 +59,13 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     private Sink _i2pSink;
 
     /**
+     * Creates a UDP server tunnel using the private key in the given file.
      *
+     * @param privkey file containing the private key for the destination
+     * @param privkeyname name of the private key file
+     * @param l logging facility
+     * @param notifyThis event dispatcher for notifications
+     * @param tunnel the tunnel
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
      *                                  badly that we cant create a socketManager
      *
@@ -84,7 +90,6 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     private void init(InputStream privData, Logging l) {
         this.l = l;
 
-        // create i2pclient
         I2PClient client = I2PClientFactory.createClient();
 
         try {
@@ -132,8 +137,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     }
 
     /**
-     * Gets the read idle timeout for newly-created connections (in
-     * milliseconds).
+     * Read idle timeout for newly-created connections (in milliseconds).
      *
      * @return the read timeout used for connections, or -1 for no timeout
      */

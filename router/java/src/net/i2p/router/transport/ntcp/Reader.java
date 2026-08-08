@@ -37,9 +37,7 @@ public class Reader {
     /** Tracks how many runner threads are actively processing (not parked). */
     private final AtomicInteger _activeCount = new AtomicInteger();
 
-    /**
-     * Constructor.
-     */
+    /** Reader thread pool for the given context. */
     public Reader(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
@@ -49,31 +47,26 @@ public class Reader {
         _readAfterLive = new HashSet<>(16);
     }
 
-    /** Get the reader thread count */
+    /** Reader thread count. */
     public static int getThreadCount() { return _threadCount; }
 
-    /** Get the number of threads currently processing (not parked). */
+    /** Number of threads currently processing (not parked). */
     public int getActiveCount() { return _activeCount.get(); }
 
     /**
-     * Get reader pool utilization as a ratio (0.0-1.0).
-     * Returns NaN if no runners are active (pool not started).
-      * @return the utilization
+     * Reader pool utilization as a ratio (0.0-1.0).
+     * NaN if no runners are active (pool not started).
+     *
+     * @return the utilization
      */
     public double getUtilization() {
         int size = _runners.size();
         return size > 0 ? (double) _activeCount.get() / size : Double.NaN;
     }
- /**
-  * Description.
-  */
-
-    /** Set the reader thread count, bounded by MIN_THREADS-MAX_THREADS */
+    /** Reader thread count, bounded by MIN_THREADS-MAX_THREADS */
     public static void setThreadCount(int count) { _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, count)); }
 
-    /**
-     * Description.
-     */
+    /** Starts the given number of reader threads. */
     public synchronized void startReading(int numReaders) {
         for (int i = 1; i <= numReaders; i++) {
             startRunner();
@@ -96,9 +89,6 @@ public class Reader {
         int current = _runners.size();
         if (target > current) {
             for (int i = current; i < target; i++) {
-                /**
-                 * Description.
-                 */
                 startRunner();
             }
         } else if (target < current) {
@@ -107,9 +97,6 @@ public class Reader {
                 Runner r = _runners.remove(i);
                 r.stop();
             }
-            /**
-             * Description.
-             */
             synchronized (_pendingConnections) {
                 _readAfterLive.clear();
                 _pendingConnections.notifyAll();
@@ -117,17 +104,9 @@ public class Reader {
         }
     }
 
-    /**
-     * Description.
-     */
+    /** Stop all reader threads. */
     public synchronized void stopReading() {
-        /**
-         * Description.
-         */
         while (!_runners.isEmpty()) {
-            /**
-             * Description.
-             */
             Runner r = _runners.remove(0);
             r.stop();
         }
@@ -137,14 +116,9 @@ public class Reader {
         }
     }
 
-    /**
-     * Description.
-     */
+    /** Registers a connection to be read. */
     public void wantsRead(NTCPConnection con) {
         boolean already = false;
-        /**
-         * Description.
-         */
         synchronized (_pendingConnections) {
             if (_liveReads.contains(con)) {
                 _readAfterLive.add(con);
@@ -158,9 +132,7 @@ public class Reader {
             _log.debug("wantsRead: " + con + " already live? " + already);
     }
 
-    /**
-     * Description.
-     */
+    /** Removes a closed connection from the queues. */
     public void connectionClosed(NTCPConnection con) {
         synchronized (_pendingConnections) {
             _readAfterLive.remove(con);

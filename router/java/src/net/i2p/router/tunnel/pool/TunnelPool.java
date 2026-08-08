@@ -634,9 +634,9 @@ public class TunnelPool {
     }
 
     /**
-     * Return a list of tunnels in the pool
+     * List of tunnels currently in the pool.
      *
-     * @return A copy of the list of TunnelInfo objects
+     * @return a copy of the list of TunnelInfo objects
      */
     public List<TunnelInfo> listTunnels() {
         _tunnelsLock.lock();

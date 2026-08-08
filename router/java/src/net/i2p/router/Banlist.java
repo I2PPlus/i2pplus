@@ -1113,7 +1113,11 @@ public class Banlist {
         } else {return false;}
     }
 
-    /** @deprecated moved to router console */
+    /**
+     *  Render banlist status as HTML.
+     *
+     *  @deprecated moved to router console
+     */
     @Deprecated
     public void renderStatusHTML(Writer out) throws IOException {
         // intentionally empty - deprecated, moved to router console

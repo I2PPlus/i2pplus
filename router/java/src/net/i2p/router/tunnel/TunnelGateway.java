@@ -218,13 +218,15 @@ abstract class TunnelGateway {
          */
         public long receiveEncrypted(byte[] encrypted);
 
-        /** @return non-null */
+        /**
+         *  Tunnel the message should be sent through.
+         *
+         *  @return non-null
+         */
         public Hash getSendTo();
     }
 
-    /**
-     * DelayedFlush.
-     */
+    /** Delayed flush timer event. */
     protected class DelayedFlush extends SimpleTimer2.TimedEvent {
         /** Schedule with the context timer. */
         DelayedFlush() {

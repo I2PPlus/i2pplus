@@ -143,11 +143,19 @@ public class MuxedSKM extends SessionKeyManager {
         return null;
     }
 
-    /** @return 0, tag management is handled by ratchet protocol */
+    /**
+     *  Not used; tag management is handled by the ratchet protocol.
+     *
+     *  @return 0, tag management is handled by ratchet protocol
+     */
     @Override
     public int getTagsToSend() { return 0; }
 
-    /** @return 0, threshold not used for ratchet sessions */
+    /**
+     *  Not used; thresholds are not used for ratchet sessions.
+     *
+     *  @return 0, threshold not used for ratchet sessions
+     */
     @Override
     public int getLowThreshold() { return 0; }
 

@@ -321,8 +321,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * @return true if the database is initialized and ready for use, false otherwise
      */
+    /**
+     *  Whether the database is initialized and ready.
+     *
+     *  @return initialized
+     */
     @Override
-    /** @return initialized */
     public boolean isInitialized() {return _initialized && _ds != null && _ds.isInitialized();}
 
     /**
@@ -343,8 +347,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     public PeerSelector getPeerSelector() {return _peerSelector;}
 
+    /**
+     *  Reseed checker, or null for a client DB.
+     *
+     *  @return the reseed checker
+     */
     @Override
-    /** @return the reseed checker */
     public ReseedChecker reseedChecker() {
         if (isClientDb()) {return null;}
         return _reseedChecker;
@@ -366,20 +374,32 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     * Get the KBucketSet for the main DB.
+     * KBucketSet for the main DB.
      * @return the main DB's KBucketSet. Client DBs do not have their own.
      */
     KBucketSet<Hash> getKBuckets() {return _kb;}
-    /** @return the data store */
+    /**
+     *  The data store.
+     *
+     *  @return the data store
+     */
     DataStore getDataStore() {return _ds;}
 
-    /** @return the last explore new date */
+    /**
+     *  Time of the last explore run.
+     *
+     *  @return the last explore new date
+     */
     long getLastExploreNewDate() {return _lastExploreNew;}
-    /** @param when the new date */
+    /**
+     *  Sets the time of the last explore run.
+     *
+     *  @param when the new date
+     */
     void setLastExploreNewDate(long when) {_lastExploreNew = when;}
 
     /**
-     * Gets the set of keys to explore.
+     * Set of keys to explore.
      *
      * @return unmodifiable set
      */
@@ -568,7 +588,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return new HashSet<>(_peerSelector.selectNearest(key, maxNumRouters, peersToIgnore, _kb));
     }
 
-    /** Get the hashes for all known routers */
+    /** Hashes for all known routers. */
     @Override
     public Set<Hash> getAllRouters() {
         if (isClientDb() || !_initialized) {return Collections.emptySet();}
@@ -618,27 +638,33 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
+     *  BlindData for the given key.
+     *
      *  @param spk unblinded key
      *  @return BlindData or null
      */
     @Override
-    /** @return the blindData */
     public BlindData getBlindData(SigningPublicKey spk) {
         return blindCache().getData(spk);
     }
 
     /**
+     *  BlindData to put in the cache.
+     *
      *  @param bd new BlindData to put in the cache
      */
     @Override
-    /** Set the blindData */
     public void setBlindData(BlindData bd) {
         if (_log.shouldWarn()) {_log.warn("Adding to blind cache: " + bd);}
         blindCache().addToCache(bd);
     }
 
+    /**
+     *  All cached BlindData.
+     *
+     *  @return the blindData
+     */
     @Override
-    /** @return the blindData */
     public List<BlindData> getBlindData() {
        return blindCache().getData();
     }
@@ -661,10 +687,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
+     *  Validated entry stored locally.
+     *
      *  @return RouterInfo, LeaseSet, or null, validated
      */
     @Override
-    /** @return the entry or null */
     public DatabaseEntry lookupLocally(Hash key) {
         if (!_initialized) {return null;}
         DatabaseEntry rv = _ds.get(key);
@@ -687,11 +714,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Not for use without validation
+     *  Not for use without validation.
+     *
      *  @return RouterInfo, LeaseSet, or null, NOT validated
      */
     @Override
-    /** @return the entry or null */
     public DatabaseEntry lookupLocallyWithoutValidation(Hash key) {
         if (!_initialized) {return null;}
         return _ds.get(key);
@@ -762,8 +789,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         search(key, onFindJob, onFailedLookupJob, timeoutMs, true, fromLocalDest);
     }
 
+    /**
+     *  LeaseSet stored locally.
+     *
+     *  @return the LeaseSet or null
+     */
     @Override
-    /** @return the LeaseSet or null */
     public LeaseSet lookupLeaseSetLocally(Hash key) {
         if (!_initialized) {return null;}
         DatabaseEntry ds = _ds.get(key);
@@ -846,8 +877,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  Succeeds even if LS validation fails due to unsupported sig type, expired, etc.
      *
      */
+    /**
+     *  Destination stored locally, or null.
+     *
+     *  @return the Destination or null
+     */
     @Override
-    /** @return the Destination or null */
     public Destination lookupDestinationLocally(Hash key) {
         if (!_initialized) {return null;}
         DatabaseEntry ds = _ds.get(key);
@@ -860,7 +895,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return null;
     }
 
-    /** @return true if contains */
+    /**
+     *  Whether the router advertises the given capability.
+     *
+     *  @return true if contains
+     */
     private boolean containsCapability(RouterInfo ri, char capability) {
         String caps = ri.getCapabilities();
         return caps != null && caps.indexOf(capability) >= 0;
@@ -1065,8 +1104,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _purged = 0;
         }
 
+        /**
+         *  Job name.
+         *
+         *  @return the name
+         */
         @Override
-        /** @return the name */
         public String getName() { return "NetDb capability purge"; }
 
         @Override
@@ -1090,12 +1133,20 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
     }
 
-    /** @return permanentlyBlocklisted */
+    /**
+     *  Whether the router is on the permanent blocklist.
+     *
+     *  @return permanentlyBlocklisted
+     */
     private boolean isPermanentlyBlocklisted(Hash key) {
         return _context.banlist().isBanlistedForever(key);
     }
 
-    /** @return hostileBlocklisted */
+    /**
+     *  Whether the router is on the hostile blocklist.
+     *
+     *  @return hostileBlocklisted
+     */
     private boolean isHostileBlocklisted(Hash key) {
         return _context.banlist().isBanlistedHostile(key);
     }
@@ -1170,8 +1221,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * @return null always for client dbs
      */
+    /**
+     *  RouterInfo stored locally.
+     *
+     *  @return the RouterInfo or null
+     */
     @Override
-    /** @return the RouterInfo or null */
     public RouterInfo lookupRouterInfoLocally(Hash key) {
         if (!_initialized || isClientDb()) {return null;}
         DatabaseEntry ds = _ds.get(key);
@@ -1384,8 +1439,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             super(ctx);
         }
 
+        /**
+         *  Job name.
+         *
+         *  @return the name
+         */
         @Override
-        /** @return the name */
         public String getName() { return "Republish LeaseSets (batch)"; }
 
         @Override
@@ -1475,7 +1534,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
     }
 
-    /** @param target hash to stop publishing */
+    /**
+     *  Stops publishing the given LeaseSet.
+     *
+     *  @param target hash to stop publishing
+     */
     void stopPublishing(Hash target) {
         Set<RepublishLeaseSetJob> jobs = _publishingLeaseSets.remove(target);
         if (jobs != null) {
@@ -1505,8 +1568,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /** Set the last time we successfully published our RI. */
     void routerInfoPublishSuccessful() {_lastRIPublishTime = _context.clock().now();}
 
+    /**
+     *  Time of the last successful RI publication.
+     *
+     *  @return the lastRouterInfoPublishTime
+     */
     @Override
-    /** @return the lastRouterInfoPublishTime */
     public long getLastRouterInfoPublishTime() {return _lastRIPublishTime;}
 
     /**
@@ -2040,7 +2107,11 @@ if (blockedCountries.contains(country) && !isBanned) {
 return false;
     }
 
-    /** @return true if XG */
+    /**
+     *  Whether the router should be XG-banned.
+     *
+     *  @return true if XG
+     */
     private boolean checkXG(RouterInfo routerInfo, String caps, String routerId, Hash h) {
         if (!_context.banlist().isXgBanEnabled()) return false;
         if (isRouterXG(routerInfo, h.equals(_context.routerHash()))) {
@@ -2298,7 +2369,11 @@ return false;
         return null;
     }
 
-    /** @return reason or null */
+    /**
+     *  Why the router's short expiration is disqualifying, or null.
+     *
+     *  @return reason or null
+     */
     private String checkShortExpiration(RouterInfo routerInfo, String caps, String routerId, boolean isUs) {
         if (routerInfo == null) {return null;}
         if (!routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_SHORT)) {
@@ -2591,7 +2666,6 @@ return false;
         throw new UnsupportedOperationException();
     }
 
-    /** Public for NetDbRenderer in routerconsole */
     @Override
     public Set<LeaseSet> getLeases() {
         if (!_initialized) {return null;}
@@ -2602,10 +2676,13 @@ return false;
         return leases;
     }
 
-    /** Public for NetDbRenderer in routerconsole */
-    /* @since 0.9.64+ */
+    /**
+     *  LeaseSets published by this router's clients.
+     *
+     *  @since 0.9.64+
+     *  @return the clientLeases
+     */
     @Override
-    /** @return the clientLeases */
     public Set<LeaseSet> getClientLeases() {
         if (!_initialized) {return null;}
         Set<LeaseSet> leases = new ConcurrentHashSet<>();
@@ -2619,10 +2696,13 @@ return false;
         return leases;
     }
 
-    /** Public for NetDbRenderer in routerconsole */
-    /* @since 0.9.64+ */
+    /**
+     *  LeaseSets published to the network.
+     *
+     *  @since 0.9.64+
+     *  @return the publishedLeases
+     */
     @Override
-    /** @return the publishedLeases */
     public Set<LeaseSet> getPublishedLeases() {
         if (!_initialized) {return null;}
         Set<LeaseSet> leases = new ConcurrentHashSet<>();
@@ -2637,10 +2717,13 @@ return false;
         return leases;
     }
 
-    /** Public for NetDbRenderer in routerconsole */
-    /* @since 0.9.64+ */
+    /**
+     *  LeaseSets not published to the network.
+     *
+     *  @since 0.9.64+
+     *  @return the unpublishedLeases
+     */
     @Override
-    /** @return the unpublishedLeases */
     public Set<LeaseSet> getUnpublishedLeases() {
         if (!_initialized) {return null;}
         Set<LeaseSet> leases = new ConcurrentHashSet<>();
@@ -2655,8 +2738,12 @@ return false;
         return leases;
     }
 
+    /**
+     *  LeaseSets stored in the floodfill database.
+     *
+     *  @return the floodfillLeases
+     */
     @Override
-    /** @return the floodfillLeases */
     public Set<LeaseSet> getFloodfillLeases() {
         if (!_initialized) {return null;}
         Set<LeaseSet> leases = new ConcurrentHashSet<>();
@@ -2666,8 +2753,12 @@ return false;
         return leases;
     }
 
+    /**
+     *  RouterInfos stored in the database.
+     *
+     *  @return the routers
+     */
     @Override
-    /** @return the routers */
     public Set<RouterInfo> getRouters() {
         if (isClientDb()) {return Collections.emptySet();}
         if (!_initialized) {return null;}
@@ -2763,8 +2854,12 @@ return false;
      *  @param key only for Destinations; for RouterIdentities, see Banlist
      *  @return whether negative cached forever
      */
+    /**
+     *  Whether the key is permanently negative-cached.
+     *
+     *  @return whether the hash is in the negative cache
+     */
     @Override
-    /** @return whether the hash is in the negative cache */
     public boolean isNegativeCachedForever(Hash key) {return key != null && _negativeCache.getBadDest(key) != null;}
 
     @Override
@@ -2774,7 +2869,11 @@ return false;
         out.write(_kb.toString().replace("\n", "<br>\n"));
     }
 
-    /** @return "MainNetDb" for the main netdb, or "ClientNetDb [base32]" for a client netdb */
+    /**
+     *  "MainNetDb" for the main netdb, or "ClientNetDb [base32]" for a client netdb.
+     *
+     *  @return "MainNetDb" for the main netdb, or "ClientNetDb [base32]" for a client netdb
+     */
     @Override
     public String toString() {
         if (!isClientDb()) {return "MainNetDb";}
@@ -2962,8 +3061,12 @@ return false;
             _log = ctx.logManager().getLog(RefreshClientLeaseSetsJob.class);
         }
 
+        /**
+         *  Job name.
+         *
+         *  @return the name
+         */
         @Override
-        /** @return the name */
         public String getName() { return "Refresh client LeaseSets"; }
 
         @Override

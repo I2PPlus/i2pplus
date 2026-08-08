@@ -357,13 +357,17 @@ public abstract class TransportImpl implements Transport {
         return haveCapacity(DEFAULT_CAPACITY_PCT);
     }
 
-    /** @param pct are we under x% 0-100 */
+    /**
+     *  Whether we are under the given capacity level.
+     *
+     *  @param pct are we under x% 0-100
+     */
     public boolean haveCapacity(int pct) {
         return countPeers() < getMaxConnections() * pct / 100;
     }
 
     /**
-     * Return our peer clock skews on a transport.
+     * Peer clock skews on a transport.
      * List composed of Long, each element representing a peer skew in seconds.
      * Dummy version. Transports override it.
      * @return the clock skews
@@ -371,6 +375,8 @@ public abstract class TransportImpl implements Transport {
     public List<Long> getClockSkews() {return Collections.emptyList();}
 
     /**
+     * Most recent error messages.
+     *
      * @return the most recent error messages
      */
     public List<String> getMostRecentErrorMessages() {return Collections.emptyList();}

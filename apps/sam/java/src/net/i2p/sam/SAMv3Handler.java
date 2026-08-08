@@ -36,10 +36,6 @@ class SAMv3Handler extends SAMv1Handler
     /** I2P session. */
     private Session session;
     // TODO remove singleton, hang off SAMBridge like dgserver
-    /**
-     * sSessionsHash.
-     */
-    /** sSessionsHash */
     public static final SessionsDB sSessionsHash = new SessionsDB();
     /** Stolen socket. */
     volatile boolean stolenSocket;

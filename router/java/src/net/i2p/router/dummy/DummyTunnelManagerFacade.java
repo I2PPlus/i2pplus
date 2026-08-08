@@ -31,7 +31,11 @@ public class DummyTunnelManagerFacade implements TunnelManagerFacade {
     /** Creates a new DummyTunnelManagerFacade */
     public DummyTunnelManagerFacade() {}
 
-    /** @deprecated unused */
+    /**
+     *  Select an inbound tunnel for a destination.
+     *
+     *  @deprecated unused
+     */
     @Override
     public TunnelInfo selectInboundTunnel() { return null; }
     public TunnelInfo selectInboundTunnel(Hash destination) { return null; }

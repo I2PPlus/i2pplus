@@ -159,7 +159,6 @@ class BatchedPreprocessor extends TrivialPreprocessor {
         int batchCount = 0;
         int beforeLooping = pending.size();
 
-        // loop until the queue is empty
         while (!pending.isEmpty()) {
             int allocated = 0;
             long beforePendingLoop;
@@ -168,7 +167,6 @@ class BatchedPreprocessor extends TrivialPreprocessor {
             else
                 beforePendingLoop = 0;
 
-            // loop until we fill up a single message
             for (int i = 0; i < pending.size(); i++) {
                 long pendingStart;
                 if (timingBuf != null)

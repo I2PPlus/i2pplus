@@ -154,26 +154,30 @@ public class ProfileOrganizer {
     private static final int MIN_TUNNEL_REQUESTS = 50;
     /** Cooldown period (ms) after demotion before peer can be re-promoted */
     private static final long TUNNEL_DEMOTION_COOLDOWN_MS = 10 * 60 * 1000L; // 10 minutes
-    /** Exclude peers from tunnel selection after this many cumulative failures.
-     *  Without this, the blame system (tunnelFailed) only increments counters —
-     *  peers with 200+ failures keep getting selected because ghost peer clears
-     *  on any success and first-hop cooldown is only 5 minutes. */
+    /**
+     * Exclude peers from tunnel selection after this many cumulative failures.
+     * Without this, the blame system (tunnelFailed) only increments counters —
+     * peers with 200+ failures keep getting selected because ghost peer clears
+     * on any success and first-hop cooldown is only 5 minutes.
+     */
     private static final long MAX_LIFETIME_TUNNEL_FAILURES = 20;
 
-    /** When high-cap tier has at least this many peers, require actual capacity
-     *  threshold — stop bucket-filling with marginal peers.
-     *  @since 0.9.70+ */
+    /**
+     * When high-cap tier has at least this many peers, require actual capacity
+     * threshold — stop bucket-filling with marginal peers.
+     * @since 0.9.70+
+     */
     private static final int MIN_HC_TIGHT_COUNT = 300;
-    /** When fast tier has at least this many peers, require speed threshold
-     *  — stop admitting via low-latency bypass alone.
-     *  @since 0.9.70+ */
+    /**
+     * When fast tier has at least this many peers, require speed threshold
+     * — stop admitting via low-latency bypass alone.
+     * @since 0.9.70+
+     */
     private static final int MIN_FAST_TIGHT_COUNT = 200;
 
-    /**
-     * PROP_MAX_PROFILES.
-     */
+    /** Config property for the maximum number of peer profiles. */
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
-    /** _defaultMaxProfiles. */
+    /** Runtime-adjustable default max profile count. */
     public static volatile int _defaultMaxProfiles = getDefaultMaxProfiles();
     /** @since 0.9.70+ */
     public static int getDefaultMaxProfilesValue() { return _defaultMaxProfiles; }

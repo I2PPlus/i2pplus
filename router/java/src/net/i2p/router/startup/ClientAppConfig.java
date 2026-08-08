@@ -416,11 +416,8 @@ public class ClientAppConfig {
             counter.increment(f);
         }
         IOException e = null;
-        // Write the config files
         Set<File> files = counter.objects();
-        // For each file, write all the configs for that file
         for (File f : files) {
-            // Gather configs for this file
             List<ClientAppConfig> cacs = new ArrayList<>(8);
             for (ClientAppConfig cac : apps) {
                 if (cac.configFile.equals(f))

@@ -297,21 +297,26 @@ public class PeerState {
         };
     }
 
-    /** Target RTT in ms — below this, increase concurrency; above this, decrease.
-     *  I2P network RTT through 2-4 hops is typically 500-2000ms.
-     *  High enough to avoid false congestion signals from normal network latency.
-     *  Configurable via i2p.transport.udp.targetRTT */
+    /**
+     * Target RTT in ms — below this, increase concurrency; above this, decrease.
+     * I2P network RTT through 2-4 hops is typically 500-2000ms.
+     * High enough to avoid false congestion signals from normal network latency.
+     * Configurable via i2p.transport.udp.targetRTT
+     */
     private static volatile int TARGET_RTT = 2000;
-    /** RTT multiplier above which we multiplicative-decrease concurrency.
-     *  Only decrease when RTT > TARGET_RTT * RTT_DECREASE_FACTOR — truly congested.
-     *  Configurable via i2p.transport.udp.rttDecreaseFactor */
+    /**
+     * RTT multiplier above which we multiplicative-decrease concurrency.
+     * Only decrease when RTT > TARGET_RTT * RTT_DECREASE_FACTOR — truly congested.
+     * Configurable via i2p.transport.udp.rttDecreaseFactor
+     */
     private static volatile int RTT_DECREASE_FACTOR = 4;
     /** When RTT > TARGET_RTT but there are queued messages, increase modestly */
     private static final int QUEUE_BACKPRESSURE_INCREASE = 4;
-    /** How many concurrent outbound messages do we allow OutboundMessageFragments to send.
-        This counts full messages, NOT fragments (UDP packets).
-        Dynamically adjusted based on measured RTT: increased when RTT < TARGET_RTT,
-        decreased when RTT > TARGET_RTT * RTT_DECREASE_FACTOR.
+    /**
+     * How many concurrent outbound messages do we allow OutboundMessageFragments to send.
+     * This counts full messages, NOT fragments (UDP packets).
+     * Dynamically adjusted based on measured RTT: increased when RTT < TARGET_RTT,
+     * decreased when RTT > TARGET_RTT * RTT_DECREASE_FACTOR.
      */
     private int _concurrentMessagesAllowed = INIT_CONCURRENT_MSGS;
     /** how many concurrency rejections have we had in a row */

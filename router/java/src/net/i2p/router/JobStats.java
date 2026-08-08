@@ -127,7 +127,7 @@ public class JobStats {
             }
         }
     }
-/** Return the lastRunTime */
+/** Time of the last run. */
     public long getLastRunTime() {return _lastRunTime;}
 
     /**

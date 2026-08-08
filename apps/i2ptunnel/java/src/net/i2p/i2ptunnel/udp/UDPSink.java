@@ -16,12 +16,13 @@ public class UDPSink implements Sink {
     protected final int remotePort;
 
     /**
+     *  Opens a DatagramSocket and sends datagrams to the given host and port.
+     *
      *  @param host where to send
      *  @param port where to send
      *  @throws IllegalArgumentException on DatagramSocket IOException
      */
     public UDPSink(InetAddress host, int port) {
-        // create socket
         try {
             this.sock = new DatagramSocket();
         } catch (IOException e) {
@@ -33,6 +34,8 @@ public class UDPSink implements Sink {
 
 
     /**
+     *  Sends datagrams through the given socket to the specified host and port.
+     *
      *  @param socket existing socket
      *  @param host where to send
      *  @param port where to send
@@ -45,6 +48,8 @@ public class UDPSink implements Sink {
     }
 
     /**
+     *  Sends the data to the configured remote host and port.
+     *
      *  @param src ignored
      *  @param fromPort ignored
      *  @param toPort ignored
@@ -54,10 +59,8 @@ public class UDPSink implements Sink {
     public void send(Destination src, int fromPort, int toPort, byte[] data) {
         // if data.length > this.sock.getSendBufferSize() ...
 
-        // create packet
         DatagramPacket packet = new DatagramPacket(data, data.length, this.remoteHost, this.remotePort);
 
-        // send packet
         try {
             this.sock.send(packet);
         } catch (IOException ioe) {
@@ -66,6 +69,8 @@ public class UDPSink implements Sink {
     }
 
     /**
+     *  Local port of the DatagramSocket we are sending from.
+     *
      *  @return the local port of the DatagramSocket we are sending from
      *  @since 0.9.53
      */

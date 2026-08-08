@@ -40,7 +40,9 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
      */
     protected static final ByteCache _dataCache = ByteCache.getInstance(512, PREPROCESSED_SIZE);
 
-    /** @param ctx the router context */
+    /**
+     *  @param ctx the router context
+     */
     public TrivialPreprocessor(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());

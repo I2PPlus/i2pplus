@@ -200,7 +200,11 @@ public class DecayingBloomFilter {
         }
     }
 
-    /** @return the current duplicate count */
+    /**
+     *  Current number of duplicates detected.
+     *
+     *  @return the current duplicate count
+     */
     public long getCurrentDuplicateCount() { return _currentDuplicates.get(); }
 
     /** unsynchronized but only used for logging elsewhere */

@@ -59,9 +59,6 @@ final class ECConstants {
     }
 
     /**
-     * isBCAvailable.
-     */
-    /**
      * Return whether Bouncy Castle is available.
      * @return whether b c available
      */

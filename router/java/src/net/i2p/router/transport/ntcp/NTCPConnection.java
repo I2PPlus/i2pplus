@@ -77,7 +77,7 @@ public class NTCPConnection implements Closeable {
     private static volatile int MAX_WRITE_BUFS = 512;
 
     /**
-     * Get the current max write buffers per NTCP connection.
+     * Current max write buffers per NTCP connection.
      *
      * @return the current max write buffers
      * @since 0.9.70+
@@ -85,7 +85,7 @@ public class NTCPConnection implements Closeable {
     public static int getMaxWriteBufs() { return MAX_WRITE_BUFS; }
 
     /**
-     * Set the max write buffers per NTCP connection (called by Tuner).
+     * Max write buffers per NTCP connection (called by Tuner).
      *
      * @param max the maximum write buffers
      * @since 0.9.70+
@@ -334,13 +334,13 @@ public class NTCPConnection implements Closeable {
     public SelectionKey getKey() { return _conKey; }
 
     /**
-     *  Set the socket channel.
+     *  Socket channel for this connection.
      *  @param chan the channel
      */
     public void setChannel(SocketChannel chan) { _chan = chan; }
 
     /**
-     *  Set the selection key.
+     *  Selection key for this connection.
      * @param key the key
      */
     public void setKey(SelectionKey key) { _conKey = key; }
@@ -364,7 +364,7 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     *  Get the remote IP address.
+     *  Remote IP address.
      *
      *  @return null if unknown
      *  @since 0.9.53
@@ -379,7 +379,7 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     *  Get the remote port.
+     *  Remote port.
      *
      *  @return 0 if unknown
      *  @since 2.11.0
@@ -426,7 +426,7 @@ public class NTCPConnection implements Closeable {
     public long getClockSkew() { return _clockSkew; }
 
     /**
-     *  Get the connection uptime in milliseconds.
+     *  Connection uptime in milliseconds.
      *
      *  @return the uptime in ms
      */
@@ -441,7 +441,7 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     * Get the time this connection was established.
+     * Time this connection was established.
      * @return established timestamp, or 0 if not yet established
      * @since 0.9.55
      */
@@ -453,13 +453,25 @@ public class NTCPConnection implements Closeable {
         }
     }
 
-    /** @return messages sent */
+    /**
+     *  Messages sent on this connection.
+     *
+     *  @return messages sent
+     */
     public int getMessagesSent() { return _messagesWritten.get(); }
 
-    /** @return messages received */
+    /**
+     *  Messages received on this connection.
+     *
+     *  @return messages received
+     */
     public int getMessagesReceived() { return _messagesRead.get(); }
 
-    /** @return outbound queue size */
+    /**
+     *  Outbound queue size.
+     *
+     *  @return outbound queue size
+     */
     public int getOutboundQueueSize() {
             int queued = _outbound.size();
             synchronized(_writeLock) {
@@ -600,12 +612,20 @@ public class NTCPConnection implements Closeable {
         return count;
     }
 
-    /** @return last zero read time */
+    /**
+     *  Time of the last zero-byte read.
+     *
+     *  @return last zero read time
+     */
     public long getLastZeroReadTime() {
         return _lastZeroReadTime;
     }
 
-    /** @return true if closed */
+    /**
+     *  Whether the connection is closed.
+     *
+     *  @return true if closed
+     */
     public boolean isClosed() { return _closed.get(); }
 
     @Override
@@ -755,7 +775,11 @@ public class NTCPConnection implements Closeable {
             _transport.getWriter().wantsWrite(this, "enqueued");
     }
 
-    /** @return true if outbound queue is backlogged */
+    /**
+     *  Whether the outbound queue is backlogged.
+     *
+     *  @return true if outbound queue is backlogged
+     */
     public boolean isBacklogged() { return _outbound.isBacklogged(); }
 
     /**
@@ -1351,7 +1375,7 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     * Get the next read buffer, or null if none available.
+     * Next read buffer, or null if none available.
      *
      * @return the next read buffer, or null
      */
@@ -1444,9 +1468,17 @@ public class NTCPConnection implements Closeable {
     private float _sendBps;
     private float _recvBps;
 
-    /** @return current send rate in Bps */
+    /**
+     *  Current send rate in Bps.
+     *
+     *  @return current send rate in Bps
+     */
     public float getSendRate() { synchronized(_statLock) { return _sendBps; } }
-    /** @return current receive rate in Bps */
+    /**
+     *  Current receive rate in Bps.
+     *
+     *  @return current receive rate in Bps
+     */
     public float getRecvRate() { synchronized(_statLock) { return _recvBps; } }
 
     /**
@@ -2133,7 +2165,11 @@ public class NTCPConnection implements Closeable {
         }
     }
 
-    /** @return true if write interest is pending */
+    /**
+     *  Whether the pumper has registered write interest.
+     *
+     *  @return true if write interest is pending
+     */
     public boolean hasWriteInterestPending() {
         return _writeInterestPending.get();
     }
@@ -2152,7 +2188,11 @@ public class NTCPConnection implements Closeable {
         _lastActiveTime = System.currentTimeMillis();
     }
 
-    /** @return last active time */
+    /**
+     *  Time of the last activity.
+     *
+     *  @return last active time
+     */
     public long getLastActiveTime() {
         return _lastActiveTime;
     }

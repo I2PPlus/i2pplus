@@ -34,13 +34,19 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
     private byte[] _data;
     private final int _type;
 
-    /** @param type 0-255 */
+    /**
+     *  Message with the given type, unknown to the router.
+     *
+     *  @param type 0-255
+     */
     public UnknownI2NPMessage(I2PAppContext context, int type) {
         super(context);
         _type = type;
     }
 
     /**
+     *  Sets the raw message data.
+     *
      *  @throws IllegalStateException if data previously set, to protect saved checksum
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {

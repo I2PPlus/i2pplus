@@ -37,7 +37,6 @@ public class I2PSinkAnywhere implements Sink {
         this.sess = sess;
         this.raw = raw;
 
-        // create maker
         if (raw) {
             this.maker = null;
         } else {
@@ -68,7 +67,6 @@ public class I2PSinkAnywhere implements Sink {
      * @throws RuntimeException if the session is closed
      */
     public synchronized void send(Destination to, int fromPort, int toPort, byte[] data) {
-        // create payload
         byte[] payload;
         if(!this.raw) {
             synchronized(this.maker) {
@@ -78,7 +76,6 @@ public class I2PSinkAnywhere implements Sink {
             payload = data;
         }
 
-        // send message
         try {
             this.sess.sendMessage(to, payload,
                                   (this.raw ? I2PSession.PROTO_DATAGRAM_RAW : I2PSession.PROTO_DATAGRAM),

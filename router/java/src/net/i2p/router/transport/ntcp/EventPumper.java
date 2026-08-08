@@ -572,7 +572,7 @@ class EventPumper implements Runnable {
     }
 
     /**
-     * Return a read buffer to the pool.
+     * Read buffer returned to the pool.
      * These buffers must be from acquireBuf(), i.e. capacity() == BUF_SIZE.
      * High-frequency path in thread.
      */
@@ -1183,14 +1183,14 @@ class EventPumper implements Runnable {
         return _expireIdleWriteTime;
     }
 
-    /** Get the selector loop delay in milliseconds */
+    /** Selector loop delay in milliseconds. */
     public static long getSelectorLoopDelay() { return _selectorLoopDelay; }
 
-    /** Get the max idle loop rate in loops per second */
+    /** Max idle loop rate in loops per second. */
     public static int getMaxIdleLps() { return _maxIdleLps; }
 
     /**
-     * Set the max idle loop rate in loops per second, bounded 1-5000.
+     * Max idle loop rate in loops per second, bounded 1-5000.
      * The pumper enforces this as a minimum idle iteration time (1e9 / rate),
      * capping idle busy-spin even when selector wakeups defeat the timeout.
      */
@@ -1199,7 +1199,7 @@ class EventPumper implements Runnable {
     }
 
     /**
-     * Set the selector loop delay, bounded 1-SELECTOR_MAX_DELAY ms.
+     * Selector loop delay, bounded 1-SELECTOR_MAX_DELAY ms.
      * Updates the base delay the pumper relaxes toward and raises the live
      * delay immediately so Tuner-driven increases take effect without waiting
      * for the pumper's own 60s ramp.
@@ -1211,15 +1211,13 @@ class EventPumper implements Runnable {
             _currentDelay = v;
     }
 
-    /** Get the failsafe iteration frequency in milliseconds */
+    /** Failsafe iteration frequency in milliseconds. */
     public static long getFailsafeIterationFreq() { return _failsafeIterationFreq; }
 
-    /** Set the failsafe iteration frequency, bounded by MIN-MAX */
+    /** Failsafe iteration frequency, bounded by MIN-MAX. */
     public static void setFailsafeIterationFreq(long ms) { _failsafeIterationFreq = Math.max(MIN_FAILSAFE_FREQ, Math.min(MAX_FAILSAFE_FREQ, ms)); }
 
-    /**
-     * setInterest.
-     */
+    /** Interest operations on the given selection key. */
     public static void setInterest(SelectionKey key, int op) throws CancelledKeyException {
         if (key == null || !key.isValid()) return;
         synchronized (key) {

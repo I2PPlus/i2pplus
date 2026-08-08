@@ -25,14 +25,12 @@ public class UDPSource implements Source, Runnable {
      * @throws RuntimeException if the DatagramSocket cannot be opened
      */
     public UDPSource(int port) {
-        // create udp-socket
         try {
             this.sock = new DatagramSocket(port);
         } catch (IOException e) {
             throw new RuntimeException("failed to listen...", e);
         }
         this.port = port;
-        // create thread
         this.thread = new I2PAppThread(this);
     }
 
@@ -71,25 +69,20 @@ public class UDPSource implements Source, Runnable {
      * Receives UDP datagrams in a loop and forwards them to the configured sink.
      */
     public void run() {
-        // create packet
         byte[] buf = new byte[MAX_SIZE];
         DatagramPacket pack = new DatagramPacket(buf, buf.length);
         while(true) {
             try {
-                // receive...
                 this.sock.receive(pack);
 
                 Sink s = this.sink;
                 if (s == null)
                     break;
 
-                // create new data array
                 byte[] nbuf = new byte[pack.getLength()];
 
-                // copy over
                 System.arraycopy(pack.getData(), 0, nbuf, 0, nbuf.length);
 
-                // transfer to sink
                 s.send(null, port, 0, nbuf);
             } catch(Exception e) {
                 Log log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
@@ -101,6 +94,8 @@ public class UDPSource implements Source, Runnable {
     }
 
     /**
+     *  Local port of the DatagramSocket we are receiving on.
+     *
      *  @return the local port of the DatagramSocket we are receiving on
      *  @since 0.9.53
      */

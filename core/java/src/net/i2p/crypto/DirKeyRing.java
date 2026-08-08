@@ -20,9 +20,6 @@ import java.security.cert.X509Certificate;
  *
  *  @since 0.9.9, public since 0.9.28
  */
-/**
- * DirKeyRing Implements KeyRing.
- */
 public class DirKeyRing implements KeyRing {
 
     private final File _base;

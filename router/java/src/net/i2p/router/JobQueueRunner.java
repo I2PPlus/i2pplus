@@ -34,19 +34,39 @@ class JobQueueRunner extends I2PThread {
         // all createRateStat in JobQueue
     }
 
-    /** @return the current job */
+    /**
+     *  The job currently being executed.
+     *
+     *  @return the current job
+     */
     public Job getCurrentJob() {return _currentJob;}
-    /** @return the last job */
+    /**
+     *  The most recently completed job.
+     *
+     *  @return the last job
+     */
     public Job getLastJob() {return _lastJob;}
-    /** @return the runner id */
+    /**
+     *  Identifier for this runner.
+     *
+     *  @return the runner id
+     */
     public int getRunnerId() {return _id;}
     /** Stop the runner. */
     public void stopRunning() {_keepRunning = false;}
     /** Start the runner. */
     public void startRunning() {_keepRunning = true;}
-    /** @return the time the last job began */
+    /**
+     *  Time the last job began.
+     *
+     *  @return the time the last job began
+     */
     public long getLastBegin() {return _lastBegin;}
-    /** @return the time the last job ended */
+    /**
+     *  Time the last job ended.
+     *
+     *  @return the time the last job ended
+     */
     public long getLastEnd() {return _lastEnd;}
 
     public void run() {

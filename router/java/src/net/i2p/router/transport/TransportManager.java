@@ -146,7 +146,11 @@ public class TransportManager implements TransportEventListener {
 
     private OutboundMaintainerEvent _outboundMaintainer;
 
-    /** @param context router context */
+    /**
+     *  Manager for all enabled transports.
+     *
+     *  @param context router context
+     */
     public TransportManager(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(TransportManager.class);
@@ -357,7 +361,12 @@ public class TransportManager implements TransportEventListener {
             _log.log(Log.CRIT, "No transports are enabled - router cannot function!");
     }
 
-    /** @param ctx context @return true if NTCP enabled */
+    /**
+     *  Whether the NTCP transport is enabled.
+     *
+     *  @param ctx context
+     *  @return true if NTCP enabled
+     */
     public static boolean isNTCPEnabled(RouterContext ctx) {
         return ctx.getBooleanPropertyDefaultTrue(PROP_ENABLE_NTCP);
     }
@@ -392,10 +401,8 @@ public class TransportManager implements TransportEventListener {
         String lastv4 = _context.getProperty(UDPTransport.PROP_IP);
         String lastv6 = _context.getProperty(UDPTransport.PROP_IPV6);
         boolean preferTemp = Boolean.parseBoolean(Addresses.useIPv6TempAddresses());
-        //
         // Avoid IPv6 temporary addresses if we have a non-temporary one,
         // unless the kernel prefers them
-        //
         boolean hasPreferredV6Address = false;
         List<InetAddress> addresses = new ArrayList<>(4);
         List<Inet6Address> nonPreferredV6Addresses = new ArrayList<>(4);
@@ -584,12 +591,21 @@ public class TransportManager implements TransportEventListener {
         TransportImpl.clearCaches();
     }
 
-    /** @param style transport style @return the transport for the given style or null */
+    /**
+     *  The registered transport for the given style.
+     *
+     *  @param style transport style
+     *  @return the transport for the given style or null
+     */
     Transport getTransport(String style) {
         return _transports.get(style);
     }
 
-    /** @return number of registered transports */
+    /**
+     *  Number of registered transports.
+     *
+     *  @return number of registered transports
+     */
     int getTransportCount() { return _transports.size(); }
 
     /**
@@ -605,7 +621,8 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * Get the adaptive tuner from the UDP transport.
+     * Adaptive tuner from the UDP transport.
+     *
      * @return the adaptive tuner, or null if not available
      * @since 0.9.70+
      */
@@ -873,13 +890,22 @@ public class TransportManager implements TransportEventListener {
             ip = host;
         }
 
-        /** @return hash code */
+        /**
+         *  Hash code combining style, port, and IP.
+         *
+         *  @return hash code
+         */
         @Override
         public int hashCode() {
             return style.hashCode() ^ port ^ DataHelper.hashCode(ip);
         }
 
-        /** @param o object @return true if equal */
+        /**
+         *  Whether this port equals the given object.
+         *
+         *  @param o object
+         *  @return true if equal
+         */
         @Override
         public boolean equals(Object o) {
             if (o == this)
@@ -1179,7 +1205,11 @@ public class TransportManager implements TransportEventListener {
         }
     }
 
-    /** @return aggregated recent error messages from all transports */
+    /**
+     *  Aggregated recent error messages from all transports.
+     *
+     *  @return aggregated recent error messages from all transports
+     */
     List<String> getMostRecentErrorMessages() {
         List<String> rv = new ArrayList<>(16);
         for (Transport t : _transports.values()) {

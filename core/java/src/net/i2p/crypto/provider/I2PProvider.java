@@ -16,12 +16,9 @@ public final class I2PProvider extends Provider {
     private static boolean _installed;
 
     /**
-     * Construct a new provider.  This should only be required when
-     * using runtime registration of the provider using the
-     * <code>Security.addProvider()</code> mechanism.
-     */
-    /**
-     * Construct a new I2P provider.
+     * Construct a new I2P provider instance.  This should only be required
+     * when using runtime registration of the provider via
+     * <code>Security.addProvider()</code>.
      */
     public I2PProvider() {
         // following constructor deprecated in Java 9,

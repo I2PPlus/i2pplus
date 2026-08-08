@@ -63,14 +63,22 @@ class LookupThrottler {
     /** Periodic cleanup task for stale throttle entries. */
     private final Cleaner _cleaner;
 
-    /** @param facade floodfill network database facade */
+    /**
+     *  Throttle for the given floodfill facade.
+     *
+     *  @param facade floodfill network database facade
+     */
     LookupThrottler(FloodfillNetworkDatabaseFacade facade) {
         this(facade, DEFAULT_MAX_LOOKUPS, DEFAULT_MAX_NON_FF_LOOKUPS, DEFAULT_CLEAN_TIME);
     }
 
     /**
-     * @param maxlookups when floodfill
-     * @param maxnonfflookups when not floodfill
+     *  Throttle with configurable lookup limits.
+     *
+     *  @param facade floodfill network database facade
+     *  @param maxlookups when floodfill
+     *  @param maxnonfflookups when not floodfill
+     *  @param cleanTime milliseconds between throttling table cleanups
      */
     LookupThrottler(FloodfillNetworkDatabaseFacade facade, int maxlookups, int maxnonfflookups, long cleanTime) {
         _facade = facade;

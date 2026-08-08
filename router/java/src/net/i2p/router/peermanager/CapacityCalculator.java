@@ -268,8 +268,6 @@ class CapacityCalculator {
         if (curFailed != null) {
             double failed = curFailed.computeAverages(ra, false).getTotalValues();
             if (failed > 0) {
-                //    return 0.0d; // their tunnels have failed in the last 0-10 minutes
-                //else
                 // .04 = 4.0 / 100.0 adjustment to failed
                 val -= 0.04 * failed * stretch;
             }

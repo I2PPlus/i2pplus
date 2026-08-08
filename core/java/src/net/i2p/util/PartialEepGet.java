@@ -32,13 +32,6 @@ public class PartialEepGet extends EepGet {
     /**
      * Instantiate an EepGet that will fetch exactly size bytes when fetch() is called.
      *
-     * @param proxyHost use null or "" for no proxy
-     * @param proxyPort use 0 for no proxy
-     * @param size fetch exactly this many bytes
-     */
-    /**
-     * Instantiate an EepGet that will fetch exactly size bytes when fetch() is called.
-     *
      * @param ctx the I2P app context
      * @param proxyHost use null or &quot;&quot; for no proxy
      * @param proxyPort use 0 for no proxy
@@ -69,10 +62,6 @@ public class PartialEepGet extends EepGet {
         _fetchSize = size;
     }
 
-    /**
-     * PartialEepGet [-p 127.0.0.1:4444] [-l #bytes] url
-     *
-     */
     /**
      * Entry point for command-line usage.
      *

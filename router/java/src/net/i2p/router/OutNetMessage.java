@@ -183,9 +183,17 @@ public class OutNetMessage implements CDPQEntry {
         return _message != null ? _message.getClass().getSimpleName() : "null";
     }
 
-    /** @return the message type ID */
+    /**
+     *  Message type ID.
+     *
+     *  @return the message type ID
+     */
     public int getMessageTypeId() {return _messageTypeId;}
-    /** @return the message ID */
+    /**
+     *  Message ID.
+     *
+     *  @return the message ID
+     */
     public long getMessageId() {return _messageId;}
 
     /**
@@ -323,22 +331,38 @@ public class OutNetMessage implements CDPQEntry {
         return (_failedTransports == null ? Collections.<String>emptyList() : _failedTransports);
     }
 
-    /** @return when the sending process began */
+    /**
+     *  When the sending process began.
+     *
+     *  @return when the sending process began
+     */
     public long getSendBegin() {return _sendBegin;}
 
     /** begin the send */
     public void beginSend() {_sendBegin = _context.clock().now();}
 
-    /** @return the creation time */
+    /**
+     *  Creation time.
+     *
+     *  @return the creation time
+     */
     public long getCreated() {return _created;}
 
     /** Reset creation time for dispatch age tracking on requeue */
     public void resetCreatedTime() {_created = _context.clock().now();}
 
-    /** @return the remaining lifetime */
+    /**
+     *  Remaining lifetime.
+     *
+     *  @return the remaining lifetime
+     */
     public long getLifetime() {return _context.clock().now() - _created;}
 
-    /** @return the send time */
+    /**
+     *  Send time.
+     *
+     *  @return the send time
+     */
     public long getSendTime() {return _context.clock().now() - _sendBegin;}
 
     /**
@@ -362,7 +386,11 @@ public class OutNetMessage implements CDPQEntry {
      */
     public void setTransportQueued(long now) {_transportQueued = now;}
 
-    /** @return when the message was queued */
+    /**
+     *  When the message was queued.
+     *
+     *  @return when the message was queued
+     */
     public long getTransportQueued() {return _transportQueued;}
 
     /**

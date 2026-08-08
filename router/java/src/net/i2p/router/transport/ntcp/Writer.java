@@ -33,9 +33,7 @@ public class Writer {
     /** Tracks how many runner threads are actively processing (not parked). */
     private final AtomicInteger _activeCount = new AtomicInteger();
 
-    /**
-     * Writer.
-     */
+    /** Writer thread pool for the given context. */
     public Writer(RouterContext ctx) {
         _log = ctx.logManager().getLog(getClass());
         _pendingConnections = new LinkedHashSet<>(128);
@@ -44,15 +42,16 @@ public class Writer {
         _writeAfterLive = new HashSet<>(16);
     }
 
-    /** Get the writer thread count */
+    /** Writer thread count. */
     public static int getThreadCount() { return _threadCount; }
 
-    /** Get the number of threads currently processing (not parked). */
+    /** Number of threads currently processing (not parked). */
     public int getActiveCount() { return _activeCount.get(); }
 
     /**
-     * Get writer pool utilization as a ratio (0.0-1.0).
-     * Returns NaN if no writers are active (pool not started).
+     * Writer pool utilization as a ratio (0.0-1.0).
+     * NaN if no writers are active (pool not started).
+     *
      * @return the utilization
      */
     public double getUtilization() {
@@ -60,12 +59,10 @@ public class Writer {
         return size > 0 ? (double) _activeCount.get() / size : Double.NaN;
     }
 
-    /** Set the writer thread count, bounded by MIN_THREADS-MAX_THREADS */
+    /** Writer thread count, bounded by MIN_THREADS-MAX_THREADS. */
     public static void setThreadCount(int count) { _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, count)); }
 
-    /**
-     * startWriting.
-     */
+    /** Starts the given number of writer threads. */
     public synchronized void startWriting(int numWriters) {
         for (int i = 1; i <= numWriters; i++) {
             startRunner();
@@ -102,9 +99,7 @@ public class Writer {
         }
     }
 
-    /**
-     * stopWriting.
-     */
+    /** Stops all writer threads. */
     public synchronized void stopWriting() {
         while (!_runners.isEmpty()) {
             Runner r = _runners.remove(0);
@@ -116,9 +111,7 @@ public class Writer {
         }
     }
 
-    /**
-     * wantsWrite.
-     */
+    /** Registers a connection to be written. */
     public void wantsWrite(NTCPConnection con, String source) {
         boolean already = false;
         boolean pending = false;
@@ -135,9 +128,7 @@ public class Writer {
             _log.debug("wantsWrite: " + con + " already live? " + already + " added to pending? " + pending + ": " + source);
     }
 
-    /**
-     * connectionClosed.
-     */
+    /** Removes a closed connection from the queues. */
     public void connectionClosed(NTCPConnection con) {
         synchronized (_pendingConnections) {
             _writeAfterLive.remove(con);
@@ -154,21 +145,15 @@ public class Writer {
 
         private volatile boolean _stop;
 
-        /**
-         * Runner.
-         */
+        /** Writer runner with its own scratch buffer. */
         public Runner() {
             _prepBuffer = new NTCPConnection.PrepBuffer();
         }
 
-        /**
-         * stop.
-         */
+        /** Stops this runner. */
         public void stop() { _stop = true; }
 
-        /**
-         * run.
-         */
+        /** Writer processing loop. */
         public void run() {
             if (_log.shouldInfo()) _log.info("Starting writer");
             NTCPConnection con = null;

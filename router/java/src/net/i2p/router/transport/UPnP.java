@@ -726,7 +726,6 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         // for a port forward when miniupnpd is configured for "secure".
         // local, no loopback, ipv6, no temp. ipv6
         Set<String> addrs = Addresses.getAddresses(true, false, true, false);
-        // remove public addresses
         // see TransportManager.startListening()
         for (Iterator<String> iter = addrs.iterator(); iter.hasNext(); ) {
             String addr = iter.next();

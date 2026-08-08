@@ -251,7 +251,7 @@ abstract class EstablishBase implements EstablishState {
     }
 
     /**
-     *  Get the NTCP version
+     *  NTCP version.
      *  @return 1, 2, or 0 if unknown
      *  @since 0.9.35
      */
@@ -299,7 +299,7 @@ abstract class EstablishBase implements EstablishState {
     }
 
     /**
-     * Get the failure reason if the handshake failed, or null if not failed/corrupt.
+     * Failure reason if the handshake failed, or null if not failed/corrupt.
      * @return failure reason string or null
      */
     public String getFailReason() {

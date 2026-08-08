@@ -157,7 +157,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     }
 
     /**
-     * Get the NTCP version
+     * NTCP version.
      * @return 2-5 or 0 if unknown
      * @since 0.9.35
      */

@@ -52,7 +52,11 @@ public class DecayingHashSet extends DecayingBloomFilter {
         this(context, durationMs, entryBytes, "DHS");
     }
 
-    /** @param name just for logging / debugging / stats */
+    /**
+     *  Decaying hash set with a custom name.
+     *
+     *  @param name just for logging / debugging / stats
+     */
     public DecayingHashSet(I2PAppContext context, int durationMs, int entryBytes, String name) {
         super(durationMs, entryBytes, name, context);
         if (entryBytes <= 0 || entryBytes > 32)

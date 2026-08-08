@@ -1099,19 +1099,17 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Sample code to verify a 3rd party signature.
-     *  This just goes through all the hosts.txt files and tries everybody.
-     *  You need to be in the $I2P directory or have a local hosts.txt for this to work.
-     *  Doubt this is what you want as it is super-slow, and what good is
-     *  a signing scheme where anybody is allowed to sign?
-     *
-     *  In a real application you would make a list of approved signers,
-     *  do a naming lookup to get their Destinations, and try those only.
-     *  Or do a netDb lookup of the Hash in the Certificate, do a reverse
-     *  naming lookup to see if it is allowed, then verify the Signature.
-     */
-    /**
      *  Verify the signature on a destination.
+     *
+     *  <p>Sample code that goes through all the hosts.txt files and tries
+     *  everybody.  You need to be in the $I2P directory or have a local
+     *  hosts.txt for this to work.  Doubt this is what you want as it is
+     *  super-slow, and what good is a signing scheme where anybody is
+     *  allowed to sign?  In a real application you would make a list of
+     *  approved signers, do a naming lookup to get their Destinations, and
+     *  try those only.  Or do a netDb lookup of the Hash in the Certificate,
+     *  do a reverse naming lookup to see if it is allowed, then verify the
+     *  Signature.</p>
      *
      *  @param d the destination to verify
      *  @return true if the signature is valid

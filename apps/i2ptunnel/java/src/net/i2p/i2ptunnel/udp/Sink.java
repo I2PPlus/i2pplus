@@ -7,6 +7,8 @@ import net.i2p.data.Destination;
  */
 public interface Sink {
     /**
+     *  Sends a datagram to the given destination.
+     *
      *  @param fromPort I2CP source port, 0-65535
      *  @param toPort I2CP destination port, 0-65535
      *  @param src some implementations may ignore, may be null in some implementations

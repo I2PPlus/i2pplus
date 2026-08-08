@@ -48,11 +48,11 @@ class TunnelParticipant {
     private static final long LONG_MAX_LOOKUP_TIME = 25 * 1000L;
     private static final int PRIORITY = OutNetMessage.PRIORITY_PARTICIPATING;
     // 200 messages * 2KB in 10 minutes = 340 Bps - optimized for high bandwidth contexts
-    /** D e f a u l t  b w  p e r  t u n n e l  e s t i m a t e */
+    /** Default bandwidth per tunnel estimate. */
     static final int DEFAULT_BW_PER_TUNNEL_ESTIMATE = RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE * 2048 / (10 * 60);
 
     /**
-     * Construct for intermediate tunnel participant (not endpoint).
+     * For intermediate tunnel participant (not endpoint).
      */
     public TunnelParticipant(RouterContext ctx, HopConfig config, HopProcessor processor) {
         this(ctx, config, processor, null);

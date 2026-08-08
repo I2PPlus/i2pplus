@@ -165,7 +165,11 @@ public interface Transport {
             this.cfgstr = cfgstr;
         }
 
-    /** @return config string */
+    /**
+     *  Config string for this address source.
+     *
+     *  @return config string
+     */
     public String toConfigString() {
             return cfgstr;
         }
@@ -282,11 +286,23 @@ public interface Transport {
      */
     public List<Hash> getEstablished();
 
-    /** @return peer count */
+    /**
+     *  Number of peers.
+     *
+     *  @return peer count
+     */
     public int countPeers();
-    /** @return active peer count */
+    /**
+     *  Number of active peers.
+     *
+     *  @return active peer count
+     */
     public int countActivePeers();
-    /** @return active send peer count */
+    /**
+     *  Number of active send peers.
+     *
+     *  @return active send peer count
+     */
     public int countActiveSendPeers();
 
     /**

@@ -69,7 +69,11 @@ public abstract class StrictCountries {
         _countries = new HashSet<>(Arrays.asList(c));
     }
 
-    /** @param country non-null, two letter code, case-independent */
+    /**
+     *  Whether the country is in the restricted set.
+     *
+     *  @param country non-null, two-letter code, case-independent
+     */
     public static boolean contains(String country) {
         return _countries.contains(country.toUpperCase(Locale.US));
     }

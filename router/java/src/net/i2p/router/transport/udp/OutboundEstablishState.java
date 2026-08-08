@@ -203,7 +203,11 @@ class OutboundEstablishState {
      */
     public int getVersion() { return 1; }
 
-    /** @return the current outbound state */
+    /**
+     *  Current outbound handshake state.
+     *
+     *  @return the current outbound state
+     */
     public synchronized OutboundState getState() { return _currentState; }
 
     /**
@@ -217,14 +221,22 @@ class OutboundEstablishState {
         return already;
     }
 
-    /** @return the remote address */
+    /**
+     *  Remote address of the peer.
+     *
+     *  @return the remote address
+     */
     public UDPAddress getRemoteAddress() { return _remoteAddress; }
 
-    /** @param nonce the introduction nonce */
+    /**
+     *  Sets the introduction nonce.
+     *
+     *  @param nonce the introduction nonce
+     */
     public void setIntroNonce(long nonce) { _introductionNonce = nonce; }
 
     /**
-     * Get the introduction nonce, or -1 if unset.
+     * Introduction nonce, or -1 if unset.
      *
      * @return the nonce, or -1
      */
@@ -247,7 +259,11 @@ class OutboundEstablishState {
      */
     public boolean needIntroduction() { return _needIntroduction; }
 
-    /** @return the RTT */
+    /**
+     *  Round-trip time estimate.
+     *
+     *  @return the RTT
+     */
     synchronized int getRTT() { return _rtt; }
 
     /**
@@ -294,7 +310,11 @@ class OutboundEstablishState {
         return _queuedMessages.poll();
     }
 
-    /** @return the remote identity */
+    /**
+     *  Remote router identity.
+     *
+     *  @return the remote identity
+     */
     public RouterIdentity getRemoteIdentity() { return _remotePeer; }
 
     /**
@@ -348,15 +368,35 @@ class OutboundEstablishState {
         _nextSend = _context.clock().now();
     }
 
-    /** @return the received relay tag */
+    /**
+     *  Relay tag received from the introducer.
+     *
+     *  @return the received relay tag
+     */
     public synchronized long getReceivedRelayTag() { return _receivedRelayTag; }
-    /** @return the sent signed-on time */
+    /**
+     *  Time the signed-on packet was sent.
+     *
+     *  @return the sent signed-on time
+     */
     public synchronized long getSentSignedOnTime() { return _sentSignedOnTime; }
-    /** @return the received signed-on time */
+    /**
+     *  Time the signed-on packet was received.
+     *
+     *  @return the received signed-on time
+     */
     public synchronized long getReceivedSignedOnTime() { return _receivedSignedOnTime; }
-    /** @return the received IP */
+    /**
+     *  IP address reported by the peer.
+     *
+     *  @return the received IP
+     */
     public synchronized byte[] getReceivedIP() { return _aliceIP; }
-    /** @return the received port */
+    /**
+     *  Port reported by the peer.
+     *
+     *  @return the received port
+     */
     public synchronized int getReceivedPort() { return _alicePort; }
 
     /** note that we just sent the SessionConfirmed packet */
@@ -513,7 +553,11 @@ class OutboundEstablishState {
      */
     public long getLifetime(long now) { return now - _establishBegin; }
 
-    /** @return the establish begin time */
+    /**
+     *  Time the establish began.
+     *
+     *  @return the establish begin time
+     */
     public long getEstablishBeginTime() { return _establishBegin; }
 
     /**

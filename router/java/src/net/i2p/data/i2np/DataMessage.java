@@ -33,7 +33,11 @@ public class DataMessage extends FastI2NPMessageImpl {
         super(context);
     }
 
-    /** @return the data */
+    /**
+     *  Payload data.
+     *
+     *  @return the data
+     */
     public byte[] getData() {
         return _data;
     }
@@ -50,7 +54,11 @@ public class DataMessage extends FastI2NPMessageImpl {
         _data = data;
     }
 
-    /** @return the data size */
+    /**
+     *  Payload size in bytes.
+     *
+     *  @return the data size
+     */
     public int getSize() {
         return _data.length;
     }

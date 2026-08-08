@@ -91,7 +91,6 @@ public class I2PSource implements Source {
      */
     @Override
     public void start() {
-        // create listener
         Listener l = new Listener();
         if (protocol != Protocol.RAW)
             sess.addMuxedSessionListener(l, I2PSession.PROTO_DATAGRAM, port);
@@ -104,7 +103,11 @@ public class I2PSource implements Source {
      */
     protected class Listener implements I2PSessionMuxedListener {
 
-        /** @throws IllegalStateException always */
+        /**
+         *  Always throws, since the muxed variant must be used.
+         *
+         *  @throws IllegalStateException always
+         */
         public void messageAvailable(I2PSession sess, int id, long size) {
             throw new IllegalStateException("muxed");
         }
@@ -114,12 +117,9 @@ public class I2PSource implements Source {
             if (log.shouldDebug())
                 log.debug("Got " + size + " bytes, proto: " + proto + " from port: " + fromPort + " to port: " + toPort);
             try {
-                // receive message
                 byte[] msg = session.receiveMessage(id);
                 if (proto == I2PSession.PROTO_DATAGRAM) {
-                    // load datagram into it
                     diss.loadI2PDatagram(msg);
-                    // now call sink
                     sink.send(diss.getSender(), fromPort, toPort, diss.getPayload());
                 } else if (proto == I2PSession.PROTO_DATAGRAM_RAW) {
                     sink.send(null, fromPort, toPort, msg);

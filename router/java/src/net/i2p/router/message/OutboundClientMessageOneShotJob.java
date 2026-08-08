@@ -765,8 +765,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
 
         DispatchJob dispatchJob = new DispatchJob(msg, selector, onReply, onFail);
-        //    getContext().jobQueue().addJob(dispatchJob);
-        //else
         dispatchJob.runJob();
         if (!wantACK) {getContext().statManager().addRateData("client.dispatchNoACK", 1);}
     }

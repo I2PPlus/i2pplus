@@ -724,7 +724,11 @@ class ClientManager {
         }
     }
 
-    /** @deprecated unused */
+    /**
+     *  Render client status as HTML.
+     *
+     *  @deprecated unused
+     */
     @Deprecated
     public void renderStatusHTML(Writer out) throws IOException {
         // intentionally empty - deprecated, rendering moved to router console

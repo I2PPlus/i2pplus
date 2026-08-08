@@ -97,10 +97,8 @@ public class SAMBridge implements Runnable, ClientApp {
     /** Property suffix for SAM password hash entries. */
     public static final String PROP_PW_SUFFIX = ".shash";
     /** Default listen address for the SAM TCP socket. */
-    /** Default TCP host. */
     protected static final String DEFAULT_TCP_HOST = "127.0.0.1";
     /** Default port for the SAM TCP socket. */
-    /** Default TCP port. */
     protected static final String DEFAULT_TCP_PORT = "7656";
 
     /** Property for the SAM datagram listen address. */
@@ -108,13 +106,10 @@ public class SAMBridge implements Runnable, ClientApp {
     /** Property for the SAM datagram listen port. */
     public static final String PROP_DATAGRAM_PORT = "sam.udp.port";
     /** Default listen address for the SAM datagram socket. */
-    /** Default datagram host. */
     protected static final String DEFAULT_DATAGRAM_HOST = "127.0.0.1";
     /** Default port for the SAM datagram socket. */
-    /** Default datagram port int. */
     protected static final int DEFAULT_DATAGRAM_PORT_INT = 7655;
     /** Default port string for the SAM datagram socket. */
-    /** Default datagram port. */
     protected static final String DEFAULT_DATAGRAM_PORT = Integer.toString(DEFAULT_DATAGRAM_PORT_INT);
 
     /**

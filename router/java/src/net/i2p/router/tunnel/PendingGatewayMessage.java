@@ -58,10 +58,18 @@ class PendingGatewayMessage implements CDQEntry {
      */
     public TunnelId getToTunnel() { return _toTunnel; }
 
-    /** @return the message ID */
+    /**
+     *  Message ID.
+     *
+     *  @return the message ID
+     */
     public long getMessageId() { return _messageId; }
 
-    /** @return the message expiration */
+    /**
+     *  Message expiration time.
+     *
+     *  @return the message expiration
+     */
     public long getExpiration() { return _expiration; }
 
     /**
@@ -82,7 +90,11 @@ class PendingGatewayMessage implements CDQEntry {
      */
     public void setOffset(int offset) { _offset = offset; }
 
-    /** @return the lifetime in milliseconds */
+    /**
+     *  Lifetime in milliseconds.
+     *
+     *  @return the lifetime in milliseconds
+     */
     public long getLifetime() { return System.currentTimeMillis()-_created; }
 
     /**

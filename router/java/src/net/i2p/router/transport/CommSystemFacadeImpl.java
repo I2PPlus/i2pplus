@@ -167,24 +167,36 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         getReverseDnsExecutor();
     }
 
-    /** Get the rDNS executor core pool size. @since 0.9.70+ */
+    /**
+     * rDNS executor core pool size.
+     * @since 0.9.70+
+     */
     public static int getRdnsCorePoolSize() { return _rdnsCorePoolSize; }
 
-    /** Set the rDNS executor core pool size, bounded 2-8. @since 0.9.70+ */
+    /**
+     * rDNS executor core pool size, bounded 2-8.
+     * @since 0.9.70+
+     */
     public static void setRdnsCorePoolSize(int size) {
         _rdnsCorePoolSize = Math.max(2, Math.min(8, size));
     }
 
-    /** Get the rDNS executor max pool size. @since 0.9.70+ */
+    /**
+     * rDNS executor max pool size.
+     * @since 0.9.70+
+     */
     public static int getRdnsMaxPoolSize() { return _rdnsMaxPoolSize; }
 
-    /** Set the rDNS executor max pool size, bounded 2-8. @since 0.9.70+ */
+    /**
+     * rDNS executor max pool size, bounded 2-8.
+     * @since 0.9.70+
+     */
     public static void setRdnsMaxPoolSize(int size) {
         _rdnsMaxPoolSize = Math.max(2, Math.min(8, size));
     }
 
     /**
-     * Get the reverse DNS executor, initializing it if necessary.
+     * Reverse DNS executor, initializing it if necessary.
      * @return the reverse dns executor
      */
     private ExecutorService getReverseDnsExecutor() {
@@ -1281,7 +1293,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * Returns the canonical hostname for the given IP address from cache or DNS.
+     * Canonical hostname for the given IP address from cache or DNS.
      * If RDNS is enabled, performs a reverse DNS lookup first.
      * Falls back to local ASN database if DNS fails, returning the org name.
      *
@@ -1824,7 +1836,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Get the first valid IP of the specified type (IPv4 or IPv6).
+     *  First valid IP of the specified type (IPv4 or IPv6).
      * @return the first valid i p of type
      */
     private static byte[] getFirstValidIPOfType(RouterInfo ri, boolean wantIPv6) {

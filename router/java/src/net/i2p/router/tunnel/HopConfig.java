@@ -170,7 +170,11 @@ public class HopConfig {
      */
     public synchronized void incrementProcessedMessages() { _messagesProcessed++; }
 
-    /** @return the processed messages count */
+    /**
+     *  Processed messages count.
+     *
+     *  @return the processed messages count
+     */
     public synchronized int getProcessedMessagesCount() { return _messagesProcessed; }
 
     /**

@@ -107,7 +107,11 @@ public class DeliveryInstructions extends DataStructureImpl {
     /** default -1 */
     public int getDeliveryMode() { return _deliveryMode; }
 
-    /** @param mode 0-3 */
+    /**
+     *  Delivery mode of the message.
+     *
+     *  @param mode 0-3
+     */
     public void setDeliveryMode(int mode) { _deliveryMode = mode; }
 
     /** default null */

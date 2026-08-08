@@ -267,7 +267,11 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         //_context.statManager().addRateData("crypto.MLKEMReused", 1);
     }
 
-    /** @return true if successful, false if full */
+    /**
+     *  Adds a precomputed key pair to the pool.
+     *
+     *  @return true if successful, false if full
+     */
     private final boolean addKeys(KeyPair kp) {
         return _keys.offer(kp);
     }

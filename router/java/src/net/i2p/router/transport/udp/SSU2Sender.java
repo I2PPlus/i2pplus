@@ -12,34 +12,96 @@ import java.util.List;
  * @since 0.9.57
  */
 interface SSU2Sender {
-    /** @return remote host ID */
+    /**
+     *  Remote host ID.
+     *
+     *  @return remote host ID
+     */
     RemoteHostId getRemoteHostId();
-    /** @return true for IPv6 */
+    /**
+     *  Whether the remote is IPv6.
+     *
+     *  @return true for IPv6
+     */
     boolean isIPv6();
-    /** @return remote IP address */
+    /**
+     *  Remote IP address.
+     *
+     *  @return remote IP address
+     */
     InetAddress getRemoteIPAddress();
-    /** @return remote port */
+    /**
+     *  Remote port.
+     *
+     *  @return remote port
+     */
     int getRemotePort();
-    /** @return MTU */
+    /**
+     *  Maximum transmission unit.
+     *
+     *  @return MTU
+     */
     int getMTU();
-    /** @return next packet number */
+    /**
+     *  Next packet number to use.
+     *
+     *  @return next packet number
+     */
     long getNextPacketNumber() throws IOException;
-    /** @return send connection ID */
+    /**
+     *  Connection ID to use when sending.
+     *
+     *  @return send connection ID
+     */
     long getSendConnID();
-    /** @return send cipher */
+    /**
+     *  Cipher to use when sending.
+     *
+     *  @return send cipher
+     */
     CipherState getSendCipher();
-    /** @return send header encrypt key 1 */
+    /**
+     *  Header encryption key 1.
+     *
+     *  @return send header encrypt key 1
+     */
     byte[] getSendHeaderEncryptKey1();
-    /** @return send header encrypt key 2 */
+    /**
+     *  Header encryption key 2.
+     *
+     *  @return send header encrypt key 2
+     */
     byte[] getSendHeaderEncryptKey2();
-    /** @param reason destroy reason */
+    /**
+     *  Reason the connection was destroyed.
+     *
+     *  @param reason destroy reason
+     */
     void setDestroyReason(int reason);
-    /** @return received messages bitfield */
+    /**
+     *  Bitfield of received messages.
+     *
+     *  @return received messages bitfield
+     */
     SSU2Bitfield getReceivedMessages();
-    /** @return acked messages bitfield */
+    /**
+     *  Bitfield of acked messages.
+     *
+     *  @return acked messages bitfield
+     */
     SSU2Bitfield getAckedMessages();
-    /** @param pktNum packet number, @param length fragment length, @param fragments fragment list */
+    /**
+     *  Records that a set of fragments was sent.
+     *
+     *  @param pktNum packet number
+     *  @param length fragment length
+     *  @param fragments fragment list
+     */
     void fragmentsSent(long pktNum, int length, List<PacketBuilder.Fragment> fragments);
-    /** @return flags byte */
+    /**
+     *  Flags byte.
+     *
+     *  @return flags byte
+     */
     byte getFlags();
 }

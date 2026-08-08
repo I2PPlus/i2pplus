@@ -45,8 +45,11 @@ public class RatchetSessionTag {
     public long getLong() {
         return _data;
     }
-    /** @return the tag size in bytes (always 8) */
-
+    /**
+     *  Tag size in bytes (always 8).
+     *
+     *  @return the tag size in bytes (always 8)
+     */
     public int length() { // NOSONAR S1845 length() is standard Java naming
         return LENGTH;
     }
@@ -80,7 +83,11 @@ public class RatchetSessionTag {
         return _data == ((RatchetSessionTag) obj)._data;
     }
 
-    /** @return base64-encoded tag string */
+    /**
+     *  Base64-encoded tag string.
+     *
+     *  @return base64-encoded tag string
+     */
     @Override
     public String toString() {
         return "RatchetSessionTag: " + toBase64();

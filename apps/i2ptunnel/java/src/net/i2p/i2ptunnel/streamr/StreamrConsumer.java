@@ -30,13 +30,11 @@ public class StreamrConsumer extends I2PTunnelUDPClientBase {
                            I2PTunnel tunnel) {
         super(destination, l, notifyThis, tunnel);
 
-        // create udp-destination
         UDPSink udps = new UDPSink(host, port);
         int localPort = udps.getPort();
         this.sink = udps;
         setSink(this.sink);
 
-        // create pinger
         this.pinger = new Pinger(_context, localPort);
         this.pinger.setSink(this);
     }
@@ -48,7 +46,6 @@ public class StreamrConsumer extends I2PTunnelUDPClientBase {
     @Override
     public final void startRunning() {
         super.startRunning();
-        // send subscribe-message
         this.pinger.start();
         l.log("Streamr client ready");
     }
@@ -61,7 +58,6 @@ public class StreamrConsumer extends I2PTunnelUDPClientBase {
      */
     @Override
     public boolean close(boolean forced) {
-        // send unsubscribe-message
         this.pinger.stop();
         this.sink.stop();
         return super.close(forced);

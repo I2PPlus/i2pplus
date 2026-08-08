@@ -505,11 +505,23 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     @Override
     public int getVersion() { return _version; }
-    /** @return the send connection ID */
+    /**
+     *  Connection ID we use when sending.
+     *
+     *  @return the send connection ID
+     */
     public long getSendConnID() { return _sendConnID; }
-    /** @return the receive connection ID */
+    /**
+     *  Connection ID we receive from the peer.
+     *
+     *  @return the receive connection ID
+     */
     public long getRcvConnID() { return _rcvConnID; }
-    /** @return the current token */
+    /**
+     *  Current session token.
+     *
+     *  @return the current token
+     */
     public long getToken() { return _token; }
     /**
      *  Get the next token for this connection
@@ -521,21 +533,47 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             return null;
         return _transport.getEstablisher().getInboundToken(_remoteHostId);
     }
-    /** @return the handshake state */
+    /**
+     *  Current handshake state.
+     *
+     *  @return the handshake state
+     */
     public HandshakeState getHandshakeState() { return _handshakeState; }
-    /** @return the send header encrypt key 1 */
+    /**
+     *  Header encryption key 1 for sending.
+     *
+     *  @return the send header encrypt key 1
+     */
     public byte[] getSendHeaderEncryptKey1() { return _headerEncryptKey1; }
-    /** @return the receive header encrypt key 1 */
+    /**
+     *  Header encryption key 1 for receiving.
+     *
+     *  @return the receive header encrypt key 1
+     */
     public byte[] getRcvHeaderEncryptKey1() { return _headerEncryptKey1; }
-    /** @return the send header encrypt key 2 */
+    /**
+     *  Header encryption key 2 for sending.
+     *
+     *  @return the send header encrypt key 2
+     */
     public byte[] getSendHeaderEncryptKey2() { return _sendHeaderEncryptKey2; }
     /**
+     *  Header encryption key 2 for receiving.
+     *
      *  @return null before Session Request is sent (i.e. we sent a Token Request first)
      */
     public byte[] getRcvHeaderEncryptKey2() { return _rcvHeaderEncryptKey2; }
-    /** @return the retry header encrypt key 2 */
+    /**
+     *  Retry header encryption key 2 for receiving.
+     *
+     *  @return the retry header encrypt key 2
+     */
     public byte[] getRcvRetryHeaderEncryptKey2() { return _rcvRetryHeaderEncryptKey2; }
-    /** @return the Bob socket address */
+    /**
+     *  Socket address we sent the session request to.
+     *
+     *  @return the Bob socket address
+     */
     public InetSocketAddress getSentAddress() { return _bobSocketAddress; }
 
     /**
@@ -954,7 +992,11 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                 count > 0 ? " (Introducers: " + count + ")" : "");
     }
 
-    /** @return the number of introducers */
+    /**
+     *  Number of current introducers.
+     *
+     *  @return the number of introducers
+     */
     public int countIntroducers() {
         return _introducers != null ? _introducers.size() : 0;
     }

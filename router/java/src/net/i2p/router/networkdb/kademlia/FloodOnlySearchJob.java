@@ -72,7 +72,11 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
         _onTimeout = new FloodOnlyLookupTimeoutJob(ctx, this);
     }
 
-    /** @return true if DSRM should be processed */
+    /**
+     *  Whether a DSRM reply should be processed.
+     *
+     *  @return true if DSRM should be processed
+     */
     public boolean shouldProcessDSRM() { return _shouldProcessDSRM; }
 
     @Override

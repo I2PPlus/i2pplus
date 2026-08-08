@@ -347,7 +347,11 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         _keys.offer(kp);
     }
 
-    /** @return true if successful, false if at or above max size */
+    /**
+     *  Adds a precomputed key pair to the pool.
+     *
+     *  @return true if successful, false if at or above max size
+     */
     private final boolean addKeys(KeyPair kp) {
         if (_keys.size() >= _maxSize) { return false; }
         return _keys.offer(kp);

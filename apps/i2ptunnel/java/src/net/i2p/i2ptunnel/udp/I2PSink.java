@@ -59,7 +59,6 @@ public class I2PSink implements Sink {
         this.raw = raw;
         this.toPort = toPort;
 
-        // create maker
         if (raw) {
             this.maker = null;
         } else {
@@ -80,7 +79,6 @@ public class I2PSink implements Sink {
      */
     @Override
     public synchronized void send(Destination src, int fromPort, int ign_toPort, byte[] data) {
-        // create payload
         byte[] payload;
         if (!this.raw) {
             synchronized(this.maker) {
@@ -90,7 +88,6 @@ public class I2PSink implements Sink {
             payload = data;
         }
 
-        // send message
         try {
             this.sess.sendMessage(this.dest, payload,
                                   (this.raw ? I2PSession.PROTO_DATAGRAM_RAW : I2PSession.PROTO_DATAGRAM),

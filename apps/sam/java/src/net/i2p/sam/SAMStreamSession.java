@@ -50,25 +50,10 @@ import net.i2p.util.Log;
  */
 class SAMStreamSession implements SAMMessageSess {
 
-    /**
-     * _log.
-     */
     protected final Log _log;
-    /**
-     * SOCKET_HANDLER_BUF_SIZE.
-     */
     protected final static int SOCKET_HANDLER_BUF_SIZE = 32768;
-    /**
-     * recv.
-     */
     protected final SAMStreamReceiver recv;
-    /**
-     * server.
-     */
     protected final SAMStreamSessionServer server;
-    /**
-     * socketMgr.
-     */
     protected final I2PSocketManager socketMgr;
 
     /** stream id (Long) to SAMStreamSessionSocketReader */
@@ -80,17 +65,11 @@ class SAMStreamSession implements SAMMessageSess {
     private final AtomicInteger lastNegativeId = new AtomicInteger();
 
     // Can we create outgoing connections?
-    /**
-     * canCreate.
-     */
     protected final boolean canCreate;
     /** Listen protocol. */
     private final int listenProtocol;
     /** Listen port. */
     private final int listenPort;
-    /**
-     * _isOwnSession.
-     */
     protected final boolean _isOwnSession;
 
     /**
@@ -99,15 +78,7 @@ class SAMStreamSession implements SAMMessageSess {
      */
     protected final boolean forceFlush;
 
-    /**
-     * PROP_FORCE_FLUSH.
-     */
-    /** PROP_FORCE_FLUSH */
     public static final String PROP_FORCE_FLUSH = "sam.forceFlush";
-    /**
-     * DEFAULT_FORCE_FLUSH.
-     */
-    /** DEFAULT_FORCE_FLUSH */
     public static final String DEFAULT_FORCE_FLUSH = "false";
 
     /**
@@ -574,7 +545,6 @@ class SAMStreamSession implements SAMMessageSess {
      *
      * @author human
      */
-    /** SAMStreamSessionServer */
     public class SAMStreamSessionServer implements Runnable {
 
         /** Lock for server running state. */
@@ -694,12 +664,8 @@ class SAMStreamSession implements SAMMessageSess {
      *
      * @author human
      */
-    /** SAMStreamSessionSocketReader */
     public static class SAMStreamSessionSocketReader implements Runnable {
 
-        /**
-         * i2pSocket.
-         */
         protected final I2PSocket i2pSocket;
 
         /**
@@ -757,7 +723,6 @@ class SAMStreamSession implements SAMMessageSess {
     /**
      * SAMv1StreamSessionSocketReader.
      */
-    /** SAMv1StreamSessionSocketReader */
     public class SAMv1StreamSessionSocketReader extends SAMStreamSessionSocketReader {
         /**
          * Create a new SAM STREAM session socket reader

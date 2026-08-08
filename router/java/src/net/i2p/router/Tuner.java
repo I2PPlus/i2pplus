@@ -241,13 +241,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         return Math.max(min, Math.min(max, min + peers / divisor));
     }
 
-    /** @return the UDP transport or null */
+    /**
+     *  UDP transport, or null if not available.
+     *
+     *  @return the UDP transport or null
+     */
     private UDPTransport getUDPTransport() {
         Transport t = _context.commSystem().getTransports().get(UDPTransport.STYLE);
         return t instanceof UDPTransport ? (UDPTransport) t : null;
     }
 
-    /** @return the NTCP transport or null */
+    /**
+     *  NTCP transport, or null if not available.
+     *
+     *  @return the NTCP transport or null
+     */
     private NTCPTransport getNTCPTransport() {
         Transport t = _context.commSystem().getTransports().get(NTCPTransport.STYLE);
         return t instanceof NTCPTransport ? (NTCPTransport) t : null;
@@ -266,13 +274,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *  Global caps (maxQueuedTests, hardLimit) protect the job queue instead. */
     private static volatile int _testClientBudget = 256;
 
-    /** Retest delay backoff multiplier (percent, 100 = 1x).
-     *  Increases under job queue pressure to free test capacity for UNTESTED tunnels.
-     *  Range 100 (no backoff) to 800 (8x). */
+    /**
+     * Retest delay backoff multiplier (percent, 100 = 1x).
+     * Increases under job queue pressure to free test capacity for UNTESTED tunnels.
+     * Range 100 (no backoff) to 800 (8x).
+     */
     private static volatile int _testRetestBackoff = 100;
 
-    /** Extra tunnels to build beyond target per pool when build failure rate is high.
-     *  Computed from build success rate. Range 0-10. */
+    /**
+     * Extra tunnels to build beyond target per pool when build failure rate is high.
+     * Computed from build success rate. Range 0-10.
+     */
     private static volatile int _buildFailureBuffer = 0;
 
     /**

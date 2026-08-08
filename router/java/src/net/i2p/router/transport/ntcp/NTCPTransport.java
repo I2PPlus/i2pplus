@@ -923,7 +923,7 @@ public class NTCPTransport extends TransportImpl {
     void setLastBadSkew(long skew) {_lastBadSkew = skew;}
 
     /**
-     * Return our peer clock skews on this transport.
+     * Peer clock skews on this transport.
      * List composed of Long, each element representing a peer skew in seconds.
      * A positive number means our clock is ahead of theirs.
      * @return the clock skews
@@ -1271,13 +1271,13 @@ public class NTCPTransport extends TransportImpl {
     Writer getWriter() {return _writer;}
 
     /**
-     * Get the transport style.
+     * Transport style.
      * @return always "NTCP"
      */
     public String getStyle() {return STYLE;}
 
     /**
-     * Get the alternate supported style.
+     * Alternate supported style.
      * @return "NTCP2" always
      * @since 0.9.35
      */
@@ -1308,10 +1308,16 @@ public class NTCPTransport extends TransportImpl {
      */
     static volatile int ESTABLISH_TIMEOUT = 5*1000;
 
-    /** Get the NTCP establish timeout in ms. @since 0.9.70+ */
+    /**
+     * NTCP establish timeout in ms.
+     * @since 0.9.70+
+     */
     public static int getEstablishTimeout() { return ESTABLISH_TIMEOUT; }
 
-    /** Set the NTCP establish timeout, bounded 1500-10000ms. @since 0.9.70+ */
+    /**
+     * NTCP establish timeout, bounded 1500-10000ms.
+     * @since 0.9.70+
+     */
     public static void setEstablishTimeout(int ms) {
         ESTABLISH_TIMEOUT = Math.max(1500, Math.min(10000, ms));
     }
@@ -1437,7 +1443,7 @@ public class NTCPTransport extends TransportImpl {
     byte[] getNTCP2StaticIV() {return _ntcp2StaticIV;}
 
     /**
-     * Get the valid NTCP version of Bob's NTCP address
+     * Valid NTCP version of Bob's NTCP address
      * for our outbound connections as Alice.
      *
      * @return the valid version 2-5, 1 for old NTCP1, or 0 if unusable
@@ -1477,7 +1483,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * Return a single configured IP (as a String) or null if not configured or invalid.
+     * Single configured IP (as a String) or null if not configured or invalid.
      * Resolves a hostname to an IP.
      * Called at startup via createNTCPAddress() and later via externalAddressReceived().
      *
@@ -2032,52 +2038,50 @@ public class NTCPTransport extends TransportImpl {
      * Cache the bid to reduce object churn
      */
     private class SharedBid extends TransportBid {
-        /**
-         * SharedBid.
-         */
+        /** Bid for this transport with a fixed latency. */
         public SharedBid(int ms) {super(); setLatencyMs(ms);}
         /**
+         * The transport this bid is for.
+         *
          * @return the transport
          */
         @Override
         public Transport getTransport() {return NTCPTransport.this;}
-        /**
-         * toString.
-         */
+        /** String form of this bid. */
         @Override
         public String toString() {return "NTCP bid @ " + getLatencyMs();}
     }
 
     // ==================== Tuner delegation ====================
 
-    /** Get the selector loop delay in milliseconds */
+    /** Selector loop delay in milliseconds. */
     public static long getSelectorLoopDelay() { return EventPumper.getSelectorLoopDelay(); }
 
-    /** Set the selector loop delay, bounded 1-100ms */
+    /** Selector loop delay, bounded 1-100ms. */
     public static void setSelectorLoopDelay(long ms) { EventPumper.setSelectorLoopDelay(ms); }
 
-    /** Get the max idle loop rate in loops per second */
+    /** Max idle loop rate in loops per second. */
     public static int getMaxIdleLps() { return EventPumper.getMaxIdleLps(); }
 
-    /** Set the max idle loop rate in loops per second, bounded 1-5000 */
+    /** Max idle loop rate in loops per second, bounded 1-5000. */
     public static void setMaxIdleLps(int lps) { EventPumper.setMaxIdleLps(lps); }
 
-    /** Get the failsafe iteration frequency in milliseconds */
+    /** Failsafe iteration frequency in milliseconds. */
     public static long getFailsafeIterationFreq() { return EventPumper.getFailsafeIterationFreq(); }
 
-    /** Set the failsafe iteration frequency, bounded by MIN-MAX */
+    /** Failsafe iteration frequency, bounded by MIN-MAX. */
     public static void setFailsafeIterationFreq(long ms) { EventPumper.setFailsafeIterationFreq(ms); }
 
-    /** Get the send finisher max threads */
+    /** Send finisher max threads. */
     public static int getSendFinisherMaxThreads() { return NTCPSendFinisher.getMaxThreads(); }
 
-    /** Set the send finisher max threads */
+    /** Send finisher max threads. */
     public static void setSendFinisherMaxThreads(int threads) { NTCPSendFinisher.setMaxThreads(threads); }
 
-    /** Get the send finisher queue capacity */
+    /** Send finisher queue capacity. */
     public static int getSendFinisherQueueCapacity() { return NTCPSendFinisher.getQueueCapacity(); }
 
-    /** Set the send finisher queue capacity */
+    /** Send finisher queue capacity. */
     public static void setSendFinisherQueueCapacity(int capacity) { NTCPSendFinisher.setQueueCapacity(capacity); }
 
     /**
@@ -2091,7 +2095,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * Returns the current send finisher queue depth.
+     * Current send finisher queue depth.
      *
      * @return pending tasks count
      * @since 0.9.70+

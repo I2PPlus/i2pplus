@@ -41,7 +41,11 @@ class RatchetEntry {
         this.acksToSend = acksToSend;
     }
 
-    /** @return debug string with tag and key */
+    /**
+     *  Debug string with tag and key.
+     *
+     *  @return debug string with tag and key
+     */
     @Override
     public String toString() {
         return "RatchetEntry[" + tag.toBase64() + ' ' + key + ']';

@@ -223,7 +223,7 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /**
-     *  Get the NTCP version
+     *  NTCP version.
      *  @return 2-5
      */
     public int getVersion() { return _version; }
@@ -605,7 +605,7 @@ class OutboundNTCP2State implements EstablishState {
         releaseBufs(false);
     }
 
-    /** Get the failure reason if the handshake failed */
+    /** Failure reason if the handshake failed. */
     @Override
     public String getFailReason() {
         if (_failReason != null) { return _failReason; }

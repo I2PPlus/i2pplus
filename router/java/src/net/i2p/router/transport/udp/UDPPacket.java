@@ -150,7 +150,6 @@ class UDPPacket implements CDPQEntry {
      * @param num sequence number to set
      */
     @Override
-    /** Sequence number. */
     public void setSeqNum(long num) {
         _seqNum = num;
     }
@@ -161,7 +160,6 @@ class UDPPacket implements CDPQEntry {
      * @return sequence number
      */
     @Override
-    /** Sequence number. */
     public long getSeqNum() {
         return _seqNum;
     }

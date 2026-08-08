@@ -355,7 +355,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
 
     private static class RouterInfoRoutingKeyComparator implements Comparator<RouterInfo>, Serializable {
          private final transient Hash _us;
-         /** @param us ROUTING KEY */
+         /**
+          *  Comparator using the routing key.
+          *
+          *  @param us ROUTING KEY
+          */
          public RouterInfoRoutingKeyComparator(Hash us) {
              _us = us;
          }

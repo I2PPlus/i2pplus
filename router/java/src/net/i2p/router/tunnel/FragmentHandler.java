@@ -215,18 +215,25 @@ class FragmentHandler {
         } finally {
             // each of the FragmentedMessages populated make a copy out of the
             // payload, which they release separately, so we can release
-            // immediately
-            //
-            // This is certainly interesting, to wrap the 1024-byte array in a new ByteArray
-            // in order to put it in the pool, but it shouldn't cause any harm.
+            // immediately. This is certainly interesting, to wrap the
+            // 1024-byte array in a new ByteArray in order to put it in the
+            // pool, but it shouldn't cause any harm.
             _cache.release(new ByteArray(preprocessed));
         }
         return true;
     }
 
-    /** @return complete count */
+    /**
+     *  Fragments received and complete.
+     *
+     *  @return complete count
+     */
     public int getCompleteCount() { return _completed.get(); }
-    /** @return failed count */
+    /**
+     *  Fragments that failed.
+     *
+     *  @return failed count
+     */
     public int getFailedCount() { return _failed.get(); }
 
     private static final ByteCache _validateCache = ByteCache.getInstance(512, TrivialPreprocessor.PREPROCESSED_SIZE);
