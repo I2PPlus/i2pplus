@@ -33,7 +33,7 @@
  */
 function extractRefreshPayload(doc) {
     const tbody = doc.querySelector("#snarkTbody");
-    const activeBadge = doc.querySelector("#filterBar .filter#all.enabled .badge");
+    const activeBadge = doc.querySelector("#filterBar .filter#all .badge");
     const pagenavtop = doc.querySelector("#pagenavtop");
     const torrentlist = doc.querySelector("#torrentlist");
     const mainsection = doc.querySelector("#mainsection");
