@@ -288,6 +288,7 @@ class PartialPiece implements Comparable<PartialPiece> {
      * @param len length of chunk in bytes
      */
     private void handleChunkReception(int chunk, int offset, int len) {
+        piece.setActive();
         if (bitfield.get(chunk)) {
             info("Already have chunk " + chunk + " on " + this);
         } else {

@@ -29,7 +29,7 @@ public class PeerID implements Comparable<PeerID> {
     private final int port;
     private byte[] destHash;
 
-    /** whether we have tried to get the dest from the hash - only do once */
+    /** Whether we have tried to get the dest from the hash; only do once. */
     private boolean triedDestLookup;
 
     private final int hash;
@@ -109,7 +109,12 @@ public class PeerID implements Comparable<PeerID> {
         return id;
     }
 
-    /** for connecting out to peer based on desthash @since 0.8.1 */
+    /**
+     * Sets the peer ID bytes, for connecting out to the peer based on its dest hash.
+     *
+     * @param xid the peer ID bytes
+     * @since 0.8.1
+     */
     public void setID(byte[] xid) {
         id = xid;
     }

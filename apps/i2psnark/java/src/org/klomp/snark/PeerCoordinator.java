@@ -90,6 +90,13 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     public static final long MAX_SEED_INACTIVE = 3 * (long) 60 * 1000;
 
     /**
+     * Inactivity timeout before re-queuing a requested piece that is receiving no data.
+     *
+     * @since 0.9.71+
+     */
+    static final long PIECE_STALL_TIMEOUT = 5 * (long) 60 * 1000;
+
+    /**
      * Approximation of the number of current uploaders (unchoked peers), whether interested or not.
      * Resynced by PeerChecker once in a while.
      */
@@ -120,7 +127,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /** Peers we heard about via PEX */
     private final Set<PeerID> pexPeers;
 
-    /** estimate of the peers, without requiring any synchronization */
+    /** Estimate of the peers, without requiring any synchronization. */
     private volatile int peerCount;
 
     /** Timer to handle all periodical tasks. */
@@ -188,7 +195,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     private static final long COMMENT_REQ_DELAY = 60 * 60 * 1000L;
     private static final int MAX_COMMENT_NOT_REQ = 10;
 
-    /** hostname to expire time, sync on this */
+    /** Hostname to expire time. Sync on this. */
     private Map<String, Long> _webPeerBans;
 
     private static final long WEBPEER_BAN_TIME = 30 * 60 * 1000L;
@@ -1857,6 +1864,96 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (pc != null) {
                 pc.setRequested(peer, false);
             }
+        }
+    }
+
+    /**
+     * Checks if the piece has been requested but has received no data for longer than the timeout.
+     *
+     * @param p the piece to check
+     * @param now the current time in milliseconds
+     * @param timeout the stall timeout in milliseconds
+     * @return true if the piece is requested and stale
+     * @since 0.9.71+
+     */
+    static boolean isStalled(Piece p, long now, long timeout) {
+        return p.isRequested() && now - p.getLastActive() > timeout;
+    }
+
+    /**
+     * Re-queues any requested pieces that have received no data for PIECE_STALL_TIMEOUT, so they
+     * can be requested from other peers. Called periodically by PeerCheckerTask.
+     *
+     * @param now the current time in milliseconds
+     * @since 0.9.71+
+     */
+    void checkStalledPieces(long now) {
+        if (halted) {
+            return;
+        }
+        List<StalledPiece> stalled = null;
+        synchronized (wantedPieces) {
+            for (Piece p : wantedPieces) {
+                if (isStalled(p, now, PIECE_STALL_TIMEOUT)) {
+                    if (stalled == null) {
+                        stalled = new ArrayList<>(2);
+                    }
+                    stalled.add(new StalledPiece(p, p.getRequesters()));
+                }
+            }
+        }
+        if (stalled != null) {
+            for (StalledPiece sp : stalled) {
+                expireStalledPiece(sp.piece, sp.requesters);
+            }
+        }
+    }
+
+    /**
+     * Cancels the outstanding requests for a stalled piece and returns its partial data to the
+     * partial piece list, so the piece can be re-requested from other peers.
+     *
+     * @param p the stalled piece
+     * @param requesters snapshot of the peers requesting it, taken under the wantedPieces lock
+     * @since 0.9.71+
+     */
+    private void expireStalledPiece(Piece p, Set<PeerID> requesters) {
+        for (Peer peer : peerList()) {
+            if (!requesters.contains(peer.getPeerID())) {
+                continue;
+            }
+            PeerState st = peer.state;
+            if (st == null) {
+                continue;
+            }
+            st.out.cancelRequestMessages(p.getId());
+            List<Request> pcs = st.returnPartialPieces(p.getId());
+            if (pcs.isEmpty()) {
+                markUnrequested(peer, p.getId());
+                continue;
+            }
+            savePartialPieces(peer, pcs);
+            if (_log.shouldWarn()) {
+                _log.warn(
+                        "Piece "
+                                + p.getId()
+                                + " stalled (no data for "
+                                + PIECE_STALL_TIMEOUT / 60000
+                                + " min), re-queued from ["
+                                + peer
+                                + "]");
+            }
+        }
+    }
+
+    /** A stalled piece and the snapshot of its requesters, taken under the wantedPieces lock. */
+    private static class StalledPiece {
+        final Piece piece;
+        final Set<PeerID> requesters;
+
+        StalledPiece(Piece piece, Set<PeerID> requesters) {
+            this.piece = piece;
+            this.requesters = requesters;
         }
     }
 

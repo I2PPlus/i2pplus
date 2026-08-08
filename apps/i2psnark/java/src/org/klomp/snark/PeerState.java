@@ -52,7 +52,7 @@ class PeerState implements DataLoader {
     /** Whether the peer has choked us */
     volatile boolean choked = true;
 
-    /** the pieces the peer has. locking: this */
+    /** The pieces the peer has. Locking: this. */
     BitField bitfield;
 
     /** Inbound connection */
@@ -72,7 +72,7 @@ class PeerState implements DataLoader {
     /** Anti-snub: unchoked peers that send no request for this long are snubbing */
     private static final long SNUB_TIMEOUT = 3 * 60 * 1000;
 
-    /** the tail (NOT the head) of the request queue */
+    /** The tail (NOT the head) of the request queue. */
     private Request lastRequest;
 
     private int currentMaxPipeline;

@@ -47,6 +47,9 @@ class PeerCheckerTask implements Runnable {
             return;
         }
 
+        // Re-queue requested pieces that have received no data for PIECE_STALL_TIMEOUT
+        coordinator.checkStalledPieces(System.currentTimeMillis());
+
         // Calculate total uploading and worst downloader.
         long worstdownload = Long.MAX_VALUE;
         Peer worstDownloader = null;

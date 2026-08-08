@@ -1,5 +1,6 @@
 package org.klomp.snark;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,6 +40,9 @@ class Piece implements Comparable<Piece> {
      */
     private int priority;
 
+    /** Time of the last request or received chunk, for stall detection. */
+    volatile long _lastActive;
+
     /**
      * Creates a new Piece with the given ID.
      *
@@ -47,6 +51,7 @@ class Piece implements Comparable<Piece> {
     public Piece(int id) {
         this.id = id;
         this.peers = new HashSet<>(I2PSnarkUtil.MAX_CONNECTIONS / 2);
+        _lastActive = System.currentTimeMillis();
         // defer creating requests to save memory
     }
 
@@ -137,12 +142,59 @@ class Piece implements Comparable<Piece> {
      * @since 0.8.3
      */
     public void setRequested(Peer peer, boolean requested) {
+        setRequested(peer.getPeerID(), requested);
+    }
+
+    /**
+     * Marks a peer as requesting or no longer requesting this piece, stamping the last-activity
+     * time when a request is made. Used to avoid deadlocks when querying each peer.
+     * Caller must synchronize.
+     *
+     * @param pid the peer ID
+     * @param requested true to mark as requested, false to unmark
+     * @since 0.9.71+
+     */
+    void setRequested(PeerID pid, boolean requested) {
         if (requested) {
             if (this.requests == null) this.requests = new HashSet<>(2);
-            this.requests.add(peer.getPeerID());
+            this.requests.add(pid);
+            _lastActive = System.currentTimeMillis();
         } else {
-            if (this.requests != null) this.requests.remove(peer.getPeerID());
+            if (this.requests != null) this.requests.remove(pid);
         }
+    }
+
+    /**
+     * Records that this piece has just received a chunk, for stall detection.
+     *
+     * @since 0.9.71+
+     */
+    public void setActive() {
+        _lastActive = System.currentTimeMillis();
+    }
+
+    /**
+     * Returns the time of the last request or received chunk for this piece.
+     *
+     * @return the time in milliseconds
+     * @since 0.9.71+
+     */
+    public long getLastActive() {
+        return _lastActive;
+    }
+
+    /**
+     * Returns a snapshot of the peers currently requesting this piece.
+     * Caller must synchronize.
+     *
+     * @return the requesting peers, or an empty set
+     * @since 0.9.71+
+     */
+    public Set<PeerID> getRequesters() {
+        if (requests == null) {
+            return Collections.emptySet();
+        }
+        return new HashSet<>(requests);
     }
 
     /**
