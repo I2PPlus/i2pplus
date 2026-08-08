@@ -187,6 +187,16 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String PROP_PREALLOCATE_FILES = "i2psnark.preallocateFiles";
 
     public static final String DEFAULT_PREALLOCATE_FILES = "true";
+
+    /**
+     * Disconnect peers that cancel most of what they request. Off by default; conservative
+     * thresholds and a minimum-volume guard protect legitimate peers under congestion.
+     *
+     * @since 0.9.72+
+     */
+    public static final String PROP_BAN_DISCARD_RATIO = "i2psnark.banDiscardRatio";
+
+    public static final String DEFAULT_BAN_DISCARD_RATIO = "false";
     public static final String PROP_OLD_AUTO_START = "i2snark.autoStart"; // oops
     public static final String PROP_AUTO_START =
             "i2psnark.autoStart"; // convert in migration to new config file
@@ -1289,6 +1299,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (!_config.containsKey(PROP_DOWNBW_MAX)) {
             _config.setProperty(PROP_DOWNBW_MAX, Integer.toString(DEFAULT_MAX_DOWN_BW));
         }
+        if (!_config.containsKey(PROP_BAN_DISCARD_RATIO)) {
+            _config.setProperty(PROP_BAN_DISCARD_RATIO, DEFAULT_BAN_DISCARD_RATIO);
+        }
         // Pipeline tunables. Apply before any PeerState exists so standalone config is honored.
         int minPipe = getInt(PROP_MIN_PIPELINE, PeerState.MIN_PIPELINE);
         int maxPipe = getInt(PROP_MAX_PIPELINE, PeerState.MAX_PIPELINE);
@@ -1301,6 +1314,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _bwManager.setDownBWLimit(maxdown * 1024L);
         int maxup = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
         _bwManager.setUpBWLimit(maxup * 1024L);
+        _util.setBanDiscardRatio(
+                Boolean.parseBoolean(_config.getProperty(PROP_BAN_DISCARD_RATIO)));
     }
 
     /**

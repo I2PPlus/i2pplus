@@ -96,6 +96,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     private int _maxUploaders;
     private int _maxUpBW;
     private int _maxConnections;
+    /** Discard-ratio auto-ban toggle, set by SnarkManager from config */
+    private volatile boolean _banDiscardRatio;
     private final File _tmpDir;
     private int _startupDelay;
     private boolean _collapsePanels;
@@ -266,6 +268,26 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     public void setMaxConnections(int limit) {
         _maxConnections = limit;
+    }
+
+    /**
+     * Whether to disconnect peers that cancel most of what they request.
+     *
+     * @return true if the discard-ratio auto-ban is enabled
+     * @since 0.9.72+
+     */
+    public boolean isBanDiscardRatio() {
+        return _banDiscardRatio;
+    }
+
+    /**
+     * Set whether to disconnect peers that cancel most of what they request.
+     *
+     * @param ban true to enable the discard-ratio auto-ban
+     * @since 0.9.72+
+     */
+    public void setBanDiscardRatio(boolean ban) {
+        _banDiscardRatio = ban;
     }
 
     public void setStartupDelay(int minutes) {

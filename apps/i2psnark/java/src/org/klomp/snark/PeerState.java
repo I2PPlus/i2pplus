@@ -62,6 +62,9 @@ class PeerState implements DataLoader {
     // Outstanding request
     private final List<Request> outstandingRequests = new LinkedList<>();
 
+    /** Bytes of piece data the peer cancelled after requesting */
+    private long _cancelledBytes;
+
     /** the tail (NOT the head) of the request queue */
     private Request lastRequest;
 
@@ -78,6 +81,12 @@ class PeerState implements DataLoader {
 
     /** Default cap on a single piece request from a peer. */
     private static final int DEFAULT_MAX_PARTSIZE = 128 * 1024;
+
+    /** Discard-ratio auto-ban: minimum cancelled+uploaded bytes before evaluation */
+    private static final long DISCARD_MIN_BYTES = 1024 * 1024;
+
+    /** Discard-ratio auto-ban: cancelled percentage above which the peer is disconnected */
+    private static final int DISCARD_BAN_PERCENT = 90;
 
     /** Absolute cap on pipeline depth, outbound or inbound. */
     private static final int MAX_PIPELINE_CAP = 256;
@@ -753,6 +762,40 @@ class PeerState implements DataLoader {
         if (_log.shouldDebug())
             _log.debug("Received cancel message (" + piece + ", " + begin + ", " + length + ")");
         out.cancelRequest(piece, begin, length);
+        if (listener.getUtil().isBanDiscardRatio()) {
+            checkDiscardRatio(length);
+        }
+    }
+
+    /**
+     * Count cancelled bytes and disconnect the peer if it cancels most of what it requests.
+     * Conservative: requires at least DISCARD_MIN_BYTES of volume and a cancel ratio above
+     * DISCARD_BAN_PERCENT, so legitimate peers under congestion are not affected.
+     *
+     * @param length the number of cancelled bytes
+     */
+    private void checkDiscardRatio(int length) {
+        synchronized (this) {
+            _cancelledBytes += length;
+            long uploaded = peer.getUploaded();
+            long total = _cancelledBytes + uploaded;
+            if (total >= DISCARD_MIN_BYTES
+                    && _cancelledBytes * 100 >= total * DISCARD_BAN_PERCENT) {
+                if (_log.shouldWarn()) {
+                    _log.warn(
+                            "Disconnecting ["
+                                    + peer
+                                    + "] for excessive discard ratio "
+                                    + (_cancelledBytes * 100 / total)
+                                    + "% ("
+                                    + _cancelledBytes
+                                    + " cancelled, "
+                                    + uploaded
+                                    + " uploaded)");
+                }
+                peer.disconnect();
+            }
+        }
     }
 
     /**
