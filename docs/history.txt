@@ -1,4 +1,7 @@
 2026-08-08 dr|z3d
+  * I2PSnark: DHT get_peers walks the closest nodes instead of stopping
+    at the first reply, so an empty or short peer list from one node no
+    longer ends the lookup and small swarms return more peers
   * I2PSnark: When idle, tunnels are kept at a minimum of 2 inbound and
     2 outbound instead of collapsing to 1, so tracker announces and DHT
     lookups no longer time out while no peers are connected

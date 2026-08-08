@@ -469,7 +469,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 if (_log.shouldDebug()) _log.debug("Received peers");
                 List<Hash> reply = (List<Hash>) waiter.getReplyObject();
                 // shouldn't send us an empty peers list but through
-                // 0.9.8.1 it will
+                // 0.9.8.1 it will; keep walking when empty so a node with no
+                // stored peers cannot end the lookup for a small swarm
                 if (!reply.isEmpty()) {
                     for (int j = 0; j < reply.size() && rv.size() < max; j++) {
                         Hash h = reply.get(j);
@@ -478,12 +479,15 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 }
                 if (_log.shouldInfo())
                     _log.info(
-                            "Finished get_peers: received "
+                            "Received "
                                     + reply.size()
-                                    + " peers from DHT, returning "
-                                    + rv.size()
-                                    + " peers");
-                break;
+                                    + " peers from DHT node "
+                                    + nInfo
+                                    + ", total "
+                                    + rv.size());
+                if (rv.size() >= max) {
+                    break;
+                }
             } else if (replyType == REPLY_NODES) {
                 heardFrom.add(waiter.getSentTo());
                 List<NodeInfo> reply = (List<NodeInfo>) waiter.getReplyObject();
