@@ -283,7 +283,7 @@ public class TrackerClient implements Runnable {
             if (!_initialized) {
                 setup();
             }
-            if (trackers.isEmpty() && _util.getDHT() == null) {
+            if (trackers.isEmpty() && _util.getDHTForTorrent(snark.getInfoHash()) == null) {
                 stop = true;
                 this.snark.addMessage(
                         _util.getString(
@@ -486,7 +486,7 @@ public class TrackerClient implements Runnable {
                 boolean hadMeta = coordinator.getLeft() >= 0;
 
                 // Local DHT tracker announce
-                DHT dht = _util.getDHT();
+                DHT dht = _util.getDHTForTorrent(snark.getInfoHash());
                 if (dht != null && (meta == null || !meta.isPrivate()))
                     dht.announce(snark.getInfoHash(), coordinator.completed());
 
@@ -645,7 +645,7 @@ public class TrackerClient implements Runnable {
 
                     Set<Peer> peers = info.getPeers();
                     // Pass everybody over to our tracker
-                    DHT dht = _util.getDHT();
+                    DHT dht = _util.getDHTForTorrent(snark.getInfoHash());
                     if (dht != null) {
                         for (Peer peer : peers) {
                             dht.announce(
@@ -780,7 +780,7 @@ public class TrackerClient implements Runnable {
      * @since 0.9.71+
      */
     private void fetchPeersFromDHT() {
-        DHT dht = _util.getDHT();
+        DHT dht = _util.getDHTForTorrent(snark.getInfoHash());
         if (dht == null || (meta != null && meta.isPrivate()) || stop) {
             return;
         }
@@ -950,7 +950,7 @@ public class TrackerClient implements Runnable {
      * @since 0.9.1
      */
     private void unannounce() {
-        DHT dht = _util.getDHT(); // Local DHT tracker unannounce
+        DHT dht = _util.getDHTForTorrent(snark.getInfoHash()); // Local DHT tracker unannounce
         if (dht != null) {
             dht.unannounce(snark.getInfoHash());
         }
@@ -1052,7 +1052,7 @@ public class TrackerClient implements Runnable {
                 .append("&port=")
                 .append(port)
                 .append("&ip=")
-                .append(_util.getOurIPString())
+                .append(_util.getOurIPString(snark.getInfoHash()))
                 .append(".i2p")
                 .append("&uploaded=")
                 .append(uploaded)
@@ -1090,7 +1090,13 @@ public class TrackerClient implements Runnable {
         // Retry each announce up to 3 times total; EepGet waits 5-65s between attempts and
         // also retries HTTP 504 gateway timeouts, so transient proxy failures are tolerated
         byte[] fetched =
-                _util.get(s, true, fast ? -1 : 2, small ? 128 : 1024, small ? 1024 : 32 * 1024);
+                _util.get(
+                        s,
+                        true,
+                        fast ? -1 : 2,
+                        small ? 128 : 1024,
+                        small ? 1024 : 32 * 1024,
+                        snark.getInfoHash());
         if (fetched == null) {
             throw new IOException("No response from " + tr.host);
         }
@@ -1127,7 +1133,7 @@ public class TrackerClient implements Runnable {
     private TrackerInfo doRequestUDP(
             TCTracker tr, long uploaded, long downloaded, long left, int event)
             throws IOException {
-        UDPTrackerClient udptc = _util.getUDPTrackerClient();
+        UDPTrackerClient udptc = _util.getUDPTrackerClient(snark.getInfoHash());
         if (udptc == null) {
             throw new IOException("no UDPTC");
         }

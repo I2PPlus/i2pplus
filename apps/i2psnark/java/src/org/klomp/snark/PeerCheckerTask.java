@@ -75,7 +75,7 @@ class PeerCheckerTask implements Runnable {
                             + uploadLimit
                             + " overBW? "
                             + overBWLimit);
-        DHT dht = _util.getDHT();
+        DHT dht = _util.getDHTForTorrent(coordinator.getInfoHash());
         boolean fetchComments = _util.utCommentsEnabled();
         int i = 0;
         for (Peer peer : peerList) {

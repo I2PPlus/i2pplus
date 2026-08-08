@@ -140,7 +140,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
             // This breaks out of the loop after any failure. TrackerClient will requeue eventually.
             loop:
             while (true) {
-                I2PSocketManager mgr = util.getSocketManager();
+                I2PSocketManager mgr = util.getSocketManager(infohash);
                 if (mgr == null) return;
                 if (notify) {
                     synchronized (this) {

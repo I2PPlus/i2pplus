@@ -268,6 +268,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     public static final String PROP_VARY_OUTBOUND_HOPS = "i2psnark.varyOutboundHops";
 
+    /**
+     * Whether each torrent runs on its own destination.
+     *
+     * @since 0.9.71+
+     */
+    public static final String PROP_MULTI_DEST = "i2psnark.multiDest";
+
     public static final int MIN_UP_BW = 5;
     public static final int MIN_DOWN_BW = 2 * MIN_UP_BW;
     public static final int DEFAULT_MAX_UP_BW = 1024;
@@ -276,6 +283,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final int DEFAULT_REFRESH_DELAY_SECS = 5;
     private static final int DEFAULT_PAGE_SIZE = 50;
     public static final int DEFAULT_TUNNEL_QUANTITY = 16;
+    /** Delay between per-destination torrent starts, allowing each destination's tunnels to build */
+    private static final long MULTI_DEST_STAGGER_MS = 8 * 1000;
     public static final int DEFAULT_MAX_FILES_PER_TORRENT = 2000;
     public static final String CONFIG_DIR_SUFFIX = ".d";
     private static final String SUBDIR_PREFIX = "s";
@@ -1431,6 +1440,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         _config.getProperty(
                                 PROP_VARY_OUTBOUND_HOPS,
                                 Boolean.toString(I2PSnarkUtil.DEFAULT_VARY_OUTBOUND_HOPS))));
+        _util.setMultiDest(Boolean.parseBoolean(_config.getProperty(PROP_MULTI_DEST, "false")));
 
         for (String c : _config.stringPropertyNames()) {
             if (c.startsWith(PROP_API_PREFIX)) {
@@ -1505,6 +1515,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             boolean enableAddCreate,
             boolean enableVaryInboundHops,
             boolean enableVaryOutboundHops,
+            boolean multiDest,
             String apiTarget,
             String apiKey) {
         synchronized (_configLock) {
@@ -1537,6 +1548,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     enableAddCreate,
                     enableVaryInboundHops,
                     enableVaryOutboundHops,
+                    multiDest,
                     apiTarget,
                     apiKey);
         }
@@ -1571,6 +1583,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             boolean enableAddCreate,
             boolean enableVaryInboundHops,
             boolean enableVaryOutboundHops,
+            boolean multiDest,
             String apiTarget,
             String apiKey) {
         boolean changed = false;
@@ -1674,6 +1687,18 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
             addMessage(restart);
             _util.setEnableVaryOutboundHops(enableVaryOutboundHops);
+            changed = true;
+        }
+
+        if (_util.getMultiDest() != multiDest) {
+            _config.setProperty(PROP_MULTI_DEST, Boolean.toString(multiDest));
+            if (multiDest) {
+                addMessage(_t("Enabled a separate destination for each torrent"));
+            } else {
+                addMessage(_t("Disabled a separate destination for each torrent"));
+            }
+            addMessage(restart);
+            _util.setMultiDest(multiDest);
             changed = true;
         }
 
@@ -4618,6 +4643,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         Thread.sleep(250);
                     } // try to prevent OOMs
                     catch (InterruptedException ie) { /* ignored */ }
+                }
+                if (_util.getMultiDest()) {
+                    // Stagger per-destination torrents: each torrent's session builds its
+                    // tunnels asynchronously, so start the next one only after this one's
+                    // tunnels have had time to build, keeping the router from being swamped
+                    // by tunnel build requests from every torrent at once
+                    try {
+                        Thread.sleep(MULTI_DEST_STAGGER_MS);
+                    } catch (InterruptedException ie) { /* ignored */ }
                 }
             }
         }

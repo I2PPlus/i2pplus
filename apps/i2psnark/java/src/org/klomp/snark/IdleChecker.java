@@ -27,8 +27,8 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
     private int _consec;
     private int _consecNotRunning;
     private boolean _isIdle;
-    private String _lastIn = DEFAULT_QTY;
-    private String _lastOut = DEFAULT_QTY;
+    private String _lastInbound = DEFAULT_QTY;
+    private String _lastOutbound = DEFAULT_QTY;
     private final Object _lock = new Object();
 
     private static final long CHECK_TIME = (long) 63 * 1000;
@@ -95,8 +95,8 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
             _isIdle = false;
             _consec = 0;
             _consecNotRunning = 0;
-            _lastIn = DEFAULT_QTY;
-            _lastOut = DEFAULT_QTY;
+            _lastInbound = DEFAULT_QTY;
+            _lastOutbound = DEFAULT_QTY;
         }
         schedule(CHECK_TIME);
     }
@@ -146,61 +146,61 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         _isIdle = false;
         boolean isStandalone = !_util.getContext().isRouterContext();
         Map<String, String> opts = _util.getI2CPOptions();
-        String i = opts.get("inbound.quantity");
+        String inQty = opts.get("inbound.quantity");
 
-        if (i == null) {
-            i = Integer.toString(SnarkManager.DEFAULT_TUNNEL_QUANTITY);
+        if (inQty == null) {
+            inQty = Integer.toString(SnarkManager.DEFAULT_TUNNEL_QUANTITY);
         }
-        String o = opts.get("outbound.quantity");
-        if (o == null) {
-            o = Integer.toString(SnarkManager.DEFAULT_TUNNEL_QUANTITY);
+        String outQty = opts.get("outbound.quantity");
+        if (outQty == null) {
+            outQty = Integer.toString(SnarkManager.DEFAULT_TUNNEL_QUANTITY);
         }
-        String ib = opts.get("inbound.backupQuantity");
-        if (ib == null) {
-            ib = "0";
+        String inBackup = opts.get("inbound.backupQuantity");
+        if (inBackup == null) {
+            inBackup = "0";
         }
-        String ob = opts.get("outbound.backupQuantity");
-        if (ob == null) {
-            ob = "0";
+        String outBackup = opts.get("outbound.backupQuantity");
+        if (outBackup == null) {
+            outBackup = "0";
         }
 
         // We don't need more tunnels than we have peers, reduce if so reduce to max(peerCount / 2,
         // 2)
-        int in;
-        int out;
+        int inTunnels;
+        int outTunnels;
         try {
-            in = Integer.parseInt(i);
+            inTunnels = Integer.parseInt(inQty);
         } catch (NumberFormatException nfe) {
-            in = 3;
+            inTunnels = 3;
         }
         try {
-            out = Integer.parseInt(o);
+            outTunnels = Integer.parseInt(outQty);
         } catch (NumberFormatException nfe) {
-            out = 3;
+            outTunnels = 3;
         }
         int target = Math.max(peerCount / 2, 2);
 
         boolean increasedCount = false;
-        if (target > in || target > out) {
+        if (target > inTunnels || target > outTunnels) {
             increasedCount = true;
         }
 
-        if (target < in && in > 2) {
-            in = target;
-            i = Integer.toString(in);
+        if (target < inTunnels && inTunnels > 2) {
+            inTunnels = target;
+            inQty = Integer.toString(inTunnels);
         }
-        if (target < out && out > 2) {
-            out = target;
-            o = Integer.toString(out);
+        if (target < outTunnels && outTunnels > 2) {
+            outTunnels = target;
+            outQty = Integer.toString(outTunnels);
         }
-        if (!(_lastIn.equals(i) && _lastOut.equals(o))) {
-            setTunnels(i, o, ib, ob);
+        if (!(_lastInbound.equals(inQty) && _lastOutbound.equals(outQty))) {
+            setTunnels(inQty, outQty, inBackup, outBackup);
             if (increasedCount) {
                 String msg =
                         "Peer activity detected -> Increasing tunnel count to "
-                                + i
+                                + inQty
                                 + " inbound / "
-                                + o
+                                + outQty
                                 + " outbound";
                 if (_log.shouldInfo()) {
                     _log.info(msg);
@@ -213,40 +213,59 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Sets the inbound/outbound tunnel counts and backup quantities.
+     * Sets the inbound/outbound tunnel counts and backup quantities on the shared session and
+     * every torrent's own session (multi-dest), so they all scale with usage and shrink back
+     * down when idle.
      *
-     * @param i the inbound tunnel quantity
-     * @param o the outbound tunnel quantity
-     * @param ib the inbound backup quantity
-     * @param ob the outbound backup quantity
+     * @param inboundQty the inbound tunnel quantity
+     * @param outboundQty the outbound tunnel quantity
+     * @param inboundBackup the inbound backup quantity
+     * @param outboundBackup the outbound backup quantity
      */
-    private void setTunnels(String i, String o, String ib, String ob) {
+    private void setTunnels(
+            String inboundQty,
+            String outboundQty,
+            String inboundBackup,
+            String outboundBackup) {
         _consec = 0;
-        I2PSocketManager mgr = _util.getSocketManager();
-        if (mgr != null) {
-            I2PSession sess = mgr.getSession();
-            if (sess != null) {
-                if (_log.shouldInfo()) {
-                    _log.info(
-                            "Tunnel settings updated: ["
-                                    + i
-                                    + " inbound / "
-                                    + o
-                                    + " outbound / "
-                                    + ib
-                                    + " inbound backup / "
-                                    + ob
-                                    + " outbound backup]");
-                }
-                Properties newProps = new Properties();
-                newProps.setProperty("inbound.quantity", i);
-                newProps.setProperty("outbound.quantity", o);
-                newProps.setProperty("inbound.backupQuantity", ib);
-                newProps.setProperty("outbound.backupQuantity", ob);
-                sess.updateOptions(newProps);
-                _lastIn = i;
-                _lastOut = o;
-            }
+        Properties newProps = new Properties();
+        newProps.setProperty("inbound.quantity", inboundQty);
+        newProps.setProperty("outbound.quantity", outboundQty);
+        newProps.setProperty("inbound.backupQuantity", inboundBackup);
+        newProps.setProperty("outbound.backupQuantity", outboundBackup);
+        if (_log.shouldInfo()) {
+            _log.info(
+                    "Tunnel settings updated: ["
+                            + inboundQty
+                            + " inbound / "
+                            + outboundQty
+                            + " outbound / "
+                            + inboundBackup
+                            + " inbound backup / "
+                            + outboundBackup
+                            + " outbound backup]");
+        }
+        applyTunnels(newProps, _util.getSocketManager());
+        for (TorrentDest td : _util.getTorrentDests()) {
+            applyTunnels(newProps, td.getSocketManager());
+        }
+        _lastInbound = inboundQty;
+        _lastOutbound = outboundQty;
+    }
+
+    /**
+     * Apply the tunnel quantity options to one session, if connected.
+     *
+     * @param settings the tunnel quantity options to apply
+     * @param mgr the manager of the session, or null
+     */
+    private void applyTunnels(Properties settings, I2PSocketManager mgr) {
+        if (mgr == null) {
+            return;
+        }
+        I2PSession sess = mgr.getSession();
+        if (sess != null) {
+            sess.updateOptions(settings);
         }
     }
 
@@ -258,7 +277,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
      */
     public int getActiveInboundCount() {
         try {
-            return Integer.parseInt(_lastIn);
+            return Integer.parseInt(_lastInbound);
         } catch (NumberFormatException nfe) {
             return 2;
         }
@@ -272,7 +291,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
      */
     public int getActiveOutboundCount() {
         try {
-            return Integer.parseInt(_lastOut);
+            return Integer.parseInt(_lastOutbound);
         } catch (NumberFormatException nfe) {
             return 2;
         }

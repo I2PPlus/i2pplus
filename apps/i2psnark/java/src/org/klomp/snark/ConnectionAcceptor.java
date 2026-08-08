@@ -16,11 +16,14 @@ import net.i2p.I2PException;
 import net.i2p.client.streaming.I2PServerSocket;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.RouterRestartException;
+import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer2;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -42,6 +45,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * determine which torrent a connection belongs to based on the info hash in the BitTorrent
  * handshake.
  *
+ * <p>When multi-dest is enabled, each torrent additionally runs a {@link TorrentAcceptLoop} on
+ * its own server socket, so that incoming connections are received on the torrent's own
+ * destination.
+ *
  * <p>Connections that repeatedly fail protocol validation may be temporarily blacklisted to prevent
  * abuse.
  *
@@ -53,8 +60,10 @@ class ConnectionAcceptor implements Runnable {
     private final PeerAcceptor peeracceptor;
     private Thread thread;
     private final I2PSnarkUtil _util;
+    private final TorrentDest _td;
     private final ObjectCounter<Hash> _badCounter = new ObjectCounter<>();
     private final SimpleTimer2.TimedEvent _cleaner;
+    private final Map<String, TorrentAcceptLoop> _torrentAcceptors = new ConcurrentHashMap<>();
     private volatile boolean stop; // protocol errors before blacklisting.
     private static final int MAX_BAD = 1;
     private static final long BAD_CLEAN_INTERVAL = 15 * (long) 60 * 1000;
@@ -65,6 +74,7 @@ class ConnectionAcceptor implements Runnable {
     /** Multitorrent. Caller MUST call startAccepting() */
     public ConnectionAcceptor(I2PSnarkUtil util, PeerCoordinatorSet set) {
         _util = util;
+        _td = null;
         _cleaner = new Cleaner();
         peeracceptor = new PeerAcceptor(set);
     }
@@ -89,6 +99,22 @@ class ConnectionAcceptor implements Runnable {
     public ConnectionAcceptor(I2PSnarkUtil util, PeerAcceptor peeracceptor) {
         this.peeracceptor = peeracceptor;
         _util = util;
+        _td = null;
+        thread = new I2PAppThread(this, "SnarkAcceptor");
+        thread.setDaemon(true);
+        thread.start();
+        _cleaner = new Cleaner();
+    }
+
+    /**
+     * Single torrent on its own destination. Do NOT call startAccepting().
+     *
+     * @since 0.9.71+
+     */
+    public ConnectionAcceptor(I2PSnarkUtil util, PeerAcceptor peeracceptor, TorrentDest td) {
+        this.peeracceptor = peeracceptor;
+        _util = util;
+        _td = td;
         thread = new I2PAppThread(this, "SnarkAcceptor");
         thread.setDaemon(true);
         thread.start();
@@ -105,6 +131,43 @@ class ConnectionAcceptor implements Runnable {
             t.interrupt();
             thread = null;
         }
+        for (TorrentAcceptLoop loop : _torrentAcceptors.values()) {
+            loop.halt();
+        }
+        _torrentAcceptors.clear();
+    }
+
+    /**
+     * Start an accept loop on a torrent's own destination, replacing any previous loop for
+     * the same torrent. Multitorrent only.
+     *
+     * @param td the torrent's transient destination
+     * @param coordinator the torrent's peer coordinator
+     * @since 0.9.71+
+     */
+    public void addTorrentAcceptor(TorrentDest td, PeerCoordinator coordinator) {
+        removeTorrentAcceptor(td.getKey());
+        PeerCoordinatorSet set = new PeerCoordinatorSet();
+        set.add(coordinator);
+        TorrentAcceptLoop loop = new TorrentAcceptLoop(td, new PeerAcceptor(set));
+        TorrentAcceptLoop existing = _torrentAcceptors.putIfAbsent(td.getKey(), loop);
+        if (existing != null) {
+            loop = existing;
+        }
+        loop.start();
+    }
+
+    /**
+     * Stop the accept loop for a torrent's destination. Multitorrent only.
+     *
+     * @param key the Base64-encoded info hash key
+     * @since 0.9.71+
+     */
+    public void removeTorrentAcceptor(String key) {
+        TorrentAcceptLoop loop = _torrentAcceptors.remove(key);
+        if (loop != null) {
+            loop.halt();
+        }
     }
 
     /**
@@ -113,7 +176,7 @@ class ConnectionAcceptor implements Runnable {
      * @since 0.9.9
      */
     private void locked_halt() {
-        I2PServerSocket ss = _util.getServerSocket();
+        I2PServerSocket ss = getServerSocket();
         if (ss != null) {
             try {
                 ss.close();
@@ -121,6 +184,26 @@ class ConnectionAcceptor implements Runnable {
         }
         _badCounter.clear();
         _cleaner.cancel();
+    }
+
+    /**
+     * @return the server socket for this acceptor's destination, or null
+     */
+    private I2PServerSocket getServerSocket() {
+        if (_td != null) {
+            return _td.getServerSocket();
+        }
+        return _util.getServerSocket();
+    }
+
+    /**
+     * @return the destination of this acceptor, or null
+     */
+    private Destination getMyDestination() {
+        if (_td != null) {
+            return _td.getMyDestination();
+        }
+        return _util.getMyDestination();
     }
 
     /**
@@ -158,16 +241,16 @@ class ConnectionAcceptor implements Runnable {
 
     private void run2() {
         while (!stop) {
-            I2PServerSocket serverSocket = _util.getServerSocket();
+            I2PServerSocket serverSocket = getServerSocket();
             while ((serverSocket == null) && (!stop)) {
-                if (!(_util.isConnecting() || _util.connected())) {
+                if (_td == null && !(_util.isConnecting() || _util.connected())) {
                     stop = true;
                     break;
                 }
                 try {
                     Thread.sleep((long) 10 * 1000);
                 } catch (InterruptedException ie) { /* ignored */ }
-                serverSocket = _util.getServerSocket();
+                serverSocket = getServerSocket();
             }
             if (stop) {
                 break;
@@ -176,64 +259,8 @@ class ConnectionAcceptor implements Runnable {
                 I2PSocket socket = serverSocket.accept();
                 if (socket == null) {
                     continue;
-                } else {
-                    if (socket.getPeerDestination().equals(_util.getMyDestination())) {
-                        _log.error("[I2PSnark] Dropping incoming connection from our own router");
-                        try {
-                            socket.reset();
-                        } catch (IOException ioe) { /* ignored */ }
-                        continue;
-                    }
-                    Hash h = socket.getPeerDestination().calculateHash();
-                    if (socket.getLocalPort() == 80) {
-                        _badCounter.increment(h);
-                        if (_log.shouldWarn()) {
-                            _log.warn(
-                                    "[I2PSnark] Dropping incoming HTTP connection from client ["
-                                            + h.toBase32().substring(0, 8)
-                                            + "]");
-                        }
-                        try {
-                            socket.reset();
-                        } catch (IOException ioe) { /* ignored */ }
-                        continue;
-                    }
-                    int bad = _badCounter.count(h);
-                    if (bad >= MAX_BAD) {
-                        if (_log.shouldWarn()) {
-                            _log.warn(
-                                    "[I2PSnark] Rejecting incoming connection from client ["
-                                            + h.toBase32().substring(0, 8)
-                                            + "] after "
-                                            + bad
-                                            + " failures (Max is "
-                                            + MAX_BAD
-                                            + ")");
-                        }
-                        try {
-                            socket.reset();
-                        } catch (IOException ioe) { /* ignored */ }
-                        continue;
-                    }
-                    if (activeHandlers.get() >= MAX_HANDLERS) {
-                        if (_log.shouldWarn()) {
-                            _log.warn(
-                                    "[I2PSnark] Too many incoming connections in handshake ("
-                                            + activeHandlers.get()
-                                            + "), dropping connection from ["
-                                            + h.toBase32().substring(0, 8)
-                                            + "]");
-                        }
-                        try {
-                            socket.close();
-                        } catch (IOException ioe) { /* ignored */ }
-                        continue;
-                    }
-                    activeHandlers.incrementAndGet();
-                    Thread t =
-                            new I2PAppThread(new Handler(socket), "SnarkIncoming");
-                    t.start();
                 }
+                handleSocket(socket, getMyDestination(), peeracceptor);
             } catch (RouterRestartException rre) {
                 I2PAppContext ctx = I2PAppContext.getGlobalContext();
                 String msg = "Waiting for I2P router restart...";
@@ -310,11 +337,179 @@ class ConnectionAcceptor implements Runnable {
         }
     }
 
+    /**
+     * Validate an accepted socket and dispatch it to a handler thread.
+     *
+     * @param socket the accepted socket
+     * @param myDest the destination of this acceptor, to drop connections from ourselves
+     * @param pa the peer acceptor to route the connection to
+     */
+    private void handleSocket(I2PSocket socket, Destination myDest, PeerAcceptor pa) {
+        if (socket.getPeerDestination().equals(myDest)) {
+            _log.error("[I2PSnark] Dropping incoming connection from our own router");
+            try {
+                socket.reset();
+            } catch (IOException ioe) { /* ignored */ }
+            return;
+        }
+        Hash h = socket.getPeerDestination().calculateHash();
+        if (socket.getLocalPort() == 80) {
+            _badCounter.increment(h);
+            if (_log.shouldWarn()) {
+                _log.warn(
+                        "[I2PSnark] Dropping incoming HTTP connection from client ["
+                                + h.toBase32().substring(0, 8)
+                                + "]");
+            }
+            try {
+                socket.reset();
+            } catch (IOException ioe) { /* ignored */ }
+            return;
+        }
+        int bad = _badCounter.count(h);
+        if (bad >= MAX_BAD) {
+            if (_log.shouldWarn()) {
+                _log.warn(
+                        "[I2PSnark] Rejecting incoming connection from client ["
+                                + h.toBase32().substring(0, 8)
+                                + "] after "
+                                + bad
+                                + " failures (Max is "
+                                + MAX_BAD
+                                + ")");
+            }
+            try {
+                socket.reset();
+            } catch (IOException ioe) { /* ignored */ }
+            return;
+        }
+        if (activeHandlers.get() >= MAX_HANDLERS) {
+            if (_log.shouldWarn()) {
+                _log.warn(
+                        "[I2PSnark] Too many incoming connections in handshake ("
+                                + activeHandlers.get()
+                                + "), dropping connection from ["
+                                + h.toBase32().substring(0, 8)
+                                + "]");
+            }
+            try {
+                socket.close();
+            } catch (IOException ioe) { /* ignored */ }
+            return;
+        }
+        activeHandlers.incrementAndGet();
+        Thread t = new I2PAppThread(new Handler(socket, pa), "SnarkIncoming");
+        t.start();
+    }
+
+    /**
+     * Accept loop for a torrent's own destination. Multitorrent only.
+     *
+     * @since 0.9.71+
+     */
+    private class TorrentAcceptLoop implements Runnable {
+        private final TorrentDest _td;
+        private final PeerAcceptor _pa;
+        private volatile boolean _stop;
+        private Thread _thread;
+
+        public TorrentAcceptLoop(TorrentDest td, PeerAcceptor pa) {
+            _td = td;
+            _pa = pa;
+        }
+
+        public synchronized void start() {
+            if (_thread != null) {
+                return;
+            }
+            _stop = false;
+            _thread = new I2PAppThread(this, "SnarkAcceptor-" + _td.getKey().substring(0, 6));
+            _thread.setDaemon(true);
+            _thread.start();
+        }
+
+        public synchronized void halt() {
+            if (_stop) {
+                return;
+            }
+            _stop = true;
+            I2PServerSocket ss = _td.getServerSocket();
+            if (ss != null) {
+                try {
+                    ss.close();
+                } catch (I2PException ioe) { /* ignored */ }
+            }
+            Thread t = _thread;
+            if (t != null) {
+                t.interrupt();
+            }
+        }
+
+        @Override
+        public void run() {
+            try {
+                runLoop();
+            } finally {
+                synchronized (this) {
+                    _thread = null;
+                }
+            }
+        }
+
+        private void runLoop() {
+            while (!_stop) {
+                I2PServerSocket ss = _td.getServerSocket();
+                if (ss == null) {
+                    sleep(10 * (long) 1000);
+                    continue;
+                }
+                Destination myDest = _td.getMyDestination();
+                if (myDest == null) {
+                    sleep(10 * (long) 1000);
+                    continue;
+                }
+                try {
+                    I2PSocket socket = ss.accept();
+                    if (socket != null) {
+                        handleSocket(socket, myDest, _pa);
+                    }
+                } catch (RouterRestartException rre) {
+                    // the session may reconnect; wait and retry
+                    sleep(2 * (long) 60 * 1000);
+                } catch (ConnectException ce) {
+                    // presumed due to the socket closing on halt() or session teardown
+                    sleep(10 * (long) 1000);
+                } catch (I2PException ioe) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("[I2PSnark] Error while accepting", ioe);
+                    }
+                    sleep(10 * (long) 1000);
+                } catch (IOException ioe) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("[I2PSnark] Error while accepting", ioe);
+                    }
+                    sleep(10 * (long) 1000);
+                }
+            }
+        }
+
+        private void sleep(long ms) {
+            try {
+                Thread.sleep(ms);
+            } catch (InterruptedException ie) {
+                _stop = true;
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
     private class Handler implements Runnable {
         private final I2PSocket _socket;
+        private final PeerAcceptor _pa;
 
-        public Handler(I2PSocket socket) {
+        public Handler(I2PSocket socket, PeerAcceptor pa) {
             _socket = socket;
+            _pa = pa;
         }
 
         @Override
@@ -330,7 +525,7 @@ class ConnectionAcceptor implements Runnable {
                                     + _socket.getPeerDestination().calculateHash()
                                     + "]");
                 }
-                peeracceptor.connection(_socket, in, out);
+                _pa.connection(_socket, in, out);
             } catch (PeerAcceptor.ProtocolException ihe) {
                 _badCounter.increment(_socket.getPeerDestination().calculateHash());
                 if (_log.shouldInfo()) {

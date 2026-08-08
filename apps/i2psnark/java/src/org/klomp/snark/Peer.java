@@ -50,7 +50,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     private final PeerID peerID;
 
     private final byte[] my_id;
-    private final byte[] infohash;
+    protected final byte[] infohash;
 
     /** will start out null in magnet mode */
     protected MetaInfo metainfo;
@@ -251,7 +251,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             // Do we need to handshake?
             if (din == null) {
                 // Outgoing connection
-                sock = util.connect(peerID);
+                sock = util.connect(peerID, infohash);
                 if (_log.shouldDebug()) _log.debug("Connected to " + peerID + ": " + sock);
                 if ((sock == null) || (sock.isClosed())) {
                     throw new IOException("Unable to reach " + peerID);

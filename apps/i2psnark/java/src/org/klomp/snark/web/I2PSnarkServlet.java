@@ -2543,6 +2543,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean enableAddCreate = req.getParameter("enableAddCreate") != null;
         boolean enableVaryInboundHops = req.getParameter("varyInbound") != null;
         boolean enableVaryOutboundHops = req.getParameter("varyOutbound") != null;
+        boolean multiDest = req.getParameter("multiDest") != null;
 
         String dataDir = req.getParameter("nofilter_dataDir");
         String seedPct = req.getParameter("seedPct");
@@ -2566,7 +2567,7 @@ public class I2PSnarkServlet extends BasicServlet {
         _manager.updateConfig(dataDir, filesPublic, autoStart, refreshDel, startupDel, pageSize, seedPct, eepHost, eepPort,
                               i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang,
                               ratings, comments, commentsName, collapsePanels, showStatusFilter, enableLightbox,
-                              enableAddCreate, enableVaryInboundHops, enableVaryOutboundHops, apiTarget, apiKey);
+                              enableAddCreate, enableVaryInboundHops, enableVaryOutboundHops, multiDest, apiTarget, apiKey);
         try {
             setResourceBase(_manager.getDataDir());
         } catch (ServletException ignored) { /* ignored */ }
@@ -3990,6 +3991,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean noCollapse = noCollapsePanels(req);
         boolean varyInbound = _manager.util().enableVaryInboundHops();
         boolean varyOutbound = _manager.util().enableVaryOutboundHops();
+        boolean multiDest = _manager.util().getMultiDest();
 
 /* configuration */
 
@@ -4251,8 +4253,8 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(_t("Our destination (identity) for this session")).append("\">")
                .append(_t("Dest.")).append("<code>").append(IPString.substring(0,4)).append("</code></span>");
         }
-        buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n");
-        buf.append("<span class=configOption><b>")
+        buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
+           .append("<span class=configOption><b>")
            .append(_t("Inbound Settings"))
            .append("</b> \n")
            .append(renderOptions(1, 16, SnarkManager.DEFAULT_TUNNEL_QUANTITY, options.remove("inbound.quantity"), "inbound.quantity", TUNNEL))
@@ -4276,8 +4278,16 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<input type=checkbox class=\"optbox slider\" name=varyOutbound id=varyOutbound ")
            .append(varyOutbound ? "checked " : "").append("> <span>").append(_t("Outbound")).append("</span></label>")
            .append("</span><br>\n")
-            .append("<script src=\"").append(_resourcePath).append("js/toggleVaryTunnelLength.js?").append(CoreVersion.VERSION).append("\" defer></script>\n")
-           .append("<noscript><style>#hopVariance .optbox.slider{pointer-events:none!important;opacity:.4!important}</style></noscript>\n");
+           .append("<script src=\"").append(_resourcePath).append("js/toggleVaryTunnelLength.js?").append(CoreVersion.VERSION).append("\" defer></script>\n")
+           .append("<noscript><style>#hopVariance .optbox.slider{pointer-events:none!important;opacity:.4!important}</style></noscript>\n")
+           .append("<span class=configOption id=multiDest><b>")
+           .append(_t("Per-torrent destinations"))
+           .append("</b> \n")
+           .append("<label title=\"")
+           .append(_t("Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."))
+           .append("\">")
+           .append("<input type=checkbox class=\"optbox slider\" name=multiDest id=multiDest ")
+           .append(multiDest ? "checked " : "").append("</label></span><br>\n");
 
         if (isStandalone()) {
             buf.append("<span class=configOption><label><b>")

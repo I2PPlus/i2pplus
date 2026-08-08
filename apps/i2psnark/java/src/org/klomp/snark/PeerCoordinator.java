@@ -1900,7 +1900,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @since DHT
      */
     void sendDHT(Peer peer) {
-        DHT dht = _util.getDHT();
+        DHT dht = _util.getDHTForTorrent(getInfoHash());
         if (dht == null) {
             return;
         }
@@ -1993,7 +1993,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     @Override
     public void gotPort(Peer peer, int port, int rport) {
-        DHT dht = _util.getDHT();
+        DHT dht = _util.getDHTForTorrent(getInfoHash());
         if (dht != null && port > 0 && port < 65535 && rport == port + 1) {
             dht.ping(peer.getDestination(), port);
         }
@@ -2009,7 +2009,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         if (!needOutboundPeers()) {
             return;
         }
-        Destination myDest = _util.getMyDestination();
+        Destination myDest = _util.getMyDestination(getInfoHash());
         if (myDest == null) {
             return;
         }

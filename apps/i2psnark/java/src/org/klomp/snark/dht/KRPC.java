@@ -118,7 +118,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private SimpleTimer2.TimedEvent _explorer;
 
     /** hook to inject and receive datagrams */
-    private final I2PSession _session;
+    protected I2PSession _session;
 
     /** 20 byte random id */
     private final byte[] _myID;
@@ -130,14 +130,14 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private final NodeInfo _myNodeInfo;
 
     /** unsigned dgrams */
-    private final int _rPort;
+    protected int _rPort;
 
     /** signed dgrams */
-    private final int _qPort;
+    protected int _qPort;
 
     private final File _dhtFile;
     private final File _backupDhtFile;
-    private volatile boolean _isRunning;
+    protected volatile boolean _isRunning;
     private volatile boolean _hasBootstrapped;
 
     /** stats */
@@ -207,15 +207,25 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param baseName generally "i2psnark"
      */
     public KRPC(I2PAppContext ctx, String baseName, I2PSession session) {
+        this(ctx, baseName, session, null);
+    }
+
+    /**
+     * @param baseName generally "i2psnark"
+     * @param shared the KRPC instance whose routing table, tracker, and blacklist are shared with
+     *            this instance, or null for a standalone instance; a TorrentKRPC passes the main
+     *            instance and overrides start() and stop() to run only the message listener
+     */
+    protected KRPC(I2PAppContext ctx, String baseName, I2PSession session, KRPC shared) {
         _context = ctx;
         _session = session;
         _log = ctx.logManager().getLog(KRPC.class);
-        _tracker = new DHTTracker(ctx);
+        _tracker = (shared != null) ? shared._tracker : new DHTTracker(ctx);
 
         _sentQueries = new ConcurrentHashMap<>();
         _outgoingTokens = new ConcurrentHashMap<>();
         _incomingTokens = new ConcurrentHashMap<>();
-        _blacklist = new ConcurrentHashSet<>();
+        _blacklist = (shared != null) ? shared._blacklist : new ConcurrentHashSet<>();
 
         // Construct my NodeInfo
         // Pick ports over a big range to marginally increase security
@@ -244,9 +254,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                             ctx.getConfigDir(), "i2psnark.config" + SnarkManager.CONFIG_DIR_SUFFIX);
             _backupDhtFile = new File(bconf, "i2psnark" + DHT_FILE_SUFFIX);
         }
-        _knownNodes = new DHTNodes(ctx, _myNID);
+        _knownNodes = (shared != null) ? shared._knownNodes : new DHTNodes(ctx, _myNID);
 
-        start();
+        if (shared == null) {
+            start();
+        }
     }
 
     ///////////////// Public methods
@@ -1700,7 +1712,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /** Callback for replies */
-    private class ReplyWaiter extends SimpleTimer2.TimedEvent {
+    protected class ReplyWaiter extends SimpleTimer2.TimedEvent {
         private final MsgID mid;
         private final NodeInfo sentTo;
         private final Runnable onReply;

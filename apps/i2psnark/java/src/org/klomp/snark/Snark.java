@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PServerSocket;
+import net.i2p.data.Base64;
 import net.i2p.data.Destination;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFile;
@@ -377,8 +378,18 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                                 + _util.getI2CPPort(),
                         null);
         }
+        String key = null;
+        TorrentDest td = null;
+        if (_util.getMultiDest()) {
+            key = Base64.encode(infoHash);
+            td = _util.getOrCreateTorrentDest(key, getBaseName());
+            if (td == null) {
+                fatalRouter("Unable to listen for I2P connections", null);
+            }
+        }
         if (coordinator == null) {
-            I2PServerSocket serversocket = _util.getServerSocket();
+            I2PServerSocket serversocket =
+                    td != null ? td.getServerSocket() : _util.getServerSocket();
             if (serversocket == null) fatalRouter("Unable to listen for I2P connections", null);
             else {
                 Destination d = serversocket.getManager().getSession().getMyDestination();
@@ -403,15 +414,26 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             if (_peerCoordinatorSet != null) {
                 _peerCoordinatorSet.add(coordinator); // multitorrent
             } else {
-                acceptor =
-                        new ConnectionAcceptor(
-                                _util, new PeerAcceptor(coordinator)); // single torrent
+                if (td != null) {
+                    acceptor =
+                            new ConnectionAcceptor(
+                                    _util, new PeerAcceptor(coordinator), td); // single torrent
+                } else {
+                    acceptor =
+                            new ConnectionAcceptor(
+                                    _util, new PeerAcceptor(coordinator)); // single torrent
+                }
             }
             // TODO pass saved closest DHT nodes to the tracker? or direct to the coordinator?
             trackerclient = new TrackerClient(_util, meta, additionalTrackerURL, coordinator, this);
         }
+        if (td != null && _peerCoordinatorSet != null) {
+            // multitorrent: register the accept loop on the torrent's destination,
+            // on first start and on restart
+            acceptor.addTorrentAcceptor(td, coordinator);
+        }
         // ensure acceptor is running when in multitorrent
-        if (_peerCoordinatorSet != null && acceptor != null) {
+        if (_peerCoordinatorSet != null && acceptor != null && td == null) {
             acceptor.startAccepting();
         }
 
@@ -509,7 +531,13 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             if (pc != null) {
                 _peerCoordinatorSet.remove(pc);
             }
-            _util.disconnect();
+            if (_util.getMultiDest()) {
+                String key = Base64.encode(infoHash);
+                acceptor.removeTorrentAcceptor(key);
+                _util.removeTorrentDest(key);
+            } else {
+                _util.disconnect();
+            }
         }
     }
 

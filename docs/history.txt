@@ -1,7 +1,12 @@
 2026-08-08 dr|z3d
-  * I2PSnark: Re-verify only the pieces overlapping files that changed
-    since the last save when resuming a torrent, instead of re-hashing
-    every piece; unchanged files keep their saved state
+  * I2PSnark:
+    - Re-verify only the pieces overlapping files that changed
+      since the last save when resuming a torrent, instead of re-hashing
+      every piece; unchanged files keep their saved state
+    - Optional separate destination per torrent: each torrent gets its
+      own I2P destination, connection acceptor, and DHT port while
+      sharing the global tracker and blacklist, so peers from one
+      torrent can never be linked to another by destination
 
 2026-08-07 dr|z3d
   * Tunnel: Restore LeaseSet lease expiry to the full 10-minute tunnel
