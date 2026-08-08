@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.SequenceInputStream;
+import java.net.SocketTimeoutException;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.data.Base64;
@@ -75,6 +76,9 @@ class PeerAcceptor {
             socket.setReadTimeout(HASH_READ_TIMEOUT);
             try {
                 peerInfoHash = readHash(in);
+            } catch (SocketTimeoutException ste) {
+                // A slow peer is not a misbehaving peer; never blacklist on timeout
+                throw ste;
             } catch (IOException ioe) {
                 // unique exception so ConnectionAcceptor can blame the peer
                 throw new ProtocolException("bad protocol", ioe);
