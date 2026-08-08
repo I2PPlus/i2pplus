@@ -1,4 +1,7 @@
 2026-08-08 dr|z3d
+  * I2PSnark: Incoming connections are rejected only after 3 handshake
+    failures within a window, and a successful handshake clears the count,
+    so a single transient failure no longer blacklists a peer for 15 minutes
   * I2PSnark: In PeerListener.connected(), compute the BEP 40 canonical
     peer priority from the local and remote destination hashes; when both
     sides have connected to each other, the side with the smaller hash

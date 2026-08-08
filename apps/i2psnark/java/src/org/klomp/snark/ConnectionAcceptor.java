@@ -64,8 +64,10 @@ class ConnectionAcceptor implements Runnable {
     private final ObjectCounter<Hash> _badCounter = new ObjectCounter<>();
     private final SimpleTimer2.TimedEvent _cleaner;
     private final Map<String, TorrentAcceptLoop> _torrentAcceptors = new ConcurrentHashMap<>();
-    private volatile boolean stop; // protocol errors before blacklisting.
-    private static final int MAX_BAD = 1;
+    /** Stops the accept loop */
+    private volatile boolean stop;
+    /** Protocol errors within a window before the client is rejected. */
+    private static final int MAX_BAD = 3;
     private static final long BAD_CLEAN_INTERVAL = 15 * (long) 60 * 1000;
     /** Maximum concurrent incoming connections in handshake */
     private static final int MAX_HANDLERS = 64;
@@ -526,6 +528,9 @@ class ConnectionAcceptor implements Runnable {
                                     + "]");
                 }
                 _pa.connection(_socket, in, out);
+                // A successful handshake shows the client is healthy; drop
+                // any protocol-error count so only serial failures blacklist
+                _badCounter.clear(_socket.getPeerDestination().calculateHash());
             } catch (PeerAcceptor.ProtocolException ihe) {
                 _badCounter.increment(_socket.getPeerDestination().calculateHash());
                 if (_log.shouldInfo()) {
