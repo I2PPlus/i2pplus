@@ -98,7 +98,7 @@ public class GeoIP {
     // ASN database for IP → org name lookups
     private volatile com.maxmind.db.Reader _asnReader;
 
-    /** P r o p  g e o i p  e n a b l e d */
+    /** Property: whether GeoIP lookups are enabled. */
     static final String PROP_GEOIP_ENABLED = "routerconsole.geoip.enable";
     /** Normalize ISP/org names from ASN database (strip suffixes, abbreviate, title-case) */
     static final String PROP_NORMALIZE_ISP = "routerconsole.enableISPNameNormalization";

@@ -144,16 +144,10 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private static final int DEFAULT_CODEL_INTERVAL = 50;
     /**  interval */
     private volatile long _interval;
-    /** S t a t  d e l a y */
+    /** RateStat name for message delay. */
     private final String STAT_DELAY;
     private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 1000 : 500;
 
-    /**
-     *  Target 15, interval 100
-     *
-     *  @param name for stats
-     */
-//        this(ctx, name, capacity, TARGET, INTERVAL);
     /**
      * Constructs a queue with default CoDel target and interval from properties.
      *

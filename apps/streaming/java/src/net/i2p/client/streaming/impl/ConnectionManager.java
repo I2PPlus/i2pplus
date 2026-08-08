@@ -157,7 +157,7 @@ class ConnectionManager {
     private static final String PROP_ENABLE_PONG_DELAY = "i2p.streaming.enablePongDelay";
     private static final boolean DEFAULT_ENABLE_PONG_DELAY = false;
     private static final int MAX_PONG_DELAY = 50;
-    /** P r o p  m a x  p o n g  d e l a y */
+    /** Property: maximum pong delay in ms. */
     static final String PROP_MAX_PONG_DELAY = "i2p.streaming.maxPongDelay";
 
     // https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers

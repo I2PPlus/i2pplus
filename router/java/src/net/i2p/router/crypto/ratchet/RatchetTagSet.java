@@ -33,7 +33,7 @@ import net.i2p.util.Log;
 class RatchetTagSet implements TagSetHandle {
     private final SessionTagListener _lsnr;
     private final PublicKey _remoteKey;
-/** The session key */
+    /** The session key. */
     protected final SessionKey _key;
     // NSR only, else null
     private final HandshakeState _state;
@@ -76,11 +76,11 @@ class RatchetTagSet implements TagSetHandle {
     private static final boolean TEST_RATCHET = false;
     // 4 * max streaming window
     private static final int LOW = TEST_RATCHET ? (MAX - 512) : (MAX - 4096);
-    /** D e b u g  o b  n s r */
+    /** Debug flag for outbound New Session Requests. */
     static final int DEBUG_OB_NSR = 0x10001;
-    /** D e b u g  i b  n s r */
+    /** Debug flag for inbound New Session Requests. */
     static final int DEBUG_IB_NSR = 0x10002;
-    /** D e b u g  s i n g l e  e s */
+    /** Debug flag for a single encrypted session. */
     static final int DEBUG_SINGLE_ES = 0x10003;
     // Start empty (no allocations), we only use storage for gaps
     private static final int INITIAL_KEY_CAPACITY = 0;
@@ -677,24 +677,4 @@ class RatchetTagSet implements TagSetHandle {
         return buf.toString();
     }
 
-    /**
-     *  first tag still available, or null
-     *  inbound only
-     *  testing only
-     */
-/****
-    private RatchetSessionTag getFirstTag() {
-        if (_sessionTags == null)
-            throw new IllegalStateException("Outbound tagset");
-        if (_sessionTags.size() <= 0)
-            return null;
-        return _sessionTags.valueAt(0);
-    }
-****/
-
-     /**
-     *  tags still available
-     *  inbound only
-     *  testing only
-     */
 }

@@ -631,7 +631,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
     }
 
-    /** P r o p  o u t b o u n d  s t a r t u p  r e t r i e s */
+    /** Property: outbound tunnel startup retries. */
     static final String PROP_OUTBOUND_STARTUP_RETRIES = "router.tunnel.outboundStartupRetries";
     private static final int DEFAULT_OUTBOUND_STARTUP_RETRIES = 5;
 

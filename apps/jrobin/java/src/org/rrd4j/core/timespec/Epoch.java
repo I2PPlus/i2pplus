@@ -65,7 +65,7 @@ public class Epoch extends JFrame {
     /** Help button */
     private final JButton helpButton = new JButton("Help");
 
-    /** O u t p u t  d a t e  f o r m a t */
+    /** Format pattern for the output date. */
     private final SimpleDateFormat OUTPUT_DATE_FORMAT =
             new SimpleDateFormat("MM/dd/yy HH:mm:ss EEE");
 

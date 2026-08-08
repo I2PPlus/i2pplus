@@ -78,7 +78,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
     /**  interval */
     private volatile long _interval;
-    /** S t a t  d r o p */
+    /** RateStat name for dropped messages. */
     private final String STAT_DROP;
 
     /** Active instances for dynamic tuning — weak refs prevent leak when tunnels expire */

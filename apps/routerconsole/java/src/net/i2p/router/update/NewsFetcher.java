@@ -81,7 +81,7 @@ class NewsFetcher extends UpdateRunner {
     private boolean _gotNewEntry;
 
     private static final String TEMP_NEWS_FILE = "news.xml.temp";
-    /** P r o p  b l o c k l i s t  t i m e */
+    /** Property: current blocklist version. */
     static final String PROP_BLOCKLIST_TIME = "router.blocklistVersion";
     private static final String BLOCKLIST_DIR = "docs/feed/blocklist";
     private static final String BLOCKLIST_FILE = "blocklist.txt";

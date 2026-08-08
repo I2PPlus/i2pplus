@@ -93,9 +93,9 @@ abstract class EstablishBase implements EstablishState {
      * Tracks the progression through various phases of the handshake.
      */
     protected enum State {
-        /** O b  i n i t */
+        /** Outbound handshake, waiting for the responder's key. */
         OB_INIT,
-        /** I b  i n i t */
+        /** Inbound handshake, waiting for the initiator's key. */
         IB_INIT,
 
         /**
@@ -142,7 +142,7 @@ abstract class EstablishBase implements EstablishState {
 
         /** OB: got and verified 4; IB: got and verified 3 and sent 4 */
         VERIFIED,
-        /** C o r r u p t */
+        /** Handshake data failed verification. */
         CORRUPT
     }
 

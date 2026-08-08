@@ -151,12 +151,12 @@ public interface Transport {
      *  @since IPv6
      */
     public enum AddressSource {
-        /** S o u r c e  u p n p */
+        /** Address from a UPnP port mapping. */
         SOURCE_UPNP("upnp"),
-        /** S o u r c e  i n t e r f a c e */
+        /** Address of a local interface. */
         SOURCE_INTERFACE("local"),
         SOURCE_CONFIG("config"),
-        /** S o u r c e  s s u */
+        /** Address from the SSU transport. */
         SOURCE_SSU("ssu");
 
         private final String cfgstr;

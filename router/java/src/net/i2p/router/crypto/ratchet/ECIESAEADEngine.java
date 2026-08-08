@@ -78,7 +78,7 @@ public final class ECIESAEADEngine {
     private static final int MIN_ENCRYPTED_SIZE = MIN_ES_SIZE;
     private static final byte[] NULLPK = new byte[KEYLEN];
     private static final int MAXPAD = 16;
-    /** M a x  n s  a g e */
+    /** Maximum age of a New Session request in ms. */
     static final long MAX_NS_AGE = 5*60*1000L;
     private static final long MAX_NS_FUTURE = 2*60*1000L;
     // debug, send ACKREQ in every ES
@@ -1461,11 +1461,11 @@ public final class ECIESAEADEngine {
         public final List<GarlicClove> cloveSet = new ArrayList<>(3);
         private final RatchetSKM skm;
         private final PublicKey remote;
-/** The datetime value */
+        /** The datetime value. */
         public long datetime;
         /** null or non-empty */
         public List<NextSessionKey> nextKeys;
-/** Whether an ack was requested */
+        /** Whether an ack was requested. */
         public boolean ackRequested;
 
         /**

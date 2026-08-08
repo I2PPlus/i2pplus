@@ -68,7 +68,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      */
     static final long SESSION_LIFETIME_MAX_MS = SESSION_TAG_DURATION_MS + 2 * 60 * 1000L;
 
-    /** S e s s i o n  p e n d i n g  d u r a t i o n  m s */
+    /** How long a session stays pending in ms. */
     static final long SESSION_PENDING_DURATION_MS = 3 * 60 * 1000L;
     // replace an old session created before this if we get a new NS
     private static final long SESSION_REPLACE_AGE = 2*60*1000L;

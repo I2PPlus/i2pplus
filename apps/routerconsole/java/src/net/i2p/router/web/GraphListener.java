@@ -35,9 +35,9 @@ public class GraphListener implements RateSummaryListener {
     public static final String PROP_PERSISTENT = "routerconsole.graphPersistent";
     /** note that .jrb files are NOT compatible with .rrd files */
     static final String RRD_DIR = "rrd";
-    /** R r d  p r e f i x */
+    /** Prefix for RRD file names. */
     static final String RRD_PREFIX = "rrd-";
-    /** R r d  s u f f i x */
+    /** Suffix for RRD file names. */
     static final String RRD_SUFFIX = ".jrb";
     /** Consolidation function used for RRD archives. */
     static final ConsolFun CF = ConsolFun.AVERAGE;

@@ -184,7 +184,7 @@ public class NTCPTransport extends TransportImpl {
      * STYLE2.
      */
     public static final String STYLE2 = "NTCP2";
-    /** N t c p2  i n t  v e r s i o n */
+    /** NTCP2 protocol version. */
     static final int NTCP2_INT_VERSION = 2;
     /** "2" */
     static final String NTCP2_VERSION = Integer.toString(NTCP2_INT_VERSION);
@@ -192,7 +192,7 @@ public class NTCPTransport extends TransportImpl {
     static final String NTCP2_VERSION_ALT = NTCP2_VERSION + ',';
     /** 0 to disable, or 3/4/5 for enctypes 5/6/7 */
     static final int PQ_INT_VERSION = 4;
-    /** P q  v e r s i o n */
+    /** PQ protocol version string. */
     static final String PQ_VERSION = Integer.toString(PQ_INT_VERSION);
     /** b64 static private key */
     public static final String PROP_NTCP2_SP = "i2np.ntcp2.sp";

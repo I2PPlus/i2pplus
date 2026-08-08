@@ -172,25 +172,25 @@ public class WebMail extends HttpServlet {
     private static final String PREV = "prev";
     private static final String NEXT = "next";
     private static final String SORT = "sort"; // SORT is a GET or POST param, SORT_XX are the values, possibly prefixed by '-'
-    /** S o r t  i d */
+    /** Sort value for the message id. */
     static final String SORT_ID = "id";
-    /** S o r t  s e n d e r */
+    /** Sort value for the sender. */
     static final String SORT_SENDER = "sender";
-    /** S o r t  s u b j e c t */
+    /** Sort value for the subject. */
     static final String SORT_SUBJECT = "subject";
-    /** S o r t  d a t e */
+    /** Sort value for the date. */
     static final String SORT_DATE = "date";
-    /** S o r t  s i z e */
+    /** Sort value for the size. */
     static final String SORT_SIZE = "size";
-    /** S o r t  d e f a u l t */
+    /** Default sort column. */
     static final String SORT_DEFAULT = SORT_DATE;
-    /** S o r t  o r d e r  d e f a u l t */
+    /** Default sort order. */
     static final SortOrder SORT_ORDER_DEFAULT = SortOrder.UP;
     private static final List<String> VALID_SORTS = Arrays.asList(new String[] {// for XSS
                                       SORT_ID, SORT_SENDER, SORT_SUBJECT, SORT_DATE, SORT_SIZE,
                                       '-' + SORT_ID, '-' + SORT_SENDER, '-' + SORT_SUBJECT, '-' +
                                       SORT_DATE, '-' + SORT_SIZE});
-    /** D i r  f o l d e r */
+    /** Maildir subfolder for current mail. */
     static final String DIR_FOLDER = "cur"; // MailDir-like
     /** Translated "Drafts" folder name */
     public static final String DIR_DRAFTS = _x("Drafts"); // MailDir-like
@@ -223,7 +223,7 @@ public class WebMail extends HttpServlet {
     private static final String CONFIG_HTML_SHOW_BLOCKED_IMAGES = "view.html.blockedImages";
     private static final String CONFIG_ENABLE_MAIL_PREVIEWS = "view.enableMailPreviews";
     private static final String CONFIG_COPY_TO_SENT = "composer.copy.to.sent";
-    /** C o n f i g  l e a v e  o n  s e r v e r */
+    /** Config key: leave mail on the server. */
     static final String CONFIG_LEAVE_ON_SERVER = "pop3.leave.on.server";
     /**
      * CONFIG_BACKGROUND_CHECK.

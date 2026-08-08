@@ -80,7 +80,7 @@ public class PersistentDataStore extends TransientDataStore {
     private static final int READ_INTERVAL = 5*60*1000;
     /** Config property to enable flat directory layout. */
     private static final String PROP_FLAT = "router.networkDatabase.flat";
-    /** D i r  p r e f i x */
+    /** Directory prefix for netDb files. */
     static final String DIR_PREFIX = "r";
     /** Base64 alphabet used for directory naming. */
     private static final String B64 = Base64.ALPHABET_I2P;

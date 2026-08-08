@@ -117,7 +117,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final Job _erj;
     /** LU routers job */
     private final Job _lurj;
-    /** P r o p  m i n  r o u t e r  v e r s i o n */
+    /** Property: minimum router version for exploration. */
     static final String PROP_MIN_ROUTER_VERSION = "router.minVersionAllowed";
     /** Config property for blocking own-country peers. */
     public static final String PROP_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
@@ -226,9 +226,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final long ROUTER_INFO_EXPIRATION_FLOODFILL = 16*60*60*1000L;
     /** RouterInfo expiration time in ms for introduced peers. */
     private static final long ROUTER_INFO_EXPIRATION_INTRODUCED = 54*60*1000L;
-    /** P r o p  r o u t e r  i n f o  e x p i r a t i o n  a d j u s t e d */
+    /** Property: adjusted RouterInfo expiration time in ms. */
     static final String PROP_ROUTER_INFO_EXPIRATION_ADJUSTED = "router.expireRouterInfo";
-    /** P r o p  v a l i d a t e  r o u t e r s  a f t e r */
+    /** Property: delay before validating routers in ms. */
     static final String PROP_VALIDATE_ROUTERS_AFTER = "router.validateRoutersAfter";
     /** Delay in ms before starting explore jobs. */
     private static final long EXPLORE_JOB_DELAY = 5*60*1000L;
@@ -249,12 +249,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /** Maximum number of peers to place in the queue to explore */
     static final int MAX_EXPLORE_QUEUE = 64;
-    /** P r o p  e x p l o r e  q u e u e */
+    /** Property: maximum explore queue size. */
     static final String PROP_EXPLORE_QUEUE = "router.exploreQueue";
 
     /** Kad K  Was 500 in old implementation but that was with B ~= -8! */
     private static final int BUCKET_SIZE = 24;
-    /** P r o p  b u c k e t  s i z e */
+    /** Property: Kademlia bucket size (B parameter). */
     static final String PROP_BUCKET_SIZE = "router.exploreBucketSize";
     /** Kademlia bucket size (B parameter). */
     private static final int KAD_B = 4;

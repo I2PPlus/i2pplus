@@ -113,7 +113,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  @since 0.9.70+
      */
     static final ConcurrentHashMap<Hash, Long> _recentlyQueriedFloodfills = new ConcurrentHashMap<>(1024);
-    /** R e c e n t l y  q u e r i e d  c o o l d o w n */
+    /** Cooldown before a floodfill can be queried again in ms. */
     static final long RECENTLY_QUERIED_COOLDOWN = 60*1000L;
 
     /**

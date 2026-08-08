@@ -46,13 +46,13 @@ public class SendMessageOptions extends DateAndFlags {
 
     /** Reliability bits 9-10. */
     public enum Reliability {
-        /** D e f a u l t */
+        /** No reliability preference. */
         DEFAULT,
-        /** B e s t  e f f o r t */
+        /** Best effort delivery, no acknowledgment. */
         BEST_EFFORT,
-        /** G u a r a n t e e d */
+        /** Guaranteed delivery with acknowledgment. */
         GUARANTEED,
-        /** U n d e f i n e d */
+        /** Reliability not specified. */
         UNDEFINED
     }
 
@@ -213,11 +213,11 @@ public class SendMessageOptions extends DateAndFlags {
 
     /** Overrides i2cp.gzip session option and size threshold for this message only. */
     public enum GzipOption {
-        /** D e f a u l t */
+        /** Use the session's gzip setting. */
         DEFAULT,
-        /** G z i p  o f f */
+        /** Send without gzip compression. */
         GZIP_OFF,
-        /** G z i p  o n */
+        /** Send with gzip compression. */
         GZIP_ON
     }
 
