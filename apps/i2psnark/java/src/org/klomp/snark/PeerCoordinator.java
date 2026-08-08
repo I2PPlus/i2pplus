@@ -1765,6 +1765,44 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * Allocates a PartialPiece for a specific suggested piece, or returns null if the piece is not
+     * wanted, is already being fetched, or the peer is already fetching it. Used for BEP 6 suggest
+     * handling.
+     *
+     * @param peer the peer that suggested the piece
+     * @param piece the suggested piece number
+     * @return a new PartialPiece to request, or null
+     * @since 0.9.72+
+     */
+    @Override
+    public PartialPiece getPartialPiece(Peer peer, int piece) {
+        if (metainfo == null || (storage != null && storage.isChecking())) {
+            return null;
+        }
+        synchronized (wantedPieces) {
+            // never create a second partial for a piece already being downloaded
+            if (partialIds.contains(Integer.valueOf(piece))) {
+                return null;
+            }
+            Piece p = wantedMap.get(Integer.valueOf(piece));
+            if (p == null || p.isDisabled() || p.isRequestedBy(peer)) {
+                return null;
+            }
+            if (p.isRequested() && wantedPieces.size() > END_GAME_THRESHOLD) {
+                return null; // not in end game, already requested from another peer
+            }
+            if (p.getRequestCount() >= MAX_PARALLEL_REQUESTS) {
+                return null;
+            }
+            p.setRequested(peer, true);
+            if (_log.shouldInfo()) {
+                _log.info("Suggest: requesting piece [" + p + "] from [" + peer + "]");
+            }
+            return new PartialPiece(p, metainfo.getPieceLength(piece), _util.getTempDir());
+        }
+    }
+
+    /**
      * Called when we are downloading from the peer and may need to ask for a new piece. Returns
      * true if wantPiece() or getPartialPiece() would return a piece.
      *

@@ -827,14 +827,47 @@ class PeerState implements DataLoader {
     /////////// fast message handlers /////////
 
     /**
-     * BEP 6 Treated as "have" for now
+     * BEP 6 Suggest. Treated as a one-shot request hint: the peer is hinting that this piece is a
+     * good one to request from it. Request it immediately if we want it and are unchoked. Never
+     * recorded as a permanent have, as that would distort availability for the swarm.
      *
-     * @since 0.9.21
+     * @since 0.9.72+
      */
     void suggestMessage(int piece) {
-        if (_log.shouldDebug())
-            _log.debug("Handling suggest as have(" + piece + ") from [" + peer + "]");
-        haveMessage(piece);
+        if (metainfo == null) {
+            return;
+        }
+        if (piece < 0 || piece >= metainfo.getPieces()) {
+            if (_log.shouldWarn()) {
+                _log.warn("Received strange 'suggest: " + piece + "' message from [" + peer + "]");
+            }
+            return;
+        }
+        if (_log.shouldDebug()) {
+            _log.debug("Handling suggest(" + piece + ") from [" + peer + "]");
+        }
+        synchronized (this) {
+            if (choked) {
+                // Cannot request now; the hint is one-shot so do not remember it
+                return;
+            }
+            if (getRequestedPieces().contains(Integer.valueOf(piece))) {
+                return; // already in flight
+            }
+            PartialPiece pp = listener.getPartialPiece(peer, piece);
+            if (pp == null) {
+                return; // not wanted or already being fetched elsewhere
+            }
+            Request r = pp.getRequest();
+            outstandingRequests.add(r);
+            lastRequest = r;
+            out.sendRequest(r);
+            if (interesting) {
+                request(true); // fill the request pipeline for this piece
+            } else {
+                setInteresting(true);
+            }
+        }
     }
 
     /**

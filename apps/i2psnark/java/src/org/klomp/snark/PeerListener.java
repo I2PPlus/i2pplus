@@ -120,6 +120,18 @@ interface PeerListener {
     PartialPiece getPartialPiece(Peer peer, BitField havePieces);
 
     /**
+     * Called when the peer suggests a specific piece via a BEP 6 suggest message. Returns a
+     * PartialPiece for that piece if we want it and it is not already being fetched from another
+     * peer, null otherwise.
+     *
+     * @param peer the Peer that got the message.
+     * @param piece the suggested piece number
+     * @return request (contains the partial data and valid length), or null if not wanted
+     * @since 0.9.72+
+     */
+    PartialPiece getPartialPiece(Peer peer, int piece);
+
+    /**
      * Called when an extension message is received.
      *
      * @param peer the Peer that got the message.
