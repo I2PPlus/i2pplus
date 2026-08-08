@@ -83,6 +83,13 @@ public interface I2PClient {
     public static final String PROP_GZIP = "i2cp.gzip";
 
     /**
+     * How many minutes to wait for the first lease set (tunnels) during session
+     * connect before failing. Integer; 0 or unparsable values fall back to the
+     * default of 20. @since 0.9.71+
+     */
+    public static final String PROP_TUNNEL_BUILD_TIMEOUT = "i2cp.tunnelBuildTimeoutMinutes";
+
+    /**
      *  7654
      *
      *  @since 0.9.38

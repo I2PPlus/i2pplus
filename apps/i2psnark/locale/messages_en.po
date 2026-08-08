@@ -1197,6 +1197,12 @@ msgstr ""
 msgid "Our destination (identity) for this session"
 msgstr ""
 
+msgid "Primary Dest."
+msgstr ""
+
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr ""
+
 msgid "Dest."
 msgstr ""
 

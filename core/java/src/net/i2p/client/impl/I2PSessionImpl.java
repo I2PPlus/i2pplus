@@ -461,6 +461,41 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     }
 
     /**
+     * Minutes to wait for the first lease set during connect, from the session options if
+     * set there, else from the router options, else the 20 minute default.
+     *
+     * @return minutes, at least 1
+     * @since 0.9.71+
+     */
+    private int getTunnelBuildTimeout() {
+        return getTunnelBuildTimeout(_options.getProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT),
+                                     _context.getProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT));
+    }
+
+    /**
+     * Parse the tunnel build timeout, shared with the instance method and tests.
+     * Invalid or non-positive values fall back to the 20 minute default.
+     *
+     * @param sessionValue per-session option value, or null
+     * @param contextValue router option value, or null
+     * @return minutes, at least 1
+     * @since 0.9.71+
+     */
+    static int getTunnelBuildTimeout(String sessionValue, String contextValue) {
+        String value = sessionValue != null ? sessionValue : contextValue;
+        if (value != null) {
+            try {
+                int minutes = Integer.parseInt(value.trim());
+                if (minutes > 0) {
+                    return minutes;
+                }
+            } catch (NumberFormatException nfe) {
+            }
+        }
+        return 20;
+    }
+
+    /**
      * Get I2CP host from the config
      *
      * @since 0.9.7 was in loadConfig()
@@ -815,10 +850,11 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             if (_log.shouldDebug()) {_log.debug(getPrefix() + " -> After producer.connect()");}
 
             // wait until we have created a lease set
+            int maxWait = getTunnelBuildTimeout() * 60;
             int waitcount = 0;
             while (_leaseSet == null) {
-                if (waitcount++ > 20*60) {
-                    throw new IOException("No tunnels built after waiting 20 minutes. Your network connection may be down, or there is severe network congestion.");
+                if (waitcount++ > maxWait) {
+                    throw new IOException("No tunnels built after waiting " + (maxWait / 60) + " minutes. Your network connection may be down, or there is severe network congestion.");
                 }
                 synchronized (_leaseSetWait) {_leaseSetWait.wait(1000);} // InterruptedException caught below
                 // if we got a disconnect message while waiting

@@ -13,6 +13,13 @@
       own I2P destination, connection acceptor, and DHT port while
       sharing the global tracker and blacklist, so peers from one
       torrent can never be linked to another by destination
+    - Wait up to 5 minutes for tunnels instead of 20 when starting
+      per-torrent destinations, and retry the start every 5 minutes
+      if the tunnels cannot be built, instead of abandoning the
+      torrent as failed
+    - Auto-started torrents begin one at a time with a randomized
+      30-90 second pause between each, so tunnel builds don't flood
+      the router and start timing doesn't reveal the batch order
 
 2026-08-07 dr|z3d
   * Tunnel: Restore LeaseSet lease expiry to the full 10-minute tunnel

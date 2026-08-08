@@ -19,6 +19,7 @@ import net.i2p.data.Base64;
 import net.i2p.data.Destination;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFile;
+import net.i2p.util.SimpleTimer2;
 import org.klomp.snark.comments.Comment;
 import org.klomp.snark.comments.CommentSet;
 
@@ -346,6 +347,16 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Startup retry delay after a failed per-torrent session creation, in milliseconds.
+     *
+     * @since 0.9.71+
+     */
+    private static final long RETRY_INTERVAL_MS = 5 * 60 * 1000;
+
+    /** Startup retry event, when a per-torrent session creation failed. */
+    private volatile SimpleTimer2.TimedEvent _retryEvent;
+
+    /**
      * Start up contacting peers and querying the tracker. Blocks if tunnel is not yet open.
      *
      * @throws RuntimeException via fatal()
@@ -355,6 +366,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         if (!stopped) {
             return;
         }
+        cancelRetry();
         starting = true;
         try {
             x_startTorrent();
@@ -384,7 +396,18 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             key = Base64.encode(infoHash);
             td = _util.getOrCreateTorrentDest(key, getBaseName());
             if (td == null) {
-                fatalRouter("Unable to listen for I2P connections", null);
+                // Session creation failed (e.g. tunnels unavailable); not fatal for a
+                // per-torrent session — retry periodically until it comes up.
+                if (_log.shouldWarn()) {
+                    _log.warn(
+                            "Unable to listen for I2P connections for "
+                                    + getBaseName()
+                                    + ", retrying in "
+                                    + (RETRY_INTERVAL_MS / 60000)
+                                    + " minutes");
+                }
+                scheduleRetry();
+                return;
             }
         }
         if (coordinator == null) {
@@ -463,6 +486,38 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
     }
 
+    /**
+     * Schedule a retry of startTorrent() after a per-torrent session creation failure.
+     * Rescheduled on each subsequent failure; cancelled by stopTorrent() or a manual start.
+     *
+     * @since 0.9.71+
+     */
+    private void scheduleRetry() {
+        cancelRetry();
+        _retryEvent =
+                new SimpleTimer2.TimedEvent(_util.getContext().simpleTimer2(), RETRY_INTERVAL_MS) {
+                    @Override
+                    public void timeReached() {
+                        cancelRetry();
+                        if (stopped) {
+                            startTorrent();
+                        }
+                    }
+                };
+    }
+
+    /**
+     * Cancel a pending startup retry, if any.
+     *
+     * @since 0.9.71+
+     */
+    private synchronized void cancelRetry() {
+        if (_retryEvent != null) {
+            _retryEvent.cancel();
+            _retryEvent = null;
+        }
+    }
+
     /** Stop contacting the tracker and talking with peers */
     public void stopTorrent() {
         stopTorrent(false);
@@ -475,6 +530,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.9.1
      */
     public synchronized void stopTorrent(boolean fast) {
+        cancelRetry();
         TrackerClient tc = trackerclient;
         if (tc != null) {
             tc.halt(fast);

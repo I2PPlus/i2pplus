@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
@@ -286,6 +287,33 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /** Delay between per-destination torrent starts, allowing each destination's tunnels to build */
     private static final long MULTI_DEST_STAGGER_MS = 8 * 1000;
     public static final int DEFAULT_MAX_FILES_PER_TORRENT = 2000;
+
+    /**
+     * Wait before the next auto-started torrent in a batch when multi-destination mode is
+     * on, spreading out tunnel builds and decoupling start times from batch order. No wait
+     * in single-dest mode, where all torrents share the one session.
+     *
+     * @since 0.9.71+
+     */
+    private void multiDestStartDelay() {
+        if (!_util.getMultiDest()) {
+            return;
+        }
+        try {
+            Thread.sleep(startDelay(_context.random()));
+        } catch (InterruptedException ie) { /* ignored */ }
+    }
+
+    /**
+     * Random delay between auto-started torrents in multi-dest mode, 30-90 seconds.
+     *
+     * @param rnd source of randomness
+     * @return delay in milliseconds
+     * @since 0.9.71+
+     */
+    static long startDelay(Random rnd) {
+        return 30L * 1000 + 1000L * rnd.nextInt(61);
+    }
     public static final String CONFIG_DIR_SUFFIX = ".d";
     private static final String SUBDIR_PREFIX = "s";
     private static final String B64 = Base64.ALPHABET_I2P;
@@ -3772,10 +3800,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         autostart = shouldAutoStart();
                         if (autostart && !oldOK && !doMagnets && !_snarks.isEmpty()) {
                             // Start previously added torrents
+                            int started = 0;
                             for (Snark snark : _snarks.values()) {
                                 Properties config = getConfig(snark);
                                 String prop = config.getProperty(PROP_META_RUNNING);
                                 if (prop == null || Boolean.parseBoolean(prop)) {
+                                    if (started++ > 0) {
+                                        multiDestStartDelay();
+                                    }
                                     if (!_util.connected()) {
                                         String msg = _t("Connecting to I2P") + "...";
                                         addMessage(msg);
@@ -4131,6 +4163,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private void addMagnets(boolean autostart) {
         boolean changed = false;
+        int started = 0;
         for (Iterator<?> iter = _config.keySet().iterator(); iter.hasNext(); ) {
             String k = (String) iter.next();
             if (k.startsWith(PROP_META_MAGNET_PREFIX)) {
@@ -4147,6 +4180,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     String tracker = config.getProperty(PROP_META_MAGNET_TR);
                     String dir = config.getProperty(PROP_META_MAGNET_DIR);
                     File dirf = (dir != null) ? (new File(dir)) : null;
+                    if (autostart && started++ > 0) {
+                        multiDestStartDelay();
+                    }
                     addMagnet(name, ih, tracker, false, autostart, dirf, this);
                 } else {
                     iter.remove();
@@ -4184,6 +4220,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         Set<String> existingNames = listTorrentFiles();
         // let's find new ones first...
         int count = 0;
+        int started = 0;
         for (String name : foundNames) {
             if (existingNames.contains(name)) { /* ignored */ } // already known. noop
             else {
@@ -4207,6 +4244,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _log.error("Unable to add torrent: " + name + "\n* Reason: " + e.getMessage());
                     disableTorrentFile(name);
                     rv = false;
+                }
+                if (shouldStart && started++ > 0) {
+                    multiDestStartDelay();
                 }
                 if (shouldStart && (count++ & 0x0f) == 15) {
                     // try to prevent OOMs at startup
@@ -4567,7 +4607,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                     .replace("Magnet ", ""));
         }
         if (connected) {
-            snark.startTorrent();
+            try {
+                snark.startTorrent();
+            } catch (RuntimeException re) { /* ignored */ } // Snark.fatal() will log and call fatal() here for user
+                                                              // message before throwing
         } else {
             snark.setStarting(); // mark it for the UI
             (new I2PAppThread(new ThreadedStarter(snark), "TorrentStarter", true)).start();

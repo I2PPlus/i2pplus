@@ -661,8 +661,13 @@ public class I2PSnarkUtil implements DisconnectListener {
     public TorrentDest getOrCreateTorrentDest(String key, String name) {
         TorrentDest td = _torrentDests.get(key);
         if (td == null) {
-            // cap at minimal tunnels; IdleChecker ramps them up with usage
-            Properties opts = buildOpts(getNickname(name), true);
+            // Cap at minimal tunnels; IdleChecker ramps them up with usage.
+            // buildOpts() mutates the shared context properties, so copy them for the
+            // session and give up on tunnel building sooner than the 20 minute default;
+            // a per-torrent session failure is retried by Snark.
+            Properties opts = new Properties();
+            opts.putAll(buildOpts(getNickname(name), true));
+            opts.setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "5");
             I2PSocketManager mgr =
                     I2PSocketManagerFactory.createManager(_i2cpHost, _i2cpPort, opts);
             if (mgr == null) {
