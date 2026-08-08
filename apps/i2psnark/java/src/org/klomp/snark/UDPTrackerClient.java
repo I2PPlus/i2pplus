@@ -83,6 +83,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
 
     private static final int ACTION_CONNECT = 0;
     private static final int ACTION_ANNOUNCE = 1;
+    private static final int ACTION_SCRAPE = 2;
     private static final int ACTION_ERROR = 3;
 
 
@@ -224,6 +225,72 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     }
 
     //////// private below here
+
+    /**
+     * Scrape for swarm composition for a torrent. Blocking! Caller should run in a thread.
+     *
+     * <p>BEP 15 scrape request, single info hash.
+     *
+     * @param ih the Info Hash (torrent)
+     * @param maxWait the maximum time to wait (ms) must be &gt; 0
+     * @param toHost the tracker hostname
+     * @param toPort the tracker port
+     * @return the response, or null on fail or timeout
+     * @since 0.9.71+
+     */
+    public TrackerResponse scrape(byte[] ih, long maxWait, String toHost, int toPort) {
+        long now = _context.clock().now();
+        long end = now + maxWait;
+        if (toPort <= 0) {
+            throw new IllegalArgumentException();
+        }
+        Tracker tr = getTracker(toHost, toPort);
+        if (tr.getDest(false) == null) {
+            if (_log.shouldInfo()) {
+                _log.info("Cannot resolve " + tr);
+            }
+            return null;
+        }
+        long toWait = end - now;
+        toWait = toWait * 3 / 4;
+        if (toWait < 1000) {
+            if (_log.shouldInfo()) {
+                _log.info("Out of time after resolving: " + tr);
+            }
+            return null;
+        }
+        Long cid = getConnection(tr, now + toWait);
+        if (cid == null) {
+            if (_log.shouldInfo()) {
+                _log.info("No connection for: " + tr);
+            }
+            return null;
+        }
+        now = _context.clock().now();
+        toWait = end - now;
+        if (toWait < 1000) {
+            if (_log.shouldInfo()) {
+                _log.info("Out of time after getting conn: " + tr);
+            }
+            return null;
+        }
+        ReplyWaiter w = sendScrape(tr, cid.longValue(), ih, toWait);
+        if (w == null) {
+            if (_log.shouldInfo()) {
+                _log.info("Initial scrape to " + tr + " failed");
+            }
+            return null;
+        }
+        boolean success = waitAndRetransmit(w, end);
+        _sentQueries.remove(w.getID());
+        if (success) {
+            return w.getReplyObject();
+        }
+        if (_log.shouldInfo()) {
+            _log.info("Scrape to " + tr + " failed after retrying");
+        }
+        return null;
+    }
 
     /**
      * Get or establish a connection to the tracker.
@@ -390,6 +457,47 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         DataHelper.toLong(payload, 80, 4, event);
         DataHelper.toLong(payload, 92, 4, numWant);
         DataHelper.toLong(payload, 96, 2, _rPort);
+        boolean rv = sendMessage(tr.getDest(true), tr.getPort(), payload, true);
+        return rv ? payload : null;
+    }
+
+    /**
+     * Send one time with a new tid
+     *
+     * @param toWait if &lt;= 0 does not register
+     * @return null on failure or if toWait &lt;= 0
+     */
+    private ReplyWaiter sendScrape(Tracker tr, long connID, byte[] ih, long toWait) {
+        int tid = _context.random().nextInt();
+        byte[] payload = sendScrape(tr, tid, connID, ih);
+        if (payload != null) {
+            if (toWait > 0) {
+                ReplyWaiter rv = new ReplyWaiter(tid, tr, ACTION_SCRAPE, payload, toWait);
+                _sentQueries.put(Integer.valueOf(tid), rv);
+                if (_log.shouldInfo()) {
+                    _log.info("Sent: " + rv + " timeout: " + toWait);
+                }
+                return rv;
+            }
+            if (_log.shouldInfo()) {
+                _log.info("Sent scrape to " + tr + " no wait");
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Send one time with given tid
+     *
+     * @return the payload or null on failure
+     */
+    private byte[] sendScrape(Tracker tr, int tid, long connID, byte[] ih) {
+        // BEP 15 scrape request, single info hash
+        byte[] payload = new byte[36];
+        DataHelper.toLong8(payload, 0, connID);
+        DataHelper.toLong(payload, 8, 4, ACTION_SCRAPE);
+        DataHelper.toLong(payload, 12, 4, tid);
+        System.arraycopy(ih, 0, payload, 16, 20);
         boolean rv = sendMessage(tr.getDest(true), tr.getPort(), payload, true);
         return rv ? payload : null;
     }
@@ -566,6 +674,10 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
                 receiveAnnounce(waiter, payload);
                 break;
 
+            case ACTION_SCRAPE:
+                receiveScrape(waiter, payload);
+                break;
+
             case ACTION_ERROR:
                 receiveError(waiter, payload, expect);
                 break;
@@ -640,6 +752,34 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             TrackerResponse resp = new TrackerResponse(interval, seeds, leeches, hashes);
             waiter.gotResponse(resp);
             tr.setInterval(interval);
+        } else {
+            waiter.gotReply(false);
+            tr.gotError();
+        }
+    }
+
+    /**
+     * Parse a BEP 15 scrape response, single info hash: seeders, completed, leechers.
+     *
+     * @param waiter the waiter for the scrape request
+     * @param payload the raw response
+     */
+    private void receiveScrape(ReplyWaiter waiter, byte[] payload) {
+        Tracker tr = waiter.getSentTo();
+        if (payload.length >= 20) {
+            int seeds = (int) DataHelper.fromLong(payload, 8, 4);
+            int leeches = (int) DataHelper.fromLong(payload, 16, 4);
+            if (_log.shouldInfo()) {
+                _log.info(
+                        "Received scrape from "
+                                + tr
+                                + " seeds: "
+                                + seeds
+                                + " leeches: "
+                                + leeches);
+            }
+            TrackerResponse resp = new TrackerResponse(0, seeds, leeches, Collections.emptySet());
+            waiter.gotResponse(resp);
         } else {
             waiter.gotReply(false);
             tr.gotError();

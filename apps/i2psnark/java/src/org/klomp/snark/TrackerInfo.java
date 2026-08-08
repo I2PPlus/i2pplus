@@ -247,6 +247,14 @@ class TrackerInfo {
         return complete;
     }
 
+    /**
+     * @return the leech count
+     * @since 0.9.71+
+     */
+    public int getLeechCount() {
+        return incomplete;
+    }
+
     /** Not HTML escaped. */
     public String getFailureReason() {
         return failure_reason;

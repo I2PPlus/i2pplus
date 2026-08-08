@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,6 +21,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import net.i2p.crypto.SigType;
@@ -30,6 +32,8 @@ import net.i2p.util.ConvertToHash;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+import org.klomp.snark.bencode.BDecoder;
+import org.klomp.snark.bencode.BEValue;
 import org.klomp.snark.bencode.InvalidBEncodingException;
 import org.klomp.snark.dht.DHT;
 
@@ -66,6 +70,8 @@ public class TrackerClient implements Runnable {
     private static final String NOT_REGISTERED_2 = "torrent not found"; // diftracker
     private static final String NOT_REGISTERED_3 = "torrent unauthorised"; // vuze
     private static final String ERROR_GOT_HTML = "received html (invalid response)"; // fake return
+    /** BEP 48 scrape path segment */
+    private static final String SCRAPE = "scrape";
 
     private static final int SLEEP = 5; // 5 minutes.
     private static final int DELAY_MIN = 2000; // 2 secs.
@@ -622,6 +628,25 @@ public class TrackerClient implements Runnable {
                     if (snark.getTrackerSeenPeers() < tr.seenPeers) {
                         snark.setTrackerSeenPeers(tr.seenPeers);
                     }
+                    // Refresh swarm composition when the announce didn't report it
+                    if (info.getSeedCount() <= 0 && info.getLeechCount() <= 0) {
+                        try {
+                            TrackerInfo scrape = doScrape(tr);
+                            if (scrape != null
+                                    && scrape.getSeedCount() + scrape.getLeechCount() > 0) {
+                                snark.updateScrape(
+                                        scrape.getSeedCount(), scrape.getLeechCount());
+                            }
+                        } catch (IOException ioe) {
+                            if (_log.shouldDebug()) {
+                                _log.debug(
+                                        "Scrape failed for "
+                                                + tr.host
+                                                + ": "
+                                                + ioe.getMessage());
+                            }
+                        }
+                    }
                     // auto stop
                     // These are very high thresholds for now, not configurable, just for update
                     // torrent
@@ -1022,6 +1047,147 @@ public class TrackerClient implements Runnable {
             return doRequestUDP(tr, uploaded, downloaded, left, event);
         }
         return doRequestHTTP(tr, infoHash, peerID, uploaded, downloaded, left, event);
+    }
+
+    /**
+     * Scrape for swarm composition from a tracker, BEP 15 (UDP) or BEP 48 (HTTP).
+     *
+     * @param tr the tracker
+     * @return the scrape result, or null on failure
+     * @throws IOException on HTTP scrape failure
+     */
+    private TrackerInfo doScrape(TCTracker tr) throws IOException {
+        if (tr.isUDP) {
+            UDPTrackerClient udptc = _util.getUDPTrackerClient(snark.getInfoHash());
+            if (udptc == null) {
+                return null;
+            }
+            UDPTrackerClient.TrackerResponse fetched =
+                    udptc.scrape(snark.getInfoHash(), 30 * 1000, tr.host, tr.port);
+            if (fetched == null || fetched.getFailureReason() != null) {
+                return null;
+            }
+            return new TrackerInfo(
+                    fetched.getPeers(),
+                    0,
+                    fetched.getSeedCount(),
+                    fetched.getLeechCount(),
+                    null,
+                    snark.getID(),
+                    snark.getInfoHash(),
+                    snark.getMetaInfo(),
+                    _util);
+        }
+        return doScrapeHTTP(tr, infoHash);
+    }
+
+    /**
+     * Scrape for swarm composition from an HTTP tracker, BEP 48: the last path segment of the
+     * announce URL is replaced with "scrape" and any query string is dropped.
+     *
+     * @param tr the tracker
+     * @param infoHash the hex info hash
+     * @return the scrape result, or null on failure
+     * @throws IOException on fetch or parse failure
+     */
+    private TrackerInfo doScrapeHTTP(TCTracker tr, String infoHash) throws IOException {
+        String url = scrapeURL(tr.announce) + "?info_hash=" + infoHash;
+        if (_log.shouldDebug()) {
+            _log.debug("Sending TrackerClient scrape\n* URL: " + url);
+        }
+        byte[] fetched = _util.get(url, true, 1, 256, 2048, snark.getInfoHash());
+        if (fetched == null || fetched.length == 0) {
+            throw new IOException("No scrape response from " + tr.host);
+        }
+        // The HTML check only works if we didn't exceed the maxium fetch size specified in get(),
+        // otherwise we already threw an IOE.
+        if (fetched[0] == '<') {
+            throw new IOException(ERROR_GOT_HTML + " from " + tr.host);
+        }
+        BDecoder bd = new BDecoder(new ByteArrayInputStream(fetched));
+        Map<String, BEValue> files = bd.bdecodeMap().getMap();
+        BEValue fv = files.get("files"); // BEP 48
+        if (fv == null) {
+            fv = files.get("peers"); // some trackers (opentracker) use this
+        }
+        if (fv == null) {
+            throw new IOException("No files in scrape response from " + tr.host);
+        }
+        int complete = 0;
+        int incomplete = 0;
+        byte[] ih = snark.getInfoHash();
+        for (Map.Entry<String, BEValue> e : fv.getMap().entrySet()) {
+            if (!isMyHash(e.getKey(), ih)) {
+                continue;
+            }
+            Map<String, BEValue> stats = e.getValue().getMap();
+            BEValue cv = stats.get("complete");
+            if (cv != null) {
+                complete = cv.getInt();
+            }
+            BEValue iv = stats.get("incomplete");
+            if (iv != null) {
+                incomplete = iv.getInt();
+            }
+            break;
+        }
+        if (_log.shouldLog(Log.INFO)) {
+            _log.info(
+                    "Scrape response from "
+                            + tr.host
+                            + ": seeds "
+                            + complete
+                            + " leeches "
+                            + incomplete);
+        }
+        return new TrackerInfo(
+                Collections.emptySet(),
+                0,
+                complete,
+                incomplete,
+                null,
+                snark.getID(),
+                ih,
+                snark.getMetaInfo(),
+                _util);
+    }
+
+    /**
+     * Build the BEP 48 scrape URL from the announce URL: drop any query string and replace the
+     * last path segment with "scrape".
+     *
+     * @param announce the announce URL
+     * @return the scrape URL
+     */
+    private static String scrapeURL(String announce) {
+        String base = announce;
+        int q = base.indexOf('?');
+        if (q >= 0) {
+            base = base.substring(0, q);
+        }
+        int slash = base.lastIndexOf('/');
+        if (slash < 0) {
+            return base + '/' + SCRAPE;
+        }
+        return base.substring(0, slash + 1) + SCRAPE;
+    }
+
+    /**
+     * @param key a bencoded dictionary key
+     * @param ih the torrent's info hash
+     * @return whether the key is the info hash, byte for byte
+     */
+    private static boolean isMyHash(String key, byte[] ih) {
+        if (key.length() != ih.length) {
+            return false;
+        }
+        byte[] kb = key.getBytes(StandardCharsets.UTF_8);
+        for (int i = 0; i < ih.length; i++) {
+            if (kb[i] != ih[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

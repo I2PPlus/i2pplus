@@ -53,6 +53,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private final PeerCoordinatorSet _peerCoordinatorSet;
     private volatile String trackerProblems;
     private volatile int trackerSeenPeers;
+    private volatile int _scrapeSeeders;
+    private volatile int _scrapeLeechers;
     private volatile boolean _autoStoppable;
     private volatile String activity = "Not started";
     private long savedUploaded;
@@ -866,6 +868,52 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     public void setTrackerSeenPeers(int p) {
         trackerSeenPeers = p;
+    }
+
+    /**
+     * Get the best-known seed count from tracker scrapes.
+     *
+     * @return the seed count, 0 if no scrape yet
+     * @since 0.9.71+
+     */
+    public int getScrapeSeeders() {
+        return _scrapeSeeders;
+    }
+
+    /**
+     * Get the best-known leech count from tracker scrapes.
+     *
+     * @return the leech count, 0 if no scrape yet
+     * @since 0.9.71+
+     */
+    public int getScrapeLeechers() {
+        return _scrapeLeechers;
+    }
+
+    /**
+     * Update the best-known swarm composition from a tracker scrape (BEP 15/48).
+     *
+     * <p>Keeps the maximum of each count, and raises the aggregate tracker seen peers to the sum
+     * when larger.
+     *
+     * @param seeders the seed count
+     * @param leechers the leech count
+     * @since 0.9.71+
+     */
+    public void updateScrape(int seeders, int leechers) {
+        if (seeders < 0 || leechers < 0) {
+            return;
+        }
+        if (seeders > _scrapeSeeders) {
+            _scrapeSeeders = seeders;
+        }
+        if (leechers > _scrapeLeechers) {
+            _scrapeLeechers = leechers;
+        }
+        int total = _scrapeSeeders + _scrapeLeechers;
+        if (total > trackerSeenPeers) {
+            setTrackerSeenPeers(total);
+        }
     }
 
     /** Recalculate piece priorities */
