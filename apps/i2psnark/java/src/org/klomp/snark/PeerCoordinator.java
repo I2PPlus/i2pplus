@@ -2286,7 +2286,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @since 0.8.4
      */
     Set<PeerID> getPEXPeers() {
-        return new HashSet<>(pexPeers);
+        return pexPeers;
     }
 
     /**

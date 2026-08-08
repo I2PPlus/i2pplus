@@ -1,4 +1,7 @@
 2026-08-08 dr|z3d
+  * I2PSnark: Peer exchange peers handed to the connection pool are
+    dropped from the pending list again, so a long-running torrent no
+    longer accumulates stale peer addresses that are never retried
   * I2PSnark: Saved partial piece lists are always guarded by the same
     lock, so completing a piece or halting the torrent can no longer race
     with peer threads reading the list, which could crash or lose
