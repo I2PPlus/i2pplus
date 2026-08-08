@@ -29,6 +29,12 @@ class PeerConnectionIn implements Runnable {
     // in the bitfield message is bigger but it's currently 5000/8 = 625 so don't bother)
     private static final int MAX_MSG_SIZE = Math.max(PeerState.PARTSIZE + 9, MagnetState.CHUNK_SIZE + 100); // 100 for the ext msg dictionary
 
+    /** Flood guard: maximum inbound messages per window, generous to tolerate bursts */
+    private static final int MAX_MESSAGES_PER_WINDOW = 2000;
+
+    /** Flood guard: length of the counting window */
+    private static final long FLOOD_WINDOW_MS = 10 * 1000;
+
     private volatile Thread thread;
     private volatile boolean quit;
     private final boolean isStandalone = !I2PAppContext.getGlobalContext().isRouterContext();
@@ -97,6 +103,8 @@ class PeerConnectionIn implements Runnable {
     @Override
     public void run() {
         thread = Thread.currentThread();
+        long windowStart = System.currentTimeMillis();
+        int windowCount = 0;
         try {
             while (!quit) {
                 final PeerState ps = peer.state;
@@ -112,6 +120,20 @@ class PeerConnectionIn implements Runnable {
                 // Wait till we hear something...
                 int i = din.readInt();
                 lastRcvd = System.currentTimeMillis();
+                // Count all messages including keep-alives; disconnect on flood
+                long now = System.currentTimeMillis();
+                if (now - windowStart >= FLOOD_WINDOW_MS) {
+                    windowStart = now;
+                    windowCount = 0;
+                }
+                if (++windowCount > MAX_MESSAGES_PER_WINDOW) {
+                    throw new IOException(
+                            "Message flood from ["
+                                    + peer
+                                    + "]: "
+                                    + windowCount
+                                    + " messages in window");
+                }
                 if (i < 0 || i > MAX_MSG_SIZE) {
                     throw new IOException("Unexpected length prefix: " + i);
                 }
