@@ -38,7 +38,6 @@ class DHTTracker {
     private static final long CLEAN_TIME = (long) 199 * 1000;
 
     /** no guidance in BEP 5; Vuze is 8h */
-    private static final long MAX_EXPIRE_TIME = 10 * (long) 60 * 1000;
     private static final long MIN_EXPIRE_TIME = 5 * (long) 60 * 1000;
     private static final long DELTA_EXPIRE_TIME = 3 * (long) 60 * 1000;
     private static final int MAX_PEERS = 400;
@@ -47,12 +46,31 @@ class DHTTracker {
     private static final int MAX_TORRENTS = 2000;
 
     /**
+     * The maximum expiration period, scaled by how many peers are known:
+     * the fewer peers we know, the longer we keep them around.
+     *
+     * @param peerCount the number of peers currently known
+     * @return the maximum expiration period in milliseconds
+     */
+    private static long getMaxExpireTime(int peerCount) {
+        if (peerCount < 100) {
+            return 4 * 60 * 60 * 1000L;         // 4 hours
+        } else if (peerCount < 200) {
+            return 2 * 60 * 60 * 1000L;         // 2 hours
+        } else if (peerCount < 300) {
+            return 60 * 60 * 1000L;             // 1 hour
+        } else {
+            return 30 * 60 * 1000L;             // 30 minutes
+        }
+    }
+
+    /**
      * @param ctx the app context
      */
     DHTTracker(I2PAppContext ctx) {
         _context = ctx;
         _torrents = new Torrents();
-        _expireTime = MAX_EXPIRE_TIME;
+        _expireTime = getMaxExpireTime(0);
         _log = _context.logManager().getLog(DHTTracker.class);
     }
 
@@ -226,7 +244,7 @@ class DHTTracker {
 
             if (peerCount > MAX_PEERS) tooMany = true;
             if (tooMany) _expireTime = Math.max(_expireTime - DELTA_EXPIRE_TIME, MIN_EXPIRE_TIME);
-            else _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, MAX_EXPIRE_TIME);
+            else _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, getMaxExpireTime(peerCount));
 
             if (_log.shouldDebug())
                 _log.debug(
