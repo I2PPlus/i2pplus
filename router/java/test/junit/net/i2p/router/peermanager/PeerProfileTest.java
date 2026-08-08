@@ -146,9 +146,14 @@ public class PeerProfileTest {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
         Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
         PeerProfile profile = new PeerProfile(_ctx, peer);
-        // profiles are created unexpanded and expanded lazily on first use
+        // profiles are created unexpanded; merely accessing the tunnel history
+        // must not expand them — only real tunnel participation does, so idle
+        // profiles can be dropped from memory
         assertFalse(profile.getIsExpanded());
         profile.getTunnelHistory();
+        assertFalse(profile.getIsExpanded());
+        profile.getTunnelHistory().incrementAgreedTo();
+        profile.expandProfile();
         assertTrue(profile.getIsExpanded());
     }
 

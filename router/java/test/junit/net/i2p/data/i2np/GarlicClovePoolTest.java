@@ -48,15 +48,16 @@ public class GarlicClovePoolTest {
     @Test
     public void testPooledCloveMatchesNewClove() {
         GarlicClovePool pool = new GarlicClovePool(4);
+        long exp = System.currentTimeMillis() + 60000;
 
         GarlicClove fresh = new GarlicClove(CTX);
         fresh.setCloveId(42);
-        fresh.setExpiration(System.currentTimeMillis() + 60000);
+        fresh.setExpiration(exp);
         fresh.setCertificate(Certificate.NULL_CERT);
 
         GarlicClove pooled = pool.acquire();
         pooled.setCloveId(42);
-        pooled.setExpiration(System.currentTimeMillis() + 60000);
+        pooled.setExpiration(exp);
         pooled.setCertificate(Certificate.NULL_CERT);
 
         assertEquals(fresh.getCloveId(), pooled.getCloveId());
@@ -87,7 +88,7 @@ public class GarlicClovePoolTest {
         GarlicClove extra = pool.acquire();
         assertNotNull("pool allocates new when empty", first);
         assertNotNull("pool allocates new when empty", extra);
-        assertNotEquals("pool allocates distinct instances when empty", first, extra);
+        assertNotSame("pool allocates distinct instances when empty", first, extra);
     }
 
     @Test

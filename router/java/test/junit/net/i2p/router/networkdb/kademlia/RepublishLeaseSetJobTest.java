@@ -119,6 +119,29 @@ public class RepublishLeaseSetJobTest {
     }
 
     /**
+     * A client whose I2CP session is closed by close-on-idle but whose tunnel
+     * pools still exist must keep the local re-mint cycle alive — the
+     * isTrackedLocal() gate prevents treating a temporarily-closed session as
+     * a stop, so the local copy is not failed and publishing is not stopped.
+     */
+    @Test
+    public void testClosedSessionWithPoolKeepsLocalCopyFresh() {
+        Hash hash = newHash(8);
+        when(_cm.shouldPublishLeaseSet(hash)).thenReturn(false);
+        when(_cm.isLocal(hash)).thenReturn(false);
+        LeaseSet ls = localLeaseSet(hash);
+        when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
+
+        RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);
+        assertTrue(job.registerSelf());
+        job.runJob();
+
+        verify(_facade, never()).stopPublishing(hash);
+        verify(_facade, never()).fail(hash);
+        verify(_jobQueue).addJob(any(Job.class));
+    }
+
+    /**
      * An active local publishing client must still floodfill — the local-only
      * fast path must not swallow the normal publish path.
      */
@@ -241,8 +264,11 @@ public class RepublishLeaseSetJobTest {
     }
 
     /**
-     * A client that is no longer local AND should not publish has stopped —
-     * its LeaseSet is failed and publishing stopped.
+     * A client that is no longer local, should not publish, AND has no tunnel
+     * pools left has truly stopped — its LeaseSet is failed and publishing
+     * stopped.  The isTrackedLocal() gate keeps the re-mint cycle alive only
+     * while a pool still exists (close-on-idle), so a pool-less destination
+     * must fall through to the stop path.
      */
     @Test
     public void testStoppedClientStopsPublishing() {
@@ -251,6 +277,9 @@ public class RepublishLeaseSetJobTest {
         when(_cm.isLocal(hash)).thenReturn(false);
         LeaseSet ls = localLeaseSet(hash);
         when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
+        // no pools configured for this destination — truly stopped
+        TunnelManagerFacade tm = mock(TunnelManagerFacade.class);
+        when(_ctx.tunnelManager()).thenReturn(tm);
 
         RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);
         assertTrue(job.registerSelf());
@@ -266,7 +295,8 @@ public class RepublishLeaseSetJobTest {
 
     /**
      * A publishing client that is no longer local gets the normal
-     * not-local cleanup: stop publishing without failing the LeaseSet.
+     * not-local cleanup: the stored LeaseSet is failed (dropping any stale
+     * raw-store copy) and publishing stopped.
      */
     @Test
     public void testNonLocalPublishingClientStopsPublishing() {
@@ -280,7 +310,7 @@ public class RepublishLeaseSetJobTest {
         job.runJob();
 
         verify(_facade).stopPublishing(hash);
-        verify(_facade, never()).fail(hash);
+        verify(_facade).fail(hash);
         verify(_facade, never()).sendStore(any(Hash.class), any(LeaseSet.class), any(Job.class), any(Job.class), anyLong(), any());
     }
 
