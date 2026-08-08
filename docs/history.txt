@@ -1,4 +1,9 @@
 2026-08-08 dr|z3d
+  * I2PSnark: In PeerListener.connected(), compute the BEP 40 canonical
+    peer priority from the local and remote destination hashes; when both
+    sides have connected to each other, the side with the smaller hash
+    keeps its outgoing connection and the larger side drops its outgoing
+    leg, so each pair converges on a single canonical connection
   * NetDB: Sweep now also purges expired local LeaseSets, so stale
     entries don't linger in the netdb lease listings
   * Dev docs: New consolidated developer documentation site (READMEs +

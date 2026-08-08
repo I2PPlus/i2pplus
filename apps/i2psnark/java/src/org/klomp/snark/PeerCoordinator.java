@@ -858,26 +858,56 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 old = null;
             }
             if (old != null) {
-                if (_log.shouldWarn()) {
-                    _log.warn(
-                            "Already connected to ["
-                                    + peer
-                                    + "] - ["
-                                    + old
-                                    + "] inactive for "
-                                    + old.getInactiveTime()
-                                    + "ms");
+                // BEP 40 canonical peer priority for I2P: when both we and the
+                // peer connected to each other, the side with the smaller
+                // destination hash keeps its outgoing leg as the canonical
+                // initiator, so the larger side abandons its outgoing leg
+                boolean dropNew = old.isIncoming() == peer.isIncoming();
+                if (!dropNew) {
+                    Destination myDest = _util.getMyDestination(getInfoHash());
+                    byte[] ourHash = myDest == null ? null : myDest.calculateHash().getData();
+                    byte[] peerHash = peer.getPeerID().getDestHash();
+                    if (ourHash == null || peerHash == null) {
+                        dropNew = true;
+                    } else {
+                        dropNew = (DataHelper.compareTo(ourHash, peerHash) > 0) == !peer.isIncoming();
+                    }
                 }
-                // toDisconnect = peer to get out of synchronized(peers)
-                peer.disconnect(false); // Don't deregister this connection/peer.
-                // Already checked in addPeer() but we could have gone over the limit since then
-            } else if (peers.size() >= getMaxConnections()) {
+                if (dropNew) {
+                    if (_log.shouldWarn()) {
+                        _log.warn(
+                                "Already connected to ["
+                                        + peer
+                                        + "] - ["
+                                        + old
+                                        + "] inactive for "
+                                        + old.getInactiveTime()
+                                        + "ms");
+                    }
+                    // toDisconnect = peer to get out of synchronized(peers)
+                    peer.disconnect(false); // Don't deregister this connection/peer.
+                    // Already checked in addPeer() but we could have gone over the limit since then
+                } else {
+                    if (_log.shouldWarn()) {
+                        _log.warn(
+                                "Canonical peer priority: replacing duplicate connection to ["
+                                        + peer
+                                        + "] - ["
+                                        + old
+                                        + "]");
+                    }
+                    peers.remove(old);
+                    toDisconnect = old;
+                    old = null;
+                }
+            }
+            if (old == null && peers.size() >= getMaxConnections()) {
                 if (_log.shouldWarn()) {
                     _log.warn("Already at MAX_CONNECTIONS in connected() with peer [" + peer + "]");
                 }
                 // toDisconnect = peer to get out of synchronized(peers)
                 peer.disconnect(false);
-            } else {
+            } else if (old == null) {
                 if (_log.shouldInfo()) {
                     // just for logging
                     String name;
