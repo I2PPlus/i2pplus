@@ -92,7 +92,10 @@ class ExpireLeasesJob extends JobImpl {
             LeaseSet ls = (LeaseSet) obj;
             Hash h = entry.getKey();
             boolean isLocal = ctx.clientManager().isLocal(h);
-            if (isLocal) {continue;}
+            // Skip current local LeaseSets - RepublishLeaseSetJob refreshes
+            // those.  Stale expired local copies fall through and are purged
+            // once they pass the stale threshold, like any other entry.
+            if (isLocal && ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {continue;}
             if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                 long expiredAgo = now - ls.getLatestLeaseDate();
                 if (expiredAgo > STALE_EXPIRED_MS) {
@@ -147,8 +150,14 @@ class ExpireLeasesJob extends JobImpl {
                 LeaseSet ls = (LeaseSet) obj;
                 Hash h = entry.getKey();
                 boolean isLocal = ctx.clientManager().isLocal(h);
-                // Skip local LeaseSets - they're managed by RepublishLeaseSetJob
-                if (isLocal) {
+                // Skip current local LeaseSets - they're managed by
+                // RepublishLeaseSetJob, which refreshes the copies it owns.
+                // An EXPIRED local copy (e.g. a dead republish job, close-on-idle
+                // client that left a stale LS in its per-client netdb, or a
+                // dontPublishLeaseSet service with no inbound pool) must still
+                // fall through to the expiry purge below, otherwise the stale
+                // LeaseSet lingers in the netdb listing forever.
+                if (isLocal && ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                     continue;
                 }
                 if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
