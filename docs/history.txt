@@ -1,4 +1,7 @@
 2026-08-08 dr|z3d
+  * I2PSnark: When idle, tunnels are kept at a minimum of 2 inbound and
+    2 outbound instead of collapsing to 1, so tracker announces and DHT
+    lookups no longer time out while no peers are connected
   * I2PSnark: Incoming connections are rejected only after 3 handshake
     failures within a window, and a successful handshake clears the count,
     so a single transient failure no longer blacklists a peer for 15 minutes

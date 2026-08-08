@@ -102,7 +102,8 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Reduces tunnel count to 1 in / 1 out (or 2/2 for standalone).
+     * Reduces tunnel count to the minimum of 2 in / 2 out when idle, so tracker
+     * and DHT traffic keep a usable path while no peers are connected.
      */
     private void reduceTunnels() {
         _isIdle = true;
@@ -119,7 +120,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         } catch (NumberFormatException nfe) {
             obtunnels = 1;
         }
-        int minTunnels = isStandalone ? 2 : 1;
+        int minTunnels = 2;
         if (ibtunnels > minTunnels || obtunnels > minTunnels) {
             String msg =
                     "Connection is idle -> Reducing inbound / outbound tunnel count to "
@@ -130,10 +131,8 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
             }
             if (isStandalone) {
                 System.out.println(" • " + msg);
-                setTunnels("2", "2", "0", "0");
-            } else {
-                setTunnels("1", "1", "0", "0");
             }
+            setTunnels("2", "2", "0", "0");
         }
     }
 
