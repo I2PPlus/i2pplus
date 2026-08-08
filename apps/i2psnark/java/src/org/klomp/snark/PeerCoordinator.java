@@ -798,7 +798,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             peer.disconnect();
         }
         // delete any saved orphan partial piece
-        synchronized (partialPieces) {
+        synchronized (wantedPieces) {
             for (PartialPiece pp : partialPieces) {
                 pp.release();
             }
@@ -1569,7 +1569,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             snark.storageCompleted(storage);
         }
 
-        synchronized (partialPieces) {
+        synchronized (wantedPieces) {
             for (PartialPiece ppp : partialPieces) {
                 ppp.release();
             }

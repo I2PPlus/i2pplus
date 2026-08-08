@@ -1,4 +1,8 @@
 2026-08-08 dr|z3d
+  * I2PSnark: Saved partial piece lists are always guarded by the same
+    lock, so completing a piece or halting the torrent can no longer race
+    with peer threads reading the list, which could crash or lose
+    in-progress piece data
   * I2PSnark: DHT get_peers walks the closest nodes instead of stopping
     at the first reply, so an empty or short peer list from one node no
     longer ends the lookup and small swarms return more peers
