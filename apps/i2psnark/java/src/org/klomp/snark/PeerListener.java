@@ -127,7 +127,7 @@ interface PeerListener {
      * @param peer the Peer that got the message.
      * @param piece the suggested piece number
      * @return request (contains the partial data and valid length), or null if not wanted
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     PartialPiece getPartialPiece(Peer peer, int piece);
 

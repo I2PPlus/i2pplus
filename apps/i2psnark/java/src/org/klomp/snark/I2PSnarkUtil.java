@@ -274,7 +274,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * Whether to disconnect peers that cancel most of what they request.
      *
      * @return true if the discard-ratio auto-ban is enabled
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public boolean isBanDiscardRatio() {
         return _banDiscardRatio;
@@ -284,7 +284,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * Set whether to disconnect peers that cancel most of what they request.
      *
      * @param ban true to enable the discard-ratio auto-ban
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public void setBanDiscardRatio(boolean ban) {
         _banDiscardRatio = ban;

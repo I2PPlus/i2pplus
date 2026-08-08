@@ -1772,7 +1772,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @param peer the peer that suggested the piece
      * @param piece the suggested piece number
      * @return a new PartialPiece to request, or null
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     @Override
     public PartialPiece getPartialPiece(Peer peer, int piece) {

@@ -192,7 +192,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Disconnect peers that cancel most of what they request. Off by default; conservative
      * thresholds and a minimum-volume guard protect legitimate peers under congestion.
      *
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static final String PROP_BAN_DISCARD_RATIO = "i2psnark.banDiscardRatio";
 
