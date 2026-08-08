@@ -196,6 +196,10 @@ abstract class ExtensionHandler {
             BEValue bev = dec.bdecodeMap();
             Map<String, BEValue> map = bev.getMap();
             peer.setHandshakeMap(map);
+            BEValue uploadOnly = map.get("upload_only");
+            if (uploadOnly != null) {
+                peer.setUploadOnly(uploadOnly.getInt() != 0);
+            }
             Map<String, BEValue> msgmap = map.get("m").getMap();
 
             if (log.shouldDebug())

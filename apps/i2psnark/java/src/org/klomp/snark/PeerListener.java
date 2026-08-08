@@ -7,6 +7,7 @@
 package org.klomp.snark;
 
 import java.util.List;
+import java.util.Set;
 import net.i2p.data.ByteArray;
 import org.klomp.snark.comments.Comment;
 
@@ -118,6 +119,18 @@ interface PeerListener {
      * @since 0.8.2
      */
     PartialPiece getPartialPiece(Peer peer, BitField havePieces);
+
+    /**
+     * Called when a peer has connected and there may be a partially downloaded piece that the
+     * coordinator can give the peer task. May be called while the peer chokes us, to request a
+     * BEP 6 allowed fast piece.
+     *
+     * @param havePieces the have-pieces bitmask for the peer
+     * @param allowed the pieces servable while choked, or null for no restriction
+     * @return request (contains the partial data and valid length)
+     * @since 0.9.71+
+     */
+    PartialPiece getPartialPiece(Peer peer, BitField havePieces, Set<Integer> allowed);
 
     /**
      * Called when the peer suggests a specific piece via a BEP 6 suggest message. Returns a

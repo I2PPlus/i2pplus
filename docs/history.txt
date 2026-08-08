@@ -16,6 +16,12 @@
     - DHT keeps known nodes and tracker peers longer when few are
       known: node expiration raised to 1 hour, tracker peer
       expiration up to 4 hours, so small swarms stay connected
+    - BEP 6 fast extension: peers that choke us can still serve a
+      small allowed-fast set of pieces, and we serve ours to choked
+      peers, so slow or partial seeds don't stall downloads
+    - BEP 21 partial seeds: peers declaring upload-only mode are
+      detected and handled, and partial seed counts from trackers
+      that report downloaders are shown in scrapes
   * Router: Peers that never accepted or rejected a tunnel build are
     kept in memory longer when the profile store is sparse (up to 4
     hours below 2000 profiles), so quiet peers aren't purged too early

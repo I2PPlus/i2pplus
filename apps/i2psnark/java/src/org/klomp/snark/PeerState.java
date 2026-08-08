@@ -6,6 +6,7 @@
 
 package org.klomp.snark;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import net.i2p.I2PAppContext;
+import net.i2p.crypto.SHA1;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
@@ -51,6 +53,12 @@ class PeerState implements DataLoader {
     volatile boolean interested;
     /** Whether the peer has choked us */
     volatile boolean choked = true;
+
+    /** BEP 6: pieces we advertised to the peer, servable even while choking it */
+    private volatile Set<Integer> _allowedFast;
+
+    /** BEP 6: pieces the peer advertised to us, requestable while it chokes us */
+    private final Set<Integer> _peerAllowedFast = new HashSet<>(8);
 
     /** The pieces the peer has. Locking: this. */
     BitField bitfield;
@@ -359,10 +367,11 @@ class PeerState implements DataLoader {
         } // synch
 
         boolean interest = listener.gotBitField(peer, bitfield);
-        if (bitfield.complete() && !interest) {
-            // They are seeding and we are seeding,
+        if ((bitfield.complete() || peer.isUploadOnly()) && !interest) {
+            // They are seeding (or a partial seed) and we are seeding,
             // why did they contact us? (robert)
             // Dump them quick before we send our whole bitmap
+            // A partial seed never requests anything, so it is equally useless to us
 
             // If we both support comments, allow it
             if (listener.getUtil().utCommentsEnabled()) {
@@ -411,7 +420,7 @@ class PeerState implements DataLoader {
         synchronized (this) {
             _lastRequestTime = System.currentTimeMillis();
         }
-        if (choking) {
+        if (choking && !isAllowedFast(piece)) {
             if (peer.supportsFast()) {
                 if (_log.shouldDebug())
                     _log.debug("Request received, sending reject to choked [" + peer + "]");
@@ -1089,13 +1098,115 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * BEP 6 Ignored for now
+     * Handle an allowed fast message (BEP 6): the peer will serve this piece even while it chokes
+     * us. Store it and pull a request now, while we are still choked.
      *
+     * @param piece the piece index
      * @since 0.9.21
      */
     void allowedFastMessage(int piece) {
-        if (_log.shouldDebug())
-            _log.debug("Ignoring allowed_fast(" + piece + ") from [" + peer + "]");
+        if (metainfo == null || piece < 0 || piece >= metainfo.getPieces()) {
+            if (_log.shouldDebug()) {
+                _log.debug("Ignoring allowed_fast for unknown piece " + piece + " from [" + peer + "]");
+            }
+            return;
+        }
+        boolean isNew;
+        synchronized (this) {
+            isNew = _peerAllowedFast.add(Integer.valueOf(piece));
+        }
+        if (isNew && choked) {
+            addRequest();
+        }
+        if (_log.shouldDebug()) {
+            _log.debug("Got allowed_fast(" + piece + ") from [" + peer + "]");
+        }
+    }
+
+    /**
+     * Whether the piece is in our BEP 6 allowed fast set for this peer.
+     *
+     * @param piece the piece index
+     * @return true if servable even while we choke the peer
+     * @since 0.9.71+
+     */
+    boolean isAllowedFast(int piece) {
+        Set<Integer> allowed = _allowedFast;
+        return allowed != null && allowed.contains(Integer.valueOf(piece));
+    }
+
+    /**
+     * Generate and queue the BEP 6 allowed fast set for this peer.
+     *
+     * <p>The set is derived from the peer's destination hash, so both ends compute the same
+     * pieces. Only pieces we actually have are advertised, and requests for them are served even
+     * while we choke the peer.
+     *
+     * @param ourBitfield the pieces we have, may be null
+     * @since 0.9.71+
+     */
+    void sendAllowedFast(BitField ourBitfield) {
+        if (!peer.supportsFast()
+                || metainfo == null
+                || ourBitfield == null
+                || ourBitfield.count() <= 0) {
+            return;
+        }
+        byte[] peerHash = peer.getPeerID().getDestHash();
+        if (peerHash == null) {
+            return;
+        }
+        Set<Integer> set =
+                generateAllowedFastSet(peerHash, metainfo.getInfoHash(), metainfo.getPieces());
+        if (set.isEmpty()) {
+            return;
+        }
+        Set<Integer> mine = new HashSet<>(10);
+        for (Integer piece : set) {
+            if (ourBitfield.get(piece.intValue())) {
+                out.sendAllowedFast(piece.intValue());
+                mine.add(piece);
+            }
+        }
+        if (mine.isEmpty()) {
+            return;
+        }
+        synchronized (this) {
+            _allowedFast = mine;
+        }
+    }
+
+    /**
+     * Generate the BEP 6 allowed fast set for a peer.
+     *
+     * <p>The first four bytes of the peer's destination hash stand in for the masked IP
+     * address, so both ends of an I2P connection can compute the same up to ten piece
+     * indices from the torrent infohash.
+     *
+     * @param peerHash the 32-byte destination hash of the peer
+     * @param infohash the infohash of the torrent
+     * @param pieces the number of pieces in the torrent
+     * @return the allowed fast set, never null
+     * @since 0.9.71+
+     */
+    static Set<Integer> generateAllowedFastSet(byte[] peerHash, byte[] infohash, int pieces) {
+        Set<Integer> rv = new HashSet<>(10);
+        if (peerHash == null || infohash == null || pieces <= 0) {
+            return rv;
+        }
+        // x = first four destination hash bytes ++ first 20 of the infohash
+        byte[] x = new byte[24];
+        System.arraycopy(peerHash, 0, x, 0, 4);
+        System.arraycopy(infohash, 0, x, 4, Math.min(20, infohash.length));
+        MessageDigest md = SHA1.getInstance();
+        while (rv.size() < 10) {
+            x = md.digest(x);
+            for (int i = 0; i < 5 && rv.size() < 10; i++) {
+                long y = DataHelper.fromLong(x, i * 4, 4) & 0xffffffffL;
+                rv.add(Integer.valueOf((int) (y % pieces)));
+            }
+        }
+        return rv;
     }
 
     /**
@@ -1230,6 +1341,11 @@ class PeerState implements DataLoader {
                     currentMaxPipeline++;
                 }
             }
+            // BEP 6: pieces requestable while choked, null when none allowed
+            Set<Integer> fastPieces = null;
+            if (choked && !_peerAllowedFast.isEmpty()) {
+                fastPieces = new HashSet<>(_peerAllowedFast);
+            }
             boolean more_pieces = true;
             while (more_pieces) {
                 more_pieces = outstandingRequests.size() < currentMaxPipeline;
@@ -1242,11 +1358,7 @@ class PeerState implements DataLoader {
                         if (listener.needPiece(this.peer, bitfield)) {
                             setInteresting(true);
                             if (_log.shouldDebug()) {
-                                _log.debug(
-                                        "["
-                                                + peer
-                                                + "] addRequest() we need something, setting"
-                                                + " interesting, delaying requestNextPiece()");
+                                _log.debug("[" + peer + "] needs something, set interesting, delay");
                             }
                         } else {
                             if (_log.shouldDebug()) {
@@ -1255,19 +1367,15 @@ class PeerState implements DataLoader {
                         }
                         return;
                     }
-                    if (choked) {
-                        // If choked, delay pulling
+                    if (choked && fastPieces == null) {
+                        // If choked without allowed fast pieces, delay pulling
                         // a request from the PeerCoordinator until unchoked.
                         if (_log.shouldDebug()) {
-                            _log.debug(
-                                    "["
-                                            + peer
-                                            + "] addRequest() we are choked, delaying"
-                                            + " requestNextPiece()");
+                            _log.debug("[" + peer + "] choked, delaying requestNextPiece()");
                         }
                         return;
                     }
-                    more_pieces = requestNextPiece();
+                    more_pieces = requestNextPiece(fastPieces);
                 } else if (more_pieces) { // We want something
                     int pieceLength;
                     boolean isLastChunk;
@@ -1276,7 +1384,7 @@ class PeerState implements DataLoader {
 
                     // Last part of a piece?
                     if (isLastChunk) {
-                        more_pieces = requestNextPiece();
+                        more_pieces = requestNextPiece(fastPieces);
                     } else {
                         PartialPiece nextPiece = lastRequest.getPartialPiece();
                         int nextBegin = lastRequest.off + PARTSIZE;
@@ -1287,13 +1395,19 @@ class PeerState implements DataLoader {
                                 int nextLength = maxLength > PARTSIZE ? PARTSIZE : maxLength;
                                 Request req = new Request(nextPiece, nextBegin, nextLength);
                                 outstandingRequests.add(req);
-                                if (!choked) out.sendRequest(req);
+                                // BEP 6: allowed fast pieces are requested even while choked
+                                if (!choked
+                                        || (fastPieces != null
+                                                && fastPieces.contains(
+                                                        Integer.valueOf(nextPiece.getPiece())))) {
+                                    out.sendRequest(req);
+                                }
                                 lastRequest = req;
                                 break;
                             } else {
                                 nextBegin += PARTSIZE;
                                 if (nextBegin >= pieceLength) {
-                                    more_pieces = requestNextPiece();
+                                    more_pieces = requestNextPiece(fastPieces);
                                     break;
                                 }
                             }
@@ -1318,18 +1432,23 @@ class PeerState implements DataLoader {
     /**
      * Starts requesting first chunk of next piece. Returns true if something has been added to the
      * requests, false otherwise. Caller should synchronize.
+     *
+     * @param allowed the pieces servable while choked, or null for no restriction
      */
-    private boolean requestNextPiece() {
+    private boolean requestNextPiece(Set<Integer> allowed) {
         // Check that we already know what the other side has.
         if (bitfield != null) {
             // Check for adopting an orphaned partial piece
-            PartialPiece pp = listener.getPartialPiece(peer, bitfield);
+            PartialPiece pp = listener.getPartialPiece(peer, bitfield, allowed);
             if (pp != null) {
                 // Double-check that r not already in outstandingRequests
                 if (!getRequestedPieces().contains(Integer.valueOf(pp.getPiece()))) {
                     Request r = pp.getRequest();
                     outstandingRequests.add(r);
-                    if (!choked) {
+                    // BEP 6: allowed fast pieces are requested even while choked
+                    if (!choked
+                            || (allowed != null
+                                    && allowed.contains(Integer.valueOf(pp.getPiece())))) {
                         out.sendRequest(r);
                     }
                     lastRequest = r;

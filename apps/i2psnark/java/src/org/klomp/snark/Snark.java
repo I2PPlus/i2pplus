@@ -55,6 +55,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private volatile int trackerSeenPeers;
     private volatile int _scrapeSeeders;
     private volatile int _scrapeLeechers;
+    private volatile int _scrapePartials;
     private volatile boolean _autoStoppable;
     private volatile String activity = "Not started";
     private long savedUploaded;
@@ -937,6 +938,18 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the best-known partial seed count from tracker scrapes.
+     *
+     * <p>Partial seeds have some files but download nothing more (BEP 21).
+     *
+     * @return the partial seed count, 0 if no scrape yet or not supported
+     * @since 0.9.71+
+     */
+    public int getScrapePartialSeeds() {
+        return _scrapePartials;
+    }
+
+    /**
      * Update the best-known swarm composition from a tracker scrape (BEP 15/48).
      *
      * <p>Keeps the maximum of each count, and raises the aggregate tracker seen peers to the sum
@@ -947,7 +960,22 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.9.71+
      */
     public void updateScrape(int seeders, int leechers) {
-        if (seeders < 0 || leechers < 0) {
+        updateScrape(seeders, leechers, 0);
+    }
+
+    /**
+     * Update the best-known swarm composition from a tracker scrape (BEP 15/48/21).
+     *
+     * <p>Keeps the maximum of each count, and raises the aggregate tracker seen peers to the sum
+     * when larger.
+     *
+     * @param seeders the seed count
+     * @param leechers the leech count
+     * @param partials the partial seed count, 0 if unknown
+     * @since 0.9.71+
+     */
+    public void updateScrape(int seeders, int leechers, int partials) {
+        if (seeders < 0 || leechers < 0 || partials < 0) {
             return;
         }
         if (seeders > _scrapeSeeders) {
@@ -955,6 +983,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
         if (leechers > _scrapeLeechers) {
             _scrapeLeechers = leechers;
+        }
+        if (partials > _scrapePartials) {
+            _scrapePartials = partials;
         }
         int total = _scrapeSeeders + _scrapeLeechers;
         if (total > trackerSeenPeers) {

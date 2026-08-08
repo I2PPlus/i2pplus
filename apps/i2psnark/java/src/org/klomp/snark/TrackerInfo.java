@@ -30,6 +30,7 @@ class TrackerInfo {
     private final Set<Peer> peers;
     private int complete;
     private int incomplete;
+    private int downloaders;
 
     /**
      * @param metainfo may be null
@@ -100,6 +101,15 @@ class TrackerInfo {
                         incomplete = 0;
                     }
                 } catch (InvalidBEncodingException ibe) { /* ignored */ }
+
+            bev = m.get("downloaders");
+            if (bev != null)
+                try {
+                    downloaders = bev.getInt();
+                    if (downloaders < 0) {
+                        downloaders = 0;
+                    }
+                } catch (InvalidBEncodingException ibe) { /* ignored */ }
         }
     }
 
@@ -107,6 +117,7 @@ class TrackerInfo {
      * To convert returned UDPTracker data to the standard structure
      *
      * @param hashes may be null
+     * @param downloaders the active downloader count, 0 if unknown (BEP 21)
      * @param error may be null
      * @since 0.9.14
      */
@@ -115,6 +126,7 @@ class TrackerInfo {
             int interval,
             int complete,
             int incomplete,
+            int downloaders,
             String error,
             byte[] my_id,
             byte[] infohash,
@@ -124,6 +136,7 @@ class TrackerInfo {
         this.interval = interval;
         this.complete = complete;
         this.incomplete = incomplete;
+        this.downloaders = downloaders;
         failure_reason = error;
     }
 
@@ -253,6 +266,19 @@ class TrackerInfo {
      */
     public int getLeechCount() {
         return incomplete;
+    }
+
+    /**
+     * The partial seed count, derived from the BEP 21 downloaders scrape field.
+     *
+     * <p>Partial seeds have some files but download nothing more; trackers report them
+     * separately from active downloaders. Zero when the tracker omits the field.
+     *
+     * @return the partial seed count
+     * @since 0.9.71+
+     */
+    public int getPartialSeedCount() {
+        return Math.max(0, incomplete - downloaders);
     }
 
     /** Not HTML escaped. */

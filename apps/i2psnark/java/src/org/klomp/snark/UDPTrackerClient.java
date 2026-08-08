@@ -80,6 +80,12 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      * Torrent stopped.
      */
     public static final int EVENT_STOPPED = 3;
+    /**
+     * Partial seed (BEP 21), HTTP only; not defined in the UDP protocol.
+     *
+     * @since 0.9.71+
+     */
+    public static final int EVENT_PAUSED = 5;
 
     private static final int ACTION_CONNECT = 0;
     private static final int ACTION_ANNOUNCE = 1;

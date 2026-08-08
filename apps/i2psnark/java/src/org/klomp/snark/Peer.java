@@ -99,6 +99,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     private static final long OPTION_FAST = 0x0000000000000004L;
     private long options;
     private final boolean _isIncoming;
+    private volatile boolean _uploadOnly;
     private int _totalCommentsSent;
     private int _maxPipeline = PeerState.MIN_PIPELINE;
     private long connected;
@@ -158,6 +159,30 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      */
     public boolean isIncoming() {
         return _isIncoming;
+    }
+
+    /**
+     * The peer declared itself a partial seed (BEP 21 upload_only).
+     *
+     * <p>A partial seed has some files but does not want to download anything more.
+     *
+     * @param uploadOnly whether the peer is a partial seed
+     * @since 0.9.71+
+     */
+    public void setUploadOnly(boolean uploadOnly) {
+        _uploadOnly = uploadOnly;
+    }
+
+    /**
+     * Whether the peer declared itself a partial seed (BEP 21 upload_only).
+     *
+     * <p>A partial seed has some files but does not want to download anything more.
+     *
+     * @return true if the peer is a partial seed
+     * @since 0.9.71+
+     */
+    public boolean isUploadOnly() {
+        return _uploadOnly;
     }
 
     /** Returns the id of the peer. */
@@ -307,6 +332,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             // Send our bitmap
             if (bitfield != null) {
                 s.out.sendBitfield(bitfield);
+                // BEP 6: advertise the fast pieces servable while choking
+                s.sendAllowedFast(bitfield);
             }
 
             // We are up and running!

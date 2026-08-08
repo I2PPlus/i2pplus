@@ -66,6 +66,7 @@ public class TrackerClient implements Runnable {
     private static final String STARTED_EVENT = "started";
     private static final String COMPLETED_EVENT = "completed";
     private static final String STOPPED_EVENT = "stopped";
+    private static final String PAUSED_EVENT = "paused";
     private static final String NOT_REGISTERED = "torrent not registered"; // bytemonsoon
     private static final String NOT_REGISTERED_2 = "torrent not found"; // diftracker
     private static final String NOT_REGISTERED_3 = "torrent unauthorised"; // vuze
@@ -606,9 +607,16 @@ public class TrackerClient implements Runnable {
                         downloaded = len;
                     }
                     left = coordinator.getLeft();
+                    // Partial seed: nothing wanted but pieces missing (BEP 21)
+                    boolean partialSeed =
+                            left == 0
+                                    && coordinator.getStorage() != null
+                                    && !coordinator.getStorage().getBitField().complete();
                     int event;
                     if (!tr.started) {
                         event = UDPTrackerClient.EVENT_STARTED;
+                    } else if (partialSeed) {
+                        event = UDPTrackerClient.EVENT_PAUSED;
                     } else if (newlyCompleted) {
                         event = UDPTrackerClient.EVENT_COMPLETED;
                     } else {
@@ -635,7 +643,9 @@ public class TrackerClient implements Runnable {
                             if (scrape != null
                                     && scrape.getSeedCount() + scrape.getLeechCount() > 0) {
                                 snark.updateScrape(
-                                        scrape.getSeedCount(), scrape.getLeechCount());
+                                        scrape.getSeedCount(),
+                                        scrape.getLeechCount(),
+                                        scrape.getPartialSeedCount());
                             }
                         } catch (IOException ioe) {
                             if (_log.shouldDebug()) {
@@ -1072,6 +1082,7 @@ public class TrackerClient implements Runnable {
                     0,
                     fetched.getSeedCount(),
                     fetched.getLeechCount(),
+                    0,
                     null,
                     snark.getID(),
                     snark.getInfoHash(),
@@ -1115,6 +1126,7 @@ public class TrackerClient implements Runnable {
         }
         int complete = 0;
         int incomplete = 0;
+        int downloaders = 0;
         byte[] ih = snark.getInfoHash();
         for (Map.Entry<String, BEValue> e : fv.getMap().entrySet()) {
             if (!isMyHash(e.getKey(), ih)) {
@@ -1129,6 +1141,10 @@ public class TrackerClient implements Runnable {
             if (iv != null) {
                 incomplete = iv.getInt();
             }
+            BEValue dv = stats.get("downloaders");
+            if (dv != null) {
+                downloaders = dv.getInt();
+            }
             break;
         }
         if (_log.shouldLog(Log.INFO)) {
@@ -1138,13 +1154,16 @@ public class TrackerClient implements Runnable {
                             + ": seeds "
                             + complete
                             + " leeches "
-                            + incomplete);
+                            + incomplete
+                            + " partials "
+                            + Math.max(0, incomplete - downloaders));
         }
         return new TrackerInfo(
                 Collections.emptySet(),
                 0,
                 complete,
                 incomplete,
+                downloaders,
                 null,
                 snark.getID(),
                 ih,
@@ -1306,6 +1325,10 @@ public class TrackerClient implements Runnable {
         if (_log.shouldLog(Log.INFO)) {
             _log.info("Sending UDPTrackerClient request");
         }
+        // BEP 15 has no paused event; partial seeds announce normally over UDP
+        if (event == UDPTrackerClient.EVENT_PAUSED) {
+            event = UDPTrackerClient.EVENT_NONE;
+        }
         tr.lastRequestTime = System.currentTimeMillis();
         // Don't wait for a response to stopped when shutting down
         boolean fast = _fastUnannounce && event == UDPTrackerClient.EVENT_STOPPED;
@@ -1337,6 +1360,7 @@ public class TrackerClient implements Runnable {
                         fetched.getInterval(),
                         fetched.getSeedCount(),
                         fetched.getLeechCount(),
+                        0,
                         fetched.getFailureReason(),
                         snark.getID(),
                         snark.getInfoHash(),
@@ -1389,6 +1413,8 @@ public class TrackerClient implements Runnable {
                 return COMPLETED_EVENT;
             case UDPTrackerClient.EVENT_STOPPED:
                 return STOPPED_EVENT;
+            case UDPTrackerClient.EVENT_PAUSED:
+                return PAUSED_EVENT;
             default:
                 return NO_EVENT;
         }

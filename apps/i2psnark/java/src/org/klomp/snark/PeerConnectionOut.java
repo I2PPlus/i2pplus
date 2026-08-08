@@ -126,7 +126,8 @@ class PeerConnectionOut implements Runnable {
                         while (m == null && it.hasNext() && skipped < MAX_PRIORITY_SCAN) {
                             Message nm = it.next();
                             if (nm.type == Message.PIECE) {
-                                if (state.choking) {
+                                // BEP 6: keep serving allowed fast pieces when we choke
+                                if (state.choking && !state.isAllowedFast(nm.piece)) {
                                     it.remove();
                                     if (peer.supportsFast()) {
                                         Message r =
@@ -587,6 +588,12 @@ class PeerConnectionOut implements Runnable {
     /** Queue a reject message. */
     void sendReject(int piece, int begin, int length) {
         Message m = new Message(Message.REJECT, piece, begin, length);
+        addMessage(m);
+    }
+
+    /** Queue an allowed fast message (BEP 6). */
+    void sendAllowedFast(int piece) {
+        Message m = new Message(Message.ALLOWED_FAST, piece);
         addMessage(m);
     }
 }

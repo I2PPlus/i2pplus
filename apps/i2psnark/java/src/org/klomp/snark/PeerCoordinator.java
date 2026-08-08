@@ -1126,13 +1126,29 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @since 0.8.2
      */
     private Piece wantPiece(Peer peer, BitField havePieces, boolean record) {
+        return wantPiece(peer, havePieces, record, null);
+    }
+
+    /**
+     * Returns one of the claimed pieces in the given BitField that is still wanted or null if none
+     * of the given pieces are wanted.
+     *
+     * <p>When the allowed set is not null, only pieces in it are eligible, for requesting BEP 6
+     * allowed fast pieces from a peer that chokes us.
+     *
+     * @param record if true, actually record in our data structures that we gave the request to
+     *     this peer. If false, do not update the data structures.
+     * @param allowed the pieces servable while choked, or null for no restriction
+     * @since 0.9.71+
+     */
+    private Piece wantPiece(
+            Peer peer, BitField havePieces, boolean record, Set<Integer> allowed) {
         if (halted) {
             if (_log.shouldInfo()) {
                 _log.info("We don't want anything from [" + peer + "] as we are halted!");
             }
             return null;
         }
-
         Piece piece = null;
         List<Piece> requested = new ArrayList<>();
         int wantedSize = END_GAME_THRESHOLD + 1;
@@ -1147,6 +1163,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 // sorted by priority, so when we hit a disabled piece we are done
                 if (p.isDisabled()) {
                     break;
+                }
+                if (allowed != null && !allowed.contains(Integer.valueOf(p.getId()))) {
+                    continue; // BEP 6: only allowed fast pieces while choked
                 }
                 if (havePieces.get(p.getId()) && !p.isRequested()) {
                     // never ever choose one that's in partialPieces, or we
@@ -1197,6 +1216,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 Iterator<Piece> it2 = requested.iterator();
                 while (piece == null && it2.hasNext()) {
                     Piece p = it2.next();
+                    if (allowed != null && !allowed.contains(Integer.valueOf(p.getId()))) {
+                        continue; // BEP 6: only allowed fast pieces while choked
+                    }
                     if (havePieces.get(p.getId())) {
                         // limit number of parallel requests
                         int requestedCount = p.getRequestCount();
@@ -1679,6 +1701,23 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     @Override
     public PartialPiece getPartialPiece(Peer peer, BitField havePieces) {
+        return getPartialPiece(peer, havePieces, null);
+    }
+
+    /**
+     * Return partial piece to the PeerState if it's still wanted and peer has it.
+     *
+     * <p>When the allowed set is not null, only pieces in it are eligible, for requesting BEP 6
+     * allowed fast pieces from a peer that chokes us.
+     *
+     * @param havePieces pieces the peer has, the rv will be one of these
+     * @param allowed the pieces servable while choked, or null for no restriction
+     * @return PartialPiece or null
+     * @since 0.9.71+
+     */
+    @Override
+    public PartialPiece getPartialPiece(
+            Peer peer, BitField havePieces, Set<Integer> allowed) {
         if (metainfo == null || (storage != null && storage.isChecking())) {
             return null;
         }
@@ -1688,6 +1727,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             for (Iterator<PartialPiece> iter = partialPieces.iterator(); iter.hasNext(); ) {
                 PartialPiece pp = iter.next();
                 int savedPiece = pp.getPiece();
+                if (allowed != null && !allowed.contains(Integer.valueOf(savedPiece))) {
+                    continue; // BEP 6: only allowed fast pieces while choked
+                }
                 if (havePieces.get(savedPiece)) {
                     // this is just a double-check, it should be in there
                     boolean skipped = false;
@@ -1759,7 +1801,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         }
         // ...and this section turns this into the general move-requests-around code!
         // Temporary? So PeerState never calls wantPiece() directly for now...
-        Piece piece = wantPiece(peer, havePieces, true);
+        Piece piece = wantPiece(peer, havePieces, true, allowed);
         if (piece != null) {
             // TODO padding
             return new PartialPiece(
