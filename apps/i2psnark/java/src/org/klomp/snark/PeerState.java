@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
+import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 import org.klomp.snark.bencode.BEValue;
 import org.klomp.snark.bencode.InvalidBEncodingException;
@@ -774,6 +775,28 @@ class PeerState implements DataLoader {
     }
 
     /**
+     * Get the partial piece for a piece, give it back to PeerCoordinator. Clears the requests
+     * for that piece.
+     *
+     * @param piece the piece index
+     * @return List of one PartialPiece, or empty list
+     * @since 0.9.71+
+     */
+    synchronized List<Request> returnPartialPieces(int piece) {
+        List<Request> rv = new ArrayList<>(1);
+        for (Iterator<Request> iter = outstandingRequests.iterator(); iter.hasNext(); ) {
+            Request req = iter.next();
+            if (req.getPiece() == piece) {
+                if (rv.isEmpty()) rv.add(req);
+                iter.remove();
+            }
+        }
+        if (pendingRequest != null && pendingRequest.getPiece() == piece) pendingRequest = null;
+        if (lastRequest != null && lastRequest.getPiece() == piece) lastRequest = null;
+        return rv;
+    }
+
+    /**
      * @return all pieces we are currently requesting, or empty Set
      */
     private synchronized Set<Integer> getRequestedPieces() {
@@ -842,10 +865,77 @@ class PeerState implements DataLoader {
             if (_log.shouldInfo()) _log.info("Private torrent -> Ignoring extension message " + id);
             return;
         }
+        if (id == ExtensionHandler.ID_LT_DONTHAVE) {
+            if (bs.length != 4) {
+                if (_log.shouldWarn())
+                    _log.warn(
+                            "Received invalid lt_donthave ("
+                                    + bs.length
+                                    + " bytes) from ["
+                                    + peer
+                                    + "]");
+                return;
+            }
+            dontHaveMessage((int) DataHelper.fromLong(bs, 0, 4));
+            return;
+        }
         ExtensionHandler.handleMessage(peer, listener, id, bs);
         // Peer coord will get metadata from MagnetState,
         // verify, and then call gotMetaInfo()
         listener.gotExtension(peer, id, bs);
+    }
+
+    /**
+     * Handle a BEP 54 lt_donthave message: the peer no longer has a piece it advertised.
+     * Without the Fast extension, silently cancel outstanding requests for the piece.
+     *
+     * @param piece the piece index
+     * @since 0.9.71+
+     */
+    void dontHaveMessage(int piece) {
+        if (_log.shouldDebug()) _log.debug("[" + peer + "] rcv dont_have(" + piece + ")");
+        synchronized (this) {
+            if (metainfo == null) {
+                // Clear any deferred have state so the piece isn't re-marked later
+                if (bitfield != null && piece >= 0 && piece < bitfield.size()) {
+                    bitfield.clear(piece);
+                } else if (havesBeforeMetaInfo != null) {
+                    havesBeforeMetaInfo.remove(Integer.valueOf(piece));
+                } else if (_log.shouldWarn()) {
+                    _log.warn(
+                            "Received DONT_HAVE " + piece + " before metainfo from [" + peer + "]");
+                }
+                return;
+            }
+            // Sanity check
+            if (piece < 0 || piece >= metainfo.getPieces()) {
+                if (_log.shouldWarn())
+                    _log.warn(
+                            "Received strange 'dont_have: "
+                                    + piece
+                                    + "' message from ["
+                                    + peer
+                                    + "]");
+                return;
+            }
+            if (bitfield != null) {
+                bitfield.clear(piece);
+            }
+        }
+        if (!peer.supportsFast()) {
+            out.cancelRequestMessages(piece);
+            List<Request> pcs = returnPartialPieces(piece);
+            if (!pcs.isEmpty()) {
+                if (_log.shouldDebug())
+                    _log.debug(
+                            "["
+                                    + peer
+                                    + "] got dont_have, returning partial pieces to the"
+                                    + " PeerCoordinator: "
+                                    + pcs);
+                listener.savePartialPieces(this.peer, pcs);
+            }
+        }
     }
 
     /**

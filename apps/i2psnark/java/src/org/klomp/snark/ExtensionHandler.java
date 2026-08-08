@@ -60,6 +60,20 @@ abstract class ExtensionHandler {
      */
     public static final String TYPE_COMMENT = "ut_comment";
 
+    /**
+     * BEP 54 lt_donthave extension message ID (5).
+     *
+     * @since 0.9.71+
+     */
+    public static final int ID_LT_DONTHAVE = 5;
+
+    /**
+     * BEP 54 lt_donthave extension type string.
+     *
+     * @since 0.9.71+
+     */
+    public static final String TYPE_LT_DONTHAVE = "lt_donthave";
+
     /** Pieces * SHA1 Hash length, + 25% extra for file names, bencoding overhead, etc */
     private static final int MAX_METADATA_SIZE = Storage.MAX_PIECES * 20 * 5 / 4;
 
@@ -111,6 +125,8 @@ abstract class ExtensionHandler {
         if (comment) {
             m.put(TYPE_COMMENT, Integer.valueOf(ID_COMMENT));
         }
+        // advertise support for receiving BEP 54 lt_donthave messages
+        m.put(TYPE_LT_DONTHAVE, Integer.valueOf(ID_LT_DONTHAVE));
         // include the map even if empty so the far-end doesn't NPE
         handshake.put("m", m);
         handshake.put("p", Integer.valueOf(TrackerClient.PORT));
@@ -119,6 +135,20 @@ abstract class ExtensionHandler {
         // BEP 21
         if (uploadOnly) handshake.put("upload_only", Integer.valueOf(1));
         return BEncoder.bencode(handshake);
+    }
+
+    /**
+     * Send a BEP 54 lt_donthave message to a peer that advertised support: the piece is no longer
+     * available. The payload is the raw 4-byte piece index.
+     *
+     * @param peer the peer to send to
+     * @param piece the piece index
+     * @since 0.9.71+
+     */
+    public static void sendDontHave(Peer peer, int piece) {
+        byte[] payload = new byte[4];
+        DataHelper.toLong(payload, 0, 4, piece);
+        sendExtension(peer, TYPE_LT_DONTHAVE, payload);
     }
 
     /**

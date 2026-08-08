@@ -521,6 +521,23 @@ class PeerConnectionOut implements Runnable {
     }
 
     /**
+     * Remove Request messages for a piece from the queue. Does not send a cancel message.
+     *
+     * @param piece the piece index
+     * @since 0.9.71+
+     */
+    void cancelRequestMessages(int piece) {
+        synchronized (sendQueue) {
+            for (Iterator<Message> it = sendQueue.iterator(); it.hasNext(); ) {
+                Message m = it.next();
+                if (m.type == Message.REQUEST && m.piece == piece) {
+                    it.remove();
+                }
+            }
+        }
+    }
+
+    /**
      * Called by the PeerState when the other side doesn't want this request to be handled anymore.
      * Removes any pending Piece Message from our send queue. Does not send a cancel message.
      *
