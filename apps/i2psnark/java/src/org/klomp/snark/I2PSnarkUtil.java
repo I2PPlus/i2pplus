@@ -124,8 +124,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     private int _maxFilesPerTorrent = SnarkManager.DEFAULT_MAX_FILES_PER_TORRENT;
     private String _apiTarget;
     private String _apiKey;
-    private static final int EEPGET_CONNECT_TIMEOUT = 60 * 1000;
-    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 15 * 1000;
+    private static final int EEPGET_CONNECT_TIMEOUT = 75 * 1000;
+    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 30 * 1000;
     public static final int DEFAULT_STARTUP_DELAY = 3;
     public static final boolean DEFAULT_COLLAPSE_PANELS = true;
     public static final boolean DEFAULT_SHOW_STATUSFILTER = false;
@@ -1105,22 +1105,16 @@ public class I2PSnarkUtil implements DisconnectListener {
         int truncate = url.indexOf("&");
         String convertedurl = trackerB32ToHostname(url);
         if (get.fetch(timeout)) {
-            if (_log.shouldDebug())
-                _log.debug(
-                        "Request successful ["
-                                + convertedurl.substring(0, truncate)
-                                + "...] (Size: "
-                                + out.length()
-                                + " bytes)");
+            if (_log.shouldDebug()) {
+                _log.debug("Request successful [" + convertedurl.substring(0, truncate) + "...] (Size: " +
+                            out.length() + " bytes)");
+            }
             return out;
         } else {
-            if (_log.shouldWarn())
-                _log.warn(
-                        "Timeout ("
-                                + timeout / 1000
-                                + "s) requesting ["
-                                + convertedurl.substring(0, truncate)
-                                + "...]");
+            if (_log.shouldWarn()) {
+                _log.warn("Timeout (" + timeout / 1000 + "s) requesting [" + convertedurl.substring(0, truncate) +
+                          "...]");
+            }
             out.delete();
             return null;
         }
