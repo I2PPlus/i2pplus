@@ -23,6 +23,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
+import net.i2p.data.Base32;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
@@ -1027,8 +1028,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                         }
                     };
 
-            String threadName = "Snark peer " + peer.toString();
-            new I2PAppThread(r, threadName).start();
+            String threadName =
+                    "SnarkPeer-" + Base32.encode(peer.getPeerID().getDestHash()).substring(0, 6);
+            new I2PAppThread(r, threadName, true).start();
             return true;
         }
 

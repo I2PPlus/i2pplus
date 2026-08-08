@@ -1,4 +1,6 @@
 2026-08-08 dr|z3d
+  * I2PSnark: Per-peer threads no longer keep the router from shutting
+    down when a peer connection is stuck
   * I2PSnark: Peer-suggested pieces are no longer requested when the
     request pipeline is already full, so a suggest flood cannot grow a
     peer's pending request queue beyond its limit
