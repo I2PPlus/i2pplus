@@ -1338,7 +1338,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /** Maintain a configurable total uploader cap CoordinatorListener */
     static final int MIN_TOTAL_UPLOADERS = 10;
 
-    /** M a x  t o t a l  u p l o a d e r s */
+    /** Maximum peers we upload to across all torrents. */
     static final int MAX_TOTAL_UPLOADERS = 50;
 
     /**

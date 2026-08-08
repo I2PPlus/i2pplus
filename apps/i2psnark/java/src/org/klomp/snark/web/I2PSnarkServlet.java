@@ -153,7 +153,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Webapp resource base path.
      */
     public static final String WARBASE = "/.res/";
-    /** H e l l i p */
+    /** Ellipsis character used to truncate long names. */
     static final char HELLIP = '\u2026';
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
@@ -3041,7 +3041,7 @@ public class I2PSnarkServlet extends BasicServlet {
         return rv;
     }
 
-    /** M a x  d i s p l a y e d  f i l e n a m e  l e n g t h */
+    /** Longest file name shown before truncation. */
     static final int MAX_DISPLAYED_FILENAME_LENGTH = 255;
 
     /**

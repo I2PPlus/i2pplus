@@ -74,10 +74,10 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     private final Snark snark;
 
     // package local for access by CheckDownLoadersTask
-    /** C h e c k  p e r i o d */
+    /** How often to recompute upload slots and UI download speeds. */
     static final long CHECK_PERIOD =
             (long) 5 * 1000; // update download speed in UI and choke/unchoke tests
-    /** M a x  u p l o a d e r s */
+    /** Maximum peers we upload to at once. */
     static final int MAX_UPLOADERS = 16;
     /**
      * Inactivity timeout before disconnecting idle peers.
@@ -106,7 +106,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
     private final AtomicLong uploaded = new AtomicLong();
     private final AtomicLong downloaded = new AtomicLong();
-    /** R a t e  d e p t h */
+    /** Number of samples in the upload/download rate windows. */
     static final int RATE_DEPTH = 3; // make following arrays RATE_DEPTH long
     private final long[] uploaded_old = {-1, -1, -1};
     private final long[] downloaded_old = {-1, -1, -1};

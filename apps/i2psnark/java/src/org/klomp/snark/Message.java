@@ -40,46 +40,46 @@ import net.i2p.util.ByteCache;
  * @since 0.1.0
  */
 class Message {
-    /** K e e p  a l i v e */
+    /** No-op message sent periodically to keep the connection alive. */
     static final byte KEEP_ALIVE = -1;
-    /** C h o k e */
+    /** Stop sending piece data to the peer. */
     static final byte CHOKE = 0;
-    /** U n c h o k e */
+    /** Resume sending piece data to the peer. */
     static final byte UNCHOKE = 1;
-    /** I n t e r e s t e d */
+    /** Signal that the peer has pieces we want. */
     static final byte INTERESTED = 2;
-    /** U n i n t e r e s t e d */
+    /** Signal that we no longer want pieces from the peer. */
     static final byte UNINTERESTED = 3;
-    /** H a v e */
+    /** Announce possession of a single piece. */
     static final byte HAVE = 4;
-    /** B i t f i e l d */
+    /** Bitfield of pieces the peer has. */
     static final byte BITFIELD = 5;
-    /** R e q u e s t */
+    /** Request a chunk of a piece. */
     static final byte REQUEST = 6;
-    /** P i e c e */
+    /** Chunk of a piece in response to a request. */
     static final byte PIECE = 7;
-    /** C a n c e l */
+    /** Cancel a previously sent request. */
     static final byte CANCEL = 8;
-    /** P o r t */
-    static final byte PORT = 9; // DHT  (BEP 5)
-    /** S u g g e s t */
-    static final byte SUGGEST = 13; // Fast (BEP 6)
-    /** H a v e  a l l */
-    static final byte HAVE_ALL = 14; // Fast (BEP 6)
-    /** H a v e  n o n e */
-    static final byte HAVE_NONE = 15; // Fast (BEP 6)
-    /** R e j e c t */
-    static final byte REJECT = 16; // Fast (BEP 6)
-    /** A l l o w e d  f a s t */
-    static final byte ALLOWED_FAST = 17; // Fast (BEP 6)
-    /** E x t e n s i o n */
-    static final byte EXTENSION = 20; // BEP 10
-    /** H a s h  r e q u e s t */
-    static final byte HASH_REQUEST = 21; // BEP 52
-    /** H a s h e s */
-    static final byte HASHES = 22; // BEP 52
-    /** H a s h  r e j e c t */
-    static final byte HASH_REJECT = 23; // BEP 52
+    /** Announce the DHT listening port (BEP 5). */
+    static final byte PORT = 9;
+    /** Suggest a piece the peer may want (BEP 6). */
+    static final byte SUGGEST = 13;
+    /** Announce possession of every piece (BEP 6). */
+    static final byte HAVE_ALL = 14;
+    /** Announce possession of no pieces (BEP 6). */
+    static final byte HAVE_NONE = 15;
+    /** Reject a previously accepted request (BEP 6). */
+    static final byte REJECT = 16;
+    /** Allow request of a piece without an unchoke (BEP 6). */
+    static final byte ALLOWED_FAST = 17;
+    /** BEP 10 extended message, sub-type in the low byte. */
+    static final byte EXTENSION = 20;
+    /** Request merkle hash tree data (BEP 52). */
+    static final byte HASH_REQUEST = 21;
+    /** Merkle hash tree data (BEP 52). */
+    static final byte HASHES = 22;
+    /** Reject a hash request (BEP 52). */
+    static final byte HASH_REJECT = 23;
 
     /** The message type */
     // Not all fields are used for every message.
