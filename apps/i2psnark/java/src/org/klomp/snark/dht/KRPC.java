@@ -860,6 +860,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (noSeeds) {
             args.put("noseed", Integer.valueOf(1));
         }
+        args.put("scrape", Integer.valueOf(1));
         map.put("a", args);
         ReplyWaiter rv = sendQuery(nInfo, map, true);
         if (rv != null) {
@@ -936,6 +937,22 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @return success
      */
     private boolean sendNodes(NodeInfo nInfo, MsgID msgID, Token token, byte[] ids) {
+        return sendNodes(nInfo, msgID, token, ids, null, null);
+    }
+
+    /**
+     * Send a nodes response, optionally with BEP 33 scrape bloom filters.
+     *
+     * @param nInfo who to send it to
+     * @param msgID the message ID to respond to
+     * @param token the token to include, or null for find_node responses
+     * @param ids the concatenated 54-byte node infos
+     * @param bFsd 256-byte seed filter, null to omit
+     * @param bFpe 256-byte peer filter, null to omit
+     * @return success
+     */
+    private boolean sendNodes(
+            NodeInfo nInfo, MsgID msgID, Token token, byte[] ids, byte[] bFsd, byte[] bFpe) {
         if (_log.shouldInfo()) {
             _log.info("Sending nodes to " + nInfo);
         }
@@ -946,6 +963,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             resps.put("token", token.getData());
         }
         resps.put("nodes", ids);
+        if (bFsd != null && bFpe != null) {
+            resps.put("BFsd", bFsd);
+            resps.put("BFpe", bFpe);
+        }
         return sendResponse(nInfo, msgID, map);
     }
 
@@ -959,6 +980,22 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @return success
      */
     private boolean sendPeers(NodeInfo nInfo, MsgID msgID, Token token, List<byte[]> peers) {
+        return sendPeers(nInfo, msgID, token, peers, null, null);
+    }
+
+    /**
+     * Send a peers response, optionally with BEP 33 scrape bloom filters.
+     *
+     * @param nInfo who to send it to
+     * @param msgID the message ID to respond to
+     * @param token non-null token to include
+     * @param peers the list of peer hashes to send
+     * @param bFsd 256-byte seed filter, null to omit
+     * @param bFpe 256-byte peer filter, null to omit
+     * @return success
+     */
+    private boolean sendPeers(
+            NodeInfo nInfo, MsgID msgID, Token token, List<byte[]> peers, byte[] bFsd, byte[] bFpe) {
         if (_log.shouldInfo()) {
             _log.info("Sending peers to " + nInfo);
         }
@@ -967,6 +1004,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         map.put("r", resps);
         resps.put("token", token.getData());
         resps.put("values", peers);
+        if (bFsd != null && bFpe != null) {
+            resps.put("BFsd", bFsd);
+            resps.put("BFpe", bFpe);
+        }
         return sendResponse(nInfo, msgID, map);
     }
 
@@ -1309,7 +1350,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             if (nos != null) {
                 noSeeds = nos.getInt() == 1;
             }
-            receiveGetPeers(msgID, nInfo, ih, noSeeds);
+            boolean scrape = false;
+            BEValue scr = args.get("scrape");
+            if (scr != null) {
+                scrape = scr.getInt() == 1;
+            }
+            receiveGetPeers(msgID, nInfo, ih, noSeeds, scrape);
         } else if (method.equals("announce_peer")) {
             byte[] hash = args.get("info_hash").getBytes();
             InfoHash ih = new InfoHash(hash);
@@ -1459,8 +1505,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         return nodeArray;
     }
 
-    /** Handle and respond to the query */
-    private void receiveGetPeers(MsgID msgID, NodeInfo nInfo, InfoHash ih, boolean noSeeds)
+    /**
+     * Handle and respond to the query.
+     *
+     * @param scrape true if BEP 33 scrape was requested, may add BFsd and BFpe to the response
+     */
+    private void receiveGetPeers(MsgID msgID, NodeInfo nInfo, InfoHash ih, boolean noSeeds, boolean scrape)
             throws InvalidBEncodingException {
         if (_log.shouldInfo()) {
             _log.info(
@@ -1478,6 +1528,15 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             _log.info("Stored new Outbound token " + token + "\n* Target: " + nInfo);
         }
 
+        byte[] bFsd = null;
+        byte[] bFpe = null;
+        if (scrape) {
+            BloomFilter[] filters = _tracker.getBloomFilters(ih);
+            if (filters != null) {
+                bFsd = filters[0].getData();
+                bFpe = filters[1].getData();
+            }
+        }
         List<Hash> peers = _tracker.getPeers(ih, MAX_WANT, noSeeds);
         // Check this before removing him, so we don't needlessly send nodes
         // if he's the only one on the torrent.
@@ -1490,7 +1549,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             nodes.remove(nInfo); // him
             nodes.remove(_myNodeInfo); // me
             byte[] nodeArray = packNodes(nodes);
-            sendNodes(nInfo, msgID, token, nodeArray);
+            sendNodes(nInfo, msgID, token, nodeArray, bFsd, bFpe);
         } else {
             List<byte[]> hashes;
             if (peers.isEmpty()) {
@@ -1501,7 +1560,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                     hashes.add(peer.getData());
                 }
             }
-            sendPeers(nInfo, msgID, token, hashes);
+            sendPeers(nInfo, msgID, token, hashes, bFsd, bFpe);
         }
     }
 
@@ -1580,6 +1639,36 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             byte[] nid = response.get("id").getBytes();
             receivePong(nInfo, nid);
             waiter.gotReply(REPLY_PONG, null);
+        }
+
+        // BEP 33 scrape - estimate the swarm size from the bloom filters
+        // in the response to a get_peers query
+        BEValue bFsd = response.get("BFsd");
+        BEValue bFpe = response.get("BFpe");
+        if (bFsd != null && bFpe != null) {
+            byte[] sd = bFsd.getBytes();
+            byte[] pe = bFpe.getBytes();
+            if (sd.length == BloomFilter.SIZE && pe.length == BloomFilter.SIZE) {
+                BloomFilter seeds = new BloomFilter(sd);
+                BloomFilter peers = new BloomFilter(pe);
+                if (_log.shouldInfo()) {
+                    _log.info(
+                            "Received scrape from "
+                                    + nInfo
+                                    + "\n* Estimated seeds: "
+                                    + (int) seeds.estimateSize()
+                                    + " peers: "
+                                    + (int) peers.estimateSize());
+                }
+            } else if (_log.shouldWarn()) {
+                _log.warn(
+                        "Bad bloom filter sizes in scrape from "
+                                + nInfo
+                                + ": "
+                                + sd.length
+                                + "/"
+                                + pe.length);
+            }
         }
     }
 

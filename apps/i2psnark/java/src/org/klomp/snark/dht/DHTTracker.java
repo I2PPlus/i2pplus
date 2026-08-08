@@ -174,6 +174,34 @@ class DHTTracker {
     }
 
     /**
+     * Build BEP 33 bloom filters for a torrent, one for the stored seeds
+     * and one for the stored peers, by inserting the 32-byte destination
+     * hash of each peer into the appropriate filter.
+     *
+     * @param ih the info hash of the torrent
+     * @return two-element array with the seeds filter first, or null if
+     *         there are no entries for the torrent
+     * @since 0.9.71+
+     */
+    BloomFilter[] getBloomFilters(InfoHash ih) {
+        Peers peers = _torrents.get(ih);
+        if (peers == null || peers.isEmpty()) {
+            return null;
+        }
+        BloomFilter seeds = new BloomFilter();
+        BloomFilter nons = new BloomFilter();
+        for (Peer peer : peers.values()) {
+            byte[] data = peer.getData();
+            if (peer.isSeed()) {
+                seeds.insert(data);
+            } else {
+                nons.insert(data);
+            }
+        }
+        return new BloomFilter[] {seeds, nons};
+    }
+
+    /**
      * Debug info, HTML formatted.
      *
      * @param buf the buffer to append HTML to

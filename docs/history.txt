@@ -22,6 +22,9 @@
     - BEP 21 partial seeds: peers declaring upload-only mode are
       detected and handled, and partial seed counts from trackers
       that report downloaders are shown in scrapes
+    - BEP 33 DHT scrapes: get_peers requests carry the scrape flag,
+      and responses to them include seed and peer bloom filters, so
+      the swarm size can be estimated without a tracker
   * Router: Peers that never accepted or rejected a tunnel build are
     kept in memory longer when the profile store is sparse (up to 4
     hours below 2000 profiles), so quiet peers aren't purged too early
