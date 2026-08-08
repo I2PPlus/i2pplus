@@ -986,9 +986,21 @@ public class ProfileOrganizer {
           final long expirePassive = 3 * 24 * 60 * 60 * 1000L;   // 3 days
           final long expireGossip = 24 * 60 * 60 * 1000L;        // 24 hours
           // Peers that never accepted or rejected a tunnel build for us aren't
-          // useful — drop them from memory aggressively. They'll be recreated
+          // useful — drop them from memory eventually. They'll be recreated
           // on demand if they ever respond to a build request.
-          final long expireUntracked = 30 * 60 * 1000L;         // 30 minutes
+          // Scale the window with the number of profiles stored: the fewer
+          // profiles known, the longer we keep untracked peers around.
+          int storedProfiles = _strictCapacityOrder.size();
+          final long expireUntracked;
+          if (storedProfiles < 2000) {
+              expireUntracked = 4 * 60 * 60 * 1000L;         // 4 hours
+          } else if (storedProfiles < 3000) {
+              expireUntracked = 3 * 60 * 60 * 1000L;         // 3 hours
+          } else if (storedProfiles < 4000) {
+              expireUntracked = 2 * 60 * 60 * 1000L;         // 2 hours
+          } else {
+              expireUntracked = 60 * 60 * 1000L;             // 1 hour
+          }
 
          // Optional coalescing (read-only, safe to skip if lock fails)
          if (shouldCoalesce && _context.router() != null &&
