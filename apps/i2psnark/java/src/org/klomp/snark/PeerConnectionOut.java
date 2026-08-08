@@ -64,6 +64,21 @@ class PeerConnectionOut implements Runnable {
     }
 
     /**
+     * Whether a PIECE message is still queued, i.e. we are actively uploading to the peer.
+     *
+     * @return true if any PIECE message is pending
+     * @since 0.9.71+
+     */
+    boolean hasPendingPiece() {
+        for (Message m : sendQueue) {
+            if (m.type == Message.PIECE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Pull messages from the send queue and deliver to the peer.
      */
     @Override

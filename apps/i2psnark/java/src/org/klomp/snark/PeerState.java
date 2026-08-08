@@ -65,6 +65,12 @@ class PeerState implements DataLoader {
     /** Bytes of piece data the peer cancelled after requesting */
     private long _cancelledBytes;
 
+    /** Time of the last inbound request from the peer */
+    private long _lastRequestTime;
+
+    /** Anti-snub: unchoked peers that send no request for this long are snubbing */
+    private static final long SNUB_TIMEOUT = 3 * 60 * 1000;
+
     /** the tail (NOT the head) of the request queue */
     private Request lastRequest;
 
@@ -184,6 +190,7 @@ class PeerState implements DataLoader {
 
         this.in = in;
         this.out = out;
+        _lastRequestTime = System.currentTimeMillis();
     }
 
     /**
@@ -400,6 +407,9 @@ class PeerState implements DataLoader {
                             + length
                             + ") ");
         if (metainfo == null) return;
+        synchronized (this) {
+            _lastRequestTime = System.currentTimeMillis();
+        }
         if (choking) {
             if (peer.supportsFast()) {
                 if (_log.shouldDebug())
@@ -522,6 +532,24 @@ class PeerState implements DataLoader {
      */
     void uploaded(int size) {
         peer.uploaded(size);
+    }
+
+    /**
+     * True if the peer is snubbing us: it is unchoked by us and interested but has sent no request
+     * for SNUB_TIMEOUT, and nothing is queued to send it. Generous timeout to tolerate I2P latency.
+     *
+     * @return true if the peer is snubbing
+     * @since 0.9.71+
+     */
+    boolean isSnubbing() {
+        if (out.hasPendingPiece()) {
+            return false;
+        }
+        long lastRequest;
+        synchronized (this) {
+            lastRequest = _lastRequestTime;
+        }
+        return System.currentTimeMillis() - lastRequest > SNUB_TIMEOUT;
     }
 
     /** Flag to back up from firstOutstandingRequest when calculating progress */
@@ -773,6 +801,7 @@ class PeerState implements DataLoader {
      * DISCARD_BAN_PERCENT, so legitimate peers under congestion are not affected.
      *
      * @param length the number of cancelled bytes
+     * @since 0.9.71+
      */
     private void checkDiscardRatio(int length) {
         synchronized (this) {
@@ -874,7 +903,7 @@ class PeerState implements DataLoader {
      * good one to request from it. Request it immediately if we want it and are unchoked. Never
      * recorded as a permanent have, as that would distort availability for the swarm.
      *
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     void suggestMessage(int piece) {
         if (metainfo == null) {

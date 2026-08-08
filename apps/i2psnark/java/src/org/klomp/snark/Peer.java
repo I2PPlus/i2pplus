@@ -675,6 +675,17 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         return (s == null) || s.choked;
     }
 
+    /**
+     * Whether or not the peer is snubbing us (unchoked but not requesting).
+     *
+     * @return true if snubbing, false if not connected
+     * @since 0.9.71+
+     */
+    public boolean isSnubbing() {
+        PeerState s = state;
+        return (s != null) && s.isSnubbing();
+    }
+
     /////// begin BandwidthListener interface ///////
 
     /**

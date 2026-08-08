@@ -200,6 +200,17 @@ class PeerCheckerTask implements Runnable {
 
                     // Put it at the back of the list
                     removed.add(peer);
+                } else if (peer.isInterested() && peer.isSnubbing()) {
+                    // Peer wants our pieces but never requests any; free the upload slot
+                    if (_log.shouldDebug()) _log.debug("Choking snubbing peer [" + peer + "]");
+                    peer.setChoking(true);
+                    uploaders--;
+                    interestedUploaders--;
+                    coordinator.decrementUploaders(true);
+                    removedCount++;
+
+                    // Put it at the back of the list
+                    removed.add(peer);
                 } else if (peer.isInteresting() && !peer.isChoked() && download == 0) {
                     // We are downloading but didn't receive anything...
                     if (_log.shouldDebug())
