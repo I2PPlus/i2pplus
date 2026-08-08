@@ -15,10 +15,11 @@ Features:
   - Pure-python pipeline: markdown_it for md -> html, stdlib regex elsewhere
   - No external fetches: CSS/JS are inlined in every page; images referenced by
     local docs are copied alongside the mirrored tree
-  - Relative links rewritten (.md -> .html); hash anchors kept
-  - Sidebar navigation tree with collapsible modules, breadcrumbs, and an index
-    page with client-side search (works from file://, no server needed)
-  - package.html pages classified first-party (net.i2p.*) vs third-party/vendored
+- Relative links rewritten (.md -> .html); hash anchors kept
+- Sidebar navigation tree with collapsible modules, breadcrumbs, and an index
+  page with client-side search (works from file://, no server needed)
+- package.html pages classified first-party (net.i2p.*) vs third-party/vendored
+- Javadoc {@link ...} tags in package.html resolved to links into the site
 
 Usage:
     python3 tools/scripts/build-devdocs.py              # stage + publish
@@ -285,8 +286,6 @@ padding:14px 10px;overflow-y:auto;max-height:100vh;position:sticky;top:0;font-si
 background:#10151b;color:#fff}
 .sidebar details{margin-left:2px}
 .sidebar summary{cursor:pointer;font-weight:600;padding:2px 0;color:#e6e9ee;user-select:none}
-.sidebar details>summary::before{content:"\\25B8 ";color:#8892a0}
-.sidebar details[open]>summary::before{content:"\\25BE "}
 .sidebar ul{list-style:none;margin:2px 0 4px;padding-left:10px}
 .sidebar li.here a{color:#7cc0ff;font-weight:700}
 .sidebar li.third a{opacity:.7}
@@ -479,6 +478,64 @@ def external_blank(html):
 
 _URL_RE = re.compile(r"(?<![\w])(https?://[^\s<>\"']+)")
 _TAG_SPLIT = re.compile(r"(<[^>]*>)")
+_JAVADOC_LINK = re.compile(r"\{@link(?:plain)?\s+([^\s}]+)(?:\s+([^}]*?))?\}", flags=re.I)
+
+
+def _pkg_dotted(outrel):
+    """Dotted package name for a package page output path (the path segment
+    under the module's java/ dir), e.g. 'apps/foo/java/net/i2p/x/package.html'
+    -> 'net.i2p.x'; None when the page isn't under a java/ tree."""
+    m = re.search(r"/java/(?:src/)?([^/]+(?:/[^/]+)*)/package\.html$", outrel)
+    return m.group(1).replace("/", ".") if m else None
+
+
+def _pkg_index(pages):
+    """dotted package name -> {top-level dir: outrel} for every package page,
+    so javadoc references can be resolved to a concrete page in the site."""
+    index = {}
+    for p in pages:
+        if p["kind"] != "package":
+            continue
+        dotted = _pkg_dotted(p["outrel"])
+        if not dotted:
+            continue
+        top = p["outrel"].split("/", 1)[0]
+        index.setdefault(dotted, {})[top] = p["outrel"]
+    return index
+
+
+def _package_page(ref, index, page):
+    """Output path of the package.html for a javadoc reference (package or
+    class name); None when no package page exists in the site. Class
+    references fall back to the enclosing package. On ambiguity between
+    modules, the current page's own module wins."""
+    ref = ref.split("#", 1)[0]
+    parts = ref.split(".")
+    top = page["outrel"].split("/", 1)[0]
+    for n in range(len(parts), 0, -1):
+        entry = index.get(".".join(parts[:n]))
+        if entry:
+            return entry.get(top) or sorted(entry)[0]
+    return None
+
+
+def resolve_javadoc_links(text, page, index):
+    """Convert {@link pkg.Class} tags to hrefs. The site has no class pages,
+    so class references link to the enclosing package page; bare packages link
+    to their own page. Unresolvable tags render as plain text."""
+    pdir = posixpath.dirname(page["outrel"])
+
+    def replace(m):
+        ref, label = m.group(1), (m.group(2) or "").strip()
+        if not label:
+            label = ref[1:] if ref.startswith("#") else ref
+        cand = _package_page(ref, index, page)
+        if cand:
+            href = posixpath.relpath(cand, pdir)
+            return '<a href="%s">%s</a>' % (htmlmod.escape(href), htmlmod.escape(label))
+        return htmlmod.escape(label)
+
+    return _JAVADOC_LINK.sub(replace, text)
 
 
 def linkify_text(html):
@@ -541,9 +598,11 @@ def main():
 
     tree = build_tree(pages)
     pages_by_out = {p["outrel"]: p for p in pages}
+    pkg_index = _pkg_index(pages)
 
     for p in pages:
-        p["body"] = fix_links(render_page_html(p), p, pages_by_out, root, assets)
+        html = fix_links(render_page_html(p), p, pages_by_out, root, assets)
+        p["body"] = resolve_javadoc_links(html, p, pkg_index)
 
     stage = Path(args.stage)
     out = Path(args.out)
