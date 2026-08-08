@@ -292,8 +292,11 @@ class ClientManager {
                 for (SessionId id : ids) {_runnerSessionIds.remove(id);}
             }
             for (Destination dest : dests) {
-                _runners.remove(dest);
-                _runnersByHash.remove(dest.calculateHash());
+                // Value-aware: destinationEstablished() may have replaced this
+                // runner's registration for a dest since it was looked up;
+                // removing by key alone would drop the replacement.
+                _runners.remove(dest, runner);
+                _runnersByHash.remove(dest.calculateHash(), runner);
             }
         }
     }
@@ -341,23 +344,37 @@ class ClientManager {
 
         synchronized (_pendingRunners) {_pendingRunners.remove(runner);}
         int rv;
+        ClientConnectionRunner stale = null;
         synchronized (_runners) {
             Hash destHash = dest.calculateHash();
-            boolean fail = _runnersByHash.containsKey(destHash);
-            if (fail) {rv = SessionStatusMessage.STATUS_DUP_DEST;}
-            else {
-                SessionId id = locked_getNextSessionId();
-                if (id != null) {
-                    runner.setSessionId(destHash, id);
-                    _runners.put(dest, runner);
-                    _runnersByHash.put(destHash, runner);
-                    rv = SessionStatusMessage.STATUS_CREATED;
-                } else {rv = SessionStatusMessage.STATUS_REFUSED;}
-            }
+            SessionId id = locked_getNextSessionId();
+            if (id != null) {
+                ClientConnectionRunner old = _runnersByHash.get(destHash);
+                if (old != null && old != runner) {
+                    // A previous connection still owns this destination (e.g.
+                    // the client reconnected after its session died). Replace
+                    // it below, and stop the stale runner once out of the
+                    // lock; its teardown re-enters unregisterConnection() with
+                    // value-aware removals, so it can't drop the new entry.
+                    stale = old;
+                    for (Destination od : old.getDestinations()) {
+                        _runners.remove(od, old);
+                        _runnersByHash.remove(od.calculateHash(), old);
+                    }
+                }
+                runner.setSessionId(destHash, id);
+                _runners.put(dest, runner);
+                _runnersByHash.put(destHash, runner);
+                rv = SessionStatusMessage.STATUS_CREATED;
+            } else {rv = SessionStatusMessage.STATUS_REFUSED;}
         }
-        if (rv == SessionStatusMessage.STATUS_DUP_DEST) {
-            _log.log(Log.CRIT, "Client attempted to register DUPLICATE destination: " + dest.toBase32());
-        } else if (rv == SessionStatusMessage.STATUS_REFUSED) {
+        if (stale != null) {
+            if (_log.shouldWarn()) {
+                _log.warn("Replacing connection for destination [" + dest.calculateHash().toBase32().substring(0,8) + "]");
+            }
+            stale.disconnectClient("Replaced by a new connection for the same destination", Log.WARN);
+        }
+        if (rv == SessionStatusMessage.STATUS_REFUSED) {
             _log.error("Max sessions exceeded for: " + dest.toBase32());
         }
         return rv;
