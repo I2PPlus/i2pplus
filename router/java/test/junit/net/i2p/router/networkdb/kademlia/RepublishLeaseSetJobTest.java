@@ -19,6 +19,7 @@ import java.io.File;
 
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
+import net.i2p.data.Lease;
 import net.i2p.data.LeaseSet;
 import net.i2p.router.ClientManagerFacade;
 import net.i2p.router.Job;
@@ -179,8 +180,8 @@ public class RepublishLeaseSetJobTest {
         when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
 
         // the pool's current LeaseSet extends well beyond the stored copy
-        LeaseSet freshPoolLs = mock(LeaseSet.class);
-        when(freshPoolLs.getLatestLeaseDate()).thenReturn(NOW + 5L * 60 * 1000);
+        // and carries enough fresh leases to satisfy the re-mint gate
+        LeaseSet freshPoolLs = freshPoolLeaseSet(NOW + 5L * 60 * 1000, 2);
         TunnelPool pool = mock(TunnelPool.class);
         when(pool.getInboundTunnelsAsLeaseSet()).thenReturn(freshPoolLs);
         TunnelManagerFacade tm = mock(TunnelManagerFacade.class);
@@ -199,14 +200,14 @@ public class RepublishLeaseSetJobTest {
     }
 
     /**
-     * An expiring LeaseSet with below-target tunnel count must re-mint
-     * immediately — the expiring check runs before the startup deferral gate,
-     * so a near-expiry LS never waits behind the gate waiting for tunnels.
-     * Regression test for the case where a service at 1/3 tunnels was deferred
-     * at 176s instead of re-minted.
+     * An expiring LeaseSet whose pool holds too few fresh tunnels must NOT
+     * re-mint — the re-mint gate only fires when the pool can actually extend
+     * the lease past the fresh window.  Below target, the job defers, requests
+     * fresh tunnel builds, and reschedules; it never floods the dying copy and
+     * never re-signs the same near-expired leases.
      */
     @Test
-    public void testExpiringBelowTargetRemintsInsteadOfDeferring() {
+    public void testExpiringBelowTargetDefersAndRequestsBuilds() {
         Hash hash = newHash(7);
         when(_cm.shouldPublishLeaseSet(hash)).thenReturn(true);
         when(_cm.isLocal(hash)).thenReturn(true);
@@ -216,23 +217,26 @@ public class RepublishLeaseSetJobTest {
         when(ls.getLeaseCount()).thenReturn(1);
         when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
 
-        // pool's current LeaseSet extends beyond the stored copy
-        LeaseSet freshPoolLs = mock(LeaseSet.class);
-        when(freshPoolLs.getLatestLeaseDate()).thenReturn(NOW + 5L * 60 * 1000);
+        // pool's current LeaseSet extends beyond the stored copy but has only
+        // 1 fresh lease — below the target of 2, so the gate holds
+        LeaseSet freshPoolLs = freshPoolLeaseSet(NOW + 5L * 60 * 1000, 1);
         TunnelPool pool = mock(TunnelPool.class);
         when(pool.getInboundTunnelsAsLeaseSet()).thenReturn(freshPoolLs);
         TunnelManagerFacade tm = mock(TunnelManagerFacade.class);
         when(tm.getInboundPool(hash)).thenReturn(pool);
+        TunnelPoolSettings targetSettings = settings(2);
+        when(tm.getInboundSettings(any(Hash.class))).thenReturn(targetSettings);
         when(_ctx.tunnelManager()).thenReturn(tm);
 
         RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);
         assertTrue(job.registerSelf());
         job.runJob();
 
-        // never flood the expiring stored copy, never defer
+        // never flood the expiring stored copy, never re-mint below target
         verify(_facade, never()).sendStore(eq(hash), eq(ls), any(Job.class), any(Job.class), anyLong(), any());
-        // re-mint requested with the pool's healthy current LS
-        verify(_cm).requestLeaseSet(eq(hash), eq(freshPoolLs));
+        verify(_cm, never()).requestLeaseSet(eq(hash), any());
+        // fresh builds requested so the next cycle can re-mint
+        verify(pool).requestFreshTunnelBuild();
         verify(_jobQueue).addJob(any(Job.class));
     }
 
@@ -353,5 +357,37 @@ public class RepublishLeaseSetJobTest {
         when(ls.getLatestLeaseDate()).thenReturn(latestLeaseDate);
         when(ls.getLeaseCount()).thenReturn(2);
         return ls;
+    }
+
+    /**
+     * A pool LeaseSet mock whose leases all extend to the given date, so the
+     * re-mint gate's fresh-lease count matches the given count.
+     *
+     * @param latestLeaseDate the expiry every lease reports
+     * @param leaseCount the number of leases, all fresh
+     * @return the mocked LeaseSet
+     */
+    private static LeaseSet freshPoolLeaseSet(long latestLeaseDate, int leaseCount) {
+        LeaseSet ls = mock(LeaseSet.class);
+        when(ls.getLatestLeaseDate()).thenReturn(latestLeaseDate);
+        when(ls.getLeaseCount()).thenReturn(leaseCount);
+        for (int i = 0; i < leaseCount; i++) {
+            Lease lease = mock(Lease.class);
+            when(lease.getEndTime()).thenReturn(latestLeaseDate);
+            when(ls.getLease(i)).thenReturn(lease);
+        }
+        return ls;
+    }
+
+    /**
+     * Tunnel pool settings with the given quantity.
+     *
+     * @param quantity the target lease count
+     * @return the mocked settings
+     */
+    private static TunnelPoolSettings settings(int quantity) {
+        TunnelPoolSettings s = mock(TunnelPoolSettings.class);
+        when(s.getQuantity()).thenReturn(quantity);
+        return s;
     }
 }

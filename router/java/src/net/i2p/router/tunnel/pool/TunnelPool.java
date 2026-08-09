@@ -1067,6 +1067,21 @@ public class TunnelPool {
     }
 
     /**
+     *  Remove a config that was never actually sent to the network (e.g. a
+     *  build skipped by the executor's pacing gate). Unlike buildComplete(),
+     *  no result accounting, peer cooldowns, or profile updates occur; the
+     *  pool's deficit logic will simply request the tunnel again later.
+     *
+     *  @param cfg the config to remove from the in-progress list
+     *  @since 0.9.70
+     */
+    void removeInProgress(PooledTunnelCreatorConfig cfg) {
+        synchronized (_inProgress) {
+            _inProgress.remove(cfg);
+        }
+    }
+
+    /**
      *  Cancel excess in-progress tunnel builds to stay within budget.
      *  Cancels the newest builds first (less time invested).
      *  @param maxAllowed the maximum number of in-progress builds allowed
@@ -3083,10 +3098,19 @@ public class TunnelPool {
      *  backoff to avoid build storms.
      */
     public void requestFreshTunnelBuild() {
-        if (!_alive || !_settings.isInbound() || _settings.isExploratory())
+        if (!_alive || !_settings.isInbound() || _settings.isExploratory()) {
+            if (_log.shouldDebug()) {
+                _log.debug(toString() + " -> Skipping fresh build: alive=" + _alive +
+                          ", inbound=" + _settings.isInbound() + ", exploratory=" + _settings.isExploratory());
+            }
             return;
-        if (!_ensuringTunnels.compareAndSet(false, true))
+        }
+        if (!_ensuringTunnels.compareAndSet(false, true)) {
+            if (_log.shouldDebug()) {
+                _log.debug(toString() + " -> Skipping fresh build: ensure already in progress");
+            }
             return;
+        }
         try {
             int target = _settings.getQuantity();
             long now = _context.clock().now();
@@ -3112,9 +3136,17 @@ public class TunnelPool {
             int room = Math.max(0, cap - inProgress);
             int needed = Math.min(deficit, room);
             if (needed <= 0) {
+                if (_log.shouldInfo()) {
+                    _log.info(toString() + " -> Skipping fresh build: inProgress=" + inProgress +
+                              " >= cap " + cap + " (target=" + target + ", fresh=" + fresh + ")");
+                }
                 return;
             }
             if (now - _lastDeficitBuildTime < 5000) {
+                if (_log.shouldDebug()) {
+                    _log.debug(toString() + " -> Skipping fresh build: last deficit build " +
+                              (now - _lastDeficitBuildTime) + "ms ago (dedup)");
+                }
                 return;
             }
             if (_manager.getExecutor().isPoolInBackoff(this)) {

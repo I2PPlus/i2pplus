@@ -996,6 +996,10 @@ public class BuildExecutor implements Runnable {
     void buildTunnel(PooledTunnelCreatorConfig cfg) {
         if (cfg.getLength() > 1 && !paceAllowed()) {
             _context.statManager().addRateData("tunnel.buildPacedOut", 1);
+            // Never sent to the network, so no timeout will fire — remove it
+            // now or the pool's _inProgress count leaks upward forever,
+            // starving every cap-guard that gates on in-progress builds.
+            cfg.getTunnelPool().removeInProgress(cfg);
             return;
         }
         long beforeBuild = System.currentTimeMillis();
