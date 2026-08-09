@@ -4291,7 +4291,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<script src=\"").append(_resourcePath).append("js/toggleVaryTunnelLength.js?").append(CoreVersion.VERSION).append("\" defer></script>\n")
            .append("<noscript><style>#hopVariance .optbox.slider{pointer-events:none!important;opacity:.4!important}</style></noscript>\n")
            .append("<span class=configOption id=multiDest><b>")
-           .append(_t("Per-torrent destinations"))
+           .append(_t("Multi-destination"))
            .append("</b> \n")
            .append("<label title=\"")
            .append(_t("Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."))
