@@ -169,7 +169,6 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <style>#pagenav{display:block!important}</style>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 <script src=/js/refreshElements.js type=module></script>
-<script src=/js/lazyload.js></script>
 <script src=/js/tablesort/sortShared.js></script>
 <script src=/js/tablesort/tablesort.js></script>
 <script src=/js/netdb.js type=module></script>

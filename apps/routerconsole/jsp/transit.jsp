@@ -5,7 +5,6 @@
 <link href=/themes/console/tablesort.css rel=stylesheet>
 <script src=/js/tablesort/sortShared.js></script>
 <script src=/js/tablesort/tablesort.js type=module></script>
-<script src=/js/lazyload.js type=module></script>
 <script src=/js/transit.js type=module></script>
 <link rel=prefetch href=/tunnelpeercount>
 </head>

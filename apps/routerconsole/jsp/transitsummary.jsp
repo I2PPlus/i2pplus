@@ -6,7 +6,6 @@
 <script src=/js/convertKBtoMB.js type=module></script>
 <script src=/js/tablesort/sortShared.js></script>
 <script src=/js/tablesort/tablesort.js type=module></script>
-<script src=/js/lazyload.js type=module></script>
 <script src=/js/transitsummary.js type=module></script>
 <link rel=prefetch href=/tunnelpeercount>
 </head>
