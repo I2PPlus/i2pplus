@@ -861,7 +861,12 @@ public class BuildExecutor implements Runnable {
                             }
                             int wantedCount = pool.getSettings().getTotalQuantity();
                             int buildingCount = pool.getInProgressCount();
-                            int target = Math.max(getTunnelTargetMin(_context), wantedCount + getTunnelTargetBuffer(_context));
+                            // Zero-hop pools keep their configured quantity; the
+                            // 2-tunnel floor ensures a single failure can't
+                            // starve the pool.
+                            int target = pool.getSettings().isZeroHop() ? wantedCount :
+                                         Math.max(2, Math.max(getTunnelTargetMin(_context),
+                                                               wantedCount + getTunnelTargetBuffer(_context)));
                             int maxBuilding = Math.max(4, target * 2);
                             if (buildingCount > maxBuilding) {
                                 for (PooledTunnelCreatorConfig cfg : pool.cancelExcessInProgress(maxBuilding)) {
@@ -1301,7 +1306,12 @@ public class BuildExecutor implements Runnable {
             String nickname = pool.getSettings().getDestinationNickname();
             boolean isPing = nickname != null && nickname.startsWith("Ping");
 
-            int target = isPing ? wantedCount : Math.max(getTunnelTargetMin(_context), wantedCount + getTunnelTargetBuffer(_context));
+            // Ping and zero-hop pools keep their configured quantity; all
+            // others hold at least 2 tunnels per direction so a single
+            // failure can't empty the pool or starve the LeaseSet.
+            int target = (isPing || pool.getSettings().isZeroHop()) ? wantedCount :
+                         Math.max(2, Math.max(getTunnelTargetMin(_context),
+                                               wantedCount + getTunnelTargetBuffer(_context)));
 
             List<TunnelInfo> tunnels = pool.listTunnels();
             boolean allowZeroHop = pool.getSettings().getAllowZeroHop();

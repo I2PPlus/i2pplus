@@ -47,15 +47,29 @@ import net.i2p.util.SystemVersion;
 public class TunnelPool {
     private static final Comparator<TunnelInfo> EXPIRATION_COMPARATOR =
             Comparator.comparingLong(TunnelInfo::getExpiration);
-    private static final Comparator<TunnelInfo> LATENCY_COMPARATOR =
+    /**
+     *  Best tunnels first for LeaseSet publication: freshest (longest remaining
+     *  life) so the lease survives floodfill propagation, then lowest average
+     *  latency, then fewest consecutive failures.
+     */
+    static final Comparator<TunnelInfo> QUALITY_COMPARATOR =
             (a, b) -> {
-                int la = getTunnelAvgLatency(a);
-                int lb = getTunnelAvgLatency(b);
-                if (la < 0 && lb < 0) return 0;
-                if (la < 0) return 1;
-                if (lb < 0) return -1;
-                return Integer.compare(la, lb);
+                int cmp = Long.compare(b.getExpiration(), a.getExpiration());
+                if (cmp != 0) {return cmp;}
+                cmp = compareAvgLatency(a, b);
+                if (cmp != 0) {return cmp;}
+                return Integer.compare(a.getConsecutiveFailures(), b.getConsecutiveFailures());
             };
+
+    /** Latency ascending, tunnels with no measurements sort last. */
+    private static int compareAvgLatency(TunnelInfo a, TunnelInfo b) {
+        int la = getTunnelAvgLatency(a);
+        int lb = getTunnelAvgLatency(b);
+        if (la < 0 && lb < 0) {return 0;}
+        if (la < 0) {return 1;}
+        if (lb < 0) {return -1;}
+        return Integer.compare(la, lb);
+    }
     private final List<PooledTunnelCreatorConfig> _inProgress = new ArrayList<>();
     /** The router context */
     protected final RouterContext _context;
@@ -88,6 +102,12 @@ public class TunnelPool {
      */
     private volatile int _consecutiveEmergencies = 0;
     private static final int MAX_EMERGENCY_BOOST = 10;
+    /**
+     *  Extra tunnels maintained while the pool is struggling, so LeaseSet
+     *  publication always has fresh candidates instead of re-signing the
+     *  same aging leases.
+     */
+    private static final int STRUGGLE_RESERVE = 2;
     /**
      *  Minimum interval between pre-build triggers per pool.
      *  pruneExcessTunnels() fires this on every ~15s cycle for every IB pool
@@ -125,6 +145,10 @@ public class TunnelPool {
     /** Default early expiration time for pruned tunnels (30 seconds) */
     static final long DEFAULT_PRUNE_EARLY_EXPIRY = 120L * 1000;
     private static final String PROP_PRUNE_EARLY_EXPIRY = "router.pruneEarlyExpiryDelay";
+    /** Non-published tunnels with more remaining life than this are fresh — never pruned. */
+    private static final long PRUNE_KEEP_IF_FRESH_MS = 9L * 60 * 1000;
+    /** Non-published tunnels with less remaining life than this are pruned at publication. */
+    private static final long PRUNE_NEAR_EXPIRY_MS = 5L * 60 * 1000;
     /** If less than one success in this many, reduce length (exploratory only) */
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_1 = 10;
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 12;
@@ -898,6 +922,29 @@ public class TunnelPool {
     }
 
     /**
+     *  Whether this is a short-lived ping pool.
+     *  Ping pools keep their configured quantity — the 2-tunnel floor
+     *  doesn't apply.
+     */
+    private boolean isPingPool() {
+        String nickname = _settings.getDestinationNickname();
+        return nickname != null && (nickname.equals("I2Ping") ||
+                                    (nickname.startsWith("Ping") && nickname.contains("[")));
+    }
+
+    /**
+     *  The tunnel count the pool maintains, never less than 2 per direction
+     *  regardless of the configured quantity, unless the pool is a ping pool
+     *  or expressly zero-hop.
+     *
+     *  @return the number of tunnels to build and keep
+     */
+    int getEffectiveTarget() {
+        if (isPingPool() || _settings.isZeroHop()) {return _settings.getQuantity();}
+        return Math.max(2, _settings.getQuantity());
+    }
+
+    /**
      * Pool settings.
      * @return the settings for this pool
      */
@@ -1402,7 +1449,7 @@ public class TunnelPool {
      *  @since 0.9.70+
      */
     public boolean isStruggling() {
-        return _hasIncompleteLeaseSet || getActiveTunnelCount() < _settings.getQuantity();
+        return _hasIncompleteLeaseSet || getActiveTunnelCount() < getEffectiveTarget();
     }
 
     /**
@@ -1470,7 +1517,7 @@ public class TunnelPool {
                 // Hard cap: never more than target + 2 usable tunnels per direction.
                 // FAILED/FAILING tunnels are dead or dying and don't count — they must
                 // not block replacement builds.
-                int target = _settings.getQuantity();
+                int target = getEffectiveTarget();
                 int usable = 0;
                 for (TunnelInfo t : _tunnels) {
                     TunnelTestStatus ts = t.getTestStatus();
@@ -1778,11 +1825,11 @@ public class TunnelPool {
             goodTunnels.add(tunnel);
         }
 
-        // Sort by latency ascending — prefer fast tunnels for the LeaseSet.
-        // Tunnels with no latency data sort after tested ones.
-        Collections.sort(goodTunnels, LATENCY_COMPARATOR);
+        // Sort by quality — freshest first, then lowest latency, then fewest
+        // failures — so the LeaseSet holds the best tunnels available.
+        Collections.sort(goodTunnels, QUALITY_COMPARATOR);
 
-        // Take only the best latency tunnels up to wanted count
+        // Take only the best tunnels up to wanted count
         int wantedLeases = wanted - (zeroHopTunnel != null ? 1 : 0);
         if (goodTunnels.size() > wantedLeases) {
             goodTunnels = new ArrayList<>(goodTunnels.subList(0, wantedLeases));
@@ -2616,6 +2663,7 @@ public class TunnelPool {
         }
         if (publishedGateways.isEmpty()) return;
         long now = _context.clock().now();
+        int latencyThreshold = _context.getProperty("router.latencyBuildThreshold", 1500);
         List<TunnelInfo> toRemove = new ArrayList<>();
         _tunnelsLock.lock();
         try {
@@ -2623,8 +2671,11 @@ public class TunnelPool {
                 TunnelInfo t = _tunnels.get(i);
                 if (t.getTunnelFailed()) continue;
                 if (t.getLength() <= 1) continue;
-                if (t.getExpiration() <= now + 5L * 60 * 1000) {
-                    // Expiring soon — let it expire naturally
+                // Freshly built tunnels stay as reserve whatever their latency —
+                // measurements aren't stable yet and they're the best candidates
+                // for the next LeaseSet.
+                long timeLeft = t.getExpiration() - now;
+                if (timeLeft > PRUNE_KEEP_IF_FRESH_MS) {
                     continue;
                 }
                 // Don't prune UNTESTED tunnels — they were just built and
@@ -2640,7 +2691,17 @@ public class TunnelPool {
                     // Published in LeaseSet — keep
                     continue;
                 }
-                toRemove.add(t);
+                // Non-published tunnels near expiry or slower than the latency
+                // threshold will never be leased — remove them now so fresh
+                // replacements build before the pool thins out.
+                if (timeLeft <= PRUNE_NEAR_EXPIRY_MS) {
+                    toRemove.add(t);
+                    continue;
+                }
+                int lat = getTunnelAvgLatency(t);
+                if (lat >= 0 && lat > latencyThreshold) {
+                    toRemove.add(t);
+                }
             }
         } finally {_tunnelsLock.unlock();}
         if (toRemove.isEmpty()) return;
@@ -2649,7 +2710,7 @@ public class TunnelPool {
         // included in the next LeaseSet.  Pruning them creates churn: build 3
         // → publish 1 gateway → prune 2 → pool drops to 0-1 → EMERGENCY → repeat.
         int currentSize = getTunnelCount();
-        int target = _settings.getQuantity();
+        int target = getEffectiveTarget();
         // Dynamic scaling: keep extra tunnels when pool keeps collapsing
         int effectiveTarget = Math.min(target + _consecutiveEmergencies,
                                        target + MAX_EMERGENCY_BOOST);
@@ -2816,7 +2877,7 @@ public class TunnelPool {
         // Clear out dead tunnels before counting, so FAILING/FAILED tunnels
         // don't inflate the count and block replacement builds.
         pruneNonGoodTunnels();
-        int target = _settings.getQuantity();
+        int target = getEffectiveTarget();
         // Dynamic scaling: boost target when pool keeps collapsing.
         // More tunnels = more resilience. LeaseSet picks the best.
         // Also add failure buffer from Tuner — extra tunnels to maintain
@@ -2824,6 +2885,11 @@ public class TunnelPool {
         int failureBuffer = Tuner.getBuildFailureBuffer();
         int effectiveTarget = Math.min(target + _consecutiveEmergencies + failureBuffer,
                                        target + MAX_EMERGENCY_BOOST + failureBuffer);
+        // Struggling pools get extra reserve tunnels so LeaseSet publication
+        // has fresh candidates; self-limits as the pool recovers.
+        if (isStruggling()) {
+            effectiveTarget += STRUGGLE_RESERVE;
+        }
         long now = _context.clock().now();
         // Build replacements 3 minutes before the existing tunnels expire, so
         // fresh builds (10-40s) complete well before the old tunnels die and
@@ -3112,7 +3178,7 @@ public class TunnelPool {
             return;
         }
         try {
-            int target = _settings.getQuantity();
+            int target = getEffectiveTarget();
             long now = _context.clock().now();
             long freshUntil = now + getFreshLeaseWindow(_context);
             _tunnelsLock.lock();

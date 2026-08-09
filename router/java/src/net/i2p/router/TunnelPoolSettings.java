@@ -212,6 +212,17 @@ public class TunnelPoolSettings {
     }
 
     /**
+     *  Whether the pool is expressly configured for zero-hop tunnels,
+     *  by length 0 or lengthOverride 0.  Excludes the allowZeroHop fallback
+     *  flag, which permits zero hops only as a last resort.
+     *
+     *  @return true if zero hops are the configured tunnel length
+     */
+    public boolean isZeroHop() {
+        return _length + Math.min(_lengthVariance, 0) <= 0 || _lengthOverride == 0;
+    }
+
+    /**
      *  Should tunnels in this pool be tested?
      *
      *  @return true for normal pools, false for hostchecker/ping tunnels

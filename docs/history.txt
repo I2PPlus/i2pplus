@@ -1,4 +1,15 @@
 2026-08-09 dr|z3d
+  * Tunnel: Pools now keep at least 2 tunnels per direction regardless of
+    the configured quantity (except expressly 0-hop and ping pools), so a
+    single tunnel failure can no longer leave a pool or its LeaseSet empty
+  * Tunnel: LeaseSets publish the freshest tunnels — longest remaining
+    life first, then lowest latency, then fewest failures — while extra
+    tunnels are kept in reserve so each publication has fresh candidates
+  * Tunnel: Struggling pools build extra reserve tunnels, so LeaseSet
+    publication can pick fresh tunnels instead of re-signing aging leases
+  * Tunnel: Inbound pools prune non-published tunnels that are near
+    expiry or slower than the latency threshold right after LeaseSet
+    publication, so replacement tunnels are built before the pool thins
   * I2PSnark: Torrents created from multiple files now insert BEP 47
     padding files so each real file ends on a piece boundary, which
     lets peers verify the torrent without downloading a partial piece
