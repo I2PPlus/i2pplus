@@ -62,6 +62,7 @@ class ConnectionAcceptor implements Runnable {
     private final I2PSnarkUtil _util;
     private final TorrentDest _td;
     private final ObjectCounter<Hash> _badCounter = new ObjectCounter<>();
+    private final Map<Hash, String> _badReasons = new ConcurrentHashMap<>();
     private final SimpleTimer2.TimedEvent _cleaner;
     private final Map<String, TorrentAcceptLoop> _torrentAcceptors = new ConcurrentHashMap<>();
     /** Stops the accept loop */
@@ -185,6 +186,7 @@ class ConnectionAcceptor implements Runnable {
             } catch (I2PException ioe) { /* ignored */ }
         }
         _badCounter.clear();
+        _badReasons.clear();
         _cleaner.cancel();
     }
 
@@ -357,6 +359,7 @@ class ConnectionAcceptor implements Runnable {
         Hash h = socket.getPeerDestination().calculateHash();
         if (socket.getLocalPort() == 80) {
             _badCounter.increment(h);
+            _badReasons.put(h, "incoming HTTP connection");
             if (_log.shouldWarn()) {
                 _log.warn(
                         "[I2PSnark] Dropping incoming HTTP connection from client ["
@@ -371,6 +374,7 @@ class ConnectionAcceptor implements Runnable {
         int bad = _badCounter.count(h);
         if (bad >= MAX_BAD) {
             if (_log.shouldWarn()) {
+                String reason = _badReasons.get(h);
                 _log.warn(
                         "[I2PSnark] Rejecting incoming connection from client ["
                                 + h.toBase32().substring(0, 8)
@@ -378,7 +382,8 @@ class ConnectionAcceptor implements Runnable {
                                 + bad
                                 + " failures (Max is "
                                 + MAX_BAD
-                                + ")");
+                                + "), last reason: "
+                                + (reason != null ? reason : "unknown"));
             }
             try {
                 socket.reset();
@@ -531,8 +536,11 @@ class ConnectionAcceptor implements Runnable {
                 // A successful handshake shows the client is healthy; drop
                 // any protocol-error count so only serial failures blacklist
                 _badCounter.clear(_socket.getPeerDestination().calculateHash());
+                _badReasons.remove(_socket.getPeerDestination().calculateHash());
             } catch (PeerAcceptor.ProtocolException ihe) {
-                _badCounter.increment(_socket.getPeerDestination().calculateHash());
+                Hash h = _socket.getPeerDestination().calculateHash();
+                _badCounter.increment(h);
+                _badReasons.put(h, "protocol error: " + ihe.getMessage());
                 if (_log.shouldInfo()) {
                     _log.info(
                             "[I2PSnark] Protocol error from ["

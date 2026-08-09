@@ -1456,7 +1456,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             _blacklist.add(nid);
             if (!already) {
                 if (_log.shouldInfo()) {
-                    _log.info("Blacklisted: [" + nid + "]");
+                    _log.info(
+                            "Blacklisted: ["
+                                    + nid
+                                    + "] failed to respond to "
+                                    + nid.getFailCount()
+                                    + " consecutive queries");
                 }
             }
         }

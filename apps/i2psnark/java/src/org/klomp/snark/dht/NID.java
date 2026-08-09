@@ -83,6 +83,15 @@ public class NID extends SHA1Hash {
     }
 
     /**
+     * Returns the number of consecutive timeouts or failures recorded.
+     *
+     * @return the current failure count
+     */
+    public int getFailCount() {
+        return fails;
+    }
+
+    /**
      * Records a timeout and checks if the node should be considered problematic.
      *
      * <p>Increments the failure counter and returns whether the node has exceeded the maximum
