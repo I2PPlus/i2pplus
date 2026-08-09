@@ -64,6 +64,7 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <% } %>
 <%@include file="sidebar.jsi"%>
 <jsp:useBean id="formhandler" class="net.i2p.router.web.helpers.NetDbHelper" scope="request"/>
+<jsp:setProperty name="formhandler" property="contextId" value="<%=i2pcontextId%>"/>
 <jsp:setProperty name="formhandler" property="full" value="<%=request.getParameter(\"f\")%>"/>
 <jsp:setProperty name="formhandler" property="show" value="<%=request.getParameter(\"show\")%>"/>
 <jsp:setProperty name="formhandler" property="router" value="<%=request.getParameter(\"r\")%>"/>
