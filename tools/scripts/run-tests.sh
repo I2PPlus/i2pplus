@@ -65,7 +65,7 @@ get_build_props() {
       props="$props -Dcore.java.build.dir=${build_root}/core/java/build -Drouter.java.build.dir=${build_root}/router/java/build -Dministreaming.java.build.dir=${build_root}/apps/ministreaming/java/build -Dstreaming.java.build.dir=${build_root}/apps/streaming/java/build"
       ;;
     apps/routerconsole/java)
-      props="$props -Dcore.java.build.dir=${build_root}/core/java/build -Drouter.java.build.dir=${build_root}/router/java/build -Dministreaming.java.build.dir=${build_root}/apps/ministreaming/java/build -Dstreaming.java.build.dir=${build_root}/apps/streaming/java/build -Di2ptunnel.java.build.dir=${build_root}/apps/i2ptunnel/java/build -Djetty.pkg.dir=${build_root}/apps/jetty/build -Djrobin.java.build.dir=${build_root}/apps/jrobin/java/build -Dsystray.java.build.dir=${build_root}/apps/systray/java/build -Ddesktopgui.dist.dir=${build_root}/apps/desktopgui/dist -Ddesktopgui.build.dir=${build_root}/apps/desktopgui/build -Dwrapper.dir=${REPO_ROOT}/installer/lib/wrapper/all"
+      props="$props -Dcore.java.build.dir=${build_root}/core/java/build -Drouter.java.build.dir=${build_root}/router/java/build -Dministreaming.java.build.dir=${build_root}/apps/ministreaming/java/build -Dstreaming.java.build.dir=${build_root}/apps/streaming/java/build -Di2ptunnel.java.build.dir=${build_root}/apps/i2ptunnel/java/build -Djetty.pkg.dir=${build_root}/apps/jetty/build -Djrobin.java.build.dir=${build_root}/apps/jrobin/java/build -Dsystray.java.build.dir=${build_root}/apps/systray/java/build -Dsam.java.build.dir=${build_root}/apps/sam/java/build -Ddesktopgui.dist.dir=${build_root}/apps/desktopgui/dist -Ddesktopgui.build.dir=${build_root}/apps/desktopgui/build -Dwrapper.dir=${REPO_ROOT}/installer/lib/wrapper/all"
       ;;
     apps/i2psnark/java)
       props="$props -Dcore.java.build.dir=${build_root}/core/java/build -Dministreaming.java.build.dir=${build_root}/apps/ministreaming/java/build -Dstreaming.java.build.dir=${build_root}/apps/streaming/java/build -Drouter.java.build.dir=${build_root}/router/java/build -Djetty.pkg.dir=${build_root}/apps/jetty/build -Dsystray.java.build.dir=${build_root}/apps/systray/java/build -Di2ptunnel.java.build.dir=${build_root}/apps/i2ptunnel/java/build -Dservlet.jar=${REPO_ROOT}/apps/jetty/jettylib/javax.servlet.jar"
@@ -330,11 +330,11 @@ case "${1:-all}" in
     run_build router/java
     run_build router/java jarTest
     build_desktopgui
+    run_build apps/sam/java
     run_build apps/addressbook
     run_build apps/routerconsole/java
     run_build apps/i2psnark/java
     run_build apps/susimail
-    run_build apps/sam/java
 
     # Run all test suites in parallel (safe now that clean is removed from junit.test)
     core_r=$(mktemp)
