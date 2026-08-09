@@ -1,4 +1,21 @@
+2026-08-09 dr|z3d
+  * I2PSnark: Torrents created from multiple files now insert BEP 47
+    padding files so each real file ends on a piece boundary, which
+    lets peers verify the torrent without downloading a partial piece
+    per file and reduces wasted bandwidth and storage
+  * I2PSnark: Padding files are virtual - they hash as zeros and are
+    never created, allocated, or written to disk, saving space and
+    avoiding pad churn on rechecks
+  * I2PSnark: Re-creating a torrent over a data directory that already
+    holds padding files skips them instead of treating them as data,
+    so the same directory produces the same metainfo
+
 2026-08-08 dr|z3d
+  * I2PSnark: Peers stuck on handshake timeouts are no longer counted
+    as bad clients and blacklisted
+  * I2PSnark: The snub clock is restarted on unchoke and the snub
+    timeout is 60 seconds, so a peer that stops responding is declared
+    snubbed and replaced much sooner than before
   * I2PSnark: Per-peer threads no longer keep the router from shutting
     down when a peer connection is stuck
   * I2PSnark: Peer-suggested pieces are no longer requested when the

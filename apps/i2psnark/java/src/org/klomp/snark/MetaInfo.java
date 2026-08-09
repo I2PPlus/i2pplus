@@ -78,6 +78,7 @@ public class MetaInfo {
      * @param name_utf8 unused, retained for API compatibility
      * @param files list of file path components per file, null for single-file torrent
      * @param lengths list of file sizes in bytes, null for single-file torrent
+     * @param attributes per-file attribute strings (BEP 47 "p" marks padding files), may be null
      * @param piece_length the length of each data piece in bytes
      * @param piece_hashes concatenated 20-byte SHA1 hashes of all pieces
      * @param length total torrent size in bytes
@@ -93,6 +94,7 @@ public class MetaInfo {
             String name_utf8,
             List<List<String>> files,
             List<Long> lengths,
+            List<String> attributes,
             int piece_length,
             byte[] piece_hashes,
             long length,
@@ -105,6 +107,8 @@ public class MetaInfo {
         this.name = name;
         this.files = files == null ? null : Collections.unmodifiableList(files);
         this.lengths = lengths == null ? null : Collections.unmodifiableList(lengths);
+        this.attributes =
+                attributes == null ? null : Collections.unmodifiableList(attributes);
         this.piece_length = piece_length;
         this.piece_hashes = piece_hashes;
         this.length = length;
@@ -114,8 +118,6 @@ public class MetaInfo {
         this.created_by = null;
         this.creation_date = 0;
         this.url_list = url_list;
-        this.attributes =
-                null; // TODO BEP 52 hybrid torrent with piece layers, meta version and file tree
         this.info_hash = calculateInfoHash();
     }
 

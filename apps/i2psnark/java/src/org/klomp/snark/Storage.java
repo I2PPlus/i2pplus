@@ -20,8 +20,10 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -92,6 +94,9 @@ public class Storage implements Closeable {
 
     /** The default piece size for new torrents. */
     private static final int DEFAULT_PIECE_SIZE = 256 * 1024;
+
+    /** BEP 47 directory holding synthetic padding files; skipped when walking a source dir. */
+    static final String PAD_DIR = ".pad";
 
     /**
      * Maximum permitted piece size.
@@ -256,6 +261,56 @@ public class Storage implements Closeable {
             pc_size *= 2;
             pcs = (int) ((total - 1) / pc_size) + 1;
         }
+
+        // BEP 47 padding: insert zero-fill files so each file except the last ends on a piece
+        // boundary. Multi-file torrents only; single-file torrents have no file list to pad.
+        // The piece growth loop above ran on the real total, so pc_size is final; padding adds
+        // at most one piece per file, which the 3x headroom of that guard absorbs.
+        List<String> attributes = null;
+        if (_torrentFiles.size() > 1) {
+            attributes = new ArrayList<>(_torrentFiles.size());
+            List<TorrentFile> realFiles = new ArrayList<>(_torrentFiles);
+            Map<Long, Integer> padNames = new HashMap<>(4);
+            int idx = 0;
+            for (int i = 0; i < realFiles.size(); i++) {
+                TorrentFile tf = realFiles.get(i);
+                attributes.add("");
+                idx++;
+                long rem = tf.length % pc_size;
+                if (rem != 0 && i < realFiles.size() - 1) {
+                    long padLen = pc_size - rem;
+                    // Recommended name is the length in base 10; suffix duplicates
+                    Integer n = padNames.get(Long.valueOf(padLen));
+                    String padName;
+                    if (n == null) {
+                        padNames.put(Long.valueOf(padLen), Integer.valueOf(2));
+                        padName = Long.toString(padLen);
+                    } else {
+                        padNames.put(Long.valueOf(padLen), Integer.valueOf(n.intValue() + 1));
+                        padName = Long.toString(padLen) + '-' + n;
+                    }
+                    _torrentFiles.add(
+                            idx,
+                            new TorrentFile(
+                                    baseFile,
+                                    new File(baseFile, PAD_DIR + File.separator + padName),
+                                    padLen,
+                                    true));
+                    lengthsList.add(idx, Long.valueOf(padLen));
+                    attributes.add(idx, "p");
+                    total += padLen;
+                    idx++;
+                }
+            }
+            if (total > MAX_TOTAL_SIZE) {
+                throw new IOException(
+                        "Torrent too big ("
+                                + total
+                                + " bytes), maximum permitted is "
+                                + MAX_TOTAL_SIZE);
+            }
+        }
+        pcs = (int) ((total - 1) / pc_size) + 1;
         piece_size = pc_size;
         pieces = pcs;
         total_length = total;
@@ -288,6 +343,7 @@ public class Storage implements Closeable {
                         null,
                         files,
                         lengthsList,
+                        attributes,
                         piece_size,
                         piece_hashes,
                         total,
@@ -445,6 +501,14 @@ public class Storage implements Closeable {
                                 + " and restart");
             }
             for (int i = 0; i < files.length; i++) {
+                // Skip BEP 47 padding directories so re-creating a padded torrent does not
+                // include the synthetic zero files as data; parse renames dotfiles to _pad
+                if (files[i].isDirectory()) {
+                    String n = files[i].getName();
+                    if (n.equals(PAD_DIR) || n.equals("_pad")) {
+                        continue;
+                    }
+                }
                 addFiles(l, files[i], filters);
             }
         }
@@ -922,7 +986,17 @@ public class Storage implements Closeable {
             trusted = new ArrayList<>(size);
             for (int i = 0; i < size; i++) {
                 List<String> path = files.get(i);
-                File f = createFileFromNames(_base, path, areFilesPublic);
+                boolean isPad = metainfo.isPaddingFile(i);
+                File f;
+                if (isPad) {
+                    // BEP 47: a padding file is never on disk; build the path only
+                    f = _base;
+                    for (String component : path) {
+                        f = new File(f, component);
+                    }
+                } else {
+                    f = createFileFromNames(_base, path, areFilesPublic);
+                }
                 // dup file name check after filtering
                 for (int j = 0; j < i; j++) {
                     if (f.equals(_torrentFiles.get(j).RAFfile)) {
@@ -944,13 +1018,14 @@ public class Storage implements Closeable {
                     }
                 }
                 long len = ls.get(i).longValue();
-                _torrentFiles.add(new TorrentFile(_base, f, len));
+                _torrentFiles.add(new TorrentFile(_base, f, len, isPad));
                 total += len;
-                if (useSavedBitField) {
+                if (useSavedBitField && !isPad) {
                     long lm = f.lastModified();
                     trusted.add(Boolean.valueOf(lm > 0 && lm <= savedTime && f.length() == len));
                 } else {
-                    trusted.add(Boolean.FALSE);
+                    // Padding never touches disk, so its hashes can never go stale
+                    trusted.add(isPad ? Boolean.TRUE : Boolean.FALSE);
                 }
             }
 
@@ -1028,15 +1103,32 @@ public class Storage implements Closeable {
         long fileEnd = _torrentFiles.get(0).length;
         long pieceEnd = 0;
         for (int i = 0; i < pieces; i++) {
-            while (fileEnd <= pieceEnd && file + 1 < _torrentFiles.size()) {
+            long pieceStart = pieceEnd;
+            pieceEnd = Math.min(pieceStart + piece_size, total_length);
+            // Stop while file cursor covers the piece start; file may be to the
+            // right of the piece start if the piece begins inside a file
+            while (fileEnd <= pieceStart && file + 1 < _torrentFiles.size()) {
                 file++;
                 fileEnd += _torrentFiles.get(file).length;
             }
-            long pieceStart = pieceEnd;
-            pieceEnd = Math.min(pieceStart + piece_size, total_length);
-            if (fileTrusted.get(file).booleanValue() && pieceEnd <= fileEnd) {
-                rv[i] = true;
+            // A piece is trusted only if every file it overlaps is trusted;
+            // padding files are always trusted (they hash as zeros and never
+            // touch disk, so their bytes cannot go stale)
+            boolean ok = true;
+            int f = file;
+            long fEnd = fileEnd;
+            while (true) {
+                if (!fileTrusted.get(f).booleanValue()) {
+                    ok = false;
+                    break;
+                }
+                if (fEnd >= pieceEnd || f + 1 >= _torrentFiles.size()) {
+                    break;
+                }
+                f++;
+                fEnd += _torrentFiles.get(f).length;
             }
+            rv[i] = ok && fEnd >= pieceEnd;
         }
         return rv;
     }
@@ -1053,6 +1145,9 @@ public class Storage implements Closeable {
         }
         for (int i = 0; i < _torrentFiles.size(); i++) {
             TorrentFile tf = _torrentFiles.get(i);
+            if (tf.isPadding) {
+                continue;
+            }
             if (!tf.RAFfile.exists()) {
                 // File should exist when we get here, but could have vanished
                 List<List<String>> files = metainfo.getFiles();
@@ -1436,6 +1531,11 @@ public class Storage implements Closeable {
         long lengthProgress = 0;
         for (int i = 0; i < _torrentFiles.size(); i++) {
             TorrentFile tf = _torrentFiles.get(i);
+            if (tf.isPadding) {
+                // Padding is never on disk; skip the length check and allocation
+                lengthProgress += tf.length;
+                continue;
+            }
             long length = tf.RAFfile.length();
             lengthProgress += tf.length;
             boolean exists = tf.RAFfile.exists();
@@ -1685,6 +1785,12 @@ public class Storage implements Closeable {
                 int need = length - written;
                 int len = fc.chunk(need);
                 TorrentFile tf = fc.getFile();
+                if (tf.isPadding) {
+                    // Padding never touches disk; the piece hash already verified it as zeros
+                    written += len;
+                    fc.advance(len, need);
+                    continue;
+                }
                 synchronized (tf) {
                     try {
                         RandomAccessFile raf = tf.checkRAF();
@@ -1805,20 +1911,25 @@ public class Storage implements Closeable {
             int need = length - read;
             int len = fc.chunk(need);
             TorrentFile tf = fc.getFile();
-            synchronized (tf) {
-                try {
-                    RandomAccessFile raf = tf.checkRAF();
-                    raf.seek(fc.getOffset());
-                    raf.readFully(bs, read, len);
-                } catch (IOException ioe) {
+            if (tf.isPadding) {
+                // BEP 47: padding regions hash as zeros, never touch disk
+                Arrays.fill(bs, read, read + len, (byte) 0);
+            } else {
+                synchronized (tf) {
                     try {
-                        tf.closeRAF();
-                    } catch (IOException ioe2) { /* ignored */ }
-                    // get the file name in the logs
-                    IOException ioe2 =
-                            new IOException("Error reading " + tf.RAFfile.getAbsolutePath());
-                    ioe2.initCause(ioe);
-                    throw ioe2;
+                        RandomAccessFile raf = tf.checkRAF();
+                        raf.seek(fc.getOffset());
+                        raf.readFully(bs, read, len);
+                    } catch (IOException ioe) {
+                        try {
+                            tf.closeRAF();
+                        } catch (IOException ioe2) { /* ignored */ }
+                        // get the file name in the logs
+                        IOException ioe2 =
+                                new IOException("Error reading " + tf.RAFfile.getAbsolutePath());
+                        ioe2.initCause(ioe);
+                        throw ioe2;
+                    }
                 }
             }
             read += len;
@@ -1921,6 +2032,9 @@ public class Storage implements Closeable {
         /** is the file empty and sparse? locking: this */
         public boolean isSparse;
 
+        /** BEP 47 padding placeholder; hashes as zeros and is never read from or written to disk */
+        public final boolean isPadding;
+
         /** priority by file; default 0 */
         public volatile int priority;
 
@@ -1933,6 +2047,14 @@ public class Storage implements Closeable {
          * For existing metainfo with specified file length; use base == f for single-file torrent
          */
         public TorrentFile(File base, File f, long len) {
+            this(base, f, len, false);
+        }
+
+        /**
+         * For existing metainfo; a padding file is a synthetic BEP 47 zero-fill entry whose pieces
+         * hash as zeros. The runtime never creates, allocates, or writes it to disk.
+         */
+        public TorrentFile(File base, File f, long len, boolean padding) {
             String n = f.getPath();
             if (base.isDirectory() && n.startsWith(base.getPath())) {
                 n = n.substring(base.getPath().length() + 1);
@@ -1940,6 +2062,7 @@ public class Storage implements Closeable {
             name = n;
             length = len;
             RAFfile = f;
+            isPadding = padding;
         }
 
         /*

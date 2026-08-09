@@ -394,6 +394,155 @@ public class StorageTest {
         assertFalse(s2.getBitField().get(3));
     }
 
+    // ----- BEP 47 padding -----
+
+    /**
+     * Deterministic content for the given size: byte i has value (i * 31 + 7).
+     */
+    private static byte[] content(int size) {
+        byte[] content = new byte[size];
+        for (int i = 0; i < content.length; i++) {
+            content[i] = (byte) ((i * 31 + 7) & 0xff);
+        }
+        return content;
+    }
+
+    /** Creates a torrent from _dataDir and returns the resulting metainfo. */
+    private MetaInfo createTorrent() throws Exception {
+        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        Storage created =
+                new Storage(
+                        util,
+                        _dataDir,
+                        "http://tracker.test",
+                        null,
+                        null,
+                        false,
+                        null,
+                        new ArrayList<>());
+        return created.getMetaInfo();
+    }
+
+    /**
+     * Multi-file creation with unaligned files: a .pad entry is inserted after each file except
+     * the last so files end on piece boundaries, pad content hashes as zeros, the serialized
+     * .torrent file round-trips losslessly, and the torrent verifies end to end.
+     */
+    @Test
+    public void testCreationPadsUnalignedMultiFileTorrent() throws Exception {
+        byte[] c = content(2000);
+        writeFile(new File(_dataDir, "a.dat"), c, 0, 1000);
+        writeFile(new File(_dataDir, "b.dat"), c, 1000, 1000);
+        MetaInfo mi = createTorrent();
+        // 64 KiB pieces (256 KiB default / 4): a.dat pads 64536 bytes, b.dat is last and stays
+        assertEquals(3, mi.getFiles().size());
+        assertEquals(Long.valueOf(1000), mi.getLengths().get(0));
+        assertEquals(Long.valueOf(64536), mi.getLengths().get(1));
+        assertEquals(Long.valueOf(1000), mi.getLengths().get(2));
+        assertEquals(Arrays.asList(".pad", "64536"), mi.getFiles().get(1));
+        assertFalse(mi.isPaddingFile(0));
+        assertTrue(mi.isPaddingFile(1));
+        assertFalse(mi.isPaddingFile(2));
+        assertEquals(2, mi.getPieces());
+        assertEquals(66536, mi.getTotalLength());
+        // The written .torrent file (same bytes locked_writeMetaInfo persists) must re-parse
+        // with identical info hash, lengths, attributes, and piece hashes. Parse renames the
+        // dotfile .pad to _pad (Storage.filterName), matching the on-disk layout
+        byte[] torrentData = mi.getTorrentData();
+        MetaInfo reparsed = new MetaInfo(new ByteArrayInputStream(torrentData));
+        assertArrayEquals(mi.getInfoHash(), reparsed.getInfoHash());
+        assertEquals(Arrays.asList("a.dat"), reparsed.getFiles().get(0));
+        assertEquals(Arrays.asList("_pad", "64536"), reparsed.getFiles().get(1));
+        assertEquals(Arrays.asList("b.dat"), reparsed.getFiles().get(2));
+        assertEquals(mi.getLengths(), reparsed.getLengths());
+        assertEquals(mi.getPieces(), reparsed.getPieces());
+        assertEquals(mi.getTotalLength(), reparsed.getTotalLength());
+        assertTrue(reparsed.isPaddingFile(1));
+        assertFalse(reparsed.isPaddingFile(0));
+        assertFalse(reparsed.isPaddingFile(2));
+        // A fresh runtime open of the same dir must verify every piece: the pad hashes as zeros
+        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        RecordingListener l = new RecordingListener();
+        Storage s = new Storage(util, _dataDir, reparsed, l, true);
+        s.check(0, null);
+        assertTrue(s.complete());
+        assertEquals(0, s.needed());
+        // Padding is never materialized on disk
+        assertFalse(new File(new File(_dataDir, "_pad"), "64536").exists());
+        assertFalse(new File(new File(_dataDir, ".pad"), "64536").exists());
+    }
+
+    /** Creation with already-aligned files adds no pads and no attributes. */
+    @Test
+    public void testCreationSkipsPadsForAlignedFiles() throws Exception {
+        byte[] c = content(2 * 65536);
+        writeFile(new File(_dataDir, "a.dat"), c, 0, 65536);
+        writeFile(new File(_dataDir, "b.dat"), c, 65536, 65536);
+        MetaInfo mi = createTorrent();
+        assertEquals(2, mi.getFiles().size());
+        assertFalse(mi.isPaddingFile(0));
+        assertFalse(mi.isPaddingFile(1));
+        assertEquals(131072, mi.getTotalLength());
+        assertEquals(2, mi.getPieces());
+        // Round-trip: no pad entries or attributes may appear for aligned files
+        MetaInfo reparsed = new MetaInfo(new ByteArrayInputStream(mi.getTorrentData()));
+        assertEquals(mi.getFiles(), reparsed.getFiles());
+        assertArrayEquals(mi.getInfoHash(), reparsed.getInfoHash());
+        assertFalse(reparsed.isPaddingFile(0));
+        assertFalse(reparsed.isPaddingFile(1));
+        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        RecordingListener l = new RecordingListener();
+        Storage s = new Storage(util, _dataDir, mi, l, true);
+        s.check(0, null);
+        assertTrue(s.complete());
+    }
+
+    /** Single-file creation is never padded (no file list, no root-level attr support). */
+    @Test
+    public void testCreationNeverPadsSingleFile() throws Exception {
+        File f = new File(_dataDir, "single.dat");
+        byte[] c = content(5000);
+        writeFile(f, c, 0, 5000);
+        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        Storage created =
+                new Storage(util, f, "http://tracker.test", null, null, false, null, new ArrayList<>());
+        MetaInfo mi = created.getMetaInfo();
+        assertNull(mi.getFiles());
+        assertEquals(5000, mi.getTotalLength());
+        assertEquals(1, mi.getPieces());
+        RecordingListener l = new RecordingListener();
+        Storage s = new Storage(util, f, mi, l, true);
+        s.check(0, null);
+        assertTrue(s.complete());
+        assertFalse(new File(_dataDir, ".pad").exists());
+    }
+
+    /**
+     * Re-creating a torrent from a directory that already holds materialized pad files (e.g. the
+     * data dir of a torrent created by an older version or another client) must not absorb the
+     * synthetic files, and must produce the same metainfo. Covers both the .pad and the
+     * parse-renamed _pad layouts.
+     */
+    @Test
+    public void testRecreateSkipsExistingPadDir() throws Exception {
+        byte[] c = content(2000);
+        writeFile(new File(_dataDir, "a.dat"), c, 0, 1000);
+        writeFile(new File(_dataDir, "b.dat"), c, 1000, 1000);
+        MetaInfo first = createTorrent();
+        // Materialize the pad file entry manually, as a foreign client would
+        File pad = new File(new File(_dataDir, ".pad"), "64536");
+        assertTrue(pad.getParentFile().mkdirs() || pad.getParentFile().isDirectory());
+        writeFile(pad, new byte[64536], 0, 64536);
+        MetaInfo second = createTorrent();
+        assertEquals(first.getFiles(), second.getFiles());
+        assertArrayEquals(first.getInfoHash(), second.getInfoHash());
+        // Parse-renamed layout: a _pad directory must be skipped too
+        assertTrue(new File(_dataDir, ".pad").renameTo(new File(_dataDir, "_pad")));
+        MetaInfo third = createTorrent();
+        assertEquals(first.getFiles(), third.getFiles());
+        assertArrayEquals(first.getInfoHash(), third.getInfoHash());
+    }
+
     private static void setMtime(File f, long time) {
         assertTrue("setLastModified failed for " + f, f.setLastModified(time));
     }
