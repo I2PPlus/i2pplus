@@ -1915,8 +1915,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
                 }
 
-                buf.append("<a href=\"/netdb?c=").append(c).append("\"><img width=20 height=15 alt=\"")
-                   .append(c.toUpperCase(Locale.US)).append("\" title=\"").append(countryName);
+                buf.append("<a href=\"/netdb?c=").append(c).append("\"><img width=20 height=15 alt=")
+                   .append(c.toUpperCase(Locale.US)).append(" title=\"").append(countryName);
 
                 if (ip != null && !"null".equals(ip)) {
                     if (enableReverseLookups()) {
@@ -1994,8 +1994,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             } else {buf.append(_t("unknown"));}
             buf.append("\">");
             if (!"xx".equals(countryCode)) {
-                buf.append("<a href=\"/netdb?c=").append(countryCode).append("\"><img width=24 height=18 alt=\"")
-                   .append(countryCode.toUpperCase(Locale.US)).append("\" src=\"/flags.jsp?c=")
+                buf.append("<a href=\"/netdb?c=").append(countryCode).append("\"><img width=24 height=18 alt=")
+                   .append(countryCode.toUpperCase(Locale.US)).append(" src=\"/flags.jsp?c=")
                    .append(countryCode).append("\" loading=lazy></a>");
             } else {buf.append(unknownFlag);}
         } else {buf.append(_t("unknown")).append("\">").append(unknownFlag);}
