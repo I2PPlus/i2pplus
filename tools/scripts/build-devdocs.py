@@ -16,8 +16,10 @@ Features:
   - No external fetches: CSS/JS are inlined in every page; images referenced by
     local docs are copied alongside the mirrored tree
 - Relative links rewritten (.md -> .html); hash anchors kept
-- Sidebar navigation tree with collapsible modules, breadcrumbs, and an index
-  page with client-side search (works from file://, no server needed)
+- Sidebar navigation tree with collapsible modules, an h3 heading per
+  subsystem (apps/ modules, java package families under router/core),
+  breadcrumbs, and an index page with client-side search (works from file://,
+  no server needed)
 - package.html pages classified first-party (net.i2p.*) vs third-party/vendored
 - Javadoc {@link ...} tags in package.html resolved to links into the site
 
@@ -223,11 +225,42 @@ def build_tree(pages):
     return root
 
 
+_SCAFFOLD_DIRS = frozenset(("java", "src", "main", "test", "jsp", "webapp",
+                            "resources", "build", "dist"))
+_PKG_ROOTS = frozenset(("net", "i2p", "org", "com", "eu", "gnu", "freenet"))
+
+
+def page_section(outrel):
+    """Sidebar h3 label for a page under a module group: for apps the module
+    directory (addressbook, i2psnark ...), for java trees the package family
+    under net.i2p (tunnel, transport, peermanager ...) or the vendored root
+    (bouncycastle, google ...); pages directly under the module group get the
+    group name itself."""
+    parts = outrel.split("/")
+    mod, rest = parts[0], parts[1:]
+    if len(rest) == 1:
+        return mod
+    if mod == "apps":
+        return rest[0]
+    while rest and rest[0] in _SCAFFOLD_DIRS:
+        rest = rest[1:]
+    if rest and rest[0] in _PKG_ROOTS:
+        rest = rest[1:]
+        if rest and rest[0] == "i2p":
+            rest = rest[1:]
+    if not rest or rest[0].endswith(".html"):
+        return mod
+    if rest[0] == "router" and len(rest) > 1 and not rest[1].endswith(".html"):
+        return rest[1]
+    return rest[0]
+
+
 def render_tree(tree, current, up=""):
-    """Sidebar: one collapsible group per top-level directory, holding plain
-    links to every page under it (no collapsible nesting deeper down). The
-    group containing the current page is open, as is everything on the index.
-    All links are relative to the page directory via the UP prefix."""
+    """Sidebar: one collapsible group per top-level directory, holding a
+    hierarchy of h3 headings for the subsystem slide on the pages under a
+    module (see page_section). The group containing the current page is open,
+    as is everything on the index. All links are relative to the page
+    directory via the UP prefix."""
     top = current.split("/")[0] if current else ""
 
     def all_pages(node):
@@ -244,11 +277,18 @@ def render_tree(tree, current, up=""):
 
     out = ['<details open><summary>I2P+</summary><ul>']
     for name, child in tree["children"].items():
-        pages = sorted(all_pages(child), key=lambda x: (x["outrel"], x["title"].lower()))
+        sections = OrderedDict()
+        for p in all_pages(child):
+            sections.setdefault(page_section(p["outrel"]), []).append(p)
+        heads = [name] if name in sections else []
+        heads += sorted(s for s in sections if s != name)
         out.append('<li><details%s><summary>%s</summary><ul>' % (
             " open" if (not current or name == top) else "", htmlmod.escape(name)))
-        for p in pages:
-            out.append(page_link(p))
+        for s in heads:
+            out.append('<li><h3>%s</h3><ul class="sub">' % htmlmod.escape(s))
+            for p in sorted(sections[s], key=lambda x: (x["outrel"], x["title"].lower())):
+                out.append(page_link(p))
+            out.append("</ul></li>")
         out.append("</ul></details></li>")
     for p in sorted(tree["pages"], key=lambda x: x["title"].lower()):
         out.append(page_link(p))
@@ -287,7 +327,10 @@ background:#10151b;color:#fff}
 .sidebar details{margin-left:2px}
 .sidebar summary{cursor:pointer;font-weight:600;padding:2px 0;color:#e6e9ee;user-select:none}
 .sidebar ul{list-style:none;margin:2px 0 4px;padding-left:10px}
-.sidebar li.here a{color:#7cc0ff;font-weight:700}
+.sidebar ul.sub{margin:0 0 6px;padding-left:8px}
+.sidebar h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+color:#7c8ea4;margin:12px 0 2px;padding-left:4px}
+.sidebar li.here > a{color:#7cc0ff;font-weight:700}
 .sidebar li.third a{opacity:.7}
 .sidebar li.collapsed{color:#8892a0;padding:1px 4px;font-size:13px}
 .content{flex:1;margin:0 8%;padding:26px 0 60px;min-width:0}
