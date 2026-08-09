@@ -587,20 +587,21 @@
       windowtitle="I2PTunnel"/>
   </target>
 
-  <target name="compileTest">
+  <target name="compileTest" depends="compile">
     <mkdir dir="${build.dir}"/>
-    <mkdir dir="${build.dir}/obj"/>
+    <mkdir dir="${build.dir}/testobj"/>
     <property name="junit.home" value="${ant.home}/lib/"/>
     <property name="mockito.home" value="${ant.home}/lib/"/>
     <!-- We need the ant runtime, as it includes junit -->
-    <javac srcdir="./src:./test/junit" debug="true" source="${javac.version}"
+    <javac srcdir="./test/junit" debug="true" source="${javac.version}"
       target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="true"
       encoding="UTF-8"
-      deprecation="on" destdir="${build.dir}/obj">
+      deprecation="on" destdir="${build.dir}/testobj">
       <compilerarg line="${javac.compilerargs}"/>
       <classpath>
+        <pathelement location="${build.dir}/obj"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
@@ -629,6 +630,7 @@
       <classpath>
         <pathelement path="${classpath}"/>
         <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${build.dir}/testobj"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>

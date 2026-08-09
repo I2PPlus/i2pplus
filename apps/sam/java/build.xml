@@ -58,14 +58,15 @@
   <target name="compileTest" depends="compile">
     <property name="junit.home" value="../../../tools/test/junit/"/>
     <property name="hamcrest.home" value="../../../tools/test/hamcrest/"/>
+    <mkdir dir="${build.dir}/testobj"/>
     <javac
       srcdir="./test"
       debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="${build.dir}/obj"
-      classpath="${core.java.build.dir}/i2p.jar:${core.java.build.dir}/i2ptest.jar:${ministreaming.java.build.dir}/mstreaming.jar:${streaming.java.build.dir}/streaming.jar:${junit.home}/junit4.jar:${hamcrest.home}/hamcrest-core.jar">
+      destdir="${build.dir}/testobj"
+      classpath="${core.java.build.dir}/i2p.jar:${core.java.build.dir}/i2ptest.jar:${ministreaming.java.build.dir}/mstreaming.jar:${streaming.java.build.dir}/streaming.jar:${junit.home}/junit4.jar:${hamcrest.home}/hamcrest-core.jar:${build.dir}/obj">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -133,7 +134,7 @@
   </target>
 
   <target name="jarTest" depends="jar, compileTest">
-    <jar destfile="${build.dir}/sam.jar" basedir="${build.dir}/obj" includes="**/*Test*.class" update="true"/>
+    <jar destfile="${build.dir}/sam_test.jar" basedir="${build.dir}/testobj"/>
   </target>
   <target name="junit.test" depends="compileTest">
     <property name="junit.reports.dir" value="../../reports"/>
@@ -155,6 +156,7 @@
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
         <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${build.dir}/testobj"/>
       </classpath>
       <batchtest todir="${junit.reports.dir}/sam/junit/">
         <fileset dir="./test">

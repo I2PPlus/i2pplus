@@ -897,16 +897,18 @@
     <property name="junit.home" value="../../../tools/test/junit"/>
     <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
     <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/testobj"/>
     <javac
       srcdir="./test/junit"
       debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="${build.dir}/obj">
+      destdir="${build.dir}/testobj">
       <compilerarg line="${javac.compilerargs}"/>
       <classpath>
         <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${build.dir}/testobj"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${router.java.build.dir}/router.jar"/>
@@ -924,6 +926,7 @@
     <junit fork="yes" maxmemory="384M">
       <classpath>
         <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${build.dir}/testobj"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${router.java.build.dir}/router.jar"/>

@@ -147,12 +147,13 @@
 
   <target name="compileTest" depends="builddeptest, compile">
     <property name="junit.home" value="${ant.home}/lib/"/>
+    <mkdir dir="${build}/testobj"/>
     <javac srcdir="./java/test/junit" debug="true" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       debuglevel="lines,vars,source"
       includeAntRuntime="true"
       encoding="UTF-8"
-      destdir="${build}">
+      destdir="${build}/testobj">
       <classpath>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
@@ -186,6 +187,7 @@
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
         <pathelement location="${build}"/>
+        <pathelement location="${build}/testobj"/>
       </classpath>
       <batchtest todir="${junit.reports.dir}/addressbook/junit/">
         <fileset dir="./java/test/junit">

@@ -307,6 +307,7 @@
   <target name="junit.compileTest" depends="builddeptest, compile">
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/obj"/>
+    <mkdir dir="${build.dir}/testobj"/>
     <!-- set hamcrest and junit homes to the old default unless overridden elsewhere -->
     <property name="hamcrest.home" value="${ant.home}/lib/"/>
     <property name="junit.home" value="${ant.home}/lib/"/>
@@ -315,7 +316,7 @@
       debuglevel="lines,vars,source"
       includeAntRuntime="true"
       encoding="UTF-8"
-      destdir="${build.dir}/obj">
+      destdir="${build.dir}/testobj">
       <classpath>
         <pathelement path="${javac.classpath}"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
@@ -371,7 +372,9 @@
     <copy todir="${build.dir}/obj/net/i2p/router/util/resources" failonerror="false">
       <fileset dir="../resources" erroronmissingdir="false"/>
     </copy>
-    <jar destfile="${build.dir}/routertest.jar" basedir="${build.dir}/obj">
+    <jar destfile="${build.dir}/routertest.jar">
+      <fileset dir="${build.dir}/obj"/>
+      <fileset dir="${build.dir}/testobj"/>
       <manifest>
         <attribute name="${manifest.classpath.name}" value="i2ptest.jar"/>
         <attribute name="Specification-Title" value="I2P Router"/>
@@ -481,6 +484,7 @@
         <pathelement location="${mockito.home}/objenesis.jar"/>
         <pathelement location="${build.dir}/obj_cobertura"/>
         <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${build.dir}/testobj"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${apps.i2ptunnel.java.build.dir}/i2ptunnel.jar"/>
         <pathelement location="../../build/jbigi.jar"/>
