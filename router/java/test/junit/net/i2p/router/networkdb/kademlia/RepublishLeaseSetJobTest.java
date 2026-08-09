@@ -151,7 +151,8 @@ public class RepublishLeaseSetJobTest {
         Hash hash = newHash(2);
         when(_cm.shouldPublishLeaseSet(hash)).thenReturn(true);
         when(_cm.isLocal(hash)).thenReturn(true);
-        LeaseSet ls = localLeaseSet(hash);
+        // 7-minute runway keeps this clear of the 5-minute re-mint window
+        LeaseSet ls = localLeaseSet(hash, NOW + 7L * 60 * 1000);
         when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
 
         RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);

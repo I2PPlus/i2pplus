@@ -177,16 +177,19 @@ public class TunnelPool {
 
     /**
      *  A lease is "fresh" enough to re-mint while it has at least this much
-     *  remaining: two minutes less than the tunnel lifetime, so a lease born
-     *  in the current build wave still spans most of a full tunnel life.
-     *  Scales with i2p.tunnel.lifetime so short-lifetime configs aren't
-     *  stuck deferring forever.
+     *  remaining: nine minutes for the default ten-minute lifetime, or the
+     *  lifetime minus a minute for shorter-lived tunnels so short-lifetime
+     *  configs aren't stuck deferring forever.  A fresh LeaseSet therefore
+     *  carries leases covering most of a full tunnel life instead of
+     *  re-signing the stored copy's near-expiry leases.
      *
      *  @param ctx the router context
      *  @return the fresh window in ms
      */
     public static long getFreshLeaseWindow(RouterContext ctx) {
-        return Math.max(2L * 60 * 1000, getTunnelLifetime(ctx) - 2L * 60 * 1000);
+        return Math.max(2L * 60 * 1000,
+                        Math.min(9L * 60 * 1000,
+                                 getTunnelLifetime(ctx) - 60L * 1000));
     }
 
     /**

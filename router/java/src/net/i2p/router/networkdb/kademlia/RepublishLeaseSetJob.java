@@ -49,7 +49,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     /** Maximum backoff delay for publish retries. */
     public static final int RETRY_MAX_DELAY_DEFAULT = (int) (120L * 1000);
     /** Window before lease expiry to trigger a re-mint instead of flooding the dying copy. */
-    private static final long EXPIRY_WINDOW = 3L * 60 * 1000;
+    private static final long EXPIRY_WINDOW = 5L * 60 * 1000;
     /** Minimum reschedule interval — prevents sub-minute flood treadmills. */
     private static final long MIN_RESCHEDULE = 60L * 1000;
     /**
@@ -473,9 +473,12 @@ public class RepublishLeaseSetJob extends JobImpl {
         int target = getTargetLeaseCount();
         boolean requested = false;
 
-        // Gate on all but one fresh lease: a single missing lease shouldn't
-        // defer the re-mint when build success is marginal
-        if (fresh != null && freshTimeUntilExpiry > timeUntilExpiry && freshCount >= Math.max(1, target - 1)) {
+        // Gate on the minimum viable set of fresh leases: two for server
+        // pools with target > 2, one otherwise.  Re-minting with fewer
+        // leases would serve an unnecessarily thin copy — the leases would
+        // expire before the successor propagates.
+        int required = Math.min(2, Math.max(1, target - 1));
+        if (fresh != null && freshTimeUntilExpiry > timeUntilExpiry && freshCount >= required) {
             if (_log.shouldInfo()) {
                 _log.info("Requesting re-mint of LeaseSet for " + name + " [" + shortHash() +
                           "] (extends expiry from " + (timeUntilExpiry / 1000) +
