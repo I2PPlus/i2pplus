@@ -4230,6 +4230,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
             // sort so the initial startup goes in natural order, more or less
             Collections.sort(foundNames, Collator.getInstance());
+            // Randomize the start order of an autostart batch: in multi-dest mode this
+            // keeps one destination's tunnel pool from grabbing all the early torrents,
+            // and everywhere it avoids repeated lockstep trackers announces on restarts
+            if (shouldStart) {
+                Collections.shuffle(foundNames, _context.random());
+            }
         }
 
         Set<String> existingNames = listTorrentFiles();

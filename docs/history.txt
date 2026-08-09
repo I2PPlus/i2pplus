@@ -9,6 +9,9 @@
   * I2PSnark:
     - BEP 47 padding for multi-file torrents (hashes as zeros, never
       stored); re-creates skip existing padding, same metainfo
+    - Auto-started torrents start in randomized order instead of
+      alphabetical, so multi-dest batches spread across destinations
+      and restarts do not re-announce trackers in the same sequence
 
 2026-08-08 dr|z3d
   * I2PSnark:
