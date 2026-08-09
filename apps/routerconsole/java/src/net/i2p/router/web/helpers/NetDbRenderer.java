@@ -872,6 +872,16 @@ class NetDbRenderer {
         Destination dest = ls.getDestination();
         Hash key = ls.getHash();
         int type = ls.getType();
+        long exp;
+        if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
+            exp = ls.getLatestLeaseDate() - now;
+        } else {
+            LeaseSet2 ls2 = (LeaseSet2) ls;
+            long pub = now - ls2.getPublished();
+            exp = ((LeaseSet2)ls).getExpires() - now;
+        }
+        boolean isExpired = exp <= 0;
+        if (isExpired) {return;}
         if (key != null) {
             buf.append("<table class=leaseset id=\"ls_").append(key.toBase32().substring(0,4)).append("\">");
         } else {buf.append("<table class=leaseset>");}
@@ -908,17 +918,9 @@ class NetDbRenderer {
                 buf.append("</th></tr>\n");
             }
         }
-        long exp;
         String bullet = "<span class=bullet>&nbsp; &bullet; &nbsp;</span>";
         buf.append("<tr><td>");
-        if (type == DatabaseEntry.KEY_TYPE_LEASESET) {exp = ls.getLatestLeaseDate() - now;}
-        else {
-            LeaseSet2 ls2 = (LeaseSet2) ls;
-            long pub = now - ls2.getPublished();
-            exp = ((LeaseSet2)ls).getExpires() - now;
-        }
-        boolean isExpired = exp <= 0;
-        buf.append("<span class=\"nowrap expiry").append(isExpired ? " expired" : "").append("\" title=\"")
+        buf.append("<span class=\"expiry nowrap").append(isExpired ? " expired" : "").append("\" title=\"")
            .append(_t("Expiry")).append("\">").append(bullet).append("<b>");
         if (!isExpired) {buf.append(_t("Expires{0}", ":</b> ")).append(DataHelper.formatDuration2(exp).replace(" in", ""));}
         else {buf.append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));}

@@ -19,6 +19,10 @@
     - Auto-started torrents start in randomized order instead of
       alphabetical, so multi-dest batches spread across destinations
       and restarts do not re-announce trackers in the same sequence
+  * Console:
+    - Netdb leaseset rows: built-in expiry kept through auto-refresh
+      (leaseset views refreshed by lsCompact), expired sets skipped,
+      LS type/key stamps aligned right
 
 2026-08-08 dr|z3d
   * I2PSnark:

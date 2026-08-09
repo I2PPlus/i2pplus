@@ -200,7 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    if (window.location.search.includes("l=3")) {
+    if (window.location.search.includes("l=3") || window.location.search.includes("show=ls_local")) {
       const summaryTable = document.getElementById("leasesetsummary");
       const publishedCount = document.querySelectorAll("table.leaseset th:last-child span.lsdest.published").length;
       const unpublishedCount = document.querySelectorAll("table.leaseset th:last-child span.lsdest:not(.published)").length;

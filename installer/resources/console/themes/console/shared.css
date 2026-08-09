@@ -2,6 +2,7 @@
 /* Author: dr|z3d */
 
 :root{--graphbar:#292}
+.leaseset .ekey,.leaseset .stype{margin-left:2px!important;float:right}
 .expanded #ffstatus,#ffconf:hover #ffstatus{opacity:0}
 .hasExpandedElement #floodfillconfig{margin-bottom:-1px;display:table!important}
 .jobsCounter {margin:0 0 0 1px;padding:3px 8px;display:inline-block;vertical-align:baseline;line-height:1;font-weight:700;border-radius:3px;box-shadow:var(--bevel);background:var(--badge)}
