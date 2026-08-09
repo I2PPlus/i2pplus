@@ -655,21 +655,49 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * The tunnel nickname for a torrent's destination, "I2PSnark - &lt;name&gt;" with the name
-     * truncated to {@link #MAX_NAME_LENGTH} characters plus an ellipsis. Local only; not shared
-     * with trackers or the DHT.
+     * Get the tunnel nickname for a torrent's destination, "I2PSnark - &lt;name&gt;" with the
+     * name reduced to just the content title, truncated to {@link #MAX_NAME_LENGTH} characters
+     * plus an ellipsis. Parentheses and brackets with anything inside them (year, resolution,
+     * release group), a metadata tail after the first dash, file extensions and common quality
+     * tokens (resolution, codec, source) are removed, so the nickname is shorter and the title
+     * stands out on the console's tunnels page. Local only; not shared with trackers or the DHT.
      *
      * @since 0.9.71+
      */
     static String getNickname(String name) {
         String nick = name != null ? name : "";
+        // Remove parenthesized and bracketed segments, e.g. "(2026)", "[WEBRip]"
+        nick = nick.replaceAll("\\([^()]*\\)|\\[[^\\[\\]]*\\]", "");
+// Remove common quality tokens (resolution, codec, source) wherever they appear
+        nick = nick.replaceAll("(?i)(?<=[.\\-_ ]|^)(?:1080p|2160p|720p|480p|4k|8k|x264|x265|h264|h265|hevc" +
+                               "|xvid|divx|web-dl|webdl|webrip|hdtv|pdtv|bluray|bdrip|brrip|dvdrip|remux" +
+                               "|proper|repack|internal|10bit|12bit|8bit|aac|ac3|eac3|dts|ddp5\\.1|dd5\\.1|5\\.1" +
+                               "|7\\.1|atmos|hdr10|hdr)(?=[.\\-_ ]|$)", "");
+        // Remove a trailing file extension
+        nick = nick.replaceAll("(?i)\\.(?:mkv|mp4|avi|wmv|flv|webm|m4v|mov|mpg|mpeg|ts|m2ts|mp3|flac|m4a|ogg|opus|wav|wma|aac|ac3|dts|zip|rar|7z|tar|iso|torrent|srt|sub|nfo|txt|jpg|jpeg|png|gif|bmp|webp)$", "");
+        // Cut a release tag after a dash like "-xRip" or "-NeoNoir"; keep all-caps acronyms
+        // like "Pony-FIM" and multi-word tails ("Show - Season 2") that are part of the title
+        int dash = nick.indexOf('-');
+        if (dash > 0) {
+            String tail = nick.substring(dash + 1).trim();
+            boolean releaseTag = !tail.isEmpty() && tail.matches("[A-Za-z0-9]+") && !tail.matches("[A-Z0-9]+");
+            // Cut a release tag like "-xRip" or a long descriptive tail like
+            // "- The Most Influential Images..."; keep short multi-word tails
+            // ("Show - Season 2") and all-caps acronyms ("Pony-FIM")
+            if (tail.length() > 25 || releaseTag) {
+                nick = nick.substring(0, dash);
+            }
+        }
+        nick = nick.replaceAll("\\.{2,}", ".");
+        nick = nick.replaceAll("\\s+", " ").trim();
+        nick = nick.replaceAll("^[.\\-]+|[.\\-]+$", "");
         if (nick.length() > MAX_NAME_LENGTH) {
             nick = nick.substring(0, MAX_NAME_LENGTH) + "...";
         }
         return "I2PSnark - " + nick;
     }
 
-    private static final int MAX_NAME_LENGTH = 32;
+    private static final int MAX_NAME_LENGTH = 64;
 
     /**
      * Get the transient destination for a torrent, creating the destination and session on
