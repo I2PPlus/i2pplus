@@ -873,8 +873,8 @@ class NetDbRenderer {
         Hash key = ls.getHash();
         int type = ls.getType();
         if (key != null) {
-            buf.append("<table class=\"leaseset").append(!debug ? " lazy" : "").append("\" id=\"ls_").append(key.toBase32().substring(0,4)).append("\">");
-        } else {buf.append("<table class=\"leaseset").append(!debug ? " lazy" : "").append("\">");}
+            buf.append("<table class=leaseset id=\"ls_").append(key.toBase32().substring(0,4)).append("\">");
+        } else {buf.append("<table class=leaseset>");}
         buf.append("<tr><th><b class=lskey>");
         if (type == DatabaseEntry.KEY_TYPE_META_LS2) {buf.append(_t("Meta"));}
         String keyB64 = key != null ? key.toBase64() : null;
@@ -1471,7 +1471,7 @@ class NetDbRenderer {
             else if (c == 'R') isReachable = true;
             else if (c == 'U') isUnreachable = true;
         }
-        buf.append("<table class=\"netdbentry lazy\">\n<thead><tr>");
+        buf.append("<table class=netdbentry>\n<thead><tr>");
         if (isLocalRouter) {
             buf.append("<th id=us><b id=our-info>").append(_t("Our info")).append(":</b><th><code>").append(routerHashBase64)
                .append("</code></th><th id=netdb_ourinfo>");
