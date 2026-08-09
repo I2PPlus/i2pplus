@@ -453,10 +453,13 @@ public class RepublishLeaseSetJob extends JobImpl {
      *  pool at its target count with aging leases never rebuilds on its own
      *  (the pool only replaces inside its 3-minute pre-expiry window), so an
      *  ungated re-mint just re-signs the same near-expired leases — the
-     *  "extends expiry from 629s to 630s" no-op.  When the pool falls short,
-     *  request fresh tunnel builds and re-check after a minute; only after
-     *  several consecutive deferred tries does it fall back to re-minting the
-     *  current copy, so a congested network can't leave the LeaseSet empty.
+     *  "extends expiry from 629s to 630s" no-op.  When the pool falls short by
+     *  more than one, request fresh tunnel builds and re-check after a minute;
+     *  only after several consecutive deferred tries does it fall back to
+     *  re-minting the current copy, so a congested network can't leave the
+     *  LeaseSet empty.  The fallback resets the deferral counter so the next
+     *  cycle resumes requesting fresh builds instead of re-minting thin
+     *  copies forever.
      *
      *  @param name the destination name for logging
      *  @param now current time in ms
@@ -470,7 +473,9 @@ public class RepublishLeaseSetJob extends JobImpl {
         int target = getTargetLeaseCount();
         boolean requested = false;
 
-        if (fresh != null && freshTimeUntilExpiry > timeUntilExpiry && freshCount >= target) {
+        // Gate on all but one fresh lease: a single missing lease shouldn't
+        // defer the re-mint when build success is marginal
+        if (fresh != null && freshTimeUntilExpiry > timeUntilExpiry && freshCount >= Math.max(1, target - 1)) {
             if (_log.shouldInfo()) {
                 _log.info("Requesting re-mint of LeaseSet for " + name + " [" + shortHash() +
                           "] (extends expiry from " + (timeUntilExpiry / 1000) +
@@ -489,6 +494,9 @@ public class RepublishLeaseSetJob extends JobImpl {
                               " deferred tries (" + freshCount + "/" + target + " fresh leases)");
                 }
                 getContext().clientManager().requestLeaseSet(_dest, fresh);
+                // Reset so the next cycle requests fresh builds again instead
+                // of re-minting thin copies forever
+                _remintDefers.remove(_dest);
                 requested = true;
             } else {
                 defers.incrementAndGet();

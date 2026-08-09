@@ -202,9 +202,9 @@ public class RepublishLeaseSetJobTest {
     /**
      * An expiring LeaseSet whose pool holds too few fresh tunnels must NOT
      * re-mint — the re-mint gate only fires when the pool can actually extend
-     * the lease past the fresh window.  Below target, the job defers, requests
-     * fresh tunnel builds, and reschedules; it never floods the dying copy and
-     * never re-signs the same near-expired leases.
+     * the lease past the fresh window.  Below target minus one, the job
+     * defers, requests fresh tunnel builds, and reschedules; it never floods
+     * the dying copy and never re-signs the same near-expired leases.
      */
     @Test
     public void testExpiringBelowTargetDefersAndRequestsBuilds() {
@@ -212,19 +212,19 @@ public class RepublishLeaseSetJobTest {
         when(_cm.shouldPublishLeaseSet(hash)).thenReturn(true);
         when(_cm.isLocal(hash)).thenReturn(true);
 
-        // stored LS expiring soon with only 1 lease against a target of 2
+        // stored LS expiring soon with only 1 lease against a target of 3
         LeaseSet ls = localLeaseSet(hash, NOW + 60L * 1000);
         when(ls.getLeaseCount()).thenReturn(1);
         when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
 
         // pool's current LeaseSet extends beyond the stored copy but has only
-        // 1 fresh lease — below the target of 2, so the gate holds
+        // 1 fresh lease — below the target of 3, so the gate holds
         LeaseSet freshPoolLs = freshPoolLeaseSet(NOW + 5L * 60 * 1000, 1);
         TunnelPool pool = mock(TunnelPool.class);
         when(pool.getInboundTunnelsAsLeaseSet()).thenReturn(freshPoolLs);
         TunnelManagerFacade tm = mock(TunnelManagerFacade.class);
         when(tm.getInboundPool(hash)).thenReturn(pool);
-        TunnelPoolSettings targetSettings = settings(2);
+        TunnelPoolSettings targetSettings = settings(3);
         when(tm.getInboundSettings(any(Hash.class))).thenReturn(targetSettings);
         when(_ctx.tunnelManager()).thenReturn(tm);
 
