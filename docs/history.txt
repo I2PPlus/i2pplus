@@ -6,9 +6,13 @@
       failures), extras kept as reserve; struggling pools add to it
     - Near-expiry/slow non-published tunnels pruned after publication,
       so replacements build before a pool thins
-    - Re-mint before leases expire: LeaseSets re-signed from fresh tunnels
-      (9-min window at default lifetime), flood of near-expiry copy
-      replaced by re-mint once 2 fresh leases exist (1 for 1-tunnel pools)
+    - Re-mint before leases expire: LeaseSets re-signed from the pool's
+      current tunnels when enough viable leases remain (3-min window),
+      never from the stored near-expiry copy; if builds stall below
+      capacity, falls back to a thin re-mint after 3 deferred tries so
+      a congested network can't lose the LeaseSet
+    - Tunnel lifetime 11 min (was 10), lease cap extended to match, so
+      re-minted copies carry ~11-min leases instead of near-dead ones
   * I2PSnark:
     - BEP 47 padding for multi-file torrents (hashes as zeros, never
       stored); re-creates skip existing padding, same metainfo

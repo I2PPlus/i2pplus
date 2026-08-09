@@ -39,8 +39,10 @@ class RequestLeaseSetJob extends JobImpl {
     private static final long DEFAULT_MAX_FUDGE = 5L*1000;
     private static final String PROP_MAX_FUDGE = "router.requestLeaseSetMaxFudge";
     private static final long TEN_MINUTES_MS = 10L * 60 * 1000;
-    // Maximum future time for lease expiration (must match KademliaNetworkDatabaseFacade.MAX_LEASE_FUDGE)
-    private static final long MAX_LEASE_FUTURE = 10L * 60 * 1000;
+    // Maximum future time for lease expiration: one minute past the default
+    // 11-minute tunnel lifetime, keeping requested leases inside the
+    // KademliaNetworkDatabaseFacade.MAX_LEASE_FUTURE (15 min) netdb cap
+    private static final long MAX_LEASE_FUTURE = 12L * 60 * 1000;
     private static final long CLOCK_FUDGE_FACTOR = 30L * 1000;
     public RequestLeaseSetJob(RouterContext ctx, ClientConnectionRunner runner, LeaseRequestState state) {
         super(ctx);
@@ -111,7 +113,7 @@ class RequestLeaseSetJob extends JobImpl {
         long maxAllowedTime = now + MAX_LEASE_FUTURE + CLOCK_FUDGE_FACTOR;
         if (endTime > maxAllowedTime) {
             if (_log.shouldInfo()) {
-                _log.info("LeaseSet expiration would exceed limit -> Capping to ~10 minutes...");
+                _log.info("LeaseSet expiration would exceed limit -> Capping to ~12 minutes...");
             }
             endTime = maxAllowedTime;
         }

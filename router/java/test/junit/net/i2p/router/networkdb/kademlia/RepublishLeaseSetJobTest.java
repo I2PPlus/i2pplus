@@ -242,6 +242,58 @@ public class RepublishLeaseSetJobTest {
     }
 
     /**
+     * A pool stuck below target must not defer forever: after
+     * MAX_REMINT_DEFERS consecutive deferred cycles it falls back to a thin
+     * re-mint that still extends the stored copy's expiry, then resets the
+     * deferral counter so the next cycle requests fresh builds again instead
+     * of re-minting thin copies indefinitely.
+     */
+    @Test
+    public void testPersistentDeficitFallsBackAfterMaxDefers() {
+        Hash hash = newHash(8);
+        when(_cm.shouldPublishLeaseSet(hash)).thenReturn(true);
+        when(_cm.isLocal(hash)).thenReturn(true);
+
+        // stored LS expiring soon with only 1 lease against a target of 3
+        LeaseSet ls = localLeaseSet(hash, NOW + 60L * 1000);
+        when(ls.getLeaseCount()).thenReturn(1);
+        when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
+
+        // pool extends expiry but stays at 1 fresh lease — below the gate
+        LeaseSet freshPoolLs = freshPoolLeaseSet(NOW + 5L * 60 * 1000, 1);
+        TunnelPool pool = mock(TunnelPool.class);
+        when(pool.getInboundTunnelsAsLeaseSet()).thenReturn(freshPoolLs);
+        TunnelManagerFacade tm = mock(TunnelManagerFacade.class);
+        when(tm.getInboundPool(hash)).thenReturn(pool);
+        TunnelPoolSettings targetSettings = settings(3);
+        when(tm.getInboundSettings(any(Hash.class))).thenReturn(targetSettings);
+        when(_ctx.tunnelManager()).thenReturn(tm);
+
+        // three deferred cycles request fresh builds but never re-mint
+        for (int i = 0; i < 3; i++) {
+            RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);
+            assertTrue(job.registerSelf());
+            job.runJob();
+        }
+        verify(pool, times(3)).requestFreshTunnelBuild();
+        verify(_cm, never()).requestLeaseSet(eq(hash), any());
+
+        // the fourth falls back to a thin re-mint that still extends expiry
+        RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);
+        assertTrue(job.registerSelf());
+        job.runJob();
+        verify(_cm).requestLeaseSet(eq(hash), eq(freshPoolLs));
+
+        // counter reset after the fallback: the next cycle defers again
+        RepublishLeaseSetJob job5 = new RepublishLeaseSetJob(_ctx, _facade, hash);
+        assertTrue(job5.registerSelf());
+        job5.runJob();
+        verify(pool, times(4)).requestFreshTunnelBuild();
+        verify(_cm, times(1)).requestLeaseSet(eq(hash), any());
+        verify(_jobQueue, times(5)).addJob(any(Job.class));
+    }
+
+    /**
      * A publishing client whose stored LeaseSet is expiring but whose pool has
      * no usable LeaseSet right now must NOT flood the dying copy either —
      * it requests the client to build fresh tunnels and reschedules.

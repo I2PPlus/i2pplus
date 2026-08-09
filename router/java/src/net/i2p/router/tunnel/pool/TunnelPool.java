@@ -154,6 +154,10 @@ public class TunnelPool {
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 12;
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_CLIENT_1 = 4;
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_CLIENT_2 = 5;
+    /** Lease end is set this long before the tunnel expires, so peers re-fetch
+      * the new LeaseSet while the gateway still routes instead of racing
+      * tunnel death. */
+    private static final long LEASE_SAFETY_MARGIN = 60L * 1000;
 
     /**
      * Early expiry time for pruned tunnels.
@@ -165,31 +169,35 @@ public class TunnelPool {
     }
 
     /**
-     *  Tunnel lifetime from config or default (10 minutes).
-     *  Tunable via i2p.tunnel.lifetime (default: 600000).
+     *  Tunnel lifetime from config or default (11 minutes).
+     *  Longer than stock so a pool holds overlapping tunnel generations,
+     *  giving the LeaseSet re-mint more leases to choose from at any moment.
+     *  Tunable via i2p.tunnel.lifetime (default: 660000).
      *
      *  @param ctx the router context
      *  @return the tunnel lifetime in milliseconds
      */
     public static int getTunnelLifetime(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.lifetime", 10 * 60 * 1000);
+        return ctx.getProperty("i2p.tunnel.lifetime", 11 * 60 * 1000);
     }
 
     /**
-     *  A lease is "fresh" enough to re-mint while it has at least this much
-     *  remaining: nine minutes for the default ten-minute lifetime, or the
-     *  lifetime minus a minute for shorter-lived tunnels so short-lifetime
-     *  configs aren't stuck deferring forever.  A fresh LeaseSet therefore
-     *  carries leases covering most of a full tunnel life instead of
-     *  re-signing the stored copy's near-expiry leases.
+     *  A lease counts toward a re-mint while it has at least this much
+     *  remaining: three minutes covers the re-sign request, floodfill
+     *  propagation, and initial connection establishment, and a tunnel closer
+     *  to expiry than this is already inside the pool's proactive replacement
+     *  window (BuildExecutor starts replacing GOOD tunnels 330s out), so
+     *  counting it would overstate the pool's health.  Shrinks toward two
+     *  minutes for very short lifetimes so short-lifetime configs aren't
+     *  stuck deferring forever.
      *
      *  @param ctx the router context
-     *  @return the fresh window in ms
+     *  @return the lease viability window in ms
      */
-    public static long getFreshLeaseWindow(RouterContext ctx) {
+    public static long getLeaseViabilityWindow(RouterContext ctx) {
         return Math.max(2L * 60 * 1000,
-                        Math.min(9L * 60 * 1000,
-                                 getTunnelLifetime(ctx) - 60L * 1000));
+                        Math.min(3L * 60 * 1000,
+                                 getTunnelLifetime(ctx) - 2L * 60 * 1000));
     }
 
     /**
@@ -261,7 +269,7 @@ public class TunnelPool {
      * tunnel lifetime. The tunnel itself continues to process messages; only the
      * cached LeaseSet on the requesting side expires earlier, triggering a re-fetch.
      *
-     * The default is the full tunnel lifetime (10 minutes) plus CLOCK_FUDGE_FACTOR,
+     * The default is the full tunnel lifetime (11 minutes) plus CLOCK_FUDGE_FACTOR,
      * matching the stock lease expiry — peers hold a valid LeaseSet for the whole
      * tunnel life, and the republish cycle (default 5 min) re-floods well before
      * the lease dies.  Set &quot;i2p.tunnel.leaseMaxDuration&quot; explicitly to override.
@@ -270,7 +278,7 @@ public class TunnelPool {
      * @return the maximum lease duration in milliseconds
      */
     static long getLeaseMaxDuration(RouterContext ctx) {
-        long autoDefault = TunnelPoolSettings.DEFAULT_DURATION + Router.CLOCK_FUDGE_FACTOR;
+        long autoDefault = getTunnelLifetime(ctx) + Router.CLOCK_FUDGE_FACTOR;
         return ctx.getProperty("i2p.tunnel.leaseMaxDuration", autoDefault);
     }
 
@@ -2763,7 +2771,8 @@ public class TunnelPool {
     /**
      * Build a Lease from a single tunnel's gateway, using the HopConfig
      * expiration (original full lifetime) rather than the possibly-shortened
-     * failure expiration.
+     * failure expiration.  The lease ends {@link #LEASE_SAFETY_MARGIN} before
+     * the tunnel expires so peers re-fetch while the gateway still routes.
      */
     private Lease buildLeaseFromTunnel(TunnelInfo cfg) {
         TunnelId inId = cfg.getReceiveTunnelId(0);
@@ -2774,6 +2783,9 @@ public class TunnelPool {
         if (cfg instanceof TunnelCreatorConfig) {
             expiration = ((TunnelCreatorConfig) cfg).getConfig(0).getExpiration();
         }
+        // End the lease before the tunnel dies: the gateway keeps routing for
+        // the margin, giving peers time to fetch the successor LeaseSet.
+        expiration -= LEASE_SAFETY_MARGIN;
         // Cap lease end so peers re-fetch sooner than the full tunnel lifetime.
         // The gateway still processes messages for the full lifetime; only the
         // cached LeaseSet on the requesting side expires earlier.
@@ -3158,11 +3170,13 @@ public class TunnelPool {
 
     /**
      *  Request new inbound tunnels so the pool holds the target count with at
-     *  least {@link #getFreshLeaseWindow(RouterContext)} remaining.  Called by
-     *  the LeaseSet republisher before a re-mint: the normal build logic only
-     *  replaces tunnels inside its 3-minute pre-expiry window or below-target
-     *  count, so a pool at target with aging leases never rebuilds on its own,
-     *  and a re-mint would re-sign the same near-expired leases.
+     *  least {@link #getLeaseViabilityWindow(RouterContext)} remaining.
+     *  Called by
+     *  the LeaseSet republisher before a re-mint: the normal build logic
+     *  replaces tunnels only when below target or inside its proactive
+     *  replacement window (BuildExecutor starts 330s out), so a pool at
+     *  target with aging leases never rebuilds on its own, and a re-mint
+     *  would re-sign the same near-expired leases.
      *  Respects the in-progress cap, the per-period dedup guard and pool
      *  backoff to avoid build storms.
      */
@@ -3183,7 +3197,7 @@ public class TunnelPool {
         try {
             int target = getEffectiveTarget();
             long now = _context.clock().now();
-            long freshUntil = now + getFreshLeaseWindow(_context);
+            long freshUntil = now + getLeaseViabilityWindow(_context);
             _tunnelsLock.lock();
             int fresh = 0;
             try {
@@ -3250,18 +3264,18 @@ public class TunnelPool {
         // Peers for new tunnel, including us, ENDPOINT FIRST
         List<Hash> peers = null;
         long now = _context.clock().now();
-        long expiration = now + TunnelPoolSettings.DEFAULT_DURATION;
-        // Stagger 0-300s (5 min) to prevent all tunnels expiring simultaneously.
-        // With a 10-min lifetime, 120s stagger only spread expirations over a
-        // 2-minute window.  When 11+ pools all build at boot, their IB tunnels
-        // all expire at ~10 min, causing ExpireJob.phase1 to remove them all in
+        long expiration = now + getTunnelLifetime(_context);
+        // Stagger 0-240s (4 min) to prevent all tunnels expiring simultaneously.
+        // With an 11-min lifetime, 240s stagger spreads expirations over a
+        // 4-minute window.  When 11+ pools all build at boot, their IB tunnels
+        // all expire at ~11 min, causing ExpireJob.phase1 to remove them all in
         // one batch → mass EMERGENCY triggers → build storm → death spiral.
-        // 300s stagger spreads expirations over 5 minutes, giving builds time to
+        // 240s stagger spreads expirations over 4 minutes, giving builds time to
         // complete before the next pool's tunnels expire.
-        // NOTE: Capped at 300s because NetDb rejects LeaseSets expiring >15 min
-        // in the future (MAX_LEASE_FUTURE).  With DEFAULT_DURATION=10 min,
-        // stagger must stay under 5 min to avoid "Future LeaseSet" errors.
-        int stagger = _context.random().nextInt(300001);
+        // NOTE: Capped at 240s because NetDb rejects LeaseSets expiring >15 min
+        // in the future (MAX_LEASE_FUTURE).  With an 11-min lifetime, stagger
+        // must stay under 4 min to avoid "Future LeaseSet" errors.
+        int stagger = _context.random().nextInt(240001);
         expiration += stagger;
 
         if (!forceZeroHop) {
