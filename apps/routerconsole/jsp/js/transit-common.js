@@ -15,7 +15,6 @@ import {refreshElements} from "/js/refreshElements.js";
  * @param {string} config.fetchUrl - URL to fetch updates from
  * @param {number} [config.refreshInterval=10000] - Refresh interval in ms
  * @param {number} [config.retryDelay=3000] - Retry delay when no DOM found
- * @param {boolean} [config.usePeerRowTracking=false] - Optimize refresh by peer row count
  * @returns {void}
  */
 export function initTransit(config) {
@@ -27,7 +26,6 @@ export function initTransit(config) {
   let sorter = null;
   let isSetup = false;
   let isRefreshing = false;
-  let lastPeerRowCount = -1;
   let stopRefresh = null;
 
   /** Caches DOM element references. */
@@ -39,14 +37,33 @@ export function initTransit(config) {
     refreshBtn = document.getElementById("refreshPage");
   }
 
+  /** Binds the refresh link to trigger an immediate refresh. */
+  function bindRefreshBtn() {
+    if (!refreshBtn || refreshBtn.dataset.bound === "1") { return; }
+    refreshBtn.dataset.bound = "1";
+    refreshBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      refreshData(true);
+    });
+  }
+
   /** Initializes Tablesort on the transit table. */
   function setupTablesort() {
     if (isSetup || !tunnels) return;
     sorter = sorter || new Tablesort(tunnels, {descending: true});
     tunnels.addEventListener("beforeSort", () => progressx?.show?.(theme));
     tunnels.addEventListener("afterSort", () => progressx?.hide?.());
-    if (refreshBtn) refreshBtn.removeAttribute("href");
     isSetup = true;
+  }
+
+  /** Re-caches DOM refs and Tablesort after a whole-div refresh replaced the table. */
+  function revalidate() {
+    sorter = null;
+    isSetup = false;
+    main = peers = tunnels = refreshBtn = null;
+    getDOM();
+    bindRefreshBtn();
+    setupTablesort();
   }
 
   /** Shows the progress bar. */
@@ -68,50 +85,49 @@ export function initTransit(config) {
     getDOM();
     if (stopRefresh) { stopRefresh(); stopRefresh = null; }
     let stop = null;
-    if (tunnels) {
-      setupTablesort();
-      if (peers) {
-        if (config.usePeerRowTracking) {
-          const currentRows = peers.querySelectorAll("tr").length;
-          if (currentRows === lastPeerRowCount && currentRows > 0) {
-            stop = refreshElements("#transitPeers td>*, #statusnotes td", FETCH_URL, REFRESH_INTERVAL, immediate);
-          } else if (currentRows !== lastPeerRowCount) {
-            stop = refreshElements("#transitPeers, #statusnotes td", FETCH_URL, REFRESH_INTERVAL, immediate);
-            lastPeerRowCount = currentRows;
-          } else {
-            stop = refreshElements("#tunnels", FETCH_URL, RETRY_DELAY, immediate);
-          }
-        } else {
-          stop = refreshElements("#statusnotes td, #transitPeers", FETCH_URL, REFRESH_INTERVAL, immediate);
-        }
-      } else if (main) {
-        stop = refreshElements("#tunnels", FETCH_URL, RETRY_DELAY, immediate);
-      }
+    if (peers) {
+      stop = refreshElements("#transitPeers, #statusnotes", FETCH_URL, REFRESH_INTERVAL, immediate);
+    } else if (main) {
+      // No tunnels yet: poll the whole div until the table appears
+      stop = refreshElements("#tunnels", FETCH_URL, RETRY_DELAY, immediate);
     }
+    setupTablesort();
     stopRefresh = stop;
     endRefresh();
   }
 
-  /**
-   * Retries DOM lookup until the refresh button is found, then starts the
-   * refresh cycle.
-   * @param {number} [retryCount=0] - Current retry attempt
-   */
-  function init(retryCount = 0) {
+  /** Starts the refresh cycle. */
+  function init() {
     getDOM();
-    if (!refreshBtn) {
-      if (retryCount < 30) { setTimeout(() => init(retryCount + 1), RETRY_DELAY); }
-      return;
-    }
-    refreshBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      refreshData(true);
-    });
+    bindRefreshBtn();
     refreshData();
   }
 
   document.addEventListener("refreshComplete", () => {
     if (sorter) sorter.refresh();
+  });
+
+  // A whole-div refresh replaces the table, invalidating cached refs and the
+  // Tablesort instance; re-cache and switch back to the tbody loop once present
+  document.addEventListener("elementsRefreshed", (e) => {
+    const selectors = e.detail?.selectors || [];
+    if (!selectors.includes("#tunnels")) { return; }
+    revalidate();
+    if (peers && stopRefresh) {
+      stopRefresh();
+      stopRefresh = null;
+      refreshData();
+    }
+  });
+
+  // The server stopped rendering the table; drop the stale tbody ref and fall
+  // back to the whole-div loop until tunnels are available again
+  document.addEventListener("elementsMissing", (e) => {
+    const selectors = e.detail?.selectors || [];
+    if (!selectors.includes("#transitPeers")) { return; }
+    if (stopRefresh) { stopRefresh(); stopRefresh = null; }
+    peers = null;
+    refreshData();
   });
 
   if (document.readyState === "loading") {

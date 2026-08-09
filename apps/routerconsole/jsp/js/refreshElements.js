@@ -290,6 +290,8 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
    * Patch the document from a fetched response with morphdom (no row diff).
    * The response arrived as VDOM from the diff worker; the fragment roots are
    * realized into a detached container before the selectors are matched.
+   * Selectors that match the DOM but not the response are reported via an
+   * elementsMissing event so the page can fall back to a container refresh.
    * @function patchResponse
    * @param {Object} vdom - The parsed fragment VDOM (nodeName "#document")
    * @returns {void}
@@ -302,9 +304,16 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
       const el = realizeVdom(kids[i]);
       if (el) { container.appendChild(el); }
     }
+    const missing = [];
     selectors.forEach(selector => {
       const targetElements = document.querySelectorAll(selector);
       const targetElementsResponse = container.querySelectorAll(selector);
+      if (targetElements.length > 0 && targetElementsResponse.length === 0) {
+        // The element vanished from the server-rendered page; keep the stale
+        // node in place and report it so the page can fall back to a container
+        missing.push(selector);
+        return;
+      }
       targetElements.forEach((targetElement, index) => {
         const targetElementResponse = targetElementsResponse[index];
         if (targetElement && targetElementResponse) {
@@ -320,6 +329,9 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
         }
       });
     });
+    if (missing.length > 0) {
+      document.dispatchEvent(new CustomEvent("elementsMissing", { detail: { selectors: missing } }));
+    }
     if (lazyAdded) { document.dispatchEvent(new Event("elementsPatched")); }
     dispatchDone();
   }

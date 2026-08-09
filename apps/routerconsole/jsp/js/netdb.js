@@ -31,15 +31,14 @@ import { refreshElements } from "/js/refreshElements.js";
 
     /**
      * Initializes auto-refresh based on the current view type (countries, RI,
-     * or LS). The leaseset views refresh the lease tables and their expiry
-     * spans with a full-page fetch, patching only the matched elements.
+     * or LS). Both detail views patch only the entry tables and expiry spans,
+     * leaving the search form and the delay-load wrapper untouched.
      * @function initRefresh
      * @returns {void}
      */
     const initRefresh = () => {
       if (countries) { refreshElements("#netdboverview table tbody", url, REFRESH_INTERVAL_SHORT); }
-      else if (hasRI) { refreshElements(".netdbentry", url, REFRESH_INTERVAL); }
-      else if (hasLS) { refreshElements([".leaseset", ".expiry"], url, REFRESH_INTERVAL); }
+      else if (hasRI || hasLS) { refreshElements([".netdbentry", ".leaseset", ".expiry"], url, REFRESH_INTERVAL); }
     };
 
     document.addEventListener("refreshComplete", () => ccsorter?.refresh());
