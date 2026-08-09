@@ -419,13 +419,20 @@ function Parser() {
                     stack.push(implied);
                     parent = implied;
                 } else if ((tagNameLower === "td" || tagNameLower === "th") && parent.tagName !== "tr") {
-                    // a new cell implicitly closes any open cell (clear back to the row)
-                    while (stack.length > 1 && stack[stack.length - 1].tagName !== "tr") stack.pop();
+                    // A new cell closes an open cell, but never crosses a table
+                    // section or row boundary into an enclosing table.
+                    const top = stack[stack.length - 1];
+                    if (top.tagName === "td" || top.tagName === "th") { stack.pop(); }
                     parent = stack[stack.length - 1];
                 }
                 parent.children.push(node);
                 !isSelfClosing && stack.push(node);
-            } else if (!isSelfClosing && stack.length > 1) stack.pop();
+            } else if (!isSelfClosing) {
+                // Pop to the matching open tag; implied TBODY and similar
+                // context elements break the strict one-close-per-open count.
+                while (stack.length > 1 && stack[stack.length - 1].tagName !== tagName) stack.pop();
+                if (stack.length > 1) { stack.pop(); }
+            }
         }
         return {
             root,
