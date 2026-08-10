@@ -2499,8 +2499,10 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                     try {Thread.sleep(20);}
                     catch (InterruptedException ie) { /* ignored */ }
                     if (t.isAlive()) {
-                        if (_log.shouldWarn()) {_log.warn("Killing TG thread " + t);}
-                        try {t.stop();}
+                        if (_log.shouldWarn()) {_log.warn("Interrupting TG thread " + t + " again");}
+                        // Thread.stop() was removed in JDK 20; reassert the interrupt
+                        // instead. The TestWorker exits cooperatively via wantToStop().
+                        try {t.interrupt();}
                         catch (RuntimeException re) {_log.debug("TG", re);}
                     }
                 }
