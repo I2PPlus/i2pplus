@@ -308,60 +308,54 @@ def related_html(p, pages, up=""):
 
 
 CSS = """<style>
-:root{--bg:#1f2630;--fg:#d5dbe4;--navbg:#171c24;--navfg:#c8cfd9;--link:#6cb4e8;
---hl:#343d4a;--code:#262f3b;--third:#e0b341}
+:root{--bg:#1f2630;--fg:#d5dbe4;--navbg:#171c24;--navfg:#c8cfd9;--link:#6cb4e8;--hl:#343d4a;--code:#262f3b;--third:#e0b341}
 *{box-sizing:border-box}
-body{margin:0;font:15px/1.6 -apple-system,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
-color:var(--fg);background:var(--bg)}
 a{color:var(--link);text-decoration:none}
 a:hover{text-decoration:underline}
-.wrap{display:flex;min-height:100vh}
-.sidebar{width:320px;min-width:320px;background:var(--navbg);color:var(--navfg);
-padding:14px 10px;overflow-y:auto;max-height:100vh;position:sticky;top:0;font-size:14px}
-.sidebar a{color:var(--navfg);display:block;line-height:1.35;margin:1px 0}
-.sidebar .brand{color:#fff;font-weight:700;font-size:16px;padding:0 6px 10px;display:block}
-.sidebar .brand:hover{color:#7cc0ff;text-decoration:none}
-.sidebar form{padding:0 0 8px}
-.sidebar input{width:100%;padding:6px 8px;border:1px solid #3a4452;border-radius:4px;
-background:#10151b;color:#fff}
-.sidebar details{margin-left:2px}
-.sidebar summary{cursor:pointer;font-weight:600;padding:2px 0;color:#e6e9ee;user-select:none}
-.sidebar ul{list-style:none;margin:2px 0 4px;padding-left:10px}
-.sidebar ul.sub{margin:0 0 6px;padding-left:8px}
-.sidebar h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
-color:#7c8ea4;margin:12px 0 2px;padding-left:4px}
-.sidebar li.here > a{color:#7cc0ff;font-weight:700}
-.sidebar li.third a{opacity:.7}
-.sidebar li.collapsed{color:#8892a0;padding:1px 4px;font-size:13px}
-.content{flex:1;margin:0 8%;padding:26px 0 60px;min-width:0}
-.crumbs{font-size:13px;color:#9aa4b0;margin-bottom:16px}
+blockquote{border-left:4px solid var(--hl);margin:8px 0;padding:2px 14px;color:#aab4c0}
+body{margin:0;font:15px/1.6 Open Sans,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
+code{background:var(--code);border:1px solid #343d4a;border-radius:3px;padding:1px 4px;font-size:13px}
+color:var(--fg);background:var(--bg)}
+footer{margin-top:18px;font-size:12px;color:#7a8490}
 h1{font-size:26px;margin:0 0 12px}
 h2,.section{border-bottom:1px solid var(--hl);padding-bottom:4px;margin-top:1.6em}
-code{background:var(--code);border:1px solid #343d4a;border-radius:3px;padding:1px 4px;font-size:13px}
-pre{background:var(--code);border:1px solid var(--hl);border-radius:6px;padding:10px 12px;
-overflow-x:auto;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+img{max-width:100%}
+mark{background:#e4c981;color:#161b22;border-radius:2px;padding:0 2px}
 pre code{background:none;border:none;padding:0}
+pre{background:var(--code);border:1px solid var(--hl);border-radius:6px;padding:10px 12px;overflow-x:auto;font-family:Fira Sans,ui-monospace,Menlo,Consolas,monospace;font-size:13px}
 table{border-collapse:collapse;margin:12px 0;width:100%}
 th,td{border:1px solid var(--hl);padding:6px 10px;text-align:left}
 th{background:#2a3340}
-blockquote{border-left:4px solid var(--hl);margin:8px 0;padding:2px 14px;color:#aab4c0}
-img{max-width:100%}
-.badge{display:inline-block;background:#3d3314;color:#e4c981;border:1px solid #8a6d3b;
-border-radius:9px;font-size:11px;padding:1px 8px;vertical-align:middle}
-.related{background:#232c38;border:1px solid var(--hl);border-radius:6px;padding:10px 16px;
-margin-top:24px;font-size:14px}
+.badge{display:inline-block;background:#3d3314;color:#e4c981;border:1px solid #8a6d3b;border-radius:9px;font-size:11px;padding:1px 8px;vertical-align:middle}
+.content{flex:1;margin:0 8%;padding:26px 0 60px;min-width:0}
+.crumbs{font-size:13px;color:#9aa4b0;margin-bottom:16px}
+.hide{display:none}
+.mod a{margin:0 2px;padding:1px 6px;white-space:nowrap;background:#55f1;border-radius:4px;font-size:90%;font-weight:600}
 .related h3{margin:0 0 6px;font-size:14px}
 .related ul{margin:0;padding-left:18px}
-footer{margin-top:18px;font-size:12px;color:#7a8490}
-#q{width:100%;max-width:420px;padding:8px 12px;border:1px solid var(--hl);border-radius:5px;
-font-size:15px;background:#171c24;color:var(--fg)}
-#list,#list-tp{list-style:none;padding:0}
-#list li,#list-tp li{padding:2px 0}
+.related{background:#232c38;border:1px solid var(--hl);border-radius:6px;padding:10px 16px;margin-top:24px;font-size:14px}
+.sidebar .brand:hover{color:#7cc0ff;text-decoration:none}
+.sidebar .brand{color:#fff;font-weight:700;font-size:16px;padding:0 6px 10px;display:block}
+.sidebar a{color:var(--navfg);display:block;line-height:1.35;margin:1px 0}
+.sidebar details{margin-left:2px}
+.sidebar form{padding:0 0 8px}
+.sidebar h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#7c8ea4;margin:12px 0 2px;padding-left:4px}
+.sidebar input{width:100%;padding:6px 8px;border:1px solid #3a4452;border-radius:4px;background:#10151b;color:#fff}
+.sidebar li.collapsed{color:#8892a0;padding:1px 4px;font-size:13px}
+.sidebar li.here > a{color:#7cc0ff;font-weight:700}
+.sidebar li.third a{opacity:.7}
+.sidebar summary{cursor:pointer;font-weight:600;padding:2px 0;color:#e6e9ee;user-select:none}
+.sidebar ul.sub{margin:0 0 6px;padding-left:8px}
+.sidebar ul{list-style:none;margin:2px 0 4px;padding-left:10px}
+.sidebar ul a{font-size:90%}
+.sidebar{width:320px;min-width:320px;background:var(--navbg);color:var(--navfg);padding:14px 10px;overflow-y:auto;max-height:100vh;position:sticky;top:0;font-size:14px}
+.wrap{display:flex;min-height:100vh}
 #list .pth,#list-tp .pth{color:#7a8490;font-size:12px}
-.hide{display:none}
-mark{background:#e4c981;color:#161b22;border-radius:2px;padding:0 2px}
-#nores{margin:18px 0 0;color:#c8cfd9;background:#232c38;border:1px solid var(--hl);border-radius:6px;padding:10px 14px}
+#list li,#list-tp li{padding:2px 0}
+#list,#list-tp{list-style:none;padding:0}
 #nores b{color:#e4c981}
+#nores{margin:18px 0 0;color:#c8cfd9;background:#232c38;border:1px solid var(--hl);border-radius:6px;padding:10px 14px}
+#q{width:100%;max-width:420px;padding:8px 12px;border:1px solid var(--hl);border-radius:5px;font-size:15px;background:#171c24;color:var(--fg)}
 </style>"""
 
 
@@ -425,7 +419,7 @@ def write_index(out_dir, pages, tree, favicon):
         "<title>I2P+ Developer Documentation</title>\n", favicon, "\n", CSS,
         "<style>.mods{display:flex;flex-wrap:wrap;gap:12px}\n",
         ".mod{border:1px solid var(--hl);border-radius:6px;padding:10px 14px;",
-        "background:var(--code);flex:1 1 260px}\n",
+        "background:var(--code);flex:1 1 300px}\n",
         ".mod p{margin:6px 0 0;line-height:1.9}</style>\n</head>\n",
         "<body><div class=\"wrap\">\n<aside class=\"sidebar\">\n",
         "<div class=\"brand\">I2P+ Docs</div>\n",
