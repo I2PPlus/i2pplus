@@ -4,6 +4,25 @@
       instead of a hardcoded > 4 threshold, so a tunnel that failed
       completely (counter set to exactly MAX+1 = 4) is removed even when
       it is the pool's last one instead of being kept as a dead zombie
+  * NetDB:
+    - Missing local LeaseSet: rebuild request dropped from every 5s to
+      every 30s, downgraded from WARN to throttled INFO, and skipped
+      entirely while the pool is already building or testing tunnels
+      (the pool requests a re-sign itself on every completed build), so
+      a store race can't feed a request loop back into tunnel builds
+    - Revert the 10-minute re-mint floor: it made every pool-backed
+      copy take the re-mint path, starving the direct floodfill (no
+      LeaseSet store reached the network), so locally hosted services
+      became unreachable shortly after restart; floodfilling resumes
+      for copies older than the 4-minute expiry window
+    - Expiry window narrowed to 4 minutes so the 10-minute lease cap
+      still lets the 5-minute republish cycle present fresh copies
+      above the window and flood them directly instead of re-minting
+      at the boundary forever
+    - LeaseSet lease cap now 10 minutes (was 11m30s), configurable via
+      i2p.tunnel.leaseMaxDuration; the 5-minute republish cycle re-checks
+      inside the expiry window, so the stored copy is always refreshed
+      (re-minted or re-flooded) before any lease dies
   * I2PSnark:
     - DHT: main instance in multi-dest mode serves no tracker queries
       (routing-table-only), per-torrent instances serve only their own

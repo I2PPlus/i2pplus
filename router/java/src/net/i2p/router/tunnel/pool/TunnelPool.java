@@ -24,7 +24,6 @@ import net.i2p.stat.RateConstants;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.TunnelId;
 import net.i2p.router.CommSystemFacade;
-import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.Tuner;
@@ -263,23 +262,22 @@ public class TunnelPool {
     }
 
     /**
-     * Maximum lease set lease duration from config or auto-computed default.
+     * Maximum lease set lease duration from config or default (10 minutes).
      * Lease end dates in published LeaseSets are capped to this value from now,
-     * so peers re-fetch our LeaseSet sooner when this is set shorter than the
-     * tunnel lifetime. The tunnel itself continues to process messages; only the
-     * cached LeaseSet on the requesting side expires earlier, triggering a re-fetch.
+     * so peers re-fetch our LeaseSet sooner than the 11-minute tunnel lifetime.
+     * The tunnel itself continues to process messages; only the cached
+     * LeaseSet on the requesting side expires earlier, triggering a re-fetch.
      *
-     * The default is the full tunnel lifetime (11 minutes) plus CLOCK_FUDGE_FACTOR,
-     * matching the stock lease expiry — peers hold a valid LeaseSet for the whole
-     * tunnel life, and the republish cycle (default 5 min) re-floods well before
-     * the lease dies.  Set &quot;i2p.tunnel.leaseMaxDuration&quot; explicitly to override.
+     * The 5-minute republish cycle re-floods (or re-mints) well before a lease
+     * dies: the re-mint floor re-signs any stored copy under 10 minutes, and
+     * the reschedule anchors each check inside the 5-minute expiry window.
+     * Set &quot;i2p.tunnel.leaseMaxDuration&quot; explicitly to override.
      *
      * @param ctx the router context
      * @return the maximum lease duration in milliseconds
      */
     static long getLeaseMaxDuration(RouterContext ctx) {
-        long autoDefault = getTunnelLifetime(ctx) + Router.CLOCK_FUDGE_FACTOR;
-        return ctx.getProperty("i2p.tunnel.leaseMaxDuration", autoDefault);
+        return ctx.getProperty("i2p.tunnel.leaseMaxDuration", 10L * 60 * 1000);
     }
 
     /** Tunnel pool */

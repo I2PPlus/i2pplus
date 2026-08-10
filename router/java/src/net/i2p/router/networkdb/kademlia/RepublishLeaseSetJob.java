@@ -48,10 +48,18 @@ public class RepublishLeaseSetJob extends JobImpl {
     public static final int RETRY_DELAY_DEFAULT = (int) (10L * 1000);
     /** Maximum backoff delay for publish retries. */
     public static final int RETRY_MAX_DELAY_DEFAULT = (int) (120L * 1000);
-    /** Window before lease expiry to trigger a re-mint instead of flooding the dying copy. */
-    private static final long EXPIRY_WINDOW = 5L * 60 * 1000;
+    /** Window before lease expiry to trigger a re-mint instead of flooding the
+     *  dying copy.  Must stay below (lease cap - republish interval) — here
+     *  240s < 600s - 300s — so a freshly re-minted copy (capped at ~600s) still
+     *  presents above this window at the next interval check and gets flooded
+     *  directly; with an equal boundary the check lands at the knife edge and
+     *  re-mints forever, starving the floodfill. */
+    private static final long EXPIRY_WINDOW = 4L * 60 * 1000;
     /** Minimum reschedule interval — prevents sub-minute flood treadmills. */
     private static final long MIN_RESCHEDULE = 60L * 1000;
+    /** Retry interval after a missing local LeaseSet — long enough for the
+     *  pool to build and test a replacement tunnel before we ask again. */
+    private static final long MISSING_LEASESET_RETRY = 30L * 1000;
     /**
      *  A lease is viable for a re-mint while it has at least this much time
      *  remaining: the re-sign request, floodfill propagation, and connection
@@ -82,6 +90,8 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static final ConcurrentHashMap<Hash, Long> _lastVerifyLogTime = new ConcurrentHashMap<>();
     /** Last log timestamp per destination to throttle no-requeue log messages. */
     private static final ConcurrentHashMap<Hash, Long> _lastNotRequeueLogTime = new ConcurrentHashMap<>();
+    /** Last log timestamp per destination to throttle missing-LeaseSet log messages. */
+    private static final ConcurrentHashMap<Hash, Long> _lastMissingLogTime = new ConcurrentHashMap<>();
     // Persistent per-destination failure count — never reset, survives job instances.
     // Used to decide when to perform expensive floodfill verification.
     /** Persistent per-destination store failure count. */
@@ -244,13 +254,29 @@ public class RepublishLeaseSetJob extends JobImpl {
     // No LeaseSet exists locally — ask the client to create one
     /** Handle missing lease set */
     private void handleMissingLeaseSet() {
-        if (_log.shouldWarn()) {
-            _log.warn("Client [" + shortHash() +
-                      "] is LOCAL, but no valid LeaseSet found -> Requesting immediate rebuild");
+        long now = getContext().clock().now();
+        Long lastLog = _lastMissingLogTime.get(_dest);
+        if (_log.shouldInfo() && (lastLog == null || now - lastLog > 10L * 1000)) {
+            _log.info("Client [" + shortHash() +
+                      "] is LOCAL, but no valid LeaseSet found -> Requesting rebuild");
+            _lastMissingLogTime.put(_dest, now);
         }
         clearRetryInProgress();
-        getContext().clientManager().requestLeaseSet(_dest, null);
-        scheduleRepublish(5L * 1000);
+        // A LOCAL client with no stored LeaseSet is usually a pool still
+        // building its first tunnels or a store race.  The pool requests a
+        // re-sign itself on every completed build, so while it is actively
+        // building or testing our request would be redundant — skip it and
+        // let the pool's own hook land the LeaseSet.  Only a quiet pool
+        // (no builds in flight) needs the nudge to re-sign its tunnels.
+        TunnelPool pool = getContext().tunnelManager().getInboundPool(_dest);
+        if (pool == null || (pool.getInProgressCount() == 0 && pool.getTestingTunnelCount() == 0)) {
+            getContext().clientManager().requestLeaseSet(_dest, null);
+        } else if (_log.shouldDebug()) {
+            _log.debug("Skipping LeaseSet request for busy pool [" + shortHash() + "] (" +
+                       pool.getInProgressCount() + " building, " + pool.getTestingTunnelCount() +
+                       " testing)");
+        }
+        scheduleRepublish(MISSING_LEASESET_RETRY);
     }
 
     // Client is no longer local — clean up and stop publishing
@@ -325,9 +351,9 @@ public class RepublishLeaseSetJob extends JobImpl {
             return;
         }
 
-        // Published LeaseSet expiring soon: don't flood the near-expiry copy to
-        // the network — it would expire before propagation completes.  Re-mint
-        // from the tunnel pool's current tunnels and request a fresh re-signed
+        // Published LeaseSet too close to expiry to floodfill: don't flood a
+        // copy that would expire before propagation completes.  Re-mint from
+        // the tunnel pool's current tunnels and request a fresh re-signed
         // LeaseSet; the client's Reply re-floods the new LS with full expiry.
         // This check runs before the startup deferral gate so an expiring LS
         // always re-mints immediately — never waits behind the gate.
@@ -414,10 +440,14 @@ public class RepublishLeaseSetJob extends JobImpl {
     /**
      * Next republish delay: the configured interval floored at MIN_RESCHEDULE,
      * but capped so the next check fires before the current LeaseSet hits the
-     * EXPIRY_WINDOW re-mint threshold.  A healthy 10-minute lease with a 5-min
+     * EXPIRY_WINDOW re-mint threshold.  A fresh 10-minute lease with a 5-min
      * interval schedules at the interval; a shorter/thinner lease schedules
      * sooner, so a re-mint that only slightly extends expiry is re-flooded
      * again before the copy dies instead of rotting for a full interval.
+     * With the lease cap at 600s the alternation is: re-mint lands ~594s,
+     * the next check at the interval sees it above EXPIRY_WINDOW and floods
+     * directly, then the 60s re-check crosses the window and re-mints again —
+     * every cycle both refreshes and floodfills.
      *
      * @param timeUntilExpiry ms until the current LeaseSet expires
      * @return delay in ms
@@ -668,6 +698,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         cleanupMap(_lastPublishLogTime, now);
         cleanupMap(_lastVerifyLogTime, now);
         cleanupMap(_lastNotRequeueLogTime, now);
+        cleanupMap(_lastMissingLogTime, now);
         cleanupGlobalFailCount(now);
         cleanupRemintDefers();
         cleanupPublishedOnce();
