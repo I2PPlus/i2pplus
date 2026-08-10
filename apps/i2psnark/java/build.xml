@@ -5,17 +5,17 @@
   <property name="build.dir" value="${build.root}apps/i2psnark/java/build"/>
 
   <property name="...build.dir" value="${build.root}build"/>
-  <property name="core.java.build.dir" value="../../../core/java/build"/>
-  <property name="ministreaming.java.build.dir" value="../../ministreaming/java/build"/>
-  <property name="streaming.java.build.dir" value="../../streaming/java/build"/>
-  <property name="systray.java.build.dir" value="../../systray/java/build"/>
+  <property name="core.java.build.dir" value="${build.root}core/java/build"/>
+  <property name="ministreaming.java.build.dir" value="${build.root}apps/ministreaming/java/build"/>
+  <property name="streaming.java.build.dir" value="${build.root}apps/streaming/java/build"/>
+  <property name="systray.java.build.dir" value="${build.root}apps/systray/java/build"/>
 
   <property name="...build.dir" value="${...build.dir}"/>
   <property name="core.java.build.dir" value="${core.java.build.dir}"/>
   <property name="ministreaming.java.build.dir" value="${ministreaming.java.build.dir}"/>
   <property name="streaming.java.build.dir" value="${streaming.java.build.dir}"/>
   <property name="systray.java.build.dir" value="${systray.java.build.dir}"/>
-  <property name="jetty.pkg.dir" value="../../jetty/jettylib"/>
+  <property name="jetty.pkg.dir" value="${build.root}apps/jetty/build"/>
 
   <condition property="standalone.dir" value="${build.root}apps/i2psnark/java/standalone" else="i2psnark">
     <isset property="build.root"/>
@@ -26,7 +26,7 @@
   <condition property="standalone.7z" value="${build.root}apps/i2psnark/java/i2psnark-standalone.7z" else="i2psnark-standalone.7z">
     <isset property="build.root"/>
   </condition>
-  <condition property="standalone.war" value="${build.root}apps/i2psnark/i2psnark.war" else="../i2psnark.war">
+  <condition property="standalone.war" value="${build.dir}/i2psnark.war" else="build/i2psnark.war">
     <isset property="build.root"/>
   </condition>
 
