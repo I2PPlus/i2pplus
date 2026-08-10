@@ -726,7 +726,7 @@ input.trackername{width:100px}
 #filecheck a{margin:8px}
 #snarkLang{margin-right:5px;padding:4px 8px;display:inline-block;line-height:1.6;vertical-align:middle;color:#ff7;font-weight:700;text-align:center;border-radius:4px;background:#212}
 #torrentOrderControl b{background:linear-gradient(180deg,#303,#101)}
-#bwAllocation .numeric,.numeric[name="upLimit"],.numeric[name="startupDelay"]{min-width:68px}
+#bwAllocation .numeric,.numeric[name="upLimit"],.numeric[name="startupDelay"],#multiDestMax{min-width:68px}
 .numeric[name="maxFiles"]{min-width:80px}
 #configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:8px}
 

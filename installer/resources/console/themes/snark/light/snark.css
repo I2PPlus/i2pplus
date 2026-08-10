@@ -365,7 +365,7 @@ input.create:hover,input.create:focus{background:var(--create) no-repeat center 
 #addSection input[type=file]{margin-top:-1px;width:calc(80% - 10px)}
 #configs input[type=submit],#trackerconfig input[type=submit],input[name="savepri"]{text-transform:capitalize}
 #configureAuthor input{width:250px}
-.r.numeric{min-width:68px}
+.r.numeric,#multiDestMax{min-width:68px}
 
 /* configure */
 form:last-child .configPanel{margin-top:10px}
