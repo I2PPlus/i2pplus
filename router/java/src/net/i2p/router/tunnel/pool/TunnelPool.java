@@ -2006,10 +2006,13 @@ public class TunnelPool {
         if (cfg.getConsecutiveFailures() > 1) {
             int failures = cfg.getConsecutiveFailures();
             int remaining = size();
-            // A tunnel with 5+ consecutive test failures cannot route traffic.
-            // Remove it immediately — it wastes build slots and test cycles.
-            // The collapse guard only protects tunnels with <= 4 failures.
-            boolean isDead = failures > 4;
+            // A tunnel that failed completely cannot route traffic, even if it
+            // is the pool's last one. tunnelFailedCompletely() sets the counter
+            // to exactly MAX+1 (4), so compare against getTunnelFailed() rather
+            // than a hardcoded threshold or the guard would keep a dead tunnel.
+            // The collapse guard only protects tunnels that are still failing
+            // tests (failures <= MAX), not ones already marked dead.
+            boolean isDead = cfg.getTunnelFailed();
             if (remaining <= 1 && !isDead) {
                 // Collapse guard: don't remove if this would leave the pool
                 // with zero usable tunnels and the tunnel isn't conclusively dead.

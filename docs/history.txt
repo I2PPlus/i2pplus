@@ -1,4 +1,9 @@
 2026-08-10 dr|z3d
+  * Tunnel:
+    - Collapse guard in fail() now uses getTunnelFailed() (failures > 3)
+      instead of a hardcoded > 4 threshold, so a tunnel that failed
+      completely (counter set to exactly MAX+1 = 4) is removed even when
+      it is the pool's last one instead of being kept as a dead zombie
   * I2PSnark:
     - DHT: main instance in multi-dest mode serves no tracker queries
       (routing-table-only), per-torrent instances serve only their own
