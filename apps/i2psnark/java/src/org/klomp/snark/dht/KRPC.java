@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
@@ -115,7 +116,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private final Set<NID> _blacklist;
 
     /** infohashes this instance serves tracker queries for, empty when serving all */
-    private final Set<InfoHash> _servedTorrents = new HashSet<>(1);
+    private final Set<InfoHash> _servedTorrents = new CopyOnWriteArraySet<>();
 
     /** false to answer no tracker queries, keeping the instance routing-only */
     private volatile boolean _serveAll = true;
@@ -295,16 +296,26 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Restrict tracker queries to the given infohash, replacing any previous
-     * set. A per-torrent DHT instance registers its own torrent, so probing
-     * one destination never reveals other torrents' swarms.
+     * Serve tracker queries for the given infohash in addition to any already
+     * served. A per-torrent DHT instance registers its own torrent; a pooled
+     * destination registers each torrent assigned to it, so probing one
+     * destination never reveals torrents hosted elsewhere.
      *
      * @param ih the infohash to serve
      */
-    public void serveTorrent(InfoHash ih) {
+    public void addServedTorrent(InfoHash ih) {
         _serveAll = false;
-        _servedTorrents.clear();
         _servedTorrents.add(ih);
+    }
+
+    /**
+     * Stop serving tracker queries for the given infohash. Called when a
+     * torrent is removed from a pooled destination.
+     *
+     * @param ih the infohash to stop serving
+     */
+    public void removeServedTorrent(InfoHash ih) {
+        _servedTorrents.remove(ih);
     }
 
     ///////////////// Public methods

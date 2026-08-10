@@ -286,6 +286,18 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public static final String PROP_MULTI_DEST = "i2psnark.multiDest";
 
+    /**
+     * Maximum number of destinations in multi-dest mode, 0 for one per torrent.
+     *
+     * @since 0.9.71+
+     */
+    public static final String PROP_MULTI_DEST_MAX = "i2psnark.multiDestMax";
+
+    /** Default cap on destinations so many torrents share destinations instead of exhausting memory */
+    public static final int DEFAULT_MULTI_DEST_MAX = 50;
+    /** Absolute maximum for the destination cap */
+    public static final int MAX_MULTI_DEST = 1000;
+
     public static final int MIN_UP_BW = 5;
     public static final int MIN_DOWN_BW = 2 * MIN_UP_BW;
     public static final int DEFAULT_MAX_UP_BW = 1024;
@@ -1484,6 +1496,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                 PROP_VARY_OUTBOUND_HOPS,
                                 Boolean.toString(I2PSnarkUtil.DEFAULT_VARY_OUTBOUND_HOPS))));
         _util.setMultiDest(Boolean.parseBoolean(_config.getProperty(PROP_MULTI_DEST, "false")));
+        _util.setMaxDest(parseMaxDest(_config.getProperty(PROP_MULTI_DEST_MAX, Integer.toString(DEFAULT_MULTI_DEST_MAX))));
 
         for (String c : _config.stringPropertyNames()) {
             if (c.startsWith(PROP_API_PREFIX)) {
@@ -1528,6 +1541,26 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return defaultVal;
     }
 
+    /**
+     * Parse the destination cap, clamping invalid and out-of-range values to zero, which
+     * restores one destination per torrent.
+     *
+     * @param s the raw property value, or null
+     * @return a value in [0, MAX_MULTI_DEST]
+     */
+    private static int parseMaxDest(String s) {
+        int rv = 0;
+        try {
+            if ((s != null) && (!s.trim().isEmpty())) {
+                rv = Integer.parseInt(s.trim());
+            }
+        } catch (NumberFormatException nfe) { /* ignored */ }
+        if (rv < 0 || rv > MAX_MULTI_DEST) {
+            rv = 0;
+        }
+        return rv;
+    }
+
     /** all params may be null or need trimming */
     public void updateConfig(
             String dataDir,
@@ -1559,6 +1592,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             boolean enableVaryInboundHops,
             boolean enableVaryOutboundHops,
             boolean multiDest,
+            String multiDestMax,
             String apiTarget,
             String apiKey) {
         synchronized (_configLock) {
@@ -1592,6 +1626,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     enableVaryInboundHops,
                     enableVaryOutboundHops,
                     multiDest,
+                    multiDestMax,
                     apiTarget,
                     apiKey);
         }
@@ -1627,6 +1662,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             boolean enableVaryInboundHops,
             boolean enableVaryOutboundHops,
             boolean multiDest,
+            String multiDestMax,
             String apiTarget,
             String apiKey) {
         boolean changed = false;
@@ -1743,6 +1779,21 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             addMessage(restart);
             _util.setMultiDest(multiDest);
             changed = true;
+        }
+
+        if (multiDestMax != null) {
+            int maxDest = parseMaxDest(multiDestMax);
+            if (maxDest != _util.getMaxDest()) {
+                _util.setMaxDest(maxDest);
+                changed = true;
+                _config.setProperty(PROP_MULTI_DEST_MAX, Integer.toString(maxDest));
+                if (maxDest > 0) {
+                    addMessage(_t("Maximum destinations changed to {0}", maxDest));
+                } else {
+                    addMessage(_t("Unlimited destinations restored (one per torrent)"));
+                }
+                addMessage(restart);
+            }
         }
 
         if (startDelay != null && _context.isRouterContext()) {

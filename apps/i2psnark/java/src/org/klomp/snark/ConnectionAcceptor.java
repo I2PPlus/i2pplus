@@ -64,7 +64,8 @@ class ConnectionAcceptor implements Runnable {
     private final ObjectCounter<Hash> _badCounter = new ObjectCounter<>();
     private final Map<Hash, String> _badReasons = new ConcurrentHashMap<>();
     private final SimpleTimer2.TimedEvent _cleaner;
-    private final Map<String, TorrentAcceptLoop> _torrentAcceptors = new ConcurrentHashMap<>();
+    /** accept loops per destination, shared by the torrents pooled on it */
+    private final Map<TorrentDest, TorrentAcceptLoop> _torrentAcceptors = new ConcurrentHashMap<>();
     /** Stops the accept loop */
     private volatile boolean stop;
     /** Protocol errors within a window before the client is rejected. */
@@ -141,35 +142,50 @@ class ConnectionAcceptor implements Runnable {
     }
 
     /**
-     * Start an accept loop on a torrent's own destination, replacing any previous loop for
-     * the same torrent. Multitorrent only.
+     * Start an accept loop on a torrent's destination, adding the torrent to the
+     * destination's loop when one already runs for a pooled destination. Multitorrent only.
      *
-     * @param td the torrent's transient destination
+     * @param td the torrent's destination
      * @param coordinator the torrent's peer coordinator
      * @since 0.9.71+
      */
     public void addTorrentAcceptor(TorrentDest td, PeerCoordinator coordinator) {
-        removeTorrentAcceptor(td.getKey());
-        PeerCoordinatorSet set = new PeerCoordinatorSet();
-        set.add(coordinator);
-        TorrentAcceptLoop loop = new TorrentAcceptLoop(td, new PeerAcceptor(set));
-        TorrentAcceptLoop existing = _torrentAcceptors.putIfAbsent(td.getKey(), loop);
-        if (existing != null) {
-            loop = existing;
+        TorrentAcceptLoop loop = _torrentAcceptors.get(td);
+        if (loop == null) {
+            PeerCoordinatorSet set = new PeerCoordinatorSet();
+            set.add(coordinator);
+            TorrentAcceptLoop created = new TorrentAcceptLoop(td, set);
+            loop = _torrentAcceptors.putIfAbsent(td, created);
+            if (loop == null) {
+                loop = created;
+                loop.start();
+            } else {
+                loop.add(coordinator);
+            }
+        } else {
+            loop.add(coordinator);
         }
-        loop.start();
     }
 
     /**
-     * Stop the accept loop for a torrent's destination. Multitorrent only.
+     * Remove a torrent from its destination's accept loop, halting the loop when it no
+     * longer serves any torrent. Multitorrent only.
      *
-     * @param key the Base64-encoded info hash key
+     * @param td the torrent's destination, or null if it never got one
+     * @param coordinator the torrent's peer coordinator
      * @since 0.9.71+
      */
-    public void removeTorrentAcceptor(String key) {
-        TorrentAcceptLoop loop = _torrentAcceptors.remove(key);
+    public void removeTorrentAcceptor(TorrentDest td, PeerCoordinator coordinator) {
+        if (td == null || coordinator == null) {
+            return;
+        }
+        TorrentAcceptLoop loop = _torrentAcceptors.get(td);
         if (loop != null) {
-            loop.halt();
+            loop.remove(coordinator);
+            if (loop.isEmpty()) {
+                _torrentAcceptors.remove(td, loop);
+                loop.halt();
+            }
         }
     }
 
@@ -410,19 +426,47 @@ class ConnectionAcceptor implements Runnable {
     }
 
     /**
-     * Accept loop for a torrent's own destination. Multitorrent only.
+     * Accept loop for a destination, serving every torrent pooled on it, routed by the info
+     * hash in the handshake. Multitorrent only.
      *
      * @since 0.9.71+
      */
     private class TorrentAcceptLoop implements Runnable {
         private final TorrentDest _td;
         private final PeerAcceptor _pa;
+        private final PeerCoordinatorSet _set;
         private volatile boolean _stop;
         private Thread _thread;
 
-        public TorrentAcceptLoop(TorrentDest td, PeerAcceptor pa) {
+        public TorrentAcceptLoop(TorrentDest td, PeerCoordinatorSet set) {
             _td = td;
-            _pa = pa;
+            _set = set;
+            _pa = new PeerAcceptor(set);
+        }
+
+        /**
+         * Add a torrent's coordinator to this loop's routing set.
+         *
+         * @param coordinator the coordinator
+         */
+        public void add(PeerCoordinator coordinator) {
+            _set.add(coordinator);
+        }
+
+        /**
+         * Remove a torrent's coordinator from this loop's routing set.
+         *
+         * @param coordinator the coordinator
+         */
+        public void remove(PeerCoordinator coordinator) {
+            _set.remove(coordinator);
+        }
+
+        /**
+         * @return true when no torrents are routed through this loop
+         */
+        public boolean isEmpty() {
+            return !_set.iterator().hasNext();
         }
 
         public synchronized void start() {

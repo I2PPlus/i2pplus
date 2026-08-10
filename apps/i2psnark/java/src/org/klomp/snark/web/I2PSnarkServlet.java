@@ -2544,6 +2544,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean enableVaryInboundHops = req.getParameter("varyInbound") != null;
         boolean enableVaryOutboundHops = req.getParameter("varyOutbound") != null;
         boolean multiDest = req.getParameter("multiDest") != null;
+        String multiDestMax = req.getParameter("multiDestMax");
 
         String dataDir = req.getParameter("nofilter_dataDir");
         String seedPct = req.getParameter("seedPct");
@@ -2567,7 +2568,7 @@ public class I2PSnarkServlet extends BasicServlet {
         _manager.updateConfig(dataDir, filesPublic, autoStart, refreshDel, startupDel, pageSize, seedPct, eepHost, eepPort,
                               i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang,
                               ratings, comments, commentsName, collapsePanels, showStatusFilter, enableLightbox,
-                              enableAddCreate, enableVaryInboundHops, enableVaryOutboundHops, multiDest, apiTarget, apiKey);
+                              enableAddCreate, enableVaryInboundHops, enableVaryOutboundHops, multiDest, multiDestMax, apiTarget, apiKey);
         try {
             setResourceBase(_manager.getDataDir());
         } catch (ServletException ignored) { /* ignored */ }
@@ -4297,7 +4298,17 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_t("Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."))
            .append("\">")
            .append("<input type=checkbox class=\"optbox slider\" name=multiDest id=multiDest ")
-           .append(multiDest ? "checked " : "").append("</label></span><br>\n");
+           .append(multiDest ? "checked " : "").append("</label></span><br>\n")
+           .append("<span class=configOption id=maxDest><b>")
+           .append(_t("Maximum destinations"))
+           .append("</b> \n")
+           .append("<label title=\"")
+           .append(_t("When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."))
+           .append("\">")
+           .append("<input type=text name=multiDestMax id=multiDestMax value=\"")
+           .append(_manager.util().getMaxDest())
+           .append("\" class=numeric size=5 maxlength=4 pattern=\"[0-9]{1,4}\" spellcheck=false>")
+           .append("</label></span><br>\n");
 
         if (isStandalone()) {
             buf.append("<span class=configOption><label><b>")

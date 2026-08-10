@@ -47,6 +47,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private final byte[] id;
     private final byte[] infoHash;
     private String additionalTrackerURL;
+    /** The transient destination, when multi-dest is enabled; null otherwise or on stop */
+    private TorrentDest _dest;
     /** The util */
     protected final I2PSnarkUtil _util;
     private final Log _log;
@@ -421,6 +423,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         if (_util.getMultiDest()) {
             key = Base64.encode(infoHash);
             td = _util.getOrCreateTorrentDest(key, getBaseName());
+            _dest = td;
             if (td == null) {
                 // Session creation failed (e.g. tunnels or router unreachable); not fatal
                 // for a per-torrent session — retry with backoff, then give up after an
@@ -638,8 +641,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             }
             if (_util.getMultiDest()) {
                 String key = Base64.encode(infoHash);
-                acceptor.removeTorrentAcceptor(key);
+                acceptor.removeTorrentAcceptor(_dest, pc);
                 _util.removeTorrentDest(key);
+                _dest = null;
             } else {
                 _util.disconnect();
             }

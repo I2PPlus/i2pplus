@@ -52,6 +52,7 @@ import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import org.klomp.snark.dht.DHT;
+import org.klomp.snark.dht.InfoHash;
 import org.klomp.snark.dht.KRPC;
 import org.klomp.snark.dht.TorrentKRPC;
 
@@ -118,6 +119,10 @@ public class I2PSnarkUtil implements DisconnectListener {
     private boolean _enableUDP = ENABLE_UDP_TRACKER;
     private UDPTrackerClient _udpTracker;
     private boolean _multiDest;
+    /** Maximum shared destinations in multi-dest mode, 0 for one per torrent */
+    private int _maxDest = SnarkManager.DEFAULT_MULTI_DEST_MAX;
+    /** Per-run random salt mixing pool assignments so the grouping is unlearnable */
+    private final int _destSalt;
     private final Map<String, TorrentDest> _torrentDests = new ConcurrentHashMap<>();
     private long _startedTime;
     private final DisconnectListener _discon;
@@ -168,6 +173,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         _log = _context.logManager().getLog(I2PSnarkUtil.class);
         _baseName = baseName;
         _discon = discon;
+        _destSalt = _context.random().nextInt();
         _opts = new HashMap<>();
         setI2CPConfig("127.0.0.1", I2PClient.DEFAULT_LISTEN_PORT, null);
         _banlist = new ConcurrentHashSet<>();
@@ -657,6 +663,23 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * @return the maximum number of per-torrent destinations in multi-dest mode, 0 for one
+     *         destination per torrent
+     * @since 0.9.71+
+     */
+    public int getMaxDest() {
+        return _maxDest;
+    }
+
+    /**
+     * @param maxDest the maximum number of destinations, 0-1000; zero is unlimited
+     * @since 0.9.71+
+     */
+    public void setMaxDest(int maxDest) {
+        _maxDest = maxDest;
+    }
+
+    /**
      * Apply the multi-dest serving mode to the main DHT instance: in multi-dest mode it
      * answers no tracker queries, keeping it a routing-table-only node so probing the
      * primary destination never reveals torrents hosted on per-torrent destinations.
@@ -713,51 +736,78 @@ public class I2PSnarkUtil implements DisconnectListener {
     private static final int MAX_NAME_LENGTH = 64;
 
     /**
-     * Get the transient destination for a torrent, creating the destination and session on
-     * first use. Only used when multi-dest is enabled.
+     * Get the destination for a torrent, creating the destination and session on first use,
+     * or assigning the torrent to a shared pool when the configured maximum number of
+     * destinations is exceeded. Only used when multi-dest is enabled.
      *
      * @param key Base64 encoding of the torrent's info hash
      * @param name torrent name, used in the tunnel nickname
      * @return the destination, or null if the session could not be created
      * @since 0.9.71+
      */
-    public TorrentDest getOrCreateTorrentDest(String key, String name) {
+    public synchronized TorrentDest getOrCreateTorrentDest(String key, String name) {
         TorrentDest td = _torrentDests.get(key);
         if (td == null) {
-            // Cap at minimal tunnels; IdleChecker ramps them up with usage.
-            // buildOpts() mutates the shared context properties, so copy them for the
-            // session and wait up to an hour for the initial tunnel builds before
-            // giving up; a per-torrent session failure is retried by Snark.
-            Properties opts = new Properties();
-            opts.putAll(buildOpts(getNickname(name), true));
-            opts.setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "60");
-            I2PSocketManager mgr =
-                    I2PSocketManagerFactory.createManager(_i2cpHost, _i2cpPort, opts);
-            if (mgr == null) {
-                return null;
+            int poolIndex = (_maxDest > 0) ? poolIndexFor(key) : -1;
+            if (poolIndex >= 0) {
+                // Reuse an existing pool, so torrents stably share destinations within a
+                // run; the salted index makes the grouping unlearnable from the publicly
+                // known info hashes and yields variable pool sizes.
+                for (TorrentDest pool : _torrentDests.values()) {
+                    if (pool.getPoolIndex() == poolIndex) {
+                        td = pool;
+                        break;
+                    }
+                }
             }
-            td = new TorrentDest(_context, key, mgr, mgr.getServerSocket());
-            TorrentDest existing = _torrentDests.putIfAbsent(key, td);
-            if (existing != null) {
-                td.destroy();
-                td = existing;
+            if (td == null) {
+                // Cap at minimal tunnels; IdleChecker ramps them up with usage.
+                // buildOpts() mutates the shared context properties, so copy them for the
+                // session and wait up to an hour for the initial tunnel builds before
+                // giving up; a per-torrent session failure is retried by Snark.
+                Properties opts = new Properties();
+                opts.putAll(buildOpts(getNickname(name), true));
+                opts.setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "60");
+                I2PSocketManager mgr =
+                        I2PSocketManagerFactory.createManager(_i2cpHost, _i2cpPort, opts);
+                if (mgr == null) {
+                    return null;
+                }
+                td = new TorrentDest(_context, key, poolIndex, mgr, mgr.getServerSocket());
             }
+            td.assign(key, new InfoHash(Base64.decode(key)));
+            _torrentDests.put(key, td);
         }
         return td;
     }
 
     /**
-     * Remove and destroy the transient destination for a torrent.
+     * Pool index for a torrent: the info hash mixed with a per-run random salt, so torrents
+     * share destinations stably within a run but the grouping cannot be predicted or
+     * verified from the publicly known info hashes.
+     *
+     * @param key Base64 encoding of the torrent's info hash
+     * @return a pool index in [0, _maxDest)
+     */
+    private int poolIndexFor(String key) {
+        return Math.floorMod(DataHelper.hashCode(Base64.decode(key)) ^ _destSalt, _maxDest);
+    }
+
+    /**
+     * Remove and destroy the destination for a torrent, destroying a pooled destination
+     * only when its last torrent is removed.
      *
      * @since 0.9.71+
      */
     public void removeTorrentDest(String key) {
-        TorrentDest td = _torrentDests.remove(key);
-        if (td != null) {
-            if (_log.shouldInfo()) {
-                _log.info("Removing torrent dest " + key.substring(0, 6));
+        synchronized (this) {
+            TorrentDest td = _torrentDests.remove(key);
+            if (td != null && td.unassign(key)) {
+                if (_log.shouldInfo()) {
+                    _log.info("Removing torrent dest " + key.substring(0, 6));
+                }
+                td.destroy();
             }
-            td.destroy();
         }
     }
 
