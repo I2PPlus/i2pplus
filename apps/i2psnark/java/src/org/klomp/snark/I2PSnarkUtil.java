@@ -512,6 +512,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (_shouldUseDHT && _manager != null && _dht == null) {
             _dht = new KRPC(_context, _baseName, _manager.getSession());
         }
+        updateDHTServing();
         if (_enableUDP && _manager != null) {
             if (_udpTracker == null) {
                 _udpTracker = new UDPTrackerClient(_context, _manager.getSession(), this);
@@ -652,6 +653,18 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public void setMultiDest(boolean multiDest) {
         _multiDest = multiDest;
+        updateDHTServing();
+    }
+
+    /**
+     * Apply the multi-dest serving mode to the main DHT instance: in multi-dest mode it
+     * answers no tracker queries, keeping it a routing-table-only node so probing the
+     * primary destination never reveals torrents hosted on per-torrent destinations.
+     */
+    private void updateDHTServing() {
+        if (_dht instanceof KRPC) {
+            ((KRPC) _dht).setServeAll(!_multiDest);
+        }
     }
 
     /**
@@ -1535,6 +1548,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             _dht.stop();
             _dht = null;
         }
+        updateDHTServing();
     }
 
     /**

@@ -8,7 +8,9 @@ import net.i2p.client.I2PSession;
  * destination. Shares the main instance's routing table, tracker, and blacklist, but
  * generates its own NID, query ports, and token maps, so that tokens issued for one
  * destination can never authorize an announce from another, which would make remote
- * nodes store the wrong peer hash for a torrent.
+ * nodes store the wrong peer hash for a torrent.  Serves tracker queries only for its
+ * own torrent's infohash, so probing this destination never reveals the other torrents
+ * hosted on the router.
  *
  * @since 0.9.71+
  */
@@ -19,9 +21,11 @@ public class TorrentKRPC extends KRPC {
      * @param shared the main DHT instance, whose routing table, tracker, and blacklist are
      *            shared; must be started already
      * @param session the transient session of the torrent's destination
+     * @param ih the torrent's infohash, the only infohash this instance serves
      */
-    public TorrentKRPC(I2PAppContext ctx, KRPC shared, I2PSession session) {
+    public TorrentKRPC(I2PAppContext ctx, KRPC shared, I2PSession session, InfoHash ih) {
         super(ctx, "i2psnark", session, shared);
+        serveTorrent(ih);
         start();
     }
 

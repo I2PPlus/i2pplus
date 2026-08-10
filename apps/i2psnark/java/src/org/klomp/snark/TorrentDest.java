@@ -4,8 +4,10 @@ import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.client.streaming.I2PServerSocket;
 import net.i2p.client.streaming.I2PSocketManager;
+import net.i2p.data.Base64;
 import net.i2p.data.Destination;
 
+import org.klomp.snark.dht.InfoHash;
 import org.klomp.snark.dht.KRPC;
 import org.klomp.snark.dht.TorrentKRPC;
 
@@ -66,14 +68,16 @@ public class TorrentDest {
 
     /**
      * Lazily create the per-torrent DHT instance on this destination's session, sharing
-     * the main instance's routing table, tracker, and blacklist.
+     * the main instance's routing table, tracker, and blacklist, serving tracker queries
+     * only for this torrent's infohash.
      *
      * @param shared the main DHT instance, or null if the DHT is disabled
      * @return the DHT instance, or null if disabled
      */
     public synchronized TorrentKRPC getDHT(KRPC shared) {
         if (_dht == null && shared != null) {
-            _dht = new TorrentKRPC(_context, shared, _mgr.getSession());
+            _dht = new TorrentKRPC(_context, shared, _mgr.getSession(),
+                                   new InfoHash(Base64.decode(_key)));
         }
         return _dht;
     }

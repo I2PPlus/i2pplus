@@ -24,7 +24,7 @@ import org.klomp.snark.I2PSnarkUtil;
  *
  * @since 0.9.2
  */
-class InfoHash extends SHA1Hash {
+public class InfoHash extends SHA1Hash {
 
     /**
      * Creates a new info hash from the specified 20-byte data.

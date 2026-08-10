@@ -114,6 +114,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** recently unreachable, with lastSeen() as the added-to-blacklist time */
     private final Set<NID> _blacklist;
 
+    /** infohashes this instance serves tracker queries for, empty when serving all */
+    private final Set<InfoHash> _servedTorrents = new HashSet<>(1);
+
+    /** false to answer no tracker queries, keeping the instance routing-only */
+    private volatile boolean _serveAll = true;
+
     private SimpleTimer2.TimedEvent _cleaner;
     private SimpleTimer2.TimedEvent _explorer;
 
@@ -259,6 +265,46 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (shared == null) {
             start();
         }
+    }
+
+    /**
+     * Whether tracker queries (get_peers and announce_peer) are served for the
+     * given infohash: all infohashes for the main instance in single-dest
+     * mode, only the configured torrents for a per-torrent instance.
+     *
+     * @param ih the infohash being queried
+     * @return true if queries for this infohash are served
+     */
+    private boolean serves(InfoHash ih) {
+        return _serveAll || _servedTorrents.contains(ih);
+    }
+
+    /**
+     * Set whether tracker queries are served for every infohash. Multi-dest
+     * mode passes false, keeping the main instance a routing-table-only node
+     * so probing the primary destination never reveals torrents hosted on
+     * per-torrent destinations.
+     *
+     * @param serveAll true to serve every infohash, false to serve none
+     */
+    public void setServeAll(boolean serveAll) {
+        _serveAll = serveAll;
+        if (!serveAll) {
+            _servedTorrents.clear();
+        }
+    }
+
+    /**
+     * Restrict tracker queries to the given infohash, replacing any previous
+     * set. A per-torrent DHT instance registers its own torrent, so probing
+     * one destination never reveals other torrents' swarms.
+     *
+     * @param ih the infohash to serve
+     */
+    public void serveTorrent(InfoHash ih) {
+        _serveAll = false;
+        _servedTorrents.clear();
+        _servedTorrents.add(ih);
     }
 
     ///////////////// Public methods
@@ -1521,6 +1567,18 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     private void receiveGetPeers(MsgID msgID, NodeInfo nInfo, InfoHash ih, boolean noSeeds, boolean scrape)
             throws InvalidBEncodingException {
+        if (!serves(ih)) {
+            if (_log.shouldDebug()) {
+                _log.debug("Ignoring get_peers for unserved torrent " + ih);
+            }
+            // Answer as a routing node only: closest nodes, no token, so the
+            // querying node learns nothing about whether we host this torrent.
+            List<NodeInfo> nodes = _knownNodes.findClosest(ih, K);
+            nodes.remove(nInfo);
+            nodes.remove(_myNodeInfo);
+            sendNodes(nInfo, msgID, null, packNodes(nodes));
+            return;
+        }
         if (_log.shouldInfo()) {
             _log.info(
                     "Received get_peers request from "
@@ -1580,6 +1638,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     private void receiveAnnouncePeer(MsgID msgID, InfoHash ih, byte[] tok, boolean isSeed)
             throws InvalidBEncodingException {
+        if (!serves(ih)) {
+            if (_log.shouldDebug()) {
+                _log.debug("Ignoring announce_peer for unserved torrent " + ih);
+            }
+            return;
+        }
         Token token = new Token(tok);
         NodeInfo nInfo = _outgoingTokens.get(token);
         if (nInfo == null) {
