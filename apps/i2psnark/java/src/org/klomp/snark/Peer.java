@@ -215,6 +215,15 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         return sock.toString();
     }
 
+    /**
+     * The I2PSocket of this connection, or null if never connected.
+     *
+     * @return the socket
+     */
+    I2PSocket getI2PSocket() {
+        return sock;
+    }
+
     /** The hash code of a Peer is the hash code of the peerID. */
     @Override
     public int hashCode() {

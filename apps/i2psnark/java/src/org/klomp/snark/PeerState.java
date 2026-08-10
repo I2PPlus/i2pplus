@@ -16,9 +16,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import net.i2p.I2PAppContext;
+import net.i2p.client.streaming.I2PSocket;
 import net.i2p.crypto.SHA1;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
+import net.i2p.data.Destination;
 import net.i2p.util.Log;
 import org.klomp.snark.bencode.BEValue;
 import org.klomp.snark.bencode.InvalidBEncodingException;
@@ -58,7 +60,13 @@ class PeerState implements DataLoader {
     private volatile Set<Integer> _allowedFast;
 
     /** BEP 6: pieces the peer advertised to us, requestable while it chokes us */
-    private final Set<Integer> _peerAllowedFast = new HashSet<>(8);
+    final Set<Integer> _peerAllowedFast = new HashSet<>(8);
+
+    /**
+     * BEP 6: pieces a conforming sender may advertise, derived from our own destination hash;
+     * null until computed, or when our destination cannot be determined.
+     */
+    Set<Integer> _expectedAllowedFast;
 
     /** The pieces the peer has. Locking: this. */
     BitField bitfield;
@@ -1109,6 +1117,9 @@ class PeerState implements DataLoader {
      * Handle an allowed fast message (BEP 6): the peer will serve this piece even while it chokes
      * us. Store it and pull a request now, while we are still choked.
      *
+     * <p>Indices outside the deterministic set derived from our own destination hash are dropped,
+     * defending against buggy or malicious senders that invent pieces.
+     *
      * @param piece the piece index
      * @since 0.9.21
      */
@@ -1116,6 +1127,14 @@ class PeerState implements DataLoader {
         if (metainfo == null || piece < 0 || piece >= metainfo.getPieces()) {
             if (_log.shouldDebug()) {
                 _log.debug("Ignoring allowed_fast for unknown piece " + piece + " from [" + peer + "]");
+            }
+            return;
+        }
+        Set<Integer> expected = expectedAllowedFast();
+        if (expected != null && !expected.contains(Integer.valueOf(piece))) {
+            if (_log.shouldDebug()) {
+                _log.debug(
+                        "Ignoring allowed_fast(" + piece + ") from [" + peer + "] not in our allowed fast set");
             }
             return;
         }
@@ -1129,6 +1148,31 @@ class PeerState implements DataLoader {
         if (_log.shouldDebug()) {
             _log.debug("Got allowed_fast(" + piece + ") from [" + peer + "]");
         }
+    }
+
+    /**
+     * The set of pieces a conforming sender may advertise, derived from our own destination hash,
+     * or null when our destination cannot be determined.
+     *
+     * <p>Computed once per connection; called only from the reader thread.
+     *
+     * @return the expected set, or null for no verification
+     */
+    Set<Integer> expectedAllowedFast() {
+        Set<Integer> expected = _expectedAllowedFast;
+        if (expected == null) {
+            Destination myDest = null;
+            I2PSocket mySock = peer.getI2PSocket();
+            if (mySock != null) {
+                myDest = mySock.getThisDestination();
+            }
+            if (myDest != null) {
+                expected = generateAllowedFastSet(
+                        myDest.calculateHash().getData(), metainfo.getInfoHash(), metainfo.getPieces());
+            }
+            _expectedAllowedFast = expected;
+        }
+        return expected;
     }
 
     /**

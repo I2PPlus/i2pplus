@@ -142,8 +142,8 @@ public class TorrentKRPCTest {
         try {
             FakeSession sess1 = new FakeSession();
             FakeSession sess2 = new FakeSession();
-            TorrentKRPC t1 = new TorrentKRPC(CTX, main, sess1.session);
-            TorrentKRPC t2 = new TorrentKRPC(CTX, main, sess2.session);
+            TorrentKRPC t1 = new TorrentKRPC(CTX, main, sess1.session, new ArrayList<InfoHash>());
+            TorrentKRPC t2 = new TorrentKRPC(CTX, main, sess2.session, new ArrayList<InfoHash>());
 
             // own ports
             int q1 = ((Integer) getField(t1, "_qPort")).intValue();
@@ -194,8 +194,8 @@ public class TorrentKRPCTest {
         try {
             FakeSession sess1 = new FakeSession();
             FakeSession sess2 = new FakeSession();
-            TorrentKRPC t1 = new TorrentKRPC(CTX, main, sess1.session);
-            TorrentKRPC t2 = new TorrentKRPC(CTX, main, sess2.session);
+            TorrentKRPC t1 = new TorrentKRPC(CTX, main, sess1.session, new ArrayList<InfoHash>());
+            TorrentKRPC t2 = new TorrentKRPC(CTX, main, sess2.session, new ArrayList<InfoHash>());
             DHTTracker tracker = (DHTTracker) getField(t1, "_tracker");
             InfoHash ih = new InfoHash(new byte[20]);
             NodeInfo nInfo = new NodeInfo(newDest(), 40000);
@@ -242,7 +242,7 @@ public class TorrentKRPCTest {
         KRPC main = new KRPC(CTX, "i2psnark", mainSess.session);
         try {
             FakeSession sess = new FakeSession();
-            TorrentKRPC t = new TorrentKRPC(CTX, main, sess.session);
+            TorrentKRPC t = new TorrentKRPC(CTX, main, sess.session, new ArrayList<InfoHash>());
             int q = ((Integer) getField(t, "_qPort")).intValue();
             int r = ((Integer) getField(t, "_rPort")).intValue();
 
