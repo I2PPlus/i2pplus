@@ -178,22 +178,27 @@ class TunnelRenderer {
             }
             String b64 = client.toBase64().substring(0,4);
             if (isLocal) {
+                String tname = getTunnelName(in);
+                String tip = getPoolTip(in);
                 out.write("<div class=tablewrap>\n");
                 out.write("<h3 class=\"");
                 if (_context.clientManager().shouldPublishLeaseSet(client)) {
                     out.write("server ");
-                    if (getTunnelName(in).equals(_t("I2PSnark")) || getTunnelName(in).startsWith("I2PSnark -")) {
+                    if (tname.equals(_t("I2PSnark")) || tname.startsWith("I2PSnark -")) {
                     	   out.write("snark ");
                     }
-                    else if ("messenger".equalsIgnoreCase(getTunnelName(in)) ||
-                             "i2pchat".equalsIgnoreCase(getTunnelName(in))) {
+                    else if ("messenger".equalsIgnoreCase(tname) ||
+                             "i2pchat".equalsIgnoreCase(tname)) {
                         out.write("i2pchat ");
                     }
                 }
                 else {out.write("client ");}
                 out.write("tabletitle\" ");
+                if (tip != null) {
+                    out.write("data-tip=\"" + tip + "\" ");
+                }
                 out.write("id=\"" + b64 + "\">");
-                out.write(getTunnelName(in));
+                out.write(tname);
                 // links are set to float:right in CSS so they will be displayed in reverse order
                 if (isAdvanced) {
                     out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +
@@ -997,6 +1002,25 @@ class TunnelRenderer {
         }
         if (name != null) {return DataHelper.escapeHTML(_t(name));}
         return ins.getDestination().toBase32();
+    }
+
+    /**
+     *  Get the pool's torrent names for the tooltip, when the tunnel is a shared
+     *  I2PSnark pool destination and the i2psnark.poolMembers session property is set.
+     *
+     *  @param in the tunnel pool
+     *  @return the escaped tooltip text, or null for a dedicated destination
+     */
+    private String getPoolTip(TunnelPool in) {
+        String name = in.getSettings().getDestinationNickname();
+        if (name == null || !name.startsWith("I2PSnark - Pool")) {
+            return null;
+        }
+        String members = in.getSettings().getUnknownOptions().getProperty("i2psnark.poolMembers");
+        if (members == null || members.length() == 0) {
+            return null;
+        }
+        return DataHelper.escapeHTML(members);
     }
 
     private void renderPool(Writer out, TunnelPool in, TunnelPool outPool) throws IOException {

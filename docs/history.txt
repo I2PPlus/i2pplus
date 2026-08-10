@@ -6,7 +6,9 @@
     - Maximum destinations option (0-1000, default 50): when more
       torrents run than the cap, the extras share destinations in
       randomized, variable-size pools (salted per run), so destination
-      count stays bounded to limit memory use
+      count stays bounded to limit memory use; pooled destinations show
+      as "I2PSnark - Pool N" on the console's tunnels page with a
+      data-tip tooltip listing the pooled torrents
 
 2026-08-09 dr|z3d
   * Tunnel:

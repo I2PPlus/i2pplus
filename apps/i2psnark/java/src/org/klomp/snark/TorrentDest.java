@@ -3,6 +3,7 @@ package org.klomp.snark;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.client.streaming.I2PServerSocket;
@@ -31,8 +32,13 @@ public class TorrentDest {
     private final int _poolIndex;
     private final I2PSocketManager _mgr;
     private final I2PServerSocket _serverSocket;
+    /** Session property carrying the pool's torrent names, for the /tunnels pool tooltip */
+    public static final String PROP_POOL_MEMBERS = "i2psnark.poolMembers";
+
     /** assigned torrents by Base64-encoded info hash key, guarded by synchronized methods */
     private final Map<String, InfoHash> _torrents = new HashMap<>(1);
+    /** assigned torrent names by Base64-encoded info hash key, for the pool tooltip */
+    private final Map<String, String> _names = new HashMap<>(1);
     private TorrentKRPC _dht;
     private UDPTrackerClient _udpTracker;
 
@@ -85,31 +91,63 @@ public class TorrentDest {
 
     /**
      * Assign a torrent to this destination, serving its infohash on the DHT instance when
-     * one already runs.
+     * one already runs, and updating the pool tooltip.
      *
      * @param key the Base64-encoded info hash key
      * @param ih the torrent's info hash
+     * @param name the torrent name, shown in the pool tooltip
      */
-    public synchronized void assign(String key, InfoHash ih) {
+    public synchronized void assign(String key, InfoHash ih, String name) {
         _torrents.put(key, ih);
+        if (name != null) {
+            _names.put(key, name);
+        }
         if (_dht != null) {
             _dht.addServedTorrent(ih);
         }
+        updatePoolMembersProp();
     }
 
     /**
      * Remove a torrent from this destination, stopping its DHT serving when an instance
-     * runs.
+     * runs and updating the pool tooltip.
      *
      * @param key the Base64-encoded info hash key
      * @return true when no torrents remain assigned
      */
     public synchronized boolean unassign(String key) {
         InfoHash ih = _torrents.remove(key);
+        _names.remove(key);
         if (ih != null && _dht != null) {
             _dht.removeServedTorrent(ih);
         }
+        updatePoolMembersProp();
         return _torrents.isEmpty();
+    }
+
+    /**
+     * Push the pool's torrent names to the session's i2psnark.poolMembers property, which
+     * the console reads to render the pool tooltip on the tunnels page. Dedicated
+     * destinations have no tooltip and skip the update.
+     */
+    private void updatePoolMembersProp() {
+        if (_poolIndex < 0) {
+            return;
+        }
+        I2PSession sess = _mgr.getSession();
+        if (sess == null) {
+            return;
+        }
+        StringBuilder buf = new StringBuilder(_names.size() * 16);
+        for (String name : _names.values()) {
+            if (buf.length() > 0) {
+                buf.append('|');
+            }
+            buf.append(name.replace("|", " "));
+        }
+        Properties props = new Properties();
+        props.setProperty(PROP_POOL_MEMBERS, buf.toString());
+        sess.updateOptions(props);
     }
 
     /**

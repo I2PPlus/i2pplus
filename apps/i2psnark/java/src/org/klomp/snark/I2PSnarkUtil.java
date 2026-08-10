@@ -765,9 +765,13 @@ public class I2PSnarkUtil implements DisconnectListener {
                 // buildOpts() mutates the shared context properties, so copy them for the
                 // session and wait up to an hour for the initial tunnel builds before
                 // giving up; a per-torrent session failure is retried by Snark.
+                String nickname = poolIndex >= 0 ? getPoolNickname(poolIndex) : getNickname(name);
                 Properties opts = new Properties();
-                opts.putAll(buildOpts(getNickname(name), true));
+                opts.putAll(buildOpts(nickname, true));
                 opts.setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "60");
+                if (poolIndex >= 0 && name != null) {
+                    opts.setProperty(TorrentDest.PROP_POOL_MEMBERS, name.replace("|", " "));
+                }
                 I2PSocketManager mgr =
                         I2PSocketManagerFactory.createManager(_i2cpHost, _i2cpPort, opts);
                 if (mgr == null) {
@@ -775,10 +779,22 @@ public class I2PSnarkUtil implements DisconnectListener {
                 }
                 td = new TorrentDest(_context, key, poolIndex, mgr, mgr.getServerSocket());
             }
-            td.assign(key, new InfoHash(Base64.decode(key)));
+            td.assign(key, new InfoHash(Base64.decode(key)), name);
             _torrentDests.put(key, td);
         }
         return td;
+    }
+
+    /**
+     * Tunnel nickname for a shared pool, "I2PSnark - Pool &lt;n&gt;", so the console's tunnels
+     * page shows the pool rather than the first torrent's name. The pool's member names are
+     * carried in the i2psnark.poolMembers session property for the pool tooltip.
+     *
+     * @param poolIndex the pool index
+     * @return the nickname
+     */
+    private static String getPoolNickname(int poolIndex) {
+        return "I2PSnark - Pool " + (poolIndex + 1);
     }
 
     /**
