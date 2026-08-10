@@ -1007,13 +1007,15 @@ class TunnelRenderer {
     /**
      *  Get the pool's torrent names for the tooltip, when the tunnel is a shared
      *  I2PSnark pool destination and the i2psnark.poolMembers session property is set.
+     *  Single-torrent pools have the torrent's name for a nickname, so the check matches
+     *  all I2PSnark tunnels; dedicated destinations have no poolMembers property.
      *
      *  @param in the tunnel pool
      *  @return the escaped tooltip text, or null for a dedicated destination
      */
     private String getPoolTip(TunnelPool in) {
         String name = in.getSettings().getDestinationNickname();
-        if (name == null || !name.startsWith("I2PSnark - Pool")) {
+        if (name == null || !name.startsWith("I2PSnark -")) {
             return null;
         }
         String members = in.getSettings().getUnknownOptions().getProperty("i2psnark.poolMembers");

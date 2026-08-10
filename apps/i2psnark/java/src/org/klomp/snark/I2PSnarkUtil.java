@@ -123,6 +123,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     private int _maxDest = SnarkManager.DEFAULT_MULTI_DEST_MAX;
     /** Per-run random salt mixing pool assignments so the grouping is unlearnable */
     private final int _destSalt;
+    /** Sequential pool number for the tunnel nickname, one per pool destination created */
+    private int _nextPoolNum;
     private final Map<String, TorrentDest> _torrentDests = new ConcurrentHashMap<>();
     private long _startedTime;
     private final DisconnectListener _discon;
@@ -765,19 +767,26 @@ public class I2PSnarkUtil implements DisconnectListener {
                 // buildOpts() mutates the shared context properties, so copy them for the
                 // session and wait up to an hour for the initial tunnel builds before
                 // giving up; a per-torrent session failure is retried by Snark.
-                String nickname = poolIndex >= 0 ? getPoolNickname(poolIndex) : getNickname(name);
+                // Pools start out named after their first torrent; TorrentDest renames
+                // them to "I2PSnark - Pool <n>" when a second torrent joins.
+                int poolNum = poolIndex >= 0 ? ++_nextPoolNum : -1;
+                String nickname = getNickname(name);
                 Properties opts = new Properties();
                 opts.putAll(buildOpts(nickname, true));
                 opts.setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "60");
                 if (poolIndex >= 0 && name != null) {
-                    opts.setProperty(TorrentDest.PROP_POOL_MEMBERS, name.replace("|", " "));
+                    // Prefixes are required: the router only stores session options
+                    // under inbound./outbound. in the pool settings, which the console
+                    // reads for the pool tooltip.
+                    opts.setProperty("inbound." + TorrentDest.PROP_POOL_MEMBERS, name.replace("|", " "));
+                    opts.setProperty("outbound." + TorrentDest.PROP_POOL_MEMBERS, name.replace("|", " "));
                 }
                 I2PSocketManager mgr =
                         I2PSocketManagerFactory.createManager(_i2cpHost, _i2cpPort, opts);
                 if (mgr == null) {
                     return null;
                 }
-                td = new TorrentDest(_context, key, poolIndex, mgr, mgr.getServerSocket());
+                td = new TorrentDest(_context, key, poolIndex, poolNum, mgr, mgr.getServerSocket());
             }
             td.assign(key, new InfoHash(Base64.decode(key)), name);
             _torrentDests.put(key, td);
@@ -786,15 +795,16 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * Tunnel nickname for a shared pool, "I2PSnark - Pool &lt;n&gt;", so the console's tunnels
-     * page shows the pool rather than the first torrent's name. The pool's member names are
-     * carried in the i2psnark.poolMembers session property for the pool tooltip.
+     * Tunnel nickname for a shared pool, "I2PSnark - Pool &lt;n&gt;", with the pool's member
+     * names carried in the i2psnark.poolMembers session property for the pool tooltip.
+     * Single-torrent pools keep their torrent's nickname instead; this is applied by
+     * TorrentDest only when a second torrent joins the pool.
      *
-     * @param poolIndex the pool index
+     * @param poolNum the sequential pool number, assigned when the pool destination was created
      * @return the nickname
      */
-    private static String getPoolNickname(int poolIndex) {
-        return "I2PSnark - Pool " + (poolIndex + 1);
+    static String getPoolNickname(int poolNum) {
+        return "I2PSnark - Pool " + poolNum;
     }
 
     /**

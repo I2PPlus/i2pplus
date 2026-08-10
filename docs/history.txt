@@ -14,6 +14,11 @@
       count stays bounded to limit memory use; pooled destinations show
       as "I2PSnark - Pool N" on the console's tunnels page with a
       data-tip tooltip listing the pooled torrents
+    - Pool naming: a shared destination keeps the name of its first
+      torrent while it holds one; it renames to "I2PSnark - Pool N"
+      (sequential per run) when a second torrent joins, and back when
+      it reverts to one. The pool tooltip now shows for single-torrent
+      pools too, with the full torrent name
 
 2026-08-09 dr|z3d
   * Tunnel:

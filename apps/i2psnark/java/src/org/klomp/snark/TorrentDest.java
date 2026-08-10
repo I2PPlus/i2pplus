@@ -30,6 +30,8 @@ public class TorrentDest {
     private final String _key;
     /** -1 when dedicated to a single torrent, else the shared pool index */
     private final int _poolIndex;
+    /** Sequential pool number for the "I2PSnark - Pool N" nickname, -1 when dedicated */
+    private final int _poolNum;
     private final I2PSocketManager _mgr;
     private final I2PServerSocket _serverSocket;
     /** Session property carrying the pool's torrent names, for the /tunnels pool tooltip */
@@ -45,13 +47,15 @@ public class TorrentDest {
     /**
      * @param key Base64 encoding of the first torrent's info hash
      * @param poolIndex the shared pool index, or -1 for a dedicated destination
+     * @param poolNum the sequential pool number for the nickname, -1 when dedicated
      * @param mgr the socket manager of the new transient destination; must be connected
      * @param serverSocket the destination's server socket, or null
      */
-    public TorrentDest(I2PAppContext ctx, String key, int poolIndex, I2PSocketManager mgr, I2PServerSocket serverSocket) {
+    public TorrentDest(I2PAppContext ctx, String key, int poolIndex, int poolNum, I2PSocketManager mgr, I2PServerSocket serverSocket) {
         _context = ctx;
         _key = key;
         _poolIndex = poolIndex;
+        _poolNum = poolNum;
         _mgr = mgr;
         _serverSocket = serverSocket;
     }
@@ -91,7 +95,9 @@ public class TorrentDest {
 
     /**
      * Assign a torrent to this destination, serving its infohash on the DHT instance when
-     * one already runs, and updating the pool tooltip.
+     * one already runs, and updating the pool tooltip and tunnel nickname. The nickname
+     * changes only when the pool crosses the one-to-two torrent boundary; further members
+     * keep the pool name until the pool reverts to a single torrent.
      *
      * @param key the Base64-encoded info hash key
      * @param ih the torrent's info hash
@@ -105,12 +111,13 @@ public class TorrentDest {
         if (_dht != null) {
             _dht.addServedTorrent(ih);
         }
-        updatePoolMembersProp();
+        updatePoolProps();
     }
 
     /**
      * Remove a torrent from this destination, stopping its DHT serving when an instance
-     * runs and updating the pool tooltip.
+     * runs and updating the pool tooltip and tunnel nickname. The nickname reverts to the
+     * remaining torrent's name when the pool drops back to a single torrent.
      *
      * @param key the Base64-encoded info hash key
      * @return true when no torrents remain assigned
@@ -121,16 +128,20 @@ public class TorrentDest {
         if (ih != null && _dht != null) {
             _dht.removeServedTorrent(ih);
         }
-        updatePoolMembersProp();
+        updatePoolProps();
         return _torrents.isEmpty();
     }
 
     /**
      * Push the pool's torrent names to the session's i2psnark.poolMembers property, which
-     * the console reads to render the pool tooltip on the tunnels page. Dedicated
-     * destinations have no tooltip and skip the update.
+     * the console reads to render the pool tooltip on the tunnels page. The property must
+     * carry the inbound./outbound. prefix, because the router only stores prefixed session
+     * options in the pool settings. Also sets the tunnel nickname: the single torrent's
+     * name while one torrent is assigned, the "I2PSnark - Pool N" name once a second joins
+     * and until the pool reverts to one. Dedicated destinations have no tooltip and skip
+     * the update.
      */
-    private void updatePoolMembersProp() {
+    private void updatePoolProps() {
         if (_poolIndex < 0) {
             return;
         }
@@ -146,7 +157,20 @@ public class TorrentDest {
             buf.append(name.replace("|", " "));
         }
         Properties props = new Properties();
-        props.setProperty(PROP_POOL_MEMBERS, buf.toString());
+        props.setProperty("inbound." + PROP_POOL_MEMBERS, buf.toString());
+        props.setProperty("outbound." + PROP_POOL_MEMBERS, buf.toString());
+        String nick;
+        if (_torrents.size() == 1 && !_names.isEmpty()) {
+            nick = I2PSnarkUtil.getNickname(_names.values().iterator().next());
+        } else if (_torrents.size() > 1) {
+            nick = I2PSnarkUtil.getPoolNickname(_poolNum);
+        } else {
+            nick = null;
+        }
+        if (nick != null) {
+            props.setProperty("inbound.nickname", nick);
+            props.setProperty("outbound.nickname", nick);
+        }
         sess.updateOptions(props);
     }
 
