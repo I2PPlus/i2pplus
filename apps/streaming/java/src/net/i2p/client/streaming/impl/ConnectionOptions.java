@@ -28,8 +28,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private boolean _fullySigned;
     /** Answer pings. */
     private boolean _answerPings;
-    /** Enforce proto. */
-    private boolean _enforceProto;
     /** Window size. */
     private volatile int _windowSize;
     /** Connection traffic profile (only bulk supported). */
@@ -232,8 +230,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static final String PROP_MAX_TOTAL_CONNS_HOUR = "i2p.streaming.maxTotalConnsPerHour";
     /** Max total connections per day across all peers */
     public static final String PROP_MAX_TOTAL_CONNS_DAY = "i2p.streaming.maxTotalConnsPerDay";
-    /** Reject connections without PROTO_STREAMING flag */
-    public static final String PROP_ENFORCE_PROTO = "i2p.streaming.enforceProtocol";
 
     /** @since 0.9.3 moved from I2PSocketManagerFull */
     public static final String PROP_MAX_STREAMS = "i2p.streaming.maxConcurrentStreams";
@@ -418,12 +414,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** @since 0.9.34 */
     public static final int DEFAULT_TAG_THRESHOLD = 30;
 
-    /**
-     * If PROTO is enforced, we cannot communicate with destinations before 0.7.1.
-     * Default true since 0.9.36.
-     */
-    private static final boolean DEFAULT_ENFORCE_PROTO = true;
-
     /*
      * Message size derivation (1730 == 2 tunnel messages):
      *   1024 Tunnel Message - 21 Header = 1003 Tunnel Payload
@@ -532,7 +522,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             setCongestionAvoidanceGrowthRateFactor(opts.getCongestionAvoidanceGrowthRateFactor());
             setSlowStartGrowthRateFactor(opts.getSlowStartGrowthRateFactor());
             setAnswerPings(opts.getAnswerPings());
-            setEnforceProtocol(opts.getEnforceProtocol());
             setDisableRejectLogging(opts.getDisableRejectLogging());
             initLists(opts);
             _maxConnsPerMinute = opts.getMaxConnsPerMinute();
@@ -610,8 +599,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
         if (!onlyIfSet || opts.getProperty(PROP_ANSWER_PINGS) != null)
             setAnswerPings(getBool(opts, PROP_ANSWER_PINGS, DEFAULT_ANSWER_PINGS));
-        if (!onlyIfSet || opts.getProperty(PROP_ENFORCE_PROTO) != null)
-            setEnforceProtocol(getBool(opts, PROP_ENFORCE_PROTO, DEFAULT_ENFORCE_PROTO));
         if (!onlyIfSet || opts.getProperty(PROP_DISABLE_REJ_LOG) != null)
             setDisableRejectLogging(getBool(opts, PROP_DISABLE_REJ_LOG, false));
 
@@ -684,20 +671,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @param yes true to respond to pings
      */
     public void setAnswerPings(boolean yes) {_answerPings = yes;}
-
-    /**
-     * If true, only accept traffic with I2PSession.PROTO_STREAMING (6).
-     * Destinations before 0.7.1 (March 2009) lack this flag and will be rejected.
-     * Set to true when running multiple protocols on a single Destination.
-     *
-     * @return true if protocol enforcement is enabled
-     */
-    public boolean getEnforceProtocol() {return _enforceProto;}
-    /**
-     * Whether to enforce the PROTO_STREAMING flag.
-     * @param yes true to enforce PROTO_STREAMING flag
-     */
-    public void setEnforceProtocol(boolean yes) {_enforceProto = yes;}
 
     /**
      * Whether connection reject logging is suppressed.
