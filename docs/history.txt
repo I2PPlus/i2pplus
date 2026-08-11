@@ -19,6 +19,10 @@
       configuration (default on) staggers batched starts with a random
       delay so simultaneously started torrents cannot be correlated by
       trackers or DHT peers; disable it to start a batch immediately
+    - Torrents running on shared pool destinations now show a pool badge
+      (pool number, destination tooltip) in the status column, and the
+      status header sorts by status then pool in both directions when
+      more than one destination is active
 
 2026-08-10 dr|z3d
   * Tunnel:

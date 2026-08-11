@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import org.klomp.snark.MetaInfo;
 import org.klomp.snark.Snark;
 import org.klomp.snark.Storage;
+import org.klomp.snark.TorrentDest;
 
 /**
  * Comparators for various columns
@@ -43,6 +44,7 @@ class Sorters {
      *   <li>10: Remaining (needed)
      *   <li>11: Upload ratio
      *   <li>12: File type
+     *   <li>13: Status and pool
      * </ul>
      *
      * @param servlet for file type callback only
@@ -115,6 +117,11 @@ class Sorters {
             case -12:
             case 12:
                 rv = new FileTypeComparator(rev, lang, servlet);
+                break;
+
+            case -13:
+            case 13:
+                rv = new StatusPoolComparator(rev, lang, servlet);
                 break;
         }
         return rv;
@@ -229,6 +236,14 @@ class Sorters {
         }
 
         public int compareIt(Snark l, Snark r) {
+            return comp(l, r);
+        }
+
+        /**
+         * Compare two torrents by status, with ties broken by swarm size
+         * for idle, inactive and magnet states, otherwise by active peer count.
+         */
+        static int comp(Snark l, Snark r) {
             int rv = getStatus(l) - getStatus(r);
             if (rv != 0) {
                 return rv;
@@ -246,7 +261,7 @@ class Sorters {
             } // tie break by active peer count
         }
 
-        private static int getStatus(Snark snark) {
+        static int getStatus(Snark snark) {
             boolean isMagnet = snark.getRemainingLength() < 0;
             if (snark.isStopped() && !isMagnet) {
                 return STATUS_STOPPED_OFFSET + getStatusImpl(snark);
@@ -297,6 +312,46 @@ class Sorters {
             } else {
                 return STATUS_UNKNOWN;
             }
+        }
+    }
+
+    /**
+     * Sort by status, then by pool number; ties fall back to the status
+     * tie-breaks. The pool stage only applies when multi-dest mode has
+     * more than one destination.
+     */
+    private static class StatusPoolComparator extends Sort {
+
+        private final boolean _poolSort;
+
+        private StatusPoolComparator(boolean rev, String lang, I2PSnarkServlet servlet) {
+            super(rev, lang);
+            _poolSort = servlet.multiDestSortEnabled();
+        }
+
+        public int compareIt(Snark l, Snark r) {
+            int rv = StatusComparator.getStatus(l) - StatusComparator.getStatus(r);
+            if (rv != 0) {
+                return rv;
+            }
+            if (_poolSort) {
+                rv = compLong(poolNum(l), poolNum(r));
+                if (rv != 0) {
+                    return rv;
+                }
+            }
+            return StatusComparator.comp(l, r);
+        }
+
+        /**
+         * The pool number of a torrent's shared destination, -1 when dedicated.
+         *
+         * @param snark the torrent
+         * @return the pool number, or -1
+         */
+        private static int poolNum(Snark snark) {
+            TorrentDest td = snark.getDest();
+            return td != null ? td.getPoolNum() : -1;
         }
     }
 

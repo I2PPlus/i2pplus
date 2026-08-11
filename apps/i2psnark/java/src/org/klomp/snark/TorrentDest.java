@@ -80,6 +80,16 @@ public class TorrentDest {
         return _poolIndex;
     }
 
+    /**
+     * The sequential pool number shown in the tunnel nickname "I2PSnark - Pool
+     * &lt;n&gt;", or -1 when dedicated to a single torrent.
+     *
+     * @return the pool number, or -1 when dedicated
+     */
+    public int getPoolNum() {
+        return _poolNum;
+    }
+
     public I2PSocketManager getSocketManager() {
         return _mgr;
     }

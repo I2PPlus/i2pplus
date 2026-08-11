@@ -48,7 +48,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private final byte[] infoHash;
     private String additionalTrackerURL;
     /** The transient destination, when multi-dest is enabled; null otherwise or on stop */
-    private TorrentDest _dest;
+    private volatile TorrentDest _dest;
     /** The util */
     protected final I2PSnarkUtil _util;
     private final Log _log;
@@ -730,6 +730,17 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             return meta.getInfoHash();
         }
         return infoHash;
+    }
+
+    /**
+     * The transient multi-dest destination, or null when multi-dest is
+     * disabled or the torrent is stopped.
+     *
+     * @return the destination, or null
+     * @since 0.9.71+
+     */
+    public TorrentDest getDest() {
+        return _dest;
     }
 
     /**

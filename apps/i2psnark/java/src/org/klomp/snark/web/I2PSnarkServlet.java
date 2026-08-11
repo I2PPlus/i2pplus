@@ -45,6 +45,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.Base32;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
+import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.servlet.RequestWrapper;
 import net.i2p.servlet.util.ServletUtil;
@@ -63,6 +64,7 @@ import org.klomp.snark.Snark;
 import org.klomp.snark.SnarkManager;
 import org.klomp.snark.Storage;
 import org.klomp.snark.TorrentCreateFilter;
+import org.klomp.snark.TorrentDest;
 import org.klomp.snark.Tracker;
 import org.klomp.snark.TrackerClient;
 import org.klomp.snark.URIUtil;
@@ -1076,7 +1078,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String filter = req.getParameter("filter") != null ? req.getParameter("filter") : "";
         String peerParam = req.getParameter("p");
         String search = req.getParameter("search");
-        String srt = req.getParameter("sort");
+        String srt = normalizeSortParam(req.getParameter("sort"));
         String stParam = req.getParameter("st");
         boolean filterEnabled = !filter.isEmpty() && !"all".equals(filter);
 
@@ -1265,10 +1267,24 @@ public class I2PSnarkServlet extends BasicServlet {
         // Start building header row
         buf.append("<tr>");
 
-        // Status header sort parameters and active sort detection
-        String nextSort = ("-2".equals(currentSort)) ? "2" : "-2";
-        boolean isStatusSort = "2".equals(currentSort) || "-2".equals(currentSort);
-        boolean isStatusDesc = currentSort != null && currentSort.startsWith("-");
+        // Status header sort parameters and active sort detection,
+        // cycling status asc/desc and status+pool asc/desc when pooled dests exist
+        String nextSort;
+        boolean poolSort = multiDestSortEnabled();
+        if ("-2".equals(currentSort)) {
+            nextSort = "2";
+        } else if ("2".equals(currentSort)) {
+            nextSort = poolSort ? "-13" : "-2";
+        } else if (poolSort && "-13".equals(currentSort)) {
+            nextSort = "13";
+        } else if (poolSort && "13".equals(currentSort)) {
+            nextSort = "-2";
+        } else {
+            nextSort = "-2";
+        }
+        boolean isStatusSort = "2".equals(currentSort) || "-2".equals(currentSort)
+                               || (poolSort && ("13".equals(currentSort) || "-13".equals(currentSort)));
+        boolean isStatusDesc = "-2".equals(currentSort) || (poolSort && "-13".equals(currentSort));
         appendSortHeader(buf, contextPath, req, currentSort, nextSort, separator, filterQuery,
                          "status", "status", txtStatus, showSort, isStatusSort, isStatusDesc);
 
@@ -1500,6 +1516,16 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Whether pool badges and pool-based sorting apply: multi-dest mode
+     * with more than one active destination.
+     *
+     * @return true when pooled destinations are in use
+     */
+    boolean multiDestSortEnabled() {
+        return _manager.util().getMultiDest() && _manager.util().getTorrentDests().size() > 1;
+    }
+
+    /**
      * Appends the footer section for the torrent list table, displaying overall statistics,
      * counters, and status indicators with associated icons.
      *
@@ -1718,7 +1744,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String peerParam = req.getParameter("p");
         String psize = req.getParameter("ps");
         String search = req.getParameter("search");
-        String srt = req.getParameter("sort");
+        String srt = normalizeSortParam(req.getParameter("sort"));
         String reqURL = req.getRequestURL().toString();
 
         int pageSizeConf = _manager.getPageSize();
@@ -1876,7 +1902,7 @@ public class I2PSnarkServlet extends BasicServlet {
         params.put("nonce", String.valueOf(getNonce()));
         params.put("p", req.getParameter("p"));
         params.put("st", req.getParameter("st"));
-        params.put("sort", req.getParameter("sort"));
+        params.put("sort", normalizeSortParam(req.getParameter("sort")));
         params.put("action", action);
         params.put("search", req.getParameter("search"));
 
@@ -1892,6 +1918,61 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
         buf.append("\n");
+    }
+
+    /**
+     *  Normalize a human-readable sort parameter to its legacy numeric form,
+     *  e.g. "pool-desc" to "-13", so readable URLs survive header cycling,
+     *  hidden inputs and query-string rebuilds. Numeric and unrecognized
+     *  values pass through unchanged.
+     *
+     *  @param sort the raw sort parameter, or null
+     *  @return the normalized sort parameter, or null
+     *  @since 0.9.71+
+     */
+    private static String normalizeSortParam(String sort) {
+        if (sort == null) {
+            return null;
+        }
+        String name = sort.toLowerCase(Locale.US);
+        boolean rev = false;
+        if (name.endsWith("-desc")) {
+            rev = true;
+            name = name.substring(0, name.length() - 5);
+        } else if (name.endsWith("-asc")) {
+            name = name.substring(0, name.length() - 4);
+        }
+        int type;
+        if (name.equals("name")) {
+            type = 1;
+        } else if (name.equals("status")) {
+            type = 2;
+        } else if (name.equals("pool")) {
+            type = 13;
+        } else if (name.equals("peers")) {
+            type = 3;
+        } else if (name.equals("eta")) {
+            type = 4;
+        } else if (name.equals("size")) {
+            type = 5;
+        } else if (name.equals("downloaded")) {
+            type = 6;
+        } else if (name.equals("uploaded")) {
+            type = 7;
+        } else if (name.equals("downrate") || name.equals("down-rate")) {
+            type = 8;
+        } else if (name.equals("uprate") || name.equals("up-rate")) {
+            type = 9;
+        } else if (name.equals("remaining") || name.equals("needed")) {
+            type = 10;
+        } else if (name.equals("ratio")) {
+            type = 11;
+        } else if (name.equals("type")) {
+            type = 12;
+        } else {
+            return sort;
+        }
+        return String.valueOf(rev ? -type : type);
     }
 
     /**
@@ -1933,6 +2014,9 @@ public class I2PSnarkServlet extends BasicServlet {
             if (value == null) {
                 value = req.getParameter(paramName);
                 if (value != null) {
+                    if ("sort".equals(paramName)) {
+                        value = normalizeSortParam(value);
+                    }
                     if ("p".equals(paramName) || "sort".equals(paramName) || "st".equals(paramName)) {
                         value = DataHelper.stripHTML(value);
                     } else if ("search".equals(paramName)) {value = DataHelper.escapeHTML(value);}
@@ -3033,7 +3117,7 @@ public class I2PSnarkServlet extends BasicServlet {
         ArrayList<Snark> rv = new ArrayList<>(_manager.getTorrents());
         if (rv.size() > 1) {
             int sort = 0;
-            String ssort = req.getParameter("sort");
+            String ssort = normalizeSortParam(req.getParameter("sort"));
             if (ssort != null) {
                 try {sort = Integer.parseInt(ssort);}
                 catch (NumberFormatException nfe) { /* ignored */ }
@@ -3165,6 +3249,25 @@ public class I2PSnarkServlet extends BasicServlet {
             String statusString = statusResult.statusHtml;
             String rowClass = (row % 2 == 0 ? "rowEven" : "rowOdd");
             String rowStatus = rowClass + ' ' + snarkStatusLocal;
+
+            // Append a pool badge after the status icon when the torrent runs on a shared destination
+            if (isRunning && multiDestSortEnabled()) {
+                TorrentDest td = snark.getDest();
+                if (td != null && td.getPoolNum() >= 0) {
+                    StringBuilder poolBadge = new StringBuilder(64).append("<span class=pool");
+                    Destination dest = td.getMyDestination();
+                    if (dest != null) {
+                        poolBadge.append(" title=\"").append(_t("Destination")).append(": ")
+                                 .append(dest.toBase64().substring(0, 4)).append('"');
+                    }
+                    poolBadge.append('>').append(td.getPoolNum()).append("</span>");
+                    int tdEnd = statusString.indexOf("</td>");
+                    if (tdEnd >= 0) {
+                        statusString = statusString.substring(0, tdEnd) + poolBadge
+                                        + statusString.substring(tdEnd);
+                    }
+                }
+            }
 
             buf.append("<tr class=\"").append(rowStatus).append(" volatile\"><td class=status>")
                .append(statusString).append("</b></td><td class=trackerLink>");
