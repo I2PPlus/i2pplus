@@ -4,5 +4,5 @@ form,table,.configTitle,.toggleview,#navbar{margin-left:auto;margin-right:auto}
 .right{text-align:right}
 .configPanel,.section,.mainsection,#addSection,#createSection{text-align:center}
 td.status{position:relative;text-align:center}
-.status .pool{padding:0 1px;min-width:12px;display:inline-block;position:absolute;top:7px;right:6px;text-align:center;font-size:75%;border-radius:2px;box-shadow:var(--highlight);background:#292a}
+.status .pool{padding:2px 1px 1px;min-width:12px;display:inline-block;position:absolute;top:7px;right:6px;text-align:center;font-size:75%;font-weight:700;color:#fff;border-radius:2px;box-shadow:var(--highlight);background:#292a}
 #torrents .tName{text-align:left}

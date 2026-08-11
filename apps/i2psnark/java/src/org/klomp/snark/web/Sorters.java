@@ -44,7 +44,7 @@ class Sorters {
      *   <li>10: Remaining (needed)
      *   <li>11: Upload ratio
      *   <li>12: File type
-     *   <li>13: Status and pool
+     *   <li>13: Pool, then status
      * </ul>
      *
      * @param servlet for file type callback only
@@ -121,7 +121,7 @@ class Sorters {
 
             case -13:
             case 13:
-                rv = new StatusPoolComparator(rev, lang, servlet);
+                rv = new StatusPoolComparator(rev, lang);
                 break;
         }
         return rv;
@@ -316,35 +316,27 @@ class Sorters {
     }
 
     /**
-     * Sort by status, then by pool number; ties fall back to the status
-     * tie-breaks. The pool stage only applies when multi-dest mode has
-     * more than one destination.
+     * Sort strictly by pool number, then by status; ties fall back to the
+     * status tie-breaks. Torrents without a destination (stopped, or
+     * multi-dest off) share pool -1 and sort first in ascending order.
      */
     private static class StatusPoolComparator extends Sort {
 
-        private final boolean _poolSort;
-
-        private StatusPoolComparator(boolean rev, String lang, I2PSnarkServlet servlet) {
+        private StatusPoolComparator(boolean rev, String lang) {
             super(rev, lang);
-            _poolSort = servlet.multiDestSortEnabled();
         }
 
         public int compareIt(Snark l, Snark r) {
-            int rv = StatusComparator.getStatus(l) - StatusComparator.getStatus(r);
+            int rv = compLong(poolNum(l), poolNum(r));
             if (rv != 0) {
                 return rv;
-            }
-            if (_poolSort) {
-                rv = compLong(poolNum(l), poolNum(r));
-                if (rv != 0) {
-                    return rv;
-                }
             }
             return StatusComparator.comp(l, r);
         }
 
         /**
-         * The pool number of a torrent's shared destination, -1 when dedicated.
+         * The pool number of a torrent's shared destination, -1 when the
+         * torrent has no destination.
          *
          * @param snark the torrent
          * @return the pool number, or -1
