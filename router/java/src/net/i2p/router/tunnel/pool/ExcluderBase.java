@@ -18,7 +18,7 @@ import net.i2p.data.Hash;
  */
 abstract class ExcluderBase implements Set<Hash> {
     /**
-     * s.
+     * The underlying set of excluded hashes.
      */
     protected final Set<Hash> s;
 
@@ -47,59 +47,63 @@ abstract class ExcluderBase implements Set<Hash> {
     @Override
     public abstract boolean contains(Object o);
     /**
-     * add.
+     * Add the hash to the underlying set.
      */
     public boolean add(Hash h) {return s.add(h);}
     /**
-     * addAll.
+     * Add all of the hashes to the underlying set.
      */
     public boolean addAll(Collection<? extends Hash> c) {return s.addAll(c);}
     /**
-     * clear.
+     * Remove all hashes from the underlying set.
      */
     public void clear() {s.clear();}
     /**
-     * containsAll.
+     * Whether the underlying set contains all of the given hashes.
      */
     public boolean containsAll(Collection<?> c) {return s.containsAll(c);}
     /**
-     * equals.
+     * Whether the underlying set equals the given object.
      */
     public boolean equals(Object o) {return s.equals(o);}
     /**
-     * @return whether h code is present
+     * The hash code of the underlying set.
+     *
+     * @return the hash code
      */
     public int hashCode() {return s.hashCode();}
     /**
+     * Whether the underlying set is empty.
+     *
      * @return whether empty
      */
     public boolean isEmpty() {return s.isEmpty();}
     /**
-     * iterator.
+     * An iterator over the underlying set.
      */
     public Iterator<Hash> iterator() {return s.iterator();}
     /**
-     * remove.
+     * Remove the hash from the underlying set.
      */
     public boolean remove(Object o) {return s.remove(o);}
     /**
-     * removeAll.
+     * Remove all of the given hashes from the underlying set.
      */
     public boolean removeAll(Collection<?> c) {return s.removeAll(c);}
     /**
-     * retainAll.
+     * Retain only the given hashes in the underlying set.
      */
     public boolean retainAll(Collection<?> c) {return s.retainAll(c);}
     /**
-     * size.
+     * The number of hashes in the underlying set.
      */
     public int size() {return s.size();}
     /**
-     * toArray.
+     * The hashes of the underlying set as an array.
      */
     public Object[] toArray() {return s.toArray();}
     /**
-     * toArray.
+     * The hashes of the underlying set in the given array.
      */
     public <Hash> Hash[] toArray(Hash[] a) {return s.toArray(a);}
 
@@ -142,7 +146,7 @@ abstract class ExcluderBase implements Set<Hash> {
     }
 
     /**
-     * toString.
+     * Description of the excluded set and its size.
      */
     @Override
     public String toString() {

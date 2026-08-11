@@ -63,20 +63,20 @@ import net.i2p.util.VersionComparator;
  * @since 0.8.9
  */
 public class IterativeSearchJob extends FloodSearchJob {
-    /** peers not sent to yet, sorted closest-to-the-routing-key */
+    /** Peers not sent to yet, sorted closest-to-the-routing-key. */
     private final SortedSet<Hash> _toTry;
-    /** query sent, no reply yet */
+    /** Query sent, no reply yet. */
     private final Set<Hash> _unheardFrom;
-    /** query sent, failed, timed out, or got DSRM */
+    /** Query sent, failed, timed out, or got DSRM. */
     private final Set<Hash> _failedPeers;
-    /** the time the query was sent to a peer, which we need to update profiles correctly */
+    /** The time the query was sent to a peer, which we need to update profiles correctly. */
     private final Map<Hash, Long> _sentTime;
-    /** the routing key */
+    /** The routing key. */
     private final Hash _rkey;
-    /** this is a marker to register with the MessageRegistry, it is never sent */
+    /** This is a marker to register with the MessageRegistry, it is never sent. */
     private OutNetMessage _out;
     private final Hash _fromLocalDest;
-    /** testing */
+    /** Hash to always query first, set from a router property for testing. */
     private static Hash _alwaysQueryHash;
     /** Max number of peers to query */
     private final int _totalSearchLimit;
@@ -109,7 +109,8 @@ public class IterativeSearchJob extends FloodSearchJob {
     public static long getMaxSearchTime() { return _maxSearchTime; }
 
     /**
-     * Set the total search time cap. Tuner may call this.
+     * Total search time cap. Tuner may call this.
+     *
      * @param val ms, clamped to [10s, 30s]
      * @since 0.9.71+
      */
@@ -170,7 +171,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static volatile int _maxConcurrentDefault = SystemVersion.isSlow() ? 4 : 16;
 
     /**
-     * Gets the maximum concurrent default value.
+     * Maximum concurrent default value.
      *
      * @since 0.9.70+
      * @return the max concurrent default
@@ -178,8 +179,9 @@ public class IterativeSearchJob extends FloodSearchJob {
     public static int getMaxConcurrentDefault() { return _maxConcurrentDefault; }
 
     /**
-     * Sets the maximum concurrent default value.
+     * Maximum concurrent default value, clamped to [1, 64].
      *
+     * @param val the new default
      * @since 0.9.70+
      */
     public static void setMaxConcurrentDefault(int val) { _maxConcurrentDefault = Math.max(1, Math.min(64, val)); }
@@ -238,7 +240,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      */
     public static final String PROP_ENCRYPT_RI = "router.encryptRouterLookups";
 
-    /** only on fast boxes, for now */
+    /** Only on fast boxes, for now. */
     public static final boolean DEFAULT_ENCRYPT_RI = NativeBigInteger.isNative();
 
     /**
@@ -791,6 +793,8 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
+     * Name of this job.
+     *
      * @return the name
      */
     @Override

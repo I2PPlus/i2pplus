@@ -355,7 +355,7 @@ class PeerTestState {
     /**
      *  Set the status code sent to Alice (SSU2 Bob only).
      * @param status the status
-     *  @since 0.9.57
+     * @since 0.9.57
      */
     public void setStatus(int status) { _status = status; }
 
@@ -382,7 +382,7 @@ class PeerTestState {
     public int incrementPacketsRelayed() { return _packetsRelayed.incrementAndGet(); }
 
     /**
-     * toString.
+     * String representation of this test state.
      */
     @Override
     public String toString() {

@@ -127,7 +127,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      */
     public static final int KEY_TYPE_SERVICE_LIST = 11;
 
-    /** cryptographic signature */
+    /** Cryptographic signature. */
     protected volatile Signature _signature;
     /**
      * Current routing key, cached. Synchronize on this object.
@@ -378,7 +378,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-     *  Marks this entry as received via published mode.
+     * Marks this entry as received via published mode.
      *
      * @since 0.9.58 moved up from LeaseSet
      *

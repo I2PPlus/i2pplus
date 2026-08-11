@@ -49,14 +49,14 @@ public class JobTiming implements Clock.ClockUpdateListener {
     }
 
     /**
-     * Get the actual start time when the job began execution.
+     * The actual start time when the job began execution.
      *
      * @return the actual start time
      */
     public long getActualStart() { return _actualStart; }
 
     /**
-     * Set the actual start time when the job began execution.
+     * The actual start time when the job began execution.
      *
      * @param actualStartTime the actual start time
      */
@@ -66,14 +66,14 @@ public class JobTiming implements Clock.ClockUpdateListener {
     public void start() { _actualStart = _context.clock().now(); }
 
     /**
-     * Get the actual end time when the job finished execution.
+     * The actual end time when the job finished execution.
      *
      * @return the actual end time
      */
     public long getActualEnd() { return _actualEnd; }
 
     /**
-     * Set the actual end time when the job finished execution.
+     * The actual end time when the job finished execution.
      *
      * @param actualEndTime the actual end time
      */

@@ -36,18 +36,22 @@ class FloodOnlyLookupSelector implements MessageSelector {
     }
 
     /**
-     * continueMatching.
+     * Continue matching while lookups remain and the match is not yet found.
      */
     public boolean continueMatching() {
         return _search.getLookupsRemaining() > 0 && !_matchFound && _context.clock().now() < getExpiration();
     }
 
     /**
+     * Absolute time when the search expires, or -1 once a match is found.
+     *
      * @return the expiration
      */
     public long getExpiration() { return (_matchFound ? -1 : _search.getExpiration()); }
 
     /**
+     * Whether the message is a store for the searched key.
+     *
      * @return whether match
      */
     public boolean isMatch(I2NPMessage message) {

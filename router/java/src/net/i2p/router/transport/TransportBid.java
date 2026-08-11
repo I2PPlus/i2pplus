@@ -34,7 +34,7 @@ public class TransportBid {
      */
     public int getLatencyMs() {return _latencyMs;}
     /**
-     * setLatencyMs.
+     * The latency bid value in milliseconds.
      */
     public void setLatencyMs(int milliseconds) {_latencyMs = milliseconds;}
 
@@ -44,7 +44,7 @@ public class TransportBid {
      */
     public Transport getTransport() {return _transport;}
     /**
-     * setTransport.
+     * The transport that offered this bid.
      */
     public void setTransport(Transport transport) {_transport = transport;}
 }

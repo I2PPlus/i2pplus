@@ -20,6 +20,8 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
     private static final int PRIORITY = OutNetMessage.PRIORITY_PARTICIPATING;
 
     /**
+     * Binds the router context and hop configuration.
+     *
      * @param ctx the router context
      * @param cfg the hop configuration
      */
@@ -30,6 +32,8 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
     }
 
     /**
+     * Queue the encrypted data for delivery to the next hop.
+     *
      * @param encrypted the encrypted data
      * @return the message unique ID
      */
@@ -38,7 +42,7 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
     }
 
     /**
-     * receiveEncrypted.
+     * Queue the encrypted data for delivery, with the netDb lookup already done.
      */
     public long receiveEncrypted(byte[] encrypted, boolean alreadySearched) {
         if (!alreadySearched)
@@ -91,12 +95,14 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
         }
 
         /**
+         * The name of this job.
+         *
          * @return the name
          */
         public String getName() { return "Lookup IBGW First Hop"; }
 
         /**
-         * runJob.
+         * Continue the router info lookup for the next hop.
          */
         public void runJob() {
             receiveEncrypted(_encrypted, true);

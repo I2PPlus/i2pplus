@@ -40,9 +40,6 @@ class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandle
         super(context, RequestVariableLeaseSetMessage.MESSAGE_TYPE);
     }
 
-    /**
-     * handleMessage.
-     */
     @Override
     /**
      * Handle an incoming I2CP message.

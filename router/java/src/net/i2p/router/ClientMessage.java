@@ -30,7 +30,7 @@ public class ClientMessage {
     private final MessageId _messageId;
     private final long _messageNonce;
     private final long _expiration;
-    /** only for outbound messages */
+    /** Flags only used for outbound messages. */
     private final int _flags;
 
     /**

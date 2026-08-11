@@ -16,13 +16,13 @@ import net.i2p.router.util.DecayingHashSet;
  */
 class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     private final RouterContext _context;
-    /** list of message IDs recently received, so we can ignore in flight dups */
+    /** List of message IDs recently received, so we can ignore in flight dups. */
     private volatile DecayingBloomFilter _recentlyCompletedMessages;
     private final UDPTransport _transport;
     private final MessageReceiver _messageReceiver;
     private volatile boolean _alive;
 
-    /** decay the recently completed every 10 seconds */
+    /** Decay the recently completed every 10 seconds. */
     private static final int DECAY_PERIOD = 10*1000;
 
     /**
@@ -38,7 +38,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     }
 
     /**
-     * startup.
+     * Start the receiver and duplicate filter.
      */
     public synchronized void startup() {
         _alive = true;
@@ -49,7 +49,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     }
 
     /**
-     * shutdown.
+     * Shut down the receiver and duplicate filter.
      */
     public synchronized void shutdown() {
         _alive = false;
@@ -59,6 +59,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     }
 
     /**
+     * Whether the receiver is alive.
      * @return whether alive
      */
     public boolean isAlive() {return _alive;}
@@ -84,7 +85,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     int getReceiverQueueCapacity() { return _messageReceiver.getQueueCapacity(); }
 
     /**
-     * Get message receiver pool utilization as a ratio (0.0-1.0).
+     * Message receiver pool utilization as a ratio (0.0-1.0).
      * @since 0.9.70+
      */
     double getMessageReceiverUtilization() { return _messageReceiver.getUtilization(); }
@@ -123,7 +124,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
      */
     public static class ModifiableLong {
         /**
-         * value.
+         * The value.
          */
         public long value;
         /**

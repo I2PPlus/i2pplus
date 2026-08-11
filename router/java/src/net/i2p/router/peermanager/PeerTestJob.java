@@ -55,16 +55,16 @@ import net.i2p.util.VersionComparator;
 public class PeerTestJob extends JobImpl {
     private final Log _log;
     private PeerManager _manager;
-    /** whether to continue testing */
+    /** Whether to continue testing. */
     private boolean _keepTesting;
     private final List<Hash> _priorityPeers = new ArrayList<>();
-    /** default delay between peer tests */
+    /** Default delay between peer tests. */
     private static final long DEFAULT_PEER_TEST_DELAY = 5*60*1000L;
     /**
      * PROP_PEER_TEST_DELAY.
      */
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
-    /** default number of peers to test concurrently */
+    /** Default number of peers to test concurrently. */
     private static final int DEFAULT_PEER_TEST_CONCURRENCY = 1;
     /**
      * PROP_PEER_TEST_CONCURRENCY.

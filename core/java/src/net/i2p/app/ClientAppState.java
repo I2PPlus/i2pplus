@@ -8,22 +8,22 @@ package net.i2p.app;
  *  @since 0.9.4
  */
 public enum ClientAppState {
-    /** initial value */
+    /** Initial value. */
     UNINITIALIZED,
-    /** after constructor is complete */
+    /** After constructor is complete. */
     INITIALIZED,
-    /** starting up */
+    /** Starting up. */
     STARTING,
-    /** startup failed */
+    /** Startup failed. */
     START_FAILED,
-    /** running */
+    /** Running. */
     RUNNING,
-    /** stopping */
+    /** Stopping. */
     STOPPING,
-    /** stopped normally */
+    /** Stopped normally. */
     STOPPED,
-    /** stopped abnormally */
+    /** Stopped abnormally. */
     CRASHED,
-    /** forked as a new process, status unknown from now on */
+    /** Forked as a new process, status unknown from now on. */
     FORKED
 }

@@ -102,7 +102,7 @@ public class NTCPTransport extends TransportImpl {
     private final SharedBid _fastBid;
     private final SharedBid _slowBid;
     private final SharedBid _slowCostBid;
-    /** save some conns for inbound */
+    /** Save some conns for inbound. */
     private final SharedBid _nearCapacityBid;
     private final SharedBid _nearCapacityCostBid;
     private final SharedBid _transientFail;
@@ -123,8 +123,8 @@ public class NTCPTransport extends TransportImpl {
     private final int _networkID;
 
     /**
-     * list of NTCPConnection of connections not yet established that we
-     * want to remove on establishment or close on timeout
+     * List of NTCPConnection of connections not yet established that we
+     * want to remove on establishment or close on timeout.
      */
     private final Set<NTCPConnection> _establishing;
     /** "bloom filter" */
@@ -157,7 +157,7 @@ public class NTCPTransport extends TransportImpl {
     private static final int DEFAULT_COST = 10;
     private static final int NTCP2_OUTBOUND_COST = 14;
 
-    /** this is rarely if ever used, default is to bind to wildcard address */
+    /** This is rarely if ever used, default is to bind to wildcard address. */
     public static final String PROP_BIND_INTERFACE = "i2np.ntcp.bindInterface";
 
     private final NTCPSendFinisher _finisher;
@@ -592,7 +592,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * afterSend.
+     * Notify after the message send attempt completes.
      */
     @Override
     public void afterSend(OutNetMessage msg, boolean sendSuccessful, boolean allowRequeue, long msToSend) {
@@ -600,7 +600,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * bid.
+     * Bid on sending the message to the target.
      */
     public TransportBid bid(RouterInfo toAddress, int dataSize) {
         if (!isAlive()) {return null;}
@@ -728,16 +728,17 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * allowConnection.
+     * Whether an additional outbound connection may be accepted.
      */
     public boolean allowConnection() {
         return _conByIdent.size() < getMaxConnections();
     }
 
-    /** queue up afterSend call, which can take some time w/ jobs, etc */
+    /** Queue up the afterSend call, which can take some time with jobs, etc. */
     void sendComplete(OutNetMessage msg) {_finisher.add(msg);}
 
     /**
+     * Whether an established connection exists to the given peer.
      * @return whether established
      */
     @Override
@@ -747,6 +748,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
+     * Whether a connection attempt is in progress to the given peer.
      * @return whether connecting
      */
     @Override
@@ -756,6 +758,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
+     * Whether the connection to the given peer is backlogged.
      * @return whether backlogged
      */
     @Override
@@ -814,6 +817,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
+     * The connection removed; usually the con passed in, but possibly a second connection with the same peer.
      * @return usually the con passed in, but possibly a second connection with the same peer...
      *         only con or null as of 0.9.37
      */
@@ -831,14 +835,14 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * countPeers.
+     * Number of known connections.
      */
     public int countPeers() {
             return _conByIdent.size();
     }
 
     /**
-     * Get peer counts by transport type and direction.
+     * Peer counts by transport type and direction.
      * @return 8 bytes: version 1 4 bytes all zeros, version 2 ipv4 in/out, ipv6 in/out
      * @since 0.9.57
      */
@@ -1116,6 +1120,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
+     * Whether the pumper thread is alive.
      * @return whether alive
      */
     public boolean isAlive() {return _pumper.isAlive();}
@@ -1285,6 +1290,7 @@ public class NTCPTransport extends TransportImpl {
     public String getAltStyle() {return STYLE2;}
 
     /**
+     * The style to publish.
      * @return "NTCP2" always
      * @since 0.9.39
      */
@@ -1302,7 +1308,7 @@ public class NTCPTransport extends TransportImpl {
     X25519KeyFactory getXDHFactory() {return _xdhFactory;}
 
     /**
-     * how long from initial connection attempt (accept() or connect()) until
+     * How long from initial connection attempt (accept() or connect()) until
      * the con must be established to avoid premature close()ing.
      * Tuned to ~3-5x average establish time; the Tuner further adjusts this at runtime.
      */
@@ -1322,12 +1328,12 @@ public class NTCPTransport extends TransportImpl {
         ESTABLISH_TIMEOUT = Math.max(1500, Math.min(10000, ms));
     }
 
-    /** add us to the establishment timeout process */
+    /** Add us to the establishment timeout process. */
     void establishing(NTCPConnection con) {_establishing.add(con);}
 
     /**
-     * called in the EventPumper no more than once a second or so, closing
-     * any unconnected/unestablished connections
+     * Called in the EventPumper no more than once a second or so, closing
+     * any unconnected/unestablished connections.
      */
     void expireTimedOut() {
         int expired = 0;
@@ -2105,7 +2111,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * Get send finisher pool utilization as a ratio (0.0-1.0).
+     * Send finisher pool utilization as a ratio (0.0-1.0).
      * Returns NaN if pool not started.
      *
      * @since 0.9.70+
@@ -2116,7 +2122,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * Get reader pool utilization as a ratio (0.0-1.0).
+     * Reader pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
      *
      * @since 0.9.70+
@@ -2127,7 +2133,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * Get writer pool utilization as a ratio (0.0-1.0).
+     * Writer pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
      *
      * @since 0.9.70+

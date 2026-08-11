@@ -32,7 +32,7 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
     private TunnelDispatcher _dispatcher;
 
     /**
-     * Get the dispatcher, fetching from context if not yet initialized.
+     * The dispatcher, fetching from context if not yet initialized.
      * @return the dispatcher
      */
     private TunnelDispatcher getDispatcher() {
@@ -166,7 +166,7 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Get the peer hash for a tunnel - this is the "entry point" peer
+     * The peer hash for a tunnel - this is the "entry point" peer
      * who first introduced this tunnel to us (IBGW or closest hop to IBGW).
      * @return the peer hash
      */

@@ -12,7 +12,8 @@ class IntegrationCalculator {
     private IntegrationCalculator() {}
 
     /**
-     * calc.
+     * How well integrated the peer is, as a weighted count of recent db introductions
+     * plus the integration bonus.
      */
     public static double calc(PeerProfile profile) {
         long val = 0;

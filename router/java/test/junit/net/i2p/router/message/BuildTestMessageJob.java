@@ -48,6 +48,7 @@ public class BuildTestMessageJob extends JobImpl {
     private long _testMessageKey;
 
     /**
+     * Send a ping to the target router and invoke the appropriate callbacks on success or failure.
      *
      * @param target router being tested
      * @param onSendJob after the ping is successful

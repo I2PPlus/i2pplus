@@ -11,10 +11,10 @@ public class ElGamalPublicKeySpec extends ElGamalKeySpec {
     private final BigInteger y;
 
     /**
-     * Constructs an ElGamal public key specification.
+     * ElGamal public key specification.
      *
-     * @param y the public key value
-     * @param spec the ElGamal parameter specification
+     * @param y The public key value.
+     * @param spec The ElGamal parameter specification.
      */
     public ElGamalPublicKeySpec(BigInteger y, ElGamalParameterSpec spec) {
         super(spec);

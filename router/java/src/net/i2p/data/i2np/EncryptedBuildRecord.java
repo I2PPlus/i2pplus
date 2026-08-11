@@ -23,6 +23,7 @@ public class EncryptedBuildRecord extends SimpleDataStructure {
     public final static int LENGTH = TunnelBuildMessageBase.RECORD_SIZE;
 
     /**
+     * Create a build record from the given encrypted data.
      * @param data the encrypted record data
      * @throws IllegalArgumentException if data is not correct length (null is ok)
      */

@@ -69,10 +69,14 @@ class SearchState {
     }
 
     /**
+     * The search target.
+     *
      * @return the target
      */
     public Hash getTarget() {return _searchKey;}
     /**
+     * Number of pending peers.
+     *
      * @return the pending size
      */
     public int getPendingSize() {
@@ -81,6 +85,8 @@ class SearchState {
         }
     }
     /**
+     * Copy of the pending peers.
+     *
      * @return the pending
      */
     public Set<Hash> getPending() {
@@ -89,6 +95,8 @@ class SearchState {
         }
     }
     /**
+     * Copy of the attempted peers.
+     *
      * @return the attempted
      */
     public Set<Hash> getAttempted() {
@@ -97,6 +105,8 @@ class SearchState {
         }
     }
     /**
+     * Number of attempted peers.
+     *
      * @return the attempted size
      */
     public int getAttemptedSize() {
@@ -105,6 +115,8 @@ class SearchState {
         }
     }
     /**
+     * Up to max attempted peers closest to the target.
+     *
      * @return the closest attempted
      */
     public Set<Hash> getClosestAttempted(int max) {
@@ -126,7 +138,7 @@ class SearchState {
     }
 
     /**
-     * wasAttempted.
+     * Whether the peer was attempted.
      */
     public boolean wasAttempted(Hash peer) {
         synchronized (_attemptedPeers) {
@@ -134,6 +146,8 @@ class SearchState {
         }
     }
     /**
+     * Copy of the successful peers.
+     *
      * @return the successful
      */
     public Set<Hash> getSuccessful() {
@@ -142,6 +156,8 @@ class SearchState {
         }
     }
     /**
+     * Copy of the failed peers.
+     *
      * @return the failed
      */
     public Set<Hash> getFailed() {
@@ -150,6 +166,8 @@ class SearchState {
         }
     }
     /**
+     * Number of failed peers.
+     *
      * @return the failed size
      */
     public int getFailedSize() {
@@ -158,6 +176,8 @@ class SearchState {
         }
     }
     /**
+     * Number of successful peers.
+     *
      * @return the successful size
      */
     public int getSuccessfulSize() {
@@ -167,12 +187,12 @@ class SearchState {
     }
 
     /**
-     * completed.
+     * Whether the search has completed.
      */
     public boolean completed() {return _completed != -1;}
 
     /**
-     * complete.
+     * Mark the search as completed at the current time.
      */
     public void complete() {
         _completed = _context.clock().now();
@@ -198,16 +218,22 @@ class SearchState {
     public void abort() {_aborted = true;}
 
     /**
+     * Time the search started.
+     *
      * @return the when started
      */
     public long getWhenStarted() {return _started;}
     /**
+     * Time the search completed, or -1 if not yet completed.
+     *
      * @return the when completed
      */
     public long getWhenCompleted() {return _completed;}
 
     /**
-     * addPending.
+     * Add the peers to the pending and attempted sets.
+     *
+     * @param pending the peers to add
      */
     public void addPending(Collection<Hash> pending) {
         synchronized (_pendingPeers) {
@@ -219,7 +245,9 @@ class SearchState {
         synchronized (_attemptedPeers) {_attemptedPeers.addAll(pending);}
     }
     /**
-     * addPending.
+     * Add the peer to the pending and attempted sets.
+     *
+     * @param peer the peer to add
      */
     public void addPending(Hash peer) {
         synchronized (_pendingPeers) {
@@ -228,7 +256,7 @@ class SearchState {
         }
         synchronized (_attemptedPeers) {_attemptedPeers.add(peer);}
     }
-    /** we didn't actually want to add this peer as part of the pending list... */
+    /** We didn't actually want to add this peer as part of the pending list... */
     public void removePending(Hash peer) {
         synchronized (_pendingPeers) {
             _pendingPeers.remove(peer);
@@ -237,7 +265,7 @@ class SearchState {
         synchronized (_attemptedPeers) {_attemptedPeers.remove(peer);}
     }
 
-    /** how long did it take to get the reply, or -1 if we don't know */
+    /** How long it took to get the reply, or -1 if we don't know. */
     public long dataFound(Hash peer) {
         long rv = -1;
         synchronized (_pendingPeers) {
@@ -249,7 +277,7 @@ class SearchState {
         return rv;
     }
 
-    /** how long did it take to get the reply, or -1 if we dont know */
+    /** How long it took to get the reply, or -1 if we don't know. */
     public long replyFound(Hash peer) {
         synchronized (_repliedPeers) {_repliedPeers.add(peer);}
         synchronized (_pendingPeers) {
@@ -261,6 +289,8 @@ class SearchState {
     }
 
     /**
+     * Copy of the peers that replied.
+     *
      * @return the replied peers
      */
     public Set<Hash> getRepliedPeers() {
@@ -268,7 +298,9 @@ class SearchState {
     }
 
     /**
-     * replyTimeout.
+     * Move the peer from pending to failed on timeout.
+     *
+     * @param peer the peer that timed out
      */
     public void replyTimeout(Hash peer) {
         synchronized (_pendingPeers) {
@@ -279,7 +311,10 @@ class SearchState {
     }
 
     /**
-     * addLeaseSetResponse.
+     * Record the peer's LeaseSet response.
+     *
+     * @param peer the peer that responded
+     * @param ls the received LeaseSet
      */
     public void addLeaseSetResponse(Hash peer, LeaseSet ls) {
         long leaseDate = ls.getLatestLeaseDate();
@@ -296,6 +331,8 @@ class SearchState {
     }
 
     /**
+     * LeaseSet with the newest lease date among the responses.
+     *
      * @return the newest lease set
      */
     public LeaseSet getNewestLeaseSet() {
@@ -321,7 +358,10 @@ class SearchState {
     }
 
     /**
-     * addInitialLeaseSetResponse.
+     * Record the peer's LeaseSet response from the initial phase.
+     *
+     * @param peer the peer that responded
+     * @param ls the received LeaseSet
      */
     public void addInitialLeaseSetResponse(Hash peer, LeaseSet ls) {
         long now = _context.clock().now();
@@ -340,6 +380,8 @@ class SearchState {
     }
 
     /**
+     * Whether enough initial responses have been received to store.
+     *
      * @return whether store initial
      */
     public boolean shouldStoreInitial() {
@@ -352,6 +394,8 @@ class SearchState {
     }
 
     /**
+     * LeaseSet with the newest lease date among the initial responses.
+     *
      * @return the best initial lease set
      */
     public LeaseSet getBestInitialLeaseSet() {
@@ -377,7 +421,7 @@ class SearchState {
     }
 
     /**
-     * clearInitialTracking.
+     * Clear the initial response tracking state.
      */
     public void clearInitialTracking() {
         synchronized (_leaseSetResponses) {
@@ -387,6 +431,8 @@ class SearchState {
     }
 
     /**
+     * Stored lease date of the last accepted LeaseSet.
+     *
      * @return the stored lease date
      */
     public long getStoredLeaseDate() {
@@ -394,13 +440,18 @@ class SearchState {
     }
 
     /**
-     * setStoredLeaseDate.
+     * Record the stored lease date.
+     *
+     * @param date the new stored lease date
      */
     public void setStoredLeaseDate(long date) {
         _storedLeaseDate = date;
     }
 
     /**
+     * Whether the given LeaseSet is newer than the stored one.
+     *
+     * @param ls the LeaseSet to compare
      * @return whether update stored
      */
     public boolean shouldUpdateStored(LeaseSet ls) {
@@ -408,7 +459,7 @@ class SearchState {
     }
 
     /**
-     * toString.
+     * Debug string for this search state.
      */
     @Override
     public String toString() {

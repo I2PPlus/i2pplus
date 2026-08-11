@@ -23,17 +23,17 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  */
 public class Clock implements Timestamper.UpdateListener {
-    /** the I2P application context */
+    /** The I2P application context. */
     protected final I2PAppContext _context;
-    /** whether the system clock was determined to be invalid at startup */
+    /** Whether the system clock was determined to be invalid at startup. */
     protected final boolean _isSystemClockBad;
-    /** the time when this clock was started */
+    /** The time when this clock was started. */
     protected long _startedOn;
-    /** whether the clock skew stat has been created */
+    /** Whether the clock skew stat has been created. */
     protected boolean _statCreated;
-    /** the current offset from system time */
+    /** The current offset from system time. */
     protected volatile long _offset;
-    /** whether the offset has ever been changed */
+    /** Whether the offset has ever been changed. */
     protected boolean _alreadyChanged;
     private final Set<ClockUpdateListener> _listeners;
 
@@ -74,7 +74,7 @@ public class Clock implements Timestamper.UpdateListener {
     }
 
     /**
-     * Get the global clock instance.
+     * Global clock instance.
      *
      * @return the global clock instance
      */
@@ -100,13 +100,13 @@ public class Clock implements Timestamper.UpdateListener {
         return _context.logManager().getLog(Clock.class);
     }
 
-    /** if the clock is skewed by 3+ days, forget it */
+    /** If the clock is skewed by 3+ days, forget it. */
     public static final long MAX_OFFSET = 3 * 24 * 60 * (long) 60 * 1000;
 
-    /** after we've started up and shifted the clock, don't allow shifts of more than 10 minutes */
+    /** After we've started up and shifted the clock, don't allow shifts of more than 10 minutes. */
     public static final long MAX_LIVE_OFFSET = 10 * (long) 60 * 1000;
 
-    /** if the clock skewed changes by less than this, ignore the update (so we don't slide all over the place) */
+    /** If the clock skew changes by less than this, ignore the update (so we don't slide all over the place). */
     public static final long MIN_OFFSET_CHANGE = (long) 5 * 1000;
 
     /**
@@ -172,7 +172,7 @@ public class Clock implements Timestamper.UpdateListener {
     }
 
     /**
-     * Get the current offset from system time.
+     * Current offset from system time.
      *
      * @return the current delta from System.currentTimeMillis() in milliseconds
      */
@@ -190,7 +190,7 @@ public class Clock implements Timestamper.UpdateListener {
     }
 
     /**
-     * Set the clock to the given real time, computing the offset.
+     * Adjust the clock to the given real time, computing the offset.
      *
      * @param realTime the real time in milliseconds
      */

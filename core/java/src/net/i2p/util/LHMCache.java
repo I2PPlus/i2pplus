@@ -13,7 +13,7 @@ import java.util.Map;
  *  @param <V> type of values in this cache
  */
 public class LHMCache<K, V> extends LinkedHashMap<K, V> {
-    /**  max */
+    /** Maximum number of entries. */
     private final int _max;
 
     /**

@@ -18,9 +18,9 @@ import net.i2p.util.Log;
  * There is one "Special" netDb which has a non-hash name. This is used for the operation of
  * router itself and not clients, in particular when acting as a floodfill:
  *
- *  - Main NetDB: This is the netDb we use if or when we become a floodfill, and for
- *  direct interaction with other routers on the network, such as when we are communicating
- *  with a floodfill.
+ * - Main NetDB: This is the netDb we use if or when we become a floodfill, and for
+ * direct interaction with other routers on the network, such as when we are communicating
+ * with a floodfill.
  *
  * It is possible that it may be advantageous some day to have other netDb's for specific use
  * cases, but that is not the purpose of this class at this time.
@@ -49,9 +49,8 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
     private final FloodfillNetworkDatabaseFacade _mainDbid;
 
     /**
-     * Construct a new FloodfillNetworkDatabaseSegmentor with the given
-     * RouterContext, containing a default, main netDb
-     * and which is prepared to add client netDbs.
+     * New segmentor with the given RouterContext, containing a default,
+     * main netDb and prepared to add client netDbs.
      *
      * @since 0.9.61
      */
@@ -105,7 +104,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
     }
 
     /**
-     * get the main netDb, which is the one we will use if we are a floodfill
+     * The main netDb, the one we will use if we are a floodfill.
      *
      * @since 0.9.61
      * @return may be null
@@ -116,8 +115,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
     }
 
     /**
-     * get the client netDb for the given id
-     * Will return the "main" netDb if
+     * The client netDb for the given id. Will return the "main" netDb if
      * the dbid is null.
      *
      * @since 0.9.61

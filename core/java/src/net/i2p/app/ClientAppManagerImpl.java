@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ClientAppManagerImpl implements ClientAppManager {
 
-    /** registered name to client */
+    /** Registered name to client. */
     protected final ConcurrentHashMap<String, ClientApp> _registered;
 
     /**

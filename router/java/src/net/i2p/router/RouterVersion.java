@@ -15,28 +15,24 @@ import net.i2p.CoreVersion;
  *
  */
 public class RouterVersion {
-    /** deprecated */
+    /** Deprecated, do not use. */
     public static final String ID = "Git";
-    /**
-     * VERSION.
-     */
+    /** The router version number. */
     public static final String VERSION = CoreVersion.VERSION;
-    /** for example: "beta", "alpha", "rc" */
+    /** For example: "beta", "alpha", "rc" */
     public static final String STATUS = "";
-    /**
-     * BUILD.
-     */
+    /** The router build number. */
     public static final long BUILD = 4;
 
-    /** for example "-test" */
+    /** For example "-test" */
     public static final String EXTRA = "+";
-    /**
-     * FULL_VERSION.
-     */
+    /** The full version string, combining version, build, and extra. */
     public static final String FULL_VERSION = VERSION + "-" + BUILD + EXTRA;
 
     /**
-     * main.
+     * Print the router and core version strings.
+     *
+     * @param args ignored
      */
     public static void main(String[] args) {
         System.out.println("I2P+ Router version: " + FULL_VERSION); // NOSONAR CLI tool

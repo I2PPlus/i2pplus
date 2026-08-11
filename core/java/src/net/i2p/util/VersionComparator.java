@@ -80,9 +80,11 @@ public class VersionComparator implements Comparator<String>, Serializable {
     }
 
     /**
+     * Index of the next separator character, or the end of the string.
+     *
      * @param s string to process
      * @param start starting index in the string to process
-     * @return the index of the next separator character, or end of string.
+     * @return the index of the next separator character, or end of string
      */
     private static int nextSeparator(String s, int start) {
         while (start < s.length()) {

@@ -120,7 +120,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      *  Localized reachability status string.
      *
-     *  @since 0.9.45
+     * @since 0.9.45
      * @return the localized status string
      */
     public String getLocalizedStatusString() {
@@ -199,7 +199,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      *  Our two-letter country code determined from our external IP.
      *
-     *  @since 0.8.11
+     * @since 0.8.11
      * @return the our country
      */
     public String getOurCountry() { return null; }
@@ -207,7 +207,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      *  Whether country blocking is enabled at all.
      *
-     *  @since 0.8.13
+     * @since 0.8.13
      * @return whether in strict country
      */
     public boolean isInStrictCountry() { return false; }
@@ -253,7 +253,7 @@ public abstract class CommSystemFacade implements Service {
     public String getCountryName(String code) { return code; }
 
     /**
-     * Get the country code map
+     * The map of all country codes.
      *
      * @return Map of two-letter lower case code to untranslated country name, unmodifiable
      * @since 0.9.53
@@ -349,7 +349,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      *  Whether this is a dummy implementation with no real transports.
      *
-     *  @since 0.8.13
+     * @since 0.8.13
      * @return whether dummy
      */
     public boolean isDummy() { return true; }
@@ -357,8 +357,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      *  Whether the comm system is fully initialized and running.
      *
-     *  @since 0.9.53
-     * @return whether running
+     * @since 0.9.53
      */
     public boolean isRunning() { return true; }
 
@@ -398,7 +397,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      *  Factory for making X25519 key pairs.
      *
-     *  @since 0.9.46
+     * @since 0.9.46
      * @return the x d h factory
      */
     public X25519KeyFactory getXDHFactory() { return null; }
@@ -420,7 +419,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      *  Is this IP exempt from any incoming throttles or rejections
      *
-     *  @since 0.9.58
+     * @since 0.9.58
      * @return whether exempt incoming
      */
     public boolean isExemptIncoming(String ip) { return false; }
@@ -925,7 +924,7 @@ public abstract class CommSystemFacade implements Service {
         }
 
         /**
-         * toStatusString(), translated if available.
+         * Status string translated to the current language if available.
          *
          * @param ctx the context for translation lookup
          * @return translated status string
@@ -936,7 +935,7 @@ public abstract class CommSystemFacade implements Service {
         }
 
         /**
-         * toString.
+         * String representation of this status.
          */
         @Override
         public String toString() {

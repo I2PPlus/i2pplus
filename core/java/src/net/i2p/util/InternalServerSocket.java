@@ -114,7 +114,7 @@ public class InternalServerSocket extends ServerSocket {
 
     // ignored stuff
 
-    /** warning - unsupported */
+    /** Unsupported, ignored. */
     @Override
     public void setSoTimeout(int timeout) {
         // TODO

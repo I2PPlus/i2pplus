@@ -91,7 +91,7 @@ class LocalHash extends Hash {
     }
 
     /**
-     * clearXorCache.
+     * Clear the XOR distance cache.
      */
     public void clearXorCache() {
         synchronized (_xorCache) {

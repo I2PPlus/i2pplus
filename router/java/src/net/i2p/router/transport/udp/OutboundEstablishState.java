@@ -21,7 +21,7 @@ import net.i2p.util.SystemVersion;
 class OutboundEstablishState {
     /** The router context */
     protected final RouterContext _context;
-    /** Logger */
+    /** Logger. */
     protected final Log _log;
     // SessionRequest message
     /** Bob's IP */
@@ -95,17 +95,17 @@ class OutboundEstablishState {
      * Tracks the progression of outgoing connection setup.
      */
     public enum OutboundState {
-        /** nothin sent yet */
+        /** Nothing sent yet. */
         OB_STATE_UNKNOWN,
-        /** we have sent an initial request */
+        /** We have sent an initial request. */
         OB_STATE_REQUEST_SENT,
-        /** we have received a signed creation packet */
+        /** We have received a signed creation packet. */
         OB_STATE_CREATED_RECEIVED,
-        /** we have sent one or more confirmation packets */
+        /** We have sent one or more confirmation packets. */
         OB_STATE_CONFIRMED_PARTIALLY,
-        /** we have received a data packet */
+        /** We have received a data packet. */
         OB_STATE_CONFIRMED_COMPLETELY,
-        /** we need to have someone introduce us to the peer, but haven't received a RelayResponse yet */
+        /** We need to have someone introduce us to the peer, but haven't received a RelayResponse yet. */
         OB_STATE_PENDING_INTRO,
         /** RelayResponse received */
         OB_STATE_INTRODUCED,
@@ -346,7 +346,7 @@ class OutboundEstablishState {
      * remnants are dropped (perhaps they were spoofed, etc) so that we can
      * receive another one
      *
-     *  Generates session key and mac key.
+     * Generates session key and mac key.
      *
      * @return true if valid
      */
@@ -399,7 +399,7 @@ class OutboundEstablishState {
      */
     public synchronized int getReceivedPort() { return _alicePort; }
 
-    /** note that we just sent the SessionConfirmed packet */
+    /** Note that we just sent the SessionConfirmed packet. */
     public synchronized void confirmedPacketsSent() {
         _lastSend = _context.clock().now();
         long delay;
@@ -430,7 +430,7 @@ class OutboundEstablishState {
      */
     public long getConfirmedSentTime() { return _confirmedSentTime; }
 
-    /** note that we just sent the SessionRequest packet */
+    /** Note that we just sent the SessionRequest packet. */
     public synchronized void requestSent() {
         _lastSend = _context.clock().now();
         long delay;
@@ -459,7 +459,7 @@ class OutboundEstablishState {
      */
     public long getRequestSentTime() { return _requestSentTime; }
 
-    /** note that we just sent the RelayRequest packet */
+    /** Note that we just sent the RelayRequest packet. */
     public synchronized void introSent() {
         _lastSend = _context.clock().now();
         long delay;
@@ -485,7 +485,7 @@ class OutboundEstablishState {
     public long getIntroSentTime() { return _introSentTime; }
 
     /**
-     * introductionFailed.
+     * Record that the introduction failed.
      */
     public synchronized void introductionFailed() {
         _nextSend = _context.clock().now();
@@ -586,7 +586,7 @@ class OutboundEstablishState {
      */
     RemoteHostId getClaimedAddress() { return _claimedAddress; }
 
-    /** we have received a real data packet, so we're done establishing */
+    /** We have received a real data packet, so we're done establishing. */
     public synchronized void dataReceived() {
         packetReceived();
         _currentState = OutboundState.OB_STATE_CONFIRMED_COMPLETELY;
@@ -599,7 +599,7 @@ class OutboundEstablishState {
         _nextSend = _context.clock().now();
     }
 
-    /** Get string representation */
+    /** String representation */
     @Override
     public String toString() {
         return "OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _remoteHostId +

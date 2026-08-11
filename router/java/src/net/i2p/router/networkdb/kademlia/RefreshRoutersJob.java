@@ -51,6 +51,8 @@ class RefreshRoutersJob extends JobImpl {
     }
 
     /**
+     * Name of this job.
+     *
      * @return the name
      */
     @Override
@@ -150,7 +152,7 @@ class RefreshRoutersJob extends JobImpl {
             }
             Collections.sort(nonFloodfills, new Comparator<Hash>() {
                 /**
-                 * compare.
+                 * Compare two routers by precomputed refresh score, highest first.
                  */
                 public int compare(Hash a, Hash b) {
                     int sa = scores.getOrDefault(a, 0);
@@ -390,11 +392,11 @@ class RefreshRoutersJob extends JobImpl {
     private class Disconnector extends SimpleTimer2.TimedEvent {
         private final Hash h;
         /**
-         * Disconnector.
+         * Force a disconnect for the peer on refresh timeout.
          */
         public Disconnector(Hash h) {super(getContext().simpleTimer2()); this.h = h;}
         /**
-         * timeReached.
+         * Disconnect the peer when the refresh timeout is reached.
          */
         public void timeReached() {getContext().commSystem().forceDisconnect(h, "Routers refresh timeout");}
     }

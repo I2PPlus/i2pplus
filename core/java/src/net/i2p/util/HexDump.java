@@ -24,7 +24,7 @@ import java.io.OutputStream;
  * @author human
  */
 public class HexDump {
-    /** utility class */
+    /** Utility class. */
     private HexDump() {}
 
     private static final int FORMAT_OFFSET_PADDING = 8;

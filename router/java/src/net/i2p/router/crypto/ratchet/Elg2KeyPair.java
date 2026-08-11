@@ -14,6 +14,8 @@ public class Elg2KeyPair extends KeyPair {
     private final byte[] encoded;
 
     /**
+     * Construct a key pair from the given keys and the pre-encoded public key.
+     *
      * @param publicKey the public key
      * @param privateKey the private key
      * @param enc the encoded Elligator2 public key
@@ -24,6 +26,8 @@ public class Elg2KeyPair extends KeyPair {
     }
 
     /**
+     * The pre-calculated Elligator2-encoded public key.
+     *
      * @return the encoded Elligator2 public key
      */
     public byte[] getEncoded() {

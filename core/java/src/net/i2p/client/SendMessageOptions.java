@@ -17,7 +17,7 @@ import net.i2p.data.DateAndFlags;
  */
 public class SendMessageOptions extends DateAndFlags {
 
-    /**  gzip */
+    /** Gzip compression option for this message. */
     private GzipOption _gzip = GzipOption.DEFAULT;
 
     /** 1 means don't send, 0 means default. */
@@ -56,25 +56,25 @@ public class SendMessageOptions extends DateAndFlags {
         UNDEFINED
     }
 
-    /** best effort mask */
+    /** Best effort delivery mask. */
     private static final int BEST_EFFORT_MASK = 0x0200;
-    /** guaranteed mask */
+    /** Guaranteed delivery mask. */
     private static final int GUARANTEED_MASK = 0x0400;
-    /** reliability mask */
+    /** Reliability mask. */
     private static final int RELIABILITY_MASK = BEST_EFFORT_MASK | GUARANTEED_MASK;
 
-    /** default true */
+    /** Send the lease set with the message; defaults to true. */
     public void setSendLeaseSet(boolean yes) {
         if (yes) _flags &= ~LS_MASK;
         else _flags |= LS_MASK;
     }
 
-    /** default true */
+    /** Whether the lease set is sent with the message; defaults to true. */
     public boolean getSendLeaseSet() {
         return getSendLeaseSet(_flags);
     }
 
-    /** default true */
+    /** Whether the lease set is sent with the message; defaults to true. */
     public static boolean getSendLeaseSet(int flags) {
         return (flags & LS_MASK) == 0;
     }
@@ -143,7 +143,7 @@ public class SendMessageOptions extends DateAndFlags {
         return codeToVal(exp, TAGS_REQD);
     }
 
-    /** rounds down */
+    /** Round the value down to the nearest code in the array. */
     private static int valToCode(int val, int[] codes) {
         // special case, round up so we don't turn it into default
         if (val > 0 && val <= codes[1]) return 1;
@@ -158,7 +158,7 @@ public class SendMessageOptions extends DateAndFlags {
     }
 
     /**
-     * Set message delivery reliability.
+     * Message delivery reliability.
      * @param r reliability (default DEFAULT)
      */
     public void setReliability(Reliability r) {

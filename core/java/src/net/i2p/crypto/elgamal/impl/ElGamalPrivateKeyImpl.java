@@ -29,12 +29,12 @@ import javax.crypto.spec.DHPrivateKeySpec;
 public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     private static final long serialVersionUID = 4819350091141529678L;
 
-    /** X */
+    /** The private exponent x. */
     private BigInteger x;
     /** El spec */
     private ElGamalParameterSpec elSpec;
 
-    /** no-arg constructor */
+    /** No-arg constructor. */
     protected ElGamalPrivateKeyImpl() {}
 
     /**
@@ -78,8 +78,10 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     }
 
     /**
-     * @param x the private exponent
-     * @param elSpec the ElGamal parameters
+     * Create from the private exponent and parameters.
+     *
+     * @param x The private exponent.
+     * @param elSpec The ElGamal parameters.
      */
     public ElGamalPrivateKeyImpl(BigInteger x, ElGamalParameterSpec elSpec) {
         this.x = x;
@@ -96,7 +98,9 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     }
 
     /**
-     * @return the algorithm
+     * The algorithm name, "ElGamal".
+     *
+     * @return The algorithm.
      */
     @Override
     public String getAlgorithm() {
@@ -104,9 +108,9 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     }
 
     /**
-     * return the encoding format we produce in getEncoded().
+     * The encoding format produced by getEncoded().
      *
-     * @return the format
+     * @return The format.
      */
     @Override
     public String getFormat() {
@@ -180,7 +184,9 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     }
 
     /**
-     * @return the parameters
+     * The ElGamal parameters for this key.
+     *
+     * @return The parameters.
      */
     @Override
     public ElGamalParameterSpec getParameters() {
@@ -188,7 +194,9 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     }
 
     /**
-     * @return the params
+     * The parameters for this key.
+     *
+     * @return The params.
      */
     @Override
     public DHParameterSpec getParams() {
@@ -196,7 +204,9 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     }
 
     /**
-     * @return the x
+     * The private exponent.
+     *
+     * @return The x.
      */
     @Override
     public BigInteger getX() {

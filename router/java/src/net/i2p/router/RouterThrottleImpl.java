@@ -57,7 +57,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     private static final int DEFAULT_MAX_PROCESSINGTIME = SystemVersion.isSlow() ? 3000 : 2000;
 
-    /** tunnel acceptance */
+    /** Tunnel acceptance */
     public static final int TUNNEL_ACCEPT = 0;
 
     /** = TrivialPreprocessor.PREPROCESSED_SIZE */
@@ -320,7 +320,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         return Math.min(floor, share / 2); // Cap at 50% of share
     }
 
-    /** also limited to 90% - see below */
+    /** Also limited to 90% - see below */
     private static final int MIN_AVAILABLE_BPS = 4*1024; // always leave at least 4KBps free when allowing
     private static final String LIMIT_STR = _x("Declining requests" + ": " + "Bandwidth limit");
 
@@ -532,6 +532,8 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     /**
+     * The average message processing delay.
+     *
      * @return the message delay
      */
     public long getMessageDelay() {
@@ -542,6 +544,8 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     /**
+     * The current tunnel lag.
+     *
      * @return the tunnel lag
      */
     public long getTunnelLag() {
@@ -550,12 +554,14 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     /**
+     * The current tunnel status message.
+     *
      * @return the tunnel status
      */
     public String getTunnelStatus() {return _tunnelStatus;}
 
     /**
-     * getTunnelStatus(), translated if available.
+     * The current tunnel status, translated if available.
      *
      * @since 0.9.45
      * @return the localized tunnel status
@@ -569,6 +575,9 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     /**
+     * Whether the router is shutting down.
+     *
+     * @param _context the router context
      * @return whether shutting down
      */
     public static boolean isShuttingDown(RouterContext _context) {
@@ -596,7 +605,9 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     /**
-     * setTunnelStatus.
+     * The tunnel acceptance status message.
+     *
+     * @param msg the status message
      */
     public void setTunnelStatus(String msg) {_tunnelStatus = msg;}
 

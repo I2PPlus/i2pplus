@@ -48,7 +48,7 @@ class SearchMessageSelector implements MessageSelector {
     }
 
     /**
-     * toString.
+     * Debug description of this selector.
      */
     @Override
     public String toString() {
@@ -57,7 +57,7 @@ class SearchMessageSelector implements MessageSelector {
     }
 
     /**
-     * continueMatching.
+     * Continue matching until the search expires or the value is found.
      */
     public boolean continueMatching() {
         boolean expired = _context.clock().now() > _exp;
@@ -79,12 +79,16 @@ class SearchMessageSelector implements MessageSelector {
     }
 
     /**
+     * Absolute time when this selector stops matching.
+     *
      * @return the expiration
      */
     @Override
     public long getExpiration() { return _exp; }
 
     /**
+     * Whether the message is a store for the searched key.
+     *
      * @return whether match
      */
     public boolean isMatch(I2NPMessage message) {

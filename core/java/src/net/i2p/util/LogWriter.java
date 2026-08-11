@@ -22,10 +22,10 @@ import java.util.Queue;
  * @since 0.9.19 pulled from FileLogWriter so Android may extend; renamed from LogWriterBase in 0.9.26
  */
 abstract class LogWriter implements Runnable {
-    /** every 10 seconds? why? Just have the gui force a reread after a change?? */
+    /** Every 10 seconds? Why? Just have the gui force a reread after a change?? */
     private static final long CONFIG_READ_INTERVAL = (long) 50 * 1000;
 
-    /** ajax refresh interval */
+    /** Ajax refresh interval. */
     static final long FLUSH_INTERVAL = (long) 15 * 1000;
     private static final long MIN_FLUSH_INTERVAL = (long) 2 * 1000;
     private static final long MAX_FLUSH_INTERVAL = 5 * (long) 60 * 1000;
@@ -90,7 +90,7 @@ abstract class LogWriter implements Runnable {
     }
 
     /**
-     * Set the flush interval for the log writer.
+     * Flush interval for the log writer, clamped to the supported range.
      *
      * @param interval the interval in milliseconds
      * @since 0.9.18
@@ -112,7 +112,7 @@ abstract class LogWriter implements Runnable {
     }
 
     /**
-     * run.
+     * Write loop, flushing records and rereading config until stopped.
      */
     @Override
     public void run() {

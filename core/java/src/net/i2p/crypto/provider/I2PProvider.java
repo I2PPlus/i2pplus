@@ -16,7 +16,7 @@ public final class I2PProvider extends Provider {
     private static boolean _installed;
 
     /**
-     * Construct a new I2P provider instance.  This should only be required
+     * I2P provider instance.  This should only be required
      * when using runtime registration of the provider via
      * <code>Security.addProvider()</code>.
      */

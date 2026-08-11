@@ -44,17 +44,19 @@ class SSU2Bitfield {
     }
 
     /**
-     * size.
+     * The size in bits.
      */
     public int size() {return size;}
 
     /**
+     * The current offset.
+     *
      * @return the offset
      */
     public long getOffset() {return offset;}
 
     /**
-     * Sets the given bit to true.
+     * Mark the given bit as set.
      * When a bit higher than the current size + offset is set,
      * the offset shifts up and the lowest set bits are lost.
      *
@@ -272,7 +274,7 @@ class SSU2Bitfield {
     }
 
     /**
-     * toString.
+     * String representation of this bitfield.
      */
     @Override
     public String toString() {

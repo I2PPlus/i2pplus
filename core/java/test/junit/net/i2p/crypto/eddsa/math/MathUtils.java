@@ -35,21 +35,21 @@ public class MathUtils {
     private static final BigInteger groupOrder = BigInteger.ONE.shiftLeft(252).add(new BigInteger("27742317777372353535851937790883648493"));
 
     /**
-     * Gets q = 2^255 - 19 as BigInteger.
+     * Q = 2^255 - 19 as a BigInteger.
      */
     public static BigInteger getQ() {
         return new BigInteger("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffed", 16);
     }
 
     /**
-     * Gets group order = 2^252 + 27742317777372353535851937790883648493 as BigInteger.
+     * Group order = 2^252 + 27742317777372353535851937790883648493 as a BigInteger.
      */
     public static BigInteger getGroupOrder() {
         return groupOrder;
     }
 
     /**
-     * Gets the underlying finite field with q=2^255 - 19 elements.
+     * The underlying finite field with q=2^255 - 19 elements.
      *
      * @return The finite field.
      */
@@ -170,7 +170,7 @@ public class MathUtils {
     }
 
     /**
-     * Gets a random field element where |t[i]| &lt;= 2^24 for 0 &lt;= i &lt;= 9.
+     * A random field element where |t[i]| &lt;= 2^24 for 0 &lt;= i &lt;= 9.
      *
      * @return The field element.
      */
@@ -187,7 +187,7 @@ public class MathUtils {
     // region group element
 
     /**
-     * Gets a random group element in P3 representation.
+     * A random group element in P3 representation.
      *
      * @return The group element.
      */
@@ -196,7 +196,7 @@ public class MathUtils {
     }
 
     /**
-     * Gets a random group element in P3 representation, with precmp and dblPrecmp populated.
+     * A random group element in P3 representation, with precmp and dblPrecmp populated.
      *
      * @return The group element.
      */

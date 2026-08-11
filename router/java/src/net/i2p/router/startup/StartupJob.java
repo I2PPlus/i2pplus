@@ -36,11 +36,13 @@ public class StartupJob extends JobImpl {
     }
 
     /**
-     * @return the name
+     *  Name of this job.
+     *
+     *  @return the name
      */
     public String getName() { return "Boot Router"; }
     /**
-     * runJob.
+     * Queue the jobs that boot the router: load client apps and router info.
      */
     public void runJob() {
         if (!SystemVersion.isAndroid())

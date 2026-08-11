@@ -22,16 +22,18 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
     private boolean _shouldProcessDSRM;
     private final HashSet<Hash> _unheardFrom;
 
-    /** this is a marker to register with the MessageRegistry, it is never sent */
+    /** This is a marker to register with the MessageRegistry, it is never sent */
     private OutNetMessage _out;
-    /** reply message selector */
+    /** Reply message selector. */
     protected final MessageSelector _replySelector;
-    /** job to run on reply */
+    /** Job to run on reply. */
     protected final ReplyJob _onReply;
-    /** job to run on timeout */
+    /** Job to run on timeout. */
     protected final Job _onTimeout;
 
     /**
+     * Flood-only search for the given key against the floodfill network database.
+     *
      * @param ctx the router context
      * @param facade the floodfill network database facade
      * @param key the hash key to search for

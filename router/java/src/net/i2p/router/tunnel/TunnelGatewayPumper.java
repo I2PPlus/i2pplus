@@ -24,15 +24,15 @@ import net.i2p.util.SimpleTimer2;
  * and multiple consumer threads (pumper threads).
  *
  * Shutdown coordination:
- *   - The stopPumping() method sets a stop flag and enqueues a special poison pill for each thread.
- *   - Threads detect the poison pill and exit cleanly.
- *   - Threads are interrupted and joined to ensure complete termination.
+ * - The stopPumping() method sets a stop flag and enqueues a special poison pill for each thread.
+ * - Threads detect the poison pill and exit cleanly.
+ * - Threads are interrupted and joined to ensure complete termination.
  *
  * Thread safety notes:
- *   - Uses a LinkedBlockingQueue with bounded capacity for backpressure.
- *   - Uses a concurrent Set to track backlogged gateways for requeueing.
- *   - Non-blocking offer() with timeout prevents I2CP reader stalls.
- *   - Gateway drops are tracked via tunnel.pumperQueueFull stat.
+ * - Uses a LinkedBlockingQueue with bounded capacity for backpressure.
+ * - Uses a concurrent Set to track backlogged gateways for requeueing.
+ * - Non-blocking offer() with timeout prevents I2CP reader stalls.
+ * - Gateway drops are tracked via tunnel.pumperQueueFull stat.
  */
 class TunnelGatewayPumper implements Runnable {
     private final RouterContext _context;
@@ -103,41 +103,41 @@ class TunnelGatewayPumper implements Runnable {
     }
 
     /**
-     * Get the current pumper queue capacity.
+     * The current pumper queue capacity.
      * @since 0.9.70+
      * @return the queue capacity
      */
     public static int getQueueCapacity() { return _queueCapacity; }
 
     /**
-     * Set the pumper queue capacity. Does not resize existing queue;
+     * The pumper queue capacity. Does not resize existing queue;
      * call {@link #resizeQueue} to apply to running instance.
      * @since 0.9.70+
      */
     public static void setQueueCapacity(int capacity) { _queueCapacity = Math.max(64, Math.min(4096, capacity)); }
 
     /**
-     * Get the current max pumper threads.
+     * The current max pumper threads.
      * @since 0.9.70+
      * @return the max pumpers
      */
     public static int getMaxPumpers() { return _maxPumpers; }
 
     /**
-     * Set the max pumper threads.
+     * The max pumper threads.
      * @since 0.9.70+
      */
     public static void setMaxPumpers(int max) { _maxPumpers = Math.max(2, Math.min(16, max)); }
 
     /**
-     * Get the number of pumper threads actively processing (not parked on take()).
+     * The number of pumper threads actively processing (not parked on take()).
      * @since 0.9.70+
      * @return the active count
      */
     public int getActiveCount() { return _activeCount.get(); }
 
     /**
-     * Get pumper pool utilization as a ratio (0.0-1.0).
+     * The pumper pool utilization as a ratio (0.0-1.0).
      * Returns NaN if no pumpers are running.
      *
      * @since 0.9.70+
@@ -175,7 +175,7 @@ class TunnelGatewayPumper implements Runnable {
     public static void setRequeueTime(long ms) { _requeueTime = Math.max(10, Math.min(200, ms)); }
 
     /**
-     * Get pumper pool utilization as a ratio (0.0-1.0).
+     * The pumper pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
      *
      * @since 0.9.70+

@@ -35,9 +35,9 @@ import net.i2p.util.SimpleTimer2;
  */
 public class OutboundMessageRegistry {
     private final Log _log;
-    /** list of currently active MessageSelector instances */
+    /** List of currently active MessageSelector instances. */
     private final List<MessageSelector> _selectors;
-    /** map of active MessageSelector to either an OutNetMessage or a List of OutNetMessages causing it (for quick removal) */
+    /** Map of active MessageSelector to either an OutNetMessage or a List of OutNetMessages causing it (for quick removal). */
     private final Map<MessageSelector, Object> _selectorToMessage;
     /**
      *  set of active OutNetMessage (for quick removal and selector fetching)
@@ -262,7 +262,7 @@ public class OutboundMessageRegistry {
         }
 
         /**
-         * timeReached.
+         * Run the scheduled cleanup of expired selectors.
          */
         @SuppressWarnings("unchecked")
         public void timeReached() {
@@ -336,7 +336,7 @@ public class OutboundMessageRegistry {
         }
 
         /**
-         * scheduleExpiration.
+         * Reschedule the cleanup for the given selector's expiration.
          */
         public void scheduleExpiration(MessageSelector sel) {
             long now = _context.clock().now();

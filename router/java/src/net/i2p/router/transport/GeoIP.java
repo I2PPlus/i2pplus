@@ -78,7 +78,7 @@ public class GeoIP {
     private final I2PAppContext _context;
     private static volatile BanLogger _banLogger;
     private final Map<String, String> _codeToName;
-    /** code to itself to prevent String proliferation */
+    /** Code to itself to prevent String proliferation. */
     private final Map<String, String> _codeCache;
 
     // In the following structures, an IPv4 IP is stored as a non-negative long, 0 to 2**32 - 1,
@@ -142,9 +142,9 @@ public class GeoIP {
      * PROP_BLOCK_MY_COUNTRY.
      */
     public static final String PROP_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
-    /** maxmind API */
+    /** Maxmind API. */
     private static final String UNKNOWN_COUNTRY_CODE = "--";
-    /** db-ip.com https://db-ip.com/faq.php */
+    /** Unknown code from db-ip.com (https://db-ip.com/faq.php). */
     private static final String UNKNOWN_COUNTRY_CODE2 = "ZZ";
 
     static {
@@ -218,7 +218,7 @@ public class GeoIP {
         private static final int CLEAR = 8;
 
         /**
-         * run.
+         * Run the current lookup batch.
          */
         @Override
         public void run() {
@@ -519,7 +519,7 @@ public class GeoIP {
     }
 
    /**
-    * Get the GeoIP2 database file
+    * The GeoIP2 database file to use.
     *
     * @return null if not found
     * @since 0.9.38
@@ -539,7 +539,7 @@ public class GeoIP {
     }
 
    /**
-    * Get the ASN database file
+    * The ASN database file to use.
     *
     * @return null if not found
     * @since 0.9.65+
@@ -570,7 +570,7 @@ public class GeoIP {
     }
 
     /**
-     * Get the organization name for an IP from the local ASN database.
+     * The organization name for an IP from the local ASN database.
      * Returns the AS organization (e.g. "Google LLC") or null if not found.
      *
      * @param ipAddress IPv4 or IPv6 address string
@@ -941,7 +941,7 @@ public class GeoIP {
      * 1. Word-by-word: words starting lowercase and ending uppercase are likely reversed.
      * 2. Full-string: try reversing the entire name for compound words without spaces.
      * 3. Full word-level char reversal: reverse every word unconditionally (catches
-     *    all-lowercase reversed words like "enofadov" where decode isn't in known-words).
+     * all-lowercase reversed words like "enofadov" where decode isn't in known-words).
      * 4. Word-order reversal: reverse word order (catches "loclix as trading sciacca...").
      * 5. Combined: char-reversal then word-order (catches both like "tsohxuled sa gnidart...").
      * Also detects "as trading" pattern which strongly signals word-order is reversed.
@@ -1157,7 +1157,7 @@ public class GeoIP {
     /**
      * A word looks reversed if:
      * 1. Its first letter is lowercase and last letter is uppercase
-     *    (e.g. "puorG" → "Group"), OR
+     * (e.g. "puorG" → "Group"), OR
      * 2. Reversing its letters yields a known word (e.g. "CSJP" → "PJSC").
      *
      * Leading/trailing non-letter characters are ignored for the letter check
@@ -1388,11 +1388,11 @@ public class GeoIP {
     * The file need not be sorted.
     *
     * Acceptable formats:
-    *   #comment (# must be in column 1)
-    *   code,full name
+    * #comment (# must be in column 1)
+    * code,full name
     *
     * Example:
-    *   US,UNITED STATES
+    * US,UNITED STATES
     *
     * To create:
     * wget http://ip-to-country.webhosting.info/downloads/ip-to-country.csv.zip
@@ -1437,11 +1437,11 @@ public class GeoIP {
     * The geoip file must be sorted, and may not contain overlapping entries.
     *
     * Acceptable formats (IPV4 only):
-    *   #comment (# must be in column 1)
-    *   integer IP,integer IP, country code
+    * #comment (# must be in column 1)
+    * integer IP,integer IP, country code
     *
     * Example:
-    *   121195296,121195327,IT
+    * 121195296,121195327,IT
     *
     * This is identical to the Tor geoip file, which can be found in
     * src/config/geoip in their distribution, or /usr/local/lib/share/tor/geoip
@@ -1689,7 +1689,7 @@ public class GeoIP {
         add(toLong(ip));
     }
 
-    /** see above for ip-to-long mapping */
+    /** See above for ip-to-long mapping. */
     private void add(long ip) {
         Long li = Long.valueOf(ip);
         if (!(_IPToCountry.containsKey(li) || _notFound.contains(li))) {
@@ -1699,7 +1699,7 @@ public class GeoIP {
     }
 
     /**
-     * Get the country for an IP from the cache.
+     * The country for an IP from the cache.
      * Public for BundleRouterInfos
      *
      * @param ip IPv4 or IPv6
@@ -1712,7 +1712,7 @@ public class GeoIP {
     }
 
     /**
-     * Get the country for an IP from the cache.
+     * The country for an IP from the cache.
      * @param ip IPv4 or IPv6
      * @return lower-case code, generally two letters, or null.
      */
@@ -1723,10 +1723,10 @@ public class GeoIP {
         return get(toLong(ip));
     }
 
-    /** see above for ip-to-long mapping */
+    /** See above for ip-to-long mapping. */
     private String get(long ip) {return _IPToCountry.get(Long.valueOf(ip));}
 
-    /** see above for ip-to-long mapping */
+    /** See above for ip-to-long mapping. */
     private static long toLong(byte[] ip) {
         long rv = 0;
         if (ip.length == 16) {
@@ -1739,6 +1739,7 @@ public class GeoIP {
     }
 
     /**
+     * The given IPv4 as a dotted-quad string.
      * @return e.g. 1.2.3.4
      * @since 0.9.38 for maxmind
      */
@@ -1753,6 +1754,7 @@ public class GeoIP {
     }
 
     /**
+     * The given IPv6 as a hex string.
      * @return e.g. aabb:ccdd:eeff:1122::
      * @since 0.9.26 for maxmind
      */
@@ -1767,7 +1769,7 @@ public class GeoIP {
     }
 
     /**
-     * Get the country for a country code
+     * The untranslated country name for a country code.
      * Public for BundleRouterInfos
      *
      * @param code two-letter lower case code
@@ -1779,7 +1781,7 @@ public class GeoIP {
     }
 
     /**
-     * Get the country code map
+     * The country code map.
      *
      * @return Map of two-letter lower case code to untranslated country name, unmodifiable
      * @since 0.9.53

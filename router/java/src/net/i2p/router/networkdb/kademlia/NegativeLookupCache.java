@@ -31,7 +31,7 @@ class NegativeLookupCache {
     private final SimpleTimer2.TimedEvent cleaner;
     private final long cleanTime;
 
-    /** maximum number of failures before caching */
+    /** Maximum number of failures before caching. */
     static final int MAX_FAILS = 6;
     private static final int MAX_BAD_DESTS = 128;
     private static final long CLEAN_TIME = 2*60*1000L;
@@ -97,7 +97,7 @@ class NegativeLookupCache {
     }
 
     /**
-     * Get a cached bad destination.
+     * Cached bad destination for the given hash.
      *
      * @param h the hash to look up
      * @return the destination or null if not cached

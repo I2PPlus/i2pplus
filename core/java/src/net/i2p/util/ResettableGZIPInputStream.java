@@ -24,7 +24,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     /** See below for why this is necessary */
     private final ExtraByteInputStream _extraByteInputStream;
 
-    /** keep a typesafe copy of this */
+    /** Keep a typesafe copy of this. */
     private final LookaheadInputStream _lookaheadStream;
 
     private final CRC32 _crc32;
@@ -89,7 +89,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     /**
-     *
+     * Read up to len bytes of uncompressed data into the given buffer.
      */
     @Override
     public int read(byte[] buf, int off, int len) throws IOException {
@@ -373,7 +373,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
             in.close();
         }
 
-        /** does NOT call in.reset() */
+        /** Does NOT call in.reset(). */
         @Override
         public void reset() {
             _extraSent = false;

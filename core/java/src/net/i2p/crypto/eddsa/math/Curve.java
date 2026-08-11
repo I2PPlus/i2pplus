@@ -10,13 +10,13 @@ import java.io.Serializable;
  */
 public class Curve implements Serializable {
     private static final long serialVersionUID = 4578920872509827L;
-    /** F */
+    /** The finite field. */
     private final Field f;
-    /** D */
+    /** The curve parameter d. */
     private final FieldElement d;
-    /** D2 */
+    /** Twice the curve parameter d. */
     private final FieldElement d2;
-    /** I */
+    /** The square root of -1. */
     private final FieldElement I;
 
     /** Zero p2 */
@@ -113,13 +113,22 @@ public class Curve implements Serializable {
         return ge;
     }
 
-    /** @return hash code */
+    /**
+     * The hash code of this curve.
+     *
+     * @return The hash code.
+     */
     @Override
     public int hashCode() {
         return f.hashCode() ^ d.hashCode() ^ I.hashCode();
     }
 
-    /** @param o the object @return true if equal */
+    /**
+     * Whether this curve equals the given object.
+     *
+     * @param o The object to compare.
+     * @return True if equal.
+     */
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;

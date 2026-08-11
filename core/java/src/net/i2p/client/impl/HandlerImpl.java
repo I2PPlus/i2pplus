@@ -25,7 +25,7 @@ abstract class HandlerImpl implements I2CPMessageHandler {
     protected final I2PAppContext _context;
 
     /**
-     * HandlerImpl.
+     * Store the app context and handler message type.
      */
     public HandlerImpl(I2PAppContext context, int type) {
         _context = context;
@@ -33,9 +33,6 @@ abstract class HandlerImpl implements I2CPMessageHandler {
         _log = context.logManager().getLog(getClass());
     }
 
-    /**
-     * getType.
-     */
     @Override
     /**
      * Return the message type.

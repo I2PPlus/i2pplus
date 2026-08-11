@@ -88,13 +88,13 @@ public abstract class TransportUtil {
         /** IPv6 disabled */
         IPV6_DISABLED("false"),
 
-        /** lower priority than IPv4 */
+        /** Lower priority than IPv4. */
         IPV6_NOT_PREFERRED("preferIPv4"),
 
-        /** equal priority to IPv4 */
+        /** Equal priority to IPv4. */
         IPV6_ENABLED("enable"),
 
-        /** higher priority than IPv4 */
+        /** Higher priority than IPv4. */
         IPV6_PREFERRED("preferIPv6"),
 
         /** IPv4 disabled */
@@ -107,7 +107,7 @@ public abstract class TransportUtil {
         }
 
         /**
-         * toConfigString.
+         * The config string for this option.
          */
         public String toConfigString() {
             return cfgstr;
@@ -130,7 +130,8 @@ public abstract class TransportUtil {
     }
 
     /**
-     * @return the i pv6 config
+     * The IPv6 config for the given transport style.
+     * @return the IPv6 config
      */
     public static IPv6Config getIPv6Config(RouterContext ctx, String transportStyle) {
         String cfg;
@@ -144,7 +145,8 @@ public abstract class TransportUtil {
     }
 
     /**
-     * @return the i pv6 config
+     * The IPv6 config for the given config string.
+     * @return the IPv6 config
      */
     public static IPv6Config getIPv6Config(String cfg) {
         if (cfg == null)
@@ -158,7 +160,7 @@ public abstract class TransportUtil {
     /**
      *  This returns true if the force-firewalled setting is configured, false otherwise.
      *
-     *  @since 0.9.20
+     * @since 0.9.20
      * @return whether i pv4 firewalled
      */
     public static boolean isIPv4Firewalled(RouterContext ctx) {
@@ -168,7 +170,7 @@ public abstract class TransportUtil {
     /**
      *  This returns true if the force-firewalled setting is configured, false otherwise.
      *
-     *  @since 0.9.27, implemented in 0.9.28
+     * @since 0.9.27, implemented in 0.9.28
      * @return whether i pv6 firewalled
      */
     public static boolean isIPv6Firewalled(RouterContext ctx) {
@@ -192,7 +194,8 @@ public abstract class TransportUtil {
     }
 
     /**
-     *  @since 0.9.49
+     *  Whether the address is an in-network Yggdrasil address.
+     * @since 0.9.49
      * @return whether yggdrasil
      */
     public static boolean isYggdrasil(RouterAddress addr) {
@@ -348,7 +351,7 @@ public abstract class TransportUtil {
      *  ref: http://i2p-projekt.i2p/en/docs/ports
      *  ref: https://cs.chromium.org/chromium/src/net/base/port_util.cc
      *
-     *  @since 0.9.17 moved from logic in individual transports
+     * @since 0.9.17 moved from logic in individual transports
      * @return whether valid port
      */
     public static boolean isValidPort(int port) {

@@ -13,29 +13,29 @@ import net.i2p.router.util.CDQEntry;
  *  @since 0.9.3 refactored from TunnelGateway.Pending
  */
 class PendingGatewayMessage implements CDQEntry {
-    /** the destination router */
+    /** The destination router. */
     protected final Hash _toRouter;
-    /** the destination tunnel */
+    /** The destination tunnel. */
     protected final TunnelId _toTunnel;
-    /** the message ID */
+    /** The message ID. */
     protected final long _messageId;
-    /** the message expiration */
+    /** The message expiration. */
     protected final long _expiration;
-    /** raw unfragmented message data */
+    /** Raw unfragmented message data. */
     protected final byte[] _remaining;
-    /** index into the data to be sent */
+    /** Index into the data to be sent. */
     protected volatile int _offset;
-    /** which fragment are we working on */
+    /** Which fragment we are working on. */
     protected int _fragmentNumber;
-    /** when this message was created */
+    /** When this message was created. */
     protected final long _created;
     /** IDs of TunnelDataMessages this message was fragmented into */
     private List<Long> _messageIds;
-    /** time enqueued in CDQ */
+    /** Time enqueued in CDQ. */
     private long _enqueueTime;
 
     /**
-     * PendingGatewayMessage.
+     * Stores the message data, destination, and expiration for a pending send.
      */
     public PendingGatewayMessage(I2NPMessage message, Hash toRouter, TunnelId toTunnel) {
         _toRouter = toRouter;
@@ -103,7 +103,7 @@ class PendingGatewayMessage implements CDQEntry {
      */
     public int getFragmentNumber() { return _fragmentNumber; }
 
-    /** ok, fragment sent, increment what the next will be */
+    /** Fragment sent, so move on to the next one. */
     public void incrementFragmentNumber() { _fragmentNumber++; }
 
     /**
@@ -143,7 +143,7 @@ class PendingGatewayMessage implements CDQEntry {
 
     /**
      *  For CDQ
-     *  @since 0.9.3
+     * @since 0.9.3
      * @return the enqueue time
      */
     public long getEnqueueTime() {
@@ -159,7 +159,7 @@ class PendingGatewayMessage implements CDQEntry {
     }
 
     /**
-     * toString.
+     * Debug description of this pending message and its progress.
      */
     @Override
     public String toString() {

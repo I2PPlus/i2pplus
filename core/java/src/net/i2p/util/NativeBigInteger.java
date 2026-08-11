@@ -101,13 +101,13 @@ import java.nio.charset.StandardCharsets;
  *
  */
 public class NativeBigInteger extends BigInteger {
-    /** did we load the native lib correctly? */
+    /** Did we load the native lib correctly? */
     private static boolean _nativeOk;
 
-    /** is native lib loaded and at least version 3? */
+    /** Is native lib loaded and at least version 3? */
     private static boolean _nativeOk3;
 
-    /** is native lib loaded and at least version 3, and GMP at least version 5? */
+    /** Is native lib loaded and at least version 3, and GMP at least version 5? */
     private static boolean _nativeCTOk;
 
     private static int _jbigiVersion;
@@ -117,7 +117,7 @@ public class NativeBigInteger extends BigInteger {
     private static String _extractedResource;
 
     /**
-     * do we want to dump some basic success/failure info to stderr during
+     * Do we want to dump some basic success/failure info to stderr during
      * initialization?  this would otherwise use the Log component, but this makes
      * it easier for other systems to reuse this class
      *
@@ -125,8 +125,6 @@ public class NativeBigInteger extends BigInteger {
      * then comment out the I2PAppContext usage below.
      *
      * Set to false if not in router context, so scripts using TrustedUpdate
-     * don't spew log messages. main() below overrides to true.
-     * @return the property
      */
     private static boolean _doLog = System.getProperty("jbigi.dontLog") == null
             && I2PAppContext.getCurrentContext() != null
@@ -168,7 +166,7 @@ public class NativeBigInteger extends BigInteger {
     private static final String JBIGI_OPTIMIZATION_NANO = "nano";
     private static final String JBIGI_OPTIMIZATION_PENTIUMM = "pentiumm";
 
-    /** all libjbibi builds are identical to pentium3, case handled in getMiddleName2() */
+    /** All libjbibi builds are identical to pentium3, case handled in getMiddleName2(). */
     private static final String JBIGI_OPTIMIZATION_VIAC32 = "viac32";
 
     /**
@@ -281,7 +279,7 @@ public class NativeBigInteger extends BigInteger {
         JBIGI_OPTIMIZATION_JAGUAR, JBIGI_OPTIMIZATION_BOBCAT, JBIGI_OPTIMIZATION_ATHLON64
     };
 
-    /** the main AMD product line */
+    /** The main AMD product line. */
     private static final String[] JBIGI_COMPAT_LIST_AMD_MAIN = {
         JBIGI_OPTIMIZATION_ZEN3, JBIGI_OPTIMIZATION_ZEN2, JBIGI_OPTIMIZATION_ZEN,
         JBIGI_OPTIMIZATION_EXCAVATOR, JBIGI_OPTIMIZATION_STEAMROLLER, JBIGI_OPTIMIZATION_PILEDRIVER,
@@ -548,7 +546,7 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
-     * calculate (base ^ exponent) % modulus.
+     * Calculate (base ^ exponent) % modulus.
      *
      * @param base
      *            big endian twos complement representation of the base (but it must be positive)
@@ -565,7 +563,7 @@ public class NativeBigInteger extends BigInteger {
     private static native byte[] nativeModPow(byte[] base, byte[] exponent, byte[] modulus);
 
     /**
-     * calculate (base ^ exponent) % modulus.
+     * Calculate (base ^ exponent) % modulus.
      * Constant Time.
      *
      * @param base
@@ -680,6 +678,8 @@ public class NativeBigInteger extends BigInteger {
     private volatile byte[] cachedBa;
 
     /**
+     * BigInteger from the given big-endian representation.
+     *
      * @param val big-endian two's-complement representation
      */
     public NativeBigInteger(byte[] val) {
@@ -687,6 +687,8 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
+     * BigInteger from the given signum and magnitude.
+     *
      * @param signum signum of the representation
      * @param magnitude big-endian binary representation
      */
@@ -783,7 +785,7 @@ public class NativeBigInteger extends BigInteger {
         }
     }
 
-    /** caches */
+    /** Cached byte array representation, filled in on first call. */
     @Override
     public byte[] toByteArray() {
         // Since we are immutable, safe to never update cached ba after initial generation
@@ -794,6 +796,7 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
+     * Whether native methods will be used by this class.
      *
      * @return True iff native methods will be used by this class
      */
@@ -802,6 +805,8 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
+     * Human-readable status of the native library load.
+     *
      * @return A string suitable for display to the user
      */
     public static String loadStatus() {

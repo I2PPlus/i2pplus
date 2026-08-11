@@ -221,6 +221,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
+     * The negotiated SSU 2 version.
      * @return the version
      */
     @Override
@@ -265,7 +266,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     /////////////////////////////////////////////////////////
 
     /**
-     * gotDateTime.
+     * Got a DateTime block.
      */
     @Override
     public void gotDateTime(long time) {
@@ -273,7 +274,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * gotOptions.
+     * Got an Options block.
      */
     public void gotOptions(byte[] options, boolean isHandshake) {
         if (_log.shouldDebug()) {_log.debug("[SSU] Received OPTIONS block");}
@@ -515,7 +516,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * gotRIFragment.
+     * Got an RI fragment block.
      */
     @Override
     public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
@@ -527,7 +528,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * gotAddress.
+     * Got an Address block.
      */
     @Override
     public void gotAddress(byte[] ip, int port) {
@@ -537,7 +538,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * gotRelayTagRequest.
+     * Got a RelayTagRequest block.
      */
     @Override
     public void gotRelayTagRequest() {
@@ -546,7 +547,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * gotRelayTag.
+     * Got a RelayTag block.
      */
     @Override
     public void gotRelayTag(long tag) {
@@ -554,7 +555,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * gotRelayRequest.
+     * Got a RelayRequest block.
      */
     public void gotRelayRequest(byte[] data) {
         if (_receivedConfirmedIdentity == null) {
@@ -563,7 +564,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * gotRelayResponse.
+     * Got a RelayResponse block.
      */
     @Override
     public void gotRelayResponse(int status, byte[] data) {
@@ -573,7 +574,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * gotRelayIntro.
+     * Got a RelayIntro block.
      */
     @Override
     public void gotRelayIntro(Hash aliceHash, byte[] data) {
@@ -583,7 +584,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * gotPeerTest.
+     * Got a PeerTest block.
      */
     public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
         if (_receivedConfirmedIdentity == null) {
@@ -593,7 +594,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * gotToken.
+     * Got a Token block.
      */
     @Override
     public void gotToken(long token, long expires) {
@@ -607,7 +608,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * gotI2NP.
+     * Got an I2NP block.
      */
     @Override
     public void gotI2NP(I2NPMessage msg) {
@@ -623,7 +624,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * gotFragment.
+     * Got a Fragment block.
      */
     @Override
     public void gotFragment(byte[] data, int off, int len, long messageID, int frag, boolean isLast) throws DataFormatException {
@@ -639,14 +640,14 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * gotACK.
+     * Got an ACK block.
      */
     public void gotACK(long ackThru, int acks, byte[] ranges) {
         throw new IllegalStateException("ACK in Handshake");
     }
 
     /**
-     * gotTermination.
+     * Got a Termination block.
      */
     public void gotTermination(int reason, long count) {
         if (_log.shouldInfo()) {
@@ -658,14 +659,14 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * gotPathChallenge.
+     * Got a PathChallenge block.
      */
     public void gotPathChallenge(RemoteHostId from, byte[] data) {
         throw new IllegalStateException("BAD block in handshake");
     }
 
     /**
-     * gotPathResponse.
+     * Got a PathResponse block.
      */
     public void gotPathResponse(RemoteHostId from, byte[] data) {
         throw new IllegalStateException("BAD block in handshake");
@@ -699,14 +700,17 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     // SSU 2 things
 
     /**
-     * @return the send conn i d
+     * The send conn ID.
+     * @return the send conn id
      */
     public long getSendConnID() {return _sendConnID;}
     /**
-     * @return the rcv conn i d
+     * The rcv conn ID.
+     * @return the rcv conn id
      */
     public long getRcvConnID() {return _rcvConnID;}
     /**
+     * The token.
      * @return the token
      */
     public long getToken() {return _token;}
@@ -718,32 +722,38 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         return _transport.getEstablisher().getInboundToken(_remoteHostId);
     }
     /**
+     * The handshake state.
      * @return the handshake state
      */
     public HandshakeState getHandshakeState() {return _handshakeState;}
     /**
+     * The send header encrypt key1.
      * @return the send header encrypt key1
      */
     public byte[] getSendHeaderEncryptKey1() {return _sendHeaderEncryptKey1;}
     /**
+     * The rcv header encrypt key1.
      * @return the rcv header encrypt key1
      */
     public byte[] getRcvHeaderEncryptKey1() {return _transport.getSSU2StaticIntroKey();}
     /**
+     * The send header encrypt key2.
      * @return the send header encrypt key2
      */
     public byte[] getSendHeaderEncryptKey2() {return _sendHeaderEncryptKey2;}
     /**
+     * The rcv header encrypt key2.
      * @return the rcv header encrypt key2
      */
     public synchronized byte[] getRcvHeaderEncryptKey2() {return _rcvHeaderEncryptKey2;}
     /**
+     * The sent address.
      * @return the sent address
      */
     public InetSocketAddress getSentAddress() {return _aliceSocketAddress;}
 
     /**
-     * createdPacketSent.
+     * Record that we sent the SessionCreated packet.
      */
     @Override
     public synchronized void createdPacketSent() {
@@ -761,7 +771,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
 
-    /** note that we just sent a Retry packet */
+    /** Note that we just sent a Retry packet. */
     public synchronized void retryPacketSent() {
         // retry after clock skew
         if (_currentState == InboundState.IB_STATE_FAILED) {return;}
@@ -1148,8 +1158,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * note that we just sent the SessionCreated packet
-     * and save it for retransmission
+     * Note that we just sent the SessionCreated packet,
+     * and save it for retransmission.
      */
     public synchronized void createdPacketSent(DatagramPacket pkt) {
         if (_sessCrForReTX == null) {
@@ -1164,6 +1174,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
+     * The retransmitted SessionCreated packet, or null if not sent or already got the session confirmed.
      * @return null if not sent or already got the session confirmed
      */
     public synchronized UDPPacket getRetransmitSessionCreatedPacket() {
@@ -1185,6 +1196,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
+     * The completed PeerState, or null if we have not received the session confirmed.
      * @return null if we have not received the session confirmed
      */
     public synchronized PeerState2 getPeerState() {
@@ -1204,6 +1216,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
+     * Queue a data packet received before the session completed.
      * @param packet with header still encrypted
      */
     public synchronized void queuePossibleDataPacket(UDPPacket packet) {
@@ -1265,7 +1278,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * toString.
+     * A string summary of this state.
      */
     @Override
     public String toString() {
@@ -1291,24 +1304,26 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     private static class RIException extends DataFormatException {
         private final int rsn;
         /**
-         * RIException.
+         * Creates the RI exception.
          */
         public RIException(String msg, int reason) {
             super(msg);
             rsn = reason;
         }
         /**
-         * RIException.
+         * Creates the RI exception.
          */
         public RIException(String msg, int reason, Throwable t) {
             super(msg, t);
             rsn = reason;
         }
         /**
+         * The reason code.
          * @return the reason
          */
         public int getReason() {return rsn;}
         /**
+         * The message with the reason code prefixed.
          * @return the message
          */
         @Override
@@ -1318,11 +1333,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     private class Disconnector extends SimpleTimer2.TimedEvent {
         private final Hash h;
         /**
-         * Disconnector.
+         * Creates the disconnector.
          */
         public Disconnector(Hash h) {super(_context.simpleTimer2()); this.h = h;}
         /**
-         * timeReached.
+         * Disconnect the peer when the timer fires.
          */
         public void timeReached() {
             _context.commSystem().forceDisconnect(h, "Invalid SSU address");

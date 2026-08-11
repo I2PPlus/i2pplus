@@ -40,7 +40,7 @@ public final class ElGamalAESEngine {
     private final Log _log;
     private static final int MIN_ENCRYPTED_SIZE = 80; // smallest possible resulting size
     private final I2PAppContext _context;
-    /** enforced since release 0.6 */
+    /** Enforced since release 0.6. */
     public static final int MAX_TAGS_RECEIVED = 200;
     private static final int ELG_CLEARTEXT_LENGTH = 222;
     private static final int ELG_ENCRYPTED_LENGTH = 514;
@@ -271,12 +271,12 @@ public final class ElGamalAESEngine {
     }
 
     /**
-     * scenario 1:
+     * Scenario 1:
      * Begin with 222 bytes, ElG encrypted, containing:
      * <pre>
-     *  - 32 byte SessionKey
-     *  - 32 byte pre-IV for the AES
-     *  - 158 bytes of random padding
+     * - 32 byte SessionKey
+     * - 32 byte pre-IV for the AES
+     * - 158 bytes of random padding
      * </pre>
      * After encryption, the ElG section is 514 bytes long.
      * Then encrypt with AES using that session key and the first 16 bytes of the SHA256 of the pre-IV, using
@@ -325,17 +325,17 @@ public final class ElGamalAESEngine {
     }
 
     /**
-     * scenario 2:
+     * Scenario 2:
      * The data begins with 32 byte session tag, which also serves as the preIV.
      * Then decrypt with AES using that session key and the first 16 bytes of the SHA256 of the pre-IV:
      * <pre>
-     *  - 2 byte integer specifying the # of session tags
-     *  - that many 32 byte session tags
-     *  - 4 byte integer specifying data.length
-     *  - SHA256 of data
-     *  - 1 byte flag that, if == 1, is followed by a new SessionKey
-     *  - data
-     *  - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
+     * - 2 byte integer specifying the # of session tags
+     * - that many 32 byte session tags
+     * - 4 byte integer specifying data.length
+     * - SHA256 of data
+     * - 1 byte flag that, if == 1, is followed by a new SessionKey
+     * - data
+     * - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
      * </pre>
      *
      * If anything doesn't match up in decryption, it falls back to decryptNewSession
@@ -378,13 +378,13 @@ public final class ElGamalAESEngine {
     /**
      * Decrypt the AES data with the session key and IV.  The result should be:
      * <pre>
-     *  - 2 byte integer specifying the # of session tags
-     *  - that many 32 byte session tags
-     *  - 4 byte integer specifying data.length
-     *  - SHA256 of data
-     *  - 1 byte flag that, if == 1, is followed by a new SessionKey
-     *  - data
-     *  - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
+     * - 2 byte integer specifying the # of session tags
+     * - that many 32 byte session tags
+     * - 4 byte integer specifying data.length
+     * - SHA256 of data
+     * - 1 byte flag that, if == 1, is followed by a new SessionKey
+     * - data
+     * - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
      * </pre>
      *
      * If anything doesn't match up in decryption, return null.  Otherwise, return
@@ -575,23 +575,23 @@ public final class ElGamalAESEngine {
     }
 
     /**
-     * scenario 1:
+     * Scenario 1:
      * Begin with 222 bytes, ElG encrypted, containing:
      * <pre>
-     *  - 32 byte SessionKey
-     *  - 32 byte pre-IV for the AES
-     *  - 158 bytes of random padding
+     * - 32 byte SessionKey
+     * - 32 byte pre-IV for the AES
+     * - 158 bytes of random padding
      * </pre>
      * After encryption, the ElG section is 514 bytes long.
      * Then encrypt the following with AES using that session key and the first 16 bytes of the SHA256 of the pre-IV:
      * <pre>
-     *  - 2 byte integer specifying the # of session tags
-     *  - that many 32 byte session tags
-     *  - 4 byte integer specifying data.length
-     *  - SHA256 of data
-     *  - 1 byte flag that, if == 1, is followed by a new SessionKey
-     *  - data
-     *  - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
+     * - 2 byte integer specifying the # of session tags
+     * - that many 32 byte session tags
+     * - 4 byte integer specifying data.length
+     * - SHA256 of data
+     * - 1 byte flag that, if == 1, is followed by a new SessionKey
+     * - data
+     * - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
      * </pre>
      *
      * @param tagsForDelivery session tags to be associated with the key or null;
@@ -631,17 +631,17 @@ public final class ElGamalAESEngine {
     }
 
     /**
-     * scenario 2:
+     * Scenario 2:
      * Begin with 32 byte session tag, which also serves as the preIV.
      * Then encrypt with AES using that session key and the first 16 bytes of the SHA256 of the pre-IV:
      * <pre>
-     *  - 2 byte integer specifying the # of session tags
-     *  - that many 32 byte session tags
-     *  - 4 byte integer specifying data.length
-     *  - SHA256 of data
-     *  - 1 byte flag that, if == 1, is followed by a new SessionKey
-     *  - data
-     *  - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
+     * - 2 byte integer specifying the # of session tags
+     * - that many 32 byte session tags
+     * - 4 byte integer specifying data.length
+     * - SHA256 of data
+     * - 1 byte flag that, if == 1, is followed by a new SessionKey
+     * - data
+     * - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
      * </pre>
      *
      * @param tagsForDelivery session tags to be associated with the key or null;
@@ -686,13 +686,13 @@ public final class ElGamalAESEngine {
      * and making sure the resulting data is at least as long as the paddedSize and
      * also mod 16 bytes.  The contents of the encrypted data is:
      * <pre>
-     *  - 2 byte integer specifying the # of session tags
-     *  - that many 32 byte session tags
-     *  - 4 byte integer specifying data.length
-     *  - SHA256 of data
-     *  - 1 byte flag that, if == 1, is followed by a new SessionKey
-     *  - data
-     *  - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
+     * - 2 byte integer specifying the # of session tags
+     * - that many 32 byte session tags
+     * - 4 byte integer specifying data.length
+     * - SHA256 of data
+     * - 1 byte flag that, if == 1, is followed by a new SessionKey
+     * - data
+     * - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
      * </pre>
      *
      * Note: package private for ElGamalTest.testAES()
@@ -706,6 +706,8 @@ public final class ElGamalAESEngine {
     }
 
     /**
+     * Encrypt the AES area with the given key and IV, reserving the specified
+     * number of bytes at the beginning of the result for the session tag prefix.
      *
      * @param tagsForDelivery session tags to be associated with the key or null;
      *                        200 max enforced at receiver

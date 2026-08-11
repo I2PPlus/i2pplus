@@ -26,6 +26,8 @@ class LogLimit {
     }
 
     /**
+     * Root name matched by this limit.
+     *
      * @return the root name
      */
     public String getRootName() {
@@ -33,6 +35,8 @@ class LogLimit {
     }
 
     /**
+     * Priority limit applied to matching logs.
+     *
      * @return the limit
      */
     public int getLimit() {
@@ -40,14 +44,14 @@ class LogLimit {
     }
 
     /**
-     * setLimit.
+     * Configure the priority limit.
      */
     public void setLimit(int limit) {
         _limit = limit;
     }
 
     /**
-     * matches.
+     * Whether the log matches this limit, by name or class hierarchy.
      */
     public boolean matches(Log log) {
         String name = log.getName();
@@ -58,7 +62,9 @@ class LogLimit {
     }
 
     /**
-     * @return whether h code is present
+     * Hash code derived from the root name.
+     *
+     * @return the hash code
      */
     @Override
     public int hashCode() {
@@ -66,7 +72,7 @@ class LogLimit {
     }
 
     /**
-     * equals.
+     * Compare by root name.
      */
     @Override
     public boolean equals(Object o) {

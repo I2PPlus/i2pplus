@@ -115,7 +115,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         _availabilityNotifier = new MuxedAvailabilityNotifier();
     }
 
-    /** listen on all protocols and ports */
+    /** Listen on all protocols and ports. */
     @Override
     public void setSessionListener(I2PSessionListener lsnr) {
         _demultiplexer.addListener(lsnr, PROTO_ANY, PORT_ANY);
@@ -157,16 +157,12 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         _demultiplexer.addMuxedListener(l, proto, port);
     }
 
-    /** removes the specified listener (only) */
+    /** Remove the specified listener (only). */
     @Override
     public void removeListener(int proto, int port) {
         _demultiplexer.removeListener(proto, port);
     }
 
-    /**
-     * sendMessage.
-     * @return success
-     */
     @Override
     /**
      * Send an I2CP message.
@@ -176,10 +172,6 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         return sendMessage(dest, payload, 0, payload.length, null, null, 0, PROTO_UNSPECIFIED, PORT_UNSPECIFIED, PORT_UNSPECIFIED);
     }
 
-    /**
-     * sendMessage.
-     * @return success
-     */
     @Override
     /**
      * Send an I2CP message.
@@ -402,9 +394,6 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
             _msgs = new LinkedBlockingQueue<>();
         }
 
-        /**
-         * stopNotifying.
-         */
         @Override
         /**
          * Stop availability notifications.
@@ -443,9 +432,6 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
             if (!_alive && _log.shouldWarn()) _log.warn(getPrefix() + "Message available but notifier not running");
         }
 
-        /**
-         * run.
-         */
         @Override
         /**
          * Execute the task.
@@ -474,27 +460,17 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         }
     }
 
-    /** let's keep this simple */
+    /** Keep this simple. */
     private static class MsgData {
-        /**
-         * id.
-         */
+        /** Message ID. */
         public final int id;
-        /**
-         * size.
-         */
+        /** Message size. */
         public final int size;
-        /**
-         * proto.
-         */
+        /** Protocol number. */
         public final int proto;
-        /**
-         * fromPort.
-         */
+        /** Origin port. */
         public final int fromPort;
-        /**
-         * toPort.
-         */
+        /** Destination port. */
         public final int toPort;
 
         /**
@@ -509,7 +485,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         }
     }
 
-    /**
+    /*
      *  No, we couldn't put any protocol byte in front of everything and
      *  keep backward compatibility. But there are several bytes that
      *  are unused AND unchecked in the gzip header in releases &lt;= 0.7.

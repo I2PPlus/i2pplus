@@ -27,7 +27,7 @@ public class VerifiedDestination extends Destination {
     }
 
     /**
-     * alternative constructor which takes a base64 string representation
+     * Alternative constructor which takes a base64 string representation
      *
      * @param s a Base64 representation of the destination, as (eg) is used in hosts.txt
      */
@@ -37,7 +37,7 @@ public class VerifiedDestination extends Destination {
     }
 
     /**
-     * create from an existing Dest
+     * Create from an existing Dest
      *
      * @param d must be non-null
      */
@@ -46,7 +46,7 @@ public class VerifiedDestination extends Destination {
     }
 
     /**
-     * verify the certificate.
+     * Verify the certificate.
      *
      * @param allowNone If true, allow a NULL or HIDDEN certificate.
      * @return true if the certificate is valid
@@ -77,14 +77,14 @@ public class VerifiedDestination extends Destination {
      *  to approve a destination.
      *
      *  We define a Signed Certificate as follows:
-     *   - length: Either 44 or 72 bytes
-     *   - contents:
+     *     - length: Either 44 or 72 bytes
+     *     - contents:
      *      1: a 44 byte Signature
      *      2 (optional): a 32 byte Hash of the signing Destination
      *        This can be a hint to the verification process to help find
      *        the identity and keys of the signing Destination.
-     *   Data which is signed: The first 384 bytes of the Destination
-     *   (i.e. the Public Key and Signing Public Key, WITHOUT the Certificate)
+     *     Data which is signed: The first 384 bytes of the Destination
+     *     (i.e. the Public Key and Signing Public Key, WITHOUT the Certificate)
      *
      *  It is not appropriate to enforce a particular delegation scheme here.
      *  The application will need to apply additional steps to select

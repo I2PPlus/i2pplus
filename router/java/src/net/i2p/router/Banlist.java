@@ -107,13 +107,13 @@ public class Banlist {
 
     /** Entry representing a banned peer with expiration and reason information */
     public static class Entry {
-        /** when it should expire, per the i2p clock */
+        /** When it should expire, per the i2p clock. */
         public long expireOn;
-        /** why they were banlisted */
+        /** Why they were banlisted. */
         public String cause;
-        /** separate code so cause can contain {0} for translation */
+        /** Separate code so cause can contain {0} for translation. */
         public String causeCode;
-        /** set of transports to ban, null means all transports */
+        /** Transports to ban, null means all transports. */
         public Set<String> transports;
 
         /**
@@ -805,7 +805,7 @@ public class Banlist {
     }
 
     /**
-     * Get the number of currently banlisted routers.
+     * Number of currently banlisted routers.
      *
      * @return the number of currently banlisted routers
      */

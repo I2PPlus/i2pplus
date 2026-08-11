@@ -140,7 +140,7 @@ public class Writer {
 
     private class Runner implements Runnable {
 
-        /** a scratch space to serialize and encrypt messages */
+        /** A scratch space to serialize and encrypt messages. */
         private final NTCPConnection.PrepBuffer _prepBuffer;
 
         private volatile boolean _stop;

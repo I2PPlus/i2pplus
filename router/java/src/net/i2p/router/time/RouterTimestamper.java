@@ -40,7 +40,7 @@ public class RouterTimestamper extends Timestamper {
     private static final int DEFAULT_QUERY_FREQUENCY = 11*60*1000;
     private static final String DEFAULT_SERVER_LIST = "0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org";
     private static final boolean DEFAULT_DISABLED = true;
-    /** how many times do we have to query if we are changing the clock? */
+    /** Number of servers to query when changing the clock. */
     private static final int DEFAULT_CONCURRING_SERVERS = 3;
     private static final int MAX_CONSECUTIVE_FAILS = 10;
     private static final int DEFAULT_TIMEOUT = 10*1000;
@@ -68,7 +68,7 @@ public class RouterTimestamper extends Timestamper {
      */
     public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
 
-    /** if different SNTP servers differ by more than 10s, someone is b0rked */
+    /** If different SNTP servers differ by more than 10s, someone is b0rked. */
     private static final int MAX_VARIANCE = 10*1000;
 
     /**
@@ -116,6 +116,8 @@ public class RouterTimestamper extends Timestamper {
     }
 
     /**
+     * Number of NTP servers in the configured list.
+     *
      * @return the server count
      */
     public int getServerCount() {
@@ -124,6 +126,8 @@ public class RouterTimestamper extends Timestamper {
         }
     }
     /**
+     * NTP server at the given index in the configured list.
+     *
      * @return the server
      */
     public String getServer(int index) {
@@ -133,34 +137,42 @@ public class RouterTimestamper extends Timestamper {
     }
 
     /**
+     * How often to query the NTP servers, in ms.
+     *
      * @return the query frequency ms
      */
     public int getQueryFrequencyMs() { return _queryFrequency; }
 
     /**
-     * @return the is disabled
+     * Whether NTP is disabled.
+     *
+     * @return whether disabled
      */
     public boolean getIsDisabled() { return _disabled; }
 
     /**
-     * addListener.
+     * Register a listener to be notified of time updates.
      */
     public void addListener(UpdateListener lsnr) {
             _listeners.add(lsnr);
     }
     /**
-     * removeListener.
+     * Unregister a listener from time update notifications.
      */
     public void removeListener(UpdateListener lsnr) {
             _listeners.remove(lsnr);
     }
     /**
+     * Number of registered time update listeners.
+     *
      * @return the listener count
      */
     public int getListenerCount() {
             return _listeners.size();
     }
     /**
+     * Time update listener at the given index.
+     *
      * @return the listener
      */
     public UpdateListener getListener(int index) {
@@ -168,7 +180,7 @@ public class RouterTimestamper extends Timestamper {
     }
 
     /**
-     * startTimestamper.
+     * Start the SNTP query thread, unless disabled or already initialized.
      */
     public void startTimestamper() {
         if (_disabled || _initialized)
@@ -181,7 +193,7 @@ public class RouterTimestamper extends Timestamper {
     }
 
     /**
-     * waitForInitialization.
+     * Wait until the initial time synchronization completes, or the timeout is reached.
      */
     @Override
     public void waitForInitialization() {
@@ -208,7 +220,7 @@ public class RouterTimestamper extends Timestamper {
     /** @since 0.8.8 */
     private class Shutdown implements Runnable {
         /**
-         * run.
+         * Stop the timestamper and interrupt the query thread.
          */
         public void run() {
              _isRunning = false;
@@ -218,7 +230,7 @@ public class RouterTimestamper extends Timestamper {
     }
 
     /**
-     * run.
+     * Run the main SNTP query loop, updating the time periodically.
      */
     @Override
     public void run() {

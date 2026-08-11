@@ -44,14 +44,14 @@ import net.i2p.util.Log;
  */
 public class GeoIPv6 {
 
-    /** utility class */
+    /** Utility class. */
     private GeoIPv6() {}
 
     private static final String GEOIP_DIR_DEFAULT = "geoip";
     private static final String GEOIP_FILE_DEFAULT = "geoipv6.dat.gz";
     private static final String MAGIC = "I2PGeoIPv6\0\001\0\0\0\0";
     private static final String COMMENT = "I2P compressed geoipv6 file. See GeoIPv6.java for format.";
-    /** includes magic */
+    /** Includes magic. */
     private static final int HEADER_LEN = 256;
 
     /**
@@ -138,8 +138,8 @@ public class GeoIPv6 {
     *
     * Acceptable input formats (IPv6 only):
     *<pre>
-    *   #comment (# must be in column 1)
-    *   "text IP", "text IP", "bigint IP", "bigint IP", "country code", "country name"
+    * #comment (# must be in column 1)
+    * "text IP", "text IP", "bigint IP", "bigint IP", "country code", "country name"
     *</pre>
     * Quotes and spaces optional. Sorting not required.
     * Country code case-insensitive.
@@ -148,22 +148,22 @@ public class GeoIPv6 {
     *
     * Example:
     *<pre>
-    *   "2001:200::", "2001:200:ffff:ffff:ffff:ffff:ffff:ffff", "42540528726795050063891204319802818560", "42540528806023212578155541913346768895", "JP", "Japan"
+    * "2001:200::", "2001:200:ffff:ffff:ffff:ffff:ffff:ffff", "42540528726795050063891204319802818560", "42540528806023212578155541913346768895", "JP", "Japan"
     *</pre>
     *
     *<pre>
     * Output format:
-    *   Bytes 0-9: Magic number "I2PGeoIPv6"
-    *   Bytes 10-11: version (0x0001)
-    *   Bytes 12-15 flags (0)
-    *   Bytes 16-23: Date (long)
-    *   Bytes 24-xx: Comment (UTF-8)
-    *   Bytes xx-255: null padding
-    *   Bytes 256-: 18 byte records:
+    * Bytes 0-9: Magic number "I2PGeoIPv6"
+    * Bytes 10-11: version (0x0001)
+    * Bytes 12-15 flags (0)
+    * Bytes 16-23: Date (long)
+    * Bytes 24-xx: Comment (UTF-8)
+    * Bytes xx-255: null padding
+    * Bytes 256-: 18 byte records:
     *       8 byte from (/64)
     *       8 byte to (/64)
     *       2 byte country code LOWER case (ASCII)
-    *   Data must be sorted (SIGNED twos complement), no overlap
+    * Data must be sorted (SIGNED twos complement), no overlap
     *</pre>
     *
     * SLOW. For preprocessing only!
@@ -290,7 +290,7 @@ public class GeoIPv6 {
                 throw new IllegalArgumentException(toString());
         }
 
-        /** twos complement */
+        /** Two's complement. */
         public int compareTo(V6Entry r) {
             if (from < r.from) return -1;
             if (r.from < from) return 1;
@@ -318,7 +318,7 @@ public class GeoIPv6 {
         return rv;
     }
 
-    /** like DataHelper.writeLong(rawStream, 8, value) but allows negative values */
+    /** Like DataHelper.writeLong(rawStream, 8, value) but allows negative values. */
     private static void writeLong(OutputStream rawStream, long value) throws IOException {
         for (int i = 56; i >= 0; i -= 8) {
             byte cur = (byte) (value >> i);
@@ -326,7 +326,7 @@ public class GeoIPv6 {
         }
     }
 
-    /** like DataHelper.readLong(src, offset, 8) but allows negative values */
+    /** Like DataHelper.readLong(src, offset, 8) but allows negative values. */
     private static long readLong(byte[] src, int offset) {
         long rv = 0;
         int limit = offset + 8;

@@ -43,7 +43,7 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
     private static final int TUNNEL_PRIORITY = OutNetMessage.PRIORITY_LOWEST;
 
     /**
-     * Constructs a job to handle an inbound garlic message.
+     * Job to handle an inbound garlic message received outside of a tunnel.
      *
      * @param context              router context providing core services
      * @param msg                  garlic message to process

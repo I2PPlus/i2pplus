@@ -115,7 +115,7 @@ public class OOMListener implements I2PThread.OOMEventListener {
 
     /**
      *  Best guess if running from a Debian package
-     *  @since 0.9.35
+     * @since 0.9.35
      * @return whether debian package
      */
     private static boolean isDebianPackage(RouterContext ctx) {
@@ -129,7 +129,7 @@ public class OOMListener implements I2PThread.OOMEventListener {
     }
 
     /**
-     * Get the best guess path for wrapper.config file.
+     * The best guess path for the wrapper.config file.
      *
      * This method attempts to determine the location of the wrapper
      * configuration file based on the installation type and platform.

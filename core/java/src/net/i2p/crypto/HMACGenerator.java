@@ -74,7 +74,7 @@ public abstract class HMACGenerator {
     }
 
     /**
-     * releaseTmp.
+     * Release a temporary array back to the cache.
      */
     protected void releaseTmp(byte[] tmp) {
         SimpleByteCache.release(tmp);

@@ -141,14 +141,20 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     /// begin SSU2Sender interface ///
 
     /**
+     * The remote host ID.
+     *
      * @return the remote host id
      */
     public RemoteHostId getRemoteHostId() { return _remoteHostId; }
     /**
+     * Whether the peer is IPv6.
+     *
      * @return whether i pv6
      */
     public boolean isIPv6() { return _remoteHostId.getIP().length == 16; }
     /**
+     * The remote IP address.
+     *
      * @return the remote i p address
      */
     public InetAddress getRemoteIPAddress() {
@@ -159,54 +165,74 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         }
     }
     /**
+     * The remote port.
+     *
      * @return the remote port
      */
     public int getRemotePort() { return _remoteHostId.getPort(); }
     /**
+     * The MTU.
+     *
      * @return the m t u
      */
     public int getMTU() { return _mtu; }
     /**
+     * The next packet number.
+     *
      * @return the next packet number
      */
     public long getNextPacketNumber() { return _packetNumber.getAndIncrement(); }
     /**
+     * The send connection ID.
+     *
      * @return the send conn i d
      */
     public long getSendConnID() { return _sendConnID; }
     /**
+     * The send cipher.
+     *
      * @return the send cipher
      */
     public CipherState getSendCipher() { return _sendCha; }
     /**
+     * The first send header encryption key.
+     *
      * @return the send header encrypt key1
      */
     public byte[] getSendHeaderEncryptKey1() { return _sendHeaderEncryptKey1; }
     /**
+     * The second send header encryption key.
+     *
      * @return the send header encrypt key2
      */
     public byte[] getSendHeaderEncryptKey2() { return _sendHeaderEncryptKey2; }
     /**
-     * setDestroyReason.
+     * The destroy reason.
      */
     public void setDestroyReason(int reason) {
         // No-op - intentionally empty
     }
     /**
+     * The received messages bitfield.
+     *
      * @return the received messages
      */
     public SSU2Bitfield getReceivedMessages() { return _receivedMessages; }
     /**
+     * No-op, we don't care what was acked.
+     *
      *  @return null always, we don't care what was acked
      */
     public SSU2Bitfield getAckedMessages() { return null; }
     /**
-     * fragmentsSent.
+     * Track sent fragments; no-op after destruction.
      */
     public void fragmentsSent(long pktNum, int length, List<PacketBuilder.Fragment> fragments) {
         // No-op - intentionally empty
     }
     /**
+     * The flags byte.
+     *
      * @return the flags
      */
     public byte getFlags() { return 0; }
@@ -304,20 +330,20 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     /////////////////////////////////////////////////////////
 
     /**
-     * gotDateTime.
+     * Process a received DateTime block; no-op after destruction.
      */
     public void gotDateTime(long time) {
         // No-op - intentionally empty
     }
     /**
-     * gotOptions.
+     * Process a received Options block; no-op after destruction.
      */
     public void gotOptions(byte[] options, boolean isHandshake) {
         // No-op - intentionally empty
     }
 
     /**
-     * gotRI.
+     * Process a received RouterInfo block.
      */
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) {
         if (_log.shouldDebug())
@@ -326,7 +352,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     * gotRIFragment.
+     * Process a received RouterInfo fragment block.
      */
     public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
         if (_log.shouldDebug())
@@ -335,26 +361,26 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     * gotAddress.
+     * Process a received Address block; no-op after destruction.
      */
     public void gotAddress(byte[] ip, int port) {
         // No-op - intentionally empty
     }
     /**
-     * gotRelayTagRequest.
+     * Process a received RelayTagRequest block; no-op after destruction.
      */
     public void gotRelayTagRequest() {
         // No-op - intentionally empty
     }
     /**
-     * gotRelayTag.
+     * Process a received RelayTag block; no-op after destruction.
      */
     public void gotRelayTag(long tag) {
         // No-op - intentionally empty
     }
 
     /**
-     * gotRelayRequest.
+     * Process a received RelayRequest block.
      */
     public void gotRelayRequest(byte[] data) {
         if (_log.shouldDebug())
@@ -363,7 +389,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     * gotRelayResponse.
+     * Process a received RelayResponse block.
      */
     public void gotRelayResponse(int status, byte[] data) {
         if (_log.shouldDebug())
@@ -372,7 +398,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     * gotRelayIntro.
+     * Process a received RelayIntro block.
      */
     public void gotRelayIntro(Hash aliceHash, byte[] data) {
         if (_log.shouldDebug())
@@ -381,7 +407,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     * gotPeerTest.
+     * Process a received PeerTest block.
      */
     public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
         if (_log.shouldDebug())
@@ -390,7 +416,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     * gotToken.
+     * Process a received Token block.
      */
     public void gotToken(long token, long expires) {
         if (_log.shouldDebug())
@@ -401,7 +427,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     * gotI2NP.
+     * Process a received I2NP block.
      */
     public void gotI2NP(I2NPMessage msg) {
         if (_log.shouldDebug())
@@ -410,7 +436,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     * gotFragment.
+     * Process a received Fragment block.
      */
     public void gotFragment(byte[] data, int off, int len, long messageId, int frag, boolean isLast) {
         if (_log.shouldDebug())
@@ -419,14 +445,14 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     * gotACK.
+     * Process a received ACK block; no-op after destruction.
      */
     public void gotACK(long ackThru, int acks, byte[] ranges) {
         // No-op - intentionally empty
     }
 
     /**
-     * gotTermination.
+     * Process a received Termination block.
      */
     public void gotTermination(int reason, long count) {
         if (_log.shouldInfo()) {
@@ -450,13 +476,13 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     * gotPathChallenge.
+     * Process a received PathChallenge block; no-op after destruction.
      */
     public void gotPathChallenge(RemoteHostId from, byte[] data) {
         // No-op - intentionally empty
     }
     /**
-     * gotPathResponse.
+     * Process a received PathResponse block; no-op after destruction.
      */
     public void gotPathResponse(RemoteHostId from, byte[] data) {
         // No-op - intentionally empty
@@ -480,7 +506,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         }
 
         /**
-         * schedule.
+         * Schedule the ack+destroy packet.
          */
         public void schedule() {
             // delay to implement a simple rate limit, as recommended by QUIC
@@ -488,9 +514,9 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         }
 
         /**
-         *  Send a termination+ack+token packet, unless acks were already sent
-         *  as indicated by _wantACKSendSince == 0.
-         *  Also does retransmission, if we were the one that sent the first termination.
+         * Send a termination+ack+token packet, unless acks were already sent
+         * as indicated by _wantACKSendSince == 0.
+         * Also does retransmission, if we were the one that sent the first termination.
          */
         public void timeReached() {
             synchronized(PeerStateDestroyed.this) {
@@ -527,7 +553,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         }
 
         /**
-         * timeReached.
+         * Remove this peer from the transport list.
          */
         public void timeReached() {
             _ackTimer.cancel();
@@ -538,7 +564,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     * toString.
+     * String representation of this destroyed peer.
      */
     @Override
     public String toString() {

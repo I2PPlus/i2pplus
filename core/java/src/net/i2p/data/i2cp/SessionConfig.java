@@ -75,8 +75,9 @@ public class SessionConfig extends DataStructureImpl {
      *
      * Really? See also ClientManager.REQUEST_LEASESET_TIMEOUT.
      * If I2CP replay attacks are a thing, there's a lot more to do.
+     *
+     * Maximum age of a session authorization in milliseconds.
      */
-    /** Maximum age of a session authorization in milliseconds. */
     private static final long OFFSET_VALIDITY = 3 * (long) 60 * 1000;
 
     /**
@@ -114,7 +115,7 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     * setCreationDate.
+     * Creation date for this session.
      */
     public void setCreationDate(Date date) {
         _creationDate = date;
@@ -154,7 +155,7 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     * setSignature.
+     * Signature for this session authorization.
      */
     public void setSignature(Signature sig) {
         _signature = sig;

@@ -83,25 +83,25 @@ public class PeerProfile {
     // does this peer profile contain expanded data, or just the basics?
     private boolean _expanded;
     private boolean _expandedDB;
-    /** low latency flag, set when peer responds quickly to tunnel builds, persisted */
+    /** Low latency flag, set when peer responds quickly to tunnel builds, persisted. */
     private volatile boolean _lowLatency;
     private final int _distance;
 
-    /** keep track of the fastest 8 throughputs unless slow, then 4 */
+    /** Keep track of the fastest 8 throughputs unless slow, then 4. */
     private static final int THROUGHPUT_COUNT = SystemVersion.isSlow() ? 4 : 8;
     /**
-     * fastest 1 minute throughput, in bytes per minute, ordered with fastest
-     * first.  this is not synchronized, as we don't *need* perfection, and we only
+     * Fastest 1 minute throughput, in bytes per minute, ordered with fastest
+     * first.  This is not synchronized, as we don't *need* perfection, and we only
      * reorder/insert values on coalesce
      */
     private final float[] _peakThroughput = new float[THROUGHPUT_COUNT];
     private final AtomicLong _peakThroughputCurrentTotal = new AtomicLong();
     private final float[] _peakTunnelThroughput = new float[THROUGHPUT_COUNT];
-    /** total number of bytes pushed through a single tunnel in a 1 minute period */
+    /** Total number of bytes pushed through a single tunnel in a 1 minute period. */
     private final float[] _peakTunnel1mThroughput = new float[THROUGHPUT_COUNT];
     private long _lastTestStarted;
     private volatile long _lastThroughputUpdate;
-    /** periodically cut the measured throughput values */
+    /** Periodically cut the measured throughput values. */
     private static final int DEGRADES_PER_DAY = 4;
     // one in this many times, ~= 61
     private static final int DEGRADE_PROBABILITY = PeerManager.REORGANIZES_PER_DAY / DEGRADES_PER_DAY;
@@ -189,7 +189,7 @@ public class PeerProfile {
     public boolean isLowLatency() {return _lowLatency;}
 
     /**
-     * Set the low latency flag.
+     * The low latency flag.
      *
      * @param low true for low latency
      */
@@ -327,7 +327,7 @@ public class PeerProfile {
     public long getLastSendSuccessful() {return _lastSentToSuccessfully;}
 
     /**
-     * Set when we last sent to this peer successfully.
+     * When we last sent to this peer successfully.
      *
      * @param when the timestamp
      */
@@ -341,7 +341,7 @@ public class PeerProfile {
     public long getLastSendFailed() {return _lastFailedSend;}
 
     /**
-     * Set when we last had a problem sending to this peer.
+     * When we last had a problem sending to this peer.
      *
      * @param when the timestamp
      */
@@ -355,7 +355,7 @@ public class PeerProfile {
     public long getLastHeardFrom() {return _lastHeardFrom;}
 
     /**
-     * Set when we last heard from the peer.
+     * When we last heard from the peer.
      *
      * @param when the timestamp
      */
@@ -389,7 +389,7 @@ public class PeerProfile {
     }
 
     /**
-     * Set the tunnel history.
+     * The tunnel history.
      *
      * @param history the TunnelHistory
      */
@@ -429,7 +429,7 @@ public class PeerProfile {
     }
 
     /**
-     * Set the DB history.
+     * The DB history.
      *
      * @param hist the DBHistory
      */
@@ -502,7 +502,7 @@ public class PeerProfile {
     void setSpeedBonusLastUpdate(long ts) {_speedBonusLastUpdate = ts;}
 
     /**
-     * extra factor added to the capacity ranking - this can be updated in the profile
+     * Extra factor added to the capacity ranking - this can be updated in the profile
      * written to disk to affect how the algorithm ranks capacity.  Negative values are
      * penalties. Expires after 4 hours if not refreshed.
      *
@@ -515,27 +515,35 @@ public class PeerProfile {
         return hoursSinceUpdate >= 4 ? 0 : _capacityBonus;
     }
     /**
+     * The capacity bonus.
+     *
      * @param bonus the capacity bonus
      */
     public void setCapacityBonus(int bonus) {_capacityBonus = bonus; _capacityBonusLastUpdate = _context.clock().now();}
 
     /**
+     * The timestamp of the last capacity bonus update.
+     *
      * @return the timestamp of the last capacity bonus update
      */
     long getCapacityBonusLastUpdate() {return _capacityBonusLastUpdate;}
 
     /**
+     * The timestamp of the last capacity bonus update.
+     *
      * @param ts the timestamp
      */
     void setCapacityBonusLastUpdate(long ts) {_capacityBonusLastUpdate = ts;}
 
     /**
+     * The raw capacity bonus value.
+     *
      * @return the raw capacity bonus value
      */
     int getCapacityBonusRaw() {return _capacityBonus;}
 
     /**
-     * extra factor added to the integration ranking - this can be updated in the profile
+     * Extra factor added to the integration ranking - this can be updated in the profile
      * written to disk to affect how the algorithm ranks integration.  Negative values are
      * penalties.
      *
@@ -544,6 +552,8 @@ public class PeerProfile {
     public int getIntegrationBonus() {return _integrationBonus;}
 
     /**
+     * The integration bonus.
+     *
      * @param bonus the integration bonus
      */
     public void setIntegrationBonus(int bonus) {_integrationBonus = bonus;}
@@ -582,19 +592,21 @@ public class PeerProfile {
     }
 
     /**
+     * Timestamp when the EWMA was last updated.
+     *
      * @return timestamp when the EWMA was last updated
      */
     long getTunnelTestTimeAvgLastUpdate() {return _tunnelTestTimeAvgLastUpdate;}
 
     /**
-     * Set the tunnel test time average.
+     * The tunnel test time average.
      *
      * @param avg the average in ms
      */
     void setTunnelTestTimeAverage(float avg) {_tunnelTestResponseTimeAvg = avg;}
 
     /**
-     * Set the timestamp of the last tunnel test time average update.
+     * The timestamp of the last tunnel test time average update.
      *
      * @param ts the timestamp
      */
@@ -622,11 +634,15 @@ public class PeerProfile {
     }
 
     /**
+     * The average peer test time.
+     *
      * @return the peer test time average
      */
     public float getPeerTestTimeAverage() {return _peerTestResponseTimeAvg;}
 
     /**
+     * Set the average peer test time.
+     *
      * @param testAvg the peer test time average
      */
     void setPeerTestTimeAverage(float testAvg) {_peerTestResponseTimeAvg = testAvg;}
@@ -661,6 +677,8 @@ public class PeerProfile {
     }
 
     /**
+     * The peak throughput in KBps.
+     *
      * @return the peak throughput in KBps
      */
     public float getPeakThroughputKBps() {
@@ -710,6 +728,8 @@ public class PeerProfile {
     }
 
     /**
+     * The peak tunnel throughput in KBps.
+     *
      * @return the peak tunnel throughput in KBps
      */
     public float getPeakTunnelThroughputKBps() {
@@ -789,21 +809,29 @@ public class PeerProfile {
     }
 
     /**
+     * The timestamp of the last throughput update.
+     *
      * @return the timestamp of the last throughput update
      */
     long getLastThroughputUpdate() {return _lastThroughputUpdate;}
 
     /**
+     * Set the timestamp of the last throughput update.
+     *
      * @param ts the timestamp
      */
     void setLastThroughputUpdate(long ts) {_lastThroughputUpdate = ts;}
 
     /**
+     * The timestamp of the last test start.
+     *
      * @return the timestamp of the last test start
      */
     public long getLastTestStarted() {return _lastTestStarted;}
 
     /**
+     * Set the timestamp of the last test start.
+     *
      * @param ts the timestamp
      */
     void setLastTestStarted(long ts) {_lastTestStarted = ts;}

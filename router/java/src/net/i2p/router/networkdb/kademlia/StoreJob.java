@@ -129,7 +129,7 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
-     * Get the name of this job for logging and debugging.
+     * Name of this job for logging and debugging.
      *
      * @return job name
      */
@@ -148,7 +148,7 @@ abstract class StoreJob extends JobImpl {
     private static final int RESEND_DELAY = 1000; // upstream is 3s
 
     /**
-     * send the key to the next batch of peers
+     * Send the key to the next batch of peers.
      *
      * Synchronized to enforce parallelization limits and prevent dups
      */
@@ -172,7 +172,7 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
-     * Get the maximum number of parallel store operations.
+     * Maximum number of parallel store operations.
      * Note: Overridden in Floodfill Search Job.
      *
      * @return number of messages to send simultaneously
@@ -180,7 +180,7 @@ abstract class StoreJob extends JobImpl {
     protected int getParallelization() {return PARALLELIZATION;}
 
     /**
-     * Get the required redundancy level for successful store.
+     * Required redundancy level for successful store.
      * Note: Overridden in Floodfill Search Job.
      *
      * @return number of peers that must receive the data
@@ -289,7 +289,7 @@ abstract class StoreJob extends JobImpl {
         return ((FloodfillPeerSelector)_peerSelector).selectFloodfillParticipants(rkey, numClosest, alreadyChecked, ks);
     }
 
-    /** limit expiration for direct sends */
+    /** Limit expiration for direct sends. */
     private static final int MAX_DIRECT_EXPIRATION = 20*1000;
 
     /**
@@ -713,7 +713,7 @@ abstract class StoreJob extends JobImpl {
          */
         public void runJob() {sendNext();}
         /**
-         * Get the name of this wait job.
+         * Name of this wait job.
          *
          * @return job name
          */
@@ -820,7 +820,7 @@ abstract class StoreJob extends JobImpl {
         }
 
         /**
-         * Get the name of this job.
+         * Name of this job.
          *
          * @return job name
          */
@@ -861,7 +861,7 @@ abstract class StoreJob extends JobImpl {
         }
 
         /**
-         * Set the received message (unused, selector already verified match).
+         * Received message (unused, selector already verified match).
          *
          * @param message the received message (ignored)
          */
@@ -917,7 +917,7 @@ abstract class StoreJob extends JobImpl {
             sendNext();
         }
         /**
-         * Get the name of this failed job.
+         * Name of this failed job.
          *
          * @return job name
          */

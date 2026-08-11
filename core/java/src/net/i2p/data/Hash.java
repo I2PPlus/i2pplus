@@ -94,7 +94,7 @@ public class Hash extends SimpleDataStructure {
     private static final SDSCache<Hash> _cache = new SDSCache<>(Hash.class, HASH_LENGTH, CACHE_SIZE);
 
     /**
-     * Pull from cache or return new
+     *  Pull from cache or return new
      *
      *  WARNING - If the SDS is found in the cache, the passed-in
      *  byte array will be returned to the SimpleByteCache for reuse.
@@ -171,7 +171,7 @@ public class Hash extends SimpleDataStructure {
         _cachedHashCode = super.hashCode();
     }
 
-    /** a Hash is a hash, so just use the first 4 bytes for speed */
+    /** A Hash is a hash, so just use the first 4 bytes for speed. */
     @Override
     public int hashCode() {
         return _cachedHashCode;

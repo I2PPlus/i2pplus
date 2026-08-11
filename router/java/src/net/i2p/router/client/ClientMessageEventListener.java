@@ -65,15 +65,15 @@ import net.i2p.util.PasswordManager;
  */
 class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventListener {
     private final Log _log;
-    /** the router context */
+    /** The router context. */
     protected final RouterContext _context;
-    /** the client connection runner */
+    /** The client connection runner. */
     protected final ClientConnectionRunner _runner;
     private final boolean  _enforceAuth;
     private volatile boolean _authorized;
 
     private static final String PROP_AUTH = "i2cp.auth";
-    /** if true, user/pw must be in GetDateMessage */
+    /** If true, user/pw must be in GetDateMessage. */
     private static final String PROP_AUTH_STRICT = "i2cp.strictAuth";
 
     /**

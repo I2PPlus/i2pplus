@@ -86,7 +86,7 @@ public class Ed25519FieldElement extends FieldElement {
     private static final byte[] ZERO = new byte[32];
 
     /**
-     * Gets a value indicating whether or not the field element is non-zero.
+     * Whether or not the field element is non-zero.
      *
      * @return 1 if it is non-zero, 0 otherwise.
      */
@@ -143,7 +143,7 @@ public class Ed25519FieldElement extends FieldElement {
      *
      * @param val The field element to subtract.
      * @return The field element this - val.
-     **/
+     */
 
     @Override
     public FieldElement subtract(FieldElement val) {
@@ -948,7 +948,7 @@ public class Ed25519FieldElement extends FieldElement {
     }
 
     /**
-     * Gets this field element to the power of $(2^{252} - 3)$.
+     * This field element to the power of $(2^{252} - 3)$.
      * This is a helper function for calculating the square root.
      * <p>
      * TODO-CR BR: I think it makes sense to have a sqrt function.
@@ -1072,7 +1072,7 @@ public class Ed25519FieldElement extends FieldElement {
     /**
      * Constant-time conditional move. Well, actually it is a conditional copy.
      * Logic is inspired by the SUPERCOP implementation at:
-     *   https://github.com/floodyberry/supercop/blob/master/crypto_sign/ed25519/ref10/fe_cmov.c
+     *     https://github.com/floodyberry/supercop/blob/master/crypto_sign/ed25519/ref10/fe_cmov.c
      *
      * @param val the other field element.
      * @param b must be 0 or 1, otherwise results are undefined.

@@ -72,7 +72,7 @@ public class ProfileOrganizerTest {
         return info;
     }
 
-    /** register a router info in the dummy netdb so profiling-exclusion passes */
+    /** Register a router info in the dummy netdb so profiling-exclusion passes. */
     private static void seedNetDb(RouterInfo ri) throws Exception {
         Class<?> c = _ctx.netDb().getClass();
         Field routers = null;

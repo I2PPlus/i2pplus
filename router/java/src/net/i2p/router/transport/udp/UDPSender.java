@@ -76,7 +76,7 @@ public class UDPSender {
     }
 
     /**
-     * Constructs a UDPSender with the given context, socket, name, and endpoint listener.
+     * Create a UDPSender with the given context, socket, name, and endpoint listener.
      * Initializes the CoDel priority queue and all relevant rate statistics trackers.
      *
      * @param ctx the router context
@@ -233,7 +233,7 @@ public class UDPSender {
     private class Runner implements Runnable {
 
         /**
-         * run.
+         * Dequeue and send UDP packets until shutdown.
          */
         @Override
         public void run() {

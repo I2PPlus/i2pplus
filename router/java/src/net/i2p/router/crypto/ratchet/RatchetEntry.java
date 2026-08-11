@@ -24,7 +24,7 @@ class RatchetEntry {
     /** ACKs queued for delivery with this entry, or null. */
     public final List<Integer> acksToSend;
 
-    /** outbound - calculated key */
+    /** Outbound-calculated key. */
     public RatchetEntry(RatchetSessionTag tag, SessionKeyAndNonce key, int keyID, int pn) {
         this(tag, key, keyID, pn, null, null, null);
     }

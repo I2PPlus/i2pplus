@@ -32,7 +32,10 @@ class IterativeLookupJob extends JobImpl {
     private final DatabaseSearchReplyMessage _dsrm;
     private final IterativeSearchJob _search;
 
-    /** method comment */
+    /**
+     * Chase the hashes from the received DatabaseSearchReplyMessage,
+     * starting a followup search for each.
+     */
     public IterativeLookupJob(RouterContext ctx, DatabaseSearchReplyMessage dsrm, IterativeSearchJob search) {
         super(ctx);
         _log = ctx.logManager().getLog(IterativeLookupJob.class);

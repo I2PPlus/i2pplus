@@ -13,9 +13,6 @@ import java.io.Serializable;
  * Unused as a class, as the keys are cached in the SessionKey objects,
  * but the static methods are used in FortunaStandalone.
  */
-/**
- * CryptixAESKeyCache.
- */
 public final class CryptixAESKeyCache {
     private static final int KEYSIZE = 32; // 256bit AES
     private static final int BLOCKSIZE = 16;
@@ -61,10 +58,10 @@ public final class CryptixAESKeyCache {
      * Obsolete — Keys are now cached in SessionKey objects. Retained for legacy AES engine support.
      */
     public static class KeyCacheEntry implements Serializable {
-        /** encryption round keys */
+        /** Encryption round keys. */
         final int[][] Ke;
 
-        /** decryption round keys */
+        /** Decryption round keys. */
         final int[][] Kd;
 
         /**

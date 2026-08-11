@@ -78,7 +78,7 @@ import net.i2p.I2PAppContext;
 public abstract class RoutingKeyGenerator {
 
     /**
-     * Get the generator for this context.
+     * Generator for this context.
      *
      * @return null in I2PAppContext; non-null in RouterContext.
      */
@@ -94,7 +94,7 @@ public abstract class RoutingKeyGenerator {
     public abstract long getLastChanged();
 
     /**
-     * Get the routing key for a key.
+     * Routing key for a key.
      *
      * @throws IllegalArgumentException if origKey is null
      * @return the routing key

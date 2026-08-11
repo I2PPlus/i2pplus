@@ -35,14 +35,14 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
     }
 
     /**
-     * restart.
+     *  Restart the network database, retaining the in-memory store.
      */
     @Override
     public void restart() { /* Intentionally empty - dummy implementation */ }
     /** Shut down and release resources */
     public void shutdown() { /* Intentionally empty - dummy implementation */ }
     /**
-     * startup.
+     *  Start the network database and register the local router info.
      */
     @Override
     public void startup() {
@@ -52,7 +52,7 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
     public DatabaseEntry lookupLocally(Hash key) { return null; }
     public DatabaseEntry lookupLocallyWithoutValidation(Hash key) { return null; }
     /**
-     * lookupLeaseSet.
+     *  Look up a lease set in the network database.
      */
     @Override
     public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) { /* Intentionally empty - dummy implementation */ }
@@ -64,19 +64,19 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
                                        long timeoutMs, Hash fromLocalDest) { /* Intentionally empty - dummy implementation */ }
 
     /**
-     * lookupDestination.
+     *  Look up a destination using the client's tunnels.
      */
     @Override
     public void lookupDestination(Hash key, Job onFinishedJob, long timeoutMs, Hash fromLocalDest) { /* Intentionally empty - dummy implementation */ }
 
     /**
-     * lookupDestinationLocally.
+     *  Look up a destination in the in-memory store.
      */
     @Override
     public Destination lookupDestinationLocally(Hash key) { return null; }
 
     /**
-     * lookupRouterInfo.
+     *  Look up a router info in the network database.
      */
     @Override
     public void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
@@ -87,7 +87,7 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
             _context.jobQueue().addJob(onFindJob);
     }
     /**
-     * lookupRouterInfoLocally.
+     *  Look up a router info in the in-memory store.
      */
     @Override
     public RouterInfo lookupRouterInfoLocally(Hash key) { return _routers.get(key); }

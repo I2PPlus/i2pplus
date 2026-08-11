@@ -16,12 +16,12 @@ final class RemoteHostId {
     private final Hash _peerHash;
     private final int _hashCode;
 
-    /** direct */
+    /** Direct (IP + port). */
     public RemoteHostId(byte[] ip, int port) {
         this(ip, port, null);
     }
 
-    /** indirect */
+    /** Indirect (hash only). */
     public RemoteHostId(Hash peerHash) {
         this(null, 0, peerHash);
     }
@@ -33,13 +33,13 @@ final class RemoteHostId {
         _hashCode = DataHelper.hashCode(_ip) ^ DataHelper.hashCode(_peerHash) ^ _port;
     }
 
-    /** Get the IP address, or null if indirect */
+    /** The IP address, or null if indirect. */
     public byte[] getIP() { return _ip; }
 
-    /** Get the port, or 0 if indirect */
+    /** The port, or 0 if indirect. */
     public int getPort() { return _port; }
 
-    /** Get the peer hash, or null if direct */
+    /** The peer hash, or null if direct. */
     public Hash getPeerHash() { return _peerHash; }
 
     @Override

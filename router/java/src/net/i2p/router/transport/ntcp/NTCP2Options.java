@@ -34,34 +34,42 @@ class NTCP2Options {
     }
 
     /**
+     * The send padding min.
      * @return the send min
      */
     public float getSendMin() { return _sendMin; }
     /**
+     * The send padding max.
      * @return the send max
      */
     public float getSendMax() { return _sendMax; }
     /**
+     * The receive padding min.
      * @return the recv min
      */
     public float getRecvMin() { return _recvMin; }
     /**
+     * The receive padding max.
      * @return the recv max
      */
     public float getRecvMax() { return _recvMax; }
     /**
+     * The send dummy data rate in bytes per second.
      * @return the send dummy
      */
     public int getSendDummy() { return _sendDummy; }
     /**
+     * The receive dummy data rate in bytes per second.
      * @return the recv dummy
      */
     public int getRecvDummy() { return _recvDummy; }
     /**
+     * The send delay in milliseconds.
      * @return the send delay
      */
     public int getSendDelay() { return _sendDelay; }
     /**
+     * The receive delay in milliseconds.
      * @return the recv delay
      */
     public int getRecvDelay() { return _recvDelay; }
@@ -110,7 +118,7 @@ class NTCP2Options {
     }
 
     /**
-     * toString.
+     * String representation of these padding options.
      */
     @Override
     public String toString() {

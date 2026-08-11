@@ -190,7 +190,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     private final float _bandwidthBytesPerMs;
 
     /**
-     * Construct with default queue size thresholds based on bandwidth.
+     * With default queue size thresholds based on bandwidth.
      *
      * @param ctx the I2P application context
      * @param bwBps nominal output bandwidth in bytes per second
@@ -200,7 +200,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     }
 
     /**
-     * Construct specifying bandwidth and queue size thresholds.
+     * With the given bandwidth and queue size thresholds.
      *
      * Queue size thresholds:
      * - minThB: queue size in bytes to start probabilistically dropping packets
@@ -239,7 +239,9 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     }
 
     /**
-     * @return the configured maximum bandwidth in bytes per second.
+     * Maximum bandwidth this queue is configured for.
+     *
+     * @return the configured maximum bandwidth in bytes per second
      */
     public int getMaxBandwidth() {
         return _bandwidthBps;

@@ -23,7 +23,7 @@ import net.i2p.util.Log;
  *
  */
 class ReportAbuseJob extends JobImpl {
-    /** Logger */
+    /** Log for this job. */
     private final Log _log;
     /** Client connection to send the abuse report to */
     private final ClientConnectionRunner _runner;

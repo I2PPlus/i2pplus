@@ -28,7 +28,7 @@ import javax.crypto.spec.DHPublicKeySpec;
 public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     private static final long serialVersionUID = 8712728417091216948L;
 
-    /** Y */
+    /** The public value y = g^x mod p. */
     private BigInteger y;
     /** El spec */
     private ElGamalParameterSpec elSpec;

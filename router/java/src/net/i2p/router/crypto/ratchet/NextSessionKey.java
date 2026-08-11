@@ -46,6 +46,8 @@ class NextSessionKey extends PublicKey {
     }
 
     /**
+     * The session identifier.
+     *
      * @return the session identifier
      */
     public int getID() {
@@ -53,6 +55,8 @@ class NextSessionKey extends PublicKey {
     }
 
     /**
+     * Whether this is a reverse session.
+     *
      * @return true if this is a reverse session
      * @since 0.9.46
      */
@@ -61,6 +65,8 @@ class NextSessionKey extends PublicKey {
     }
 
     /**
+     * Whether this is a request.
+     *
      * @return true if this is a request
      * @since 0.9.46
      */
@@ -69,8 +75,10 @@ class NextSessionKey extends PublicKey {
     }
 
     /**
-     *  @since 0.9.46
-     * @return whether h code is present
+     * Hash code combining the id with the reverse and request flags.
+     *
+     * @since 0.9.46
+     * @return the hash code
      */
     @Override
     public int hashCode() {

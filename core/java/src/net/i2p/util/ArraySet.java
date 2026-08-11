@@ -168,6 +168,8 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
+     * Add the element to the set.
+     *
      * @param o the element to add
      * @throws SetFullException if throwOnFull was true in constructor
      * @throws NullPointerException if o is null
@@ -283,7 +285,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
         private static final long serialVersionUID = 9087390587254111L;
 
         /**
-         * Constructs a SetFullException.
+         * Empty constructor.
          */
         public SetFullException() {
             super();

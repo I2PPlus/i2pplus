@@ -35,9 +35,9 @@ public class MessageWrapper {
     /** Wraps an I2NP message with metadata. */
     private MessageWrapper() {}
 
-    /** netdb_tags_to_deliver */
+    /** Number of tags to deliver with a garlic wrap. */
     private static final int NETDB_TAGS_TO_DELIVER = 6;
-    /** netdb_low_threshold */
+    /** Low threshold for delivered tags. */
     private static final int NETDB_LOW_THRESHOLD = 3;
 
     /**
@@ -85,15 +85,15 @@ public class MessageWrapper {
 
     /** Wrapper so that we can keep track of the key and tags  for later notification to the SKM  */
     static class WrappedMessage {
-        /** msg */
+        /** The wrapped GarlicMessage. */
         private GarlicMessage msg;
-        /** skm */
+        /** The session key manager used for wrapping. */
         private SessionKeyManager skm;
-        /** sent to */
+        /** The recipient's public key. */
         private PublicKey sentTo;
-        /** session key */
+        /** The session key used for wrapping. */
         private SessionKey sessionKey;
-        /** tsh */
+        /** Handle for the delivered tags. */
         private TagSetHandle tsh;
 
         /** Wrapped message */
@@ -110,14 +110,14 @@ public class MessageWrapper {
             return this.msg;
         }
 
-        /** delivered tags (if any) were acked */
+        /** Delivered tags (if any) were acked. */
         void acked() {
             if (this.tsh != null) {
                 this.skm.tagsAcked(this.sentTo, this.sessionKey, this.tsh);
             }
         }
 
-        /** delivered tags (if any) were not acked */
+        /** Delivered tags (if any) were not acked. */
         void fail() {
             if (this.tsh != null) {
                 this.skm.failTags(this.sentTo, this.sessionKey, this.tsh);
@@ -163,9 +163,9 @@ public class MessageWrapper {
     public static class OneTimeSession {
         /** ElG or ratchet */
         public final SessionKey key;
-        /** non-null for ElG */
+        /** Non-null for ElG. */
         public final SessionTag tag;
-        /** non-null for ratchet  */
+        /** Non-null for ratchet. */
         public final RatchetSessionTag rtag;
 
         /**

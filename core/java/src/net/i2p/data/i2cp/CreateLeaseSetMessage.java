@@ -29,13 +29,13 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
      * MESSAGE_TYPE.
      */
     public static final int MESSAGE_TYPE = 4;
-    /** the session ID */
+    /** The session ID. */
     protected SessionId _sessionId;
-    /** the lease set */
+    /** The lease set. */
     protected LeaseSet _leaseSet;
-    /** the signing private key */
+    /** The signing private key. */
     private SigningPrivateKey _signingPrivateKey;
-    /** the private key */
+    /** The private key. */
     protected PrivateKey _privateKey;
 
     /** @since 0.9.38 */
@@ -116,7 +116,7 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * doReadMessage.
+     * Read the message body from the input stream.
      */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
@@ -140,7 +140,7 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * doWriteMessage.
+     * Write the message body to the output stream.
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

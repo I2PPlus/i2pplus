@@ -59,7 +59,7 @@ class TunnelParticipant {
     }
 
     /**
-     * Construct for inbound tunnel endpoint.
+     * For inbound tunnel endpoints.
      */
     public TunnelParticipant(RouterContext ctx, InboundEndpointProcessor inEndProc) {
         this(ctx, null, null, inEndProc);
@@ -124,13 +124,15 @@ class TunnelParticipant {
      */
     private class Found extends JobImpl {
         /**
-         * Found.
+         * Binds the router context.
          */
         public Found(RouterContext ctx) {
             super(ctx);
         }
 
         /**
+         * The name of this job.
+         *
          * @return the name
          */
         public String getName() {
@@ -138,7 +140,7 @@ class TunnelParticipant {
         }
 
         /**
-         * runJob.
+         * Cache the next hop router info if the lookup completed.
          */
         public void runJob() {
             if (_nextHopCache == null) {
@@ -233,6 +235,8 @@ class TunnelParticipant {
     }
 
     /**
+     * The number of completed fragmented messages.
+     *
      * @return the complete count
      */
     public int getCompleteCount() {
@@ -240,6 +244,8 @@ class TunnelParticipant {
     }
 
     /**
+     * The number of failed fragmented messages.
+     *
      * @return the failed count
      */
     public int getFailedCount() {
@@ -247,6 +253,8 @@ class TunnelParticipant {
     }
 
     /**
+     * When the tunnel expires, or -1 if unknown.
+     *
      * @return tunnel expiration time, or -1 if unknown
      */
     public long getExpiration() {
@@ -264,7 +272,7 @@ class TunnelParticipant {
      */
     private class DefragmentedHandler implements FragmentHandler.DefragmentedReceiver {
         /**
-         * receiveComplete.
+         * Distribute the complete message to its target.
          */
         public void receiveComplete(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
             if (_log.shouldDebug()) {
@@ -330,7 +338,7 @@ class TunnelParticipant {
         private final TunnelDataMessage _msg;
 
         /**
-         * SendJob.
+         * The tunnel data message to send after the lookup.
          */
         public SendJob(RouterContext ctx, TunnelDataMessage msg) {
             super(ctx);
@@ -338,6 +346,8 @@ class TunnelParticipant {
         }
 
         /**
+         * The name of this job.
+         *
          * @return the name
          */
         public String getName() {
@@ -345,7 +355,7 @@ class TunnelParticipant {
         }
 
         /**
-         * runJob.
+         * Send the queued message once the next hop is found.
          */
         public void runJob() {
             if (_nextHopCache != null) {
@@ -376,7 +386,7 @@ class TunnelParticipant {
         private final TunnelDataMessage _msg;
 
         /**
-         * TimeoutJob.
+         * The tunnel data message dropped on lookup timeout.
          */
         public TimeoutJob(RouterContext ctx, TunnelDataMessage msg) {
             super(ctx);
@@ -384,6 +394,8 @@ class TunnelParticipant {
         }
 
         /**
+         * The name of this job.
+         *
          * @return the name
          */
         public String getName() {
@@ -391,7 +403,7 @@ class TunnelParticipant {
         }
 
         /**
-         * runJob.
+         * Drop the message if the next hop lookup timed out.
          */
         public void runJob() {
             if (_nextHopCache != null) return;
@@ -414,7 +426,7 @@ class TunnelParticipant {
     }
 
     /**
-     * toString.
+     * Description of the participant role and its config.
      */
     @Override
     public String toString() {

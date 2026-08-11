@@ -259,37 +259,37 @@ public enum SigType {
         isAvail = x_isAvailable();
     }
 
-    /** the unique identifier for this type */
+    /** The unique identifier for this type. */
     public int getCode() {
         return code;
     }
 
-    /** the length of the public key, in bytes */
+    /** The length of the public key, in bytes. */
     public int getPubkeyLen() {
         return pubkeyLen;
     }
 
-    /** the length of the private key, in bytes */
+    /** The length of the private key, in bytes. */
     public int getPrivkeyLen() {
         return privkeyLen;
     }
 
-    /** the length of the hash, in bytes */
+    /** The length of the hash, in bytes. */
     public int getHashLen() {
         return hashLen;
     }
 
-    /** the length of the signature, in bytes */
+    /** The length of the signature, in bytes. */
     public int getSigLen() {
         return sigLen;
     }
 
-    /** the standard base algorithm name used for the Java crypto factories */
+    /** The standard base algorithm name used for the Java crypto factories. */
     public SigAlgo getBaseAlgorithm() {
         return base;
     }
 
-    /** the standard name used for the Java crypto factories */
+    /** The standard name used for the Java crypto factories. */
     public String getAlgorithmName() {
         return algoName;
     }
@@ -305,10 +305,10 @@ public enum SigType {
         return params;
     }
 
-    /** Gets a MessageDigest instance for this signature type.
+    /** A MessageDigest instance for this signature type.
      *
      *  @throws UnsupportedOperationException if not supported
-     *  @return the digest instance
+     *  @return The digest instance.
      */
     public MessageDigest getDigestInstance() {
         if (digestName.equals("SHA-1")) return SHA1.getInstance();
@@ -346,7 +346,7 @@ public enum SigType {
     /**
      *  The router version in which this type was first supported.
      *
-     *  @since 0.9.15
+     * @since 0.9.15
      * @return the supported since
      */
     public String getSupportedSince() {
@@ -356,7 +356,7 @@ public enum SigType {
     /**
      *  The OID for the signature.
      *
-     *  @since 0.9.25
+     * @since 0.9.25
      * @return the o i d
      */
     public String getOID() {
@@ -444,9 +444,9 @@ public enum SigType {
         }
     }
 
-    /** signature type by code.
+    /** Signature type by code.
      *
-     *  @return null if not supported
+     *  @return Null if not supported.
      */
     public static SigType getByCode(int code) {
         if (code < 0 || code >= BY_CODE.length) return null;

@@ -26,7 +26,7 @@ import java.util.Set;
 
 /**
  *
- * session key management unit tests:
+ * Session key management unit tests.
  *
  */
 public class SessionEncryptionTest extends TestCase {

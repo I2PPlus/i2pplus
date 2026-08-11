@@ -92,7 +92,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     // cache
     private PublicKey _pubKey;
 
-    /** no-arg constructor, uses default type */
+    /** No-arg constructor, uses the default type. */
     public PrivateKey() {
         this(DEF_TYPE);
     }
@@ -109,7 +109,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-     * Construct from raw key data.
+     * Private key from raw key data.
      * @param data key data
      */
     public PrivateKey(byte[] data) {
@@ -144,7 +144,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-     * Constructs from base64.
+     * Private key from a string of base64 data.
      *
      * @param base64Data a string of base64 data (the output of .toBase64() called
      * on a prior instance of PrivateKey
@@ -203,7 +203,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     /**
      *  javax.security.auth.Destroyable interface
      *
-     *  @since 0.9.40
+     * @since 0.9.40
      * @return whether destroyed
      */
     @Override

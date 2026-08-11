@@ -99,13 +99,13 @@ public class CreateRouterInfoJob extends JobImpl {
      *
      *  Old router.keys file format: Note that this is NOT the
      *  same "eepPriv.dat" format used by the client code.
-     *<pre>
-     *   - Private key (256 bytes)
-     *   - Signing Private key (20 bytes)
-     *   - Public key (256 bytes)
-     *   - Signing Public key (128 bytes)
+     *  <pre>
+     *  - Private key (256 bytes)
+     *  - Signing Private key (20 bytes)
+     *  - Public key (256 bytes)
+     *  - Signing Public key (128 bytes)
      *  Total 660 bytes
-     *</pre>
+     *  </pre>
      *
      *  Caller must hold Router.routerInfoFileLock.
      *

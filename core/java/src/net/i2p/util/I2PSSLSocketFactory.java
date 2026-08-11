@@ -228,12 +228,14 @@ public class I2PSSLSocketFactory {
      */
     public static final List<String> INCLUDE_CIPHERS = Collections.emptyList();
 
-    /** the "real" factory */
+    /** The "real" factory. */
     private final SSLSocketFactory _factory;
 
     private final I2PAppContext _context;
 
     /**
+     * Create a socket factory with the given context and certificate path.
+     *
      * @param relativeCertPath e.g. "certificates/i2cp"; as of 0.9.41, may be absolute
      * @since 0.9.9 was static
      */

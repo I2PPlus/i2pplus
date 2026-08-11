@@ -56,7 +56,7 @@ import java.nio.charset.StandardCharsets;
  */
 public final class CertUtil {
 
-    /** utility class */
+    /** Utility class. */
     private CertUtil() {}
 
     private static final String CERT_DIR = "certificates";

@@ -82,7 +82,7 @@ public class Certificate extends DataStructureImpl {
     /** Specifies a null certificate type with no payload */
     public static final int CERTIFICATE_TYPE_NULL = 0;
 
-    /** we should not be used for anything (don't use us in the netDb, in tunnels, or tell others about us) */
+    /** We should not be used for anything (don't use us in the netDb, in tunnels, or tell others about us). */
     public static final int CERTIFICATE_TYPE_HIDDEN = 2;
 
     /** Signed with 40-byte Signature and (optional) 32-byte hash */
@@ -172,7 +172,7 @@ public class Certificate extends DataStructureImpl {
     public Certificate() {}
 
     /**
-     * Construct a certificate with the given type and payload.
+     * Certificate with the given type and payload.
      *
      * @param type the certificate type
      * @param payload the certificate payload (may be null)

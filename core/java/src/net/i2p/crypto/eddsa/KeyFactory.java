@@ -66,9 +66,6 @@ import java.security.spec.X509EncodedKeySpec;
  * @since 0.9.15
  * @author str4d
  */
-/**
- * Key factory for EdDSA key conversions and specifications.
- */
 public final class KeyFactory extends KeyFactorySpi {
 
     /**

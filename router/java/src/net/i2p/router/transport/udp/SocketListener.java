@@ -6,7 +6,7 @@ package net.i2p.router.transport.udp;
  */
 interface SocketListener {
     /**
-     * fail().
+     * Notification that the socket failed.
      */
     public void fail();
 }

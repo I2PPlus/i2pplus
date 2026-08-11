@@ -33,13 +33,13 @@ abstract class PeerSelector {
         _log = _context.logManager().getLog(getClass());
     }
 
-    /** List */
+    /** Peers nearest to the key in routing space. */
     abstract List<Hash> selectNearest(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets);
-    /** List */
+    /** Peers nearest to the key, floodfills first, then sorted by Kademlia distance. */
     abstract List<Hash> selectNearestExplicit(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets);
-    /** List */
+    /** Peers nearest to the key, floodfills first, then sorted by Kademlia distance, excluding our own hash. */
     abstract List<Hash> selectNearestExplicitThin(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets);
-    /** List */
+    /** Peers nearest to the key, floodfills first, then sorted by Kademlia distance, preferring connected peers. */
     abstract List<Hash> selectMostReliablePeers(Hash key, int numClosest, Set<Hash> alreadyChecked, KBucketSet<Hash> kbuckets);
 
 }

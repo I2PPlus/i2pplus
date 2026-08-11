@@ -38,9 +38,9 @@ public class TunnelPoolSettings {
     private Set<Hash> _firstPeerExclusions;
     /** @since 0.9.68+ last peer exclusions for diversity */
     private Set<Hash> _lastPeerExclusions;
-    /** prefix used to configure the inbound exploratory pool */
+    /** Prefix used to configure the inbound exploratory pool */
     public static final String      PREFIX_INBOUND_EXPLORATORY = "router.inboundPool.";
-    /** prefix used to configure the outbound exploratory pool */
+    /** Prefix used to configure the outbound exploratory pool */
     public static final String      PREFIX_OUTBOUND_EXPLORATORY = "router.outboundPool.";
     /**
      * PROP_NICKNAME.
@@ -66,7 +66,7 @@ public class TunnelPoolSettings {
      * PROP_LENGTH_VARIANCE.
      */
     public static final String      PROP_LENGTH_VARIANCE = "lengthVariance";
-    /** don't trust this, always true */
+    /** Config property allowing zero-hop tunnels; unreliable, zero hops are always possible */
     public static final String      PROP_ALLOW_ZERO_HOP = "allowZeroHop";
     /**
      * PROP_SHOULD_TEST.
@@ -95,11 +95,11 @@ public class TunnelPoolSettings {
      */
     public static final int         DEFAULT_DURATION = 10*60*1000;
     private static final boolean    IS_SLOW = SystemVersion.isSlow();
-    /** client only */
+    /** Default inbound tunnel length for client pools */
     private static final int        DEFAULT_IB_LENGTH = 3;
     private static final int        DEFAULT_OB_LENGTH = 3;
     private static final int        DEFAULT_LENGTH_VARIANCE = 0;
-    /** expl only */
+    /** Default inbound tunnel length for exploratory pools */
     private static final int        DEFAULT_IB_EXPL_LENGTH = IS_SLOW ? 2 : 3;
     private static final int        DEFAULT_OB_EXPL_LENGTH = IS_SLOW ? 2 : 3;
     private static final int        DEFAULT_IB_EXPL_LENGTH_VARIANCE = IS_SLOW ? 0 : 1;
@@ -157,17 +157,21 @@ public class TunnelPoolSettings {
             _aliases = null;
     }
 
-    /** how many tunnels should be available at all times */
+    /** How many tunnels should be available at all times */
     public int getQuantity() { return _quantity; }
     /**
-     * setQuantity.
+     * Set how many tunnels should be available at all times.
+     *
+     * @param quantity the desired quantity
      */
     public void setQuantity(int quantity) { _quantity = quantity; }
 
-    /** how many backup tunnels should be kept waiting in the wings */
+    /** How many backup tunnels should be kept waiting in the wings */
     public int getBackupQuantity() { return _backupQuantity; }
     /**
-     * setBackupQuantity.
+     * Set how many backup tunnels should be kept waiting in the wings.
+     *
+     * @param quantity the desired backup quantity
      */
     public void setBackupQuantity(int quantity) { _backupQuantity = quantity; }
 
@@ -233,7 +237,7 @@ public class TunnelPoolSettings {
     }
 
     /**
-     * how should the length be varied.  if negative, this randomly skews from
+     * How the length should be varied. If negative, this randomly skews from
      * (length - variance) to (length + variance), or if positive, from length
      * to (length + variance), inclusive.
      *
@@ -241,7 +245,9 @@ public class TunnelPoolSettings {
      */
     public int getLengthVariance() { return _lengthVariance; }
     /**
-     * setLengthVariance.
+     * Set how the length should be varied.
+     *
+     * @param variance the length variance
      */
     public void setLengthVariance(int variance) { _lengthVariance = variance; }
 
@@ -260,21 +266,21 @@ public class TunnelPoolSettings {
      */
     public void setLengthOverride(int length) { _lengthOverride = length; }
 
-    /** is this an inbound tunnel? */
+    /** Is this an inbound tunnel? */
     public boolean isInbound() { return _isInbound; }
 
-    /** is this an exploratory tunnel (or a client tunnel) */
+    /** Is this an exploratory tunnel (or a client tunnel) */
     public boolean isExploratory() { return _isExploratory; }
 
-    /** what destination is this a client tunnel for (or null if exploratory) */
+    /** What destination is this a client tunnel for (or null if exploratory) */
     public Hash getDestination() { return _destination; }
 
     /**
-     *  Other destinations that use the same tunnel (or null if exploratory)
+     *  Other destinations that use the same tunnel (or null if exploratory).
      *  Modifiable, concurrent, not a copy
      *
      *  @since 0.9.21
-     * @return the aliases
+     *  @return the aliases
      */
     public Set<Hash> getAliases() {
         return _aliases;
@@ -285,7 +291,7 @@ public class TunnelPoolSettings {
      *  If non-null, don't build tunnels.
      *
      *  @since 0.9.21
-     * @return the alias of
+     *  @return the alias of
      */
     public Hash getAliasOf() {
         return _aliasOf;
@@ -351,10 +357,12 @@ public class TunnelPoolSettings {
      */
     public SessionKey getRandomKey() { return _randomKey; }
 
-    /** what user supplied name was given to the client connected (can be null) */
+    /** What user supplied name was given to the client connected (can be null) */
     public String getDestinationNickname() { return _destinationNickname; }
     /**
-     * setDestinationNickname.
+     * Set the user supplied name given to the connected client.
+     *
+     * @param name the nickname, or null
      */
     public void setDestinationNickname(String name) { _destinationNickname = name; }
 
@@ -384,6 +392,8 @@ public class TunnelPoolSettings {
     public Properties getUnknownOptions() { return _unknownOptions; }
 
     /**
+     * The msg ID bloom xor value used to randomize message IDs.
+     *
      * @return the msg id bloom xor
      */
     public long getMsgIdBloomXor() { return _msgIDBloomXor; }
@@ -462,7 +472,7 @@ public class TunnelPoolSettings {
     }
 
     /**
-     * toString.
+     * String representation of these settings for debugging.
      */
     @Override
     public String toString() {

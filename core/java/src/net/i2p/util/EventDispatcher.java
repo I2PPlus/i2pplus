@@ -38,8 +38,9 @@ import java.util.Set;
 public interface EventDispatcher {
 
     /**
-     * Get an object to be used to deliver events (usually
+     * Object to be used to deliver events (usually
      * <code>this</code>, but YMMV).
+     *
      * @return the event dispatcher
      */
     public EventDispatcher getEventDispatcher();

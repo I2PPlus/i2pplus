@@ -21,6 +21,8 @@ import net.i2p.data.i2cp.I2CPMessage;
  */
 class DisconnectMessageHandler extends HandlerImpl {
     /**
+     * Create the handler for I2CP disconnect messages.
+     *
      * @param context the I2P app context
      */
     public DisconnectMessageHandler(I2PAppContext context) {

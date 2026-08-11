@@ -24,19 +24,19 @@ import java.util.concurrent.ConcurrentHashMap;
  *  Following is sample usage:
  *  <pre>
  *
- * private static final SDSCache&lt; Foo&gt; _cache = new SDSCache(Foo.class, LENGTH, 1024);
+ *  private static final SDSCache&lt; Foo&gt; _cache = new SDSCache(Foo.class, LENGTH, 1024);
  *
- * public static Foo create(byte[] data) {
- * return _cache.get(data);
- * }
+ *  public static Foo create(byte[] data) {
+ *  return _cache.get(data);
+ *  }
  *
- * public static Foo create(byte[] data, int off) {
- * return _cache.get(data, off);
- * }
+ *  public static Foo create(byte[] data, int off) {
+ *  return _cache.get(data, off);
+ *  }
  *
- * public static Foo create(InputStream in) throws IOException {
- * return _cache.get(in);
- * }
+ *  public static Foo create(InputStream in) throws IOException {
+ *  return _cache.get(in);
+ *  }
  *
  *  </pre>
  *
@@ -56,13 +56,13 @@ public class SDSCache<V extends SimpleDataStructure> {
         FACTOR = Math.max(MIN_FACTOR, Math.min(MAX_FACTOR, maxMemory / (128 * 1024 * 1024d)));
     }
 
-    /** the cache */
+    /** The cache. */
     private final ConcurrentHashMap<Integer, WeakReference<V>> _cache;
 
-    /** the byte array length for the class we are caching */
+    /** The byte array length for the class we are caching. */
     private final int _datalen;
 
-    /** the constructor for the class we are caching */
+    /** The constructor for the class we are caching. */
     private final Constructor<V> _rvCon;
 
     /**

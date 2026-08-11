@@ -121,8 +121,8 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             /**
              *  Answer any request for a LeaseSet if it has been published to us.
              *  getReceivedAsPublished:
-             *    - false for received over a client tunnel(if associated with a client, goes to client subDB)
-             *    - true for received in a DatabaseStoreMessage unsolicited(goes to main Db)
+             *  - false for received over a client tunnel(if associated with a client, goes to client subDB)
+             *  - true for received in a DatabaseStoreMessage unsolicited(goes to main Db)
              */
             if (ls != null && ls.getReceivedAsPublished()) {
                 /**

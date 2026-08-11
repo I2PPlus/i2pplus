@@ -65,14 +65,14 @@ public class NTCPConnection implements Closeable {
     private final FIFOBandwidthLimiter.CompleteListener _inboundListener;
     private final FIFOBandwidthLimiter.CompleteListener _outboundListener;
     /**
-     * queue of ByteBuffer containing data we have read and are ready to process, oldest first
-     * unbounded and lockless
+     * Queue of ByteBuffer containing data we have read and are ready to process, oldest first.
+     * Unbounded and lockless.
      */
     private final Queue<ByteBuffer> _readBufs;
     /**
-     * list of ByteBuffers containing fully populated and encrypted data, ready to write,
+     * List of ByteBuffers containing fully populated and encrypted data, ready to write,
      * and already cleared through the bandwidth limiter.
-     * unbounded and lockless
+     * Unbounded and lockless.
      */
     private static volatile int MAX_WRITE_BUFS = 512;
 
@@ -106,14 +106,14 @@ public class NTCPConnection implements Closeable {
     private RouterIdentity _remotePeer;
     private long _clockSkew; // in seconds
     /**
-     * pending unprepared OutNetMessage instances
+     * Pending unprepared OutNetMessage instances.
      */
     private final PriBlockingQueue<OutNetMessage> _outbound;
     /**
      *  current prepared OutNetMessages, or empty - synchronize on _writeLock
      */
     private final List<OutNetMessage> _currentOutbound;
-    /** current partially read I2NP message */
+    /** Current partially read I2NP message. */
     private ReadState _curReadState;
     private final AtomicInteger _messagesRead = new AtomicInteger();
     private final AtomicInteger _messagesWritten = new AtomicInteger();
@@ -138,7 +138,7 @@ public class NTCPConnection implements Closeable {
     private static final int META_SIZE = BLOCK_SIZE;
 
     private volatile boolean _sendingMeta;
-    /** how many consecutive sends were failed due to (estimated) send queue time */
+    /** How many consecutive sends were failed due to (estimated) send queue time. */
     private long _nextInfoTime;
     private volatile boolean _mayDisconnect;
     private final AtomicBoolean _writeInterestPending = new AtomicBoolean(false);
@@ -156,7 +156,7 @@ public class NTCPConnection implements Closeable {
      */
     private static final int META_FREQUENCY = 45*60*1000;
 
-    /** how often we send our routerinfo unsolicited */
+    /** How often we send our routerinfo unsolicited. */
     private static final int INFO_FREQUENCY = 50*60*1000;
 
     /**
@@ -246,7 +246,7 @@ public class NTCPConnection implements Closeable {
      * Create an inbound connected (though not established) NTCP connection.
      * Caller MUST call transport.establishing(this) after construction.
      * Caller MUST key.attach(this) after construction.
-         *  @param ctx the router context
+     *  @param ctx the router context
      *  @param transport the NTCP transport
      *  @param chan the socket channel
      *  @param key the selection key
@@ -506,14 +506,14 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     *  Get time since last send in milliseconds.
+     *  Time since last send in milliseconds.
      *
      *  @return time since last send in ms
      */
     public long getTimeSinceSend() { return _context.clock().now()-_lastSendTime; }
 
     /**
-     * Get time since last send in milliseconds.
+     * Time since last send in milliseconds.
      * @param now current time
      * @return milliseconds
      * @since 0.9.38
@@ -521,14 +521,14 @@ public class NTCPConnection implements Closeable {
     public long getTimeSinceSend(long now) { return now - _lastSendTime; }
 
     /**
-     *  Get time since last receive in milliseconds.
+     *  Time since last receive in milliseconds.
      *
      *  @return time since last receive in ms
      */
     public long getTimeSinceReceive() { return _context.clock().now()-_lastReceiveTime; }
 
     /**
-     * Get time since last receive in milliseconds.
+     * Time since last receive in milliseconds.
      * @param now current time
      * @return milliseconds
      * @since 0.9.38
@@ -536,14 +536,14 @@ public class NTCPConnection implements Closeable {
     public long getTimeSinceReceive(long now) { return now - _lastReceiveTime; }
 
     /**
-     *  Get time since connection creation in milliseconds.
+     *  Time since connection creation in milliseconds.
      *
      *  @return time since creation in ms
      */
     public long getTimeSinceCreated() { return _context.clock().now()-_created; }
 
     /**
-     * Get time since connection creation in milliseconds.
+     * Time since connection creation in milliseconds.
      * @param now current time
      * @return milliseconds
      * @since 0.9.38
@@ -578,7 +578,7 @@ public class NTCPConnection implements Closeable {
     public void setVersion(int ver) { _version = ver; }
 
     /**
-     * Sets to true.
+     * The may-disconnect flag, set to true.
      * @since 0.9.24
      */
     public void setMayDisconnect() { _mayDisconnect = true; }
@@ -683,6 +683,7 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
+     * The connection; usually this, but could be a second connection with the same peer.
      * @return usually this, but could be a second connection with the same peer...
      *         only this or null as of 0.9.37
      */
@@ -758,7 +759,7 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     * toss the message onto the connection's send queue
+     * Queue the message onto the connection's send queue.
      *
      * @param msg the message to send
      */
@@ -1177,8 +1178,8 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     * async callback after the outbound connection was completed (this should NOT block,
-     * as it occurs in the selector thread)
+     * Async callback after the outbound connection was completed (this should NOT block,
+     * as it occurs in the selector thread).
      */
     synchronized void outboundConnected() {
         if (_establishState == EstablishBase.FAILED) {
@@ -1304,7 +1305,7 @@ public class NTCPConnection implements Closeable {
         addIBRequest(req);
     }
 
-    /** ditto for writes */
+    /** Ditto for writes. */
     private void queuedWrite(ByteBuffer buf, FIFOBandwidthLimiter.Request req) {
         req.attach(buf);
         req.setCompleteListener(_outboundListener);
@@ -2122,7 +2123,7 @@ public class NTCPConnection implements Closeable {
      */
     private class DelayedCloser extends SimpleTimer2.TimedEvent {
 
-        /** schedules itself */
+        /** Schedules itself. */
         public DelayedCloser() {
             super(_context.simpleTimer2());
             schedule(NTCP2_TERMINATION_CLOSE_DELAY);

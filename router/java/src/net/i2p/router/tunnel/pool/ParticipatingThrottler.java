@@ -554,11 +554,11 @@ public class ParticipatingThrottler {
      */
     private class Cleaner extends SimpleTimer2.TimedEvent {
         /**
-         * Cleaner.
+         * Periodically clear the burst counter.
          */
         public Cleaner() { super(context.simpleTimer2()); }
         /**
-         * timeReached.
+         * Clear the counter and reschedule.
          */
         @Override
         public void timeReached() {
@@ -574,11 +574,11 @@ public class ParticipatingThrottler {
         private final Hash h;
         private final String version;
         /**
-         * Disconnector.
+         * Force disconnect the peer on timer expiry.
          */
         public Disconnector(Hash h, String version) { super(context.simpleTimer2()); this.h = h; this.version = version; }
         /**
-         * timeReached.
+         * Force disconnect the peer.
          */
         public void timeReached() {
             String reason = (version == null || version.isEmpty()) ? "Old version" : "Old version (" + version + ")";

@@ -33,12 +33,14 @@ class FloodfillRouterInfoFloodJob extends JobImpl {
     }
 
     /**
+     * Name of this job.
+     *
      * @return the name
      */
     public String getName() { return "Distribute Local RouterInfo to Floodfills"; }
 
     /**
-     * runJob.
+     * Flood the local RouterInfo out to the floodfill peers.
      */
     public void runJob() {
         FloodfillPeerSelector sel = (FloodfillPeerSelector)_facade.getPeerSelector();

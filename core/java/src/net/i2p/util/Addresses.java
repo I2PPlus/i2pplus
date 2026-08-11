@@ -119,9 +119,9 @@ public abstract class Addresses {
     }
 
 /**
- * Gets the first non-local IPv4 address found.
+ * First non-local IPv4 address found.
  *
- * @return the first non-local address IPv4 address it finds, or null
+ * @return the first non-local IPv4 address found, or null
  */
     public static String getAnyAddress() {
         SortedSet<String> a = getAddresses();
@@ -131,22 +131,22 @@ public abstract class Addresses {
     }
 
 /**
- * Gets all non-IPv6 addresses excluding local, broadcast, and multicast addresses.
+ * All non-IPv6 addresses excluding local, broadcast, and multicast addresses.
  *
- *  @return a sorted set of all addresses, excluding
- *  IPv6, local, broadcast, multicast, etc.
+ * @return a sorted set of all addresses, excluding
+ *         IPv6, local, broadcast, multicast, etc.
  */
     public static SortedSet<String> getAddresses() {
         return getAddresses(false, false);
     }
 
 /**
- * Gets all addresses excluding only link-local and multicast addresses.
+ * All addresses excluding only link-local and multicast addresses.
  *
- *  @return a sorted set of all addresses, excluding
- *  only link local and multicast
+ * @return a sorted set of all addresses, excluding
+ *         only link-local and multicast
  *
- *  @since 0.8.3
+ * @since 0.8.3
  */
     public static SortedSet<String> getAllAddresses() {
         return getAddresses(true, true);

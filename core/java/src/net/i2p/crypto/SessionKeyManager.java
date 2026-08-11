@@ -103,17 +103,17 @@ public class SessionKeyManager {
     }
 
     /**
-     * Get the number of tags to send.
+     * The number of session tags to send.
      *
-     * @return the number of tags to send, or 0 if not implemented
+     * @return The number of tags to send, or 0 if not implemented.
      * @since 0.9.2
      */
     public int getTagsToSend() { return 0; };
 
     /**
-     * Get the low threshold for tag sending.
+     * The low threshold for sending tags.
      *
-     * @return the low threshold, or 0 if not implemented
+     * @return The low threshold, or 0 if not implemented.
      * @since 0.9.2
      */
     public int getLowThreshold() { return 0; };

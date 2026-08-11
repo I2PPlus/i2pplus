@@ -26,11 +26,11 @@ import java.util.Arrays;
  */
 public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     private static final long serialVersionUID = 9837459837498475L;
-    /** A */
+    /** The public key point. */
     private final GroupElement A;
-    /** Aneg */
+    /** The negated public key point, lazily initialized. */
     private GroupElement Aneg = null;
-    /** Abyte */
+    /** The encoded public key (Abyte). */
     private final byte[] Abyte;
     /** Ed dsa spec */
     private final EdDSAParameterSpec edDsaSpec;
@@ -63,7 +63,9 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     }
 
     /**
-     * @return the algorithm
+     * The reported algorithm name for all EdDSA keys.
+     *
+     * @return The algorithm.
      */
     @Override
     public String getAlgorithm() {
@@ -71,7 +73,9 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     }
 
     /**
-     * @return the format
+     * The encoding format of the key.
+     *
+     * @return The format.
      */
     @Override
     public String getFormat() {
@@ -93,26 +97,26 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
      * Relevant spec quotes:
      *
      * <pre>
-     *  In the X.509 certificate, the subjectPublicKeyInfo field has the
-     *  SubjectPublicKeyInfo type, which has the following ASN.1 syntax:
+     *      In the X.509 certificate, the subjectPublicKeyInfo field has the
+     *      SubjectPublicKeyInfo type, which has the following ASN.1 syntax:
      *
-     *  SubjectPublicKeyInfo  ::=  SEQUENCE  {
-     *    algorithm         AlgorithmIdentifier,
-     *    subjectPublicKey  BIT STRING
-     *  }
+     *      SubjectPublicKeyInfo  ::=  SEQUENCE  {
+     *        algorithm         AlgorithmIdentifier,
+     *        subjectPublicKey  BIT STRING
+     *      }
      * </pre>
      *
      * <pre>
-     *  AlgorithmIdentifier  ::=  SEQUENCE  {
-     *    algorithm   OBJECT IDENTIFIER,
-     *    parameters  ANY DEFINED BY algorithm OPTIONAL
-     *  }
+     *      AlgorithmIdentifier  ::=  SEQUENCE  {
+     *        algorithm   OBJECT IDENTIFIER,
+     *        parameters  ANY DEFINED BY algorithm OPTIONAL
+     *      }
      *
-     *  For all of the OIDs, the parameters MUST be absent.
+     *      For all of the OIDs, the parameters MUST be absent.
      * </pre>
      *
      * <pre>
-     *  id-Ed25519   OBJECT IDENTIFIER ::= { 1 3 101 112 }
+     *      id-Ed25519   OBJECT IDENTIFIER ::= { 1 3 101 112 }
      * </pre>
      *
      * @return 44 bytes for Ed25519, null for other curves
@@ -224,7 +228,9 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     }
 
     /**
-     * @return the params
+     * The EdDSA domain parameters for the key.
+     *
+     * @return The params.
      */
     @Override
     public EdDSAParameterSpec getParams() {
@@ -232,18 +238,18 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     }
 
     /**
-     * getA.
+     * The public key point A.
      *
-     * @return the public key point A
+     * @return The public key point A.
      */
     public GroupElement getA() {
         return A;
     }
 
     /**
-     * getNegativeA.
+     * The negated public key point.
      *
-     * @return the negated public key point
+     * @return The negated public key point.
      */
     public GroupElement getNegativeA() {
         // Only read Aneg once, otherwise read re-ordering might occur between
@@ -257,16 +263,18 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     }
 
     /**
-     * getAbyte.
+     * The encoded public key.
      *
-     * @return the public key bytes
+     * @return The public key bytes.
      */
     public byte[] getAbyte() {
         return Abyte;
     }
 
     /**
-     *  @since 0.9.25
+     * Hash code of the public key bytes, for use in hash tables.
+     *
+     * @since 0.9.25
      * @return whether h code is present
      */
     @Override

@@ -15,25 +15,25 @@ import net.i2p.data.TunnelId;
  * Defines the information associated with a tunnel
  */
 public interface TunnelInfo {
-    /** how many peers are there in the tunnel (including the creator)? */
+    /** How many peers are there in the tunnel (including the creator)? */
     public int getLength();
 
     /**
-     * retrieve the tunnelId that the given hop receives messages on.
-     * the gateway is hop 0.
+     * The tunnelId that the given hop receives messages on.
+     * The gateway is hop 0.
      *
      * @return the receive tunnel id
      */
     public TunnelId getReceiveTunnelId(int hop);
     /**
-     * retrieve the tunnelId that the given hop sends messages on.
-     * the gateway is hop 0.
+     * The tunnelId that the given hop sends messages on.
+     * The gateway is hop 0.
      *
      * @return the send tunnel id
      */
     public TunnelId getSendTunnelId(int hop);
 
-    /** retrieve the peer at the given hop.  the gateway is hop 0 */
+    /** The peer at the given hop. The gateway is hop 0. */
     public Hash getPeer(int hop);
 
     /**
@@ -60,14 +60,14 @@ public interface TunnelInfo {
      */
     public Hash getFarEnd();
 
-    /** is this an inbound tunnel? */
+    /** Is this an inbound tunnel? */
     public boolean isInbound();
 
-    /** if this is a client tunnel, what destination is it for? */
+    /** If this is a client tunnel, what destination is it for? */
     public Hash getDestination();
 
     /**
-     * Get the tunnel's expiration time.
+     * The tunnel's expiration time.
      *
      * @return expiration time in milliseconds since epoch
      */
@@ -81,13 +81,13 @@ public interface TunnelInfo {
     public void testSuccessful(int responseTime);
 
     /**
-     * Get the count of messages that have been processed through this tunnel.
+     * The count of messages that have been processed through this tunnel.
      *
      * @return the number of processed messages
      */
     public int getProcessedMessagesCount();
 
-    /** we know for sure that this many bytes travelled through the tunnel in its lifetime */
+    /** Number of bytes known to have travelled through the tunnel in its lifetime. */
     public long getVerifiedBytesTransferred();
 
     /**
@@ -120,7 +120,7 @@ public interface TunnelInfo {
     public boolean getTunnelFailed();
 
     /**
-     * Get the current test status of this tunnel for UI display.
+     * The current test status of this tunnel for UI display.
      *
      * @return the current test status (UNTESTED, TESTING, GOOD, FAILING, or FAILED)
      * @since 0.9.68+
@@ -128,7 +128,7 @@ public interface TunnelInfo {
     public TunnelTestStatus getTestStatus();
 
     /**
-     * Set the test status when a test is started.
+     * The test status when a test is started.
      * Called by TestJob when beginning a tunnel test.
      *
      * @since 0.9.68+
@@ -136,7 +136,7 @@ public interface TunnelInfo {
     public void setTestStarted();
 
     /**
-     * Set the test status when a test fails.
+     * The test status when a test fails.
      * Called by TestJob when a tunnel test fails.
      *
      * @since 0.9.68+
@@ -144,7 +144,7 @@ public interface TunnelInfo {
     public void setTestFailed();
 
     /**
-     * Get the number of consecutive test failures.
+     * The number of consecutive test failures.
      *
      * @return the count of consecutive failures
      * @since 0.9.68+
@@ -152,13 +152,15 @@ public interface TunnelInfo {
     public int getConsecutiveFailures();
 
     /**
+     * The latency of the last tunnel test.
+     *
      * @return latency in milliseconds, or -1 if not available
      * @since 0.9.68+
      */
     public int getLastLatency();
 
     /**
-     * Set the tunnel's expiration time.
+     * The tunnel's expiration time.
      * Allows proactive tunnel cleanup by marking tunnels for expiry.
      *
      * @param when expiration time in milliseconds since epoch

@@ -166,7 +166,7 @@ abstract class MigrateJetty {
             ctx.router().saveConfig(PROP_JETTY9_MIGRATED_2, "true");
     }
 
-    /** do we have Jetty 7/8/9? */
+    /** Whether the latest Jetty (7/8/9) is available. */
     private static boolean hasLatestJetty() {
         if (!_wasChecked) {
             try {

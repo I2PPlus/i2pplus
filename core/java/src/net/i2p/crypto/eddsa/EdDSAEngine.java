@@ -146,6 +146,8 @@ public class EdDSAEngine extends Signature {
     }
 
     /**
+     * Update the signature with one byte.
+     *
      * @throws SignatureException if in one-shot mode
      */
     @Override
@@ -156,6 +158,8 @@ public class EdDSAEngine extends Signature {
     }
 
     /**
+     * Update the signature with the given bytes.
+     *
      * @throws SignatureException if one-shot rules are violated
      */
     @Override
@@ -289,7 +293,7 @@ public class EdDSAEngine extends Signature {
      *  To efficiently sign all the data in one shot, if it is available,
      *  use this method, which will avoid copying the data.
      *
-     * Same as:
+     *  Same as:
      *<pre>
      *  setParameter(ONE_SHOT_MODE)
      *  update(data)
@@ -310,7 +314,7 @@ public class EdDSAEngine extends Signature {
      *  To efficiently sign all the data in one shot, if it is available,
      *  use this method, which will avoid copying the data.
      *
-     * Same as:
+     *  Same as:
      *<pre>
      *  setParameter(ONE_SHOT_MODE)
      *  update(data, off, len)
@@ -335,7 +339,7 @@ public class EdDSAEngine extends Signature {
      *  To efficiently verify all the data in one shot, if it is available,
      *  use this method, which will avoid copying the data.
      *
-     * Same as:
+     *  Same as:
      *<pre>
      *  setParameter(ONE_SHOT_MODE)
      *  update(data)
@@ -357,7 +361,7 @@ public class EdDSAEngine extends Signature {
      *  To efficiently verify all the data in one shot, if it is available,
      *  use this method, which will avoid copying the data.
      *
-     * Same as:
+     *  Same as:
      *<pre>
      *  setParameter(ONE_SHOT_MODE)
      *  update(data, off, len)
@@ -381,7 +385,7 @@ public class EdDSAEngine extends Signature {
      *  To efficiently verify all the data in one shot, if it is available,
      *  use this method, which will avoid copying the data.
      *
-     * Same as:
+     *  Same as:
      *<pre>
      *  setParameter(ONE_SHOT_MODE)
      *  update(data)
@@ -405,7 +409,7 @@ public class EdDSAEngine extends Signature {
      *  To efficiently verify all the data in one shot, if it is available,
      *  use this method, which will avoid copying the data.
      *
-     * Same as:
+     *  Same as:
      *<pre>
      *  setParameter(ONE_SHOT_MODE)
      *  update(data, off, len)
@@ -430,6 +434,8 @@ public class EdDSAEngine extends Signature {
     }
 
     /**
+     * Only the one-shot mode parameter specification is supported.
+     *
      * @throws InvalidAlgorithmParameterException if spec is ONE_SHOT_MODE and update() already called
      * @see #ONE_SHOT_MODE
      * @since 0.9.25
@@ -454,6 +460,8 @@ public class EdDSAEngine extends Signature {
     }
 
     /**
+     * Parameter retrieval; unsupported, always throws.
+     *
      * @return nothing, always throws
      * @deprecated
      */

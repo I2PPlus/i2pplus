@@ -39,7 +39,7 @@ import java.util.Locale;
 @Deprecated
 public class EepGetAndAddNamingService extends EepGetNamingService {
 
-    /** default hosts.txt filename */
+    /** Default hosts.txt filename */
     private static final String DEFAULT_HOSTS_FILE = "hosts.txt";
 
     /**

@@ -15,11 +15,11 @@ public class ElGamalParameterSpec implements AlgorithmParameterSpec {
     private final BigInteger g;
 
     /**
-     * Constructs a parameter set for Diffie-Hellman, using a prime modulus
+     * Parameter set for Diffie-Hellman, using a prime modulus
      * <code>p</code> and a base generator <code>g</code>.
      *
-     * @param p the prime modulus
-     * @param g the base generator
+     * @param p The prime modulus.
+     * @param g The base generator.
      */
     public ElGamalParameterSpec(BigInteger p, BigInteger g) {
         this.p = p;

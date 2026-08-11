@@ -27,6 +27,8 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     private final boolean initialized;
 
     /**
+     * Copy of the given sorted set.
+     *
      * @param c sorted set to copy, must already be sorted
      */
     public UnmodifiableSortedSet(SortedSet<? extends E> c) {
@@ -34,6 +36,8 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
+     * Copy of the given sorted set with the given comparator.
+     *
      * @param c sorted set to copy, must already be sorted
      * @param comparator comparator for ordering
      */
@@ -45,6 +49,8 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
+     * Copy of the given set, sorted.
+     *
      * @param c set to copy and sort
      */
     public UnmodifiableSortedSet(Set<? extends E> c) {
@@ -52,6 +58,8 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
+     * Copy of the given set, sorted with the given comparator.
+     *
      * @param c set to copy and sort
      * @param comparator comparator for ordering
      */
@@ -89,7 +97,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     * comparator.
+     * Comparator used for ordering, or null.
      */
     @Override
     public Comparator<? super E> comparator() {
@@ -97,7 +105,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     * first.
+     * First (lowest) element.
      */
     @Override
     @SuppressWarnings("unchecked")
@@ -107,7 +115,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     * last.
+     * Last (highest) element.
      */
     @Override
     @SuppressWarnings("unchecked")

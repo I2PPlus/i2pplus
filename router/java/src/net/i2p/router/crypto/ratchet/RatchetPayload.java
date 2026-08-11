@@ -16,7 +16,7 @@ import net.i2p.data.i2np.GarlicClove;
  */
 class RatchetPayload {
 
-    /** utility class */
+    /** Utility class with static methods only, not instantiable. */
     private RatchetPayload() {}
 
     /** Block header size in bytes */
@@ -373,7 +373,7 @@ class RatchetPayload {
         }
 
         /**
-         * with random data
+         * Padding block filled with random data from the given context.
          *
          * @deprecated Use {@link #PaddingBlock(int)} instead.
          * @since 0.9.70

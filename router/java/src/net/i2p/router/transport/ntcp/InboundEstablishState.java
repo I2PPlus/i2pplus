@@ -113,7 +113,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     /** Maximum message 3 part 2 size (6000 bytes, less than full buffer) */
     private static final int MSG3P2_MAX = 6000;
 
-    /** Set of states that are part of NTCP 2 protocol processing */
+    /** The set of states that are part of NTCP 2 protocol processing. */
     private static final Set<State> STATES_NTCP2 =
         EnumSet.of(State.IB_NTCP2_INIT, State.IB_NTCP2_GOT_X, State.IB_NTCP2_GOT_MSG1, State.IB_NTCP2_GOT_PADDING,
                    State.IB_NTCP2_SENT_Y, State.IB_NTCP2_GOT_RI, State.IB_NTCP2_READ_RANDOM);
@@ -664,7 +664,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     }
 
     /**
-     * Constructs and queues NTCP 2 message 2 for sending to Alice.
+     * Message 2 of the NTCP 2 handshake, built and queued for sending to Alice.
      *
      * <p>Message 2 contains:
      * <ul>

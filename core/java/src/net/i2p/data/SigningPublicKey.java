@@ -158,7 +158,8 @@ public class SigningPublicKey extends SimpleDataStructure {
         } // bypass length check
     }
 
-    /** constructs from base64
+    /**
+     * Signing public key from a string of base64 data.
      *
      * @param base64Data a string of base64 data (the output of .toBase64() called
      * on a prior instance of SigningPublicKey

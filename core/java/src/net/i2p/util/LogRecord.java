@@ -36,6 +36,8 @@ class LogRecord {
     }
 
     /**
+     * Time the record was created.
+     *
      * @return the date
      */
     public long getDate() {
@@ -43,6 +45,8 @@ class LogRecord {
     }
 
     /**
+     * Class the record is from.
+     *
      * @return the source
      */
     public Class<?> getSource() {
@@ -50,6 +54,8 @@ class LogRecord {
     }
 
     /**
+     * Name the record is from.
+     *
      * @return the source name
      */
     public String getSourceName() {
@@ -57,6 +63,8 @@ class LogRecord {
     }
 
     /**
+     * Thread the record was created on.
+     *
      * @return the thread name
      */
     public String getThreadName() {
@@ -64,6 +72,8 @@ class LogRecord {
     }
 
     /**
+     * Log priority of the record.
+     *
      * @return the priority
      */
     public int getPriority() {
@@ -71,6 +81,8 @@ class LogRecord {
     }
 
     /**
+     * Message text.
+     *
      * @return the message
      */
     public String getMessage() {
@@ -78,6 +90,8 @@ class LogRecord {
     }
 
     /**
+     * Throwable attached to the record, if any.
+     *
      * @return the throwable
      */
     public Throwable getThrowable() {
@@ -100,7 +114,9 @@ class LogRecord {
     }
 
     /**
-     * @return whether h code is present
+     * Hash code derived from the message.
+     *
+     * @return the hash code
      */
     @Override
     public int hashCode() {

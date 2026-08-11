@@ -8,13 +8,15 @@ package net.i2p.router.tunnel;
 class DummyValidator implements IVValidator {
     private static final DummyValidator _instance = new DummyValidator();
     /**
+     * The shared DummyValidator instance.
+     *
      * @return the instance
      */
     public static DummyValidator getInstance() { return _instance; }
     private DummyValidator() {}
 
     /**
-     * receiveIV.
+     * Accepts all initialization vectors as valid.
      */
     public boolean receiveIV(byte[] ivData, int ivOffset, byte[] payload, int payloadOffset) { return true; }
 

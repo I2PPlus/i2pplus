@@ -27,7 +27,7 @@ public interface TransportEventListener {
     public void messageReceived(I2NPMessage message, RouterIdentity fromRouter, Hash fromRouterHash);
 
     /**
-     * transportAddressChanged().
+     * Notify the listener that the transport's address changed.
      */
     public void transportAddressChanged();
 }

@@ -13,20 +13,17 @@ import net.i2p.crypto.eddsa.math.ScalarOps;
  * <p>
  * Reviewed/commented by Bloody Rookie (nemproject@gmx.de)
  */
-/**
- * Implementation of ScalarOps for Ed25519.
- */
 public class Ed25519ScalarOps implements ScalarOps {
 
     /**
      * Reduction modulo the group order $q$.
      * <p>
      * Input:
-     *   $s[0]+256*s[1]+\dots+256^{63}*s[63] = s$
+     *     $s[0]+256*s[1]+\dots+256^{63}*s[63] = s$
      * <p>
      * Output:
-     *   $s[0]+256*s[1]+\dots+256^{31}*s[31] = s \bmod q$
-     *   where $q = 2^{252} + 27742317777372353535851937790883648493$.
+     *     $s[0]+256*s[1]+\dots+256^{31}*s[31] = s \bmod q$
+     *     where $q = 2^{252} + 27742317777372353535851937790883648493$.
      */
     @Override
     public byte[] reduce(byte[] s) {
@@ -388,8 +385,8 @@ public class Ed25519ScalarOps implements ScalarOps {
      * <li>$c[0]+256*c[1]+\dots+256^{31}*c[31] = c$
      * </ul><p>
      * Output:
-     *   $result[0]+256*result[1]+\dots+256^{31}*result[31] = (ab+c) \bmod q$
-     *   where $q = 2^{252} + 27742317777372353535851937790883648493$.
+     *     $result[0]+256*result[1]+\dots+256^{31}*result[31] = (ab+c) \bmod q$
+     *     where $q = 2^{252} + 27742317777372353535851937790883648493$.
      * <p>
      * See the comments in {@link #reduce(byte[])} for an explanation of the algorithm.
      */

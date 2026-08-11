@@ -24,7 +24,7 @@ class HopProcessor {
     private final IVValidator _validator;
 
     /**
-     * as of i2p 0.6, the tunnel crypto changed to encrypt the IV both before
+     * As of i2p 0.6, the tunnel crypto changed to encrypt the IV both before
      * and after using it at each hop so as to prevent a certain type of replay/confirmation
      * attack.
      *

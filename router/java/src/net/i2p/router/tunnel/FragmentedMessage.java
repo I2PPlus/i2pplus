@@ -128,19 +128,27 @@ class FragmentedMessage {
     }
 
     /**
+     * The unique ID of this fragmented message.
+     *
      * @return the message id
      */
     public long getMessageId() { return _messageId; }
     /**
+     * The router this message is being sent to.
+     *
      * @return the target router
      */
     public Hash getTargetRouter() { return _toRouter; }
     /**
+     * The tunnel this message is being sent to.
+     *
      * @return the target tunnel
      */
     public TunnelId getTargetTunnel() { return _toTunnel; }
 
     /**
+     * The number of fragments received so far.
+     *
      * @return the fragment count
      */
     public int getFragmentCount() {
@@ -151,15 +159,15 @@ class FragmentedMessage {
         return found;
     }
 
-    /** used in the fragment handler so we can cancel the expire event on success */
+    /** Used in the fragment handler so we can cancel the expire event on success. */
     public SimpleTimer2.TimedEvent getExpireEvent() { return _expireEvent; }
 
     /**
-     * setExpireEvent.
+     * The expire event to cancel when this message completes.
      */
     public void setExpireEvent(SimpleTimer2.TimedEvent evt) { _expireEvent = evt; }
 
-    /** have we received all of the fragments? */
+    /** Have we received all of the fragments? */
     public boolean isComplete() {
         if (!_lastReceived)
             return false;
@@ -169,6 +177,8 @@ class FragmentedMessage {
         return true;
     }
     /**
+     * The size of the complete message, in bytes.
+     *
      * @return the complete size
      */
     public int getCompleteSize() {
@@ -190,9 +200,11 @@ class FragmentedMessage {
         return size;
     }
 
-    /** how long has this fragmented message been alive?  */
+    /** How long has this fragmented message been alive? */
     public long getLifetime() { return _context.clock().now() - _createdOn; }
     /**
+     * Whether this message has been released after completion.
+     *
      * @return the released
      */
     public boolean getReleased() { return _completed; }
@@ -212,7 +224,7 @@ class FragmentedMessage {
     }
 
     /**
-     * toByteArray.
+     * The complete reassembled message data, freeing the fragments.
      */
     public byte[] toByteArray() {
         synchronized (this) {
@@ -225,11 +237,13 @@ class FragmentedMessage {
     }
 
     /**
+     * The lifetime at which the fragments were released, or 0 if not yet released.
+     *
      * @return the released after
      */
     public synchronized long getReleasedAfter() { return _releasedAfter; }
     /**
-     * failed.
+     * Releases the fragments, marking the message as failed.
      */
     public void failed() {
         synchronized (this) {
@@ -257,7 +271,7 @@ class FragmentedMessage {
         }
     }
 
-    /** toString */
+    /** Debug description of the message ID and the received fragments. */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);

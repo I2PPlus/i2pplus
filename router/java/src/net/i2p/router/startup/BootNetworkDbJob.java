@@ -11,7 +11,7 @@ package net.i2p.router.startup;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 
-/** start up the network database */
+/** Start up the network database. */
 class BootNetworkDbJob extends JobImpl {
 
     /**

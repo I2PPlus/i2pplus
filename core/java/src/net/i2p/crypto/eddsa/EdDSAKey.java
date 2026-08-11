@@ -17,7 +17,9 @@ public interface EdDSAKey {
     String KEY_ALGORITHM = "EdDSA";
 
     /**
-     * @return a parameter specification representing the EdDSA domain
+     * The EdDSA domain parameters for the key.
+     *
+     * @return A parameter specification representing the EdDSA domain
      *         parameters for the key.
      */
     EdDSAParameterSpec getParams();

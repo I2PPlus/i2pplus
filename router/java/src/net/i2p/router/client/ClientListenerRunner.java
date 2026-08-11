@@ -52,7 +52,7 @@ class ClientListenerRunner implements Runnable {
     public static final String BIND_ALL_INTERFACES = "i2cp.tcp.bindAllInterfaces";
 
     /**
-     * Construct a new client listener runner.
+     * Create a new client listener runner for the given port.
      *
      * @param context the router context
      * @param manager the client manager
@@ -74,7 +74,7 @@ class ClientListenerRunner implements Runnable {
     public boolean isListening() { return _running && _listening; }
 
     /**
-     * Get a ServerSocket.
+     * A ServerSocket for this listener.
      * Split out so it can be overridden for SSL.
      *
      * @return the ServerSocket
@@ -178,17 +178,17 @@ class ClientListenerRunner implements Runnable {
     }
 
     /**
- * Just so unit tests don't NPE, where router could be null.
- *
- * @since 0.9.20
+     * Just so unit tests don't NPE, where the router could be null.
+     *
+     * @since 0.9.20
      * @return whether alive
- */
+     */
     private boolean isAlive() {
         Router r = _context.router();
         return r == null || r.isAlive();
     }
 
-    /** give the i2cp client 5 seconds to show that they're really i2cp clients */
+    /** Give the i2cp client 5 seconds to show that they're really i2cp clients. */
     protected static final int CONNECT_TIMEOUT = 5*1000;
 
     /**

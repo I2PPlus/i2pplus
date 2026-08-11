@@ -21,15 +21,12 @@ import net.i2p.util.Clock;
  */
 class SetDateMessageHandler extends HandlerImpl {
     /**
-     * SetDateMessageHandler.
+     * Create the handler for I2CP time messages.
      */
     public SetDateMessageHandler(I2PAppContext ctx) {
         super(ctx, SetDateMessage.MESSAGE_TYPE);
     }
 
-    /**
-     * handleMessage.
-     */
     @Override
     /**
      * Handle an incoming I2CP message.

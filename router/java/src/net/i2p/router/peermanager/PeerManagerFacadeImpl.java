@@ -41,7 +41,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     }
 
     /**
-     * startup.
+     * Start the peer manager and begin testing peers.
      */
     public synchronized void startup() {
         _log.info("Starting Peer Manager...");
@@ -51,7 +51,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     }
 
     /**
-     * shutdown.
+     * Shut down the peer manager, storing and clearing the profiles.
      */
     public synchronized void shutdown() {
         _log.info("Shutting down Peer Manager...");
@@ -63,7 +63,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     }
 
     /**
-     * restart.
+     * Store the profiles and reload them from disk.
      */
     public synchronized void restart() {
         _manager.storeProfiles();
@@ -80,7 +80,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     }
 
     /**
-     * removeCapabilities.
+     * Remove all capabilities for the peer from the index.
      */
     public void removeCapabilities(Hash peer) {
         if (_manager == null) return;
@@ -88,7 +88,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     }
 
     /**
-     * Get the peer test job for scheduling priority peer tests.
+     * The peer test job for scheduling priority peer tests.
      *
      * @return the PeerTestJob instance, or null if not available
      * @since 0.9.69+

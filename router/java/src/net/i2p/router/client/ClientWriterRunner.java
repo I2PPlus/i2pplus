@@ -22,14 +22,14 @@ class ClientWriterRunner implements Runnable {
     private static volatile int _queueSize = 256;
 
     /**
-     * Get the queue size.
+     * The current size of the message queue.
      * @return the queue size
      * @since 0.9.70+
      */
     public static int getQueueSize() { return _queueSize; }
 
     /**
-     * Set the queue size.
+     * Update the message queue size, clamped to the supported range.
      * @param val the new queue size
      * @since 0.9.70+
      */

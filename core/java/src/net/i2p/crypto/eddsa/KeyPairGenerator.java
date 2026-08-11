@@ -42,15 +42,15 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
      */
     protected static final int DEFAULT_KEYSIZE = 256;
     /**
-     * edParams.
+     * EdDSA parameter specification, set by initialize().
      */
     protected EdDSAParameterSpec edParams;
     /**
-     * random.
+     * The random number source, set by initialize().
      */
     protected SecureRandom random;
     /**
-     * initialized.
+     * Whether the generator has been initialized.
      */
     protected boolean initialized;
 
@@ -63,7 +63,7 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
     }
 
     /**
-     * initialize.
+     * Initialize with the given key size.
      */
     @Override
     public void initialize(int keysize, SecureRandom random) {
@@ -77,7 +77,7 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
     }
 
     /**
-     * initialize.
+     * Initialize with the given parameter spec.
      */
     @Override
     public void initialize(AlgorithmParameterSpec params, SecureRandom random) throws InvalidAlgorithmParameterException {

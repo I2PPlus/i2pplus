@@ -8,7 +8,7 @@ package net.i2p.router.tunnel;
  */
 public interface IVValidator {
     /**
-     * receive the IV for the tunnel message, returning true if it is valid,
+     * Receive the IV for the tunnel message, returning true if it is valid,
      * or false if it has already been used (or is otherwise invalid).  To
      * prevent colluding attackers from successfully tagging the tunnel by
      * switching the IV and the first block of the message, the validator should

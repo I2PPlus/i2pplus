@@ -97,7 +97,7 @@ abstract class FloodSearchJob extends JobImpl {
             getContext().jobQueue().addJob(onFailed);
     }
 
-    /** using context clock */
+    /** Expiration time from the context clock. */
     public long getExpiration() { return _expiration; }
     /** Max simultaneous flood lookups before fallback. */
     protected static final int CONCURRENT_SEARCHES = SystemVersion.isSlow() ? 3 : 5;
@@ -116,12 +116,16 @@ abstract class FloodSearchJob extends JobImpl {
     public String getName() { return "NetDb Search (phase 1)"; }
 
     /**
+     * The database entry hash being searched.
+     *
      * @return the database entry hash being searched
      */
     public Hash getKey() { return _key; }
 
     /**
-     *  @return number remaining after decrementing
+     * Number of lookups remaining after decrementing.
+     *
+     * @return number remaining after decrementing
      */
     protected int decrementRemaining() {
         // safe decrement
@@ -135,6 +139,8 @@ abstract class FloodSearchJob extends JobImpl {
     }
 
     /**
+     * Number of flood lookups still pending.
+     *
      * @return number of flood lookups still pending
      */
     protected int getLookupsRemaining() { return _lookupsRemaining.get(); }

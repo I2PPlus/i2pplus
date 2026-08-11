@@ -8,9 +8,6 @@ import java.net.Socket;
  *
  *  @since 0.9.11
  */
-/**
- * Outproxy.
- */
 public interface Outproxy {
 
     /**

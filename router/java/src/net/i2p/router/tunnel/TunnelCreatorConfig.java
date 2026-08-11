@@ -23,14 +23,14 @@ import net.i2p.util.Log;
  */
 public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
-     * _context.
+     * The router context.
      */
     protected final RouterContext _context;
-    /** only necessary for client tunnels */
+    /** Only necessary for client tunnels. */
     private final Hash _destination;
-    /** gateway first */
+    /** Gateway first. */
     private final HopConfig[] _config;
-    /** gateway first */
+    /** Gateway first. */
     private final Hash[] _peers;
     private volatile long _expiration;
     private List<Integer> _order;
@@ -63,7 +63,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     // Make configurable? - but can't easily get to pool options from here
     /**
-     * MAX_CONSECUTIVE_TEST_FAILURES.
+     * Maximum consecutive test failures before the tunnel is retired.
      */
     public static final int MAX_CONSECUTIVE_TEST_FAILURES = 3;
     private static final int LATENCY_SAMPLE_SIZE = 3;
@@ -81,7 +81,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  @since 0.9.69+
      */
     private volatile int _recentTestExemptions;
-    /** optional pool nickname for log display */
+    /** Optional pool nickname for log display. */
     private String _destinationNickname;
 
     /**
@@ -93,7 +93,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     *  Set an optional display nickname for this tunnel (e.g. pool name like I2PSnark)
+     *  Optional display nickname for this tunnel (e.g. pool name like I2PSnark)
      *  @since 0.9.70+
      */
     public void setDestinationNickname(String name) { _destinationNickname = name; }
@@ -105,6 +105,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public String getDestinationNickname() { return _destinationNickname; }
 
     /**
+     * Allocates the hop configs and peer arrays for the given length.
+     *
      * @param length 1 minimum (0 hop is length 1)
      * @param destination null for exploratory
      */
@@ -129,19 +131,21 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public int getLength() {return _config.length;}
 
     /**
+     * The tunnel pool options.
+     *
      * @return the options
      */
     public Properties getOptions() {return null;}
 
     /**
-     * retrieve the config for the given hop.  the gateway is
+     * Retrieve the config for the given hop.  the gateway is
      * hop 0.
      * @return the config
      */
     public HopConfig getConfig(int hop) {return _config[hop];}
 
     /**
-     * retrieve the tunnelId that the given hop receives messages on.
+     * Retrieve the tunnelId that the given hop receives messages on.
      * the gateway is hop 0.
      *
      * @return the receive tunnel id
@@ -149,17 +153,17 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public TunnelId getReceiveTunnelId(int hop) {return _config[hop].getReceiveTunnel();}
 
     /**
-     * retrieve the tunnelId that the given hop sends messages on.
+     * Retrieve the tunnelId that the given hop sends messages on.
      * the gateway is hop 0.
      *
      * @return the send tunnel id
      */
     public TunnelId getSendTunnelId(int hop) {return _config[hop].getSendTunnel();}
 
-    /** retrieve the peer at the given hop.  the gateway is hop 0 */
+    /** Retrieve the peer at the given hop (the gateway is hop 0). */
     public Hash getPeer(int hop) {return _peers[hop];}
     /**
-     * setPeer.
+     * The peer at the given hop.
      */
     public void setPeer(int hop, Hash peer) {_peers[hop] = peer;}
 
@@ -184,7 +188,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      */
     public Hash getFarEnd() {return _peers[_isInbound ? 0 : _peers.length - 1];}
 
-    /** is this an inbound tunnel? */
+    /** Is this an inbound tunnel? */
     public boolean isInbound() {return _isInbound;}
 
     /**
@@ -194,31 +198,35 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public Hash getDestination() {return _destination;}
 
     /**
+     * The tunnel expiration, in ms since the epoch.
+     *
      * @return the expiration
      */
     public long getExpiration() {return _expiration;}
     /**
-     * setExpiration.
+     * The tunnel expiration, in ms since the epoch.
      */
     public void setExpiration(long when) {_expiration = when;}
 
-    /** component ordering in the new style request */
+    /** Component ordering in the new style request. */
     public List<Integer> getReplyOrder() {return _order;}
     /**
-     * setReplyOrder.
+     * The component ordering for the new style request.
      */
     public void setReplyOrder(List<Integer> order) {_order = order;}
 
-    /** new style reply message id */
+    /** The message ID for the new style reply. */
     public long getReplyMessageId() {return _replyMessageId;}
     /**
-     * setReplyMessageId.
+     * The message ID for the new style reply.
      */
     public void setReplyMessageId(long id) {_replyMessageId = id;}
 
-    /** take note of a message being pumped through this tunnel */
+    /** Take note of a message being pumped through this tunnel. */
     public void incrementProcessedMessages() {_messagesProcessed.incrementAndGet();}
     /**
+     * The number of messages pumped through this tunnel.
+     *
      * @return the processed messages count
      */
     public int getProcessedMessagesCount() {return _messagesProcessed.get();}
@@ -244,7 +252,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
                 Hash[] peersCopy = Arrays.copyOfRange(_peers, start, end);
                 _context.jobQueue().addJob(new JobImpl(_context) {
                     /**
-                     * runJob.
+                     * Update the per-peer throughput profiles with the normalized total.
                      */
                     @Override
                     public void runJob() {
@@ -253,6 +261,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
                         }
                     }
                     /**
+                     * The name of this job.
+                     *
                      * @return the name
                      */
                     @Override
@@ -263,6 +273,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
+     * The total verified bytes transferred on this tunnel.
+     *
      * @return the verified bytes transferred
      */
     public synchronized long getVerifiedBytesTransferred() {return _verifiedBytesTransferred;}
@@ -314,6 +326,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public boolean getTunnelFailed() {return _failures.get() > MAX_CONSECUTIVE_TEST_FAILURES;}
 
     /**
+     * The consecutive failure count.
+     *
      * @return the tunnel failures
      */
     public int getTunnelFailures() {return _failures.get();}
@@ -330,8 +344,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     *  Get the number of recent-traffic test exemptions used.
-     *  @since 0.9.69+
+     * The number of recent-traffic test exemptions used.
+     * @since 0.9.69+
      * @return the recent test exemptions
      */
     public int getRecentTestExemptions() {return _recentTestExemptions;}
@@ -343,7 +357,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public void incrementRecentTestExemptions() {_recentTestExemptions++;}
 
     /**
-     * testSuccessful.
+     * Mark the tunnel as GOOD, recording the latency of the successful test.
      */
     public void testSuccessful(int ms) {
         _failures.set(0);
@@ -411,7 +425,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      *  Checksum for blank record
-     *  @since 0.9.48
+     * @since 0.9.48
      * @return the blank hash
      */
     public Hash getBlankHash() {return _blankHash;}
@@ -423,7 +437,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public void setBlankHash(Hash h) {_blankHash = h;}
 
     /**
-     *  Set last test latency
+     *  The latency of the last completed test.
      *  @param ms latency in milliseconds
      *  @since 0.9.68+
      */
@@ -432,6 +446,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
+     * The last recorded test latency.
+     *
      * @return latency in milliseconds, or -1 if not available
      * @since 0.9.68+
      */
@@ -452,7 +468,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     * Get average latency from last 3 tests.
+     * The average latency of the last 3 tests.
      * @return average latency in ms, or -1 if no tests yet
      * @since 0.9.69+
      */
@@ -466,6 +482,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
+     * Whether at least 3 latency samples have been collected.
+     *
      * @return true if we have at least 3 latency samples
      * @since 0.9.69+
      */
@@ -474,6 +492,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
+     * Whether the tunnel needs an expedited test due to slow detection.
+     *
      * @return true if tunnel needs an expedited test due to slow detection
      * @since 0.9.69+
      */
@@ -486,13 +506,13 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public void clearExpeditedTest() { _needsExpeditedTest = false; }
 
     /**
-     * Set expedited test flag - called when tunnel appears slow.
+     * The tunnel appeared slow, so flag it for an expedited test.
      * @since 0.9.69+
      */
     public void requestExpeditedTest() { _needsExpeditedTest = true; }
 
     /**
-     * Get the current test status of this tunnel for UI display.
+     * The current test status of this tunnel for UI display.
      * @return the current test status (UNTESTED, TESTING, GOOD, FAILING, or FAILED)
      * @since 0.9.68+
      */
@@ -543,7 +563,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     * Get the number of consecutive test failures.
+     * The number of consecutive test failures.
      * @return the count of consecutive failures
      * @since 0.9.68+
      */
@@ -552,7 +572,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     *  Set ECIES reply key and IV
+     *  The ECIES reply key and associated data for the given hop.
      *  @since 0.9.48
      */
     public void setChaChaReplyKeys(int hop, SessionKey key, byte[] ad) {
@@ -566,7 +586,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      *  Is it an ECIES hop?
-     *  @since 0.9.48
+     * @since 0.9.48
      * @return whether e c
      */
     public boolean isEC(int hop) {
@@ -575,8 +595,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     *  Get ECIES reply key
-     *  @since 0.9.48
+     *  The ECIES reply key for the given hop, or null.
+     * @since 0.9.48
      * @return the cha cha reply key
      */
     public SessionKey getChaChaReplyKey(int hop) {
@@ -585,8 +605,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     *  Get ECIES reply AD
-     *  @since 0.9.48
+     *  The ECIES reply associated data for the given hop, or null.
+     * @since 0.9.48
      * @return the cha cha reply a d
      */
     public byte[] getChaChaReplyAD(int hop) {
@@ -608,7 +628,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public OneTimeSession getGarlicReplyKeys() {return _garlicReplyKeys;}
 
     /**
-     * toString.
+     * Human-readable description of the tunnel, its peers, and its state.
      */
     @Override
     public String toString() {

@@ -59,10 +59,10 @@ public final class ByteCache extends TryCache<ByteArray> {
     private static final int MAX_CACHE;
     private static final int MIN_CACHE_OBJECTS = 16;
 
-    /** how often do we cleanup all caches */
+    /** How often do we cleanup all caches. */
     private static final int CLEANUP_FREQUENCY = 33 * 1000;
 
-    /** if we haven't exceeded the cache size in 90 seconds, cut our cache in half */
+    /** If the cache size hasn't been exceeded in 90 seconds, cut the cache in half. */
     private static final long EXPIRE_PERIOD = (long) 90 * 1000;
 
     /** Global cleanup task - single timer for all caches */
@@ -80,7 +80,7 @@ public final class ByteCache extends TryCache<ByteArray> {
      */
     private static class GlobalCleanup extends SimpleTimer2.TimedEvent {
         /**
-         * timeReached.
+         * Clean all caches of entries past their expiration, then reschedule.
          */
         @Override
         public void timeReached() {
@@ -93,7 +93,7 @@ public final class ByteCache extends TryCache<ByteArray> {
         }
 
         /**
-         * toString.
+         * String identifying this cleanup task.
          */
         @Override
         public String toString() {
@@ -113,6 +113,8 @@ public final class ByteCache extends TryCache<ByteArray> {
     }
 
     /**
+     * Shared cache for the given entry size and capacity.
+     *
      * @return the instance
      */
     @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
@@ -168,7 +170,7 @@ public final class ByteCache extends TryCache<ByteArray> {
         }
 
         /**
-         * newInstance.
+         * Create a new byte array of the configured size, marked empty.
          */
         @Override
         public ByteArray newInstance() {
@@ -207,7 +209,7 @@ public final class ByteCache extends TryCache<ByteArray> {
     }
 
     /**
-     * release.
+     * Release the entry back to the cache, optionally zeroing its contents first.
      */
     public final void release(ByteArray entry, boolean shouldZero) {
         if (entry == null || entry.getData() == null) {

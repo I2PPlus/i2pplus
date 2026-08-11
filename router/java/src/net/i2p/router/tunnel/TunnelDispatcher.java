@@ -33,38 +33,38 @@ import net.i2p.util.SimpleTimer2;
  * Handle the actual processing and forwarding of messages through the various tunnels.
  *
  *<pre>
- *  For each type of tunnel, it creates a chain of handlers, as follows:
+ * For each type of tunnel, it creates a chain of handlers, as follows:
  *
- *  Following tunnels are created by us:
+ * Following tunnels are created by us:
  *
- *    Outbound Gateway &gt; 0 hops:
+ *     Outbound Gateway &gt; 0 hops:
  *       PumpedTunnelGateway
  *         BatchedRouterPreprocessor -&gt; OutboundSender -&gt; OutboundReceiver -&gt; OutNetMessagePool
  *
- *    Outbound zero-hop Gateway+Endpoint:
+ *     Outbound zero-hop Gateway+Endpoint:
  *       TunnelGatewayZeroHop
  *         OutboundMessageDistributor -&gt; OutNetMessagePool
  *
- *    Inbound Endpoint &gt; 0 hops:
+ *     Inbound Endpoint &gt; 0 hops:
  *       TunnelParticipant
  *        RouterFragmentHandler -&gt;  InboundEndpointProcessor -&gt; InboundMessageDistributor -&gt; InNetMessagePool
  *
- *    Inbound zero-hop Gateway+Endpoint:
+ *     Inbound zero-hop Gateway+Endpoint:
  *       TunnelGatewayZeroHop
  *         InboundMessageDistributor -&gt; InNetMessagePool
  *
  *
- *  Following tunnels are NOT created by us:
+ * Following tunnels are NOT created by us:
  *
- *    Participant (not gateway or endpoint)
+ *     Participant (not gateway or endpoint)
  *       TunnelParticipant
  *         HopProcessor -&gt; OutNetMessagePool
  *
- *    Outbound Endpoint &gt; 0 hops:
+ *     Outbound Endpoint &gt; 0 hops:
  *       OutboundTunnelEndpoint
  *         RouterFragmentHandler -&gt; HopProcessor -&gt; OutboundMessageDistributor -&gt; OutNetMessagePool
  *
- *    Inbound Gateway &gt; 0 hops:
+ *     Inbound Gateway &gt; 0 hops:
  *       ThrottledPumpedTunnelGateway
  *         BatchedRouterPreprocessor -&gt; InboundSender -&gt; InboundGatewayReceiver -&gt; OutNetMessagePool
  *
@@ -78,8 +78,10 @@ public class TunnelDispatcher implements Service {
     private final ConcurrentHashMap<TunnelId, TunnelGateway> _outboundGateways = new ConcurrentHashMap<>();
 
     /**
-     * @return true if we currently have an outbound gateway for the given TunnelId.
+     * Whether an outbound gateway exists for the given TunnelId.
      * This helps callers determine if a tunnel is ready for outbound dispatch.
+     *
+     * @return true if we currently have an outbound gateway for the given TunnelId.
      */
     public boolean hasOutboundGateway(TunnelId tid) {
         return _outboundGateways.containsKey(tid);
@@ -186,7 +188,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Get the cleanup interval based on tunnel count.
+     * The cleanup interval scaled to the tunnel count.
      * More tunnels = more frequent cleanup.
      *
      * @return cleanup interval in milliseconds
@@ -600,7 +602,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Get the total bandwidth allocated for participating tunnels
+     * The total bandwidth allocated for participating tunnels.
      * @return the allocated b w
      */
     public int getAllocatedBW() {
@@ -608,7 +610,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Get the number of participating tunnels
+     * The number of participating tunnels.
      * @return the participating count
      */
     public int getParticipatingCount() {
@@ -616,7 +618,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Get a new random send tunnel ID that isn't a duplicate
+     * A random send tunnel ID that isn't a duplicate.
      * @return the new o b g w i d
      */
     public TunnelId getNewOBGWID() {
@@ -630,7 +632,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Get a new random receive tunnel ID that isn't a duplicate
+     * A random receive tunnel ID that isn't a duplicate.
      * @return the new i b e p i d
      */
     public TunnelId getNewIBEPID() {
@@ -644,7 +646,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Get a new random receive tunnel ID that isn't a duplicate (zero hop)
+     * A random receive tunnel ID that isn't a duplicate (zero hop).
      * @return the new i b zero hop i d
      */
     public TunnelId getNewIBZeroHopID() {
@@ -940,7 +942,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Get a list of participating tunnels (for console display).
+     * The participating tunnels for console display.
      * Filters out tunnels that are > 30 seconds past expiration.
      */
     public List<HopConfig> listParticipatingTunnels() {
@@ -1084,7 +1086,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Get the max bandwidth per transit tunnel.
+     * The max bandwidth per transit tunnel.
      * Scales with allocation: higher share = higher per-tunnel cap.
      * Uses outbound bandwidth only — on floodfill routers inbound is far
      * smaller than outbound and would create an artificial bottleneck.
@@ -1161,7 +1163,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Get the current bandwidth share in KBps
+     * The current bandwidth share in KBps.
      * @return the share bandwidth
      */
     public static int getShareBandwidth(RouterContext ctx) {
@@ -1277,7 +1279,7 @@ public class TunnelDispatcher implements Service {
     public static int getPumperMaxThreads() { return TunnelGatewayPumper.getMaxPumpers(); }
 
     /**
-     * Get pumper pool utilization as a ratio (0.0-1.0).
+     * The pumper pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
      *
      * @since 0.9.70+

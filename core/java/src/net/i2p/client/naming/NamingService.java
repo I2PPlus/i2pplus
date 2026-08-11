@@ -31,16 +31,16 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public abstract class NamingService {
 
-    /** logger */
+    /** The logger. */
     protected final Log _log;
-    /** context */
+    /** The app context. */
     protected final I2PAppContext _context;
-    /** listeners */
+    /** The listeners. */
     protected final Set<NamingServiceListener> _listeners;
-    /** updaters */
+    /** The updaters. */
     protected final Set<NamingServiceUpdater> _updaters;
 
-    /** what classname should be used as the naming service impl? */
+    /** What classname should be used as the naming service impl? */
     public static final String PROP_IMPL = "i2p.naming.impl";
 
     private static final String DEFAULT_IMPL = "net.i2p.router.naming.BlockfileNamingService";
@@ -133,7 +133,7 @@ public abstract class NamingService {
     ///// New API Starts Here
 
     /**
-     * Get the name of this naming service.
+     * The name of this naming service.
      *
      * @return Class simple name by default
      * @since 0.8.7
@@ -232,7 +232,7 @@ public abstract class NamingService {
     // that might be better... then addressbook only talks to the 'router' HostsTxtNamingService
 
     /**
-     * Get the number of entries in this naming service.
+     * The number of entries in this naming service.
      *
      * @return number of entries or -1 if unknown
      * @since 0.8.7
@@ -371,7 +371,7 @@ public abstract class NamingService {
     }
 
     /**
-     * Get all known hostnames.
+     * All known hostnames.
      *
      * @return all known hostnames or empty Set if none;
      *         Returned Set is not necessarily sorted, implementation dependent
@@ -383,7 +383,7 @@ public abstract class NamingService {
     }
 
     /**
-     * Get all known hostnames matching the specified options.
+     * All known hostnames matching the specified options.
      *
      * @param options NamingService-specific, can be null
      * @return all known hostnames (matching the options if non-null)

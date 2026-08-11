@@ -135,9 +135,10 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
         }
     }
 
-    /** @param host the IP address */
     /**
      * Match the IP address against subject alternative names.
+     *
+     * @param host the IP address
      */
     static void matchIPAddress(final String host, final List<String> subjectAlts) throws SSLException {
         for (int i = 0; i < subjectAlts.size(); i++) {

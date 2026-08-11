@@ -74,7 +74,7 @@ public class InNetMessagePool implements Service {
     private static final long[] RATES = RateConstants.BASIC_RATES;
 
     /**
-     * Constructs the message pool with given context.
+     * Message pool for processing inbound I2NP messages.
      * Initializes message queues according to configuration properties.
      *
      * @param context router context for environment access

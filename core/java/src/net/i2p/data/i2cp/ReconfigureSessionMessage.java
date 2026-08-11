@@ -21,9 +21,6 @@ import java.io.InputStream;
  *
  * @author zzz
  */
-/**
- * Message to reconfigure an I2CP session.
- */
 public class ReconfigureSessionMessage extends I2CPMessageImpl {
     /**
      * MESSAGE_TYPE.
@@ -56,7 +53,7 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
     }
 
     /**
-     * setSessionId.
+     * Session ID for this message.
      */
     public void setSessionId(SessionId id) {
         _sessionId = id;
@@ -71,14 +68,14 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
     }
 
     /**
-     * setSessionConfig.
+     * Session config for this message.
      */
     public void setSessionConfig(SessionConfig config) {
         _sessionConfig = config;
     }
 
     /**
-     * doReadMessage.
+     * Read the message body from the input stream.
      */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
@@ -93,7 +90,7 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
     }
 
     /**
-     * doWriteMessage.
+     * Write the message body to the output stream.
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

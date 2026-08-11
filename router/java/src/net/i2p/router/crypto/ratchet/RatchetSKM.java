@@ -164,7 +164,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Get the encryption type for this session key manager
+     * The encryption type for this session key manager.
      *
      *  @return the encryption type
      *  @since 0.9.44
@@ -174,6 +174,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
+     * A snapshot of all inbound ratchet tag sets.
+     *
      * @return a snapshot of all inbound ratchet tag sets
      */
     private Set<RatchetTagSet> getRatchetTagSets() {
@@ -188,6 +190,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
+     * Not supported for this key manager.
+     *
      * @throws UnsupportedOperationException always
      * @return the current key
      */
@@ -197,6 +201,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
+     * Not supported for this key manager.
+     *
      * @throws UnsupportedOperationException always
      * @return the current or new key
      */
@@ -206,6 +212,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
+     * Not supported for this key manager.
+     *
      * @throws UnsupportedOperationException always
      */
     @Override

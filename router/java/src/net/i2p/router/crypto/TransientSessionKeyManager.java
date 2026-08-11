@@ -81,7 +81,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     /** The router context */
     protected final I2PAppContext _context;
     private volatile boolean _alive;
-    /** for debugging */
+    /** For debugging. */
     private final AtomicInteger _rcvTagSetID = new AtomicInteger();
     private final AtomicInteger _sentTagSetID = new AtomicInteger();
     private final int _tagsToSend;
@@ -108,31 +108,31 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     private static final long SESSION_TAG_EXPIRATION_WINDOW = 90 * 1000L;
 
     /**
-     * a few MB? how about 24 MB!
+     * A few MB? How about 24 MB!
      * This is the max size of _inboundTagSets.
      */
     public static final int MAX_INBOUND_SESSION_TAGS = 800 * 1000;
 
     /**
      *  This was 100 since 0.6.1.10 (50 before that). It's important because:
-     * <pre>
+     *  <pre>
      *  - Tags are 32 bytes. So it previously added 3200 bytes to an initial message.
      *  - Too many tags adds a huge overhead to short-duration connections
-     *    (like http, datagrams, etc.)
+     *  (like http, datagrams, etc.)
      *  - Large messages have a much higher chance of being dropped due to one of their
-     *    1KB fragments being discarded by a tunnel participant.
+     *  1KB fragments being discarded by a tunnel participant.
      *  - This reduces the effective maximum datagram size because the client doesn't
-     *    know when tags will be bundled, so the tag size must be subtracted from the
-     *    maximum I2NP size or transport limit.
-     * </pre>
+     *  know when tags will be bundled, so the tag size must be subtracted from the
+     *  maximum I2NP size or transport limit.
+     *  </pre>
      *
      *  Issues with too small a value:
      * <pre>
      *  - When tags are sent, a reply leaseset (~1KB) is always bundled. Maybe we don't need
-     *    to bundle more than every minute or so rather than every time?
+     *  to bundle more than every minute or so rather than every time?
      *  - Does the number of tags (and the threshold of 20) limit the effective streaming lib
-     *    window size? Should the threshold and the number of sent tags be variable based on
-     *    the message rate?
+     *  window size? Should the threshold and the number of sent tags be variable based on
+     *  the message rate?
      * </pre>
      *
      *  We have to be very careful if we implement an adaptive scheme, since the key manager
@@ -181,7 +181,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     }
 
     /**
-     * shutdown.
+     * Shutdown.
      */
     @Override
     public void shutdown() {
@@ -206,6 +206,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     }
 
     /**
+     * Snapshot of all inbound tag sets.
+     *
      * @return a snapshot of all inbound tag sets
      */
     private Set<TagSet> getInboundTagSets() {
@@ -539,12 +541,11 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     }
 
     /**
-     * remove a bunch of arbitrarily selected tags, then drop all of
-     * the associated tag sets.  this is very time consuming - iterating
+     * Remove a bunch of arbitrarily selected tags, then drop all of
+     * the associated tag sets.  This is very time consuming - iterating
      * across the entire _inboundTagSets map, but it should be very rare,
      * and the stats we can gather can hopefully reduce the frequency of
      * using too many session tags in the future
-     *
      */
     private void clearExcess(int overage) {
         long now = _context.clock().now();
@@ -725,7 +726,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      *  Return a map of session key to a set of inbound TagSets for that SessionKey
      *
      *  @since 0.9.33 split out from renderStatusHTML()
-     * @return the inbound tag sets by session key
+     *  @return the inbound tag sets by session key
      */
     private Map<SessionKey, Set<TagSet>> getInboundTagSetsBySessionKey() {
         Set<TagSet> inbound = getInboundTagSets();
@@ -935,7 +936,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             set.setAcked();
         }
 
-        /** didn't get an ack for these tags */
+        /** Didn't get an ack for these tags */
         void failTags(TagSet set) {
             synchronized (_tagSets) {
                 _unackedTagSets.remove(set);
@@ -972,7 +973,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         public SessionKey getCurrentKey() {
             return _currentKey;
         }
-        /** Set the currentKey */
+        /** Replace the current session key. */
 
         public void setCurrentKey(SessionKey key) {
             _lastUsed = _context.clock().now();
@@ -1059,6 +1060,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
 
         /**
+         * Total number of tags in acked TagSets not yet expired.
+         *
          * @return the total number of tags in acked TagSets
          */
         public int availableTags() {
@@ -1082,8 +1085,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
 
         /**
-         * Get the furthest away tag set expiration date - after which all of the
-         * tags will have expired
+         * The furthest tag set expiration date, after which all of the
+         * tags will have expired.
          *
          * @return the last expiration date
          */
@@ -1131,7 +1134,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         private final long _date;
         private final int _id;
         private final int _origSize;
-        /** did we get an ack for this tagset? Only for outbound tagsets */
+        /** Did we get an ack for this tagset? Only for outbound tagsets */
         private boolean _acked;
 
         /**
@@ -1164,7 +1167,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             return _origSize;
         }
 
-        /** tags still available */
+        /** Tags still available */
         public Set<SessionTag> getTags() {
             return _sessionTags;
         }
@@ -1215,6 +1218,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         public int getID() {return _id;}
 
         /**
+         * Debug string with ID, size, ack status, and key.
+         *
          * @return debug string with ID, size, ack status, and key
          */
         @Override

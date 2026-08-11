@@ -176,7 +176,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     * returns the OS of the system running I2P as a lower-case string
+     * Returns the OS of the system running I2P as a lower-case string
      * for reference in clients.config and plugin.config files.
      *
      * matches the conventions of the Go cross compiler
@@ -207,7 +207,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     * returns the architecture of the system running I2P as a string
+     * Returns the architecture of the system running I2P as a string
      * for reference in clients.config and plugin.config files.
      *
      * matches the conventions of the Go cross compiler
@@ -234,6 +234,8 @@ public abstract class SystemVersion {
     }
 
     /**
+     * Whether the OS is Windows.
+     *
      * @return whether windows
      */
     public static boolean isWindows() {
@@ -241,6 +243,8 @@ public abstract class SystemVersion {
     }
 
     /**
+     * Whether the OS is Mac.
+     *
      * @return whether mac
      */
     public static boolean isMac() {
@@ -248,6 +252,8 @@ public abstract class SystemVersion {
     }
 
     /**
+     * Whether the OS is Android.
+     *
      * @return whether android
      */
     public static boolean isAndroid() {
@@ -658,7 +664,7 @@ public abstract class SystemVersion {
         }
     }
 
-    /** calculate how many (virtual) cores should be actually used by a thread pool */
+    /** Calculate how many (virtual) cores should be actually used by a thread pool. */
     public static int usableCores() {
         /** On these OSes we want our threads to occupy the CPU as long as possible
          * instead of being put to sleep by the power saving features
@@ -670,7 +676,7 @@ public abstract class SystemVersion {
         int dividend = 1;
         int divisor = 1;
 
-        /** reflect CPU unavailable through hyperthreading
+        /** Reflect CPU unavailable through hyperthreading.
          * 4 virtual cores = 3 threads
          * 8 virtual cores = 6 threads
          * 12 virtual cores = 9 threads

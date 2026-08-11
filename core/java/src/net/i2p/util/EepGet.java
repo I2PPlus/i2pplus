@@ -1039,7 +1039,7 @@ public class EepGet {
                 final Thread thread = Thread.currentThread();
                 timeout.setTimeoutCommand(new Runnable() {
                     /**
-                     * run.
+                     * Timeout reached, abort the transfer and interrupt the fetching thread.
                      */
                     @Override
                     public void run() {
@@ -2536,13 +2536,13 @@ public class EepGet {
         private final String password;
         // as recvd in 407
         /**
-         * authMode.
+         * Auth mode as received in the 407 response.
          */
         public AUTH_MODE authMode = AUTH_MODE.NONE;
         // as recvd in 407, after the mode string
         private String authChallenge;
         /**
-         * authSent.
+         * Whether the auth header has been sent.
          */
         public boolean authSent;
         private int nonceCount;
@@ -2551,6 +2551,8 @@ public class EepGet {
         private Map<String, String> args;
 
         /**
+         * Create the auth state with the given credentials.
+         *
          * @param user username
          * @param pw password
          */
@@ -2606,6 +2608,8 @@ public class EepGet {
         }
 
         /**
+         * Build the Authorization header for the given request.
+         *
          * @return the auth header
          */
         public String getAuthHeader(String method, String uri) throws IOException {
@@ -2729,6 +2733,8 @@ public class EepGet {
         private final OutputStream _out;
 
         /**
+         * Wrap the raw compressed input and the decompressed output.
+         *
          * @param in raw (compressed) input
          * @param out decompressed output
          */
@@ -2738,7 +2744,7 @@ public class EepGet {
         }
 
         /**
-         * run.
+         * Decompress the raw input stream to the output stream.
          */
         @Override
         public void run() {

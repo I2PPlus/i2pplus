@@ -41,26 +41,26 @@ import net.i2p.util.SecureFileOutputStream;
  * This helper class reads and writes files in the
  * same "eepPriv.dat" format used by the client code.
  * The format is:
- *<pre>
- *  - Destination (387 bytes if no certificate, otherwise longer)
- *     - Public key (256 bytes), random data as of 0.9.57 (except for RouterPrivateKeyFile)
- *     - Signing Public key (128 bytes)
- *     - Cert. type (1 byte)
- *     - Cert. length (2 bytes)
- *     - Certificate if length != 0
- *  - Private key (256 bytes for ElGamal, or length specified by key certificate)
- *     -          All zeros as of 0.9.57 (except for RouterPrivateKeyFile)
- *  - Signing Private key (20 bytes, or length specified by key certificate)
- *  - As of 0.9.38, if the Signing Private Key is all zeros,
- *    the offline signature section (see proposal 123):
- *     - Expires timestamp (4 bytes, seconds since epoch, rolls over in 2106)
- *     - Sig type of transient public key (2 bytes)
- *     - Transient Signing Public key (length as specified by transient sig type)
- *     - Signature of Signed Public key by offline key (length as specified by destination sig type)
- *     - Transient Signing Private key (length as specified by transient sig type)
- *
- * Total: 663 or more bytes for ElGamal, may be smaller for other enc. types
- *</pre>
+*<pre>
+     *     - Destination (387 bytes if no certificate, otherwise longer)
+     *        - Public key (256 bytes), random data as of 0.9.57 (except for RouterPrivateKeyFile)
+     *        - Signing Public key (128 bytes)
+     *        - Cert. type (1 byte)
+     *        - Cert. length (2 bytes)
+     *        - Certificate if length != 0
+     *     - Private key (256 bytes for ElGamal, or length specified by key certificate)
+     *        -          All zeros as of 0.9.57 (except for RouterPrivateKeyFile)
+     *     - Signing Private key (20 bytes, or length specified by key certificate)
+     *     - As of 0.9.38, if the Signing Private Key is all zeros,
+     *       the offline signature section (see proposal 123):
+     *        - Expires timestamp (4 bytes, seconds since epoch, rolls over in 2106)
+     *        - Sig type of transient public key (2 bytes)
+     *        - Transient Signing Public key (length as specified by transient sig type)
+     *        - Signature of Signed Public key by offline key (length as specified by destination sig type)
+     *        - Transient Signing Private key (length as specified by transient sig type)
+     *
+     *     Total: 663 or more bytes for ElGamal, may be smaller for other enc. types
+     *</pre>
  *
  * Destination encryption keys have been unused since 0.6 (2005).
  * As of 0.9.57, new Destination encryption public keys are simply random data,
@@ -74,14 +74,14 @@ import net.i2p.util.SecureFileOutputStream;
 @SuppressWarnings("PMD.CloseResource")
 public class PrivateKeyFile {
 
-    /** the key file */
+    /** The key file. */
     protected final File file;
     private final I2PClient client;
-    /** the destination */
+    /** The destination. */
     protected Destination dest;
-    /** the private key */
+    /** The private key. */
     protected PrivateKey privKey;
-    /** the signing private key */
+    /** The signing private key. */
     protected SigningPrivateKey signingPrivKey;
     private long _offlineExpiration;
     private Signature _offlineSignature;

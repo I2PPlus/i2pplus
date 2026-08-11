@@ -36,7 +36,7 @@ public class ClientMessagePool {
     }
 
     /**
-     * Get the outbound cache for this message pool.
+     * The outbound cache for this message pool.
      *
      * @return the OutboundCache instance
      */

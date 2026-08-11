@@ -60,7 +60,7 @@ public class SetDateMessage extends I2CPMessageImpl {
     }
 
     /**
-     * setDate.
+     * Current router date.
      */
     public void setDate(Date date) {
         _date = date;
@@ -77,7 +77,7 @@ public class SetDateMessage extends I2CPMessageImpl {
     }
 
     /**
-     * doReadMessage.
+     * Read the message body from the input stream.
      */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
@@ -92,7 +92,7 @@ public class SetDateMessage extends I2CPMessageImpl {
     }
 
     /**
-     * doWriteMessage.
+     * Write the message body to the output stream.
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

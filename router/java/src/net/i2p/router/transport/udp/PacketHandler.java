@@ -81,7 +81,7 @@ class PacketHandler {
     public static int getMaxHandlers() { return _maxHandlers; }
 
     /**
-     * Sets the target max packet handler threads.
+     * The target max packet handler threads.
      * Takes effect immediately via {@link #adjustThreads()}.
      *
      * @param handlers the new max handlers
@@ -108,7 +108,7 @@ class PacketHandler {
     public int getProcessingCount() { return _processingCount.get(); }
 
     /**
-     * Get packet handler pool utilization as a ratio (0.0-1.0).
+     * Packet handler pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
      *
      * @return the utilization ratio
@@ -167,7 +167,7 @@ class PacketHandler {
     }
 
     /**
-     * Get the handler status string.
+     * The handler status string.
      *
      * @return the status
      */

@@ -47,7 +47,7 @@ import net.i2p.util.SystemVersion;
 @SuppressWarnings("PMD.CloseResource")
 public final class KeyStoreUtil {
 
-    /** whether blacklist warning has been logged */
+    /** Whether the blacklist warning has been logged. */
     private static boolean _blacklistLogged;
 
     /**

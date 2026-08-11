@@ -351,7 +351,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     public static int getBuildFailureBuffer() { return _buildFailureBuffer; }
 
     /**
-     * Set the I2CP internal queue size (called by Tuner).
+     * The I2CP internal queue size, clamped to a sane range (called by Tuner).
+     *
      * @param size the queue size
      * @since 0.9.70+
      */
@@ -455,6 +456,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         private volatile long _lastSaveMs;
 
         /**
+         * Load the autotune config for the given context.
+         *
          * @param ctx the router context
          */
         public AutotuneConfig(RouterContext ctx) {
@@ -521,7 +524,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Set a property.
+         * Property to set in the tuner config.
+         *
          * @param key the property key
          * @param value the property value
          */
@@ -534,7 +538,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         File getFile() { return _file; }
     }
 
-    /** Set up the tuner with all tunable parameters.
+    /** The tuner with all tunable parameters.
      *
      * @param ctx the router context
      */
@@ -896,6 +900,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * 60s rolling average of the named stat, or NaN if unavailable.
+     *
      * @return 60s rolling average of a stat, or NaN if unavailable
      */
     private double getAvgStat(String name) {
@@ -907,6 +913,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * Hourly rolling average of the named stat, or NaN if unavailable.
+     *
      * @return hourly rolling average of a stat, or NaN if unavailable
      */
     private double getHourlyAvgStat(String name) {
@@ -918,6 +926,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * Event count in the last 60s for the named stat, or NaN if unavailable.
+     *
      * @return event count in the last 60s for a stat, or NaN if unavailable
      */
     private double getEventCountStat(String name) {
@@ -1044,7 +1054,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Set an override value for a param.
+     * An override value for a param.
      * @param name the param name
      * @param value the override value
      */
@@ -1121,7 +1131,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Update the runtime value */
         void update();
         /**
-         * Set an override.
+         * An override value.
          * @param value the override value
          */
         void setOverride(int value);
@@ -1192,6 +1202,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         public final double[] statHistory;
 
         /**
+         * A tunable parameter with the given name, description and subsystem.
+         *
          * @param name the param name
          * @param description the param description
          * @param subsystem the subsystem name
@@ -1238,12 +1250,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * <p>Each param wraps a single router configuration value. The tuning
      * loop reads an observed stat, computes a target, and applies it:
      * <pre>
-     *   observed = getObservedStat()
-     *   target   = computeTarget(observed)
-     *   target   = clamp(target, min, max)
-     *   target   = dampenByHealth(target, current)
-     *   target   = accelerateRollback(target, current, defaultValue)
-     *   applyValue(target)
+     * observed = getObservedStat()
+     * target   = computeTarget(observed)
+     * target   = clamp(target, min, max)
+     * target   = dampenByHealth(target, current)
+     * target   = accelerateRollback(target, current, defaultValue)
+     * applyValue(target)
      * </pre>
      *
      * <p>Min/max/step ranges are stored in {@code autotune.config} and
@@ -1317,6 +1329,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected final AutotuneConfig _autotune;
 
         /**
+         * A tunable parameter with the given name, description and subsystem.
+         *
          * @param name internal property key (e.g. "i2p.tunnel.socketConnectTimeout")
          * @param description human-readable label shown in Tuner UI (e.g. "Socket connect timeout (ms)")
          *                    — keep short, include unit in parens; same convention for all new params
@@ -1329,6 +1343,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
+         * A tunable parameter with the given name, description and subsystem.
+         *
          * @param subsystem subsystem identifier (e.g. "i2ptunnel", "streaming")
          */
         protected BaseParam(String name, String description, String subsystem,
@@ -1586,7 +1602,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Set a manual override value. Disables auto-tuning until cleared.
+         * A manual override value. Disables auto-tuning until cleared.
          *
          * <p>Called from the console form handler when a user manually
          * sets a param value. Setting value &lt; 0 re-enables auto-tuning.
@@ -1614,10 +1630,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         void setHealth(SystemHealth health) { _health = health; }
 
         /**
+         * Rolling window of recent tunable values.
+         *
          * @return rolling window of recent tunable values
          */
         public int[] getValueHistory() { return _valueHistory; }
         /**
+         * Rolling window of recent stat values.
+         *
          * @return rolling window of recent stat values
          */
         public double[] getStatHistory() { return _statHistory; }
@@ -1640,19 +1660,27 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
+         * Apply the tunable value to the router configuration.
+         *
          * @param value the tunable value to apply to router configuration
          */
         protected abstract void applyValue(int value);
         /**
+         * Current runtime value read from the router configuration.
+         *
          * @return current runtime value read from router config
          */
         protected abstract int getRuntimeValue();
         /**
+         * Observed stat value used for autotuning.
+         *
          * @param ctx router context
          * @return observed stat value for autotuning
          */
         protected abstract double getObservedStat(RouterContext ctx);
         /**
+         * Target tunable value computed from the observed stat.
+         *
          * @param observed current stat value
          * @return target tunable value
          */
@@ -2722,7 +2750,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Set the runtime value.
+         * The runtime value for this parameter.
          */
         protected void setRuntimeValue(int value) {
             _maxDispatchAgeMs = value;
@@ -10512,6 +10540,8 @@ protected int computeTarget(double observed) {
         }
 
         /**
+         * True if any transport reports firewalled status.
+         *
          * @return true if any transport reports firewalled status
          */
         private boolean isFirewalled() {

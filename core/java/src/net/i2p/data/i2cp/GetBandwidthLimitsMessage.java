@@ -20,7 +20,7 @@ public class GetBandwidthLimitsMessage extends I2CPMessageImpl {
     public static final int MESSAGE_TYPE = 8;
 
     /**
-     * Constructs a new GetBandwidthLimitsMessage.
+     * No data to initialize for this message type.
      */
     public GetBandwidthLimitsMessage() {
         super();
@@ -35,7 +35,7 @@ public class GetBandwidthLimitsMessage extends I2CPMessageImpl {
     }
 
     /**
-     * doWriteMessage.
+     * Write the message body to the output stream.
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

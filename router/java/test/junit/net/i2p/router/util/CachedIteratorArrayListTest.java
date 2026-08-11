@@ -23,7 +23,7 @@ public class CachedIteratorArrayListTest {
         iter = l.iterator();
     }
 
-    /** test iterations work */
+    /** Test iterations work. */
     @Test
     public void test() {
         String total = "";
@@ -69,8 +69,8 @@ public class CachedIteratorArrayListTest {
     }
 
     /**
-     * tests the Collections.sort method because that is used
-     * in the router and internally creates iterators
+     * Tests the Collections.sort method because that is used
+     * in the router and internally creates iterators.
      */
     @Test
     public void testSorting() {

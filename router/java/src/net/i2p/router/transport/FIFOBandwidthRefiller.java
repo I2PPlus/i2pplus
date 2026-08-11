@@ -59,36 +59,36 @@ public class FIFOBandwidthRefiller implements Runnable {
     // Inbound bandwidth limiter for participating tunnels
     private volatile SyntheticREDQueue _partBWEIn;
 
-    /** how many KBps do we want to allow? */
+    /** How many KBps to allow. */
     private volatile int _inboundKBytesPerSecond;
-    /** how many KBps do we want to allow? */
+    /** How many KBps to allow. */
     private volatile int _outboundKBytesPerSecond;
-    /** how many KBps do we want to allow during burst? */
+    /** How many KBps to allow during burst. */
     private volatile int _inboundBurstKBytesPerSecond;
-    /** how many KBps do we want to allow during burst? */
+    /** How many KBps to allow during burst. */
     private volatile int _outboundBurstKBytesPerSecond;
-    /** when did we last replenish the queue? */
+    /** When we last replenished the queue. */
     private volatile long _lastRefillTime;
-    /** when did we last check the config for updates? */
+    /** When we last checked the config for updates. */
     private volatile long _lastCheckConfigTime;
-    /** how frequently do we check the config for updates? */
+    /** How frequently we check the config for updates. */
     private volatile long _configCheckPeriodMs = 60*1000L;
     private volatile boolean _isRunning;
 
-    /** prop inbound bandwidth */
+    /** Property for inbound bandwidth. */
     public static final String PROP_INBOUND_BANDWIDTH = "i2np.bandwidth.inboundKBytesPerSecond";
-    /** prop outbound bandwidth */
+    /** Property for outbound bandwidth. */
     public static final String PROP_OUTBOUND_BANDWIDTH = "i2np.bandwidth.outboundKBytesPerSecond";
-    /** prop inbound burst bandwidth */
+    /** Property for inbound burst bandwidth. */
     public static final String PROP_INBOUND_BURST_BANDWIDTH = "i2np.bandwidth.inboundBurstKBytesPerSecond";
-    /** prop outbound burst bandwidth */
+    /** Property for outbound burst bandwidth. */
     public static final String PROP_OUTBOUND_BURST_BANDWIDTH = "i2np.bandwidth.outboundBurstKBytesPerSecond";
-    /** prop inbound bandwidth peak */
+    /** Property for inbound bandwidth peak. */
     public static final String PROP_INBOUND_BANDWIDTH_PEAK = "i2np.bandwidth.inboundBurstKBytes";
-    /** prop outbound bandwidth peak */
+    /** Property for outbound bandwidth peak. */
     public static final String PROP_OUTBOUND_BANDWIDTH_PEAK = "i2np.bandwidth.outboundBurstKBytes";
     // no longer allow unlimited bandwidth - the user must specify a value, else use defaults below (KBps)
-    /** default inbound bandwidth */
+    /** Default inbound bandwidth. */
     public static final int DEFAULT_INBOUND_BANDWIDTH = 1024;
     /**
      *  Caution, do not make DEFAULT_OUTBOUND_BANDWIDTH * DEFAULT_SHARE_PCT &gt; 32
@@ -97,12 +97,12 @@ public class FIFOBandwidthRefiller implements Runnable {
      *  adjusting bandwidth class boundaries.
      */
     public static final int DEFAULT_OUTBOUND_BANDWIDTH = 128;
-    /** default inbound burst bandwidth */
+    /** Default inbound burst bandwidth. */
     public static final int DEFAULT_INBOUND_BURST_BANDWIDTH = 1024;
-    /** default outbound burst bandwidth */
+    /** Default outbound burst bandwidth. */
     public static final int DEFAULT_OUTBOUND_BURST_BANDWIDTH = 128;
 
-    /** default burst seconds */
+    /** Default burst seconds. */
     public static final int DEFAULT_BURST_SECONDS = 60;
 
     /** For now, until there is some tuning and safe throttling, we set the floor at this inbound (KBps) */
@@ -128,19 +128,19 @@ public class FIFOBandwidthRefiller implements Runnable {
     private static final float SHARE_LIMIT_FACTOR = 0.95f;
 
     /**
-     * how often we replenish the queues.
-     * the bandwidth limiter will get an update this often (ms)
+     * How often we replenish the queues.
+     * The bandwidth limiter will get an update this often (ms)
      * @return whether slow
      */
     private static volatile long _replenishFrequency = SystemVersion.isSlow() || SystemVersion.getCPULoadAvg() > 80 ? 100 : 20;
 
-    /** Get the replenish frequency */
+    /** The replenish frequency in ms. */
     public static long getReplenishFrequency() { return _replenishFrequency; }
 
-    /** Set the replenish frequency, bounded 5-200ms */
+    /** The replenish frequency in ms, bounded 5-200. */
     public static void setReplenishFrequency(long ms) { _replenishFrequency = Math.max(5, Math.min(200, ms)); }
 
-    /** comment */
+    /** Refiller keeping the given limiter's queues full. */
     FIFOBandwidthRefiller(RouterContext context, FIFOBandwidthLimiter limiter) {
         _limiter = limiter;
         _context = context;
@@ -372,9 +372,9 @@ public class FIFOBandwidthRefiller implements Runnable {
      *
      * @param size bytes
      * @param factor multiplier of size for the drop calculation, 1 for no adjustment
-* @return true for accepted, false for drop
-      *  @since 0.8.12
-      */
+     * @return true for accepted, false for drop
+     * @since 0.8.12
+     */
     boolean incrementParticipatingMessageBytes(int size, float factor) {
         return _partBWE.offer(size, factor);
     }

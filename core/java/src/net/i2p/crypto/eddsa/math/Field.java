@@ -35,13 +35,13 @@ public class Field implements Serializable {
      */
     public final FieldElement EIGHT;
 
-    /** B */
+    /** The bit length of field elements. */
     private final int b;
-    /** Q */
+    /** The field prime q. */
     private final FieldElement q;
 
     /**
-     * q-2
+     * The value q - 2.
      */
     private final FieldElement qm2;
 
@@ -50,7 +50,7 @@ public class Field implements Serializable {
      */
     private final FieldElement qm5d8;
 
-    /** Enc */
+    /** The encoding for field elements. */
     private final Encoding enc;
 
     /**

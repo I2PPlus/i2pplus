@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class XORComparatorTest {
 
-    /** hash with all bytes zero */
+    /** Hash with all bytes zero. */
     private static Hash h(byte... b) {
         byte[] data = new byte[Hash.HASH_LENGTH];
         System.arraycopy(b, 0, data, 0, b.length);
@@ -101,7 +101,7 @@ public class XORComparatorTest {
         }
     }
 
-    /** reference XOR distance comparison for verification */
+    /** Reference XOR distance comparison for verification. */
     private static int compareDistance(Hash base, byte[] lhs, byte[] rhs) {
         for (int i = 0; i < Hash.HASH_LENGTH; i++) {
             int ld = (lhs[i] ^ base.getData()[i]) & 0xff;

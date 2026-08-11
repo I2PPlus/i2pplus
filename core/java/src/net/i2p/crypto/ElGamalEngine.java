@@ -85,7 +85,7 @@ public final class ElGamalEngine {
         return _ykgen.getNextYK();
     }
 
-    /** encrypt the data to the public key
+    /** Encrypt the data to the public key.
      *
      * @return encrypted data, will be exactly 514 bytes long
      *         Contains the two-part encrypted data starting at bytes 0 and 257.

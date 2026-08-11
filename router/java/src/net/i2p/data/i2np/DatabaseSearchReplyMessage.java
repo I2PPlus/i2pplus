@@ -46,6 +46,8 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     public Hash getSearchKey() { return _key; }
 
     /**
+     * Assigns the key being searched for.
+     *
      * @throws IllegalStateException if key previously set, to protect saved checksum
      */
     public void setSearchKey(Hash key) {
@@ -55,30 +57,36 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     }
 
     /**
+     * The number of peer hashes included in the reply.
+     *
      * @return the num replies
      */
     public int getNumReplies() { return _peerHashes.size(); }
     /**
+     * The peer hash at the given index.
+     *
      * @return the reply
      */
     public Hash getReply(int index) { return _peerHashes.get(index); }
     /**
-     * addReply.
+     * Adds a peer hash to the reply.
      */
     public void addReply(Hash peer) { _peerHashes.add(peer); }
     //public void addReplies(Collection replies) { _peerHashes.addAll(replies); }
 
     /**
+     * The router that sent this reply.
+     *
      * @return the from hash
      */
     public Hash getFromHash() { return _from; }
     /**
-     * setFromHash.
+     * Assigns the router that sent this reply.
      */
     public void setFromHash(Hash from) { _from = from; }
 
     /**
-     * readMessage.
+     * Reads the message fields from the byte array.
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
@@ -110,12 +118,12 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
             throw new I2NPMessageException("buffer overrun");
     }
 
-    /** calculate the message body's length (not including the header and footer */
+    /** Calculate the message body's length (not including the header and footer). */
     protected int calculateWrittenLength() {
         return Hash.HASH_LENGTH + 1 + getNumReplies()*Hash.HASH_LENGTH + Hash.HASH_LENGTH;
     }
 
-    /** write the message body to the output array, starting at the given index */
+    /** Write the message body to the output array, starting at the given index. */
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         if (_key == null)
             throw new I2NPMessageException("Key in reply to not specified");
@@ -135,12 +143,14 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     }
 
     /**
+     * The message type.
+     *
      * @return the type
      */
     public int getType() { return MESSAGE_TYPE; }
 
     /**
-     * equals.
+     * Compares this message to another for equality of all fields.
      */
     @Override
     public boolean equals(Object object) {
@@ -155,7 +165,9 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * @return whether h code is present
+     * Hash code calculated from the message fields.
+     *
+     * @return the hash code
      */
     @Override
     public int hashCode() {
@@ -165,7 +177,7 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * toString.
+     * String form of the message, suitable for debugging.
      */
     @Override
     public String toString() {

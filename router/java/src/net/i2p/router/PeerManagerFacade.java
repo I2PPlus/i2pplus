@@ -20,24 +20,34 @@ import net.i2p.router.peermanager.PeerTestJob;
  */
 public interface PeerManagerFacade extends Service {
     /**
-     * capability).
+     * All peers with the given capability.
+     *
+     * @param capability the capability
      * @return the peers by capability
      */
     public Set<Hash> getPeersByCapability(char capability);
     /**
-     * capability).
+     * Count of peers with the given capability.
+     *
+     * @param capability the capability
+     * @return the count
      */
     public int countPeersByCapability(char capability);
-    /**
-     * caps).
+/**
+     * The capabilities for a peer.
+     *
+     * @param peer the peer
      */
     public void setCapabilities(Hash peer, String caps);
     /**
-     * peer).
+     * Remove all capabilities from a peer.
+     *
+     * @param peer the peer
      */
     public void removeCapabilities(Hash peer);
     /**
-     * getPeerTestJob().
+     * The peer test job for testing peers.
+     *
      * @return the peer test job
      */
     public PeerTestJob getPeerTestJob();

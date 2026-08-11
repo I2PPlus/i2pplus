@@ -35,6 +35,8 @@ public interface RouterThrottle {
     public void setTunnelStatus(String msg);
 
     /**
+     * The tunnel status message, translated via the router resource bundle.
+     *
      * @since 0.9.45
      * @return the tunnel status, translated via the router resource bundle
      */

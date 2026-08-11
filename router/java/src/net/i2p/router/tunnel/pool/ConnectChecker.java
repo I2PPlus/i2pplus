@@ -16,9 +16,9 @@ import net.i2p.util.Log;
      */
     public class ConnectChecker {
 
-    /** the router context */
+    /** The router context. */
     protected final RouterContext ctx;
-    /** the logger */
+    /** The logger. */
     protected final Log log;
 
     private static final int NTCP_V4 = 0x01;
@@ -27,7 +27,7 @@ import net.i2p.util.Log;
     private static final int SSU_V6 = 0x08;
     private static final int SSU2_V4 = 0x10;
     private static final int SSU2_V6 = 0x20;
-    /** any IPv4 transport */
+    /** Any IPv4 transport. */
     public static final int ANY_V4 = NTCP_V4 | SSU_V4 | SSU2_V4;
 
     /**
@@ -57,7 +57,7 @@ import net.i2p.util.Log;
 
     /**
      *  Is SSU2 enabled?
-     *  @since 0.9.56
+     * @since 0.9.56
      * @return whether s s u2 enabled
      */
     private boolean isSSU2Enabled() {return true;}
@@ -323,11 +323,11 @@ import net.i2p.util.Log;
         return cf;
     }
 
-    /** prevent object churn */
+    /** Prevent object churn. */
     private static final String IHOST[] = {"ihost0", "ihost1", "ihost2"};
 
     /**
-     * Get the bitmask of supported transports for the given addresses.
+     * The bitmask of supported transports for the given addresses.
      *
      *  @param addrs non-empty, set your own default if empty
      *  @return bitmask of v4/v6 NTCP/SSU

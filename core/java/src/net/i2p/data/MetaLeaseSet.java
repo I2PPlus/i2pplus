@@ -169,7 +169,7 @@ public class MetaLeaseSet extends LeaseSet2 {
         return DataHelper.eq(_signature, ls.getSignature()) && DataHelper.eq(_leases, ls._leases) && DataHelper.eq(_destination, ls.getDestination());
     }
 
-    /** the destination has enough randomness in it to use it by itself for speed */
+    /** The destination has enough randomness in it to use it by itself for speed. */
     @Override
     public int hashCode() {
         return super.hashCode();

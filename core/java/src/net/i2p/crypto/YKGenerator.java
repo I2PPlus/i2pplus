@@ -27,7 +27,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * each precalculation so that the CPU isn't hosed during startup.
  * These three parameters are controlled by java environmental variables and
  * can be adjusted via:
- *  -Dcrypto.yk.precalc.min=40 -Dcrypto.yk.precalc.max=100 -Dcrypto.yk.precalc.delay=60000
+ * -Dcrypto.yk.precalc.min=40 -Dcrypto.yk.precalc.max=100 -Dcrypto.yk.precalc.delay=60000
  *
  * (delay is milliseconds)
  *
@@ -166,12 +166,12 @@ final class YKGenerator {
         return yk;
     }
 
-    /** the thread */
+    /** Precalculation thread. */
     private class YKPrecalcRunner implements Runnable {
         private final int _minSize;
         private final int _maxSize;
 
-        /** check every 30 seconds whether we have less than the minimum */
+        /** Check every 30 seconds whether fewer than the minimum YK pairs remain. */
         private long _checkDelay = (long) 30 * 1000;
 
         private YKPrecalcRunner(int minSize, int maxSize) {
@@ -180,7 +180,7 @@ final class YKGenerator {
         }
 
         /**
-         * run.
+         * Precalculate YK pairs until the generator is stopped.
          */
         @Override
         public void run() {

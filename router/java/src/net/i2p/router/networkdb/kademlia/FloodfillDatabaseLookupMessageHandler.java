@@ -43,7 +43,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
     private static final long[] RATES = RateConstants.BASIC_RATES;
 
     /**
-     * Constructs a new handler for floodfill DatabaseLookupMessages.
+     * Handler for floodfill DatabaseLookupMessages.
      *
      * @param context the router context providing system state and utilities
      * @param facade the network database facade used for lookup management and throttling

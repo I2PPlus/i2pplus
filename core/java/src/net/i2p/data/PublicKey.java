@@ -130,7 +130,7 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     * Construct a new public key.
+     * New public key with the given encryption type.
      *  @param type if null, type is unknown
      *  @since 0.9.38
      */
@@ -141,7 +141,7 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     * Construct from raw key data.
+     * Public key from raw key data.
      * @param data must be non-null
      */
     public PublicKey(byte[] data) {
@@ -149,7 +149,7 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     * Construct a new public key.
+     * New public key with the given encryption type and raw key data.
      *  @param type if null, type is unknown
      *  @param data must be non-null
      *  @since 0.9.38
@@ -182,7 +182,7 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     * Constructs from base64. ElGamal only.
+     * Public key from a string of base64 data. ElGamal only.
      *
      * @param base64Data a string of base64 data (the output of .toBase64() called
      * on a prior instance of PublicKey
@@ -220,7 +220,7 @@ public class PublicKey extends SimpleDataStructure {
      *
      *  Only valid if getType() returns null
      *
-     *  @since 0.9.38
+     * @since 0.9.38
      * @return the unknown type code
      */
     public int getUnknownTypeCode() {

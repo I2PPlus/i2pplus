@@ -37,11 +37,11 @@ public class RouterClock extends Clock {
     public static final int DEFAULT_STRATUM = 8;
     private static final int WORST_STRATUM = 16;
 
-    /** the max NTP Timestamper delay is 30m right now, make this longer than that */
+    /** The max NTP Timestamper delay is 30m right now, make this longer than that */
     private static final long MIN_DELAY_FOR_WORSE_STRATUM = 45L*60*1000;
     private volatile long _desiredOffset;
     private volatile long _lastSlewed;
-    /** use system time for this */
+    /** Use system time for this */
     private long _lastChanged;
     private int _lastStratum;
     private long _lastProposedOffset;
@@ -56,7 +56,7 @@ public class RouterClock extends Clock {
     private static final long MASSIVE_SHIFT_FORWARD = 360L*1000;
     private static final long MASSIVE_SHIFT_BACKWARD = 61L*1000;
 
-    /** testing only */
+    /** Testing only - disables clock adjustment when set. */
     private static final String PROP_DISABLE_ADJUSTMENT = "time.disableOffset";
 
     private final Set<ClockShiftListener> _shiftListeners;
@@ -85,7 +85,7 @@ public class RouterClock extends Clock {
     }
 
     /**
-     * Get the timestamper used for time synchronization.
+     * The timestamper used for time synchronization.
      *
      * @return the RouterTimestamper instance
      */
@@ -104,16 +104,23 @@ public class RouterClock extends Clock {
     }
 
     /**
-     * @since 0.7.12
+     * The offset with the given stratum.
+     *
      * @param offsetMs the delta from System.currentTimeMillis() (NOT the delta from now())
+     * @param stratum the stratum of the time source
+     * @since 0.7.12
      */
     private void setOffset(long offsetMs, int stratum) {
          setOffset(offsetMs, false, stratum);
     }
 
     /**
-     * @since 0.7.12
+     * The offset, optionally forcing the change.
+     *
      * @param offsetMs the delta from System.currentTimeMillis() (NOT the delta from now())
+     * @param force whether to bypass sanity checks
+     * @param stratum the stratum of the time source
+     * @since 0.7.12
      */
     private synchronized void setOffset(long offsetMs, boolean force, int stratum) {
         long delta = offsetMs - _offset;
@@ -243,7 +250,7 @@ public class RouterClock extends Clock {
     }
 
     /**
-     * Set the current time, used by the timestamper when synchronizing.
+     * The current time, used by the timestamper when synchronizing.
      *
      * @param realTime the current time from the time source
      * @param stratum the stratum level

@@ -200,6 +200,8 @@ public class LeaseSetKeys {
     }
 
     /**
+     * The PQ decryption key of any type, or null if the LS does not support PQ.
+     *
      * @return PQ key (any type) or null if the LS does not support PQ
      * @since 0.9.67
      */
@@ -222,9 +224,9 @@ public class LeaseSetKeys {
     }
 
     /**
-     *  What types of encryption are supported?
+     * The types of encryption supported by this LeaseSet.
      *
-     *  @since 0.9.44
+     * @since 0.9.44
      * @return the supported encryption
      */
     public Set<EncType> getSupportedEncryption() {

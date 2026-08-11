@@ -33,7 +33,7 @@ public class SessionIdTest extends StructureTest {
     }
 
     /**
-     * so we can test it as a structure
+     * So we can test it as a structure.
      * @since 0.9.48 no longer extends DataStructureImpl
      */
     private static class SessionIdStructure extends SessionId implements DataStructure {

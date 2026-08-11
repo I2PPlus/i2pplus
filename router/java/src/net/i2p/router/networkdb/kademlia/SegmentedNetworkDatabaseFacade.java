@@ -42,7 +42,7 @@ import net.i2p.router.NetworkDatabaseFacade;
 public abstract class SegmentedNetworkDatabaseFacade {
 
     /**
-     * Get the main netDb, the one which is used if we're a floodfill
+     * The main netDb, the one which is used if we're a floodfill.
      *
      * @return may be null if main netDb is not initialized
      * @since 0.9.61
@@ -50,7 +50,7 @@ public abstract class SegmentedNetworkDatabaseFacade {
     public abstract NetworkDatabaseFacade mainNetDB();
 
     /**
-     * Get a client netDb for a given client Hash identifier. Will never
+     * A client netDb for a given client Hash identifier. Will never
      * return the mainNetDB.
      *
      * @return may be null if the client netDb does not exist

@@ -337,7 +337,7 @@ public class GroupElement implements Serializable {
     }
 
     /**
-     * Gets the curve of the group element.
+     * The curve of the group element.
      *
      * @return The curve.
      */
@@ -346,7 +346,7 @@ public class GroupElement implements Serializable {
     }
 
     /**
-     * Gets the representation of the group element.
+     * The representation of the group element.
      *
      * @return The representation.
      */
@@ -355,7 +355,7 @@ public class GroupElement implements Serializable {
     }
 
     /**
-     * Gets the $X$ value of the group element.
+     * The $X$ value of the group element.
      * This is for most representation the projective $X$ coordinate.
      *
      * @return The $X$ value.
@@ -365,7 +365,7 @@ public class GroupElement implements Serializable {
     }
 
     /**
-     * Gets the $Y$ value of the group element.
+     * The $Y$ value of the group element.
      * This is for most representation the projective $Y$ coordinate.
      *
      * @return The $Y$ value.
@@ -375,7 +375,7 @@ public class GroupElement implements Serializable {
     }
 
     /**
-     * Gets the $Z$ value of the group element.
+     * The $Z$ value of the group element.
      * This is for most representation the projective $Z$ coordinate.
      *
      * @return The $Z$ value.
@@ -385,7 +385,7 @@ public class GroupElement implements Serializable {
     }
 
     /**
-     * Gets the $T$ value of the group element.
+     * The $T$ value of the group element.
      * This is for most representation the projective $T$ coordinate.
      *
      * @return The $T$ value.
@@ -954,7 +954,7 @@ public class GroupElement implements Serializable {
      * Constant time.
      * <p>
      * Preconditions: (TODO: Check this applies here)
-     *   $a[31] \le 127$
+     *     $a[31] \le 127$
      *
      * @param a $= a[0]+256*a[1]+\dots+256^{31} a[31]$
      * @return the GroupElement

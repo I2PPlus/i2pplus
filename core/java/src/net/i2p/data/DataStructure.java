@@ -108,7 +108,7 @@ public interface DataStructure /* extends Serializable */ {
     public void writeBytes(OutputStream out) throws DataFormatException, IOException;
 
     /**
-     * render the structure into modified base 64 notation
+     * Render the structure into modified base 64 notation
      *
      * @return null on error
      */

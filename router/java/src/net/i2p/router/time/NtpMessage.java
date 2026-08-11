@@ -236,7 +236,7 @@ class NtpMessage {
 
 
     /**
-     * Constructs a new NtpMessage from an array of bytes.
+     * Parses a new NtpMessage from an array of bytes.
      *
      * @param array 48 bytes minimum
      */
@@ -272,8 +272,7 @@ class NtpMessage {
 
 
     /**
-     * Constructs a new NtpMessage in client -&gt; server mode, and sets the
-     * transmit timestamp to the current time.
+     * A client-mode NtpMessage with the transmit timestamp set to the current time.
      */
     public NtpMessage() {
         // Note that all the other member variables are already set with

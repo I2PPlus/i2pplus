@@ -55,12 +55,14 @@ class SearchReplyJob extends JobImpl {
     }
 
     /**
+     * Name of this job.
+     *
      * @return the name
      */
     public String getName() { return "Process Kademlia Search Reply"; }
 
     /**
-     * runJob.
+     * Process the peers referenced in the search reply.
      */
     public void runJob() {
         int count = Math.min(_msg.getNumReplies(), 2 * SingleLookupJob.MAX_TO_FOLLOW);

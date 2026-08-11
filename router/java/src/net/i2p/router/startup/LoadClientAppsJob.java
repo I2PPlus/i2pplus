@@ -34,7 +34,7 @@ public class LoadClientAppsJob extends JobImpl {
     }
 
     /**
-     * runJob.
+     * Load and start the client applications configured in clients.config.
      */
     public void runJob() {
         synchronized (LoadClientAppsJob.class) {
@@ -91,13 +91,13 @@ public class LoadClientAppsJob extends JobImpl {
         private final ThreadGroup _threadGroup; // NOSONAR S3014 ThreadGroup used for thread naming, not pool management
         private final ClassLoader _cl;
 
-        /** caller MUST call schedule() */
+        /** Caller must call schedule() before this event fires. */
         public DelayedRunClient(SimpleTimer2 pool, RouterContext enclosingContext, String className,
                                 String clientName, String[] args) {
             this(pool, enclosingContext, className, clientName, args, null, null);
         }
 
-        /** caller MUST call schedule() */
+        /** Caller must call schedule() before this event fires. */
         public DelayedRunClient(SimpleTimer2 pool, RouterContext enclosingContext, String className, String clientName,
                                 String[] args, ThreadGroup threadGroup, ClassLoader cl) { // NOSONAR S3014
             super(pool);
@@ -111,7 +111,7 @@ public class LoadClientAppsJob extends JobImpl {
         }
 
         /**
-         * timeReached.
+         * Run the configured client application.
          */
         public void timeReached() {
             runClient(_className, _clientName, _args, _ctx, _log, _threadGroup, _cl);
@@ -125,7 +125,7 @@ public class LoadClientAppsJob extends JobImpl {
         }
 
         /**
-         * timeReached.
+         * Wait for the router to be running, then run the configured client application.
          */
         public void timeReached() {
             if (!_ctx.router().isRunning()) {
@@ -307,7 +307,7 @@ public class LoadClientAppsJob extends JobImpl {
         }
 
         /**
-         * run.
+         * Load and start the client application.
          */
         public void run() {
             boolean ok = false;
@@ -362,7 +362,9 @@ public class LoadClientAppsJob extends JobImpl {
     }
 
     /**
-     * @return the name
+     *  Name of this job.
+     *
+     *  @return the name
      */
     public String getName() { return "Load Client Applications"; }
 

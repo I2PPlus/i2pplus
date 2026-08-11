@@ -184,9 +184,9 @@ public class UDPTransport extends TransportImpl {
     public static final String STYLE = "SSU";
     /** Config key for SSU internal port. */
     public static final String PROP_INTERNAL_PORT = "i2np.udp.internalPort";
-    /** define this to explicitly set an external IP address */
+    /** Define this to explicitly set an external IP address. */
     public static final String PROP_EXTERNAL_HOST = "i2np.udp.host";
-    /** define this to explicitly set an external port */
+    /** Define this to explicitly set an external port. */
     public static final String PROP_EXTERNAL_PORT = "i2np.udp.port";
     /** Config key to prefer UDP transport. */
     public static final String PROP_PREFER_UDP = "i2np.udp.preferred";
@@ -197,13 +197,13 @@ public class UDPTransport extends TransportImpl {
      */
     private static final String PROP_FIXED_PORT = "i2np.udp.fixedPort";
 
-    /** allowed sources of address updates */
+    /** Allowed sources of address updates. */
     public static final String PROP_SOURCES = "i2np.udp.addressSources";
     /** + */
     public static final String DEFAULT_SOURCES = SOURCE_INTERFACE.toConfigString() + ',' +
                                                  SOURCE_UPNP.toConfigString() + ',' +
                                                  SOURCE_SSU.toConfigString();
-    /** remember IP changes */
+    /** Remember IP changes across restarts. */
     public static final String PROP_IP= "i2np.lastIP";
     /** Config key tracking last IP address change. */
     public static final String PROP_IP_CHANGE = "i2np.lastIPChange";
@@ -545,6 +545,8 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
+     * The OutboundMessageFragments instance.
+     *
      * @return the instance of OutboundMessageFragments
      * @since 0.9.48
      */
@@ -733,7 +735,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Sets up UDP endpoints based on bind addresses and port.
+     * Create UDP endpoints for the given bind addresses and port.
      *
      * @param bindToAddrs addresses to bind, empty means wildcard
      * @param port port to bind endpoints on
@@ -975,7 +977,7 @@ public class UDPTransport extends TransportImpl {
      *  The endpoint has failed. Remove it.
      *
      * @param endpoint the endpoint
-     *  @since 0.9.16
+     * @since 0.9.16
      */
     public void fail(UDPEndpoint endpoint) {
         if (_endpoints.remove(endpoint)) {
@@ -1031,7 +1033,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * valid SSU version of Bob's SSU address
+     * Valid SSU version of Bob's SSU address
      * for our outbound connections as Alice.
      *
      * @return the valid version 1 or 2, or 0 if unusable
@@ -1416,9 +1418,9 @@ public class UDPTransport extends TransportImpl {
      * Slight enhancement - require two different peers in a row to agree
      *
      * Todo:
-     *   - Much better tracking of troublemakers
-     *   - Disable if we have good local address or UPnP
-     *   - This gets harder if and when we publish multiple addresses, or IPv6
+     * - Much better tracking of troublemakers
+     * - Disable if we have good local address or UPnP
+     * - This gets harder if and when we publish multiple addresses, or IPv6
      *
      * @param from Hash of inbound destination
      * @param hisIP the IP of the peer telling us
@@ -1778,15 +1780,16 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * get the state for the peer with the given ident, or null
-     * if no state exists
+     * The peer state for the peer with the given ident, or null
+     * if no state exists.
      */
     PeerState getPeerState(Hash remotePeer) {
         return _peersByIdent.get(remotePeer);
     }
 
     /**
-     * state by SSU2 connection ID
+     * Peer state by SSU2 connection ID.
+     *
      * @since 0.9.55
      */
     PeerState2 getPeerState(long rcvConnID) {
@@ -2024,10 +2027,9 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * messageReceived.
+     * Handle incoming message from transport layer.
      */
     @Override
-    /** Handle incoming message from transport layer. */
     public void messageReceived(I2NPMessage inMsg, RouterIdentity remoteIdent, Hash remoteIdentHash, long msToReceive, int bytesReceived) {
         if (inMsg.getType() == DatabaseStoreMessage.MESSAGE_TYPE) {
             DatabaseStoreMessage dsm = (DatabaseStoreMessage)inMsg;
@@ -2073,6 +2075,8 @@ public class UDPTransport extends TransportImpl {
     private class RemoveDropList extends SimpleTimer2.TimedEvent {
         private final RemoteHostId _peer;
         /**
+         * Create a drop-list entry for the given peer.
+         *
          * @param peer peer to remove after delay
          */
         public RemoveDropList(RemoteHostId peer) { super(_context.simpleTimer2()); _peer = peer; }
@@ -2570,6 +2574,8 @@ public class UDPTransport extends TransportImpl {
     public String getAltStyle() {return STYLE2;}
 
     /**
+     * The publish style.
+     *
      * @return "SSU" unless SSU1 disabled, then "SSU2"
      * @since 0.9.57
      */
@@ -3317,7 +3323,7 @@ public class UDPTransport extends TransportImpl {
             _introManager.introducedCount() < getMaxConnections() / 4;
     }
 
-    /** default true */
+    /** Whether direct UDP connections to other routers are allowed; defaults to true. */
     private boolean allowDirectUDP() {
         return _context.getBooleanPropertyDefaultTrue(PROP_ALLOW_DIRECT);
     }
@@ -3459,7 +3465,8 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  @since 0.9.3
+     *  Whether the peer for the given destination is backlogged.
+     * @since 0.9.3
      * @return whether backlogged
      */
     @Override

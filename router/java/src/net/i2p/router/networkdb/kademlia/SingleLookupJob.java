@@ -40,7 +40,7 @@ class SingleLookupJob extends JobImpl {
     }
 
     /**
-     * runJob.
+     * Kick off single searches for the peers referenced in the reply.
      */
     public void runJob() {
         Hash from = _dsrm.getFromHash();
@@ -61,6 +61,8 @@ class SingleLookupJob extends JobImpl {
     }
 
     /**
+     * Name of this job.
+     *
      * @return the name
      */
     public String getName() { return "Process DbStoreReplyMsg"; }

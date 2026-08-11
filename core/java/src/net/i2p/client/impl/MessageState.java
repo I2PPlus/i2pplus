@@ -69,7 +69,7 @@ class MessageState {
     }
 
     /**
-     * receive.
+     * Process a message status from the router and notify the listener.
      */
     public void receive(int status) {
         State oldState;
@@ -86,18 +86,12 @@ class MessageState {
     }
 
     /**
-     * setMessageId.
-     */
-    /**
-     * Set the message ID.
+     * Message ID assigned to this message.
      */
     public void setMessageId(MessageId id) {
         _id = id;
     }
 
-    /**
-     * getMessageId.
-     */
     /**
      * Return the message ID.
      * @return the message id
@@ -107,9 +101,6 @@ class MessageState {
     }
 
     /**
-     * getElapsed.
-     */
-    /**
      * Return the elapsed time.
      * @return the elapsed
      */
@@ -117,9 +108,6 @@ class MessageState {
         return _context.clock().now() - _created;
     }
 
-    /**
-     *  @since 0.9.14
-     */
     /**
      * Return the expiration time.
      * @return the expires
@@ -221,7 +209,7 @@ class MessageState {
     }
 
     /**
-     * cancel.
+     * Cancel the message by injecting a canceled status.
      */
     public void cancel() {
         // Inject a fake status

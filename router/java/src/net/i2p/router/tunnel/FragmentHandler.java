@@ -92,9 +92,9 @@ The total size, including the tunnel ID and IV, is 1028 bytes.
  *
  */
 class FragmentHandler {
-    /** the context */
+    /** The router context. */
     protected final RouterContext _context;
-    /** the log */
+    /** The log. */
     protected final Log _log;
     private final Map<Integer, FragmentedMessage> _fragmentedMessages;
     private final DefragmentedReceiver _receiver;
@@ -105,7 +105,7 @@ class FragmentHandler {
     /** Reusable I2NP message handler — avoids per-message allocation */
     private final I2NPMessageHandler _inboundHandler;
 
-    /** don't wait more than this long to completely receive a fragmented message */
+    /** Don't wait more than this long to completely receive a fragmented message. */
     static long MAX_DEFRAGMENT_TIME = 45*1000L;
     private static final ByteCache _cache = ByteCache.getInstance(512, TrivialPreprocessor.PREPROCESSED_SIZE);
 
@@ -120,6 +120,8 @@ class FragmentHandler {
     }
 
     /**
+     * Binds the given context and receiver, storing the inbound flag.
+     *
      * @param context the router context
      * @param receiver the defragmented receiver
      * @param isInbound true for IBEP, false for OBEP
@@ -295,27 +297,29 @@ class FragmentHandler {
         return eq;
     }
 
-    /** is this a follw up byte? */
+    /** Is this a follow-up byte? */
     static final byte MASK_IS_SUBSEQUENT = (byte)(1 << 7);
-    /** how should this be delivered.  shift this 5 the right and get TYPE_* */
+    /** How this should be delivered. Shift right 5 to get TYPE_*. */
     static final byte MASK_TYPE = (byte)(3 << 5);
-    /** is this the first of a fragmented message? */
+    /** Is this the first fragment of a fragmented message? */
     static final byte MASK_FRAGMENTED = (byte)(1 << 3);
-    /** are there follow up headers? UNIMPLEMENTED */
+    /** Are there follow-up headers? UNIMPLEMENTED */
     static final byte MASK_EXTENDED = (byte)(1 << 2);
-    /** for subsequent fragments, which bits contain the fragment #? */
+    /** For subsequent fragments, which bits contain the fragment number? */
     private static final int MASK_FRAGMENT_NUM = (byte)((1 << 7) - 2); // 0x7E;
 
-    /** local delivery */
+    /** Local delivery. */
     static final short TYPE_LOCAL = 0;
-    /** tunnel delivery */
+    /** Tunnel delivery. */
     static final short TYPE_TUNNEL = 1;
-    /** router delivery */
+    /** Router delivery. */
     static final short TYPE_ROUTER = 2;
-    /** undefined delivery */
+    /** Undefined delivery. */
     static final short TYPE_UNDEF = 3;
 
     /**
+     * The offset for the next byte after the received fragment, or -1 on error.
+     *
      * @return the offset for the next byte after the received fragment or -1 on error
      * @throws RuntimeException
      */

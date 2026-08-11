@@ -20,7 +20,7 @@ import java.security.MessageDigest;
  * but only if all data to be signed or verified is available
  * in a single byte array.
  *</p><p>
- *Option 1:
+ * Option 1:
  *</p><ol>
  *<li>Call initSign() or initVerify() as usual.
  *</li><li>Call setParameter(ONE_SHOT_MODE)
@@ -31,7 +31,7 @@ import java.security.MessageDigest;
  *</li></ol>
  *
  *<p>
- *Option 2:
+ * Option 2:
  *</p><ol>
  *<li>Call initSign() or initVerify() as usual.
  *</li><li>Call one of the signOneShot() or verifyOneShot() methods.

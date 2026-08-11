@@ -103,7 +103,7 @@ public class TransportManager implements TransportEventListener {
      * If we want more than one transport with the same style we will have to change this.
      */
     private final Map<String, Transport> _transports;
-    /** locking: this */
+    /** Locking: this. */
     private final Map<String, Transport> _pluggableTransports;
     private final RouterContext _context;
     private final UPnPManager _upnpManager;
@@ -112,11 +112,11 @@ public class TransportManager implements TransportEventListener {
     private final boolean _enableUDP;
     private boolean _upnpUpdateQueued;
 
-    /** default true */
+    /** Property enabling the UDP transport; defaults to true. */
     public static final String PROP_ENABLE_UDP = "i2np.udp.enable";
-    /** default true */
+    /** Property enabling the NTCP transport; defaults to true. */
     public static final String PROP_ENABLE_NTCP = "i2np.ntcp.enable";
-    /** default true */
+    /** Property enabling UPnP port forwarding; defaults to true. */
     public static final String PROP_ENABLE_UPNP = "i2np.upnp.enable";
     /** Enable UPnP for IPv6 */
     public static final String PROP_ENABLE_UPNP_IPV6 = "i2np.upnp.ipv6.enable";
@@ -127,7 +127,7 @@ public class TransportManager implements TransportEventListener {
     private static final String PROP_JAVA_PROXY3 = "http.proxyHost";
     private static final String PROP_JAVA_PROXY4 = "https.proxyHost";
 
-    /** not forever, since they may update */
+    /** Not forever, since they may update. */
     private static final long SIGTYPE_BANLIST_DURATION = 36*60*60*1000L;
     private static final long UPNP_REFRESH_TIME = UPnP.LEASE_TIME_SECONDS * 1000L / 3;
     private final long _msgIDBloomXor;
@@ -182,7 +182,7 @@ public class TransportManager implements TransportEventListener {
      *  Detect system settings and log warnings.
      *  ref: https://docs.oracle.com/javase/8/docs/api/java/net/doc-files/net-properties.html
      *
-     *  @since 0.9.47
+     * @since 0.9.47
      * @return whether proxied
      */
     private boolean isProxied() {
@@ -303,7 +303,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * Get the X25519 key factory used by transports.
+     * The X25519 key factory used by transports.
      *
      * This method returns the key factory that provides
      * X25519 key pairs for transport encryption operations.
@@ -507,7 +507,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * callback from UPnP
+     * Callback from UPnP.
      *
      */
     void forwardPortStatus(String style, byte[] ip, int port, int externalPort, boolean success, String reason) {
@@ -516,7 +516,7 @@ public class TransportManager implements TransportEventListener {
             t.forwardPortStatus(ip, port, externalPort, success, reason);
     }
 
-    /** Void */
+    /** Start listening on all configured transports. */
     synchronized void startListening() {
         if (_xdhThread != null && _xdhThread.getState() == Thread.State.NEW)
             _xdhThread.start();
@@ -719,7 +719,9 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * @param peer peer hash @return true if any transport is backlogged to peer
+     * Whether any transport is backlogged to the given peer.
+     * @param peer peer hash
+     * @return true if any transport is backlogged to peer
      */
     boolean isBacklogged(Hash peer) {
         for (Transport t : _transports.values()) {
@@ -730,7 +732,9 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * @param peer peer hash @return true if any transport has an established connection
+     * Whether any transport has an established connection to the given peer.
+     * @param peer peer hash
+     * @return true if any transport has an established connection
      */
     boolean isEstablished(Hash peer) {
         for (Transport t : _transports.values()) {
@@ -756,6 +760,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
+     * The list of peer hashes with established connections, may be empty.
      * @return list of peer hashes with established connections, may be empty
      */
     public List<Hash> getEstablished() {
@@ -963,7 +968,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * Get the best bid for a message across all transports.
+     * The best bid for a message across all transports.
      * @param msg the message to bid on
      * @return the winning bid or null
      */
@@ -976,8 +981,9 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * Get all bids for a message across all transports.
-     * @param msg the message to bid on @return list of bids, never null
+     * All bids for a message across all transports.
+     * @param msg the message to bid on
+     * @return list of bids, never null
      */
     List<TransportBid> getBids(OutNetMessage msg) {
         if (msg == null)
@@ -1010,8 +1016,9 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * Get the best bid, skipping failed transports and unreachable peers.
-     * @param msg the message to bid on @return the winning bid or null
+     * The best bid, skipping failed transports and unreachable peers.
+     * @param msg the message to bid on
+     * @return the winning bid or null
      */
     TransportBid getNextBid(OutNetMessage msg) {
         int unreachableTransports = 0;
@@ -1171,7 +1178,7 @@ public class TransportManager implements TransportEventListener {
          */
         public UpdatePorts() { super(_context.simpleTimer2()); }
         /**
-         * timeReached.
+         * Apply the queued UPnP port updates.
          */
         public void timeReached() {
             Set<Port> ports = getPorts();
@@ -1197,7 +1204,7 @@ public class TransportManager implements TransportEventListener {
         public UPnPRefresher() { super(_context.simpleTimer2()); }
 
         /**
-         * timeReached.
+         * Notify transports of an address change and reschedule.
          */
         public void timeReached() {
             transportAddressChanged();
@@ -1288,7 +1295,7 @@ public class TransportManager implements TransportEventListener {
         }
 
         /**
-         * timeReached.
+         * Run the outbound connection maintainer.
          */
         public void timeReached() {
             try {

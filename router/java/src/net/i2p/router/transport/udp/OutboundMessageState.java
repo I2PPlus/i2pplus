@@ -18,19 +18,19 @@ import net.i2p.util.Log;
 class OutboundMessageState implements CDPQEntry {
     private final I2PAppContext _context;
     private final Log _log;
-    /** may be null if we are part of the establishment */
+    /** May be null if we are part of the establishment. */
     private final OutNetMessage _message;
     private final I2NPMessage _i2npMessage;
-    /** will be null, unless we are part of the establishment */
+    /** Will be null, unless we are part of the establishment. */
     private final PeerState _peer;
     private final long _expiration;
     private final byte[] _messageBuf;
-    /** fixed fragment size across the message */
+    /** Fixed fragment size across the message. */
     private final int _fragmentSize;
-    /** bitmask, 0 if acked, all 0 = complete */
+    /** Bitmask, 0 if acked, all 0 = complete. */
     private long _fragmentAcks;
     private final int _numFragments;
-    /** sends for each fragment, or null if only one fragment */
+    /** Sends for each fragment, or null if only one fragment. */
     private final byte[] _fragmentSends;
     private final long _startedOn;
     /** Time of first fragment send (for network RTT measurement, excludes queue time) */
@@ -40,7 +40,7 @@ class OutboundMessageState implements CDPQEntry {
     // we can't use the ones in _message since it is null for injections
     private volatile long _enqueueTime;
     private volatile long _seqNum;
-    /** how many bytes push() is allowed to send */
+    /** How many bytes push() is allowed to send. */
     private int _allowedSendBytes;
     private final AtomicInteger _nacks = new AtomicInteger();
     /**
@@ -51,13 +51,14 @@ class OutboundMessageState implements CDPQEntry {
     private static volatile long _messageExpiration = 60*1000L;
 
     /**
+     * The current outbound message expiration in ms.
      * @return current outbound message expiration in ms
      * @since 0.9.70+
      */
     public static long getMessageExpiration() { return _messageExpiration; }
 
     /**
-     * Set outbound message expiration. Called by Tuner.
+     * The outbound message expiration, called by Tuner.
      * @param ms expiration in ms, clamped to [5000, 300000]
      * @since 0.9.70+
      */
@@ -126,8 +127,9 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     * @since 0.9.54
+     * The SSU 2 version of the peer.
      * @return the version
+     * @since 0.9.54
      */
     public int getVersion() { return _peer.getVersion(); }
 
@@ -139,24 +141,28 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
+     * The message.
      * @return the message
      */
     public OutNetMessage getMessage() { return _message; }
 
     /**
+     * The message ID.
      * @return the message id
      */
     public long getMessageId() { return _i2npMessage.getUniqueId(); }
 
     /**
+     * Increment and return the NACK count.
      * @return new value
      * @since 0.9.49
      */
     public int incrementNACKs() { return _nacks.incrementAndGet(); }
 
     /**
+     * The NACK count.
+     * @return the nacks
      * @since 0.9.49
-     * @return the n a c ks
      */
     public int getNACKs() { return _nacks.get(); }
 
@@ -166,11 +172,13 @@ class OutboundMessageState implements CDPQEntry {
     public void clearNACKs() { _nacks.set(0); }
 
     /**
+     * The peer.
      * @return the peer
      */
     public PeerState getPeer() { return _peer; }
 
     /**
+     * Whether the message has expired.
      * @return whether expired
      */
     public boolean isExpired() {
@@ -178,14 +186,16 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     * @since 0.9.38
+     * Whether the message has expired at the given time.
      * @return whether expired
+     * @since 0.9.38
      */
     public boolean isExpired(long now) {
         return _expiration < now;
     }
 
     /**
+     * Whether all fragments have been acked.
      * @return whether complete
      */
     public synchronized boolean isComplete() {
@@ -217,6 +227,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
+     * Count of unacked fragments.
      * @return count of unacked fragments
      * @since 0.9.49
      */
@@ -236,7 +247,7 @@ class OutboundMessageState implements CDPQEntry {
     /**
      *  Is any fragment unsent?
      *
-     *  @since 0.9.49
+     * @since 0.9.49
      * @return whether unsent fragments is present
      */
     public synchronized boolean hasUnsentFragments() {
@@ -256,7 +267,7 @@ class OutboundMessageState implements CDPQEntry {
      *  Only call if not complete and _numFragments greater than 1.
      *  Caller must synch.
      *
-     *  @since 0.9.49
+     * @since 0.9.49
      * @return the min send count
      */
     private int getMinSendCount() {
@@ -342,6 +353,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
+     * Whether the fragment has not been ACKed.
      * @return true if the fragment has not been ACKed
      */
     public synchronized boolean needsSending(int fragment) {
@@ -349,6 +361,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
+     * The lifetime.
      * @return the lifetime
      */
     public long getLifetime() { return _context.clock().now() - _startedOn; }
@@ -564,7 +577,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      *  For CDQ
-     *  @since 0.9.3
+     * @since 0.9.3
      * @return the enqueue time
      */
     @Override
@@ -592,7 +605,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      *  For CDPQ
-     *  @since 0.9.3
+     * @since 0.9.3
      * @return the seq num
      */
     public long getSeqNum() {
@@ -609,7 +622,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     * toString.
+     * A string summary of this message state.
      */
     @Override
     public String toString() {

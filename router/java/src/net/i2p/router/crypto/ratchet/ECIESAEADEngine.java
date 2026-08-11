@@ -388,6 +388,8 @@ public final class ECIESAEADEngine {
     }
 
     /**
+     * Verify the encryption type is supported by this engine.
+     *
      * @throws IllegalArgumentException if unsupported
      * @since 0.9.67
      */
@@ -404,6 +406,8 @@ public final class ECIESAEADEngine {
     }
 
     /**
+     * The Noise handshake pattern for the given encryption type.
+     *
      * @since 0.9.67
      * @return the noise pattern
      */
@@ -423,6 +427,8 @@ public final class ECIESAEADEngine {
     }
 
     /**
+     * The hybrid key factory for the given encryption type, or null if not a hybrid type.
+     *
      * @since 0.9.67, public since 0.9.69 for transports
      * @return the hybrid key factory
      */
@@ -449,6 +455,8 @@ public final class ECIESAEADEngine {
     }
 
     /**
+     * The minimum New Session message size for the given encryption type.
+     *
      * @since 0.9.67
      * @return the min n s size
      */
@@ -468,6 +476,8 @@ public final class ECIESAEADEngine {
     }
 
     /**
+     * The minimum New Session Reply message size for the given encryption type.
+     *
      * @since 0.9.67
      * @return the min n s r size
      */
@@ -487,6 +497,8 @@ public final class ECIESAEADEngine {
     }
 
     /**
+     * The encryption type set for the given encryption type.
+     *
      * @since 0.9.67
      * @return the enc type set
      */
@@ -506,18 +518,18 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * scenario 1: New Session Message
+     * Scenario 1: New Session Message
      *
      * Begin with 80 bytes, ECIES encrypted, containing:
      * <pre>
-     *  - 32 byte Elligator2 key
-     *  - 32 byte static key
-     *  - 16 byte MAC
+     * - 32 byte Elligator2 key
+     * - 32 byte static key
+     * - 16 byte MAC
      * </pre>
      * And then the data:
      * <pre>
-     *  - payload (7 bytes minimum for DateTime block)
-     *  - 16 byte MAC
+     * - payload (7 bytes minimum for DateTime block)
+     * - 16 byte MAC
      * </pre>
      *
      * @param data 96 bytes minimum
@@ -674,12 +686,12 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * scenario 1A: New Session Message Anonymous
+     * Scenario 1A: New Session Message Anonymous
      *
      * <pre>
-     *  - 32 byte ephemeral key (NOT Elligator2)
-     *  - payload (7 bytes minimum for DateTime block)
-     *  - 16 byte MAC
+     * - 32 byte ephemeral key (NOT Elligator2)
+     * - payload (7 bytes minimum for DateTime block)
+     * - 16 byte MAC
      * </pre>
      *
      * @param data 55 bytes minimum
@@ -779,18 +791,18 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * scenario 2: New Session Reply Message
+     * Scenario 2: New Session Reply Message
      *
      * Begin with 56 bytes, containing:
      * <pre>
-     *  - 8 byte SessionTag
-     *  - 32 byte Elligator2 key
-     *  - 16 byte MAC
+     * - 8 byte SessionTag
+     * - 32 byte Elligator2 key
+     * - 16 byte MAC
      * </pre>
      * And then the data:
      * <pre>
-     *  - payload
-     *  - 16 byte MAC
+     * - payload
+     * - 16 byte MAC
      * </pre>
      *
      * @param tag 8 bytes, same as first 8 bytes of data
@@ -940,12 +952,12 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * scenario 3: Existing Session Message
+     * Scenario 3: Existing Session Message
      *
      * <pre>
-     *  - 8 byte SessionTag
-     *  - payload
-     *  - 16 byte MAC
+     * - 8 byte SessionTag
+     * - payload
+     * - 16 byte MAC
      * </pre>
      *
      * If anything doesn't match up in decryption, it returns null
@@ -1083,6 +1095,9 @@ public final class ECIESAEADEngine {
     }
 
     /**
+     * Encrypt the cloves to the target, selecting New Session, New Session Reply, or Existing
+     * Session encryption as appropriate.
+     *
      * @param to destination to encrypt for, required when priv is non-null
      * @param priv local private key to encrypt with, from the leaseset
      *             may be null for anonymous (N-in-IK)
@@ -1140,18 +1155,18 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * scenario 1: New Session Message
+     * Scenario 1: New Session Message
      *
      * Begin with 80 bytes, ECIES encrypted, containing:
      * <pre>
-     *  - 32 byte Elligator2 key
-     *  - 32 byte static key
-     *  - 16 byte MAC
+     * - 32 byte Elligator2 key
+     * - 32 byte static key
+     * - 16 byte MAC
      * </pre>
      * And then the data:
      * <pre>
-     *  - payload
-     *  - 16 byte MAC
+     * - payload
+     * - 16 byte MAC
      * </pre>
      *
      * @param to destination to encrypt for, required when priv is non-null
@@ -1224,12 +1239,12 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * scenario 1A: New Session Message from an anonymous source.
+     * Scenario 1A: New Session Message from an anonymous source.
      *
      * <pre>
-     *  - 32 byte ephemeral key (NOT Elligator2)
-     *  - payload
-     *  - 16 byte MAC
+     * - 32 byte ephemeral key (NOT Elligator2)
+     * - payload
+     * - 16 byte MAC
      * </pre>
      *
      * @return encrypted data or null on failure
@@ -1266,18 +1281,18 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * scenario 2: New Session Reply Message
+     * Scenario 2: New Session Reply Message
      *
      * Begin with 56 bytes, containing:
      * <pre>
-     *  - 8 byte SessionTag
-     *  - 32 byte Elligator2 key
-     *  - 16 byte MAC
+     * - 8 byte SessionTag
+     * - 32 byte Elligator2 key
+     * - 16 byte MAC
      * </pre>
      * And then the data:
      * <pre>
-     *  - payload
-     *  - 16 byte MAC
+     * - payload
+     * - 16 byte MAC
      * </pre>
      *
      * @param state must have already been cloned
@@ -1352,12 +1367,12 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * scenario 3: Existing Session Message
+     * Scenario 3: Existing Session Message
      *
      * <pre>
-     *  - 8 byte SessionTag
-     *  - payload
-     *  - 16 byte MAC
+     * - 8 byte SessionTag
+     * - payload
+     * - 16 byte MAC
      * </pre>
      *
      * @param target only used if callback is non-null to register it
@@ -1389,9 +1404,9 @@ public final class ECIESAEADEngine {
      * n=0, ad=null.
      *
      * <pre>
-     *  - 8 byte SessionTag
-     *  - payload
-     *  - 16 byte MAC
+     * - 8 byte SessionTag
+     * - payload
+     * - 16 byte MAC
      * </pre>
      *
      * @return encrypted data or null on failure
@@ -1423,6 +1438,7 @@ public final class ECIESAEADEngine {
     }
 
     /**
+     * Encrypt the data with the given key and nonce.
      *
      * @param ad may be null
      * @return space will be left at beginning for ad (tag), null on error
@@ -1457,13 +1473,13 @@ public final class ECIESAEADEngine {
     /////////////////////////////////////////////////////////
 
     private class PLCallback implements RatchetPayload.PayloadCallback {
-        /** non null, may be empty */
+        /** Non-null, may be empty. */
         public final List<GarlicClove> cloveSet = new ArrayList<>(3);
         private final RatchetSKM skm;
         private final PublicKey remote;
         /** The datetime value. */
         public long datetime;
-        /** null or non-empty */
+        /** Null or non-empty. */
         public List<NextSessionKey> nextKeys;
         /** Whether an ack was requested. */
         public boolean ackRequested;

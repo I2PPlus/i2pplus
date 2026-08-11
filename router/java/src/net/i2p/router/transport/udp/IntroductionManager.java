@@ -41,11 +41,11 @@ class IntroductionManager {
     private final Log _log;
     private final UDPTransport _transport;
     private final PacketBuilder2 _builder2;
-    /** map of relay tag to Charlie PeerState that should receive the introduction (we are Bob) */
+    /** Map of relay tag to Charlie PeerState that should receive the introduction (we are Bob). */
     private final Map<Long, PeerState> _outbound;
-    /** map of relay tag to Bob PeerState who have given us introduction tags (we are Charlie) */
+    /** Map of relay tag to Bob PeerState who have given us introduction tags (we are Charlie). */
     private final Map<Long, PeerState> _inbound;
-    /** map of relay nonce to alice PeerState who requested it */
+    /** Map of relay nonce to Alice PeerState who requested it. */
     private final ConcurrentHashMap<Long, PeerState2> _nonceToAlice;
     private final Set<Long> _recentHolePunches;
     private long _lastHolePunchClean;
@@ -70,7 +70,9 @@ class IntroductionManager {
     private static final long PUNCH_CLEAN_TIME = 5*1000L;
     private static final int MAX_PUNCHES = 20;
 
-    /** method comment */
+    /**
+     * Creates the introduction manager.
+     */
     public IntroductionManager(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
         _log = ctx.logManager().getLog(IntroductionManager.class);
@@ -84,13 +86,17 @@ class IntroductionManager {
         ctx.statManager().createRateStat("udp.relayBadIP", "Received IP or port was bad", "Transport [UDP]", UDPTransport.RATES);
     }
 
-    /** method comment */
+    /**
+     * Clear all introduction mappings.
+     */
     public void reset() {
         _inbound.clear();
         _outbound.clear();
     }
 
-    /** method comment */
+    /**
+     * Register the peer's relay tags.
+     */
     public void add(PeerState peer) {
         if (peer == null) return;
         // let's not use an introducer on a privileged port, sounds like trouble
@@ -106,7 +112,9 @@ class IntroductionManager {
         }
     }
 
-    /** method comment */
+    /**
+     * Unregister the peer's relay tags.
+     */
     public void remove(PeerState peer) {
         if (peer == null) return;
         long id = peer.getWeRelayToThemAs();
@@ -122,7 +130,7 @@ class IntroductionManager {
      *  Is this inbound tag currently valid,
      *  i.e. is the peer still connected?
      *
-     *  @since 0.9.50
+     * @since 0.9.50
      * @return whether inbound tag valid
      */
     public boolean isInboundTagValid(long tag) {
@@ -951,7 +959,7 @@ class IntroductionManager {
 
     /**
      *  Are IP and port valid?
-     *  @since 0.9.50
+     * @since 0.9.50
      * @return whether valid
      */
     private boolean isValid(byte[] ip, int port, boolean allowIPv6) {

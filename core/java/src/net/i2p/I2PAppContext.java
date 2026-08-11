@@ -1046,7 +1046,7 @@ public class I2PAppContext {
      *  may use it without depending on router.jar.
      *
      * @param task the task
-     *  @since 0.7.1
+     * @since 0.7.1
      */
     public void addShutdownTask(Runnable task) {
         _shutdownTasks.add(task);

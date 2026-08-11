@@ -71,6 +71,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private volatile boolean _floodfillEnabled;
     /** Set of hashes whose verification is in progress. */
     private final Set<Hash> _verifiesInProgress;
+
     /** Throttles excessive flood operations. */
     private FloodThrottler _floodThrottler;
     /** Throttles excessive lookup operations. */
@@ -353,6 +354,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         final IterativeSearchJob search;
 
         /**
+         * Entry for a peer that failed to respond.
+         *
          * @param peer the peer that didn't respond
          * @param search the search job to notify on timeout
          */
@@ -468,6 +471,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private class DelayedPublish extends SimpleTimer2.TimedEvent {
         private final RouterInfo localRouterInfo;
         /**
+         * Publish this RouterInfo once the delay has elapsed.
+         *
          * @param local the RouterInfo to publish after delay
          */
         public DelayedPublish(RouterInfo local) {
@@ -771,6 +776,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         private final Hash _peer;
 
         /**
+         * Record a failed store for the given peer.
+         *
          * @param ctx router context
          * @param peer the peer
          */
@@ -792,6 +799,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         private final Hash _peer;
 
         /**
+         * Record a successful store for the given peer.
+         *
          * @param ctx router context
          * @param peer the floodfill peer
          */
@@ -834,6 +843,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     /**
+     * Whether this router participates in floodfill.
+     *
      * @return whether this router participates in floodfill
      */
     @Override
@@ -965,7 +976,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  if it is stale.
      *
      * @param peer the peer
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     public void contactHeardFrom(Hash peer) {
         if (_contactRefreshJob != null) {
@@ -1222,6 +1233,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         private final Hash _peer;
 
         /**
+         * Job to drop the peer after a lookup timeout.
+         *
          * @param ctx router context
          * @param peer the peer
          * @param _info unused
@@ -1251,6 +1264,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         private final RouterInfo _info;
 
         /**
+         * Job to verify a failing peer after a successful lookup.
+         *
          * @param ctx router context
          * @param peer the peer
          * @param info the stored RouterInfo for comparison

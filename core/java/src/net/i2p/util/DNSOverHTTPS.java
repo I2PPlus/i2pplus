@@ -245,7 +245,6 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
      *
      * @since 0.9.35
      */
-    /** DNS query type for IPv4/IPv6 preference. */
     public enum Type {
         /** IPv4 only */
         V4_ONLY,

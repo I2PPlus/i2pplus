@@ -69,7 +69,7 @@ public class TunnelPoolTargetTest {
         assertEquals(1, createPool(settings).getEffectiveTarget());
     }
 
-    /** lengthOverride 0 is an explicit zero-hop configuration. */
+    /** LengthOverride 0 is an explicit zero-hop configuration. */
     @Test
     public void testLengthOverrideZeroIsZeroHop() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);

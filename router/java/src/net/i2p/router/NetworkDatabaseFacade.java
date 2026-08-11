@@ -76,15 +76,26 @@ public abstract class NetworkDatabaseFacade implements Service {
     public abstract void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, Hash fromLocalDest);
 
     /**
-     * key).
+     * Look up a LeaseSet in the local network database.
+     *
+     * @param key the key
+     * @return the LeaseSet, or null if not found
      */
     public abstract LeaseSet lookupLeaseSetLocally(Hash key);
     /**
-     * timeoutMs).
+     * Look up a RouterInfo in the network database.
+     *
+     * @param key the key
+     * @param onFindJob job to run on success
+     * @param onFailedLookupJob job to run on failure
+     * @param timeoutMs timeout in milliseconds
      */
     public abstract void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs);
     /**
-     * key).
+     * Look up a RouterInfo in the local network database.
+     *
+     * @param key the key
+     * @return the RouterInfo, or null if not found
      */
     public abstract RouterInfo lookupRouterInfoLocally(Hash key);
 
@@ -127,6 +138,10 @@ public abstract class NetworkDatabaseFacade implements Service {
     public abstract Destination lookupDestinationLocally(Hash key);
 
     /**
+     * Store a LeaseSet in the network database.
+     *
+     * @param key the key
+     * @param leaseSet the LeaseSet to store
      * @return the leaseSet if another leaseSet already existed at that key
      *
      * @throws IllegalArgumentException if the data is not valid
@@ -150,6 +165,10 @@ public abstract class NetworkDatabaseFacade implements Service {
     public abstract void removeLeaseSetFromTracking(Hash key);
 
     /**
+     * Store a RouterInfo in the network database.
+     *
+     * @param key the key
+     * @param routerInfo the RouterInfo to store
      * @return the routerInfo if another router already existed at that key
      *
      * @throws IllegalArgumentException if the data is not valid
@@ -251,30 +270,34 @@ public abstract class NetworkDatabaseFacade implements Service {
      *  @return set of LeaseSets, or empty
      */
     public Set<LeaseSet> getLeases() {return Collections.emptySet();}
-    /** public for NetDbRenderer in routerconsole */
+    /** Public for NetDbRenderer in routerconsole */
     public Set<RouterInfo> getRouters() {return Collections.emptySet();}
-    /** public for NetDbRenderer in routerconsole */
-    /* @since 0.9.64+ */
     /**
+     * The known client LeaseSets. Public for NetDbRenderer in routerconsole.
+     *
      * @return the client leases
+     * @since 0.9.64+
      */
     public Set<LeaseSet> getClientLeases() {return Collections.emptySet();}
-    /** public for NetDbRenderer in routerconsole */
-    /* @since 0.9.64+ */
     /**
+     * The known published LeaseSets. Public for NetDbRenderer in routerconsole.
+     *
      * @return the published leases
+     * @since 0.9.64+
      */
     public Set<LeaseSet> getPublishedLeases() {return Collections.emptySet();}
-    /** public for NetDbRenderer in routerconsole */
-    /* @since 0.9.64+ */
     /**
+     * The known unpublished LeaseSets. Public for NetDbRenderer in routerconsole.
+     *
      * @return the unpublished leases
+     * @since 0.9.64+
      */
     public Set<LeaseSet> getUnpublishedLeases() {return Collections.emptySet();}
-    /** public for NetDbRenderer in routerconsole */
-    /* @since 0.9.64+ */
     /**
+     * The known floodfill LeaseSets. Public for NetDbRenderer in routerconsole.
+     *
      * @return the floodfill leases
+     * @since 0.9.64+
      */
     public Set<LeaseSet> getFloodfillLeases() {return Collections.emptySet();}
     /** @since 0.9 */
@@ -314,9 +337,9 @@ public abstract class NetworkDatabaseFacade implements Service {
     public void setBlindData(BlindData bd) {}
 
     /**
-     *  For console ConfigKeyringHelper
+     * The blind data for the given unblinded key, for console ConfigKeyringHelper.
      *
-     *  @since 0.9.41
+     * @since 0.9.41
      * @return the blind data
      */
     public List<BlindData> getBlindData() {

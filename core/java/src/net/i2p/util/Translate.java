@@ -27,27 +27,27 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 0.7.9
  */
 public abstract class Translate {
-    /** prop lang */
+    /** Property for the console language. */
     public static final String PROP_LANG = "routerconsole.lang";
 
     /** @since 0.9.10 */
     public static final String PROP_COUNTRY = "routerconsole.country";
 
-    /** non-null, two- or three-letter lower case, may be "" */
+    /** Non-null, two- or three-letter lower case, may be "". */
     private static final String _localeLang = Locale.getDefault().getLanguage();
 
-    /** non-null, two-letter upper case, may be "" */
+    /** Non-null, two-letter upper case, may be "". */
     private static final String _localeCountry = Locale.getDefault().getCountry();
 
     private static final Map<String, ResourceBundle> _bundles = new ConcurrentHashMap<>(16);
     private static final Set<String> _missing = new ConcurrentHashSet<>(16);
 
-    /** use to look for untagged strings */
+    /** Use to look for untagged strings. */
     private static final String TEST_LANG = "xx";
 
     private static final String TEST_STRING = "XXXX";
 
-    /** lang in routerconsole.lang property, else current locale */
+    /** Lang in routerconsole.lang property, else current locale. */
     public static String getString(String key, I2PAppContext ctx, String bun) {
         if (key == null) {
             (new NullPointerException("null translation string")).printStackTrace();
@@ -87,7 +87,7 @@ public abstract class Translate {
         return getString(s, ctx, bun, o);
     }
 
-    /** for {0} and {1} */
+    /** For {0} and {1}. */
     public static String getString(String s, Object o, Object o2, I2PAppContext ctx, String bun) {
         return getString(s, ctx, bun, o, o2);
     }
@@ -208,7 +208,7 @@ public abstract class Translate {
     }
 
     /**
-     * cache both found and not found for speed
+     * Cache both found and not found for speed.
      *
      * @param lang non-null, if "" returns null
      * @param country non-null, may be ""

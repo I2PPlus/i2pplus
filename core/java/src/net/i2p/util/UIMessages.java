@@ -24,6 +24,8 @@ public class UIMessages {
     private int _cachedCount = -1;
 
     /**
+     * Message buffer with the given capacity.
+     *
      * @param maxSize the maximum number of messages to keep
      */
     public UIMessages(int maxSize) {
@@ -156,9 +158,9 @@ public class UIMessages {
      * selectively clear messages from the queue.</p>
      */
     public static class Message {
-        /** sequential identifier */
+        /** Sequential identifier. */
         public final int id;
-        /** the message text */
+        /** The message text. */
         public final String message;
 
         private Message(int i, String msg) {
@@ -167,7 +169,7 @@ public class UIMessages {
         }
 
         /**
-         * toString.
+         * Message text.
          */
         @Override
         public String toString() {

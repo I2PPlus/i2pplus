@@ -50,13 +50,15 @@ class RebuildRouterInfoJob extends JobImpl {
     }
 
     /**
-     * @return the name
+     *  Name of this job.
+     *
+     *  @return the name
      */
     @Override
     public String getName() { return "Rebuild RouterInfo"; }
 
     /**
-     * runJob.
+     * Not used; rebuilding is now triggered from LoadRouterInfoJob.
      */
     @Override
     public void runJob() {

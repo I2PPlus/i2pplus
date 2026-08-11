@@ -62,7 +62,7 @@ class I2CPMessageProducer {
     private final java.util.concurrent.locks.Condition _throttleCondition;
     private static final String PROP_MAX_BW = "i2cp.outboundBytesPerSecond";
 
-    /** see ConnectionOptions in streaming  - MTU + streaming overhead + gzip overhead */
+    /** See ConnectionOptions in streaming  - MTU + streaming overhead + gzip overhead */
     private static final int TYP_SIZE = 1730 + 28 + 23;
 
     private static final int MIN_RATE = 2 * TYP_SIZE;
@@ -161,9 +161,6 @@ class I2CPMessageProducer {
      * Send all the messages that a client needs to send to a router to establish
      * a new session.
      */
-    /**
-     * Connect to the server.
-     */
     public void connect(I2PSessionImpl session) throws I2PSessionException {
         updateBandwidth(session);
         CreateSessionMessage msg = new CreateSessionMessage();
@@ -198,9 +195,6 @@ class I2CPMessageProducer {
      * This does NOT close the socket.
      *
      */
-    /**
-     * Disconnect from the server.
-     */
     public void disconnect(I2PSessionImpl session) throws I2PSessionException {
         if (session.isClosed()) return;
         DestroySessionMessage dmsg = new DestroySessionMessage();
@@ -224,9 +218,6 @@ class I2CPMessageProducer {
      * @param key unused - no end-to-end crypto
      * @param newKey unused - no end-to-end crypto
      */
-    /**
-     * Send an I2CP message.
-     */
     public void sendMessage(
             I2PSessionImpl session,
             Destination dest,
@@ -246,9 +237,6 @@ class I2CPMessageProducer {
      *
      * @param nonce 0 to 0xffffffff; if 0, the router will not reply with a MessageStatusMessage
      * @since 0.8.4
-     */
-    /**
-     * Send an I2CP message.
      */
     public void sendMessage(
             I2PSessionImpl session, Destination dest, long nonce, byte[] payload, long expires, int flags)
@@ -280,9 +268,6 @@ class I2CPMessageProducer {
      *
      * @param nonce 0 to 0xffffffff; if 0, the router will not reply with a MessageStatusMessage
      * @since 0.9.2
-     */
-    /**
-     * Send an I2CP message.
      */
     public void sendMessage(
             I2PSessionImpl session, Destination dest, long nonce, byte[] payload, SendMessageOptions options)
@@ -417,9 +402,6 @@ class I2CPMessageProducer {
     /**
      * Send an abuse message to the router
      */
-    /**
-     * Send an abuse report.
-     */
     public void reportAbuse(I2PSessionImpl session, int msgId, int severity) throws I2PSessionException {
         ReportAbuseMessage msg = new ReportAbuseMessage();
         MessageId id = new MessageId();
@@ -441,9 +423,6 @@ class I2CPMessageProducer {
      * the caller does that.
      *
      * @param signingPriv unused for LS2 lease sets
-     */
-    /**
-     * Send a CreateLeaseSet message.
      */
     public void createLeaseSet(
             I2PSessionImpl session, LeaseSet leaseSet, SigningPrivateKey signingPriv, List<PrivateKey> privs)
@@ -475,9 +454,6 @@ class I2CPMessageProducer {
      * Update number of tunnels
      *
      * @param tunnels 0 for original configured number
-     */
-    /**
-     * Update the tunnel count and settings.
      */
     public void updateTunnels(I2PSessionImpl session, int tunnels) throws I2PSessionException {
         ReconfigureSessionMessage msg = new ReconfigureSessionMessage();

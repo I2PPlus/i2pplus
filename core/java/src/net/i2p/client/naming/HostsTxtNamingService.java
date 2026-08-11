@@ -46,7 +46,7 @@ public class HostsTxtNamingService extends MetaNamingService {
      */
     public static final String PROP_HOSTS_FILE = "i2p.hostsfilelist";
 
-    /** default hosts.txt filenames */
+    /** Default hosts.txt filenames */
     public static final String DEFAULT_HOSTS_FILE = "privatehosts.txt,userhosts.txt,hosts.txt";
 
     private List<String> getFilenames() {

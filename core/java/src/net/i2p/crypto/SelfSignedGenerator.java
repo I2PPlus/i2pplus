@@ -639,12 +639,12 @@ public final class SelfSignedGenerator {
 
     /**
      *  Add the following extensions:
-     *   1) Subject Key Identifier
-     *   2) Key Usage
-     *   3) Basic Constraints
-     *   4) Subject Alternative Name
+     *      1) Subject Key Identifier
+     *      2) Key Usage
+     *      3) Basic Constraints
+     *      4) Subject Alternative Name
      *      As of 0.9.34, adds 127.0.0.1 and ::1 to the SAN also
-     *   5) Authority Key Identifier
+     *      5) Authority Key Identifier
      *  (not necessarily output in that order)
      *
      *  Ref: RFC 5280

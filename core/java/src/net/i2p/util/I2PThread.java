@@ -113,7 +113,7 @@ public class I2PThread extends Thread {
     }
 
     /**
-     * run.
+     * Run the thread, catching and reporting OOM and other failures.
      */
     @Override
     public void run() {
@@ -128,18 +128,18 @@ public class I2PThread extends Thread {
     }
 
     /**
-     * fireOOM.
+     * Notify listeners that an OutOfMemoryError occurred.
      */
     protected void fireOOM(OutOfMemoryError oom) {
         for (OOMEventListener listener : _listeners) listener.outOfMemory(oom);
     }
 
-    /** register a new component that wants notification of OOM events */
+    /** Register a new component that wants notification of OOM events. */
     public static void addOOMEventListener(OOMEventListener lsnr) {
         _listeners.add(lsnr);
     }
 
-    /** unregister a component that wants notification of OOM events */
+    /** Unregister a component that wants notification of OOM events. */
     public static void removeOOMEventListener(OOMEventListener lsnr) {
         _listeners.remove(lsnr);
     }
@@ -151,7 +151,7 @@ public class I2PThread extends Thread {
      */
     public interface OOMEventListener {
         /**
-         * err).
+         * Notify that an OutOfMemoryError occurred.
          */
         public void outOfMemory(OutOfMemoryError err);
     }

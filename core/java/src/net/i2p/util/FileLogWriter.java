@@ -62,7 +62,7 @@ class FileLogWriter extends LogWriter {
     }
 
     /**
-     * writeRecord.
+     * Write the record and its formatted text, using the record's priority.
      */
     @Override
     protected synchronized void writeRecord(LogRecord rec, String formatted) {
@@ -70,7 +70,7 @@ class FileLogWriter extends LogWriter {
     }
 
     /**
-     * writeRecord.
+     * Write the formatted record text at the given priority.
      */
     @Override
     protected synchronized void writeRecord(int priority, String val) {
@@ -173,9 +173,10 @@ class FileLogWriter extends LogWriter {
     }
 
     /**
-     * Get the next file in the rotation
+     * Next file in the rotation.
      *
-     * Caller must synch
+     * Caller must sync.
+     *
      * @return the next file
      */
     private File getNextFile() {
@@ -273,7 +274,7 @@ class FileLogWriter extends LogWriter {
         }
 
         /**
-         * run.
+         * Compress the rotated log file.
          */
         @Override
         public void run() {
@@ -281,7 +282,7 @@ class FileLogWriter extends LogWriter {
         }
 
         /**
-         * compress.
+         * Compress the log file to a .gz file.
          */
         public void compress() {
             File to = new File(_f.getPath() + ".gz");

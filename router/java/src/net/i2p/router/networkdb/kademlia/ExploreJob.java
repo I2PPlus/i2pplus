@@ -64,7 +64,7 @@ public class ExploreJob extends SearchJob {
     private final int _bredth;
 
     /**
-     * Constructs a new ExploreJob with given parameters and calculates concurrency level.
+     * New exploratory search with the given parameters and calculated concurrency level.
      *
      * @param context       Router context providing environment and config access
      * @param facade        Facade handling the Kademlia network database operations

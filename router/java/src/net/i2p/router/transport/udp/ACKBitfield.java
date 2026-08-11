@@ -7,14 +7,14 @@ package net.i2p.router.transport.udp;
 interface ACKBitfield {
 
     /**
-     * Get the message ID this is partially ACKing.
+     * The message ID this is partially ACKing.
      *
      * @return message ID
      */
     public long getMessageId();
 
     /**
-     * Get how many fragments are covered in this bitfield.
+     * The number of fragments covered in this bitfield.
      *
      * @return number of fragments
      */

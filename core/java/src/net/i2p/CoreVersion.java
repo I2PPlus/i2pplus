@@ -22,7 +22,7 @@ public class CoreVersion {
      */
     private CoreVersion() {}
 
-    /** deprecated */
+    /** Build identifier. */
     public static final String ID = "Git";
 
     /**

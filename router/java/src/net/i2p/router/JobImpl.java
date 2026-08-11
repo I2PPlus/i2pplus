@@ -32,21 +32,21 @@ public abstract class JobImpl implements Job {
     }
 
     /**
-     * Get the unique job ID for this job.
+     * The unique job ID for this job.
      *
      * @return the unique job identifier
      */
     public long getJobId() { return _id; }
 
     /**
-     * Get the timing object for this job.
+     * The timing object for this job.
      *
      * @return the JobTiming object controlling when this job runs
      */
     public JobTiming getTiming() { return _timing; }
 
     /**
-     * Get the router context that this job belongs to.
+     * The router context that this job belongs to.
      *
      * @return the RouterContext for this job
      */
@@ -58,7 +58,7 @@ public abstract class JobImpl implements Job {
     }
 
     /**
-     * Get the timestamp when this job was last made ready for execution.
+     * The timestamp when this job was last made ready for execution.
      *
      * @return timestamp in milliseconds when job was made ready, or 0 if not yet ready
      */

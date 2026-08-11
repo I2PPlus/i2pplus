@@ -23,10 +23,10 @@ import java.io.ByteArrayOutputStream;
  */
 public abstract class StructureTest {
 
-    /** create a populated structure for writing */
+    /** Create a populated structure for writing. */
     public abstract DataStructure createDataStructure() throws DataFormatException;
 
-    /** create an unpopulated structure for reading */
+    /** Create an unpopulated structure for reading. */
     public abstract DataStructure createStructureToRead();
 
     @Test

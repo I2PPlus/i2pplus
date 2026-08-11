@@ -142,6 +142,8 @@ public class EepPost extends EepGet {
     }
 
     /**
+     * Not supported, use post() instead.
+     *
      * @throws UnsupportedOperationException always
      */
     @Override
@@ -150,6 +152,8 @@ public class EepPost extends EepGet {
     }
 
     /**
+     * Not supported, use post() instead.
+     *
      * @throws UnsupportedOperationException always
      */
     @Override
@@ -158,6 +162,8 @@ public class EepPost extends EepGet {
     }
 
     /**
+     * Not supported, use post() instead.
+     *
      * @throws UnsupportedOperationException always
      */
     @Override

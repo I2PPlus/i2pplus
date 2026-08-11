@@ -38,7 +38,9 @@ public enum EncAlgo {
     }
 
     /**
-     * @return the name
+     * The name of this encryption algorithm.
+     *
+     * @return The name.
      */
     public String getName() {
         return name;

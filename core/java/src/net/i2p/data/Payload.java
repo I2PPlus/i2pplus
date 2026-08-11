@@ -124,10 +124,10 @@ public class Payload extends DataStructureImpl {
     }
 
      /**
-      * the real data
-      *
-      *  @throws IllegalArgumentException if bigger than 64KB
-     *  @param data the data
+     * The encrypted data.
+     *
+     * @param data the data
+     * @throws IllegalArgumentException if bigger than 64KB
      */
     public void setEncryptedData(byte[] data) {
         if (data.length > MAX_LENGTH) throw new IllegalArgumentException();

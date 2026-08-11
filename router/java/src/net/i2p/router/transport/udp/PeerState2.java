@@ -142,13 +142,15 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private final boolean shouldLogDebug = _log.shouldDebug();
 
     /**
+     * Current sent-messages cleanup interval.
+     *
      * @return current sent-messages cleanup interval in ms
      * @since 0.9.70+
      */
     public static long getSentMessagesCleanTime() { return _sentMessagesCleanTime; }
 
     /**
-     * Set sent-messages cleanup interval. Called by Tuner.
+     * Sent-messages cleanup interval, called by Tuner.
      * @param ms cleanup interval in ms, clamped to [2000, 300000]
      * @since 0.9.70+
      */
@@ -211,6 +213,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     // SSU 1 overrides
 
     /**
+     * The version.
+     *
      * @return the version
      */
     @Override
@@ -406,6 +410,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     protected long getNextPacketNumberNoThrow() {return _packetNumber.getAndIncrement();}
 
     /**
+     * The send connection ID.
+     * For PeerStateDestroyed only, after we are dead.
+     *
      * @since public since 0.9.57 for SSU2Sender interface only
      * @return the send conn i d
      */
@@ -417,11 +424,17 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      */
     public CipherState getSendCipher() {return _sendCha;}
     /**
+     * The send header encryption key 1.
+     * Caller must sync on returned object when encrypting.
+     *
      * @since public since 0.9.57 for SSU2Sender interface only
      * @return the send header encrypt key1
      */
     public byte[] getSendHeaderEncryptKey1() {return _sendHeaderEncryptKey1;}
     /**
+     * The send header encryption key 2.
+     * Caller must sync on returned object when encrypting.
+     *
      * @since public since 0.9.57 for SSU2Sender interface only
      * @return the send header encrypt key2
      */
@@ -450,6 +463,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     byte[] getRcvHeaderEncryptKey2() {return _rcvHeaderEncryptKey2;}
 
     /**
+     * The destroy reason, for PeerStateDestroyed only, after we are dead.
+     *
      * @return 0 (REASON_UNSPEC) if unset
      * @since 0.9.57 for PeerStateDestroyed
      */
@@ -483,7 +498,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     int getOurPort() {return _ourPort;}
 
     /**
-     *  @since public since 0.9.57 for SSU2Sender interface only
+     *  Bitfield of messages received from the peer.
+     * @since public since 0.9.57 for SSU2Sender interface only
      * @return the received messages
      */
     public SSU2Bitfield getReceivedMessages() {
@@ -495,7 +511,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  @since public since 0.9.57 for SSU2Sender interface only
+     *  Bitfield of messages acknowledged to the peer.
+     * @since public since 0.9.57 for SSU2Sender interface only
      * @return the acked messages
      */
     public SSU2Bitfield getAckedMessages() {return _ackedMessages;}
@@ -703,7 +720,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /////////////////////////////////////////////////////////
 
     /**
-     * gotDateTime.
+     * Process a received DateTime block.
      */
     public void gotDateTime(long time) {
         // super adds CLOCK_SKEW_FUDGE that doesn't apply here
@@ -711,14 +728,14 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * gotOptions.
+     * Process a received Options block.
      */
     public void gotOptions(byte[] options, boolean isHandshake) {
         // No-op - intentionally empty
     }
 
     /**
-     * gotRI.
+     * Process a received RouterInfo block, storing and possibly flooding it.
      */
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
         if (shouldLogDebug) {
@@ -755,19 +772,19 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * gotRIFragment.
+     * Process a received RouterInfo fragment block.
      */
     public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
         throw new IllegalStateException("RouterInfo fragment in Data phase");
     }
 
     /**
-     * gotAddress.
+     * Process a received Address block, updating our external address.
      */
     public void gotAddress(byte[] ip, int port) {_ourIP = ip; _ourPort = port;} // TODO validate
 
     /**
-     * gotRelayTagRequest.
+     * Process a received RelayTagRequest block, offering a relay tag if possible.
      */
     public void gotRelayTagRequest() {
         if (shouldLogDebug) {_log.debug("[SSU] Received RELAY TAG REQUEST " + this);}
@@ -792,7 +809,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * gotRelayTag.
+     * Process a received RelayTag block.
      */
     public void gotRelayTag(long tag) {
         long old = getTheyRelayToUsAs();
@@ -807,7 +824,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * gotRelayRequest.
+     * Process a received RelayRequest block.
      */
     public void gotRelayRequest(byte[] data) {
         _transport.getIntroManager().receiveRelayRequest(this, data);
@@ -816,7 +833,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * gotRelayResponse.
+     * Process a received RelayResponse block.
      */
     public void gotRelayResponse(int status, byte[] data) {
         _transport.getIntroManager().receiveRelayResponse(this, status, data);
@@ -825,7 +842,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * gotRelayIntro.
+     * Process a received RelayIntro block.
      */
     public void gotRelayIntro(Hash aliceHash, byte[] data) {
         _transport.getIntroManager().receiveRelayIntro(this, aliceHash, data);
@@ -834,7 +851,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * gotPeerTest.
+     * Process a received PeerTest block.
      */
     public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
         _transport.getPeerTestManager().receiveTest(_remoteHostId, this, msg, status, h, data);
@@ -843,7 +860,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * gotToken.
+     * Process a received Token block.
      */
     public void gotToken(long token, long expires) {
         if (shouldLogDebug) {
@@ -853,7 +870,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * gotI2NP.
+     * Process a received I2NP block.
      */
     public void gotI2NP(I2NPMessage msg) {
         if (shouldLogDebug) {_log.debug("[SSU] Received I2NP block: " + msg);}
@@ -873,7 +890,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * gotFragment.
+     * Process a received Fragment block.
      */
     public void gotFragment(byte[] data, int off, int len, long messageId, int frag, boolean isLast) throws DataFormatException {
         if (shouldLogDebug) {
@@ -961,7 +978,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * gotACK.
+     * Process a received ACK block.
      */
     public void gotACK(long ackThru, int acks, byte[] ranges) {
         int hc = (((int) ackThru) << 8) ^ (acks << 24) ^ DataHelper.hashCode(ranges);
@@ -988,7 +1005,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
 
     /**
-     * gotTermination.
+     * Process a received Termination block.
      */
     public void gotTermination(int reason, long count) {
         if (shouldLogDebug) {
@@ -1012,7 +1029,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * gotPathChallenge.
+     * Process a received PathChallenge block, replying with a PathResponse.
      */
     public void gotPathChallenge(RemoteHostId from, byte[] data) {
         if (shouldLogDebug) {_log.debug("Received PATH CHALLENGE block, length: " + data.length + " " + this);}
@@ -1033,7 +1050,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * gotPathResponse.
+     * Process a received PathResponse block.
      */
     public void gotPathResponse(RemoteHostId from, byte[] data) {
         if (shouldLogDebug) {
@@ -1257,6 +1274,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
+     * The saved SessionConfirmed packets for retransmission.
+     *
      * @return null if not sent or already got the ack
      */
     private synchronized UDPPacket[] getRetransmitSessionConfirmedPackets() {
@@ -1282,7 +1301,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      *  Flag byte to be sent in header
      *
-     *  @since 0.9.56, public since 0.9.57 for SSU2Sender interface
+     * @since 0.9.56, public since 0.9.57 for SSU2Sender interface
      * @return the flags
      */
     public byte getFlags() {return shouldRequestImmediateAck() ? (byte) 0x01 : 0;}
@@ -1293,6 +1312,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     boolean isDead() {return _dead;}
 
     /**
+     * Number of pending sent-but-unacked packet entries.
+     *
      * @return number of pending sent-but-unacked packet entries
      * @since 0.9.70+
      */

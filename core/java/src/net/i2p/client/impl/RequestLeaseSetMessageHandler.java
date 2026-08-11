@@ -130,9 +130,6 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         return true;
     }
 
-    /**
-     * handleMessage.
-     */
     @Override
     /**
      * Handle an incoming I2CP message.
@@ -502,8 +499,8 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 }
             } catch (I2PSessionException ise) {
                 if (session.isClosed()) {
-                    /**
-                     * race, closed while signing leaseset - EOFExceptions are logged at WARN level
+                    /*
+                     * Race, closed while signing leaseset - EOFExceptions are logged at WARN level
                      * (see I2PSessionImpl.propagateError()) so the user won't see this
                      */
                     EOFException eof = new EOFException("Session closed while signing LeaseSet");
@@ -735,12 +732,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             private static final long serialVersionUID = 1L;
 
             /**
-             * compare.
-             */
-            @Override
-            /**
              * Compare two objects.
              */
+            @Override
             public int compare(PrivateKey l, PrivateKey r) {
                 return r.getType().compareTo(l.getType());
             }

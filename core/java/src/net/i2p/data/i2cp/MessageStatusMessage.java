@@ -44,7 +44,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      */
     public static final int STATUS_SEND_ACCEPTED = 1;
 
-    /** unused */
+    /** Unused best-effort success status code. */
     public static final int STATUS_SEND_BEST_EFFORT_SUCCESS = 2;
 
     /**
@@ -223,12 +223,12 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     /**
      * NOTE: Add any new status codes to handlers in:
-     *   net.i2p.client.impl.MessageState
-     *   net.i2p.client.impl.MessageStatusMessageHandler
-     *   net.i2p.client.streaming.I2PSocketException
-     *   net.i2p.client.streaming.impl.PacketQueue
-     *   net.i2p.i2ptunnel.I2PTunnelHTTPClientBase
-     *   and update http://i2p-projekt.i2p/spec/i2cp
+     *     net.i2p.client.impl.MessageState
+     *     net.i2p.client.impl.MessageStatusMessageHandler
+     *     net.i2p.client.streaming.I2PSocketException
+     *     net.i2p.client.streaming.impl.PacketQueue
+     *     net.i2p.i2ptunnel.I2PTunnelHTTPClientBase
+     *     and update http://i2p-projekt.i2p/spec/i2cp
      */
     public MessageStatusMessage() {
         _sessionId = -1;
@@ -285,7 +285,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      *  Is the status code a success status code?
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      * @return whether successful
      */
     public boolean isSuccessful() {
@@ -295,7 +295,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      *  Is the status code a success status code?
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      * @return whether successful
      */
     public static boolean isSuccessful(int status) {
@@ -326,7 +326,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * setSize.
+     * Size of the message data.
      */
     public void setSize(long size) {
         _size = size;
@@ -366,7 +366,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * doReadMessage.
+     * Read the message body from the input stream.
      */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
@@ -409,7 +409,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * doWriteMessage.
+     * Write the message body to the output stream.
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

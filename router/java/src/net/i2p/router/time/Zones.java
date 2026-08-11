@@ -32,8 +32,8 @@ class Zones {
     private static final String CONTINENT_FILE_DEFAULT = "continents.txt";
 
     /**
-     * ref: http://dev.maxmind.com/geoip/legacy/codes/country_continent/
-     *  ref: http://www.pool.ntp.org/zone/@
+     * Ref: http://dev.maxmind.com/geoip/legacy/codes/country_continent/
+     * Ref: http://www.pool.ntp.org/zone/@
      */
     private static final String[] ZONES = {
         // not an NTP zone
@@ -77,11 +77,11 @@ class Zones {
      *  The file need not be sorted.
      *
      *  Format:
-     *    #comment (# must be in column 1)
-     *    country code,continent code
+     *  #comment (# must be in column 1)
+     *  country code,continent code
      *
      *  Example:
-     *    US,NA
+     *  US,NA
      *
      *  Modified from GeoIP.readCountryFile()
      *  ref: http://dev.maxmind.com/geoip/legacy/codes/country_continent/

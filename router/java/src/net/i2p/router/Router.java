@@ -86,13 +86,13 @@ public class Router implements RouterClock.ClockShiftListener {
     private Log _log;
     private final RouterContext _context;
     private final Map<String, String> _config;
-    /** full path */
+    /** Full path to the config file */
     private String _configFilename;
     private RouterInfo _routerInfo;
     private final ReentrantReadWriteLock _routerInfoLock = new ReentrantReadWriteLock(false);
     private RouterIdentity _routerIdent;
     private Hash _routerHash;
-    /** not for external use */
+    /** Not for external use */
     public final Object routerInfoFileLock = new Object();
     private final Object _configFileLock = new Object();
     private long _started;
@@ -111,7 +111,7 @@ public class Router implements RouterClock.ClockShiftListener {
     private FamilyKeyCrypto _familyKeyCrypto;
     private boolean _familyKeyCryptoFail;
     /**
-     * _familyKeyLock.
+     * Lock protecting the family key crypto.
      */
     public final Object _familyKeyLock = new Object();
     private UPnPScannerCallback _upnpScannerCallback;
@@ -125,24 +125,24 @@ public class Router implements RouterClock.ClockShiftListener {
 
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
     /**
-     * PROP_CONFIG_FILE.
+     * Config property for the router config file location.
      */
     public static final String PROP_CONFIG_FILE = "router.configLocation";
 
-    /** let clocks be off by 30 seconds (reduced from 60s to improve lease renewal timing) */
+    /** Let clocks be off by 30 seconds (reduced from 60s to improve lease renewal timing) */
     public static final long CLOCK_FUDGE_FACTOR = 30L*1000;
 
-    /** used to differentiate routerInfo files on different networks */
+    /** Used to differentiate routerInfo files on different networks */
     private static final int DEFAULT_NETWORK_ID = 2;
     private static final String PROP_NETWORK_ID = "router.networkID";
     private final int _networkID;
 
-    /** coalesce stats this often - should be a little less than one minute, so the graphs get updated */
+    /** Coalesce stats this often - should be a little less than one minute, so the graphs get updated */
     public static final int COALESCE_TIME = 50*1000;
 
-    /** this puts an 'H' in your routerInfo **/
+    /** This puts an 'H' in your routerInfo **/
     public static final String PROP_HIDDEN = "router.hiddenMode";
-    /** this does not put an 'H' in your routerInfo **/
+    /** This does not put an 'H' in your routerInfo **/
     public static final String PROP_HIDDEN_HIDDEN = "router.isHidden";
     /** New router keys at every restart. Disabled. */
     public static final String PROP_DYNAMIC_KEYS = "router.dynamicKeys";
@@ -152,21 +152,21 @@ public class Router implements RouterClock.ClockShiftListener {
      *  @since 0.9.34
      */
     public static final String PROP_REBUILD_KEYS = "router.rebuildKeys";
-    /** deprecated, use gracefulShutdownInProgress() */
+    /** Deprecated, use gracefulShutdownInProgress() */
     private static final String PROP_SHUTDOWN_IN_PROGRESS = "__shutdownInProgress";
     /**
-     * PROP_IB_RANDOM_KEY.
+     * Config property for the inbound exploratory pool random key.
      */
     public static final String PROP_IB_RANDOM_KEY = TunnelPoolSettings.PREFIX_INBOUND_EXPLORATORY + TunnelPoolSettings.PROP_RANDOM_KEY;
     /**
-     * PROP_OB_RANDOM_KEY.
+     * Config property for the outbound exploratory pool random key.
      */
     public static final String PROP_OB_RANDOM_KEY = TunnelPoolSettings.PREFIX_OUTBOUND_EXPLORATORY + TunnelPoolSettings.PROP_RANDOM_KEY;
     private static final String EVENTLOG = "eventlog.txt";
     private static final String PROP_JBIGI = "jbigi.loadedResource";
     private static final String PROP_JBIGI_PROCESSOR = "jbigi.lastProcessor";
     /**
-     * UPDATE_FILE.
+     * The update zip file name.
      */
     public static final String UPDATE_FILE = "i2pupdate.zip";
     private static final boolean CONGESTION_CAPS = true;
@@ -174,6 +174,8 @@ public class Router implements RouterClock.ClockShiftListener {
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String PROP_RELAX_CONGESTION_CAP = "router.relaxCongestionCap";
     /**
+     * Whether advanced mode is enabled.
+     *
      * @return whether advanced
      */
     public boolean isAdvanced() {return getContext().getBooleanProperty(PROP_ADVANCED);}
@@ -507,7 +509,7 @@ public class Router implements RouterClock.ClockShiftListener {
     public boolean getKillVMOnEnd() {return _killVMOnEnd;}
 
     /**
-     * Get the absolute path to the router configuration file.
+     * The absolute path to the router configuration file.
      *
      * @return absolute path to the configuration file
      */
@@ -522,7 +524,7 @@ public class Router implements RouterClock.ClockShiftListener {
     public String getConfigSetting(String name) {return _config.get(name);}
 
     /**
-     * Get an unmodifiable set of all configuration property names.
+     * An unmodifiable set of all configuration property names.
      *
      * <p>Warning: this is a live view of the configuration - use
      * {@link #saveConfig()} or {@link #saveConfig(String, String)} when you
@@ -534,7 +536,7 @@ public class Router implements RouterClock.ClockShiftListener {
     public Set<String> getConfigSettings() {return Collections.unmodifiableSet(_config.keySet());}
 
     /**
-     * Get an unmodifiable map of all configuration settings.
+     * An unmodifiable map of all configuration settings.
      *
      * @return unmodifiable Map of configuration property names to values (unsorted)
      */
@@ -564,7 +566,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Lockless.
      *
      *  @since 0.9.67
-     * @return the router identity
+     *  @return the router identity
      */
     public RouterIdentity getRouterIdentity() {return _routerIdent;}
 
@@ -574,7 +576,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Lockless.
      *
      *  @since 0.9.67
-     * @return the router hash
+     *  @return the router hash
      */
     public Hash getRouterHash() {return _routerHash;}
 
@@ -641,11 +643,11 @@ public class Router implements RouterClock.ClockShiftListener {
 
     private class LoggerCallback implements UPnPScannerCallback {
         /**
-         * beforeScan.
+         * Log that the SSDP scan is about to begin.
          */
         public void beforeScan() {_log.info("SSDP beforeScan()");}
         /**
-         * afterScan.
+         * Log that the SSDP scan has finished.
          */
         public void afterScan() {_log.info("SSDP afterScan()");}
     }
@@ -801,11 +803,11 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     private enum State {
         UNINITIALIZED,
-        /** constructor complete */
+        /** Constructor complete */
         INITIALIZED,
-        /** runRouter() called */
+        /** Startup: runRouter() called */
         STARTING_1,
-        /** startupStuff() complete, most of the time here is NTP */
+        /** Startup: startupStuff() complete, most of the time here is NTP */
         STARTING_2,
         /** NTP done, Job queue started, StartupJob queued, runRouter() returned */
         STARTING_3,
@@ -813,7 +815,7 @@ public class Router implements RouterClock.ClockShiftListener {
         NETDB_READY,
         /** Non-zero-hop expl. tunnels built. From STARTING_3 */
         EXPL_TUNNELS_READY,
-        /** from NETDB_READY or EXPL_TUNNELS_READY */
+        /** From NETDB_READY or EXPL_TUNNELS_READY */
         RUNNING,
         /**
          *  A "soft" restart, primarily of the comm system, after
@@ -823,7 +825,7 @@ public class Router implements RouterClock.ClockShiftListener {
          *  This is not a graceful restart - all peer connections are dropped immediately.
          */
         RESTARTING,
-        /** cancellable shutdown has begun */
+        /** Cancellable shutdown has begun */
         GRACEFUL_SHUTDOWN,
         /** In shutdown(). Non-cancellable shutdown has begun */
         FINAL_SHUTDOWN_1,
@@ -831,7 +833,7 @@ public class Router implements RouterClock.ClockShiftListener {
         FINAL_SHUTDOWN_2,
         /** In finalShutdown(). Final cleanup */
         FINAL_SHUTDOWN_3,
-        /** all done */
+        /** All done */
         STOPPED
     }
 
@@ -880,6 +882,8 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
+     * Whether the router is RUNNING, i.e. NetDB and expl. tunnels are ready.
+     *
      * @return true if router is RUNNING, i.e NetDB and Expl. tunnels are ready.
      * @since 0.9.39
      */
@@ -888,6 +892,8 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
+     * Whether the router is RESTARTING (soft restart).
+     *
      * @return true if router is RESTARTING (soft restart)
      * @since 0.9.40
      */
@@ -987,7 +993,6 @@ public class Router implements RouterClock.ClockShiftListener {
      * Not for external use.
      *
      * Warning - risk of deadlock - do not call while holding locks
-     *
      */
     public void rebuildRouterInfo() {rebuildRouterInfo(false);}
 
@@ -996,7 +1001,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * has changed.
      * Not for external use.
      *
-     *  Warning - risk of deadlock - do not call while holding locks
+     * Warning - risk of deadlock - do not call while holding locks
      *
      * @param blockingRebuild ignored, operation is always nonblocking
      */
@@ -1066,38 +1071,38 @@ public class Router implements RouterClock.ClockShiftListener {
 
     // publicize our ballpark capacity
     /**
-     * CAPABILITY_BW12.
+     * Bandwidth class capability for 12 KB/s.
      */
     public static final char CAPABILITY_BW12 = 'K';
     /**
-     * CAPABILITY_BW32.
+     * Bandwidth class capability for 32 KB/s.
      */
     public static final char CAPABILITY_BW32 = 'L';
     /**
-     * CAPABILITY_BW64.
+     * Bandwidth class capability for 64 KB/s.
      */
     public static final char CAPABILITY_BW64 = 'M';
     /**
-     * CAPABILITY_BW128.
+     * Bandwidth class capability for 128 KB/s.
      */
     public static final char CAPABILITY_BW128 = 'N';
     /**
-     * CAPABILITY_BW256.
+     * Bandwidth class capability for 256 KB/s.
      */
     public static final char CAPABILITY_BW256 = 'O';
     /** @since 0.9.18 */
     public static final char CAPABILITY_BW512 = 'P';
     /** @since 0.9.18 */
     public static final char CAPABILITY_BW_UNLIMITED = 'X';
-    /** for testing */
+    /** For testing */
     public static final String PROP_FORCE_BWCLASS = "router.forceBandwidthClass";
 
     /**
-     * CAPABILITY_REACHABLE.
+     * Reachability capability.
      */
     public static final char CAPABILITY_REACHABLE = 'R';
     /**
-     * CAPABILITY_UNREACHABLE.
+     * Unreachability capability.
      */
     public static final char CAPABILITY_UNREACHABLE = 'U';
 
@@ -1108,7 +1113,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /** @since 0.9.58, proposal 162 */
     public static final char CAPABILITY_NO_TUNNELS = 'G';
 
-    /** for testing */
+    /** For testing */
     public static final String PROP_FORCE_UNREACHABLE = "router.forceUnreachable";
 
     /**
@@ -1303,12 +1308,11 @@ public class Router implements RouterClock.ClockShiftListener {
         return rv.toString();
     }
 
-    /*
-     *  This checks the config only. We don't check the current RI
-     *  due to deadlocks.
-     *
-     */
     /**
+     * Whether the router is hidden.
+     * This checks the config only. We don't check the current RI
+     * due to deadlocks.
+     *
      * @return whether hidden
      */
     public boolean isHidden() {
@@ -1389,9 +1393,9 @@ public class Router implements RouterClock.ClockShiftListener {
      * Rebuild a new identity the hard way - delete all of our old identity
      * files, then reboot the router.
      *
-     *  Calls exit(), never returns.
+     * Calls exit(), never returns.
      *
-     *  Not for external use.
+     * Not for external use.
      */
     @SuppressWarnings("java:S1181")
     public synchronized void rebuildNewIdentity() {
@@ -1482,15 +1486,15 @@ public class Router implements RouterClock.ClockShiftListener {
         if (changes != null) {saveConfig(changes, null);}
     }
 
-    /** shut down after all tunnels are gone */
+    /** Shut down after all tunnels are gone */
     public static final int EXIT_GRACEFUL = 2;
-    /** shut down immediately */
+    /** Shut down immediately */
     public static final int EXIT_HARD = 3;
-    /** shut down immediately */
+    /** Shut down immediately */
     public static final int EXIT_OOM = 10;
-    /** shut down immediately, and tell the wrapper to restart */
+    /** Shut down immediately, and tell the wrapper to restart */
     public static final int EXIT_HARD_RESTART = 4;
-    /** shut down after all tunnels are gone, and tell the wrapper to restart */
+    /** Shut down after all tunnels are gone, and tell the wrapper to restart */
     public static final int EXIT_GRACEFUL_RESTART = 5;
 
     /**
@@ -1698,7 +1702,7 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     * disable dynamic key functionality for the moment, as it may be harmful and doesn't
+     * Disable dynamic key functionality for the moment, as it may be harmful and doesn't
      * add meaningful anonymity
      */
     private static final boolean ALLOW_DYNAMIC_KEYS = true;
@@ -2061,7 +2065,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Once called, the result is cached.
      *
      *  @since 0.9.47
-     * @return the estimated downtime
+     *  @return the estimated downtime
      */
     public long getEstimatedDowntime() {
         synchronized(_configFileLock) {

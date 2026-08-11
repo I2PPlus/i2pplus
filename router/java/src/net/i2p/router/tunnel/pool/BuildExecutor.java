@@ -118,25 +118,25 @@ public class BuildExecutor implements Runnable {
     private static volatile long POOL_BACKOFF_MS = 12 * 1000L;
 
     /**
-     * Get the pool failure threshold.
+     * The pool failure threshold.
      * @return the threshold
      * @since 0.9.70+
      */
     public static int getPoolFailureThreshold() { return CONSECUTIVE_FAILURE_THRESHOLD; }
     /**
-     * Set the pool failure threshold.
+     * The pool failure threshold.
      * @param val the threshold value (1-20)
      * @since 0.9.70+
      */
     public static void setPoolFailureThreshold(int val) { CONSECUTIVE_FAILURE_THRESHOLD = Math.max(1, Math.min(20, val)); }
     /**
-     * Get the pool backoff time in milliseconds.
+     * The pool backoff time in milliseconds.
      * @return the backoff in ms
      * @since 0.9.70+
      */
     public static long getPoolBackoffMs() { return POOL_BACKOFF_MS; }
     /**
-     * Set the pool backoff time in milliseconds.
+     * The pool backoff time in milliseconds.
      * @param val the backoff in ms (1000-60000)
      * @since 0.9.70+
      */
@@ -147,7 +147,7 @@ public class BuildExecutor implements Runnable {
     private volatile long _adaptiveFirstHopTimeout;
 
     /**
-     * Get the tunnel lifetime from config. Delegates to TunnelPool.
+     * The tunnel lifetime from config, delegated to TunnelPool.
      *
      * @param ctx the router context
      * @return the tunnel lifetime in milliseconds
@@ -157,7 +157,7 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
-     * Get the target build buffer from config or default (0).
+     * The target build buffer from config or default (0).
      * Extra tunnels to maintain beyond the configured quantity.
      * Tunable via i2p.tunnel.targetBuffer (default: 0).
      *
@@ -169,7 +169,7 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
-     * Get the GOOD deficit throttle interval from config or default (30s).
+     * The GOOD deficit throttle interval from config or default (30s).
      * Minimum time between GOOD-tunnel deficit rebuilds for non-critical pools.
      * Tunable via i2p.tunnel.goodDeficitThrottle (default: 30000).
      *
@@ -180,7 +180,7 @@ public class BuildExecutor implements Runnable {
         return ctx.getProperty("i2p.tunnel.goodDeficitThrottle", 30000);
     }
     /**
-     * Get the maximum number of concurrent tunnel builds allowed.
+     * The maximum number of concurrent tunnel builds allowed.
      * Calculated based on CPU cores and configurable multiplier
      *
      * @return maximum concurrent builds allowed
@@ -189,14 +189,14 @@ public class BuildExecutor implements Runnable {
     private static volatile int _maxConcurrentBuilds = Math.max(SystemVersion.getCores() * 4, 32);
 
     /**
-     * Get the maximum number of concurrent builds allowed.
+     * The maximum number of concurrent builds allowed.
      * @return maximum concurrent builds
      * @since 0.9.70+
      */
     public static int getMaxConcurrentBuilds() { return _maxConcurrentBuilds; }
 
     /**
-     * Set the maximum number of concurrent builds allowed.
+     * The maximum number of concurrent builds allowed.
      * @param val the maximum concurrent builds
      * @since 0.9.70+
      */
@@ -386,8 +386,8 @@ public class BuildExecutor implements Runnable {
      * marginally in either direction based on success rate.
      *
      * Adaptive ranges:
-     *   REQUEST_TIMEOUT:   13s base, 10-18s range
-     *   FIRST_HOP_TIMEOUT: 10s base, 8-15s range
+     * REQUEST_TIMEOUT:   13s base, 10-18s range
+     * FIRST_HOP_TIMEOUT: 10s base, 8-15s range
      */
     private void calculateAdaptiveTimeoutFromSuccess() {
         int successCount = _buildSuccessCount.get();
@@ -1241,7 +1241,7 @@ public class BuildExecutor implements Runnable {
     /**
      * Graduated-urgency replenishment - replaces simple deficit-based approach.
      * Uses expiry-window urgency multipliers from mainline I2P:
-     *   1x at 210-270s, 2x at 150-210s, 4x at 90-150s, 6x at <90s.
+     * 1x at 210-270s, 2x at 150-210s, 4x at 90-150s, 6x at <90s.
      * This ensures tunnels are rebuilt predictively before they expire,
      * rather than only reactively after failure.
      */

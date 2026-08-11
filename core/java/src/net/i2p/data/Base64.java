@@ -122,7 +122,7 @@ public class Base64 {
      * @param s the Base64 encoded string
      * @param useStandardAlphabet Warning, must be false for I2P compatibility
      * @return the decoded data, null on error
-     *  @since 0.9.25
+     * @since 0.9.25
      */
     public static byte[] decode(String s, boolean useStandardAlphabet) {
         return safeDecode(s, useStandardAlphabet);
@@ -161,7 +161,7 @@ public class Base64 {
      * Translates a Base64 value to either its 6-bit reconstruction value
      * or a negative number indicating some other meaning.
      * As of 0.9.14 this is the decoding for the I2P alphabet. See safeDecode().
-     **/
+     */
     private final static byte[] DECODABET = {
         -9, -9, -9, -9, -9, -9, -9, -9, -9,                     // Decimal  0 -  8
         -5, -5,                                                 // Whitespace: Tab and Linefeed
@@ -287,7 +287,7 @@ public class Base64 {
         out.write(decoded);
     }
 
-    /** exits 1, never returns */
+    /** Exits 1, never returns. */
     private static void help() {
         System.err.println("Usage: Base64 encode <inFile> <outFile>");
         System.err.println("       Base64 encode <inFile>");

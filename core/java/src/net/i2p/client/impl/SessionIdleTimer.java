@@ -92,7 +92,7 @@ class SessionIdleTimer extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * timeReached.
+     * Check session activity and reduce or destroy on idle.
      */
     @Override
     public void timeReached() {

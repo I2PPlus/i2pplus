@@ -16,7 +16,7 @@ class OutboundGatewayProcessor {
     private final I2PAppContext _context;
     private final TunnelCreatorConfig _config;
 
-    /** method comment */
+    /** Binds the router context and tunnel creator config. */
     public OutboundGatewayProcessor(I2PAppContext ctx, TunnelCreatorConfig cfg) {
         _context = ctx;
         _config = cfg;

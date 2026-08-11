@@ -65,7 +65,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * setSessionId.
+     * Session ID for this message.
      */
     public void setSessionId(SessionId id) {
         _sessionId = id;
@@ -102,7 +102,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * addEndpoint.
+     * Add a router and tunnel endpoint.
      */
     public void addEndpoint(Hash router, TunnelId tunnel) {
         if (router == null) {
@@ -123,14 +123,14 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * setEndDate.
+     * End date of the lease set.
      */
     public void setEndDate(Date end) {
         _end = end;
     }
 
     /**
-     * doReadMessage.
+     * Read the message body from the input stream.
      */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
@@ -153,7 +153,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * doWriteMessage.
+     * Write the message body to the output stream.
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

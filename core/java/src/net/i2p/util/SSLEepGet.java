@@ -48,19 +48,19 @@ import net.i2p.socks.SOCKS5Client;
  */
 @SuppressWarnings("PMD.CloseResource")
 public class SSLEepGet extends EepGet {
-    /** if true, save cert chain on cert error */
+    /** If true, save cert chain on cert error. */
     private int _saveCerts;
 
-    /** if true, don't do hostname verification */
+    /** If true, don't do hostname verification. */
     private boolean _bypassVerification;
 
-    /** true if called from main(), used for logging */
+    /** True if called from main(), used for logging. */
     private boolean _commandLine;
 
-    /** may be null if init failed */
+    /** May be null if init failed. */
     private final SSLContext _sslContext;
 
-    /** may be null if init failed */
+    /** May be null if init failed. */
     private SavingTrustManager _stm;
 
     private final ProxyType _proxyType;
@@ -346,6 +346,8 @@ public class SSLEepGet extends EepGet {
         }
 
         /**
+         * Issuers accepted by the wrapped trust manager.
+         *
          * @return the accepted issuers
          */
         @Override
@@ -354,7 +356,7 @@ public class SSLEepGet extends EepGet {
         }
 
         /**
-         * checkClientTrusted.
+         * Reject all client certificates.
          */
         @Override
         public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
@@ -362,7 +364,7 @@ public class SSLEepGet extends EepGet {
         }
 
         /**
-         * checkServerTrusted.
+         * Save the presented chain, delegating to the wrapped trust manager.
          */
         @Override
         public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
@@ -452,7 +454,7 @@ public class SSLEepGet extends EepGet {
     ///// start of overrides
 
     /**
-     * doFetch.
+     * Fetch the resource over SSL.
      */
     @Override
     protected void doFetch(SocketTimeout timeout) throws IOException {
@@ -620,7 +622,7 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     * sendRequest.
+     * Send the HTTP request over SSL.
      */
     @Override
     protected void sendRequest(SocketTimeout timeout) throws IOException {

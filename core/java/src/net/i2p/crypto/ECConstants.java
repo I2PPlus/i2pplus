@@ -66,27 +66,27 @@ final class ECConstants {
 
     private static class ECParms {
         /**
-         * ps.
+         * Prime modulus p.
          */
         public final String ps;
         /**
-         * ns.
+         * Order n.
          */
         public final String ns;
         /**
-         * ss.
+         * Seed for the SHA-1 based generation algorithm.
          */
         public final String ss;
         /**
-         * bs.
+         * Coefficient b.
          */
         public final String bs;
         /**
-         * gxs.
+         * Base point x coordinate (Gx).
          */
         public final String gxs;
         /**
-         * gys.
+         * Base point y coordinate (Gy).
          */
         public final String gys;
         private static final BigInteger A = new NativeBigInteger("-3");

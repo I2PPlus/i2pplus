@@ -31,7 +31,7 @@ class OutboundTunnelEndpoint {
     private int _totalmsg;
 
     /**
-     * OutboundTunnelEndpoint.
+     * Binds the context, config, and processor, sizing the RED queue to the allocated bandwidth.
      */
     public OutboundTunnelEndpoint(RouterContext ctx, HopConfig config, HopProcessor processor) {
         _context = ctx;
@@ -58,7 +58,7 @@ class OutboundTunnelEndpoint {
     }
 
     /**
-     * dispatch.
+     * Decrypt and honor the instructions of an incoming tunnel data message.
      */
     public void dispatch(TunnelDataMessage msg, Hash recvFrom) {
         _config.incrementProcessedMessages();

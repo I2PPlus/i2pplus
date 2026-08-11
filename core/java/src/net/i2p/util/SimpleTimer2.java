@@ -182,7 +182,7 @@ public class SimpleTimer2 {
     }
 
     /**
-     * state of a given TimedEvent
+     * State of a given TimedEvent.
      *
      * valid transitions:
      * {IDLE,CANCELLED,RUNNING} -&gt; SCHEDULED [ -&gt; SCHEDULED ]* -&gt; RUNNING -&gt; {IDLE,CANCELLED,SCHEDULED}
@@ -210,17 +210,17 @@ public class SimpleTimer2 {
         private Log _log;
         private SimpleTimer2 _pool;
         private int _fuzz;
-        /** default fuzz threshold in milliseconds */
+        /** Default fuzz threshold in milliseconds. */
         protected static final int DEFAULT_FUZZ = 100;
         private ScheduledFuture<?> _future;
 
-        /** state of the current event.  All access should be under lock. */
+        /** State of the current event. All access should be under lock. */
         protected TimedEventState _state;
-        /** absolute time this event should run next time. LOCKING: this */
+        /** Absolute time this event should run next time. LOCKING: this */
         private long _nextRun;
-        /** whether this was scheduled during RUNNING state.  LOCKING: this */
+        /** Whether this was scheduled during RUNNING state. LOCKING: this */
         private boolean _rescheduleAfterRun;
-        /** whether this was cancelled during RUNNING state.  LOCKING: this */
+        /** Whether this was cancelled during RUNNING state. LOCKING: this */
         private boolean _cancelAfterRun;
 
         /**
@@ -265,7 +265,7 @@ public class SimpleTimer2 {
         }
 
         /**
-         * Set reschedule threshold in ms. Rescheduling is skipped if the
+         * Reschedule threshold in ms. Rescheduling is skipped if the
          * existing and new timeouts differ by less than this value.
          * Default 100ms.
          *
@@ -276,7 +276,7 @@ public class SimpleTimer2 {
         }
 
         /**
-         * Set the timer pool. Must be called before schedule() for events created
+         * Timer pool for this event. Must be called before schedule() for events created
          * via the no-arg constructor. Called automatically by addEvent()/addPeriodicEvent().
          * Not thread-safe to call concurrently with schedule() or cancel().
          *
@@ -571,6 +571,8 @@ public class SimpleTimer2 {
     }
 
     /**
+     * Timer name.
+     *
      * @return the timer name
      */
     @Override
@@ -578,7 +580,7 @@ public class SimpleTimer2 {
         return _name;
     }
 
-    /** warning - slow */
+    /** Warning - slow. */
     private String debug() {
         _executor.purge();  // Remove cancelled tasks from the queue so we get a good queue size stat
         return

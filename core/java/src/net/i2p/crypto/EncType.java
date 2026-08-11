@@ -166,27 +166,27 @@ public enum EncType {
         isPQ = base == EncAlgo.ECIES_MLKEM;
     }
 
-    /** the unique identifier for this type */
+    /** The unique identifier for this type. */
     public int getCode() {
         return code;
     }
 
-    /** the length of the public key, in bytes */
+    /** The length of the public key, in bytes. */
     public int getPubkeyLen() {
         return pubkeyLen;
     }
 
-    /** the length of the private key, in bytes */
+    /** The length of the private key, in bytes. */
     public int getPrivkeyLen() {
         return privkeyLen;
     }
 
-    /** the standard base algorithm name used for the Java crypto factories */
+    /** The standard base algorithm name used for the Java crypto factories. */
     public EncAlgo getBaseAlgorithm() {
         return base;
     }
 
-    /** the standard name used for the Java crypto factories */
+    /** The standard name used for the Java crypto factories. */
     public String getAlgorithmName() {
         return algoName;
     }
@@ -285,9 +285,9 @@ public enum EncType {
         }
     }
 
-    /** encryption type by code.
+    /** Encryption type by code.
      *
-     *  @return null if not supported
+     *  @return Null if not supported.
      */
     public static EncType getByCode(int code) {
         if (code < 0 || code >= BY_CODE.length) return null;

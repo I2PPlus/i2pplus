@@ -68,15 +68,15 @@ import net.i2p.util.SimpleTimer2;
  * @author jrandom
  */
 class ClientConnectionRunner {
-    /** logger for the runner */
+    /** Logger for the runner. */
     protected final Log _log;
-    /** router context */
+    /** Router context. */
     protected final RouterContext _context;
-    /** client manager managing this runner */
+    /** Client manager managing this runner. */
     protected final ClientManager _manager;
-    /** socket for this particular peer connection */
+    /** Socket for this particular peer connection. */
     private final Socket _socket;
-    /** output stream of the socket that I2CP messages bound to the client should be written to */
+    /** Output stream of the socket that I2CP messages bound to the client should be written to. */
     private OutputStream _out;
 
     private final ConcurrentHashMap<Hash, SessionParams> _sessions;
@@ -93,7 +93,7 @@ class ClientConnectionRunner {
      *  Unused for i2cp.messageReliability = "none" (_dontSendMSM = true)
      */
     private final Set<MessageId> _acceptedPending;
-    /** thingy that does stuff */
+    /** Reads and processes incoming I2CP messages from the client. */
     protected I2CPMessageReader _reader;
     /** Used for all sessions, which must all have the same crypto keys */
     private SessionKeyManager _sessionKeyManager;
@@ -105,7 +105,7 @@ class ClientConnectionRunner {
      */
     private final List<MessageId> _alreadyProcessed;
     private ClientWriterRunner _writer;
-    /** are we, uh, dead */
+    /** True once the connection has been shut down. */
     private volatile boolean _dead;
     /** For outbound traffic. true if i2cp.messageReliability = "none"; @since 0.8.1 */
     private boolean _dontSendMSM;
@@ -148,9 +148,9 @@ class ClientConnectionRunner {
         SessionConfig config;
         LeaseRequestState leaseRequest;
         Rerequest rerequestTimer;
-        /** possibly decrypted */
+        /** Current lease set, possibly decrypted. */
         LeaseSet currentLeaseSet;
-        /** only if encrypted */
+        /** Encrypted lease set, present only if the client uses encrypted lease sets. */
         LeaseSet currentEncryptedLeaseSet;
 
         SessionParams(Destination d, boolean isPrimary) {
@@ -734,7 +734,7 @@ class ClientConnectionRunner {
      * Note that this sends the Guaranteed status codes, even though we only support best effort.
      * Doesn't do anything if i2cp.messageReliability = "none"
      *
-     *  Do not use for status = STATUS_SEND_ACCEPTED; use ackSendMessage() for that.
+     * Do not use for status = STATUS_SEND_ACCEPTED; use ackSendMessage() for that.
      *
      *  @param dest the client
      *  @param id the router's ID for this message
@@ -751,7 +751,7 @@ class ClientConnectionRunner {
     }
 
     /**
-     * called after a new leaseSet is granted by the client, the NetworkDb has been
+     * Called after a new leaseSet is granted by the client and the NetworkDb has been
      * updated.  This takes care of all the LeaseRequestState stuff (including firing any jobs)
      *
      * @param ls if encrypted, the encrypted LS, not the decrypted one
@@ -1240,7 +1240,7 @@ class ClientConnectionRunner {
     private static final int MAX_REQUEUE = 60;  // retries
 
     /**
-     * Get the FloodfillNetworkDatabaseFacade for this runner. This is the client netDb.
+     * The FloodfillNetworkDatabaseFacade for this runner, the client netDb.
      *
      * If a session has not been created yet, it will return null.
      *

@@ -22,8 +22,9 @@ import javax.crypto.interfaces.DHKey;
  */
 public interface ElGamalKey extends DHKey {
     /**
-     * getParameters().
-     * @return the parameters
+     * The ElGamal parameters for this key.
+     *
+     * @return The parameters.
      */
     public ElGamalParameterSpec getParameters();
 }

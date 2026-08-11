@@ -132,7 +132,7 @@ import java.nio.charset.StandardCharsets;
 @SuppressWarnings("PMD.CloseResource")
 public class DataHelper {
 
-    /** utility class */
+    /** Utility class. */
     private DataHelper() {}
 
     /** See storeProps(). 600-750 ms on RPi. */
@@ -227,7 +227,7 @@ public class DataHelper {
     /**
      *  The default formatting for date/time, current locale, local time zone
      *
-     *  @since 0.9.43
+     * @since 0.9.43
      * @return the date instance
      */
     private static final DateFormat DATE_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM);
@@ -507,7 +507,7 @@ public class DataHelper {
      * Warning - confusing method name, Properties is the target.
      * Strings must be UTF-8 encoded in the byte array.
      *
-     *  As of 0.9.18, throws DataFormatException on duplicate key
+     * As of 0.9.18, throws DataFormatException on duplicate key
      *
      * @param source source
      * @param offset starting offset in source
@@ -1435,7 +1435,7 @@ public class DataHelper {
     }
 
     /**
-     * xor the lhs with the rhs, storing the result in out.
+     * Xor the lhs with the rhs, storing the result in out.
      *
      * @param lhs one of the source arrays
      * @param startLeft starting index in the lhs array to begin the xor
@@ -1645,7 +1645,7 @@ public class DataHelper {
     }
 
     /**
-     * update the hash along the way
+     * Update the hash along the way
      * Warning - strips \n but not \r
      * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
      * Warning - not UTF-8
@@ -1666,7 +1666,10 @@ public class DataHelper {
         }
     }
 
-    /** ridiculously long, just to prevent OOM DOS @since 0.7.13 */
+    /**
+     * Ridiculously long, just to prevent OOM DOS.
+     * @since 0.7.13
+     */
     private static final int MAX_LINE_LENGTH = 8 * 1024;
 
     /**
@@ -1686,7 +1689,7 @@ public class DataHelper {
     }
 
     /**
-     * update the hash along the way
+     * Update the hash along the way
      * Warning - strips \n but not \r
      * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
      * Warning - not UTF-8

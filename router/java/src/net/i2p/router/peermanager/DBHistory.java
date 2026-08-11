@@ -49,50 +49,50 @@ public class DBHistory {
                                          statGroup, new long[] { RateConstants.ONE_HOUR });
     }
 
-    /** how many times we have sent them a db lookup and received the value back from them */
+    /** How many times we have sent them a db lookup and received the value back from them. */
     public long getSuccessfulLookups() {return _successfulLookups.get();}
-    /** how many times we have sent them a db lookup and not received the value or a lookup reply */
+    /** How many times we have sent them a db lookup and not received the value or a lookup reply. */
     public long getFailedLookups() {return _failedLookups.get();}
 
     /**
- * Not persisted until 0.9.24
- *
- * @since 0.7.8
+     * Time of the last successful lookup, not persisted until 0.9.24.
+     *
+     * @since 0.7.8
      * @return the last lookup successful
- */
+     */
     public long getLastLookupSuccessful() {return _lastLookupSuccessful;}
 
     /**
- * Not persisted until 0.9.24
- *
- * @since 0.7.8
+     * Time of the last failed lookup, not persisted until 0.9.24.
+     *
+     * @since 0.7.8
      * @return the last lookup failed
- */
+     */
     public long getLastLookupFailed() {return _lastLookupFailed;}
 
     /**
- * Not persisted until 0.9.24
- *
- * @since 0.7.8
+     * Time of the last successful store, not persisted until 0.9.24.
+     *
+     * @since 0.7.8
      * @return the last store successful
- */
+     */
     public long getLastStoreSuccessful() {return _lastStoreSuccessful;}
 
     /**
- * Not persisted until 0.9.24
- *
- * @since 0.7.8
+     * Time of the last failed store, not persisted until 0.9.24.
+     *
+     * @since 0.7.8
      * @return the last store failed
- */
+     */
     public long getLastStoreFailed() {return _lastStoreFailed;}
 
-    /** how many times have they sent us data we didn't ask for and that we've never seen? */
+    /** How many times have they sent us data we didn't ask for and that we've never seen? */
     public long getUnpromptedDbStoreNew() {return _unpromptedDbStoreNew.get();}
-    /** how many times have they sent us data we didn't ask for but that we have seen? */
+    /** How many times have they sent us data we didn't ask for but that we have seen? */
     public long getUnpromptedDbStoreOld() {return _unpromptedDbStoreOld.get();}
-    /** how often does the peer fail to reply to a lookup request, broken into 1 hour and 1 day periods */
+    /** How often does the peer fail to reply to a lookup request, broken into 1 hour and 1 day periods? */
     public RateStat getFailedLookupRate() {return _failedLookupRate;}
-    /** not sure how much this is used, to be investigated */
+    /** Rate at which the peer sends us invalid reply data, to be investigated. */
     public RateStat getInvalidReplyRate() {return _invalidReplyRate;}
 
     /** Note that the peer was not only able to respond to the lookup, but sent us the data we wanted! */
@@ -159,19 +159,19 @@ public class DBHistory {
     }
 
     /**
-     * setSuccessfulLookups.
+     * The count of successful lookups.
      */
     public void setSuccessfulLookups(long num) {_successfulLookups.set(num);}
     /**
-     * setFailedLookups.
+     * The count of failed lookups.
      */
     public void setFailedLookups(long num) {_failedLookups.set(num);}
     /**
-     * setUnpromptedDbStoreNew.
+     * The count of unrequested db stores of data we have never seen.
      */
     public void setUnpromptedDbStoreNew(long num) {_unpromptedDbStoreNew.set(num);}
     /**
-     * setUnpromptedDbStoreOld.
+     * The count of unrequested db stores of data we have seen before.
      */
     public void setUnpromptedDbStoreOld(long num) {_unpromptedDbStoreOld.set(num);}
 
@@ -180,7 +180,7 @@ public class DBHistory {
     private static final long DECAY_DENOMINATOR = 4;
 
     /**
-     * coalesceStats.
+     * Coalesce the rate stats and periodically decay the counters.
      */
     public void coalesceStats() {
         if (_log.shouldDebug()) {_log.debug("Coalescing Profile Manager stats");}
@@ -215,11 +215,11 @@ public class DBHistory {
 
     private static final String NL = System.getProperty("line.separator");
     private static final String HR = "# ----------------------------------------------------------------------------------------";
-    /** write out the data from the profile to the stream including comments */
+    /** Write out the data from the profile to the stream including comments. */
     public void store(OutputStream out) throws IOException {store(out, true);}
 
     /**
-     * write out the data from the profile to the stream
+     * Write out the data from the profile to the stream.
      *
      * @param addComments add comment lines to the output
      * @since 0.9.41
@@ -251,7 +251,7 @@ public class DBHistory {
     }
 
     /**
-     * load.
+     * Load the DB history from the given properties.
      */
     public void load(Properties props) {
         _failedLookups.set(getLong(props, "dbHistory.failedLookups"));

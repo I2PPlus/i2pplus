@@ -129,7 +129,8 @@ class FloodfillStoreJob extends StoreJob {
     }
 
     /**
-     * Get the published timestamp from the data.
+     * The published timestamp from the data.
+     *
      * @return the published timestamp
      */
     private long getPublishedTimestamp(DatabaseEntry data) {
@@ -138,7 +139,8 @@ class FloodfillStoreJob extends StoreJob {
     }
 
     /**
-     * Get the client hash from the data or key if not available.
+     * The client hash from the data, or the key if not available.
+     *
      * @return the client hash
      */
     private Hash getClientHash(DatabaseEntry data, Hash key) {

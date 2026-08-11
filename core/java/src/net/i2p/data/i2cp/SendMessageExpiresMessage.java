@@ -87,7 +87,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     /**
      *  Use this instead of getExpiration().getTime()
      *
-     *  @since 0.8.4
+     * @since 0.8.4
      * @return the expiration time
      */
     public long getExpirationTime() {
@@ -95,7 +95,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     * setExpiration.
+     * Expiration time of the message.
      */
     public void setExpiration(Date d) {
         _daf.setDate(d);

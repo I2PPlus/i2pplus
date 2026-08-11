@@ -13,7 +13,7 @@ import java.util.Random;
 import java.util.TimeZone;
 
 /**
- * basic unit tests for the DataHelper
+ * Basic unit tests for the DataHelper.
  *
  */
 public class DataHelperTest {
@@ -216,7 +216,7 @@ public class DataHelperTest {
             r.nextBytes(buf);
         }
 
-        /** skip a little at a time, or sometimes zero */
+        /** Skip a little at a time, or sometimes zero. */
         @Override
         public long skip(long n) {
             return super.skip(Math.min(n, r.nextInt(4)));

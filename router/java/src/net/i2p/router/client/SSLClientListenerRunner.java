@@ -42,6 +42,8 @@ class SSLClientListenerRunner extends ClientListenerRunner {
     }
 
     /**
+     * Verify the keystore exists and is usable, creating it if necessary.
+     *
      * @return success if it exists and we have a password, or it was created successfully.
      */
     private boolean verifyKeyStore(File ks) {
@@ -122,7 +124,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
     }
 
     /**
-     * Sets up the SSLContext and sets the socket factory.
+     * The SSLContext and socket factory set up from the given keystore.
      *
      * @return success
      */
@@ -153,7 +155,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
     }
 
     /**
-     * Get a SSLServerSocket.
+     * A SSLServerSocket from the configured socket factory.
      * @return the server socket
      */
     @Override

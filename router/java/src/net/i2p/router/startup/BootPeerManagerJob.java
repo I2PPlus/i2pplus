@@ -11,7 +11,7 @@ package net.i2p.router.startup;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 
-/** start up the peer manager */
+/** Start up the peer manager. */
 class BootPeerManagerJob extends JobImpl {
 
     /**

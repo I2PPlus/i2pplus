@@ -33,23 +33,23 @@ import net.i2p.util.SimpleTimer2;
  * Unused directly - see PumpedTunnelGateway, ThrottledPumpedTunnelGateway, and TunnelGatewayZeroHop overrides.
  */
 abstract class TunnelGateway {
-    /** router context */
+    /** The router context. */
     protected final RouterContext _context;
-    /** log instance */
+    /** The log instance. */
     protected final Log _log;
-    /** message queue */
+    /** The message queue. */
     protected final List<PendingGatewayMessage> _queue;
-    /** queue preprocessor */
+    /** The queue preprocessor. */
     protected final QueuePreprocessor _preprocessor;
-    /** sender */
+    /** The message sender, encrypting and forwarding preprocessed messages. */
     protected final Sender _sender;
-    /** receiver */
+    /** The message receiver, consuming encrypted messages for forwarding. */
     protected final Receiver _receiver;
-    /** last flush time */
+    /** The last flush time. */
     protected long _lastFlush;
-    /** delayed flush timer */
+    /** The delayed flush timer. */
     protected final DelayedFlush _delayedFlush;
-    /** messages sent count */
+    /** The messages sent count. */
     protected int _messagesSent;
 
     /**
@@ -156,7 +156,7 @@ abstract class TunnelGateway {
     }
 
     /**
-     * Get the number of messages sent.
+     * The number of messages sent.
      *
      * @return the number of messages sent
      */
@@ -234,7 +234,7 @@ abstract class TunnelGateway {
         }
 
         /**
-         * timeReached.
+         * Flush the queue of pending messages.
          */
         public void timeReached() {
             boolean wantRequeue = false;

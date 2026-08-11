@@ -30,20 +30,19 @@ public class BandwidthLimitsMessage extends I2CPMessageImpl {
     }
 
     /**
+     *  Construct with client bandwidth limits.
+     *
      *  Slot definitions. Slots 7-15 are left undefined and wasted — this
      *  message is only local and rarely sent, so we don't care about the waste.
      *
-     * 0) Client inbound limit (KBps)
-     * 1) Client outbound limit (KBps)
-     * 2) Router inbound limit (KBps)
-     * 3) Router inbound burst limit (KBps)
-     * 4) Router outbound limit (KBps)
-     * 5) Router outbound burst limit (KBps)
-     * 6) Router burst time (seconds)
-     * 7-15) undefined
-     */
-    /**
-     * Construct with client bandwidth limits.
+     *  0) Client inbound limit (KBps)
+     *  1) Client outbound limit (KBps)
+     *  2) Router inbound limit (KBps)
+     *  3) Router inbound burst limit (KBps)
+     *  4) Router outbound limit (KBps)
+     *  5) Router outbound burst limit (KBps)
+     *  6) Router burst time (seconds)
+     *  7-15) undefined
      *
      * @param in Client inbound limit (KBps)
      * @param out Client outbound limit (KBps)
@@ -55,7 +54,7 @@ public class BandwidthLimitsMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Construct with all bandwidth limits.
+     * All client and router bandwidth limits.
      *
      * @param in Client inbound limit (KBps)
      * @param out Client outbound limit (KBps)
@@ -79,7 +78,7 @@ public class BandwidthLimitsMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Get the current bandwidth limits.
+     * Current bandwidth limits array.
      *
      * @return the current bandwidth limits array
      */

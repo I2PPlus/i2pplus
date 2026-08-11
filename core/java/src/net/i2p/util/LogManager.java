@@ -184,13 +184,13 @@ public class LogManager implements Flushable {
     private final I2PAppContext _context;
     private final Log _log;
 
-    /** when was the config file last read (or -1 if never) */
+    /** When was the config file last read (or -1 if never). */
     private long _configLastRead;
 
-    /** the config file */
+    /** The config file. */
     private File _locationFile;
 
-    /** max to LogRecords to buffer in memory before we start blocking */
+    /** Max LogRecords to buffer in memory before we start blocking. */
     private static final int MAX_BUFFER = 1024;
 
     /** Ordered list of LogRecord elements that have not been written out yet */
@@ -202,14 +202,14 @@ public class LogManager implements Flushable {
     /** String (scope) or Log.LogScope to Log object */
     private final ConcurrentHashMap<Object, Log> _logs;
 
-    /** who clears and writes our records */
+    /** Who clears and writes our records. */
     private volatile LogWriter _writer;
 
     private volatile boolean _shutdown;
 
     /**
-     * default log level for logs that aren't explicitly controlled
-     * through a LogLimit in _limits
+     * Default log level for logs that aren't explicitly controlled
+     * through a LogLimit in _limits.
      */
     private volatile int _defaultLimit;
 
@@ -222,25 +222,25 @@ public class LogManager implements Flushable {
     /** Date format string (for the SimpleDateFormat instance) */
     private String _dateFormatPattern;
 
-    /** log filename pattern */
+    /** Log filename pattern. */
     private String _baseLogfilename;
 
-    /** max # bytes in the logfile before rotation */
+    /** Max bytes in the logfile before rotation. */
     private volatile int _fileSize;
 
-    /** max # rotated logs */
+    /** Max rotated logs. */
     private int _rotationLimit;
 
-    /** minimum log level to be displayed on stdout */
+    /** Minimum log level to be displayed on stdout. */
     private volatile int _onScreenLimit;
 
-    /** whether or not we even want to display anything on stdout */
+    /** Whether or not we even want to display anything on stdout. */
     private volatile boolean _displayOnScreen;
 
-    /** how many records we want to buffer in the "recent logs" list */
+    /** How many records we want to buffer in the "recent logs" list. */
     private int _consoleBufferSize = DEFAULT_CONSOLEBUFFERSIZE;
 
-    /** the actual "recent logs" list */
+    /** The actual "recent logs" list. */
     private final LogConsoleBuffer _consoleBuffer;
 
     private int _logBufferSize = MAX_BUFFER;
@@ -255,6 +255,8 @@ public class LogManager implements Flushable {
     private boolean _alreadyNoticedMissingConfig;
 
     /**
+     * Create the log manager for the given context.
+     *
      * @param context the I2P app context
      */
     public LogManager(I2PAppContext context) {
@@ -323,6 +325,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Log for the given class.
+     *
      * @param cls the class to get the log for
      * @return the log
      */
@@ -331,6 +335,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Log with the given name.
+     *
      * @param name the name
      * @return the log
      */
@@ -339,6 +345,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Log for the given class and name, creating it if necessary.
+     *
      * @param cls the class (may be null)
      * @param name the name
      * @return the log
@@ -424,7 +432,7 @@ public class LogManager implements Flushable {
     }
 
     /**
-     * Set the logger config file path and reload configuration.
+     * Configure the logger from the given config file, reloading the configuration.
      *
      * @param filename the config file path
      */
@@ -713,6 +721,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Default limit for logs without explicit overrides, as a text string.
+     *
      * @return the default log limit as a string
      */
     public String getDefaultLimit() {
@@ -720,6 +730,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Configure the default log limit from a text string.
+     *
      * @param lim the default log limit string
      */
     public void setDefaultLimit(String lim) {
@@ -827,6 +839,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Base log filename pattern.
+     *
      * @return the base log filename pattern
      */
     public String getBaseLogfilename() {
@@ -834,6 +848,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Configure the base log filename pattern.
+     *
      * @param filenamePattern the base log filename pattern
      */
     public void setBaseLogfilename(String filenamePattern) {
@@ -842,6 +858,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Maximum log file size in bytes before rotation.
+     *
      * @return the maximum log file size in bytes
      */
     public int getFileSize() {
@@ -849,6 +867,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Number of rotated log files to keep.
+     *
      * @return the rotation limit (number of log files to keep)
      */
     public int getRotationLimit() {
@@ -876,7 +896,7 @@ public class LogManager implements Flushable {
     }
 
     /**
-     * Get the minimum size for gzip compression.
+     * Minimum size for gzip compression.
      *
      * @return the minimum size in bytes, or Long.MAX_VALUE if gzip is disabled
      * @since 0.9.56
@@ -950,6 +970,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Log format characters.
+     *
      * @return the log format characters
      */
     public char[] getFormat() {
@@ -957,6 +979,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Configure the log format characters.
+     *
      * @param fmt the log format characters
      */
     public void setFormat(char[] fmt) {
@@ -972,6 +996,8 @@ public class LogManager implements Flushable {
     }
 
     /**
+     * Date format pattern string.
+     *
      * @return the date format pattern string
      */
     public String getDateFormatPattern() {
@@ -1027,7 +1053,7 @@ public class LogManager implements Flushable {
 
     private class ShutdownHook extends I2PAppThread {
         /**
-         * run.
+         * Shut down the log manager.
          */
         @Override
         public void run() {

@@ -105,25 +105,25 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * Get the reply tunnel.
+     * The tunnel to send the reply through, or null if no reply is requested.
      *
      * @return the reply tunnel, or null
      */
     public TunnelId getReplyTunnel() {return _replyTunnel;}
     /**
-     * Set the reply tunnel.
+     * Assigns the tunnel to send the reply through.
      *
      * @param id the reply tunnel
      */
     public void setReplyTunnel(TunnelId id) {_replyTunnel = id;}
     /**
-     * Get the reply gateway.
+     * The gateway to send the reply to, or null if no reply is requested.
      *
      * @return the reply gateway, or null
      */
     public Hash getReplyGateway() {return _replyGateway;}
     /**
-     * Set the reply gateway.
+     * Assigns the gateway to send the reply to.
      *
      * @param peer the reply gateway
      */
@@ -142,13 +142,14 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     public boolean getReceivedAsReply() {return _receivedAsReply;}
 
     /**
-     * set to true
+     * Records that this message was received by searching for it.
+     *
      * @since 0.9.58
      */
     public void setReceivedAsReply() {_receivedAsReply = true;}
 
     /**
-     * readMessage.
+     * Reads the message fields from the byte array.
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
@@ -240,7 +241,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
         return len;
     }
 
-    /** write the message body to the output array, starting at the given index */
+    /** Write the message body to the output array, starting at the given index. */
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         if (_dbEntry == null) {throw new I2NPMessageException("Missing entry");}
         int type = _dbEntry.getType();
@@ -275,12 +276,16 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     }
 
     /**
+     * The message type.
+     *
      * @return the type
      */
     public int getType() {return MESSAGE_TYPE;}
 
     /**
-     * @return whether h code is present
+     * Hash code calculated from the message fields.
+     *
+     * @return the hash code
      */
     @Override
     public int hashCode() {
@@ -292,7 +297,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * equals.
+     * Compares this message to another for equality of all fields.
      */
     @Override
     public boolean equals(Object object) {
@@ -307,7 +312,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * toString.
+     * String form of the message, suitable for debugging.
      */
     @Override
     public String toString() {

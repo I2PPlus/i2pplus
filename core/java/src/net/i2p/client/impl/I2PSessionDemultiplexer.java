@@ -161,7 +161,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         _listeners.remove(key(proto, port));
     }
 
-    /** find the one listener that most specifically matches the request */
+    /** Find the one listener that most specifically matches the request */
     private I2PSessionMuxedListener findListener(int proto, int port) {
         I2PSessionMuxedListener rv = getListener(proto, port);
         if (rv != null) return rv;
@@ -187,7 +187,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         return Integer.valueOf(((port << 8) & 0xffff00) | proto);
     }
 
-    /** for those that don't care about proto and ports */
+    /** For listeners that don't care about proto and ports */
     private static class NoPortsListener implements I2PSessionMuxedListener {
         private I2PSessionListener _l;
 

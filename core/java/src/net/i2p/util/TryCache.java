@@ -89,7 +89,7 @@ public class TryCache<T> {
     }
 
     /**
-     * Get the current number of cached items.
+     * Current number of cached items.
      *
      * @return the current number of cached items
      */
@@ -137,7 +137,7 @@ public class TryCache<T> {
     }
 
     /**
-     * Get the timestamp of the last underflow.
+     * Timestamp of the last underflow.
      *
      * @return the timestamp of the last underflow
      */

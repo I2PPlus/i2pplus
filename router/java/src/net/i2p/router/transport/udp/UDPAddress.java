@@ -115,7 +115,7 @@ class UDPAddress {
         _isIPv4 = (_host != null && _host.contains(".")) || (caps != null && caps.contains("4"));
         _isIPv6 = (_host != null && _host.contains(":")) || (caps != null && caps.contains("6"));
 
-        /** addr.getTransportStyle.equals"SSU2" */
+        /** True if the address advertises SSU2 only. */
         final boolean ssu2only = addr.getTransportStyle().equals("SSU2");
         int cmtu = 0;
         try {

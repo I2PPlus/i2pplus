@@ -34,7 +34,7 @@ import net.i2p.util.SimpleTimer2;
  * Responsibilities:
  * - Maintains `_peersByCapability` index (character → Set of Hash) for quick capability lookups
  * - Runs Reorg on SimpleTimer2 which calls ProfileOrganizer.reorganize() at adaptive intervals
- *   (30s early uptime → 90s medium → 250s steady state)
+ * (30s early uptime → 90s medium → 250s steady state)
  * - Periodically stores profiles to disk via ProfilePersistenceHelper (every 15 min)
  * - Loads stored profiles from disk on startup in a background thread
  * - Selects peers for PeerTestJob via selectPeers(criteria) — PURPOSE_TEST only
@@ -50,7 +50,7 @@ class PeerManager {
     private final ProfileOrganizer _organizer;
     private final ProfilePersistenceHelper _persistenceHelper;
     private final Map<Character, Set<Hash>> _peersByCapability;
-    /** value strings are lower case */
+    /** Value strings are lower case. */
     private final Map<Hash, String> _capabilitiesByPeer;
     private final AtomicBoolean _storeLock = new AtomicBoolean();
     private volatile long _lastStore;
@@ -110,11 +110,11 @@ class PeerManager {
 
     private class Reorg extends SimpleTimer2.TimedEvent {
         /**
-         * Reorg.
+         * Create the timer event for periodic profile reorganization.
          */
         public Reorg() {super(_context.simpleTimer2(), REORGANIZE_TIME);}
         /**
-         * timeReached.
+         * Start a reorg thread when the timer fires.
          */
         public void timeReached() {(new ReorgThread(this)).start();}
     }
@@ -131,7 +131,7 @@ class PeerManager {
         private final SimpleTimer2.TimedEvent _event;
 
         /**
-         * ReorgThread.
+         * Create the thread that performs the reorganization.
          */
         public ReorgThread(SimpleTimer2.TimedEvent event) {
             super("PeerManager Reorg");
@@ -140,7 +140,7 @@ class PeerManager {
         }
 
         /**
-         * run.
+         * Reorganize the profiles, periodically storing them and evicting stale ones.
          */
         public void run() {
             long start = System.currentTimeMillis();
@@ -213,6 +213,8 @@ class PeerManager {
     }
 
     /**
+     * All tracked peers from the organizer.
+     *
      * @return all tracked peers from the organizer
      */
     Set<Hash> selectPeers() {return _organizer.selectAllPeers();}
@@ -260,7 +262,7 @@ class PeerManager {
         long uptime = (r != null) ? r.getUptime() : 0L;
 
         /**
-         * run.
+         * Load the stored profiles and start the reorg timer once the router is up.
          */
         @Override
         public void run() {
@@ -352,14 +354,14 @@ class PeerManager {
         }
     }
 
-    /** locking no longer req'd */
+    /** Locking no longer required. */
     private Set<Hash> locked_getPeers(char c) {
         c = Character.toLowerCase(c);
         return _peersByCapability.get(Character.valueOf(c));
     }
 
     /**
-     * removeCapabilities.
+     * Remove all capabilities for the peer from the index.
      */
     public void removeCapabilities(Hash peer) {
         if (_log.shouldDebug()) {_log.debug("Removing capabilities from [" + peer.toBase64().substring(0,6) + "]");}

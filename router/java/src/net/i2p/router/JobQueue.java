@@ -74,7 +74,7 @@ public class JobQueue {
         if (RUNNERS > maxRunners) {RUNNERS = maxRunners;}
     }
 
-    /** router.config parameter to override the max runners */
+    /** Router.config parameter to override the max runners */
     static final String PROP_MAX_RUNNERS = "router.maxJobRunners";
     /** If a job is this lagged, spit out a warning, but keep going */
     private static final long DEFAULT_LAG_WARNING = 5*1000L;
@@ -763,7 +763,7 @@ public class JobQueue {
         }
 
         /**
-         * run.
+         *  Pump jobs from the scheduling queue to the runner queue.
          */
         @Override
         public void run() {

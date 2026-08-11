@@ -53,10 +53,10 @@ abstract class EstablishBase implements EstablishState {
      */
     protected long _peerSkew;
 
-    /** previously received encrypted block (or the IV) */
+    /** Previously received encrypted block (or the IV). */
     protected byte[] _prevEncrypted;
 
-    /** bytes received so far */
+    /** Bytes received so far. */
     protected int _received;
 
     /**
@@ -234,7 +234,7 @@ abstract class EstablishBase implements EstablishState {
      */
     public void prepareOutbound() { /* no-op */ }
 
-    /** did the handshake fail for some reason? */
+    /** Did the handshake fail for some reason? */
     public boolean isCorrupt() {
         return _isCorrupt.get();
     }
@@ -331,7 +331,7 @@ abstract class EstablishBase implements EstablishState {
     protected String prefix() { return toString(); }
 
     /**
-     * toString.
+     * String representation of this state.
      */
     @Override
     public String toString() {
@@ -357,26 +357,25 @@ abstract class EstablishBase implements EstablishState {
         }
 
         /**
+         * The NTCP 2 version.
          * @return the version
          */
         public int getVersion() { return 1; }
 
-        /*
-         * @throws IllegalStateException always
-         */
         /**
-         * receive.
+         * Reject any data received after the handshake verified.
+         *
+         * @throws IllegalStateException always
          */
         @Override
         public void receive(ByteBuffer src) {
             throw new IllegalStateException("receive() " + src.remaining() + " on verified state, doing nothing!");
         }
 
-        /*
-         * @throws IllegalStateException always
-         */
         /**
-         * prepareOutbound.
+         * Reject handshake preparation after verification.
+         *
+         * @throws IllegalStateException always
          */
         @Override
         public void prepareOutbound() {
@@ -384,7 +383,7 @@ abstract class EstablishBase implements EstablishState {
         }
 
         /**
-         * toString.
+         * String representation of the verified state.
          */
         @Override
         public String toString() { return "VerifiedEstablishState: ";}
@@ -404,26 +403,25 @@ abstract class EstablishBase implements EstablishState {
         }
 
         /**
+         * The NTCP 2 version.
          * @return the version
          */
         public int getVersion() { return 1; }
 
-        /*
-         * @throws IllegalStateException always
-         */
         /**
-         * receive.
+         * Reject any data received after the handshake failed.
+         *
+         * @throws IllegalStateException always
          */
         @Override
         public void receive(ByteBuffer src) {
             throw new IllegalStateException("receive() " + src.remaining() + " on failed state, doing nothing!");
         }
 
-        /*
-         * @throws IllegalStateException always
-         */
         /**
-         * prepareOutbound.
+         * Reject handshake preparation after failure.
+         *
+         * @throws IllegalStateException always
          */
         @Override
         public void prepareOutbound() {
@@ -431,7 +429,7 @@ abstract class EstablishBase implements EstablishState {
         }
 
         /**
-         * toString.
+         * String representation of the failed state.
          */
         @Override
         public String toString() { return "FailedEstablishState: ";}

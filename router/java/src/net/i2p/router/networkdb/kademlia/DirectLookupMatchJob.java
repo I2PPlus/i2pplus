@@ -20,6 +20,8 @@ class DirectLookupMatchJob extends FloodOnlyLookupMatchJob {
     }
 
     /**
+     * Name of this job.
+     *
      * @return the name
      */
     @Override

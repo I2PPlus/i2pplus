@@ -39,17 +39,15 @@ public class MessageHistory {
     private static final byte[] NL = DataHelper.getUTF8(System.getProperty("line.separator"));
     private static final int FLUSH_SIZE = 1000; // write out at least once every 1000 entries
 
-    /** config property determining whether we want to debug with the message history - default false */
+    /** Config property determining whether we want to debug with the message history - default false */
     public static final String PROP_KEEP_MESSAGE_HISTORY = "router.keepHistory";
-    /** config property determining where we want to log the message history, if we're keeping one */
+    /** Config property determining where we want to log the message history, if we're keeping one */
     public static final String PROP_MESSAGE_HISTORY_FILENAME = "router.historyFilename";
-    /**
-     * DEFAULT_MESSAGE_HISTORY_FILENAME.
-     */
+    /** Default file name for the message history log. */
     public static final String DEFAULT_MESSAGE_HISTORY_FILENAME = "messageHistory.txt";
 
     /**
-     * MessageHistory.
+     * Message history for the given context.
      *
      * @param context the router context
      */
@@ -77,6 +75,8 @@ public class MessageHistory {
     }
 
     /**
+     * Whether logging is enabled.
+     *
      * @return whether logging is enabled
      */
     public boolean getDoLog() { return _doLog; }
@@ -132,12 +132,14 @@ public class MessageHistory {
             super(MessageHistory.this._context);
         }
         /**
-         * runJob.
+         * Reinitialize the message history when the router identity changes.
          */
         public void runJob() {
             initialize(true);
         }
         /**
+         * The name of this job.
+         *
          * @return the name
          */
         public String getName() { return "Reinitialize Message History"; }
@@ -168,6 +170,8 @@ public class MessageHistory {
     }
 
     /**
+     * Note that a message was dispatched to a tunnel.
+     *
      * @param info the info
      */
     public void tunnelDispatched(String info) {
@@ -177,6 +181,8 @@ public class MessageHistory {
     }
 
     /**
+     * Note that a message was dispatched to a tunnel.
+     *
      * @param messageId the message ID
      * @param tunnelId the tunnel ID
      * @param type the type
@@ -187,6 +193,8 @@ public class MessageHistory {
     }
 
     /**
+     * Note that a message was dispatched to a tunnel.
+     *
      * @param messageId the message ID
      * @param tunnelId the tunnel ID
      * @param toTunnel the tunnel
@@ -202,6 +210,8 @@ public class MessageHistory {
     }
 
     /**
+     * Note that a message was dispatched to a tunnel.
+     *
      * @param messageId the message ID
      * @param innerMessageId the inner message ID
      * @param tunnelId the tunnel ID
@@ -258,6 +268,8 @@ public class MessageHistory {
     }
 
     /**
+     * Note that a router rejected our request to participate in a tunnel.
+     *
      * @param peer the peer
      * @param msg the message
      */
@@ -310,7 +322,11 @@ public class MessageHistory {
     }
 
     /**
-     * droppedInboundMessage.
+     * Note that an inbound message was dropped.
+     *
+     * @param messageId message ID dropped
+     * @param from peer that sent the message (if known)
+     * @param info the reason the message was dropped
      */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void droppedInboundMessage(long messageId, Hash from, String info) {
@@ -397,7 +413,7 @@ public class MessageHistory {
     }
 
     /**
-     * We just received a message from the peer
+     * Note that we just received a message from the peer.
      *
      * @param messageType class name for the message object (e.g. DatabaseFindNearestMessage, TunnelMessage, etc)
      * @param messageId the unique message id of the message received (not including any tunnel or garlic wrapped
@@ -420,7 +436,12 @@ public class MessageHistory {
         addEntry(buf.toString());
     }
     /**
-     * receiveMessage.
+     * Note that we just received a message with no known origin.
+     *
+     * @param messageType class name for the message object (e.g. DatabaseFindNearestMessage, TunnelMessage, etc)
+     * @param messageId the unique message id of the message received
+     * @param expiration the expiration for the message received
+     * @param isValid whether the message is valid (non duplicates, etc)
      */
     public void receiveMessage(String messageType, long messageId, long expiration, boolean isValid) {
         receiveMessage(messageType, messageId, expiration, null, isValid);
@@ -461,7 +482,11 @@ public class MessageHistory {
     }
 
     /**
-     * receiveTunnelFragment.
+     * Note that we received a fragment of a tunneled message.
+     *
+     * @param messageId message ID the fragment belongs to
+     * @param fragmentId fragment index
+     * @param status status object for the fragment
      */
     public void receiveTunnelFragment(long messageId, int fragmentId, Object status) {
         if (!_doLog) return;
@@ -469,7 +494,9 @@ public class MessageHistory {
         addEntry(getPrefix() + "Received fragment " + fragmentId + " in " + messageId + " Status: " + status.toString());
     }
     /**
-     * receiveTunnelFragmentComplete.
+     * Note that all fragments of a tunneled message were received.
+     *
+     * @param messageId message ID that completed
      */
     public void receiveTunnelFragmentComplete(long messageId) {
         if (!_doLog) return;
@@ -477,7 +504,10 @@ public class MessageHistory {
         addEntry(getPrefix() + "Received fragmented message completely: " + messageId);
     }
     /**
-     * droppedFragmentedMessage.
+     * Note that a fragmented message was dropped.
+     *
+     * @param messageId message ID dropped
+     * @param status the reason it was dropped
      */
     public void droppedFragmentedMessage(long messageId, String status) {
         if (!_doLog) return;
@@ -485,7 +515,13 @@ public class MessageHistory {
         addEntry(getPrefix() + "Fragmented message dropped: " + messageId + " " + status);
     }
     /**
-     * fragmentMessage.
+     * Note that a message was split into fragments.
+     *
+     * @param messageId message ID fragmented
+     * @param numFragments number of fragments
+     * @param totalLength total length of the message
+     * @param messageIds the fragment message IDs
+     * @param msg additional info
      */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void fragmentMessage(long messageId, int numFragments, int totalLength, List<Long> messageIds, String msg) {
@@ -500,7 +536,14 @@ public class MessageHistory {
         addEntry(buf.toString());
     }
     /**
-     * fragmentMessage.
+     * Note that a message was split into fragments.
+     *
+     * @param messageId message ID fragmented
+     * @param numFragments number of fragments
+     * @param totalLength total length of the message
+     * @param messageIds the fragment message IDs
+     * @param tunnel tunnel the fragments were sent on
+     * @param msg additional info
      */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void fragmentMessage(long messageId, int numFragments, int totalLength, List<Long> messageIds, Object tunnel, String msg) {
@@ -517,7 +560,10 @@ public class MessageHistory {
         addEntry(buf.toString());
     }
     /**
-     * droppedTunnelDataMessageUnknown.
+     * Note that a data message for an unknown tunnel was dropped.
+     *
+     * @param msgId message ID dropped
+     * @param tunnelId tunnel ID the message was for
      */
     public void droppedTunnelDataMessageUnknown(long msgId, long tunnelId) {
         if (!_doLog) return;
@@ -525,7 +571,10 @@ public class MessageHistory {
         addEntry(getPrefix() + "Dropping data message " + msgId + " for UNKNOWN tunnel " + tunnelId);
     }
     /**
-     * droppedTunnelGatewayMessageUnknown.
+     * Note that a gateway message for an unknown tunnel was dropped.
+     *
+     * @param msgId message ID dropped
+     * @param tunnelId tunnel ID the message was for
      */
     public void droppedTunnelGatewayMessageUnknown(long msgId, long tunnelId) {
         if (!_doLog) return;
@@ -595,21 +644,23 @@ public class MessageHistory {
         }
     }
 
-    /** write out the message history once per minute, if not sooner */
+    /** Write out the message history once per minute, if not sooner */
     private static final long WRITE_DELAY = 60*1000L;
     private class WriteJob extends JobImpl {
         /**
-         * WriteJob.
+         * The write job that flushes the pending message history.
          */
         public WriteJob() {
             super(MessageHistory.this._context);
         }
         /**
+         * The name of this job.
+         *
          * @return the name
          */
         public String getName() { return _doLog ? "Message Debug Log" : "Message Debug Log (disabled)"; }
         /**
-         * runJob.
+         * Flush pending entries, refresh settings, and reschedule.
          */
         public void runJob() {
             flushEntries();

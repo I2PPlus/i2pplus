@@ -125,8 +125,9 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
         setData(data);
     }
 
-    /** constructs from base64
-    *
+    /**
+     * Signing private key from a string of base64 data.
+     *
      * @param base64Data a string of base64 data (the output of .toBase64() called
      * on a prior instance of SigningPrivateKey
      */
@@ -144,7 +145,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     /**
      *  Gets the signature type of this private key.
      *
-     *  @since 0.9.8
+     * @since 0.9.8
      * @return the type
      */
     public SigType getType() {
@@ -207,7 +208,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     /**
      *  javax.security.auth.Destroyable interface
      *
-     *  @since 0.9.40
+     * @since 0.9.40
      * @return whether destroyed
      */
     @Override

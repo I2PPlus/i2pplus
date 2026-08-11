@@ -74,7 +74,7 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     * Get the minimum test period from config or default (15s).
+     * The minimum test period from config or default (15s).
      * Tunable via i2p.tunnel.testJob.minTestPeriod (default: 15000).
      * @return the min test period
      */
@@ -85,7 +85,7 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     * Get the maximum test period from config or default (30s).
+     * The maximum test period from config or default (30s).
      * Tunable via i2p.tunnel.testJob.maxTestPeriod (default: 30000).
      * @return the max test period
      */
@@ -226,7 +226,7 @@ public class TestJob extends JobImpl {
     private boolean _valid = true;
 
     /**
-     * Get the total number of TestJob instances (active + queued) using atomic counter.
+     * The total number of TestJob instances (active + queued) using atomic counter.
      * This provides more reliable limiting than job queue counting alone.
      *
      * @return the total number of TestJob instances
@@ -237,7 +237,7 @@ public class TestJob extends JobImpl {
 
     /**
      *  Get the current number of queued + active test jobs for capacity planning.
-     *  @since 0.9.69+
+     * @since 0.9.69+
      * @return the current test job count
      */
     public static int getCurrentTestJobCount() {
@@ -246,7 +246,7 @@ public class TestJob extends JobImpl {
 
     /**
      *  Get the maximum number of queued test jobs allowed before deferring.
-     *  @since 0.9.69+
+     * @since 0.9.69+
      * @return the max test jobs
      */
     public static int getMaxTestJobs() {
@@ -613,6 +613,8 @@ public class TestJob extends JobImpl {
     }
 
     /**
+     * The name of this job.
+     *
      * @return the name
      */
     @Override
@@ -621,7 +623,7 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     * runJob.
+     * Run the tunnel test and report success or failure.
      */
     @Override
     public void runJob() {
@@ -1417,18 +1419,18 @@ public class TestJob extends JobImpl {
         private OutNetMessage _sentMessage;
 
         /**
-         * OnTestReply.
+         * Handle the test reply and report the result.
          */
         public OnTestReply() { super(TestJob.this.getContext()); }
 
         /**
-         * setSentMessage.
+         * Store the outbound message sent to the gateway for cleanup.
          */
         @Override public String getName() { return "Verify Tunnel Test"; }
         public void setSentMessage(OutNetMessage m) { _sentMessage = m; }
 
         /**
-         * runJob.
+         * Complete the test, reporting success or failure.
          */
         @Override
         public void runJob() {
@@ -1444,7 +1446,7 @@ public class TestJob extends JobImpl {
         }
 
         /**
-         * setMessage.
+         * Record the arrival time of the reply message.
          */
         @Override
         public void setMessage(I2NPMessage message) {
@@ -1456,7 +1458,7 @@ public class TestJob extends JobImpl {
         private final long _started;
 
         /**
-         * OnTestTimeout.
+         * Handle a test timeout, reporting failure.
          */
         public OnTestTimeout(long now) {
             super(TestJob.this.getContext());
@@ -1464,7 +1466,7 @@ public class TestJob extends JobImpl {
         }
 
         /**
-         * runJob.
+         * Report the test as failed on timeout.
          */
         @Override public String getName() { return "Timeout Tunnel Test"; }
 

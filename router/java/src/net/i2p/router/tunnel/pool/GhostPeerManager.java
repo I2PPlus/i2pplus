@@ -124,7 +124,7 @@ public class GhostPeerManager {
     }
 
     /**
-     * Get the current timeout threshold.
+     * The current timeout threshold.
      *
      * @return threshold number of timeouts before exclusion
      */
@@ -148,7 +148,7 @@ public class GhostPeerManager {
     }
 
     /**
-     * Get count of currently tracked ghost peers.
+     * Count of currently tracked ghost peers.
      *
      * @return number of ghost peers
      */

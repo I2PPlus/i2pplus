@@ -22,15 +22,12 @@ import net.i2p.data.i2cp.SessionStatusMessage;
  */
 class SessionStatusMessageHandler extends HandlerImpl {
     /**
-     * SessionStatusMessageHandler.
+     * Create the handler for I2CP session status messages.
      */
     public SessionStatusMessageHandler(I2PAppContext context) {
         super(context, SessionStatusMessage.MESSAGE_TYPE);
     }
 
-    /**
-     * handleMessage.
-     */
     @Override
     /**
      * Handle an incoming I2CP message.

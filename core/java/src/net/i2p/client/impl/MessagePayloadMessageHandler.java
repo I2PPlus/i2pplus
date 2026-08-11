@@ -28,15 +28,12 @@ import net.i2p.data.i2cp.ReceiveMessageEndMessage;
  */
 class MessagePayloadMessageHandler extends HandlerImpl {
     /**
-     * MessagePayloadMessageHandler.
+     * Create the handler for I2CP message payload messages.
      */
     public MessagePayloadMessageHandler(I2PAppContext context) {
         super(context, MessagePayloadMessage.MESSAGE_TYPE);
     }
 
-    /**
-     * handleMessage.
-     */
     @Override
     /**
      * Handle an incoming I2CP message.

@@ -57,7 +57,7 @@ public class LeaseSet2 extends LeaseSet {
     protected Signature _offlineSignature;
     /** Options and statistics properties, may be null. */
     protected Properties _options;
-    /** only used if more than one key, otherwise null */
+    /** Only used if more than one key, otherwise null. */
     private List<PublicKey> _encryptionKeys;
     /** If this leaseset was formerly blinded, the blinded hash, so we can find it again */
     private Hash _blindedHash;
@@ -68,11 +68,10 @@ public class LeaseSet2 extends LeaseSet {
     /** Flag bit for unpublished lease set. */
     private static final int FLAG_UNPUBLISHED = 0x02;
     /**
-     *  Set if the unencrypted LS, when published, will be blinded/encrypted
+     *  Set if the unencrypted LS, when published, will be blinded/encrypted.
      *
      *  @since 0.9.42
      */
-    /** Flag bit for blinded/encrypted lease set. */
     private static final int FLAG_BLINDED = 0x04;
     /** Maximum number of encryption keys. */
     private static final int MAX_KEYS = 8;
@@ -98,7 +97,7 @@ public class LeaseSet2 extends LeaseSet {
     public long getPublished() {return _published;}
 
     /**
-     * Set published timestamp.
+     * Published timestamp.
      * Will be rounded to nearest second.
      * If not called, will be set on write.
      *
@@ -138,7 +137,7 @@ public class LeaseSet2 extends LeaseSet {
     /**
      *  Set if the unencrypted LS, when published, will be blinded/encrypted
      *
-     *  @since 0.9.42
+     * @since 0.9.42
      * @return whether blinded when published
      */
     public boolean isBlindedWhenPublished() {return (_flags & FLAG_BLINDED) != 0;}
@@ -161,7 +160,7 @@ public class LeaseSet2 extends LeaseSet {
      * us, AND the unpublished flag is not set.
      * Default false.
      *
-     *  @since 0.9.39 overridden
+     * @since 0.9.39 overridden
      * @return the received as published
      */
     @Override
@@ -192,7 +191,7 @@ public class LeaseSet2 extends LeaseSet {
      *  If more than one key, return the first supported one.
      *  If none supported, return the first one.
      *
-     *  @since 0.9.39 overridden
+     * @since 0.9.39 overridden
      * @return the encryption key
      */
     @Override
@@ -370,7 +369,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     * Set this on creation if known
+     * Blinded hash, if known at creation.
      */
     public void setBlindedHash(Hash bh) {_blindedHash = bh;}
 
@@ -417,7 +416,7 @@ public class LeaseSet2 extends LeaseSet {
         return _expires > now - fudge;
     }
 
-    /** without sig! */
+    /** Without the signature! */
     @Override
     protected byte[] getBytes() {
         if (_byteified != null) return _byteified;
@@ -706,7 +705,7 @@ public class LeaseSet2 extends LeaseSet {
                && DataHelper.eq(_destination, ls.getDestination());
     }
 
-    /** the destination has enough randomness in it to use it by itself for speed */
+    /** The destination has enough randomness in it to use it by itself for speed. */
     @Override
     public int hashCode() {
         if (_destination == null) {return 0;}

@@ -51,7 +51,7 @@ public class ReadConfigJob extends JobImpl {
     }
 
     /**
-     * Get the name of this job.
+     * Name of this job.
      *
      * @return job name for logging and identification
      */

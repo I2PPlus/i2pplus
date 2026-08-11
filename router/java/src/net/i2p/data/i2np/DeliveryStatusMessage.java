@@ -38,6 +38,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     }
 
     /**
+     * The message id being acknowledged.
      * @return the message id
      */
     public long getMessageId() { return _id; }
@@ -80,7 +81,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * readMessage.
+     * Populate the message fields from the byte array, starting at the given offset.
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
@@ -93,12 +94,12 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
         _arrival = DataHelper.fromLong(data, curIndex, DataHelper.DATE_LENGTH);
     }
 
-    /** calculate the message body's length (not including the header and footer */
+    /** Calculate the message body's length (not including the header and footer). */
     protected int calculateWrittenLength() {
         return 4 + DataHelper.DATE_LENGTH; // id + arrival
     }
 
-    /** write the message body to the output array, starting at the given index */
+    /** Write the message body to the output array, starting at the given index. */
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         if ( (_id < 0) || (_arrival <= 0) ) throw new I2NPMessageException("Not enough data to write out");
 
@@ -110,12 +111,14 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     }
 
     /**
+     * The I2NP message type of a delivery status message.
      * @return the type
      */
     public int getType() { return MESSAGE_TYPE; }
 
     /**
-     * @return whether h code is present
+     * Hash code combining the message id and arrival time.
+     * @return the hash code
      */
     @Override
     public int hashCode() {
@@ -123,7 +126,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * equals.
+     * Compare the message id and arrival time for equality.
      */
     @Override
     public boolean equals(Object object) {
@@ -137,7 +140,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * toString.
+     * String form for debugging, showing the message id and time since arrival.
      */
     @Override
     public String toString() {

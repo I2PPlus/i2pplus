@@ -245,7 +245,7 @@ public class ReseedChecker {
     }
 
     /**
-     * Gets the status message from the current reseed attempt.
+     * Status message from the current reseed attempt.
      *
      * @return status message (may contain HTML), never null
      */
@@ -254,7 +254,7 @@ public class ReseedChecker {
     }
 
     /**
-     * Sets the status message for the current reseed attempt.
+     * Status message for the current reseed attempt.
      *
      * @param s status message, non-null but may be empty
      */
@@ -263,7 +263,7 @@ public class ReseedChecker {
     }
 
     /**
-     * Gets the error message from the last or current reseed attempt.
+     * Error message from the last or current reseed attempt.
      *
      * @return error message (may contain HTML), never null
      */
@@ -272,7 +272,7 @@ public class ReseedChecker {
     }
 
     /**
-     * Sets the error message for the last or current reseed attempt.
+     * Error message for the last or current reseed attempt.
      *
      * @param s error message, non-null but may be empty
      */

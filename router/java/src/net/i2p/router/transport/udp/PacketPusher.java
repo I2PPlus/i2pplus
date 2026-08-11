@@ -28,7 +28,7 @@ class PacketPusher implements Runnable {
     private volatile Thread _thread;
 
     /**
-     * Constructs a PacketPusher instance.
+     * Creates the packet pusher.
      *
      * @param ctx the router context used to get the logger
      * @param fragments the outbound message fragment pool to pull packets from

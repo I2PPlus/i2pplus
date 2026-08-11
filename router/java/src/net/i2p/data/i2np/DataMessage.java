@@ -43,7 +43,7 @@ public class DataMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * Set the data payload.
+     * The data payload, settable only once so the saved checksum stays valid.
      *
      *  @param data the data
      *  @throws IllegalStateException if data previously set, to protect saved checksum
@@ -74,7 +74,7 @@ public class DataMessage extends FastI2NPMessageImpl {
         System.arraycopy(data, curIndex, _data, 0, size);
     }
 
-    /** calculate the message body's length (not including the header and footer */
+    /** Calculate the message body's length, not including the header and footer. */
     protected int calculateWrittenLength() {
         if (_data == null)
             return 4;
@@ -82,7 +82,7 @@ public class DataMessage extends FastI2NPMessageImpl {
             return 4 + _data.length;
     }
 
-    /** write the message body to the output array, starting at the given index */
+    /** Write the message body to the output array, starting at the given index. */
     protected int writeMessageBody(byte[] out, int curIndex) {
         if (_data == null) {
             out[curIndex++] = 0x0;

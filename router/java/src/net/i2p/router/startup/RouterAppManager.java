@@ -220,7 +220,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
      */
     public class Shutdown implements Runnable {
         /**
-         * run.
+         * Shut down all running router applications.
          */
         @Override
         public void run() {

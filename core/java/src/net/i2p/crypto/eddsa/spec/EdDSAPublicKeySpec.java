@@ -30,10 +30,10 @@ public class EdDSAPublicKeySpec implements KeySpec {
     }
 
     /**
-     * Constructs a public key specification from a group element.
+     * Public key specification from a group element.
      *
-     * @param A the public key group element
-     * @param spec the parameter specification for this key
+     * @param A The public key group element.
+     * @param spec The parameter specification for this key.
      */
     public EdDSAPublicKeySpec(GroupElement A, EdDSAParameterSpec spec) {
         this.A = A;

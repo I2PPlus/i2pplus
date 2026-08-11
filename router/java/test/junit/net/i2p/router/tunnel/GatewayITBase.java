@@ -36,10 +36,12 @@ public abstract class GatewayITBase extends RouterITBase {
         _gw = new PumpedTunnelGateway(_context, _preprocessor, _sender, _receiver, _pumper);
     }
 
-    /** sets up the sender and receiver.  Subclasses must override */
+    /** Creates the sender and receiver.  Subclasses must override. */
     protected abstract void setupSenderAndReceiver();
 
     /**
+     * The hop at which the tunnel data starts being decrypted.
+     *
      * @return at which hop to start the decryption process
      */
     protected abstract int getLastHop();

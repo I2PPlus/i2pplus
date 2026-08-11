@@ -29,14 +29,14 @@ public class I2PProperties extends Properties {
     }
 
     /**
-     * Constructs an empty I2PProperties with no default values.
+     * Empty I2PProperties with no default values.
      */
     public I2PProperties() {
         super();
     }
 
     /**
-     * Constructs an I2PProperties with the given default values.
+     * I2PProperties with the given default values.
      *
      * @param defaults the default property values
      */
@@ -63,7 +63,7 @@ public class I2PProperties extends Properties {
     }
 
     /**
-     * Sets a property and notifies registered callbacks.
+     * Store the property value and notify registered callbacks.
      *
      * @return the previous value, or null
      */
@@ -84,7 +84,10 @@ public class I2PProperties extends Properties {
     public interface I2PPropertyCallback {
 
         /**
-         * value).
+         * Notify that a property value changed.
+         *
+         * @param key the property name
+         * @param value the new value
          */
         public void propertyChanged(String key, String value);
     }

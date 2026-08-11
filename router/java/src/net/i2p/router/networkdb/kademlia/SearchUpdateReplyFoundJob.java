@@ -59,13 +59,15 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
     }
 
     /**
+     * Name of this job.
+     *
      * @return the name
      */
     @Override
     public String getName() { return "Update Kademlia Search Reply Found "; }
 
     /**
-     * runJob.
+     * Process the store message and continue the search.
      */
     public void runJob() {
         if (_isFloodfillPeer)
@@ -146,7 +148,7 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
     }
 
     /**
-     * setMessage.
+     * Store the matched message, then continue the search.
      */
     @Override
     public void setMessage(I2NPMessage message) { _message = message; }

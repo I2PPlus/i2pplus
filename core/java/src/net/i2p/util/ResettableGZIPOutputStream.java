@@ -16,18 +16,20 @@ import java.util.zip.DeflaterOutputStream;
  *
  */
 public class ResettableGZIPOutputStream extends DeflaterOutputStream {
-    /** has the header been written out yet? */
+    /** Has the header been written out yet? */
     private boolean _headerWritten;
 
     private boolean _footerWritten;
 
-    /** how much data is in the uncompressed stream? */
+    /** How much data is in the uncompressed stream? */
     private long _writtenSize;
 
     private final CRC32 _crc32;
     private static final boolean DEBUG = false;
 
     /**
+     * Stream writing gzip data to the given output stream.
+     *
      * @param o the underlying output stream
      */
     public ResettableGZIPOutputStream(OutputStream o) {
@@ -62,7 +64,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
     };
 
     /**
-     * obviously not threadsafe, but its a stream, thats standard
+     * Obviously not threadsafe, but it's a stream, that's standard.
      */
     private void ensureHeaderIsWritten() throws IOException {
         if (_headerWritten) return;

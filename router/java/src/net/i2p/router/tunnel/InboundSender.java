@@ -10,14 +10,14 @@ class InboundSender implements TunnelGateway.Sender {
     private final InboundGatewayProcessor _processor;
 
     /**
-     * InboundSender.
+     * Binds the given context and hop config for the inbound gateway.
      */
     public InboundSender(I2PAppContext ctx, HopConfig config) {
         _processor = new InboundGatewayProcessor(ctx, config);
     }
 
     /**
-     * sendPreprocessed.
+     * Encrypt the preprocessed data and forward it to the receiver for delivery.
      */
     public long sendPreprocessed(byte[] preprocessed, TunnelGateway.Receiver receiver) {
         _processor.process(preprocessed, 0, preprocessed.length);

@@ -81,7 +81,7 @@ public class EstablishmentManager {
     private final Map<RemoteHostId, Token> _inboundTokens;
     private final ObjectCounter<RemoteHostId> _terminationCounter;
 
-    /** map of RemoteHostId to InboundEstablishState */
+    /** Map of RemoteHostId to InboundEstablishState */
     private final ConcurrentHashMap<RemoteHostId, InboundEstablishState> _inboundStates;
 
     /**
@@ -140,13 +140,13 @@ public class EstablishmentManager {
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
     private static volatile int _defaultLowMaxConcurrentEstablish = SystemVersion.isSlow() ? 128 : 512;
     private static volatile int _defaultHighMaxConcurrentEstablish = SystemVersion.isSlow() ? 256 : 2048;
-    /** Get the default low max concurrent establish */
+    /** The default low max concurrent establish */
     public static int getDefaultLowMaxConcurrentEstablish() { return _defaultLowMaxConcurrentEstablish; }
-    /** Set the default low max concurrent establish, bounded 32-4096 */
+    /** The default low max concurrent establish, bounded 32-4096 */
     public static void setDefaultLowMaxConcurrentEstablish(int val) { _defaultLowMaxConcurrentEstablish = Math.max(32, Math.min(4096, val)); }
-    /** Get the default high max concurrent establish */
+    /** The default high max concurrent establish */
     public static int getDefaultHighMaxConcurrentEstablish() { return _defaultHighMaxConcurrentEstablish; }
-    /** Set the default high max concurrent establish, bounded 64-8192 */
+    /** The default high max concurrent establish, bounded 64-8192 */
     public static void setDefaultHighMaxConcurrentEstablish(int val) { _defaultHighMaxConcurrentEstablish = Math.max(64, Math.min(8192, val)); }
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
 
@@ -154,13 +154,15 @@ public class EstablishmentManager {
     private static volatile int MAX_QUEUED_OUTBOUND = 128;
 
     /**
+     * The current max queued outbound connections.
      * @return the current max queued outbound connections
      * @since 0.9.70+
      */
     public static int getMaxQueuedOutbound() { return MAX_QUEUED_OUTBOUND; }
 
     /**
-     * Set the max queued outbound connections (called by Tuner).
+     * The max queued outbound connections (called by Tuner).
+     * @param max the maximum number of queued connections
      * @since 0.9.70+
      */
     public static void setMaxQueuedOutbound(int max) {
@@ -190,7 +192,7 @@ public class EstablishmentManager {
     /** Max wait before receiving a response to a single message during outbound establishment */
     public static final long OB_MESSAGE_TIMEOUT = 2500L;
 
-    /** for the DSM and or netdb store */
+    /** For the DSM and or netdb store. */
     static final AtomicLong DATA_MESSAGE_TIMEOUT = new AtomicLong(30*1000L);
 
     private static final long IB_BAN_TIME = 30*60L*1000L;
@@ -208,7 +210,7 @@ public class EstablishmentManager {
     private static final int MAX_TERMINATIONS = 2;
 
     /**
-     * EstablishmentManager.
+     * Creates the establishment manager.
      */
     public EstablishmentManager(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -258,7 +260,7 @@ public class EstablishmentManager {
     }
 
     /**
-     * startup.
+     * Start the establishment manager.
      */
     public synchronized void startup() {
         loadTokens();
@@ -268,7 +270,7 @@ public class EstablishmentManager {
     }
 
     /**
-     * shutdown.
+     * Shut down the establishment manager.
      */
     public synchronized void shutdown() {
         _alive = false;
@@ -884,8 +886,7 @@ public class EstablishmentManager {
     }
 
     /**
-     * got a SessionConfirmed (should only happen as part of an inbound
-     * establishment)
+     * Got a SessionConfirmed, should only happen as part of an inbound establishment.
      *
      * SSU 2 only.
      * @param state non-null
@@ -1170,9 +1171,8 @@ public class EstablishmentManager {
     }
 
     /**
-     * ok, fully received, add it to the established cons and queue up a
-     * netDb store to them
-     *
+     * Ok, fully received, add it to the established cons and queue up a
+     * netDb store to them.
      */
     private void handleCompletelyEstablished(InboundEstablishState state) {
         if (state.isComplete()) return;
@@ -1209,7 +1209,7 @@ public class EstablishmentManager {
     }
 
     /**
-     * send our info immediately
+     * Send our info immediately.
      * TODO move to / combine with sendAck0()
      */
     private void sendInboundComplete(PeerState peer) {
@@ -1225,8 +1225,8 @@ public class EstablishmentManager {
     }
 
     /**
-     * ok, fully received, add it to the established cons and send any
-     * queued messages
+     * Ok, fully received, add it to the established cons and send any
+     * queued messages.
      *
      * @return the new PeerState
      */
@@ -1289,7 +1289,7 @@ public class EstablishmentManager {
         return m;
     }
 
-    /** the relay tag is a 4-byte field in the protocol */
+    /** The relay tag is a 4-byte field in the protocol. */
     public static final long MAX_TAG_VALUE = 0xFFFFFFFFL;
 
     /**
@@ -2387,7 +2387,7 @@ public class EstablishmentManager {
     /**
      *  Get a token that can be used later for the peer to connect to us
      *
-     *  @since 0.9.54
+     * @since 0.9.54
      * @return the inbound token
      */
     public Token getInboundToken(RemoteHostId peer) {
@@ -2476,13 +2476,13 @@ public class EstablishmentManager {
             expires = (int) (exp >> 10);
             added = (int) (now >> 10);
         }
-        /** Get the token value */
+        /** The token value */
         public long getToken() {return token;}
-        /** Get the expiration time */
+        /** The expiration time */
         public long getExpiration() {return (expires & 0xFFFFFFFFL) << 10;}
-        /** Get when this token was added */
+        /** When this token was added */
         public long getWhenAdded() {return (added & 0xFFFFFFFFL) << 10;}
-        /** Get string representation */
+        /** String representation */
         public String toString() {
             return "Token [" + token + "]\n* Added: " + DataHelper.formatTime(getWhenAdded()) +
                    "\n* Expires: " + DataHelper.formatTime(getExpiration());
@@ -2626,7 +2626,7 @@ public class EstablishmentManager {
      */
     private static class TokenComparator implements Comparator<Map.Entry<RemoteHostId, Token>>, Serializable {
         /**
-         * compare.
+         * Compare the two entries by expiration, soonest first.
          */
         @Override
         public int compare(Map.Entry<RemoteHostId, Token> l, Map.Entry<RemoteHostId, Token> r) {
@@ -2647,12 +2647,12 @@ public class EstablishmentManager {
     private class InboundTokens extends LHMCache<RemoteHostId, Token> {
 
         /**
-         * InboundTokens.
+         * Creates the inbound token cache.
          */
         public InboundTokens(int max) {super(max);}
 
         /**
-         * removeEldestEntry.
+         * Remove the eldest entry, recording its eviction time.
          */
         @Override
         protected boolean removeEldestEntry(Map.Entry<RemoteHostId, Token> eldest) {
@@ -2676,29 +2676,19 @@ public class EstablishmentManager {
         private final RemoteHostId _from;
         private final Log _log;
 
-        /**
-         * _timeReceived.
-         */
+        /** Time the hole punch request was received. */
         public long _timeReceived;
-        /**
-         * _aliceIP.
-         */
+        /** Alice's IP from the Address block. */
         public byte[] _aliceIP;
-        /**
-         * _alicePort.
-         */
+        /** Alice's port from the Address block. */
         public int _alicePort;
-        /**
-         * _respCode.
-         */
+        /** Response code from the RelayResponse block. */
         public int _respCode = 999;
-        /**
-         * _respData.
-         */
+        /** Payload from the RelayResponse block. */
         public byte[] _respData;
 
         /**
-         * HPCallback.
+         * Creates the hole punch callback.
          */
         public HPCallback(RemoteHostId from, Log log) {
             _from = from;
@@ -2706,35 +2696,35 @@ public class EstablishmentManager {
         }
 
         /**
-         * gotDateTime.
+         * Got a DateTime block.
          */
         public void gotDateTime(long time) {
             _timeReceived = time;
         }
 
         /**
-         * gotOptions.
+         * Got an Options block.
          */
         public void gotOptions(byte[] options, boolean isHandshake) {
             // Options are allowed in HolePunch (but ignored)
         }
 
         /**
-         * gotRI.
+         * Got an RI block.
          */
         public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) {
             warn("Unexpected RI block in HolePunch");
         }
 
         /**
-         * gotRIFragment.
+         * Got an RI fragment block.
          */
         public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
             warn("Unexpected RI fragment block in HolePunch");
         }
 
         /**
-         * gotAddress.
+         * Got an Address block.
          */
         public void gotAddress(byte[] ip, int port) {
             _aliceIP = ip;
@@ -2742,28 +2732,28 @@ public class EstablishmentManager {
         }
 
         /**
-         * gotRelayTagRequest.
+         * Got a RelayTagRequest block.
          */
         public void gotRelayTagRequest() {
             warn("Unexpected RelayTagRequest block in HolePunch");
         }
 
         /**
-         * gotRelayTag.
+         * Got a RelayTag block.
          */
         public void gotRelayTag(long tag) {
             warn("Unexpected RelayTag block in HolePunch");
         }
 
         /**
-         * gotRelayRequest.
+         * Got a RelayRequest block.
          */
         public void gotRelayRequest(byte[] data) {
             warn("Unexpected RelayRequest block in HolePunch");
         }
 
         /**
-         * gotRelayResponse.
+         * Got a RelayResponse block.
          */
         public void gotRelayResponse(int status, byte[] data) {
             if (data == null || data.length < 12) {
@@ -2775,63 +2765,63 @@ public class EstablishmentManager {
         }
 
         /**
-         * gotRelayIntro.
+         * Got a RelayIntro block.
          */
         public void gotRelayIntro(Hash aliceHash, byte[] data) {
             warn("Unexpected RelayIntro block in HolePunch");
         }
 
         /**
-         * gotPeerTest.
+         * Got a PeerTest block.
          */
         public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
             warn("Unexpected PeerTest block in HolePunch");
         }
 
         /**
-         * gotToken.
+         * Got a Token block.
          */
         public void gotToken(long token, long expires) {
             warn("Unexpected Token block in HolePunch");
         }
 
         /**
-         * gotI2NP.
+         * Got an I2NP block.
          */
         public void gotI2NP(I2NPMessage msg) {
             warn("Unexpected I2NP block in HolePunch");
         }
 
         /**
-         * gotFragment.
+         * Got a Fragment block.
          */
         public void gotFragment(byte[] data, int off, int len, long messageId, int frag, boolean isLast) {
             warn("Unexpected Fragment block in HolePunch");
         }
 
         /**
-         * gotACK.
+         * Got an ACK block.
          */
         public void gotACK(long ackThru, int acks, byte[] ranges) {
             warn("Unexpected ACK block in HolePunch");
         }
 
         /**
-         * gotTermination.
+         * Got a Termination block.
          */
         public void gotTermination(int reason, long count) {
             warn("Unexpected Termination block in HolePunch");
         }
 
         /**
-         * gotPathChallenge.
+         * Got a PathChallenge block.
          */
         public void gotPathChallenge(RemoteHostId from, byte[] data) {
             warn("Unexpected PathChallenge block in HolePunch");
         }
 
         /**
-         * gotPathResponse.
+         * Got a PathResponse block.
          */
         public void gotPathResponse(RemoteHostId from, byte[] data) {
             warn("Unexpected PathResponse block in HolePunch");
@@ -2844,7 +2834,7 @@ public class EstablishmentManager {
         }
     }
 
-    /** End SSU 2 **/
+    /* End SSU 2 */
 
 
     /**
@@ -2855,7 +2845,7 @@ public class EstablishmentManager {
      */
     private class Establisher implements Runnable {
         /**
-         * run.
+         * Run the establish loop.
          */
         @Override
         public void run() {
@@ -3003,7 +2993,7 @@ public class EstablishmentManager {
     }
 
     /**
-     * parseReason.
+     * The reason string for an SSU termination code.
      */
     public static String parseReason(int reasonCode) {
         switch (reasonCode) {

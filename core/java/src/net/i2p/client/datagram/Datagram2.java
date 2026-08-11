@@ -220,7 +220,7 @@ public class Datagram2 {
     }
 
     /**
-     * Get the payload carried by an I2P repliable datagram (previously loaded
+     * The payload carried by an I2P repliable datagram (previously loaded
      * with the load() method)
      *
      * @return A byte array containing the datagram payload
@@ -230,7 +230,7 @@ public class Datagram2 {
     }
 
     /**
-     * Get the sender of an I2P repliable datagram (previously loaded with the
+     * The sender of an I2P repliable datagram (previously loaded with the
      * load() method)
      *
      * @return The Destination of the I2P repliable datagram sender
@@ -240,7 +240,7 @@ public class Datagram2 {
     }
 
     /**
-     * Get the options of an I2P repliable datagram (previously loaded with the
+     * The options of an I2P repliable datagram (previously loaded with the
      * load() method), if any
      *
      * @return options or null

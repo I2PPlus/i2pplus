@@ -28,7 +28,7 @@ class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
     private final SyntheticREDQueue _partBWE;
 
     /**
-     * Constructs a ThrottledPumpedTunnelGateway with bandwidth throttling.
+     * A pump-driven gateway that drops excess messages based on estimated bandwidth.
      *
      * Allocated bandwidth value is retrieved from config or set to reasonable default.
      *

@@ -52,11 +52,11 @@ public class Utils {
     }
 
     /**
-     * Get the i'th bit of a byte array.
+     * The i'th bit of a byte array.
      *
-     * @param h the byte array.
-     * @param i the bit index.
-     * @return 0 or 1, the value of the i'th bit in h
+     * @param h The byte array.
+     * @param i The bit index.
+     * @return 0 or 1, the value of the i'th bit in h.
      */
     public static int bit(byte[] h, int i) {
         return (h[i >> 3] >> (i & 7)) & 1;

@@ -30,6 +30,8 @@ public class BandwidthLimitedInputStream extends FilterInputStream {
     }
 
     /**
+     * Limit the read bandwidth on the wrapped stream, delaying as needed for the given peer.
+     *
      * @param pullFromOutbound even though this is an input stream, if this is true, use the
      *                         context's outbound bandwidth limiter queue for delays
      */

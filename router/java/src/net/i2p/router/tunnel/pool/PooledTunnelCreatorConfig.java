@@ -33,7 +33,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
         }
     }
 
-    /** called from TestJob */
+    /** Called from TestJob. */
     public void testJobSuccessful(int ms) {testSuccessful(ms);}
 
     /**

@@ -36,32 +36,32 @@ import java.nio.charset.StandardCharsets;
  */
 public class TranslateReader extends FilterReader {
 
-    /** all states may transition to START */
+    /** All states may transition to START. */
     private enum S {
         START,
-        /** next state LPAREN */
+        /** Next state LPAREN. */
         UNDER,
-        /** next state QUOTE */
+        /** Next state QUOTE. */
         LPAREN,
-        /** next state LPAREN or BACK */
+        /** Next state LPAREN or BACK. */
         QUOTE,
-        /** next state QUOTE */
+        /** Next state QUOTE. */
         BACK
     }
 
     private final String _bundle;
     private final I2PAppContext _ctx;
 
-    /** parse in progress */
+    /** Parse in progress. */
     private final StringBuilder _inBuf;
 
-    /** parsed and translated */
+    /** Parsed and translated. */
     private final StringBuilder _outBuf;
 
-    /** pending string or parameter for translation */
+    /** Pending string or parameter for translation. */
     private final StringBuilder _argBuf;
 
-    /** parsed string and parameters */
+    /** Parsed string and parameters. */
     private final List<String> _args;
 
     private S _state = S.START;

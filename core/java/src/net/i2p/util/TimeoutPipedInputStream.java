@@ -30,6 +30,8 @@ class TimeoutPipedInputStream extends PipedInputStream {
     }
 
     /**
+     * Read the next byte, blocking until available or the timeout is reached.
+     *
      * @throws SocketTimeoutException if timeout is reached
      */
     @Override

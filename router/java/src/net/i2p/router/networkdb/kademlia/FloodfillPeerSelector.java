@@ -186,7 +186,7 @@ class FloodfillPeerSelector extends PeerSelector {
 
     private static final int NO_FAIL_STORE_OK = 5*60*1000;
     private static final int NO_FAIL_STORE_GOOD = NO_FAIL_STORE_OK * 2;
-    /** this must be longer than the max streaming timeout (60s) */
+    /** This must be longer than the max streaming timeout (60s). */
     private static final int NO_FAIL_LOOKUP_OK = 70*1000;
     private static final int NO_FAIL_LOOKUP_GOOD = NO_FAIL_LOOKUP_OK * 3;
     private static final int MAX_GOOD_RESP_TIME = 2000;
@@ -488,7 +488,10 @@ class FloodfillPeerSelector extends PeerSelector {
         }
         private static final int EXTRA_MATCHES = 200;
         /**
-         * add.
+         * Add an entry to the selection, skipping ignored, banlisted,
+         * or non-floodfill entries once enough matches have been collected.
+         *
+         * @param entry the candidate router hash
          */
         public void add(Hash entry) {
             if ((_toIgnore != null) && (_toIgnore.contains(entry))) {return;}
@@ -507,7 +510,12 @@ class FloodfillPeerSelector extends PeerSelector {
             _matches++;
         }
 
-        /** get the first $howMany entries matching */
+        /**
+         * The first howMany matching entries.
+         *
+         * @param howMany the maximum number of entries to return
+         * @return the list of matching peer hashes
+         */
         public List<Hash> get(int howMany) {
             return get(howMany, false);
         }
@@ -576,7 +584,9 @@ class FloodfillPeerSelector extends PeerSelector {
             return rv;
         }
         /**
-         * size.
+         * Number of entries collected so far.
+         *
+         * @return the match count
          */
         public int size() { return _matches; }
     }

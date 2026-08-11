@@ -136,7 +136,7 @@ public class JobStats {
     public void jobDropped() {_numDropped.incrementAndGet();}
 
     /**
-     * Get the number of jobs that were dropped.
+     * Number of jobs that were dropped.
      *
      * @return the count of dropped jobs
      * @since 0.9.19
@@ -144,49 +144,49 @@ public class JobStats {
     public long getDropped() {return _numDropped.get();}
 
     /**
-     * Get the name of this job type.
+     * Name of this job type.
      *
      * @return the job name
      */
     public String getName() {return _job;}
 
     /**
-     * Get the maximum number of recent execution entries tracked.
+     * Maximum number of recent execution entries tracked.
      *
      * @return the max recent entries limit
      */
     public int getMaxRecentEntries() {return _maxRecentEntries;}
 
     /**
-     * Get the total number of times this job type has run.
+     * Total number of times this job type has run.
      *
      * @return the run count
      */
     public long getRuns() {return _numRuns.get();}
 
     /**
-     * Get the total execution time for all runs of this job type.
+     * Total execution time for all runs of this job type.
      *
      * @return total time in milliseconds
      */
     public long getTotalTime() {return _totalTime.get();}
 
     /**
-     * Get the maximum execution time for a single run of this job type.
+     * Maximum execution time for a single run of this job type.
      *
      * @return maximum time in milliseconds, or -1 if never run
      */
     public long getMaxTime() {return _maxTime;}
 
     /**
-     * Get the minimum execution time for a single run of this job type.
+     * Minimum execution time for a single run of this job type.
      *
      * @return minimum time in milliseconds, or -1 if never run
      */
     public long getMinTime() {return _minTime;}
 
     /**
-     * Get the average execution time for this job type.
+     * Average execution time for this job type.
      *
      * @return average time in milliseconds per run, or 0 if never run
      */
@@ -196,28 +196,28 @@ public class JobStats {
         else {return 0;}
     }
     /**
-     * Get the total pending/wait time for all runs of this job type.
+     * Total pending/wait time for all runs of this job type.
      *
      * @return total pending time in milliseconds
      */
     public long getTotalPendingTime() {return _totalPendingTime.get();}
 
     /**
-     * Get the maximum pending/wait time for a single run of this job type.
+     * Maximum pending/wait time for a single run of this job type.
      *
      * @return maximum pending time in milliseconds, or -1 if never run
      */
     public long getMaxPendingTime() {return _maxPendingTime;}
 
     /**
-     * Get the minimum pending/wait time for a single run of this job type.
+     * Minimum pending/wait time for a single run of this job type.
      *
      * @return minimum pending time in milliseconds, or -1 if never run
      */
     public long getMinPendingTime() {return _minPendingTime;}
 
     /**
-     * Get the average pending/wait time for this job type.
+     * Average pending/wait time for this job type.
      *
      * @return average pending time in milliseconds per run, or 0 if never run
      */

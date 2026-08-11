@@ -18,10 +18,10 @@ public final class SimpleByteCache {
 
     private static final int DEFAULT_SIZE = 64;
 
-    /** how often do we cleanup all caches */
+    /** How often do we cleanup all caches. */
     private static final int CLEANUP_FREQUENCY = 60 * 1000; // 1 minute
 
-    /** if we haven't exceeded the cache size in 90 seconds, cut our cache in half */
+    /** If we haven't exceeded the cache size in 90 seconds, cut our cache in half. */
     private static final long EXPIRE_PERIOD = (long) 90 * 1000;
 
     static {
@@ -59,7 +59,7 @@ public final class SimpleByteCache {
     }
 
     /**
-     * Get a cache responsible for arrays of the given size
+     * Cache responsible for arrays of the given size.
      *
      * @param size how large should the objects cached be?
      * @return the instance
@@ -70,7 +70,7 @@ public final class SimpleByteCache {
     }
 
     /**
-     * Get a cache responsible for objects of the given size
+     * Cache responsible for objects of the given size.
      *
      * @param cacheSize how large we want the cache to grow
      *                  (number of objects, NOT memory size)
@@ -134,14 +134,17 @@ public final class SimpleByteCache {
     }
 
     /**
-     * Get the next available array, either from the cache or a brand new one
+     * Next available array, either from the cache or a brand new one.
+     *
+     * @param size how large should the object be?
+     * @return the array
      */
     public static byte[] acquire(int size) {
         return getInstance(size).acquire();
     }
 
     /**
-     * Get the next available array, either from the cache or a brand new one
+     * Next available array, either from the cache or a brand new one.
      */
     private byte[] acquire() {
         return _available.acquire();

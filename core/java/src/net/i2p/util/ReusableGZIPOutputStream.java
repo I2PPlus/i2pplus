@@ -68,7 +68,7 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
         _buffer = (ByteArrayOutputStream) out;
     }
 
-    /** clear the data so we can start again afresh */
+    /** Clear the data so we can start again afresh. */
     @Override
     public void reset() {
         super.reset();
@@ -77,13 +77,13 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
     }
 
     /**
-     * setLevel.
+     * Configure the compression level.
      */
     public void setLevel(int level) {
         def.setLevel(level);
     }
 
-    /** pull the contents of the stream written */
+    /** Pull the contents of the stream written. */
     public byte[] getData() {
         return _buffer.toByteArray();
     }

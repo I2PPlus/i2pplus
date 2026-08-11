@@ -75,12 +75,12 @@ class OutboundMessageFragments {
     }
 
     /**
-     * startup.
+     * Start the message pool.
      */
     public synchronized void startup() { _alive = true; }
 
     /**
-     * shutdown.
+     * Shut down the message pool.
      */
     public synchronized void shutdown() {
         _alive = false;

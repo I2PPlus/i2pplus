@@ -39,7 +39,7 @@ public interface Job {
     public void runJob();
 
     /**
-     * the router is extremely overloaded, so this job has been dropped.  if for
+     * The router is extremely overloaded, so this job has been dropped.  If for
      * some reason the job *must* do some cleanup / requeueing of other tasks, it
      * should do so here.
      *

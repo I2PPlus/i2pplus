@@ -15,9 +15,9 @@ public interface BandwidthEstimator {
     public void addSample(int acked);
 
     /**
-     * Get the current bandwidth estimate.
+     * Current bandwidth estimate.
      *
-     * @return the current bandwidth estimate in bytes/ms or packets/ms.
+     * @return the current bandwidth estimate in bytes/ms or packets/ms
      */
     public float getBandwidthEstimate();
 }

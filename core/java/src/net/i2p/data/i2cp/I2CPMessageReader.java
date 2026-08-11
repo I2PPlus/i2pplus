@@ -63,20 +63,21 @@ public class I2CPMessageReader {
      * For internal extension only. No stream.
      *
      * @since 0.8.3
-      * @param lsnr the lsnr
+     * @param lsnr the lsnr
      */
     protected I2CPMessageReader(I2CPMessageEventListener lsnr) {
         setListener(lsnr);
     }
 
     /**
-     * setListener.
+     * Listener for message events.
      */
     public final void setListener(I2CPMessageEventListener lsnr) {
         _listener = lsnr;
     }
 
     /**
+     * Current message event listener.
      * @return the listener
      */
     public I2CPMessageEventListener getListener() {
@@ -152,18 +153,18 @@ public class I2CPMessageReader {
             _stayAlive = true;
         }
 
-        /** deprecated unused */
+        /** Pause the reader loop. */
         public void pauseRunner() {
             _doRun = false;
         }
 
-        /** deprecated unused */
+        /** Resume the reader loop. */
         public void resumeRunner() {
             _doRun = true;
         }
 
         /**
-         * cancelRunner.
+         * Cancel the message reading loop and close the stream.
          */
         public void cancelRunner() {
             _doRun = false;
@@ -180,7 +181,7 @@ public class I2CPMessageReader {
         }
 
         /**
-         * run.
+         * Run the message reading loop.
          */
         @Override
         public void run() {

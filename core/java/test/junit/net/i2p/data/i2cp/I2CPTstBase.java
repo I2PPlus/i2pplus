@@ -26,10 +26,10 @@ import java.io.ByteArrayOutputStream;
  */
 public abstract class I2CPTstBase {
 
-    /** create a populated structure for writing */
+    /** Create a populated structure for writing. */
     public abstract I2CPMessageImpl createDataStructure() throws DataFormatException;
 
-    /** create an unpopulated structure for reading */
+    /** Create an unpopulated structure for reading. */
     public abstract I2CPMessageImpl createStructureToRead();
 
     @Test

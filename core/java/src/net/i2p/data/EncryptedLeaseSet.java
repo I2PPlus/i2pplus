@@ -65,7 +65,7 @@ import java.util.Set;
  */
 public class EncryptedLeaseSet extends LeaseSet2 {
 
-    /** includes salt */
+    /** Includes salt. */
     private byte[] _encryptedData;
     /** Decrypted LeaseSet 2 instance. */
     private LeaseSet2 _decryptedLS2;
@@ -73,7 +73,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     private Hash __calculatedHash;
     /** Alpha signing private key. */
     private SigningPrivateKey _alpha;
-    /** to decrypt with if we don't have full dest */
+    /** To decrypt with if we don't have the full destination. */
     private SigningPublicKey _unblindedSPK;
     /** Secret passphrase for decryption. */
     private String _secret;
@@ -81,7 +81,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     private PrivateKey _clientPrivateKey;
     /** Logger instance. */
     private final Log _log;
-    /** debug */
+    /** Authorization type of this lease set. */
     private int _authType;
     /** Number of keys in the encrypted set. */
     private int _numKeys;
@@ -934,7 +934,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         return DataHelper.eq(_signature, ls.getSignature()) && DataHelper.eq(_signingKey, ls.getSigningKey());
     }
 
-    /** the destination has enough randomness in it to use it by itself for speed */
+    /** The destination has enough randomness in it to use it by itself for speed. */
     @Override
     public int hashCode() {
         if (_encryptionKey == null) {

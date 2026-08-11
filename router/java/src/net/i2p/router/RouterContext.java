@@ -127,7 +127,7 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     * Sets the default context, unless there is one already.
+     * The default context, unless there is one already.
      * NOT a public API, for use by Router only, NOT for external use.
      *
      * @param ctx context constructed with doInit = false
@@ -141,7 +141,7 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     * Set properties where the defaults must be different from those
+     * Properties where the defaults must be different from those
      * in I2PAppContext.
      *
      * Unless we are explicitly disabling the timestamper, we want to use it.
@@ -281,7 +281,7 @@ public class RouterContext extends I2PAppContext {
         }
     }
 
-    /** what router is this context working for? */
+    /** What router is this context working for? */
     public Router router() { return _router; }
 
     /**
@@ -327,14 +327,7 @@ public class RouterContext extends I2PAppContext {
     public OutboundMessageRegistry messageRegistry() { return _messageRegistry; }
 
     /**
-     * The monitor keeps track of inbound and outbound messages currently held in
-     * memory / queued for processing.  We'll use this to throttle the router so
-     * we don't overflow.
-     *
-     */
-
-    /**
-     * Get the network database segmentor for advanced database access.
+     * The network database segmentor for advanced database access.
      *
      * @return the SegmentedNetworkDatabaseFacade instance
      * @since 0.9.61
@@ -342,14 +335,14 @@ public class RouterContext extends I2PAppContext {
     public SegmentedNetworkDatabaseFacade netDbSegmentor() { return _netDb; }
 
     /**
-     * Get the main network database facade for standard database operations.
+     * The main network database facade for standard database operations.
      *
      * @return the NetworkDatabaseFacade for the main network
      */
     public NetworkDatabaseFacade netDb() { return _netDb.mainNetDB(); }
 
     /**
-     * Get the client netDb for the given id.
+     * The client netDb for the given id.
      * Will return the main netDb if
      * the dbid is null or the client db is not found.
      *
@@ -418,14 +411,14 @@ public class RouterContext extends I2PAppContext {
     public StatisticsManager statPublisher() { return _statPublisher; }
 
     /**
-     * Get thebanlist for managing banned peers.
+     * The banlist for managing banned peers.
      *
      * @return the Banlist instance
      */
     public Banlist banlist() { return _banlist; }
 
     /**
-     * Get the blocklist for managing blocked peers.
+     * The blocklist for managing blocked peers.
      *
      * @return the Blocklist instance
      */
@@ -438,7 +431,7 @@ public class RouterContext extends I2PAppContext {
     public MessageValidator messageValidator() { return _messageValidator; }
 
     /**
-     * Get the router throttle controller for managing load.
+     * The router throttle controller for managing load.
      *
      * @return the RouterThrottle instance
      */
@@ -538,6 +531,8 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
+     * New Properties with system and context properties.
+     *
      * @return new Properties with system and context properties
      * @since 0.8.4
      */
@@ -561,7 +556,7 @@ public class RouterContext extends I2PAppContext {
         }
     }
 
-    /** override to support storage in router.config */
+    /** Override to support storage in router.config */
     @Override
     public KeyRing keyRing() {
         if (!_keyRingInitialized)
@@ -601,7 +596,7 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     * Get the set of final shutdown tasks.
+     * The set of final shutdown tasks.
      *
      * @return the Set of Runnable tasks to execute during final shutdown
      * @since 0.8.8
@@ -695,7 +690,7 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     * Get the routing key generator for this context.
+     * The routing key generator for this context.
      *
      * @return the RouterKeyGenerator instance
      * @since 0.9.16
@@ -705,7 +700,7 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     * Get the garlic message parser for this context.
+     * The garlic message parser for this context.
      * Since we only need one parser instance, this is lazily initialized.
      *
      * @return the GarlicMessageParser instance

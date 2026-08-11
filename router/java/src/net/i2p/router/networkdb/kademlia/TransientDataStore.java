@@ -67,21 +67,23 @@ class TransientDataStore implements DataStore {
     }
 
     /**
+     * Whether the data store is initialized.
+     *
      * @return whether initialized
      */
     @Override
     public boolean isInitialized() {return true;}
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     /**
-     * enableReverseLookups.
+     * Whether reverse lookups are enabled.
      */
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     /**
-     * stop.
+     * Clear the in-memory store.
      */
     public void stop() {_data.clear();}
     /**
-     * rescan.
+     * No-op - the in-memory store has no external state to rescan.
      */
     public void rescan() { /* No-op - in-memory store has no external state to rescan */ }
 
@@ -117,7 +119,7 @@ class TransientDataStore implements DataStore {
         return Collections.unmodifiableSet(_data.entrySet());
     }
 
-    /** for PersistentDataStore only - don't use here
+    /** For PersistentDataStore only - don't use here.
       * @throws UnsupportedOperationException always
       */
     @Override
@@ -126,7 +128,10 @@ class TransientDataStore implements DataStore {
     }
 
     /**
-     * get.
+     * The entry for the key, or null if not found.
+     *
+     * @param key the hash to look up
+     * @return the entry or null
      */
     public DatabaseEntry get(Hash key) {
         if (key != null) {return _data.get(key);}
@@ -134,6 +139,8 @@ class TransientDataStore implements DataStore {
     }
 
     /**
+     * Whether the data store contains the key.
+     *
      * @return whether known
      */
     @Override
@@ -142,7 +149,7 @@ class TransientDataStore implements DataStore {
     }
 
     /**
-     * countLeaseSets.
+     * Number of lease sets in the store.
      */
     public int countLeaseSets() {
         int count = 0;
@@ -152,7 +159,7 @@ class TransientDataStore implements DataStore {
         return count;
     }
 
-    /** for PersistentDataStore only - don't use here
+    /** For PersistentDataStore only - don't use here.
       * @throws UnsupportedOperationException always
       */
     public boolean put(Hash key, DatabaseEntry data, boolean persist) {
@@ -296,16 +303,13 @@ class TransientDataStore implements DataStore {
         return rv;
     }
 
-    /*
-     *  Unconditionally store, bypass all newer/older checks
-     *
-     *  @return success
-     *  @param key non-null
-     *  @param data non-null
-     *  @since 0.9.64
-     */
     /**
-     * forcePut.
+     * Unconditionally store, bypass all newer/older checks.
+     *
+     * @return success
+     * @param key non-null
+     * @param data non-null
+     * @since 0.9.64
      */
     @Override
     public boolean forcePut(Hash key, DatabaseEntry data) {
@@ -314,7 +318,7 @@ class TransientDataStore implements DataStore {
     }
 
     /**
-     * toString.
+     * Debug string listing all stored entries.
      */
     @Override
     public String toString() {
@@ -329,7 +333,7 @@ class TransientDataStore implements DataStore {
         return buf.toString();
     }
 
-    /** for PersistentDataStore only - don't use here
+    /** For PersistentDataStore only - don't use here.
       * @throws UnsupportedOperationException always
       */
     public DatabaseEntry remove(Hash key, boolean persist) {
@@ -337,7 +341,10 @@ class TransientDataStore implements DataStore {
     }
 
     /**
-     * remove.
+     * Remove and return the entry for the key.
+     *
+     * @param key the hash to remove
+     * @return the removed entry, or null if not found
      */
     public DatabaseEntry remove(Hash key) {
         return _data.remove(key);

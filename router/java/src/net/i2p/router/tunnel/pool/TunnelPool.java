@@ -726,7 +726,7 @@ public class TunnelPool {
      *  Enhanced with exponential backoff for firewalled routers to prevent
      *  tunnel pool exhaustion after extended uptime.
      *
-     *  @since 0.8.11
+     * @since 0.8.11
      * @return the adjusted total quantity
      */
     private int getAdjustedTotalQuantity() {
@@ -897,12 +897,12 @@ public class TunnelPool {
         _settings.setLengthOverride(-1); // disable
     }
 
-    /** list of tunnelInfo instances of tunnels currently being built
+    /** List of tunnelInfo instances of tunnels currently being built.
      *  @return the list of tunnels currently being built
      */
     public List<PooledTunnelCreatorConfig> listPending() {synchronized (_inProgress) {return new ArrayList<>(_inProgress);}}
 
-    /** duplicate of size(), let's pick one
+    /** Duplicate of size(), let's pick one.
      *  @return the number of tunnels in the pool
      */
     int getTunnelCount() {return size();}
@@ -1002,7 +1002,7 @@ public class TunnelPool {
         return _alive && (_settings.isExploratory() || _context.clientManager().isLocal(_settings.getDestination()));
     }
 
-    /** duplicate of getTunnelCount(), let's pick one
+    /** Duplicate of getTunnelCount(), let's pick one.
      *  @return the number of tunnels in the pool
      */
     public int size() {
@@ -1255,7 +1255,7 @@ public class TunnelPool {
                 List<TunnelInfo> sortedTunnels = new ArrayList<>(_tunnels);
                 sortedTunnels.sort(new Comparator<TunnelInfo>() {
                     /**
-                     * compare.
+                     * Compare tunnels by prune rank, then expiration.
                      */
                     public int compare(TunnelInfo a, TunnelInfo b) {
                         int pa = pruneRank(a.getTestStatus());
@@ -2049,7 +2049,7 @@ public class TunnelPool {
 
     private class LeaseSetRepublishEvent extends SimpleTimer2.TimedEvent {
         /**
-         * timeReached.
+         * Republish the LeaseSet and prune non-good tunnels.
          */
         public void timeReached() {
             _leaseSetRepublishPending = false;
@@ -2129,7 +2129,7 @@ public class TunnelPool {
         }
     }
 
-    /** noop for outbound and exploratory */
+    /** No-op for outbound and exploratory pools. */
     void refreshLeaseSet() {
         refreshLeaseSet(false);
     }
@@ -2285,7 +2285,7 @@ public class TunnelPool {
      */
     private class DeferredRefreshEvent extends SimpleTimer2.TimedEvent {
         /**
-         * timeReached.
+         * Perform the deferred LeaseSet refresh.
          */
         public void timeReached() {
             _pendingRefreshScheduled.set(false);
@@ -2398,7 +2398,7 @@ public class TunnelPool {
      */
     private static class LeaseComparator implements Comparator<Lease>, Serializable {
          /**
-          * compare.
+          * Compare leases by end time, latest first.
           */
          public int compare(Lease l, Lease r) {
              long lt = l.getEndTime();
@@ -2418,6 +2418,8 @@ public class TunnelPool {
         private final boolean _avoidZero;
 
         /**
+         * The sort key and zero-hop handling for this comparator.
+         *
          * @param target key to compare distances with
          * @param avoidZeroHop if true, zero-hop tunnels will be put last
          */
@@ -2427,7 +2429,7 @@ public class TunnelPool {
         }
 
         /**
-         * compare.
+         * Compare tunnels by XOR distance to the target.
          */
         public int compare(TunnelInfo lhs, TunnelInfo rhs) {
             if (_avoidZero) {
@@ -3775,7 +3777,7 @@ public class TunnelPool {
     }
 
     /**
-     * toString.
+     * Description of the pool and its settings.
      */
     @Override
     public String toString() {

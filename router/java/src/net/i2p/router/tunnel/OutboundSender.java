@@ -11,6 +11,8 @@ class OutboundSender implements TunnelGateway.Sender {
     private final OutboundGatewayProcessor _processor;
 
     /**
+     * Binds the given context and config, creating the outbound gateway processor.
+     *
      * @param ctx the context
      * @param config the tunnel creator config
      */

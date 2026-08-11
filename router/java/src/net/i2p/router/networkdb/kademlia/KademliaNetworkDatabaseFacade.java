@@ -321,11 +321,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * @return true if the database is initialized and ready for use, false otherwise
      */
-    /**
-     *  Whether the database is initialized and ready.
-     *
-     *  @return initialized
-     */
     @Override
     public boolean isInitialized() {return _initialized && _ds != null && _ds.isInitialized();}
 
@@ -560,7 +555,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
              *  Don't start it right away, so we don't send searches for random keys out our 0-hop exploratory
              *  tunnels (generating direct connections to one or more floodfill peers within seconds of startup).
              *  We're trying to minimize the ff connections to lessen the load on the floodfills, and in any case,
-             * let's try to build some real expl. tunnels first. No rush, it only runs every 30m.
+             *  let's try to build some real expl. tunnels first. No rush, it only runs every 30m.
              */
             _exploreJob.getTiming().setStartAfter(now + EXPLORE_JOB_DELAY);
             _context.jobQueue().addJob(_exploreJob);
@@ -575,7 +570,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     protected void createHandlers() {}
 
     /**
-     * Get the routers closest to that key in response to a remote lookup
+     * The routers closest to that key in response to a remote lookup.
      * Only used by ../HDLMJ
      * Set MAY INCLUDE our own router - add to peersToIgnore if you don't want
      *
@@ -629,7 +624,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     * Get the size of the KBucketSet. The KBucketSet contains RIs only.
+     * Size of the KBucketSet. The KBucketSet contains RIs only.
      *
      * @return the size
      */
@@ -872,11 +867,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
     }
 
-    /**
-     *  Lookup locally in netDB and in badDest cache
-     *  Succeeds even if LS validation fails due to unsupported sig type, expired, etc.
-     *
-     */
     /**
      *  Destination stored locally, or null.
      *
@@ -1221,11 +1211,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * @return null always for client dbs
      */
-    /**
-     *  RouterInfo stored locally.
-     *
-     *  @return the RouterInfo or null
-     */
     @Override
     public RouterInfo lookupRouterInfoLocally(Hash key) {
         if (!_initialized || isClientDb()) {return null;}
@@ -1243,7 +1228,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final long PUBLISH_DELAY = 1000;
 
     /**
-     * Get the proactive republish threshold from config or default (3 minutes).
+     * Proactive republish threshold from config or default (3 minutes).
      * If a lease is expiring within this threshold, it gets republished immediately.
      * Tunable via i2p.netdb.proactiveRepublishThreshold (default: 180000).
      * @return the proactive republish threshold
@@ -1565,7 +1550,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         store(h, localRouterInfo);
     }
 
-    /** Set the last time we successfully published our RI. */
+    /** Record the current time as the last successful RI publication. */
     void routerInfoPublishSuccessful() {_lastRIPublishTime = _context.clock().now();}
 
     /**
@@ -2781,7 +2766,7 @@ return false;
     private static final int TIMEOUT_MULTIPLIER = 3;
 
     /**
-     * Get the timeout for a peer, based on the profile data, or the default timeout.
+     * The timeout for a peer, based on the profile data, or the default timeout.
      *
      * @param peer the peer
      * @return the timeout for a peer, based on the profile data, or the default timeout
@@ -2854,11 +2839,6 @@ return false;
      *  @param key only for Destinations; for RouterIdentities, see Banlist
      *  @return whether negative cached forever
      */
-    /**
-     *  Whether the key is permanently negative-cached.
-     *
-     *  @return whether the hash is in the negative cache
-     */
     @Override
     public boolean isNegativeCachedForever(Hash key) {return key != null && _negativeCache.getBadDest(key) != null;}
 
@@ -2880,7 +2860,7 @@ return false;
         return "ClientNetDb [" + _dbid.toBase32().substring(0,8) + "]";
     }
 
-    /** set of blocked countries. */
+    /** Blocked countries, cached for reuse. */
     private synchronized Set<String> getBlockedCountries() {
         Set<String> cached = _blockedCountries;
         if (cached != null) return cached;
@@ -2897,7 +2877,8 @@ return false;
     }
 
     /**
-     * Get the number of RouterInfo files stored on disk, if using PersistentDataStore.
+     * Number of RouterInfo files stored on disk, if using PersistentDataStore.
+     *
      * @return number of RIs on disk, or 0 if not using persistent storage
      */
     public int getStoredRouterInfoCount() {

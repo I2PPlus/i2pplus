@@ -18,7 +18,7 @@ final class MuxedPQEngine {
     private final Log _log;
 
     /**
-     * Construct a new instance.
+     * Create the engine for the given router context.
      */
     public MuxedPQEngine(RouterContext ctx) {
         _context = ctx;
@@ -39,7 +39,8 @@ final class MuxedPQEngine {
     private static final int MIN_NS_MLKEM1024_SIZE = 1568 + NS_MLKEM_OVERHEAD + DATETIME_SIZE; // 1687
 
     /**
-     * Get minimum new session size for the given encryption type
+     * The minimum new session size for the given encryption type.
+     *
      * @return the min n s size
      */
     private static int getMinNSSize(EncType type) {

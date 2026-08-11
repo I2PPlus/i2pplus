@@ -41,24 +41,24 @@ import net.i2p.util.Log;
  *
  * Cleartext:
  * <pre>
- *   bytes     0-3: tunnel ID to receive messages as
- *   bytes    4-35: local router identity hash (Unused and no accessor here)
- *   bytes   36-39: next tunnel ID
- *   bytes   40-71: next router identity hash
- *   bytes  72-103: AES-256 tunnel layer key
- *   bytes 104-135: AES-256 tunnel IV key
- *   bytes 136-167: AES-256 reply key
- *   bytes 168-183: reply IV
- *   byte      184: flags
- *   bytes 185-188: request time (in hours since the epoch)
- *   bytes 189-192: next message ID
- *   bytes 193-221: uninterpreted / random padding
+ * bytes     0-3: tunnel ID to receive messages as
+ * bytes    4-35: local router identity hash (Unused and no accessor here)
+ * bytes   36-39: next tunnel ID
+ * bytes   40-71: next router identity hash
+ * bytes  72-103: AES-256 tunnel layer key
+ * bytes 104-135: AES-256 tunnel IV key
+ * bytes 136-167: AES-256 reply key
+ * bytes 168-183: reply IV
+ * byte      184: flags
+ * bytes 185-188: request time (in hours since the epoch)
+ * bytes 189-192: next message ID
+ * bytes 193-221: uninterpreted / random padding
  * </pre>
  *
  * Encrypted:
  * <pre>
- *   bytes    0-15: First 16 bytes of router hash
- *   bytes  16-527: ElGamal encrypted block (discarding zero bytes at elg[0] and elg[257])
+ * bytes    0-15: First 16 bytes of router hash
+ * bytes  16-527: ElGamal encrypted block (discarding zero bytes at elg[0] and elg[257])
  * </pre>
  *
  * ECIES long record format, ref: proposal 152:
@@ -69,29 +69,29 @@ import net.i2p.util.Log;
  *
  * Cleartext:
  * <pre>
- *   bytes     0-3: tunnel ID to receive messages as, nonzero
- *   bytes     4-7: next tunnel ID, nonzero
- *   bytes    8-39: next router identity hash
- *   bytes   40-71: AES-256 tunnel layer key
- *   bytes  72-103: AES-256 tunnel IV key
- *   bytes 104-135: AES-256 reply key
- *   bytes 136-151: AES-256 reply IV
- *   byte      152: flags
- *   bytes 153-155: more flags, unused, set to 0 for compatibility
- *   bytes 156-159: request time (in minutes since the epoch, rounded down)
- *   bytes 160-163: request expiration (in seconds since creation)
- *   bytes 164-167: next message ID
- *   bytes   168-x: tunnel build options (Mapping)
- *   bytes     x-x: other data as implied by flags or options
- *   bytes   x-463: random padding
+ * bytes     0-3: tunnel ID to receive messages as, nonzero
+ * bytes     4-7: next tunnel ID, nonzero
+ * bytes    8-39: next router identity hash
+ * bytes   40-71: AES-256 tunnel layer key
+ * bytes  72-103: AES-256 tunnel IV key
+ * bytes 104-135: AES-256 reply key
+ * bytes 136-151: AES-256 reply IV
+ * byte      152: flags
+ * bytes 153-155: more flags, unused, set to 0 for compatibility
+ * bytes 156-159: request time (in minutes since the epoch, rounded down)
+ * bytes 160-163: request expiration (in seconds since creation)
+ * bytes 164-167: next message ID
+ * bytes   168-x: tunnel build options (Mapping)
+ * bytes     x-x: other data as implied by flags or options
+ * bytes   x-463: random padding
  * </pre>
  *
  * Encrypted:
  * <pre>
- *   bytes    0-15: Hop's truncated identity hash
- *   bytes   16-47: Sender's ephemeral X25519 public key
- *   bytes  48-511: ChaCha20 encrypted BuildRequestRecord
- *   bytes 512-527: Poly1305 MAC
+ * bytes    0-15: Hop's truncated identity hash
+ * bytes   16-47: Sender's ephemeral X25519 public key
+ * bytes  48-511: ChaCha20 encrypted BuildRequestRecord
+ * bytes 512-527: Poly1305 MAC
  * </pre>
  *
  * ECIES short record format, ref: proposal 157:
@@ -102,26 +102,26 @@ import net.i2p.util.Log;
  *
  * Cleartext:
  * <pre>
- *   bytes     0-3: tunnel ID to receive messages as, nonzero
- *   bytes     4-7: next tunnel ID, nonzero
- *   bytes    8-39: next router identity hash
- *   byte       40: flags
- *   bytes   41-42: more flags, unused, set to 0 for compatibility
- *   byte       43: layer enc. type
- *   bytes   44-47: request time (in minutes since the epoch, rounded down)
- *   bytes   48-51: request expiration (in seconds since creation)
- *   bytes   52-55: next message ID
- *   bytes    56-x: tunnel build options (Mapping)
- *   bytes     x-x: other data as implied by flags or options
- *   bytes   x-153: random padding
+ * bytes     0-3: tunnel ID to receive messages as, nonzero
+ * bytes     4-7: next tunnel ID, nonzero
+ * bytes    8-39: next router identity hash
+ * byte       40: flags
+ * bytes   41-42: more flags, unused, set to 0 for compatibility
+ * byte       43: layer enc. type
+ * bytes   44-47: request time (in minutes since the epoch, rounded down)
+ * bytes   48-51: request expiration (in seconds since creation)
+ * bytes   52-55: next message ID
+ * bytes    56-x: tunnel build options (Mapping)
+ * bytes     x-x: other data as implied by flags or options
+ * bytes   x-153: random padding
  * </pre>
  *
  * Encrypted:
  * <pre>
- *   bytes    0-15: Hop's truncated identity hash
- *   bytes   16-47: Sender's ephemeral X25519 public key
- *   bytes  48-201: ChaCha20 encrypted BuildRequestRecord
- *   bytes 202-217: Poly1305 MAC
+ * bytes    0-15: Hop's truncated identity hash
+ * bytes   16-47: Sender's ephemeral X25519 public key
+ * bytes  48-201: ChaCha20 encrypted BuildRequestRecord
+ * bytes 202-217: Poly1305 MAC
  * </pre>
  *
  */
@@ -156,7 +156,7 @@ public class BuildRequestRecord {
 
     /** IV size in bytes */
     public static final int IV_SIZE = 16;
-    /** we show 16 bytes of the peer hash outside the elGamal block */
+    /** We show 16 bytes of the peer hash outside the elGamal block. */
     public static final int PEER_SIZE = 16;
     private static final int DEFAULT_EXPIRATION_SECONDS = 10*60;
     private static final int EC_LEN = EncType.ECIES_X25519.getPubkeyLen();
@@ -456,7 +456,7 @@ public class BuildRequestRecord {
     /**
      * Encrypts the record using ElGamal.
      * Encrypt the record to the specified peer.  The result is formatted as: <pre>
-     *   bytes 0-15: truncated SHA-256 of the current hop's identity (the toPeer parameter)
+     * bytes 0-15: truncated SHA-256 of the current hop's identity (the toPeer parameter)
      * bytes 15-527: ElGamal-2048 encrypted block
      * </pre>
      * ElGamal only.
@@ -708,18 +708,18 @@ public class BuildRequestRecord {
         _data = buf;
         _isEC = false;
 
-       /*   bytes     0-3: tunnel ID to receive messages as
-        *   bytes    4-35: local router identity hash
-        *   bytes   36-39: next tunnel ID
-        *   bytes   40-71: next router identity hash
-        *   bytes  72-103: AES-256 tunnel layer key
-        *   bytes 104-135: AES-256 tunnel IV key
-        *   bytes 136-167: AES-256 reply key
-        *   bytes 168-183: reply IV
-        *   byte      184: flags
-        *   bytes 185-188: request time (in hours since the epoch)
-        *   bytes 189-192: next message ID
-        *   bytes 193-221: uninterpreted / random padding
+       /* bytes     0-3: tunnel ID to receive messages as
+        * bytes    4-35: local router identity hash
+        * bytes   36-39: next tunnel ID
+        * bytes   40-71: next router identity hash
+        * bytes  72-103: AES-256 tunnel layer key
+        * bytes 104-135: AES-256 tunnel IV key
+        * bytes 136-167: AES-256 reply key
+        * bytes 168-183: reply IV
+        * byte      184: flags
+        * bytes 185-188: request time (in hours since the epoch)
+        * bytes 189-192: next message ID
+        * bytes 193-221: uninterpreted / random padding
         */
         DataHelper.toLong(buf, OFF_RECV_TUNNEL, 4, receiveTunnelId);
         System.arraycopy(peer.getData(), 0, buf, OFF_OUR_IDENT, Hash.HASH_LENGTH);

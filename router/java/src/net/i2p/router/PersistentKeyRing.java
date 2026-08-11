@@ -27,7 +27,11 @@ public class PersistentKeyRing extends KeyRing {
     }
 
     /**
-     * put.
+     * Store a session key, persisting it to the router config.
+     *
+     * @param h the destination hash
+     * @param sk the session key
+     * @return the previous key, or null
      */
     @Override
     public SessionKey put(Hash h, SessionKey sk) {
@@ -40,7 +44,10 @@ public class PersistentKeyRing extends KeyRing {
     }
 
     /**
-     * remove.
+     * Remove a session key, clearing it from the router config.
+     *
+     * @param o the destination hash or key
+     * @return the previous key, or null
      */
     @Override
     public SessionKey remove(Object o) {

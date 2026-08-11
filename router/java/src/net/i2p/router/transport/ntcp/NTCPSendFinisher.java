@@ -168,7 +168,7 @@ class NTCPSendFinisher {
     }
 
     /**
-     * Get send finisher pool utilization as a ratio (0.0-1.0).
+     * Send finisher pool utilization as a ratio (0.0-1.0).
      * Returns NaN if pool not started.
      *
      * @return the utilization ratio

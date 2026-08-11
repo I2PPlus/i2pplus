@@ -56,7 +56,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     * startup.
+     * Start the client manager to accept I2CP connections.
      */
     @Override
     public synchronized void startup() {
@@ -67,7 +67,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     * shutdown.
+     * Shut down the client manager, disconnecting all clients.
      */
     @Override
     public synchronized void shutdown() {shutdown("Router shutdown");}
@@ -87,6 +87,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
+     * Whether the client manager is running.
+     *
      * @return whether alive
      */
     @Override
@@ -95,8 +97,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     private static final long MAX_TIME_TO_REBUILD = 10L*60*1000;
 
     /**
-     * Get the minimum time to lease expiry across all clients.
-     * Used by RouterWatchdog to adjust sleep interval.
+     * Minimum time to lease expiry across all clients.
+     * Used by RouterWatchdog to adjust the sleep interval.
      *
      * @return minimum time to expiry in milliseconds, or Long.MAX_VALUE if no leases
      */
@@ -122,7 +124,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     * verifyClientLiveliness.
+     * Verify that client lease sets are still live, requesting renewal when
+     * they have expired or are about to expire.
      */
     @Override
     public boolean verifyClientLiveliness() {
@@ -256,6 +259,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
+     * Whether the lease set for the destination should be published.
+     *
      * @return whether publish lease set
      */
     @Override
@@ -347,7 +352,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     * get the FloodfillNetworkDatabaseFacade associated with a particular client destination.
+     * The FloodfillNetworkDatabaseFacade associated with a particular client destination.
      * This is inside the runner, so it won't be there if the runner isn't ready.
      *
      * @param destHash destination hash associated with the client who's subDb we're looking for
@@ -361,7 +366,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     * get all the primary hashes for all the clients and return them as a set
+     * All the primary hashes for all the clients as a set.
      *
      * @return all the hashes or an empty set, non-null
      * @since 0.9.61

@@ -405,7 +405,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
      * if the expl. and client tunnel lengths aren't too different.
      * So calculate the difference between the exploratory fail rate
      * and the client fail rate, normalized to 100:
-     *    100 * ((Efail - Cfail) / (100 - Cfail))
+     * 100 * ((Efail - Cfail) / (100 - Cfail))
      * Even this isn't the "true" rate for the NonFailingPeers pool, since we
      * are often building exploratory tunnels using the HighCapacity pool.
      * @return the exploratory fail percentage

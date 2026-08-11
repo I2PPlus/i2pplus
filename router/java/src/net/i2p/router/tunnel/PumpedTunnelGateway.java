@@ -83,26 +83,26 @@ class PumpedTunnelGateway extends TunnelGateway {
     public static int getMaxObMsgsPerPump() { return _maxObMsgsPerPump; }
 
     /**
-     * Set the max outbound messages per pump
+     * The maximum outbound messages per pump.
      * @since 0.9.70+
      */
     public static void setMaxObMsgsPerPump(int val) { _maxObMsgsPerPump = Math.max(8, Math.min(1024, val)); }
 
     /**
-     * Get the max inbound messages per pump
+     * The maximum inbound messages per pump.
      * @since 0.9.70+
      * @return the max ib msgs per pump
      */
     public static int getMaxIbMsgsPerPump() { return _maxIbMsgsPerPump; }
 
     /**
-     * Set the max inbound messages per pump
+     * The maximum inbound messages per pump.
      * @since 0.9.70+
      */
     public static void setMaxIbMsgsPerPump(int val) { _maxIbMsgsPerPump = Math.max(8, Math.min(512, val)); }
 
     /**
-     * Constructs a PumpedTunnelGateway instance.
+     * A gateway for a single tunnel hop.
      *
      * Outbound gateways use an unbounded priority queue;
      * inbound gateways use a bounded blocking queue.

@@ -48,7 +48,7 @@ class StoreState {
     }
 
     /**
-     * Constructs a new StoreState for tracking store operations.
+     * New store state tracking pending, attempted, and successful peers.
      *
      * @param key the DatabaseEntry hash
      * @param toSkip may be null, if non-null, all attempted and skipped targets will be added as of 0.9.53
@@ -71,15 +71,21 @@ class StoreState {
     }
 
     /**
+     * The DatabaseEntry hash target.
+     *
      * @return the target
      */
     public Hash getTarget() { return _key; }
     /**
+     * The data being stored.
+     *
      * @return the data
      */
     public DatabaseEntry getData() { return _data; }
 
     /**
+     * Number of pending peers.
+     *
      * @return the pending count
      */
     public int getPendingCount() {
@@ -105,7 +111,7 @@ class StoreState {
      *  Does not include skipped peers.
      *  Do not use getAttempted().size() as that does include skipped peers.
      *
-     *  @since 0.9.53
+     * @since 0.9.53
      * @return the attempted count
      */
     public int getAttemptedCount() {
@@ -118,7 +124,7 @@ class StoreState {
      *  Return a successful peer (a random one if more than one was successful)
      *  or null.
      *
-     *  @since 0.9.53 formerly returned a copy of the Set
+     * @since 0.9.53 formerly returned a copy of the Set
      * @return the successful
      */
     public Hash getSuccessful() {
@@ -134,26 +140,34 @@ class StoreState {
     }
 
     /**
-     * completed.
+     * Whether the store has completed.
      */
     public boolean completed() { return _completed != -1; }
     /**
-     * complete.
+     * Mark the store as completed at the current time, if not already.
+     *
+     * @param completed whether to mark the store as completed
      */
     public void complete(boolean completed) {
         if (completed && _completed <= 0)
             _completed = _context.clock().now();
     }
     /**
+     * Number of peers that confirmed the store.
+     *
      * @return the complete count
      */
     public int getCompleteCount() { return _completeCount; }
 
     /**
+     * Time the store started.
+     *
      * @return the when started
      */
     public long getWhenStarted() { return _started; }
     /**
+     * Time the store completed, or -1 if not yet completed.
+     *
      * @return the when completed
      */
     public long getWhenCompleted() { return _completed; }
@@ -194,7 +208,7 @@ class StoreState {
         }
     }
 
-    /** we aren't even going to try to contact this peer */
+    /** We aren't even going to try to contact this peer. */
     public void addSkipped(Hash peer) {
         synchronized (_attemptedPeers) {
             _attemptedPeers.add(peer);
@@ -202,7 +216,10 @@ class StoreState {
     }
 
     /**
-     * confirmed.
+     * Mark the peer as confirmed and return the response time.
+     *
+     * @param peer the peer that confirmed
+     * @return the response time in ms, or -1 if unknown
      */
     public long confirmed(Hash peer) {
         long rv = -1;
@@ -222,7 +239,9 @@ class StoreState {
     }
 
     /**
-     * replyTimeout.
+     * Remove the peer from pending on timeout.
+     *
+     * @param peer the peer that timed out
      */
     public void replyTimeout(Hash peer) {
         synchronized (_pendingPeers) {
@@ -231,7 +250,7 @@ class StoreState {
     }
 
     /**
-     * toString.
+     * Debug string for this store state.
      */
     @Override
     public String toString() {

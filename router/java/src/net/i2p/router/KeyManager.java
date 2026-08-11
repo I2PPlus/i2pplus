@@ -153,7 +153,7 @@ public class KeyManager {
     }
 
     /**
-     * Get the keys registered for a destination.
+     * The keys registered for a destination.
      *
      * @param dest the destination to look up
      * @return the LeaseSetKeys for the destination, or null if not found

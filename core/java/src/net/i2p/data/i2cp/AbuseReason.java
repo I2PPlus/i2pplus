@@ -33,7 +33,7 @@ public class AbuseReason extends DataStructureImpl {
     public AbuseReason() { /* required for I2CP deserialization */ }
 
     /**
-     * Get the abuse reason.
+     * Abuse reason text.
      *
      * @return the abuse reason
      */
@@ -42,7 +42,7 @@ public class AbuseReason extends DataStructureImpl {
     }
 
     /**
-     * Set abuse reason.
+     * New abuse reason text.
      *
      * @param reason the abuse reason
      */

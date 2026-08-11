@@ -29,7 +29,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
     private static final int PRIORITY = OutNetMessage.PRIORITY_MY_DATA;
 
     /**
-     * OutboundReceiver.
+     * Binds the context and pool config, caching the first hop router info.
      */
     public OutboundReceiver(RouterContext ctx, PooledTunnelCreatorConfig cfg) {
         _context = ctx;
@@ -42,7 +42,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
     }
 
     /**
-     * receiveEncrypted.
+     * Forward the encrypted data to the first hop in the tunnel.
      */
     public long receiveEncrypted(byte[] encrypted) {
         TunnelDataMessage msg = new TunnelDataMessage(_context);
@@ -92,7 +92,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         private final TunnelDataMessage _msg;
 
         /**
-         * SendJob.
+         * The tunnel data message to send once the first hop is found.
          */
         public SendJob(RouterContext ctx, TunnelDataMessage msg) {
             super(ctx);
@@ -100,12 +100,14 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         }
 
         /**
+         * The name of this job.
+         *
          * @return the name
          */
         public String getName() { return "Send to OBGW after Lookup"; }
 
         /**
-         * runJob.
+         * Send the queued message once the first hop is found.
          */
         public void runJob() {
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(_config.getPeer(1));
@@ -129,19 +131,21 @@ class OutboundReceiver implements TunnelGateway.Receiver {
      */
     private class LookupFailedJob extends JobImpl {
         /**
-         * LookupFailedJob.
+         * Binds the router context.
          */
         public LookupFailedJob(RouterContext ctx) {
             super(ctx);
         }
 
         /**
+         * The name of this job.
+         *
          * @return the name
          */
         public String getName() { return "Timeout OBGW Lookup"; }
 
         /**
-         * runJob.
+         * Fail the tunnel since the first hop lookup timed out.
          */
         public void runJob() {
             if (_log.shouldWarn())
@@ -158,19 +162,21 @@ class OutboundReceiver implements TunnelGateway.Receiver {
      */
     private class SendFailedJob extends JobImpl {
         /**
-         * SendFailedJob.
+         * Binds the router context.
          */
         public SendFailedJob(RouterContext ctx) {
             super(ctx);
         }
 
         /**
+         * The name of this job.
+         *
          * @return the name
          */
         public String getName() { return "OBGW Send Failure"; }
 
         /**
-         * runJob.
+         * Fail the tunnel since sending to the first hop failed.
          */
         public void runJob() {
             if (_log.shouldWarn())

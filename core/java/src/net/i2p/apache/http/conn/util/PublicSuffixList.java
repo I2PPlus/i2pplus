@@ -39,9 +39,6 @@ import net.i2p.apache.http.util.Args;
  *
  * @since 4.4
  */
-/**
- * PublicSuffixList.
- */
 public final class PublicSuffixList {
 
     private final List<String> rules;
@@ -56,9 +53,6 @@ public final class PublicSuffixList {
     }
 
     /**
-     * getRules.
-     */
-    /**
      * Return the suffix rules.
      * @return the rules
      */
@@ -66,9 +60,6 @@ public final class PublicSuffixList {
         return rules;
     }
 
-    /**
-     * getExceptions.
-     */
     /**
      * Return the exception rules.
      * @return the exceptions

@@ -44,15 +44,15 @@ import net.i2p.util.SimpleTimer2;
  */
 class I2PSessionImpl2 extends I2PSessionImpl {
 
-    /** set of MessageState objects, representing all of the messages in the process of being sent */
+    /** One MessageState object per message in the process of being sent */
     protected final Map<Long, MessageState> _sendingStates;
     /**
      * _sendMessageNonce.
      */
     protected final AtomicLong _sendMessageNonce;
-    /** max # seconds to wait for confirmation of the message send */
+    /** Max # seconds to wait for confirmation of the message send */
     private final static long SEND_TIMEOUT = (long) 60 * 1000; // 60 seconds to send
-    /** should we gzip each payload prior to sending it? */
+    /** Should we gzip each payload prior to sending it? */
     private final static boolean SHOULD_COMPRESS = true;
     private final static boolean SHOULD_DECOMPRESS = true;
     /** Don't expect any MSMs from the router for outbound traffic @since 0.8.1 */
@@ -62,7 +62,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     private static Method _tunnelManagerMethod;
 
     /**
-     * for extension by SimpleSession (no dest)
+     * For extension by SimpleSession (no dest)
      */
     protected I2PSessionImpl2(I2PAppContext context, Properties options,
                               I2PClientMessageHandlerMap handlerMap) {
@@ -72,7 +72,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     * for extension by I2PSessionMuxedImpl
+     * For extension by I2PSessionMuxedImpl
      *
      * Create a new session, reading the Destination, PrivateKey, and SigningPrivateKey
      * from the destKeyStream, and using the specified options to connect to the router
@@ -131,7 +131,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         public RemoveExpired() {super(_context.simpleTimer2(), REMOVE_EXPIRED_TIME);}
 
         /**
-         * timeReached.
+         * Remove expired message states and reschedule.
          */
         @Override
         public void timeReached() {
@@ -148,17 +148,11 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     * getTimeout.
-     */
-    /**
      * Return the timeout value.
      * @return the timeout
      */
     protected long getTimeout() {return SEND_TIMEOUT;}
 
-    /**
-     * destroySession.
-     */
     @Override
     /**
      * Destroy the I2P session.
@@ -182,9 +176,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
     private static final int DONT_COMPRESS_SIZE = 66; // Todo: don't compress if destination is local?
 
-    /**
-     * shouldCompress.
-     */
     /**
      * Return whether compression should be used.
      * @return whether compress
@@ -323,16 +314,12 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
 
-    /** unused, see MuxedImpl override */
+    /** Unused, see MuxedImpl override. */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload) throws I2PSessionException {
         return sendMessage(dest, payload, 0, payload.length);
     }
 
-    /**
-     * sendMessage.
-     * @return success
-     */
     @Override
     /**
      * Send an I2CP message.
@@ -420,11 +407,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         else {return sendBestEffort(dest, payload, keyUsed, tagsSent, expires);}
     }
 
-    /**
-     * pull the unencrypted AND DECOMPRESSED data
-     *
-     * @return the data, or null on error
-     */
     @Override
     /**
      * Receive a message from the router.
@@ -652,9 +634,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         }
     }
 
-    /**
-     * removeTunnelStatusListener.
-     */
     @Override
     /**
      * Remove a tunnel status listener.
@@ -674,10 +653,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         }
     }
 
-    /**
-     * switchToNewTunnel.
-     * @return success
-     */
     @Override
     /**
      * Switch to the new tunnel set.
@@ -688,21 +663,15 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     * setCurrentTunnelPair.
+     * Current tunnel pair in use.
      */
     @Override
-    /**
-     * Set the current tunnel pair.
-     */
     public void setCurrentTunnelPair(TunnelPair pair) {
         _currentTunnelPair = pair;
     }
 
     private volatile TunnelPair _currentTunnelPair;
 
-    /**
-     * getCurrentTunnelPair.
-     */
     @Override
     /**
      * Return the current tunnel pair.
@@ -735,9 +704,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         return null;
     }
 
-    /**
-     * rebuildTunnels.
-     */
     @Override
     /**
      * Rebuild the tunnel set.
@@ -761,9 +727,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      *
      *  @since 0.9.69
      */
-    /**
-     * Notify listeners of a tunnel failure.
-     */
     protected void notifyTunnelFailed(String poolName, boolean isInbound) {
         for (TunnelStatusListener lsnr : _tunnelStatusListeners) {
             try {
@@ -780,9 +743,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      *
      *  @since 0.9.69+
      */
-    /**
-     * Notify listeners of a tunnel removal.
-     */
     protected void notifyTunnelRemoved(TunnelRemovalEvent event) {
         for (TunnelStatusListener lsnr : _tunnelStatusListeners) {
             try {
@@ -798,9 +758,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      *  Notify all tunnel status listeners of pool shutdown.
      *
      *  @since 0.9.69+
-     */
-    /**
-     * Notify listeners of pool shutdown.
      */
     protected void notifyPoolShuttingDown(String poolName, boolean isInbound) {
         for (TunnelStatusListener lsnr : _tunnelStatusListeners) {

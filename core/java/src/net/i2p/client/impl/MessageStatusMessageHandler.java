@@ -23,15 +23,12 @@ import net.i2p.data.i2cp.ReceiveMessageBeginMessage;
  */
 class MessageStatusMessageHandler extends HandlerImpl {
     /**
-     * MessageStatusMessageHandler.
+     * Create the handler for I2CP message status messages.
      */
     public MessageStatusMessageHandler(I2PAppContext context) {
         super(context, MessageStatusMessage.MESSAGE_TYPE);
     }
 
-    /**
-     * handleMessage.
-     */
     @Override
     /**
      * Handle an incoming I2CP message.

@@ -43,7 +43,9 @@ public class RouterCommandLine extends net.i2p.util.CommandLine {
     protected RouterCommandLine() {}
 
     /**
-     * main.
+     * Parse the command line and execute the requested command.
+     *
+     * @param args the command line arguments
      */
     public static void main(String[] args) {
         List<String> classes = new ArrayList<>(RCLASSES.size() + CLASSES.size());
@@ -57,7 +59,9 @@ public class RouterCommandLine extends net.i2p.util.CommandLine {
     }
 
     /**
-     * usage.
+     * Print usage information and the list of available commands.
+     *
+     * @param classes the command classes
      */
     public static void usage(List<String> classes) {
         System.err.println("I2P Router version " + RouterVersion.FULL_VERSION + '\n' +

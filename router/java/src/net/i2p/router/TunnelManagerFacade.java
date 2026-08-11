@@ -123,22 +123,23 @@ public interface TunnelManagerFacade extends Service {
     /** Is a tunnel a valid member of the pool? */
     public boolean isValidTunnel(Hash client, TunnelInfo tunnel);
 
-    /** how many tunnels are we participating in? */
+    /** How many tunnels are we participating in? */
     public int getParticipatingCount();
-    /** how many free inbound tunnels do we have available? */
+    /** How many free inbound tunnels do we have available? */
     public int getFreeTunnelCount();
-    /** how many outbound tunnels do we have available? */
+    /** How many outbound tunnels do we have available? */
     public int getOutboundTunnelCount();
-    /** how many free inbound client tunnels do we have available? */
+    /** How many free inbound client tunnels do we have available? */
     public int getInboundClientTunnelCount();
-    /** how many outbound client tunnels do we have available? */
+    /** How many outbound client tunnels do we have available? */
     public int getOutboundClientTunnelCount();
-    /** how many outbound client tunnels in this pool? */
+    /** How many outbound client tunnels in this pool? */
     public int getOutboundClientTunnelCount(Hash destination);
-    /** how many inbound client tunnels in this pool? */
+    /** How many inbound client tunnels in this pool? */
     public int getInboundClientTunnelCount(Hash destination);
     /**
-     * getShareRatio().
+     * The share ratio of tunnel bandwidth allocated to the network.
+     *
      * @return the share ratio
      */
     public double getShareRatio();
@@ -146,7 +147,7 @@ public interface TunnelManagerFacade extends Service {
     /** When does the last tunnel we are participating in expire? */
     public long getLastParticipatingExpiration();
 
-    /** count how many inbound tunnel requests we have received but not yet processed */
+    /** Count how many inbound tunnel requests we have received but not yet processed */
     public int getInboundBuildQueueSize();
 
     /**
@@ -188,50 +189,66 @@ public interface TunnelManagerFacade extends Service {
     public void removeAlias(Destination dest);
 
     /**
-     * getInboundSettings().
+     * The inbound settings for the exploratory pool.
+     *
      * @return the inbound settings
      */
     public TunnelPoolSettings getInboundSettings();
     /**
-     * getOutboundSettings().
+     * The outbound settings for the exploratory pool.
+     *
      * @return the outbound settings
      */
     public TunnelPoolSettings getOutboundSettings();
     /**
-     * client).
+     * The inbound settings for the given client.
+     *
+     * @param client the client hash
      * @return the inbound settings
      */
     public TunnelPoolSettings getInboundSettings(Hash client);
     /**
-     * client).
+     * The outbound settings for the given client.
+     *
+     * @param client the client hash
      * @return the outbound settings
      */
     public TunnelPoolSettings getOutboundSettings(Hash client);
     /**
-     * settings).
+     * Set the inbound settings for the exploratory pool.
+     *
+     * @param settings the inbound settings
      */
     public void setInboundSettings(TunnelPoolSettings settings);
     /**
-     * settings).
+     * Set the outbound settings for the exploratory pool.
+     *
+     * @param settings the outbound settings
      */
     public void setOutboundSettings(TunnelPoolSettings settings);
     /**
-     * settings).
+     * Set the inbound settings for the given client.
+     *
+     * @param client the client hash
+     * @param settings the inbound settings
      */
     public void setInboundSettings(Hash client, TunnelPoolSettings settings);
     /**
-     * settings).
+     * Set the outbound settings for the given client.
+     *
+     * @param client the client hash
+     * @param settings the outbound settings
      */
     public void setOutboundSettings(Hash client, TunnelPoolSettings settings);
-    /** for TunnelRenderer in router console */
+    /** For TunnelRenderer in router console */
     public void listPools(List<TunnelPool> out);
-    /** for TunnelRenderer in router console */
+    /** For TunnelRenderer in router console */
     public Map<Hash, TunnelPool> getInboundClientPools();
-    /** for TunnelRenderer in router console */
+    /** For TunnelRenderer in router console */
     public Map<Hash, TunnelPool> getOutboundClientPools();
-    /** for TunnelRenderer in router console */
+    /** For TunnelRenderer in router console */
     public TunnelPool getInboundExploratoryPool();
-    /** for TunnelRenderer in router console */
+    /** For TunnelRenderer in router console */
     public TunnelPool getOutboundExploratoryPool();
 
     /**
@@ -250,7 +267,7 @@ public interface TunnelManagerFacade extends Service {
     public void fail(Hash peer);
 
     /**
-     * Get the ghost peer manager for tracking peers with consistent tunnel build timeouts.
+     * The ghost peer manager for tracking peers with consistent tunnel build timeouts.
      *
      * @return the GhostPeerManager instance
      * @since 0.9.68+

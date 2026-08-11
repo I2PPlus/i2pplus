@@ -44,8 +44,8 @@ public final class I2PDatagramMaker {
     private final ByteArrayOutputStream sxDGram = new ByteArrayOutputStream(INIT_DGRAM_BUFSIZE);
 
     /**
-     * Construct a new I2PDatagramMaker that will be able to create I2P
-     * repliable datagrams going to be sent through the specified I2PSession.
+     * An I2PDatagramMaker able to create I2P repliable datagrams going to be
+     * sent through the specified I2PSession.
      *
      * Does NOT support LS2 offline keys!
      *
@@ -57,8 +57,8 @@ public final class I2PDatagramMaker {
     }
 
     /**
-     * Construct a new I2PDatagramMaker that is null.
-     * Use setI2PDatagramMaker to set the parameters.
+     * An I2PDatagramMaker with no session yet;
+     * use setI2PDatagramMaker to set the parameters.
      */
     public I2PDatagramMaker() {
         // nop

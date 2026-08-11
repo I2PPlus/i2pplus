@@ -31,10 +31,10 @@ import net.i2p.util.ByteArrayStream;
  * not before, so we can infer the types from the LeaseSet.
  *
  * For Meta LS:
-  * PrivateKeys are not present.
-  *
-  * @since 0.9.38
-  */
+ * PrivateKeys are not present.
+ *
+ * @since 0.9.38
+ */
 public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
     /**
      *  NOTE: Preliminary format was type 40 in 0.9.38.
@@ -75,7 +75,7 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
     }
 
     /**
-     * doReadMessage.
+     * Read the message body from the input stream.
      */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
@@ -136,7 +136,7 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
     }
 
     /**
-     * doWriteMessage.
+     * Write the message body to the output stream.
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

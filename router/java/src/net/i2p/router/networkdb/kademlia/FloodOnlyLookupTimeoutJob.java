@@ -29,7 +29,7 @@ class FloodOnlyLookupTimeoutJob extends JobImpl {
     }
 
     /**
-     * runJob.
+     * Fail the search job when the lookup times out.
      */
     public void runJob() {
         Log log = getContext().logManager().getLog(getClass());
@@ -39,6 +39,8 @@ class FloodOnlyLookupTimeoutJob extends JobImpl {
     }
 
     /**
+     * Name of this job.
+     *
      * @return the name
      */
     public String getName() { return "Timeout NetDb FloodSearch"; }

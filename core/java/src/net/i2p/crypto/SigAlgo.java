@@ -30,7 +30,9 @@ public enum SigAlgo {
     }
 
     /**
-     * @return the name
+     * The name of this signature algorithm.
+     *
+     * @return The name.
      */
     public String getName() {
         return name;

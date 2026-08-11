@@ -43,14 +43,14 @@ public class DisconnectMessage extends I2CPMessageImpl {
     }
 
     /**
-     * setReason.
+     * Reason for the disconnect.
      */
     public void setReason(String reason) {
         _reason = reason;
     }
 
     /**
-     * doReadMessage.
+     * Read the message body from the input stream.
      */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
@@ -58,7 +58,7 @@ public class DisconnectMessage extends I2CPMessageImpl {
     }
 
     /**
-     * doWriteMessage.
+     * Write the message body to the output stream.
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

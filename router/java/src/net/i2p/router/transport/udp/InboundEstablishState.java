@@ -18,7 +18,7 @@ import net.i2p.util.SystemVersion;
 class InboundEstablishState {  // TODO do all these methods need to be synchronized?
     /** Router context */
     protected final RouterContext _context;
-    /** Logger */
+    /** Logger. */
     protected final Log _log;
     /** SessionRequest message data from Alice */
     private byte[] _receivedX;
@@ -64,17 +64,17 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
      * Tracks the progression of incoming connection setup.
      */
     public enum InboundState {
-        /** nothin' known yet */
+        /** Nothing known yet. */
         IB_STATE_UNKNOWN,
-        /** we have received an initial request */
+        /** We have received an initial request. */
         IB_STATE_REQUEST_RECEIVED,
-        /** we have sent a signed creation packet */
+        /** We have sent a signed creation packet. */
         IB_STATE_CREATED_SENT,
-        /** we have received one but not all the confirmation packets - never happens in practice - see below. */
+        /** We have received one but not all the confirmation packets - never happens in practice - see below. */
         IB_STATE_CONFIRMED_PARTIALLY,
-        /** we have all the confirmation packets */
+        /** We have all the confirmation packets. */
         IB_STATE_CONFIRMED_COMPLETELY,
-        /** we are explicitly failing it */
+        /** We are explicitly failing it. */
         IB_STATE_FAILED,
         /** Successful completion, PeerState created and added to transport */
         IB_STATE_COMPLETE,

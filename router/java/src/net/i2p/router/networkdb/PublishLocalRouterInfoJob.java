@@ -46,7 +46,7 @@ public class PublishLocalRouterInfoJob extends JobImpl {
      */
     private static final long PUBLISH_DELAY = 43L*60*1000;
 
-    /** this needs to be long enough to give us time to start up,
+    /** This needs to be long enough to give us time to start up,
      *  but less than 20m (when we start accepting tunnels and could be a IBGW)
      *  Actually no, we need this soon if we are a new router or
      *  other routers have forgotten about us, else
@@ -66,12 +66,14 @@ public class PublishLocalRouterInfoJob extends JobImpl {
     }
 
     /**
+     * Name of this job.
+     *
      * @return the name
      */
     public String getName() { return "Publish Local RouterInfo"; }
 
     /**
-     * runJob.
+     * Publish the local RouterInfo, or requeue if it is not yet time.
      */
     public void runJob() {
         if (!getContext().commSystem().isRunning()) {
@@ -159,7 +161,9 @@ public class PublishLocalRouterInfoJob extends JobImpl {
     }
 
     /**
-     *  @since public since 0.9.65 for use by Router
+     * Delay until the next RouterInfo publish.
+     *
+     * @since public since 0.9.65 for use by Router
      * @return the delay
      */
     public long getDelay() {
@@ -176,7 +180,7 @@ public class PublishLocalRouterInfoJob extends JobImpl {
      */
     private static class AddrComparator implements Comparator<RouterAddress>, Serializable {
         /**
-         * compare.
+         * Compare two RouterAddresses by transport style, then host.
          */
         public int compare(RouterAddress l, RouterAddress r) {
             int c = l.getTransportStyle().compareTo(r.getTransportStyle());

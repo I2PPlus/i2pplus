@@ -73,16 +73,14 @@ public class TrustedUpdate {
     }
 
     /**
-     * Constructs a new <code>TrustedUpdate</code> with the default global
-     * context.
+     * Trusted update verifier using the default global context.
      */
     public TrustedUpdate() {
         this(I2PAppContext.getGlobalContext());
     }
 
     /**
-     * Constructs a new <code>TrustedUpdate</code> with the given
-     * {@link net.i2p.I2PAppContext}.
+     * Trusted update verifier using the given context.
      *
      * @param context An instance of <code>I2PAppContext</code>.
      */
@@ -113,7 +111,7 @@ public class TrustedUpdate {
 
     /**
      * Keys.
-     *  @since 0.9.8, public since 0.9.14.1
+     * @since 0.9.8, public since 0.9.14.1
      * @return the keys
      */
     public Map<SigningPublicKey, String> getKeys() {

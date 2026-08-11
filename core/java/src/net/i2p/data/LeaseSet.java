@@ -86,10 +86,10 @@ import java.util.Set;
  * leases and the original leaseset signature.
  *
  * Revocation (zero leases) isn't used anywhere. In addition:
- *  - A revoked leaseset has an EarliestLeaseDate of -1, so it will
- *    never be stored successfully.
- *  - Revocation of an encrypted leaseset will explode.
- *  - So having an included signature at all is pointless?
+ *     - A revoked leaseset has an EarliestLeaseDate of -1, so it will
+ *       never be stored successfully.
+ *     - Revocation of an encrypted leaseset will explode.
+ *     - So having an included signature at all is pointless?
  *
  *
  * @author jrandom
@@ -384,7 +384,7 @@ public class LeaseSet extends DatabaseEntry {
         return _lastExpiration > now - fudge;
     }
 
-    /** without sig! */
+    /** Without the signature! */
     @Override
     protected byte[] getBytes() {
         if (_byteified != null) {
@@ -494,7 +494,7 @@ public class LeaseSet extends DatabaseEntry {
         return DataHelper.eq(_signature, ls.getSignature()) && DataHelper.eq(_leases, ls._leases) && DataHelper.eq(getEncryptionKey(), ls.getEncryptionKey()) && DataHelper.eq(_signingKey, ls.getSigningKey()) && DataHelper.eq(_destination, ls.getDestination());
     }
 
-    /** the destination has enough randomness in it to use it by itself for speed */
+    /** The destination has enough randomness in it to use it by itself for speed. */
     @Override
     public int hashCode() {
         if (_destination == null) {

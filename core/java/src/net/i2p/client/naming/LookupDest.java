@@ -105,7 +105,7 @@ public class LookupDest {
     }
 
     /**
-     * Get I2CP options from the context.
+     * I2CP options from the context.
      *
      * @since 0.9.40 split out from above
      * @return the opts

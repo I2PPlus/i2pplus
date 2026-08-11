@@ -73,7 +73,7 @@ public class Log {
     public static final String STR_CRIT = "CRIT";
 
     /**
-     * Get the log level integer for a string level name.
+     * Integer log level for a string level name.
      *
      * @param level the level
      * @return the integer level
@@ -124,17 +124,14 @@ public class Log {
         _manager.addLog(this);
     }
 
-    /** Log */
     Log(LogManager manager, Class<?> cls) {
         this(manager, cls, null);
     }
 
-    /** Log */
     Log(LogManager manager, String name) {
         this(manager, null, name);
     }
 
-    /** Log */
     Log(LogManager manager, Class<?> cls, String name) {
         _manager = manager;
         _class = cls;
@@ -256,7 +253,7 @@ public class Log {
     }
 
     /**
-     * Get the minimum priority for logging.
+     * Minimum priority for logging.
      *
      * @return the minimum priority
      */
@@ -265,7 +262,7 @@ public class Log {
     }
 
     /**
-     * Set the minimum priority for logging.
+     * Configure the minimum priority for logging.
      *
      * @param priority the minimum priority
      */
@@ -324,7 +321,7 @@ public class Log {
     }
 
     /**
-     * logs a loop when closing a resource with level DEBUG
+     * Logs a loop when closing a resource with level DEBUG.
      * This method is for debugging purposes only and
      * is subject to change or removal w/o notice.
      * NOT a supported API.
@@ -359,7 +356,7 @@ public class Log {
         }
         Exception e = new Exception("check stack trace") {
             /**
-             * fillInStackTrace.
+             * Skip stack trace filling for performance.
              */
             @Override
             public Throwable fillInStackTrace() {
@@ -370,7 +367,7 @@ public class Log {
     }
 
     /**
-     * Get the logger name.
+     * Logger name.
      *
      * @return the name
      */
@@ -391,7 +388,7 @@ public class Log {
     }
 
     /**
-     * Get the scope string for a name and class.
+     * Scope string for a name and class.
      *
      * @param name the logger name
      * @param cls the class
@@ -414,6 +411,8 @@ public class Log {
         private final String _scopeCache;
 
         /**
+         * Create the scope, caching the computed string.
+         *
          * @param name the logger name
          * @param cls the class
          */

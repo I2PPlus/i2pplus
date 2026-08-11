@@ -104,7 +104,7 @@ public class SessionKey extends SimpleDataStructure {
     }
 
     /**
-     * Sets the data.
+     * Session key data.
      *
      * @param data 32 bytes, or null
      * @throws IllegalArgumentException if data is not the legal number of bytes (but null is ok)
@@ -116,8 +116,8 @@ public class SessionKey extends SimpleDataStructure {
     }
 
     /**
-     * retrieve an internal representation of the session key, as known
-     * by the AES engine used.  this can be reused safely
+     * Retrieve an internal representation of the session key, as known
+     * by the AES engine used. This can be reused safely.
      * @return the prepared key
      */
     public Object getPreparedKey() {

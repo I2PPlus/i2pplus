@@ -53,7 +53,7 @@ public class SessionId {
     }
 
     /**
-     * Set the session ID.
+     * New session ID.
      *
      * @param id 0-65535
      * @throws IllegalArgumentException if the ID is out of range

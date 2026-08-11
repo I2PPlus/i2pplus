@@ -18,7 +18,7 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 
 /**
- * Get a working directory for i2p.
+ * Provides the working directory for i2p.
  *
  * For the location, first try the system property i2p.dir.config
  * Next try $HOME/.i2p on linux or %LOCALAPPDATA%\I2P on Windows.
@@ -54,7 +54,7 @@ public class WorkingDir {
     private static final String WORKING_DIR_DEFAULT_MAC = "i2p";
     private static final String WORKING_DIR_DEFAULT = ".i2p";
     private static final String WORKING_DIR_DEFAULT_DAEMON = "i2p-config";
-    /** we do a couple of things differently if this is the username */
+    /** We do a couple of things differently if this is the username. */
     private static final String PROP_WRAPPER_LOG = "wrapper.logfile";
     private static final String DEFAULT_WRAPPER_LOG = "wrapper.log";
     /** Feb 16 2006 */
@@ -332,7 +332,7 @@ public class WorkingDir {
     }
 
     /**
-     * files and directories from the base install to copy over
+     * Files and directories from the base install to copy over.
      * None of these should be included in i2pupdate.zip
      *
      * The user should not delete these in the old location, leave them as templates for new users

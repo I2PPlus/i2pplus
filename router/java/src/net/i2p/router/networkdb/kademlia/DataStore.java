@@ -67,16 +67,13 @@ public interface DataStore {
      */
     public boolean put(Hash key, DatabaseEntry data, boolean persist);
 
-    /*
-     *  Unconditionally store, bypass all newer/older checks
-     *
-     *  @return success
-     *  @param key non-null
-     *  @param data non-null
-     *  @since 0.9.64
-     */
     /**
-     * data).
+     * Unconditionally store, bypass all newer/older checks.
+     *
+     * @return success
+     * @param key non-null
+     * @param data non-null
+     * @since 0.9.64
      */
     public boolean forcePut(Hash key, DatabaseEntry data);
 
@@ -96,13 +93,13 @@ public interface DataStore {
      */
     public DatabaseEntry remove(Hash key, boolean persist);
     /**
-     * Get all keys stored in the data store.
+     * All keys stored in the data store.
      *
      * @return set of all hash keys
      */
     public Set<Hash> getKeys();
     /**
-     * Gets all entries in the data store.
+     * All entries in the data store.
      *
      * @since 0.8.3
      * @return the entries
@@ -110,7 +107,7 @@ public interface DataStore {
     public Collection<DatabaseEntry> getEntries();
 
     /**
-     * Gets all map entries in the data store.
+     * All map entries in the data store.
      *
      * @since 0.8.3
      * @return the map entries

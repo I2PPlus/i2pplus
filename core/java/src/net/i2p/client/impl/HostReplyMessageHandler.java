@@ -18,15 +18,12 @@ import net.i2p.data.i2cp.I2CPMessage;
 class HostReplyMessageHandler extends HandlerImpl {
 
     /**
-     * HostReplyMessageHandler.
+     * Create the handler for I2CP host replies.
      */
     public HostReplyMessageHandler(I2PAppContext ctx) {
         super(ctx, HostReplyMessage.MESSAGE_TYPE);
     }
 
-    /**
-     * handleMessage.
-     */
     @Override
     /**
      * Handle an incoming I2CP message.

@@ -96,7 +96,7 @@ public interface I2PClient {
      */
     public static final int DEFAULT_LISTEN_PORT = 7654;
 
-    /** protocol flag that must be sent when opening the i2cp connection to the router */
+    /** Protocol flag that must be sent when opening the i2cp connection to the router */
     public static final int PROTOCOL_BYTE = 0x2A;
 
     /**
@@ -118,23 +118,11 @@ public interface I2PClient {
 
     /**
      * Create a new destination with the default certificate creation properties and store
-     * it, along with the private encryption and signing keys at the specified location
-     *
-     * Caller must close stream.
-     *
-     * @param destKeyStream create a new destination and write out the object to the given stream,
-     *                      formatted as Destination, PrivateKey, and SigningPrivateKey
-     *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     *
-     * @return new destination
-     */
-    /**
-     * Create a new destination with the default certificate creation properties and store
      * it, along with the private encryption and signing keys at the specified location.
      *
      * Caller must close stream.
      *
-     * @param destKeyStream stream to write destination and keys to
+     * @param destKeyStream stream to write the destination and keys to
      * @return new destination
      * @throws I2PException on I2P protocol error
      * @throws IOException on IO error
@@ -161,23 +149,11 @@ public interface I2PClient {
 
     /**
      * Create a new destination with the given certificate and store it, along with the private
-     * encryption and signing keys at the specified location
-     *
-     * Caller must close stream.
-     *
-     * @param destKeyStream location to write out the destination, PrivateKey, and SigningPrivateKey,
-     *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     *
-     * @param cert certificate to tie to the destination
-     * @return newly created destination
-     */
-    /**
-     * Create a new destination with the given certificate and store it, along with the private
      * encryption and signing keys at the specified location.
      *
      * Caller must close stream.
      *
-     * @param destKeyStream stream to write destination and keys to
+     * @param destKeyStream stream to write the destination and keys to
      * @param cert certificate to tie to the destination
      * @return newly created destination
      * @throws I2PException on I2P protocol error

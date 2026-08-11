@@ -31,10 +31,14 @@ public class ClientTunnelSettings {
     }
 
     /**
+     * Inbound tunnel pool settings.
+     *
      * @return inbound tunnel pool settings
      */
     public TunnelPoolSettings getInboundSettings() { return _inboundSettings; }
     /**
+     * Outbound tunnel pool settings.
+     *
      * @return outbound tunnel pool settings
      */
     public TunnelPoolSettings getOutboundSettings() { return _outboundSettings; }

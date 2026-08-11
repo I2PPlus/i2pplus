@@ -515,7 +515,8 @@ class SSU2Payload {
         }
 
         /**
-         * Get the block type.
+         * The block type.
+         *
          * @return block type
          * @since 0.9.55
          */
@@ -566,7 +567,7 @@ class SSU2Payload {
         public abstract int writeData(byte[] tgt, int off);
 
         /**
-         * toString.
+         * String representation of this block.
          */
         @Override
         public String toString() {
@@ -972,7 +973,7 @@ class SSU2Payload {
         }
 
         /**
-         * toString.
+         * String representation of this ACK block.
          */
         @Override
         public String toString() {
@@ -1141,6 +1142,8 @@ class SSU2Payload {
         }
 
         /**
+         * The data length of this block.
+         *
          * @return the data length
          */
         public int getDataLength() {
@@ -1148,7 +1151,7 @@ class SSU2Payload {
         }
 
         /**
-         * writeData.
+         * Write this block's data to the target array.
          */
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(d, 0, tgt, off, d.length);
@@ -1172,6 +1175,8 @@ class SSU2Payload {
         }
 
         /**
+         * The data length of this block.
+         *
          * @return the data length
          */
         public int getDataLength() {
@@ -1179,7 +1184,7 @@ class SSU2Payload {
         }
 
         /**
-         * writeData.
+         * Write this block's data to the target array.
          */
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(d, 0, tgt, off, d.length);
@@ -1209,6 +1214,8 @@ class SSU2Payload {
         }
 
         /**
+         * The data length of this block.
+         *
          * @return the data length
          */
         public int getDataLength() {
@@ -1219,7 +1226,7 @@ class SSU2Payload {
         }
 
         /**
-         * writeData.
+         * Write this block's data to the target array.
          */
         public int writeData(byte[] tgt, int off) {
             tgt[off++] = (byte) n;
@@ -1250,6 +1257,8 @@ class SSU2Payload {
         }
 
         /**
+         * The data length of this block.
+         *
          * @return the data length
          */
         public int getDataLength() {
@@ -1257,7 +1266,7 @@ class SSU2Payload {
         }
 
         /**
-         * writeData.
+         * Write this block's data to the target array.
          */
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong(tgt, off, 4, tok.getExpiration() / 1000);
@@ -1283,6 +1292,8 @@ class SSU2Payload {
         }
 
         /**
+         * The data length of this block.
+         *
          * @return the data length
          */
         public int getDataLength() {
@@ -1290,7 +1301,7 @@ class SSU2Payload {
         }
 
         /**
-         * writeData.
+         * Write this block's data to the target array.
          */
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(d, 0, tgt, off, d.length);
@@ -1314,6 +1325,8 @@ class SSU2Payload {
         }
 
         /**
+         * The data length of this block.
+         *
          * @return the data length
          */
         public int getDataLength() {
@@ -1321,7 +1334,7 @@ class SSU2Payload {
         }
 
         /**
-         * writeData.
+         * Write this block's data to the target array.
          */
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(d, 0, tgt, off, d.length);

@@ -35,8 +35,8 @@ class InboundMessageState implements CDQEntry {
     private static final ByteCache _fragmentCache = ByteCache.getInstance(64, MAX_FRAGMENT_SIZE);
 
     /**
-     * Constructs a new InboundMessageState with no fragments.
-      * @param ctx the ctx
+     * Creates a new InboundMessageState with no fragments.
+     * @param ctx the ctx
      */
     public InboundMessageState(RouterContext ctx, long messageId, Hash from) {
         _context = ctx;
@@ -51,9 +51,9 @@ class InboundMessageState implements CDQEntry {
     }
 
     /**
-     * Constructs and initializes by receiving one fragment.
-     *  @throws DataFormatException if fragment is invalid
-      *  @param ctx the ctx
+     * Creates an InboundMessageState and stores the first received fragment.
+     * @throws DataFormatException if fragment is invalid
+     * @param ctx the ctx
      */
     public InboundMessageState(RouterContext ctx, long messageId, Hash from,
                                byte[] data, int off, int len, int fragmentNum, boolean isLast)
@@ -81,7 +81,7 @@ class InboundMessageState implements CDQEntry {
     /**
      * Receives and stores a fragment.
      *  @return true if successful, false if corrupt or invalid
-      *  @param data the data
+     *  @param data the data
      */
     public boolean receiveFragment(byte[] data, int off, int len, int fragmentNum, boolean isLast) {
         synchronized(lock) {
@@ -130,7 +130,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Returns whether the specified fragment has been received.
-      *  @param fragmentNum the fragmentNum
+     *  @param fragmentNum the fragmentNum
      *  @return whether fragment is present
      */
     public boolean hasFragment(int fragmentNum) {
@@ -170,7 +170,7 @@ class InboundMessageState implements CDQEntry {
     }
 
     /**
-     * Sets enqueue time for queueing.
+     * The enqueue time for queueing.
      */
     public void setEnqueueTime(long now) {
         synchronized(lock) {
@@ -179,7 +179,7 @@ class InboundMessageState implements CDQEntry {
     }
 
     /**
-     * Gets the enqueue time.
+     * The enqueue time.
      * @return the enqueue time
      */
     public long getEnqueueTime() {
@@ -196,22 +196,21 @@ class InboundMessageState implements CDQEntry {
     }
 
     /**
-     * Returns the Hash of the sender.
-      * @return the from
-      * @return the from
+     * The Hash of the sender.
+     * @return the from
      */
     public Hash getFrom() { return _from; }
 
     /**
-     * Returns the message ID.
-      * @return the message id
+     * The message ID.
+     * @return the message id
      */
     public long getMessageId() { return _messageId; }
 
     /**
-     * Returns the total size of the complete message in bytes.
-     *  @throws IllegalStateException if message incomplete or released
-      *  @return the complete size
+     * The total size of the complete message in bytes.
+     * @throws IllegalStateException if message incomplete or released
+     * @return the complete size
      */
     public int getCompleteSize() {
         synchronized(lock) {
@@ -235,7 +234,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Creates a bitfield representing received fragments.
-      * @return the value
+     * @return the value
      */
     public ACKBitfield createACKBitfield() {
         synchronized(lock) {
@@ -321,8 +320,8 @@ class InboundMessageState implements CDQEntry {
     }
 
     /**
-     * Returns the array of fragments, throws if already released.
-      * @return the fragments
+     * The array of fragments, throws if already released.
+     * @return the fragments
      */
     public ByteArray[] getFragments() {
         synchronized(lock) {
@@ -336,8 +335,8 @@ class InboundMessageState implements CDQEntry {
     }
 
     /**
-     * Returns number of fragments received or expected.
-      * @return the fragment count
+     * Number of fragments received or expected.
+     * @return the fragment count
      */
     public int getFragmentCount() {
         synchronized(lock) {
@@ -346,7 +345,7 @@ class InboundMessageState implements CDQEntry {
     }
 
     /**
-     * Returns a string summary of this message state.
+     * A string summary of this message state.
      */
     @Override
     public String toString() {

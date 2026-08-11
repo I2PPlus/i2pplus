@@ -97,7 +97,7 @@ public final class PrioritySendPool {
     }
 
     /**
-     * size.
+     * Number of messages currently in the pool.
      */
     public int size() {
         synchronized (_messages) {
@@ -106,7 +106,7 @@ public final class PrioritySendPool {
     }
 
     /**
-     * remainingCapacity.
+     * Free capacity remaining in the pool.
      */
     public int remainingCapacity() {
         synchronized (_messages) {
@@ -115,6 +115,7 @@ public final class PrioritySendPool {
     }
 
     /**
+     * The configured pool capacity.
      * @return the capacity
      */
     public int getCapacity() {
@@ -137,10 +138,12 @@ public final class PrioritySendPool {
      */
     public int getAddedCount() { return _addedCount; }
     /**
+     * The number of messages evicted since construction.
      * @return the evicted count
      */
     public int getEvictedCount() { return _evictedCount; }
     /**
+     * The number of messages dropped since construction.
      * @return the dropped count
      */
     public int getDroppedCount() { return _droppedCount; }

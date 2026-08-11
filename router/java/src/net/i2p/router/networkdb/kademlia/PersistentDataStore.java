@@ -57,21 +57,21 @@ import net.i2p.util.SimpleTimer2;
  * Public only for access to static methods by startup classes.
  */
 public class PersistentDataStore extends TransientDataStore {
-    /** database directory */
+    /** Database directory. */
     private final File _dbDir;
     /** Reference to the Kademlia facade for netdb operations. */
     private final KademliaNetworkDatabaseFacade _facade;
     /** Background thread for persisting RouterInfo files to disk. */
     private final Writer _writer;
-    /** read job */
+    /** Read job that loads the database from disk. */
     private final ReadJob _readJob;
-    /** ban logger */
+    /** Ban logger. */
     private final BanLogger _banLogger;
-    /** initialized flag */
+    /** Initialized flag. */
     private volatile boolean _initialized;
-    /** flat mode flag */
+    /** Flat mode flag. */
     private final boolean _flat;
-    /** network ID */
+    /** Network ID. */
     private final int _networkID;
 
     /** Initial delay before first netdb scan. */
@@ -129,6 +129,8 @@ public class PersistentDataStore extends TransientDataStore {
 
     @Override
     /**
+     * Whether the data store has completed initial loading.
+     *
      * @return true if the data store has completed initial loading
      */
     public boolean isInitialized() {return _initialized || _readJob.isNetDbReady();}
@@ -149,6 +151,8 @@ public class PersistentDataStore extends TransientDataStore {
 
     @Override
     /**
+     * The entry stored for the key, or null if not found.
+     *
      * @return the entry or null if not found
      */
     public DatabaseEntry get(Hash key) {return get(key, true);}
@@ -632,11 +636,11 @@ public class PersistentDataStore extends TransientDataStore {
      *  As of 0.9.4, also initiates an automatic reseed if necessary.
      */
     private class ReadJob extends JobImpl {
-        /** last modified time */
+        /** Last modified time. */
         private volatile long _lastModified;
-        /** last reseed time */
+        /** Last reseed time. */
         private volatile long _lastReseed;
-        /** netdb ready flag */
+        /** Netdb ready flag. */
         private volatile boolean _setNetDbReady;
         /** Minimum routers before netdb is considered ready. */
         private static final int MIN_ROUTERS = KademliaNetworkDatabaseFacade.MIN_RESEED;
@@ -731,6 +735,8 @@ public class PersistentDataStore extends TransientDataStore {
         public void wakeup() {requeue(0);}
 
         /**
+         * Whether the netdb has enough routers to be usable.
+         *
          * @return true once the netdb has enough routers to be usable
          */
         public boolean isNetDbReady() {return _setNetDbReady;}
@@ -826,11 +832,11 @@ public class PersistentDataStore extends TransientDataStore {
 
     /** Reads a single RouterInfo file from disk and stores it in memory. */
     private class ReadRouterJob extends JobImpl {
-        /** router file */
+        /** Router file to read. */
         private final File _routerFile;
-        /** hash key */
+        /** Hash key of the router. */
         private final Hash _key;
-        /** known date */
+        /** Published date of the cached entry. */
         private long _knownDate;
 
         /**
@@ -848,6 +854,8 @@ public class PersistentDataStore extends TransientDataStore {
         public String getName() {return "Read RouterInfo";}
 
         /**
+         * Whether the file is newer than the cached entry.
+         *
          * @return true if the file is newer than the cached entry
          */
         private boolean shouldRead() {

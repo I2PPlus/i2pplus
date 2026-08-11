@@ -56,7 +56,7 @@ import net.i2p.util.SystemVersion;
  */
 class ClientManager {
     private final Log _log;
-    /** registered client listener runners */
+    /** Registered client listener runners. */
     protected final List<ClientListenerRunner> _listeners;
     // Destination --> ClientConnectionRunner
     // Locked for adds/removes but not lookups
@@ -71,13 +71,13 @@ class ClientManager {
     private final Set<SessionId> _runnerSessionIds;
     private final Set<Destination> _metaDests;
     private final Set<Hash> _metaHashes;
-    /** router context */
+    /** Router context. */
     protected final RouterContext _ctx;
-    /** I2CP listen port */
+    /** I2CP listen port. */
     protected final int _port;
-    /** true after start() completes */
+    /** True after start() completes. */
     protected volatile boolean _isStarted;
-    /** true if start() was ever called */
+    /** True if start() was ever called. */
     protected volatile boolean _wasStarted;
     private final SimpleTimer2.TimedEvent _clientTimestamper;
 
@@ -518,6 +518,8 @@ class ClientManager {
         private final long _messageNonce;
 
         /**
+         * Distribute a message from one client connection directly to another.
+         *
          * @param msgId the router's ID for this message
          * @param messageNonce the client's ID for this message
          */
@@ -761,7 +763,7 @@ class ClientManager {
     }
 
     /**
-     * get the FloodfillNetworkDatabaseFacade associated with a particular client destination.
+     * The FloodfillNetworkDatabaseFacade associated with a particular client destination.
      * This is inside the runner, so it won't be there if the runner isn't ready.
      *
      * @param destHash destination hash associated with the client who's subDb we're looking for, may be null
@@ -789,7 +791,7 @@ class ClientManager {
     }
 
     /**
-     * get all the primary hashes for all the clients and return them as a set
+     * All the primary hashes for all the clients as a set.
      *
      * @return non-null
      * @since 0.9.61
@@ -836,7 +838,7 @@ class ClientManager {
 
         public static final long LOOP_TIME = 5L*60*1000;
 
-        /** must call schedule() later */
+        /** Must call schedule() later. */
         public ClientTimestamper() {super(_ctx.simpleTimer2());}
 
         public void timeReached() {

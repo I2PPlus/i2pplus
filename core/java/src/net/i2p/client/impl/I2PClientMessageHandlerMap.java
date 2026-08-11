@@ -27,16 +27,16 @@ import net.i2p.data.i2cp.SetDateMessage;
  * @author jrandom
  */
 class I2PClientMessageHandlerMap {
-    /** map of message type id--&gt; I2CPMessageHandler */
+    /** Map of message type id--&gt; I2CPMessageHandler */
     protected final I2CPMessageHandler[] _handlers;
 
-    /** for extension */
+    /** For extension by subclasses. */
     protected I2PClientMessageHandlerMap(int highest) {
         _handlers = new I2CPMessageHandler[highest + 1];
     }
 
     /**
-     * I2PClientMessageHandlerMap.
+     * Handler map for all standard I2CP message types.
      */
     public I2PClientMessageHandlerMap(I2PAppContext context) {
         // 39 = highest type expected from router
@@ -55,9 +55,6 @@ class I2PClientMessageHandlerMap {
         _handlers[HostReplyMessage.MESSAGE_TYPE] = new HostReplyMessageHandler(context);
     }
 
-    /**
-     * getHandler.
-     */
     /**
      * Return the handler for the given type.
      * @return the handler

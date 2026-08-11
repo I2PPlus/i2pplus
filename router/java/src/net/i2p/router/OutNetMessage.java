@@ -28,7 +28,7 @@ public class OutNetMessage implements CDPQEntry {
     private final RouterInfo _target;
     private final I2NPMessage _message;
     private final int _messageTypeId;
-    /** cached message ID, for use after we discard the message */
+    /** Cached message ID, for use after we discard the message */
     private final long _messageId;
     private final int _messageSize;
     private final int _priority;
@@ -45,11 +45,11 @@ public class OutNetMessage implements CDPQEntry {
     private long _transportQueued;
     private long _seqNum;
     private final boolean _shouldTimestamp;
-    /** for debugging, contains a mapping of even name to Long (e.g. "begin sending", "handleOutbound", etc) */
+    /** For debugging, maps each event name to a timestamp (e.g. "begin sending", "handleOutbound", etc) */
     private HashMap<String, Long> _timestamps;
     /**
-     * contains a list of timestamp event names in the order they were fired
-     * (some JVMs have less than 10ms resolution, so the Long above doesn't guarantee order)
+     * Contains a list of timestamp event names in the order they were fired
+     * (some JVMs have less than 10ms resolution, so the Long above doesn't guarantee order).
      */
     private List<String> _timestampOrder;
 
@@ -248,7 +248,9 @@ public class OutNetMessage implements CDPQEntry {
      */
     public Job getOnSendJob() {return _onSend;}
     /**
-     * setOnSendJob.
+     * The job enqueued when the message is sent.
+     *
+     * @param job the onSend job
      */
     public void setOnSendJob(Job job) {_onSend = job;}
 
@@ -260,7 +262,9 @@ public class OutNetMessage implements CDPQEntry {
      */
     public Job getOnFailedSendJob() {return _onFailedSend;}
     /**
-     * setOnFailedSendJob.
+     * The job enqueued when the message cannot be sent.
+     *
+     * @param job the onFailedSend job
      */
     public void setOnFailedSendJob(Job job) {_onFailedSend = job;}
 
@@ -271,7 +275,9 @@ public class OutNetMessage implements CDPQEntry {
      */
     public ReplyJob getOnReplyJob() {return _onReply;}
     /**
-     * setOnReplyJob.
+     * The job enqueued when a reply is detected.
+     *
+     * @param job the onReply job
      */
     public void setOnReplyJob(ReplyJob job) {_onReply = job;}
 
@@ -283,7 +289,9 @@ public class OutNetMessage implements CDPQEntry {
      */
     public Job getOnFailedReplyJob() {return _onFailedReply;}
     /**
-     * setOnFailedReplyJob.
+     * The job enqueued when no reply arrives before expiration.
+     *
+     * @param job the onFailedReply job
      */
     public void setOnFailedReplyJob(Job job) {_onFailedReply = job;}
 
@@ -294,7 +302,9 @@ public class OutNetMessage implements CDPQEntry {
      */
     public MessageSelector getReplySelector() {return _replySelector;}
     /**
-     * setReplySelector.
+     * The selector used to find a reply to this message.
+     *
+     * @param selector the reply selector
      */
     public void setReplySelector(MessageSelector selector) {_replySelector = selector;}
 
@@ -315,6 +325,8 @@ public class OutNetMessage implements CDPQEntry {
     }
 
     /**
+     * Number of transports that have failed to deliver this message.
+     *
      * @return the number of failed transports
      * @since 0.9.55
      */
@@ -338,7 +350,7 @@ public class OutNetMessage implements CDPQEntry {
      */
     public long getSendBegin() {return _sendBegin;}
 
-    /** begin the send */
+    /** Record the time the send process began. */
     public void beginSend() {_sendBegin = _context.clock().now();}
 
     /**
@@ -366,17 +378,18 @@ public class OutNetMessage implements CDPQEntry {
     public long getSendTime() {return _context.clock().now() - _sendBegin;}
 
     /**
-     *  For CDQ
+     * The enqueue time, used by the CDQ.
      *
-     *  @since 0.9.3
+     * @param now the enqueue time
+     * @since 0.9.3
      */
     public void setEnqueueTime(long now) {_enqueueTime = now;}
 
     /**
-     *  For CDQ
+     * The enqueue time, used by the CDQ.
      *
-     *  @since 0.9.3
      * @return the enqueue time
+     * @since 0.9.3
      */
     public long getEnqueueTime() {return _enqueueTime;}
 
@@ -411,17 +424,18 @@ public class OutNetMessage implements CDPQEntry {
     }
 
     /**
-     *  For CDPQ
+     * The sequence number, used by the CDPQ.
      *
-     *  @since 0.9.3
+     * @param num the sequence number
+     * @since 0.9.3
      */
     public void setSeqNum(long num) {_seqNum = num;}
 
     /**
-     *  For CDPQ
+     * The sequence number, used by the CDPQ.
      *
-     *  @since 0.9.3
      * @return the seq num
+     * @since 0.9.3
      */
     public long getSeqNum() {return _seqNum;}
 
@@ -432,7 +446,7 @@ public class OutNetMessage implements CDPQEntry {
     public void discardData() { /* No-op - data is not held separately in this implementation */ }
 
     /**
-     * toString.
+     * String representation of this message for debugging.
      */
     @Override
     public String toString() {

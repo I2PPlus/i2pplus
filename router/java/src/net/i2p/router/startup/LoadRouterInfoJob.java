@@ -57,13 +57,15 @@ class LoadRouterInfoJob extends JobImpl {
     }
 
     /**
-     * @return the name
+     *  Name of this job.
+     *
+     *  @return the name
      */
     @Override
     public String getName() { return "Load Local RouterInfo"; }
 
     /**
-     * runJob.
+     * Load the local RouterInfo, rebuilding it if the files are missing.
      */
     @Override
     public void runJob() {
@@ -239,7 +241,7 @@ class LoadRouterInfoJob extends JobImpl {
     /**
      *  Does our RI ElGamal private key length match the configuration?
      *  If not, return true.
-     *  @since 0.9.8
+     * @since 0.9.8
      * @return whether rebuild
      */
     private boolean shouldRebuild(PrivateKey privkey) {
@@ -272,15 +274,15 @@ class LoadRouterInfoJob extends JobImpl {
     /** Key data container for router information. @since 0.9.16 */
     public static class KeyData {
         /**
-         * routerIdentity.
+         * Router identity of this router.
          */
         public final RouterIdentity routerIdentity;
         /**
-         * privateKey.
+         * ElGamal private key for this router.
          */
         public final PrivateKey privateKey;
         /**
-         * signingPrivateKey.
+         * Signing private key for this router.
          */
         public final SigningPrivateKey signingPrivateKey;
 

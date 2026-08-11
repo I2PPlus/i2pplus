@@ -127,7 +127,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  Get the effective first-hop fail cooldown.
      *  During ghost cascades (>50 ghosts), shorten from 5 min to 60s
      *  to rehabilitate peers faster when the network is stressed.
-     *  @since 0.9.70
+     * @since 0.9.70
      * @return the effective first hop cooldown
      */
     private static long getEffectiveFirstHopCooldown(RouterContext ctx) {
@@ -184,7 +184,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     * Get all non-self peers in active tunnels of the given pool.
+     * All non-self peers in active tunnels of the given pool.
      * Used to enforce per-pool diversity: no peer in more than 1 tunnel per pool.
      *
      * @param ctx the router context
@@ -550,7 +550,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     * Get effective exclude caps, adapting to build success.
+     * Effective exclude caps, adapting to build success.
      * During low build success (<40%), relax exclusions for M, N, O, D, and P caps.
      * Also relax during first 10 minutes of uptime when build success is unknown.
      * @return non-null, possibly empty
@@ -835,8 +835,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     private static final boolean DEFAULT_INBOUND_CLIENT_EXCLUDE_UNREACHABLE = false;
 
     /**
-     * do we want to skip unreachable peers?
-     * @return true if yes
+     * Whether to skip unreachable peers.
+     * @return true if unreachable peers should be skipped
      */
     private boolean filterUnreachable(boolean isInbound, boolean isExploratory) {
         if (SystemVersion.isSlow() || ctx.router().getUptime() < 65*60*1000L)
@@ -866,7 +866,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     private static final String PROP_INBOUND_CLIENT_EXCLUDE_SLOW = "router.inboundClientExcludeSlow";
 
     /**
-     * do we want to skip peers that are slow?
+     * Whether to skip peers that are slow.
      *
      * @param isInbound true for inbound tunnels
      * @param isExploratory true for exploratory tunnels
@@ -985,7 +985,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         private final long k1;
 
         /**
-         * not thread safe
+         * Not thread safe.
          *
          * @param k container for sort keys, not used as a Hash
          */
@@ -998,7 +998,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         /**
-         * compare.
+         * Compare the two hashes by SipHash distance.
          */
         public int compare(Hash l, Hash r) {
             long lh = SipHashInline.hash24(k0, k1, l.getData());

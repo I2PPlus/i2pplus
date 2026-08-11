@@ -140,14 +140,14 @@ public abstract class ClientManagerFacade implements Service {
      */
     public abstract SessionConfig getClientSessionConfig(Destination dest);
     /**
-     * Get the session key manager for a given client.
+     * The session key manager for a given client.
      *
      * @param dest the destination hash
      * @return the session key manager
      */
     public abstract SessionKeyManager getClientSessionKeyManager(Hash dest);
     /**
-     * renderStatusHTML.
+     * Render the client status HTML.
      */
     public void renderStatusHTML(Writer out) throws IOException { }
 
@@ -178,7 +178,7 @@ public abstract class ClientManagerFacade implements Service {
     public void unregisterMetaDest(Destination dest) {}
 
     /**
-     * get the FloodfillNetworkDatabaseFacade associated with a particular client destination.
+     * The FloodfillNetworkDatabaseFacade associated with a particular client destination.
      * This is inside the runner, so it won't be there if the runner isn't ready.
      *
      * @param destHash destination hash associated with the client who's subDb we're looking for
@@ -188,7 +188,7 @@ public abstract class ClientManagerFacade implements Service {
     public abstract FloodfillNetworkDatabaseFacade getClientFloodfillNetworkDatabaseFacade(Hash destHash);
 
     /**
-     * get a set of all primary hashes
+     * A set of all primary hashes.
      *
      * @return non-null set of Hashes
      * @since 0.9.61

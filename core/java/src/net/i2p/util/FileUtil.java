@@ -276,7 +276,7 @@ public class FileUtil {
             Class.forName("io.pack200.Pack200", false, ClassLoader.getSystemClassLoader());
             return true;
         } catch (Exception e) { /* ignored */ }
-        /**
+        /*
          * try {
          * Class.forName("org.apache.commons.compress.harmony.unpack200.Archive", false, ClassLoader.getSystemClassLoader());
          * return true;
@@ -285,7 +285,7 @@ public class FileUtil {
          * Class.forName("org.apache.harmony.unpack200.Archive", false, ClassLoader.getSystemClassLoader());
          * return true;
          * } catch (Exception e) {}
-         **/
+         */
         return false;
     }
 
@@ -342,7 +342,7 @@ public class FileUtil {
         // Incompatible with pack200 from Java 6-13
         // Error is:
         // org.apache.commons.compress.harmony.pack200.Pack200Exception: Invalid segment minor version
-        /**
+        /*
          * if (!_failedApache) {
          * try {
          * Class<?> p200;
@@ -367,7 +367,7 @@ public class FileUtil {
          * e.printStackTrace();
          * }
          * }
-         **/
+         */
         // ------------------
         // For gcj, gij, etc., use this
         throw new IOException("Unpack200 not supported");
@@ -447,6 +447,8 @@ public class FileUtil {
     }
 
     /**
+     * Copy the file, optionally overwriting the destination.
+     *
      * @return true if it was copied successfully
      */
     public static boolean copy(String source, String dest, boolean overwriteExisting) {
@@ -454,6 +456,8 @@ public class FileUtil {
     }
 
     /**
+     * Copy the file, optionally overwriting the destination, optionally logging failures.
+     *
      * @param quiet don't log fails to wrapper log if true
      * @return true if it was copied successfully
      */
@@ -464,6 +468,8 @@ public class FileUtil {
     }
 
     /**
+     * Copy the file, optionally overwriting the destination, optionally logging failures.
+     *
      * @param quiet don't log fails to wrapper log if true
      * @return true if it was copied successfully
      * @since 0.8.8

@@ -58,13 +58,15 @@ class ExpireLeasesJob extends JobImpl {
     }
 
     /**
+     * Name of this job.
+     *
      * @return the name
      */
     public String getName() { return "Expire Leases"; }
 
-/**
-      * runJob.
-      */
+    /**
+     * Expire outdated lease sets and refresh those about to expire.
+     */
     public void runJob() {
         long uptime = getContext().router().getUptime();
         List<Hash> toExpire = selectKeysToExpire();
@@ -204,7 +206,7 @@ class ExpireLeasesJob extends JobImpl {
      */
     private static class LeaseSetComparator implements Comparator<LeaseSet>, Serializable {
          /**
-          * compare.
+          * Compare lease sets by latest lease date, oldest first.
           */
          @Override
          public int compare(LeaseSet l, LeaseSet r) {
@@ -217,6 +219,8 @@ class ExpireLeasesJob extends JobImpl {
     }
 
     /**
+     * Tunnel nickname for the given destination, if it has inbound tunnels.
+     *
      * @return the tunnel name
      */
     public String getTunnelName(Destination d) {

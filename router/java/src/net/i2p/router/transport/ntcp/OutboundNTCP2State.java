@@ -42,7 +42,7 @@ class OutboundNTCP2State implements EstablishState {
     private final NTCPTransport _transport;
     private final NTCPConnection _con;
     private final byte[] _tmp;
-    /** bytes received so far */
+    /** Bytes received so far. */
     private int _received;
     private long _peerSkew;
 
@@ -71,7 +71,7 @@ class OutboundNTCP2State implements EstablishState {
     /** NTCP2 message 3 part 1 size in bytes (48). */
     public static final int MSG3P1_SIZE = KEY_SIZE + MAC_SIZE;
     private static final int OPTIONS3_SIZE = 12;
-    /** in SECONDS */
+    /** In SECONDS. */
     public static final long MAX_SKEW = 60;
     // SipHash KDF things
     private static final byte[] ZEROLEN = new byte[0];
@@ -79,7 +79,7 @@ class OutboundNTCP2State implements EstablishState {
      * ZEROKEY.
      */
     public static final byte[] ZEROKEY = new byte[KEY_SIZE];
-    /** for SipHash keygen */
+    /** For SipHash keygen. */
     private static final byte[] SIPHASH = DataHelper.getASCII("siphash");
 
     private final Object _stateLock = new Object();
@@ -97,13 +97,13 @@ class OutboundNTCP2State implements EstablishState {
 
     private enum State {
         OB_INIT,
-        /** sent 1 */
+        /** Sent 1. */
         OB_SENT_X,
-        /** sent 1, got 2 but not padding */
+        /** Sent 1, got 2 but not padding. */
         OB_GOT_HXY,
-        /** sent 1, got 2 incl. padding */
+        /** Sent 1, got 2 incl. padding. */
         OB_GOT_PADDING,
-        /** sent 1, got 2 incl. padding, sent 3 */
+        /** Sent 1, got 2 incl. padding, sent 3. */
         VERIFIED,
         CORRUPT
     }
@@ -204,7 +204,7 @@ class OutboundNTCP2State implements EstablishState {
         receiveOutbound(src);
     }
 
-    /** did the handshake fail for some reason? */
+    /** Did the handshake fail for some reason? */
     public boolean isCorrupt() {
         synchronized (_stateLock) {
             return _state == State.CORRUPT;
@@ -230,7 +230,7 @@ class OutboundNTCP2State implements EstablishState {
 
     /**
      *  Check if the connection is in initial state and ready for prepareOutbound()
-     *  @since 0.9.59
+     * @since 0.9.59
      * @return whether initial state
      */
     public boolean isInitialState() {
@@ -574,16 +574,16 @@ class OutboundNTCP2State implements EstablishState {
      */
     public synchronized void close(String reason, Exception e) {fail(reason, e);}
     /**
-     * fail.
+     * Fail the handshake with the given reason.
      */
     protected void fail(String reason) {fail(reason, null);}
     /**
-     * fail.
+     * Fail the handshake with the given reason and exception.
      */
     protected void fail(String reason, Exception e) {fail(reason, e, false);}
 
     /**
-     * fail.
+     * Fail the handshake, optionally skew-related.
      */
     protected synchronized void fail(String reason, Exception e, boolean bySkew) {
         if (_state == State.CORRUPT || _state == State.VERIFIED) {return;}
@@ -622,7 +622,7 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /**
-     * toString.
+     * String representation of this state.
      */
     @Override
     public String toString() {

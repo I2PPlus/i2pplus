@@ -168,13 +168,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * rDNS executor core pool size.
+     * The rDNS executor core pool size.
      * @since 0.9.70+
      */
     public static int getRdnsCorePoolSize() { return _rdnsCorePoolSize; }
 
     /**
-     * rDNS executor core pool size, bounded 2-8.
+     * The rDNS executor core pool size, bounded 2-8.
      * @since 0.9.70+
      */
     public static void setRdnsCorePoolSize(int size) {
@@ -182,13 +182,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * rDNS executor max pool size.
+     * The rDNS executor max pool size.
      * @since 0.9.70+
      */
     public static int getRdnsMaxPoolSize() { return _rdnsMaxPoolSize; }
 
     /**
-     * rDNS executor max pool size, bounded 2-8.
+     * The rDNS executor max pool size, bounded 2-8.
      * @since 0.9.70+
      */
     public static void setRdnsMaxPoolSize(int size) {
@@ -347,12 +347,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      *  Cannot be restarted after calling this. Use restart() for that.
      *
-     * Gracefully shutdown the communication system.
+     *  Gracefully shutdown the communication system.
      *
-     * This method performs a clean shutdown of all transport
-     * protocols and network operations. It stops accepting
-     * new connections, closes existing ones, and performs
-     * cleanup of system resources.
+     *  This method performs a clean shutdown of all transport
+     *  protocols and network operations. It stops accepting
+     *  new connections, closes existing ones, and performs
+     *  cleanup of system resources.
      *
      * <strong>Shutdown Process:</strong>
      * <ul>
@@ -435,6 +435,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
+     * Whether the comm system is running.
      * @since 0.9.53
      * @return whether running
      */
@@ -449,24 +450,25 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public int countActivePeers() { return _manager.countActivePeers(); }
 
     /**
-     * haveInboundCapacity.
+     * Whether we have capacity to handle an inbound message at the given percentage.
      */
     @Override
     public boolean haveInboundCapacity(int pct) { return _manager.haveInboundCapacity(pct); }
     /**
-     * haveOutboundCapacity.
+     * Whether we have capacity to handle an outbound message at the given percentage.
      */
     @Override
     public boolean haveOutboundCapacity(int pct) { return _manager.haveOutboundCapacity(pct); }
     /**
-     * haveHighOutboundCapacity.
+     * Whether we have high outbound capacity.
      */
     @Override
     public boolean haveHighOutboundCapacity() { return _manager.haveHighOutboundCapacity(); }
 
     /**
+     * The framed average clock skew of connected peers in milliseconds, or the clock offset if we cannot answer.
      * @param percentToInclude 1-100
-     * @return Framed average clock skew of connected peers in milliseconds, or the clock offset if we cannot answer.
+     * @return The framed average clock skew of connected peers in milliseconds, or the clock offset if we cannot answer.
      * Average is calculated over the middle "percentToInclude" peers.
      *
      * A positive number means our clock is ahead of theirs.
@@ -527,6 +529,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
+     * Whether the given peer is backlogged.
      * @return whether backlogged
      */
     @Override
@@ -535,6 +538,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
+     * Whether the given peer is established.
      * @return whether established
      */
     @Override
@@ -551,7 +555,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * wasUnreachable.
+     * Whether the given peer was recently unreachable.
      */
     @Override
     public boolean wasUnreachable(Hash peer) {
@@ -559,6 +563,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
+     * Whether we are currently connecting to the given peer.
      * @return whether connecting
      */
     @Override
@@ -567,7 +572,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * @return the i p
+     * The known IP address of the given peer.
+     * @return the IP address
      */
     @Override
     public byte[] getIP(Hash peer) {
@@ -596,7 +602,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * forceDisconnect.
+     * Force an immediate disconnect from the given peer with the given reason.
      */
     @Override
     public void forceDisconnect(Hash peer, String reason) {
@@ -604,7 +610,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * @return the most recent error messages
+     *  The status of the communication system.
+     *
+     * @since 0.9.20
+     * @return the status
      */
     @Override
     public List<String> getMostRecentErrorMessages() {
@@ -612,7 +621,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  @since 0.9.20
+     *  The current network status.
+     * @since 0.9.20
      * @return the status
      */
     @Override
@@ -626,7 +636,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * getStatus().toStatusString(), translated if available.
+     * The localized status string from getStatus().toStatusString(), translated if available.
      * @since 0.9.45
      * @return the localized status string
      */
@@ -688,7 +698,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     private static class AddrComparator implements Comparator<RouterAddress>, Serializable {
         /**
-         * compare.
+         * Compare two router addresses for consistent ordering.
          */
         @Override
         public int compare(RouterAddress l, RouterAddress r) {
@@ -809,9 +819,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  Do not call from transport constructor. Transport must be ready to be started.
      *
      *  Following transport methods will be called:
-     *    setListener()
-     *    externalAddressReceived() (zero or more times, one for each known address)
-     *    startListening();
+     *  setListener()
+     *  externalAddressReceived() (zero or more times, one for each known address)
+     *  startListening();
      *
      *  @since 0.9.16
      */
@@ -824,8 +834,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  Pluggable transports. Not for NTCP or SSU.
      *
      *  Following transport methods will be called:
-     *    setListener(null)
-     *    stopListening();
+     *  setListener(null)
+     *  stopListening();
      *
      *  @since 0.9.16
      */
@@ -836,7 +846,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      *  Factory for making X25519 key pairs.
-     *  @since 0.9.46
+     * @since 0.9.46
      * @return the x d h factory
      */
     @Override
@@ -867,7 +877,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final int QUEUE_TIME = 10*60*1000;
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     /**
-     * enableReverseLookups.
+     * Whether reverse lookups are enabled.
      */
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     private static final Charset ENCODING = StandardCharsets.UTF_8;
@@ -881,7 +891,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * Collect the IPs for all routers in the DB, and queue them for lookup,
      * then fire off the periodic lookup task for the first time.
      *
-     *  As of 0.9.32, works only for literal IPs, ignores host names.
+     * As of 0.9.32, works only for literal IPs, ignores host names.
      */
     private class QueueAll extends SimpleTimer2.TimedEvent {
         private boolean _firstRun = true;
@@ -890,7 +900,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
          */
         public QueueAll() { super(_context.simpleTimer2()); }
         /**
-         * timeReached.
+         * Run the scheduled task.
          */
         @Override
         public void timeReached() {
@@ -920,7 +930,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
          */
         public Lookup() { super(_context.simpleTimer2()); }
         /**
-         * timeReached.
+         * Run the scheduled task.
          */
         @Override
         public void timeReached() {
@@ -944,7 +954,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
 
         /**
-         * run.
+         * Run the GeoIP lookup for all routers in the NetDB.
          */
         @Override
         public void run() {
@@ -1029,13 +1039,15 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
 
         /**
-         * @return the ip address
+         * The cached IP address of the entry.
+         * @return the IP address
          */
         public String getIpAddress() {
             return ipAddress;
         }
 
         /**
+         * The cached hostname for the entry.
          * @return the hostname
          */
         public String getHostname() {
@@ -1043,6 +1055,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
 
         /**
+         * The timestamp when the entry was cached.
          * @return the timestamp
          */
         public long getTimestamp() {
@@ -1050,7 +1063,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
 
         /**
-         * @return the rdns entry
+         * The formatted rDNS cache entry.
+         * @return the rDNS entry
          */
         public String getRdnsEntry() {
             return rdnsEntryToString(this);
@@ -1067,11 +1081,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     private static final ConcurrentHashMap<String, CacheEntry> rdnsCache = new ConcurrentHashMap<>(MAX_RDNS_CACHE_SIZE);
 
-    /** Set after the first normalize sweep to avoid re-processing every 15 min */
+    /** Flag set after the first normalize sweep to avoid re-processing every 15 minutes */
     private static volatile boolean _normalizeSweepDone;
 
     /**
-     * rdnsCacheSize.
+     * The size of the rDNS cache file, in KB.
      */
     public static String rdnsCacheSize() {
         File cache = new File(RDNS_CACHE_FILE);
@@ -1159,7 +1173,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
 
         /**
-         * run.
+         * Clean up and write the rDNS cache to disk.
          */
         @Override
         public void run() {
@@ -1267,14 +1281,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * countRdnsCacheEntries.
+     * The number of entries in the rDNS cache.
      */
     public static int countRdnsCacheEntries() {
         return rdnsCache.size();
     }
 
     /**
-     * Get cache statistics for monitoring
+     * Cache statistics for monitoring.
      * @return formatted string with cache stats
      */
     public static String getRdnsCacheStats() {
@@ -1285,7 +1299,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * @return the computed maximum rdns cache size based on available memory
+     * The computed maximum rDNS cache size based on available memory.
+     * @return the computed maximum rDNS cache size based on available memory
      * @since 0.9.61+
      */
     public static int getMaxRdnsCacheSize() {
@@ -1390,7 +1405,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * @return the canonical host name sync
+     * The canonical host name for the given IP address, resolved synchronously.
+     * @return the canonical host name
      */
     @Override
     public String getCanonicalHostNameSync(String ipAddress) {
@@ -1558,7 +1574,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      *  Are we in a strict country
-     *  @since 0.8.13
+     * @since 0.8.13
      * @return whether in strict country
      */
     @Override
@@ -1744,7 +1760,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * Get country code for an IP address string
+     * The two-letter country code for an IP address string.
      * @param ip IP address string
      * @return two-letter country code or null if unknown
      */
@@ -1868,7 +1884,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return ntcp6 != TransportUtil.IPv6Config.IPV6_DISABLED || ssu6 != TransportUtil.IPv6Config.IPV6_DISABLED;
     }
 
-    /** full name for a country code, or the code if we don't know the name */
+    /** Full name for a country code, or the code if we don't know the name. */
     @Override
     public String getCountryName(String c) {
         if (_geoIP == null) {return c;}
@@ -1955,7 +1971,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * renderPeerFlag.
+     * Render the HTML flag image for the given peer.
      */
     public String renderPeerFlag(Hash peer) {
         StringBuilder buf = new StringBuilder(128);
@@ -2093,7 +2109,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      *  Is everything disabled for testing?
-     *  @since 0.8.13
+     * @since 0.8.13
      * @return whether dummy
      */
     @Override
@@ -2131,7 +2147,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
          */
         public Timestamper() { super(_context.simpleTimer2()); }
         /**
-         * timeReached.
+         * Run the scheduled task.
          */
         @Override
         public void timeReached() {
@@ -2164,7 +2180,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         public NetMonitor() {super(_context.simpleTimer2(), 0);}
 
         /**
-         * timeReached.
+         * Run the scheduled task.
          */
         @Override
         public void timeReached() {

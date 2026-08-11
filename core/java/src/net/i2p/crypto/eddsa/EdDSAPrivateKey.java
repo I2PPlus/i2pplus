@@ -26,15 +26,15 @@ import java.util.Arrays;
  */
 public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     private static final long serialVersionUID = 23495873459878957L;
-    /** Seed */
+    /** The 32-byte seed, or null if constructed from H. */
     private final byte[] seed;
-    /** H */
+    /** The 64-byte hash of the seed. */
     private final byte[] h;
-    /** A */
+    /** The private scalar, the first 32 bytes of H. */
     private final byte[] a;
-    /** A */
+    /** The public key point. */
     private final GroupElement A;
-    /** Abyte */
+    /** The encoded public key (Abyte). */
     private final byte[] Abyte;
     /** Ed dsa spec */
     private final EdDSAParameterSpec edDsaSpec;
@@ -70,7 +70,9 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     }
 
     /**
-     * @return the algorithm
+     * The reported algorithm name for all EdDSA keys.
+     *
+     * @return The algorithm.
      */
     @Override
     public String getAlgorithm() {
@@ -78,7 +80,9 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     }
 
     /**
-     * @return the format
+     * The encoding format of the key.
+     *
+     * @return The format.
      */
     @Override
     public String getFormat() {
@@ -103,42 +107,42 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
      * Relevant spec quotes:
      *
      * <pre>
-     *  OneAsymmetricKey ::= SEQUENCE {
-     *    version Version,
-     *    privateKeyAlgorithm PrivateKeyAlgorithmIdentifier,
-     *    privateKey PrivateKey,
-     *    attributes [0] IMPLICIT Attributes OPTIONAL,
-     *    ...,
-     *    [[2: publicKey [1] IMPLICIT PublicKey OPTIONAL ]],
-     *    ...
-     *  }
+     *      OneAsymmetricKey ::= SEQUENCE {
+     *        version Version,
+     *        privateKeyAlgorithm PrivateKeyAlgorithmIdentifier,
+     *        privateKey PrivateKey,
+     *        attributes [0] IMPLICIT Attributes OPTIONAL,
+     *        ...,
+     *        [[2: publicKey [1] IMPLICIT PublicKey OPTIONAL ]],
+     *        ...
+     *      }
      *
-     *  Version ::= INTEGER
-     *  PrivateKeyAlgorithmIdentifier ::= AlgorithmIdentifier
-     *  PrivateKey ::= OCTET STRING
-     *  PublicKey ::= BIT STRING
-     *  Attributes ::= SET OF Attribute
+     *      Version ::= INTEGER
+     *      PrivateKeyAlgorithmIdentifier ::= AlgorithmIdentifier
+     *      PrivateKey ::= OCTET STRING
+     *      PublicKey ::= BIT STRING
+     *      Attributes ::= SET OF Attribute
      * </pre>
      *
      * <pre>
-     *  ... when encoding a OneAsymmetricKey object, the private key is wrapped
-     *  in a CurvePrivateKey object and wrapped by the OCTET STRING of the
-     *  "privateKey" field.
+     *      ... when encoding a OneAsymmetricKey object, the private key is wrapped
+     *      in a CurvePrivateKey object and wrapped by the OCTET STRING of the
+     *      "privateKey" field.
      *
-     *  CurvePrivateKey ::= OCTET STRING
+     *      CurvePrivateKey ::= OCTET STRING
      * </pre>
      *
      * <pre>
-     *  AlgorithmIdentifier  ::=  SEQUENCE  {
-     *    algorithm   OBJECT IDENTIFIER,
-     *    parameters  ANY DEFINED BY algorithm OPTIONAL
-     *  }
+     *      AlgorithmIdentifier  ::=  SEQUENCE  {
+     *        algorithm   OBJECT IDENTIFIER,
+     *        parameters  ANY DEFINED BY algorithm OPTIONAL
+     *      }
      *
-     *  For all of the OIDs, the parameters MUST be absent.
+     *      For all of the OIDs, the parameters MUST be absent.
      * </pre>
      *
      * <pre>
-     *  id-Ed25519   OBJECT IDENTIFIER ::= { 1 3 101 112 }
+     *      id-Ed25519   OBJECT IDENTIFIER ::= { 1 3 101 112 }
      * </pre>
      *
      * @return 48 bytes for Ed25519, null for other curves
@@ -263,7 +267,9 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     }
 
     /**
-     * @return the params
+     * The EdDSA domain parameters for the key.
+     *
+     * @return The params.
      */
     @Override
     public EdDSAParameterSpec getParams() {
@@ -271,43 +277,55 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     }
 
     /**
-     * @return will be null if constructed from a spec which was directly
-     *         constructed from H
+     * The 32-byte seed.
+     *
+     * @return Will be null if constructed from a spec which was directly
+     *         constructed from H.
      */
     public byte[] getSeed() {
         return seed;
     }
 
     /**
-     * @return the hash of the seed
+     * The 64-byte hash of the seed.
+     *
+     * @return The hash of the seed.
      */
     public byte[] getH() {
         return h;
     }
 
     /**
-     * @return the private key
+     * The private scalar, the first 32 bytes of H.
+     *
+     * @return The private key.
      */
     public byte[] geta() {
         return a;
     }
 
     /**
-     * @return the public key
+     * The public key point.
+     *
+     * @return The public key.
      */
     public GroupElement getA() {
         return A;
     }
 
     /**
-     * @return the public key
+     * The encoded public key.
+     *
+     * @return The public key.
      */
     public byte[] getAbyte() {
         return Abyte;
     }
 
     /**
-     *  @since 0.9.25
+     * Hash code of the seed, for use in hash tables.
+     *
+     * @since 0.9.25
      * @return whether h code is present
      */
     @Override

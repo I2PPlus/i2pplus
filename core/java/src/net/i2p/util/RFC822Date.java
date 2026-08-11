@@ -40,7 +40,7 @@ public abstract class RFC822Date {
     }
 
     /**
-     * new Date(String foo) is deprecated, so let's do this the hard way
+     * New Date(String foo) is deprecated, so let's do this the hard way.
      *
      * @param s non-null
      * @return -1 on failure
@@ -66,7 +66,7 @@ public abstract class RFC822Date {
     }
 
     /**
-     * main.
+     * Parse the argument and print the formatted date, for testing.
      */
     public static void main(String[] args) {
         if (args.length == 1) {

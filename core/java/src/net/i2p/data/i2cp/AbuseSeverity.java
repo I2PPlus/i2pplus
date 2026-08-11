@@ -36,7 +36,7 @@ public class AbuseSeverity extends DataStructureImpl {
     }
 
     /**
-     * Get the severity level.
+     * Severity level of the abuse.
      *
      * @return the severity level
      */
@@ -45,7 +45,7 @@ public class AbuseSeverity extends DataStructureImpl {
     }
 
     /**
-     * Set the severity level.
+     * New severity level of the abuse.
      *
      * @param id the severity level
      */

@@ -108,7 +108,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
      *
      *  If it fails (after a timeout period), resend the data.
      *  If the queried data is older than what we stored, that counts as a fail.
-     **/
+     */
     public void runJob() {
         _target = pickTarget();
         if (_target == null) {

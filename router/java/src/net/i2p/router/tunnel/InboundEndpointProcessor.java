@@ -20,7 +20,7 @@ class InboundEndpointProcessor {
     private final IVValidator _validator;
 
     /**
-     * InboundEndpointProcessor.
+     * Binds the router context, tunnel creator config, and IV validator.
      */
     public InboundEndpointProcessor(RouterContext ctx, TunnelCreatorConfig cfg, IVValidator validator) {
         _context = ctx;
@@ -30,10 +30,14 @@ class InboundEndpointProcessor {
     }
 
     /**
+     * The destination this inbound tunnel was created for.
+     *
      * @return the destination
      */
     public Hash getDestination() { return _config.getDestination(); }
     /**
+     * The tunnel creator config for this endpoint.
+     *
      * @return the config
      */
     public TunnelCreatorConfig getConfig() { return _config; }

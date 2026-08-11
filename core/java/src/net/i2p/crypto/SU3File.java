@@ -175,21 +175,21 @@ public class SU3File {
     private static final int DEFAULT_SIG_CODE = 6;
 
     /**
-     *
+     * SU3 file from the given path.
      */
     public SU3File(String file) {
         this(new File(file));
     }
 
     /**
-     *
+     * SU3 file from the given file.
      */
     public SU3File(File file) {
         this(I2PAppContext.getGlobalContext(), file);
     }
 
     /**
-     *
+     * SU3 file from the given file, using the given context.
      */
     public SU3File(I2PAppContext context, File file) {
         _context = context;
@@ -386,7 +386,7 @@ public class SU3File {
         _headerVerified = true;
     }
 
-    /** skip but update digest */
+    /** Skip the given number of bytes. */
     private static void skip(InputStream in, int cnt) throws IOException {
         for (int i = 0; i < cnt; i++) {
             if (in.read() < 0) throw new EOFException();

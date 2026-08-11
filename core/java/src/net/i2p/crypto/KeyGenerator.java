@@ -83,8 +83,9 @@ public final class KeyGenerator {
     }
 
     /**
-     * Get the global KeyGenerator instance.
-     * @return the global instance
+     * The global KeyGenerator instance.
+     *
+     * @return The global instance.
      */
     public static KeyGenerator getInstance() {
         return I2PAppContext.getGlobalContext().keyGenerator();
@@ -156,7 +157,7 @@ public final class KeyGenerator {
      */
     public int getPBERTLegacy() { return PBE_ROUNDS_LEGACY; }
 
-    /** standard exponent size */
+    /** Standard exponent size. */
     private static final int PUBKEY_EXPONENT_SIZE_FULL = 2048;
 
     /**

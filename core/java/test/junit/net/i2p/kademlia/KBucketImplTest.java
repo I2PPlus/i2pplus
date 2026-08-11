@@ -31,7 +31,7 @@ public class KBucketImplTest {
         return Hash.create(data);
     }
 
-    /** never rejects: accepts everything */
+    /** Never rejects: accepts everything. */
     private static final KBucketTrimmer<Hash> ACCEPT_ALL = new KBucketTrimmer<Hash>() {
         public boolean trim(KBucket<Hash> kbucket, Hash toAdd) {
             return true;

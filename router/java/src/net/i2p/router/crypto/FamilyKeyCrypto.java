@@ -192,11 +192,11 @@ public class FamilyKeyCrypto {
     }
 
     /**
- * Do we have a valid family?
- *
- * @since 0.9.28
+     * Do we have a valid family?
+     *
+     * @since 0.9.28
      * @return whether family is present
- */
+     */
     public boolean hasFamily() {
         return _pubkey != null;
     }
@@ -267,6 +267,8 @@ public class FamilyKeyCrypto {
         /** The verification result */
         public final Result result;
         /**
+         * Stores the family name, signature, and verification result.
+         *
          * @param n family name
          * @param s signature string
          * @param r verification result
@@ -615,7 +617,7 @@ public class FamilyKeyCrypto {
     }
 
     /**
-     * Get the private key from the keystore
+     * Load the private key for this family from the keystore.
      *
      * @return non-null, throws on all errors
      */

@@ -76,47 +76,47 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         // we may transition from these to another state
         // See EstablishmentManager.handlePendingIntro() for state machine
 
-        /** nothing happened yet */
+        /** Nothing happened yet. */
         INTRO_STATE_INIT,
-        /** lookup for the introducer RI was sent */
+        /** Lookup for the introducer RI was sent. */
         INTRO_STATE_LOOKUP_SENT,
-        /** we have the introducer RI */
+        /** We have the introducer RI. */
         INTRO_STATE_HAS_RI,
-        /** we are connecting to the introducer */
+        /** We are connecting to the introducer. */
         INTRO_STATE_CONNECTING,
-        /** we are connected to this introducer */
+        /** We are connected to this introducer. */
         INTRO_STATE_CONNECTED,
-        /** we sent the relay request to this introducer */
+        /** We sent the relay request to this introducer. */
         INTRO_STATE_RELAY_REQUEST_SENT,
-        /** we got a good relay response via this introducer */
+        /** We got a good relay response via this introducer. */
         INTRO_STATE_RELAY_CHARLIE_ACCEPTED,
 
         // final states
         // we do not transition from these states
 
-        /** introducer has expired */
+        /** Introducer has expired. */
         INTRO_STATE_EXPIRED,
-        /** we tried to lookup the introducer RI, no luck */
+        /** We tried to lookup the introducer RI, no luck. */
         INTRO_STATE_LOOKUP_FAILED,
-        /** we rejected this introducer for some reason */
+        /** We rejected this introducer for some reason. */
         INTRO_STATE_REJECTED,
-        /** we failed to connect to the introducer */
+        /** We failed to connect to the introducer. */
         INTRO_STATE_CONNECT_FAILED,
-        /** he disconnected from us along the way */
+        /** He disconnected from us along the way. */
         INTRO_STATE_DISCONNECTED,
-        /** we failed to get a relay response from this introducer */
+        /** We failed to get a relay response from this introducer. */
         INTRO_STATE_RELAY_RESPONSE_TIMEOUT,
-        /** we got a rejection from this introducer */
+        /** We got a rejection from this introducer. */
         INTRO_STATE_BOB_REJECT,
-        /** we got a rejection from Charlie via this introducer */
+        /** We got a rejection from Charlie via this introducer. */
         INTRO_STATE_CHARLIE_REJECT,
-        /** unspecified failure */
+        /** Unspecified failure. */
         INTRO_STATE_FAILED,
-        /** this peer is not an introducer */
+        /** This peer is not an introducer. */
         INTRO_STATE_INVALID,
-        /** this peer is us */
+        /** This peer is us. */
         INTRO_STATE_US,
-        /** we got an accept from Charlie via this introducer */
+        /** We got an accept from Charlie via this introducer. */
         INTRO_STATE_SUCCESS
     }
 
@@ -907,7 +907,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     * Get a packet to retransmit the SessionRequest
+     * A packet to retransmit the SessionRequest.
      *
      * @return null if not sent or already got the session created
      */
@@ -927,7 +927,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     * Get the peer state for this connection
+     * The peer state for this connection.
      *
      * @return null if we have not sent the session confirmed
      */
@@ -937,7 +937,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     * Get the current state for the SSU2 introducer specified
+     * The current state for the SSU2 introducer specified.
      *
      * @param h the introducer hash
      * @return non-null current state for the SSU2 introducer specified,
@@ -955,7 +955,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     * Set the current state for the SSU2 introducer specified
+     * The current state for the SSU2 introducer specified.
      *
      * @param h the introducer hash
      * @param state the new state

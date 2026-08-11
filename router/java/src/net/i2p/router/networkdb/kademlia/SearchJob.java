@@ -92,7 +92,7 @@ public class SearchJob extends JobImpl {
     private static final int PER_PEER_TIMEOUT = 8*1000;
 
     /**
-     * give ourselves 30 seconds to send out the value found to the closest
+     * Give ourselves 30 seconds to send out the value found to the closest
      * peers /after/ we get a successful match.  If this fails, no biggie, but
      * this'll help heal the network so subsequent searches will find the data.
      * Tunable via the Tuner (netdb.resendTimeout).
@@ -108,7 +108,7 @@ public class SearchJob extends JobImpl {
     public static long getResendTimeout() { return RESEND_TIMEOUT; }
 
     /**
-     * Set the lease republish message window. Tuner may call this.
+     * Lease republish message window. Tuner may call this.
      * @param val ms, clamped to [10s, 30s]
      * @since 0.9.71+
      */
@@ -157,18 +157,26 @@ public class SearchJob extends JobImpl {
     }
 
     /**
+     * Search state tracking attempted/pending/failed peers.
+     *
      * @return search state tracking attempted/pending/failed peers
      */
     protected SearchState getState() {return _state;}
     /**
+     * The network database facade.
+     *
      * @return the network database facade
      */
     protected KademliaNetworkDatabaseFacade getFacade() {return _facade;}
     /**
+     * Absolute time when this search expires.
+     *
      * @return absolute time when this search expires
      */
     public long getExpiration() {return _expiration;}
     /**
+     * Timeout duration in milliseconds.
+     *
      * @return timeout duration in milliseconds
      */
     public long getTimeoutMs() {return _timeoutMs;}
@@ -257,6 +265,8 @@ public class SearchJob extends JobImpl {
     private boolean isLocal() {return _facade.getDataStore().isKnown(_state.getTarget());}
 
     /**
+     * Whether the search deadline has passed.
+     *
      * @return true if the search deadline has passed
      */
     private boolean isExpired() {return getContext().clock().now() >= _expiration;}
@@ -381,6 +391,8 @@ public class SearchJob extends JobImpl {
     /** Job that re-invokes searchNext after a delay. */
     private class RequeuePending extends JobImpl {
         /**
+         * Requeue job that re-invokes searchNext.
+         *
          * @param enclosingContext the router context
          */
         public RequeuePending(RouterContext enclosingContext) {
@@ -437,7 +449,7 @@ public class SearchJob extends JobImpl {
     }
 
     /**
-     * we're (probably) searching for a LeaseSet, so to be (overly) cautious, we're sending
+     * We're (probably) searching for a LeaseSet, so to be (overly) cautious, we're sending
      * the request out through a tunnel w/ reply back through another tunnel.
      *
      */
@@ -562,6 +574,8 @@ public class SearchJob extends JobImpl {
         /** Sent time */
         private long _sentOn;
         /**
+         * Mark the peer as failed for this search.
+         *
          * @param enclosingContext the router context
          * @param peer the peer
          */
@@ -657,7 +671,7 @@ public class SearchJob extends JobImpl {
     public static int getLeaseResendCount() { return MAX_LEASE_RESEND; }
 
     /**
-     * Set the max peers that get a lease republish after a search. Tuner may call this.
+     * Max peers that get a lease republish after a search. Tuner may call this.
      * @param val clamped to [5, 10]
      * @since 0.9.71+
      */
@@ -811,6 +825,8 @@ public class SearchJob extends JobImpl {
         private final long _expiration;
 
         /**
+         * Search callbacks and deadline.
+         *
          * @param onFind success callback
          * @param onFail failure callback
          * @param expiration deadline
@@ -830,6 +846,8 @@ public class SearchJob extends JobImpl {
 
     @Override
     /**
+     * Debug string with elapsed time since search started.
+     *
      * @return debug string with elapsed time since search started
      */
     public String toString() {
@@ -838,11 +856,15 @@ public class SearchJob extends JobImpl {
     }
 
     /**
+     * Whether the peer was already queried.
+     *
      * @return true if peer was already queried
      */
     boolean wasAttempted(Hash peer) {return _state.wasAttempted(peer);}
 
     /**
+     * The search timeout in ms.
+     *
      * @return the search timeout in ms
      */
     long timeoutMs() {return _timeoutMs;}

@@ -30,6 +30,8 @@ import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 public class DummyClientManagerFacade extends ClientManagerFacade {
     private RouterContext _context;
     /**
+     *  Initializes this facade with the router context.
+     *
      *  @param ctx the router context
      */
     public DummyClientManagerFacade(RouterContext ctx) {
@@ -47,7 +49,7 @@ public class DummyClientManagerFacade extends ClientManagerFacade {
     }
     @Override
     public void startup() { /* Intentionally empty - dummy implementation */ }
-    /** empty dummy implementation */
+    /** Prevents further client connections from being accepted. */
     public void stopAcceptingClients() { /* Intentionally empty - dummy implementation */ }
     public void shutdown() { /* Intentionally empty - dummy implementation */ }
     @Override
@@ -65,7 +67,7 @@ public class DummyClientManagerFacade extends ClientManagerFacade {
      *  Return the floodfill network database facade.
      *
      *  @since 0.9.61
-     * @return the client floodfill network database facade
+     *  @return the client floodfill network database facade
      */
     public FloodfillNetworkDatabaseFacade getClientFloodfillNetworkDatabaseFacade(Hash dbid) {
         return null;
@@ -75,7 +77,7 @@ public class DummyClientManagerFacade extends ClientManagerFacade {
      *  Return the set of primary hashes.
      *
      *  @since 0.9.61
-     * @return the primary hashes
+     *  @return the primary hashes
      */
     public Set<Hash> getPrimaryHashes() {
         return Collections.emptySet();

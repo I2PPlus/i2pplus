@@ -155,37 +155,37 @@ final class SSU2Header {
      */
     public static class Header {
         /**
-         * data.
+         * The raw header bytes.
          */
         public final byte[] data;
 
         /**
-         * Header.
+         * Create a Header with the given size.
          */
         public Header(int len) { data = new byte[len]; }
 
-        /** all headers */
+        /** Available in all header types. */
         public long getDestConnID() { return DataHelper.fromLong8(data, 0); }
-        /** all headers */
+        /** Available in all header types. */
         public long getPacketNumber() { return DataHelper.fromLong(data, PKT_NUM_OFFSET, PKT_NUM_LEN); }
-        /** all headers */
+        /** Available in all header types. */
         public int getType() { return data[TYPE_OFFSET] & 0xff; }
 
-        /** short headers only */
+        /** Short header flags byte, present only in short headers. */
         public int getShortHeaderFlags() { return (int) DataHelper.fromLong(data, SHORT_HEADER_FLAGS_OFFSET, SHORT_HEADER_FLAGS_LEN); }
 
-        /** long headers only */
+        /** SSU2 protocol version, present only in long headers. */
         public int getVersion() { return data[VERSION_OFFSET] & 0xff; }
-        /** long headers only */
+        /** Network ID, present only in long headers. */
         public int getNetID() { return data[NETID_OFFSET] & 0xff; }
-        /** long headers only */
+        /** Long header flags byte, present only in long headers. */
         public int getHandshakeHeaderFlags() { return data[LONG_HEADER_FLAGS_OFFSET] & 0xff; }
-        /** long headers only */
+        /** Source connection ID, present only in long headers. */
         public long getSrcConnID() { return DataHelper.fromLong8(data, SRC_CONN_ID_OFFSET); }
-        /** long headers only */
+        /** Token, present only in long headers. */
         public long getToken() { return DataHelper.fromLong8(data, TOKEN_OFFSET); }
 
-        /** handshake headers only */
+        /** X25519 ephemeral public key, present only in handshake headers. */
         public byte[] getEphemeralKey() {
             byte[] rv = new byte[KEY_LEN];
             System.arraycopy(data, LONG_HEADER_SIZE, rv, 0, KEY_LEN);
@@ -193,7 +193,7 @@ final class SSU2Header {
         }
 
         /**
-         * toString.
+         * String representation of this header.
          */
         @Override
         public String toString() {

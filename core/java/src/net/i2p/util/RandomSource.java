@@ -115,14 +115,14 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     }
 
     /**
-     * harvester.
+     * This random source as an entropy harvester.
      */
     public EntropyHarvester harvester() {
         return this;
     }
 
     /**
-     * feedEntropy.
+     * Feed the given entropy into the generator.
      */
     @Override
     public void feedEntropy(String source, long data, int bitoffset, int bits) {
@@ -130,7 +130,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     }
 
     /**
-     * feedEntropy.
+     * Feed the given entropy into the generator.
      */
     @Override
     public void feedEntropy(String source, byte[] data, int offset, int len) {
@@ -150,7 +150,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     }
 
     /**
-     * saveSeed.
+     * Save the current state as a new seed.
      */
     public void saveSeed() {
         byte[] buf = new byte[1024];
@@ -161,7 +161,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     private static final String SEEDFILE = "prngseed.rnd";
 
     /**
-     * writeSeed.
+     * Write the seed to the seed file.
      */
     public static final void writeSeed(byte[] buf) {
         File f = new File(I2PAppContext.getGlobalContext().getConfigDir(), SEEDFILE);
@@ -229,7 +229,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
         }
 
         /**
-         * run.
+         * Fill the buffer from the system secure random source.
          */
         @Override
         public void run() {

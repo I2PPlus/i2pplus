@@ -40,7 +40,7 @@ public class NegativeLookupCacheTest {
         return h;
     }
 
-    /** a Destination with a complete KeysAndCert so calculateHash() works */
+    /** A Destination with a complete KeysAndCert so calculateHash() works. */
     private static Destination destination(int seed) {
         Destination d = new Destination();
         d.setCertificate(new Certificate(Certificate.CERTIFICATE_TYPE_NULL, null));

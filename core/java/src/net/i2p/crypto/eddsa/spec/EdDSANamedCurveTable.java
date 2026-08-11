@@ -19,7 +19,7 @@ import net.i2p.crypto.eddsa.math.ed25519.Ed25519ScalarOps;
 public class EdDSANamedCurveTable {
     /** RFC 8032 */
     public static final String ED_25519 = "Ed25519";
-    /** old name */
+    /** Old name for the Ed25519 curve. */
     public static final String CURVE_ED25519_SHA512 = "ed25519-sha-512";
 
     private static final Field ed25519field = new Field(

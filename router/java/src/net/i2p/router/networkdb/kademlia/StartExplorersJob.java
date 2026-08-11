@@ -57,7 +57,7 @@ class StartExplorersJob extends JobImpl {
     private final long _msgIDBloomXor = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
 
     /**
-     * Constructs a StartExplorersJob to manage peer exploration scheduling.
+     * Job to manage peer exploration scheduling.
      *
      * @param context the router context
      * @param facade the network database facade to interact with peer data
@@ -69,6 +69,8 @@ class StartExplorersJob extends JobImpl {
     }
 
     /**
+     * Name of this job.
+     *
      * @return the name
      */
     @Override

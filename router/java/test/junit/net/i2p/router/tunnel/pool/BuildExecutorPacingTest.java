@@ -63,7 +63,7 @@ public class BuildExecutorPacingTest {
     }
 
     /**
-     * removeInProgress() must remove only the matching config, leaving
+     * The removeInProgress() method must remove only the matching config, leaving
      * unrelated in-progress builds untouched.
      */
     @Test

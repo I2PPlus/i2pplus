@@ -15,11 +15,8 @@ import java.math.BigInteger;
  * It handles the specific encoding requirements for EdDSA operations including
  * bit masking and constant-time conversions.
  */
-/**
- * Little-endian encoding of field elements for EdDSA, backed by BigInteger.
- */
 public class BigIntegerLittleEndianEncoding extends Encoding implements Serializable {
-    /** Constructor */
+    /** New encoding instance; no initialization is required. */
     public BigIntegerLittleEndianEncoding() {}
     private static final long serialVersionUID = 3984579843759837L;
 

@@ -26,9 +26,9 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
      * MESSAGE_TYPE.
      */
     public final static int MESSAGE_TYPE = 6;
-    /** the session ID */
+    /** The session ID. */
     private int _sessionId;
-    /** the message ID */
+    /** The message ID. */
     private long _messageId;
 
     /** Default constructor */
@@ -81,7 +81,7 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
     }
 
     /**
-     * doReadMessage.
+     * Read the message body from the input stream.
      */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
@@ -94,7 +94,7 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
     }
 
     /**
-     * doWriteMessage.
+     * Write the message body to the output stream.
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

@@ -87,7 +87,7 @@ public class BuildHandler implements Runnable {
     private static final int PERCENT_LOOKUP_LIMIT = IS_SLOW ? 15 : 40; // limit lookups to this % of current participating tunnels
     private static final int MAX_PENDING_LOOKUPS = 64;
     private static final long MAX_REQUEST_FUTURE = 5*60*1000L;
-    private static final long MAX_REQUEST_AGE = 65*60*1000L; /** must be > 1 hour due to rounding down */
+    private static final long MAX_REQUEST_AGE = 65*60*1000L; /** Must be > 1 hour due to rounding down. */
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000L;
 
     private static int getNextHopLookupTimeout(RouterContext ctx) {
@@ -642,13 +642,15 @@ public class BuildHandler implements Runnable {
         }
 
         /**
+         * The name of this job.
+         *
          * @return the name
          */
         @Override
         public String getName() {return "Defer Tunnel Join Processing";}
 
         /**
-         * runJob.
+         * Complete the join request once the next hop is found.
          */
         @Override
         public void runJob() {
@@ -701,13 +703,15 @@ public class BuildHandler implements Runnable {
         }
 
         /**
+         * The name of this job.
+         *
          * @return the name
          */
         @Override
         public String getName() {return "Timeout Locating Peer for Tunnel Join";}
 
         /**
-         * runJob.
+         * Reject the request and blame the peer that could not be located.
          */
         @Override
         public void runJob() {
@@ -1200,6 +1204,8 @@ public class BuildHandler implements Runnable {
     }
 
     /**
+     * The number of inbound build messages queued.
+     *
      * @return the inbound build queue size
      */
     public int getInboundBuildQueueSize() {return _inboundBuildMessages.size();}
@@ -1280,7 +1286,7 @@ public class BuildHandler implements Runnable {
 
     private class TunnelBuildReplyMessageHandlerJobBuilder implements HandlerJobBuilder {
         /**
-         * createJob.
+         * Queue the reply message state and return the handler job.
          */
         @Override
         public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
@@ -1301,7 +1307,7 @@ public class BuildHandler implements Runnable {
         }
     }
 
-    /** normal inbound requests from other people */
+    /** Normal inbound requests from other people. */
     private static class BuildMessageState implements CDQEntry {
         private final RouterContext _ctx;
         final TunnelBuildMessage msg;
@@ -1321,27 +1327,31 @@ public class BuildHandler implements Runnable {
             recvTime = System.currentTimeMillis();
         }
         /**
-         * setEnqueueTime.
+         * No-op; the enqueue time is fixed at construction.
          */
         @Override
         public void setEnqueueTime(long time) {
             // intentionally empty - enqueue time is set at construction, no need to update
         }
         /**
+         * The time the message was received.
+         *
          * @return the enqueue time
          */
         @Override
         public long getEnqueueTime() {return recvTime;}
         /**
-         * setLookupStartTime.
+         * The time the next hop lookup started.
          */
         public void setLookupStartTime(long time) {this.lookupStartTime = time;}
         /**
+         * The time the next hop lookup started.
+         *
          * @return the lookup start time
          */
         public long getLookupStartTime() {return lookupStartTime;}
         /**
-         * drop.
+         * Mark the request as dropped due to queue overload.
          */
         @Override
         public void drop() {
@@ -1350,12 +1360,12 @@ public class BuildHandler implements Runnable {
         }
     }
 
-    /** replies for outbound tunnels that we have created */
+    /** Replies for outbound tunnels that we have created. */
     private static class BuildReplyMessageState {
         final TunnelBuildReplyMessage msg;
         final long recvTime;
         /**
-         * BuildReplyMessageState.
+         * The reply message and the time it was received.
          */
         public BuildReplyMessageState(I2NPMessage m) {
             msg = (TunnelBuildReplyMessage)m;
@@ -1363,13 +1373,13 @@ public class BuildHandler implements Runnable {
         }
     }
 
-    /** replies for inbound tunnels we have created */
+    /** Replies for inbound tunnels we have created. */
     private static class BuildEndMessageState {
         final TunnelBuildMessage msg;
         final PooledTunnelCreatorConfig cfg;
         final long recvTime;
         /**
-         * BuildEndMessageState.
+         * The tunnel config, message, and receive time of a build end reply.
          */
         public BuildEndMessageState(PooledTunnelCreatorConfig c, I2NPMessage m) {
             cfg = c;
@@ -1378,34 +1388,38 @@ public class BuildHandler implements Runnable {
         }
     }
 
-    /** noop */
+    /** No-op job returned once a tunnel build message is handled. */
     private static class TunnelBuildMessageHandlerJob extends JobImpl {
         private TunnelBuildMessageHandlerJob(RouterContext ctx) {super(ctx);}
         /**
-         * runJob.
+         * No-op; the message was already handled.
          */
         @Override
         public void runJob() {
             // No-op - intentionally empty
         }
         /**
+         * The name of this job.
+         *
          * @return the name
          */
         @Override
         public String getName() {return "Receive Tunnel Build Message";}
     }
 
-    /** noop */
+    /** No-op job returned once a tunnel build reply message is handled. */
     private static class TunnelBuildReplyMessageHandlerJob extends JobImpl {
         private TunnelBuildReplyMessageHandlerJob(RouterContext ctx) {super(ctx);}
         /**
-         * runJob.
+         * No-op; the message was already handled.
          */
         @Override
         public void runJob() {
             // No-op - intentionally empty
         }
         /**
+         * The name of this job.
+         *
          * @return the name
          */
         @Override
@@ -1424,12 +1438,14 @@ public class BuildHandler implements Runnable {
             _cfg = cfg;
         }
         /**
+         * The name of this job.
+         *
          * @return the name
          */
         @Override
         public String getName() {return "Timeout Building Tunnel Hop";}
         /**
-         * runJob.
+         * Remove the participating tunnel when the next hop cannot be contacted.
          */
         @Override
         public void runJob() {

@@ -85,39 +85,39 @@ public interface I2PSession {
     public boolean sendMessage(Destination dest, byte[] payload, int proto, int fromport, int toport) throws I2PSessionException;
 
     /**
-     * End-to-End Crypto is disabled, tags and keys are ignored!
+     *  End-to-End Crypto is disabled, tags and keys are ignored!
      *
-     * Like sendMessage above, except the key used and the tags sent are exposed to the
-     * application.  <p>
+     *  Like sendMessage above, except the key used and the tags sent are exposed to the
+     *  application.  <p>
      *
-     * If some application layer message delivery confirmation is used,
-     * rather than i2p's (slow) built in confirmation via guaranteed delivery mode, the
-     * application can update the SessionKeyManager, ala:
-     * <pre>
-     *   SessionKeyManager.getInstance().tagsDelivered(dest.getPublicKey(), keyUsed, tagsSent);
-     * </pre>
-     * If an application is using guaranteed delivery mode, this is not useful, but for
-     * applications using best effort delivery mode, if they can know with certainty that a message
-     * was delivered and can update the SessionKeyManager appropriately, a significant performance
-     * boost will occur (subsequent message encryption and decryption will be done via AES and a SessionTag,
-     * rather than ElGamal+AES, which is 1000x slower).
+     *  If some application layer message delivery confirmation is used,
+     *  rather than i2p's (slow) built in confirmation via guaranteed delivery mode, the
+     *  application can update the SessionKeyManager, ala:
+     *  <pre>
+     *  SessionKeyManager.getInstance().tagsDelivered(dest.getPublicKey(), keyUsed, tagsSent);
+     *  </pre>
+     *  If an application is using guaranteed delivery mode, this is not useful, but for
+     *  applications using best effort delivery mode, if they can know with certainty that a message
+     *  was delivered and can update the SessionKeyManager appropriately, a significant performance
+     *  boost will occur (subsequent message encryption and decryption will be done via AES and a SessionTag,
+     *  rather than ElGamal+AES, which is 1000x slower).
      *
-     * @param dest location to send the message
-     * @param payload body of the message to be sent (unencrypted)
-     * @param keyUsed UNUSED, IGNORED. Session key delivered to the destination for association with the tags sent.  This is essentially
-     *                an output parameter - keyUsed.getData() is ignored during this call, but after the call completes,
-     *                it will be filled with the bytes of the session key delivered.  Typically the key delivered is the
-     *                same one as the key encrypted with, but not always.  If this is null then the key data will not be
-     *                exposed.
+     *  @param dest location to send the message
+     *  @param payload body of the message to be sent (unencrypted)
+     *  @param keyUsed UNUSED, IGNORED. Session key delivered to the destination for association with the tags sent.  This is essentially
+     *                 an output parameter - keyUsed.getData() is ignored during this call, but after the call completes,
+     *                 it will be filled with the bytes of the session key delivered.  Typically the key delivered is the
+     *                 same one as the key encrypted with, but not always.  If this is null then the key data will not be
+     *                 exposed.
      *
-     * @param tagsSent UNUSED, IGNORED. Set of tags delivered to the peer and associated with the keyUsed.  This is also an output parameter -
-     *                 the contents of the set is ignored during the call, but afterwards it contains a set of SessionTag
-     *                 objects that were sent along side the given keyUsed.
+     *  @param tagsSent UNUSED, IGNORED. Set of tags delivered to the peer and associated with the keyUsed.  This is also an output parameter -
+     *                  the contents of the set is ignored during the call, but afterwards it contains a set of SessionTag
+     *                  objects that were sent along side the given keyUsed.
      *
-     * @return success
-     * @throws I2PSessionException on error
+     *  @return success
+     *  @throws I2PSessionException on error
      */
-     public boolean sendMessage(Destination dest, byte[] payload, SessionKey keyUsed, Set<SessionTag> tagsSent) throws I2PSessionException;
+    public boolean sendMessage(Destination dest, byte[] payload, SessionKey keyUsed, Set<SessionTag> tagsSent) throws I2PSessionException;
 
     /**
      * End-to-End Crypto is disabled, tags and keys are ignored.
@@ -558,7 +558,7 @@ public interface I2PSession {
     public void updateOptions(Properties options);
 
     /**
-      * Get the current bandwidth limits. Blocking.
+      * Current bandwidth limits; blocks until the response arrives.
       *
       * @return int array of [inbound, outbound] Bps, or null on error
       * @throws I2PSessionException on error
@@ -703,7 +703,7 @@ public interface I2PSession {
     }
 
     /**
-     * Set the tunnel IDs actively in use by this session.
+     * Tunnel IDs actively in use by this session.
      * Called by the streaming library when it learns which tunnels are being used.
      *
      * @param pair the tunnel pair in use

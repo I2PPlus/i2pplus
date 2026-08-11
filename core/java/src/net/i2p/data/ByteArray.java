@@ -85,7 +85,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     }
 
     /**
-     * Sets the number of valid bytes.
+     * Number of valid bytes.
      *
      * @param valid the new valid count
      */
@@ -103,7 +103,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     }
 
     /**
-     * Sets the offset into the byte array.
+     * Offset into the byte array.
      *
      * @param offset the new offset
      */

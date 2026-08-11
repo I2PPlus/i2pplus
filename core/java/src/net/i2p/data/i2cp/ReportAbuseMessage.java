@@ -55,7 +55,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     }
 
     /**
-     * setSessionId.
+     * Session ID for this message.
      */
     public void setSessionId(SessionId id) {
         _sessionId = id;
@@ -70,7 +70,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     }
 
     /**
-     * setSeverity.
+     * Severity of the abuse.
      */
     public void setSeverity(AbuseSeverity severity) {
         _severity = severity;
@@ -85,7 +85,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     }
 
     /**
-     * setReason.
+     * Reason for the abuse.
      */
     public void setReason(AbuseReason reason) {
         _reason = reason;
@@ -100,14 +100,14 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     }
 
     /**
-     * setMessageId.
+     * Message ID of the reported message.
      */
     public void setMessageId(MessageId id) {
         _messageId = id;
     }
 
     /**
-     * doReadMessage.
+     * Read the message body from the input stream.
      */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
@@ -126,7 +126,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     }
 
     /**
-     * doWriteMessage.
+     * Write the message body to the output stream.
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

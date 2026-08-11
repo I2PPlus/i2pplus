@@ -86,7 +86,7 @@ public class SessionStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * setSessionId.
+     * Session ID for this message.
      */
     public void setSessionId(SessionId id) {
         _sessionId = id;
@@ -101,14 +101,14 @@ public class SessionStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * setStatus.
+     * Status of the session.
      */
     public final void setStatus(int status) {
         _status = status;
     }
 
     /**
-     * doReadMessage.
+     * Read the message body from the input stream.
      */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
@@ -125,7 +125,7 @@ public class SessionStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * doWriteMessage.
+     * Write the message body to the output stream.
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

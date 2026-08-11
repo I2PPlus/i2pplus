@@ -268,7 +268,7 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Get current used memory in bytes.
+     * Current used memory in bytes.
      * @return the used memory
      */
     private long getUsedMemory() {
@@ -277,7 +277,7 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Get memory usage percentage.
+     * Memory usage percentage.
      * @return the memory usage percent
      */
     private double getMemoryUsagePercent() {
@@ -357,7 +357,7 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Get the minimum number of runners (floor), dynamic - reads property each time.
+     * Minimum number of runners (floor), dynamic - reads property each time.
      * On router startup, returns more runners to handle startup load.
      */
     int getMinRunnersDynamic() {
@@ -372,7 +372,7 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Get the check interval in milliseconds.
+     * Check interval in milliseconds.
      * @return the check interval
      */
     private long getCheckInterval() {
@@ -380,7 +380,7 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Get the cooldown period between scale events.
+     * Cooldown period between scale events.
      * @return the cooldown period
      */
     private long getCooldownPeriod() {
@@ -392,7 +392,7 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Get the lag threshold for scaling up.
+     * Lag threshold for scaling up.
      * @return the scale up lag threshold
      */
     private int getScaleUpLagThreshold() {
@@ -400,7 +400,7 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Get the message delay threshold for scaling up.
+     * Message delay threshold for scaling up.
      * @return the scale up message delay threshold
      */
     private int getScaleUpMessageDelayThreshold() {
@@ -408,7 +408,7 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Get the lag threshold for scaling down.
+     * Lag threshold for scaling down.
      * @return the scale down lag threshold
      */
     private int getScaleDownLagThreshold() {
@@ -416,7 +416,7 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Get the jobs-to-runners ratio threshold for scaling up.
+     * Jobs-to-runners ratio threshold for scaling up.
      * @return the scale up jobs ratio
      */
     private double getScaleUpJobsRatio() {
@@ -1065,7 +1065,7 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Get the current maximum runner limit (may be up to 2x configured or RAM-limited).
+     * Current maximum runner limit (may be up to 2x configured or RAM-limited).
      * @return the current max runners
      */
     public int getCurrentMaxRunners() {

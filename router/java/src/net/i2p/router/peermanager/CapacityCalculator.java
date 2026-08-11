@@ -26,10 +26,10 @@ class CapacityCalculator {
     /** Property for bonus applied to peers in the same country */
     public static final String PROP_COUNTRY_BONUS = "profileOrganizer.sameCountryBonus";
 
-    /** used to adjust each period so that we keep trying to expand the peer's capacity */
+    /** Used to adjust each period so that we keep trying to expand the peer's capacity. */
     static final long GROWTH_FACTOR = 5;
 
-    /** the calculator estimates over a 1 hour period */
+    /** The calculator estimates over a 1 hour period. */
     private static long ESTIMATE_PERIOD = 60*60*1000L;
 
     // total of all possible bonuses should be less than 4, since

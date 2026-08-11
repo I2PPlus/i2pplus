@@ -179,7 +179,7 @@ public final class CryptixAESEngine extends AESEngine {
         SimpleByteCache.release(cur);
     }
 
-    /** encrypt exactly 16 bytes using the session key
+    /** Encrypt exactly 16 bytes using the session key.
      *
      * @param payload plaintext data, 16 bytes starting at inIndex
      * @param sessionKey private session key
@@ -201,7 +201,7 @@ public final class CryptixAESEngine extends AESEngine {
         CryptixRijndael_Algorithm.blockEncrypt(payload, out, inIndex, outIndex, pkey);
     }
 
-    /** decrypt exactly 16 bytes of data with the session key provided
+    /** Decrypt exactly 16 bytes of data with the session key provided.
      *
      * @param payload encrypted data, 16 bytes starting at inIndex
      * @param sessionKey private session key
@@ -268,21 +268,21 @@ public final class CryptixAESEngine extends AESEngine {
      *<pre>
      *  JVM	Cryptix (ms)	System (ms)
      *  Sun	 8662		n/a
-     * OpenJDK	 8616		  8510
-     * Harmony	14732		 16986
-     * JamVM	50013		761494 (!)
-     * gij	51130		761693 (!)
-     * jrockit	 9780		n/a
+     *  OpenJDK	 8616		  8510
+     *  Harmony	14732		 16986
+     *  JamVM	50013		761494 (!)
+     *  gij	51130		761693 (!)
+     *  jrockit	 9780		n/a
      *</pre>
      *
-     * Speed ups with AES-NI:
-     * May 2014 AMD Hexcore 100K runs (1024 bytes):
+     *  Speed ups with AES-NI:
+     *  May 2014 AMD Hexcore 100K runs (1024 bytes):
      *<pre>
      *  JVM		Cryptix (ms)	System (ms)
-     * OpenJDK 6	3314		  5030
-     * OpenJDK 7	3285		  2476
+     *  OpenJDK 6	3314		  5030
+     *  OpenJDK 7	3285		  2476
      *</pre>
      *
-     * Cryptix is faster for data smaller than 704 bytes.
+     *  Cryptix is faster for data smaller than 704 bytes.
      */
 }

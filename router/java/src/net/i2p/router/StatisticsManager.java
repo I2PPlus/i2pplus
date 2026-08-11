@@ -34,10 +34,10 @@ public class StatisticsManager {
     private final String _networkID;
 
     /**
-     * PROP_PUBLISH_RANKINGS.
+     * Config property controlling whether to publish peer rankings.
      */
     public static final String PROP_PUBLISH_RANKINGS = "router.publishPeerRankings";
-    /** enhance anonymity by only including build stats one out of this many times */
+    /** Enhance anonymity by only including build stats one out of this many times */
     private static final int RANDOM_INCLUDE_STATS = 1024;
     private static final boolean SIMPLE_STATS = true;
 
@@ -147,6 +147,11 @@ public class StatisticsManager {
     }
 
     /**
+     * Include a named rate's data in the published stats.
+     *
+     * @param rateName the rate to include
+     * @param stats the properties to add to
+     * @param selectedPeriods the periods to include, or null for all
      * @param fudgeQuantity the data being published in this stat is too sensitive to, uh
      *                      publish, so we're kludge the quantity (allowing the fairly safe
      *                      publication of the average values
@@ -288,7 +293,9 @@ public class StatisticsManager {
     }
 
     /**
-     * renderStatusHTML.
+     * Render the status in HTML. Intentionally a no-op.
+     *
+     * @param out the writer
      */
     public void renderStatusHTML(Writer out) { /* No-op - intentionally empty */ }
 }

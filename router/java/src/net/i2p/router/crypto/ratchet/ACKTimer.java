@@ -9,7 +9,8 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * Timer for sending ratchet-layer acknowledgments when application responses are delayed, supporting NS, NSR, ACK requests, and forward next key blocks
+ *  Timer for sending ratchet-layer acknowledgments when application responses are delayed,
+ *  supporting NS, NSR, ACK requests, and forward next key blocks.
  *
  *  The vast majority of these will be cancelled before firing,
  *  when streaming sends a response.
@@ -34,8 +35,8 @@ class ACKTimer extends SimpleTimer2.TimedEvent {
      * ACK timer for ratchet.
      *
      * @param context router context for timer and logging
-     *  @param from local destination ACK will come from, non-null
-     *  @param to remote destination ACK will go to, non-null
+     * @param from local destination ACK will come from, non-null
+     * @param to remote destination ACK will go to, non-null
      *
      */
     public ACKTimer(RouterContext context, Destination from, Destination to) {

@@ -14,9 +14,9 @@ public class ElGamalGenParameterSpec implements AlgorithmParameterSpec {
     private final int primeSize;
 
     /**
-     * Constructs a parameter set for ElGamal key generation.
+     * Parameter set for ElGamal key generation.
      *
-     * @param primeSize the size (in bits) of the prime modulus.
+     * @param primeSize The size (in bits) of the prime modulus.
      */
     public ElGamalGenParameterSpec(int primeSize) {
         this.primeSize = primeSize;

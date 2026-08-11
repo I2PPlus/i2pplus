@@ -118,7 +118,7 @@ public final class SHA256Generator {
     /**
      *  Return a new MessageDigest from the system libs.
      *
-     *  @since 0.8.7, public since 0.8.8 for FortunaStandalone
+     * @since 0.8.7, public since 0.8.8 for FortunaStandalone
      * @return the digest instance
      */
     public static MessageDigest getDigestInstance() {
@@ -130,7 +130,7 @@ public final class SHA256Generator {
     }
 
     /**
-     * main.
+     * Hash the first argument and print the base64 result.
      */
     public static void main(String[] args) {
         if (args.length != 1) {

@@ -13,9 +13,9 @@ public class ElGamalKeySpec implements KeySpec {
     private final ElGamalParameterSpec spec;
 
     /**
-     * Constructs an ElGamal key specification with the given parameters.
+     * ElGamal key specification with the given parameters.
      *
-     * @param spec the ElGamal parameter specification containing prime p and generator g
+     * @param spec The ElGamal parameter specification containing prime p and generator g.
      */
     public ElGamalKeySpec(ElGamalParameterSpec spec) {
         this.spec = spec;

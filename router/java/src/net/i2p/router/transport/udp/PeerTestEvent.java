@@ -26,26 +26,26 @@ import net.i2p.util.SimpleTimer2;
 
     /** Whether this event is active. */
     private boolean _alive;
-    /** when did we last test our reachability */
+    /** When we last tested our reachability. */
     private final AtomicLong _lastTested = new AtomicLong();
-    /** when did we last test our IPv6 reachability */
+    /** When we last tested our IPv6 reachability. */
     private final AtomicLong _lastTestedV6 = new AtomicLong();
-    /** no force run */
+    /** No force run. */
     private static final int NO_FORCE = 0;
-    /** force IPv4 test */
+    /** Force IPv4 test. */
     private static final int FORCE_IPV4 = 1;
-    /** force IPv6 test */
+    /** Force IPv6 test. */
     private static final int FORCE_IPV6 = 2;
-    /** force run flags */
+    /** Force run flags. */
     private int _forceRun;
-    /** whether last test was IPv6 */
+    /** Whether the last test was IPv6. */
     private boolean _lastTestIPv6 = true;
-    /** test frequency in ms */
+    /** Test frequency in ms. */
     private static final int TEST_FREQUENCY = 5*60*1000;
-    /** must be greater than PeerTestManager.MAX_TEST_TIME */
+    /** Must be greater than PeerTestManager.MAX_TEST_TIME. */
     private static final int MIN_TEST_FREQUENCY = 45*1000;
 
-    /** property to disable peer test */
+    /** Property to disable peer test. */
     private static final String PROP_DISABLE_PEER_TEST = "i2np.udp.disablePeerTest";
 
     /** Peer test event. */
@@ -57,7 +57,7 @@ import net.i2p.util.SimpleTimer2;
         _testManager = ptmgr;
     }
 
-    /** timeReached. */
+    /** Run a reachability test if due, then reschedule. */
     @Override
     public synchronized void timeReached() {
         if (shouldTest()) {

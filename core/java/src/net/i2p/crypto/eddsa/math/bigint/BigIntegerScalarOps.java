@@ -14,9 +14,9 @@ import java.math.BigInteger;
  * within the valid scalar range for EdDSA operations.
  */
 public class BigIntegerScalarOps implements ScalarOps {
-    /** L */
+    /** The group order (subgroup size) l. */
     private final BigInteger l;
-    /** Enc */
+    /** The little-endian encoding for field elements. */
     private final BigIntegerLittleEndianEncoding enc;
 
     /**
@@ -31,13 +31,25 @@ public class BigIntegerScalarOps implements ScalarOps {
         enc.setField(f);
     }
 
-    /** @param s the scalar @return the reduced scalar */
+    /**
+     * Reduce the given scalar modulo the group order.
+     *
+     * @param s The scalar to reduce.
+     * @return The reduced scalar.
+     */
     @Override
     public byte[] reduce(byte[] s) {
         return enc.encode(enc.toBigInteger(s).mod(l));
     }
 
-    /** @param a the first scalar @param b the second scalar @param c the third scalar @return the result */
+    /**
+     * Multiply a by b, add c, and reduce modulo the group order.
+     *
+     * @param a The first scalar.
+     * @param b The second scalar.
+     * @param c The third scalar.
+     * @return The result.
+     */
     @Override
     public byte[] multiplyAndAdd(byte[] a, byte[] b, byte[] c) {
         return enc.encode(enc.toBigInteger(a).multiply(enc.toBigInteger(b)).add(enc.toBigInteger(c)).mod(l));

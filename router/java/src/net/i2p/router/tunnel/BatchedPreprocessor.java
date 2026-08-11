@@ -31,14 +31,14 @@ import net.i2p.util.SystemVersion;
  *
  * If we are in the middle of a tunnel msg and starting a new i2np msg, and this one won't
  * fit, let's look to see if we have somthing that would fit instead by reordering:
- *   if (allocated &gt; 0 &amp;&amp; msg.getFragment == 0) {
+ * if (allocated &gt; 0 &amp;&amp; msg.getFragment == 0) {
  *       for (j = i+1, j &lt; pending.size(); j++) {
  *           if it will fit and it is fragment 0 {
  *               msg = pending.remove(j)
  *               pending.add(0, msg)
  *           }
  *       }
- *   }
+ * }
  */
 class BatchedPreprocessor extends TrivialPreprocessor {
     private long _pendingSince;
@@ -70,7 +70,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
 
     //private static final boolean DISABLE_BATCHING = false;
 
-    /** not final or private so the test code can adjust */
+    /** Not final or private so the test code can adjust. */
     static long DEFAULT_DELAY = SystemVersion.isSlow() ? 100 : 50;
     /**
      *  Wait up to this long before sending (flushing) a small tunnel message
@@ -97,7 +97,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      */
     private static final int FULL_ENOUGH_SIZE = (FULL_SIZE * 80) / 100;
 
-    /** how long do we want to wait before flushing */
+    /** How long to wait before flushing a queued message. */
     @Override
     public long getDelayAmount() { return getDelayAmount(true); }
     private long getDelayAmount(boolean shouldStat) {

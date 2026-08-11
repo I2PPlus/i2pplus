@@ -32,7 +32,7 @@ class MessageReceiver {
     private final Log _log;
     private final UDPTransport _transport;
     private final BanLogger _banLogger;
-    /** list of messages (InboundMessageState) fully received but not interpreted yet */
+    /** List of messages (InboundMessageState) fully received but not interpreted yet. */
     private final BlockingQueue<InboundMessageState> _completeMessages;
     private volatile boolean _alive;
     private static volatile int _threadCount = SystemVersion.isSlow() ? 2 : 3;
@@ -84,7 +84,7 @@ class MessageReceiver {
     public int getProcessingCount() { return _processingCount.get(); }
 
     /**
-     * Get message receiver pool utilization as a ratio (0.0-1.0).
+     * Message receiver pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
      *
      * @since 0.9.70+
@@ -103,7 +103,7 @@ class MessageReceiver {
     public int getQueueCapacity() { return _completeMessages.size() + _completeMessages.remainingCapacity(); }
 
     /**
-     * Sets the target thread count. Takes effect immediately — excess threads
+     * The target thread count. Takes effect immediately — excess threads
      * will exit, new threads will be started if needed.
      * @since 0.9.70+
      */
@@ -112,7 +112,7 @@ class MessageReceiver {
     }
 
     /**
-     * startup.
+     * Start the receiver threads.
      */
     public synchronized void startup() {
         _alive = true;
@@ -134,14 +134,14 @@ class MessageReceiver {
         private final I2NPMessageHandler _handler;
         Runner() { _handler = new I2NPMessageHandler(_context); }
         /**
-         * run.
+         * Run the receive loop.
          */
         @Override
         public void run() { loop(_handler); }
     }
 
     /**
-     * shutdown.
+     * Shut down the receiver threads.
      */
     public synchronized void shutdown() {
         _alive = false;

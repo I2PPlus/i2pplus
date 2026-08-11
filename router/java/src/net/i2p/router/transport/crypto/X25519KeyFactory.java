@@ -222,7 +222,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     public int getMinSize() { return _minSize; }
 
     /**
-     * Sets the minimum precalc queue size.
+     * The minimum precalc queue size.
      * @since 0.9.70+
      */
     public void setMinSize(int min) { _minSize = Math.max(HARD_MIN, min); }
@@ -235,7 +235,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     public int getMaxSize() { return _maxSize; }
 
     /**
-     * Sets the maximum precalc queue size.
+     * The maximum precalc queue size.
      * @since 0.9.70+
      */
     public void setMaxSize(int max) { _maxSize = Math.max(_minSize, max); }
@@ -259,7 +259,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     }
 
     /**
-     * run.
+     * Precalculate keys until shutdown.
      */
     public void run() {
         try {run2();}

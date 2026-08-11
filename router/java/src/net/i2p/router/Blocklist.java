@@ -55,10 +55,10 @@ import net.i2p.util.SystemVersion;
  * And the on-disk blocklist can also contain router hashes to be banlisted.
  *
  * So, this class maintains three separate lists:
- *<pre>
- *   1) The list of IP ranges, read in from a file at startup
- *   2) The list of hashes, read in from the same file
- *   3) A list of single IPs, initially empty, added to as needed
+ * <pre>
+ * 1) The list of IP ranges, read in from a file at startup
+ * 2) The list of hashes, read in from the same file
+ * 3) A list of single IPs, initially empty, added to as needed
  *</pre>
  *
  * Read in the IP blocklist from a file, store it in-memory as efficiently
@@ -226,7 +226,7 @@ public class Blocklist {
      */
     public boolean isCountryBlocklistEnabled() { return _blocklistCountryEnabled; }
 
-    /** only for testing with main() */
+    /** Only for testing with main(). */
     private Blocklist() {
         _context = null;
         _log = new Log(Blocklist.class);
@@ -560,38 +560,37 @@ public class Blocklist {
     }
 
    /**
-    * Read in and parse the blocklist.
-    * The blocklist need not be sorted, and may contain overlapping entries.
-    *
-    * Acceptable formats (IPV4 only):
-    *   #comment (# must be in column 1)
-    *   comment:IP-IP
-    *   comment:morecomments:IP-IP
-    *   IP-IP
-    *   (comments also allowed before any of the following)
-    *   IP/masklength
-    *   IP
-    *   hostname (DNS looked up at list readin time, not dynamically, so may not be much use)
-    *   44-byte Base64 router hash
-    *
-    * Acceptable formats (IPV6 only):
-    *   comment:IPv6 (must replace : with ; e.g. abcd;1234;0;12;;ff)
-    *   IPv6 (must replace : with ; e.g. abcd;1234;0;12;;ff)
-    *
-    * No whitespace allowed after the last ':'.
-    *
-    * For further information and downloads:
-    *   http://www.bluetack.co.uk/forums/index.php?autocom=faq&CODE=02&qid=17
-    *   http://blocklist.googlepages.com/
-    *   http://www.cymru.com/Documents/bogon-list.html
-    *
-    *
-    * Must call allocate() before and merge() after.
-    *
-    *  @param blocklist out parameter, entries stored here
-    *  @param count current number of entries
-    *  @return new number of entries
-    */
+     * Read in and parse the blocklist.
+     * The blocklist need not be sorted, and may contain overlapping entries.
+     *
+     * Acceptable formats (IPV4 only):
+     * #comment (# must be in column 1)
+     * comment:IP-IP
+     * comment:morecomments:IP-IP
+     * IP-IP
+     * (comments also allowed before any of the following)
+     * IP/masklength
+     * IP
+     * hostname (DNS looked up at list readin time, not dynamically, so may not be much use)
+     * 44-byte Base64 router hash
+     *
+     * Acceptable formats (IPV6 only):
+     * comment:IPv6 (must replace : with ; e.g. abcd;1234;0;12;;ff)
+     * IPv6 (must replace : with ; e.g. abcd;1234;0;12;;ff)
+     *
+     * No whitespace allowed after the last ':'.
+     *
+     * For further information and downloads:
+     * http://www.bluetack.co.uk/forums/index.php?autocom=faq&CODE=02&qid=17
+     * http://blocklist.googlepages.com/
+     * http://www.cymru.com/Documents/bogon-list.html
+     *
+     * Must call allocate() before and merge() after.
+     *
+     *  @param blocklist out parameter, entries stored here
+     *  @param count current number of entries
+     *  @return new number of entries
+     */
     private int readBlocklistFile(BLFile blf, long[] blocklist, int count) {
         File blFile = blf.file;
         if (blFile == null || (!blFile.exists()) || blFile.length() <= 0) {
@@ -695,13 +694,13 @@ public class Blocklist {
      *  The result of parsing one line.
      */
     private static class Entry {
-        /** the comment extracted from the line */
+        /** The comment extracted from the line. */
         final String comment;
-        /** the starting IP address */
+        /** The starting IP address. */
         final byte[] ip1;
-        /** the ending IP address */
+        /** The ending IP address. */
         final byte[] ip2;
-        /** the router hash, if this is a hash entry */
+        /** The router hash, if this is a hash entry. */
         final Hash peer;
 
         /**
@@ -952,6 +951,8 @@ public class Blocklist {
     }
 
     /**
+     * Add a single IPv4 address to the blocklist.
+     *
      * @return true if it was NOT previously on the list
      */
     private boolean add(int ip) {
@@ -975,6 +976,8 @@ public class Blocklist {
     }
 
     /**
+     * Add an IPv6 address to the blocklist.
+     *
      * @param ip IPv6 non-negative
      * @return true if it was NOT previously on the list
      * @since IPv6
@@ -987,6 +990,8 @@ public class Blocklist {
     }
 
     /**
+     * Remove an IPv6 address from the blocklist.
+     *
      * @param ip IPv6 non-negative
      * @since 0.9.28
      */
@@ -997,6 +1002,8 @@ public class Blocklist {
     }
 
     /**
+     * Check whether an IPv6 address is on the single IP blocklist.
+     *
      * @param ip IPv6 non-negative
      * @since IPv6
      * @return whether on single list

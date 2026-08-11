@@ -54,7 +54,7 @@ public class GarlicMessageReceiver {
     }
 
     /**
-     * Constructs a GarlicMessageReceiver without targeting a specific client destination.
+     * Garlic message receiver that does not target a specific client destination.
      *
      * @param context  The router context containing necessary services.
      * @param receiver The non-null CloveReceiver to handle valid cloves.
@@ -64,7 +64,7 @@ public class GarlicMessageReceiver {
     }
 
     /**
-     * Constructs a GarlicMessageReceiver targeting a specific client destination.
+     * Garlic message receiver targeting a specific client destination.
      *
      * @param context           The router context containing necessary services.
      * @param receiver          The non-null CloveReceiver to handle valid cloves.

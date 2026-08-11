@@ -17,9 +17,6 @@ import java.math.BigInteger;
  *
  * @since 0.9.38
  */
-/**
- * EdDSABlinding.
- */
 public final class EdDSABlinding {
 
     private static final byte[] ONE = Utils.hexToBytes("0100000000000000000000000000000000000000000000000000000000000000");

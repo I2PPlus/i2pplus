@@ -75,8 +75,8 @@ public final class KeyFactory extends KeyFactorySpi {
     /** KeyFactory for ElGamal encryption keys. */
     public KeyFactory() {}
 
-/**
- * Generates an ElGamal private key from the provided key specification.
+    /**
+     * Generates an ElGamal private key from the provided key specification.
      *
      * This method converts various key specification formats into ElGamal private keys,
      * supporting both ElGamal-specific specifications and standard PKCS#8 encoding.

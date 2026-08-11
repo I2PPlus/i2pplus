@@ -65,6 +65,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
     private static final int RESEND_DELAY = 500;
 
     /**
+     * Handle an incoming floodfill DatabaseStoreMessage.
+     *
      * @param receivedMessage must never have reply token set if it came down a tunnel
      */
     public HandleFloodfillDatabaseStoreMessageJob(RouterContext ctx, DatabaseStoreMessage receivedMessage,

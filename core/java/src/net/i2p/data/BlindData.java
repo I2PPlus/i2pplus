@@ -74,21 +74,21 @@ public class BlindData {
     private volatile String _b32;
 
     /**
-     * bits 3-0 including per-client bit
+     * Bits 3-0 including per-client bit.
      *
      * @since 0.9.41
      */
     public static final int AUTH_NONE = 0;
 
     /**
-     * bits 3-0 including per-client bit
+     * Bits 3-0 including per-client bit.
      *
      * @since 0.9.41
      */
     public static final int AUTH_DH = 1;
 
     /**
-     * bits 3-0 including per-client bit
+     * Bits 3-0 including per-client bit.
      *
      * @since 0.9.41
      */

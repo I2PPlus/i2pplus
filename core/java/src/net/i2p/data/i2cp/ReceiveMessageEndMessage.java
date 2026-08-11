@@ -33,7 +33,7 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
     private long _messageId;
 
     /**
-     * Construct a new instance.
+     * New instance with unset session and message IDs.
      */
     public ReceiveMessageEndMessage() {
         _sessionId = -1;
@@ -41,7 +41,7 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Get the session id.
+     * Session identifier.
      * @return the session id
      */
     public long getSessionId() {
@@ -68,7 +68,7 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Get the message id.
+     * Message identifier.
      * @return the message id
      */
     public long getMessageId() {
@@ -76,7 +76,7 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Set the message id.
+     * New message identifier.
      */
     public void setMessageId(long id) {
         _messageId = id;

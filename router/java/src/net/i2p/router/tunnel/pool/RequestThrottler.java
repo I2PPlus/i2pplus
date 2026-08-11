@@ -84,210 +84,210 @@ public class RequestThrottler {
     public static volatile long _sustainedModerateLoadMs = 60_000;
 
     /**
-     * Get the minimum request limit per peer.
+     * The minimum request limit per peer.
      *
      * @return the minimum limit
      * @since 0.9.70+
      */
     public static int getRequestMinLimit() { return _reqMinLimit; }
     /**
-     * Set the minimum request limit per peer.
+     * The minimum request limit per peer.
      *
      * @param val the minimum limit (clamped to 1-100)
      * @since 0.9.70+
      */
     public static void setRequestMinLimit(int val) { _reqMinLimit = Math.max(1, Math.min(100, val)); }
     /**
-     * Get the maximum request limit per peer.
+     * The maximum request limit per peer.
      *
      * @return the maximum limit
      * @since 0.9.70+
      */
     public static int getRequestMaxLimit() { return _reqMaxLimit; }
     /**
-     * Set the maximum request limit per peer.
+     * The maximum request limit per peer.
      *
      * @param val the maximum limit (clamped to 10-1000)
      * @since 0.9.70+
      */
     public static void setRequestMaxLimit(int val) { _reqMaxLimit = Math.max(10, Math.min(1000, val)); }
     /**
-     * Get the request limit as percentage of participating tunnel count.
+     * The request limit as percentage of participating tunnel count.
      *
      * @return the percentage limit
      * @since 0.9.70+
      */
     public static int getRequestPctLimit() { return _reqPercentLimit; }
     /**
-     * Set the request limit as percentage of participating tunnel count.
+     * The request limit as percentage of participating tunnel count.
      *
      * @param val the percentage limit (clamped to 1-100)
      * @since 0.9.70+
      */
     public static void setRequestPctLimit(int val) { _reqPercentLimit = Math.max(1, Math.min(100, val)); }
     /**
-     * Get the burst threshold for 1-second sliding window.
+     * The burst threshold for 1-second sliding window.
      *
      * @return the burst threshold (requests per second)
      * @since 0.9.70+
      */
     public static int getRequestBurst1sThreshold() { return _reqBurst1sThreshold; }
     /**
-     * Set the burst threshold for 1-second sliding window.
+     * The burst threshold for 1-second sliding window.
      *
      * @param val the burst threshold (clamped to 1-100)
      * @since 0.9.70+
      */
     public static void setRequestBurst1sThreshold(int val) { _reqBurst1sThreshold = Math.max(1, Math.min(100, val)); }
     /**
-     * Get the rejection threshold (30-100, default 70%).
+     * The rejection threshold (30-100, default 70%).
      *
      * @return the rejection threshold percentage
      * @since 0.9.70+
      */
     public static int getRequestRejectThreshold() { return _reqRejectThreshold; }
     /**
-     * Set the rejection threshold percentage.
+     * The rejection threshold percentage.
      *
      * @param val the rejection threshold (clamped to 30-100)
      * @since 0.9.70+
      */
     public static void setRequestRejectThreshold(int val) { _reqRejectThreshold = Math.max(30, Math.min(100, val)); }
     /**
-     * Get the rejection steepness (100=linear ramp, 200=quadratic).
+     * The rejection steepness (100=linear ramp, 200=quadratic).
      *
      * @return the rejection steepness value
      * @since 0.9.70+
      */
     public static int getRequestRejectSteepness() { return _reqRejectSteepness; }
     /**
-     * Set the rejection steepness (100=linear, 500=max curve).
+     * The rejection steepness (100=linear, 500=max curve).
      *
      * @param val the steepness value (clamped to 100-500)
      * @since 0.9.70+
      */
     public static void setRequestRejectSteepness(int val) { _reqRejectSteepness = Math.max(100, Math.min(500, val)); }
     /**
-     * Get the load weight (how much load inflates effective ratio, 0-300%).
+     * The load weight (how much load inflates effective ratio, 0-300%).
      *
      * @return the load weight percentage
      * @since 0.9.70+
      */
     public static int getRequestLoadWeight() { return _reqLoadWeight; }
     /**
-     * Set the load weight percentage.
+     * The load weight percentage.
      *
      * @param val the load weight (clamped to 0-300)
      * @since 0.9.70+
      */
     public static void setRequestLoadWeight(int val) { _reqLoadWeight = Math.max(0, Math.min(300, val)); }
     /**
-     * Get the high-load job lag threshold in milliseconds.
+     * The high-load job lag threshold in milliseconds.
      *
      * @return the high-load lag threshold (ms)
      * @since 0.9.70+
      */
     public static int getHighLoadLagMs() { return _highLoadLagMs; }
     /**
-     * Set the high-load job lag threshold in milliseconds.
+     * The high-load job lag threshold in milliseconds.
      *
      * @param val the high-load lag threshold (clamped to 200-5000)
      * @since 0.9.70+
      */
     public static void setHighLoadLagMs(int val) { _highLoadLagMs = Math.max(200, Math.min(5000, val)); }
     /**
-     * Get the high-load CPU threshold percentage.
+     * The high-load CPU threshold percentage.
      *
      * @return the high-load CPU percentage
      * @since 0.9.70+
      */
     public static int getHighLoadCpuPct() { return _highLoadCpuPct; }
     /**
-     * Set the high-load CPU threshold percentage.
+     * The high-load CPU threshold percentage.
      *
      * @param val the CPU percentage (clamped to 50-100)
      * @since 0.9.70+
      */
     public static void setHighLoadCpuPct(int val) { _highLoadCpuPct = Math.max(50, Math.min(100, val)); }
     /**
-     * Get the high-load system load threshold percentage (normalized by cores).
+     * The high-load system load threshold percentage (normalized by cores).
      *
      * @return the high-load system load percentage
      * @since 0.9.70+
      */
     public static int getHighLoadSysLoadPct() { return _highLoadSysLoadPct; }
     /**
-     * Set the high-load system load threshold percentage.
+     * The high-load system load threshold percentage.
      *
      * @param val the system load percentage (clamped to 50-100)
      * @since 0.9.70+
      */
     public static void setHighLoadSysLoadPct(int val) { _highLoadSysLoadPct = Math.max(50, Math.min(100, val)); }
     /**
-     * Get the moderate-load job lag threshold in milliseconds.
+     * The moderate-load job lag threshold in milliseconds.
      *
      * @return the moderate-load lag threshold (ms)
      * @since 0.9.70+
      */
     public static int getModerateLoadLagMs() { return _moderateLoadLagMs; }
     /**
-     * Set the moderate-load job lag threshold in milliseconds.
+     * The moderate-load job lag threshold in milliseconds.
      *
      * @param val the moderate-load lag threshold (clamped to 100-3000)
      * @since 0.9.70+
      */
     public static void setModerateLoadLagMs(int val) { _moderateLoadLagMs = Math.max(100, Math.min(3000, val)); }
     /**
-     * Get the moderate-load CPU threshold percentage.
+     * The moderate-load CPU threshold percentage.
      *
      * @return the moderate-load CPU percentage
      * @since 0.9.70+
      */
     public static int getModerateLoadCpuPct() { return _moderateLoadCpuPct; }
     /**
-     * Set the moderate-load CPU threshold percentage.
+     * The moderate-load CPU threshold percentage.
      *
      * @param val the CPU percentage (clamped to 40-100)
      * @since 0.9.70+
      */
     public static void setModerateLoadCpuPct(int val) { _moderateLoadCpuPct = Math.max(40, Math.min(100, val)); }
     /**
-     * Get the moderate-load system load threshold percentage (normalized by cores).
+     * The moderate-load system load threshold percentage (normalized by cores).
      *
      * @return the moderate-load system load percentage
      * @since 0.9.70+
      */
     public static int getModerateLoadSysLoadPct() { return _moderateLoadSysLoadPct; }
     /**
-     * Set the moderate-load system load threshold percentage.
+     * The moderate-load system load threshold percentage.
      *
      * @param val the system load percentage (clamped to 30-100)
      * @since 0.9.70+
      */
     public static void setModerateLoadSysLoadPct(int val) { _moderateLoadSysLoadPct = Math.max(30, Math.min(100, val)); }
     /**
-     * Get the duration (ms) high load must persist before gating requests.
+     * The duration (ms) high load must persist before gating requests.
      *
      * @return the sustained high load duration (ms)
      * @since 0.9.70+
      */
     public static long getSustainedHighLoadMs() { return _sustainedHighLoadMs; }
     /**
-     * Set the duration (ms) high load must persist before gating requests.
+     * The duration (ms) high load must persist before gating requests.
      *
      * @param val the sustained high load duration (clamped to 5-120s)
      * @since 0.9.70+
      */
     public static void setSustainedHighLoadMs(long val) { _sustainedHighLoadMs = Math.max(5000, Math.min(120_000, val)); }
     /**
-     * Get the duration (ms) moderate load must persist before disconnecting low-share peers.
+     * The duration (ms) moderate load must persist before disconnecting low-share peers.
      *
      * @return the sustained moderate load duration (ms)
      * @since 0.9.70+
      */
     public static long getSustainedModerateLoadMs() { return _sustainedModerateLoadMs; }
     /**
-     * Set the duration (ms) moderate load must persist before disconnecting low-share peers.
+     * The duration (ms) moderate load must persist before disconnecting low-share peers.
      *
      * @param val the sustained moderate load duration (clamped to 10-300s)
      * @since 0.9.70+

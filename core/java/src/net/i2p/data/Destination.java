@@ -94,7 +94,7 @@ import java.util.Map;
  */
 public class Destination extends KeysAndCert {
 
-    /**  cached b64 */
+    /** Cached b64. */
     private String _cachedB64;
 
     private static final int CACHE_SIZE;
@@ -151,7 +151,7 @@ public class Destination extends KeysAndCert {
     public Destination() {}
 
     /**
-     * alternative constructor which takes a base64 string representation
+     * Alternative constructor which takes a base64 string representation.
      *
      * @param s a Base64 representation of the destination, as (eg) is used in hosts.txt
      * @throws DataFormatException if the string is invalid
@@ -253,7 +253,7 @@ public class Destination extends KeysAndCert {
     }
 
     /**
-     * equals.
+     * Compares this Destination for equality with another object.
      */
     @Override
     public boolean equals(Object o) {

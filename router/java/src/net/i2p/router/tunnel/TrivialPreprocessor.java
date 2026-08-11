@@ -41,6 +41,8 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     protected static final ByteCache _dataCache = ByteCache.getInstance(512, PREPROCESSED_SIZE);
 
     /**
+     *  Binds the router context and initializes the log.
+     *
      *  @param ctx the router context
      */
     public TrivialPreprocessor(RouterContext ctx) {
@@ -48,7 +50,7 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
         _log = ctx.logManager().getLog(getClass());
     }
 
-    /** how long do we want to wait before flushing */
+    /** How long to wait before flushing. */
     public long getDelayAmount() { return 0; }
 
     /**
@@ -141,11 +143,11 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
         System.arraycopy(tmp, 0, b, off, len);
     }
 
-    /** is this a follw up byte? */
+    /** Is this a follow-up byte? */
     private static final byte MASK_IS_SUBSEQUENT = FragmentHandler.MASK_IS_SUBSEQUENT;
-    /** how should this be delivered?  shift this 5 the right and get TYPE_* */
+    /** How should this be delivered? Shift right 5 to get TYPE_*. */
     //private static final byte MASK_TYPE = FragmentHandler.MASK_TYPE;
-    /** is this the first of a fragmented message? */
+    /** Is this the first fragment of a fragmented message? */
     private static final byte MASK_FRAGMENTED = FragmentHandler.MASK_FRAGMENTED;
 
     private static final byte MASK_TUNNEL = (byte)(FragmentHandler.TYPE_TUNNEL << 5);

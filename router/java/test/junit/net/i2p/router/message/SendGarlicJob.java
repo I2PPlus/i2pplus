@@ -43,6 +43,7 @@ public class SendGarlicJob extends JobImpl {
     private Set<SessionTag> _wrappedTags;
 
     /**
+     * Send a garlic message and invoke the appropriate callbacks on reply, failure, or timeout.
      *
      * @param config ???
      * @param onSend after the ping is successful

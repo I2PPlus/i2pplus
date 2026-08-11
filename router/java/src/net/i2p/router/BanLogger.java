@@ -159,7 +159,7 @@ public class BanLogger {
     }
 
     /**
-     * Get the singleton instance of BanLogger.
+     * The singleton instance of BanLogger.
      * May return null if not initialized yet.
      *
      * @return the singleton instance, or null if not initialized
@@ -444,7 +444,7 @@ public class BanLogger {
     }
 
     /**
-     * Get capabilities string from RouterInfo for the given hash.
+     * Capabilities string from RouterInfo for the given hash.
      * @return caps string or empty string
      */
     private String getCaps(Hash hash) {
@@ -460,7 +460,7 @@ public class BanLogger {
     }
 
     /**
-     * Get version string from RouterInfo for the given hash.
+     * Version string from RouterInfo for the given hash.
      * @return version string or empty string
      */
     private String getVersion(Hash hash) {
@@ -494,7 +494,7 @@ public class BanLogger {
     }
 
     /**
-     * Get country code from IP using GeoIP.
+     * Country code from IP using GeoIP.
      * @return country code or empty string
      */
     private String getCountry(String ipPort) {
@@ -512,7 +512,7 @@ public class BanLogger {
     }
 
     /**
-     * Get hostname or ASN org name from IP using the local ASN database.
+     * Hostname or ASN org name from IP using the local ASN database.
      * Non-blocking — uses cached results or fast local MMDB lookup.
      * @return hostname/ASN or empty string
      */
@@ -531,8 +531,8 @@ public class BanLogger {
     }
 
     /**
-     * Get IP address from banlist for the given hash.
-     * @return the i p from context
+     * IP address from banlist for the given hash.
+     * @return the IP address from context
      */
     private String getIPFromContext(Hash hash, RouterContext context) {
         if (hash == null) {return "UNKNOWN";}
@@ -739,7 +739,7 @@ public class BanLogger {
     }
 
     /**
-     * Get the log file path.
+     * The log file path.
      *
      * @return the log file
      */

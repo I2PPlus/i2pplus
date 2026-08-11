@@ -25,6 +25,8 @@ public interface NavService {
     public void registerApp(String appName, String displayName, String path, String tooltip, String iconpath);
 
     /**
+     * Unregister a client application from the nav bar.
+     *
      * @param name standard name for the app
      */
     public void unregisterApp(String name);

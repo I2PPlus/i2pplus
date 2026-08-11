@@ -36,12 +36,12 @@ class NTCP2Payload {
      */
     public interface PayloadCallback {
         /**
-         * gotDateTime.
+         * Receive the data/time block.
          */
         public void gotDateTime(long time) throws DataFormatException;
 
         /**
-         * gotI2NP.
+         * Receive an I2NP message block.
          */
         public void gotI2NP(I2NPMessage msg) throws I2NPMessageException;
 
@@ -69,7 +69,7 @@ class NTCP2Payload {
         public void gotPadding(int paddingLength, int frameLength);
 
         /**
-         * len).
+         * Receive an unknown block type.
          */
         public void gotUnknown(int type, int len);
     }
@@ -225,7 +225,7 @@ class NTCP2Payload {
         public abstract int writeData(byte[] tgt, int off);
 
         /**
-         * toString.
+         * String representation of this block.
          */
         @Override
         public String toString() {
@@ -250,6 +250,7 @@ class NTCP2Payload {
         }
 
         /**
+         * The data length of this block.
          * @return the data length
          */
         public int getDataLength() {
@@ -257,7 +258,7 @@ class NTCP2Payload {
         }
 
         /**
-         * writeData.
+         * Write the block data to the target array.
          */
         public int writeData(byte[] tgt, int off) {
             tgt[off++] = (byte) (f ? 1 : 0);    // flag
@@ -281,6 +282,7 @@ class NTCP2Payload {
         }
 
         /**
+         * The data length of this block.
          * @return the data length
          */
         public int getDataLength() {
@@ -288,7 +290,7 @@ class NTCP2Payload {
         }
 
         /**
-         * writeData.
+         * Write the block data to the target array.
          */
         public int writeData(byte[] tgt, int off) {
             return m.toRawByteArrayNTCP2(tgt, off);
@@ -302,12 +304,12 @@ class NTCP2Payload {
         private final int sz;
         private final I2PAppContext ctx;
 
-        /** with zero-filled data */
+        /** With zero-filled data. */
         public PaddingBlock(int size) {
             this(null, size);
         }
 
-        /** with random data */
+        /** With random data. */
         public PaddingBlock(I2PAppContext context, int size) {
             super(BLOCK_PADDING);
             sz = size;
@@ -315,6 +317,7 @@ class NTCP2Payload {
         }
 
         /**
+         * The data length of this block.
          * @return the data length
          */
         public int getDataLength() {
@@ -322,7 +325,7 @@ class NTCP2Payload {
         }
 
         /**
-         * writeData.
+         * Write the block data to the target array.
          */
         public int writeData(byte[] tgt, int off) {
             if (ctx != null)
@@ -349,6 +352,7 @@ class NTCP2Payload {
         }
 
         /**
+         * The data length of this block.
          * @return the data length
          */
         public int getDataLength() {
@@ -356,7 +360,7 @@ class NTCP2Payload {
         }
 
         /**
-         * writeData.
+         * Write the block data to the target array.
          */
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong(tgt, off, 4, (now + 500) / 1000);
@@ -379,6 +383,7 @@ class NTCP2Payload {
         }
 
         /**
+         * The data length of this block.
          * @return the data length
          */
         public int getDataLength() {
@@ -386,7 +391,7 @@ class NTCP2Payload {
         }
 
         /**
-         * writeData.
+         * Write the block data to the target array.
          */
         public int writeData(byte[] tgt, int off) {
             System.arraycopy(opts, 0, tgt, off, opts.length);
@@ -411,6 +416,7 @@ class NTCP2Payload {
         }
 
         /**
+         * The data length of this block.
          * @return the data length
          */
         public int getDataLength() {
@@ -418,7 +424,7 @@ class NTCP2Payload {
         }
 
         /**
-         * writeData.
+         * Write the block data to the target array.
          */
         public int writeData(byte[] tgt, int off) {
             DataHelper.toLong8(tgt, off, rcvd);

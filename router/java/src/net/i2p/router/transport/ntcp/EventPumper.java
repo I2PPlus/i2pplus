@@ -105,7 +105,7 @@ class EventPumper implements Runnable {
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         /**
-         * newInstance.
+         * Create a new buffer of BUF_SIZE, direct or heap.
          */
         @Override
         public ByteBuffer newInstance() {
@@ -143,7 +143,7 @@ class EventPumper implements Runnable {
     private static final long SELECTOR_MAX_DELAY = 20;
     private static volatile long _currentDelay = _selectorLoopDelay;
     private static final long BLOCKED_IP_FREQ = 43 * 60 * 1000L;
-    /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
+    /** Tunnel test now disabled, but this should be long enough to allow an active tunnel to get started. */
     private static final long MIN_EXPIRE_IDLE_TIME = 120 * 1000L;
     private static final long MAX_EXPIRE_IDLE_TIME = 11 * 60 * 1000L;
     private static final long MAY_DISCON_TIMEOUT = 10 * 1000L;
@@ -193,7 +193,7 @@ class EventPumper implements Runnable {
     }
 
     /**
-     * startPumping.
+     * Open the selector and start the pump thread.
      */
     public synchronized void startPumping() {
         if (_log.shouldInfo())
@@ -213,7 +213,7 @@ class EventPumper implements Runnable {
     }
 
     /**
-     * stopPumping.
+     * Stop the pump thread and wake the selector.
      */
     public synchronized void stopPumping() {
         _alive = false;
@@ -282,7 +282,7 @@ class EventPumper implements Runnable {
     }
 
     /**
-     * run.
+     * Run the selector event loop.
      */
     @Override
     public void run() {
@@ -917,7 +917,7 @@ class EventPumper implements Runnable {
     }
 
     /**
-     * processWrite.
+     * Try to write the queued buffers for the connection.
      */
     public boolean processWrite(final NTCPConnection con, final SelectionKey key) {
         boolean rv = false;
@@ -1124,7 +1124,7 @@ class EventPumper implements Runnable {
     }
 
     /**
-     * blockIP.
+     * Record the given IP as blocked.
      */
     public void blockIP(byte[] ip) {
         if (ip == null) return;
@@ -1177,6 +1177,7 @@ class EventPumper implements Runnable {
     }
 
     /**
+     * The idle timeout for connections.
      * @return the idle timeout
      */
     public long getIdleTimeout() {
@@ -1228,7 +1229,7 @@ class EventPumper implements Runnable {
     }
 
     /**
-     * clearInterest.
+     * Clear the given interest operation on the selection key.
      */
     public static void clearInterest(SelectionKey key, int op) throws CancelledKeyException {
         if (key == null || !key.isValid()) return;

@@ -29,7 +29,7 @@ public class LogSettingsTest extends TestCase {
     private String origLogSettings;
 
     /**
-     * Sets up the test fixture.
+     * Initializes the test fixture.
      *
      * Called before every test case method.
      */

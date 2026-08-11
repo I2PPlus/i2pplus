@@ -8,8 +8,8 @@ import net.i2p.util.Log;
 /**
  * A Westwood+ bandwidth estimator with:
  * &lt;ul&gt;
- *   &lt;li&gt;A first-stage anti-aliasing low-pass filter based on RTT&lt;/li&gt;
- *   &lt;li&gt;A time-varying EWMA filter based on inter-arrival time&lt;/li&gt;
+ * &lt;li&gt;A first-stage anti-aliasing low-pass filter based on RTT&lt;/li&gt;
+ * &lt;li&gt;A time-varying EWMA filter based on inter-arrival time&lt;/li&gt;
  * &lt;/ul&gt;
  *
  * &lt;p&gt;This estimator is adapted from the Linux kernel's &lt;code&gt;tcp_westwood.c&lt;/code&gt;
@@ -48,7 +48,7 @@ public class SimpleBandwidthEstimator implements BandwidthEstimator {
     public static int getDecayFactor() { return _decayFactor; }
 
     /**
-     * Sets the EWMA decay factor for new estimators.
+     * The EWMA decay factor for new estimators.
      * Higher = more smoothing, lower = faster adaptation.
      * @since 0.9.70+
      */

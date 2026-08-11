@@ -81,7 +81,7 @@ public class KeysAndCert extends DataStructureImpl {
     protected Certificate _certificate;
     /** Cached calculated hash value. */
     private Hash __calculatedHash;
-    /** if compressed, 32 bytes only */
+    /** If compressed, 32 bytes only. */
     private byte[] _padding;
 
     /**
@@ -156,7 +156,7 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      *  Valid for RouterIdentities. May contain random padding for Destinations.
      *
-     *  @since 0.9.42
+     * @since 0.9.42
      * @return the public key
      */
     public PublicKey getPublicKey() {
@@ -352,7 +352,7 @@ public class KeysAndCert extends DataStructureImpl {
                         ((_paddingBlocks > 1 || ident._paddingBlocks > 1) && Arrays.equals(getPadding(), ident.getPadding())));
     }
 
-    /** the signing key has enough randomness in it to use it by itself for speed */
+    /** The signing key has enough randomness in it to use it by itself for speed. */
     @Override
     public int hashCode() {
         // don't use public key, some app devs thinking of using

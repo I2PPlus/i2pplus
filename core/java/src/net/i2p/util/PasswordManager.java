@@ -28,13 +28,13 @@ public class PasswordManager {
     /** Stored hash length in bytes (salt + session key, 48). */
     protected static final int SHASH_LENGTH = SALT_LENGTH + SessionKey.KEYSIZE_BYTES;
 
-    /** stored as plain text */
+    /** Stored as plain text. */
     protected static final String PROP_PW = ".password";
 
-    /** stored obfuscated as b64 of the UTF-8 bytes */
+    /** Stored obfuscated as b64 of the UTF-8 bytes. */
     protected static final String PROP_B64 = ".b64";
 
-    /** stored as the hex of the MD5 hash of the UTF-8 bytes. Compatible with Jetty. */
+    /** Stored as the hex of the MD5 hash of the UTF-8 bytes. Compatible with Jetty. */
     protected static final String PROP_MD5 = ".md5";
 
     /**

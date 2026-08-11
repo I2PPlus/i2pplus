@@ -52,7 +52,7 @@ public class AnalysisTest {
         _analysis = ctor.newInstance(_ctx, null, null);
     }
 
-    /** router identity with a unique hash and the given IPv4 address */
+    /** Router identity with a unique hash and the given IPv4 address. */
     private static RouterInfo routerV4(int seed, String ipv4) {
         RouterInfo info = new RouterInfo();
         RouterIdentity ident = new RouterIdentity();
@@ -69,7 +69,7 @@ public class AnalysisTest {
         return info;
     }
 
-    /** router with the given IPv6 address */
+    /** Router with the given IPv6 address. */
     private static RouterInfo routerV6(int seed, String ipv6) {
         RouterInfo info = new RouterInfo();
         RouterIdentity ident = new RouterIdentity();

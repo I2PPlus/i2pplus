@@ -38,9 +38,9 @@ class BloomFilterIVValidator implements IVValidator {
     private static final long MIN_MEM_FOR_HUGE2_BLOOM = 384*1024*1024L;
     private static final long MIN_MEM_FOR_HUGE3_BLOOM = 512*1024*1024L;
     private static final long MIN_MEM_FOR_HUGE4_BLOOM = 1024*1024*1024L;
-    /** for testing */
+    /** For testing. */
     private static final String PROP_FORCE = "router.forceDecayingBloomFilter";
-    /** for testing */
+    /** For testing. */
     private static final String PROP_DISABLE = "router.disableDecayingBloomFilter";
 
     /**

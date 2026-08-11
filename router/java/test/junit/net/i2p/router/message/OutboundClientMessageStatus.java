@@ -40,12 +40,12 @@ class OutboundClientMessageStatus {
         _start = ctx.clock().now();
     }
 
-    /** raw payload */
+    /** Raw payload. */
     public Payload getPayload() {
         return _msg.getPayload();
     }
 
-    /** clove, if we've built it */
+    /** Clove, if we've built it. */
     public PayloadGarlicConfig getClove() {
         return _clove;
     }
@@ -58,7 +58,7 @@ class OutboundClientMessageStatus {
         return _msg;
     }
 
-    /** date we started the process on */
+    /** Date we started the process on. */
     public long getStart() {
         return _start;
     }
@@ -78,17 +78,17 @@ class OutboundClientMessageStatus {
         }
     }
 
-    /** who sent the message? */
+    /** Who sent the message? */
     public Destination getFrom() {
         return _msg.getFromDestination();
     }
 
-    /** who is the message going to? */
+    /** Who is the message going to? */
     public Destination getTo() {
         return _msg.getDestination();
     }
 
-    /** what is the target's current leaseSet (or null if we don't know yet) */
+    /** What is the target's current leaseSet (or null if we don't know yet)? */
     public LeaseSet getLeaseSet() {
         return _leaseSet;
     }
@@ -97,7 +97,7 @@ class OutboundClientMessageStatus {
         _leaseSet = ls;
     }
 
-    /** have we already sent the message down this tunnel? */
+    /** Have we already sent the message down this tunnel? */
     public boolean alreadySent(Hash gateway, TunnelId tunnelId) {
         Tunnel t = new Tunnel(gateway, tunnelId);
         synchronized (_sent) {
@@ -112,38 +112,38 @@ class OutboundClientMessageStatus {
         }
     }
 
-    /** how many messages have we sent through various leases? */
+    /** How many messages have we sent through various leases? */
     public int getNumSent() {
         synchronized (_sent) {
             return _sent.size() + _previousSent;
         }
     }
 
-    /** did we totally fail? */
+    /** Did we totally fail? */
     public boolean getFailure() {
         return _failure;
     }
 
-    /** we failed.  returns true if we had already failed before */
+    /** We failed.  Returns true if we had already failed before. */
     public boolean failed() {
         boolean already = _failure;
         _failure = true;
         return already;
     }
 
-    /** have we totally succeeded? */
+    /** Have we totally succeeded? */
     public boolean getSuccess() {
         return _success;
     }
 
-    /** we succeeded.  returns true if we had already succeeded before */
+    /** We succeeded.  Returns true if we had already succeeded before. */
     public boolean success() {
         boolean already = _success;
         _success = true;
         return already;
     }
 
-    /** represent a unique tunnel at any given time */
+    /** Represents a unique tunnel at any given time. */
     private class Tunnel {
         private Hash _gateway;
         private TunnelId _tunnel;

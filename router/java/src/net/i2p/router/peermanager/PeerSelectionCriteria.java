@@ -31,7 +31,7 @@ class PeerSelectionCriteria {
      */
     public int getMinimumRequired() { return _minReq; }
     /**
-     * Set the minimum number of peers required
+     * The minimum number of peers required.
      *
      * @param min the minimum number of peers
      */
@@ -43,7 +43,7 @@ class PeerSelectionCriteria {
      */
     public int getMaximumRequired() { return _maxReq; }
     /**
-     * Set the maximum number of peers required
+     * The maximum number of peers required.
      *
      * @param max the maximum number of peers
      */
@@ -55,7 +55,7 @@ class PeerSelectionCriteria {
      */
     public int getPurpose() { return _purpose; }
     /**
-     * Set the purpose for which the peers will be used
+     * The purpose for which the peers will be used.
      *
      * @param purpose the purpose
      */

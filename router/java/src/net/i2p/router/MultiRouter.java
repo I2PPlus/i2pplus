@@ -13,16 +13,16 @@ import net.i2p.data.router.RouterInfo;
 
 /**
  * Fire up multiple routers in the same VM, all with their own RouterContext
- * (and all that entails).  In addition, this creates a root I2PAppContext for
- * any objects not booted through one of the RouterContexts.  Each of these
+ * (and all that entails). In addition, this creates a root I2PAppContext for
+ * any objects not booted through one of the RouterContexts. Each of these
  * contexts are configured through a simple properties file (where the name=value
  * contained in them are used for the context's getProperty(name)). <p>
  *
  * <b>Usage:</b><pre>
- *  MultiRouter numberRouters
+ * MultiRouter numberRouters
  * </pre>
  *
- * Each routerContext specified is used to boot up a single router.  It is HIGHLY
+ * Each routerContext specified is used to boot up a single router. It is HIGHLY
  * recommended that those context files contain a few base env properties: <ul>
  *  <li>loggerFilenameOverride=rN/logs/log-router-#.txt</li>
  *  <li>router.configLocation=rN/router.config</li>
@@ -55,7 +55,7 @@ public class MultiRouter {
     private static ArrayList<Router> _routers = new ArrayList<>(8);
     private static I2PAppContext _defaultContext; // NOSONAR S1450: used on lines 78-79
 
-    /** method comment */
+    /** Boot the requested number of routers from the given arguments. */
     public static void main(String[] args) {
         if ( (args == null) || (args.length < 1) ) {
             usage();

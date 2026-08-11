@@ -68,14 +68,14 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
     }
 
     /**
-     * distribute.
+     * Distribute the message to the target, with no tunnel ID.
      */
     public void distribute(I2NPMessage msg, Hash target) {
         distribute(msg, target, null);
     }
 
     /**
-     * distribute.
+     * Distribute the message to the target, giving the tunnel ID for remote delivery.
      */
     public void distribute(I2NPMessage msg, Hash target, TunnelId tunnel) {
         if (_log.shouldDebug()) {

@@ -7,7 +7,7 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 
 /**
- * Get a relative working directory for i2p based upon properties by parent process.
+ * Provides a relative working directory for i2p based upon properties set by the parent process.
  *
  * This is used together with the Browser Bundle.
  *
@@ -53,7 +53,7 @@ public class PortableWorkingDir {
 
     private static final String PROP_BASE_DIR = "i2p.dir.base";
     private static final String PROP_WORKING_DIR = "i2p.dir.config";
-    /** we do a couple of things differently if this is the username */
+    /** We do a couple of things differently if this is the username. */
     private static final String PROP_WRAPPER_LOG = "wrapper.logfile";
     private static final String DEFAULT_WRAPPER_LOG = "wrapper.log";
 

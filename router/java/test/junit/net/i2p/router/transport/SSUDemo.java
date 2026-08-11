@@ -132,7 +132,7 @@ public class SSUDemo {
         _us.inNetMessagePool().registerHandlerJobBuilder(FooMessage.MESSAGE_TYPE, new FooJobBuilder());
     }
 
-    /** random place for storing router info files - written as $dir/base64(SHA256(info.getIdentity)) */
+    /** Random place for storing router info files - written as $dir/base64(SHA256(info.getIdentity)). */
     private static File getInfoDir() {
         return new File("/tmp/ssuDemoInfo/");
     }
@@ -218,7 +218,7 @@ public class SSUDemo {
         _us.outNetMessagePool().add(out);
     }
 
-    /** fired if and only if the FooMessage is ACKed before we time out */
+    /** Fired if and only if the FooMessage is ACKed before we time out. */
     private class AfterACK extends JobImpl {
         public AfterACK() {
             super(_us);
@@ -290,12 +290,12 @@ public class SSUDemo {
             _data = data;
         }
 
-        /** pull the read data off */
+        /** Pull the read data off. */
         public byte[] getData() {
             return _data;
         }
 
-        /** specify the payload to be sent */
+        /** Specify the payload to be sent. */
         public void setData(byte[] data) {
             _data = data;
         }

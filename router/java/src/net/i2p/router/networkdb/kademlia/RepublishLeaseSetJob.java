@@ -80,7 +80,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     /** Staleness threshold for cleaning up tracking maps. */
     private static final long CACHE_CLEANUP_THRESHOLD = 15L * 60 * 1000;
     // Last time cleanupStaleEntries() ran — guards against redundant sweeps
-    /** last cleanup time */
+    /** Last cleanup time. */
     private static volatile long _lastCleanupTime;
     /** Tracks destinations currently being retried to prevent duplicate retries. */
     private static final ConcurrentHashMap<Hash, Boolean> _retryInProgress = new ConcurrentHashMap<>();
@@ -107,11 +107,11 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static final long FIRST_PUBLISH_TIMEOUT = 60L * 1000;
     /** Destinations that have published successfully at least once — never defer these again. */
     private static final Set<Hash> _publishedOnce = ConcurrentHashMap.newKeySet();
-    /** destination hash */
+    /** Destination hash. */
     private final Hash _dest;
     /** Kademlia network database facade instance. */
     private final KademliaNetworkDatabaseFacade _facade;
-    /** last published time */
+    /** Last published time. */
     private volatile long _lastPublished;
     /** Per-instance retry counter for exponential backoff. */
     private final AtomicInteger failCount = new AtomicInteger(0);
@@ -119,7 +119,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     private boolean highPriority;
     /** Whether a floodfill verification lookup is in progress. */
     private final AtomicBoolean _lookupInProgress = new AtomicBoolean(false);
-    /** registered flag */
+    /** Registered flag. */
     private boolean _registered = false;
 
     /**
@@ -387,6 +387,8 @@ public class RepublishLeaseSetJob extends JobImpl {
     // One-time only: once a destination publishes, _publishedOnce prevents
     // re-deferral on subsequent cycles (no 15s treadmill).
     /**
+     * Whether publication was deferred while waiting for target tunnels.
+     *
      * @return true if publication was deferred
      */
     private boolean maybeDeferFirstPublish(int leaseCount, int targetLeases) {

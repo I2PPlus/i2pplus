@@ -92,7 +92,7 @@ public interface Transport {
     public void stopListening();
 
     /**
-     * Get all addresses this transport is currently listening on.
+     * All addresses this transport is currently listening on.
      *
      * This method returns the complete list of RouterAddress objects
      * representing all network endpoints (both IPv4 and IPv6) that
@@ -107,7 +107,7 @@ public interface Transport {
     public List<RouterAddress> getCurrentAddresses();
 
     /**
-     * Get the first currently listening address of specified IP version.
+     * The first currently listening address of specified IP version.
      *
      * This method returns the first RouterAddress matching the requested
      * IP version from the list of current addresses. This is useful
@@ -124,7 +124,7 @@ public interface Transport {
 
     /**
      *  Do we have any current address?
-     *  @since IPv6
+     * @since IPv6
      * @return whether current address is present
      */
     public boolean hasCurrentAddress();
@@ -228,7 +228,7 @@ public interface Transport {
     public void forwardPortStatus(byte[] ip, int port, int externalPort, boolean success, String reason);
 
     /**
-     * Get the internal port that transport wants forwarded via UPnP.
+     * The internal port that the transport wants forwarded via UPnP.
      *
      * This method returns the preferred internal port that the
      * transport would like to have mapped to an external port through
@@ -248,7 +248,7 @@ public interface Transport {
     public int getRequestedPort();
 
     /**
-     * Set the event listener for transport-related notifications.
+     * The event listener for transport-related notifications.
      *
      * The listener will be notified of various transport events
      * such as message availability, peer status changes, and
@@ -260,7 +260,7 @@ public interface Transport {
     public void setListener(TransportEventListener listener);
 
     /**
-     * Get the unique style identifier for this transport.
+     * The unique style identifier for this transport.
      *
      * This method returns a string that uniquely identifies the
      * transport type (e.g., "NTCP", "UDP", "SSU"). This
@@ -271,7 +271,7 @@ public interface Transport {
     public String getStyle();
 
     /**
-     * Get list of peers that this transport has established connections with.
+     * The list of peers this transport has established connections with.
      *
      * This method returns the current set of peer hashes that
      * have successfully completed connection establishment. These are
@@ -306,7 +306,7 @@ public interface Transport {
     public int countActiveSendPeers();
 
     /**
-     * Get detailed peer count statistics by IP version and direction.
+     * Detailed peer count statistics by IP version and direction.
      *
      * This method returns an array containing peer counts broken
      * down by IP version and connection direction. This provides
@@ -327,17 +327,19 @@ public interface Transport {
     public int[] getPeerCounts();
 
     /**
+     * Whether capacity is available for a message.
      * @return true if capacity available
      */
     public boolean haveCapacity();
     /**
+     * Whether capacity is available for the given percentage.
      * @param pct percent 0-100
      * @return true if capacity available
      */
     public boolean haveCapacity(int pct);
 
     /**
-     * Get list of clock skew measurements from peer communications.
+     * The list of clock skew measurements from peer communications.
      *
      * This method returns a list of measured clock differences
      * (in milliseconds) between this router and various peers.
@@ -353,11 +355,13 @@ public interface Transport {
     public List<Long> getClockSkews();
 
     /**
+     * The most recent error messages.
      * @return recent error messages
      */
     public List<String> getMostRecentErrorMessages();
 
     /**
+     * Render the transport status HTML to the given writer.
      * @param out writer
      * @param urlBase base URL
      * @param sortFlags flags
@@ -365,7 +369,7 @@ public interface Transport {
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException;
 
     /**
-     * Get the current reachability status of this transport.
+     * The current reachability status of this transport.
      *
      * This method returns the transport's ability to establish
      * and maintain connections with other peers. The status indicates
@@ -380,21 +384,25 @@ public interface Transport {
     public Status getReachabilityStatus();
 
     /**
+     * The current IPv6 configuration.
      * @return IPv6 config
      */
     public TransportUtil.IPv6Config getIPv6Config();
 
     /**
+     * Whether force-firewalled for IPv4.
      * @return true if force-firewalled for IPv4
      */
     public boolean isIPv4Firewalled();
 
     /**
+     * Whether force-firewalled for IPv6.
      * @return true if force-firewalled for IPv6
      */
     public boolean isIPv6Firewalled();
 
     /**
+     * Whether the given peer is backlogged.
      * @param peer peer hash
      * @return true if backlogged
      */
@@ -421,11 +429,13 @@ public interface Transport {
     public boolean wasUnreachable(Hash peer);
 
     /**
+     * Whether the given peer is unreachable.
      * @param peer peer hash
      * @return true if unreachable
      */
     public boolean isUnreachable(Hash peer);
     /**
+     * Whether the given peer is established.
      * @param peer peer hash
      * @return true if established
      */

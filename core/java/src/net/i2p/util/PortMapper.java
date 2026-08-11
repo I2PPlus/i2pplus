@@ -71,7 +71,7 @@ public class PortMapper {
     /** BOB service */
     public static final String SVC_BOB = "BOB";
 
-    /** not necessary, already in config? */
+    /** Not necessary, already in config? */
     public static final String SVC_I2CP = "I2CP";
 
     /** I2CP-SSL service name.
@@ -406,7 +406,7 @@ public class PortMapper {
     }
 
     /**
-     * Get the list of eepsite URLs.
+     * Eepsite URLs configured in this port mapper.
      *
      * @return unsorted, non-empty, or null if none
      * @since 0.9.50

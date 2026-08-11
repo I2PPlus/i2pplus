@@ -15,8 +15,8 @@ public class GracefulShutdown implements Runnable {
     private final Object _wakeLock = new Object();
 
     /**
-     * Get the lock object for wake/sleep coordination with the shutdown detector.
- *
+     * The lock object for wake/sleep coordination with the shutdown detector.
+     *
      * @return the shared lock object
      */
     public Object getWakeLock() {

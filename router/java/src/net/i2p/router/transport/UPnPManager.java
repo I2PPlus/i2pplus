@@ -91,7 +91,7 @@ class UPnPManager {
      */
     private static final String PROP_HTTP_PORT = "i2np.upnp.HTTPPort";
     private static final int DEFAULT_HTTP_PORT = 7652;
-    /** this is the UDP SSDP Search reply listener */
+    /** This is the UDP SSDP search reply listener. */
     private static final String PROP_SSDP_PORT = "i2np.upnp.SSDPPort";
     private static final int DEFAULT_SSDP_PORT = 7653;
     private static final long RESCAN_MIN_DELAY = 60*1000L;
@@ -250,13 +250,13 @@ class UPnPManager {
      */
     private class Rescanner extends SimpleTimer2.TimedEvent {
 
-        /** caller must schedule() */
+        /** Caller must schedule(). */
         public Rescanner() {
             super(_context.simpleTimer2());
         }
 
         /**
-         * timeReached.
+         * Rescan for UPnP devices and reschedule.
          */
         public void timeReached() {
             if (_shouldBeRunning) {
@@ -273,13 +273,13 @@ class UPnPManager {
      */
     private class DelayedCallback extends SimpleTimer2.TimedEvent {
 
-        /** caller must reschedule() */
+        /** Caller must reschedule(). */
         public DelayedCallback() {
             super(_context.simpleTimer2());
         }
 
         /**
-         * timeReached.
+         * Run the post-scan callback.
          */
         public void timeReached() {
              _scannerCallback.afterScan();

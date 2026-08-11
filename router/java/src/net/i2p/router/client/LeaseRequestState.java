@@ -47,25 +47,25 @@ class LeaseRequestState {
     }
 
     /**
-     * Get the requested lease set.
+     * The lease set that is being requested.
      * @return the lease set that is being requested
      */
     public LeaseSet getRequested() {return _requestedLeaseSet;}
 
     /**
-     * Get the on-granted job.
+     * The job to run once the lease set is created.
      * @return what to do once the lease set is created
      */
     public Job getOnGranted() { return _onGranted; }
 
     /**
-     * Get the on-failed job.
+     * The job to run if the lease set create fails or times out.
      * @return what to do if the lease set create fails / times out
      */
     public Job getOnFailed() { return _onFailed; }
 
     /**
-     * Get the expiration time.
+     * When the request for the lease set expires.
      * @return when the request for the lease set expires
      */
     public long getExpiration() { return _expiration; }
@@ -86,7 +86,7 @@ class LeaseRequestState {
     public boolean getIsSuccessful() {return _successful;}
 
     /**
-     * Set whether the request was successful.
+     * Record whether the request was successful.
      * @param is true if successful
      */
     public void setIsSuccessful(boolean is) {_successful = is;}

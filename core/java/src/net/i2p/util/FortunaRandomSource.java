@@ -26,11 +26,11 @@ import java.util.Properties;
  *
  */
 public class FortunaRandomSource extends RandomSource implements EntropyHarvester {
-    /**  fortuna */
+    /** The Fortuna PRNG instance. */
     private final AsyncFortunaStandalone _fortuna;
-    /**  next gaussian */
+    /** Next Gaussian value, cached for the following call. */
     private double _nextGaussian;
-    /**  have next gaussian */
+    /** Whether a cached Gaussian value is available. */
     private boolean _haveNextGaussian;
 
     /**
@@ -292,7 +292,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
         return (int) rv;
     }
 
-    /** reseed the fortuna */
+    /** Reseed the fortuna. */
     @Override
     public void feedEntropy(String source, long data, int bitoffset, int bits) {
         synchronized (_fortuna) {
@@ -300,7 +300,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
         }
     }
 
-    /** reseed the fortuna */
+    /** Reseed the fortuna. */
     @Override
     public void feedEntropy(String source, byte[] data, int offset, int len) {
         try {

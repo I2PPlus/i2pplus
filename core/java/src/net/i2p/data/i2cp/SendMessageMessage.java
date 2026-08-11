@@ -100,8 +100,9 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Destination to send the message to.
      * @param destination the destination
-     *  @deprecated use 4-arg constructor
+     * @deprecated use 4-arg constructor
      */
     @Deprecated
     public synchronized void setDestination(Destination destination) {

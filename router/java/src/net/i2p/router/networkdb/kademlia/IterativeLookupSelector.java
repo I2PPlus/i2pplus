@@ -30,7 +30,7 @@ class IterativeLookupSelector implements MessageSelector {
     }
 
     /**
-     * continueMatching.
+     * Continue matching until a match is found or the search expires.
      */
     @Override
     public boolean continueMatching() {
@@ -39,6 +39,8 @@ class IterativeLookupSelector implements MessageSelector {
     }
 
     /**
+     * Absolute time when the search expires, or -1 once a match is found.
+     *
      * @return the expiration
      */
     public long getExpiration() { return (_matchFound ? -1 : _search.getExpiration()); }

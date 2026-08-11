@@ -79,7 +79,7 @@ public class SHA1Hash extends SimpleDataStructure {
     }
 
     /**
-     * readBytes.
+     * Read the hash data from a stream.
      */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
@@ -87,7 +87,7 @@ public class SHA1Hash extends SimpleDataStructure {
         _cachedHashCode = super.hashCode();
     }
 
-    /** a Hash is a hash, so just use the first 4 bytes for speed */
+    /** A Hash is a hash, so just use the first 4 bytes for speed. */
     @Override
     public int hashCode() {
         return _cachedHashCode;

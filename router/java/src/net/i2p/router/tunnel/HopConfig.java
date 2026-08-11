@@ -54,14 +54,14 @@ public class HopConfig {
     }
 
     /**
-     * Set the receive tunnel ID
+     * The tunnel ID to receive messages on.
      *
      * @param id the tunnel ID
      */
     public void setReceiveTunnelId(TunnelId id) { _receiveTunnel = id; }
 
     /**
-     * Set the receive tunnel ID.
+     * The receive tunnel ID, from 1 to 0xffffffff.
      *
      *  @param id 1 to 0xffffffff
      *  @throws IllegalArgumentException if less than or equal to zero or greater than max value
@@ -69,7 +69,7 @@ public class HopConfig {
      */
     public void setReceiveTunnelId(long id) { _receiveTunnel = new TunnelId(id); }
 
-    /** what is the previous peer in the tunnel (null if gateway) */
+    /** What is the previous peer in the tunnel (null if gateway)? */
     public Hash getReceiveFrom() { return _receiveFrom; }
 
     /**
@@ -96,8 +96,8 @@ public class HopConfig {
     }
 
     /**
-     * Set the send tunnel ID.
-     *  Do not set for endpoint
+     * The tunnel ID to send messages through.
+     * Do not set for endpoint
      *
      *  @param id the tunnel ID
      *  @since 0.9.48
@@ -105,8 +105,8 @@ public class HopConfig {
     public void setSendTunnelId(TunnelId id) { _sendTunnel = id; }
 
     /**
-     * Set the send tunnel ID.
-     *  Do not set for endpoint
+     * The send tunnel ID, from 1 to 0xffffffff.
+     * Do not set for endpoint
      *
      *  @param id 1 to 0xffffffff
      *  @throws IllegalArgumentException if less than or equal to zero or greater than max value
@@ -114,7 +114,7 @@ public class HopConfig {
      */
     public void setSendTunnelId(long id) { _sendTunnel = new TunnelId(id); }
 
-    /** what is the next peer in the tunnel (null if endpoint) */
+    /** What is the next peer in the tunnel (null if endpoint)? */
     public Hash getSendTo() { return _sendTo; }
 
     /**
@@ -124,28 +124,28 @@ public class HopConfig {
      */
     public void setSendTo(Hash to) { _sendTo = to; }
 
-    /** what key should we use to encrypt the layer before passing it on? */
+    /** What key encrypts the layer before passing it on? */
     public SessionKey getLayerKey() { return _layerKey; }
-    /** Set the layer encryption key */
+    /** The key to encrypt the layer with before passing it on. */
     public void setLayerKey(SessionKey key) { _layerKey = key; }
 
-    /** what key should we use to encrypt the preIV before passing it on? */
+    /** What key encrypts the preIV before passing it on? */
     public SessionKey getIVKey() { return _ivKey; }
-    /** Set the IV encryption key */
+    /** The key to encrypt the IV with before passing it on. */
     public void setIVKey(SessionKey key) { _ivKey = key; }
 
-    /** when does this tunnel expire (in ms since the epoch)? */
+    /** When does this tunnel expire (in ms since the epoch)? */
     public long getExpiration() { return _expiration; }
-    /** Set the tunnel expiration time */
+    /** The tunnel expiration time, in ms since the epoch. */
     public void setExpiration(long when) { _expiration = when; }
 
-    /** when was this tunnel created (in ms since the epoch)? */
+    /** When was this tunnel created (in ms since the epoch)? */
     public long getCreation() { return _creation; }
-    /** Set the tunnel creation time */
+    /** The tunnel creation time, in ms since the epoch. */
     public void setCreation(long when) { _creation = when; }
 
     /**
-     * Get the allocated bandwidth for this hop.
+     * The bandwidth allocated for this hop.
      *
      *  @return Bps
      *  @since 0.9.66
@@ -154,7 +154,7 @@ public class HopConfig {
         return _allocatedBW;
     }
     /**
-     * Set the allocated bandwidth for this hop.
+     * The bandwidth allocated for this hop.
      *
      *  @param bw Bps
      *  @since 0.9.66

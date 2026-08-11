@@ -104,7 +104,7 @@ public class DeliveryInstructions extends DataStructureImpl {
      */
     public SessionKey getEncryptionKey() { return /* _encryptionKey */ null; }
 
-    /** default -1 */
+    /** Default -1. */
     public int getDeliveryMode() { return _deliveryMode; }
 
     /**
@@ -114,46 +114,46 @@ public class DeliveryInstructions extends DataStructureImpl {
      */
     public void setDeliveryMode(int mode) { _deliveryMode = mode; }
 
-    /** default null */
+    /** Default null. */
     public Hash getDestination() { return _destinationHash; }
 
-    /** required for DESTINATION */
+    /** Required for DESTINATION. */
     public void setDestination(Hash dest) { _destinationHash = dest; }
 
-    /** default null */
+    /** Default null. */
     public Hash getRouter() { return _routerHash; }
 
-    /** required for ROUTER or TUNNEL */
+    /** Required for ROUTER or TUNNEL. */
     public void setRouter(Hash router) { _routerHash = router; }
 
-    /** default null */
+    /** Default null. */
     public TunnelId getTunnelId() { return _tunnelId; }
 
-    /** required for TUNNEL */
+    /** Required for TUNNEL. */
     public void setTunnelId(TunnelId id) { _tunnelId = id; }
 
     /**
-     * default false
+     * Defaults to false.
      * Obsolete — delay not implemented in this release.
      * @return the delay requested
      */
     public boolean getDelayRequested() { return _delayRequested; }
 
     /**
-     * default false
+     * Defaults to false.
      * Obsolete — delay not implemented in this release.
      */
     public void setDelayRequested(boolean req) { _delayRequested = req; }
 
     /**
-     * default 0
+     * Defaults to 0.
      * Obsolete — delay not implemented in this release.
      * @return the delay seconds
      */
     public long getDelaySeconds() { return _delaySeconds; }
 
     /**
-     * default 0
+     * Defaults to 0.
      * Obsolete — delay not implemented in this release.
      */
     public void setDelaySeconds(long seconds) { _delaySeconds = seconds; }
@@ -167,7 +167,8 @@ public class DeliveryInstructions extends DataStructureImpl {
     }
 
     /**
-     * readBytes.
+     * Populate the delivery instructions from the byte array, starting at the given offset.
+     * @return the number of bytes read
      */
     public int readBytes(byte[] data, int offset) {
         int cur = offset;
@@ -214,14 +215,14 @@ public class DeliveryInstructions extends DataStructureImpl {
         return cur - offset;
     }
 
-    /** high bits */
+    /** Extract the delivery mode from the flags byte. */
     private static int flagMode(int flags) {
         int v = flags & FLAG_MODE;
         v >>>= 5;
         return v;
     }
 
-    /** unused */
+    /** Whether the delay flag is set in the flags byte. */
     private static boolean flagDelay(int flags) {
         return (0 != (flags & FLAG_DELAY));
     }
@@ -317,6 +318,7 @@ public class DeliveryInstructions extends DataStructureImpl {
     }
 
     /**
+     * Serialize the delivery instructions into the byte array, starting at the given offset.
      * @return the number of bytes written to the target
      */
     public int writeBytes(byte[] target, int offset) {
@@ -329,6 +331,7 @@ public class DeliveryInstructions extends DataStructureImpl {
     }
 
     /**
+     * Size of the serialized delivery instructions in bytes.
      * @return the size
      */
     public int getSize() {
@@ -336,7 +339,7 @@ public class DeliveryInstructions extends DataStructureImpl {
     }
 
     /**
-     * equals.
+     * Compare the delivery instructions for equality, including mode, delay, and target fields.
      */
     @Override
     public boolean equals(Object obj) {
@@ -353,7 +356,8 @@ public class DeliveryInstructions extends DataStructureImpl {
     }
 
     /**
-     * @return whether h code is present
+     * Hash code combining the delay, mode, and target fields.
+     * @return the hash code
      */
     @Override
     public int hashCode() {
@@ -366,7 +370,7 @@ public class DeliveryInstructions extends DataStructureImpl {
     }
 
     /**
-     * toString.
+     * String form for debugging, showing the mode and any delay or target fields.
      */
     @Override
     public String toString() {
@@ -402,13 +406,14 @@ public class DeliveryInstructions extends DataStructureImpl {
         //private static final byte flag = DELIVERY_MODE_LOCAL << 5;  // 0
 
         /**
+         * Delivery mode for this local delivery.
          * @return the delivery mode
          */
         @Override
         public int getDeliveryMode() { return DELIVERY_MODE_LOCAL; }
 
         /**
-         * setDeliveryMode.
+         * Throws, as local delivery instructions are immutable.
          */
         @Override
         public void setDeliveryMode(int mode) {
@@ -416,7 +421,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
 
         /**
-         * setDestination.
+         * Throws, as local delivery instructions are immutable.
          */
         @Override
         public void setDestination(Hash dest) {
@@ -424,7 +429,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
 
         /**
-         * setRouter.
+         * Throws, as local delivery instructions are immutable.
          */
         @Override
         public void setRouter(Hash router) {
@@ -432,7 +437,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
 
         /**
-         * setTunnelId.
+         * Throws, as local delivery instructions are immutable.
          */
         @Override
         public void setTunnelId(TunnelId id) {
@@ -440,7 +445,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
 
         /**
-         * setDelayRequested.
+         * Throws, as local delivery instructions are immutable.
          */
         @Override
         public void setDelayRequested(boolean req) {
@@ -448,7 +453,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
 
         /**
-         * setDelaySeconds.
+         * Throws, as local delivery instructions are immutable.
          */
         @Override
         public void setDelaySeconds(long seconds) {
@@ -456,7 +461,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
 
         /**
-         * readBytes.
+         * Throws, as local delivery instructions are immutable.
          */
         @Override
         public int readBytes(byte[] data, int offset) {
@@ -464,7 +469,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
 
         /**
-         * writeBytes.
+         * Writes the zero flag byte, as local delivery has no additional info.
          */
         @Override
         public int writeBytes(byte[] target, int offset) {
@@ -473,6 +478,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
 
         /**
+         * Local delivery serializes to a single flag byte.
          * @return the size
          */
         @Override
@@ -481,7 +487,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
 
         /**
-         * toString.
+         * String form for debugging.
          */
         @Override
         public String toString() {

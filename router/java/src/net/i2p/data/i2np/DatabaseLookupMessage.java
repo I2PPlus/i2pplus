@@ -43,7 +43,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     private Hash _key;
     private Hash _fromHash;
     private TunnelId _replyTunnel;
-    /** this must be kept as a list to preserve the order and not break the checksum */
+    /** This must be kept as a list to preserve the order and not break the checksum. */
     private List<Hash> _dontIncludePeers;
     private SessionKey _replyKey;
     private SessionTag _replyTag;
@@ -73,13 +73,13 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
 
     /** Database lookup type enumeration. @since 0.9.16 */
     public enum Type {
-        /** default - LS or RI */
+        /** Default - LS or RI. */
         ANY,
-        /** lease set only */
+        /** Lease set only - reply with the matching lease set. */
         LS,
-        /** router info only */
+        /** Router info only - reply with the matching router info. */
         RI,
-        /** exploratory - return closest non-floodfill router infos */
+        /** Exploratory - return closest non-floodfill router infos. */
         EXPL
     }
 
@@ -116,6 +116,8 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     public Hash getSearchKey() { return _key; }
 
     /**
+     * Assigns the key being searched for.
+     *
      * @throws IllegalStateException if key previously set, to protect saved checksum
      */
     public void setSearchKey(Hash key) {
@@ -156,6 +158,8 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     public Hash getFrom() { return _fromHash; }
 
     /**
+     * Assigns the router who requested this lookup.
+     *
      * @throws IllegalStateException if from previously set, to protect saved checksum
      */
     public void setFrom(Hash from) {
@@ -172,6 +176,8 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     public TunnelId getReplyTunnel() { return _replyTunnel; }
 
     /**
+     * Assigns the tunnel a reply should be sent to.
+     *
      * @throws IllegalStateException if tunnel previously set, to protect saved checksum
      */
     public void setReplyTunnel(TunnelId replyTunnel) {
@@ -224,15 +230,15 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
      *  The included session key or null if unset.
      *  If non-null, either getReplyTag() or getRatchetReplyTag() is non-null.
      *
-     *  @since 0.9.7
+     * @since 0.9.7
      * @return the reply key
      */
     public SessionKey getReplyKey() { return _replyKey; }
 
     /**
-     *  The included session tag or null if unset
+     *  The included session tag or null if unset.
      *
-     *  @since 0.9.7
+     * @since 0.9.7
      * @return the reply tag
      */
     public SessionTag getReplyTag() { return _replyTag; }
@@ -254,9 +260,9 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  The included session tag or null if unset
+     *  The included session tag or null if unset.
      *
-     *  @since 0.9.46
+     * @since 0.9.46
      * @return the ratchet reply tag
      */
     public RatchetSessionTag getRatchetReplyTag() { return _ratchetReplyTag; }
@@ -281,7 +287,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
      *  The included session key or null if unset.
      *  Preliminary, not fully supported, see proposal 154.
      *
-     *  @since 0.9.46
+     * @since 0.9.46
      * @return the ratchet public key
      */
     public PublicKey getRatchetPublicKey() { return _ratchetPubKey; }
@@ -299,7 +305,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * Set of peers that a lookup reply should NOT include.
+     * Collection of peers that a lookup reply should NOT include.
      * WARNING - returns a copy.
      *
      * @return Set of Hash objects, each of which is the H(routerIdentity) to skip, or null
@@ -361,7 +367,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * readMessage.
+     * Reads the message fields from the byte array.
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
@@ -470,7 +476,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * calculateWrittenLength.
+     * Calculates the length of the message body.
      */
     protected int calculateWrittenLength() {
         int totalLength = 0;
@@ -496,7 +502,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * writeMessageBody.
+     * Writes the message body to the output array, returning the new index.
      */
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         if (_key == null) throw new I2NPMessageException("Key being searched for not specified");
@@ -574,12 +580,16 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
+     * The message type.
+     *
      * @return the type
      */
     public int getType() { return MESSAGE_TYPE; }
 
     /**
-     * @return whether h code is present
+     * Hash code calculated from the message fields.
+     *
+     * @return the hash code
      */
     @Override
     public int hashCode() {
@@ -590,7 +600,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * equals.
+     * Compares this message to another for equality of all fields.
      */
     @Override
     public boolean equals(Object object) {
@@ -606,7 +616,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * toString.
+     * String form of the message, suitable for debugging.
      */
     @Override
     public String toString() {

@@ -136,31 +136,31 @@ class PeerTestManager {
     private final Log _log;
     private final UDPTransport _transport;
     private final PacketBuilder2 _packetBuilder2;
-    /** map of Long(nonce) to PeerTestState for tests currently in progress (as Bob/Charlie) */
+    /** Map of Long(nonce) to PeerTestState for tests currently in progress (as Bob/Charlie). */
     private final Map<Long, PeerTestState> _activeTests;
-    /** current test we are running (as Alice), or null */
+    /** Current test we are running (as Alice), or null. */
     private PeerTestState _currentTest;
     private volatile boolean _currentTestComplete;
-    /** as Alice */
+    /** Test being run as Alice. */
     private final Queue<Long> _recentTests;
     private final IPThrottler _throttle;
 
     private static final int MAX_RELAYED_PER_TEST_ALICE = 9;
 
-    /** longest we will keep track of a Charlie nonce for */
+    /** Longest we will keep track of a Charlie nonce for. */
     private static final int MAX_CHARLIE_LIFETIME = 15*1000;
-    /** longest we will keep track of test as Bob to forward response from Charlie */
+    /** Longest we will keep track of the test as Bob to forward the response from Charlie. */
     private static final int MAX_BOB_LIFETIME = 10*1000;
 
-    /** as Bob/Charlie */
+    /** Tests running as Bob/Charlie. */
     private static final int MAX_ACTIVE_TESTS = 20;
     private static final int MAX_RECENT_TESTS = 40;
 
-    /** for the throttler */
+    /** For the throttler. */
     private static final int MAX_PER_IP = 12;
     private static final long THROTTLE_CLEAN_TIME = 10*60*1000L;
 
-    /** initial - ContinueTimer adds backoff */
+    /** Initial timeout; ContinueTimer adds backoff. */
     private static final int RESEND_TIMEOUT = 4*1000;
     private static final int MAX_TEST_TIME = 20*1000;
     private static final long MAX_SKEW = 2*60*1000L;
@@ -280,7 +280,7 @@ class PeerTestManager {
     private class ContinueTimer extends SimpleTimer2.TimedEvent {
         private final long _nonce;
 
-        /** schedules itself */
+        /** Schedules itself. */
         public ContinueTimer(long nonce) {
             super(_context.simpleTimer2());
             _nonce = nonce;
@@ -367,7 +367,7 @@ class PeerTestManager {
         }
     }
 
-    /** call from a synchronized method */
+    /** Call from a synchronized method. */
     private boolean expired() {
         PeerTestState state = _currentTest;
         if (state != null)
@@ -458,7 +458,7 @@ class PeerTestManager {
         }
     }
 
-    /**
+    /*
      * If we have sent a packet to charlie within the last 10 minutes, ignore any test
      * results we get from them, as our NAT will have poked a hole anyway
      * NAT idle timeouts vary widely, from 30s to 10m or more.
@@ -757,7 +757,7 @@ class PeerTestManager {
         private volatile int count;
         private static final long DELAY = 50;
 
-        /** schedules itself */
+        /** Schedules itself. */
         public DelayTest(RemoteHostId f, PeerState2 fp, int m, Hash h, byte[] d) {
             super(_context.simpleTimer2());
             from = f;
@@ -1747,7 +1747,7 @@ class PeerTestManager {
     private class RemoveTest extends SimpleTimer2.TimedEvent {
         private final Long _nonce;
 
-        /** schedules itself */
+        /** Schedules itself. */
         public RemoveTest(Long nonce, long delay) {
             super(_context.simpleTimer2());
             _nonce = nonce;
@@ -1770,7 +1770,7 @@ class PeerTestManager {
     private class CharlieTimer extends SimpleTimer2.TimedEvent {
         private final Long _nonce;
 
-        /** schedules itself */
+        /** Schedules itself. */
         public CharlieTimer(Long nonce) {
             super(_context.simpleTimer2());
             _nonce = nonce;

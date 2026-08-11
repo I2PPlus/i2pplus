@@ -11,7 +11,7 @@ package net.i2p.router.startup;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 
-/** start I2CP interface */
+/** Start the I2CP interface. */
 class StartAcceptingClientsJob extends JobImpl {
 
     /**
@@ -22,12 +22,14 @@ class StartAcceptingClientsJob extends JobImpl {
     }
 
     /**
-     * @return the name
+     *  Name of this job.
+     *
+     *  @return the name
      */
     public String getName() { return "Start Accepting Clients"; }
 
     /**
-     * runJob.
+     * Start the client manager to accept I2CP connections.
      */
     public void runJob() {
 

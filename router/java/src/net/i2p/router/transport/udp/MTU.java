@@ -16,7 +16,7 @@ import net.i2p.util.SystemVersion;
 import java.io.Serializable;
 
 /**
- * Get the MTU for the network interface of an address.
+ * The MTU for the network interface of an address.
  * Not available until Java 6 / Android API 9.
  *
  * Public only for command line test.

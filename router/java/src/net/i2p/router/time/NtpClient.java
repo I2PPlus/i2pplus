@@ -38,7 +38,7 @@ import net.i2p.util.Log;
  * @since 0.9.1 moved from net.i2p.time
  */
 public class NtpClient {
-    /** difference between the unix epoch and jan 1 1900 (NTP uses that) */
+    /** Difference between the Unix epoch and Jan 1 1900, the epoch used by NTP. */
     static final double SECONDS_1900_TO_EPOCH = 2208988800.0;
     private static final int NTP_PORT = 123;
     private static final int DEFAULT_TIMEOUT = 10 * 1000;
@@ -227,7 +227,7 @@ public class NtpClient {
      * Main entry point for the NtpClient program.
      *
      * Usage:
-     *   java -jar i2p/lib/router.jar NtpClient [-6] [servers...]
+     * java -jar i2p/lib/router.jar NtpClient [-6] [servers...]
      *
      * The optional "-6" flag forces IPv6 DNS lookups.
      * If no servers are specified, the default "pool.ntp.org" is used.
