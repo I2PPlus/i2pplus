@@ -913,7 +913,6 @@ html:not(.iframed) #filterBar #stopped{border-radius:0 3px 3px 0}
 #filterBar .filter:hover{color:var(--hover)}
 #filterBar .filter:active{text-shadow:none}
 #filterBar .filter[hidden]{display:none}
-#filterBar .badge{animation:fade .05s ease-in .2s both,position .1s ease-out .3s both}
 #torrentlist #filterBar~#torrents,.iframed #torrentlist #filterBar~#torrents{border-radius:0 0 4px 4px;border-top:0;box-shadow:none}
 .iframed #torrentlist #filterBar~#torrents{border-radius:0}
 .iframed #filterBar{margin:1px 1px -1px;position:relative;z-index:999;border-radius:0}

@@ -1274,10 +1274,10 @@ public class I2PSnarkServlet extends BasicServlet {
         if ("-2".equals(currentSort)) {
             nextSort = "2";
         } else if ("2".equals(currentSort)) {
-            nextSort = poolSort ? "-13" : "-2";
-        } else if (poolSort && "-13".equals(currentSort)) {
-            nextSort = "13";
+            nextSort = poolSort ? "13" : "-2";
         } else if (poolSort && "13".equals(currentSort)) {
+            nextSort = "-13";
+        } else if (poolSort && "-13".equals(currentSort)) {
             nextSort = "-2";
         } else {
             nextSort = "-2";
@@ -3251,7 +3251,8 @@ public class I2PSnarkServlet extends BasicServlet {
             String rowStatus = rowClass + ' ' + snarkStatusLocal;
 
             // Append a pool badge after the status icon when the torrent runs on a shared destination
-            if (isRunning && multiDestSortEnabled()) {
+            // and the list is sorted by status and pool
+            if (isRunning && multiDestSortEnabled() && sortParam != null && sortParam.contains("13")) {
                 TorrentDest td = snark.getDest();
                 if (td != null && td.getPoolNum() >= 0) {
                     StringBuilder poolBadge = new StringBuilder(64).append("<span class=pool");
