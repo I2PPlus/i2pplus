@@ -19,10 +19,9 @@ import java.util.Arrays;
  * @author str4d
  *
  * @see <a href="https://tools.ietf.org/html/rfc8410">RFC 8410</a>
- * @see <a href=
- * @since 0.9.15
- *      "https://tools.ietf.org/html/draft-josefsson-pkix-eddsa-04">Older draft
+ * @see <a href="https://tools.ietf.org/html/draft-josefsson-pkix-eddsa-04">Older draft
  *      specification</a>
+ * @since 0.9.15
  */
 public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     private static final long serialVersionUID = 9837459837498475L;

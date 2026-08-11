@@ -45,7 +45,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * determine which torrent a connection belongs to based on the info hash in the BitTorrent
  * handshake.
  *
- * <p>When multi-dest is enabled, each torrent additionally runs a {@link TorrentAcceptLoop} on
+ * <p>When multi-dest is enabled, each torrent additionally runs a {@code TorrentAcceptLoop} on
  * its own server socket, so that incoming connections are received on the torrent's own
  * destination.
  *
