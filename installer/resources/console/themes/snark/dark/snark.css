@@ -689,13 +689,14 @@ input.trackerhome,input.trackerannounce{width:210px}
 #trackerconfig th:first-child,#fileFilter th:first-child{text-align:center;background:var(--nuke) no-repeat center center/16px,var(--th)}
 #trackerconfig th:last-child,#trackerconfig td:last-child{padding-left:10px}
 #trackerconfig tr:nth-child(odd),.snarkConfig tr:nth-child(odd){background:#000900}
-#trackerconfig tr:nth-last-child(2),#configs tr:nth-last-child(2),#fileFilter tr:nth-last-child(2),#trackerconfig tr:nth-last-child(2):hover,#configs tr:nth-last-child(2):hover,#fileFilter tr:nth-last-child(2):hover{box-shadow:var(--row_highlight);background:var(--th)}
 #trackerconfig tr:nth-child(even),.snarkConfig tr:nth-child(even){background:#010}
 #trackerconfig th,#trackerconfig td,#trackerconfig th:last-child,#trackerconfig td:last-child{text-align:left}
 #trackerconfig td,.snarkConfig td{padding:5px 1px}
 #trackerconfig td:first-child,#fileFilter td:first-child{text-align:center}
 #trackerconfig tr:nth-last-child(2) td,#fileFilter tr:nth-last-child(2) td{padding:7px 8px}
+#trackerconfig tr:nth-last-child(2),#configs tr:nth-last-child(2),#fileFilter tr:nth-last-child(2),#trackerconfig tr:nth-last-child(2),#trackerconfig tr:nth-last-child(2):hover,#configs tr:nth-last-child(2):hover,#fileFilter tr:nth-last-child(2):hover{box-shadow:var(--row_highlight);background:var(--th)}
 #trackerconfig th:nth-child(4),#trackerconfig th:nth-child(5),#trackerconfig th:nth-child(6),#trackerconfig td:nth-child(4),#trackerconfig td:nth-child(5),#trackerconfig td:nth-child(6){min-width:64px;text-align:center}
+#trackerconfig tr:nth-last-child(2) td,#trackerconfig tr:nth-last-child(2) td:hover{background:#0000}
 #trackerconfig input,#fileFilter input{margin:3px}
 #trackerconfig input[type=submit]{margin:4px 3px}
 #trackerconfig .delete,#trackerconfig .reload{float:left}
