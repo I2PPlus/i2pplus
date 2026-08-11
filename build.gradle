@@ -62,6 +62,8 @@ def releaseVersion = getReleaseVersion()
 def buildVersion = getBuildVersion()
 def buildExtra = getBuildExtra()
 def fullVersion = "$releaseVersion-$buildVersion$buildExtra"
+ext.fullVersion = fullVersion
+ext.buildExtra = buildExtra
 
 def builtBy = getBuiltBy()
 def workspaceVersion = getWorkspaceVersion()
@@ -111,4 +113,8 @@ task codeCoverageReport(type: JacocoReport) {
 
 ext.pkgTempDir = "${System.getProperty('java.io.tmpdir')}/build-i2p/pkg-temp"
 
+// Final artifacts (i2pupdate.zip, i2p.tar.bz2, *.deb) land in dist/, as in ant
+ext.distDir = file('dist')
+
 apply from: file('tools/gradle/update.gradle')
+apply from: file('tools/gradle/package.gradle')

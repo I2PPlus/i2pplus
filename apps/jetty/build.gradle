@@ -6,6 +6,22 @@ base {
     archivesName = 'jetty-i2p'
 }
 
+// Never restore jetty outputs from the build cache: an empty cached entry
+// produced a jar without JspC, breaking :apps:susidns:precompileJsp.
+tasks.named('compileJava') {
+    outputs.cacheIf { false }
+}
+def jettyClassesDir = layout.buildDirectory.dir('classes/java/main').get().asFile
+
+tasks.named('jar') {
+    outputs.cacheIf { false }
+    doFirst {
+        if (!jettyClassesDir.isDirectory() || jettyClassesDir.listFiles().length == 0) {
+            throw new GradleException('Refusing to build an empty jetty-i2p.jar: no compiled classes')
+        }
+    }
+}
+
 sourceSets {
     main {
         java {

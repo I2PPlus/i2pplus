@@ -58,7 +58,9 @@ task precompileJsp(type: JavaExec) {
         new File("${buildDirPath}/tmp_jsp").mkdirs()
     }
 
-    dependsOn copyJsps, ':apps:i2ptunnel:i2ptunnelJar'
+    dependsOn copyJsps, ':apps:i2ptunnel:i2ptunnelJar',
+              ':apps:jetty:jar', ':apps:ministreaming:jar',
+              ':core:jar', ':router:jar', ':apps:addressbook:jar'
 
     classpath = java.sourceSets.main.runtimeClasspath + fileTree("src/lib")
     def jspClasspathStr = (java.sourceSets.main.runtimeClasspath + fileTree("src/lib")).asPath

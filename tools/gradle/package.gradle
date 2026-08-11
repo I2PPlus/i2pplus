@@ -1,0 +1,238 @@
+// Gradle mirrors of the user-facing Ant targets in build.xml.
+// Packaging, housekeeping, release, and QA tooling. Kept separate from
+// update.gradle (which only covers the update zip variants).
+//
+// NOT ported (Ant-only today): IzPack installers (pkg200/installer*),
+// jbigi native builds, launch4j wrappers, build-buildtools, and the
+// updater200 family.
+//
+// Configuration-cache safe: file sets and exec commands are declared at
+// configuration time, never inside doLast closures.
+
+def workspaceDist = file('dist').absolutePath
+
+// Version strings from the root script, captured at apply time so task
+// configuration stays configuration-cache friendly.
+def pkgVersion = "${ext.fullVersion}"
+def pkgTempArg = "${pkgTempDir}"
+def pkgTmpDirAbs = "${pkgTempDir}"
+def buildExtraSuffix = "${ext.buildExtra}"
+
+// File sets for distclean, captured at configuration time so the task body
+// stays configuration-cache compatible.
+def distFiles = fileTree('dist') { exclude 'README.md' }
+def blocklistBaks = fileTree('installer/resources/blocklist') { include '*.bak' }
+def soFiles = fileTree(rootDir) { include '*.so'; include '*.so.*' }
+def appImages = fileTree(rootDir) { include 'AppImage/'; include '*.appimage'; include '*.AppImage' }
+def moduleBuildDirs = fileTree(rootDir) { include 'apps/*/build/**'; include 'core/build/**'; include 'router/build/**'; include 'installer/**/build/**' }
+def runtimeArtifacts = fileTree(rootDir) { include 'sessionbans/'; include 'peerProfiles/'; include 'autotune.config'; include 'logger.config'; include 'messages.mo' }
+def wrapperObjs = fileTree('installer/lib/wrapper/win64') { include '*.o'; include '*.rc'; include 'console.ico' }
+
+// ---------------------------------------------------------------------------
+// distclean — wipe every build artifact (mirrors ant distclean)
+// ---------------------------------------------------------------------------
+
+task distclean(type: Delete) {
+    group = 'build'
+    description = 'Remove all build outputs, dist artifacts, logs, and runtime leftovers (mirrors ant distclean).'
+    dependsOn clean
+    dependsOn subprojects.findAll { it.plugins.hasPlugin('java') }.collect { it.tasks.named('clean') }
+    delete distFiles, blocklistBaks, soFiles, appImages, moduleBuildDirs, runtimeArtifacts, wrapperObjs
+    delete file('logs')
+    // AppImage build artifacts (keep downloaded appimagetool)
+    delete file('tools/appimage/squashfs-root')
+    // Native build outputs
+    delete file('core/c/jbigi/bin'), file('core/c/jbigi/lib'), file('core/c/jcpuid/lib')
+    delete file('installer/lib/izpack/5/patches/java/build')
+    delete file('installer/lib/wrapper/build-temp'), file('installer/bin')
+    delete file('installer/java/build'), file('installer/build'), file('reproducible/build')
+    // Runtime/test artifacts that must never live in the source tree
+    delete file('router/java/sessionbans'), file('router/java/autotune.config')
+    // Custom langpacks
+    delete file('com')
+    // Gradle caches inside the tree
+    delete file('.gradle'), file('tools/gradle/wrapper/.gradle')
+    // Redirected build output (build.root): wipes /tmp/build-i2p like ant
+    delete file(buildDir.parentFile)
+    doLast {
+        // Ensure dist directory exists after cleanup
+        ant.mkdir(dir: workspaceDist)
+    }
+}
+
+// ---------------------------------------------------------------------------
+// updaterCompact — the daily-verification update zip (mirrors ant updaterCompact)
+// ---------------------------------------------------------------------------
+
+task prepUpdateCompact(type: Copy) {
+    group = 'package'
+    description = 'Assemble the compact update payload (mirrors ant prepupdatecompact).'
+    dependsOn prepUpdateSmall
+    into pkgTmpDirAbs
+    into('certificates') { from 'installer/resources/certificates' }
+    into('docs/proxy') { from('installer/resources/console/proxy') { include '*.ht' } }
+    from('docs/history.txt') {
+        filter(org.apache.tools.ant.filters.HeadFilter, lines: 1500)
+    }
+    doLast {
+        String more = '\n\n----------------\n\nEARLIER HISTORY IS AVAILABLE IN THE SOURCE PACKAGE'
+        ant.concat(more, append: 'true', destfile: pkgTmpDirAbs + '/history.txt')
+    }
+}
+
+task updaterCompact(type: Zip) {
+    group = 'package'
+    description = 'Build the compact update zip dist/i2pupdate.zip (mirrors ant updaterCompact).'
+    dependsOn prepUpdateCompact
+    archiveFileName.set('i2pupdate.zip')
+    destinationDirectory.set(distDir)
+    from pkgTmpDirAbs
+}
+
+// ---------------------------------------------------------------------------
+// pkg / buildDeb / tarball — distribution set (mirrors ant pkg, minus IzPack)
+// ---------------------------------------------------------------------------
+
+task buildDeb(type: Exec) {
+    group = 'package'
+    description = 'Build the self-contained Debian package (mirrors ant buildDeb).'
+    dependsOn prepUpdate
+    commandLine 'bash', '-c',
+        'tools/scripts/build-deb.sh "${1}" "${2}" && ' +
+        'h=$(sha256sum "dist/i2p_${1}_all.deb"); echo "$(basename "dist/i2p_${1}_all.deb"): ${h%% *}"',
+        'build-deb', pkgVersion, pkgTempArg
+}
+
+task tarball(type: Tar) {
+    group = 'package'
+    description = 'Build the source tarball dist/i2p.tar.bz2 from the package payload (mirrors ant tarball).'
+    dependsOn prepUpdate
+    archiveFileName.set('i2p.tar.bz2')
+    destinationDirectory.set(distDir)
+    compression = Compression.BZIP2
+    from(pkgTmpDirAbs) { exclude 'README.md' }
+    into 'i2p'
+}
+
+task pkg {
+    group = 'package'
+    description = 'Assemble the distribution set: update zip, Debian package, and tarball (mirrors ant pkg minus the IzPack installer).'
+    dependsOn distclean, updater, buildDeb, tarball
+}
+
+// Ant runs a target's dependencies in list order (distclean first); Gradle
+// needs an explicit edge, otherwise any task may start before the wipe.
+// The clean tasks are distclean's own dependencies, so they are the only
+// exception: every other task must wait until the wipe completes, or a
+// clean running in parallel deletes outputs another task just produced
+// (e.g. compileJava racing :apps:jetty:clean, leaving an empty jar for
+// the JspC classpath).
+def distcleanCleanTasks = new HashSet<Object>([clean, distclean])
+subprojects { sub ->
+    sub.tasks.configureEach { t ->
+        if (t.name == 'clean') {
+            distcleanCleanTasks.add(t)
+        } else {
+            t.mustRunAfter distclean
+        }
+    }
+}
+tasks.configureEach { t ->
+    if (!distcleanCleanTasks.contains(t)) {
+        t.mustRunAfter distclean
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Release tooling (mirrors ant bump / bumpMajorVersion)
+// ---------------------------------------------------------------------------
+
+// File handles for the release tooling, captured at configuration time so
+// the task bodies stay configuration-cache compatible.
+def routerVersionFile = file('router/java/src/net/i2p/router/RouterVersion.java')
+def coreVersionFile = file('core/java/src/net/i2p/CoreVersion.java')
+def izpackVersionFiles = ['installer/lib/izpack/5/install5.xml', 'installer/lib/izpack/4/install.xml'].collect { file(it) }
+
+task bump {
+    group = 'release'
+    description = 'Increment the router BUILD number in RouterVersion.java (mirrors ant bump).'
+    doLast {
+        def pat = ~/(public\s+static\s+final\s+long\s+BUILD\s+=\s+)([0-9]+);/
+        def m = pat.matcher(routerVersionFile.text)
+        if (!m.find()) {
+            throw new GradleException('Could not parse BUILD in router/java/src/net/i2p/router/RouterVersion.java')
+        }
+        long next = m.group(2).toLong() + 1
+        routerVersionFile.text = routerVersionFile.text.replaceFirst(pat) { it.group(1) + next + ';' }
+        logger.lifecycle("Build number is now: ${next}${buildExtraSuffix}")
+    }
+}
+
+task bumpMajorVersion {
+    group = 'release'
+    description = 'Increment the release minor version, PUBLISHED_VERSION sub-version, and reset BUILD to 0 (mirrors ant bumpMajorVersion).'
+    doLast {
+        def coreTxt = coreVersionFile.text
+        def ver = coreTxt =~ /public\s+static\s+final\s+String\s+VERSION\s+=\s+"([0-9]+)\.([0-9]+)\.[0-9]+";/
+        def pub = coreTxt =~ /public\s+static\s+final\s+String\s+PUBLISHED_VERSION\s+=\s+"0\.9\.([0-9]+)";/
+        if (!ver.find() || !pub.find()) {
+            throw new GradleException('Could not parse VERSION/PUBLISHED_VERSION in core/java/src/net/i2p/CoreVersion.java')
+        }
+        String major = ver.group(1)
+        long newMinor = ver.group(2).toLong() + 1
+        long newSub = pub.group(1).toLong() + 1
+        logger.lifecycle("Bumping VERSION: ${major}.${ver.group(2)}.0 -> ${major}.${newMinor}.0")
+        logger.lifecycle("Bumping PUBLISHED_VERSION: 0.9.${pub.group(1)} -> 0.9.${newSub}")
+        coreTxt = coreTxt.replaceFirst(~/(public\s+static\s+final\s+String\s+VERSION\s+=\s+")[0-9]+\.[0-9]+\.[0-9]+";/) { it.group(1) + "${major}.${newMinor}.0\";" }
+        coreTxt = coreTxt.replaceFirst(~/(public\s+static\s+final\s+String\s+PUBLISHED_VERSION\s+=\s+"0\.9\.)[0-9]+(";)/) { it.group(1) + newSub + it.group(2) }
+        coreVersionFile.text = coreTxt
+        // IzPack appversion fields use the <major>.<minor>.0+ form
+        izpackVersionFiles.each { iz ->
+            if (iz.exists()) {
+                iz.text = iz.text.replaceFirst(~/(?m)(<appversion>)[0-9]+\.[0-9]+\.[0-9]+\+/) { it.group(1) + "${major}.${newMinor}.0+" }
+            }
+        }
+        routerVersionFile.text = routerVersionFile.text.replaceFirst(~/(public\s+static\s+final\s+long\s+BUILD\s+=\s+)[0-9]+;/) { it.group(1) + '0;' }
+        logger.lifecycle('BUILD reset to 0.')
+        logger.lifecycle('Major version bump complete. Run ./gradlew distclean updaterCompact to verify.')
+    }
+}
+
+// ---------------------------------------------------------------------------
+// QA tooling (mirrors ant sonarqube-report / po-status)
+// ---------------------------------------------------------------------------
+
+task sonarqubeReport(type: Exec) {
+    group = 'verification'
+    description = 'Run the SonarQube analysis (mirrors ant sonarqube-report).'
+    dependsOn subprojects.findAll { it.plugins.hasPlugin('java') }.collect { it.tasks.named('classes') }
+    commandLine 'bash', 'tools/sonarqube/run-sonar.sh'
+}
+
+task poStatus(type: Exec) {
+    group = 'verification'
+    description = 'Show translation status across all bundles (mirrors ant po-status).'
+    commandLine 'sh', 'tools/scripts/translation_status.sh', "${rootDir.absolutePath}"
+}
+
+// ---------------------------------------------------------------------------
+// Test aggregates (mirrors ant testCore / testRouter)
+// ---------------------------------------------------------------------------
+
+task testCore {
+    group = 'verification'
+    description = 'Run the core module tests (mirrors ant testCore).'
+    dependsOn ':core:test'
+}
+
+task testRouter {
+    group = 'verification'
+    description = 'Run the router module tests (mirrors ant testRouter).'
+    dependsOn ':router:test'
+}
+
+task testApps {
+    group = 'verification'
+    description = 'Run the application module tests (mirrors ant testApps).'
+    dependsOn subprojects.findAll { it.path.startsWith(':apps') && it.plugins.hasPlugin('java') }.collect { it.tasks.named('test') }
+}

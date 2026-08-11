@@ -36,6 +36,7 @@ task prepUpdateSmall(type: Copy) {
 def pkgTmpDir = pkgTempDir
 
 task prepUpdate(type: Copy) {
+    dependsOn prepUpdateSmall
     dependsOn ':apps:sam:jar'
     dependsOn ':apps:i2psnark:i2psnarkJar', ':apps:i2psnark:jar'
     dependsOn ':apps:systray:jar'
@@ -45,14 +46,10 @@ task prepUpdate(type: Copy) {
     dependsOn ':apps:i2psnark:war'
     dependsOn ':apps:i2pcontrol:war'
     dependsOn ':apps:imagegen:war'
-    inputs.files fileTree(pkgTmpDir + '/lib').include('*.jar')
-    inputs.files fileTree(pkgTmpDir + '/webapps').include('*.war')
-    from pkgTmpDir
     mustRunAfter ':apps:susidns:war', ':apps:susimail:war'
     mustRunAfter ':apps:i2psnark:war'
     mustRunAfter ':apps:i2pcontrol:war'
     mustRunAfter ':apps:imagegen:war'
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     // Base dir
     into pkgTmpDir
     into('lib') {
@@ -97,23 +94,23 @@ task updaterRouter(type: Zip) {
     // https://stackoverflow.com/questions/54501697/gradle-war-plugin-how-to-change-name-of-an-archive
     // https://discuss.gradle.org/t/destinationdir-is-deprecated-archivename-is-deprecated/31586
     archiveFileName.set('i2pupdate.zip')
-    destinationDirectory.set(file("${buildDir}/dist"))
+    destinationDirectory.set(distDir)
     from pkgTempDir
 }
 
 task updaterSmall(type: Zip) {
     dependsOn prepUpdateSmall
     archiveFileName.set('i2pupdate.zip')
-    destinationDirectory.set(file("${buildDir}/dist"))
+    destinationDirectory.set(distDir)
     from pkgTempDir
 }
 
 def rootDirAbs = rootDir.absolutePath
 
 task updater(type: Zip) {
-    dependsOn prepUpdate
+    dependsOn prepUpdate, prepUpdateSmall, prepUpdateRouter
     archiveFileName.set('i2pupdate.zip')
-    destinationDirectory.set(file("${buildDir}/dist"))
+    destinationDirectory.set(distDir)
     from pkgTempDir
     doLast {
         ant.exec(executable: 'git', outputproperty: 'git.revision', dir: rootDirAbs) {
