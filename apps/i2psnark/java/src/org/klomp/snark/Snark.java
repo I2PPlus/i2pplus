@@ -382,6 +382,14 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private long _retryStart;
 
     /**
+     * Stop count, incremented by stopTorrent() so a retry event that already fired cannot
+     * reconnect a torrent stopped while its event was pending.
+     *
+     * @since 0.9.71+
+     */
+    private long _stopCount;
+
+    /**
      * Start up contacting peers and querying the tracker. Blocks if tunnel is not yet open.
      *
      * @throws RuntimeException via fatal()
@@ -535,13 +543,18 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     private void scheduleRetry(long delay) {
         cancelRetry();
+        long stopCount = _stopCount;
         _retryEvent =
                 new SimpleTimer2.TimedEvent(_util.getContext().simpleTimer2(), delay) {
                     @Override
                     public void timeReached() {
                         cancelRetry();
-                        if (stopped) {
-                            startTorrent();
+                        synchronized (Snark.this) {
+                            // Re-check under the monitor: a stop that completed while this
+                            // event was pending leaves stopped true and bumps the count
+                            if (stopped && stopCount == _stopCount) {
+                                startTorrent();
+                            }
                         }
                     }
                 };
@@ -583,6 +596,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     public synchronized void stopTorrent(boolean fast) {
         cancelRetry();
         resetRetry();
+        _stopCount++;
         TrackerClient tc = trackerclient;
         if (tc != null) {
             tc.halt(fast);
