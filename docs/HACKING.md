@@ -65,22 +65,6 @@ or
 sudo service i2p start
 ```
 
-### Peripheral/External Packages: SBT
-
-The `sbt` tool from the Scala project is used for the (discontinued) Browser Bundle
-launcher and the Mac OS X launcher. It can be invoked via an `ant` target. To build
-the OS X launcher:
-
-```sh
-ant osxLauncher
-```
-
-To build the Browser Bundle launcher:
-
-```sh
-ant bbLauncher
-```
-
 ## Browsing the source code
 
 * The [DIRECTORIES.md](DIRECTORIES.md) contains a listing of the directories
@@ -88,7 +72,7 @@ in the I2P source code and what the code inside them is used for.
 
 * Some parts of the I2P router are started by files that end with the suffix
 `'Runner.java'` and can be listed by running the command
-`find . -type f -name '*Runner.java'` in the root of your `i2p.i2p` source
+`find . -type f -name '*Runner.java'` in the root of your I2P+ source
 directory.
 
 ## Version control
@@ -128,12 +112,3 @@ git fetch --unshallow
 
 For developers new to `git`, the official documentation provides a comprehensive
 knowledge base: https://git-scm.com/docs . See also the **Guides** section.
-
-## SBT behind a proxy
-
-`sbt` does not work well with SOCKS5 proxies. To use it with Tor, configure an
-HTTP proxy via the `SBT_OPTS` environment variable:
-
-```sh
-export SBT_OPTS="$SBT_OPTS -Dhttp.proxyHost=myproxy -Dhttp.proxyPort=myport"
-```

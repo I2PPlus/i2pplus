@@ -4,10 +4,12 @@
 
 | Requirement      | Details                                                        |
 | ---------------- | -------------------------------------------------------------- |
-| **Java SDK**     | 17 or higher (OpenJDK, Oracle, or Microsoft JDK on Windows).   |
+| **Java SDK**     | 1.8 or higher (OpenJDK, Oracle, or Microsoft JDK on Windows).  |
 | **Apache Ant**   | 1.9.8 or higher                                                |
 | **GNU gettext**  | `xgettext`, `msgfmt`, and `msgmerge` must be on your PATH      |
 | **Locale**       | Build environment must use a UTF-8 locale                      |
+
+Java 17 will become the minimum after the Jetty 12 migration.
 
 For JVM compatibility details, see https://i2pplus.github.io/i2pplus
 

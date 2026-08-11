@@ -43,6 +43,8 @@ See also: [Project README](../README.md)
 ### Sub-project READMEs
 
 - [HACKING.md](HACKING.md) - Developer guide and build systems
+- [CHECKLIST.md](CHECKLIST.md) - Release checklist and process
+- [TRANSLATING.md](TRANSLATING.md) - Adding and updating translations
 - [DEBUGGING.md](DEBUGGING.md) - Runtime debugging with JDWP and other tools
 - [INSTALL.md](INSTALL.md) - Building from source
 - [INSTALL-headless.md](INSTALL-headless.md) - Headless installation guide
@@ -58,8 +60,7 @@ See also: [Project README](../README.md)
 ### External READMEs
 
 - [../docker/README.md](../docker/README.md) - Running I2P+ in Docker
-- [../scripts/README.md](../scripts/README.md) - Utility scripts for development and administration
-- [../scripts/tests/README.md](../scripts/tests/README.md) - Validation and testing scripts
+- [../tools/scripts/README.md](../tools/scripts/README.md) - Development and administration scripts, including translation tools
 - [../installer/resources/README.md](../installer/resources/README.md) - Bundled installer resources
 - [../installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - Native JNI library for cryptography (GMP)
 - [../apps/imagegen/zxing/README.md](../apps/imagegen/zxing/README.md) - Barcode library (maintenance mode)
@@ -79,7 +80,7 @@ See also: [Project README](../README.md)
 | Document                                     | Description                                                            |
 | -------------------------------------------- | ---------------------------------------------------------------------- |
 | [INSTALL.md](INSTALL.md)                     | Building and installing I2P+ from source                               |
-| [INSTALL-headless.md](INSTALL-headless.md)   | Headless (console mode) installation guide. Also bundled as `.txt`     |
+| [INSTALL-headless.md](INSTALL-headless.md)   | Headless (console mode) installation guide                             |
 
 ## Administration
 
@@ -93,4 +94,4 @@ See also: [Project README](../README.md)
 | ---------------------------- | --------------------------------- |
 | [THEMING.md](THEMING.md)     | Console and webapp theming system |
 | [history.txt](history.txt)   | Full changelog                    |
-| [licenses/](licenses/)       | Third-party licenses              |
+| [LICENSES.md](LICENSES.md)   | Third-party licenses              |

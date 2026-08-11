@@ -47,7 +47,8 @@ rm -rf $I2PInstallDir ~/.i2p
 
 ## Supported JVMs
 
-As of release 2.12.0+ (0.9.69+), all platforms require Java 17 or higher.
+Java 1.8 or higher is required. Java 17 will become the minimum after the
+Jetty 12 migration.
 
 | Platform        | JVM                                      |
 | --------------- | ---------------------------------------- |

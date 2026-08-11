@@ -1,3 +1,11 @@
+2026-08-11 dr|z3d
+  * Docs:
+    - Corrected the Java requirement in the build docs (1.8 minimum; 17 will
+      come with the Jetty 12 migration), fixed broken index links in the docs
+      index, repointed the English-language flags in the translated READMEs,
+      added a translation how-to (TRANSLATING.md), and dropped the stale SBT
+      launcher sections from the developer guide
+
 2026-08-10 dr|z3d
   * Tunnel:
     - Collapse guard in fail() now uses getTunnelFailed() (failures > 3)
