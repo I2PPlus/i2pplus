@@ -23,6 +23,7 @@ dependencies {
 }
 
 war {
+    rootSpec.exclude('**/*.jar')
     from 'imagegen/webapp/src/main/webapp/imagegen.css'
     from 'imagegen/webapp/src/main/webapp/index.html'
     webXml = file('imagegen/webapp/src/main/webapp/WEB-INF/web.xml')

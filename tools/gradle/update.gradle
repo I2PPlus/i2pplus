@@ -1,5 +1,15 @@
+def pkgTmpDir = pkgTempDir
+def localeBuildDir = "${System.getProperty('java.io.tmpdir')}/build-i2p/locale-build"
+
 task prepUpdateRouter(type: Copy) {
+    group = 'package'
+    description = 'Assemble the router-only update payload (mirrors ant prepupdate-router).'
     dependsOn ':core:jar', ':router:jar'
+    // Fresh staging dir; the zip task zips everything found, so stale
+    // leftovers from earlier runs (renamed jars, deleted dirs) must not persist
+    doFirst {
+        new File(pkgTmpDir).deleteDir()
+    }
     // Pass in paths as a closure, so they are not executed during configuration
     from {[
         project(':core').jar.archiveFile,
@@ -9,6 +19,8 @@ task prepUpdateRouter(type: Copy) {
 }
 
 task prepUpdateSmall(type: Copy) {
+    group = 'package'
+    description = 'Assemble the base update payload: core, router, streaming, console jars and wars (mirrors ant prepupdateSmall).'
     dependsOn prepUpdateRouter
     dependsOn ':apps:ministreaming:jar', ':apps:streaming:jar'
     dependsOn ':apps:routerconsole:jar', ':apps:i2ptunnel:i2ptunnelJar'
@@ -23,6 +35,8 @@ task prepUpdateSmall(type: Copy) {
             project(':apps:routerconsole').jar.archiveFile,
             project(':apps:i2ptunnel').i2ptunnelJar.archiveFile,
             project(':apps:jrobin').jar.archiveFile,
+            // Address book must ship in the payload (ant preppkg-base copies it)
+            project(':apps:addressbook').jar.archiveFile,
         ]}
     }
     into('webapps') {
@@ -33,9 +47,17 @@ task prepUpdateSmall(type: Copy) {
     }
 }
 
-def pkgTmpDir = pkgTempDir
+// Compile the router locale po files to gettext .mo, as the ant updater does
+task compileLocale(type: Exec) {
+    group = 'package'
+    description = 'Compile the locale po files to gettext .mo via tools/scripts/bundle-messages.sh (mirrors ant prep-script-translation).'
+    workingDir rootDir
+    commandLine 'sh', 'tools/scripts/bundle-messages.sh', '--dir', 'installer/resources/locale', '--build-dir', localeBuildDir
+}
 
 task prepUpdate(type: Copy) {
+    group = 'package'
+    description = 'Assemble the full update payload into pkg-temp: all jars, wars, locale, certificates, docs (mirrors ant prepupdate).'
     dependsOn prepUpdateSmall
     dependsOn ':apps:sam:jar'
     dependsOn ':apps:i2psnark:i2psnarkJar', ':apps:i2psnark:jar'
@@ -46,6 +68,7 @@ task prepUpdate(type: Copy) {
     dependsOn ':apps:i2psnark:war'
     dependsOn ':apps:i2pcontrol:war'
     dependsOn ':apps:imagegen:war'
+    dependsOn compileLocale
     mustRunAfter ':apps:susidns:war', ':apps:susimail:war'
     mustRunAfter ':apps:i2psnark:war'
     mustRunAfter ':apps:i2pcontrol:war'
@@ -85,11 +108,13 @@ task prepUpdate(type: Copy) {
     from 'installer/resources/blocklist.txt'
     from 'installer/resources/deletelist.txt'
     into('certificates') { from 'installer/resources/certificates' }
-    into('locale') { from 'installer/resources/locale' }
+    into('locale') { from "$localeBuildDir/mo" }
     into('man') { from 'installer/resources/platform-specific/unix/man' }
 }
 
 task updaterRouter(type: Zip) {
+    group = 'package'
+    description = 'Build the router-only update zip dist/i2pupdate.zip (mirrors ant updater-router).'
     dependsOn prepUpdateRouter
     // https://stackoverflow.com/questions/54501697/gradle-war-plugin-how-to-change-name-of-an-archive
     // https://discuss.gradle.org/t/destinationdir-is-deprecated-archivename-is-deprecated/31586
@@ -99,6 +124,8 @@ task updaterRouter(type: Zip) {
 }
 
 task updaterSmall(type: Zip) {
+    group = 'package'
+    description = 'Build the compact update zip dist/i2pupdate.zip to verify all module compiles (mirrors ant updaterSmall).'
     dependsOn prepUpdateSmall
     archiveFileName.set('i2pupdate.zip')
     destinationDirectory.set(distDir)
@@ -108,6 +135,8 @@ task updaterSmall(type: Zip) {
 def rootDirAbs = rootDir.absolutePath
 
 task updater(type: Zip) {
+    group = 'package'
+    description = 'Build the full update zip dist/i2pupdate.zip for existing installs (mirrors ant updater).'
     dependsOn prepUpdate, prepUpdateSmall, prepUpdateRouter
     archiveFileName.set('i2pupdate.zip')
     destinationDirectory.set(distDir)

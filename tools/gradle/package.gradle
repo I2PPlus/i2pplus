@@ -1,10 +1,10 @@
 // Gradle mirrors of the user-facing Ant targets in build.xml.
 // Packaging, housekeeping, release, and QA tooling. Kept separate from
-// update.gradle (which only covers the update zip variants).
+// update.gradle (which only covers the update zip variants) and from
+// installer.gradle (which covers the IzPack installer family).
 //
-// NOT ported (Ant-only today): IzPack installers (pkg200/installer*),
-// jbigi native builds, launch4j wrappers, build-buildtools, and the
-// updater200 family.
+// NOT ported (Ant-only today): jbigi native builds (buildJbigi*), the zip /
+// 7z platform packages, AppImage, pkg200, updater200, and build-buildtools.
 //
 // Configuration-cache safe: file sets and exec commands are declared at
 // configuration time, never inside doLast closures.
@@ -90,7 +90,7 @@ task updaterCompact(type: Zip) {
 }
 
 // ---------------------------------------------------------------------------
-// pkg / buildDeb / tarball — distribution set (mirrors ant pkg, minus IzPack)
+// pkg / buildDeb / tarball — distribution set (mirrors ant pkg, plus deb)
 // ---------------------------------------------------------------------------
 
 task buildDeb(type: Exec) {
@@ -116,8 +116,8 @@ task tarball(type: Tar) {
 
 task pkg {
     group = 'package'
-    description = 'Assemble the distribution set: update zip, Debian package, and tarball (mirrors ant pkg minus the IzPack installer).'
-    dependsOn distclean, updater, buildDeb, tarball
+    description = 'Assemble the distribution set: update zip, Debian package, tarball, and the IzPack installer (mirrors ant pkg).'
+    dependsOn 'distclean', 'updater', 'buildDeb', 'tarball', 'installer'
 }
 
 // Ant runs a target's dependencies in list order (distclean first); Gradle

@@ -21,6 +21,7 @@ dependencies {
 
 war {
     archiveBaseName.set('jsonrpc')
+    rootSpec.exclude('**/*.jar')
     webXml = file('web.xml')
     dependsOn ':apps:i2ptunnel:i2ptunnelJar'
 }

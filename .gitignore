@@ -257,6 +257,8 @@ installer/build/
 installer/bin/
 installer/java/build/
 installer/lib/izpack/patches.jar
+# IzPack 5 langpack staging (written by the installer5 tasks)
+/com/
 
 # Session bans
 router/sessionbans/

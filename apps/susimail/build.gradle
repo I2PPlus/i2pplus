@@ -29,6 +29,7 @@ task bundle {
 war.dependsOn bundle, ':apps:i2ptunnel:i2ptunnelJar'
 
 war {
+    rootSpec.exclude('**/*.jar')
     from 'src'
     exclude 'WEB-INF/web.xml'
     exclude 'LICENSE'

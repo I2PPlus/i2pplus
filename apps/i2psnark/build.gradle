@@ -50,6 +50,7 @@ task bundle {
 war.dependsOn bundle, ':apps:i2ptunnel:i2ptunnelJar'
 
 war {
+    rootSpec.exclude('**/*.jar')
     rootSpec.exclude('/org/klomp/snark/*.class')
     rootSpec.exclude('/org/klomp/snark/bencode/**')
     rootSpec.exclude('/org/klomp/snark/comments/**')

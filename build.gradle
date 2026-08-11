@@ -118,3 +118,4 @@ ext.distDir = file('dist')
 
 apply from: file('tools/gradle/update.gradle')
 apply from: file('tools/gradle/package.gradle')
+apply from: file('tools/gradle/installer.gradle')

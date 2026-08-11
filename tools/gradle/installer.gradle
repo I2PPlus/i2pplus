@@ -1,0 +1,749 @@
+// Gradle mirrors of the IzPack installer targets in build.xml: installer,
+// installer5, the per-platform installers, and their payload staging.
+//
+// Each platform variant stages its payload into its own directory under
+// /tmp/build-i2p/pkg-installer (ant reuses the shared pkg-temp serially;
+// separate dirs let the parallel Gradle graph rebuild the full installer and
+// the platform installers without racing the update zip payload).
+//
+// Deliberate fixes vs ant, noted in the README: ant's installer-windows /
+// installer5-windows / installer2app targets reference files at the repo root
+// (basedir/install.jar, basedir/i2pinstall.exe) that never exist there, so the
+// exe move fails in ant; the ports use dist/ paths instead.
+//
+// IzPack 4 (bundled) serves the installer family; IzPack 5 (external, at
+// ~/IzPack) serves the installer5 family. launch4j is bundled but ships no
+// macOS binaries, so exe targets only run on x86 Linux/Windows, as in ant.
+//
+// Configuration-cache safe: the payload is staged with real Copy tasks (the
+// same lazy from {} pattern update.gradle uses), izpack/launch4j run as Exec
+// tasks, and finishing touches (gunzip, CRLF, chmod, sha256) run as pure Java
+// inside doLast. Project state is only read at configuration time; final
+// locals are captured by value so they survive the cache replay.
+
+// Final locals are captured by value in task closures, which keeps them
+// resolvable when the configuration cache replays task execution; function
+// bodies get the values they need as parameters instead
+final def workspaceRootAbs = rootDir.absolutePath
+final def stageRoot = file("${System.getProperty('java.io.tmpdir')}/build-i2p/pkg-installer")
+final def izpackWork = file("${buildDir}/izpack")
+final def launcherWork = file("${buildDir}/launch4j")
+final def izPack4Compiler = "${workspaceRootAbs}/installer/lib/izpack/4/standalone-compiler.jar"
+final def izPackPatchesJar = "${workspaceRootAbs}/installer/lib/izpack/patches.jar"
+final def launch4jJar = "${workspaceRootAbs}/installer/lib/launch4j/launch4j.jar"
+final def payloadSeed = "${pkgTempDir}"
+final def distAbs = file('dist').absolutePath
+final def fullVersion = "${ext.fullVersion}"
+final def iz5home = System.getProperty('user.home') + '/IzPack'
+final def izpack2appPy = "${iz5home}/utils/wrappers/izpack2app/izpack2app.py"
+
+// One shared instance; task closures capture it by value under the config cache
+final def installerUtil = new InstallerUtil()
+
+// Closures created inside the factory functions below cannot see top-level
+// locals, so each factory receives the values it needs as one config map
+final def stageCfg = [seed: payloadSeed, launcherWork: "${launcherWork}",
+                      fullVersion: fullVersion, wsAbs: workspaceRootAbs, util: installerUtil]
+final def izpack4Cfg = [seed: payloadSeed, izWork: "${izpackWork}", dAbs: "${distAbs}",
+                        wsAbs: workspaceRootAbs, compiler: izPack4Compiler, util: installerUtil]
+final def izpack5Cfg = [seed: payloadSeed, izWork: "${izpackWork}", dAbs: "${distAbs}",
+                        wsAbs: workspaceRootAbs, iz5home: iz5home, util: installerUtil]
+
+// ant sets noExe when launch4j has no binaries for the build host. Final
+// locals so onlyIf closures capture them by value under the config cache.
+final def launcherSupported = ['x86', 'i386', 'i586', 'i686', 'amd64', 'x86_64'].contains(System.getProperty('os.arch')) &&
+        (System.getProperty('os.name').toLowerCase().contains('linux') ||
+         System.getProperty('os.name').toLowerCase().contains('windows'))
+
+// Helper methods live on a plain class so task closures can call them through
+// an explicit receiver; bare script methods and script locals do not resolve
+// inside task configuration closures (delegate-first dispatch)
+class InstallerUtil {
+    // ant's sha256sum helper prints "basename: hash"
+    void printSha(File absFile) {
+        def pb = new ProcessBuilder('sh', '-c',
+                "f=\"${absFile}\"; h=\$(sha256sum \"\$f\"); echo \"\$(basename \"\$f\"): \${h%% *}\"")
+        pb.inheritIO()
+        pb.start().waitFor()
+    }
+
+    void gunzip(File gz, File out) {
+        out.parentFile.mkdirs()
+        new FileOutputStream(out).withCloseable { fos ->
+            new java.util.zip.GZIPInputStream(new FileInputStream(gz)).withCloseable { gis ->
+                byte[] buf = new byte[65536]
+                int n
+                while ((n = gis.read(buf)) > 0) {
+                    fos.write(buf, 0, n)
+                }
+            }
+        }
+    }
+
+    // Convert the windows-relevant payload files to CRLF (ant fixcrlf)
+    void crlfStage(File stage) {
+        def patterns = ['**/*.config', '**/*.bat', '**/*.cmd', '**/*.xml', '**/*.properties', '**/*.txt', 'scripts/*']
+        new Paths().forEachFile(stage, patterns) { File f ->
+            String text = f.getText('UTF-8')
+            if (text.contains('\n') && !text.contains('\r\n')) {
+                f.setText(text.replaceAll('\r?\n', '\r\n'), 'UTF-8')
+            }
+        }
+    }
+
+    // Walker helper for crlfStage: matches ant-style include patterns per directory
+    private static class Paths {
+        void forEachFile(File root, List<String> patterns, Closure action) {
+            root.traverse(type: groovy.io.FileType.FILES) { f ->
+                def rel = root.toPath().relativize(f.toPath()).toString().replace(File.separator, '/')
+                if (patterns.any { matches(it, rel) }) {
+                    action(f)
+                }
+            }
+        }
+
+        // Ant-style matching: '**/' at the scan-root spans any directory depth,
+        // '*' spans a single path segment, 'dir/' matches everything under dir
+        private static boolean matches(String pattern, String rel) {
+            if (pattern.endsWith('/')) {
+                return rel.startsWith(pattern)
+            }
+            StringBuilder regex = new StringBuilder()
+            int i = 0
+            while (i < pattern.length()) {
+                char c = pattern.charAt(i)
+                if (c == '*') {
+                    if (i + 1 < pattern.length() && pattern.charAt(i + 1) == '*') {
+                        if (i + 2 < pattern.length() && pattern.charAt(i + 2) == '/') {
+                            regex.append('(?:[^/]+/)*')
+                            i += 3
+                        } else {
+                            regex.append('.*')
+                            i += 2
+                        }
+                    } else {
+                        regex.append('[^/]*')
+                        i += 1
+                    }
+                } else {
+                    // Escape regex metacharacters (only '.' can appear in our patterns)
+                    if (c == '.') {
+                        regex.append('\\.')
+                    } else {
+                        regex.append(c)
+                    }
+                    i += 1
+                }
+            }
+            rel ==~ regex.toString()
+        }
+    }
+}
+
+// One staging task per variant, named after the ant preppkg targets. The
+// staging runs fresh every time (never up-to-date), exactly like ant, and the
+// up-to-date checks live on the izpack tasks that consume the payload.
+def makeStageTask(String taskName, String stageDir, String variant, String taskDesc, Map cfg) {
+    task(taskName, type: Copy) {
+        group = 'package'
+        description = taskDesc
+        dependsOn 'prepUpdate', ':installer:jar'
+        if (variant == 'all' || variant == 'windows') {
+            dependsOn 'buildexe'
+        }
+        // Fresh staging dir each run; the seed and all extras are re-copied
+        doFirst {
+            new File(stageDir).deleteDir()
+        }
+        // Never up-to-date: staging must mirror the payload even when only
+        // the repo extras changed
+        outputs.upToDateWhen { false }
+        outputs.dir(stageDir)
+        // ant's plain <copy> overwrites the seed (e.g. certificates); match it
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+        into stageDir
+        // Seed with the update payload (minus files the installer drops),
+        // then add the installer-only extras
+        from(cfg.seed) {
+            exclude '**/*.jar.pack'
+            exclude '**/*.war.pack'
+            exclude '**/deletelist.txt'
+            exclude 'webapps/addressbook.war'
+        }
+        from 'apps/i2psnark/i2psnark.config'
+        from 'installer/resources/blocklist/blocklist.txt'
+        from 'installer/resources/blocklist/blocklist_tor.txt'
+        from 'installer/resources/clients.config'
+        from 'installer/resources/i2ptunnel.config'
+        from 'installer/lib/wrapper/wrapper.config'
+        from 'installer/lib/wrapper/wrapper.config.commented'
+        from 'installer/resources/hosts.txt'
+        from 'docs/INSTALL-headless.md'
+        into('scripts') {
+            from 'apps/proxyscript/i2pProxy.pac'
+        }
+        into('docs') {
+            from('installer/resources/platform-specific/windows') {
+                include 'startconsole.html'
+                include 'start.ico'
+                include 'stop.ico'
+                include 'console.ico'
+                include 'uninstall.ico'
+            }
+            from('installer/resources/console/themes') {
+                exclude '**/*.*~'
+            }
+        }
+        into('eepsite') {
+            from('installer/resources/eepsite') {
+                exclude '**/.placeholder'
+            }
+        }
+        into('eepsite-jetty9.3') {
+            from 'installer/resources/eepsite-jetty9.3'
+        }
+        into('eepsite/docroot') {
+            from('installer/resources/console/themes/console/light/images/favicon.svg') {
+                rename { 'favicon.svg' }
+            }
+        }
+        into('certificates') {
+            from 'installer/resources/certificates'
+        }
+        // Jetty runtime jars are vendored in apps/jetty/jettylib; the legacy
+        // ones never enter the payload (ant copies then deletes them)
+        into('lib') {
+            from('apps/jetty/jettylib') {
+                include 'javax.servlet.jar'
+                include 'jetty*.jar'
+                include 'org.mortbay.*.jar'
+                include 'commons*.jar'
+                include 'jasper*.jar'
+                exclude 'jetty-i2p.jar'
+                exclude 'commons-logging.jar'
+                exclude 'jasper-compiler.jar'
+                exclude 'jetty-java5-threadpool.jar'
+                exclude 'jetty-sslengine.jar'
+            }
+            from { project(':apps:jetty').jar.archiveFile }
+        }
+        into('licenses') {
+            from('docs/LICENSES.md') {
+                rename { 'LICENSE.md' }
+            }
+            from('apps/jetty/apache-tomcat-9.0.107/NOTICE') {
+                rename { 'NOTICE-Tomcat.txt' }
+            }
+        }
+        into('geoip') {
+            from 'installer/resources/geoip/countries.txt'
+            from 'installer/resources/geoip/continents.txt'
+        }
+        into('eepsite/docroot/help/lib') {
+            from('apps/routerconsole/resources/icons/flags_svg') {
+                include 'az.svg bn.svg cn.svg cz.svg de.svg dk.svg es.svg ee.svg fi.svg fr.svg'
+                include 'gr.svg hu.svg id.svg in.svg ir.svg it.svg jp.svg kr.svg no.svg nl.svg'
+                include 'pl.svg pt.svg ro.svg ru.svg se.svg si.svg tr.svg us.svg lang_ar.svg'
+                include 'ua.svg vn.svg xt.svg'
+            }
+        }
+
+        // Unix scripts, wrapper binaries, and windows bits for this variant
+        // (ant preppkg-unix plus the per-platform preppkg-* targets)
+        if (variant != 'windows') {
+            from 'installer/resources/platform-specific/unix/runplain.sh'
+            from 'installer/resources/platform-specific/unix/eepget'
+            from 'installer/resources/platform-specific/unix/eephead'
+            from 'installer/resources/platform-specific/unix/i2ping'
+            from 'installer/resources/platform-specific/unix/hostping'
+            from 'installer/resources/platform-specific/unix/graceful_update'
+            from 'installer/resources/platform-specific/unix/i2prouter'
+            from 'installer/resources/platform-specific/unix/osid'
+            from 'installer/resources/platform-specific/unix/postinstall.sh'
+        }
+        if (variant == 'all' || variant == 'nowindows' || variant == 'linux') {
+            ['linux', 'linux64', 'linux-armv5', 'linux-armv7', 'linux64-armv8'].each { d ->
+                into("lib/wrapper/${d}") {
+                    from("installer/lib/wrapper/${d}") {
+                        exclude '*.txt'
+                        exclude 'README.md'
+                    }
+                }
+            }
+        }
+        if (variant == 'all' || variant == 'nowindows' || variant == 'freebsd') {
+            ['freebsd', 'freebsd64'].each { d ->
+                into("lib/wrapper/${d}") {
+                    from("installer/lib/wrapper/${d}") {
+                        exclude '*.txt'
+                        exclude 'README.md'
+                    }
+                }
+            }
+        }
+        if (variant == 'all' || variant == 'nowindows' || variant == 'osx') {
+            into('Start I2P Router.app') {
+                from 'installer/resources/platform-specific/macos/Start I2P Router.app'
+            }
+            into('lib/wrapper/macosx') {
+                from('installer/lib/wrapper/macosx') {
+                    exclude '*.txt'
+                    exclude 'README.md'
+                }
+            }
+            from 'installer/resources/platform-specific/macos/net.i2p.router.plist.template'
+            from 'installer/resources/platform-specific/macos/install_i2p_service_osx.command'
+            from 'installer/resources/platform-specific/macos/uninstall_i2p_service_osx.command'
+        }
+        if (variant == 'nowindows' && new File('installer/lib/wrapper/solaris').isDirectory()) {
+            into('lib/wrapper/solaris') {
+                from('installer/lib/wrapper/solaris') {
+                    exclude '*.txt'
+                    exclude 'README.md'
+                }
+            }
+        }
+        if (variant == 'all' || variant == 'windows') {
+            ['eepget.bat', 'eephead.bat', 'i2prouter.bat', 'fixperms.bat',
+             'install_i2p_service_winnt.bat', 'set_config_dir_for_nt_service.bat',
+             'uninstall_i2p_service_winnt.bat', 'StartI2P+Service.bat', 'StopI2P+Service.bat',
+             'EnableI2P+Service.bat', 'DisableI2P+Service.bat'].each { b ->
+                from "installer/resources/platform-specific/windows/${b}"
+            }
+            ['win32', 'win64'].each { d ->
+                into("lib/wrapper/${d}") {
+                    from("installer/lib/wrapper/${d}") {
+                        exclude '*.txt'
+                        exclude 'README.md'
+                    }
+                }
+            }
+            from { project(':installer').jar.archiveFile }
+        }
+
+        // Old windows binaries need the matching old wrapper jar (ant
+        // preppkg-windows-only), and the all-platform payload keeps both
+        if (variant == 'windows') {
+            into('lib') {
+                from('installer/lib/wrapper/win-all/wrapper.jar')
+            }
+        } else {
+            into('lib') {
+                from('installer/lib/wrapper/all/wrapper.jar')
+                if (variant == 'all') {
+                    from('installer/lib/wrapper/win-all/wrapper.jar') {
+                        rename { 'wrapper-windows.jar' }
+                    }
+                }
+            }
+        }
+
+        doLast {
+            File stageF = new File(stageDir)
+            // GeoIP databases, as the ant preppkg-base gunzip steps
+            cfg.util.gunzip(new File("${cfg.wsAbs}/installer/resources/geoip/GeoLite2-Country.mmdb.gz"),
+                   new File(stageF, 'geoip/GeoLite2-Country.mmdb'))
+            cfg.util.gunzip(new File("${cfg.wsAbs}/installer/resources/geoip/db-ip-asn.mmdb.gz"),
+                   new File(stageF, 'geoip/db-ip-asn.mmdb'))
+            if (variant == 'windows') {
+                cfg.util.crlfStage(stageF)
+            }
+            if (variant != 'windows') {
+                ['eepget', 'eephead', 'i2ping', 'hostping', 'graceful_update'].each { s ->
+                    new File(stageF, s).setExecutable(true)
+                }
+            }
+            if (variant == 'all' || variant == 'nowindows' || variant == 'osx') {
+                new File(stageF, 'install_i2p_service_osx.command').setExecutable(true)
+                new File(stageF, 'uninstall_i2p_service_osx.command').setExecutable(true)
+            }
+        }
+    }
+}
+
+makeStageTask('preppkg', "${stageRoot}/all", 'all',
+        'Stage the full all-platform installer payload (mirrors ant preppkg).', stageCfg)
+makeStageTask('preppkg-nowindows', "${stageRoot}/nowindows", 'nowindows',
+        'Stage the no-windows installer payload (mirrors ant preppkg-nowindows).', stageCfg)
+makeStageTask('preppkg-linux-only', "${stageRoot}/linux", 'linux',
+        'Stage the linux-only installer payload (mirrors ant preppkg-linux-only).', stageCfg)
+makeStageTask('preppkg-freebsd-only', "${stageRoot}/freebsd", 'freebsd',
+        'Stage the freebsd-only installer payload (mirrors ant preppkg-freebsd-only).', stageCfg)
+makeStageTask('preppkg-osx-only', "${stageRoot}/osx", 'osx',
+        'Stage the osx-only installer payload (mirrors ant preppkg-osx-only).', stageCfg)
+makeStageTask('preppkg-windows-only', "${stageRoot}/windows", 'windows',
+        'Stage the windows-only installer payload (mirrors ant preppkg-windows-only).', stageCfg)
+
+// Variant-specific jbigi.jar built from the bundled natives (ant jbigi-*-only)
+def makeJbigiJarTask(String taskName, String stageDir, String variant, String taskDesc, String version) {
+    String stageDep = [all: 'preppkg', nowindows: 'preppkg-nowindows', linux: 'preppkg-linux-only',
+                       freebsd: 'preppkg-freebsd-only', osx: 'preppkg-osx-only',
+                       windows: 'preppkg-windows-only'][variant]
+    // Ant filesets split the includes on spaces; one pattern per gradle include
+    String[] includePatterns = ([all: '*.so *.dll *.jnilib', nowindows: '*.so *.jnilib',
+                                 linux: '*linux*.so', freebsd: '*bsd*.so', osx: '*.jnilib',
+                                 windows: '*windows*.dll'][variant] as String).split()
+    def matches = fileTree('installer/lib/jbigi') { include includePatterns }.files
+    if (matches.isEmpty()) {
+        throw new GradleException("No jbigi natives for installer variant ${variant} (patterns ${includePatterns.join(' ')})")
+    }
+    task(taskName, type: Jar) {
+        group = 'package'
+        description = taskDesc
+        dependsOn stageDep
+        archiveFileName.set('jbigi.jar')
+        destinationDirectory.set(file("${stageDir}/lib"))
+        from('installer/lib/jbigi') {
+            include includePatterns
+        }
+        manifest {
+            attributes('Implementation-Version': version, 'Built-By': 'I2P+',
+                       'Build-Date': new java.text.SimpleDateFormat('yyyy-MM-dd HH:mm:ss').format(new Date()),
+                       'Base-Revision': 'git', 'Workspace-Changes': '')
+        }
+    }
+}
+
+makeJbigiJarTask('jbigi', "${stageRoot}/all", 'all',
+        'Build the all-platform jbigi.jar into the staged payload (mirrors ant jbigi).', fullVersion)
+makeJbigiJarTask('jbigi-nowindows', "${stageRoot}/nowindows", 'nowindows',
+        'Build the no-windows jbigi.jar into the staged payload (mirrors ant jbigi-nowindows).', fullVersion)
+makeJbigiJarTask('jbigi-linux', "${stageRoot}/linux", 'linux',
+        'Build the linux-only jbigi.jar into the staged payload (mirrors ant jbigi-linux).', fullVersion)
+makeJbigiJarTask('jbigi-freebsd', "${stageRoot}/freebsd", 'freebsd',
+        'Build the freebsd-only jbigi.jar into the staged payload (mirrors ant jbigi-freebsd).', fullVersion)
+makeJbigiJarTask('jbigi-osx', "${stageRoot}/osx", 'osx',
+        'Build the osx-only jbigi.jar into the staged payload (mirrors ant jbigi-osx).', fullVersion)
+makeJbigiJarTask('jbigi-windows', "${stageRoot}/windows", 'windows',
+        'Build the windows-only jbigi.jar into the staged payload (mirrors ant jbigi-windows).', fullVersion)
+
+// Filtered IzPack install descriptors with the pkg-temp dir redirected to the
+// gradle payload location (ant preppkg-base ends with the same substitution)
+task prepIzpackConfigs(type: Copy) {
+    group = 'package'
+    description = 'Prepare the IzPack 4/5 install descriptors for the gradle payload dir (mirrors ant preppkg-base).'
+    destinationDir = izpackWork
+    from('installer/lib/izpack/4/install.xml') {
+        into '4'
+        filter { line -> line.replace('dir="pkg-temp"', 'dir="' + payloadSeed + '"') }
+    }
+    from('installer/lib/izpack/5/install5.xml') {
+        into '5'
+        filter { line -> line.replace('dir="pkg-temp"', 'dir="' + payloadSeed + '"') }
+    }
+}
+
+// IzPack 4 patches jar, built from the bundled patch classes (ant izpack-patches)
+task izpackPatches(type: Jar) {
+    group = 'package'
+    description = 'Build the IzPack 4 patches jar installer/lib/izpack/patches.jar (mirrors ant izpack-patches).'
+    archiveFileName.set('patches.jar')
+    destinationDirectory.set(file('installer/lib/izpack'))
+    from 'installer/lib/izpack/4/patches'
+}
+
+// Windows startup exe for the payload (ant buildexe): an empty launcher jar
+// with the full classpath manifest, wrapped by launch4j
+def launcherClassPath = ['lib/commons-el.jar', 'lib/desktopgui.jar', 'lib/i2p.jar', 'lib/i2psnark.jar',
+                         'lib/i2ptunnel.jar', 'lib/jasper-runtime.jar', 'lib/javax.servlet.jar',
+                         'lib/jbigi.jar', 'lib/jetty-continuation.jar', 'lib/jetty-deploy.jar',
+                         'lib/jetty-http.jar', 'lib/jetty-i2p.jar', 'lib/jetty-io.jar',
+                         'lib/jetty-rewrite-handler.jar', 'lib/jetty-security.jar',
+                         'lib/jetty-servlet.jar', 'lib/jetty-servlets.jar', 'lib/jetty-start.jar',
+                         'lib/jetty-util.jar', 'lib/jetty-webapp.jar', 'lib/jetty-xml.jar',
+                         'lib/jrobin.jar', 'lib/jstl.jar', 'lib/mstreaming.jar',
+                         'lib/org.mortbay.jetty.jar', 'lib/pack200.jar', 'lib/routerconsole.jar',
+                         'lib/router.jar', 'lib/sam.jar', 'lib/standard.jar', 'lib/streaming.jar',
+                         'lib/systray.jar', 'lib/wrapper.jar'].join(' ')
+
+def launchi2pXmlText = '''<launch4jConfig>
+  <headerType>0</headerType>
+  <jar>''' + "${launcherWork}/launchi2p.jar" + '''</jar>
+  <outfile>''' + "${launcherWork}/i2p.exe" + '''</outfile>
+  <errTitle>I2P+</errTitle>
+  <chdir>.</chdir>
+  <customProcName>false</customProcName>
+  <icon>''' + "${workspaceRootAbs}/installer/resources/platform-specific/windows/start.ico" + '''</icon>
+  <jre>
+    <minVersion>1.8.0</minVersion>
+    <maxHeapSize>512</maxHeapSize>
+    <args>-Djava.library.path=.;lib -DloggerFilenameOverride=logs/log-router-@.txt -Dorg.mortbay.http.Version.paranoid=true -Dorg.mortbay.util.FileResource.checkAliases=false</args>
+  </jre>
+</launch4jConfig>'''
+
+task launchi2pJar(type: Jar) {
+    group = 'package'
+    description = 'Build the empty launchi2p.jar with the full launcher classpath manifest (mirrors ant buildexe).'
+    archiveFileName.set('launchi2p.jar')
+    destinationDirectory.set(launcherWork)
+    manifest {
+        attributes('Main-Class': 'net.i2p.router.RouterLaunch', 'Class-Path': launcherClassPath,
+                   'Built-By': 'I2P+',
+                   'Build-Date': new java.text.SimpleDateFormat('yyyy-MM-dd HH:mm:ss').format(new Date()),
+                   'Base-Revision': 'git')
+    }
+}
+
+task launchi2pXml {
+    group = 'package'
+    description = 'Generate the launch4j config for the payload launcher (mirrors ant buildexe).'
+    doLast {
+        new File("${launcherWork}" as String).mkdirs()
+        new File("${launcherWork}/launchi2p.xml" as String).setText(launchi2pXmlText, 'UTF-8')
+    }
+}
+
+task launch4jWrap(type: Exec) {
+    group = 'package'
+    description = 'Wrap launchi2p.jar as i2p.exe via launch4j (mirrors ant buildexe).'
+    dependsOn launchi2pJar, launchi2pXml
+    onlyIf { launcherSupported }
+    workingDir launcherWork
+    commandLine 'java', '-jar', launch4jJar, "${launcherWork}/launchi2p.xml"
+}
+
+task buildexe {
+    group = 'package'
+    description = 'Build the launchi2p.jar manifest and i2p.exe windows launcher via launch4j (mirrors ant buildexe).'
+    dependsOn launch4jWrap
+}
+
+// Shared launch4j invocation for the installer exes (ant installerexe etc.)
+def makeLaunch4jTask(String taskName, String configFile, String outExe, String taskDesc, String dep,
+                     String launch4jPath, boolean supported, InstallerUtil util) {
+    task(taskName, type: Exec) {
+        group = 'package'
+        description = taskDesc
+        dependsOn dep
+        onlyIf { supported }
+        commandLine 'java', '-jar', launch4jPath, configFile
+        outputs.file(outExe)
+        doLast {
+            util.printSha(new File(outExe))
+        }
+    }
+}
+
+makeLaunch4jTask('installerexe', "${workspaceRootAbs}/installer/i2pinstaller.xml", "${distAbs}/i2pinstall.exe",
+        'Build dist/i2pinstall.exe from dist/install.jar via launch4j (mirrors ant installerexe).', 'installer',
+        launch4jJar, launcherSupported, installerUtil)
+
+// IzPack 4 installer builds; each produces one jar (the exe is the separate
+// installerexe task), then the platform jar names as in ant
+def makeIzpack4Task(String taskName, String stageTask, String jbigiTask, String outJarName, String taskDesc, Map cfg) {
+    task(taskName, type: Exec) {
+        group = 'package'
+        description = taskDesc
+        dependsOn stageTask, jbigiTask, izpackPatches, prepIzpackConfigs
+        // CLI is positional: the xml file comes first, '-c' is compression
+        commandLine 'java', '-jar', cfg.compiler, "${cfg.izWork}/4/install.xml",
+                '-b', cfg.wsAbs, '-k', 'standard', '-o', "${cfg.dAbs}/${outJarName}"
+        inputs.files(fileTree(cfg.seed), file("${cfg.izWork}/4/install.xml"), izpackPatches)
+        outputs.file("${cfg.dAbs}/${outJarName}")
+        doLast {
+            cfg.util.printSha(new File("${cfg.dAbs}/${outJarName}"))
+        }
+    }
+}
+
+makeIzpack4Task('installer', 'preppkg', 'jbigi', 'install.jar',
+        'Build the full all-platform installer dist/install.jar (mirrors ant installer).', izpack4Cfg)
+makeIzpack4Task('installer-nowindows', 'preppkg-nowindows', 'jbigi-nowindows', "i2pinstall_${fullVersion}.jar",
+        'Build the no-windows installer jar (mirrors ant installer-nowindows).', izpack4Cfg)
+makeIzpack4Task('installer-linux', 'preppkg-linux-only', 'jbigi-linux', "i2pinstall_${fullVersion}_linux-only.jar",
+        'Build the linux-only installer jar (mirrors ant installer-linux).', izpack4Cfg)
+makeIzpack4Task('installer-freebsd', 'preppkg-freebsd-only', 'jbigi-freebsd', "i2pinstall_${fullVersion}_freebsd-only.jar",
+        'Build the freebsd-only installer jar (mirrors ant installer-freebsd).', izpack4Cfg)
+makeIzpack4Task('installer-osx', 'preppkg-osx-only', 'jbigi-osx', "i2pinstall_${fullVersion}_osx-only.jar",
+        'Build the osx-only installer jar and the mac app bundle (mirrors ant installer-osx).', izpack4Cfg)
+
+// Windows-only izpack4 installer: intermediate names avoid clobbering the
+// full installer's install.jar / i2pinstall.exe when both build in parallel
+// (fixes ant's broken move from basedir/i2pinstall.exe)
+task installerW4Jar(type: Exec) {
+    group = 'package'
+    description = 'Build the windows-only installer jar (mirrors ant installer-windows).'
+    dependsOn 'preppkg-windows-only', 'jbigi-windows', izpackPatches, prepIzpackConfigs
+    commandLine 'java', '-jar', izPack4Compiler, "${izpackWork}/4/install.xml",
+            '-b', workspaceRootAbs, '-k', 'standard', '-o', "${distAbs}/install-windows.jar"
+    inputs.files(fileTree(payloadSeed), file("${izpackWork}/4/install.xml"), izpackPatches)
+    outputs.file("${distAbs}/install-windows.jar")
+}
+
+task installerW4Exe(type: Exec) {
+    group = 'package'
+    description = 'Wrap the windows-only installer jar (mirrors ant installer-windows).'
+    dependsOn installerW4Jar
+    onlyIf { launcherSupported }
+    commandLine 'java', '-jar', launch4jJar, "${launcherWork}/i2pinstall-windows.xml"
+    outputs.file("${distAbs}/i2pinstall-windows.exe")
+    doFirst {
+        // Generated config with absolute dist/ paths, so launch4j finds both files
+        new File("${launcherWork}" as String).mkdirs()
+        new File("${launcherWork}/i2pinstall-windows.xml" as String).setText(
+                '<launch4jConfig>\n' +
+                '  <headerType>0</headerType>\n' +
+                '  <jar>' + "${distAbs}/install-windows.jar" + '</jar>\n' +
+                '  <outfile>' + "${distAbs}/i2pinstall-windows.exe" + '</outfile>\n' +
+                '  <errTitle>I2P+ Installer</errTitle>\n' +
+                '  <chdir>.</chdir>\n' +
+                '  <customProcName>false</customProcName>\n' +
+                '  <icon>' + "${workspaceRootAbs}/installer/resources/platform-specific/windows/console.ico" + '</icon>\n' +
+                '  <jre>\n    <minVersion>1.8</minVersion>\n  </jre>\n' +
+                '</launch4jConfig>', 'UTF-8')
+    }
+    doLast {
+        // Rename to the ant output name and drop the intermediate jar
+        new File("${distAbs}/i2pinstall-windows.exe").renameTo(new File("${distAbs}/i2pinstall_${fullVersion}_windows.exe"))
+        new File("${distAbs}/install-windows.jar").delete()
+        installerUtil.printSha(new File("${distAbs}/i2pinstall_${fullVersion}_windows.exe"))
+    }
+}
+
+task('installer-windows') {
+    group = 'package'
+    description = 'Build the windows-only installer exe dist/i2pinstall_<version>_windows.exe (mirrors ant installer-windows).'
+    dependsOn installerW4Exe
+}
+
+// mac app bundle from the osx-only installer jar (ant installer2app)
+task installer2app {
+    group = 'package'
+    description = 'Build the mac installer app bundle and dist/i2pinstall_<version>_osx.tar.bz2 (mirrors ant installer2app).'
+    dependsOn 'installer-osx'
+    onlyIf { new File(izpack2appPy).isFile() }
+    inputs.file("${distAbs}/i2pinstall_${fullVersion}_osx-only.jar")
+    outputs.file("${distAbs}/i2pinstall_${fullVersion}_osx.tar.bz2")
+    doLast {
+        String appDir = "${stageRoot}/osx/osx/i2p-${fullVersion}_osx-install.app"
+        def pb = new ProcessBuilder('python', izpack2appPy,
+                "${distAbs}/i2pinstall_${fullVersion}_osx-only.jar", appDir)
+        pb.inheritIO()
+        if (pb.start().waitFor() != 0) {
+            throw new GradleException("izpack2app.py failed")
+        }
+        def tb = new ProcessBuilder('tar', '-cjf', "${distAbs}/i2pinstall_${fullVersion}_osx.tar.bz2",
+                '-C', new File(appDir).parentFile.absolutePath, new File(appDir).name)
+        tb.inheritIO()
+        if (tb.start().waitFor() != 0) {
+            throw new GradleException("tar failed")
+        }
+        installerUtil.printSha(new File("${distAbs}/i2pinstall_${fullVersion}_osx.tar.bz2"))
+    }
+}
+
+// IzPack 5 variants; they need IzPack 5 at ${user.home}/IzPack and fail with
+// the ant message otherwise
+def makeIzpack5Task(String taskName, String stageTask, String jbigiTask, String outJarName, String taskDesc, Map cfg) {
+    task(taskName, type: Exec) {
+        group = 'package'
+        description = taskDesc
+        dependsOn stageTask, jbigiTask, prepIzpackConfigs
+        commandLine 'java', '-cp', "${cfg.iz5home}/lib/*", 'com.izforge.izpack.compiler.bootstrap.CompilerLauncher',
+                '-c', "${cfg.izWork}/5/install5.xml", '-b', cfg.wsAbs, '-o', "${cfg.dAbs}/${outJarName}"
+        inputs.files(fileTree(cfg.seed), file("${cfg.izWork}/5/install5.xml"))
+        outputs.file("${cfg.dAbs}/${outJarName}")
+        doFirst {
+            if (!new File(cfg.iz5home).isDirectory()) {
+                throw new GradleException("Error - IzPack 5.1.x must be installed at ${cfg.iz5home}, " +
+                        "or set izpack5.home=..., or download from http://izpack.org/downloads/ and install")
+            }
+            // Custom langpacks load relative to the working directory; place
+            // them at the repo root, as ant does (distclean wipes com/)
+            new File("${cfg.wsAbs}/com/izforge/izpack/bin/langpacks" as String).mkdirs()
+            new File("${cfg.wsAbs}/com/izforge/izpack/bin/langpacks" as String).deleteDir()
+            def src = new File("${cfg.wsAbs}/installer/lib/izpack/5/patches/resources")
+            src.eachFileRecurse(groovy.io.FileType.FILES) { f ->
+                def rel = src.toPath().relativize(f.toPath()).toString()
+                new File("${cfg.wsAbs}/com/izforge/izpack/bin/langpacks/${rel}").parentFile.mkdirs()
+                f.copyTo(new File("${cfg.wsAbs}/com/izforge/izpack/bin/langpacks/${rel}"))
+            }
+        }
+        doLast {
+            cfg.util.printSha(new File("${cfg.dAbs}/${outJarName}"))
+        }
+    }
+}
+
+makeIzpack5Task('installer5', 'preppkg', 'jbigi', 'install.jar',
+        'Build the full all-platform installer dist/install.jar with IzPack 5 (mirrors ant installer5).', izpack5Cfg)
+makeIzpack5Task('installer5-nowindows', 'preppkg-nowindows', 'jbigi-nowindows', "i2pinstall_${fullVersion}.jar",
+        'Build the no-windows installer jar with IzPack 5 (mirrors ant installer5-nowindows).', izpack5Cfg)
+makeIzpack5Task('installer5-linux', 'preppkg-linux-only', 'jbigi-linux', "i2pinstall_${fullVersion}_linux-only.jar",
+        'Build the linux-only installer jar with IzPack 5 (mirrors ant installer5-linux).', izpack5Cfg)
+makeIzpack5Task('installer5-freebsd', 'preppkg-freebsd-only', 'jbigi-freebsd', "i2pinstall_${fullVersion}_freebsd-only.jar",
+        'Build the freebsd-only installer jar with IzPack 5 (mirrors ant installer5-freebsd).', izpack5Cfg)
+makeIzpack5Task('installer5-osx', 'preppkg-osx-only', 'jbigi-osx', "i2pinstall_${fullVersion}_osx-only.jar",
+        'Build the osx-only installer jar with IzPack 5 (mirrors ant installer5-osx).', izpack5Cfg)
+
+// IzPack5 exe via izpack2exe.py (ant installer5exe), fixed to read dist/install.jar
+task installer5exe(type: Exec) {
+    group = 'package'
+    description = 'Build dist/i2pinstall.exe from dist/install.jar with IzPack5 izpack2exe.py (mirrors ant installer5exe).'
+    dependsOn installer5
+    onlyIf { launcherSupported }
+    workingDir "${iz5home}/utils/wrappers/izpack2exe"
+    commandLine 'python', 'izpack2exe.py', "--file=${distAbs}/install.jar",
+            '--with-7z=/usr/bin/7zr', '--no-upx', "--output=${distAbs}/i2pinstall.exe"
+    outputs.file("${distAbs}/i2pinstall.exe")
+    doFirst {
+        if (!new File(iz5home).isDirectory()) {
+            throw new GradleException("Error - IzPack 5.1.x must be installed at ${iz5home}, " +
+                    "or set izpack5.home=..., or download from http://izpack.org/downloads/ and install")
+        }
+        new File("${iz5home}/utils/wrappers/izpack2exe/7za").setExecutable(true)
+        new File("${iz5home}/utils/wrappers/izpack2exe/izpack2exe.py").setExecutable(true)
+    }
+    doLast {
+        installerUtil.printSha(new File("${distAbs}/i2pinstall.exe"))
+    }
+}
+
+// Windows-only izpack5 installer with the same dist/-path fixes as installer-windows
+task installer5WJar(type: Exec) {
+    group = 'package'
+    description = 'Build the windows-only installer jar with IzPack 5 (mirrors ant installer5-windows).'
+    dependsOn 'preppkg-windows-only', 'jbigi-windows', prepIzpackConfigs
+    commandLine 'java', '-cp', "${iz5home}/lib/*", 'com.izforge.izpack.compiler.bootstrap.CompilerLauncher',
+            '-c', "${izpackWork}/5/install5.xml", '-b', workspaceRootAbs, '-o', "${distAbs}/install-windows.jar"
+    inputs.files(fileTree(payloadSeed), file("${izpackWork}/5/install5.xml"))
+    outputs.file("${distAbs}/install-windows.jar")
+}
+
+task installer5WExe(type: Exec) {
+    group = 'package'
+    description = 'Wrap the izpack5 windows-only installer jar (mirrors ant installer5-windows).'
+    dependsOn installer5WJar
+    onlyIf { launcherSupported }
+    workingDir "${iz5home}/utils/wrappers/izpack2exe"
+    commandLine 'python', 'izpack2exe.py', "--file=${distAbs}/install-windows.jar",
+            '--with-7z=/usr/bin/7zr', '--no-upx', "--output=${distAbs}/i2pinstall-windows.exe"
+    outputs.file("${distAbs}/i2pinstall_${fullVersion}_windows.exe")
+    doFirst {
+        if (!new File(iz5home).isDirectory()) {
+            throw new GradleException("Error - IzPack 5.1.x must be installed at ${iz5home}, " +
+                    "or set izpack5.home=..., or download from http://izpack.org/downloads/ and install")
+        }
+        new File("${iz5home}/utils/wrappers/izpack2exe/7za").setExecutable(true)
+        new File("${iz5home}/utils/wrappers/izpack2exe/izpack2exe.py").setExecutable(true)
+    }
+    doLast {
+        new File("${distAbs}/i2pinstall-windows.exe").renameTo(new File("${distAbs}/i2pinstall_${fullVersion}_windows.exe"))
+        new File("${distAbs}/install-windows.jar").delete()
+        installerUtil.printSha(new File("${distAbs}/i2pinstall_${fullVersion}_windows.exe"))
+    }
+}
+
+task('installer5-windows') {
+    group = 'package'
+    description = 'Build the windows-only installer exe with IzPack 5 (mirrors ant installer5-windows).'
+    dependsOn installer5WExe
+}
+
+task('installer-all') {
+    group = 'package'
+    description = 'Build every platform installer (mirrors ant installer-all, minus its broken shared pkg-temp deletion).'
+    dependsOn 'installer-freebsd', 'installer-linux', 'installer-osx', 'installer-windows',
+            'installer-nowindows', installer, installer2app
+}
