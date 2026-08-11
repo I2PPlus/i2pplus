@@ -90,7 +90,7 @@ if [ "$TYPE" = "java" ]; then
         export JAVAC="${JAVA_HOME}/../bin/javac"
     fi
 
-    msgfmt -V 2>/dev/null | grep -q -E ' 0\.((19)|[2-9])'
+    msgfmt -V 2>/dev/null | grep -q -E ' 0\.((19)|[2-9])| [1-9]\.'
     FAST=$?
 
 # --- TYPE=mo specific defaults & validation ---
