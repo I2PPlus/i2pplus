@@ -86,7 +86,7 @@ public class BitField {
     }
 
     /**
-     * Sets the given bit to true.
+     * Mark the given bit true.
      *
      * @param bit the bit
      * @throws IndexOutOfBoundsException if bit is smaller then zero or bigger then or equal to size
@@ -104,7 +104,7 @@ public class BitField {
     }
 
     /**
-     * Sets the given bit to false.
+     * Mark the given bit false.
      *
      * @param bit the bit
      * @throws IndexOutOfBoundsException if bit is smaller then zero or bigger then or equal to size
@@ -123,7 +123,7 @@ public class BitField {
     }
 
     /**
-     * Sets all bits to true.
+     * Mark all bits true.
      *
      * @since 0.9.21
      */

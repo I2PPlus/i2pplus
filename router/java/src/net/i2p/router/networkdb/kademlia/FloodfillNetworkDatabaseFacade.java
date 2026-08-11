@@ -69,7 +69,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private final ConcurrentHashMap<Hash, FloodSearchJob> _activeFloodQueries;
     /** Whether this router is currently floodfill-enabled. */
     private volatile boolean _floodfillEnabled;
-    /** Set of hashes whose verification is in progress. */
+    /** Hashes whose verification is in progress. */
     private final Set<Hash> _verifiesInProgress;
 
     /** Throttles excessive flood operations. */

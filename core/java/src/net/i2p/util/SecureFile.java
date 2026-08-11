@@ -8,8 +8,8 @@ import java.io.IOException;
  * and createTempFile() also. So just use this instead.
  * Probably should have just made this class in the beginning and not had two.
  *
- * @since 0.8.2
  * @author zzz
+ * @since 0.8.2
  */
 public class SecureFile extends SecureDirectory {
 

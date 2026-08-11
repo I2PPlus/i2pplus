@@ -178,8 +178,8 @@ public abstract class FormHandler {
      * For nofilter_ prefixed params, validates for XSS patterns.
      *
      * @param key the setting key
-     * @since 0.9.4 consolidated from numerous FormHandlers
      * @return trimmed string or null
+     * @since 0.9.4 consolidated from numerous FormHandlers
      */
     protected String getJettyString(String key) {
         if (_settings == null) {return null;}

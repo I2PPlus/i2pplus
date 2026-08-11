@@ -136,8 +136,8 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
      * received after the reply job times out will not have this set.
      * Default false.
      *
-     * @since 0.9.58
      * @return the received as reply
+     * @since 0.9.58
      */
     public boolean getReceivedAsReply() {return _receivedAsReply;}
 

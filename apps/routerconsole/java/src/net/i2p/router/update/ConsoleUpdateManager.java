@@ -531,8 +531,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  A router update had been downloaded and handled by an UpdatePostProcessor.
      *  It will provide wrapper-like function to install the update and restart after shutdown.
      *
-     *  @since 0.9.51
      * @return whether external restart pending
+     *  @since 0.9.51
      */
     public boolean isExternalRestartPending() {return _externalRestartPending;}
 

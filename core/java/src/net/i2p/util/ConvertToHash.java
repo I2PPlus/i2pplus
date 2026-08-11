@@ -12,13 +12,13 @@ import java.util.Locale;
 /**
  *  Convert any kind of destination String to a hash
  *  Supported:
- *    Base64 dest
- *    Base64 dest.i2p
- *    Base64 Hash
- *    Base64 Hash.i2p
- *    Base32 Hash
- *    Base32 desthash.b32.i2p
- *    example.i2p
+ *  Base64 dest
+ *  Base64 dest.i2p
+ *  Base64 Hash
+ *  Base64 Hash.i2p
+ *  Base32 Hash
+ *  Base32 desthash.b32.i2p
+ *  example.i2p
  *
  *  @author zzz
  */

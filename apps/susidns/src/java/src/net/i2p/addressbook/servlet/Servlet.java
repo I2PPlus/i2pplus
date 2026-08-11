@@ -17,8 +17,8 @@ import net.i2p.I2PAppContext;
  * This was a GenericServlet, we make it an HttpServlet solely to provide a
  * simple page to display status.
  *
- * @since 0.9.30 moved from addressbook to SusiDNS
  * @author Ragnarok
+ * @since 0.9.30 moved from addressbook to SusiDNS
  *
  */
 public class Servlet extends HttpServlet {

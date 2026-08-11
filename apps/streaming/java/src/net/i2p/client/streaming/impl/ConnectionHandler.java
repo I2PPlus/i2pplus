@@ -38,8 +38,9 @@ class ConnectionHandler {
      * the queued SYN is reset after this window, so it must be long enough to
      * absorb brief stalls without refusing inbound connections. Tunable via
      * i2p.streaming.acceptTimeout (default: 30000 / 30 seconds).
+     *
+     * @since 0.9.70+
      */
-    /** @since 0.9.70+ */
     synchronized void setAcceptTimeout(int ms) { _acceptTimeout = ms; }
 
     private int getAcceptTimeout() {
@@ -79,7 +80,7 @@ class ConnectionHandler {
     }
 
     /**
-     * Set whether this handler is actively accepting new connections.
+     * Whether this handler is actively accepting new connections.
      * When set to false, a poison packet is offered to wake any
      * threads blocked in accept().
      *

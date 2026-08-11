@@ -117,8 +117,8 @@ public class PublicKey extends SimpleDataStructure {
      *
      * @param in the input stream
      * @return the result
-     * @since 0.8.3
      * @throws java.io.IOException if an I/O error occurs
+     * @since 0.8.3
      */
     public static PublicKey create(InputStream in) throws IOException {
         return _cache.get(in);
@@ -206,7 +206,7 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Gets the encryption type of this public key.
+     *  Encryption type of this public key.
      *
      *  @return null if unknown
      *  @since 0.9.38
@@ -216,12 +216,12 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Gets the type code for unknown encryption types.
+     *  Type code for unknown encryption types.
      *
      *  Only valid if getType() returns null
      *
-     * @since 0.9.38
      * @return the unknown type code
+     * @since 0.9.38
      */
     public int getUnknownTypeCode() {
         return _unknownTypeCode;
@@ -265,13 +265,13 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Get the portion of this (type 0) PK that is really padding based on the Key Cert type given,
+     *  Padding portion of this (type 0) PK based on the Key Cert type given,
      *  if any
      *
      *  @return trailing padding length &gt; 0 or null if no padding or type is unknown
      *  @throws IllegalArgumentException if this is already typed to a different type
-     *  @since 0.9.42
      *  @param kcert the key certificate
+     *  @since 0.9.42
      */
     public byte[] getPadding(KeyCertificate kcert) {
         if (_data == null) {

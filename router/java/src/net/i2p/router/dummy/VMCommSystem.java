@@ -62,8 +62,8 @@ public class VMCommSystem extends CommSystemFacade {
 
     /**
      *  Factory for making X25519 key pairs.
-     *  @since 0.9.49 so some tests don't NPE
      *  @return the x d h factory
+     *  @since 0.9.49 so some tests don't NPE
      */
     @Override
     public X25519KeyFactory getXDHFactory() { return _xdhThread; }

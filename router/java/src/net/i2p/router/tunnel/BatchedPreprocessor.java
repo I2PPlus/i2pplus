@@ -81,7 +81,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     protected long getSendDelay() { return DEFAULT_DELAY; }
 
     /**
-     *  if we have this many messages queued that are too small, flush them anyway
+     *  If we have this many messages queued that are too small, flush them anyway
      *  Even small messages take up about 200 bytes or so.
      */
     private static final int FORCE_BATCH_FLUSH = 5;

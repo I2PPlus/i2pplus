@@ -51,8 +51,8 @@ import net.i2p.util.OrderedProperties;
  * To ensure integrity of the RouterInfo, methods that change an element of the
  * RouterInfo will throw an IllegalStateException after the RouterInfo is signed.
  *
- * @since 0.9.16 moved from net.i2p.data
  * @author jrandom
+ * @since 0.9.16 moved from net.i2p.data
  */
 public class RouterInfo extends DatabaseEntry {
     /** Router context. */
@@ -67,21 +67,21 @@ public class RouterInfo extends DatabaseEntry {
      *  Save addresses in the order received so the signature works.
      */
     private final List<RouterAddress> _addresses;
-    /** may be null to save memory, no longer final */
+    /** May be null to save memory, no longer final. */
     private Set<Hash> _peers;
     /** Config properties for this router info. */
     private final Properties _options;
     /** Whether the signature has been verified. */
     private volatile boolean _validated;
-    /**  is valid */
+    /** Whether this router info is valid. */
     private volatile boolean _isValid;
     /** Cached serialized byte form. */
     private volatile byte[] _byteified;
-    /**  hash code */
+    /** Cached hash code. */
     private volatile int _hashCode;
-    /**  hash code initialized */
+    /** Whether the hash code has been initialized. */
     private volatile boolean _hashCodeInitialized;
-    /** should we cache the byte and string versions _byteified ? **/
+    /** Whether to cache the byte and string versions of this router info. */
     private volatile boolean _shouldCache;
     /**
      * Maybe we should check if we are floodfill?
@@ -214,8 +214,8 @@ public class RouterInfo extends DatabaseEntry {
      * Return the number of router addresses.
      * More efficient than getAddresses().size()
      *
-     * @since 0.9.27
      * @return the address count
+     * @since 0.9.27
      */
     public int getAddressCount() {
         return _addresses.size();
@@ -407,8 +407,8 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     * which network is this routerInfo a part of.  configured through the property
-     * PROP_NETWORK_ID
+     * Which network this router info is a part of, configured through the property
+     * PROP_NETWORK_ID.
      * @return -1 if unknown
      */
     public int getNetworkId() {
@@ -423,7 +423,7 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     * what special capabilities this router offers
+     * What special capabilities this router offers.
      * @return non-null, empty string if none
      */
     public String getCapabilities() {
@@ -465,8 +465,8 @@ public class RouterInfo extends DatabaseEntry {
      * Return a string representation of this node's congestion cap,
      * or "Unknown"
      *
-     * @since 0.9.63+
      * @return the congestion cap
+     * @since 0.9.63+
      */
     public String getCongestionCap() {
         String congestionCaps = CONGESTION_CAPABILITY_CHARS;
@@ -661,7 +661,7 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     * equals.
+     * Compare the published time, signature, identity, addresses, options, and peers for equality.
      */
     @Override
     public boolean equals(Object object) {
@@ -679,6 +679,7 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
+     * Hash code based on the identity and published time.
      * @return whether h code is present
      */
     @Override
@@ -691,7 +692,7 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     * toString.
+     * String form for debugging, showing all router info fields.
      */
     @Override
     public String toString() {

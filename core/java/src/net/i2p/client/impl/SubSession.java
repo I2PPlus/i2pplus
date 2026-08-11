@@ -83,8 +83,8 @@ class SubSession extends I2PSessionMuxedImpl {
 
     /**
      * Primary options.
-     *  @since 0.9.33
      * @return the primary options
+     * @since 0.9.33
      */
     public Properties getPrimaryOptions() {
         return _primary.getOptions();

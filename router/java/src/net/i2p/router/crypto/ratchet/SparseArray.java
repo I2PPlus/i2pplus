@@ -119,7 +119,7 @@ class SparseArray<E> implements Cloneable {
     }
 
     /**
-     * Gets the Object mapped from the specified key, or <code>null</code>
+     * Object mapped from the specified key, or <code>null</code>
      * if no such mapping has been made.
      */
     public E get(int key) {
@@ -127,7 +127,7 @@ class SparseArray<E> implements Cloneable {
     }
 
     /**
-     * Gets the Object mapped from the specified key, or the specified Object
+     * Object mapped from the specified key, or the specified Object
      * if no such mapping has been made.
      *
      * @param key 0 MIN, 65535 MAX

@@ -113,16 +113,16 @@ abstract class SAMMessageSession implements SAMMessageSess {
     }
 
     /**
-     * @since 0.9.25
      * @return the listen protocol
+     * @since 0.9.25
      */
     public int getListenProtocol() {
         return listenProtocol;
     }
 
     /**
-     * @since 0.9.25
      * @return the listen port
+     * @since 0.9.25
      */
     public int getListenPort() {
         return listenPort;
@@ -319,8 +319,8 @@ abstract class SAMMessageSession implements SAMMessageSess {
 
         /**
          * The session.
-         * @since 0.9.25
          * @return the session
+         * @since 0.9.25
          */
         public final I2PSession getSession() {
             return _session;

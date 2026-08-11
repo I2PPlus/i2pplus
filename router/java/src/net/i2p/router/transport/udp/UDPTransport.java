@@ -394,6 +394,8 @@ public class UDPTransport extends TransportImpl {
                                                                       Status.IPV4_SNAT_IPV6_UNKNOWN);
 
     /**
+     *  Create the UDP transport for the given router context and SSU2 XDH factory.
+     *
      *  @param ctx the router context
      *  @param xdh non-null
      */
@@ -1704,6 +1706,8 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
+     *  Compare two address and port pairs for equality; either address may be null.
+     *
      *  @param laddr and raddr may be null
      */
     private static final boolean eq(byte[] laddr, int lport, byte[] raddr, int rport) {
@@ -1762,7 +1766,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  states for all peers at the given remote host, ignoring port.
+     *  States for all peers at the given remote host, ignoring port.
      *  Used for a last-chance search for a peer that changed port, by PacketHandler.
      *  Always returns empty list for IPv6 hostInfo.
      *  @since 0.9.3
@@ -2514,7 +2518,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  first available address we can use.
+     *  First available address of the target that we can use.
      *  @return address or null
      *  @since 0.9.6
      */
@@ -2566,8 +2570,8 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * An alternate supported style, or null.
-     * @since 0.9.54
      * @return the alt style
+     * @since 0.9.54
      */
     @Override
     /** Returns "SSU2". */
@@ -2892,6 +2896,8 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
+     *  Rebuild the external address from the given validated host; caller must hold the rebuild lock.
+     *
      *  @param host new validated IPv4 or IPv6 or DNS hostname or null
      *              or ":" to force IPv6 introducer rebuild
      */
@@ -3466,8 +3472,9 @@ public class UDPTransport extends TransportImpl {
 
     /**
      *  Whether the peer for the given destination is backlogged.
-     * @since 0.9.3
-     * @return whether backlogged
+     *
+     *  @return whether backlogged
+     *  @since 0.9.3
      */
     @Override
     public boolean isBacklogged(Hash dest) {
@@ -3573,6 +3580,8 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
+     *  XDH key factory for SSU2, or null if not configured for SSU2.
+     *
      *  @return null if not configured for SSU2
      *  @since 0.9.54
      */
@@ -3581,6 +3590,8 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
+     *  Packet builder for SSU2, or null if not configured for SSU2.
+     *
      *  @return null if not configured for SSU2
      *  @since 0.9.54
      */
@@ -3829,8 +3840,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  @since 0.9.27
+     *  Update the reachability status of this router, optionally for an IPv6 change.
+     *
      *  @param isIPv6 Is the change an IPv6 change?
+     *  @since 0.9.27
      */
     void setReachabilityStatus(Status status, boolean isIPv6) {
         /** Lock for rebuilding external address. */

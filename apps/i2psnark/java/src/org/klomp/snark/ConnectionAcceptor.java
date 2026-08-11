@@ -64,7 +64,7 @@ class ConnectionAcceptor implements Runnable {
     private final ObjectCounter<Hash> _badCounter = new ObjectCounter<>();
     private final Map<Hash, String> _badReasons = new ConcurrentHashMap<>();
     private final SimpleTimer2.TimedEvent _cleaner;
-    /** accept loops per destination, shared by the torrents pooled on it */
+    /** Accept loops per destination, shared by the torrents pooled on it. */
     private final Map<TorrentDest, TorrentAcceptLoop> _torrentAcceptors = new ConcurrentHashMap<>();
     /** Stops the accept loop */
     private volatile boolean stop;
@@ -207,6 +207,8 @@ class ConnectionAcceptor implements Runnable {
     }
 
     /**
+     * The server socket for this acceptor's destination, or null.
+     *
      * @return the server socket for this acceptor's destination, or null
      */
     private I2PServerSocket getServerSocket() {
@@ -217,6 +219,8 @@ class ConnectionAcceptor implements Runnable {
     }
 
     /**
+     * The destination of this acceptor, or null.
+     *
      * @return the destination of this acceptor, or null
      */
     private Destination getMyDestination() {
@@ -463,6 +467,8 @@ class ConnectionAcceptor implements Runnable {
         }
 
         /**
+         * Whether no torrents are routed through this loop.
+         *
          * @return true when no torrents are routed through this loop
          */
         public boolean isEmpty() {

@@ -38,8 +38,8 @@ import net.i2p.util.OrderedProperties;
  * several releases for the change to propagate as it is backwards-incompatible.
  * Restored as of 0.9.12.
  *
- * @since 0.9.16 moved from net.i2p.data
  * @author jrandom
+ * @since 0.9.16 moved from net.i2p.data
  */
 public class RouterAddress extends DataStructureImpl {
     /** Cost value (0-255). */
@@ -131,8 +131,9 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     * @since 0.8.13
+     * Transport option value for the given key.
      * @return the option
+     * @since 0.8.13
      */
     public String getOption(String opt) {
         return _options.getProperty(opt);

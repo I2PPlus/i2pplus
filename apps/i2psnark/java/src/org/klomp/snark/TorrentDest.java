@@ -37,14 +37,16 @@ public class TorrentDest {
     /** Session property carrying the pool's torrent names, for the /tunnels pool tooltip */
     public static final String PROP_POOL_MEMBERS = "i2psnark.poolMembers";
 
-    /** assigned torrents by Base64-encoded info hash key, guarded by synchronized methods */
+    /** Assigned torrents by Base64-encoded info hash key, guarded by synchronized methods. */
     private final Map<String, InfoHash> _torrents = new HashMap<>(1);
-    /** assigned torrent names by Base64-encoded info hash key, for the pool tooltip */
+    /** Assigned torrent names by Base64-encoded info hash key, for the pool tooltip. */
     private final Map<String, String> _names = new HashMap<>(1);
     private TorrentKRPC _dht;
     private UDPTrackerClient _udpTracker;
 
     /**
+     * Assign a torrent to this destination.
+     *
      * @param key Base64 encoding of the first torrent's info hash
      * @param poolIndex the shared pool index, or -1 for a dedicated destination
      * @param poolNum the sequential pool number for the nickname, -1 when dedicated
@@ -61,6 +63,8 @@ public class TorrentDest {
     }
 
     /**
+     * The Base64-encoded info hash of the first torrent assigned.
+     *
      * @return the Base64-encoded info hash of the first torrent assigned
      */
     public String getKey() {
@@ -68,6 +72,8 @@ public class TorrentDest {
     }
 
     /**
+     * The shared pool index, or -1 when dedicated to a single torrent.
+     *
      * @return the shared pool index, or -1 when dedicated to a single torrent
      */
     public int getPoolIndex() {
@@ -83,6 +89,8 @@ public class TorrentDest {
     }
 
     /**
+     * The destination, or null.
+     *
      * @return the destination, or null
      */
     public Destination getMyDestination() {

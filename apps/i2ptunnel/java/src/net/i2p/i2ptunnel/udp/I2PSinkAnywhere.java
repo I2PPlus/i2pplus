@@ -63,8 +63,8 @@ public class I2PSinkAnywhere implements Sink {
      * @param fromPort I2CP source port, 0-65535
      * @param toPort I2CP destination port, 0-65535
      * @param data the data to send
-     * @since 0.9.53
      * @throws RuntimeException if the session is closed
+     * @since 0.9.53
      */
     public synchronized void send(Destination to, int fromPort, int toPort, byte[] data) {
         byte[] payload;

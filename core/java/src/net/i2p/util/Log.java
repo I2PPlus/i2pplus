@@ -283,8 +283,8 @@ public class Log {
     /**
      * Check if DEBUG level logging is enabled.
      *
-     * @since 0.9.20
      * @return whether debug
+     * @since 0.9.20
      */
     public boolean shouldDebug() {
         return DEBUG >= _minPriority;
@@ -293,8 +293,8 @@ public class Log {
     /**
      * Check if INFO level logging is enabled.
      *
-     * @since 0.9.20
      * @return whether info
+     * @since 0.9.20
      */
     public boolean shouldInfo() {
         return INFO >= _minPriority;
@@ -303,8 +303,8 @@ public class Log {
     /**
      * Check if WARN level logging is enabled.
      *
-     * @since 0.9.20
      * @return whether warn
+     * @since 0.9.20
      */
     public boolean shouldWarn() {
         return WARN >= _minPriority;
@@ -313,8 +313,8 @@ public class Log {
     /**
      * Check if ERROR level logging is enabled.
      *
-     * @since 0.9.20
      * @return whether error
+     * @since 0.9.20
      */
     public boolean shouldError() {
         return ERROR >= _minPriority;

@@ -21,9 +21,9 @@ import java.util.Arrays;
 /**
  * Passes a command to the OS shell for execution and manages the input and
  * output.
- * @since 0.9.3
  *
  * @author hypercubus
+ * @since 0.9.3
  */
 @SuppressWarnings("PMD.CloseResource")
 public class ShellCommand {

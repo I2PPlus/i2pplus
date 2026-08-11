@@ -246,8 +246,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      * Returns rDNS executor pending lookup count, or 0 if not running.
      *
-     * @since 0.9.70+
      * @return the rdns queue size
+     * @since 0.9.70+
      */
     public int getRdnsQueueSize() {
         synchronized (reverseDnsExecutorLock) {
@@ -264,8 +264,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      * Returns rDNS executor active thread count, or 0 if not running.
      *
-     * @since 0.9.70+
      * @return the rdns active count
+     * @since 0.9.70+
      */
     public int getRdnsActiveCount() {
         synchronized (reverseDnsExecutorLock) {
@@ -282,8 +282,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      * Returns rDNS executor total thread count, or 0 if not running.
      *
-     * @since 0.9.70+
      * @return the rdns pool size
+     * @since 0.9.70+
      */
     public int getRdnsPoolSize() {
         synchronized (reverseDnsExecutorLock) {
@@ -301,8 +301,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * Returns rDNS executor utilization as a ratio (0.0-1.0),
      * or {@link Double#NaN} if not running.
      *
-     * @since 0.9.70+
      * @return the rdns utilization
+     * @since 0.9.70+
      */
     public double getRdnsUtilization() {
         synchronized (reverseDnsExecutorLock) {
@@ -436,8 +436,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Whether the comm system is running.
-     * @since 0.9.53
      * @return whether running
+     * @since 0.9.53
      */
     @Override
     public synchronized boolean isRunning() { return _wasStarted; }
@@ -530,6 +530,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Whether the given peer is backlogged.
+     *
      * @return whether backlogged
      */
     @Override
@@ -547,6 +548,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
+     *  Established peers.
+     *
      *  @return a new list, may be modified
      *  @since 0.9.34
      */
@@ -612,8 +615,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      *  The status of the communication system.
      *
-     * @since 0.9.20
      * @return the status
+     * @since 0.9.20
      */
     @Override
     public List<String> getMostRecentErrorMessages() {
@@ -622,8 +625,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      *  The current network status.
-     * @since 0.9.20
      * @return the status
+     * @since 0.9.20
      */
     @Override
     public Status getStatus() {
@@ -637,8 +640,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * The localized status string from getStatus().toStatusString(), translated if available.
-     * @since 0.9.45
      * @return the localized status string
+     * @since 0.9.45
      */
     @Override
     public String getLocalizedStatusString() {
@@ -657,6 +660,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
+     *  Transports in use.
+     *
      *  @return SortedMap of style to Transport (a copy)
      *  @since 0.9.31
      */
@@ -791,8 +796,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  Is this IP exempt from any incoming throttles or rejections
      *
      *  @param ip canonical string
-     *  @since 0.9.58
      *  @return whether exempt incoming
+     *  @since 0.9.58
      */
     @Override
     public boolean isExemptIncoming(String ip) {
@@ -846,8 +851,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      *  Factory for making X25519 key pairs.
-     * @since 0.9.46
      * @return the x d h factory
+     * @since 0.9.46
      */
     @Override
     public X25519KeyFactory getXDHFactory() {
@@ -967,6 +972,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
+     *  Queues a GeoIP lookup for the given IP.
+     *
      *  @param ip ipv4 or ipv6
      */
     @Override
@@ -982,8 +989,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      * Supports migration from older cache file formats missing timestamps.
      *
-     * @since 0.9.61+
      * @return the global context
+     * @since 0.9.61+
      */
     private static final String RDNS_CACHE_FILE = I2PAppContext.getGlobalContext().getConfigDir() +
                                                   File.separator + "rdnscache.txt";
@@ -1501,6 +1508,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static Timer _rdnsTimer;
 
     /**
+     *  Domain name from a reverse DNS hostname.
+     *
      *  @return domain name only from reverse dns hostname lookups
      *  @since 0.9.58+
      */
@@ -1566,6 +1575,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
+     *  Country code for this router, from the GeoIP lookup.
+     *
      *  @return two-letter lower-case country code or null
      *  @since 0.8.11
      */
@@ -1574,8 +1585,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      *  Are we in a strict country
-     * @since 0.8.13
      * @return whether in strict country
+     * @since 0.8.13
      */
     @Override
     public boolean isInStrictCountry() {
@@ -1591,8 +1602,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  or may not be publishing an IP.
      *
      *  @param peer non-null
-     *  @since 0.9.16
      *  @return whether in strict country
+     *  @since 0.9.16
      */
     @Override
     public boolean isInStrictCountry(Hash peer) {
@@ -1603,8 +1614,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      *  Are they in a strict country
      *  @param ri non-null
-     *  @since 0.9.16
      *  @return whether in strict country
+     *  @since 0.9.16
      */
     @Override
     public boolean isInStrictCountry(RouterInfo ri) {
@@ -1810,7 +1821,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Get an IP address compatible with our capabilities (IPv4/IPv6).
+     *  IP address compatible with our capabilities (IPv4/IPv6).
      *  Prefers IPv4 if we support it.
      *
      *  @param ri RouterInfo to get IP from
@@ -2109,8 +2120,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      *  Is everything disabled for testing?
-     * @since 0.8.13
      * @return whether dummy
+     * @since 0.8.13
      */
     @Override
     public boolean isDummy() {return _context.getBooleanProperty(PROP_DISABLED);}

@@ -77,7 +77,7 @@ public interface I2NPMessage {
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException;
     /**
-     * readMessage.
+     * Read the message fields from the byte array, using the given handler.
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException;
 
@@ -98,12 +98,12 @@ public interface I2NPMessage {
      */
     public long getUniqueId(long msgIDBloomXor);
     /**
-     * getUniqueId().
+     * Unique message id, optionally XORed with the given value.
      * @return the unique id
      */
     public long getUniqueId();
     /**
-     * id).
+     * Unique id for this message, assigned when written.
      */
     public void setUniqueId(long id);
 
@@ -114,7 +114,7 @@ public interface I2NPMessage {
      */
     public long getMessageExpiration();
     /**
-     * exp).
+     * Expiration for this message, assigned when written.
      */
     public void setMessageExpiration(long exp);
 

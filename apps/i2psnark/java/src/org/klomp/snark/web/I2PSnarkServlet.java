@@ -107,16 +107,16 @@ import org.klomp.snark.dht.DHT;
 public class I2PSnarkServlet extends BasicServlet {
 
     private static final long serialVersionUID = 1L;
-    /**  context path */
+    /** Context path. */
     private String _contextPath; /* generally "/i2psnark" */
-    /**  context name */
+    /** Context name. */
     private String _contextName; /* generally "i2psnark" */
     private transient SnarkManager _manager;
     /** Rotating CSRF nonce, rotates every 5 minutes */
     private long _currentNonce;
-    /**  recent nonces */
+    /** Recent nonces. */
     private final long[] _recentNonces = new long[2];
-    /**  last rotation */
+    /** Last rotation. */
     private long _lastRotation;
     private static final long NONCE_ROTATION_MS = 5 * (long) 60 * 1000; // 5 minutes
 
@@ -135,13 +135,13 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final Pattern HEX_PATTERN = Pattern.compile("[a-fA-F0-9]+");
     private static final Pattern BASE32_PATTERN = Pattern.compile("[a-zA-Z2-7]+");
 
-    /**  theme path */
+    /** Theme path. */
     private String _themePath;
-    /**  resource path */
+    /** Resource path. */
     private String _resourcePath;
-    /**  img path */
+    /** Image path. */
     private String _imgPath;
-    /**  last announce u r l */
+    /** Last announce URL. */
     private String _lastAnnounceURL;
 
     private static final String DEFAULT_NAME = "i2psnark";
@@ -184,9 +184,10 @@ public class I2PSnarkServlet extends BasicServlet {
     public I2PSnarkServlet() {super();}
 
     /**
-     *  Get current CSRF nonce, rotating every 5 minutes.
+     * Current CSRF nonce, rotating every 5 minutes.
+     *
      * @return the nonce
-     *  @since 2.x.x
+     * @since 2.x.x
      */
     private synchronized long getNonce() {
         if (_currentNonce == 0) {
@@ -399,7 +400,9 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * init.
+     * Initialize the servlet.
+     *
+     * @param cfg the servlet config
      */
     @Override
     public void init(ServletConfig cfg) throws ServletException {
@@ -424,7 +427,7 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * destroy.
+     * Destroy the servlet.
      */
     @Override
     public void destroy() {
@@ -963,7 +966,7 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Sets Cross-Origin Resource Sharing (CORS) and Content Security Policy (CSP) headers
+     * Cross-Origin Resource Sharing (CORS) and Content Security Policy (CSP) headers
      * for XMLHttpRequest (XHR) responses.
      *
      * @param resp the HttpServletResponse object to which headers will be added
@@ -1849,11 +1852,11 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  hidden inputs for nonce and paramters p, st, and sort
+     * Hidden inputs for the nonce and parameters p, st, and sort.
      *
-     *  @param out writes to it
-     *  @param action if non-null, add it as the action
-     *  @since 0.9.16
+     * @param out writes to it
+     * @param action if non-null, add it as the action
+     * @since 0.9.16
      */
     private void writeHiddenInputs(PrintWriter out, HttpServletRequest req, String action) {
         StringBuilder buf = new StringBuilder(256);
@@ -1862,11 +1865,11 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  hidden inputs for nonce and parameters p, st, and sort
+     * Hidden inputs for the nonce and parameters p, st, and sort.
      *
-     *  @param buf appends to it
-     *  @param action if non-null, add it as the action
-     *  @since 0.9.16
+     * @param buf appends to it
+     * @param action if non-null, add it as the action
+     * @since 0.9.16
      */
     private void writeHiddenInputs(StringBuilder buf, HttpServletRequest req, String action) {
         Map<String, String> params = new HashMap<>();
@@ -1906,9 +1909,11 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  @param s search param override or "" for default or null to keep the same as in req
-     *  @return the query string
-     *  @since 0.9.58
+     * Query string with an optional search override.
+     *
+     * @param s search param override or "" for default or null to keep the same as in req
+     * @return the query string
+     * @since 0.9.58
      */
     private static String getQueryString(HttpServletRequest req, String p, String st, String so, String search) {
         String url = req.getRequestURL().toString();
@@ -3680,9 +3685,10 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Get version from bytes 3-6
-     *  @return " w.x.y.z" or ""
-     *  @since 0.9.14
+     * Version from bytes 3-6.
+     *
+     * @return " w.x.y.z" or ""
+     * @since 0.9.14
      */
     private static String getAzVersion(byte[] id) {
         if (id[7] != '-') {return "";}
@@ -3701,9 +3707,10 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Get version from bytes 3-5
-     *  @return " w.x.y" or ""
-     *  @since 0.9.14
+     * Version from bytes 3-5.
+     *
+     * @return " w.x.y" or ""
+     * @since 0.9.14
      */
     private static String getRobtVersion(byte[] id) {
         StringBuilder buf = new StringBuilder(8);
@@ -3737,11 +3744,11 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Generate link to details page if we know it supports it.
-     *  Start of anchor only, caller must add anchor text or img and close anchor.
+     * Link to the details page if the tracker supports it.
+     * Start of anchor only; caller must add anchor text or img and close the anchor.
      *
      * @return the tracker link url
-     *  @since 0.8.4
+     * @since 0.8.4
      */
     private String getTrackerLinkUrl(String announce, byte[] infohash) {
         // temporarily hardcoded for postman and torrfreedom, requires bytemonsoon patch or flyte for lookup by info_hash
@@ -3772,9 +3779,10 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Full link to details page with img
+     * Full link to the details page with an image.
+     *
      * @return the tracker link
-     *  @since 0.8.4
+     * @since 0.8.4
      */
     private String getTrackerLink(String announce, byte[] infohash) {
         String linkUrl = getTrackerLinkUrl(announce, infohash);
@@ -3789,9 +3797,10 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Full anchor to home page or details page with shortened hostname as anchor text
+     * Full anchor to the home page or details page with shortened hostname as anchor text.
+     *
      * @return the short tracker link
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     private String getShortTrackerLink(String announce, byte[] infohash) {
         StringBuilder buf = new StringBuilder(128);
@@ -4307,18 +4316,18 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<label title=\"")
            .append(_t("When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."))
            .append("\">")
-.append("<input type=text name=multiDestMax id=multiDestMax value=\"")
-            .append(_manager.util().getMaxDest())
-            .append("\" class=numeric size=5 maxlength=4 pattern=\"[0-9]{1,4}\" spellcheck=false>")
-            .append("</label></span><br>\n")
-            .append("<span class=configOption id=randomizeStartup><b>")
-            .append(_t("Randomize startup delay"))
-            .append("</b> \n")
-            .append("<label title=\"")
-            .append(_t("Stagger torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."))
-            .append("\">")
-            .append("<input type=checkbox class=\"optbox slider\" name=randomizeStartup id=randomizeStartup ")
-            .append(randomizeStartup ? "checked " : "").append("></label></span><br>\n");
+           .append("<input type=text name=multiDestMax id=multiDestMax value=\"")
+           .append(_manager.util().getMaxDest())
+           .append("\" class=numeric size=5 maxlength=4 pattern=\"[0-9]{1,4}\" spellcheck=false>")
+           .append("</label></span><br>\n")
+           .append("<span class=configOption id=randomizeStartup><b>")
+           .append(_t("Randomize startup delay"))
+           .append("</b> \n")
+           .append("<label title=\"")
+           .append(_t("Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."))
+           .append("\">")
+           .append("<input type=checkbox class=\"optbox slider\" name=randomizeStartup id=randomizeStartup ")
+           .append(randomizeStartup ? "checked " : "").append("></label></span><br>\n");
 
         if (isStandalone()) {
             buf.append("<span class=configOption><label><b>")
@@ -4609,9 +4618,11 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  @param url in base32 or hex
-     *  @param dataDir null to default to snark data directory
-     *  @since 0.8.4
+     * Add a torrent from a magnet URL.
+     *
+     * @param url in base32 or hex
+     * @param dataDir null to default to snark data directory
+     * @since 0.8.4
      */
     private void addMagnet(String url, File dataDir) {
         if (url.startsWith(MagnetURI.MAGNET_FULL_V2)) {
@@ -4629,11 +4640,10 @@ public class I2PSnarkServlet extends BasicServlet {
         }
     }
 
-    /** copied from ConfigTunnelsHelper */
+    /** Copied from ConfigTunnelsHelper. */
     private static final String HOP = "hop";
     private static final String TUNNEL = "tunnel";
-    /** dummies for translation */
-    /** prevents the ngettext line below from getting tagged */
+    /** Dummies for translation; prevents the ngettext line below from getting tagged. */
     private static final String DUMMY0 = "{0} ";
     private static final String DUMMY1 = "1 ";
 
@@ -4674,22 +4684,22 @@ public class I2PSnarkServlet extends BasicServlet {
        return buf.toString();
     }
 
-    /** translate */
+    /** Translate a string. */
     private String _t(String s) {return _manager.util().getString(s);}
 
-    /** translate */
+    /** Translate a string with one argument. */
     private String _t(String s, Object o) {return _manager.util().getString(s, o);}
 
-    /** translate */
+    /** Translate a string with two arguments. */
     private String _t(String s, Object o, Object o2) {return _manager.util().getString(s, o, o2);}
 
-    /** translate (ngettext) @since 0.7.14 */
+    /** Translate a pluralized string. @since 0.7.14 */
     private String ngettext(String s, String p, int n) {return _manager.util().getString(n, s, p);}
 
-    /** dummy for tagging */
+    /** Dummy for tagging. */
     private static String ngettext(String s, String p) {return null;}
 
-    /** format filesize */
+    /** Format the file size. */
     private static String formatSize(long bytes) {return DataHelper.formatSize2(bytes) + 'B';}
 
     /**
@@ -5251,12 +5261,12 @@ public class I2PSnarkServlet extends BasicServlet {
         return buf.toString();
     }
 
-    /** known postman tracker b64 announce, both old and new */
+    /** Known postman tracker base64 announce, both old and new. */
     private static final String POSTMAN_B64 =
             "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA";
     private static final String POSTMAN_B64_NEW =
             "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICrsRuil8qK~whOvj8uNTv~ohZnTZHxTLgi~sDyo98BwJ-4Y4NMSuF4GLzcgLypcR1D1WY2tDqMKRYFVyLE~MTPVjRRgXfcKolykQ666~Go~A~~CNV4qc~zlO6F4bsUhVZDU7WJ7mxCAwqaMiJsL-NgIkb~SMHNxIzaE~oy0agHJMBQAEAAcAAA==";
-    /** known tracker b32 announces */
+    /** Known tracker base32 announces. */
     private static final String BT_B32 = "ev5dpxvcmshi6mil7gaon3b2wbplwylzraxs4wtz7dd5lzdsc2dq.b32.i2p";
     private static final String CHUDO_B32 = "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p";
     private static final String CRYPT_B32 = "ri5a27ioqd4vkik72fawbcryglkmwyy4726uu5j3eg6zqh2jswfq.b32.i2p";
@@ -5736,6 +5746,8 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Whether the MIME type is audio.
+     *
      * @param mime non-null
      * @return whether audio
      * @since 0.9.44
@@ -5750,6 +5762,8 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Whether the MIME type is video.
+     *
      * @param mime non-null
      * @return whether video
      * @since 0.9.44
@@ -5805,7 +5819,7 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Get the audio files in the resource list as a m3u playlist.
+     * The audio files in the resource list as an m3u playlist.
      * https://en.wikipedia.org/wiki/M3U
      *
      * @param base The encoded base URL
@@ -5883,6 +5897,8 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Display the ratings and comments section.
+     *
      * @param er ratings enabled globally
      * @param ec comments enabled globally
      * @param esc comments enabled this torrent
@@ -6021,9 +6037,11 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  @param so null ok
-     *  @return query string or ""
-     *  @since 0.9.16
+     * Query string for the sort parameter.
+     *
+     * @param so null ok
+     * @return query string or ""
+     * @since 0.9.16
      */
     private static String getQueryString(String so) {
         if (so != null && !so.isEmpty()) {return "?sort=" + DataHelper.stripHTML(so);}
@@ -6291,6 +6309,8 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Display the edit-torrent section.
+     *
      * @param snark non-null
      * @param base the base path
      * @param buf output buffer
@@ -6538,10 +6558,11 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Is "a" equal to "b", or is "a" a directory and a parent
-     *  of file or directory "b", canonically speaking?
+     * Whether "a" equals "b", or "a" is a directory and a parent of
+     * file or directory "b", canonically speaking.
+     *
      * @return whether parent of
-     *  @since 0.9.15
+     * @since 0.9.15
      */
     private static boolean isParentOf(File a, File b) {
         try {
@@ -6561,9 +6582,10 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Are we running in standalone mode?
+     * Whether we are running in standalone mode.
+     *
      * @return whether standalone
-     *  @since 0.9.54+
+     * @since 0.9.54+
      */
     private boolean isStandalone() {
         if (_context.isRouterContext()) {return false;}

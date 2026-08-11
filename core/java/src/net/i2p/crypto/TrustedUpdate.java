@@ -111,8 +111,8 @@ public class TrustedUpdate {
 
     /**
      * Keys.
-     * @since 0.9.8, public since 0.9.14.1
      * @return the keys
+     * @since 0.9.8, public since 0.9.14.1
      */
     public Map<SigningPublicKey, String> getKeys() {
         return Collections.unmodifiableMap(_trustedKeys);
@@ -124,8 +124,8 @@ public class TrustedUpdate {
      *
      *  @param key 172 character base64 string
      *  @param name non-null but "" ok
-     *  @since 0.7.12
      *  @return true if successful
+     *  @since 0.7.12
      */
     public final boolean addKey(String key, String name) {
         if (_log.shouldDebug()) _log.debug("Adding " + name + ": " + key);

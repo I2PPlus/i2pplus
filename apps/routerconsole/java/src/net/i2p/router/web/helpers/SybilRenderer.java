@@ -1043,8 +1043,8 @@ public class SybilRenderer {
     /**
      * Countries now in a separate bundle
      * @param code two-letter country code
-     * @since 0.9.9
      * @return the translated country
+     * @since 0.9.9
      */
     private String getTranslatedCountry(String code) {
         String name = _context.commSystem().getCountryName(code);

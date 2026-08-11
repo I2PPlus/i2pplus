@@ -878,8 +878,8 @@ public class LogManager implements Flushable {
     /**
      * Check if gzip compression should be used for rotated log files.
      *
-     * @since 0.9.56, public since 0.9.57, was pkg private
      * @return whether gzip
+     * @since 0.9.56, public since 0.9.57, was pkg private
      */
     public boolean shouldGzip() {
         return _gzip;

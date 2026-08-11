@@ -17,7 +17,7 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 /**
- *  Get the build date as set in i2p.jar,
+ *  The build date as set in i2p.jar,
  *  and reasonable min and max values for the current time,
  *  to be used as sanity checks.
  *
@@ -35,7 +35,7 @@ public class BuildTime {
     private static final long _latestTime;
     private static final long YEARS_25 = 25L * 365 * 24 * 60 * 60 * 1000;
 
-    /** update this periodically */
+    /** Update this periodically. */
     private static final String EARLIEST = "2025-01-01 12:00:00 UTC";
 
     // fallback if parse fails ticket #1976
@@ -80,7 +80,7 @@ public class BuildTime {
     }
 
     /**
-     *  Get the build date for i2p.jar.
+     *  The build date for i2p.jar.
      *
      *  @return the earliest possible time if actual build date is unknown
      */
@@ -89,7 +89,7 @@ public class BuildTime {
     }
 
     /**
-     *  Get the earliest it could possibly be right now.
+     *  The earliest it could possibly be right now.
      *  Latest of the build time minus a day, or a hardcoded time.
      *
      *  @return the time
@@ -99,7 +99,7 @@ public class BuildTime {
     }
 
     /**
-     *  Get the latest it could possibly be right now.
+     *  The latest it could possibly be right now.
      *  Hardcoded.
      *
      *  @return the time

@@ -79,6 +79,7 @@ public class I2PSocketAddress extends SocketAddress {
     }
 
     /**
+     *  Creates an unresolved address for the given host and port.
      *  @throws IllegalArgumentException for port &lt; 0 or port &gt; 65535
      */
     public static I2PSocketAddress createUnresolved(String host, int port) {
@@ -95,6 +96,7 @@ public class I2PSocketAddress extends SocketAddress {
     }
 
     /**
+     * The port number of this address.
      * @return the port number, 0 if not specified
      */
     public int getPort() {
@@ -114,6 +116,7 @@ public class I2PSocketAddress extends SocketAddress {
     }
 
     /**
+     *  Host name of this address, as given in the constructor.
      *  @return the host only if given in the constructor. Does not do a reverse lookup.
      */
     public String getHostName() {
@@ -121,6 +124,7 @@ public class I2PSocketAddress extends SocketAddress {
     }
 
     /**
+     * Whether the destination has not been resolved.
      * @return true if this address was created unresolved or resolution failed
      */
     public boolean isUnresolved() {
@@ -128,7 +132,7 @@ public class I2PSocketAddress extends SocketAddress {
     }
 
     /**
-     * toString.
+     * String representation of this address.
      */
     @Override
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
@@ -144,7 +148,7 @@ public class I2PSocketAddress extends SocketAddress {
     }
 
     /**
-     * equals.
+     * Whether this address equals another, comparing port, destination, and host.
      */
     @Override
     public boolean equals(Object obj) {
@@ -163,6 +167,7 @@ public class I2PSocketAddress extends SocketAddress {
     }
 
     /**
+     * Hash code of this address.
      * @return whether h code is present
      */
     @Override

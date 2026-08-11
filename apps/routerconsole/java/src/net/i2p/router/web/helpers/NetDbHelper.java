@@ -67,8 +67,8 @@ public class NetDbHelper extends FormHandler {
     private static final int DEFAULT_PAGE = 0;
     /**
      * Whether the router is a floodfill router.
-     * @since 0.9.33
      * @return whether floodfill
+     * @since 0.9.33
      */
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
 
@@ -380,8 +380,8 @@ public class NetDbHelper extends FormHandler {
 
     /**
      *  Get a session-bound nonce for forms in this page.
-     *  @since 0.9.38
      * @return the nonce
+     *  @since 0.9.38
      */
     private String getNonce() {
         return CSSHelper.getNonce(_session);
@@ -495,8 +495,8 @@ public class NetDbHelper extends FormHandler {
     /**
      *  Return the currently selected NetDb tab index.
      *
-     *  @since 0.9.1
      * @return the tab
+     *  @since 0.9.1
      */
     private int getTab() {
         if (_debug) {return 6;}

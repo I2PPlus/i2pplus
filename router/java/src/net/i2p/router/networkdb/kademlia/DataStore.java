@@ -101,16 +101,16 @@ public interface DataStore {
     /**
      * All entries in the data store.
      *
-     * @since 0.8.3
      * @return the entries
+     * @since 0.8.3
      */
     public Collection<DatabaseEntry> getEntries();
 
     /**
      * All map entries in the data store.
      *
-     * @since 0.8.3
      * @return the map entries
+     * @since 0.8.3
      */
     public Set<Map.Entry<Hash, DatabaseEntry>> getMapEntries();
     /**

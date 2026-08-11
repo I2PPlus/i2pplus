@@ -230,8 +230,9 @@ class OutboundNTCP2State implements EstablishState {
 
     /**
      *  Check if the connection is in initial state and ready for prepareOutbound()
-     * @since 0.9.59
-     * @return whether initial state
+     *
+     *  @return whether initial state
+     *  @since 0.9.59
      */
     public boolean isInitialState() {
         return _state == State.OB_INIT;

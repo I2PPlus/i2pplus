@@ -32,10 +32,10 @@ class DHTNodes {
     private final KBucketSet<NID> _kad;
     private volatile boolean _isRunning;
 
-    /** stagger with other cleaners */
+    /** Stagger with other cleaners. */
     private static final long CLEAN_TIME = (long) 117 * 1000;
 
-    /** how long since last heard from do we delete - BEP 5 says 15 minutes */
+    /** How long since last heard before deletion; BEP 5 says 15 minutes. */
     private static final long MAX_EXPIRE_TIME = 60 * (long) 60 * 1000;
     private static final long MIN_EXPIRE_TIME = 30 * (long) 60 * 1000;
     private static final long DELTA_EXPIRE_TIME = 6 * (long) 60 * 1000;
@@ -92,7 +92,7 @@ class DHTNodes {
     }
 
     /**
-     * Get a node by its ID.
+     * The node with the given ID.
      *
      * @param nid the node ID to look up
      * @return the node info, or null if not found
@@ -127,7 +127,7 @@ class DHTNodes {
     }
 
     /**
-     * Get all known nodes.
+     * All known nodes.
      *
      * @return collection of all known node infos
      */
@@ -158,7 +158,7 @@ class DHTNodes {
     }
 
     /**
-     * Get random keys to explore for DHT maintenance.
+     * Random keys to explore for DHT maintenance.
      *
      * @return list of node IDs representing buckets that need refreshing
      */

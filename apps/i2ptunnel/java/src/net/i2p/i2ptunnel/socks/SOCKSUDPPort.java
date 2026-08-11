@@ -91,8 +91,8 @@ public class SOCKSUDPPort implements Source, Sink {
      *  @param from will be passed along
      *  @param fromPort will be passed along
      *  @param toPort will be passed along
-     *  @since 0.9.53 added fromPort and toPort parameters
      *  @throws RuntimeException
+     *  @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination from, int fromPort, int toPort, byte[] data) {
         this.wrapper.send(from, fromPort, toPort, data);

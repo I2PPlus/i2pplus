@@ -119,7 +119,7 @@ class MessageInputStream extends InputStream {
     private int _readyDataSize = 0;
 
     /**
-     * Constructs a new MessageInputStream with the specified buffer limits.
+     * New stream with the specified buffer limits.
      *
      * @param ctx Application context for logging and utilities
      * @param maxMessageSize Max size of a single message block
@@ -131,7 +131,7 @@ class MessageInputStream extends InputStream {
     }
 
     /**
-     * Constructs a new MessageInputStream with the specified buffer limits.
+     * New stream with the specified buffer limits.
      *
      * @param ctx Application context for logging and utilities
      * @param maxMessageSize Max size of a single message block
@@ -174,7 +174,7 @@ class MessageInputStream extends InputStream {
     }
 
     /**
-     * Gets the total number of bytes queued up in ready buffers.
+     * Total number of bytes queued up in ready buffers.
      * Does not throw IOException on closed stream.
      *
      * @return number of bytes waiting to be read
@@ -321,7 +321,7 @@ class MessageInputStream extends InputStream {
     }
 
     /**
-     * Gets an array of missing block IDs between the highest ready block and highest received block.
+     * Missing block IDs between the highest ready block and highest received block.
      * Two-pass to avoid ArrayList allocation inside the lock.
      *
      * @return array of missing block IDs, empty if none
@@ -624,7 +624,7 @@ class MessageInputStream extends InputStream {
     }
 
     /**
-     * Sets the read timeout in milliseconds.
+     * Read timeout in milliseconds.
      * -1 means block indefinitely, 0 means non-blocking.
      *
      * @param timeout new read timeout

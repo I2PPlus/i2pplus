@@ -55,6 +55,8 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     //////// begin UpdateTask methods
 
     /**
+     * Whether the runner is running.
+     *
      * @return whether running
      */
     @Override
@@ -63,7 +65,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * shutdown.
+     * Shut down the runner.
      */
     @Override
     public void shutdown() {
@@ -72,6 +74,8 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
+     * The type.
+     *
      * @return the type
      */
     @Override
@@ -80,6 +84,8 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
+     * The method.
+     *
      * @return the method
      */
     @Override
@@ -88,6 +94,8 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
+     * The URI.
+     *
      * @return the u r i
      */
     @Override
@@ -96,6 +104,8 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
+     * The ID.
+     *
      * @return the i d
      */
     @Override
@@ -106,7 +116,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     //////// end UpdateTask methods
 
     /**
-     * start.
+     * Start the runner.
      */
     @Override
     public void start() {
@@ -272,7 +282,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     //////// all pass through to SnarkManager
 
     /**
-     * torrentComplete.
+     * Handle torrent completion.
      */
     @Override
     public void torrentComplete(Snark snark) {
@@ -288,7 +298,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * gotMetaInfo.
+     * Handle received metainfo.
      */
     @Override
     public String gotMetaInfo(Snark snark) {
@@ -312,7 +322,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * fatal.
+     * Handle a fatal error.
      */
     @Override
     public void fatal(Snark snark, String error) {
@@ -321,7 +331,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * addMessage.
+     * Add a message to the console.
      */
     @Override
     public void addMessage(Snark snark, String message) {
@@ -329,7 +339,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * gotPiece.
+     * Handle a received piece.
      */
     @Override
     public void gotPiece(Snark snark) {
@@ -338,6 +348,8 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
+     * The saved torrent time.
+     *
      * @return the saved torrent time
      */
     @Override
@@ -346,6 +358,8 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
+     * The saved torrent bit field.
+     *
      * @return the saved torrent bit field
      */
     @Override
@@ -354,6 +368,8 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
+     * The saved preserve-names setting.
+     *
      * @return the saved preserve names setting
      */
     @Override
@@ -362,6 +378,8 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
+     * The saved uploaded bytes.
+     *
      * @return the saved uploaded
      */
     @Override
@@ -369,13 +387,22 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         return _smgr.getSavedUploaded(snark);
     }
 
-    /** @param snark the torrent */
+    /**
+     * Add a message from the torrent to the console.
+     *
+     * @param snark the torrent
+     */
     @Override
     public CommentSet getSavedComments(Snark snark) {
         return _smgr.getSavedComments(snark);
     }
 
-    /** @param snark the torrent @param comments to save */
+    /**
+     * Save comments for the torrent.
+     *
+     * @param snark the torrent
+     * @param comments to save
+     */
     @Override
     public void locked_saveComments(Snark snark, CommentSet comments) {
         _smgr.locked_saveComments(snark, comments);
@@ -415,7 +442,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * toString.
+     * String form of the runner.
      */
     @Override
     public String toString() {

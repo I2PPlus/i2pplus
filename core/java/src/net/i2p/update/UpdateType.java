@@ -20,11 +20,11 @@ public enum UpdateType {
     GEOIP,
     /** Blocklist updates */
     BLOCKLIST,
-    /** unused */
+    /** Unused reseed data updates. */
     RESEED,
-    /** unused */
+    /** Unused homepage updates. */
     HOMEPAGE,
-    /** unused */
+    /** Unused addressbook updates. */
     ADDRESSBOOK,
     /** Signed router updates in SU3 format @since 0.9.9 */
     ROUTER_SIGNED_SU3,

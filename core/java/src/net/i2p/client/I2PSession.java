@@ -430,9 +430,9 @@ public interface I2PSession {
       *
       *  @param h the hash to look up
       *  @param maxWait ms
-      *  @since 0.8.3
       *  @return null on failure
       *  @throws I2PSessionException on error
+      *  @since 0.8.3
       */
      public Destination lookupDest(Hash h, long maxWait) throws I2PSessionException;
 
@@ -498,9 +498,9 @@ public interface I2PSession {
       *
       *  @param name the hostname to look up
       *  @param maxWait ms
-      *  @since 0.9.11
       *  @return null on failure
       *  @throws I2PSessionException on error
+      *  @since 0.9.11
       */
      public Destination lookupDest(String name, long maxWait) throws I2PSessionException;
 
@@ -511,9 +511,9 @@ public interface I2PSession {
       *
       *  @param name the hostname to look up
       *  @param maxWait ms
-      *  @since 0.9.43
       *  @return non-null
       *  @throws I2PSessionException on error
+      *  @since 0.9.43
       */
      public LookupResult lookupDest2(String name, long maxWait) throws I2PSessionException;
 

@@ -718,11 +718,11 @@ public class RrdDbPool {
      * Wait until the pool is empty and return a lock that prevent any additions of new RrdDb
      * references until it's released.
      *
-     * @since 3.7
      * @param timeout the time to wait for the write lock
      * @param unit the time unit of the timeout argument
      * @return a lock to release when operations on this pool are finished.
      * @throws InterruptedException if interrupted whole waiting for the lock
+     * @since 3.7
      */
     public Lock lockEmpty(long timeout, TimeUnit unit) throws InterruptedException {
         usageWLock.tryLock(timeout, unit);

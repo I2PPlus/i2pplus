@@ -29,8 +29,8 @@ import net.i2p.I2PAppContext;
  * Writing from scratch rather than extending EepGet would maybe have been less bloated memory-wise.
  * This way gets us redirect handling, among other benefits.
  *
- * @since 0.7.7
  * @author zzz
+ * @since 0.7.7
  */
 public class EepHead extends EepGet {
     /** EepGet needs either a non-null file or a stream... shouldn't actually be written to... */

@@ -257,7 +257,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Sets the session ID.
+     *  Session ID for this message.
      *
      * @param id 0-65535
      */
@@ -274,7 +274,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Sets the status code.
+     *  Status code for this message.
      *
      * @param status 0-255
      */
@@ -285,8 +285,8 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      *  Is the status code a success status code?
      *
-     * @since 0.9.5
      * @return whether successful
+     * @since 0.9.5
      */
     public boolean isSuccessful() {
         return isSuccessful(_status);
@@ -295,8 +295,8 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      *  Is the status code a success status code?
      *
-     * @since 0.9.5
      * @return whether successful
+     * @since 0.9.5
      */
     public static boolean isSuccessful(int status) {
         return status == STATUS_SEND_GUARANTEED_SUCCESS || status == STATUS_SEND_BEST_EFFORT_SUCCESS || status == STATUS_SEND_SUCCESS_LOCAL || status == STATUS_SEND_ACCEPTED || status == STATUS_AVAILABLE;

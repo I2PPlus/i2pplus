@@ -718,8 +718,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     /**
      * The addresses we want to bind to
      *
-     * @since 0.9.46, public since 0.9.55 for HTTPServerList
      * @return the local addresses
+     * @since 0.9.46, public since 0.9.55 for HTTPServerList
      */
     public static Set<String> getLocalAddresses() {
         // older miniupnpd will send ipv6 ssdp search response to ipv4 address,
@@ -1650,9 +1650,10 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
+     *  Removes an IPv4 port mapping.
      *
-     *  @since 0.9.50 split out from above
      *  @return success
+     *  @since 0.9.50 split out from above
      */
     private boolean removeMappingV4(Service service, String protocol, int port, ForwardPort fp, boolean noLog) {
         Action remove = service.getAction("DeletePortMapping");
@@ -1683,9 +1684,10 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
+     *  Removes an IPv6 port mapping.
      *
-     *  @since 0.9.50
      *  @return success
+     *  @since 0.9.50
      */
     private boolean removeMappingV6(Service service, String protocol, int port, IPv6ForwardPort fp, boolean noLog) {
         int uid = fp.getUID();
@@ -1852,9 +1854,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     private static final AtomicInteger __id = new AtomicInteger();
 
     /**
-     *  postControlAction() can take many seconds, especially if it's failing,
-     *  and onChangePublicPorts() may be called from threads we don't want to slow down,
-     *  so throw this in a thread.
+     *  Runs port registration in a background thread; postControlAction() can take many seconds,
+     *  especially if it's failing, and onChangePublicPorts() may be called from threads we
+     *  don't want to slow down.
      *
      *  @param portsToForwardNow if null, renew subscriptions only, then exit.
      */
@@ -1893,6 +1895,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         private final Set<ForwardPort> portsToForwardNow;
 
         /**
+         *  Registration thread handling the given ports.
+         *
          *  @param ports if null, renew subscriptions only, then exit.
          */
         public RegisterPortsThread(Set<ForwardPort> ports) {
@@ -1935,7 +1939,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
-     *  postControlAction() can take many seconds, especially if it's failing,
+     *  Runs port unregistration in a background thread; postControlAction() can take many seconds,
+     *  especially if it's failing,
      *  and onChangePublicPorts() may be called from threads we don't want to slow down,
      *  so throw this in a thread.
      */
@@ -1983,6 +1988,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         private long _expires;
 
         /**
+         *  Port forwarding entry for the given IPv6 address.
+         *
          *  @param ip the IPv6 address being forwarded, non-null
          */
         public IPv6ForwardPort(String name, int protocol, int port, String ip) {
@@ -1999,21 +2006,29 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         public String getIP() { return _ip; }
 
         /**
+         *  Unique ID of the pinhole.
+         *
          *  @return 0-65535 or -1 if unset
          */
         public synchronized int getUID() { return _uid; }
 
         /**
+         *  Unique ID of the pinhole.
+         *
          *  @param uid 0-65535
          */
         public synchronized void setUID(int uid) { _uid = uid; }
 
         /**
+         *  Expiration time of the pinhole.
+         *
          *  @return absolute time or 0 if unset
          */
         public synchronized long getExpiration() { return _expires; }
 
         /**
+         *  Expiration time of the pinhole.
+         *
          *  @param expires absolute time
          */
         public synchronized void setExpiration(long expires) { _expires = expires; }

@@ -103,8 +103,8 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
     }
 
     /**
-     *  @since 0.9.62
      * @return the boolean option
+     *  @since 0.9.62
      */
     protected boolean getBooleanOption(String opt, boolean dflt) {
         Properties opts = getTunnel().getClientOptions();
@@ -126,8 +126,8 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
     /**
      *  Returns the I2PSocketManager for this task, or null if not applicable.
      *  Extending classes may override to return their socket manager.
-     *  @since 0.9.63
      * @return the socket manager
+     *  @since 0.9.63
      */
     public I2PSocketManager getSocketManager() {return null;}
 

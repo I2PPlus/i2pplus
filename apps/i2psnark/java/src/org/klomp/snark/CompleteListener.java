@@ -70,20 +70,26 @@ public interface CompleteListener {
     public BitField getSavedTorrentBitField(Snark snark);
 
     /**
-     * @since 0.9.15
+     * The saved preserve-names setting.
+     *
      * @return the saved preserve names setting
+     * @since 0.9.15
      */
     public boolean getSavedPreserveNamesSetting(Snark snark);
 
     /**
-     * @since 0.9.15
+     * The saved uploaded bytes.
+     *
      * @return the saved uploaded
+     * @since 0.9.15
      */
     public long getSavedUploaded(Snark snark);
 
     /**
-     * @since 0.9.31
+     * The saved comments.
+     *
      * @return the saved comments
+     * @since 0.9.31
      */
     public CommentSet getSavedComments(Snark snark);
 
@@ -93,14 +99,18 @@ public interface CompleteListener {
     public void locked_saveComments(Snark snark, CommentSet comments);
 
     /**
-     * @since 0.9.42
+     * Whether the torrent should auto-start.
+     *
      * @return whether auto start
+     * @since 0.9.42
      */
     public boolean shouldAutoStart();
 
     /**
-     * @since 0.9.62
+     * The bandwidth listener for the torrent.
+     *
      * @return the bandwidth listener
+     * @since 0.9.62
      */
     public BandwidthListener getBandwidthListener();
 }

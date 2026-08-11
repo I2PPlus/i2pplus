@@ -15,10 +15,10 @@ import javax.crypto.interfaces.DHKey;
  * <p>Implementations include {@link ElGamalPublicKey} and {@link ElGamalPrivateKey}
  * which provide the actual cryptographic operations for encryption and decryption.</p>
  *
- * @since 0.9.25
  * @author I2P Project
  *
  * @see <a href="https://en.wikipedia.org/wiki/ElGamal_encryption">ElGamal Encryption</a>
+ * @since 0.9.25
  */
 public interface ElGamalKey extends DHKey {
     /**

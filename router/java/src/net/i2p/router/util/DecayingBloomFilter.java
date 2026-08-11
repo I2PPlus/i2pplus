@@ -62,14 +62,14 @@ public class DecayingBloomFilter {
     protected volatile boolean _keepDecaying;
     /** The decay timer event */
     protected final SimpleTimer2.TimedEvent _decayEvent;
-    /** just for logging */
+    /** Name for logging. */
     protected final String _name;
-    /** synchronize against this lock when switching double buffers */
+    /** Synchronize against this lock when switching double buffers. */
     protected final ReentrantReadWriteLock _reorganizeLock = new ReentrantReadWriteLock();
 
     private static final int DEFAULT_M = 23;
     private static final int DEFAULT_K = 11;
-    /** true for debugging */
+    /** True for debugging. */
     private static final boolean ALWAYS_MISS = false;
 
     /**
@@ -192,7 +192,7 @@ public class DecayingBloomFilter {
      */
     private class Shutdown implements Runnable {
         /**
-         * run.
+         * Clear on shutdown.
          */
         @Override
         public void run() {
@@ -207,13 +207,13 @@ public class DecayingBloomFilter {
      */
     public long getCurrentDuplicateCount() { return _currentDuplicates.get(); }
 
-    /** unsynchronized but only used for logging elsewhere */
+    /** Unsynchronized but only used for logging elsewhere. */
     public int getInsertedCount() {
             return _current.size() + _previous.size();
     }
 
     /**
-     * Get the false positive rate
+     * False positive rate.
      *
      * @return the false positive rate
      */
@@ -362,7 +362,7 @@ public class DecayingBloomFilter {
     }
 
     /**
-     * decay.
+     * Decay the filter, moving the current buffer to the previous.
      */
     protected void decay() {
         int currentCount = 0;
@@ -394,7 +394,7 @@ public class DecayingBloomFilter {
         }
 
         /**
-         * timeReached.
+         * Decay and re-schedule the next event.
          */
         @Override
         public void timeReached() {
@@ -425,7 +425,7 @@ public class DecayingBloomFilter {
         }
 
         /**
-         * timeReached.
+         * Decay at the next hour, if the hour has changed.
          */
         public void timeReached() {
             if (_keepDecaying) {
@@ -441,7 +441,7 @@ public class DecayingBloomFilter {
             }
         }
 
-        /** side effect: sets _currentHour */
+        /** Side effect: sets the current hour. */
         private long getTimeTillNextHour() {
             long now = _context.clock().now();
             long currentHour = now / HOUR;

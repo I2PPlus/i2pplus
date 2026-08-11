@@ -10,15 +10,15 @@ import net.i2p.data.router.RouterInfo;
  */
 public class Pair implements Comparable<Pair> {
     /**
-     * r1.
+     * First router.
      */
     public final RouterInfo r1;
     /**
-     * r2.
+     * Second router.
      */
     public final RouterInfo r2;
     /**
-     * dist.
+     * Distance between the routers.
      */
     public final BigInteger dist;
 
@@ -30,14 +30,14 @@ public class Pair implements Comparable<Pair> {
     }
 
     /**
-     * compareTo.
+     * Compare this pair's distance to another pair's.
      */
     public int compareTo(Pair p) {
         return this.dist.compareTo(p.dist);
     }
 
     /**
-     * equals.
+     * Whether this pair equals the given object.
      */
     @Override
     public boolean equals(Object o) {
@@ -48,6 +48,8 @@ public class Pair implements Comparable<Pair> {
     }
 
     /**
+     * Hash code for this pair.
+     *
      * @return whether h code is present
      */
     @Override

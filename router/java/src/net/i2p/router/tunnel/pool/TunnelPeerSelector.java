@@ -124,11 +124,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     *  Get the effective first-hop fail cooldown.
+     *  Effective first-hop fail cooldown.
      *  During ghost cascades (>50 ghosts), shorten from 5 min to 60s
      *  to rehabilitate peers faster when the network is stressed.
-     * @since 0.9.70
      * @return the effective first hop cooldown
+     * @since 0.9.70
      */
     private static long getEffectiveFirstHopCooldown(RouterContext ctx) {
         try {
@@ -733,6 +733,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
+     *  Exclude caps to apply during peer selection.
      *  @return non-null, possibly empty
      */
     private static String getExcludeCaps(RouterContext ctx) {
@@ -1431,7 +1432,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     *  Set the Tuner-controlled activity-window multiplier. Clamped to [1, 8].
+     *  Tuner-controlled activity-window multiplier, clamped to [1, 8].
      *
      *  @param mult the multiplier applied to the base activity window
      *  @since 0.9.70+
@@ -1441,7 +1442,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     *  Get the current Tuner-controlled activity-window multiplier.
+     *  Current Tuner-controlled activity-window multiplier.
      *
      *  @return the current multiplier, in [1, 8]
      *  @since 0.9.70+

@@ -88,8 +88,8 @@ class Draft extends Mail {
 	/**
 	 * Includes size of attachments
 	 *
-	 * @since 0.9.62
 	 * @return the size
+	 * @since 0.9.62
 	 */
 	@Override
 	public synchronized long getSize() {

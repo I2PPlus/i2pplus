@@ -38,7 +38,7 @@ abstract class SchedulerImpl implements TaskScheduler {
     }
 
     /**
-     * toString.
+     * Name of the scheduler class.
      */
     @Override
     public String toString() {

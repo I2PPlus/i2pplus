@@ -30,7 +30,7 @@ class ConnectionPacketHandler {
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
 
     /**
-     * Get the maximum slow start window size.
+     * Maximum slow start window size.
      * Tunable via i2p.streaming.maxSlowStartWindow (default: 32).
      * @return the max slow start window
      */

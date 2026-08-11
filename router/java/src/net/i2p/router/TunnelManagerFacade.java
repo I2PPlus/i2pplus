@@ -215,26 +215,26 @@ public interface TunnelManagerFacade extends Service {
      */
     public TunnelPoolSettings getOutboundSettings(Hash client);
     /**
-     * Set the inbound settings for the exploratory pool.
+     * The inbound settings for the exploratory pool.
      *
      * @param settings the inbound settings
      */
     public void setInboundSettings(TunnelPoolSettings settings);
     /**
-     * Set the outbound settings for the exploratory pool.
+     * The outbound settings for the exploratory pool.
      *
      * @param settings the outbound settings
      */
     public void setOutboundSettings(TunnelPoolSettings settings);
     /**
-     * Set the inbound settings for the given client.
+     * The inbound settings for the given client.
      *
      * @param client the client hash
      * @param settings the inbound settings
      */
     public void setInboundSettings(Hash client, TunnelPoolSettings settings);
     /**
-     * Set the outbound settings for the given client.
+     * The outbound settings for the given client.
      *
      * @param client the client hash
      * @param settings the outbound settings
@@ -252,12 +252,16 @@ public interface TunnelManagerFacade extends Service {
     public TunnelPool getOutboundExploratoryPool();
 
     /**
+     *  Inbound tunnel pool for the given client, or null if none.
+     *
      *  @return pool or null
      *  @since 0.9.34
      */
     public TunnelPool getInboundPool(Hash client);
 
     /**
+     *  Outbound tunnel pool for the given client, or null if none.
+     *
      *  @return pool or null
      *  @since 0.9.34
      */

@@ -55,7 +55,7 @@ class ConnectionManager {
     private volatile ConnThrottler _minuteThrottler;
     private volatile ConnThrottler _hourThrottler;
     private volatile ConnThrottler _dayThrottler;
-    /** since 0.9, each manager instantiates its own timer */
+    /** Since 0.9, each manager instantiates its own timer. */
     private final RetransmissionTimer _timer;
     private final Map<Long, Object> _recentlyClosed;
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
@@ -124,7 +124,7 @@ class ConnectionManager {
 
      private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
-    /** cache of the property to detect changes */
+    /** Cache of the property to detect changes. */
     private static volatile String _currentBlacklist = "";
     private static final Set<Hash> _globalBlacklist = new ConcurrentHashSet<>();
 
@@ -277,7 +277,7 @@ class ConnectionManager {
     }
 
     /**
-     * Set the socket accept() timeout.
+     * Socket accept() timeout.
      * @param x
      */
     public void setSoTimeout(long x) {
@@ -285,7 +285,7 @@ class ConnectionManager {
     }
 
     /**
-     * Get the socket accept() timeout.
+     * Socket accept() timeout.
      * @return accept timeout in ms.
      */
     public long getSoTimeout() {
@@ -343,6 +343,7 @@ class ConnectionManager {
     }
 
     /**
+     *  Whether incoming connections are accepted.
      *  @return if we should accept connections
      */
     public boolean getAllowIncomingConnections() {
@@ -882,12 +883,13 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         }
 
         /**
-         * toString.
+         * Text description of the reason.
          */
         @Override
         public String toString() { return txt; }
 
         /**
+         * Seconds for the Retry-After header.
          * @return the seconds
          */
         public int getSeconds() { return seconds; }
@@ -1000,10 +1002,12 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
 
 
     /**
+     * Message handler for this manager.
      * @return the message handler
      */
     public MessageHandler getMessageHandler() { return _messageHandler; }
     /**
+     * Packet handler for this manager.
      * @return the packet handler
      */
     public PacketHandler getPacketHandler() { return _packetHandler; }
@@ -1015,17 +1019,23 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      */
     public I2PSession getSession() { return _session; }
 
-    /** @param con the connection */
-    /** Update opts from share. */
+    /**
+     * Update opts from share.
+     * @param con the connection
+     */
     public void updateOptsFromShare(Connection con) { _tcbShare.updateOptsFromShare(con); }
-    /** @param con the connection */
-    /** Update share opts. */
+    /**
+     * Update share opts.
+     * @param con the connection
+     */
     public void updateShareOpts(Connection con) { _tcbShare.updateShareOpts(con); }
     /**
+     * Connection handler for this manager.
      * @return the connection handler
      */
     public ConnectionHandler getConnectionHandler() { return _connectionHandler; }
     /**
+     * Outbound packet queue.
      * @return the outbound packet queue
      */
     public PacketQueue getPacketQueue() { return _outboundQueue; }
@@ -1269,7 +1279,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         }
     }
 
-    /** return a set of Connection objects
+    /** Connections currently managed.
      * @return set of Connection objects
      */
     public Set<Connection> listConnections() {
@@ -1277,7 +1287,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
-     *  blocking
+     *  Ping the destination and wait for a pong.
      *
      *  @param peer the destination
      *  @param timeoutMs greater than zero
@@ -1288,7 +1298,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
-     *  blocking
+     *  Ping the destination and wait for a pong.
      *
      *  @param peer the destination
      *  @param fromPort the source port
@@ -1302,7 +1312,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
-     *  blocking
+     *  Ping the destination, optionally waiting for a pong.
      *
      *  @param peer the destination
      *  @param fromPort the source port
@@ -1317,7 +1327,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
-     *  blocking
+     *  Ping the destination, optionally waiting for a pong.
      *
      *  @param peer the destination
      *  @param fromPort the source port
@@ -1366,7 +1376,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
-     *  blocking
+     *  Ping the destination with a payload and wait for the pong.
      *
      *  @param peer the destination
      *  @param fromPort the source port
@@ -1422,9 +1432,9 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      *  The callback interface for a pong.
      *  Unused? Not part of the public streaming API.
      */
-    /** PingNotifier */
     public interface PingNotifier {
         /**
+         *  Notify the caller that the ping completed.
          *  @param ok true if pong received; false if timed out
          */
         public void pingComplete(boolean ok);
@@ -1448,7 +1458,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         }
 
         /**
-         * timeReached.
+         * Remove the pending ping and notify the caller on timeout.
          */
         public void timeReached() {
             PingRequest pr = _pendingPings.remove(_id);
@@ -1470,13 +1480,16 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         private ByteArray _payload;
         private final PingNotifier _notifier;
 
-        /** @param notifier may be null */
-        /** Ping request. */
+        /**
+         * Ping request.
+         * @param notifier may be null
+         */
         public PingRequest(PingNotifier notifier) {
             _notifier = notifier;
         }
 
         /**
+         *  Record the pong and notify the caller.
          *  @param payload may be null
          */
         public void pong(ByteArray payload) {
@@ -1491,11 +1504,12 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         }
 
         /**
-         * pongReceived.
+         * Whether a pong has been received.
          */
         public synchronized boolean pongReceived() { return _ponged; }
 
         /**
+         *  Payload received in the pong.
          *  @return null if no payload or no pong received
          *  @since 0.9.18
          */

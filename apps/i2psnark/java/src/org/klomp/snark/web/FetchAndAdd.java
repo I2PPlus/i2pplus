@@ -59,10 +59,10 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
     private static final int RETRIES = 20;
 
     /**
-     * Caller should call _mgr.addDownloader(this), which will start things off.
+     * Create the downloader; the caller should call _mgr.addDownloader(this), which starts things off.
      *
      * @param dataDir null to default to snark data directory
-      * @param ctx the ctx
+     * @param ctx the ctx
      */
     public FetchAndAdd(I2PAppContext ctx, SnarkManager mgr, String url, File dataDir) {
         // magnet constructor
@@ -78,7 +78,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
     }
 
     /**
-     * Set off by startTorrent().
+     * Begin fetching; called by startTorrent().
      */
     @Override
     public void run() {
@@ -243,6 +243,8 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
     }
 
     /**
+     * The torrent file size, or -1.
+     *
      * @return torrent file size or -1
      */
     @Override
@@ -251,6 +253,8 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
     }
 
     /**
+     * The remaining bytes, or -1 when done so the web lists us as "complete" instead of "seeding".
+     *
      * @return -1 when done so the web will list us as "complete" instead of "seeding"
      */
     @Override
@@ -260,6 +264,8 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
     }
 
     /**
+     * The torrent file bytes remaining, or -1.
+     *
      * @return torrent file bytes remaining or -1
      */
     @Override

@@ -11,10 +11,10 @@ package net.i2p.time;
  */
 public class Timestamper implements Runnable {
 
-    /** dummy */
+    /** No-op constructor for source compatibility. */
     public Timestamper() { /* nop */ }
 
-    /** dummy */
+    /** No-op; initialization is handled by RouterTimestamper. */
     public void waitForInitialization() { /* nop */ }
 
     /**
@@ -25,7 +25,7 @@ public class Timestamper implements Runnable {
      */
     public void timestampNow() { /* nop */ }
 
-    /** dummy */
+    /** No-op run loop; the router handles time updates. */
     @Override
     public void run() { /* nop */ }
 
@@ -37,11 +37,7 @@ public class Timestamper implements Runnable {
      */
     public interface UpdateListener {
         /**
-         * The time has been queried and we have a current value for 'now'
-         *
-         */
-        /**
-         * Set the current time.
+         * Current time as updated, with its stratum, for Clock.
          *
          * @param now the current time
          * @param stratum 1-15, 1 being the best (added in 0.7.12)

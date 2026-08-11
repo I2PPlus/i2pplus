@@ -11,7 +11,7 @@ public class RateAverages {
     /** Create a new RateAverages */
     public RateAverages() {}
 
-    /** thread-local temp instance */
+    /** Thread-local temp instance. */
     private static final ThreadLocal<RateAverages> TEMP = new ThreadLocal<RateAverages>() {
         /**
          * Per-thread initial value.
@@ -23,11 +23,10 @@ public class RateAverages {
     };
 
     /**
-     *  Gets a thread-local temp instance.
-     *
-     * @since 0.9.4
+     *  Thread-local temp instance.
      *
      * @return thread-local temp instance.
+     * @since 0.9.4
      */
     public static RateAverages getTemp() {
         return TEMP.get();
@@ -61,85 +60,80 @@ public class RateAverages {
     }
 
     /**
-     *  Gets the weighted average.
-     *
-     * @since 0.9.4
+     * The weighted average.
      *
      * @return one of several things:
      * if there are any events (current or last) =&gt; weighted average
      * otherwise if the useLifetime parameter to Rate.computeAverages was:
      * true =&gt; the lifetime average value
      * false =&gt; zero
+     * @since 0.9.4
      */
     public double getAverage() {
         return average;
     }
 
-    /** Set the weighted average. */
+    /** Stores the weighted average. */
     void setAverage(double average) {
         this.average = average;
     }
 
     /**
-     *  Gets the current average.
-     *
-     * @since 0.9.4
+     *  The current average.
      *
      * @return the current average == current value / current event count
+     * @since 0.9.4
      */
     public double getCurrent() {
         return current;
     }
 
-    /** Set the current period average. */
+    /** Stores the current period average. */
     void setCurrent(double current) {
         this.current = current;
     }
 
     /**
-     *  Gets the last average.
-     *
-     * @since 0.9.4
+     *  The last average.
      *
      * @return the last average == last value / last event count
+     * @since 0.9.4
      */
     public double getLast() {
         return last;
     }
 
-    /** Set the last period average. */
+    /** Stores the last period average. */
     void setLast(double last) {
         this.last = last;
     }
 
     /**
-     *  Gets the total event count.
-     *
-     * @since 0.9.4
+     *  The total event count.
      *
      * @return the total event count == current + last event counts
+     * @since 0.9.4
      */
     public long getTotalEventCount() {
         return totalEventCount;
     }
 
-    /** Set the total event count. */
+    /** Stores the total event count. */
     void setTotalEventCount(long totalEventCount) {
         this.totalEventCount = totalEventCount;
     }
 
     /**
-     *  Gets the total values.
-     *
-     * @since 0.9.4
+     *  The total values.
      *
      * @return the total values == current + last values
+     * @since 0.9.4
      */
     public double getTotalValues() {
         return totalValues;
     }
 
-    /** Set the total values sum. */
+    /** Stores the total values sum. */
     void setTotalValues(double totalValues) {
         this.totalValues = totalValues;
     }

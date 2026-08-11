@@ -67,6 +67,8 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
+     *  Session ID the message is being sent to.
+     *
      *  @return the SessionId
      */
     public synchronized SessionId getSessionId() {
@@ -84,6 +86,8 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
+     *  Session ID the message is being sent to.
+     *
      *  @param id the session ID
      *  @deprecated use 4-arg constructor
      */
@@ -93,6 +97,8 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
+     *  Destination the message is being sent to.
+     *
      *  @return the Destination
      */
     public synchronized Destination getDestination() {
@@ -110,6 +116,8 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
+     *  Message payload being sent.
+     *
      *  @return the Payload
      */
     public synchronized Payload getPayload() {
@@ -117,6 +125,8 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
+     *  Message payload being sent.
+     *
      *  @param payload the payload
      *  @deprecated use 4-arg constructor
      */
@@ -126,7 +136,7 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Gets the message nonce.
+     *  Message nonce.
      *
      * @return 0 to 0xffffffff
      */
@@ -135,6 +145,8 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
+     *  Message nonce.
+     *
      *  @param nonce 0 to 0xffffffff
      *  @deprecated use 4-arg constructor
      */
@@ -172,6 +184,8 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
+     *  Serialization is not supported for this message.
+     *
      *  @throws UnsupportedOperationException always
      */
     @Override

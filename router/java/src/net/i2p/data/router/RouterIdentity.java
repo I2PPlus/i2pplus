@@ -19,8 +19,8 @@ import net.i2p.data.KeysAndCert;
  * As of 0.9.9 this data structure is immutable after the two keys and the certificate
  * are set; attempts to change them will throw an IllegalStateException.
  *
- * @since 0.9.16 moved from net.i2p.data
  * @author jrandom
+ * @since 0.9.16 moved from net.i2p.data
  */
 public class RouterIdentity extends KeysAndCert {
 

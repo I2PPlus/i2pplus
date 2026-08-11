@@ -461,8 +461,8 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * Retrieve amount of used memory.
-     * @since 0.9.32 uncommented
      * @return the memory
+     * @since 0.9.32 uncommented
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized String getMemory() {
@@ -536,8 +536,8 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * Retrieve CPU Load as a percentage.
-     * @since 0.9.58+
      * @return the c p u load
+     * @since 0.9.58+
      */
     public int getCPULoad() {
         if (_context == null) {return 0;}
@@ -546,8 +546,8 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * Retrieve CPU Load Average as a percentage.
-     * @since 0.9.58+
      * @return the c p u load avg
+     * @since 0.9.58+
      */
     public int getCPULoadAvg() {
         if (_context == null) {return 0;}
@@ -556,8 +556,8 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * Retrieve System Load Average as a percentage.
-     * @since 0.9.58+
      * @return the system load
+     * @since 0.9.58+
      */
     public int getSystemLoad() {
         if (_context == null) {return 0;}
@@ -566,8 +566,8 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * Render JVM CPU Load Bar
-     * @since 0.9.58+
      * @return the c p u bar
+     * @since 0.9.58+
      */
     public String getCPUBar() {
         int cpu = getCPULoad();
@@ -580,8 +580,8 @@ public class SidebarHelper extends HelperBase {
     /**
      * Retrieve Tunnel build success as a percentage.
      * Returns the higher of the 1-minute or 10-minute average.
-     * @since 0.9.58+
      * @return the tunnel build success
+     * @since 0.9.58+
      */
     public int getTunnelBuildSuccess() {
         if (_context == null) {return 0;}
@@ -864,8 +864,8 @@ public class SidebarHelper extends HelperBase {
     /**
      * Are both the webapp and TCG running?
      *
-     * @since 0.9.58
      * @return whether i2 p tunnel running
+     * @since 0.9.58
      */
     public boolean isI2PTunnelRunning() {
         if (!_context.portMapper().isRegistered(PortMapper.SVC_I2PTUNNEL)) {return false;}
@@ -1369,8 +1369,8 @@ public class SidebarHelper extends HelperBase {
 
     /**
      *  The update status and buttons
-     *  @since 0.8.13 moved from SidebarRenderer
      * @return the update status
+     *  @since 0.8.13 moved from SidebarRenderer
      */
     public String getUpdateStatus() {
         StringBuilder buf = new StringBuilder(512);
@@ -1524,8 +1524,8 @@ public class SidebarHelper extends HelperBase {
 
     /**
      *  The restart status and buttons
-     *  @since 0.8.13 moved from SidebarRenderer
      * @return the restart status
+     *  @since 0.8.13 moved from SidebarRenderer
      */
     public String getRestartStatus() {
         String nextNonce = null;
@@ -1540,8 +1540,8 @@ public class SidebarHelper extends HelperBase {
 
     /**
      *  The firewall status and reseed status/buttons
-     *  @since 0.9 moved from SidebarRenderer
      * @return the firewall and reseed status
+     *  @since 0.9 moved from SidebarRenderer
      */
     public String getFirewallAndReseedStatus() {
         StringBuilder buf = new StringBuilder(256);

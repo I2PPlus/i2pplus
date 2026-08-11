@@ -22,8 +22,8 @@ import net.i2p.util.SystemVersion;
  *
  * Moved from web/ and turned into an Updater.
  *
- * @since 0.7.12
  * @author zzz
+ * @since 0.7.12
  */
 class PluginUpdateHandler implements Checker, Updater {
     private final RouterContext _context;

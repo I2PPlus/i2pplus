@@ -64,7 +64,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
     }
 
     /**
-     *  Get the first known ClientApp with this class name and exact arguments.
+     *  First known ClientApp with this class name and exact arguments.
      *  Caller may then retrieve or control the state of the returned client.
      *  A client will generally be found only if it is running or transitioning;
      *  after it is stopped it will not be tracked by the manager.
@@ -229,7 +229,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
     }
 
     /**
-     *  debug
+     *  Render debug HTML of the app manager state.
      *  @since 0.9.6
      */
     public void renderStatusHTML(Writer out) throws IOException {
@@ -247,7 +247,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
     }
 
     /**
-     *  debug
+     *  Append debug HTML of the tracked clients to the buffer.
      *  @since 0.9.6
      */
     private void toString1(StringBuilder buf) {
@@ -264,7 +264,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
     }
 
     /**
-     *  debug
+     *  Append debug HTML of the registered clients to the buffer.
      *  @since 0.9.6
      */
     private void toString2(StringBuilder buf) {

@@ -78,12 +78,12 @@ class ProfilePersistenceHelper {
     }
 
     /**
-     * setUs.
+     * Store the local router identity hash for filtering out the router's own profile.
      */
     public void setUs(Hash routerIdentHash) {_us = routerIdentHash;}
 
     /**
-     * write out the data from the profile to the file
+     * Write the data from the profile to the file
      *
      * @return success
      */
@@ -99,13 +99,13 @@ class ProfilePersistenceHelper {
     }
 
     /**
-     * write out the data from the profile to the stream
+     * Write the data from the profile to the stream
      * includes comments
      */
     public void writeProfile(PeerProfile profile, OutputStream out) throws IOException {writeProfile(profile, out, true);}
 
     /**
-     * write out the data from the profile to the stream
+     * Write the data from the profile to the stream
      *
      * @param addComments add comment lines to the output
      * @since 0.9.41
@@ -214,7 +214,7 @@ class ProfilePersistenceHelper {
     }
 
     /**
-     * readProfiles.
+     * Load all existing profiles from the profile directory.
      */
     public List<PeerProfile> readProfiles() {
         long start = System.currentTimeMillis();
@@ -274,7 +274,7 @@ class ProfilePersistenceHelper {
 
     private static class ProfileFilter implements FilenameFilter {
         /**
-         * accept.
+         * Whether the filename matches the profile naming pattern.
          */
         @Override
         public boolean accept(File dir, String filename) {
@@ -337,6 +337,8 @@ class ProfilePersistenceHelper {
     }
 
     /**
+     *  Read and parse a single stored profile.
+     *
      *  @param cutoff delete and return null if older than this (absolute time)
      */
     @SuppressWarnings("deprecation")
@@ -480,6 +482,8 @@ class ProfilePersistenceHelper {
     }
 
     /**
+     * Parse a long value from the properties, or 0 if missing or invalid.
+     *
      * @return the long value or 0
      */
     static long getLong(Properties props, String key) {

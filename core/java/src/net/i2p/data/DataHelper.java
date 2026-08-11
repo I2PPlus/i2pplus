@@ -227,8 +227,8 @@ public class DataHelper {
     /**
      *  The default formatting for date/time, current locale, local time zone
      *
-     * @since 0.9.43
      * @return the date instance
+     * @since 0.9.43
      */
     private static final DateFormat DATE_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM);
 
@@ -2437,8 +2437,8 @@ public class DataHelper {
      *  Warning - misnamed, converts to ISO-8859-1.
      *
      *  @param orig non-null, truncates to 8-bit chars
-     *  @since 0.9.5
      *  @return a copy of the byte array, or null
+     *  @since 0.9.5
      */
     public static byte[] getASCII(String orig) {
         byte[] rv = new byte[orig.length()];

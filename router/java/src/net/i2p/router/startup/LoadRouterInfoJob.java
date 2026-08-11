@@ -241,8 +241,8 @@ class LoadRouterInfoJob extends JobImpl {
     /**
      *  Does our RI ElGamal private key length match the configuration?
      *  If not, return true.
-     * @since 0.9.8
      * @return whether rebuild
+     * @since 0.9.8
      */
     private boolean shouldRebuild(PrivateKey privkey) {
         if (privkey.getType() != EncType.ELGAMAL_2048)

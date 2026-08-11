@@ -68,7 +68,7 @@ public class LeaseSet2 extends LeaseSet {
     /** Flag bit for unpublished lease set. */
     private static final int FLAG_UNPUBLISHED = 0x02;
     /**
-     *  Set if the unencrypted LS, when published, will be blinded/encrypted.
+     *  Flag bit set if the unencrypted LS, when published, will be blinded/encrypted.
      *
      *  @since 0.9.42
      */
@@ -135,15 +135,15 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  Set if the unencrypted LS, when published, will be blinded/encrypted
+     *  Whether the unencrypted LS, when published, will be blinded/encrypted.
      *
-     * @since 0.9.42
      * @return whether blinded when published
+     * @since 0.9.42
      */
     public boolean isBlindedWhenPublished() {return (_flags & FLAG_BLINDED) != 0;}
 
     /**
-     *  Set if the unencrypted LS, when published, will be blinded/encrypted
+     *  Mark the unencrypted LS to be blinded/encrypted when published.
      *
      *  @throws IllegalStateException if already signed
      *  @since 0.9.42
@@ -160,8 +160,8 @@ public class LeaseSet2 extends LeaseSet {
      * us, AND the unpublished flag is not set.
      * Default false.
      *
-     * @since 0.9.39 overridden
      * @return the received as published
+     * @since 0.9.39 overridden
      */
     @Override
     public boolean getReceivedAsPublished() {
@@ -169,7 +169,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  Get an option value by key.
+     *  Option value for the given key.
      *
      *  @param opt the option key
      *  @return the option value, or null if not found
@@ -180,7 +180,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-      *  Gets the leaseset options.
+      *  Leaseset options.
       *
       *  @return not a copy, do not modify, or null
       *  @since 0.9.63
@@ -191,8 +191,8 @@ public class LeaseSet2 extends LeaseSet {
      *  If more than one key, return the first supported one.
      *  If none supported, return the first one.
      *
-     * @since 0.9.39 overridden
      * @return the encryption key
+     * @since 0.9.39 overridden
      */
     @Override
     public PublicKey getEncryptionKey() {
@@ -286,7 +286,7 @@ public class LeaseSet2 extends LeaseSet {
     public boolean isOffline() {return (_flags & FLAG_OFFLINE_KEYS) != 0;}
 
     /**
-      *  Gets the transient public key for offline signing.
+      *  Transient public key for offline signing.
       *
       *  @return transient public key or null if not offline signed
       */

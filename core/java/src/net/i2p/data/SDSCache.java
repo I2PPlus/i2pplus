@@ -40,10 +40,10 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  *  </pre>
  *
- *  @since 0.8.3
  *  @author zzz
  *
  *  @param <V> type of SimpleDataStructure objects cached
+ *  @since 0.8.3
  */
 public class SDSCache<V extends SimpleDataStructure> {
 

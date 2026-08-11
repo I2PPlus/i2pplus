@@ -29,8 +29,8 @@ import net.i2p.data.SimpleDataStructure;
  *   <li>Data structure indexing and lookup</li>
  * </ul>
  *
- * @since 0.8.1
  * @author zzz
+ * @since 0.8.1
  */
 @SuppressWarnings({"PMD.OverrideBothEqualsAndHashcode", "checkstyle:EqualsHashCode"})
 public class SHA1Hash extends SimpleDataStructure {

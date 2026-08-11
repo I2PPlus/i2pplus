@@ -104,8 +104,8 @@ class TunnelGatewayPumper implements Runnable {
 
     /**
      * The current pumper queue capacity.
-     * @since 0.9.70+
      * @return the queue capacity
+     * @since 0.9.70+
      */
     public static int getQueueCapacity() { return _queueCapacity; }
 
@@ -118,8 +118,8 @@ class TunnelGatewayPumper implements Runnable {
 
     /**
      * The current max pumper threads.
-     * @since 0.9.70+
      * @return the max pumpers
+     * @since 0.9.70+
      */
     public static int getMaxPumpers() { return _maxPumpers; }
 
@@ -131,8 +131,8 @@ class TunnelGatewayPumper implements Runnable {
 
     /**
      * The number of pumper threads actively processing (not parked on take()).
-     * @since 0.9.70+
      * @return the active count
+     * @since 0.9.70+
      */
     public int getActiveCount() { return _activeCount.get(); }
 
@@ -140,8 +140,8 @@ class TunnelGatewayPumper implements Runnable {
      * The pumper pool utilization as a ratio (0.0-1.0).
      * Returns NaN if no pumpers are running.
      *
-     * @since 0.9.70+
      * @return the instance utilization
+     * @since 0.9.70+
      */
     public double getInstanceUtilization() {
         int size = _threads.size();
@@ -178,8 +178,8 @@ class TunnelGatewayPumper implements Runnable {
      * The pumper pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
      *
-     * @since 0.9.70+
      * @return the utilization
+     * @since 0.9.70+
      */
     public static double getUtilization() {
         TunnelGatewayPumper instance = _instance;

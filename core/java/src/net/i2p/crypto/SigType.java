@@ -321,12 +321,12 @@ public enum SigType {
     }
 
     /**
-     *  Gets a Hash instance for this signature type.
+     *  Create a Hash instance for this signature type.
      *
-     *  @since 0.9.9
      *
      *  @throws UnsupportedOperationException if not supported
      *  @return the hash instance
+     *  @since 0.9.9
      */
     public SimpleDataStructure getHashInstance() {
         switch (getHashLen()) {
@@ -346,8 +346,8 @@ public enum SigType {
     /**
      *  The router version in which this type was first supported.
      *
-     * @since 0.9.15
      * @return the supported since
+     * @since 0.9.15
      */
     public String getSupportedSince() {
         return since;
@@ -356,8 +356,8 @@ public enum SigType {
     /**
      *  The OID for the signature.
      *
-     * @since 0.9.25
      * @return the o i d
+     * @since 0.9.25
      */
     public String getOID() {
         return oid;
@@ -366,9 +366,9 @@ public enum SigType {
     /**
      *  Checks if this signature type is available in the JVM.
      *
-     *  @since 0.9.12
      *
      *  @return true if supported in this JVM
+     *  @since 0.9.12
      */
     public boolean isAvailable() {
         return isAvail;

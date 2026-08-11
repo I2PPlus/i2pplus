@@ -99,14 +99,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     // sync on _snarks
     private final Map<String, Snark> _filteredBaseNameToSnark;
 
-    /** used to prevent DirMonitor from deleting torrents that don't have a torrent file yet */
+    /** Prevents DirMonitor from deleting torrents that don't have a torrent file yet. */
     private final Set<String> _magnets;
 
     private final Object _addSnarkLock;
     private File _configFile;
     private File _configDir;
 
-    /** one lock for all config, files for simplicity */
+    /** One lock for all config, files for simplicity. */
     private final Object _configLock = new Object();
 
     private Properties _config;
@@ -353,9 +353,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final Pattern COMMENT_CLEANUP = Pattern.compile("[\n\r<>#;]");
     private static final int DEFAULT_MAX_MESSAGES = 50;
 
-    /**
-     * @since 0.9.67+
-     */
 
 
     /**
@@ -393,7 +390,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public static final Set<String> DEFAULT_TRACKER_ANNOUNCES;
 
-    /** host names for config form */
+    /** Host names for config form. */
     static final Set<String> KNOWN_OPENTRACKERS = new HashSet<>(Arrays.asList(new String[] {
         "opentracker.bt.i2p", "ev5dpxvcmshi6mil7gaon3b2wbplwylzraxs4wtz7dd5lzdsc2dq.b32.i2p",
         "opentracker.dg2.i2p", "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p",
@@ -427,16 +424,16 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         DEFAULT_TRACKER_ANNOUNCES = Collections.unmodifiableSet(ann);
     }
 
-    /** comma delimited list of name=announceURL=baseURL for the trackers to be displayed */
+    /** Comma delimited list of name=announceURL=baseURL for the trackers to be displayed. */
     public static final String PROP_TRACKERS = "i2psnark.trackers";
 
     /**
-     * comma delimited list of name=filterPattern for torrent create filters. Deprecated. If
+     * Comma delimited list of name=filterPattern for torrent create filters. Deprecated. If
      * detected, filters will be converted to new storage and then this config will be removed.
      */
     public static final String PROP_TORRENT_CREATE_FILTERS = "i2psnark.torrent_create_filters";
 
-    /** filename for serialized torrent filters config */
+    /** Filename for serialized torrent filters config. */
     public static final String PROP_TORRENT_FILTERS_CONFIG = "filters.conf";
 
     /** For embedded. */
@@ -615,6 +612,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Whether the manager is in the process of stopping.
+     *
      * @return whether stopping
      * @since 0.9.1
      */
@@ -672,6 +671,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * The I2PSnarkUtil instance for this manager.
+     *
      * @return I2PSnarkUtil instance
      */
     public I2PSnarkUtil util() {
@@ -690,6 +691,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * The bandwidth listener for this manager.
+     *
      * @return bandwidth listener
      */
     @Override
@@ -747,7 +750,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * @return current time or 0 if no util
+     * Date format for recent messages.
      */
     private static final ThreadLocal<DateFormat> DATE_FORMAT = new ThreadLocal<DateFormat>() {
         @Override
@@ -765,6 +768,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * The list of recent UI messages for display on the web page.
+     *
      * @return list of recent messages
      */
     public List<UIMessages.Message> getMessages() {
@@ -788,6 +793,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Whether the files in the data directory are world-readable.
+     *
      * @return default false
      * @since 0.8.9
      */
@@ -796,6 +803,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Whether new torrents preallocate their storage files.
+     *
      * @return default true
      * @since 0.9.66+
      */
@@ -805,6 +814,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Whether newly added torrents should be started automatically.
+     *
      * @return true if newly added torrents should be started automatically
      */
     @Override
@@ -814,6 +825,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Whether smart sort is enabled in the web interface.
+     *
      * @return default false
      * @since 0.9.23
      */
@@ -826,6 +839,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Whether the web interface collapses panels by default.
+     *
      * @return default true
      * @since 0.9.32
      */
@@ -838,6 +853,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Whether the status filter bar is shown in the web interface.
+     *
      * @return default false
      * @since 0.9.34
      */
@@ -850,6 +867,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Whether the lightbox is used to display large images in the web interface.
+     *
      * @return default true
      * @since 0.9.34
      */
@@ -862,6 +881,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Whether hops are randomly varied for inbound torrent tunnels.
+     *
      * @return default false
      * @since 0.9.64+
      */
@@ -874,6 +895,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Whether hops are randomly varied for outbound torrent tunnels.
+     *
      * @return default false
      * @since 0.9.64+
      */
@@ -886,6 +909,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * How often the web page refreshes itself.
+     *
      * @return -1 for never
      * @since 0.8.9
      */
@@ -898,6 +923,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Maximum number of files a torrent may contain.
+     *
      * @return the max files per torrent
      * @since 0.9.46 (I2P+)
      */
@@ -910,6 +937,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Maximum number of messages kept for display on the web page.
+     *
      * @return the max log messages
      * @since 0.9.61+ (I2P+)
      */
@@ -947,6 +976,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * The configured torrent data directory.
+     *
      * @return the configured torrent data directory
      */
     public File getDataDir() {
@@ -1095,10 +1126,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return dir;
     }
 
-    /** how long to cache a per-torrent config before reloading, covers manual file edits */
+    /** How long to cache a per-torrent config before reloading, covers manual file edits. */
     private static final long CONFIG_CACHE_TTL = 60 * 1000;
 
-    /** guarded by _configLock */
+    /** Guarded by _configLock. */
     private final Map<SHA1Hash, ConfigCacheEntry> _configCache = new HashMap<>(8);
 
     /**
@@ -1243,6 +1274,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Load the config from the given file.
+     *
      * @param filename null to set initial defaults
      */
     public void loadConfig(String filename) {
@@ -1251,7 +1284,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
-    /** null to set initial defaults */
+    /** Null to set initial defaults. */
     private void locked_loadConfig(String filename) {
         if (_config == null) {
             _config = new OrderedProperties();
@@ -1353,6 +1386,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Whether themes are applied across all applications.
+     *
      * @return the universal theming
      * @since 0.9.31
      */
@@ -1361,7 +1396,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Get current theme.
+     * The current theme for this web interface.
      *
      * @return String -- the current theme
      */
@@ -1395,7 +1430,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Get all themes
+     * All themes available for this web interface.
      *
      * @return String[] -- Array of all the themes found, non-null, unsorted
      */
@@ -1584,7 +1619,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return rv;
     }
 
-    /** all params may be null or need trimming */
+    /** All params may be null or need trimming. */
     public void updateConfig(
             String dataDir,
             boolean filesPublic,
@@ -2316,6 +2351,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * The configured private tracker list.
+     *
      * @return non-null, fixed size, may be empty or unmodifiable
      * @since 0.9.1
      */
@@ -2324,6 +2361,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Save the given open tracker list.
+     *
      * @param ot null to restore default
      * @since 0.9.1
      */
@@ -2342,6 +2381,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Save the given private tracker list.
+     *
      * @param pt null ok, default is none
      * @since 0.9.1
      */
@@ -2356,6 +2397,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Deserialize the given list property from the config.
+     *
      * @param dflt default or null
      * @return non-null, fixed size
      * @since 0.9.1
@@ -2372,7 +2415,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Sets the config, does NOT save it
+     * Serialize the given list into the config for the given property, does NOT save it.
      *
      * @param values may be null or empty
      * @return the comma-separated config string, non-null
@@ -2409,7 +2452,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
-    /** Set of canonical .torrent filenames that we are dealing with. An unsynchronized copy. */
+    /** Canonical .torrent filenames that we are dealing with. An unsynchronized copy. */
     public Set<String> listTorrentFiles() {
         return new HashSet<>(_snarks.keySet());
     }
@@ -3149,7 +3192,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
-    /** Get the timestamp for a torrent from the config file. A Snark.CompleteListener method. */
+    /** Timestamp for a torrent from the config file. A Snark.CompleteListener method. */
     @Override
     public long getSavedTorrentTime(Snark snark) {
         Properties config = getConfig(snark);
@@ -3164,8 +3207,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Get the saved bitfield for a torrent from the config file. Convert "." to a full bitfield. A
+     * Saved bitfield for a torrent from the config file. Convert "." to a full bitfield. A
      * Snark.CompleteListener method.
+     *
      * @return the saved torrent bit field
      */
     @Override
@@ -3198,7 +3242,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Get the saved priorities for a torrent from the config file.
+     * Saved priorities for a torrent from the config file.
      *
      * @since 0.8.1
      */
@@ -3231,7 +3275,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Get the base location for a torrent from the config file.
+     * Base location for a torrent from the config file.
      *
      * @return File or null, doesn't necessarily exist
      * @since 0.9.15
@@ -3246,7 +3290,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Get setting for a torrent from the config file.
+     * Setting for a torrent from the config file.
      *
      * @return setting, false if not found
      * @since 0.9.15
@@ -3258,7 +3302,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Get setting for a torrent from the config file.
+     * Setting for a torrent from the config file.
      *
      * @return setting, 0 if not found
      * @since 0.9.15
@@ -3275,7 +3319,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Get setting for a torrent from the config file.
+     * Setting for a torrent from the config file.
      *
      * @return non-null, rv[0] is added time or 0; rv[1] is completed time or 0
      * @since 0.9.23
@@ -3295,7 +3339,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Get setting for comments enabled from the config file. Caller must first check global
+     * Setting for comments enabled from the config file. Caller must first check global
      * I2PSnarkUtil.commentsEnabled() Default true.
      *
      * @return the saved comments enabled
@@ -3314,7 +3358,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Set setting for comments enabled in the config file.
+     * Setting for comments enabled in the config file.
      *
      * @since 0.9.31
      */
@@ -4308,7 +4352,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * caller must synchronize on _snarks
+     * Add torrents found in the given directory. Caller must synchronize on _snarks.
      *
      * @param shouldStart should we autostart the torrents
      * @return success, false if an error adding any torrent.
@@ -4400,23 +4444,23 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return rv;
     }
 
-    /** translate */
+    /** Translate the given string. */
     private String _t(String s) {
         return _util.getString(s);
     }
 
-    /** translate */
+    /** Translate the given string with one substitution. */
     private String _t(String s, Object o) {
         return _util.getString(s, o);
     }
 
-    /** translate */
+    /** Translate the given string with two substitutions. */
     private String _t(String s, Object o, Object o2) {
         return _util.getString(s, o, o2);
     }
 
     /**
-     * mark for translation, does not translate
+     * Marks for translation, does not translate.
      *
      * @since 0.9.53
      */
@@ -5014,7 +5058,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private class ThreadedRechecker implements Runnable {
         private final Snark snark;
 
-        /** must have non-null storage */
+        /** Must have non-null storage. */
         public ThreadedRechecker(Snark s) {
             snark = s;
         }
@@ -5085,7 +5129,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * ignore case, current locale
+     * Compare ignoring case, current locale.
      *
      * @since 0.9
      */
@@ -5098,7 +5142,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * ignore case, current locale
+     * Compare ignoring case, current locale.
      *
      * @since 0.9.62+
      */
@@ -5111,16 +5155,18 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
-    /** how long to cache the disk usage string, avoids a statfs per render */
+    /** How long to cache the disk usage string, avoids a statfs per render. */
     private static final long DISK_USAGE_TTL = 30 * 1000;
-    /** last time the disk usage string was computed */
+    /** Last time the disk usage string was computed. */
     private long _diskUsageCheckedAt;
-    /** cached disk usage string */
+    /** Cached disk usage string. */
     private String _diskUsageCached;
 
-    /* @since 0.9.64+ */
     /**
+     * The cached disk usage string for display.
+     *
      * @return the disk usage
+     * @since 0.9.64+
      */
     public String getDiskUsage() {
         long now = System.currentTimeMillis();

@@ -88,9 +88,9 @@ import java.nio.charset.StandardCharsets;
  * times.  At the end of each test, if the native implementation is loaded this will
  * output something like:</p>
  * <pre>
- *  native run time:        6090ms (60ms each)
- *  java run time:          68067ms (673ms each)
- *  native = 8.947066860593239% of pure java time
+ * native run time:        6090ms (60ms each)
+ * java run time:          68067ms (673ms each)
+ * native = 8.947066860593239% of pure java time
  * </pre>
  *
  * <p>If the native implementation is not loaded, it will start by saying:</p>
@@ -134,9 +134,9 @@ public class NativeBigInteger extends BigInteger {
      *  The following libraries are be available in jbigi.jar in all I2P versions
      *  originally installed as release 0.6.1.10 or later (released 2006-01-16),
      *  for linux, freebsd, and windows, EXCEPT:
-     *   - k63 was removed for linux and freebsd in 0.8.7 (identical to k62)
-     *   - athlon64 not available for freebsd
-     *   - viac3 not available for windows
+     *  - k63 was removed for linux and freebsd in 0.8.7 (identical to k62)
+     *  - athlon64 not available for freebsd
+     *  - viac3 not available for windows
      */
     private static final String JBIGI_OPTIMIZATION_K6 = "k6";
 
@@ -582,41 +582,43 @@ public class NativeBigInteger extends BigInteger {
     private static native byte[] nativeModPowCT(byte[] base, byte[] exponent, byte[] modulus);
 
     /**
-     *  @since 0.9.26 and libjbigi version 3
+     *  Compute the modular inverse of base modulo d.
+     *
      *  @throws ArithmeticException
+     *  @since 0.9.26 and libjbigi version 3
      */
     private static native byte[] nativeModInverse(byte[] base, byte[] d);
 
     /**
-     *  Get the jbigi version, only available since jbigi version 3
+     *  The jbigi version, only available since jbigi version 3
      *
      *  @since 0.9.26
      */
     private static native int nativeJbigiVersion();
 
     /**
-     *  Get the libmp version, only available since jbigi version 3
+     *  The libmp major version, only available since jbigi version 3
      *
      *  @since 0.9.26
      */
     private static native int nativeGMPMajorVersion();
 
     /**
-     *  Get the libmp version, only available since jbigi version 3
+     *  The libmp minor version, only available since jbigi version 3
      *
      *  @since 0.9.26
      */
     private static native int nativeGMPMinorVersion();
 
     /**
-     *  Get the libmp version, only available since jbigi version 3
+     *  The libmp patch version, only available since jbigi version 3
      *
      *  @since 0.9.26
      */
     private static native int nativeGMPPatchVersion();
 
     /**
-     *  Get the jbigi version
+     *  The jbigi version, fetched from the native library
      *
      *  @return 0 if no jbigi available, 2 if version not supported
      *  @since 0.9.26
@@ -631,7 +633,7 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
-     *  Set the jbigi and libgmp versions. Call after loading.
+     *  Store the jbigi and libgmp versions. Call after loading.
      *  Sets _jbigiVersion, _nativeOk3, and _libGMPVersion.
      *
      *  @since 0.9.26
@@ -655,7 +657,7 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
-     *  Get the jbigi version
+     *  The jbigi version, fetched from the native library
      *
      *  @return 0 if no jbigi available, 2 if version info not supported
      *  @since 0.9.26
@@ -665,7 +667,7 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
-     *  Get the libgmp version
+     *  The libgmp version string
      *
      *  @return "unknown" if no jbigi available or if version not supported
      *  @since 0.9.26
@@ -734,6 +736,8 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
+     *  Compute base^exponent mod m using the native library.
+     *
      *  @param m must be postive
      *  @param exponent must be postive
      *  @throws ArithmeticException if m &lt;= 0 or exponent &lt;=0
@@ -749,6 +753,8 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
+     *  Compute base^exponent mod m in constant time using the native library.
+     *
      *  @param exponent must be postive
      *  @param m must be postive and odd
      *  @throws ArithmeticException if m &lt;= 0 or m is even or exponent &lt;=0
@@ -761,6 +767,8 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
+     *  Compute the modular inverse of this value modulo m using the native library.
+     *
      *  @throws ArithmeticException if not coprime with m, or m &lt;= 0
      *  @since 0.9.26 and libjbigi version 3
      */
@@ -818,8 +826,8 @@ public class NativeBigInteger extends BigInteger {
      *  Null if unknown or not loaded.
      *  Currently non-null only if extracted from jbigi.jar.
      *
+     *  @return the loaded resource name
      *  @since 0.9.17
-     * @return the loaded resource name
      */
     public static String getLoadedResourceName() {
         return _extractedResource;
@@ -849,22 +857,22 @@ public class NativeBigInteger extends BigInteger {
      * <pre>
      * Load order (using linux naming with cpu type "xxx")
      * Old order 0.8.6 and earlier:
-     *   - filesystem libjbigi.so
-     *   - jbigi.jar libjbigi.so
-     *   - jbigi.jar libjbigi-linux-xxx.so
-     *   - filesystem libjbigi-linux-xxx.so
-     *   - jbigi.jar libjbigi-linux-none.so
-     *   - filesystem libjbigi-linux-none.so
+     * - filesystem libjbigi.so
+     * - jbigi.jar libjbigi.so
+     * - jbigi.jar libjbigi-linux-xxx.so
+     * - filesystem libjbigi-linux-xxx.so
+     * - jbigi.jar libjbigi-linux-none.so
+     * - filesystem libjbigi-linux-none.so
      *
      * New order as of 0.8.7:
-     *   - filesystem libjbigi.so
-     *   - jbigi.jar libjbigi-linux-xxx_64.so if it may be 64 bit
-     *   - jbigi.jar libjbigi-linux-athlon64_64.so if it may be 64 bit
-     *   - jbigi.jar libjbigi-linux-xxx.so
-     *   - jbigi.jar libjbigi-linux-athlon64.so if it may be 64 bit
-     *   - jbigi.jar libjbigi-linux-yyy.so 0 or more other alternates
-     *   - jbigi.jar libjbigi-linux-none_64.so if it may be 64 bit
-     *   - jbigi.jar libjbigi-linux-none.so
+     * - filesystem libjbigi.so
+     * - jbigi.jar libjbigi-linux-xxx_64.so if it may be 64 bit
+     * - jbigi.jar libjbigi-linux-athlon64_64.so if it may be 64 bit
+     * - jbigi.jar libjbigi-linux-xxx.so
+     * - jbigi.jar libjbigi-linux-athlon64.so if it may be 64 bit
+     * - jbigi.jar libjbigi-linux-yyy.so 0 or more other alternates
+     * - jbigi.jar libjbigi-linux-none_64.so if it may be 64 bit
+     * - jbigi.jar libjbigi-linux-none.so
      * </pre>
      */
     private static final void loadNative() {
@@ -1127,6 +1135,8 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
+     *  The middle part of the native library name, based on the CPU type.
+     *
      *  @return may be null if optimized is true
      */
     private static final String getMiddleName2(boolean optimized) {
@@ -1147,6 +1157,8 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
+     *  The middle part of the native library name, for a non-optimized library.
+     *
      *  @return may be null if optimized is true; returns jbigi-xxx-none if optimize is false
      */
     private static final String getMiddleName1() {

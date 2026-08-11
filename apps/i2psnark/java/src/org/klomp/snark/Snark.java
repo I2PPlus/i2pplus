@@ -29,10 +29,10 @@ import org.klomp.snark.comments.CommentSet;
 public class Snark implements StorageListener, CoordinatorListener, ShutdownListener {
 
 
-    /** max connections */
+    /** Maximum connections. */
     public static final String PROP_MAX_CONNECTIONS = "i2psnark.maxConnections";
 
-    /** most of these used to be public, use accessors below instead */
+    /** Most of these used to be public; use accessors below instead. */
     private String torrent;
 
     private MetaInfo meta;
@@ -68,7 +68,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private final int _rpcID = __RPCID.incrementAndGet();
 
     /**
-     * multitorrent
+     * Create the torrent in multitorrent mode.
      *
      * <p>Will not start itself. Caller must call startTorrent() if desired.
      *
@@ -111,7 +111,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * multitorrent
+     * Create the torrent in multitorrent mode.
      *
      * <p>Will not start itself. Caller must call startTorrent() if desired.
      *
@@ -251,7 +251,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * multitorrent, magnet, Used by snark-rpc plugin
+     * Create the torrent in multitorrent or magnet mode, for the snark-rpc plugin.
      *
      * <p>Will not start itself. Caller must call startTorrent() if desired.
      *
@@ -290,7 +290,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * multitorrent, magnet
+     * Create the torrent in multitorrent or magnet mode.
      *
      * <p>Will not start itself. Caller must call startTorrent() if desired.
      *
@@ -667,7 +667,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     // Accessors
 
     /**
-     * Get the file name of the .torrent file.
+     * The file name of the .torrent file.
      *
      * @return file name of .torrent file (should be full absolute path), or a fake name if in
      *     magnet mode.
@@ -678,7 +678,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the base name of the torrent.
+     * The base name of the torrent.
      *
      * @return base name of torrent [filtered version of getMetaInfo.getName()], or a fake name if
      *     in magnet mode
@@ -692,6 +692,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * The base name with path and error info, for error logging only.
+     *
      * @return base name for torrent [filtered version of getMetaInfo.getName()], or a fake name if
      *     in magnet mode, followed by path info and error message, for error logging only
      * @since 0.9.44
@@ -707,7 +709,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the peer ID.
+     * The peer ID.
      *
      * @return always will be valid even in magnet mode
      * @since 0.8.4
@@ -717,7 +719,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the info hash.
+     * The info hash.
      *
      * @return always will be valid even in magnet mode
      * @since 0.8.4
@@ -731,7 +733,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the metainfo.
+     * The metainfo.
      *
      * @return may be null if in magnet mode
      * @since 0.8.4
@@ -741,7 +743,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the storage.
+     * The storage.
      *
      * @return may be null if in magnet mode
      * @since 0.8.4
@@ -771,7 +773,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Set startup in progress.
+     * Mark startup in progress.
      *
      * @since 0.9.1
      */
@@ -790,7 +792,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the progress of file checking as a percentage. If checking is in progress, return
+     * The progress of file checking as a percentage. If checking is in progress, return
      * completion 0.0 ... 1.0, else return 1.0.
      *
      * @return checking progress as a percentage (0.0 to 1.0)
@@ -815,7 +817,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the current download rate in bytes per second.
+     * The current download rate in bytes per second.
      *
      * @return download rate in bytes per second, or 0 if not available
      * @since 0.8.4
@@ -829,7 +831,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the current upload rate in bytes per second.
+     * The current upload rate in bytes per second.
      *
      * @return upload rate in bytes per second, or 0 if not available
      * @since 0.8.4
@@ -843,7 +845,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the total number of bytes downloaded.
+     * The total number of bytes downloaded.
      *
      * @return total bytes downloaded, or 0 if not available
      * @since 0.8.4
@@ -857,7 +859,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the total number of bytes uploaded.
+     * The total number of bytes uploaded.
      *
      * @return total bytes uploaded, including saved uploaded if coordinator is not available
      * @since 0.8.4
@@ -871,7 +873,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the peer count.
+     * The peer count.
      *
      * @return peer count
      */
@@ -884,7 +886,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the peer list.
+     * The peer list.
      *
      * @return peer list
      */
@@ -907,7 +909,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Set the tracker problems string.
+     * Store the tracker problems string.
      *
      * @param p tracker error string or null
      * @since 0.8.4
@@ -917,7 +919,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the tracker seen peers count.
+     * The tracker seen peers count.
      *
      * @return count returned from tracker
      * @since 0.8.4
@@ -927,7 +929,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Set the tracker seen peers count.
+     * Store the tracker seen peers count.
      *
      * @param p peer count from tracker
      */
@@ -936,7 +938,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the best-known seed count from tracker scrapes.
+     * The best-known seed count from tracker scrapes.
      *
      * @return the seed count, 0 if no scrape yet
      * @since 0.9.71+
@@ -946,7 +948,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the best-known leech count from tracker scrapes.
+     * The best-known leech count from tracker scrapes.
      *
      * @return the leech count, 0 if no scrape yet
      * @since 0.9.71+
@@ -956,7 +958,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the best-known partial seed count from tracker scrapes.
+     * The best-known partial seed count from tracker scrapes.
      *
      * <p>Partial seeds have some files but download nothing more (BEP 21).
      *
@@ -1020,7 +1022,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the total length of all torrent files.
+     * The total length of all torrent files.
      *
      * @return total of all torrent files, or total of metainfo file if fetching magnet, or -1
      * @since 0.8.4
@@ -1109,7 +1111,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the piece length.
+     * The piece length.
      *
      * @param p the piece number
      * @return metainfo piece length or 16K if fetching magnet
@@ -1123,7 +1125,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the number of pieces.
+     * The number of pieces.
      *
      * @return number of pieces
      * @since 0.8.4
@@ -1150,7 +1152,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Get the tracker URL.
+     * The tracker URL.
      *
      * @return trackerURL string from magnet-mode constructor, may be null
      * @since 0.8.4
@@ -1170,7 +1172,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Set whether the torrent is auto-stoppable.
+     * Store whether the torrent is auto-stoppable.
      *
      * @param yes true if auto-stoppable
      * @since 0.9.9
@@ -1325,7 +1327,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
 
     // How much storage space has been allocated
 
-    /** does nothing */
+    /** No-op; deliberately empty. */
     @Override
     public void storageAllocated(Storage storage, long length) { /* no-op */ }
 
@@ -1391,6 +1393,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Whether the torrent storage has completed.
+     *
      * @return true if the torrent storage has completed
      */
     public boolean isStorageCompleted() {
@@ -1530,6 +1534,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private boolean notificationSent;
 
     /**
+     * Whether a completion notification has already been sent for this torrent.
+     *
      * @return true if a completion notification has already been sent for this torrent
      */
     public boolean isNotificationSent() {

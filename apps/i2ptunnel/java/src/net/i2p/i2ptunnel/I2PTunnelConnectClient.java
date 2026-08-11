@@ -143,8 +143,8 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
     }
 
     /**
-     *  @since 0.9.4
      * @return the realm
+     *  @since 0.9.4
      */
     protected String getRealm() {
         return AUTH_REALM;

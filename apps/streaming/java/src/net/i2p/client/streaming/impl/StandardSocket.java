@@ -36,12 +36,13 @@ class StandardSocket extends Socket {
     private volatile boolean _outputShutdown;
     private volatile boolean _closed;
 
-    /** StandardSocket */
+    /** Wraps an I2PSocket in a java.net.Socket. */
     StandardSocket(I2PSocket socket) {
         _socket = socket;
     }
 
     /**
+     *  Binding is not supported.
      *  @throws UnsupportedOperationException always
      */
     @Override
@@ -50,7 +51,7 @@ class StandardSocket extends Socket {
     }
 
     /**
-     * close.
+     * Closes the socket and the underlying I2PSocket.
      */
     @Override
     public void close() throws IOException {
@@ -59,6 +60,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     *  Connecting is not supported.
      *  @throws UnsupportedOperationException always
      */
     @Override
@@ -67,6 +69,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     *  Connecting is not supported.
      *  @throws UnsupportedOperationException always
      */
     @Override
@@ -75,6 +78,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     *  Channel is not supported.
      *  @return null always, unimplemented
      */
     @Override
@@ -83,6 +87,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     *  No remote address.
      *  @return null always
      */
     @Override
@@ -91,6 +96,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     * Input stream from the underlying I2PSocket.
      * @return the input stream
      * @throws IOException if the socket has no input stream
      */
@@ -103,6 +109,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     * Keep-alive setting.
      * @return true if keep-alive is enabled (inactivity action is SEND)
      */
     @Override
@@ -114,6 +121,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     *  No local address.
      *  @return null always
      */
     @Override
@@ -122,6 +130,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     *  Local port.
      *  @return the port or 0 if unknown
      */
     @Override
@@ -130,6 +139,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     *  Local socket address.
      *  @return an I2PSocketAddress as of 0.9.26; prior to that, returned null
      *  @since implemented in 0.9.26
      */
@@ -139,6 +149,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     *  OOB inline is not supported.
      *  @return false always
      */
     @Override
@@ -147,6 +158,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     * Output stream from the underlying I2PSocket.
      * @return the output stream
      * @throws IOException if the socket has no output stream
      */
@@ -159,6 +171,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     *  Remote port.
      *  @return the port or 0 if unknown
      */
     @Override
@@ -167,6 +180,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     * Inbound buffer size.
      * @return the inbound buffer size, or 64KB if options are unavailable
      */
     @Override
@@ -178,6 +192,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     *  Remote socket address.
      *  @return an I2PSocketAddress as of 0.9.26; prior to that, threw UnsupportedOperationException
      *  @since implemented in 0.9.26
      */
@@ -187,6 +202,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     *  Reuse address is not supported.
      *  @return false always
      */
     @Override
@@ -195,6 +211,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     * Outbound buffer size.
      * @return the inbound buffer size, or 64KB if options are unavailable
      */
     @Override
@@ -206,12 +223,14 @@ class StandardSocket extends Socket {
     }
 
     /**
+     * SO_LINGER is not implemented.
      * @return -1 always (not implemented)
      */
     @Override
     public int getSoLinger() { return -1; }
 
     /**
+     * Socket timeout.
      * @return the socket timeout in milliseconds
      */
     @Override
@@ -231,6 +250,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     *  TCP_NODELAY is not supported.
      *  @return false always
      */
     @Override
@@ -240,6 +260,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     *  Traffic class is not supported.
      *  @return 0 always
      */
     @Override
@@ -248,6 +269,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     *  Always bound.
      *  @return true always
      */
     @Override
@@ -256,6 +278,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     * Whether closed.
      * @return whether closed
      */
     @Override
@@ -264,6 +287,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     * Whether connected.
      * @return whether connected
      */
     @Override
@@ -272,6 +296,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     * Whether input shutdown.
      * @return whether input shutdown
      */
     @Override
@@ -280,6 +305,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     * Whether output shutdown.
      * @return whether output shutdown
      */
     @Override
@@ -288,6 +314,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     *  Urgent data is not supported.
      *  @throws UnsupportedOperationException always
      */
     @Override
@@ -296,6 +323,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     * Keep-alive setting.
      * @param on true to enable keep-alive (inactivity action SEND), false for NOOP
      */
     @Override
@@ -310,6 +338,7 @@ class StandardSocket extends Socket {
     }
 
     /**
+     * OOB inline setting.
      * @param on true to throw UnsupportedOperationException, false does nothing
      * @throws UnsupportedOperationException if on is true
      */
@@ -350,6 +379,7 @@ class StandardSocket extends Socket {
     public void setSoLinger(boolean on, int linger) { /* no-op */ }
 
     /**
+     * Socket timeout.
      * @param timeout the timeout in milliseconds
      * @throws SocketException if the options are unavailable
      */
@@ -377,7 +407,7 @@ class StandardSocket extends Socket {
     public void setTrafficClass(int tc) { /* no-op */ }
 
     /**
-     * shutdownInput.
+     * Shuts down the input side, closing the underlying I2PSocket.
      */
     @Override
     public void shutdownInput() throws IOException {
@@ -386,7 +416,7 @@ class StandardSocket extends Socket {
     }
 
     /**
-     * shutdownOutput.
+     * Shuts down the output side, closing the underlying I2PSocket.
      */
     @Override
     public void shutdownOutput() throws IOException {
@@ -395,7 +425,7 @@ class StandardSocket extends Socket {
     }
 
     /**
-     * toString.
+     * String representation of the underlying I2PSocket.
      */
     @Override
     public String toString() {

@@ -718,8 +718,8 @@ public class NTCPTransport extends TransportImpl {
      * AND we have a public IPv6 address.
      *
      * @param addr may be null, returns false
-     * @since 0.9.8
      * @return whether valid
+     * @since 0.9.8
      */
     private boolean isValid(byte[] addr) {
         if (addr == null) return false;
@@ -759,6 +759,7 @@ public class NTCPTransport extends TransportImpl {
 
     /**
      * Whether the connection to the given peer is backlogged.
+     *
      * @return whether backlogged
      */
     @Override
@@ -1493,8 +1494,8 @@ public class NTCPTransport extends TransportImpl {
      * Resolves a hostname to an IP.
      * Called at startup via createNTCPAddress() and later via externalAddressReceived().
      *
-     * @since 0.9.32
      * @return the configured i p
+     * @since 0.9.32
      */
     private String getConfiguredIP() {
         // Fixme doesn't check PROP_BIND_INTERFACE
@@ -2114,8 +2115,8 @@ public class NTCPTransport extends TransportImpl {
      * Send finisher pool utilization as a ratio (0.0-1.0).
      * Returns NaN if pool not started.
      *
-     * @since 0.9.70+
      * @return the send finisher utilization
+     * @since 0.9.70+
      */
     public double getSendFinisherUtilization() {
         return _finisher.getUtilization();
@@ -2125,8 +2126,8 @@ public class NTCPTransport extends TransportImpl {
      * Reader pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
      *
-     * @since 0.9.70+
      * @return the reader utilization
+     * @since 0.9.70+
      */
     public double getReaderUtilization() {
         return _reader.getUtilization();
@@ -2136,8 +2137,8 @@ public class NTCPTransport extends TransportImpl {
      * Writer pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
      *
-     * @since 0.9.70+
      * @return the writer utilization
+     * @since 0.9.70+
      */
     public double getWriterUtilization() {
         return _writer.getUtilization();

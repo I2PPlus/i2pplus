@@ -31,7 +31,7 @@ import net.i2p.data.Destination;
 public interface I2PSocketManager {
 
     /**
-     * Get the I2P session.
+     * The I2P session associated with this manager.
      *
      *  @return the session, non-null
      */
@@ -59,7 +59,7 @@ public interface I2PSocketManager {
     public void removeSubsession(I2PSession session);
 
     /**
-     * Get all subsessions.
+     * All subsessions of the primary session.
      *
      *  @return a list of subsessions, non-null, does not include the primary session
      *  @since 0.9.21
@@ -74,7 +74,7 @@ public interface I2PSocketManager {
      */
     public void setAcceptTimeout(long ms);
     /**
-     * getAcceptTimeout().
+     * The current accept timeout.
      * @return the accept timeout
      */
     public long getAcceptTimeout();
@@ -246,18 +246,18 @@ public interface I2PSocketManager {
     public void init(I2PAppContext context, I2PSession session, Properties opts, String name);
 
     /**
-     * lsnr).
+     * Register a listener to be notified when the I2P session disconnects.
      */
     public void addDisconnectListener(DisconnectListener lsnr);
     /**
-     * lsnr).
+     * Remove a disconnection listener.
      */
     public void removeDisconnectListener(DisconnectListener lsnr);
 
     /** Listener for notification when an I2P session is disconnected */
     public static interface DisconnectListener {
         /**
-         * sessionDisconnected().
+         * Called when the I2P session is disconnected.
          */
         public void sessionDisconnected();
     }

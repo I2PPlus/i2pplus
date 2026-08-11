@@ -725,8 +725,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     /**
      *  Return a map of session key to a set of inbound TagSets for that SessionKey
      *
-     *  @since 0.9.33 split out from renderStatusHTML()
      *  @return the inbound tag sets by session key
+     *  @since 0.9.33 split out from renderStatusHTML()
      */
     private Map<SessionKey, Set<TagSet>> getInboundTagSetsBySessionKey() {
         Set<TagSet> inbound = getInboundTagSets();
@@ -1120,8 +1120,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
         /**
          * Whether the outbound tag set has been acknowledged.
-         * @since 0.9 for debugging
          * @return the ack received
+         * @since 0.9 for debugging
          */
         public boolean getAckReceived() {
             return _acked;
@@ -1160,8 +1160,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
         /**
          * Original number of tags in this set before any were consumed.
-         * @since 0.9.3 for debugging
          * @return the original size
+         * @since 0.9.3 for debugging
          */
         public int getOriginalSize() {
             return _origSize;
@@ -1212,8 +1212,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
         /**
          * Unique identifier for this tag set.
-         * @since 0.9 for debugging
          * @return the i d
+         * @since 0.9 for debugging
          */
         public int getID() {return _id;}
 

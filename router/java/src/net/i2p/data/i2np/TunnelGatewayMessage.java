@@ -25,7 +25,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     /** Message type ID for this I2NP message */
 
     public final static int MESSAGE_TYPE = 19;
-    /** if we can't deliver a tunnel message in 10s, forget it */
+    /** If we can't deliver a tunnel message in 10s, forget it. */
     private static final int EXPIRATION_PERIOD = 10*1000;
     /** Constructor with 10-second message expiration from context clock. */
 
@@ -38,6 +38,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     public TunnelId getTunnelId() {return _tunnelId;}
 
     /**
+     *  Tunnel ID for this message; may only be set once.
      *  @throws IllegalStateException if id previously set, to protect saved checksum
      */
     public void setTunnelId(TunnelId id) {
@@ -59,6 +60,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     public I2NPMessage getMessage() {return _msg;}
 
     /**
+     *  Embedded message; may only be set once.
      *  @throws IllegalStateException if msg previously set, to protect saved checksum
      */
     public void setMessage(I2NPMessage msg) {
@@ -78,7 +80,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
         return rv;
     }
 
-    /** write the message body to the output array, starting at the given index */
+    /** Write the message body to the output array, starting at the given index. */
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         if ((_tunnelId == null) || ((_msg == null) && (_msgData == null)) ) {
             _log.log(Log.CRIT, "failing to write out gateway message");

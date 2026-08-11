@@ -87,8 +87,8 @@ import java.util.Arrays;
  *   <li><strong>0.9.48:</strong> Removed DataStructureImpl inheritance for space savings</li>
  * </ul>
  *
- * @since 0.8.2
  * @author zzz
+ * @since 0.8.2
  */
 public abstract class SimpleDataStructure implements DataStructure {
     /** The byte array data for this structure. */

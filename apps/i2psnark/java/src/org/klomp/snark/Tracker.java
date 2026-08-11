@@ -28,6 +28,8 @@ public class Tracker {
     public final boolean supportsDetails;
 
     /**
+     * Create a tracker.
+     *
      * @param baseURL The web site, may be null
      */
     public Tracker(String name, String announceURL, String baseURL) {

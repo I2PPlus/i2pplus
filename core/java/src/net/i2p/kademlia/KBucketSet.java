@@ -38,9 +38,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  * Refactored from net.i2p.router.networkdb.kademlia
  *
- * @since 0.9.2 in i2psnark, moved to core in 0.9.10
  *
  * @param <T> type of SimpleDataStructure objects stored in buckets
+ * @since 0.9.2 in i2psnark, moved to core in 0.9.10
  */
 public class KBucketSet<T extends SimpleDataStructure> {
     private final Log _log;
@@ -158,7 +158,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      *
      * @param peer the peer
      * @return true if the peer is new to the bucket it goes in, or false if it was
-     *  already in it. Always returns false on an attempt to add ourselves.
+     * already in it. Always returns false on an attempt to add ourselves.
      */
     public boolean add(T peer) {
         KBucket<T> bucket;
@@ -362,7 +362,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     * Get all entries in all buckets, excluding the specified entries.
+     * All entries in all buckets, excluding the specified entries.
      *
      * @param toIgnore entries to exclude
      * @return a copy in a new set

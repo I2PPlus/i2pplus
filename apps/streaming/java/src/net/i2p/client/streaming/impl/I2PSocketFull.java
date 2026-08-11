@@ -23,6 +23,7 @@ class I2PSocketFull implements I2PSocket {
     private final AtomicBoolean _closed = new AtomicBoolean();
 
     /**
+     * Bridge between a connection and the I2PSocket API.
      * @param con the underlying connection, may be null
      * @param context the I2P application context
      */
@@ -79,7 +80,7 @@ class I2PSocketFull implements I2PSocket {
      *  Resetting this socket will also close the socket's InputStream and OutputStream.
      *
      * @throws IOException if an I/O error occurs
-     *  @since 0.9.30
+     * @since 0.9.30
      */
     public void reset() throws IOException {
         Connection c = _connection;
@@ -95,7 +96,10 @@ class I2PSocketFull implements I2PSocket {
         destroy();
     }
 
-    /** @return the connection */
+    /**
+     * Underlying connection.
+     * @return the connection
+     */
     Connection getConnection() { return _connection; }
 
     /**
@@ -113,6 +117,7 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
+     * Socket options for this socket.
      * @return the socket options, or null if the socket is closed
      */
     public I2PSocketOptions getOptions() {
@@ -138,11 +143,13 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
+     * Remote peer destination.
      * @return the remote peer destination
      */
     public Destination getPeerDestination() { return _remotePeer; }
 
     /**
+     * Read timeout for this socket.
      * @return the read timeout in milliseconds, or -1 if no options are set
      */
     public long getReadTimeout() {
@@ -154,11 +161,13 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
+     * Local peer destination.
      * @return the local peer destination
      */
     public Destination getThisDestination() { return _localPeer; }
 
     /**
+     * New socket options.
      * @param options the new socket options
      */
     public void setOptions(I2PSocketOptions options) {
@@ -172,6 +181,7 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
+     * Read timeout in milliseconds.
      * @param ms the read timeout in milliseconds
      */
     public void setReadTimeout(long ms) {
@@ -192,6 +202,7 @@ class I2PSocketFull implements I2PSocket {
     public void setSocketErrorListener(I2PSocket.SocketErrorListener lsnr) { /* no-op */ }
 
     /**
+     * Whether the socket is closed or not connected.
      * @return true if the socket is closed or not connected
      */
     public boolean isClosed() {
@@ -202,7 +213,7 @@ class I2PSocketFull implements I2PSocket {
                 (c.getResetSent()));
     }
 
-    /** Destroy */
+    /** Release the connection reference. */
     void destroy() {
         _connection = null;
     }
@@ -236,6 +247,7 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
+     * Total bytes sent over the socket's lifetime.
      * @return total bytes sent over this socket's lifetime, or 0 if not connected
      */
     @Override
@@ -245,6 +257,7 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
+     * Total bytes received over the socket's lifetime.
      * @return total bytes received over this socket's lifetime, or 0 if not connected
      */
     @Override
@@ -254,7 +267,7 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
-     * toString.
+     * Description of this socket.
      */
     @Override
     public String toString() {

@@ -57,32 +57,32 @@ public class DBHistory {
     /**
      * Time of the last successful lookup, not persisted until 0.9.24.
      *
-     * @since 0.7.8
      * @return the last lookup successful
+     * @since 0.7.8
      */
     public long getLastLookupSuccessful() {return _lastLookupSuccessful;}
 
     /**
      * Time of the last failed lookup, not persisted until 0.9.24.
      *
-     * @since 0.7.8
      * @return the last lookup failed
+     * @since 0.7.8
      */
     public long getLastLookupFailed() {return _lastLookupFailed;}
 
     /**
      * Time of the last successful store, not persisted until 0.9.24.
      *
-     * @since 0.7.8
      * @return the last store successful
+     * @since 0.7.8
      */
     public long getLastStoreSuccessful() {return _lastStoreSuccessful;}
 
     /**
      * Time of the last failed store, not persisted until 0.9.24.
      *
-     * @since 0.7.8
      * @return the last store failed
+     * @since 0.7.8
      */
     public long getLastStoreFailed() {return _lastStoreFailed;}
 

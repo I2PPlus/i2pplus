@@ -63,7 +63,7 @@ class Zones {
     }
 
     /**
-     *  Get the NTP zone for a country
+     *  NTP zone for a country.
      *
      *  @param country non-null, two letter code, case-independent
      *  @return lower-case NTP zone, e.g. "africa", or null

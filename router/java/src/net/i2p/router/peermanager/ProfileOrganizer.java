@@ -50,7 +50,7 @@ import net.i2p.util.SystemVersion;
  * 3. Speed, capacity, and integration thresholds are recalculated from the active set
  * 4. Each surviving profile is evaluated via locked_promoteProfileToTiers()
  * 5. If fast/high-cap tiers fall below minimum thresholds, fallback passes fill gaps
- *    (with selectability checks to prevent selecting unusable peers)
+ * (with selectability checks to prevent selecting unusable peers)
  *
  * Concurrency: ReentrantReadWriteLock protects all tier maps.
  * reorganize() acquires the write lock; selection methods use the read lock.
@@ -265,7 +265,7 @@ public class ProfileOrganizer {
     private void releaseWriteLock() {_reorganizeLock.writeLock().unlock();}
 
     /**
-     * Set the local router hash for self-exclusion from peer selection.
+     * Store the local router hash for self-exclusion from peer selection.
      */
     public void setUs(Hash us) {_us = us;}
 
@@ -1324,7 +1324,7 @@ public class ProfileOrganizer {
     }
 
     /**
-     * purgeStaleProfileFiles.
+     * Remove stale profile files for peers outside the active set when over the cap.
      */
     public void purgeStaleProfileFiles() {
         int maxProfiles = ABSOLUTE_MAX_PROFILES;
@@ -1695,6 +1695,8 @@ public class ProfileOrganizer {
     }
 
     /**
+     * Whether the given peer is eligible for selection.
+     *
      * @return whether selectable
      */
     public boolean isSelectable(Hash peer) {
@@ -2157,8 +2159,8 @@ public class ProfileOrganizer {
      * selectable, and recently active. Used by tuner to adjust tier limits
      * based on viable peers, not just raw counts.
      *
-     * @since 0.9.70+
      * @return whether quality peer
+     * @since 0.9.70+
      */
     private boolean isQualityPeer(PeerProfile profile, long recentCutoff) {
         if (profile.getPeer().equals(_us)) return false;
@@ -2198,6 +2200,8 @@ public class ProfileOrganizer {
     }
 
     /**
+     * Minimum number of peers to keep in the fast tier.
+     *
      * @return the minimum fast peers
      */
     protected int getMinimumFastPeers() {
@@ -2207,6 +2211,8 @@ public class ProfileOrganizer {
     }
 
     /**
+     * Maximum number of peers to keep in the fast tier, capped by active peers.
+     *
      * @return the maximum fast peers
      */
     protected int getMaximumFastPeers() {
@@ -2225,6 +2231,8 @@ public class ProfileOrganizer {
     }
 
     /**
+     * Maximum number of peers to keep in the high-capacity tier, capped by active peers.
+     *
      * @return the maximum high cap peers
      */
     protected int getMaximumHighCapPeers() {
@@ -2242,6 +2250,8 @@ public class ProfileOrganizer {
     }
 
     /**
+     * Minimum number of peers to keep in the high-capacity tier.
+     *
      * @return the minimum high capacity peers
      */
     protected int getMinimumHighCapacityPeers() {
@@ -2254,7 +2264,7 @@ public class ProfileOrganizer {
     private static final String num(double num) {synchronized (_fmt) {return _fmt.format(num);} }
 
     /**
-     * main.
+     * Command-line entry point; reads profile dump files and prints thresholds.
      */
     public static void main(String[] args) {
         if (args.length <= 0) {
@@ -2309,6 +2319,8 @@ public class ProfileOrganizer {
     }
 
     /**
+     * Recent tunnel build success ratio, from router statistics.
+     *
      * @return the tunnel build success
      */
     public double getTunnelBuildSuccess() {
@@ -2344,6 +2356,8 @@ public class ProfileOrganizer {
     }
 
     /**
+     * Whether recent tunnel build success is below the attack threshold.
+     *
      * @return whether low build success
      */
     public boolean isLowBuildSuccess() {
@@ -2352,7 +2366,7 @@ public class ProfileOrganizer {
     }
 
     /**
-     * writeProfile.
+     * Persist the given profile to disk.
      */
     public void writeProfile(PeerProfile profile) {
         _persistenceHelper.writeProfile(profile);

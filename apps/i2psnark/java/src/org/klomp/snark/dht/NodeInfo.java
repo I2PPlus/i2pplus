@@ -193,6 +193,8 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
+     * The node ID.
+     *
      * @return the n i d
      */
     public NID getNID() {
@@ -200,6 +202,8 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
+     * The destination, may be null if we don't have it.
+     *
      * @return may be null if we don't have it
      */
     public Destination getDestination() {
@@ -207,6 +211,8 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
+     * The hash.
+     *
      * @return the hash
      */
     public Hash getHash() {
@@ -214,7 +220,7 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * calculateHash.
+     * Calculate the hash.
      */
     @Override
     public Hash calculateHash() {
@@ -235,6 +241,8 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
+     * The port.
+     *
      * @return the port
      */
     public int getPort() {
@@ -246,6 +254,8 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
+     * Whether hash code is present.
+     *
      * @return whether h code is present
      */
     @Override
@@ -254,7 +264,7 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * equals.
+     * Whether this node equals the other.
      */
     @Override
     public boolean equals(Object o) {
@@ -268,7 +278,7 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * toString.
+     * String form of the node.
      */
     @Override
     public String toString() {

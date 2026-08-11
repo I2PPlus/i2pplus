@@ -55,8 +55,8 @@ public class SOCKSUDPWrapper implements Source, Sink {
      * Use the cached header, which should have the host string and port
      *
      *  May throw RuntimeException from underlying sink
-     *  @since 0.9.53 added fromPort and toPort parameters
      *  @throws RuntimeException
+     *  @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination from, int fromPort, int toPort, byte[] data) {
         if (this.sink == null)

@@ -55,7 +55,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
     public static int getDecayFactor() { return _decayFactor; }
 
     /**
-     * Sets the EWMA decay factor for new estimators.
+     * EWMA decay factor for new estimators.
      * Higher = more smoothing, lower = faster adaptation.
      *
      * @param factor the new decay factor (clamped to 2..16)
@@ -66,7 +66,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             _decayFactor = factor;
     }
 
-    /** SimpleBandwidthEstimator */
+    /** New estimator bound to the given options. */
     SimpleBandwidthEstimator(I2PAppContext ctx, ConnectionOptions opts) {
         _log = ctx.logManager().getLog(SimpleBandwidthEstimator.class);
         _context = ctx;
@@ -107,6 +107,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
     }
 
     /**
+     * Current bandwidth estimate.
      * @return the current bandwidth estimate in packets/ms.
      */
     @Override
@@ -181,7 +182,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
     }
 
     /**
-     * toString.
+     * Debug representation of the estimate state.
      */
     @Override
     public synchronized String toString() {

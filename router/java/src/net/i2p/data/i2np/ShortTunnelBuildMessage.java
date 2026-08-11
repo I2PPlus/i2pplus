@@ -18,7 +18,7 @@ public class ShortTunnelBuildMessage extends TunnelBuildMessage {
      */
     public static final int SHORT_RECORD_SIZE = 218;
 
-    /** zero record count, will be set with readMessage() */
+    /** Zero record count, will be set with readMessage(). */
     public ShortTunnelBuildMessage(I2PAppContext context) {
         super(context, 0);
     }
@@ -31,6 +31,7 @@ public class ShortTunnelBuildMessage extends TunnelBuildMessage {
     }
 
     /**
+     *  Store a build record, checking its length.
      *  @param record must be ShortEncryptedBuildRecord or null
      */
     @Override
@@ -41,19 +42,20 @@ public class ShortTunnelBuildMessage extends TunnelBuildMessage {
     }
 
     /**
-     * calculateWrittenLength.
+     *  Written length of the message body: one record count byte plus the records.
      */
     @Override
     protected int calculateWrittenLength() { return 1 + (RECORD_COUNT * SHORT_RECORD_SIZE); }
 
     /**
-     * @return the type
+     *  I2NP message type of a short tunnel build message.
+     *  @return the type
      */
     @Override
     public int getType() { return MESSAGE_TYPE; }
 
     /**
-     * readMessage.
+     *  Read the records from a byte array.
      */
     @Override
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
@@ -76,7 +78,7 @@ public class ShortTunnelBuildMessage extends TunnelBuildMessage {
     }
 
     /**
-     * writeMessageBody.
+     *  Write the records to the output array, starting at the given index.
      */
     @Override
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
@@ -94,7 +96,7 @@ public class ShortTunnelBuildMessage extends TunnelBuildMessage {
     }
 
     /**
-     * toString.
+     *  String form for debugging, showing the id and record count.
      */
     @Override
     public String toString() {

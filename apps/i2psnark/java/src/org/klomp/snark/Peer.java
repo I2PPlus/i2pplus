@@ -52,7 +52,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     private final byte[] my_id;
     protected final byte[] infohash;
 
-    /** will start out null in magnet mode */
+    /** Will start out null in magnet mode. */
     protected MetaInfo metainfo;
 
     private Map<String, BEValue> handshakeMap;
@@ -62,7 +62,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     private DataInputStream din;
     private DataOutputStream dout;
 
-    /** running counters */
+    /** Running counters. */
     private final AtomicLong downloaded = new AtomicLong();
 
     private final AtomicLong uploaded = new AtomicLong();
@@ -74,7 +74,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      */
     volatile PeerState state;
 
-    /** shared across all peers on this torrent */
+    /** Shared across all peers on this torrent. */
     MagnetState magnetState;
 
     private I2PSocket sock;
@@ -201,6 +201,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
+     * Socket debug string, for debug printing.
+     *
      * @return socket debug string (for debug printing)
      */
     public String getSocket() {
@@ -374,7 +376,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     private static final long HANDSHAKE_READ_TIMEOUT = (long) 45 * 1000;
 
     /**
-     * Sets DataIn/OutputStreams, does the handshake and returns the id reported by the other side.
+     * Perform the handshake over the data streams and return the ID reported by the other side.
      */
     private byte[] handshake(InputStream in, OutputStream out) throws IOException {
         dout = new DataOutputStream(out);
@@ -489,7 +491,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Sets the extension handshake data and updates the request pipeline limit.
+     * Store the extension handshake data and update the request pipeline limit.
      *
      * @param map the handshake map (non-null)
      * @since 0.8.4
@@ -679,7 +681,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Sets whether or not we are choking the peer. Defaults to true. When choke is false and the
+     * Whether we are choking the peer. Defaults to true. When choke is false and the
      * peer requests some pieces we upload them, otherwise requests of this peer are ignored.
      *
      * @param choke true to choke (stop uploading), false to unchoke (allow uploads)
@@ -789,8 +791,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /**
      * Should we send this many bytes? Do NOT call uploaded() after this.
      *
-     * @since 0.9.62
      * @return whether send
+     * @since 0.9.62
      */
     public boolean shouldSend(int size) {
         PeerState s = state;
@@ -807,8 +809,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /**
      * Should we request this many bytes?
      *
-     * @since 0.9.62
      * @return whether request
+     * @since 0.9.62
      */
     public boolean shouldRequest(int size) {
         PeerState s = state;
@@ -821,8 +823,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /**
      * Should we request this many bytes?
      *
-     * @since 0.9.62
      * @return whether request
+     * @since 0.9.62
      */
     public boolean shouldRequest(Peer peer, int size) {
         if (peer != this) {
@@ -838,8 +840,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /**
      * Current limit in Bps
      *
-     * @since 0.9.62
      * @return the up b w limit
+     * @since 0.9.62
      */
     public long getUpBWLimit() {
         PeerState s = state;
@@ -865,8 +867,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /**
      * Current limit in Bps
      *
-     * @since 0.9.62
      * @return the down b w limit
+     * @since 0.9.62
      */
     public long getDownBWLimit() {
         PeerState s = state;
@@ -924,7 +926,11 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         } // "no state";
     }
 
-    /** @return max inactive time */
+    /**
+     * The max inactive time.
+     *
+     * @return max inactive time
+     */
     public long getMaxInactiveTime() {
         return isCompleted() && !isInteresting()
                 ? PeerCoordinator.MAX_SEED_INACTIVE
@@ -984,7 +990,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Sets the total number of UT comments sent to this peer.
+     * Store the total number of UT comments sent to this peer.
      *
      * @param count the count to set
      * @since 0.9.31
@@ -1024,7 +1030,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Sets the timestamp when PEX peers were last sent to this peer.
+     * Store the timestamp when PEX peers were last sent to this peer.
      *
      * @param now the current timestamp in milliseconds
      * @since 0.9.63

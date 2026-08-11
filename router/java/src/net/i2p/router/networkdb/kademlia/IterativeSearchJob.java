@@ -173,8 +173,8 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * Maximum concurrent default value.
      *
-     * @since 0.9.70+
      * @return the max concurrent default
+     * @since 0.9.70+
      */
     public static int getMaxConcurrentDefault() { return _maxConcurrentDefault; }
 

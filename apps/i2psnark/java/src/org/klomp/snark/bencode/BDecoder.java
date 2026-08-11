@@ -57,8 +57,8 @@ public class BDecoder {
     private boolean in_special_map = false;
 
     /**
-     * creation deferred until we encounter the special map, to make processing of announce replies
-     * more efficient
+     * Creation deferred until we encounter the special map, to make processing of announce replies
+     * more efficient.
      */
     private MessageDigest sha_digest;
 
@@ -129,7 +129,7 @@ public class BDecoder {
     }
 
     /**
-     * Gets the next indicator and returns either null when the stream has ended or bdecodes the
+     * Read the next indicator, returning null when the stream has ended, or bdecode the
      * rest of the stream and returns the appropriate BEValue encoded object.
      *
      * @return the next BEValue on the stream, or null if the stream has ended

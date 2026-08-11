@@ -49,6 +49,8 @@ public class BandwidthManager implements BandwidthListener {
     private SyntheticREDQueue _req;
 
     /**
+     * Create the bandwidth manager.
+     *
      * @param ctx the app context
      * @param upLimit the upload limit in Bps
      * @param downLimit the download limit in Bps

@@ -30,7 +30,7 @@ public class BandwidthLimitsMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Construct with client bandwidth limits.
+     *  BandwidthLimitsMessage with the client inbound and outbound limits.
      *
      *  Slot definitions. Slots 7-15 are left undefined and wasted — this
      *  message is only local and rarely sent, so we don't care about the waste.

@@ -111,8 +111,8 @@ class StoreState {
      *  Does not include skipped peers.
      *  Do not use getAttempted().size() as that does include skipped peers.
      *
-     * @since 0.9.53
      * @return the attempted count
+     * @since 0.9.53
      */
     public int getAttemptedCount() {
         synchronized (_attemptedPeers) {
@@ -124,8 +124,8 @@ class StoreState {
      *  Return a successful peer (a random one if more than one was successful)
      *  or null.
      *
-     * @since 0.9.53 formerly returned a copy of the Set
      * @return the successful
+     * @since 0.9.53 formerly returned a copy of the Set
      */
     public Hash getSuccessful() {
         synchronized (_successfulPeers) {

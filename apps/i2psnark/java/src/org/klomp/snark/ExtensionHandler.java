@@ -39,7 +39,7 @@ abstract class ExtensionHandler {
      */
     public static final int ID_PEX = 2;
 
-    /** not ut_pex since the compact format is different */
+    /** Not ut_pex since the compact format is different. */
     public static final String TYPE_PEX = "i2p_pex";
 
     /**
@@ -47,7 +47,7 @@ abstract class ExtensionHandler {
      */
     public static final int ID_DHT = 3;
 
-    /** not using the option bit since the compact format is different */
+    /** Not using the option bit since the compact format is different. */
     public static final String TYPE_DHT = "i2p_dht";
 
     /**

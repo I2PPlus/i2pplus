@@ -33,6 +33,8 @@ class TrackerInfo {
     private int downloaders;
 
     /**
+     * Create tracker info for the metainfo.
+     *
      * @param metainfo may be null
      */
     public TrackerInfo(
@@ -168,8 +170,8 @@ class TrackerInfo {
     /**
      * One big string of concatenated 32-byte hashes
      *
-     * @since 0.8.1
      * @return the peers
+     * @since 0.8.1
      */
     private static Set<Peer> getPeers(
             byte[] l, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
@@ -196,8 +198,8 @@ class TrackerInfo {
     /**
      * From Hash to Peer
      *
-     * @since 0.9.14
      * @return the peers
+     * @since 0.9.14
      */
     private static Set<Peer> getPeers(
             Set<Hash> hashes, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util) {
@@ -253,14 +255,18 @@ class TrackerInfo {
     }
 
     /**
-     * @since 0.9.9
+     * The seed count.
+     *
      * @return the seed count
+     * @since 0.9.9
      */
     public int getSeedCount() {
         return complete;
     }
 
     /**
+     * The leech count.
+     *
      * @return the leech count
      * @since 0.9.71+
      */
@@ -286,13 +292,13 @@ class TrackerInfo {
         return failure_reason;
     }
 
-    /** in seconds */
+    /** Interval in seconds. */
     public int getInterval() {
         return interval;
     }
 
     /**
-     * toString.
+     * String form of the tracker info.
      */
     @Override
     public String toString() {

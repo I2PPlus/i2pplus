@@ -46,12 +46,12 @@ import net.i2p.util.Log;
  */
 public class PcapWriter implements Closeable, Flushable {
 
-    /** big-endian, see file format ref - 24 bytes */
+    /** Big-endian pcap global header, see file format ref - 24 bytes. */
     private static final byte[] FILE_HEADER = { (byte) 0xa1, (byte) 0xb2, (byte) 0xc3, (byte) 0xd4,
                                                 0, 2, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0,
                                                 0, 0, (byte) 0xff, (byte) 0xff, 0, 0, 0, 1 };
 
-    /** dummy macs, IPv4 ethertype */
+    /** Dummy MAC addresses, IPv4 ethertype. */
     private static final byte[] MAC_HEADER = { 1, 2, 3, 4, 5, 6,
                                                1, 2, 3, 4, 5, 6,
                                                (byte) 0x08, 0 };
@@ -59,10 +59,10 @@ public class PcapWriter implements Closeable, Flushable {
     private static final byte[] IP_HEADER_2 = { 0x12, 0x34, 0x40, 0, 64, 6 };  // ID, flags, TTL and TCP
     private static final byte[] UNK_IP = { (byte) 0xff, 0, 0, 0};
     private static final byte[] MY_UNK_IP = {127, 0, 0, 0};
-    /** max # of streaming lib payload bytes to dump */
+    /** Max # of streaming lib payload bytes to dump. */
     private static final int MAX_PAYLOAD_BYTES = 10;
 
-    /** options - give our custom ones some mnemonics */
+    /** Options - give our custom ones some mnemonics. */
     private static final int MAX_OPTION_LEN = 40;
     private static final byte OPTION_END = 0;
     private static final byte OPTION_MSS = 2;

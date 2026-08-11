@@ -28,10 +28,10 @@ class PeerAcceptor {
     private final Log _log =
             I2PAppContext.getGlobalContext().logManager().getLog(PeerAcceptor.class);
     private final PeerCoordinator coordinator;
-    /** Coordinators */
+    /** The coordinators this acceptor feeds. */
     final PeerCoordinatorSet coordinators;
 
-    /** shorten timeout while reading handshake */
+    /** Shorten timeout while reading handshake. */
     private static final long HASH_READ_TIMEOUT = (long) 45 * 1000;
 
     /**
@@ -170,7 +170,7 @@ class PeerAcceptor {
         }
     }
 
-    /** 48 */
+    /** Handshake read timeout, in seconds. */
     private static final int LOOKAHEAD_SIZE =
             PROTO_LEN + 8 + // blank, reserved
                     20; // infohash
@@ -201,7 +201,11 @@ class PeerAcceptor {
      * @since 0.9.1
      */
     public static class ProtocolException extends IOException {
-        /** @param s the detail message */
+        /**
+     * Create an acceptor exception.
+     *
+     * @param s the detail message
+     */
         public ProtocolException(String s) {
             super(s);
         }

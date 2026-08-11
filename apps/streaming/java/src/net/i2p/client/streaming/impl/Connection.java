@@ -102,7 +102,7 @@ class Connection {
     private final ConnectionDataReceiver _receiver;
     /** I2P socket for this connection. */
     private I2PSocketFull _socket;
-    /** set to an error cause if the connection could not be established */
+    /** Error cause if the connection could not be established. */
     private String _connectionError;
     /** Atomic long. */
     private final AtomicLong _disconnectScheduledOn = new AtomicLong();
@@ -121,11 +121,11 @@ class Connection {
     /** Pacing lock. */
     private final Object _pacingLock = new Object();
 
-    /** has the other side choked us? */
+    /** Whether the other side has choked us. */
     private volatile boolean _isChoked;
-    /** are we choking the other side? */
+    /** Whether we are choking the other side. */
     private volatile boolean _isChoking;
-    /** when we last sent a choke ACK, for persist-timer rate-limiting of re-asserts */
+    /** When we last sent a choke ACK, for persist-timer rate-limiting of re-asserts. */
     private volatile long _lastChokeAckTime;
     /** Unchoke messages pending. */
     private final AtomicInteger _unchokesToSend = new AtomicInteger();
@@ -135,7 +135,7 @@ class Connection {
     private final Object _connectLock;
     /** Locking for _nextSendTime */
     private final Object _nextSendLock;
-    /** how many messages have been resent and not yet ACKed? */
+    /** How many messages have been resent and not yet ACKed. */
     private final AtomicInteger _activeResends = new AtomicInteger();
     /** Connection event. */
     private final ConEvent _connectionEvent;
@@ -149,9 +149,8 @@ class Connection {
     private final TLProbeEvent _tlpEvent;
     /** Ack dup event. */
     private final AckDupEvent _ackDupEvent;
-    /** Reusable list for ackPackets() — avoids per-call allocation.
+    /** Acked list, reusable for ackPackets() — avoids per-call allocation.
      *  Only accessed from the receive thread, serialized by _dataLock. */
-    /** Acked list. */
     private final List<PacketLocal> _ackedList;
     /** Random wait. */
     private final int _randomWait;
@@ -187,10 +186,7 @@ class Connection {
     public static int getDisconnectTimeout() {
         return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.disconnectTimeout", 2*60*1000);
     }
-    /**
-     * DEFAULT_CONNECT_TIMEOUT.
-     */
-    /** DEFAULT_CONNECT_TIMEOUT */
+    /** Default connect timeout in milliseconds. */
     public static final int DEFAULT_CONNECT_TIMEOUT = 30*1000;
     /** @since 0.9.70+ */
     static long getMaxConnectTimeout() {
@@ -219,9 +215,7 @@ class Connection {
      *  Default window size cap used when no per-connection or global override is set.
      *  The effective ceiling is managed by getGlobalMaxWindowSize(), which the Tuner
      *  adjusts based on observed RTT, bandwidth, and loss.
-     * @return whether slow
      */
-    /** MAX_WINDOW_SIZE_DEFAULT */
     public static final int MAX_WINDOW_SIZE_DEFAULT = SystemVersion.isSlow() ? 384 : 512;
 
     /**
@@ -229,7 +223,6 @@ class Connection {
      *  Prevents runaway window growth from estimator noise or bugs.
      *  Set to accommodate high-BDP paths (e.g. 50Mbps @ 1s RTT ~ 6250 packets @ 1KB).
      */
-    /** ABSOLUTE_MAX_WINDOW */
     public static final int ABSOLUTE_MAX_WINDOW = 4096;
 
     /** @since 0.9.70+ mutable for adaptive tuning via Tuner */
@@ -283,6 +276,7 @@ class Connection {
     }
 
     /**
+     *  Constructor for this connection.
      *  @param opts may be null
      */
     public Connection(I2PAppContext ctx, ConnectionManager manager,
@@ -413,7 +407,7 @@ class Connection {
     int getSSThresh() {return _ssthresh;}
 
     /**
-     * Get the next outbound packet sequence number.
+     * Next outbound packet sequence number.
      *
      * @return the next sequence number
      */
@@ -534,6 +528,7 @@ class Connection {
     }
 
     /**
+     *  Whether the sender should block.
      *  @return true if the sender should block (window full or choked)
      */
     private boolean shouldWait(int unacked, int wsz) {
@@ -948,7 +943,10 @@ class Connection {
      */
     public boolean getResetReceived() {return _resetReceived.get();}
 
-    /** @return 0 if not received */
+    /**
+     * Timestamp when a reset was received.
+     * @return 0 if not received
+     */
     public long getResetReceivedOn() {return _resetReceivedOn.get();}
 
     /**
@@ -986,10 +984,16 @@ class Connection {
      */
     public boolean getResetSent() {return _resetSentOn.get() > 0;}
 
-    /** @return 0 if not sent */
+    /**
+     * Timestamp when a reset was sent.
+     * @return 0 if not sent
+     */
     public long getResetSentOn() {return _resetSentOn.get();}
 
-    /** @return 0 if not scheduled */
+    /**
+     * Timestamp when the disconnect was scheduled.
+     * @return 0 if not scheduled
+     */
     public long getDisconnectScheduledOn() {return _disconnectScheduledOn.get();}
 
     /**
@@ -1138,7 +1142,7 @@ class Connection {
             }
         }
         /**
-         * timeReached.
+         * Disconnect the connection when the timer fires.
          */
         public void timeReached() {disconnectComplete();}
     }
@@ -1156,12 +1160,12 @@ class Connection {
      *  Schedule an event on our timer.
      *  The event should use the no-arg constructor; the pool is set here.
      *
+     *  @return the reusable AckDupEvent for duplicate ACK scheduling
      *  @since 0.9.23
      */
-    /** Reusable AckDupEvent for duplicate ACK scheduling. */
     AckDupEvent getAckDupEvent() { return _ackDupEvent; }
 
-    /** who are we talking with
+    /** Destination of the remote peer.
      * @return peer Destination or null if unset
      */
     public synchronized Destination getRemotePeer() {return _remotePeer;}
@@ -1173,6 +1177,7 @@ class Connection {
     }
 
     /**
+     *  Remote peer of this connection, non-null.
      *  @param peer non-null
      */
     public void setRemotePeer(Destination peer) {
@@ -1203,6 +1208,7 @@ class Connection {
     }
 
     /**
+     *  Transient signing public key of the remote peer.
      *  @param transientSPK null ok
      *  @since 0.9.39
      */
@@ -1222,6 +1228,7 @@ class Connection {
     public long getSendStreamId() {return _sendStreamId.get();}
 
     /**
+     *  Stream ID that we send data on.
      *  @param id 0 to 0xffffffff
      *  @throws IllegalStateException if already set to nonzero
      */
@@ -1239,6 +1246,7 @@ class Connection {
     public long getReceiveStreamId() {return _receiveStreamId.get();}
 
     /**
+     *  Stream ID that the peer sends data on.
      *  @param id 0 to 0xffffffff
      *  @throws IllegalStateException if already set to nonzero
      */
@@ -1264,7 +1272,7 @@ class Connection {
      */
     public ConnectionOptions getOptions() {return _options;}
     /**
-     * Set the ConnectionOptions.
+     * ConnectionOptions for this connection.
      * @param opts ConnectionOptions non-null
      */
     public void setOptions(ConnectionOptions opts) {_options = opts;}
@@ -1273,21 +1281,21 @@ class Connection {
     public ConnectionManager getConnectionManager() {return _connectionManager;}
 
     /**
-     * Get the I2P session for this connection.
+     * I2P session for this connection.
      *
      * @return the session
      */
     public I2PSession getSession() {return _session;}
 
     /**
-     * Get the socket associated with this connection.
+     * Socket associated with this connection.
      *
      * @return the socket, or null if not yet set
      */
     public I2PSocketFull getSocket() {return _socket;}
 
     /**
-     * Set the socket associated with this connection.
+     * Socket associated with this connection.
      *
      * @param socket the socket
      */
@@ -1301,27 +1309,28 @@ class Connection {
     public int getPort() {return _remotePort;}
 
     /**
+     *  Local port of this connection.
      *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
      *  @since 0.8.9
      */
     public int getLocalPort() {return _localPort;}
 
     /**
-     * Get the connection error message, if any.
+     * Connection error message, if any.
      *
      * @return error message, or null if no error
      */
     public String getConnectionError() {return _connectionError;}
 
     /**
-     * Set the connection error message.
+     * Connection error message.
      *
      * @param err the error message
      */
     public void setConnectionError(String err) {_connectionError = err;}
 
     /**
-     * Get the lifetime of this connection in milliseconds.
+     * Lifetime of this connection in milliseconds.
      *
      * @return connection lifetime in ms
      */
@@ -1332,42 +1341,42 @@ class Connection {
     }
 
     /**
-     * Get the packet handler for this connection.
+     * Packet handler for this connection.
      *
      * @return the packet handler
      */
     public ConnectionPacketHandler getPacketHandler() {return _handler;}
 
     /**
-     * Get total bytes sent on this connection.
+     * Total bytes sent on this connection.
      *
      * @return lifetime bytes sent
      */
     public long getLifetimeBytesSent() {return _lifetimeBytesSent.get();}
 
     /**
-     * Get total bytes received on this connection.
+     * Total bytes received on this connection.
      *
      * @return lifetime bytes received
      */
     public long getLifetimeBytesReceived() {return _lifetimeBytesReceived.get();}
 
     /**
-     * Get total duplicate messages sent on this connection.
+     * Total duplicate messages sent on this connection.
      *
      * @return lifetime duplicate messages sent
      */
     public long getLifetimeDupMessagesSent() {return _lifetimeDupMessageSent.get();}
 
     /**
-     * Get total duplicate bytes sent on this connection.
+     * Total duplicate bytes sent on this connection.
      *
      * @return lifetime duplicate bytes sent
      */
     public long getLifetimeDupBytesSent() {return _lifetimeDupBytesSent.get();}
 
     /**
-     * Get total duplicate messages received on this connection.
+     * Total duplicate messages received on this connection.
      *
      * @return lifetime duplicate messages received
      */
@@ -1439,7 +1448,7 @@ class Connection {
     }
 
     /**
-     *  Set or clear if we are choking the other side.
+     *  Choking state toward the other side.
      *  If on is true or the value has changed, this will call ackImmediately().
      *  @param on true for choking
      *  @since 0.9.29
@@ -1465,7 +1474,7 @@ class Connection {
     }
 
     /**
-     *  Set or clear if we are being choked by the other side.
+     *  Choked state set by the other side.
      *  @param on true for choked
      *  @since 0.9.29
      */
@@ -1505,21 +1514,27 @@ class Connection {
      */
     public boolean isChoked() {return _isChoked;}
 
-    /** how many packets have we sent and the other side has ACKed?
+    /** How many packets have we sent and the other side has ACKed?
      * @return Count of how many packets ACKed.
      */
     public long getAckedPackets() {return _ackedPackets.get();}
     /**
-     * Get the timestamp when this connection was created.
+     * Timestamp when this connection was created.
      *
      * @return creation timestamp
      */
     public long getCreatedOn() {return _createdOn;}
 
-    /** @return 0 if not sent */
+    /**
+     * Timestamp when a close was sent.
+     * @return 0 if not sent
+     */
     public long getCloseSentOn() {return _closeSentOn.get();}
 
-    /** @return 0 if not received */
+    /**
+     * Timestamp when a close was received.
+     * @return 0 if not received
+     */
     public long getCloseReceivedOn() {return _closeReceivedOn.get();}
 
     /**
@@ -1538,13 +1553,13 @@ class Connection {
     public void incrementUnackedPacketsReceived() {_unackedPacketsReceived.incrementAndGet();}
 
     /**
-     * Get the count of unacked packets received.
+     * Count of unacked packets received.
      *
      * @return number of unacked packets received
      */
     public int getUnackedPacketsReceived() {return _unackedPacketsReceived.get();}
 
-    /** how many packets have we sent but not yet received an ACK for?
+    /** How many packets have we sent but not yet received an ACK for?
      * @return Count of packets in-flight.
      */
     public int getUnackedPacketsSent() {
@@ -1552,25 +1567,27 @@ class Connection {
     }
 
     /**
-     * Get the congestion window end sequence number.
+     * Congestion window end sequence number.
      *
      * @return the congestion window end
      */
     public long getCongestionWindowEnd() {return _congestionWindowEnd;}
 
     /**
-     * Set the congestion window end sequence number.
+     * Congestion window end sequence number.
      *
      * @param endMsg the new congestion window end
      */
-    /** {_congestionWindowEnd */
     public void setCongestionWindowEnd(long endMsg) {_congestionWindowEnd = endMsg;}
 
-    /** @return the highest outbound packet we have received an ack for */
+    /**
+     * Highest outbound packet we have received an ack for.
+     * @return the highest outbound packet we have received an ack for
+     */
     public long getHighestAckedThrough() {return _highestAckedThrough.get();}
 
     /**
-     * Get the timestamp of the last send or receive activity.
+     * Timestamp of the last send or receive activity.
      *
      * @return the later of last send time and last receive time
      */
@@ -1696,7 +1713,7 @@ class Connection {
             setFuzz(5*1000); // sloppy timer, don't reschedule unless at least 5s later
         }
         /**
-         * timeReached.
+         * Perform the configured inactivity action.
          */
         public void timeReached() {
             if (_log.shouldDebug()) {
@@ -1784,6 +1801,7 @@ class Connection {
         }
 
         /**
+         * Time left before the inactivity timeout.
          * @return the time left
          */
         public final long getTimeLeft() {
@@ -1796,21 +1814,21 @@ class Connection {
     }
 
     /**
-     * Get the input stream that the local peer receives data on.
+     * Input stream that the local peer receives data on.
      *
      * @return the inbound message stream, non-null
      */
     public MessageInputStream getInputStream() {return _inputStream;}
 
     /**
-     * Get the output stream that the local peer sends data to the remote peer on.
+     * Output stream that the local peer sends data to the remote peer on.
      *
      * @return the outbound message stream, non-null
      */
     public MessageOutputStream getOutputStream() {return _outputStream;}
 
     /**
-     * toString.
+     * Human-readable summary of this connection.
      */
     @Override
     public String toString() {
@@ -1891,7 +1909,7 @@ class Connection {
         }
 
         /**
-         * cancel.
+         * Cancel the pending probe, if any.
          */
         @Override
         public synchronized boolean cancel() {
@@ -1900,7 +1918,7 @@ class Connection {
         }
 
         /**
-         * timeReached.
+         * Send the tail loss probe when the timer fires.
          */
         @Override
         public void timeReached() {
@@ -1946,7 +1964,7 @@ class Connection {
         RetransmitEvent() {super(_timer);}
 
         /**
-         * cancel.
+         * Cancel the pending retransmission timer.
          */
         @Override
         public synchronized boolean cancel() {
@@ -1955,7 +1973,7 @@ class Connection {
         }
 
         /**
-         * scheduleIfNotRunning.
+         * Schedule the retransmit timer if it is not already running.
          */
         public synchronized boolean scheduleIfNotRunning(long delay) {
             if (_scheduled) {return false;}
@@ -1981,7 +1999,7 @@ class Connection {
         }
 
         /**
-         * pushBackRTO.
+         * Push back the retransmission timeout to the given RTO.
          */
         public synchronized void pushBackRTO(int rto) {
             if (!_scheduled) {
@@ -1993,7 +2011,7 @@ class Connection {
         }
 
         /**
-         * timeReached.
+         * Retransmit packets and adjust congestion state when the timer fires.
          */
         @Override
         public void timeReached() {
@@ -2196,7 +2214,7 @@ class Connection {
         }
 
         /**
-         * timeReached.
+         * Send the next paced packet when the timer fires.
          */
         public void timeReached() {
             PacketLocal packet;
@@ -2252,7 +2270,7 @@ class Connection {
         }
 
         /**
-         * timeReached.
+         * Send an ACK for a duplicate packet when the timer fires.
          */
         public void timeReached() {
             boolean sent = false;
@@ -2279,17 +2297,17 @@ class Connection {
     }
 
     /**
-     * fired to reschedule event notification
+     * Notify waiters to reschedule the connection event.
      */
     class ConEvent extends SimpleTimer2.TimedEvent {
         /** Con event */
         ConEvent() {super();}
         /**
-         * timeReached.
+         * Notify event waiters when the timer fires.
          */
         public void timeReached() {eventOccurred();}
         /**
-         * toString.
+         * Description of the event.
          */
         @Override
         public String toString() {return "event on connection to " + getRemotePeerString();}
@@ -2327,7 +2345,7 @@ class Connection {
         }
 
         /**
-         * timeReached.
+         * Retransmit the packet when the timer fires.
          */
         public void timeReached() {retransmit();}
 

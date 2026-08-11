@@ -143,8 +143,8 @@ public class UIMessages {
     /**
      * Check if there are any messages.
      *
-     * @since 0.9.46
      * @return whether empty
+     * @since 0.9.46
      */
     public synchronized boolean isEmpty() {
         return _messages.peekLast() == null;

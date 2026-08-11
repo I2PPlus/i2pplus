@@ -330,7 +330,7 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
-     *  Get or create failure tracking state for a pool.
+     *  Failure tracking state for a pool, created if absent.
      *  Uses get()+putIfAbsent() instead of computeIfAbsent() to avoid
      *  per-call allocation of the fallback array and reduce lock contention.
      *  @return existing or newly-created long[2]
@@ -976,7 +976,7 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
-     *  Get the paired pool (opposite direction) for IB/OB balance comparison.
+     *  Paired pool (opposite direction) for IB/OB balance comparison.
      *  Handles both client pools (by destination) and exploratory pools (by pool reference).
      * @return the paired pool
      */

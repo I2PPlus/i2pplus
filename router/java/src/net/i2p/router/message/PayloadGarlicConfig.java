@@ -27,6 +27,8 @@ public class PayloadGarlicConfig extends GarlicConfig {
     private final I2NPMessage _payload;
 
     /**
+     * Create a garlic config wrapping the given I2NP message payload.
+     *
      * @param cert the certificate
      * @param id the message ID
      * @param expiration the expiration time
@@ -35,8 +37,8 @@ public class PayloadGarlicConfig extends GarlicConfig {
      */
     public PayloadGarlicConfig(Certificate cert, long id, long expiration,
                                DeliveryInstructions di, I2NPMessage message) {
-	super(null, cert, id, expiration, di);
-	_payload = message;
+        super(null, cert, id, expiration, di);
+        _payload = message;
     }
 
     /**
@@ -49,14 +51,14 @@ public class PayloadGarlicConfig extends GarlicConfig {
 
     @Override
     protected String getSubData() {
-	return "<payloadMessage>" + _payload + "</payloadMessage>";
+        return "<payloadMessage>" + _payload + "</payloadMessage>";
     }
 
     /**
      *  Not supported for single-clove configs.
      *
-     *  @since 0.9.12
      *  @throws UnsupportedOperationException always
+     *  @since 0.9.12
      */
     @Override
     public void addClove(GarlicConfig config) {
@@ -75,9 +77,9 @@ public class PayloadGarlicConfig extends GarlicConfig {
     /**
      *  Not supported for single-clove configs.
      *
-     *  @since 0.9.12
      *  @throws UnsupportedOperationException always
      *  @return the clove
+     *  @since 0.9.12
      */
     @Override
     public GarlicConfig getClove(int index) {

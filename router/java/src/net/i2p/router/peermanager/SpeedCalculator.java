@@ -15,7 +15,7 @@ import net.i2p.router.RouterContext;
  * - Congestion caps (D=0.75x, E=0.50x) multiply down the effective speed
  * - Actual peak 1-min tunnel throughput adds to bandwidth tier estimate when available
  * - When no throughput data exists, estimatedSpeed decays by 50% per 30 minutes
- *   to gradually deprioritize idle-but-capable peers
+ * to gradually deprioritize idle-but-capable peers
  */
 class SpeedCalculator {
 
@@ -39,7 +39,7 @@ class SpeedCalculator {
     private static final double CONGESTION_E = 0.50;
 
     /**
-     * calc.
+     * Calculate the estimated speed score for the given peer.
      */
     public static double calc(PeerProfile profile) {
         RouterContext context = profile.getContext();

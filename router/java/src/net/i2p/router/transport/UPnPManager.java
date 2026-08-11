@@ -66,8 +66,8 @@ import org.freenetproject.ForwardPortStatus;
  *   <li>Logging and monitoring capabilities</li>
  * </ul>
  *
- * @since 0.7.4
  * @author zzz
+ * @since 0.7.4
  */
 class UPnPManager {
     private final Log _log;

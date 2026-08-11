@@ -112,10 +112,10 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     }
 
     /**
-     *  Get the previous midnight (GMT) for the time given.
+     *  Previous midnight (GMT) for the time given.
      *  Caller must synch.
+     *  @return the previous midnight
      *  @since 0.9.10
-     * @return the previous midnight
      */
     private LocalDate getPreviousMidnight(long now) {
             return Instant.ofEpochMilli(now).atZone(GMT).toLocalDate();
@@ -180,21 +180,21 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     }
 
     /**
-     * Get the routing key using tomorrow's modData, not today's
+     * Routing key using tomorrow's modData, not today's
      *
-     * @since 0.9.10
      * @return the next routing key
+     * @since 0.9.10
      */
     public Hash getNextRoutingKey(Hash origKey) {
         return getKey(origKey, _nextModData);
     }
 
     /**
-     * Get the routing key for the specified date, not today's
+     * Routing key for the specified date, not today's
      *
      * @param time Java time
-     * @since 0.9.28
      * @return the routing key
+     * @since 0.9.28
      */
     public Hash getRoutingKey(Hash origKey, long time) {
         String modVal;

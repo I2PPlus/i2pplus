@@ -23,7 +23,7 @@ public interface CDQEntry {
     public void setEnqueueTime(long time);
 
     /**
-     * Get the enqueue timestamp.
+     * Enqueue timestamp.
      *
      * @return the enqueue timestamp
      */

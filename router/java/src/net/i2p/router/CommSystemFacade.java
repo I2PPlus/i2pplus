@@ -112,16 +112,16 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Determine under what conditions we are remotely reachable.
      *
-     * @since 0.9.20
      * @return the status
+     * @since 0.9.20
      */
     public Status getStatus() { return Status.OK; }
 
     /**
      *  Localized reachability status string.
      *
-     * @since 0.9.45
      * @return the localized status string
+     * @since 0.9.45
      */
     public String getLocalizedStatusString() {
         return getStatus().toStatusString();
@@ -199,16 +199,16 @@ public abstract class CommSystemFacade implements Service {
     /**
      *  Our two-letter country code determined from our external IP.
      *
-     * @since 0.8.11
      * @return the our country
+     * @since 0.8.11
      */
     public String getOurCountry() { return null; }
 
     /**
      *  Whether country blocking is enabled at all.
      *
-     * @since 0.8.13
      * @return whether in strict country
+     * @since 0.8.13
      */
     public boolean isInStrictCountry() { return false; }
 
@@ -216,8 +216,8 @@ public abstract class CommSystemFacade implements Service {
      *  Whether the given peer's country is blocked.
      *
      *  @param peer peer to check
-     *  @since 0.9.16
      *  @return whether in strict country
+     *  @since 0.9.16
      */
     public boolean isInStrictCountry(Hash peer) { return false; }
 
@@ -225,8 +225,8 @@ public abstract class CommSystemFacade implements Service {
      *  Whether the given router's country is blocked.
      *
      *  @param ri router info to check
-     *  @since 0.9.16
      *  @return whether in strict country
+     *  @since 0.9.16
      */
     public boolean isInStrictCountry(RouterInfo ri) { return false; }
 
@@ -349,8 +349,8 @@ public abstract class CommSystemFacade implements Service {
     /**
      *  Whether this is a dummy implementation with no real transports.
      *
-     * @since 0.8.13
      * @return whether dummy
+     * @since 0.8.13
      */
     public boolean isDummy() { return true; }
 
@@ -397,8 +397,8 @@ public abstract class CommSystemFacade implements Service {
     /**
      *  Factory for making X25519 key pairs.
      *
-     * @since 0.9.46
      * @return the x d h factory
+     * @since 0.9.46
      */
     public X25519KeyFactory getXDHFactory() { return null; }
 
@@ -419,8 +419,8 @@ public abstract class CommSystemFacade implements Service {
     /**
      *  Is this IP exempt from any incoming throttles or rejections
      *
-     * @since 0.9.58
      * @return whether exempt incoming
+     * @since 0.9.58
      */
     public boolean isExemptIncoming(String ip) { return false; }
 

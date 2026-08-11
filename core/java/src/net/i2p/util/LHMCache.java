@@ -7,10 +7,10 @@ import java.util.Map;
  *  A LinkedHashMap with a maximum size, for use as
  *  an LRU cache. Unsynchronized.
  *
- *  @since 0.9.3
  *
  *  @param <K> type of keys in this cache
  *  @param <V> type of values in this cache
+ *  @since 0.9.3
  */
 public class LHMCache<K, V> extends LinkedHashMap<K, V> {
     /** Maximum number of entries. */

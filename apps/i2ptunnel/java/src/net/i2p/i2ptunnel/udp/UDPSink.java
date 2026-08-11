@@ -53,8 +53,8 @@ public class UDPSink implements Sink {
      *  @param src ignored
      *  @param fromPort ignored
      *  @param toPort ignored
-     *  @since 0.9.53 added fromPort and toPort parameters, breaking change, sorry
      *  @throws RuntimeException on DatagramSocket IOException
+     *  @since 0.9.53 added fromPort and toPort parameters, breaking change, sorry
      */
     public void send(Destination src, int fromPort, int toPort, byte[] data) {
         // if data.length > this.sock.getSendBufferSize() ...

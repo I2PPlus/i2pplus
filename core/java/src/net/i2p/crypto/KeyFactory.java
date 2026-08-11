@@ -9,8 +9,8 @@ package net.i2p.crypto;
  * <p>This abstraction allows for different key generation strategies while maintaining
  * a consistent API across the I2P cryptographic framework.</p>
  *
- * @since 0.9.44
  * @author I2P Project
+ * @since 0.9.44
  */
 public interface KeyFactory {
 

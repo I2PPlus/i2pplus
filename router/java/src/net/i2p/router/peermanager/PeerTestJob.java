@@ -70,7 +70,7 @@ public class PeerTestJob extends JobImpl {
      * PROP_PEER_TEST_CONCURRENCY.
      */
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
-    /** default timeout in milliseconds */
+    /** Default timeout in milliseconds. */
     private static final int DEFAULT_PEER_TEST_TIMEOUT = 10000;
     /**
      * PROP_PEER_TEST_TIMEOUT.
@@ -92,7 +92,7 @@ public class PeerTestJob extends JobImpl {
     }
 
     /**
-     * Gets the average successful peer test time over the last minute.
+     * Average successful peer test time over the last minute.
      *
      * @return average test time in milliseconds, or 0 if no context available
      */
@@ -105,7 +105,7 @@ public class PeerTestJob extends JobImpl {
     }
 
     /**
-     * Gets the total average peer test time including both successful and slow tests over the last hour.
+     * Total average peer test time over the last hour, including slow tests.
      *
      * @return total average test time in milliseconds, or 0 if no context available
      * @since 0.9.49+
@@ -237,6 +237,8 @@ public class PeerTestJob extends JobImpl {
     }
 
     /**
+     * Name of this job.
+     *
      * @return the name
      */
     public String getName() { return "Test Peers"; }
@@ -440,7 +442,7 @@ public class PeerTestJob extends JobImpl {
     }
 
     /**
-     * what tunnel will we send the test out through?
+     * What tunnel will we send the test out through?
      *
      * @return tunnel id (or null if none are found)
      */
@@ -449,7 +451,7 @@ public class PeerTestJob extends JobImpl {
     }
 
     /**
-     * what tunnel will we get replies through?
+     * What tunnel will we get replies through?
      *
      * @return tunnel id (or null if none are found)
      */
@@ -551,14 +553,18 @@ public class PeerTestJob extends JobImpl {
             _matchFound = false;
         }
         /**
-         * continueMatching.
+         * Whether to keep matching replies for this test.
          */
         public boolean continueMatching() { return false; }
         /**
+         * Expiration time of this reply match.
+         *
          * @return the expiration
          */
         public long getExpiration() { return _expiration; }
         /**
+         * Whether the message matches this test.
+         *
          * @return whether match
          */
         public boolean isMatch(I2NPMessage message) {
@@ -674,11 +680,11 @@ public class PeerTestJob extends JobImpl {
                    data.bandwidthTier.equals("X") || data.bandwidthTier.equals("N");
         }
         /**
-         * matchFound.
+         * Whether a matching reply was found.
          */
         public boolean matchFound() { return _matchFound; }
         /**
-         * toString.
+         * String form of this selector for logging.
          */
         @Override
         public String toString() {
@@ -706,11 +712,13 @@ public class PeerTestJob extends JobImpl {
             _testBegin = context.clock().now();
         }
         /**
+         * Name of this job.
+         *
          * @return the name
          */
         public String getName() { return "Verify Peer Test"; }
         /**
-         * runJob.
+         * Process the matched reply and record the test result.
          */
         public void runJob() {
             long responseTime = getContext().clock().now() - _testBegin;
@@ -781,7 +789,7 @@ public class PeerTestJob extends JobImpl {
         }
 
         /**
-         * setMessage.
+         * Store the message for this job.
          */
         public void setMessage(I2NPMessage message) {
             // noop
@@ -808,12 +816,14 @@ public class PeerTestJob extends JobImpl {
             _selector = sel;
         }
         /**
+         * Name of this job.
+         *
          * @return the name
          */
         public String getName() { return "Timeout Peer Test"; }
         private boolean getShouldFailPeer() { return true; }
         /**
-         * runJob.
+         * Run the timeout handling job.
          */
         public void runJob() {
             if (_selector.matchFound())

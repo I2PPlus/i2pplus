@@ -36,20 +36,20 @@ public class Points implements Comparable<Points> {
     }
 
     /**
-     *  Get the total points.
+     *  Total points accumulated.
      *
+     *  @return the points
      *  @since 0.9.38
-     * @return the points
      */
     public double getPoints() {
         return points;
     }
 
     /**
-     *  Get the list of reasons.
+     *  Reasons accumulated with the points.
      *
+     *  @return the reasons
      *  @since 0.9.38
-     * @return the reasons
      */
     public List<String> getReasons() {
         return reasons;

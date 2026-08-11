@@ -62,7 +62,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
                         + 2 // payload length
                         + CHECKSUM_LENGTH;
 
-    /** unused */
+    /** Unused custom message-type builders. */
     private static final Map<Integer, Builder> _builders = new ConcurrentHashMap<>(1);
 
     /**
@@ -73,9 +73,9 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     @Deprecated
     public static final void registerBuilder(Builder builder, int type) { _builders.put(Integer.valueOf(type), builder); }
 
-    /** interface for extending the types of messages handled - unused */
+    /** Interface for extending the types of messages handled - unused. */
     public interface Builder {
-        /** instantiate a new I2NPMessage to be populated shortly */
+        /** Instantiate a new I2NPMessage to be populated shortly. */
         public I2NPMessage build(I2PAppContext ctx);
     }
 
@@ -95,12 +95,12 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *
      *<pre>
      *  Specifically:
-     *    1 byte type (if caller didn't read already, as specified by the type param
-     *    4 byte ID
-     *    8 byte expiration
-     *    2 byte size
-     *    1 byte checksum
-     *    size bytes of payload (read by readMessage() in implementation)
+     *  1 byte type (if caller didn't read already, as specified by the type param
+     *  4 byte ID
+     *  8 byte expiration
+     *  2 byte size
+     *  1 byte checksum
+     *  size bytes of payload (read by readMessage() in implementation)
      *</pre>
      *
      *  @param type the message type or -1 if we should read it here
@@ -111,7 +111,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     }
 
     /**
-     *  Set a limit on the max to read from the data buffer, so that
+     *  Limit the max to read from the data buffer, so that
      *  we can use a large buffer but prevent the reader from reading off the end.
      *
      *  @param type the message type or -1 if we should read it here
@@ -188,7 +188,8 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     }
 
     /**
-     * @return the unique id
+     *  Unique id for this message, lazily initialized when negative.
+     *  @return the unique id
      */
     public synchronized long getUniqueId() {
         // Lazy initialization of value
@@ -216,7 +217,8 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     public void setMessageExpiration(long exp) { _expiration = exp; }
 
     /**
-     * @return the message size
+     *  Serialized message size, including the 16-byte header.
+     *  @return the message size
      */
     public synchronized int getMessageSize() {
         return calculateWrittenLength() + (15 + CHECKSUM_LENGTH); // 16 bytes in the header
@@ -232,7 +234,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     }
 
     /**
-     * toByteArray.
+     *  The message serialized into a new byte array.
      */
     public byte[] toByteArray() {
         byte[] data = new byte[getMessageSize()];
@@ -246,8 +248,8 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     }
 
     /**
-     * write the message to the buffer, returning the number of bytes written.
-     * the data is formatted so as to be self contained, with the type, size,
+     * Write the message to the buffer, returning the number of bytes written.
+     * The data is formatted so as to be self contained, with the type, size,
      * expiration, unique id, as well as a checksum bundled along.
      * Full 16 byte header for NTCP 1.
      *
@@ -293,11 +295,11 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         }
     }
 
-    /** calculate the message body's length (not including the header and footer */
+    /** Calculate the message body's length (not including the header and footer). */
     protected abstract int calculateWrittenLength();
 
     /**
-     * write the message body to the output array, starting at the given index.
+     * Write the message body to the output array, starting at the given index.
      * @return the index into the array after the last byte written (NOT the length)
      */
     protected abstract int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException;
@@ -351,7 +353,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     }
 
     /**
-     * readMessage.
+     *  Read the message fields from the byte array, ignoring the handler.
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException {
         // ignore the handler (overridden in subclasses if necessary

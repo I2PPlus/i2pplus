@@ -63,8 +63,8 @@ import java.security.spec.X509EncodedKeySpec;
  * @see EdDSAPublicKey
  * @see EdDSAPrivateKey
  * @see net.i2p.crypto.provider.I2PProvider
- * @since 0.9.15
  * @author str4d
+ * @since 0.9.15
  */
 public final class KeyFactory extends KeyFactorySpi {
 

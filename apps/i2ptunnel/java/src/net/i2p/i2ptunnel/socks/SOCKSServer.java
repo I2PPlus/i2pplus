@@ -110,8 +110,8 @@ abstract class SOCKSServer {
     public abstract I2PSocket getDestinationI2PSocket(I2PSOCKSTunnel t) throws SOCKSException;
 
     /**
-     *  @since 0.9.27
      * @return whether use outproxy plugin
+     *  @since 0.9.27
      */
     private boolean shouldUseOutproxyPlugin() {
         return Boolean.parseBoolean(props.getProperty(I2PTunnelHTTPClientBase.PROP_USE_OUTPROXY_PLUGIN, "true"));

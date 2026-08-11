@@ -51,8 +51,8 @@ public class Messages extends Translate {
      *
      *  @param langCode two-letter lower-case
      *  @param dflt e.g. "English"
-     *  @since 0.9.5
      *  @return the display language
+     *  @since 0.9.5
      */
     public static String getDisplayLanguage(String langCode, String dflt, I2PAppContext ctx) {
         return Translate.getDisplayLanguage(langCode, dflt, ctx, BUNDLE_NAME);

@@ -25,9 +25,9 @@ import java.util.Set;
  * <p>Typical use cases include UI components and Sybil attack detection
  * where thread safety is not required.</p>
  *
- * @since 0.9.58
  *
  * @param <K> type of objects being counted
+ * @since 0.9.58
  */
 public class ObjectCounterUnsafe<K> {
     private final HashMap<K, Int> map = new HashMap<>();

@@ -33,7 +33,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
     }
 
     /**
-     * clear.
+     * Remove the single element.
      */
     @Override
     public void clear() {
@@ -41,7 +41,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
     }
 
     /**
-     * contains.
+     * Whether the set contains the given element.
      */
     @Override
     public boolean contains(Object o) {
@@ -49,6 +49,8 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
     }
 
     /**
+     * Whether the set is empty.
+     *
      * @return whether empty
      */
     @Override
@@ -57,7 +59,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
     }
 
     /**
-     * remove.
+     * Remove the element if it matches.
      */
     @Override
     public boolean remove(Object o) {
@@ -68,7 +70,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
     }
 
     /**
-     * size.
+     * Number of elements, 0 or 1.
      */
     @Override
     public int size() {
@@ -76,7 +78,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
     }
 
     /**
-     * iterator.
+     * Iterator over the single element.
      */
     public Iterator<E> iterator() {
         return new RSSIterator();
@@ -86,6 +88,8 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
         boolean done;
 
         /**
+         * Whether the next element is present.
+         *
          * @return whether next is present
          */
         @Override
@@ -94,7 +98,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
         }
 
         /**
-         * next.
+         * Return the single element.
          */
         public E next() {
             if (!hasNext())
@@ -104,7 +108,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
         }
 
         /**
-         * remove.
+         * Remove the single element after next() has been called.
          */
         public void remove() {
             if (_elem == null || !done)

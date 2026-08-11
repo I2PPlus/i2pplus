@@ -11,7 +11,7 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 
 /**
- * Get messages off an In-JVM queue, zero-copy.
+ * Fetches messages off an In-JVM queue, zero-copy.
  * Uses a shared dispatcher thread instead of one thread per instance.
  *
  * @author zzz

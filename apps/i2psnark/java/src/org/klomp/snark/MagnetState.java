@@ -28,21 +28,21 @@ class MagnetState {
     private final byte[] infohash;
     private boolean complete;
 
-    /** if false, nothing below is valid */
+    /** If false, nothing below is valid. */
     private boolean isInitialized;
 
     private int metaSize;
     private int totalChunks;
 
-    /** bitfield for the metainfo chunks - will remain null if we start out complete */
+    /** Bitfield for the metainfo chunks; remains null if we start out complete. */
     private BitField requested;
 
     private BitField have;
 
-    /** bitfield for the metainfo */
+    /** Bitfield for the metainfo. */
     private byte[] metainfoBytes;
 
-    /** only valid when finished */
+    /** Only valid when finished. */
     private MetaInfo metainfo;
 
     /**
@@ -82,7 +82,7 @@ class MagnetState {
     }
 
     /**
-     * Sets the MetaInfo for a completed magnet download.
+     * Store the MetaInfo for a completed magnet download.
      *
      * @param meta the completed MetaInfo
      */
@@ -131,7 +131,7 @@ class MagnetState {
     }
 
     /**
-     * Get the size of a specific chunk.
+     * The size of a specific chunk.
      *
      * @param chunk the chunk number
      * @return the size of the chunk in bytes
@@ -141,7 +141,7 @@ class MagnetState {
     }
 
     /**
-     * Get the number of chunks remaining to be downloaded.
+     * The number of chunks remaining to be downloaded.
      *
      * @return the number of chunks remaining
      * @throws IllegalArgumentException if not initialized
@@ -153,7 +153,7 @@ class MagnetState {
     }
 
     /**
-     * Get the next chunk number to request. Uses a random selection algorithm to avoid requesting
+     * The next chunk number to request. Uses a random selection algorithm to avoid requesting
      * the same chunks repeatedly.
      *
      * @return the next chunk number to request
@@ -179,7 +179,7 @@ class MagnetState {
     }
 
     /**
-     * Get the data for a specific chunk.
+     * The data for a specific chunk.
      *
      * @param chunk the chunk number to retrieve
      * @return the chunk data as a byte array

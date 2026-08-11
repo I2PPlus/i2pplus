@@ -188,7 +188,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Sets the inbound/outbound tunnel counts and backup quantities on the shared session and
+     * Configure the inbound/outbound tunnel counts and backup quantities on the shared session and
      * every torrent's own session (multi-dest), so they all scale with usage and shrink back
      * down when idle.
      *
@@ -247,8 +247,8 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
     /**
      * Return the current inbound tunnel count
      *
-     * @since 0.9.66+
      * @return the active inbound count
+     * @since 0.9.66+
      */
     public int getActiveInboundCount() {
         try {
@@ -261,8 +261,8 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
     /**
      * Return the current outbound tunnel count
      *
-     * @since 0.9.66+
      * @return the active outbound count
+     * @since 0.9.66+
      */
     public int getActiveOutboundCount() {
         try {

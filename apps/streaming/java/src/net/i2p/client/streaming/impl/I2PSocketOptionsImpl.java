@@ -36,7 +36,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     public static final int DEFAULT_CONNECT_TIMEOUT = 30*1000;
 
     /**
-     *  Sets max buffer size, connect timeout, read timeout, and write timeout
+     *  Max buffer size, connect timeout, read timeout, and write timeout
      *  from System properties. Does not set local port or remote port.
      */
     public I2PSocketOptionsImpl() {
@@ -60,7 +60,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     }
 
     /**
-     *  Sets max buffer size, connect timeout, read timeout, and write timeout
+     *  Max buffer size, connect timeout, read timeout, and write timeout
      *  from properties. Does not set local port or remote port.
      *
      *  As of 0.9.19, defaults in opts are honored.
@@ -72,7 +72,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     }
 
     /**
-     *  Sets max buffer size, connect timeout, read timeout, and write timeout
+     *  Max buffer size, connect timeout, read timeout, and write timeout
      *  from properties. Does not set local port or remote port.
      *
      *  As of 0.9.19, defaults in opts are honored.
@@ -92,7 +92,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     }
 
     /**
-     *  Sets max buffer size, connect timeout, read timeout, and write timeout
+     *  Max buffer size, connect timeout, read timeout, and write timeout
      *  from properties. Does not set local port or remote port.
      */
     protected void init(Properties opts) {
@@ -103,6 +103,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     }
 
     /**
+     * Parse an integer property value, with a default on failure.
      * @return the int
      */
     protected static int getInt(Properties opts, String name, int defaultVal) {

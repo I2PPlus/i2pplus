@@ -269,7 +269,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  gij or JamVM with GNU Classpath
+     *  Gij or JamVM with GNU Classpath
      * @return whether g n u
      */
     public static boolean isGNU() {
@@ -277,33 +277,40 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  @since 0.9.23
+     *  True if Gentoo.
+     *
      * @return whether gentoo
+     * @since 0.9.23
      */
     public static boolean isGentoo() {
         return _isGentoo;
     }
 
     /**
-     *  @since 0.9.26
+     *  True if OpenJDK.
+     *
      * @return whether open j d k
+     * @since 0.9.26
      */
     public static boolean isOpenJDK() {
         return _isOpenJDK;
     }
 
     /**
-     *  @since 0.9.8
-     * speed: do not cripple down for powerful ARM
+     *  Speed: do not cripple down for powerful ARM
+     *
      * @return whether a r m
+     * @since 0.9.8
      */
     public static boolean isARM() {
         return _isArm && (getCores() < 4 || getCores() == 4 && System.getProperty("os.arch").startsWith("arm"));
     }
 
     /**
-     *  @since 0.9.14
+     *  True if x86.
+     *
      * @return whether x86
+     * @since 0.9.14
      */
     public static boolean isX86() {
         return _isX86;
@@ -312,8 +319,8 @@ public abstract class SystemVersion {
     /**
      *  Is this a very slow interpreted mode VM?
      *
-     *  @since 0.9.38
      * @return whether zero v m
+     * @since 0.9.38
      */
     public static boolean isZeroVM() {
         return _isZero;
@@ -323,8 +330,8 @@ public abstract class SystemVersion {
      *  Our best guess on whether this is a slow architecture / OS / JVM,
      *  using some simple heuristics.
      *
-     *  @since 0.9.30
      * @return whether slow
+     * @since 0.9.30
      */
     public static boolean isSlow() {
         // we don't put the NBI call in the static field,
@@ -354,6 +361,7 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  True if the JVM is Java 8 or higher, false for Android.
      *
      *  @return true if Java 1.8 or higher, false for Android.
      *  @since 0.9.15
@@ -363,6 +371,7 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  True if the JVM is Java 9 or higher, false for Android.
      *
      *  @return true if Java 9 or higher, false for Android.
      *  @since 0.9.23
@@ -372,6 +381,7 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  True if the JVM is Java 10 or higher, false for Android.
      *
      *  @return true if Java 10 or higher, false for Android.
      *  @since 0.9.33
@@ -381,6 +391,7 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  True if the JVM is Java 11 or higher, false for Android.
      *
      *  @return true if Java 11 or higher, false for Android.
      *  @since 0.9.35
@@ -390,6 +401,7 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  True if the JVM is Java 12 or higher, false for Android.
      *
      *  @return true if Java 12 or higher, false for Android.
      *  @since 0.9.59+
@@ -399,6 +411,7 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  True if the JVM is Java 13 or higher, false for Android.
      *
      *  @return true if Java 13 or higher, false for Android.
      *  @since 0.9.59+
@@ -408,6 +421,7 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  True if the JVM is Java 14 or higher, false for Android.
      *
      *  @return true if Java 14 or higher, false for Android.
      *  @since 0.9.59+
@@ -417,6 +431,7 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  True if the JVM is Java 15 or higher, false for Android.
      *
      *  @return true if Java 15 or higher, false for Android.
      *  @since 0.9.59+
@@ -426,6 +441,7 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  True if the JVM is Java 16 or higher, false for Android.
      *
      *  @return true if Java 16 or higher, false for Android.
      *  @since 0.9.59+
@@ -435,6 +451,7 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  True if the JVM is Java 17 or higher, false for Android.
      *
      *  @return true if Java 17 or higher, false for Android.
      *  @since 0.9.59+
@@ -444,6 +461,7 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  True if the JVM is Java 18 or higher, false for Android.
      *
      *  @return true if Java 18 or higher, false for Android.
      *  @since 0.9.59+
@@ -453,6 +471,7 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  True if the JVM is Java 19 or higher, false for Android.
      *
      *  @return true if Java 19 or higher, false for Android.
      *  @since 0.9.59+
@@ -462,6 +481,7 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  True if the JVM is Java 20 or higher, false for Android.
      *
      *  @return true if Java 20 or higher, false for Android.
      *  @since 0.9.59+
@@ -471,6 +491,7 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  True if the JVM is Java 21 or higher, false for Android.
      *
      *  @return true if Java 21 or higher, false for Android.
      *  @since 0.9.59+
@@ -480,6 +501,7 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  True if the JVM is Java 22 or higher, false for Android.
      *
      *  @return true if Java 21 or higher, false for Android.
      *  @since 0.9.59+
@@ -608,8 +630,8 @@ public abstract class SystemVersion {
     /**
      *  Runtime.getRuntime().maxMemory() but check for bogus values
      *
-     *  @since 0.9.8
      * @return the max memory
+     * @since 0.9.8
      */
     public static long getMaxMemory() {
         long maxMemory = Runtime.getRuntime().maxMemory();
@@ -759,8 +781,8 @@ public abstract class SystemVersion {
     /**
      * Retrieve CPU Load of the JVM.
      *
-     * @since 0.9.57+
      * @return the c p u load
+     * @since 0.9.57+
      */
     public static int getCPULoad() {
         OperatingSystemMXBean osmxb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
@@ -773,8 +795,8 @@ public abstract class SystemVersion {
     /**
      * Retrieve CPU Load Average of the JVM.
      *
-     * @since 0.9.57+
      * @return the c p u load avg
+     * @since 0.9.57+
      */
     public static int getCPULoadAvg() {
         if (_ctx == null || _ctx.statManager() == null || _ctx.statManager().getRate("router.cpuLoad") == null) {
@@ -811,8 +833,8 @@ public abstract class SystemVersion {
     /**
      * Retrieve System Load as percentage (100% equals full system load)
      *
-     * @since 0.9.57+
      * @return the system load
+     * @since 0.9.57+
      */
     public static int getSystemLoad() {
         if (_ctx == null || _ctx.statManager() == null) {
@@ -853,8 +875,8 @@ public abstract class SystemVersion {
     /**
      * Retrieve Tunnel build success as a percentage.
      *
-     * @since 0.9.58+
      * @return the tunnel build success
+     * @since 0.9.58+
      */
     public static int getTunnelBuildSuccess() {
         I2PAppContext context = I2PAppContext.getGlobalContext();

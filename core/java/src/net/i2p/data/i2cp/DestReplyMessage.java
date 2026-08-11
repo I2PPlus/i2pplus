@@ -62,8 +62,8 @@ public class DestReplyMessage extends I2CPMessageImpl {
     /**
      *  Gets the hash of the destination.
      *
-     * @since 0.8.3
      * @return the hash
+     * @since 0.8.3
      */
     public Hash getHash() {
         return _hash;

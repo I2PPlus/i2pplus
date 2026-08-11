@@ -34,28 +34,28 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Therefore the compatibility situation is as follows:
  *
  * Compatibility:
- *    old streaming -&gt; new streaming: sends proto anything, rcvs proto anything
- *    new streaming -&gt; old streaming: sends PROTO_STREAMING, ignores rcvd proto
- *    old datagram -&gt; new datagram: sends proto anything, rcvs proto anything
- *    new datagram -&gt; old datagram: sends PROTO_DATAGRAM, ignores rcvd proto
- *    In all the above cases, streaming and datagram receive traffic for the other
- *    protocol, same as before.
+ * old streaming -&gt; new streaming: sends proto anything, rcvs proto anything
+ * new streaming -&gt; old streaming: sends PROTO_STREAMING, ignores rcvd proto
+ * old datagram -&gt; new datagram: sends proto anything, rcvs proto anything
+ * new datagram -&gt; old datagram: sends PROTO_DATAGRAM, ignores rcvd proto
+ * In all the above cases, streaming and datagram receive traffic for the other
+ * protocol, same as before.
  *
- *    old datagram -&gt; new muxed: doesn't work because the old sends proto 0 but the udp side
- *                               of the mux registers with PROTO_DATAGRAM, so the datagrams
- *                               go to the streaming side, same as before.
- *    old streaming -&gt; new muxed: works
+ * old datagram -&gt; new muxed: doesn't work because the old sends proto 0 but the udp side
+ *                            of the mux registers with PROTO_DATAGRAM, so the datagrams
+ *                            go to the streaming side, same as before.
+ * old streaming -&gt; new muxed: works
  *
  * Typical Usage:
- *    Streaming + datagrams:
- *        I2PSocketManager sockMgr = getSocketManager();
+ * Streaming + datagrams:
+ * I2PSocketManager sockMgr = getSocketManager();
  *        I2PSession session = sockMgr.getSession();
  *        session.addMuxedSessionListener(myI2PSessionMuxedListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
  *         * or *
  *        session.addSessionListener(myI2PSessionListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
  *        session.sendMessage(dest, payload, I2PSession.PROTO_DATAGRAM, fromPort, toPort);
  *
- *    Datagrams only, with multiple ports:
+ * Datagrams only, with multiple ports:
  *        I2PClient client = I2PClientFactory.createClient();
  *        ...
  *        I2PSession session = client.createSession(...);
@@ -64,7 +64,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *        session.addSessionListener(myI2PSessionListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
  *        session.sendMessage(dest, payload, I2PSession.PROTO_DATAGRAM, fromPort, toPort);
  *
- *    Multiple streaming ports:
+ * Multiple streaming ports:
  *        Needs some streaming lib hacking
  *
  * @author zzz

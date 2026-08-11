@@ -116,7 +116,7 @@ class PeerTestState {
      */
     public PeerState2 getAlice() { return _alice; }
     /**
-     *  Set Alice's PeerState2 (SSU2 only).
+     *  Alice's PeerState2 (SSU2 only).
      *  @param alice Alice's SSU2 state
      *  @since 0.9.54
      */
@@ -124,7 +124,7 @@ class PeerTestState {
         _alice = alice;
     }
     /**
-     *  Set Alice's IP, port, and hash.
+     *  Alice's IP, port, and hash.
      *  @param ip Alice's IP address
      *  @param port Alice's port
      *  @param hash Alice's Hash (SSU2 only), null for SSU1
@@ -154,7 +154,7 @@ class PeerTestState {
     public Hash getCharlieHash() { return _charlieHash; }
 
     /**
-     *  Set Charlie's IP, port, and hash.
+     *  Charlie's IP, port, and hash.
      *  Saves the previous Charlie hash for tracking rotations.
      *  @param ip Charlie's IP address
      *  @param port Charlie's port
@@ -183,7 +183,7 @@ class PeerTestState {
      */
     public InetAddress getAliceIPFromCharlie() { return _aliceIPFromCharlie; }
     /**
-     *  Set Alice's IP as reported by Charlie.
+     *  Alice's IP as reported by Charlie.
      *  @param ip Alice's IP from Charlie's perspective
      */
     public void setAliceIPFromCharlie(InetAddress ip) { _aliceIPFromCharlie = ip; }
@@ -204,7 +204,7 @@ class PeerTestState {
      */
     public int getCharliePort() { return _charliePort; }
     /**
-     *  Set Charlie's port.
+     *  Charlie's port.
      *  @param charliePort Charlie's port number
      */
     public void setCharliePort(int charliePort) { _charliePort = charliePort; }
@@ -215,7 +215,7 @@ class PeerTestState {
      */
     public int getAlicePortFromCharlie() { return _alicePortFromCharlie; }
     /**
-     *  Set Alice's port as reported by Charlie.
+     *  Alice's port as reported by Charlie.
      *  @param alicePortFromCharlie Alice's port from Charlie's perspective
      */
     public void setAlicePortFromCharlie(int alicePortFromCharlie) { _alicePortFromCharlie = alicePortFromCharlie; }
@@ -226,7 +226,7 @@ class PeerTestState {
      */
     public SessionKey getAliceIntroKey() { return _aliceIntroKey; }
     /**
-     *  Set Alice's intro key.
+     *  Alice's intro key.
      *  @param key Alice's intro key
      */
     public void setAliceIntroKey(SessionKey key) { _aliceIntroKey = key; }
@@ -246,7 +246,7 @@ class PeerTestState {
     public SessionKey getAliceMACKey() { return _aliceMACKey; }
 
     /**
-     *  Set Alice's cipher and MAC keys.
+     *  Alice's cipher and MAC keys.
      *  @param ck cipher key
      *  @param mk MAC key
      *  @since 0.9.52
@@ -262,7 +262,7 @@ class PeerTestState {
      */
     public SessionKey getCharlieIntroKey() { return _charlieIntroKey; }
     /**
-     *  Set Charlie's intro key.
+     *  Charlie's intro key.
      *  @param key Charlie's intro key
      */
     public void setCharlieIntroKey(SessionKey key) { _charlieIntroKey = key; }
@@ -279,7 +279,7 @@ class PeerTestState {
      */
     public long getLastSendTime() { return _lastSendTime; }
     /**
-     *  Set the time we last sent a packet.
+     *  Time we last sent a packet.
      *  @param when the last send timestamp
      */
     public void setLastSendTime(long when) { _lastSendTime = when; }
@@ -290,7 +290,7 @@ class PeerTestState {
      */
     public long getReceiveAliceTime() { return _receiveAliceTime; }
     /**
-     *  Set the time we last received from Alice.
+     *  Time we last received from Alice.
      *  @param when the receive timestamp
      */
     public void setReceiveAliceTime(long when) { _receiveAliceTime = when; }
@@ -301,7 +301,7 @@ class PeerTestState {
      */
     public long getReceiveBobTime() { return _receiveBobTime; }
     /**
-     *  Set the time we last received from Bob.
+     *  Time we last received from Bob.
      *  @param when the receive timestamp
      */
     public void setReceiveBobTime(long when) { _receiveBobTime = when; }
@@ -312,7 +312,7 @@ class PeerTestState {
      */
     public long getReceiveCharlieTime() { return _receiveCharlieTime; }
     /**
-     *  Set the time we last received from Charlie.
+     *  Time we last received from Charlie.
      *  @param when the receive timestamp
      */
     public void setReceiveCharlieTime(long when) { _receiveCharlieTime = when; }
@@ -325,7 +325,7 @@ class PeerTestState {
     public long getSendAliceTime() { return _sendAliceTime; }
 
     /**
-     *  Set when we last sent to Alice (SSU2 Bob only).
+     *  When we last sent to Alice (SSU2 Bob only).
      *  @param when the send timestamp
      *  @since 0.9.57
      */
@@ -339,7 +339,7 @@ class PeerTestState {
     public long getSendCharlieTime() { return _sendCharlieTime; }
 
     /**
-     *  Set when we last sent to Charlie (SSU2 Alice only).
+     *  When we last sent to Charlie (SSU2 Alice only).
      *  @param when the send timestamp
      *  @since 0.9.57
      */
@@ -353,14 +353,14 @@ class PeerTestState {
     public int getStatus() { return _status; }
 
     /**
-     *  Set the status code sent to Alice (SSU2 Bob only).
+     *  Status code sent to Alice (SSU2 Bob only).
      * @param status the status
      * @since 0.9.57
      */
     public void setStatus(int status) { _status = status; }
 
     /**
-     *  Get the test data for retransmission.
+     *  Test data for retransmission.
      *  SSU2 only, used when we are Alice, Bob, or Charlie.
      *  @return the test data, or null if not set
      *  @since 0.9.57

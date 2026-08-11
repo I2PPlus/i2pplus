@@ -50,47 +50,53 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
+     * How and where to deliver this clove.
      * @return the instructions
      */
     public DeliveryInstructions getInstructions() { return _instructions; }
     /**
-     * setInstructions.
+     * Delivery instructions for this clove.
      */
     public void setInstructions(DeliveryInstructions instr) { _instructions = instr; }
     /**
+     * The message payload wrapped in this clove.
      * @return the data
      */
     public I2NPMessage getData() { return _msg; }
     /**
-     * setData.
+     * Message payload wrapped in this clove.
      */
     public void setData(I2NPMessage msg) { _msg = msg; }
     /**
+     * Unique identifier for this clove.
      * @return the clove id
      */
     public long getCloveId() { return _cloveId; }
     /**
-     * setCloveId.
+     * Unique identifier for this clove.
      */
     public void setCloveId(long id) { _cloveId = id; }
     /**
+     * Time after which this clove expires.
      * @return the expiration
      */
     public long getExpiration() { return _expiration; }
     /**
-     * setExpiration.
+     * Time after which this clove expires.
      */
     public void setExpiration(long exp) { _expiration = exp; }
     /**
+     * Certificate authorizing delivery of this clove.
      * @return the certificate
      */
     public Certificate getCertificate() { return _certificate; }
     /**
-     * setCertificate.
+     * Certificate authorizing delivery of this clove.
      */
     public void setCertificate(Certificate cert) { _certificate = cert; }
 
     /**
+     * Read the clove from a stream; not supported.
      *  @deprecated unused, use byte array method to avoid copying
      *  @throws UnsupportedOperationException always
      */
@@ -100,6 +106,7 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
+     * Write the clove to a stream; not supported.
      *  @deprecated unused, use byte array method to avoid copying
      *  @throws UnsupportedOperationException always
      */
@@ -109,6 +116,7 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
+     * Read the clove from a byte array.
      *  @return length read
      */
     public int readBytes(byte[] source, int offset) throws DataFormatException {
@@ -187,15 +195,17 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
+     *  Size of the ratchet-format clove.
+     *
+     *  @return the ratchet-clove size
      *  @since 0.9.44
-     * @return the size ratchet
      */
     public int getSizeRatchet() {
         return _instructions.getSize() + _msg.getMessageSize() - 7;
     }
 
     /**
-     * estimateSize.
+     *  Estimated serialized length of this clove.
      */
     public int estimateSize() {
         return _instructions.getSize()
@@ -206,7 +216,7 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
-     * equals.
+     *  Compare all clove fields for equality.
      */
     @Override
     public boolean equals(Object obj) {
@@ -221,7 +231,8 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
-     * @return whether h code is present
+     *  Hash code covering all clove fields.
+     *  @return whether h code is present
      */
     @Override
     public int hashCode() {
@@ -233,7 +244,7 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
-     * toString.
+     *  String form for debugging, showing the instructions, expiration, and data.
      */
     @Override
     public String toString() {

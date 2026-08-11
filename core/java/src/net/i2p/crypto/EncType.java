@@ -264,9 +264,9 @@ public enum EncType {
     /**
      *  Checks if this is a post-quantum encryption type.
      *
-     *  @since 0.9.67
      *
      *  @return true if this is a PQ type
+     *  @since 0.9.67
      */
     public boolean isPQ() {
         return isPQ;

@@ -110,7 +110,7 @@ public class NTCPConnection implements Closeable {
      */
     private final PriBlockingQueue<OutNetMessage> _outbound;
     /**
-     *  current prepared OutNetMessages, or empty - synchronize on _writeLock
+     *  Current prepared OutNetMessages, or empty - synchronize on _writeLock
      */
     private final List<OutNetMessage> _currentOutbound;
     /** Current partially read I2NP message. */
@@ -346,16 +346,22 @@ public class NTCPConnection implements Closeable {
     public void setKey(SelectionKey key) { _conKey = key; }
 
     /**
+     *  Whether this is an inbound connection.
+     *
      *  @return true if inbound
      */
     public boolean isInbound() { return _isInbound; }
 
     /**
+     *  Whether the connection is established.
+     *
      *  @return true if established
      */
     public boolean isEstablished() { return _establishState.isComplete(); }
 
     /**
+     *  Whether the connection is over IPv6.
+     *
      *  @return true if IPv6
      *  @since IPv6
      */
@@ -569,7 +575,7 @@ public class NTCPConnection implements Closeable {
     public int getVersion() { return _version; }
 
     /**
-     *  Set version 2 from InboundEstablishState.
+     *  Records version 2 from InboundEstablishState.
      *  Just for logging, so we know before finishInboundEstablish() is called.
      *
      *  @param ver the version to set
@@ -584,13 +590,15 @@ public class NTCPConnection implements Closeable {
     public void setMayDisconnect() { _mayDisconnect = true; }
 
     /**
+     *  Whether the connection may be disconnected.
+     *
      *  @return true if may disconnect
      *  @since 0.9.24
      */
     public boolean getMayDisconnect() { return _mayDisconnect; }
 
     /**
-     *  workaround for EventPumper
+     *  Workaround for EventPumper.
      *  @since 0.8.12
      */
     public void clearZeroRead() {
@@ -1756,6 +1764,8 @@ public class NTCPConnection implements Closeable {
         private boolean _terminated;
 
         /**
+         *  NTCP2 read state initialized from the given key data.
+         *
          *  @param keyData using first 24 bytes
          */
         public NTCP2ReadState(CipherState rcvr, byte[] keyData) {
@@ -2074,6 +2084,8 @@ public class NTCPConnection implements Closeable {
         private int _read;
 
         /**
+         *  Read state for the NTCP2 failure message.
+         *
          *  @param toRead how much left to read
          *  @param validFramesRcvd to be sent in termination message
          */
@@ -2176,6 +2188,8 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
+     *  Atomically updates the write-interest-pending flag.
+     *
      *  @param expected expected value
      *  @param update new value
      *  @return true if CAS succeeded

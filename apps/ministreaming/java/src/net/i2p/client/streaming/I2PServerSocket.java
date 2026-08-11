@@ -48,13 +48,13 @@ public interface I2PServerSocket {
     public AcceptingChannel getChannel();
 
     /**
-     * Set Sock Option accept timeout
+     * Accept timeout for incoming connections, in ms.
      * @param x timeout in ms
      */
     public void setSoTimeout(long x);
 
     /**
-     * Get Sock Option accept timeout
+     * Accept timeout for incoming connections, in ms.
      * @return timeout in ms
      */
     public long getSoTimeout();

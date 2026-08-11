@@ -1005,8 +1005,8 @@ public class Blocklist {
      * Check whether an IPv6 address is on the single IP blocklist.
      *
      * @param ip IPv6 non-negative
-     * @since IPv6
      * @return whether on single list
+     * @since IPv6
      */
     private boolean isOnSingleList(BigInteger ip) {
         if (_singleIPv6Blocklist != null) {
@@ -1028,8 +1028,8 @@ public class Blocklist {
     /**
      * Will not contain duplicates.
      *
-     * @since 0.9.29
      * @return the addresses
+     * @since 0.9.29
      */
     private List<byte[]> getAddresses(RouterInfo pinfo) {
         List<byte[]> rv = new ArrayList<>(4);
@@ -1148,8 +1148,8 @@ public class Blocklist {
      * The array is sorted in signed order, but we don't care.
      * Each long is ((from << 32) | to)
      *
-     * @since 0.9.48 split out from above
      * @return whether permanently blocklisted
+     * @since 0.9.48 split out from above
      */
     private static boolean isPermanentlyBlocklisted(int ip, long[] blocklist, int blocklistSize) {
         int hi = blocklistSize - 1;

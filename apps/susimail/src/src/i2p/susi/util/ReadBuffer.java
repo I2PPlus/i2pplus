@@ -13,86 +13,86 @@ import net.i2p.data.DataHelper;
  */
 public class ReadBuffer implements Buffer {
 
-	/**
-	 * content.
-	 */
-	public final byte[] content;
-	/**
-	 * length.
-	 */
-	public final int length;
-	/**
-	 * offset.
-	 */
-	public final int offset;
+    /**
+     * content.
+     */
+    public final byte[] content;
+    /**
+     * length.
+     */
+    public final int length;
+    /**
+     * offset.
+     */
+    public final int offset;
 
-	/**
-	 * Create a ReadBuffer for a portion of a byte array.
-	 *
-	 * @param content the byte array containing the data
-	 * @param offset the start offset within the array
-	 * @param length the number of bytes from offset
-	 */
-	public ReadBuffer(byte[] content, int offset, int length) {
-		this.content = content;
-		this.offset = offset;
-		this.length = length;
-	}
+    /**
+     * Create a ReadBuffer for a portion of a byte array.
+     *
+     * @param content the byte array containing the data
+     * @param offset the start offset within the array
+     * @param length the number of bytes from offset
+     */
+    public ReadBuffer(byte[] content, int offset, int length) {
+        this.content = content;
+        this.offset = offset;
+        this.length = length;
+    }
 
-	/**
-	 * @return new ByteArrayInputStream over the content
-	 * @since 0.9.34
-	 */
-	@Override
-	public InputStream getInputStream() {
-		return new ByteArrayInputStream(content, offset, length);
-	}
+    /**
+     * @return new ByteArrayInputStream over the content
+     * @since 0.9.34
+     */
+    @Override
+    public InputStream getInputStream() {
+        return new ByteArrayInputStream(content, offset, length);
+    }
 
-	/**
-	 * @throws IllegalStateException always
-	 * @since 0.9.34
-	 * @return the output stream
-	 */
-	@Override
-	public OutputStream getOutputStream() {
-		throw new IllegalStateException();
-	}
+    /**
+     * @throws IllegalStateException always
+     * @return the output stream
+     * @since 0.9.34
+     */
+    @Override
+    public OutputStream getOutputStream() {
+        throw new IllegalStateException();
+    }
 
-	/**
-	 * Does nothing
-	 * @since 0.9.34
-	 */
-	@Override
-	public void readComplete(boolean success) { /* no-op */ }
+    /**
+     * Does nothing
+     * @since 0.9.34
+     */
+    @Override
+    public void readComplete(boolean success) { /* no-op */ }
 
-	/**
-	 * Does nothing
-	 * @since 0.9.34
-	 */
-	public void writeComplete(boolean success) { /* no-op */ }
+    /**
+     * Does nothing
+     * @since 0.9.34
+     */
+    public void writeComplete(boolean success) { /* no-op */ }
 
-	/**
-	 * Always valid
-	 * @return the length
-	 */
-	public int getLength() {
-		return length;
-	}
+    /**
+     * Always valid
+     * @return the length
+     */
+    public int getLength() {
+        return length;
+    }
 
-	/**
-	 * Always valid
-	 * @return the offset
-	 */
-	public int getOffset() {
-		return offset;
-	}
+    /**
+     * Always valid
+     * @return the offset
+     */
+    public int getOffset() {
+        return offset;
+    }
 
-	/**
-	 * toString.
-	 */
-	@Override
-	public String toString()
-	{
-		return content != null ? DataHelper.getUTF8(content, offset, length) : "";
-	}
+    /**
+     * toString.
+     */
+    @Override
+    public String toString()
+    {
+        return content != null ? DataHelper.getUTF8(content, offset, length) : "";
+    }
 }

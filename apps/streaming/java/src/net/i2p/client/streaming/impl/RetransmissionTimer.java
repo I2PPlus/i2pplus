@@ -15,6 +15,7 @@ public class RetransmissionTimer {
     private final SimpleTimer2 _dedicated;
 
     /**
+     * New timer with a dedicated SimpleTimer2 thread.
      * @param ctx the application context
      * @param name used for the timer thread name
      * @since 0.9
@@ -24,6 +25,7 @@ public class RetransmissionTimer {
     }
 
     /**
+     * Dedicated SimpleTimer2 instance.
      * @return the dedicated SimpleTimer2 instance
      * @since 0.9
      */

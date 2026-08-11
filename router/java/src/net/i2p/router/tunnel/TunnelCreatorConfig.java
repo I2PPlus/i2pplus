@@ -99,6 +99,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public void setDestinationNickname(String name) { _destinationNickname = name; }
 
     /**
+     *  Pool nickname for this tunnel, or null if not set.
      *  @return the pool nickname if set, null otherwise
      *  @since 0.9.70+
      */
@@ -320,8 +321,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      * Has the tunnel failed completely?
      *
-     * @since 0.9.53
      * @return the tunnel failed
+     * @since 0.9.53
      */
     public boolean getTunnelFailed() {return _failures.get() > MAX_CONSECUTIVE_TEST_FAILURES;}
 
@@ -345,8 +346,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * The number of recent-traffic test exemptions used.
-     * @since 0.9.69+
      * @return the recent test exemptions
+     * @since 0.9.69+
      */
     public int getRecentTestExemptions() {return _recentTestExemptions;}
 
@@ -425,8 +426,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      *  Checksum for blank record
-     * @since 0.9.48
      * @return the blank hash
+     * @since 0.9.48
      */
     public Hash getBlankHash() {return _blankHash;}
 
@@ -586,8 +587,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      *  Is it an ECIES hop?
-     * @since 0.9.48
      * @return whether e c
+     * @since 0.9.48
      */
     public boolean isEC(int hop) {
         if (_ChaReplyKeys == null) {return false;}
@@ -596,8 +597,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      *  The ECIES reply key for the given hop, or null.
-     * @since 0.9.48
      * @return the cha cha reply key
+     * @since 0.9.48
      */
     public SessionKey getChaChaReplyKey(int hop) {
         if (_ChaReplyKeys == null) {return null;}
@@ -606,8 +607,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      *  The ECIES reply associated data for the given hop, or null.
-     * @since 0.9.48
      * @return the cha cha reply a d
+     * @since 0.9.48
      */
     public byte[] getChaChaReplyAD(int hop) {
         if (_ChaReplyADs == null) {return null;}

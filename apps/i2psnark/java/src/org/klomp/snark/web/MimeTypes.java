@@ -114,7 +114,7 @@ class MimeTypes {
     }
 
     /**
-     * Get the MIME type by filename extension.
+     * The MIME type by filename extension.
      *
      * <p>Returns ONLY local mappings. Caller should use getServletContext().getMimeType() if this
      * returns null.
@@ -140,7 +140,7 @@ class MimeTypes {
     }
 
     /**
-     * Set a mime mapping.
+     * Add a MIME mapping.
      *
      * @param extension the file extension (without the dot), case-insensitive
      * @param type the MIME type to associate with the extension

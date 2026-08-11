@@ -194,6 +194,8 @@ class PeerState implements DataLoader {
     }
 
     /**
+     * Create the peer state for the torrent.
+     *
      * @param metainfo null if in magnet mode
      */
     PeerState(
@@ -325,6 +327,8 @@ class PeerState implements DataLoader {
     }
 
     /**
+     * Mark the peer's bitfield.
+     *
      * @param bitmap null to use the isAll param
      * @param isAll only if bitmap == null: true for have_all, false for have_none
      * @since 0.9.21
@@ -745,6 +749,8 @@ class PeerState implements DataLoader {
     }
 
     /**
+     * The lowest offset of any request for the piece.
+     *
      * @return lowest offset of any request for the piece
      * @since 0.8.2
      */
@@ -777,7 +783,7 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * Get partial pieces, give them back to PeerCoordinator. Clears the request queue.
+     * Return partial pieces to the PeerCoordinator and clear the request queue.
      *
      * @return List of PartialPieces, even those with an offset == 0, or empty list
      * @since 0.8.2
@@ -796,7 +802,7 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * Get the partial piece for a piece, give it back to PeerCoordinator. Clears the requests
+     * Return the partial piece for a piece to the PeerCoordinator. Clears the requests
      * for that piece.
      *
      * @param piece the piece index
@@ -818,6 +824,8 @@ class PeerState implements DataLoader {
     }
 
     /**
+     * All pieces we are currently requesting, or an empty set.
+     *
      * @return all pieces we are currently requesting, or empty Set
      */
     private synchronized Set<Integer> getRequestedPieces() {
@@ -1535,7 +1543,7 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * Sets whether or not we are interested in pieces from this peer.
+     * Whether we are interested in pieces from this peer.
      *
      * @param interest true if interested
      */
@@ -1558,7 +1566,7 @@ class PeerState implements DataLoader {
     private long lastChokeSendTime = 0;
 
     /**
-     * Sets whether or not we are choking the peer.
+     * Whether we are choking the peer.
      *
      * @param choke true to choke, false to unchoke
      */
@@ -1598,7 +1606,7 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * debug
+     * Debug string for the peer, or null.
      *
      * @return string or null
      * @since 0.8.1

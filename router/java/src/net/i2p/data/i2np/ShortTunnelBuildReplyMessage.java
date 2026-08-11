@@ -27,6 +27,7 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     }
 
     /**
+     *  Store a build record, checking its length.
      *  @param record must be ShortEncryptedBuildRecord or null
      */
     @Override
@@ -37,18 +38,20 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     }
 
     /**
-     * calculateWrittenLength.
+     *  Written length of the message body, zero since never serialized.
      */
     @Override
     protected int calculateWrittenLength() { return 0; }
 
     /**
+     *  I2NP message type of a short tunnel build reply, never sent.
      * @return the type
      */
     @Override
     public int getType() { return MESSAGE_TYPE; }
 
     /**
+     *  Unsupported; the reply is never deserialized.
      *  @throws UnsupportedOperationException always
      */
     @Override
@@ -57,6 +60,7 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     }
 
     /**
+     *  Unsupported; the reply is never serialized.
      *  @throws UnsupportedOperationException always
      */
     @Override
@@ -65,7 +69,7 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     }
 
     /**
-     * toString.
+     *  String form for debugging, showing the id and record count.
      */
     @Override
     public String toString() {

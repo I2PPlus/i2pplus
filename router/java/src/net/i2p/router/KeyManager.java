@@ -230,6 +230,8 @@ public class KeyManager {
         }
 
         /**
+         *  Synchronize the signing private key with the file on disk.
+         *
          *  @param type the SigType to expect on read-in, ignored on write
          */
         private void syncSigningKey(File keyDir, SigType type) {
@@ -246,6 +248,8 @@ public class KeyManager {
         }
 
         /**
+         *  Synchronize the signing public key with the file on disk.
+         *
          *  @param type the SigType to expect on read-in, ignored on write
          */
         private void syncVerificationKey(File keyDir, SigType type) {
@@ -262,6 +266,8 @@ public class KeyManager {
         }
 
         /**
+         *  Synchronize the given structure with the file on disk.
+         *
          *  @param param non-null, filled-in if exists is true, or without data if exists is false
          *  @param exists write to file if true, read from file if false
          *  @return structure or null on read error

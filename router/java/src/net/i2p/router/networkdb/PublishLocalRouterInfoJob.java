@@ -163,8 +163,8 @@ public class PublishLocalRouterInfoJob extends JobImpl {
     /**
      * Delay until the next RouterInfo publish.
      *
-     * @since public since 0.9.65 for use by Router
      * @return the delay
+     * @since public since 0.9.65 for use by Router
      */
     public long getDelay() {
         long rv = (PUBLISH_DELAY * 2 / 3) + getContext().random().nextLong(PUBLISH_DELAY / 3);

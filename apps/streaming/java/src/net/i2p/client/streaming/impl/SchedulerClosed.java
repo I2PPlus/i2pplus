@@ -56,7 +56,7 @@ class SchedulerClosed extends SchedulerImpl {
     }
 
     /**
-     * eventOccurred.
+     * Handles the scheduler event; a no-op as the timeout is handled by the timer.
      */
     @Override
     public void eventOccurred(Connection con) {

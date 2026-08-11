@@ -130,8 +130,8 @@ class IntroductionManager {
      *  Is this inbound tag currently valid,
      *  i.e. is the peer still connected?
      *
-     * @since 0.9.50
      * @return whether inbound tag valid
+     * @since 0.9.50
      */
     public boolean isInboundTagValid(long tag) {
         return _inbound.containsKey(Long.valueOf(tag));
@@ -945,7 +945,7 @@ class IntroductionManager {
     }
 
     /**
-     *  Get an address out of a RI. SSU2 only.
+     *  Address out of a RouterInfo. SSU2 only.
      *
      *  @return address or null
      *  @since 0.9.55
@@ -959,8 +959,8 @@ class IntroductionManager {
 
     /**
      *  Are IP and port valid?
-     * @since 0.9.50
      * @return whether valid
+     * @since 0.9.50
      */
     private boolean isValid(byte[] ip, int port, boolean allowIPv6) {
         return TransportUtil.isValidPort(port) &&

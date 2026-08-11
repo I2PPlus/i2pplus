@@ -52,6 +52,7 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
+     *  Binding is not supported.
      *  @throws UnsupportedOperationException always
      */
     @Override
@@ -60,6 +61,7 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
+     *  Binding is not supported.
      *  @throws UnsupportedOperationException always
      */
     @Override
@@ -74,6 +76,7 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
+     *  Channel is not supported.
      *  @return null always, unimplemented
      */
     @Override
@@ -82,6 +85,7 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
+     *  No remote address.
      *  @return null always
      */
     @Override
@@ -90,6 +94,7 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
+     *  Local port is not available.
      *  @return -1 always
      */
     @Override
@@ -109,6 +114,7 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
+     * Inbound buffer size.
      * @return the inbound buffer size, or 64KB if options are unavailable
      */
     @Override
@@ -120,6 +126,7 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
+     *  Reuse address is not supported.
      *  @return false always
      */
     @Override
@@ -128,6 +135,7 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
+     * Socket timeout.
      * @return the socket timeout in milliseconds
      */
     @Override
@@ -136,6 +144,7 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
+     *  Always bound.
      *  @return true always
      */
     @Override
@@ -167,6 +176,7 @@ class StandardServerSocket extends ServerSocket {
     public void setReuseAddress(boolean on) { /* no-op */ }
 
     /**
+     * Socket timeout.
      * @param timeout the timeout in milliseconds
      * @throws SocketException if the timeout could not be set
      */

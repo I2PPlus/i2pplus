@@ -157,8 +157,8 @@ public class PeerHelper extends HelperBase {
     /**
      *  Return the currently selected tab index.
      *
-     *  @since 0.9.38
      * @return the tab
+     *  @since 0.9.38
      */
     private int getTab() {
         if ("ntcp".equals(_transport)) {return 1;}
@@ -169,8 +169,8 @@ public class PeerHelper extends HelperBase {
 
     /**
      * Get the 1-minute average of a RateStat, or 0 if unavailable.
-     * @since 0.9.70+
      * @return the stat avg
+     * @since 0.9.70+
      */
     private double getStatAvg(String name) {
         RateStat rs = _context.statManager().getRate(name);

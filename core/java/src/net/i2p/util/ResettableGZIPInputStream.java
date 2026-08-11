@@ -120,8 +120,8 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     /**
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *
+     *  @return the total read
      *  @since 0.8.9
-     * @return the total read
      */
     public long getTotalRead() {
         try {
@@ -134,8 +134,8 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     /**
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *
+     *  @return the total expanded
      *  @since 0.8.9
-     * @return the total expanded
      */
     public long getTotalExpanded() {
         try {
@@ -149,8 +149,8 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     /**
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *
+     *  @return the remaining
      *  @since 0.8.9
-     * @return the remaining
      */
     public long getRemaining() {
         try {
@@ -164,8 +164,8 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     /**
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *
+     *  @return the finished
      *  @since 0.8.9
-     * @return the finished
      */
     public boolean getFinished() {
         try {
@@ -302,8 +302,8 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      *  except that this is resettable.
      *
      *  Unsupported:
-     *    - available() doesn't include the extra byte
-     *    - skip() doesn't skip the extra byte
+     *  - available() doesn't include the extra byte
+     *  - skip() doesn't skip the extra byte
      *
      *  Why? otherwise the inflater finished() is wrong when the compressed payload
      *  (in between the 10 byte header and the 8 byte footer) is a multiple of 512 bytes,

@@ -162,7 +162,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-     *  Gets the encryption type of this private key.
+     *  Encryption type of this private key.
      *
      *  @return non-null
      *  @since 0.9.38
@@ -185,7 +185,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-     *  javax.security.auth.Destroyable interface
+     *  Destroy this key and clear its data, per the javax.security.auth.Destroyable interface.
      *
      *  @since 0.9.40
      */
@@ -201,10 +201,10 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-     *  javax.security.auth.Destroyable interface
+     *  Whether this key has been destroyed.
      *
-     * @since 0.9.40
      * @return whether destroyed
+     * @since 0.9.40
      */
     @Override
     public boolean isDestroyed() {

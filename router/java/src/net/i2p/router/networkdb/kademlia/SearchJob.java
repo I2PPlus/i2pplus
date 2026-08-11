@@ -404,7 +404,7 @@ public class SearchJob extends JobImpl {
     }
 
     /**
-     * Set of Hash structures for routers we want to check next.  This is the 'interesting' part of
+     * Hash structures for routers we want to check next.  This is the 'interesting' part of
      * the algorithm.  But to keep you on your toes, we've refactored it to the PeerSelector.selectNearestExplicit
      *
      * @return ordered list of Hash objects

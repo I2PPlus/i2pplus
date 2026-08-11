@@ -408,8 +408,8 @@ public final class ECIESAEADEngine {
     /**
      * The Noise handshake pattern for the given encryption type.
      *
-     * @since 0.9.67
      * @return the noise pattern
+     * @since 0.9.67
      */
     private static NoiseInit.PatternID getNoisePattern(EncType type) {
         switch(type) {
@@ -429,8 +429,8 @@ public final class ECIESAEADEngine {
     /**
      * The hybrid key factory for the given encryption type, or null if not a hybrid type.
      *
-     * @since 0.9.67, public since 0.9.69 for transports
      * @return the hybrid key factory
+     * @since 0.9.67, public since 0.9.69 for transports
      */
     public KeyFactory getHybridKeyFactory(EncType type) {
         switch(type) {
@@ -457,8 +457,8 @@ public final class ECIESAEADEngine {
     /**
      * The minimum New Session message size for the given encryption type.
      *
-     * @since 0.9.67
      * @return the min n s size
+     * @since 0.9.67
      */
     private static int getMinNSSize(EncType type) {
         switch(type) {
@@ -478,8 +478,8 @@ public final class ECIESAEADEngine {
     /**
      * The minimum New Session Reply message size for the given encryption type.
      *
-     * @since 0.9.67
      * @return the min n s r size
+     * @since 0.9.67
      */
     private static int getMinNSRSize(EncType type) {
         switch(type) {
@@ -499,8 +499,8 @@ public final class ECIESAEADEngine {
     /**
      * The encryption type set for the given encryption type.
      *
-     * @since 0.9.67
      * @return the enc type set
+     * @since 0.9.67
      */
     private static Set<EncType> getEncTypeSet(EncType type) {
         switch(type) {
@@ -1587,6 +1587,8 @@ public final class ECIESAEADEngine {
     }
 
     /**
+     *  Create the payload, adding a DateTime block if expiration is greater than zero.
+     *
      *  @param expiration if greater than zero, add a DateTime block
      *  @param overhead bytes to be added later, to assist in padding calculation
      *  @since 0.9.46
@@ -1601,6 +1603,8 @@ public final class ECIESAEADEngine {
     private static final int B3 = 2932;
 
     /**
+     *  Create the payload from the given cloves and optional blocks.
+     *
      *  @param expiration if greater than zero, add a DateTime block
      *  @param ackreq to request an ack, must be false for NS/NSR
      *  @param nextKey1 may be null

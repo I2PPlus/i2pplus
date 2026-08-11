@@ -1189,8 +1189,8 @@ class SidebarRenderer {
      *  Uses the live bandwidth ring buffer when available (≥ 400 samples), falling
      *  back to 1-min RRD averages + live BPS. Inbound renders in the top half
      *  (inverted), outbound in the bottom half.
-     *  @since 0.9.70+
      * @return the data attributes
+     *  @since 0.9.70+
      */
     private String getDataAttributes() {
         try {

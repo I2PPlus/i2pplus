@@ -19,9 +19,9 @@ import java.util.Set;
  *
  * Refactored from net.i2p.router.networkdb.kademlia
  *
- * @since 0.9.2 in i2psnark, moved to core in 0.9.10
  *
  * @param <T> type of SimpleDataStructure objects stored in the bucket
+ * @since 0.9.2 in i2psnark, moved to core in 0.9.10
  */
 public interface KBucket<T extends SimpleDataStructure> {
 

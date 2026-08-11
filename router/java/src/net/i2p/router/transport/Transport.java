@@ -124,8 +124,8 @@ public interface Transport {
 
     /**
      *  Do we have any current address?
-     * @since IPv6
      * @return whether current address is present
+     * @since IPv6
      */
     public boolean hasCurrentAddress();
 

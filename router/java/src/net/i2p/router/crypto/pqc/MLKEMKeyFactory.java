@@ -94,16 +94,16 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     /**
      * Returns the last created instance.
      *
-     * @since 0.9.70+
      * @return the instance
+     * @since 0.9.70+
      */
     public static MLKEMKeyFactory getInstance() { return _lastInstance; }
 
     /**
      * Returns the current minimum precalc queue size.
      *
-     * @since 0.9.70+
      * @return the min size
+     * @since 0.9.70+
      */
     public int getMinSize() { return _minSize; }
 
@@ -117,8 +117,8 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     /**
      * Returns the current maximum precalc queue size.
      *
-     * @since 0.9.70+
      * @return the max size
+     * @since 0.9.70+
      */
     public int getMaxSize() { return _maxSize; }
 
@@ -132,8 +132,8 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     /**
      * Returns the current number of precalc keys queued.
      *
-     * @since 0.9.70+
      * @return the size
+     * @since 0.9.70+
      */
     public int getSize() { return _keys.size(); }
 

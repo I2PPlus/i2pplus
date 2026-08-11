@@ -1476,8 +1476,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Current share bandwidth in bytes per second.
          * Useful for params whose ranges should scale with bandwidth.
          *
-         * @since 0.9.70+
          * @return the share bps
+         * @since 0.9.70+
          */
         protected static int getShareBps(RouterContext ctx) {
             return 1000 * TunnelDispatcher.getShareBandwidth(ctx);
@@ -1487,8 +1487,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Effective default min — override for bandwidth-scaled params.
          * Called by refreshRanges() instead of _defaultMin.
          *
-         * @since 0.9.70+
          * @return the default min
+         * @since 0.9.70+
          */
         protected int getDefaultMin(RouterContext ctx) { return _defaultMin; }
 
@@ -1496,16 +1496,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Effective default max — override for bandwidth-scaled params.
          * Called by refreshRanges() instead of _defaultMax.
          *
-         * @since 0.9.70+
          * @return the default max
+         * @since 0.9.70+
          */
         protected int getDefaultMax(RouterContext ctx) { return _defaultMax; }
 
         /**
          * Transit bandwidth threshold for "heavy" — 80% of configured share bandwidth.
          * Replaces the old hardcoded 50 KB/s which was far too low for any real router.
-         * @since 0.9.70+
          * @return the heavy transit threshold
+         * @since 0.9.70+
          */
         protected static int getHeavyTransitThreshold(RouterContext ctx) {
             return getShareBps(ctx) * 4 / 5;
@@ -1513,8 +1513,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Transit bandwidth threshold for "sustained heavy" — 50% of configured share.
-         * @since 0.9.70+
          * @return the sustained heavy transit threshold
+         * @since 0.9.70+
          */
         protected static int getSustainedHeavyTransitThreshold(RouterContext ctx) {
             return getShareBps(ctx) / 2;
@@ -1524,8 +1524,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Effective default step — override for bandwidth-scaled params.
          * Called by refreshRanges() instead of _defaultStep.
          *
-         * @since 0.9.70+
          * @return the default step
+         * @since 0.9.70+
          */
         protected int getDefaultStep(RouterContext ctx) { return _defaultStep; }
 
@@ -1923,8 +1923,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * NTCP reader pool utilization (0.0-1.0).
-         * @since 0.9.70+
          * @return the reader utilization
+         * @since 0.9.70+
          */
         protected double getReaderUtilization(RouterContext ctx) {
             Transport t = ctx.commSystem().getTransports().get(NTCPTransport.STYLE);
@@ -1933,8 +1933,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * NTCP writer pool utilization (0.0-1.0).
-         * @since 0.9.70+
          * @return the writer utilization
+         * @since 0.9.70+
          */
         protected double getWriterUtilization(RouterContext ctx) {
             Transport t = ctx.commSystem().getTransports().get(NTCPTransport.STYLE);
@@ -1943,8 +1943,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * NTCP send finisher pool utilization (0.0-1.0).
-         * @since 0.9.70+
          * @return the send finisher utilization
+         * @since 0.9.70+
          */
         protected double getSendFinisherUtilization(RouterContext ctx) {
             Transport t = ctx.commSystem().getTransports().get(NTCPTransport.STYLE);
@@ -1953,8 +1953,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * UDP packet handler pool utilization (0.0-1.0).
-         * @since 0.9.70+
          * @return the packet handler utilization
+         * @since 0.9.70+
          */
         protected double getPacketHandlerUtilization(RouterContext ctx) {
             Transport t = ctx.commSystem().getTransports().get(UDPTransport.STYLE);
@@ -1963,8 +1963,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * UDP message receiver pool utilization (0.0-1.0).
-         * @since 0.9.70+
          * @return the message receiver utilization
+         * @since 0.9.70+
          */
         protected double getMessageReceiverUtilization(RouterContext ctx) {
             Transport t = ctx.commSystem().getTransports().get(UDPTransport.STYLE);
@@ -1973,8 +1973,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Tunnel pumper pool utilization (0.0-1.0).
-         * @since 0.9.70+
          * @return the pumper utilization
+         * @since 0.9.70+
          */
         protected double getPumperUtilization(RouterContext ctx) {
             return TunnelDispatcher.getPumperUtilization();

@@ -27,10 +27,10 @@ import net.i2p.util.SimpleByteCache;
  *   <li>Easy swapping of underlying AES providers</li>
  * </ul>
  *
- * @since 0.8.0
  * @author I2P Project
  *
  * @see CryptixAESEngine
+ * @since 0.8.0
  */
 public class AESEngine {
     /** Logger instance */

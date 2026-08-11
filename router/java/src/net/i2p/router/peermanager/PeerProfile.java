@@ -158,7 +158,7 @@ public class PeerProfile {
     }
 
     /**
-     *  what peer is being profiled
+     *  What peer is being profiled
      *
      *  @return the peer, non-null
      */
@@ -291,7 +291,7 @@ public class PeerProfile {
     public synchronized long getFirstHeardAbout() {return _firstHeardAbout;}
 
     /**
-     *  Set when did we first heard about this peer, only if older.
+     *  Remember when we first heard about this peer, only if older.
      *  Package private, only set by profile management subsystem.
      *
      * @param when the time to set
@@ -301,14 +301,14 @@ public class PeerProfile {
     }
 
     /**
-     *  when did we last hear about this peer?
+     *  When did we last hear about this peer?
      *
      *  @return 0 if unset
      */
     public synchronized long getLastHeardAbout() {return _lastHeardAbout;}
 
     /**
-     *  Set when did we last hear about this peer, only if unset or newer.
+     *  Remember when we last heard about this peer, only if unset or newer.
      *  Also sets FirstHeardAbout if earlier.
      *
      * @param when the time to set
@@ -580,6 +580,8 @@ public class PeerProfile {
      */
     public float getIntegrationValue() {return _integrationValue;}
     /**
+     *  EWMA average of the tunnel test response time.
+     *
      *  @return EWMA average with time-based decay (50% per hour since last update)
      */
     public float getTunnelTestTimeAverage() {
@@ -641,7 +643,7 @@ public class PeerProfile {
     public float getPeerTestTimeAverage() {return _peerTestResponseTimeAvg;}
 
     /**
-     * Set the average peer test time.
+     * Store the average peer test time.
      *
      * @param testAvg the peer test time average
      */
@@ -816,7 +818,7 @@ public class PeerProfile {
     long getLastThroughputUpdate() {return _lastThroughputUpdate;}
 
     /**
-     * Set the timestamp of the last throughput update.
+     * Store the timestamp of the last throughput update.
      *
      * @param ts the timestamp
      */
@@ -830,7 +832,7 @@ public class PeerProfile {
     public long getLastTestStarted() {return _lastTestStarted;}
 
     /**
-     * Set the timestamp of the last test start.
+     * Store the timestamp of the last test start.
      *
      * @param ts the timestamp
      */

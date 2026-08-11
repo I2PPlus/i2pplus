@@ -107,8 +107,8 @@ public class LookupDest {
     /**
      * I2CP options from the context.
      *
-     * @since 0.9.40 split out from above
      * @return the opts
+     * @since 0.9.40 split out from above
      */
     private static Properties getOpts(I2PAppContext ctx) {
         Properties opts = new Properties();

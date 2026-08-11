@@ -58,11 +58,11 @@ class SessionKeyAndNonce extends SessionKey {
     }
 
     /**
- * For inbound ES, else 0
- *
- * @since 0.9.46
-     * @return the i d
- */
+     *  For inbound ES, else 0
+     *
+     *  @return the i d
+     *  @since 0.9.46
+     */
     public int getID() {
         return _id;
     }
@@ -71,8 +71,8 @@ class SessionKeyAndNonce extends SessionKey {
      *  For inbound ES, else null.
      *  For NSR, use getHansdhakeState().getRemotePublicKey().getPublicKey().
      *
+     *  @return the remote key
      *  @since 0.9.46
-     * @return the remote key
      */
     public PublicKey getRemoteKey() {
         return _remoteKey;

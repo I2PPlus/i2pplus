@@ -143,10 +143,10 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     }
 
     /**
-     *  Gets the signature type of this private key.
+     *  Signature type of this private key.
      *
-     * @since 0.9.8
      * @return the type
+     * @since 0.9.8
      */
     public SigType getType() {
         return _type;
@@ -191,7 +191,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     }
 
     /**
-     *  javax.security.auth.Destroyable interface
+     *  Destroy this key and clear its data, per the javax.security.auth.Destroyable interface.
      *
      *  @since 0.9.40
      */
@@ -206,10 +206,10 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     }
 
     /**
-     *  javax.security.auth.Destroyable interface
+     *  Whether this key has been destroyed.
      *
-     * @since 0.9.40
      * @return whether destroyed
+     * @since 0.9.40
      */
     @Override
     public boolean isDestroyed() {

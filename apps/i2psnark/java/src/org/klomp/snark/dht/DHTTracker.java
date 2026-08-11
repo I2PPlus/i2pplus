@@ -28,16 +28,16 @@ class DHTTracker {
     private final Log _log;
     private volatile boolean _isRunning;
 
-    /** not current, updated by cleaner */
+    /** Not current; updated by the cleaner. */
     private int _peerCount;
 
-    /** not current, updated by cleaner */
+    /** Not current; updated by the cleaner. */
     private int _torrentCount;
 
-    /** stagger with other cleaners */
+    /** Stagger with other cleaners. */
     private static final long CLEAN_TIME = (long) 199 * 1000;
 
-    /** no guidance in BEP 5; Vuze is 8h */
+    /** No guidance in BEP 5; Vuze is 8h. */
     private static final long MIN_EXPIRE_TIME = 5 * (long) 60 * 1000;
     private static final long DELTA_EXPIRE_TIME = 3 * (long) 60 * 1000;
     private static final int MAX_PEERS = 400;
@@ -65,6 +65,8 @@ class DHTTracker {
     }
 
     /**
+     * Create a tracker for the given context.
+     *
      * @param ctx the app context
      */
     DHTTracker(I2PAppContext ctx) {
@@ -128,7 +130,7 @@ class DHTTracker {
     }
 
     /**
-     * Get peers for a torrent.
+     * Fetch peers for a torrent.
      * Caller's responsibility to remove himself from the list.
      *
      * @param ih the info hash of the torrent

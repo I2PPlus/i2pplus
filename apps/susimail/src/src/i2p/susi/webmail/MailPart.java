@@ -386,8 +386,8 @@ class MailPart {
      *  Caller must call readComplete() on buffer
      *
      *  @param offset 2 for sendAttachment, 0 otherwise, probably for \r\n
-     *  @since 0.9.35
      *  @return the raw input stream
+     *  @since 0.9.35
      */
     private synchronized LimitInputStream getRawInputStream(int offset) throws IOException {
         InputStream in = buffer.getInputStream();

@@ -66,8 +66,8 @@ public interface LookupResult {
      * For async calls only. Nonce will be non-zero.
      * Callback will be called later with the final result and the same nonce.
      *
-     * @since 0.9.67
      * @return the nonce
+     * @since 0.9.67
      */
     public int getNonce();
 }

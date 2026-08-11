@@ -81,7 +81,7 @@ class BasicServlet extends HttpServlet {
 
     private final transient MimeTypes _mimeTypes;
 
-    /** same as PeerState.PARTSIZE */
+    /** Same as PeerState.PARTSIZE. */
     private static final int BUFSIZE = 16 * 1024;
 
     private transient ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
@@ -150,7 +150,7 @@ class BasicServlet extends HttpServlet {
     }
 
     /**
-     * Get Resource to serve. Map a path to a resource. The default implementation calls
+     * Resource to serve, mapping a path to a resource. The default implementation calls
      * HttpContext.getResource but derived servlets may provide their own mapping.
      *
      * @param pathInContext The path to find a resource for.
@@ -174,7 +174,7 @@ class BasicServlet extends HttpServlet {
     }
 
     /**
-     * Get Resource to serve. Map a path to a resource. The default implementation calls
+     * Resource to serve, mapping a path to a resource. The default implementation calls
      * HttpContext.getResource but derived servlets may provide their own mapping.
      *
      * @param pathInContext The path to find a resource for.
@@ -461,21 +461,21 @@ class BasicServlet extends HttpServlet {
 
     /* I2P additions below here */
 
-    /** from Jetty HttpContent.java */
+    /** From Jetty HttpContent.java. */
     public interface HttpContent {
-        /** Get content type */
+        /** Content type. */
         String getContentType();
 
-        /** Get last modified */
+        /** Last modified. */
         long getLastModified();
 
-        /** in seconds */
+        /** In seconds. */
         int getCacheTime();
 
-        /** Get content length */
+        /** Content length. */
         long getContentLength();
 
-        /** Get input stream */
+        /** Input stream. */
         InputStream getInputStream() throws IOException;
     }
 
@@ -487,6 +487,8 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
+         * The content type.
+         *
          * @return the content type
          */
         public String getContentType() {
@@ -494,6 +496,8 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
+         * The last modified time.
+         *
          * @return the last modified
          */
         public long getLastModified() {
@@ -501,6 +505,8 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
+         * The cache time.
+         *
          * @return the cache time
          */
         public int getCacheTime() {
@@ -508,6 +514,8 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
+         * The content length.
+         *
          * @return the content length
          */
         public long getContentLength() {
@@ -515,6 +523,8 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
+         * The input stream.
+         *
          * @return the input stream
          */
         public InputStream getInputStream() throws IOException {
@@ -525,7 +535,7 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
-         * toString.
+         * String form of the content.
          */
         @Override
         public String toString() {
@@ -538,6 +548,8 @@ class BasicServlet extends HttpServlet {
         private final long _limit;
 
         /**
+         * Create a content provider for the file, limited to the given byte count.
+         *
          * @param file the file
          * @param limit max bytes to serve
          */
@@ -547,6 +559,8 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
+         * The content length.
+         *
          * @return the content length
          */
         @Override
@@ -563,6 +577,8 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
+         * The content type.
+         *
          * @return the content type
          */
         public String getContentType() {
@@ -570,6 +586,8 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
+         * The last modified time.
+         *
          * @return the last modified
          */
         public long getLastModified() {
@@ -583,6 +601,8 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
+         * The cache time.
+         *
          * @return the cache time
          */
         public int getCacheTime() {
@@ -590,6 +610,8 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
+         * The content length.
+         *
          * @return the content length
          */
         public long getContentLength() {
@@ -597,6 +619,8 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
+         * The input stream.
+         *
          * @return the input stream
          */
         public InputStream getInputStream() throws IOException {
@@ -608,7 +632,7 @@ class BasicServlet extends HttpServlet {
         }
 
         /**
-         * toString.
+         * String form of the servlet.
          */
         @Override
         public String toString() {
@@ -626,7 +650,7 @@ class BasicServlet extends HttpServlet {
     }
 
     /**
-     * Get the MIME type by filename extension.
+     * The MIME type by filename extension.
      *
      * @param filename A file name
      * @return MIME type matching the longest dot extension of the file name.

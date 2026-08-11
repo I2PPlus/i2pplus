@@ -131,8 +131,10 @@ public class RunStandalone {
     }
 
     /**
-     * @since 0.9.67+
+     * The snark revision.
+     *
      * @return the snark revision
+     * @since 0.9.67+
      */
     public String getSnarkRevision() {
         File base = _context.getBaseDir();
@@ -155,8 +157,10 @@ public class RunStandalone {
     }
 
     /**
-     * @since 0.9.67+
+     * The host from the Jetty config.
+     *
      * @return the host from jetty config
+     * @since 0.9.67+
      */
     public String getHostFromJettyConfig() {
         try {
@@ -179,8 +183,10 @@ public class RunStandalone {
     }
 
     /**
-     * @since 0.9.67+
+     * The port from the Jetty config.
+     *
      * @return the port from jetty config
+     * @since 0.9.67+
      */
     public int getPortFromJettyConfig() {
         try {

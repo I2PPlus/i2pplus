@@ -152,7 +152,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         }
     }
 
-    /** cache of the property to detect changes */
+    /** Cached property value to detect changes. */
     private static volatile String _userDsaList = "";
     private static final Set<Hash> _userDsaOnly = new ConcurrentHashSet<>(4);
     private static final String PROP_DSALIST = "i2p.streaming.dsalist";
@@ -164,6 +164,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     private static final long ACCEPT_TIMEOUT_DEFAULT = (long) 10*1000;
 
     /**
+     * No longer supported, throws UnsupportedOperationException.
      * @deprecated use 4-arg constructor
      * @throws UnsupportedOperationException always
      */
@@ -257,6 +258,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
+     *  The I2P session for this socket manager.
      *  @return the session, non-null
      */
     public I2PSession getSession() {
@@ -321,9 +323,10 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
+     *  Sig type from the options, or the default if unset or unsupported.
      *  @param opts may be null
-     *  @since 0.9.21 copied from I2PSocketManagerFactory
      *  @return the sig type
+     *  @since 0.9.21 copied from I2PSocketManagerFactory
      */
     private SigType getSigType(Properties opts) {
         if (opts != null) {
@@ -360,6 +363,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
+     *  Subsession list, not including the primary session.
      *  @return a list of subsessions, non-null, does not include the primary session
      *  @since 0.9.21
      */
@@ -368,6 +372,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
+     * Connection manager for this socket manager.
      * @return the connection manager
      */
     public ConnectionManager getConnectionManager() {
@@ -477,6 +482,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
+     * Accept timeout in milliseconds.
      * @return the accept timeout in milliseconds
      */
     public long getAcceptTimeout() { return _acceptTimeout; }
@@ -531,8 +537,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *  This only listens on the primary session. There is no way to get
      *  incoming connections on a subsession.
      *
-     *  @since 0.8.4
      * @return the standard server socket
+     * @since 0.8.4
      */
     public synchronized ServerSocket getStandardServerSocket() throws IOException {
         if (_realServerSocket == null)
@@ -542,6 +548,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
+     * Verify the session is connected, reconnecting if needed.
      * @throws I2PException if session is closed; as of 0.9.61, this is an I2PSessionException which extends I2PException
      */
     private void verifySession() throws I2PException {
@@ -755,8 +762,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /**
      * Has the socket manager been destroyed?
      *
-     * @since 0.9.9
      * @return whether destroyed
+     * @since 0.9.9
      */
     public boolean isDestroyed() {
         return _isDestroyed.get();
@@ -790,6 +797,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
 
     /**
+     * Add a disconnect listener.
      * @param lsnr the disconnect listener to add
      */
     public void addDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {
@@ -797,6 +805,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
+     * Remove a disconnect listener.
      * @param lsnr the disconnect listener to remove
      */
     public void removeDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {
@@ -812,6 +821,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     private static final String PCAP_FILE = "streaming.pcap";
 
     /**
+     * Initialize PCAP logging if the property is set.
      * @param ctx the I2P application context
      */
     private static void debugInit(I2PAppContext ctx) {
@@ -832,72 +842,84 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     // ==================== Tuner delegation ====================
 
     /**
+     * Initial window size.
      * @return the initial window size
      * @since 0.9.70+
      */
     public static int getInitialWindowSize() { return ConnectionOptions.getInitialWindowSize(); }
 
     /**
+     * Initial window size.
      * @param val the new initial window size
      * @since 0.9.70+
      */
     public static void setInitialWindowSize(int val) { ConnectionOptions.setInitialWindowSize(val); }
 
     /**
+     * Initial retransmission timeout.
      * @return the initial retransmission timeout
      * @since 0.9.70+
      */
     public static int getInitialRTO() { return ConnectionOptions.getInitialRTO(); }
 
     /**
+     * Initial retransmission timeout.
      * @param val the new initial retransmission timeout
      * @since 0.9.70+
      */
     public static void setInitialRTO(int val) { ConnectionOptions.setInitialRTO(val); }
 
     /**
+     * Default initial ACK delay.
      * @return the default initial ACK delay
      * @since 0.9.70+
      */
     public static int getDefaultInitialAckDelay() { return ConnectionOptions.getDefaultInitialAckDelay(); }
 
     /**
+     * Default initial ACK delay.
      * @param val the new default initial ACK delay
      * @since 0.9.70+
      */
     public static void setDefaultInitialAckDelay(int val) { ConnectionOptions.setDefaultInitialAckDelay(val); }
 
     /**
+     * Default passive flush delay.
      * @return the default passive flush delay
      * @since 0.9.70+
      */
     public static int getDefaultPassiveFlushDelay() { return MessageOutputStream.getDefaultPassiveFlushDelay(); }
 
     /**
+     * Default passive flush delay.
      * @param val the new default passive flush delay
      * @since 0.9.70+
      */
     public static void setDefaultPassiveFlushDelay(int val) { MessageOutputStream.setDefaultPassiveFlushDelay(val); }
 
     /**
+     * Default inactivity timeout.
      * @return the default inactivity timeout
      * @since 0.9.70+
      */
     public static int getDefaultInactivityTimeout() { return ConnectionOptions.getDefaultInactivityTimeout(); }
 
     /**
+     * Default inactivity timeout.
      * @param val the new default inactivity timeout
      * @since 0.9.70+
      */
     public static void setDefaultInactivityTimeout(int val) { ConnectionOptions.setDefaultInactivityTimeout(val); }
 
     /**
+     * Maximum inbound buffer cap.
      * @return the maximum inbound buffer cap (bytes)
      * @since 0.9.70+
      */
     public static int getMaxInboundBuffer() { return ConnectionOptions.getMaxInboundBufferStatic(); }
 
     /**
+     * Maximum inbound buffer cap.
      * @param val the new maximum inbound buffer cap (bytes)
      * @since 0.9.70+
      */

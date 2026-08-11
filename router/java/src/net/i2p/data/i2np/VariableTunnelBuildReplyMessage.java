@@ -13,7 +13,7 @@ public class VariableTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     /** Message type ID for this I2NP message */
     public static final int MESSAGE_TYPE = 24;
 
-    /** zero record count, will be set with readMessage() */
+    /** Zero record count, will be set with readMessage(). */
     public VariableTunnelBuildReplyMessage(I2PAppContext context) {
         super(context, 0);
     }

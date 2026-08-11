@@ -34,10 +34,10 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
     private static final ByteCache _payloadCache = ByteCache.getInstance(128, Packet.MAX_PAYLOAD_SIZE);
     /** Reusable empty payload — avoids per-packet ByteArray allocation for ACK-only packets.
      *  Serialized per-connection by _dataLock in MessageOutputStream. */
-    /** Empty payload. */
     private final ByteArray _emptyPayload;
 
     /**
+     *  Create a data receiver for the given connection.
      *  @param con non-null
      */
     public ConnectionDataReceiver(I2PAppContext ctx, Connection con) {
@@ -142,25 +142,25 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         }
 
         /**
-         * waitForCompletion.
+         * Wait for the write to complete.
          */
         public void waitForCompletion(int maxWaitMs) throws IOException {
             throw _error;
         }
 
         /**
-         * waitForAccept.
+         * Wait for the write to be accepted.
          */
         public void waitForAccept(int maxWaitMs) throws IOException {
             throw _error;
         }
 
         /**
-         * writeAccepted.
+         * Whether the write was accepted.
          */
         public boolean writeAccepted() { return false; }
         /**
-         * writeFailed.
+         * Whether the write failed.
          */
         public boolean writeFailed() { return true; }
     }
@@ -196,7 +196,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         return packet;
     }
 
-    /** Ack only. */
+    /** Whether the packet carries no data and only serves to elicit an ACK. */
     private boolean isAckOnly(int size) {
         boolean ackOnly = size <= 0 && // no data
                           _connection.getLastSendId() >= 0 && // not a SYN
@@ -283,19 +283,19 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      */
     private static final class DummyStatus implements MessageOutputStream.WriteStatus {
         /**
-         * waitForAccept.
+         * Wait for the write to be accepted.
          */
         public final void waitForAccept(int maxWaitMs) { /* no-op */ }
         /**
-         * waitForCompletion.
+         * Wait for the write to complete.
          */
         public final void waitForCompletion(int maxWaitMs) { /* no-op */ }
         /**
-         * writeAccepted.
+         * Whether the write was accepted.
          */
         public final boolean writeAccepted() { return true; }
         /**
-         * writeFailed.
+         * Whether the write failed.
          */
         public final boolean writeFailed() { return false; }
     }

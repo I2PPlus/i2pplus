@@ -18,9 +18,9 @@ import java.util.Set;
  *  add(), remove(), and contains() are O(n).
  *  Warning: addAll() and the Collection constructor are O(n**2).
  *
- *  @since 0.9.25, moved to net.i2p.util in 0.9.55
  *
  *  @param <E> type of elements in this set
+ *  @since 0.9.25, moved to net.i2p.util in 0.9.55
  */
 public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     /** The maximum capacity for this set */
@@ -192,8 +192,8 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      *  responsibility to ensure that o is not a duplicate.
      *  Any duplicate added will appear in the iterator.
      *
-     * @param o non-null, NPE will not be thrown
-     * @throws SetFullException if throwOnFull was true in constructor
+     *  @param o non-null, NPE will not be thrown
+     *  @throws SetFullException if throwOnFull was true in constructor
      *  @since 0.9.55
      */
     public void addUnique(E o) {

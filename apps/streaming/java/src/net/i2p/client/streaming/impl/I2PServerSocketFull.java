@@ -16,6 +16,7 @@ class I2PServerSocketFull implements I2PServerSocket {
     private final I2PSocketManagerFull _socketManager;
 
     /**
+     * Bridge to accept connections from the given manager.
      * @param mgr the socket manager to accept connections from
      */
     public I2PServerSocketFull(I2PSocketManagerFull mgr) {
@@ -56,6 +57,7 @@ class I2PServerSocketFull implements I2PServerSocket {
     }
 
     /**
+     * Current accept timeout.
      * @return the current timeout in milliseconds
      */
     @Override
@@ -64,6 +66,7 @@ class I2PServerSocketFull implements I2PServerSocket {
     }
 
     /**
+     * Accept timeout in milliseconds.
      * @param x timeout in milliseconds
      */
     public void setSoTimeout(long x) {
@@ -77,6 +80,7 @@ class I2PServerSocketFull implements I2PServerSocket {
     }
 
     /**
+     * Socket manager that owns this server socket.
      * @return the socket manager
      */
     public I2PSocketManager getManager() {

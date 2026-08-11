@@ -324,6 +324,8 @@ public class EstablishmentManager {
     public void establish(OutNetMessage msg) {establish(msg, true);}
 
     /**
+     *  Establishes a connection to send the message, or queues it if the limit is exceeded.
+     *
      *  @param queueIfMaxExceeded true normally, false if called from locked_admit so we don't loop
      *  @since 0.9.2
      */
@@ -625,8 +627,8 @@ public class EstablishmentManager {
     /**
      * Should we allow another inbound establishment?
      *
-     * @since 0.9.2
      * @return whether allow inbound establishment
+     * @since 0.9.2
      */
     public boolean shouldAllowInboundEstablishment() {
         if (_inboundStates.size() >= getMaxInboundEstablishers())
@@ -1040,8 +1042,8 @@ public class EstablishmentManager {
 
     /**
      * Is the peer on the blocklist or banlist?
-     * @since 0.9.68+
      * @return whether peer banned
+     * @since 0.9.68+
      */
     private boolean isPeerBanned(RemoteHostId hostId) {
         return isPeerBanned(hostId, "peer");
@@ -1049,8 +1051,8 @@ public class EstablishmentManager {
 
     /**
      * Is the peer on the blocklist or banlist?
-     * @since 0.9.68+
      * @return whether peer banned
+     * @since 0.9.68+
      */
     private boolean isPeerBanned(RemoteHostId hostId, String context) {
         try {
@@ -1076,8 +1078,8 @@ public class EstablishmentManager {
 
     /**
      * Is the peer on the blocklist or banlist?
-     * @since 0.9.68+
      * @return whether peer banned
+     * @since 0.9.68+
      */
     private boolean isPeerBanned(InboundEstablishState2 state) {
         return isPeerBanned(state.getRemoteHostId());
@@ -1085,8 +1087,8 @@ public class EstablishmentManager {
 
     /**
      * Is the peer on the blocklist or banlist?
-     * @since 0.9.68+
      * @return whether peer banned
+     * @since 0.9.68+
      */
     private boolean isPeerBanned(OutboundEstablishState2 state) {
         return isPeerBanned(state.getRemoteHostId());
@@ -2322,7 +2324,7 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Get a token to connect to the peer
+     *  Token to connect to the peer.
      *
      *  @return 0 if none available
      *  @since 0.9.54
@@ -2385,17 +2387,17 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Get a token that can be used later for the peer to connect to us
+     *  Token that can be used later for the peer to connect to us
      *
-     * @since 0.9.54
      * @return the inbound token
+     * @since 0.9.54
      */
     public Token getInboundToken(RemoteHostId peer) {
         return getInboundToken(peer, IB_TOKEN_EXPIRATION);
     }
 
     /**
-     *  Get a token that can be used later for the peer to connect to us.
+     *  Token that can be used later for the peer to connect to us.
      *
      *  @param expiration time from now, will be reduced if necessary based on cache eviction time.
      *  @return non-null
@@ -2469,6 +2471,8 @@ public class EstablishmentManager {
         private final int added;
 
         /**
+         *  Token for the given value and expiration.
+         *
          *  @param exp absolute time, not relative to now
          */
         public Token(long tok, long exp, long now) {

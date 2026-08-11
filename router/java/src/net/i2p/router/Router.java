@@ -565,8 +565,8 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Warning, may be null if called very early.
      *  Lockless.
      *
-     *  @since 0.9.67
      *  @return the router identity
+     *  @since 0.9.67
      */
     public RouterIdentity getRouterIdentity() {return _routerIdent;}
 
@@ -575,8 +575,8 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Warning, may be null if called very early.
      *  Lockless.
      *
-     *  @since 0.9.67
      *  @return the router hash
+     *  @since 0.9.67
      */
     public Hash getRouterHash() {return _routerHash;}
 
@@ -683,8 +683,8 @@ public class Router implements RouterClock.ClockShiftListener {
      *  This may take quite a while, especially if NTP fails
      *  or the system lacks entropy
      *
-     *  @since public as of 0.9 for Android and other embedded uses
      *  @throws IllegalStateException if called more than once
+     *  @since public as of 0.9 for Android and other embedded uses
      */
     public synchronized void runRouter() {
         synchronized(_stateLock) {
@@ -764,7 +764,7 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     *  this does not use ctx.getConfigDir(), must provide a full path in filename
+     *  This does not use ctx.getConfigDir(), must provide a full path in filename
      *  Caller must synchronize
      *
      *  @param ctx will be null at startup when called from constructor
@@ -976,8 +976,8 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * Is a final shutdown in progress? This may not be cancelled.
      *
-     * @since 0.8.12
      * @return whether final shutdown in progress
+     * @since 0.8.12
      */
     public boolean isFinalShutdownInProgress() {
         synchronized(_stateLock) {return STATES_FINAL.contains(_state);}
@@ -2064,8 +2064,8 @@ public class Router implements RouterClock.ClockShiftListener {
      *  May take a while to run the first time, if it has to go through the event log.
      *  Once called, the result is cached.
      *
-     *  @since 0.9.47
      *  @return the estimated downtime
+     *  @since 0.9.47
      */
     public long getEstimatedDowntime() {
         synchronized(_configFileLock) {

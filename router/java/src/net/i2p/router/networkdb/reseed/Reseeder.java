@@ -1202,8 +1202,8 @@ public class Reseeder {
          *  Display string for what we're fetching.
          *  Untranslated, for logs only.
          *
-         * @since 0.9.33
          * @return the display string
+         * @since 0.9.33
          */
         private String getDisplayString(SSLEepGet.ProxyType type) {
             switch(type) {

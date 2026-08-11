@@ -9,18 +9,18 @@ import java.io.OutputStream;
 import java.util.Properties;
 
 import java.nio.charset.StandardCharsets;
-/** coordinate a moving rate over various periods */
+/** Coordinates a moving rate over various periods. */
 public class RateStat {
-    /** unique name of the statistic */
+    /** Unique name of the statistic. */
     private final String _statName;
 
-    /** grouping under which the stat is kept */
+    /** Grouping under which the stat is kept. */
     private final String _groupName;
 
-    /** describe the stat */
+    /** Describes the stat. */
     private final String _description;
 
-    /** actual rate objects for this statistic */
+    /** Actual rate objects for this statistic. */
     protected final Rate[] _rates;
 
     /**
@@ -70,7 +70,7 @@ public void addData(long value) {
         for (Rate r : _rates) r.addData(value);
     }
 
-    /** coalesce all the stats */
+    /** Coalesces all the stats. */
     public void coalesceStats() {
         for (Rate r : _rates) r.coalesce();
     }

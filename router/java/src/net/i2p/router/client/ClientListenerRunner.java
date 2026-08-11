@@ -180,8 +180,8 @@ class ClientListenerRunner implements Runnable {
     /**
      * Just so unit tests don't NPE, where the router could be null.
      *
-     * @since 0.9.20
      * @return whether alive
+     * @since 0.9.20
      */
     private boolean isAlive() {
         Router r = _context.router();

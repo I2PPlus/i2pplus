@@ -89,15 +89,15 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         _noEffort = "none".equals(getOptions().getProperty(I2PClient.PROP_RELIABILITY, "").toLowerCase(Locale.US));
     }
 
-    /*
+    /**
      * For extension by SubSession via I2PSessionMuxedImpl
+     *
+     * Create a new session, reading the Destination, PrivateKey, and SigningPrivateKey
+     * from the destKeyStream, and using the specified options to connect to the router
      *
      * @param destKeyStream stream containing the private key data, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      * @param options set of options to configure the router with, if null will use System properties
      * @since 0.9.21
-     */
-    /**
-     * I2PSessionImpl2.
      */
     protected I2PSessionImpl2(I2PSessionImpl primary, InputStream destKeyStream, Properties options) throws I2PSessionException {
         super(primary, destKeyStream, options);

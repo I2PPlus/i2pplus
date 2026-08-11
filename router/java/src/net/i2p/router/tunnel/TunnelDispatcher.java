@@ -1282,8 +1282,8 @@ public class TunnelDispatcher implements Service {
      * The pumper pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
      *
-     * @since 0.9.70+
      * @return the pumper utilization
+     * @since 0.9.70+
      */
     public static double getPumperUtilization() { return TunnelGatewayPumper.getUtilization(); }
 

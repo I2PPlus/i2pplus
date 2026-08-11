@@ -44,7 +44,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     public long getMessageId() { return _id; }
 
     /**
-     * Set the message ID for this delivery status.
+     * Message ID for this delivery status.
      *
      * @param id 0 to (2**32) - 1
      * @throws IllegalStateException if id previously set, to protect saved checksum

@@ -784,8 +784,8 @@ public class EditBean extends IndexBean {
 
     /**
      * POST limits
-     * @since 0.9.9
      * @return the post max
+     * @since 0.9.9
      */
     public int getPostMax(int tunnel) {
         return _helper.getPostMax(tunnel);
@@ -907,8 +907,8 @@ public class EditBean extends IndexBean {
     /**
      *  The quantity options for the tunnel, as HTML.
      *  @param mode 0=both, 1=in, 2=out
-     *  @since 0.9.7
      *  @return the quantity options
+     *  @since 0.9.7
      */
     public String getQuantityOptions(int tunnel, int mode) {
         int tunnelDepth = getTunnelDepth(tunnel, DFLT_LENGTH);

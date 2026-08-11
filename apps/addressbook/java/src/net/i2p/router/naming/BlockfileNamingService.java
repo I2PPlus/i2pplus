@@ -697,16 +697,16 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
-     *  @since 0.8.9
      * @return the reverse key
+     *  @since 0.8.9
      */
     private static Integer getReverseKey(Destination dest) {
         return getReverseKey(dest.calculateHash());
     }
 
     /**
-     *  @since 0.8.9
      * @return the reverse key
+     *  @since 0.8.9
      */
     private static Integer getReverseKey(Hash hash) {
         byte[] hashBytes = hash.getData();
@@ -1191,8 +1191,8 @@ public class BlockfileNamingService extends DummyNamingService {
      *                Key "beginWith": start here in the iteration
      *                Don't use both startsWith and beginWith.
      *                Search, startsWith, and beginWith values must be lower case.
-     *  @since 0.9.20
      * @return the base64 entries
+     *  @since 0.9.20
      */
     @Override
     public Map<String, String> getBase64Entries(Properties options) {
@@ -1419,8 +1419,8 @@ public class BlockfileNamingService extends DummyNamingService {
      *                Key "beginWith": start here in the iteration
      *                Don't use both startsWith and beginWith.
      *                Search, startsWith, and beginWith values must be lower case.
-     *  @since 0.9.20
      * @return the names
+     *  @since 0.9.20
      */
     @Override
     public Set<String> getNames(Properties options) {

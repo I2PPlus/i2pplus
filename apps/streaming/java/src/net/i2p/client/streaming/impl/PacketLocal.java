@@ -33,10 +33,10 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     private final AtomicInteger _nackCount = new AtomicInteger();
     private volatile boolean _retransmitted;
     private volatile int _timeout;
-    /** whether this packet has been enqueued for I2CP send */
+    /** Whether this packet has been enqueued for I2CP send. */
     private volatile boolean _enqueued;
 
-    /** not bound to a connection */
+    /** Constructor for a packet not bound to a connection. */
     public PacketLocal(I2PAppContext ctx, Destination to, I2PSession session) {
         super(session);
         _context = ctx;
@@ -48,7 +48,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         _cancelledOn = -1;
     }
 
-    /** bound to a connection */
+    /** Constructor for a packet bound to a connection. */
     public PacketLocal(I2PAppContext ctx, Destination to, Connection con) {
         super(con.getSession());
         _context = ctx;
@@ -80,11 +80,13 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     }
 
     /**
+     * Destination this packet is being sent to.
      * @return the destination this packet is being sent to
      */
     public Destination getTo() { return _to; }
 
     /**
+     * Whether this packet should be signed.
      * @return true if this packet should be signed
      */
     public boolean shouldSign() {
@@ -95,11 +97,13 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     }
 
     /**
+     * Creation time.
      * @return the time this packet was created
      */
     public long getCreatedOn() { return _createdOn; }
 
     /**
+     * Lifetime of this packet.
      * @return the lifetime of this packet in ms
      */
     public long getLifetime() { return _context.clock().now() - _createdOn; }
@@ -162,7 +166,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             _log.debug("Resend cancelled! " + toString());
     }
 
-    /** how long after packet creation was it acked?
+    /** How long after packet creation was it acked?
      * @return how long after packet creation the packet was ACKed in ms
      */
     public synchronized int getAckTime() {
@@ -173,16 +177,19 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     }
 
     /**
+     * Number of times sent.
      * @return the number of times this packet has been sent
      */
     public int getNumSends() { return _numSends.get(); }
 
     /**
+     * Time of the last send.
      * @return the time of the last send, or -1 if never sent
      */
     public long getLastSend() { return _lastSend; }
 
     /**
+     * Bound connection.
      * @return null if not bound
      */
     public Connection getConnection() { return _connection; }
@@ -231,6 +238,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     public int getTimeout() { return _timeout; }
 
     /**
+     * Timeout for this packet.
      * @param timeout time from now, not absolute time
      * @since 0.9.46
      */
@@ -404,21 +412,25 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     }
 
     /**
+     * Whether this packet was cancelled.
      * @return true if this packet was cancelled
      */
     private synchronized boolean isCancelled() { return _cancelledOn > 0; }
 
     /**
+     * Whether the send was accepted.
      * @return true if this packet was accepted for sending
      */
     public synchronized boolean writeAccepted() { return _acceptedOn > 0 && _cancelledOn <= 0; }
 
     /**
+     * Whether the send failed.
      * @return true if this packet's send failed
      */
     public synchronized boolean writeFailed() { return _cancelledOn > 0; }
 
     /**
+     * Whether the send succeeded and was ACKed.
      * @return true if this packet was successfully sent and ACKed
      */
     public synchronized boolean writeSuccessful() { return _ackOn > 0 && _cancelledOn <= 0; }

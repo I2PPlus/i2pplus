@@ -12,8 +12,8 @@ import java.security.spec.AlgorithmParameterSpec;
 /**
  * Parameter specification for an EdDSA algorithm.
  *
- * @since 0.9.15
  * @author str4d
+ * @since 0.9.15
  *
  */
 public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable {

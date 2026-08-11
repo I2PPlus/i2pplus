@@ -69,7 +69,7 @@ class Peer extends Hash {
     }
 
     /**
-     * Sets whether this peer is a seed.
+     * Whether this peer is a seed.
      *
      * @param isSeed true if this peer has the complete torrent, false otherwise
      * @since 0.9.14

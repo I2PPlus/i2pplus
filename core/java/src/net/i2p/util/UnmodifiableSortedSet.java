@@ -17,9 +17,9 @@ import java.util.SortedSet;
  *  The Collection constructors are not recommended for large sets
  *  as duplicate check is O(n**2).
  *
- *  @since 0.9.55
  *
  *  @param <E> type of elements in this set
+ *  @since 0.9.55
  */
 public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E> {
 

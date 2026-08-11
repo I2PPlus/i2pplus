@@ -176,8 +176,8 @@ interface PeerListener {
     /**
      * Convenience
      *
-     * @since 0.9.2
      * @return the util
+     * @since 0.9.2
      */
     public I2PSnarkUtil getUtil();
 

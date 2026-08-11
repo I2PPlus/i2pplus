@@ -34,43 +34,43 @@ public class Rate {
     private volatile long _creationDate;
     private volatile int _period;
 
-    /** in current (partial) period, what is the total value acrued through all events? */
+    /** In current (partial) period, what is the total value acrued through all events? */
     public double getCurrentTotalValue() {
         return _currentTotalValue;
     }
 
-    /** in current (partial) period, how many events have occurred? */
+    /** In current (partial) period, how many events have occurred? */
     public long getCurrentEventCount() {
         return _currentEventCount;
     }
 
-    /** in current (partial) period, how much of the time has been spent doing the events? */
+    /** In current (partial) period, how much of the time has been spent doing the events? */
     public long getCurrentTotalEventTime() {
         return _currentTotalEventTime;
     }
 
-    /** in the last full period, what was the total value acrued through all events? */
+    /** In the last full period, what was the total value acrued through all events? */
     public double getLastTotalValue() {
         return _lastTotalValue;
     }
 
-    /** in the last full period, how many events occurred? */
+    /** In the last full period, how many events occurred? */
     public long getLastEventCount() {
         return _lastEventCount;
     }
 
-    /** in the last full period, how much of the time was spent doing the events? */
+    /** In the last full period, how much of the time was spent doing the events? */
     public long getLastTotalEventTime() {
         return _lastTotalEventTime;
     }
 
-    /** what was the max total value acrued in any period?  */
+    /** What was the max total value acrued in any period? */
     public double getExtremeTotalValue() {
         return _extremeTotalValue;
     }
 
     /**
-     * when the max(totalValue) was achieved, how many events occurred in that period?
+     * When the max(totalValue) was achieved, how many events occurred in that period?
      * Note that this is not necesarily the highest event count; that isn't tracked.
      * @return the extreme event count
      */
@@ -78,37 +78,37 @@ public class Rate {
         return _extremeEventCount;
     }
 
-    /** when the max(totalValue) was achieved, how much of the time was spent doing the events? */
+    /** When the max(totalValue) was achieved, how much of the time was spent doing the events? */
     public long getExtremeTotalEventTime() {
         return _extremeTotalEventTime;
     }
 
-    /** since rate creation, what was the total value acrued through all events?  */
+    /** Since rate creation, what was the total value acrued through all events? */
     public double getLifetimeTotalValue() {
         return _lifetimeTotalValue;
     }
 
-    /** since rate creation, how many events have occurred? */
+    /** Since rate creation, how many events have occurred? */
     public long getLifetimeEventCount() {
         return _lifetimeEventCount;
     }
 
-    /** since rate creation, how much of the time was spent doing the events? */
+    /** Since rate creation, how much of the time was spent doing the events? */
     public long getLifetimeTotalEventTime() {
         return _lifetimeTotalEventTime;
     }
 
-    /** when was the rate last coalesced? */
+    /** When was the rate last coalesced? */
     public long getLastCoalesceDate() {
         return _lastCoalesceDate;
     }
 
-    /** when was this rate created? */
+    /** When was this rate created? */
     public long getCreationDate() {
         return _creationDate;
     }
 
-    /** how large should this rate's cycle be? */
+    /** How large should this rate's cycle be? */
     public long getPeriod() {
         return _period;
     }
@@ -123,7 +123,7 @@ public class Rate {
     }
 
     /**
-     * Set the rate stat this rate belongs to.
+     * The rate stat this rate belongs to.
      *
      * @param rs the rate stat this rate belongs to
      */
@@ -187,22 +187,22 @@ public class Rate {
      * <pre>
      * There are at least 4 possible strategies for eventDuration:
      *
-     *   1) eventDuration is always zero.
+     * 1) eventDuration is always zero.
      *      The various get*Saturation*() and get*EventTime() methods will return zero.
      *
-     *   2) Each eventDuration is relatively small, and reflects processing time.
+     * 2) Each eventDuration is relatively small, and reflects processing time.
      *      This is probably the original meaning of "saturation", as it allows you
      *      to track how much time is spent gathering the stats.
      *      get*EventTime() will be close to 0.
      *      get*EventSaturation() will return values close to 0,
      *      get*SaturationLimit() will return adjusted values for the totals.
      *
-     *   3) The total of the eventDurations are approximately equal to total elapsed time.
+     * 3) The total of the eventDurations are approximately equal to total elapsed time.
      *      get*EventTime() will be close to the period.
      *      get*EventSaturation() will return values close to 1,
      *      get*SaturationLimit() will return adjusted values for the totals.
      *
-     *   4) Each eventDuration is not a duration at all, but someother independent data.
+     * 4) Each eventDuration is not a duration at all, but someother independent data.
      *      get*EventTime() may be used to retrieve the data.
      *      get*EventSaturation() are probably useless.
      *      get*SaturationLimit() are probably useless.
@@ -261,7 +261,7 @@ public class Rate {
     }
 
     /**
-     * Set the listener to notify on coalesce.
+     * The listener to notify on coalesce.
      *
      * @param listener the listener to notify on coalesce, or null to clear
      */
@@ -279,7 +279,7 @@ public class Rate {
     }
 
     /**
-     *  Get the last N data points from the underlying storage (RRD).
+     *  The last N data points from the underlying storage (RRD).
      *  Delegates to the summary listener if it supports historical data.
      *  Returns NaN-padded array if the listener is null or data is unavailable.
      *
@@ -328,7 +328,7 @@ public class Rate {
     }
 
     /**
-     *  Gets the average value, or the lifetime average if no recent data.
+     *  The average value, or the lifetime average if no recent data.
      *
      * @return the average or lifetime average depending on last event count
      * @since 0.9.4
@@ -385,7 +385,7 @@ public class Rate {
         return 0.0D;
     }
 
-    /** how many periods have we already completed? */
+    /** How many periods have we already completed? */
     public synchronized long getLifetimePeriods() {
         long lifetime = now() - _creationDate;
         double periods = lifetime / (double) _period;
@@ -393,7 +393,7 @@ public class Rate {
     }
 
     /**
-     * using the last period's rate, what is the total value that could have been sent
+     * Using the last period's rate, what is the total value that could have been sent
      * if events were constant?
      *
      * @return max total value, or 0 if event times aren't used
@@ -469,7 +469,7 @@ public class Rate {
      *
      * @param out where to store the computed averages.
      * @param useLifetime whether the lifetime average should be used if
-     * there are no events.
+     *  there are no events.
      *
      * @return the same RateAverages object for chaining
      * @since 0.9.4

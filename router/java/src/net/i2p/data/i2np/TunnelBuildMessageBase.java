@@ -49,14 +49,16 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
     }
 
     /**
+     *  Store a build record.
      *  @param record may be null
-      * @param index the index
+     *  @param index the index
      */
     public void setRecord(int index, EncryptedBuildRecord record) {_records[index] = record;}
 
     /**
+     *  Build record at the given index, may be null.
+     *  @param index the index
      *  @return may be null
-      * @param index the index
      */
     public EncryptedBuildRecord getRecord(int index) {return _records[index];}
 
@@ -69,12 +71,12 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
     public static final int RECORD_SIZE = 512+16;
 
     /**
-     * calculateWrittenLength.
+     *  Written length of the message body: one record size per record.
      */
     protected int calculateWrittenLength() {return RECORD_SIZE * RECORD_COUNT;}
 
     /**
-     * readMessage.
+     *  Read the records from a byte array.
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != getType()) {throw new I2NPMessageException("Message type is incorrect for this message");}
@@ -91,7 +93,7 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
     }
 
     /**
-     * writeMessageBody.
+     *  Write the records to the output array, starting at the given index.
      */
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         int remaining = out.length - (curIndex + calculateWrittenLength());

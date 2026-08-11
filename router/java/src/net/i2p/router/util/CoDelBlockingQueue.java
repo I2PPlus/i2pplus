@@ -38,9 +38,9 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private static final long serialVersionUID = 1L;
     private final transient I2PAppContext _context;
     private final transient Log _log;
-    /**  name */
+    /** Queue name. */
     private final String _name;
-    /**  capacity */
+    /** Maximum queue capacity. */
     private final int _capacity;
 
     // following 4 are state variables defined by sample code, locked by this
@@ -50,15 +50,15 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private long _drop_next;
     /** Packets dropped since going into drop state */
     private int _count;
-    /** true if in drop state */
+    /** True if in drop state. */
     private boolean _dropping;
 
-    /** following is a per-request global for ease of use, locked by this */
+    /** Per-request global for ease of use, locked by this. */
     private long _now;
 
-    /** debugging */
+    /** Unique ID generator for instances. */
     private static final AtomicLong __id = new AtomicLong();
-    /**  id */
+    /** Instance ID. */
     private final long _id;
 
     private static final long[] CODEL_RATES = RateConstants.SHORT_TERM_RATES;
@@ -131,7 +131,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *
      */
     private static final int DEFAULT_CODEL_TARGET = 5;
-    /**  target */
+    /** CoDel target delay in ms. */
     private volatile long _target;
 
     /**
@@ -142,14 +142,14 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *
      */
     private static final int DEFAULT_CODEL_INTERVAL = 50;
-    /**  interval */
+    /** CoDel interval in ms. */
     private volatile long _interval;
     /** RateStat name for message delay. */
     private final String STAT_DELAY;
     private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 1000 : 500;
 
     /**
-     * Constructs a queue with default CoDel target and interval from properties.
+     * Queue with default CoDel target and interval from properties.
      *
      * @param ctx the I2P application context
      * @param name name for this queue instance
@@ -161,7 +161,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
-     *  Constructs a queue with explicit CoDel target and interval.
+     *  Queue with explicit CoDel target and interval.
      *
      *  @param ctx the I2P application context
      *  @param name for stats
@@ -193,7 +193,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     public long getTarget() { return _target; }
 
     /**
-     * Sets the current CoDel target delay in ms.
+     * Current CoDel target delay in ms.
      *
      * @param target the new target delay in ms
      * @since 0.9.70+
@@ -209,7 +209,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     public long getInterval() { return _interval; }
 
     /**
-     * Sets the current CoDel interval in ms.
+     * Current CoDel interval in ms.
      *
      * @param interval the new interval in ms
      * @since 0.9.70+
@@ -217,7 +217,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     public void setInterval(long interval) { _interval = interval; }
 
     /**
-     * add.
+     * Add an element, recording the enqueue time.
      */
     @Override
     public boolean add(E o) {
@@ -226,7 +226,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
-     * offer.
+     * Offer an element, recording the enqueue time.
      */
     @Override
     public boolean offer(E o) {
@@ -235,7 +235,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
-     * offer.
+     * Offer an element, recording the enqueue time.
      */
     @Override
     public boolean offer(E o, long timeout, TimeUnit unit) throws InterruptedException {
@@ -244,7 +244,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
-     * put.
+     * Put an element, recording the enqueue time.
      */
     @Override
     public void put(E o) throws InterruptedException {
@@ -253,7 +253,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
-     * clear.
+     * Clear the queue and reset CoDel state.
      */
     @Override
     public void clear() {
@@ -267,7 +267,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
-     * take.
+     * Take the next element, applying CoDel drops as needed.
      */
     @Override
     public E take() throws InterruptedException {
@@ -279,7 +279,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
-     * poll.
+     * Poll the next element, applying CoDel drops as needed.
      */
     @Override
     public E poll() {
@@ -378,6 +378,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
+     *  Dequeue the next element, applying CoDel drops as needed.
+     *
      *  @return if null, call again
      */
     private E deque() throws InterruptedException {
@@ -388,6 +390,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private static final int MAX_DROPS_PER_CALL = 8;
 
     /**
+     *  Apply CoDel control to the given entry, dropping if needed.
+     *
      *  @param rv may be null
      *  @return rv or a subequent entry or null if dropped
      */

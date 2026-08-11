@@ -99,8 +99,8 @@ class NTCP2Options {
     }
 
     /**
-     *  @since 0.9.37 consolidated from two places
      *  @return null on error
+     *  @since 0.9.37 consolidated from two places
      */
     public static NTCP2Options fromByteArray(byte[] options) {
         if (options.length < 12)

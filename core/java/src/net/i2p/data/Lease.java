@@ -149,8 +149,8 @@ public class Lease extends DataStructureImpl {
     /**
      *  Gets the lease end time.
      *
-     * @since 0.9.48
      * @return the end time
+     * @since 0.9.48
      */
     public long getEndTime() {
         return _end;

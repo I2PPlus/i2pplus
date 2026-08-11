@@ -740,7 +740,7 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Set the destination.
+     *  Destination for this key file.
      *
      *  @param d the destination
      */
@@ -865,7 +865,7 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Get the signing private key.
+     *  Signing private key.
      *
      *  @return null on error or if not initialized
      */
@@ -920,7 +920,7 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Get the offline key expiration time.
+     *  Offline key expiration time.
      *
      *  @return Java time (ms) or 0 if not initialized or does not have offline keys
      *  @since 0.9.38
@@ -930,7 +930,7 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Get the offline signature.
+     *  Offline signature.
      *
      *  @return the signature, or null if not initialized or does not have offline keys
      *  @since 0.9.38
@@ -940,7 +940,7 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Get the transient signing public key.
+     *  Transient signing public key.
      *
      *  @return null on error or if not initialized or does not have offline keys
      *  @since 0.9.38
@@ -956,7 +956,7 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Get the transient signing private key.
+     *  Transient signing private key.
      *
      *  @return null on error or if not initialized or does not have offline keys
      *  @since 0.9.38

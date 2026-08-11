@@ -45,19 +45,19 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     private final I2PAppContext _context;
     private final Log _log;
 
-    /** hook to inject and receive datagrams */
+    /** Hook to inject and receive datagrams. */
     private final I2PSession _session;
 
     private final I2PSnarkUtil _util;
     private final Hash _myHash;
 
-    /** unsigned datagrams */
+    /** Unsigned datagrams. */
     private final int _rPort;
 
-    /** dest and port to tracker data */
+    /** Dest and port to tracker data. */
     private final ConcurrentHashMap<HostPort, Tracker> _trackers;
 
-    /** our TID to tracker */
+    /** Our TID to tracker. */
     private final Map<Integer, ReplyWaiter> _sentQueries;
 
     private boolean _isRunning;
@@ -96,7 +96,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     private static final long CONN_EXPIRATION = 3 * (long) 60 * 1000;
     private static final long DEFAULT_TIMEOUT = (long) 90 * 1000;
 
-    /** in seconds */
+    /** In seconds. */
     private static final int DEFAULT_INTERVAL = 60 * 60;
 
     private static final int MIN_INTERVAL = 15 * 60;
@@ -299,7 +299,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     }
 
     /**
-     * Get or establish a connection to the tracker.
+     * Establish a connection to the tracker.
      *
      * @param tr the tracker to connect to
      * @param untilTime the deadline time in milliseconds
@@ -348,7 +348,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     }
 
     /**
-     * Get or create a tracker entry.
+     * Create or find a tracker entry.
      *
      * @param host the tracker hostname
      * @param port the tracker port
@@ -508,7 +508,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         return rv ? payload : null;
     }
 
-    /** wait after initial send, resend if necessary */
+    /** Wait after initial send, resend if necessary. */
     private boolean waitAndRetransmit(ReplyWaiter w, long untilTime) {
         synchronized (w) {
             while (true) {
@@ -638,6 +638,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     ///// Reception.....
 
     /**
+     * Receive a message.
+     *
      * @param from dest or null if it didn't come in on signed port
      */
     private void receiveMessage(Destination from, int fromPort, byte[] payload) {
@@ -701,6 +703,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     }
 
     /**
+     * Receive a connection reply.
+     *
      * @param lifetime ms
      */
     private void receiveConnection(ReplyWaiter waiter, byte[] payload) {
@@ -843,18 +847,23 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
     }
 
-    /** for non-muxed */
+    /** For non-muxed. */
     @Override
     public void messageAvailable(I2PSession session, int msgId, long size) { /* no-op */ }
 
     /**
-     * reportAbuse.
+     * Handle a reportAbuse message from the session.
+     *
+     * @param session the session
+     * @param severity the abuse severity
      */
     @Override
     public void reportAbuse(I2PSession session, int severity) { /* no-op */ }
 
     /**
-     * disconnected.
+     * Handle a session disconnect.
+     *
+     * @param session the session
      */
     @Override
     public void disconnected(I2PSession session) {
@@ -870,7 +879,11 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     }
 
     /**
-     * errorOccurred.
+     * Handle a session error.
+     *
+     * @param session the session
+     * @param message the error message
+     * @param error the error
      */
     @Override
     public void errorOccurred(I2PSession session, String message, Throwable error) {
@@ -891,7 +904,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         private final String error;
         private final Set<Hash> peers;
 
-        /** success */
+        /** Success. */
         public TrackerResponse(int interval, int seeds, int leeches, Set<Hash> peers) {
             this.interval = interval;
             complete = seeds;
@@ -900,7 +913,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             error = null;
         }
 
-        /** failure */
+        /** Failure. */
         public TrackerResponse(String errorMsg) {
             interval = DEFAULT_INTERVAL;
             complete = 0;
@@ -910,6 +923,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * The peers.
+         *
          * @return the peers
          */
         public Set<Hash> getPeers() {
@@ -925,6 +940,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * The seed count.
+         *
          * @return the seed count
          */
         public int getSeedCount() {
@@ -932,6 +949,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * The leech count.
+         *
          * @return the leech count
          */
         public int getLeechCount() {
@@ -939,13 +958,15 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * The failure reason.
+         *
          * @return the failure reason
          */
         public String getFailureReason() {
             return error;
         }
 
-        /** in seconds */
+        /** In seconds. */
         public int getInterval() {
             return interval;
         }
@@ -957,6 +978,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         protected final int port;
 
         /**
+         * Create a host/port pair.
+         *
          * @param port the announce port
          */
         public HostPort(String host, int port) {
@@ -965,6 +988,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * The announce port.
+         *
          * @return the announce port
          */
         public int getPort() {
@@ -972,6 +997,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * Whether hash code is present.
+         *
          * @return whether h code is present
          */
         @Override
@@ -980,7 +1007,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
-         * equals.
+         * Whether this equals the other.
          */
         @Override
         public boolean equals(Object o) {
@@ -992,7 +1019,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
-         * toString.
+         * String form of the host/port pair.
          */
         @Override
         public String toString() {
@@ -1024,6 +1051,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * The destination, or null.
+         *
          * @param fast if true, do not lookup
          * @return dest or null
          */
@@ -1037,7 +1066,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
-         * Set whether a connection to the tracker is in progress.
+         * Store whether a connection to the tracker is in progress.
          */
         public synchronized void setConnInProgress(boolean yes) {
             if (yes) {
@@ -1049,6 +1078,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * Whether a connection is in progress.
+         *
          * @return whether conn in progress
          */
         public synchronized boolean isConnInProgress() {
@@ -1056,6 +1087,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * Whether the connection is valid.
+         *
          * @return whether conn valid
          */
         public synchronized boolean isConnValid() {
@@ -1072,14 +1105,14 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             notifyAll();
         }
 
-        /** does not change state */
+        /** Does not change state. */
         public synchronized void replyTimeout() {
             consecFails++;
             lastFailed = _context.clock().now();
         }
 
         /**
-         * sets heardFrom
+         * Store the connection ID and expiration.
          *
          * @param lifetime ms
          */
@@ -1094,6 +1127,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * The connection ID, or null if invalid.
+         *
          * @return null if invalid
          */
         public synchronized Long getConnection() {
@@ -1104,13 +1139,15 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * The interval.
+         *
          * @return the interval
          */
         public synchronized int getInterval() {
             return interval;
         }
 
-        /** sets heardFrom; calls notify */
+        /** Update the interval and heardFrom, notifying waiters. */
         public synchronized void setInterval(int interval) {
             long now = _context.clock().now();
             lastHeardFrom = now;
@@ -1119,7 +1156,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             this.notifyAll();
         }
 
-        /** sets heardFrom; calls notify */
+        /** Mark an error, update heardFrom, and notify waiters. */
         public synchronized void gotError() {
             long now = _context.clock().now();
             lastHeardFrom = now;
@@ -1129,13 +1166,13 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             this.notifyAll();
         }
 
-        /** doubled for each consecutive failure */
+        /** Doubled for each consecutive failure. */
         public synchronized long getTimeout() {
             return DEFAULT_TIMEOUT << Math.min(consecFails, 3);
         }
 
         /**
-         * toString.
+         * String form of the waiter.
          */
         @Override
         public String toString() {
@@ -1183,6 +1220,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * The ID.
+         *
          * @return the i d
          */
         public int getID() {
@@ -1190,6 +1229,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * The sent-to tracker.
+         *
          * @return the sent to
          */
         public Tracker getSentTo() {
@@ -1197,6 +1238,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * The expected action.
+         *
          * @return the expected action
          */
         public int getExpectedAction() {
@@ -1204,6 +1247,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * The payload.
+         *
          * @return the payload
          */
         public byte[] getPayload() {
@@ -1211,6 +1256,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
+         * The reply object, may be null depending on what happened. Cast to the expected type.
+         *
          * @return may be null depending on what happened. Cast to expected type.
          */
         public synchronized TrackerResponse getReplyObject() {
@@ -1249,14 +1296,14 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             gotReply(resp.error == null);
         }
 
-        /** Sets state to INIT. */
+        /** Reset to the INIT state. */
         @Override
         public synchronized void schedule(long toWait) {
             state = WaitState.INIT;
             super.schedule(toWait);
         }
 
-        /** timer callback on timeout */
+        /** Timer callback on timeout. */
         public synchronized void timeReached() {
             // don't trump success or failure
             if (state != WaitState.INIT) {
@@ -1274,7 +1321,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
-         * toString.
+         * String form of the reply waiter.
          */
         @Override
         public String toString() {

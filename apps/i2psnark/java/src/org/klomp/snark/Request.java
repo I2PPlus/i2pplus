@@ -18,9 +18,9 @@ import java.io.IOException;
  */
 class Request {
     private final PartialPiece piece;
-    /** Off */
+    /** Offset in the piece. */
     final int off;
-    /** Len */
+    /** Length in bytes. */
     final int len;
     /** Send time */
     long sendTime;
@@ -67,8 +67,8 @@ class Request {
     /**
      * The piece number this Request is for
      *
-     * @since 0.9.1
      * @return the piece
+     * @since 0.9.1
      */
     public int getPiece() {
         return piece.getPiece();
@@ -77,8 +77,8 @@ class Request {
     /**
      * The PartialPiece this Request is for
      *
-     * @since 0.9.1
      * @return the partial piece
+     * @since 0.9.1
      */
     public PartialPiece getPartialPiece() {
         return piece;
@@ -101,7 +101,11 @@ class Request {
         return false;
     }
 
-    /** @return "(piece,off,len)" */
+    /**
+     * A string representation of the request.
+     *
+     * @return "(piece,off,len)"
+     */
     @Override
     public String toString() {
         return "(" + piece.getPiece() + "," + off + "," + len + ")";

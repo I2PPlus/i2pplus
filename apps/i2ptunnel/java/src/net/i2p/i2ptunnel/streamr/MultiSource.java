@@ -50,8 +50,8 @@ public class MultiSource implements Source, Sink {
 
     /**
      *  May throw RuntimeException from underlying sinks
-     *  @since 0.9.53 added fromPort and toPort parameters
      *  @throws RuntimeException
+     *  @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination ignored_from, int ignored_fromPort, int ignored_toPort, byte[] data) {
         if (sinks.isEmpty()) {

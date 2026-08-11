@@ -280,7 +280,7 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * run.
+     * Run the tracker client thread.
      */
     @Override
     public void run() {
@@ -429,6 +429,8 @@ public class TrackerClient implements Runnable {
     }
 
     /**
+     * Whether the announce URL already exists in the list.
+     *
      * @param existing the ones we already know about
      * @param ann an announce URL non-null
      * @return true if ann is valid and new; adds to existing if returns true
@@ -566,7 +568,7 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * Get peers from a list of trackers.
+     * Fetch peers from a list of trackers.
      *
      * @param trckrs the list of trackers to query
      * @return max peers seen
@@ -780,7 +782,7 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * Get peers from Peer Exchange (PEX).
+     * Fetch peers from Peer Exchange (PEX).
      *
      * @return max peers seen
      */
@@ -900,6 +902,8 @@ public class TrackerClient implements Runnable {
     }
 
     /**
+     * Valid web peers from the metainfo.
+     *
      * @return valid web peers from metainfo
      * @since 0.9.49
      */
@@ -1192,6 +1196,8 @@ public class TrackerClient implements Runnable {
     }
 
     /**
+     * Whether the key was already in the dictionary.
+     *
      * @param key a bencoded dictionary key
      * @param ih the torrent's info hash
      * @return whether the key is the info hash, byte for byte
@@ -1447,6 +1453,8 @@ public class TrackerClient implements Runnable {
     }
 
     /**
+     * Whether the announce URL is an I2P host.
+     *
      * @param ann an announce URL, may be null, returns false if null
      * @return true for i2p hosts only
      * @since 0.7.12
@@ -1561,6 +1569,8 @@ public class TrackerClient implements Runnable {
         int seenPeers;
 
         /**
+         * Create a tracker entry for the announce URL.
+         *
          * @param a must be a valid http URL with a path, or a udp URL (path is ignored)
          * @param p true if primary
          */

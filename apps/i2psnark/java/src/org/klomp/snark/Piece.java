@@ -230,7 +230,7 @@ class Piece implements Comparable<Piece> {
     }
 
     /**
-     * Gets the current priority level for this piece.
+     * The current priority level for this piece.
      *
      * @return priority value (negative values indicate disabled/skipped pieces)
      * @since 0.8.1
@@ -240,7 +240,7 @@ class Piece implements Comparable<Piece> {
     }
 
     /**
-     * Sets the priority level for this piece.
+     * The priority level for this piece.
      *
      * @param p priority value (negative to disable, 0 or positive for normal priority)
      * @since 0.8.1

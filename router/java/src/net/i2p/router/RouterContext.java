@@ -346,9 +346,9 @@ public class RouterContext extends I2PAppContext {
      * Will return the main netDb if
      * the dbid is null or the client db is not found.
      *
-     * @since 0.9.61
      * @param id may be null
      * @return non-null
+     * @since 0.9.61
      */
     public NetworkDatabaseFacade clientNetDb(Hash id) { return _netDb.clientNetDB(id); }
 
@@ -512,8 +512,8 @@ public class RouterContext extends I2PAppContext {
     /**
      * Return a long with a long default
      *
-     * @since 0.9.4
      * @return the property
+     * @since 0.9.4
      */
     @Override
     public long getProperty(String propName, long defaultVal) {

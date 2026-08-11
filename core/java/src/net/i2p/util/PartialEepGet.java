@@ -22,8 +22,8 @@ import net.i2p.I2PAppContext;
  *
  * Useful for checking .sud versions
  *
- * @since 0.7.12
  * @author zzz
+ * @since 0.7.12
  */
 @SuppressWarnings("PMD.CloseResource")
 public class PartialEepGet extends EepGet {

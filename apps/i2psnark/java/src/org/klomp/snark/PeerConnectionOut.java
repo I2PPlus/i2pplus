@@ -34,12 +34,12 @@ class PeerConnectionOut implements Runnable {
     // Contains Messages.
     // Bounded queue to prevent unbounded memory growth under slow network conditions
     private static final int MAX_QUEUE_SIZE = 1000;
-    /** max consecutive PIECE messages the priority scan walks before giving up */
+    /** Max consecutive PIECE messages the priority scan walks before giving up. */
     private static final int MAX_PRIORITY_SCAN = 16;
     private final BlockingQueue<Message> sendQueue = new LinkedBlockingQueue<>(MAX_QUEUE_SIZE);
     private static final AtomicLong __id = new AtomicLong();
     private final long _id;
-    /** last send time */
+    /** Last send time. */
     long lastSent;
 
     /**
@@ -269,7 +269,7 @@ class PeerConnectionOut implements Runnable {
         }
     }
 
-    /** remove messages not sent in 3m */
+    /** Remove messages not sent in 3m. */
     private static final int SEND_TIMEOUT = 3 * 60 * 1000;
 
     /**
@@ -386,7 +386,7 @@ class PeerConnectionOut implements Runnable {
         }
     }
 
-    /** retransmit requests not received in 7m */
+    /** Retransmit requests not received in 7m. */
     private static final int REQ_TIMEOUT = (2 * SEND_TIMEOUT) + (60 * 1000);
 
     /**

@@ -153,8 +153,8 @@ public abstract class TransportImpl implements Transport {
     /**
      * The NTCP send pool capacity (called by Tuner).
      * Resizes the pool on NTCP transports, draining old messages.
-     * @since 0.9.70+
      * @param capacity the capacity
+     * @since 0.9.70+
      */
     public static void setSendPoolCapacity(int capacity) {
         int def = SystemVersion.isSlow() ? 64 : 128;
@@ -672,8 +672,8 @@ public abstract class TransportImpl implements Transport {
 
     /**
      *  Do we have any current address?
-     * @since IPv6
      * @return whether current address is present
+     * @since IPv6
      */
     public boolean hasCurrentAddress() {
         synchronized(_currentAddresses) {return !_currentAddresses.isEmpty();}
@@ -732,8 +732,8 @@ public abstract class TransportImpl implements Transport {
      *  To remove all IPv4 or IPv6 addresses, use removeAddress(boolean).
      *  To remove all IPv4 and IPv6 addresses, use replaceAddress(null).
      *
-     * @since 0.9.20
      * @param address the address
+     * @since 0.9.20
      */
     protected void removeAddress(RouterAddress address) {
         if (_log.shouldWarn()) {_log.warn("Removing exisiting address\n* " + address);}
@@ -780,8 +780,8 @@ public abstract class TransportImpl implements Transport {
     /**
      *  Save a local address we were notified about before we started.
      *
-     * @since IPv6
      * @param address the address
+     * @since IPv6
      */
     protected void saveLocalAddress(InetAddress address) {
         _localAddresses.add(address);
@@ -790,8 +790,8 @@ public abstract class TransportImpl implements Transport {
     /**
      *  Return and then clear all saved local addresses.
      *
-     * @since IPv6
      * @return the saved local addresses
+     * @since IPv6
      */
     protected Collection<InetAddress> getSavedLocalAddresses() {
         List<InetAddress> rv = new ArrayList<>(_localAddresses);
@@ -800,11 +800,11 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  Get all available address we can use, shuffled and then sorted by cost/preference.
+     *  All available addresses we can use, shuffled and then sorted by cost/preference.
      *  Lowest cost (most preferred) first.
      *  @return non-null, possibly empty
-     *  @since IPv6, public since 0.9.50, was protected
      *  @param target the target
+     *  @since IPv6, public since 0.9.50, was protected
      */
     public List<RouterAddress> getTargetAddresses(RouterInfo target) {
         List<RouterAddress> rv;
@@ -944,8 +944,8 @@ public abstract class TransportImpl implements Transport {
     /**
      *  This returns true if the force-firewalled setting is configured, false otherwise.
      *
-     * @since 0.9.20, public since 0.9.30
      * @return whether i pv4 firewalled
+     * @since 0.9.20, public since 0.9.30
      */
     public boolean isIPv4Firewalled() {
         return TransportUtil.isIPv4Firewalled(_context);
@@ -954,8 +954,8 @@ public abstract class TransportImpl implements Transport {
     /**
      *  This returns true if the force-firewalled setting is configured, false otherwise.
      *
-     * @since 0.9.27, public since 0.9.30
      * @return whether i pv6 firewalled
+     * @since 0.9.27, public since 0.9.30
      */
     public boolean isIPv6Firewalled() {
         return TransportUtil.isIPv6Firewalled(_context);
@@ -963,6 +963,7 @@ public abstract class TransportImpl implements Transport {
 
     /**
      * Whether the given peer is backlogged.
+     *
      * @return whether backlogged
      */
     public boolean isBacklogged(Hash peer) {return false;}
@@ -1109,8 +1110,8 @@ public abstract class TransportImpl implements Transport {
     /**
      * Are we allowed to connect to local addresses?
      *
-     * @since 0.9.28 moved from UDPTransport
      * @return the value
+     * @since 0.9.28 moved from UDPTransport
      */
     public boolean allowLocal() {return _context.getBooleanProperty("i2np.allowLocal");}
 
@@ -1219,8 +1220,8 @@ public abstract class TransportImpl implements Transport {
 
     /**
      *  The IPv6 configuration for this transport.
-     * @since IPv6, public since 0.9.30
      * @return the i pv6 config
+     * @since IPv6, public since 0.9.30
      */
     public TransportUtil.IPv6Config getIPv6Config() {
         return TransportUtil.getIPv6Config(_context, getStyle());

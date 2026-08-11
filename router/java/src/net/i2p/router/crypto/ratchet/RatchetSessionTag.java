@@ -4,7 +4,7 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 
 /**
- * 8-byte session tag for ratchet protocol messages with efficient long-based storage representation for memory optimization
+ *  8-byte session tag for ratchet protocol messages with efficient long-based storage representation for memory optimization
  *  Does not extend SessionTag or DataStructure to save space
  *
  *  @since 0.9.44
@@ -14,13 +14,15 @@ public class RatchetSessionTag {
     public static final int LENGTH = 8;
 
     private final long _data;
-    /** Constructs tag from a long value for compact 8-byte storage. */
+    /** Tag from a long value for compact 8-byte storage. */
 
     public RatchetSessionTag(long val) {
         _data = val;
     }
 
     /**
+     *  First 8 bytes of the given value are copied; the reference is not kept.
+     *
      *  @param val will copy the first 8 bytes. Reference will not be kept.
      */
     public RatchetSessionTag(byte[] val) {
@@ -30,6 +32,8 @@ public class RatchetSessionTag {
     }
 
     /**
+     *  The tag as a byte array.
+     *
      *  @return data as a byte array
      */
     public byte[] getData() {
@@ -39,6 +43,8 @@ public class RatchetSessionTag {
     }
 
     /**
+     *  The tag as a long value.
+     *
      *  @return data as a long value
      *  @since 0.9.46
      */

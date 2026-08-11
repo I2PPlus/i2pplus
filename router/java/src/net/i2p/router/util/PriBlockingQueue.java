@@ -67,7 +67,7 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
     private static final PriorityComparator<?> PRIORITY_COMPARATOR = new PriorityComparator<>();
 
     /**
-     * Constructs a new priority blocking queue with the given initial capacity.
+     * Priority blocking queue with the given initial capacity.
      * The queue is bounded by a configurable max size read once at construction.
      *
      * @param ctx             the I2P application context

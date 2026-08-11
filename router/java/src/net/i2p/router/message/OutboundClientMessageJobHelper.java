@@ -74,32 +74,18 @@ class OutboundClientMessageJobHelper {
      *
      * For now, its just a tunneled DeliveryStatusMessage
      *
-     * @param wrappedKey non-null with null data,
-     *                   output parameter that will be filled with the SessionKey used
- *
-     * @param wrappedTags output parameter that will be filled with the sessionTags used
-     * @param bundledReplyLeaseSet if specified, the given LeaseSet will be packaged with the message (allowing
-     *                             much faster replies, since their netDb search will return almost instantly)
- *
-     * @param replyTunnel non-null if requireAck is true or bundledReplyLeaseSet is non-null
-     * @param requireAck if true, bundle replyToken in an ack clove
-     * @return garlic, or null if no tunnels were found (or other errors)
-     */
-
-    /**
      * Allow the app to specify the data clove directly, which enables OutboundClientMessage to resend the
-     * same payload (including expiration and unique id) in different garlics (down different tunnels)
-     *
-     * This is called from OCMOSJ
+     * same payload (including expiration and unique id) in different garlics (down different tunnels).
+     * This is called from OCMOSJ.
      *
      * @param dataClove may be null for ECIES-layer ack
      * @param tagsToSendOverride if &gt; 0, use this instead of skm's default
      * @param lowTagsOverride if &gt; 0, use this instead of skm's default
      * @param wrappedKey for ElGamal, non-null with null data, output parameter
-                         that will be filled with the SessionKey used, may be null for ECIES
+     *                   that will be filled with the SessionKey used, may be null for ECIES
      * @param wrappedTags for ElGamal, output parameter that will be filled with the sessionTags used,
      *                    may be null for ECIES
- *
+     *
      * @param replyTunnel non-null if requireAck is true or bundledReplyLeaseSet is non-null
      * @param requireAck if true, bundle replyToken in an ack clove
      * @param bundledReplyLeaseSet may be null; if non-null, put it in a clove
@@ -231,9 +217,9 @@ class OutboundClientMessageJobHelper {
 
         /**
          * Defaults:
-         *  ackInstructions.setDelayRequested(false);
-         *  ackInstructions.setDelaySeconds(0);
-         *  ackInstructions.setEncrypted(false);
+         * ackInstructions.setDelayRequested(false);
+         * ackInstructions.setDelaySeconds(0);
+         * ackInstructions.setEncrypted(false);
          */
 
         DeliveryStatusMessage dsm = buildDSM(ctx, replyToken);

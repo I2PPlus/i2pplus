@@ -22,8 +22,8 @@ import java.util.NoSuchElementException;
  * with proper fail-fast behavior on concurrent modifications.
  *
  * @param <E>  type of elements in this list
- * @since 0.9.4 moved from net.i2p.util in 0.9.24
  * @author zab
+ * @since 0.9.4 moved from net.i2p.util in 0.9.24
  */
 @SuppressWarnings("java:S2975")
 public class CachedIteratorArrayList<E> extends ArrayList<E> {

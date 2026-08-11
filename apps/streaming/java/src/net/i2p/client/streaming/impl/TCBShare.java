@@ -48,7 +48,7 @@ class TCBShare {
     private static final int MAX_RTT_DEV = (int) (MAX_RTT * 1.5);
 
     /**
-     * Get the maximum window size for TCB sharing from config.
+     * Maximum window size for TCB sharing from config.
      * Tunable via i2p.streaming.maxSlowStartWindow (default: 64).
      *
      * @return the maximum window size

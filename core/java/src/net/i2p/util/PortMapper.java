@@ -242,7 +242,7 @@ public class PortMapper {
     }
 
     /**
-     *  Get the registered port for a service
+     *  The registered port for a service
      *
      *  @param service the service name
      *  @return -1 if not registered
@@ -253,7 +253,7 @@ public class PortMapper {
     }
 
     /**
-     *  Get the registered port for a service
+     *  The registered port for a service
      *
      *  @param service the service name
      *  @param def default
@@ -266,7 +266,7 @@ public class PortMapper {
     }
 
     /**
-     *  Get the registered host for a service.
+     *  The registered host for a service.
      *  Will return "127.0.0.1" if the service was registered without a host.
      *
      *  @param def default
@@ -280,7 +280,7 @@ public class PortMapper {
     }
 
     /**
-     *  Get the actual host for a service.
+     *  The actual host for a service.
      *  Will return "127.0.0.1" if the service was registered without a host.
      *  If the service was registered with the host "0.0.0.0", "::", or "0:0:0:0:0:0:0:0",
      *  it will return a public IP if we have one,
@@ -346,8 +346,8 @@ public class PortMapper {
      *  If PROP_PREFER_HTTPS is set to false,
      *  return http URL unless console is https only. Default http://127.0.0.1:7657/
      *
+     *  @return the console u r l
      *  @since 0.9.33 consolidated from i2ptunnel and desktopgui
-     * @return the console u r l
      */
     public String getConsoleURL() {
         return getConsoleURL(I2PAppContext.getGlobalContext().getBooleanPropertyDefaultTrue(PROP_PREFER_HTTPS));
@@ -359,14 +359,16 @@ public class PortMapper {
      *  If preferHTTPS is false,
      *  return http URL unless console is https only. Default http://127.0.0.1:7657/
      *
+     *  @return the console u r l
      *  @since 0.9.34
-     * @return the console u r l
      */
     public String getConsoleURL(boolean preferHTTPS) {
         return preferHTTPS ? getHTTPSConsoleURL() : getHTTPConsoleURL();
     }
 
     /**
+     *  The console URL, https if the console is https only.
+     *
      *  @return http URL unless console is https only. Default http://127.0.0.1:7657/
      */
     private String getHTTPConsoleURL() {
@@ -386,6 +388,8 @@ public class PortMapper {
     }
 
     /**
+     *  The console URL, http if the console is http only.
+     *
      *  @return https URL unless console is http only. Default http://127.0.0.1:7657/
      *  @since 0.9.34
      */

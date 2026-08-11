@@ -1823,8 +1823,8 @@ class PeerTestManager {
      * @param hash alice for msg 2, charlie for msg 4
      * @param data signed peer test data
      * @param to charlie for msg 2, alice for msg 4
-     * @since 0.9.57
      * @throws IOException if to peer is dead
+     * @since 0.9.57
      */
     private void sendRIandPT(RouterInfo ri, int status, Hash hash, byte[] data, PeerState2 to, long now) throws IOException {
         boolean delay = false;

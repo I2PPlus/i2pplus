@@ -43,26 +43,26 @@ import java.util.Set;
  *
  *  Refactored from net.i2p.router.networkdb.kademlia
  *
- *  @since 0.9.2 in i2psnark, moved to core in 0.9.10
  *
  *  @param <T> type of SimpleDataStructure objects stored in this bucket
+ *  @since 0.9.2 in i2psnark, moved to core in 0.9.10
  */
 class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     /**
-     *  set of Hash objects for the peers in the kbucket
+     *  The peers in the kbucket, stored in a set.
      */
     private final Set<T> _entries;
 
-    /** include if any bits equal or higher to this bit (in big endian order) */
+    /** Include if any bits equal or higher to this bit (in big endian order). */
     private final int _begin;
 
-    /** include if no bits higher than this bit (inclusive) are set */
+    /** Include if no bits higher than this bit (inclusive) are set. */
     private final int _end;
 
     private final int _max;
     private final KBucketTrimmer<T> _trimmer;
 
-    /** when did we last shake things up */
+    /** When did we last shake things up. */
     private long _lastChanged;
 
     private final I2PAppContext _context;
@@ -103,6 +103,8 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     }
 
     /**
+     *  Unmodifiable view of the entries in this bucket.
+     *
      *  @return an unmodifiable view; not a copy
      */
     @Override
@@ -123,7 +125,7 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     }
 
     /**
-     *  Sets last-changed if rv is true OR if the peer is already present.
+     *  Updates last-changed if rv is true OR if the peer is already present.
      *  Calls the trimmer if begin == end and we are full.
      *  If begin != end then add it and caller must do bucket splitting.
      *
@@ -141,6 +143,8 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     }
 
     /**
+     *  Remove the peer from this bucket.
+     *
      *  @return if removed. Does NOT set lastChanged.
      */
     @Override

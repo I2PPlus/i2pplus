@@ -333,8 +333,8 @@ public class WebMail extends HttpServlet {
 
         /**
          *  PBKDF2 hash for password verification with high iteration count
-         *  @since 0.9.70+
          * @return whether h password is present
+         *  @since 0.9.70+
          */
         private static String hashPassword(String password, String salt) {
             try {
@@ -1893,8 +1893,8 @@ public class WebMail extends HttpServlet {
      * Either mobile or text browser
      * Copied from net.i2p.router.web.CSSHelper
      * @param ua null ok
-     * @since 0.9.7
      * @return whether mobile
+     * @since 0.9.7
      */
     private static boolean isMobile(String ua) {
         if (ua == null) {return false;}

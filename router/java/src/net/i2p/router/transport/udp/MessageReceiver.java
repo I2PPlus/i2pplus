@@ -64,22 +64,22 @@ class MessageReceiver {
 
     /**
      * Returns the current target thread count.
-     * @since 0.9.70+
      * @return the thread count
+     * @since 0.9.70+
      */
     public static int getThreadCount() { return _threadCount; }
 
     /**
      * Returns the current queue depth of the message receiver.
-     * @since 0.9.70+
      * @return the queue size
+     * @since 0.9.70+
      */
     public int getQueueSize() { return _completeMessages.size(); }
 
     /**
      * Returns the number of runners actively processing messages (not parked on take()).
-     * @since 0.9.70+
      * @return the processing count
+     * @since 0.9.70+
      */
     public int getProcessingCount() { return _processingCount.get(); }
 
@@ -87,8 +87,8 @@ class MessageReceiver {
      * Message receiver pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
      *
-     * @since 0.9.70+
      * @return the utilization
+     * @since 0.9.70+
      */
     public double getUtilization() {
         int count = _threadCount;
@@ -97,8 +97,8 @@ class MessageReceiver {
 
     /**
      * Returns the maximum capacity of the message receiver queue.
-     * @since 0.9.70+
      * @return the queue capacity
+     * @since 0.9.70+
      */
     public int getQueueCapacity() { return _completeMessages.size() + _completeMessages.remainingCapacity(); }
 

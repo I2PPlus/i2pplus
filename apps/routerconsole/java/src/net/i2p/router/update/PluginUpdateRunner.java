@@ -218,8 +218,8 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     *  @since 0.9.15
      *  @return if SU3
+     *  @since 0.9.15
      */
     private static boolean isSU3File(File f) throws IOException {
         FileInputStream fis = null;
@@ -238,8 +238,8 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     *  @since 0.9.15
      *  @return success
+     *  @since 0.9.15
      */
     private void processSUD(File f, File appDir, String url) {
         TrustedUpdate up = new TrustedUpdate(_context);
@@ -396,8 +396,8 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     *  @since 0.9.15
      *  @return null on error
+     *  @since 0.9.15
      */
     private Properties getPluginConfig(File f, File to, String url) {
         File tempDir = new File(_context.getTempDir(), "tmp" + _context.random().nextInt() + "-unzip");

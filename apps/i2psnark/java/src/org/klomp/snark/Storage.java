@@ -398,9 +398,11 @@ public class Storage implements Closeable {
         return rv;
     }
 
-    /* @since 0.9.62+ */
     /**
+     * The excluded files.
+     *
      * @return the excluded files
+     * @since 0.9.62+
      */
     public List<String> getExcludedFiles(File base) {
         List<String> excludedNames = new ArrayList<>();
@@ -424,6 +426,8 @@ public class Storage implements Closeable {
     }
 
     /**
+     * Count the files in the torrent.
+     *
      * @throws IOException if too many total files
      */
     private void addFiles(List<File> l, File f, List<TorrentCreateFilter> filters)
@@ -532,8 +536,8 @@ public class Storage implements Closeable {
     /**
      * Has the storage changed since instantiation?
      *
-     * @since 0.8.5
      * @return whether changed
+     * @since 0.8.5
      */
     public boolean isChanged() {
         return changed;
@@ -549,7 +553,7 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Get the last activity timestamp.
+     * The last activity timestamp.
      *
      * @return timestamp in milliseconds since epoch, or 0 if never set
      * @since 0.9.42
@@ -559,7 +563,7 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Set the activity timestamp to the current time.
+     * Mark the activity timestamp as now.
      *
      * @since 0.9.42
      */
@@ -568,7 +572,7 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Set the activity timestamp.
+     * Store the activity timestamp.
      *
      * @param time timestamp in milliseconds since epoch
      * @since 0.9.42
@@ -581,8 +585,8 @@ public class Storage implements Closeable {
     /**
      * File checking in progress.
      *
-     * @since 0.9.3
      * @return whether checking
+     * @since 0.9.3
      */
     public boolean isChecking() {
         return _isChecking;
@@ -591,8 +595,8 @@ public class Storage implements Closeable {
     /**
      * If checking is in progress, return completion 0.0 ... 1.0, else return 1.0.
      *
-     * @since 0.9.23
      * @return the checking progress
+     * @since 0.9.23
      */
     public double getCheckingProgress() {
         if (_isChecking) {
@@ -605,15 +609,15 @@ public class Storage implements Closeable {
     /**
      * Disk allocation (ballooning) in progress. Always false on Windows.
      *
-     * @since 0.9.3
      * @return whether allocating
+     * @since 0.9.3
      */
     public boolean isAllocating() {
         return _allocateCount.get() > 0;
     }
 
     /**
-     * Get index to pass to remaining(), getPriority(), setPriority()
+     * Index to pass to remaining(), getPriority(), setPriority()
      *
      * @param file non-canonical path (non-directory)
      * @return internal index of file; -1 if unknown file
@@ -686,9 +690,11 @@ public class Storage implements Closeable {
     }
 
     /**
+     * The priority of the file at the index.
+     *
      * @param fileIndex as obtained from indexOf
-     * @since 0.8.1
      * @return the priority
+     * @since 0.8.1
      */
     public int getPriority(int fileIndex) {
         if (complete() || metainfo.getFiles() == null) {
@@ -719,7 +725,7 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Get the file priorities array.
+     * The file priorities array.
      *
      * @return null on error, if complete, or if only one file
      * @since 0.8.1
@@ -740,7 +746,7 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Set the file priorities array. Only call this when stopped, but after check()
+     * The file priorities array. Only call this when stopped, but after check()
      *
      * @param p may be null
      * @since 0.8.1
@@ -762,6 +768,8 @@ public class Storage implements Closeable {
     }
 
     /**
+     * Whether in-order download mode is enabled.
+     *
      * @return whether in-order download mode is enabled
      * @since 0.9.36
      */
@@ -911,14 +919,16 @@ public class Storage implements Closeable {
      * to remove illegal characters. This is where the data actually is, relative to the snark base
      * dir.
      *
-     * @since 0.7.14
      * @return the base name
+     * @since 0.7.14
      */
     public String getBaseName() {
         return optFilterName(metainfo.getName());
     }
 
     /**
+     * Whether original file names are being preserved, false if filtered.
+     *
      * @return true if original file names are being preserved, false if filtered
      * @since 0.9.15
      */
@@ -1419,8 +1429,8 @@ public class Storage implements Closeable {
     /**
      * Does not include directories.
      *
-     * @since 0.9.23
      * @return the file count
+     * @since 0.9.23
      */
     public int getFileCount() {
         return _torrentFiles.size();
@@ -1491,6 +1501,8 @@ public class Storage implements Closeable {
     }
 
     /**
+     * Whether the check changed anything; only valid if recheck == true.
+     *
      * @return true if changed (only valid if recheck == true)
      */
     private boolean locked_checkCreateFiles(boolean recheck) throws IOException {
@@ -1498,6 +1510,8 @@ public class Storage implements Closeable {
     }
 
     /**
+     * Check the pieces, reporting whether anything changed.
+     *
      * @param pieceTrusted array indexed by piece, or null to hash everything
      * @return true if changed (only valid if recheck == true)
      */
@@ -1886,8 +1900,8 @@ public class Storage implements Closeable {
      * This is a dup of MetaInfo.getPieceLength() but we need it before the MetaInfo is created in
      * our second constructor.
      *
-     * @since 0.8.5
      * @return the piece length
+     * @since 0.8.5
      */
     private int getPieceLength(int piece) {
         if (piece >= 0 && piece < pieces - 1) {
@@ -1966,12 +1980,20 @@ public class Storage implements Closeable {
             }
         }
 
-        /** @return the file containing the cursor position */
+        /**
+     * The file containing the cursor position.
+     *
+     * @return the file containing the cursor position
+     */
         TorrentFile getFile() {
             return _torrentFiles.get(i);
         }
 
-        /** @return the offset of the cursor within the current file */
+        /**
+     * The offset of the cursor within the current file.
+     *
+     * @return the offset of the cursor within the current file
+     */
         long getOffset() {
             return start;
         }
@@ -2023,19 +2045,19 @@ public class Storage implements Closeable {
         public final String name;
         public final File RAFfile;
 
-        /** when was RAF last accessed, or 0 if closed locking: this */
+        /** When the RAF was last accessed, or 0 if closed; locking: this. */
         private long RAFtime;
 
-        /** null when closed locking: this */
+        /** Null when closed; locking: this. */
         private RandomAccessFile raf;
 
-        /** is the file empty and sparse? locking: this */
+        /** Whether the file is empty and sparse; locking: this. */
         public boolean isSparse;
 
         /** BEP 47 padding placeholder; hashes as zeros and is never read from or written to disk */
         public final boolean isPadding;
 
-        /** priority by file; default 0 */
+        /** Priority by file; default 0. */
         public volatile int priority;
 
         /** For new metainfo from files; use base == f for single-file torrent */
@@ -2080,12 +2102,12 @@ public class Storage implements Closeable {
             return raf;
         }
 
-        /** locking: this */
+        /** Locking: this. */
         private synchronized void openRAF() throws IOException {
             openRAF(_probablyComplete);
         }
 
-        /** locking: this */
+        /** Locking: this. */
         private synchronized void openRAF(boolean readonly) throws IOException {
             raf = new RandomAccessFile(RAFfile, (readonly || !RAFfile.canWrite()) ? "r" : "rw");
             RAFtime = System.currentTimeMillis();
@@ -2190,6 +2212,8 @@ public class Storage implements Closeable {
         }
 
         /**
+         * Whether hash code is present.
+         *
          * @return whether h code is present
          */
         @Override
@@ -2198,7 +2222,7 @@ public class Storage implements Closeable {
         }
 
         /**
-         * equals.
+         * Whether this equals the other.
          */
         @Override
         public boolean equals(Object o) {
@@ -2208,7 +2232,7 @@ public class Storage implements Closeable {
         }
 
         /**
-         * toString.
+         * String form of the storage.
          */
         @Override
         public String toString() {

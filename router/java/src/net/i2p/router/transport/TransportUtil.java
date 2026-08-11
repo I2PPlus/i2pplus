@@ -160,8 +160,8 @@ public abstract class TransportUtil {
     /**
      *  This returns true if the force-firewalled setting is configured, false otherwise.
      *
-     * @since 0.9.20
      * @return whether i pv4 firewalled
+     * @since 0.9.20
      */
     public static boolean isIPv4Firewalled(RouterContext ctx) {
         return ctx.getBooleanProperty(PROP_IPV4_FIREWALLED);
@@ -170,8 +170,8 @@ public abstract class TransportUtil {
     /**
      *  This returns true if the force-firewalled setting is configured, false otherwise.
      *
-     * @since 0.9.27, implemented in 0.9.28
      * @return whether i pv6 firewalled
+     * @since 0.9.27, implemented in 0.9.28
      */
     public static boolean isIPv6Firewalled(RouterContext ctx) {
         return ctx.getBooleanProperty(PROP_IPV6_FIREWALLED);
@@ -195,8 +195,8 @@ public abstract class TransportUtil {
 
     /**
      *  Whether the address is an in-network Yggdrasil address.
-     * @since 0.9.49
      * @return whether yggdrasil
+     * @since 0.9.49
      */
     public static boolean isYggdrasil(RouterAddress addr) {
         // do this the fast way, without calling getIP() to parse the host string
@@ -205,6 +205,8 @@ public abstract class TransportUtil {
     }
 
     /**
+     *  Address type of the given RouterAddress.
+     *
      *  @return null if unknown
      *  @since 0.9.54
      */
@@ -214,6 +216,8 @@ public abstract class TransportUtil {
     }
 
     /**
+     *  Address type of the given host string.
+     *
      *  @return null if unknown
      *  @since 0.9.54
      */
@@ -231,6 +235,8 @@ public abstract class TransportUtil {
     }
 
     /**
+     *  Address type of the given IP address.
+     *
      *  @return null if unknown
      *  @since 0.9.54
      */
@@ -248,9 +254,11 @@ public abstract class TransportUtil {
     }
 
     /**
+     *  Whether the address is publicly routable, optionally allowing IPv6.
+     *
      *  @param addr non-null
-     *  @since IPv6 moved from TransportImpl
      *  @return whether publicly routable
+     *  @since IPv6 moved from TransportImpl
      */
     public static boolean isPubliclyRoutable(byte[] addr, boolean allowIPv6) {
         return isPubliclyRoutable(addr, true, allowIPv6);
@@ -260,8 +268,8 @@ public abstract class TransportUtil {
      *  Ref: RFC 5735
      *
      *  @param addr non-null
-     *  @since IPv6
      *  @return whether publicly routable
+     *  @since IPv6
      */
     public static boolean isPubliclyRoutable(byte[] addr, boolean allowIPv4, boolean allowIPv6) {
         if (I2PAppContext.getGlobalContext().getBooleanProperty("i2np.allowLocal"))
@@ -351,8 +359,8 @@ public abstract class TransportUtil {
      *  ref: http://i2p-projekt.i2p/en/docs/ports
      *  ref: https://cs.chromium.org/chromium/src/net/base/port_util.cc
      *
-     * @since 0.9.17 moved from logic in individual transports
      * @return whether valid port
+     * @since 0.9.17 moved from logic in individual transports
      */
     public static boolean isValidPort(int port) {
         // update log message below if you update this list
@@ -387,7 +395,7 @@ public abstract class TransportUtil {
     }
 
     /**
-     *  log an error
+     *  Logs an error for an invalid port.
      *  @since 0.9.39 pulled out of UDPEndpoint
      */
     public static void logInvalidPort(Log log, String transportStyle, int port) {

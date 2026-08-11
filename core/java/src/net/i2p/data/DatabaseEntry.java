@@ -157,7 +157,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-     *  Sets the local client that received this entry.
+     *  Local client that received this entry.
      *
      * @param receivedBy the hash of the receiving client
      * @since 0.9.61

@@ -106,8 +106,8 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
     /**
      * The main netDb, the one we will use if we are a floodfill.
      *
-     * @since 0.9.61
      * @return may be null
+     * @since 0.9.61
      */
     @Override
     public NetworkDatabaseFacade mainNetDB() {
@@ -118,8 +118,8 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      * The client netDb for the given id. Will return the "main" netDb if
      * the dbid is null.
      *
-     * @since 0.9.61
      * @return non-null, the main netDb if the client netDb does not exist
+     * @since 0.9.61
      */
     @Override
     public NetworkDatabaseFacade clientNetDB(Hash id) {

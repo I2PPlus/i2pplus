@@ -87,8 +87,8 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     /**
      *  Use this instead of getExpiration().getTime()
      *
-     * @since 0.8.4
      * @return the expiration time
+     * @since 0.8.4
      */
     public long getExpirationTime() {
         return _daf.getTime();
@@ -102,7 +102,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     *  Sets the message expiration time.
+     *  Message expiration time in ms.
      *
      * @since 0.8.4
      */
@@ -111,17 +111,17 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     *  Gets the message flags.
+     *  Message flags.
      *
-     * @since 0.8.4
      * @return the flags
+     * @since 0.8.4
      */
     public int getFlags() {
         return _daf.getFlags();
     }
 
     /**
-     *  Sets the message flags.
+     *  Message flags.
      *
      * @since 0.8.4
      */

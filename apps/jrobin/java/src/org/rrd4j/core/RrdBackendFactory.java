@@ -608,8 +608,8 @@ public abstract class RrdBackendFactory implements Closeable {
     /**
      * A generic close handle, default implementation does nothing.
      *
-     * @since 3.4
      * @throws IOException if the close fails
+     * @since 3.4
      */
     public void close() throws IOException {}
 }

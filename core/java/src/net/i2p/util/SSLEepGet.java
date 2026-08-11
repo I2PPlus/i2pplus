@@ -100,6 +100,8 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
+     *  Create an SSLEepGet that writes to a stream, using an existing SSL state.
+     *
      *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      *               This makes repeated fetches from the same host MUCH faster,
      *               and prevents repeated key store loads even for different hosts.
@@ -111,6 +113,9 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
+     *  Create an SSLEepGet that writes to a stream, using an existing SSL state,
+     *  limited to a maximum response size.
+     *
      *  @param maxSize The maximum size of the response
      *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      *               This makes repeated fetches from the same host MUCH faster,
@@ -132,6 +137,8 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
+     *  Create an SSLEepGet that writes to a file, using an existing SSL state.
+     *
      *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      *               This makes repeated fetches from the same host MUCH faster,
      *               and prevents repeated key store loads even for different hosts.
@@ -245,7 +252,7 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     *  outputFile, outputStream: One null, one non-null
+     *  Output file and output stream: one null, one non-null
      *
      *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      *               This makes repeated fetches from the same host MUCH faster,
@@ -420,8 +427,8 @@ public class SSLEepGet extends EepGet {
      *  Pass this back to the next SSLEepGet constructor for faster fetches.
      *  This may be called either after the constructor or after the fetch.
      *
+     *  @return the s s l state
      *  @since 0.8.2
-     * @return the s s l state
      */
     public SSLState getSSLState() {
         return new SSLState(_sslContext);

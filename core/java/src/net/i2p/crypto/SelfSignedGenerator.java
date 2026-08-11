@@ -105,6 +105,8 @@ public final class SelfSignedGenerator {
     }
 
     /**
+     *  Create a self-signed certificate with a new keypair.
+     *
      *  @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
      *  @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      *  @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
@@ -125,6 +127,8 @@ public final class SelfSignedGenerator {
     }
 
     /**
+     *  Create a self-signed certificate with a new keypair.
+     *
      *  @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
      *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
      *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
@@ -185,6 +189,8 @@ public final class SelfSignedGenerator {
     }
 
     /**
+     *  Create a self-signed certificate with the given keypair.
+     *
      *  @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
      *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
      *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
@@ -311,6 +317,8 @@ public final class SelfSignedGenerator {
     }
 
     /**
+     *  Create a renewed certificate from the given cert and keypair.
+     *
      *  @param cert the old cert to be replaced
      *  @param jpriv the private key
      *
@@ -402,6 +410,8 @@ public final class SelfSignedGenerator {
     }
 
     /**
+     *  Generate the TBS portion of the certificate.
+     *
      *  @param cname the common name, non-null
      *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
      *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
@@ -504,6 +514,7 @@ public final class SelfSignedGenerator {
     }
 
     /**
+     *  Generate the TBS portion of the CRL.
      *
      *  @param crlNum 0-255 because lazy
      *  @return ASN.1 encoded object
@@ -590,6 +601,8 @@ public final class SelfSignedGenerator {
     }
 
     /**
+     *  Total bytes needed to hold a value of the given length in ASN.1.
+     *
      *  @param val the length of the value, 65535 max
      *  @return the length of the TLV
      */
@@ -897,6 +910,7 @@ public final class SelfSignedGenerator {
     }
 
     /**
+     *  Generate the extensions section of the CRL.
      *
      *  @param crlNum 0-255 because lazy
      *  @return 16 bytes ASN.1 encoded object

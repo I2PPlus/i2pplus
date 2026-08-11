@@ -95,6 +95,8 @@ public class RandomIterator<E> implements Iterator<E> {
     }
 
     /**
+     * Whether the next random element is present.
+     *
      * @return whether next is present
      */
     public boolean hasNext() {
@@ -102,7 +104,7 @@ public class RandomIterator<E> implements Iterator<E> {
     }
 
     /**
-     * next.
+     * Return the next random element.
      */
     public E next() {
         if (!hasNext())
@@ -161,6 +163,8 @@ public class RandomIterator<E> implements Iterator<E> {
     }
 
     /**
+     *  Removal is not supported.
+     *
      *  @throws UnsupportedOperationException always
      */
     public void remove() {

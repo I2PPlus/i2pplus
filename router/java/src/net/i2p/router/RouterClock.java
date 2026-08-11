@@ -369,6 +369,8 @@ public class RouterClock extends Clock {
     public interface ClockShiftListener {
 
         /**
+         *  Notifies the listener that the router clock shifted.
+         *
          *  @param delta The system clock and adjusted clock just changed by this much,
          *               in milliseconds (approximately)
          */

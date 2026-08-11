@@ -47,8 +47,8 @@ public class SOCKSUDPUnwrapper implements Source, Sink {
      *  @param ignored_from ignored
      *  @param fromPort will be passed along
      *  @param toPort ignored
-     *  @since 0.9.53 added fromPort and toPort parameters
      *  @throws RuntimeException
+     *  @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination ignored_from, int fromPort, int toPort, byte[] data) {
         SOCKSHeader h;

@@ -990,8 +990,8 @@ class TunnelRenderer {
 
     /**
      *  Get display name for the tunnel
-     *  @since 0.9.57
      * @return the tunnel name
+     *  @since 0.9.57
      */
     private String getTunnelName(TunnelPool in) {
         TunnelPoolSettings ins = in.getSettings();

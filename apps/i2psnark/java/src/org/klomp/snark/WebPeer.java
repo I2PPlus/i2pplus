@@ -76,7 +76,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
-     * toString.
+     * String form of the web peer.
      */
     @Override
     public String toString() {
@@ -84,6 +84,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
+     * Socket debug string, for debug printing.
+     *
      * @return socket debug string (for debug printing)
      */
     @Override
@@ -446,6 +448,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
+     * The max pipeline.
+     *
      * @return the max pipeline
      */
     @Override
@@ -454,6 +458,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
+     * Whether the peer is connected.
+     *
      * @return whether connected
      */
     @Override
@@ -469,7 +475,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
-     * have.
+     * Handle a have message.
      */
     @Override
     public void have(int piece) { /* no-op */ }
@@ -483,6 +489,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
+     * Whether we are interested.
+     *
      * @return whether interested
      */
     @Override
@@ -491,6 +499,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
+     * Whether the peer is interesting.
+     *
      * @return whether interesting
      */
     @Override
@@ -499,12 +509,14 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
-     * setChoking.
+     * Handle a choke or unchoke message.
      */
     @Override
     public void setChoking(boolean choke) { /* no-op */ }
 
     /**
+     * Whether we are choking.
+     *
      * @return whether choking
      */
     @Override
@@ -513,6 +525,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
+     * Whether we are choked.
+     *
      * @return whether choked
      */
     @Override
@@ -521,6 +535,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
+     * The inactive time.
+     *
      * @return the inactive time
      */
     @Override
@@ -531,6 +547,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
+     * The max inactive time.
+     *
      * @return the max inactive time
      */
     @Override
@@ -539,19 +557,19 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
-     * keepAlive.
+     * Handle a keep-alive message.
      */
     @Override
     public void keepAlive() { /* no-op */ }
 
     /**
-     * retransmitRequests.
+     * Retransmit pending requests.
      */
     @Override
     public void retransmitRequests() { /* no-op */ }
 
     /**
-     * completed.
+     * Handle a completed message.
      */
     @Override
     public int completed() {
@@ -559,6 +577,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
+     * Whether the peer completed the torrent.
+     *
      * @return whether completed
      */
     @Override
@@ -594,8 +614,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * Should we request this many bytes?
      *
-     * @since 0.9.62
      * @return whether request
+     * @since 0.9.62
      */
     @Override
     public boolean shouldRequest(int size) {

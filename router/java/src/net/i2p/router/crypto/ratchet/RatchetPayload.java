@@ -296,7 +296,7 @@ class RatchetPayload {
         }
 
         /**
-         *  Get the total size of the block.
+         *  Total size of the block.
          *
          *  @return the size of the block, including the 3 byte header (type and size)
          */
@@ -305,7 +305,7 @@ class RatchetPayload {
         }
 
         /**
-         *  Get the data size of the block.
+         *  Data size of the block.
          *
          *  @return the size of the block, NOT including the 3 byte header (type and size)
          */

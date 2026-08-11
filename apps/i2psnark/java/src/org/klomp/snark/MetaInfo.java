@@ -557,14 +557,16 @@ public class MetaInfo {
     /**
      * Is it a private torrent?
      *
-     * @since 0.9
      * @return whether private
+     * @since 0.9
      */
     public boolean isPrivate() {
         return privateTorrent > 0;
     }
 
     /**
+     * The private tracker flag: 0 (default), 1 (set to 1), -1 (set to 0).
+     *
      * @return 0 (default), 1 (set to 1), -1 (set to 0)
      * @since 0.9.62
      */
@@ -607,8 +609,8 @@ public class MetaInfo {
     /**
      * The comment string or null. Not available for locally-created torrents.
      *
-     * @since 0.9.7
      * @return the comment
+     * @since 0.9.7
      */
     public String getComment() {
         return this.comment;
@@ -617,8 +619,8 @@ public class MetaInfo {
     /**
      * The created-by string or null. Not available for locally-created torrents.
      *
-     * @since 0.9.7
      * @return the created by
+     * @since 0.9.7
      */
     public String getCreatedBy() {
         return this.created_by;
@@ -627,8 +629,8 @@ public class MetaInfo {
     /**
      * The creation date (ms) or zero. As of 0.9.19, available for locally-created torrents.
      *
-     * @since 0.9.7
      * @return the creation date
+     * @since 0.9.7
      */
     public long getCreationDate() {
         return this.creation_date;
@@ -814,8 +816,8 @@ public class MetaInfo {
     /**
      * Side effect: Caches infoBytesLength.
      *
-     * @since 0.8.4
      * @return the info bytes
+     * @since 0.8.4
      */
     public synchronized byte[] getInfoBytes() {
         if (infoMap == null) {
@@ -829,8 +831,8 @@ public class MetaInfo {
     /**
      * The size of getInfoBytes(). Cached.
      *
-     * @since 0.9.48
      * @return the info bytes length
+     * @since 0.9.48
      */
     public synchronized int getInfoBytesLength() {
         if (infoBytesLength > 0) {
@@ -840,6 +842,8 @@ public class MetaInfo {
     }
 
     /**
+     * An unmodifiable view of the info map.
+     *
      * @return an unmodifiable view of the Map
      */
     private Map<String, BEValue> createInfoMap() {

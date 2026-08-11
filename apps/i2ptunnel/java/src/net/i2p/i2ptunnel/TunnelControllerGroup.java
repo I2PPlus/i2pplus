@@ -194,8 +194,8 @@ public class TunnelControllerGroup implements ClientApp {
      *  want to instantiate TCG too early.
      *
      *  @throws IllegalArgumentException if unable to load from i2ptunnel.config
-     *  @since 0.9.41
      *  @return the instance
+     *  @since 0.9.41
      */
     public static TunnelControllerGroup getInstance(I2PAppContext ctx) {
         synchronized (TunnelControllerGroup.class) {
@@ -308,8 +308,8 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      *  Helper
-     *  @since 0.9.49
      * @return the context
+     *  @since 0.9.49
      */
     public I2PAppContext getContext() {
         return _context;
@@ -347,8 +347,8 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      *  ClientApp interface
-     *  @since 0.9.4
      * @return the state
+     *  @since 0.9.4
      */
     @Override
     public ClientAppState getState() {
@@ -357,8 +357,8 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      *  The registered name of this tunnel group, for the ClientApp interface.
-     *  @since 0.9.4
      *  @return the name
+     *  @since 0.9.4
      */
     @Override
     public String getName() {
@@ -367,8 +367,8 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      *  The display name of this tunnel group, for the ClientApp interface.
-     *  @since 0.9.4
      *  @return the display name
+     *  @since 0.9.4
      */
     @Override
     public String getDisplayName() {
@@ -707,8 +707,8 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      *  Load the controllers from the config file.
      *  @param shouldMigrate migrate to, and load from, i2ptunnel.config.d
-     *  @since 0.9.42
      *  @throws IllegalArgumentException if unable to load from file
+     *  @since 0.9.42
      */
     private synchronized void loadControllers(File cfgFile, boolean shouldMigrate) {
         if (_log.shouldInfo())
@@ -1198,8 +1198,8 @@ public class TunnelControllerGroup implements ClientApp {
      * return the config File associated with a TunnelController or a default
      * File based on the tunnel name.
      *
-     * @since 0.9.42
      * @return the File ready for use
+     * @since 0.9.42
      */
     private synchronized File assureConfigFile(TunnelController tc) {
         File file = tc.getConfigFile();

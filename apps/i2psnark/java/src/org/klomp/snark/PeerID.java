@@ -110,7 +110,7 @@ public class PeerID implements Comparable<PeerID> {
     }
 
     /**
-     * Sets the peer ID bytes, for connecting out to the peer based on its dest hash.
+     * Store the peer ID bytes, for connecting out to the peer based on its dest hash.
      *
      * @param xid the peer ID bytes
      * @since 0.8.1
@@ -120,7 +120,7 @@ public class PeerID implements Comparable<PeerID> {
     }
 
     /**
-     * Get the destination. If this PeerId was instantiated with a destHash, and we have not yet
+     * The destination. If this PeerId was instantiated with a destHash, and we have not yet
      * done so, lookup the full destination, which may take up to 10 seconds.
      *
      * @return Dest or null if unknown
@@ -144,8 +144,10 @@ public class PeerID implements Comparable<PeerID> {
     }
 
     /**
-     * @since 0.8.1
+     * The dest hash.
+     *
      * @return the dest hash
+     * @since 0.8.1
      */
     public byte[] getDestHash() {
         return destHash;

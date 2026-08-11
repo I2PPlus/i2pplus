@@ -182,8 +182,8 @@ public class MetaNamingService extends DummyNamingService {
     /**
      *  All services aggregated
      *
+     *  @return the base64 entries
      *  @since 0.9.20
-     * @return the base64 entries
      */
     @Override
     public Map<String, String> getBase64Entries(Properties options) {

@@ -639,8 +639,8 @@ class NetDbRenderer {
      *  @param out Writer to output HTML
      *  @param debug if true, sort by distance and show debug info
      *  @param client if non-null, render only leasesets for that client
-     *  @since 0.7.14
      *  @throws java.io.IOException if an I/O error occurs
+     *  @since 0.7.14
      */
     public void renderLeaseSetHTML(Writer out, boolean debug, Hash client) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
@@ -759,8 +759,8 @@ class NetDbRenderer {
      *
      *  @param out output
      *  @param debug if true, show debug info
-     *  @since 0.9.70+
      *  @throws java.io.IOException if an I/O error occurs
+     *  @since 0.9.70+
      */
     public void renderLeaseSetListFragment(Writer out, boolean debug) throws IOException {
         renderLeaseSetHTML(out, debug, null);
@@ -774,8 +774,8 @@ class NetDbRenderer {
      *  full local netdb page and the fragment mode.
      *
      *  @param out output
-     *  @since 0.9.70+
      *  @throws java.io.IOException if an I/O error occurs
+     *  @since 0.9.70+
      */
     public void renderLocalLeaseSetList(Writer out) throws IOException {
         renderLocalSummary(out);
@@ -812,8 +812,8 @@ class NetDbRenderer {
      *  @param out Writer to output HTML
      *  @param hostname the destination b32, full hash, or hostname
      *  @param debug if true, show debug info
-     *  @since 0.9.57
      *  @throws java.io.IOException if an I/O error occurs
+     *  @since 0.9.57
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderLeaseSet(Writer out, String hostname, boolean debug) throws IOException {
@@ -1378,8 +1378,8 @@ class NetDbRenderer {
 
     /**
      *  Translated country name for the given country code.
-     *  @since 0.9.9
      * @return the translated country
+     *  @since 0.9.9
      */
     private String getTranslatedCountry(String code) {
         String name = _context.commSystem().getCountryName(code);

@@ -25,8 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * messageAvailable() only calls one listener, not all that apply.
  * The others call all listeners.
  *
- * @since 0.7.1
  * @author zzz
+ * @since 0.7.1
  */
 public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
     private final Log _log;

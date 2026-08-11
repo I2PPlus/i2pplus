@@ -6,18 +6,18 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import java.nio.charset.StandardCharsets;
-/** coordinate an event frequency over various periods */
+/** Coordinates an event frequency over various periods. */
 public class FrequencyStat {
-    /** unique name of the statistic */
+    /** Unique name of the statistic. */
     private final String _statName;
 
-    /** grouping under which the stat is kept */
+    /** Grouping under which the stat is kept. */
     private final String _groupName;
 
-    /** describe the stat */
+    /** Describes the stat. */
     private final String _description;
 
-    /** actual frequency objects for this statistic */
+    /** Actual frequency objects for this statistic. */
     private final Frequency[] _frequencies;
 
     /**
@@ -36,13 +36,13 @@ public class FrequencyStat {
         for (int i = 0; i < periods.length; i++) _frequencies[i] = new Frequency(periods[i]);
     }
 
-    /** update all of the frequencies for the various periods */
+    /** Updates all of the frequencies for the various periods. */
     public void eventOccurred() {
         for (int i = 0; i < _frequencies.length; i++) _frequencies[i].eventOccurred();
     }
 
     /**
-     * coalesce all the stats
+     * Coalesce all the stats.
      */
     public void coalesceStats() {
         for (int i = 0; i < _frequencies.length; i++) _frequencies[i].recalculate();
@@ -83,7 +83,7 @@ public class FrequencyStat {
     }
 
     /**
-     * Get the frequency object for the specified period.
+     * Frequency object for the specified period.
      *
      * @param period the period in milliseconds
      * @return the Frequency for the given period, or null if not found
@@ -96,7 +96,7 @@ public class FrequencyStat {
     }
 
     /**
-     *  Gets the lifetime event count.
+     *  Lifetime event count.
      *
      * @return lifetime event count
      * @since 0.8.2
@@ -107,7 +107,7 @@ public class FrequencyStat {
     }
 
     /**
-     *  Gets the lifetime average frequency.
+     *  Lifetime average frequency.
      *
      * @return lifetime average frequency in millisedonds, i.e. the average time between events, or Long.MAX_VALUE if no events ever
      * @since 0.8.2

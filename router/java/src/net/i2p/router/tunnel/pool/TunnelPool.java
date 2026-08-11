@@ -578,8 +578,8 @@ public class TunnelPool {
 
     /**
      * Suppress last-resort tunnel warning spam with rate limiting.
-     * @since 0.9.69+
      * @return whether log last resort warning
+     * @since 0.9.69+
      */
     private boolean shouldLogLastResortWarning() {
         long now = System.currentTimeMillis();
@@ -661,7 +661,7 @@ public class TunnelPool {
     }
 
     /**
-     *  tunnel by its gateway tunnel ID.
+     *  Tunnel by its gateway tunnel ID.
      *  @param gatewayId for inbound, the GW rcv tunnel ID; for outbound, the GW send tunnel ID.
      *  @return the tunnel with the matching gateway ID, or null if not found
      */
@@ -726,8 +726,8 @@ public class TunnelPool {
      *  Enhanced with exponential backoff for firewalled routers to prevent
      *  tunnel pool exhaustion after extended uptime.
      *
-     * @since 0.8.11
      * @return the adjusted total quantity
+     * @since 0.8.11
      */
     private int getAdjustedTotalQuantity() {
         if (_settings.getLength() == 0 && _settings.getLengthVariance() == 0) {return 1;}
@@ -1383,7 +1383,7 @@ public class TunnelPool {
     }
 
     /**
-     *  global tunnel build success rate as a fraction (0.0-1.0).
+     *  Global tunnel build success rate as a fraction (0.0-1.0).
      *  Reads the same StatManager rate the Tuner uses.
      *  Returns NaN if no data yet (early startup).
      * @return the build success rate
@@ -1402,7 +1402,7 @@ public class TunnelPool {
     }
 
     /**
-     *  effective latency value for prune sorting.
+     *  Effective latency value for prune sorting.
      *  Higher = slower = more likely to be pruned.
      *  Uses average latency (3+ samples), then last latency,
      *  then MAX_VALUE (no data = prune first).

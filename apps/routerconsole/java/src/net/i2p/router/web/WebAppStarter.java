@@ -285,8 +285,8 @@ public class WebAppStarter {
      *  Warning, this will NOT work during shutdown, because
      *  the console is already unregistered.
      *
-     *  @since public since 0.9.33; was package private
      * @return whether web app running
+     *  @since public since 0.9.33; was package private
      */
     public static boolean isWebAppRunning(I2PAppContext ctx, String appName) {
         ContextHandler wac = getWebApp(ctx, appName);
@@ -331,8 +331,8 @@ public class WebAppStarter {
     }
 
     /**
-     *  @since 0.9.41
      * @return the web app
+     *  @since 0.9.41
      */
     private static ContextHandler getWebApp(ContextHandlerCollection server, String appName) {
         Handler[] handlers = server.getHandlers();
@@ -355,8 +355,8 @@ public class WebAppStarter {
      *  Warning, this will NOT work during shutdown, because
      *  the console is already unregistered.
      *
-     *  @since public since 0.9.33, was package private
      * @return the console server
+     *  @since public since 0.9.33, was package private
      */
     public static ContextHandlerCollection getConsoleServer(I2PAppContext ctx) {
         Server s = RouterConsoleRunner.getConsoleServer(ctx);
@@ -366,8 +366,8 @@ public class WebAppStarter {
     }
 
     /**
-     *  @since 0.9.41
      * @return the console server
+     *  @since 0.9.41
      */
     private static ContextHandlerCollection getConsoleServer(Server s) {
         Handler h = s.getChildHandlerByClass(ContextHandlerCollection.class);

@@ -196,7 +196,7 @@ class OutboundEstablishState {
     }
 
     /**
-     *  Get the version of the SSU protocol in use.
+     *  Version of the SSU protocol in use.
      *
      *  @return the protocol version
      *  @since 0.9.54
@@ -229,7 +229,7 @@ class OutboundEstablishState {
     public UDPAddress getRemoteAddress() { return _remoteAddress; }
 
     /**
-     *  Sets the introduction nonce.
+     *  Introduction nonce.
      *
      *  @param nonce the introduction nonce
      */
@@ -302,7 +302,7 @@ class OutboundEstablishState {
     }
 
     /**
-     *  Get the next queued message.
+     *  Next queued message.
      *
      *  @return the next queued message, or null if none
      */

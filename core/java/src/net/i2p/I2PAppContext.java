@@ -368,9 +368,9 @@ public class I2PAppContext {
      *  The only thing that may be useful in here is the lib/ dir
      *  containing the .jars.
      *
-     *  @since 0.7.6
      *
      *  @return dir constant for the life of the context
+     *  @since 0.7.6
      */
     public File getBaseDir() { return _baseDir; }
 
@@ -381,9 +381,9 @@ public class I2PAppContext {
      *  In installations originally installed with 0.7.5 or earlier, and in
      *  "portable" installations, this will be the same as the base dir.
      *
-     *  @since 0.7.6
      *
      *  @return dir constant for the life of the context
+     *  @since 0.7.6
      */
     public File getConfigDir() { return _configDir; }
 
@@ -392,9 +392,9 @@ public class I2PAppContext {
      *  Applications should not use this.
      *  The same as the config dir for now.
      *
-     *  @since 0.7.6
      *
      *  @return dir constant for the life of the context
+     *  @since 0.7.6
      */
     public File getRouterDir() { return _routerDir; }
 
@@ -405,9 +405,9 @@ public class I2PAppContext {
      *  Was the same as the system temp dir prior to that.
      *  Which was a problem for multi-user installations.
      *
-     *  @since 0.7.6
      *
      *  @return dir constant for the life of the context
+     *  @since 0.7.6
      */
     public File getPIDDir() { return _pidDir; }
 
@@ -417,9 +417,9 @@ public class I2PAppContext {
      *  The same as the config dir for now.
      *  (i.e. ~/.i2p, NOT ~/.i2p/logs)
      *
-     *  @since 0.7.6
      *
      *  @return dir constant for the life of the context
+     *  @since 0.7.6
      */
     public File getLogDir() { return _logDir; }
 
@@ -428,9 +428,9 @@ public class I2PAppContext {
      *  The same as the config dir for now, but may change in the future.
      *  Apps should be careful not to overwrite router files.
      *
-     *  @since 0.7.6
      *
      *  @return dir constant for the life of the context
+     *  @since 0.7.6
      */
     public File getAppDir() { return _appDir; }
 
@@ -441,9 +441,9 @@ public class I2PAppContext {
      *  Applications should create their own directory inside this directory
      *  to avoid collisions with other apps.
      *
-     *  @since 0.7.6
      *
      *  @return dir constant for the life of the context
+     *  @since 0.7.6
      */
     public final File getTempDir() {
         // fixme don't synchronize every time

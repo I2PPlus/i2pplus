@@ -563,8 +563,8 @@ public class RouterThrottleImpl implements RouterThrottle {
     /**
      * The current tunnel status, translated if available.
      *
-     * @since 0.9.45
      * @return the localized tunnel status
+     * @since 0.9.45
      */
     public String getLocalizedTunnelStatus() {
         return Translate.getString(_tunnelStatus, _context, CommSystemFacade.ROUTER_BUNDLE_NAME);

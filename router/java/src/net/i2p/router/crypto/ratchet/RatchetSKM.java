@@ -410,7 +410,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Get the far-end destination for a public key
+     * The far-end destination for a public key.
      *
      * @param target the target public key
      * @return the far-end Destination for this PublicKey, or null
@@ -425,6 +425,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
+     * Not supported for this key manager.
+     *
      * @throws UnsupportedOperationException always
      */
     @Override
@@ -472,12 +474,16 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     public int getTagsToSend() { return 0; }
 
     /**
+     *  The configured threshold for sending more tags.
+     *
      *  @return the configured value
      */
     @Override
     public int getLowThreshold() { return 999999; }
 
     /**
+     *  Whether to send more tags, always false here.
+     *
      *  @return false always
      */
     @Override
@@ -523,6 +529,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
+     * Not supported for this key manager.
+     *
      * @throws UnsupportedOperationException always
      */
     @Override
@@ -531,6 +539,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
+     * Not supported for this key manager.
+     *
      * @throws UnsupportedOperationException always
      */
     @Override
@@ -539,6 +549,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
+     * Not supported for this key manager.
+     *
      * @throws UnsupportedOperationException always
      */
     @Override
@@ -547,6 +559,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
+     * Not supported for this key manager.
+     *
      * @throws UnsupportedOperationException always
      */
     @Override
@@ -555,6 +569,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
+     * Not supported for this key manager.
+     *
      * @throws UnsupportedOperationException always
      */
     @Override
@@ -574,6 +590,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
+     * Not supported for this key manager.
+     *
      * @throws UnsupportedOperationException always
      */
     @Override
@@ -841,7 +859,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * renderStatusHTML.
+     *  Render the session status HTML.
      */
     @Override
     public void renderStatusHTML(Writer out) throws IOException {
@@ -1006,7 +1024,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         private SimpleTimer2.TimedEvent _ackTimer;
         private Destination _destination;
         /**
-         *  Set to true after first tagset is acked.
+         *  True after the first tagset is acked.
          *  Upon repeated failures, we may revert back to false.
          *  This prevents us getting "stuck" forever, using tags that weren't acked
          *  to deliver the next set of tags.
@@ -1039,6 +1057,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         private static final int MAX_SEND_REVERSE_KEY = 128;
 
         /**
+         * Outbound session for the given target.
+         *
          * @param d may be null
          * @param key may be null
          * @param callback may be null. Always null for IB.
@@ -1349,11 +1369,11 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
- * Reverse key to send, or null
- *
- * @since 0.9.46
-         * @return the reverse send key
- */
+         *  Reverse key to send, or null
+         *
+         *  @return the reverse send key
+         *  @since 0.9.46
+         */
         private NextSessionKey getReverseSendKey() {
             synchronized (_unackedTagSets) {
                 if (_myIBKey == null)
@@ -1465,11 +1485,11 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
- * ONLY updated for inbound NS/NSR/ES tag used
- *
- * @since 0.9.46
-         * @return the last received date
- */
+         *  ONLY updated for inbound NS/NSR/ES tag used
+         *
+         *  @return the last received date
+         *  @since 0.9.46
+         */
         public long getLastReceivedDate() {
             return _lastReceived;
         }
@@ -1562,6 +1582,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
+         * Destination for the current session's far end.
+         *
          * @return the far-end Destination for this PublicKey, or null
          * @since 0.9.47
          */
@@ -1572,6 +1594,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
+         *  Number of tags remaining in acked tag sets.
+         *
          * @return the total number of tags in acked RatchetTagSets
          */
         public int availableTags() {
@@ -1588,7 +1612,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         * Get the furthest away tag set expiration date - after which all of the
+         * Furthest away tag set expiration date, after which all of the
          * tags will have expired
          *
          * @return the last expiration date
@@ -1645,6 +1669,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
+         *  Pending acks drained from the queue, up to the send limit.
+         *
          *  @return the acks to send, non empty, or null
          *  @since 0.9.46
          */

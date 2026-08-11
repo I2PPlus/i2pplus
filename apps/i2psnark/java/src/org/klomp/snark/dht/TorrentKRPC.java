@@ -18,6 +18,8 @@ import net.i2p.client.I2PSession;
 public class TorrentKRPC extends KRPC {
 
     /**
+     * Create a DHT instance on a torrent's transient destination.
+     *
      * @param ctx application context
      * @param shared the main DHT instance, whose routing table, tracker, and blacklist are
      *            shared; must be started already

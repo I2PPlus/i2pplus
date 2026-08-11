@@ -68,13 +68,13 @@ public class DecayingHashSet extends DecayingBloomFilter {
                      " cycle (s) = " + (durationMs / 1000));
     }
 
-    /** unsynchronized but only used for logging elsewhere */
+    /** Unsynchronized but only used for logging elsewhere. */
     @Override
     public int getInsertedCount() {
         return _current.size() + _previous.size();
     }
 
-    /** pointless, only used for logging elsewhere */
+    /** Stubbed rate; only used for logging elsewhere. */
     @Override
     public double getFalsePositiveRate() {
         if (_entryBytes <= 8)
@@ -83,6 +83,8 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     /**
+     * Add the entry, returning whether it was a duplicate.
+     *
      * @return true if the entry added is a duplicate
      */
     @Override
@@ -101,6 +103,8 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     /**
+     * Add the long entry, returning whether it was a duplicate.
+     *
      * @return true if the entry added is a duplicate.  the number of low order
      * bits used is determined by the entryBytes parameter used on creation of the
      * filter.
@@ -112,6 +116,8 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     /**
+     * Check whether the entry is already known, without adding it.
+     *
      * @return true if the entry is already known.  this does NOT add the
      * entry however.
      *
@@ -148,6 +154,8 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     /**
+     *  Add the entry to the current set if new, or check membership only.
+     *
      *  @param addIfNew if true, add the element to current if it is not already there or in previous;
      *                  if false, only check
      *
@@ -180,7 +188,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
         } finally { releaseWriteLock(); }
     }
 
-    /** super doesn't call clear, but neither do the users, so it seems like we should here */
+    /** Super doesn't call clear, but neither do the users, so it seems like we should here. */
     @Override
     public void stopDecaying() {
         _keepDecaying = false;
@@ -227,7 +235,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
             _longhashcode = lhc;
         }
 
-        /** faster version for when storing <= 8 bytes */
+        /** Faster version for when storing <= 8 bytes. */
         public ArrayWrapper(long b) {
             _longhashcode = b;
         }
@@ -248,7 +256,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     /**
-     *  vs. DBF, this measures 1.93x faster for testByLong and 2.46x faster for testByBytes.
+     *  Relative to DBF, this measures 1.93x faster for testByLong and 2.46x faster for testByBytes.
      */
 /*****
     public static void main(String[] args) {
@@ -261,7 +269,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 *****/
 
-    /** and the answer is: 49.9 bytes. The ArrayWrapper alone measured 16, so that's 34 for the HashSet entry. */
+    /** The answer is: 49.9 bytes. The ArrayWrapper alone measured 16, so that's 34 for the HashSet entry. */
 /*****
     private static void testSize() {
         int qty = 256*1024;

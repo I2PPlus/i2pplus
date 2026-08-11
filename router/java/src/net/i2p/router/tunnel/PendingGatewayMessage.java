@@ -143,8 +143,8 @@ class PendingGatewayMessage implements CDQEntry {
 
     /**
      *  For CDQ
-     * @since 0.9.3
      * @return the enqueue time
+     * @since 0.9.3
      */
     public long getEnqueueTime() {
         return _enqueueTime;

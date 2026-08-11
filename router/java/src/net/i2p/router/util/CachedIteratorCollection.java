@@ -245,6 +245,8 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         }
 
         /**
+         * Whether this iterator is in the middle of an iteration.
+         *
          * @return true if this iterator is in the middle of an iteration
          */
         private boolean inUse() {

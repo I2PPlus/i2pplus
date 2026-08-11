@@ -16,11 +16,15 @@ import net.i2p.data.Hash;
 public interface DHT {
 
     /**
+     * The UDP query port.
+     *
      * @return The UDP query port
      */
     public int getPort();
 
     /**
+     * The UDP response port.
+     *
      * @return The UDP response port
      */
     public int getRPort();
@@ -36,8 +40,8 @@ public interface DHT {
     public void ping(Destination dest, int port);
 
     /**
-     * Get peers for a torrent, and announce to the closest annMax nodes we find. Blocking! Caller
-     * should run in a thread.
+     * Fetch peers for a torrent, and announce to the closest annMax nodes we find. Blocking!
+     * Caller should run in a thread.
      *
      * @param ih the Info Hash (torrent)
      * @param max maximum number of peers to return

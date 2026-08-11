@@ -382,8 +382,8 @@ class SAMStreamSession implements SAMMessageSess {
     /**
      * Is the underlying streaming socket manager destroyed?
      *
-     * @since 0.9.61
      * @return whether destroyed
+     * @since 0.9.61
      */
     public boolean isDestroyed() { return socketMgr.isDestroyed(); }
 

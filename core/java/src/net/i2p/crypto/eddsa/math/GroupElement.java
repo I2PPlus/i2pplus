@@ -8,8 +8,8 @@ import net.i2p.crypto.eddsa.Utils;
  * Represents a point on an EdDSA curve with support for multiple coordinate representations.
  * Provides operations for point addition, doubling, and scalar multiplication.
  *
- * @since 0.9.15
  * @author str4d
+ * @since 0.9.15
  */
 public class GroupElement implements Serializable {
     private static final long serialVersionUID = 2395879087349587L;

@@ -161,6 +161,8 @@ public class GeoIP {
     }
 
     /**
+     *  GeoIP lookup service for IP to country mapping.
+     *
      *  @param context RouterContext in production, I2PAppContext for testing only
      */
     public GeoIP(I2PAppContext context) {
@@ -226,6 +228,8 @@ public class GeoIP {
         }
 
         /**
+         *  Loads the GeoIP IPv4 database and reports its timestamp.
+         *
          *  @return timestamp of the geoip ipv4 file used, or 0 on failure
          */
         public long runit() {
@@ -1338,8 +1342,8 @@ public class GeoIP {
 
    /**
     * Return the current GeoIP database version
-    * @since 0.9.65+
     * @return the geo i p build info
+    * @since 0.9.65+
     */
     private static final ThreadLocal<DateFormat> _GEOIP_DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("MMM d, yyyy", Locale.US));
 
@@ -1362,8 +1366,8 @@ public class GeoIP {
 
    /**
     * Return the current ASN database version
-    * @since 0.9.65+
     * @return the a s n build info
+    * @since 0.9.65+
     */
     public String getASNBuildInfo() {
         File asnFile = getASN();

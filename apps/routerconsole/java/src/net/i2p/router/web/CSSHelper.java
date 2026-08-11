@@ -199,8 +199,8 @@ public class CSSHelper extends HelperBase {
     /**
      *  Get current CSRF nonce, rotating every 5 minutes.
      *  Keeps 2 previous nonces for backward compatibility (multi-tab, slow clients).
-     *  @since 0.9.4
      * @return the nonce
+     *  @since 0.9.4
      */
     public static synchronized String getNonce() {
         if (_currentNonce == null) {
@@ -297,8 +297,8 @@ public class CSSHelper extends HelperBase {
 
     /**
      * Returns the sidebar graph time period in minutes (2–30).
-     * @since 0.9.70+
      * @return the sidebar graph minutes
+     * @since 0.9.70+
      */
     public int getSidebarGraphMinutes() {
         int val = _context.getProperty(PROP_SIDEBAR_GRAPH_MINUTES, 20);
@@ -321,8 +321,8 @@ public class CSSHelper extends HelperBase {
 
     /**
      * Returns the sidebar graph render direction ("ltr" or "rtl").
-     * @since 0.9.70+
      * @return the sidebar graph direction
+     * @since 0.9.70+
      */
     public String getSidebarGraphDirection() {
         String val = _context.getProperty(PROP_SIDEBAR_GRAPH_DIRECTION, "rtl");
@@ -376,8 +376,8 @@ public class CSSHelper extends HelperBase {
     /**
      *  Should we send X_Frame_Options=SAMEORIGIN
      *  Default true
-     *  @since 0.9.1
      * @return whether send x frame
+     *  @since 0.9.1
      */
     public boolean shouldSendXFrame() {return !_context.getBooleanProperty(PROP_XFRAME);}
 

@@ -31,10 +31,10 @@ import java.util.Map;
  *   <li>Router identity and communication</li>
  * </ul>
  *
- * @since 0.9.15
  * @author str4d
  *
  * @see <a href="https://tools.ietf.org/html/rfc8032">RFC 8032 - EdDSA</a>
+ * @since 0.9.15
  */
 public class KeyPairGenerator extends KeyPairGeneratorSpi {
     /**

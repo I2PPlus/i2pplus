@@ -115,8 +115,8 @@ public class OOMListener implements I2PThread.OOMEventListener {
 
     /**
      *  Best guess if running from a Debian package
-     * @since 0.9.35
      * @return whether debian package
+     * @since 0.9.35
      */
     private static boolean isDebianPackage(RouterContext ctx) {
         boolean isDebian = !SystemVersion.isWindows() && !SystemVersion.isMac() &&

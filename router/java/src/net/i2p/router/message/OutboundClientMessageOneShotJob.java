@@ -260,7 +260,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         _overallExpiration = overallExpiration;
     }
 
-    /** call once only */
+    /** Called once at router startup. */
     public static void init(RouterContext ctx) {
         ctx.statManager().createFrequencyStat("client.sendMessageFailFrequency", "How often client fails to send a message", "ClientMessages", RATES);
         ctx.statManager().createRateStat("client.dispatchNoACK", "Repeated message sends to a peer (no ACK required)", "ClientMessages", RATES);
@@ -364,7 +364,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     *  Get the reply lease set, checking the cache first.
+     *  Reply lease set, checking the cache first.
      *
      *  @param force to force including a reply lease set
      *  @return lease set or null if we should not send the lease set

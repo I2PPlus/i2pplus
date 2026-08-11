@@ -45,7 +45,7 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  Sets the raw message data.
+     *  Raw message data; may only be set once.
      *
      *  @throws IllegalStateException if data previously set, to protect saved checksum
      */
@@ -59,13 +59,13 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
         System.arraycopy(data, offset, _data, 0, dataSize);
     }
 
-    /** calculate the message body's length (not including the header and footer */
+    /** Calculate the message body's length (not including the header and footer). */
     protected int calculateWrittenLength() {
         if (_data == null) {return 0;}
         else {return _data.length;}
     }
 
-    /** write the message body to the output array, starting at the given index */
+    /** Write the message body to the output array, starting at the given index. */
     protected int writeMessageBody(byte[] out, int curIndex) {
         if (_data != null) {
             System.arraycopy(_data, 0, out, curIndex, _data.length);

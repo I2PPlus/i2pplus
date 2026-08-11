@@ -31,6 +31,7 @@ public class GarlicMessage extends FastI2NPMessageImpl {
     }
 
     /**
+     * The raw message data.
      * @return the data
      */
     public byte[] getData() {
@@ -38,6 +39,7 @@ public class GarlicMessage extends FastI2NPMessageImpl {
     }
 
     /**
+     * The raw message data.
      *  @throws IllegalStateException if data previously set, to protect saved checksum
      */
     public void setData(byte[] data) {
@@ -47,7 +49,7 @@ public class GarlicMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * readMessage.
+     * Read the message from a byte array.
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
@@ -60,11 +62,11 @@ public class GarlicMessage extends FastI2NPMessageImpl {
         System.arraycopy(data, curIndex, _data, 0, len);
     }
 
-    /** calculate the message body's length (not including the header and footer */
+    /** Calculate the message body's length (not including the header and footer). */
     protected int calculateWrittenLength() {
         return 4 + _data.length;
     }
-    /** write the message body to the output array, starting at the given index */
+    /** Write the message body to the output array, starting at the given index. */
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         DataHelper.toLong(out, curIndex, 4, _data.length);
         curIndex += 4;
@@ -74,11 +76,13 @@ public class GarlicMessage extends FastI2NPMessageImpl {
     }
 
     /**
+     * The I2NP message type of a garlic message.
      * @return the type
      */
     public int getType() { return MESSAGE_TYPE; }
 
     /**
+     * Hash code based on the message data.
      * @return whether h code is present
      */
     @Override
@@ -87,7 +91,7 @@ public class GarlicMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * equals.
+     * Compare the message data for equality.
      */
     @Override
     public boolean equals(Object object) {
@@ -100,7 +104,7 @@ public class GarlicMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * toString.
+     * String form for debugging, showing the id and data length.
      */
     @Override
     public String toString() {

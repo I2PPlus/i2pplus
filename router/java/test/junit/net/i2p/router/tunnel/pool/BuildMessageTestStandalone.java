@@ -60,6 +60,8 @@ public class BuildMessageTestStandalone extends TestCase {
     }
 
     /**
+     *  Test building a message of the given type.
+     *
      *  @param testType outbound: 1=ElG; 2=ECIES; 3=ECIES short; inbound: 4-6
      */
     private void x_testBuildMessage(RouterContext ctx, int testType) {

@@ -61,7 +61,7 @@ class RatchetTagSet implements TagSetHandle {
     private int _lastKey = -1;
     private KeyPair _nextKeys;
     private NextSessionKey _nextKey;
-    /** for debugging */
+    /** For debugging. */
     private static final AtomicInteger __tagSetID = new AtomicInteger();
     private final int _tagSetID = __tagSetID.incrementAndGet();
 
@@ -161,6 +161,8 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
+     *  Tag set for a ratchet session with the given keys and sizes.
+     *
      *  @param hkdf the HKDF instance
      *  @param lsnr the session tag listener
      *  @param state the handshake state
@@ -361,7 +363,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  unused tags generated
+     *  Unused tags generated.
      *
      *  @return 0 for outbound
      */
@@ -370,7 +372,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  tags remaining
+     *  Tags remaining.
      *
      *  @return 0 - 65536
      */
@@ -434,7 +436,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  inbound only
+     *  Inbound only.
      *
      *  @return associated SessionKey or null if not found.
      */
@@ -488,7 +490,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  inbound only
+     *  Inbound only.
      */
     private void addTags(int usedTagNumber) {
         int lookAhead;
@@ -536,7 +538,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  inbound only
+     *  Inbound only.
      */
     private void storeNextTag() {
         RatchetSessionTag tag = consumeNext();
@@ -623,7 +625,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     * toString.
+     *  Debug string for this tag set.
      */
     @Override
     public synchronized String toString() {

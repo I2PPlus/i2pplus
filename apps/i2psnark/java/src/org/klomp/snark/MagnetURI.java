@@ -20,7 +20,6 @@ public class MagnetURI {
     private final String _name;
     private final byte[] _ih;
 
-    /** BEP 9 */
     /** BEP 9 magnet prefix. */
     public static final String MAGNET = "magnet:";
 
@@ -39,6 +38,8 @@ public class MagnetURI {
     public static final String MAGNET_FULL_V2 = MAGNET + "?xt=urn:btmh:";
 
     /**
+     * Parse a magnet or maggot URI.
+     *
      * @param url non-null
      */
     public MagnetURI(I2PSnarkUtil util, String url) throws IllegalArgumentException {
@@ -132,6 +133,8 @@ public class MagnetURI {
     }
 
     /**
+     * The first decoded parameter, or null.
+     *
      * @return first decoded parameter or null
      */
     private static String getParam(String key, String uri) {
@@ -158,6 +161,8 @@ public class MagnetURI {
     }
 
     /**
+     * All decoded parameters, or null.
+     *
      * @return all decoded parameters or null
      * @since 0.9.1
      */
@@ -195,6 +200,8 @@ public class MagnetURI {
     }
 
     /**
+     * All valid I2P trackers, or null if none.
+     *
      * @return all valid I2P trackers or null if none
      * @since 0.9.1
      */

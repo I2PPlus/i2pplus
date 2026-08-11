@@ -262,8 +262,8 @@ public class FIFOBandwidthLimiter {
 
     /**
      *  In Bytes per second
-     * @since 0.9.68
      * @return the max share bandwidth
+     * @since 0.9.68
      */
     public int getMaxShareBandwidth() {
         return _refiller.getMaxShareBandwidth();
@@ -357,8 +357,8 @@ public class FIFOBandwidthLimiter {
 
     /**
      *  The inbound bandwidth status.
-     * @since 0.9.53
      * @return the inbound status
+     * @since 0.9.53
      */
     private StringBuilder getInboundStatus() {
         StringBuilder rv = new StringBuilder(128);
@@ -371,8 +371,8 @@ public class FIFOBandwidthLimiter {
 
     /**
      *  The outbound bandwidth status.
-     * @since 0.9.53
      * @return the outbound status
+     * @since 0.9.53
      */
     private StringBuilder getOutboundStatus() {
         StringBuilder rv = new StringBuilder(128);
@@ -811,6 +811,8 @@ public class FIFOBandwidthLimiter {
         private final int _priority;
 
         /**
+         *  Allocation request for the given byte count.
+         *
          *  @param priority 0 for now
          */
         public SimpleRequest(int bytes, int priority) {

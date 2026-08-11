@@ -74,8 +74,8 @@ public class I2PSink implements Sink {
      * @param fromPort I2CP source port, 0-65535
      * @param ign_toPort ignored
      * @param data the data to send
-     * @since 0.9.53 added fromPort and toPort parameters, breaking change, sorry
      * @throws RuntimeException if the session is closed
+     * @since 0.9.53 added fromPort and toPort parameters, breaking change, sorry
      */
     @Override
     public synchronized void send(Destination src, int fromPort, int ign_toPort, byte[] data) {

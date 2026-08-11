@@ -42,15 +42,15 @@ public class EventLog {
 
     private final I2PAppContext _context;
     private final File _file;
-    /** event to cached map */
+    /** Event to cached map. */
     private final Map<String, SortedMap<Long, String>> _cache;
-    /** event to starting time of cached map */
+    /** Event to starting time of cached map. */
     private final Map<String, Long> _cacheTime;
 
-    /** max entries per cache type */
+    /** Max entries per cache type. */
     private static final int MAX_CACHE_ENTRIES = 32;
 
-    /** for convenience, not required */
+    /** For convenience, not required. */
     public static final String ABORTED = "aborted";
     /**
      * BECAME_FLOODFILL.
@@ -159,6 +159,8 @@ public class EventLog {
     }
 
     /**
+     *  Event log for the given file, which should be absolute.
+     *
      *  @param file should be absolute
      */
     public EventLog(I2PAppContext ctx, File file) {

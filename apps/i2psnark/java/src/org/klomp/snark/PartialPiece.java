@@ -51,7 +51,7 @@ class PartialPiece implements Comparable<PartialPiece> {
     private static int _max_in_mem = MAX_IN_MEM;
 
     /**
-     * Constructs a PartialPiece for the given piece with specified length. If piece length exceeds
+     * A PartialPiece for the given piece with the specified length. If piece length exceeds
      * threshold or memory is constrained, stores on disk.
      *
      * @param piece The Piece identifier object

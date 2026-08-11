@@ -80,7 +80,7 @@ public final class SHA256Generator {
     }
 
     /**
-     *  Get a MessageDigest instance from the pool,
+     *  Obtain a MessageDigest instance from the pool,
      *  for uses where the one-shot calculateHash()
      *  would require copying the data.
      *  Return the instance via release() when done.
@@ -118,8 +118,8 @@ public final class SHA256Generator {
     /**
      *  Return a new MessageDigest from the system libs.
      *
-     * @since 0.8.7, public since 0.8.8 for FortunaStandalone
      * @return the digest instance
+     * @since 0.8.7, public since 0.8.8 for FortunaStandalone
      */
     public static MessageDigest getDigestInstance() {
         try {

@@ -25,18 +25,18 @@ public class StatManager {
     private final I2PAppContext _context;
     private final Log _log;
 
-    /** stat name to FrequencyStat */
+    /** Stat name to FrequencyStat. */
     private final ConcurrentHashMap<String, FrequencyStat> _frequencyStats;
 
-    /** stat name to RateStat */
+    /** Stat name to RateStat. */
     private final ConcurrentHashMap<String, RateStat> _rateStats;
 
     private int coalesceCounter;
 
-    /** every this many minutes for frequencies */
+    /** Frequency stats are coalesced every this many minutes. */
     private static final int FREQ_COALESCE_RATE = 9;
 
-    /** default false */
+    /** Enables full stat collection; default false. */
     public static final String PROP_STAT_FULL = "stat.full";
 
     /**
@@ -44,8 +44,6 @@ public class StatManager {
      * application context.  This constructor should only be used by the
      * appropriate application context itself.
      *
-     */
-    /**
      * @param context the application context
      */
     public StatManager(I2PAppContext context) {
@@ -202,7 +200,7 @@ public class StatManager {
     }
 
     /**
-     * Get the names of all frequency statistics.
+     * Names of all frequency statistics.
      *
      * @return a copy of the frequency stat names
      */
@@ -211,7 +209,7 @@ public class StatManager {
     }
 
     /**
-     * Get the names of all rate statistics.
+     * Names of all rate statistics.
      *
      * @return a copy of the rate stat names
      */
@@ -219,12 +217,12 @@ public class StatManager {
         return new HashSet<>(_rateStats.keySet());
     }
 
-    /** is the given stat a monitored rate? */
+    /** Whether the given stat is a monitored rate. */
     public boolean isRate(String statName) {
         return _rateStats.containsKey(statName);
     }
 
-    /** is the given stat a monitored frequency? */
+    /** Whether the given stat is a monitored frequency. */
     public boolean isFrequency(String statName) {
         return _frequencyStats.containsKey(statName);
     }

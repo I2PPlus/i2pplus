@@ -87,8 +87,8 @@ class MessageOutputStream extends OutputStream {
 
     /**
      * Default passive flush delay optimized for lower latency while maintaining stability.
-     * @since 0.9.70+ mutable for adaptive tuning
      * @return whether slow
+     * @since 0.9.70+ mutable for adaptive tuning
      */
     private static volatile int _defaultPassiveFlushDelay = SystemVersion.isSlow() ? 200 : 100;
 
@@ -99,7 +99,7 @@ class MessageOutputStream extends OutputStream {
     public static void setDefaultPassiveFlushDelay(int val) { _defaultPassiveFlushDelay = Math.max(10, Math.min(500, val)); }
 
     /**
-     * Constructs the stream with default passive flush delay.
+     * Stream with default passive flush delay.
      *
      * @param ctx          Application context for logging and utilities
      * @param timer        Timer used for scheduling passive flush events
@@ -113,7 +113,7 @@ class MessageOutputStream extends OutputStream {
     }
 
     /**
-     * Constructs the stream with specified passive flush delay.
+     * Stream with specified passive flush delay.
      *
      * @param ctx                Application context for logging and utilities
      * @param timer              Timer used for scheduling passive flush events
@@ -154,7 +154,7 @@ class MessageOutputStream extends OutputStream {
     }
 
     /**
-     * Sets the write timeout in milliseconds for blocking write operations.
+     * Write timeout in milliseconds for blocking write operations.
      *
      * @param ms Timeout in milliseconds, -1 for infinite wait.
      */
@@ -166,7 +166,7 @@ class MessageOutputStream extends OutputStream {
     }
 
     /**
-     * Gets the current write timeout.
+     * Current write timeout.
      *
      * @return write timeout in milliseconds
      */
@@ -175,6 +175,7 @@ class MessageOutputStream extends OutputStream {
     }
 
     /**
+     * Current passive flush delay.
      * @return current passive flush delay in ms
      */
     public int getPassiveFlushDelay() { return _passiveFlushDelay; }
@@ -676,7 +677,7 @@ class MessageOutputStream extends OutputStream {
         private volatile boolean _enqueued = false;
 
         /**
-         * Constructs a Flusher with given timer.
+         * Flusher with the given timer.
          *
          * @param timer timer to schedule flush events
          */

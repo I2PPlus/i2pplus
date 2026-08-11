@@ -12,8 +12,8 @@ import net.i2p.crypto.eddsa.math.ed25519.Ed25519ScalarOps;
  * Table of named EdDSA curves.
  * Provides lookup of curve specifications by name.
  *
- * @since 0.9.15
  * @author str4d
+ * @since 0.9.15
  *
  */
 public class EdDSANamedCurveTable {

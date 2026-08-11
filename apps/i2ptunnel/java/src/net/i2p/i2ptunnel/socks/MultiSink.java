@@ -35,8 +35,8 @@ public class MultiSink<S extends Sink> implements Source, Sink {
      *  @param from passed along
      *  @param fromPort passed along
      *  @param toPort passed along
-     *  @since 0.9.53 added fromPort and toPort parameters
      *  @throws RuntimeException
+     *  @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination from, int fromPort, int toPort, byte[] data) {
         Sink s = cache.get(toPort);

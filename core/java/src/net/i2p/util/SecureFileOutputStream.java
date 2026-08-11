@@ -15,8 +15,8 @@ import java.util.Set;
  * Same as FileOutputStream but sets the file mode so it can only
  * be read and written by the owner only (i.e. 600 on linux)
  *
- * @since 0.8.1
  * @author zzz
+ * @since 0.8.1
  */
 public class SecureFileOutputStream extends FileOutputStream {
 

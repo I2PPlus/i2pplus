@@ -422,8 +422,8 @@ public class SAMBridge implements Runnable, ClientApp {
 
     /**
      * Count handlers whose socket has been stolen for data streaming.
-     * @since 0.9.70+
      * @return the stolen socket count
+     * @since 0.9.70+
      */
     public int getStolenSocketCount() {
         synchronized (_handlers) {
@@ -554,8 +554,8 @@ public class SAMBridge implements Runnable, ClientApp {
 
     /**
      * Return the state
-     * @since 0.9.6
      * @return the state
+     * @since 0.9.6
      */
     public ClientAppState getState() {
         return _state;
@@ -563,8 +563,8 @@ public class SAMBridge implements Runnable, ClientApp {
 
     /**
      * Return the name
-     * @since 0.9.6
      * @return the name
+     * @since 0.9.6
      */
     public String getName() {
         return "SAM";
@@ -572,8 +572,8 @@ public class SAMBridge implements Runnable, ClientApp {
 
     /**
      * Return the display name
-     * @since 0.9.6
      * @return the display name
+     * @since 0.9.6
      */
     public String getDisplayName() {
         return "SAM " + _listenHost + ':' + _listenPort;

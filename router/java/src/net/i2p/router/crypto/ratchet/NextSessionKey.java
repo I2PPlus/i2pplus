@@ -77,8 +77,8 @@ class NextSessionKey extends PublicKey {
     /**
      * Hash code combining the id with the reverse and request flags.
      *
-     * @since 0.9.46
      * @return the hash code
+     * @since 0.9.46
      */
     @Override
     public int hashCode() {

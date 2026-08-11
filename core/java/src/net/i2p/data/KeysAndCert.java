@@ -69,8 +69,8 @@ import java.util.Arrays;
  *   <li>Provides unified interface for identity management across I2P</li>
  * </ul>
  *
- * @since 0.8.2
  * @author zzz
+ * @since 0.8.2
  */
 public class KeysAndCert extends DataStructureImpl {
     /** Public encryption key. */
@@ -156,8 +156,8 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      *  Valid for RouterIdentities. May contain random padding for Destinations.
      *
-     * @since 0.9.42
      * @return the public key
+     * @since 0.9.42
      */
     public PublicKey getPublicKey() {
         return _publicKey;
@@ -195,8 +195,8 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      *  Padding bytes for key alignment.
      *
-     * @since 0.9.16
      * @return the padding
+     * @since 0.9.16
      */
     public byte[] getPadding() {
         if (_paddingBlocks <= 1) {
@@ -226,8 +226,8 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      * Is there compressible padding?
      *
-     * @since 0.9.66
      * @return whether compressible
+     * @since 0.9.66
      */
     public boolean isCompressible() {
         return _paddingBlocks > 1;

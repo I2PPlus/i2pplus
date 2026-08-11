@@ -132,6 +132,8 @@ class Sorters {
         private static final Collator _c = Collator.getInstance();
 
         /**
+         * Create the comparator for the language.
+         *
          * @param lang may be null
          */
         private TorrentNameComparator(String lang) {
@@ -143,6 +145,8 @@ class Sorters {
         }
 
         /**
+         * Compare two torrents by name.
+         *
          * @param p may be null
          */
         public static int comp(Snark l, Snark r, Pattern p) {
@@ -189,7 +193,7 @@ class Sorters {
         }
 
         /**
-         * r).
+         * Compare two torrents.
          */
         protected abstract int compareIt(Snark l, Snark r);
 
@@ -499,6 +503,8 @@ class Sorters {
         public final int index;
 
         /**
+         * Create a file/index entry.
+         *
          * @param storage may be null
          * @param remainingArray precomputed, non-null iff storage is non-null
          */
@@ -507,6 +513,8 @@ class Sorters {
         }
 
         /**
+         * Create a file/index entry with preview lengths.
+         *
          * @param storage may be null
          * @param remainingArray precomputed, non-null iff storage is non-null
          */
@@ -621,7 +629,7 @@ class Sorters {
         }
 
         /**
-         * r).
+         * Compare two file/index entries.
          */
         protected abstract int compareIt(FileAndIndex l, FileAndIndex r);
 
@@ -686,7 +694,7 @@ class Sorters {
             super(rev);
         }
 
-        /** highest first */
+        /** Highest first. */
         public int compareIt(FileAndIndex l, FileAndIndex r) {
             return r.priority - l.priority;
         }
@@ -725,6 +733,8 @@ class Sorters {
     }
 
     /**
+     * The translated value, null for none.
+     *
      * @param lang null for none
      * @return null for none
      * @since 0.9.23

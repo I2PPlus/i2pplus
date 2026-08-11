@@ -87,6 +87,8 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
+     *  Fragments the given message for transmission.
+     *
      *  @param m null if msg is "injected"
      *  @throws IllegalArgumentException if too big or if msg or peer is null
      */
@@ -134,6 +136,8 @@ class OutboundMessageState implements CDPQEntry {
     public int getVersion() { return _peer.getVersion(); }
 
     /**
+     *  Bit mask for the given fragment index.
+     *
      *  @param fragment 0-63
      */
     private static long mask(int fragment) {
@@ -247,8 +251,8 @@ class OutboundMessageState implements CDPQEntry {
     /**
      *  Is any fragment unsent?
      *
-     * @since 0.9.49
      * @return whether unsent fragments is present
+     * @since 0.9.49
      */
     public synchronized boolean hasUnsentFragments() {
         if (isComplete())
@@ -267,8 +271,8 @@ class OutboundMessageState implements CDPQEntry {
      *  Only call if not complete and _numFragments greater than 1.
      *  Caller must synch.
      *
-     * @since 0.9.49
      * @return the min send count
+     * @since 0.9.49
      */
     private int getMinSendCount() {
         int rv = 127;
@@ -379,8 +383,8 @@ class OutboundMessageState implements CDPQEntry {
      * Network RTT: time since first fragment was sent (excludes queue time).
      * Falls back to total lifetime if message hasn't been sent yet.
      *
-     * @since 0.9.70+
      * @return the send lifetime
+     * @since 0.9.70+
      */
     public long getSendLifetime() {
         if (_firstSendTime == 0) return getLifetime();
@@ -577,8 +581,8 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      *  For CDQ
-     * @since 0.9.3
      * @return the enqueue time
+     * @since 0.9.3
      */
     @Override
     public long getEnqueueTime() {
@@ -605,8 +609,8 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      *  For CDPQ
-     * @since 0.9.3
      * @return the seq num
+     * @since 0.9.3
      */
     public long getSeqNum() {
         return _seqNum;

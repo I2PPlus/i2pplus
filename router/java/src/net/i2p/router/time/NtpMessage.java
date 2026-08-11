@@ -462,8 +462,8 @@ class NtpMessage {
     /**
      *  Convert the reference identifier to a human-readable string.
      *
-     * @since 0.9.29
      * @return non-null, "" if unset
+     * @since 0.9.29
      */
     public String referenceIdentifierToString() {
         return referenceIdentifierToString(referenceIdentifier, stratum, version);

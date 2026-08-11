@@ -29,8 +29,6 @@ import net.i2p.util.Log;
  * it will connect internally to the router in the JVM.
  * You cannot connect out from a router JVM to another router.
  *
- */
-/**
  * Factory for creating I2PSocketManager instances.
  *
  * @since 0.9.8
@@ -64,9 +62,9 @@ public class I2PSocketManagerFactory {
      * Blocks for a long time while the router builds tunnels.
      * The nonblocking createDisconnectedManager() is preferred.
      *
-     * @since 0.9.40
      * @param filter The filter for incoming connections
      * @return the newly created socket manager, or null if there were errors
+     * @since 0.9.40
      */
     public static I2PSocketManager createManager(IncomingConnectionFilter filter) {
         return createManager(getHost(), getPort(), (Properties) System.getProperties().clone(), filter);
@@ -93,10 +91,10 @@ public class I2PSocketManagerFactory {
      * Blocks for a long time while the router builds tunnels.
      * The nonblocking createDisconnectedManager() is preferred.
      *
-     * @since 0.9.40
      * @param opts Streaming and I2CP options, may be null
      * @param filter The filter to use for incoming connections
      * @return the newly created socket manager, or null if there were errors
+     * @since 0.9.40
      */
     public static I2PSocketManager createManager(Properties opts, IncomingConnectionFilter filter) {
         return createManager(getHost(), getPort(), opts, filter);
@@ -158,12 +156,12 @@ public class I2PSocketManagerFactory {
      * Blocks for a long time while the router builds tunnels.
      * The nonblocking createDisconnectedManager() is preferred.
      *
-     * @since 0.9.40
      * @param i2cpHost I2CP host null to use default, ignored if in router context
      * @param i2cpPort I2CP port &lt;= 0 to use default, ignored if in router context
      * @param opts Streaming and I2CP options, may be null
      * @param filter The filter to use for incoming connections
      * @return the newly created socket manager, or null if there were errors
+     * @since 0.9.40
      */
     public static I2PSocketManager createManager(String i2cpHost, int i2cpPort, Properties opts,
                     IncomingConnectionFilter filter) {
@@ -204,11 +202,11 @@ public class I2PSocketManagerFactory {
      * Blocks for a long time while the router builds tunnels.
      * The nonblocking createDisconnectedManager() is preferred.
      *
-     * @since 0.9.40
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      *                           or null for a transient destination. Caller must close.
      * @param filter The filter to use for incoming connections
      * @return the newly created socket manager, or null if there were errors
+     * @since 0.9.40
      */
     public static I2PSocketManager createManager(InputStream myPrivateKeyStream, IncomingConnectionFilter filter) {
         return createManager(myPrivateKeyStream, getHost(), getPort(), (Properties) System.getProperties().clone(), filter);
@@ -448,9 +446,10 @@ public class I2PSocketManagerFactory {
     }
 
     /**
+     *  Determine the configured signature type from the given options.
      *  @param opts may be null
-     *  @since 0.9.12
      *  @return the sig type
+     *  @since 0.9.12
      */
     private static SigType getSigType(Properties opts) {
         if (opts != null) {

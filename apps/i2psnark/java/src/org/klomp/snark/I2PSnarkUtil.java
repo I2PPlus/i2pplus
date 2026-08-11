@@ -167,6 +167,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Create a utility instance bound to the given context.
+     *
      * @param baseName generally "i2psnark"
      * @since Jetty 7
      */
@@ -203,6 +205,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The context this utility is bound to.
+     *
      * @return the context
      * @since 0.9.1
      */
@@ -211,6 +215,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Configure the I2CP connection parameters.
+     *
      * @param i2cpHost may be null for no change
      * @param i2cpPort may be 0 for no change
      * @param opts may be null for no change
@@ -289,7 +295,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * Set whether to disconnect peers that cancel most of what they request.
+     * Whether to disconnect peers that cancel most of what they request.
      *
      * @param ban true to enable the discard-ratio auto-ban
      * @since 0.9.71+
@@ -306,6 +312,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The I2CP host configured.
+     *
      * @return the i2 c p host
      */
     public String getI2CPHost() {
@@ -313,6 +321,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The I2CP port configured.
+     *
      * @return the i2 c p port
      */
     public int getI2CPPort() {
@@ -320,6 +330,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * A copy of the I2CP options.
+     *
      * @return a copy
      */
     public Map<String, String> getI2CPOptions() {
@@ -329,6 +341,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The EepProxy host configured.
+     *
      * @return the eep proxy host
      */
     public String getEepProxyHost() {
@@ -336,6 +350,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The EepProxy port configured.
+     *
      * @return the eep proxy port
      */
     public int getEepProxyPort() {
@@ -343,6 +359,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether an EepProxy is configured.
+     *
      * @return the eep proxy set
      */
     public boolean getEepProxySet() {
@@ -350,6 +368,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The maximum number of uploaders per torrent.
+     *
      * @return the max uploaders
      */
     public int getMaxUploaders() {
@@ -357,6 +377,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The maximum upload bandwidth per torrent.
+     *
      * @return KBps
      */
     public int getMaxUpBW() {
@@ -364,6 +386,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The maximum number of connections per torrent.
+     *
      * @return the max connections
      */
     public int getMaxConnections() {
@@ -371,6 +395,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The startup delay in minutes.
+     *
      * @return the startup delay
      */
     public int getStartupDelay() {
@@ -378,6 +404,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether files in the data directory are world-readable.
+     *
      * @return the files public
      * @since 0.8.9
      */
@@ -386,6 +414,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether files in the data directory are world-readable.
+     *
      * @since 0.8.9
      */
     public void setFilesPublic(boolean yes) {
@@ -393,6 +423,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether new torrents preallocate their storage files.
+     *
      * @return the preallocate files
      * @since 0.9.66+
      */
@@ -401,6 +433,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether new torrents preallocate their storage files.
+     *
      * @since 0.9.66+
      */
     public void setPreallocateFiles(boolean yes) {
@@ -408,6 +442,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The temporary directory used for downloads in progress.
+     *
      * @return the temp dir
      * @since 0.9.1
      */
@@ -416,6 +452,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Maximum number of files a torrent may contain.
+     *
      * @return the max files per torrent
      * @since 0.9.58
      */
@@ -424,6 +462,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Maximum number of files a torrent may contain.
+     *
      * @since 0.9.58
      */
     public void setMaxFilesPerTorrent(int max) {
@@ -431,6 +471,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The API target base path.
+     *
      * @return the a p i target
      * @since 0.9.67
      */
@@ -439,7 +481,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     };
 
     /**
-     * Get the api key.
+     * The API key, or null if not set.
+     *
      * @return the a p i key
      * @since 0.9.67
      */
@@ -448,7 +491,10 @@ public class I2PSnarkUtil implements DisconnectListener {
     };
 
     /**
-     * Set the api.
+     * Configure the API target and key.
+     *
+     * @param target the API target base path
+     * @param key the API key
      * @since 0.9.67
      */
     public void setAPI(String target, String key) {
@@ -457,6 +503,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether both an API target and key are configured.
+     *
      * @return whether a p i key is present
      * @since 0.9.67
      */
@@ -468,7 +516,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * Get the vary inbound hops.
+     * Whether hops are randomly varied for inbound torrent tunnels.
+     *
      * @return the vary inbound hops
      * @since 0.9.64+
      */
@@ -477,7 +526,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * Get the vary outbound hops.
+     * Whether hops are randomly varied for outbound torrent tunnels.
+     *
      * @return the vary outbound hops
      * @since 0.9.64+
      */
@@ -486,6 +536,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether hops are randomly varied for inbound torrent tunnels.
+     *
      * @since 0.9.64+
      */
     public void setVaryInboundHops(boolean yes) {
@@ -665,8 +717,10 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * @return the maximum number of per-torrent destinations in multi-dest mode, 0 for one
-     *         destination per torrent
+     * The maximum number of per-torrent destinations in multi-dest mode, 0 for one
+     * destination per torrent.
+     *
+     * @return the maximum number of per-torrent destinations
      * @since 0.9.71+
      */
     public int getMaxDest() {
@@ -674,6 +728,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Configure the maximum number of per-torrent destinations, 0-1000; zero is unlimited.
+     *
      * @param maxDest the maximum number of destinations, 0-1000; zero is unlimited
      * @since 0.9.71+
      */
@@ -693,20 +749,22 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * Get the tunnel nickname for a torrent's destination, "I2PSnark - &lt;name&gt;" with the
+     * The tunnel nickname for a torrent's destination, "I2PSnark - &lt;name&gt;" with the
      * name reduced to just the content title, truncated to {@link #MAX_NAME_LENGTH} characters
      * plus an ellipsis. Parentheses and brackets with anything inside them (year, resolution,
      * release group), a metadata tail after the first dash, file extensions and common quality
      * tokens (resolution, codec, source) are removed, so the nickname is shorter and the title
      * stands out on the console's tunnels page. Local only; not shared with trackers or the DHT.
      *
+     * @param name the torrent name
+     * @return the nickname
      * @since 0.9.71+
      */
     static String getNickname(String name) {
         String nick = name != null ? name : "";
         // Remove parenthesized and bracketed segments, e.g. "(2026)", "[WEBRip]"
         nick = nick.replaceAll("\\([^()]*\\)|\\[[^\\[\\]]*\\]", "");
-// Remove common quality tokens (resolution, codec, source) wherever they appear
+        // Remove common quality tokens (resolution, codec, source) wherever they appear
         nick = nick.replaceAll("(?i)(?<=[.\\-_ ]|^)(?:1080p|2160p|720p|480p|4k|8k|x264|x265|h264|h265|hevc" +
                                "|xvid|divx|web-dl|webdl|webrip|hdtv|pdtv|bluray|bdrip|brrip|dvdrip|remux" +
                                "|proper|repack|internal|10bit|12bit|8bit|aac|ac3|eac3|dts|ddp5\\.1|dd5\\.1|5\\.1" +
@@ -738,7 +796,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     private static final int MAX_NAME_LENGTH = 64;
 
     /**
-     * Get the destination for a torrent, creating the destination and session on first use,
+     * The destination for a torrent, creating the destination and session on first use,
      * or assigning the torrent to a shared pool when the configured maximum number of
      * destinations is exceeded. Only used when multi-dest is enabled.
      *
@@ -875,6 +933,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The transient destination for the torrent, or null if none.
+     *
      * @param ih the torrent's info hash, or null
      * @return the transient destination for the torrent, or null
      */
@@ -886,8 +946,11 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * @return the socket manager for the torrent's destination, or the shared manager when
-     *         multi-dest is disabled or the torrent has no destination
+     * The socket manager for the torrent's destination, or the shared manager when
+     * multi-dest is disabled or the torrent has no destination.
+     *
+     * @param ih the torrent's info hash
+     * @return the socket manager
      * @since 0.9.71+
      */
     public I2PSocketManager getSocketManager(byte[] ih) {
@@ -899,7 +962,11 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * @return the server socket for the torrent's destination, or the shared server socket
+     * The server socket for the torrent's destination, or the shared server socket
+     * when multi-dest is disabled or the torrent has no destination.
+     *
+     * @param ih the torrent's info hash
+     * @return the server socket
      * @since 0.9.71+
      */
     public I2PServerSocket getServerSocket(byte[] ih) {
@@ -911,7 +978,11 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * @return the destination for the torrent, or the shared destination
+     * The destination for the torrent, or the shared destination when multi-dest
+     * is disabled or the torrent has no destination.
+     *
+     * @param ih the torrent's info hash
+     * @return the destination
      * @since 0.9.71+
      */
     Destination getMyDestination(byte[] ih) {
@@ -937,8 +1008,11 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * @return the DHT instance for the torrent, on the torrent's own destination, or the
-     *         shared DHT instance when multi-dest is disabled or the DHT is disabled
+     * The DHT instance for the torrent, on the torrent's own destination, or the
+     * shared DHT instance when multi-dest is disabled or the DHT is disabled.
+     *
+     * @param ih the torrent's info hash
+     * @return the DHT instance
      * @since 0.9.71+
      */
     public DHT getDHTForTorrent(byte[] ih) {
@@ -953,6 +1027,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The main DHT instance, or null if disabled.
+     *
      * @return the main DHT instance, or null if disabled
      */
     private KRPC getKRPC() {
@@ -963,7 +1039,11 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * @return the UDP tracker client for the torrent's destination, or the shared client
+     * The UDP tracker client for the torrent's destination, or the shared client
+     * when the torrent has no destination.
+     *
+     * @param ih the torrent's info hash
+     * @return the UDP tracker client
      * @since 0.9.71+
      */
     public UDPTrackerClient getUDPTrackerClient(byte[] ih) {
@@ -975,7 +1055,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * sessionDisconnected.
+     * Handle the I2CP session being disconnected, dropping the manager reference.
      */
     @Override
     public void sessionDisconnected() {
@@ -993,6 +1073,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The main DHT instance, or null if disabled or not started.
+     *
      * @return null if disabled or not started
      * @since 0.8.4
      */
@@ -1001,6 +1083,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The shared UDP tracker client, or null if disabled or not started.
+     *
      * @return null if disabled or not started
      * @since 0.9.14
      */
@@ -1013,6 +1097,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether an I2CP connection attempt is in progress.
+     *
      * @return whether connecting
      * @since 0.9.1
      */
@@ -1145,14 +1231,20 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Fetch the given URL to a file.
+     *
      * @param rewrite if true, convert http://KEY.i2p/foo/announce to http://i2p/KEY/foo/announce
+     * @return the file it is stored in, or null on error
      */
     public File get(String url, boolean rewrite) {
         return get(url, rewrite, 0);
     }
 
     /**
+     * Fetch the given URL to a file.
+     *
      * @param retries if &gt; 0, set timeout to a few seconds
+     * @return the file it is stored in, or null on error
      */
     public File get(String url, int retries) {
         return get(url, true, retries);
@@ -1175,14 +1267,21 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Fetch the given URL to a file.
+     *
+     * @param rewrite if true, convert http://KEY.i2p/foo/announce to http://i2p/KEY/foo/announce
      * @param retries if &gt; 0, set timeout to a few seconds
+     * @return the file it is stored in, or null on error
      */
     public File get(String url, boolean rewrite, int retries) {
         return get(url, rewrite, retries, _manager);
     }
 
     /**
+     * Fetch the given URL to a file through the given socket manager.
+     *
      * @param retries if &gt; 0, set timeout to a few seconds
+     * @return the file it is stored in, or null on error
      */
     private File get(String url, boolean rewrite, int retries, I2PSocketManager mgr) {
         if (_log.shouldDebug()) {
@@ -1372,6 +1471,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The shared server socket.
+     *
      * @return the server socket
      */
     public I2PServerSocket getServerSocket() {
@@ -1384,10 +1485,10 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * The value.
+     * Full Base64 of the Destination.
+     *
      * @return the our i p string
      */
-    /** Full Base64 of Destination */
     public String getOurIPString() {
         Destination dest = getMyDestination();
         if (dest != null) {
@@ -1397,6 +1498,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The shared destination.
+     *
      * @return dest or null
      * @since 0.8.4
      */
@@ -1574,6 +1677,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Configure the open tracker announce URLs to use as backups.
+     *
      * @param ot non-null list of announce URLs
      */
     public void setOpenTrackers(List<String> ot) {
@@ -1623,6 +1728,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether open trackers are used as backups.
+     *
      * @return whether use open trackers
      */
     public boolean shouldUseOpenTrackers() {
@@ -1644,6 +1751,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether the DHT is used.
+     *
      * @return whether use d h t
      * @since DHT
      */
@@ -1701,6 +1810,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The comments file name.
+     *
      * @return non-null, "" if none
      * @since 0.9.31
      */
@@ -1818,7 +1929,12 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     private static final String BUNDLE_NAME = "org.klomp.snark.web.messages";
 
-    /** lang in routerconsole.lang property, else current locale */
+    /**
+     * A translated string for the given key.
+     *
+     * @return the translated string, in the routerconsole.lang property if set,
+     *         else the current locale
+     */
     public String getString(String key) {
         return Translate.getString(key, _context, BUNDLE_NAME);
     }
@@ -1843,7 +1959,15 @@ public class I2PSnarkUtil implements DisconnectListener {
         return Translate.getString(s, o, o2, _context, BUNDLE_NAME);
     }
 
-    /** ngettext @since 0.7.14 */
+    /**
+     * A translated plural string for the given count.
+     *
+     * @param n the count, selects singular or plural form
+     * @param s the singular form
+     * @param p the plural form
+     * @return the translated string
+     * @since 0.7.14
+     */
     public String getString(int n, String s, String p) {
         return Translate.getString(n, s, p, _context, BUNDLE_NAME);
     }

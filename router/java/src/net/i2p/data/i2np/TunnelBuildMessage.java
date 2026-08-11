@@ -25,12 +25,13 @@ public class TunnelBuildMessage extends TunnelBuildMessageBase {
     }
 
     /**
+     * The I2NP message type of a build message.
      * @return the type
      */
     public int getType() {return MESSAGE_TYPE;}
 
     /**
-     * toString.
+     * String form for debugging.
      */
     @Override
     public String toString() {return "[TunnelBuildMessage]";}

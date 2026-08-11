@@ -498,8 +498,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * I2CP host from the config
      *
-     * @since 0.9.7 was in loadConfig()
      * @return the host
+     * @since 0.9.7 was in loadConfig()
      */
     private String getHost() {
         if (_context.isRouterContext()) {return "[Internal connection]";} // just for logging
@@ -512,8 +512,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * I2CP port from the config
      *
-     * @since 0.9.7 was in loadConfig()
      * @return the port
+     * @since 0.9.7 was in loadConfig()
      */
     private int getPort() {
         if (_context.isRouterContext() || (SystemVersion.isAndroid() &&
@@ -612,16 +612,16 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      *  Does this session support fast receive?
      *
-     *  @since 0.9.4
      *  @return true if fast receive is supported
+     *  @since 0.9.4
      */
     public boolean getFastReceive() {return _fastReceive && _routerSupportsFastReceive;}
 
     /**
      *  Does this session support LS2?
      *
-     *  @since 0.9.38
      *  @return true if LS2 is supported
+     *  @since 0.9.38
      */
     public boolean supportsLS2() {return _routerSupportsLS2;}
 
@@ -694,8 +694,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      *  Does this session have offline and transient keys?
      *
-     *  @since 0.9.38
      *  @return whether offline
+     *  @since 0.9.38
      */
     @Override
     public boolean isOffline() {return _offlineSignature != null;}
@@ -915,9 +915,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      *  Wait for a SetDate response from the router.
      *
-     *  @since 0.9.11 moved from connect()
      *  @throws InterruptedException if interrupted
      *  @throws IOException on I/O error
+     *  @since 0.9.11 moved from connect()
      */
     protected void waitForDate() throws InterruptedException, IOException {
         if (_log.shouldDebug()) _log.debug(getPrefix() + "After getDate / begin waiting for a response");
@@ -1225,16 +1225,16 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      *  For Subsessions
      *
-     *  @since 0.9.21
      *  @return the I2CP message handler map
+     *  @since 0.9.21
      */
     I2PClientMessageHandlerMap getHandlerMap() {return _handlerMap;}
 
     /**
      *  For Subsessions
      *
-     *  @since 0.9.21
      *  @return the I2P app context
+     *  @since 0.9.21
      */
     I2PAppContext getContext() {return _context;}
 
@@ -1578,8 +1578,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Session name for logging
      *
-     * @since 0.9.46
      * @return the session name
+     * @since 0.9.46
      */
     protected String getName() {
         StringBuilder buf = new StringBuilder();
@@ -1831,8 +1831,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  Blocking.
      *
      *  @param maxWait ms
-     *  @since 0.8.3
      *  @return null on failure
+     *  @since 0.8.3
      */
     @Override
     public Destination lookupDest(Hash h, long maxWait) throws I2PSessionException {
@@ -1908,8 +1908,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  Blocking. See above for details.
      *
      *  @param maxWait ms
-     *  @since 0.9.11
      *  @return null on failure
+     *  @since 0.9.11
      */
     @Override
     public Destination lookupDest(String name, long maxWait) throws I2PSessionException {
@@ -1924,8 +1924,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  Same as lookupDest() but with a failure code in the return value
      *
      *  @param maxWait ms
-     *  @since 0.9.43
      *  @return non-null
+     *  @since 0.9.43
      */
     @Override
     public LookupResult lookupDest2(String name, long maxWait) throws I2PSessionException {
@@ -1947,8 +1947,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *
      *  @param name the hostname to look up
      *  @param maxWait ms
-     *  @since 0.9.11
      *  @return null on failure
+     *  @since 0.9.11
      */
     private LookupWaiter x_lookupDest(String name, long maxWait) throws I2PSessionException {
         if (name.isEmpty()) {return null;}

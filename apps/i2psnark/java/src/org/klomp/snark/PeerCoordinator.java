@@ -120,7 +120,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     private final long[] downloaded_old = {-1, -1, -1};
 
     /**
-     * synchronize on this when changing peers or downloaders. This is a Queue, not a Set, because
+     * Synchronize on this when changing peers or downloaders. This is a Queue, not a Set, because
      * PeerCheckerTask keeps things in order for choking/unchoking.
      */
     final Deque<Peer> peers;
@@ -157,26 +157,26 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     private long wantedBytes;
 
     /**
-     * partial pieces - lock by synching on wantedPieces - TODO store Requests, not PartialPieces
+     * Partial pieces; lock by synching on wantedPieces. TODO store Requests, not PartialPieces.
      */
     private final List<PartialPiece> partialPieces;
 
     /**
-     * piece ids currently in partialPieces, for O(1) membership checks. Sync on wantedPieces.
+     * Piece ids currently in partialPieces, for O(1) membership checks. Sync on wantedPieces.
      *
      * @since 0.9.68+
      */
     private final Set<Integer> partialIds = new HashSet<>(8);
 
     /**
-     * index of wantedPieces by piece id, for O(1) lookups. Sync on wantedPieces.
+     * Index of wantedPieces by piece id, for O(1) lookups. Sync on wantedPieces.
      *
      * @since 0.9.68+
      */
     private final Map<Integer, Piece> wantedMap = new HashMap<>(64);
 
     /**
-     * whether wantedPieces needs resorting (rarest-first). Sync on wantedPieces.
+     * Whether wantedPieces needs resorting (rarest-first). Sync on wantedPieces.
      *
      * @since 0.9.68+
      */
@@ -202,6 +202,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     private static final long WEBPEER_BAN_TIME = 30 * 60 * 1000L;
 
     /**
+     * Create a peer coordinator for the torrent.
+     *
      * @param metainfo null if in magnet mode
      * @param storage null if in magnet mode
      */
@@ -460,7 +462,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Sets the initial total of uploaded bytes of all peers (from a saved status)
+     * The initial total of uploaded bytes of all peers, from a saved status.
      *
      * @since 0.9.15
      */
@@ -504,8 +506,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Should we send this many bytes? Do NOT call uploaded() if this returns true.
      *
-     * @since 0.9.62
      * @return whether send
+     * @since 0.9.62
      */
     @Override
     public boolean shouldSend(int size) {
@@ -519,8 +521,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Should we request this many bytes?
      *
-     * @since 0.9.62
      * @return whether request
+     * @since 0.9.62
      */
     @Override
     public boolean shouldRequest(Peer peer, int size) {
@@ -621,7 +623,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         return (r * 1000) / CHECK_PERIOD;
     }
 
-    /** Get rate */
+    /** The download or upload rate, per the param. */
     static long getRate(long[] array) {
         long rate = 0;
         int i = 0;
@@ -643,8 +645,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Current limit in Bps
      *
-     * @since 0.9.62
      * @return the up b w limit
+     * @since 0.9.62
      */
     @Override
     public long getUpBWLimit() {
@@ -675,8 +677,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Current limit in Bps
      *
-     * @since 0.9.62
      * @return the down b w limit
+     * @since 0.9.62
      */
     @Override
     public long getDownBWLimit() {
@@ -945,6 +947,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * The peer with the given ID, or null.
+     *
      * @return peer if peer id is in the collection, else null
      */
     private static Peer peerIDInList(PeerID pid, Collection<Peer> peers) {
@@ -1099,6 +1103,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * Whether we still want the given piece.
+     *
      * @return true if we still want the given piece
      */
     @Override
@@ -2180,8 +2186,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Sets the storage after transition out of magnet mode Snark calls this after we call
-     * gotMetaInfo()
+     * Store the storage after transition out of magnet mode. Snark calls this after we call
+     * gotMetaInfo().
      *
      * @since 0.8.4
      */
@@ -2209,7 +2215,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Get peers from PEX - PeerListener callback
+     * Handle peers from PEX; a PeerListener callback.
      *
      * @since 0.8.4
      */
@@ -2345,11 +2351,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Set the uploaders and interestedUploaders counts
+     * Record the uploader and interested-uploader counts.
      *
-     * @since 0.9.28
      * @param upl whether interested or not
      * @param inter interested only
+     * @since 0.9.28
      */
     public void setUploaders(int upl, int inter) {
         if (upl < 0) {
@@ -2385,6 +2391,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * The current value.
+     *
      * @return current
      * @since 0.9.28
      */
@@ -2402,8 +2410,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Convenience
      *
-     * @since 0.9.2
      * @return the util
+     * @since 0.9.2
      */
     @Override
     public I2PSnarkUtil getUtil() {
@@ -2437,8 +2445,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * Is a web peer banned?
      *
      * @param host the hostname
-     * @since 0.9.49
      * @return whether web peer banned
+     * @since 0.9.49
      */
     public synchronized boolean isWebPeerBanned(String host) {
         if (_webPeerBans == null) {

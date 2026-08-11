@@ -97,34 +97,34 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private final I2PAppContext _context;
     private final Log _log;
 
-    /** our tracker */
+    /** Our tracker. */
     private final DHTTracker _tracker;
 
-    /** who we know */
+    /** Who we know. */
     private final DHTNodes _knownNodes;
 
-    /** index to sent queries awaiting reply */
+    /** Index to sent queries awaiting reply. */
     private final ConcurrentHashMap<MsgID, ReplyWaiter> _sentQueries;
 
-    /** index to outgoing tokens we generated, sent in reply to a get_peers query */
+    /** Index to outgoing tokens we generated, sent in reply to a get_peers query. */
     private final ConcurrentHashMap<Token, NodeInfo> _outgoingTokens;
 
-    /** index to incoming opaque tokens, received in a peers or nodes reply */
+    /** Index to incoming opaque tokens, received in a peers or nodes reply. */
     private final ConcurrentHashMap<NID, Token> _incomingTokens;
 
-    /** recently unreachable, with lastSeen() as the added-to-blacklist time */
+    /** Recently unreachable, with lastSeen() as the added-to-blacklist time. */
     private final Set<NID> _blacklist;
 
-    /** infohashes this instance serves tracker queries for, empty when serving all */
+    /** Infohashes this instance serves tracker queries for, empty when serving all. */
     private final Set<InfoHash> _servedTorrents = new CopyOnWriteArraySet<>();
 
-    /** false to answer no tracker queries, keeping the instance routing-only */
+    /** False to answer no tracker queries, keeping the instance routing-only. */
     private volatile boolean _serveAll = true;
 
     private SimpleTimer2.TimedEvent _cleaner;
     private SimpleTimer2.TimedEvent _explorer;
 
-    /** hook to inject and receive datagrams */
+    /** Hook to inject and receive datagrams. */
     protected I2PSession _session;
 
     /** 20 byte random id */
@@ -136,10 +136,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** 20 byte random id + 32 byte Hash + 2 byte port */
     private final NodeInfo _myNodeInfo;
 
-    /** unsigned dgrams */
+    /** Unsigned datagrams. */
     protected int _rPort;
 
-    /** signed dgrams */
+    /** Signed datagrams. */
     protected int _qPort;
 
     private final File _dhtFile;
@@ -147,7 +147,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     protected volatile boolean _isRunning;
     private volatile boolean _hasBootstrapped;
 
-    /** stats */
+    /** Stats. */
     private final AtomicLong _rxPkts = new AtomicLong();
 
     private final AtomicLong _txPkts = new AtomicLong();
@@ -156,7 +156,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private long _started;
     private long _nodesLastSaved;
 
-    /** all-zero NID used for pings */
+    /** All-zero NID used for pings. */
     public static final NID FAKE_NID = new NID(new byte[NID.HASH_LENGTH]);
 
     /** Max number of nodes to return. BEP 5 says 8 */
@@ -168,7 +168,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     private static final int MAX_WANT = I2PSnarkUtil.MAX_CONNECTIONS * 3;
 
-    /** overloads error codes which start with 201 */
+    /** Overloads error codes which start with 201. */
     private static final int REPLY_NONE = 0;
 
     private static final int REPLY_PONG = 1;
@@ -181,20 +181,18 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     public static final boolean SECURE_NID = true;
 
-    /** how long since generated do we delete - BEP 5 says 10 minutes */
+    /** How long since generated do we delete - BEP 5 says 10 minutes. */
     private static final long MAX_TOKEN_AGE = 10 * (long) 60 * 1000;
 
     private static final long MAX_INBOUND_TOKEN_AGE = MAX_TOKEN_AGE - 2 * 60 * 1000;
     private static final int MAX_OUTBOUND_TOKENS = 5000;
 
-    /** how long since sent do we wait for a reply */
-
-    /** how long since sent do we wait for a reply */
+    /** How long since sent do we wait for a reply. */
     private static final long DEFAULT_QUERY_TIMEOUT = (long) 75 * 1000;
 
     private static final long DEST_LOOKUP_TIMEOUT = (long) 10 * 1000;
 
-    /** stagger with other cleaners */
+    /** Stagger with other cleaners. */
     private static final long CLEAN_TIME = (long) 63 * 1000;
 
     private static final long EXPLORE_TIME = 10 * (long) 60 * 1000;
@@ -211,6 +209,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private static final int LOW_CRYPTO_TAGS = 4;
 
     /**
+     * Create the DHT instance.
+     *
      * @param baseName generally "i2psnark"
      */
     public KRPC(I2PAppContext ctx, String baseName, I2PSession session) {
@@ -218,6 +218,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
+     * Create the DHT instance sharing state.
+     *
      * @param baseName generally "i2psnark"
      * @param shared the KRPC instance whose routing table, tracker, and blacklist are shared with
      *            this instance, or null for a standalone instance; a TorrentKRPC passes the main
@@ -281,7 +283,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Set whether tracker queries are served for every infohash. Multi-dest
+     * Whether tracker queries are served for every infohash. Multi-dest
      * mode passes false, keeping the main instance a routing-table-only node
      * so probing the primary destination never reveals torrents hosted on
      * per-torrent destinations.
@@ -330,6 +332,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
+     * The UDP query port.
+     *
      * @return The UDP query port
      */
     public int getPort() {
@@ -337,6 +341,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
+     * The UDP response port.
+     *
      * @return The UDP response port
      */
     public int getRPort() {
@@ -433,7 +439,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Get peers for a torrent, and announce to the closest annMax nodes we find. This is an
+     * Find peers for a torrent, announcing to the closest annMax nodes found. This is an
      * iterative lookup in the DHT. Blocking! Caller should run in a thread.
      *
      * @param ih the Info Hash (torrent)
@@ -1204,7 +1210,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Get the dest for a NodeInfo lacking it, and store it there. Blocking.
+     * The dest for a NodeInfo lacking it, stored there. Blocking.
      *
      * @param nInfo the node to look up
      * @return success
@@ -1313,6 +1319,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     ///// Reception.....
 
     /**
+     * Handle an incoming datagram.
+     *
      * @param from dest or null if it didn't come in on signed port
      */
     private void receiveMessage(Destination from, int fromPort, byte[] payload) {
@@ -1910,18 +1918,22 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
 
         /**
+         * The destination the packet was sent to.
+         *
          * @return the sent to
          */
         public NodeInfo getSentTo() {
             return sentTo;
         }
 
-        /** only used for get_peers, to save the Info Hash */
+        /** Only used for get_peers, to save the Info Hash. */
         public void setSentObject(Object o) {
             sentObject = o;
         }
 
         /**
+         * The object stored with setSentObject().
+         *
          * @return that stored with setSentObject()
          */
         public Object getSentObject() {
@@ -1968,7 +1980,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             }
         }
 
-        /** timer callback on timeout */
+        /** Timer callback on timeout. */
         public void timeReached() {
             _sentQueries.remove(mid);
             if (onTimeout != null) {
@@ -2053,18 +2065,23 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
     }
 
-    /** for non-muxed */
+    /** For non-muxed. */
     @Override
     public void messageAvailable(I2PSession session, int msgId, long size) { /* no-op */ }
 
     /**
-     * reportAbuse.
+     * Handle a reportAbuse message from the session.
+     *
+     * @param session the session
+     * @param severity the abuse severity
      */
     @Override
     public void reportAbuse(I2PSession session, int severity) { /* no-op */ }
 
     /**
-     * disconnected.
+     * Handle a session disconnect.
+     *
+     * @param session the session
      */
     @Override
     public void disconnected(I2PSession session) {
@@ -2075,7 +2092,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * errorOccurred.
+     * Handle a session error.
+     *
+     * @param session the session
+     * @param message the error message
+     * @param error the error
      */
     @Override
     public void errorOccurred(I2PSession session, String message, Throwable error) {
@@ -2182,7 +2203,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
     }
 
-    /** explorer thread */
+    /** Explorer thread. */
     private class ExplorerThread implements Runnable {
 
         public void run() {

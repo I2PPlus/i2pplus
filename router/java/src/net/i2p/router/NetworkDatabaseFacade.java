@@ -230,21 +230,21 @@ public abstract class NetworkDatabaseFacade implements Service {
     public long getLastRouterInfoPublishTime() {return 0;}
 
     /**
-     *  Get all known router hashes.
+     *  All known router hashes.
      *
      *  @return set of router hashes
      */
     public abstract Set<Hash> getAllRouters();
 
     /**
-     *  Get the number of known routers.
+     *  Number of known routers.
      *
      *  @return the count
      */
     public int getKnownRouters() {return 0;}
 
     /**
-     *  Get the number of known LeaseSets.
+     *  Number of known LeaseSets.
      *
      *  @return the count
      */
@@ -265,7 +265,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     /** Debug only - all user info moved to NetDbRenderer in router console */
     public void renderStatusHTML(Writer out) throws IOException {}
     /**
-     *  Get all known LeaseSets for display.
+     *  All known LeaseSets for display.
      *
      *  @return set of LeaseSets, or empty
      */
@@ -316,12 +316,14 @@ public abstract class NetworkDatabaseFacade implements Service {
      *  Is it permanently negative cached?
      *
      *  @param key only for Destinations; for RouterIdentities, see Banlist
-     *  @since 0.9.16
      *  @return whether negative cached forever
+     *  @since 0.9.16
      */
     public boolean isNegativeCachedForever(Hash key) {return false;}
 
     /**
+     *  Look up the cached BlindData for the given key.
+     *
      *  @param spk unblinded key
      *  @return BlindData or null
      *  @since 0.9.40
@@ -331,6 +333,8 @@ public abstract class NetworkDatabaseFacade implements Service {
     }
 
     /**
+     *  Cache the given BlindData for later lookup.
+     *
      *  @param bd new BlindData to put in the cache
      *  @since 0.9.40
      */
@@ -339,8 +343,8 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      * The blind data for the given unblinded key, for console ConfigKeyringHelper.
      *
-     * @since 0.9.41
      * @return the blind data
+     * @since 0.9.41
      */
     public List<BlindData> getBlindData() {
         return null;

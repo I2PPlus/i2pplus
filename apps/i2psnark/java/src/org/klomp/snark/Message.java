@@ -272,7 +272,11 @@ class Message {
         return true;
     }
 
-    /** @return a string representation of the message */
+    /**
+     * A string representation of the message.
+     *
+     * @return a string representation of the message
+     */
     @Override
     public String toString() {
         switch (type) {

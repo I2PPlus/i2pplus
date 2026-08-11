@@ -16,11 +16,11 @@ import java.util.Arrays;
  * For compatibility with older releases, decoding supports both RFC 8410 and an
  * older draft specifications.
  *
- * @since 0.9.15
  * @author str4d
  *
  * @see <a href="https://tools.ietf.org/html/rfc8410">RFC 8410</a>
  * @see <a href=
+ * @since 0.9.15
  *      "https://tools.ietf.org/html/draft-josefsson-pkix-eddsa-04">Older draft
  *      specification</a>
  */
@@ -325,8 +325,8 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     /**
      * Hash code of the seed, for use in hash tables.
      *
-     * @since 0.9.25
      * @return whether h code is present
+     * @since 0.9.25
      */
     @Override
     public int hashCode() {
@@ -334,6 +334,8 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     }
 
     /**
+     *  Whether this key is equal to the given key.
+     *
      *  @return true if equal
      *  @since 0.9.25
      */

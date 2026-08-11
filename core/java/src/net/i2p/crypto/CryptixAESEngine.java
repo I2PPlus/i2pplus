@@ -43,8 +43,8 @@ public final class CryptixAESEngine extends AESEngine {
     /**
      * Check for AES-NI support in processor and JVM.
      *
-     * @since 0.9.14
      * @return whether a e s n i is present
+     * @since 0.9.14
      */
     private static boolean hasAESNI() {
         if (SystemVersion.isX86() && SystemVersion.is64Bit() && SystemVersion.isJava7() && !SystemVersion.isApache() && !SystemVersion.isGNU()) {
@@ -64,6 +64,8 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /**
+     *  Encrypt the payload with the session key.
+     *
      *  @param iv must be 16 bytes
      *  @param length must be a multiple of 16
      */
@@ -73,6 +75,8 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /**
+     *  Encrypt the payload with the session key.
+     *
      *  @param iv must be 16 bytes
      *  @param length must be a multiple of 16
      */
@@ -111,6 +115,8 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /**
+     *  Decrypt the payload with the session key.
+     *
      *  @param iv 16 bytes
      *  @param length must be a multiple of 16 (will overrun to next mod 16 if not)
      */
@@ -120,6 +126,8 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /**
+     *  Decrypt the payload with the session key.
+     *
      *  @param iv 16 bytes starting at ivOffset
      *  @param length must be a multiple of 16 (will overrun to next mod 16 if not)
      */
@@ -225,6 +233,8 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /**
+     *  Obtain a Cipher from the cache, or create a new one if empty.
+     *
      *  @return cached or new
      *  @since 0.9.49
      */

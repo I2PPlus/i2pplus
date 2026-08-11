@@ -142,7 +142,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     private static final byte[] IPV6_NAT64 = new byte[16];
     static { IPV6_NAT64[1] = 0x64; IPV6_NAT64[2] = (byte) 0xff; IPV6_NAT64[3] = (byte) 0x9b; }
 
-    /** Get via getInstance() */
+    /** Use getInstance() instead. */
     private Analysis(RouterContext ctx, ClientAppManager mgr, String[] args) {
         super(ctx);
         _context = ctx;
@@ -156,7 +156,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     * Gets the singleton Analysis instance, creating it if necessary.
+     * Singleton Analysis instance, creating it if necessary.
      *
      * @param ctx the router context
      * @return non-null, creates new if not already registered
@@ -174,7 +174,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Gets the persistence handler for storing and retrieving Sybil analysis data.
+     *  Persistence handler for storing and retrieving Sybil analysis data.
      *
      *  @return the PersistSybil instance used by this analysis
      */
@@ -291,7 +291,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Gets the current state of this application.
+     *  Current state of this application.
      *
      *  @return the current ClientAppState
      */
@@ -300,7 +300,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Gets the application name.
+     *  Application name.
      *
      *  @return the constant APP_NAME
      */
@@ -309,7 +309,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Gets the display name for this application.
+     *  Display name for this application.
      *
      *  @return "Sybil Analyzer"
      */
@@ -630,7 +630,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         return biLog2(min);
     }
 
-    /** v4 only */
+    /** IPv4 only. */
     private static byte[] getIP(RouterInfo ri) {
         for (RouterAddress ra : ri.getAddresses()) {
             byte[] rv = ra.getIP();
@@ -640,10 +640,10 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     * v6 only
- *
-     * @since 0.9.57
+     * IPv6 only.
+     *
      * @return the i pv6
+     * @since 0.9.57
      */
     private static byte[] getIPv6(RouterInfo ri) {
         for (RouterAddress ra : ri.getAddresses()) {
@@ -1311,12 +1311,12 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      *  This is a lot more expensive than _t(s), so use sparingly.
      *
      *  @param s string to be translated containing {0}
-     *    The {0} will be replaced by the parameter.
-     *    Single quotes must be doubled, i.e. ' -> '' in the string.
+     *           The {0} will be replaced by the parameter.
+     *           Single quotes must be doubled, i.e. ' -> '' in the string.
      *  @param o parameter, not translated.
-     *    To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     *    Do not double the single quotes in the parameter.
-     *    Use autoboxing to call with ints, longs, floats, etc.
+     *           To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     *           Do not double the single quotes in the parameter.
+     *           Use autoboxing to call with ints, longs, floats, etc.
      */
     private String _t(String s, Object o) {
         return Translate.getString(s, o, _context, BUNDLE_NAME);

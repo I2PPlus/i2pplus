@@ -39,8 +39,8 @@ import java.nio.charset.StandardCharsets;
  * <b>Performance Warning:</b> Many methods in this class are very slow on Windows
  * (approximately 200ms + 50ms per interface). Consider caching results when possible.
  *
- * @since 0.8.3 moved to core from router/transport
  * @author zzz
+ * @since 0.8.3 moved to core from router/transport
  */
 public abstract class Addresses {
 
@@ -754,7 +754,7 @@ public abstract class Addresses {
      *
      * @param host the hostname
      * @return true if IPv4 address
-     *  @since 0.9.34
+     * @since 0.9.34
      */
     public static boolean isIPv4Address(String host) {
         return InetAddressUtils.isIPv4Address(host);
@@ -765,7 +765,7 @@ public abstract class Addresses {
      *
      * @param host the hostname
      * @return true if IPv6 address
-     *  @since 0.9.34
+     * @since 0.9.34
      */
     public static boolean isIPv6Address(String host) {
         return InetAddressUtils.isIPv6Address(host);
@@ -776,7 +776,7 @@ public abstract class Addresses {
      *
      * @param host the hostname
      * @return true if either IPv4 or IPv6
-     *  @since 0.9.34
+     * @since 0.9.34
      */
     public static boolean isIPAddress(String host) {
         return InetAddressUtils.isIPv4Address(host) || InetAddressUtils.isIPv6Address(host);
@@ -1298,8 +1298,8 @@ public abstract class Addresses {
     /**
      * RFC 4941
      *
-     * @since 0.9.34
      * @return the privacy status
+     * @since 0.9.34
      */
     private static String getPrivacyStatus() {
         String rv = useIPv6TempAddresses();

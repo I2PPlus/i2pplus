@@ -86,10 +86,9 @@ import java.util.Set;
  * leases and the original leaseset signature.
  *
  * Revocation (zero leases) isn't used anywhere. In addition:
- *     - A revoked leaseset has an EarliestLeaseDate of -1, so it will
- *       never be stored successfully.
- *     - Revocation of an encrypted leaseset will explode.
- *     - So having an included signature at all is pointless?
+ * - A revoked leaseset has an EarliestLeaseDate of -1, so it will never be stored successfully.
+ * - Revocation of an encrypted leaseset will explode.
+ * - So having an included signature at all is pointless?
  *
  *
  * @author jrandom
@@ -178,7 +177,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  Sets the destination for this leaseset.
+     *  Destination for this leaseset.
      *
      * @throws IllegalStateException if already signed
      */
@@ -213,7 +212,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  Sets the encryption key for this leaseset.
+     *  Encryption public key for this leaseset.
      *
      * @throws IllegalStateException if already signed
      */
@@ -286,7 +285,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  Gets the number of leases in this leaseset.
+     *  Number of leases in this leaseset.
      *
      *  @return 0-16
      *  A LeaseSet with no leases is revoked.
@@ -300,7 +299,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  Get the lease at the given index.
+     *  Lease at the given index.
      *
      *  @param index the lease index
      *  @return the lease

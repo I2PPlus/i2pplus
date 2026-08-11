@@ -60,8 +60,8 @@ import java.util.Map;
  *   <li>Key validation and rectification</li>
  * </ul>
  *
- * @since 0.9.9, public since 0.9.12
  * @author I2P Project
+ * @since 0.9.9, public since 0.9.12
  */
 public final class SigUtil {
 

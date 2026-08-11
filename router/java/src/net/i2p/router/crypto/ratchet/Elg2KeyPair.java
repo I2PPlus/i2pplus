@@ -14,7 +14,7 @@ public class Elg2KeyPair extends KeyPair {
     private final byte[] encoded;
 
     /**
-     * Construct a key pair from the given keys and the pre-encoded public key.
+     * Key pair from the given keys and the pre-encoded public key.
      *
      * @param publicKey the public key
      * @param privateKey the private key

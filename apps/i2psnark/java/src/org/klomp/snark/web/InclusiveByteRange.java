@@ -81,6 +81,8 @@ public class InclusiveByteRange {
     }
 
     /**
+     * Parse the Range header fields into a list of byte ranges.
+     *
      * @param headers Enumeration of Range header fields.
      * @param size Size of the resource.
      * @return List of satisfiable ranges

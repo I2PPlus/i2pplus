@@ -196,8 +196,8 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
      * @param fromPort I2CP source port, 0-65535
      * @param toPort I2CP destination port, 0-65535
      * @param data the data to send
-     * @since 0.9.53 added fromPort and toPort parameters
      * @throws RuntimeException if the session is closed
+     * @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination to, int fromPort, int toPort, byte[] data) {
         _i2pSink.send(to, fromPort, toPort, data);

@@ -210,8 +210,8 @@ public class LeaseSetKeys {
     /**
      * Do we support this type of encryption?
      *
-     * @since 0.9.44
      * @return whether supported
+     * @since 0.9.44
      */
     public boolean isSupported(EncType type) {
         if (type == EncType.ELGAMAL_2048)
@@ -226,8 +226,8 @@ public class LeaseSetKeys {
     /**
      * The types of encryption supported by this LeaseSet.
      *
-     * @since 0.9.44
      * @return the supported encryption
+     * @since 0.9.44
      */
     public Set<EncType> getSupportedEncryption() {
         if (_decryptionKey != null)

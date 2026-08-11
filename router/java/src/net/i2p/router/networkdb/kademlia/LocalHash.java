@@ -20,9 +20,9 @@ import net.i2p.data.Hash;
 /**
  * Pull the caching used only by KBucketImpl out of Hash and put it here.
  *
- * @since 0.7.14
  * @author jrandom
  * @author moved from Hash.java by zzz
+ * @since 0.7.14
  */
 class LocalHash extends Hash {
     private Map<Hash, byte[]> _xorCache;

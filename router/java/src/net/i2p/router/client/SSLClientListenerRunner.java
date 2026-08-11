@@ -26,8 +26,8 @@ import net.i2p.util.SecureDirectory;
 /**
  * SSL version of ClientListenerRunner
  *
- * @since 0.8.3
  * @author zzz
+ * @since 0.8.3
  */
 class SSLClientListenerRunner extends ClientListenerRunner {
 

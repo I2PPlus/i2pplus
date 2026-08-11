@@ -160,7 +160,7 @@ public class TunnelPoolSettings {
     /** How many tunnels should be available at all times */
     public int getQuantity() { return _quantity; }
     /**
-     * Set how many tunnels should be available at all times.
+     * How many tunnels should be available at all times.
      *
      * @param quantity the desired quantity
      */
@@ -169,7 +169,7 @@ public class TunnelPoolSettings {
     /** How many backup tunnels should be kept waiting in the wings */
     public int getBackupQuantity() { return _backupQuantity; }
     /**
-     * Set how many backup tunnels should be kept waiting in the wings.
+     * How many backup tunnels should be kept waiting in the wings.
      *
      * @param quantity the desired backup quantity
      */
@@ -245,7 +245,7 @@ public class TunnelPoolSettings {
      */
     public int getLengthVariance() { return _lengthVariance; }
     /**
-     * Set how the length should be varied.
+     * How the length should be varied.
      *
      * @param variance the length variance
      */
@@ -279,8 +279,8 @@ public class TunnelPoolSettings {
      *  Other destinations that use the same tunnel (or null if exploratory).
      *  Modifiable, concurrent, not a copy
      *
-     *  @since 0.9.21
      *  @return the aliases
+     *  @since 0.9.21
      */
     public Set<Hash> getAliases() {
         return _aliases;
@@ -290,8 +290,8 @@ public class TunnelPoolSettings {
      *  Other destination that this is an alias of (or null).
      *  If non-null, don't build tunnels.
      *
-     *  @since 0.9.21
      *  @return the alias of
+     *  @since 0.9.21
      */
     public Hash getAliasOf() {
         return _aliasOf;
@@ -299,7 +299,7 @@ public class TunnelPoolSettings {
 
 
     /**
-     *  Set other destination that this is an alias of (or null).
+     *  Other destination that this is an alias of (or null).
      *  If non-null, don't build tunnels.
      *
      *  @since 0.9.21
@@ -309,7 +309,7 @@ public class TunnelPoolSettings {
     }
 
     /**
-     *  Get the set of first peer exclusions for diversity.
+     *  First peer exclusions for diversity.
      *  These are peers that should not be used as the first hop in new tunnels.
      *
      *  @return Set of peer hashes to exclude, or null if none set
@@ -320,7 +320,7 @@ public class TunnelPoolSettings {
     }
 
     /**
-     *  Set the first peer exclusions for diversity.
+     *  First peer exclusions for diversity.
      *
      *  @param exclusions Set of peer hashes to exclude, or null to clear
      *  @since 0.9.68+
@@ -330,7 +330,7 @@ public class TunnelPoolSettings {
     }
 
     /**
-     *  Get the set of last peer exclusions for diversity.
+     *  Last peer exclusions for diversity.
      *  These are peers that should not be used as the last hop in new tunnels.
      *
      *  @return Set of peer hashes to exclude, or null if none set
@@ -341,7 +341,7 @@ public class TunnelPoolSettings {
     }
 
     /**
-     *  Set the last peer exclusions for diversity.
+     *  Last peer exclusions for diversity.
      *
      *  @param exclusions Set of peer hashes to exclude, or null to clear
      *  @since 0.9.68+
@@ -351,7 +351,7 @@ public class TunnelPoolSettings {
     }
 
     /**
-     *  random key used for peer ordering
+     *  Random key used for peer ordering.
      *
      *  @return non-null
      */
@@ -360,7 +360,7 @@ public class TunnelPoolSettings {
     /** What user supplied name was given to the client connected (can be null) */
     public String getDestinationNickname() { return _destinationNickname; }
     /**
-     * Set the user supplied name given to the connected client.
+     * User supplied name given to the connected client.
      *
      * @param name the nickname, or null
      */
@@ -387,6 +387,8 @@ public class TunnelPoolSettings {
     public int getPriority() { return _priority; }
 
     /**
+     *  Options not recognized when reading from properties.
+     *
      *  @return non-null
      */
     public Properties getUnknownOptions() { return _unknownOptions; }
@@ -450,6 +452,8 @@ public class TunnelPoolSettings {
     }
 
     /**
+     *  Write the settings into the given properties map.
+     *
      *  @param prefix non-null
      */
     public void writeToProperties(String prefix, Properties props) {

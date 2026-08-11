@@ -87,7 +87,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private DataStore _ds; // hash to DataStructure mapping, persisted when necessary
     /** Where the data store is pushing the data */
     private String _dbDir;
-    /** Set of Hash objects that we should search on (to fill up a bucket, not to get data) */
+    /** Hash objects that we should search on (to fill up a bucket, not to get data) */
     private final Set<Hash> _exploreKeys;
     /** Initialized flag */
     private boolean _initialized;
@@ -387,14 +387,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     long getLastExploreNewDate() {return _lastExploreNew;}
     /**
-     *  Sets the time of the last explore run.
+     *  Time of the last explore run.
      *
      *  @param when the new date
      */
     void setLastExploreNewDate(long when) {_lastExploreNew = when;}
 
     /**
-     * Set of keys to explore.
+     * Keys to explore.
      *
      * @return unmodifiable set
      */
@@ -2664,8 +2664,8 @@ return false;
     /**
      *  LeaseSets published by this router's clients.
      *
-     *  @since 0.9.64+
      *  @return the clientLeases
+     *  @since 0.9.64+
      */
     @Override
     public Set<LeaseSet> getClientLeases() {
@@ -2684,8 +2684,8 @@ return false;
     /**
      *  LeaseSets published to the network.
      *
-     *  @since 0.9.64+
      *  @return the publishedLeases
+     *  @since 0.9.64+
      */
     @Override
     public Set<LeaseSet> getPublishedLeases() {
@@ -2705,8 +2705,8 @@ return false;
     /**
      *  LeaseSets not published to the network.
      *
-     *  @since 0.9.64+
      *  @return the unpublishedLeases
+     *  @since 0.9.64+
      */
     @Override
     public Set<LeaseSet> getUnpublishedLeases() {

@@ -226,12 +226,13 @@ class Packet {
 
     private boolean _sendStreamIdSet = false;
 
-    /** what stream do we send data to the peer on?
+    /** Stream we send data to the peer on.
      * @return stream ID we use to send data
      */
     public long getSendStreamId() {return _sendStreamId;}
 
     /**
+     * Stream the peer will receive data on.
      * @param id the send stream ID to set
      * @throws RuntimeException if the send stream ID has already been set to a different value
      */
@@ -246,12 +247,13 @@ class Packet {
     private boolean _receiveStreamIdSet = false;
 
     /**
-     * stream the replies should be sent on.  this should be 0 if the connection is still being built.
+     * Stream the replies should be sent on. This should be 0 if the connection is still being built.
      * @return stream ID we use to get data, zero if the connection is still being built.
      */
     public long getReceiveStreamId() {return _receiveStreamId;}
 
     /**
+     * Stream the peer will send replies on.
      * @param id the receive stream ID to set
      * @throws RuntimeException if the receive stream ID has already been set to a different value
      */
@@ -269,6 +271,7 @@ class Packet {
     public long getSequenceNum() {return _sequenceNum;}
 
     /**
+     * Sequence number to set.
      * @param num the sequence number to set
      */
     public void setSequenceNum(long num) {_sequenceNum = num;}
@@ -286,6 +289,7 @@ class Packet {
     }
 
     /**
+     * ACK-through value to set; if &lt; 0, sets FLAG_NO_ACK.
      * @param id the ack through value to set, if &lt; 0 sets FLAG_NO_ACK
      */
     public void setAckThrough(long id) {
@@ -304,6 +308,7 @@ class Packet {
     public long[] getNacks() {return _nacks;}
 
     /**
+     * NACK list to set.
      * @param nacks list of packet sequence numbers not ACKed, or null if there are none.
      */
     public void setNacks(long[] nacks) {_nacks = nacks;}
@@ -336,12 +341,13 @@ class Packet {
      */
     public static final int MAX_PAYLOAD_SIZE = 32*1024;
 
-    /** get the actual payload of the message.  may be null
+    /** Actual payload of the message, may be null.
      * @return the payload of the message, null if none.
      */
     public ByteArray getPayload() {return _payload;}
 
     /**
+     * Payload to set.
      * @param payload the payload to set, or null to clear
      * @throws IllegalArgumentException if the payload exceeds MAX_PAYLOAD_SIZE
      */
@@ -352,16 +358,18 @@ class Packet {
     }
 
     /**
+     * Payload size in bytes.
      * @return the size of the payload in bytes, or 0 if no payload
      */
     public int getPayloadSize() {
         return (_payload == null ? 0 : _payload.getValid());
     }
 
-    /** does nothing right now */
+    /** No-op stub. */
     public void releasePayload() { /* no-op */ }
 
     /**
+     * Allocate a MAX_PAYLOAD_SIZE buffer for this packet.
      * @return a new ByteArray of MAX_PAYLOAD_SIZE for this packet
      */
     public ByteArray acquirePayload() {
@@ -369,18 +377,20 @@ class Packet {
         return _payload;
     }
 
-    /** is a particular flag set on this packet?
+    /** Is a particular flag set on this packet?
      * @param flag bitmask of any flag(s)
      * @return true if set, false if not.
      */
     public boolean isFlagSet(int flag) {return 0 != (_flags & flag);}
 
     /**
+     *  Marks the flag(s) set.
      *  @param flag bitmask of any flag(s)
      */
     public void setFlag(int flag) {_flags |= flag;}
 
     /**
+     *  Marks the flag(s) set or clear.
      *  @param flag bitmask of any flag(s)
      *  @param set true to set, false to clear
      */
@@ -390,6 +400,7 @@ class Packet {
     }
 
     /**
+     * Replace the entire flag word.
      * @param flags the flags to set
      */
     private void setFlags(int flags) {_flags = flags;}
@@ -412,16 +423,16 @@ class Packet {
         _optionSignature = sig;
     }
 
-    /** the sender of the packet (only included if the flag for it is set)
+    /** Sender of the packet, only included if the flag for it is set.
      * @return the sending Destination
      */
     public Destination getOptionalFrom() {return _optionFrom;}
 
     /**
-     *  Only if an offline signing block was included, else null
+     *  Transient signing public key, only if an offline signing block was included, else null.
      *
-     *  @since 0.9.39
-     * @return the transient s p k
+     * @return the transient signing public key
+     * @since 0.9.39
      */
     public SigningPublicKey getTransientSPK() {return _transientSigningPublicKey;}
 
@@ -458,6 +469,7 @@ class Packet {
     }
 
     /**
+     *  Local port.
      *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
      *  @since 0.8.9
      */
@@ -471,6 +483,7 @@ class Packet {
     public void setLocalPort(int port) {_localPort = port;}
 
     /**
+     *  Remote port.
      *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
      *  @since 0.8.9
      */
@@ -497,6 +510,7 @@ class Packet {
     }
 
     /**
+     * Write the packet to the buffer, leaving room for a fake signature if requested.
      * @param buffer bytes to write to a destination
      * @param offset starting point in the buffer to send
      * @param fakeSigLen if 0, include the real signature in _optionSignature;
@@ -598,7 +612,7 @@ class Packet {
     }
 
     /**
-     * how large would this packet be if we wrote it
+     * Size of this packet if written to a buffer.
      *
      * @return How large the current packet would be
      */
@@ -856,7 +870,7 @@ class Packet {
     }
 
     /**
-     * toString.
+     * String representation of this packet.
      */
     @Override
     public String toString() {
@@ -865,7 +879,7 @@ class Packet {
     }
 
     /**
-     * formatAsString.
+     * Format as a string builder for logging.
      */
     protected StringBuilder formatAsString() {
         Log l = I2PAppContext.getCurrentContext().logManager().getLog(Packet.class);
@@ -886,6 +900,7 @@ class Packet {
     }
 
     /**
+     * Format a stream ID for display.
      * @param id the stream ID to format
      * @return base64-encoded stream ID without trailing '='
      */

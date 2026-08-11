@@ -377,6 +377,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     private class RemoveExpired extends SimpleTimer2.TimedEvent {
 
         /**
+         * Timer for the scheduled removal.
          * @param timer the timer
          */
         public RemoveExpired(SimpleTimer2 timer) {

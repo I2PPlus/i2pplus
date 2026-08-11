@@ -26,6 +26,8 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
     }
 
     /**
+     *  Reading this message always fails.
+     *
      *  @deprecated don't do this
      *  @throws I2CPMessageException always
      */
@@ -36,6 +38,8 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
     }
 
     /**
+     *  Writing this message always fails.
+     *
      *  @deprecated don't do this
      *  @throws I2CPMessageException always
      */
@@ -46,6 +50,8 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
     }
 
     /**
+     *  Type of this message.
+     *
      * @return the type
      */
     @Override
@@ -54,6 +60,8 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
     }
 
     /**
+     *  Hash code for this message.
+     *
      * @return whether h code is present
      */
     @Override
@@ -62,7 +70,7 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
     }
 
     /**
-     * equals.
+     * Whether this message equals the given object.
      */
     @Override
     public boolean equals(Object object) {
@@ -74,7 +82,7 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
     }
 
     /**
-     * toString.
+     * String representation of this message.
      */
     @Override
     public String toString() {

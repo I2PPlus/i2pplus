@@ -12,7 +12,7 @@ class SchedulerChooser {
     private final I2PAppContext _context;
     private final Log _log;
     private final TaskScheduler _nullScheduler;
-    /** list of TaskScheduler objects */
+    /** List of TaskScheduler objects. */
     private final List<TaskScheduler> _schedulers;
 
     /**

@@ -25,8 +25,8 @@ import java.util.Arrays;
  * EdDSA signature engine implementing the Java Signature API.
  * Supports both standard streaming and one-shot operation modes for efficiency.
  *
- * @since 0.9.15
  * @author str4d
+ * @since 0.9.15
  */
 public class EdDSAEngine extends Signature {
     /** The signature algorithm name. */

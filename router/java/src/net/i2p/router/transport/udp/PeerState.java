@@ -1028,7 +1028,7 @@ public class PeerState {
     void setLastPingTime(long when) {_lastPingTime = when;}
 
     /**
-     *  latest of last sent, last ACK, last ping.
+     *  Latest of last sent, last ACK, last ping.
      *
      *  @return the latest time
      *  @since 0.9.3
@@ -1740,8 +1740,9 @@ public class PeerState {
 
     /**
      *  Whether the peer is dead or its outbound queue is backlogged.
-     * @since 0.9.3
-     * @return whether backlogged
+     *
+     *  @return whether backlogged
+     *  @since 0.9.3
      */
     public boolean isBacklogged() {return _dead || _outboundQueue.isBacklogged();}
 
@@ -1755,7 +1756,7 @@ public class PeerState {
     private static final int MIN_ACK_SIZE = 1 + (4 * MIN_EXPLICIT_ACKS);
 
     /**
-     *  how much payload data can we shove in there?
+     *  How much payload data can we shove in there?
      *  @return MTU - 87, i.e. 533 or 1397 (IPv4), MTU - 107 (IPv6)
      */
     int fragmentSize() {
@@ -1957,10 +1958,10 @@ public class PeerState {
     }
 
     /**
-     * SSU 2 only
+     *  SSU 2 only
      *
-     * @since 0.9.56
-     * @return whether request immediate ack
+     *  @return whether request immediate ack
+     *  @since 0.9.56
      */
     protected boolean shouldRequestImmediateAck() {
         synchronized(_sendWindowBytesRemainingLock) {

@@ -8,9 +8,9 @@ import java.util.Comparator;
 /**
  * Help sort Hashes in relation to a base key using the XOR metric
  *
- * @since 0.9.2 in i2psnark, moved to core in 0.9.10
  *
  * @param <T> type of SimpleDataStructure objects being compared
+ * @since 0.9.2 in i2psnark, moved to core in 0.9.10
  */
 public class XORComparator<T extends SimpleDataStructure> implements Comparator<T>, Serializable {
     /** Key to compare distances with */
@@ -26,7 +26,7 @@ public class XORComparator<T extends SimpleDataStructure> implements Comparator<
     }
 
     /**
-     * compare.
+     *  Compare two entries by XOR distance to the base key.
      */
     @Override
     public int compare(T lhs, T rhs) {

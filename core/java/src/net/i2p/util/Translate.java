@@ -72,16 +72,16 @@ public abstract class Translate {
      *  This is a lot more expensive than getString(s, ctx), so use sparingly.
      *
      *  @param s string to be translated containing {0}
-     *    The {0} will be replaced by the parameter.
-     *    Single quotes must be doubled, i.e. ' -&gt; '' in the string.
+     *  The {0} will be replaced by the parameter.
+     *  Single quotes must be doubled, i.e. ' -&gt; '' in the string.
      *
      *  @param o parameter, not translated.
-     *    To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     *    Do not double the single quotes in the parameter.
-     *    Use autoboxing to call with ints, longs, floats, etc.
-4 * @param ctx the ctx
-4 * @param bun the bun
-4 * @return the result
+     *  To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     *  Do not double the single quotes in the parameter.
+     *  Use autoboxing to call with ints, longs, floats, etc.
+     *  @param ctx the ctx
+     *  @param bun the bun
+     *  @return the result
      */
     public static String getString(String s, Object o, I2PAppContext ctx, String bun) {
         return getString(s, ctx, bun, o);
@@ -243,8 +243,8 @@ public abstract class Translate {
      *
      *  @param langCode two- or three-letter lower-case
      *  @param dflt e.g. "English"
-     *  @since 0.9.5
      *  @return the display language
+     *  @since 0.9.5
      */
     public static String getDisplayLanguage(String langCode, String dflt, I2PAppContext ctx, String bun) {
         String curLang = getLanguage(ctx);

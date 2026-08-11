@@ -75,8 +75,8 @@ public class JSONUtils {
      * single message assigned to "msg" key
      * @param msg {byte[]} message which should be assigned to json object
      * @return {byte[]} json object represented by jsontext and encodes into a sequence of bytes
-     * @since 0.9.45
       * @param tests the tests
+     * @since 0.9.45
      */
     public static byte[] createJsonLoginObj(byte[] msg, byte tests) {
         JsonObject obj = new JsonObject();

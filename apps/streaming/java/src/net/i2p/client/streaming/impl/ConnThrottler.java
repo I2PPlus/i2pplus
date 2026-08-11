@@ -20,6 +20,7 @@ class ConnThrottler {
     private final Cleaner _cleaner;
 
     /**
+     * Connection throttle for incoming connection rates.
      * @param max per-peer, 0 for unlimited
      * @param totalMax for all peers, 0 for unlimited
      * @param period ms
@@ -39,6 +40,7 @@ class ConnThrottler {
     }
 
     /**
+     * Update the connection limits.
      * @param max per-peer, 0 for unlimited
      * @param totalMax for all peers, 0 for unlimited
      * @since 0.9.3
@@ -89,7 +91,7 @@ class ConnThrottler {
         }
 
         /**
-         * timeReached.
+         * Reset the counters when the period expires.
          */
         public void timeReached() {
             if (_totalMax > 0)

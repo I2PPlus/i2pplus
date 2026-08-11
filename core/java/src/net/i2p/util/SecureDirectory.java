@@ -7,8 +7,8 @@ import java.io.File;
  * be read and written by the owner only (i.e. 700 on linux)
  * As of 0.8.2, just use SecureFile instead of this.
  *
- * @since 0.8.1
  * @author zzz
+ * @since 0.8.1
  */
 public class SecureDirectory extends File {
 

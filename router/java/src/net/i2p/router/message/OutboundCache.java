@@ -109,6 +109,8 @@ public class OutboundCache {
         }
 
         /**
+         * Computes the hash code for this pair.
+         *
          * @return whether h code is present
          */
         @Override
@@ -119,7 +121,7 @@ public class OutboundCache {
         }
 
         /**
-         * equals.
+         * Whether this pair equals the given object.
          */
         @Override
         public boolean equals(final Object o) {
@@ -258,7 +260,7 @@ public class OutboundCache {
          */
         public OCMOSJCacheCleaner() { super(_context.simpleTimer2()); }
         /**
-         * timeReached.
+         * Clean all caches and reschedule the cleanup timer.
          */
         @Override
         public void timeReached() {

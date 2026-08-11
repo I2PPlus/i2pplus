@@ -5,8 +5,8 @@ import net.i2p.crypto.eddsa.spec.EdDSAParameterSpec;
 /**
  * Common interface for all EdDSA keys.
  *
- * @since 0.9.15
  * @author str4d
+ * @since 0.9.15
  */
 public interface EdDSAKey {
     /**

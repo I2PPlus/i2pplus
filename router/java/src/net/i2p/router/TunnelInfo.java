@@ -114,8 +114,8 @@ public interface TunnelInfo {
     /**
      * Has the tunnel failed completely?
      *
-     * @since 0.9.53 copied from TunnelCreatorConfig
      * @return the tunnel failed
+     * @since 0.9.53 copied from TunnelCreatorConfig
      */
     public boolean getTunnelFailed();
 

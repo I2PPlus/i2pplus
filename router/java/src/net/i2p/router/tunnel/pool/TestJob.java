@@ -236,18 +236,18 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Get the current number of queued + active test jobs for capacity planning.
-     * @since 0.9.69+
+     *  Current number of queued + active test jobs for capacity planning.
      * @return the current test job count
+     * @since 0.9.69+
      */
     public static int getCurrentTestJobCount() {
         return TOTAL_TEST_JOBS.get();
     }
 
     /**
-     *  Get the maximum number of queued test jobs allowed before deferring.
-     * @since 0.9.69+
+     *  Maximum number of queued test jobs allowed before deferring.
      * @return the max test jobs
+     * @since 0.9.69+
      */
     public static int getMaxTestJobs() {
         return maxQueuedTests;
@@ -1001,6 +1001,7 @@ public class TestJob extends JobImpl {
     }
 
     /**
+     *  Whether tunnel build success has fallen below the attack threshold.
      *  @return true when build success is below the attack threshold,
      *          indicating the router is struggling to find suitable peers.
      *          In this state, the test cycle should run more slowly and

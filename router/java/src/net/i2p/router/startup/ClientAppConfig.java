@@ -485,8 +485,8 @@ public class ClientAppConfig {
     /**
      *  Hash code based on class name.
      *
-     * @since 0.9.42
      * @return whether h code is present
+     * @since 0.9.42
      */
     @Override
     public int hashCode() {

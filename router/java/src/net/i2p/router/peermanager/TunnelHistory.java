@@ -34,13 +34,13 @@ public class TunnelHistory {
     /** Rate periods for history tracking */
     static final long[] RATES = new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
-    /** probabalistic tunnel rejection due to a flood of requests - infrequent */
+    /** Probabalistic tunnel rejection due to a flood of requests - infrequent */
     public static final int TUNNEL_REJECT_PROBABALISTIC_REJECT = 10;
-    /** tunnel rejection due to temporary cpu/job/tunnel overload - rare */
+    /** Tunnel rejection due to temporary cpu/job/tunnel overload - rare */
     public static final int TUNNEL_REJECT_TRANSIENT_OVERLOAD = 20;
-    /** tunnel rejection due to excess bandwidth usage - used for most rejections even if not really for bandwidth */
+    /** Tunnel rejection due to excess bandwidth usage - used for most rejections even if not really for bandwidth */
     public static final int TUNNEL_REJECT_BANDWIDTH = 30;
-    /** tunnel rejection due to system failure - not currently used */
+    /** Tunnel rejection due to system failure - not currently used */
     public static final int TUNNEL_REJECT_CRIT = 50;
     /** Streaming NACK - peer accepted tunnel but can't deliver data */
     public static final int TUNNEL_REJECT_STREAMING_NACK = 100;
@@ -55,26 +55,26 @@ public class TunnelHistory {
         _failRate = new RateStat("tunnelHistory.failRate", "How often do tunnels this peer accepts fail?", statGroup, RATES);
     }
 
-    /** total tunnels the peer has agreed to participate in */
+    /** Total tunnels the peer has agreed to participate in */
     public long getLifetimeAgreedTo() {return _lifetimeAgreedTo.get();}
-    /** total tunnels the peer has refused to participate in */
+    /** Total tunnels the peer has refused to participate in */
     public long getLifetimeRejected() {return _lifetimeRejected.get();}
-    /** total tunnels the peer has agreed to participate in that were later marked as failed prematurely */
+    /** Total tunnels the peer has agreed to participate in that were later marked as failed prematurely */
     public long getLifetimeFailed() {return _lifetimeFailed.get();}
-    /** when the peer last agreed to participate in a tunnel */
+    /** When the peer last agreed to participate in a tunnel */
     public long getLastAgreedTo() {return _lastAgreedTo;}
-    /** when the peer last refused to participate in a tunnel with level of critical */
+    /** When the peer last refused to participate in a tunnel with level of critical */
     public long getLastRejectedCritical() {return _lastRejectedCritical;}
-    /** when the peer last refused to participate in a tunnel complaining of bandwidth overload */
+    /** When the peer last refused to participate in a tunnel complaining of bandwidth overload */
     public long getLastRejectedBandwidth() {return _lastRejectedBandwidth;}
-    /** when the peer last refused to participate in a tunnel complaining of transient overload */
+    /** When the peer last refused to participate in a tunnel complaining of transient overload */
     public long getLastRejectedTransient() {return _lastRejectedTransient;}
-    /** when the peer last refused to participate in a tunnel probabalistically */
+    /** When the peer last refused to participate in a tunnel probabalistically */
     public long getLastRejectedProbabalistic() {return _lastRejectedProbabalistic;}
-    /** when the last tunnel the peer participated in failed */
+    /** When the last tunnel the peer participated in failed */
     public long getLastFailed() {return _lastFailed;}
 
-    /** when the peer last passed a tunnel test */
+    /** When the peer last passed a tunnel test */
     public long getLastTestedSuccessfully() {return _lastTestedSuccessfully;}
 
     /**
@@ -101,14 +101,14 @@ public class TunnelHistory {
     }
 
     /**
-     * incrementProcessed.
+     * Processed message counter; legacy method, no longer tracked.
      */
     public void incrementProcessed(int processedSuccessfully, int failedProcessing) {
         // intentionally empty - legacy method from strict speed calculator, no longer tracked
     }
 
     /**
-     * incrementAgreedTo.
+     * Count a tunnel participation agreement and record its time.
      */
     public void incrementAgreedTo() {
         _lifetimeAgreedTo.incrementAndGet();
@@ -116,6 +116,8 @@ public class TunnelHistory {
     }
 
     /**
+     * Count a tunnel rejection at the given severity and record its time.
+     *
      * @param severity how much the peer doesnt want to participate in the
      *                 tunnel (large == more severe)
      */
@@ -143,10 +145,14 @@ public class TunnelHistory {
     }
 
     /**
+     * Rejection rate statistics for this peer.
+     *
      * @return the rejection rate
      */
     public RateStat getRejectionRate() {return _rejectRate;}
     /**
+     * Failure rate statistics for this peer.
+     *
      * @return the failed rate
      */
     public RateStat getFailedRate() {return _failRate;}
@@ -156,7 +162,7 @@ public class TunnelHistory {
     private static final long DECAY_DENOMINATOR = 4;
 
     /**
-     * coalesceStats.
+     * Coalesce the rate statistics.
      */
     public void coalesceStats() {
         if (_log.shouldDebug()) {_log.debug("Coalescing Profile Manager stats...");}
@@ -192,14 +198,14 @@ public class TunnelHistory {
     private static final String HR = "# ----------------------------------------------------------------------------------------";
 
     /**
-     * store.
+     * Write the tunnel history to the stream, including comments.
      */
     public void store(OutputStream out) throws IOException {
         store(out, true);
     }
 
     /**
-     * write out the data from the profile to the stream
+     * Write the data from the profile to the stream
      *
      * @param addComments add comment lines to the output
      * @since 0.9.41
@@ -239,7 +245,7 @@ public class TunnelHistory {
     }
 
     /**
-     * load.
+     * Restore the tunnel history fields from the given properties.
      */
     public void load(Properties props) {
         _lastAgreedTo = getLong(props, "tunnels.lastAgreedTo");

@@ -42,8 +42,8 @@ public class SimpleBandwidthEstimator implements BandwidthEstimator {
 
     /**
      * Returns the current EWMA decay factor.
-     * @since 0.9.70+
      * @return the decay factor
+     * @since 0.9.70+
      */
     public static int getDecayFactor() { return _decayFactor; }
 

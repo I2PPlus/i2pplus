@@ -33,7 +33,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     public final static int MESSAGE_TYPE = 18;
     /** Size of the data payload in bytes */
     public static final int DATA_SIZE = 1024;
-    /** if we can't deliver a tunnel message in 10s, forget it */
+    /** If we can't deliver a tunnel message in 10s, forget it. */
     private static final int EXPIRATION_PERIOD = 10*1000;
 
     private static final ByteCache _cache;
@@ -100,6 +100,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     }
 
     /**
+     *  Tunnel payload; may only be set once.
      *  @throws IllegalStateException if data previously set, to protect saved checksum
      */
     public void setData(byte[] data) {
@@ -131,9 +132,9 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         System.arraycopy(data, curIndex, _data, 0, DATA_SIZE);
     }
 
-    /** calculate the message body's length (not including the header and footer */
+    /** Calculate the message body's length (not including the header and footer). */
     protected int calculateWrittenLength() {return 4 + DATA_SIZE;}
-    /** write the message body to the output array, starting at the given index */
+    /** Write the message body to the output array, starting at the given index. */
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         if ((_tunnelId <= 0) || (_data == null)) {
             throw new I2NPMessageException("Not enough data to write out (id=" + _tunnelId + ")");

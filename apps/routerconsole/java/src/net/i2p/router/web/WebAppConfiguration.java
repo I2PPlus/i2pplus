@@ -153,8 +153,8 @@ public class WebAppConfiguration implements Configuration {
      * Convert URL to URI so there's no blocking equals(),
      * not that there's really any hostnames in here,
      * but keep findbugs happy.
-     * @since 0.9
  * @return the system class path
+     * @since 0.9
      */
     private static Set<URI> getSystemClassPath(I2PAppContext ctx) {
         Set<URI> rv = new HashSet<>(32);
