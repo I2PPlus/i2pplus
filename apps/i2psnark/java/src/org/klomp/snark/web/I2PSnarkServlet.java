@@ -185,8 +185,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      *  Get current CSRF nonce, rotating every 5 minutes.
-     *  @since 2.x.x
      * @return the nonce
+     *  @since 2.x.x
      */
     private synchronized long getNonce() {
         if (_currentNonce == 0) {
@@ -1907,8 +1907,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      *  @param s search param override or "" for default or null to keep the same as in req
-     *  @since 0.9.58
      *  @return the query string
+     *  @since 0.9.58
      */
     private static String getQueryString(HttpServletRequest req, String p, String st, String so, String search) {
         String url = req.getRequestURL().toString();
@@ -2545,6 +2545,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean enableVaryOutboundHops = req.getParameter("varyOutbound") != null;
         boolean multiDest = req.getParameter("multiDest") != null;
         String multiDestMax = req.getParameter("multiDestMax");
+        boolean randomizeStartup = req.getParameter("randomizeStartup") != null;
 
         String dataDir = req.getParameter("nofilter_dataDir");
         String seedPct = req.getParameter("seedPct");
@@ -2568,7 +2569,7 @@ public class I2PSnarkServlet extends BasicServlet {
         _manager.updateConfig(dataDir, filesPublic, autoStart, refreshDel, startupDel, pageSize, seedPct, eepHost, eepPort,
                               i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang,
                               ratings, comments, commentsName, collapsePanels, showStatusFilter, enableLightbox,
-                              enableAddCreate, enableVaryInboundHops, enableVaryOutboundHops, multiDest, multiDestMax, apiTarget, apiKey);
+                              enableAddCreate, enableVaryInboundHops, enableVaryOutboundHops, multiDest, multiDestMax, randomizeStartup, apiTarget, apiKey);
         try {
             setResourceBase(_manager.getDataDir());
         } catch (ServletException ignored) { /* ignored */ }
@@ -3993,6 +3994,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean varyInbound = _manager.util().enableVaryInboundHops();
         boolean varyOutbound = _manager.util().enableVaryOutboundHops();
         boolean multiDest = _manager.util().getMultiDest();
+        boolean randomizeStartup = _manager.getRandomizeStartupDelay();
 
 /* configuration */
 
@@ -4305,10 +4307,18 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<label title=\"")
            .append(_t("When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."))
            .append("\">")
-           .append("<input type=text name=multiDestMax id=multiDestMax value=\"")
-           .append(_manager.util().getMaxDest())
-           .append("\" class=numeric size=5 maxlength=4 pattern=\"[0-9]{1,4}\" spellcheck=false>")
-           .append("</label></span><br>\n");
+.append("<input type=text name=multiDestMax id=multiDestMax value=\"")
+            .append(_manager.util().getMaxDest())
+            .append("\" class=numeric size=5 maxlength=4 pattern=\"[0-9]{1,4}\" spellcheck=false>")
+            .append("</label></span><br>\n")
+            .append("<span class=configOption id=randomizeStartup><b>")
+            .append(_t("Randomize startup delay"))
+            .append("</b> \n")
+            .append("<label title=\"")
+            .append(_t("Stagger torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."))
+            .append("\">")
+            .append("<input type=checkbox class=\"optbox slider\" name=randomizeStartup id=randomizeStartup ")
+            .append(randomizeStartup ? "checked " : "").append("></label></span><br>\n");
 
         if (isStandalone()) {
             buf.append("<span class=configOption><label><b>")
@@ -5711,8 +5721,8 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Basic checks only, not as comprehensive as what TrackerClient does.
      * Just to hide non-i2p trackers from the details page.
-     * @since 0.9.46
      * @return whether i2 p tracker
+     * @since 0.9.46
      */
     private boolean isI2PTracker(String url) {
         try {
@@ -5727,8 +5737,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * @param mime non-null
-     * @since 0.9.44
      * @return whether audio
+     * @since 0.9.44
      */
     private static boolean isAudio(String mime) {
         /**
@@ -5741,8 +5751,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * @param mime non-null
-     * @since 0.9.44
      * @return whether video
+     * @since 0.9.44
      */
     private static boolean isVideo(String mime) {
         return mime.startsWith("video/") && !mime.equals("video/x-msvideo") && /*!mime.equals("video/x-matroska") &&*/
@@ -5775,8 +5785,8 @@ public class I2PSnarkServlet extends BasicServlet {
      * Is there at least one complete audio file in this directory or below?
      * Recursive.
      *
-     * @since 0.9.44
      * @return whether complete audio is present
+     * @since 0.9.44
      */
     private boolean hasCompleteAudio(List<Sorters.FileAndIndex> fileList, Storage storage, long[] remainingArray) {
         for (Sorters.FileAndIndex fai : fileList) {
@@ -6530,8 +6540,8 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      *  Is "a" equal to "b", or is "a" a directory and a parent
      *  of file or directory "b", canonically speaking?
-     *  @since 0.9.15
      * @return whether parent of
+     *  @since 0.9.15
      */
     private static boolean isParentOf(File a, File b) {
         try {
@@ -6552,8 +6562,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      *  Are we running in standalone mode?
-     *  @since 0.9.54+
      * @return whether standalone
+     *  @since 0.9.54+
      */
     private boolean isStandalone() {
         if (_context.isRouterContext()) {return false;}

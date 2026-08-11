@@ -5,6 +5,20 @@
       index, repointed the English-language flags in the translated READMEs,
       added a translation how-to (TRANSLATING.md), and dropped the stale SBT
       launcher sections from the developer guide
+  * I2PSnark:
+    - Stopped torrents no longer silently restart: a torrent stopped while
+      its per-torrent session retry was pending (e.g. router still starting
+      up) could reconnect in the background and keep its destination and
+      tunnels alive, so pools appeared to persist after stopping all members
+    - Batched torrent starts (auto-start, Start All, magnets, reconnect)
+      now stagger once per shared destination instead of once per torrent,
+      so pool-mates start immediately and tunnel builds are spread across
+      pools; when the batch exceeds the destination cap the pools are
+      calculated up front and their start order randomized
+    - New "Randomize startup delay" option in the tunnels section of the
+      configuration (default on) staggers batched starts with a random
+      delay so simultaneously started torrents cannot be correlated by
+      trackers or DHT peers; disable it to start a batch immediately
 
 2026-08-10 dr|z3d
   * Tunnel:

@@ -127,6 +127,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private UpdateManager _umgr;
     private UpdateHandler _uhandler;
     private SimpleTimer2.TimedEvent _idleChecker;
+    private volatile boolean _randomizeStartupDelay = true;
 
     public static final String PROP_I2CP_HOST = "i2psnark.i2cpHost";
     public static final String PROP_I2CP_PORT = "i2psnark.i2cpPort";
@@ -293,6 +294,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public static final String PROP_MULTI_DEST_MAX = "i2psnark.multiDestMax";
 
+    /**
+     * Stagger batched starts with a random delay, so torrents that start together
+     * cannot be correlated by trackers or DHT peers, and tunnel builds are spread
+     * out. Disable to start all torrents in a batch immediately.
+     *
+     * @since 0.9.71+
+     */
+    public static final String PROP_RANDOMIZE_STARTUP = "i2psnark.randomizeStartupDelay";
+
     /** Default cap on destinations so many torrents share destinations instead of exhausting memory */
     public static final int DEFAULT_MULTI_DEST_MAX = 50;
     /** Absolute maximum for the destination cap */
@@ -312,13 +322,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * Wait before the next auto-started torrent in a batch when multi-destination mode is
-     * on, spreading out tunnel builds and decoupling start times from batch order. No wait
-     * in single-dest mode, where all torrents share the one session.
+     * on, once per pool, spreading out tunnel builds and decoupling start times from batch
+     * order. No wait in single-dest mode, where all torrents share the one session, or
+     * when randomize startup delay is disabled.
      *
      * @since 0.9.71+
      */
     private void multiDestStartDelay() {
-        if (!_util.getMultiDest()) {
+        if (!_util.getMultiDest() || !_randomizeStartupDelay) {
             return;
         }
         try {
@@ -604,8 +615,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * @since 0.9.1
      * @return whether stopping
+     * @since 0.9.1
      */
     public boolean isStopping() {
         return _stopping;
@@ -641,8 +652,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * ClientApp method.
      *
-     * @since 0.9.30
      * @return the name
+     * @since 0.9.30
      */
     @Override
     public String getName() {
@@ -652,8 +663,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * ClientApp method.
      *
-     * @since 0.9.30
      * @return the display name
+     * @since 0.9.30
      */
     @Override
     public String getDisplayName() {
@@ -665,6 +676,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public I2PSnarkUtil util() {
         return _util;
+    }
+
+    /**
+     * Whether batched torrent starts are staggered with a random delay, so torrents
+     * starting together cannot be correlated, and tunnel builds are spread out.
+     *
+     * @return true to stagger batched starts (default)
+     * @since 0.9.71+
+     */
+    public boolean getRandomizeStartupDelay() {
+        return _randomizeStartupDelay;
     }
 
     /**
@@ -876,8 +898,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * @since 0.9.46 (I2P+)
      * @return the max files per torrent
+     * @since 0.9.46 (I2P+)
      */
     public int getMaxFilesPerTorrent() {
         try {
@@ -888,8 +910,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * @since 0.9.61+ (I2P+)
      * @return the max log messages
+     * @since 0.9.61+ (I2P+)
      */
     public int getMaxLogMessages() {
         try {
@@ -902,8 +924,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * For GUI
      *
-     * @since 0.9.6
      * @return the page size
+     * @since 0.9.6
      */
     public int getPageSize() {
         try {
@@ -948,8 +970,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * For RPC
      *
-     * @since 0.9.30
      * @return the config dir
+     * @since 0.9.30
      */
     public File getConfigDir() {
         return _configDir;
@@ -1331,8 +1353,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * @since 0.9.31
      * @return the universal theming
+     * @since 0.9.31
      */
     public boolean getUniversalTheming() {
         return _context.getBooleanProperty(RC_PROP_UNIVERSAL_THEMING);
@@ -1496,6 +1518,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                 PROP_VARY_OUTBOUND_HOPS,
                                 Boolean.toString(I2PSnarkUtil.DEFAULT_VARY_OUTBOUND_HOPS))));
         _util.setMultiDest(Boolean.parseBoolean(_config.getProperty(PROP_MULTI_DEST, "false")));
+        _randomizeStartupDelay = Boolean.parseBoolean(_config.getProperty(PROP_RANDOMIZE_STARTUP, "true"));
         _util.setMaxDest(parseMaxDest(_config.getProperty(PROP_MULTI_DEST_MAX, Integer.toString(DEFAULT_MULTI_DEST_MAX))));
 
         for (String c : _config.stringPropertyNames()) {
@@ -1593,6 +1616,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             boolean enableVaryOutboundHops,
             boolean multiDest,
             String multiDestMax,
+            boolean randomizeStartup,
             String apiTarget,
             String apiKey) {
         synchronized (_configLock) {
@@ -1627,6 +1651,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     enableVaryOutboundHops,
                     multiDest,
                     multiDestMax,
+                    randomizeStartup,
                     apiTarget,
                     apiKey);
         }
@@ -1663,6 +1688,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             boolean enableVaryOutboundHops,
             boolean multiDest,
             String multiDestMax,
+            boolean randomizeStartup,
             String apiTarget,
             String apiKey) {
         boolean changed = false;
@@ -1794,6 +1820,18 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 }
                 addMessage(restart);
             }
+        }
+
+        if (_randomizeStartupDelay != randomizeStartup) {
+            _config.setProperty(PROP_RANDOMIZE_STARTUP, Boolean.toString(randomizeStartup));
+            if (randomizeStartup) {
+                addMessage(_t("Enabled randomizing torrent start times"));
+            } else {
+                addMessage(_t("Disabled randomizing torrent start times"));
+            }
+            addMessage(restart);
+            _randomizeStartupDelay = randomizeStartup;
+            changed = true;
         }
 
         if (startDelay != null && _context.isRouterContext()) {
@@ -2390,8 +2428,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Unmodifiable
      *
-     * @since 0.9.4
      * @return the torrents
+     * @since 0.9.4
      */
     public Collection<Snark> getTorrents() {
         return Collections.unmodifiableCollection(_snarks.values());
@@ -3260,8 +3298,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Get setting for comments enabled from the config file. Caller must first check global
      * I2PSnarkUtil.commentsEnabled() Default true.
      *
-     * @since 0.9.31
      * @return the saved comments enabled
+     * @since 0.9.31
      */
     public boolean getSavedCommentsEnabled(Snark snark) {
         boolean rv = true;
@@ -3867,11 +3905,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         if (autostart && !oldOK && !doMagnets && !_snarks.isEmpty()) {
                             // Start previously added torrents
                             int started = 0;
+                            Set<Integer> seenPools = new HashSet<>(0);
                             for (Snark snark : _snarks.values()) {
                                 Properties config = getConfig(snark);
                                 String prop = config.getProperty(PROP_META_RUNNING);
                                 if (prop == null || Boolean.parseBoolean(prop)) {
-                                    if (started++ > 0) {
+                                    int pool = _util.getPoolIndex(snark.getInfoHash());
+                                    boolean newPool = (pool < 0) || seenPools.add(pool);
+                                    if (started++ > 0 && newPool) {
                                         multiDestStartDelay();
                                     }
                                     if (!_util.connected()) {
@@ -4230,6 +4271,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private void addMagnets(boolean autostart) {
         boolean changed = false;
         int started = 0;
+        Set<Integer> seenPools = new HashSet<>(0);
         for (Iterator<?> iter = _config.keySet().iterator(); iter.hasNext(); ) {
             String k = (String) iter.next();
             if (k.startsWith(PROP_META_MAGNET_PREFIX)) {
@@ -4246,8 +4288,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     String tracker = config.getProperty(PROP_META_MAGNET_TR);
                     String dir = config.getProperty(PROP_META_MAGNET_DIR);
                     File dirf = (dir != null) ? (new File(dir)) : null;
-                    if (autostart && started++ > 0) {
-                        multiDestStartDelay();
+                    if (autostart) {
+                        int pool = _util.getPoolIndex(ih);
+                        boolean newPool = (pool < 0) || seenPools.add(pool);
+                        if (started++ > 0 && newPool) {
+                            multiDestStartDelay();
+                        }
                     }
                     addMagnet(name, ih, tracker, false, autostart, dirf, this);
                 } else {
@@ -4293,12 +4339,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         // let's find new ones first...
         int count = 0;
         int started = 0;
+        Set<Integer> seenPools = new HashSet<>(0);
         for (String name : foundNames) {
             if (existingNames.contains(name)) { /* ignored */ } // already known. noop
             else {
+                boolean ok = false;
                 try {
                     // don't let one bad torrent kill the whole loop
-                    boolean ok = addTorrent(name, null, !shouldStart);
+                    ok = addTorrent(name, null, !shouldStart);
                     if (!ok) {
                         addMessage(_t("Error: Could not add torrent: {0}", name));
                         _log.error("Unable to add torrent: " + name);
@@ -4317,8 +4365,16 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     disableTorrentFile(name);
                     rv = false;
                 }
-                if (shouldStart && started++ > 0) {
-                    multiDestStartDelay();
+                if (shouldStart) {
+                    // Stagger only when a new pool starts; a shared destination's
+                    // tunnels are built by its first torrent only, so pool-mates
+                    // need no spacing
+                    Snark added = ok ? getTorrent(name) : null;
+                    int pool = (added != null) ? _util.getPoolIndex(added.getInfoHash()) : -1;
+                    boolean newPool = (pool < 0) || seenPools.add(pool);
+                    if (started++ > 0 && newPool) {
+                        multiDestStartDelay();
+                    }
                 }
                 if (shouldStart && (count++ & 0x0f) == 15) {
                     // try to prevent OOMs at startup
@@ -4371,8 +4427,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Unsorted map of name to Tracker object Modifiable, not a copy
      *
-     * @since 0.9.1
      * @return the tracker map
+     * @since 0.9.1
      */
     public Map<String, Tracker> getTrackerMap() {
         return _trackerMap;
@@ -4381,8 +4437,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Unsorted map of name to TorrentCreateFilter object Modifiable, not a copy
      *
-     * @since 0.9.62+
      * @return the torrent create filter map
+     * @since 0.9.62+
      */
     public Map<String, TorrentCreateFilter> getTorrentCreateFilterMap() {
         return _torrentCreateFilterMap;
@@ -4391,8 +4447,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Returns the current number of configured file filters
      *
-     * @since 0.9.62+
      * @return the create filter count
+     * @since 0.9.62+
      */
     public int getCreateFilterCount() {
         return _torrentCreateFilterMap.size();
@@ -4406,8 +4462,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Unsorted, do not modify
      *
-     * @since 0.9.62+
      * @return the torrent create filter strings
+     * @since 0.9.62+
      */
     public Collection<TorrentCreateFilter> getTorrentCreateFilterStrings() {
         return _torrentCreateFilterMap.values();
@@ -4416,8 +4472,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Sorted copy
      *
-     * @since 0.9.1
      * @return the sorted trackers
+     * @since 0.9.1
      */
     public List<Tracker> getSortedTrackers() {
         List<Tracker> rv = new ArrayList<>(_trackerMap.values());
@@ -4436,8 +4492,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Sorted copy
      *
-     * @since 0.9.62+
      * @return the sorted torrent create filter strings
+     * @since 0.9.62+
      */
     public List<TorrentCreateFilter> getSortedTorrentCreateFilterStrings() {
         List<TorrentCreateFilter> fv =
@@ -4449,8 +4505,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Has the default tracker list been modified?
      *
-     * @since 0.9.35
      * @return whether modified trackers is present
+     * @since 0.9.35
      */
     public boolean hasModifiedTrackers() {
         return _config.containsKey(PROP_TRACKERS);
@@ -4747,23 +4803,53 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.1
      */
     private void startAll() {
-        int count = 0;
+        // Collect the stopped torrents first; when they exceed the destination
+        // count, group them by pool and randomize the pool order so each pool's
+        // tunnel builds are staggered, not the individual torrents'
+        List<Snark> stopped = new ArrayList<>(0);
         for (Snark snark : _snarks.values()) {
             if (snark.isStopped()) {
-                try {
-                    snark.startTorrent();
-                } catch (RuntimeException re) { /* ignored */ } // Snark.fatal() will log and call fatal() here for user message before throwing
-                if ((count++ & 0x0f) == 15) {
-                    try {
-                        Thread.sleep(250);
-                    } // try to prevent OOMs
-                    catch (InterruptedException ie) { /* ignored */ }
+                stopped.add(snark);
+            }
+        }
+        if (_util.getMultiDest() && _randomizeStartupDelay && _util.getMaxDest() > 0 && stopped.size() > _util.getMaxDest()) {
+            Map<Integer, List<Snark>> byPool = new HashMap<>(stopped.size() / 2);
+            for (Snark snark : stopped) {
+                int pool = _util.getPoolIndex(snark.getInfoHash());
+                List<Snark> members = byPool.get(pool);
+                if (members == null) {
+                    members = new ArrayList<>(0);
+                    byPool.put(pool, members);
                 }
-                if (_util.getMultiDest()) {
-                    // Stagger per-destination torrents: each torrent's session builds its
-                    // tunnels asynchronously, so start the next one only after this one's
-                    // tunnels have had time to build, keeping the router from being swamped
-                    // by tunnel build requests from every torrent at once
+                members.add(snark);
+            }
+            // Randomize the pool start order
+            List<List<Snark>> pools = new ArrayList<>(byPool.values());
+            Collections.shuffle(pools, _context.random());
+            stopped.clear();
+            for (List<Snark> members : pools) {
+                stopped.addAll(members);
+            }
+        }
+        int count = 0;
+        Set<Integer> seenPools = new HashSet<>(0);
+        for (Snark snark : stopped) {
+            try {
+                snark.startTorrent();
+            } catch (RuntimeException re) { /* ignored */ } // Snark.fatal() will log and call fatal() here for user message before throwing
+            if ((count++ & 0x0f) == 15) {
+                try {
+                    Thread.sleep(250);
+                } // try to prevent OOMs
+                catch (InterruptedException ie) { /* ignored */ }
+            }
+            if (_util.getMultiDest() && _randomizeStartupDelay) {
+                // Stagger per-pool torrents: only a pool's first torrent builds its
+                // tunnels, so start the next pool's only after this pool's tunnels
+                // have had time to build, keeping the router from being swamped by
+                // tunnel build requests from every pool at once
+                int pool = _util.getPoolIndex(snark.getInfoHash());
+                if (pool < 0 || seenPools.add(pool)) {
                     try {
                         Thread.sleep(MULTI_DEST_STAGGER_MS);
                     } catch (InterruptedException ie) { /* ignored */ }

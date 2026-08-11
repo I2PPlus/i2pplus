@@ -203,8 +203,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * @since 0.9.1
      * @return the context
+     * @since 0.9.1
      */
     public I2PAppContext getContext() {
         return _context;
@@ -378,8 +378,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * @since 0.8.9
      * @return the files public
+     * @since 0.8.9
      */
     public boolean getFilesPublic() {
         return _areFilesPublic;
@@ -393,8 +393,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * @since 0.9.66+
      * @return the preallocate files
+     * @since 0.9.66+
      */
     public boolean getPreallocateFiles() {
         return _shouldPreallocateFiles;
@@ -408,16 +408,16 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * @since 0.9.1
      * @return the temp dir
+     * @since 0.9.1
      */
     public File getTempDir() {
         return _tmpDir;
     }
 
     /**
-     * @since 0.9.58
      * @return the max files per torrent
+     * @since 0.9.58
      */
     public int getMaxFilesPerTorrent() {
         return _maxFilesPerTorrent;
@@ -431,8 +431,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * @since 0.9.67
      * @return the a p i target
+     * @since 0.9.67
      */
     public String getAPITarget() {
         return _apiTarget;
@@ -440,8 +440,8 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /**
      * Get the api key.
-     * @since 0.9.67
      * @return the a p i key
+     * @since 0.9.67
      */
     public String getAPIKey() {
         return _apiKey;
@@ -457,8 +457,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * @since 0.9.67
      * @return whether a p i key is present
+     * @since 0.9.67
      */
     public boolean hasAPIKey() {
         return _apiTarget != null
@@ -469,8 +469,8 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /**
      * Get the vary inbound hops.
-     * @since 0.9.64+
      * @return the vary inbound hops
+     * @since 0.9.64+
      */
     public boolean getVaryInboundHops() {
         return _varyInboundHops;
@@ -478,8 +478,8 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /**
      * Get the vary outbound hops.
-     * @since 0.9.64+
      * @return the vary outbound hops
+     * @since 0.9.64+
      */
     public boolean getVaryOutboundHops() {
         return _varyOutboundHops;
@@ -808,6 +808,22 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Pool index that would be assigned to the torrent, -1 when pooling is off.
+     * Deterministic within a run, so batch starts can compute pool membership up
+     * front; matches the assignment in getOrCreateTorrentDest().
+     *
+     * @param ih the torrent's info hash, or null
+     * @return the pool index in [0, _maxDest), or -1 for a dedicated destination
+     * @since 0.9.71+
+     */
+    public int getPoolIndex(byte[] ih) {
+        if (_maxDest <= 0 || ih == null) {
+            return -1;
+        }
+        return poolIndexFor(Base64.encode(ih));
+    }
+
+    /**
      * Pool index for a torrent: the info hash mixed with a per-run random salt, so torrents
      * share destinations stably within a run but the grouping cannot be predicted or
      * verified from the publicly known info hashes.
@@ -997,8 +1013,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * @since 0.9.1
      * @return whether connecting
+     * @since 0.9.1
      */
     public boolean isConnecting() {
         return _manager == null && _connecting;
@@ -1579,8 +1595,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Is this announce URL probably for an open tracker?
      *
-     * @since 0.9.17
      * @return whether known open tracker
+     * @since 0.9.17
      */
     public boolean isKnownOpenTracker(String url) {
         try {
@@ -1628,8 +1644,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * @since DHT
      * @return whether use d h t
+     * @since DHT
      */
     public boolean shouldUseDHT() {
         return _shouldUseDHT;
