@@ -43,7 +43,7 @@ public class DestReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Non-null with non-null data.
+     *  Non-null with non-null data.
      *  @param h non-null with non-null data
      *  @since 0.8.3
      */
@@ -60,7 +60,7 @@ public class DestReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Gets the hash of the destination.
+     * Gets the hash of the destination.
      *
      * @return the hash
      * @since 0.8.3

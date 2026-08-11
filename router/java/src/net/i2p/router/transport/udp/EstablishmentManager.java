@@ -2387,7 +2387,7 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Token that can be used later for the peer to connect to us
+     * Token that can be used later for the peer to connect to us
      *
      * @return the inbound token
      * @since 0.9.54

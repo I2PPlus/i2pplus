@@ -971,9 +971,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     /**
-     *  Notify that we heard from or about a peer (e.g. received a DatabaseStoreMessage
-     *  from them).  The ContactDrivenRefreshJob will consider refreshing their RouterInfo
-     *  if it is stale.
+     * Notify that we heard from or about a peer (e.g. received a DatabaseStoreMessage
+     * from them).  The ContactDrivenRefreshJob will consider refreshing their RouterInfo
+     * if it is stale.
      *
      * @param peer the peer
      * @since 0.9.70+

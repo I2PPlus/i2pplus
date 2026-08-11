@@ -147,7 +147,7 @@ public class Lease extends DataStructureImpl {
     }
 
     /**
-     *  Gets the lease end time.
+     * Gets the lease end time.
      *
      * @return the end time
      * @since 0.9.48
@@ -157,7 +157,7 @@ public class Lease extends DataStructureImpl {
     }
 
     /**
-     *  Sets the lease end date.
+     * Sets the lease end date.
      *
      * @since 0.9.48
      */

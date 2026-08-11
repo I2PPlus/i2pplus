@@ -21,7 +21,7 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     private final EdDSAParameterSpec spec;
 
     /**
-     * Create a new EdDSA private key specification from a seed.
+     *  Create a new EdDSA private key specification from a seed.
      *
      *  @param seed the private key
      *  @param spec the parameter specification for this key
@@ -110,7 +110,7 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     }
 
     /**
-     * Return the seed, or null if constructed from the private key directly.
+     *  Return the seed, or null if constructed from the private key directly.
      *
      *  @return will be null if constructed directly from the private key
      */
@@ -119,7 +119,7 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     }
 
     /**
-     * Return the hash.
+     *  Return the hash.
      *
      *  @return the hash
      */
@@ -128,7 +128,7 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     }
 
     /**
-     * Return the private key.
+     *  Return the private key.
      *
      *  @return the private key
      */
@@ -137,7 +137,7 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     }
 
     /**
-     * Return the public key.
+     *  Return the public key.
      *
      *  @return the public key
      */

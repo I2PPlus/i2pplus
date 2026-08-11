@@ -68,8 +68,8 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     private final I2PAppContext _context;
 
     /**
-     *  All entries in this bucket will have at least one bit different
-     *  from us in the range [begin, end] inclusive.
+     * All entries in this bucket will have at least one bit different
+     * from us in the range [begin, end] inclusive.
      *
      * @param context the router context
      * @param begin the range begin
@@ -163,7 +163,7 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     }
 
     /**
-     *  The last-changed timestamp, which actually indicates last-added or last-seen.
+     * The last-changed timestamp, which actually indicates last-added or last-seen.
      * @return the last changed
      */
     @Override

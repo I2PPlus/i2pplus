@@ -143,7 +143,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     }
 
     /**
-     *  Signature type of this private key.
+     * Signature type of this private key.
      *
      * @return the type
      * @since 0.9.8
@@ -206,7 +206,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     }
 
     /**
-     *  Whether this key has been destroyed.
+     * Whether this key has been destroyed.
      *
      * @return whether destroyed
      * @since 0.9.40

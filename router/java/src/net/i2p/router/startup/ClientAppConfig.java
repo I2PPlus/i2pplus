@@ -483,7 +483,7 @@ public class ClientAppConfig {
     }
 
     /**
-     *  Hash code based on class name.
+     * Hash code based on class name.
      *
      * @return whether h code is present
      * @since 0.9.42

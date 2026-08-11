@@ -52,7 +52,7 @@ public class SOCKSUDPWrapper implements Source, Sink {
     public void start() { /* no-op */ }
 
     /**
-     * Use the cached header, which should have the host string and port
+     *  Use the cached header, which should have the host string and port
      *
      *  May throw RuntimeException from underlying sink
      *  @throws RuntimeException

@@ -988,7 +988,7 @@ public class LogManager implements Flushable {
     }
 
     /**
-     *  Any usage of returned formatter must be synchronized!
+     * Any usage of returned formatter must be synchronized!
      * @return the date format
      */
     public SimpleDateFormat getDateFormat() {

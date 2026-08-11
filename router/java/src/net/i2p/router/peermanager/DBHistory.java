@@ -112,7 +112,7 @@ public class DBHistory {
     }
 
     /**
-     * Note that we successfully stored to a floodfill peer and verified the result by asking another floodfill peer
+     *  Note that we successfully stored to a floodfill peer and verified the result by asking another floodfill peer
      *
      *  @since 0.7.8
      */
@@ -125,7 +125,7 @@ public class DBHistory {
     }
 
     /**
-     * Note that floodfill verify failed
+     *  Note that floodfill verify failed
      *
      *  @since 0.7.8
      */

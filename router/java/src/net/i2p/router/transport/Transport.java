@@ -123,7 +123,7 @@ public interface Transport {
     public RouterAddress getCurrentAddress(boolean ipv6);
 
     /**
-     *  Do we have any current address?
+     * Do we have any current address?
      * @return whether current address is present
      * @since IPv6
      */
@@ -147,7 +147,7 @@ public interface Transport {
     public List<RouterAddress> updateAddress();
 
     /**
-     * Source of transport address configuration.
+     *  Source of transport address configuration.
      *  @since IPv6
      */
     public enum AddressSource {

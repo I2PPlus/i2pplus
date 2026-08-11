@@ -209,7 +209,7 @@ public void addData(long value) {
     }
 
     /**
-     *  Stores the rate statistics to an output stream.
+     * Stores the rate statistics to an output stream.
      *
      * @param out the output stream
      * @param prefix the property prefix

@@ -236,7 +236,7 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Current number of queued + active test jobs for capacity planning.
+     * Current number of queued + active test jobs for capacity planning.
      * @return the current test job count
      * @since 0.9.69+
      */
@@ -245,7 +245,7 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Maximum number of queued test jobs allowed before deferring.
+     * Maximum number of queued test jobs allowed before deferring.
      * @return the max test jobs
      * @since 0.9.69+
      */

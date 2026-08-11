@@ -250,7 +250,7 @@ class RatchetPayload {
     }
 
     /**
-     * Write blocks to a payload buffer.
+     *  Write blocks to a payload buffer.
      *
      *  @param payload writes to it starting at off
      *  @param off the starting offset

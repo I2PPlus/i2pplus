@@ -117,7 +117,7 @@ public class LeaseSet2 extends LeaseSet {
     public long getExpires() {return _expires;}
 
     /**
-     * True if unpublished.
+     *  True if unpublished.
      *  @return true if unpublished
      */
     public boolean isUnpublished() {return (_flags & FLAG_UNPUBLISHED) != 0;}
@@ -135,7 +135,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  Whether the unencrypted LS, when published, will be blinded/encrypted.
+     * Whether the unencrypted LS, when published, will be blinded/encrypted.
      *
      * @return whether blinded when published
      * @since 0.9.42
@@ -188,8 +188,8 @@ public class LeaseSet2 extends LeaseSet {
     public Properties getOptions() {return _options;}
 
     /**
-     *  If more than one key, return the first supported one.
-     *  If none supported, return the first one.
+     * If more than one key, return the first supported one.
+     * If none supported, return the first one.
      *
      * @return the encryption key
      * @since 0.9.39 overridden
@@ -280,7 +280,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-      *  Checks if this leaseset uses offline keys.
+      * Checks if this leaseset uses offline keys.
      * @return whether offline
       */
     public boolean isOffline() {return (_flags & FLAG_OFFLINE_KEYS) != 0;}
@@ -388,8 +388,8 @@ public class LeaseSet2 extends LeaseSet {
     public int getType() {return KEY_TYPE_LS2;}
 
     /**
-     *  The revocation key. Overridden to do nothing,
-     *  as we're using the _signingKey field for the blinded key in Enc LS2.
+     * The revocation key. Overridden to do nothing,
+     * as we're using the _signingKey field for the blinded key in Enc LS2.
      *
      * @since 0.9.39
      */

@@ -225,7 +225,7 @@ public class DataHelper {
     private static final Pattern ILLEGAL_VALUE = Pattern.compile("[#\\r\\n]");
 
     /**
-     *  The default formatting for date/time, current locale, local time zone
+     * The default formatting for date/time, current locale, local time zone
      *
      * @return the date instance
      * @since 0.9.43

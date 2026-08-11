@@ -167,7 +167,7 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     *  All services aggregated
+     * All services aggregated
      * @return the entries
      */
     @Override
@@ -195,7 +195,7 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     *  All services aggregated
+     * All services aggregated
      * @return the names
      */
     @Override

@@ -302,8 +302,8 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         }
 
         /**
-         *  Returns true as long as current Iteration Index Node (itrIndexNode)
-         *  is non-null
+         * Returns true as long as current Iteration Index Node (itrIndexNode)
+         * is non-null
          *
          * @return whether next is present
          */

@@ -976,7 +976,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  The endpoint has failed. Remove it.
+     * The endpoint has failed. Remove it.
      *
      * @param endpoint the endpoint
      * @since 0.9.16
@@ -1171,10 +1171,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  The current or configured internal IPv4 port.
-     *  UDPEndpoint should always be instantiated (and a random port picked if not configured)
-     *  before this is called, so the returned value should be &gt; 0
-     *  unless the endpoint failed to bind.
+     * The current or configured internal IPv4 port.
+     * UDPEndpoint should always be instantiated (and a random port picked if not configured)
+     * before this is called, so the returned value should be &gt; 0
+     * unless the endpoint failed to bind.
      * @return the requested port
      */
     @Override
@@ -1184,10 +1184,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  The current or configured internal port.
-     *  UDPEndpoint should always be instantiated (and a random port picked if not configured)
-     *  before this is called, so the returned value should be &gt; 0
-     *  unless the endpoint failed to bind.
+     * The current or configured internal port.
+     * UDPEndpoint should always be instantiated (and a random port picked if not configured)
+     * before this is called, so the returned value should be &gt; 0
+     * unless the endpoint failed to bind.
      * @return the requested port
      */
     private int getRequestedPort(boolean ipv6) {
@@ -1730,13 +1730,13 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Was true before 0.9.2
-     *  Now false if we need introducers (as perhaps that's why we need them,
-     *  our firewall is changing our port), unless overridden by the property.
-     *  We must have an accurate external port when firewalled, or else
-     *  our signature of the SessionCreated packet will be invalid.
+     * Was true before 0.9.2
+     * Now false if we need introducers (as perhaps that's why we need them,
+     * our firewall is changing our port), unless overridden by the property.
+     * We must have an accurate external port when firewalled, or else
+     * our signature of the SessionCreated packet will be invalid.
      *
-     *  As of 0.9.58, returns false if status is UNKNOWN
+     * As of 0.9.58, returns false if status is UNKNOWN
      * @return the is port fixed
      */
     private boolean getIsPortFixed(boolean isIPv6) {

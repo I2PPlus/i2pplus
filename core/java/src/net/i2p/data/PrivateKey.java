@@ -98,7 +98,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-     * Constructor with type.
+     *  Constructor with type.
      *
      *  @param type non-null
      *  @since 0.9.38
@@ -117,7 +117,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-     * Constructor with type and data.
+     *  Constructor with type and data.
      *
      *  @param type non-null
      *  @param data must be non-null
@@ -130,7 +130,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-     * Constructor with type, data, and cached public key.
+     *  Constructor with type, data, and cached public key.
      *
      *  @param type non-null
      *  @param data must be non-null
@@ -201,7 +201,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-     *  Whether this key has been destroyed.
+     * Whether this key has been destroyed.
      *
      * @return whether destroyed
      * @since 0.9.40

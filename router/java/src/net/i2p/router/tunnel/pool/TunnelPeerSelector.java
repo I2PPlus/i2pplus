@@ -124,9 +124,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     *  Effective first-hop fail cooldown.
-     *  During ghost cascades (>50 ghosts), shorten from 5 min to 60s
-     *  to rehabilitate peers faster when the network is stressed.
+     * Effective first-hop fail cooldown.
+     * During ghost cascades (>50 ghosts), shorten from 5 min to 60s
+     * to rehabilitate peers faster when the network is stressed.
      * @return the effective first hop cooldown
      * @since 0.9.70
      */

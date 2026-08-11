@@ -307,9 +307,9 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     *  Helper
+     * Helper
      * @return the context
-     *  @since 0.9.49
+     * @since 0.9.49
      */
     public I2PAppContext getContext() {
         return _context;
@@ -346,9 +346,9 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     *  ClientApp interface
+     * ClientApp interface
      * @return the state
-     *  @since 0.9.4
+     * @since 0.9.4
      */
     @Override
     public ClientAppState getState() {

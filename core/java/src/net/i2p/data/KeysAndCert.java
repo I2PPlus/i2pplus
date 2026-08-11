@@ -106,7 +106,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Certificate to set.
+     * Certificate to set.
      *
      * @throws IllegalStateException if was already set
      */
@@ -154,7 +154,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Valid for RouterIdentities. May contain random padding for Destinations.
+     * Valid for RouterIdentities. May contain random padding for Destinations.
      *
      * @return the public key
      * @since 0.9.42
@@ -164,7 +164,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Public key to set.
+     * Public key to set.
      *
      * @throws IllegalStateException if was already set
      */
@@ -183,7 +183,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Signing public key to set.
+     * Signing public key to set.
      *
      * @throws IllegalStateException if was already set
      */
@@ -193,7 +193,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Padding bytes for key alignment.
+     * Padding bytes for key alignment.
      *
      * @return the padding
      * @since 0.9.16
@@ -210,7 +210,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Padding bytes to set.
+     * Padding bytes to set.
      *
      * @throws IllegalStateException if was already set
      * @since 0.9.12
@@ -262,7 +262,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Combines two padding arrays.
+     * Combines two padding arrays.
      *
      * @return null if both are null
      * @since 0.9.42

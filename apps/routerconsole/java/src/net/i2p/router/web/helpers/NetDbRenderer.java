@@ -127,7 +127,7 @@ class NetDbRenderer {
     private long now;
 
     /**
-     * Whether the router matches all capability characters in the filter.
+     *  Whether the router matches all capability characters in the filter.
      *
      *  @param ri the router to check
      *  @param capabilities capability characters that must all be present (e.g. "fK")
@@ -1377,9 +1377,9 @@ class NetDbRenderer {
     }
 
     /**
-     *  Translated country name for the given country code.
+     * Translated country name for the given country code.
      * @return the translated country
-     *  @since 0.9.9
+     * @since 0.9.9
      */
     private String getTranslatedCountry(String code) {
         String name = _context.commSystem().getCountryName(code);

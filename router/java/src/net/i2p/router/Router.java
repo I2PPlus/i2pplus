@@ -543,15 +543,15 @@ public class Router implements RouterClock.ClockShiftListener {
     public Map<String, String> getConfigMap() {return Collections.unmodifiableMap(_config);}
 
     /**
-     *  Our current router info.
-     *  Warning, may be null if called very early.
+     * Our current router info.
+     * Warning, may be null if called very early.
      *
-     *  Warning - risk of deadlock - do not call while holding locks
+     * Warning - risk of deadlock - do not call while holding locks
      *
-     *  Note: Due to lock contention, especially during a
-     *  rebuild of the router info, this may take a long time.
-     *  For determining the current status of the router, use
-     *  RouterContext.commSystem().getStatus().
+     * Note: Due to lock contention, especially during a
+     * rebuild of the router info, this may take a long time.
+     * For determining the current status of the router, use
+     * RouterContext.commSystem().getStatus().
      * @return the router info
      */
     public RouterInfo getRouterInfo() {
@@ -2127,14 +2127,14 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     *  Max of inbound and outbound rate in bytes per second
+     * Max of inbound and outbound rate in bytes per second
      * @return the 1s rate
      */
     public int get1sRate() {return get1sRate(false);}
 
     /**
-     *  When outboundOnly is false, outbound rate in bytes per second.
-     *  When true, max of inbound and outbound rate in bytes per second.
+     * When outboundOnly is false, outbound rate in bytes per second.
+     * When true, max of inbound and outbound rate in bytes per second.
      * @return the 1s rate
      */
     public int get1sRate(boolean outboundOnly) {
@@ -2145,7 +2145,7 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     *  Inbound rate in bytes per second
+     * Inbound rate in bytes per second
      * @return the 1s rate in
      */
     public int get1sRateIn() {
@@ -2154,14 +2154,14 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     *  Max of inbound and outbound rate in bytes per second
+     * Max of inbound and outbound rate in bytes per second
      * @return the 15s rate
      */
     public int get15sRate() {return get15sRate(false);}
 
     /**
-     *  When outboundOnly is false, outbound rate in bytes per second.
-     *  When true, max of inbound and outbound rate in bytes per second.
+     * When outboundOnly is false, outbound rate in bytes per second.
+     * When true, max of inbound and outbound rate in bytes per second.
      * @return the 15s rate
      */
     public int get15sRate(boolean outboundOnly) {
@@ -2172,7 +2172,7 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     *  Inbound rate in bytes per second
+     * Inbound rate in bytes per second
      * @return the 15s rate in
      */
     public int get15sRateIn() {
@@ -2181,14 +2181,14 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     *  Max of inbound and outbound rate in bytes per second
+     * Max of inbound and outbound rate in bytes per second
      * @return the 1m rate
      */
     public int get1mRate() {return get1mRate(false);}
 
     /**
-     *  When outboundOnly is false, outbound rate in bytes per second.
-     *  When true, max of inbound and outbound rate in bytes per second.
+     * When outboundOnly is false, outbound rate in bytes per second.
+     * When true, max of inbound and outbound rate in bytes per second.
      * @return the 1m rate
      */
     public int get1mRate(boolean outboundOnly) {
@@ -2204,7 +2204,7 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     *  Inbound rate in bytes per second
+     * Inbound rate in bytes per second
      * @return the 1m rate in
      */
     public int get1mRateIn() {

@@ -498,7 +498,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     int getOurPort() {return _ourPort;}
 
     /**
-     *  Bitfield of messages received from the peer.
+     * Bitfield of messages received from the peer.
      * @return the received messages
      * @since public since 0.9.57 for SSU2Sender interface only
      */
@@ -511,7 +511,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Bitfield of messages acknowledged to the peer.
+     * Bitfield of messages acknowledged to the peer.
      * @return the acked messages
      * @since public since 0.9.57 for SSU2Sender interface only
      */
@@ -1301,7 +1301,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Flag byte to be sent in header
+     * Flag byte to be sent in header
      *
      * @return the flags
      * @since 0.9.56, public since 0.9.57 for SSU2Sender interface

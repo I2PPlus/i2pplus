@@ -20,7 +20,7 @@ public final class SHA256Generator {
     private final LinkedBlockingQueue<MessageDigest> _digests;
 
     /**
-     * Unused.
+     *  Unused.
      *  @param context unused
      */
     public SHA256Generator(I2PAppContext context) {
@@ -46,7 +46,7 @@ public final class SHA256Generator {
     }
 
     /**
-     * Calculate the hash and cache the result.
+     *  Calculate the hash and cache the result.
      *
      *  @param source what to hash
      *  @param start the starting offset
@@ -116,7 +116,7 @@ public final class SHA256Generator {
     }
 
     /**
-     *  Return a new MessageDigest from the system libs.
+     * Return a new MessageDigest from the system libs.
      *
      * @return the digest instance
      * @since 0.8.7, public since 0.8.8 for FortunaStandalone

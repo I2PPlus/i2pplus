@@ -39,7 +39,7 @@ public class GarlicMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * The raw message data.
+     *  The raw message data.
      *  @throws IllegalStateException if data previously set, to protect saved checksum
      */
     public void setData(byte[] data) {

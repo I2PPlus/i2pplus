@@ -23,7 +23,7 @@ public class RateAverages {
     };
 
     /**
-     *  Thread-local temp instance.
+     * Thread-local temp instance.
      *
      * @return thread-local temp instance.
      * @since 0.9.4
@@ -79,7 +79,7 @@ public class RateAverages {
     }
 
     /**
-     *  The current average.
+     * The current average.
      *
      * @return the current average == current value / current event count
      * @since 0.9.4
@@ -94,7 +94,7 @@ public class RateAverages {
     }
 
     /**
-     *  The last average.
+     * The last average.
      *
      * @return the last average == last value / last event count
      * @since 0.9.4
@@ -109,7 +109,7 @@ public class RateAverages {
     }
 
     /**
-     *  The total event count.
+     * The total event count.
      *
      * @return the total event count == current + last event counts
      * @since 0.9.4
@@ -124,7 +124,7 @@ public class RateAverages {
     }
 
     /**
-     *  The total values.
+     * The total values.
      *
      * @return the total values == current + last values
      * @since 0.9.4

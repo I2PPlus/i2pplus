@@ -50,7 +50,7 @@ class SessionKeyAndNonce extends SessionKey {
     }
 
     /**
-     *  For ES, else 0
+     * For ES, else 0
      * @return the nonce
      */
     public int getNonce() {
@@ -79,8 +79,8 @@ class SessionKeyAndNonce extends SessionKey {
     }
 
     /**
-     *  For inbound NSR only, else null.
-     *  MUST be cloned before processing NSR.
+     * For inbound NSR only, else null.
+     * MUST be cloned before processing NSR.
      * @return the handshake state
      */
     public HandshakeState getHandshakeState() {

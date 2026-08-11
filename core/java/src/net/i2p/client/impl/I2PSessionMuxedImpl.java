@@ -214,7 +214,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     }
 
     /**
-     * Send a message with protocol and port information.
+     *  Send a message with protocol and port information.
      *
      *  @param keyUsed unused - no end-to-end crypto
      *  @param tagsSent unused - no end-to-end crypto
@@ -239,7 +239,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     }
 
     /**
-     * Send a message with protocol, port, and flags.
+     *  Send a message with protocol, port, and flags.
      *
      *  @param keyUsed unused - no end-to-end crypto
      *  @param tagsSent unused - no end-to-end crypto

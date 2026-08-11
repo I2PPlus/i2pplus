@@ -157,7 +157,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-     *  Local client that received this entry.
+     * Local client that received this entry.
      *
      * @param receivedBy the hash of the receiving client
      * @since 0.9.61
@@ -276,7 +276,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-     *  Validates the routing key for this entry.
+     * Validates the routing key for this entry.
      *
      * @return true if the routing key is valid
      * @throws IllegalStateException if not in RouterContext

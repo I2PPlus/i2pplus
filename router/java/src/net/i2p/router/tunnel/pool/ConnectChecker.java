@@ -56,7 +56,7 @@ import net.i2p.util.Log;
     protected boolean isSSUDisabled() {return !ctx.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP);}
 
     /**
-     *  Is SSU2 enabled?
+     * Is SSU2 enabled?
      * @return whether s s u2 enabled
      * @since 0.9.56
      */
@@ -327,7 +327,7 @@ import net.i2p.util.Log;
     private static final String IHOST[] = {"ihost0", "ihost1", "ihost2"};
 
     /**
-     * The bitmask of supported transports for the given addresses.
+     *  The bitmask of supported transports for the given addresses.
      *
      *  @param addrs non-empty, set your own default if empty
      *  @return bitmask of v4/v6 NTCP/SSU

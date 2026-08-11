@@ -291,8 +291,8 @@ public class PeerProfile {
     public synchronized long getFirstHeardAbout() {return _firstHeardAbout;}
 
     /**
-     *  Remember when we first heard about this peer, only if older.
-     *  Package private, only set by profile management subsystem.
+     * Remember when we first heard about this peer, only if older.
+     * Package private, only set by profile management subsystem.
      *
      * @param when the time to set
      */
@@ -308,8 +308,8 @@ public class PeerProfile {
     public synchronized long getLastHeardAbout() {return _lastHeardAbout;}
 
     /**
-     *  Remember when we last heard about this peer, only if unset or newer.
-     *  Also sets FirstHeardAbout if earlier.
+     * Remember when we last heard about this peer, only if unset or newer.
+     * Also sets FirstHeardAbout if earlier.
      *
      * @param when the time to set
      */
@@ -691,7 +691,7 @@ public class PeerProfile {
     }
 
     /**
-     *  Only for restoration from persisted profile.
+     * Only for restoration from persisted profile.
      *
      * @param kBps the peak throughput in KBps
      */
@@ -742,7 +742,7 @@ public class PeerProfile {
     }
 
     /**
-     *  Only for restoration from persisted profile.
+     * Only for restoration from persisted profile.
      *
      * @param kBps the peak tunnel throughput in KBps
      */
@@ -800,7 +800,7 @@ public class PeerProfile {
     }
 
     /**
-     *  Only for restoration from persisted profile.
+     * Only for restoration from persisted profile.
      *
      * @param kBps the peak 1-minute throughput in KBps
      */

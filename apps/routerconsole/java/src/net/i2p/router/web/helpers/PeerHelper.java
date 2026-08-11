@@ -155,10 +155,10 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Return the currently selected tab index.
+     * Return the currently selected tab index.
      *
      * @return the tab
-     *  @since 0.9.38
+     * @since 0.9.38
      */
     private int getTab() {
         if ("ntcp".equals(_transport)) {return 1;}

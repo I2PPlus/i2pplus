@@ -130,7 +130,7 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     * New public key with the given encryption type.
+     *  New public key with the given encryption type.
      *  @param type if null, type is unknown
      *  @since 0.9.38
      */
@@ -149,7 +149,7 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     * New public key with the given encryption type and raw key data.
+     *  New public key with the given encryption type and raw key data.
      *  @param type if null, type is unknown
      *  @param data must be non-null
      *  @since 0.9.38
@@ -216,9 +216,9 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Type code for unknown encryption types.
+     * Type code for unknown encryption types.
      *
-     *  Only valid if getType() returns null
+     * Only valid if getType() returns null
      *
      * @return the unknown type code
      * @since 0.9.38

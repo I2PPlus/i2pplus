@@ -184,7 +184,7 @@ public class StatManager {
     }
 
     /**
-     *  Misnamed, as it returns a FrequencyStat, not a Frequency.
+     * Misnamed, as it returns a FrequencyStat, not a Frequency.
      * @return the frequency
      */
     public FrequencyStat getFrequency(String name) {
@@ -192,7 +192,7 @@ public class StatManager {
     }
 
     /**
-     *  Misnamed, as it returns a RateStat, not a Rate.
+     * Misnamed, as it returns a RateStat, not a Rate.
      * @return the rate
      */
     public RateStat getRate(String name) {

@@ -76,7 +76,7 @@ public final class ElGamalSigEngine extends Signature {
     }
 
     /**
-     * ASN.1 R,S.
+     *  ASN.1 R,S.
      *  @return ASN.1 R,S
      */
     @Override
@@ -113,7 +113,7 @@ public final class ElGamalSigEngine extends Signature {
     }
 
     /**
-     * ASN.1 R,S.
+     *  ASN.1 R,S.
      *  @param sigBytes ASN.1 R,S
      *  @return true if the signature is valid
      */

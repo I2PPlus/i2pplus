@@ -129,7 +129,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     protected int localPort = DEFAULT_LOCAL_PORT;
 
     /**
-     *  Non-blocking
+     * Non-blocking
      *
      * @param privData Base64-encoded private key data,
      *                 format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
@@ -146,7 +146,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Non-blocking
+     * Non-blocking
      *
      * @param privkey file containing the private key data,
      *                format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
@@ -177,7 +177,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Non-blocking
+     * Non-blocking
      *
      * @param privData stream containing the private key data,
      *                 format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
@@ -740,11 +740,11 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  This is run in a thread from a limited-size thread pool via Handler.run(),
-     *  except for a standard server (this class, no extension, as determined in getUsePool()),
-     *  it is run directly in the acceptor thread (see run()).
+     * This is run in a thread from a limited-size thread pool via Handler.run(),
+     * except for a standard server (this class, no extension, as determined in getUsePool()),
+     * it is run directly in the acceptor thread (see run()).
      *
-     *  Handles an incoming I2P connection by forwarding it to the local TCP destination.
+     * Handles an incoming I2P connection by forwarding it to the local TCP destination.
      * <p>
      * This method is called by the server socket's acceptance thread when a new
      * I2P connection arrives. It creates a local TCP socket connection and spawns
@@ -811,7 +811,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Creates a TCP socket connection to the configured destination.
+     * Creates a TCP socket connection to the configured destination.
      * <p>
      * This method resolves the target host and port for the incoming connection,
      * supporting port-based destination mapping via the client options. If a port
@@ -856,7 +856,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Gets a human-readable string representation of the target socket.
+     * Gets a human-readable string representation of the target socket.
      * <p>
      * This method is used for logging and error messages when socket creation
      * fails. It returns the configured destination address, taking into account
@@ -880,7 +880,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Creates a TCP socket connection to the specified destination.
+     * Creates a TCP socket connection to the specified destination.
      * <p>
      * This convenience method delegates to getSocket() with forceNonSSL=false,
      * allowing SSL configuration to be controlled by client options.

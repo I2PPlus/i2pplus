@@ -635,8 +635,8 @@ class PeerTestManager {
     }
 
     /**
-     * Depending upon the status, fire off different events (using received port/ip/etc as
-     * necessary).
+     *  Depending upon the status, fire off different events (using received port/ip/etc as
+     *  necessary).
      *
      *  @param isIPv6 Is the change an IPv6 change?
      */

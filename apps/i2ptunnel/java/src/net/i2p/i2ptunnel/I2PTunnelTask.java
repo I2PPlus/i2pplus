@@ -89,7 +89,7 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
     public void connected(I2PSession session) {getTunnel().addSession(session);}
 
     /**
-     *  Called when a session is disconnected.
+     * Called when a session is disconnected.
      * <p>
      * This method removes the session from the tunnel and notifies
      * the router that disconnection occurred.
@@ -104,7 +104,7 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
 
     /**
      * @return the boolean option
-     *  @since 0.9.62
+     * @since 0.9.62
      */
     protected boolean getBooleanOption(String opt, boolean dflt) {
         Properties opts = getTunnel().getClientOptions();
@@ -124,10 +124,10 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
     public void reportAbuse(I2PSession session, int severity) {}
 
     /**
-     *  Returns the I2PSocketManager for this task, or null if not applicable.
-     *  Extending classes may override to return their socket manager.
+     * Returns the I2PSocketManager for this task, or null if not applicable.
+     * Extending classes may override to return their socket manager.
      * @return the socket manager
-     *  @since 0.9.63
+     * @since 0.9.63
      */
     public I2PSocketManager getSocketManager() {return null;}
 

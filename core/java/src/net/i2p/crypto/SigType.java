@@ -344,7 +344,7 @@ public enum SigType {
     }
 
     /**
-     *  The router version in which this type was first supported.
+     * The router version in which this type was first supported.
      *
      * @return the supported since
      * @since 0.9.15
@@ -354,7 +354,7 @@ public enum SigType {
     }
 
     /**
-     *  The OID for the signature.
+     * The OID for the signature.
      *
      * @return the o i d
      * @since 0.9.25

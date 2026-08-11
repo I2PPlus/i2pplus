@@ -709,22 +709,22 @@ public class TunnelPool {
     }
 
     /**
-     *  Return settings.getTotalQuantity, unless this is an exploratory tunnel
-     *  AND exploratory build success rate is less than 1/10, AND total settings
-     *  is greater than 1. Otherwise subtract 1 to help prevent congestion collapse,
-     *  and prevent really unintegrated routers from working too hard.
-     *  We only do this for exploratory as different clients could have different
-     *  length settings. Although I guess inbound and outbound exploratory
-     *  could be different too, and inbound is harder...
+     * Return settings.getTotalQuantity, unless this is an exploratory tunnel
+     * AND exploratory build success rate is less than 1/10, AND total settings
+     * is greater than 1. Otherwise subtract 1 to help prevent congestion collapse,
+     * and prevent really unintegrated routers from working too hard.
+     * We only do this for exploratory as different clients could have different
+     * length settings. Although I guess inbound and outbound exploratory
+     * could be different too, and inbound is harder...
      *
-     *  As of 0.9.19, add more if exploratory and floodfill, as floodfills
-     *  generate a lot of exploratory traffic.
-     *  TODO high-bandwidth non-floodfills do also...
+     * As of 0.9.19, add more if exploratory and floodfill, as floodfills
+     * generate a lot of exploratory traffic.
+     * TODO high-bandwidth non-floodfills do also...
      *
-     *  Also returns 1 if set for zero hop, client or exploratory.
+     * Also returns 1 if set for zero hop, client or exploratory.
      *
-     *  Enhanced with exponential backoff for firewalled routers to prevent
-     *  tunnel pool exhaustion after extended uptime.
+     * Enhanced with exponential backoff for firewalled routers to prevent
+     * tunnel pool exhaustion after extended uptime.
      *
      * @return the adjusted total quantity
      * @since 0.8.11
@@ -1383,9 +1383,9 @@ public class TunnelPool {
     }
 
     /**
-     *  Global tunnel build success rate as a fraction (0.0-1.0).
-     *  Reads the same StatManager rate the Tuner uses.
-     *  Returns NaN if no data yet (early startup).
+     * Global tunnel build success rate as a fraction (0.0-1.0).
+     * Reads the same StatManager rate the Tuner uses.
+     * Returns NaN if no data yet (early startup).
      * @return the build success rate
      */
     private double getBuildSuccessRate() {

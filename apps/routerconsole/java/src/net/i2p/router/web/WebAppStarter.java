@@ -279,14 +279,14 @@ public class WebAppStarter {
     }
 
     /**
-     *  As of 0.9.34, the appName will be registered with the PortMapper,
-     *  and PortMapper.isRegistered() will be more efficient than this.
+     * As of 0.9.34, the appName will be registered with the PortMapper,
+     * and PortMapper.isRegistered() will be more efficient than this.
      *
-     *  Warning, this will NOT work during shutdown, because
-     *  the console is already unregistered.
+     * Warning, this will NOT work during shutdown, because
+     * the console is already unregistered.
      *
      * @return whether web app running
-     *  @since public since 0.9.33; was package private
+     * @since public since 0.9.33; was package private
      */
     public static boolean isWebAppRunning(I2PAppContext ctx, String appName) {
         ContextHandler wac = getWebApp(ctx, appName);
@@ -332,7 +332,7 @@ public class WebAppStarter {
 
     /**
      * @return the web app
-     *  @since 0.9.41
+     * @since 0.9.41
      */
     private static ContextHandler getWebApp(ContextHandlerCollection server, String appName) {
         Handler[] handlers = server.getHandlers();
@@ -350,13 +350,13 @@ public class WebAppStarter {
     }
 
     /**
-     *  See comments in ConfigClientsHandler
+     * See comments in ConfigClientsHandler
      *
-     *  Warning, this will NOT work during shutdown, because
-     *  the console is already unregistered.
+     * Warning, this will NOT work during shutdown, because
+     * the console is already unregistered.
      *
      * @return the console server
-     *  @since public since 0.9.33, was package private
+     * @since public since 0.9.33, was package private
      */
     public static ContextHandlerCollection getConsoleServer(I2PAppContext ctx) {
         Server s = RouterConsoleRunner.getConsoleServer(ctx);
@@ -367,7 +367,7 @@ public class WebAppStarter {
 
     /**
      * @return the console server
-     *  @since 0.9.41
+     * @since 0.9.41
      */
     private static ContextHandlerCollection getConsoleServer(Server s) {
         Handler h = s.getChildHandlerByClass(ContextHandlerCollection.class);

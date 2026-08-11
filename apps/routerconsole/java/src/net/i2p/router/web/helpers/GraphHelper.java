@@ -87,9 +87,9 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     *  This must be output in the jsp since &lt;meta&gt; must be in the &lt;head&gt;
+     * This must be output in the jsp since &lt;meta&gt; must be in the &lt;head&gt;
      * @return the refresh meta
-     *  @since 0.8.7
+     * @since 0.8.7
      */
     public String getRefreshMeta() {
         if (_refreshDelaySeconds <= 8 ||
@@ -301,11 +301,11 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     *  For single stat page;
-     *  stat = "bw.combined" treated specially
+     * For single stat page;
+     * stat = "bw.combined" treated specially
      *
      * @return the single stat
-     *  @since 0.9
+     * @since 0.9
      */
     public String getSingleStat() {
         GraphGenerator ss = GraphGenerator.instance(_context);
@@ -550,9 +550,9 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     *  We have to do this here because processForm() isn't called unless the nonces are good
+     * We have to do this here because processForm() isn't called unless the nonces are good
      * @return the all messages
-     *  @since 0.8.7
+     * @since 0.8.7
      */
     @Override
     public String getAllMessages() {

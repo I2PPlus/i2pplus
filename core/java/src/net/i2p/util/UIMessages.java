@@ -46,8 +46,8 @@ public class UIMessages {
     }
 
     /**
-     * Use if it includes a link.
-     * Does not escape '&lt;' and '&gt;' before queueing
+     *  Use if it includes a link.
+     *  Does not escape '&lt;' and '&gt;' before queueing
      *
      *  @return the message id
      */

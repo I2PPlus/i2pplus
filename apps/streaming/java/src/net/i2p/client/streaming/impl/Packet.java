@@ -429,7 +429,7 @@ class Packet {
     public Destination getOptionalFrom() {return _optionFrom;}
 
     /**
-     *  Transient signing public key, only if an offline signing block was included, else null.
+     * Transient signing public key, only if an offline signing block was included, else null.
      *
      * @return the transient signing public key
      * @since 0.9.39

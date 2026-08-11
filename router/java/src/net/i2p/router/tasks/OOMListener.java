@@ -10,21 +10,21 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * Out-of-memory error handler for emergency router shutdown.
+ *  Out-of-memory error handler for emergency router shutdown.
  *
- * This listener is registered with the I2PThread system to handle
- * OutOfMemoryError events. When the JVM runs out of memory, this class
- * attempts to perform an orderly shutdown of the router to prevent
- * data corruption and hung processes.
+ *  This listener is registered with the I2PThread system to handle
+ *  OutOfMemoryError events. When the JVM runs out of memory, this class
+ *  attempts to perform an orderly shutdown of the router to prevent
+ *  data corruption and hung processes.
  *
- * The handler is designed to be resilient against additional OOM errors
- * during the shutdown process and will make best-effort attempts to:
- * <ul>
+ *  The handler is designed to be resilient against additional OOM errors
+ *  during the shutdown process and will make best-effort attempts to:
+ *  <ul>
  *   <li>Clear caches to free memory</li>
  *   <li>Log diagnostic information</li>
  *   <li>Generate thread dumps for debugging</li>
  *   <li>Shutdown the router with appropriate exit code</li>
- * </ul>
+ *  </ul>
  *
  *  @since 0.8.12 moved from Router.java
  */
@@ -114,7 +114,7 @@ public class OOMListener implements I2PThread.OOMEventListener {
     }
 
     /**
-     *  Best guess if running from a Debian package
+     * Best guess if running from a Debian package
      * @return whether debian package
      * @since 0.9.35
      */

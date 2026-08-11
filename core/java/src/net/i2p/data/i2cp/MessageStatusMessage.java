@@ -257,7 +257,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Session ID for this message.
+     * Session ID for this message.
      *
      * @param id 0-65535
      */
@@ -274,7 +274,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Status code for this message.
+     * Status code for this message.
      *
      * @param status 0-255
      */
@@ -283,7 +283,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Is the status code a success status code?
+     * Is the status code a success status code?
      *
      * @return whether successful
      * @since 0.9.5
@@ -293,7 +293,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Is the status code a success status code?
+     * Is the status code a success status code?
      *
      * @return whether successful
      * @since 0.9.5
@@ -303,7 +303,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  This is the router's ID for the message
+     * This is the router's ID for the message
      * @return the message id
      */
     public long getMessageId() {
@@ -333,7 +333,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  This is the client's ID for the message
+     * This is the client's ID for the message
      * @return the nonce
      */
     public long getNonce() {

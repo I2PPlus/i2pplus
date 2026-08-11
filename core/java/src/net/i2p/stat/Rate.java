@@ -279,9 +279,9 @@ public class Rate {
     }
 
     /**
-     *  The last N data points from the underlying storage (RRD).
-     *  Delegates to the summary listener if it supports historical data.
-     *  Returns NaN-padded array if the listener is null or data is unavailable.
+     * The last N data points from the underlying storage (RRD).
+     * Delegates to the summary listener if it supports historical data.
+     * Returns NaN-padded array if the listener is null or data is unavailable.
      *
      * @param count number of data points
      * @return array of length count
@@ -328,7 +328,7 @@ public class Rate {
     }
 
     /**
-     *  The average value, or the lifetime average if no recent data.
+     * The average value, or the lifetime average if no recent data.
      *
      * @return the average or lifetime average depending on last event count
      * @since 0.9.4
@@ -455,7 +455,7 @@ public class Rate {
     }
 
     /**
-     *  Computes the averages for this rate.
+     * Computes the averages for this rate.
      *
      * @return a thread-local temp object containing computed averages.
      * @since 0.9.4
@@ -465,11 +465,11 @@ public class Rate {
     }
 
     /**
-     *  Computes the averages and stores them in the provided object.
+     * Computes the averages and stores them in the provided object.
      *
      * @param out where to store the computed averages.
      * @param useLifetime whether the lifetime average should be used if
-     *  there are no events.
+     * there are no events.
      *
      * @return the same RateAverages object for chaining
      * @since 0.9.4
@@ -503,7 +503,7 @@ public class Rate {
     }
 
     /**
-     *  Stores the rate data to a string builder.
+     * Stores the rate data to a string builder.
      *
      * @param addComments add comment lines to the output
      * @since 0.9.41

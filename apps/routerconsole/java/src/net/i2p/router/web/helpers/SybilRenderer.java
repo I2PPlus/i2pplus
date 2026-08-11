@@ -74,7 +74,7 @@ public class SybilRenderer {
     }
 
     /**
-     *   Entry point
+     *  Entry point
      *
      *  @param mode what tab to show
      *  @param date only for mode = 12
@@ -887,7 +887,7 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the HTML for /64 IPv6 groups.
+     * Render the HTML for /64 IPv6 groups.
      *
      * @since 0.9.57
      */
@@ -920,7 +920,7 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the HTML for /48 IPv6 groups.
+     * Render the HTML for /48 IPv6 groups.
      *
      * @since 0.9.57
      */

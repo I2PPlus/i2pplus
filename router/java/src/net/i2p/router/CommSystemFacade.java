@@ -118,7 +118,7 @@ public abstract class CommSystemFacade implements Service {
     public Status getStatus() { return Status.OK; }
 
     /**
-     *  Localized reachability status string.
+     * Localized reachability status string.
      *
      * @return the localized status string
      * @since 0.9.45
@@ -197,7 +197,7 @@ public abstract class CommSystemFacade implements Service {
     public void forceDisconnect(Hash peer, String reason) {}
 
     /**
-     *  Our two-letter country code determined from our external IP.
+     * Our two-letter country code determined from our external IP.
      *
      * @return the our country
      * @since 0.8.11
@@ -205,7 +205,7 @@ public abstract class CommSystemFacade implements Service {
     public String getOurCountry() { return null; }
 
     /**
-     *  Whether country blocking is enabled at all.
+     * Whether country blocking is enabled at all.
      *
      * @return whether in strict country
      * @since 0.8.13
@@ -347,7 +347,7 @@ public abstract class CommSystemFacade implements Service {
     public abstract List<Hash> getEstablished();
 
     /**
-     *  Whether this is a dummy implementation with no real transports.
+     * Whether this is a dummy implementation with no real transports.
      *
      * @return whether dummy
      * @since 0.8.13
@@ -355,7 +355,7 @@ public abstract class CommSystemFacade implements Service {
     public boolean isDummy() { return true; }
 
     /**
-     *  Whether the comm system is fully initialized and running.
+     * Whether the comm system is fully initialized and running.
      *
      * @since 0.9.53
      */
@@ -395,7 +395,7 @@ public abstract class CommSystemFacade implements Service {
     public void unregisterTransport(Transport t) {}
 
     /**
-     *  Factory for making X25519 key pairs.
+     * Factory for making X25519 key pairs.
      *
      * @return the x d h factory
      * @since 0.9.46
@@ -417,7 +417,7 @@ public abstract class CommSystemFacade implements Service {
     public void exemptIncoming(Hash peer) {}
 
     /**
-     *  Is this IP exempt from any incoming throttles or rejections
+     * Is this IP exempt from any incoming throttles or rejections
      *
      * @return whether exempt incoming
      * @since 0.9.58

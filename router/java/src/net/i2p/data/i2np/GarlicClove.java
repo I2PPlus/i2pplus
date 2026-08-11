@@ -96,7 +96,7 @@ public class GarlicClove extends DataStructureImpl {
     public void setCertificate(Certificate cert) { _certificate = cert; }
 
     /**
-     * Read the clove from a stream; not supported.
+     *  Read the clove from a stream; not supported.
      *  @deprecated unused, use byte array method to avoid copying
      *  @throws UnsupportedOperationException always
      */
@@ -106,7 +106,7 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
-     * Write the clove to a stream; not supported.
+     *  Write the clove to a stream; not supported.
      *  @deprecated unused, use byte array method to avoid copying
      *  @throws UnsupportedOperationException always
      */
@@ -116,7 +116,7 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
-     * Read the clove from a byte array.
+     *  Read the clove from a byte array.
      *  @return length read
      */
     public int readBytes(byte[] source, int offset) throws DataFormatException {

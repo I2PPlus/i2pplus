@@ -1039,11 +1039,11 @@ public class I2PAppContext {
     }
 
     /**
-     *  WARNING - Shutdown tasks are not executed in an I2PAppContext.
-     *  You must be in a RouterContext for the tasks to be executed
-     *  at shutdown.
-     *  This method moved from Router in 0.7.1 so that clients
-     *  may use it without depending on router.jar.
+     * WARNING - Shutdown tasks are not executed in an I2PAppContext.
+     * You must be in a RouterContext for the tasks to be executed
+     * at shutdown.
+     * This method moved from Router in 0.7.1 so that clients
+     * may use it without depending on router.jar.
      *
      * @param task the task
      * @since 0.7.1

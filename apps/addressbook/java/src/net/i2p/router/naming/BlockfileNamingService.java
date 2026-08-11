@@ -698,7 +698,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * @return the reverse key
-     *  @since 0.8.9
+     * @since 0.8.9
      */
     private static Integer getReverseKey(Destination dest) {
         return getReverseKey(dest.calculateHash());
@@ -706,7 +706,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * @return the reverse key
-     *  @since 0.8.9
+     * @since 0.8.9
      */
     private static Integer getReverseKey(Hash hash) {
         byte[] hashBytes = hash.getData();
@@ -1192,7 +1192,7 @@ public class BlockfileNamingService extends DummyNamingService {
      *                Don't use both startsWith and beginWith.
      *                Search, startsWith, and beginWith values must be lower case.
      * @return the base64 entries
-     *  @since 0.9.20
+     * @since 0.9.20
      */
     @Override
     public Map<String, String> getBase64Entries(Properties options) {
@@ -1420,7 +1420,7 @@ public class BlockfileNamingService extends DummyNamingService {
      *                Don't use both startsWith and beginWith.
      *                Search, startsWith, and beginWith values must be lower case.
      * @return the names
-     *  @since 0.9.20
+     * @since 0.9.20
      */
     @Override
     public Set<String> getNames(Properties options) {
@@ -1499,7 +1499,7 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
-     *  Look up a hostname from a Destination's hash. Returns the first name found, or null.
+     * Look up a hostname from a Destination's hash. Returns the first name found, or null.
      * @param options to configure lookup behavior (unused)
      * @since 0.8.9
      */
@@ -1825,7 +1825,7 @@ public class BlockfileNamingService extends DummyNamingService {
      */
     private static class PropertiesSerializer implements Serializer<Properties> {
         /**
-         *  A format error on the properties is non-fatal (returns an empty properties)
+         * A format error on the properties is non-fatal (returns an empty properties)
          * @return the bytes
          */
         public byte[] getBytes(Properties p) {
@@ -1895,8 +1895,8 @@ public class BlockfileNamingService extends DummyNamingService {
     private static class DestEntrySerializer implements Serializer<DestEntry> {
 
         /**
-         *  A format error on the properties is non-fatal (only the properties are lost)
-         *  A format error on the destination is fatal
+         * A format error on the properties is non-fatal (only the properties are lost)
+         * A format error on the destination is fatal
          * @return the bytes
          */
         @Override
@@ -1945,7 +1945,7 @@ public class BlockfileNamingService extends DummyNamingService {
     private static class DestEntrySerializerV4 implements Serializer<DestEntry> {
 
         /**
-         *  Serialize a DestEntry to bytes, including the destination list if present.
+         * Serialize a DestEntry to bytes, including the destination list if present.
          * @return the bytes
          */
         @Override

@@ -84,20 +84,20 @@ public class Reseeder {
     public static final String DEFAULT_SEED_URL = ""; // Disable due to misconfiguation (ticket #1466)
 
     /**
-     *  The I2P reseed servers are managed by backup (backup@mail.i2p).
-     *  Please contact him for support, change requests, or issues.
-     *  See also the reseed forum http://zzz.i2p/forums/18
-     *  and the reseed setup and testing guide
-     *  https://geti2p.net/en/get-involved/guides/reseed
+     * The I2P reseed servers are managed by backup (backup@mail.i2p).
+     * Please contact him for support, change requests, or issues.
+     * See also the reseed forum http://zzz.i2p/forums/18
+     * and the reseed setup and testing guide
+     * https://geti2p.net/en/get-involved/guides/reseed
      *
-     *  All supported reseed hosts need a corresponding reseed (SU3)
-     *  signing certificate installed in the router.
+     * All supported reseed hosts need a corresponding reseed (SU3)
+     * signing certificate installed in the router.
      *
-     *  All supported reseed hosts with selfsigned SSL certificates
-     *  need the corresponding SSL certificate installed in the router.
+     * All supported reseed hosts with selfsigned SSL certificates
+     * need the corresponding SSL certificate installed in the router.
      *
-     *  While this implementation supports SNI, others may not, so
-     *  SNI requirements are noted.
+     * While this implementation supports SNI, others may not, so
+     * SNI requirements are noted.
      *
      * @since 0.8.2
      */
@@ -1199,8 +1199,8 @@ public class Reseeder {
         }
 
         /**
-         *  Display string for what we're fetching.
-         *  Untranslated, for logs only.
+         * Display string for what we're fetching.
+         * Untranslated, for logs only.
          *
          * @return the display string
          * @since 0.9.33

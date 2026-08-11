@@ -203,7 +203,7 @@ public enum EncType {
     }
 
     /**
-     *  The router version in which this type was first supported.
+     * The router version in which this type was first supported.
      * @return the supported since
      */
     public String getSupportedSince() {

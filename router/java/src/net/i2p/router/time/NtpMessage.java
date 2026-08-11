@@ -460,7 +460,7 @@ class NtpMessage {
     }
 
     /**
-     *  Convert the reference identifier to a human-readable string.
+     * Convert the reference identifier to a human-readable string.
      *
      * @return non-null, "" if unset
      * @since 0.9.29

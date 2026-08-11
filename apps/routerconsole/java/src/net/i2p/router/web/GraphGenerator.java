@@ -236,9 +236,9 @@ public class GraphGenerator implements Runnable, ClientApp {
     /////// End ClientApp methods
 
     /**
-     *  List of GraphListener instances
+     * List of GraphListener instances
      * @return the listeners
-     *  @since public since 0.9.33, was package private
+     * @since public since 0.9.33, was package private
      */
     public List<GraphListener> getListeners() { return _listeners; }
 

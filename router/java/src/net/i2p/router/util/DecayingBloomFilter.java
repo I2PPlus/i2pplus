@@ -468,7 +468,7 @@ public class DecayingBloomFilter {
     }
 
     /**
-     * Acquire the write lock
+     *  Acquire the write lock
      *
      *  @return true if the lock was acquired
      *  @since 0.8.11 moved from DecayingHashSet

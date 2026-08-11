@@ -104,7 +104,7 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     *  Does not call logManager.flush(); call getCriticalLogs() first to flush
+     * Does not call logManager.flush(); call getCriticalLogs() first to flush
      * @return the logs
      */
     public String getLogs() {
@@ -117,7 +117,7 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     *  Return HTML rendering of the most recent critical log messages.
+     * Return HTML rendering of the most recent critical log messages.
      * @return the critical logs
      */
     public String getCriticalLogs() {
@@ -331,7 +331,7 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     *  Return the Built-By attribute from the i2p.jar manifest.
+     * Return the Built-By attribute from the i2p.jar manifest.
      *
      * @return the built by
      * @since 0.9.35
@@ -348,7 +348,7 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     *  Return the build revision and date from the routerconsole.war manifest.
+     * Return the build revision and date from the routerconsole.war manifest.
      *
      * @return the revision
      * @since 0.9.50+

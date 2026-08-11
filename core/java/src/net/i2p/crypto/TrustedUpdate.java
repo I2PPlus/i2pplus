@@ -322,7 +322,7 @@ public class TrustedUpdate {
     }
 
     /**
-     * True if there's no version mismatch.
+     *  True if there's no version mismatch.
      *  @return true if there's no version mismatch
      *  @since 0.8.8
      */

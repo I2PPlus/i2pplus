@@ -158,7 +158,7 @@ public abstract class TransportUtil {
     }
 
     /**
-     *  This returns true if the force-firewalled setting is configured, false otherwise.
+     * This returns true if the force-firewalled setting is configured, false otherwise.
      *
      * @return whether i pv4 firewalled
      * @since 0.9.20
@@ -168,7 +168,7 @@ public abstract class TransportUtil {
     }
 
     /**
-     *  This returns true if the force-firewalled setting is configured, false otherwise.
+     * This returns true if the force-firewalled setting is configured, false otherwise.
      *
      * @return whether i pv6 firewalled
      * @since 0.9.27, implemented in 0.9.28
@@ -194,7 +194,7 @@ public abstract class TransportUtil {
     }
 
     /**
-     *  Whether the address is an in-network Yggdrasil address.
+     * Whether the address is an in-network Yggdrasil address.
      * @return whether yggdrasil
      * @since 0.9.49
      */
@@ -354,10 +354,10 @@ public abstract class TransportUtil {
     }
 
     /**
-     *  Is this a valid port for us or a remote router?
+     * Is this a valid port for us or a remote router?
      *
-     *  ref: http://i2p-projekt.i2p/en/docs/ports
-     *  ref: https://cs.chromium.org/chromium/src/net/base/port_util.cc
+     * ref: http://i2p-projekt.i2p/en/docs/ports
+     * ref: https://cs.chromium.org/chromium/src/net/base/port_util.cc
      *
      * @return whether valid port
      * @since 0.9.17 moved from logic in individual transports

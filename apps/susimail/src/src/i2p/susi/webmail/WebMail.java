@@ -332,9 +332,9 @@ public class WebMail extends HttpServlet {
         }
 
         /**
-         *  PBKDF2 hash for password verification with high iteration count
+         * PBKDF2 hash for password verification with high iteration count
          * @return whether h password is present
-         *  @since 0.9.70+
+         * @since 0.9.70+
          */
         private static String hashPassword(String password, String salt) {
             try {

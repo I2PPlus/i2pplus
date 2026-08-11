@@ -232,8 +232,8 @@ public abstract class TransportImpl implements Transport {
     public abstract int countPeers();
 
     /**
-     *  How many peers are we currently connected to, that we have
-     *  sent a message to or received a message from in the last five minutes.
+     * How many peers are we currently connected to, that we have
+     * sent a message to or received a message from in the last five minutes.
       * @return the value
      */
     public abstract int countActivePeers();
@@ -602,7 +602,7 @@ public abstract class TransportImpl implements Transport {
     protected abstract void outboundMessageReady();
 
     /**
-     * Message received from the I2NPMessageReader - send it to the listener
+     *  Message received from the I2NPMessageReader - send it to the listener
      *
      *  @param inMsg non-null
      *  @param remoteIdent may be null
@@ -671,7 +671,7 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  Do we have any current address?
+     * Do we have any current address?
      * @return whether current address is present
      * @since IPv6
      */
@@ -727,10 +727,10 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  Remove only this address.
-     *  Calls listener.transportAddressChanged().
-     *  To remove all IPv4 or IPv6 addresses, use removeAddress(boolean).
-     *  To remove all IPv4 and IPv6 addresses, use replaceAddress(null).
+     * Remove only this address.
+     * Calls listener.transportAddressChanged().
+     * To remove all IPv4 or IPv6 addresses, use removeAddress(boolean).
+     * To remove all IPv4 and IPv6 addresses, use replaceAddress(null).
      *
      * @param address the address
      * @since 0.9.20
@@ -778,7 +778,7 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  Save a local address we were notified about before we started.
+     * Save a local address we were notified about before we started.
      *
      * @param address the address
      * @since IPv6
@@ -788,7 +788,7 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  Return and then clear all saved local addresses.
+     * Return and then clear all saved local addresses.
      *
      * @return the saved local addresses
      * @since IPv6
@@ -936,13 +936,13 @@ public abstract class TransportImpl implements Transport {
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {renderStatusHTML(out);}
 
     /**
-     *  Previously returned short, now enum as of 0.9.20
+     * Previously returned short, now enum as of 0.9.20
      * @return the reachability status
      */
     public abstract Status getReachabilityStatus();
 
     /**
-     *  This returns true if the force-firewalled setting is configured, false otherwise.
+     * This returns true if the force-firewalled setting is configured, false otherwise.
      *
      * @return whether i pv4 firewalled
      * @since 0.9.20, public since 0.9.30
@@ -952,7 +952,7 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  This returns true if the force-firewalled setting is configured, false otherwise.
+     * This returns true if the force-firewalled setting is configured, false otherwise.
      *
      * @return whether i pv6 firewalled
      * @since 0.9.27, public since 0.9.30
@@ -1116,7 +1116,7 @@ public abstract class TransportImpl implements Transport {
     public boolean allowLocal() {return _context.getBooleanProperty("i2np.allowLocal");}
 
     /**
-     * IP of the peer from the last connection (in or out, any transport).
+     *  IP of the peer from the last connection (in or out, any transport).
      *
      *  @param ip IPv4 or IPv6, non-null
      *  @param peer the peer
@@ -1128,7 +1128,7 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     * IP of the peer from the last connection (in or out, any transport).
+     *  IP of the peer from the last connection (in or out, any transport).
      *
      *  @return IPv4 or IPv6 or null
      *  @param peer the peer
@@ -1219,7 +1219,7 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  The IPv6 configuration for this transport.
+     * The IPv6 configuration for this transport.
      * @return the i pv6 config
      * @since IPv6, public since 0.9.30
      */

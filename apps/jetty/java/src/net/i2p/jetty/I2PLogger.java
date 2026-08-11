@@ -270,7 +270,7 @@ public class I2PLogger implements Logger
 
     /**
      * @return the name
-     *  @since Jetty 7
+     * @since Jetty 7
      */
     public String getName() {
         return "net.i2p.jetty.I2PLogger";

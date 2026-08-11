@@ -345,14 +345,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Cannot be restarted after calling this. Use restart() for that.
+     * Cannot be restarted after calling this. Use restart() for that.
      *
-     *  Gracefully shutdown the communication system.
+     * Gracefully shutdown the communication system.
      *
-     *  This method performs a clean shutdown of all transport
-     *  protocols and network operations. It stops accepting
-     *  new connections, closes existing ones, and performs
-     *  cleanup of system resources.
+     * This method performs a clean shutdown of all transport
+     * protocols and network operations. It stops accepting
+     * new connections, closes existing ones, and performs
+     * cleanup of system resources.
      *
      * <strong>Shutdown Process:</strong>
      * <ul>
@@ -613,7 +613,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  The status of the communication system.
+     * The status of the communication system.
      *
      * @return the status
      * @since 0.9.20
@@ -624,7 +624,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  The current network status.
+     * The current network status.
      * @return the status
      * @since 0.9.20
      */
@@ -850,7 +850,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Factory for making X25519 key pairs.
+     * Factory for making X25519 key pairs.
      * @return the x d h factory
      * @since 0.9.46
      */
@@ -1584,7 +1584,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public String getOurCountry() {return _context.getProperty(GeoIP.PROP_IP_COUNTRY);}
 
     /**
-     *  Are we in a strict country
+     * Are we in a strict country
      * @return whether in strict country
      * @since 0.8.13
      */
@@ -1863,7 +1863,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  First valid IP of the specified type (IPv4 or IPv6).
+     * First valid IP of the specified type (IPv4 or IPv6).
      * @return the first valid i p of type
      */
     private static byte[] getFirstValidIPOfType(RouterInfo ri, boolean wantIPv6) {
@@ -2119,7 +2119,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Is everything disabled for testing?
+     * Is everything disabled for testing?
      * @return whether dummy
      * @since 0.8.13
      */

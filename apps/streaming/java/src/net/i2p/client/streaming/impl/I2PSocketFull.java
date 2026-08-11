@@ -38,13 +38,13 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
-     *  Closes this socket.
+     * Closes this socket.
      *
-     *  Nonblocking as of 0.9.9:
-     *  Any thread currently blocked in an I/O operation upon this socket will throw an IOException.
-     *  Once a socket has been closed, it is not available for further networking use
-     *  (i.e. can't be reconnected or rebound). A new socket needs to be created.
-     *  Closing this socket will also close the socket's InputStream and OutputStream.
+     * Nonblocking as of 0.9.9:
+     * Any thread currently blocked in an I/O operation upon this socket will throw an IOException.
+     * Once a socket has been closed, it is not available for further networking use
+     * (i.e. can't be reconnected or rebound). A new socket needs to be created.
+     * Closing this socket will also close the socket's InputStream and OutputStream.
      *
      * @throws IOException if an I/O error occurs
      */
@@ -70,14 +70,14 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
-     *  Resets and closes this socket. Sends a RESET indication to the far-end.
-     *  This is the equivalent of setSoLinger(true, 0) followed by close() on a Java Socket.
+     * Resets and closes this socket. Sends a RESET indication to the far-end.
+     * This is the equivalent of setSoLinger(true, 0) followed by close() on a Java Socket.
      *
-     *  Nonblocking.
-     *  Any thread currently blocked in an I/O operation upon this socket will throw an IOException.
-     *  Once a socket has been reset, it is not available for further networking use
-     *  (i.e. can't be reconnected or rebound). A new socket needs to be created.
-     *  Resetting this socket will also close the socket's InputStream and OutputStream.
+     * Nonblocking.
+     * Any thread currently blocked in an I/O operation upon this socket will throw an IOException.
+     * Once a socket has been reset, it is not available for further networking use
+     * (i.e. can't be reconnected or rebound). A new socket needs to be created.
+     * Resetting this socket will also close the socket's InputStream and OutputStream.
      *
      * @throws IOException if an I/O error occurs
      * @since 0.9.30
@@ -103,8 +103,8 @@ class I2PSocketFull implements I2PSocket {
     Connection getConnection() { return _connection; }
 
     /**
-     *  As of 0.9.9 will throw an IOE if socket is closed.
-     *  Prior to that would return null instead of throwing IOE.
+     * As of 0.9.9 will throw an IOE if socket is closed.
+     * Prior to that would return null instead of throwing IOE.
      *
      * @return non-null input stream
      * @throws IOException if the socket is closed
@@ -129,8 +129,8 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
-     *  As of 0.9.9 will throw an IOE if socket is closed.
-     *  Prior to that would return null instead of throwing IOE.
+     * As of 0.9.9 will throw an IOE if socket is closed.
+     * Prior to that would return null instead of throwing IOE.
      *
      * @return non-null output stream
      * @throws IOException if the socket is closed
@@ -195,7 +195,7 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
-     *  Deprecated, unimplemented, does nothing.
+     * Deprecated, unimplemented, does nothing.
      *
      * @param lsnr ignored
      */

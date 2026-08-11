@@ -239,8 +239,8 @@ class LoadRouterInfoJob extends JobImpl {
     }
 
     /**
-     *  Does our RI ElGamal private key length match the configuration?
-     *  If not, return true.
+     * Does our RI ElGamal private key length match the configuration?
+     * If not, return true.
      * @return whether rebuild
      * @since 0.9.8
      */

@@ -158,29 +158,29 @@ public class FIFOBandwidthLimiter {
     public float getReceiveBps15s() { return _recvBps15s; }
 
     /**
-     *  The configured maximum, not the current rate.
-     *  In binary K, i.e. rate / 1024.
+     * The configured maximum, not the current rate.
+     * In binary K, i.e. rate / 1024.
      * @return the outbound k bytes per second
      */
     public int getOutboundKBytesPerSecond() { return _refiller.getOutboundKBytesPerSecond(); }
 
     /**
-     *  The configured maximum, not the current rate.
-     *  In binary K, i.e. rate / 1024.
+     * The configured maximum, not the current rate.
+     * In binary K, i.e. rate / 1024.
      * @return the inbound k bytes per second
      */
     public int getInboundKBytesPerSecond() { return _refiller.getInboundKBytesPerSecond(); }
 
     /**
-     *  The configured maximum, not the current rate.
-     *  In binary K, i.e. rate / 1024.
+     * The configured maximum, not the current rate.
+     * In binary K, i.e. rate / 1024.
      * @return the outbound burst k bytes per second
      */
     public int getOutboundBurstKBytesPerSecond() { return _refiller.getOutboundBurstKBytesPerSecond(); }
 
     /**
-     *  The configured maximum, not the current rate.
-     *  In binary K, i.e. rate / 1024.
+     * The configured maximum, not the current rate.
+     * In binary K, i.e. rate / 1024.
      * @return the inbound burst k bytes per second
      */
     public int getInboundBurstKBytesPerSecond() { return _refiller.getInboundBurstKBytesPerSecond(); }
@@ -216,10 +216,10 @@ public class FIFOBandwidthLimiter {
     }
 
     /**
-     *  We intend to send traffic for a participating tunnel
-     *  with the given size and adjustment factor.
-     *  Returns true if the message can be sent within the current
-     *  share bandwidth limits, or false if it should be dropped.
+     * We intend to send traffic for a participating tunnel
+     * with the given size and adjustment factor.
+     * Returns true if the message can be sent within the current
+     * share bandwidth limits, or false if it should be dropped.
      *
      * @param size bytes
      * @param factor multiplier of size for the drop calculation, 1 for no adjustment
@@ -261,7 +261,7 @@ public class FIFOBandwidthLimiter {
     }
 
     /**
-     *  In Bytes per second
+     * In Bytes per second
      * @return the max share bandwidth
      * @since 0.9.68
      */
@@ -356,7 +356,7 @@ public class FIFOBandwidthLimiter {
     }
 
     /**
-     *  The inbound bandwidth status.
+     * The inbound bandwidth status.
      * @return the inbound status
      * @since 0.9.53
      */
@@ -370,7 +370,7 @@ public class FIFOBandwidthLimiter {
     }
 
     /**
-     *  The outbound bandwidth status.
+     * The outbound bandwidth status.
      * @return the outbound status
      * @since 0.9.53
      */

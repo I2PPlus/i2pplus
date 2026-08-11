@@ -128,8 +128,8 @@ public class LookupDest {
     }
 
     /**
-     *  Supports hostnames and extended b32.
-     *  TODO: does not support I2CP options.
+     * Supports hostnames and extended b32.
+     * TODO: does not support I2CP options.
      *
      * @param args command line arguments
      */

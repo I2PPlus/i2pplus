@@ -121,9 +121,9 @@ public class ConfigTunnelsHelper extends HelperBase {
     }
 
     /**
-     *  Get display name for the tunnel
+     * Get display name for the tunnel
      * @return the tunnel name
-     *  @since 0.9.57
+     * @since 0.9.57
      */
     private String getTunnelName(TunnelPoolSettings ins) {
         String name = ins.getDestinationNickname();

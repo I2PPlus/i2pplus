@@ -118,9 +118,9 @@ public class Blocklist {
     public static final String BLOCKLIST_COUNTRY_FILE = "blocklist-country.txt";
 
     /**
-     *  Limits of transient (in-memory) blocklists.
-     *  Note that it's impossible to prevent clogging up
-     *  the tables by a determined attacker, esp. on IPv6
+     * Limits of transient (in-memory) blocklists.
+     * Note that it's impossible to prevent clogging up
+     * the tables by a determined attacker, esp. on IPv6
      * @return whether slow
      */
     private static final int MAX_IPV4_SINGLES = SystemVersion.isSlow() ? 2048 : 8192;
@@ -560,32 +560,32 @@ public class Blocklist {
     }
 
    /**
-     * Read in and parse the blocklist.
-     * The blocklist need not be sorted, and may contain overlapping entries.
+     *  Read in and parse the blocklist.
+     *  The blocklist need not be sorted, and may contain overlapping entries.
      *
-     * Acceptable formats (IPV4 only):
-     * #comment (# must be in column 1)
-     * comment:IP-IP
-     * comment:morecomments:IP-IP
-     * IP-IP
-     * (comments also allowed before any of the following)
-     * IP/masklength
-     * IP
-     * hostname (DNS looked up at list readin time, not dynamically, so may not be much use)
-     * 44-byte Base64 router hash
+     *  Acceptable formats (IPV4 only):
+     *  #comment (# must be in column 1)
+     *  comment:IP-IP
+     *  comment:morecomments:IP-IP
+     *  IP-IP
+     *  (comments also allowed before any of the following)
+     *  IP/masklength
+     *  IP
+     *  hostname (DNS looked up at list readin time, not dynamically, so may not be much use)
+     *  44-byte Base64 router hash
      *
-     * Acceptable formats (IPV6 only):
-     * comment:IPv6 (must replace : with ; e.g. abcd;1234;0;12;;ff)
-     * IPv6 (must replace : with ; e.g. abcd;1234;0;12;;ff)
+     *  Acceptable formats (IPV6 only):
+     *  comment:IPv6 (must replace : with ; e.g. abcd;1234;0;12;;ff)
+     *  IPv6 (must replace : with ; e.g. abcd;1234;0;12;;ff)
      *
-     * No whitespace allowed after the last ':'.
+     *  No whitespace allowed after the last ':'.
      *
-     * For further information and downloads:
-     * http://www.bluetack.co.uk/forums/index.php?autocom=faq&CODE=02&qid=17
-     * http://blocklist.googlepages.com/
-     * http://www.cymru.com/Documents/bogon-list.html
+     *  For further information and downloads:
+     *  http://www.bluetack.co.uk/forums/index.php?autocom=faq&CODE=02&qid=17
+     *  http://blocklist.googlepages.com/
+     *  http://www.cymru.com/Documents/bogon-list.html
      *
-     * Must call allocate() before and merge() after.
+     *  Must call allocate() before and merge() after.
      *
      *  @param blocklist out parameter, entries stored here
      *  @param count current number of entries

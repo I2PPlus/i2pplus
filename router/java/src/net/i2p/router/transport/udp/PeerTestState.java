@@ -353,7 +353,7 @@ class PeerTestState {
     public int getStatus() { return _status; }
 
     /**
-     *  Status code sent to Alice (SSU2 Bob only).
+     * Status code sent to Alice (SSU2 Bob only).
      * @param status the status
      * @since 0.9.57
      */

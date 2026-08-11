@@ -71,7 +71,7 @@ public interface KBucket<T extends SimpleDataStructure> {
     public void setLastChanged();
 
     /**
-     *  The last-changed timestamp
+     * The last-changed timestamp
      * @return the last changed
      */
     public long getLastChanged();

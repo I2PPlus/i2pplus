@@ -516,9 +516,9 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     *  ClientApp interface
+     * ClientApp interface
      * @return the state
-     *  @since 0.9.18
+     * @since 0.9.18
      */
     @Override
     public ClientAppState getState() {
@@ -526,9 +526,9 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     *  ClientApp interface
+     * ClientApp interface
      * @return the name
-     *  @since 0.9.18
+     * @since 0.9.18
      */
     @Override
     public String getName() {
@@ -536,9 +536,9 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     *  ClientApp interface
+     * ClientApp interface
      * @return the display name
-     *  @since 0.9.18
+     * @since 0.9.18
      */
     @Override
     public String getDisplayName() {

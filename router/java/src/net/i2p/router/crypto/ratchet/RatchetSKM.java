@@ -33,7 +33,7 @@ import net.i2p.util.SimpleTimer2;
 
 /**
  *
- * Session key manager for ratchet encryption.
+ *  Session key manager for ratchet encryption.
  *
  *  @since 0.9.44
  */
@@ -164,7 +164,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * The encryption type for this session key manager.
+     *  The encryption type for this session key manager.
      *
      *  @return the encryption type
      *  @since 0.9.44
@@ -222,7 +222,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Check if a public key is a duplicate
+     *  Check if a public key is a duplicate
      *
      *  @param pk the public key to check
      *  @return true if a dup
@@ -832,9 +832,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /// end ACKS ///
 
     /**
-     *  Return a map of PublicKey to a set of inbound RatchetTagSets for that key.
-     *  Only for renderStatusHTML() below.
-     *  Does not return expired sets or sets with null keys.
+     * Return a map of PublicKey to a set of inbound RatchetTagSets for that key.
+     * Only for renderStatusHTML() below.
+     * Does not return expired sets or sets with null keys.
      * @return the ratchet tag sets by public key
      */
     private Map<PublicKey, Set<RatchetTagSet>> getRatchetTagSetsByPublicKey() {
@@ -1459,7 +1459,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         *  Original outbound state, null for inbound.
+         * Original outbound state, null for inbound.
          * @return the handshake state
          */
         public HandshakeState getHandshakeState() {
@@ -1477,7 +1477,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         *  NOT updated for inbound except for NSR and first ES tag used
+         * NOT updated for inbound except for NSR and first ES tag used
          * @return the last used date
          */
         public long getLastUsedDate() {
@@ -1594,7 +1594,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         *  Number of tags remaining in acked tag sets.
+         * Number of tags remaining in acked tag sets.
          *
          * @return the total number of tags in acked RatchetTagSets
          */

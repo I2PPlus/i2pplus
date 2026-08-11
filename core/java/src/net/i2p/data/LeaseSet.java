@@ -177,7 +177,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  Destination for this leaseset.
+     * Destination for this leaseset.
      *
      * @throws IllegalStateException if already signed
      */
@@ -189,7 +189,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     * Encryption public key.
+     *  Encryption public key.
      *  @return the encryption public key
      */
     public PublicKey getEncryptionKey() {
@@ -212,7 +212,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  Encryption public key for this leaseset.
+     * Encryption public key for this leaseset.
      *
      * @throws IllegalStateException if already signed
      */
@@ -258,7 +258,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  Adds a lease to this leaseset.
+     * Adds a lease to this leaseset.
      *
      * @throws IllegalStateException if already signed
      */

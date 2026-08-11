@@ -261,7 +261,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  Apache Harmony JVM, or Android
+     * Apache Harmony JVM, or Android
      * @return whether apache
      */
     public static boolean isApache() {
@@ -269,7 +269,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  Gij or JamVM with GNU Classpath
+     * Gij or JamVM with GNU Classpath
      * @return whether g n u
      */
     public static boolean isGNU() {
@@ -277,7 +277,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  True if Gentoo.
+     * True if Gentoo.
      *
      * @return whether gentoo
      * @since 0.9.23
@@ -287,7 +287,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  True if OpenJDK.
+     * True if OpenJDK.
      *
      * @return whether open j d k
      * @since 0.9.26
@@ -297,7 +297,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  Speed: do not cripple down for powerful ARM
+     * Speed: do not cripple down for powerful ARM
      *
      * @return whether a r m
      * @since 0.9.8
@@ -307,7 +307,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  True if x86.
+     * True if x86.
      *
      * @return whether x86
      * @since 0.9.14
@@ -317,7 +317,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  Is this a very slow interpreted mode VM?
+     * Is this a very slow interpreted mode VM?
      *
      * @return whether zero v m
      * @since 0.9.38
@@ -327,8 +327,8 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  Our best guess on whether this is a slow architecture / OS / JVM,
-     *  using some simple heuristics.
+     * Our best guess on whether this is a slow architecture / OS / JVM,
+     * using some simple heuristics.
      *
      * @return whether slow
      * @since 0.9.30
@@ -619,8 +619,8 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  Is the wrapper present?
-     *  Same as I2PAppContext.hasWrapper()
+     * Is the wrapper present?
+     * Same as I2PAppContext.hasWrapper()
      * @return whether wrapper is present
      */
     public static boolean hasWrapper() {
@@ -628,7 +628,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  Runtime.getRuntime().maxMemory() but check for bogus values
+     * Runtime.getRuntime().maxMemory() but check for bogus values
      *
      * @return the max memory
      * @since 0.9.8

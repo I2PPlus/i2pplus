@@ -79,7 +79,7 @@ public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable 
     }
 
     /**
-     * Return the base (generator) point.
+     *  Return the base (generator) point.
      *
      *  @return the base (generator)
      */

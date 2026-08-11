@@ -613,9 +613,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  This is only used by StatisticsManager to publish the count if we are floodfill.
-     *  So to hide a clue that a popular eepsite is hosted on a floodfill router,
-     *  only count leasesets that are "received as published", as of 0.7.14
+     * This is only used by StatisticsManager to publish the count if we are floodfill.
+     * So to hide a clue that a popular eepsite is hosted on a floodfill router,
+     * only count leasesets that are "received as published", as of 0.7.14
      * @return the known lease sets
      */
     @Override

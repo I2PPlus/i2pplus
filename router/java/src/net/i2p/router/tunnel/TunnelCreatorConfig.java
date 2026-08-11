@@ -124,9 +124,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     *  How many hops are there in the tunnel?
-     *  INCLUDING US.
-     *  i.e. one more than the TunnelCreatorConfig length.
+     * How many hops are there in the tunnel?
+     * INCLUDING US.
+     * i.e. one more than the TunnelCreatorConfig length.
      * @return the length
      */
     public int getLength() {return _config.length;}
@@ -281,7 +281,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public synchronized long getVerifiedBytesTransferred() {return _verifiedBytesTransferred;}
 
     /**
-     *  When we last sent or received data on this tunnel
+     * When we last sent or received data on this tunnel
      * @return the last transferred
      */
     public synchronized long getLastTransferred() { return _lastTransferredTime; }
@@ -425,7 +425,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public byte[] getAESReplyIV(int hop) {return _AESReplyIVs[hop];}
 
     /**
-     *  Checksum for blank record
+     * Checksum for blank record
      * @return the blank hash
      * @since 0.9.48
      */
@@ -586,7 +586,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     *  Is it an ECIES hop?
+     * Is it an ECIES hop?
      * @return whether e c
      * @since 0.9.48
      */
@@ -596,7 +596,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     *  The ECIES reply key for the given hop, or null.
+     * The ECIES reply key for the given hop, or null.
      * @return the cha cha reply key
      * @since 0.9.48
      */
@@ -606,7 +606,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     *  The ECIES reply associated data for the given hop, or null.
+     * The ECIES reply associated data for the given hop, or null.
      * @return the cha cha reply a d
      * @since 0.9.48
      */

@@ -227,8 +227,8 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  The included session key or null if unset.
-     *  If non-null, either getReplyTag() or getRatchetReplyTag() is non-null.
+     * The included session key or null if unset.
+     * If non-null, either getReplyTag() or getRatchetReplyTag() is non-null.
      *
      * @return the reply key
      * @since 0.9.7
@@ -236,7 +236,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     public SessionKey getReplyKey() { return _replyKey; }
 
     /**
-     *  The included session tag or null if unset.
+     * The included session tag or null if unset.
      *
      * @return the reply tag
      * @since 0.9.7
@@ -260,7 +260,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  The included session tag or null if unset.
+     * The included session tag or null if unset.
      *
      * @return the ratchet reply tag
      * @since 0.9.46
@@ -284,8 +284,8 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  The included session key or null if unset.
-     *  Preliminary, not fully supported, see proposal 154.
+     * The included session key or null if unset.
+     * Preliminary, not fully supported, see proposal 154.
      *
      * @return the ratchet public key
      * @since 0.9.46

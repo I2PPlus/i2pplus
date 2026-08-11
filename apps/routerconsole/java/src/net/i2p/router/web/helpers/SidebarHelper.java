@@ -758,7 +758,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     *  Format the current bandwidth rates for display.
+     *    Format the current bandwidth rates for display.
      *
      *    @return "x.xx / y.yy {K|M}"
      */
@@ -772,7 +772,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     *  Format the 5-minute average bandwidth rates for display.
+     *    Format the 5-minute average bandwidth rates for display.
      *
      *    @return "x.xx / y.yy {K|M}"
      */
@@ -798,7 +798,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     *  Format the lifetime average bandwidth rates for display.
+     *    Format the lifetime average bandwidth rates for display.
      *
      *    @return "x.xx / y.yy {K|M}"
      */
@@ -1368,9 +1368,9 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     *  The update status and buttons
+     * The update status and buttons
      * @return the update status
-     *  @since 0.8.13 moved from SidebarRenderer
+     * @since 0.8.13 moved from SidebarRenderer
      */
     public String getUpdateStatus() {
         StringBuilder buf = new StringBuilder(512);
@@ -1523,9 +1523,9 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     *  The restart status and buttons
+     * The restart status and buttons
      * @return the restart status
-     *  @since 0.8.13 moved from SidebarRenderer
+     * @since 0.8.13 moved from SidebarRenderer
      */
     public String getRestartStatus() {
         String nextNonce = null;
@@ -1539,9 +1539,9 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     *  The firewall status and reseed status/buttons
+     * The firewall status and reseed status/buttons
      * @return the firewall and reseed status
-     *  @since 0.9 moved from SidebarRenderer
+     * @since 0.9 moved from SidebarRenderer
      */
     public String getFirewallAndReseedStatus() {
         StringBuilder buf = new StringBuilder(256);
@@ -1719,7 +1719,7 @@ public class SidebarHelper extends HelperBase {
     public void setRequest(HttpServletRequest s) {_request = s;}
 
     /**
-     *  Return the request URI, or /home as default.
+     * Return the request URI, or /home as default.
      *
      * @return non-null; "/home" if (strangely) not set by jsp
      */

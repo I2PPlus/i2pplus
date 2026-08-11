@@ -957,15 +957,15 @@ class Connection {
     public boolean isInbound() {return _isInbound;}
 
     /**
-     *  Always true at the start, even if we haven't gotten a reply on an
-     *  outbound connection. Only set to false on disconnect.
-     *  For outbound, use getHighestAckedThrough() &gt;= 0 also,
-     *  to determine if the connection is up.
+     * Always true at the start, even if we haven't gotten a reply on an
+     * outbound connection. Only set to false on disconnect.
+     * For outbound, use getHighestAckedThrough() &gt;= 0 also,
+     * to determine if the connection is up.
      *
-     *  In general, this is true until either:
-     *  - CLOSE received and CLOSE sent and our CLOSE is acked
-     *  - RESET received or sent
-     *  - closed on the socket side
+     * In general, this is true until either:
+     * - CLOSE received and CLOSE sent and our CLOSE is acked
+     * - RESET received or sent
+     * - closed on the socket side
      * @return the is connected
      */
     public boolean getIsConnected() {return _connected.get();}
@@ -1302,7 +1302,7 @@ class Connection {
     public void setSocket(I2PSocketFull socket) {_socket = socket;}
 
     /**
-     * The remote port.
+     *  The remote port.
      *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
      *  @since 0.8.9
      */

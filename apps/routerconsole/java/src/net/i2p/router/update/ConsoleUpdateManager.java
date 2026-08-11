@@ -97,7 +97,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private static final boolean DEFAULT_ENABLE_TORRENT_UPDATES = false;
 
     /**
-     * Ignored.
+     *  Ignored.
      *  @param args ignored
      */
     public ConsoleUpdateManager(RouterContext ctx, ClientAppManager listener, String[] args) {
@@ -118,7 +118,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     * Null if not found.
+     *  Null if not found.
      *  @return null if not found
      */
     public static ConsoleUpdateManager getInstance() {
@@ -423,22 +423,22 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Is any download in progress?
-     *  Does not include checks.
+     * Is any download in progress?
+     * Does not include checks.
      * @return whether update in progress
      */
     @Override
     public boolean isUpdateInProgress() {return !_downloaders.isEmpty();}
 
     /**
-     *  Is a download in progress?
+     * Is a download in progress?
      * @return whether update in progress
      */
     @Override
     public boolean isUpdateInProgress(UpdateType type) {return isUpdateInProgress(type, "");}
 
     /**
-     *  Is a download in progress?
+     * Is a download in progress?
      * @return whether update in progress
      */
     @Override
@@ -476,20 +476,20 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Is any check in progress?
-     *  Does not include updates.
+     * Is any check in progress?
+     * Does not include updates.
      * @return whether check in progress
      */
     public boolean isCheckInProgress() {return !_activeCheckers.isEmpty();}
 
     /**
-     *  Is a check in progress?
+     * Is a check in progress?
      * @return whether check in progress
      */
     public boolean isCheckInProgress(UpdateType type) {return isCheckInProgress(type, "");}
 
     /**
-     *  Is a check in progress?
+     * Is a check in progress?
      * @return whether check in progress
      */
     public boolean isCheckInProgress(UpdateType type, String id) {
@@ -528,11 +528,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  A router update had been downloaded and handled by an UpdatePostProcessor.
-     *  It will provide wrapper-like function to install the update and restart after shutdown.
+     * A router update had been downloaded and handled by an UpdatePostProcessor.
+     * It will provide wrapper-like function to install the update and restart after shutdown.
      *
      * @return whether external restart pending
-     *  @since 0.9.51
+     * @since 0.9.51
      */
     public boolean isExternalRestartPending() {return _externalRestartPending;}
 
@@ -1004,7 +1004,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     * May be null.
+     *  May be null.
      *  @param task may be null
      */
     @Override
@@ -1411,7 +1411,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     * Success.
+     *  Success.
      *  @return success
      */
     private boolean handlePluginFile(URI uri, String actualVersion, File sudFile) {return false;} //handled elsewhere?

@@ -207,7 +207,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     *  As of 0.9.49, includes packet overhead
+     * As of 0.9.49, includes packet overhead
      * @return the unacked size
      */
     public synchronized int getUnackedSize() {
@@ -249,7 +249,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     *  Is any fragment unsent?
+     * Is any fragment unsent?
      *
      * @return whether unsent fragments is present
      * @since 0.9.49
@@ -267,9 +267,9 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     *  The min send count of unacked fragments.
-     *  Only call if not complete and _numFragments greater than 1.
-     *  Caller must synch.
+     * The min send count of unacked fragments.
+     * Only call if not complete and _numFragments greater than 1.
+     * Caller must synch.
      *
      * @return the min send count
      * @since 0.9.49
@@ -420,15 +420,15 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     *  The max number of sends for any fragment.
-     *  As of 0.9.49, may be less than getPushCount() if we pushed only some fragments
+     * The max number of sends for any fragment.
+     * As of 0.9.49, may be less than getPushCount() if we pushed only some fragments
      * @return the max sends
      */
     public synchronized int getMaxSends() { return _maxSends; }
 
     /**
-     *  The number of times we've pushed some fragments.
-     *  As of 0.9.49, may be greater than getMaxSends() if we pushed only some fragments.
+     * The number of times we've pushed some fragments.
+     * As of 0.9.49, may be greater than getMaxSends() if we pushed only some fragments.
      * @return the push count
      */
     public synchronized int getPushCount() { return _pushCount; }
@@ -580,7 +580,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     *  For CDQ
+     * For CDQ
      * @return the enqueue time
      * @since 0.9.3
      */
@@ -608,7 +608,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     *  For CDPQ
+     * For CDPQ
      * @return the seq num
      * @since 0.9.3
      */

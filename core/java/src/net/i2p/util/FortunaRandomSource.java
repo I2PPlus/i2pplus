@@ -34,7 +34,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     private boolean _haveNextGaussian;
 
     /**
-     *  May block up to 10 seconds or forever
+     * May block up to 10 seconds or forever
      * @param context the context
      */
     public FortunaRandomSource(I2PAppContext context) {

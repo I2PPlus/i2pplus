@@ -114,11 +114,11 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     public static final String PROP_USE_SSL = I2PTunnelServer.PROP_USE_SSL;
 
     /**
-     * This constructor is used to add a client to an existing socket manager.
-     * <p>
-     * As of 0.9.21 this does NOT open the local socket. You MUST call
-     * {@link #startRunning()} for that. The local socket will be opened
-     * immediately (ignoring the <code>i2cp.delayOpen</code> option).
+     *  This constructor is used to add a client to an existing socket manager.
+     *  <p>
+     *  As of 0.9.21 this does NOT open the local socket. You MUST call
+     *  {@link #startRunning()} for that. The local socket will be opened
+     *  immediately (ignoring the <code>i2cp.delayOpen</code> option).
      *
      *  @param localPort if 0, use any port, get actual port selected with getLocalPort()
      *  @param l the logging instance
@@ -269,11 +269,11 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
-     *  Returns the I2PSocketManager for this task.
-     *  For non-shared clients returns the instance socket manager.
-     *  For shared clients returns the shared static socket manager.
+     * Returns the I2PSocketManager for this task.
+     * For non-shared clients returns the instance socket manager.
+     * For shared clients returns the shared static socket manager.
      * @return the socket manager
-     *  @since 0.9.63
+     * @since 0.9.63
      */
     @Override
     public I2PSocketManager getSocketManager() {

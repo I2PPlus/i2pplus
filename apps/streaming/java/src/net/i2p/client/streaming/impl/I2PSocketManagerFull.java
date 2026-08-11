@@ -237,16 +237,16 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     *  Create a copy of the current options, to be used in a setDefaultOptions() call.
+     * Create a copy of the current options, to be used in a setDefaultOptions() call.
      *
      * @return a copy of the current default options
      */
     public I2PSocketOptions buildOptions() { return buildOptions(null); }
 
     /**
-     *  Create a modified copy of the current options, to be used in a setDefaultOptions() call.
+     * Create a modified copy of the current options, to be used in a setDefaultOptions() call.
      *
-     *  As of 0.9.19, defaults in opts are honored.
+     * As of 0.9.19, defaults in opts are honored.
      *
      * @param opts The new options, may be null
      * @return a new options object with the specified modifications
@@ -507,9 +507,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     *  Current options, not a copy, setters may be used to make changes.
+     * Current options, not a copy, setters may be used to make changes.
      *
-     *  TODO There is no facility to specify the session.
+     * TODO There is no facility to specify the session.
      * @return the default options
      */
     public I2PSocketOptions getDefaultOptions() {
@@ -532,10 +532,10 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     *  Like getServerSocket but returns a real ServerSocket for easier porting of apps.
+     * Like getServerSocket but returns a real ServerSocket for easier porting of apps.
      *
-     *  This only listens on the primary session. There is no way to get
-     *  incoming connections on a subsession.
+     * This only listens on the primary session. There is no way to get
+     * incoming connections on a subsession.
      *
      * @return the standard server socket
      * @since 0.8.4
@@ -785,7 +785,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     *  For logging / diagnostics only
+     * For logging / diagnostics only
      * @return the name
      */
     public String getName() { return _name; }

@@ -976,8 +976,8 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
-     *  Paired pool (opposite direction) for IB/OB balance comparison.
-     *  Handles both client pools (by destination) and exploratory pools (by pool reference).
+     * Paired pool (opposite direction) for IB/OB balance comparison.
+     * Handles both client pools (by destination) and exploratory pools (by pool reference).
      * @return the paired pool
      */
     private static TunnelPool getPairedPool(TunnelPool pool) {

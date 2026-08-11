@@ -1151,7 +1151,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
 
         /**
-         *  For inbound: when the TagSet will expire; for outbound: creation time
+         * For inbound: when the TagSet will expire; for outbound: creation time
          * @return the date
          */
         public long getDate() {
@@ -1205,7 +1205,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         public void setAcked() { _acked = true; }
 
         /**
-         *  For outbound only.
+         * For outbound only.
          * @return the acked
          */
         public boolean getAcked() { return _acked; }

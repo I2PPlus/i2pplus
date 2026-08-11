@@ -95,9 +95,9 @@ class StoreState {
     }
 
     /**
-     *  The peers attempted OR skipped.
-     *  DOES include skipped peers.
-     *  Use getAttemptedCount for the number of attempts.
+     * The peers attempted OR skipped.
+     * DOES include skipped peers.
+     * Use getAttemptedCount for the number of attempts.
      * @return the attempted
      */
     public Set<Hash> getAttempted() {
@@ -107,9 +107,9 @@ class StoreState {
     }
 
     /**
-     *  The number of peers attempted.
-     *  Does not include skipped peers.
-     *  Do not use getAttempted().size() as that does include skipped peers.
+     * The number of peers attempted.
+     * Does not include skipped peers.
+     * Do not use getAttempted().size() as that does include skipped peers.
      *
      * @return the attempted count
      * @since 0.9.53
@@ -121,8 +121,8 @@ class StoreState {
     }
 
     /**
-     *  Return a successful peer (a random one if more than one was successful)
-     *  or null.
+     * Return a successful peer (a random one if more than one was successful)
+     * or null.
      *
      * @return the successful
      * @since 0.9.53 formerly returned a copy of the Set

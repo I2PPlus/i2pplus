@@ -36,7 +36,7 @@ class SubSession extends I2PSessionMuxedImpl {
     private final I2PSessionMuxedImpl _primary;
 
     /**
-     * Must be a I2PSessionMuxedImpl.
+     *  Must be a I2PSessionMuxedImpl.
      *  @param primary must be a I2PSessionMuxedImpl
      *  @param destKeyStream location from which to read keys
      *  @param options session options
@@ -145,8 +145,8 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     *  Has the session been closed (or not yet connected)?
-     *  False when open and during transitions.
+     * Has the session been closed (or not yet connected)?
+     * False when open and during transitions.
      * @return whether closed
      */
     @Override

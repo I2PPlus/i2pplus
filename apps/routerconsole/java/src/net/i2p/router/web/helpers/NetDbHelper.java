@@ -379,9 +379,9 @@ public class NetDbHelper extends FormHandler {
     }
 
     /**
-     *  Get a session-bound nonce for forms in this page.
+     * Get a session-bound nonce for forms in this page.
      * @return the nonce
-     *  @since 0.9.38
+     * @since 0.9.38
      */
     private String getNonce() {
         return CSSHelper.getNonce(_session);
@@ -493,10 +493,10 @@ public class NetDbHelper extends FormHandler {
     }
 
     /**
-     *  Return the currently selected NetDb tab index.
+     * Return the currently selected NetDb tab index.
      *
      * @return the tab
-     *  @since 0.9.1
+     * @since 0.9.1
      */
     private int getTab() {
         if (_debug) {return 6;}

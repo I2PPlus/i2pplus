@@ -96,7 +96,7 @@ public class FrequencyStat {
     }
 
     /**
-     *  Lifetime event count.
+     * Lifetime event count.
      *
      * @return lifetime event count
      * @since 0.8.2
@@ -107,7 +107,7 @@ public class FrequencyStat {
     }
 
     /**
-     *  Lifetime average frequency.
+     * Lifetime average frequency.
      *
      * @return lifetime average frequency in millisedonds, i.e. the average time between events, or Long.MAX_VALUE if no events ever
      * @since 0.8.2

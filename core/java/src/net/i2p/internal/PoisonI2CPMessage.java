@@ -50,7 +50,7 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Type of this message.
+     * Type of this message.
      *
      * @return the type
      */
@@ -60,7 +60,7 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Hash code for this message.
+     * Hash code for this message.
      *
      * @return whether h code is present
      */

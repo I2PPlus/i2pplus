@@ -225,8 +225,8 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     }
 
     /**
-     *  The raw header consists of a one-byte type and a 4-byte expiration in seconds only.
-     *  Used by SSU only!
+     * The raw header consists of a one-byte type and a 4-byte expiration in seconds only.
+     * Used by SSU only!
      * @return the raw message size
      */
     public synchronized int getRawMessageSize() {

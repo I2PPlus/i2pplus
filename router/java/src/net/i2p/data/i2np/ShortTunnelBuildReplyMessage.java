@@ -44,7 +44,7 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     protected int calculateWrittenLength() { return 0; }
 
     /**
-     *  I2NP message type of a short tunnel build reply, never sent.
+     * I2NP message type of a short tunnel build reply, never sent.
      * @return the type
      */
     @Override

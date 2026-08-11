@@ -239,10 +239,10 @@ public class I2PSocketEepGet extends EepGet {
     }
 
     /**
-     *  Guess we have to override this since
-     *  super doesn't strip the http://host from the GET line
-     *  which hoses some servers (opentracker)
-     *  HTTP proxy was kind enough to do this for us
+     * Guess we have to override this since
+     * super doesn't strip the http://host from the GET line
+     * which hoses some servers (opentracker)
+     * HTTP proxy was kind enough to do this for us
      * @return the request
      */
     @Override

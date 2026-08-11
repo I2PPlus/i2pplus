@@ -179,8 +179,8 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Detect system settings and log warnings.
-     *  ref: https://docs.oracle.com/javase/8/docs/api/java/net/doc-files/net-properties.html
+     * Detect system settings and log warnings.
+     * ref: https://docs.oracle.com/javase/8/docs/api/java/net/doc-files/net-properties.html
      *
      * @return whether proxied
      * @since 0.9.47
@@ -860,7 +860,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * Port configuration for transport protocols.
+     *  Port configuration for transport protocols.
      *  @since IPv6
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingTypeName")

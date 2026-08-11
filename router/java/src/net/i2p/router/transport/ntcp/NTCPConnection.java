@@ -243,9 +243,9 @@ public class NTCPConnection implements Closeable {
     private byte[] _sendSipIV;
 
     /**
-     * Create an inbound connected (though not established) NTCP connection.
-     * Caller MUST call transport.establishing(this) after construction.
-     * Caller MUST key.attach(this) after construction.
+     *  Create an inbound connected (though not established) NTCP connection.
+     *  Caller MUST call transport.establishing(this) after construction.
+     *  Caller MUST key.attach(this) after construction.
      *  @param ctx the router context
      *  @param transport the NTCP transport
      *  @param chan the socket channel
@@ -340,7 +340,7 @@ public class NTCPConnection implements Closeable {
     public void setChannel(SocketChannel chan) { _chan = chan; }
 
     /**
-     *  Selection key for this connection.
+     * Selection key for this connection.
      * @param key the key
      */
     public void setKey(SelectionKey key) { _conKey = key; }
@@ -426,7 +426,7 @@ public class NTCPConnection implements Closeable {
     public void setRemotePeer(RouterIdentity ident) { _remotePeer = ident; }
 
     /**
-     * A positive number means our clock is ahead of theirs.
+     *  A positive number means our clock is ahead of theirs.
      *  @return seconds
      */
     public long getClockSkew() { return _clockSkew; }

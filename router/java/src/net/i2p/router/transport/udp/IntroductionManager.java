@@ -127,8 +127,8 @@ class IntroductionManager {
     }
 
     /**
-     *  Is this inbound tag currently valid,
-     *  i.e. is the peer still connected?
+     * Is this inbound tag currently valid,
+     * i.e. is the peer still connected?
      *
      * @return whether inbound tag valid
      * @since 0.9.50
@@ -958,7 +958,7 @@ class IntroductionManager {
 
 
     /**
-     *  Are IP and port valid?
+     * Are IP and port valid?
      * @return whether valid
      * @since 0.9.50
      */

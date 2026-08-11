@@ -111,7 +111,7 @@ abstract class SOCKSServer {
 
     /**
      * @return whether use outproxy plugin
-     *  @since 0.9.27
+     * @since 0.9.27
      */
     private boolean shouldUseOutproxyPlugin() {
         return Boolean.parseBoolean(props.getProperty(I2PTunnelHTTPClientBase.PROP_USE_OUTPROXY_PLUGIN, "true"));

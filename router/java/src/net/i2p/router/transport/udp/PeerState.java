@@ -845,8 +845,8 @@ public class PeerState {
     public int getVersion() {return 1;}
 
     /**
-     *  Change the remote port.
-     *  Caller should sync; UDPTransport must remove and add to peersByRemoteHost map
+     * Change the remote port.
+     * Caller should sync; UDPTransport must remove and add to peersByRemoteHost map
      *
      * @param newPort the new port number
      * @since 0.9.3
@@ -876,18 +876,18 @@ public class PeerState {
     public long getKeyEstablishedTime() {return _keyEstablishedTime;}
 
     /**
-     *  Clock skew.
-     *  How far off is the remote peer from our clock, in milliseconds?
-     *  A positive number means our clock is ahead of theirs.
+     * Clock skew.
+     * How far off is the remote peer from our clock, in milliseconds?
+     * A positive number means our clock is ahead of theirs.
      *
      * @return the clock skew in ms
      */
     public long getClockSkew() {return _clockSkew;}
 
     /**
-     *  Last send time.
-     *  When did we last send them a packet?
-     *  Updated for data, relay, and peer test, but not acks, pings, or termination
+     * Last send time.
+     * When did we last send them a packet?
+     * Updated for data, relay, and peer test, but not acks, pings, or termination
      *
      * @return the last send time
      */
@@ -897,9 +897,9 @@ public class PeerState {
     public long getLastSendFullyTime() {return _lastSendFullyTime;}
 
     /**
-     *  Last receive time.
-     *  When did we last receive a packet from them?
-     *  Updated for data, relay, and peer test, but not acks, pings, or termination
+     * Last receive time.
+     * When did we last receive a packet from them?
+     * Updated for data, relay, and peer test, but not acks, pings, or termination
      *
      * @return the last receive time
      */
@@ -909,10 +909,10 @@ public class PeerState {
     public int getConsecutiveFailedSends() {return _consecutiveFailedSends;}
 
     /**
-     *  Send window bytes.
-     *  How many bytes should we send to the peer in a second.
-     *  1st stat in CWND column, otherwise unused,
-     *  candidate for removal.
+     * Send window bytes.
+     * How many bytes should we send to the peer in a second.
+     * 1st stat in CWND column, otherwise unused,
+     * candidate for removal.
      *
      * @return the send window bytes
      */
@@ -929,7 +929,7 @@ public class PeerState {
     public byte[] getRemoteIP() {return _remoteIP;}
 
     /**
-     * Cached remote IP address.
+     *  Cached remote IP address.
      *
      *  @return may be null if IP is invalid
      */
@@ -970,10 +970,10 @@ public class PeerState {
     public int getMTU() {return _mtu;}
 
     /**
-     *  Receive MTU estimate.
-     *  Estimate how large the other side's MTU is.
-     *  This could be wrong.
-     *  It is used only for the HTML status.
+     * Receive MTU estimate.
+     * Estimate how large the other side's MTU is.
+     * This could be wrong.
+     * It is used only for the HTML status.
      * @return the receive m t u
      */
     public int getReceiveMTU() {return _mtuReceive;}
@@ -1129,16 +1129,16 @@ public class PeerState {
     void setTheyRelayToUsAs(long tag) {_theyRelayToUsAs = tag;}
 
     /**
-     *  Slow start threshold.
-     *  Stat in SST column, otherwise unused - candidate for removal
+     * Slow start threshold.
+     * Stat in SST column, otherwise unused - candidate for removal
      *
      * @return the slow start threshold
      */
     public int getSlowStartThreshold() {return _slowStartThreshold;}
 
     /**
-     *  Concurrent sends count.
-     *  2nd stat in CWND column, otherwise unused - candidate for removal
+     * Concurrent sends count.
+     * 2nd stat in CWND column, otherwise unused - candidate for removal
      *
      * @return the concurrent sends count
      */
@@ -1147,9 +1147,9 @@ public class PeerState {
     }
 
     /**
-     *  Concurrent send window.
-     *  3rd stat in CWND column, otherwise unused,
-     *  candidate for removal
+     * Concurrent send window.
+     * 3rd stat in CWND column, otherwise unused,
+     * candidate for removal
      *
      * @return the concurrent send window
      */
@@ -1158,8 +1158,8 @@ public class PeerState {
     }
 
     /**
-     *  Consecutive send rejections count.
-     *  4th stat in CWND column, otherwise unused - candidate for removal
+     * Consecutive send rejections count.
+     * 4th stat in CWND column, otherwise unused - candidate for removal
      *
      * @return the consecutive send rejections count
      */
@@ -1538,8 +1538,8 @@ public class PeerState {
     public int getRTTDeviation() {return _rttDeviation;}
 
     /**
-     *  I2NP messages sent - does not include duplicates.
-     *  As of 0.9.24, incremented when bandwidth is allocated just before sending, not when acked.
+     * I2NP messages sent - does not include duplicates.
+     * As of 0.9.24, incremented when bandwidth is allocated just before sending, not when acked.
      *
      * @return the messages sent count
      */
@@ -1548,8 +1548,8 @@ public class PeerState {
      }
 
     /**
-     *  I2NP messages received.
-     *  As of 0.9.24, does not include duplicates.
+     * I2NP messages received.
+     * As of 0.9.24, does not include duplicates.
      *
      * @return the messages received count
      */
@@ -1586,7 +1586,7 @@ public class PeerState {
                                                   UDPPacket.MAC_SIZE + UDPPacket.IV_SIZE;
 
     /**
-     * Record a received packet.
+     *  Record a received packet.
      *
      *  @param size not including IP header, UDP header, MAC or IV
      */
@@ -1637,7 +1637,7 @@ public class PeerState {
     void clearWantedACKSendSince() {throw new UnsupportedOperationException();}
 
     /**
-     * Remote host ID.
+     *  Remote host ID.
      *
      *  @return non-null
      *  @since public since 0.9.57 for SSU2Sender interface only
@@ -1970,9 +1970,9 @@ public class PeerState {
     }
 
     /**
-     *  Transfer the basic activity/state from the old peer to the current peer
+     * Transfer the basic activity/state from the old peer to the current peer
      *
-     *  SSU 1 or 2.
+     * SSU 1 or 2.
      *
      * @param oldPeer non-null
      */

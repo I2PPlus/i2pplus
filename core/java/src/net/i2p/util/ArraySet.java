@@ -50,8 +50,8 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  A fixed capacity of max(MAX_CAPACITY, c.size())
-     *  Adds over capacity will throw a SetFullException.
+     * A fixed capacity of max(MAX_CAPACITY, c.size())
+     * Adds over capacity will throw a SetFullException.
      *
      * @param c the collection to copy
      * @since 0.9.55
@@ -61,8 +61,8 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  A fixed capacity of max(capacity, c.size())
-     *  Adds over capacity will throw a SetFullException.
+     * A fixed capacity of max(capacity, c.size())
+     * Adds over capacity will throw a SetFullException.
      *
      * @param c the collection to copy
      * @param capacity the maximum capacity
@@ -77,11 +77,11 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  A fixed capacity of max(MAX_CAPACITY, c.size()), which may be more than
-     *  the resulting set size if there are duplicates in c.
-     *  Adds over capacity will throw a SetFullException.
+     * A fixed capacity of max(MAX_CAPACITY, c.size()), which may be more than
+     * the resulting set size if there are duplicates in c.
+     * Adds over capacity will throw a SetFullException.
      *
-     *  Warning: O(n**2).
+     * Warning: O(n**2).
      *
      * @param c the collection to copy
      */
@@ -90,11 +90,11 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  A fixed capacity of max(capacity, c.size()), which may be more than
-     *  the resulting set size if there are duplicates in c.
-     *  Adds over capacity will throw a SetFullException.
+     * A fixed capacity of max(capacity, c.size()), which may be more than
+     * the resulting set size if there are duplicates in c.
+     * Adds over capacity will throw a SetFullException.
      *
-     *  Warning: O(n**2).
+     * Warning: O(n**2).
      *
      * @param c the collection to copy
      * @param capacity the maximum capacity
@@ -106,10 +106,10 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  A fixed capacity of arr.length.
-     *  Adds over capacity will throw a SetFullException.
-     *  arr must not contain duplicates, no checks are done.
-     *  arr may contain nulls but they must be at the end.
+     * A fixed capacity of arr.length.
+     * Adds over capacity will throw a SetFullException.
+     * arr must not contain duplicates, no checks are done.
+     * arr may contain nulls but they must be at the end.
      *
      * @param arr the array to copy
      * @since 0.9.58
@@ -125,7 +125,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  Adds over capacity will throw a SetFullException.
+     * Adds over capacity will throw a SetFullException.
      *
      * @param capacity the maximum size
      * @throws IllegalArgumentException if capacity less than 1.
@@ -135,12 +135,12 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  If throwOnFull is false,
-     *  adds over capacity will overwrite starting at slot zero.
-     *  This breaks the AbstractCollection invariant that
-     *  "a Collection will always contain the specified element after add() returns",
-     *  but it prevents unexpected exceptions.
-     *  If throwOnFull is true, adds over capacity will throw a SetFullException.
+     * If throwOnFull is false,
+     * adds over capacity will overwrite starting at slot zero.
+     * This breaks the AbstractCollection invariant that
+     * "a Collection will always contain the specified element after add() returns",
+     * but it prevents unexpected exceptions.
+     * If throwOnFull is true, adds over capacity will throw a SetFullException.
      *
      * @param capacity the maximum size
      * @param throwOnFull whether to throw on overflow
@@ -153,7 +153,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  Finds the index of the given object in the set.
+     * Finds the index of the given object in the set.
      *
      * @param o the object to find the index of
      * @return -1 if not found or if o is null
@@ -252,7 +252,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  Returns the element at the specified index.
+     * Returns the element at the specified index.
      *
      * @param index the index
      * @return the element at the specified index
@@ -266,8 +266,8 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  Supports remove.
-     *  Supports comodification checks.
+     * Supports remove.
+     * Supports comodification checks.
      *
      * @return an iterator over this set
      */

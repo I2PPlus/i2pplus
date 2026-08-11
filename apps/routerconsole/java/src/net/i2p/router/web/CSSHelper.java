@@ -197,10 +197,10 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     *  Get current CSRF nonce, rotating every 5 minutes.
-     *  Keeps 2 previous nonces for backward compatibility (multi-tab, slow clients).
+     * Get current CSRF nonce, rotating every 5 minutes.
+     * Keeps 2 previous nonces for backward compatibility (multi-tab, slow clients).
      * @return the nonce
-     *  @since 0.9.4
+     * @since 0.9.4
      */
     public static synchronized String getNonce() {
         if (_currentNonce == null) {
@@ -374,10 +374,10 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     *  Should we send X_Frame_Options=SAMEORIGIN
-     *  Default true
+     * Should we send X_Frame_Options=SAMEORIGIN
+     * Default true
      * @return whether send x frame
-     *  @since 0.9.1
+     * @since 0.9.1
      */
     public boolean shouldSendXFrame() {return !_context.getBooleanProperty(PROP_XFRAME);}
 

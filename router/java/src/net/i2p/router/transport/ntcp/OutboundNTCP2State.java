@@ -239,8 +239,8 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /**
-     *  Check if the connection is in a state where prepareOutbound() has already been called
-     *  to avoid duplicate calls that cause IllegalStateException
+     * Check if the connection is in a state where prepareOutbound() has already been called
+     * to avoid duplicate calls that cause IllegalStateException
      * @return whether prepare outbound called
      */
     public boolean isPrepareOutboundCalled() {

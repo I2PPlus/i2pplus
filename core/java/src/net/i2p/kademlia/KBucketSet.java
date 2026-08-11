@@ -119,7 +119,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     * Try to acquire the read lock without blocking.
+     *  Try to acquire the read lock without blocking.
      *
      *  @return true if the lock was acquired
      */
@@ -195,9 +195,9 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  No lock required.
-     *  FIXME will split the closest buckets too far if B &gt; 1 and K &lt; 2**B
-     *  Won't ever really happen and if it does it still works.
+     * No lock required.
+     * FIXME will split the closest buckets too far if B &gt; 1 and K &lt; 2**B
+     * Won't ever really happen and if it does it still works.
      * @return whether split
      */
     private boolean shouldSplit(KBucket<T> b) {
@@ -344,7 +344,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     * Return all entries in all buckets.
+     *  Return all entries in all buckets.
      *
      *  @return a copy in a new set
      */

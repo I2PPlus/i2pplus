@@ -31,7 +31,7 @@ import net.i2p.data.Destination;
 public interface I2PSocketManager {
 
     /**
-     * The I2P session associated with this manager.
+     *  The I2P session associated with this manager.
      *
      *  @return the session, non-null
      */
@@ -51,7 +51,7 @@ public interface I2PSocketManager {
     public I2PSession addSubsession(InputStream privateKeyStream, Properties opts) throws I2PSessionException;
 
     /**
-     * Remove a subsession.
+     *  Remove a subsession.
      *
      *  @param session the subsession to remove
      *  @since 0.9.21
@@ -59,7 +59,7 @@ public interface I2PSocketManager {
     public void removeSubsession(I2PSession session);
 
     /**
-     * All subsessions of the primary session.
+     *  All subsessions of the primary session.
      *
      *  @return a list of subsessions, non-null, does not include the primary session
      *  @since 0.9.21
@@ -228,7 +228,7 @@ public interface I2PSocketManager {
     public String getName();
 
     /**
-     *  For logging / diagnostics only
+     * For logging / diagnostics only
      *
      * @param name the name
      */

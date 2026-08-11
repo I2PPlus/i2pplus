@@ -76,8 +76,8 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     *  The Date object is created here, it is not cached.
-     *  Use getExpirationTime() if you only need the long value.
+     * The Date object is created here, it is not cached.
+     * Use getExpirationTime() if you only need the long value.
      * @return the expiration
      */
     public Date getExpiration() {
@@ -85,7 +85,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     *  Use this instead of getExpiration().getTime()
+     * Use this instead of getExpiration().getTime()
      *
      * @return the expiration time
      * @since 0.8.4
@@ -102,7 +102,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     *  Message expiration time in ms.
+     * Message expiration time in ms.
      *
      * @since 0.8.4
      */
@@ -111,7 +111,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     *  Message flags.
+     * Message flags.
      *
      * @return the flags
      * @since 0.8.4
@@ -121,7 +121,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     *  Message flags.
+     * Message flags.
      *
      * @since 0.8.4
      */

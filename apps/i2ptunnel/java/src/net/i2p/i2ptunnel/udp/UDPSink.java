@@ -89,7 +89,7 @@ public class UDPSink implements Sink {
     }
 
     /**
-     *  Closes the underlying DatagramSocket.
+     * Closes the underlying DatagramSocket.
      *
      * @since 0.9.53
      */

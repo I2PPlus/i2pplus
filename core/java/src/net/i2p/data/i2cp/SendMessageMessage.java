@@ -136,7 +136,7 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Message nonce.
+     * Message nonce.
      *
      * @return 0 to 0xffffffff
      */

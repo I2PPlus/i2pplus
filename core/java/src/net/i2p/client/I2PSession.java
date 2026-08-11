@@ -299,7 +299,7 @@ public interface I2PSession {
 
     /** Instruct the I2PSession where it should send event notifications
      *
-     *  WARNING: It is recommended that you use a method that specifies the protocol and ports.
+     * WARNING: It is recommended that you use a method that specifies the protocol and ports.
      *
      * @param lsnr listener to retrieve events
      */

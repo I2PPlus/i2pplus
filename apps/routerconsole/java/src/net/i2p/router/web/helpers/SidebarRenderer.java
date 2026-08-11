@@ -1185,12 +1185,12 @@ class SidebarRenderer {
     }
 
     /**
-     *  Return data-rx and data-tx attributes for the dual-baseline canvas minigraph.
-     *  Uses the live bandwidth ring buffer when available (≥ 400 samples), falling
-     *  back to 1-min RRD averages + live BPS. Inbound renders in the top half
-     *  (inverted), outbound in the bottom half.
+     * Return data-rx and data-tx attributes for the dual-baseline canvas minigraph.
+     * Uses the live bandwidth ring buffer when available (≥ 400 samples), falling
+     * back to 1-min RRD averages + live BPS. Inbound renders in the top half
+     * (inverted), outbound in the bottom half.
      * @return the data attributes
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private String getDataAttributes() {
         try {

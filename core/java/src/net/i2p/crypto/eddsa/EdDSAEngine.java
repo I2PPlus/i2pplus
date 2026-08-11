@@ -290,14 +290,14 @@ public class EdDSAEngine extends Signature {
     }
 
     /**
-     *  To efficiently sign all the data in one shot, if it is available,
-     *  use this method, which will avoid copying the data.
+     * To efficiently sign all the data in one shot, if it is available,
+     * use this method, which will avoid copying the data.
      *
-     *  Same as:
+     * Same as:
      *<pre>
-     *  setParameter(ONE_SHOT_MODE)
-     *  update(data)
-     *  sig = sign()
+     * setParameter(ONE_SHOT_MODE)
+     * update(data)
+     * sig = sign()
      *</pre>
      *
      * @param data the message to be signed
@@ -311,14 +311,14 @@ public class EdDSAEngine extends Signature {
     }
 
     /**
-     *  To efficiently sign all the data in one shot, if it is available,
-     *  use this method, which will avoid copying the data.
+     * To efficiently sign all the data in one shot, if it is available,
+     * use this method, which will avoid copying the data.
      *
-     *  Same as:
+     * Same as:
      *<pre>
-     *  setParameter(ONE_SHOT_MODE)
-     *  update(data, off, len)
-     *  sig = sign()
+     * setParameter(ONE_SHOT_MODE)
+     * update(data, off, len)
+     * sig = sign()
      *</pre>
      *
      * @param data byte array containing the message to be signed
@@ -336,14 +336,14 @@ public class EdDSAEngine extends Signature {
     }
 
     /**
-     *  To efficiently verify all the data in one shot, if it is available,
-     *  use this method, which will avoid copying the data.
+     * To efficiently verify all the data in one shot, if it is available,
+     * use this method, which will avoid copying the data.
      *
-     *  Same as:
+     * Same as:
      *<pre>
-     *  setParameter(ONE_SHOT_MODE)
-     *  update(data)
-     *  ok = verify(signature)
+     * setParameter(ONE_SHOT_MODE)
+     * update(data)
+     * ok = verify(signature)
      *</pre>
      *
      * @param data the message that was signed
@@ -358,14 +358,14 @@ public class EdDSAEngine extends Signature {
     }
 
     /**
-     *  To efficiently verify all the data in one shot, if it is available,
-     *  use this method, which will avoid copying the data.
+     * To efficiently verify all the data in one shot, if it is available,
+     * use this method, which will avoid copying the data.
      *
-     *  Same as:
+     * Same as:
      *<pre>
-     *  setParameter(ONE_SHOT_MODE)
-     *  update(data, off, len)
-     *  ok = verify(signature)
+     * setParameter(ONE_SHOT_MODE)
+     * update(data, off, len)
+     * ok = verify(signature)
      *</pre>
      *
      * @param data byte array containing the message that was signed
@@ -382,14 +382,14 @@ public class EdDSAEngine extends Signature {
     }
 
     /**
-     *  To efficiently verify all the data in one shot, if it is available,
-     *  use this method, which will avoid copying the data.
+     * To efficiently verify all the data in one shot, if it is available,
+     * use this method, which will avoid copying the data.
      *
-     *  Same as:
+     * Same as:
      *<pre>
-     *  setParameter(ONE_SHOT_MODE)
-     *  update(data)
-     *  ok = verify(signature, sigoff, siglen)
+     * setParameter(ONE_SHOT_MODE)
+     * update(data)
+     * ok = verify(signature, sigoff, siglen)
      *</pre>
      *
      * @param data the message that was signed
@@ -406,14 +406,14 @@ public class EdDSAEngine extends Signature {
     }
 
     /**
-     *  To efficiently verify all the data in one shot, if it is available,
-     *  use this method, which will avoid copying the data.
+     * To efficiently verify all the data in one shot, if it is available,
+     * use this method, which will avoid copying the data.
      *
-     *  Same as:
+     * Same as:
      *<pre>
-     *  setParameter(ONE_SHOT_MODE)
-     *  update(data, off, len)
-     *  ok = verify(signature, sigoff, siglen)
+     * setParameter(ONE_SHOT_MODE)
+     * update(data, off, len)
+     * ok = verify(signature, sigoff, siglen)
      *</pre>
      *
      * @param data byte array containing the message that was signed

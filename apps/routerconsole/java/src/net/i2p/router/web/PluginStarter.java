@@ -772,11 +772,11 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  Is the plugin enabled in plugins.config?
-     *  Default true
+     * Is the plugin enabled in plugins.config?
+     * Default true
      *
      * @return whether plugin enabled
-     *  @since 0.8.13
+     * @since 0.8.13
      */
     public static boolean isPluginEnabled(String appName) {
         Properties props = pluginProperties();
@@ -1060,7 +1060,7 @@ public class PluginStarter implements Runnable {
 
     /**
      * @return whether plugin running
-     *  @since 0.9.41
+     * @since 0.9.41
      */
     protected static boolean isPluginRunning(String pluginName, RouterContext ctx, Server s) {
         Log log = ctx.logManager().getLog(PluginStarter.class);
