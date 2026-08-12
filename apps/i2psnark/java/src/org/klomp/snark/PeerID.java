@@ -51,12 +51,11 @@ public class PeerID implements Comparable<PeerID> {
 
     /**
      * Creates a PeerID from a Map containing BEncoded peer id, ip and port.
+     * Non-compact tracker response.
      *
-     * @deprecated non-compact
      * @param m the map containing peer id and ip entries
      * @throws InvalidBEncodingException if the map entries are missing or invalid
      */
-    @Deprecated
     public PeerID(Map<String, BEValue> m) throws InvalidBEncodingException {
         BEValue bevalue = m.get("peer id");
         if (bevalue == null) throw new InvalidBEncodingException("peer id missing");
@@ -81,12 +80,12 @@ public class PeerID implements Comparable<PeerID> {
      * @param util for eventual destination lookup
      * @since 0.8.1
      */
-    public PeerID(byte[] dest_hash, I2PSnarkUtil util) throws InvalidBEncodingException {
+    public PeerID(byte[] destHashParam, I2PSnarkUtil util) throws InvalidBEncodingException {
         // id and address remain null
         port = TrackerClient.PORT;
-        if (dest_hash.length != 32) throw new InvalidBEncodingException("Bad hash length");
-        destHash = dest_hash;
-        hash = DataHelper.hashCode(dest_hash);
+        if (destHashParam.length != 32) throw new InvalidBEncodingException("Bad hash length");
+        destHash = destHashParam;
+        hash = DataHelper.hashCode(destHashParam);
         this.util = util;
     }
 
@@ -220,13 +219,13 @@ public class PeerID implements Comparable<PeerID> {
 
     /** Encode an id as a hex encoded string and remove leading zeros. */
     public static String idencode(byte[] bs) {
-        boolean leading_zeros = true;
+        boolean leadingZeros = true;
 
         StringBuilder sb = new StringBuilder(bs.length * 2);
         for (int i = 0; i < bs.length; i++) {
             int c = bs[i] & 0xFF;
-            if (leading_zeros && c == 0) continue;
-            else leading_zeros = false;
+            if (leadingZeros && c == 0) continue;
+            else leadingZeros = false;
 
             if (c < 16) sb.append('0');
             sb.append(Integer.toHexString(c));

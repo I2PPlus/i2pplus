@@ -112,9 +112,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      *
      * @param metainfo null if in magnet mode
      */
-    public Peer(PeerID peerID, byte[] my_id, byte[] infohash, MetaInfo metainfo) {
+    public Peer(PeerID peerID, byte[] myId, byte[] infohash, MetaInfo metainfo) {
         this.peerID = peerID;
-        this.my_id = my_id;
+        this.my_id = myId;
         this.infohash = infohash;
         this.metainfo = metainfo;
         _id = __id.incrementAndGet();
@@ -134,11 +134,11 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             final I2PSocket sock,
             InputStream in,
             OutputStream out,
-            byte[] my_id,
+            byte[] myId,
             byte[] infohash,
             MetaInfo metainfo)
             throws IOException {
-        this.my_id = my_id;
+        this.my_id = myId;
         this.infohash = infohash;
         this.metainfo = metainfo;
         this.sock = sock;
@@ -303,10 +303,10 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
                 InputStream in = sock.getInputStream();
                 OutputStream out = sock.getOutputStream();
                 byte[] id = handshake(in, out);
-                byte[] expected_id = peerID.getID();
-                if (expected_id == null) {
+                byte[] expectedId = peerID.getID();
+                if (expectedId == null) {
                     peerID.setID(id);
-                } else if (Arrays.equals(expected_id, id)) {
+                } else if (Arrays.equals(expectedId, id)) {
                     if (_log.shouldDebug())
                         _log.debug("Handshake got matching IDs with " + toString());
                 } else {
@@ -314,7 +314,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
                             "Unexpected peerID '"
                                     + PeerID.idencode(id)
                                     + "' expected '"
-                                    + PeerID.idencode(expected_id)
+                                    + PeerID.idencode(expectedId)
                                     + "'");
                 }
             } else {

@@ -75,33 +75,33 @@ public class MetaInfo {
      *
      * @param announce the tracker announce URL, may be null
      * @param name the file or top-level directory name
-     * @param name_utf8 unused, retained for API compatibility
+     * @param nameUtf8 unused, retained for API compatibility
      * @param files list of file path components per file, null for single-file torrent
      * @param lengths list of file sizes in bytes, null for single-file torrent
      * @param attributes per-file attribute strings (BEP 47 "p" marks padding files), may be null
-     * @param piece_length the length of each data piece in bytes
-     * @param piece_hashes concatenated 20-byte SHA1 hashes of all pieces
+     * @param pieceLength the length of each data piece in bytes
+     * @param pieceHashes concatenated 20-byte SHA1 hashes of all pieces
      * @param length total torrent size in bytes
      * @param privateTorrent whether the tracker restricts peer sharing to the swarm
-     * @param announce_list tiered list of alternate announce URLs, may be null
-     * @param created_by application name that created the torrent, may be null
-     * @param url_list web seed URLs for BEP 19 HTTP seeding, may be null
+     * @param announceList tiered list of alternate announce URLs, may be null
+     * @param createdBy application name that created the torrent, may be null
+     * @param urlList web seed URLs for BEP 19 HTTP seeding, may be null
      * @param comment free-form user comment, may be null
      */
     public MetaInfo(
             String announce,
             String name,
-            String name_utf8,
+            String nameUtf8,
             List<List<String>> files,
             List<Long> lengths,
             List<String> attributes,
-            int piece_length,
-            byte[] piece_hashes,
+            int pieceLength,
+            byte[] pieceHashes,
             long length,
             boolean privateTorrent,
-            List<List<String>> announce_list,
-            String created_by,
-            List<String> url_list,
+            List<List<String>> announceList,
+            String createdBy,
+            List<String> urlList,
             String comment) {
         this.announce = announce;
         this.name = name;
@@ -109,15 +109,15 @@ public class MetaInfo {
         this.lengths = lengths == null ? null : Collections.unmodifiableList(lengths);
         this.attributes =
                 attributes == null ? null : Collections.unmodifiableList(attributes);
-        this.piece_length = piece_length;
-        this.piece_hashes = piece_hashes;
+        this.piece_length = pieceLength;
+        this.piece_hashes = pieceHashes;
         this.length = length;
         this.privateTorrent = privateTorrent ? 1 : 0;
-        this.announce_list = announce_list;
+        this.announce_list = announceList;
         this.comment = comment;
         this.created_by = null;
         this.creation_date = 0;
-        this.url_list = url_list;
+        this.url_list = urlList;
         this.info_hash = calculateInfoHash();
     }
 
@@ -126,46 +126,46 @@ public class MetaInfo {
      *
      * @param announce the tracker announce URL, may be null
      * @param name the file or top-level directory name
-     * @param name_utf8 unused, retained for API compatibility
+     * @param nameUtf8 unused, retained for API compatibility
      * @param files list of file path components per file, null for single-file torrent
      * @param lengths list of file sizes in bytes, null for single-file torrent
-     * @param piece_length the length of each data piece in bytes
-     * @param piece_hashes concatenated 20-byte SHA1 hashes of all pieces
+     * @param pieceLength the length of each data piece in bytes
+     * @param pieceHashes concatenated 20-byte SHA1 hashes of all pieces
      * @param length total torrent size in bytes
      * @param privateTorrent 0 = not present, 1 = private, -1 = explicitly not private
-     * @param announce_list tiered list of alternate announce URLs, may be null
-     * @param created_by application name that created the torrent, may be null
-     * @param url_list web seed URLs for BEP 19 HTTP seeding, may be null
+     * @param announceList tiered list of alternate announce URLs, may be null
+     * @param createdBy application name that created the torrent, may be null
+     * @param urlList web seed URLs for BEP 19 HTTP seeding, may be null
      * @param comment free-form user comment, may be null
      * @since 0.9.62
      */
     public MetaInfo(
             String announce,
             String name,
-            String name_utf8,
+            String nameUtf8,
             List<List<String>> files,
             List<Long> lengths,
-            int piece_length,
-            byte[] piece_hashes,
+            int pieceLength,
+            byte[] pieceHashes,
             long length,
             int privateTorrent,
-            List<List<String>> announce_list,
-            String created_by,
-            List<String> url_list,
+            List<List<String>> announceList,
+            String createdBy,
+            List<String> urlList,
             String comment) {
         this.announce = announce;
         this.name = name;
         this.files = files == null ? null : Collections.unmodifiableList(files);
         this.lengths = lengths == null ? null : Collections.unmodifiableList(lengths);
-        this.piece_length = piece_length;
-        this.piece_hashes = piece_hashes;
+        this.piece_length = pieceLength;
+        this.piece_hashes = pieceHashes;
         this.length = length;
         this.privateTorrent = privateTorrent;
-        this.announce_list = announce_list;
+        this.announce_list = announceList;
         this.comment = comment;
-        this.created_by = created_by;
+        this.created_by = createdBy;
         this.creation_date = I2PAppContext.getGlobalContext().clock().now();
-        this.url_list = url_list;
+        this.url_list = urlList;
         this.attributes = null;
         this.info_hash = calculateInfoHash();
     }
@@ -174,21 +174,21 @@ public class MetaInfo {
      * Will not change infohash. Retains creation date of old MetaInfo if nonzero.
      *
      * @param old the source MetaInfo whose infohash, name, files, and hashes are reused
-     * @param new_announce the replacement announce URL, may be null
-     * @param new_announce_list tiered list of replacement announce URLs, may be null
-     * @param new_comment replacement comment string, may be null
-     * @param new_created_by replacement created-by string, may be null
-     * @param new_url_list replacement web seed URLs, may be null
+     * @param newAnnounce the replacement announce URL, may be null
+     * @param newAnnounceList tiered list of replacement announce URLs, may be null
+     * @param newComment replacement comment string, may be null
+     * @param newCreatedBy replacement created-by string, may be null
+     * @param newUrlList replacement web seed URLs, may be null
      * @since 0.9.64
      */
     public MetaInfo(
             MetaInfo old,
-            String new_announce,
-            List<List<String>> new_announce_list,
-            String new_comment,
-            String new_created_by,
-            List<String> new_url_list) {
-        this.announce = new_announce;
+            String newAnnounce,
+            List<List<String>> newAnnounceList,
+            String newComment,
+            String newCreatedBy,
+            List<String> newUrlList) {
+        this.announce = newAnnounce;
         this.info_hash = old.info_hash;
         this.name = old.name;
         this.files = old.files;
@@ -198,14 +198,14 @@ public class MetaInfo {
         this.piece_hashes = old.piece_hashes;
         this.length = old.length;
         this.privateTorrent = old.privateTorrent;
-        this.announce_list = new_announce_list;
-        this.comment = new_comment;
+        this.announce_list = newAnnounceList;
+        this.comment = newComment;
         this.created_by = null;
         this.creation_date =
                 old.creation_date > 0
                         ? old.creation_date
                         : I2PAppContext.getGlobalContext().clock().now();
-        this.url_list = new_url_list;
+        this.url_list = newUrlList;
         this.infoMap = old.infoMap;
         this.infoBytesLength = old.infoBytesLength;
     }
@@ -398,9 +398,9 @@ public class MetaInfo {
                 throw new InvalidBEncodingException("Zero size files list");
             }
 
-            List<List<String>> m_files = new ArrayList<>(size);
-            List<Long> m_lengths = new ArrayList<>(size);
-            List<String> m_attributes = null;
+            List<List<String>> mFiles = new ArrayList<>(size);
+            List<Long> mLengths = new ArrayList<>(size);
+            List<String> mAttributes = null;
             long l = 0;
             for (int i = 0; i < list.size(); i++) {
                 Map<String, BEValue> desc = list.get(i).getMap();
@@ -412,7 +412,7 @@ public class MetaInfo {
                 if (len < 0) {
                     throw new InvalidBEncodingException("Negative file length");
                 }
-                m_lengths.add(Long.valueOf(len));
+                mLengths.add(Long.valueOf(len));
                 // check for overflowing the long
                 long oldTotal = l;
                 l += len;
@@ -424,14 +424,14 @@ public class MetaInfo {
                 if (val == null) {
                     throw new InvalidBEncodingException("Missing path list");
                 }
-                List<BEValue> path_list = val.getList();
-                int path_length = path_list.size();
-                if (path_length == 0) {
+                List<BEValue> pathList = val.getList();
+                int pathLength = pathList.size();
+                if (pathLength == 0) {
                     throw new InvalidBEncodingException("Zero size file path list");
                 }
 
-                List<String> file = new ArrayList<>(path_length);
-                Iterator<BEValue> it = path_list.iterator();
+                List<String> file = new ArrayList<>(pathLength);
+                Iterator<BEValue> it = pathList.iterator();
                 while (it.hasNext()) {
                     String s = it.next().getString();
                     s = Storage.filterName(s);
@@ -440,35 +440,35 @@ public class MetaInfo {
 
                 // quick dup check - case sensitive, etc. - Storage does a better job
                 for (int j = 0; j < i; j++) {
-                    if (file.equals(m_files.get(j))) {
+                    if (file.equals(mFiles.get(j))) {
                         throw new InvalidBEncodingException(
                                 "Duplicate file path " + DataHelper.toString(file));
                     }
                 }
 
-                m_files.add(Collections.unmodifiableList(file));
+                mFiles.add(Collections.unmodifiableList(file));
 
                 // BEP 47
                 val = desc.get("attr");
                 if (val != null) {
                     String s = val.getString();
-                    if (m_attributes == null) {
-                        m_attributes = new ArrayList<>(size);
+                    if (mAttributes == null) {
+                        mAttributes = new ArrayList<>(size);
                         for (int j = 0; j < i; j++) {
-                            m_attributes.add("");
+                            mAttributes.add("");
                         }
-                        m_attributes.add(s);
+                        mAttributes.add(s);
                     }
                 } else {
-                    if (m_attributes != null) {
-                        m_attributes.add("");
+                    if (mAttributes != null) {
+                        mAttributes.add("");
                     }
                 }
             }
-            files = Collections.unmodifiableList(m_files);
-            lengths = Collections.unmodifiableList(m_lengths);
+            files = Collections.unmodifiableList(mFiles);
+            lengths = Collections.unmodifiableList(mLengths);
             length = l;
-            attributes = m_attributes;
+            attributes = mAttributes;
         }
 
         info_hash = calculateInfoHash();
@@ -933,9 +933,9 @@ public class MetaInfo {
      */
     public static void main(String[] args) {
         boolean error = false;
-        String created_by = null;
+        String createdBy = null;
         String announce = null;
-        List<String> url_list = null;
+        List<String> urlList = null;
         String comment = null;
         Getopt g = new Getopt("Storage", args, "a:c:m:w:");
         try {
@@ -947,7 +947,7 @@ public class MetaInfo {
                         break;
 
                     case 'c':
-                        created_by = g.getOptarg();
+                        createdBy = g.getOptarg();
                         break;
 
                     case 'm':
@@ -955,8 +955,8 @@ public class MetaInfo {
                         break;
 
                     case 'w':
-                        if (url_list == null) url_list = new ArrayList<>();
-                        url_list.add(g.getOptarg());
+                        if (urlList == null) urlList = new ArrayList<>();
+                        urlList.add(g.getOptarg());
                         break;
 
                     case '?':
@@ -995,11 +995,11 @@ public class MetaInfo {
                                 + "\nComment:      "
                                 + meta.getComment());
 
-                if (created_by != null || announce != null || url_list != null || comment != null) {
-                    String cb = created_by != null ? created_by : meta.getCreatedBy();
+                if (createdBy != null || announce != null || urlList != null || comment != null) {
+                    String cb = createdBy != null ? createdBy : meta.getCreatedBy();
                     String an = announce != null ? announce : meta.getAnnounce();
                     String cm = comment != null ? comment : meta.getComment();
-                    List<String> urls = url_list != null ? url_list : meta.getWebSeedURLs();
+                    List<String> urls = urlList != null ? urlList : meta.getWebSeedURLs();
                     MetaInfo meta2 = new MetaInfo(meta, an, meta.getAnnounceList(), cm, cb, urls);
                     File from = new File(args[i]);
                     File to = new File(args[i] + ".bak");

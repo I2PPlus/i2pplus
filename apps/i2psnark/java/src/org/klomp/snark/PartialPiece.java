@@ -48,7 +48,7 @@ class PartialPiece implements Comparable<PartialPiece> {
 
     // Threshold for using in-memory storage vs temp file; can be dynamically reduced on OOM
     private static final int MAX_IN_MEM = 1024 * 1024;
-    private static int _max_in_mem = MAX_IN_MEM;
+    private static int maxInMem = MAX_IN_MEM;
 
     /**
      * A PartialPiece for the given piece with the specified length. If piece length exceeds
@@ -70,10 +70,10 @@ class PartialPiece implements Comparable<PartialPiece> {
                 try {
                     tempBs = new byte[len];
                 } catch (OutOfMemoryError oom) {
-                    if (_max_in_mem > PeerState.PARTSIZE) _max_in_mem /= 2;
+                    if (maxInMem > PeerState.PARTSIZE) maxInMem /= 2;
                     Log log = I2PAppContext.getGlobalContext().logManager().getLog(PartialPiece.class);
                     log.logAlways(Log.WARN, "OOM creating new partial piece -> RAM cache reduced to " +
-                                             _max_in_mem / 1024 + "KB");
+                                              maxInMem / 1024 + "KB");
                     // fall through to use temp file
                 }
             }

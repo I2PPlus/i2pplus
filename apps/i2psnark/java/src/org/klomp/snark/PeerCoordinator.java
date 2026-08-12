@@ -972,18 +972,18 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             return false;
         }
 
-        boolean need_more;
+        boolean needMore;
         int peersize = 0;
         synchronized (peers) {
             peersize = peers.size();
-            need_more = (!peer.isConnected()) && peersize < getMaxConnections();
-            if (need_more) {
+            needMore = (!peer.isConnected()) && peersize < getMaxConnections();
+            if (needMore) {
                 Peer old = peerIDInList(peer.getPeerID(), peers);
-                need_more = old == null || old.getInactiveTime() > old.getMaxInactiveTime();
+                needMore = old == null || old.getInactiveTime() > old.getMaxInactiveTime();
             }
         }
 
-        if (need_more) {
+        if (needMore) {
             if (_log.shouldDebug()) {
                 // just for logging
                 String name;
