@@ -108,6 +108,16 @@ mv "$TMPDIR"/codeql/* "$INSTALL_DIR"/
 shopt -u dotglob
 rm -rf "$TMPDIR"
 
+# Remove any stale older versions, keeping only the new one. The version.txt
+# record of the previous install is not enough: versions superseded before the
+# last update (or left by --force/aborted runs) would otherwise linger forever
+for old in "${SCRIPT_DIR}"/codeql-v*; do
+    if [ -d "$old" ] && [ "$old" != "$INSTALL_DIR" ]; then
+        echo "Removing stale CodeQL ${old##*/}..."
+        rm -rf "$old"
+    fi
+done
+
 # Symlink for convenience: tools/codeql/codeql -> tools/codeql/codeql-vX.Y.Z
 rm -f "${SCRIPT_DIR}/codeql"
 ln -sf "codeql-${LATEST}" "${SCRIPT_DIR}/codeql"
