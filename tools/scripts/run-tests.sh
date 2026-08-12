@@ -98,6 +98,13 @@ build_jetty() {
   local jettylib="${REPO_ROOT}/apps/jetty/jettylib"
   local cp="${jettylib}/javax.servlet.jar:${jettylib}/jetty-util.jar:${jettylib}/jetty-http.jar:${jettylib}/jetty-io.jar:${jettylib}/jetty-security.jar:${jettylib}/jetty-servlet.jar:${jettylib}/jetty-webapp.jar:${jettylib}/jetty-xml.jar:${jettylib}/org.mortbay.jetty.jar:${jettylib}/commons-logging.jar:${jettylib}/jasper-runtime.jar:${jettylib}/tomcat-api.jar:${jettylib}/jsp-api.jar:${jettylib}/jetty-deploy.jar:${build_root}/core/java/build/i2p.jar"
   mkdir -p "$out"
+  # jetty-util.jar is not shipped in jettylib (the ant build assembles it into
+  # the pkg dir); materialize the checked-in distribution jar so the classpath
+  # and the copy loop below resolve it like the other jetty libs.
+  local distro="${REPO_ROOT}/apps/jetty/jetty-distribution-9.3.30.v20211001"
+  if [ ! -f "${jettylib}/jetty-util.jar" ] && [ -f "${distro}/lib/jetty-util-9.3.30.v20211001.jar" ]; then
+    cp "${distro}/lib/jetty-util-9.3.30.v20211001.jar" "${jettylib}/jetty-util.jar"
+  fi
   javac --release 8 -Xlint:-options -cp "$cp" -d "$out" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/ServletUtil.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/WriterOutputStream.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/JspC.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/I2PDefaultServlet.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/WebAppProviderConfiguration.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/RequestWrapper.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/ErrorServlet.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XSSRequestWrapper.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XI2PLocationFilter.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XSSFilter.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/JettyXmlConfigurationParser.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/I2PRequestLog.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/I2PLogger.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/JettyStart.java" 2>&1
   local src_d="$out"
   (cd "$src_d" && jar cf jetty-i2p.jar net/)
