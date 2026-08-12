@@ -33,15 +33,6 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     private static final Pattern COLON_SPLIT = Pattern.compile(":");
     private static final SecureRandom _random = new SecureRandom();
 
-    /**
-     * Description.
-     */
-    /**
-     * Description.
-     */
-    /**
-     * Description.
-     */
     public ConsolePasswordManager(RouterContext ctx) {
         super(ctx);
         migrateConsole();
@@ -55,19 +46,8 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      *  @param pw plain text, already trimmed
      *  @return if pw verified
      */
-/****
-    public boolean checkCrypt(String realm, String user, String pw) {
-        String pfx = realm;
-        if (user != null && user.length() > 0)
-            pfx += '.' + user;
-        cr = _context.getProperty(pfx + ".crypt");
-        if (cr == null)
-            return false;
-        return cr.equals(UnixCrypt.crypt(pw, cr));
-    }
-****/
 
-/**
+    /**
      *  Straight MD5. Compatible with Jetty.
      *
      *  @param realm e.g. i2cp, routerconsole, etc.
@@ -213,22 +193,6 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      *  @param pw plain text, already trimmed
      *  @return success
      */
-/****
-    public boolean saveCrypt(String realm, String user, String pw) {
-        String pfx = realm;
-        if (user != null && user.length() > 0)
-            pfx += '.' + user;
-        String salt = user != null ? user : "";
-        String crypt = UnixCrypt.crypt(pw, salt);
-        Map<String, String> toAdd = Collections.singletonMap(pfx + ".crypt", crypt);
-        List<String> toDel = new ArrayList(4);
-        toDel.add(pfx + PROP_PW);
-        toDel.add(pfx + PROP_B64);
-        toDel.add(pfx + PROP_MD5);
-        toDel.add(pfx + PROP_SHASH);
-        return _context.router().saveConfig(toAdd, toDel);
-    }
-****/
 
     /**
      *  Straight MD5, no salt

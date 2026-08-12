@@ -60,7 +60,6 @@ public class ConfigUpdateHelper extends HelperBase {
      * @return the news u r l
      */
     public static String getNewsURL(I2PAppContext ctx) {
-        String url = ctx.getProperty(ConfigUpdateHandler.PROP_NEWS_URL);
         return ConfigUpdateHandler.DEFAULT_NEWS_URL_SU3;
     }
 

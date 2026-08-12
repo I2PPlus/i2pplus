@@ -73,9 +73,9 @@ public class CSSHelper extends HelperBase {
      */
     public static final boolean DEFAULT_ENABLE_SORA_FONT = false;
     /** Rotating nonce for CSRF protection, rotates every 5 minutes */
-    private static String _currentNonce;
+    private static String currentNonce;
     private static final String[] _recentNonces = new String[2];
-    private static long _lastRotation;
+    private static long lastRotation;
     private static final long NONCE_ROTATION_MS = 5 * (long) 60 * 1000; // 5 minutes
     /** @since 0.9.67+ */
     public static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
@@ -203,17 +203,17 @@ public class CSSHelper extends HelperBase {
      * @since 0.9.4
      */
     public static synchronized String getNonce() {
-        if (_currentNonce == null) {
-            _currentNonce = Long.toString(RandomSource.getInstance().nextLong());
-            _lastRotation = System.currentTimeMillis();
-        } else if (System.currentTimeMillis() - _lastRotation > NONCE_ROTATION_MS) {
+        if (currentNonce == null) {
+            currentNonce = Long.toString(RandomSource.getInstance().nextLong());
+            lastRotation = System.currentTimeMillis();
+        } else if (System.currentTimeMillis() - lastRotation > NONCE_ROTATION_MS) {
             // Rotate: shift current to recent[0], recent[0] to recent[1], generate new
             _recentNonces[1] = _recentNonces[0];
-            _recentNonces[0] = _currentNonce;
-            _currentNonce = Long.toString(RandomSource.getInstance().nextLong());
-            _lastRotation = System.currentTimeMillis();
+            _recentNonces[0] = currentNonce;
+            currentNonce = Long.toString(RandomSource.getInstance().nextLong());
+            lastRotation = System.currentTimeMillis();
         }
-        return _currentNonce;
+        return currentNonce;
     }
 
     /**

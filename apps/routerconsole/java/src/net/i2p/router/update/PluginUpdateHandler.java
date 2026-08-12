@@ -70,8 +70,7 @@ class PluginUpdateHandler implements Checker, Updater {
             return null;
         }
 
-        UpdateRunner update = new PluginUpdateChecker(_context, _mgr, updateSources, appName, oldVersion);
-        return update;
+        return new PluginUpdateChecker(_context, _mgr, updateSources, appName, oldVersion);
     }
 
     /** download a single plugin */

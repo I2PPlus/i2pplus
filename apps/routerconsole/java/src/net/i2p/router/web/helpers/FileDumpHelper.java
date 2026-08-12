@@ -21,7 +21,6 @@ import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.PluginStarter;
 import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.FileUtil;
-import net.i2p.util.SystemVersion;
 
 /**
  *  Dump info on jars and wars
@@ -34,12 +33,6 @@ public class FileDumpHelper extends HelperBase {
     private static final String LINK = "http://git.skank.i2p/i2pplus/I2P.Plus/src/commit/";
     private static final String UPSTREAMLINK = "https://github.com/i2p/i2p.i2p/tree/";
 
-    /**
-     * Description.
-     */
-    /**
-     * Description.
-     */
     /**
      * @return the file summary
      */

@@ -127,7 +127,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         return (ConsoleUpdateManager) cmgr.getRegisteredApp(APP_NAME);
     }
 
-    /////// ClientApp methods
+    // ClientApp methods
 
     /**
      *  UpdateManager interface
@@ -663,7 +663,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         return null;
     }
 
-    /////////// start UpdateManager interface
+    // start UpdateManager interface
 
     /**
      *  Call once for each type/method pair.
@@ -691,9 +691,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
         RegisteredUpdater ru = new RegisteredUpdater(updater, type, method, priority);
         if (_log.shouldInfo()) {_log.info("Registering " + ru);}
-        if (!_registeredUpdaters.add(ru)) {
-            if (_log.shouldWarn()) {_log.warn("Duplicate registration " + ru);}
-        }
+        if (!_registeredUpdaters.add(ru) && _log.shouldWarn()) {_log.warn("Duplicate registration " + ru);}
     }
 
     /**
@@ -713,9 +711,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     public void register(Checker updater, UpdateType type, UpdateMethod method, int priority) {
         RegisteredChecker rc = new RegisteredChecker(updater, type, method, priority);
         if (_log.shouldInfo()) {_log.info("Registering " + rc);}
-        if (!_registeredCheckers.add(rc)) {
-            if (_log.shouldWarn()) {_log.warn("Duplicate registration " + rc);}
-        }
+        if (!_registeredCheckers.add(rc) && _log.shouldWarn()) {_log.warn("Duplicate registration " + rc);}
     }
 
     /**
@@ -1043,9 +1039,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             VersionAvailable va = _available.get(ui);
             if (va != null) {
                 UpdateTask next = retry(ui, va.sourceMap, toTry, DEFAULT_MAX_TIME);  // fixme old maxtime lost
-                if (next != null) {
-                   if (_log.shouldWarn()) {_log.warn("Retrying with " + next + "...");}
-                }
+                if (next != null && _log.shouldWarn()) {_log.warn("Retrying with " + next + "...");}
             }
         }
         _downloaders.remove(task);
@@ -1155,7 +1149,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         if (old != null && old.compareTo(ver) <= 0) {_available.remove(ui);}
     }
 
-    ///////// End UpdateManager interface
+    // End UpdateManager interface
 
     /**
      *  Adds to downloaded, removes from available
@@ -1226,8 +1220,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
             case ROUTER_SIGNED:
               { // avoid dup variables in next case
-                String URLs = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_URL, ConfigUpdateHandler.DEFAULT_UPDATE_URL);
-                StringTokenizer tok = new StringTokenizer(URLs, " ,\r\n");
+                String urls = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_URL, ConfigUpdateHandler.DEFAULT_UPDATE_URL);
+                StringTokenizer tok = new StringTokenizer(urls, " ,\r\n");
                 List<URI> rv = new ArrayList<>();
                 while (tok.hasMoreTokens()) {
                     try {rv.add(new URI(tok.nextToken().trim()));}

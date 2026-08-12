@@ -135,7 +135,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
         _currentVersion = currentVersion;
     }
 
-    //////// begin UpdateTask methods
+    // begin UpdateTask methods
 
     /**
      * Whether running.
@@ -175,7 +175,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
      */
     public String getID() { return ""; }
 
-    //////// end UpdateTask methods
+    // end UpdateTask methods
 
     /**
      * run.

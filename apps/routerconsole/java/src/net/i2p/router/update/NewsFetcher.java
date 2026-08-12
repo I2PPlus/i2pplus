@@ -310,24 +310,20 @@ class NewsFetcher extends UpdateRunner {
                             }
 
                             String minRouter = args.get(MIN_VERSION_KEY);
-                            if (minRouter != null) {
-                                if (VersionComparator.comp(RouterVersion.VERSION, minRouter) < 0) {
+                            if (minRouter != null && VersionComparator.comp(RouterVersion.VERSION, minRouter) < 0) {
                                     String msg = _mgr._t("You must first update to version {0}", minRouter);
                                     _log.logAlways(Log.WARN, "Cannot update to version " + ver + ": " + msg);
                                     _mgr.notifyVersionConstraint(this, _currentURI, ROUTER_SIGNED, "", ver, msg);
                                     return;
-                                }
                             }
 
                             String minJava = args.get(MIN_JAVA_VERSION_KEY);
-                            if (minJava != null) {
-                                if (!SystemVersion.isJava(minJava)) {
+                            if (minJava != null && !SystemVersion.isJava(minJava)) {
                                     String ourJava = System.getProperty("java.version");
                                     String msg = _mgr._t("Requires Java version {0} but installed Java version is {1}", minJava, ourJava);
                                     _log.logAlways(Log.WARN, "Cannot update to version " + ver + ": " + msg);
                                     _mgr.notifyVersionConstraint(this, _currentURI, ROUTER_SIGNED, "", ver, msg);
                                     return;
-                                }
                             }
                             _log.logAlways(Log.CRIT, "Router is out of date, current version is: " + ver + " -> Update advised!");
 
@@ -429,8 +425,8 @@ class NewsFetcher extends UpdateRunner {
         return rv;
     }
 
-    private static List<URI> tokenize(String URLs) {
-        StringTokenizer tok = new StringTokenizer(URLs, " ,\r\n");
+    private static List<URI> tokenize(String urls) {
+        StringTokenizer tok = new StringTokenizer(urls, " ,\r\n");
         List<URI> rv = new ArrayList<>();
         while (tok.hasMoreTokens()) {
             try {rv.add(new URI(tok.nextToken().trim()));}

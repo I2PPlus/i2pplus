@@ -567,7 +567,6 @@ public class NewsXMLParser {
                 }
             }
         }
-        int count = node.getNNodes();
         for (int i = 0; i < node.getNNodes(); i++) {
             boolean removed = validate(node.getNode(i));
             if (removed)

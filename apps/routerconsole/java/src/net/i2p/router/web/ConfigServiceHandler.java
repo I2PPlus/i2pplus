@@ -27,7 +27,7 @@ import net.i2p.i2ptunnel.TunnelControllerGroup;
  */
 public class ConfigServiceHandler extends FormHandler {
 
-    private static WrapperListener _wrapperListener;
+    private static WrapperListener wrapperListener;
 
     private static final String LISTENER_AVAILABLE = "3.2.0";
     private static final String PROPERTIES_AVAILABLE = "3.2.0";
@@ -166,10 +166,10 @@ public class ConfigServiceHandler extends FormHandler {
      *  @since 0.8.13
      */
     synchronized static void registerSignalHandler(RouterContext ctx) {
-        if (ctx.hasWrapper() && _wrapperListener == null) {
+        if (ctx.hasWrapper() && wrapperListener == null) {
             String wv = System.getProperty("wrapper.version");
             if (wv != null && VersionComparator.comp(wv, LISTENER_AVAILABLE) >= 0) {
-                try {_wrapperListener = new WrapperListener(ctx);}
+                try {wrapperListener = new WrapperListener(ctx);}
                 catch (Throwable t) { /* ignored */ }
             }
         }
@@ -181,9 +181,9 @@ public class ConfigServiceHandler extends FormHandler {
      *  @since 0.8.13
      */
     public synchronized static void unregisterSignalHandler() {
-        if (_wrapperListener != null) {
-            _wrapperListener.unregister();
-            _wrapperListener = null;
+        if (wrapperListener != null) {
+            wrapperListener.unregister();
+            wrapperListener = null;
         }
     }
 

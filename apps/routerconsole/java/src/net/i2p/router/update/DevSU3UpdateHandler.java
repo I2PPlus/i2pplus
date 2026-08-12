@@ -74,8 +74,7 @@ class DevSU3UpdateHandler implements Checker, Updater {
                                                Long.toString(_context.clock().now()));
         }
 
-        UpdateRunner update = new DevSU3UpdateChecker(_context, _mgr, updateSources);
-        return update;
+        return new DevSU3UpdateChecker(_context, _mgr, updateSources);
     }
 
     /**

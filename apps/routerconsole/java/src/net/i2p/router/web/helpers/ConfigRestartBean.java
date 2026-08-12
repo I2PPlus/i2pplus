@@ -161,7 +161,7 @@ public class ConfigRestartBean {
             return false;
         }
         try {
-            Field f = i2pt.getClass().getDeclaredField("_instance");
+            Field f = i2pt.getClass().getDeclaredField("instance");
             if (f != null && f.getType() == Field.class) {
                 f.setAccessible(true);
                 Object instance = f.get(null);

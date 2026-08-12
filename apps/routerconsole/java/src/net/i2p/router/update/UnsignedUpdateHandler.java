@@ -72,8 +72,7 @@ class UnsignedUpdateHandler implements Checker, Updater {
             return null;
         }
 
-        UpdateRunner update = new UnsignedUpdateChecker(_context, _mgr, updateSources, ms);
-        return update;
+        return new UnsignedUpdateChecker(_context, _mgr, updateSources, ms);
     }
 
     /**

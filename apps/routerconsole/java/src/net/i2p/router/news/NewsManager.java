@@ -50,7 +50,6 @@ public class NewsManager implements ClientApp {
      * and read in at startup by ConsoleUpdateManager.startup() and NewsFetcher.checkForUpdates().
      * While running, the UpdateManager keeps the metadata. NewsHelper looks at the news.xml timestamp.
      */
-     //private NewsMetadata _currentMetadata;
 
     /**
      * APP_NAME.
@@ -122,7 +121,7 @@ public class NewsManager implements ClientApp {
         Collections.sort(_currentNews);
     }
 
-    /////// ClientApp methods
+    // ClientApp methods
 
     /**
      *  ClientApp interface
