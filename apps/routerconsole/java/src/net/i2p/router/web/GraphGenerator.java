@@ -336,7 +336,7 @@ public class GraphGenerator implements Runnable, ClientApp {
                                           int end, boolean showCredit, boolean showRestarts) throws IOException {
         try {
             try {_sem.acquire();}
-            catch (InterruptedException ie) { /* ignored */ }
+            catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
             try {
                 return locked_renderGraph(rate, out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
                                          periodCount, end, showCredit, showRestarts);
@@ -397,7 +397,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     public boolean getXML(Rate rate, OutputStream out) throws IOException {
         try {
             try {_sem.acquire();}
-            catch (InterruptedException ie) { /* ignored */ }
+            catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
             return locked_getXML(rate, out);
         } finally {_sem.release();}
     }
@@ -469,7 +469,7 @@ public class GraphGenerator implements Runnable, ClientApp {
                                    int periodCount, int end, boolean showCredit, boolean showRestarts) throws IOException {
         try {
             try {_sem.acquire();}
-            catch (InterruptedException ie) { /* ignored */ }
+            catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
             try {return locked_renderCombinedGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit, showRestarts);}
             catch (NoClassDefFoundError ncdfe) {
                 setDisabled();

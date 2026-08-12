@@ -329,7 +329,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 if (t != null) {
                     synchronized(t) {
                         try {t.wait(maxWait);}
-                        catch (InterruptedException ie) { /* ignored */ }
+                        catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
                     }
                     return getUpdateAvailable(type, id);
                 }

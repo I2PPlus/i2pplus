@@ -330,7 +330,10 @@ public class ConfigClientsHandler extends FormHandler {
                 // Give a chance for status to update
                 try {
                    Thread.sleep(1000);
-                } catch (InterruptedException ie) { /* ignored */ }
+                } catch (InterruptedException ie) {
+                    // ignored
+                    Thread.currentThread().interrupt();
+                }
             } catch (Throwable t) {
                 addFormError("Cannot stop client " + ca.className + ": " + t, true);
                 _log.error("Error stopping client " + ca.className, t);
@@ -352,7 +355,10 @@ public class ConfigClientsHandler extends FormHandler {
         // Give a chance for status to update
         try {
             Thread.sleep(1000);
-        } catch (InterruptedException ie) { /* ignored */ }
+        } catch (InterruptedException ie) {
+            // ignored
+            Thread.currentThread().interrupt();
+        }
     }
 
     private void deleteClient(int i) {
@@ -480,7 +486,10 @@ public class ConfigClientsHandler extends FormHandler {
                 }
                 try {
                    Thread.sleep(500);
-                } catch (InterruptedException ie) { /* ignored */ }
+                } catch (InterruptedException ie) {
+                    // ignored
+                    Thread.currentThread().interrupt();
+                }
              }
              String status = mgr.getStatus();
              if (status != null && !status.isEmpty())
@@ -523,7 +532,10 @@ public class ConfigClientsHandler extends FormHandler {
         // So that update() will post a status to the summary bar before we reload
         try {
            Thread.sleep(1000);
-        } catch (InterruptedException ie) { /* ignored */ }
+        } catch (InterruptedException ie) {
+            // ignored
+            Thread.currentThread().interrupt();
+        }
     }
 
     /**
@@ -577,7 +589,10 @@ public class ConfigClientsHandler extends FormHandler {
         // So that update() will post a status to the summary bar before we reload
         try {
            Thread.sleep(5000);
-        } catch (InterruptedException ie) { /* ignored */ }
+        } catch (InterruptedException ie) {
+            // ignored
+            Thread.currentThread().interrupt();
+        }
     }
 
     private void checkPlugin(String app) {
@@ -593,7 +608,10 @@ public class ConfigClientsHandler extends FormHandler {
         // So that update() will post a status to the summary bar before we reload
         try {
            Thread.sleep(1000);
-        } catch (InterruptedException ie) { /* ignored */ }
+        } catch (InterruptedException ie) {
+            // ignored
+            Thread.currentThread().interrupt();
+        }
     }
 
     /**

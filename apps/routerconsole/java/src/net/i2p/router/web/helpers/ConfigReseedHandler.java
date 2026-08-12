@@ -63,7 +63,9 @@ public class ConfigReseedHandler extends FormHandler {
                     for (int i = 0; i < 40; i++) {
                         try {
                             Thread.sleep(500);
-                        } catch (InterruptedException ie) { /* ignored */ }
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                        }
                         if (!checker.inProgress())
                             break;
                     }

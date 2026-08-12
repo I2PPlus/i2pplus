@@ -498,7 +498,7 @@ class NetDbRenderer {
                 networkDatabase.lookupRouterInfo(hash, lookupWaiter, lookupWaiter, timeout);
                 try {
                     lookupWaiter.wait(timeout);
-                } catch (InterruptedException ignored) { /* ignored */ }
+                } catch (InterruptedException ignored) { /* ignored */ Thread.currentThread().interrupt(); }
             }
             routerInfo = (RouterInfo) networkDatabase.lookupLocallyWithoutValidation(hash);
         }
@@ -835,7 +835,7 @@ class NetDbRenderer {
                 synchronized(lw) {
                     _context.netDb().lookupLeaseSetRemotely(hash, lw, lw, LS_LOOKUP_WAIT, null);
                     try {lw.wait((long) LS_LOOKUP_WAIT + 1000);}
-                    catch (InterruptedException ie) { /* ignored */ }
+                    catch (InterruptedException ie) { /* ignored */ Thread.currentThread().interrupt(); }
                 }
                 ls = _context.netDb().lookupLeaseSetLocally(hash);
             }

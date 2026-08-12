@@ -208,7 +208,10 @@ public class PluginStarter implements Runnable {
             while (!ctx.router().isRunning()) {
                 try {
                     Thread.sleep((long) 10*1000);
-                } catch (InterruptedException ie) { return; }
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
                 // 30 minutes
                 if (loop++ > 180) return;
             }
@@ -219,7 +222,10 @@ public class PluginStarter implements Runnable {
             do {
                 try {
                     Thread.sleep((long) 5*1000);
-                } catch (InterruptedException ie) { break; }
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
                 if (loop++ > 40) break;
             } while (mgr.isUpdateInProgress(TYPE_DUMMY));
         }
@@ -265,7 +271,10 @@ public class PluginStarter implements Runnable {
                 // keep going
                 try {
                     Thread.sleep((long) 5*1000);
-                } catch (InterruptedException ie) { /* ignored */ }
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    /* ignored */
+                }
                 if (loop++ > 48) break;
             } while (mgr.isUpdateInProgress(PLUGIN, appName));
 
@@ -1003,7 +1012,10 @@ public class PluginStarter implements Runnable {
                         } else {
                             Thread.sleep(1000);
                         }
-                    } catch (InterruptedException ie) { /* ignored */ }
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        /* ignored */
+                    }
                     // quick check, will throw ClassNotFoundException on error
                     LoadClientAppsJob.testClient(app.className, cl);
                 }

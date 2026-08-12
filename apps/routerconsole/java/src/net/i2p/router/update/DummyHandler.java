@@ -71,7 +71,7 @@ class DummyHandler implements Checker, Updater {
         protected void update() {
             try {
                 Thread.sleep(_delay);
-            } catch (InterruptedException ie) { /* ignored */ }
+            } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
             _mgr.notifyCheckComplete(this, false, false);
             _mgr.notifyTaskFailed(this, "dummy", null);
         }
