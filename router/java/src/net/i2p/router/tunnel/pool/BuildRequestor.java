@@ -62,6 +62,33 @@ public abstract class BuildRequestor {
     /** 5 records (~2600 bytes) fit well within 3 tunnel messages */
     private static final int MEDIUM_RECORDS = 5;
 
+    private static volatile RouterContext _cfgCtx;
+    private static volatile long _cfgRefreshed;
+    private static volatile int _cachedRequestTimeout;
+    private static volatile int _cachedFirstHopTimeout;
+    private static volatile int _cachedExploratoryBackoff;
+    private static volatile int _cachedMaxConsecutiveFails;
+    private static volatile int _cachedClientBackoff;
+    private static final long CONFIG_REFRESH_MS = 30 * 1000L;
+
+    /**
+     *  Refresh the cached build configuration from properties at most once
+     *  per CONFIG_REFRESH_MS, or immediately when the context changes.
+     *  Benign race: duplicate refreshes are idempotent writes.
+     */
+    private static void refreshBuildConfig(RouterContext ctx) {
+        long now = ctx.clock().now();
+        if (_cfgCtx == ctx && now - _cfgRefreshed < CONFIG_REFRESH_MS)
+            return;
+        _cachedRequestTimeout = ctx.getProperty("i2p.tunnel.build.requestTimeout", 15*1000);
+        _cachedFirstHopTimeout = ctx.getProperty("i2p.tunnel.build.firstHopTimeout", 10*1000);
+        _cachedExploratoryBackoff = ctx.getProperty("i2p.tunnel.build.exploratoryBackoff", 200);
+        _cachedMaxConsecutiveFails = ctx.getProperty("i2p.tunnel.buildRequest.maxConsecutiveFails", 3);
+        _cachedClientBackoff = ctx.getProperty("i2p.tunnel.build.clientBackoff", 50);
+        _cfgCtx = ctx;
+        _cfgRefreshed = now;
+    }
+
     // Static immutable order lists for randomized record placement
     private static final List<Integer> ORDER;
     private static final List<Integer> SHORT_ORDER;
@@ -100,7 +127,8 @@ public abstract class BuildRequestor {
      * @return request timeout in ms
      */
     public static int getRequestTimeout(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.requestTimeout", 15*1000);
+        refreshBuildConfig(ctx);
+        return _cachedRequestTimeout;
     }
 
     /**
@@ -112,7 +140,8 @@ public abstract class BuildRequestor {
      * @return first hop timeout in ms
      */
     public static int getFirstHopTimeout(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.firstHopTimeout", 10*1000);
+        refreshBuildConfig(ctx);
+        return _cachedFirstHopTimeout;
     }
 
     /**
@@ -121,7 +150,8 @@ public abstract class BuildRequestor {
      */
     private static final int BUILD_MSG_TIMEOUT = 60*1000;
     private static int getExploratoryBackoff(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.exploratoryBackoff", 200);
+        refreshBuildConfig(ctx);
+        return _cachedExploratoryBackoff;
     }
 
     /**
@@ -132,10 +162,12 @@ public abstract class BuildRequestor {
      *  @return max consecutive failures
      */
     static int getMaxConsecutiveClientBuildFails(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.buildRequest.maxConsecutiveFails", 3);
+        refreshBuildConfig(ctx);
+        return _cachedMaxConsecutiveFails;
     }
     private static int getClientBackoff(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.clientBackoff", 50);
+        refreshBuildConfig(ctx);
+        return _cachedClientBackoff;
     }
 
     /** Proposal 168 minimum bandwidth property key */

@@ -60,6 +60,55 @@ public class TestJob extends JobImpl {
     private static final int MAX_DEFERRED = 3;
     private int _deferredCount = 0;
 
+    private static volatile RouterContext _cfgCtx;
+    private static volatile long _cfgRefreshed;
+    private static volatile int _cachedMaxConcurrent;
+    private static volatile int _cachedMinTestPeriod;
+    private static volatile int _cachedMaxTestPeriod;
+    private static volatile int _cachedMinTestDelay;
+    private static volatile int _cachedMaxTestDelay;
+    private static volatile double _cachedPoolCoverageThreshold;
+    private static volatile int _cachedMaxExploratoryPerPool;
+    private static volatile int _cachedMaxClientPerPool;
+    private static volatile int _cachedBaseMaxQueued;
+    private static volatile int _cachedHardLimit;
+    private static final long CONFIG_REFRESH_MS = 30 * 1000L;
+
+    /**
+     *  Refresh the cached test-job configuration from properties at most once
+     *  per CONFIG_REFRESH_MS, or immediately when the context changes.
+     *  Benign race: duplicate refreshes are idempotent writes.
+     */
+    private static void refreshTestJobConfig(RouterContext ctx) {
+        long now = ctx.clock().now();
+        if (_cfgCtx == ctx && now - _cfgRefreshed < CONFIG_REFRESH_MS)
+            return;
+        _cachedMaxConcurrent = ctx.getProperty("i2p.tunnel.testJob.maxConcurrent",
+                                               SystemVersion.isSlow() ? 32 : 64);
+        _cachedMinTestPeriod = ctx.getProperty("i2p.tunnel.testJob.minTestPeriod", 20*1000);
+        _cachedMaxTestPeriod = ctx.getProperty("i2p.tunnel.testJob.maxTestPeriod", 30*1000);
+        _cachedMinTestDelay = ctx.getProperty("i2p.tunnel.testJob.minTestDelay", 30*1000);
+        _cachedMaxTestDelay = ctx.getProperty("i2p.tunnel.testJob.maxTestDelay", 90*1000);
+        _cachedMaxExploratoryPerPool = ctx.getProperty("i2p.tunnel.testJob.maxExploratoryPerPool", 12);
+        _cachedMaxClientPerPool = ctx.getProperty("i2p.tunnel.testJob.maxClientPerPool", 24);
+        _cachedBaseMaxQueued = ctx.getProperty("i2p.tunnel.testJob.maxQueued",
+                                               SystemVersion.isSlow() ? 64 : 96);
+        _cachedHardLimit = ctx.getProperty("i2p.tunnel.testJob.hardLimit",
+                                           SystemVersion.isSlow() ? 384 : 512);
+        String val = ctx.getProperty("i2p.tunnel.testJob.poolCoverageThreshold");
+        if (val != null) {
+            try {
+                _cachedPoolCoverageThreshold = Double.parseDouble(val);
+            } catch (NumberFormatException e) {
+                // fall through
+                _cachedPoolCoverageThreshold = 0.95;
+            }
+        } else {
+            _cachedPoolCoverageThreshold = 0.95;
+        }
+        _cfgCtx = ctx;
+        _cfgRefreshed = now;
+    }
 
     /**
      * Maximum number of tunnel tests that can run concurrently.
@@ -69,8 +118,8 @@ public class TestJob extends JobImpl {
      * @return the max concurrent tests
      */
     private static int getMaxConcurrentTests(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.testJob.maxConcurrent",
-                               SystemVersion.isSlow() ? 32 : 64);
+        refreshTestJobConfig(ctx);
+        return _cachedMaxConcurrent;
     }
 
     /**
@@ -81,7 +130,8 @@ public class TestJob extends JobImpl {
     private int getMinTestPeriod() {
         // Must be >= the 20s minimum in dispatchOutbound to prevent the
         // ReplySelector from expiring before the message arrives.
-        return getContext().getProperty("i2p.tunnel.testJob.minTestPeriod", 20*1000);
+        refreshTestJobConfig(getContext());
+        return _cachedMinTestPeriod;
     }
 
     /**
@@ -90,15 +140,18 @@ public class TestJob extends JobImpl {
      * @return the max test period
      */
     private int getMaxTestPeriod() {
-        return getContext().getProperty("i2p.tunnel.testJob.maxTestPeriod", 30*1000);
+        refreshTestJobConfig(getContext());
+        return _cachedMaxTestPeriod;
     }
 
     // Adaptive testing frequency constants
     private static int getMinTestDelay(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.testJob.minTestDelay", 30*1000);
+        refreshTestJobConfig(ctx);
+        return _cachedMinTestDelay;
     }
     private static int getMaxTestDelay(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.testJob.maxTestDelay", 90*1000);
+        refreshTestJobConfig(ctx);
+        return _cachedMaxTestDelay;
     }
     private static final int SUCCESS_HISTORY_SIZE = 3; // Track last 3 results
     private static final int MAX_LAG_FOR_SCHEDULE = 150;
@@ -108,21 +161,16 @@ public class TestJob extends JobImpl {
      *  At 10+ failures the tunnel is clearly dead — force removal. */
     private static final int MAX_SERVER_POOL_TEST_FAILURES = 10;
     private static double getPoolCoverageThreshold(RouterContext ctx) {
-        String val = ctx.getProperty("i2p.tunnel.testJob.poolCoverageThreshold");
-        if (val != null) {
-            try {
-                return Double.parseDouble(val);
-            } catch (NumberFormatException e) {
-                // fall through
-            }
-        }
-        return 0.95;
+        refreshTestJobConfig(ctx);
+        return _cachedPoolCoverageThreshold;
     }
     private static int getMaxExploratoryPerPool(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.testJob.maxExploratoryPerPool", 12);
+        refreshTestJobConfig(ctx);
+        return _cachedMaxExploratoryPerPool;
     }
     private static int getMaxClientPerPool(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.testJob.maxClientPerPool", 24);
+        refreshTestJobConfig(ctx);
+        return _cachedMaxClientPerPool;
     }
 
     /**
@@ -175,8 +223,8 @@ public class TestJob extends JobImpl {
      *  @return configured base max queued tests
      */
     private static int getBaseMaxQueuedTests(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.testJob.maxQueued",
-                               SystemVersion.isSlow() ? 64 : 96);
+        refreshTestJobConfig(ctx);
+        return _cachedBaseMaxQueued;
     }
 
     /**
@@ -187,8 +235,8 @@ public class TestJob extends JobImpl {
      * @return the hard limit
      */
     public static int getHardLimit(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.testJob.hardLimit",
-                               SystemVersion.isSlow() ? 384 : 512);
+        refreshTestJobConfig(ctx);
+        return _cachedHardLimit;
     }
 
     /**

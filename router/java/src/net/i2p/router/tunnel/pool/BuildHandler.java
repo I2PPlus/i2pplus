@@ -90,30 +90,82 @@ public class BuildHandler implements Runnable {
     private static final long MAX_REQUEST_AGE = 65*60*1000L; /** Must be > 1 hour due to rounding down. */
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000L;
 
+    private static volatile RouterContext _cfgCtx;
+    private static volatile long _cfgRefreshed;
+    private static volatile int _cachedNextHopLookupTimeout;
+    private static volatile int _cachedMinLookupLimit;
+    private static volatile int _cachedMaxLookupLimit;
+    private static volatile int _cachedPercentLookupLimit;
+    private static volatile long _cachedMaxRequestFuture;
+    private static volatile long _cachedMaxRequestAge;
+    private static volatile long _cachedMaxRequestAgeEcies;
+    private static volatile long _cachedJobLagLimitTunnel;
+    private static volatile int _cachedMaxParticipatingTunnels;
+    private static final long CONFIG_REFRESH_MS = 30 * 1000L;
+
+    /**
+     *  Refresh the cached build configuration from properties at most once
+     *  per CONFIG_REFRESH_MS, or immediately when the context changes.
+     *  Benign race: duplicate refreshes are idempotent writes.
+     */
+    private static void refreshBuildConfig(RouterContext ctx) {
+        long now = ctx.clock().now();
+        if (_cfgCtx == ctx && now - _cfgRefreshed < CONFIG_REFRESH_MS)
+            return;
+        _cachedNextHopLookupTimeout = ctx.getProperty("i2p.tunnel.build.nextHopLookupTimeout", NEXT_HOP_LOOKUP_TIMEOUT);
+        _cachedMinLookupLimit = ctx.getProperty("i2p.tunnel.build.minLookupLimit", SystemVersion.isSlow() ? 4 : 10);
+        _cachedMaxLookupLimit = ctx.getProperty("i2p.tunnel.build.maxLookupLimit", IS_SLOW ? 10 : MAX_LOOKUP_LIMIT);
+        _cachedPercentLookupLimit = ctx.getProperty("i2p.tunnel.build.percentLookupLimit", SystemVersion.isSlow() ? 15 : 40);
+        _cachedMaxRequestFuture = ctx.getProperty("i2p.tunnel.build.maxRequestFuture", 5*60*1000L);
+        _cachedMaxRequestAge = ctx.getProperty("i2p.tunnel.build.maxRequestAge", 65*60*1000L);
+        _cachedMaxRequestAgeEcies = ctx.getProperty("i2p.tunnel.build.maxRequestAgeEcies", 8*60*1000L);
+        _cachedJobLagLimitTunnel = ctx.getProperty("i2p.tunnel.build.jobLagLimitTunnel", SystemVersion.isSlow() ? 800 : 500);
+        _cachedMaxParticipatingTunnels = ctx.getProperty("router.maxParticipatingTunnels", IS_SLOW ? 4000 : 10000);
+        _cfgCtx = ctx;
+        _cfgRefreshed = now;
+    }
+
     private static int getNextHopLookupTimeout(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.nextHopLookupTimeout", NEXT_HOP_LOOKUP_TIMEOUT);
+        refreshBuildConfig(ctx);
+        return _cachedNextHopLookupTimeout;
     }
     private static int getMinLookupLimit(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.minLookupLimit", SystemVersion.isSlow() ? 4 : 10);
+        refreshBuildConfig(ctx);
+        return _cachedMinLookupLimit;
     }
     private static int getMaxLookupLimit(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.maxLookupLimit", IS_SLOW ? 10 : MAX_LOOKUP_LIMIT);
+        refreshBuildConfig(ctx);
+        return _cachedMaxLookupLimit;
     }
     private static int getPercentLookupLimit(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.percentLookupLimit", SystemVersion.isSlow() ? 15 : 40);
+        refreshBuildConfig(ctx);
+        return _cachedPercentLookupLimit;
     }
     private static long getMaxRequestFuture(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.maxRequestFuture", 5*60*1000L);
+        refreshBuildConfig(ctx);
+        return _cachedMaxRequestFuture;
     }
     private static long getMaxRequestAge(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.maxRequestAge", 65*60*1000L);
+        refreshBuildConfig(ctx);
+        return _cachedMaxRequestAge;
     }
     private static long getMaxRequestAgeEcies(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.maxRequestAgeEcies", 8*60*1000L);
+        refreshBuildConfig(ctx);
+        return _cachedMaxRequestAgeEcies;
     }
 
     private static long getJobLagLimitTunnel(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.jobLagLimitTunnel", SystemVersion.isSlow() ? 800 : 500);
+        refreshBuildConfig(ctx);
+        return _cachedJobLagLimitTunnel;
+    }
+
+    /**
+     *  Upper bound on participating tunnels before the router drops
+     *  incoming build requests, tunable via router.maxParticipatingTunnels.
+     */
+    private static int getMaxParticipatingTunnels(RouterContext ctx) {
+        refreshBuildConfig(ctx);
+        return _cachedMaxParticipatingTunnels;
     }
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
     /**
@@ -282,7 +334,7 @@ public class BuildHandler implements Runnable {
         long now = System.currentTimeMillis();
         long uptime = _context.router().getUptime();
         long dropBefore = now - (BuildRequestor.getRequestTimeout(_context) / 4);
-        int maxTunnels = _context.getProperty("router.maxParticipatingTunnels", IS_SLOW ? 4000 : 10000);
+        int maxTunnels = getMaxParticipatingTunnels(_context);
         long lag = _context.jobQueue().getMaxLag();
         boolean isLagged = lag > getJobLagLimitTunnel(_context) && maxTunnels > 0 && uptime > 5*60*1000L;
         boolean highLoad = SystemVersion.getCPULoadAvg() > 98 && isLagged;

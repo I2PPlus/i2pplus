@@ -53,6 +53,86 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     private static final String ALT_EXCLUDE_CAPS = String.valueOf(Router.CAPABILITY_BW12) +
                                                    String.valueOf(Router.CAPABILITY_NO_TUNNELS);
 
+    private static volatile RouterContext _cfgCtx;
+    private static volatile long _cfgRefreshed;
+    private static volatile String _cachedExcludeCaps;
+    private static volatile String _cachedExplicitPeers;
+    private static volatile boolean _cachedIbExplUnreachable;
+    private static volatile boolean _cachedObExplUnreachable;
+    private static volatile boolean _cachedIbClientUnreachable;
+    private static volatile boolean _cachedObClientUnreachable;
+    private static volatile boolean _cachedIbExplSlow;
+    private static volatile boolean _cachedObExplSlow;
+    private static volatile boolean _cachedIbClientSlow;
+    private static volatile boolean _cachedObClientSlow;
+    private static final long CONFIG_REFRESH_MS = 30 * 1000L;
+
+    /**
+     *  Refresh the cached peer-selection configuration from properties at
+     *  most once per CONFIG_REFRESH_MS, or immediately when the context
+     *  changes.  Benign race: duplicate refreshes are idempotent writes.
+     *  Values without a configured property cache as null, preserving the
+     *  per-call default behavior of the callers.
+     */
+    private static void refreshPeerConfig(RouterContext ctx) {
+        long now = ctx.clock().now();
+        if (_cfgCtx == ctx && now - _cfgRefreshed < CONFIG_REFRESH_MS)
+            return;
+        _cachedExcludeCaps = ctx.getProperty("router.excludePeerCaps");
+        _cachedExplicitPeers = ctx.getProperty("explicitPeers");
+        _cachedIbExplUnreachable = ctx.getProperty(PROP_INBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE, DEFAULT_INBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE);
+        _cachedObExplUnreachable = ctx.getProperty(PROP_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE, DEFAULT_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE);
+        _cachedIbClientUnreachable = ctx.getProperty(PROP_INBOUND_CLIENT_EXCLUDE_UNREACHABLE, DEFAULT_INBOUND_CLIENT_EXCLUDE_UNREACHABLE);
+        _cachedObClientUnreachable = ctx.getProperty(PROP_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE, DEFAULT_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE);
+        _cachedIbExplSlow = ctx.getProperty(PROP_INBOUND_EXPLORATORY_EXCLUDE_SLOW, true);
+        _cachedObExplSlow = ctx.getProperty(PROP_OUTBOUND_EXPLORATORY_EXCLUDE_SLOW, true);
+        _cachedIbClientSlow = ctx.getProperty(PROP_INBOUND_CLIENT_EXCLUDE_SLOW, true);
+        _cachedObClientSlow = ctx.getProperty(PROP_OUTBOUND_CLIENT_EXCLUDE_SLOW, true);
+        _cfgCtx = ctx;
+        _cfgRefreshed = now;
+    }
+
+    private static String getCachedExcludeCaps(RouterContext ctx) {
+        refreshPeerConfig(ctx);
+        return _cachedExcludeCaps;
+    }
+    private static String getCachedExplicitPeers(RouterContext ctx) {
+        refreshPeerConfig(ctx);
+        return _cachedExplicitPeers;
+    }
+    private static boolean getCachedIbExplUnreachable(RouterContext ctx) {
+        refreshPeerConfig(ctx);
+        return _cachedIbExplUnreachable;
+    }
+    private static boolean getCachedObExplUnreachable(RouterContext ctx) {
+        refreshPeerConfig(ctx);
+        return _cachedObExplUnreachable;
+    }
+    private static boolean getCachedIbClientUnreachable(RouterContext ctx) {
+        refreshPeerConfig(ctx);
+        return _cachedIbClientUnreachable;
+    }
+    private static boolean getCachedObClientUnreachable(RouterContext ctx) {
+        refreshPeerConfig(ctx);
+        return _cachedObClientUnreachable;
+    }
+    private static boolean getCachedIbExplSlow(RouterContext ctx) {
+        refreshPeerConfig(ctx);
+        return _cachedIbExplSlow;
+    }
+    private static boolean getCachedObExplSlow(RouterContext ctx) {
+        refreshPeerConfig(ctx);
+        return _cachedObExplSlow;
+    }
+    private static boolean getCachedIbClientSlow(RouterContext ctx) {
+        refreshPeerConfig(ctx);
+        return _cachedIbClientSlow;
+    }
+    private static boolean getCachedObClientSlow(RouterContext ctx) {
+        refreshPeerConfig(ctx);
+        return _cachedObClientSlow;
+    }
+
     /** Threshold for detecting tunnel build attacks */
     protected static final double ATTACK_THRESHOLD = ProfileOrganizer.ATTACK_THRESHOLD;
     /** Duration in ms to suppress startup warnings */
@@ -339,7 +419,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         Properties opts = settings.getUnknownOptions();
         String peers = opts.getProperty("explicitPeers");
         if (peers == null)
-            peers = ctx.getProperty("explicitPeers");
+            peers = getCachedExplicitPeers(ctx);
         // only one out of 4 times so we don't break completely if peer doesn't build one
         return peers != null && ctx.random().nextInt(4) == 0;
     }
@@ -358,7 +438,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         peers = opts.getProperty("explicitPeers");
 
         if (peers == null)
-            peers = ctx.getProperty("explicitPeers");
+            peers = getCachedExplicitPeers(ctx);
 
         List<Hash> rv = new ArrayList<>();
         StringTokenizer tok = new StringTokenizer(peers, ",");
@@ -738,7 +818,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     private static String getExcludeCaps(RouterContext ctx) {
         String dflt = (ctx.random().nextInt(4) != 0) ? DEFAULT_EXCLUDE_CAPS : ALT_EXCLUDE_CAPS;
-        return ctx.getProperty("router.excludePeerCaps", dflt);
+        String val = getCachedExcludeCaps(ctx);
+        return val != null ? val : dflt;
     }
 
     /** SSU2 fixes (2.1.0), Congestion fixes (2.2.0) */
@@ -846,17 +927,17 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (isInbound) {
                 if (ctx.router().isHidden())
                     return true;
-                return ctx.getProperty(PROP_INBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE, DEFAULT_INBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE);
+                return getCachedIbExplUnreachable(ctx);
             } else {
-                return ctx.getProperty(PROP_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE, DEFAULT_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE);
+                return getCachedObExplUnreachable(ctx);
             }
         } else {
             if (isInbound) {
                 if (ctx.router().isHidden())
                     return true;
-                return ctx.getProperty(PROP_INBOUND_CLIENT_EXCLUDE_UNREACHABLE, DEFAULT_INBOUND_CLIENT_EXCLUDE_UNREACHABLE);
+                return getCachedIbClientUnreachable(ctx);
             } else {
-                return ctx.getProperty(PROP_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE, DEFAULT_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE);
+                return getCachedObClientUnreachable(ctx);
             }
         }
     }
@@ -875,11 +956,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     protected boolean filterSlow(boolean isInbound, boolean isExploratory) {
         if (isExploratory) {
-            if (isInbound) {return ctx.getProperty(PROP_INBOUND_EXPLORATORY_EXCLUDE_SLOW, true);}
-            else {return ctx.getProperty(PROP_OUTBOUND_EXPLORATORY_EXCLUDE_SLOW, true);}
+            if (isInbound) {return getCachedIbExplSlow(ctx);}
+            else {return getCachedObExplSlow(ctx);}
         } else {
-            if (isInbound) {return ctx.getProperty(PROP_INBOUND_CLIENT_EXCLUDE_SLOW, true);}
-            else {return ctx.getProperty(PROP_OUTBOUND_CLIENT_EXCLUDE_SLOW, true);}
+            if (isInbound) {return getCachedIbClientSlow(ctx);}
+            else {return getCachedObClientSlow(ctx);}
         }
     }
 

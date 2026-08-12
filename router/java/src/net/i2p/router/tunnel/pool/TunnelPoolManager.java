@@ -1255,6 +1255,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         // Uses two-phase approach to prevent deadlock:
         // Phase A: Identify candidates under pool lock
         // Phase B: Remove them OUTSIDE the lock to prevent ABBA deadlock
+        int minOverride = _context.getProperty(PROP_SLOW_TUNNEL_MIN, 0);
         for (TunnelPool pool : pools) {
             if (pool == null) continue;
 
@@ -1271,7 +1272,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             synchronized (pool) {
                 int currentCount = pool.size();
                 int configuredQty = pool.getSettings().getQuantity();
-                int minOverride = _context.getProperty(PROP_SLOW_TUNNEL_MIN, 0);
                 int minToKeep = Math.max(2, minOverride > 0 ? minOverride : configuredQty);
 
                 if (currentCount <= minToKeep) continue;

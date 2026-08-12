@@ -90,6 +90,13 @@ public class TunnelPool {
     private final String _rateName;
     private final long _firstInstalled;
     private final AtomicInteger _consecutiveBuildTimeouts = new AtomicInteger();
+    /** Cached rate-stat handles so per-build lookups skip the StatManager map. */
+    private final RateStat[] _expireStatSlot = new RateStat[1];
+    private final RateStat[] _rejectStatSlot = new RateStat[1];
+    private final RateStat[] _successStatSlot = new RateStat[1];
+    private final RateStat[] _buildSuccessRateStatSlot = new RateStat[1];
+    private final RateStat[] _avgBWStatSlot = new RateStat[1];
+    private final RateStat[] _buildRatioStatSlot = new RateStat[1];
     private long _lastTimeoutWarningTime;
     private long _lastNoTunnelsWarningTime;
     private long _lastLastResortLogTime;
@@ -154,8 +161,8 @@ public class TunnelPool {
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_CLIENT_1 = 4;
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_CLIENT_2 = 5;
     /** Lease end is set this long before the tunnel expires, so peers re-fetch
-      * the new LeaseSet while the gateway still routes instead of racing
-      * tunnel death. */
+     * the new LeaseSet while the gateway still routes instead of racing
+     * tunnel death. */
     private static final long LEASE_SAFETY_MARGIN = 60L * 1000;
 
     /**
@@ -407,12 +414,29 @@ public class TunnelPool {
     public TunnelPoolManager getTunnelPoolManager() {return _manager;}
 
     /**
+     *  Get a rate stat, caching the handle so per-build lookups skip the
+     *  StatManager lookup.  Null results are not cached — the stat may be
+     *  registered after the first use.
+     *  @param slot the cached handle, null until first found
+     *  @param name the stat name
+     *  @return the stat, or null if not registered
+     */
+    private RateStat getRateStat(RateStat[] slot, String name) {
+        RateStat rs = slot[0];
+        if (rs == null) {
+            rs = _context.statManager().getRate(name);
+            slot[0] = rs;
+        }
+        return rs;
+    }
+
+    /**
      *  Average bandwidth per tunnel in the pool.
      *  @return average bandwidth per configured tunnel in Bps
      *  @since 0.9.66
      */
     public int getAvgBWPerTunnel() {
-        RateStat stat = _context.statManager().getRate(_rateName);
+        RateStat stat = getRateStat(_avgBWStatSlot, _rateName);
         if (stat == null)
             return 0;
         Rate rate = stat.getRate(RateConstants.FIVE_MINUTES);
@@ -726,16 +750,16 @@ public class TunnelPool {
                 th1 = BUILD_TRIES_LENGTH_OVERRIDE_1;   // 10
                 th2 = BUILD_TRIES_LENGTH_OVERRIDE_2;   // 12
                 minLen = 1;
-                e = _context.statManager().getRate("tunnel.buildExploratoryExpire");
-                r = _context.statManager().getRate("tunnel.buildExploratoryReject");
-                s = _context.statManager().getRate("tunnel.buildExploratorySuccess");
+                e = getRateStat(_expireStatSlot, "tunnel.buildExploratoryExpire");
+                r = getRateStat(_rejectStatSlot, "tunnel.buildExploratoryReject");
+                s = getRateStat(_successStatSlot, "tunnel.buildExploratorySuccess");
             } else {
                 th1 = BUILD_TRIES_LENGTH_OVERRIDE_CLIENT_1;  // 4
                 th2 = BUILD_TRIES_LENGTH_OVERRIDE_CLIENT_2;  // 5
                 minLen = 2;
-                e = _context.statManager().getRate("tunnel.buildClientExpire");
-                r = _context.statManager().getRate("tunnel.buildClientReject");
-                s = _context.statManager().getRate("tunnel.buildClientSuccess");
+                e = getRateStat(_expireStatSlot, "tunnel.buildClientExpire");
+                r = getRateStat(_rejectStatSlot, "tunnel.buildClientReject");
+                s = getRateStat(_successStatSlot, "tunnel.buildClientSuccess");
             }
             if (e != null && r != null && s != null) {
                 Rate er = e.getRate(RateConstants.TEN_MINUTES);
@@ -1250,7 +1274,7 @@ public class TunnelPool {
      * @return the build success rate
      */
     private double getBuildSuccessRate() {
-        RateStat rs = _context.statManager().getRate("tunnel.buildSuccessRate");
+        RateStat rs = getRateStat(_buildSuccessRateStatSlot, "tunnel.buildSuccessRate");
         if (rs == null)
             return Double.NaN;
         Rate rate = rs.getRate(60000L);
@@ -2193,9 +2217,9 @@ public class TunnelPool {
         Set<Hash> aliases = _settings.getAliases();
         if (aliases != null && !aliases.isEmpty()) {
             for (Hash h : aliases) {
-                 // don't corrupt other requests
-                 LeaseSet ls2 = new LeaseSet();
-                 for (int i = 0; i < ls.getLeaseCount(); i++) {ls2.addLease(ls.getLease(i));}
+                // don't corrupt other requests
+                LeaseSet ls2 = new LeaseSet();
+                for (int i = 0; i < ls.getLeaseCount(); i++) {ls2.addLease(ls.getLease(i));}
                 _context.clientManager().requestLeaseSet(h, ls2);
             }
         }
@@ -2240,15 +2264,15 @@ public class TunnelPool {
      *
      */
     private static class LeaseComparator implements Comparator<Lease>, Serializable {
-         /**
-          * Compare leases by end time, latest first.
-          */
-         public int compare(Lease l, Lease r) {
-             long lt = l.getEndTime();
-             long rt = r.getEndTime();
-             if (rt > lt) {return 1;}
-             if (rt < lt) {return -1;}
-             return 0;
+        /**
+         * Compare leases by end time, latest first.
+         */
+        public int compare(Lease l, Lease r) {
+            long lt = l.getEndTime();
+            long rt = r.getEndTime();
+            if (rt > lt) {return 1;}
+            if (rt < lt) {return -1;}
+            return 0;
         }
     }
 
@@ -3324,45 +3348,45 @@ public class TunnelPool {
      *  @since 0.9.53
      */
     private void updatePairedProfile(PooledTunnelCreatorConfig cfg, boolean success) {
-       // Will be null if paired tunnel is 0-hop
-       TunnelId pairedGW = cfg.getPairedGW();
-       if (pairedGW == null) {return;}
-       if (!success) {
-           // Don't blame the paired tunnel for exploratory build failures
-           if (_settings.isExploratory()) {return;}
-           // Don't blame the paired tunnel if there might be some other problem
-           if (getConsecutiveBuildTimeouts() > 3) {return;}
-       }
-       TunnelPool pool;
-       PooledTunnelCreatorConfig paired = null;
-       if (!_settings.isExploratory()) {
-           Hash dest = _settings.getDestination();
-           if (_settings.isInbound()) {pool = _manager.getOutboundPool(dest);}
-           else {pool = _manager.getInboundPool(dest);}
-           if (pool != null) {paired = (PooledTunnelCreatorConfig) pool.getTunnel(pairedGW);}
-       }
+        // Will be null if paired tunnel is 0-hop
+        TunnelId pairedGW = cfg.getPairedGW();
+        if (pairedGW == null) {return;}
+        if (!success) {
+            // Don't blame the paired tunnel for exploratory build failures
+            if (_settings.isExploratory()) {return;}
+            // Don't blame the paired tunnel if there might be some other problem
+            if (getConsecutiveBuildTimeouts() > 3) {return;}
+        }
+        TunnelPool pool;
+        PooledTunnelCreatorConfig paired = null;
+        if (!_settings.isExploratory()) {
+            Hash dest = _settings.getDestination();
+            if (_settings.isInbound()) {pool = _manager.getOutboundPool(dest);}
+            else {pool = _manager.getInboundPool(dest);}
+            if (pool != null) {paired = (PooledTunnelCreatorConfig) pool.getTunnel(pairedGW);}
+        }
         if (paired == null) { // Not found or exploratory
             if (_settings.isInbound()) {pool = _manager.getOutboundExploratoryPool();}
             else {pool = _manager.getInboundExploratoryPool();}
             if (pool != null) {paired = (PooledTunnelCreatorConfig) pool.getTunnel(pairedGW);}
         }
-         if (paired != null && paired.getLength() > 1) {
-             if (success) {
-                 // Seed UNTESTED paired tunnels as GOOD on build success so
-                 // the pool has at least one usable tunnel. Once tested
-                 // (GOOD/FAILING), build RTT doesn't overwrite real results.
-                 if (paired.getTestStatus() == TunnelTestStatus.UNTESTED) {
-                     long requestedOn = cfg.getExpiration() - getTunnelLifetime(_context);
-                     int rtt = (int) (_context.clock().now() - requestedOn);
-                     if (rtt > 0) {
-                         paired.testSuccessful(rtt);
-                     }
-                 }
-             }
-             // On failure: don't touch the paired tunnel's test status.
-             // A build failure in this direction doesn't indicate the paired
-             // tunnel is broken — the failure was in the new tunnel's path.
-         }
+        if (paired != null && paired.getLength() > 1) {
+            if (success) {
+                // Seed UNTESTED paired tunnels as GOOD on build success so
+                // the pool has at least one usable tunnel. Once tested
+                // (GOOD/FAILING), build RTT doesn't overwrite real results.
+                if (paired.getTestStatus() == TunnelTestStatus.UNTESTED) {
+                    long requestedOn = cfg.getExpiration() - getTunnelLifetime(_context);
+                    int rtt = (int) (_context.clock().now() - requestedOn);
+                    if (rtt > 0) {
+                        paired.testSuccessful(rtt);
+                    }
+                }
+            }
+            // On failure: don't touch the paired tunnel's test status.
+            // A build failure in this direction doesn't indicate the paired
+            // tunnel is broken — the failure was in the new tunnel's path.
+        }
     }
 
     /**
@@ -3517,7 +3541,7 @@ public class TunnelPool {
 
         // Check rate stats as secondary indicator
         String rateName = buildRateName();
-        RateStat rs = _context.statManager().getRate(rateName);
+        RateStat rs = getRateStat(_buildRatioStatSlot, rateName);
         if (rs == null) {
             return false;
         }
