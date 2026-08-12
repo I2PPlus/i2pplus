@@ -1567,6 +1567,13 @@ class Connection {
     }
 
     /**
+     * For ConnectionPacketHandler.adjustWindow()
+     *
+     * @since 0.9.71
+     */
+    public Object getWindowLock() {return _outboundPackets;}
+
+    /**
      * Congestion window end sequence number.
      *
      * @return the congestion window end

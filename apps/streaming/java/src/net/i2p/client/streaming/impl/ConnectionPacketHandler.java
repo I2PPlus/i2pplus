@@ -452,102 +452,104 @@ class ConnectionPacketHandler {
      * @return true if congested
      */
     private boolean adjustWindow(Connection con, boolean isNew, long sequenceNum, int numResends, int acked, boolean choke) {
-        boolean congested;
-        if (choke || (!isNew && sequenceNum > 0) || con.isChoked()) {
-            if (_log.shouldDebug())
-                _log.debug("Congestion on the sending side, not adjusting window...\n* " + con);
-            congested = true;
-        } else {
-            congested = false;
-        }
+        synchronized(con.getWindowLock()) {
+            boolean congested;
+            if (choke || (!isNew && sequenceNum > 0) || con.isChoked()) {
+                if (_log.shouldDebug())
+                    _log.debug("Congestion on the sending side, not adjusting window...\n* " + con);
+                congested = true;
+            } else {
+                congested = false;
+            }
 
-        long lowest = con.getHighestAckedThrough();
-        // RFC 2581
-        // Why wait until we get a whole cwin to start updating the window?
-        // That means we don't start increasing the window until after 1 RTT.
-        // And whether we increase the window or not (probably not since 1/N),
-        // we reset the CongestionWindowEnd and have to wait another RTT.
-        // So we add the acked > 1 and UnackedPacketsSent > 0 cases,
-        // so we almost always go through the window adjustment code,
-        // unless we're just sending a single packet now and then.
-        // This keeps the window size from going sky-high from  ping traffic alone.
-        // Since we don't adjust the window down after idle? (RFC 2581 sec. 4.1)
-        if (lowest >= con.getCongestionWindowEnd() ||
-            acked > 1 ||
-            con.getUnackedPacketsSent() > 0) {
-            // new packet that ack'ed uncongested data, or an empty ack
-            int oldWindow = con.getOptions().getWindowSize();
-            int newWindowSize = oldWindow;
+            long lowest = con.getHighestAckedThrough();
+            // RFC 2581
+            // Why wait until we get a whole cwin to start updating the window?
+            // That means we don't start increasing the window until after 1 RTT.
+            // And whether we increase the window or not (probably not since 1/N),
+            // we reset the CongestionWindowEnd and have to wait another RTT.
+            // So we add the acked > 1 and UnackedPacketsSent > 0 cases,
+            // so we almost always go through the window adjustment code,
+            // unless we're just sending a single packet now and then.
+            // This keeps the window size from going sky-high from  ping traffic alone.
+            // Since we don't adjust the window down after idle? (RFC 2581 sec. 4.1)
+            if (lowest >= con.getCongestionWindowEnd() ||
+                acked > 1 ||
+                con.getUnackedPacketsSent() > 0) {
+                // new packet that ack'ed uncongested data, or an empty ack
+                int oldWindow = con.getOptions().getWindowSize();
+                int newWindowSize = oldWindow;
 
-            if ((!congested) && (acked > 0)) {
-                int ssthresh = con.getSSThresh();
-                if (newWindowSize < ssthresh) {
-                    // slow start - exponential growth
-                    // grow acked/N times (where N = the slow start factor)
-                    // always grow at least 1
-                    int factor = con.getOptions().getSlowStartGrowthRateFactor();
-                    if (factor <= 1) {
-                        // above a certain point, don't grow exponentially
-                        // as it often leads to a big packet loss (30-50) all at once that
-                        // takes quite a while (a minute or more) to recover from,
-                        // especially if crypto tags are lost
-                        newWindowSize = Math.min(ssthresh, newWindowSize + acked);
-                    } else if (acked < factor)
-                        newWindowSize++;
-                    else
-                        newWindowSize += acked / factor;
-                    if (_log.shouldDebug())
-                        _log.debug("Slow start ACKs = " + acked + " for " + con);
-                // this is too fast since we mostly disabled the CongestionWindowEnd test above
-                } else {
-                    // congestion avoidance
-                    // linear growth - increase window 1/N per RTT
-                    // we can't use newWindowSize += acked/(oldWindow*N) (where N = the cong. avoid. factor), since we're
-                    // integers, so lets use a random distribution instead
-                    int caFactor = con.getOptions().getCongestionAvoidanceGrowthRateFactor();
-                    int effAcked = acked;
-                    int maxWin = con.getOptions().getMaxWindowSize();
-                    if (newWindowSize < maxWin) {
-                        // Deficit-driven growth: grow faster when well below max window
-                        // so large windows recover quickly after a loss. Tapers to 1/RTT
-                        // as the window fills, preventing overshoot at the plateau.
-                        // At maxWindow: 1x (TCP Reno, 1/RTT).
-                        // At 50% maxWindow: ~5x.
-                        // At 25% maxWindow: ~7x.
-                        int deficit = maxWin - newWindowSize;
-                        int multiplier = 1 + (8 * deficit) / Math.max(1, maxWin);
-                        effAcked = Math.max(acked, acked * multiplier);
+                if ((!congested) && (acked > 0)) {
+                    int ssthresh = con.getSSThresh();
+                    if (newWindowSize < ssthresh) {
+                        // slow start - exponential growth
+                        // grow acked/N times (where N = the slow start factor)
+                        // always grow at least 1
+                        int factor = con.getOptions().getSlowStartGrowthRateFactor();
+                        if (factor <= 1) {
+                            // above a certain point, don't grow exponentially
+                            // as it often leads to a big packet loss (30-50) all at once that
+                            // takes quite a while (a minute or more) to recover from,
+                            // especially if crypto tags are lost
+                            newWindowSize = Math.min(ssthresh, newWindowSize + acked);
+                        } else if (acked < factor)
+                            newWindowSize++;
+                        else
+                            newWindowSize += acked / factor;
+                        if (_log.shouldDebug())
+                            _log.debug("Slow start ACKs = " + acked + " for " + con);
+                    // this is too fast since we mostly disabled the CongestionWindowEnd test above
+                    } else {
+                        // congestion avoidance
+                        // linear growth - increase window 1/N per RTT
+                        // we can't use newWindowSize += acked/(oldWindow*N) (where N = the cong. avoid. factor), since we're
+                        // integers, so lets use a random distribution instead
+                        int caFactor = con.getOptions().getCongestionAvoidanceGrowthRateFactor();
+                        int effAcked = acked;
+                        int maxWin = con.getOptions().getMaxWindowSize();
+                        if (newWindowSize < maxWin) {
+                            // Deficit-driven growth: grow faster when well below max window
+                            // so large windows recover quickly after a loss. Tapers to 1/RTT
+                            // as the window fills, preventing overshoot at the plateau.
+                            // At maxWindow: 1x (TCP Reno, 1/RTT).
+                            // At 50% maxWindow: ~5x.
+                            // At 25% maxWindow: ~7x.
+                            int deficit = maxWin - newWindowSize;
+                            int multiplier = 1 + (8 * deficit) / Math.max(1, maxWin);
+                            effAcked = Math.max(acked, acked * multiplier);
+                        }
+                        int shouldIncrement = _context.random().nextInt(Math.max(1, caFactor * newWindowSize));
+                        if (shouldIncrement < effAcked)
+                            newWindowSize++;
+                        if (_log.shouldDebug())
+                            _log.debug("Congestion Avoidance ACKs = " + acked + " for " + con);
                     }
-                    int shouldIncrement = _context.random().nextInt(Math.max(1, caFactor * newWindowSize));
-                    if (shouldIncrement < effAcked)
-                        newWindowSize++;
+                } else {
                     if (_log.shouldDebug())
-                        _log.debug("Congestion Avoidance ACKs = " + acked + " for " + con);
+                        _log.debug("No change to [Window " + con.getOptions().getWindowSize() +
+                                   "]\n* Congested? " + congested + "; ACKed: " + acked + "; Resends: " + numResends);
                 }
+
+                if (newWindowSize <= 0)
+                    newWindowSize = 1;
+
+                con.getOptions().setWindowSize(newWindowSize);
+                con.setCongestionWindowEnd(newWindowSize + lowest);
+
+                if (_log.shouldDebug())
+                    _log.debug("New window size: " + newWindowSize + "/" + oldWindow + "/" + con.getOptions().getWindowSize() +
+                              " (resends: " + numResends + ") for " + con);
             } else {
                 if (_log.shouldDebug())
                     _log.debug("No change to [Window " + con.getOptions().getWindowSize() +
-                               "]\n* Congested? " + congested + "; ACKed: " + acked + "; Resends: " + numResends);
+                               "]\n* HighestAckedThrough: " + lowest + "; congestionWindowEnd: " + con.getCongestionWindowEnd() +
+                               "; ACKed: " + acked + "; UnACKed: " + con.getUnackedPacketsSent());
             }
 
-            if (newWindowSize <= 0)
-                newWindowSize = 1;
-
-            con.getOptions().setWindowSize(newWindowSize);
-            con.setCongestionWindowEnd(newWindowSize + lowest);
-
-            if (_log.shouldDebug())
-                _log.debug("New window size: " + newWindowSize + "/" + oldWindow + "/" + con.getOptions().getWindowSize() +
-                          " (resends: " + numResends + ") for " + con);
-        } else {
-            if (_log.shouldDebug())
-                _log.debug("No change to [Window " + con.getOptions().getWindowSize() +
-                           "]\n* HighestAckedThrough: " + lowest + "; congestionWindowEnd: " + con.getCongestionWindowEnd() +
-                           "; ACKed: " + acked + "; UnACKed: " + con.getUnackedPacketsSent());
+            con.windowAdjusted();
+            return congested;
         }
-
-        con.windowAdjusted();
-        return congested;
     }
 
     /**
