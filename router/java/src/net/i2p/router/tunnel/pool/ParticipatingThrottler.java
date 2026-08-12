@@ -39,11 +39,7 @@ public class ParticipatingThrottler {
     private BanLogger _banLogger;
     private static final boolean IS_SLOW = SystemVersion.isSlow();
     private static final boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
-    private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
-    private static final boolean DEFAULT_SHOULD_THROTTLE = true;
     private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
-    private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
-    private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
 
     /**
      * Min tunnels per peer before throttling.
@@ -219,8 +215,8 @@ public class ParticipatingThrottler {
         int count = counter.increment(h);
         Result rv;
         int bantime = isLU || isLowShare || isUnreachable ? 60*60*1000 : 4*60*60*1000;
-        boolean shouldThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
-        boolean shouldDisconnect = context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
+        boolean shouldThrottle = context.getProperty(RequestThrottler.PROP_SHOULD_THROTTLE, RequestThrottler.DEFAULT_SHOULD_THROTTLE);
+        boolean shouldDisconnect = context.getProperty(RequestThrottler.PROP_SHOULD_DISCONNECT, RequestThrottler.DEFAULT_SHOULD_DISCONNECT);
         boolean shouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
         boolean isBanned = context.banlist().isBanlisted(h) ||
                            context.banlist().isBanlistedHostile(h) ||

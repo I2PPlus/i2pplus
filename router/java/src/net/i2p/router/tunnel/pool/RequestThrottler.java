@@ -289,10 +289,10 @@ public class RequestThrottler {
     // Sustained load tracking — timestamp when load first exceeded threshold
     private volatile long _moderateLoadStart;
 
-    private static final boolean DEFAULT_SHOULD_THROTTLE = true;
-    private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
-    private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
-    private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
+    static final boolean DEFAULT_SHOULD_THROTTLE = true;
+    static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
+    static final boolean DEFAULT_SHOULD_DISCONNECT = false;
+    static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private static final boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
     private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
     private static final boolean DEFAULT_BAN_EXCESSIVE_REQUESTS = true;
