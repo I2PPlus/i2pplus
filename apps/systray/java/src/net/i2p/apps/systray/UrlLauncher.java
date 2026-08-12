@@ -222,7 +222,6 @@ public class UrlLauncher implements ClientApp {
      *
      * @param hkeyquery registry entry to ask for.
      * @param key key to retrieve value from
-     * @param additionalArgs additional arguments to pass to the `REG QUERY` command
      * @return either a registry "Default" value or null if one does not exist/is empty
      * @since 2.0.0
      */
@@ -242,6 +241,8 @@ public class UrlLauncher implements ClientApp {
                         }
                     }
                 }
+            } finally {
+                process.destroy();
             }
         } catch (Exception e) {
             if (_log.shouldError())

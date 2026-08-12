@@ -28,8 +28,6 @@ import java.util.Arrays;
 @SuppressWarnings("PMD.CloseResource")
 public class ShellCommand {
 
-    private static final boolean WAIT_FOR_EXIT_STATUS = true;
-
     /** @since 0.9.3 */
     private static class Result {
         public volatile boolean commandSuccessful;
@@ -56,7 +54,7 @@ public class ShellCommand {
 
         @Override
         public void run() {
-            result.commandSuccessful = execute(shellCommand, WAIT_FOR_EXIT_STATUS);
+            result.commandSuccessful = execute(shellCommand);
         }
     }
 
@@ -107,7 +105,7 @@ public class ShellCommand {
      * @since 0.9.38
      */
     public boolean executeSilentAndWait(String[] commandArray) {
-        return execute(commandArray, WAIT_FOR_EXIT_STATUS);
+        return execute(commandArray);
     }
 
     /**
@@ -212,9 +210,13 @@ public class ShellCommand {
     }
 
     /**
+     *  Executes the command and waits for it to complete.
+     *  The process is destroyed if the wait is interrupted.
+     *
      *  @param shellCommand either a String or a String[] (since 0.8.3) - quick hack
+     *  @return true if the process exited with status 0, else false
      */
-    private boolean execute(Object shellCommand, boolean waitForExitStatus) {
+    private boolean execute(Object shellCommand) {
         Process process;
         String name = null; // for debugging only
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(ShellCommand.class);
@@ -222,13 +224,13 @@ public class ShellCommand {
             // easy way so we don't have to copy this whole method
             if (shellCommand instanceof String) {
                 name = (String) shellCommand;
-                if (log.shouldDebug()) log.debug("ShellCommand exec \"" + name + "\" wait? " + waitForExitStatus);
+                if (log.shouldDebug()) log.debug("ShellCommand exec \"" + name + "\"");
                 process = Runtime.getRuntime().exec(name);
             } else if (shellCommand instanceof String[]) {
                 String[] arr = (String[]) shellCommand;
                 if (log.shouldDebug()) {
                     name = Arrays.toString(arr);
-                    log.debug("ShellCommand exec \"" + name + "\" wait? " + waitForExitStatus);
+                    log.debug("ShellCommand exec \"" + name + "\"");
                 }
                 process = Runtime.getRuntime().exec(arr);
             } else {
@@ -238,20 +240,18 @@ public class ShellCommand {
             processStderrConsumer.start();
             Thread processStdoutConsumer = new StreamConsumer(process.getInputStream());
             processStdoutConsumer.start();
-            if (waitForExitStatus) {
-                if (log.shouldDebug()) log.debug("ShellCommand waiting for \"" + name + '\"');
-                try {
-                    process.waitFor();
-                } catch (InterruptedException e) {
-                    if (log.shouldWarn()) {
-                        log.warn("ShellCommand exception waiting for \"" + name + '"', e);
-                    }
-                    return false;
+            if (log.shouldDebug()) log.debug("ShellCommand waiting for \"" + name + '\"');
+            try {
+                process.waitFor();
+            } catch (InterruptedException e) {
+                if (log.shouldWarn()) {
+                    log.warn("ShellCommand exception waiting for \"" + name + '"', e);
                 }
-
-                if (log.shouldDebug()) log.debug("ShellCommand exit value is " + process.exitValue() + " for \"" + name + '\"');
-                if (process.exitValue() > 0) return false;
+                process.destroy();
+                return false;
             }
+            if (log.shouldDebug()) log.debug("ShellCommand exit value is " + process.exitValue() + " for \"" + name + '\"');
+            if (process.exitValue() > 0) return false;
         } catch (IOException e) {
             // probably IOException, file not found from exec()
             if (log.shouldWarn()) {
