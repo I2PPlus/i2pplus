@@ -54,7 +54,7 @@ public class SAMStreamSend {
 
     /** Connection id (Integer) to peer (Flooder) */
     private final Map<String, Sender> _remotePeers;
-    private static I2PSSLSocketFactory _sslSocketFactory;
+    private static I2PSSLSocketFactory sslSocketFactory;
 
     private static final int STREAM=0;
     private static final int DG=1;
@@ -264,16 +264,16 @@ public class SAMStreamSend {
         if (!isSSL)
             return new Socket(_samHost, port);
         synchronized(SAMStreamSink.class) {
-            if (_sslSocketFactory == null) {
+            if (sslSocketFactory == null) {
                 try {
-                    _sslSocketFactory = new I2PSSLSocketFactory(
+                    sslSocketFactory = new I2PSSLSocketFactory(
                         _context, true, "certificates/sam");
                 } catch (GeneralSecurityException gse) {
                     throw new IOException("SSL error", gse);
                 }
             }
         }
-        SSLSocket sock = (SSLSocket) _sslSocketFactory.createSocket(_samHost, port);
+        SSLSocket sock = (SSLSocket) sslSocketFactory.createSocket(_samHost, port);
         I2PSSLSocketFactory.verifyHostname(_context, sock, _samHost);
         return sock;
     }

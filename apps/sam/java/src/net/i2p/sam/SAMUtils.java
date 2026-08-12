@@ -126,8 +126,7 @@ class SAMUtils {
      */
     private static Destination lookupHost(String name) {
         NamingService ns = I2PAppContext.getGlobalContext().namingService();
-        Destination dest = ns.lookup(name);
-        return dest;
+        return ns.lookup(name);
     }
 
     /**

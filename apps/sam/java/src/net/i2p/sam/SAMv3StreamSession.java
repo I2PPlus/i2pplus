@@ -55,7 +55,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     /** for subsession only, null otherwise */
     private final LinkedBlockingQueue<I2PSocket> _acceptQueue;
 
-    private static I2PSSLSocketFactory _sslSocketFactory;
+    private static I2PSSLSocketFactory sslSocketFactory;
 
     private final String nick;
 
@@ -488,9 +488,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                     if (isSSL) {
                         I2PAppContext ctx = I2PAppContext.getGlobalContext();
                         synchronized (SAMv3StreamSession.class) {
-                            if (_sslSocketFactory == null) {
+                            if (sslSocketFactory == null) {
                                 try {
-                                    _sslSocketFactory = new I2PSSLSocketFactory(ctx, true, "certificates/sam");
+                                    sslSocketFactory = new I2PSSLSocketFactory(ctx, true, "certificates/sam");
                                 } catch (GeneralSecurityException gse) {
                                     Log log = ctx.logManager().getLog(SAMv3StreamSession.class);
                                     log.error("SSL error", gse);
@@ -501,7 +501,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                                 }
                             }
                         }
-                        SSLSocket sock = (SSLSocket) _sslSocketFactory.createSocket(host, port);
+                        SSLSocket sock = (SSLSocket) sslSocketFactory.createSocket(host, port);
                         I2PSSLSocketFactory.verifyHostname(ctx, sock, host);
                         clientServerSock = new SSLSocketChannel(sock);
                     } else {

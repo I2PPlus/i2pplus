@@ -670,10 +670,8 @@ public class SAMBridge implements Runnable, ClientApp {
                 @Override
                 public void timeReached() {
                     int removed = SAMv3Handler.sSessionsHash.removeStale((long) 10 * 60 * 1000);
-                    if (removed > 0) {
-                        if (_log.shouldWarn())
-                            _log.warn("Removed " + removed + " stale SAM session(s)");
-                    }
+                    if (removed > 0 && _log.shouldWarn())
+                        _log.warn("Removed " + removed + " stale SAM session(s)");
                     schedule((long) 5 * 60 * 1000);
                 }
             }, 5 * 60 * 1000);
@@ -1086,8 +1084,7 @@ public class SAMBridge implements Runnable, ClientApp {
             if (attemptauth) {
                 if (_log.shouldLog(Log.DEBUG))
                     _log.debug("SAMBridge.secureSession() called when authentication is enabled");
-                SAMSecureSessionInterface secureSession = new SAMSecureSession();
-                return secureSession;
+                return new SAMSecureSession();
             }
         }
         return _secureSession;
