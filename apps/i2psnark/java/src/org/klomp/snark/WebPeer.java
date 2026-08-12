@@ -703,19 +703,6 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
-     * Returns the index of the first outstanding request for the given piece.
-     *
-     * @param piece the piece index
-     * @return index in outstandingRequests, or -1 if not found
-     */
-    private synchronized int getFirstOutstandingRequest(int piece) {
-        for (int i = 0; i < outstandingRequests.size(); i++) {
-            if (outstandingRequests.get(i).getPiece() == piece) return i;
-        }
-        return -1;
-    }
-
-    /**
      * Return partial pieces to the coordinator.
      *
      * @return list of partial piece requests

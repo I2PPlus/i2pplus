@@ -353,8 +353,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final Pattern COMMENT_CLEANUP = Pattern.compile("[\n\r<>#;]");
     private static final int DEFAULT_MAX_MESSAGES = 50;
 
-
-
     /**
      * "name", "announceURL=websiteURL" pairs '=' in announceURL must be escaped as &#44;
      *
@@ -4437,15 +4435,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /** Translate the given string with two substitutions. */
     private String _t(String s, Object o, Object o2) {
         return _util.getString(s, o, o2);
-    }
-
-    /**
-     * Marks for translation, does not translate.
-     *
-     * @since 0.9.53
-     */
-    private static String _x(String s) {
-        return s;
     }
 
     /**

@@ -125,7 +125,6 @@ public class Storage implements Closeable {
     private static final int BUFSIZE = PeerState.PARTSIZE;
     private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
-
     /** Configuration key for enabling file pre-allocation. */
     public static final String PROP_PREALLOCATE_FILES = "i2psnark.preallocateFiles";
 
@@ -1498,15 +1497,6 @@ public class Storage implements Closeable {
                 _isChecking = false;
             }
         }
-    }
-
-    /**
-     * Whether the check changed anything; only valid if recheck == true.
-     *
-     * @return true if changed (only valid if recheck == true)
-     */
-    private boolean locked_checkCreateFiles(boolean recheck) throws IOException {
-        return locked_checkCreateFiles(recheck, null);
     }
 
     /**
