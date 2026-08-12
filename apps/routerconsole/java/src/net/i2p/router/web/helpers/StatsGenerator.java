@@ -295,10 +295,22 @@ public class StatsGenerator {
     }
 
     private static final ThreadLocal<DecimalFormat> _fmt = ThreadLocal.withInitial(() -> new DecimalFormat("###,##0.0##"));
-    private static final String num(double num) { return _fmt.get().format(num); }
+    private static final String num(double num) {
+        try {
+            return _fmt.get().format(num);
+        } finally {
+            _fmt.remove();
+        }
+    }
 
     private static final ThreadLocal<DecimalFormat> _pct = ThreadLocal.withInitial(() -> new DecimalFormat("#0.00%"));
-    private static final String pct(double num) { return _pct.get().format(num); }
+    private static final String pct(double num) {
+        try {
+            return _pct.get().format(num);
+        } finally {
+            _pct.remove();
+        }
+    }
 
     /**
      *  Translated sort

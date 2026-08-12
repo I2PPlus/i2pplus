@@ -83,21 +83,29 @@ public abstract class RFC3339Date {
             s = s.substring(0, len - 3) + s.substring(len - 2);
         }
         DateFormat[] formats = DATE_FORMATS.get();
-        for (int i = 0; i < formats.length; i++) {
-            try {
-                Date date = formats[i].parse(s);
-                if (date != null)
-                    return date.getTime();
-            } catch (ParseException pe) { /* ignored */ }
+        try {
+            for (int i = 0; i < formats.length; i++) {
+                try {
+                    Date date = formats[i].parse(s);
+                    if (date != null)
+                        return date.getTime();
+                } catch (ParseException pe) { /* ignored */ }
+            }
+            return -1;
+        } finally {
+            DATE_FORMATS.remove();
         }
-        return -1;
     }
 
     /**
      * Format is "yyyy-MM-ddTHH:mm:ssZ"
      */
     public static String to3339Date(long t) {
-        return OUTPUT_FORMAT.get().format(new Date(t));
+        try {
+            return OUTPUT_FORMAT.get().format(new Date(t));
+        } finally {
+            OUTPUT_FORMAT.remove();
+        }
     }
 
 }

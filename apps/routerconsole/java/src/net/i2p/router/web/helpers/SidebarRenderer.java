@@ -432,7 +432,11 @@ class SidebarRenderer {
      * renderClockHTML.
      */
     public String renderClockHTML() {
-        return "<div id=clock class=volatile>" + CLOCK_FMT.get().format(new Date()) + "</div>";
+        try {
+            return "<div id=clock class=volatile>" + CLOCK_FMT.get().format(new Date()) + "</div>";
+        } finally {
+            CLOCK_FMT.remove();
+        }
     }
 
     /**
