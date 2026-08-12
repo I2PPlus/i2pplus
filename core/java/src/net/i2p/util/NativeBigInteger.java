@@ -376,8 +376,6 @@ public class NativeBigInteger extends BigInteger {
 
     private static final boolean _isOS2 = System.getProperty("os.name").startsWith("OS/2");
     private static final boolean _isMac = SystemVersion.isMac();
-    private static final boolean _isLinux =
-            System.getProperty("os.name").toLowerCase(Locale.US).contains("linux");
     private static final boolean _isKFreebsd =
             System.getProperty("os.name").toLowerCase(Locale.US).contains("kfreebsd");
     private static final boolean _isFreebsd = (!_isKFreebsd)

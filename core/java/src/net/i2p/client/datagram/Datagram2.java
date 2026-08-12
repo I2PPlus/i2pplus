@@ -58,7 +58,6 @@ public class Datagram2 {
     private final byte[] _payload;
     private final Properties _options;
 
-    private static final int INIT_DGRAM_BUFSIZE = 2 * 1024;
     private static final int MIN_DGRAM_SIZE = 387 + 2 + 40;
     private static final int MAX_DGRAM_BUFSIZE = 61 * 1024;
     private static final byte VERSION_MASK = 0x0f;

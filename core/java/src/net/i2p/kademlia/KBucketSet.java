@@ -118,15 +118,6 @@ public class KBucketSet<T extends SimpleDataStructure> {
         _bucketsLock.readLock().lock();
     }
 
-    /**
-     *  Try to acquire the read lock without blocking.
-     *
-     *  @return true if the lock was acquired
-     */
-    private boolean tryReadLock() {
-        return _bucketsLock.readLock().tryLock();
-    }
-
     private void releaseReadLock() {
         _bucketsLock.readLock().unlock();
     }

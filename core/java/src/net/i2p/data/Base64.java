@@ -196,7 +196,6 @@ public class Base64 {
         -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9                     // Decimal 244 - 255
     };
 
-    private final static byte WHITE_SPACE_ENC = -5; // Indicates white space in encoding
     /** Defeats instantiation. */
     private Base64() { // nop
     }

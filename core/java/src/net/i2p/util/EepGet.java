@@ -759,7 +759,6 @@ public class EepGet {
         private long _discarded;
         private long _lastComplete;
         private boolean _firstTime;
-        private final DecimalFormat _pct = new DecimalFormat("00.0%");
         /**
          * Default constructor, 1024-byte marks and 40 marks per line.
          */

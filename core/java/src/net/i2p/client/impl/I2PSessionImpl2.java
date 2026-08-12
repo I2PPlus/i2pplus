@@ -58,7 +58,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /** Don't expect any MSMs from the router for outbound traffic @since 0.8.1 */
     protected boolean _noEffort;
     private static final long REMOVE_EXPIRED_TIME = (long) 63*1000;
-    private static final long[] RATES = { 60*1000, 10*60*1000L, 30*60*1000L, 60*60*1000L };
     private static Method _tunnelManagerMethod;
 
     /**
