@@ -872,9 +872,9 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  const snarkPageSize = ").append(pageSize).append(";\n")
                .append("  const snarkRefreshDelay = ").append(delay).append(";\n")
                .append("  const totalSnarks = ").append(_manager.listTorrentFiles().size()).append(";\n")
-                .append("  window.snarkPageSize = snarkPageSize;\n")
-                .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
-                .append("  window.totalSnarks = totalSnarks;\n</script>\n");
+               .append("  window.snarkPageSize = snarkPageSize;\n")
+               .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
+               .append("  window.totalSnarks = totalSnarks;\n</script>\n");
             if (!isStandalone()) {
                 buf.append("<script src=").append(resourcePath).append("js/tunnelCounter.js type=module></script>\n");
             }
