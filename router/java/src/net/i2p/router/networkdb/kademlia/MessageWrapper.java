@@ -219,10 +219,10 @@ public class MessageWrapper {
      */
     public static OneTimeSession generateSession(RouterContext ctx, Hash localDest,
                                                  long expiration, boolean forceElG) {
-         SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(localDest);
-         if (skm == null)
-             return null;
-         return generateSession(ctx, skm, expiration, forceElG);
+        SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(localDest);
+        if (skm == null)
+            return null;
+        return generateSession(ctx, skm, expiration, forceElG);
     }
 
     /**

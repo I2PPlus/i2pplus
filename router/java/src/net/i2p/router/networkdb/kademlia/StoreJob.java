@@ -233,7 +233,7 @@ abstract class StoreJob extends JobImpl {
                 DatabaseEntry ds;
                 if (_facade.isClientDb()) {
                     ds = ((FloodfillNetworkDatabaseFacade) getContext().netDb()).getDataStore().get(peer);
-                 } else {ds = _facade.getDataStore().get(peer);}
+                } else {ds = _facade.getDataStore().get(peer);}
                 if ((ds == null) || !(ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {
                     if (_log.shouldInfo()) {
                         _log.info("Error selecting closest hash that wasn't a Router! [" +
@@ -256,8 +256,8 @@ abstract class StoreJob extends JobImpl {
                 } else {
                     int peerTimeout = _facade.getPeerTimeout(peer);
                     if (_log.shouldInfo()) {
-                         int attempts = _state.getAttemptedCount() + 1;
-                         _log.info("Sending key [" + _state.getTarget().toBase32().substring(0,8) + "] " +
+                        int attempts = _state.getAttemptedCount() + 1;
+                        _log.info("Sending key [" + _state.getTarget().toBase32().substring(0,8) + "] " +
                                    (attempts > 1 ? "(Attempt: " + attempts + ")" : "") + "\n* To: " + closestHashes);
                     }
                     _state.addPending(peer);

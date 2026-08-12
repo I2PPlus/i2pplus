@@ -175,7 +175,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                  */
                 else {wasNew = false;}
             } catch (UnsupportedCryptoException uce) {
-               if (_log.shouldError()) {_log.error("Unsupported Encryption: " + uce.getMessage());}
+                if (_log.shouldError()) {_log.error("Unsupported Encryption: " + uce.getMessage());}
                 invalidMessage = uce.getMessage();
                 dontBlamePeer = true;
             } catch (IllegalArgumentException iae) {invalidMessage = iae.getMessage();}

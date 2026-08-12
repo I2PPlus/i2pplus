@@ -56,7 +56,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      */
     public FloodfillNetworkDatabaseSegmentor(RouterContext context) {
         _log = context.logManager().getLog(getClass());
-            _context = context;
+        _context = context;
         _mainDbid = new FloodfillNetworkDatabaseFacade(_context, MAIN_DBID);
     }
 

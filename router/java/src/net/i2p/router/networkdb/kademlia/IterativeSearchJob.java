@@ -444,8 +444,8 @@ public class IterativeSearchJob extends FloodSearchJob {
             return;
         }
         if (_expiration - MIN_SINGLE_SEARCH_TIME < now) { // not enough time left to bother
-          cancelJob();
-          return;
+            cancelJob();
+            return;
         }
         if (_expiration - 1500 < now)  {_expiration = now + 1500;}
         while (true) {
@@ -571,8 +571,8 @@ public class IterativeSearchJob extends FloodSearchJob {
                     isClientReplyTunnel = true;
                 }
                 if (replyTunnel == null) {
-                   if (_log.shouldWarn())
-                       _log.warn(getJobId() + ": ISJ from " + _facade + " for " +
+                    if (_log.shouldWarn())
+                        _log.warn(getJobId() + ": ISJ from " + _facade + " for " +
                                  (_isLease ? "LS " : "RI ") +
                                   _key + " to " + peer +
                                   " failed, no IB tunnel (client or exploratory) to receive reply");

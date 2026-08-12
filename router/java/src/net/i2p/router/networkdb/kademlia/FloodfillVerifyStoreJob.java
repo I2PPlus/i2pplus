@@ -149,9 +149,9 @@ class FloodfillVerifyStoreJob extends JobImpl {
         // garlic encrypt to hide contents from the OBEP
         RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(_target);
         if (peer == null) {
-             if (_log.shouldWarn()) {
-                 _log.warn("LOCAL lookup of RouterInfo for target " + _target + " failed [DbId: " + _facade + "]");
-             }
+            if (_log.shouldWarn()) {
+                _log.warn("LOCAL lookup of RouterInfo for target " + _target + " failed [DbId: " + _facade + "]");
+            }
             _facade.verifyFinished(_key);
             return;
         }
@@ -169,7 +169,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     sess = MessageWrapper.generateSession(ctx, ctx.sessionKeyManager(), VERIFY_TIMEOUT, !supportsRatchet);
                 } else {
                     // We don't have a compatible way to get a reply, skip it for now.
-                     if (_log.shouldWarn()) {_log.warn("Skipping NetDbStore verify for incompatible Router " + peer);}
+                    if (_log.shouldWarn()) {_log.warn("Skipping NetDbStore verify for incompatible Router " + peer);}
                     _facade.verifyFinished(_key);
                     return;
                 }
@@ -182,7 +182,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 if (supportsElGamal || supportsRatchet) {
                     sess = MessageWrapper.generateSession(ctx, _client, VERIFY_TIMEOUT, !supportsRatchet); // garlic encrypt
                     if (sess == null) {
-                         if (_log.shouldWarn()) {_log.warn("No SessionKeyManager for connection to [" + _target.toBase64().substring(0,6) + "]");}
+                        if (_log.shouldWarn()) {_log.warn("No SessionKeyManager for connection to [" + _target.toBase64().substring(0,6) + "]");}
                         _facade.verifyFinished(_key);
                         return;
                     }
@@ -217,7 +217,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             else {fromKey = _client;}
             _wrappedMessage = MessageWrapper.wrap(ctx, lookup, fromKey, peer);
             if (_wrappedMessage == null) {
-                 if (_log.shouldWarn()) {_log.warn("Garlic encryption failure");}
+                if (_log.shouldWarn()) {_log.warn("Garlic encryption failure");}
                 _facade.verifyFinished(_key);
                 return;
             }
@@ -226,7 +226,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             // force full ElG for ECIES fromkey or forces ECIES for ECIES peer
             sent = MessageWrapper.wrap(ctx, lookup, peer);
             if (sent == null) {
-                 if (_log.shouldWarn()) {_log.warn("Garlic encryption failure");}
+                if (_log.shouldWarn()) {_log.warn("Garlic encryption failure");}
                 _facade.verifyFinished(_key);
                 return;
             }

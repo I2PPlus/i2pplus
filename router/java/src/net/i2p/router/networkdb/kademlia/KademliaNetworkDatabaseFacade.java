@@ -331,8 +331,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @throws IllegalStateException if called on a client database
      */
     protected PeerSelector createPeerSelector() {
-       if (isClientDb()) {throw new IllegalStateException();}
-       return new FloodfillPeerSelector(_context);
+        if (isClientDb()) {throw new IllegalStateException();}
+        return new FloodfillPeerSelector(_context);
     }
 
     /**
@@ -427,7 +427,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // MAX_EXPLORE_QUEUE enforced in loop below
         for (Iterator<Hash> iter = keys.iterator(); iter.hasNext() && _exploreKeys.size() < MAX_EXPLORE_QUEUE;) {
             _exploreKeys.add(iter.next());
-         }
+        }
         _context.statManager().addRateData("netDb.exploreKeySet", _exploreKeys.size());
     }
 
@@ -661,7 +661,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     @Override
     public List<BlindData> getBlindData() {
-       return blindCache().getData();
+        return blindCache().getData();
     }
 
     /**
@@ -1777,11 +1777,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 blindCache().setBlinded(dest);
             }
         } else if (type == DatabaseEntry.KEY_TYPE_LS2 || type == DatabaseEntry.KEY_TYPE_META_LS2) {
-             // if it came in via garlic
-             LeaseSet2 ls2 = (LeaseSet2) leaseSet;
-             if (ls2.isBlindedWhenPublished()) {
-                 Destination dest = leaseSet.getDestination();
-                 if (dest != null) {blindCache().setBlinded(dest, null, null);}
+            // if it came in via garlic
+            LeaseSet2 ls2 = (LeaseSet2) leaseSet;
+            if (ls2.isBlindedWhenPublished()) {
+                Destination dest = leaseSet.getDestination();
+                if (dest != null) {blindCache().setBlinded(dest, null, null);}
             }
         }
         return rv;
@@ -1965,7 +1965,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @param routerId the short ID of the router
      * @return true if the router has invalid NTCP addresses and was banned, false otherwise
      */
-     private boolean banInvalidNTCPAddresses(RouterInfo routerInfo, long now, String caps, String routerId) {
+    private boolean banInvalidNTCPAddresses(RouterInfo routerInfo, long now, String caps, String routerId) {
         for (RouterAddress ra : routerInfo.getTargetAddresses("NTCP2")) {
             String i = ra.getOption("i");
             if (i != null && i.length() != 24) {
@@ -2136,7 +2136,7 @@ return false;
             return true;
         }
         return false;
-     }
+    }
 
     /** Clean up existing LU routers loaded before the ban was added. Called at startup to remove LU routers from the netdb. */
     public void cleanupLURouters() {
