@@ -17,7 +17,7 @@
     theme = "\"" + theme + "\"";
 %>
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
 <head>
 <script src=/js/setupIframe.js></script>
 <link rel=preload href="images/how.svg" as="object">

@@ -28,8 +28,8 @@
     boolean overrideEnabled = false;
 %>
 <!DOCTYPE html>
-<%  if (isDarkTheme) { %><html id=tman style=background:#000> <% } %>
-<%  else { %><html id=tman><% } %>
+<%  if (isDarkTheme) { %><html lang="en" id=tman style=background:#000> <% } %>
+<%  else { %><html lang="en" id=tman><% } %>
 <head>
 <meta charset=utf-8>
 <title><%=intl._t("Tunnel Manager")%></title>

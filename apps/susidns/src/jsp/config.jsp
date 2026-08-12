@@ -61,7 +61,7 @@
     theme = "\"" + theme + "\"";
 %>
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
 <head>
 <script src=/js/setupIframe.js></script>
 <meta charset=utf-8>

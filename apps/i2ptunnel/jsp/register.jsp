@@ -22,7 +22,7 @@
      }
    }
 %>
-<html id=tman>
+<html lang="en" id=tman>
 <head>
 <script src=/js/setupIframe.js></script>
 <title><%=intl._t("Tunnel Manager")%> - <%=intl._t("Registration Helper")%></title>

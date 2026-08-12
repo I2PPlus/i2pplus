@@ -32,7 +32,7 @@
      else {curPage = curPage + 1;}
    }
 %>
-<html id=tman>
+<html lang="en" id=tman>
 <head>
 <script src=/js/setupIframe.js></script>
 <title><%=intl._t("I2P Tunnel Manager - Tunnel Creation Wizard")%></title>

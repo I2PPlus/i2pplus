@@ -21,7 +21,7 @@
     }
 %>
 <!DOCTYPE html>
-<html id=tman>
+<html lang="en" id=tman>
 <head>
 <script src=/js/setupIframe.js></script>
 <title><%=intl._t("Tunnel Manager")%> - <%=(__isClient ? intl._t("Edit Client Tunnel") : intl._t("Edit Server Tunnel"))%></title>
