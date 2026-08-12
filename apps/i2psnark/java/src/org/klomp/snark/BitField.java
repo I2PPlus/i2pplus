@@ -28,7 +28,7 @@ import java.util.Arrays;
 public class BitField {
 
     private final byte[] data;
-    private final int size;
+    protected final int size;
     private int count;
 
     /**
@@ -60,6 +60,18 @@ public class BitField {
         System.arraycopy(bitfield, 0, this.data, 0, arraysize);
 
         for (int i = 0; i < size; i++) if (get(i)) this.count++;
+    }
+
+    /**
+     * For CompleteBitField. All methods except size() must be overridden.
+     *
+     * @param size the number of bits in the bit field
+     * @param dummy ignored
+     * @since 0.9.71
+     */
+    protected BitField(int size, int dummy) {
+        this.size = size;
+        data = null;
     }
 
     /**
@@ -189,7 +201,7 @@ public class BitField {
         BitField bf = (BitField) o;
         return count == bf.count()
                 && size == bf.size()
-                && Arrays.equals(data, bf.getFieldBytes());
+                && (count == size || Arrays.equals(data, bf.getFieldBytes()));
     }
 
     @Override
