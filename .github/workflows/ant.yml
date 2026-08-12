@@ -23,7 +23,7 @@ jobs:
       - name: PackageInstall
         run: sudo apt install -y gettext ant-contrib parallel uglifyjs
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Set up JDK 8
         uses: actions/setup-java@v5
@@ -54,12 +54,15 @@ jobs:
           fi
           git archive --format=zip -o "dist/i2p-src-${SHA:0:8}.zip" "$SHA"
 
+      - name: Install jsdoc template dependencies
+        run: bash tools/jsdoc/install-jsdoc-deps.sh
+
       - name: Build jsdoc
         continue-on-error: true
         run: ant jsdoc-zip
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: i2p-build-artifacts
           path: |
@@ -95,7 +98,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v8
         with:
           name: i2p-build-artifacts
           path: artifacts/

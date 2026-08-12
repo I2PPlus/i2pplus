@@ -5,7 +5,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-TEMPLATE_DIR="$SCRIPT_DIR/tools/jsdoc/docdash-template"
+TEMPLATE_DIR="$SCRIPT_DIR/docdash-template"
 
 echo "Installing JSDoc dependencies..."
 
