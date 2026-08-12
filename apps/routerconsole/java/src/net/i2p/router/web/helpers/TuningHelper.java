@@ -149,7 +149,6 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.highLoadCpuPct", _x("High-Load CPU Threshold"));
         DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.moderateLoadLagMs", _x("Moderate-Load Lag Threshold"));
         DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.moderateLoadCpuPct", _x("Moderate-Load CPU Threshold"));
-        DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.sustainedHighLoadMs", _x("Sustained High-Load Window"));
         DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", _x("Sustained Moderate-Load Window"));
         DISPLAY_NAMES.put("tunnel.peerSelection.activityWindowMultiplier", _x("Peer Activity Window Multiplier"));
         DISPLAY_NAMES.put("tunnel.pool.failureThreshold", _x("Pool Build Failure Threshold"));
@@ -283,7 +282,6 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.highLoadCpuPct", _x("System load percent triggering high-load request gating."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.moderateLoadLagMs", _x("Job queue lag triggering moderate-load peer disconnect (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.moderateLoadCpuPct", _x("System load percent triggering moderate-load disconnect."));
-        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.sustainedHighLoadMs", _x("Duration of high load before gating requests (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", _x("Duration of moderate load before declining requests (ms)."));
         PARAM_DESCRIPTIONS.put("tunnel.peerSelection.activityWindowMultiplier", _x("Widens peer recency window to re-admit peers when builds fail."));
         PARAM_DESCRIPTIONS.put("tunnel.pool.failureThreshold", _x("Consecutive failures before pool backoff."));

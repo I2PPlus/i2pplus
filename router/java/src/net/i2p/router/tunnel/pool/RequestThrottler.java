@@ -1,14 +1,9 @@
 package net.i2p.router.tunnel.pool;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerArray;
-import java.util.regex.Pattern;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
@@ -37,8 +32,6 @@ public class RequestThrottler {
     private final ObjectCounter<Hash> counter;
     private final Log _log;
     private BanLogger _banLogger;
-    private volatile String lastBlockCountriesProp;
-    private volatile Set<String> cachedBlockedCountries;
     private volatile long lastFirewallCheckTime;
     private volatile boolean cachedFirewalledStatus;
     private static final long FIREWALL_CHECK_INTERVAL = 10*60*1000L; // Check every 10 minutes
@@ -301,9 +294,6 @@ public class RequestThrottler {
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private static final boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
     private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
-    private static final String PROP_BLOCK_COUNTRIES = "router.blockCountries";
-    private static final String DEFAULT_BLOCK_COUNTRIES = "";
-    private static final Pattern COMMA_SPLIT = Pattern.compile(",");
 
     /**
      * Creates a new RequestThrottler bound to the given router context.
@@ -317,8 +307,6 @@ public class RequestThrottler {
         this.counter = new ObjectCounter<>();
         this._burstCounter = new BurstWindowCounter(BURST_WINDOW_MS, BURST_BUCKET_COUNT);
         _log = ctx.logManager().getLog(RequestThrottler.class);
-        this.lastBlockCountriesProp = null;
-        this.cachedBlockedCountries = Collections.emptySet();
         this.lastFirewallCheckTime = 0;
         this.cachedFirewalledStatus = false;
         this.lastPropertyCheckTime = 0;
@@ -551,32 +539,6 @@ public class RequestThrottler {
     }
 
     /**
-     * Returns the set of country codes configured to be blocked from participation.
-     * Uses caching to avoid repeated string operations.
-     *
-     * @return set of country codes (in lower case) to block; empty if none configured
-     * @since 0.9.65+
-     */
-    private Set<String> getBlockedCountries() {
-        String blockCountries = context.getProperty(PROP_BLOCK_COUNTRIES, DEFAULT_BLOCK_COUNTRIES);
-
-        // Check if cache is still valid
-        if (blockCountries.equals(lastBlockCountriesProp)) {
-            return cachedBlockedCountries;
-        }
-
-        // Update cache
-        lastBlockCountriesProp = blockCountries;
-        if (blockCountries.isEmpty()) {
-            cachedBlockedCountries = Collections.emptySet();
-        } else {
-            cachedBlockedCountries = new HashSet<>(Arrays.asList(blockCountries.toLowerCase().split(",")));
-        }
-
-        return cachedBlockedCountries;
-    }
-
-    /**
      * Computes a 0.0–1.0 load score from job queue lag, CPU load, system load,
      * and bandwidth queue pressure. Shared curve shape with ParticipatingThrottler.
      */
@@ -661,17 +623,6 @@ public class RequestThrottler {
         return caps.indexOf(Router.CAPABILITY_BW256) >= 0 ||
                caps.indexOf(Router.CAPABILITY_BW512) >= 0 ||
                caps.indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
-    }
-
-    /**
-     * Checks if router is low tier (lowest bandwidth tiers).
-     * @return whether l tier
-     */
-    private boolean isLTier(RouterInfo ri) {
-        if (ri == null) return false;
-        String caps = ri.getCapabilities();
-        return caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
-               caps.indexOf(Router.CAPABILITY_BW32) >= 0;
     }
 
     /**

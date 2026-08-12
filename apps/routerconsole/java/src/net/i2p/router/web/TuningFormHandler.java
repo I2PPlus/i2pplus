@@ -247,8 +247,6 @@ public class TuningFormHandler extends FormHandler {
         TUNED.add(t);
         t = new Tunable("i2p.tunnel.requestThrottle.rejectThreshold", "i2pTunnelRequestthrottleRejectthreshold", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
-        t = new Tunable("i2p.tunnel.requestThrottle.sustainedHighLoadMs", "i2pTunnelRequestthrottleSustainedhighloadms", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
-        TUNED.add(t);
         t = new Tunable("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", "i2pTunnelRequestthrottleSustainedmoderateloadms", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
 // Tunnel

@@ -11459,7 +11459,6 @@ protected int computeTarget(double observed) {
      * Tunes the high-load job lag threshold in RequestThrottler.
      * Higher = more tolerant (only rejects under severe lag).
      * Lower = more sensitive (rejects sooner under moderate lag).
-     * Sustained load detection requires this threshold to persist for sustainedHighLoadMs.
      *
      * @since 0.9.70+
      */

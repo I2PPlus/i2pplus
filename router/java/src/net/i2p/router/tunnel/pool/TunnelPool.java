@@ -435,8 +435,6 @@ public class TunnelPool {
         }
     }
 
-    private long getLifetime() {return System.currentTimeMillis() - _started;}
-
     /**
      * Pull a random tunnel out of the pool.  If there are none available but
      * the pool is configured to allow 0hop tunnels, this builds a fake one
@@ -706,136 +704,6 @@ public class TunnelPool {
             }
         } finally {_tunnelsLock.unlock();}
         return true;
-    }
-
-    /**
-     * Return settings.getTotalQuantity, unless this is an exploratory tunnel
-     * AND exploratory build success rate is less than 1/10, AND total settings
-     * is greater than 1. Otherwise subtract 1 to help prevent congestion collapse,
-     * and prevent really unintegrated routers from working too hard.
-     * We only do this for exploratory as different clients could have different
-     * length settings. Although I guess inbound and outbound exploratory
-     * could be different too, and inbound is harder...
-     *
-     * As of 0.9.19, add more if exploratory and floodfill, as floodfills
-     * generate a lot of exploratory traffic.
-     * TODO high-bandwidth non-floodfills do also...
-     *
-     * Also returns 1 if set for zero hop, client or exploratory.
-     *
-     * Enhanced with exponential backoff for firewalled routers to prevent
-     * tunnel pool exhaustion after extended uptime.
-     *
-     * @return the adjusted total quantity
-     * @since 0.8.11
-     */
-    private int getAdjustedTotalQuantity() {
-        if (_settings.getLength() == 0 && _settings.getLengthVariance() == 0) {return 1;}
-        long uptime = _context.router().getUptime();
-        int rv = _settings.getTotalQuantity();
-
-        if (!_settings.isExploratory()) {
-            if (rv <= 1) {return rv;}
-            // throttle client tunnel builds in times of congestion with exponential backoff
-            int fails = _consecutiveBuildTimeouts.get();
-            // Don't reduce quantity if test queue is saturated — the bottleneck is
-            // testing capacity, not build capacity. Reducing builds would starve
-            // the pool of new tunnels that could be tested when capacity frees up.
-            boolean testQueueSaturated = TestJob.getCurrentTestJobCount() >=
-                                         TestJob.getMaxTestJobs();
-            // Don't reduce quantity when pool has 0 GOOD tunnels — reducing the
-            // target in this state makes recovery impossible and guarantees
-            // pool collapse.  The backoff is meant to avoid wasting build slots
-            // during congestion, but with 0 GOOD tunnels every build is critical.
-            boolean poolEmpty = getActiveTunnelCount() == 0;
-            // At >= 30 consecutive timeouts, override the poolEmpty guard:
-            // the destination is likely unreachable or all candidate peers dead.
-            // Reduce quantity to 1 to stop wasting build slots.
-            // The pool gets a single attempt per cycle — if it succeeds, normal
-            // backoff resumes; if not, no harm in minimal retries.
-            if (fails > 30 && !testQueueSaturated) {
-                rv = Math.max(1, _settings.getTotalQuantity() / 4);
-                if (rv < 1) {rv = 1;}
-                if (_log.shouldWarn() && !shouldSuppressTimeoutWarning()) {
-                    _log.warn("Extreme backoff: reducing " + this + " to " + rv +
-                              " after " + fails + " consecutive timeouts (destination may be unreachable)");
-                }
-            } else if (fails > 12 && !testQueueSaturated && !poolEmpty) {
-                // Linear backoff: reduce by 50% after 12 failures
-                int reductionFactor = 2; // Max 2x reduction
-
-                // Check if router is firewalled using status check
-                boolean isFirewalled = _context.commSystem().getStatus() == CommSystemFacade.Status.REJECT_UNSOLICITED ||
-                                   _context.commSystem().getStatus() == CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
-                                   _context.commSystem().getStatus() == CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
-                                   _context.commSystem().getStatus() == CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
-                                   _context.commSystem().getStatus() == CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
-                                   _context.commSystem().getStatus() == CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
-
-                int minTunnels = isFirewalled ? 3 : 2; // Keep minimum tunnels for redundancy
-
-                rv = Math.max(minTunnels, _settings.getTotalQuantity() / reductionFactor);
-
-                // Additional safety: never reduce below 2 for non-firewalled, 3 for firewalled
-                if (isFirewalled && rv < 3) {rv = 3;}
-                else if (rv < 2) {rv = 2;}
-
-                if (fails >= 10 && _log.shouldWarn() && !shouldSuppressTimeoutWarning() && uptime > getStartupTime(_context)) {
-                    _log.warn("Limiting to " + rv + " tunnels after " + fails +
-                              " consecutive build timeouts on " + this);
-                }
-            } else if (fails > 12 && testQueueSaturated) {
-                if (_log.shouldWarn() && !shouldSuppressTimeoutWarning() && uptime > getStartupTime(_context)) {
-                    _log.warn("Test queue saturated (" + TestJob.getCurrentTestJobCount() +
-                              "/" + TestJob.getMaxTestJobs() +
-                              ") -> NOT reducing tunnel quantity on " + this + " (fails=" + fails + ")");
-                }
-            }
-            // Ensure minimum of 2 for basic redundancy, but don't over-build
-            // beyond the configured quantity during normal operation
-            if (!(_settings.getLength() == 0 && _settings.getLengthVariance() == 0)) {
-                if (fails <= 12 || testQueueSaturated) {
-                    if (rv < 2) {
-                        rv = 2;
-                    }
-                }
-            }
-            return rv;
-        }
-        // TODO high-bw non-ff also
-        if ((_context.netDb().floodfillEnabled() && uptime > getStartupTime(_context) ||SystemVersion.getMaxMemory() >= 1024L * 1024 * 1024) && rv < 3) {
-            rv = 3;
-       } else if (_settings.isExploratory() && rv < 2) {
-            rv = 2;
-       }
-       if (rv > 1) {
-           RateStat e = _context.statManager().getRate("tunnel.buildExploratoryExpire");
-           RateStat r = _context.statManager().getRate("tunnel.buildExploratoryReject");
-           RateStat s = _context.statManager().getRate("tunnel.buildExploratorySuccess");
-           if (e != null && r != null && s != null) {
-               Rate er = e.getRate(RateConstants.TEN_MINUTES);
-               Rate rr = r.getRate(RateConstants.TEN_MINUTES);
-               Rate sr = s.getRate(RateConstants.TEN_MINUTES);
-               if (er != null && rr != null && sr != null) {
-                    RateAverages ra = RateAverages.getTemp();
-                    long ec = er.computeAverages(ra, false).getTotalEventCount();
-                    long rc = rr.computeAverages(ra, false).getTotalEventCount();
-                    long sc = sr.computeAverages(ra, false).getTotalEventCount();
-                    long tot = ec + rc + sc;
-                    if (tot >= getBuildTriesQuantityOverride(_context)) {
-                        if (1000 * sc / tot <= 1000 / getBuildTriesQuantityOverride(_context)) {rv--;}
-                    }
-                }
-            }
-        }
-        // Ensure minimum of 2 for basic redundancy, but don't over-build
-        // beyond what the configuration and existing logic already provide
-        if (!(_settings.getLength() == 0 && _settings.getLengthVariance() == 0)) {
-            if (rv < 2) {
-                rv = 2;
-            }
-        }
-        return rv;
     }
 
     /**
@@ -1392,25 +1260,6 @@ public class TunnelPool {
         if (Double.isNaN(avg))
             return Double.NaN;
         return avg / 100.0;
-    }
-
-    /**
-     *  Effective latency value for prune sorting.
-     *  Higher = slower = more likely to be pruned.
-     *  Uses average latency (3+ samples), then last latency,
-     *  then MAX_VALUE (no data = prune first).
-     *  @return latency in ms, or Integer.MAX_VALUE if unknown
-     */
-    private static int getEffectiveLatencyForPrune(TunnelInfo info) {
-        if (info instanceof TunnelCreatorConfig) {
-            TunnelCreatorConfig cfg = (TunnelCreatorConfig) info;
-            if (cfg.hasEnoughLatencyTests()) {
-                return cfg.getAverageLatency();
-            }
-            int last = cfg.getLastLatency();
-            if (last >= 0) return last;
-        }
-        return Integer.MAX_VALUE;
     }
 
     /**
@@ -2799,25 +2648,6 @@ public class TunnelPool {
     }
 
     /**
-     * Build an emergency LeaseSet from a single tunnel's gateway lease,
-     * bypassing failure filters. Used when all tunnels have been removed
-     * due to failures, to keep the destination reachable during the
-     * replacement build window. Uses the HopConfig expiration (full
-     * 10-minute lifetime) rather than the shortened failure expiration.
-     */
-    private LeaseSet buildEmergencyLeaseSet(TunnelInfo cfg) {
-        if (cfg == null) {return null;}
-        Lease lease = buildLeaseFromTunnel(cfg);
-        if (lease == null) {return null;}
-        LeaseSet ls = new LeaseSet();
-        ls.addLease(lease);
-        if (_log.shouldWarn()) {
-            _log.warn(toString() + "\n* Emergency LeaseSet published from failed tunnel " + cfg);
-        }
-        return ls;
-    }
-
-    /**
      * Find the best degraded tunnel from a given list for emergency LS fallback.
      * Picks the tunnel with the fewest consecutive failures (excluding fully
      * dead tunnels).  If tied, picks the one with the latest expiration.
@@ -3461,7 +3291,7 @@ public class TunnelPool {
     /**
      *  Increment consecutive build timeout counter.
      *  Called by BuildExecutor for first-hop failures (OTHER_FAILURE with buildTime >= 1000ms)
-     *  so the adaptive quantity throttling in getAdjustedTotalQuantity() can respond.
+     *  so the pool's build-health checks can respond to sustained first-hop failures.
      *  @since 0.9.68
      */
     void incrementBuildTimeout() {_consecutiveBuildTimeouts.incrementAndGet();}
