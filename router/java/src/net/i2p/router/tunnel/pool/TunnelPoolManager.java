@@ -711,7 +711,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             synchronized (_mgr) {
                 // The pool may have been removed (and possibly recreated) since this was scheduled
                 if (_mgr._clientOutboundPools.get(_dest) != outbound) {return;}
-                if (inbound.getTunnelCount() > 0 || ++attempts >= maxAttempts) {
+                if (inbound.size() > 0 || ++attempts >= maxAttempts) {
                     _mgr._pendingOutboundStartups.remove(_dest, this);
                     outbound.startup();
                 } else {
@@ -768,8 +768,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             TunnelPool inbound = _clientInboundPools.get(destination);
             TunnelPool outbound = _clientOutboundPools.get(destination);
             int tunnelCount = 0;
-            if (inbound != null) tunnelCount += inbound.getTunnelCount();
-            if (outbound != null) tunnelCount += outbound.getTunnelCount();
+            if (inbound != null) tunnelCount += inbound.size();
+            if (outbound != null) tunnelCount += outbound.size();
             _log.info("Delayed pool removal scheduled for [" + destination.toBase32().substring(0,8) +
                       "] - " + tunnelCount + " tunnels will expire naturally");
         }
@@ -1269,7 +1269,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
             // PHASE A: Snapshot decision under lock
             synchronized (pool) {
-                int currentCount = pool.getTunnelCount();
+                int currentCount = pool.size();
                 int configuredQty = pool.getSettings().getQuantity();
                 int minOverride = _context.getProperty(PROP_SLOW_TUNNEL_MIN, 0);
                 int minToKeep = Math.max(2, minOverride > 0 ? minOverride : configuredQty);

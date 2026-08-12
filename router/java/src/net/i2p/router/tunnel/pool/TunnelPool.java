@@ -902,11 +902,6 @@ public class TunnelPool {
      */
     public List<PooledTunnelCreatorConfig> listPending() {synchronized (_inProgress) {return new ArrayList<>(_inProgress);}}
 
-    /** Duplicate of size(), let's pick one.
-     *  @return the number of tunnels in the pool
-     */
-    int getTunnelCount() {return size();}
-
     /**
      *  Count tunnels that are usable for routing — not failed, not expired,
      *  not expiring within 5 minutes.  Used by the EMERGENCY balance check
@@ -1002,9 +997,7 @@ public class TunnelPool {
         return _alive && (_settings.isExploratory() || _context.clientManager().isLocal(_settings.getDestination()));
     }
 
-    /** Duplicate of getTunnelCount(), let's pick one.
-     *  @return the number of tunnels in the pool
-     */
+    /** @return the number of tunnels in the pool */
     public int size() {
         _tunnelsLock.lock();
         try {return _tunnels.size();} finally {_tunnelsLock.unlock();}
@@ -1203,7 +1196,7 @@ public class TunnelPool {
                 Hash dest = _settings.getDestination();
                 TunnelPool oppositePool = _manager.getOutboundPool(dest);
                 if (oppositePool != null) {
-                    int oppositeUsable = oppositePool.getTunnelCount();
+                    int oppositeUsable = oppositePool.size();
                     int oppositeMin = oppositePool.getSettings().getQuantity();
                     if (oppositeUsable < oppositeMin) {
                         // OB pool is below target — don't prune IB tunnels.
@@ -1661,7 +1654,7 @@ public class TunnelPool {
             }
         }
 
-        if (getTunnelCount() <= 0 && !isAlive()) {
+        if (size() <= 0 && !isAlive()) {
             // this calls both our shutdown() and the other one (inbound/outbound)
             // This is racy - see TunnelPoolManager
             _manager.removeTunnels(_settings.getDestination());
@@ -2247,7 +2240,7 @@ public class TunnelPool {
             }
             _lastRefreshTime = now;
             if (_log.shouldDebug()) {
-                _log.debug(toString() + "\n* Refreshing LeaseSet (force=" + force + ", count=" + getTunnelCount() + ")");
+                _log.debug(toString() + "\n* Refreshing LeaseSet (force=" + force + ", count=" + size() + ")");
             }
             LeaseSet ls;
             _tunnelsLock.lock();
@@ -2724,7 +2717,7 @@ public class TunnelPool {
         // Non-published tunnels are valid backups — they carry data and can be
         // included in the next LeaseSet.  Pruning them creates churn: build 3
         // → publish 1 gateway → prune 2 → pool drops to 0-1 → EMERGENCY → repeat.
-        int currentSize = getTunnelCount();
+        int currentSize = size();
         int target = getEffectiveTarget();
         // Dynamic scaling: keep extra tunnels when pool keeps collapsing
         int effectiveTarget = Math.min(target + _consecutiveEmergencies,
@@ -2742,7 +2735,7 @@ public class TunnelPool {
             _log.info(toString() + " -> Pruning " + toRemove.size() +
                       " non-published tunnels after LeaseSet publish " +
                       "(published " + publishedGateways.size() + " gateways, " +
-                      "pool total " + getTunnelCount() + ")");
+                      "pool total " + size() + ")");
         }
         // Batch removal under lock
         // Do NOT cancel ExpireJobs — same reason as pruneNonGoodTunnels():
@@ -3141,7 +3134,7 @@ public class TunnelPool {
             // MORE usable tunnels than its paired direction.  When both pools are at
             // zero usable, both must build — skipping both causes a deadlock where
             // neither pool ever recovers.  Use getUsableTunnelCount() (not
-            // getTunnelCount()) so zombie tunnels with hundreds of failures
+            // size()) so zombie tunnels with hundreds of failures
             // don't block recovery.
             TunnelPool paired = _pairedPool;
             if (paired != null) {

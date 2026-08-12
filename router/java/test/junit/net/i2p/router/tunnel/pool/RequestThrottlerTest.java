@@ -154,18 +154,6 @@ public class RequestThrottlerTest {
     }
 
     @Test
-    public void testSustainedHighLoadMsClampLow() {
-        RequestThrottler.setSustainedHighLoadMs(1000);
-        assertEquals(5000, RequestThrottler.getSustainedHighLoadMs());
-    }
-
-    @Test
-    public void testSustainedHighLoadMsClampHigh() {
-        RequestThrottler.setSustainedHighLoadMs(300_000);
-        assertEquals(120_000, RequestThrottler.getSustainedHighLoadMs());
-    }
-
-    @Test
     public void testSustainedModerateLoadMsClampLow() {
         RequestThrottler.setSustainedModerateLoadMs(1000);
         assertEquals(10_000, RequestThrottler.getSustainedModerateLoadMs());

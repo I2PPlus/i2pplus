@@ -647,7 +647,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new RequestHighLoadCpuParam());
         _params.add(new RequestModerateLoadLagParam());
         _params.add(new RequestModerateLoadCpuParam());
-        _params.add(new RequestSustainedHighLoadParam());
         _params.add(new RequestSustainedModerateLoadParam());
         // Pool backoff
         _params.add(new PoolFailureThresholdParam());
@@ -11588,44 +11587,6 @@ protected int computeTarget(double observed) {
     }
 
     /**
-     * Tunes how long high load must persist before gating requests.
-     * Higher = more tolerant (waits longer before rejecting).
-     * Lower = more responsive (rejects sooner under sustained load).
-     *
-     * @since 0.9.70+
-     */
-    private class RequestSustainedHighLoadParam extends BaseParam {
-        RequestSustainedHighLoadParam() {
-            super("i2p.tunnel.requestThrottle.sustainedHighLoadMs", "Sustained high-load window (ms)",
-                  SUB_TRANSIT, 5000, 120_000, 5000, "jobQueue.jobLag", _context);
-        }
-        /** Apply the tunable value to the router configuration. */
-        protected void applyValue(int value) { RequestThrottler.setSustainedHighLoadMs(value); }
-        /** Read the current runtime value of this tunable from router config. */
-        protected int getRuntimeValue() { return (int) RequestThrottler.getSustainedHighLoadMs(); }
-        /** Read the observed stat value for autotuning decisions. */
-        protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
-        }
-        /** Compute the target value based on observed stat and configured limits. */
-        protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
-            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            int sysLoad = SystemVersion.getSystemLoad();
-            boolean highLoad = !Double.isNaN(jobLag) && jobLag > 500 && sysLoad > 70;
-            // Under sustained high load, shorten window for faster reaction
-            if (highLoad && current > _min) return Math.max(_min, current - _step * 2);
-            // When idle, lengthen window to avoid reacting to transient spikes
-            if (!highLoad && current < _max) return Math.min(_max, current + _step);
-            return current;
-        }
-    }
-
-    /**
      * Tunes how long moderate load must persist before disconnecting low-share peers.
      *
      * @since 0.9.70+
@@ -11649,15 +11610,7 @@ protected int computeTarget(double observed) {
         }
         /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
-            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            int sysLoad = SystemVersion.getSystemLoad();
-            // Moderate window should be ~2x the high window
-            int highWindow = (int) RequestThrottler.getSustainedHighLoadMs();
-            int target = Math.max(_min, Math.min(_max, highWindow * 2));
-            if (current < target && current < _max) return Math.min(_max, current + _step);
-            if (current > target && current > _min) return Math.max(_min, current - _step);
-            return current;
+            return getRuntimeValue();
         }
     }
 

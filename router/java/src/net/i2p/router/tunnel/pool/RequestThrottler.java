@@ -78,8 +78,6 @@ public class RequestThrottler {
     public static volatile int _moderateLoadCpuPct = 90;
     /** Moderate-load system load threshold (percent, normalized by cores) @since 0.9.70+ */
     public static volatile int _moderateLoadSysLoadPct = 80;
-    /** Duration (ms) high load must persist before gating requests @since 0.9.70+ */
-    public static volatile long _sustainedHighLoadMs = 30_000;
     /** Duration (ms) moderate load must persist before disconnecting low-share peers @since 0.9.70+ */
     public static volatile long _sustainedModerateLoadMs = 60_000;
 
@@ -266,20 +264,6 @@ public class RequestThrottler {
      */
     public static void setModerateLoadSysLoadPct(int val) { _moderateLoadSysLoadPct = Math.max(30, Math.min(100, val)); }
     /**
-     * The duration (ms) high load must persist before gating requests.
-     *
-     * @return the sustained high load duration (ms)
-     * @since 0.9.70+
-     */
-    public static long getSustainedHighLoadMs() { return _sustainedHighLoadMs; }
-    /**
-     * The duration (ms) high load must persist before gating requests.
-     *
-     * @param val the sustained high load duration (clamped to 5-120s)
-     * @since 0.9.70+
-     */
-    public static void setSustainedHighLoadMs(long val) { _sustainedHighLoadMs = Math.max(5000, Math.min(120_000, val)); }
-    /**
      * The duration (ms) moderate load must persist before disconnecting low-share peers.
      *
      * @return the sustained moderate load duration (ms)
@@ -309,7 +293,6 @@ public class RequestThrottler {
     private final Map<Hash, BurstOffenseRecord> _burstOffenses = new ConcurrentHashMap<>();
 
     // Sustained load tracking — timestamp when load first exceeded threshold
-    private volatile long _highLoadStart;
     private volatile long _moderateLoadStart;
 
     private static final boolean DEFAULT_SHOULD_THROTTLE = true;
@@ -361,7 +344,6 @@ public class RequestThrottler {
         _moderateLoadLagMs = ctx.getProperty("i2p.tunnel.requestThrottle.moderateLoadLagMs", 500);
         _moderateLoadCpuPct = ctx.getProperty("i2p.tunnel.requestThrottle.moderateLoadCpuPct", 90);
         _moderateLoadSysLoadPct = ctx.getProperty("i2p.tunnel.requestThrottle.moderateLoadSysLoadPct", 80);
-        _sustainedHighLoadMs = ctx.getProperty("i2p.tunnel.requestThrottle.sustainedHighLoadMs", 30_000L);
         _sustainedModerateLoadMs = ctx.getProperty("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", 60_000L);
         ctx.statManager().createRequiredRateStat("tunnel.throttleRequestReject", "Request throttle reject count", "Tunnels [Participating]", RATES);
         new Cleaner().schedule(CLEAN_TIME);

@@ -1569,18 +1569,4 @@ public class BuildExecutor implements Runnable {
         }
     }
 
-    /**
-     * Count tunnels with expiry > minExpiryMs from now
-     */
-    private int countWithExpiry(TunnelPool pool, long now, int minExpiryMs) {
-        int count = 0;
-        List<TunnelInfo> tunnels = pool.listTunnels();
-        for (TunnelInfo info : tunnels) {
-            if (info.getExpiration() - now > minExpiryMs) {
-                count++;
-            }
-        }
-        return count;
-    }
-
 }

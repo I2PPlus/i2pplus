@@ -68,9 +68,9 @@ public class TestJob extends JobImpl {
      * Tunable via i2p.tunnel.testJob.maxConcurrent (default: 64 fast / 32 slow)
      * @return the max concurrent tests
      */
-    private int getMaxConcurrentTests() {
-        return getContext().getProperty("i2p.tunnel.testJob.maxConcurrent",
-                                        SystemVersion.isSlow() ? 32 : 64);
+    private static int getMaxConcurrentTests(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.testJob.maxConcurrent",
+                               SystemVersion.isSlow() ? 32 : 64);
     }
 
     /**
@@ -124,6 +124,19 @@ public class TestJob extends JobImpl {
     private static int getMaxClientPerPool(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.testJob.maxClientPerPool", 24);
     }
+
+    /**
+     *  Per-pool test budget for client pools, bounded by three knobs:
+     *  the Tuner budget (dynamic), the pool-coverage cap (at most
+     *  coverageThreshold of a pool's active tunnels under test at once),
+     *  and the absolute per-pool cap.  With defaults the Tuner budget
+     *  (effectively unlimited) is superseded by the coverage cap.
+     */
+    private static int getClientPoolTestBudget(RouterContext ctx, TunnelPool pool) {
+        int activeCount = pool.getActiveTunnelCount();
+        int coverageCap = Math.max(1, (int) Math.ceil(activeCount * getPoolCoverageThreshold(ctx)));
+        return Math.min(Math.min(Tuner.getTestClientBudget(), coverageCap), getMaxClientPerPool(ctx));
+    }
     private static final float DEFAULT_SUCCESS_RATE = 0.5f; // 50% for new tunnels
 
     /**
@@ -137,9 +150,24 @@ public class TestJob extends JobImpl {
     /**
      * Maximum number of TestJob instances that should be queued before deferring new ones.
      * Prevents job queue saturation from too many waiting tunnel tests.
-     * Tunable via i2p.tunnel.testJob.maxQueued (default: 192 fast / 96 slow)
+     * Tunable via i2p.tunnel.testJob.maxQueued (default: 96 fast / 64 slow).
+     * Dynamically overridden by the Tuner at runtime; when it still holds the
+     * built-in default, the configured property value is applied on first use.
      */
-    public static volatile int maxQueuedTests = SystemVersion.isSlow() ? 64 : 96;
+    private static final int DEFAULT_QUEUED_LIMIT = SystemVersion.isSlow() ? 64 : 96;
+
+    public static volatile int maxQueuedTests = DEFAULT_QUEUED_LIMIT;
+
+    /**
+     *  Refresh {@link #maxQueuedTests} from the configured property when the
+     *  Tuner has not overridden the static dynamically.
+     */
+    private static void applyConfiguredQueuedLimit(RouterContext ctx) {
+        int configured = getBaseMaxQueuedTests(ctx);
+        if (maxQueuedTests == DEFAULT_QUEUED_LIMIT && maxQueuedTests != configured) {
+            maxQueuedTests = configured;
+        }
+    }
 
     /**
      *  Base max queued tests value, read from PROP or static default.
@@ -332,7 +360,7 @@ public class TestJob extends JobImpl {
                 String poolId = getPoolId(pool);
                 int activeCount = pool.getActiveTunnelCount();
                 if (activeCount > 0) {
-                    int poolTestBudget = Tuner.getTestClientBudget();
+                    int poolTestBudget = getClientPoolTestBudget(ctx, pool);
                     poolCount = POOL_TEST_COUNTS.computeIfAbsent(poolId, k -> new AtomicInteger(0));
                     int prev = poolCount.getAndIncrement();
                     if (prev >= poolTestBudget) {
@@ -347,6 +375,11 @@ public class TestJob extends JobImpl {
             }
             Long tunnelKey = getTunnelKey(cfg);
             if (tunnelKey != null && RUNNING_TESTS.containsKey(tunnelKey)) {
+                TOTAL_TEST_JOBS.decrementAndGet();
+                if (poolCount != null) {poolCount.decrementAndGet();}
+                return false;
+            }
+            if (RUNNING_TESTS.size() >= getMaxConcurrentTests(ctx)) {
                 TOTAL_TEST_JOBS.decrementAndGet();
                 if (poolCount != null) {poolCount.decrementAndGet();}
                 return false;
@@ -413,12 +446,21 @@ public class TestJob extends JobImpl {
             return false;
         }
 
-        Long tunnelKey = getTunnelKey(cfg);
+Long tunnelKey = getTunnelKey(cfg);
         if (tunnelKey != null && RUNNING_TESTS.containsKey(tunnelKey)) {
             TOTAL_TEST_JOBS.decrementAndGet();
             Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldDebug()) {
                 log.debug("Test already running for tunnel key " + tunnelKey + " -> Skipping duplicate test for " + cfg);
+            }
+            return false;
+        }
+
+        if (RUNNING_TESTS.size() >= getMaxConcurrentTests(ctx)) {
+            TOTAL_TEST_JOBS.decrementAndGet();
+            Log log = ctx.logManager().getLog(TestJob.class);
+            if (log.shouldDebug()) {
+                log.debug("Concurrent test limit (" + getMaxConcurrentTests(ctx) + ") reached -> Not scheduling test for " + cfg);
             }
             return false;
         }
@@ -436,7 +478,7 @@ public class TestJob extends JobImpl {
                 if (pool.getSettings().isExploratory()) {
                     poolTestBudget = getMaxExploratoryPerPool(ctx);
                 } else {
-                    poolTestBudget = Tuner.getTestClientBudget();
+                    poolTestBudget = getClientPoolTestBudget(ctx, pool);
                 }
                 AtomicInteger poolCount = POOL_TEST_COUNTS.computeIfAbsent(poolId, k -> new AtomicInteger(0));
                 int prev = poolCount.getAndIncrement();
@@ -527,6 +569,7 @@ public class TestJob extends JobImpl {
      */
     public TestJob(RouterContext ctx, PooledTunnelCreatorConfig cfg, TunnelPool pool) {
         super(ctx);
+        applyConfiguredQueuedLimit(ctx);
         _log = ctx.logManager().getLog(TestJob.class);
         _cfg = cfg;
         _pool = (pool != null) ? pool : cfg.getTunnelPool();
@@ -1311,20 +1354,30 @@ public class TestJob extends JobImpl {
 
     private int getTestPeriod() {
         final RouterContext ctx = getContext();
-        if (_outTunnel == null || _replyTunnel == null) return 15*1000;
-
-        // Use mainline's formula: 3x transport avg + 2.5s per hop.
-        // No upper cap — slow networks need generous timeouts to avoid
-        // false test failures that trigger unnecessary pool churn.
-        RateStat tspt = ctx.statManager().getRate("transport.sendProcessingTime");
-        if (tspt != null) {
-            Rate r = tspt.getRate(60*1000L);
-            if (r != null) {
-                int delay = 3 * (int) r.getAverageValue();
-                return delay + (2500 * (_outTunnel.getLength() + _replyTunnel.getLength()));
+        int period;
+        if (_outTunnel == null || _replyTunnel == null) {
+            period = 15*1000;
+        } else {
+            // Use mainline's formula: 3x transport avg + 2.5s per hop.
+            // No upper cap — slow networks need generous timeouts to avoid
+            // false test failures that trigger unnecessary pool churn.
+            RateStat tspt = ctx.statManager().getRate("transport.sendProcessingTime");
+            if (tspt != null) {
+                Rate r = tspt.getRate(60*1000L);
+                if (r != null) {
+                    int delay = 3 * (int) r.getAverageValue();
+                    period = delay + (2500 * (_outTunnel.getLength() + _replyTunnel.getLength()));
+                } else {
+                    period = 15*1000;
+                }
+            } else {
+                period = 15*1000;
             }
         }
-        return 15*1000;
+        // Clamp to the configured window; the min must stay >= the 20s
+        // dispatchOutbound minimum so the ReplySelector doesn't expire
+        // before the message arrives.
+        return Math.max(getMinTestPeriod(), Math.min(getMaxTestPeriod(), period));
     }
 
     /**

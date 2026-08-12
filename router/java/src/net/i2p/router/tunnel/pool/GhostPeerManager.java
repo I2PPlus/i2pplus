@@ -38,6 +38,19 @@ public class GhostPeerManager {
         return ctx.getProperty("i2p.tunnel.ghostPeer.attackCooldownMs", 180*1000);
     }
 
+    /**
+     *  Cooldown for the current network state: under stress, rehabilitate
+     *  peers faster — many get ghosted through no fault of their own when
+     *  the whole network is slow.
+     */
+    private long getActiveCooldownMs() {
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        if (buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD) {
+            return getAttackCooldownMs(_context);
+        }
+        return getCooldownMs(_context);
+    }
+
     private static final int MAX_TRACKED_PEERS = 1024;
 
     /**
@@ -72,7 +85,7 @@ public class GhostPeerManager {
             Long existingTime = _ghostSince.putIfAbsent(peer, _context.clock().now());
             if (existingTime == null && _log.shouldWarn()) {
                 _log.warn("Peer [" + peer.toBase64().substring(0,6) + "] marked as ghost for " +
-                          getCooldownMs(_context)/1000 + "s -> " +
+                          getActiveCooldownMs()/1000 + "s -> " +
                            newCount + " consecutive tunnel build timeouts" +
                            (underAttack ? " (network under stress, shortened threshold " + getThreshold() + ")" : ""));
             }
@@ -91,7 +104,7 @@ public class GhostPeerManager {
             return;
         }
         int threshold = getThreshold();
-        long cooldown = getCooldownMs(_context);
+        long cooldown = getActiveCooldownMs();
         long now = _context.clock().now();
         for (Map.Entry<Hash, AtomicInteger> e : _timeoutCounts.entrySet()) {
             Hash peer = e.getKey();
@@ -142,10 +155,7 @@ public class GhostPeerManager {
         Long since = _ghostSince.get(peer);
         if (since != null) {
             long elapsed = _context.clock().now() - since;
-            // Under attack: use shorter cooldown to rehabilitate peers faster.
-            // During network-wide events, peers get ghosted through no fault of their
-            // own — the network is slow, not the peer.
-            long cooldown = getCooldownMs(_context);
+            long cooldown = getActiveCooldownMs();
             if (elapsed >= cooldown) {
                 _timeoutCounts.remove(peer);
                 _ghostSince.remove(peer);
