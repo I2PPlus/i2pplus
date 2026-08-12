@@ -590,11 +590,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             slash = oldPath.length();
                             oldPath = oldPath.concat("/");
                         }
-                        String _dest = oldPath.substring(0, slash);
-                        if (slash >= 516 && !_dest.contains(".")) {
+                        String dest = oldPath.substring(0, slash);
+                        if (slash >= 516 && !dest.contains(".")) {
                             // possible alternative:
                             // redirect to b32
-                            destination = _dest;
+                            destination = dest;
                             host = getHostName(destination);
                             targetRequest = requestURI.toASCIIString();
                             String newURI = oldPath.substring(slash);
@@ -654,8 +654,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                         i.e. on your eepsite put
                                         <a href="?i2paddresshelper=name.i2p">This is the name I want to be called.</a>
                                          */
-                                        Destination _dest = _context.namingService().lookup(ahelperKey);
-                                        if (_dest == null) {
+                                        Destination dest = _context.namingService().lookup(ahelperKey);
+                                        if (dest == null) {
                                             if (_log.shouldWarn()) {
                                                 _log.warn(getPrefix(requestId) + "Could not find destination for " + ahelperKey);
                                             }
@@ -672,7 +672,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                             }
                                             return;
                                         }
-                                        ahelperKey = _dest.toBase64();
+                                        ahelperKey = dest.toBase64();
                                     }
 
                                     ahelperPresent = true;

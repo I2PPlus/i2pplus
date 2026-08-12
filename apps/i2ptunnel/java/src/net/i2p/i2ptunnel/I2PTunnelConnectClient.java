@@ -274,7 +274,6 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                     // strip Proxy-Authenticate from the response in HTTPResponseOutputStream
                     // save for auth check below
                     authorization = line.substring(21);  // "proxy-authorization: ".length()
-                    line = null;
                 } else if (!line.isEmpty()) {
                     // Additional lines - shouldn't be too many. Firefox sends:
                     // User-Agent: blabla
@@ -283,7 +282,6 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                     //
                     // We could send these (filtered like in HTTPClient) on to the outproxy,
                     // but for now just chomp them all.
-                    line = null;
                 } else {
                     // Add Proxy-Authentication header for next hop (outproxy)
                     if (usingWWWProxy && Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_OUTPROXY_AUTH))) {

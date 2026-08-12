@@ -53,7 +53,7 @@ public class MultiSource implements Source, Sink {
      *  @throws RuntimeException
      *  @since 0.9.53 added fromPort and toPort parameters
      */
-    public void send(Destination ignored_from, int ignored_fromPort, int ignored_toPort, byte[] data) {
+    public void send(Destination ignoredFrom, int ignoredFromPort, int ignoredToPort, byte[] data) {
         if (sinks.isEmpty()) {
             if (log.shouldDebug())
                 log.debug("No subscribers to send " + data.length + " bytes to");

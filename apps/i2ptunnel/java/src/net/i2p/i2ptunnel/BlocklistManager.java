@@ -53,8 +53,8 @@ public class BlocklistManager {
     private Pattern _regexPattern = null;
     private long _blocklistLastModified;
     private List<String> _clientBlockList = new ArrayList<>();
-    private static long _blocklistClientsLastModified;
-    private static int _cachedClientBlockListSize = -1;
+    private static long blocklistClientsLastModified;
+    private static int cachedClientBlockListSize = -1;
     private int _clientLimit;
 
     /**
@@ -193,7 +193,7 @@ public class BlocklistManager {
         if (!blocklistClients.exists()) {
             try {
                 blocklistClients.createNewFile();
-                _blocklistClientsLastModified = blocklistClients.lastModified();
+                blocklistClientsLastModified = blocklistClients.lastModified();
             } catch (IOException e) {
                 _log.error("[HTTPServer] Error creating file for blocked destination (" + e.getMessage() + ")");
                 return;
@@ -213,7 +213,7 @@ public class BlocklistManager {
             } catch (IOException e) {
                 _log.error("[HTTPServer] Error logging blocked destination (" + e.getMessage() + ")");
             }
-            _blocklistClientsLastModified = blocklistClients.lastModified();
+            blocklistClientsLastModified = blocklistClients.lastModified();
         }
     }
 
@@ -225,7 +225,7 @@ public class BlocklistManager {
      */
     private synchronized void refreshClientBlocklist(File blocklistClients) throws IOException {
         long currentLastModified = blocklistClients.lastModified();
-        if (currentLastModified != _blocklistClientsLastModified) {
+        if (currentLastModified != blocklistClientsLastModified) {
             _clientBlockList.clear();
             try (BufferedReader reader = new BufferedReader(
                     new InputStreamReader(new BufferedInputStream(new FileInputStream(blocklistClients)), StandardCharsets.UTF_8))) {
@@ -240,8 +240,8 @@ public class BlocklistManager {
                 _log.error("[HTTPServer] Error reading client blocklist file (" + e.getMessage() + ")");
                 throw e;
             }
-            _blocklistClientsLastModified = currentLastModified;
-            _cachedClientBlockListSize = _clientBlockList.size();
+            blocklistClientsLastModified = currentLastModified;
+            cachedClientBlockListSize = _clientBlockList.size();
         }
     }
 
@@ -271,6 +271,6 @@ public class BlocklistManager {
      * @return the number of entries in the client blocklist, or -1 if not initialized
      */
     public int getClientBlocklistSize() {
-        return _cachedClientBlockListSize;
+        return cachedClientBlockListSize;
     }
 }

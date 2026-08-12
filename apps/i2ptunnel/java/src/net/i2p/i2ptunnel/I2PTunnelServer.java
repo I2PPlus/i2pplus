@@ -124,7 +124,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     /**
      *  Server ID for HTTP bidirectional proxies; not incremented, always 0.
      */
-    protected static volatile long __serverId = 0;
+    protected static volatile long serverId = 0;
     private static final int DEFAULT_LOCAL_PORT = 4488;
     protected int localPort = DEFAULT_LOCAL_PORT;
 

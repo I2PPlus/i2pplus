@@ -13,7 +13,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -1669,7 +1668,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     static void addEntry(Map<String, List<String>> headers, String key, String value) {
         List<String> entry = headers.get(key);
-        if (entry == null) {headers.put(key, entry = new ArrayList<>(1));}
+        if (entry == null) {
+            entry = new ArrayList<>(1);
+            headers.put(key, entry);
+        }
         entry.add(value);
     }
 
@@ -1681,10 +1683,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @param value the header value to set (replaces all existing values for this key)
      */
     static void setEntry(Map<String, List<String>> headers, String key, String value) {
-      List<String> entry = headers.get(key);
-      if (entry == null) {headers.put(key, entry = new ArrayList<>(1));}
-      else {entry.clear();}
-      entry.add(value);
+        List<String> entry = headers.get(key);
+        if (entry == null) {
+            entry = new ArrayList<>(1);
+            headers.put(key, entry);
+        } else {
+            entry.clear();
+        }
+        entry.add(value);
     }
 
     /**

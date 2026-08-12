@@ -995,7 +995,7 @@ public class TunnelController implements Logging {
                     long remaining = deadline - System.currentTimeMillis();
                     if (remaining <= 0) {break;}
                     try {wait(remaining);}
-                    catch (InterruptedException ie) {break;}
+                    catch (InterruptedException ie) {Thread.currentThread().interrupt(); break;}
                 }
             }
             if (_state != TunnelState.STOPPED && _log.shouldWarn())
@@ -1042,20 +1042,17 @@ public class TunnelController implements Logging {
             }
         }
 
-        if (oldConfig != null) {
-            if (configChanged(_config, oldConfig, PROP_FILE) ||
-                configChanged(_config, oldConfig, OPT_ALT_PKF) ||
-                configChanged(_config, oldConfig, OPT_SIG_TYPE)) {
-                log("‣ Tunnel must be stopped and restarted for private key file changes to take effect");
-            }
+        if (oldConfig != null &&
+            (configChanged(_config, oldConfig, PROP_FILE) ||
+             configChanged(_config, oldConfig, OPT_ALT_PKF) ||
+             configChanged(_config, oldConfig, OPT_SIG_TYPE))) {
+            log("‣ Tunnel must be stopped and restarted for private key file changes to take effect");
         }
 
         // Running, so check sessions
         Collection<I2PSession> sessions = getAllSessions();
-        if (sessions.isEmpty()) {
-             if (_log.shouldDebug())
-                 _log.debug("Running but no sessions to update");
-        }
+        if (sessions.isEmpty() && _log.shouldDebug())
+            _log.debug("Running but no sessions to update");
         for (I2PSession s : sessions) {
             // tell the router via the session
             if (!s.isClosed()) {
@@ -1102,20 +1099,16 @@ public class TunnelController implements Logging {
      * @param type the tunnel type
      */
     private void setServerDefaults(String type) {
-        if (type.equals(TYPE_HTTP_SERVER)) {
-            if (!_config.containsKey(OPT_LIMIT_ACTION))
-                _config.setProperty(OPT_LIMIT_ACTION, "http");
-        }
+        if (type.equals(TYPE_HTTP_SERVER) && !_config.containsKey(OPT_LIMIT_ACTION))
+            _config.setProperty(OPT_LIMIT_ACTION, "http");
         if (type.equals(TYPE_HTTP_SERVER) || type.equals(TYPE_STREAMR_SERVER)) {
             String tgzip = _config.getProperty(PROP_TUN_GZIP);
-            if (tgzip == null || Boolean.parseBoolean(tgzip)) {
-                // Web server will gzip
-                // If web server doesn't gzip, I2PTunnelHTTPServer will.
-                // Streaming will force gzip on first packet for header compression,
-                // regardless of this setting
-                if (!_config.containsKey(OPT_I2CP_GZIP))
-                    _config.setProperty(OPT_I2CP_GZIP, "false");
-            }
+            // Web server will gzip
+            // If web server doesn't gzip, I2PTunnelHTTPServer will.
+            // Streaming will force gzip on first packet for header compression,
+            // regardless of this setting
+            if ((tgzip == null || Boolean.parseBoolean(tgzip)) && !_config.containsKey(OPT_I2CP_GZIP))
+                _config.setProperty(OPT_I2CP_GZIP, "false");
             if (!_config.containsKey(OPT_BUNDLE_REPLY))
                 _config.setProperty(OPT_BUNDLE_REPLY, "false");
             if (!_config.containsKey(OPT_ENCTYPE))
@@ -1142,12 +1135,10 @@ public class TunnelController implements Logging {
             if (!_config.containsKey(OPT_ENCTYPE))
                 _config.setProperty(OPT_ENCTYPE, "6,4");
         }
-        if (type.equals(TYPE_IRC_CLIENT) || type.equals(TYPE_STD_CLIENT) ||
-            type.equals(TYPE_IRC_SERVER) || type.equals(TYPE_STD_SERVER) ||
-            type.equals(TYPE_SOCKS_IRC)) {
-            if (!_config.containsKey(OPT_PRIORITY))
-                _config.setProperty(OPT_PRIORITY, "10");
-        }
+        if ((type.equals(TYPE_IRC_CLIENT) || type.equals(TYPE_STD_CLIENT) ||
+             type.equals(TYPE_IRC_SERVER) || type.equals(TYPE_STD_SERVER) ||
+             type.equals(TYPE_SOCKS_IRC)) && !_config.containsKey(OPT_PRIORITY))
+            _config.setProperty(OPT_PRIORITY, "10");
     }
 
     /**
@@ -1158,14 +1149,12 @@ public class TunnelController implements Logging {
      */
     private void setSignatureDefault(String type) {
         // same default logic as in EditBean.getSigType() and GeneralHelper.getSigType()
-        if (!isClient(type) ||
-            type.equals(TYPE_IRC_CLIENT) || type.equals(TYPE_STD_CLIENT) ||
-            type.equals(TYPE_SOCKS) || type.equals(TYPE_CONNECT) ||
-            type.equals(TYPE_SOCKS_IRC) || type.equals(TYPE_STREAMR_CLIENT) ||
-            type.equals(TYPE_HTTP_CLIENT)) {
-            if (!_config.containsKey(OPT_SIG_TYPE))
-                _config.setProperty(OPT_SIG_TYPE, PREFERRED_SIGTYPE.name());
-        }
+        if ((!isClient(type) ||
+             type.equals(TYPE_IRC_CLIENT) || type.equals(TYPE_STD_CLIENT) ||
+             type.equals(TYPE_SOCKS) || type.equals(TYPE_CONNECT) ||
+             type.equals(TYPE_SOCKS_IRC) || type.equals(TYPE_STREAMR_CLIENT) ||
+             type.equals(TYPE_HTTP_CLIENT)) && !_config.containsKey(OPT_SIG_TYPE))
+            _config.setProperty(OPT_SIG_TYPE, PREFERRED_SIGTYPE.name());
     }
 
     /**
@@ -1220,10 +1209,10 @@ public class TunnelController implements Logging {
      */
     private void setClientDefaults(String type) {
         if (isClient(type) &&
-            (type.equals(TYPE_HTTP_CLIENT) || Boolean.parseBoolean(_config.getProperty(PROP_SHARED)))) {
+            (type.equals(TYPE_HTTP_CLIENT) || Boolean.parseBoolean(_config.getProperty(PROP_SHARED))) &&
+            !_config.containsKey(OPT_ENCTYPE)) {
             // migration: HTTP proxy and shared clients default to MLKEM768+ECIES
-            if (!_config.containsKey(OPT_ENCTYPE))
-                _config.setProperty(OPT_ENCTYPE, "6,4");
+            _config.setProperty(OPT_ENCTYPE, "6,4");
         }
     }
 

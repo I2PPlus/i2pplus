@@ -85,6 +85,7 @@ public class I2Ping extends I2PTunnelClientBase {
         try {
             runCommand(getTunnel().getClientOptions().getProperty(PROP_COMMAND));
         } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
             l.log(" ✖ I2Ping was interrupted during execution");
             _log.error("Pinger interrupted", ex);
         } catch (IOException ex) {
@@ -324,6 +325,7 @@ public class I2Ping extends I2PTunnelClientBase {
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
                     l.log(" ✖ Interrupted while waiting for tunnels");
                     return;
                 }

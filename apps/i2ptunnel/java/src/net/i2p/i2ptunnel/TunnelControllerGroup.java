@@ -47,7 +47,7 @@ public class TunnelControllerGroup implements ClientApp {
     private volatile ClientAppState _state;
     private final I2PAppContext _context;
     private final ClientAppManager _mgr;
-    private static volatile TunnelControllerGroup _instance;
+    private static volatile TunnelControllerGroup instance;
     /** Default config file name */
     static final String DEFAULT_CONFIG_FILE = "i2ptunnel.config";
     /** Config directory for split config files */
@@ -69,20 +69,20 @@ public class TunnelControllerGroup implements ClientApp {
      *  Set by shutdownDelayedServers() and checked by GracefulShutdown.
      *  @since 0.9.68+
      */
-    private static volatile boolean _delayedShutdownInProgress = false;
+    private static volatile boolean delayedShutdownInProgress = false;
 
     /**
      *  Timestamp when delayed shutdown started, used to calculate remaining wait time.
      *  @since 0.9.68+
      */
-    private static volatile long _delayedShutdownStartTime = 0;
+    private static volatile long delayedShutdownStartTime = 0;
 
     /**
      *  Flag to signal that delayed shutdown should be cancelled.
      *  Set by cancelDelayedShutdown() and checked by shutdown tasks.
      *  @since 0.9.68+
      */
-    private static volatile boolean _cancelDelayedShutdown = false;
+    private static volatile boolean cancelDelayedShutdown = false;
 
     /**
      *  Executor service for delayed shutdown tasks, used for cancellation.
@@ -108,49 +108,49 @@ public class TunnelControllerGroup implements ClientApp {
     private static final long SERVER_KEEPALIVE_MS = (long) 30*1000;
 
     /** Tuned by Tuner */
-    private static volatile int _serverHandlerThreads = Math.max(SystemVersion.getCores(), 4);
+    private static volatile int serverHandlerThreads = Math.max(SystemVersion.getCores(), 4);
     /** Tuned by Tuner */
-    private static volatile int _clientRunnerMax = 8192;
+    private static volatile int clientRunnerMax = 8192;
 
     /**
      *  The number of threads handling connections to server tunnels.
      *  @return the server handler threads
      */
-    public static int getServerHandlerThreads() { return _serverHandlerThreads; }
+    public static int getServerHandlerThreads() { return serverHandlerThreads; }
     /**
      *  Clamp and set the number of server handler threads, 2 to 128.
      *  @param val the desired count
      */
     public static void setServerHandlerThreads(int val) {
-        _serverHandlerThreads = Math.max(2, Math.min(128, val));
+        serverHandlerThreads = Math.max(2, Math.min(128, val));
     }
     /**
      *  The maximum number of concurrent client connections.
      *  @return the client runner max
      */
-    public static int getClientRunnerMax() { return _clientRunnerMax; }
+    public static int getClientRunnerMax() { return clientRunnerMax; }
     /**
      *  Clamp and set the maximum concurrent client connections, 4 to 8192.
      *  @param val the desired maximum
      */
     public static void setClientRunnerMax(int val) {
-        _clientRunnerMax = Math.max(4, Math.min(8192, val));
+        clientRunnerMax = Math.max(4, Math.min(8192, val));
     }
 
     /** Socket connect timeout in ms, tuned by Tuner */
-    private static volatile int _socketConnectTimeout = 10000;
+    private static volatile int socketConnectTimeout = 10000;
 
     /**
      *  The socket connect timeout in milliseconds.
      *  @return the socket connect timeout
      */
-    public static int getSocketConnectTimeout() { return _socketConnectTimeout; }
+    public static int getSocketConnectTimeout() { return socketConnectTimeout; }
     /**
      *  Clamp and set the socket connect timeout, 5000 to 120000 ms.
      *  @param val the timeout in milliseconds
      */
     public static void setSocketConnectTimeout(int val) {
-        _socketConnectTimeout = Math.max(5000, Math.min(120000, val));
+        socketConnectTimeout = Math.max(5000, Math.min(120000, val));
     }
 
     /** Rate stat intervals */
@@ -171,16 +171,14 @@ public class TunnelControllerGroup implements ClientApp {
      */
     public static TunnelControllerGroup getInstance() {
         synchronized (TunnelControllerGroup.class) {
-            if (_instance == null) {
-                if (!SystemVersion.isAndroid()) {
-                    I2PAppContext ctx = I2PAppContext.getGlobalContext();
-                    if (!ctx.isRouterContext()) {
-                        _instance = new TunnelControllerGroup(ctx, null, null);
-                        _instance.startup();
-                    }
-                } // else wait for the router to start it
-            }
-            return _instance;
+            if (instance == null && !SystemVersion.isAndroid()) {
+                I2PAppContext ctx = I2PAppContext.getGlobalContext();
+                if (!ctx.isRouterContext()) {
+                    instance = new TunnelControllerGroup(ctx, null, null);
+                    instance.startup();
+                }
+            } // else wait for the router to start it
+            return instance;
         }
     }
 
@@ -199,19 +197,19 @@ public class TunnelControllerGroup implements ClientApp {
      */
     public static TunnelControllerGroup getInstance(I2PAppContext ctx) {
         synchronized (TunnelControllerGroup.class) {
-            if (_instance == null) {
+            if (instance == null) {
                 if (SystemVersion.isAndroid() || !ctx.isRouterContext()) {
-                    _instance = new TunnelControllerGroup(ctx, null, null);
-                    _instance.startup();
+                    instance = new TunnelControllerGroup(ctx, null, null);
+                    instance.startup();
                 } // else wait for the router to start it
             } else {
-                if (SystemVersion.isAndroid() && _instance._context != ctx) {
+                if (SystemVersion.isAndroid() && instance._context != ctx) {
                     ctx.logManager().getLog(TunnelControllerGroup.class).warn("Old context in TunnelControllerGroup");
-                    _instance.shutdown();
-                    _instance = new TunnelControllerGroup(ctx, null, null);
+                    instance.shutdown();
+                    instance = new TunnelControllerGroup(ctx, null, null);
                  }
             }
-            return _instance;
+            return instance;
         }
     }
 
@@ -246,8 +244,8 @@ public class TunnelControllerGroup implements ClientApp {
         }
         _sessions = new HashMap<>(4);
         synchronized (TunnelControllerGroup.class) {
-            if (_instance == null) {
-                _instance = this;
+            if (instance == null) {
+                instance = this;
             } else {
                 _log.logAlways(Log.WARN, "New TunnelControllerGroup, now you have two");
                 if (_log.shouldWarn())
@@ -300,9 +298,9 @@ public class TunnelControllerGroup implements ClientApp {
      */
     public static void main(String[] args) {
         synchronized (TunnelControllerGroup.class) {
-            if (_instance != null) return; // already loaded through the web
-            _instance = new TunnelControllerGroup(I2PAppContext.getGlobalContext(), null, args);
-            _instance.startup();
+            if (instance != null) return; // already loaded through the web
+            instance = new TunnelControllerGroup(I2PAppContext.getGlobalContext(), null, args);
+            instance.startup();
         }
     }
 
@@ -433,8 +431,8 @@ public class TunnelControllerGroup implements ClientApp {
         synchronized (this) {
             unloadControllers();
             synchronized (TunnelControllerGroup.class) {
-                if (_instance == this)
-                    _instance = null;
+                if (instance == this)
+                    instance = null;
             }
             killServerExecutor();
             killClientExecutor();
@@ -467,7 +465,7 @@ public class TunnelControllerGroup implements ClientApp {
      *  @since 0.9.68+
      */
     public static boolean isDelayedShutdownInProgress() {
-        return _delayedShutdownInProgress;
+        return delayedShutdownInProgress;
     }
 
     /**
@@ -499,14 +497,14 @@ public class TunnelControllerGroup implements ClientApp {
      *  @since 0.9.68+
      */
     public static int getRemainingShutdownDelay() {
-        if (!_delayedShutdownInProgress || _delayedShutdownStartTime <= 0) {
+        if (!delayedShutdownInProgress || delayedShutdownStartTime <= 0) {
             return 0;
         }
         TunnelControllerGroup tcg = getInstance();
         if (tcg == null) {
             return 0;
         }
-        long elapsed = (System.currentTimeMillis() - _delayedShutdownStartTime) / 1000;
+        long elapsed = (System.currentTimeMillis() - delayedShutdownStartTime) / 1000;
         int maxDelay = tcg.getMaxShutdownDelay();
         int remaining = (int) (maxDelay - elapsed);
         return Math.max(0, remaining);
@@ -518,10 +516,10 @@ public class TunnelControllerGroup implements ClientApp {
      *  @since 0.9.68+
      */
     public void cancelDelayedShutdown() {
-        if (!_delayedShutdownInProgress) {
+        if (!delayedShutdownInProgress) {
             return;
         }
-        _cancelDelayedShutdown = true;
+        cancelDelayedShutdown = true;
         if (_delayedShutdownExecutor != null) {
             _delayedShutdownExecutor.shutdownNow();
         }
@@ -546,9 +544,9 @@ public class TunnelControllerGroup implements ClientApp {
             }
         }
 
-        _delayedShutdownInProgress = true;
-        _delayedShutdownStartTime = System.currentTimeMillis();
-        _cancelDelayedShutdown = false;
+        delayedShutdownInProgress = true;
+        delayedShutdownStartTime = System.currentTimeMillis();
+        cancelDelayedShutdown = false;
         List<TunnelController> stoppedServers = Collections.synchronizedList(new ArrayList<>());
         _delayedShutdownExecutor = Executors.newCachedThreadPool(r -> {
             Thread t = new Thread(r, "TunnelShutdown");
@@ -562,7 +560,7 @@ public class TunnelControllerGroup implements ClientApp {
         try {
             long maxWait = Math.min(maxDelay + 30, 300) * 1000L;
             boolean completed = _delayedShutdownExecutor.awaitTermination(maxWait, TimeUnit.MILLISECONDS);
-            long elapsed = (System.currentTimeMillis() - _delayedShutdownStartTime) / 1000;
+            long elapsed = (System.currentTimeMillis() - delayedShutdownStartTime) / 1000;
             if (completed) {
                 if (_log.shouldInfo())
                     _log.info("All delayed servers stopped in " + elapsed + "s");
@@ -622,7 +620,7 @@ public class TunnelControllerGroup implements ClientApp {
                 public void run() {
                     if (actualDelay > 0) {
                         for (int i = 0; i < actualDelay; i++) {
-                            if (_cancelDelayedShutdown) {
+                            if (cancelDelayedShutdown) {
                                 return;
                             }
                             try {
@@ -633,7 +631,7 @@ public class TunnelControllerGroup implements ClientApp {
                             }
                         }
                     }
-                    if (_cancelDelayedShutdown) {
+                    if (cancelDelayedShutdown) {
                         return;
                     }
                     tc.stopTunnel();
@@ -651,7 +649,7 @@ public class TunnelControllerGroup implements ClientApp {
      */
     private void cleanupShutdown(List<TunnelController> stoppedServers) {
         _delayedShutdownExecutor.shutdownNow();
-        if (_cancelDelayedShutdown) {
+        if (cancelDelayedShutdown) {
             synchronized(stoppedServers) {
                 for (TunnelController tc : stoppedServers) {
                     tc.startTunnelBackground();
@@ -660,9 +658,9 @@ public class TunnelControllerGroup implements ClientApp {
                 }
             }
         }
-        _delayedShutdownInProgress = false;
-        _delayedShutdownStartTime = 0;
-        _cancelDelayedShutdown = false;
+        delayedShutdownInProgress = false;
+        delayedShutdownStartTime = 0;
+        cancelDelayedShutdown = false;
         _delayedShutdownExecutor = null;
     }
 
@@ -676,12 +674,9 @@ public class TunnelControllerGroup implements ClientApp {
      */
     private boolean shouldMigrate() {
         try {
-            if (_context.isRouterContext()) {
-                if (!SystemVersion.isAndroid()) {
-                    if (!_context.getConfigDir().getCanonicalPath().equals(_context.getBaseDir().getCanonicalPath())) {
-                        return true;
-                    }
-                }
+            if (_context.isRouterContext() && !SystemVersion.isAndroid() &&
+                !_context.getConfigDir().getCanonicalPath().equals(_context.getBaseDir().getCanonicalPath())) {
+                return true;
             }
         } catch (IOException ioe) { /* ignored */ }
         return false;
@@ -818,9 +813,9 @@ public class TunnelControllerGroup implements ClientApp {
             }
             i++;
         }
-        if (ok) {
-            if (!FileUtil.rename(from, new File(from.getAbsolutePath() + ".bak")))
-                from.delete();
+        if (ok && !FileUtil.rename(from, new File(from.getAbsolutePath() + ".bak"))) {
+            if (!from.delete() && _log.shouldWarn())
+                _log.warn("Error migrating i2ptunnel config: unable to remove " + from);
         }
         return ok;
     }
@@ -1160,10 +1155,9 @@ public class TunnelControllerGroup implements ClientApp {
      */
     public synchronized void removeConfig(TunnelController tc) throws IOException {
         File cfgFile = assureConfigFile(tc);
-        if (!FileUtil.rename(cfgFile, new File(cfgFile.getAbsolutePath() + ".bak")))
-            if (! cfgFile.delete())
-                if (_log.shouldWarn())
-                    _log.warn("could not delete config file" + cfgFile.toString());
+        if (!FileUtil.rename(cfgFile, new File(cfgFile.getAbsolutePath() + ".bak")) &&
+            !cfgFile.delete() && _log.shouldWarn())
+            _log.warn("could not delete config file" + cfgFile.toString());
         if (!shouldMigrate())
             saveConfig();
     }
@@ -1339,8 +1333,7 @@ public class TunnelControllerGroup implements ClientApp {
 
         _controllersLock.readLock().lock();
         try {
-            List<TunnelController> rv = new ArrayList<>(_controllers);
-            return rv;
+            return new ArrayList<>(_controllers);
         } finally {
             _controllersLock.readLock().unlock();
         }
@@ -1417,8 +1410,8 @@ public class TunnelControllerGroup implements ClientApp {
                 if (ctx != null) {
                     ctx.statManager().createRequiredRateStat("i2ptunnel.clientRunner.poolSize", "Client runner pool size", "I2PTunnel", RATES);
                 }
-            } else if (_executor.getMaximumPoolSize() != _clientRunnerMax) {
-                resizeClientExecutor(_clientRunnerMax);
+            } else if (_executor.getMaximumPoolSize() != clientRunnerMax) {
+                resizeClientExecutor(clientRunnerMax);
             }
         }
         return _executor;
@@ -1434,7 +1427,7 @@ public class TunnelControllerGroup implements ClientApp {
     ThreadPoolExecutor getServerExecutor() {
         synchronized (_serverExecutorLock) {
             if (_serverExecutor == null) {
-                int threads = _serverHandlerThreads;
+                int threads = serverHandlerThreads;
                 _serverExecutor = new ThreadPoolExecutor(
                     threads, threads,
                     SERVER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
@@ -1455,8 +1448,8 @@ public class TunnelControllerGroup implements ClientApp {
                     ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.blockingHandleTime", "Handler socket connect time (ms)", "I2PTunnel", RATES);
                     ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.socketConnectTime", "Socket connect time (ms)", "I2PTunnel", RATES);
                 }
-            } else if (_serverExecutor.getCorePoolSize() != _serverHandlerThreads) {
-                resizeServerExecutor(_serverHandlerThreads);
+            } else if (_serverExecutor.getCorePoolSize() != serverHandlerThreads) {
+                resizeServerExecutor(serverHandlerThreads);
             }
         }
         return _serverExecutor;
@@ -1541,7 +1534,7 @@ public class TunnelControllerGroup implements ClientApp {
     static class CustomThreadPoolExecutor extends ThreadPoolExecutor {
         /** Create with default configuration */
         public CustomThreadPoolExecutor() {
-             super(0, _clientRunnerMax, HANDLER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
+             super(0, clientRunnerMax, HANDLER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
                    new SynchronousQueue<>(), new CustomThreadFactory());
         }
     }

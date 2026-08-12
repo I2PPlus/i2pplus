@@ -99,6 +99,7 @@ public class Pinger implements Source, Runnable {
                 try {
                     this.waitlock.wait(delay);
                 } catch(InterruptedException ie) {
+                    Thread.currentThread().interrupt();
                     break;
                 }
             }

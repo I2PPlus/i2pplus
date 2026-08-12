@@ -3,7 +3,7 @@ package net.i2p.i2ptunnel.access;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
  * Counts connection attempts and detects threshold breaches.
  *
  * @since 0.9.40

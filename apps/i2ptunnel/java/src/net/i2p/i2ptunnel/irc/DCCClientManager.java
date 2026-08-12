@@ -43,7 +43,7 @@ public class DCCClientManager extends EventReceiver {
     private final ConcurrentHashMap<Integer, I2PTunnelDCCClient> _complete;
 
     // list of client tunnels?
-    private static long _id;
+    private static long id;
 
     private static final int MAX_INCOMING_PENDING = 10;
     private static final int MAX_INCOMING_ACTIVE = 10;
@@ -125,7 +125,7 @@ public class DCCClientManager extends EventReceiver {
             // Transparent tunnel used for all types...
             // Do we need to do any filtering for chat?
             I2PTunnelDCCClient cTunnel = new I2PTunnelDCCClient(b32, localPort, port, l, sockMgr,
-                                                                _dispatch, _tunnel, ++_id);
+                                                                _dispatch, _tunnel, ++id);
             cTunnel.attachEventDispatcher(this);
             cTunnel.startRunning();
             int lport = cTunnel.getLocalPort();

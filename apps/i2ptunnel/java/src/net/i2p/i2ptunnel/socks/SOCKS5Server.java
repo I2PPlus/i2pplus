@@ -154,7 +154,7 @@ class SOCKS5Server extends SOCKSServer {
         c = in.readUnsignedByte();
         if (c <= 0) {
             _log.logAlways(Log.WARN, "SOCKS proxy authentication failed");
-            try { Thread.sleep(5000); } catch (InterruptedException ie) { /* ignored */ }
+            try { Thread.sleep(5000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
             throw new SOCKSException("Bad authentication");
         }
         byte[] user = new byte[c];
@@ -163,7 +163,7 @@ class SOCKS5Server extends SOCKSServer {
         c = in.readUnsignedByte();
         if (c <= 0) {
             _log.logAlways(Log.WARN, "SOCKS proxy authentication failed -> User: " + u + " on " + client);
-            try { Thread.sleep(5000); } catch (InterruptedException ie) { /* ignored */ }
+            try { Thread.sleep(5000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
             throw new SOCKSException("Bad authentication");
         }
         byte[] pw = new byte[c];
@@ -177,7 +177,7 @@ class SOCKS5Server extends SOCKSServer {
             String hex = PasswordManager.sha256Hex(I2PSOCKSTunnel.AUTH_REALM, u, p);
             if (configPW == null || !DataHelper.eqCT(hex, configPW)) {
                 _log.logAlways(Log.WARN, "SOCKS proxy authentication failed -> User: " + u + " on " + client);
-                try { Thread.sleep(5000); } catch (InterruptedException ie) { /* ignored */ }
+                try { Thread.sleep(5000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
                 sendAuthReply(AUTH_FAILURE, out);
                 throw new SOCKSException("SOCKS authorization failure");
             }
@@ -580,7 +580,7 @@ class SOCKS5Server extends SOCKSServer {
     }
 
     // This isn't really the right place for this, we can't stop the tunnel once it starts.
-    private static SOCKSUDPTunnel _tunnel;
+    private static SOCKSUDPTunnel tunnel;
     private static final Object _startLock = new Object();
     private static final byte[] dummyIP = new byte[4];
 
@@ -595,10 +595,10 @@ class SOCKS5Server extends SOCKSServer {
     private void handleUDP(DataInputStream in, DataOutputStream out) throws SOCKSException {
         List<Integer> ports = new ArrayList<>(1);
         synchronized (_startLock) {
-            if (_tunnel == null) {
+            if (tunnel == null) {
                 // tunnel options?
-                _tunnel = new SOCKSUDPTunnel(new I2PTunnel());
-                _tunnel.startRunning();
+                tunnel = new SOCKSUDPTunnel(new I2PTunnel());
+                tunnel.startRunning();
             }
         }
         while (true) {
@@ -607,7 +607,7 @@ class SOCKS5Server extends SOCKSServer {
             try {
                 ia = InetAddress.getByAddress(connHostName, dummyIP);
             } catch (UnknownHostException uhe) { /* ignored */ } // won't happen, no resolving done here
-            int myPort = _tunnel.add(ia, connPort);
+            int myPort = tunnel.add(ia, connPort);
             ports.add(Integer.valueOf(myPort));
             try {
                 sendRequestReply(Reply.SUCCEEDED, AddressType.IPV4, InetAddress.getByName("127.0.0.1"), null, myPort, out);
@@ -623,7 +623,7 @@ class SOCKS5Server extends SOCKSServer {
         }
 
         for (Integer i : ports)
-            _tunnel.remove(i);
+            tunnel.remove(i);
 
         // Prevent I2PSocksTunnel from calling getDestinationI2PSocket() above
         // to create a streaming lib connection...

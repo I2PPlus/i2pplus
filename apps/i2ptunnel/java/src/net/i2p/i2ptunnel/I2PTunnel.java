@@ -282,7 +282,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         while (dontDie) {
             synchronized (this) {
                 try {wait();}
-                catch (InterruptedException ie) {break;}
+                catch (InterruptedException ie) {Thread.currentThread().interrupt(); break;}
             }
         }
     }
@@ -962,13 +962,13 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public void runConnectClient(String[] args, Logging l) {
         if (args.length >= 1 && args.length <= 3) {
-            int _port = -1;
+            int portNum = -1;
             try {
-                _port = Integer.parseInt(args[0]);
+                portNum = Integer.parseInt(args[0]);
             } catch (NumberFormatException nfe) {
                 _log.error(getPrefix() + "Port specified is not valid: " + args[0], nfe);
             }
-            if (_port <= 0)
+            if (portNum <= 0)
                 throw new IllegalArgumentException(getPrefix() + "Bad port " + args[0]);
 
             String proxy = "";
@@ -994,13 +994,13 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
             ownDest = !isShared;
             try {
-                I2PTunnelClientBase task = new I2PTunnelConnectClient(_port, l, ownDest, proxy, this, this);
+                I2PTunnelClientBase task = new I2PTunnelConnectClient(portNum, l, ownDest, proxy, this, this);
                 task.startRunning();
                 addtask(task);
                 notifyEvent("connectclientTaskId", Integer.valueOf(task.getId()));
             } catch (IllegalArgumentException iae) {
                 clientRunError("Invalid I2PTunnel configuration to create a CONNECT client connecting to the router at " + host + ':' + port +
-                             " and listening on " + listenHost + ':' + _port, "connectclientTaskId", l, iae);
+                             " and listening on " + listenHost + ':' + portNum, "connectclientTaskId", l, iae);
             }
         } else {
             l.log("connectclient <port> [<sharedClient>] [<proxy>]\n" +
@@ -1024,15 +1024,15 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public void runIrcClient(String[] args, Logging l) {
         if (args.length >= 2) {
-            int _port = -1;
+            int portNum = -1;
             try {
-                _port = Integer.parseInt(args[0]);
+                portNum = Integer.parseInt(args[0]);
             } catch (NumberFormatException nfe) {
                 l.log("invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[0], nfe);
                 notifyEvent("ircclientTaskId", Integer.valueOf(-1));
             }
-            if (_port <= 0)
+            if (portNum <= 0)
                 throw new IllegalArgumentException(getPrefix() + "Bad port " + args[0]);
 
             boolean isShared = true;
@@ -1052,13 +1052,13 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 String privateKeyFile = null;
                 if (args.length >= 4)
                     privateKeyFile = args[3];
-                I2PTunnelClientBase task = new I2PTunnelIRCClient(_port, args[1], l, ownDest, this, this, privateKeyFile);
+                I2PTunnelClientBase task = new I2PTunnelIRCClient(portNum, args[1], l, ownDest, this, this, privateKeyFile);
                 task.startRunning();
                 addtask(task);
                 notifyEvent("ircclientTaskId", Integer.valueOf(task.getId()));
             } catch (IllegalArgumentException iae) {
                 clientRunError("Invalid I2PTunnel configuration to create an IRC client connecting to the router at " + host + ':'+ port +
-                             " and listening on " + listenHost + ':' + _port, "ircclientTaskId", l, iae);
+                             " and listening on " + listenHost + ':' + portNum, "ircclientTaskId", l, iae);
             }
         } else {
             l.log("ircclient <port> [<sharedClient> [<privKeyFile>]]\n" +
@@ -1082,15 +1082,15 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public void runSOCKSTunnel(String[] args, Logging l) {
         if (args.length >= 1 && args.length <= 3) {
-            int _port = -1;
+            int portNum = -1;
             try {
-                _port = Integer.parseInt(args[0]);
+                portNum = Integer.parseInt(args[0]);
             } catch (NumberFormatException nfe) {
                 l.log("invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[0], nfe);
                 notifyEvent("sockstunnelTaskId", Integer.valueOf(-1));
             }
-            if (_port <= 0)
+            if (portNum <= 0)
                 throw new IllegalArgumentException(getPrefix() + "Bad port " + args[0]);
 
             boolean isShared = false;
@@ -1102,13 +1102,13 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             if (args.length == 3)
                 privateKeyFile = args[2];
             try {
-                I2PTunnelClientBase task = new I2PSOCKSTunnel(_port, l, ownDest, this, this, privateKeyFile);
+                I2PTunnelClientBase task = new I2PSOCKSTunnel(portNum, l, ownDest, this, this, privateKeyFile);
                 task.startRunning();
                 addtask(task);
                 notifyEvent("sockstunnelTaskId", Integer.valueOf(task.getId()));
             } catch (IllegalArgumentException iae) {
                 clientRunError("Invalid I2PTunnel configuration to create a SOCKS Proxy connecting to the router at " + host + ':'+ port +
-                             " and listening on " + listenHost + ':' + _port, "sockstunnelTaskId", l, iae);
+                             " and listening on " + listenHost + ':' + portNum, "sockstunnelTaskId", l, iae);
             }
         } else {
             l.log("sockstunnel <port>\n" +
@@ -1130,15 +1130,15 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public void runSOCKSIRCTunnel(String[] args, Logging l) {
         if (args.length >= 1 && args.length <= 3) {
-            int _port = -1;
+            int portNum = -1;
             try {
-                _port = Integer.parseInt(args[0]);
+                portNum = Integer.parseInt(args[0]);
             } catch (NumberFormatException nfe) {
                 l.log("invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[0], nfe);
                 notifyEvent("socksirctunnelTaskId", Integer.valueOf(-1));
             }
-            if (_port <= 0)
+            if (portNum <= 0)
                 throw new IllegalArgumentException(getPrefix() + "Bad port " + args[0]);
 
             boolean isShared = false;
@@ -1150,13 +1150,13 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             if (args.length == 3)
                 privateKeyFile = args[2];
             try {
-                I2PTunnelClientBase task = new I2PSOCKSIRCTunnel(_port, l, ownDest, this, this, privateKeyFile);
+                I2PTunnelClientBase task = new I2PSOCKSIRCTunnel(portNum, l, ownDest, this, this, privateKeyFile);
                 task.startRunning();
                 addtask(task);
                 notifyEvent("socksirctunnelTaskId", Integer.valueOf(task.getId()));
             } catch (IllegalArgumentException iae) {
                 clientRunError("Invalid I2PTunnel configuration to create a SOCKS IRC Proxy connecting to the router at " + host + ':'+ port +
-                             " and listening on " + listenHost + ':' + _port, "socksirctunnelTaskId", l, iae);
+                             " and listening on " + listenHost + ':' + portNum, "socksirctunnelTaskId", l, iae);
             }
         } else {
             l.log("socksirctunnel <port> [<sharedClient> [<privKeyFile>]]\n" +
@@ -1174,9 +1174,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public void runStreamrClient(String[] args, Logging l) {
         if (args.length == 3) {
-            InetAddress _host;
+            InetAddress hostAddr;
             try {
-                _host = InetAddress.getByName(args[0]);
+                hostAddr = InetAddress.getByName(args[0]);
             } catch (UnknownHostException uhe) {
                 l.log("unknown host");
                 _log.error(getPrefix() + "Error resolving " + args[0], uhe);
@@ -1184,25 +1184,25 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 return;
             }
 
-            int _port = -1;
+            int portNum = -1;
             try {
-                _port = Integer.parseInt(args[1]);
+                portNum = Integer.parseInt(args[1]);
             } catch (NumberFormatException nfe) {
                 l.log("invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[0], nfe);
                 notifyEvent("streamrtunnelTaskId", Integer.valueOf(-1));
             }
-            if (_port <= 0)
+            if (portNum <= 0)
                 throw new IllegalArgumentException(getPrefix() + "Bad port " + args[0]);
 
             try {
-                StreamrConsumer task = new StreamrConsumer(_host, _port, args[2], l, this, this);
+                StreamrConsumer task = new StreamrConsumer(hostAddr, portNum, args[2], l, this, this);
                 task.startRunning();
                 addtask(task);
                 notifyEvent("streamrtunnelTaskId", Integer.valueOf(task.getId()));
             } catch (IllegalArgumentException iae) {
                 clientRunError("Invalid I2PTunnel configuration to create a Streamr Client connecting to the router at " + host + ':'+ port +
-                             " and sending to " + _host + ':' + _port, "streamrtunnelTaskId", l, iae);
+                             " and sending to " + hostAddr + ':' + portNum, "streamrtunnelTaskId", l, iae);
             }
         } else {
             l.log("streamrclient <host> <port> <destination>\n" +
@@ -1220,15 +1220,15 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public void runStreamrServer(String[] args, Logging l) {
         if (args.length == 2) {
-            int _port = -1;
+            int portNum = -1;
             try {
-                _port = Integer.parseInt(args[0]);
+                portNum = Integer.parseInt(args[0]);
             } catch (NumberFormatException nfe) {
                 l.log("invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[0], nfe);
                 notifyEvent("streamrtunnelTaskId", Integer.valueOf(-1));
             }
-            if (_port <= 0)
+            if (portNum <= 0)
                 throw new IllegalArgumentException(getPrefix() + "Bad port " + args[0]);
 
             File privKeyFile = new File(args[1]);
@@ -1241,7 +1241,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 return;
             }
 
-            StreamrProducer task = new StreamrProducer(_port, privKeyFile, args[1], l, this, this);
+            StreamrProducer task = new StreamrProducer(portNum, privKeyFile, args[1], l, this, this);
             task.startRunning();
             addtask(task);
             notifyEvent("streamrtunnelTaskId", Integer.valueOf(task.getId()));
@@ -1718,7 +1718,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             session.connect();
             System.out.println("Sending: " + bd);
             session.sendBlindingInfo(bd);
-            try { Thread.sleep(1000); } catch (InterruptedException ie) { /* ignored */ }
+            try { Thread.sleep(1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
         } catch (I2PSessionException ise) {
             System.out.println("Send blinding info failed: " + ise);
         } finally {

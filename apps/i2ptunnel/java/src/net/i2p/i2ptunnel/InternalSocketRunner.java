@@ -7,7 +7,7 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.InternalServerSocket;
 import net.i2p.util.Log;
 
-/**
+/*
  * Listens for in-JVM connections on internal socket.
  *
  * @since 0.7.9

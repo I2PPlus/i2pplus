@@ -557,7 +557,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             } else {
                 // Now one connection is dead - kill the other as well, after making sure we flush
                 try {close(out, in, i2pout, i2pin, s, i2ps, null, null);}
-                catch (InterruptedException ie) { /* ignored */ }
+                catch (InterruptedException ie) {Thread.currentThread().interrupt(); /* ignored */ }
             }
         }
     }
