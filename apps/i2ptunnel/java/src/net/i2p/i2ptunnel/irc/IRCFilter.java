@@ -16,7 +16,6 @@ import net.i2p.util.Log;
 abstract class IRCFilter {
 
     private static final boolean ALLOW_ALL_DCC_IN = false;
-    private static final boolean ALLOW_ALL_DCC_OUT = false;
     /** does not override DCC handling */
     private static final boolean ALLOW_ALL_CTCP_IN = false;
     /** does not override DCC handling */
@@ -579,10 +578,6 @@ abstract class IRCFilter {
         // no IP in these, replace port only
         if (type.equals("RESUME") || type.equals("ACCEPT")) {
             haveIP = false;
-        } else if (!(type.equals("CHAT") || type.equals("SEND")) && ALLOW_ALL_DCC_OUT) {
-            if (ctcp > 0)
-                return pfx + msg + (char) 0x01;
-            return pfx + msg;
         }
         if (helper == null || !helper.isEnabled())
             return null;

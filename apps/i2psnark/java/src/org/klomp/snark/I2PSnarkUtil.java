@@ -1299,9 +1299,6 @@ public class I2PSnarkUtil implements DisconnectListener {
             out = SecureFile.createTempFile("i2psnark", null, _tmpDir);
         } catch (IOException ioe) {
             _log.error("Temp file error", ioe);
-            if (out != null) {
-                out.delete();
-            }
             return null;
         }
         out.deleteOnExit();

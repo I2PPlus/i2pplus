@@ -114,7 +114,6 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         } catch (IOException ioe) {
             _log.error("Temporary storage error", ioe);
             _mgr.addMessage("Problem writing file to temp directory: " + ioe.getMessage());
-            if (out != null) out.delete();
             return null;
         }
         out.deleteOnExit();

@@ -205,9 +205,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 if (shouldLogDebug) {_log.debug("Sending ACK 0 with tag " + tag + this);}
             } else {pkt = _transport.getBuilder2().buildACK(this);}
             _transport.send(pkt);
-        } catch (IOException ioe) {
-            if (pkt != null) { pkt.release(); }
-        }
+        } catch (IOException ioe) { /* build failed */ }
     }
 
     // SSU 1 overrides
@@ -343,9 +341,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             try {
                 pkt = _transport.getBuilder2().buildSessionDestroyPacket(SSU2Util.REASON_FRAME_TIMEOUT, this);
                 _transport.send(pkt);
-            } catch (IOException ioe) {
-                if (pkt != null) { pkt.release(); }
-            }
+            } catch (IOException ioe) { /* build failed */ }
             _transport.dropPeer(this, true, "No SessionConfirmed ACK received");
         }
         return rv;
@@ -712,9 +708,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             pkt.setAddress(toIP);
             pkt.setPort(toPort);
             _transport.send(packet);
-        } catch (IOException ioe) {
-            if (packet != null) { packet.release(); }
-        }
+        } catch (IOException ioe) { /* build failed */ }
     }
 
     /////////////////////////////////////////////////////////
@@ -804,9 +798,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                                                      Collections.singletonList(block),
                                                                      this);
                 _transport.send(pkt);
-            } catch (IOException ioe) {
-                if (pkt != null) { pkt.release(); }
-            }
+            } catch (IOException ioe) { /* build failed */ }
         }
     }
 
@@ -1020,7 +1012,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 pkt = _transport.getBuilder2().buildSessionDestroyPacket(SSU2Util.REASON_TERMINATION, this);
                 _transport.send(pkt);
             } catch (IOException ioe) {
-                if (pkt != null) { pkt.release(); }
                 if (_log.shouldWarn()) {
                     _log.warn("[SSU] Failed to send SessionDestroy -> " + ioe.getMessage());
                 }
@@ -1046,9 +1037,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             long now = _context.clock().now();
             setLastSendTime(now);
             setLastReceiveTime(now);
-        } catch (IOException ioe) {
-            if (pkt != null) { pkt.release(); }
-        }
+        } catch (IOException ioe) { /* build failed */ }
     }
 
     /**
@@ -1091,7 +1080,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     setLastSendTime(now);
                                     setLastReceiveTime(now);
                                 } catch (IOException ioe) {
-                                    if (pkt != null) { pkt.release(); }
                                     if (_log.shouldWarn()) {
                                         _log.warn("[SSU] Failed to send NewToken after successful migration to " + from + ' ' + this + " -> " + ioe.getMessage());
                                     }
@@ -1388,9 +1376,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 ack = _transport.getBuilder2().buildACK(PeerState2.this);
                 if (shouldLogDebug) {_log.debug("[SSU] ACKTimer sending ACKs" + PeerState2.this);}
                 _transport.send(ack);
-            } catch (IOException ioe) {
-                if (ack != null) { ack.release(); }
-            }
+            } catch (IOException ioe) { /* build failed */ }
         }
     }
 

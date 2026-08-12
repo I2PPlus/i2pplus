@@ -1706,7 +1706,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 }
             }
             return "xx";
-        } else if (country == null && ri == null) {return "xx";}
+        }
 
         if (countryCache.size() >= MAX_COUNTRY_CACHE_SIZE) {
             // Evict oldest entries by timestamp

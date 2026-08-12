@@ -3,7 +3,6 @@ package net.i2p.router.networkdb.reseed;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,17 +12,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import java.util.regex.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SU3File;
-import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -56,16 +52,12 @@ public class Reseeder {
     private final Log _log;
     private final ReseedChecker _checker;
 
-    // Reject unreasonably big files, because we download into a ByteArrayOutputStream.
-    private static final long MAX_RESEED_RESPONSE_SIZE = 2 * 1024 * 1024L;
     private static final long MAX_SU3_RESPONSE_SIZE = 1024 * 1024L;
     /** Limit per host to avoid getting stuck on one that is seriously overloaded. */
-    private static final int MAX_TIME_PER_HOST = 10 * 1000;
     private static final long MAX_FILE_AGE = 3*24*60*60*1000L;
     /** Don't disable this! */
     private static final boolean ENABLE_SU3 = true;
     /** If false, use SU3 only; disable fallback to directory index and individual dat files. */
-    private static final boolean ENABLE_NON_SU3 = false;
     private static final int MIN_RI_WANTED = 800;
     private static final int MIN_RESEED_SERVERS = 12;
     // Network ID cross-check, proposal 147, as of 0.9.42
@@ -639,9 +631,6 @@ public class Reseeder {
                         dl = reseedSU3(new URI(url.toString() + SU3_FILENAME + query), echoStatus);
                     } catch (URISyntaxException ignored) { /* ignored */ }
                 }
-                if (ENABLE_NON_SU3 && dl <= 0) {
-                    dl = reseedOne(url, echoStatus);
-                }
                 if (dl > 0) {
                     total += dl;
                     fetchedReseedServers++;
@@ -657,128 +646,6 @@ public class Reseeder {
                 }
             }
             return total;
-        }
-
-        /**
-         * Attempts to reseed by fetching router info files from a single reseed URL.
-         *
-         * Downloads, extracts router info URLs from content, filters own router info,
-         * and attempts to fetch up to 250 router infos with error handling,
-         * respecting a time limit and error thresholds.
-         *
-         * @param seedURL the reseed URI to fetch data from
-         * @param echoStatus flag indicating if progress should be printed
-         * @return number of router infos successfully fetched
-         */
-        private int reseedOne(URI seedURL, boolean echoStatus) {
-            String display = getDisplayString(seedURL);
-            String trimmed = cleanDisplayString(display);
-
-            try {
-                final long timeLimit = System.currentTimeMillis() + MAX_TIME_PER_HOST;
-                _checker.setStatus(_t("Contacting reseed host") + ":<br>" + DataHelper.escapeHTML(trimmed));
-                _log.info("Reseeding from " + display);
-
-                byte[] contentRaw = readURL(seedURL);
-                if (contentRaw == null) {
-                    _log.warn("No RouterInfos received from: " + trimmed);
-                    return 0;
-                }
-
-                String content = DataHelper.getUTF8(contentRaw);
-                Set<String> urls = new HashSet<>(1024);
-                Hash ourHash = _context.routerHash();
-                String ourB64 = (ourHash != null) ? ourHash.toBase64() : null;
-
-                int cur = 0;
-                int total = 0;
-                StringBuilder sb = new StringBuilder();
-                while (total++ < 1000) {
-                    int start = indexOfIgnoreCase(content, sb.append("href=\"").append(ROUTERINFO_PREFIX).toString(), cur);
-                    sb.setLength(0);
-                    if (start < 0) break;
-
-                    int end = content.indexOf(sb.append(ROUTERINFO_SUFFIX).append("\">").toString(), start);
-                    sb.setLength(0);
-                    if (end < 0) break;
-
-                    if (start - end > 200) {
-                        cur = end + 1;
-                        continue;
-                    }
-
-                    String name = content.substring(start + sb.append("href=\"").append(ROUTERINFO_PREFIX).toString().length(), end);
-                    sb.setLength(0);
-
-                    if (ourB64 == null || !name.contains(ourB64)) {
-                        urls.add(name);
-                    } else if (_log.shouldInfo()) {
-                        _log.info("Skipping our own RI");
-                    }
-                    cur = end + 1;
-                }
-
-                if (urls.isEmpty()) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Read " + contentRaw.length + " bytes from reseed server " + trimmed + " but found no RouterInfo URLs");
-                    }
-                    _log.warn("No RouterInfos received from: " + trimmed);
-                    return 0;
-                }
-
-                List<String> urlList = new ArrayList<>(urls);
-                Collections.shuffle(urlList, _context.random());
-
-                int fetched = 0;
-                int errors = 0;
-                for (Iterator<String> iter = urlList.iterator();
-                     iter.hasNext() && fetched < 250 && System.currentTimeMillis() < timeLimit; ) {
-                    String routerInfoName = iter.next();
-                    try {
-                        _checker.setStatus(_t("Reseeding: fetching router info from seed URL ({0} successful, {1} errors).", fetched, errors));
-                        if (!fetchSeed(seedURL.toString(), routerInfoName)) {
-                            continue;
-                        }
-                        fetched++;
-                        if (echoStatus) {
-                            _log.debug(".");
-                            if (fetched % 60 == 0) _log.debug("");
-                        }
-                    } catch (RuntimeException e) {
-                        if (_log.shouldInfo()) _log.info("Failed fetch", e);
-                        errors++;
-                    }
-                    if (errors >= 50 || (errors >= 10 && fetched <= 1)) break;
-                }
-
-                _log.warn("Reseed acquired " + fetched + " router infos with " + errors + " errors [" + trimmed + "]");
-                if (fetched > 0) _context.netDb().rescan();
-                return fetched;
-
-            } catch (Exception t) {
-                if (_log.shouldWarn()) _log.warn("Error reseeding -> " + t.getMessage());
-                _log.warn("No router infos " + display);
-                return 0;
-            }
-        }
-
-        /** Cleans the display string for logging by removing unwanted parts. */
-        private String cleanDisplayString(String s) {
-            return s.replace("http://", "")
-                    .replace("https://", "")
-                    .replace("netDb/", "")
-                    .replace("/i2pseeds.su3", "")
-                    .replace("from ", "")
-                    .replace("?", "")
-                    .replace("netid=2", "")
-                    .replaceAll(PAREN_PATTERN.pattern(), "");
-        }
-
-        /** Case insensitive indexOf for content parsing, returns -1 if not found */
-        private int indexOfIgnoreCase(String str, String search, int fromIndex) {
-            final String lowerStr = str.toLowerCase(Locale.US);
-            final String lowerSearch = search.toLowerCase(Locale.US);
-            return lowerStr.indexOf(lowerSearch, fromIndex);
         }
 
         /**
@@ -979,87 +846,6 @@ public class Reseeder {
         }
 
         /**
-         *  Always throws an exception if something fails.
-         *  We do NOT validate the received data here - that is done in PersistentDataStore
-         *
-         *  @param peer The Base64 hash, may include % encoding. It is decoded and validated here.
-         *  @return true on success, false if skipped
-         */
-        private boolean fetchSeed(String seedURL, String peer) throws IOException, URISyntaxException {
-            /* Use URI to do % decoding of the B64 hash (some servers escape ~ and =)
-             * Also do basic hash validation. This prevents stuff like * .. or / in the file name
-             */
-            URI uri = new URI(peer);
-            String b64 = uri.getPath();
-            if (b64 == null) {throw new IOException("Bad hash " + peer);}
-            byte[] hash = Base64.decode(b64);
-            if (hash == null || hash.length != Hash.HASH_LENGTH) {throw new IOException("Bad hash " + peer);}
-            Hash ourHash = _context.routerHash();
-            if (ourHash != null && DataHelper.eq(hash, ourHash.getData())) {return false;}
-
-            URI url = new URI(seedURL + (seedURL.endsWith("/") ? "" : "/") + ROUTERINFO_PREFIX + peer + ROUTERINFO_SUFFIX);
-
-            byte[] data = readURL(url);
-            if (data == null || data.length <= 0) {throw new IOException("Failed fetch of " + url);}
-            return writeSeed(b64, data);
-        }
-
-        /**
-         *  Fetch a URL into a byte array.
-         *
-         *  @param url the URL to fetch
-         *  @return the response body, or null on error
-         */
-        private byte[] readURL(URI url) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream(4*1024);
-            EepGet get;
-            boolean ssl = "https".equals(url.getScheme());
-            if (ssl) {
-                SSLEepGet sslget;
-                if (_sslState == null) {
-                    if (_shouldProxySSL) {
-                        sslget = new SSLEepGet(_context, _sproxyType, _sproxyHost, _sproxyPort,
-                                               baos, url.toString());
-                    } else {sslget = new SSLEepGet(_context, baos, url.toString());}
-                    _sslState = sslget.getSSLState(); // Save state for next time
-                } else {
-                    if (_shouldProxySSL) {
-                        sslget = new SSLEepGet(_context, _sproxyType, _sproxyHost, _sproxyPort,
-                                               baos, url.toString(), _sslState);
-                    } else {
-                        sslget = new SSLEepGet(_context, baos, url.toString(), _sslState);
-                    }
-                }
-                get = sslget;
-                if (_shouldProxySSL && _context.getBooleanProperty(PROP_SPROXY_AUTH_ENABLE)) {
-                    String user = _context.getProperty(PROP_SPROXY_USERNAME);
-                    String pass = _context.getProperty(PROP_SPROXY_PASSWORD);
-                    if (user != null && !user.isEmpty() &&
-                        pass != null && !pass.isEmpty())
-                        get.addAuthorization(user, pass);
-                }
-            } else {
-                // Do a (probably) non-proxied eepget into our ByteArrayOutputStream with 0 retries
-                get = new EepGet(_context, _shouldProxyHTTP, _proxyHost, _proxyPort, 3, 0, MAX_RESEED_RESPONSE_SIZE,
-                                 null, baos, url.toString(), false, null, null);
-                if (_shouldProxyHTTP && _context.getBooleanProperty(PROP_PROXY_AUTH_ENABLE)) {
-                    String user = _context.getProperty(PROP_PROXY_USERNAME);
-                    String pass = _context.getProperty(PROP_PROXY_PASSWORD);
-                    if (user != null && !user.isEmpty() &&
-                        pass != null && !pass.isEmpty())
-                        get.addAuthorization(user, pass);
-                }
-            }
-            if (!url.toString().endsWith("/")) {
-                String minLastMod = RFC822Date.to822Date(_context.clock().now() - MAX_FILE_AGE);
-                get.addHeader("If-Modified-Since", minLastMod);
-            }
-            get.addStatusListener(ReseedRunner.this);
-            if (get.fetch() && get.getStatusCode() == 200) {return baos.toByteArray();}
-            return null;
-        }
-
-        /**
          *  Fetch a URL to a temporary file.
          *
          *  @param url the URL to fetch
@@ -1113,36 +899,6 @@ public class Reseeder {
             if (!out.delete())
                 _log.warn("Failed to delete temp file " + out.getName());
             return null;
-        }
-
-        /**
-         *  Write a fetched router info to disk.
-         *  Skips if a recent copy already exists.
-         *
-         *  @param name valid Base64 hash
-         *  @param data raw router info bytes
-         *  @return true on success, false if skipped
-         */
-        private boolean writeSeed(String name, byte[] data) throws IOException {
-            String dirName = "netDb"; // _context.getProperty("router.networkDatabase.dbDir", "netDb");
-            File netDbDir = new SecureDirectory(_context.getRouterDir(), dirName);
-            if (!netDbDir.exists()) {netDbDir.mkdirs();}
-            File file = new File(netDbDir, ROUTERINFO_PREFIX + name + ROUTERINFO_SUFFIX);
-            // Don't overwrite recent file
-            // TODO: even better would be to compare to last-mod date from eepget
-            if (file.exists() && file.lastModified() > _context.clock().now() - 60*60*1000L) {
-                if (_log.shouldDebug()) {
-                    _log.debug("Skipping RouterInfo; local copy is more recent: " + file);
-                }
-                return false;
-            }
-            try (FileOutputStream fos = new SecureFileOutputStream(file)) {
-                fos.write(data);
-                if (_log.shouldInfo()) {
-                    _log.info("Saved RouterInfo (" + data.length + " bytes) to " + file);
-                }
-            }
-            return true;
         }
 
         /**

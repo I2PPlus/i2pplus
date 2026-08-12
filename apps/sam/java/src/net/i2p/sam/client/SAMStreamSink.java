@@ -579,8 +579,6 @@ public class SAMStreamSink {
             } catch (IOException ioe) {
                 _log.error("Error creating a new sink", ioe);
                 try { _in.close(); } catch (IOException ioe2) { /* ignored */ }
-                if (sink != null)
-                    sink.closed();
                 return;
             }
             // inline so the reader doesn't grab the data

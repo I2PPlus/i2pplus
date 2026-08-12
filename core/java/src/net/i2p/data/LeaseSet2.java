@@ -62,7 +62,6 @@ public class LeaseSet2 extends LeaseSet {
     /** If this leaseset was formerly blinded, the blinded hash, so we can find it again */
     private Hash _blindedHash;
     /** If true, ignore server key preference (for testing). */
-    private static final boolean IGNORE_SERVER_KEY_PREFERENCE = false; // true for testing
     /** Flag bit for offline keys. */
     private static final int FLAG_OFFLINE_KEYS = 0x01;
     /** Flag bit for unpublished lease set. */
@@ -216,18 +215,8 @@ public class LeaseSet2 extends LeaseSet {
     public PublicKey getEncryptionKey(Set<EncType> supported) {
         List<PublicKey> keys = getEncryptionKeys();
         if (keys == null) {return null;}
-        if (!IGNORE_SERVER_KEY_PREFERENCE || supported.size() <= 1 || keys.size() <= 1) {
-            for (PublicKey pk : keys) { // Honor order in LS
-                if (supported.contains(pk.getType())) {return pk;}
-            }
-        } else {
-            List<EncType> types = new ArrayList<>(supported); // Our preference, newest enc type first
-            Collections.sort(types, Collections.reverseOrder());
-            for (EncType type : types) {
-                for (PublicKey pk : keys) {
-                    if (type == pk.getType()) {return pk;}
-                }
-            }
+        for (PublicKey pk : keys) { // Honor order in LS
+            if (supported.contains(pk.getType())) {return pk;}
         }
         return null;
     }

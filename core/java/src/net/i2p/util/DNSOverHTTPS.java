@@ -516,10 +516,6 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             }
         } else {
             log("Fail fetching, rc: " + eepget.getStatusCode());
-            if (DEBUG && baos.size() > 0) {
-                // google says "the HTTP body should explain the error"
-                log("Response body:\n" + DataHelper.getUTF8(baos.toByteArray()));
-            }
         }
         return null;
     }

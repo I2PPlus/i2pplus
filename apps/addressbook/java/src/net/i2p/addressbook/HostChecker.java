@@ -256,7 +256,6 @@ public class HostChecker {
 
     // Category retry settings
     private static final long CATEGORY_RETRY_INTERVAL = 10 * 60 * 1000L; // 10 minutes
-    private static final int MAX_CATEGORY_RETRIES = -1; // -1 for infinite retries
     private static final Pattern COMMA_SPLIT = Pattern.compile(",");
 
     private volatile long _pingInterval = DEFAULT_PING_INTERVAL;
@@ -994,14 +993,6 @@ public class HostChecker {
     /**
      * Fallback method to use EepHead for HTTP HEAD request testing
      * Marks site as up if any response is received
-     */
-    private PingResult fallbackToEepHead(String hostname, long startTime, String leaseSetTypes) {
-        return fallbackToEepHead(hostname, startTime, leaseSetTypes, true);
-    }
-
-    /**
-     * Fallback method to use EepHead for HTTP HEAD request testing
-     * Marks site as up if any response is received
      * @param saveResult whether to save the result to _pingResults (false when LeaseSet lookup already succeeded)
      */
     private PingResult fallbackToEepHead(String hostname, long startTime, String leaseSetTypes, boolean saveResult) {
@@ -1685,14 +1676,6 @@ public class HostChecker {
 
             // Only retry if categories download was not successful
             if (!_categoriesDownloadSuccessful.get()) {
-                // Check if we've exceeded max retries (if set)
-                if (MAX_CATEGORY_RETRIES > 0 && _categoryRetryCount >= MAX_CATEGORY_RETRIES) {
-                    if (_log.shouldDebug()) {
-                        _log.debug("Category retry limit reached (" + MAX_CATEGORY_RETRIES + "), stopping retries");
-                    }
-                    return;
-                }
-
                 _categoryRetryCount++;
                 if (_log.shouldInfo()) {
                     _log.info("Retrying category download (attempt " + _categoryRetryCount + ")...");

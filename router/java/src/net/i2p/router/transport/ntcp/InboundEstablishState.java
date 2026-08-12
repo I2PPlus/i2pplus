@@ -267,22 +267,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 return;
             }
             if ((_X[KEY_SIZE - 1] & 0x80) != 0) {
-                if (NTCPTransport.PQ_INT_VERSION != 0) {
-                    _version = NTCPTransport.PQ_INT_VERSION;
-                    _X[KEY_SIZE - 1] &= (byte) 0x7f;
-                } else {
-                    _padlen1 = _context.random().nextInt(PADDING1_FAIL_MAX) - src.remaining();
-                    if (_padlen1 > 0) {
-                        if (_log.shouldWarn())
-                            _log.warn("Bad PK msg 1, X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
-                                      " more bytes, waiting for " + _padlen1 + " more bytes");
-                        changeState(State.IB_NTCP2_READ_RANDOM);
-                    } else {
-                        fail("Bad PK msg 1, X = " + Base64.encode(_X, 0, KEY_SIZE) + " remaining = " + src.remaining());
-                    }
-                    _transport.getPumper().blockIP(_con.getRemoteIP());
-                    return;
-                }
+                _version = NTCPTransport.PQ_INT_VERSION;
+                _X[KEY_SIZE - 1] &= (byte) 0x7f;
             }
             _con.setVersion(_version);
         }

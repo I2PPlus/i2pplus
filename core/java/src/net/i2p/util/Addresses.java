@@ -61,7 +61,6 @@ public abstract class Addresses {
     private static final Map<Inet6Address, Inet6Addr> _ifCache = INET6_CACHE_ENABLED ? new HashMap<>(8) : null;
     /** 12 char hex lower case */
     private static final Set<String> _macCache = new HashSet<>();
-    private static final boolean TEST_IPV6_ONLY = false;
 
     // Convert IPv6 to canonical RFC 5952
     // https://stackoverflow.com/questions/7043983/ipv6-address-into-compressed-form-in-java
@@ -361,14 +360,6 @@ public abstract class Addresses {
     private static boolean shouldInclude(InetAddress ia, boolean includeSiteLocal,
                                          boolean includeLoopbackAndWildcard, boolean includeIPv6) {
         byte[] ip = ia.getAddress();
-        if (TEST_IPV6_ONLY && ip.length == 4) {
-            int i = ip[0] & 0xff;
-            if (i != 127 &&
-                i != 192 &&
-                i != 10 &&
-                i != 0)
-                return false;
-        }
 
         return
             (!ia.isLinkLocalAddress()) &&     // 169.254.x.x

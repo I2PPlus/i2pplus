@@ -240,9 +240,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             List<EncType> types = new ArrayList<>(2);
             String senc = session.getOptions().getProperty(PROP_LS_ENCTYPE);
             if (senc != null) {
-                if (!PREFER_NEW_ENC && senc.equals("4,0")) {
-                    senc = "0,4";
-                } else if (PREFER_NEW_ENC && senc.equals("0,4")) {
+                if (senc.equals("0,4")) {
                     senc = "4,0";
                 }
                 String[] senca = DataHelper.split(senc, ",");

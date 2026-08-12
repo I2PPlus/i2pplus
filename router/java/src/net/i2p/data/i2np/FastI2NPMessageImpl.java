@@ -10,11 +10,8 @@ package net.i2p.data.i2np;
 
 
 import net.i2p.I2PAppContext;
-import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
-import net.i2p.util.HexDump;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleByteCache;
 
 /**
  *  Ignore, but save, the SHA-256 checksum in the full 16-byte header when read in.
@@ -89,19 +86,8 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
         readMessage(data, cur, sz, type);
         cur += sz;
         _hasChecksum = true;
-        if (VERIFY_TEST && _log.shouldInfo())
-            _log.info("Ignored c/s " + getClass().getSimpleName());
         return cur - offset;
     }
-
-    /**
-     *  This tests the reuse-checksum feature.
-     *  The results are that mostly UnknownI2NPMessages (from inside a TGM),
-     *  with a lot of DeliveryStatusMessages,
-     *  and a few DatabaseLookupMessages that get reused.
-     *  The last two are tiny, but the savings at the gateway should help.
-     */
-    private static final boolean VERIFY_TEST = false;
 
     /**
      *  If available, use the previously-computed or previously-read checksum for speed
@@ -110,8 +96,6 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
     public int toByteArray(byte[] buffer) {
         if (_hasChecksum)
             return toByteArrayWithSavedChecksum(buffer);
-        if (VERIFY_TEST && _log.shouldInfo())
-            _log.info("Generating new c/s " + getClass().getSimpleName());
         return super.toByteArray(buffer);
     }
 
@@ -121,22 +105,6 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
     protected int toByteArrayWithSavedChecksum(byte[] buffer) {
         try {
             int writtenLen = writeMessageBody(buffer, HEADER_LENGTH);
-            if (VERIFY_TEST) {
-                byte[] h = SimpleByteCache.acquire(32);
-                _context.sha().calculateHash(buffer, HEADER_LENGTH, writtenLen - HEADER_LENGTH, h, 0);
-                if (h[0] != _checksum) {
-                    _log.log(Log.CRIT, "Please report " + getClass().getSimpleName() +
-                                       " size " + writtenLen +
-                                       " saved c/s " + Integer.toHexString(_checksum & 0xff) +
-                                       " calc " + Integer.toHexString(h[0] & 0xff), new Exception());
-                    _log.log(Log.CRIT, "DUMP:\n" + HexDump.dump(buffer, HEADER_LENGTH, writtenLen - HEADER_LENGTH));
-                    _log.log(Log.CRIT, "RAW:\n" + Base64.encode(buffer, HEADER_LENGTH, writtenLen - HEADER_LENGTH));
-                    _checksum = h[0];
-                } else if (_log.shouldInfo()) {
-                    _log.info("Using saved c/s " + getClass().getSimpleName() + ' ' + _checksum);
-                }
-                SimpleByteCache.release(h);
-            }
             int payloadLen = writtenLen - HEADER_LENGTH;
             int off = 0;
             buffer[off++] = (byte) getType();

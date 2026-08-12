@@ -149,7 +149,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     public static final int DEFAULT_TAGS = 40;
     /** Same as DEFAULT_RECHECK_INTERVAL. */
     public static final int LOW_THRESHOLD = 30;
-    private static final boolean USE_UNACKED_TAGS = false;
 
     /**
      * The session key manager should only be constructed and accessed through the
@@ -1101,17 +1100,10 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                 return -1;
         }
 
-        /**
-         *  If the session has never been acked, put the TagSet on the unacked list.
-         *  Otherwise, consider it good right away.
-         */
         public void addTags(TagSet set) {
             _lastUsed = _context.clock().now();
             synchronized (_tagSets) {
-                if (USE_UNACKED_TAGS && _acked)
-                    _tagSets.add(set);
-                else
-                    _unackedTagSets.add(set);
+                _unackedTagSets.add(set);
             }
         }
 

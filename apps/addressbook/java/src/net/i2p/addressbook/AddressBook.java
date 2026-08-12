@@ -110,9 +110,6 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
                 tmp.delete();
             }
         } catch (IOException ioe) {
-            if (tmp != null) {
-                tmp.delete();
-            }
             a = Collections.emptyMap();
         }
         this.addresses = a;
