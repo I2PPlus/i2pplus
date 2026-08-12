@@ -55,18 +55,18 @@ set, this is a follow on fragment.</p>
 <p>With the first (leftmost or MSB) bit being 0, the instructions are:</p>
 <ul>
 <li>1 byte control byte:<pre>
-      bit 0: is follow on fragment?  (1 = true, 0 = false, must be 0)
-   bits 1-2: delivery type
+      bit 7: is follow on fragment?  (1 = true, 0 = false, must be 0)
+   bits 6-5: delivery type
              (0x0 = LOCAL, 0x01 = TUNNEL, 0x02 = ROUTER)
-      bit 3: delay included?  (1 = true, 0 = false) (unimplemented)
-      bit 4: fragmented?  (1 = true, 0 = false)
-      bit 5: extended options?  (1 = true, 0 = false) (unimplemented)
-   bits 6-7: reserved</pre></li>
+      bit 4: delay included?  (1 = true, 0 = false) (unimplemented)
+      bit 3: fragmented?  (1 = true, 0 = false)
+      bit 2: extended options?  (1 = true, 0 = false) (unimplemented)
+   bits 1-0: reserved</pre></li>
 <li>if the delivery type was TUNNEL, a 4 byte tunnel ID</li>
 <li>if the delivery type was TUNNEL or ROUTER, a 32 byte router hash</li>
 <li>if the delay included flag is true, a 1 byte value (unimplemented):<pre>
-      bit 0: type (0 = strict, 1 = randomized)
-   bits 1-7: delay exponent (2^value minutes)</pre></li>
+      bit 7: type (0 = strict, 1 = randomized)
+   bits 0-6: delay exponent (2^value minutes)</pre></li>
 <li>if the fragmented flag is true, a 4 byte message ID</li>
 <li>if the extended options flag is true (unimplemented):<pre>
    = a 1 byte option size (in bytes)
@@ -77,9 +77,9 @@ set, this is a follow on fragment.</p>
 <p>If the first bit being 1, the instructions are:</p>
 <ul>
 <li>1 byte control byte:<pre>
-      bit 0: is follow on fragment?  (1 = true, 0 = false, must be 1)
-   bits 1-6: fragment number
-      bit 7: is last? (1 = true, 0 = false)</pre></li>
+      bit 7: is follow on fragment?  (1 = true, 0 = false, must be 1)
+   bits 6-1: fragment number
+      bit 0: is last? (1 = true, 0 = false)</pre></li>
 <li>4 byte message ID (same one defined in the first fragment)</li>
 <li>2 byte size of this fragment</li>
 </ul>

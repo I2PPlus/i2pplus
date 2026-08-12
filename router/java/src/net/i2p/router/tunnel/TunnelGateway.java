@@ -99,60 +99,7 @@ abstract class TunnelGateway {
      * @return true if the message was accepted, false if dropped
      */
     public boolean add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
-        throw new UnsupportedOperationException("unused, right?");
-/****
-        _messagesSent++;
-        long startAdd = System.currentTimeMillis();
-        boolean delayedFlush = false;
-        long delayAmount = -1;
-        int remaining = 0;
-        Pending cur = new PendingImpl(msg, toRouter, toTunnel);
-        long beforeLock = System.currentTimeMillis();
-        long afterAdded = -1;
-        long afterPreprocess = 0;
-        long afterExpire = 0;
-        synchronized (_queue) {
-            _queue.add(cur);
-            afterAdded = System.currentTimeMillis();
-            if (_log.shouldDebug())
-                _log.debug("Added before direct flush preprocessing: " + _queue);
-            delayedFlush = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
-            afterPreprocess = System.currentTimeMillis();
-            if (delayedFlush)
-                delayAmount = _preprocessor.getDelayAmount();
-            _lastFlush = _context.clock().now();
-
-            // expire any as necessary, even if its framented
-            for (int i = 0; i < _queue.size(); i++) {
-                Pending m = _queue.get(i);
-                if (m.getExpiration() + Router.CLOCK_FUDGE_FACTOR < _lastFlush) {
-                    if (_log.shouldDebug())
-                        _log.debug("Expire on the queue (size=" + _queue.size() + "): " + m);
-                    _queue.remove(i);
-                    i--;
-                }
-            }
-            afterExpire = System.currentTimeMillis();
-            remaining = _queue.size();
-            if ( (remaining > 0) && (_log.shouldDebug()) )
-                _log.debug("Remaining after preprocessing: " + _queue);
-        }
-
-        if (delayedFlush) {
-            _delayedFlush.reschedule(delayAmount);
-        }
-
-        if (_log.shouldDebug()) {
-            long complete = System.currentTimeMillis();
-            _log.debug("Time to add the message " + msg.getUniqueId() + ": " + (complete-startAdd)
-                       + " delayed? " + delayedFlush + " remaining: " + remaining
-                       + " prepare: " + (beforeLock-startAdd)
-                       + " add: " + (afterAdded-beforeLock)
-                       + " preprocess: " + (afterPreprocess-afterAdded)
-                       + " expire: " + (afterExpire-afterPreprocess)
-                       + " queue flush: " + (complete-afterExpire));
-        }
-*/
+        throw new UnsupportedOperationException("unused; subclasses override add()");
     }
 
     /**

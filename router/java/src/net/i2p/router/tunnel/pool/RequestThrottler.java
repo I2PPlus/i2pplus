@@ -23,7 +23,7 @@ import net.i2p.util.SimpleTimer2;
  *
  * Checks various router characteristics and decides whether to throttle,
  * ban, or disconnect routers based on request count, version, bandwidth,
- * country, and system load.
+ * and system load.
  *
  * @since 0.9.5
  */

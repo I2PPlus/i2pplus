@@ -150,7 +150,7 @@ abstract class ExcluderBase implements Set<Hash> {
      */
     @Override
     public String toString() {
-         return getClass().getSimpleName() + " (" + s.size() + ") " + (s.size() <= 10 ? s.toString() : "");
+        return getClass().getSimpleName() + " (" + s.size() + ") " + (s.size() <= 10 ? s.toString() : "");
     }
 
 }

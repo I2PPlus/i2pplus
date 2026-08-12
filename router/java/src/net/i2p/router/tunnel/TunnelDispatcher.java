@@ -47,7 +47,7 @@ import net.i2p.util.SimpleTimer2;
  *
  *     Inbound Endpoint &gt; 0 hops:
  *       TunnelParticipant
- *        RouterFragmentHandler -&gt;  InboundEndpointProcessor -&gt; InboundMessageDistributor -&gt; InNetMessagePool
+ *        FragmentHandler -&gt;  InboundEndpointProcessor -&gt; InboundMessageDistributor -&gt; InNetMessagePool
  *
  *     Inbound zero-hop Gateway+Endpoint:
  *       TunnelGatewayZeroHop
@@ -62,7 +62,7 @@ import net.i2p.util.SimpleTimer2;
  *
  *     Outbound Endpoint &gt; 0 hops:
  *       OutboundTunnelEndpoint
- *         RouterFragmentHandler -&gt; HopProcessor -&gt; OutboundMessageDistributor -&gt; OutNetMessagePool
+ *         FragmentHandler -&gt; HopProcessor -&gt; OutboundMessageDistributor -&gt; OutNetMessagePool
  *
  *     Inbound Gateway &gt; 0 hops:
  *       ThrottledPumpedTunnelGateway

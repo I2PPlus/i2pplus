@@ -331,8 +331,8 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                         return false;
                     }
                     // won't get here, we returned
-                 } else {
-                     // We didn't flush. Note that the messages remain on the pending list.
+                } else {
+                    // We didn't flush. Note that the messages remain on the pending list.
                     _context.statManager().addRateData("tunnel.batchDelay", pending.size());
                     if (_pendingSince <= 0) {
                         _pendingSince = _context.clock().now();

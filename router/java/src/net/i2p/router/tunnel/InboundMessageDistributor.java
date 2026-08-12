@@ -89,10 +89,10 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
         if (_client != null) {
             switch (type) {
                 case DatabaseSearchReplyMessage.MESSAGE_TYPE:
-                     // FVSJ or client lookups could also result in a DSRM.
-                     // Since there's some code that replies directly to this to gather new ff RouterInfos,
-                     // sanitize it
-                     break;
+                    // FVSJ or client lookups could also result in a DSRM.
+                    // Since there's some code that replies directly to this to gather new ff RouterInfos,
+                    // sanitize it
+                    break;
 
                 case DatabaseStoreMessage.MESSAGE_TYPE:
                     DatabaseStoreMessage dsm = (DatabaseStoreMessage) msg;
@@ -236,105 +236,105 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
             case DeliveryInstructions.DELIVERY_MODE_LOCAL:
                 if (_log.shouldDebug())
                     _log.debug("Local delivery instructions for clove: " + data.getClass().getSimpleName());
-                switch (type) {
-                  case GarlicMessage.MESSAGE_TYPE:
-                    _receiver.receive((GarlicMessage)data);
-                    break;
+                    switch (type) {
+                        case GarlicMessage.MESSAGE_TYPE:
+                            _receiver.receive((GarlicMessage)data);
+                            break;
 
-                    case DatabaseStoreMessage.MESSAGE_TYPE:
+                        case DatabaseStoreMessage.MESSAGE_TYPE:
 
-                    // Treat db store explicitly here (not in HandleFloodfillDatabaseStoreMessageJob),
-                    // since we don't want to republish (or flood)
-                    // unnecessarily. Reply tokens ignored.
-                    DatabaseStoreMessage dsm = (DatabaseStoreMessage)data;
-                    // Ensure the reply info is cleared, just in case
-                    dsm.setReplyToken(0);
-                    dsm.setReplyTunnel(null);
-                    dsm.setReplyGateway(null);
-                    String truncDest = _client != null ? _client.toString().substring(0,8) : "";
+                            // Treat db store explicitly here (not in HandleFloodfillDatabaseStoreMessageJob),
+                            // since we don't want to republish (or flood)
+                            // unnecessarily. Reply tokens ignored.
+                            DatabaseStoreMessage dsm = (DatabaseStoreMessage)data;
+                            // Ensure the reply info is cleared, just in case
+                            dsm.setReplyToken(0);
+                            dsm.setReplyTunnel(null);
+                            dsm.setReplyGateway(null);
+                            String truncDest = _client != null ? _client.toString().substring(0,8) : "";
 
-                    if (dsm.getEntry().isLeaseSet()) {
-                        // Case 1:
-                        // store of our own LS.
-                        // This is almost certainly a response to a FloodfillVerifyStoreJob search.
-                        // We must send to the InNetMessagePool so the message can be matched
-                        // and the verify marked as successful.
+                            if (dsm.getEntry().isLeaseSet()) {
+                                // Case 1:
+                                // store of our own LS.
+                                // This is almost certainly a response to a FloodfillVerifyStoreJob search.
+                                // We must send to the InNetMessagePool so the message can be matched
+                                // and the verify marked as successful.
 
-                        // Case 2:
-                        // Store of somebody else's LS.
-                        // This could be an encrypted response to an IterativeSearchJob search.
-                        // We must send to the InNetMessagePool so the message can be matched
-                        // and the search marked as successful.
-                        // Or, it's a normal LS bundled with data and a MessageStatusMessage.
+                                // Case 2:
+                                // Store of somebody else's LS.
+                                // This could be an encrypted response to an IterativeSearchJob search.
+                                // We must send to the InNetMessagePool so the message can be matched
+                                // and the search marked as successful.
+                                // Or, it's a normal LS bundled with data and a MessageStatusMessage.
 
-                        // ... and inject it.
-                        ((LeaseSet)dsm.getEntry()).setReceivedBy(_client);
-                        if (_log.shouldLog(Log.INFO)) {
-                            _log.info("Storing garlic LS down tunnel for: " + dsm.getKey() + "\n* Sent to: " +
-                                      _clientNickname + (_client != null ? " [" + _client.toBase32().substring(0,8) + "]" :  " router"));
-                        }
-                        _context.inNetMessagePool().add(dsm, null, null, _msgIDBloomXor);
-                    } else {
-                        if (_client != null) {
-                            // drop it, since the data we receive shouldn't include router
-                            // references, as that might get us to talk to them (and therefore
-                            // open an attack vector)
-                            _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1,
-                                                               DatabaseStoreMessage.MESSAGE_TYPE);
-                            _log.error("Dropping DANGEROUS message (" + dsm + ") sent down a tunnel for " + _clientNickname + " [" + truncDest + "]",
-                                       new Exception("cause"));
-                            return;
-                        }
-                        // Case 3:
-                        // Store of an RI (ours or somebody else's)
-                        // This is almost certainly a response to an IterativeSearchJob search.
-                        // We must send to the InNetMessagePool so the message can be matched
-                        // and the search marked as successful.
-                        // note that encrypted replies to RI lookups is currently disabled in ISJ, we won't get here.
-                        // ... and inject it.
-                        if (_log.shouldInfo()) {
-                            _log.info("Received DBStoreMessage from " +  _clientNickname + " tunnel for RouterInfo [" + dsm.getKey() + "]");
-                        }
-                        _context.inNetMessagePool().add(dsm, null, null, _msgIDBloomXor);
-                    }
-                    break;
+                                // ... and inject it.
+                                ((LeaseSet)dsm.getEntry()).setReceivedBy(_client);
+                                if (_log.shouldLog(Log.INFO)) {
+                                    _log.info("Storing garlic LS down tunnel for: " + dsm.getKey() + "\n* Sent to: " +
+                                              _clientNickname + (_client != null ? " [" + _client.toBase32().substring(0,8) + "]" :  " router"));
+                                }
+                                _context.inNetMessagePool().add(dsm, null, null, _msgIDBloomXor);
+                            } else {
+                                if (_client != null) {
+                                    // drop it, since the data we receive shouldn't include router
+                                    // references, as that might get us to talk to them (and therefore
+                                    // open an attack vector)
+                                    _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1,
+                                                                       DatabaseStoreMessage.MESSAGE_TYPE);
+                                    _log.error("Dropping DANGEROUS message (" + dsm + ") sent down a tunnel for " + _clientNickname + " [" + truncDest + "]",
+                                               new Exception("cause"));
+                                    return;
+                                }
+                                // Case 3:
+                                // Store of an RI (ours or somebody else's)
+                                // This is almost certainly a response to an IterativeSearchJob search.
+                                // We must send to the InNetMessagePool so the message can be matched
+                                // and the search marked as successful.
+                                // note that encrypted replies to RI lookups is currently disabled in ISJ, we won't get here.
+                                // ... and inject it.
+                                if (_log.shouldInfo()) {
+                                    _log.info("Received DBStoreMessage from " +  _clientNickname + " tunnel for RouterInfo [" + dsm.getKey() + "]");
+                                }
+                                _context.inNetMessagePool().add(dsm, null, null, _msgIDBloomXor);
+                            }
+                            break;
 
-                    case DatabaseSearchReplyMessage.MESSAGE_TYPE:
+                        case DatabaseSearchReplyMessage.MESSAGE_TYPE:
 
-                    // DSRMs show up here now that replies are encrypted
-                    // TODO: Strip in IterativeLookupJob etc. instead, depending on
-                    // LS or RI and client or expl., so that we can safely follow references
-                    // in a reply to a LS lookup over client tunnels.
-                    // ILJ would also have to follow references via client tunnels
-                    DatabaseSearchReplyMessage orig = (DatabaseSearchReplyMessage) data;
-                    _context.inNetMessagePool().add(orig, null, null, _msgIDBloomXor);
-                    break;
+                            // DSRMs show up here now that replies are encrypted
+                            // TODO: Strip in IterativeLookupJob etc. instead, depending on
+                            // LS or RI and client or expl., so that we can safely follow references
+                            // in a reply to a LS lookup over client tunnels.
+                            // ILJ would also have to follow references via client tunnels
+                            DatabaseSearchReplyMessage orig = (DatabaseSearchReplyMessage) data;
+                            _context.inNetMessagePool().add(orig, null, null, _msgIDBloomXor);
+                            break;
 
-                    case DataMessage.MESSAGE_TYPE:
+                        case DataMessage.MESSAGE_TYPE:
 
-                    // a data message targeting the local router is how we send load tests
-                    // (real data messages target destinations)
-                    _context.statManager().addRateData("tunnel.handleLoadClove", 1);
-                    break;
+                            // a data message targeting the local router is how we send load tests
+                            // (real data messages target destinations)
+                            _context.statManager().addRateData("tunnel.handleLoadClove", 1);
+                            break;
 
-                  case DeliveryStatusMessage.MESSAGE_TYPE:
-                  case OutboundTunnelBuildReplyMessage.MESSAGE_TYPE:
-                      _context.inNetMessagePool().add(data, null, null, _msgIDBloomXor);
-                      break;
+                        case DeliveryStatusMessage.MESSAGE_TYPE:
+                        case OutboundTunnelBuildReplyMessage.MESSAGE_TYPE:
+                            _context.inNetMessagePool().add(data, null, null, _msgIDBloomXor);
+                            break;
 
-                  default:
-                        // drop it, since the data we receive shouldn't include other stuff,
-                        // as that might open an attack vector
-                        if (_client != null) {
-                            _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1, data.getType());
-                            _log.error("Dropping DANGEROUS message (" + data + ") down a tunnel for client [" +
-                                       _client.toString().substring(0,8) + "]", new Exception("cause"));
-                        } else {
-                            _log.error("Dropped dangerous message received down an expl. tunnel " + data, new Exception("cause"));
-                        }
-                        break;
+                        default:
+                            // drop it, since the data we receive shouldn't include other stuff,
+                            // as that might open an attack vector
+                            if (_client != null) {
+                                _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1, data.getType());
+                                _log.error("Dropping DANGEROUS message (" + data + ") down a tunnel for client [" +
+                                           _client.toString().substring(0,8) + "]", new Exception("cause"));
+                            } else {
+                                _log.error("Dropped dangerous message received down an expl. tunnel " + data, new Exception("cause"));
+                            }
+                            break;
 
-                } // switch (type)
+                    } // switch (type)
                 return;
 
                 case DeliveryInstructions.DELIVERY_MODE_DESTINATION:

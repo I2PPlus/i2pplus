@@ -235,12 +235,12 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      *  This calls profile manager tunnelDataPushed1m() for each peer
      */
-     public synchronized void incrementVerifiedBytesTransferred(int bytes) {
-         _verifiedBytesTransferred += bytes;
-         _peakThroughputCurrentTotal += bytes;
-         long now = System.currentTimeMillis();
-         _lastTransferredTime = now;
-         long timeSince = now - _peakThroughputLastCoallesce;
+    public synchronized void incrementVerifiedBytesTransferred(int bytes) {
+        _verifiedBytesTransferred += bytes;
+        _peakThroughputCurrentTotal += bytes;
+        long now = System.currentTimeMillis();
+        _lastTransferredTime = now;
+        long timeSince = now - _peakThroughputLastCoallesce;
         if (timeSince >= 60*1000) {
             long tot = _peakThroughputCurrentTotal;
             int normalized = (int) (tot * 60d*1000d / timeSince);
@@ -685,10 +685,10 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         StringBuilder buf = new StringBuilder(1024);
         buf.append(toString());
         for (int i = 0; i < _peers.length; i++) {
-             if (i == 0) {buf.append("\n* Gateway ");}
-             else if (i == _peers.length - 1) {buf.append("\n* Endpoint ");}
-             else {buf.append("\n* Hop ").append(i);}
-             buf.append(": ").append(_config[i]);
+            if (i == 0) {buf.append("\n* Gateway ");}
+            else if (i == _peers.length - 1) {buf.append("\n* Endpoint ");}
+            else {buf.append("\n* Hop ").append(i);}
+            buf.append(": ").append(_config[i]);
         }
         if (_garlicReplyKeys != null) {
             buf.append("\n* Garlic Reply Key: ").append(_garlicReplyKeys.key).append("\n* Tag: ").append(_garlicReplyKeys.rtag);

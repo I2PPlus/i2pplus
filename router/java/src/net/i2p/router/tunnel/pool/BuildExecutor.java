@@ -261,7 +261,7 @@ public class BuildExecutor implements Runnable {
      * @param mgr the tunnel pool manager
      * @param ghostMgr the ghost peer manager for tracking timeouts
      */
- public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager ghostMgr) {
+    public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager ghostMgr) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         _manager = mgr;

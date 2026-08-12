@@ -417,18 +417,18 @@ class TunnelGatewayPumper implements Runnable {
         public PoisonPTG(RouterContext ctx) {
             super(ctx, null, null, new NoOpReceiver(), null);
         }
-        
+
         @Override
         public int getMessagesSent() {
             return POISON_PTG;
         }
-        
+
         @Override
         public boolean pump(List<PendingGatewayMessage> queueBuf) {
             // Poison pill should not pump any messages
             return false;
         }
-        
+
         /**
          * No-op receiver for poison pill to avoid null pointer issues
          */
@@ -438,7 +438,7 @@ class TunnelGatewayPumper implements Runnable {
                 // No-op for poison pill
                 return -1;
             }
-            
+
             @Override
             public Hash getSendTo() {
                 return null; // Return null as this is poison pill
